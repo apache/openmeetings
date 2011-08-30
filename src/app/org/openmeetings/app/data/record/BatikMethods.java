@@ -5,18 +5,13 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.font.FontRenderContext;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
-import java.awt.geom.QuadCurve2D;
 import java.awt.geom.Rectangle2D;
-import java.util.List;
-import java.util.Map;
 import java.util.Iterator;
+import java.util.List;
 
-import javax.servlet.http.HttpServlet;
 import javax.swing.JTextArea;
 
 import org.apache.batik.dom.svg.SVGDOMImplementation;
@@ -25,17 +20,17 @@ import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.geom.ArrowStyle;
 import org.openmeetings.utils.geom.GeomPoint;
-import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 public class BatikMethods {
 	
 	private static final Logger log = Red5LoggerFactory.getLogger(BatikMethods.class, ScopeApplicationAdapter.webAppRootKey);
+	@Autowired
+	private Configurationmanagement cfgManagement;
 
 	public void paintTextByWidthHeight(SVGGraphics2D g2d, int x1, int y1, int width, int height,
 			String text, int style, int size, Color fontColor) throws Exception {
@@ -49,7 +44,7 @@ public class BatikMethods {
 	public void _paintTextByWidthHeight(SVGGraphics2D g2d, int x1, int y1, int width, int height,
 			String text, int style, int size, Color fontColor) throws Exception {
 
-		String default_export_font = Configurationmanagement.getInstance().getConfKey(3,"default_export_font").getConf_value();
+		String default_export_font = cfgManagement.getConfKey(3,"default_export_font").getConf_value();
 		
 		this.drawTextByString(g2d, x1, y1, width, height, text, default_export_font, style, size, fontColor);
 

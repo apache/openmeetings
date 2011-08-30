@@ -7,6 +7,7 @@ import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.persistence.beans.basic.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 
@@ -14,29 +15,38 @@ import org.openmeetings.app.persistence.beans.basic.Configuration;
  *
  */
 public class ConfigurationService {
+	@Autowired
+	private Sessionmanagement sessionManagement;
+	@Autowired
+	private Configurationmanagement cfgManagement;
+    @Autowired
+    private Usermanagement userManagement;
 	
 	/*
 	 * Configuration Handlers
 	 */    
     public SearchResult getAllConf(String SID, int start ,int max, String orderby, boolean asc){
-        Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);     	
-        return Configurationmanagement.getInstance().getAllConf(user_level, start, max, orderby, asc);
+        Long users_id = sessionManagement.checkSession(SID);
+        Long user_level = userManagement.getUserLevelByID(users_id);     	
+        return cfgManagement.getAllConf(user_level, start, max, orderby, asc);
     }
+    
     public Configuration getConfByConfigurationId(String SID,long configuration_id){
-        Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);     	
-        return Configurationmanagement.getInstance().getConfByConfigurationId(user_level,configuration_id);
+        Long users_id = sessionManagement.checkSession(SID);
+        Long user_level = userManagement.getUserLevelByID(users_id);     	
+        return cfgManagement.getConfByConfigurationId(user_level,configuration_id);
     }
+    
     public Long saveOrUpdateConfiguration(String SID,LinkedHashMap values){
-        Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);     	
-        return Configurationmanagement.getInstance().saveOrUpdateConfiguration(user_level,values, users_id);
-    }    
+        Long users_id = sessionManagement.checkSession(SID);
+        Long user_level = userManagement.getUserLevelByID(users_id);     	
+        return cfgManagement.saveOrUpdateConfiguration(user_level,values, users_id);
+    }
+    
     public Long deleteConfiguration(String SID,LinkedHashMap values){
-        Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);     	
-        return Configurationmanagement.getInstance().deleteConfByConfiguration(user_level, values, users_id);
+        Long users_id = sessionManagement.checkSession(SID);
+        Long user_level = userManagement.getUserLevelByID(users_id);     	
+        return cfgManagement.deleteConfByConfiguration(user_level, values, users_id);
     }
 	    
 }

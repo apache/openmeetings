@@ -3,35 +3,26 @@ package org.openmeetings.app.data.user.dao;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.apache.commons.lang.StringUtils;
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.user.PrivateMessages;
 import org.openmeetings.app.persistence.beans.user.Users;
-import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 public class PrivateMessagesDaoImpl {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(PrivateMessagesDaoImpl.class, ScopeApplicationAdapter.webAppRootKey);
-
-	private static PrivateMessagesDaoImpl instance = null;
-
-	private PrivateMessagesDaoImpl() {
-	}
-
-	public static synchronized PrivateMessagesDaoImpl getInstance() {
-		if (instance == null) {
-			instance = new PrivateMessagesDaoImpl();
-		}
-		return instance;
-	}
+	@PersistenceContext
+	private EntityManager em;
 	
 	public Long addPrivateMessage(String subject, String message, Long parentMessageId, 
 			Users from, Users to, Users owner, Boolean bookedRoom, Rooms room,
@@ -53,16 +44,8 @@ public class PrivateMessagesDaoImpl {
 			privateMessage.setIsContactRequest(isContactRequest);
 			privateMessage.setUserContactId(userContactId);
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			
-			privateMessage = session.merge(privateMessage);
+			privateMessage = em.merge(privateMessage);
 			Long privateMessageId = privateMessage.getPrivateMessageFolderId();
-			
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 			return privateMessageId;			
 		} catch (Exception e) {
@@ -74,16 +57,8 @@ public class PrivateMessagesDaoImpl {
 	public Long addPrivateMessageObj(PrivateMessages privateMessage) {
 		try {
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			
-			privateMessage = session.merge(privateMessage);
+			privateMessage = em.merge(privateMessage);
 			Long privateMessageId = privateMessage.getPrivateMessageFolderId();
-			
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 			return privateMessageId;			
 		} catch (Exception e) {
@@ -97,15 +72,9 @@ public class PrivateMessagesDaoImpl {
 			
 			String hql = "select c from PrivateMessages c ";
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql); 
+			Query query = em.createQuery(hql); 
 			
 			List<PrivateMessages> privateMessages = query.getResultList();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 			return privateMessages;
 			
@@ -121,11 +90,7 @@ public class PrivateMessagesDaoImpl {
 			String hql = "select c from PrivateMessages c " +
 						"where c.privateMessageId = :privateMessageId ";
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql); 
+			Query query = em.createQuery(hql); 
 			query.setParameter("privateMessageId", privateMessageId);
 			
 			PrivateMessages privateMessage = null;
@@ -133,8 +98,6 @@ public class PrivateMessagesDaoImpl {
 				privateMessage = (PrivateMessages) query.getSingleResult();
 		    } catch (NoResultException ex) {
 		    }
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 			return privateMessage;
 			
@@ -147,21 +110,13 @@ public class PrivateMessagesDaoImpl {
 	public void updatePrivateMessages(PrivateMessages privateMessage) {
 		try {
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			
 			if (privateMessage.getPrivateMessageFolderId() == null) {
-				session.persist(privateMessage);
-			    } else {
-			    	if (!session.contains(privateMessage)) {
-			    		session.merge(privateMessage);
+				em.persist(privateMessage);
+		    } else {
+		    	if (!em.contains(privateMessage)) {
+		    		em.merge(privateMessage);
 			    }
 			}
-			
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 		} catch (Exception e) {
 			log.error("[updatePrivateMessages]",e);
@@ -188,19 +143,13 @@ public class PrivateMessagesDaoImpl {
 				hql += " ) ";
 			}
 
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql); 
+			Query query = em.createQuery(hql); 
 			query.setParameter("toUserId", toUserId);
 			if (search.length() != 0) {
 				query.setParameter("search", StringUtils.lowerCase("%"+search+"%"));
 			}
 			query.setParameter("privateMessageFolderId", privateMessageFolderId);
 			List ll = query.getResultList();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 			return (Long)ll.get(0);
 			
@@ -239,11 +188,7 @@ public class PrivateMessagesDaoImpl {
 				hql += " DESC";
 			}
 
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql); 
+			Query query = em.createQuery(hql); 
 			query.setParameter("toUserId", toUserId);
 			query.setParameter("isTrash", false);
 			query.setParameter("privateMessageFolderId", privateMessageFolderId);
@@ -253,8 +198,6 @@ public class PrivateMessagesDaoImpl {
 			query.setFirstResult(start);
 			query.setMaxResults(max);
 			List<PrivateMessages> ll = query.getResultList();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 			return ll;	
 		} catch (Exception e) {
@@ -284,11 +227,7 @@ public class PrivateMessagesDaoImpl {
 				hql += " ) ";
 			}
 
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql); 
+			Query query = em.createQuery(hql); 
 			query.setParameter("toUserId", toUserId);
 			query.setParameter("isTrash", false);
 			query.setParameter("privateMessageFolderId", privateMessageFolderId);
@@ -296,8 +235,6 @@ public class PrivateMessagesDaoImpl {
 				query.setParameter("search", StringUtils.lowerCase("%"+search+"%"));
 			}
 			List ll = query.getResultList();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 			return (Long)ll.get(0);
 			
@@ -334,11 +271,7 @@ public class PrivateMessagesDaoImpl {
 				hql += " DESC";
 			}
 
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql); 
+			Query query = em.createQuery(hql); 
 			if (search.length() != 0) {
 				query.setParameter("search", StringUtils.lowerCase("%"+search+"%"));
 			}
@@ -346,8 +279,6 @@ public class PrivateMessagesDaoImpl {
 			query.setFirstResult(start);
 			query.setMaxResults(max);
 			List<PrivateMessages> ll = query.getResultList();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 			return ll;	
 		} catch (Exception e) {
@@ -374,18 +305,12 @@ public class PrivateMessagesDaoImpl {
 				hql += " ) ";
 			}
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql); 
+			Query query = em.createQuery(hql); 
 			query.setParameter("user_id", user_id);
 			if (search.length() != 0) {
 				query.setParameter("search", StringUtils.lowerCase("%"+search+"%"));
 			}
 			List ll = query.getResultList();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 			return (Long)ll.get(0);
 			
@@ -424,11 +349,7 @@ public class PrivateMessagesDaoImpl {
 				hql += " DESC";
 			}
 
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql); 
+			Query query = em.createQuery(hql); 
 			query.setParameter("toUserId", toUserId);
 			query.setParameter("privateMessageFolderId", privateMessageFolderId);
 			if (search.length() != 0) {
@@ -437,8 +358,6 @@ public class PrivateMessagesDaoImpl {
 			query.setFirstResult(start);
 			query.setMaxResults(max);
 			List<PrivateMessages> ll = query.getResultList();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 			return ll;	
 		} catch (Exception e) {
@@ -467,19 +386,13 @@ public class PrivateMessagesDaoImpl {
 				hql += " ) ";
 			}
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql); 
+			Query query = em.createQuery(hql); 
 			query.setParameter("toUserId", toUserId);
 			if (search.length() != 0) {
 				query.setParameter("search", StringUtils.lowerCase("%"+search+"%"));
 			}
 			query.setParameter("privateMessageFolderId", privateMessageFolderId);
 			List ll = query.getResultList();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 			return (Long)ll.get(0);
 			
@@ -521,11 +434,7 @@ public class PrivateMessagesDaoImpl {
 			
 			log.debug("privateMessageFolderId "+privateMessageFolderId);
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql); 
+			Query query = em.createQuery(hql); 
 			query.setParameter("toUserId", toUserId);
 			query.setParameter("isTrash", false);
 			query.setParameter("privateMessageFolderId", privateMessageFolderId);
@@ -535,8 +444,6 @@ public class PrivateMessagesDaoImpl {
 			query.setFirstResult(start);
 			query.setMaxResults(max);
 			List<PrivateMessages> ll = query.getResultList();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 			return ll;
 			
@@ -553,11 +460,7 @@ public class PrivateMessagesDaoImpl {
 						"SET c.isTrash = :isTrash,c.privateMessageFolderId = :privateMessageFolderId " +
 						"where c.privateMessageId IN (:privateMessageIds) ";
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql); 
+			Query query = em.createQuery(hql); 
 			query.setParameter("isTrash", isTrash);
 			query.setParameter("privateMessageFolderId", privateMessageFolderId);
 			query.setParameter("privateMessageIds", privateMessageIds);
@@ -568,7 +471,7 @@ public class PrivateMessagesDaoImpl {
 				String hqlSel = "select c from PrivateMessages c " +
 								"where c.privateMessageId = :privateMessageId ";
 	
-				Query querySel = session.createQuery(hqlSel); 
+				Query querySel = em.createQuery(hqlSel); 
 				querySel.setParameter("privateMessageId", privateMessageId);
 				
 				PrivateMessages privateMessages = null;
@@ -576,25 +479,9 @@ public class PrivateMessagesDaoImpl {
 					privateMessages = (PrivateMessages) querySel.getSingleResult();
 			    } catch (NoResultException ex) {
 			    }
-				
-				if (privateMessages != null) {
-					session.refresh(privateMessages);
-				}
 			}
 			
-			
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
-			
-			
-			
-			
-			
-			
 			return updatedEntities;
-			
-			
-			
 		} catch (Exception e) {
 			log.error("[updatePrivateMessagesToTrash]",e);
 		}
@@ -608,11 +495,7 @@ public class PrivateMessagesDaoImpl {
 						"SET c.isRead = :isRead " +
 						"where c.privateMessageId IN (:privateMessageIds) ";
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql); 
+			Query query = em.createQuery(hql); 
 			query.setParameter("isRead", isRead);
 			query.setParameter("privateMessageIds", privateMessageIds);
 			int updatedEntities = query.executeUpdate();
@@ -622,7 +505,7 @@ public class PrivateMessagesDaoImpl {
 				String hqlSel = "select c from PrivateMessages c " +
 								"where c.privateMessageId = :privateMessageId ";
 	
-				Query querySel = session.createQuery(hqlSel); 
+				Query querySel = em.createQuery(hqlSel); 
 				querySel.setParameter("privateMessageId", privateMessageId);
 				
 				PrivateMessages privateMessages = null;
@@ -630,14 +513,7 @@ public class PrivateMessagesDaoImpl {
 					privateMessages = (PrivateMessages) querySel.getSingleResult();
 			    } catch (NoResultException ex) {
 			    }
-				
-				if (privateMessages != null) {
-					session.refresh(privateMessages);
-				}
 			}
-			
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			return updatedEntities;
 		} catch (Exception e) {
 			log.error("[updatePrivateMessagesReadStatus]",e);
@@ -652,11 +528,7 @@ public class PrivateMessagesDaoImpl {
 						"SET c.privateMessageFolderId = :privateMessageFolderId, c.isTrash = false " +
 						"where c.privateMessageId IN (:privateMessageIds) ";
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql); 
+			Query query = em.createQuery(hql); 
 			query.setParameter("privateMessageFolderId", privateMessageFolderId);
 			query.setParameter("privateMessageIds", privateMessageIds);
 			int updatedEntities = query.executeUpdate();
@@ -666,7 +538,7 @@ public class PrivateMessagesDaoImpl {
 				String hqlSel = "select c from PrivateMessages c " +
 								"where c.privateMessageId = :privateMessageId ";
 	
-				Query querySel = session.createQuery(hqlSel); 
+				Query querySel = em.createQuery(hqlSel); 
 				querySel.setParameter("privateMessageId", privateMessageId);
 				
 				PrivateMessages privateMessages = null;
@@ -674,14 +546,7 @@ public class PrivateMessagesDaoImpl {
 					privateMessages = (PrivateMessages) querySel.getSingleResult();
 			    } catch (NoResultException ex) {
 			    }
-				
-				if (privateMessages != null) {
-					session.refresh(privateMessages);
-				}
 			}
-			
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			return updatedEntities;
 		} catch (Exception e) {
 			log.error("[updatePrivateMessagesReadStatus]",e);
@@ -695,31 +560,10 @@ public class PrivateMessagesDaoImpl {
 			String hql = "DELETE PrivateMessages c " +
 						"where c.privateMessageId IN (:privateMessageIds) ";
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql); 
+			Query query = em.createQuery(hql); 
 			query.setParameter("privateMessageIds", privateMessageIds);
 			int updatedEntities = query.executeUpdate();
 			
-//			//Refresh the Entities in the Cache as Hibernate will not do it!
-//			for (Long privateMessageId : privateMessageIds) {
-//				String hqlSel = "select c from PrivateMessages c " +
-//								"where c.privateMessageId = :privateMessageId ";
-//	
-//				Query querySel = session.createQuery(hqlSel); 
-//				querySel.setParameter("privateMessageId", privateMessageId);
-//				
-//				PrivateMessages privateMessages = (PrivateMessages) querySel.uniqueResult();
-//				
-//				if (privateMessages != null) {
-//					session.refresh(privateMessages);
-//				}
-//			}
-			
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			return updatedEntities;
 		} catch (Exception e) {
 			log.error("[updatePrivateMessagesReadStatus]",e);
@@ -734,15 +578,9 @@ public class PrivateMessagesDaoImpl {
 						"where c.room.rooms_id = :roomId ";
 			
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql); 
+			Query query = em.createQuery(hql); 
 			query.setParameter("roomId", roomId);
 			List<PrivateMessages> ll = query.getResultList();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 			return ll;	
 		} catch (Exception e) {

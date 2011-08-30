@@ -2,23 +2,25 @@ package org.openmeetings.test.navi;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
-import org.openmeetings.app.persistence.beans.basic.*;
+import org.junit.Test;
+import org.openmeetings.app.persistence.beans.basic.Naviglobal;
+import org.openmeetings.app.persistence.beans.basic.Navimain;
+import org.openmeetings.app.persistence.beans.basic.Navisub;
+import org.openmeetings.app.persistence.beans.basic.Sessiondata;
 import org.openmeetings.app.persistence.beans.domain.Organisation_Users;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.MainService;
-import junit.framework.TestCase;
+import org.openmeetings.test.AbstractOpenmeetingsSpringTest;
+import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestNavi extends TestCase {
+public class TestNavi extends AbstractOpenmeetingsSpringTest {
+	@Autowired
+	private MainService mService;
 	
-	public TestNavi(String testname){
-		super(testname);
-	}
-	
+	@Test
 	public void testGetNavi(){
 		
-		MainService mService = new MainService();
 		Sessiondata sessionData = mService.getsessiondata();
 		
 		Users us = (Users) mService.loginUser(sessionData.getSession_id(), "SebastianWagner", "test",false,null,-1L);

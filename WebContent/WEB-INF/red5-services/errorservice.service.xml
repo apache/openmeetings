@@ -8,8 +8,6 @@
     
         
     <!-- Class for Methods which can be invoked by the client -->
-    <bean id="errorservice.service" 
-        class="org.openmeetings.app.remote.ErrorService" 
-        />          
-                
+    <bean id="errorservice.service" class="org.openmeetings.app.remote.ErrorService" />          
+
 </beans>

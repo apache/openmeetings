@@ -1,0 +1,38 @@
+<serviceGroup>
+  <service name="UserService">
+	<description>User Service</description>
+	<messageReceivers>
+        <messageReceiver 
+            mep="http://www.w3.org/2004/08/wsdl/in-only"
+			class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver"/>
+        <messageReceiver
+            mep="http://www.w3.org/2004/08/wsdl/in-out"
+			class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+    </messageReceivers>
+    <parameter name="ServiceClass" locked="xsd:false">org.openmeetings.axis.services.UserWebServiceFacade</parameter>
+  </service>
+  <service name="RoomService">
+	<description>Room Service</description>
+	<messageReceivers>
+        <messageReceiver 
+            mep="http://www.w3.org/2004/08/wsdl/in-only"
+			class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver"/>
+        <messageReceiver
+            mep="http://www.w3.org/2004/08/wsdl/in-out"
+			class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+    </messageReceivers>
+    <parameter name="ServiceClass" locked="xsd:false">org.openmeetings.axis.services.RoomWebServiceFacade</parameter>
+  </service>
+  <service name="FileService">
+	<description>File Service</description>
+	<messageReceivers>
+        <messageReceiver 
+            mep="http://www.w3.org/2004/08/wsdl/in-only"
+			class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver"/>
+        <messageReceiver
+            mep="http://www.w3.org/2004/08/wsdl/in-out"
+			class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+    </messageReceivers>
+    <parameter name="ServiceClass" locked="xsd:false">org.openmeetings.axis.services.FileWebServiceFacade</parameter>
+  </service>
+</serviceGroup>

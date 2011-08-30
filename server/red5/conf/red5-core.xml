@@ -18,8 +18,8 @@
 		</property>
 	</bean>
 	
-	<bean id="placeholderConfig"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	<bean id="red5CorePlaceholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreUnresolvablePlaceholders" value="true"/>
 		<property name="location" value="classpath:/red5.properties" />
 	</bean>
 	

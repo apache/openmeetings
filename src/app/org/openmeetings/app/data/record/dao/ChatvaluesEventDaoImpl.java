@@ -2,47 +2,32 @@ package org.openmeetings.app.data.record.dao;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.red5.logging.Red5LoggerFactory;
-import javax.persistence.Query;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import org.openmeetings.app.persistence.beans.recording.ChatvaluesEvent;
-import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
+import org.openmeetings.app.persistence.beans.recording.ChatvaluesEvent;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
+import org.springframework.transaction.annotation.Transactional;
+
+@Transactional
 public class ChatvaluesEventDaoImpl {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(ChatvaluesEventDaoImpl.class, ScopeApplicationAdapter.webAppRootKey);
+	@PersistenceContext
+	private EntityManager em;
 
-	private ChatvaluesEventDaoImpl() {
-	}
-
-	private static ChatvaluesEventDaoImpl instance = null;
-
-	public static synchronized ChatvaluesEventDaoImpl getInstance() {
-		if (instance == null) {
-			instance = new ChatvaluesEventDaoImpl();
-		}
-
-		return instance;
-	}
-	
 	public List<ChatvaluesEvent> getChatvaluesEventByRoomRecordingId(Long roomrecordingId) {
 		try {
 			
 			String hql = "select c from ChatvaluesEvent as c " +
 						"where c.roomRecording.roomrecordingId = :roomrecordingId";
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql);
+			Query query = em.createQuery(hql);
 			query.setParameter("roomrecordingId", roomrecordingId);
 			List<ChatvaluesEvent> ll = query.getResultList();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 			return ll;
 	
@@ -56,16 +41,8 @@ public class ChatvaluesEventDaoImpl {
 	public Long addChatvaluesEvent(ChatvaluesEvent chatvaluesEvent) {
 		try {
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			
-			chatvaluesEvent = session.merge(chatvaluesEvent);
+			chatvaluesEvent = em.merge(chatvaluesEvent);
 			Long chatvaluesEventId = chatvaluesEvent.getChatvaluesEventId();
-			
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 			return chatvaluesEventId;
 		} catch (Exception ex2) {

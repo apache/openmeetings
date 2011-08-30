@@ -2,32 +2,23 @@ package org.openmeetings.app.data.user.dao;
 
 import java.util.Date;
 
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
 import org.openmeetings.app.persistence.beans.user.UserSipData;
-import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 public class UserSipDataDaoImpl {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(UserSipDataDaoImpl.class, ScopeApplicationAdapter.webAppRootKey);
-
-	private static UserSipDataDaoImpl instance = null;
-
-	
-	private UserSipDataDaoImpl() {
-	}
-
-	public static synchronized UserSipDataDaoImpl getInstance() {
-		if (instance == null) {
-			instance = new UserSipDataDaoImpl();
-		}
-		return instance;
-	}
+	@PersistenceContext
+	private EntityManager em;
 	
 	public UserSipData getUserSipDataById(Long userSipDataId) {
 		try {
@@ -38,19 +29,13 @@ public class UserSipDataDaoImpl {
 			
 			String hql = "select c from UserSipData as c where c.userSipDataId = :userSipDataId";
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql);
+			Query query = em.createQuery(hql);
 			query.setParameter("userSipDataId", userSipDataId);
 			UserSipData userSipData = null;
 			try {
 				userSipData = (UserSipData) query.getSingleResult();
 		    } catch (NoResultException ex) {
 		    }
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 			return userSipData;
 		} catch (Exception ex2) {
@@ -68,14 +53,8 @@ public class UserSipDataDaoImpl {
 			
 			userSipData.setInserted(new Date());
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			userSipData = session.merge(userSipData);
+			userSipData = em.merge(userSipData);
 			Long userSipDataId = userSipData.getUserSipDataId();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 			return userSipDataId;
 		} catch (Exception ex2) {
@@ -93,19 +72,13 @@ public class UserSipDataDaoImpl {
 			
 			userSipData.setUpdated(new Date());
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
 			if (userSipData.getUserSipDataId() == 0) {
-				session.persist(userSipData);
-			    } else {
-			    	if (!session.contains(userSipData)) {
-			    		session.merge(userSipData);
+				em.persist(userSipData);
+		    } else {
+		    	if (!em.contains(userSipData)) {
+		    		em.merge(userSipData);
 			    }
 			}
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 			return userSipData.getUserSipDataId();
 		} catch (Exception ex2) {

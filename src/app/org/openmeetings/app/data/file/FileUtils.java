@@ -14,156 +14,148 @@ import org.openmeetings.app.persistence.beans.files.FileExplorerItem;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class FileUtils {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(FileProcessor.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(
+			FileProcessor.class, ScopeApplicationAdapter.webAppRootKey);
 
-	private static FileUtils instance;
-	
-	private FileUtils() {}
+	@Autowired
+	private FileExplorerItemDaoImpl fileExplorerItemDao;
 
-	public static synchronized FileUtils getInstance() {
-		if (instance == null) {
-			instance = new FileUtils();
-		}
-		return instance;
-	}
-	
 	public long getSizeOfDirectoryAndSubs(FileExplorerItem fileExplorerItem) {
-        try {
+		try {
 
-            long fileSize = 0;
+			long fileSize = 0;
 
-            if (fileExplorerItem.getIsImage()) {
+			if (fileExplorerItem.getIsImage()) {
 
-                File tFile = new File(ScopeApplicationAdapter.webAppPath
-                        + File.separatorChar + "upload" + File.separatorChar
-                        + "files" + File.separatorChar
-                        + fileExplorerItem.getFileHash());
-                if (tFile.exists()) {
-                    fileSize += tFile.length();
-                }
+				File tFile = new File(ScopeApplicationAdapter.webAppPath
+						+ File.separatorChar + "upload" + File.separatorChar
+						+ "files" + File.separatorChar
+						+ fileExplorerItem.getFileHash());
+				if (tFile.exists()) {
+					fileSize += tFile.length();
+				}
 
-                File thumbFile = new File(ScopeApplicationAdapter.webAppPath
-                        + File.separatorChar + "upload" + File.separatorChar
-                        + "files" + File.separatorChar + "_thumb_"
-                        + fileExplorerItem.getFileHash());
-                if (thumbFile.exists()) {
-                    fileSize += thumbFile.length();
-                }
+				File thumbFile = new File(ScopeApplicationAdapter.webAppPath
+						+ File.separatorChar + "upload" + File.separatorChar
+						+ "files" + File.separatorChar + "_thumb_"
+						+ fileExplorerItem.getFileHash());
+				if (thumbFile.exists()) {
+					fileSize += thumbFile.length();
+				}
 
-            }
+			}
 
-            if (fileExplorerItem.getIsPresentation()) {
+			if (fileExplorerItem.getIsPresentation()) {
 
-                File tFolder = new File(ScopeApplicationAdapter.webAppPath
-                        + File.separatorChar + "upload" + File.separatorChar
-                        + "files" + File.separatorChar
-                        + fileExplorerItem.getFileHash());
+				File tFolder = new File(ScopeApplicationAdapter.webAppPath
+						+ File.separatorChar + "upload" + File.separatorChar
+						+ "files" + File.separatorChar
+						+ fileExplorerItem.getFileHash());
 
-                if (tFolder.exists()) {
-                    fileSize += this.getDirSize(tFolder);
-                }
+				if (tFolder.exists()) {
+					fileSize += this.getDirSize(tFolder);
+				}
 
-            }
+			}
 
-            log.debug("calling [1] FileExplorerItemDaoImpl.updateFileOrFolder()");
-            FileExplorerItemDaoImpl.getInstance().updateFileOrFolder(
-                    fileExplorerItem);
+			log.debug("calling [1] FileExplorerItemDaoImpl.updateFileOrFolder()");
+			fileExplorerItemDao.updateFileOrFolder(fileExplorerItem);
 
-            FileExplorerItem[] childElements = FileExplorerItemDaoImpl
-                    .getInstance().getFileExplorerItemsByParent(
-                            fileExplorerItem.getFileExplorerItemId());
+			FileExplorerItem[] childElements = fileExplorerItemDao
+					.getFileExplorerItemsByParent(fileExplorerItem
+							.getFileExplorerItemId());
 
-            for (FileExplorerItem childExplorerItem : childElements) {
+			for (FileExplorerItem childExplorerItem : childElements) {
 
-                fileSize += this.getSizeOfDirectoryAndSubs(childExplorerItem);
+				fileSize += this.getSizeOfDirectoryAndSubs(childExplorerItem);
 
-            }
+			}
 
-            return fileSize;
+			return fileSize;
 
-        } catch (Exception err) {
-            log.error("[getSizeOfDirectoryAndSubs] ", err);
-        }
-        return 0;
-    }
+		} catch (Exception err) {
+			log.error("[getSizeOfDirectoryAndSubs] ", err);
+		}
+		return 0;
+	}
 
 	public long getDirSize(File dir) {
-        long size = 0;
-        if (dir.isFile()) {
-            size = dir.length();
-        } else {
-            File[] subFiles = dir.listFiles();
+		long size = 0;
+		if (dir.isFile()) {
+			size = dir.length();
+		} else {
+			File[] subFiles = dir.listFiles();
 
-            for (File file : subFiles) {
-                if (file.isFile()) {
-                    size += file.length();
-                } else {
-                    size += this.getDirSize(file);
-                }
+			for (File file : subFiles) {
+				if (file.isFile()) {
+					size += file.length();
+				} else {
+					size += this.getDirSize(file);
+				}
 
-            }
-        }
+			}
+		}
 
-        return size;
-    }
-    
-	public void setFileToOwnerOrRoomByParent(
-            FileExplorerItem fileExplorerItem, Long users_id, Long room_id) {
-        try {
+		return size;
+	}
 
-            fileExplorerItem.setOwnerId(users_id);
-            fileExplorerItem.setRoom_id(room_id);
+	public void setFileToOwnerOrRoomByParent(FileExplorerItem fileExplorerItem,
+			Long users_id, Long room_id) {
+		try {
 
-            log.debug("calling [2] FileExplorerItemDaoImpl.updateFileOrFolder()");
-            FileExplorerItemDaoImpl.getInstance().updateFileOrFolder(
-                    fileExplorerItem);
+			fileExplorerItem.setOwnerId(users_id);
+			fileExplorerItem.setRoom_id(room_id);
 
-            FileExplorerItem[] childElements = FileExplorerItemDaoImpl
-                    .getInstance().getFileExplorerItemsByParent(
-                            fileExplorerItem.getFileExplorerItemId());
+			log.debug("calling [2] FileExplorerItemDaoImpl.updateFileOrFolder()");
+			fileExplorerItemDao.updateFileOrFolder(fileExplorerItem);
 
-            for (FileExplorerItem childExplorerItem : childElements) {
+			FileExplorerItem[] childElements = fileExplorerItemDao
+					.getFileExplorerItemsByParent(fileExplorerItem
+							.getFileExplorerItemId());
 
-                this.setFileToOwnerOrRoomByParent(childExplorerItem, users_id,
-                        room_id);
+			for (FileExplorerItem childExplorerItem : childElements) {
 
-            }
+				this.setFileToOwnerOrRoomByParent(childExplorerItem, users_id,
+						room_id);
 
-        } catch (Exception err) {
-            log.error("[setFileToOwnerOrRoomByParent] ", err);
-        }
-    }
+			}
+
+		} catch (Exception err) {
+			log.error("[setFileToOwnerOrRoomByParent] ", err);
+		}
+	}
 
 	public String formatDate(Date date) {
-        SimpleDateFormat formatter;
-        String pattern = "dd/MM/yy H:mm:ss";
-        Locale locale = new Locale("en", "US");
-        formatter = new SimpleDateFormat(pattern, locale);
-        return formatter.format(date);
-    }
-    
+		SimpleDateFormat formatter;
+		String pattern = "dd/MM/yy H:mm:ss";
+		Locale locale = new Locale("en", "US");
+		formatter = new SimpleDateFormat(pattern, locale);
+		return formatter.format(date);
+	}
+
 	public void copyFile(String sourceFile, String targetFile) {
-        try {
-            File f1 = new File(sourceFile);
-            File f2 = new File(targetFile);
-            InputStream in = new FileInputStream(f1);
+		try {
+			File f1 = new File(sourceFile);
+			File f2 = new File(targetFile);
+			InputStream in = new FileInputStream(f1);
 
-            // For Overwrite the file.
-            OutputStream out = new FileOutputStream(f2);
+			// For Overwrite the file.
+			OutputStream out = new FileOutputStream(f2);
 
-            byte[] buf = new byte[1024];
-            int len;
-            while ((len = in.read(buf)) > 0) {
-                out.write(buf, 0, len);
-            }
-            in.close();
-            out.close();
-            System.out.println("File copied.");
-        } catch (Exception e) {
-            log.error("[copyfile]", e);
-        }
-    }
+			byte[] buf = new byte[1024];
+			int len;
+			while ((len = in.read(buf)) > 0) {
+				out.write(buf, 0, len);
+			}
+			in.close();
+			out.close();
+			System.out.println("File copied.");
+		} catch (Exception e) {
+			log.error("[copyfile]", e);
+		}
+	}
 }

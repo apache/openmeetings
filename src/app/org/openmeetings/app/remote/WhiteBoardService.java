@@ -21,6 +21,7 @@ import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.remote.red5.WhiteBoardObjectListManager;
 import org.openmeetings.app.remote.red5.WhiteBoardObjectListManagerById;
+import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.IScope;
 import org.red5.server.api.Red5;
@@ -28,7 +29,7 @@ import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.api.service.IServiceCapableConnection;
 import org.slf4j.Logger;
-import org.red5.logging.Red5LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 
@@ -37,53 +38,22 @@ import org.red5.logging.Red5LoggerFactory;
  */
 public class WhiteBoardService implements IPendingServiceCallback {
 	
-private static final Logger log = Red5LoggerFactory.getLogger(WhiteBoardService.class, "openmeetings");
-	
-	private WhiteBoardService() {}
-	
-	private static WhiteBoardService instance = null;
-	
-	//Beans, see red5-web.xml
+	private static final Logger log = Red5LoggerFactory.getLogger(WhiteBoardService.class, "openmeetings");
+    @Autowired
+    private Usermanagement userManagement;
+    @Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter = null;
+    @Autowired
 	private ClientListManager clientListManager = null;
+    @Autowired
 	private WhiteBoardObjectListManager whiteBoardObjectListManager = null;
+    @Autowired
 	private WhiteBoardObjectListManagerById whiteBoardObjectListManagerById = null;
+	@Autowired
+	private Sessionmanagement sessionManagement;
+	@Autowired
+	private AuthLevelmanagement authLevelManagement;
 	 
-	public static synchronized WhiteBoardService getInstance() {
-		if (instance == null) {
-			instance = new WhiteBoardService();
-		}
-		return instance;
-	}
-	
-	//Beans, see red5-web.xml
-	public ClientListManager getClientListManager() {
-		return clientListManager;
-	}
-	public void setClientListManager(ClientListManager clientListManager) {
-		this.clientListManager = clientListManager;
-	}
-	public WhiteBoardObjectListManager getWhiteBoardObjectListManager() {
-		return whiteBoardObjectListManager;
-	}
-	public void setWhiteBoardObjectListManager(
-			WhiteBoardObjectListManager whiteBoardObjectListManager) {
-		this.whiteBoardObjectListManager = whiteBoardObjectListManager;
-	}
-	public ScopeApplicationAdapter getScopeApplicationAdapter() {
-		return scopeApplicationAdapter;
-	}
-	public void setScopeApplicationAdapter(
-			ScopeApplicationAdapter scopeApplicationAdapter) {
-		this.scopeApplicationAdapter = scopeApplicationAdapter;
-	}
-	public WhiteBoardObjectListManagerById getWhiteBoardObjectListManagerById() {
-		return whiteBoardObjectListManagerById;
-	}
-	public void setWhiteBoardObjectListManagerById(
-			WhiteBoardObjectListManagerById whiteBoardObjectListManagerById) {
-		this.whiteBoardObjectListManagerById = whiteBoardObjectListManagerById;
-	}
 	/**
 	 * Loading the List of Objects on the whiteboard
 	 * @return HashMap<String,Map>
@@ -247,10 +217,10 @@ private static final Logger log = Red5LoggerFactory.getLogger(WhiteBoardService.
 			String streamid = current.getClient().getId();
 			RoomClient currentClient = this.clientListManager.getClientByStreamId(streamid);
 			
-			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+			Long users_id = sessionManagement.checkSession(SID);
+	        Long user_level = userManagement.getUserLevelByID(users_id);
 	        
-	        if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+	        if (authLevelManagement.checkUserLevel(user_level)) {
 	        	
 	        	if (currentClient.getIsMod()) {
 	        		RoomClient rcl = this.clientListManager.getClientByPublicSID(publicSID);
@@ -285,10 +255,10 @@ private static final Logger log = Red5LoggerFactory.getLogger(WhiteBoardService.
 			String streamid = current.getClient().getId();
 			RoomClient currentClient = this.clientListManager.getClientByStreamId(streamid);
 			
-			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+			Long users_id = sessionManagement.checkSession(SID);
+	        Long user_level = userManagement.getUserLevelByID(users_id);
 	        
-	        if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+	        if (authLevelManagement.checkUserLevel(user_level)) {
 	        	
 	        	if (currentClient.getIsMod()) {
 	        		RoomClient rcl = this.clientListManager.getClientByPublicSID(publicSID);
@@ -323,10 +293,10 @@ private static final Logger log = Red5LoggerFactory.getLogger(WhiteBoardService.
 			String streamid = current.getClient().getId();
 			RoomClient currentClient = this.clientListManager.getClientByStreamId(streamid);
 			
-			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-	        Long user_level = Usermanagement.getInstance().getUserLevelByID(users_id);
+			Long users_id = sessionManagement.checkSession(SID);
+	        Long user_level = userManagement.getUserLevelByID(users_id);
 	        
-	        if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+	        if (authLevelManagement.checkUserLevel(user_level)) {
 	        	
 	        	if (currentClient.getIsMod()) {
 	        		RoomClient rcl = this.clientListManager.getClientByPublicSID(publicSID);

@@ -1,28 +1,29 @@
 package org.openmeetings.app.data.basic;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Date;
-import java.util.Calendar;
 
-import org.openmeetings.app.persistence.beans.basic.Sessiondata;
-import org.openmeetings.app.persistence.beans.recording.RoomClient;
-import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
-import org.openmeetings.app.remote.red5.ClientListManager;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
-import org.openmeetings.utils.crypt.ManageCryptStyle;
-import org.slf4j.Logger;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.openmeetings.app.persistence.beans.basic.Sessiondata;
+import org.openmeetings.app.persistence.beans.recording.RoomClient;
+import org.openmeetings.app.remote.red5.ClientListManager;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.Query;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.TypedQuery;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 
@@ -31,33 +32,18 @@ import javax.persistence.TypedQuery;
  *         TODO: Delete all inactive session by a scheduler
  * 
  */
+@Transactional
 public class Sessionmanagement {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			Sessionmanagement.class, ScopeApplicationAdapter.webAppRootKey);
+	@PersistenceContext
+	private EntityManager em;
 
-	// private static final Logger log = new Logger(Sessionmanagement.class,
-	// ScopeApplicationAdapter.webAppRootKey);
-
-	// private static final Logger log =
-	// Red5Red5LoggerFactory.getLogger(Sessionmanagement.class,
-	// ScopeApplicationAdapter.webAppRootKey);
-	// private static final Logger log =
-	// Red5LoggerFactory.getLogger(Sessionmanagement.class,
-	// ScopeApplicationAdapter.webAppRootKey);
-
-	private static Sessionmanagement instance;
-
-	private Sessionmanagement() {
-		// log.setLevel(Level.DEBUG);
-	}
-
-	public static synchronized Sessionmanagement getInstance() {
-		if (instance == null) {
-			instance = new Sessionmanagement();
-		}
-		return instance;
-	}
+	@Autowired
+	private ManageCryptStyle manageCryptStyle;
+	@Autowired
+	private ClientListManager clientListManager;
 
 	/**
 	 * creates a new session-object in the database
@@ -68,28 +54,17 @@ public class Sessionmanagement {
 		// log.error("startsession User: || ");
 		try {
 
-			System.out.println("startsession :: startsession");
 			log.debug("startsession :: startsession");
 
 			long thistime = new Date().getTime();
 			Sessiondata sessiondata = new Sessiondata();
-			sessiondata.setSession_id(ManageCryptStyle.getInstance()
-					.getInstanceOfCrypt()
+			sessiondata.setSession_id(manageCryptStyle.getInstanceOfCrypt()
 					.createPassPhrase(String.valueOf(thistime).toString()));
 			sessiondata.setRefresh_time(new Date());
 			sessiondata.setStarttermin_time(new Date());
 			sessiondata.setUser_id(null);
 
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			session.flush();
-			sessiondata = session.merge(sessiondata);
-			session.flush();
-			session.refresh(sessiondata);
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
+			sessiondata = em.merge(sessiondata);
 
 			return sessiondata;
 		} catch (Exception ex2) {
@@ -103,22 +78,15 @@ public class Sessionmanagement {
 		try {
 			log.debug("updateUser User SID: " + SID);
 
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			session.flush();
-			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaBuilder cb = em.getCriteriaBuilder();
 			CriteriaQuery<Sessiondata> cq = cb.createQuery(Sessiondata.class);
 			Root<Sessiondata> c = cq.from(Sessiondata.class);
 			Predicate condition = cb.equal(c.get("session_id"), SID);
 			cq.where(condition);
 
-			TypedQuery<Sessiondata> q = session.createQuery(cq);
+			TypedQuery<Sessiondata> q = em.createQuery(cq);
 
 			List<Sessiondata> fullList = q.getResultList();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			if (fullList.size() == 0) {
 				log.error("Could not find session to update: " + SID);
 				return null;
@@ -126,7 +94,7 @@ public class Sessionmanagement {
 				// log.error("Found session to update: "+SID);
 			}
 
-			Sessiondata sd = (Sessiondata) fullList.get(0);
+			Sessiondata sd = fullList.get(0);
 
 			return sd;
 		} catch (Exception ex2) {
@@ -192,18 +160,11 @@ public class Sessionmanagement {
 					+ "where c.session_id LIKE :session_id";
 
 			// log.debug("checkSession User: || "+SID);
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-
 			// session.flush();
-			Query query = session.createQuery(hql);
+			Query query = em.createQuery(hql);
 			query.setParameter("session_id", SID);
 
 			List<Sessiondata> sessions = query.getResultList();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 
 			Sessiondata sessiondata = null;
 			if (sessions != null && sessions.size() > 0) {
@@ -249,18 +210,10 @@ public class Sessionmanagement {
 					+ "where c.session_id LIKE :session_id";
 
 			// log.debug("checkSession User: || "+SID);
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-
-			// session.flush();
-			Query query = session.createQuery(hql);
+			Query query = em.createQuery(hql);
 			query.setParameter("session_id", SID);
 
 			List<Sessiondata> sessions = query.getResultList();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 
 			Sessiondata sessiondata = null;
 			if (sessions != null && sessions.size() > 0) {
@@ -274,22 +227,16 @@ public class Sessionmanagement {
 			log.debug("Found session to update: " + sessiondata.getSession_id()
 					+ " userId: " + USER_ID);
 
-			idf = PersistenceSessionUtil.createSession();
-			session = PersistenceSessionUtil.getSession();
-			tx = session.getTransaction();
-			tx.begin();
 			sessiondata.setRefresh_time(new Date());
 			// session.refresh(sd);
 			sessiondata.setUser_id(USER_ID);
 			if (sessiondata.getId() == null) {
-				session.persist(sessiondata);
+				em.persist(sessiondata);
 			} else {
-				if (!session.contains(sessiondata)) {
-					session.merge(sessiondata);
+				if (!em.contains(sessiondata)) {
+					em.merge(sessiondata);
 				}
 			}
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 
 			// log.debug("session updated User: "+USER_ID);
 			return true;
@@ -308,18 +255,10 @@ public class Sessionmanagement {
 					+ "where c.session_id LIKE :session_id";
 
 			// log.debug("checkSession User: || "+SID);
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-
-			session.flush();
-			Query query = session.createQuery(hql);
+			Query query = em.createQuery(hql);
 			query.setParameter("session_id", SID);
 
 			List<Sessiondata> sessions = query.getResultList();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 
 			Sessiondata sessiondata = null;
 			if (sessions != null && sessions.size() > 0) {
@@ -333,10 +272,6 @@ public class Sessionmanagement {
 			log.debug("Found session to update: " + sessiondata.getSession_id()
 					+ " userId: " + USER_ID);
 
-			idf = PersistenceSessionUtil.createSession();
-			session = PersistenceSessionUtil.getSession();
-			tx = session.getTransaction();
-			tx.begin();
 			sessiondata.setRefresh_time(new Date());
 			// session.refresh(sd);
 			sessiondata.setUser_id(USER_ID);
@@ -345,15 +280,12 @@ public class Sessionmanagement {
 			}
 			sessiondata.setLanguage_id(language_id);
 			if (sessiondata.getId() == null) {
-				session.persist(sessiondata);
+				em.persist(sessiondata);
 			} else {
-				if (!session.contains(sessiondata)) {
-					session.merge(sessiondata);
+				if (!em.contains(sessiondata)) {
+					em.merge(sessiondata);
 				}
 			}
-			session.flush();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 
 			// log.debug("session updated User: "+USER_ID);
 			return true;
@@ -371,18 +303,10 @@ public class Sessionmanagement {
 					+ "where c.session_id LIKE :session_id";
 
 			// log.debug("checkSession User: || "+SID);
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-
-			session.flush();
-			Query query = session.createQuery(hql);
+			Query query = em.createQuery(hql);
 			query.setParameter("session_id", SID);
 
 			List<Sessiondata> sessions = query.getResultList();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 
 			Sessiondata sessiondata = null;
 			if (sessions != null && sessions.size() > 0) {
@@ -396,24 +320,16 @@ public class Sessionmanagement {
 			log.debug("Found session to update: " + sessiondata.getSession_id()
 					+ " organisation_id: " + organization_id);
 
-			idf = PersistenceSessionUtil.createSession();
-			session = PersistenceSessionUtil.getSession();
-			tx = session.getTransaction();
-			tx.begin();
 			sessiondata.setRefresh_time(new Date());
 			// session.refresh(sd);
 			sessiondata.setOrganization_id(organization_id);
 			if (sessiondata.getId() == null) {
-				session.persist(sessiondata);
+				em.persist(sessiondata);
 			} else {
-				if (!session.contains(sessiondata)) {
-					session.merge(sessiondata);
+				if (!em.contains(sessiondata)) {
+					em.merge(sessiondata);
 				}
 			}
-			session.flush();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
-
 			// log.debug("session updated User: "+USER_ID);
 			return true;
 		} catch (Exception ex2) {
@@ -430,18 +346,10 @@ public class Sessionmanagement {
 					+ "where c.session_id LIKE :session_id";
 
 			// log.debug("checkSession User: || "+SID);
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-
-			session.flush();
-			Query query = session.createQuery(hql);
+			Query query = em.createQuery(hql);
 			query.setParameter("session_id", SID);
 
 			List<Sessiondata> sessions = query.getResultList();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 
 			Sessiondata sessiondata = null;
 			if (sessions != null && sessions.size() > 0) {
@@ -455,23 +363,16 @@ public class Sessionmanagement {
 			log.debug("Found session to update: " + sessiondata.getSession_id()
 					+ " userId: " + USER_ID);
 
-			idf = PersistenceSessionUtil.createSession();
-			session = PersistenceSessionUtil.getSession();
-			tx = session.getTransaction();
-			tx.begin();
 			sessiondata.setRefresh_time(new Date());
 			// session.refresh(sd);
 			sessiondata.setUser_id(USER_ID);
 			if (sessiondata.getId() == null) {
-				session.persist(sessiondata);
+				em.persist(sessiondata);
 			} else {
-				if (!session.contains(sessiondata)) {
-					session.merge(sessiondata);
+				if (!em.contains(sessiondata)) {
+					em.merge(sessiondata);
 				}
 			}
-			session.flush();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 
 			// log.debug("session updated User: "+USER_ID);
 			return true;
@@ -485,21 +386,14 @@ public class Sessionmanagement {
 		try {
 			log.debug("updateUser User SID: " + SID);
 
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			session.flush();
-			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaBuilder cb = em.getCriteriaBuilder();
 			CriteriaQuery<Sessiondata> cq = cb.createQuery(Sessiondata.class);
 			Root<Sessiondata> c = cq.from(Sessiondata.class);
 			Predicate condition = cb.equal(c.get("session_id"), SID);
 			cq.where(condition);
 
-			TypedQuery<Sessiondata> q = session.createQuery(cq);
+			TypedQuery<Sessiondata> q = em.createQuery(cq);
 			List<Sessiondata> fullList = q.getResultList();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 
 			if (fullList.size() == 0) {
 				log.error("Could not find session to update: " + SID);
@@ -507,32 +401,20 @@ public class Sessionmanagement {
 			} else {
 				// log.error("Found session to update: "+SID);
 			}
-			Sessiondata sd = (Sessiondata) fullList.get(0);
+			Sessiondata sd = fullList.get(0);
 			// log.debug("Found session to update: "+sd.getSession_id()+
 			// " userId: "+USER_ID);
 
 			sd.setRefresh_time(new Date());
 			sd.setSessionXml(sessionXml);
 
-			idf = PersistenceSessionUtil.createSession();
-			session = PersistenceSessionUtil.getSession();
-			tx = session.getTransaction();
-			tx.begin();
-
-			// session.refresh(sd);
-
-			session.flush();
 			if (sd.getId() == null) {
-				session.persist(sd);
+				em.persist(sd);
 			} else {
-				if (!session.contains(sd)) {
-					session.merge(sd);
+				if (!em.contains(sd)) {
+					em.merge(sd);
 				}
 			}
-			session.flush();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
-
 			// log.debug("session updated User: "+USER_ID);
 			return true;
 		} catch (Exception ex2) {
@@ -549,44 +431,31 @@ public class Sessionmanagement {
 	private void updatesession(String SID) {
 		try {
 			// log.debug("****** updatesession: "+SID);
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaBuilder cb = em.getCriteriaBuilder();
 			CriteriaQuery<Sessiondata> cq = cb.createQuery(Sessiondata.class);
 			Root<Sessiondata> c = cq.from(Sessiondata.class);
 			Predicate condition = cb.equal(c.get("session_id"), SID);
 			cq.where(condition);
 
-			TypedQuery<Sessiondata> q = session.createQuery(cq);
+			TypedQuery<Sessiondata> q = em.createQuery(cq);
 
 			List<Sessiondata> fullList = q.getResultList();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			if (fullList.size() == 0) {
 				log.error("Found NO session to updateSession: ");
 
 			} else {
 				// log.debug("Found session to updateSession: ");
-				Sessiondata sd = (Sessiondata) fullList.iterator().next();
+				Sessiondata sd = fullList.iterator().next();
 				// log.debug("Found session to updateSession sd "+sd.getUser_id()+" "+sd.getSession_id());
 				sd.setRefresh_time(new Date());
 
-				Object idf2 = PersistenceSessionUtil.createSession();
-				EntityManager session2 = PersistenceSessionUtil.getSession();
-				EntityTransaction tx2 = session2.getTransaction();
-				tx2.begin();
 				if (sd.getId() == null) {
-					session2.persist(sd);
+					em.persist(sd);
 				} else {
-					if (!session2.contains(sd)) {
-						session2.merge(sd);
+					if (!em.contains(sd)) {
+						em.merge(sd);
 					}
 				}
-				session2.flush();
-				tx2.commit();
-				PersistenceSessionUtil.closeSession(idf2);
 			}
 
 		} catch (Exception ex2) {
@@ -607,15 +476,9 @@ public class Sessionmanagement {
 					+ "c.storePermanent IS NULL " + "OR "
 					+ "c.storePermanent = false " + ")";
 
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql);
+			Query query = em.createQuery(hql);
 			query.setParameter("refresh_time", refresh_time);
 			List<Sessiondata> fullList = query.getResultList();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 
 			log.debug("Sessions To Delete :: " + fullList.size());
 
@@ -638,18 +501,11 @@ public class Sessionmanagement {
 			rightNow.setTimeInMillis(rightNow.getTimeInMillis() - 1800000);
 			List l = this.getSessionToDelete(rightNow.getTime());
 			log.debug("clearSessionTable: " + l.size());
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
 			for (Iterator it = l.iterator(); it.hasNext();) {
 				Sessiondata sData = (Sessiondata) it.next();
-				sData = session.find(Sessiondata.class, sData.getId());
-				session.remove(sData);
+				sData = em.find(Sessiondata.class, sData.getId());
+				em.remove(sData);
 			}
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
-
 		} catch (Exception err) {
 			log.error("clearSessionTable", err);
 		}
@@ -661,12 +517,12 @@ public class Sessionmanagement {
 	public void clearSessionByRoomId(Long room_id) {
 		try {
 
-			HashMap<String, RoomClient> MyUserList = ClientListManager
-					.getInstance().getClientListByRoom(room_id);
+			HashMap<String, RoomClient> MyUserList = clientListManager
+					.getClientListByRoom(room_id);
 
 			for (Iterator<String> iter = MyUserList.keySet().iterator(); iter
 					.hasNext();) {
-				String key = (String) iter.next();
+				String key = iter.next();
 
 				RoomClient rcl = MyUserList.get(key);
 
@@ -680,13 +536,8 @@ public class Sessionmanagement {
 
 				Sessiondata sData = this.getSessionByHash(SID);
 
-				Object idf = PersistenceSessionUtil.createSession();
-				EntityManager session = PersistenceSessionUtil.getSession();
-				EntityTransaction tx = session.getTransaction();
-				tx.begin();
-				sData = session.find(Sessiondata.class, sData.getId());
-				session.remove(sData);
-				PersistenceSessionUtil.closeSession(idf);
+				sData = em.find(Sessiondata.class, sData.getId());
+				em.remove(sData);
 			}
 
 		} catch (Exception err) {

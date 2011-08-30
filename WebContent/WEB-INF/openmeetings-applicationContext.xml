@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<beans	xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:tx="http://www.springframework.org/schema/tx"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd" 
+>
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
+		<property name="persistenceUnitName" value="openmeetings" />
+	</bean>
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+
+	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+	
+	<bean id="jpaTransactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+	 
+	<bean class="org.springframework.web.context.support.ServletContextAttributeExporter">
+		<property name="attributes">
+			<map>
+				<entry key="cfgManagement">
+					<ref bean="cfgManagement"/>
+				</entry>
+				<entry key="sessionManagement">
+					<ref bean="sessionManagement"/>
+				</entry>
+				<entry key="userManagement">
+					<ref bean="userManagement"/>
+				</entry>
+				<entry key="fieldmanagment">
+					<ref bean="fieldmanagment"/>
+				</entry>
+				<entry key="appointmentDao">
+					<ref bean="appointmentDao"/>
+				</entry>
+				<entry key="organisationmanagement">
+					<ref bean="organisationmanagement"/>
+				</entry>
+				<entry key="roommanagement">
+					<ref bean="roommanagement"/>
+				</entry>
+				<entry key="fileExplorerItemDao">
+					<ref bean="fileExplorerItemDao"/>
+				</entry>
+				<entry key="flvRecordingDao">
+					<ref bean="flvRecordingDao"/>
+				</entry>
+				<entry key="flvRecordingMetaDataDao">
+					<ref bean="flvRecordingMetaDataDao"/>
+				</entry>
+				<entry key="roomModeratorsDao">
+					<ref bean="roomModeratorsDao"/>
+				</entry>
+				<entry key="usersDao">
+					<ref bean="usersDao"/>
+				</entry>
+				<entry key="meetingMemberDao">
+					<ref bean="meetingMemberDao"/>
+				</entry>
+				<entry key="ldapConfigDao">
+					<ref bean="ldapConfigDao"/>
+				</entry>
+				<entry key="privateMessagesDao">
+					<ref bean="privateMessagesDao"/>
+				</entry>
+				<entry key="privateMessageFolderDao">
+					<ref bean="privateMessageFolderDao"/>
+				</entry>
+				<entry key="userContactsDao">
+					<ref bean="userContactsDao"/>
+				</entry>
+				<entry key="statemanagement">
+					<ref bean="statemanagement"/>
+				</entry>
+				<entry key="omTimeZoneDaoImpl">
+					<ref bean="omTimeZoneDaoImpl"/>
+				</entry>
+				<entry key="appointmentCategoryDaoImpl">
+					<ref bean="appointmentCategoryDaoImpl"/>
+				</entry>
+				<entry key="appointmentReminderTypDaoImpl">
+					<ref bean="appointmentReminderTypDaoImpl"/>
+				</entry>
+				<entry key="appointmentLogic">
+					<ref bean="appointmentLogic"/>
+				</entry>
+				<entry key="fieldLanguageDaoImpl">
+					<ref bean="fieldLanguageDaoImpl"/>
+				</entry>
+				<entry key="scopeApplicationAdapter">
+					<ref bean="web.handler"/>
+				</entry>
+				<entry key="mainService">
+					<ref bean="xmlcrm.service"/>
+				</entry>
+				<entry key="generateImage">
+					<ref bean="generateImage"/>
+				</entry>
+				<entry key="generateThumbs">
+					<ref bean="generateThumbs"/>
+				</entry>
+				<entry key="generatePDF">
+					<ref bean="generatePDF"/>
+				</entry>
+				<entry key="importInitvalues">
+                    <ref bean="importInitvalues"/>
+                </entry>
+				<entry key="authLevelManagement">
+                    <ref bean="authLevelManagement"/>
+                </entry>
+				<entry key="fileProcessor">
+                    <ref bean="openmeetings.FileProcessor"/>
+                </entry>
+				<entry key="clientListManager">
+                    <ref bean="openmeetings.ClientListManager"/>
+                </entry>
+				<entry key="rtpStreamingHandler">
+                    <ref bean="rtpStreamingHandler"/>
+                </entry>
+                <!-- 
+                <entry key="mainService">
+                    <ref bean="xmlcrm.service"/>
+                </entry>
+                 -->
+			</map>
+		</property>
+	</bean>
+	
+    <!-- New Class for the Streaming Handlers -->
+    <bean id="web.handler" class="org.openmeetings.app.remote.red5.ScopeApplicationAdapter"/>
+    <bean id="openmeetings.ClientListManager" class="org.openmeetings.app.remote.red5.ClientListManager" />
+    <bean id="openmeetings.EmoticonsManager" class="org.openmeetings.app.remote.red5.EmoticonsManager" />
+    <bean id="openmeetings.WhiteBoardObjectListManager" class="org.openmeetings.app.remote.red5.WhiteBoardObjectListManager" />
+    <bean id="openmeetings.WhiteBoardObjectListManagerById" class="org.openmeetings.app.remote.red5.WhiteBoardObjectListManagerById" />
+
+	<!-- Services -->
+    <import resource="red5-services/appointmentcategoryservice.service.xml"/> 
+    <import resource="red5-services/appointmentreminderservice.service.xml"/>
+    <import resource="red5-services/calendarservice.service.xml"/> 
+    <import resource="red5-services/meetingmemberservice.service.xml"/>  
+    <import resource="red5-services/fileservice.service.xml"/>  
+    <import resource="red5-services/conferenceservice.service.xml"/>  
+    <import resource="red5-services/userservice.service.xml"/>  
+    <import resource="red5-services/organisationservice.service.xml"/>  
+    <import resource="red5-services/configservice.service.xml"/>  
+    <import resource="red5-services/errorservice.service.xml"/>  
+    <import resource="red5-services/pollservice.service.xml"/>  
+    <import resource="red5-services/xmlcrm.service.xml"/>  
+    <import resource="red5-services/languageservice.service.xml"/>  
+    <import resource="red5-services/chatservice.service.xml"/>  
+    <import resource="red5-services/streamservice.service.xml"/>  
+    <import resource="red5-services/invitationservice.service.xml"/>  
+    <import resource="red5-services/whiteboardservice.service.xml"/>  
+    <import resource="red5-services/printservice.service.xml"/>  
+    <import resource="red5-services/flvrecorderservice.service.xml"/> 
+    <import resource="red5-services/ldapconfigservice.service.xml"/>
+    
+    <!-- Scheduled tasks --> 
+    <import resource="red5-services/schedulerJobs.service.xml"/>  
+
+	<!-- Interface Transactional -->
+	<bean id="appointmentReminderTypDaoImpl" class="org.openmeetings.app.data.calendar.daos.AppointmentReminderTypDaoImpl" />
+	<bean id="appointmentCategoryDaoImpl" class="org.openmeetings.app.data.calendar.daos.AppointmentCategoryDaoImpl" />
+	<bean id="roommanagement" class="org.openmeetings.app.data.conference.Roommanagement" />
+	<bean id="addressmanagement" class="org.openmeetings.app.data.user.Addressmanagement" />
+	<bean id="organisationmanagement" class="org.openmeetings.app.data.user.Organisationmanagement" />
+	<bean id="salutationmanagement" class="org.openmeetings.app.data.user.Salutationmanagement" />
+	<bean id="errorManagement" class="org.openmeetings.app.data.basic.ErrorManagement" />
+	<bean id="navimanagement" class="org.openmeetings.app.data.basic.Navimanagement" />
+	<bean id="omTimeZoneDaoImpl" class="org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl" />
+	<bean id="statemanagement" class="org.openmeetings.app.data.user.Statemanagement" />
+	<bean id="fieldLanguageDaoImpl" class="org.openmeetings.app.data.basic.FieldLanguageDaoImpl"/>
+	<bean id="fieldmanagment" class="org.openmeetings.app.data.basic.Fieldmanagment"/>
+	<bean id="cfgManagement" class="org.openmeetings.app.data.basic.Configurationmanagement"/>
+	<bean id="recordingDao" class="org.openmeetings.app.data.record.dao.RecordingDaoImpl"/>
+	<bean id="appointmentDao" class="org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl"/>
+	<bean id="appointmentLogic" class="org.openmeetings.app.data.calendar.management.AppointmentLogic"/>
+	<bean id="sessionManagement" class="org.openmeetings.app.data.basic.Sessionmanagement"/>
+	<bean id="userManagement" class="org.openmeetings.app.data.user.Usermanagement"/>
+	<bean id="roomModeratorsDao" class="org.openmeetings.app.data.conference.dao.RoomModeratorsDaoImpl"/>
+	<bean id="chatValuesEventDao" class="org.openmeetings.app.data.record.dao.ChatvaluesEventDaoImpl"/>
+	<bean id="conferenceLogDao" class="org.openmeetings.app.data.logs.ConferenceLogDaoImpl"/>
+	<bean id="conferenceLogTypeDao" class="org.openmeetings.app.data.logs.ConferenceLogTypeDaoImpl"/>
+	<bean id="emailManagement" class="org.openmeetings.app.data.user.Emailmanagement"/>
+	<bean id="fileExplorerItemDao" class="org.openmeetings.app.data.file.dao.FileExplorerItemDaoImpl"/>
+	<bean id="flvRecordingDao" class="org.openmeetings.app.data.flvrecord.FlvRecordingDaoImpl"/>
+	<bean id="flvRecordingLogDao" class="org.openmeetings.app.data.flvrecord.FlvRecordingLogDaoImpl"/>
+	<bean id="flvRecordingMetaDataDao" class="org.openmeetings.app.data.flvrecord.FlvRecordingMetaDataDaoImpl"/>
+	<bean id="flvRecordingMetaDeltaDao" class="org.openmeetings.app.data.flvrecord.FlvRecordingMetaDeltaDaoImpl"/>
+	<bean id="groupManagement" class="org.openmeetings.app.data.user.Groupmanagement"/>
+	<bean id="ldapConfigDao" class="org.openmeetings.app.data.basic.dao.LdapConfigDaoImpl"/>
+	<bean id="invitationManagement" class="org.openmeetings.app.data.conference.Invitationmanagement"/>
+	<bean id="meetingMemberDao" class="org.openmeetings.app.data.calendar.daos.MeetingMemberDaoImpl"/>
+	<bean id="openXGReturnObjectDao" class="org.openmeetings.app.sip.xmlrpc.custom.dao.OpenXGReturnObjectDaoImpl"/>
+	<bean id="privateMessageFolderDao" class="org.openmeetings.app.data.user.dao.PrivateMessageFolderDaoImpl"/>
+	<bean id="privateMessagesDao" class="org.openmeetings.app.data.user.dao.PrivateMessagesDaoImpl"/>
+	<bean id="recordingClientDao" class="org.openmeetings.app.data.record.dao.RecordingClientDaoImpl"/>
+	<bean id="recordingConversionJobDao" class="org.openmeetings.app.data.record.dao.RecordingConversionJobDaoImpl"/>
+	<bean id="roomClientDao" class="org.openmeetings.app.data.record.dao.RoomClientDaoImpl"/>
+	<bean id="roomRecordingDao" class="org.openmeetings.app.data.record.dao.RoomRecordingDaoImpl"/>
+	<bean id="roomStreamDao" class="org.openmeetings.app.data.record.dao.RoomStreamDaoImpl"/>
+	<bean id="soapLoginDao" class="org.openmeetings.app.data.basic.dao.SOAPLoginDaoImpl"/>
+	<bean id="userContactsDao" class="org.openmeetings.app.data.user.dao.UserContactsDaoImpl"/>
+	<bean id="userSipDataDao" class="org.openmeetings.app.data.user.dao.UserSipDataDaoImpl"/>
+	<bean id="usersDao" class="org.openmeetings.app.data.user.dao.UsersDaoImpl"/>
+	<bean id="whiteBoardEventDao" class="org.openmeetings.app.data.record.dao.WhiteBoardEventDaoImpl"/>
+	
+	<!-- No Interface -->
+	<bean id="manageCryptStyle" class="org.openmeetings.utils.crypt.ManageCryptStyle" />
+	<bean id="openXGHttpClient" class="org.openmeetings.app.sip.xmlrpc.OpenXGHttpClient" />
+	<bean id="appointmentCategoryLogic" class="org.openmeetings.app.data.calendar.management.AppointmentCategoryLogic" />
+	<bean id="whiteboardConvertionJobManager" class="org.openmeetings.app.data.record.WhiteboardConvertionJobManager" />
+	<bean id="generateImage" class="org.openmeetings.app.documents.GenerateImage" />
+	<bean id="generateThumbs" class="org.openmeetings.app.documents.GenerateThumbs" />
+	<bean id="generatePDF" class="org.openmeetings.app.documents.GeneratePDF" />
+	<bean id="serverSharingSessionList" class="org.openmeetings.server.cache.ServerSharingSessionList" />
+	<bean id="serverSocketMinaProcess" class="org.openmeetings.server.socket.ServerSocketMinaProcess" />
+	<bean id="whiteboardConvertionJobManagerSWFTools" class="org.openmeetings.app.data.record.WhiteboardConvertionJobManagerSWFTools" />
+	<bean id="mailHandler" class="org.openmeetings.utils.mail.MailHandler" />
+	<bean id="feedbackManagement" class="org.openmeetings.app.data.conference.Feedbackmanagement" />
+	<bean id="importInitvalues" class="org.openmeetings.app.installation.ImportInitvalues" />
+	<bean id="libraryWmlLoader" class="org.openmeetings.app.documents.LibraryWmlLoader" />
+	<bean id="loadAtomRssFeed" class="org.openmeetings.app.rss.LoadAtomRssFeed" />
+	<bean id="authLevelManagement" class="org.openmeetings.app.data.basic.AuthLevelmanagement" />
+	<bean id="generateSWF" class="org.openmeetings.app.documents.GenerateSWF" />
+	<bean id="fileUtils" class="org.openmeetings.app.data.file.FileUtils" />
+	<bean id="rtpStreamingHandler" class="org.openmeetings.app.rtp.RTPStreamingHandler" />
+	
+	<!--  Templates -->
+	<bean id="registerUserTemplate" class="org.openmeetings.app.templates.RegisterUserTemplate" />
+	<bean id="feedbackTemplate" class="org.openmeetings.app.templates.FeedbackTemplate" />
+	<bean id="invitationTemplate" class="org.openmeetings.app.templates.InvitationTemplate" />
+	<bean id="requestContactTemplate" class="org.openmeetings.app.templates.RequestContactTemplate" />
+	<bean id="requestContactConfirmTemplate" class="org.openmeetings.app.templates.RequestContactConfirmTemplate" />
+	<bean id="resetPasswordTemplate" class="org.openmeetings.app.templates.ResetPasswordTemplate" />
+	
+	<!-- Thread Executor -->
+	<bean id="mailTaskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+	  <property name="corePoolSize" value="5" />
+	  <property name="maxPoolSize" value="10" />
+	  <property name="queueCapacity" value="25" />
+	</bean>
+
+	<bean id="mailThread" class="org.openmeetings.utils.mail.MailThread">
+	   <constructor-arg ref="mailTaskExecutor" />
+	</bean>
+	
+	<bean id="mailiCalThread" class="org.openmeetings.utils.mail.MailiCalThread">
+       <constructor-arg ref="mailTaskExecutor" />
+    </bean>
+	
+	<!-- Axis2 Spring Services Entry 
+	<bean id="applicationContext" class="org.apache.axis2.extensions.spring.receivers.ApplicationContextHolder" />
+	 -->
+	 
+	<!-- Axis2 Service Proxy's -->
+  	<bean id="userWebService" class="org.openmeetings.axis.services.UserWebService" />
+  	<bean id="roomWebService" class="org.openmeetings.axis.services.RoomWebService" />
+  	<bean id="fileWebService" class="org.openmeetings.axis.services.FileWebService" />
+  	
+  	<!-- Servlet Facade Beans -->
+  	<bean id="backupExport" class="org.openmeetings.servlet.outputhandler.BackupExport" />
+  	<bean id="backupImport" class="org.openmeetings.servlet.outputhandler.BackupImport" />
+
+	<tx:annotation-driven transaction-manager="jpaTransactionManager"/>
+	
+	<context:annotation-config />
+	<context:component-scan base-package="org.openmeetings"/>
+	
+</beans>

@@ -1,47 +1,35 @@
 package org.openmeetings.app.data.basic;
 
-import java.util.List;
 import java.util.Date;
+import java.util.List;
 
-import org.slf4j.Logger;
-import org.red5.logging.Red5LoggerFactory;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.openmeetings.app.persistence.beans.lang.FieldLanguage;
-import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 
  * @author sebastianwagner
- *
+ * 
  */
+@Transactional
 public class FieldLanguageDaoImpl {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(FieldLanguageDaoImpl.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(
+			FieldLanguageDaoImpl.class, ScopeApplicationAdapter.webAppRootKey);
 
-	private FieldLanguageDaoImpl() {
-	}
-
-	private static FieldLanguageDaoImpl instance = null;
- 
-	public static synchronized FieldLanguageDaoImpl getInstance() {
-		if (instance == null) {
-			instance = new FieldLanguageDaoImpl();
-		}
-		return instance;
-	}
-	
+	@PersistenceContext
+	private EntityManager em;
 
 	public Long addLanguage(String langName, Boolean langRtl) {
 		try {
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
 
 			FieldLanguage fl = new FieldLanguage();
 			fl.setStarttime(new Date());
@@ -49,111 +37,82 @@ public class FieldLanguageDaoImpl {
 			fl.setName(langName);
 			fl.setRtl(langRtl);
 
-			fl = session.merge(fl);
-			session.flush();
+			fl = em.merge(fl);
 			Long languages_id = fl.getLanguage_id();
 
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
-			
 			return languages_id;
 		} catch (Exception ex2) {
-			log.error("[addLanguage]: ",ex2);
+			log.error("[addLanguage]: ", ex2);
 		}
 		return null;
 	}
 
- 
 	public void emptyFieldLanguage() {
 		try {
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			
-//			 TODO delete hql query doesn't work, must be repared
-			session.createQuery("delete from FieldLanguage");
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
+
+			// TODO delete hql query doesn't work, must be repared
+			em.createQuery("delete from FieldLanguage");
 		} catch (Exception ex2) {
-			log.error("[getConfKey]: ",ex2);
+			log.error("[getConfKey]: ", ex2);
 		}
 	}
-	
-	public Long updateFieldLanguage(Long language_id, String langName, String deleted) {
+
+	public Long updateFieldLanguage(Long language_id, String langName,
+			String deleted) {
 		try {
 			FieldLanguage fl = this.getFieldLanguageById(language_id);
 			fl.setUpdatetime(new Date());
-			if (langName.length()>0) fl.setName(langName);
+			if (langName.length() > 0)
+				fl.setName(langName);
 			fl.setDeleted(deleted);
 			this.updateLanguage(fl);
 			return language_id;
 		} catch (Exception ex2) {
-			log.error("[updateLanguage]: ",ex2);
+			log.error("[updateLanguage]: ", ex2);
 		}
 		return new Long(-1);
 	}
 
-	
 	private void updateLanguage(FieldLanguage fl) throws Exception {
-		Object idf = PersistenceSessionUtil.createSession();
-		EntityManager session = PersistenceSessionUtil.getSession();
-		EntityTransaction tx = session.getTransaction();
-		tx.begin();
 		if (fl.getLanguage_id() == null) {
-			session.persist(fl);
-		    } else {
-		    	if (!session.contains(fl)) {
-		    		session.merge(fl);
-		    }
+			em.persist(fl);
+		} else {
+			if (!em.contains(fl)) {
+				em.merge(fl);
+			}
 		}
-		tx.commit();
-		PersistenceSessionUtil.closeSession(idf);
-	}	
-
+	}
 
 	public FieldLanguage getFieldLanguageById(Long language_id) {
 		try {
-			String hql = "select c from FieldLanguage as c " +
-					"WHERE c.deleted <> :deleted " +
-					"AND c.language_id = :language_id";
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql);
+			String hql = "select c from FieldLanguage as c "
+					+ "WHERE c.deleted <> :deleted "
+					+ "AND c.language_id = :language_id";
+			Query query = em.createQuery(hql);
 			query.setParameter("deleted", "true");
 			query.setParameter("language_id", language_id);
 			FieldLanguage fl = null;
 			try {
 				fl = (FieldLanguage) query.getSingleResult();
-	        } catch (NoResultException ex) {
-	        }
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
+			} catch (NoResultException ex) {
+			}
 			return fl;
 		} catch (Exception ex2) {
-			log.error("[getLanguageById]: ",ex2);
+			log.error("[getLanguageById]: ", ex2);
 		}
 		return null;
 	}
-	
+
 	public List<FieldLanguage> getLanguages() {
 		try {
-			String hql = "select c from FieldLanguage as c " +
-					"WHERE c.deleted <> :deleted ";
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql);
+			String hql = "select c from FieldLanguage as c "
+					+ "WHERE c.deleted <> :deleted ";
+			Query query = em.createQuery(hql);
 			query.setParameter("deleted", "true");
 			List<FieldLanguage> ll = query.getResultList();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			return ll;
 		} catch (Exception ex2) {
-			log.error("[getLanguages]: ",ex2);
+			log.error("[getLanguages]: ", ex2);
 		}
 		return null;
 	}

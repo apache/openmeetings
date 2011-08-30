@@ -5,43 +5,30 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.persistence.Query;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecording;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingLog;
-import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 public class FlvRecordingLogDaoImpl {
 	
 	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecordingLogDaoImpl.class);
-
-	private static FlvRecordingLogDaoImpl instance;
-
-	private FlvRecordingLogDaoImpl() {}
-
-	public static synchronized FlvRecordingLogDaoImpl getInstance() {
-		if (instance == null) {
-			instance = new FlvRecordingLogDaoImpl();
-		}
-		return instance;
-	}
+	@PersistenceContext
+	private EntityManager em;
 	
 	public List<FlvRecordingLog> getFLVRecordingLogByRecordingId(Long flvRecordingId){
 		try {
 			String hql = "select c from FlvRecordingLog as c where c.flvRecording.flvRecordingId = :flvRecordingId";
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql);
+			Query query = em.createQuery(hql);
 			query.setParameter("flvRecordingId", flvRecordingId);
 			List<FlvRecordingLog> flvRecordingList = query.getResultList();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 			return flvRecordingList;
 			
@@ -55,16 +42,10 @@ public class FlvRecordingLogDaoImpl {
 		try {
 			List<FlvRecordingLog> flvRecordingLogs = this.getFLVRecordingLogByRecordingId(flvRecordingId);
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
 			for (FlvRecordingLog flvRecordingLog : flvRecordingLogs) {
-				flvRecordingLog = session.find(FlvRecordingLog.class, flvRecordingLog.getFlvRecordingLogId());
-				session.remove(flvRecordingLog);
+				flvRecordingLog = em.find(FlvRecordingLog.class, flvRecordingLog.getFlvRecordingLogId());
+				em.remove(flvRecordingLog);
 			}
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 		} catch (Exception ex2) {
 			log.error("[deleteFLVRecordingLogByRecordingId] ", ex2);
@@ -92,16 +73,8 @@ public class FlvRecordingLogDaoImpl {
 			flvRecordingLog.setFullMessage(fullMessage);
 			flvRecordingLog.setMsgType(msgType);
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			
-			flvRecordingLog = session.merge(flvRecordingLog);
+			flvRecordingLog = em.merge(flvRecordingLog);
 			Long flvRecordingLogId = flvRecordingLog.getFlvRecordingLogId();
-			
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 			return flvRecordingLogId;
 		} catch (Exception ex2) {

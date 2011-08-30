@@ -6,14 +6,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
-import org.slf4j.Logger;
+import org.dom4j.Element;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
-
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.io.SAXReader;
-import org.dom4j.Element;
+import org.slf4j.Logger;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.XppDriver;
@@ -22,21 +18,12 @@ public class LibraryWmlLoader {
 	
 	private static final Logger log = Red5LoggerFactory.getLogger(LibraryWmlLoader.class, ScopeApplicationAdapter.webAppRootKey);
 	
+	@SuppressWarnings("unused")
 	private static final String fileExt = ".wml";
 	
 	private static final String wmlFolderName = "stored/";
 	
-	private static LibraryWmlLoader instance;
-
-	private LibraryWmlLoader() {}
-
-	public static synchronized LibraryWmlLoader getInstance() {
-		if (instance == null) {
-			instance = new LibraryWmlLoader();
-		}
-		return instance;
-	}
-
+	@SuppressWarnings({ "rawtypes", "unused" })
 	public ArrayList loadWmlFile(String filePath, String fileName){
 		try {
 			LinkedHashMap lMap = new LinkedHashMap();
@@ -70,6 +57,7 @@ public class LibraryWmlLoader {
 	 * @param paintElement
 	 * @param subMap
 	 */
+	@SuppressWarnings({ "unused", "rawtypes" })
 	private void createListObjectPaintByNode(Element paintElement, LinkedHashMap<Integer,Object> subMap){
 		try {
 			

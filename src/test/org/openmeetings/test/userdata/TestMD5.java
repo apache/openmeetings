@@ -2,16 +2,12 @@ package org.openmeetings.test.userdata;
 
 import junit.framework.TestCase;
 
+import org.junit.Test;
+
 public class TestMD5 extends TestCase {
 	
-	
-	public TestMD5(String testname) {
-		super(testname);
-	}
-	
+	@Test
 	public void testTestMD5(){
-		
-		
 		
 	}
 

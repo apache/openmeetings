@@ -16,6 +16,7 @@ import java.util.zip.GZIPInputStream;
 //import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.server.beans.ServerFrameBean;
 import org.openmeetings.server.beans.ServerFrameCursorStatus;
@@ -31,9 +32,11 @@ import org.openmeetings.server.socket.ServerSocketMinaProcess;
 public class ServerSharingSessionList {
 	
 	private static final Logger log = Red5LoggerFactory.getLogger(ServerSharingSessionList.class, ScopeApplicationAdapter.webAppRootKey);
-	//private static Logger log = Red5LoggerFactory.getLogger(ServerSharingSessionList.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private static Map<String,ServerSharingSessionBean> sharingSessions = new HashMap<String,ServerSharingSessionBean>();
+	
+	@Autowired
+	private ScopeApplicationAdapter scopeApplicationAdapter;
 	
 	/**
 	 * 
@@ -145,7 +148,7 @@ public class ServerSharingSessionList {
 		}
 	}
 	
-	public static Boolean updateCursorPosition(ServerFrameCursorStatus cPosition) {
+	public Boolean updateCursorPosition(ServerFrameCursorStatus cPosition) {
 		try {
 			
 			if (sharingSessions.containsKey(cPosition.getPublicSID())) {
@@ -167,9 +170,8 @@ public class ServerSharingSessionList {
 				 * Send Cursor to trigger HTTP-Connections
 				 * 
 				 */
-				ScopeApplicationAdapter scopeApplicationAdapter = ScopeApplicationAdapter.getInstance();
 				if (scopeApplicationAdapter != null) {
-					ScopeApplicationAdapter.getInstance().sendScreenSharingCursorPos(cPosition);
+					scopeApplicationAdapter.sendScreenSharingCursorPos(cPosition);
 				}
 				
 				sharingSessions.put(cPosition.getPublicSID(),serverSharingSessionBean);
@@ -193,7 +195,7 @@ public class ServerSharingSessionList {
 	}
 	
 	
-	public static Boolean addFrameToSession(ServerFrameBean serverFrameBean) {
+	public Boolean addFrameToSession(ServerFrameBean serverFrameBean) {
 		try {
 			
 			if (sharingSessions.containsKey(serverFrameBean.getPublicSID())) {
@@ -265,7 +267,6 @@ public class ServerSharingSessionList {
 						
 						log.debug("SEND Buffer Full Message -2- Start ScreenSharing or Recording for all Clients "+(d.getTime() - serverSharingSessionBean.getSessionStarted().getTime()));
 						
-						ScopeApplicationAdapter scopeApplicationAdapter = ScopeApplicationAdapter.getInstance();
 						if (scopeApplicationAdapter != null) {
 							scopeApplicationAdapter.sendScreenSharingMessage(serverSharingSessionBean);
 						}
@@ -301,9 +302,8 @@ public class ServerSharingSessionList {
 						 * Send Screen to trigger HTTP-Connections
 						 * 
 						 */
-						ScopeApplicationAdapter scopeApplicationAdapter = ScopeApplicationAdapter.getInstance();
 						if (scopeApplicationAdapter != null) {
-							ScopeApplicationAdapter.getInstance().sendScreenSharingFrame(serverFrameBean);
+							scopeApplicationAdapter.sendScreenSharingFrame(serverFrameBean);
 						}
 						
 					}
@@ -362,7 +362,7 @@ public class ServerSharingSessionList {
 			ServerSharingSessionBean serverSharingSessionBean) {
 		try {
 			
-			String webappDir = ScopeApplicationAdapter.getInstance().webAppPath;
+			String webappDir = ScopeApplicationAdapter.webAppPath;
 			
 			String baseDir = webappDir + File.separatorChar + "upload" + File.separatorChar + "screens" + File.separatorChar;
 			
@@ -481,7 +481,7 @@ public class ServerSharingSessionList {
 	}
 
 
-	public static synchronized void stopSession(Long sessionId) {
+	public synchronized void stopSession(Long sessionId) {
 		try {
 			
 			for (Iterator<String> iter = sharingSessions.keySet().iterator();iter.hasNext();) {
@@ -510,10 +510,9 @@ public class ServerSharingSessionList {
 					 * Send Screen to trigger HTTP-Connections
 					 * 
 					 */
-					ScopeApplicationAdapter scopeApplicationAdapter = ScopeApplicationAdapter.getInstance();
 					if (scopeApplicationAdapter != null) {
 						serverSharingSessionBean.setDeleted(true);
-						ScopeApplicationAdapter.getInstance().sendScreenSharingMessage(serverSharingSessionBean);
+						scopeApplicationAdapter.sendScreenSharingMessage(serverSharingSessionBean);
 					}
 					
 					log.debug("Mark session as Deleted");
@@ -533,7 +532,7 @@ public class ServerSharingSessionList {
 	/**
 	 * @param sessionId
 	 */
-	public static synchronized void removeSession(Long sessionId) {
+	public synchronized void removeSession(Long sessionId) {
 		try {
 			
 			for (Iterator<String> iter = sharingSessions.keySet().iterator();iter.hasNext();) {
@@ -562,10 +561,9 @@ public class ServerSharingSessionList {
 					 * Send Screen to trigger HTTP-Connections
 					 * 
 					 */
-					ScopeApplicationAdapter scopeApplicationAdapter = ScopeApplicationAdapter.getInstance();
 					if (scopeApplicationAdapter != null) {
 						serverSharingSessionBean.setDeleted(true);
-						ScopeApplicationAdapter.getInstance().sendScreenSharingMessage(serverSharingSessionBean);
+						scopeApplicationAdapter.sendScreenSharingMessage(serverSharingSessionBean);
 					}
 					
 					log.debug("Session Found To Be removed");

@@ -31,6 +31,30 @@
     <parameter name="attachmentDIR"></parameter>
     <parameter name="sizeThreshold">4000</parameter-->
 
+    <parameter name="EnableChildFirstClassLoading">false</parameter>
+
+    <!--
+    The exposeServiceMetadata parameter decides whether the metadata (WSDL, schema, policy) of
+    the services deployed on Axis2 should be visible when ?wsdl, ?wsdl2, ?xsd, ?policy requests
+    are received.
+    This parameter can be defined in the axi2.xml file, in which case this will be applicable
+    globally, or in the services.xml files, in which case, it will be applicable to the
+    Service groups and/or services, depending on the level at which the parameter is declared.
+    This value of this parameter defaults to true.
+    -->
+    <parameter name="exposeServiceMetadata">true</parameter>
+
+
+    <!--Uncomment if you want to plugin your own attachments lifecycle implementation -->
+    <!--<attachmentsLifecycleManager class="org.apache.axiom.attachments.lifecycle.impl.LifecycleManagerImpl"/>-->
+
+
+    <!--Uncomment if you want to enable the reduction of the in-memory cache of WSDL definitions -->
+    <!--In some server environments, the available memory heap is limited and can fill up under load -->
+    <!--Since in-memory copies of WSDL definitions can be large, some steps can be taken-->
+    <!--to reduce the memory needed for the cached WSDL definitions. -->
+    <!--parameter name="reduceWSDLMemoryCache">true</parameter-->
+
     <!--This will give out the timout of the configuration contexts, in milliseconds-->
     <parameter name="ConfigContextTimeoutInterval">30000</parameter>
 
@@ -50,14 +74,13 @@
     <!--To override repository/services you need to uncomment following parameter and value SHOULD be absolute file path.-->
     <!--ServicesDirectory only works on the following cases-->
     <!---File based configurator and in that case the value should be a file URL (http:// not allowed)-->
-    <!---When creating URL Based configurator with URL “file://”  -->
+    <!---When creating URL Based configurator with URL file:// -->
     <!--- War based configurator with expanded case , -->
 
     <!--All the other scenarios it will be ignored.-->
     <!--<parameter name="ServicesDirectory">service</parameter>-->
     <!--To override repository/modules you need to uncomment following parameter and value SHOULD be absolute file path-->
     <!--<parameter name="ModulesDirectory">modules</parameter>-->
-
 
 
     <!--Following params will set the proper context paths for invocations. All the endpoints will have a commons context-->
@@ -71,10 +94,23 @@
     <!--<parameter name="restPath">rest</parameter>-->
 
     <!-- Following parameter will completely disable REST handling in Axis2-->
-    <parameter name="disableREST" locked="true">false</parameter>
+    <parameter name="disableREST" locked="false">false</parameter>
+
+    <!-- Following parameter will suppress generation of SOAP 1.2 bindings in auto-generated WSDL files -->
+    <parameter name="disableSOAP12" locked="true">false</parameter>
 
     <!--POJO deployer , this will alow users to drop .class file and make that into a service-->
     <deployer extension=".class" directory="pojo" class="org.apache.axis2.deployment.POJODeployer"/>
+    <deployer extension=".jar" directory="servicejars"
+              class="org.apache.axis2.jaxws.framework.JAXWSDeployer"/>
+    <deployer extension=".jar" directory="transports"
+              class="org.apache.axis2.deployment.TransportDeployer"/>
+
+    <!--CORBA deployer , this will alow users to invoke remote CORBA services through Axis2-->
+    <!--<deployer extension=".xml" directory="corba" class="org.apache.axis2.corba.deployer.CorbaDeployer"/>-->
+
+    <!--<deployer extension=".jsa" directory="rmiservices" class="org.apache.axis2.rmi.deploy.RMIServiceDeployer"/>-->
+
 
     <!-- Following parameter will set the host name for the epr-->
     <!--<parameter name="hostname" locked="true">myhost.com</parameter>-->
@@ -83,20 +119,31 @@
     <!-- use this parameter to override autodetected url -->
     <!--<parameter name="httpFrontendHostUrl">https://someotherhost/context</parameter>-->
 
+    <!--By default, JAXWS services are created by reading annotations. WSDL and schema are generated-->
+    <!--using a separate WSDL generator only when ?wsdl is called. Therefore, even if you engage-->
+    <!--policies etc.. to AxisService, it doesn't appear in the WSDL. By setting the following property-->
+    <!--to true, you can create the AxisService using the generated WSDL and remove the need for a-->
+    <!--WSDL generator. When ?wsdl is called, WSDL is generated in the normal way.-->
+    <parameter name="useGeneratedWSDLinJAXWS">false</parameter>
 
     <!--    The way of adding listener to the system-->
     <!--    <listener class="org.apache.axis2.ObserverIMPL">-->
     <!--        <parameter name="RSS_URL">http://127.0.0.1/rss</parameter>-->
     <!--    </listener>-->
 
+    <threadContextMigrators>
+        <threadContextMigrator listId="JAXWS-ThreadContextMigrator-List"
+                               class="org.apache.axis2.jaxws.addressing.migrator.EndpointContextMapMigrator"/>
+    </threadContextMigrators>
+
     <!-- ================================================= -->
     <!-- Message Receivers -->
     <!-- ================================================= -->
-    <!--This is the deafult MessageReceiver for the system , if you want to have MessageReceivers for -->
+    <!--This is the default MessageReceiver for the system , if you want to have MessageReceivers for -->
     <!--all the other MEP implement it and add the correct entry to here , so that you can refer from-->
     <!--any operation -->
-    <!--Note : You can ovrride this for a particular service by adding the same element with your requirement-->
-     <messageReceivers>
+    <!--Note : You can override this for a particular service by adding the same element with your requirement-->
+    <messageReceivers>
         <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-only"
                          class="org.apache.axis2.receivers.RawXMLINOnlyMessageReceiver"/>
         <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out"
@@ -104,6 +151,10 @@
         <messageReceiver mep="http://www.w3.org/2006/01/wsdl/in-only"
                          class="org.apache.axis2.receivers.RawXMLINOnlyMessageReceiver"/>
         <messageReceiver mep="http://www.w3.org/2006/01/wsdl/in-out"
+                         class="org.apache.axis2.receivers.RawXMLINOutMessageReceiver"/>
+        <messageReceiver mep="http://www.w3.org/ns/wsdl/in-only"
+                         class="org.apache.axis2.receivers.RawXMLINOnlyMessageReceiver"/>
+        <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out"
                          class="org.apache.axis2.receivers.RawXMLINOutMessageReceiver"/>
     </messageReceivers>
 
@@ -114,11 +165,15 @@
     <!--format  serialization in Axis2. These message formats are expected to be resolved based on the content type. -->
     <messageFormatters>
         <messageFormatter contentType="application/x-www-form-urlencoded"
-                         class="org.apache.axis2.transport.http.XFormURLEncodedFormatter"/>
+                          class="org.apache.axis2.transport.http.XFormURLEncodedFormatter"/>
         <messageFormatter contentType="multipart/form-data"
-                         class="org.apache.axis2.transport.http.MultipartFormDataFormatter"/>
+                          class="org.apache.axis2.transport.http.MultipartFormDataFormatter"/>
         <messageFormatter contentType="application/xml"
-                         class="org.apache.axis2.transport.http.ApplicationXMLFormatter"/>
+                          class="org.apache.axis2.transport.http.ApplicationXMLFormatter"/>
+        <messageFormatter contentType="text/xml"
+                          class="org.apache.axis2.transport.http.SOAPMessageFormatter"/>
+        <messageFormatter contentType="application/soap+xml"
+                          class="org.apache.axis2.transport.http.SOAPMessageFormatter"/>
     </messageFormatters>
 
     <!-- ================================================= -->
@@ -128,11 +183,11 @@
     <!--formats in Axis2. These message formats are expected to be resolved based on the content type. -->
     <messageBuilders>
         <messageBuilder contentType="application/xml"
-                         class="org.apache.axis2.builder.ApplicationXMLBuilder"/>
+                        class="org.apache.axis2.builder.ApplicationXMLBuilder"/>
         <messageBuilder contentType="application/x-www-form-urlencoded"
-                         class="org.apache.axis2.builder.XFormURLEncodedBuilder"/>
+                        class="org.apache.axis2.builder.XFormURLEncodedBuilder"/>
         <messageBuilder contentType="multipart/form-data"
-                         class="org.apache.axis2.builder.MultipartFormDataBuilder"/>
+                        class="org.apache.axis2.builder.MultipartFormDataBuilder"/>
     </messageBuilders>
 
     <!-- ================================================= -->
@@ -160,97 +215,18 @@
         <!-- <parameter name="requestTimeout">10000</parameter>                   -->
         <!-- <parameter name="requestTcpNoDelay">false</parameter>                   -->
         <!-- <parameter name="requestCoreThreadPoolSize">50</parameter>                      -->
-        <!-- <parameter name="RequestMaxThreadPoolSize">100</parameter>                     -->
+        <!-- <parameter name="requestMaxThreadPoolSize">100</parameter>                     -->
         <!-- <parameter name="threadKeepAliveTime">240000</parameter>                  -->
         <!-- <parameter name="threadKeepAliveTimeUnit">MILLISECONDS</parameter>            -->
     </transportReceiver>
 
-    <!--Uncomment this and configure as appropriate for JMS transport support, after setting up your JMS environment (e.g. ActiveMQ)
-    <transportReceiver name="jms" class="org.apache.axis2.transport.jms.JMSListener">
-        <parameter name="myTopicConnectionFactory">
-        	<parameter name="java.naming.factory.initial">org.apache.activemq.jndi.ActiveMQInitialContextFactory</parameter>
-        	<parameter name="java.naming.provider.url">tcp://localhost:61616</parameter>
-        	<parameter name="transport.jms.ConnectionFactoryJNDIName">TopicConnectionFactory</parameter>
-        </parameter>
-
-        <parameter name="myQueueConnectionFactory">
-        	<parameter name="java.naming.factory.initial">org.apache.activemq.jndi.ActiveMQInitialContextFactory</parameter>
-        	<parameter name="java.naming.provider.url">tcp://localhost:61616</parameter>
-        	<parameter name="transport.jms.ConnectionFactoryJNDIName">QueueConnectionFactory</parameter>
-        </parameter>
-
-        <parameter name="default">
-        	<parameter name="java.naming.factory.initial">org.apache.activemq.jndi.ActiveMQInitialContextFactory</parameter>
-        	<parameter name="java.naming.provider.url">tcp://localhost:61616</parameter>
-        	<parameter name="transport.jms.ConnectionFactoryJNDIName">QueueConnectionFactory</parameter>
-        </parameter>
-    </transportReceiver>-->
-
-    <!-- ================================================= -->
-    <!-- Non-blocking http/s Transport Listener  -->
-
-    <!-- the non blocking http transport based on HttpCore + NIO extensions
-    <transportReceiver name="http" class="org.apache.axis2.transport.nhttp.HttpCoreNIOListener">
-    	<parameter name="port" locked="false">9000</parameter>
-    	<parameter name="non-blocking" locked="false">true</parameter>
-    </transportReceiver>-->
-
-    <!-- the non blocking https transport based on HttpCore + SSL-NIO extensions
-    <transportReceiver name="https" class="org.apache.axis2.transport.nhttp.HttpCoreNIOSSLListener">
-    	<parameter name="port" locked="false">9002</parameter>
-    	<parameter name="non-blocking" locked="false">true</parameter>
-        <parameter name="keystore" locked="false">
-            <KeyStore>
-                <Location>identity.jks</Location>
-                <Type>JKS</Type>
-                <Password>password</Password>
-                <KeyPassword>password</KeyPassword>
-            </KeyStore>
-        </parameter>
-        <parameter name="truststore" locked="false">
-            <TrustStore>
-                <Location>trust.jks</Location>
-                <Type>JKS</Type>
-                <Password>password</Password>
-            </TrustStore>
-        </parameter>-->
-        <!--<parameter name="SSLVerifyClient">require</parameter>
-            supports optional|require or defaults to none -->
-    <!--</transportReceiver>-->
-
-    <!-- ================================================= -->
-    <!-- Mail Transport Listener  -->
-    <!-- This is a sample configuration. It assumes a mail server running in localhost.
-         Listener pops  messages that comes to the email address red@localhost. Users
-         password is red. Listener connect to the server every 3000 milliseconds.
-         Parameters with "transport." prefix is Axis2 specific. Others are all from Java Mail API. 
-         http://people.apache.org/~pzf/SMTPBase64Binding-0.2.html
-     -->
-    <!-- ================================================= -->
-    <!--<transportReceiver name="mailto" class="org.apache.axis2.transport.mail.SimpleMailListener">
-        <parameter name="mail.pop3.host">localhost</parameter>
-        <parameter name="mail.pop3.user">red</parameter>
-        <parameter name="mail.store.protocol">pop3</parameter>
-        <parameter name="transport.mail.pop3.password">red</parameter>
-        <parameter name="transport.mail.replyToAddress">red@localhost</parameter>
-        <parameter name="transport.listener.interval">3000</parameter>
-    </transportReceiver>-->
-
-	<!--Uncomment if you want to have TCP transport support-->
-    <!--transportReceiver name="tcp"
-                       class="org.apache.axis2.transport.tcp.TCPServer">
-        <parameter name="port">6060</parameter-->>
-        <!--If you want to give your own host address for EPR generation-->
-        <!--uncomment the following paramter , and set it as you required.-->
-        <!--<parameter name="hostname">tcp://myApp.com/ws</parameter>-->
-    <!-- /transportReceiver -->
+    <!-- This is where you'd put custom transports.  See the transports project -->
+    <!-- for more.  http://ws.apache.org/commons/transport                      -->
 
     <!-- ================================================= -->
     <!-- Transport Outs -->
     <!-- ================================================= -->
 
-    <transportSender name="tcp"
-                     class="org.apache.axis2.transport.tcp.TCPTransportSender"/>
     <transportSender name="local"
                      class="org.apache.axis2.transport.local.LocalTransportSender"/>
     <transportSender name="http"
@@ -267,49 +243,10 @@
         <parameter name="PROTOCOL">HTTP/1.1</parameter>
         <parameter name="Transfer-Encoding">chunked</parameter>
     </transportSender>
-    <!--<transportSender name="jms"-->
-                     <!--class="org.apache.axis2.transport.jms.JMSSender"/>-->
 
-    <!-- ================================================= -->
-    <!-- Non-blocking http/s Transport Sender  -->
-
-    <!-- the non-blocking http transport sender based on HttpCore + NIO extensions
-    <transportSender name="http"  class="org.apache.axis2.transport.nhttp.HttpCoreNIOSender">
-        <parameter name="non-blocking" locked="false">true</parameter>
-    </transportSender>-->
-
-    <!-- the non-blocking https transport sender based on HttpCore + NIO SSL extensions
-    <transportSender name="https" class="org.apache.axis2.transport.nhttp.HttpCoreNIOSSLSender">
-        <parameter name="non-blocking" locked="false">true</parameter>
-        <parameter name="keystore" locked="false">
-            <KeyStore>
-                <Location>identity.jks</Location>
-                <Type>JKS</Type>
-                <Password>password</Password>
-                <KeyPassword>password</KeyPassword>
-            </KeyStore>
-        </parameter>
-        <parameter name="truststore" locked="false">
-            <TrustStore>
-                <Location>trust.jks</Location>
-                <Type>JKS</Type>
-                <Password>password</Password>
-            </TrustStore>
-        </parameter>-->
-        <!--<parameter name="HostnameVerifier">DefaultAndLocalhost</parameter>
-            supports Strict|AllowAll|DefaultAndLocalhost or the default if none specified -->
-    <!--</transportSender>-->
-
-    <!-- ================================================= -->
-    <!-- Mail Transport Sender  -->
-    <!--Only need to uncomment the sender. Configuration is achieved with every client.
-        At any instant mail host should be given. Sample configuration has been given.
-        http://people.apache.org/~pzf/SMTPBase64Binding-0.2.html
-   -->
-    <!-- ================================================= -->
-   <!--<transportSender name="mailto" class="org.apache.axis2.transport.mail.MailTransportSender">
-        <parameter name="mail.smtp.host">localhost</parameter>
-    </transportSender>-->
+    <!-- Please enable this if you need the java transport -->
+    <!-- <transportSender name="java"
+                     class="org.apache.axis2.transport.java.JavaTransportSender"/> -->
 
     <!-- ================================================= -->
     <!-- Global Modules  -->
@@ -325,19 +262,167 @@
     <!-- ================================================= -->
     <!-- Clustering  -->
     <!-- ================================================= -->
-    <!-- Configure and uncomment following for preparing Axis2 to a clustered environment -->
     <!--
-    <cluster class="org.apache.axis2.cluster.tribes.TribesClusterManager">
-        <parameter name="param1">value1</parameter>
-        <parameter name="domain">apache.axis2.domain</parameter>
-    	<configurationManager class="org.apache.axis2.cluster.configuration.TribesConfigurationManager">
-    	    <listener class="org.apache.axis2.cluster.configuration.DefaultConfigurationManagerListener"/>
-    	</configurationManager>
-    	<contextManager class="org.apache.axis2.cluster.context.TribesContextManager">
-    	    <listener class="org.apache.axis2.cluster.context.DefaultContextManagerListener"/>
-    	</contextManager>
-    </cluster>
-    -->
+     To enable clustering for this node, set the value of "enable" attribute of the "clustering"
+     element to "true". The initialization of a node in the cluster is handled by the class
+     corresponding to the "class" attribute of the "clustering" element. It is also responsible for
+     getting this node to join the cluster.
+     -->
+    <clustering class="org.apache.axis2.clustering.tribes.TribesClusteringAgent" enable="false">
+
+        <!--
+           This parameter indicates whether the cluster has to be automatically initalized
+           when the AxisConfiguration is built. If set to "true" the initialization will not be
+           done at that stage, and some other party will have to explictly initialize the cluster.
+        -->
+        <parameter name="AvoidInitiation">true</parameter>
+
+        <!--
+           The membership scheme used in this setup. The only values supported at the moment are
+           "multicast" and "wka"
+
+           1. multicast - membership is automatically discovered using multicasting
+           2. wka - Well-Known Address based multicasting. Membership is discovered with the help
+                    of one or more nodes running at a Well-Known Address. New members joining a
+                    cluster will first connect to a well-known node, register with the well-known node
+                    and get the membership list from it. When new members join, one of the well-known
+                    nodes will notify the others in the group. When a member leaves the cluster or
+                    is deemed to have left the cluster, it will be detected by the Group Membership
+                    Service (GMS) using a TCP ping mechanism.
+        -->
+        <parameter name="membershipScheme">multicast</parameter>
+
+        <!--
+         The clustering domain/group. Nodes in the same group will belong to the same multicast
+         domain. There will not be interference between nodes in different groups.
+        -->
+        <parameter name="domain">wso2.carbon.domain</parameter>
+
+        <!--
+           When a Web service request is received, and processed, before the response is sent to the
+           client, should we update the states of all members in the cluster? If the value of
+           this parameter is set to "true", the response to the client will be sent only after
+           all the members have been updated. Obviously, this can be time consuming. In some cases,
+           such this overhead may not be acceptable, in which case the value of this parameter
+           should be set to "false"
+        -->
+        <parameter name="synchronizeAll">true</parameter>
+
+        <!--
+          The maximum number of times we need to retry to send a message to a particular node
+          before giving up and considering that node to be faulty
+        -->
+        <parameter name="maxRetries">10</parameter>
+
+        <!-- The multicast address to be used -->
+        <parameter name="mcastAddress">228.0.0.4</parameter>
+
+        <!-- The multicast port to be used -->
+        <parameter name="mcastPort">45564</parameter>
+
+        <!-- The frequency of sending membership multicast messages (in ms) -->
+        <parameter name="mcastFrequency">500</parameter>
+
+        <!-- The time interval within which if a member does not respond, the member will be
+         deemed to have left the group (in ms)
+         -->
+        <parameter name="memberDropTime">3000</parameter>
+
+        <!--
+           The IP address of the network interface to which the multicasting has to be bound to.
+           Multicasting would be done using this interface.
+        -->
+        <parameter name="mcastBindAddress">127.0.0.1</parameter>
+
+        <!-- The host name or IP address of this member -->
+        <parameter name="localMemberHost">127.0.0.1</parameter>
+
+        <!--
+        The TCP port used by this member. This is the port through which other nodes will
+        contact this member
+         -->
+        <parameter name="localMemberPort">4000</parameter>
+
+        <!--
+        Preserve message ordering. This will be done according to sender order.
+        -->
+        <parameter name="preserveMessageOrder">true</parameter>
+
+        <!--
+        Maintain atmost-once message processing semantics
+        -->
+        <parameter name="atmostOnceMessageSemantics">true</parameter>
+
+        <!--
+        Properties specific to this member
+        -->
+        <parameter name="properties">
+            <property name="backendServerURL" value="https://${hostName}:${httpsPort}/services/"/>
+            <property name="mgtConsoleURL" value="https://${hostName}:${httpsPort}/"/>
+        </parameter>
+
+        <!--
+           The list of static or well-known members. These entries will only be valid if the
+           "membershipScheme" above is set to "wka"
+        -->
+        <members>
+            <member>
+                <hostName>127.0.0.1</hostName>
+                <port>4000</port>
+            </member>
+            <member>
+                <hostName>127.0.0.1</hostName>
+                <port>4001</port>
+            </member>
+        </members>
+
+        <!--
+        Enable the groupManagement entry if you need to run this node as a cluster manager.
+        Multiple application domains with different GroupManagementAgent implementations
+        can be defined in this section.
+        -->
+        <groupManagement enable="false">
+            <applicationDomain name="apache.axis2.application.domain"
+                               description="Axis2 group"
+                               agent="org.apache.axis2.clustering.management.DefaultGroupManagementAgent"/>
+        </groupManagement>
+
+        <!--
+           This interface is responsible for handling management of a specific node in the cluster
+           The "enable" attribute indicates whether Node management has been enabled
+        -->
+        <nodeManager class="org.apache.axis2.clustering.management.DefaultNodeManager"
+                         enable="true"/>
+
+        <!--
+           This interface is responsible for handling state replication. The property changes in
+           the Axis2 context hierarchy in this node, are propagated to all other nodes in the cluster.
+
+           The "excludes" patterns can be used to specify the prefixes (e.g. local_*) or
+           suffixes (e.g. *_local) of the properties to be excluded from replication. The pattern
+           "*" indicates that all properties in a particular context should not be replicated.
+
+            The "enable" attribute indicates whether context replication has been enabled
+        -->
+        <stateManager class="org.apache.axis2.clustering.state.DefaultStateManager"
+                      enable="true">
+            <replication>
+                <defaults>
+                    <exclude name="local_*"/>
+                    <exclude name="LOCAL_*"/>
+                </defaults>
+                <context class="org.apache.axis2.context.ConfigurationContext">
+                    <exclude name="local_*"/>
+                </context>
+                <context class="org.apache.axis2.context.ServiceGroupContext">
+                    <exclude name="local_*"/>
+                </context>
+                <context class="org.apache.axis2.context.ServiceContext">
+                    <exclude name="local_*"/>
+                </context>
+            </replication>
+        </stateManager>
+    </clustering>
 
     <!-- ================================================= -->
     <!-- Phases  -->
@@ -355,9 +440,9 @@
             </handler>
         </phase>
         <phase name="Addressing">
-             <handler name="AddressingBasedDispatcher"
+            <handler name="AddressingBasedDispatcher"
                      class="org.apache.axis2.dispatchers.AddressingBasedDispatcher">
-                 <order phase="Addressing"/>
+                <order phase="Addressing"/>
             </handler>
         </phase>
         <phase name="Security"/>
@@ -371,14 +456,22 @@
                      class="org.apache.axis2.dispatchers.RequestURIOperationDispatcher"/>
             <handler name="SOAPMessageBodyBasedDispatcher"
                      class="org.apache.axis2.dispatchers.SOAPMessageBodyBasedDispatcher"/>
-
             <handler name="HTTPLocationBasedDispatcher"
                      class="org.apache.axis2.dispatchers.HTTPLocationBasedDispatcher"/>
+            <handler name="GenericProviderDispatcher"
+                     class="org.apache.axis2.jaxws.dispatchers.GenericProviderDispatcher"/>
+            <handler name="MustUnderstandValidationDispatcher"
+                     class="org.apache.axis2.jaxws.dispatchers.MustUnderstandValidationDispatcher"/>
         </phase>
         <phase name="RMPhase"/>
         <!--  System predefined phases       -->
         <!--   After Postdispatch phase module author or service author can add any phase he want      -->
-        <phase name="OperationInPhase"/>
+        <phase name="OperationInPhase">
+            <handler name="MustUnderstandChecker"
+                     class="org.apache.axis2.jaxws.dispatchers.MustUnderstandChecker">
+                <order phase="OperationInPhase"/>
+            </handler>
+        </phase>
         <phase name="soapmonitorPhase"/>
     </phaseOrder>
     <phaseOrder type="OutFlow">
@@ -394,9 +487,9 @@
     </phaseOrder>
     <phaseOrder type="InFaultFlow">
         <phase name="Addressing">
-             <handler name="AddressingBasedDispatcher"
+            <handler name="AddressingBasedDispatcher"
                      class="org.apache.axis2.dispatchers.AddressingBasedDispatcher">
-                 <order phase="Addressing"/>
+                <order phase="Addressing"/>
             </handler>
         </phase>
         <phase name="Security"/>
@@ -410,9 +503,12 @@
                      class="org.apache.axis2.dispatchers.RequestURIOperationDispatcher"/>
             <handler name="SOAPMessageBodyBasedDispatcher"
                      class="org.apache.axis2.dispatchers.SOAPMessageBodyBasedDispatcher"/>
-
             <handler name="HTTPLocationBasedDispatcher"
                      class="org.apache.axis2.dispatchers.HTTPLocationBasedDispatcher"/>
+            <handler name="GenericProviderDispatcher"
+                     class="org.apache.axis2.jaxws.dispatchers.GenericProviderDispatcher"/>
+            <handler name="MustUnderstandValidationDispatcher"
+                     class="org.apache.axis2.jaxws.dispatchers.MustUnderstandValidationDispatcher"/>
         </phase>
         <phase name="RMPhase"/>
         <!--      user can add his own phases to this area  -->
@@ -426,5 +522,7 @@
         <phase name="RMPhase"/>
         <phase name="PolicyDetermination"/>
         <phase name="MessageOut"/>
+        <phase name="Security"/>
     </phaseOrder>
 </axisconfig>
+

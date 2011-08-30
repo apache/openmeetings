@@ -452,7 +452,8 @@ public class RTPExport implements ControllerListener, DataSinkListener {
     /**
      * Create a media locator from the given string.
      */
-    static MediaLocator createMediaLocator(String url) {
+    @SuppressWarnings("unused")
+	static MediaLocator createMediaLocator(String url) {
 
 	MediaLocator ml;
 

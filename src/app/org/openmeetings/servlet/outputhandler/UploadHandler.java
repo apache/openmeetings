@@ -28,6 +28,8 @@ import org.openmeetings.utils.StoredFile;
 import org.openmeetings.utils.stringhandlers.StringComparer;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.itextpdf.text.pdf.PdfReader;
 
@@ -40,14 +42,110 @@ public class UploadHandler extends HttpServlet {
 
 	private String filesString[] = null;
 
-	public UploadHandler() {
+	public Sessionmanagement getSessionManagement() {
+		try {
+			if (ScopeApplicationAdapter.initComplete) {
+				ApplicationContext context = WebApplicationContextUtils
+						.getWebApplicationContext(getServletContext());
+				return (Sessionmanagement) context.getBean("sessionManagement");
+			}
+		} catch (Exception err) {
+			log.error("[getSessionManagement]", err);
+		}
+		return null;
 	}
 
+	public Usermanagement getUserManagement() {
+		try {
+			if (ScopeApplicationAdapter.initComplete) {
+				ApplicationContext context = WebApplicationContextUtils
+						.getWebApplicationContext(getServletContext());
+				return (Usermanagement) context.getBean("userManagement");
+			}
+		} catch (Exception err) {
+			log.error("[getUserManagement]", err);
+		}
+		return null;
+	}
+
+	public UsersDaoImpl getUsersDao() {
+		try {
+			if (ScopeApplicationAdapter.initComplete) {
+				ApplicationContext context = WebApplicationContextUtils
+						.getWebApplicationContext(getServletContext());
+				return (UsersDaoImpl) context.getBean("usersDao");
+			}
+		} catch (Exception err) {
+			log.error("[getUsersDao]", err);
+		}
+		return null;
+	}
+
+	public ScopeApplicationAdapter getScopeApplicationAdapter() {
+		try {
+			if (ScopeApplicationAdapter.initComplete) {
+				ApplicationContext context = WebApplicationContextUtils
+						.getWebApplicationContext(getServletContext());
+				return (ScopeApplicationAdapter) context
+						.getBean("scopeApplicationAdapter");
+			}
+		} catch (Exception err) {
+			log.error("[getScopeApplicationAdapter]", err);
+		}
+		return null;
+	}
+
+	public GenerateImage getGenerateImage() {
+		try {
+			if (ScopeApplicationAdapter.initComplete) {
+				ApplicationContext context = WebApplicationContextUtils
+						.getWebApplicationContext(getServletContext());
+				return (GenerateImage) context.getBean("generateImage");
+			}
+		} catch (Exception err) {
+			log.error("[getGenerateImage]", err);
+		}
+		return null;
+	}
+
+	public GenerateThumbs getGenerateThumbs() {
+		try {
+			if (ScopeApplicationAdapter.initComplete) {
+				ApplicationContext context = WebApplicationContextUtils
+						.getWebApplicationContext(getServletContext());
+				return (GenerateThumbs) context.getBean("generateThumbs");
+			}
+		} catch (Exception err) {
+			log.error("[getGenerateThumbs]", err);
+		}
+		return null;
+	}
+
+	public GeneratePDF getGeneratePDF() {
+		try {
+			if (ScopeApplicationAdapter.initComplete) {
+				ApplicationContext context = WebApplicationContextUtils
+						.getWebApplicationContext(getServletContext());
+				return (GeneratePDF) context.getBean("generatePDF");
+			}
+		} catch (Exception err) {
+			log.error("[getGeneratePDF]", err);
+		}
+		return null;
+	}
+
+	@Override
 	protected void service(HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws ServletException,
 			IOException {
 		log.debug("starting upload");
 		try {
+
+			if (getUserManagement() == null || getGeneratePDF() == null
+					|| getGenerateThumbs() == null) {
+				return;
+			}
+
 			int contentLength = httpServletRequest.getContentLength();
 			if (contentLength <= 0) {
 				log.debug("ContentLength = " + contentLength + ", aborted");
@@ -61,9 +159,8 @@ public class UploadHandler extends HttpServlet {
 			}
 			log.debug("sid: " + sid);
 
-			Long userId = Sessionmanagement.getInstance().checkSession(sid);
-			Long userLevel = Usermanagement.getInstance().getUserLevelByID(
-					userId);
+			Long userId = getSessionManagement().checkSession(sid);
+			Long userLevel = getUserManagement().getUserLevelByID(userId);
 			log.debug("userId = " + userId + ", userLevel = " + userLevel);
 
 			if (userLevel <= 0) {
@@ -78,11 +175,11 @@ public class UploadHandler extends HttpServlet {
 			}
 
 			LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
-			hs.put("user", UsersDaoImpl.getInstance().getUser(userId));
-			
+			hs.put("user", getUsersDao().getUser(userId));
+
 			fileService(httpServletRequest, sid, userId, hs);
-			ScopeApplicationAdapter.getInstance()
-					.sendMessageWithClientByPublicSID(hs, publicSID);
+			getScopeApplicationAdapter().sendMessageWithClientByPublicSID(hs,
+					publicSID);
 		} catch (Exception e) {
 			System.out.println("Exception during upload: " + e);
 			e.printStackTrace();
@@ -91,8 +188,8 @@ public class UploadHandler extends HttpServlet {
 	}
 
 	protected void fileService(HttpServletRequest httpServletRequest,
-			String sid, Long userId, Map<String, Object> hs) throws ServletException,
-			Exception {
+			String sid, Long userId, Map<String, Object> hs)
+			throws ServletException, Exception {
 
 		String room_id = httpServletRequest.getParameter("room_id");
 		if (room_id == null) {
@@ -115,6 +212,7 @@ public class UploadHandler extends HttpServlet {
 		InputStream is = upload.getFileContents("Filedata");
 
 		// trim whitespace
+		@SuppressWarnings("deprecation")
 		String fileSystemName = upload.getFileSystemName("Filedata");
 		fileSystemName = StringUtils.deleteWhitespace(fileSystemName);
 
@@ -139,20 +237,20 @@ public class UploadHandler extends HttpServlet {
 			localFolder.mkdirs();
 		}
 
-        // Check variable to see if this file is a presentation
-        int dotidx = fileSystemName.lastIndexOf('.');
-        String newFileName = StringComparer.getInstance().compareForRealPaths(
-                fileSystemName.substring(0, dotidx));
-        String newFileExtDot = fileSystemName.substring(dotidx,
-                fileSystemName.length()).toLowerCase();
-        String newFileExt = newFileExtDot.substring(1);
+		// Check variable to see if this file is a presentation
+		int dotidx = fileSystemName.lastIndexOf('.');
+		String newFileName = StringComparer.getInstance().compareForRealPaths(
+				fileSystemName.substring(0, dotidx));
+		String newFileExtDot = fileSystemName.substring(dotidx,
+				fileSystemName.length()).toLowerCase();
+		String newFileExt = newFileExtDot.substring(1);
 
 		// trim long names cause cannot output that
 		final int MAX_FILE_NAME_LENGTH = 30;
 		if (newFileName.length() >= MAX_FILE_NAME_LENGTH) {
 			newFileName = newFileName.substring(0, MAX_FILE_NAME_LENGTH);
 		}
-        StoredFile storedFile = new StoredFile(newFileName, newFileExt);
+		StoredFile storedFile = new StoredFile(newFileName, newFileExt);
 
 		// check if this is a a file that can be converted by
 		// openoffice-service
@@ -178,7 +276,8 @@ public class UploadHandler extends HttpServlet {
 					// System.out.println("cannot write to directory");
 				}
 			}
-			completeName += ScopeApplicationAdapter.profilesPrefix + userId + File.separatorChar;
+			completeName += ScopeApplicationAdapter.profilesPrefix + userId
+					+ File.separatorChar;
 			File f2 = new File(completeName);
 			if (!f2.exists()) {
 				boolean c = f2.mkdir();
@@ -204,8 +303,8 @@ public class UploadHandler extends HttpServlet {
 					+ "uploadtemp"
 					+ File.separatorChar
 					+ ((userProfile) ? "profiles" + File.separatorChar
-							+ ScopeApplicationAdapter.profilesPrefix + userId : roomName)
-					+ File.separatorChar;
+							+ ScopeApplicationAdapter.profilesPrefix + userId
+							: roomName) + File.separatorChar;
 			localFolder = new File(workingDirPpt);
 			if (!localFolder.exists()) {
 				localFolder.mkdirs();
@@ -247,8 +346,8 @@ public class UploadHandler extends HttpServlet {
 		log.debug("canBeConverted: " + canBeConverted);
 		if (canBeConverted) {
 			// convert to pdf, thumbs, swf and xml-description
-			returnError = GeneratePDF.getInstance().convertPDF(currentDir,
-					newFileName, newFileExtDot, roomName, true, completeName);
+			returnError = getGeneratePDF().convertPDF(currentDir, newFileName,
+					newFileExtDot, roomName, true, completeName);
 		} else if (isPdf) {
 			boolean isEncrypted = false;
 			try {
@@ -275,6 +374,7 @@ public class UploadHandler extends HttpServlet {
 
 			log.debug("isEncrypted :: " + isEncrypted);
 
+			@SuppressWarnings("unused")
 			HashMap<String, Object> returnError2 = new HashMap<String, Object>();
 
 			if (isEncrypted) {
@@ -286,8 +386,8 @@ public class UploadHandler extends HttpServlet {
 
 				String outputfile = completeName + newFileExtDot;
 
-				returnError2 = GenerateThumbs.getInstance().decodePDF(
-						inputfile, outputfile);
+				returnError2 = getGenerateThumbs().decodePDF(inputfile,
+						outputfile);
 
 				File f_old = new File(inputfile);
 				if (f_old.exists()) {
@@ -297,8 +397,8 @@ public class UploadHandler extends HttpServlet {
 			}
 
 			// convert to thumbs, swf and xml-description
-			returnError = GeneratePDF.getInstance().convertPDF(currentDir,
-					newFileName, newFileExtDot, roomName, false, completeName);
+			returnError = getGeneratePDF().convertPDF(currentDir, newFileName,
+					newFileExtDot, roomName, false, completeName);
 
 			// returnError.put("decodePDF", returnError2);
 
@@ -310,47 +410,44 @@ public class UploadHandler extends HttpServlet {
 				// User Profile Update
 				this.deleteUserProfileFiles(currentDir, userId);
 				// convert it to JPG
-				returnError = GenerateImage.getInstance()
-						.convertImageUserProfile(currentDir, newFileName,
-								newFileExtDot, userId, newFileName, false);
+				returnError = getGenerateImage().convertImageUserProfile(
+						currentDir, newFileName, newFileExtDot, userId,
+						newFileName, false);
 			} else {
 				// convert it to JPG
 				log.debug("##### convert it to JPG: " + userProfile);
-				returnError = GenerateImage.getInstance().convertImage(
-						currentDir, newFileName, newFileExtDot, roomName,
-						newFileName, false);
+				returnError = getGenerateImage().convertImage(currentDir,
+						newFileName, newFileExtDot, roomName, newFileName,
+						false);
 			}
 		} else if (isAsIs) {
 			if (userProfile) {
 				// User Profile Update
 				this.deleteUserProfileFiles(currentDir, userId);
 				// is UserProfile Picture
-				HashMap<String, Object> processThumb1 = GenerateThumbs
-						.getInstance().generateThumb("_chat_", currentDir,
-								completeName, 40);
-				HashMap<String, Object> processThumb2 = GenerateThumbs
-						.getInstance().generateThumb("_profile_", currentDir,
-								completeName, 126);
-				HashMap<String, Object> processThumb3 = GenerateThumbs
-						.getInstance().generateThumb("_big_", currentDir,
-								completeName, 240);
+				HashMap<String, Object> processThumb1 = getGenerateThumbs()
+						.generateThumb("_chat_", currentDir, completeName, 40);
+				HashMap<String, Object> processThumb2 = getGenerateThumbs()
+						.generateThumb("_profile_", currentDir, completeName,
+								126);
+				HashMap<String, Object> processThumb3 = getGenerateThumbs()
+						.generateThumb("_big_", currentDir, completeName, 240);
 				returnError.put("processThumb1", processThumb1);
 				returnError.put("processThumb2", processThumb2);
 				returnError.put("processThumb3", processThumb3);
 
 				File fileNameToStore = new File(completeName + ".jpg");
 				String pictureuri = fileNameToStore.getName();
-				Users us = UsersDaoImpl.getInstance().getUser(userId);
+				Users us = getUsersDao().getUser(userId);
 				us.setUpdatetime(new java.util.Date());
 				us.setPictureuri(pictureuri);
-				UsersDaoImpl.getInstance().updateUser(us);
+				getUsersDao().updateUser(us);
 
-				ScopeApplicationAdapter.getInstance().updateUserSessionObject(
-						userId, pictureuri);
+				getScopeApplicationAdapter().updateUserSessionObject(userId,
+						pictureuri);
 			} else {
-				HashMap<String, Object> processThumb = GenerateThumbs
-						.getInstance().generateThumb("_thumb_", currentDir,
-								completeName, 50);
+				HashMap<String, Object> processThumb = getGenerateThumbs()
+						.generateThumb("_thumb_", currentDir, completeName, 50);
 				returnError.put("processThumb", processThumb);
 			}
 		}
@@ -365,7 +462,8 @@ public class UploadHandler extends HttpServlet {
 			Long users_id) throws Exception {
 
 		String working_imgdir = current_dir + "upload" + File.separatorChar
-				+ "profiles" + File.separatorChar + ScopeApplicationAdapter.profilesPrefix + users_id
+				+ "profiles" + File.separatorChar
+				+ ScopeApplicationAdapter.profilesPrefix + users_id
 				+ File.separatorChar;
 		File f = new File(working_imgdir);
 		if (f.exists() && f.isDirectory()) {
@@ -377,7 +475,8 @@ public class UploadHandler extends HttpServlet {
 			throws Exception {
 
 		String working_imgdir = current_dir + "upload" + File.separatorChar
-				+ "profiles" + File.separatorChar + ScopeApplicationAdapter.profilesPrefix + users_id
+				+ "profiles" + File.separatorChar
+				+ ScopeApplicationAdapter.profilesPrefix + users_id
 				+ File.separatorChar;
 
 		for (int i = 0; i < this.filesString.length; i++) {

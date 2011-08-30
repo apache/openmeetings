@@ -8,8 +8,7 @@
     
     
     <!-- Class for Methods which can be invoked by the client -->
-    <bean id="chatservice.service" 
-        class="org.openmeetings.app.remote.ChatService">
+    <bean id="chatservice.service" class="org.openmeetings.app.remote.ChatService">
         <property name="clientListManager" ref="openmeetings.ClientListManager" />
         <property name="emoticonsManager" ref="openmeetings.EmoticonsManager" />
     </bean>

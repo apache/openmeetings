@@ -86,6 +86,7 @@ public class ChatService implements IPendingServiceCallback {
 	 * @param newMessage
 	 * @return
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public int sendMessageWithClient(Object newMessage) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
@@ -304,6 +305,7 @@ public class ChatService implements IPendingServiceCallback {
 	 * @param newMessage
 	 * @return
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public int sendMessageToOverallChat(Object newMessage) {
 		try {
 			IConnection current = Red5.getConnectionLocal();

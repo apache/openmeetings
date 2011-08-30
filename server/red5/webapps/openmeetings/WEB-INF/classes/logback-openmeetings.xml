@@ -28,25 +28,10 @@
   <logger name="com.mchange.v2">
     <level value="ERROR"/>
   </logger>
-  <logger name="org.hibernate.cache">
-    <level value="ERROR"/>
-  </logger>
   <logger name="org.apache.axiom">
     <level value="ERROR"/>
   </logger>
-  <logger name="org.hibernate.jdbc">
-    <level value="ERROR"/>
-  </logger>
-  <logger name="org.hibernate.SQL">
-    <level value="ERROR"/>
-  </logger>
   <logger name="org.apache.commons.httpclient">
-    <level value="ERROR"/>
-  </logger>
-  <logger name="org.hibernate.tool.hbm2ddl">
-    <level value="ERROR"/>
-  </logger>
-  <logger name="org.hibernate">
     <level value="ERROR"/>
   </logger>
   <logger name="de.hunsicker.jalopy.io">

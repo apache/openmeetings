@@ -1,39 +1,30 @@
 package org.openmeetings.app.data.user;
 
-import java.util.Iterator;
 import java.util.Date;
+import java.util.Iterator;
 
-import org.slf4j.Logger;
-import org.red5.logging.Red5LoggerFactory;
-import javax.persistence.Query;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.openmeetings.app.persistence.beans.user.Usergroups;
 import org.openmeetings.app.persistence.beans.user.Users_Usergroups;
-import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 
  * @author swagner
  *
  */
+@Transactional
 public class Groupmanagement {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(Groupmanagement.class, ScopeApplicationAdapter.webAppRootKey);
-
-	private static Groupmanagement instance;
-
-	private Groupmanagement() {
-	}
-
-	public static synchronized Groupmanagement getInstance() {
-		if (instance != null) {
-			instance = new Groupmanagement();
-		}
-		return instance;
-	}
+	@PersistenceContext
+	private EntityManager em;
 
 	private boolean checkUserLevel(Long user_level) {
 		if (user_level.longValue() > 1) {
@@ -54,12 +45,7 @@ public class Groupmanagement {
 	public Users_Usergroups[] getUserGroups(Long USER_ID) {
 		Users_Usergroups[] usersusergroups = new Users_Usergroups[1];
 		try {
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session
-					.createQuery("select c from Users_Usergroups as c where c.user_id = :user_id");
+			Query query = em.createQuery("select c from Users_Usergroups as c where c.user_id = :user_id");
 			query.setParameter("user_id", USER_ID.longValue());
 			int count = query.getResultList().size();
 			usersusergroups = new Users_Usergroups[count];
@@ -68,8 +54,6 @@ public class Groupmanagement {
 				usersusergroups[k] = (Users_Usergroups) it2.next();
 				k++;
 			}
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 		} catch (Exception ex2) {
 			log.error("getUserGroups",ex2);
 		}
@@ -79,18 +63,11 @@ public class Groupmanagement {
 	public Users_Usergroups getUserGroupsSingle(long USER_ID) {
 		Users_Usergroups usersusergroups = new Users_Usergroups();
 		try {
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session
-					.createQuery("select c from Users_Usergroups as c where c.user_id = :user_id");
+			Query query = em.createQuery("select c from Users_Usergroups as c where c.user_id = :user_id");
 			query.setParameter("user_id", USER_ID);
 			for (Iterator it2 = query.getResultList().iterator(); it2.hasNext();) {
 				usersusergroups = (Users_Usergroups) it2.next();
 			}
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 		} catch (Exception ex2) {
 			log.error("getUserGroupsSingle",ex2);
 		}
@@ -108,15 +85,7 @@ public class Groupmanagement {
 			usersusergroups.setStarttime(new Date());
 			usersusergroups.setUpdatetime(null);
 			try {
-				Object idf = PersistenceSessionUtil.createSession();
-				EntityManager session = PersistenceSessionUtil.getSession();
-				EntityTransaction tx = session.getTransaction();
-				tx.begin();
-				session.merge(usersusergroups);
-				session.flush();
-				session.refresh(usersusergroups);
-				tx.commit();
-				PersistenceSessionUtil.closeSession(idf);
+				em.merge(usersusergroups);
 			} catch (Exception ex2) {
 				log.error("addUserToGroup",ex2);
 			}
@@ -131,23 +100,17 @@ public class Groupmanagement {
 		String res = "updateUserGroup";
 		if (checkUserLevel(user_level)) {
 			try {
-				Object idf = PersistenceSessionUtil.createSession();
-				EntityManager session = PersistenceSessionUtil.getSession();
-				EntityTransaction tx = session.getTransaction();
-			tx.begin();
 				String hqlUpdate = " UPDATE Users_Usergroups set "
 						+ " usergroup_id = :usergroup_id, user_id = :user_id, "
 						+ " updatetime = :updatetime, comment = :comment "
 						+ " where users_usergroups_id= :users_usergroups_id";
-				int updatedEntities = session.createQuery(hqlUpdate).setParameter(
+				int updatedEntities = em.createQuery(hqlUpdate).setParameter(
 						"usergroup_id", usergroup_id.longValue()).setParameter(
 						"user_id", user_id.longValue()).setParameter("updatetime",
 						new Long(-1)).setParameter(
 						"comment", comment).setParameter("users_usergroups_id",
 						users_usergroups_id.longValue()).executeUpdate();
 				res = "Success: " + updatedEntities;
-				tx.commit();
-				PersistenceSessionUtil.closeSession(idf);
 			} catch (Exception ex2) {
 				log.error("updateUserGroup",ex2);
 			}
@@ -161,17 +124,10 @@ public class Groupmanagement {
 		String res = "deleteUserGroupByID";
 		if (checkUserLevel(user_level)) {
 			try {
-				Object idf = PersistenceSessionUtil.createSession();
-				EntityManager session = PersistenceSessionUtil.getSession();
-				EntityTransaction tx = session.getTransaction();
-			tx.begin();
 				String hqlUpdate = "delete users_usergroups where users_usergroups_id= :users_usergroups_id";
-				int updatedEntities = session.createQuery(hqlUpdate).setParameter(
+				int updatedEntities = em.createQuery(hqlUpdate).setParameter(
 						"UID", users_usergroups_id.longValue()).executeUpdate();
 				res = "Success" + updatedEntities;
-				tx.commit();
-				PersistenceSessionUtil.closeSession(idf);
-
 			} catch (Exception ex2) {
 				log.error("deleteUserGroupByID",ex2);
 			}
@@ -184,16 +140,10 @@ public class Groupmanagement {
 	public String deleteUserFromAllGroups(Long user_id) {
 		String res = "deleteUserFromAllGroups";
 		try {
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
 			String hqlUpdate = "delete users_usergroups where user_id= :user_id";
-			int updatedEntities = session.createQuery(hqlUpdate).setParameter(
+			int updatedEntities = em.createQuery(hqlUpdate).setParameter(
 					"user_id", user_id.longValue()).executeUpdate();
 			res = "Success" + updatedEntities;
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 		} catch (Exception ex2) {
 			log.error("deleteUserFromAllGroups",ex2);
 		}
@@ -203,17 +153,10 @@ public class Groupmanagement {
 	public String deleteAllGroupUsers(Long usergroup_id) {
 		String res = "deleteAllGroupUsers";
 		try {
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
 			String hqlUpdate = "delete users_usergroups where usergroup_id= :usergroup_id";
-			int updatedEntities = session.createQuery(hqlUpdate).setParameter(
+			int updatedEntities = em.createQuery(hqlUpdate).setParameter(
 					"usergroup_id", usergroup_id.longValue()).executeUpdate();
 			res = "Success" + updatedEntities;
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
-
 		} catch (Exception ex2) {
 			log.error("deleteAllGroupUsers",ex2);
 		}
@@ -224,18 +167,11 @@ public class Groupmanagement {
 		Users_Usergroups groups = new Users_Usergroups();
 		if (checkUserLevel(user_level)) {
 			try {
-				Object idf = PersistenceSessionUtil.createSession();
-				EntityManager session = PersistenceSessionUtil.getSession();
-				EntityTransaction tx = session.getTransaction();
-			tx.begin();
-				Query query = session
-						.createQuery("select c from Usergroups as c where c.usergroup_id = :usergroup_id");
+				Query query = em.createQuery("select c from Usergroups as c where c.usergroup_id = :usergroup_id");
 				query.setParameter("usergroup_id", usergroup_id.longValue());
 				for (Iterator it2 = query.getResultList().iterator(); it2.hasNext();) {
 					groups = (Users_Usergroups) it2.next();
 				}
-				tx.commit();
-				PersistenceSessionUtil.closeSession(idf);
 				//TODO: setzen der Usergroups einer Gruppe
 				//groups.setUsergroups(getUsergroupsUsers(GROUP_ID));
 			} catch (Exception ex2) {
@@ -250,12 +186,7 @@ public class Groupmanagement {
 	public Usergroups[] getUsergroupsUsers(Long usergroup_id) {
 		Usergroups[] usergroups = new Usergroups[1];
 		try {
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session
-					.createQuery("select c from Usergroups as c where c.usergroup_id = :usergroup_id");
+			Query query = em.createQuery("select c from Usergroups as c where c.usergroup_id = :usergroup_id");
 			query.setParameter("usergroup_id", usergroup_id.longValue());
 			int count = query.getResultList().size();
 			usergroups = new Usergroups[count];
@@ -264,8 +195,6 @@ public class Groupmanagement {
 				usergroups[k] = (Usergroups) it2.next();
 				k++;
 			}
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			for (int vars = 0; vars < usergroups.length; vars++) {
 				//Todo:setzend er Passenden Benutzergruppen
 				//usergroups[vars].setUsers(ResHandler.getUsermanagement().getUserForGroup(usergroups[vars].getUSER_ID()));
@@ -280,11 +209,7 @@ public class Groupmanagement {
 		Usergroups[] usergroups = new Usergroups[1];
 		if (checkConfLevel(user_level)) {
 			try {
-				Object idf = PersistenceSessionUtil.createSession();
-				EntityManager session = PersistenceSessionUtil.getSession();
-				EntityTransaction tx = session.getTransaction();
-			tx.begin();
-				Query query = session.createQuery("from Usergroups");
+				Query query = em.createQuery("from Usergroups");
 				int count = query.getResultList().size();
 				usergroups = new Usergroups[count];
 				int k = 0;
@@ -292,8 +217,6 @@ public class Groupmanagement {
 					usergroups[k] = (Usergroups) it2.next();
 					k++;
 				}
-				tx.commit();
-				PersistenceSessionUtil.closeSession(idf);
 				for (int vars = 0; vars < usergroups.length; vars++) {
 					//Todo:setzen der Benutzer dieser Gruppe
 					//groups[vars].setUsergroups(getUsergroupsUsers(groups[vars].getGROUP_ID()));
@@ -311,18 +234,11 @@ public class Groupmanagement {
 	public Usergroups getGroup(Long usergroup_id) {
 		Usergroups usergroups = new Usergroups();
 		try {
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session
-					.createQuery("select c from Usergroups as c where c.usergroup_id = :usergroup_id");
+			Query query = em.createQuery("select c from Usergroups as c where c.usergroup_id = :usergroup_id");
 			query.setParameter("usergroup_id", usergroup_id.longValue());
 			for (Iterator it2 = query.getResultList().iterator(); it2.hasNext();) {
 				usergroups = (Usergroups) it2.next();
 			}
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 		} catch (Exception ex2) {
 			log.error("getGroup",ex2);
 		}
@@ -333,11 +249,7 @@ public class Groupmanagement {
 		Usergroups[] usergroups = new Usergroups[1];
 		if (checkConfLevel(user_level)) {
 			try {
-				Object idf = PersistenceSessionUtil.createSession();
-				EntityManager session = PersistenceSessionUtil.getSession();
-				EntityTransaction tx = session.getTransaction();
-			tx.begin();
-				Query query = session.createQuery("from Usergroups");
+				Query query = em.createQuery("from Usergroups");
 				int count = query.getResultList().size();
 				usergroups = new Usergroups[count];
 				int k = 0;
@@ -345,8 +257,6 @@ public class Groupmanagement {
 					usergroups[k] = (Usergroups) it2.next();
 					k++;
 				}
-				tx.commit();
-				PersistenceSessionUtil.closeSession(idf);
 				for (int vars = 0; vars < usergroups.length; vars++) {
 					//groups[vars].setUsers(ResHandler.getUsermanagement().getUser(groups[vars].getUSER_ID()));
 				}
@@ -364,18 +274,11 @@ public class Groupmanagement {
 		Users_Usergroups groups = new Users_Usergroups();
 		if (checkConfLevel(user_level)) {
 			try {
-				Object idf = PersistenceSessionUtil.createSession();
-				EntityManager session = PersistenceSessionUtil.getSession();
-				EntityTransaction tx = session.getTransaction();
-			tx.begin();
-				Query query = session
-						.createQuery("select c from Usergroups as c where c.usergroup_id = :usergroup_id");
+				Query query = em.createQuery("select c from Usergroups as c where c.usergroup_id = :usergroup_id");
 				query.setParameter("usergroup_id", usergroup_id.longValue());
 				for (Iterator it2 = query.getResultList().iterator(); it2.hasNext();) {
 					groups = (Users_Usergroups) it2.next();
 				}
-				tx.commit();
-				PersistenceSessionUtil.closeSession(idf);
 				//TODO: Benutzer einer gruppe setzten
 				//groups.setUsers(ResHandler.getUsermanagement().getUser(groups()));
 
@@ -402,15 +305,7 @@ public class Groupmanagement {
 			usergroups.setStarttime(new Date());
 			usergroups.setUpdatetime(null);
 			try {
-				Object idf = PersistenceSessionUtil.createSession();
-				EntityManager session = PersistenceSessionUtil.getSession();
-				EntityTransaction tx = session.getTransaction();
-				tx.begin();
-				session.merge(usergroups);
-				session.flush();
-				session.refresh(usergroups);
-				tx.commit();
-				PersistenceSessionUtil.closeSession(idf);
+				em.merge(usergroups);
 			} catch (Exception ex2) {
 				log.error("addGroup",ex2);
 			}
@@ -425,12 +320,8 @@ public class Groupmanagement {
 		String res = "UpdateGroup";
 		if (checkUserLevel(user_level)) {
 			try {
-				Object idf = PersistenceSessionUtil.createSession();
-				EntityManager session = PersistenceSessionUtil.getSession();
-				EntityTransaction tx = session.getTransaction();
-			tx.begin();
 				String hqlUpdate = "update Usergroups set user_id = :user_id,level_id = :level_id, name = :name, description = :description, updatetime = :updatetime, comment = :comment where usergroup_id= :usergroup_id";
-				int updatedEntities = session.createQuery(hqlUpdate).setParameter(
+				int updatedEntities = em.createQuery(hqlUpdate).setParameter(
 						"user_id", USER_ID.longValue()).setParameter("level_id",
 						level_id.longValue()).setParameter("name", name)
 						.setParameter("description", description).setParameter(
@@ -439,8 +330,6 @@ public class Groupmanagement {
 						.setParameter("comment", comment).setParameter("usergroup_id",
 								usergroup_id.longValue()).executeUpdate();
 				res = "Success" + updatedEntities;
-				tx.commit();
-				PersistenceSessionUtil.closeSession(idf);
 			} catch (Exception ex2) {
 				log.error("updateGroup",ex2);
 			}
@@ -454,17 +343,11 @@ public class Groupmanagement {
 		String res = "UpdateGroup";
 		if (checkUserLevel(user_level)) {
 			try {
-				Object idf = PersistenceSessionUtil.createSession();
-				EntityManager session = PersistenceSessionUtil.getSession();
-				EntityTransaction tx = session.getTransaction();
-			tx.begin();
 				String hqlUpdate = "delete Usergroups where usergroup_id= :usergroup_id";
-				int updatedEntities = session.createQuery(hqlUpdate).setParameter(
+				int updatedEntities = em.createQuery(hqlUpdate).setParameter(
 						"usergroup_id", usergroup_id.longValue())
 						.executeUpdate();
 				res = "Success" + updatedEntities;
-				tx.commit();
-				PersistenceSessionUtil.closeSession(idf);
 				deleteAllGroupUsers(usergroup_id);
 			} catch (Exception ex2) {
 				log.error("deleteGroup",ex2);
@@ -479,12 +362,7 @@ public class Groupmanagement {
 		Usergroups[] groups = new Usergroups[1];
 		if (checkConfLevel(user_level)) {
 			try {
-				Object idf = PersistenceSessionUtil.createSession();
-				EntityManager session = PersistenceSessionUtil.getSession();
-				EntityTransaction tx = session.getTransaction();
-			tx.begin();
-				Query query = session
-						.createQuery("select c from usergroup_id as c where c.level_id = :level_id");
+				Query query = em.createQuery("select c from usergroup_id as c where c.level_id = :level_id");
 				query.setParameter("level_id", 1);
 				int count = query.getResultList().size();
 				groups = new Usergroups[count];
@@ -493,8 +371,6 @@ public class Groupmanagement {
 					groups[k] = (Usergroups) it2.next();
 					k++;
 				}
-				tx.commit();
-				PersistenceSessionUtil.closeSession(idf);
 				for (int vars = 0; vars < groups.length; vars++) {
 					//groups[vars].setUsers(ResHandler.getUsermanagement().getUser(groups[vars].getUSER_ID()));
 				}
@@ -512,19 +388,12 @@ public class Groupmanagement {
 		Usergroups groups = new Usergroups();
 		if (checkConfLevel(user_level)) {
 			try {
-				Object idf = PersistenceSessionUtil.createSession();
-				EntityManager session = PersistenceSessionUtil.getSession();
-				EntityTransaction tx = session.getTransaction();
-			tx.begin();
-				Query query = session
-						.createQuery("select c from Usergroups as c where c.usergroup_id = :usergroup_id AND c.level_id = :level_id");
+				Query query = em.createQuery("select c from Usergroups as c where c.usergroup_id = :usergroup_id AND c.level_id = :level_id");
 				query.setParameter("usergroup_id", usergroup_id.longValue());
 				query.setParameter("level_id", 1);
 				for (Iterator it2 = query.getResultList().iterator(); it2.hasNext();) {
 					groups = (Usergroups) it2.next();
 				}
-				tx.commit();
-				PersistenceSessionUtil.closeSession(idf);
 				//Todo: Set user
 				//groups.setUsers(ResHandler.getUsermanagement().getUser(groups.getUSER_ID()));
 

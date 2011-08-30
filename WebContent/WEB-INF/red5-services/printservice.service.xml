@@ -9,8 +9,6 @@
     
                 
     <!-- Class for Methods which can be invoked by the client -->
-    <bean id="printservice.service" 
-        class="org.openmeetings.app.remote.PrintService" 
-        />      
+    <bean id="printservice.service" class="org.openmeetings.app.remote.PrintService" />
 
 </beans>

@@ -1,32 +1,25 @@
 package org.openmeetings.app.data.record.dao;
 
-import org.slf4j.Logger;
-import org.red5.logging.Red5LoggerFactory;
-
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import org.openmeetings.app.persistence.beans.recording.RoomRecording;
-import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
+import org.openmeetings.app.persistence.beans.recording.RoomRecording;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
+@Transactional
 public class RoomRecordingDaoImpl {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomRecordingDaoImpl.class, ScopeApplicationAdapter.webAppRootKey);
-
-	private RoomRecordingDaoImpl() {
-	}
-
-	private static RoomRecordingDaoImpl instance = null;
-
-	public static synchronized RoomRecordingDaoImpl getInstance() {
-		if (instance == null) {
-			instance = new RoomRecordingDaoImpl();
-		}
-
-		return instance;
-	}
+	@PersistenceContext
+	private EntityManager em;
+	@Autowired
+	private RoomClientDaoImpl roomClientDao;
 	
 	public RoomRecording getRoomRecordingById(Long roomrecordingId) {
 		try {
@@ -35,11 +28,7 @@ public class RoomRecordingDaoImpl {
 			String hql = "select r from RoomRecording r " +
 					"WHERE r.roomrecordingId = :roomrecordingId ";
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql);
+			Query query = em.createQuery(hql);
 			query.setParameter("roomrecordingId",roomrecordingId);
 			
 			RoomRecording roomRecording = null;
@@ -47,8 +36,6 @@ public class RoomRecordingDaoImpl {
 				roomRecording = (RoomRecording) query.getSingleResult();
 		    } catch (NoResultException ex) {
 		    }
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 			return roomRecording;
 		} catch (Exception ex2) {
@@ -62,11 +49,11 @@ public class RoomRecordingDaoImpl {
 			
 			//Fill and remove duplicated RoomClient Objects
 			if (roomRecording.getEnduser() != null) {
-				roomRecording.setEnduser(RoomClientDaoImpl.getInstance().getAndAddRoomClientByPublicSID(roomRecording.getEnduser()));
+				roomRecording.setEnduser(roomClientDao.getAndAddRoomClientByPublicSID(roomRecording.getEnduser()));
 			}
 		
 			if (roomRecording.getStartedby() != null) {
-				roomRecording.setStartedby(RoomClientDaoImpl.getInstance().getAndAddRoomClientByPublicSID(roomRecording.getStartedby()));
+				roomRecording.setStartedby(roomClientDao.getAndAddRoomClientByPublicSID(roomRecording.getStartedby()));
 			}
 			
 			log.debug("roomRecording.getRoom_setup() ID: "+roomRecording.getRoom_setup().getRooms_id());
@@ -74,14 +61,8 @@ public class RoomRecordingDaoImpl {
 			log.debug("roomRecording.getEnduser().getRoomClientId(): "+roomRecording.getEnduser().getRoomClientId());
 			log.debug("roomRecording.getStartedby().getRoomClientId(): "+roomRecording.getStartedby().getRoomClientId());
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			roomRecording = session.merge(roomRecording);
+			roomRecording = em.merge(roomRecording);
 			Long roomRecordingId = roomRecording.getRoomrecordingId();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 			return roomRecordingId;
 		} catch (Exception ex2) {
@@ -93,20 +74,13 @@ public class RoomRecordingDaoImpl {
 	public Long updateRoomRecording(RoomRecording roomRecording) {
 		try {
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
 			if (roomRecording.getRoomrecordingId() == null) {
-				session.persist(roomRecording);
-			    } else {
-			    	if (!session.contains(roomRecording)) {
-			    		session.merge(roomRecording);
+				em.persist(roomRecording);
+		    } else {
+		    	if (!em.contains(roomRecording)) {
+		    		em.merge(roomRecording);
 			    }
 			}
-			
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 		} catch (Exception ex2) {
 			log.error("[updateRoomRecording]: " , ex2);

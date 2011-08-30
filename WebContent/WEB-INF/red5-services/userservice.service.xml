@@ -8,14 +8,6 @@
     
 
     <!-- Class for Methods which can be invoked by the client -->
-    <bean id="userservice.service" 
-        class="org.openmeetings.app.remote.UserService">
-        <property name="clientListManager" ref="openmeetings.ClientListManager" />
-        <property name="scopeApplicationAdapter" ref="web.handler.openmeetings" />
-    </bean>     
-             
-    <bean id="openmeetings.UsersDaoImpl"
-        class="org.openmeetings.app.data.user.dao.UsersDaoImpl">
-    </bean>        
-                    
+    <bean id="userservice.service" class="org.openmeetings.app.remote.UserService" />
+
 </beans>

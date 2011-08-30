@@ -6,12 +6,7 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
                            http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.0.xsd">
     
-    
-                
     <!-- Class for Methods which can be invoked by the client -->
-    <bean id="pollservice.service" 
-        class="org.openmeetings.app.remote.PollService" >
-        <property name="clientListManager" ref="openmeetings.ClientListManager" />
-    </bean>     
+    <bean id="pollservice.service" class="org.openmeetings.app.remote.PollService" />
 
 </beans>

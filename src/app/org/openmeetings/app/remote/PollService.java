@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.Set;
 
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
@@ -33,15 +34,11 @@ public class PollService {
 	private static HashMap<Long,RoomPoll> pollList = new HashMap<Long,RoomPoll>();
 	
 	//Beans, see red5-web.xml
-	private ClientListManager clientListManager = null;
+	@Autowired
+	private ClientListManager clientListManager;
+	@Autowired
+	private ScopeApplicationAdapter scopeApplicationAdapter;
 	
-	public ClientListManager getClientListManager() {
-		return clientListManager;
-	}
-	public void setClientListManager(ClientListManager clientListManager) {
-		this.clientListManager = clientListManager;
-	}
-
 	public String createPoll(String pollQuestion,int pollTypeId){
 		String returnValue="";
 		try {
@@ -108,7 +105,7 @@ public class PollService {
     						//continue;
     					} else {
 							if (rcl.getRoom_id().equals(rc.getRoom_id()) && rcl.getRoom_id()!=null){
-								((IServiceCapableConnection) conn).invoke(clientFunction,obj,ScopeApplicationAdapter.getInstance());
+								((IServiceCapableConnection) conn).invoke(clientFunction,obj, scopeApplicationAdapter);
 								log.debug("sending "+clientFunction+" to " + conn+" "+conn.getClient().getId());
 							}
 						}

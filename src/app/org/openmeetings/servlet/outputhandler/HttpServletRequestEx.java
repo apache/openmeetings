@@ -1,19 +1,16 @@
 package org.openmeetings.servlet.outputhandler;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-
-import javax.servlet.*;
-import javax.servlet.http.*;
-
-import java.util.Enumeration;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Collections;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.slf4j.Logger;			// FIXME
-import org.red5.logging.Red5LoggerFactory; // FIXME
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 
 
 public class HttpServletRequestEx extends HttpServletRequestWrapper {

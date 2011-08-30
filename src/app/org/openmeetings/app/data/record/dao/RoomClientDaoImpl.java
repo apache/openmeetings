@@ -1,32 +1,22 @@
 package org.openmeetings.app.data.record.dao;
 
-import org.slf4j.Logger;
-import org.red5.logging.Red5LoggerFactory;
-
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import org.openmeetings.app.persistence.beans.recording.RoomClient;
-import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
+import org.openmeetings.app.persistence.beans.recording.RoomClient;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
+import org.springframework.transaction.annotation.Transactional;
+
+@Transactional
 public class RoomClientDaoImpl {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomClientDaoImpl.class, ScopeApplicationAdapter.webAppRootKey);
-
-	private RoomClientDaoImpl() {
-	}
-
-	private static RoomClientDaoImpl instance = null;
-
-	public static synchronized RoomClientDaoImpl getInstance() {
-		if (instance == null) {
-			instance = new RoomClientDaoImpl();
-		}
-
-		return instance;
-	}
+	@PersistenceContext
+	private EntityManager em;
 	
 	public RoomClient getAndAddRoomClientByPublicSID(RoomClient rcl) throws Exception {
 		// TODO Auto-generated method stub
@@ -62,11 +52,7 @@ public class RoomClientDaoImpl {
 			
 			log.debug("hql: "+hql);
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql);
+			Query query = em.createQuery(hql);
 			query.setParameter("publicSID",publicSID);
 			
 			log.debug("Number OF Records: "+query.getResultList().size());
@@ -76,8 +62,6 @@ public class RoomClientDaoImpl {
 				roomClient = (RoomClient) query.getSingleResult();
 		    } catch (NoResultException ex) {
 		    }
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 			return roomClient;
 			
@@ -94,11 +78,7 @@ public class RoomClientDaoImpl {
 			String hql = "select r from RoomClient r " +
 					"WHERE r.roomClientId = :roomClientId ";
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql);
+			Query query = em.createQuery(hql);
 			query.setParameter("roomClientId",roomClientId);
 			
 			RoomClient roomClient = null;
@@ -106,8 +86,6 @@ public class RoomClientDaoImpl {
 				roomClient = (RoomClient) query.getSingleResult();
 		    } catch (NoResultException ex) {
 		    }
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 			return roomClient;
 			
@@ -120,15 +98,8 @@ public class RoomClientDaoImpl {
 	public Long addRoomClient(RoomClient roomClient) {
 		try {
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			roomClient = session.merge(roomClient);
+			roomClient = em.merge(roomClient);
 			Long roomClientId = roomClient.getRoomClientId();
-			
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 			return roomClientId;
 		} catch (Exception ex2) {

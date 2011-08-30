@@ -33,6 +33,8 @@ public class EmoticonsManager {
 
 	
 
+	
+	@SuppressWarnings("unchecked")
 	public void loadEmot(IScope scope){
 		try {
 			

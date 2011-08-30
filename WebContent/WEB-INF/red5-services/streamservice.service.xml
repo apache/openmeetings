@@ -8,9 +8,6 @@
     
     
     <!-- Class for Methods which can be invoked by the client -->
-    <bean id="streamservice.service" 
-        class="org.openmeetings.app.remote.StreamService">
-        <property name="clientListManager" ref="openmeetings.ClientListManager" />
-    </bean>
-    
+    <bean id="streamservice.service" class="org.openmeetings.app.remote.StreamService" />
+
 </beans>

@@ -12,7 +12,7 @@
 	
 	<bean id="web.scope" class="org.red5.server.WebScope" init-method="register">
 		<property name="server" ref="red5.server" />
-		<property name="parent" ref="global.scope" />
+		<property name="parent" ref="global.scope" /> 
 		<property name="context" ref="web.context" />
 		<property name="handler" ref="global.handler" />
 		<property name="contextPath" value="/" />

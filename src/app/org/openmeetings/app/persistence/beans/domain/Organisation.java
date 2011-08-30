@@ -14,26 +14,28 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "organisation")
 public class Organisation implements Serializable {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 99123580264065654L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
 	@Column(name="organisation_id")
 	private Long organisation_id;
+	
 	@Column(name="name")
 	private String name;
+	
 	@Column(name="insertedby")
 	private Long insertedby;
+	
 	@Column(name="updatedby")
 	private Long updatedby;
+	
 	@Column(name="starttime")
 	private Date starttime;
+	
 	@Column(name="updatetime")
 	private Date updatetime;
+	
 	@Column(name="deleted")
 	private String deleted;
 	

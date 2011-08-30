@@ -3,12 +3,8 @@ package org.openmeetings.app.remote;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.TimeZone;
 
-import org.slf4j.Logger;
-import org.red5.logging.Red5LoggerFactory;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl;
@@ -16,39 +12,43 @@ import org.openmeetings.app.data.calendar.management.AppointmentLogic;
 import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.persistence.beans.calendar.Appointment;
-import org.openmeetings.app.persistence.beans.calendar.AppointmentReminderTyps;
 import org.openmeetings.app.persistence.beans.rooms.RoomTypes;
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class CalendarService {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			CalendarService.class, ScopeApplicationAdapter.webAppRootKey);
 
-	private static CalendarService instance = null;
-
-	public static synchronized CalendarService getInstance() {
-		if (instance == null) {
-			instance = new CalendarService();
-		}
-
-		return instance;
-	}
+	@Autowired
+	private AppointmentDaoImpl appointmentDao;
+	@Autowired
+	private AppointmentLogic appointmentLogic;
+	@Autowired
+	private Sessionmanagement sessionManagement;
+	@Autowired
+	private Usermanagement userManagement;
+	@Autowired
+	private Roommanagement roommanagement;
+	@Autowired
+	private AuthLevelmanagement authLevelManagement;
 
 	public List<Appointment> getAppointmentByRange(String SID, Date starttime,
 			Date endtime) {
 		log.debug("getAppointmentByRange : startdate - " + starttime
 				+ ", enddate - " + endtime);
 		try {
-			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-			Long user_level = Usermanagement.getInstance().getUserLevelByID(
-					users_id);
-			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+			Long users_id = sessionManagement.checkSession(SID);
+			Long user_level = userManagement.getUserLevelByID(users_id);
+			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				return AppointmentLogic.getInstance().getAppointmentByRange(
-						users_id, starttime, endtime);
+				return appointmentLogic.getAppointmentByRange(users_id,
+						starttime, endtime);
 			}
 		} catch (Exception err) {
 			log.error("[getAppointmentByRange]", err);
@@ -60,12 +60,11 @@ public class CalendarService {
 
 		try {
 
-			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-			Long user_level = Usermanagement.getInstance().getUserLevelByID(
-					users_id);
-			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+			Long users_id = sessionManagement.checkSession(SID);
+			Long user_level = userManagement.getUserLevelByID(users_id);
+			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				return AppointmentLogic.getInstance().getNextAppointment();
+				return appointmentLogic.getNextAppointment();
 			}
 		} catch (Exception err) {
 			log.error("[getNextAppointmentById]", err);
@@ -79,13 +78,12 @@ public class CalendarService {
 
 		try {
 
-			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-			Long user_level = Usermanagement.getInstance().getUserLevelByID(
-					users_id);
-			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+			Long users_id = sessionManagement.checkSession(SID);
+			Long user_level = userManagement.getUserLevelByID(users_id);
+			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				return AppointmentLogic.getInstance().searchAppointmentByName(
-						appointmentName);
+				return appointmentLogic
+						.searchAppointmentByName(appointmentName);
 			}
 		} catch (Exception err) {
 			log.error("[searchAppointmentByName]", err);
@@ -98,25 +96,24 @@ public class CalendarService {
 			String appointmentLocation, String appointmentDescription,
 			Date appointmentstart, Date appointmentend, Boolean isDaily,
 			Boolean isWeekly, Boolean isMonthly, Boolean isYearly,
-			Long categoryId, Long remind, List mmClient, 
-			Long roomType, String baseUrl, Long language_id) {
+			Long categoryId, Long remind, List<?> mmClient, Long roomType,
+			String baseUrl, Long language_id) {
 
 		log.debug("saveAppointMent SID:" + SID + ", baseUrl : " + baseUrl);
 
 		try {
-			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
+			Long users_id = sessionManagement.checkSession(SID);
 			log.debug("saveAppointMent users_id:" + users_id);
-			
-			Long user_level = Usermanagement.getInstance().getUserLevelByID(
-					users_id);
 
-			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+			Long user_level = userManagement.getUserLevelByID(users_id);
 
-				Long id = AppointmentLogic.getInstance().saveAppointment(
-						appointmentName, users_id, appointmentLocation,
-						appointmentDescription, appointmentstart,
-						appointmentend, isDaily, isWeekly, isMonthly, isYearly,
-						categoryId, remind, mmClient, roomType, baseUrl, language_id);
+			if (authLevelManagement.checkUserLevel(user_level)) {
+
+				Long id = appointmentLogic.saveAppointment(appointmentName,
+						users_id, appointmentLocation, appointmentDescription,
+						appointmentstart, appointmentend, isDaily, isWeekly,
+						isMonthly, isYearly, categoryId, remind, mmClient,
+						roomType, baseUrl, language_id);
 
 				return id;
 			} else {
@@ -130,29 +127,26 @@ public class CalendarService {
 	}
 
 	public Long updateAppointmentTimeOnly(String SID, Long appointmentId,
-			Date appointmentstart, Date appointmentend, String baseurl, 
+			Date appointmentstart, Date appointmentend, String baseurl,
 			Long language_id) {
 		try {
 
-			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-			Long user_level = Usermanagement.getInstance().getUserLevelByID(
-					users_id);
-			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+			Long users_id = sessionManagement.checkSession(SID);
+			Long user_level = userManagement.getUserLevelByID(users_id);
+			if (authLevelManagement.checkUserLevel(user_level)) {
 
 				log.debug("updateAppointment");
 
 				log.debug("appointmentId " + appointmentId);
 
-				Appointment app = AppointmentLogic.getInstance()
+				appointmentLogic
 						.getAppointMentById(appointmentId);
 
-				Users user = Usermanagement.getInstance().getUserById(users_id);
-				
-				return AppointmentLogic.getInstance().updateAppointmentByTime(
-						appointmentId, 
-						appointmentstart, appointmentend, 
-						users_id, baseurl, language_id, 
-						user.getOmTimeZone().getIcal());
+				Users user = userManagement.getUserById(users_id);
+
+				return appointmentLogic.updateAppointmentByTime(appointmentId,
+						appointmentstart, appointmentend, users_id, baseurl,
+						language_id, user.getOmTimeZone().getIcal());
 			}
 		} catch (Exception err) {
 			log.error("[updateAppointment]", err);
@@ -167,20 +161,18 @@ public class CalendarService {
 			String appointmentDescription, Date appointmentstart,
 			Date appointmentend, Boolean isDaily, Boolean isWeekly,
 			Boolean isMonthly, Boolean isYearly, Long categoryId, Long remind,
-			List mmClient, Long roomType, String baseurl, Long language_id) {
+			List<?> mmClient, Long roomType, String baseurl, Long language_id) {
 		try {
 
-			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-			Long user_level = Usermanagement.getInstance().getUserLevelByID(
-					users_id);
-			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+			Long users_id = sessionManagement.checkSession(SID);
+			Long user_level = userManagement.getUserLevelByID(users_id);
+			if (authLevelManagement.checkUserLevel(user_level)) {
 
 				log.debug("updateAppointment");
 
-				RoomTypes rt = Roommanagement.getInstance().getRoomTypesById(
-						roomType);
+				RoomTypes rt = roommanagement.getRoomTypesById(roomType);
 
-				Appointment app = AppointmentLogic.getInstance()
+				Appointment app = appointmentLogic
 						.getAppointMentById(appointmentId);
 
 				Rooms room = app.getRoom();
@@ -190,17 +182,17 @@ public class CalendarService {
 					room.setName(appointmentName);
 					room.setRoomtype(rt);
 
-					Roommanagement.getInstance().updateRoomObject(room);
+					roommanagement.updateRoomObject(room);
 				}
 
-				Users user = Usermanagement.getInstance().getUserById(users_id);
-				
-				return AppointmentLogic.getInstance().updateAppointment(
-						appointmentId, appointmentName, appointmentDescription,
+				Users user = userManagement.getUserById(users_id);
+
+				return appointmentLogic.updateAppointment(appointmentId,
+						appointmentName, appointmentDescription,
 						appointmentstart, appointmentend, isDaily, isWeekly,
 						isMonthly, isYearly, categoryId, remind, mmClient,
-						users_id, baseurl, language_id, false, "", 
-						user.getOmTimeZone().getIcal());
+						users_id, baseurl, language_id, false, "", user
+								.getOmTimeZone().getIcal());
 			}
 		} catch (Exception err) {
 			log.error("[updateAppointment]", err);
@@ -210,24 +202,24 @@ public class CalendarService {
 
 	}
 
-	public Long deleteAppointment(String SID, Long appointmentId, Long language_id) {
+	public Long deleteAppointment(String SID, Long appointmentId,
+			Long language_id) {
 
 		log.debug("deleteAppointment : " + appointmentId);
 
 		try {
 
-			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-			Long user_level = Usermanagement.getInstance().getUserLevelByID(
-					users_id);
-			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+			Long users_id = sessionManagement.checkSession(SID);
+			Long user_level = userManagement.getUserLevelByID(users_id);
+			if (authLevelManagement.checkUserLevel(user_level)) {
 
-//				Appointment app = AppointmentLogic.getInstance()
-//						.getAppointMentById(appointmentId);
-//				Roommanagement.getInstance().deleteRoom(app.getRoom());
+				// Appointment app = AppointmentLogic.getInstance()
+				// .getAppointMentById(appointmentId);
+				// roommanagement.deleteRoom(app.getRoom());
 
-				return AppointmentLogic.getInstance().deleteAppointment(
-											appointmentId, users_id, language_id);
-				
+				return appointmentLogic.deleteAppointment(appointmentId,
+						users_id, language_id);
+
 			}
 
 		} catch (Exception err) {
@@ -236,40 +228,43 @@ public class CalendarService {
 		return null;
 
 	}
-	
+
 	public Appointment getAppointmentByRoomId(String SID, Long room_id) {
 		try {
 
-			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-			Long user_level = Usermanagement.getInstance().getUserLevelByID(
-					users_id);
-			if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
+			Long users_id = sessionManagement.checkSession(SID);
+			Long user_level = userManagement.getUserLevelByID(users_id);
+			if (authLevelManagement.checkUserLevel(user_level)) {
 
-//				Appointment app = AppointmentLogic.getInstance()
-//						.getAppointMentById(appointmentId);
-//				Roommanagement.getInstance().deleteRoom(app.getRoom());
-				
+				// Appointment app = AppointmentLogic.getInstance()
+				// .getAppointMentById(appointmentId);
+				// roommanagement.deleteRoom(app.getRoom());
+
 				Appointment appointment = new Appointment();
 
-				Appointment appStored = AppointmentDaoImpl.getInstance().getAppointmentByRoomId(
-															users_id, room_id);
+				Appointment appStored = appointmentDao.getAppointmentByRoomId(
+						users_id, room_id);
 
-				Users user = Usermanagement.getInstance().getUserById(users_id);
-				
-				TimeZone timeZone = TimeZone.getTimeZone(user.getOmTimeZone().getIcal());
-				
+				Users user = userManagement.getUserById(users_id);
+
+				TimeZone timeZone = TimeZone.getTimeZone(user.getOmTimeZone()
+						.getIcal());
+
 				Calendar cal = Calendar.getInstance();
 				cal.setTimeZone(timeZone);
-				int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
-				
-				//System.out.println("CalendarServlet offset "+offset );
-				//System.out.println("CalendarServlet TimeZone "+TimeZone.getDefault().getID() );
-				//log.debug("addAppointment offset :: "+offset);
-				
-				appointment.setAppointmentStarttime(new Date(appStored.getAppointmentStarttime().getTime() + offset));
-				appointment.setAppointmentEndtime(new Date(appStored.getAppointmentEndtime().getTime() + offset));
-				
-				
+				int offset = cal.get(Calendar.ZONE_OFFSET)
+						+ cal.get(Calendar.DST_OFFSET);
+
+				// System.out.println("CalendarServlet offset "+offset );
+				// System.out.println("CalendarServlet TimeZone "+TimeZone.getDefault().getID()
+				// );
+				// log.debug("addAppointment offset :: "+offset);
+
+				appointment.setAppointmentStarttime(new Date(appStored
+						.getAppointmentStarttime().getTime() + offset));
+				appointment.setAppointmentEndtime(new Date(appStored
+						.getAppointmentEndtime().getTime() + offset));
+
 				return appointment;
 			}
 

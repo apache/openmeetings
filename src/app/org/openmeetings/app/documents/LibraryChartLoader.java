@@ -28,9 +28,9 @@ public class LibraryChartLoader {
         return instance;
     }
 
-    public ArrayList loadChart(String filePath, String fileName) {
+    @SuppressWarnings("rawtypes")
+	public ArrayList loadChart(String filePath, String fileName) {
         try {
-            LinkedHashMap lMap = new LinkedHashMap();
             String filepathComplete = filePath + fileName + fileExt;
 
             log.error("filepathComplete: " + filepathComplete);

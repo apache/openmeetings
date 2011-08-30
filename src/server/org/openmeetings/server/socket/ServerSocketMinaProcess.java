@@ -1,30 +1,14 @@
 package org.openmeetings.server.socket;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
-
-import javax.imageio.IIOImage;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageWriteParam;
-import javax.imageio.ImageWriter;
-import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
-import javax.imageio.stream.ImageOutputStream;
 
 import org.apache.mina.core.filterchain.DefaultIoFilterChainBuilder;
 import org.apache.mina.core.session.IoSession;
-import org.apache.mina.filter.logging.LoggingFilter;
-import org.apache.mina.transport.socket.DatagramSessionConfig;
-import org.apache.mina.transport.socket.nio.NioDatagramAcceptor;
-import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
+import org.apache.mina.filter.logging.LoggingFilter;
+import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.server.beans.ServerFrameBean;
 import org.openmeetings.server.beans.ServerFrameCursorStatus;
@@ -37,6 +21,7 @@ import org.openmeetings.server.cache.ServerSharingViewersList;
 import org.openmeetings.server.codec.ServerDesktopCodecSharingFactory;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author sebastianwagner
@@ -49,6 +34,8 @@ public class ServerSocketMinaProcess {
 	private static NioSocketAcceptor acceptor = null;
 	
 	public static final int port = 4445;
+	@Autowired
+	private ServerSharingSessionList serverSharingSessionList;
 	
 	public static void sendCursorPositionToSession(ServerFrameCursorStatus cursorStatus) {
 		try {
@@ -195,7 +182,7 @@ public class ServerSocketMinaProcess {
 			ServerSharingSessionList.startSession(sessionId,serverStatusBean);
 		} else if (serverStatusBean.getMode() == 4) {
 			log.debug("STOP SESSION");
-			ServerSharingSessionList.stopSession(sessionId);
+			serverSharingSessionList.stopSession(sessionId);
 		}
 		
 	}
@@ -264,7 +251,7 @@ public class ServerSocketMinaProcess {
 				serverFrameBean.setImageBytesAsJPEG(serverFrameBean.getImageBytes());
 //			}
 			
-			ServerSharingSessionList.addFrameToSession(serverFrameBean);
+				serverSharingSessionList.addFrameToSession(serverFrameBean);
 			
 		} catch (Exception err) {
 			log.error("[recvServerFrameBean]",err);
@@ -277,7 +264,7 @@ public class ServerSocketMinaProcess {
 	public void updateClientCursor(SocketAddress remoteAddress, ServerFrameCursorStatus serverFrameCursorStatus) {
 		// TODO Auto-generated method stub
 		
-		ServerSharingSessionList.updateCursorPosition(serverFrameCursorStatus);
+		serverSharingSessionList.updateCursorPosition(serverFrameCursorStatus);
 
 	}
 
@@ -287,7 +274,7 @@ public class ServerSocketMinaProcess {
 	public void removeClient(SocketAddress remoteAddress, Long sessionId) {
 		// TODO Auto-generated method stub
 		
-		ServerSharingSessionList.removeSession(sessionId);
+		serverSharingSessionList.removeSession(sessionId);
 		ServerSharingViewersList.removeSession(sessionId);
 	}
 

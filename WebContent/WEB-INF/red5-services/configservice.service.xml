@@ -8,12 +8,6 @@
     
         
     <!-- Class for Methods which can be invoked by the client -->
-    <bean id="configservice.service" 
-        class="org.openmeetings.app.remote.ConfigurationService" 
-        />  
-        
-    <bean id="openmeetings.Configurationmanagement" 
-        class="org.openmeetings.app.data.basic.Configurationmanagement">
-    </bean>           
-                    
+    <bean id="configservice.service" class="org.openmeetings.app.remote.ConfigurationService" />  
+
 </beans>

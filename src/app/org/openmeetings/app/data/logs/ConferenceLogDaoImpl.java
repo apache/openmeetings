@@ -2,31 +2,25 @@ package org.openmeetings.app.data.logs;
 
 import java.util.Date;
 
-import org.slf4j.Logger;
-import org.red5.logging.Red5LoggerFactory;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceContext;
+
 import org.openmeetings.app.persistence.beans.logs.ConferenceLog;
 import org.openmeetings.app.persistence.beans.logs.ConferenceLogType;
-import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 public class ConferenceLogDaoImpl {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(ConferenceLogDaoImpl.class, ScopeApplicationAdapter.webAppRootKey);
-
-	private ConferenceLogDaoImpl() {
-	}
-
-	private static ConferenceLogDaoImpl instance = null;
-
-	public static synchronized ConferenceLogDaoImpl getInstance() {
-		if (instance == null) {
-			instance = new ConferenceLogDaoImpl();
-		}
-		return instance;
-	}
-	
+	@PersistenceContext
+	private EntityManager em;
+	@Autowired
+	private ConferenceLogTypeDaoImpl conferenceLogTypeDao;
 
 	public Long addConferenceLog(String eventType, Long userId, String streamid, 
 			Long room_id, String userip, String scopeName, 
@@ -34,10 +28,10 @@ public class ConferenceLogDaoImpl {
 			String firstname, String lastname) {
 		try {
 			
-			ConferenceLogType confLogType = ConferenceLogTypeDaoImpl.getInstance().getConferenceLogTypeByEventName(eventType);
+			ConferenceLogType confLogType = conferenceLogTypeDao.getConferenceLogTypeByEventName(eventType);
 			if (confLogType == null) {
-				ConferenceLogTypeDaoImpl.getInstance().addConferenceLogType(eventType);
-				confLogType = ConferenceLogTypeDaoImpl.getInstance().getConferenceLogTypeByEventName(eventType);
+				conferenceLogTypeDao.addConferenceLogType(eventType);
+				confLogType = conferenceLogTypeDao.getConferenceLogTypeByEventName(eventType);
 			}
 			
 			ConferenceLog confLog = new ConferenceLog();
@@ -54,18 +48,9 @@ public class ConferenceLogDaoImpl {
 			confLog.setLastname(lastname);
 			confLog.setEmail(email);
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			
-			confLog = session.merge(confLog);
-			session.flush();
+			confLog = em.merge(confLog);
 			Long confLogId = confLog.getConferenceLogId();
 
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
-			
 			return confLogId;
 		} catch (Exception ex2) {
 			log.error("[addConferenceLog]: ",ex2);

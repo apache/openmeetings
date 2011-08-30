@@ -25,67 +25,32 @@ import org.openmeetings.app.persistence.beans.flvrecord.FlvRecording;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingMetaData;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingMetaDelta;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
-import org.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class FlvInterviewReConverter {
-	
 	private int initCutSeconds = 0;
 	private int leftSideLoud = 1;
 	private int rightSideLoud = 1;
-	
 	private Integer leftSideTime = 0;
 	private Integer rightSideTime = 0;	
 
-	private static final Logger log = Red5LoggerFactory
-			.getLogger(FlvInterviewReConverter.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(FlvInterviewReConverter.class);
 
 	// Spring loaded Beans
+	@Autowired
 	private FlvRecordingDaoImpl flvRecordingDaoImpl = null;
+	@Autowired
 	private FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDaoImpl = null;
+	@Autowired
 	private Configurationmanagement configurationmanagement;
+	@Autowired
 	private FlvRecordingLogDaoImpl flvRecordingLogDaoImpl;
+	@Autowired
 	private FlvRecordingMetaDeltaDaoImpl flvRecordingMetaDeltaDaoImpl;
-
-	public FlvRecordingDaoImpl getFlvRecordingDaoImpl() {
-		return flvRecordingDaoImpl;
-	}
-	public void setFlvRecordingDaoImpl(FlvRecordingDaoImpl flvRecordingDaoImpl) {
-		this.flvRecordingDaoImpl = flvRecordingDaoImpl;
-	}
-
-	public FlvRecordingMetaDataDaoImpl getFlvRecordingMetaDataDaoImpl() {
-		return flvRecordingMetaDataDaoImpl;
-	}
-	public void setFlvRecordingMetaDataDaoImpl(
-			FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDaoImpl) {
-		this.flvRecordingMetaDataDaoImpl = flvRecordingMetaDataDaoImpl;
-	}
-
-	public Configurationmanagement getConfigurationmanagement() {
-		return configurationmanagement;
-	}
-	public void setConfigurationmanagement(
-			Configurationmanagement configurationmanagement) {
-		this.configurationmanagement = configurationmanagement;
-	}
-
-	public FlvRecordingLogDaoImpl getFlvRecordingLogDaoImpl() {
-		return flvRecordingLogDaoImpl;
-	}
-	public void setFlvRecordingLogDaoImpl(
-			FlvRecordingLogDaoImpl flvRecordingLogDaoImpl) {
-		this.flvRecordingLogDaoImpl = flvRecordingLogDaoImpl;
-	}
-	
-	public FlvRecordingMetaDeltaDaoImpl getFlvRecordingMetaDeltaDaoImpl() {
-		return flvRecordingMetaDeltaDaoImpl;
-	}
-	public void setFlvRecordingMetaDeltaDaoImpl(
-			FlvRecordingMetaDeltaDaoImpl flvRecordingMetaDeltaDaoImpl) {
-		this.flvRecordingMetaDeltaDaoImpl = flvRecordingMetaDeltaDaoImpl;
-	}
+	@Autowired
+	private GenerateThumbs generateThumbs;
 	
 	public void startConversion(Long flvRecordingId, Integer leftSideLoud, Integer rightSideLoud, Integer leftSideTime, Integer rightSideTime) {
 		try {
@@ -151,8 +116,7 @@ public class FlvInterviewReConverter {
 		List<HashMap<String, Object>> returnLog = new LinkedList<HashMap<String, Object>>();
 		try {
 
-			List<FlvRecordingMetaData> metaDataList = this
-					.getFlvRecordingMetaDataDaoImpl()
+			List<FlvRecordingMetaData> metaDataList = flvRecordingMetaDataDaoImpl
 					.getFlvRecordingMetaDataAudioFlvsByRecording(
 							flvRecording.getFlvRecordingId());
 
@@ -528,8 +492,7 @@ public class FlvInterviewReConverter {
 					
 				}
 
-				this.getFlvRecordingMetaDataDaoImpl()
-						.updateFlvRecordingMetaData(flvRecordingMetaData);
+				flvRecordingMetaDataDaoImpl.updateFlvRecordingMetaData(flvRecordingMetaData);
 
 			}
 
@@ -855,7 +818,7 @@ public class FlvInterviewReConverter {
 				log.debug("completeLengthInSeconds|currentTimeInMilliSeconds " + 
 						completeLengthInSeconds + "|" + currentTimeInMilliSeconds + "|" + progress + "|" + cLength);
 				
-				FlvRecordingDaoImpl.getInstance().updateFlvRecordingProgress(flvRecording.getFlvRecordingId(), progress);
+				flvRecordingDaoImpl.updateFlvRecordingProgress(flvRecording.getFlvRecordingId(), progress);
 				
 				if (currentTimeInMilliSeconds >= completeLengthInSeconds) {
 				
@@ -1076,7 +1039,7 @@ public class FlvInterviewReConverter {
         String[] cmd = {this.getPathToImageMagick(),
                         file1,file2,"+append",file3};
            
-        return GenerateThumbs.getInstance().processImageWindows(cmd);
+        return generateThumbs.processImageWindows(cmd);
         
         //GenerateSWF.executeScript("mergeWave",cmd);
         

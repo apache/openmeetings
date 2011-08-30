@@ -1,19 +1,15 @@
 package org.openmeetings.app.data.flvrecord.listener;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.mina.core.buffer.IoBuffer;
-//import org.openmeetings.app.data.flvrecord.FlvRecordingHelperDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDeltaDaoImpl;
-//import org.openmeetings.app.hibernate.beans.flvrecord.FlvRecordingHelper;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingMetaDelta;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
-import org.openmeetings.utils.math.CalendarPatterns;
 import org.red5.io.IStreamableFile;
 import org.red5.io.IStreamableFileFactory;
 import org.red5.io.IStreamableFileService;
@@ -28,8 +24,8 @@ import org.red5.server.api.ScopeUtils;
 import org.red5.server.api.stream.IBroadcastStream;
 import org.red5.server.api.stream.IStreamListener;
 import org.red5.server.api.stream.IStreamPacket;
-import org.red5.server.net.rtmp.event.SerializeUtils;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class StreamTranscodingListener implements IStreamListener {
 	
@@ -65,6 +61,8 @@ public class StreamTranscodingListener implements IStreamListener {
 	private int duration;
 	
 	private static final Logger log = Red5LoggerFactory.getLogger(StreamTranscodingListener.class, ScopeApplicationAdapter.webAppRootKey);
+	@Autowired
+	private FlvRecordingMetaDeltaDaoImpl flvRecordingMetaDeltaDao;
 
 	
 	public StreamTranscodingListener(String streamName, IScope scope, 
@@ -402,7 +400,7 @@ public class StreamTranscodingListener implements IStreamListener {
 				
 				for (FlvRecordingMetaDelta flvRecordingMetaDeltaLoop : this.flvRecordingMetaDeltas) {
 					
-					FlvRecordingMetaDeltaDaoImpl.getInstance().addFlvRecordingMetaDelta(flvRecordingMetaDeltaLoop);
+					flvRecordingMetaDeltaDao.addFlvRecordingMetaDelta(flvRecordingMetaDeltaLoop);
 					
 				}
 				

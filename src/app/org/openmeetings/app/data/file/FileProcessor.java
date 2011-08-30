@@ -18,35 +18,27 @@ import org.openmeetings.utils.StoredFile;
 import org.openmeetings.utils.crypt.MD5;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class FileProcessor {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(FileProcessor.class, ScopeApplicationAdapter.webAppRootKey);
 
 	//Spring loaded Beans
+	@Autowired
 	private FlvExplorerConverter flvExplorerConverter;
-	
-	public FlvExplorerConverter getFlvExplorerConverter() {
-		return flvExplorerConverter;
-	}
-	public void setFlvExplorerConverter(FlvExplorerConverter flvExplorerConverter) {
-		this.flvExplorerConverter = flvExplorerConverter;
-	}
+	@Autowired
+	private FileExplorerItemDaoImpl fileExplorerItemDao;
+	@Autowired
+	private GenerateImage generateImage;
+	@Autowired
+	private GenerateThumbs generateThumbs;
+	@Autowired
+	private GeneratePDF generatePDF;
 
-	private static FileProcessor instance;
-	
 	private String workingDir = "";
 	private String working_dirppt = "";
 
-	private FileProcessor() {}
-
-	public static synchronized FileProcessor getInstance() {
-		if (instance == null) {
-			instance = new FileProcessor();
-		}
-		return instance;
-	}
-	
 	private void prepareFolderStructure(String current_dir) throws Exception {
 		
 		this.workingDir = current_dir + "upload" + File.separatorChar
@@ -167,8 +159,7 @@ public class FileProcessor {
             fileHashName = newFileSystemName + ".flv";
         }
 
-        FileExplorerItem fileExplorerItem = FileExplorerItemDaoImpl
-                .getInstance().getFileExplorerItemsById(parentFolderId);
+        FileExplorerItem fileExplorerItem = fileExplorerItemDao.getFileExplorerItemsById(parentFolderId);
 
         if (fileExplorerItem != null) {
             if (fileExplorerItem.getIsFolder() == null
@@ -177,7 +168,7 @@ public class FileProcessor {
             }
         }
 
-        Long fileExplorerItemId = FileExplorerItemDaoImpl.getInstance().add(
+        Long fileExplorerItemId = fileExplorerItemDao.add(
                 fileSystemName, fileHashName, // The Hashname of the file
                 parentFolderId, ownerId, room_id, userId, false, // isFolder
                 isImage, isPresentation, "", false, isChart, 
@@ -190,12 +181,12 @@ public class FileProcessor {
         log.debug("canBeConverted: " + canBeConverted);
         if (canBeConverted) {
             // convert to pdf, thumbs, swf and xml-description
-            returnError = GeneratePDF.getInstance().convertPDF(current_dir,
+            returnError = generatePDF.convertPDF(current_dir,
                     newFileSystemName, newFileExtDot, "files", true,
                     completeName);
         } else if (isPdf) {
             // convert to thumbs, swf and xml-description
-            returnError = GeneratePDF.getInstance().convertPDF(current_dir,
+            returnError = generatePDF.convertPDF(current_dir,
                     newFileSystemName, newFileExtDot, "files", false,
                     completeName);
         } else if (isChart) {
@@ -203,12 +194,11 @@ public class FileProcessor {
         } else if (isImage && !isAsIs) {
             // convert it to JPG
             log.debug("##### convert it to JPG: ");
-            returnError = GenerateImage.getInstance().convertImage(current_dir,
+            returnError = generateImage.convertImage(current_dir,
                     newFileSystemName, newFileExtDot, "files",
                     newFileSystemName, false);
         } else if (isAsIs) {
-            HashMap<String, Object> processThumb = GenerateThumbs.getInstance()
-                    .generateThumb("_thumb_", current_dir, completeName, 50);
+            HashMap<String, Object> processThumb = generateThumbs.generateThumb("_thumb_", current_dir, completeName, 50);
             returnError.put("processThumb", processThumb);
         } else if (isVideo) {
 

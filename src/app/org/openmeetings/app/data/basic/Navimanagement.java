@@ -1,58 +1,60 @@
 package org.openmeetings.app.data.basic;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Date;
-import java.util.Map;
-import java.util.Set;
 
-import org.slf4j.Logger;
-import org.red5.logging.Red5LoggerFactory;
-import javax.persistence.Query;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.openmeetings.app.persistence.beans.basic.Naviglobal;
 import org.openmeetings.app.persistence.beans.basic.Navimain;
 import org.openmeetings.app.persistence.beans.basic.Navisub;
-import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
-import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 public class Navimanagement {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(Navimanagement.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(
+			Navimanagement.class, ScopeApplicationAdapter.webAppRootKey);
 
-	private static Navimanagement instance;
+	@PersistenceContext
+	private EntityManager em;
 
-	private Navimanagement() {
-	};
-
-	public static synchronized Navimanagement getInstance() {
-		if (instance == null) {
-			instance = new Navimanagement();
-		}
-		return instance;
-	}
+	@Autowired
+	private Fieldmanagment fieldmanagment;
 
 	public List getMainMenu(long user_level, long USER_ID, long language_id) {
 		List<Naviglobal> ll = this.getMainMenu(user_level, USER_ID);
 		for (Iterator<Naviglobal> it2 = ll.iterator(); it2.hasNext();) {
-			Naviglobal navigl = (Naviglobal) it2.next();
-			navigl.setLabel(Fieldmanagment.getInstance().getFieldByIdAndLanguageByNavi(navigl.getFieldvalues_id(),language_id));
-			navigl.setTooltip(Fieldmanagment.getInstance().getFieldByIdAndLanguageByNavi(navigl.getTooltip_fieldvalues_id(),language_id));
+			Naviglobal navigl = it2.next();
+			navigl.setLabel(fieldmanagment.getFieldByIdAndLanguageByNavi(
+					navigl.getFieldvalues_id(), language_id));
+			navigl.setTooltip(fieldmanagment.getFieldByIdAndLanguageByNavi(
+					navigl.getTooltip_fieldvalues_id(), language_id));
 			List<Navimain> s = navigl.getMainnavi();
 			for (Iterator<Navimain> it3 = s.iterator(); it3.hasNext();) {
-				Navimain navim = (Navimain) it3.next();
-				navim.setLabel(Fieldmanagment.getInstance().getFieldByIdAndLanguageByNavi(navim.getFieldvalues_id(),language_id));
-				navim.setTooltip(Fieldmanagment.getInstance().getFieldByIdAndLanguageByNavi(navim.getTooltip_fieldvalues_id(),language_id));
-				if (navim.getSubnavi() != null ) {
-					for (Iterator<Navisub> it4 = navim.getSubnavi().iterator(); it4.hasNext();) {
-						Navisub navis = (Navisub) it4.next();
-						navis.setLabel(Fieldmanagment.getInstance().getFieldByIdAndLanguageByNavi(navis.getFieldvalues_id(),language_id));
-						navis.setTooltip(Fieldmanagment.getInstance().getFieldByIdAndLanguageByNavi(navis.getTooltip_fieldvalues_id(),language_id));
+				Navimain navim = it3.next();
+				navim.setLabel(fieldmanagment.getFieldByIdAndLanguageByNavi(
+						navim.getFieldvalues_id(), language_id));
+				navim.setTooltip(fieldmanagment.getFieldByIdAndLanguageByNavi(
+						navim.getTooltip_fieldvalues_id(), language_id));
+				if (navim.getSubnavi() != null) {
+					for (Iterator<Navisub> it4 = navim.getSubnavi().iterator(); it4
+							.hasNext();) {
+						Navisub navis = it4.next();
+						navis.setLabel(fieldmanagment
+								.getFieldByIdAndLanguageByNavi(
+										navis.getFieldvalues_id(), language_id));
+						navis.setTooltip(fieldmanagment
+								.getFieldByIdAndLanguageByNavi(
+										navis.getTooltip_fieldvalues_id(),
+										language_id));
 					}
 				}
 
@@ -63,28 +65,17 @@ public class Navimanagement {
 
 	public List<Naviglobal> getMainMenu(long user_level, long USER_ID) {
 		try {
-			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			// CriteriaBuilder crit = session.getCriteriaBuilder();
-			Query query = session.createQuery("select c from Naviglobal as c " +
-					"where c.level_id <= :level_id AND " +
-					"c.deleted LIKE 'false' " +
-					"order by c.naviorder");
+
+			// CriteriaBuilder crit = em.getCriteriaBuilder();
+			Query query = em.createQuery("select c from Naviglobal as c "
+					+ "where c.level_id <= :level_id AND "
+					+ "c.deleted LIKE 'false' " + "order by c.naviorder");
 			query.setParameter("level_id", user_level);
 			List<Naviglobal> navi = query.getResultList();
 
-			tx.commit();
-			
-			log.debug("getMainMenu "+navi.size());
-			
-			PersistenceSessionUtil.closeSession(idf);
-			
 			return navi;
 		} catch (Exception ex2) {
-			log.error("getMainMenu",ex2);
+			log.error("getMainMenu", ex2);
 		}
 		return null;
 	}
@@ -107,19 +98,12 @@ public class Navimanagement {
 			ng.setStarttime(new Date());
 			ng.setTooltip_fieldvalues_id(tooltip_fieldvalues_id);
 
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			// CriteriaBuilder crit = session.getCriteriaBuilder();
+			// CriteriaBuilder crit = em.getCriteriaBuilder();
 
-			session.merge(ng);
-
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
+			em.merge(ng);
 
 		} catch (Exception ex2) {
-			log.error("addGlobalStructure",ex2);
+			log.error("addGlobalStructure", ex2);
 		}
 	}
 
@@ -141,19 +125,10 @@ public class Navimanagement {
 			ng.setGlobal_id(global_id);
 			ng.setStarttime(new Date());
 
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			// CriteriaBuilder crit = session.getCriteriaBuilder();
-
-			session.merge(ng);
-
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
+			em.merge(ng);
 
 		} catch (Exception ex2) {
-			log.error("addMainStructure",ex2);
+			log.error("addMainStructure", ex2);
 		}
 	}
 
@@ -175,19 +150,10 @@ public class Navimanagement {
 			ng.setMain_id(main_id);
 			ng.setStarttime(new Date());
 
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			// CriteriaBuilder crit = session.getCriteriaBuilder();
-
-			session.merge(ng);
-
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
+			em.merge(ng);
 
 		} catch (Exception ex2) {
-			log.error("addSubStructure",ex2);
+			log.error("addSubStructure", ex2);
 		}
 	}
 }

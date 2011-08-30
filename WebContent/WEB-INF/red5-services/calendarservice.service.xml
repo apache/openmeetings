@@ -8,8 +8,6 @@
     
     
     <!-- Class for Methods which can be invoked by the client -->
-    <bean id="calendarservice.service" 
-        class="org.openmeetings.app.remote.CalendarService" />
-        
+    <bean id="calendarservice.service" class="org.openmeetings.app.remote.CalendarService" />
     
 </beans>

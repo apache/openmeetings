@@ -1,10 +1,6 @@
 package org.openmeetings.app.data.flvrecord.converter;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,40 +13,20 @@ import org.openmeetings.app.persistence.beans.files.FileExplorerItem;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class FlvExplorerConverter {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(FlvExplorerConverter.class);
 	
 	//Spring loaded Beans
+	@Autowired
 	private Configurationmanagement configurationmanagement;
+	@Autowired
 	private FileExplorerItemDaoImpl fileExplorerItemDaoImpl;
+	@Autowired
 	private FlvRecordingLogDaoImpl flvRecordingLogDaoImpl;
 
-	public Configurationmanagement getConfigurationmanagement() {
-		return configurationmanagement;
-	}
-	public void setConfigurationmanagement(
-			Configurationmanagement configurationmanagement) {
-		this.configurationmanagement = configurationmanagement;
-	}
-	
-	public FileExplorerItemDaoImpl getFileExplorerItemDaoImpl() {
-		return fileExplorerItemDaoImpl;
-	}
-	public void setFileExplorerItemDaoImpl(
-			FileExplorerItemDaoImpl fileExplorerItemDaoImpl) {
-		this.fileExplorerItemDaoImpl = fileExplorerItemDaoImpl;
-	}
-	
-	public FlvRecordingLogDaoImpl getFlvRecordingLogDaoImpl() {
-		return flvRecordingLogDaoImpl;
-	}
-	public void setFlvRecordingLogDaoImpl(
-			FlvRecordingLogDaoImpl flvRecordingLogDaoImpl) {
-		this.flvRecordingLogDaoImpl = flvRecordingLogDaoImpl;
-	}
-	
 	private String getPathToFFMPEG() {
 		String pathToFFMPEG = this.configurationmanagement.getConfKey(3,
 				"ffmpeg_path").getConf_value();

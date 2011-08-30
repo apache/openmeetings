@@ -3,37 +3,29 @@ package org.openmeetings.app.data.file.dao;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
 import org.openmeetings.app.persistence.beans.files.FileExplorerItem;
-import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author sebastianwagner
  * 
  */
+@Transactional
 public class FileExplorerItemDaoImpl {
 
     private static final Logger log = Red5LoggerFactory.getLogger(
             FileExplorerItemDaoImpl.class,
             ScopeApplicationAdapter.webAppRootKey);
-
-    private static FileExplorerItemDaoImpl instance;
-
-    private FileExplorerItemDaoImpl() {
-    }
-
-    public static synchronized FileExplorerItemDaoImpl getInstance() {
-        if (instance == null) {
-            instance = new FileExplorerItemDaoImpl();
-        }
-        return instance;
-    }
+	@PersistenceContext
+	private EntityManager em;
 
     public Long add(String fileName, String fileHash,
             Long parentFileExplorerItemId, Long ownerId, Long room_id,
@@ -62,15 +54,8 @@ public class FileExplorerItemDaoImpl {
             fileItem.setExternalFileId(externalFileId);
             fileItem.setExternalType(externalType);
 
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			
-			fileItem = session.merge(fileItem);
+			fileItem = em.merge(fileItem);
 			Long fileItemId = fileItem.getFileExplorerItemId();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 
             log.debug(".add(): file " + fileName + " added as " + fileItemId);
             return fileItemId;
@@ -83,15 +68,8 @@ public class FileExplorerItemDaoImpl {
     public Long addFileExplorerItem(FileExplorerItem fileItem) {
         try {
 
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			
-			fileItem = session.merge(fileItem);
+			fileItem = em.merge(fileItem);
 			Long fileItemId = fileItem.getFileExplorerItemId();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 
             return fileItemId;
         } catch (Exception ex2) {
@@ -109,18 +87,12 @@ public class FileExplorerItemDaoImpl {
                     + "AND c.room_id = :room_id " + "AND c.ownerId = :ownerId "
                     + "ORDER BY c.isFolder DESC, c.fileName ";
 
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql);
+			Query query = em.createQuery(hql);
 			query.setParameter("deleted", "true");
 			query.setParameter("room_id",room_id);
 			query.setParameter("ownerId",ownerId);
 			
 			List<FileExplorerItem> fileExplorerList = query.getResultList();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 
             return fileExplorerList;
         } catch (Exception ex2) {
@@ -141,18 +113,12 @@ public class FileExplorerItemDaoImpl {
 					"AND c.parentFileExplorerItemId = :parentFileExplorerItemId " +
 					"ORDER BY c.isFolder DESC, c.fileName ";
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql);
+			Query query = em.createQuery(hql);
 			query.setParameter("deleted", "true");
 			query.setParameter("room_id",room_id);
 			query.setParameter("parentFileExplorerItemId", parentFileExplorerItemId);
 			
 	        FileExplorerItem[] fileExplorerList = (FileExplorerItem[]) query.getResultList().toArray(new FileExplorerItem[0]);
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 			return fileExplorerList;
         } catch (Exception ex2) {
@@ -172,19 +138,12 @@ public class FileExplorerItemDaoImpl {
                     + "AND c.parentFileExplorerItemId = :parentFileExplorerItemId "
                     + "ORDER BY c.isFolder DESC, c.fileName ";
 
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql);
+			Query query = em.createQuery(hql);
 			query.setParameter("deleted", "true");
 			query.setParameter("ownerId",ownerId);
 			query.setParameter("parentFileExplorerItemId", parentFileExplorerItemId);
 			
             FileExplorerItem[] fileExplorerList = (FileExplorerItem[]) query.getResultList().toArray(new FileExplorerItem[0]);
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
-			
 
             return fileExplorerList;
         } catch (Exception ex2) {
@@ -203,17 +162,11 @@ public class FileExplorerItemDaoImpl {
                     + "AND c.parentFileExplorerItemId = :parentFileExplorerItemId "
                     + "ORDER BY c.isFolder DESC, c.fileName ";
 
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql);
+			Query query = em.createQuery(hql);
 			query.setParameter("deleted", "true");
 			query.setParameter("parentFileExplorerItemId", parentFileExplorerItemId);
 			
             FileExplorerItem[] fileExplorerList = (FileExplorerItem[]) query.getResultList().toArray(new FileExplorerItem[0]);
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 
             return fileExplorerList;
         } catch (Exception ex2) {
@@ -230,11 +183,7 @@ public class FileExplorerItemDaoImpl {
             String hql = "SELECT c FROM FileExplorerItem c "
                     + "WHERE c.fileExplorerItemId = :fileExplorerItemId";
 
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql);
+			Query query = em.createQuery(hql);
 			query.setParameter("fileExplorerItemId", fileExplorerItemId);
 			
 			FileExplorerItem fileExplorerList = null;
@@ -242,8 +191,6 @@ public class FileExplorerItemDaoImpl {
 				fileExplorerList = (FileExplorerItem) query.getSingleResult();
 		    } catch (NoResultException ex) {
 		    }
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 
             return fileExplorerList;
         } catch (Exception ex2) {
@@ -261,11 +208,7 @@ public class FileExplorerItemDaoImpl {
                     + "WHERE c.externalFileId = :externalFileId " +
             		"AND c.externalType LIKE :externalType";
 
-            Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql);
+			Query query = em.createQuery(hql);
 			query.setParameter("externalFileId", externalFileId);
 			query.setParameter("externalType", externalType);
 			
@@ -274,8 +217,6 @@ public class FileExplorerItemDaoImpl {
 				fileExplorerList = (FileExplorerItem) query.getSingleResult();
 		    } catch (NoResultException ex) {
 		    }
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 
             return fileExplorerList;
         } catch (Exception ex2) {
@@ -291,16 +232,9 @@ public class FileExplorerItemDaoImpl {
 
             String hql = "SELECT c FROM FileExplorerItem c ";
 
-            Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql);
+			Query query = em.createQuery(hql);
 
             List<FileExplorerItem> fileExplorerList = query.getResultList();
-            
-            tx.commit();
-            PersistenceSessionUtil.closeSession(idf);
 
             return fileExplorerList;
         } catch (Exception ex2) {
@@ -323,21 +257,13 @@ public class FileExplorerItemDaoImpl {
             fId.setDeleted("true");
             fId.setUpdated(new Date());
 
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
 			if (fId.getFileExplorerItemId() == 0) {
-				session.persist(fId);
-			    } else {
-			    	if (!session.contains(fId)) {
-			    		session.merge(fId);
+				em.persist(fId);
+		    } else {
+		    	if (!em.contains(fId)) {
+		    		em.merge(fId);
 			    }
 			}
-			session.flush();
-            tx.commit();
-            PersistenceSessionUtil.closeSession(idf);
-
         } catch (Exception ex2) {
             log.error("[deleteFileExplorerItem]: ", ex2);
         }
@@ -358,21 +284,13 @@ public class FileExplorerItemDaoImpl {
             fId.setDeleted("true");
             fId.setUpdated(new Date());
 
-            Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
 			if (fId.getFileExplorerItemId() == 0) {
-				session.persist(fId);
-			    } else {
-			    	if (!session.contains(fId)) {
-			    		session.merge(fId);
+				em.persist(fId);
+		    } else {
+		    	if (!em.contains(fId)) {
+		    		em.merge(fId);
 			    }
 			}
-            session.flush();
-            tx.commit();
-            PersistenceSessionUtil.closeSession(idf);
-
         } catch (Exception ex2) {
             log.error("[deleteFileExplorerItemByExternalIdAndType]: ", ex2);
         }
@@ -393,21 +311,13 @@ public class FileExplorerItemDaoImpl {
             fId.setFileName(fileName);
             fId.setUpdated(new Date());
 
-            Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
 			if (fId.getFileExplorerItemId() == 0) {
-				session.persist(fId);
-			    } else {
-			    	if (!session.contains(fId)) {
-			    		session.merge(fId);
+				em.persist(fId);
+		    } else {
+		    	if (!em.contains(fId)) {
+		    		em.merge(fId);
 			    }
 			}
-            session.flush();
-            tx.commit();
-            PersistenceSessionUtil.closeSession(idf);
-
         } catch (Exception ex2) {
             log.error("[updateFileOrFolderName]: ", ex2);
         }
@@ -418,21 +328,13 @@ public class FileExplorerItemDaoImpl {
         try {
             // fId.setUpdated(new Date());
 
-            Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
 			if (fId.getFileExplorerItemId() == 0) {
-				session.persist(fId);
-			    } else {
-			    	if (!session.contains(fId)) {
-			    		session.merge(fId);
+				em.persist(fId);
+		    } else {
+		    	if (!em.contains(fId)) {
+		    		em.merge(fId);
 			    }
 			}
-            session.flush();
-            tx.commit();
-            PersistenceSessionUtil.closeSession(idf);
-
         } catch (Exception ex2) {
             log.error("[updateFileOrFolder]: ", ex2);
         }
@@ -469,21 +371,13 @@ public class FileExplorerItemDaoImpl {
 
             fId.setUpdated(new Date());
 
-            Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
 			if (fId.getFileExplorerItemId() == 0) {
-				session.persist(fId);
-			    } else {
-			    	if (!session.contains(fId)) {
-			    		session.merge(fId);
+				em.persist(fId);
+		    } else {
+		    	if (!em.contains(fId)) {
+		    		em.merge(fId);
 			    }
 			}
-            session.flush();
-            tx.commit();
-            PersistenceSessionUtil.closeSession(idf);
-
         } catch (Exception ex2) {
             log.error("[updateFileOrFolderName]: ", ex2);
         }

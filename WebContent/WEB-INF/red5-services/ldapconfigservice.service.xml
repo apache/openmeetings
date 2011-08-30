@@ -8,13 +8,6 @@
     
         
     <!-- Class for Methods which can be invoked by the client -->
-    <bean id="ldapconfigservice.service" 
-        class="org.openmeetings.app.remote.LdapConfigService">
-    	<property name="ldapConfigDaoImpl" ref="openmeetings.LdapConfigDaoImpl" />
-    </bean> 
-        
-    <bean id="openmeetings.LdapConfigDaoImpl" 
-        class="org.openmeetings.app.data.basic.dao.LdapConfigDaoImpl">
-    </bean>         
-                    
+    <bean id="ldapconfigservice.service" class="org.openmeetings.app.remote.LdapConfigService" />
+
 </beans>

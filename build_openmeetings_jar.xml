@@ -1,172 +1,310 @@
-<project name="openmeetings" basedir="./" default="jar">
+<project name="openmeetings" basedir="./" default="dist">
 
-    <!-- Sources and output dirs -->
-    <property name="main.src.dir" value="${basedir}/src/app"/>
-    <property name="webstart.src.dir" value="${basedir}/src/screenviewer"/>
-    <property name="templates.src.dir" value="${basedir}/src/templates"/>
-    <property name="test.src.dir" value="${basedir}/src/test"/>
+	<!-- Sources and output dirs -->
+	<property name="main.src.dir" value="${basedir}/src/app"/>
+	<property name="webstart.src.dir" value="${basedir}/src/screenviewer"/>
+	<property name="templates.src.dir" value="${basedir}/src/templates"/>
+	<property name="test.src.dir" value="${basedir}/src/test"/>
 	<property name="server.src.dir" value="${basedir}/src/server"/>
 	<property name="client.src.dir" value="${basedir}/src/client"/>
-    <property name="main.out.dir" value="${basedir}/bin"/>
-	
+	<property name="main.out.dir" value="${basedir}/bin"/>
+
 	<!-- screen.out.dir -->
 	<property name="screen.out.dir" value="${basedir}/screen_compile" />
-	
+
 	<!-- screen.src.dir -->
 	<property name="screen.src.dir" value="${basedir}/src/red5-screenshare" />
-	
+
 	<!-- hudson config -->
-	<property environment="env"/>
+	<property environment="env" />
 
 	<property name="build.number.hudson" value="${env.BUILD_NUMBER}" />
 	<property name="build.svn.hudson" value="${env.SVN_REVISION}" />
 	<property name="build.target" value="/home/swagner/apache-tomcat-6.0.18/webapps/openmeetings/builds/" />
-	
-    <!-- Axis2 Services -->
-    <property name="fileservice.src.dir" value="${basedir}/src/fileservice"/>
-    <property name="roomservice.src.dir" value="${basedir}/src/roomservice"/>
-    <property name="userservice.src.dir" value="${basedir}/src/userservice"/>
-    
-    <property name="classes.dir" value="${basedir}/bin"/>
-    
-    <property name="dist.dir" value="dist"/>
-    
-    <!-- Conf dirs -->
-    <property name="conf.dir" value="${basedir}/conf"/>
-    
-    <!-- Distribution properties -->
-    <property name="project.distname" value="openmeetings"/>
 
-    <!-- libraries -->
-    <property name="project.lib" value="./lib"/>
-	
-    <!-- Open JPA -->
-    <property name="openjpa.lib" value="${project.lib}/openjpa"/>
-    <!-- Log4j -->
-    <property name="log4j.lib" value="${project.lib}/log4j" />
-    <!-- xDoclet -->
-    <property name="xdoclet.lib" value="${project.lib}/xdoclet" />
-    <!-- Jakarta commons -->
-    <property name="jakarta.common.lib" value="${project.lib}/jakarta-commons" />
-    <!--JDBC Drivers-->
-    <property name="database.lib" value="${project.lib}/database" />
-    <property name="red5.lib" value="${project.lib}/red5_08rc3" />
-    <property name="upload.lib" value="${project.lib}/upload" />
-    <property name="xstream.lib" value="${project.lib}/xstream" />
-    <property name="junit.lib" value="${project.lib}/junit" />
-    <property name="web.lib" value="${project.lib}" />
-    <property name="ical.lib" value="${project.lib}/ical4j" />
-    <!-- Apache Axis2 -->
-    <property name="axis2.lib" value="${project.lib}/axis2-1.3" />
-    <!-- JMF Libe -->
-    <property name="jmf.lib" value="${project.lib}/jmf" />
-    <!-- SLF4J -->
-    <property name="slf4j.lib" value="${project.lib}/slf4j" />
-    <!-- Apache Velocity -->
-    <property name="velocity.lib" value="${project.lib}/velocity" />
-    <!-- Apache Batik -->
-    <property name="batik.lib" value="${project.lib}/batik_17" />
-    <property name="java2swf.lib" value="${project.lib}/java2swf" />
+	<!-- Axis2 Services -->
+	<property name="fileservice.src.dir" value="${basedir}/src/fileservice"/>
+	<property name="roomservice.src.dir" value="${basedir}/src/roomservice"/>
+	<property name="userservice.src.dir" value="${basedir}/src/userservice"/>
+
+	<property name="classes.dir" value="${basedir}/bin"/>
+	<property name="dist.dir" value="dist"/>
+	<property name="red5.root" value="${dist.dir}/red5"/>
+	<property name="report.dir" value="${basedir}/junitreport"/>
+
+	<!-- Conf dirs -->
+	<property name="conf.dir" value="${basedir}/conf"/>
+
+	<!-- Distribution properties -->
+	<property name="project.distname" value="openmeetings"/>
+
+	<!-- libraries -->
+	<property name="project.lib" value="${basedir}/lib"/>
+
+	<!-- LPS Properties -->
+	<property name="out.dir.swf" value = "${basedir}/${dist.dir}/red5/webapps/${project.distname}/" />
+	<property name="laszlo.home" value="${basedir}/openlaszlo"/>
+	<property name="webcontent.src.dir" value="${basedir}/WebContent"/>
+	<property name="laszlo.src.dir" value="${webcontent.src.dir}/${project.distname}"/>
+	<property name="laszlo.debug" value="false"/>
+	<property name="laszlo.proxied" value = "solo"/>
+
+	<path id = "laszlo.lib">
+		<!-- swf8 -->
+		<fileset dir = "${laszlo.home}/WEB-INF/lib" includes="saxon-6.5.3-lz-p1.jar jakarta-regexp-1.2.jar
+			commons-collections.jar jdom.jar log4j-1.2.6.jar lps-4.9.0.jar batik-all-flex.jar velocity-dep-1.4-flex.jar"/>
+		<!-- swf10 -->
+		<fileset dir = "${laszlo.home}/WEB-INF/lib" includes="mxmlc*.jar flex-messaging-common.jar swfutils.jar asc.jar
+			fxgutils.jar"/>
+	</path>
+
+	<!-- Open JPA -->
+	<property name="openjpa.lib" value="${project.lib}/openjpa2"/>
+	<!--JDBC Drivers-->
+	<property name="database.lib" value="${project.lib}/database" />
+	<property name="red5.lib" value="${basedir}/server/red5" />
+	<property name="red5.server.lib" value="${basedir}/server/red5/lib" />
+	<property name="spring.lib" value="${project.lib}/spring" />
+	<property name="upload.lib" value="${project.lib}/upload" />
+	<property name="xstream.lib" value="${project.lib}/xstream" />
+	<property name="web.lib" value="${project.lib}" />
+	<property name="ical.lib" value="${project.lib}/ical4j" />
+	<!-- Apache Axis2 -->
+	<property name="axis2.lib" value="${project.lib}/axis2-1.6" />
+	<!-- JMF Libe -->
+	<property name="jmf.lib" value="${project.lib}/jmf" />
+	<!-- SLF4J -->
+	<property name="slf4j.lib" value="${project.lib}/slf4j" />
+	<!-- Apache Velocity -->
+	<property name="velocity.lib" value="${project.lib}/velocity" />
+	<!-- Apache Batik -->
+	<property name="batik.lib" value="${project.lib}/batik_17" />
+	<property name="java2swf.lib" value="${project.lib}/java2swf" />
 	<!-- Junit -->
-    <property name="junit.lib" value="${project.lib}/junit" />
-	
+	<property name="junit.lib" value="${project.lib}/junit" />
+
 	<!-- screenshare.lib -->
-    <property name="screenshare.lib" value="${basedir}/WebContent/red5-screenshare" />
-	
-    <!-- compile classpath -->
-    <path id="compile.classpath">
-        <fileset dir="${log4j.lib}" includes="*.jar"/>
-        <fileset dir="${openjpa.lib}" includes="*.jar"/>
-        <fileset dir="${project.lib}" includes="*.jar"/>
-        <fileset dir="${jakarta.common.lib}" includes="*.jar"/>
-        <fileset dir="${red5.lib}" includes="*.jar"/>
-        <fileset dir="${upload.lib}" includes="*.jar"/>
-        <fileset dir="${xstream.lib}" includes="*.jar"/>
-        <fileset dir="${junit.lib}" includes="*.jar"/>
-        <fileset dir="${web.lib}" includes="*.jar"/>
-        <fileset dir="${slf4j.lib}" includes="*.jar"/>
-        <fileset dir="${axis2.lib}" includes="*.jar"/>
-        <fileset dir="${velocity.lib}" includes="*.jar"/>
-        <fileset dir="${batik.lib}" includes="*.jar"/>
-        <fileset dir="${ical.lib}" includes="*.jar"/>
-        <fileset dir="${java2swf.lib}" includes="*.jar"/>
-        <fileset dir="${jmf.lib}" includes="*.jar"/>
-    	<fileset dir="${junit.lib}" includes="*.jar"/>
-    </path>
-    
-    <!-- Compile JAR -->
-    <target name="jar" description="Make Archive" depends="compile">
-        <tstamp prefix="build">
-            <format property="TODAY" pattern="d-MMMM-yyyy" locale="en"/>
-        </tstamp>
-        <manifestclasspath property="jar.classpath" jarfile="${project.distname}.jar">
-            <classpath refid="compile.classpath"/>
-        </manifestclasspath>
-        <jar destfile="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/lib/${project.distname}.jar">
-            <fileset dir="${classes.dir}">
-                <include name="**"/>
-                <exclude name="**/test/**"/>
-            	<exclude name="**/axis/**"/>
-                <exclude name="**/webstart/**"/>
-            	<!-- For now we include this into the main JAR
-            	<exclude name="**/server/**"/>
-            	 -->
-            	<exclude name="**/client/**"/>
-                <exclude name="**/*.png"/>
-                <exclude name="**/*.vm"/>
-                <exclude name="log4j.properties"/>
-            </fileset>
-            <manifest>
-                <attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com"/>
-                <attribute name="Built-On" value="${build.TODAY}"/>
-                <attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
-            </manifest>
-        </jar>  
-        <jar destfile="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/lib/${project.distname}-templates.jar">
-            <fileset dir="${classes.dir}">
-                <include name="**"/>
-                <exclude name="**/org/**"/>
-                <exclude name="**/*.png"/>
-                <exclude name="**/*.properties"/>
-            </fileset>
-            <manifest>
-                <attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com"/>
-                <attribute name="Built-On" value="${build.TODAY}"/>
-                <attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
-            </manifest>
-        </jar>  
-    </target>
-    
-    <!-- Normal build of application
+	<property name="screenshare.lib" value="${basedir}/WebContent/red5-screenshare" />
+
+	<!-- compile classpath -->
+	<path id="compile.classpath">
+		<fileset dir="${openjpa.lib}" includes="*.jar"/>
+		<fileset dir="${spring.lib}" includes="*.jar"/>
+		<fileset dir="${project.lib}" includes="*.jar"/>
+		<fileset dir="${red5.lib}" includes="*.jar"/>
+		<fileset dir="${red5.server.lib}" includes="*.jar"/>
+		<fileset dir="${upload.lib}" includes="*.jar"/>
+		<fileset dir="${xstream.lib}" includes="*.jar"/>
+		<fileset dir="${junit.lib}" includes="*.jar" excludes="red5.jar"/>
+		<fileset dir="${web.lib}" includes="*.jar"/>
+		<fileset dir="${slf4j.lib}" includes="*.jar"/>
+		<fileset dir="${axis2.lib}" includes="*.jar"/>
+		<fileset dir="${velocity.lib}" includes="*.jar"/>
+		<fileset dir="${batik.lib}" includes="*.jar"/>
+		<fileset dir="${ical.lib}" includes="*.jar"/>
+		<fileset dir="${java2swf.lib}" includes="*.jar"/>
+		<fileset dir="${jmf.lib}" includes="*.jar"/>
+		<fileset dir="${junit.lib}" includes="*.jar"/>
+		<fileset dir="${screenshare.lib}" includes="*kunststoff.jar"/>
+	</path>
+
+	<!-- screenshare classpath -->
+	<path id="screenshare.classpath">
+		<fileset dir="${screenshare.lib}" includes="*.jar"/>
+	</path>
+
+
+	<!-- build webapp -->
+
+	<target name="dist" description="jar distribution of OpenMeetings"
+        depends="jar"><!-- , signWebStartJars -->
+
+	</target>
+
+	<!-- Compile JAR -->
+	<target name="jar" description="Make Archive" depends="enhance">
+		<tstamp prefix="build">
+			<format property="TODAY" pattern="d-MMMM-yyyy" locale="en"/>
+		</tstamp>
+		<manifestclasspath property="jar.classpath" jarfile="${project.distname}.jar">
+			<classpath refid="compile.classpath"/>
+		</manifestclasspath>
+		<manifestclasspath property="jar2.classpath" jarfile="${project.distname}.jar">
+			<classpath refid="screenshare.classpath"/>
+		</manifestclasspath>
+		<jar destfile="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/lib/${project.distname}.jar">
+			<fileset dir="${classes.dir}">
+				<include name="**"/>
+				<exclude name="**/test/**"/>
+				<exclude name="**/axis/**"/>
+				<exclude name="**/webstart/**"/>
+				<!-- For now we include this into the main JAR
+                <exclude name="**/server/**"/>
+                 -->
+				<exclude name="**/client/**"/>
+				<exclude name="**/*.png"/>
+				<exclude name="**/*.vm"/>
+				<exclude name="log4j.properties"/>
+			</fileset>
+			<manifest>
+				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com"/>
+				<attribute name="Built-On" value="${build.TODAY}"/>
+				<attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
+			</manifest>
+		</jar>
+		<jar destfile="${dist.dir}/red5/webapps/${project.distname}/screen/screenviewer.jar">
+			<fileset dir="${classes.dir}">
+				<include name="**/webstart/**"/>
+				<include name="**/*png"/>
+			</fileset>
+			<manifest>
+				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com"/>
+				<attribute name="Built-On" value="${build.TODAY}"/>
+				<attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
+			</manifest>
+		</jar>
+		<jar destfile="${dist.dir}/red5/webapps/${project.distname}/screen/${project.distname}-client.jar">
+			<fileset dir="${classes.dir}">
+				<include name="log4j.properties" />
+				<include name="**/client/**"/>
+				<include name="**/*png"/>
+			</fileset>
+			<manifest>
+				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com"/>
+				<attribute name="Built-On" value="${build.TODAY}"/>
+				<attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
+			</manifest>
+		</jar>
+		<jar destfile="${dist.dir}/red5/webapps/${project.distname}/screen/viewer.jar">
+			<fileset dir="${classes.dir}">
+				<include name="**/jrdesktop/**"/>
+				<include name="**/*png"/>
+			</fileset>
+			<manifest>
+				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com"/>
+				<attribute name="Built-On" value="${build.TODAY}"/>
+				<attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
+			</manifest>
+		</jar>
+		<jar destfile="${dist.dir}/red5/webapps/${project.distname}/screen/rtpviewer.jar">
+			<fileset dir="${classes.dir}">
+				<include name="log4j.properties" />
+				<include name="**/de/**"/>
+				<exclude name="**/applet/**"/>
+			</fileset>
+			<manifest>
+				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com"/>
+				<attribute name="Built-On" value="${build.TODAY}"/>
+				<attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
+			</manifest>
+		</jar>
+
+		<!-- Build WebServices -->
+		<jar destfile="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/services/OpenMeetingsService.aar">
+			<fileset dir="src/">
+				<include name="META-INF/services.xml"/>
+			</fileset>
+		</jar>
+
+		<jar destfile="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/lib/openmeetings-WebService.jar">
+			<fileset dir="${classes.dir}">
+				<include name="**/openmeetings/axis/**"/>
+			</fileset>
+		</jar>
+
+	</target>
+
+	<!-- Normal build of application
     compiler="org.eclipse.jdt.core.JDTCompilerAdapter" -->
-    <target name="compile">
-        <echo message="Compile main to ${main.out.dir}"></echo>
-    	<javac debug="on" debuglevel="lines,vars,source" srcdir="${main.src.dir}" destdir="${main.out.dir}" >
-            <src path="${server.src.dir}" />
-    		<src path="${main.src.dir}" />
-            <classpath refid="compile.classpath"/>
-        </javac>
-    </target>
+	<target name="compile">
+		<echo message="Compile main to ${main.out.dir}">
+		</echo>
+		<javac debug="on" debuglevel="lines,vars,source" destdir="${main.out.dir}" >
+			<src path="${server.src.dir}" />
+			<src path="${main.src.dir}" />
+			<classpath refid="compile.classpath"/>
+			<compilerarg value="-Aopenjpa.metamodel=true"/>
+		</javac>
+		<javac debug="on" debuglevel="lines,vars,source" srcdir="${webstart.src.dir}" destdir="${main.out.dir}" >
+			<classpath refid="compile.classpath"/>
+		</javac>
+		<javac debug="on" debuglevel="lines,vars,source" srcdir="${templates.src.dir}" destdir="${main.out.dir}" >
+			<classpath refid="compile.classpath"/>
+		</javac>
+		<javac debug="on" debuglevel="lines,vars,source" srcdir="${client.src.dir}" destdir="${main.out.dir}" >
+			<classpath refid="compile.classpath"/>
+		</javac>
+		<javac debug="on" debuglevel="lines,vars,source" srcdir="${test.src.dir}" destdir="${main.out.dir}" >
+			<classpath refid="compile.classpath"/>
+		</javac>
+		<javac debug="on" debuglevel="lines,vars,source" srcdir="${fileservice.src.dir}" destdir="${main.out.dir}" >
+			<classpath refid="compile.classpath"/>
+		</javac>
+		<javac debug="on" debuglevel="lines,vars,source" srcdir="${roomservice.src.dir}" destdir="${main.out.dir}" >
+			<classpath refid="compile.classpath"/>
+		</javac>
+		<javac debug="on" debuglevel="lines,vars,source" srcdir="${userservice.src.dir}" destdir="${main.out.dir}" >
+			<classpath refid="compile.classpath"/>
+		</javac>
+		<echo message="Compile screen share to ${screen.out.dir}">
+		</echo>
+		<!-- compile screen share -->
+		<javac debug="on" debuglevel="lines,vars,source" srcdir="${screen.src.dir}" destdir="${screen.out.dir}" >
+			<classpath refid="screenshare.classpath"/>
+		</javac>
+	</target>
+	
+	<target name="signWebStartJars">
+		<delete file="filetest.keystore" />
+		<genkey alias="filetest"
+          storepass="secret"
+          keystore="filetest.keystore"
+          verbose="true">
+			<dname>
+				<param name="CN" value="Sebastian Wagner"/>
+				<param name="OU" value="technology"/>
+				<param name="O"  value="openmeetings.googlecode.com"/>
+				<param name="C"  value="DE"/>
+			</dname>
+		</genkey>
+		<signjar
+            alias="filetest" keystore="filetest.keystore"
+            storepass="secret"
+            lazy="false"
+            >
+			<path>
+				<fileset dir="${dist.dir}/red5/webapps/${project.distname}/screen" >
+					<include name="**/*.jar" />
+
+				</fileset>
+				<fileset dir="${dist.dir}/red5/webapps/${project.distname}/red5-screenshare" >
+					<include name="**/*.jar" />
+
+				</fileset>
+			</path>
+		</signjar>
+	</target>
+
 
 	<path id="jpa.enhancement.classpath">
-	    <pathelement path="${classes.dir}"/>
-	    <!-- lib contains all of the jars that came with the OpenJPA binary download -->
-	    <fileset dir="${openjpa.lib}" includes="*.jar" />
+		<pathelement path="${classes.dir}"/>
+		<!-- lib contains all of the jars that came with the OpenJPA binary download -->
+		<fileset dir="${openjpa.lib}" includes="*.jar" />
+		<fileset dir="${openjpa.lib}" includes="*.jar" />
 	</path>
-	
-    <!-- define the openjpac task -->
-    <taskdef name="openjpac" classname="org.apache.openjpa.ant.PCEnhancerTask">
-        <classpath refid="jpa.enhancement.classpath"/>
-    </taskdef>
-        
+
+	<!-- define the openjpac task -->
+	<taskdef name="openjpac" classname="org.apache.openjpa.ant.PCEnhancerTask">
+		<classpath refid="jpa.enhancement.classpath"/>
+	</taskdef>
+
 	<target name="enhance" depends="compile">
-        <!-- invoke the enhancer -->
+		<!-- invoke the enhancer -->
 		<openjpac>
-        	<classpath refid="jpa.enhancement.classpath"/>
+			<classpath refid="jpa.enhancement.classpath"/>
 			<config propertiesFile="src/META-INF/persistence.xml"/>
-        </openjpac> 
-        <echo message="Enhancing complete."/>
-    </target>
-	
+		</openjpac>
+		<echo message="Enhancing complete."/>
+	</target>
 
 </project>

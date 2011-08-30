@@ -8,8 +8,6 @@
     
     
     <!-- Class for Methods which can be invoked by the client -->
-    <bean id="organisationservice.service" 
-        class="org.openmeetings.app.remote.OrganisationService" 
-        />      
-        
+    <bean id="organisationservice.service" class="org.openmeetings.app.remote.OrganisationService" />      
+
 </beans>

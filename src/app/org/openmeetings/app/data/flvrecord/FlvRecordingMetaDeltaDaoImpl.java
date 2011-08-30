@@ -2,32 +2,25 @@ package org.openmeetings.app.data.flvrecord;
 
 import java.util.List;
 
-import javax.persistence.Query;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingMetaDelta;
-import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author sebastianwagner
  *
  */
+@Transactional
 public class FlvRecordingMetaDeltaDaoImpl {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecordingMetaDeltaDaoImpl.class);
-
-	private static FlvRecordingMetaDeltaDaoImpl instance;
-
-	private FlvRecordingMetaDeltaDaoImpl() {}
-
-	public static synchronized FlvRecordingMetaDeltaDaoImpl getInstance() {
-		if (instance == null) {
-			instance = new FlvRecordingMetaDeltaDaoImpl();
-		}
-		return instance;
-	}
+	@PersistenceContext
+	private EntityManager em;
 	
 	public List<FlvRecordingMetaDelta> getFlvRecordingMetaDeltaByMetaId(Long flvRecordingMetaDataId) {
 		try { 
@@ -35,16 +28,10 @@ public class FlvRecordingMetaDeltaDaoImpl {
 			String hql = "SELECT c FROM FlvRecordingMetaDelta c " +
 					"WHERE c.flvRecordingMetaDataId = :flvRecordingMetaDataId";
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql);
+			Query query = em.createQuery(hql);
 			query.setParameter("flvRecordingMetaDataId", flvRecordingMetaDataId);
 			
 			List<FlvRecordingMetaDelta> flvRecordingMetaDeltas = query.getResultList();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 			return flvRecordingMetaDeltas;
 		} catch (Exception ex2) {
@@ -58,16 +45,8 @@ public class FlvRecordingMetaDeltaDaoImpl {
 	public Long addFlvRecordingMetaDelta(FlvRecordingMetaDelta flvRecordingMetaDelta) {
 		try { 
 			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			
-			flvRecordingMetaDelta = session.merge(flvRecordingMetaDelta);
+			flvRecordingMetaDelta = em.merge(flvRecordingMetaDelta);
 			Long flvRecordingMetaDeltaId = flvRecordingMetaDelta.getFlvRecordingMetaDeltaId();
-			
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 			log.debug("flvRecordingMetaDeltaId "+flvRecordingMetaDeltaId);
 			
@@ -80,22 +59,13 @@ public class FlvRecordingMetaDeltaDaoImpl {
 	
 	public Long updateFlvRecordingMetaDelta(FlvRecordingMetaDelta flvRecordingMetaDelta) {
 		try { 
-			
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			
 			if (flvRecordingMetaDelta.getFlvRecordingMetaDataId() == 0) {
-				session.persist(flvRecordingMetaDelta);
-			    } else {
-			    	if (!session.contains(flvRecordingMetaDelta)) {
-			    		session.merge(flvRecordingMetaDelta);
+				em.persist(flvRecordingMetaDelta);
+		    } else {
+		    	if (!em.contains(flvRecordingMetaDelta)) {
+		    		em.merge(flvRecordingMetaDelta);
 			    }
 			}
-			
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			
 			return flvRecordingMetaDelta.getFlvRecordingMetaDataId();
 		} catch (Exception ex2) {

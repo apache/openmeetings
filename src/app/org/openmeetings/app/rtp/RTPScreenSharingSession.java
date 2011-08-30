@@ -1,9 +1,10 @@
 package org.openmeetings.app.rtp;
 
 import java.util.HashMap;
-import org.openmeetings.app.persistence.beans.recording.RoomClient;
+
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.user.Users;
+import org.openmeetings.app.remote.red5.ClientListManager;
 /**
  * represents a ScreenSharingSession within Conference
  * @author o.becherer
@@ -54,8 +55,8 @@ public class RTPScreenSharingSession {
 		return sharingUser;
 	}
 	
-	public void startReceiver() throws Exception{
-		receiver = new RTPStreamReceiver(this);
+	public void startReceiver(ClientListManager clientListManager) throws Exception{
+		receiver = new RTPStreamReceiver(clientListManager, this);
 		
 	}
 	

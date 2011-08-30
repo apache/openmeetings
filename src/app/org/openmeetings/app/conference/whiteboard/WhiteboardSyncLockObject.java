@@ -2,14 +2,12 @@ package org.openmeetings.app.conference.whiteboard;
 
 import java.util.Date;
 
-import org.openmeetings.app.persistence.beans.recording.RoomClient;
-
 public class WhiteboardSyncLockObject {
-	
+
 	private String publicSID;
 	private boolean isInitialLoaded = false;
 	private boolean isCurrentLoadingItem = false;
-	
+
 	private Date addtime;
 	private Date starttime;
 

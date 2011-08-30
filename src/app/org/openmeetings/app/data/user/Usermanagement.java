@@ -7,9 +7,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -37,7 +37,6 @@ import org.openmeetings.app.persistence.beans.user.UserSipData;
 import org.openmeetings.app.persistence.beans.user.Userdata;
 import org.openmeetings.app.persistence.beans.user.Userlevel;
 import org.openmeetings.app.persistence.beans.user.Users;
-import org.openmeetings.app.persistence.utils.PersistenceSessionUtil;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.sip.xmlrpc.OpenXGHttpClient;
@@ -49,28 +48,57 @@ import org.red5.io.utils.ObjectMap;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IScope;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 
  * @author swagner
  * 
  */
+@Transactional
 public class Usermanagement {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			Usermanagement.class, ScopeApplicationAdapter.webAppRootKey);
 
-	private static Usermanagement instance = null;
+	@PersistenceContext
+	private EntityManager em;
 
-	private Usermanagement() {
-	}
-
-	public static synchronized Usermanagement getInstance() {
-		if (instance == null) {
-			instance = new Usermanagement();
-		}
-		return instance;
-	}
+	@Autowired
+	private Sessionmanagement sessionManagement;
+	@Autowired
+	private Configurationmanagement cfgManagement;
+	@Autowired
+	private Fieldmanagment fieldmanagment;
+	@Autowired
+	private Statemanagement statemanagement;
+	@Autowired
+	private OmTimeZoneDaoImpl omTimeZoneDaoImpl;
+	@Autowired
+	private Organisationmanagement organisationmanagement;
+	@Autowired
+	private ManageCryptStyle manageCryptStyle;
+	@Autowired
+	private Addressmanagement addressmanagement;
+	@Autowired
+	private OpenXGHttpClient openXGHttpClient;
+	@Autowired
+	private UsersDaoImpl usersDao;
+	@Autowired
+	private Emailmanagement emailManagement;
+	@Autowired
+	private UserSipDataDaoImpl userSipDataDao;
+	@Autowired
+	private ScopeApplicationAdapter scopeApplicationAdapter;
+	@Autowired
+	private MailHandler mailHandler;
+	@Autowired
+	private ResetPasswordTemplate resetPasswordTemplate;
+	@Autowired
+	private AuthLevelmanagement authLevelManagement;
+	@Autowired
+	private ClientListManager clientListManager;
 
 	/**
 	 * query for a list of users
@@ -85,18 +113,13 @@ public class Usermanagement {
 	public SearchResult getUsersList(long user_level, int start, int max,
 			String orderby, boolean asc) {
 		try {
-			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)) {
+			if (authLevelManagement.checkAdminLevel(user_level)) {
 				SearchResult sresult = new SearchResult();
 				sresult.setObjectName(Users.class.getName());
-				sresult.setRecords(UsersDaoImpl.getInstance()
-						.selectMaxFromUsers());
+				sresult.setRecords(usersDao.selectMaxFromUsers());
 
 				// get all users
-				Object idf = PersistenceSessionUtil.createSession();
-				EntityManager session = PersistenceSessionUtil.getSession();
-				EntityTransaction tx = session.getTransaction();
-				tx.begin();
-				CriteriaBuilder cb = session.getCriteriaBuilder();
+				CriteriaBuilder cb = em.getCriteriaBuilder();
 				CriteriaQuery<Users> cq = cb.createQuery(Users.class);
 				Root<Users> c = cq.from(Users.class);
 				Predicate condition = cb.equal(c.get("deleted"), "false");
@@ -107,12 +130,11 @@ public class Usermanagement {
 				} else {
 					cq.orderBy(cb.desc(c.get(orderby)));
 				}
-				TypedQuery<Users> q = session.createQuery(cq);
+				TypedQuery<Users> q = em.createQuery(cq);
 				q.setFirstResult(start);
 				q.setMaxResults(max);
+				@SuppressWarnings("unused")
 				List<Users> ll = q.getResultList();
-				tx.commit();
-				PersistenceSessionUtil.closeSession(idf);
 				return sresult;
 			}
 		} catch (Exception ex2) {
@@ -126,7 +148,7 @@ public class Usermanagement {
 		try {
 			SearchResult sresult = new SearchResult();
 			sresult.setObjectName(Users.class.getName());
-			sresult.setRecords(UsersDaoImpl.getInstance().getAllUserMax(search));
+			sresult.setRecords(usersDao.getAllUserMax(search));
 
 			String[] searchItems = search.split(" ");
 
@@ -166,11 +188,7 @@ public class Usermanagement {
 
 			log.debug("Show HQL: " + hql);
 
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql);
+			Query query = em.createQuery(hql);
 			// query.setParameter("macomUserId", userId);
 
 			// query
@@ -178,9 +196,8 @@ public class Usermanagement {
 			// else ((Criteria) query).addOrder(Order.desc(orderby));
 			query.setFirstResult(start);
 			query.setMaxResults(max);
+			@SuppressWarnings("unchecked")
 			List<Users> ll = query.getResultList();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 
 			sresult.setResult(ll);
 
@@ -202,13 +219,13 @@ public class Usermanagement {
 	public Users checkAdmingetUserById(long user_level, long user_id) {
 		// FIXME: We have to check here for the User only cause the
 		// Org-Moderator otherwise cannot access it
-		if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)) {
-			return UsersDaoImpl.getInstance().getUser(user_id);
+		if (authLevelManagement.checkUserLevel(user_level)) {
+			return usersDao.getUser(user_id);
 		}
 		return null;
 	}
 
-	public List getUserByMod(Long user_level, long user_id) {
+	public List<Users> getUserByMod(Long user_level, long user_id) {
 		return null;
 	}
 
@@ -230,36 +247,29 @@ public class Usermanagement {
 					+ "(c.login LIKE :userOrEmail OR c.adresses.email LIKE :userOrEmail  ) "
 					+ "AND c.deleted <> :deleted";
 
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-
-			Query query = session.createQuery(hql);
+			Query query = em.createQuery(hql);
 			query.setParameter("userOrEmail", userOrEmail);
 			query.setParameter("deleted", "true");
 
+			@SuppressWarnings("unchecked")
 			List<Users> ll = query.getResultList();
-
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 
 			log.debug("debug SIZE: " + ll.size());
 
 			if (ll.size() == 0) {
 				return new Long(-10);
 			} else {
-				Users users = (Users) ll.get(0);
+				Users users = ll.get(0);
 
 				// Refresh User Object
 				users = this.refreshUserObject(users);
 
-				if (ManageCryptStyle.getInstance().getInstanceOfCrypt()
-						.verifyPassword(userpass, users.getPassword())) {
+				if (manageCryptStyle.getInstanceOfCrypt().verifyPassword(
+						userpass, users.getPassword())) {
 					log.info("chsum OK: " + users.getUser_id());
 
-					Boolean bool = Sessionmanagement.getInstance().updateUser(
-							SID, users.getUser_id(), storePermanent,
+					Boolean bool = sessionManagement.updateUser(SID,
+							users.getUser_id(), storePermanent,
 							users.getLanguage_id());
 					if (bool == null) {
 						// Exception
@@ -282,10 +292,13 @@ public class Usermanagement {
 						currentClient.setUser_id(users.getUser_id());
 					}
 
-					// System.out.println("loginUser "+users.getOrganisation_users());
-					// if (users.getOrganisation_users() != null) {
-					// System.out.println("loginUser size "+users.getOrganisation_users().size());
-					// }
+					log.debug("loginUser " + users.getOrganisation_users());
+					if (users.getOrganisation_users() != null) {
+						log.debug("loginUser size "
+								+ users.getOrganisation_users().size());
+					} else {
+						throw new Exception("No Organization assigned to user");
+					}
 
 					return users;
 				} else {
@@ -302,17 +315,7 @@ public class Usermanagement {
 	public Users refreshUserObject(Users us) {
 		try {
 
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-
-			us = session.merge(us);
-			session.refresh(us);
-
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
-
+			us = em.merge(us);
 			return us;
 		} catch (Exception ex2) {
 			log.error("[loginUser]: ", ex2);
@@ -323,16 +326,14 @@ public class Usermanagement {
 	public Users loginUserByRemoteHash(String SID, String remoteHash) {
 		try {
 
-			Sessiondata sessionData = Sessionmanagement.getInstance()
+			Sessiondata sessionData = sessionManagement
 					.getSessionByHash(remoteHash);
 
 			if (sessionData != null) {
 
-				Users u = Usermanagement.getInstance().getUserById(
-						sessionData.getUser_id());
+				Users u = getUserById(sessionData.getUser_id());
 
-				Sessionmanagement.getInstance().updateUserWithoutSession(SID,
-						u.getUser_id());
+				sessionManagement.updateUserWithoutSession(SID, u.getUser_id());
 
 				return u;
 
@@ -349,26 +350,20 @@ public class Usermanagement {
 	}
 
 	public Long logout(String SID, long USER_ID) {
-		Sessionmanagement.getInstance().updateUser(SID, 0, false, null);
+		sessionManagement.updateUser(SID, 0, false, null);
 		return new Long(-12);
 	}
 
 	private void updateLastLogin(Users us) {
 		try {
 			us.setLastlogin(new Date());
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
 			if (us.getUser_id() == null) {
-				session.persist(us);
+				em.persist(us);
 			} else {
-				if (!session.contains(us)) {
-					session.merge(us);
+				if (!em.contains(us)) {
+					em.merge(us);
 				}
 			}
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 		} catch (Exception ex2) {
 			log.error("updateLastLogin", ex2);
 		}
@@ -383,19 +378,15 @@ public class Usermanagement {
 	 * @param start
 	 * @return
 	 */
-	public List searchUser(long user_level, String searchcriteria,
+	public List<Users> searchUser(long user_level, String searchcriteria,
 			String searchstring, int max, int start, String orderby, boolean asc) {
-		if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)) {
+		if (authLevelManagement.checkAdminLevel(user_level)) {
 			try {
-				Object idf = PersistenceSessionUtil.createSession();
-				EntityManager session = PersistenceSessionUtil.getSession();
-				EntityTransaction tx = session.getTransaction();
-				tx.begin();
-				CriteriaBuilder cb = session.getCriteriaBuilder();
+				CriteriaBuilder cb = em.getCriteriaBuilder();
 				CriteriaQuery<Users> cq = cb.createQuery(Users.class);
 				Root<Users> c = cq.from(Users.class);
-				Expression<String> literal = cb.literal((String) "%"
-						+ searchstring + "%");
+				Expression<String> literal = cb.literal("%" + searchstring
+						+ "%");
 				// crit.add(Restrictions.ilike(searchcriteria, "%" +
 				// searchstring + "%"));
 				Path<String> path = c.get(searchcriteria);
@@ -408,12 +399,10 @@ public class Usermanagement {
 				} else {
 					cq.orderBy(cb.desc(c.get(orderby)));
 				}
-				TypedQuery<Users> q = session.createQuery(cq);
+				TypedQuery<Users> q = em.createQuery(cq);
 				q.setFirstResult(start);
 				q.setMaxResults(max);
 				List<Users> contactsZ = q.getResultList();
-				tx.commit();
-				PersistenceSessionUtil.closeSession(idf);
 				return contactsZ;
 			} catch (Exception ex2) {
 				log.error("searchUser", ex2);
@@ -422,20 +411,15 @@ public class Usermanagement {
 		return null;
 	}
 
-	public List getUserdataDashBoard(Long user_id) {
+	public List<Userdata> getUserdataDashBoard(Long user_id) {
 		if (user_id.longValue() > 0) {
 			try {
-				Object idf = PersistenceSessionUtil.createSession();
-				EntityManager session = PersistenceSessionUtil.getSession();
-				EntityTransaction tx = session.getTransaction();
-				tx.begin();
-				Query query = session
+				Query query = em
 						.createQuery("select c from Userdata as c where c.user_id = :user_id AND c.deleted <> :deleted");
 				query.setParameter("user_id", user_id.longValue());
 				query.setParameter("deleted", "true");
-				List ll = query.getResultList();
-				tx.commit();
-				PersistenceSessionUtil.closeSession(idf);
+				@SuppressWarnings("unchecked")
+				List<Userdata> ll = query.getResultList();
 				return ll;
 			} catch (Exception ex2) {
 				log.error("getUserdataDashBoard", ex2);
@@ -444,50 +428,20 @@ public class Usermanagement {
 		return null;
 	}
 
-	private int getUserdataNoByKey(Long USER_ID, String DATA_KEY) {
-		int userdata = 0;
-		if (USER_ID.longValue() > 0) {
-			try {
-				Object idf = PersistenceSessionUtil.createSession();
-				EntityManager session = PersistenceSessionUtil.getSession();
-				EntityTransaction tx = session.getTransaction();
-				tx.begin();
-				Query query = session
-						.createQuery("select c from Userdata as c where c.user_id = :user_id AND c.data_key = :data_key AND c.deleted <> :deleted");
-				query.setParameter("user_id", USER_ID.longValue());
-				query.setParameter("data_key", DATA_KEY);
-				query.setParameter("deleted", "true");
-				userdata = query.getResultList().size();
-				tx.commit();
-				PersistenceSessionUtil.closeSession(idf);
-			} catch (Exception ex2) {
-				log.error("getUserdataNoByKey", ex2);
-			}
-		} else {
-			System.out.println("Error: No USER_ID given");
-		}
-		return userdata;
-	}
-
 	public Userdata getUserdataByKey(Long user_id, String DATA_KEY) {
 		Userdata userdata = new Userdata();
 		if (user_id.longValue() > 0) {
 			try {
-				Object idf = PersistenceSessionUtil.createSession();
-				EntityManager session = PersistenceSessionUtil.getSession();
-				EntityTransaction tx = session.getTransaction();
-				tx.begin();
-				Query query = session
+				Query query = em
 						.createQuery("select c from Userdata as c where c.user_id = :user_id AND c.data_key = :data_key AND c.deleted <> :deleted");
 				query.setParameter("user_id", user_id.longValue());
 				query.setParameter("data_key", DATA_KEY);
 				query.setParameter("deleted", "true");
-				for (Iterator it2 = query.getResultList().iterator(); it2
+				for (@SuppressWarnings("unchecked")
+				Iterator<Userdata> it2 = query.getResultList().iterator(); it2
 						.hasNext();) {
-					userdata = (Userdata) it2.next();
+					userdata = it2.next();
 				}
-				tx.commit();
-				PersistenceSessionUtil.closeSession(idf);
 			} catch (Exception ex2) {
 				log.error("getUserdataByKey", ex2);
 			}
@@ -502,23 +456,21 @@ public class Usermanagement {
 			Date age, String street, String additionalname, String zip,
 			long states_id, String town, int availible, String telefon,
 			String fax, String mobil, String email, String comment, int status,
-			List organisations, int title_id, String phone, String sip_user,
+			List<?> organisations, int title_id, String phone, String sip_user,
 			String sip_pass, String sip_auth, Boolean generateSipUserData,
 			String jNameTimeZone, Boolean forceTimeZoneCheck,
 			String userOffers, String userSearchs, Boolean showContactData,
 			Boolean showContactDataToContacts) {
 
-		if (AuthLevelmanagement.getInstance().checkUserLevel(user_level)
-				&& user_id != 0) {
+		if (authLevelManagement.checkUserLevel(user_level) && user_id != 0) {
 			try {
-				Users us = UsersDaoImpl.getInstance().getUser(user_id);
+				Users us = usersDao.getUser(user_id);
 
 				// Check for duplicates
 				boolean checkName = true;
 
 				if (!login.equals(us.getLogin())) {
-					checkName = UsersDaoImpl.getInstance()
-							.checkUserLogin(login);
+					checkName = usersDao.checkUserLogin(login);
 				}
 				boolean checkEmail = true;
 
@@ -527,8 +479,7 @@ public class Usermanagement {
 
 					// Its a new one - check, whether another user already uses
 					// that one...
-					checkEmail = Emailmanagement.getInstance().checkUserEMail(
-							email);
+					checkEmail = emailManagement.checkUserEMail(email);
 				}
 
 				if (generateSipUserData) {
@@ -543,6 +494,12 @@ public class Usermanagement {
 				if (checkName && checkEmail) {
 					// log.info("user_id " + user_id);
 
+					// add or delete organisations from this user
+					if (organisations != null) {
+						organisationmanagement.updateUserOrganisationsByUser(us, organisations);
+					}
+					us = usersDao.getUser(user_id);
+
 					us.setLastname(lastname);
 					us.setFirstname(firstname);
 					us.setAge(age);
@@ -551,7 +508,7 @@ public class Usermanagement {
 					us.setAvailible(availible);
 					us.setStatus(status);
 					us.setTitle_id(title_id);
-					us.setOmTimeZone(OmTimeZoneDaoImpl.getInstance()
+					us.setOmTimeZone(omTimeZoneDaoImpl
 							.getOmTimeZone(jNameTimeZone));
 					us.setForceTimeZoneCheck(forceTimeZoneCheck);
 
@@ -564,41 +521,32 @@ public class Usermanagement {
 						us.setLevel_id(new Long(level_id));
 					if (password.length() != 0) {
 						if (password.length() >= 6) {
-							us.setPassword(ManageCryptStyle.getInstance()
-									.getInstanceOfCrypt()
-									.createPassPhrase(password));
+							us.setPassword(manageCryptStyle
+									.getInstanceOfCrypt().createPassPhrase(
+											password));
 						} else {
 							return new Long(-7);
 						}
 					}
 
-					Addressmanagement.getInstance().updateAdress(
-							us.getAdresses().getAdresses_id(), street, zip,
-							town, states_id, additionalname, comment, fax,
-							email, phone);
-					// Emailmanagement.getInstance().updateUserEmail(mail.getMail().getMail_id(),user_id,
+					addressmanagement.updateAdress(us.getAdresses()
+							.getAdresses_id(), street, zip, town, states_id,
+							additionalname, comment, fax, email, phone);
+					// emailManagement.updateUserEmail(mail.getMail().getMail_id(),user_id,
 					// email);
-
-					// add or delete organisations from this user
-					if (organisations != null) {
-						Organisationmanagement.getInstance()
-								.updateUserOrganisationsByUser(us,
-										organisations);
-					}
 
 					if (generateSipUserData) {
 
-						UserSipData userSipData = OpenXGHttpClient
-								.getInstance().openSIPgUserCreateUser(
-										firstname, "", lastname,
-										us.getAdresses().getEmail(), password,
-										login);
+						UserSipData userSipData = openXGHttpClient
+								.openSIPgUserCreateUser(firstname, "",
+										lastname, us.getAdresses().getEmail(),
+										password, login);
 
 						if (us.getUserSipData() == null) {
-							Long userSipDataId = UserSipDataDaoImpl
-									.getInstance().addUserSipData(userSipData);
+							Long userSipDataId = userSipDataDao
+									.addUserSipData(userSipData);
 
-							us.setUserSipData(UserSipDataDaoImpl.getInstance()
+							us.setUserSipData(userSipDataDao
 									.getUserSipDataById(userSipDataId));
 						} else {
 
@@ -609,8 +557,8 @@ public class Usermanagement {
 							us.getUserSipData().setAuthId(
 									userSipData.getAuthId());
 
-							UserSipDataDaoImpl.getInstance().updateUserSipData(
-									us.getUserSipData());
+							userSipDataDao.updateUserSipData(us
+									.getUserSipData());
 						}
 
 					} else if (us.getUserSipData() == null) {
@@ -620,45 +568,40 @@ public class Usermanagement {
 						userSipData.setUserpass(sip_pass);
 						userSipData.setAuthId(sip_auth);
 
-						Long userSipDataId = UserSipDataDaoImpl.getInstance()
+						Long userSipDataId = userSipDataDao
 								.addUserSipData(userSipData);
 
-						us.setUserSipData(UserSipDataDaoImpl.getInstance()
+						us.setUserSipData(userSipDataDao
 								.getUserSipDataById(userSipDataId));
 
 					} else {
 
-						UserSipData userSipData = UserSipDataDaoImpl
-								.getInstance().getUserSipDataById(
-										us.getUserSipData().getUserSipDataId());
+						UserSipData userSipData = userSipDataDao
+								.getUserSipDataById(us.getUserSipData()
+										.getUserSipDataId());
 
 						userSipData.setUsername(sip_user);
 						userSipData.setUserpass(sip_pass);
 						userSipData.setAuthId(sip_auth);
 
-						UserSipDataDaoImpl.getInstance().updateUserSipData(
-								userSipData);
+						userSipDataDao.updateUserSipData(userSipData);
 
 						us.setUserSipData(userSipData);
 
 					}
 
 					// log.info("USER " + us.getLastname());
-					Object idf = PersistenceSessionUtil.createSession();
-					EntityManager session = PersistenceSessionUtil.getSession();
-					EntityTransaction tx = session.getTransaction();
-					tx.begin();
+					// What is this code good for? The Id is already check in
+					// the initial
+					// if clause otherwise an update is not possible
+					// if (us.getUser_id() == null) {
+					// em.persist(us);
+					// } else {
+					// if (!em.contains(us)) {
+					em.merge(us);
 
-					if (us.getUser_id() == null) {
-						session.persist(us);
-					} else {
-						if (!session.contains(us)) {
-							session.merge(us);
-						}
-					}
-
-					tx.commit();
-					PersistenceSessionUtil.closeSession(idf);
+					// }
+					// }
 
 					return us.getUser_id();
 
@@ -683,12 +626,8 @@ public class Usermanagement {
 			String DATA, String Comment) {
 		String res = "Fehler beim Update";
 		try {
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
 			String hqlUpdate = "update userdata set DATA_KEY= :DATA_KEY, USER_ID = :USER_ID, DATA = :DATA, updatetime = :updatetime, comment = :Comment where DATA_ID= :DATA_ID";
-			int updatedEntities = session.createQuery(hqlUpdate)
+			int updatedEntities = em.createQuery(hqlUpdate)
 					.setParameter("DATA_KEY", DATA_KEY)
 					.setParameter("USER_ID", USER_ID)
 					.setParameter("DATA", DATA)
@@ -696,8 +635,6 @@ public class Usermanagement {
 					.setParameter("Comment", Comment)
 					.setParameter("DATA_ID", DATA_ID).executeUpdate();
 			res = "Success" + updatedEntities;
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 		} catch (Exception ex2) {
 			log.error("updateUserdata", ex2);
 		}
@@ -708,21 +645,15 @@ public class Usermanagement {
 			String DATA, String Comment) {
 		String res = "Fehler beim Update";
 		try {
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
 			String hqlUpdate = "update Userdata set data = :data, updatetime = :updatetime, "
 					+ "comment = :comment where user_id= :user_id AND data_key = :data_key";
-			int updatedEntities = session.createQuery(hqlUpdate)
+			int updatedEntities = em.createQuery(hqlUpdate)
 					.setParameter("data", DATA)
 					.setParameter("updatetime", new Long(-1))
 					.setParameter("comment", Comment)
 					.setParameter("user_id", USER_ID.longValue())
 					.setParameter("data_key", DATA_KEY).executeUpdate();
 			res = "Success" + updatedEntities;
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 		} catch (Exception ex2) {
 			log.error("updateUserdataByKey", ex2);
 		}
@@ -732,16 +663,10 @@ public class Usermanagement {
 	public String deleteUserdata(int DATA_ID) {
 		String res = "Fehler beim deleteUserdata";
 		try {
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
 			String hqlUpdate = "delete userdata where DATA_ID= :DATA_ID";
-			int updatedEntities = session.createQuery(hqlUpdate)
+			int updatedEntities = em.createQuery(hqlUpdate)
 					.setParameter("DATA_ID", DATA_ID).executeUpdate();
 			res = "Success" + updatedEntities;
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 		} catch (Exception ex2) {
 			log.error("deleteUserdata", ex2);
 		}
@@ -751,17 +676,11 @@ public class Usermanagement {
 	public String deleteUserdataByUserAndKey(int users_id, String DATA_KEY) {
 		String res = "Fehler beim deleteUserdataByUserAndKey";
 		try {
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
 			String hqlUpdate = "delete userdata where users_id= :users_id AND DATA_KEY = :DATA_KEY";
-			int updatedEntities = session.createQuery(hqlUpdate)
+			int updatedEntities = em.createQuery(hqlUpdate)
 					.setParameter("users_id", users_id)
 					.setParameter("DATA_KEY", DATA_KEY).executeUpdate();
 			res = "Success" + updatedEntities;
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 		} catch (Exception ex2) {
 			log.error("deleteUserdataByUserAndKey", ex2);
 		}
@@ -780,15 +699,7 @@ public class Usermanagement {
 		userdata.setUser_id(new Long(USER_ID));
 		userdata.setDeleted("false");
 		try {
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			userdata = session.merge(userdata);
-			session.flush();
-			session.refresh(userdata);
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
+			userdata = em.merge(userdata);
 			ret = "success";
 		} catch (Exception ex2) {
 			log.error("addUserdata", ex2);
@@ -799,19 +710,15 @@ public class Usermanagement {
 	private Userlevel getUserLevel(Long level_id) {
 		Userlevel userlevel = new Userlevel();
 		try {
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session
+			Query query = em
 					.createQuery("select c from Userlevel as c where c.level_id = :level_id AND c.deleted <> :deleted");
 			query.setParameter("level_id", level_id.longValue());
 			query.setParameter("deleted", "true");
-			for (Iterator it2 = query.getResultList().iterator(); it2.hasNext();) {
-				userlevel = (Userlevel) it2.next();
+			for (@SuppressWarnings("unchecked")
+			Iterator<Userlevel> it2 = query.getResultList().iterator(); it2
+					.hasNext();) {
+				userlevel = it2.next();
 			}
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 		} catch (Exception ex2) {
 			log.error("[getUserLevel]", ex2);
 		}
@@ -834,12 +741,7 @@ public class Usermanagement {
 				return new Long(1);
 			}
 
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-
-			Query query = session
+			Query query = em
 					.createQuery("select c from Users as c where c.user_id = :user_id AND c.deleted <> 'true'");
 			query.setParameter("user_id", user_id);
 			Users us = null;
@@ -848,9 +750,6 @@ public class Usermanagement {
 			} catch (NoResultException e) {
 				// u=null}
 			}
-
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 
 			if (us != null) {
 				return us.getLevel_id();
@@ -873,12 +772,7 @@ public class Usermanagement {
 				return new Long(1);
 			}
 
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-
-			Query query = session
+			Query query = em
 					.createQuery("select c from Users as c where c.user_id = :user_id AND c.deleted <> 'true'");
 			query.setParameter("user_id", user_id);
 			Users us = null;
@@ -887,9 +781,6 @@ public class Usermanagement {
 			} catch (NoResultException e) {
 				// u=null}
 			}
-
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 
 			if (us != null) {
 
@@ -900,8 +791,7 @@ public class Usermanagement {
 					log.debug("user_id, organisation_id" + user_id + ", "
 							+ organisation_id);
 
-					Organisation_Users ou = Organisationmanagement
-							.getInstance()
+					Organisation_Users ou = organisationmanagement
 							.getOrganisation_UserByUserAndOrganisation(user_id,
 									organisation_id);
 
@@ -959,15 +849,15 @@ public class Usermanagement {
 			boolean generateSipUserData, String jNameTimeZone) {
 		try {
 			// Checks if FrontEndUsers can register
-			if (Configurationmanagement.getInstance()
-					.getConfKey(3, "allow_frontend_register").getConf_value()
-					.equals("1")) {
+			if (cfgManagement.getConfKey(3, "allow_frontend_register")
+					.getConf_value().equals("1")) {
 
 				Boolean sendConfirmation = false;
-				Integer sendEmailWithVerficationCode = Integer.valueOf(
-						Configurationmanagement.getInstance()
-								.getConfKey(3, "sendEmailWithVerficationCode")
-								.getConf_value()).intValue();
+				Integer sendEmailWithVerficationCode = Integer
+						.valueOf(
+								cfgManagement.getConfKey(3,
+										"sendEmailWithVerficationCode")
+										.getConf_value()).intValue();
 
 				// Send Confirmation can only be true when the baseURL is set,
 				// when you add a new user through the Administration panel
@@ -984,18 +874,17 @@ public class Usermanagement {
 				Long user_id = this.registerUserInit(3, 1, 0, 1, login,
 						Userpass, lastname, firstname, email, age, street,
 						additionalname, fax, zip, states_id, town, language_id,
-						true, new LinkedList(), phone, baseURL,
+						true, new LinkedList<Object>(), phone, baseURL,
 						sendConfirmation, "", "", "", generateSipUserData,
 						jNameTimeZone, false, "", "", false, true);
 
 				// Get the default organisation_id of registered users
 				if (user_id > 0) {
 					long organisation_id = Long.valueOf(
-							Configurationmanagement.getInstance()
-									.getConfKey(3, "default_domain_id")
+							cfgManagement.getConfKey(3, "default_domain_id")
 									.getConf_value()).longValue();
-					Organisationmanagement.getInstance().addUserToOrganisation(
-							user_id, organisation_id, user_id, "");
+					organisationmanagement.addUserToOrganisation(user_id,
+							organisation_id, user_id, "");
 				}
 
 				if (sendConfirmation) {
@@ -1017,9 +906,8 @@ public class Usermanagement {
 			boolean generateSipUserData, String jNameTimeZone) {
 		try {
 			// Checks if FrontEndUsers can register
-			if (Configurationmanagement.getInstance()
-					.getConfKey(3, "allow_frontend_register").getConf_value()
-					.equals("1")) {
+			if (cfgManagement.getConfKey(3, "allow_frontend_register")
+					.getConf_value().equals("1")) {
 
 				Boolean sendConfirmation = false;
 				Boolean sendWelcomeMessage = false;
@@ -1030,18 +918,18 @@ public class Usermanagement {
 				Long user_id = this.registerUserInit(3, 1, 0, 1, login,
 						Userpass, lastname, firstname, email, age, street,
 						additionalname, fax, zip, states_id, town, language_id,
-						sendWelcomeMessage, new LinkedList(), phone, baseURL,
-						sendConfirmation, "", "", "", generateSipUserData,
-						jNameTimeZone, false, "", "", false, true);
+						sendWelcomeMessage, new LinkedList<Object>(), phone,
+						baseURL, sendConfirmation, "", "", "",
+						generateSipUserData, jNameTimeZone, false, "", "",
+						false, true);
 
 				// Get the default organisation_id of registered users
 				if (user_id > 0) {
 					long organisation_id = Long.valueOf(
-							Configurationmanagement.getInstance()
-									.getConfKey(3, "default_domain_id")
+							cfgManagement.getConfKey(3, "default_domain_id")
 									.getConf_value()).longValue();
-					Organisationmanagement.getInstance().addUserToOrganisation(
-							user_id, organisation_id, user_id, "");
+					organisationmanagement.addUserToOrganisation(user_id,
+							organisation_id, user_id, "");
 				}
 
 				if (sendConfirmation) {
@@ -1086,7 +974,7 @@ public class Usermanagement {
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, long states_id,
 			String town, long language_id, boolean sendWelcomeMessage,
-			List organisations, String phone, String baseURL,
+			List<Object> organisations, String phone, String baseURL,
 			Boolean sendConfirmation, String sip_user, String sip_pass,
 			String sip_auth, boolean generateSipUserData,
 			String jName_timezone, Boolean forceTimeZoneCheck,
@@ -1096,18 +984,15 @@ public class Usermanagement {
 		// User Level must be at least Admin
 		// Moderators will get a temp update of there UserLevel to add Users to
 		// their Group
-		if (AuthLevelmanagement.getInstance().checkModLevel(user_level)) {
+		if (authLevelManagement.checkModLevel(user_level)) {
 			// Check for required data
 			if (login.length() >= 4 && Userpass.length() >= 4) {
 				// Check for duplicates
-				boolean checkName = UsersDaoImpl.getInstance().checkUserLogin(
-						login);
-				boolean checkEmail = Emailmanagement.getInstance()
-						.checkUserEMail(email);
+				boolean checkName = usersDao.checkUserLogin(login);
+				boolean checkEmail = emailManagement.checkUserEMail(email);
 				if (checkName && checkEmail) {
 
-					String hash = ManageCryptStyle
-							.getInstance()
+					String hash = manageCryptStyle
 							.getInstanceOfCrypt()
 							.createPassPhrase(
 									login
@@ -1118,15 +1003,14 @@ public class Usermanagement {
 					if (sendWelcomeMessage && email.length() != 0) {
 						// We need to pass the baseURL to check if this is
 						// really set to be send
-						String sendMail = Emailmanagement.getInstance()
-								.sendMail(login, Userpass, email, link,
-										sendConfirmation);
+						String sendMail = emailManagement.sendMail(login,
+								Userpass, email, link, sendConfirmation);
 						if (!sendMail.equals("success"))
 							return new Long(-19);
 					}
-					Long address_id = Addressmanagement.getInstance()
-							.saveAddress(street, zip, town, states_id,
-									additionalname, "", fax, phone, email);
+					Long address_id = addressmanagement.saveAddress(street,
+							zip, town, states_id, additionalname, "", fax,
+							phone, email);
 					if (address_id == null) {
 						return new Long(-22);
 					}
@@ -1150,14 +1034,12 @@ public class Usermanagement {
 
 					/*
 					 * Long adress_emails_id =
-					 * Emailmanagement.getInstance().registerEmail(email,
-					 * address_id,""); if (adress_emails_id==null) { return new
-					 * Long(-112); }
+					 * emailManagement.registerEmail(email, address_id,""); if
+					 * (adress_emails_id==null) { return new Long(-112); }
 					 */
 
-					Organisationmanagement.getInstance()
-							.addUserOrganisationsByHashMap(user_id,
-									organisations);
+					organisationmanagement.addUserOrganisationsByHashMap(
+							user_id, organisations);
 
 					if (address_id > 0 && user_id > 0) {
 						return user_id;
@@ -1211,8 +1093,7 @@ public class Usermanagement {
 			users.setLogin(login);
 			users.setLastname(lastname);
 			users.setAge(age);
-			users.setAdresses(Addressmanagement.getInstance().getAdressbyId(
-					adress_id));
+			users.setAdresses(addressmanagement.getAdressbyId(adress_id));
 			users.setAvailible(availible);
 			users.setLastlogin(new Date());
 			users.setLasttrans(new Long(0));
@@ -1221,8 +1102,7 @@ public class Usermanagement {
 			users.setTitle_id(new Integer(1));
 			users.setStarttime(new Date());
 			users.setActivatehash(hash);
-			users.setOmTimeZone(OmTimeZoneDaoImpl.getInstance().getOmTimeZone(
-					jName_timezone));
+			users.setOmTimeZone(omTimeZoneDaoImpl.getOmTimeZone(jName_timezone));
 			users.setForceTimeZoneCheck(forceTimeZoneCheck);
 
 			users.setUserOffers(userOffers);
@@ -1232,15 +1112,13 @@ public class Usermanagement {
 
 			if (generateSipUserData) {
 
-				UserSipData userSipData = OpenXGHttpClient
-						.getInstance()
-						.openSIPgUserCreateUser(firstname, "", lastname,
-								users.getAdresses().getEmail(), userpass, login);
+				UserSipData userSipData = openXGHttpClient
+						.openSIPgUserCreateUser(firstname, "", lastname, users
+								.getAdresses().getEmail(), userpass, login);
 
-				Long userSipDataId = UserSipDataDaoImpl.getInstance()
-						.addUserSipData(userSipData);
+				Long userSipDataId = userSipDataDao.addUserSipData(userSipData);
 
-				users.setUserSipData(UserSipDataDaoImpl.getInstance()
+				users.setUserSipData(userSipDataDao
 						.getUserSipDataById(userSipDataId));
 
 			} else {
@@ -1250,10 +1128,9 @@ public class Usermanagement {
 				userSipData.setUserpass(sip_pass);
 				userSipData.setAuthId(sip_auth);
 
-				Long userSipDataId = UserSipDataDaoImpl.getInstance()
-						.addUserSipData(userSipData);
+				Long userSipDataId = userSipDataDao.addUserSipData(userSipData);
 
-				users.setUserSipData(UserSipDataDaoImpl.getInstance()
+				users.setUserSipData(userSipDataDao
 						.getUserSipDataById(userSipDataId));
 			}
 
@@ -1264,20 +1141,16 @@ public class Usermanagement {
 			} else {
 				users.setLanguage_id(null);
 			}
-			users.setPassword(ManageCryptStyle.getInstance()
-					.getInstanceOfCrypt().createPassPhrase(userpass));
+			users.setPassword(manageCryptStyle.getInstanceOfCrypt()
+					.createPassPhrase(userpass));
 			users.setRegdate(new Date());
 			users.setDeleted("false");
 
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			users = session.merge(users);
-			session.flush();
+			users = em.merge(users);
+
+			em.flush();
+
 			Long user_id = users.getUser_id();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 
 			return user_id;
 
@@ -1297,20 +1170,13 @@ public class Usermanagement {
 					+ "AND c.externalUserType LIKE :externalUserType "
 					+ "AND c.deleted <> :deleted";
 
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-
-			Query query = session.createQuery(hql);
+			Query query = em.createQuery(hql);
 			query.setParameter("externalUserId", externalUserId);
 			query.setParameter("externalUserType", externalUserType);
 			query.setParameter("deleted", "true");
 
+			@SuppressWarnings("unchecked")
 			List<Users> users = query.getResultList();
-
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 
 			if (users.size() > 0) {
 				return users.get(0);
@@ -1336,13 +1202,11 @@ public class Usermanagement {
 			users.setAge(age);
 
 			if (adress_id != null && adress_id > 0) {
-				users.setAdresses(Addressmanagement.getInstance()
-						.getAdressbyId(adress_id));
+				users.setAdresses(addressmanagement.getAdressbyId(adress_id));
 			} else {
-				adress_id = Addressmanagement.getInstance().saveAddress("", "",
-						"", 1L, "", "", "", "", email);
-				users.setAdresses(Addressmanagement.getInstance()
-						.getAdressbyId(adress_id));
+				adress_id = addressmanagement.saveAddress("", "", "", 1L, "",
+						"", "", "", email);
+				users.setAdresses(addressmanagement.getAdressbyId(adress_id));
 			}
 
 			users.setAvailible(availible);
@@ -1354,20 +1218,17 @@ public class Usermanagement {
 			users.setStarttime(new Date());
 			users.setActivatehash(hash);
 			users.setPictureuri(pictureuri);
-			users.setOmTimeZone(OmTimeZoneDaoImpl.getInstance().getOmTimeZone(
-					jNameTimeZone));
+			users.setOmTimeZone(omTimeZoneDaoImpl.getOmTimeZone(jNameTimeZone));
 
 			if (generateSipUserData) {
 
-				UserSipData userSipData = OpenXGHttpClient
-						.getInstance()
-						.openSIPgUserCreateUser(firstname, "", lastname,
-								users.getAdresses().getEmail(), userpass, login);
+				UserSipData userSipData = openXGHttpClient
+						.openSIPgUserCreateUser(firstname, "", lastname, users
+								.getAdresses().getEmail(), userpass, login);
 
-				Long userSipDataId = UserSipDataDaoImpl.getInstance()
-						.addUserSipData(userSipData);
+				Long userSipDataId = userSipDataDao.addUserSipData(userSipData);
 
-				users.setUserSipData(UserSipDataDaoImpl.getInstance()
+				users.setUserSipData(userSipDataDao
 						.getUserSipDataById(userSipDataId));
 
 			} else {
@@ -1377,10 +1238,9 @@ public class Usermanagement {
 				userSipData.setUserpass("");
 				userSipData.setAuthId("");
 
-				Long userSipDataId = UserSipDataDaoImpl.getInstance()
-						.addUserSipData(userSipData);
+				Long userSipDataId = userSipDataDao.addUserSipData(userSipData);
 
-				users.setUserSipData(UserSipDataDaoImpl.getInstance()
+				users.setUserSipData(userSipDataDao
 						.getUserSipDataById(userSipDataId));
 			}
 
@@ -1394,19 +1254,13 @@ public class Usermanagement {
 			} else {
 				users.setLanguage_id(null);
 			}
-			users.setPassword(ManageCryptStyle.getInstance()
-					.getInstanceOfCrypt().createPassPhrase(userpass));
+			users.setPassword(manageCryptStyle.getInstanceOfCrypt()
+					.createPassPhrase(userpass));
 			users.setRegdate(new Date());
 			users.setDeleted("false");
 
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			session.merge(users);
+			em.merge(users);
 			long user_id = users.getUser_id();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 
 			return user_id;
 
@@ -1418,14 +1272,8 @@ public class Usermanagement {
 
 	public Long addUser(Users usr) {
 		try {
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			usr = session.merge(usr);
+			usr = em.merge(usr);
 			Long user_id = usr.getUser_id();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			return user_id;
 		} catch (Exception ex2) {
 			log.error("[addUser]", ex2);
@@ -1436,27 +1284,20 @@ public class Usermanagement {
 	public Long addUserBackup(Users usr) {
 		try {
 
-			Long adresses_id = Addressmanagement.getInstance().saveAddressObj(
-					usr.getAdresses());
+			Long adresses_id = addressmanagement.saveAddressObj(usr
+					.getAdresses());
 
-			usr.setAdresses(Addressmanagement.getInstance().getAdressbyId(
-					adresses_id));
+			usr.setAdresses(addressmanagement.getAdressbyId(adresses_id));
 
-			Long userSipDataId = UserSipDataDaoImpl.getInstance()
-					.addUserSipData(usr.getUserSipData());
+			Long userSipDataId = userSipDataDao.addUserSipData(usr
+					.getUserSipData());
 			if (userSipDataId != null) {
-				usr.setUserSipData(UserSipDataDaoImpl.getInstance()
+				usr.setUserSipData(userSipDataDao
 						.getUserSipDataById(userSipDataId));
 			}
 
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			usr = session.merge(usr);
+			usr = em.merge(usr);
 			Long user_id = usr.getUser_id();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 
 			return user_id;
 
@@ -1468,18 +1309,12 @@ public class Usermanagement {
 
 	public void addUserLevel(String description, int myStatus) {
 		try {
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
 			Userlevel uslevel = new Userlevel();
 			uslevel.setStarttime(new Date());
 			uslevel.setDescription(description);
 			uslevel.setStatuscode(new Integer(myStatus));
 			uslevel.setDeleted("false");
-			session.merge(uslevel);
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
+			em.merge(uslevel);
 		} catch (Exception ex2) {
 			log.error("[addUserLevel]", ex2);
 		}
@@ -1494,10 +1329,10 @@ public class Usermanagement {
 	 * @return
 	 */
 
-	public Long saveOrUpdateUser(Long user_level, ObjectMap values,
+	public Long saveOrUpdateUser(Long user_level, ObjectMap<?, ?> values,
 			Long users_id) {
 		try {
-			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)) {
+			if (authLevelManagement.checkAdminLevel(user_level)) {
 				Long returnLong = null;
 
 				Long user_id = Long.parseLong(values.get("user_id").toString());
@@ -1505,22 +1340,21 @@ public class Usermanagement {
 				if (user_id != null && user_id > 0) {
 
 					returnLong = user_id;
-					Users savedUser = UsersDaoImpl.getInstance().getUser(
-							user_id);
+					Users savedUser = usersDao.getUser(user_id);
 					savedUser.setAge((Date) values.get("age"));
 					savedUser.setFirstname(values.get("firstname").toString());
 					savedUser.setLastname(values.get("lastname").toString());
 					savedUser.setTitle_id(Integer.parseInt(values.get(
 							"title_id").toString()));
 
-					savedUser.setOmTimeZone(OmTimeZoneDaoImpl.getInstance()
-							.getOmTimeZone(
-									(values.get("jnameTimeZone").toString())));
+					savedUser.setOmTimeZone(omTimeZoneDaoImpl
+							.getOmTimeZone((values.get("jnameTimeZone")
+									.toString())));
 
 					String password = values.get("password").toString();
 
 					if (password.length() > 3) {
-						savedUser.setPassword(ManageCryptStyle.getInstance()
+						savedUser.setPassword(manageCryptStyle
 								.getInstanceOfCrypt()
 								.createPassPhrase(password));
 					}
@@ -1528,7 +1362,7 @@ public class Usermanagement {
 					String email = values.get("email").toString();
 
 					if (!email.equals(savedUser.getAdresses().getEmail())) {
-						boolean checkEmail = Emailmanagement.getInstance()
+						boolean checkEmail = emailManagement
 								.checkUserEMail(email);
 						if (!checkEmail) {
 							// mail already used by another user!
@@ -1552,12 +1386,10 @@ public class Usermanagement {
 							.setZip(values.get("zip").toString());
 					savedUser.setForceTimeZoneCheck(false);
 					savedUser.getAdresses().setStates(
-							Statemanagement.getInstance().getStateById(
-									Long.parseLong(values.get("state_id")
-											.toString())));
+							statemanagement.getStateById(Long.parseLong(values
+									.get("state_id").toString())));
 
-					Addressmanagement.getInstance().updateAdress(
-							savedUser.getAdresses());
+					addressmanagement.updateAdress(savedUser.getAdresses());
 					savedUser.setShowContactData(Boolean.valueOf(values.get(
 							"showContactData").toString()));
 					savedUser.setShowContactDataToContacts(Boolean
@@ -1568,24 +1400,15 @@ public class Usermanagement {
 					savedUser.setUserSearchs(values.get("userSearchs")
 							.toString());
 
-					// savedUser.setAdresses(Addressmanagement.getInstance().getAdressbyId(user.getAdresses().getAdresses_id()));
-
-					Object idf = PersistenceSessionUtil.createSession();
-					EntityManager session = PersistenceSessionUtil.getSession();
-					EntityTransaction tx = session.getTransaction();
-					tx.begin();
+					// savedUser.setAdresses(addressmanagement.getAdressbyId(user.getAdresses().getAdresses_id()));
 
 					if (savedUser.getUser_id() == null) {
-						session.persist(savedUser);
+						em.persist(savedUser);
 					} else {
-						if (!session.contains(savedUser)) {
-							session.merge(savedUser);
+						if (!em.contains(savedUser)) {
+							em.merge(savedUser);
 						}
 					}
-					session.flush();
-
-					tx.commit();
-					PersistenceSessionUtil.closeSession(idf);
 
 					return returnLong;
 				}
@@ -1617,13 +1440,12 @@ public class Usermanagement {
 
 			// check if Mail given
 			if (email.length() > 0) {
-				Adresses addr = Addressmanagement.getInstance()
-						.retrieveAddressByEmail(email);
+				Adresses addr = addressmanagement.retrieveAddressByEmail(email);
 				// log.debug("addr_e "+addr_e);
 				if (addr != null) {
 					// log.debug("getAdresses_id "+addr_e.getAdresses_id());
-					Users us = UsersDaoImpl.getInstance().getUserByAdressesId(
-							addr.getAdresses_id());
+					Users us = usersDao.getUserByAdressesId(addr
+							.getAdresses_id());
 					if (us != null) {
 						this.sendHashByUser(us, appLink);
 						return new Long(-4);
@@ -1635,7 +1457,7 @@ public class Usermanagement {
 				}
 				// check if username given
 			} else if (username.length() > 0) {
-				Users us = UsersDaoImpl.getInstance().getUserByName(username);
+				Users us = usersDao.getUserByName(username);
 				if (us != null) {
 					this.sendHashByUser(us, appLink);
 					return new Long(-4);
@@ -1653,26 +1475,25 @@ public class Usermanagement {
 	private void sendHashByUser(Users us, String appLink) throws Exception {
 		String loginData = us.getLogin() + new Date();
 		log.debug("User: " + us.getLogin());
-		us.setResethash(ManageCryptStyle.getInstance().getInstanceOfCrypt()
-				.createPassPhrase(loginData));
-		UsersDaoImpl.getInstance().updateUser(us);
+		us.setResethash(manageCryptStyle.getInstanceOfCrypt().createPassPhrase(
+				loginData));
+		usersDao.updateUser(us);
 		String reset_link = appLink + "?lzproxied=solo&hash="
 				+ us.getResethash();
 
 		String email = us.getAdresses().getEmail();
 
 		Long default_lang_id = Long.valueOf(
-				Configurationmanagement.getInstance()
-						.getConfKey(3, "default_lang_id").getConf_value())
+				cfgManagement.getConfKey(3, "default_lang_id").getConf_value())
 				.longValue();
 
-		String template = ResetPasswordTemplate.getInstance()
-				.getResetPasswordTemplate(reset_link, default_lang_id);
+		String template = resetPasswordTemplate.getResetPasswordTemplate(
+				reset_link, default_lang_id);
 
-		Fieldlanguagesvalues labelid517 = Fieldmanagment.getInstance()
+		Fieldlanguagesvalues labelid517 = fieldmanagment
 				.getFieldByIdAndLanguage(new Long(517), default_lang_id);
 
-		MailHandler.sendMail(email, labelid517.getValue(), template);
+		mailHandler.sendMail(email, labelid517.getValue(), template);
 	}
 
 	/**
@@ -1686,59 +1507,39 @@ public class Usermanagement {
 		if (id == 0) {
 			return null;
 		}
-
-		Object idf = PersistenceSessionUtil.createSession();
-		EntityManager session = PersistenceSessionUtil.getSession();
-		EntityTransaction tx = session.getTransaction();
-		tx.begin();
-
-		CriteriaBuilder cb = session.getCriteriaBuilder();
+		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Users> cq = cb.createQuery(Users.class);
 		Root<Users> c = cq.from(Users.class);
 		Predicate condition = cb.equal(c.get("deleted"), "false");
 		Predicate subCondition = cb.equal(c.get("user_id"), id);
 		cq.where(condition, subCondition);
-		TypedQuery<Users> q = session.createQuery(cq);
+		TypedQuery<Users> q = em.createQuery(cq);
 		Users u = null;
 		try {
-			u = (Users) q.getSingleResult();
-			tx.commit();
+			u = q.getSingleResult();
 		} catch (NoResultException e) {
-			tx.rollback();
 			// u=null}
 		} catch (NonUniqueResultException ex) {
-			tx.rollback();
 		}
 
-		PersistenceSessionUtil.closeSession(idf);
-
 		return u;
-
 	}
 
 	public Users getUserByIdAndDeleted(Long id) throws Exception {
 		log.debug("Usermanagement.getUserById");
 
-		Object idf = PersistenceSessionUtil.createSession();
-		EntityManager session = PersistenceSessionUtil.getSession();
-		EntityTransaction tx = session.getTransaction();
-		tx.begin();
-
-		CriteriaBuilder cb = session.getCriteriaBuilder();
+		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Users> cq = cb.createQuery(Users.class);
 		Root<Users> c = cq.from(Users.class);
 		Predicate condition = cb.equal(c.get("user_id"), id);
 		cq.where(condition);
-		TypedQuery<Users> q = session.createQuery(cq);
+		TypedQuery<Users> q = em.createQuery(cq);
 		Users u = null;
 		try {
-			u = (Users) q.getSingleResult();
+			u = q.getSingleResult();
 		} catch (NoResultException e) {
 			// u=null}
 		}
-
-		tx.commit();
-		PersistenceSessionUtil.closeSession(idf);
 
 		return u;
 
@@ -1754,27 +1555,19 @@ public class Usermanagement {
 	public Users getUserByLogin(String login) throws Exception {
 		log.debug("Usermanagement.getUserByLogin : " + login);
 
-		Object idf = PersistenceSessionUtil.createSession();
-		EntityManager session = PersistenceSessionUtil.getSession();
-		EntityTransaction tx = session.getTransaction();
-		tx.begin();
-
-		CriteriaBuilder cb = session.getCriteriaBuilder();
+		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Users> cq = cb.createQuery(Users.class);
 		Root<Users> c = cq.from(Users.class);
 		Predicate condition = cb.equal(c.get("deleted"), "false");
 		Predicate subCondition = cb.equal(c.get("login"), login);
 		cq.where(condition, subCondition);
-		TypedQuery<Users> q = session.createQuery(cq);
+		TypedQuery<Users> q = em.createQuery(cq);
 		Users u = null;
 		try {
-			u = (Users) q.getSingleResult();
+			u = q.getSingleResult();
 		} catch (NoResultException e) {
 			// u=null}
 		}
-
-		tx.commit();
-		PersistenceSessionUtil.closeSession(idf);
 
 		return u;
 
@@ -1795,20 +1588,12 @@ public class Usermanagement {
 				+ "(c.login LIKE :userOrEmail OR c.adresses.email LIKE :userOrEmail  ) "
 				+ "AND c.externalUserId IS NULL " + "AND c.deleted <> :deleted";
 
-		Object idf = PersistenceSessionUtil.createSession();
-		EntityManager session = PersistenceSessionUtil.getSession();
-		EntityTransaction tx = session.getTransaction();
-		tx.begin();
-
-		session.flush();
-
-		Query query = session.createQuery(hql);
+		Query query = em.createQuery(hql);
 		query.setParameter("userOrEmail", userOrEmail);
 		query.setParameter("deleted", "true");
 
+		@SuppressWarnings("unchecked")
 		List<Users> ll = query.getResultList();
-		tx.commit();
-		PersistenceSessionUtil.closeSession(idf);
 
 		if (ll.size() > 1) {
 			log.error("ALERT :: There are two users in the database that have either same login or Email ");
@@ -1829,19 +1614,11 @@ public class Usermanagement {
 		String hql = "SELECT c from Users AS c " + "WHERE "
 				+ "c.adresses.email LIKE :userOrEmail";
 
-		Object idf = PersistenceSessionUtil.createSession();
-		EntityManager session = PersistenceSessionUtil.getSession();
-		EntityTransaction tx = session.getTransaction();
-		tx.begin();
-
-		session.flush();
-
-		Query query = session.createQuery(hql);
+		Query query = em.createQuery(hql);
 		query.setParameter("userOrEmail", userOrEmail);
 
+		@SuppressWarnings("unchecked")
 		List<Users> ll = query.getResultList();
-		tx.commit();
-		PersistenceSessionUtil.closeSession(idf);
 
 		if (ll.size() > 1) {
 			log.error("ALERT :: There are two users in the database that have same Email ");
@@ -1865,12 +1642,12 @@ public class Usermanagement {
 		log.debug("Usermanagement.getUserByLogin");
 
 		if (encryptPasswd) {
-			String encrypted = ManageCryptStyle.getInstance()
-					.getInstanceOfCrypt().createPassPhrase(user.getPassword());
+			String encrypted = manageCryptStyle.getInstanceOfCrypt()
+					.createPassPhrase(user.getPassword());
 			user.setPassword(encrypted);
 		}
 
-		UsersDaoImpl.getInstance().updateUser(user);
+		usersDao.updateUser(user);
 
 	}
 
@@ -1883,20 +1660,19 @@ public class Usermanagement {
 	 */
 	public Boolean kickUserByStreamId(String SID, Long room_id) {
 		try {
-			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-			Long user_level = Usermanagement.getInstance().getUserLevelByID(
-					users_id);
-			HashMap<String, RoomClient> MyUserList = ClientListManager
-					.getInstance().getClientListByRoom(room_id);
+			Long users_id = sessionManagement.checkSession(SID);
+			Long user_level = getUserLevelByID(users_id);
+			HashMap<String, RoomClient> MyUserList = clientListManager
+					.getClientListByRoom(room_id);
 
 			// admins only
-			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)) {
+			if (authLevelManagement.checkAdminLevel(user_level)) {
 
-				Sessionmanagement.getInstance().clearSessionByRoomId(room_id);
+				sessionManagement.clearSessionByRoomId(room_id);
 
 				for (Iterator<String> iter = MyUserList.keySet().iterator(); iter
 						.hasNext();) {
-					String key = (String) iter.next();
+					String key = iter.next();
 
 					RoomClient rcl = MyUserList.get(key);
 
@@ -1907,15 +1683,14 @@ public class Usermanagement {
 					if (rcl.getRoom_id() != null) {
 						scopeName = rcl.getRoom_id().toString();
 					}
-					IScope currentScope = ScopeApplicationAdapter.getInstance()
+					IScope currentScope = scopeApplicationAdapter
 							.getRoomScope(scopeName);
-					ScopeApplicationAdapter.getInstance().roomLeaveByScope(rcl,
-							currentScope);
+					scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope);
 
 					HashMap<Integer, String> messageObj = new HashMap<Integer, String>();
 					messageObj.put(0, "kick");
-					ScopeApplicationAdapter.getInstance().sendMessageById(
-							messageObj, rcl.getStreamid(), currentScope);
+					scopeApplicationAdapter.sendMessageById(messageObj,
+							rcl.getStreamid(), currentScope);
 
 				}
 
@@ -1930,14 +1705,13 @@ public class Usermanagement {
 
 	public Boolean kickUserByPublicSID(String SID, String publicSID) {
 		try {
-			Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-			Long user_level = Usermanagement.getInstance().getUserLevelByID(
-					users_id);
+			Long users_id = sessionManagement.checkSession(SID);
+			Long user_level = getUserLevelByID(users_id);
 
 			// admins only
-			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)) {
+			if (authLevelManagement.checkAdminLevel(user_level)) {
 
-				RoomClient rcl = ClientListManager.getInstance()
+				RoomClient rcl = clientListManager
 						.getClientByPublicSID(publicSID);
 
 				if (rcl == null) {
@@ -1948,15 +1722,14 @@ public class Usermanagement {
 				if (rcl.getRoom_id() != null) {
 					scopeName = rcl.getRoom_id().toString();
 				}
-				IScope currentScope = ScopeApplicationAdapter.getInstance()
+				IScope currentScope = scopeApplicationAdapter
 						.getRoomScope(scopeName);
-				ScopeApplicationAdapter.getInstance().roomLeaveByScope(rcl,
-						currentScope);
+				scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope);
 
 				HashMap<Integer, String> messageObj = new HashMap<Integer, String>();
 				messageObj.put(0, "kick");
-				ScopeApplicationAdapter.getInstance().sendMessageById(
-						messageObj, rcl.getStreamid(), currentScope);
+				scopeApplicationAdapter.sendMessageById(messageObj,
+						rcl.getStreamid(), currentScope);
 
 				return true;
 			}
@@ -1976,11 +1749,7 @@ public class Usermanagement {
 			String hql = "SELECT u FROM Users as u "
 					+ " where u.activatehash = :activatehash"
 					+ " AND u.deleted <> :deleted";
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-			Query query = session.createQuery(hql);
+			Query query = em.createQuery(hql);
 			query.setParameter("activatehash", hash);
 			query.setParameter("deleted", "true");
 			Users u = null;
@@ -1989,8 +1758,6 @@ public class Usermanagement {
 			} catch (NoResultException e) {
 				// u=null}
 			}
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 			return u;
 		} catch (Exception e) {
 			log.error("[getUserByActivationHash]", e);
@@ -2003,19 +1770,13 @@ public class Usermanagement {
 		try {
 			if (user.getUser_id() > 0) {
 				try {
-					Object idf = PersistenceSessionUtil.createSession();
-					EntityManager session = PersistenceSessionUtil.getSession();
-					EntityTransaction tx = session.getTransaction();
-					tx.begin();
 					if (user.getUser_id() == null) {
-						session.persist(user);
+						em.persist(user);
 					} else {
-						if (!session.contains(user)) {
-							session.merge(user);
+						if (!em.contains(user)) {
+							em.merge(user);
 						}
 					}
-					tx.commit();
-					PersistenceSessionUtil.closeSession(idf);
 				} catch (Exception ex2) {
 					log.error("[updateUser] ", ex2);
 				}
@@ -2039,7 +1800,7 @@ public class Usermanagement {
 	public SearchResult getUsersListWithSearch(Long user_level, int start,
 			int max, String orderby, boolean asc, String search) {
 		try {
-			if (AuthLevelmanagement.getInstance().checkAdminLevel(user_level)) {
+			if (authLevelManagement.checkAdminLevel(user_level)) {
 
 				String hql = "select c from Users c "
 						+ "where c.deleted = 'false' " + "AND ("
@@ -2068,24 +1829,16 @@ public class Usermanagement {
 
 				SearchResult sresult = new SearchResult();
 				sresult.setObjectName(Users.class.getName());
-				sresult.setRecords(UsersDaoImpl.getInstance()
+				sresult.setRecords(usersDao
 						.selectMaxFromUsersWithSearch(search));
 
 				// get all users
-				Object idf = PersistenceSessionUtil.createSession();
-				EntityManager session = PersistenceSessionUtil.getSession();
-				EntityTransaction tx = session.getTransaction();
-				tx.begin();
-				session.flush();
-
-				Query query = session.createQuery(hql);
+				Query query = em.createQuery(hql);
 				query.setParameter("search", StringUtils.lowerCase(search));
 				query.setMaxResults(max);
 				query.setFirstResult(start);
 
 				sresult.setResult(query.getResultList());
-				tx.commit();
-				PersistenceSessionUtil.closeSession(idf);
 
 				return sresult;
 			}
@@ -2184,12 +1937,7 @@ public class Usermanagement {
 			log.debug("hql :: " + hql);
 
 			// get all users
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-
-			Query query = session.createQuery(hql);
+			Query query = em.createQuery(hql);
 
 			if (searchTxt.length() != 0 && userOffers.length() != 0
 					&& userSearchs.length() != 0) {
@@ -2238,10 +1986,8 @@ public class Usermanagement {
 			query.setMaxResults(max);
 			query.setFirstResult(start);
 
+			@SuppressWarnings("unchecked")
 			List<Users> userList = query.getResultList();
-
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 
 			return userList;
 
@@ -2333,12 +2079,7 @@ public class Usermanagement {
 			log.debug("hql :: " + hql);
 
 			// get all users
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-
-			Query query = session.createQuery(hql);
+			Query query = em.createQuery(hql);
 
 			if (searchTxt.length() != 0 && userOffers.length() != 0
 					&& userSearchs.length() != 0) {
@@ -2384,10 +2125,8 @@ public class Usermanagement {
 
 			}
 
+			@SuppressWarnings("rawtypes")
 			List userList = query.getResultList();
-
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 
 			return (Long) userList.get(0);
 
@@ -2432,20 +2171,14 @@ public class Usermanagement {
 			}
 
 			// get all users
-			Object idf = PersistenceSessionUtil.createSession();
-			EntityManager session = PersistenceSessionUtil.getSession();
-			EntityTransaction tx = session.getTransaction();
-			tx.begin();
-
-			Query query = session.createQuery(hql);
+			Query query = em.createQuery(hql);
 			query.setParameter("search", StringUtils.lowerCase(searchTxt));
 			query.setParameter("userOffers", StringUtils.lowerCase(userOffers));
 			query.setParameter("userSearchs",
 					StringUtils.lowerCase(userSearchs));
 
+			@SuppressWarnings("rawtypes")
 			List ll = query.getResultList();
-			tx.commit();
-			PersistenceSessionUtil.closeSession(idf);
 
 			return (Long) ll.get(0);
 

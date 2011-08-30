@@ -22,6 +22,7 @@ import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
@@ -40,7 +41,8 @@ public class RTPStreamReceiver implements  ReceiveStreamListener,SessionListener
 	private static final Logger log = Red5LoggerFactory.getLogger(RTPStreamReceiver.class, ScopeApplicationAdapter.webAppRootKey);
 	
 	/** contains sessionData */
-	RTPScreenSharingSession sessionData = null;
+	private RTPScreenSharingSession sessionData;
+	private ClientListManager clientListManager;
 	
 	/** The basic RTPmanager for a romm, receiving the webstart client stream */
 	private RTPManager basicManager = null;
@@ -60,9 +62,10 @@ public class RTPStreamReceiver implements  ReceiveStreamListener,SessionListener
 	 * @param session
 	 */
 	//----------------------------------------------------------------------
-	public RTPStreamReceiver(RTPScreenSharingSession session) throws Exception {
+	public RTPStreamReceiver(ClientListManager clientListManager, RTPScreenSharingSession session) throws Exception {
 		log.debug("RTPStreamReceiver Konstruktor");
 		this.sessionData = session;
+		this.clientListManager = clientListManager;
 		
 		basicManager = RTPManager.newInstance();
 		//basicManager.addSessionListener(this);
@@ -83,7 +86,7 @@ public class RTPStreamReceiver implements  ReceiveStreamListener,SessionListener
 		
 		while(iter.hasNext()){
 			String clientSID = iter.next();
-			RoomClient client = ClientListManager.getInstance().getClientByPublicSID(clientSID);
+			RoomClient client = clientListManager.getClientByPublicSID(clientSID);
 			
 			log.debug("Adding Target for room " +session.getRoom().getRooms_id() + " : " + client.getUserip() + "/" + viewers.get(clientSID));
 			

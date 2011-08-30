@@ -46,6 +46,7 @@ public class LibraryDocumentConverter {
 		return instance;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public String writeToLocalFolder(String filePath, String fileName, ArrayList objList) {
 		try {
 			
@@ -118,6 +119,7 @@ public class LibraryDocumentConverter {
 	 * @param wmlData
 	 * @return
 	 */
+	@SuppressWarnings({ "unused" })
 	private Long writeFileToLocation(String filepathComplete, String wmlData){
 		try {
 
@@ -143,6 +145,7 @@ public class LibraryDocumentConverter {
 	 * @param baseElement
 	 * @param paint
 	 */
+	@SuppressWarnings({ "unused", "rawtypes" })
 	private void createNodesByPaint(Document document, Element baseElement, LinkedHashMap paint){
 		try {
 			
@@ -216,6 +219,7 @@ public class LibraryDocumentConverter {
 	 * @param baseElement
 	 * @param letter
 	 */
+	@SuppressWarnings({ "unused", "rawtypes" })
 	private void createNodesByLetter(Document document, Element baseElement, LinkedHashMap letter){
 		try {
 			
@@ -280,6 +284,7 @@ public class LibraryDocumentConverter {
 	 * @param baseElement
 	 * @param image
 	 */
+	@SuppressWarnings({ "unused", "rawtypes" })
 	private void createNodesByImage(Document document, Element baseElement, LinkedHashMap image){
 		try {
 			
@@ -359,6 +364,7 @@ public class LibraryDocumentConverter {
 	 * @param baseElement
 	 * @param paintObject
 	 */
+	@SuppressWarnings({ "unused", "rawtypes" })
 	private void createNodesByObject(Document document, Element baseElement, LinkedHashMap paintObject){
 		try {
 			
@@ -438,6 +444,7 @@ public class LibraryDocumentConverter {
 	 * @param baseElement
 	 * @param paintObject
 	 */
+	@SuppressWarnings({ "unused", "rawtypes" })
 	private void createNodesByRectAndEllipse(Document document, Element baseElement, LinkedHashMap paintObject){
 		try {
 
@@ -492,6 +499,7 @@ public class LibraryDocumentConverter {
 	 * @param baseElement
 	 * @param image
 	 */
+	@SuppressWarnings({ "unused", "rawtypes" })
 	private void createNodesBySWF(Document document, Element baseElement, LinkedHashMap image){
 		try {
 			

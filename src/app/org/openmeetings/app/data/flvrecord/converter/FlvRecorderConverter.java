@@ -10,71 +10,30 @@ import org.openmeetings.app.data.flvrecord.FlvRecordingDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingLogDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDataDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDeltaDaoImpl;
-import org.openmeetings.app.documents.GenerateImage;
 import org.openmeetings.app.documents.GenerateSWF;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecording;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingMetaData;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingMetaDelta;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
-import org.openmeetings.utils.crypt.MD5;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-
-import javax.sound.sampled.AudioFileFormat;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class FlvRecorderConverter {
 
-	private static final Logger log = Red5LoggerFactory
-			.getLogger(FlvRecorderConverter.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecorderConverter.class);
 
 	// Spring loaded Beans
+	@Autowired
 	private FlvRecordingDaoImpl flvRecordingDaoImpl = null;
+	@Autowired
 	private FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDaoImpl = null;
+	@Autowired
 	private Configurationmanagement configurationmanagement;
+	@Autowired
 	private FlvRecordingLogDaoImpl flvRecordingLogDaoImpl;
+	@Autowired
 	private FlvRecordingMetaDeltaDaoImpl flvRecordingMetaDeltaDaoImpl;
-
-	public FlvRecordingDaoImpl getFlvRecordingDaoImpl() {
-		return flvRecordingDaoImpl;
-	}
-	public void setFlvRecordingDaoImpl(FlvRecordingDaoImpl flvRecordingDaoImpl) {
-		this.flvRecordingDaoImpl = flvRecordingDaoImpl;
-	}
-
-	public FlvRecordingMetaDataDaoImpl getFlvRecordingMetaDataDaoImpl() {
-		return flvRecordingMetaDataDaoImpl;
-	}
-	public void setFlvRecordingMetaDataDaoImpl(
-			FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDaoImpl) {
-		this.flvRecordingMetaDataDaoImpl = flvRecordingMetaDataDaoImpl;
-	}
-
-	public Configurationmanagement getConfigurationmanagement() {
-		return configurationmanagement;
-	}
-	public void setConfigurationmanagement(
-			Configurationmanagement configurationmanagement) {
-		this.configurationmanagement = configurationmanagement;
-	}
-
-	public FlvRecordingLogDaoImpl getFlvRecordingLogDaoImpl() {
-		return flvRecordingLogDaoImpl;
-	}
-	public void setFlvRecordingLogDaoImpl(
-			FlvRecordingLogDaoImpl flvRecordingLogDaoImpl) {
-		this.flvRecordingLogDaoImpl = flvRecordingLogDaoImpl;
-	}
-	
-	public FlvRecordingMetaDeltaDaoImpl getFlvRecordingMetaDeltaDaoImpl() {
-		return flvRecordingMetaDeltaDaoImpl;
-	}
-	public void setFlvRecordingMetaDeltaDaoImpl(
-			FlvRecordingMetaDeltaDaoImpl flvRecordingMetaDeltaDaoImpl) {
-		this.flvRecordingMetaDeltaDaoImpl = flvRecordingMetaDeltaDaoImpl;
-	}
 	
 	public void startConversion(Long flvRecordingId) {
 		try {
@@ -117,8 +76,7 @@ public class FlvRecorderConverter {
 		List<HashMap<String, Object>> returnLog = new LinkedList<HashMap<String, Object>>();
 		try {
 
-			List<FlvRecordingMetaData> metaDataList = this
-					.getFlvRecordingMetaDataDaoImpl()
+			List<FlvRecordingMetaData> metaDataList = flvRecordingMetaDataDaoImpl
 					.getFlvRecordingMetaDataAudioFlvsByRecording(
 							flvRecording.getFlvRecordingId());
 
@@ -433,8 +391,7 @@ public class FlvRecorderConverter {
 					
 				}
 
-				this.getFlvRecordingMetaDataDaoImpl()
-						.updateFlvRecordingMetaData(flvRecordingMetaData);
+				flvRecordingMetaDataDaoImpl.updateFlvRecordingMetaData(flvRecordingMetaData);
 
 			}
 
