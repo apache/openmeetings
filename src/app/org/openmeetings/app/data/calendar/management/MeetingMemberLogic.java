@@ -27,7 +27,7 @@ public class MeetingMemberLogic {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			MeetingMemberLogic.class, ScopeApplicationAdapter.webAppRootKey);
-	private static MeetingMemberLogic instance = null;
+
 	@Autowired
 	private AppointmentLogic appointmentLogic;
 	@Autowired
@@ -42,14 +42,6 @@ public class MeetingMemberLogic {
 	private Invitationmanagement invitationManagement;
 	@Autowired
 	private MeetingMemberDaoImpl meetingMemberDao;
-
-	public static synchronized MeetingMemberLogic getInstance() {
-		if (instance == null) {
-			instance = new MeetingMemberLogic();
-		}
-
-		return instance;
-	}
 
 	/**
 	 * @author becherer

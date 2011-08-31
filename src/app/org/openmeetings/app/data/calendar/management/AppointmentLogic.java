@@ -48,6 +48,8 @@ public class AppointmentLogic {
 	private Invitationmanagement invitationManagement;
 	@Autowired
 	private MeetingMemberDaoImpl meetingMemberDao;
+	@Autowired
+	private MeetingMemberLogic meetingMemberLogic;
 
 	public List<Appointment> getAppointmentByRange(Long userId, Date starttime,
 			Date endtime) {
@@ -204,7 +206,7 @@ public class AppointmentLogic {
 			String invitorName = user.getFirstname() + " " + user.getLastname()
 					+ " [" + user.getAdresses().getEmail() + "]";
 
-			MeetingMemberLogic.getInstance().addMeetingMember(
+			meetingMemberLogic.addMeetingMember(
 					user.getFirstname(), user.getLastname(), "", "", id,
 					userId, user.getAdresses().getEmail(), baseUrl, userId,
 					true, language_id, false, "", jNameMemberTimeZone,
@@ -231,7 +233,7 @@ public class AppointmentLogic {
 							.toString();
 
 					// Not In Remote List available - intern OR extern user
-					MeetingMemberLogic.getInstance().addMeetingMember(
+					meetingMemberLogic.addMeetingMember(
 							clientMember.get("firstname").toString(),
 							clientMember.get("lastname").toString(),
 							"0",
@@ -302,7 +304,7 @@ public class AppointmentLogic {
 			if (members != null) {
 				for (int i = 0; i < members.size(); i++) {
 					log.debug("deleting member " + members.get(i).getEmail());
-					MeetingMemberLogic.getInstance().deleteMeetingMember(
+					meetingMemberLogic.deleteMeetingMember(
 							members.get(i).getMeetingMemberId(), users_id,
 							language_id);
 				}

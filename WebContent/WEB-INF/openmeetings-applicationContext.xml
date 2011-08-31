@@ -69,6 +69,7 @@
 	<bean id="recordingDao" class="org.openmeetings.app.data.record.dao.RecordingDaoImpl"/>
 	<bean id="appointmentDao" class="org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl"/>
 	<bean id="appointmentLogic" class="org.openmeetings.app.data.calendar.management.AppointmentLogic"/>
+	<bean id="meetingMemberLogic" class="org.openmeetings.app.data.calendar.management.MeetingMemberLogic"/>
 	<bean id="sessionManagement" class="org.openmeetings.app.data.basic.Sessionmanagement"/>
 	<bean id="userManagement" class="org.openmeetings.app.data.user.Usermanagement"/>
 	<bean id="roomModeratorsDao" class="org.openmeetings.app.data.conference.dao.RoomModeratorsDaoImpl"/>

@@ -19,37 +19,8 @@ public class MeetingMemberService {
 	private Usermanagement userManagement;
 	@Autowired
 	private AuthLevelmanagement authLevelManagement;
-
-	// public Long _addMeetingMember(String SID, String firstname, String
-	// lastname, String memberStatus,
-	// String appointmentStatus, Long appointmentId, Long userid, String email,
-	// String baseUrl,
-	// Long language_id, Boolean isPasswordProtected, String password){
-	//
-	// log.debug("addMeetingMember baseUrl = " + baseUrl);
-	//
-	//
-	// try{
-	//
-	// Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-	// Long user_level = userManagement.getUserLevelByID(users_id);
-	// if (authLevelManagement.checkUserLevel(user_level)) {
-	//
-	// Long id = MeetingMemberLogic.getInstance().addMeetingMember( firstname,
-	// lastname, memberStatus,
-	// appointmentStatus, appointmentId, userid, email, baseUrl, users_id,
-	// false,
-	// language_id, isPasswordProtected, password);
-	//
-	// log.debug("addMeetingmember : newId : " + id);
-	// return id;
-	// }
-	// } catch (Exception err) {
-	// log.error("[addMeetingMember]",err);
-	// }
-	// return null;
-	//
-	// }
+	@Autowired
+	private MeetingMemberLogic meetingMemberLogic;
 
 	public Long updateMeetingMember(String SID, Long meetingMemberId,
 			String firstname, String lastname, String memberStatus,
@@ -62,7 +33,7 @@ public class MeetingMemberService {
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				return MeetingMemberLogic.getInstance().updateMeetingMember(
+				return meetingMemberLogic.updateMeetingMember(
 						meetingMemberId, firstname, lastname, memberStatus,
 						appointmentStatus, appointmentId, userid, email);
 			}
@@ -83,7 +54,7 @@ public class MeetingMemberService {
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				return MeetingMemberLogic.getInstance().deleteMeetingMember(
+				return meetingMemberLogic.deleteMeetingMember(
 						meetingMemberId, users_id, language_id);
 			}
 		} catch (Exception err) {

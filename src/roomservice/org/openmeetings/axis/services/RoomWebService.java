@@ -58,13 +58,8 @@ public class RoomWebService {
 	private ConferenceService conferenceService;
 	@Autowired
 	private ClientListManager clientListManager;
-
-	// TODO: Not implemented yet
-	// public List<Rooms_Organisation> getRoomsByOrganisationAndType(String SID,
-	// long organisation_id, long roomtypes_id) {
-	// return conferenceService.getRoomsByOrganisationAndType(SID,
-	// organisation_id, roomtypes_id);
-	// }
+	@Autowired
+	private MeetingMemberLogic meetingMemberLogic;
 
 	public Rooms[] getRoomsPublic(String SID, Long roomtypes_id)
 			throws AxisFault {
@@ -1466,7 +1461,7 @@ public class RoomWebService {
 					return -1L;
 				}
 				// Not In Remote List available - extern user
-				Long memberId = MeetingMemberLogic.getInstance()
+				Long memberId = meetingMemberLogic
 						.addMeetingMember(firstname, lastname, "0", "0",
 								appointment.getAppointmentId(), null, email,
 								baseUrl, null, new Boolean(false), language_id,
@@ -1503,7 +1498,7 @@ public class RoomWebService {
 				}
 
 				// Not In Remote List available - extern user
-				Long memberId = MeetingMemberLogic.getInstance()
+				Long memberId = meetingMemberLogic
 						.addMeetingMember(firstname, lastname, "0", "0",
 								appointment.getAppointmentId(), null, email,
 								baseUrl, null, new Boolean(false), language_id,

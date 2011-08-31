@@ -57,6 +57,8 @@ public class AppointmentDaoImpl {
 	private UsersDaoImpl usersDao;
 	@Autowired
 	private Invitationmanagement invitationManagement;
+	@Autowired
+	private MeetingMemberLogic meetingMemberLogic;
 
 	/*
 	 * insert, update, delete, select
@@ -525,7 +527,7 @@ public class AppointmentDaoImpl {
 				if (!found) {
 
 					// Not in List in client delete it
-					MeetingMemberLogic.getInstance().deleteMeetingMember(
+					meetingMemberLogic.deleteMeetingMember(
 							memberRemote.getMeetingMemberId(), users_id,
 							language_id);
 					// meetingMemberDao.deleteMeetingMember(memberRemote.getMeetingMemberId());
@@ -570,7 +572,7 @@ public class AppointmentDaoImpl {
 								"jNameTimeZone").toString();
 
 						// Not In Remote List available - intern OR extern user
-						MeetingMemberLogic.getInstance().addMeetingMember(
+						meetingMemberLogic.addMeetingMember(
 								clientMember.get("firstname").toString(),
 								clientMember.get("lastname").toString(),
 								"0", // member - Status
