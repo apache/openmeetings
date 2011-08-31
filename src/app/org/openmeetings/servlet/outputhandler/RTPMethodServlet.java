@@ -53,7 +53,7 @@ public class RTPMethodServlet extends HttpServlet {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
 				return (ScopeApplicationAdapter) context
-						.getBean("scopeApplicationAdapter");
+						.getBean("web.handler");
 			}
 		} catch (Exception err) {
 			log.error("[getScopeApplicationAdapter]", err);
