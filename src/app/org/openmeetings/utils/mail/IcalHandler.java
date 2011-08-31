@@ -32,7 +32,6 @@ import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 
@@ -40,8 +39,6 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  */
 public class IcalHandler {
-
-	@Autowired
 	private OmTimeZoneDaoImpl omTimeZoneDaoImpl;
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
@@ -59,9 +56,6 @@ public class IcalHandler {
 	public final static String ICAL_METHOD_CANCEL = "CANCEL";
 	public final static String ICAL_METHOD_REFRESH = "REFRESH";
 
-	// Default is a new Request
-	private String ICAL_METHOD = ICAL_METHOD_REQUEST;
-
 	/**
 	 * Konstruktor with DefaultTimeZone
 	 * 
@@ -69,9 +63,10 @@ public class IcalHandler {
 	 *            (@see IcalHandler Constants)
 	 * @throws Exception
 	 */
-	public IcalHandler(String methodType) {
+	public IcalHandler(OmTimeZoneDaoImpl omTimeZoneDaoImpl, String methodType) {
 		log.debug("Icalhandler method type : " + methodType);
-
+		this.omTimeZoneDaoImpl = omTimeZoneDaoImpl;
+		
 		icsCalendar = new net.fortuna.ical4j.model.Calendar();
 
 		// timeRegistry =
@@ -91,8 +86,6 @@ public class IcalHandler {
 			icsCalendar.getProperties().add(Method.CANCEL);
 		else
 			icsCalendar.getProperties().add(Method.REQUEST);
-
-		ICAL_METHOD = methodType;
 
 	}
 

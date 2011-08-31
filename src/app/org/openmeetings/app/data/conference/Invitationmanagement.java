@@ -686,7 +686,7 @@ public class Invitationmanagement {
 		// OmTimeZone omTimeZone =
 		// omTimeZoneDaoImpl.getOmTimeZone(jNameTimeZone);
 
-		IcalHandler handler = new IcalHandler(IcalHandler.ICAL_METHOD_CANCEL);
+		IcalHandler handler = new IcalHandler(omTimeZoneDaoImpl, IcalHandler.ICAL_METHOD_CANCEL);
 
 		// refresh appointment
 		point = appointmentLogic.getAppointMentById(point.getAppointmentId());
@@ -739,7 +739,7 @@ public class Invitationmanagement {
 		// Defining Organizer
 		Users user = userManagement.getUserById(organizer_userId);
 
-		IcalHandler handler = new IcalHandler(IcalHandler.ICAL_METHOD_REQUEST);
+		IcalHandler handler = new IcalHandler(omTimeZoneDaoImpl, IcalHandler.ICAL_METHOD_REQUEST);
 
 		// refresh appointment
 		point = appointmentLogic.getAppointMentById(point.getAppointmentId());
@@ -800,7 +800,7 @@ public class Invitationmanagement {
 					username, message, invitation_link, language_id, starttime,
 					endtime);
 
-			IcalHandler handler = new IcalHandler(
+			IcalHandler handler = new IcalHandler(omTimeZoneDaoImpl,
 					IcalHandler.ICAL_METHOD_REQUEST);
 
 			Appointment point = appointmentLogic
@@ -1105,6 +1105,7 @@ public class Invitationmanagement {
 			Query query = em.createQuery(hql);
 			query.setParameter("appointmentId", appointmentId);
 
+			@SuppressWarnings("unchecked")
 			List<Invitations> listInvitations = query.getResultList();
 
 			for (Invitations inv : listInvitations) {
