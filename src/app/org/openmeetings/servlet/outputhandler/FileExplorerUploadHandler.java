@@ -42,7 +42,7 @@ public class FileExplorerUploadHandler extends UploadHandler {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
-				return (FileProcessor) context.getBean("fileProcessor");
+				return (FileProcessor) context.getBean("openmeetings.FileProcessor");
 			}
 		} catch (Exception err) {
 			log.error("[getFileProcessor]", err);

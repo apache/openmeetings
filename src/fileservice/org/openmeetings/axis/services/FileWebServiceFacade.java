@@ -29,7 +29,7 @@ public class FileWebServiceFacade {
 		try {
 			ApplicationContext context = WebApplicationContextUtils
 					.getWebApplicationContext(getServletContext());
-			return (FileWebService) context.getBean("fileServiceSoapProxy");
+			return (FileWebService) context.getBean("fileWebService");
 		} catch (Exception err) {
 			log.error("[geRoomServiceProxy]", err);
 		}
