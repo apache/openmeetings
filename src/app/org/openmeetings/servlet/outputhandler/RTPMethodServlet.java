@@ -66,7 +66,7 @@ public class RTPMethodServlet extends HttpServlet {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
-				return (ClientListManager) context.getBean("clientListManager");
+				return (ClientListManager) context.getBean("openmeetings.ClientListManager");
 			}
 		} catch (Exception err) {
 			log.error("[getClientListManager]", err);

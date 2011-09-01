@@ -104,7 +104,6 @@ public class CalendarServlet extends HttpServlet {
 		return null;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	protected void service(HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws ServletException,

@@ -75,7 +75,7 @@ public class MethodGateway extends HttpServlet {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
-				return (MainService) context.getBean("mainService");
+				return (MainService) context.getBean("xmlcrm.service");
 			}
 		} catch (Exception err) {
 			log.error("[getMainService]", err);

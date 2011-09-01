@@ -33,7 +33,7 @@ public class RoomWebServiceFacade {
 		try {
 			ApplicationContext context = WebApplicationContextUtils
 					.getWebApplicationContext(getServletContext());
-			return (RoomWebService) context.getBean("roomServiceSoapProxy");
+			return (RoomWebService) context.getBean("roomWebService");
 		} catch (Exception err) {
 			log.error("[geRoomServiceProxy]", err);
 		}

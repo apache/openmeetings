@@ -201,16 +201,7 @@ public class FileProcessor {
             HashMap<String, Object> processThumb = generateThumbs.generateThumb("_thumb_", current_dir, completeName, 50);
             returnError.put("processThumb", processThumb);
         } else if (isVideo) {
-
-            // ApplicationContext context =
-            // WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-            
-            // FlvExplorerConverter flvExplorerConverter =
-            // (FlvExplorerConverter)
-            // context.getBean("openmeetings.FlvExplorerConverter");
-            
-             this.flvExplorerConverter.startConversion(fileExplorerItemId, completeName + newFileExtDot);
-
+             flvExplorerConverter.startConversion(fileExplorerItemId, completeName + newFileExtDot);
         }
 		
         returnError.put("returnAttributes", returnAttributes);
