@@ -117,11 +117,19 @@ public class DownloadHandler extends HttpServlet {
 				if (parentPath == null) {
 					parentPath = "nomodule";
 				}
+				
+				if (parentPath.startsWith("..")) {
+					throw new Exception("Error on parentPath");
+				}
 
 				String requestedFile = httpServletRequest
 						.getParameter("fileName");
 				if (requestedFile == null) {
 					requestedFile = "";
+				}
+				
+				if (requestedFile.startsWith("..")) {
+					throw new Exception("Error on fileName");
 				}
 
 				// make a complete name out of domain(organisation) + roomname
