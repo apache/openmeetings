@@ -261,11 +261,7 @@ public class StreamService implements IPendingServiceCallback {
 			RoomClient currentClient = this.clientListManager
 					.getClientByStreamId(current.getClient().getId());
 
-			RoomRecording roomRecording = roomRecordingList
-					.get(roomrecordingName);
 			Long room_id = currentClient.getRoom_id();
-
-			String conferenceType = roomRecording.getConferenceType();
 
 			// get all stream and stop recording them
 			// Todo: Check that nobody does Recording at the same time Issue 253
@@ -771,7 +767,6 @@ public class StreamService implements IPendingServiceCallback {
 					.get(roomrecordingName);
 			Date recordingsStartTime = roomRecording.getStarttime();
 			Date currentDate = new Date();
-			List<RoomStream> roomStreams = roomRecording.getRoomStreams();
 
 			RoomStream roomStream = new RoomStream();
 			roomStream.setStreamName("");

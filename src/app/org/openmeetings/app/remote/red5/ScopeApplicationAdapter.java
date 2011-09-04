@@ -579,45 +579,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 					+ room.getClients().size() + " " + room.getContextPath()
 					+ " " + room.getName());
 
-			// IConnection current = Red5.getConnectionLocal();
-
 			RoomClient currentClient = this.clientListManager
 					.getClientByStreamId(client.getId());
-
-			// //In case its a screen sharing we start a new Video for that
-			// if (currentClient != null && currentClient.getIsScreenClient() !=
-			// null && currentClient.getIsScreenClient()) {
-			//
-			// log.debug("start streamPublishStart Is Screen Sharing -- Stop ");
-			//
-			// //Notify all users of the same Scope
-			// Collection<Set<IConnection>> conCollection =
-			// current.getScope().getConnections();
-			// for (Set<IConnection> conset : conCollection) {
-			// for (IConnection conn : conset) {
-			// if (conn != null) {
-			// if (conn instanceof IServiceCapableConnection) {
-			// if (conn.equals(current)){
-			// continue;
-			// } else {
-			// RoomClient rcl =
-			// this.clientListManager.getClientByStreamId(conn.getClient().getId());
-			// //log.debug("is this users still alive? :"+rcl);
-			// //Check if the Client is in the same room and same domain
-			// IServiceCapableConnection iStream = (IServiceCapableConnection)
-			// conn;
-			// //log.info("IServiceCapableConnection ID " +
-			// iStream.getClient().getId());
-			// iStream.invoke("stopRed5ScreenSharing",new Object[] {
-			// currentClient }, this);
-			// log.debug("send Notification to");
-			// }
-			// }
-			// }
-			// }
-			// }
-			//
-			// }
 
 			// The Room Client can be null if the Client left the room by using
 			// logicalRoomLeave
@@ -771,17 +734,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 										log.debug("###########[roomLeave]");
 										if (rcl.getIsRecording()) {
 											log.debug("*** roomLeave Any Client is Recording - stop that");
-											// StreamService.addRoomClientEnterEventFunc(rcl,
-											// rcl.getRoomRecordingName(),
-											// rcl.getUserip(), false);
-											// StreamService.stopRecordingShowForClient(cons,
-											// currentClient,
-											// rcl.getRoomRecordingName(),
-											// false);
-
-											// this.flvRecorderService.stopRecordingShowForClient(cons,
-											// currentClient, false);
-
 											this.flvRecorderService
 													.stopRecordingShowForClient(
 															cons, currentClient);
