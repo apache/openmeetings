@@ -175,7 +175,7 @@ public class BackupImport {
 					}
 
 					ServletMultipartRequest upload = new ServletMultipartRequest(
-							httpServletRequest, 1000 * 1024 * 1024 * 1024, "UTF8"); // max 1000MB
+							httpServletRequest, 1000 * 1024 * 1024, "UTF8"); // max 1000MB
 					InputStream is = upload.getFileContents("Filedata");
 
 					String fileSystemName = upload.getBaseFilename("Filedata");

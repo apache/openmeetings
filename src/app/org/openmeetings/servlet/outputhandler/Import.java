@@ -157,7 +157,7 @@ public class Import extends HttpServlet {
 			// if (user_level!=null && user_level > 0) {
 			if (getAuthLevelManagement().checkAdminLevel(user_level)) {
 				ServletMultipartRequest upload = new ServletMultipartRequest(
-						httpServletRequest, 100 * 1024 * 1024 * 1024, "UTF8"); // max 100MB
+						httpServletRequest, 100 * 1024 * 1024, "UTF8"); // max 100MB
 				InputStream is = upload.getFileContents("Filedata");
 
 				if (moduleName.equals("users")) {
