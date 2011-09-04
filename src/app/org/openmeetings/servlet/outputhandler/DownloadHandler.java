@@ -31,7 +31,6 @@ public class DownloadHandler extends HttpServlet {
 	private static final String defaultProfileImageNameBig = "_big_profile_pic.jpg";
 	private static final String defaultChatImageName = "_chat_profile_pic.jpg";
 	private static final String defaultSWFName = "deleted.swf";
-	private static final String defaultPDFName = "deleted.pdf";
 
 	public Sessionmanagement getSessionManagement() {
 		try {
@@ -59,6 +58,16 @@ public class DownloadHandler extends HttpServlet {
 		return null;
 	}
 
+	private void openOrCreateFolder(String dir) {
+		File f = new File(dir);
+		if (!f.exists()) {
+			boolean c = f.mkdir();
+			if (!c) {
+				log.error("cannot write to directory");
+			}
+		}
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -118,20 +127,12 @@ public class DownloadHandler extends HttpServlet {
 					parentPath = "nomodule";
 				}
 				
-				if (parentPath.startsWith("..")) {
-					throw new Exception("Error on parentPath");
-				}
-
 				String requestedFile = httpServletRequest
 						.getParameter("fileName");
 				if (requestedFile == null) {
 					requestedFile = "";
 				}
 				
-				if (requestedFile.startsWith("..")) {
-					throw new Exception("Error on fileName");
-				}
-
 				// make a complete name out of domain(organisation) + roomname
 				String roomName = room_id;
 				// trim whitespaces cause it is a directory name
@@ -147,10 +148,8 @@ public class DownloadHandler extends HttpServlet {
 
 				// Add the Folder for the Room
 				if (moduleName.equals("lzRecorderApp")) {
-
 					working_dir = current_dir + "streams" + File.separatorChar
 							+ "hibernate" + File.separatorChar;
-
 				} else if (moduleName.equals("videoconf1")) {
 					if (parentPath.length() != 0) {
 						if (parentPath.equals("/")) {
@@ -167,32 +166,14 @@ public class DownloadHandler extends HttpServlet {
 					}
 				} else if (moduleName.equals("userprofile")) {
 					working_dir += "profiles" + File.separatorChar;
-					File f = new File(working_dir);
-					if (!f.exists()) {
-						boolean c = f.mkdir();
-						if (!c) {
-							log.error("cannot write to directory");
-						}
-					}
+					openOrCreateFolder(working_dir);
 
 					working_dir += ScopeApplicationAdapter.profilesPrefix
 							+ users_id + File.separatorChar;
-					File f2 = new File(working_dir);
-					if (!f2.exists()) {
-						boolean c = f2.mkdir();
-						if (!c) {
-							log.error("cannot write to directory");
-						}
-					}
+					openOrCreateFolder(working_dir);
 				} else if (moduleName.equals("remoteuserprofile")) {
 					working_dir += "profiles" + File.separatorChar;
-					File f = new File(working_dir);
-					if (!f.exists()) {
-						boolean c = f.mkdir();
-						if (!c) {
-							log.error("cannot write to directory");
-						}
-					}
+					openOrCreateFolder(working_dir);
 
 					String remoteUser_id = httpServletRequest
 							.getParameter("remoteUserid");
@@ -202,23 +183,10 @@ public class DownloadHandler extends HttpServlet {
 
 					working_dir += ScopeApplicationAdapter.profilesPrefix
 							+ remoteUser_id + File.separatorChar;
-					File f2 = new File(working_dir);
-					if (!f2.exists()) {
-						boolean c = f2.mkdir();
-						if (!c) {
-							log.error("cannot write to directory");
-						}
-					}
-
+					openOrCreateFolder(working_dir);
 				} else if (moduleName.equals("remoteuserprofilebig")) {
 					working_dir += "profiles" + File.separatorChar;
-					File f = new File(working_dir);
-					if (!f.exists()) {
-						boolean c = f.mkdir();
-						if (!c) {
-							log.error("cannot write to directory");
-						}
-					}
+					openOrCreateFolder(working_dir);
 
 					String remoteUser_id = httpServletRequest
 							.getParameter("remoteUserid");
@@ -228,26 +196,14 @@ public class DownloadHandler extends HttpServlet {
 
 					working_dir += ScopeApplicationAdapter.profilesPrefix
 							+ remoteUser_id + File.separatorChar;
-					File f2 = new File(working_dir);
-					if (!f2.exists()) {
-						boolean c = f2.mkdir();
-						if (!c) {
-							log.error("cannot write to directory");
-						}
-					}
+					openOrCreateFolder(working_dir);
 
 					requestedFile = this.getBigProfileUserName(working_dir);
 
 				} else if (moduleName.equals("chat")) {
 
 					working_dir += "profiles" + File.separatorChar;
-					File f = new File(working_dir);
-					if (!f.exists()) {
-						boolean c = f.mkdir();
-						if (!c) {
-							log.error("cannot write to directory");
-						}
-					}
+					openOrCreateFolder(working_dir);
 
 					String remoteUser_id = httpServletRequest
 							.getParameter("remoteUserid");
@@ -257,16 +213,9 @@ public class DownloadHandler extends HttpServlet {
 
 					working_dir += ScopeApplicationAdapter.profilesPrefix
 							+ remoteUser_id + File.separatorChar;
-					File f2 = new File(working_dir);
-					if (!f2.exists()) {
-						boolean c = f2.mkdir();
-						if (!c) {
-							log.error("cannot write to directory");
-						}
-					}
+					openOrCreateFolder(working_dir);
 
 					requestedFile = this.getChatUserName(working_dir);
-
 				} else {
 					working_dir = working_dir + roomName + File.separatorChar;
 				}
@@ -340,7 +289,11 @@ public class DownloadHandler extends HttpServlet {
 						// no file to handle abort processing
 						return;
 					}
-
+					//Requested file is outside OM webapp folder
+					if (!f2.getCanonicalPath().startsWith(current_dir)) {
+						throw new Exception("Invalid file requested");
+					}
+					
 					// Get file and handle download
 					RandomAccessFile rf = new RandomAccessFile(full_path, "r");
 
