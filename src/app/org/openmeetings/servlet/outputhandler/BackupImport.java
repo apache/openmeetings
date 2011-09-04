@@ -175,14 +175,10 @@ public class BackupImport {
 					}
 
 					ServletMultipartRequest upload = new ServletMultipartRequest(
-							httpServletRequest, 104857600 * 10, "utf-8"); // max
-																			// 1000
-																			// mb
+							httpServletRequest, 1000 * 1024 * 1024 * 1024, "UTF8"); // max 1000MB
 					InputStream is = upload.getFileContents("Filedata");
 
-					@SuppressWarnings("deprecation")
-					String fileSystemName = upload
-							.getFileSystemName("Filedata");
+					String fileSystemName = upload.getBaseFilename("Filedata");
 
 					StringUtils.deleteWhitespace(fileSystemName);
 
@@ -580,9 +576,9 @@ public class BackupImport {
 						Element itemUsers = innerIter.next();
 
 						Users us = new Users();
+						Long userId = Long.valueOf(unformatString(itemUsers
+								.element("user_id").getText()));
 
-						us.setUser_id(Long.valueOf(unformatString(itemUsers
-								.element("user_id").getText())));
 						us.setAge(CalendarPatterns
 								.parseDate(unformatString(itemUsers.element(
 										"age").getText())));
@@ -811,38 +807,7 @@ public class BackupImport {
 
 						}
 
-						Long userId = us.getUser_id();
-
-						// check if login does already exists, but only for
-						// users that have been created in the OpenMeetings
-						// Administration
-						// maybe we should check status too
-						/*
-						 * if ((us.getExternalUserId() == null ||
-						 * us.getExternalUserId() == 0) && email != null &&
-						 * email.length() > 0){
-						 * 
-						 * Users storedUser =
-						 * Usermanagement.getInstance().getUserByLoginOrEmail
-						 * (us.getLogin());
-						 * 
-						 * if (storedUser != null) { log.info(
-						 * "A user with the given login does already exist "
-						 * +us.getLogin()); } else {
-						 * 
-						 * storedUser =
-						 * Usermanagement.getInstance().getUserByLoginOrEmail
-						 * (email);
-						 * 
-						 * if (storedUser != null) { log.info(
-						 * "A user with the given email as login does already exist "
-						 * +email); } } if (storedUser != null) {
-						 * usersMap.put(userId, storedUser.getUser_id());
-						 * continue; } }
-						 */
-
 						log.debug("Import User ID " + userId);
-						us.setUser_id(null);
 						us.setStarttime(new Date());
 						Long actualNewUserId = userManagement.addUserBackup(us);
 						usersMap.put(userId, actualNewUserId);

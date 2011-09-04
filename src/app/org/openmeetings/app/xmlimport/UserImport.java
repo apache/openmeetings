@@ -33,18 +33,6 @@ public class UserImport {
 	@Autowired
 	private UsersDaoImpl usersDao;
 
-	public UserImport() {
-	}
-
-	private static UserImport instance = null;
-
-	public static synchronized UserImport getInstance() {
-		if (instance == null) {
-			instance = new UserImport();
-		}
-		return instance;
-	}
-
 	public Long addUsersByDocument(InputStream is) throws Exception {
 
 		SAXReader reader = new SAXReader();
@@ -52,8 +40,9 @@ public class UserImport {
 
 		Element root = document.getRootElement();
 
-		for (Iterator i = root.elementIterator(); i.hasNext();) {
-			Element itemObject = (Element) i.next();
+		for (@SuppressWarnings("unchecked")
+		Iterator<Element> i = root.elementIterator(); i.hasNext();) {
+			Element itemObject = i.next();
 			if (itemObject.getName().equals("users")) {
 				this.addUsersByDocument(itemObject);
 			}
@@ -64,8 +53,9 @@ public class UserImport {
 
 	private Long addUsersByDocument(Element userRoot) throws Exception {
 
-		for (Iterator i = userRoot.elementIterator("user"); i.hasNext();) {
-			Element itemUsers = (Element) i.next();
+		for (@SuppressWarnings("unchecked")
+		Iterator<Element> i = userRoot.elementIterator("user"); i.hasNext();) {
+			Element itemUsers = i.next();
 
 			Users us = new Users();
 
@@ -121,34 +111,40 @@ public class UserImport {
 
 			boolean mailCheck = true;
 
-			for (Iterator itMail = itemUsers.elementIterator("emails"); itMail
+			for (@SuppressWarnings("unchecked")
+			Iterator<Element> itMail = itemUsers.elementIterator("emails"); itMail
 					.hasNext();) {
-				Element itemElement = (Element) itMail.next();
-				for (Iterator mailIterator = itemElement
+				Element itemElement = itMail.next();
+				for (@SuppressWarnings("unchecked")
+				Iterator<Element> mailIterator = itemElement
 						.elementIterator("mail"); mailIterator.hasNext();) {
-					Element mailElement = (Element) mailIterator.next();
+					Element mailElement = mailIterator.next();
 					email = mailElement.getText();
-					if (!emailManagement.checkUserEMail(mailElement.getText()))
+					if (!emailManagement.checkUserEMail(mailElement.getText())) {
 						mailCheck = false;
+						log.info("mailCheck = " + mailCheck);
+					}
 				}
 			}
 
 			// check for duplicate Login or mail:
 			if (usersDao.checkUserLogin(us.getLogin()) && mailCheck) {
 				Long address_id = addressmanagement.saveAddress(street, zip,
-						town, state_id, additionalname, "", fax, phone, email);
+						town, state_id, additionalname, comment, fax, phone, email);
 
 				us.setAdresses(addressmanagement.getAdressbyId(address_id));
 
-				Long user_id = userManagement.addUser(us);
+				userManagement.addUser(us);
 
-				for (Iterator itOrga = itemUsers
+				for (@SuppressWarnings("unchecked")
+				Iterator<Element> itOrga = itemUsers
 						.elementIterator("organisations"); itOrga.hasNext();) {
-					Element itemElement = (Element) itOrga.next();
-					for (Iterator orgIterator = itemElement
+					Element itemElement = itOrga.next();
+					for (@SuppressWarnings("unchecked")
+					Iterator<Element> orgIterator = itemElement
 							.elementIterator("organisation_id"); orgIterator
 							.hasNext();) {
-						Element orgElement = (Element) orgIterator.next();
+						Element orgElement = orgIterator.next();
 						Long organisation_id = Long.valueOf(
 								orgElement.getText()).longValue();
 						organisationmanagement.addUserToOrganisation(

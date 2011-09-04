@@ -81,7 +81,21 @@ public class Import extends HttpServlet {
 		}
 		return null;
 	}
-
+	
+	public UserImport getUserImport() {
+		try {
+			if (ScopeApplicationAdapter.initComplete) {
+				ApplicationContext context = WebApplicationContextUtils
+						.getWebApplicationContext(getServletContext());
+				return (UserImport) context
+						.getBean("userImport");
+			}
+		} catch (Exception err) {
+			log.error("[getScopeApplicationAdapter]", err);
+		}
+		return null;
+	}
+	
 	public AuthLevelmanagement getAuthLevelManagement() {
 		try {
 			if (ScopeApplicationAdapter.initComplete) {
@@ -111,7 +125,7 @@ public class Import extends HttpServlet {
 		try {
 
 			if (getUserManagement() == null || getAuthLevelManagement() == null
-					|| getScopeApplicationAdapter() == null
+					|| getScopeApplicationAdapter() == null || getUserImport() == null
 					|| getSessionManagement() == null || getUsersDao() == null) {
 				return;
 			}
@@ -142,22 +156,13 @@ public class Import extends HttpServlet {
 
 			// if (user_level!=null && user_level > 0) {
 			if (getAuthLevelManagement().checkAdminLevel(user_level)) {
+				ServletMultipartRequest upload = new ServletMultipartRequest(
+						httpServletRequest, 100 * 1024 * 1024 * 1024, "UTF8"); // max 100MB
+				InputStream is = upload.getFileContents("Filedata");
+
 				if (moduleName.equals("users")) {
 					log.error("Import Users");
-					String organisation = httpServletRequest
-							.getParameter("secondid");
-					if (organisation == null) {
-						organisation = "0";
-					}
-					Long organisation_id = Long.valueOf(organisation)
-							.longValue();
-					log.debug("organisation_id: " + organisation_id);
-
-					ServletMultipartRequest upload = new ServletMultipartRequest(
-							httpServletRequest, 104857600); // max100 mb
-					InputStream is = upload.getFileContents("Filedata");
-
-					UserImport.getInstance().addUsersByDocument(is);
+					getUserImport().addUsersByDocument(is);
 
 				} else if (moduleName.equals("language")) {
 					log.error("Import Language");
@@ -169,13 +174,8 @@ public class Import extends HttpServlet {
 					Long language_id = Long.valueOf(language).longValue();
 					System.out.println("language_id: " + language_id);
 
-					ServletMultipartRequest upload = new ServletMultipartRequest(
-							httpServletRequest, 104857600); // max100 mb
-					InputStream is = upload.getFileContents("Filedata");
-
 					LanguageImport.getInstance().addLanguageByDocument(
 							language_id, is);
-
 				}
 			} else {
 				System.out
