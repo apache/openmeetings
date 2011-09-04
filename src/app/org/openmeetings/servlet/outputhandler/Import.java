@@ -13,12 +13,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
+import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.xmlimport.LanguageImport;
 import org.openmeetings.app.xmlimport.UserImport;
+import org.openmeetings.utils.ImportHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.context.ApplicationContext;
@@ -48,6 +50,19 @@ public class Import extends HttpServlet {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
 				return (Usermanagement) context.getBean("userManagement");
+			}
+		} catch (Exception err) {
+			log.error("[getUserManagement]", err);
+		}
+		return null;
+	}
+
+	public Configurationmanagement getCfgManagement() {
+		try {
+			if (ScopeApplicationAdapter.initComplete) {
+				ApplicationContext context = WebApplicationContextUtils
+						.getWebApplicationContext(getServletContext());
+				return (Configurationmanagement) context.getBean("cfgManagement");
 			}
 		} catch (Exception err) {
 			log.error("[getUserManagement]", err);
@@ -157,7 +172,7 @@ public class Import extends HttpServlet {
 			// if (user_level!=null && user_level > 0) {
 			if (getAuthLevelManagement().checkAdminLevel(user_level)) {
 				ServletMultipartRequest upload = new ServletMultipartRequest(
-						httpServletRequest, 100 * 1024 * 1024, "UTF8"); // max 100MB
+						httpServletRequest, ImportHelper.getMaxUploadSize(getCfgManagement(), user_level), "UTF8");
 				InputStream is = upload.getFileContents("Filedata");
 
 				if (moduleName.equals("users")) {

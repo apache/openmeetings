@@ -233,8 +233,9 @@ public class CalendarServlet extends HttpServlet {
 					appointment.setAppointmentEndtime(new Date(appointment
 							.getAppointmentEndtime().getTime() + offset));
 
-					int dayAsInt = appointment.getAppointmentStarttime()
-							.getDate();
+					Calendar appStart = Calendar.getInstance();
+					appStart.setTime(appointment.getAppointmentStarttime());
+					int dayAsInt = appStart.get(Calendar.DATE);
 
 					if (previousDay != dayAsInt) {
 
@@ -244,7 +245,7 @@ public class CalendarServlet extends HttpServlet {
 
 					}
 
-					if (appointment.getAppointmentStarttime().getMonth() + 1 == Integer
+					if (appStart.get(Calendar.MONTH) + 1 == Integer
 							.parseInt(monthStr)) {
 
 						Element event = day.addElement("event");
@@ -279,36 +280,29 @@ public class CalendarServlet extends HttpServlet {
 						Element start = event.addElement("start");
 
 						start.addAttribute("year", ""
-								+ (appointment.getAppointmentStarttime()
-										.getYear() + 1900));
+								+ appStart.get(Calendar.YEAR));
 						start.addAttribute("month", ""
-								+ (appointment.getAppointmentStarttime()
-										.getMonth() + 1));
+								+ (appStart.get(Calendar.MONTH) + 1));
 						start.addAttribute("day", ""
-								+ appointment.getAppointmentStarttime()
-										.getDate());
+								+ appStart.get(Calendar.DATE));
 						start.addAttribute("hour", ""
-								+ appointment.getAppointmentStarttime()
-										.getHours());
+								+ appStart.get(Calendar.HOUR_OF_DAY));
 						start.addAttribute("minute", ""
-								+ appointment.getAppointmentStarttime()
-										.getMinutes());
+								+ appStart.get(Calendar.MINUTE));
 
+						Calendar appEnd = Calendar.getInstance();
+						appEnd.setTime(appointment.getAppointmentEndtime());
 						Element end = event.addElement("end");
 						end.addAttribute("year", ""
-								+ (appointment.getAppointmentEndtime()
-										.getYear() + 1900));
+								+ appEnd.get(Calendar.YEAR));
 						end.addAttribute("month", ""
-								+ (appointment.getAppointmentEndtime()
-										.getMonth() + 1));
+								+ (appEnd.get(Calendar.MONTH) + 1));
 						end.addAttribute("day", ""
-								+ appointment.getAppointmentEndtime().getDate());
+								+ appEnd.get(Calendar.DATE));
 						end.addAttribute("hour", ""
-								+ appointment.getAppointmentEndtime()
-										.getHours());
+								+ appEnd.get(Calendar.HOUR));
 						end.addAttribute("minute", ""
-								+ appointment.getAppointmentEndtime()
-										.getMinutes());
+								+ appEnd.get(Calendar.MINUTE));
 
 						Element category = event.addElement("category");
 						category.addAttribute("value", ""

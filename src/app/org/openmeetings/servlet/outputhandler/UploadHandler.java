@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
@@ -24,6 +25,7 @@ import org.openmeetings.app.documents.GeneratePDF;
 import org.openmeetings.app.documents.GenerateThumbs;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.ImportHelper;
 import org.openmeetings.utils.StoredFile;
 import org.openmeetings.utils.stringhandlers.StringComparer;
 import org.red5.logging.Red5LoggerFactory;
@@ -134,6 +136,19 @@ public class UploadHandler extends HttpServlet {
 		return null;
 	}
 
+	public Configurationmanagement getCfgManagement() {
+		try {
+			if (ScopeApplicationAdapter.initComplete) {
+				ApplicationContext context = WebApplicationContextUtils
+						.getWebApplicationContext(getServletContext());
+				return (Configurationmanagement) context.getBean("cfgManagement");
+			}
+		} catch (Exception err) {
+			log.error("[getUserManagement]", err);
+		}
+		return null;
+	}
+
 	@Override
 	protected void service(HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws ServletException,
@@ -208,12 +223,11 @@ public class UploadHandler extends HttpServlet {
 		boolean userProfile = moduleName.equals("userprofile");
 
 		ServletMultipartRequest upload = new ServletMultipartRequest(
-				httpServletRequest, 104857600, "utf-8"); // max 100 mb
+				httpServletRequest, ImportHelper.getMaxUploadSize(getCfgManagement()), "UTF8");
 		InputStream is = upload.getFileContents("Filedata");
 
 		// trim whitespace
-		@SuppressWarnings("deprecation")
-		String fileSystemName = upload.getFileSystemName("Filedata");
+		String fileSystemName = upload.getBaseFilename("Filedata");
 		fileSystemName = StringUtils.deleteWhitespace(fileSystemName);
 
 		// Flash cannot read the response of an upload

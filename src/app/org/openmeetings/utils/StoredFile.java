@@ -37,7 +37,7 @@ public class StoredFile {
             Arrays.asList(new String[] { "jpg", "xchart" }));
 
     private final String name;
-    private final String ext;
+	private final String ext;
 
     public StoredFile(String name, String ext) {
         this.name = name;
@@ -94,4 +94,8 @@ public class StoredFile {
     public boolean isAsIs() {
         return asIsExtensions.contains(ext);
     }
+
+    public String getName() {
+		return name;
+	}
 }

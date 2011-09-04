@@ -61,11 +61,11 @@ public class HttpServletRequestEx extends HttpServletRequestWrapper {
 		}
 	}
 
-	public Map getParameterMap() {		
+	public Map<String, String> getParameterMap() {		
 		return new HashMap<String, String>(requestParams_);
 	}
 
-	public Enumeration getParameterNames() {
+	public Enumeration<String> getParameterNames() {
 		return Collections.enumeration(requestParams_.keySet());
 	}
 

@@ -9,9 +9,11 @@ import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
+import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.file.FileProcessor;
 import org.openmeetings.app.data.file.dao.FileExplorerItemDaoImpl;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.ImportHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.context.ApplicationContext;
@@ -46,6 +48,19 @@ public class FileExplorerUploadHandler extends UploadHandler {
 			}
 		} catch (Exception err) {
 			log.error("[getFileProcessor]", err);
+		}
+		return null;
+	}
+
+	public Configurationmanagement getCfgManagement() {
+		try {
+			if (ScopeApplicationAdapter.initComplete) {
+				ApplicationContext context = WebApplicationContextUtils
+						.getWebApplicationContext(getServletContext());
+				return (Configurationmanagement) context.getBean("cfgManagement");
+			}
+		} catch (Exception err) {
+			log.error("[getUserManagement]", err);
 		}
 		return null;
 	}
@@ -85,8 +100,7 @@ public class FileExplorerUploadHandler extends UploadHandler {
 		String current_dir = getServletContext().getRealPath("/");
 
 		ServletMultipartRequest upload = new ServletMultipartRequest(
-				httpServletRequest, 104857600 * 5, // max 500 mb
-				"utf-8");
+				httpServletRequest, ImportHelper.getMaxUploadSize(getCfgManagement()), "UTF8");
 		InputStream is = upload.getFileContents("Filedata");
 		String fileSystemName = upload.getBaseFilename("Filedata");
 		log.debug("fileSystemName: " + fileSystemName);

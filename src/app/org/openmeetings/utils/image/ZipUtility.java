@@ -13,12 +13,13 @@ import java.io.ObjectOutputStream;
 
 public class ZipUtility {
 
-    public static Object byteArraytoObject(byte[] data) throws Exception {       
+    @SuppressWarnings("unchecked")
+	public static <T> T byteArraytoObject(byte[] data) throws Exception {       
         ByteArrayInputStream bais = new ByteArrayInputStream(data);              
         ObjectInputStream ois = new ObjectInputStream(bais);
         ois.close();
         bais.close();        
-        return ois.readObject();                
+        return (T)ois.readObject();                
      }     
     
     public static byte[] objecttoByteArray(Object obj) throws IOException {

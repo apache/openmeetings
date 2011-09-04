@@ -24,6 +24,7 @@ import org.openmeetings.app.data.user.Statemanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.ImportHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -466,6 +467,9 @@ public class ImportInitvalues {
 						"0",
 						null,
 						"Display name of the user who draw the current object (User Name auto-disapper after 3 seconds.");
+
+		cfgManagement.addConfByKey(3, "max_upload_size", new Integer(ImportHelper.DEFAULT_MAX_UPLOAD_SIZE).toString(), null,
+				"Maximum size of upload file (bytes)"); //defaults to 1GB
 
 	}
 

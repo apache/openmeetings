@@ -32,6 +32,7 @@ import org.openmeetings.app.persistence.beans.basic.Configuration;
 import org.openmeetings.app.persistence.beans.recording.RoomClient;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.ImportHelper;
 import org.openmeetings.utils.image.ImageUtility;
 import org.openmeetings.utils.image.ZipUtility;
 import org.openmeetings.utils.stringhandlers.StringComparer;
@@ -183,9 +184,8 @@ public class ScreenServlet extends HttpServlet {
 
 			log.debug("record: " + record);
 
-			@SuppressWarnings("deprecation")
 			ServletMultipartRequest upload = new ServletMultipartRequest(
-					httpServletRequest, 104857600); // max 100 mb
+					httpServletRequest, ImportHelper.getMaxUploadSize(getCfgManagement()), "UTF8");
 
 			Long users_id = getSessionManagement().checkSession(sid);
 			Long user_level = getUserManagement().getUserLevelByID(users_id);
@@ -529,15 +529,14 @@ public class ScreenServlet extends HttpServlet {
 						return;
 
 					// entzippen
-					Object o = ZipUtility.byteArraytoObject(ba);
-					ArrayList al = (ArrayList) o;
+					ArrayList<byte[]> al = ZipUtility.<ArrayList<byte[]>>byteArraytoObject(ba);
 
-					byte[] temps = (byte[]) al.get(0);
+					byte[] temps = al.get(0);
 					BufferedImage bi = ImageUtility.read(temps);
 
 					// trim whitespace
 					String fileSystemName = StringUtils.deleteWhitespace(upload
-							.getFileSystemName("Filedata"));
+							.getBaseFilename("Filedata"));
 
 					String newFileSystemName = StringComparer.getInstance()
 							.compareForRealPaths(

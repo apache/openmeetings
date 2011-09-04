@@ -70,6 +70,7 @@ import org.openmeetings.app.persistence.beans.user.UserContacts;
 import org.openmeetings.app.persistence.beans.user.UserSipData;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.ImportHelper;
 import org.openmeetings.utils.math.CalendarPatterns;
 import org.openmeetings.utils.stringhandlers.StringComparer;
 import org.red5.logging.Red5LoggerFactory;
@@ -175,7 +176,7 @@ public class BackupImport {
 					}
 
 					ServletMultipartRequest upload = new ServletMultipartRequest(
-							httpServletRequest, 1000 * 1024 * 1024, "UTF8"); // max 1000MB
+							httpServletRequest, ImportHelper.getMaxUploadSize(cfgManagement, user_level), "UTF8");
 					InputStream is = upload.getFileContents("Filedata");
 
 					String fileSystemName = upload.getBaseFilename("Filedata");
