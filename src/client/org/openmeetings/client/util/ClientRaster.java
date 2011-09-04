@@ -104,14 +104,8 @@ public class ClientRaster {
 					
 //					ByteArrayOutputStream out = new ByteArrayOutputStream();
 //					
-//					// Find a jpeg writer
-//					ImageWriter writer = null;
-//					Iterator<ImageWriter> iter = ImageIO
-//							.getImageWritersByFormatName("jpg");
-//					if (iter.hasNext()) {
-//						writer = iter.next();
-//					}
-//					writer.setOutput(out);
+//					ImageWriter writer = ImageIO.getImageWritersByFormatName( "jpg" ).next();
+//					writer.setOutput(ImageIO.createImageOutputStream(out));
 //					ImageWriteParam iwparam = new JPEGImageWriteParam(
 //							Locale.getDefault());
 //					iwparam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);

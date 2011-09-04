@@ -6,6 +6,9 @@ import java.awt.PointerInfo;
 import java.util.Date;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriter;
+
 import org.apache.log4j.Logger;
 import org.openmeetings.client.beans.ClientConnectionBean;
 import org.openmeetings.client.beans.ClientCursorStatus;
@@ -276,14 +279,8 @@ public class ClientCaptureScreen {
 //			
 //			log.debug("1 buffer start , end , delta "+this.startDate+" "+endTime+" :timeInSeconds: "+timeInSeconds);
 //				
-//	// Find a jpeg writer
-//	ImageWriter writer = null;
-//	Iterator<ImageWriter> iter = ImageIO
-//			.getImageWritersByFormatName("jpg");
-//	if (iter.hasNext()) {
-//		writer = iter.next();
-//	}
-//	writer.setOutput(out);
+//	ImageWriter writer = ImageIO.getImageWritersByFormatName( "jpg" ).next();
+//	writer.setOutput(ImageIO.createImageOutputStream(out));
 //	ImageWriteParam iwparam = new JPEGImageWriteParam(
 //			Locale.getDefault());
 //	iwparam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);

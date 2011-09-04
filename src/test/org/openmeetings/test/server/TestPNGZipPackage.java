@@ -8,7 +8,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -47,14 +46,8 @@ public class TestPNGZipPackage extends TestCase {
 			
 			//PNGEncoder
 			
-			// Find a jpeg writer
-			ImageWriter writer = null;
-			Iterator<ImageWriter> iter = ImageIO
-					.getImageWritersByFormatName("jpg");
-			if (iter.hasNext()) {
-				writer = iter.next();
-			}
-			writer.setOutput(out);
+			ImageWriter writer = ImageIO.getImageWritersByFormatName( "jpg" ).next();
+			writer.setOutput(ImageIO.createImageOutputStream(out));
 			ImageWriteParam iwparam = new JPEGImageWriteParam(
 					Locale.getDefault());
 			iwparam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);

@@ -70,7 +70,7 @@
 	<!--JDBC Drivers-->
 	<property name="database.lib" value="${project.lib}/database" />
 	<property name="red5.lib" value="${basedir}/${red5.server.dir}/red5" />
-	<property name="red5.server.lib" value="${basedir}/${red5.server.dir}/red5/lib" />
+	<property name="red5.server.lib" value="${red5.lib}/lib" />
 	<property name="spring.lib" value="${project.lib}/spring" />
 	<property name="upload.lib" value="${project.lib}/upload" />
 	<property name="xstream.lib" value="${project.lib}/xstream" />

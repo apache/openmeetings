@@ -9,7 +9,6 @@ import java.awt.Robot;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.util.Iterator;
 import java.util.Locale;
 
 import javax.imageio.IIOImage;
@@ -23,9 +22,6 @@ import junit.framework.TestCase;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.openmeetings.client.beans.ClientConnectionBean;
-
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGImageDecoder;
 
 /**
  * @author sebastianwagner
@@ -64,14 +60,8 @@ public class TestGZipDeltaPackage extends TestCase {
 			
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			
-			// Find a jpeg writer
-			ImageWriter writer = null;
-			Iterator<ImageWriter> iter = ImageIO
-					.getImageWritersByFormatName("jpg");
-			if (iter.hasNext()) {
-				writer = iter.next();
-			}
-			writer.setOutput(out);
+			ImageWriter writer = ImageIO.getImageWritersByFormatName( "jpg" ).next();
+			writer.setOutput(ImageIO.createImageOutputStream(out));
 			ImageWriteParam iwparam = new JPEGImageWriteParam(
 					Locale.getDefault());
 			iwparam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
@@ -86,10 +76,7 @@ public class TestGZipDeltaPackage extends TestCase {
 			
 			
 			ByteArrayInputStream in = new ByteArrayInputStream(payload);
-			JPEGImageDecoder decoder = JPEGCodec.createJPEGDecoder(in);
-			//JPEGDecodeParam decpar = decoder.getJPEGDecodeParam();
-			
-			BufferedImage decodedImage = decoder.decodeAsBufferedImage();
+			BufferedImage decodedImage = ImageIO.read(in);
 			
 			log.debug("decodedImage W: "+decodedImage.getWidth());
 			log.debug("decodedImage H: "+decodedImage.getHeight());

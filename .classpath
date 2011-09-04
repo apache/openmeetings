@@ -11,10 +11,10 @@
 	<classpathentry kind="src" path="src/server"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="WebContent/screen/kunststoff.jar"/>
 	<classpathentry kind="lib" path="lib/spring/org.springframework.test-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/velocity/velocity-1.6.2.jar"/>
 	<classpathentry kind="lib" path="lib/velocity/velocity-tools-view-2.0.jar"/>
+	<classpathentry kind="lib" path="red5-1.0.0-RC1/red5/webapps/openmeetings/screen/kunststoff.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/spring/org.springframework.aop-3.0.5.RELEASE.jar"/>
