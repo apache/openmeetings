@@ -1260,6 +1260,7 @@ public class Usermanagement {
 			users.setDeleted("false");
 
 			em.merge(users);
+			em.flush();
 			long user_id = users.getUser_id();
 
 			return user_id;

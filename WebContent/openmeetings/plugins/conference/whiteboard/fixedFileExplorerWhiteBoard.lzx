@@ -430,8 +430,8 @@
                 
                 var tArray = new Array();
                 tArray[0] = "moveMap";
-                tArray[1] = this.x;
-                tArray[2] = this.y;
+                tArray[1] = Math.round(this.x);
+                tArray[2] = Math.round(this.y);
                 
                 this.parent.parent._drawareaMask._drawarea.onsharedMessage('moveMap',tArray);
                 this.timeisInited=false;

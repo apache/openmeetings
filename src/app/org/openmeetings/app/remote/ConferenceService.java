@@ -134,6 +134,10 @@ public class ConferenceService {
 					.getRoomsOrganisationByOrganisationId(user_level,
 							organisation_id);
 
+			if (roomOrgsList == null) {
+				return null;
+			}
+			
 			List<Rooms_Organisation> filtered = new ArrayList<Rooms_Organisation>();
 
 			for (Iterator<Rooms_Organisation> iter = roomOrgsList.iterator(); iter
@@ -216,15 +220,18 @@ public class ConferenceService {
 
 	public List<Rooms> getRoomsPublicWithoutType(String SID) {
 		try {
-			log.debug("getRoomsPublic");
 
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
-			log.error("getRoomsPublic user_level: " + user_level);
+			log.debug("getRoomsPublic user_level: " + user_level);
 
 			List<Rooms> roomList = roommanagement
 					.getPublicRoomsWithoutType(user_level);
 
+			if (roomList == null) {
+				return null;
+			}
+			
 			// Filter : no appointed meetings
 			List<Rooms> filtered = new ArrayList<Rooms>();
 
