@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+	<soapenv:Body>
+		<ns:getListOfFilesResponse xmlns:ns="http://services.axis.openmeetings.org" 
+			xmlns:ax21="http://util.java/xsd">
+			<ns:return type="java.util.LinkedList">
+				<ax21:empty>false</ax21:empty>
+				<ax21:first>5f089830_4c61_4b.jpg</ax21:first>
+				<ax21:last>y</ax21:last>
+			</ns:return>
+			<ns:return type="java.util.LinkedList">
+				<ax21:empty>false</ax21:empty>
+				<ax21:first>browsefiles_erro.jpg</ax21:first>
+				<ax21:last>y</ax21:last></ns:return>
+			<ns:return type="java.util.LinkedList">
+				<ax21:empty>false</ax21:empty>
+				<ax21:first>resizemouse.jpg</ax21:first>
+				<ax21:last>y</ax21:last>
+			</ns:return>
+		</ns:getListOfFilesResponse>
+	</soapenv:Body>
+</soapenv:Envelope>

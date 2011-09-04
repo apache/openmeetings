@@ -1,0 +1,1 @@
+java -cp screenviewer.jar:commons-collections-3.1.jar:commons-logging-api.jar:commons-logging.jar:quartz-all-1.6.0.jar:kunststoff.jar:jta.jar org.xmlcrm.webstart.gui.StartScreen http://macbook:5080/xmlcrm/ScreenServlet 1010 1 public
