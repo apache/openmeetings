@@ -132,12 +132,13 @@
     	<![CDATA[
             //this.getFileExplorerByRoom.doCall();
             var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-                            +canvas.httpRootKey+'services/FileService/getFileExplorerByRoomSelf?'
+                            +canvas.httpRootKey+'services/FileService/getFileExplorerByRoomSelfInternal?'
                             +'SID='+canvas.sessionId
-                            +'&room_id='+hib.currentroomid;
+                            +'&roomId='+hib.currentroomid;
             
             this.getFileExplorerByRoomSelf.setAttribute("src",downloadurl);
-            if ($debug) Debug.write("getFileExplorerByRoomSelf doRequest ",downloadurl);
+            if ($debug) Debug.write("getFileExplorerByRoomSelf doRequest 1 ",downloadurl);
+            if ($debug) Debug.write("getFileExplorerByRoomSelf doRequest 2 ",downloadurl.src);
             this.getFileExplorerByRoomSelf.doRequest();
         ]]>
     </method>
@@ -145,7 +146,8 @@
     <dataset name="getFileExplorerByRoomSelf" type="http" >
     	<handler name="ondata" args="d">
     		<![CDATA[
-                //if ($debug) Debug.write("ondata ",d);
+    			if ($debug) Debug.write("ondata 1 ",this.src);
+                if ($debug) Debug.write("ondata 2 ",d);
                 parent.parseRootItems(parent.parseRootToRoomObject(d));
             ]]>
     	</handler>

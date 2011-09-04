@@ -42,11 +42,11 @@
             if ($debug) Debug.write("moveFile HTTP 1: ");
             //this.getFileExplorerByRoom.doCall();
             var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-                            +canvas.httpRootKey+'services/FileService/addFolderSelf?'
+                            +canvas.httpRootKey+'services/FileService/addFolderSelfInternal?'
                             +'SID='+canvas.sessionId
                             +'&parentFileExplorerItemId='+this.parentFileExplorerItemId
                             +'&fileName='+this.text
-                            +'&room_id='+hib.currentroomid
+                            +'&roomId='+hib.currentroomid
                             +'&isOwner='+this.isOwner;
             
             this.addFolderSelf.setAttribute("src",downloadurl);

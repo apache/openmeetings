@@ -196,6 +196,13 @@ public class FileWebServiceFacade {
 		return this.geFileServiceProxy().addFolderSelf(SID,
 				parentFileExplorerItemId, fileName, room_id, isOwner);
 	}
+	
+	public Long addFolderSelfInternal(String SID, Long parentFileExplorerItemId,
+			String fileName, Long roomId, Boolean isOwner) throws AxisFault {
+		return this.geFileServiceProxy().addFolderSelf(SID,
+				parentFileExplorerItemId, fileName, roomId, isOwner);
+	}
+	
 
 	/**
 	 * 
@@ -261,6 +268,12 @@ public class FileWebServiceFacade {
 		return this.geFileServiceProxy()
 				.getFileExplorerByRoomSelf(SID, room_id);
 	}
+	
+	public FileExplorerObject getFileExplorerByRoomSelfInternal(String SID, Long roomId)
+			throws AxisFault {
+		return this.geFileServiceProxy()
+				.getFileExplorerByRoomSelf(SID, roomId);
+	}
 
 	public FileExplorerItem[] getFileExplorerByParent(String SID,
 			Long parentFileExplorerItemId, Long room_id, Boolean isOwner,
@@ -274,6 +287,13 @@ public class FileWebServiceFacade {
 			throws AxisFault {
 		return this.geFileServiceProxy().getFileExplorerByParentSelf(SID,
 				parentFileExplorerItemId, room_id, isOwner);
+	}
+	
+	public FileExplorerItem[] getFileExplorerByParentSelfInternal(String SID,
+			Long parentFileExplorerItemId, Long roomId, Boolean isOwner)
+			throws AxisFault {
+		return this.geFileServiceProxy().getFileExplorerByParentSelf(SID,
+				parentFileExplorerItemId, roomId, isOwner);
 	}
 
 	public Long updateFileOrFolderName(String SID, Long fileExplorerItemId,
@@ -302,5 +322,14 @@ public class FileWebServiceFacade {
 		return this.geFileServiceProxy().moveFileSelf(SID, fileExplorerItemId,
 				newParentFileExplorerItemId, room_id, isOwner, moveToHome);
 	}
+	
+	public Long moveFileSelfInternal(String SID, Long fileExplorerItemId,
+			Long newParentFileExplorerItemId, Long roomId, Boolean isOwner,
+			Boolean moveToHome) throws AxisFault {
+		return this.geFileServiceProxy().moveFileSelf(SID, fileExplorerItemId,
+				newParentFileExplorerItemId, roomId, isOwner, moveToHome);
+	}
+	
+	
 
 }

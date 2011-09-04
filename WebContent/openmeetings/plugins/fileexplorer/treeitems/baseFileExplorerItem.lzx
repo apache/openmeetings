@@ -325,10 +325,10 @@
     	<![CDATA[
             //this.getFileExplorerByRoom.doCall();
             var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-                            +canvas.httpRootKey+'services/FileService/getFileExplorerByParentSelf?'
+                            +canvas.httpRootKey+'services/FileService/getFileExplorerByParentSelfInternal?'
                             +'SID='+canvas.sessionId
                             +'&parentFileExplorerItemId='+this.fileExplorerItemId
-                            +'&room_id='+hib.currentroomid
+                            +'&roomId='+hib.currentroomid
                             +'&isOwner='+this.isOwner;
             
             this.getFileExplorerByParentSelf.setAttribute("src",downloadurl);

@@ -33,7 +33,7 @@ public class FileExplorerItemDaoImpl {
             Boolean isPresentation, String wmlFilePath,
             Boolean isStoredWmlFile, Boolean isChart,
             Long externalFileId, String externalType) {
-        log.debug(".add(): adding file " + fileName);
+        log.debug(".add(): adding file " + fileName+ " roomID: "+room_id);
         try {
             FileExplorerItem fileItem = new FileExplorerItem();
             fileItem.setFileName(fileName);
@@ -78,7 +78,7 @@ public class FileExplorerItemDaoImpl {
         return null;
     }
 
-    public List<FileExplorerItem> getFileExplorerItemsByRoomAndOwner(
+	public List<FileExplorerItem> getFileExplorerItemsByRoomAndOwner(
             Long room_id, Long ownerId) {
         log.debug(".getFileExplorerItemsByRoomAndOwner() started");
         try {
@@ -92,6 +92,7 @@ public class FileExplorerItemDaoImpl {
 			query.setParameter("room_id",room_id);
 			query.setParameter("ownerId",ownerId);
 			
+			@SuppressWarnings("unchecked")
 			List<FileExplorerItem> fileExplorerList = query.getResultList();
 
             return fileExplorerList;
@@ -103,7 +104,7 @@ public class FileExplorerItemDaoImpl {
 
     public FileExplorerItem[] getFileExplorerItemsByRoom(Long room_id,
             Long parentFileExplorerItemId) {
-        log.debug(".getFileExplorerItemsByRoom() started");
+        log.debug("getFileExplorerItemsByRoom room_id :: "+room_id);
         try {
 
 			String hql = "SELECT c FROM FileExplorerItem c " +
@@ -118,6 +119,7 @@ public class FileExplorerItemDaoImpl {
 			query.setParameter("room_id",room_id);
 			query.setParameter("parentFileExplorerItemId", parentFileExplorerItemId);
 			
+			@SuppressWarnings("unchecked")
 	        FileExplorerItem[] fileExplorerList = (FileExplorerItem[]) query.getResultList().toArray(new FileExplorerItem[0]);
 			
 			return fileExplorerList;
@@ -143,6 +145,7 @@ public class FileExplorerItemDaoImpl {
 			query.setParameter("ownerId",ownerId);
 			query.setParameter("parentFileExplorerItemId", parentFileExplorerItemId);
 			
+			@SuppressWarnings("unchecked")
             FileExplorerItem[] fileExplorerList = (FileExplorerItem[]) query.getResultList().toArray(new FileExplorerItem[0]);
 
             return fileExplorerList;
@@ -166,6 +169,7 @@ public class FileExplorerItemDaoImpl {
 			query.setParameter("deleted", "true");
 			query.setParameter("parentFileExplorerItemId", parentFileExplorerItemId);
 			
+			@SuppressWarnings("unchecked")
             FileExplorerItem[] fileExplorerList = (FileExplorerItem[]) query.getResultList().toArray(new FileExplorerItem[0]);
 
             return fileExplorerList;
@@ -234,6 +238,7 @@ public class FileExplorerItemDaoImpl {
 
 			Query query = em.createQuery(hql);
 
+			@SuppressWarnings("unchecked")
             List<FileExplorerItem> fileExplorerList = query.getResultList();
 
             return fileExplorerList;
