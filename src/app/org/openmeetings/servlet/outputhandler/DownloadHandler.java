@@ -58,7 +58,7 @@ public class DownloadHandler extends HttpServlet {
 		return null;
 	}
 
-	private void openOrCreateFolder(String dir) {
+	private void logNonExistentFolder(String dir) {
 		File f = new File(dir);
 		if (!f.exists()) {
 			boolean c = f.mkdir();
@@ -166,14 +166,14 @@ public class DownloadHandler extends HttpServlet {
 					}
 				} else if (moduleName.equals("userprofile")) {
 					working_dir += "profiles" + File.separatorChar;
-					openOrCreateFolder(working_dir);
+					logNonExistentFolder(working_dir);
 
 					working_dir += ScopeApplicationAdapter.profilesPrefix
 							+ users_id + File.separatorChar;
-					openOrCreateFolder(working_dir);
+					logNonExistentFolder(working_dir);
 				} else if (moduleName.equals("remoteuserprofile")) {
 					working_dir += "profiles" + File.separatorChar;
-					openOrCreateFolder(working_dir);
+					logNonExistentFolder(working_dir);
 
 					String remoteUser_id = httpServletRequest
 							.getParameter("remoteUserid");
@@ -183,10 +183,10 @@ public class DownloadHandler extends HttpServlet {
 
 					working_dir += ScopeApplicationAdapter.profilesPrefix
 							+ remoteUser_id + File.separatorChar;
-					openOrCreateFolder(working_dir);
+					logNonExistentFolder(working_dir);
 				} else if (moduleName.equals("remoteuserprofilebig")) {
 					working_dir += "profiles" + File.separatorChar;
-					openOrCreateFolder(working_dir);
+					logNonExistentFolder(working_dir);
 
 					String remoteUser_id = httpServletRequest
 							.getParameter("remoteUserid");
@@ -196,14 +196,14 @@ public class DownloadHandler extends HttpServlet {
 
 					working_dir += ScopeApplicationAdapter.profilesPrefix
 							+ remoteUser_id + File.separatorChar;
-					openOrCreateFolder(working_dir);
+					logNonExistentFolder(working_dir);
 
 					requestedFile = this.getBigProfileUserName(working_dir);
 
 				} else if (moduleName.equals("chat")) {
 
 					working_dir += "profiles" + File.separatorChar;
-					openOrCreateFolder(working_dir);
+					logNonExistentFolder(working_dir);
 
 					String remoteUser_id = httpServletRequest
 							.getParameter("remoteUserid");
@@ -213,7 +213,7 @@ public class DownloadHandler extends HttpServlet {
 
 					working_dir += ScopeApplicationAdapter.profilesPrefix
 							+ remoteUser_id + File.separatorChar;
-					openOrCreateFolder(working_dir);
+					logNonExistentFolder(working_dir);
 
 					requestedFile = this.getChatUserName(working_dir);
 				} else {
