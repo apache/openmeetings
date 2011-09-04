@@ -8,19 +8,22 @@ import org.red5.logging.Red5LoggerFactory;
 public class ImportHelper {
 	private static final org.slf4j.Logger log = Red5LoggerFactory.getLogger(
 			ImportHelper.class, ScopeApplicationAdapter.webAppRootKey);
-	public static final int DEFAULT_MAX_UPLOAD_SIZE = 1024 * 1024 * 1024; //1GB
-	
-	public static final int getMaxUploadSize(Configurationmanagement cfgManagement) {
+	public static final int DEFAULT_MAX_UPLOAD_SIZE = 1024 * 1024 * 1024; // 1GB
+
+	public static final int getMaxUploadSize(
+			Configurationmanagement cfgManagement) {
 		return getMaxUploadSize(cfgManagement, 3L);
 	}
-	
-	public static final int getMaxUploadSize(Configurationmanagement cfgManagement, Long userLevel) {
-		Configuration cfg = cfgManagement.getConfKey(userLevel, "cfgManagement");
+
+	public static final int getMaxUploadSize(
+			Configurationmanagement cfgManagement, Long userLevel) {
+		Configuration cfg = cfgManagement.getConfKey(userLevel,
+				"DEFAULT_MAX_UPLOAD_SIZE");
 		int result = DEFAULT_MAX_UPLOAD_SIZE;
 		if (cfg != null) {
 			String val = cfg.getConf_value();
 			try {
-				result = (int)Math.min(Long.parseLong(val), (long)Integer.MAX_VALUE);
+				result = (int) Math.min(Long.parseLong(val), Integer.MAX_VALUE);
 			} catch (Exception e) {
 				log.error("Invalid value saved for maxUploadSize: " + val, e);
 			}
