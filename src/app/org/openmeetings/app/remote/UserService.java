@@ -201,8 +201,8 @@ public class UserService {
 	 * @param asc
 	 * @return
 	 */
-	public List<Users> getOrgUserList(String SID, long organisation_id, int start,
-			int max, String orderby, boolean asc) {
+	public List<Users> getOrgUserList(String SID, long organisation_id,
+			int start, int max, String orderby, boolean asc) {
 		return organisationmanagement.getUsersByOrganisationId(organisation_id,
 				start, max, orderby, asc);
 	}
@@ -224,8 +224,8 @@ public class UserService {
 	 * @param asc
 	 * @return
 	 */
-	public List<Organisation> getOrganisationListByUser(String SID, long client_user,
-			int start, int max, String orderby, boolean asc) {
+	public List<Organisation> getOrganisationListByUser(String SID,
+			long client_user, int start, int max, String orderby, boolean asc) {
 		Long users_id = sessionManagement.checkSession(SID);
 		long user_level = userManagement.getUserLevelByID(users_id);
 		return organisationmanagement.getOrganisationsByUserId(user_level,
@@ -243,8 +243,8 @@ public class UserService {
 	 * @param asc
 	 * @return
 	 */
-	public List<Organisation> getRestOrganisationListByUser(String SID, long client_user,
-			int start, int max, String orderby, boolean asc) {
+	public List<Organisation> getRestOrganisationListByUser(String SID,
+			long client_user, int start, int max, String orderby, boolean asc) {
 		Long users_id = sessionManagement.checkSession(SID);
 		Long user_level = userManagement.getUserLevelByID(users_id);
 		return organisationmanagement.getRestOrganisationsByUserId(user_level,
@@ -299,7 +299,8 @@ public class UserService {
 	 * @param argObject
 	 * @return user_id or NULL or negativ value (error_id)
 	 */
-	public Long updateUserSelfSmall(String SID, @SuppressWarnings("rawtypes") ObjectMap values) {
+	public Long updateUserSelfSmall(String SID,
+			@SuppressWarnings("rawtypes") ObjectMap values) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
@@ -349,7 +350,8 @@ public class UserService {
 			Date age = null;
 			if (argObjectMap.get("userage") instanceof Date) {
 				age = (Date) argObjectMap.get("userage");
-				//log.debug("saveOrUpdateUser7 TimezoneOffset: " + age.getTimezoneOffset());
+				// log.debug("saveOrUpdateUser7 TimezoneOffset: " +
+				// age.getTimezoneOffset());
 			}
 
 			log.debug("Mail : " + argObjectMap.get("email").toString());
@@ -532,13 +534,14 @@ public class UserService {
 				}
 				IScope currentScope = this.scopeApplicationAdapter
 						.getRoomScope(scopeName);
-				this.scopeApplicationAdapter
-						.roomLeaveByScope(rcl, currentScope);
 
 				HashMap<Integer, String> messageObj = new HashMap<Integer, String>();
 				messageObj.put(0, "kick");
 				this.scopeApplicationAdapter.sendMessageById(messageObj,
 						streamid, currentScope);
+
+				this.scopeApplicationAdapter
+						.roomLeaveByScope(rcl, currentScope);
 
 				return true;
 			}
@@ -1257,7 +1260,8 @@ public class UserService {
 		return null;
 	}
 
-	public Integer moveMailsToFolder(String SID, @SuppressWarnings("rawtypes") List privateMessageIntsIds,
+	public Integer moveMailsToFolder(String SID,
+			@SuppressWarnings("rawtypes") List privateMessageIntsIds,
 			Long newFolderId) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
@@ -1282,7 +1286,8 @@ public class UserService {
 		return null;
 	}
 
-	public Integer moveMailsToTrash(String SID, @SuppressWarnings("rawtypes") List privateMessageIntsIds,
+	public Integer moveMailsToTrash(String SID,
+			@SuppressWarnings("rawtypes") List privateMessageIntsIds,
 			Boolean isTrash) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
@@ -1309,7 +1314,8 @@ public class UserService {
 		return -1;
 	}
 
-	public Integer deletePrivateMessages(String SID, @SuppressWarnings("rawtypes") List privateMessageIntsIds) {
+	public Integer deletePrivateMessages(String SID,
+			@SuppressWarnings("rawtypes") List privateMessageIntsIds) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
@@ -1333,7 +1339,8 @@ public class UserService {
 		return -1;
 	}
 
-	public Integer markReadStatusMails(String SID, @SuppressWarnings("rawtypes") List privateMessageIntsIds,
+	public Integer markReadStatusMails(String SID,
+			@SuppressWarnings("rawtypes") List privateMessageIntsIds,
 			Boolean isRead) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);

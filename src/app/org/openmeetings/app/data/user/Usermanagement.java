@@ -496,7 +496,8 @@ public class Usermanagement {
 
 					// add or delete organisations from this user
 					if (organisations != null) {
-						organisationmanagement.updateUserOrganisationsByUser(us, organisations);
+						organisationmanagement.updateUserOrganisationsByUser(
+								us, organisations);
 					}
 					us = usersDao.getUser(user_id);
 
@@ -1725,12 +1726,13 @@ public class Usermanagement {
 				}
 				IScope currentScope = scopeApplicationAdapter
 						.getRoomScope(scopeName);
-				scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope);
 
 				HashMap<Integer, String> messageObj = new HashMap<Integer, String>();
 				messageObj.put(0, "kick");
 				scopeApplicationAdapter.sendMessageById(messageObj,
 						rcl.getStreamid(), currentScope);
+
+				scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope);
 
 				return true;
 			}
