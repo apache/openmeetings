@@ -299,7 +299,7 @@ public class UserService {
 	 * @param argObject
 	 * @return user_id or NULL or negativ value (error_id)
 	 */
-	public Long updateUserSelfSmall(String SID, ObjectMap values) {
+	public Long updateUserSelfSmall(String SID, @SuppressWarnings("rawtypes") ObjectMap values) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
@@ -321,6 +321,7 @@ public class UserService {
 	 * @param regObjectObj
 	 * @return
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Long saveOrUpdateUser(String SID, Object regObjectObj) {
 		try {
 			LinkedHashMap argObjectMap = (LinkedHashMap) regObjectObj;
@@ -348,7 +349,7 @@ public class UserService {
 			Date age = null;
 			if (argObjectMap.get("userage") instanceof Date) {
 				age = (Date) argObjectMap.get("userage");
-				log.error("saveOrUpdateUser7: " + age.getTimezoneOffset());
+				//log.debug("saveOrUpdateUser7 TimezoneOffset: " + age.getTimezoneOffset());
 			}
 
 			log.debug("Mail : " + argObjectMap.get("email").toString());
@@ -910,6 +911,7 @@ public class UserService {
 		return null;
 	}
 
+	@SuppressWarnings("deprecation")
 	public Long composeMail(String SID, List<String> recipients,
 			String subject, String message, Boolean bookedRoom,
 			Date validFromDate, String validFromTime, Date validToDate,
@@ -1255,7 +1257,7 @@ public class UserService {
 		return null;
 	}
 
-	public Integer moveMailsToFolder(String SID, List privateMessageIntsIds,
+	public Integer moveMailsToFolder(String SID, @SuppressWarnings("rawtypes") List privateMessageIntsIds,
 			Long newFolderId) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
@@ -1280,7 +1282,7 @@ public class UserService {
 		return null;
 	}
 
-	public Integer moveMailsToTrash(String SID, List privateMessageIntsIds,
+	public Integer moveMailsToTrash(String SID, @SuppressWarnings("rawtypes") List privateMessageIntsIds,
 			Boolean isTrash) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
@@ -1307,7 +1309,7 @@ public class UserService {
 		return -1;
 	}
 
-	public Integer deletePrivateMessages(String SID, List privateMessageIntsIds) {
+	public Integer deletePrivateMessages(String SID, @SuppressWarnings("rawtypes") List privateMessageIntsIds) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
@@ -1331,7 +1333,7 @@ public class UserService {
 		return -1;
 	}
 
-	public Integer markReadStatusMails(String SID, List privateMessageIntsIds,
+	public Integer markReadStatusMails(String SID, @SuppressWarnings("rawtypes") List privateMessageIntsIds,
 			Boolean isRead) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);

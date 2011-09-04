@@ -10,6 +10,9 @@
 	<property name="server.src.dir" value="${basedir}/src/server"/>
 	<property name="client.src.dir" value="${basedir}/src/client"/>
 	<property name="main.out.dir" value="${basedir}/bin"/>
+	
+	<!-- Red5 dir -->
+	<property name="red5.server.dir" value="red5-1.0.0-RC1"/>
 
 	<!-- screen.out.dir -->
 	<property name="screen.out.dir" value="${basedir}/screen_compile" />
@@ -64,8 +67,8 @@
 	<property name="openjpa.lib" value="${project.lib}/openjpa2"/>
 	<!--JDBC Drivers-->
 	<property name="database.lib" value="${project.lib}/database" />
-	<property name="red5.lib" value="${basedir}/server/red5" />
-	<property name="red5.server.lib" value="${basedir}/server/red5/lib" />
+	<property name="red5.lib" value="${basedir}/${red5.server.dir}/red5" />
+	<property name="red5.server.lib" value="${basedir}/${red5.server.dir}/red5/lib" />
 	<property name="spring.lib" value="${project.lib}/spring" />
 	<property name="upload.lib" value="${project.lib}/upload" />
 	<property name="xstream.lib" value="${project.lib}/xstream" />

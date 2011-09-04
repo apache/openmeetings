@@ -1029,7 +1029,9 @@
                 if (value.isScreenClient) {
                     return;
                 }
-                canvas.currentActivityList.addMessageRequest(value, canvas.getLabelName(1367), new Date().getTime());
+                if (canvas.currentActivityList != null) {
+                	canvas.currentActivityList.addMessageRequest(value, canvas.getLabelName(1367), new Date().getTime());
+                }
                 if (canvas._overallchatcontent!=null){
                 	var parentObj = canvas._overallchatcontent.parent.parent.parent._chatparticipants;
                 	parentObj.removeItemById(value.user_id);

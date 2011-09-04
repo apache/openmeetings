@@ -65,6 +65,10 @@
             canvas.currentFileExplorer = null;
         }
         
+        if (canvas.currentActivityList != null) {
+        	canvas.currentActivityList = null;
+        }
+        
         canvas._screens.clearAllSessions();
         this.logicalRoomLeave.doCall();
         if ($debug) Debug.write("############ this.logicalRoomLeave ",this.logicalRoomLeave);
