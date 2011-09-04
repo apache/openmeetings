@@ -103,9 +103,7 @@
     <view y="${ parent.height - 201 }" width="$once{ parent.width-10 }" height="2"
         name="_border" bgcolor="$once{ canvas.basebgcolorizer }" />
                
-    <activityList name="_activityList" >
-        
-    </activityList>			   
+    <activityList name="_activityList" />
     
     <view name="_minimizeSidebar" x="${ parent.width - 10 }" width="10" 
           bgcolor="$once{ canvas.baseMousecolorizer }" height="${ parent.height }">
