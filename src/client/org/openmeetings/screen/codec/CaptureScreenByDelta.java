@@ -1,23 +1,12 @@
 package org.openmeetings.screen.codec;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.zip.GZIPOutputStream;
 
 import org.apache.log4j.Logger;
-import org.openmeetings.client.beans.ClientConnectionBean;
-import org.openmeetings.client.beans.ClientFrameBean;
-import org.openmeetings.client.transport.ClientTransportMinaPool;
 import org.openmeetings.screen.codec.beans.ClientFrameBuffer;
 import org.openmeetings.screen.codec.beans.ClientImageFrameModus;
-
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGEncodeParam;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 public class CaptureScreenByDelta {
 	
@@ -211,12 +200,21 @@ public class CaptureScreenByDelta {
 //		try {
 //			ByteArrayOutputStream out = new ByteArrayOutputStream();
 //			
-//			JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-//			JPEGEncodeParam encpar = encoder.getDefaultJPEGEncodeParam(clientImageFrameModus.getImage());
-//			
-//			encpar.setQuality(quality, false);
-//			encoder.setJPEGEncodeParam(encpar);
-//			encoder.encode(clientImageFrameModus.getImage());
+//	// Find a jpeg writer
+//	ImageWriter writer = null;
+//	Iterator<ImageWriter> iter = ImageIO
+//			.getImageWritersByFormatName("jpg");
+//	if (iter.hasNext()) {
+//		writer = iter.next();
+//	}
+//	writer.setOutput(out);
+//	ImageWriteParam iwparam = new JPEGImageWriteParam(
+//			Locale.getDefault());
+//	iwparam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+//	iwparam.setCompressionQuality(imgQuality);
+//
+//	writer.write(null, new IIOImage(clientImageFrameModus.getImage(), null, null),
+//			iwparam);
 //			
 //			byte[] payload = out.toByteArray();
 //			

@@ -1,23 +1,28 @@
 package org.openmeetings.test.server;
 
+import static org.openmeetings.client.beans.ClientConnectionBean.imgQuality;
+
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
+import java.util.Iterator;
+import java.util.Locale;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
 
 import junit.framework.TestCase;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
-import org.openmeetings.client.beans.ClientConnectionBean;
-
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGEncodeParam;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 /**
  * @author sebastianwagner
@@ -42,11 +47,21 @@ public class TestPNGZipPackage extends TestCase {
 			
 			//PNGEncoder
 			
-			JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-			JPEGEncodeParam encpar = encoder.getDefaultJPEGEncodeParam(imageScreen);
-			encpar.setQuality(ClientConnectionBean.imgQuality, false);
-			encoder.setJPEGEncodeParam(encpar);
-			encoder.encode(imageScreen);
+			// Find a jpeg writer
+			ImageWriter writer = null;
+			Iterator<ImageWriter> iter = ImageIO
+					.getImageWritersByFormatName("jpg");
+			if (iter.hasNext()) {
+				writer = iter.next();
+			}
+			writer.setOutput(out);
+			ImageWriteParam iwparam = new JPEGImageWriteParam(
+					Locale.getDefault());
+			iwparam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+			iwparam.setCompressionQuality(imgQuality);
+
+			writer.write(null, new IIOImage(imageScreen, null, null),
+					iwparam);
 			
 			imageScreen.flush();
 			

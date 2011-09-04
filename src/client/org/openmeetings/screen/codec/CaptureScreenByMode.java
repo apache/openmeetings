@@ -1,21 +1,10 @@
 package org.openmeetings.screen.codec;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.zip.GZIPOutputStream;
-
-import javax.imageio.IIOImage;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageWriteParam;
-import javax.imageio.ImageWriter;
-import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
-import javax.imageio.stream.ImageOutputStream;
 
 import org.apache.log4j.Logger;
 import org.openmeetings.client.beans.ClientConnectionBean;
@@ -23,10 +12,6 @@ import org.openmeetings.client.beans.ClientFrameBean;
 import org.openmeetings.client.transport.ClientTransportMinaPool;
 import org.openmeetings.screen.codec.beans.ClientFrameBuffer;
 import org.openmeetings.screen.codec.beans.ClientImageFrameModus;
-
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGEncodeParam;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 public class CaptureScreenByMode {
 	

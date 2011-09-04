@@ -89,6 +89,8 @@
 	<property name="java2swf.lib" value="${project.lib}/java2swf" />
 	<!-- Junit -->
 	<property name="junit.lib" value="${project.lib}/junit" />
+	<!-- Svn Task -->
+	<property name="svntask.lib" value="${project.lib}/svntask-1.0.8"/>
 
 	<!-- screenshare.lib -->
 	<property name="screenshare.lib" value="${basedir}/WebContent/red5-screenshare" />
@@ -278,7 +280,7 @@
 	</target>
 
 	<!-- Compile JAR -->
-	<target name="jar" description="Make Archive" depends="enhance">
+	<target name="jar" description="Make Archive" depends="enhance, current_revision">
 		<tstamp prefix="build">
 			<format property="TODAY" pattern="d-MMMM-yyyy" locale="en"/>
 		</tstamp>
@@ -303,6 +305,7 @@
 				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com"/>
 				<attribute name="Built-On" value="${build.TODAY}"/>
 				<attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
+				<attribute name="Svn-Revision" value="${svn.version}" />
 			</manifest>
 		</jar>
 		<jar destfile="${dist.dir}/red5/webapps/${project.distname}/screen/screenviewer.jar">
@@ -543,6 +546,19 @@
 		<echo message="Enhancing complete."/>
 	</target>
 
+	<target name="current_revision">
+		<typedef resource="com/googlecode/svntask/svntask.xml">
+			<classpath>
+				<fileset dir="${svntask.lib}" includes="*.jar"/>
+			</classpath>
+		</typedef>
+		
+		<svn><info path="." revisionProperty="svn.version" /></svn>
+		
+		<!-- Display svn revision number -->
+		<echo>Current revision: ${svn.version}</echo>
+	</target>
+	
 	<!-- Build entire project -->
 	<target name="build project" depends="clean, prepare, compile"/>
 

@@ -24,13 +24,6 @@ import org.openmeetings.client.beans.ClientConnectionBean;
 import org.openmeetings.client.beans.ClientImageFrame;
 import org.openmeetings.client.beans.ClientVirtualScreenBean;
 
-//import com.sun.imageio.plugins.png.
-
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGEncodeParam;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
-import com.sun.imageio.plugins.gif.GIFImageWriter;
-
 /**
  * @author sebastianwagner
  *
@@ -111,12 +104,21 @@ public class ClientRaster {
 					
 //					ByteArrayOutputStream out = new ByteArrayOutputStream();
 //					
-//					JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-//					JPEGEncodeParam encpar = encoder.getDefaultJPEGEncodeParam(image);
-//					
-//					encpar.setQuality(ClientConnectionBean.imgQualityDefault, false);
-//					encoder.setJPEGEncodeParam(encpar);
-//					encoder.encode(image);
+//					// Find a jpeg writer
+//					ImageWriter writer = null;
+//					Iterator<ImageWriter> iter = ImageIO
+//							.getImageWritersByFormatName("jpg");
+//					if (iter.hasNext()) {
+//						writer = iter.next();
+//					}
+//					writer.setOutput(out);
+//					ImageWriteParam iwparam = new JPEGImageWriteParam(
+//							Locale.getDefault());
+//					iwparam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+//					iwparam.setCompressionQuality(imgQuality);
+//
+//					writer.write(null, new IIOImage(image, null, null),
+//							iwparam);
 					
 					ByteArrayOutputStream out = new ByteArrayOutputStream();
 					

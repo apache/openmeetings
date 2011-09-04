@@ -1,31 +1,17 @@
 package org.openmeetings.client.screen;
 
-import java.awt.*;
-import java.io.*;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.PointerInfo;
 import java.util.Date;
 import java.util.List;
-
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.URLConnection;
-import java.net.URL;
-import java.awt.image.BufferedImage;
-
-import com.sun.image.codec.jpeg.JPEGEncodeParam;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.media.Log;
 
 import org.apache.log4j.Logger;
 import org.openmeetings.client.beans.ClientConnectionBean;
 import org.openmeetings.client.beans.ClientCursorStatus;
 import org.openmeetings.client.beans.ClientFrameBean;
 import org.openmeetings.client.beans.ClientImageFrame;
-import org.openmeetings.client.beans.ClientVirtualScreenBean;
-import org.openmeetings.client.gui.ClientStartScreen;
 import org.openmeetings.client.transport.ClientTransportMinaPool;
-import org.openmeetings.client.util.ClientPacketizer;
 import org.openmeetings.client.util.ClientRaster;
 import org.openmeetings.client.util.ClientRasterList;
 
@@ -290,11 +276,21 @@ public class ClientCaptureScreen {
 //			
 //			log.debug("1 buffer start , end , delta "+this.startDate+" "+endTime+" :timeInSeconds: "+timeInSeconds);
 //				
-//			JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-//			JPEGEncodeParam encpar = encoder.getDefaultJPEGEncodeParam(imageScreen);
-//			encpar.setQuality(ClientConnectionBean.imgQuality, false);
-//			encoder.setJPEGEncodeParam(encpar);
-//			encoder.encode(imageScreen);
+//	// Find a jpeg writer
+//	ImageWriter writer = null;
+//	Iterator<ImageWriter> iter = ImageIO
+//			.getImageWritersByFormatName("jpg");
+//	if (iter.hasNext()) {
+//		writer = iter.next();
+//	}
+//	writer.setOutput(out);
+//	ImageWriteParam iwparam = new JPEGImageWriteParam(
+//			Locale.getDefault());
+//	iwparam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+//	iwparam.setCompressionQuality(imgQuality);
+//
+//	writer.write(null, new IIOImage(imageScreen, null, null),
+//			iwparam);
 //			
 //			imageScreen.flush();
 //						
