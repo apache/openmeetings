@@ -1,22 +1,36 @@
 package org.openmeetings.client.gui;
 
+import java.awt.Color;
+import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Date;
 
-import java.awt.*;
-import java.awt.event.*;
-
 import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.AbstractButton;
+import javax.swing.ButtonModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.apache.log4j.Logger;
-import org.openmeetings.client.screen.ClientBlankArea;
-import org.openmeetings.client.screen.ClientCaptureScreen;
-import org.openmeetings.client.screen.ClientSentScreen;
 import org.openmeetings.client.beans.ClientConnectionBean;
 import org.openmeetings.client.beans.ClientStatusBean;
 import org.openmeetings.client.beans.ClientVirtualScreenBean;
+import org.openmeetings.client.screen.ClientBlankArea;
+import org.openmeetings.client.screen.ClientCaptureScreen;
+import org.openmeetings.client.screen.ClientSentScreen;
 import org.openmeetings.client.transport.ClientPacketMinaProcess;
 import org.openmeetings.client.transport.ClientTransportMinaPool;
 import org.openmeetings.client.util.ClientRasterList;
@@ -59,8 +73,6 @@ public class ClientStartScreen {
 	JLabel vScreenIconRight;
 	JLabel vScreenIconUp;
 	JLabel vScreenIconDown;	
-	
-	private JLabel myBandWidhtTestLabel;
 	
 	private String label730 = "Desktop Publisher";
 	private String label731 = "This application will publish your screen";

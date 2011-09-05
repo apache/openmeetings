@@ -1,6 +1,8 @@
 package org.openmeetings.test.backup;
 
 import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.Iterator;
 
@@ -53,7 +55,7 @@ public class TestStringReplace {
 			
 			Element organisation1 = organisations.addElement("organisation");
 			
-			organisation1.addElement("name").setText(formatString("org‹÷ƒ¸‰ˆ1"));
+			organisation1.addElement("name").setText(formatString("org\u01e6\u03ce\u0677\u042b1"));
 			organisation1.addElement("organisation_id").setText(formatString("1"));
 			organisation1.addElement("deleted").addCDATA("false");
 				
@@ -63,12 +65,14 @@ public class TestStringReplace {
 			organisation2.addElement("organisation_id").setText(formatString("2"));
 			organisation2.addElement("deleted").setText(formatString("false"));
 			
-			for (Iterator<Element> innerIter = organisations.elementIterator( "organisation" ); innerIter.hasNext(); ) {
+			for (@SuppressWarnings("unchecked")
+			Iterator<Element> innerIter = organisations.elementIterator( "organisation" ); innerIter.hasNext(); ) {
     			
     			Element orgObject = innerIter.next();
     			
     			String name = orgObject.element("name").getText();
-    			String deleted = orgObject.element("deleted").getText();
+    			assertNotNull(name);
+    			assertNotNull(orgObject.element("deleted").getText());
     			
     			System.out.println(name);
     		}

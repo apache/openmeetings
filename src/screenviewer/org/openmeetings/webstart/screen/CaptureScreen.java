@@ -16,7 +16,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Locale;
 
 import javax.imageio.IIOImage;
