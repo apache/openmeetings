@@ -39,11 +39,13 @@
     <attribute name="initObject" value="null"/>
     
     <handler name="oninit">
+    	var fName = " " + this.initObject.firstname 
+                  + " " + this.initObject.lastname;
         var tString = canvas.getLabelName(849)
-                        + " " + this.initObject.firstname 
-                        + " " + this.initObject.lastname
+                        + " " + fName
                         + " " + canvas.getLabelName(850);
         
+		this.setAttribute('title', canvas.getLabelName(855) + " " + fName);
         if (parent.subviews.length > 1) {
             this.setAttribute("y",((parent.subviews.length-1)*100)+40);
         } else {

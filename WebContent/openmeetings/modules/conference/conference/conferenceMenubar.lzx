@@ -42,6 +42,9 @@
 				labeliderror:790,showCheckBox:false});
 			</handler>
 			<method name="sendConfirmation" args="confirm,bool">
+                if (canvas.screenSharingDialogContainer != null) {
+                    canvas.screenSharingDialogContainer.destroy();
+                }
 				canvas.doActionmenu('quit');
 			</method>
 			<view resource="exit_btn_rsc" y="2" x="4" />
