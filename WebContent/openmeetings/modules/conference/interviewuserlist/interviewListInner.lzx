@@ -128,25 +128,26 @@
             
         ]]>
     </method>
-    
+
     <method name="selectItem" args="itemObj">
+        <![CDATA[
     	if ($debug) Debug.write("selectItem ",itemObj);
     	
     	if (canvas.ismoderator) {
-    		
-        	if (this.selectedItem != null) {
-    		    this.selectedItem.deselect();
-        	}
-        	
-        	if (this.selectedItem != itemObj) {
-            	this.selectedItem = itemObj;
+            if (this.selectedItem != null && this.selectedItem != itemObj) {
+                this.selectedItem.deselect();
+            }
+            
+            this.selectedItem = itemObj;
+            if (this.selectedItem.isSelected) {
+            	this.selectedItem.deselect();
+            } else {
             	this.selectedItem.select();
-        	}
-        	
+            }
     	}
-    	
+        ]]>
     </method>
-    
+
     <view name="userStatus" layout="axis:y">
     	<view>
     		 <view resource="userstatus_multiframe_rsc" frame="1" />

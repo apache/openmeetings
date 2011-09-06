@@ -14,17 +14,29 @@
     <attribute name="lastname" value="" type="string" />
     <attribute name="user_id" value="0" type="number" />
     <attribute name="refObj" value="null" />
+	<attribute name="initWidth" value="42" type="number" />
+	<attribute name="maxHeight" value="72" type="number" />
+	<attribute name="maxWidth" value="82" type="number" />
+	<attribute name="withNames" value="false" type="boolean"/>
     <attribute name="isSuperModerator" value="false" type="boolean"/>
     
     <attribute name="isSelected" value="false" type="boolean" />
     
 	<handler name="oninit">
         <![CDATA[
-        
-            //this._userpic.setAttribute('src',downloadurl); 
             //This is a workaround cause in LPS-4.2.x immediatelly loading does not work
             lz.Timer.addTimer( new LzDelegate( this, "fadeText" ), 1000 );
-
+			
+			if (this.withNames) {
+				this.setAttribute("initWidth", 252);
+				this.setAttribute("maxWidth", 252);
+				this.setAttribute("maxHeight", 62);
+				this._userName = new lz.labelText(this, {x: 41, y: 2});
+			} else {
+				this._userName = new lz.labelTooltip(this);
+			}
+			this.setAttribute("width", this.initWidth);
+			this._userName.setAttribute("text", firstname + ' ' + lastname);
             if (this.isMod) {
             	this.userStatus.setAttribute("frame",3);
             }
@@ -34,7 +46,7 @@
                 this.setAttribute("bgcolor",0x00FF00);
             }
             
-            this.updateIcons();
+            this.updateIconByMod();
         ]]>
     </handler>
     
@@ -94,9 +106,12 @@
     </handler>
     
     <method name="select">
-    	new lz.moderationMiniIcons(this,{name:'_miniIcons',
+    	var miniIcons = new lz.moderationMiniIcons(this,{name:'_miniIcons',
                 isMod:this.isMod,
                 isSuperModerator:this.isSuperModerator});
+		if (this.withNames) {
+			miniIcons.setAttribute("align", "right");
+		}
     	this.isSelected = true;
     	this._userName.text = "";
     	this.showItem.doStart();
@@ -125,16 +140,14 @@
     <view name="userStatus" align="right" frame="1" 
     	  resource="userstatus_multiframe_rsc" />
     
-    <labelTooltip name="_userName" text="$once{ parent.firstname+' '+parent.lastname }" />
-    
     <animatorgroup name="showItem" start="false" process="simultaneous">
-    	<animator attribute="height" to="72" duration="750" />
-    	<animator attribute="width" to="82" duration="750" />
+    	<animator attribute="height" to="${ parent.parent.maxHeight }" duration="750" />
+    	<animator attribute="width" to="${ parent.parent.maxWidth }" duration="750" />
     </animatorgroup>
     
     <animatorgroup name="closeItem" start="false" process="simultaneous">
         <animator attribute="height" to="42" duration="750" />
-        <animator attribute="width" to="42" duration="750" />
+        <animator attribute="width" to="${ parent.parent.initWidth }" duration="750" />
     </animatorgroup>
                  
 </class>

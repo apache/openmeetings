@@ -35,7 +35,7 @@
                 this.setAttribute("bgcolor",0x00FF00);
             }
             
-            this.updateIcons();
+            this.updateIconByMod();
         ]]>
     </handler>
     

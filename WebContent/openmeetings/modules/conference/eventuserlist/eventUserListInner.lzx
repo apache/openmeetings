@@ -62,33 +62,19 @@
 	            lastname += " *";
 	        }
             
-            if (this.listType == "eventUserListTable") {
-	            new lz.eventUserListItem(this._table.innerList,{
-	    	            user_id:object.user_id,
-	    	            firstname:object.firstname,
-                        isSuperModerator:object.isSuperModerator,
-	    	            lastname:lastname,
-	    	            refObj:object,
-	    	            connectedSince:object.connectedSince,
-	    	            isMod:object.isMod,
-	    	            streamid:object.streamid,
-	    	            username:object.username,
-	    	            formatedDate:object.formatedDate
-	                });
-            } else if (this.listType == "eventUserListTableWithNames") {
-	            new lz.eventUserListItemWithNames(this._table.innerList,{
-	    	            user_id:object.user_id,
-	    	            firstname:object.firstname,
-                        isSuperModerator:object.isSuperModerator,
-	    	            lastname:lastname,
-	    	            refObj:object,
-	    	            connectedSince:object.connectedSince,
-	    	            isMod:object.isMod,
-	    	            streamid:object.streamid,
-	    	            username:object.username,
-	    	            formatedDate:object.formatedDate
-	                });
-            }
+            new lz.eventUserListItem(this._table.innerList,{
+    	            user_id:object.user_id,
+    	            firstname:object.firstname,
+                    isSuperModerator:object.isSuperModerator,
+    	            lastname:lastname,
+    	            refObj:object,
+    	            connectedSince:object.connectedSince,
+    	            isMod:object.isMod,
+    	            streamid:object.streamid,
+    	            username:object.username,
+    	            withNames: this.listType == "eventUserListTableWithNames",
+    	            formatedDate:object.formatedDate
+                });
             
             this.sortUserList();
         ]]>
@@ -164,21 +150,22 @@
     </method>
     
     <method name="selectItem" args="itemObj">
+        <![CDATA[
     	if ($debug) Debug.write("selectItem ",itemObj);
     	
     	if (canvas.ismoderator) {
-    		
-            if (this.selectedItem != null) {
+            if (this.selectedItem != null && this.selectedItem != itemObj) {
                 this.selectedItem.deselect();
             }
             
-            if (this.selectedItem != itemObj) {
-                this.selectedItem = itemObj;
-                this.selectedItem.select();
+            this.selectedItem = itemObj;
+            if (this.selectedItem.isSelected) {
+            	this.selectedItem.deselect();
+            } else {
+            	this.selectedItem.select();
             }
-        	
     	}
-    	
+        ]]>
     </method>
     
     <view name="userStatus" layout="axis:y">

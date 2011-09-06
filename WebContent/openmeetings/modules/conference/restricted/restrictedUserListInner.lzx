@@ -18,8 +18,6 @@
         ]]>
     </handler>
     
-    <!-- clip="true" -->
-    
     <view width="$once{ parent.width-2 }" height="${ parent.height-2 }" 
         x="1" y="1" bgcolor="white" />
         
@@ -83,46 +81,6 @@
         this._table.renderContent();
     </method>
     
-    <!--
-    
-            for (var i=0;i<this._table.innerList.subviews.length;i++) {
-                if (this._table.innerList.subviews[i].refObj.publicSID == object.publicSID) {
-                    //if ($debug) Debug.warn("Already on List, do not add twice");
-                    return;
-                }
-            }
-    
-            if (this.listType == "eventUserListTable") {
-                new lz.eventUserListItem(this._table.innerList,{
-                        user_id:object.user_id,
-                        firstname:object.firstname,
-                        isSuperModerator:object.isSuperModerator,
-                        lastname:lastname,
-                        refObj:object,
-                        connectedSince:object.connectedSince,
-                        isMod:object.isMod,
-                        streamid:object.streamid,
-                        username:object.username,
-                        formatedDate:object.formatedDate
-                    });
-            } else if (this.listType == "eventUserListTableWithNames") {
-                new lz.eventUserListItemWithNames(this._table.innerList,{
-                        user_id:object.user_id,
-                        firstname:object.firstname,
-                        isSuperModerator:object.isSuperModerator,
-                        lastname:lastname,
-                        refObj:object,
-                        connectedSince:object.connectedSince,
-                        isMod:object.isMod,
-                        streamid:object.streamid,
-                        username:object.username,
-                        formatedDate:object.formatedDate
-                    });
-            }
-            
-            this.sortUserList();    
-     -->
-     
     <method name="sortUserList">
         <![CDATA[ 
             
@@ -190,51 +148,6 @@
         if ($debug) Debug.error(" :: getVideoObjectByPublicSID :: ",publicSID);
         
     </method>
-    <!--- get a Objects List Item
-        @param string publicSID publicSID
-    
-    <method name="getVideoObjectByPublicSID" args="publicSID">
-        <![CDATA[
-            //if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ",publicSID);
-            
-            //for (var i=0;i<this._videoviewcontent.subviews.length;i++){
-            //  if ($debug) Debug.write("getVideoObjectByBroadCastId6 broadcastId: ",this._videoviewcontent.subviews[i].broadcastId);
-            //  if ($debug) Debug.write("getVideoObjectByBroadCastId7 streamid,user_id: ",this._videoviewcontent.subviews[i].clientVars.streamid,this._videoviewcontent.subviews[i].clientVars.user_id);
-            //}
-            
-            for (var i=0;i<this._table.innerList.subviews.length;i++){
-                //if ($debug) Debug.write("getVideoObjectByBroadCastId2 broadcastId VIEW: ",this._videoviewcontent.subviews[i].broadcastId);
-                //if ($debug) Debug.write("getVideoObjectByBroadCastId3 broadcastId SEARCH: ",broadcastId);
-                //if ($debug) Debug.write("getVideoObjectByBroadCastId4 obj: ",this._videoviewcontent.subviews[i]);
-                //if ($debug) Debug.write("getVideoObjectByBroadCastId5 streamid,user_id: ",this._videoviewcontent.subviews[i].clientVars.streamid,this._videoviewcontent.subviews[i].clientVars.user_id);
-                if (this._table.innerList.subviews[i].refObj.publicSID==publicSID){
-                    return this._table.innerList.subviews[i];
-                }
-            }
-            
-            return null;
-            
-        ]]>
-    </method>
-     -->
-    
-    <method name="selectItem" args="itemObj">
-        if ($debug) Debug.write("selectItem ",itemObj);
-        
-        if (canvas.ismoderator) {
-            
-            if (this.selectedItem != null) {
-                this.selectedItem.deselect();
-            }
-            
-            if (this.selectedItem != itemObj) {
-                this.selectedItem = itemObj;
-                this.selectedItem.select();
-            }
-            
-        }
-        
-    </method>
     
     <view name="userStatus" layout="axis:y">
         <view>
@@ -299,24 +212,6 @@
                 lz.Timer.resetTimer( this.renderDelegate, 1000 );
             }
         </method>
-        
-        <!--
-        <method name="removeUserByPublicSid" args="refObj">
-        	<![CDATA[
-        	
-        		if ($debug) Debug.write("removeUserByPublicSid ",refObj.itemId);
-        		
-        		if ($debug) Debug.write(":: removeUserByPublicSid :1:",this.renderList.length);
-                
-        		this.renderList.splice(refObj.itemId,1);
-        		
-        		if ($debug) Debug.write(":: removeUserByPublicSid :2:",this.renderList.length);
-        		
-        		this.renderContent();
-        	
-        	]]>
-        </method>
-         -->
         
         <method name="renderByNewUser" args="refObj">
         	this.renderDelegateStarted = false;
@@ -548,10 +443,6 @@
         
     </turnOverListOrderedPaged> 
        
-    <!--
-    <eventUserListTable name="_table" /> 
-     -->
-     
     <view name="moderationPanel" clip="true" 
           height="${ (canvas.ismoderator) ? 40 : 0 }"
           y="${ parent.height - this.height - 2 }">
@@ -635,20 +526,6 @@
             ]]>
         </handler>
         
-        <!--
-            if (canvas.ismoderator) {
-                this.showItem.doStart();
-            } else {
-                this.setAttribute("height",0);
-            }
-            
-            var vList = parent._table.innerList.subviews;
-                
-            for (var i=0;i<vList.length;i++) {
-                vList[i].updateIconByMod();
-            }
-         -->
-         
         <method name="updateIcons">
             <![CDATA[
             
@@ -712,48 +589,6 @@
             ]]>
         </method>
         
-        <!--
-                for (var i=0;i<parent._table.renderList.length;i++) {
-                    
-                    for (var k=0;k<canvas.currentModeratorList.length;k++) {
-            
-                    var item = canvas.currentModeratorList[k];
-                    
-                        if ($debug) Debug.info("updateIcons ",item.publicSID);
-                       
-                        if (parent._table.renderList[i].publicSID == item.publicSID) {
-                            
-                            if (parent._table.renderList[i].isMod == false) {
-                                if ($debug) Debug.info("updateIcons Found RR ",i,item.publicSID);
-                                parent._table.renderList[i].isMod = true;
-                                
-                                var itemView = this.getItemByPublicSID(item.publicSID);
-                                if (itemView != null) {
-                                    itemView.setAttribute("isMod",true);
-                                    itemView.updateModeratorIcons();
-                                }
-                            }
-                            
-                            
-                        } else {
-                            
-                            if (parent._table.renderList[i].isMod == true) {
-                               if ($debug) Debug.info("RE updateIcons Found RR ",i,item.publicSID);
-                               parent._table.renderList[i].isMod = false;
-                            
-                               var itemView = this.getItemByPublicSID(item.publicSID);
-                               if (itemView != null) {
-                                   itemView.setAttribute("isMod",false);
-                                   itemView.updateModeratorIcons();
-                               }
-                            }
-                        }
-                        
-                    }
-                    
-                }      
-         -->                  
-        
         <method name="getItemByPublicSID" args="publicSID">
             <![CDATA[
                 var vList = parent._table._innerlist._inn._inn.subviews;
@@ -769,11 +604,6 @@
         </method>
         
         <labelText labelid="680" width="270" x="0" multiline="true" y="0" />
-        
-        <!--
-        <animator name="showItem" attribute="height" 
-                  to="40" duration="1000" start="false" />
-         -->
     </view>
 
 </class>
