@@ -502,7 +502,7 @@ public class Roommanagement {
 		try {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 			CriteriaQuery<Rooms> cq = cb.createQuery(Rooms.class);
-			Root<Rooms> c = cq.from(Rooms.class);
+			cq.from(Rooms.class);
 			TypedQuery<Rooms> q = em.createQuery(cq);
 			List<Rooms> ll = q.getResultList();
 			return ll;
@@ -720,7 +720,7 @@ public class Roommanagement {
 	 */
 	public Long addRoom(long user_level, String name, long roomtypes_id,
 			String comment, Long numberOfPartizipants, boolean ispublic,
-			List<?> organisations, Boolean appointment, Boolean isDemoRoom,
+			List<Integer> organisations, Boolean appointment, Boolean isDemoRoom,
 			Integer demoTime, Boolean isModeratedRoom,
 			List<Map<String, Object>> roomModerators,
 			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean isClosed,
@@ -846,7 +846,7 @@ public class Roommanagement {
 	 * @return id of (the newly created) room or NULL
 	 */
 	public Long addExternalRoom(String name, long roomtypes_id, String comment,
-			Long numberOfPartizipants, boolean ispublic, List<?> organisations,
+			Long numberOfPartizipants, boolean ispublic, List<Integer> organisations,
 			Boolean appointment, Boolean isDemoRoom, Integer demoTime,
 			Boolean isModeratedRoom, List<Map<String, Object>> roomModerators,
 			Long externalRoomId, String externalRoomType,
@@ -1187,7 +1187,7 @@ public class Roommanagement {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 			CriteriaQuery<Rooms_Organisation> cq = cb
 					.createQuery(Rooms_Organisation.class);
-			Root<Rooms_Organisation> c = cq.from(Rooms_Organisation.class);
+			cq.from(Rooms_Organisation.class);
 			TypedQuery<Rooms_Organisation> q = em.createQuery(cq);
 			List<Rooms_Organisation> ll = q.getResultList();
 			return ll;
@@ -1283,7 +1283,7 @@ public class Roommanagement {
 	 */
 	public Long updateRoom(long user_level, long rooms_id, long roomtypes_id,
 			String name, boolean ispublic, String comment,
-			Long numberOfPartizipants, List<?> organisations,
+			Long numberOfPartizipants, List<Integer> organisations,
 			Boolean appointment, Boolean isDemoRoom, Integer demoTime,
 			Boolean isModeratedRoom, List<Map<String, Object>> roomModerators,
 			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean isClosed,
@@ -1313,7 +1313,7 @@ public class Roommanagement {
 
 	public Long updateRoomInternal(long rooms_id, long roomtypes_id,
 			String name, boolean ispublic, String comment,
-			Long numberOfPartizipants, List<?> organisations,
+			Long numberOfPartizipants, List<Integer> organisations,
 			Boolean appointment, Boolean isDemoRoom, Integer demoTime,
 			Boolean isModeratedRoom, List<Map<String, Object>> roomModerators,
 			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean isClosed,
@@ -1439,11 +1439,9 @@ public class Roommanagement {
 		return false;
 	}
 
-	@SuppressWarnings("rawtypes")
-	private boolean checkRoomShouldByDeleted(long orgId, List organisations)
-			throws Exception {
-		for (Iterator it = organisations.iterator(); it.hasNext();) {
-			Integer key = (Integer) it.next();
+	private boolean checkRoomShouldByDeleted(long orgId, List<Integer> organisations) throws Exception {
+		for (Iterator<Integer> it = organisations.iterator(); it.hasNext();) {
+			Integer key = it.next();
 			Long storedOrgId = key.longValue();
 			if (storedOrgId.equals(orgId))
 				return true;
@@ -1451,24 +1449,23 @@ public class Roommanagement {
 		return false;
 	}
 
-	@SuppressWarnings("rawtypes")
-	private Long updateRoomOrganisations(List organisations, Rooms room)
+	private Long updateRoomOrganisations(List<Integer> organisations, Rooms room)
 			throws Exception {
-		List roomOrganisations = this.getOrganisationsByRoom(3,
+		List<Rooms_Organisation> roomOrganisations = this.getOrganisationsByRoom(3,
 				room.getRooms_id());
 
 		List<Long> roomsToAdd = new LinkedList<Long>();
 		List<Long> roomsToDel = new LinkedList<Long>();
 
-		for (Iterator it = organisations.iterator(); it.hasNext();) {
-			Integer key = (Integer) it.next();
+		for (Iterator<Integer> it = organisations.iterator(); it.hasNext();) {
+			Integer key = it.next();
 			Long orgIdToAdd = key.longValue();
 			if (!this.checkRoomAlreadyInOrg(orgIdToAdd, roomOrganisations))
 				roomsToAdd.add(orgIdToAdd);
 		}
 
-		for (Iterator it = roomOrganisations.iterator(); it.hasNext();) {
-			Rooms_Organisation rOrganisation = (Rooms_Organisation) it.next();
+		for (Iterator<Rooms_Organisation> it = roomOrganisations.iterator(); it.hasNext();) {
+			Rooms_Organisation rOrganisation = it.next();
 			Long orgIdToDel = rOrganisation.getOrganisation()
 					.getOrganisation_id();
 			if (!this.checkRoomShouldByDeleted(orgIdToDel, organisations))

@@ -296,7 +296,7 @@ public class ConferenceService {
 
 	// --------------------------------------------------------------------------------------------
 
-	public Map<String, Object> getAppointMentAndTimeZones(Long room_id) {
+	public Map<String, Object> getAppointMentAndTimeZones(Long room_id, Long user_id) {
 		log.debug("getAppointMentDataForRoom");
 
 		IConnection current = Red5.getConnectionLocal();
@@ -306,7 +306,8 @@ public class ConferenceService {
 
 		RoomClient currentClient = this.clientListManager
 				.getClientByStreamId(streamid);
-
+		currentClient.setUser_id(user_id);
+		
 		Rooms room = roommanagement.getRoomById(room_id);
 
 		if (room.getAppointment() == false)
@@ -579,21 +580,23 @@ public class ConferenceService {
 	 * @param argObject
 	 * @return
 	 */
-	@SuppressWarnings({ "rawtypes" })
 	public Long saveOrUpdateRoom(String SID, Object argObject) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			long User_level = userManagement.getUserLevelByID(users_id);
 			log.debug("argObject: 1 - " + argObject.getClass().getName());
-			LinkedHashMap argObjectMap = (LinkedHashMap) argObject;
+			@SuppressWarnings("unchecked")
+			LinkedHashMap<String, Object> argObjectMap = (LinkedHashMap<String, Object>) argObject;
 			log.debug("argObject: 2 - "
 					+ argObjectMap.get("organisations").getClass().getName());
-			List organisations = (List) argObjectMap.get("organisations");
+			@SuppressWarnings("unchecked")
+			List<Integer> organisations = (List<Integer>) argObjectMap.get("organisations");
 			Long rooms_id = Long.valueOf(
 					argObjectMap.get("rooms_id").toString()).longValue();
 			log.debug("rooms_id " + rooms_id);
 
-			List roomModerators = (List) argObjectMap.get("roomModerators");
+			@SuppressWarnings("unchecked")
+			List<Map<String,Object>> roomModerators = (List<Map<String,Object>>)argObjectMap.get("roomModerators");
 
 			Integer demoTime = null;
 			if (argObjectMap.get("demoTime").toString() != null

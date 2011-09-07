@@ -27,6 +27,7 @@ import org.openmeetings.app.ldap.LdapLoginManagement;
 import org.openmeetings.app.persistence.beans.adresses.States;
 import org.openmeetings.app.persistence.beans.basic.Configuration;
 import org.openmeetings.app.persistence.beans.basic.LdapConfig;
+import org.openmeetings.app.persistence.beans.basic.Naviglobal;
 import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.persistence.beans.basic.RemoteSessionObject;
 import org.openmeetings.app.persistence.beans.basic.SOAPLogin;
@@ -103,7 +104,7 @@ public class MainService implements IPendingServiceCallback {
 	 * @param language_id
 	 * @return
 	 */
-	public List getNavi(String SID, long language_id, Long organisation_id) {
+	public List<Naviglobal> getNavi(String SID, long language_id, Long organisation_id) {
 		try {
 			Long user_id = sessionManagement.checkSession(SID);
 			// log.error("getNavi 1: "+users_id);
@@ -207,7 +208,7 @@ public class MainService implements IPendingServiceCallback {
 
 			Users o = null;
 
-			currentClient = this.clientListManager.getClientByStreamId(current
+			currentClient = clientListManager.getClientByStreamId(current
 					.getClient().getId());
 
 			o = userManagement.loginUserByRemoteHash(SID, remoteHashId);
@@ -220,7 +221,8 @@ public class MainService implements IPendingServiceCallback {
 			}
 
 			o.setSessionData(sessionManagement.getSessionByHash(remoteHashId));
-
+			currentClient.setUser_id(o.getUser_id());
+			
 			if (currentClient.getUser_id() != null
 					&& currentClient.getUser_id() > 0) {
 

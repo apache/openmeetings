@@ -6,19 +6,16 @@
     resizeable="false" width="280" height="280" x="$once{ parent.width-this.width-10 }">
 	
 	<attribute name="roomobj" value="null" />
-	<!--
-	textcolor="white"
-	 -->
 	
 	<handler name="oninit" >
 		this.getAppointMentAndTimeZones.doCall();
-		//this.getServerTime.doCall();
 	</handler>
 	
 	<!-- Retrieving Appointmentdata for Meeting -->
 	<netRemoteCallHib name="getAppointMentAndTimeZones" remotecontext="$once{ canvas.thishib }" 
 		funcname="conferenceservice.getAppointMentAndTimeZones" >   
 		<netparam><method name="getValue">return parent.parent.roomobj.rooms_id;</method></netparam>
+		<netparam><method name="getValue">return canvas.user_id;</method></netparam>
 		
 		<handler name="ondata" args="value">	
 		    <![CDATA[

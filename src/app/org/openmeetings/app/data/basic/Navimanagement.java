@@ -29,7 +29,7 @@ public class Navimanagement {
 	@Autowired
 	private Fieldmanagment fieldmanagment;
 
-	public List getMainMenu(long user_level, long USER_ID, long language_id) {
+	public List<Naviglobal> getMainMenu(long user_level, long USER_ID, long language_id) {
 		List<Naviglobal> ll = this.getMainMenu(user_level, USER_ID);
 		for (Iterator<Naviglobal> it2 = ll.iterator(); it2.hasNext();) {
 			Naviglobal navigl = it2.next();
@@ -71,6 +71,7 @@ public class Navimanagement {
 					+ "where c.level_id <= :level_id AND "
 					+ "c.deleted LIKE 'false' " + "order by c.naviorder");
 			query.setParameter("level_id", user_level);
+			@SuppressWarnings("unchecked")
 			List<Naviglobal> navi = query.getResultList();
 
 			return navi;

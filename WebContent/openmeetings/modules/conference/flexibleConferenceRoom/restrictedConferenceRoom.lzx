@@ -16,7 +16,8 @@
         if ($debug) Debug.write("this.roomobj ",this.roomobj);
         
         if(this.roomobj.appointment){
-        	new lz.appointmentNotificationPopUp(canvas.conferenceView,{ 
+        	canvas.appointmentNotificationPopUp =
+        		new lz.appointmentNotificationPopUp(canvas.conferenceView,{ 
 						name:'appDetail', roomobj:this.roomobj });   
         } else{
         	if ($debug) Debug.write("no appointed meeting");

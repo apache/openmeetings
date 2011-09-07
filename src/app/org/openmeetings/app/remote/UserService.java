@@ -914,7 +914,25 @@ public class UserService {
 		return null;
 	}
 
-	@SuppressWarnings("deprecation")
+	private Calendar createCalendar(Date date, String time) {
+		Integer hour = Integer.valueOf(
+				time.substring(0, 2)).intValue();
+		Integer minute = Integer.valueOf(
+				time.substring(3, 5)).intValue();
+
+		log.info("createCalendar Hour: " + hour);
+		log.info("createCalendar Minute: " + minute);
+
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.set(Calendar.HOUR_OF_DAY, hour);
+		cal.set(Calendar.MINUTE, minute);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		
+		return cal;
+	}
+	
 	public Long composeMail(String SID, List<String> recipients,
 			String subject, String message, Boolean bookedRoom,
 			Date validFromDate, String validFromTime, Date validToDate,
@@ -926,34 +944,9 @@ public class UserService {
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
+				Calendar calFrom = createCalendar(validFromDate, validFromTime);
 
-				Integer validFromHour = Integer.valueOf(
-						validFromTime.substring(0, 2)).intValue();
-				Integer validFromMinute = Integer.valueOf(
-						validFromTime.substring(3, 5)).intValue();
-
-				Integer validToHour = Integer.valueOf(
-						validToTime.substring(0, 2)).intValue();
-				Integer validToMinute = Integer.valueOf(
-						validToTime.substring(3, 5)).intValue();
-
-				log.info("validFromHour: " + validFromHour);
-				log.info("validFromMinute: " + validFromMinute);
-
-				// TODO: Remove deprecated Java-Date handlers
-				Calendar calFrom = Calendar.getInstance();
-				int year = validFromDate.getYear() + 1900;
-				int month = validFromDate.getMonth();
-				int date = validFromDate.getDate();
-				calFrom.set(year, month, date, validFromHour, validFromMinute,
-						0);
-
-				Calendar calTo = Calendar.getInstance();
-				int yearTo = validToDate.getYear() + 1900;
-				int monthTo = validToDate.getMonth();
-				int dateTo = validToDate.getDate();
-				calTo.set(yearTo, monthTo, dateTo, validToHour, validToMinute,
-						0);
+				Calendar calTo = createCalendar(validToDate, validToTime);
 
 				Date appointmentstart = calFrom.getTime();
 				Date appointmentend = calTo.getTime();

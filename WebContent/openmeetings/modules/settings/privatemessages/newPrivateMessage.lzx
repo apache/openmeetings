@@ -71,7 +71,10 @@
 				
 				if ($debug) Debug.write("++ ",i,sString,t1,t2);
 				
-				var email = sString.substring(t1+1, t2);
+				var email = sString;
+				if (t1 > -1 && t2 > -1) {
+					email = sString.substring(t1 + 1, t2);
+				}
 				
 				if ($debug) Debug.write("++ ",email);
 				
@@ -334,10 +337,8 @@
 				   width="270" y="$once{ parent.height-120 }" x="4">
 		<handler name="onvalue" args="v">
 			if ($debug) Debug.write("onvalue ",v);
-			if (v) {
-				parent._hideRoomConfig.setAttribute("visibility","hidden");
-			} else {
-				parent._hideRoomConfig.setAttribute("visibility","visible");
+			if (parent._hideRoomConfig != null) {
+				parent._hideRoomConfig.setAttribute("visibility", v ? "hidden" : "visible");
 			}
 		</handler>
 	</labelCheckbox>
