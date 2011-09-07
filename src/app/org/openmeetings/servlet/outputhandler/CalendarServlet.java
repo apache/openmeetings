@@ -260,13 +260,17 @@ public class CalendarServlet extends HttpServlet {
 						isConnectedEvent.addAttribute("value",
 								"" + appointment.getIsConnectedEvent());
 
+						Element rooms_id = event.addElement("rooms_id");
+						Element roomtype = event.addElement("roomtype");
 						if (appointment.getRoom() != null) {
-							Element rooms_id = event.addElement("rooms_id");
 							rooms_id.addAttribute("value", ""
 									+ appointment.getRoom().getRooms_id());
+							roomtype.addAttribute("value", ""
+									+ appointment.getRoom().getRoomtype()
+											.getRoomtypes_id());
 						} else {
-							Element rooms_id = event.addElement("rooms_id");
 							rooms_id.addAttribute("value", "0");
+							roomtype.addAttribute("value", "1");
 						}
 
 						Element summary = event.addElement("summary");
