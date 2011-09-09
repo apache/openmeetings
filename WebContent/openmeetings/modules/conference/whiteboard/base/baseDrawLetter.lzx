@@ -101,25 +101,27 @@
 	<method name="editTextByValues" args="obj,txtName,txt,x,y,width,height">
 		<![CDATA[
 			if (!this.letterObjectIsActive){
-			    //Debug.write("editTextByValues",height);
+			    //Debug.write("editTextByValues",height); 
 			    this.edittextLetterObject = obj;
-				this.currentletterObj = new lz.baseDrawWords(canvas,{refObj:this,x:x,y:y,
+				this.currentletterObj = new lz.baseDrawWords(this,{refObj:this,x:x,y:y,
 					initTextName:txtName,inittext:txt,width:width,height:height});
 				this.edittextLetter = true;
 			}	
 		]]>
 	</method>
   	
-	<method name="drawTextField" args="textforfield,width,height,x,y" >
-		//Debug.write("drawTextField: ",textforfield,width,x,y);
-		var tempO = this.newTextField(this,'letter'+this.getCounter(),textforfield,width,height,x,y,this.currentlayersize,this.currentlayerletter,this.currentlayerstyle);
-		this.layers.push(tempO);
-	    this.drawTextFieldregister(textforfield,width,x,y,
-	               this.currentlayersize,this.currentlayerletter,
-	               this.currentlayerstyle,tempO.height,
-	               this.getSWFDocumentStatus(),
-                   this.getZIndex());
-	</method>
+		<method name="drawTextField" args="textforfield,width,height,x,y" >
+
+			//Debug.write("drawTextField: ",textforfield,width,x,y);
+			var tempO = this.newTextField(this, 'letter' + this.getCounter(),
+					textforfield, width, height, x, y, this.currentlayersize,
+					this.currentlayerletter, this.currentlayerstyle);
+			this.layers.push(tempO);
+			this.drawTextFieldregister(textforfield, width, x, y,
+					this.currentlayersize, this.currentlayerletter,
+					this.currentlayerstyle, tempO.height, this
+							.getSWFDocumentStatus(), this.getZIndex());
+		</method>
 	
 	<!-- editModus -->
 	<method name="setTextFieldByName" args="txtName,textforfield,width,x,y,height" >
@@ -163,35 +165,40 @@
     	]]>   
   	</method>    
   	
-  	<method name="endLetter">
-  		<![CDATA[
-	  		if ($debug) Debug.write("endLetter: ",this.currentlayer);
-	  		this.currentlayer.destroy();
-	  		var xProp = this.getAttributeRelative('x',canvas);
-	  		var yProp = this.getAttributeRelative('y',canvas);
-	  		if (this.startx <= this.endx){
-	  			var stx = this.startx;
-	  		} else {
-	  			var stx = this.endx;
-	  		}
-	  		if (this.starty <= this.endy){
-	  			var sty = this.starty;
-	  		} else {
-	  			var sty = this.endy;
-	  		}
-	  		var width = Math.abs(this.startx-this.endx);
-	  		var height = Math.abs(this.starty-this.endy);
-	  		if (width < 20 && height < 20){
-	  			width = 160;
-	  			height = 30;
-	  		}
-            
-			this.currentletterObj = new lz.baseDrawWords(canvas,{refObj:this,x:xProp+stx,
-					y:yProp+sty,width:width,height:height});
-                    
-            if ($debug) Debug.write("currentletterObj: ",this.currentletterObj);
+	<method name="endLetter">
+		<![CDATA[
+			if ($debug) Debug.write("endLetter: ", this.currentlayer);
+			this.currentlayer.destroy();
+			var xProp = 0;
+			var yProp = 0;
+			if (this.startx <= this.endx) {
+				var stx = this.startx;
+			} else {
+				var stx = this.endx;
+			}
+			if (this.starty <= this.endy) {
+				var sty = this.starty;
+			} else {
+				var sty = this.endy;
+			}
+			var width = Math.abs(this.startx - this.endx);
+			var height = Math.abs(this.starty - this.endy);
+			if (width < 20 && height < 20) {
+				width = 160;
+				height = 30;
+			}
+
+			this.currentletterObj = new lz.baseDrawWords(this, {
+						refObj : this,
+						x : xProp + stx,
+						y : yProp + sty,
+						width : width,
+						height : height
+					});
+
+			if ($debug) Debug.write("currentletterObj: ", this.currentletterObj.x, this.currentletterObj.y);
 		]]>
-  	</method>
+	</method>
 	
 	
 	<method name="updateByEditLetterObject" >
@@ -250,12 +257,23 @@
 		this.doSWFDocumentStatus(this.currentlayer,actionObject[actionObject.length-7]);
 	</method>
 	
-	<method name="newTextField" args="obj,naming,textforfield,width,height,x,y,fontsize,fgcolor,fontstyle">
-		this.currentlayer = new lz.whiteBoardTextField(obj,{name:naming,x:x,y:y,height:height,multiline:true,width:width,text:textforfield,fontsize:fontsize,fgcolor:fgcolor,fontstyle:fontstyle});
-		this.currentlayer.setTextEncoded(textforfield);
-		//Add Layer to global Layer  	
-	    return this.currentlayer;
-	</method>
+		<method name="newTextField" args="obj,naming,textforfield,width,height,x,y,fontsize,fgcolor,fontstyle">
+			this.currentlayer = new lz.whiteBoardTextField(obj, {
+						name : naming,
+						x : x,
+						y : y,
+						height : height,
+						multiline : true,
+						width : width,
+						text : textforfield,
+						fontsize : fontsize,
+						fgcolor : fgcolor,
+						fontstyle : fontstyle
+					});
+			this.currentlayer.setTextEncoded(textforfield);
+			//Add Layer to global Layer  	
+			return this.currentlayer;
+		</method>
 	
 	<method name="drawTextFieldregister" args="textforfield,width,x,y,fontsize,fgcolor,fontstyle,height,swfObj,zIndex">
 		var actionObject = new Array();

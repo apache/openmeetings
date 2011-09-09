@@ -92,7 +92,7 @@
             currentlayer.lineTo(x2,y2);
             currentlayer.lineTo(x2,y1);
             currentlayer.lineTo (x1,y1);
-            this.closePath();
+            currentlayer.closePath();
             
             if (this.currentrectanglestrokeDis!=-1){
                 currentlayer.strokeStyle = this.currentrectanglestroke;

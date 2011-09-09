@@ -371,12 +371,18 @@
 	        this.setContextMenu(newMenu);		
 		</handler>	
 		<handler name="ondblclick">
+
 			//Debug.write("ondblclick: ",this.parent.objRef.typeOfObject);
-			if (this.parent.objRef.typeOfObject=="text"){
-				var x = this.parent.objRef.getAttributeRelative('x',canvas);
-				var y = this.parent.objRef.getAttributeRelative('y',canvas);
+			if (this.parent.objRef.typeOfObject == "text") {
+				var x = this.parent.objRef.x; //this.parent.objRef.getAttributeRelative('x', canvas);
+				var y = this.parent.objRef.y; //this.parent.objRef.getAttributeRelative('y', canvas);
 				//Debug.write("x,y ",x,y);
-				this.parent.whiteboardRef.editTextByValues(this.parent.objRef,this.parent.objRef.name,this.parent.objRef.text,x,y,this.parent.objRef.width,this.parent.objRef.height);
+				this.parent.whiteboardRef
+						.editTextByValues(this.parent.objRef,
+								this.parent.objRef.name,
+								this.parent.objRef.text, x, y,
+								this.parent.objRef.width,
+								this.parent.objRef.height);
 			}
 		</handler>		
 		<!--
