@@ -63,6 +63,8 @@
 		<dragstate name="dragger" drag_axis="y"
 		    drag_min_y="${ this.drag_min }"  
 		    drag_max_y="${ this.drag_max }">
+			<text name="t1" x="-26" text="${ this.parent.parent.value }" bgcolor="0xFFFFFF"
+				  y="-4" resize="true" />
 		</dragstate>
 	</class>
 

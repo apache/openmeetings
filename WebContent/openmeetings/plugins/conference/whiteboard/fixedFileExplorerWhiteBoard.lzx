@@ -606,7 +606,7 @@
             this.ignoreUpdates = false;
         </method>
         
-        <labelCheckbox x="344" name="_fullFit" labelid="847" y="4" fontstyle="bold" fgcolor="0xFFFFFF">
+        <labelCheckbox x="344" name="_fullFit" labelid="847" y="4" fontstyle="bold" bgcolor="0xFFFFFF" >
             <handler name="onvalue" args="v">
                 if (parent.ignoreUpdates) {
                     return;
