@@ -35,6 +35,8 @@
 	
 	<attribute name="copyObject" value="null"/>
 	<attribute name="selectedObjects" value="null"/>
+	
+	<attribute name="ObjectByName" value="null" />
 
   	<method name="getCounter">
 		//Debug.write("### getCounter :",this.counter);
@@ -103,6 +105,9 @@
 	
 	<attribute name="isDragging" value="false" type="boolean"/>
 	
+	<attribute name="last_x" value="0" type="number" />
+	<attribute name="last_y" value="0" type="number" />
+	
 	<!-- ############
 		init
 	 -->
@@ -114,6 +119,8 @@
         //Debug.write("********** this oninit: ",this);
 		this.basdrawredoView = new LzView(canvas,{visible:false,y:440});
 		this.layers = new Array();
+		this.last_x = this.x;
+		this.last_y = this.y;
 		this.redolayers = new Array();
 		this.baseactionobjectList = new Array();
 		this.baseredoactionobjectList = new Array();
@@ -726,6 +733,14 @@
 	        		
 	        		this.setAttribute("x",Math.round(this.x));
 	        		this.setAttribute("y",Math.round(this.y));
+	        		
+	        		if (this.last_x == this.x && this.last_x == this.x) {
+	        			if ($debug) Debug.write("No Change");
+	        			return;
+	        		}
+	        		
+	        		this.last_x = this.x;
+	        		this.last_y = this.y;
 	        		
 	        		var tArray = new Array();
 		    		tArray[0] = "moveMap";

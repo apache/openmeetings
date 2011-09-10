@@ -17,8 +17,11 @@
 			    parent.parent.zoombox.setWhiteboardValues(whiteBoardObject.fullFit,whiteBoardObject.zoom);
 			}
 			
+			
 			this.setAttribute("x",whiteBoardObject.x);
 			this.setAttribute("y",whiteBoardObject.y);	
+			this.last_x = this.x;
+			this.last_y = this.y;
 			
 			/*
 			if (whiteBoardObject.brainStorming != null) {

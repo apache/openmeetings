@@ -575,10 +575,21 @@
          
     </view> 
     
-    <view name="zoombox" y="0" x="${ parent.width-this.width-14 }" layout="axis:x;spacing:2"
+    <view name="zoombox" y="0" x="${ parent.parent.width-this.width-14 }" layout="axis:x;spacing:2"
           visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }">
         
         <attribute name="ignoreUpdates" value="false" type="boolean" />
+        
+        <handler name="onx" args="x">
+        	if (this._fullFit.getValue()) {
+        		if ($debug) Debug.write("on x ",x);
+        		lz.Timer.addTimer( new LzDelegate( this, "sendUpdate" ), 100 );
+        	}
+        </handler>
+        
+        <method name="sendUpdate" args="refObj">
+        	parent._drawareaMask._drawarea.doFullFit(true);
+        </method>
         
         <method name="setWhiteboardValues" args="fullFit,zoom">
             if ($debug) Debug.write("setWhiteboardValues -1- ",fullFit,zoom);

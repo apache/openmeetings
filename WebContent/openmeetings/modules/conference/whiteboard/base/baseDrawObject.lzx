@@ -55,6 +55,8 @@
     <method name="doUpdateFullFit" args="fullFit,zoom">
     	<![CDATA[
     	
+    		if ($debug) Debug.write("doUpdateFullFit ",fullFit,zoom);
+    	
     		var actionObject = new Array();
     		actionObject.push("whiteboardObj");
     		actionObject.push(fullFit);
@@ -109,12 +111,14 @@
     
     <method name="doFullFit" args="v">
         <![CDATA[
+        	if ($debug) Debug.write("Do Full Fit ?");
+        	if ($debug) Debug.write(this.ObjectByName);
         
         	this.fullFit = v;
         	
             if (this.ObjectByName && this.ObjectByName.typeOfObject=="swf") {    
                 if (v) {
-                    if ($debug) Debug.write("Do Full Fit");
+                    if ($debug) Debug.write("Do Full Fit !");
                     this.ObjectByName._swfView.initialLoadFullFit();
                 }
             }
