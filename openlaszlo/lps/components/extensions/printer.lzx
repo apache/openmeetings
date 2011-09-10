@@ -81,7 +81,7 @@
       </text>
     </doc>
 
-    <!---
+    <!--
       Resets the printer state.
       @access private 
     -->
@@ -93,9 +93,9 @@
         }
     </method>
 
-    <!--- Starts a print job.  Not required in DHTML.
+    <!-- Starts a print job.  Not required in DHTML.
         @return boolean: true if printing is available.
-    --->
+    -->
     <method name="start">
         if ($dhtml) {
             // the user can always print
@@ -106,7 +106,7 @@
         }
     </method>
 
-    <!--- Sends the job to the printer. --->
+    <!-- Sends the job to the printer. -->
     <method name="send">
         if ($dhtml) {
             window.print();
@@ -119,14 +119,14 @@
         }
     </method>
 
-    <!--- Adds a new page to the print job.  Not available in DHTML.
+    <!-- Adds a new page to the print job.  Not available in DHTML.
           @param LzView view: The view to print from.
           @param number minX: The top-left x coordinate to start printing from
           @param number minY: The top-left y coordinate to start printing from
           @param number maxX: The bottom-right y coordinate to print to
           @param number maxY: The bottom-right y coordinate to print to
           @param boolean printasbitmap: If true, the view will be printed as a bitmap
-    --->
+    -->
     <method name="addPage" args="view:LzView, minX=null, minY=null, maxX=null, maxY=null, printasbitmap=null">
         <![CDATA[
         if ($dhtml) {
