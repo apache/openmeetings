@@ -185,6 +185,7 @@
                         || this.baseactionobjectList[i][0] == "rectangle"
                         || this.baseactionobjectList[i][0] == "uline"
                         || this.baseactionobjectList[i][0] == "image"
+                        || this.baseactionobjectList[i][0] == "clipart"
                         || this.baseactionobjectList[i][0] == "letter") {
                         	
                 	var swfObj = this.baseactionobjectList[i][this.baseactionobjectList[i].length-7];
@@ -1478,6 +1479,7 @@
                         || this.baseactionobjectList[i][0] == "rectangle"
                         || this.baseactionobjectList[i][0] == "uline"
                         || this.baseactionobjectList[i][0] == "image"
+                        || this.baseactionobjectList[i][0] == "clipart"
                         || this.baseactionobjectList[i][0] == "letter") {
                 	
                 	var swfObj = this.baseactionobjectList[i][this.baseactionobjectList[i].length-7];
