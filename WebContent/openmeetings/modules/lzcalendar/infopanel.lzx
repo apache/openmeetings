@@ -249,13 +249,6 @@
 	    		<![CDATA[
 	    			if ($debug) Debug.write("updateAppointment ",value);
 	    			
-	    			//var tStartObj = parent.datapath.xpathQuery("start[1]");
-        		
-	        		//attributes: {day: '2', hour: '15', minute: '14', month: '11', year: '2009'} 
-	        		//if ($debug) Debug.write("tStartObj ",tStartObj.attributes);
-        		
-		    		//dataloader.loadData( Number(tStartObj.attributes.month) , Number(tStartObj.attributes.year) );
-		    		
 	    			canvas.eventDataMgr.deleteEvent();
 	    			parent.parent.parent.calgrid.reloadAll();
 	    			
@@ -263,9 +256,6 @@
 	    	</handler>
 	    </netRemoteCallHib> 
 	    
-	    <!--
-        	public Long deleteAppointment(String SID,Long appointmentId){
-         -->
 	    <netRemoteCallHib name="deleteAppointment" funcname="calendarservice.deleteAppointment" 
 							  remotecontext="$once{ canvas.thishib }" >     
 			<netparam><method name="getValue">return canvas.sessionId; </method></netparam>
@@ -289,9 +279,6 @@
                 </inputtextbox>
 
                 <view name="day" y="29" >
-                   <!-- <basebutton resource="info_minical" width="15" x="-2"
-                         onclick="classroot.selectmonth();" -->
-                    <!-- height="13" -->
                     <textbox name="day"  x="0" y="1" width="150"  
                              bgcolor="0xEEF0EB" bordercolor="0x333333"
                              datapath="start[1]/@*" >
@@ -447,21 +434,6 @@
                 </view>
                 
                 <view bgcolor="0xEEF0EB" height="1" width="$once{parent.width - 10}" x="5" />
-               <!--
-                <view>
-                    <text x="20" text="Label" />
-                    <view bgcolor="0x333333" x="70" width="${this.colors.width + 2}" height="${this.colors.height + 2}" >
-                        <view name="colors" x="1" y="1">
-                            <view bgcolor="red"       width="16" height="16"/>
-                            <view bgcolor="0xFF7F00"  width="16" height="16"/>
-                            <view bgcolor="yellow"    width="16" height="16"/>
-                            <view bgcolor="green"     width="16" height="16"/>
-                            <view bgcolor="blue"      width="16" height="16"/>
-                            <view bgcolor="purple"    width="16" height="16"/>
-                            <simplelayout axis="x" spacing="1"/>
-                        </view>
-                    </view>
-                </view>             -->
                 <simplelayout axis="y" spacing="5"/>
             </view>
         </view>
@@ -513,7 +485,7 @@
 		 			   x="10" labelid="565" width="60" />
 		 	 	
 			 	<resetCombobox name="_erinnerungedit" x="10" 
-			 			  width="176" editable="false" shownitems="5" y="22">
+			 			  width="176" editable="false" shownitems="5" y="22" datapath="remindtype" >
 					<handler name="onvalue" args="v">						
 						if ($debug) Debug.write("_erinnerungatr: ",parent.parent.parent._erinnerungatr);
 						if(this.getValue == 0 ) {
@@ -523,20 +495,30 @@
 	    					if ($debug) Debug.write("_erinnerungatr: ",parent.parent.parent._erinnerungatr);
 						}
 					</handler> 
+					<handler name="ondata" args="remindtype">
+						if ($debug) Debug.write("remindtype ondata: ", remindtype);
+						var remTypeId = Number(remindtype.attributes.value);
+						if (remTypeId > 0) {
+							parent.parent.parent._erinnerungatr = remTypeId;
+						    this.selectItem(remTypeId);
+					    }
+					</handler>
 			 	</resetCombobox> 
 	    		  
 		    	<labelText name="_roomtype" y="44" x="10" labelid="619" width="60"/>
 		    	
 			 	<resetCombobox name="_roomtype_edit" x="10" 
-			 			  width="176" editable="false" shownitems="3" y="64">
-					<handler name="onvalue" args="v">						
-						parent.parent.parent.roomtype = Number(this.getValue());												
+			 			  width="176" editable="false" shownitems="3" y="64" datapath="roomtype" >
+					<handler name="onvalue" args="v">
+						parent.parent.parent.roomtype = Number(this.getValue());
 						if ($debug) Debug.write("roomtype: ",parent.parent.parent.roomtype);
 					</handler>
-					<handler name="oninit">
-					    this.selectItemAt(0);
-					</handler>	
-	    		 	<!--textitmes-->
+					<handler name="ondata" args="roomtype">
+						if ($debug) Debug.write("roomtype ondata: ", roomtype);
+						parent.parent.parent.roomtype = Number(roomtype.attributes.value);
+					    this.selectItem(parent.parent.parent.roomtype);
+					</handler>
+	    		 	<!--textitemes-->
 	    		 	<labeldTextListItem labelid="647" value="1"/>
 	    			<labeldTextListItem labelid="648" value="2"/>
 	    			<labeldTextListItem labelid="808" value="3"/>
@@ -603,41 +585,6 @@
 	            	]]>
 	            </method>
 	            
-	             <!--
-	               
-	            <method name="addListItem" args="userId,firstName,lastName,email">
-	            	<![CDATA[
-	            	
-	            		// Set the blank event pointer to the top of the member
-            			blankMeetingMemberDP.setXPath('blankMeetingMember:/attendee[1]');
-	            		
-            			blankMeetingMemberDP.setXPath('email');
-            			blankMeetingMemberDP.setNodeAttribute('value',email);
-            			
-            			blankMeetingMemberDP.setXPath('../memberId');
-            			blankMeetingMemberDP.setNodeAttribute('value',''+0);
-	            	
-            			blankMeetingMemberDP.setXPath('../firstname');
-            			blankMeetingMemberDP.setNodeAttribute('value',firstName);
-            			
-            			blankMeetingMemberDP.setXPath('../lastname');
-            			blankMeetingMemberDP.setNodeAttribute('value',lastName);
-            			
-            			blankMeetingMemberDP.setXPath('../userId');
-            			blankMeetingMemberDP.setNodeAttribute('value',''+userId);
-            			
-            			blankMeetingMemberDP.setXPath('../');
-            			
-            			//if ($debug) Debug.write("blankMeetingMemberDP ",blankMeetingMemberDP);
-            			
-            			//if ($debug) Debug.write(this.list.datapath);
-            			this.list.datapath.addNodeFromPointer(blankMeetingMemberDP);
-            			this.list.datapath.updateData();
-	            	]]>
-	            </method>
-	             -->
-	             
-	            
             	
             	<view name="list" y="42" height="${ parent.height-62 }" 
             		  clip="true" bgcolor="0xFFFFFF" width="$once{ parent.width }">
@@ -645,29 +592,7 @@
             		<view name="_content">
 	            		<simplelayout axis="y" spacing="1" />
 	            	</view>
-	            	
-	            	<!--
-	            	<view datapath="attendee/">
-	            		
-	            		<view name="member">
-	            			<simplelayout axis="x" />
-	            			<text resize="true" datapath="firstname/@value" />
-	            			<text resize="true" datapath="lastname/@value" />
-	            			<text text="(" />
-	            			<text resize="true" datapath="email/@value" />
-	            			<text text=")" />
-	            		</view>
-	            		<view x="150" resource="delete_button">
-	            			<handler name="onclick">
-	            				//if ($debug) Debug.write(parent);
-	            				//if ($debug) Debug.write(parent.datapath);
-	            				parent.datapath.deleteNode();
-	            				//parent.datapath.updateData();
-	            				parent.parent.datapath.updateData();
-	            			</handler>
-	            		</view>
-	            	</view>
-	            	 -->
+
 	            	<vscrollbar />
             	</view>
             	
@@ -707,10 +632,6 @@
 	            	
             	</view>
             	
-            	<!--
-                <inputtextbox name="txt" x="10" y="10" multiline="true" pixellock="true"
-                    width="175" height="280" datapath="attendees/@value" visible="true"/>
-                 -->
             </infoTab>
 
         </basetabslider>

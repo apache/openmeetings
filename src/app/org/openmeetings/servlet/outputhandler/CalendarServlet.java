@@ -272,6 +272,10 @@ public class CalendarServlet extends HttpServlet {
 							rooms_id.addAttribute("value", "0");
 							roomtype.addAttribute("value", "1");
 						}
+						Element remindType = event.addElement("remindtype");
+						remindType.addAttribute("value", appointment
+								.getRemind() != null ? ""
+								+ appointment.getRemind().getTypId() : "0");
 
 						Element summary = event.addElement("summary");
 						summary.addAttribute("value",
