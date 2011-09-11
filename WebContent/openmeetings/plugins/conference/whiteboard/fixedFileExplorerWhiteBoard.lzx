@@ -12,7 +12,7 @@
  -->
 
 
-<class name="fixedFileExplorerWhiteBoard" extends="view" >
+<class name="fixedFileExplorerWhiteBoard" extends="view" showhandcursor="false">
     
     <attribute name="baseurl" value="" type="string" />
     <attribute name="fileName" value="" type="string" />
@@ -162,6 +162,7 @@
         ]]>        
     </method> 
     
+    <!--
     <handler name="onmousedown" >
 		if ($debug) Debug.write("onmousedown multiWhiteboardPanel");
 		this._drawareaMask._drawarea.onmousedownMethod();
@@ -171,6 +172,8 @@
 		if ($debug) Debug.write("onmouseup multiWhiteboardPanel");
 		this._drawareaMask._drawarea.onmouseupMethod();
 	</handler>
+	 -->
+	
 	
     <!-- 
         The Content Area    
@@ -187,14 +190,20 @@
     	<handler name="onmousedown">
             this._drawarea.onmousedownMethod();
         </handler>
+        
         <handler name="onmouseup">
             this._drawarea.onmouseupMethod();
         </handler>
         
         <handler name="onmouseover">
+        	lz.Cursor.restoreCursor();
+        	lz.Cursor.showHandCursor(false);
             this._drawarea.onmouseoverMethod();
         </handler>
+        
         <handler name="onmouseout">
+        	lz.Cursor.showHandCursor(true);
+        	lz.Cursor.unlock();
             this._drawarea.onmouseoutMethod();
         </handler>
         

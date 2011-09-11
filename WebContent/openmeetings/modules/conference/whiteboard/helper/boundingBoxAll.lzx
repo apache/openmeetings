@@ -17,7 +17,7 @@
 	<attribute name="dragStarted" value="false" type="boolean"/>
 	
 	<handler name="onmouseover">
-        lz.Cursor.setCursorGlobal("arrow_draw_panel_cursor");
+        lz.Cursor.setCursorGlobal("arrow_rotate_panel_cursor");
     </handler>
     <handler name="onmouseout">
         lz.Cursor.unlock();
@@ -149,6 +149,8 @@
                 this.setAttribute("innerInsetScrollbars",16);
             } else if (this.objRef.name.indexOf('clipart') >= 0) {
             	this.canBeResized = false;
+            	this._gripperNoResize.setAttribute("visibility","visible");
+		    	this._gripperResize.setAttribute("visibility","hidden");
             	
             	new lz.boundingBoxAllRotationMarger(this,{
                     	       x:this.objRef.clipart.clipArtEndx-12,
@@ -176,8 +178,7 @@
         this.whiteboardRef.endDrawClipArtDrag(this.objRef);
         this.whiteboardRef.reselectShowObjectBounds(this.objRef.name);
     </method>
-	
-	
+    
 	<!--
 	   Do update the Selection-Box, in case another Moderator or User has moved the Object
 	   while you have it in focus
@@ -384,7 +385,13 @@
 								this.parent.objRef.width,
 								this.parent.objRef.height);
 			}
-		</handler>		
+		</handler>	
+		<handler name="onmouseover">
+	        lz.Cursor.setCursorGlobal("arrow_draw_panel_cursor");
+	    </handler>
+	    <handler name="onmouseout">
+	        lz.Cursor.unlock();
+	    </handler>	
 		<!--
 		<labelTooltip labelid="252" />
 		 -->
@@ -405,14 +412,24 @@
 	</view>    
      --> 
     
-	<baseChooseIcon resourceN="deleteIcon" y="0" labelid="80" width="22" height="22"
-					x="${ parent.width-this.width-parent.innerInsetScrollbars }" >
+	<view resource="deleteIcon" y="2"  width="16" height="16"
+					x="${ parent.width-this.width-parent.innerInsetScrollbars-2 }" >
 		<handler name="onclick">
 			//Debug.write("this.parent.objRef.name: ",this.parent.objRef.name);
 			//this.parent.whiteboardRef.deleteItemByName(this.parent.objRef.name);
 			parent.__LZRemoveItem(this.parent.objRef);
 		</handler>
-	</baseChooseIcon>	    
+		<handler name="onmouseover">
+	        lz.Cursor.restoreCursor();
+	        lz.Cursor.showHandCursor(false);
+	    </handler>
+	    <handler name="onmouseout">
+	    	lz.Cursor.showHandCursor(true);
+	        lz.Cursor.unlock();
+	    </handler>
+    
+		<labelTooltip labelid="80" />
+	</view>	    
     
     <!--
     <view name="_inner" y="22" width="${ parent.width }"
@@ -464,9 +481,15 @@
     
     <view resource="_boundingBoxPointerTL" x="0" y="0" />
     <view resource="_boundingBoxPointerTR" x="${ parent.width-this.width }" y="0" />
-    <view name="_gripperResize" visibility="visible" 
+    <view name="_gripperResize" visibility="visible"
         resource="_boundingBoxPointerUR" x="${ parent.width-this.width }" y="${ parent.height-this.height }" 
         onmousedown="parent._applyResizestateFromThis()" onmouseup="parent._removeResizestateFromThis()" >
+    	<handler name="onmouseover">
+	        lz.Cursor.setCursorGlobal("arrow_resize_panel_cursor");
+	    </handler>
+	    <handler name="onmouseout">
+	        lz.Cursor.unlock();
+	    </handler>
         <labelTooltip labelid="252" />
     </view>
     <view name="_gripperNoResize" visibility="hidden" 

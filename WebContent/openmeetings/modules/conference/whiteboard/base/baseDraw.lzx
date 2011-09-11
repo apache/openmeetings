@@ -633,7 +633,7 @@
              
 	<method name="onmousedownMethod" >
 		<![CDATA[
-		if ($debug) Debug.write("onmousedown this.drawmodus: ",this.drawmodus);
+		if ($debug) Debug.write("onmousedownMethod this.drawmodus: ",this.drawmodus);
 		
 		
 		if(this.selectedObjects.length > 0){
@@ -722,7 +722,7 @@
 	</method>
 
 	<method name="onmouseupMethod" >
-        if ($debug) Debug.write("onmouseup this.drawmodus: ",this.drawmodus);
+        if ($debug) Debug.write("onmouseupMethod this.drawmodus: ",this.drawmodus);
 		<![CDATA[	
 	        if (canvas.ismoderator || canvas.isAllowedToDraw) {
 				//var bool = false;

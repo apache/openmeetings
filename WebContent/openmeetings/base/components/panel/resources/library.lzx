@@ -7,6 +7,8 @@
     
     
 	<resource name="arrow_draw_panel_cursor" src="arrow_cursor.swf" />
+	<resource name="arrow_resize_panel_cursor" src="arrow_cursor_resize_tool.swf" />
+	<resource name="arrow_rotate_panel_cursor" src="arrow_cursor_rotate_tool.swf" />
 	<resource name="arrow_draw_panel_tool_cursor" src="arrow_cursor_tool.png" />
 	<resource name="draw_box_vertical_rsc" src="draw_box_vertical.swf" />
 	<resource name="draw_box_horizontal_rsc" src="draw_box_horizontal.swf" />
