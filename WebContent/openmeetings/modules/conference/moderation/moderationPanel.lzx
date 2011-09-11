@@ -33,7 +33,8 @@
     <attribute name="initial" value="true" type="boolean" />
     <attribute name="recordingUser" value="null" />
     
-    <attribute name="allowUserQuestions" value="true" type="boolean"/>
+    <attribute name="allowUserQuestions" value="true" type="boolean" />
+    <attribute name="roomName" value="" type="string" />
     
     <handler name="oninit">
         <![CDATA[
@@ -41,6 +42,7 @@
 	        if (this.allowUserQuestions != null && !this.allowUserQuestions) {
 	            this.mod_btn.destroy();
 	        }
+	        this._roomName.setAttribute("text",this.roomName);
         ]]>
     </handler>
     
@@ -106,7 +108,9 @@
             lz.Browser.loadURL(downloadurl,'_blank');  
             
         ]]>        
-    </method>   
+    </method>  
+    
+    <labelText name="_roomName" fgcolor="0xFFFFFF" y="4" fontstyle="bold" fontsize="12" /> 
     
     <!--
     <labelText name="mymodText" resize="true" fgcolor="0xFFFFFF" y="6" labelid="98" />

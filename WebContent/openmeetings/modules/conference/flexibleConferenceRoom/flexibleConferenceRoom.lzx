@@ -18,7 +18,8 @@
     	
         new lz.moderationPanel(canvas._moderatormenu,{
                     name:'_moderationPanel',align:'right',
-                    allowUserQuestions:this.roomobj.allowUserQuestions
+                    allowUserQuestions:this.roomobj.allowUserQuestions,
+                    roomName:this.roomobj.name
                 });          
         
         //,{x:this.roomobj.moderationPanelXPosition}
