@@ -4089,9 +4089,6 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1361" name="activity_window">
     <value>Deny</value>
   </string>
-  <string id="1361" name="activity_window">
-    <value>Deny</value>
-  </string>
   <string id="1362" name="activity_window">
     <value>I</value>
   </string>
