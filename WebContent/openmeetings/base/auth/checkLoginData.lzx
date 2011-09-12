@@ -11,6 +11,11 @@
         if (this.childObj!=null) this.childObj.close();
     </handler>
     
+    <handler name="onconstruct">
+        var g = canvas.getUserData();
+    	canvas.setColorStyle(g["usercolor"]);
+    </handler>
+    
     <handler name="oninit">
     	_mainScrollBar.setAttribute("visibility","hidden");
         lz.Focus.setFocus(this.username,true);
@@ -34,216 +39,173 @@
     <attribute name="enterPressed" type="boolean" value="false"/>
     
     <labelText name="n1" labelid="109" width="300" y="26" resize="false" x="2"/>
-        <customEdittext name="username" y="24" x="120" width="330" >
-            <handler name="oninit">
-                var t = new lz.sharedObject();
-                t.getLocal('userdata');
-                var g = t.getData('userdata');
-                if($debug) Debug.write("checkLoginData/g: ",g);
-                if(g!=null) if (g["username"]!=null) this.setAttribute('text',g["username"]);
-            </handler>      
-            <handler name="onkeyup" args="key">
-                <![CDATA[
-                if ( this.parent.enterPressed && ( key == 13 ) )
-                {
-                    parent.login();
-                }
-                ]]>
-            </handler>
-            <handler name="onkeydown" args="key">
-                if ( key == 13 )
-                {
-                    this.parent.enterPressed = true;
-                }
-            </handler>
-        </customEdittext>    
+    <customEdittext name="username" y="24" x="120" width="330" >
+        <handler name="oninit">
+            var g = canvas.getUserData();
+            if($debug) Debug.write("checkLoginData/g: ",g);
+            if (g["username"]!=null) this.setAttribute('text',g["username"]);
+        </handler>      
+        <handler name="onkeyup" args="key">
+            <![CDATA[
+            if ( this.parent.enterPressed && ( key == 13 ) )
+            {
+                parent.login();
+            }
+            ]]>
+        </handler>
+        <handler name="onkeydown" args="key">
+            if ( key == 13 )
+            {
+                this.parent.enterPressed = true;
+            }
+        </handler>
+    </customEdittext>    
 
     <labelText name="n2" labelid="110" width="300" y="56" resize="false" x="2"/>
-        <customEdittext name="userpass" y="54" password="true" x="120" width="330" >
-            <handler name="oninit">
-                var t = new lz.sharedObject();
-                t.getLocal('userdata');
-                var g = t.getData('userdata');
-                if(g!=null) if (g["userpass"]!=null) this.setAttribute('text',g["userpass"]);
-            </handler>                
-            <handler name="onkeyup" args="key">
-                <![CDATA[
-                if ( this.parent.enterPressed && ( key == 13 ) )
-                {
-                    parent.login();
-                }
-                ]]>
-            </handler>
-            <handler name="onkeydown" args="key">
-                if ( key == 13 )
-                {
-                    this.parent.enterPressed = true;
-                }
-            </handler>
-        </customEdittext>
+    <customEdittext name="userpass" y="54" password="true" x="120" width="330" >
+        <handler name="oninit">
+            var g = canvas.getUserData();
+            if (g["userpass"]!=null) this.setAttribute('text',g["userpass"]);
+        </handler>                
+        <handler name="onkeyup" args="key">
+            <![CDATA[
+            if ( this.parent.enterPressed && ( key == 13 ) )
+            {
+                parent.login();
+            }
+            ]]>
+        </handler>
+        <handler name="onkeydown" args="key">
+            if ( key == 13 )
+            {
+                this.parent.enterPressed = true;
+            }
+        </handler>
+    </customEdittext>
     
-    <labelText name="n5" text="Color-Style" width="300" y="86" resize="false" x="2"/>  
+	<labelText name="n5" text="Color-Style" width="300" y="86" resize="false" x="2"/>  
+    
+    <resetCombobox name="colors" width="330" y="84" x="120">
+        <attribute name="initselect" value="true" type="boolean" />
         
-        <resetCombobox name="colors" width="330" y="84" x="120">
-            <attribute name="initselect" value="true" type="boolean" />
-            <handler name="oninit">
-                this.addItem('redorange','redorange');
-                this.addItem('mediumseagreen','mediumseagreen');
-                this.addItem('steelblue','steelblue');
-                this.addItem('lightsteelblue','lightsteelblue');
-                this.addItem('goldenrod','goldenrod');
-                this.addItem('silvergray','silvergray'); 
-                var t = new lz.sharedObject();
-                t.getLocal('userdata');
-                var g = t.getData('userdata');
-                if($debug) Debug.write("checkLoginData/g: ",g);
-                if(g!=null) {
-                    if (g["userlang"]!=null) {
-                        this.selectItem(g["usercolor"]);
-                    } else {
-                        this.selectItem('lightsteelblue');
-                    }
-                } else {
-                    this.selectItem('lightsteelblue');
-                }
-            </handler> 
-            <handler name="onselect" args="v">
-                //Debug.write("onselect: ",v.value);
-                if (this.initselect){
-                    this.initselect=false;
-                } else {
-                    if (v.value=="mediumseagreen"){
-                        canvas.setAttribute('basebgcolorizer',"0x3CB371");
-                        canvas.setAttribute('baseMousecolorizer',"0x66CC8E");
-                        canvas.setAttribute('baseMouseOvercolorizer',"0x66CC8E");
-                    } else if (v.value=="steelblue"){
-                        canvas.setAttribute('basebgcolorizer',"0x4682B4");
-                        canvas.setAttribute('baseMousecolorizer',"0x80AECC");
-                        canvas.setAttribute('baseMouseOvercolorizer',"0x80AECC");
-                    } else if (v.value=="redorange"){
-                        canvas.setAttribute('basebgcolorizer',"0xFC8558");
-                        canvas.setAttribute('baseMousecolorizer',"0xFDC4A6");
-                        canvas.setAttribute('baseMouseOvercolorizer',"0xFDC4A6");
-                    } else if (v.value=="lightsteelblue"){
-                        canvas.setAttribute('basebgcolorizer',"0xB0C4DE");
-                        canvas.setAttribute('baseMousecolorizer',"0xC4D5E6");
-                        canvas.setAttribute('baseMouseOvercolorizer',"0xC4D5E6");
-                    } else if (v.value=="goldenrod"){
-                        canvas.setAttribute('basebgcolorizer',"0xDAA520");
-                        canvas.setAttribute('baseMousecolorizer',"0xE8C064");
-                        canvas.setAttribute('baseMouseOvercolorizer',"0xE8C064");
-                    } else if (v.value=="silvergray"){
-                        canvas.setAttribute('basebgcolorizer',"0xC4C8CC");
-                        canvas.setAttribute('baseMousecolorizer',"0xC2C8CD");
-                        canvas.setAttribute('baseMouseOvercolorizer',"0xC2C8CD");
-                    }
-                    this.parent.close();
-                    new lz.checkLoginData(canvas.main_content._content.inner);
-                }
-            </handler>
-            <handler name="onkeyup" args="key">
-                <![CDATA[
-                if ( this.parent.enterPressed && ( key == 13 ) )
-                {
-                    parent.login();
-                }
-                ]]>
-            </handler>
-            <handler name="onkeydown" args="key">
-                if ( key == 13 )
-                {
-                    this.parent.enterPressed = true;
-                }
-            </handler>
-        </resetCombobox>    
+        <handler name="oninit">
+            this.addItem('redorange','redorange');
+            this.addItem('mediumseagreen','mediumseagreen');
+            this.addItem('steelblue','steelblue');
+            this.addItem('lightsteelblue','lightsteelblue');
+            this.addItem('goldenrod','goldenrod');
+            this.addItem('silvergray','silvergray'); 
+            this.addItem('userdefined','userdefined'); 
+
+            var g = canvas.getUserData();
+            if($debug) Debug.write("checkLoginData/g: ",g);
+            this.selectItem((g["usercolor"] != null) ? g["usercolor"] : canvas.baseColorScheme);
+        </handler> 
+        <handler name="onselect" args="v">
+            //Debug.write("onselect: ",v.value);
+            if (this.initselect){
+                this.initselect=false;
+            } else {
+            	var val = canvas.setColorStyle(v.value);
+                var g = canvas.getUserData();
+                g["usercolor"] = val;
+                canvas.setUserData(g);
+                
+                this.parent.close();
+                new lz.checkLoginData(canvas.main_content._content.inner);
+            }
+        </handler>
+        <handler name="onkeyup" args="key">
+            <![CDATA[
+            if ( this.parent.enterPressed && ( key == 13 ) )
+            {
+                parent.login();
+            }
+            ]]>
+        </handler>
+        <handler name="onkeydown" args="key">
+            if ( key == 13 )
+            {
+                this.parent.enterPressed = true;
+            }
+        </handler>
+    </resetCombobox>    
     
     <labelText name="nlabelquality" text="Quality" y="116" x="2" visible="true" width="140" />     
-        <resetCombobox name="ncomboquality" width="330" y="114" x="120" editable="false" >
-            <handler name="oninit">
-                this.addItem("best ~ 16KB upload","best");
-                this.addItem("medium ~ 10KB upload ","medium");
-                var t = new lz.sharedObject();
-                t.getLocal('userdata');
-                var g = t.getData('userdata');
-                if($debug) Debug.write("checkLoginData/g: ",g);
-                if(g!=null) {
-                    if (g["userlang"]!=null) {
-                        this.selectItem(g["userquality"]);
-                    } else {
-                        this.selectItem("best");
-                    }
-                } else {
-                    this.selectItem("best");
-                }
-            </handler> 
-            <handler name="onselect">
-                canvas.vaquality = this.getValue();
-            </handler>
-            <handler name="onkeyup" args="key">
-                <![CDATA[
-                if ( this.parent.enterPressed && ( key == 13 ) )
-                {
-                    parent.login();
-                }
-                ]]>
-            </handler>
-            <handler name="onkeydown" args="key">
-                if ( key == 13 )
-                {
-                    this.parent.enterPressed = true;
-                }
-            </handler>
-        </resetCombobox>
+    <resetCombobox name="ncomboquality" width="330" y="114" x="120" editable="false" >
+        <handler name="oninit">
+            this.addItem("best ~ 16KB upload","best");
+            this.addItem("medium ~ 10KB upload ","medium");
+            var g = canvas.getUserData();
+            if($debug) Debug.write("checkLoginData/g: ",g);
+            if (g["userquality"] != null) {
+                this.selectItem(g["userquality"]);
+            } else {
+                this.selectItem("best");
+            }
+        </handler> 
+        <handler name="onselect">
+            canvas.vaquality = this.getValue();
+        </handler>
+        <handler name="onkeyup" args="key">
+            <![CDATA[
+            if ( this.parent.enterPressed && ( key == 13 ) )
+            {
+                parent.login();
+            }
+            ]]>
+        </handler>
+        <handler name="onkeydown" args="key">
+            if ( key == 13 )
+            {
+                this.parent.enterPressed = true;
+            }
+        </handler>
+    </resetCombobox>
         
 	<labelText name="domain_label" text="Domain" width="300" y="144" resize="false" x="2" />     
-        <resetCombobox name="domain" width="330" y="144" x="120" editable="false">
-        	<handler name="oninit">
-        		//this.addItem("localhost","localhost");
-        		//this.addItem("eu.p-f.biz","SA-MeetingEU");
-        		//this.addItem("am.p-f.biz","SA-MeetingAM");
-        		//this.addItem("ap.p-f.biz","SA-MeetingAP");
-        		//this.selectItemAt(0);
-        		this.getActiveLdapConfigs.doCall();
-        	</handler>
-        	
-        	<!--
-        	public List<LdapConfig> getActiveLdapConfigs() 
-        	 -->
-            <netRemoteCallHib name="getActiveLdapConfigs" funcname="ldapconfigservice.getActiveLdapConfigs" 
-        				        remotecontext="$once{ canvas.thishib }" >      
-                <handler name="ondata" args="value">
-                    //The onResult-Handler will be called be the rtmpconnection
-                    <![CDATA[
-                        if ($debug) Debug.write("getActiveLdapConfigs: ",value);
-                        for (var i=0;i<value.length;i++) {
-                            parent.addItem(value[i].name,value[i].ldapConfigId);
-                        }
-                        
-                        var t = new lz.sharedObject();
-                        t.getLocal('userdata');
-                        var g = t.getData('userdata');
-                        if(g!=null) {
-                            if (g["userdomain"]!=null) {
-                            	
-                            	var tItem = this.getItem(g["userdomain"]);
-                            	if (tItem != null) {
-                                    parent.selectItem(g["userdomain"]);
-                            	} else {
-                            		parent.selectItemAt(0);
-                            	}
-                            	
-                            } else {
-                                parent.selectItemAt(0);
-                            }
-                        } else {
-                            parent.selectItemAt(0);
-                        }
-                        
-                    ]]>
-                </handler>  
-            </netRemoteCallHib>         	 
-        	
-        </resetCombobox>        
+    <resetCombobox name="domain" width="330" y="144" x="120" editable="false">
+    	<handler name="oninit">
+    		//this.addItem("localhost","localhost");
+    		//this.addItem("eu.p-f.biz","SA-MeetingEU");
+    		//this.addItem("am.p-f.biz","SA-MeetingAM");
+    		//this.addItem("ap.p-f.biz","SA-MeetingAP");
+    		//this.selectItemAt(0);
+    		this.getActiveLdapConfigs.doCall();
+    	</handler>
+    	
+    	<!--
+    	public List<LdapConfig> getActiveLdapConfigs() 
+    	 -->
+        <netRemoteCallHib name="getActiveLdapConfigs" funcname="ldapconfigservice.getActiveLdapConfigs" 
+    				        remotecontext="$once{ canvas.thishib }" >      
+            <handler name="ondata" args="value">
+                //The onResult-Handler will be called be the rtmpconnection
+                <![CDATA[
+                    if ($debug) Debug.write("getActiveLdapConfigs: ",value);
+                    for (var i=0;i<value.length;i++) {
+                        parent.addItem(value[i].name,value[i].ldapConfigId);
+                    }
+                    
+                    var g = canvas.getUserData();
+                    if (g["userdomain"]!=null) {
+                    	
+                    	var tItem = parent.getItem(g["userdomain"]);
+                    	if (tItem != null) {
+                            parent.selectItem(g["userdomain"]);
+                    	} else {
+                    		parent.selectItemAt(0);
+                    	}
+                    	
+                    } else {
+                        parent.selectItemAt(0);
+                    }
+                    
+                ]]>
+            </handler>  
+        </netRemoteCallHib>         	 
+    	
+    </resetCombobox>        
 
     <labelText name="organisation_label_info" labelid="617" width="350" 
                multiline="true" y="22" resize="false" x="2" visible="false" />     
@@ -323,11 +285,8 @@
                 if (!(value<0)){
                     hib.userlang = isNaN(value.language_id) ? 1 :  Number(value.language_id);
                     
+                    var g = canvas.getUserData();
                     if (this.parent._savelogindata.getValue()) {
-                        var t = new lz.sharedObject();
-                        t.getLocal('userdata');
-                        var g = t.getData('userdata');
-                        if (g==null) g = new Array();
                         g["username"] = parent.username.getText();
                         g["userpass"] = parent.userpass.getText();
                         g["userquality"] = parent.ncomboquality.getValue();
@@ -336,13 +295,7 @@
                         g["userdomain"] = parent.domain.getValue();
                         g["saveuserdata"]=true;
                         g["storedSession"] = canvas.sessionId;
-                        t.setData('userdata',g);
-                        t.flush(); 
                     } else {
-                        var t = new lz.sharedObject();
-                        t.getLocal('userdata');
-                        var g = t.getData('userdata');
-                        if (g==null) g = new Array();
                         g["username"] = '';
                         g["userpass"] = '';
                         g["userquality"] = null;
@@ -351,9 +304,8 @@
                         g["userdomain"] = null;
                         g["saveuserdata"]=false;
                         g["storedSession"] = "";
-                        t.setData('userdata',g);
-                        t.flush();                 
                     }
+                    canvas.setUserData(g);
                 
                     canvas.setAttribute('user_id',value.user_id);
                     canvas.setAttribute('firstName',value.firstname);
@@ -474,10 +426,7 @@
     <labelCheckbox x="120" y="$once{ parent.height-62 }" fontsize="11"
         name="_savelogindata" labelid="288" >
         <handler name="oninit">
-            var t = new lz.sharedObject();
-            if($debug) Debug.write("checkLoginData/t: ",t);
-            t.getLocal('userdata');
-            var g = t.getData('userdata');
+            var g = canvas.getUserData();
             if($debug) Debug.write("checkLoginData/g: ",g);
             var save = g["saveuserdata"];
             if($debug) Debug.write("checkLoginData/save: ",save);

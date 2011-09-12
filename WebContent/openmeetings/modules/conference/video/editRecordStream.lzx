@@ -35,9 +35,7 @@
 		<![CDATA[
 			if ($debug) Debug.write("this.myvideocontainer ",this.myvideocontainer);			
 			if ($debug) Debug.write("editrecordstream ###################### ");
-	        var t = new lz.sharedObject();
-	        t.getLocal('userdata');
-	        var g = t.getData('userdata');
+	        var g = canvas.getUserData();
 	        var save = g["savecamdata"];
 	        //Debug.write("save: ",save,g["cam"],g["mic"]);
             
@@ -69,30 +67,13 @@
     
     <method name="storelocaldata">
         <![CDATA[
-        if (this.holddatainSO.getValue()){
-            //Debug.write("sharedobject store ");
-            var t = new lz.sharedObject();
-            t.getLocal('userdata');
-            var g = t.getData('userdata');
-            if (g==null) g = new Array();
-            g["cam"] = this.availibleCams.getValue();
-            g["mic"] = this.availibleMics.getValue();
-            g["avstored"] = this.availibleSettings.getValue();
-            g["savecamdata"] = true;
-            t.setData('userdata',g);
-            t.flush();  
-        } else {
-            var t = new lz.sharedObject();
-            t.getLocal('userdata');
-            var g = t.getData('userdata');
-            if (g==null) g = new Array();
-            g["cam"] = this.availibleCams.getValue();
-            g["mic"] = this.availibleMics.getValue();
-            g["avstored"] = this.availibleSettings.getValue();
-            g["savecamdata"]=false;
-            t.setData('userdata',g);
-            t.flush(); 
-        }        
+        //Debug.write("sharedobject store ");
+        var g = canvas.getUserData();
+        g["cam"] = this.availibleCams.getValue();
+        g["mic"] = this.availibleMics.getValue();
+        g["avstored"] = this.availibleSettings.getValue();
+        g["savecamdata"] = this.holddatainSO.getValue();
+        canvas.setUserData(g);
         ]]>
     </method>   	
     
@@ -239,13 +220,8 @@
             
 				//var r = "av";
 
-				var t = new lz.sharedObject();
-				t.getLocal('userdata');
-				var g = t.getData('userdata');
-				var cam = null;
-				if (g!=null){
-					var cam = g["avstored"];
-				}
+				var g = canvas.getUserData();
+				var cam = g["avstored"];
 				
 				var tItem = this.getItem(String(cam));  
 				if (tItem != null) {
@@ -301,14 +277,8 @@
 					this.addItem(tw[eg],eg);
 					r=eg;
 				}
-				var t = new lz.sharedObject();
-				t.getLocal('userdata');
-				var g = t.getData('userdata');
-				if (g!=null){
-					var cam = g["cam"];
-				} else {
-					var cam = r;
-				}
+				var g = canvas.getUserData();
+				var cam = g["cam"];
 				if (cam=='undefined' || cam =='' || cam == null) cam=r;
 				this.selectItem(String(cam));    
 
@@ -329,14 +299,8 @@
 	                this.addItem(tw[eg],eg);
 	            }
 	            
-	            var t = new lz.sharedObject();
-	            t.getLocal('userdata');
-	            var g = t.getData('userdata');
-	            if (g!=null){
-	            	var mic = g["mic"];
-	            } else {
-	            	var mic = r;
-	            }
+	            var g = canvas.getUserData();
+            	var mic = g["mic"];
 				if (mic=='undefined' || mic =='' || mic ==null) mic=r;
 				this.selectItem(String(mic));  
             ]]>
@@ -352,9 +316,7 @@
     <!-- Remember Me -->    
     <labelCheckbox name="holddatainSO" labelid="762" x="10" y="210" >
         <handler name="oninit">
-            var t = new lz.sharedObject();
-            t.getLocal('userdata');
-            var g = t.getData('userdata');
+            var g = canvas.getUserData();
             var save = g["savecamdata"];
             if ($debug) Debug.write("savecamdata save: ",save);
             if(save) this.setValue(true);

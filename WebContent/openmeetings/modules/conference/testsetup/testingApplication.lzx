@@ -166,14 +166,8 @@ Test the setup values before you enter a room
                     this.addItem(tw[eg],eg);
                     r=eg;
                 }
-                var t = new lz.sharedObject();
-                t.getLocal('userdata');
-                var g = t.getData('userdata');
-                if (g!=null){
-                    var cam = g["cam"];
-                } else {
-                    var cam = r;
-                }
+                var g = canvas.getUserData();
+                var cam = g["cam"];
                 if (cam=='undefined' || cam =='' || cam == null) cam=r;
                 this.selectItem(String(cam));    
 
@@ -194,14 +188,8 @@ Test the setup values before you enter a room
                     this.addItem(tw[eg],eg);
                 }
                 
-                var t = new lz.sharedObject();
-                t.getLocal('userdata');
-                var g = t.getData('userdata');
-                if (g!=null){
-                    var mic = g["mic"];
-                } else {
-                    var mic = r;
-                }
+                var g = canvas.getUserData();
+                var mic = g["mic"];
                 if (mic=='undefined' || mic =='' || mic ==null) mic=r;
                 this.selectItem(String(mic));  
             ]]>

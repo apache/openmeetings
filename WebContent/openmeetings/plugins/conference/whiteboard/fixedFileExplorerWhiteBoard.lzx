@@ -44,15 +44,11 @@
         
         ////Debug.write("clear yesno,askagain: ",yesno,askagain);
     
-         var t = new lz.sharedObject();
-         t.getLocal('userdata');
-         var g = t.getData('userdata');
-         if (g==null) g = new Array();
+         var g = canvas.getUserData();
          if (g["image"]==null) g["image"]=new Array();
          g["image"]["clearField"]=yesno;
          g["image"]["askagainclear"]=!askagain;
-         t.setData('userdata',g);
-         t.flush();     
+         canvas.setUserData(g);
 
          if (yesno){
             ////Debug.write("clear field!!");
@@ -66,30 +62,22 @@
     </method>
     
     <method name="getconfirmationscode">
-        var t = new lz.sharedObject();
-        t.getLocal('userdata');
-        var g = t.getData('userdata');
-        if (g==null) g = new Array();
+        var g = canvas.getUserData();
         if (g["image"]==null) {
             g["image"]=new Array();
             g["image"]["clearField"]=false;
             g["image"]["askagainclear"]=true;
-            t.setData('userdata',g);
-            t.flush();              
+            canvas.setUserData(g);
         }
         return g["image"];
     </method>
     
     <method name="resetDefaultConfirmations">
-        var t = new lz.sharedObject();
-        t.getLocal('userdata');
-        var g = t.getData('userdata');
-        if (g==null) g = new Array();
+        var g = canvas.getUserData();
         if (g["image"]==null) g["image"]=new Array();
         g["image"]["clearField"]=false;
         g["image"]["askagainclear"]=true;
-        t.setData('userdata',g);
-        t.flush();              
+        canvas.setUserData(g);
     </method>   
     
     <method name="clearAreaAndAddImage" args="downloadurlVal,xVal,yVal,baseurl,fileName,moduleName,parentPath,room,domain">

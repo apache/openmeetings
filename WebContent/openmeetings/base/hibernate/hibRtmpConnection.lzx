@@ -237,10 +237,7 @@
             if ($debug) Debug.write("sendCallBack logoutUser: ",value);    
             parent.initlanguageLoaded = false;
             
-            var t = new lz.sharedObject();
-            t.getLocal('userdata');
-            var g = t.getData('userdata');
-            if (g==null) g = new Array();
+            var g = canvas.getUserData();
             g["username"] = '';
             g["userpass"] = '';
             g["userquality"] = null;
@@ -248,8 +245,8 @@
             g["userlang"] = null;
             g["saveuserdata"]=false;
             g["storedSession"] = "";
-            t.setData('userdata',g);
-            t.flush(); 
+            canvas.setUserData(g);
+            canvas.setColorStyle(canvas.baseColorScheme);
             
         	parent.getLanguageByIdAndMax.start = 0;
         	parent.getLanguageByIdAndMax.doCall();
@@ -600,10 +597,7 @@
                     
 				
     					//Check if user is auto-logged in by session
-    					var t = new lz.sharedObject();
-                        if($debug) Debug.write("checkLoginData/t: ",t);
-                        t.getLocal('userdata');
-                        var g = t.getData('userdata');
+    					var g = canvas.getUserData();
                         if($debug) Debug.write("checkLoginData/g: ",g);
                         var storedSession = g["storedSession"];
                         if($debug) Debug.write("checkLoginData/save: ",save);
@@ -752,9 +746,7 @@
                     
                 	canvas.destroyExitButton = false;
                 	
-                    var t = new lz.sharedObject();
-                    t.getLocal('userdata');
-                    var g = t.getData('userdata');
+                    var g = canvas.getUserData();
                     
                     if ($debug) Debug.write("doShowUpdateProfileMessage",g["doShowUpdateProfileMessage"]);
                     
@@ -773,13 +765,9 @@
             //Debug.write("clear yesno,askagain: ",yesno,askagain);
             //can only be true in this case
         
-             var t = new lz.sharedObject();
-             t.getLocal('userdata');
-             var g = t.getData('userdata');
-             if (g==null) g = new Array();
+             var g = canvas.getUserData();
              g["doShowUpdateProfileMessage"]=askagain;
-             t.setData('userdata',g);
-             t.flush();     
+             canvas.setUserData(g);
         </method>     
     </netRemoteCallHib>
     

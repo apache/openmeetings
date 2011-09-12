@@ -90,10 +90,19 @@
             this.setAttribute('useSSL',true);
         }
         
-        this.setAttribute('red5httpport',Number(canvas.myConfigSet.getPointer().xpathQuery('config/red5httpport/text()')));  
-        this.setAttribute('basebgcolorizer',canvas.myConfigSet.getPointer().xpathQuery('config/basebgcolorizer/text()'));  
-        this.setAttribute('baseMousecolorizer',canvas.myConfigSet.getPointer().xpathQuery('config/baseMousecolorizer/text()'));  
-        this.setAttribute('baseMouseOvercolorizer',canvas.myConfigSet.getPointer().xpathQuery('config/baseMouseOvercolorizer/text()'));  
+        this.setAttribute('red5httpport',Number(canvas.myConfigSet.getPointer().xpathQuery('config/red5httpport/text()')));
+        this.setAttribute('userbgcolorizer',canvas.myConfigSet.getPointer().xpathQuery('config/basebgcolorizer/text()'));
+        this.setAttribute('userMousecolorizer',canvas.myConfigSet.getPointer().xpathQuery('config/baseMousecolorizer/text()'));
+        this.setAttribute('userMouseOvercolorizer',canvas.myConfigSet.getPointer().xpathQuery('config/baseMouseOvercolorizer/text()'));
+        if (this.baseColorScheme == "lightsteelblue" &&
+        	(this.userbgcolorizer != "0x3F5B9E"
+        	|| this.baseMousecolorizer != "0xC4D5E6"
+        	|| this.baseMouseOvercolorizer != "0xC4D5E6"))
+        {
+	        this.setAttribute('baseColorScheme', "userdefined");
+	    }
+        this.setColorStyle(this.baseColorScheme);
+        
         this.setAttribute('currentappname',canvas.myConfigSet.getPointer().xpathQuery('config/currentappname/text()'));  
         this.setAttribute('currentappnameurl',canvas.myConfigSet.getPointer().xpathQuery('config/currentappnameurl/text()'));  
         this.setAttribute('currentappnamebugurl',canvas.myConfigSet.getPointer().xpathQuery('config/currentappnamebugurl/text()'));
@@ -868,5 +877,66 @@ if (cItem == null) {
         break;
     }
 </method>  
+
+<method name="initSharedObject">
+	if (canvas.sharedObject == null) {
+		if($debug) Debug.write("canvas.initSharedObject sharedObject IS null");
+    	canvas.sharedObject = new lz.sharedObject();
+	    canvas.sharedObject.getLocal('userdata');
+    }
+</method>
+
+<method name="getUserData">
+	canvas.initSharedObject();
+    var g = canvas.sharedObject.getData('userdata');
+    if (g==null) {
+		if($debug) Debug.write("sharedObject.getData IS null");
+    	g = new Array();
+    }
+    return g;
+</method>
+
+<method name="setUserData" args="g">
+	canvas.initSharedObject();
+    canvas.sharedObject.setData('userdata', g);
+    canvas.sharedObject.flush();
+</method>
+
+<method name="setColorStyle" args="value">
+	var val = value;
+    if (val == "mediumseagreen"){
+        canvas.setAttribute('basebgcolorizer',"0x3CB371");
+        canvas.setAttribute('baseMousecolorizer',"0x66CC8E");
+        canvas.setAttribute('baseMouseOvercolorizer',"0x66CC8E");
+    } else if (val == "steelblue"){
+        canvas.setAttribute('basebgcolorizer',"0x4682B4");
+        canvas.setAttribute('baseMousecolorizer',"0x80AECC");
+        canvas.setAttribute('baseMouseOvercolorizer',"0x80AECC");
+    } else if (val == "redorange"){
+        canvas.setAttribute('basebgcolorizer',"0xFC8558");
+        canvas.setAttribute('baseMousecolorizer',"0xFDC4A6");
+        canvas.setAttribute('baseMouseOvercolorizer',"0xFDC4A6");
+    } else if (val == "lightsteelblue"){
+        canvas.setAttribute('basebgcolorizer',"0x3F5B9E");
+        canvas.setAttribute('baseMousecolorizer',"0xC4D5E6");
+        canvas.setAttribute('baseMouseOvercolorizer',"0xC4D5E6");
+    } else if (val == "goldenrod"){
+        canvas.setAttribute('basebgcolorizer',"0xDAA520");
+        canvas.setAttribute('baseMousecolorizer',"0xE8C064");
+        canvas.setAttribute('baseMouseOvercolorizer',"0xE8C064");
+    } else if (val == "silvergray"){
+        canvas.setAttribute('basebgcolorizer',"0xC4C8CC");
+        canvas.setAttribute('baseMousecolorizer',"0xC2C8CD");
+        canvas.setAttribute('baseMouseOvercolorizer',"0xC2C8CD");
+    } else if (val == "userdefined"){
+        canvas.setAttribute('basebgcolorizer', canvas.userbgcolorizer);
+        canvas.setAttribute('baseMousecolorizer', canvas.userMousecolorizer);
+        canvas.setAttribute('baseMouseOvercolorizer', canvas.userMouseOvercolorizer);
+    } else {
+    	val = null;
+    }
+    
+    return val;
+</method>
 
 </library>

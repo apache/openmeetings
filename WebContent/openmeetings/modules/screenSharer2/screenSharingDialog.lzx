@@ -887,17 +887,13 @@
                 <handler name="oninit">
                 	<![CDATA[
                 	this.bringToFront();
-                    var t = new lz.sharedObject();
-                    t.getLocal('userdata');
-                    var g = t.getData('userdata');
-                    if (g!=null) {
-                        if (g["image"]!=null) {
-                        	if ($debug) Debug.write("g[image][donotaskagainrdc] ",g["image"]["donotaskagainrdc"]);
-                            if ($debug) Debug.write("g[image] ",g["image"]);
-                            if (g["image"]["donotaskagainrdc"] != null && g["image"]["donotaskagainrdc"] == true) {
-                            	if ($debug) Debug.write("DO CLOSE IT")
-                                this.close();
-                            }
+                    var g = canvas.getUserData();
+                    if (g["image"]!=null) {
+                    	if ($debug) Debug.write("g[image][donotaskagainrdc] ",g["image"]["donotaskagainrdc"]);
+                        if ($debug) Debug.write("g[image] ",g["image"]);
+                        if (g["image"]["donotaskagainrdc"] != null && g["image"]["donotaskagainrdc"] == true) {
+                        	if ($debug) Debug.write("DO CLOSE IT")
+                            this.close();
                         }
                     }
                     ]]>
@@ -920,16 +916,12 @@
                 	<attribute name="checkboxIsinited" value="false" type="boolean"/>
                     <handler name="oninit">
                     	<![CDATA[
-                            var t = new lz.sharedObject();
-                            t.getLocal('userdata');
-                            var g = t.getData('userdata');
-                            if (g!=null) {
-                                if (g["image"]!=null) {
-                                	if ($debug) Debug.write("g[image]",g["image"]);
-                                    if (g["image"]["donotaskagainrdc"] != null && g["image"]["donotaskagainrdc"] == true) {
-                                        if ($debug) Debug.write("donotaskagainrdc ",g["image"]["donotaskagainrdc"]);
-                                        this.setValue(true);
-                                    }
+                            var g = canvas.getUserData();
+                            if (g["image"]!=null) {
+                            	if ($debug) Debug.write("g[image]",g["image"]);
+                                if (g["image"]["donotaskagainrdc"] != null && g["image"]["donotaskagainrdc"] == true) {
+                                    if ($debug) Debug.write("donotaskagainrdc ",g["image"]["donotaskagainrdc"]);
+                                    this.setValue(true);
                                 }
                             }
                             this.checkboxIsinited = true;
@@ -940,18 +932,14 @@
                     		return;
                     	}
                         if ($debug) Debug.write("onselect ",v);
-                        var t = new lz.sharedObject();
-                        t.getLocal('userdata');
-                        var g = t.getData('userdata');
-                        if (g==null) g = new Array();
+                        var g = canvas.getUserData();
                         if (g["image"]==null) g["image"]=new Array();
                         g["image"]["donotaskagainrdc"]=v;
                         
                         if ($debug) Debug.write("g[image][donotaskagainrdc] ",g["image"]["donotaskagainrdc"]);
                         if ($debug) Debug.write("g[image] ",g["image"]);
                         
-                        t.setData('userdata',g);
-                        t.flush();  
+                        canvas.setUserData(g);
                     </handler>
                 </labelCheckbox>    
                 

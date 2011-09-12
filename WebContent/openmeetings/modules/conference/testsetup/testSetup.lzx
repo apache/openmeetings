@@ -42,9 +42,7 @@ Test the setup values before you enter a room
     <handler name="oninit">
     	<![CDATA[
     	   
-    	    var t = new lz.sharedObject();
-            t.getLocal('userdata');
-            var g = t.getData('userdata');
+    	    var g = canvas.getUserData();
             var save = g["showAudioVideoTest"];
     	    
             if (!canvas.showAudioVideoTest) {
@@ -68,15 +66,11 @@ Test the setup values before you enter a room
         <![CDATA[
         
             //Debug.write("sharedobject store ");
-            var t = new lz.sharedObject();
-            t.getLocal('userdata');
-            var g = t.getData('userdata');
-            if (g==null) g = new Array();
+            var g = canvas.getUserData();
             g["cam"] = this.currentSharing.availibleCams.getValue();
             g["mic"] = this.currentSharing.availibleMics.getValue();
             g["showAudioVideoTest"] = this.holddatainSO.getValue();
-            t.setData('userdata',g);
-            t.flush();  
+            canvas.setUserData(g);
             
             this.startConference();
         ]]>
@@ -104,9 +98,7 @@ Test the setup values before you enter a room
     <!-- Remember Me -->    
     <labelCheckbox name="holddatainSO" labelid="759" x="10" y="$once{ parent.height-24 }" >
         <handler name="oninit">
-            var t = new lz.sharedObject();
-            t.getLocal('userdata');
-            var g = t.getData('userdata');
+            var g = canvas.getUserData();
             var save = g["showAudioVideoTest"];
             if ($debug) Debug.write("savecamdata save: ",save);
             if(save) this.setValue(true);

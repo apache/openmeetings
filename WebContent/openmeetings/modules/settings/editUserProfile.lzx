@@ -159,13 +159,9 @@
 				this.parent.userObj.showContactDataToContacts = false;
 			}
             
-			var t = new lz.sharedObject();
-            t.getLocal('userdata');
-            var g = t.getData('userdata');
-            if (g==null) g = new Array();
+			var g = canvas.getUserData();
             g["showAudioVideoTest"] = parent.doShowTestWizzard.getValue();
-            t.setData('userdata',g);
-            t.flush();
+            canvas.setUserData(g);
 			
             if ($debug) Debug.write("this.parent.userObj: ",this.parent.userObj);
             if ($debug) Debug.write("this.parent.userObj.adresses.states ",this.parent.userObj.adresses.states);
@@ -220,16 +216,10 @@
             <labeldTextListItem datapath="languagesSet:/item" text="$path{ 'name/text()' }"
                 value="$path{ 'language_id/text()' }" />
             <handler name="oninit">
-                var t = new lz.sharedObject();
-                t.getLocal('userdata');
-                var g = t.getData('userdata');
+                var g = canvas.getUserData();
                 if($debug) Debug.write("checkLoginData/g: ",g);
-                if(g!=null) {
-                    if (g["userlang"]!=null) {
-                        this.selectItem(g["userlang"]);
-                    } else {
-                        this.selectItem(String(canvas.thishib.userlang));
-                    }
+                if (g["userlang"]!=null) {
+                    this.selectItem(g["userlang"]);
                 } else {
                     this.selectItem(String(canvas.thishib.userlang));
                 }
@@ -289,9 +279,7 @@
     <!-- Remember Me -->    
     <labelCheckbox name="doShowTestWizzard" labelid="776" x="430" y="156" >
         <handler name="oninit">
-            var t = new lz.sharedObject();
-            t.getLocal('userdata');
-            var g = t.getData('userdata');
+            var g = canvas.getUserData();
             var save = g["showAudioVideoTest"];
             if ($debug) Debug.write("savecamdata save: ",save);
             if(save) this.setValue(true);

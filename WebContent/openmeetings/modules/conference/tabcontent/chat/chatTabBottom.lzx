@@ -34,9 +34,7 @@
     <labelCheckbox name="_inverseWording" x="2" y="24" labelid="580">
         <attribute name="doUpdate" value="false" type="boolean" />
         <handler name="oninit">
-            var t = new lz.sharedObject();
-            t.getLocal('userdata');
-            var g = t.getData('userdata');
+            var g = canvas.getUserData();
             var save = g["rtlCheckbox"];
             //if ($debug) Debug.write("oninit doUpdate",save,g);
             if(save) {
@@ -48,14 +46,10 @@
         <handler name="onvalue" args="v">
             if (this.doUpdate) {
                 //if ($debug) Debug.write("onvalue doUpdate",this.getValue());
-                var t = new lz.sharedObject();
-                t.getLocal('userdata');
-                var g = t.getData('userdata');
-                if (g==null) g = new Array();
+                var g = canvas.getUserData();
                 g["rtlCheckbox"]=this.getValue();
                 //if ($debug) Debug.write("onvalue doUpdate",g["rtlCheckbox"]);
-                t.setData('userdata',g);
-                t.flush(); 
+                canvas.setUserData(g);
             }
         </handler>
         <labelTooltip labelid="581" />

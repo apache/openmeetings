@@ -33,30 +33,22 @@
 	  	</netRemoteCallHib> 	
 		
 		<method name="getconfirmationscode">
-			var t = new lz.sharedObject();
-			 t.getLocal('userdata');
-			 var g = t.getData('userdata');
-			 if (g==null) g = new Array();
+			var g = canvas.getUserData();
 			 if (g["wmlfile"]==null) {
 				 g["wmlfile"]=new Array();
 				 g["wmlfile"]["clearField"]=false;
 				 g["wmlfile"]["askagainclear"]=true;
-				 t.setData('userdata',g);
-				 t.flush();          	
+				 canvas.setUserData(g);
 			 }
 			 return g["wmlfile"];
 		</method>
 		
 		<method name="resetDefaultConfirmations">
-			var t = new lz.sharedObject();
-			 t.getLocal('userdata');
-			 var g = t.getData('userdata');
-			 if (g==null) g = new Array();
+			var g = canvas.getUserData();
 			 if (g["wmlfile"]==null) g["wmlfile"]=new Array();
 			 g["wmlfile"]["clearField"]=false;
 			 g["wmlfile"]["askagainclear"]=true;
-			 t.setData('userdata',g);
-			 t.flush();          	
+			 canvas.setUserData(g);
 	
 		</method>	
 		
@@ -65,15 +57,11 @@
 			//Debug.write("clear yesno,askagain: ",yesno,askagain);
 			//can only be true in this case
 		
-			 var t = new lz.sharedObject();
-			 t.getLocal('userdata');
-			 var g = t.getData('userdata');
-			 if (g==null) g = new Array();
+			 var g = canvas.getUserData();
 			 if (g["wmlfile"]==null) g["wmlfile"]=new Array();
 			 g["wmlfile"]["clearField"]=yesno;
 			 g["wmlfile"]["askagainclear"]=!askagain;
-			 t.setData('userdata',g);
-			 t.flush(); 	
+			 canvas.setUserData(g);
 	
 			 if (yesno){
 				 //Debug.write("clear field!!");

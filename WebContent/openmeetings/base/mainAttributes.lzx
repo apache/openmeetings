@@ -43,9 +43,13 @@ these properties will be overwritten by config.xml -->
 <!---
 	These colors are the main colors and style the hole application
  -->
-<attribute name="basebgcolorizer" value="0x3F5B9E" type="string" />	
-<attribute name="baseMousecolorizer" value="0xC4D5E6" type="string" />	
-<attribute name="baseMouseOvercolorizer" value="0xC4D5E6" type="string" />  	
+<attribute name="baseColorScheme" value="lightsteelblue" type="string" />
+<attribute name="basebgcolorizer" value="" type="string" />	
+<attribute name="baseMousecolorizer" value="" type="string" />	
+<attribute name="baseMouseOvercolorizer" value="" type="string" />  	
+<attribute name="userbgcolorizer" value="0x3F5B9E" type="string" />	
+<attribute name="userMousecolorizer" value="0xC4D5E6" type="string" />	
+<attribute name="userMouseOvercolorizer" value="0xC4D5E6" type="string" />  	
 
 <attribute name="bgColorMenu" value="0xEEF0EB" type="string" />
 <attribute name="fontColorHeader" value="0x000000" type="string" />
@@ -377,5 +381,7 @@ and some more references to temp-objects
 
 <attribute name="allowRecording" value="true" type="boolean" />
 
+<!-- userdata -->
+<attribute name="sharedObject" value="null" />
 
 </library>

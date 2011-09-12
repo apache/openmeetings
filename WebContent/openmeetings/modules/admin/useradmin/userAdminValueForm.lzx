@@ -330,16 +330,10 @@
             <labeldTextListItem datapath="languagesSet:/item" text="$path{ 'name/text()' }"
                 value="$path{ 'language_id/text()' }" />
             <handler name="oninit">
-                var t = new lz.sharedObject();
-                t.getLocal('userdata');
-                var g = t.getData('userdata');
+                var g = canvas.getUserData();
                 if($debug) Debug.write("checkLoginData/g: ",g);
-                if(g!=null) {
-                    if (g["userlang"]!=null) {
-                        this.selectItem(g["userlang"]);
-                    } else {
-                        this.selectItem(String(canvas.thishib.userlang));
-                    }
+                if (g["userlang"]!=null) {
+                    this.selectItem(g["userlang"]);
                 } else {
                     this.selectItem(String(canvas.thishib.userlang));
                 }

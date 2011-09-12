@@ -30,10 +30,7 @@
      -->
     
     <handler name="oninit" >
-		var t = new lz.sharedObject();
-         t.getLocal('userdata');
-         var g = t.getData('userdata');
-         if (g==null) g = new Array();
+		var g = canvas.getUserData();
          if (g["image"]==null) {
          	g["image"]=new Array();
          	g["image"]["clearField"]=false;
@@ -66,17 +63,13 @@
     </handler>    
     
     <method name="storesettings" >
-		var t = new lz.sharedObject();
-         t.getLocal('userdata');
-         var g = t.getData('userdata');
+		var g = canvas.getUserData();
 		
-         if (g==null) g = new Array();
          if (g["image"]==null) g["image"]=new Array();
          g["image"]["clearField"]=this._settings.inner.clearField.holddatainSO.getValue();
          g["image"]["askagainclear"]=this._settings.inner.askagainclear.holddatainSO.getValue();
          g["image"]["donotaskagainrdc"]=this._settings.inner.donotaskagainrdc.holddatainSO.getValue();
 		
-         if (g==null) g = new Array();
          if (g["wmlfile"]==null) g["wmlfile"]=new Array();
 		//always true
          g["wmlfile"]["clearField"]=true;
@@ -84,8 +77,7 @@
 		
          g["doShowUpdateProfileMessage"] = this._settings.inner.doShowUpdateProfileMessage.holddatainSO.getValue();
          
-	     t.setData('userdata',g);
-	     t.flush();  
+	     canvas.setUserData(g);
     </method>
     
     <simpleLabelButton labelid="61" width="100" x="290" y="216">

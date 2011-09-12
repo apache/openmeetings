@@ -6,29 +6,11 @@
 
     <method name="storelocaldata">
         <![CDATA[
-        if (this.holddatainSO.getValue()){
-            //Debug.write("sharedobject store ");
-            var t = new lz.sharedObject();
-            t.getLocal('userdata');
-            var g = t.getData('userdata');
-            if (g==null) g = new Array();
-            g["cam"]=availibleCams3.getValue();
-            g["mic"]=availibleMics3.getValue();
-            //Debug.write("sharedobject store ",g["cam"],g["mic"]);
-            g["savecamdata"] = true;
-            t.setData('userdata',g);
-            t.flush();  
-        } else {
-            var t = new lz.sharedObject();
-            t.getLocal('userdata');
-            var g = t.getData('userdata');
-            if (g==null) g = new Array();
-            g["cam"]=availibleCams3.getValue();
-            g["mic"]=availibleMics3.getValue();            
-            g["savecamdata"]=false;
-            t.setData('userdata',g);
-            t.flush(); 
-        }        
+        var g = canvas.getUserData();
+        g["cam"]=availibleCams3.getValue();
+        g["mic"]=availibleMics3.getValue();
+        g["savecamdata"] = this.holddatainSO.getValue();
+        canvas.setUserData(g); 
         ]]>
     </method>   
     
@@ -49,9 +31,7 @@
                 this.addItem(tw[eg],eg);
                 t=eg;
             }
-            var t = new lz.sharedObject();
-            t.getLocal('userdata');
-            var g = t.getData('userdata');
+            var g = canvas.getUserData();
             var cam = g["cam"];
             //Debug.write("cam: ",cam);
 
@@ -76,9 +56,7 @@
                 t=eg;
                 this.addItem(tw[eg],eg);
             }
-            var t = new lz.sharedObject();
-            t.getLocal('userdata');
-            var g = t.getData('userdata');
+            var g = canvas.getUserData();
             var mic = g["mic"];
             //Debug.write("mic: ",mic);
 
@@ -94,9 +72,7 @@
     <!-- Remember Me -->    
     <checkbox name="holddatainSO" text="Do not ask again" x="10" y="220">
         <handler name="oninit">
-            var t = new lz.sharedObject();
-            t.getLocal('userdata');
-            var g = t.getData('userdata');
+            var g = canvas.getUserData();
             var save = g["savecamdata"];
             //Debug.write("save: ",save);
             if(save) this.setValue(true);
