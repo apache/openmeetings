@@ -54,12 +54,14 @@
         <view resource="sub_menu_tools_panel_rsc"
               x="$once{ parent.width - 10 }" y="$once{ parent.height - 10 }">
             <handler name="onclick">
+            	<![CDATA[
                 if ($debug) Debug.write("Show Sub Menu");
                 new lz.subMenuIconToolsToUpload(canvas,{
-                                x:this.getAttributeRelative("x",canvas) - 2,
-                                y:this.getAttributeRelative("y",canvas) + 22,
+                                x:400,
+                                y:52,
                                 refToolbar:parent
                             });
+                ]]>
             </handler>
             <labelTooltip labelid="1335" />
         </view>
@@ -118,8 +120,8 @@
             <handler name="onclick">
                 if ($debug) Debug.write("Show Sub Menu");
                 new lz.subMenuIconToolsToUpload(canvas,{
-                                x:this.getAttributeRelative("x",canvas) - 2,
-                                y:this.getAttributeRelative("y",canvas) + 22,
+                                x:400,
+                                y:52,
                                 refToolbar:parent
                             });
             </handler>

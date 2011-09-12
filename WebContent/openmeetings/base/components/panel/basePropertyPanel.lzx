@@ -50,7 +50,7 @@
             this.parent.toggleopen();
         </handler>
             
-			<view width="${ this.parent.parent.width }" y="0" stretches="width"
+		<view width="${ this.parent.parent.width }" y="0" stretches="width"
                 resource="presenter_thumb_rsc" >
 			
             <handler name="oninit">

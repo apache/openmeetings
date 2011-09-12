@@ -3673,10 +3673,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Inbox</value>
   </string>
   <string id="1223" name="private message">
-    <value>Send</value>
+    <value>Gesendet</value>
   </string>
   <string id="1224" name="private message">
-    <value>Trash</value>
+    <value>Gelöscht</value>
   </string>
   <string id="1225" name="private message">
     <value>This is you! You cannot add yourself as your own contact.</value>
@@ -4106,5 +4106,11 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="1367" name="user_left_act_msg">
     <value> has left the room.</value>
+  </string>
+  <string id="1368" name="clipart icons">
+    <value>Math icons</value>
+  </string>
+  <string id="1369" name="clipart icons">
+    <value>No category</value>
   </string>
 </language>

@@ -3,6 +3,13 @@
 	
     <resource name="sub_menu_tools_panel_rsc" src="resources/sub_menu.png" />
     <resource name="sub_menu_top_grip_colored_rsc" src="resources/sub_menu_top_grip.swf" />	
+    
+    <!--
+        How to create image map:
+        $imageMagick/montage *.png -tile 20x -geometry 22x22+2+2 all_images.jpg
+     -->
+    <resource name="sub_menu_icons_math_all_rsc" src="resources/all_images.jpg" />
+    <resource name="sub_menu_icons_general_all_rsc" src="resources/all_general_images.jpg" />
 	
 	<include href="mainToolsPanelItem.lzx" />  
 	<include href="mainToolsPanel.lzx" />  
