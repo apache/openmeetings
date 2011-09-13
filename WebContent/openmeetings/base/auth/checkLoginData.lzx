@@ -134,8 +134,8 @@
     <labelText name="nlabelquality" labelid="1371" y="116" x="2" visible="true" width="140" />     
     <resetCombobox name="ncomboquality" width="330" y="114" x="120" editable="false" >
         <handler name="oninit">
-            this.addItem(canvas.getLabelName(1379) + " ~ 16KB " + canvas.getLabelName(1380),"best");
-            this.addItem(canvas.getLabelName(1381) + " ~ 10KB " + canvas.getLabelName(1380),"medium");
+            this.addItem(canvas.getLabelName(1381) + " ~ 16KB " + canvas.getLabelName(1382),"best");
+            this.addItem(canvas.getLabelName(1383) + " ~ 10KB " + canvas.getLabelName(1382),"medium");
             var g = canvas.getUserData();
             if($debug) Debug.write("checkLoginData/g: ",g);
             if (g["userquality"] != null) {
