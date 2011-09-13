@@ -387,7 +387,9 @@
 			}
 		</handler>	
 		<handler name="onmouseover">
-	        lz.Cursor.setCursorGlobal("arrow_draw_panel_cursor");
+			if (this.parent.objRef.typeOfObject != "swf") {
+	           lz.Cursor.setCursorGlobal("arrow_draw_panel_cursor");
+			}
 	    </handler>
 	    <handler name="onmouseout">
 	        lz.Cursor.unlock();
