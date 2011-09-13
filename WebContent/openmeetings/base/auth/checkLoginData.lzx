@@ -83,19 +83,19 @@
         </handler>
     </customEdittext>
     
-	<labelText name="n5" text="Color-Style" width="300" y="86" resize="false" x="2"/>  
+	<labelText name="n5" labelid="1370" width="300" y="86" resize="false" x="2"/>  
     
     <resetCombobox name="colors" width="330" y="84" x="120">
         <attribute name="initselect" value="true" type="boolean" />
         
         <handler name="oninit">
-            this.addItem('redorange','redorange');
-            this.addItem('mediumseagreen','mediumseagreen');
-            this.addItem('steelblue','steelblue');
-            this.addItem('lightsteelblue','lightsteelblue');
-            this.addItem('goldenrod','goldenrod');
-            this.addItem('silvergray','silvergray'); 
-            this.addItem('userdefined','userdefined'); 
+            this.addItem(canvas.getLabelName(1374),'redorange');
+            this.addItem(canvas.getLabelName(1375),'mediumseagreen');
+            this.addItem(canvas.getLabelName(1376),'steelblue');
+            this.addItem(canvas.getLabelName(1377),'lightsteelblue');
+            this.addItem(canvas.getLabelName(1378),'goldenrod');
+            this.addItem(canvas.getLabelName(1379),'silvergray'); 
+            this.addItem(canvas.getLabelName(1380),'userdefined'); 
 
             var g = canvas.getUserData();
             if($debug) Debug.write("checkLoginData/g: ",g);
@@ -131,11 +131,11 @@
         </handler>
     </resetCombobox>    
     
-    <labelText name="nlabelquality" text="Quality" y="116" x="2" visible="true" width="140" />     
+    <labelText name="nlabelquality" labelid="1371" y="116" x="2" visible="true" width="140" />     
     <resetCombobox name="ncomboquality" width="330" y="114" x="120" editable="false" >
         <handler name="oninit">
-            this.addItem("best ~ 16KB upload","best");
-            this.addItem("medium ~ 10KB upload ","medium");
+            this.addItem(canvas.getLabelName(1379) + " ~ 16KB " + canvas.getLabelName(1380),"best");
+            this.addItem(canvas.getLabelName(1381) + " ~ 10KB " + canvas.getLabelName(1380),"medium");
             var g = canvas.getUserData();
             if($debug) Debug.write("checkLoginData/g: ",g);
             if (g["userquality"] != null) {
@@ -163,7 +163,7 @@
         </handler>
     </resetCombobox>
         
-	<labelText name="domain_label" text="Domain" width="300" y="144" resize="false" x="2" />     
+	<labelText name="domain_label" labelid="1372" width="300" y="144" resize="false" x="2" />     
     <resetCombobox name="domain" width="330" y="144" x="120" editable="false">
     	<handler name="oninit">
     		//this.addItem("localhost","localhost");
@@ -437,7 +437,7 @@
     <labelText align="right" resize="true" valign="bottom" >
         <handler name="oninit">
             <![CDATA[
-                this.setAttribute('text',"<u><FONT color='#0000CC'>visit "+ canvas.currentappname +"</FONT></u>");
+                this.setAttribute('text',"<u><FONT color='#0000CC'>" + canvas.getLabelName(1373) + " "+ canvas.currentappname +"</FONT></u>");
             ]]>
         </handler>
         <handler name="onclick">

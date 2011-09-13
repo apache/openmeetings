@@ -4121,4 +4121,46 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1369" name="clipart icons">
     <value>No category</value>
   </string>
+  <string id="1370" name="login_screen">
+    <value>Color-Style</value>
+  </string>
+  <string id="1371" name="login_screen">
+    <value>Quality</value>
+  </string>
+  <string id="1372" name="login_screen">
+    <value>Domain</value>
+  </string>
+  <string id="1373" name="login_screen">
+    <value>visit</value>
+  </string>
+  <string id="1374" name="login_screen">
+    <value>redorange</value>
+  </string>
+  <string id="1375" name="login_screen">
+    <value>mediumseagreen</value>
+  </string>
+  <string id="1376" name="login_screen">
+    <value>steelblue</value>
+  </string>
+  <string id="1377" name="login_screen">
+    <value>lightsteelblue</value>
+  </string>
+  <string id="1378" name="login_screen">
+    <value>goldenred</value>
+  </string>
+  <string id="1379" name="login_screen">
+    <value>silvergray</value>
+  </string>
+  <string id="1380" name="login_screen">
+    <value>userdefined</value>
+  </string>
+  <string id="1381" name="login_screen">
+    <value>best</value>
+  </string>
+  <string id="1382" name="login_screen">
+    <value>upload</value>
+  </string>
+  <string id="1383" name="login_screen">
+    <value>medium</value>
+  </string>
 </language>
