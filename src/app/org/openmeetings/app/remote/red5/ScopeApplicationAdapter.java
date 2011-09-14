@@ -55,7 +55,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		IPendingServiceCallback, IStreamAwareScopeHandler {
-
+	
+	public static String webAppRootKey = null;
+	public static String webAppRootPath = null;
+	
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			ScopeApplicationAdapter.class,
 			ScopeApplicationAdapter.webAppRootKey);
@@ -93,7 +96,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 
 	// The Global WebApp Path
 	public static String webAppPath = "";
-	public static final String webAppRootKey = "openmeetings";// FIXME
 	public static String configDirName = "conf";
 	public static String profilesPrefix = "profile_";
 

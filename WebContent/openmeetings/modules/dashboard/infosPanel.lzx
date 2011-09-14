@@ -26,12 +26,6 @@
 	<view y="20" bgcolor="white" x="1" width="$once{ parent.width-2 }" 
 		  height="$once{ parent.height-21 }" >
         
-  <!-- 282: http://code.google.com/p/openmeetings/
-       283: http://groups.google.com/group/openmeetings-user 
-       286: Project Webside (code.google.com/p/openmeetings/)
-       287: User Mailing List (groups.google.com/group/openmeetings-user)
-  -->
-        
         <labelText name="_txt" fontstyle="bold" labelid="774" y="0" x="2" />
         
         <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_1" y="30" x="30" labelid="768" />

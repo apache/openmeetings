@@ -170,9 +170,6 @@ public class OpenXgXmlWriter implements XMLWriter {
 				
 				debugw.write("");
 			
-				//debugw.write(this.readFile("/root/openmeetings/red5/webapps/openmeetings/WEB-INF/classes/NewFileISO.xml"));
-			
-			
 				log.debug(":: endDocument ::");
 				log.debug(":: endDocument ::" +w.toString());
 			

@@ -82,7 +82,7 @@ public class ActivateUser extends VelocityViewServlet {
 
 			String hash = httpServletRequest.getParameter("u");
 			ServletContext context = getServletContext();
-			String loginURL = context.getInitParameter("webAppRootKey");
+			String loginURL = ScopeApplicationAdapter.webAppRootPath;
 
 			ctx.put("APPLICATION_NAME", context.getServletContextName());
 			if (hash == null) {

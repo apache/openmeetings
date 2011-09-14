@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <configuration>
-	<contextName>openmeetings</contextName>
+	<contextName>${current_openmeetings_context_name}</contextName>
 	
-	<jmxConfigurator contextName="openmeetings" />
+	<jmxConfigurator contextName="${current_openmeetings_context_name}" />
 
   <appender name="FLOG2" class="ch.qos.logback.core.FileAppender">
-		<File>log/openmeetings.log</File>
+		<File>log/${current_openmeetings_context_name}.log</File>
 		<Append>false</Append>
 		<Encoding>UTF-8</Encoding>
 		<BufferedIO>false</BufferedIO>

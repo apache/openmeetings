@@ -19,7 +19,6 @@ import org.slf4j.Logger;
 public class ServerSharingViewersList {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(ServerSharingSessionList.class, ScopeApplicationAdapter.webAppRootKey);
-	//private static Logger log = Red5LoggerFactory.getLogger(ServerSharingSessionList.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private static Map<String,List<ServerSharingViewerBean>> viewerSessions = new HashMap<String,List<ServerSharingViewerBean>>();
 	/**

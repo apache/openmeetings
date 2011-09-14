@@ -243,7 +243,10 @@ public class ImportInitvalues {
 						"crypt_ClassName",
 						crypt_ClassName,
 						null,
-						"This Class is used for Authentification-Crypting. Be carefull what you do here! If you change it while running previous Pass of users will not be workign anymore! for more Information see http://code.google.com/p/openmeetings/wiki/CustomCryptMechanism");
+						"This Class is used for Authentification-Crypting. "
+						+ "Be carefull what you do here! If you change it while "
+						+ "running previous Pass of users will not be workign anymore! "
+						+ "for more Information see http://code.google.com/p/openmeetings/wiki/CustomCryptMechanism");
 
 		cfgManagement.addConfByKey(3, "screen_viewer", screen_viewer, null,
 				"ScreenViewer Type(0==standard, 1== jrdesktop)");

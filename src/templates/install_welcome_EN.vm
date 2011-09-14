@@ -13,7 +13,7 @@
 <ol>
 <li>Install and configure a database
 <li>Edit <b>persistence.xml</b> to fit your database authentification values.<br/>
-persistence.xml can be found in <b>$RED5-HOME/webapps/openmeetings/WEB-INF/classes/META-INF/</b>.<br/>
+persistence.xml can be found in <b>&#36;RED5-HOME/webapps/$APP_ROOT/WEB-INF/classes/META-INF/</b>.<br/>
 You need to alter:
 <pre>
 	&lt;property

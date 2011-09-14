@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Web Start Deployment Template $webAppRootKey/ => is either / in case 
-its .war or /openmeetings/ in case its a native red5 webapp-->
+<!-- Web Start Deployment Template $webAppRootKey/ is root context for webapp-->
 <jnlp spec="1.0+" codebase="$codebase"> 
 	<information> 
 		<title>ScreenViewer Client Application</title> 

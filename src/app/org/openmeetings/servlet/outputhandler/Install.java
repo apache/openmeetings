@@ -58,6 +58,7 @@ public class Install extends VelocityViewServlet {
 			HttpServletResponse httpServletResponse, Context ctx) {
 
 		try {
+			ctx.put("APP_ROOT", ScopeApplicationAdapter.webAppRootKey);
 
 			if (getImportInitvalues() == null) {
 				return getVelocityView().getVelocityEngine().getTemplate(
@@ -66,8 +67,6 @@ public class Install extends VelocityViewServlet {
 
 			ctx.put("APPLICATION_NAME", getServletContext()
 					.getServletContextName());
-			ctx.put("APPLICATION_ROOT",
-					getServletContext().getInitParameter("webAppRootKey"));
 			String command = httpServletRequest.getParameter("command");
 
 			String lang = httpServletRequest.getParameter("lang");
