@@ -12,18 +12,17 @@
 <p>Necessary steps which should have already been done:</p>
 <ol>
 <li>Install and configure a database
-<li>Edit <b>hibernate.cfg.xml</b> to fit your database authentification values.<br/>
-hibernate.cfg.xml can be found in <b>$RED5-HOME/webapps/openmeetings/conf/</b>.<br/>
+<li>Edit <b>persistence.xml</b> to fit your database authentification values.<br/>
+persistence.xml can be found in <b>$RED5-HOME/webapps/openmeetings/WEB-INF/classes/META-INF/</b>.<br/>
 You need to alter:
 <pre>
-  &lt;!-- User  / Password --&gt;
-  &lt;property name="connection.username"&gt;postgres&lt;/property&gt;
-  &lt;property name="connection.password"&gt;********&lt;/property&gt;
-
-  &lt;!-- Database Settings --&gt;
-  &lt;property name="connection.driver_class"&gt;org.postgresql.Driver&lt;/property&gt;
-  &lt;property name="dialect"&gt;org.hibernate.dialect.PostgreSQLDialect&lt;/property&gt;
-  &lt;property name="connection.url"&gt;jdbc:postgresql://localhost/openmeetings&lt;/property&gt;	
+	&lt;property
+		name="openjpa.ConnectionProperties"
+		value="DriverClassName=com.mysql.jdbc.Driver
+				, Url=jdbc:mysql://<i>ip_or_name_of_your_server</i>:3306/<i>db_instance_name</i>
+				, .....
+				, Username=<i>your_user_name_here</i>
+				, Password=<i>your_password_here</i>"/&gt;
 </pre>
 you should <b>restart red5</b> after you did change database - connection values<br/>
 <li>Install openoffice-service running on port 8100 in headless mode (<A HREF="http://code.google.com/p/openmeetings/wiki/OpenOfficeConverter">OpenOfficeConverter</A>)<BR/>
