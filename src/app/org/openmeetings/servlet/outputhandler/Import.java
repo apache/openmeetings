@@ -4,7 +4,6 @@ import http.utils.multipartrequest.ServletMultipartRequest;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Date;
 import java.util.LinkedHashMap;
 
 import javax.servlet.ServletException;
@@ -124,7 +123,21 @@ public class Import extends HttpServlet {
 		}
 		return null;
 	}
-
+	
+	public LanguageImport getLanguageImport() {
+		try {
+			if (ScopeApplicationAdapter.initComplete) {
+				ApplicationContext context = WebApplicationContextUtils
+						.getWebApplicationContext(getServletContext());
+				return (LanguageImport) context
+						.getBean("languageImport");
+			}
+		} catch (Exception err) {
+			log.error("[getLanguageImport]", err);
+		}
+		return null;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -149,13 +162,13 @@ public class Import extends HttpServlet {
 			if (sid == null) {
 				sid = "default";
 			}
-			System.out.println("sid: " + sid);
+			log.debug("sid: " + sid);
 
 			String moduleName = httpServletRequest.getParameter("moduleName");
 			if (moduleName == null) {
 				moduleName = "moduleName";
 			}
-			System.out.println("moduleName: " + moduleName);
+			log.debug("moduleName: " + moduleName);
 			Long users_id = getSessionManagement().checkSession(sid);
 			Long user_level = getUserManagement().getUserLevelByID(users_id);
 
@@ -187,15 +200,13 @@ public class Import extends HttpServlet {
 						language = "0";
 					}
 					Long language_id = Long.valueOf(language).longValue();
-					System.out.println("language_id: " + language_id);
+					log.debug("language_id: " + language_id);
 
-					LanguageImport.getInstance().addLanguageByDocument(
+					getLanguageImport().addLanguageByDocument(
 							language_id, is);
 				}
 			} else {
-				System.out
-						.println("ERROR LangExport: not authorized FileDownload "
-								+ (new Date()));
+				log.error("ERROR LangExport: not authorized FileDownload");
 			}
 
 			log.debug("Return And Close");
@@ -215,9 +226,7 @@ public class Import extends HttpServlet {
 			return;
 
 		} catch (Exception er) {
-			log.error("ERROR ", er);
-			System.out.println("Error exporting: " + er);
-			er.printStackTrace();
+			log.error("ERROR exporting:", er);
 		}
 	}
 

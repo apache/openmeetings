@@ -114,6 +114,7 @@
 	<bean id="mailHandler" class="org.openmeetings.utils.mail.MailHandler" />
 	<bean id="feedbackManagement" class="org.openmeetings.app.data.conference.Feedbackmanagement" />
 	<bean id="importInitvalues" class="org.openmeetings.app.installation.ImportInitvalues" />
+	<bean id="languageImport" class="org.openmeetings.app.xmlimport.LanguageImport" />
 	<bean id="userImport" class="org.openmeetings.app.xmlimport.UserImport"/>
 	<bean id="libraryWmlLoader" class="org.openmeetings.app.documents.LibraryWmlLoader" />
 	<bean id="loadAtomRssFeed" class="org.openmeetings.app.rss.LoadAtomRssFeed" />
