@@ -1349,6 +1349,7 @@ public class Usermanagement {
 					savedUser.setTitle_id(Integer.parseInt(values.get(
 							"title_id").toString()));
 
+					savedUser.setLanguage_id(Long.parseLong(values.get("languages_id").toString()));
 					savedUser.setOmTimeZone(omTimeZoneDaoImpl
 							.getOmTimeZone((values.get("jnameTimeZone")
 									.toString())));

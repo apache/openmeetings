@@ -332,32 +332,17 @@ public class UserService {
 						argObjectMap.get("user_idClient").toString())
 						.longValue();
 			}
-			// log.error("saveOrUpdateUser1: ");
 			Long users_id = sessionManagement.checkSession(SID);
-			// log.error("saveOrUpdateUser2: ");
 			Long user_level = userManagement.getUserLevelByID(users_id);
-
-			// log.error("saveOrUpdateUser1: "+argObjectMap.get("organisations"));
-			// log.error("saveOrUpdateUser2: "+argObjectMap.get("organisations").getClass());
-			// log.error("saveOrUpdateUser3: "+argObjectMap.get("user_idClient"));
-			// TODO: there is a BUG here: value send is Time as GMT but here it
-			// gets CEST which is wrong
-			// but maybe a OS-related-issue
-			// log.error("saveOrUpdateUser4: "+argObjectMap.get("userage"));
-			// log.error("saveOrUpdateUser5: "+argObjectMap.get("userage").getClass());
 
 			List organisations = (List) argObjectMap.get("organisations");
 			Date age = null;
 			if (argObjectMap.get("userage") instanceof Date) {
 				age = (Date) argObjectMap.get("userage");
-				// log.debug("saveOrUpdateUser7 TimezoneOffset: " +
-				// age.getTimezoneOffset());
 			}
 
 			log.debug("Mail : " + argObjectMap.get("email").toString());
 			log.debug("Phone : " + argObjectMap.get("phone").toString());
-
-			// log.error("saveOrUpdateUser6: "+age);
 
 			if (user_idClient == null || user_idClient == 0) {
 				return userManagement.registerUserInit(

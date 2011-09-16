@@ -764,20 +764,8 @@ public class MainService implements IPendingServiceCallback {
 	 */
 	public Long registerUserByObject(Object regObjectObj) {
 		try {
-			@SuppressWarnings("rawtypes")
-			Map regObject = (Map) regObjectObj;
-			// regObject.get("Username").toString();
-			// regObject.get("Userpass").toString();
-			// regObject.get("lastname").toString();
-			// regObject.get("firstname").toString();
-			// regObject.get("email").toString();
-			// new Date();regObject.get("street").toString();
-			// regObject.get("additionalname").toString();
-			// regObject.get("fax").toString();
-			// regObject.get("zip").toString();
-			// Long.valueOf(regObject.get("states_id").toString()).longValue();
-			// regObject.get("town").toString();
-			// Long.valueOf(regObject.get("language_id").toString()).longValue();
+			@SuppressWarnings("unchecked")
+			Map<?, ?> regObject = (Map<Object, Object>) regObjectObj;
 
 			String domain = regObject.get("domain").toString();
 			String port = regObject.get("port").toString();
@@ -789,10 +777,6 @@ public class MainService implements IPendingServiceCallback {
 			} else if (port.equals("443")) {
 				baseURL = "https://" + domain + webapp;
 			}
-
-			// else if (port.equals("8443")) {
-			// baseURL = "https://"+domain+":"+port+"/"+webapp+"/";
-			// }
 
 			return userManagement.registerUser(regObject.get("Username")
 					.toString(), regObject.get("Userpass").toString(),

@@ -200,8 +200,6 @@ public class Fieldmanagment {
 				log.debug("Language requieres RTL!");
 
 				List<Map<String, Object>> returnRtlList = new LinkedList<Map<String, Object>>();
-				// List<Fieldlanguagesvalues> returnRtlList = new
-				// LinkedList<Fieldlanguagesvalues>();
 
 				for (Iterator<Map<String, Object>> iter = returnList.iterator(); iter
 						.hasNext();) {
