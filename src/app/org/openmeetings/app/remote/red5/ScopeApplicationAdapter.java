@@ -1304,6 +1304,118 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		return -1L;
 	}
 
+	public synchronized Long giveExclusiveAudio(String publicSID) {
+		try {
+
+			log.debug("*..*giveExclusiveAudio publicSID: " + publicSID);
+
+			IConnection current = Red5.getConnectionLocal();
+			//String streamid = current.getClient().getId();
+
+			RoomClient currentClient = this.clientListManager.getClientByPublicSID(publicSID);
+
+			if (currentClient == null) {
+				return -1L;
+			}
+
+			//Put the mod-flag to true for this client
+            currentClient.setMicMuted(false);
+			this.clientListManager.updateClientByStreamId(currentClient.getStreamid(), currentClient);
+
+			//Notify all clients of the same scope (room)
+			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+			for (Set<IConnection> conset : conCollection) {
+				for (IConnection conn : conset) {
+					if (conn != null) {
+						RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+						if (rcl == null) {
+							//continue;
+						} else if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+    						//continue;
+    					} else {
+                            if (rcl != currentClient) {
+                                rcl.setMicMuted(true);
+			                    this.clientListManager.updateClientByStreamId(rcl.getStreamid(), rcl);
+                            }
+							log.debug("Send Flag to Client: "+rcl.getUsername());
+							if (conn instanceof IServiceCapableConnection) {
+								((IServiceCapableConnection) conn).invoke("receiveExclusiveAudioFlag",new Object[] { currentClient }, this);
+								log.debug("sending receiveExclusiveAudioFlag to " + conn);
+							}
+						}
+					}
+				}
+			}
+
+		} catch (Exception err) {
+			log.error("[giveExclusiveAudio]",err);
+		}
+		return -1L;
+	}
+
+    public synchronized Long switchMicMuted(String publicSID) {
+		try {
+			log.debug("*..*switchMicMuted publicSID: " + publicSID);
+
+			IConnection current = Red5.getConnectionLocal();
+			RoomClient currentClient = this.clientListManager.getClientByPublicSID(publicSID);
+			if (currentClient == null) {
+				return -1L;
+			}
+
+			//reverse micMuted flag for this client
+            Boolean micMuted = currentClient.getMicMuted();
+            log.debug("*..*switchMicMuted micMuted: " + micMuted);
+            if (null == micMuted) {
+                micMuted = false;
+            }
+            currentClient.setMicMuted(!micMuted);
+			this.clientListManager.updateClientByStreamId(currentClient.getStreamid(), currentClient);
+
+			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+			for (Set<IConnection> conset : conCollection) {
+				for (IConnection conn : conset) {
+					if (conn != null) {
+						RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+                        if (rcl == null) {
+							//continue;
+						} else if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+    						//continue;
+    					} else {
+							log.debug("Send mic switched to Client: "+rcl.getUsername());
+							if (conn instanceof IServiceCapableConnection) {
+								((IServiceCapableConnection) conn).invoke("receiveMicMuteSwitched",new Object[] { currentClient }, this);
+								log.debug("sending receiveMicMuteSwitched to " + conn);
+							}
+						}
+					}
+				}
+			}
+
+		} catch (Exception err) {
+			log.error("[switchMicMuted]",err);
+		}
+		return 0L;
+	}
+
+    public synchronized Boolean getMicMutedByPublicSID(String publicSID) {
+        try {
+			log.debug("*..*getMicMutedByPublicSID publicSID: " + publicSID);
+
+			RoomClient currentClient = this.clientListManager.getClientByPublicSID(publicSID);
+			if (currentClient != null) {
+				//Put micMuted for this client
+    	        Boolean micMuted = currentClient.getMicMuted();
+        	    log.debug("*..*getMicMutedByPublicSID micMuted: " + micMuted);
+
+            	return micMuted == null ? false : true;
+			}
+        } catch (Exception err) {
+			log.error("[getMicMutedByPublicSID]",err);
+		}
+		return false;
+    }
+
 	/**
 	 * Invoked by a User whenever he want to become moderator this is needed,
 	 * cause if the room has no moderator yet there is no-one he can ask to get

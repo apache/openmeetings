@@ -4163,4 +4163,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1383" name="login_screen">
     <value>medium</value>
   </string>
+  <string id="1384" name="mute micro">
+    <value>Mute microphone</value>
+  </string>
+  <string id="1385" name="unmute micro">
+    <value>Unmute microphone</value>
+  </string>
+  <string id="1386" name="give exclusive audio">
+    <value>Mute others</value>
+  </string>
 </language>

@@ -7,6 +7,7 @@
 		<frame src="resources/bullet_ball_glass_red.png"/> <!-- whiteboard allow -->
 	</resource>
 	
+	<resource name="mic_rsc" src="resources/mic.png" />
 	<resource name="av_allow_rsc" src="resources/audio_and_video.png" />
 	<resource name="av_deny_rsc" src="resources/audio_and_video_no.png" />
 	<resource name="kick_user_rsc" src="resources/cancel_icon.png" />

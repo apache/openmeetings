@@ -26,6 +26,7 @@
 			  width="$once{parent.width}" height="$once{parent.height}" />
 		<handler name="oninit">
 			this.r.setAttribute('frame',5);
+            this._videostream.micro.setGain(50);
 		</handler>
 		
 		<baseVideoStreamDevice name="_videostream" mode="broadcast"

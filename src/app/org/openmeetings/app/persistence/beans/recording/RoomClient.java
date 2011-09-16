@@ -221,6 +221,9 @@ public class RoomClient implements Serializable {
 	 */
 	@Column(name="zombieCheckFlag")
 	private Boolean zombieCheckFlag = false;
+
+    @Column(name="micMuted")
+    private Boolean micMuted = false;
 	
 	public RoomClient() {
 		super();
@@ -463,6 +466,13 @@ public class RoomClient implements Serializable {
 	}
 	public void setZombieCheckFlag(Boolean zombieCheckFlag) {
 		this.zombieCheckFlag = zombieCheckFlag;
+	}
+
+	public Boolean getMicMuted() {
+		return micMuted;
+	}
+	public void setMicMuted(Boolean micMuted) {
+		this.micMuted = micMuted;
 	}
 
 	public Boolean getCanDraw() {

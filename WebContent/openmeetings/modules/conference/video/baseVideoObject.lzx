@@ -43,6 +43,8 @@
     
     <attribute name="initH" value="40" type="number" />
     <attribute name="initW" value="40" type="number" />
+
+    <attribute name="isShowMicMute" value="false" type="boolean"/>
 	
 	<handler name="onisremote" args="r">
 		this.isremote = r;
@@ -91,9 +93,35 @@
             if (this.publicSID == canvas.publicSID) {
             	this._toolbar._resync._tip.setAttribute("labelid",610);
             }
+            this._micView.bringToFront();
+            if (this.isInterview) {
+                this.isShowMicMute = false;
+            } else if (canvas.ismoderator) {
+                this.isShowMicMute = true;
+            } else if (canvas.publicSID == this.publicSID) {
+                this.isShowMicMute = true;
+            } else {
+                this.isShowMicMute = false;
+            }
+            if (this.isShowMicMute) {
+                this._micView.setAttribute("visibility", "visible");
+            } else {
+                this._micView.setAttribute("visibility", "hidden");
+            }
+            this.getHasAudioByPublicSID.doCall();
         ]]>
     
     </handler>
+
+    <netRemoteCallHib name="getMicMutedByPublicSID" funcname="getMicMutedByPublicSID" remotecontext="${ canvas.thishib }">
+        <netparam><method name="getValue">return parent.parent.publicSID;</method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+            //The onResult-Handler will be called be the rtmpconnection
+            parent.setMicMuted(value);
+            ]]>
+        </handler>
+    </netRemoteCallHib>
 	
 	<handler name="ony">
 		<![CDATA[
@@ -289,13 +317,16 @@
             for (var eg in this.subviews) {
                 if (this.subviews[eg].name != "_toolbar" 
                         && this.subviews[eg].name != "_innertop"
-                        && this.subviews[eg].name != "_loudness") {
+                        && this.subviews[eg].name != "_loudness"
+                        && this.subviews[eg].name != "_micView") {
                      this.subviews[eg].setAttribute("visibility","hidden");   
                 }
             }
             
-            this._loudness.setAttribute("x",this.width-84);
+            this._loudness.setAttribute("x",this.width - 84 - (this.isShowMicMute ? 20 : 0));
+            this._micView.setAttribute("x",this.width - 84);
             this._loudness.bringToFront();
+            this._micView.bringToFront();
             
             this.initialHeight = this.height;
             //this.setAttribute("height",20);
@@ -312,6 +343,7 @@
             this._toolbar._maximize2.setAttribute("visibility","hidden");
             
             this._loudness.setAttribute("x",1);
+            this._micView.setAttribute("x",21);
             
             //this.setAttribute("height",this.initialHeight); 
             this._minimizeZoom.setAttribute("to",this.initialHeight);
@@ -326,7 +358,8 @@
                 for (var eg in this.subviews) {
                     if (this.subviews[eg].name != "_toolbar" 
                             && this.subviews[eg].name != "_innertop"
-                            && this.subviews[eg].name != "_loudness") {
+                            && this.subviews[eg].name != "_loudness"
+                            && this.subviews[eg].name != "_micView") {
                          this.subviews[eg].setAttribute("visibility","visible");   
                     }
                 }
@@ -363,6 +396,18 @@
 			<labelTooltip inittwice="true" labelid="372" />
 		</view>
 	</view>
+
+    <view name="_micView" x="21" y="${parent.height - 20}">
+        <miniIcons name="_micButton" width="14" height="14" resource="mute_micro_btn_rsc">
+            <handler name="onclick">
+                <![CDATA[
+                canvas.thishib.switchMicMuted.publicSID = parent.parent.publicSID;
+                canvas.thishib.switchMicMuted.doCall();
+                ]]>
+            </handler>
+            <labelTooltip name="_tip" labelid="1384" />
+        </miniIcons>
+    </view>
 
     <!--
 	<view name="showuser" x="${ parent.width-20 }" y="2" width="20"
@@ -465,7 +510,57 @@
             parent.reminimizeComplete();
         </handler>
     </animator>    
-    
+
+    <handler name="onismoderator" reference="canvas" args="m">
+        if ($debug) Debug.write("###### ismoderator ", m);
+        <![CDATA[
+        if (this.isInterview) {
+            this.isShowMicMute = false;
+        } else if (m) {
+            this.isShowMicMute = true;
+        } else if (canvas.publicSID == this.publicSID) {
+            this.isShowMicMute = true;
+        } else {
+            this.isShowMicMute = false;
+        }
+        if (this,isShowMicMute) {
+            this._micView.setAttribute("visibility", "visible");
+        } else {
+            this._micView.setAttribute("visibility", "hidden");
+        }
+        if (this.minimized) {
+            this._loudness.setAttribute("x",this.width - 84 - (this.isShowMicMute ? 20 : 0));
+            this._micView.setAttribute("x",this.width - 84);
+            this._loudness.bringToFront();
+            this._micView.bringToFront();
+        }
+        ]]>
+    </handler>
+
+    <method name="muteMicrophone" args="mute">
+        <![CDATA[
+        var gain = this._chatvideoinner._videostream.micro.gain;
+        if (mute) {
+            this._chatvideoinner._videostream.micro.setGain(0);
+        } else {
+            this._chatvideoinner._videostream.micro.setGain(50);
+        }
+        this.setMicMuted(mute);
+        ]]>
+    </method>
+
+    <method name="setMicMuted" args="micMuted">
+        <![CDATA[
+        if (micMuted) {
+            this._micView._micButton._tip.setAttribute("labelid","1385");
+            this._micView._micButton.setAttribute('frame',2);
+        } else {
+            this._micView._micButton._tip.setAttribute("labelid","1384");
+            this._micView._micButton.setAttribute('frame',1);
+        }
+        ]]>
+    </method>
+
 </class>
 
 

@@ -298,6 +298,15 @@
         <labelTooltip labelid="1213" />
     </miniIcons>              
     
+    <miniIcons name="_giveExclusiveAudio" x="136" width="16" height="16"
+               resource="mic_rsc" showhandcursor="true">
+        <handler name="onclick">
+            if ($debug) Debug.write("give giveExclusiveAudio: ",parent.parent.parent.refObj.publicSID);
+            canvas.thishib.giveExclusiveAudio.publicSID = parent.parent.parent.refObj.publicSID;
+            canvas.thishib.giveExclusiveAudio.doCall();
+        </handler>
+        <labelTooltip labelid="1386" />
+    </miniIcons>
 </class>
 
 </library>

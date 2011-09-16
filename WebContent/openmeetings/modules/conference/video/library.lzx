@@ -12,6 +12,10 @@
 		<frame src="resources/icon_mute.png" />
 		<frame src="resources/icon_mute_red.png" />
 	</resource>
+    <resource name="mute_micro_btn_rsc">
+		<frame src="resources/micro_on.png" />
+		<frame src="resources/micro_off.png" />
+	</resource>
 	
 	<resource name="lz_recorder_play" src="resources/webstart_play.png" />
    
