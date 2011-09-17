@@ -35,13 +35,9 @@ public class ImportInitvalues {
 			ImportInitvalues.class, ScopeApplicationAdapter.webAppRootKey);
 
 	public static final String languageFolderName = "languages/";
-
 	private static final String nameOfLanguageFile = "languages.xml";
-
 	private static final String nameOfCountriesFile = "countries.xml";
-
 	private static final String nameOfTimeZoneFile = "timezones.xml";
-
 	private static final String nameOfErrorFile = "errorvalues.xml";
 
 	@Autowired
@@ -279,7 +275,7 @@ public class ImportInitvalues {
 		cfgManagement.addConfByKey(3, "mail.smtp.starttls.enable", mailusetls,
 				null, "Enable TLS 1=true, 0=false");
 
-		cfgManagement.addConfByKey(3, "application.name", "OpenMeetings", null,
+		cfgManagement.addConfByKey(3, "application.name", Configurationmanagement.DEFAULT_APP_NAME, null,
 				"Name of the Browser Title window");
 
 		// "1" == "EN"

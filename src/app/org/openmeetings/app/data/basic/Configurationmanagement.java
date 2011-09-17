@@ -31,6 +31,8 @@ public class Configurationmanagement {
 			Configurationmanagement.class,
 			ScopeApplicationAdapter.webAppRootKey);
 
+	public static final String DEFAULT_APP_NAME = "OpenMeetings";
+	
 	@PersistenceContext
 	private EntityManager em;
 

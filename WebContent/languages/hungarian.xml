@@ -1501,10 +1501,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Nincs előadó a szobában, de vannak résztvevők. Jelentkezz előadónak vagy várj.</value>
   </string>
   <string id="499" name="feedback_template_subject">
-    <value>OpenMeetings visszajelzés</value>
+    <value>$APP_NAME visszajelzés</value>
   </string>
   <string id="500" name="invitation_template_head">
-    <value>OpenMeetings - Meghívó</value>
+    <value>$APP_NAME - Meghívó</value>
   </string>
   <string id="501" name="invitation_text_from">
     <value>Üzenet ettől a felhasználótól:</value>
@@ -1522,7 +1522,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>ha problémád adódik a linkkel akkor ezt másold a böngésző címsorába:</value>
   </string>
   <string id="506" name="registering_mail_text_head">
-    <value>OpenMeetings Regisztráció</value>
+    <value>$APP_NAME Regisztráció</value>
   </string>
   <string id="507" name="registering_mail_text_head2">
     <value>Felhasználói adataid:</value>
@@ -1537,13 +1537,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>EMail:</value>
   </string>
   <string id="511" name="registering_mail_text_bye">
-    <value>OpenMeetings-Csapat</value>
+    <value>$APP_NAME-Csapat</value>
   </string>
   <string id="512" name="register_mail_subject">
-    <value>OpenMeetings Regisztráció</value>
+    <value>$APP_NAME Regisztráció</value>
   </string>
   <string id="513" name="reset_password_template_head">
-    <value>OpenMeetings - Jelszó csere</value>
+    <value>$APP_NAME - Jelszó csere</value>
   </string>
   <string id="514" name="reset_password_template_test_link">
     <value>Kattints erre a linkre a jelszó cseréhez:</value>
@@ -1555,7 +1555,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>ha problémád adódna a linkkel, kérlek másold át ezt a böngésződ címsorába:</value>
   </string>
   <string id="517" name="reset_password_mail_subject">
-    <value>OpenMeetings Jelszó váltás</value>
+    <value>$APP_NAME Jelszó váltás</value>
   </string>
   <string id="518" name="dateRegExpError">
     <value>Kérlek adj meg egy érvényes dátumot, például 24.12.2001 (nn.hh.éééé)</value>
@@ -1870,7 +1870,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Server Time</value>
   </string>
   <string id="622" name="inv_reminder_template_head">
-    <value>OpenMeetings - Reminder</value>
+    <value>$APP_NAME - Reminder</value>
   </string>
   <string id="623" name="inv_reminder_text_from">
     <value>Message from User:</value>
@@ -2416,7 +2416,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Attendees</value>
   </string>
   <string id="804" name="dashboard">
-    <value>OpenMeetings, your Web Conferencing Platform. Either follow the Instructions, press the start button to start to conference immediatelly or you goto the Calendar and set up a Conference for the future.</value>
+    <value>$APP_NAME, your Web Conferencing Platform. Either follow the Instructions, press the start button to start to conference immediatelly or you goto the Calendar and set up a Conference for the future.</value>
   </string>
   <string id="805" name="dashboard">
     <value>Plan a Meeting</value>
@@ -2731,7 +2731,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>The appointement has been changed. Do you want to save those changes? &lt;br/&gt;&lt;br/&gt;All attendees of the appointment will receive a EMail with the updated date and time (depending on the notification type of this appointment).</value>
   </string>
   <string id="909" name="flv recorder error message">
-    <value>To access other recordings you have to login the OpenMeetings Application.</value>
+    <value>To access other recordings you have to login the $APP_NAME Application.</value>
   </string>
   <string id="910" name="interview video pod">
     <value>Choose the User for this Video</value>
@@ -2860,7 +2860,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Want your own Server?</value>
   </string>
   <string id="952" name="user-license">
-    <value>You would like to have OpenMeetings installed on your Server or integrated into your Moodle, SugarCRM, Website or Intranet? Prizings start at 500 Euro per Installation!</value>
+    <value>You would like to have $APP_NAME installed on your Server or integrated into your Moodle, SugarCRM, Website or Intranet? Prizings start at 500 Euro per Installation!</value>
   </string>
   <string id="953" name="user-license">
     <value>Or send us a message</value>
@@ -2938,7 +2938,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Submit</value>
   </string>
   <string id="978" name="payment-form">
-    <value>Step 1: OpenMeetings - Payment Form</value>
+    <value>Step 1: $APP_NAME - Payment Form</value>
   </string>
   <string id="979" name="payment-form">
     <value>EMail</value>
@@ -2947,7 +2947,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Click "Check out with Paypal" to pay.&lt;br/&gt; Paypal accepts VISA, MasterCard, Discover or American Express. &lt;br/&gt;It does not require to sign up with Paypal. &lt;br/&gt;Citizens from Germany can also pay with direct debit (Per Lastschrift-Einzug).</value>
   </string>
   <string id="981" name="payment-form">
-    <value>Thank you for buying OpenMeetings. &lt;br/&gt; &lt;br/&gt; As soon as we received the payment your account will be updated.&lt;br/&gt; You will receive an EMail with your invoice as PDF.&lt;br/&gt;You can also check current and past transactions in your profile settings.&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;You can close this browser window/tab now and return to OpenMeetings.</value>
+    <value>Thank you for buying $APP_NAME. &lt;br/&gt; &lt;br/&gt; As soon as we received the payment your account will be updated.&lt;br/&gt; You will receive an EMail with your invoice as PDF.&lt;br/&gt;You can also check current and past transactions in your profile settings.&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;You can close this browser window/tab now and return to $APP_NAME.</value>
   </string>
   <string id="982" name="payment-form">
     <value>Submit and Buy!</value>
@@ -2956,7 +2956,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Click and Buy!</value>
   </string>
   <string id="984" name="payment-from">
-    <value>Step 3: OpenMeetings Payment - Check order and buy!</value>
+    <value>Step 3: $APP_NAME Payment - Check order and buy!</value>
   </string>
   <string id="985" name="payment-from">
     <value>Name</value>
@@ -2971,10 +2971,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>We have received your payment. Your user profile is updated now. See attached your Invoice. The Invoice and all past Invoice can also be downloaded in your user profile.</value>
   </string>
   <string id="989" name="payment-mail">
-    <value>Thank you for using OpenMeetings!</value>
+    <value>Thank you for using $APP_NAME!</value>
   </string>
   <string id="990" name="payment-mail">
-    <value>Payment Received OpenMeetings -</value>
+    <value>Payment Received $APP_NAME -</value>
   </string>
   <string id="991" name="user-settings">
     <value>Payment and Transaction Status</value>
@@ -3001,7 +3001,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value></value>
   </string>
   <string id="999" name="error-license-flat">
-    <value>You need to buy a volume flatrate to be able to send invitations or create meetings via the calendar. With Pay-per-minute it is only possible for you to access OpenMeetings. You cannot allow 3th Parties to access a Meeting.</value>
+    <value>You need to buy a volume flatrate to be able to send invitations or create meetings via the calendar. With Pay-per-minute it is only possible for you to access $APP_NAME. You cannot allow 3th Parties to access a Meeting.</value>
   </string>
   <string id="1000" name="error user">
     <value>This Email is already used by another User.</value>
@@ -3457,7 +3457,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Please check the time zone in your user profile.</value>
   </string>
   <string id="1151" name="calendar invitation message">
-    <value>New OpenMeetings conference:</value>
+    <value>New $APP_NAME conference:</value>
   </string>
   <string id="1152" name="calendar invitation message">
     <value>Details:&lt;br/&gt;</value>
@@ -3469,16 +3469,16 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>End:</value>
   </string>
   <string id="1155" name="calendar invitation message">
-    <value>Changed OpenMeetings conference:</value>
+    <value>Changed $APP_NAME conference:</value>
   </string>
   <string id="1156" name="calendar invitation message">
     <value>Organizer:</value>
   </string>
   <string id="1157" name="calendar invitation message">
-    <value>Canceled OpenMeetings conference:</value>
+    <value>Canceled $APP_NAME conference:</value>
   </string>
   <string id="1158" name="calendar invitation message">
-    <value>OpenMeetings conference Reminder:</value>
+    <value>$APP_NAME conference Reminder:</value>
   </string>
   <string id="1159" name="user settings">
     <value>Community settings</value>
@@ -3586,7 +3586,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>would like to add you as contact.</value>
   </string>
   <string id="1194" name="user contact request">
-    <value>Check your contact requests in OpenMeetings or click on those links to accept or deny the request</value>
+    <value>Check your contact requests in $APP_NAME or click on those links to accept or deny the request</value>
   </string>
   <string id="1195" name="add user contact">
     <value>This user is already in your contact list or has received an invitation to your contact list that is not answered yet.</value>

@@ -1,5 +1,6 @@
 package org.openmeetings.app.data.basic;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,6 +19,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.openmeetings.app.data.beans.basic.SearchResult;
+import org.openmeetings.app.persistence.beans.basic.Configuration;
 import org.openmeetings.app.persistence.beans.lang.FieldLanguage;
 import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.persistence.beans.lang.Fieldvalues;
@@ -44,6 +46,9 @@ public class Fieldmanagment {
 	@Autowired
 	private FieldLanguageDaoImpl fieldLanguageDaoImpl;
 
+	@Autowired
+	private Configurationmanagement cfgManagement;
+	
 	// Reflect the Reverse Order!!
 	public Fieldlanguagesvalues getFieldByIdAndLanguageByNavi(
 			Long fieldvalues_id, Long language_id) {
@@ -58,7 +63,7 @@ public class Fieldmanagment {
 			query.setParameter("language_id", language_id);
 			Fieldlanguagesvalues flv = null;
 			try {
-				flv = (Fieldlanguagesvalues) query.getSingleResult();
+				flv = performReplace((Fieldlanguagesvalues) query.getSingleResult());
 			} catch (NoResultException ex) {
 			}
 
@@ -121,7 +126,7 @@ public class Fieldmanagment {
 			List<Fieldlanguagesvalues> fList = query.getResultList();
 
 			if (fList.size() > 0) {
-				flv = fList.get(0);
+				flv = performReplace(fList.get(0));
 			}
 
 			return flv;
@@ -155,7 +160,7 @@ public class Fieldmanagment {
 					.createQuery("select f from Fieldlanguagesvalues f WHERE f.language_id = :language_id ");
 			query.setParameter("language_id", language_id);
 			@SuppressWarnings("unchecked")
-			List<Fieldlanguagesvalues> returnList = query.getResultList();
+			List<Fieldlanguagesvalues> returnList = performReplace(query.getResultList());
 
 			return returnList;
 		} catch (Exception ex2) {
@@ -178,7 +183,7 @@ public class Fieldmanagment {
 			query.setParameter("max", new Long(start + max));
 
 			@SuppressWarnings("unchecked")
-			List<Fieldlanguagesvalues> results = query.getResultList();
+			List<Fieldlanguagesvalues> results = performReplace(query.getResultList());
 			List<Map<String, Object>> returnList = new LinkedList<Map<String, Object>>();
 			if (results.size() != 0) {
 				Iterator<Fieldlanguagesvalues> flIterator = results.iterator();
@@ -245,10 +250,6 @@ public class Fieldmanagment {
 
 			String sql = "select f from Fieldlanguagesvalues f WHERE f.language_id = :language_id "
 					+ "AND f.fieldvalues_id >= :start AND f.fieldvalues_id <  :max";
-			// log.debug("getAllFieldsByLanguage sql: "+sql);
-			// log.debug("getAllFieldsByLanguage language_id: "+language_id);
-			// log.debug("getAllFieldsByLanguage start: "+start);
-			// log.debug("getAllFieldsByLanguage max: "+max);
 
 			Query query = em.createQuery(sql);
 			query.setParameter("language_id", language_id);
@@ -256,15 +257,7 @@ public class Fieldmanagment {
 			query.setParameter("max", start + max);
 
 			@SuppressWarnings("unchecked")
-			List<Fieldlanguagesvalues> returnList = query.getResultList();
-			//
-			// for (Iterator<Fieldlanguagesvalues> iter =
-			// returnList.iterator();iter.hasNext();){
-			// Fieldlanguagesvalues flang = iter.next();
-			// log.debug("IDs: "+flang.getFieldlanguagesvalues_id()+" "+flang.getFieldvalues_id());
-			//
-			// }
-
+			List<Fieldlanguagesvalues> returnList = performReplace(query.getResultList());
 			FieldLanguage fieldLanguage = fieldLanguageDaoImpl
 					.getFieldLanguageById(language_id);
 
@@ -570,12 +563,40 @@ public class Fieldmanagment {
 		query.setParameter("fieldlanguagesvalues_id", fieldlanguagesvalues_id);
 		Fieldlanguagesvalues flv = null;
 		try {
-			flv = (Fieldlanguagesvalues) query.getSingleResult();
+			flv = performReplace((Fieldlanguagesvalues) query.getSingleResult());
 		} catch (NoResultException ex) {
 		}
 		return flv;
 	}
-
+	
+	private String getAppName() {
+		String appName = Configurationmanagement.DEFAULT_APP_NAME;
+		Configuration application_name = cfgManagement.getConfKey(3L, "application.name");
+		if (application_name != null) {
+			appName = application_name.getConf_value();
+		}
+		return appName;
+	}
+	
+	private Fieldlanguagesvalues performReplace(Fieldlanguagesvalues f) {
+		String appName = getAppName();
+		return performReplace(f, appName);
+	}
+	
+	private Fieldlanguagesvalues performReplace(Fieldlanguagesvalues f, String appName) {
+		f.setValue(f.getValue().replaceAll("\\$APP_NAME", appName));
+		return f;
+	}
+	
+	private <T extends Collection<Fieldlanguagesvalues>> T performReplace(T flv) {
+		String appName = getAppName();
+		
+		for (Fieldlanguagesvalues f : flv) {
+			performReplace(f, appName);
+		}
+		return flv;
+	}
+	
 	private void updateField(Fieldvalues fv) throws Exception {
 		if (fv.getFieldvalues_id() == null) {
 			em.persist(fv);
