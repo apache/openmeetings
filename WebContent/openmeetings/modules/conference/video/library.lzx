@@ -17,6 +17,9 @@
 		<frame src="resources/micro_off.png" />
 	</resource>
 	
+	<resource name="mute_btn_rsc" src="resources/micro_on.png" />
+	<resource name="unmute_btn_rsc" src="resources/micro_off.png" />
+	
 	<resource name="lz_recorder_play" src="resources/webstart_play.png" />
    
     <include href="videoUserProfilePic.lzx" />

@@ -97,7 +97,7 @@
                height="${ parent.height-216 }" visibility="hidden" />
     
     <restrictedUserList name="_videocontainer" y="36" 
-			   userNewVideoContainer="true" width="$once{ parent.width-10 }" 
+			    width="$once{ parent.width-10 }" 
 			   height="${ parent.height-236 }" />
 			   
     <view y="${ parent.height - 201 }" width="$once{ parent.width-10 }" height="2"

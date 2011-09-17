@@ -120,6 +120,8 @@
 			this.myvideocontainer.setAttribute('isremote',false);
 			
 			var _micro = Microphone.get(valMic);
+			//always to default gain to 50 because the Flash Plugin will remember the last time you've set the value
+			_micro.setGain(50);
 			var _camera = Camera.get(valCam);
 			if ($debug) Debug.write("_camera.setMode: ",videoview.width,videoview.height,canvas.framesPerSecond,true);
 			

@@ -42,7 +42,7 @@
 	    </method>	
 	    
 	    <handler name="ony" args="y">
-	    	parent.parent.onMoveList.sendEvent(item);
+	    	parent.parent.onMoveList.sendEvent(y);
 	    </handler> 
         
         <method name="initItemsBySubItemNo" args="itemName,noSubItems,subItemClassName">

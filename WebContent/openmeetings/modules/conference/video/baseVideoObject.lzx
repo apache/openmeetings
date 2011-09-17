@@ -21,6 +21,9 @@
 	<!--- publicSID is a hash-value to identify a user -->
 	<attribute name="publicSID" value="" type="string" />
 	
+	<!--- publicSID is a hash-value to identify a user -->
+    <attribute name="micMuted" value="false" type="boolean" />
+	
 	<!--- @keywords private -->
 	<attribute name="isremote" value="true" type="boolean" />
 	
@@ -96,33 +99,12 @@
             this._micView.bringToFront();
             if (this.isInterview) {
                 this.isShowMicMute = false;
-            } else if (canvas.ismoderator) {
-                this.isShowMicMute = true;
-            } else if (canvas.publicSID == this.publicSID) {
-                this.isShowMicMute = true;
-            } else {
-                this.isShowMicMute = false;
             }
-            if (this.isShowMicMute) {
-                this._micView.setAttribute("visibility", "visible");
-            } else {
-                this._micView.setAttribute("visibility", "hidden");
-            }
-            this.getHasAudioByPublicSID.doCall();
+            
         ]]>
     
     </handler>
 
-    <netRemoteCallHib name="getMicMutedByPublicSID" funcname="getMicMutedByPublicSID" remotecontext="${ canvas.thishib }">
-        <netparam><method name="getValue">return parent.parent.publicSID;</method></netparam>
-        <handler name="ondata" args="value">
-            <![CDATA[
-            //The onResult-Handler will be called be the rtmpconnection
-            parent.setMicMuted(value);
-            ]]>
-        </handler>
-    </netRemoteCallHib>
-	
 	<handler name="ony">
 		<![CDATA[
 		
@@ -397,7 +379,7 @@
 		</view>
 	</view>
 
-    <view name="_micView" x="21" y="${parent.height - 20}">
+    <view name="_micView" x="21" y="${parent.height - 18}">
         <miniIcons name="_micButton" width="14" height="14" resource="mute_micro_btn_rsc">
             <handler name="onclick">
                 <![CDATA[
@@ -536,21 +518,74 @@
         }
         ]]>
     </handler>
-
-    <method name="muteMicrophone" args="mute">
+    
+    <!--
+        This will mute the Microphone only to the person that is speaking
+        if the gain is set to zero NOBODY will hear 'em
+     -->
+    <method name="muteMicrophone" args="roomClientObj">
         <![CDATA[
-        var gain = this._chatvideoinner._videostream.micro.gain;
-        if (mute) {
-            this._chatvideoinner._videostream.micro.setGain(0);
-        } else {
-            this._chatvideoinner._videostream.micro.setGain(50);
+        
+        if ($debug) Debug.write("############ muteMicrophone ",roomClientObj.micMuted);
+
+        if (this.publicSID == canvas.publicSID) {
+            if (roomClientObj.micMuted) {
+            	if ($debug) Debug.write("############ SET GAIN 0");
+                this._chatvideoinner._videostream.micro.setGain(0);
+            } else {
+            	if ($debug) Debug.write("############ SET GAIN 50");
+                this._chatvideoinner._videostream.micro.setGain(50);
+            }
         }
+        this.isMutedByModerator = roomClientObj.micMuted;
+        this.setMicMuted(roomClientObj.micMuted);
+        ]]>
+    </method>
+
+    <!--
+        This will mute it only locally, that means on other screens 
+        the user might be still online and loud
+     -->    
+    <method name="silenceMicrophone" args="mute">
+        <![CDATA[
+
+        if (this.isMutedByModerator) {
+        	//errorlabelid
+        	//FIXME: That is not true, you could restart audio/video ...
+        	new lz.labelerrorPopup(canvas,{error:"This user is/You are muted by the moderator, you cannot mute or unmute it/yourself."});
+        	return;
+        }
+        if (this.publicSID == canvas.publicSID) {
+        	//self sound turned off
+        	if (mute) {
+            	new lz.confirmationSingle(canvas.main_content._content.inner,{
+                                               labelid:904,labeliderror:905,
+                                               refObj:this,showCheckBox:false});
+        	} else {
+        		this._chatvideoinner._videostream.micro.setGain(50);
+        	}
+        } else {
+        	if (mute) {
+                this._chatvideoinner._videostream.setVolume(0);
+            } else {
+                this._chatvideoinner._videostream.setVolume(100);
+            }
+        }
+        
         this.setMicMuted(mute);
         ]]>
+    </method>
+    
+    <method name="sendConfirmation" args="bool" >
+    	if ($debug) Debug.write("sendConfirmation :: ",bool);
+    	if (bool) {
+            this._chatvideoinner._videostream.micro.setGain(0);
+    	}
     </method>
 
     <method name="setMicMuted" args="micMuted">
         <![CDATA[
+        this.micMuted = micMuted;
         if (micMuted) {
             this._micView._micButton._tip.setAttribute("labelid","1385");
             this._micView._micButton.setAttribute('frame',2);

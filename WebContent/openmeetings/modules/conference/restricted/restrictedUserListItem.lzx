@@ -11,6 +11,7 @@
     <attribute name="canShare" value="false" type="boolean" />
     <attribute name="canRemote" value="false" type="boolean" />
     <attribute name="isBroadcasting" value="false" type="boolean" />
+    <attribute name="micMuted" value="false" type="boolean" />
     
     <attribute name="streamid" value="" type="string" />
     <attribute name="username" value="" type="string" />
@@ -29,13 +30,15 @@
     <attribute name="selfItem" value="false" type="boolean"/>
     
     <handler name="onisMod">
-    	if (this.isMod) {
-            this._content.userStatus.setAttribute("frame",3);
-        } else if (this.refObj.canDraw) {
-            this._content.userStatus.setAttribute("frame",2);
-        } else {
-            this._content.userStatus.setAttribute("frame",1);
-        }
+    	<![CDATA[
+        	if (this.isMod) {
+                this._content.userStatus.setAttribute("frame",3);
+            } else if (this.refObj != null && this.refObj.canDraw) {
+                this._content.userStatus.setAttribute("frame",2);
+            } else {
+                this._content.userStatus.setAttribute("frame",1);
+            }
+        ]]>
     </handler>
     
     

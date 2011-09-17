@@ -101,9 +101,9 @@
 		    if (!this.doSendNotification){
 		    	return;
 		    }
-		
+		    
     		//this.parent.parent.parent._loudness.loudness.setAttribute('text',this.level);
-			if (this.level>canvas.loudnessAcitviation) {
+			if (this.level>5) {
 				if (!this.isgreater) {
 					this.isgreater = true;
 					this.sendNotification();
@@ -114,8 +114,10 @@
 					this.sendNotification();
 				}
 			}
+			
 		]]>
-	</handler>    
+	</handler>   
+	 
 	<method name="sendNotification">
 		//if ($debug) Debug.write("Level sendNotification ",this.isgreater);
   		this.objMessage = new Array ();
@@ -124,10 +126,11 @@
   		this.objMessage[2] = parent.parent.publicSID;
 	  	this.sendMessage.doCall();
 	</method> 	
+	
     <netRemoteCallHib name="sendMessage" funcname="sendMessage" 
 		remotecontext="$once{ canvas.thishib }" showLoading="false" > 
     	<netparam><method name="getValue"> return parent.parent.objMessage; </method></netparam>
-    </netRemoteCallHib>		    			
+    </netRemoteCallHib>		
 
 </class>
 

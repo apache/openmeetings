@@ -307,6 +307,7 @@
                         list.subviews[i].setAttribute("canDraw",records[i].canDraw);
                         list.subviews[i].setAttribute("canShare",records[i].canShare);
                         list.subviews[i].setAttribute("canRemote",records[i].canRemote);
+                        list.subviews[i].setAttribute("micMuted",records[i].micMuted);
                         list.subviews[i].setAttribute("isMod",records[i].isMod);
                         list.subviews[i].isBroadcasting = records[i].isBroadcasting;
                         list.subviews[i].setAttribute("selfItem",records[i].selfItem);
@@ -332,6 +333,7 @@
                         list.subviews[i].setAttribute("canDraw",false);
                         list.subviews[i].setAttribute("canShare",false);
                         list.subviews[i].setAttribute("canRemote",false);
+                        list.subviews[i].setAttribute("micMuted",false);
                         list.subviews[i].setAttribute("isMod",false);
                         list.subviews[i].isBroadcasting = false;
                         list.subviews[i].setAttribute("selfItem",false);
@@ -393,6 +395,7 @@
                     item.setAttribute("canDraw",this.renderList[item.itemId].canDraw);
                     item.setAttribute("canShare",this.renderList[item.itemId].canShare);
                     item.setAttribute("canRemote",this.renderList[item.itemId].canRemote);
+                    item.setAttribute("micMuted",this.renderList[item.itemId].micMuted);
                     item.isBroadcasting = this.renderList[item.itemId].isBroadcasting;
                     item.setAttribute("isMod",this.renderList[item.itemId].isMod);
                     item.setAttribute("selfItem",this.renderList[item.itemId].selfItem);
@@ -426,6 +429,7 @@
                     item.setAttribute("canDraw",false);
                     item.setAttribute("canShare",false);
                     item.setAttribute("canRemote",false);
+                    item.setAttribute("micMuted",false);
                     item.setAttribute("isMod",false);
                     item.isBroadcasting = false;
                     item.setAttribute("selfItem",false);
@@ -453,6 +457,37 @@
                 //this.isMod = canvas.getIsModeratorByPublicSID(this.refObj.publicSID);
                 this.updateIcons();
             ]]>
+        </handler>
+        
+        <handler name="onmicMutedStatusChangedItem" reference="canvas" args="roomClientObj">
+        	<![CDATA[
+        	
+        	   if ($debug) Debug.write(" :: onmicMutedStatusChangedItem :: ",roomClientObj.micMuted);
+        	   
+        	   //search for the user and update its drawStatusIcon
+                var vList = parent._table._innerlist._inn._inn.subviews;
+                for (var i=0;i<vList.length;i++) {
+                    //vList[i].updateIconByMod();
+                    if (vList[i].refObj.publicSID == roomClientObj.publicSID) {
+                        vList[i].refObj.micMuted = roomClientObj.micMuted;
+                        vList[i].micMuted = roomClientObj.micMuted;
+                        vList[i].updateModeratorIcons();
+                        break;
+                    }
+                }
+        	   
+                var vList = parent._table.renderList;
+                for (var i=0;i<vList.length;i++) {
+                    //vList[i].updateIconByMod();
+                    if (vList[i].publicSID == roomClientObj.publicSID) {
+                        parent._table.renderList[i].micMuted = roomClientObj.micMuted;
+                        break;
+                    }
+                }
+
+                parent._applyAndStatusIcons.updateIcons();
+        	   
+        	]]>
         </handler>
         
         <handler name="ondrawAllowStatus" reference="canvas" args="drawObject">

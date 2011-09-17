@@ -156,7 +156,7 @@
         this.sendClearMessage(true);
     </method>   
     
-    <view resource="participents_isDrawing_rsc" x="2" y="2" />
+    <view resource="participents_allow_drawing_rsc" x="2" y="2" />
     
     <labelText text="$once{ parent.message }" multiline="true" x="20"
                width="$once{ parent.width - 40 }" font="Helvetica"/>

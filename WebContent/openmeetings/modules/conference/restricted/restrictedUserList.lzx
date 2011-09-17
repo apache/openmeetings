@@ -8,11 +8,6 @@
 	<!--- holds a references to the videoview which is broadcasting -->
 	<attribute name="broadCastViewRef" value="null" />
 	
-	<!--
-       This is a variable to make it backwards compatible to the old room layout
-     -->
-	<attribute name="userNewVideoContainer" value="false" type="boolean"/>
-	
 	<!--- colors for each user -->
 	<attribute name="colorArray" value="null" />
 	
@@ -197,10 +192,7 @@
     	<![CDATA[
     		//if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ",publicSID);
     		
-    		var videoContainer = this._videoviewcontent;
-            if (this.userNewVideoContainer) {
-                videoContainer = parent.parent._videoviewcontent;
-            }
+    		var videoContainer = parent.parent._videoviewcontent;
             
     		//for (var i=0;i<this._videoviewcontent.subviews.length;i++){
     		//	if ($debug) Debug.write("getVideoObjectByBroadCastId6 broadcastId: ",this._videoviewcontent.subviews[i].broadcastId);
@@ -387,10 +379,7 @@
 			if (obj!=null){
 				this.broadCastViewRef = obj;
 			} else {
-                var videoContainer = this._videoviewcontent;
-                if (this.userNewVideoContainer) {
-                    videoContainer = parent.parent._videoviewcontent;
-                }
+                var videoContainer = parent.parent._videoviewcontent;
                 
                 //Get a Free VideoView Slot
                 var freePos = videoContainer.getVideoObjectFreePos(40, 100, 100);
@@ -419,10 +408,7 @@
 				return obj;
 			}
 			
-            var videoContainer = this._videoviewcontent;
-            if (this.userNewVideoContainer) {
-                videoContainer = parent.parent._videoviewcontent;
-            }
+            var videoContainer = parent.parent._videoviewcontent;
             
             //Get a Free VideoView Slot
             var freePos = videoContainer.getVideoObjectFreePos(40, 100, 100);
@@ -495,19 +481,24 @@
 	</method>	
 	
 	<method name="resetAllValues">
-		var videoContainer = this._videoviewcontent;
-        if (this.userNewVideoContainer) {
-            videoContainer = parent.parent._videoviewcontent;
-        }
+		var videoContainer = parent.parent._videoviewcontent;
+
 		for (var eg in videoContainer.subviews){
 			videoContainer.subviews[eg].resetValues();
 		}
 	</method>
+	
+	<method name="updateMuteStatusVideoView" args="roomClient">
+		<![CDATA[
+    		var videoContainer = parent.parent._videoviewcontent;
+    		for (var i=0;i<videoContainer.subviews.length;i++){
+    			videoContainer.subviews[i].muteMicrophone(roomClient);
+    		}
+		]]>
+	</method>
     
     <restrictedUserListInner name="_participents" />
     
-	<commonVideoViewContent name="_videoviewcontent" />
-	
 </class>
 
 </library>

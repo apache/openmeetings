@@ -45,18 +45,19 @@
     <attribute name="showHScrollbar" value="visible" type="string"/>
      
     <handler name="oninit">
-        //this inits the items
-        this._innerlist._inn.initItems(this.listItemName);
-        
-        if (this["_menu"]) {
-            this._menu._pre1.setAttribute('isEnabled',false);
-            this._menu._next2.setAttribute('isEnabled',false);
-            this._menu._next1.setAttribute('isEnabled',false);
-            this._menu._pre2.setAttribute('isEnabled',false);
+    	<![CDATA[
+            //this inits the items
+            this._innerlist._inn.initItems(this.listItemName);
             
-            this._menu._step.updateItemsListNumber.sendEvent();
-        }
-        
+            if (this["_menu"] && this["_menu"]["_pre1"]) {
+                this._menu._pre1.setAttribute('isEnabled',false);
+                this._menu._next2.setAttribute('isEnabled',false);
+                this._menu._next1.setAttribute('isEnabled',false);
+                this._menu._pre2.setAttribute('isEnabled',false);
+                
+                this._menu._step.updateItemsListNumber.sendEvent();
+            }
+        ]]>
     </handler>  
     
     <handler name="onclickedItem" args="obj" >

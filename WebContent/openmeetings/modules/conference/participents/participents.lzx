@@ -122,7 +122,7 @@
         
         <view width="1" height="${ parent.parent.height }" x="20"
             bgcolor="$once{ canvas.basebgcolorizer }" />
-        <view name="_icon_draw" x="22" y="3" resource="participents_isDrawing_rsc" onclick="" showhandcursor="false">
+        <view name="_icon_draw" x="22" y="3" resource="participents_allow_drawing_rsc" onclick="" showhandcursor="false">
             <labelTooltip labelid="609" />
         </view>
         

@@ -130,16 +130,18 @@
     
     <method name="loadFiles">
     	<![CDATA[
-            //this.getFileExplorerByRoom.doCall();
-            var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-                            +canvas.httpRootKey+'services/FileService/getFileExplorerByRoomSelfInternal?'
-                            +'SID='+canvas.sessionId
-                            +'&roomId='+hib.currentroomid;
-            
-            this.getFileExplorerByRoomSelf.setAttribute("src",downloadurl);
-            if ($debug) Debug.write("getFileExplorerByRoomSelf doRequest 1 ",downloadurl);
-            if ($debug) Debug.write("getFileExplorerByRoomSelf doRequest 2 ",downloadurl.src);
-            this.getFileExplorerByRoomSelf.doRequest();
+    	    if (this["getFileExplorerByRoomSelf"]) {
+                //this.getFileExplorerByRoom.doCall();
+                var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+                                +canvas.httpRootKey+'services/FileService/getFileExplorerByRoomSelfInternal?'
+                                +'SID='+canvas.sessionId
+                                +'&roomId='+hib.currentroomid;
+                
+                this.getFileExplorerByRoomSelf.setAttribute("src",downloadurl);
+                if ($debug) Debug.write("getFileExplorerByRoomSelf doRequest 1 ",downloadurl);
+                if ($debug) Debug.write("getFileExplorerByRoomSelf doRequest 2 ",downloadurl.src);
+                this.getFileExplorerByRoomSelf.doRequest();
+    	    }
         ]]>
     </method>
     

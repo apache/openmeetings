@@ -4,7 +4,8 @@
     <resource name="participents_isactive" src="resources/button_ok.png" />
     
     <resource name="participents_isMod_rsc" src="resources/kdmconfig.png" />
-    <resource name="participents_isDrawing_rsc" src="resources/color_line.png" />
+    <resource name="participents_allow_drawing_rsc" src="resources/color_line.png" />
+    <resource name="participents_deny_drawing_rsc" src="resources/color_line_dis.png" />
     
 
     <include href="participents.lzx" />

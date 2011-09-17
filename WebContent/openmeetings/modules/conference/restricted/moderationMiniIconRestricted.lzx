@@ -83,6 +83,17 @@
 			this._allowDevice.setAttribute("visibility","visible");
             this._denyDevice.setAttribute("visibility","hidden");
 		}
+		
+		if ($debug) Debug.write("Set micMuted ",parent.parent.micMuted);
+		
+		if (parent.parent.micMuted) {
+			this._muteDevice.setAttribute("visibility","hidden");
+            this._unMuteDevice.setAttribute("visibility","visible");
+		} else {
+			this._muteDevice.setAttribute("visibility","visible");
+            this._unMuteDevice.setAttribute("visibility","hidden");
+		}
+		
 	</handler>
         
     <miniIcons name="_isMod" x="0" width="16" showhandcursor="true"
@@ -133,7 +144,7 @@
         <labelTooltip name="_text" labelid="676" />
     </miniIcons>
         
-    <miniIcons name="_canDraw" x="20" width="16" resource="participents_isDrawing_rsc" 
+    <miniIcons name="_canDraw" x="20" width="16" resource="participents_allow_drawing_rsc" 
                height="16" showhandcursor="false" >
     	<attribute name="isActive" value="true" type="boolean" />
         <handler name="onclick">
@@ -155,7 +166,7 @@
     </miniIcons>
     
     <miniIcons name="_canDrawModerator" x="20" width="16" opacity="0.5"
-               resource="participents_isDrawing_rsc" height="16" showhandcursor="true">
+               resource="participents_allow_drawing_rsc" height="16" showhandcursor="true">
         <handler name="onclick">
             //Do it 
             if (canvas.ismoderator) {
@@ -185,7 +196,7 @@
         <labelTooltip name="_text" labelid="1068" />
     </miniIcons>
     
-    <miniIcons name="_denyScreen" x="40" width="16" height="16" opacity="0.5"
+    <miniIcons name="_denyScreen" x="40" width="16" height="16" 
                resource="screen_allow_rsc" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("Allow Screen: ",parent.parent.parent.refObj.publicSID);
@@ -214,7 +225,7 @@
         <labelTooltip name="_text" labelid="1079" />
     </miniIcons>
     
-    <miniIcons name="_denyRemote" x="60" width="16" height="16" opacity="0.5"
+    <miniIcons name="_denyRemote" x="60" width="16" height="16" 
                resource="remote_allow_rsc" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("Allow Screen: ",parent.parent.parent.refObj.publicSID);
@@ -227,7 +238,7 @@
         <labelTooltip labelid="1078" />
     </miniIcons>        
     
-    <miniIcons name="_allowDevice" x="80" width="40" height="16" opacity="0.5" 
+    <miniIcons name="_allowDevice" x="80" width="40" height="16" 
     		   resource="av_allow_rsc" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("ALLOW: ",parent.parent.parent.refObj.publicSID);
@@ -242,8 +253,7 @@
         <labelTooltip labelid="683" />
     </miniIcons>
     
-    <miniIcons name="_denyDevice" x="80" width="40" height="16" 
-               resource="av_allow_rsc" showhandcursor="true">
+    <miniIcons name="_denyDevice" x="80" width="40" height="16" resource="av_deny_rsc" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("ALLOW: ",parent.parent.parent.refObj.publicSID);
             //var myvideocontainer = canvas._videocontainer.getNewVideoObject(parent.parent.refObj.publicSID);
@@ -256,7 +266,32 @@
         <labelTooltip labelid="684" />
     </miniIcons>
     
-	<miniIcons name="_kickUser" x="120" width="16" height="16" 
+    <miniIcons name="_muteDevice" x="120" width="16" height="16" resource="mute_btn_rsc" showhandcursor="true">
+        <handler name="onclick">
+            if ($debug) Debug.write("mute: ",parent.parent.parent.refObj.publicSID);
+            //canvas.thishib.giveExclusiveAudio.publicSID = parent.parent.parent.refObj.publicSID;
+            //canvas.thishib.giveExclusiveAudio.doCall();
+            
+            canvas.thishib.switchMicMuted.setMute(parent.parent.parent.refObj.publicSID,true);
+            
+        </handler>
+        <labelTooltip labelid="1384" />
+    </miniIcons>
+    
+    <miniIcons name="_unMuteDevice" x="120" width="16" height="16" resource="unmute_btn_rsc" 
+    		   showhandcursor="true" visibility="hidden">
+        <handler name="onclick">
+            if ($debug) Debug.write("unmute: ",parent.parent.parent.refObj.publicSID);
+            //canvas.thishib.giveExclusiveAudio.publicSID = parent.parent.parent.refObj.publicSID;
+            //canvas.thishib.giveExclusiveAudio.doCall();
+            
+            canvas.thishib.switchMicMuted.setMute(parent.parent.parent.refObj.publicSID,false);
+            
+        </handler>
+        <labelTooltip labelid="1385" />
+    </miniIcons>
+    
+	<miniIcons name="_kickUser" x="136" width="16" height="16" 
                resource="kick_user_rsc" showhandcursor="true">
         <handler name="onclick">
         	
@@ -298,15 +333,6 @@
         <labelTooltip labelid="1213" />
     </miniIcons>              
     
-    <miniIcons name="_giveExclusiveAudio" x="136" width="16" height="16"
-               resource="mic_rsc" showhandcursor="true">
-        <handler name="onclick">
-            if ($debug) Debug.write("give giveExclusiveAudio: ",parent.parent.parent.refObj.publicSID);
-            canvas.thishib.giveExclusiveAudio.publicSID = parent.parent.parent.refObj.publicSID;
-            canvas.thishib.giveExclusiveAudio.doCall();
-        </handler>
-        <labelTooltip labelid="1386" />
-    </miniIcons>
 </class>
 
 </library>

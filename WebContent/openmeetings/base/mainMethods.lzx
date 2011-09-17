@@ -761,14 +761,29 @@ if (cItem == null) {
     }
 </method>
 
-<method name="setDrawAllowStatus" args="drawObj">
+<method name="setDrawAllowStatus" args="roomClientObj">
     <![CDATA[
         if ($debug) Debug.write("drawAllowStatus changes ###### ");
-        if (drawObj.publicSID==canvas.publicSID) {
-            canvas.setAttribute("isAllowedToDraw",drawObj.canDraw);
-            canvas.setAttribute("isAllowedToScreenShare",drawObj.canShare);
-            canvas.setAttribute("isAllowedToRemoteControl",drawObj.canRemote);
+        if (roomClientObj.publicSID==canvas.publicSID) {
+            canvas.setAttribute("isAllowedToDraw",roomClientObj.canDraw);
+            canvas.setAttribute("isAllowedToScreenShare",roomClientObj.canShare);
+            canvas.setAttribute("isAllowedToRemoteControl",roomClientObj.canRemote);
         }
+    ]]>
+</method>
+
+<method name="setMuteStatus" args="roomClientObj">
+	<![CDATA[
+        if ($debug) Debug.write("setMuteStatus changes ###### ",roomClientObj.micMuted);
+        //Check for self status
+        if (roomClientObj.publicSID==canvas.publicSID) {
+            canvas.setAttribute("micMuted",roomClientObj.micMuted);
+        }
+        
+        canvas._videocontainer.updateMuteStatusVideoView(roomClientObj);
+        
+        //Notify all Listeners for change of the item
+        canvas.setAttribute("micMutedStatusChangedItem",roomClientObj);
     ]]>
 </method>
 

@@ -108,6 +108,17 @@ these properties will be overwritten by config.xml -->
  -->
 <attribute name="isAllowedToDraw" value="false" type="boolean" />
 
+<!-- 
+    this attribute holds an object of type RoomClient
+    the LAST RoomClient Object that has been changed the mute-status
+ -->
+<attribute name="micMutedStatusChangedItem" value="null" />
+
+<!--
+    this value indicates if this user is currently muted
+ -->
+<attribute name="micMuted" value="false" type="boolean" />
+
 <!--- URL/IP to use for the Server -->
 <attribute name="rtmphost" value="" type="string" />
 
