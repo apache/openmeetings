@@ -367,7 +367,7 @@ public class UserService {
 						Long.valueOf(argObjectMap.get("states_id").toString())
 								.longValue(),
 						argObjectMap.get("town").toString(),
-						0,
+						new Long(argObjectMap.get("language_id").toString()),
 						true,
 						organisations,
 						argObjectMap.get("phone").toString(),
@@ -411,6 +411,7 @@ public class UserService {
 										argObjectMap.get("states_id")
 												.toString()).longValue(),
 								argObjectMap.get("town").toString(),
+								new Long(argObjectMap.get("language_id").toString()),
 								Integer.valueOf(
 										argObjectMap.get("availible")
 												.toString()).intValue(),

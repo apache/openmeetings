@@ -241,6 +241,7 @@
   			this.sendObject["level_id"] = Number(this.parent.level.getValue());
 			this.sendObject["title_id"] = Number(this.parent.salutation.getValue());
 			this.sendObject["jNameTimeZone"] = parent._timeZone.getValue();
+            this.sendObject["language_id"] = parent.languages.getValue();
 			this.sendObject["forceTimeZoneCheck"] = parent.forceTimeZoneCheck.getValue();
   			this.sendObject["organisations"] = this.parent._organisationslist.getAllItems();
   			
@@ -272,7 +273,7 @@
     	<netparam><method name="getValue">return parent.sendObject;</method></netparam>	  		
     	<handler name="ondata" args="val">
 			<![CDATA[
-				//Debug.write("saveOrUpdateUser: ",val);
+				if ($debug) Debug.write("saveOrUpdateUser ondata: ",val);
 				if (val>0){
 					var obj = new Array();
 					obj["user_id"] = val;
@@ -297,10 +298,7 @@
 
     <labelText labelid="133" width="200" y="100" resize="false" x="2"/>
         <customEdittext name="userpass1" y="100" password="true" x="120" width="270" text="" />
-    <!--    
-    <labelText labelid="134" width="200" y="130" resize="false" x="2"/>
-        <customEdittext name="userpass2" y="130" password="true" x="120" width="270" text="" />   
-     -->
+
     <labelText labelid="135" width="200" y="130" resize="false" x="2"/>
         <resetCombobox name="salutation" width="100" y="130" x="120" editable="false" fontsize="11">
 	        <handler name="oninit" >
@@ -372,12 +370,6 @@
 		<dynamicCombobox name="state" width="270" y="460" x="120"
 						 text="Switzerland" value="204" />
     
-    	<!--
-		<validText name="state" width="270" y="370" x="120" fontsize="11" 
-            shownitems="7" validate_method="$once{ canvas.validateCountry }" 
-            resultId="state_id" resultName="name" />    
-		 -->
-		 
     <labelText labelid="158" width="200" y="490" resize="false" x="2"/>  
         <resetCombobox name="status" width="270" y="490" x="120" editable="false" fontsize="11">
 	        <handler name="oninit" >
@@ -419,9 +411,7 @@
 		</handler>
 		<labelTooltip labelid="172" />
 	</blueButton>
-	<!--
-	<baseChooseIcon resourceN="edit_add_rsc" labelid="172" y="602" x="400"
-		onclick="this.parent.addOrganisationToUser()" />	-->	
+	
 	<method name="addOrganisationToUser">
 		//if (this.user_id!=0)
 			new lz.chooseOrganisationWindow(parent,{refObj:this,item_id:this.user_id});
@@ -439,15 +429,6 @@
 		</method>
 		<labelTooltip labelid="176" />
 	</blueButton>
-	<!--
-	<baseChooseIcon resourceN="button_cancel_rsc" labelid="176" y="602" x="430"
-		onclick="new lz.confirmDeleteWindow(canvas.main_content._content.inner,{refObj:this});" >		
-		<method name="confirmDelete">
-			if (this.parent._organisationslist._selected!=null)
-				for (var i in this.parent._organisationslist._selected)	this.parent._organisationslist.removeItem(this.parent._organisationslist._selected[i].value);
-		</method>
-	</baseChooseIcon>
-	 -->
 	
     <!-- SIP Account Data -->
     <labelText labelid="893" width="200" y="740" resize="false" 
