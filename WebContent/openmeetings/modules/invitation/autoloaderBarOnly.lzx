@@ -29,7 +29,7 @@
 		remotecontext="$once{ canvas.thishib }" >
     	<attribute name="start" value="0" type="number" />
     	<attribute name="step" value="100" type="number" /> 
-    	<attribute name="max" value="1200" type="number" />    
+    	<attribute name="max" value="1300" type="number" />    
         <netparam><method name="getValue">return canvas.thishib.userlang;</method></netparam> 
         <netparam><method name="getValue">return parent.start;</method></netparam> 
         <netparam><method name="getValue">return parent.step;</method></netparam> 

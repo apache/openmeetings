@@ -429,7 +429,7 @@
     <netRemoteCallHib name="getLanguageByIdAndMax" funcname="languageservice.getLanguageByIdAndMax" >
     	<attribute name="start" value="0" type="number" />
     	<attribute name="step" value="100" type="number" /> 
-    	<attribute name="max" value="1200" type="number" />    
+    	<attribute name="max" value="1300" type="number" />    
         <netparam><method name="getValue">return parent.parent.userlang;</method></netparam> 
         <netparam><method name="getValue">return parent.start;</method></netparam> 
         <netparam><method name="getValue">return parent.step;</method></netparam> 
@@ -1765,6 +1765,10 @@
                          //          labelid:691,error:txt
                         //        });
                     //}
+                } else if (value.message[0]=='applyForMuteOn'){
+                	canvas.currentActivityList.applyForMuteOn(value.client,value.message[1]);
+                } else if (value.message[0]=='applyForMuteOff'){
+                	canvas.currentActivityList.applyForMuteOff(value.client,value.message[1]);
                 } else {
                     if ($debug) Debug.warn("sendVarsToMessageWithClient unkown message ",value);
                 }

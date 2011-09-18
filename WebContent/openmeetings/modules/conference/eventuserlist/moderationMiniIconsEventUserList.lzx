@@ -23,7 +23,11 @@
             this._canDraw.isActive = false;
             //this._canDraw._text.setAttribute("text",canvas.getLabelName(681));
             this._canDrawModerator.setAttribute("visibility","hidden");
+            this._muteDevice._tip.setAttribute("labelid",1403);
+            this._unMuteDevice._tip.setAttribute("labelid",1404);
         } else {
+        	this._muteDevice._tip.setAttribute("labelid",1394);
+            this._unMuteDevice._tip.setAttribute("labelid",1395);
             if (canvas.isAllowedToDraw) {
                 this._canDraw.setAttribute("visibility","visible");
                 this._canDraw.isActive = true;
@@ -76,7 +80,16 @@
 	            this._allowDevice.setAttribute("visibility","visible");
 	            this._denyDevice.setAttribute("visibility","hidden");
 	        }
+	        if (canvas.micMuted) {
+	        	this._muteDevice.setAttribute("visibility","hidden");
+	        	this._unMuteDevice.setAttribute("visibility","visible");
+	        } else {
+	        	this._muteDevice.setAttribute("visibility","visible");
+                this._unMuteDevice.setAttribute("visibility","hidden");
+	        }
         }
+        
+        
     </method>
 	
     <miniIcons name="_isMod" x="0" width="16" resource="participents_isMod_rsc" 
@@ -192,6 +205,43 @@
             canvas.thishib.setBroadCastingFlag.doCall(); 
         </handler>
         <labelTooltip name="_text" labelid="690" />
+    </miniIcons>
+    
+    <miniIcons name="_muteDevice" x="120" width="16" height="16" 
+    		   visible="$once{ parent.showAvIcons }" resource="mute_btn_rsc" showhandcursor="true">
+    	<handler name="onclick">
+    		if (canvas.ismoderator) {
+    			new lz.confirmationSingle(canvas.main_content._content.inner,{
+                                                   labelid:1388,labeliderror:1389,
+                                                   refReturnMethod:'confirmGloballyOff',
+                                                   refObj:this,showCheckBox:false});
+    		} else {
+    			//Apply for Right to Share Audio/Video
+                var tDate = new Date();
+                canvas.thishib.sendMessageWithClient.sendMessage("applyForMuteOn",tDate.getTime());
+    		}
+    	</handler>
+    	<method name="confirmGloballyOff" args="bool,t" >
+            if ($debug) Debug.write("confirmGloballyOff :: ",bool);
+            if (bool) {
+                canvas.thishib.switchMicMuted.setMute(canvas.publicSID,true);
+            }
+        </method>
+        <labelTooltip name="_tip" labelid="1394" />
+    </miniIcons>
+    
+    <miniIcons name="_unMuteDevice" x="120" width="16" height="16" resource="unmute_btn_rsc" 
+               visible="$once{ parent.showAvIcons }" showhandcursor="true" >
+    	<handler name="onclick">
+            if (canvas.ismoderator) {
+                canvas.thishib.switchMicMuted.setMute(canvas.publicSID,false);
+            } else {
+                //Apply for Right to Share Audio/Video
+                var tDate = new Date();
+                canvas.thishib.sendMessageWithClient.sendMessage("applyForMuteOff",tDate.getTime());
+            }
+        </handler>
+        <labelTooltip name="_tip" labelid="1395" />
     </miniIcons>
 	
 </class>

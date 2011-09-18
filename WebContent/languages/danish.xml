@@ -4155,12 +4155,66 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>medium</value>
   </string>
   <string id="1384" name="mute micro">
-    <value>Mute microphone</value>
+    <value>Mute microphone globally</value>
   </string>
   <string id="1385" name="unmute micro">
-    <value>Unmute microphone</value>
+    <value>Unmute microphone globally</value>
   </string>
   <string id="1386" name="give exclusive audio">
-    <value>Mute others</value>
+    <value>Mute microphone of others</value>
+  </string>
+  <string id="1387" name="mute self message">
+    <value>You are globally muted by the moderator. You cannot unmute yourself!</value>
+  </string>
+  <string id="1388" name="mute self confirm message title">
+    <value>Mute microphone globally?</value>
+  </string>
+  <string id="1389" name="mute self confirm message message">
+    <value>Do you really want to mute yourself globally? No other user will hear you anymore!</value>
+  </string>
+  <string id="1390" name="mute others confirm message title">
+    <value>Mute microphone locally?</value>
+  </string>
+  <string id="1391" name="mute others confirm message">
+    <value>Do you really want to mute this microphone? You can only mute it locally on your screen. It has no effect to how other users hear this user. Only moderators can turn it off globally!</value>
+  </string>
+  <string id="1392" name="mute others confirm message title">
+    <value>Mute microphone off globally?</value>
+  </string>
+  <string id="1393" name="mute others moderator message">
+    <value>Do you really want to mute this user globally? No other user will hear him anymore!</value>
+  </string>
+  <string id="1394" name="mute status icons">
+    <value>Your sound is on. Click here to send moderator message to mute your microphone globally  (in the complete conference room) off!</value>
+  </string>
+  <string id="1395" name="mute status icons">
+    <value>Your sound is off. Click here to send moderator message to unmute your microphone globally  (in the complete conference room) on!</value>
+  </string>
+  <string id="1396" name="mute apply self on message">
+    <value>would like that the moderator mutes my microphone globally.</value>
+  </string>
+  <string id="1397" name="mute apply self off message">
+    <value>would like that the moderator unmutes my microphone globally.</value>
+  </string>
+  <string id="1398" name="mute apply of message">
+    <value>want that the moderator unmutes his/her microphone.</value>
+  </string>
+  <string id="1399" name="mute apply of message">
+    <value>want that the moderator mutes his/her microphone.</value>
+  </string>
+  <string id="1400" name="mute status icons">
+    <value>Unmute microphone. Click here to mute his/her microphone globally!</value>
+  </string>
+  <string id="1401" name="mute status icons">
+    <value>Mute microphone. Click here to unmute his/her microphone globally!</value>
+  </string>
+  <string id="1402" name="mute self message">
+    <value>This user is globally muted by the moderator. You cannot unmute him!</value>
+  </string>
+  <string id="1403" name="mute micro">
+    <value>Mute your microphone globally</value>
+  </string>
+  <string id="1404" name="unmute micro">
+    <value>Unmute your microphone globally</value>
   </string>
 </language>

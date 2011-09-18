@@ -93,6 +93,8 @@ public class MainService implements IPendingServiceCallback {
 	private AuthLevelmanagement authLevelManagement;
 	@Autowired
 	private LoadAtomRssFeed loadAtomRssFeed;
+	@Autowired
+	private LdapLoginManagement ldapLoginManagement;
 
 	// External User Types
 	public static final String EXTERNAL_USER_TYPE_LDAP = "LDAP";
@@ -341,7 +343,7 @@ public class MainService implements IPendingServiceCallback {
 					ldapLogin = usernameOrEmail + "@" + ldapConfig.getDomain();
 				}
 
-				o = LdapLoginManagement.getInstance().doLdapLogin(ldapLogin,
+				o = ldapLoginManagement.doLdapLogin(ldapLogin,
 						Userpass, currentClient, SID,
 						ldapConfig.getConfigFileName());
 			} else {

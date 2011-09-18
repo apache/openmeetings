@@ -32,21 +32,18 @@
 						 width="${parent.width}" height="${parent.height}" bgcolor="black">
 			<handler name="onlevel">
                 <![CDATA[
-                    if (this.level > 0) {
-                    	parent._activityLevel.bringToFront();
+                    //if (this.level > 0) {
+                    	//parent._activityLevel.bringToFront();
                     	//parent._activityLevel.setAttribute("visibility","visible");
-                    }
-                    var fullLength = parent._activityLevel.height-2;
-                    parent._activityLevel._activity.setAttribute("height",this.level*(fullLength/100));
+                    //}
+                    var fullLength = parent.height-24;
+                    parent._activityLevel.setAttribute("height",this.level*(fullLength/100));
                 ]]>
             </handler>
 		</baseVideoStreamDevice>
 		
-		<view name="_activityLevel" width="8" x="2" y="2" opacity="0.7"
-              height="${ parent.height - 40 }" bcolor="0xFFFFFF">
-            <view name="_activity" x="1" width="6" bgcolor="0x00FF00" height="0">
-                
-            </view>
+		<view name="_activityLevel" width="6" x="2" y="2" opacity="0.5" bgcolor="0x00FF00" 
+              height="0" bcolor="0xFFFFFF">
         </view>   
 		
 	</view>	

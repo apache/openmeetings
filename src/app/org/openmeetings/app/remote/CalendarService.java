@@ -213,10 +213,6 @@ public class CalendarService {
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				// Appointment app = AppointmentLogic.getInstance()
-				// .getAppointMentById(appointmentId);
-				// roommanagement.deleteRoom(app.getRoom());
-
 				return appointmentLogic.deleteAppointment(appointmentId,
 						users_id, language_id);
 
@@ -235,10 +231,6 @@ public class CalendarService {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			if (authLevelManagement.checkUserLevel(user_level)) {
-
-				// Appointment app = AppointmentLogic.getInstance()
-				// .getAppointMentById(appointmentId);
-				// roommanagement.deleteRoom(app.getRoom());
 
 				Appointment appointment = new Appointment();
 

@@ -45,6 +45,9 @@
 <class name="baseItemActivityList" extends="view" height="40" bgcolor="$once{ canvas.baseMouseOvercolorizer }">
 	
 	<attribute name="message" value="" type="string" />
+	
+	<attribute name="labelidToolTipOkButton" value="1360" type="number" />
+	<attribute name="labelidToolTipDenyButton" value="1361" type="number" />
     
     <attribute name="rcl" value="null" />
     
@@ -72,7 +75,7 @@
         <handler name="onclick">
             this.parent.applyObject();
         </handler>
-        <labelTooltip labelid="1360" />
+        <labelTooltip labelid="$once{ parent.parent.labelidToolTipOkButton }" />
     </miniIcons> 
                
     <miniIcons resource="allow_deny_icon_rsc" visible="${ canvas.ismoderator }"
@@ -80,7 +83,7 @@
         <handler name="onclick">
             this.parent.removeObject();
         </handler>
-        <labelTooltip labelid="1361" />
+        <labelTooltip labelid="$once{ parent.parent.labelidToolTipDenyButton }" />
     </miniIcons>   
     
     <animator name="_doHide" attribute="opacity" duration="1250" to="0" start="false">
@@ -91,19 +94,32 @@
 	
 </class>
 	
+<class name="activityListRestrictedRoomApplyForMuteOn" extends="baseItemActivityList" 
+	   labelidToolTipOkButton="1400">
+    
+    <method name="applyObject">
+        canvas.thishib.switchMicMuted.setMute(this.rcl.publicSID,true);
+        //this._doHide.doStart();
+        this.sendClearMessage(true);
+    </method>   
+    
+    <view resource="mute_btn_rsc" x="2" y="2" />
+    
+    <labelText text="$once{ parent.message }" multiline="true" x="40"
+               width="$once{ parent.width - 60 }" font="Helvetica"/>
+               
+</class>    
 	
-<class name="activityListRestrictedRoomAV" extends="baseItemActivityList">
+<class name="activityListRestrictedRoomApplyForMuteOff" extends="baseItemActivityList" 
+	   labelidToolTipOkButton="1401">
 	
     <method name="applyObject">
-    	canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = this.rcl.publicSID;
-        canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
-        canvas.thishib.setBroadCastingFlag.avsettings = "av";
-        canvas.thishib.setBroadCastingFlag.doCall(); 
+    	canvas.thishib.switchMicMuted.setMute(this.rcl.publicSID,false);
         //this._doHide.doStart();
         this.sendClearMessage(true);
     </method>	
 	
-	<view resource="av_allow_rsc" x="2" y="2" />
+	<view resource="unmute_btn_rsc" x="2" y="2" />
 	
 	<labelText text="$once{ parent.message }" multiline="true" x="40"
 			   width="$once{ parent.width - 60 }" font="Helvetica"/>
@@ -311,7 +327,51 @@
                                    canvas.getLabelName(1082) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
             }
                                
-            new lz.activityListRestrictedRoomRemote(this._list._list,{
+            new lz.activityListRestrictedRoomApplyForMuteOn(this._list._list,{
+                                            message:txt,
+                                            width:this._list.width-14,
+                                            rcl:rcl,
+                                            tStamp:tStamp
+                                        });
+                                        
+            this._list._list.scrollToMax();                                        
+        ]]>                      
+    </method>
+    
+    <method name="applyForMuteOn" args="rcl,tStamp">
+        <![CDATA[
+            if (rcl.publicSID == canvas.publicSID) {
+                var txt = "<b>"+canvas.getLabelName(1362)+"</b> " +
+                           canvas.getLabelName(1396) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+            } else {
+                var txt = rcl.firstname + " " + rcl.lastname + " " +
+                                   "[" + rcl.username + "] " +
+                                   canvas.getLabelName(1398) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+            }
+                               
+            new lz.activityListRestrictedRoomApplyForMuteOn(this._list._list,{
+                                            message:txt,
+                                            width:this._list.width-14,
+                                            rcl:rcl,
+                                            tStamp:tStamp
+                                        });
+                                        
+            this._list._list.scrollToMax();                                        
+        ]]>                      
+    </method>
+    
+    <method name="applyForMuteOff" args="rcl,tStamp">
+        <![CDATA[
+            if (rcl.publicSID == canvas.publicSID) {
+                var txt = "<b>"+canvas.getLabelName(1362)+"</b> " +
+                           canvas.getLabelName(1397) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+            } else {
+                var txt = rcl.firstname + " " + rcl.lastname + " " +
+                                   "[" + rcl.username + "] " +
+                                   canvas.getLabelName(1399) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+            }
+                               
+            new lz.activityListRestrictedRoomApplyForMuteOff(this._list._list,{
                                             message:txt,
                                             width:this._list.width-14,
                                             rcl:rcl,

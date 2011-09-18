@@ -537,7 +537,7 @@
     <view name="_bg" visibility="hidden" opacity="0.7"
           width="14" height="14" x="1" y="1" bgcolor="0xFFFFFF" />
           
-    <view resource="$once{ parent.iconRessourceName }" />
+    <view name="_itemRsc" resource="$once{ parent.iconRessourceName }" />
     
 </class>
 

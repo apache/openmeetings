@@ -35,7 +35,6 @@ public class LdapLoginManagement {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			LdapLoginManagement.class, ScopeApplicationAdapter.webAppRootKey);
 
-	private static LdapLoginManagement instance = null;
 	@Autowired
 	private Sessionmanagement sessionManagement;
 	@Autowired
@@ -103,18 +102,6 @@ public class LdapLoginManagement {
 	public static final String CONFIGKEY_LDAP_KEY_COUNTRY = "ldap_user_attr_country";
 	public static final String CONFIGKEY_LDAP_KEY_TOWN = "ldap_user_attr_town";
 	public static final String CONFIGKEY_LDAP_KEY_PHONE = "ldap_user_attr_phone";
-
-	private LdapLoginManagement() {
-		// do not use -> singleton
-	}
-
-	/** Getting instance */
-	public static synchronized LdapLoginManagement getInstance() {
-		if (instance == null) {
-			instance = new LdapLoginManagement();
-		}
-		return instance;
-	}
 
 	/**
 	 * Determine if is a supported Auth Type

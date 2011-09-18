@@ -21,7 +21,7 @@
 	<!--- publicSID is a hash-value to identify a user -->
 	<attribute name="publicSID" value="" type="string" />
 	
-	<!--- publicSID is a hash-value to identify a user -->
+	<!--- micMuted indicates if the microphone is currently turned sound or gain to 0 -->
     <attribute name="micMuted" value="false" type="boolean" />
 	
 	<!--- @keywords private -->
@@ -48,6 +48,8 @@
     <attribute name="initW" value="40" type="number" />
 
     <attribute name="isShowMicMute" value="false" type="boolean"/>
+    
+    <attribute name="isMutedByModerator" value="false" type="boolean"/>
 	
 	<handler name="onisremote" args="r">
 		this.isremote = r;
@@ -55,11 +57,11 @@
 		if (r) {
 			//this.message.setAttribute('visibility','hidden');
 			this._toolbar.showuser.setAttribute('visibility','visible');
-			this._toolbar._mute.setAttribute('visibility','visible')
+			//this._toolbar._mute.setAttribute('visibility','visible')
 		} else {
 			//this.message.setAttribute('visibility','visible');
 			this._toolbar.showuser.setAttribute('visibility','hidden');
-			this._toolbar._mute.setAttribute('visibility','hidden')
+			//this._toolbar._mute.setAttribute('visibility','hidden')
 		}
 	</handler>
     
@@ -95,10 +97,6 @@
             
             if (this.publicSID == canvas.publicSID) {
             	this._toolbar._resync._tip.setAttribute("labelid",610);
-            }
-            this._micView.bringToFront();
-            if (this.isInterview) {
-                this.isShowMicMute = false;
             }
             
         ]]>
@@ -306,9 +304,7 @@
             }
             
             this._loudness.setAttribute("x",this.width - 84 - (this.isShowMicMute ? 20 : 0));
-            this._micView.setAttribute("x",this.width - 84);
             this._loudness.bringToFront();
-            this._micView.bringToFront();
             
             this.initialHeight = this.height;
             //this.setAttribute("height",20);
@@ -379,18 +375,6 @@
 		</view>
 	</view>
 
-    <view name="_micView" x="21" y="${parent.height - 18}">
-        <miniIcons name="_micButton" width="14" height="14" resource="mute_micro_btn_rsc">
-            <handler name="onclick">
-                <![CDATA[
-                canvas.thishib.switchMicMuted.publicSID = parent.parent.publicSID;
-                canvas.thishib.switchMicMuted.doCall();
-                ]]>
-            </handler>
-            <labelTooltip name="_tip" labelid="1384" />
-        </miniIcons>
-    </view>
-
     <!--
 	<view name="showuser" x="${ parent.width-20 }" y="2" width="20"
 		onmouseover="" onmouseup="" resource="showusercontext">
@@ -416,7 +400,36 @@
     
     <view name="_toolbar" x="${ parent.width-this.width-2 }" layout="axis:x;spacing:0" y="2">     
         
-        <attribute name="isload" value="true" type="boolean"/>        
+        <attribute name="isload" value="true" type="boolean"/>  
+        
+        <miniIconsPresenter name="_resync"
+            iconRessourceName="resyncuser_rsc">
+            <handler name="onclick">
+                parent.parent.resetValues();
+                if(!this.parent.parent.isremote) {
+                    if ($debug) Debug.write("editRecordStream ################# baseVideObject ");
+                    if (this.parent.parent.isInterview) {
+                        new lz.editRecordStream(parent.parent.parent,{
+                                doDefaultAnimation:false,
+                                align:'center',valign:'middle',
+                                isInterview:true,
+                                myvideocontainer:parent.parent,
+                                isSyncUpdate:true});
+                    } else {
+                        new lz.editRecordStream(canvas.main_content._content.inner,{
+                                isSyncUpdate:true});
+                    }
+                }
+            </handler>
+            <labelTooltip name="_tip" labelid="540" />
+        </miniIconsPresenter>       
+        
+        <miniIconsPresenter name="_mute" width="16" height="16" iconRessourceName="mute_micro_btn_rsc">
+            <handler name="onclick">
+                parent.parent.silenceMicrophone(!parent.parent.micMuted);
+            </handler>
+            <labelTooltip name="_tip" labelid="1384" />
+        </miniIconsPresenter>  
         
         <miniIconsPresenter name="_minimize"
             iconRessourceName="btn_presenter_minimize">
@@ -434,52 +447,15 @@
             <labelTooltip labelid="857" />
         </miniIconsPresenter>
         
-        <miniIcons name="_mute" width="16" height="16" resource="mute_btn_rsc">
-            <handler name="onclick">
-                if (parent.isload){
-	                parent.parent._chatvideoinner._videostream.setVolume(0);
-	                this.setAttribute('frame',2);
-	                this.parent.isload = false;
-	                this._tip.setAttribute("labelid","1075");
-	            } else {
-	                parent.parent._chatvideoinner._videostream.setVolume(100);
-	                this.setAttribute('frame',1);
-	                this.parent.isload = true;
-	                this._tip.setAttribute("labelid","1074");
-	            }
-            </handler>
-            <labelTooltip name="_tip" labelid="1074" />
-        </miniIcons>  
-        
-        <miniIconsPresenter name="_resync"
-            iconRessourceName="resyncuser_rsc">
-            <handler name="onclick">
-                parent.parent.resetValues();
-                if(!this.parent.parent.isremote) {
-                	if ($debug) Debug.write("editRecordStream ################# baseVideObject ");
-                	if (this.parent.parent.isInterview) {
-                		new lz.editRecordStream(parent.parent.parent,{
-                			    doDefaultAnimation:false,
-                                align:'center',valign:'middle',
-                			    isInterview:true,
-                			    myvideocontainer:parent.parent,
-                                isSyncUpdate:true});
-                	} else {
-                		new lz.editRecordStream(canvas.main_content._content.inner,{
-                                isSyncUpdate:true});
-                	}
-                }
-            </handler>
-            <labelTooltip name="_tip" labelid="540" />
-        </miniIconsPresenter>  
-        
+        <!--
         <miniIconsPresenter name="_showusercontext"
             iconRessourceName="showusercontext">
             <handler name="onclick">
                 new lz.remoteUserDetails(parent.parent);
             </handler>
             <labelTooltip labelid="68" />
-        </miniIconsPresenter>  
+        </miniIconsPresenter> 
+         --> 
         
     </view>         
     
@@ -496,25 +472,10 @@
     <handler name="onismoderator" reference="canvas" args="m">
         if ($debug) Debug.write("###### ismoderator ", m);
         <![CDATA[
-        if (this.isInterview) {
-            this.isShowMicMute = false;
-        } else if (m) {
-            this.isShowMicMute = true;
-        } else if (canvas.publicSID == this.publicSID) {
-            this.isShowMicMute = true;
-        } else {
-            this.isShowMicMute = false;
-        }
-        if (this,isShowMicMute) {
-            this._micView.setAttribute("visibility", "visible");
-        } else {
-            this._micView.setAttribute("visibility", "hidden");
-        }
+        
         if (this.minimized) {
             this._loudness.setAttribute("x",this.width - 84 - (this.isShowMicMute ? 20 : 0));
-            this._micView.setAttribute("x",this.width - 84);
             this._loudness.bringToFront();
-            this._micView.bringToFront();
         }
         ]]>
     </handler>
@@ -536,6 +497,12 @@
             	if ($debug) Debug.write("############ SET GAIN 50");
                 this._chatvideoinner._videostream.micro.setGain(50);
             }
+        } else {
+        	if (!roomClientObj.micMuted) {
+        		//Make sure sound is on, in case a user has set it locally to 0
+        		//in other words: overwrite any local settings
+        	    this._chatvideoinner._videostream.setVolume(100);
+        	}
         }
         this.isMutedByModerator = roomClientObj.micMuted;
         this.setMicMuted(roomClientObj.micMuted);
@@ -549,49 +516,78 @@
     <method name="silenceMicrophone" args="mute">
         <![CDATA[
 
-        if (this.isMutedByModerator) {
-        	//errorlabelid
+        if (this.isMutedByModerator && !canvas.ismoderator) {
         	//FIXME: That is not true, you could restart audio/video ...
-        	new lz.labelerrorPopup(canvas,{error:"This user is/You are muted by the moderator, you cannot mute or unmute it/yourself."});
+        	var errorlabelid = 1402;
+        	if (this.publicSID == canvas.publicSID) {
+        		errorlabelid = 1387;
+        	}
+        	new lz.labelerrorPopup(canvas,{errorlabelid:errorlabelid});
         	return;
         }
         if (this.publicSID == canvas.publicSID) {
         	//self sound turned off
         	if (mute) {
             	new lz.confirmationSingle(canvas.main_content._content.inner,{
-                                               labelid:904,labeliderror:905,
+                                               labelid:1388,labeliderror:1389,
+                                               refReturnMethod:'confirmGloballyOff',
                                                refObj:this,showCheckBox:false});
+                return;
         	} else {
-        		this._chatvideoinner._videostream.micro.setGain(50);
+        		canvas.thishib.switchMicMuted.setMute(this.publicSID,false);
         	}
         } else {
-        	if (mute) {
-                this._chatvideoinner._videostream.setVolume(0);
-            } else {
-                this._chatvideoinner._videostream.setVolume(100);
-            }
+        	if (canvas.ismoderator) {
+        		if (mute) {
+                    new lz.confirmationSingle(canvas.main_content._content.inner,{
+                                                   labelid:1392,labeliderror:1393,
+                                                   refReturnMethod:'confirmGloballyOff',
+                                                   refObj:this,showCheckBox:false});
+                    return;
+                } else {
+                    canvas.thishib.switchMicMuted.setMute(this.publicSID,false);
+                }
+        	} else {
+            	if (mute) {
+            		new lz.confirmationSingle(canvas.main_content._content.inner,{
+                                                   labelid:1390,labeliderror:1391,
+                                                   refReturnMethod:'confirmLocallyOff',
+                                                   refObj:this,showCheckBox:false});
+                    return;
+                } else {
+                    this._chatvideoinner._videostream.setVolume(100);
+                }
+        	}
         }
         
         this.setMicMuted(mute);
         ]]>
     </method>
     
-    <method name="sendConfirmation" args="bool" >
-    	if ($debug) Debug.write("sendConfirmation :: ",bool);
+    <method name="confirmGloballyOff" args="bool,t" >
+    	if ($debug) Debug.write("confirmGloballyOff :: ",bool);
     	if (bool) {
-            this._chatvideoinner._videostream.micro.setGain(0);
+            canvas.thishib.switchMicMuted.setMute(this.publicSID,true);
     	}
+    </method>
+    
+    <method name="confirmLocallyOff" args="bool,t" >
+        if ($debug) Debug.write("confirmLocallyOff :: ",bool);
+        if (bool) {
+        	this.setMicMuted(true);
+            this._chatvideoinner._videostream.setVolume(0);
+        }
     </method>
 
     <method name="setMicMuted" args="micMuted">
         <![CDATA[
         this.micMuted = micMuted;
         if (micMuted) {
-            this._micView._micButton._tip.setAttribute("labelid","1385");
-            this._micView._micButton.setAttribute('frame',2);
+            this._toolbar._mute._tip.setAttribute("labelid","1385");
+            this._toolbar._mute._itemRsc.setAttribute('frame',2);
         } else {
-            this._micView._micButton._tip.setAttribute("labelid","1384");
-            this._micView._micButton.setAttribute('frame',1);
+            this._toolbar._mute._tip.setAttribute("labelid","1384");
+            this._toolbar._mute._itemRsc.setAttribute('frame',1);
         }
         ]]>
     </method>
