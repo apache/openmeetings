@@ -93,6 +93,24 @@
     </animator>    
 	
 </class>
+
+<class name="activityListRestrictedRoomAV" extends="baseItemActivityList">
+    
+    <method name="applyObject">
+        canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = this.rcl.publicSID;
+        canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
+        canvas.thishib.setBroadCastingFlag.avsettings = "av";
+        canvas.thishib.setBroadCastingFlag.doCall(); 
+        //this._doHide.doStart();
+        this.sendClearMessage(true);
+    </method>   
+    
+    <view resource="av_allow_rsc" x="2" y="2" />
+    
+    <labelText text="$once{ parent.message }" multiline="true" x="40"
+               width="$once{ parent.width - 60 }" font="Helvetica"/>
+               
+</class>
 	
 <class name="activityListRestrictedRoomApplyForMuteOn" extends="baseItemActivityList" 
 	   labelidToolTipOkButton="1400">
@@ -346,7 +364,7 @@
             } else {
                 var txt = rcl.firstname + " " + rcl.lastname + " " +
                                    "[" + rcl.username + "] " +
-                                   canvas.getLabelName(1398) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+                                   canvas.getLabelName(1399) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
             }
                                
             new lz.activityListRestrictedRoomApplyForMuteOn(this._list._list,{
@@ -368,7 +386,7 @@
             } else {
                 var txt = rcl.firstname + " " + rcl.lastname + " " +
                                    "[" + rcl.username + "] " +
-                                   canvas.getLabelName(1399) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+                                   canvas.getLabelName(1398) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
             }
                                
             new lz.activityListRestrictedRoomApplyForMuteOff(this._list._list,{

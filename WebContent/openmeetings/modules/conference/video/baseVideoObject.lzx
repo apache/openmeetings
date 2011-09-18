@@ -428,7 +428,7 @@
             <handler name="onclick">
                 parent.parent.silenceMicrophone(!parent.parent.micMuted);
             </handler>
-            <labelTooltip name="_tip" labelid="1384" />
+            <labelTooltip name="_tip" labelid="1405" />
         </miniIconsPresenter>  
         
         <miniIconsPresenter name="_minimize"
@@ -516,15 +516,6 @@
     <method name="silenceMicrophone" args="mute">
         <![CDATA[
 
-        if (this.isMutedByModerator && !canvas.ismoderator) {
-        	//FIXME: That is not true, you could restart audio/video ...
-        	var errorlabelid = 1402;
-        	if (this.publicSID == canvas.publicSID) {
-        		errorlabelid = 1387;
-        	}
-        	new lz.labelerrorPopup(canvas,{errorlabelid:errorlabelid});
-        	return;
-        }
         if (this.publicSID == canvas.publicSID) {
         	//self sound turned off
         	if (mute) {
@@ -537,6 +528,17 @@
         		canvas.thishib.switchMicMuted.setMute(this.publicSID,false);
         	}
         } else {
+        	
+        	if (this.isMutedByModerator && !canvas.ismoderator) {
+                //FIXME: That is not true, you could restart audio/video ...
+                var errorlabelid = 1402;
+                if (this.publicSID == canvas.publicSID) {
+                    errorlabelid = 1387;
+                }
+                new lz.labelerrorPopup(canvas,{errorlabelid:errorlabelid});
+                return;
+            }
+        	
         	if (canvas.ismoderator) {
         		if (mute) {
                     new lz.confirmationSingle(canvas.main_content._content.inner,{
@@ -583,10 +585,10 @@
         <![CDATA[
         this.micMuted = micMuted;
         if (micMuted) {
-            this._toolbar._mute._tip.setAttribute("labelid","1385");
+            this._toolbar._mute._tip.setAttribute("labelid","1406");
             this._toolbar._mute._itemRsc.setAttribute('frame',2);
         } else {
-            this._toolbar._mute._tip.setAttribute("labelid","1384");
+            this._toolbar._mute._tip.setAttribute("labelid","1405");
             this._toolbar._mute._itemRsc.setAttribute('frame',1);
         }
         ]]>

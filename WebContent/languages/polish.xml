@@ -4291,4 +4291,10 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="1404" name="unmute micro">
     <value>Unmute your microphone globally</value>
   </string>
+  <string id="1405" name="mute micro">
+    <value>Mute microphone</value>
+  </string>
+  <string id="1406" name="unmute micro">
+    <value>Unmute microphone</value>
+  </string>
 </language>
