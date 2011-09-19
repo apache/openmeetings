@@ -1151,7 +1151,8 @@ public class Usermanagement {
 			users = em.merge(users);
 
 			em.flush();
-
+			em.refresh(users);
+			
 			Long user_id = users.getUser_id();
 
 			return user_id;
@@ -1263,6 +1264,7 @@ public class Usermanagement {
 
 			em.merge(users);
 			em.flush();
+			em.refresh(users);
 			long user_id = users.getUser_id();
 
 			return user_id;
