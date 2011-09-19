@@ -529,6 +529,8 @@
         	}
         } else {
         	
+        	//you can not unmute it locally by putting sound to 100 cause the gain is set to zero globally in the micro of the sender!
+        	//so setting the sound/volume on the other remote clients has zero effect 
         	if (this.isMutedByModerator && !canvas.ismoderator) {
                 //FIXME: That is not true, you could restart audio/video ...
                 var errorlabelid = 1402;

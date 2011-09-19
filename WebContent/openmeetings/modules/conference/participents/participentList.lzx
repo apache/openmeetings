@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+<class name="innerlistViewParticipentsTable" extends="view" 
+    width="258" bgcolor="$once{ canvas.basebgcolorizer }" >
+    <simplelayout name="_layout" axis="y" spacing="0" />
+</class>
+    
+<class name="participentsTable" extends="view" height="${ parent.height-20 }" 
+    bgcolor="0xFFFFFF" x="2" y="6" clip="true" width="$once{ parent.width-4 }" >
+        <innerlistViewParticipentsTable name="innerList" />
+    <vscrollbar />
+</class>
+
+<class name="miniIcons" extends="view" stretches="both">
+    <handler name="onmouseover">
+        if (this.showhandcursor) {
+            this.setAttribute("x",this.x-1);
+            this.setAttribute("y",this.y-1);
+            this.setAttribute("height",this.height+2);
+            this.setAttribute("width",this.width+2);
+        }
+        parent.parent.onmouseover.sendEvent();
+    </handler>
+    <handler name="onmouseout">
+        if (this.showhandcursor) {
+            this.setAttribute("x",this.x+1);
+            this.setAttribute("y",this.y+1);
+            this.setAttribute("height",this.height-2);
+            this.setAttribute("width",this.width-2);
+        }
+        parent.parent.onmouseout.sendEvent();
+    </handler>
+</class>
+    
+<class name="participentList" extends="view"  width="$once{ parent.width }" height="${ parent.height-22 }" 
+       bgcolor="$once{ canvas.basebgcolorizer }" y="22">
+    <!-- clip="true" -->
+    
+    <attribute name="sortType" value="alphabetical" type="string" />    
+    
+    <view width="$once{ parent.width-2 }" height="${ parent.height-2 }" 
+        x="1" y="1" bgcolor="white" />
+
+    <method name="addItem" args="object">
+        <![CDATA[
+            if ($debug) Debug.write("participentList addItem: ",object,object.publicSID);
+            
+            for (var i=0;i<this._table.innerList.subviews.length;i++) {
+                if (this._table.innerList.subviews[i].refObj.publicSID == object.publicSID) {
+                    //if ($debug) Debug.warn("Already on List, do not add twice");
+                    return;
+                }
+            }
+            
+            var lastname = object.lastname;
+            
+            if ($debug) Debug.write("object.isSuperModerator ",object.isSuperModerator);
+            
+            if (object.isSuperModerator) {
+                lastname += " *";
+            }
+            
+            new lz.participentListItem(this._table.innerList,{
+                    user_id:object.user_id,
+                    isSuperModerator:object.isSuperModerator,
+                    firstname:object.firstname,
+                    lastname:lastname,
+                    width:this.width-17,
+                    refObj:object,
+                    connectedSince:object.connectedSince,
+                    isMod:object.isMod,
+                    streamid:object.streamid,
+                    username:object.username,
+                    formatedDate:object.formatedDate
+                });
+            
+            this.sortUserList();
+        ]]>
+    </method>
+    
+    <method name="sortUserList">
+        <![CDATA[ 
+        
+            if (this.sortType == "alphabetical") {
+                function sortByName(a,b) {
+                   
+                    if(a.firstname.toLowerCase() < b.firstname.toLowerCase()) return -1;
+                    else if(a.firstname.toLowerCase() > b.firstname.toLowerCase()) return 1;
+                    else return 0;
+                
+                }
+            
+                this._table.innerList.subviews.sort(sortByStreamId);
+                this._table.innerList._layout.subviews.sort(sortByStreamId);
+            } else {
+                function sortByStreamId(a,b) {
+                   
+                    if(Number(a.streamid) == Number(b.streamid)) return 0;
+                    else if(Number(a.streamid) > Number(b.streamid)) return 1;
+                    else return -1;
+                
+                }
+            
+                this._table.innerList.subviews.sort(sortByStreamId);
+                this._table.innerList._layout.subviews.sort(sortByStreamId);
+            }
+            
+            this._table.innerList._layout.update();  
+        ]]>
+    </method>    
+    
+    <method name="clearList">
+        this._table.destroy();
+        new lz.participentsTable(this,{name:'_table'});
+    </method>
+    
+    <!--- get a Objects List Item
+        @param string publicSID publicSID
+     -->
+    <method name="getVideoObjectByPublicSID" args="publicSID">
+        <![CDATA[
+            //if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ",publicSID);
+            
+            //for (var i=0;i<this._videoviewcontent.subviews.length;i++){
+            //  if ($debug) Debug.write("getVideoObjectByBroadCastId6 broadcastId: ",this._videoviewcontent.subviews[i].broadcastId);
+            //  if ($debug) Debug.write("getVideoObjectByBroadCastId7 streamid,user_id: ",this._videoviewcontent.subviews[i].clientVars.streamid,this._videoviewcontent.subviews[i].clientVars.user_id);
+            //}
+            
+            for (var i=0;i<this._table.innerList.subviews.length;i++){
+                //if ($debug) Debug.write("getVideoObjectByBroadCastId2 broadcastId VIEW: ",this._videoviewcontent.subviews[i].broadcastId);
+                //if ($debug) Debug.write("getVideoObjectByBroadCastId3 broadcastId SEARCH: ",broadcastId);
+                //if ($debug) Debug.write("getVideoObjectByBroadCastId4 obj: ",this._videoviewcontent.subviews[i]);
+                //if ($debug) Debug.write("getVideoObjectByBroadCastId5 streamid,user_id: ",this._videoviewcontent.subviews[i].clientVars.streamid,this._videoviewcontent.subviews[i].clientVars.user_id);
+                if (this._table.innerList.subviews[i].refObj.publicSID==publicSID){
+                    return this._table.innerList.subviews[i];
+                }
+            }
+            
+            return null;
+            
+        ]]>
+    </method>
+    
+    <participentsTable name="_table" y="20" /> 
+
+    <view name="_miniIcons" x="132" y="0" height="18">
+        
+        <view width="1" height="${ parent.parent.height }" x="0"
+            bgcolor="$once{ canvas.basebgcolorizer }" />
+        <view name="_icon_mod" x="2" y="3" resource="participents_isMod_rsc" onclick="" showhandcursor="false">
+            <labelTooltip labelid="608" />
+        </view>
+        
+        <view width="1" height="${ parent.parent.height }" x="20"
+            bgcolor="$once{ canvas.basebgcolorizer }" />
+        <view name="_icon_draw" x="22" y="3" resource="participents_allow_drawing_rsc" onclick="" showhandcursor="false">
+            <labelTooltip labelid="609" />
+        </view>
+        
+        <view width="1" height="${ parent.parent.height }" x="40"
+            bgcolor="$once{ canvas.basebgcolorizer }" />
+        <view name="_icon_share" x="42" y="3" resource="screen_allow_rsc" onclick="" showhandcursor="false">
+            <labelTooltip labelid="1073" />
+        </view>
+        
+        <view width="1" height="${ parent.parent.height }" x="60"
+            bgcolor="$once{ canvas.basebgcolorizer }" />
+        <view name="_icon_remote" x="62" y="3" resource="remote_allow_rsc" onclick="" showhandcursor="false">
+            <labelTooltip labelid="1084" />
+        </view>
+        
+        <view width="1" height="${ parent.parent.height }" x="80"
+            bgcolor="$once{ canvas.basebgcolorizer }" />
+        <view name="_icon_sync" x="82" y="3" resource="av_allow_rsc" onclick="" showhandcursor="false">
+            <labelTooltip labelid="610" />
+        </view>
+        
+        <view width="1" height="${ parent.parent.height }" x="122"
+            bgcolor="$once{ canvas.basebgcolorizer }" />
+    </view>
+    <view name="headerDivisionLine" width="${ parent.width }" 
+          bgcolor="$once{ canvas.basebgcolorizer }" height="1" y="20" />
+    
+</class>
+
+</library>

@@ -80,17 +80,21 @@
 	            this._allowDevice.setAttribute("visibility","visible");
 	            this._denyDevice.setAttribute("visibility","hidden");
 	        }
-	        if (canvas.micMuted) {
-	        	this._muteDevice.setAttribute("visibility","hidden");
-	        	this._unMuteDevice.setAttribute("visibility","visible");
-	        } else {
-	        	this._muteDevice.setAttribute("visibility","visible");
-                this._unMuteDevice.setAttribute("visibility","hidden");
-	        }
+        }
+        
+        
+        if (canvas.micMuted) {
+            this._muteDevice.setAttribute("visibility","hidden");
+            this._unMuteDevice.setAttribute("visibility","visible");
+        } else {
+            this._muteDevice.setAttribute("visibility","visible");
+            this._unMuteDevice.setAttribute("visibility","hidden");
         }
         
         
     </method>
+    
+    <simplelayout axis="x" spacing="2" />
 	
     <miniIcons name="_isMod" x="0" width="16" resource="participents_isMod_rsc" 
     		   height="16" showhandcursor="false">
@@ -208,7 +212,7 @@
     </miniIcons>
     
     <miniIcons name="_muteDevice" x="120" width="16" height="16" 
-    		   visible="$once{ parent.showAvIcons }" resource="mute_btn_rsc" showhandcursor="true">
+    		   resource="mute_btn_rsc" showhandcursor="true">
     	<handler name="onclick">
     		if (canvas.ismoderator) {
     			new lz.confirmationSingle(canvas.main_content._content.inner,{
@@ -231,7 +235,7 @@
     </miniIcons>
     
     <miniIcons name="_unMuteDevice" x="120" width="16" height="16" resource="unmute_btn_rsc" 
-               visible="$once{ parent.showAvIcons }" showhandcursor="true" >
+               showhandcursor="true" >
     	<handler name="onclick">
             if (canvas.ismoderator) {
                 canvas.thishib.switchMicMuted.setMute(canvas.publicSID,false);

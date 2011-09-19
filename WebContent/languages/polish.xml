@@ -4297,4 +4297,13 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="1406" name="unmute micro">
     <value>Unmute microphone</value>
   </string>
+  <string id="1407" name="mute micro">
+    <value>Mute microphone globally</value>
+  </string>
+  <string id="1408" name="unmute micro">
+    <value>Unmute microphone globally</value>
+  </string>
+  <string id="1409" name="mute moderator message">
+    <value>Only moderators can mute or unmute an user globally!</value>
+  </string>
 </language>
