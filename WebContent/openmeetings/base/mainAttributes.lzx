@@ -265,6 +265,8 @@ these properties will be overwritten by config.xml -->
 
 <!--- skip loading of Language -->
 <attribute name="language_id" value="0" type="number" />
+<!--- application default language -->
+<attribute name="default_lang_id" value="1" type="number" />
 
 <attribute name="isResetUsername" value="false" type="boolean" />
 <attribute name="resetHash" value="" type="string" />

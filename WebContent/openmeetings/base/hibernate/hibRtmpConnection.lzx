@@ -248,6 +248,7 @@
             canvas.setUserData(g);
             canvas.setColorStyle(canvas.baseColorScheme);
             
+            parent.userlang = canvas.default_lang_id;
         	parent.getLanguageByIdAndMax.start = 0;
         	parent.getLanguageByIdAndMax.doCall();
         </handler>          
@@ -270,9 +271,10 @@
     <netRemoteCallHib name="getDefaultLanguage" funcname="languageservice.getDefaultLanguage" >      
         <handler name="ondata" args="value">
             //The onResult-Handler will be called be the rtmpconnection
+            canvas.default_lang_id = value;
             if ($debug) Debug.write("getDefaultLanguage: ",value,"; canvas.lang = ", canvas.language_id);
             if (canvas.language_id==0){
-            	parent.userlang = value;
+            	parent.userlang = canvas.default_lang_id;
             } else {
             	parent.userlang = canvas.language_id;
             }
