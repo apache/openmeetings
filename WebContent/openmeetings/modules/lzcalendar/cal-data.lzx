@@ -136,6 +136,8 @@
             <comment value=""/>
             <notes value=""/>
             <location value=""/>
+            <roomtype value="1"/>
+            <remindtype value="0"/>
             <attendees />
             <start year="" month="" day="" hour="" minute="" />
             <end year="" month="" day="" hour="" minute="" />
@@ -161,6 +163,8 @@
             <comment value=""/>
             <notes value=""/>
             <location value=""/>
+            <roomtype value="1"/>
+            <remindtype value="0"/>
             <attendees />
             <start year="" month="" day="" hour="" minute="" />
             <end year="" month="" day="" hour="" minute="" />
