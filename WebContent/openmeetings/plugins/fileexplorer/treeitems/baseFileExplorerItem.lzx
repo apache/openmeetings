@@ -17,6 +17,7 @@
 	<attribute name="isFolder" value="true" type="boolean" />
 	<attribute name="isImage" value="false" type="boolean" />
 	<attribute name="isPresentation" value="false" type="boolean" />
+	<attribute name="isVideo" value="false" type="boolean" />
 	
 	<attribute name="fileName" value="" type="string" />
 	<attribute name="fileHash" value="" type="string" />

@@ -100,7 +100,9 @@
     			this.moveFile();
     		} else {
     			if ($debug) Debug.warn("Drag to whiteboard !!! ");
-    			if (this.refObj.isPresentation) {
+    			if (this.refObj.isVideo) {
+    				this.refObj.playVideo();
+    			} else if (this.refObj.isPresentation) {
     			    this.refObj.loadDocumentToWhiteboard();
     			} else if (this.refObj.isImage) {
     				this.refObj.loadImageToWhiteboard();
