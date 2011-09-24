@@ -395,7 +395,7 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 				sip_language_phonecode, sip_phonerange_start, sip_phonerange);
 
 		importInitvalues.loadInitUserAndOrganisation(username, userpass,
-				useremail, orgname, timeZone);
+				useremail, orgname, timeZone, configdefaultLang);
 		importInitvalues.loadDefaultRooms();
 
 		// AppointMent Categories

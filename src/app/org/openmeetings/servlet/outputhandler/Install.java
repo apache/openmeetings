@@ -358,7 +358,7 @@ public class Install extends VelocityViewServlet {
 							sip_phonerange_start, sip_phonerange);
 
 					getImportInitvalues().loadInitUserAndOrganisation(username,
-							userpass, useremail, orgname, timeZone);
+							userpass, useremail, orgname, timeZone, configdefaultLang);
 
 					getImportInitvalues().loadDefaultRooms();
 

@@ -530,15 +530,18 @@ public class ImportInitvalues {
 	}
 
 	public void loadInitUserAndOrganisation(String username, String userpass,
-			String email, String defaultOrganisationName, String timeZone) {
+			String email, String defaultOrganisationName, String timeZone, String configdefaultLang) {
 		// Add user
 		try {
-
+			
+			Long default_lang_id = Long.parseLong(configdefaultLang);
+			if (default_lang_id == null) default_lang_id = 1L;
+			
 			// BaseUrl as param is empty as we do not send an EMAIL here
 			Long user_id = userManagement.registerUserInit(new Long(3), 3, 1,
 					1, username, userpass, "lastname", "firstname", email,
 					new java.util.Date(), "street", "no", "fax", "zip", 1,
-					"town", 0, false, null, "phone", "", false, "", "", "",
+					"town", default_lang_id, false, null, "phone", "", false, "", "", "",
 					false, timeZone, false, "", "", false, true);
 
 			log.debug("Installation - User Added user-Id " + user_id);

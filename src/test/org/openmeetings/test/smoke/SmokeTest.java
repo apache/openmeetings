@@ -126,7 +126,7 @@ public class SmokeTest extends AbstractOpenmeetingsSpringTest {
 					sip_phonerange);
 
 			importInitvalues.loadInitUserAndOrganisation(username, userpass,
-					useremail, orgname, timeZone);
+					useremail, orgname, timeZone, configdefaultLang);
 
 			importInitvalues.loadDefaultRooms();
 

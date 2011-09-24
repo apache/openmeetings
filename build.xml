@@ -223,10 +223,11 @@
 			</fileset>
 		</copy>
 
-		<!-- add templates -->
+		<!-- add templates
 		<copy todir="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/classes">
 			<fileset dir="src/templates" />
 		</copy>
+		 -->
 
 		<tstamp/>
 	</target>
@@ -308,6 +309,19 @@
 				<attribute name="Svn-Revision" value="${svn.version}" />
 			</manifest>
 		</jar>
+		<jar destfile="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/lib/${project.distname}-templates.jar">
+            <fileset dir="${classes.dir}">
+                <include name="**"/>
+                <exclude name="**/org/**"/>
+                <exclude name="**/*.png"/>
+                <exclude name="**/*.properties"/>
+            </fileset>
+            <manifest>
+                <attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com"/>
+                <attribute name="Built-On" value="${build.TODAY}"/>
+                <attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
+            </manifest>
+        </jar>  
 		<jar destfile="${dist.dir}/red5/webapps/${project.distname}/screen/screenviewer.jar">
 			<fileset dir="${classes.dir}">
 				<include name="**/webstart/**"/>
