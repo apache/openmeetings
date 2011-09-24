@@ -84,6 +84,8 @@ public class RegisterUserTemplate extends VelocityLoader {
 	public String getRegisterUserTemplate(String username, String userpass,
 			String email, Long default_lang_id) {
 		try {
+			
+			super.init();
 
 			Fieldlanguagesvalues labelid506 = fieldmanagment
 					.getFieldByIdAndLanguage(new Long(506), default_lang_id);
