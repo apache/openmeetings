@@ -1780,7 +1780,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Lade Dokument. Bitte warten Sie bis alle Benutzer synchonisiert wurden.</value>
   </string>
   <string id="592" name="upload dialog">
-    <value>Dokument hochgeladen. Bitte warten Sie ab bis es importiert wurde ...</value>
+    <value>Dokument hochgeladen. Konvertiere ...</value>
   </string>
   <string id="593" name="upload dialog">
     <value>Starte Upload</value>
@@ -2416,19 +2416,19 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Teilnehmer</value>
   </string>
   <string id="804" name="dashboard">
-    <value>$APP_NAME, Ihre Web Konferenz Plattform. Entweder starten Sie sofort ein Meeting indem Sie den 1-2-3 Anweisungen folgen oder Sie benutzen den Kalender um eine Konferenz zu planen.</value>
+    <value>$APP_NAME, Ihre Web Konferenz Plattform. Entweder starten Sie sofort ein Meeting indem Sie den 1-2-3 Anweisungen folgen oder Sie benutzen "Meetings planen" um eine Konferenz zu planen.</value>
   </string>
   <string id="805" name="dashboard">
     <value>Konferenz planen</value>
   </string>
   <string id="806" name="lzcalendar">
-    <value>Um eine Konferenz zu planen können Sie einen Event im Kalender hinzufügen. Für jeden Kalenderevent wird automatisch ein Konferenzraum angelegt.&lt;br/&gt;&lt;br/&gt;Sie können beim Anlegen der Konferenz zwischen unterschiedlichen Raumtypen wählen. Jeder Raumtyp hat ein leicht anderes Layout und Moderations-System. Sie können außerdem für jedes Event ein eigene E-Mail-Erinnerung wählen.</value>
+    <value>Um eine Konferenz zu planen können Sie einen Event im Kalender hinzufügen.</value>
   </string>
   <string id="807" name="lzcalendar">
     <value>Brauchen Sie Hilfe?</value>
   </string>
   <string id="808" name="lzcalendar">
-    <value>Eingeschränkt</value>
+    <value>Webinar</value>
   </string>
   <string id="809" name="lzcalender">
     <value>Suche</value>
