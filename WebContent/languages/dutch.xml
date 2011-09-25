@@ -4227,6 +4227,6 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Unmute microphone globally</value>
   </string>
   <string id="1409" name="mute moderator message">
-    <value>Only moderators can mute or unmute an user globally!</value>
+    <value>Only moderators can mute or unmute an user globally! To mute your own microphone: Please use the microphone icon in your video pod!</value>
   </string>
 </language>

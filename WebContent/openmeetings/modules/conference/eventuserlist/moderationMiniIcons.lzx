@@ -251,6 +251,7 @@
         <labelTooltip labelid="684" />
     </miniIcons>
     
+    <!--
     <miniIcons name="_giveExclusiveAudio" x="60" width="16" height="16"
                resource="mic_rsc" showhandcursor="true">
         <handler name="onclick">
@@ -260,6 +261,7 @@
         </handler>
         <labelTooltip labelid="1386" />
     </miniIcons>
+     -->
 
 	<miniIcons name="_kickUser" x="60" width="16" height="16" y="18"
                resource="kick_user_rsc" showhandcursor="true">

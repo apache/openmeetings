@@ -424,8 +424,7 @@
             <labelTooltip name="_tip" labelid="540" />
         </miniIconsPresenter>       
         
-        <miniIconsPresenter name="_mute" width="16" height="16" iconRessourceName="mute_micro_btn_rsc"
-				visible="${ (canvas.ismoderator || (parent.parent.publicSID == canvas.publicSID)) }">
+        <miniIconsPresenter name="_mute" width="16" height="16" iconRessourceName="mute_micro_btn_rsc">
             <handler name="onclick">
                 parent.parent.silenceMicrophone(!parent.parent.micMuted);
             </handler>
@@ -490,17 +489,20 @@
         
         if ($debug) Debug.write("############ muteMicrophone ",roomClientObj.micMuted);
 
-        if (roomClientObj.publicSID == canvas.publicSID) {
-        	if ($debug) Debug.write("Set Mute for Client :: ",roomClientObj.username);
-            if (roomClientObj.micMuted) {
-            	if ($debug) Debug.write("############ SET GAIN 0");
-                this._chatvideoinner._videostream.micro.setGain(0);
-            } else {
-            	if ($debug) Debug.write("############ SET GAIN 50");
-                this._chatvideoinner._videostream.micro.setGain(50);
+        if (roomClientObj.publicSID == this.publicSID) {
+            if (roomClientObj.publicSID == canvas.publicSID) {
+            	if ($debug) Debug.write("Set Mute for Client :: ",roomClientObj.username);
+                if (roomClientObj.micMuted) {
+                	if ($debug) Debug.write("############ SET GAIN 0");
+                    this._chatvideoinner._videostream.micro.setGain(0);
+                } else {
+                	if ($debug) Debug.write("############ SET GAIN 50");
+                    this._chatvideoinner._videostream.micro.setGain(50);
+                }
             }
             this.isMutedByModerator = roomClientObj.micMuted;
             this.setMicMuted(roomClientObj.micMuted);
+            
         } else {
         	if (!roomClientObj.micMuted) {
         		//Make sure sound is on, in case a user has set it locally to 0
@@ -530,6 +532,12 @@
         		canvas.thishib.switchMicMuted.setMute(this.publicSID,false);
         	}
         } else {
+        	
+        	//disable this action for now
+        	if (!canvas.ismoderator) {
+        		new lz.labelerrorPopup(canvas,{errorlabelid:1409});
+        		return;
+        	}
         	
         	//you can not unmute it locally by putting sound to 100 cause the gain is set to zero globally in the micro of the sender!
         	//so setting the sound/volume on the other remote clients has zero effect 
