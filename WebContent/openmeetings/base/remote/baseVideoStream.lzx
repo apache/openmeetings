@@ -233,6 +233,9 @@
 	 -->
     <method name="setVolume" args="volume">
         if ($debug) Debug.write(this.soundRef,volume,this.soundRef.getVolume());
+        if (this.soundRef == null) {
+        	return;
+        }
         this.soundRef.setVolume(volume);
     </method>	
 	
