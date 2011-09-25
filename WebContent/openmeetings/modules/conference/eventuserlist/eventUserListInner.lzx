@@ -199,6 +199,27 @@
             ]]>
         </handler>
         
+        <handler name="onmicMutedStatusChangedItem" reference="canvas" args="roomClientObj">
+            <![CDATA[
+            
+               if ($debug) Debug.write(" :: onmicMutedStatusChangedItem :: ",roomClientObj.micMuted);
+               
+                //search for the user and update its drawStatusIcon
+                var vList = parent._table.innerList.subviews;
+                for (var i=0;i<vList.length;i++) {
+                    //vList[i].updateIconByMod();
+                    if (vList[i].refObj.publicSID == roomClientObj.publicSID) {
+                        vList[i].refObj.micMuted = roomClientObj.micMuted;
+                        vList[i].updateIconByMod();
+                        break;
+                    }
+                }
+               
+                parent._applyAndStatusIcons.updateIcons();
+               
+            ]]>
+        </handler>
+        
         <handler name="ondrawAllowStatus" reference="canvas" args="drawObject">
             <![CDATA[
                 //search for the user and update its drawStatusIcon

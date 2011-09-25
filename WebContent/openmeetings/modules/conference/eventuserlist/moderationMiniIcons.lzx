@@ -72,6 +72,16 @@
 				this._denyRemote.setAttribute("visibility","visible");
 			}
         }
+        
+        if ($debug) Debug.write("onmicMutedStatusChangedItem :3: ",this.refObj.micMuted);
+            
+        if (parent.refObj.micMuted) {
+            this._mute._text.setAttribute("labelid",1408);
+            this._mute.setAttribute("frame",2);
+        } else {
+            this._mute._text.setAttribute("labelid",1407);
+            this._mute.setAttribute("frame",1);
+        }
 		
 		if (parent.refObj.isBroadcasting) {
 			this._allowDevice.setAttribute("visibility","hidden");
@@ -249,6 +259,19 @@
             canvas.thishib.setBroadCastingFlag.doCall(); 
         </handler>
         <labelTooltip labelid="684" />
+    </miniIcons>
+    
+    <miniIcons name="_mute" x="60" width="16" height="16" resource="mute_micro_btn_rsc" showhandcursor="true" >
+        <handler name="onclick">
+            <![CDATA[
+                if (canvas.ismoderator) {
+                    canvas.thishib.switchMicMuted.setMute(parent.parent.refObj.publicSID,!parent.parent.refObj.micMuted);
+                } else {
+                    new lz.labelerrorPopup(canvas,{errorlabelid:1409});
+                }
+            ]]>
+        </handler>
+        <labelTooltip name="_text" text="" labelid="1407" />
     </miniIcons>
     
     <!--

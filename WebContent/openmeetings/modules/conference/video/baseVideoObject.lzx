@@ -53,16 +53,6 @@
 	
 	<handler name="onisremote" args="r">
 		this.isremote = r;
-                //the mute attribute may not exist
-		if (r) {
-			//this.message.setAttribute('visibility','hidden');
-			this._toolbar.showuser.setAttribute('visibility','visible');
-			//this._toolbar._mute.setAttribute('visibility','visible')
-		} else {
-			//this.message.setAttribute('visibility','visible');
-			this._toolbar.showuser.setAttribute('visibility','hidden');
-			//this._toolbar._mute.setAttribute('visibility','hidden')
-		}
 	</handler>
     
     <handler name="oninit">
