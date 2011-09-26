@@ -84,7 +84,7 @@ public class ActivateUser extends VelocityViewServlet {
 			ServletContext context = getServletContext();
 			String loginURL = ScopeApplicationAdapter.webAppRootPath;
 
-			ctx.put("APPLICATION_NAME", context.getServletContextName());
+			ctx.put("APP_NAME", getConfigurationmanagement().getAppName());
 			if (hash == null) {
 				// No hash
 				Long default_lang_id = Long.valueOf(

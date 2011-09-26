@@ -41,9 +41,6 @@
     canvas.setDefaultContextMenu(cmenu);
     cmenu.hideBuiltInItems();
     if($debug) Debug.write("main.lzx/oninit:",this);
-    // Add Custom Items:
-    //var item1 = cmenu.makeMenuItem('MedCast', new LzDelegate(this,"openMeetingsMenuItemHandler"));
-    //cmenu.addItem(item1);
 </handler>
 
 

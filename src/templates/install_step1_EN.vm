@@ -128,7 +128,7 @@ function checkEmail()
 }
 </script>
 
-<h1>Openmeetings - Installation</h1>
+<h1>$APP_NAME - Installation</h1>
 
 <form name="cmxform" id="form1" class="cmxform" method="post" action="?command=step2">
 

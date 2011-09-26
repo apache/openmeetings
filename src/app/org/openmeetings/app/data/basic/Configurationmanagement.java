@@ -281,4 +281,13 @@ public class Configurationmanagement {
 		}
 		return new Long(-1);
 	}
+	
+	public String getAppName() {
+		String appName = Configurationmanagement.DEFAULT_APP_NAME;
+		Configuration application_name = getConfKey(3L, "application.name");
+		if (application_name != null) {
+			appName = application_name.getConf_value();
+		}
+		return appName;
+	}
 }

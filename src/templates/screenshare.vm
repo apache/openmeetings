@@ -2,7 +2,7 @@
 <jnlp spec='1.0+' codebase='$codebase'> 
 	<information> 
 		<title>Screen Sharing Application</title> 
-		<vendor>Openmeetings</vendor> 
+		<vendor>$APP_NAME</vendor> 
 		<homepage>http://code.google.com/p/openmeetings/</homepage>
 		<icon href="icon.jpg" />
 		<icon kind="splash" href="splashicon.jpg" />

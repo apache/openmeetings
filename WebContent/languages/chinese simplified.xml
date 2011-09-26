@@ -1501,10 +1501,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>此房间没有主持人, 但是有参与者. 你可以申请为主持人或者等待.</value>
   </string>
   <string id="499" name="feedback_template_subject">
-    <value>反馈给Openmeetings</value>
+    <value>反馈给$APP_NAME</value>
   </string>
   <string id="500" name="invitation_template_head">
-    <value>Openmeetings——邀请</value>
+    <value>$APP_NAME——邀请</value>
   </string>
   <string id="501" name="invitation_text_from">
     <value>消息发自:</value>
@@ -1522,7 +1522,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>如果你在此链接遇到问题, 请拷贝并粘贴此链接到浏览器中:</value>
   </string>
   <string id="506" name="registering_mail_text_head">
-    <value>Openmeetings——注册</value>
+    <value>$APP_NAME——注册</value>
   </string>
   <string id="507" name="registering_mail_text_head2">
     <value>你的用户数据:</value>
@@ -1537,13 +1537,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>邮件:</value>
   </string>
   <string id="511" name="registering_mail_text_bye">
-    <value>Openmeetings——团队</value>
+    <value>$APP_NAME——团队</value>
   </string>
   <string id="512" name="register_mail_subject">
-    <value>Openmeetings——注册</value>
+    <value>$APP_NAME——注册</value>
   </string>
   <string id="513" name="reset_password_template_head">
-    <value>Openmeetings——重置密码</value>
+    <value>$APP_NAME——重置密码</value>
   </string>
   <string id="514" name="reset_password_template_test_link">
     <value>点击此链接并键入新密码:</value>
@@ -1555,7 +1555,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>如果你在此链接遇到问题, 请拷贝并粘贴此链接到浏览器中:</value>
   </string>
   <string id="517" name="reset_password_mail_subject">
-    <value>Openmeetings系统重置密码</value>
+    <value>$APP_NAME系统重置密码</value>
   </string>
   <string id="518" name="dateRegExpError">
     <value>请输入一个有效的日期, 比如 24.12.2001 (天.月.年)</value>
@@ -1600,7 +1600,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>到:</value>
   </string>
   <string id="532" name="invitation_window_MailSubject">
-    <value>邀请参加Openmeetings的讨论</value>
+    <value>邀请参加$APP_NAME的讨论</value>
   </string>
   <string id="533" name="invitation_error">
     <value>没有此邀请码对应的有效邀请</value>
@@ -1870,7 +1870,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>服务器时间</value>
   </string>
   <string id="622" name="inv_reminder_template_head">
-    <value>Openmeetings会议系统——提醒</value>
+    <value>$APP_NAME会议系统——提醒</value>
   </string>
   <string id="623" name="inv_reminder_text_from">
     <value>用户信息：</value>
@@ -2860,7 +2860,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>需要您自己的服务器?</value>
   </string>
   <string id="952" name="user-license">
-    <value>您如果想拥有自己的Openmeetings会议服务器或者集成到已有的应用中去，5000元每次!</value>
+    <value>您如果想拥有自己的$APP_NAME会议服务器或者集成到已有的应用中去，5000元每次!</value>
   </string>
   <string id="953" name="user-license">
     <value>或者给我们发送信息</value>
@@ -2956,7 +2956,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>点击购买</value>
   </string>
   <string id="984" name="payment-from">
-    <value>步骤3: Openmeetings系统支付 - 检查订单及付款!</value>
+    <value>步骤3: $APP_NAME系统支付 - 检查订单及付款!</value>
   </string>
   <string id="985" name="payment-from">
     <value>姓名</value>
@@ -2971,10 +2971,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>已经收到您的付款，并已经更新了您的用户设置。所有以往的付款信息都能够在您的用户配置中下载</value>
   </string>
   <string id="989" name="payment-mail">
-    <value>感谢您使用Openmeetings系统!</value>
+    <value>感谢您使用$APP_NAME系统!</value>
   </string>
   <string id="990" name="payment-mail">
-    <value>Openmeetings系统已经收到您的付款-</value>
+    <value>$APP_NAME系统已经收到您的付款-</value>
   </string>
   <string id="991" name="user-settings">
     <value>支付状态</value>

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.velocity.Template;
 import org.apache.velocity.context.Context;
 import org.apache.velocity.tools.view.VelocityViewServlet;
+import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -70,6 +71,20 @@ public class RTPSharerServlet extends VelocityViewServlet {
 			}
 		} catch (Exception err) {
 			log.error("[getRtpStreamingHandler]", err);
+		}
+		return null;
+	}
+
+	private Configurationmanagement getConfigurationmanagement() {
+		try {
+			if (!ScopeApplicationAdapter.initComplete) {
+				return null;
+			}
+			ApplicationContext context = WebApplicationContextUtils
+					.getWebApplicationContext(getServletContext());
+			return (Configurationmanagement) context.getBean("cfgManagement");
+		} catch (Exception err) {
+			log.error("[getConfigurationmanagement]", err);
 		}
 		return null;
 	}
@@ -186,8 +201,7 @@ public class RTPSharerServlet extends VelocityViewServlet {
 							"Predefindes Viewer List does not contain publicSID("
 									+ publicSID + ") !");
 
-				ctx.put("APPLICATION_NAME", getServletContext()
-						.getServletContextName());
+				ctx.put("APP_NAME", getConfigurationmanagement().getAppName());
 				ctx.put("HOST", InetAddress.getLocalHost().getHostAddress());
 				ctx.put("PORT", myPort);
 				ctx.put("HEIGHT", rsss.getStreamHeight());

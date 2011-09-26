@@ -54,14 +54,7 @@ public class DefaultIndex extends VelocityViewServlet {
 					3L, "sip.enable");
 
 			// SIP_REALM
-			Configuration application_name = getConfigurationmanagement()
-					.getConfKey(3L, "application.name");
-			if (application_name == null) {
-				ctx.put("APPLICATION_NAME", getServletContext()
-						.getServletContextName());
-			} else {
-				ctx.put("APPLICATION_NAME", application_name.getConf_value());
-			}
+			ctx.put("APP_NAME", getConfigurationmanagement().getAppName());
 
 			if (SIP_ENABLE == null || !SIP_ENABLE.getConf_value().equals("yes")) {
 

@@ -67,10 +67,6 @@
         </handler>
     </dataset>
 
-    <method name="openMeetingsMenuItemHandler">
-        lz.Browser.loadURL("http://code.google.com/p/openmeetings/", "Openmeetings Homepage");  
-    </method>    
-    
     <method name="myinit">
         <![CDATA[
         canvas.mediaerrortimeout = 30000;

@@ -184,8 +184,7 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 			ctx.put("webAppRootKey", httpRootKey);
 			ctx.put("httpSharerURL", httpSharerURL);
 
-			ctx.put("APPLICATION_NAME", getServletContext()
-					.getServletContextName());
+			ctx.put("APP_NAME", getCfgManagement().getAppName());
 			ctx.put("SID", sid);
 			ctx.put("ROOM", room);
 			ctx.put("DOMAIN", domain);

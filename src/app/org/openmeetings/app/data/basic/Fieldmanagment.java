@@ -19,7 +19,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.openmeetings.app.data.beans.basic.SearchResult;
-import org.openmeetings.app.persistence.beans.basic.Configuration;
 import org.openmeetings.app.persistence.beans.lang.FieldLanguage;
 import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.persistence.beans.lang.Fieldvalues;
@@ -569,17 +568,8 @@ public class Fieldmanagment {
 		return flv;
 	}
 	
-	private String getAppName() {
-		String appName = Configurationmanagement.DEFAULT_APP_NAME;
-		Configuration application_name = cfgManagement.getConfKey(3L, "application.name");
-		if (application_name != null) {
-			appName = application_name.getConf_value();
-		}
-		return appName;
-	}
-	
 	private Fieldlanguagesvalues performReplace(Fieldlanguagesvalues f) {
-		String appName = getAppName();
+		String appName = cfgManagement.getAppName();
 		return performReplace(f, appName);
 	}
 	
@@ -589,7 +579,7 @@ public class Fieldmanagment {
 	}
 	
 	private <T extends Collection<Fieldlanguagesvalues>> T performReplace(T flv) {
-		String appName = getAppName();
+		String appName = cfgManagement.getAppName();
 		
 		for (Fieldlanguagesvalues f : flv) {
 			performReplace(f, appName);
