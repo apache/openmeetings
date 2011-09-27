@@ -125,7 +125,7 @@ public class Fieldmanagment {
 			List<Fieldlanguagesvalues> fList = query.getResultList();
 
 			if (fList.size() > 0) {
-				flv = performReplace(fList.get(0));
+				flv = fList.get(0); //replace should not be performed here to enable string editing via admin
 			}
 
 			return flv;
