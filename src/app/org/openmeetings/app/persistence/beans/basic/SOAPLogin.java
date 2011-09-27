@@ -3,14 +3,12 @@ package org.openmeetings.app.persistence.beans.basic;
 import java.io.Serializable;
 import java.util.Date;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 @Entity
 @Table(name = "soaplogin")
@@ -48,7 +46,7 @@ public class SOAPLogin implements Serializable {
 	private Long roomRecordingId;
 	@Column(name="landing_zone")
 	private String landingZone;
-	@Transient
+	@Column(name="allow_recording")
 	private Boolean allowRecording;
 	
 	public long getSoapLoginId() {
