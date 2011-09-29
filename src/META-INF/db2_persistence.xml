@@ -2,7 +2,7 @@
 <!-- persistence.xml schema -->
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd" version="2.0">
 	<persistence-unit name="openmeetings" transaction-type="RESOURCE_LOCAL">
- 		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
+		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
 		<class>org.openmeetings.app.persistence.beans.adresses.Adresses</class>
 		<class>org.openmeetings.app.persistence.beans.adresses.States</class>
 		<class>org.openmeetings.app.persistence.beans.basic.Configuration</class>
@@ -57,17 +57,16 @@
 		<class>org.openmeetings.app.persistence.beans.files.FileExplorerItem</class>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		<properties>
-				<property name="openjpa.RuntimeUnenhancedClasses" value="supported"/>
-				<property name="openjpa.ConnectionDriverName" value="com.ibm.db2.jcc.DB2Driver"/>
-                               <property name="openjpa.ConnectionProperties" value="username=db2admin, password=admin"/>
-                               <property name="openjpa.ConnectionURL" value="jdbc:db2://localhost:50000/test"/>
-				<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema"/>
-			    <property name="openjpa.RuntimeUnenhancedClasses" value="unsupported"/>
-      			<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
-				<property name="openjpa.DataCache" value="true"/>
-				<property name="openjpa.QueryCache" value="true"/> 
-				<property name="openjpa.jdbc.DBDictionary"  value="batchLimit=100"/> 
-				<property name="openjpa.jdbc.QuerySQLCache"  value="false"/> 
-    	</properties>
+			<property name="openjpa.RuntimeUnenhancedClasses" value="supported"/>
+			<property name="openjpa.ConnectionDriverName" value="com.ibm.db2.jcc.DB2Driver"/>
+			<property name="openjpa.ConnectionProperties" value="username=db2admin, password=admin"/>
+			<property name="openjpa.ConnectionURL" value="jdbc:db2://localhost:50000/openmeet"/>
+			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema"/>
+			<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
+			<property name="openjpa.DataCache" value="true"/>
+			<property name="openjpa.QueryCache" value="true"/> 
+			<property name="openjpa.jdbc.DBDictionary"  value="batchLimit=100"/> 
+			<property name="openjpa.jdbc.QuerySQLCache"  value="false"/>
+		</properties>
 	</persistence-unit>
 </persistence>
