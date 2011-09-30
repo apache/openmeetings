@@ -1262,9 +1262,12 @@ public class Usermanagement {
 			users.setRegdate(new Date());
 			users.setDeleted("false");
 
-			em.merge(users);
-			em.flush();
+			em.persist(users);
+			
 			em.refresh(users);
+			
+			//em.flush();
+			
 			long user_id = users.getUser_id();
 
 			return user_id;
