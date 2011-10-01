@@ -31,6 +31,9 @@
 		<class>org.openmeetings.app.persistence.beans.lang.Fieldvalues</class>
 		<class>org.openmeetings.app.persistence.beans.logs.ConferenceLog</class>
 		<class>org.openmeetings.app.persistence.beans.logs.ConferenceLogType</class>
+		<class>org.openmeetings.app.persistence.beans.poll.PollType</class>
+		<class>org.openmeetings.app.persistence.beans.poll.RoomPoll</class>
+		<class>org.openmeetings.app.persistence.beans.poll.RoomPollAnswers</class>
 		<class>org.openmeetings.app.persistence.beans.recording.ChatvaluesEvent</class>
 		<class>org.openmeetings.app.persistence.beans.recording.Recording</class>
 		<class>org.openmeetings.app.persistence.beans.recording.RecordingClient</class>
@@ -74,6 +77,7 @@
 				<property name="openjpa.QueryCache" value="true"/> 
 				<property name="openjpa.jdbc.DBDictionary"  value="batchLimit=100,tableType=myisam"/> 
 				<property name="openjpa.jdbc.QuerySQLCache"  value="false"/> 
+<!--  <property name="openjpa.Log" value="DefaultLevel=WARN, Runtime=INFO, Tool=INFO, SQL=TRACE"/> -->
     	</properties>
 	</persistence-unit>
 </persistence>

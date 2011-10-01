@@ -61,6 +61,7 @@
 	<bean id="salutationmanagement" class="org.openmeetings.app.data.user.Salutationmanagement" />
 	<bean id="errorManagement" class="org.openmeetings.app.data.basic.ErrorManagement" />
 	<bean id="navimanagement" class="org.openmeetings.app.data.basic.Navimanagement" />
+	<bean id="pollManagement" class="org.openmeetings.app.data.conference.PollManagement" />
 	<bean id="omTimeZoneDaoImpl" class="org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl" />
 	<bean id="statemanagement" class="org.openmeetings.app.data.user.Statemanagement" />
 	<bean id="fieldLanguageDaoImpl" class="org.openmeetings.app.data.basic.FieldLanguageDaoImpl"/>

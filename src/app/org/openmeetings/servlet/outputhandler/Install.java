@@ -378,6 +378,9 @@ public class Install extends VelocityViewServlet {
 					// Appointment Remindertypes
 					getImportInitvalues().loadInitAppointmentReminderTypes();
 
+					// Appointment poll types
+					getImportInitvalues().loadPollTypes();
+					
 					// update to next step
 					log.debug("add level to install file");
 					InstallationDocumentHandler

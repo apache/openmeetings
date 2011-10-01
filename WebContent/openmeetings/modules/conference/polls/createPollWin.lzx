@@ -19,9 +19,9 @@
             <handler name="ondata" args="value">
                 <![CDATA[
                     //The onResult-Handler will be called be the rtmpconnection
-                    //Debug.write("getPollTypeList : ",value)
+                    if ($debug) Debug.write("getPollTypeList : ",value)
                     for (var i=0;i<value.length;i++){
-                        this.parent._polltypes.addItem(canvas.getLabelName(value[i].pollTypeLabelid),value[i].pollTypesId);
+                        this.parent._polltypes.addItem(canvas.getLabelName(value[i].label.fieldvalues_id), value[i].pollTypesId);
                     }
                     this.parent._polltypes.selectItem(value[0].pollTypesId);
                 ]]>

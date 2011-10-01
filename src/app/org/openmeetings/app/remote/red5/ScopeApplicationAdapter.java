@@ -18,6 +18,7 @@ import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.calendar.daos.MeetingMemberDaoImpl;
 import org.openmeetings.app.data.calendar.management.AppointmentLogic;
+import org.openmeetings.app.data.conference.PollManagement;
 import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.logs.ConferenceLogDaoImpl;
 import org.openmeetings.app.data.user.Usermanagement;
@@ -29,7 +30,6 @@ import org.openmeetings.app.persistence.beans.recording.RoomClient;
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.FLVRecorderService;
-import org.openmeetings.app.remote.PollService;
 import org.openmeetings.app.remote.WhiteBoardService;
 import org.openmeetings.server.beans.ServerFrameBean;
 import org.openmeetings.server.beans.ServerFrameCursorStatus;
@@ -87,6 +87,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	private UsersDaoImpl usersDao;
 	@Autowired
 	private MeetingMemberDaoImpl meetingMemberDao;
+	@Autowired
+	private PollManagement pollManagement;
 
 	// This is the Folder where all executables are written
 	// for windows platform
@@ -152,6 +154,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			}
 
 			ScopeApplicationAdapter.initComplete = true;
+
+			clientListManager.removeAllClients();
 
 			// OpenXGHttpClient.getInstance().openSIPgUserCreateTest();
 			// OpenXGWrapperClient.getInstance().testConnection();
@@ -760,7 +764,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 					.getClientListByRoom(room_id);
 			log.debug("roomLeave rcpList size: " + rcpList.size());
 			if (rcpList.size() == 0) {
-				PollService.clearRoomPollList(room_id);
+				pollManagement.clearRoomPollList(room_id);
 				// log.debug("clearRoomPollList cleared");
 			}
 

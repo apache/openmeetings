@@ -23,7 +23,6 @@ public class RoomClient implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
 	@Column(name="roomclient_id")
 	private Long roomClientId = null;
 	
@@ -42,16 +41,15 @@ public class RoomClient implements Serializable {
 	@Column(name="scope")
 	private String scope = "";
 	
-	@Transient
+	@Column(name="vWidth")
 	private int vWidth = 0;
-	@Transient
+	@Column(name="vHeight")
 	private int vHeight = 0;
-	@Transient
+	@Column(name="vX")
 	private int vX = 0;
-	@Transient
+	@Column(name="vY")
 	private int vY = 0;
-	
-	@Transient
+	@Column(name="streamPublishName")
 	private String streamPublishName = "";
 	
 	/*
@@ -75,20 +73,19 @@ public class RoomClient implements Serializable {
 	 */
 	@Column(name="is_mod")
 	private Boolean isMod = false;
-	@Transient
+	@Column(name="is_super_mod")
 	private Boolean isSuperModerator = false;
 	@Column(name="canDraw")
 	private Boolean canDraw = false;
-	@Transient
+	@Column(name="canShare")
 	private Boolean canShare = false;
-	@Transient
+	@Column(name="canRemote")
 	private Boolean canRemote = false;
 	@Column(name="connected_since")
 	private Date connectedSince;
 	@Column(name="formated_date")
 	private String formatedDate;
-	
-	@Transient
+	@Column(name="isScreenClient")
 	private Boolean isScreenClient = false;
 	
 	/*
@@ -179,18 +176,17 @@ public class RoomClient implements Serializable {
 	@Column(name="room_recording_name")
 	private String roomRecordingName;
 	
-	@Transient
+	@Column(name="flvRecordingId")
 	private Long flvRecordingId;
-	@Transient
+	@Column(name="flvRecordingMetaDataId")
 	private Long flvRecordingMetaDataId;
-	@Transient
+	@Column(name="organization_id") //FIXME need to add reference to org
 	private Long organization_id;
-	@Transient
+	@Column(name="startRecording")
 	boolean startRecording = false;
-	@Transient
+	@Column(name="startStreaming")
 	boolean startStreaming = false;
-	
-	@Transient
+	@Column(name="screenPublishStarted")
 	private Boolean screenPublishStarted;
 	
 	/*
@@ -201,19 +197,18 @@ public class RoomClient implements Serializable {
 	private Boolean isBroadcasting = false;
 	
 	 //Vars to simulate external Users
-	@Transient
+	@Column(name="externalUserId")
     private Long externalUserId;
-	@Transient
+	@Column(name="externalUserType")
     private String externalUserType;
     
 	@Transient
     private List<String> sharerSIDs = new LinkedList<String>();
     
     //Session values for handling the Interviwe Room Type
-	@Transient
+	@Column(name="interviewPodId")
     private Integer interviewPodId = null;
-    
-	@Transient
+	@Column(name="allowRecording")
     private Boolean allowRecording = true;
 	
 	/*
@@ -224,10 +219,6 @@ public class RoomClient implements Serializable {
 
     @Column(name="micMuted")
     private Boolean micMuted = false;
-	
-	public RoomClient() {
-		super();
-	}
 	
 	public void setUserObject(Long user_id, String username, String firstname, String lastname) {
 		this.user_id = user_id;

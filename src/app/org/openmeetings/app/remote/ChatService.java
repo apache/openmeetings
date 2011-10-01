@@ -406,7 +406,7 @@ public class ChatService implements IPendingServiceCallback {
 	public LinkedList<LinkedList<String>> getAllPublicEmoticons(){
 		try {
 			LinkedList<LinkedList<String>> publicemotes = new LinkedList<LinkedList<String>>();
-			LinkedList<LinkedList<String>> allEmotes = this.emoticonsManager.getEmotfilesList();
+			LinkedList<LinkedList<String>> allEmotes = EmoticonsManager.getEmotfilesList();
 			for (Iterator<LinkedList<String>> iter = allEmotes.iterator();iter.hasNext();){
 				LinkedList<String> emot = iter.next();
 				LinkedList<String> emotPub = new LinkedList<String>();
@@ -437,9 +437,7 @@ public class ChatService implements IPendingServiceCallback {
 			LinkedList<RoomClient> guestList = new LinkedList<RoomClient>();
 			LinkedList<RoomClient> overallList = new LinkedList<RoomClient>();
 			
-			HashMap<String, RoomClient> cList = this.clientListManager.getClientList();
-			for (Iterator<String> iter = cList.keySet().iterator();iter.hasNext();) {
-				RoomClient rcl = cList.get(iter.next());
+			for (RoomClient rcl : clientListManager.getAllClients()) {
 				if (rcl.getUser_id()==null || rcl.getUser_id()<=0) {
 					guestList.add(rcl);
 				} else {

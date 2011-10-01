@@ -434,7 +434,18 @@
         <handler name="ondata" args="value">
                 <![CDATA[
                     if (value!=null){
-                        new lz.resultPollWin(canvas.main_content._content.inner,{createdBy:value.createdBy.username,pollDate:value.pollDate,pollQuestion:value.pollQuestion,pollTypeId:value.pollTypeId,roomPollAnswerList:value.roomPollAnswerList,roomPollId:value.roomPollId,roomScopeName:value.roomScopeName});
+                        new lz.resultPollWin(
+                        	canvas.main_content._content.inner
+                        	, {
+                        		createdBy: value.createdBy.username
+                        		, pollDate: value.created
+                        		, pollQuestion: value.pollQuestion
+                        		, pollTypeId: value.pollType.pollTypesId
+                        		, roomPollAnswerList: value.roomPollAnswerList
+                        		, roomPollId: value.roomPollId
+                        		, roomScopeName: value.roomScopeName
+                        	}
+                        );
                     } else {
                         new lz.messageWin(canvas.main_content._content.inner,{labeliderror:41});
                }
@@ -460,7 +471,19 @@
         <handler name="ondata" args="value">
             <![CDATA[
                 if (value!=null){
-                     new lz.answerPoll(canvas.main_content._content.inner,{createdBy:value.createdBy.username,pollDate:value.pollDate,pollQuestion:value.pollQuestion,pollTypeId:value.pollTypeId,roomPollAnswerList:value.roomPollAnswerList,roomPollId:value.roomPollId,roomScopeName:value.roomScopeName});
+                	if ($debug) Debug.write(":: getPoll: ", value);
+                     new lz.answerPoll(
+                     	canvas.main_content._content.inner
+                     	, {
+                     		createdBy: value.createdBy.username
+                     		, pollDate: value.created
+                     		, pollQuestion: value.pollQuestion
+                     		, pollTypeId: value.pollType.pollTypesId
+                     		, roomPollAnswerList: value.roomPollAnswerList
+                     		, roomPollId: value.roomPollId
+                     		, roomScopeName: value.roomScopeName
+                     	}
+                     );
                 }
             ]]>
         </handler>

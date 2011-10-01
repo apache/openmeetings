@@ -1837,7 +1837,19 @@
                 <![CDATA[
                 //The onResult-Handler will be called by the rtmpconnection
                 //Debug.write("newPoll : ",value);
-                if(canvas.streamid!=value.createdBy.streamid) new lz.answerPoll(canvas.main_content._content.inner,{createdBy:value.createdBy.username,pollDate:value.pollDate,pollQuestion:value.pollQuestion,pollTypeId:value.pollTypeId,roomPollAnswerList:value.roomPollAnswerList,roomPollId:value.roomPollId,roomScopeName:value.roomScopeName});
+                if(canvas.streamid!=value.createdBy.streamid)
+                	new lz.answerPoll(
+                		canvas.main_content._content.inner
+                		, {
+                			createdBy: value.createdBy.username
+                			, pollDate: value.created
+                			, pollQuestion: value.pollQuestion
+                			, pollTypeId: value.pollType.pollTypesId
+                			, roomPollAnswerList: value.roomPollAnswerList
+                			, roomPollId: value.roomPollId
+                			, roomScopeName: value.roomScopeName
+                		}
+                	);
                 ]]>
             </handler>   
         </netRemoteCallHib>                    

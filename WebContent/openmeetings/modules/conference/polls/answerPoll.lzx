@@ -16,7 +16,7 @@
 	<labelText text="$once{ parent.pollQuestion }" y="42" x="0" height="60" width="380" multiline="true" resize="false"/>
 	
 	<handler name="oninit">
-		//Debug.write("this.pollTypeId: ",this.pollTypeId);
+		if ($debug) Debug.write("[answerPoll:oninit] this: ",this);
 		if (this.pollTypeId==1){
 			//Debug.write("Yes/No Question");
 			this.pollboolean.setAttribute('visible',true);

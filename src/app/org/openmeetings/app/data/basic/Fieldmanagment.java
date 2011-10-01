@@ -543,7 +543,7 @@ public class Fieldmanagment {
 		return ll;
 	}
 
-	public Fieldvalues getFieldvaluesById(Long fieldvalues_id) throws Exception {
+	public Fieldvalues getFieldvaluesById(Long fieldvalues_id) {
 		String hql = "select f from Fieldvalues f WHERE f.fieldvalues_id = :fieldvalues_id ";
 		Query query = em.createQuery(hql);
 		query.setParameter("fieldvalues_id", fieldvalues_id);

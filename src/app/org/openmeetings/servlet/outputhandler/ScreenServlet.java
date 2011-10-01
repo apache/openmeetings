@@ -13,8 +13,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 
 import javax.imageio.ImageIO;
@@ -222,26 +220,21 @@ public class ScreenServlet extends HttpServlet {
 				boolean userIsInRoom = false;
 				boolean doProcess = false;
 
-				HashMap<String, RoomClient> clientList = getClientListManager()
-						.getClientList();
-				for (Iterator<String> iter = clientList.keySet().iterator(); iter
-						.hasNext();) {
-					RoomClient rcl = clientList.get(iter.next());
-					if (rcl.getPublicSID().equals(publicSID)) {
-						log.debug("found RoomClient");
-						if (rcl.getRoom_id() != null
-								&& rcl.getRoom_id().toString().equals(room)) {
-							log.debug("User is inside Room");
-							userIsInRoom = true;
-							doProcess = true;
-						} else {
-							log.debug("User already left room, block Screen - logical Room Leave");
-							OutputStream out = httpServletResponse
-									.getOutputStream();
-							String returnValue = "close";
-							out.write(returnValue.getBytes());
-							// return;
-						}
+				RoomClient rcl = getClientListManager().getClientByPublicSID(publicSID);
+				if (rcl != null) {
+					log.debug("found RoomClient");
+					if (rcl.getRoom_id() != null
+							&& rcl.getRoom_id().toString().equals(room)) {
+						log.debug("User is inside Room");
+						userIsInRoom = true;
+						doProcess = true;
+					} else {
+						log.debug("User already left room, block Screen - logical Room Leave");
+						OutputStream out = httpServletResponse
+								.getOutputStream();
+						String returnValue = "close";
+						out.write(returnValue.getBytes());
+						// return;
 					}
 				}
 
@@ -444,26 +437,20 @@ public class ScreenServlet extends HttpServlet {
 				boolean userIsInRoom = false;
 				boolean doProcess = false;
 
-				HashMap<String, RoomClient> clientList = getClientListManager()
-						.getClientList();
-				for (Iterator<String> iter = clientList.keySet().iterator(); iter
-						.hasNext();) {
-					RoomClient rcl = clientList.get(iter.next());
-					if (rcl.getPublicSID().equals(publicSID)) {
-						log.debug("found RoomClient");
-						if (rcl.getRoom_id() != null
-								&& rcl.getRoom_id().toString().equals(room)) {
-							log.debug("User is inside Room");
-							userIsInRoom = true;
-							doProcess = true;
-						} else {
-							log.debug("User already left room, block Screen - logical Room Leave");
-							OutputStream out = httpServletResponse
-									.getOutputStream();
-							String returnValue = "close";
-							out.write(returnValue.getBytes());
-
-						}
+				RoomClient rcl = getClientListManager().getClientByPublicSID(publicSID);
+				if (rcl != null) {
+					log.debug("found RoomClient");
+					if (rcl.getRoom_id() != null
+							&& rcl.getRoom_id().toString().equals(room)) {
+						log.debug("User is inside Room");
+						userIsInRoom = true;
+						doProcess = true;
+					} else {
+						log.debug("User already left room, block Screen - logical Room Leave");
+						OutputStream out = httpServletResponse
+								.getOutputStream();
+						String returnValue = "close";
+						out.write(returnValue.getBytes());
 					}
 				}
 

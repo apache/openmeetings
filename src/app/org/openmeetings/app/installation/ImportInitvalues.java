@@ -17,6 +17,7 @@ import org.openmeetings.app.data.basic.Navimanagement;
 import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.calendar.daos.AppointmentCategoryDaoImpl;
 import org.openmeetings.app.data.calendar.daos.AppointmentReminderTypDaoImpl;
+import org.openmeetings.app.data.conference.PollManagement;
 import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Salutationmanagement;
@@ -66,7 +67,9 @@ public class ImportInitvalues {
 	private AppointmentCategoryDaoImpl appointmentCategoryDaoImpl;
 	@Autowired
 	private AppointmentReminderTypDaoImpl appointmentReminderTypDaoImpl;
-
+	@Autowired
+	private PollManagement pollManagement;
+	
 	public void loadMainMenu() {
 
 		userManagement.addUserLevel("User", 1);
@@ -164,7 +167,6 @@ public class ImportInitvalues {
 
 		errorManagement.addErrorType(new Long(1), new Long(322));
 		errorManagement.addErrorType(new Long(2), new Long(323));
-
 	}
 
 	public void loadErrorMappingsFromXML(String filePath) throws Exception {
@@ -801,6 +803,17 @@ public class ImportInitvalues {
 				langFieldIdIsInited = true;
 		}
 
+	}
+
+	// ------------------------------------------------------------------------------
+
+	/**
+	 * Loading initial Language from xml Files into database
+	 */
+	// ------------------------------------------------------------------------------
+	public void loadPollTypes() {
+		pollManagement.addPollType(26L, false);
+		pollManagement.addPollType(27L, true);
 	}
 	// ------------------------------------------------------------------------------
 
