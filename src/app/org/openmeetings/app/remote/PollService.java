@@ -37,7 +37,6 @@ public class PollService {
 	private PollManagement pollManagement;
 
 	public String createPoll(String pollQuestion, int pollTypeId) {
-		//FIXME poll is created with no checks
 		String returnValue = "";
 		try {
 			log.debug("createPoll: " + pollQuestion);
@@ -50,6 +49,9 @@ public class PollService {
 					+ rc.getIsMod());
 
 			if (rc.getIsMod()) {
+				// will move all existing polls to the archive
+				pollManagement.clearRoomPollList(rc.getRoom_id());
+				
 				sendNotification(currentcon, "newPoll",
 						new Object[] { pollManagement.createPoll(rc,
 								pollQuestion, (long) pollTypeId) });

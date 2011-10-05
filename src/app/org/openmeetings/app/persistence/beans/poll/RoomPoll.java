@@ -30,6 +30,8 @@ public class RoomPoll {
 	private String pollQuestion;
 	@Column(name = "created")
 	private Date created;
+	@Column(name = "archived")
+	private boolean archived;
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "poll_type_id")
 	private PollType pollType;
@@ -135,6 +137,20 @@ public class RoomPoll {
 
 	public void setRoom(Rooms room) {
 		this.room = room;
+	}
+
+	/**
+	 * @return the archived
+	 */
+	public boolean isArchived() {
+		return archived;
+	}
+
+	/**
+	 * @param archived the archived to set
+	 */
+	public void setArchived(boolean archived) {
+		this.archived = archived;
 	}
 
 }
