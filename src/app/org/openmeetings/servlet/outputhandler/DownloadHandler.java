@@ -24,7 +24,7 @@ public class DownloadHandler extends HttpServlet {
 	private static final long serialVersionUID = 7243653203578587544L;
 
 	private static final Logger log = Red5LoggerFactory
-			.getLogger(DownloadHandler.class);
+			.getLogger(DownloadHandler.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private static final String defaultImageName = "deleted.jpg";
 	private static final String defaultProfileImageName = "profile_pic.jpg";
