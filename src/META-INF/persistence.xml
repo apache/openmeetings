@@ -59,25 +59,24 @@
 		<class>org.openmeetings.app.persistence.beans.user.Users</class>
 		<class>org.openmeetings.app.persistence.beans.files.FileExplorerItem</class>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
-		<properties>
-				<property name="openjpa.ConnectionProperties"
-					value="DriverClassName=com.mysql.jdbc.Driver
-						, Url=jdbc:mysql://localhost:3306/openmeetings?autoReconnect=true&amp;useUnicode=true&amp;createDatabaseIfNotExist=true&amp;characterEncoding=utf-8&amp;connectionCollation=utf8_general_ci&amp;cachePrepStmts=true&amp;cacheCallableStatements=true&amp;cacheServerConfiguration=true&amp;useLocalSessionState=true&amp;elideSetAutoCommits=true&amp;alwaysSendSetIsolation=false&amp;enableQueryTimeouts=false&amp;prepStmtCacheSize=3000&amp;prepStmtCacheSqlLimit=1000
-						, MaxActive=100
-						, MaxWait=10000
-						, TestOnBorrow=true
-						, poolPreparedStatements=true
-						, Username=root
-						, Password="/>
-				<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema"/>
-			    <property name="openjpa.RuntimeUnenhancedClasses" value="unsupported"/>
-      			<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
-				<property name="openjpa.ConnectionDriverName" value="org.apache.commons.dbcp.BasicDataSource"/>
-				<property name="openjpa.DataCache" value="true"/>
-				<property name="openjpa.QueryCache" value="true"/> 
-				<property name="openjpa.jdbc.DBDictionary"  value="batchLimit=100,tableType=myisam"/> 
-				<property name="openjpa.jdbc.QuerySQLCache"  value="false"/> 
-<!--  <property name="openjpa.Log" value="DefaultLevel=WARN, Runtime=INFO, Tool=INFO, SQL=TRACE"/> -->
+        <properties>
+            <property name="openjpa.ConnectionProperties"
+                value="DriverClassName=org.apache.derby.jdbc.ClientDriver,
+                                  Url=jdbc:derby:openmeetings;create=true, 
+                                  create=true,
+                                  MaxActive=100, 
+                                  MaxWait=10000, 
+                                  TestOnBorrow=true, 
+                                  Username=user, 
+                                  Password=secret" />
+            <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema" />
+            <property name="openjpa.RuntimeUnenhancedClasses" value="unsupported" />
+            <property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
+            <property name="openjpa.ConnectionDriverName" value="org.apache.commons.dbcp.BasicDataSource" />
+            <property name="openjpa.DataCache" value="true" />
+            <property name="openjpa.QueryCache" value="true" />
+            <property name="openjpa.jdbc.DBDictionary" value="batchLimit=100" />
+            <property name="openjpa.jdbc.QuerySQLCache" value="false" />
     	</properties>
 	</persistence-unit>
 </persistence>
