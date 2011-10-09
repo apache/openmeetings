@@ -177,6 +177,10 @@
                  this.parent.refObj.username.setAttribute('text',this.parent.username.getText());
                  this.parent.refObj.userpass.setAttribute('text',this.parent.userpass1.getText());
                  this.parent.close();
+			} else if (value == -40) {
+				this.parent.refObj.username.setAttribute('text',this.parent.username.getText());
+                this.parent.refObj.userpass.setAttribute('text',this.parent.userpass1.getText());
+                this.parent.close();
 			}
 			]]>
          </handler>  
