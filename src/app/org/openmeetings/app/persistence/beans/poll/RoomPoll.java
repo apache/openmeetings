@@ -16,8 +16,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.openmeetings.app.persistence.beans.recording.RoomClient;
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
+import org.openmeetings.app.persistence.beans.user.Users;
 
 @Entity
 @Table(name = "room_polls")
@@ -26,6 +26,8 @@ public class RoomPoll {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "room_poll_id")
 	private Long roomPollId;
+	@Column(name = "poll_name")
+	private String pollName;
 	@Column(name = "poll_question")
 	private String pollQuestion;
 	@Column(name = "created")
@@ -36,8 +38,8 @@ public class RoomPoll {
 	@JoinColumn(name = "poll_type_id")
 	private PollType pollType;
 	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "roomclient_id")
-	private RoomClient createdBy;
+	@JoinColumn(name = "users_id")
+	private Users createdBy;
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "rooms_id")
 	private Rooms room;
@@ -48,7 +50,7 @@ public class RoomPoll {
 	/**
 	 * @return the createdBy
 	 */
-	public RoomClient getCreatedBy() {
+	public Users getCreatedBy() {
 		return createdBy;
 	}
 
@@ -56,7 +58,7 @@ public class RoomPoll {
 	 * @param createdBy
 	 *            the createdBy to set
 	 */
-	public void setCreatedBy(RoomClient createdBy) {
+	public void setCreatedBy(Users createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -94,7 +96,10 @@ public class RoomPoll {
 	 * @return the roomPollAnswerList
 	 */
 	public List<RoomPollAnswers> getRoomPollAnswerList() {
-		return (roomPollAnswerList == null) ? new LinkedList<RoomPollAnswers>() : roomPollAnswerList;
+		if (roomPollAnswerList == null) {
+			roomPollAnswerList = new LinkedList<RoomPollAnswers>();
+		}
+		return roomPollAnswerList;
 	}
 
 	/**
@@ -151,6 +156,20 @@ public class RoomPoll {
 	 */
 	public void setArchived(boolean archived) {
 		this.archived = archived;
+	}
+
+	/**
+	 * @return the pollName
+	 */
+	public String getPollName() {
+		return pollName;
+	}
+
+	/**
+	 * @param pollName the pollName to set
+	 */
+	public void setPollName(String pollName) {
+		this.pollName = pollName;
 	}
 
 }

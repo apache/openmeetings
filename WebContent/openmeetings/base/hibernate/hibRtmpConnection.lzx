@@ -1837,11 +1837,11 @@
                 <![CDATA[
                 //The onResult-Handler will be called by the rtmpconnection
                 //Debug.write("newPoll : ",value);
-                if(canvas.streamid!=value.createdBy.streamid)
+                if(canvas.user_id!=value.createdBy.user_id)
                 	new lz.answerPoll(
                 		canvas.main_content._content.inner
                 		, {
-                			createdBy: value.createdBy.username
+                			createdBy: value.createdBy.login
                 			, pollDate: value.created
                 			, pollQuestion: value.pollQuestion
                 			, pollTypeId: value.pollType.pollTypesId

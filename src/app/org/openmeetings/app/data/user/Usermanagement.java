@@ -1510,7 +1510,7 @@ public class Usermanagement {
 	 * Find User by Id
 	 */
 	// -----------------------------------------------------------------------------------------------------
-	public Users getUserById(Long id) throws Exception {
+	public Users getUserById(Long id) {
 		log.debug("Usermanagement.getUserById");
 
 		if (id == 0) {

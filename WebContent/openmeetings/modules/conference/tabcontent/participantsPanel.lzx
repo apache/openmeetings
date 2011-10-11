@@ -161,7 +161,7 @@
                     new lz.answerPoll(
                     	canvas.main_content._content.inner
                     	, {
-                    		createdBy: value.createdBy.username
+                    		createdBy: value.createdBy.login
                     		, pollDate: value.created
                     		, pollQuestion: value.pollQuestion
                     		, pollTypeId: value.pollType.pollTypesId

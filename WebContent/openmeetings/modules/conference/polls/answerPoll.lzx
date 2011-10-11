@@ -45,10 +45,7 @@
 		</handler>
 	</resetCombobox>
 	
-    <simpleLabelButton labelid="25" width="200" x="80" y="218" 
-        onclick="this.parent.close();" />
-    
-    <simpleLabelButton labelid="32" width="200" x="290" y="218">
+    <simpleLabelButton labelid="32" width="200" x="80" y="218">
     	<handler name="onclick">
     		if (parent.pollTypeId==1){
     			this.parent.vote.pollvalue = Number(parent.pollboolean.getValue());
@@ -60,6 +57,9 @@
     		
     	</handler>
     </simpleLabelButton>
+    
+    <simpleLabelButton labelid="25" width="200" x="290" y="218" 
+        onclick="this.parent.close();" />
     
         <netRemoteCallHib name="vote" funcname="pollservice.vote" remotecontext="$once{ canvas.thishib }" >
             <attribute name="pollvalue" type="number" value="0" />

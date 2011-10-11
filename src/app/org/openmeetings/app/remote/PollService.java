@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.openmeetings.app.data.conference.PollManagement;
+import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.persistence.beans.poll.PollType;
 import org.openmeetings.app.persistence.beans.poll.RoomPoll;
 import org.openmeetings.app.persistence.beans.poll.RoomPollAnswers;
@@ -32,11 +33,13 @@ public class PollService {
 	@Autowired
 	private ClientListManager clientListManager;
 	@Autowired
+	private Usermanagement usermanagement;
+	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
 	private PollManagement pollManagement;
 
-	public String createPoll(String pollQuestion, int pollTypeId) {
+	public String createPoll(String pollName, String pollQuestion, int pollTypeId) {
 		String returnValue = "";
 		try {
 			log.debug("createPoll: " + pollQuestion);
@@ -54,7 +57,7 @@ public class PollService {
 				
 				sendNotification(currentcon, "newPoll",
 						new Object[] { pollManagement.createPoll(rc,
-								pollQuestion, (long) pollTypeId) });
+								pollName, pollQuestion, (long) pollTypeId) });
 				returnValue = "200";
 			} else {
 				returnValue = "202";
@@ -125,7 +128,7 @@ public class PollService {
 				log.error("POLL IS NULL for RoomId: " + rc.getRoom_id());
 				return -1;
 			}
-			if (pollManagement.hasVoted(roomId, streamid)) {
+			if (pollManagement.hasVoted(roomId, rc.getUser_id())) {
 				log.debug("hasVoted: true");
 				return -1;
 			}
@@ -145,8 +148,9 @@ public class PollService {
 				// Is boolean Question
 				rpA.setAnswer(new Boolean(pollvalue == 1));
 			}
-			rpA.setVotedClient(rc);
+			rpA.setVotedUser(usermanagement.getUserById(rc.getUser_id()));
 			rpA.setVoteDate(new Date());
+			rpA.setRoomPoll(roomP);
 			roomP.getRoomPollAnswerList().add(rpA);
 			pollManagement.updatePoll(roomP);
 			return 1;
@@ -183,7 +187,7 @@ public class PollService {
 
 			long roomId = rc.getRoom_id();
 			if (pollManagement.hasPoll(roomId)) {
-				return pollManagement.hasVoted(roomId, streamid) ? -1 : 1;
+				return pollManagement.hasVoted(roomId, rc.getUser_id()) ? -1 : 1;
 			} else {
 				return -2;
 			}

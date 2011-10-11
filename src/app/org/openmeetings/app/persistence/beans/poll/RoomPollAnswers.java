@@ -9,14 +9,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.openmeetings.app.persistence.beans.recording.RoomClient;
+import org.openmeetings.app.persistence.beans.user.Users;
 
 @Entity
 @Table(name = "room_poll_answers")
 public class RoomPollAnswers {
 	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "roomclient_id")
-	private RoomClient votedClient;
+	@JoinColumn(name = "users_id")
+	private Users votedUser;
 	@Column(name = "answer")
 	private Boolean answer;
 	@Column(name = "pointList")
@@ -75,16 +75,16 @@ public class RoomPollAnswers {
 	/**
 	 * @return the votedClient
 	 */
-	public RoomClient getVotedClient() {
-		return votedClient;
+	public Users getVotedUser() {
+		return votedUser;
 	}
 
 	/**
 	 * @param votedClient
 	 *            the votedClient to set
 	 */
-	public void setVotedClient(RoomClient votedClient) {
-		this.votedClient = votedClient;
+	public void setVotedUser(Users votedUser) {
+		this.votedUser = votedUser;
 	}
 
 	public RoomPoll getRoomPoll() {

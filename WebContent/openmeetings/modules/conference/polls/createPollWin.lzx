@@ -8,8 +8,11 @@
     
     <labelText fontstyle="bold" labelid="19" y="22" />
     
-    <labelText labelid="20" y="42" />
-    <customEdittext name="_question" multiline="true" width="390" x="100" y="42" height="60" />
+    <labelText labelid="1410" y="42" />
+    <customEdittext name="_name" multiline="false" width="390" x="100" y="42" />
+    
+    <labelText labelid="20" y="67" />
+    <customEdittext name="_question" multiline="true" width="390" x="100" y="67" height="60" />
      
         <netRemoteCallHib name="getPollTypeList" funcname="pollservice.getPollTypeList"
             remotecontext="$once{ canvas.thishib }" > 
@@ -28,8 +31,8 @@
             </handler>   
         </netRemoteCallHib>        
     
-    <labelText labelid="21" y="122" />
-    <resetCombobox name="_polltypes" width="160" x="100" y="122" editable="false" itemclassname="bigTextListItem" >
+    <labelText labelid="21" y="142" />
+    <resetCombobox name="_polltypes" width="160" x="100" y="142" editable="false" itemclassname="bigTextListItem" >
     	<handler name="oninit">
     		<![CDATA[
     		    this.parent.getPollTypeList.setReferenceObj(this);
@@ -38,25 +41,14 @@
     	</handler>
     </resetCombobox>
 
-    <simpleLabelButton labelid="25" width="100" x="280" y="218" 
-        onclick="this.parent.close();" />
-    
-    <simpleLabelButton labelid="22" width="100" x="390" y="218">
-    	<handler name="onclick">
-    		this.parent.createPoll.pollquestion = this.parent._question.getText();
-    		this.parent.createPoll.polltypesid = this.parent._polltypes.getValue();
-    		//Debug.write("this.parent.createPoll.createPoll: ",this.parent.createPoll.createPoll);
-    		this.parent.createPoll.doCall();
-    		
-    	</handler>
-    </simpleLabelButton>
-    
-    <labelText fgcolor="red" labelid="23" y="170" width="480" multiline="true" resize="false"/>
+    <labelText fgcolor="red" labelid="23" y="175" width="480" multiline="true" resize="false"/>
      
         <netRemoteCallHib name="createPoll" funcname="pollservice.createPoll"
             remotecontext="$once{ canvas.thishib }" >
+            <attribute name="pollname" value="" type="string" />
             <attribute name="pollquestion" value="" type="string" />
             <attribute name="polltypesid" value="0" type="number" />
+            <netparam><method name="getValue">return parent.pollname;</method></netparam>
             <netparam><method name="getValue">return parent.pollquestion;</method></netparam>
             <netparam><method name="getValue">return parent.polltypesid;</method></netparam>
             <handler name="ondata" args="value">
@@ -67,6 +59,20 @@
                 ]]>
             </handler>   
         </netRemoteCallHib>      
+    
+    <simpleLabelButton labelid="22" width="100" x="280" y="218">
+    	<handler name="onclick">
+    		this.parent.createPoll.pollname = this.parent._name.getText();
+    		this.parent.createPoll.pollquestion = this.parent._question.getText();
+    		this.parent.createPoll.polltypesid = this.parent._polltypes.getValue();
+    		//Debug.write("this.parent.createPoll.createPoll: ",this.parent.createPoll.createPoll);
+    		this.parent.createPoll.doCall();
+    		
+    	</handler>
+    </simpleLabelButton>
+    
+    <simpleLabelButton labelid="25" width="100" x="390" y="218" 
+        onclick="this.parent.close();" />
     
 </class>
 

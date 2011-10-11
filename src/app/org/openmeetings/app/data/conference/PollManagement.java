@@ -9,6 +9,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.openmeetings.app.data.basic.Fieldmanagment;
+import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.persistence.beans.poll.PollType;
 import org.openmeetings.app.persistence.beans.poll.RoomPoll;
 import org.openmeetings.app.persistence.beans.recording.RoomClient;
@@ -26,6 +27,8 @@ public class PollManagement {
 	private EntityManager em;
 	@Autowired
 	private Fieldmanagment fieldmanagment;
+	@Autowired
+	private Usermanagement usermanagement;
 	@Autowired
 	private Roommanagement roommanagement;
 
@@ -52,11 +55,12 @@ public class PollManagement {
 		return (PollType)q.getSingleResult();
 	}
 	
-	public RoomPoll createPoll(RoomClient rc, String pollQuestion, Long pollTypeId) {
+	public RoomPoll createPoll(RoomClient rc, String pollName, String pollQuestion, Long pollTypeId) {
 		RoomPoll roomP = new RoomPoll();
 		
-		roomP.setCreatedBy(rc);
+		roomP.setCreatedBy(usermanagement.getUserById(rc.getUser_id()));
 		roomP.setCreated(new Date());
+		roomP.setPollName(pollName);
 		roomP.setPollQuestion(pollQuestion);
 		roomP.setPollType(getPollType(pollTypeId));
 		roomP.setRoom(roommanagement.getRoomById(rc.getRoom_id()));
@@ -111,13 +115,13 @@ public class PollManagement {
 		return false;
 	}
 	
-	public boolean hasVoted(Long room_id, String streamid) {
+	public boolean hasVoted(Long room_id, Long userid) {
 		try {
-			log.debug(" :: hasVoted :: " + room_id + ", " + streamid);
+			log.debug(" :: hasVoted :: " + room_id + ", " + userid);
 			Query q = em.createQuery("SELECT rpa FROM RoomPollAnswers rpa "
-				+ "WHERE rpa.roomPoll.room.rooms_id = :room_id AND rpa.votedClient.streamid = :streamid AND rpa.roomPoll.archived = :archived");
+				+ "WHERE rpa.roomPoll.room.rooms_id = :room_id AND rpa.votedUser.user_id = :userid AND rpa.roomPoll.archived = :archived");
 			q.setParameter("room_id", room_id);
-			q.setParameter("streamid", streamid);
+			q.setParameter("userid", userid);
 			q.setParameter("archived", false);
 			q.getSingleResult();
 			return true;
