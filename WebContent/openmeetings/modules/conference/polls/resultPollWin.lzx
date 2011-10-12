@@ -1,117 +1,127 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 
+	<class name="resultPollWin" extends="labelExplorerBox" labelid="37"
+		docking="true" resizeable="false" closable="true" width="500" x="100"
+		height="410">
 
-<class name="resultPollWin" extends="labelExplorerBox" labelid="37"
-    docking="true" resizeable="false" closable="true" width="500" x="100" height="390">
-    
-	<attribute name="createdBy" type="string" value="" />
-	<attribute name="pollDate" type="string" value="" />
-	<attribute name="pollQuestion" type="string" value="" />
-	<attribute name="pollTypeId" type="string" value="" />
-	<attribute name="roomPollAnswerList" value="null" />
-	<attribute name="roomPollId" type="string" value="" />
-	<attribute name="roomScopeName" type="string" value="" />
-	
-	<attribute name="totalVotes" value="0" type="number" />
-	
-	<attribute name="positives" value="0" type="number" />
-    <attribute name="negatives" value="0" type="number" />
-    
-    <attribute name="vote1" value="0" type="number" />
-    <attribute name="vote2" value="0" type="number" />
-    <attribute name="vote3" value="0" type="number" />
-    <attribute name="vote4" value="0" type="number" />
-    <attribute name="vote5" value="0" type="number" />
-    <attribute name="vote6" value="0" type="number" />
-    <attribute name="vote7" value="0" type="number" />
-    <attribute name="vote8" value="0" type="number" />
-    <attribute name="vote9" value="0" type="number" />
-    <attribute name="vote10" value="0" type="number" />
-    
-	<handler name="oninit">
+		<attribute name="roomPoll" value="null" />
+		<attribute name="archPolls" value="null" />
+		<attribute name="resultpollvotes" value="null" />
+
+		<handler name="oninit">
+			this.displayResults(roomPoll);
+		</handler>
+
+		<method name="displayResults" args="poll">
 		<![CDATA[
-		//Debug.write("this.pollTypeId: ",this.pollTypeId);
-		this.head.setAttribute('text',"You "+canvas.getLabelName(36));
-		this.totalVotes = this.roomPollAnswerList.length;
-		if (this.pollTypeId==1){
-			//Debug.write("yes/no");
-			for (var eg=0;eg<this.totalVotes;eg++){
-				//Debug.write("this.totalVotes: ",this.roomPollAnswerList[eg].answer,typeof (this.roomPollAnswerList[eg].answer));
-				if (this.roomPollAnswerList[eg].answer){
-					this.positives++;
-				} else {
-					this.negatives++;
-				}
+			this.content.setAttribute("visible", poll != null);
+			if (poll == null) {
+				this.head.setAttribute('text', canvas.getLabelName(41));
+				return;
 			}
-		} else if (this.pollTypeId==2){
-			//Debug.write("numeric");
-			for (var eg=0;eg<this.totalVotes;eg++){
-				//Debug.write("this.totalVotes: ",this.roomPollAnswerList[eg].pointList);
-				this['vote'+this.roomPollAnswerList[eg].pointList]++;
+			this.head.setAttribute('text'
+				, (canvas.user_id == poll.createdBy.user_id ? canvas.getLabelName(1411) : poll.createdBy.login)
+					+ " " + canvas.getLabelName(36));
+			
+			var totalVotes = poll.roomPollAnswerList.length;
+			this.content.question.setAttribute('text', poll.pollQuestion);
+			this.content.voteResultNum.setAttribute('text', totalVotes);
+			
+			var isNumeric = poll.pollType.isNumericAnswer;
+			var resArray = new Array(isNumeric ? 10 : 2);
+			for (var i = 0; i < resArray.length; ++i) {
+				resArray[i] = 0;
 			}
-		}
-		
-		//Debug.write("this.votes: ",this);
-		this.voteResultNum.setAttribute('text',this.totalVotes);
-		
-		if (this.pollTypeId==1){
-			if (this.positives==0) {
-				var pos = 0;
-			} else {		
-				var pos = Math.round(((this.positives/this.totalVotes)*100));
+			for (var i = 0; i < totalVotes; ++i) {
+				var idx = isNumeric ? poll.roomPollAnswerList[i].pointList - 1 : (poll.roomPollAnswerList[i].answer ? 0 : 1);
+				resArray[idx]++;
 			}
-			new lz.parentResultPollBalk(this._resultpollvotes,{newX:pos*2,newPercent:pos+'%',textA:'Yes'});
-			if (this.negatives==0) {
-				var neg = 0;
-			} else {
-				var neg = Math.round(((this.negatives/this.totalVotes)*100));
+			if (this.resultpollvotes != null) {
+				this.resultpollvotes.destroy();
 			}
-			new lz.parentResultPollBalk(this._resultpollvotes,{newX:neg*2,newPercent:neg+'%',textA:'No'});
-		}
-		if (this.pollTypeId==2){
-			for (var i=1;i<11;i++){
-				if (this['vote'+i]==0) {
-					var pos = 0;
-				} else {		
-					var pos = Math.round(((this['vote'+i]/this.totalVotes)*100));
-				}
-				new lz.parentResultPollBalk(this._resultpollvotes,{newX:pos*2,newPercent:pos+'%',textA:i});
+			this.resultpollvotes = new lz.view(this.content, {y: 142, x: 100});
+			new lz.simplelayout(this.resultpollvotes, {axis: 'y', spacing: 2});
+			for (var i = 0; i < resArray.length; ++i) {
+				var pos = (totalVotes == 0) ? 0 : Math.round( 100 * resArray[i] / totalVotes);
+				new lz.parentResultPollBalk(
+					this.resultpollvotes
+					,{newX: pos * 2
+						, newPercent: pos + '%'
+						, textA: isNumeric ? i + 1 : canvas.getLabelName(i == 0 ? 34 : 35)
+					}
+				);
 			}
-		}		
 		]]>
-	</handler>
+		</method>
 
-	<labelText y="22" name="head" />
-	<labelText text="$once{ parent.pollQuestion }" y="42" x="0" height="60" 
-        width="380" multiline="true" resize="false"/>
-	
-	<labelText y="102" labelid="39"/>
-	
-	<labelText y="102" x="100" name="voteResultNum" />
-	
-	<labelText y="122" labelid="40"/>
-	
-	<view name="_resultpollvotes" layout="axis:y;spacing:2" y="122" x="100" />
-	
-    <simpleLabelButton labelid="25" width="100" x="390" y="$once{ parent.height-22 }" 
-        onclick="this.parent.close();" />    
-    
-</class>
+		<labelText y="22" name="head" />
 
-<class name="parentResultPollBalk" extends="view">
-	<attribute name="newX" value="0" type="number" />
-	<attribute name="newPercent" value="0%" type="string" />
-	<attribute name="answer" value="0" type="number" />
-	<attribute name="textA" value="" type="string" />
-	<text text="$once{ parent.textA }" resize="true" />
-	<resultPollBalk x="40" />
-</class>
+		<labelText y="42" name="archPollLbl" labelid="1412" />
+		<resetCombobox name="_archPolls" width="380" x="100" y="42"
+			editable="false" itemclassname="bigTextListItem">
 
-<class name="resultPollBalk" extends="view" bgcolor="black" height="20" width="0">
-	<view bgcolor="red" width="${ parent.width-2 }" height="${ parent.height-2 }" x="1" y="1"/>
-	<text text="$once{ parent.parent.newPercent }" resize="true" y="2" />
-	<animator attribute="width" to="$once{ parent.parent.newX }" duration="1000"/>
-</class>
+			<netRemoteCallHib name="getArchivedPollList"
+				funcname="pollservice.getArchivedPollList" remotecontext="$once{ canvas.thishib }">
+				<handler name="ondata" args="value">
+				<![CDATA[
+					if (value == null) {
+						this.parent.setAttribute("visible", false);
+						this.parent.parent.archPollLbl.setAttribute("visible", false);
+						return;
+					}
+					this.parent.parent.archPolls = value;
+					if (this.parent.parent.roomPoll != null) {
+						this.parent.addItem(this.parent.parent.roomPoll.pollName + "(" + canvas.getLabelName(1413) + ")", -1);
+					}
+					for (var i = 0; i < value.length; ++i) {
+						this.parent.addItem(value[i].pollName, i);
+					}
+					this.parent.selectItem(this.parent.parent.roomPoll == null ? 0 : -1);
+				]]>
+				</handler>
+			</netRemoteCallHib>
+			<handler name="oninit">
+				this.getArchivedPollList.doCall();
+			</handler>
+			<handler name="onselect" args="sel">
+				if ($debug) Debug.write("onselect ", sel);
+				this.parent.displayResults(sel.value > -1 ?
+				this.parent.archPolls[sel.value] : this.parent.roomPoll);
+			</handler>
+		</resetCombobox>
+
+		<view name="content">
+			<labelText name="question" y="62" x="0" height="60" width="380"
+				multiline="true" resize="false" />
+
+			<labelText y="122" labelid="39" />
+
+			<labelText y="122" x="100" name="voteResultNum" />
+
+			<labelText y="142" labelid="40" />
+		</view>
+		<simpleLabelButton labelid="25" width="100" x="390"
+			y="$once{ parent.height-22 }" onclick="this.parent.close();" />
+
+	</class>
+
+	<class name="parentResultPollBalk" extends="view">
+		<attribute name="newX" value="0" type="number" />
+		<attribute name="newPercent" value="0%" type="string" />
+		<attribute name="answer" value="0" type="number" />
+		<attribute name="textA" value="" type="string" />
+		<text text="$once{ parent.textA }" resize="true" />
+		<resultPollBalk x="40" />
+	</class>
+
+	<class name="resultPollBalk" extends="view" bgcolor="black"
+		height="20" width="0">
+		<view bgcolor="red" width="${ parent.width-2 }" height="${ parent.height-2 }"
+			x="1" y="1" />
+		<text text="$once{ parent.parent.newPercent }" resize="true" y="2" />
+		<animator attribute="width" to="$once{ parent.parent.newX }"
+			duration="1000" />
+	</class>
 
 </library>

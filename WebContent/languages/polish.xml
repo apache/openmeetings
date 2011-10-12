@@ -4309,4 +4309,13 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="1410" name="poll_name">
     <value>Poll Name</value>
   </string>
+  <string id="1411" name="poll_name">
+    <value>You</value>
+  </string>
+  <string id="1412" name="archived_polls">
+    <value>Archieved Polls</value>
+  </string>
+  <string id="1413" name="active_poll">
+    <value>active</value>
+  </string>
 </language>

@@ -100,6 +100,22 @@ public class PollManagement {
 		return null;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<RoomPoll> getArchivedPollList(Long room_id) {
+		try {
+			log.debug(" :: getPoll :: " + room_id);
+			Query q = em.createQuery("SELECT rp FROM RoomPoll rp WHERE rp.room.rooms_id = :room_id AND rp.archived = :archived");
+			q.setParameter("room_id", room_id);
+			q.setParameter("archived", true);
+			return q.getResultList();
+		} catch (NoResultException nre) {
+			//expected
+		} catch (Exception err) {
+			log.error("[getPoll]", err);
+		}
+		return null;
+	}
+	
 	public boolean hasPoll(Long room_id) {
 		try {
 			log.debug(" :: hasPoll :: " + room_id);

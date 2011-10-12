@@ -197,4 +197,17 @@ public class PollService {
 		return 0;
 	}
 
+	public List<RoomPoll> getArchivedPollList() {
+		try {
+			IConnection current = Red5.getConnectionLocal();
+			RoomClient rc = this.clientListManager.getClientByStreamId(current
+					.getClient().getId());
+
+			// get Poll
+			return pollManagement.getArchivedPollList(rc.getRoom_id());
+		} catch (Exception err) {
+			log.error("[getArchivedPollList]", err);
+		}
+		return null;
+	}
 }

@@ -432,25 +432,8 @@
     
     <netRemoteCallHib name="getVotes" funcname="pollservice.getVotes" remotecontext="$once{ canvas.thishib }" >
         <handler name="ondata" args="value">
-                <![CDATA[
-                    if (value!=null){
-                        new lz.resultPollWin(
-                        	canvas.main_content._content.inner
-                        	, {
-                        		createdBy: value.createdBy.username
-                        		, pollDate: value.created
-                        		, pollQuestion: value.pollQuestion
-                        		, pollTypeId: value.pollType.pollTypesId
-                        		, roomPollAnswerList: value.roomPollAnswerList
-                        		, roomPollId: value.roomPollId
-                        		, roomScopeName: value.roomScopeName
-                        	}
-                        );
-                    } else {
-                        new lz.messageWin(canvas.main_content._content.inner,{labeliderror:41});
-               }
-            ]]>
-          </handler>   
+        	new lz.resultPollWin(canvas.main_content._content.inner, {roomPoll: value});
+        </handler>   
     </netRemoteCallHib>  
         
     <netRemoteCallHib name="checkHasVoted" funcname="pollservice.checkHasVoted" remotecontext="$once{ canvas.thishib }" >

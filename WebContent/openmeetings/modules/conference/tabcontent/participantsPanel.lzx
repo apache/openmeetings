@@ -105,26 +105,7 @@
 		</handler>
         <netRemoteCallHib name="getVotes" funcname="pollservice.getVotes" remotecontext="$once{ canvas.thishib }" >
             <handler name="ondata" args="value">
-                <![CDATA[
-                //The onResult-Handler will be called be the rtmpconnection
-                //Debug.write("getVotes : ",value);
-                if (value!=null){
-                    new lz.resultPollWin(
-                    	canvas.main_content._content.inner
-                    	, {
-                    		createdBy: value.createdBy.username
-                    		, pollDate: value.created
-                    		, pollQuestion: value.pollQuestion
-                    		, pollTypeId: value.pollType.pollTypesId
-                    		, roomPollAnswerList: value.roomPollAnswerList
-                    		, roomPollId: value.roomPollId
-                    		, roomScopeName: value.roomScopeName
-                    	}
-                    );
-                } else {
-                    new lz.messageWin(canvas.main_content._content.inner,{labeliderror:41});
-                }
-                ]]>
+	        	new lz.resultPollWin(canvas.main_content._content.inner, {roomPoll: value});
             </handler>   
         </netRemoteCallHib>         
 	</simpleLabelButton>	
