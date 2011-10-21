@@ -128,7 +128,7 @@ public class SmokeTest extends AbstractOpenmeetingsSpringTest {
 			importInitvalues.loadInitUserAndOrganisation(username, userpass,
 					useremail, orgname, timeZone, configdefaultLang);
 
-			importInitvalues.loadDefaultRooms();
+			importInitvalues.loadDefaultRooms(true);
 
 			// AppointMent Categories
 			importInitvalues.loadInitAppointmentCategories();

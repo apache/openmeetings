@@ -474,7 +474,8 @@ public class ImportInitvalues {
 
 	}
 
-	public void loadDefaultRooms() {
+	
+	public void loadDefaultRooms(boolean createRooms) {
 
 		long conference_Id = roommanagement.addRoomType("conference");
 		log.debug("conference_Id: " + conference_Id);
@@ -489,46 +490,47 @@ public class ImportInitvalues {
 
 		long custom_Id = roommanagement.addRoomType("custom");
 		log.debug("custom_Id: " + custom_Id);
-
-		roommanagement.addRoom(3, "public Interview Room", interview_Id, "",
-				new Long(16), true, null, false, false, null, false, null,
-				true, false, false, "", "", "", null, null, null, false);
-
-		roommanagement.addRoom(3, "public Conference Room", conference_Id, "",
-				new Long(32), true, null, false, false, null, false, null,
-				true, false, false, "", "", "", null, null, null, false);
-
-		roommanagement.addRoom(3, "public Video Only Room", conference_Id, "",
-				new Long(32), true, null, false, false, null, false, null,
-				true, false, false, "", "", "", null, null, null, false);
-
-		roommanagement.addRoom(3, "public Video And Whiteboard Room",
-				conference_Id, "", new Long(32), true, null, false, false,
-				null, false, null, true, false, false, "", "", "", null, null,
-				null, false);
-
-		roommanagement.addRoom(3, "public Restricted Room", restricted_Id, "",
-				new Long(100), true, null, false, false, null, false, null,
-				true, false, false, "", "", "", null, null, null, false);
-
-		long room2 = roommanagement.addRoom(3, "private Conference Room",
-				conference_Id, "", new Long(32), false, null, false, false,
-				null, false, null, true, false, false, "", "", "", null, null,
-				null, false);
-
-		roommanagement.addRoomToOrganisation(3, room2, 1);
-
-		roommanagement.addRoom(3, "public Audience Room", audience_Id, "",
-				new Long(32), true, null, false, false, null, false, null,
-				true, false, false, "", "", "", null, null, null, false);
-
-		long room4 = roommanagement.addRoom(3, "private Audience Room",
-				audience_Id, "", new Long(32), false, null, false, false, null,
-				false, null, true, false, false, "", "", "", null, null, null,
-				false);
-
-		roommanagement.addRoomToOrganisation(3, room4, 1);
-
+		
+		if (createRooms) {
+			roommanagement.addRoom(3, "public Interview Room", interview_Id, "",
+					new Long(16), true, null, false, false, null, false, null,
+					true, false, false, "", "", "", null, null, null, false);
+	
+			roommanagement.addRoom(3, "public Conference Room", conference_Id, "",
+					new Long(32), true, null, false, false, null, false, null,
+					true, false, false, "", "", "", null, null, null, false);
+	
+			roommanagement.addRoom(3, "public Video Only Room", conference_Id, "",
+					new Long(32), true, null, false, false, null, false, null,
+					true, false, false, "", "", "", null, null, null, false);
+	
+			roommanagement.addRoom(3, "public Video And Whiteboard Room",
+					conference_Id, "", new Long(32), true, null, false, false,
+					null, false, null, true, false, false, "", "", "", null, null,
+					null, false);
+	
+			roommanagement.addRoom(3, "public Restricted Room", restricted_Id, "",
+					new Long(100), true, null, false, false, null, false, null,
+					true, false, false, "", "", "", null, null, null, false);
+	
+			long room2 = roommanagement.addRoom(3, "private Conference Room",
+					conference_Id, "", new Long(32), false, null, false, false,
+					null, false, null, true, false, false, "", "", "", null, null,
+					null, false);
+	
+			roommanagement.addRoomToOrganisation(3, room2, 1);
+	
+			roommanagement.addRoom(3, "public Audience Room", audience_Id, "",
+					new Long(32), true, null, false, false, null, false, null,
+					true, false, false, "", "", "", null, null, null, false);
+	
+			long room4 = roommanagement.addRoom(3, "private Audience Room",
+					audience_Id, "", new Long(32), false, null, false, false, null,
+					false, null, true, false, false, "", "", "", null, null, null,
+					false);
+	
+			roommanagement.addRoomToOrganisation(3, room4, 1);
+		}
 	}
 
 	public void loadInitUserAndOrganisation(String username, String userpass,

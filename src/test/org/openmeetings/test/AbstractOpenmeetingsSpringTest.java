@@ -396,7 +396,7 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 
 		importInitvalues.loadInitUserAndOrganisation(username, userpass,
 				useremail, orgname, timeZone, configdefaultLang);
-		importInitvalues.loadDefaultRooms();
+		importInitvalues.loadDefaultRooms(true);
 
 		// AppointMent Categories
 		importInitvalues.loadInitAppointmentCategories();
