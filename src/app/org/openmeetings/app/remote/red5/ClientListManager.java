@@ -225,7 +225,7 @@ public class ClientListManager {
 			String orderby, boolean asc) {
 		String sq = "select rc from RoomClient rc";
 		if (orderby != null && orderby.trim().length() > 0) {
-			sq += " ORDER BY " + orderby + " " + (asc ? "ASC" : "DESC");
+			sq += " ORDER BY rc." + orderby + " " + (asc ? "ASC" : "DESC");
 		}
 		Query q = em.createQuery(sq);
 		q.setFirstResult(start);
