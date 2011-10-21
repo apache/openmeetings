@@ -269,6 +269,8 @@ public class Install extends VelocityViewServlet {
 							.getParameter("sendEmailAtRegister");
 					String sendEmailWithVerficationCode = httpServletRequest
 							.getParameter("sendEmailWithVerficationCode");
+					String createDefaultRooms = httpServletRequest
+							.getParameter("createDefaultRooms");
 
 					String default_export_font = httpServletRequest
 							.getParameter("default_export_font");
@@ -370,7 +372,9 @@ public class Install extends VelocityViewServlet {
 					getImportInitvalues().loadInitUserAndOrganisation(username,
 							userpass, useremail, orgname, timeZone, configdefaultLang);
 
-					getImportInitvalues().loadDefaultRooms();
+					if ("1".equals(createDefaultRooms)) {
+						getImportInitvalues().loadDefaultRooms();
+					}
 
 					// AppointMent Categories
 					getImportInitvalues().loadInitAppointmentCategories();

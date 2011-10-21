@@ -782,8 +782,8 @@ public class BackupImport {
 								Element organisationObject = organisationIterator
 										.next();
 
-								Long organisation_id = importLongType(unformatString(organisationObject
-										.element("organisation_id").getText()));
+								Long organisation_id = getNewId(importLongType(unformatString(organisationObject
+										.element("organisation_id").getText())), Maps.ORGANISATIONS);
 								Long user_id = importLongType(unformatString(organisationObject
 										.element("user_id").getText()));
 								Boolean isModerator = importBooleanType(unformatString(organisationObject
@@ -1327,37 +1327,19 @@ public class BackupImport {
 		return null;
 	}
 
-	private void importOrganizsations(File orgFile) throws Exception {
-
-		List<Organisation> orgList = this.getOrganisationsByXML(orgFile);
-
-		for (Organisation org : orgList) {
-			Long orgId = org.getOrganisation_id();
-
-			org.setOrganisation_id(null);
-			Long newOrgID = organisationmanagement.addOrganisationObj(org);
-			organisationsMap.put(orgId, newOrgID);
-
-		}
-
-	}
-
-	@SuppressWarnings("unchecked")
-	private List<Organisation> getOrganisationsByXML(File orgFile) {
+	private void importOrganizsations(File orgFile) {
 		try {
-
-			List<Organisation> orgList = new LinkedList<Organisation>();
-
 			SAXReader reader = new SAXReader();
 			Document document = reader.read(orgFile);
 
 			Element root = document.getRootElement();
 
-			for (Iterator<Element> i = root.elementIterator(); i.hasNext();) {
+			for (@SuppressWarnings("unchecked")
+			Iterator<Element> i = root.elementIterator(); i.hasNext();) {
 				Element itemObject = i.next();
 				if (itemObject.getName().equals("organisations")) {
-
-					for (Iterator<Element> innerIter = itemObject
+					for (@SuppressWarnings("unchecked")
+					Iterator<Element> innerIter = itemObject
 							.elementIterator("organisation"); innerIter
 							.hasNext();) {
 
@@ -1371,23 +1353,17 @@ public class BackupImport {
 								"deleted").getText());
 
 						Organisation organisation = new Organisation();
-						organisation.setOrganisation_id(organisation_id);
 						organisation.setName(name);
 						organisation.setDeleted(deleted);
 
-						orgList.add(organisation);
-
+						Long newOrgID = organisationmanagement.addOrganisationObj(organisation);
+						organisationsMap.put(organisation_id, newOrgID);
 					}
-
 				}
 			}
-
-			return orgList;
-
 		} catch (Exception err) {
 			log.error("[getOrganisationsByXML]", err);
 		}
-		return null;
 	}
 
 	private String unformatString(String str) {

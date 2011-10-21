@@ -142,7 +142,7 @@ function checkEmail()
 		</li><li>
         <label for="userpass">Userpass</label>
     	<input name="userpass" id="userpass" size="27" 
-    		title="Enter a password" type="text" /><br />
+    		title="Enter a password" type="password" /><br />
 		</li><li>
         <label for="useremail">EMail</label>
     	<input name="useremail" id="useremail" size="27" 
@@ -188,6 +188,13 @@ function checkEmail()
 		</li><li>
         <label for="sendEmailWithVerficationCode">New Users need to verify their EMail (sendEmailWithVerficationCode)</label>
     	<select name="sendEmailWithVerficationCode" id="sendEmailWithVerficationCode" 
+    		size="1">
+	      	<option value="1" selected>Yes</option>
+	        <option value="0">No</option>
+	    </select><br />	 	       
+		</li><li>
+        <label for="createDefaultRooms">Default Rooms of all types will be created</label>
+    	<select name="createDefaultRooms" id="createDefaultRooms"
     		size="1">
 	      	<option value="1" selected>Yes</option>
 	        <option value="0">No</option>
