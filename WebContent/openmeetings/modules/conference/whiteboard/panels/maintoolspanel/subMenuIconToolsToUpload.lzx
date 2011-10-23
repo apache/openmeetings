@@ -240,7 +240,7 @@
     		folderName += "/";
     	}
     	
-    	var imageurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey
+    	var imageurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey
                                         +'public/cliparts/'+folderName+'thumb/'+refObj.modi;
     	
         if ($debug) Debug.write("this.refToolbar :: ",this.refToolbar);        
@@ -349,7 +349,7 @@
             	    	folderName += "/";
             	    }
             	
-                    var imageurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey
+                    var imageurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey
                                         +'public/cliparts/'+folderName+'thumb/';
                     
                     //if ($debug) Debug.write("imageurl :: ",imageurl);            	

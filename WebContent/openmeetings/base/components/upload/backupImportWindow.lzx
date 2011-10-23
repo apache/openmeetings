@@ -67,7 +67,7 @@
 	<button name="upload" x="10" y="100" text="Upload" width="200" enabled="false" height="20">
 		<handler name="onclick">
 			<![CDATA[
-			var uploadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+			var uploadurl = canvas.protocol+'://'+canvas.rtmphostlocal+':'+canvas.red5httpport
 				+canvas.httpRootKey+'BackupImport?sid='+canvas.sessionId
 				+'&publicSID='+canvas.publicSID;
             if ($debug) Debug.write("uploadurl: ",uploadurl);

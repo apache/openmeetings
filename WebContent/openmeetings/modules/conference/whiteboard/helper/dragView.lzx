@@ -38,7 +38,7 @@
 	        if ($debug) Debug.write("onmouseup lz.ModeManager globalUnlockMouseEvents ",x,y);
 	        
 	        if (x>=0 && y>=0 && x<=canvas._drawarea.width && y<=canvas._drawarea.height){
-		        var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'DownloadHandler?fileName='+encodeURIComponent(this.filename)
+		        var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'DownloadHandler?fileName='+encodeURIComponent(this.filename)
 			        +'&moduleName='+this.uploadmodul
 			        +'&parentPath='+encodeURIComponent(canvas.uploadmoduleimgfolder+'/')
 			        +'&room_id='+hib.currentroomid

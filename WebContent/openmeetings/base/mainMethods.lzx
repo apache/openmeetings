@@ -153,7 +153,11 @@
         
         this.setAttribute('recordModule',canvas.myConfigSet.getPointer().xpathQuery('config/recordModule/text()'));  
         
-        this.setAttribute('httpRootKey',canvas.myConfigSet.getPointer().xpathQuery('config/httpRootKey/text()'));  
+        this.setAttribute('httpRootKey',canvas.myConfigSet.getPointer().xpathQuery('config/httpRootKey/text()'));
+        
+        this.setAttribute('protocol',canvas.myConfigSet.getPointer().xpathQuery('config/protocol/text()'));  
+        
+        this.setAttribute('proxyType',canvas.myConfigSet.getPointer().xpathQuery('config/proxyType/text()'));  
         
         
         mainBaseText.setAttribute('text',canvas.currentappname);

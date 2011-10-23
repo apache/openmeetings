@@ -59,6 +59,9 @@ these properties will be overwritten by config.xml -->
 
 <attribute name="httpRootKey" value="/" type="string" />
 
+<attribute name="protocol" value="http" type="string" />
+<attribute name="proxyType" value="none" type="string" />
+
 <attribute name="showAudioVideoTest" value="true" type="boolean" />
 
 <!--

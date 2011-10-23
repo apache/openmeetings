@@ -92,17 +92,17 @@
     		
     			if (value.pictureuri==null || value.pictureuri.length==0){
 					value.pictureuri = "d.jpg";
-    		    } else if (value.pictureuri.startsWith("http")) {
+    		    } else if (value.pictureuri.startsWith("http") || value.pictureuri.startsWith("https")) {
                     //nothing
 				} else {
 					value.pictureuri = "_profile_"+value.pictureuri;
 				}
 				
 				var t = new Date();
-				if (value.pictureuri.startsWith("http")) {
+				if (value.pictureuri.startsWith("http") || value.pictureuri.startsWith("https")) {
                     var downloadurl = value.pictureuri;
                 } else {
-    		        var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+    		        var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport
     		        		+canvas.httpRootKey+'DownloadHandler?fileName='+value.pictureuri
     		        		+'&moduleName=userprofile&parentPath=&room_id='
     		        		+'&sid='+canvas.sessionId+'&r='+t.getTime();

@@ -41,7 +41,7 @@
         <![CDATA[
             if ($debug) Debug.write("moveFile HTTP 1: ");
             //this.getFileExplorerByRoom.doCall();
-            var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+            var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport
                             +canvas.httpRootKey+'services/FileService/addFolderSelfInternal?'
                             +'SID='+canvas.sessionId
                             +'&parentFileExplorerItemId='+this.parentFileExplorerItemId
@@ -88,7 +88,7 @@
         <![CDATA[
             if ($debug) Debug.write("moveFile HTTP 1: ");
             //this.getFileExplorerByRoom.doCall();
-            var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+            var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport
                             +canvas.httpRootKey+'services/FileService/updateFileOrFolderNameSelf?'
                             +'SID='+canvas.sessionId
                             +'&fileExplorerItemId='+this.fileExplorerItemId

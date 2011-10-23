@@ -383,7 +383,7 @@
         <handler name="oninit">
             //if ($debug) Debug.write("setTint");
             //TODO: Fix this, does not work at the moment
-            //http://code.google.com/p/openmeetings/issues/detail?id=470
+            //canvas.protocol + '://code.google.com/p/openmeetings/issues/detail?id=470
             this.setColor(canvas.baseMousecolorizer);
         </handler>      
     </view>

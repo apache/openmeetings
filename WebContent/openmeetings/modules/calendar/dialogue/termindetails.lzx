@@ -242,7 +242,7 @@
 					//parent.getAppointmentCategoryList.doCall();	
 					//parent.getAppointmentReminderTypList();	
 					
-					//var url = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey; 
+					//var url = canvas.protocol+'://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey; 
 					
 					
 			    	//parent.baseUrl = url;			

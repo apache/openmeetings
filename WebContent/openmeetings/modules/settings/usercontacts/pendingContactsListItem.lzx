@@ -26,14 +26,14 @@
 				
 				//var t=new Date();
 				
-		        //var profileUrl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+		        //var profileUrl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport
 		        //		+canvas.httpRootKey+'DownloadHandler?fileName='+pictureuri
 		        //		+'&moduleName=userprofile&parentPath=&room_id='
 		        //		+'&sid='+canvas.sessionId+'&r='+t.getTime();
 		        
         		var t=new Date();
                 
-                var profileUrl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+                var profileUrl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport
                     +canvas.httpRootKey+'DownloadHandler?fileName='+pictureuri
                     +'&moduleName=remoteuserprofile&parentPath=&room_id='
                     +'&remoteUserid='+this.refObj.user_id+'&r='+t.getTime()

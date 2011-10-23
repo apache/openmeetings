@@ -129,7 +129,7 @@
         <![CDATA[
             if ($debug) Debug.write("deleteFileOrFolder HTTP 2: ");
             //this.getFileExplorerByRoom.doCall();
-            var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+            var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport
                             +canvas.httpRootKey+'services/FileService/deleteFileOrFolderSelf?'
                             +'SID='+canvas.sessionId
                             +'&fileExplorerItemId='+this.fileExplorerItemId;
@@ -174,7 +174,7 @@
         <![CDATA[
             if ($debug) Debug.write("moveFile HTTP 1: ");
             //this.getFileExplorerByRoom.doCall();
-            var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+            var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport
                             +canvas.httpRootKey+'services/FileService/moveFileSelfInternal?'
                             +'SID='+canvas.sessionId
                             +'&fileExplorerItemId='+this.fileExplorerItemId

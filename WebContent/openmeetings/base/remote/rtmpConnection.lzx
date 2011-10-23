@@ -18,7 +18,9 @@
             this._nc = new NetConnection();
 
             // local reference to rtmpconnection
-            this._nc.t = this;          
+            this._nc.t = this;     
+            
+            this._nc.proxyType = canvas.proxyType;
             
             var ok = this._nc.connect(src == "null" ? null : src);
             if (this.debug) {

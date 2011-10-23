@@ -122,7 +122,7 @@
         <![CDATA[
             if ($debug) Debug.write("deleteFileOrFolder HTTP 1: ");
             //this.getFileExplorerByRoom.doCall();
-            var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+            var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport
                             +canvas.httpRootKey+'services/FileService/deleteFileOrFolderSelf?'
                             +'SID='+canvas.sessionId
                             +'&fileExplorerItemId='+this.fileExplorerItemId;
@@ -325,7 +325,7 @@
     <method name="loadFiles">
     	<![CDATA[
             //this.getFileExplorerByRoom.doCall();
-            var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+            var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport
                             +canvas.httpRootKey+'services/FileService/getFileExplorerByParentSelfInternal?'
                             +'SID='+canvas.sessionId
                             +'&parentFileExplorerItemId='+this.fileExplorerItemId

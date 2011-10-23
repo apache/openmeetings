@@ -42,7 +42,7 @@
                 this.loadimageDataWinRef = new lz.loadWhiteboardWindow(canvas.main_content._content.inner,{refObj:this});
                 this.loadimageDataWinRef.setMessage(canvas.getLabelName(this.imageLoadMessageId));
             }
-            var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'DownloadHandler?' +
+            var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'DownloadHandler?' +
                     'fileName=' + fileName +
                     '&moduleName=' + moduleName + 
                     '&parentPath=' + parentPath +
@@ -76,7 +76,7 @@
                 this.loadimageDataWinRef = new lz.loadWhiteboardWindow(canvas.main_content._content.inner,{refObj:this});
                 this.loadimageDataWinRef.setMessage(canvas.getLabelName(this.imageLoadMessageId));
             }
-            var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'DownloadHandler?' +
+            var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'DownloadHandler?' +
                     'fileName=' + fileName +
                     '&moduleName=' + moduleName + 
                     '&parentPath=' + parentPath +

@@ -11,7 +11,7 @@
     <simpleLabelButton labelid="382" width="160" x="2" y="32">
     	<handler name="onclick">
     		<![CDATA[
-	    		var exporturl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+	    		var exporturl = canvas.protocol+'://'+canvas.rtmphostlocal+':'+canvas.red5httpport
 	    				+canvas.httpRootKey+'Export?organisation='+0
 	    				+'&moduleName=users'
 	    				+'&sid='+canvas.sessionId;
@@ -50,7 +50,7 @@
     <simpleLabelButton labelid="384" x="410" y="62">
     	<handler name="onclick">
     		<![CDATA[
-	    		var exporturl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+	    		var exporturl = canvas.protocol+'://'+canvas.rtmphostlocal+':'+canvas.red5httpport
 	    				+canvas.httpRootKey+'Export?organisation='+parent.organistations.getValue()
 	    				+'&moduleName=userorganisations'
 	    				+'&sid='+canvas.sessionId;
@@ -81,7 +81,7 @@
     <simpleLabelButton text="System Backup" x="210" y="180" width="200">
         <handler name="onclick">
             <![CDATA[
-                var exporturl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+                var exporturl = canvas.protocol+'://'+canvas.rtmphostlocal+':'+canvas.red5httpport
                         +canvas.httpRootKey+'BackupExport?moduleName=backup'
                         +'&sid='+canvas.sessionId;
                 if($debug) Debug.write("BACKUP/exporturl "+exporturl);

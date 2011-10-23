@@ -159,7 +159,7 @@
             //}
         	//if ($debug) Debug.write("addPresentationToLayer uniqueObjectSyncName:",uniqueObjectSyncName,innerwidth,innerheight);
             
-            var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'DownloadHandler?' +
+            var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'DownloadHandler?' +
                     'fileName=' + encodeURIComponent(fileName) +
                     '&moduleName=' + moduleName + 
                     '&parentPath=' + encodeURIComponent(parentPath + '/') +
@@ -200,7 +200,7 @@
                 this.loadimageDataWinRef = new lz.loadWhiteboardWindow(canvas.main_content._content.inner,{refObj:this});
                 this.loadimageDataWinRef.setMessage(canvas.getLabelName(this.imageLoadMessageId));
             }
-            var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'DownloadHandler?' +
+            var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'DownloadHandler?' +
                     'fileName=' + encodeURIComponent(fileName) +
                     '&moduleName=' + moduleName + 
                     '&parentPath=' + encodeURIComponent(parentPath) +

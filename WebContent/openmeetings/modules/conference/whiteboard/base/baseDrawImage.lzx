@@ -149,7 +149,7 @@
 		//only do if last image has been loading successfully
             if (!this.isScreenImageLoading){
                 this.isScreenImageLoading = true;
-                var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'ScreenViewHandler?'
+                var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'ScreenViewHandler?'
                     +'fileName='+encodeURIComponent(value.fileName)
                     +'&room='+hib.currentroomid
                     +'&domain='+hib.conferencedomain

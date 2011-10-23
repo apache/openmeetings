@@ -37,7 +37,7 @@
 				} else {
 					value.pictureuri = "_profile_"+value.pictureuri;
 				}
-		        var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+		        var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport
 		        		+canvas.httpRootKey+'DownloadHandler?fileName='+value.pictureuri
 		        		+'&moduleName=userprofile&parentPath=&room_id='
 		        		+'&sid='+canvas.sessionId;

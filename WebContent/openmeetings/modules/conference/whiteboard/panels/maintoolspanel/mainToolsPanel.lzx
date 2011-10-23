@@ -39,7 +39,7 @@
         
         <handler name="oninit">
             this._bgIcon.setAttribute("visibility","hidden");
-            var imageurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey
+            var imageurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey
                                             +'public/cliparts/thumb/'
                                             +canvas._drawarea.currentClipArtRessourceName;
             
@@ -105,7 +105,7 @@
         
         <handler name="oninit">
         	this._bgIcon.setAttribute("visibility","hidden");
-            var imageurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey
+            var imageurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey
                                             +'public/cliparts/thumb/'
                                             +canvas._drawarea.currentClipArtRessourceName;
             

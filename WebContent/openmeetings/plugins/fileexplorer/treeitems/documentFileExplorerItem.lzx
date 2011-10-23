@@ -7,7 +7,7 @@
 	<method name="formatURL" args="filename">
         <![CDATA[
             var uploadmoduleimgfolderVar = '/' + this.fileHash;
-            var downloadurl = 'http://' + canvas.rtmphostlocal + ':' + canvas.red5httpport + canvas.httpRootKey+'DownloadHandler?' +
+            var downloadurl = canvas.protocol + '://' + canvas.rtmphostlocal + ':' + canvas.red5httpport + canvas.httpRootKey+'DownloadHandler?' +
                 'fileName=' + encodeURIComponent(this.fileHash + ".swf") +
                 '&moduleName=' + 'videoconf1' + 
                 '&parentPath=' + encodeURIComponent(uploadmoduleimgfolderVar + '/' )+

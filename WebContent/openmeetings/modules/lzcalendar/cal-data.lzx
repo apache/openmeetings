@@ -34,7 +34,7 @@
                 
             	var d = new Date();
             	
-            	var r = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey + 
+            	var r = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey + 
             			'Calendar?' +
             			'sid=' + canvas.sessionId +
             			'&year=' + yr +

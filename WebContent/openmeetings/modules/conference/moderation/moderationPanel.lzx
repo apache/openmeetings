@@ -88,7 +88,7 @@
                 organisation_id = hib.currentdomainObj.organisation_id
             }
         
-            var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+            var downloadurl = canvas.protocol+'://'+canvas.rtmphostlocal+':'+canvas.red5httpport
                 +canvas.httpRootKey+'ScreenRequestHandler?'
                 +'rtmphostlocal='+canvas.rtmphostlocal
                 +'&room='+hib.currentroomid

@@ -67,7 +67,7 @@
     
     <method name="fadeText" args="ignore=null"> 
         <![CDATA[
-            if (this.refObj.picture_uri.startsWith("http")) {
+            if (this.refObj.picture_uri.startsWith("http") || this.refObj.picture_uri.startsWith("https")) {
                 var downloadurl = this.refObj.picture_uri;
             //Do Load the Custom Moodle Profilee Picture
             } else if (this.refObj.externalUserId >= 1 && this.refObj.externalUserType == "moodle") {
@@ -81,7 +81,7 @@
                 
             } else {
         
-                var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+                var downloadurl = canvas.protocol+'://'+canvas.rtmphostlocal+':'+canvas.red5httpport
                                     +canvas.httpRootKey+'DownloadHandler?fileName=CHAT'
                                     +'&moduleName=chat&parentPath=&room_id='
                                     +'&remoteUserid='+this.user_id

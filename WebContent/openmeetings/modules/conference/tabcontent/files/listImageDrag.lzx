@@ -1,91 +1,125 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 	
-<class name="listImageDrag" extends="view" height="50" width="280"
-    bgcolor="0xFFFFFF" >
+	<class name="listImageDrag" extends="view" height="50" width="280"
+		bgcolor="0xFFFFFF" >
     
-    <handler name="onmouseover">
-        this.setAttribute('bgcolor',canvas.baseMousecolorizer);
-    </handler>
-    <handler name="onmouseout">
-        this.setAttribute('bgcolor',0xFFFFFF)
-    </handler>
+		<handler name="onmouseover">
+			this.setAttribute('bgcolor', canvas.baseMousecolorizer);
+		</handler>
+		<handler name="onmouseout">
+			this.setAttribute('bgcolor', 0xFFFFFF)
+		</handler>
 
-    <attribute name="filename" value="" type="string" />
-    <attribute name="filenamePure" value="" type="string" />
-    <attribute name="ext" value="" type="string" />
-    <attribute name="isPpt" value="false" type="boolean" />
-    <attribute name="uploadmodul" value="" type="string" />
+		<attribute name="filename" value="" type="string" />
+		<attribute name="filenamePure" value="" type="string" />
+		<attribute name="ext" value="" type="string" />
+		<attribute name="isPpt" value="false" type="boolean" />
+		<attribute name="uploadmodul" value="" type="string" />
     
-    <method name="generateFileLink" args="file">
-    	<![CDATA[
-	        return 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'DownloadHandler?fileName='+encodeURIComponent(file) +
-		        '&moduleName='+this.uploadmodul +
-		        '&parentPath='+encodeURIComponent(canvas.uploadmoduleimgfolder+'/') +
-		        '&room_id='+hib.currentroomid +
-		        '&sid='+canvas.sessionId;
-	    ]]>
-    </method>
-    
-    <handler name="oninit">
-        <![CDATA[
-        this._thumb.setAttribute('src',this.generateFileLink('_thumb_'+this.filename));
-        ]]>
-    </handler>
-    <handler name="onmousedown">
-        //this.oninit.sendEvent();
-       	new lz.dragView(canvas,{filename:this.filename,filesid:1,refObj:this,uploadmodul:this.uploadmodul,baseurl:'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'DownloadHandler',fileName:this.filename,moduleName:this.uploadmodul,parentPath:canvas.uploadmoduleimgfolder+'/',room:hib.currentroomid,domain:hib.conferencedomain});
-        lz.ModeManager.globalLockMouseEvents();
-        this.onmouseout.sendEvent();     
-        this.parent.parent.parent.highlightItem(this);
-    </handler>
-    <handler name="onmouseup">
-    	<![CDATA[
-    	if (this.getMouse('x')>=this.x && this.getMouse('x')<=(this.x+this.width) && this.getMouse('y')>=0 && this.getMouse('y')<=(0+this.height)){
-    		//Debug.write("okay inside");
-  			this.__LZFileAddDirect();
-  		}
-  		]]>
-    </handler>
-
-
-	<method name="__LZFileDownload">
+		<method name="generateFileLink" args="file">
 		<![CDATA[
-		//Debug.write("Download File ",this);
-		this._thumb.setAttribute('src',this.generateFileLink(this.filename));
-        //Debug.write(downloadurl);	
-		lz.Browser.loadURL(downloadurl,'_parent');	
+			return canvas.protocol + '://' + canvas.rtmphostlocal + ':'
+					+ canvas.red5httpport + canvas.httpRootKey
+					+ 'DownloadHandler?fileName=' + encodeURIComponent(file)
+					+ '&moduleName=' + this.uploadmodul + '&parentPath='
+					+ encodeURIComponent(canvas.uploadmoduleimgfolder + '/')
+					+ '&room_id=' + hib.currentroomid + '&sid='
+					+ canvas.sessionId;
 		]]>
-	</method>
-	<method name="__LZFileDelete">
-		//Debug.write("__LZFileDelete 3");
-		new lz.confirmationSingle(canvas.main_content._content.inner,{
-					labelid:840,labeliderror:839,refObj:this,
-					showCheckBox:false});
-    </method>
+		</method>
     
-    <method name="sendConfirmation" args="yesno" >
-        this.parent.deleteFile.String2 = canvas.uploadmoduleimgfolder;
-		//Debug.write("this.parent.deleteFile.String2 3",this.parent.deleteFile.String2);
-		this.parent.deleteFile.String1 = this.filename;
-		this.parent.deleteFile.doCall();
-    </method>
-  
-	<method name="__LZFileAddDirect">
+		<handler name="oninit">
 		<![CDATA[
-		if ($debug) Debug.write("__LZFileAddDirect clearAreaAndAddImage1: ",this);
-        canvas._drawarea.parent.parent.clearAreaAndAddImage(this.generateFileLink(this.filename),0,0,'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'DownloadHandler',this.filename,this.uploadmodul,canvas.uploadmoduleimgfolder+'/',hib.currentroomid,hib.conferencedomain);
-        this.parent.parent.parent.highlightItem(this);
-        ]]>
-	</method>
+			this._thumb.setAttribute('src', this.generateFileLink('_thumb_'
+							+ this.filename));
+		]]>
+		</handler>
+		<handler name="onmousedown">
+
+			//this.oninit.sendEvent();
+			new lz.dragView(canvas, {
+						filename : this.filename,
+						filesid : 1,
+						refObj : this,
+						uploadmodul : this.uploadmodul,
+						baseurl : canvas.protocol + '://'
+								+ canvas.rtmphostlocal + ':'
+								+ canvas.red5httpport + canvas.httpRootKey
+								+ 'DownloadHandler',
+						fileName : this.filename,
+						moduleName : this.uploadmodul,
+						parentPath : canvas.uploadmoduleimgfolder + '/',
+						room : hib.currentroomid,
+						domain : hib.conferencedomain
+					});
+			lz.ModeManager.globalLockMouseEvents();
+			this.onmouseout.sendEvent();
+			this.parent.parent.parent.highlightItem(this);
+		</handler>
+		<handler name="onmouseup">
+		<![CDATA[
+			if (this.getMouse('x') >= this.x
+					&& this.getMouse('x') <= (this.x + this.width)
+					&& this.getMouse('y') >= 0
+					&& this.getMouse('y') <= (0 + this.height)) {
+				//Debug.write("okay inside");
+				this.__LZFileAddDirect();
+			}
+		]]>
+		</handler>
+
+
+		<method name="__LZFileDownload">
+		<![CDATA[
+
+			//Debug.write("Download File ",this);
+			this._thumb.setAttribute('src', this
+							.generateFileLink(this.filename));
+			//Debug.write(downloadurl);	
+			lz.Browser.loadURL(downloadurl, '_parent');
+		]]>
+		</method>
+		<method name="__LZFileDelete">
+
+			//Debug.write("__LZFileDelete 3");
+			new lz.confirmationSingle(canvas.main_content._content.inner, {
+						labelid : 840,
+						labeliderror : 839,
+						refObj : this,
+						showCheckBox : false
+					});
+		</method>
+    
+		<method name="sendConfirmation" args="yesno" >
+			this.parent.deleteFile.String2 = canvas.uploadmoduleimgfolder;
+			//Debug.write("this.parent.deleteFile.String2 3",this.parent.deleteFile.String2);
+			this.parent.deleteFile.String1 = this.filename;
+			this.parent.deleteFile.doCall();
+		</method>
+  
+		<method name="__LZFileAddDirect">
+		<![CDATA[
+			if ($debug)
+				Debug.write("__LZFileAddDirect clearAreaAndAddImage1: ", this);
+			canvas._drawarea.parent.parent.clearAreaAndAddImage(this
+							.generateFileLink(this.filename), 0, 0,
+					canvas.protocol + '://' + canvas.rtmphostlocal + ':'
+							+ canvas.red5httpport + canvas.httpRootKey
+							+ 'DownloadHandler', this.filename,
+					this.uploadmodul, canvas.uploadmoduleimgfolder + '/',
+					hib.currentroomid, hib.conferencedomain);
+			this.parent.parent.parent.highlightItem(this);
+		]]>
+		</method>
     
     
-    <image name="_thumb" x="1" y="1" width="48" height="48" clip="true" />
-    <text name="_thumbText" 
-        x="50" text="$once{ this.parent.filenamePure }" fontsize="10" width="240" multiline="true" />
-    <view resource="filedelete_rsc" x="$once{ parent.parent.parent.width -34 }" y="1" 
-		onclick="parent.__LZFileDelete()" />
+		<image name="_thumb" x="1" y="1" width="48" height="48" clip="true" />
+		<text name="_thumbText" 
+			x="50" text="$once{ this.parent.filenamePure }" fontsize="10" width="240" multiline="true" />
+		<view resource="filedelete_rsc" x="$once{ parent.parent.parent.width -34 }" y="1" 
+			onclick="parent.__LZFileDelete()" />
     
-</class>
+	</class>
 
 </library>

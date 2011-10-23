@@ -454,7 +454,7 @@
                 	   	   return;
                 	   }
                 	
-	                   var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+	                   var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport
                                     +canvas.httpRootKey+'DownloadHandler?fileName='+parent.recordingName
                                     +'&moduleName=lzRecorderApp&parentPath=&room_id='
                                     +'&sid='+canvas.sessionId;
@@ -479,7 +479,7 @@
                 	   	   return;
                 	   }
                 	
-	                   var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+	                   var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport
                                     +canvas.httpRootKey+'DownloadHandler?fileName='+parent.alternateName
                                     +'&moduleName=lzRecorderApp&parentPath=&room_id='
                                     +'&sid='+canvas.sessionId;

@@ -198,7 +198,7 @@
             <handler name="ondata" args="value">    
                 <![CDATA[
                     if ($debug) Debug.write("addPrintList: ",value);   
-                    var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'ExportToImage?' +
+                    var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'ExportToImage?' +
 					                    'fileName=' + parent.savefileName +
 					                    '&hash='+value + 
                                         '&exportType=' + parent.exportType +

@@ -17,7 +17,7 @@
 			} else {
 				this.value.picture_uri = "_profile_"+value.picture_uri;
 			}
-	        var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+	        var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport
 	        		+canvas.httpRootKey+'DownloadHandler?fileName='+value.picture_uri
 	        		+'&moduleName=remoteuserprofilebig&parentPath=&room=&domain='
 	        		+'&remoteUserid='+this.value.user_id

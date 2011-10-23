@@ -30,7 +30,7 @@
 		
     <method name="generateFileLink" args="file">
     	<![CDATA[
-        	return 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'DownloadHandler?fileName='+file +
+        	return canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'DownloadHandler?fileName='+file +
 	        '&moduleName='+this.uploadmodul +
 	        '&parentPath='+canvas.uploadmoduleimgfolder+'/' +
 	        '&room_id='+hib.currentroomid +

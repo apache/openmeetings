@@ -132,7 +132,7 @@
     	<![CDATA[
     	    if (this["getFileExplorerByRoomSelf"]) {
                 //this.getFileExplorerByRoom.doCall();
-                var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+                var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport
                                 +canvas.httpRootKey+'services/FileService/getFileExplorerByRoomSelfInternal?'
                                 +'SID='+canvas.sessionId
                                 +'&roomId='+hib.currentroomid;

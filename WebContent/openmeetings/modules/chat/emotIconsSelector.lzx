@@ -40,7 +40,7 @@
                 	//The onResult-Handler will be called be the rtmpconnection
 					if($debug) Debug.write("emotIconsSelector/getAllPublicEmoticons : ",value);
 					for (var i=0;i<value.length;i++){
-						var swfurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'public/emoticons/'+value[i][0];
+						var swfurl = canvas.protocol+'://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'public/emoticons/'+value[i][0];
 						iconlabel = value[i][1];
 						if (value[i].length>4){
 							iconlabel += ", "+value[i][2];							

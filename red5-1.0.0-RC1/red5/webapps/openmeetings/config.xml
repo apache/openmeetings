@@ -39,6 +39,20 @@ This port is used to connec to the http-servlet
 of the red5-servlet
  -->
 <red5httpport>5080</red5httpport>
+
+<!--
+    The protocol to use for the http connections
+    for example upload/download of files 
+ -->
+<protocol>http</protocol>
+
+<!--
+    The setting for the NetConnection
+    default settings is "none"
+    set to value "best" if you are trying to use rtmp over native SSL
+    see: http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/net/NetConnection.html#proxyType
+ -->
+<proxyType>none</proxyType>
 	
 <!--
 	These colors are the main colors and style the hole application

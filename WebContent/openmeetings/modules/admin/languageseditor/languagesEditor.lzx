@@ -77,7 +77,7 @@
     <simpleLabelButton name="b2" labelid="360" width="75" x="300" y="32">
     	<handler name="onclick">
     		<![CDATA[
-	    		var exporturl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+	    		var exporturl = canvas.protocol+'://'+canvas.rtmphostlocal+':'+canvas.red5httpport
 	    				+canvas.httpRootKey+'LangExport?language='+parent.languages.getValue()
 	    				+'&sid='+canvas.sessionId;
 	            lz.Browser.loadURL(exporturl,"_parent");

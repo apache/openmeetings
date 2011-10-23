@@ -15,7 +15,7 @@
 		<![CDATA[
 			if($debug) Debug.write("chatTabItem/WIDTH: "+this.width);
 			if($debug) Debug.write("chatTab Item on init");
-	        var downloadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+	        var downloadurl = canvas.protocol+'://'+canvas.rtmphostlocal+':'+canvas.red5httpport
 	        		+canvas.httpRootKey+'DownloadHandler?fileName=CHAT'
 	        		+'&moduleName=chat&parentPath=&room_id='
 	        		+'&remoteUserid='+this.user_id
