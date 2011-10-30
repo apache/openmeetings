@@ -167,10 +167,10 @@ public class MeetingMemberLogic {
 
 			message += labelid1156.getValue() + invitorName + "<br/>";
 
-			if (point.getRemind().getTypId() == 1) {
-				log.debug("no reminder required");
-			} else if (point.getRemind().getTypId() == 2) {
-				log.debug("Reminder for Appointment : simple email");
+			// point.getRemind().getTypId() == 1 will not receive emails
+			
+			if (point.getRemind().getTypId() == 2) {
+				log.debug("Invitation for Appointment : simple email");
 
 				Invitations invitation = invitationManagement
 						.addInvitationLink(
@@ -201,8 +201,8 @@ public class MeetingMemberLogic {
 			} else if (point.getRemind().getTypId() == 3) {
 				log.debug("Reminder for Appointment : iCal mail");
 
-				System.out.println("5" + starttime);
-				System.out.println("6" + endtime);
+				log.debug("5" + starttime);
+				log.debug("6" + endtime);
 
 				invitationId = invitationManagement
 						.addInvitationIcalLink(

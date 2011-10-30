@@ -1699,7 +1699,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>&lt;u&gt;Download as TIF&lt;/u&gt;</value>
   </string>
   <string id="565" name="calendarLabel">
-    <value>Reminder</value>
+    <value>Notification type</value>
   </string>
   <string id="566" name="calendarLabel">
     <value>Category</value>

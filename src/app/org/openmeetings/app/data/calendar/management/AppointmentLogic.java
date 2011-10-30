@@ -51,27 +51,6 @@ public class AppointmentLogic {
 	@Autowired
 	private MeetingMemberLogic meetingMemberLogic;
 
-	public static void main(String... args) {
-
-		Calendar calInitial = Calendar.getInstance();
-		int offsetInitial = calInitial.get(Calendar.ZONE_OFFSET)
-				+ calInitial.get(Calendar.DST_OFFSET);
-
-		long current = System.currentTimeMillis();
-		
-		// Check right time
-		Date utcTimeNow = new Date(current - offsetInitial);
-
-		System.out.println("UTC current " + current);
-		System.out.println("UTC offsetInitial " + offsetInitial);
-		
-		System.out.println("UTC now " + utcTimeNow);
-		System.out.println("Date System.currentTimeMillis() " + new Date(current));
-		System.out.println("Date current " + new Date());
-		
-
-	}
-
 	public List<Appointment> getAppointmentByRange(Long userId, Date starttime,
 			Date endtime) {
 		try {
@@ -145,34 +124,6 @@ public class AppointmentLogic {
 			String baseUrl, Long language_id) {
 
 		log.debug("Appointmentlogic.saveAppointment");
-
-		// create a Room
-		// Long room_id = roommanagement.addRoom(
-		// 3, // Userlevel
-		// appointmentName, // name
-		// roomType, // RoomType
-		// "", // Comment
-		// new Long(8), // Number of participants
-		// true, // public
-		// null, // Organisations
-		// 270, // Video Width
-		// 280, // Video height
-		// 2, // Video X
-		// 2, // Video Y
-		// 400, // Modeartionpanel X
-		// true, // Whiteboard
-		// 276, // Whiteboard x
-		// 2, // Whiteboard y
-		// 592, // WB height
-		// 660, // WB width
-		// true, // Show Files Panel
-		// 2, // Files X
-		// 284, // Files Y
-		// 310, // Files height
-		// 270, // Files width
-		// true, // Appointment
-		// false, // Demo Room => Meeting Timer
-		// null); // Meeting Timer time in seconds
 
 		// TODO:Add this user as the default Moderator of the Room
 

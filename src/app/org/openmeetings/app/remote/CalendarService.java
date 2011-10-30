@@ -96,7 +96,7 @@ public class CalendarService {
 			String appointmentLocation, String appointmentDescription,
 			Date appointmentstart, Date appointmentend, Boolean isDaily,
 			Boolean isWeekly, Boolean isMonthly, Boolean isYearly,
-			Long categoryId, Long remind, List<?> mmClient, Long roomType,
+			Long categoryId, Long remind, List mmClient, Long roomType,
 			String baseUrl, Long language_id) {
 
 		log.debug("saveAppointMent SID:" + SID + ", baseUrl : " + baseUrl);

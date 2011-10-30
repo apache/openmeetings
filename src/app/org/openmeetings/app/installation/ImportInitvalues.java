@@ -720,7 +720,7 @@ public class ImportInitvalues {
 
 		try {
 			appointmentReminderTypDaoImpl.addAppointmentReminderTyps(-1L,
-					"none", "no reminder");
+					"do not send notification", "no reminder");
 			appointmentReminderTypDaoImpl.addAppointmentReminderTyps(-1L,
 					"simple email", "simple email notification");
 			appointmentReminderTypDaoImpl.addAppointmentReminderTyps(-1L,
