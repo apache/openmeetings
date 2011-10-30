@@ -51,6 +51,27 @@ public class AppointmentLogic {
 	@Autowired
 	private MeetingMemberLogic meetingMemberLogic;
 
+	public static void main(String... args) {
+
+		Calendar calInitial = Calendar.getInstance();
+		int offsetInitial = calInitial.get(Calendar.ZONE_OFFSET)
+				+ calInitial.get(Calendar.DST_OFFSET);
+
+		long current = System.currentTimeMillis();
+		
+		// Check right time
+		Date utcTimeNow = new Date(current - offsetInitial);
+
+		System.out.println("UTC current " + current);
+		System.out.println("UTC offsetInitial " + offsetInitial);
+		
+		System.out.println("UTC now " + utcTimeNow);
+		System.out.println("Date System.currentTimeMillis() " + new Date(current));
+		System.out.println("Date current " + new Date());
+		
+
+	}
+
 	public List<Appointment> getAppointmentByRange(Long userId, Date starttime,
 			Date endtime) {
 		try {
@@ -206,11 +227,10 @@ public class AppointmentLogic {
 			String invitorName = user.getFirstname() + " " + user.getLastname()
 					+ " [" + user.getAdresses().getEmail() + "]";
 
-			meetingMemberLogic.addMeetingMember(
-					user.getFirstname(), user.getLastname(), "", "", id,
-					userId, user.getAdresses().getEmail(), baseUrl, userId,
-					true, language_id, false, "", jNameMemberTimeZone,
-					invitorName);
+			meetingMemberLogic.addMeetingMember(user.getFirstname(), user
+					.getLastname(), "", "", id, userId, user.getAdresses()
+					.getEmail(), baseUrl, userId, true, language_id, false, "",
+					jNameMemberTimeZone, invitorName);
 
 			// add items
 			if (mmClient != null) {
@@ -295,7 +315,8 @@ public class AppointmentLogic {
 			Rooms room = point.getRoom();
 
 			// Deleting/Notifing Meetingmembers
-			List<MeetingMember> members = meetingMemberDao.getMeetingMemberByAppointmentId(appointmentId);
+			List<MeetingMember> members = meetingMemberDao
+					.getMeetingMemberByAppointmentId(appointmentId);
 
 			if (members == null)
 				log.debug("Appointment " + point.getAppointmentName()
@@ -304,9 +325,8 @@ public class AppointmentLogic {
 			if (members != null) {
 				for (int i = 0; i < members.size(); i++) {
 					log.debug("deleting member " + members.get(i).getEmail());
-					meetingMemberLogic.deleteMeetingMember(
-							members.get(i).getMeetingMemberId(), users_id,
-							language_id);
+					meetingMemberLogic.deleteMeetingMember(members.get(i)
+							.getMeetingMemberId(), users_id, language_id);
 				}
 			}
 
@@ -341,33 +361,34 @@ public class AppointmentLogic {
 	// ----------------------------------------------------------------------------------------------
 
 	/**
-	 * Sending Reminder in Simple mail format hour before Meeting begin
+	 * Sending Reminder in Simple mail format 5 minutes before Meeting begins
 	 */
 	// ----------------------------------------------------------------------------------------------
 	public void doScheduledMeetingReminder() {
 		// log.debug("doScheduledMeetingReminder");
 
 		List<Appointment> points = appointmentDao
-				.getTodaysAppointmentsForAllUsers();
+				.getTodaysReminderAppointmentsForAllUsers();
 
 		if (points == null || points.size() < 1) {
-			// log.debug("doScheduledMeetingReminder : no Appointments today");
+			log.debug("doScheduledMeetingReminder : no Appointments today");
 			return;
 		}
 
+		// Get current time in UTC
 		Calendar calInitial = Calendar.getInstance();
 		int offsetInitial = calInitial.get(Calendar.ZONE_OFFSET)
 				+ calInitial.get(Calendar.DST_OFFSET);
 
 		// Check right time
-		Date now = new Date(System.currentTimeMillis() - offsetInitial);
-
-		log.debug("doScheduledMeetingReminder : UTC now " + now);
+		long currentTimeInMilliSeconds = System.currentTimeMillis() - offsetInitial;
 
 		Long language_id = Long.valueOf(
 				cfgManagement.getConfKey(3, "default_lang_id").getConf_value())
 				.longValue();
 
+		// Get the required labels one time for all meeting members. The
+		// Language of the emails will be the system default language
 		Fieldlanguagesvalues labelid1158 = fieldmanagment
 				.getFieldByIdAndLanguage(new Long(1158), language_id);
 		Fieldlanguagesvalues labelid1153 = fieldmanagment
@@ -378,6 +399,13 @@ public class AppointmentLogic {
 		for (int i = 0; i < points.size(); i++) {
 			Appointment ment = points.get(i);
 
+			// Prevent email from being send twice, even if the cycle takes
+			// very long to send each
+			if (ment.getIsReminderEmailSend() != null
+					&& ment.getIsReminderEmailSend()) {
+				continue;
+			}
+
 			// Checking ReminderType - only ReminderType simple mail is
 			// concerned!
 			if (ment.getRemind().getTypId() == 2
@@ -386,38 +414,40 @@ public class AppointmentLogic {
 				log.debug("doScheduledMeetingReminder : Found appointment "
 						+ ment.getAppointmentName());
 
-				Date appStart = ment.getAppointmentStarttime();
-				Date oneHourBeforeAppStart = new Date(
-						System.currentTimeMillis());
-				oneHourBeforeAppStart.setTime(appStart.getTime());
-				// oneHourBeforeAppStart.setHours(appStart.getHours() -1);
+				log.debug("#### 1 "+ment
+						.getAppointmentStarttime());
+				log.debug("#### 2 "+new Date(currentTimeInMilliSeconds));
+				
+				// Get the delta in MilliSeconds between start of event and
+				// current time
+				long timeTillEventInMilliSeconds = ment
+						.getAppointmentStarttime().getTime()
+						- currentTimeInMilliSeconds;
 
-				oneHourBeforeAppStart.setMinutes(appStart.getMinutes() - 5);
+				log.debug("timeTillEventInMilliSeconds "
+						+ timeTillEventInMilliSeconds);
 
-				// System.out.println("doScheduledMeetingReminder : Found appointment 1 "
-				// +now);
-				// System.out.println("doScheduledMeetingReminder : Found appointment 2 "
-				// +appStart);
-				// System.out.println("doScheduledMeetingReminder : Found appointment 3 "
-				// +oneHourBeforeAppStart);
-				// System.out.println("doScheduledMeetingReminder : Found appointment 4 "
-				// +now.before(appStart));
-				// System.out.println("doScheduledMeetingReminder : Found appointment 5 "
-				// +now.after(oneHourBeforeAppStart));
-				//
-				if (now.before(appStart) && now.after(oneHourBeforeAppStart)) {
+				// Event is still to come and 300.000 = 5 minutes milliseconds
+				if (timeTillEventInMilliSeconds > 0
+						&& timeTillEventInMilliSeconds < 300000) {
 					log.debug("Meeting " + ment.getAppointmentName()
 							+ " is in reminder range...");
+					
+					//Update Appointment to not send invitation twice
+					ment.setIsReminderEmailSend(true);
+					appointmentDao.updateAppointment(ment);
 
-					List<MeetingMember> members = meetingMemberDao.getMeetingMemberByAppointmentId(ment.getAppointmentId());
+					List<MeetingMember> members = meetingMemberDao
+							.getMeetingMemberByAppointmentId(ment
+									.getAppointmentId());
 
-					if (members == null || members.size() < 1) {
+					if (members == null) {
 						log.debug("doScheduledMeetingReminder : no members in meeting!");
 						continue;
 					}
 
-					for (int y = 0; y < members.size(); y++) {
-						MeetingMember mm = members.get(y);
+					// Iterate through all MeetingMembers
+					for (MeetingMember mm : members) {
 
 						log.debug("doScheduledMeetingReminder : Member "
 								+ mm.getEmail());
@@ -428,114 +458,100 @@ public class AppointmentLogic {
 							log.error("Error retrieving Invitation for member "
 									+ mm.getEmail() + " in Appointment "
 									+ ment.getAppointmentName());
-						} else {
-							// Check if Invitation was updated last time
-							Date updateTime = inv.getUpdatetime();
-
-							if (updateTime != null
-									&& updateTime.after(oneHourBeforeAppStart)) {
-								log.debug("Member has been informed within one hour before Meeting start");
-								continue;
-							}
-
-							if (inv.getBaseUrl() == null
-									|| inv.getBaseUrl().length() < 1) {
-								log.error("Error retrieving baseUrl from Invitation ID : "
-										+ inv.getInvitations_id());
-								continue;
-							}
-
-							// ment.getAppointmentStarttime().toLocaleString()
-
-							Users us = ment.getUserId();
-
-							String jNameTimeZone = null;
-							if (us != null && us.getOmTimeZone() != null) {
-								jNameTimeZone = us.getOmTimeZone().getJname();
-							} else {
-								Configuration conf = cfgManagement.getConfKey(
-										3L, "default.timezone");
-								if (conf != null) {
-									jNameTimeZone = conf.getConf_value();
-								}
-							}
-
-							OmTimeZone omTimeZone = omTimeZoneDaoImpl
-									.getOmTimeZone(jNameTimeZone);
-
-							String timeZoneName = omTimeZone.getIcal();
-
-							Calendar cal = Calendar.getInstance();
-							cal.setTimeZone(TimeZone.getTimeZone(timeZoneName));
-							int offset = cal.get(Calendar.ZONE_OFFSET)
-									+ cal.get(Calendar.DST_OFFSET);
-
-							Date starttime = new Date(ment
-									.getAppointmentStarttime().getTime()
-									+ offset);
-							Date endtime = new Date(ment
-									.getAppointmentEndtime().getTime() + offset);
-
-							// String message = "Meeting : " +
-							// ment.getAppointmentName() + "<br>";
-							// if(ment.getAppointmentDescription() != null &&
-							// ment.getAppointmentDescription().length() > 0)
-							// message += "(" + ment.getAppointmentDescription()
-							// + ")<br>";
-							// message += "Start : " + starttime + "<br>";
-							// message += "End : " + endtime + "<br>";
-							// message += "Timezone : " + omTimeZone.getIcal() +
-							// "<br>";
-
-							String message = labelid1158.getValue() + " "
-									+ ment.getAppointmentName();
-
-							if (ment.getAppointmentDescription().length() != 0) {
-
-								Fieldlanguagesvalues labelid1152 = fieldmanagment
-										.getFieldByIdAndLanguage(
-												new Long(1152), language_id);
-								message += labelid1152.getValue()
-										+ ment.getAppointmentDescription();
-
-							}
-
-							message += "<br/>"
-									+ labelid1153.getValue()
-									+ ' '
-									+ CalendarPatterns
-											.getDateWithTimeByMiliSeconds(starttime)
-									+ " (" + timeZoneName + ")" + "<br/>";
-
-							message += labelid1154.getValue()
-									+ ' '
-									+ CalendarPatterns
-											.getDateWithTimeByMiliSeconds(endtime)
-									+ " (" + timeZoneName + ")" + "<br/>";
-
-							// Fieldlanguagesvalues labelid1156 =
-							// fieldmanagment.getFieldByIdAndLanguage(new
-							// Long(1156), language_id);
-							// message = labelid1156.getValue() + invitorName +
-							// "<br/>";
-
-							invitationManagement.sendInvitationReminderLink(
-											message,
-											inv.getBaseUrl(),
-											mm.getEmail(),
-											labelid1158.getValue() + " "
-													+ ment.getAppointmentName(),
-											inv.getHash());
-
-							inv.setUpdatetime(now);
-							invitationManagement.updateInvitation(inv);
+							continue;
 						}
+
+						if (inv.getBaseUrl() == null
+								|| inv.getBaseUrl().length() < 1) {
+							log.error("Error retrieving baseUrl from Invitation ID : "
+									+ inv.getInvitations_id());
+							continue;
+						}
+
+						String message = generateMessage(labelid1158, ment,
+								language_id, labelid1153, labelid1154);
+
+						invitationManagement.sendInvitationReminderLink(
+								message,
+								inv.getBaseUrl(),
+								mm.getEmail(),
+								labelid1158.getValue() + " "
+										+ ment.getAppointmentName(),
+								inv.getHash());
+
+						inv.setUpdatetime(new Date(currentTimeInMilliSeconds));
+						invitationManagement.updateInvitation(inv);
 
 					}
 				} else
 					log.debug("Meeting is not in Reminder Range!");
 			}
 		}
+	}
+
+	/**
+	 * Generate a localized message including the time and date of the meeting
+	 * event
+	 * 
+	 * @param labelid1158
+	 * @param ment
+	 * @param language_id
+	 * @param labelid1153
+	 * @param jNameTimeZone
+	 * @param labelid1154
+	 * @return
+	 */
+	private String generateMessage(Fieldlanguagesvalues labelid1158,
+			Appointment ment, Long language_id,
+			Fieldlanguagesvalues labelid1153, Fieldlanguagesvalues labelid1154) {
+
+		Users us = ment.getUserId();
+
+		String jNameTimeZone = null;
+		if (us != null && us.getOmTimeZone() != null) {
+			jNameTimeZone = us.getOmTimeZone().getJname();
+		} else {
+			Configuration conf = cfgManagement.getConfKey(3L,
+					"default.timezone");
+			if (conf != null) {
+				jNameTimeZone = conf.getConf_value();
+			}
+		}
+
+		OmTimeZone omTimeZone = omTimeZoneDaoImpl.getOmTimeZone(jNameTimeZone);
+
+		String timeZoneName = omTimeZone.getIcal();
+
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeZone(TimeZone.getTimeZone(timeZoneName));
+		int offset = cal.get(Calendar.ZONE_OFFSET)
+				+ cal.get(Calendar.DST_OFFSET);
+
+		Date starttime = new Date(ment.getAppointmentStarttime().getTime()
+				+ offset);
+		Date endtime = new Date(ment.getAppointmentEndtime().getTime() + offset);
+
+		String message = labelid1158.getValue() + " "
+				+ ment.getAppointmentName();
+
+		if (ment.getAppointmentDescription().length() != 0) {
+
+			Fieldlanguagesvalues labelid1152 = fieldmanagment
+					.getFieldByIdAndLanguage(new Long(1152), language_id);
+			message += labelid1152.getValue()
+					+ ment.getAppointmentDescription();
+
+		}
+
+		message += "<br/>" + labelid1153.getValue() + ' '
+				+ CalendarPatterns.getDateWithTimeByMiliSeconds(starttime)
+				+ " (" + timeZoneName + ")" + "<br/>";
+
+		message += labelid1154.getValue() + ' '
+				+ CalendarPatterns.getDateWithTimeByMiliSeconds(endtime) + " ("
+				+ timeZoneName + ")" + "<br/>";
+
+		return message;
 	}
 
 	// ----------------------------------------------------------------------------------------------

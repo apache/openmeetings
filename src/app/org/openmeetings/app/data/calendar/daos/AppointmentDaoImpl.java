@@ -221,6 +221,7 @@ public class AppointmentDaoImpl {
 			ap.setRemind(appointmentReminderTypDaoImpl
 					.getAppointmentReminderTypById(remind));
 			ap.setStarttime(new Date());
+			ap.setIsReminderEmailSend(false);
 			ap.setDeleted("false");
 			ap.setIsDaily(isDaily);
 			ap.setIsWeekly(isWeekly);
@@ -887,7 +888,7 @@ public class AppointmentDaoImpl {
 	 * @return
 	 */
 	// ---------------------------------------------------------------------------------------------
-	public List<Appointment> getTodaysAppointmentsForAllUsers() {
+	public List<Appointment> getTodaysReminderAppointmentsForAllUsers() {
 		try {
 
 			// log.debug("getTodaysAppoitmentsForAllUsers");
@@ -897,20 +898,21 @@ public class AppointmentDaoImpl {
 					+ "WHERE mm.deleted <> :mm_deleted "
 					+ "AND app.deleted <> :app_deleted " + "AND  "
 					+ "app.appointmentStarttime between :starttime " + "AND "
-					+ " :endtime";
+					+ " :endtime AND "
+					+ " ( app.isReminderEmailSend IS NULL OR app.isReminderEmailSend = false ) ";
 
-			Date startDate = new Date();
-			startDate.setHours(0);
-			startDate.setMinutes(0);
-			startDate.setSeconds(1);
-
-			Date endDate = new Date();
-			endDate.setHours(23);
-			endDate.setMinutes(59);
-			endDate.setSeconds(59);
-
-			Timestamp startStamp = new Timestamp(startDate.getTime());
-			Timestamp stopStamp = new Timestamp(endDate.getTime());
+			Calendar startCal = Calendar.getInstance();
+			startCal.set(Calendar.MINUTE, 0);
+			startCal.set(Calendar.HOUR, 0);
+			startCal.set(Calendar.SECOND, 1);
+			
+			Calendar endCal = Calendar.getInstance();
+			endCal.set(Calendar.MINUTE, 23);
+			endCal.set(Calendar.HOUR, 59);
+			endCal.set(Calendar.SECOND, 59);
+			
+			Timestamp startStamp = new Timestamp(startCal.getTime().getTime());
+			Timestamp stopStamp = new Timestamp(endCal.getTime().getTime());
 
 			// System.out.println("StartTime : " + startDate);
 			// System.out.println("EndTime : " + endDate);
