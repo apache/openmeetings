@@ -199,10 +199,12 @@ public class GenerateSWF {
 
 	public HashMap<String, Object> generateSwf(String current_dir,
 			String originalFolder, String destinationFolder, String fileNamePure) {
+		
 		// Create the Content of the Converter Script (.bat or .sh File)
 		String[] argv = new String[] {
 				getPathToSwfTools() + "pdf2swf" + execExt, "-s",
 				"insertstop", // insert Stop command into every frame
+				"-s","poly2bitmap", //http://www.swftools.org/gfx_tutorial.html#Rendering_pages_to_SWF_files
 				"-i", // change draw order to reduce pdf complexity
 				originalFolder + fileNamePure + ".pdf",
 				destinationFolder + fileNamePure + ".swf" };
