@@ -211,4 +211,9 @@
     <logger name="org.eclipse.jetty">
         <level value="DEBUG" />
     </logger>
+    <!-- Enable for debugging JUnit tests
+    <logger name="org.openmeetings">
+        <level value="DEBUG" />
+    </logger>
+     -->
 </configuration>
