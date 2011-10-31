@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -79,6 +78,7 @@ public class AppointmentDaoImpl {
 		query.setParameter("deleted", "true");
 		query.setParameter("room_id", room_id);
 
+		@SuppressWarnings("unchecked")
 		List<Appointment> appoint = query.getResultList();
 
 		if (appoint.size() > 0) {
@@ -141,7 +141,7 @@ public class AppointmentDaoImpl {
 			String hql = "select a from Appointment a "
 					+ "WHERE a.deleted <> :deleted ";
 
-			Query query = em.createQuery(hql);
+			TypedQuery<Appointment> query = em.createQuery(hql, Appointment.class);
 			query.setParameter("deleted", "true");
 
 			List<Appointment> appointList = query.getResultList();
@@ -287,7 +287,8 @@ public class AppointmentDaoImpl {
 			String hql = "select a from Appointment a "
 					+ "WHERE a.room.rooms_id = :roomId ";
 
-			Query query = em.createQuery(hql);
+			
+			TypedQuery<Appointment> query = em.createQuery(hql, Appointment.class);
 			query.setParameter("roomId", roomId);
 			List<Appointment> ll = query.getResultList();
 
@@ -697,12 +698,6 @@ public class AppointmentDaoImpl {
 			Date starttime, Date endtime) {
 		try {
 
-			/*
-			 * String hql = "select a from Appointment a " +
-			 * "WHERE a.deleted != :deleted "+ "AND a.userId = :userId "+
-			 * "AND a.starttime BETWEEN :starttime AND :endtime";
-			 */
-
 			starttime.setHours(0);
 
 			endtime.setHours(23);
@@ -753,7 +748,7 @@ public class AppointmentDaoImpl {
 					+ "WHERE a.deleted <> :deleted "
 					+ "AND a.appointmentCategory.categoryId = :categoryId";
 
-			Query query = em.createQuery(hql);
+			TypedQuery<Appointment> query = em.createQuery(hql, Appointment.class);
 			query.setParameter("deleted", "true");
 			query.setParameter("categoryId", categoryId);
 
@@ -816,7 +811,7 @@ public class AppointmentDaoImpl {
 					+ "WHERE a.deleted <> :deleted "
 					+ "AND a.appointmentName LIKE :appointmentName";
 
-			Query query = em.createQuery(hql);
+			TypedQuery<Appointment> query = em.createQuery(hql, Appointment.class);
 			query.setParameter("deleted", "true");
 			query.setParameter("appointmentName", name);
 
@@ -858,12 +853,11 @@ public class AppointmentDaoImpl {
 		Timestamp startStamp = new Timestamp(startDate.getTime());
 		Timestamp stopStamp = new Timestamp(endDate.getTime());
 
-		System.out.println("StartTime : " + startDate);
-		System.out.println("EndTime : " + endDate);
+		log.debug("StartTime : " + startDate);
+		log.debug("EndTime : " + endDate);
 
-		EntityTransaction tx = null;
 		try {
-			Query query = em.createQuery(hql);
+			TypedQuery<Appointment> query = em.createQuery(hql, Appointment.class);
 
 			query.setParameter("mm_deleted", true);
 			query.setParameter("app_deleted", "true");
@@ -877,7 +871,6 @@ public class AppointmentDaoImpl {
 		} catch (Exception e) {
 			log.error("Error in getTodaysAppoitmentsbyRangeAndMember : "
 					+ e.getMessage());
-			tx.rollback();
 			return null;
 		}
 	}
@@ -890,8 +883,6 @@ public class AppointmentDaoImpl {
 	// ---------------------------------------------------------------------------------------------
 	public List<Appointment> getTodaysReminderAppointmentsForAllUsers() {
 		try {
-
-			// log.debug("getTodaysAppoitmentsForAllUsers");
 
 			String hql = "SELECT app from MeetingMember mm "
 					+ "JOIN mm.appointment as app "
@@ -914,10 +905,7 @@ public class AppointmentDaoImpl {
 			Timestamp startStamp = new Timestamp(startCal.getTime().getTime());
 			Timestamp stopStamp = new Timestamp(endCal.getTime().getTime());
 
-			// System.out.println("StartTime : " + startDate);
-			// System.out.println("EndTime : " + endDate);
-
-			Query query = em.createQuery(hql);
+			TypedQuery<Appointment> query = em.createQuery(hql, Appointment.class);
 
 			query.setParameter("mm_deleted", true);
 			query.setParameter("app_deleted", "true");
@@ -939,14 +927,12 @@ public class AppointmentDaoImpl {
 	public Appointment getAppointmentByRoomId(Long user_id, Long rooms_id) {
 		try {
 
-			// log.debug("getAppointmentByRoomId");
-
 			String hql = "select a from Appointment a "
 					+ "WHERE a.deleted <> :deleted "
 					+ "AND a.userId.user_id = :user_id "
 					+ "AND a.room.rooms_id = :rooms_id ";
 
-			Query query = em.createQuery(hql);
+			TypedQuery<Appointment> query = em.createQuery(hql, Appointment.class);
 
 			query.setParameter("deleted", "true");
 			query.setParameter("user_id", user_id);

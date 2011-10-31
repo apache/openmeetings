@@ -69,7 +69,7 @@
 	<classpathentry kind="lib" path="lib/openjpa2/commons-lang-2.4.jar"/>
 	<classpathentry kind="lib" path="lib/openjpa2/dom4j-1.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/openjpa2/geronimo-jms_1.1_spec-1.1.1.jar"/>
-	<classpathentry kind="lib" path="lib/openjpa2/geronimo-jpa_2.0_spec-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/openjpa2/geronimo-jpa_2.0_spec-1.1.jar" sourcepath="C:/Users/swagner/.m2/repository/org/apache/geronimo/specs/geronimo-jpa_2.0_spec/1.1/geronimo-jpa_2.0_spec-1.1-sources.jar"/>
 	<classpathentry kind="lib" path="lib/openjpa2/geronimo-jta_1.1_spec-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/openjpa2/geronimo-validation_1.0_spec-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/openjpa2/openjpa-2.1.0.jar"/>
