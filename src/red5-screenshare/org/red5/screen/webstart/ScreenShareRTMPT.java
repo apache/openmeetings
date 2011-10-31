@@ -788,6 +788,8 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
             		key = 46;
             	} else if (key == 191) {
             		key = 47;
+            	} else if (key == 13) {
+            		key = KeyEvent.VK_ENTER;
             	}
             	
             	//logger.debug("key onkeydown -2 "+key);
@@ -821,6 +823,8 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
             		key = 46;
             	} else if (key == 191) {
             		key = 47;
+            	} else if (key == 13) {
+            		key = KeyEvent.VK_ENTER;
             	}
             	
             	//logger.debug("key onkeyup 2- "+key);
