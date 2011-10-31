@@ -31,7 +31,6 @@
 	<classpathentry kind="lib" path="lib/spring/org.springframework.web-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/spring/org.springframework.web.servlet-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/backup/commons-logging-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/backup/log4j-1.2.14.jar"/>
 	<classpathentry kind="lib" path="lib/backup/xalan-2.6.0.jar"/>
 	<classpathentry kind="lib" path="lib/backup/xerces_2_5_0.jar"/>
 	<classpathentry kind="lib" path="lib/backup/xml-apis.jar"/>
