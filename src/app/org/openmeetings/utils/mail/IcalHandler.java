@@ -19,7 +19,6 @@ import net.fortuna.ical4j.model.parameter.Role;
 import net.fortuna.ical4j.model.property.Attendee;
 import net.fortuna.ical4j.model.property.CalScale;
 import net.fortuna.ical4j.model.property.Description;
-import net.fortuna.ical4j.model.property.Method;
 import net.fortuna.ical4j.model.property.Organizer;
 import net.fortuna.ical4j.model.property.ProdId;
 import net.fortuna.ical4j.model.property.Sequence;
@@ -39,7 +38,7 @@ import org.slf4j.Logger;
  * 
  */
 public class IcalHandler {
-	private OmTimeZoneDaoImpl omTimeZoneDaoImpl;
+	private final OmTimeZoneDaoImpl omTimeZoneDaoImpl;
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			MailHandler.class, ScopeApplicationAdapter.webAppRootKey);
@@ -69,23 +68,21 @@ public class IcalHandler {
 		
 		icsCalendar = new net.fortuna.ical4j.model.Calendar();
 
-		// timeRegistry =
-		// TimeZoneRegistryFactory.getInstance().createRegistry();
-		// timeZone =
-		// timeRegistry.getTimeZone(java.util.TimeZone.getDefault().getID());
-
 		icsCalendar.getProperties().add(
 				new ProdId("-//Events Calendar//iCal4j 1.0//EN"));
 		icsCalendar.getProperties().add(CalScale.GREGORIAN);
 		icsCalendar.getProperties().add(Version.VERSION_2_0);
-
+		
 		// Switch Method Type
-		if (methodType.equals(ICAL_METHOD_REFRESH))
-			icsCalendar.getProperties().add(Method.REFRESH);
-		else if (methodType.equals(ICAL_METHOD_CANCEL))
-			icsCalendar.getProperties().add(Method.CANCEL);
-		else
-			icsCalendar.getProperties().add(Method.REQUEST);
+		// we comment out the Method type for now: The event type needs an organizer
+		// set, actually this leads to errors in displaying the email as iCal invitation
+		// in gmail, so we removed it for now. issue 1563
+//		if (methodType.equals(ICAL_METHOD_REFRESH))
+//			icsCalendar.getProperties().add(Method.REFRESH);
+//		else if (methodType.equals(ICAL_METHOD_CANCEL))
+//			icsCalendar.getProperties().add(Method.CANCEL);
+//		else
+//			icsCalendar.getProperties().add(Method.REQUEST);
 
 	}
 

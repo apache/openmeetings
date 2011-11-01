@@ -593,6 +593,7 @@
 		<pathelement path="${red5.root}/conf" />
 		<pathelement path="${om.dist.webapp}" />
 		<pathelement path="${om.dist.webapp}/WEB-INF" />
+		<pathelement path="${basedir}/WebContent/WEB-INF" />
 	</path>
 	<target name="test" depends="enhance" description="Will run all tests unless -Dtestcases=_file_name_pattern_ will be passed">
 		<mkdir dir="${report.dir}"/>

@@ -784,7 +784,7 @@ public class Invitationmanagement {
 	 * @param invitationsHash
 	 * @return
 	 */
-	private String sendInvitionIcalLink(String username, String message,
+	public String sendInvitionIcalLink(String username, String message,
 			String baseurl, String email, String subject,
 			String invitationsHash, Long appointMentId, Long organizer_userId,
 			Boolean invitor, Long language_id, Date starttime, Date endtime,

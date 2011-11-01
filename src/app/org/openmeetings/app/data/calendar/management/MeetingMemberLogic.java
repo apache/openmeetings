@@ -90,13 +90,13 @@ public class MeetingMemberLogic {
 
 			String jNameTimeZone = null;
 			if (us != null && us.getOmTimeZone() != null) {
-				System.out.println("Internal User ");
+				log.debug("Internal User ");
 				// Internal User
 				jNameTimeZone = us.getOmTimeZone().getJname();
 				omTimeZone = omTimeZoneDaoImpl.getOmTimeZone(jNameTimeZone);
 			} else {
 
-				System.out.println("External User ");
+				log.debug("External User ");
 				// External User
 				jNameTimeZone = jNameMemberTimeZone;
 				omTimeZone = omTimeZoneDaoImpl.getOmTimeZone(jNameTimeZone);
@@ -120,19 +120,19 @@ public class MeetingMemberLogic {
 			int offset = cal.get(Calendar.ZONE_OFFSET)
 					+ cal.get(Calendar.DST_OFFSET);
 
-			// System.out.println("1"+point.getAppointmentStarttime().getTime());
-			// System.out.println("2"+point.getAppointmentEndtime().getTime());
+			// log.debug("1"+point.getAppointmentStarttime().getTime());
+			// log.debug("2"+point.getAppointmentEndtime().getTime());
 
 			Date starttime = new Date(point.getAppointmentStarttime().getTime()
 					+ offset);
 			Date endtime = new Date(point.getAppointmentEndtime().getTime()
 					+ offset);
 
-			// System.out.println("jNameTimeZone "+jNameTimeZone);
-			// System.out.println("Ical "+omTimeZone.getIcal());
-			// System.out.println(offset);
-			// System.out.println("3"+starttime);
-			// System.out.println("4"+endtime);
+			// log.debug("jNameTimeZone "+jNameTimeZone);
+			// log.debug("Ical "+omTimeZone.getIcal());
+			// log.debug(offset);
+			// log.debug("3"+starttime);
+			// log.debug("4"+endtime);
 
 			Fieldlanguagesvalues labelid1151 = fieldmanagment
 					.getFieldByIdAndLanguage(new Long(1151), language_id);
@@ -201,6 +201,8 @@ public class MeetingMemberLogic {
 			} else if (point.getRemind().getTypId() == 3) {
 				log.debug("Reminder for Appointment : iCal mail");
 
+				System.out.println("### SENDING iCAL EMAIL");
+				
 				log.debug("5" + starttime);
 				log.debug("6" + endtime);
 

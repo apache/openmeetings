@@ -42,7 +42,7 @@ public abstract class VelocityLoader {
 	/**
 	 * http://$server:$port/openmeetings/?param=value&param2=value2 Loads the
 	 * path by a given string, this is necessary cause if invoked by Servlet
-	 * there is no Red5-Scope availible
+	 * there is no Red5-Scope available
 	 * 
 	 * @param path
 	 */
