@@ -1,12 +1,13 @@
 package org.openmeetings.test.error;
 
+import static junit.framework.Assert.assertNotNull;
+
 import org.junit.Test;
 import org.openmeetings.app.persistence.beans.lang.FieldLanguage;
 import org.openmeetings.app.remote.ErrorService;
 import org.openmeetings.app.remote.LanguageService;
 import org.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import static junit.framework.Assert.assertNotNull;
 
 public class TestErrorService extends AbstractOpenmeetingsSpringTest {
 	@Autowired

@@ -274,6 +274,12 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 		long interview_Id = roommanagement.addRoomType("interview");
 
 		long custom_Id = roommanagement.addRoomType("custom");
+		log.debug(String.format("All room types were created successfully [conference: %1$s; audience: %2$s; restricted: %3$s; interview: %4$s; custom: %5$s]"
+				, conference_Id
+				, audience_Id
+				, restricted_Id
+				, interview_Id
+				, custom_Id));
 
 		roommanagement.addRoom(3, "public Interview Room", interview_Id, "",
 				new Long(16), true, null, false, false, null, false, null,

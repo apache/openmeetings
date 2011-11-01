@@ -2,16 +2,18 @@
 <project-modules id="moduleCoreId" project-version="1.5.0">
     <wb-module deploy-name="ROOT">
         <wb-resource deploy-path="/" source-path="/WebContent"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/userservice"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/roomservice"/>
+<wb-resource deploy-path="/WEB-INF/classes" source-path="/red5-screenshare"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/app"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/client"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/fileservice"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/roomservice"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/screenviewer"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/templates"/>
-<wb-resource deploy-path="/WEB-INF/classes" source-path="/red5-screenshare"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/server"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/templates"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/userservice"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/WebContent/WEB-INF"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
         <property name="java-output-path"/>
         <property name="context-root" value="/"/>
     </wb-module>
