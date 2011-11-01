@@ -611,4 +611,9 @@
 			</batchtest>
 		</junit>
 	</target>
+	<target name="smoke.test" description="Will run 'Smoke' subset of tests" >
+	  <antcall target="test">
+	    <param name="junit.test.pattern" value="TestSmoke*"/>
+	  </antcall>
+	</target>
 </project>
