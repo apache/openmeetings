@@ -410,9 +410,6 @@
         <tstamp prefix="build">
             <format property="TODAY" pattern="d-MMMM-yyyy" locale="en"/>
         </tstamp>
-    	<manifestclasspath property="jar2.classpath" jarfile="${project.distname}.jar">
-			<classpath refid="compile.classpath"/>
-        </manifestclasspath>
 		<jar destfile="${dist.dir}/red5/webapps/${project.distname}/screen/rtpapplet.jar">
 			<fileset dir="${classes.dir}">
 				<include name="**/applet/**"/>
