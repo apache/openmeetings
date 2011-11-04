@@ -35,6 +35,7 @@
 	<property name="dist.dir" value="dist"/>
 	<property name="red5.root" value="${dist.dir}/red5"/>
 	<property name="report.dir" value="${basedir}/junitreport"/>
+	<property name="derbydb.dir" value="${basedir}/openmeetings"/>
 
 	<!-- Conf dirs -->
 	<property name="conf.dir" value="${basedir}/conf"/>
@@ -141,11 +142,14 @@
 
 	</target>
 
-
-	<!-- Check timestamp on files -->
-	<target name="prepare">
+	<target name="prepare.mkdir">
 		<mkdir dir="${screen.out.dir}" />
 		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${main.out.dir}" />
+	</target>
+	
+	<!-- Check timestamp on files -->
+	<target name="prepare" depends="prepare.mkdir">
 		<copy todir="${screenshare.out.dir}" filtering="true">
 			<fileset dir="${screenshare.lib}" />
 		</copy>
@@ -280,16 +284,12 @@
 
 	</target>
 
-	<!-- Compile JAR -->
-	<target name="jar" description="Make Archive" depends="enhance, current_revision">
+	<target name="jar.only" depends="enhance.only, current_revision">
 		<tstamp prefix="build">
 			<format property="TODAY" pattern="d-MMMM-yyyy" locale="en"/>
 		</tstamp>
 		<manifestclasspath property="jar.classpath" jarfile="${project.distname}.jar">
 			<classpath refid="compile.classpath"/>
-		</manifestclasspath>
-		<manifestclasspath property="jar2.classpath" jarfile="${project.distname}.jar">
-			<classpath refid="screenshare.classpath"/>
 		</manifestclasspath>
 		<jar destfile="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/lib/${project.distname}.jar">
 			<fileset dir="${classes.dir}">
@@ -381,18 +381,17 @@
 				<include name="**/openmeetings/axis/**"/>
 			</fileset>
 		</jar>
-
-		<jar destfile="${dist.dir}/red5/webapps/${project.distname}/screen/rtpapplet.jar">
-			<fileset dir="${classes.dir}">
-				<include name="**/applet/**"/>
-
-			</fileset>
-			<manifest>
-				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com"/>
-				<attribute name="Built-On" value="${build.TODAY}"/>
-				<attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
-			</manifest>
-		</jar>
+	</target>
+	
+	<target name="dist.screen.share" description="Make Screen Share Archive" depends="jar.screen.share, signWebStartJars" />
+	
+	<target name="jar.screen.share" description="Make Screen Share Archive" depends="compile.screen.share">
+        <tstamp prefix="build">
+            <format property="TODAY" pattern="d-MMMM-yyyy" locale="en"/>
+        </tstamp>
+    	<manifestclasspath property="jar2.classpath" jarfile="${project.distname}.jar">
+            <classpath refid="screenshare.classpath"/>
+        </manifestclasspath>
 		<!-- Screen Share -->
 		<jar destfile="${screenshare.out.dir}/red5-screenshare.jar">
 			<fileset dir="${screen.out.dir}">
@@ -404,7 +403,26 @@
 				<attribute name="Class-Path" value="conf/ ${jar2.classpath}"/>
 			</manifest>
 		</jar>
-
+	</target>
+	
+	<!-- Compile JAR -->
+	<target name="jar" description="Make Archive" depends="enhance, jar.only, jar.screen.share">
+        <tstamp prefix="build">
+            <format property="TODAY" pattern="d-MMMM-yyyy" locale="en"/>
+        </tstamp>
+    	<manifestclasspath property="jar2.classpath" jarfile="${project.distname}.jar">
+			<classpath refid="compile.classpath"/>
+        </manifestclasspath>
+		<jar destfile="${dist.dir}/red5/webapps/${project.distname}/screen/rtpapplet.jar">
+			<fileset dir="${classes.dir}">
+				<include name="**/applet/**"/>
+			</fileset>
+			<manifest>
+				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com"/>
+				<attribute name="Built-On" value="${build.TODAY}"/>
+				<attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
+			</manifest>
+		</jar>
 	</target>
 
 	<target name="signWebStartJars">
@@ -469,9 +487,11 @@
 		</java>
 	</target>
 
+	<target name="compile" depends="prepare, resources, compile.only"/>
+	
 	<!-- Normal build of application
     compiler="org.eclipse.jdt.core.JDTCompilerAdapter" -->
-	<target name="compile" depends="prepare, resources">
+	<target name="compile.only" depends="compile.screen.share">
 		<echo message="Compile main to ${main.out.dir}">
 		</echo>
 		<javac debug="on" debuglevel="lines,vars,source" destdir="${main.out.dir}" >
@@ -501,14 +521,16 @@
 		<javac debug="on" debuglevel="lines,vars,source" srcdir="${userservice.src.dir}" destdir="${main.out.dir}" >
 			<classpath refid="compile.classpath"/>
 		</javac>
-		<echo message="Compile screen share to ${screen.out.dir}">
-		</echo>
+	</target>
+
+	<target name="compile.screen.share" depends="prepare.mkdir">
+		<echo message="Compile screen share to ${screen.out.dir}" />
 		<!-- compile screen share -->
 		<javac debug="on" debuglevel="lines,vars,source" srcdir="${screen.src.dir}" destdir="${screen.out.dir}" >
 			<classpath refid="screenshare.classpath"/>
 		</javac>
 	</target>
-
+	
 	<target name="doStartServer" depends="compile">
 		<junit>
 			<classpath refid="compile.classpath"/>
@@ -525,18 +547,17 @@
 	</target>
 
 	<!-- Remove classes directory for clean build -->
-	<target name="clean" depends="cleanForBinary" 
-        description="Prepare for clean build">
-		<delete dir="${main.out.dir}"/>
-		<delete dir="${dist.dir}"/>
-	</target>
+	<target name="clean" depends="cleanForBinary" description="Prepare for clean build" />
 
 	<target name="cleanForBinary" description="Clean For Binary">
 		<delete dir="${dist.dir}"/>
 		<delete dir="${screen.out.dir}"/>
 		<delete dir="${main.out.dir}"/>
 		<delete dir="${report.dir}"/>
+		<delete dir="${derbydb.dir}" />
+		<delete dir="${basedir}/log" />
 		<delete file="filetest.keystore" />
+		<delete file="derby.log" />
 	</target>
 
 	<path id="jpa.enhancement.classpath">
@@ -551,7 +572,9 @@
 		<classpath refid="jpa.enhancement.classpath"/>
 	</taskdef>
 
-	<target name="enhance" depends="compile">
+	<target name="enhance" depends="compile, enhance.only" />
+	
+	<target name="enhance.only" depends="compile.only">
 		<!-- invoke the enhancer -->
 		<openjpac>
 			<classpath refid="jpa.enhancement.classpath"/>
@@ -583,6 +606,10 @@
 		<isset property="testcases" />
 	</condition>
 
+	<condition property="junit.test.formatter" value="${test.formatter}" else="xml"> <!-- plain -->
+		<isset property="test.formatter" />
+	</condition>
+
 	<path id="junit.classpath">
 		<fileset dir="${red5.root}" includes="*.jar" />
 		<path refid="compile.classpath" />
@@ -603,15 +630,22 @@
 			<classpath refid="junit.classpath"/>
 			<jvmarg value="-Dred5.root=${red5.root}"/>
 			<jvmarg value="-Dred5.config_root=${red5.root}/conf"/>
-			<formatter type="plain"/>
+			<jvmarg value="-Dwebapps.root=${basedir}/${om.dist.webapp}"/>
+			<formatter type="${junit.test.formatter}" />
 			<batchtest fork="yes" todir="${report.dir}">
 				<fileset dir="${main.out.dir}">
 					<include name="org/openmeetings/test/**/${junit.test.pattern}"/>
 				</fileset>
 			</batchtest>
 		</junit>
+		<junitreport todir="${report.dir}">
+			<fileset dir="${report.dir}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report todir="${report.dir}" />
+		</junitreport>
 	</target>
-	<target name="smoke.test" description="Will run 'Smoke' subset of tests" >
+	<target name="smoke.test" depends="dist" description="Will run 'Smoke' subset of tests" >
 	  <antcall target="test">
 	    <param name="junit.test.pattern" value="TestSmoke*"/>
 	  </antcall>

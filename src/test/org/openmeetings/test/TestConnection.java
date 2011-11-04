@@ -1,3 +1,4 @@
+package org.openmeetings.test;
 
 import java.io.File;
 

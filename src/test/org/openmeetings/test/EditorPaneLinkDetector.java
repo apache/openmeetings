@@ -1,3 +1,4 @@
+package org.openmeetings.test;
 
 /**
  * David Bismut, david.bismut@gmail.com
