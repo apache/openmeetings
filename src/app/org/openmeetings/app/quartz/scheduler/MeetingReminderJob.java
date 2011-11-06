@@ -13,7 +13,7 @@ public class MeetingReminderJob {
 	private AppointmentLogic appointmentLogic;
 	
 	public void doIt() {
-		log.trace("MeetingReminderJob.execute");
+		log.debug("MeetingReminderJob.execute");
 		try {
 			appointmentLogic.doScheduledMeetingReminder();
 		} catch (Exception err){

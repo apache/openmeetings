@@ -3823,7 +3823,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Address &amp; Phone</value>
   </string>
   <string id="1271" name="error code">
-    <value>You invitation code is no valid, the code is only valid for a period of time.</value>
+    <value>You invitation code is no valid, the code is only valid during this specific date and time:</value>
   </string>
   <string id="1272" name="user calendar">
     <value>This event is connected to several calendars of other users. Your change will also update their calendar. Would you really like to update the event?</value>

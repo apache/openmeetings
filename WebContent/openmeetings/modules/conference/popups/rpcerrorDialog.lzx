@@ -10,6 +10,7 @@
     </handler>
 	
     <attribute name="errortext" value="" type="string" />
+    <attribute name="addInfo" value="" type="string" />
 	<attribute name="errorid" value="0" type="number" />
 
 	<netRemoteCallHib name="getErrorByCode" funcname="errorservice.getErrorByCode" remotecontext="$once{ canvas.thishib }" >      
@@ -17,10 +18,12 @@
 		<netparam><method name="getValue"> return parent.parent.errorid; </method></netparam>
         <netparam><method name="getValue"> return canvas.thishib.userlang; </method></netparam>
 		<handler name="ondata" args="value">
-			Debug.write("getErrorByCode ",value);
-			//this.parent.destroy();
-			this.parent.setAttribute('errortext',value.errmessage);
-			this.parent.setAttribute('title',value.errortype);
+			<![CDATA[
+    			if ($debug) Debug.write("getErrorByCode ",value);
+    			//this.parent.destroy();
+    			this.parent.setAttribute('errortext',value.errmessage+" <br/><br/>"+parent.addInfo);
+    			this.parent.setAttribute('title',value.errortype);
+			]]>
 		</handler>
 	</netRemoteCallHib>		
 

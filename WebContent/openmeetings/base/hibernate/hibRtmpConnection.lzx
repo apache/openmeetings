@@ -293,8 +293,20 @@
 				if (value<0){
 					
 				} else {
-					parent.currentInvitation = value;
-					new lz.invitationQuickLoader(canvas.main_content._content.inner);
+					
+					if (value.allowEntry) {
+						parent.currentInvitation = value;
+                        new lz.invitationQuickLoader(canvas.main_content._content.inner);
+					} else {
+						
+						var addInfo = "" + value.validFrom +"<br/> - <br/>"+ value.validTo;
+						
+						var dlg = new lz.rpcErrorDialog(canvas,{errorid:-50,addInfo:addInfo});
+                        lz.Focus.setFocus(dlg);
+						
+					}
+					
+					
 				}
             ]]>
         </handler>   

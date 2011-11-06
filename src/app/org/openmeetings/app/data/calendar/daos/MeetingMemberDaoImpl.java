@@ -10,6 +10,7 @@ import javax.persistence.Query;
 
 import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
+import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.persistence.beans.calendar.MeetingMember;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
@@ -190,7 +191,7 @@ public class MeetingMemberDaoImpl {
 
 	public Long addMeetingMember(String firstname, String lastname,
 			String memberStatus, String appointmentStatus, Long appointmentId,
-			Long userid, String email, Boolean moderator, String jNameTimeZone,
+			Long userid, String email, Boolean moderator, OmTimeZone omTimeZone,
 			Boolean isConnectedEvent) {
 		try {
 
@@ -208,8 +209,8 @@ public class MeetingMemberDaoImpl {
 			gm.setDeleted(false);
 			gm.setInvitor(moderator);
 			gm.setIsConnectedEvent(isConnectedEvent);
-
-			gm.setOmTimeZone(omTimeZoneDaoImpl.getOmTimeZone(jNameTimeZone));
+			
+			gm.setOmTimeZone(omTimeZone);
 
 			gm = em.merge(gm);
 			Long group_member_id = gm.getMeetingMemberId();

@@ -1,9 +1,7 @@
 package org.openmeetings.app.remote;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
@@ -237,25 +235,10 @@ public class CalendarService {
 				Appointment appStored = appointmentDao.getAppointmentByRoomId(
 						users_id, room_id);
 
-				Users user = userManagement.getUserById(users_id);
-
-				TimeZone timeZone = TimeZone.getTimeZone(user.getOmTimeZone()
-						.getIcal());
-
-				Calendar cal = Calendar.getInstance();
-				cal.setTimeZone(timeZone);
-				int offset = cal.get(Calendar.ZONE_OFFSET)
-						+ cal.get(Calendar.DST_OFFSET);
-
-				// System.out.println("CalendarServlet offset "+offset );
-				// System.out.println("CalendarServlet TimeZone "+TimeZone.getDefault().getID()
-				// );
-				// log.debug("addAppointment offset :: "+offset);
-
-				appointment.setAppointmentStarttime(new Date(appStored
-						.getAppointmentStarttime().getTime() + offset));
-				appointment.setAppointmentEndtime(new Date(appStored
-						.getAppointmentEndtime().getTime() + offset));
+				appointment.setAppointmentStarttime(appStored
+						.getAppointmentStarttime());
+				appointment.setAppointmentEndtime(appStored
+						.getAppointmentEndtime());
 
 				return appointment;
 			}

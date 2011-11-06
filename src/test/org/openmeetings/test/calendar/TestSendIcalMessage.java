@@ -212,7 +212,7 @@ public class TestSendIcalMessage extends AbstractOpenmeetingsSpringTest {
 			// Create ICal Message
 			String meetingId = handler.addNewMeeting(start, end, "test event",
 					atts, "localhost:5080/link_openmeetings",
-					organizerAttendee, "", jNametimeZone);
+					organizerAttendee, "", TimeZone.getDefault());
 
 			log.debug("meetingId " + meetingId);
 

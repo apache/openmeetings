@@ -472,6 +472,9 @@ public class ImportInitvalues {
 		cfgManagement.addConfByKey(3, "max_upload_size", new Integer(ImportHelper.DEFAULT_MAX_UPLOAD_SIZE).toString(), null,
 				"Maximum size of upload file (bytes)"); //defaults to 1GB
 
+		cfgManagement.addConfByKey(3, "number.minutes.reminder.send", "15", null,
+				"The number of minutes before reminder emails are send. Set to 0 to disable reminder emails");
+		
 	}
 
 	

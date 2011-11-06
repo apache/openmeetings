@@ -1,5 +1,7 @@
 package org.openmeetings.app.data.basic;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -32,7 +34,7 @@ public class Configurationmanagement {
 			ScopeApplicationAdapter.webAppRootKey);
 
 	public static final String DEFAULT_APP_NAME = "OpenMeetings";
-	
+
 	@PersistenceContext
 	private EntityManager em;
 
@@ -44,19 +46,18 @@ public class Configurationmanagement {
 	public Configuration getConfKey(long user_level, String CONF_KEY) {
 		try {
 			if (authLevelManagement.checkUserLevel(user_level)) {
-				Configuration configuration = null;
-				Query query = em
-						.createQuery("select c from Configuration as c where c.conf_key = :conf_key and c.deleted = :deleted");
+				TypedQuery<Configuration> query = em
+						.createQuery(
+								"select c from Configuration as c where c.conf_key = :conf_key and c.deleted = :deleted",
+								Configuration.class);
 				query.setParameter("conf_key", CONF_KEY);
 				query.setParameter("deleted", "false");
 
-				@SuppressWarnings("unchecked")
 				List<Configuration> configs = query.getResultList();
 
 				if (configs != null && configs.size() > 0) {
-					configuration = configs.get(0);
+					return configs.get(0);
 				}
-				return configuration;
 			} else {
 				log.error("[getAllConf] Permission denied " + user_level);
 			}
@@ -64,6 +65,72 @@ public class Configurationmanagement {
 			log.error("[getConfKey]: ", ex2);
 		}
 		return null;
+	}
+
+	public static void main(String... args) throws SecurityException,
+			NoSuchMethodException, IllegalArgumentException,
+			InstantiationException, IllegalAccessException,
+			InvocationTargetException {
+
+		Class<Integer> typeObject = Integer.class;
+		String returnValue = "15";
+
+		if (typeObject.isAssignableFrom(returnValue.getClass())) {
+			Integer t = typeObject.cast(returnValue);
+			System.out.println("t " + t);
+		} else {
+			System.out.println("cannot be cast to Integer ");
+
+			Constructor<Integer> c = typeObject.getConstructor(returnValue
+					.getClass());
+
+			Integer k = c.newInstance(returnValue);
+
+			System.out.println("k " + k);
+
+		}
+
+	}
+
+	/**
+	 * Return a object using a custom type and a default value if the key is not present
+	 * 
+	 * Example: Integer my_key = getConfValue("my_key", Integer.class, "15");
+	 * 
+	 * @param CONF_KEY
+	 * @param typeObject
+	 * @param defaultValue
+	 * @return
+	 */
+	public <T> T getConfValue(String CONF_KEY, Class<T> typeObject,
+			String defaultValue) {
+		try {
+			Configuration conf_reminder = getConfKey(3L, CONF_KEY);
+
+			if (conf_reminder == null) {
+				log.warn("Could not find key in configuration CONF_KEY: "
+						+ CONF_KEY);
+			} else {
+				// Use the custom value as default value
+				defaultValue = conf_reminder.getConf_value();
+			}
+
+			// Either this can be directly assigned or try to find a constructor
+			// that handles it
+			if (typeObject.isAssignableFrom(defaultValue.getClass())) {
+				return typeObject.cast(defaultValue);
+			} else {
+				Constructor<T> c = typeObject.getConstructor(defaultValue
+						.getClass());
+				return c.newInstance(defaultValue);
+			}
+
+		} catch (Exception err) {
+			log.error(
+					"cannot be cast to return type, you have misconfigured your configuration CONF_KEY: "
+							+ CONF_KEY, err);
+			return null;
+		}
 	}
 
 	public Configuration getConfByConfigurationId(long user_level,
@@ -281,7 +348,7 @@ public class Configurationmanagement {
 		}
 		return new Long(-1);
 	}
-	
+
 	public String getAppName() {
 		String appName = Configurationmanagement.DEFAULT_APP_NAME;
 		Configuration application_name = getConfKey(3L, "application.name");

@@ -27,7 +27,6 @@ import net.fortuna.ical4j.model.property.Version;
 import net.fortuna.ical4j.util.UidGenerator;
 
 import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
-import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -107,31 +106,17 @@ public class IcalHandler {
 	public String addNewMeeting(GregorianCalendar startDate,
 			GregorianCalendar endDate, String name,
 			Vector<HashMap<String, String>> attendees, String description,
-			HashMap<String, String> organizer, String uid, String jNametimeZone)
+			HashMap<String, String> organizer, String uid, java.util.TimeZone normalTimeZone)
 			throws Exception {
-
-		log.debug("add new Meeting -1 " + jNametimeZone);
-		log.debug("add new Meeting -2 "
-				+ java.util.TimeZone.getDefault().getID());
-
-		// timeZone = timeRegistry.getTimeZone(jNametimeZone);
 
 		TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance()
 				.createRegistry();
-
-		OmTimeZone omTimeZone = omTimeZoneDaoImpl.getOmTimeZone(jNametimeZone);
-
-		TimeZone timeZone = registry.getTimeZone(omTimeZone.getIcal());
-
-		startDate.setTimeZone(timeZone);
-		endDate.setTimeZone(timeZone);
+		
+		TimeZone timeZone = registry.getTimeZone(normalTimeZone.getID());
 
 		DateTime start = new DateTime(startDate.getTime());
 		DateTime end = new DateTime(endDate.getTime());
 		VEvent meeting = new VEvent(start, end, name);
-
-		log.debug("DateTime start addNewMeeting " + start);
-		log.debug("DateTime end addNewMeeting " + end);
 
 		// add timezone info..
 		VTimeZone tz = timeZone.getVTimeZone();

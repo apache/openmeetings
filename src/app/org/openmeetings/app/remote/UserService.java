@@ -1064,6 +1064,8 @@ public class UserService {
 			List<String> recipients, Rooms room, Date appointmentstart,
 			Date appointmentend, Boolean invitor, Boolean isConnectedEvent,
 			String sendJNameTimeZone) throws Exception {
+		
+		
 
 		Long appointmentId = appointmentDao.addAppointment(subject,
 				to.getUser_id(), "", message, appointmentstart, appointmentend,
@@ -1072,10 +1074,6 @@ public class UserService {
 
 		for (String email : recipients) {
 
-			// Map receipent = (Map) recipients.get(iter.next());
-
-			// String email = receipent.get("email").toString();
-
 			Users meetingMember = userManagement.getUserByEmail(email);
 
 			String firstname = meetingMember.getFirstname();
@@ -1083,7 +1081,7 @@ public class UserService {
 
 			meetingMemberDao.addMeetingMember(firstname, lastname, "0", "0",
 					appointmentId, meetingMember.getUser_id(), email, invitor,
-					meetingMember.getOmTimeZone().getJname(), isConnectedEvent);
+					meetingMember.getOmTimeZone(), isConnectedEvent);
 
 		}
 

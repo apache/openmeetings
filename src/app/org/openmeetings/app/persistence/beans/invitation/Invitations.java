@@ -3,9 +3,6 @@ package org.openmeetings.app.persistence.beans.invitation;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.openmeetings.app.persistence.beans.rooms.Rooms;
-import org.openmeetings.app.persistence.beans.user.Users;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,6 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.openmeetings.app.persistence.beans.rooms.Rooms;
+import org.openmeetings.app.persistence.beans.user.Users;
 
 @Entity
 @Table(name = "invitations")
@@ -80,10 +80,11 @@ public class Invitations implements Serializable {
 	// reminders on serverside (updates)
 	@Column(name = "baseUrl")
 	private String baseUrl;
+	
+	private boolean allowEntry = true;
 
 	public Invitations() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Long getInvitations_id() {
@@ -236,6 +237,14 @@ public class Invitations implements Serializable {
 
 	public void setAppointmentId(Long appointmentId) {
 		this.appointmentId = appointmentId;
+	}
+
+	public boolean isAllowEntry() {
+		return allowEntry;
+	}
+
+	public void setAllowEntry(boolean allowEntry) {
+		this.allowEntry = allowEntry;
 	}
 
 }

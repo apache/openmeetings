@@ -30,9 +30,19 @@ public abstract class VelocityLoader {
 		try {
 			String current_dir = ScopeApplicationAdapter.webAppPath
 					+ File.separatorChar;
-
-			Velocity.init(current_dir + "WEB-INF" + File.separatorChar
+			
+			File fInit = new File(current_dir + "WEB-INF" + File.separatorChar
 					+ "velocity.properties");
+			
+			if (fInit.exists()) {
+				Velocity.init(current_dir + "WEB-INF" + File.separatorChar
+						+ "velocity.properties");
+			} else {
+				Velocity.init("WeBContent"+File.separatorChar+"WEB-INF" + File.separatorChar
+						+ "velocity.properties");
+			}
+
+			
 		} catch (Exception e) {
 			log.error("Problem initializing Velocity : ", e);
 			System.out.println("Problem initializing Velocity : " + e);

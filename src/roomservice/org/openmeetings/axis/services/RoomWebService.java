@@ -1465,7 +1465,7 @@ public class RoomWebService {
 						.addMeetingMember(firstname, lastname, "0", "0",
 								appointment.getAppointmentId(), null, email,
 								baseUrl, null, new Boolean(false), language_id,
-								false, "", "", "");
+								false, "", null, null, "");
 
 				return memberId;
 
@@ -1502,7 +1502,7 @@ public class RoomWebService {
 						.addMeetingMember(firstname, lastname, "0", "0",
 								appointment.getAppointmentId(), null, email,
 								baseUrl, null, new Boolean(false), language_id,
-								false, "", jNameTimeZone, invitorName);
+								false, "", null, null, invitorName);
 
 				return memberId;
 

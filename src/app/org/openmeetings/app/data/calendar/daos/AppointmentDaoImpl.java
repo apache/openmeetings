@@ -30,6 +30,8 @@ import org.openmeetings.app.persistence.beans.calendar.MeetingMember;
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.math.CalendarPatterns;
+import org.openmeetings.utils.math.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +60,8 @@ public class AppointmentDaoImpl {
 	private Invitationmanagement invitationManagement;
 	@Autowired
 	private MeetingMemberLogic meetingMemberLogic;
+	@Autowired
+	private TimezoneUtil timezoneUtil;
 
 	/*
 	 * insert, update, delete, select
@@ -141,7 +145,8 @@ public class AppointmentDaoImpl {
 			String hql = "select a from Appointment a "
 					+ "WHERE a.deleted <> :deleted ";
 
-			TypedQuery<Appointment> query = em.createQuery(hql, Appointment.class);
+			TypedQuery<Appointment> query = em.createQuery(hql,
+					Appointment.class);
 			query.setParameter("deleted", "true");
 
 			List<Appointment> appointList = query.getResultList();
@@ -149,8 +154,8 @@ public class AppointmentDaoImpl {
 			for (Appointment appointment : appointList) {
 
 				appointment.setMeetingMember(meetingMemberDao
-						.getMeetingMemberByAppointmentId(
-								appointment.getAppointmentId()));
+						.getMeetingMemberByAppointmentId(appointment
+								.getAppointmentId()));
 
 			}
 
@@ -194,26 +199,12 @@ public class AppointmentDaoImpl {
 			ap.setAppointmentName(appointmentName);
 			ap.setAppointmentLocation(appointmentLocation);
 
-			OmTimeZone omTimeZone = omTimeZoneDaoImpl
-					.getOmTimeZone(jNameTimeZone);
-
-			String timeZoneName = omTimeZone.getIcal();
-
-			Calendar cal = Calendar.getInstance();
-			cal.setTimeZone(TimeZone.getTimeZone(timeZoneName));
-			int offset = cal.get(Calendar.ZONE_OFFSET)
-					+ cal.get(Calendar.DST_OFFSET);
-
-			log.debug("addAppointment appointmentstart :1: " + appointmentstart);
-			log.debug("addAppointment appointmentend :1: " + appointmentend);
-			log.debug("addAppointment jNameTimeZone :: " + jNameTimeZone);
-			log.debug("addAppointment offset :: " + offset);
-
-			appointmentstart = new Date(appointmentstart.getTime() - offset);
-			appointmentend = new Date(appointmentend.getTime() - offset);
-
-			log.debug("addAppointment appointmentstart :2: " + appointmentstart);
-			log.debug("addAppointment appointmentend :2: " + appointmentend);
+			log.debug("addAppointment appointmentstart :1: "
+					+ CalendarPatterns
+							.getDateWithTimeByMiliSecondsWithZone(appointmentstart));
+			log.debug("addAppointment appointmentend :1: "
+					+ CalendarPatterns
+							.getDateWithTimeByMiliSecondsWithZone(appointmentend));
 
 			ap.setAppointmentStarttime(appointmentstart);
 			ap.setAppointmentEndtime(appointmentend);
@@ -287,8 +278,8 @@ public class AppointmentDaoImpl {
 			String hql = "select a from Appointment a "
 					+ "WHERE a.room.rooms_id = :roomId ";
 
-			
-			TypedQuery<Appointment> query = em.createQuery(hql, Appointment.class);
+			TypedQuery<Appointment> query = em.createQuery(hql,
+					Appointment.class);
 			query.setParameter("roomId", roomId);
 			List<Appointment> ll = query.getResultList();
 
@@ -345,37 +336,17 @@ public class AppointmentDaoImpl {
 			Boolean isPasswordProtected, String password) {
 		try {
 
-			log.debug("updateConnectedEvents 1 ");
-
 			if (ap.getRoom() == null) {
 				return;
 			}
 
-			log.debug("updateConnectedEvents 1a " + appointmentstart);
-			log.debug("updateConnectedEvents 1b " + appointmentend);
-
-			log.debug("updateConnectedEvents 2 " + ap.getRoom().getRooms_id());
-
 			List<Appointment> appointments = this.getAppointmentsByRoomId(ap
 					.getRoom().getRooms_id());
 
-			log.debug("updateConnectedEvents 3 " + appointments.size());
-
 			for (Appointment appointment : appointments) {
-
-				log.debug("updateConnectedEvents 4a " + ap.getAppointmentId()
-						+ "||" + appointment.getAppointmentId());
 
 				if (!ap.getAppointmentId().equals(
 						appointment.getAppointmentId())) {
-
-					log.debug("updateConnectedEvents 4b "
-							+ appointment.getAppointmentId());
-					log.debug("updateConnectedEvents 5 "
-							+ appointment.getUserId().getLogin());
-
-					log.debug("updateConnectedEvents 6 " + appointmentstart);
-					log.debug("updateConnectedEvents 7 " + appointmentend);
 
 					appointment.setAppointmentName(appointmentName);
 					appointment.setAppointmentStarttime(appointmentstart);
@@ -446,16 +417,6 @@ public class AppointmentDaoImpl {
 			AppointmentCategory appointmentCategory = appointmentCategoryDaoImpl
 					.getAppointmentCategoryById(categoryId);
 
-			Calendar cal = Calendar.getInstance();
-			cal.setTimeZone(TimeZone.getTimeZone(iCalTimeZone));
-			int offset = cal.get(Calendar.ZONE_OFFSET)
-					+ cal.get(Calendar.DST_OFFSET);
-
-			log.debug("addAppointment offset :: " + offset);
-
-			appointmentstart = new Date(appointmentstart.getTime() - offset);
-			appointmentend = new Date(appointmentend.getTime() - offset);
-
 			// change connected events of other participants
 			if (ap.getIsConnectedEvent() != null && ap.getIsConnectedEvent()) {
 				this.updateConnectedEvents(ap, appointmentName,
@@ -467,8 +428,8 @@ public class AppointmentDaoImpl {
 			}
 
 			// Update Invitation hash to new time
-			invitationManagement.updateInvitationByAppointment(
-					appointmentId, appointmentstart, appointmentend);
+			invitationManagement.updateInvitationByAppointment(appointmentId,
+					appointmentstart, appointmentend);
 
 			ap.setAppointmentName(appointmentName);
 			ap.setAppointmentStarttime(appointmentstart);
@@ -500,7 +461,8 @@ public class AppointmentDaoImpl {
 			String invitorName = user.getFirstname() + " " + user.getLastname()
 					+ " [" + user.getAdresses().getEmail() + "]";
 
-			List<MeetingMember> meetingsRemoteMembers = meetingMemberDao.getMeetingMemberByAppointmentId(ap.getAppointmentId());
+			List<MeetingMember> meetingsRemoteMembers = meetingMemberDao
+					.getMeetingMemberByAppointmentId(ap.getAppointmentId());
 
 			// to remove
 			for (MeetingMember memberRemote : meetingsRemoteMembers) {
@@ -509,6 +471,7 @@ public class AppointmentDaoImpl {
 
 				if (mmClient != null) {
 					for (int i = 0; i < mmClient.size(); i++) {
+						@SuppressWarnings("rawtypes")
 						Map clientMemeber = (Map) mmClient.get(i);
 						Long meetingMemberId = Long
 								.valueOf(
@@ -535,8 +498,8 @@ public class AppointmentDaoImpl {
 					// meetingMemberDao.deleteMeetingMember(memberRemote.getMeetingMemberId());
 				} else {
 					// Notify member of changes
-					invitationManagement.updateInvitation(ap,
-							memberRemote, users_id, language_id, invitorName);
+					invitationManagement.updateInvitation(ap, memberRemote,
+							users_id, language_id, invitorName);
 
 				}
 			}
@@ -546,6 +509,7 @@ public class AppointmentDaoImpl {
 
 				for (int i = 0; i < mmClient.size(); i++) {
 
+					@SuppressWarnings("rawtypes")
 					Map clientMember = (Map) mmClient.get(i);
 
 					Long meetingMemberId = Long.valueOf(
@@ -563,15 +527,45 @@ public class AppointmentDaoImpl {
 
 					if (!found) {
 
+						// We need two different timeZones, the internal Java
+						// Object
+						// TimeZone, and
+						// the one for the UI display object to map to, cause
+						// the UI
+						// only has around 24 timezones
+						// and Java around 600++
 						Long sendToUserId = 0L;
+						TimeZone timezoneMember = null;
+						OmTimeZone omTimeZone = null;
 						if (clientMember.get("userId") != null) {
 							sendToUserId = Long.valueOf(
 									clientMember.get("userId").toString())
 									.longValue();
 						}
 
-						String jNameMemberTimeZone = clientMember.get(
-								"jNameTimeZone").toString();
+						// Check if this is an internal user, if yes use the
+						// timezone from his profile otherwise get the timezones
+						// from the variable jNameTimeZone
+						if (sendToUserId > 0) {
+							Users interalUser = userManagement
+									.getUserById(sendToUserId);
+							timezoneMember = timezoneUtil
+									.getTimezoneByUser(interalUser);
+							omTimeZone = interalUser.getOmTimeZone();
+						} else {
+							// Get the internal-name of the timezone set in the
+							// client object and convert it to a real one
+							Object jName = clientMember.get("jNameTimeZone");
+							if (jName == null) {
+								log.error("jNameTimeZone not set in user object variable");
+								jName = "";
+							}
+							omTimeZone = omTimeZoneDaoImpl.getOmTimeZone(jName
+									.toString());
+							timezoneMember = timezoneUtil
+									.getTimezoneByInternalJName(jName
+											.toString());
+						}
 
 						// Not In Remote List available - intern OR extern user
 						meetingMemberLogic.addMeetingMember(
@@ -590,7 +584,7 @@ public class AppointmentDaoImpl {
 												// a 0 here
 								new Boolean(false), // invitor
 								language_id, isPasswordProtected, password,
-								jNameMemberTimeZone, invitorName);
+								timezoneMember, omTimeZone, invitorName);
 
 					}
 
@@ -614,16 +608,6 @@ public class AppointmentDaoImpl {
 
 			Appointment ap = this.getAppointmentById(appointmentId);
 
-			Calendar cal = Calendar.getInstance();
-			cal.setTimeZone(TimeZone.getTimeZone(iCalTimeZone));
-			int offset = cal.get(Calendar.ZONE_OFFSET)
-					+ cal.get(Calendar.DST_OFFSET);
-
-			log.debug("addAppointment offset :: " + offset);
-
-			appointmentstart = new Date(appointmentstart.getTime() - offset);
-			appointmentend = new Date(appointmentend.getTime() - offset);
-
 			// change connected events of other participants
 			if (ap.getIsConnectedEvent() != null && ap.getIsConnectedEvent()) {
 				this.updateConnectedEventsTimeOnly(ap, appointmentstart,
@@ -631,8 +615,8 @@ public class AppointmentDaoImpl {
 			}
 
 			// Update Invitation hash to new time
-			invitationManagement.updateInvitationByAppointment(
-					appointmentId, appointmentstart, appointmentend);
+			invitationManagement.updateInvitationByAppointment(appointmentId,
+					appointmentstart, appointmentend);
 
 			ap.setAppointmentStarttime(appointmentstart);
 			ap.setAppointmentEndtime(appointmentend);
@@ -646,7 +630,8 @@ public class AppointmentDaoImpl {
 				}
 			}
 
-			List<MeetingMember> meetingsRemoteMembers = meetingMemberDao.getMeetingMemberByAppointmentId(ap.getAppointmentId());
+			List<MeetingMember> meetingsRemoteMembers = meetingMemberDao
+					.getMeetingMemberByAppointmentId(ap.getAppointmentId());
 
 			// Adding Invitor Name
 			Users user = userManagement.getUserById(users_id);
@@ -657,8 +642,8 @@ public class AppointmentDaoImpl {
 			for (MeetingMember memberRemote : meetingsRemoteMembers) {
 
 				// Notify member of changes
-				invitationManagement.updateInvitation(ap,
-						memberRemote, users_id, language_id, invitorName);
+				invitationManagement.updateInvitation(ap, memberRemote,
+						users_id, language_id, invitorName);
 
 			}
 
@@ -698,10 +683,14 @@ public class AppointmentDaoImpl {
 			Date starttime, Date endtime) {
 		try {
 
-			starttime.setHours(0);
+			Calendar calstart = Calendar.getInstance();
+			calstart.setTime(starttime);
+			calstart.set(Calendar.HOUR, 0);
 
-			endtime.setHours(23);
-			endtime.setMinutes(59);
+			Calendar calend = Calendar.getInstance();
+			calend.setTime(endtime);
+			calend.set(Calendar.HOUR, 23);
+			calend.set(Calendar.MINUTE, 59);
 
 			String hql = "select a from Appointment a "
 					+ "WHERE a.deleted <> :deleted  "
@@ -717,10 +706,11 @@ public class AppointmentDaoImpl {
 
 			// "AND (a.terminstatus != 4 AND a.terminstatus != 5)";
 
-			Query query = em.createQuery(hql);
+			TypedQuery<Appointment> query = em.createQuery(hql,
+					Appointment.class);
 			query.setParameter("deleted", "true");
-			query.setParameter("starttime", starttime);
-			query.setParameter("endtime", endtime);
+			query.setParameter("starttime", calstart.getTime());
+			query.setParameter("endtime", calend.getTime());
 			query.setParameter("userId", userId);
 
 			List<Appointment> listAppoints = query.getResultList();
@@ -729,14 +719,14 @@ public class AppointmentDaoImpl {
 				log.debug("" + appointment);
 
 				appointment.setMeetingMember(meetingMemberDao
-						.getMeetingMemberByAppointmentId(
-								appointment.getAppointmentId()));
+						.getMeetingMemberByAppointmentId(appointment
+								.getAppointmentId()));
 
 			}
 
 			return listAppoints;
 		} catch (Exception ex2) {
-			log.error("[getAppointmentsByRange]: " + ex2);
+			log.error("[getAppointmentsByRange]: ", ex2);
 		}
 		return null;
 	}
@@ -748,14 +738,15 @@ public class AppointmentDaoImpl {
 					+ "WHERE a.deleted <> :deleted "
 					+ "AND a.appointmentCategory.categoryId = :categoryId";
 
-			TypedQuery<Appointment> query = em.createQuery(hql, Appointment.class);
+			TypedQuery<Appointment> query = em.createQuery(hql,
+					Appointment.class);
 			query.setParameter("deleted", "true");
 			query.setParameter("categoryId", categoryId);
 
 			List<Appointment> listAppoints = query.getResultList();
 			return listAppoints;
 		} catch (Exception ex2) {
-			log.error("[getAppointements]: " + ex2);
+			log.error("[getAppointements]: ", ex2);
 		}
 		return null;
 	}
@@ -774,7 +765,7 @@ public class AppointmentDaoImpl {
 
 			return listAppoints;
 		} catch (Exception ex2) {
-			log.error("[getAppointements]: " + ex2);
+			log.error("[getAppointements]: ", ex2);
 		}
 		return null;
 	}
@@ -799,7 +790,7 @@ public class AppointmentDaoImpl {
 
 			return appoint;
 		} catch (Exception ex2) {
-			log.error("[getNextAppointmentById]: " + ex2);
+			log.error("[getNextAppointmentById]: ", ex2);
 		}
 		return null;
 	}
@@ -811,7 +802,8 @@ public class AppointmentDaoImpl {
 					+ "WHERE a.deleted <> :deleted "
 					+ "AND a.appointmentName LIKE :appointmentName";
 
-			TypedQuery<Appointment> query = em.createQuery(hql, Appointment.class);
+			TypedQuery<Appointment> query = em.createQuery(hql,
+					Appointment.class);
 			query.setParameter("deleted", "true");
 			query.setParameter("appointmentName", name);
 
@@ -819,7 +811,7 @@ public class AppointmentDaoImpl {
 
 			return listAppoints;
 		} catch (Exception ex2) {
-			log.error("[searchAppointmentsByName]: " + ex2);
+			log.error("[searchAppointmentsByName]: ", ex2);
 		}
 		return null;
 	}
@@ -829,7 +821,7 @@ public class AppointmentDaoImpl {
 	 * @param userId
 	 * @return
 	 */
-	public List<Appointment> getTodaysAppoitmentsbyRangeAndMember(Long userId) {
+	public List<Appointment> getTodaysAppointmentsbyRangeAndMember(Long userId) {
 		log.debug("getAppoitmentbyRangeAndMember : UserID - " + userId);
 
 		String hql = "SELECT app from MeetingMember mm "
@@ -840,84 +832,92 @@ public class AppointmentDaoImpl {
 				+ "app.appointmentStarttime between :starttime " + "AND "
 				+ " :endtime";
 
-		Date startDate = new Date();
-		startDate.setHours(0);
-		startDate.setMinutes(0);
-		startDate.setSeconds(1);
+		Calendar startCal = Calendar.getInstance();
+		startCal.set(Calendar.MINUTE, 0);
+		startCal.set(Calendar.HOUR, 0);
+		startCal.set(Calendar.SECOND, 1);
 
-		Date endDate = new Date();
-		endDate.setHours(23);
-		endDate.setMinutes(59);
-		endDate.setSeconds(59);
-
-		Timestamp startStamp = new Timestamp(startDate.getTime());
-		Timestamp stopStamp = new Timestamp(endDate.getTime());
-
-		log.debug("StartTime : " + startDate);
-		log.debug("EndTime : " + endDate);
+		Calendar endCal = Calendar.getInstance();
+		endCal.set(Calendar.MINUTE, 23);
+		endCal.set(Calendar.HOUR, 59);
+		endCal.set(Calendar.SECOND, 59);
 
 		try {
-			TypedQuery<Appointment> query = em.createQuery(hql, Appointment.class);
+			TypedQuery<Appointment> query = em.createQuery(hql,
+					Appointment.class);
 
 			query.setParameter("mm_deleted", true);
 			query.setParameter("app_deleted", "true");
 			query.setParameter("userId", userId);
 
-			query.setParameter("starttime", startStamp);
-			query.setParameter("endtime", stopStamp);
+			query.setParameter("starttime", startCal.getTime());
+			query.setParameter("endtime", endCal.getTime());
 
 			List<Appointment> listAppoints = query.getResultList();
 			return listAppoints;
 		} catch (Exception e) {
-			log.error("Error in getTodaysAppoitmentsbyRangeAndMember : "
-					+ e.getMessage());
+			log.error("Error in getTodaysAppoitmentsbyRangeAndMember : ", e);
 			return null;
 		}
 	}
 
 	/**
-	 * @author becherer
-	 * @param userId
+	 * Get the meetings according to a time range. It starts by now to
+	 * Calendar.getInstance().getTime().getTime() + milliseconds
+	 * 
+	 * @author o.becherer,seba.wagner
+	 * @param milliseconds
+	 *            to get events in the past make milliseconds < 0
+	 * @param isReminderEmailSend
+	 *            if null all events in the time range, if false or true the
+	 *            param is set
 	 * @return
 	 */
-	// ---------------------------------------------------------------------------------------------
-	public List<Appointment> getTodaysReminderAppointmentsForAllUsers() {
+	public List<Appointment> getAppointmentsForAllUsersByTimeRangeStartingNow(
+			long milliseconds, Boolean isReminderEmailSend) {
 		try {
 
 			String hql = "SELECT app from MeetingMember mm "
 					+ "JOIN mm.appointment as app "
 					+ "WHERE mm.deleted <> :mm_deleted "
-					+ "AND app.deleted <> :app_deleted " + "AND  "
-					+ "app.appointmentStarttime between :starttime " + "AND "
-					+ " :endtime AND "
-					+ " ( app.isReminderEmailSend IS NULL OR app.isReminderEmailSend = false ) ";
+					+ "AND app.deleted <> :app_deleted "
+					+ "AND app.appointmentStarttime between :starttime AND :endtime ";
+
+			if (isReminderEmailSend != null) {
+				hql += "AND ( app.isReminderEmailSend IS NULL OR app.isReminderEmailSend = :isReminderEmailSend ) ";
+			}
 
 			Calendar startCal = Calendar.getInstance();
-			startCal.set(Calendar.MINUTE, 0);
-			startCal.set(Calendar.HOUR, 0);
-			startCal.set(Calendar.SECOND, 1);
-			
+			if (milliseconds < 0) {
+				startCal.setTimeInMillis(startCal.getTimeInMillis()+milliseconds);
+			}
 			Calendar endCal = Calendar.getInstance();
-			endCal.set(Calendar.MINUTE, 23);
-			endCal.set(Calendar.HOUR, 59);
-			endCal.set(Calendar.SECOND, 59);
+			if (milliseconds > 0) {
+				endCal.setTimeInMillis(endCal.getTimeInMillis()+milliseconds);
+			}
+
+			TypedQuery<Appointment> query = em.createQuery(hql,
+					Appointment.class);
 			
 			Timestamp startStamp = new Timestamp(startCal.getTime().getTime());
-			Timestamp stopStamp = new Timestamp(endCal.getTime().getTime());
-
-			TypedQuery<Appointment> query = em.createQuery(hql, Appointment.class);
+            Timestamp stopStamp = new Timestamp(endCal.getTime().getTime());
+            
+            log.debug("startStamp "+startStamp);
+            log.debug("stopStamp "+stopStamp);
 
 			query.setParameter("mm_deleted", true);
 			query.setParameter("app_deleted", "true");
-
 			query.setParameter("starttime", startStamp);
 			query.setParameter("endtime", stopStamp);
+			if (isReminderEmailSend != null) {
+				query.setParameter("isReminderEmailSend", isReminderEmailSend);
+			}
 
 			List<Appointment> listAppoints = query.getResultList();
 
 			return listAppoints;
 		} catch (Exception e) {
-			log.error("Error in getTodaysAppoitmentsForAllUsers : ", e);
+			log.error("Error in getAppointmentsForAllUsersByTimeRangeStartingNow : ", e);
 			return null;
 		}
 	}
@@ -932,7 +932,8 @@ public class AppointmentDaoImpl {
 					+ "AND a.userId.user_id = :user_id "
 					+ "AND a.room.rooms_id = :rooms_id ";
 
-			TypedQuery<Appointment> query = em.createQuery(hql, Appointment.class);
+			TypedQuery<Appointment> query = em.createQuery(hql,
+					Appointment.class);
 
 			query.setParameter("deleted", "true");
 			query.setParameter("user_id", user_id);

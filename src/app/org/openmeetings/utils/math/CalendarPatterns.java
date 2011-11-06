@@ -1,11 +1,11 @@
 package org.openmeetings.utils.math;
 
-import java.util.Date;
-import java.util.Locale;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
-import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * @author Sebastian Wagner
@@ -34,6 +34,44 @@ public class CalendarPatterns {
     		return null;
     	}
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+        Date dateOld = new Date();
+        long timeAdv = t.getTime();
+        dateOld.setTime(timeAdv);
+        String result = sdf.format(dateOld);
+        return result;
+    }
+    
+    public static String getDateWithTimeByMiliSeconds(Date t, TimeZone timezone){
+    	if (t == null) {
+    		return null;
+    	}
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+        sdf.setTimeZone(timezone);
+        Date dateOld = new Date();
+        long timeAdv = t.getTime();
+        dateOld.setTime(timeAdv);
+        String result = sdf.format(dateOld);
+        return result;
+    }
+    
+    public static String getDateWithTimeByMiliSecondsWithZone(Date t){
+    	if (t == null) {
+    		return null;
+    	}
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss z (Z)");
+        Date dateOld = new Date();
+        long timeAdv = t.getTime();
+        dateOld.setTime(timeAdv);
+        String result = sdf.format(dateOld);
+        return result;
+    }
+    
+    public static String getDateWithTimeByMiliSecondsAndTimeZone(Date t, TimeZone timezone){
+    	if (t == null) {
+    		return null;
+    	}
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss z (Z)");
+        sdf.setTimeZone(timezone);
         Date dateOld = new Date();
         long timeAdv = t.getTime();
         dateOld.setTime(timeAdv);

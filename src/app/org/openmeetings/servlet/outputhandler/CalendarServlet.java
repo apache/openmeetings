@@ -23,11 +23,10 @@ import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.calendar.management.AppointmentLogic;
 import org.openmeetings.app.data.user.Usermanagement;
-import org.openmeetings.app.persistence.beans.basic.Configuration;
-import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.persistence.beans.calendar.Appointment;
 import org.openmeetings.app.persistence.beans.calendar.MeetingMember;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.math.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.context.ApplicationContext;
@@ -104,6 +103,19 @@ public class CalendarServlet extends HttpServlet {
 		return null;
 	}
 
+	public TimezoneUtil getTimezoneUtil() {
+		try {
+			if (ScopeApplicationAdapter.initComplete) {
+				ApplicationContext context = WebApplicationContextUtils
+						.getWebApplicationContext(getServletContext());
+				return (TimezoneUtil) context.getBean("timezoneUtil");
+			}
+		} catch (Exception err) {
+			log.error("[getTimezoneUtil]", err);
+		}
+		return null;
+	}
+
 	@Override
 	protected void service(HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws ServletException,
@@ -114,7 +126,8 @@ public class CalendarServlet extends HttpServlet {
 			if (getUserManagement() == null || getOmTimeZoneDaoImpl() == null
 					|| getCfgManagement() == null
 					|| getSessionManagement() == null
-					|| getAppointmentLogic() == null) {
+					|| getAppointmentLogic() == null
+					|| getTimezoneUtil() == null) {
 				return;
 			}
 
@@ -130,22 +143,32 @@ public class CalendarServlet extends HttpServlet {
 
 			if (user_level != null && user_level > 0) {
 
+				String timeZoneIdAsStr = httpServletRequest
+						.getParameter("timeZoneId");
+
+				if (timeZoneIdAsStr == null) {
+					log.error("No timeZoneIdAsStr given, using default");
+					timeZoneIdAsStr = "";
+				}
+
+				TimeZone timezone = getTimezoneUtil()
+						.getTimezoneByOmTimeZoneId(
+								Long.valueOf(timeZoneIdAsStr).longValue());
+
 				String yearStr = httpServletRequest.getParameter("year");
 				String monthStr = httpServletRequest.getParameter("month");
 				String userStr = httpServletRequest.getParameter("user");
 				String contactUser = httpServletRequest
 						.getParameter("contactUser");
 
-				Calendar starttime = GregorianCalendar.getInstance();
-
+				Calendar starttime = GregorianCalendar.getInstance(timezone);
 				starttime.set(Calendar.DATE, 1);
 				starttime.set(Calendar.MONTH, Integer.parseInt(monthStr) - 1);
 				starttime.set(Calendar.MINUTE, 0);
 				starttime.set(Calendar.SECOND, 0);
 				starttime.set(Calendar.YEAR, Integer.parseInt(yearStr));
 
-				Calendar endtime = GregorianCalendar.getInstance();
-
+				Calendar endtime = GregorianCalendar.getInstance(timezone);
 				endtime.set(Calendar.DATE, 1);
 				endtime.set(Calendar.MONTH, Integer.parseInt(monthStr));
 				endtime.set(Calendar.MINUTE, 0);
@@ -178,63 +201,10 @@ public class CalendarServlet extends HttpServlet {
 				Element day = null;
 
 				for (Appointment appointment : appointements) {
-					String jNameTimeZone = "Europe/Berlin";
-					OmTimeZone omTimeZone = null;
 
-					String timeZoneIdAsStr = httpServletRequest
-							.getParameter("timeZoneId");
-
-					log.debug("CalendarServlet jNameTimeZone " + jNameTimeZone);
-
-					if (timeZoneIdAsStr == null) {
-
-						Configuration conf = getCfgManagement().getConfKey(3L,
-								"default.timezone");
-						if (conf != null) {
-							jNameTimeZone = conf.getConf_value();
-						}
-						omTimeZone = getOmTimeZoneDaoImpl().getOmTimeZone(
-								jNameTimeZone);
-
-					} else {
-
-						// System.out.println("CalendarServlet TimeZone "+jNameTimeZone
-						// );
-						omTimeZone = getOmTimeZoneDaoImpl().getOmTimeZoneById(
-								Long.valueOf(timeZoneIdAsStr).longValue());
-
-						if (omTimeZone == null) {
-							Configuration conf = getCfgManagement().getConfKey(
-									3L, "default.timezone");
-							if (conf != null) {
-								jNameTimeZone = conf.getConf_value();
-							}
-							omTimeZone = getOmTimeZoneDaoImpl().getOmTimeZone(
-									jNameTimeZone);
-						}
-
-					}
-
-					jNameTimeZone = omTimeZone.getIcal();
-					TimeZone timeZone = TimeZone.getTimeZone(jNameTimeZone);
-
-					Calendar cal = Calendar.getInstance();
-					cal.setTimeZone(timeZone);
-					int offset = cal.get(Calendar.ZONE_OFFSET)
-							+ cal.get(Calendar.DST_OFFSET);
-
-					// System.out.println("CalendarServlet offset "+offset );
-					// System.out.println("CalendarServlet TimeZone "+TimeZone.getDefault().getID()
-					// );
-					// log.debug("addAppointment offset :: "+offset);
-
-					appointment.setAppointmentStarttime(new Date(appointment
-							.getAppointmentStarttime().getTime() + offset));
-					appointment.setAppointmentEndtime(new Date(appointment
-							.getAppointmentEndtime().getTime() + offset));
-
-					Calendar appStart = Calendar.getInstance();
+					Calendar appStart = Calendar.getInstance(timezone);
 					appStart.setTime(appointment.getAppointmentStarttime());
+
 					int dayAsInt = appStart.get(Calendar.DATE);
 
 					if (previousDay != dayAsInt) {
@@ -287,30 +257,27 @@ public class CalendarServlet extends HttpServlet {
 
 						Element start = event.addElement("start");
 
-						start.addAttribute("year", ""
-								+ appStart.get(Calendar.YEAR));
-						start.addAttribute("month", ""
-								+ (appStart.get(Calendar.MONTH) + 1));
-						start.addAttribute("day", ""
-								+ appStart.get(Calendar.DATE));
-						start.addAttribute("hour", ""
-								+ appStart.get(Calendar.HOUR_OF_DAY));
-						start.addAttribute("minute", ""
-								+ appStart.get(Calendar.MINUTE));
+						start.addAttribute("year",
+								"" + appStart.get(Calendar.YEAR));
+						start.addAttribute("month",
+								"" + (appStart.get(Calendar.MONTH) + 1));
+						start.addAttribute("day",
+								"" + appStart.get(Calendar.DATE));
+						start.addAttribute("hour",
+								"" + appStart.get(Calendar.HOUR_OF_DAY));
+						start.addAttribute("minute",
+								"" + appStart.get(Calendar.MINUTE));
 
-						Calendar appEnd = Calendar.getInstance();
+						Calendar appEnd = Calendar.getInstance(timezone);
 						appEnd.setTime(appointment.getAppointmentEndtime());
 						Element end = event.addElement("end");
-						end.addAttribute("year", ""
-								+ appEnd.get(Calendar.YEAR));
-						end.addAttribute("month", ""
-								+ (appEnd.get(Calendar.MONTH) + 1));
-						end.addAttribute("day", ""
-								+ appEnd.get(Calendar.DATE));
-						end.addAttribute("hour", ""
-								+ appEnd.get(Calendar.HOUR));
-						end.addAttribute("minute", ""
-								+ appEnd.get(Calendar.MINUTE));
+						end.addAttribute("year", "" + appEnd.get(Calendar.YEAR));
+						end.addAttribute("month",
+								"" + (appEnd.get(Calendar.MONTH) + 1));
+						end.addAttribute("day", "" + appEnd.get(Calendar.DATE));
+						end.addAttribute("hour", "" + appEnd.get(Calendar.HOUR_OF_DAY));
+						end.addAttribute("minute",
+								"" + appEnd.get(Calendar.MINUTE));
 
 						Element category = event.addElement("category");
 						category.addAttribute("value", ""
@@ -392,8 +359,6 @@ public class CalendarServlet extends HttpServlet {
 			}
 
 		} catch (Exception er) {
-			System.out.println("Error downloading: " + er);
-			er.printStackTrace();
 			log.error("[Calendar :: service]", er);
 		}
 	}

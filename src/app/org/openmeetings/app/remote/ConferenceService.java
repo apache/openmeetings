@@ -1,7 +1,6 @@
 package org.openmeetings.app.remote;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -20,8 +19,6 @@ import org.openmeetings.app.data.calendar.management.AppointmentLogic;
 import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.conference.dao.RoomModeratorsDaoImpl;
 import org.openmeetings.app.data.user.Usermanagement;
-import org.openmeetings.app.persistence.beans.basic.Configuration;
-import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.persistence.beans.calendar.Appointment;
 import org.openmeetings.app.persistence.beans.recording.RoomClient;
 import org.openmeetings.app.persistence.beans.rooms.RoomModerators;
@@ -32,6 +29,7 @@ import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.math.CalendarPatterns;
+import org.openmeetings.utils.math.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
@@ -64,6 +62,8 @@ public class ConferenceService {
 	private RoomModeratorsDaoImpl roomModeratorsDao;
 	@Autowired
 	private AuthLevelmanagement authLevelManagement;
+	@Autowired
+	private TimezoneUtil timezoneUtil;
 
 	// beans, see chaservice.service.xml
 	private ClientListManager clientListManager = null;
@@ -137,7 +137,7 @@ public class ConferenceService {
 			if (roomOrgsList == null) {
 				return null;
 			}
-			
+
 			List<Rooms_Organisation> filtered = new ArrayList<Rooms_Organisation>();
 
 			for (Iterator<Rooms_Organisation> iter = roomOrgsList.iterator(); iter
@@ -231,7 +231,7 @@ public class ConferenceService {
 			if (roomList == null) {
 				return null;
 			}
-			
+
 			// Filter : no appointed meetings
 			List<Rooms> filtered = new ArrayList<Rooms>();
 
@@ -296,7 +296,8 @@ public class ConferenceService {
 
 	// --------------------------------------------------------------------------------------------
 
-	public Map<String, Object> getAppointMentAndTimeZones(Long room_id, Long user_id) {
+	public Map<String, Object> getAppointMentAndTimeZones(Long room_id,
+			Long user_id) {
 		log.debug("getAppointMentDataForRoom");
 
 		IConnection current = Red5.getConnectionLocal();
@@ -307,7 +308,7 @@ public class ConferenceService {
 		RoomClient currentClient = this.clientListManager
 				.getClientByStreamId(streamid);
 		currentClient.setUser_id(user_id);
-		
+
 		Rooms room = roommanagement.getRoomById(room_id);
 
 		if (room.getAppointment() == false)
@@ -323,37 +324,19 @@ public class ConferenceService {
 
 			Users us = userManagement.getUserById(currentClient.getUser_id());
 
-			String jNameTimeZone = null;
-			if (us != null && us.getOmTimeZone() != null) {
-				jNameTimeZone = us.getOmTimeZone().getJname();
-			} else {
-				Configuration conf = cfgManagement.getConfKey(3L,
-						"default.timezone");
-				if (conf != null) {
-					jNameTimeZone = conf.getConf_value();
-				}
-			}
-
-			OmTimeZone omTimeZone = omTimeZoneDaoImpl
-					.getOmTimeZone(jNameTimeZone);
-
-			Calendar cal = Calendar.getInstance();
-			cal.setTimeZone(TimeZone.getTimeZone(omTimeZone.getIcal()));
-			int offset = cal.get(Calendar.ZONE_OFFSET)
-					+ cal.get(Calendar.DST_OFFSET);
-
-			Date starttime = new Date(appointment.getAppointmentStarttime()
-					.getTime() + offset);
-			Date endtime = new Date(appointment.getAppointmentEndtime()
-					.getTime() + offset);
+			TimeZone timezone = timezoneUtil.getTimezoneByUser(us);
 
 			returnMap.put("appointment", appointment);
 
-			returnMap.put("start",
-					CalendarPatterns.getDateWithTimeByMiliSeconds(starttime));
-			returnMap.put("end",
-					CalendarPatterns.getDateWithTimeByMiliSeconds(endtime));
-			returnMap.put("timeZone", omTimeZone.getIcal());
+			returnMap.put(
+					"start",
+					CalendarPatterns.getDateWithTimeByMiliSeconds(
+							appointment.getAppointmentStarttime(), timezone));
+			returnMap.put(
+					"end",
+					CalendarPatterns.getDateWithTimeByMiliSeconds(
+							appointment.getAppointmentEndtime(), timezone));
+			returnMap.put("timeZone", us.getOmTimeZone().getIcal());
 
 			return returnMap;
 		} catch (Exception e) {
@@ -590,13 +573,15 @@ public class ConferenceService {
 			log.debug("argObject: 2 - "
 					+ argObjectMap.get("organisations").getClass().getName());
 			@SuppressWarnings("unchecked")
-			List<Integer> organisations = (List<Integer>) argObjectMap.get("organisations");
+			List<Integer> organisations = (List<Integer>) argObjectMap
+					.get("organisations");
 			Long rooms_id = Long.valueOf(
 					argObjectMap.get("rooms_id").toString()).longValue();
 			log.debug("rooms_id " + rooms_id);
 
 			@SuppressWarnings("unchecked")
-			List<Map<String,Object>> roomModerators = (List<Map<String,Object>>)argObjectMap.get("roomModerators");
+			List<Map<String, Object>> roomModerators = (List<Map<String, Object>>) argObjectMap
+					.get("roomModerators");
 
 			Integer demoTime = null;
 			if (argObjectMap.get("demoTime").toString() != null

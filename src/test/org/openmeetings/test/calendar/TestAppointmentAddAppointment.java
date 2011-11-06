@@ -35,13 +35,13 @@ public class TestAppointmentAddAppointment extends
 		try {
 			
 			//Simulate webapp path
-			ScopeApplicationAdapter.webAppPath = "./WebContent";
+			//ScopeApplicationAdapter.webAppPath = "./WebContent";
 
 			Calendar start = Calendar.getInstance();
-			start.setTimeInMillis(start.getTimeInMillis() + 900000);
+			start.setTimeInMillis(start.getTimeInMillis() + 600000);
 
 			Calendar end = Calendar.getInstance();
-			end.setTimeInMillis(end.getTimeInMillis() + 1800000);
+			end.setTimeInMillis(start.getTimeInMillis() + 600000);
 
 			String appointmentName = "Test 01";
 			String appointmentDescription = "Descr";
@@ -71,7 +71,11 @@ public class TestAppointmentAddAppointment extends
 					roomType, baseUrl, language_id);
 
 			
-			Thread.sleep(40000);
+			Thread.sleep(3000);
+			
+			appointmentLogic.doScheduledMeetingReminder();
+			
+			Thread.sleep(3000);
 			
 			assertTrue(id != null && id > 0);
 

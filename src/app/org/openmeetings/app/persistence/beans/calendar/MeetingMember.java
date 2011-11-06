@@ -3,20 +3,19 @@ package org.openmeetings.app.persistence.beans.calendar;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
-import org.openmeetings.app.persistence.beans.invitation.Invitations;
-import org.openmeetings.app.persistence.beans.user.Users;
-
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
+import org.openmeetings.app.persistence.beans.invitation.Invitations;
+import org.openmeetings.app.persistence.beans.user.Users;
 
 
 @Entity
@@ -62,7 +61,7 @@ public class MeetingMember implements Serializable {
 	@JoinColumn(name="invitation", nullable=true, insertable=false)
 	private Invitations invitation;
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="omtimezoneId", nullable=true, insertable=false)
+	@JoinColumn(name="omtimezoneId", nullable=true, insertable=true)
 	private OmTimeZone omTimeZone;
 	
 	@Column(name="is_connected_event")

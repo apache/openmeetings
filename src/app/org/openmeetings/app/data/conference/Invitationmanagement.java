@@ -20,8 +20,6 @@ import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.calendar.management.AppointmentLogic;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
-import org.openmeetings.app.persistence.beans.basic.Configuration;
-import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.persistence.beans.calendar.Appointment;
 import org.openmeetings.app.persistence.beans.calendar.MeetingMember;
 import org.openmeetings.app.persistence.beans.invitation.Invitations;
@@ -35,6 +33,7 @@ import org.openmeetings.utils.mail.IcalHandler;
 import org.openmeetings.utils.mail.MailHandler;
 import org.openmeetings.utils.mail.MailiCalThread;
 import org.openmeetings.utils.math.CalendarPatterns;
+import org.openmeetings.utils.math.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +76,8 @@ public class Invitationmanagement {
 	private InvitationTemplate invitationTemplate;
 	@Autowired
 	private AuthLevelmanagement authLevelManagement;
+	@Autowired
+	private TimezoneUtil timezoneUtil;
 
 	/**
 	 * Sending invitation within plain mail
@@ -200,7 +201,7 @@ public class Invitationmanagement {
 		try {
 			user = userManagement.getUserById(canceling_user_id);
 		} catch (Exception e) {
-			log.error("Cancelling user cant be retrieved");
+			log.error("cancelInvitation Cancelling user cant be retrieved");
 			return;
 		}
 
@@ -210,74 +211,21 @@ public class Invitationmanagement {
 			return;
 		}
 
-		log.debug("Remindertype : " + appointment.getRemind().getTypId());
-
 		Users us = member.getUserid();
-
-		String jNameTimeZone = null;
-		if (us != null && us.getOmTimeZone() != null) {
-			jNameTimeZone = us.getOmTimeZone().getJname();
+		TimeZone timezone = null;
+		// external users have no user object stored so we will need to get the
+		// timezone from the stored string
+		if (us != null) {
+			timezone = timezoneUtil.getTimezoneByUser(us);
 		} else {
-			Configuration conf = cfgManagement.getConfKey(3L,
-					"default.timezone");
-			if (conf != null) {
-				jNameTimeZone = conf.getConf_value();
-			}
+			timezone = timezoneUtil.getTimezoneByInternalJName(member
+					.getOmTimeZone().getJname());
 		}
 
-		OmTimeZone omTimeZone = omTimeZoneDaoImpl.getOmTimeZone(jNameTimeZone);
-
-		String timeZoneName = omTimeZone.getIcal();
-
-		Calendar cal = Calendar.getInstance();
-		cal.setTimeZone(TimeZone.getTimeZone(omTimeZone.getIcal()));
-		int offset = cal.get(Calendar.ZONE_OFFSET)
-				+ cal.get(Calendar.DST_OFFSET);
-
-		Date starttime = new Date(appointment.getAppointmentStarttime()
-				.getTime() + offset);
-		Date endtime = new Date(appointment.getAppointmentEndtime().getTime()
-				+ offset);
-
-		// System.out.println(omTimeZone.getIcal());
-		// System.out.println(offset);
-		// System.out.println(starttime);
-		// System.out.println(endtime);
-
-		Fieldlanguagesvalues labelid1157 = fieldmanagment
-				.getFieldByIdAndLanguage(new Long(1157), language_id);
-
-		String message = labelid1157.getValue()
-				+ appointment.getAppointmentName();
-
-		if (appointment.getAppointmentDescription().length() != 0) {
-
-			Fieldlanguagesvalues labelid1152 = fieldmanagment
-					.getFieldByIdAndLanguage(new Long(1152), language_id);
-			message += labelid1152.getValue()
-					+ appointment.getAppointmentDescription();
-
-		}
-
-		Fieldlanguagesvalues labelid1153 = fieldmanagment
-				.getFieldByIdAndLanguage(new Long(1153), language_id);
-		Fieldlanguagesvalues labelid1154 = fieldmanagment
-				.getFieldByIdAndLanguage(new Long(1154), language_id);
-
-		message += "<br/>" + labelid1153.getValue() + ' '
-				+ CalendarPatterns.getDateWithTimeByMiliSeconds(starttime)
-				+ " (" + timeZoneName + ")" + "<br/>";
-
-		message += labelid1154.getValue() + ' '
-				+ CalendarPatterns.getDateWithTimeByMiliSeconds(endtime) + " ("
-				+ timeZoneName + ")" + "<br/>";
-
-		String invitorName = user.getFirstname() + " " + user.getLastname()
-				+ " [" + user.getAdresses().getEmail() + "]";
-
-		Fieldlanguagesvalues labelid1156 = fieldmanagment
-				.getFieldByIdAndLanguage(new Long(1156), language_id);
-		message += labelid1156.getValue() + invitorName + "<br/>";
+		String subject = formatCancelSubject(language_id, appointment, user,
+				timezone);
+		String message = formatCancelMessage(language_id, appointment, user,
+				timezone);
 
 		// checking reminderType
 		if (appointment.getRemind().getTypId() == 1) {
@@ -286,21 +234,15 @@ public class Invitationmanagement {
 			log.debug("ReminderType simple mail -> sending simple mail...");
 			sendInvitationCancelMail(member.getEmail(),
 					member.getAppointment(), user.getAdresses().getEmail(),
-					labelid1157.getValue() + appointment.getAppointmentName(),
-					message);
+					subject, message);
 		} else if (appointment.getRemind().getTypId() == 3) {
 			try {
-				sendInvitationIcalCancelMail(
-						member.getEmail(),
+				sendInvitationIcalCancelMail(member.getEmail(),
 						member.getFirstname() + " " + member.getLastname(),
-						appointment,
-						canceling_user_id,
-						member.getInvitor(),
-						starttime,
-						endtime,
-						jNameTimeZone,
-						labelid1157.getValue()
-								+ appointment.getAppointmentName(), message);
+						appointment, canceling_user_id, member.getInvitor(),
+						appointment.getAppointmentStarttime(),
+						appointment.getAppointmentEndtime(), timezone, subject,
+						message);
 			} catch (Exception e) {
 				log.error("Error sending IcalCancelMail for User "
 						+ member.getEmail() + " : " + e.getMessage());
@@ -317,10 +259,83 @@ public class Invitationmanagement {
 
 	}
 
+	private String formatCancelSubject(Long language_id,
+			Appointment appointment, Users user, TimeZone timezone) {
+		try {
+			Fieldlanguagesvalues labelid1157 = fieldmanagment
+					.getFieldByIdAndLanguage(new Long(1157), language_id);
+
+			String message = labelid1157.getValue()
+					+ appointment.getAppointmentName();
+
+			message += " "
+					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
+							appointment.getAppointmentStarttime(), timezone)
+					+ " - "
+					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
+							appointment.getAppointmentEndtime(), timezone);
+
+			return message;
+		} catch (Exception err) {
+			log.error("Could not format cancel message");
+			return "Error formatCancelMessage";
+		}
+	}
+
+	private String formatCancelMessage(Long language_id,
+			Appointment appointment, Users user, TimeZone timezone) {
+		try {
+			Fieldlanguagesvalues labelid1157 = fieldmanagment
+					.getFieldByIdAndLanguage(new Long(1157), language_id);
+
+			String message = labelid1157.getValue()
+					+ appointment.getAppointmentName();
+
+			if (appointment.getAppointmentDescription().length() != 0) {
+
+				Fieldlanguagesvalues labelid1152 = fieldmanagment
+						.getFieldByIdAndLanguage(new Long(1152), language_id);
+				message += labelid1152.getValue()
+						+ appointment.getAppointmentDescription();
+
+			}
+
+			Fieldlanguagesvalues labelid1153 = fieldmanagment
+					.getFieldByIdAndLanguage(new Long(1153), language_id);
+			Fieldlanguagesvalues labelid1154 = fieldmanagment
+					.getFieldByIdAndLanguage(new Long(1154), language_id);
+
+			message += "<br/>"
+					+ labelid1153.getValue()
+					+ ' '
+					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
+							appointment.getAppointmentStarttime(), timezone)
+					+ "<br/>";
+
+			message += labelid1154.getValue()
+					+ ' '
+					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
+							appointment.getAppointmentEndtime(), timezone)
+					+ "<br/>";
+
+			String invitorName = user.getFirstname() + " " + user.getLastname()
+					+ " [" + user.getAdresses().getEmail() + "]";
+
+			Fieldlanguagesvalues labelid1156 = fieldmanagment
+					.getFieldByIdAndLanguage(new Long(1156), language_id);
+			message += labelid1156.getValue() + invitorName + "<br/>";
+
+			return message;
+		} catch (Exception err) {
+			log.error("Could not format cancel message");
+			return "Error formatCancelMessage";
+		}
+	}
+
 	// -----------------------------------------------------------------------------------------------
 
 	/**
-	 * @author becherer
+	 * @author becherer, seba.wagner
 	 * @param ment
 	 * @param member
 	 */
@@ -330,11 +345,8 @@ public class Invitationmanagement {
 
 		log.debug("updateInvitation");
 
-		Users user;
-
-		try {
-			user = userManagement.getUserById(canceling_user_id);
-		} catch (Exception e) {
+		Users user = userManagement.getUserById(canceling_user_id);
+		if (user == null) {
 			log.error("Cancelling user cant be retrieved");
 			return;
 		}
@@ -348,92 +360,126 @@ public class Invitationmanagement {
 		log.debug("Remindertype : " + appointment.getRemind().getTypId());
 
 		Users us = member.getUserid();
-
-		String jNameTimeZone = null;
-		if (us != null && us.getOmTimeZone() != null) {
-			jNameTimeZone = us.getOmTimeZone().getJname();
+		TimeZone timezone = null;
+		// external users have no user object stored so we will need to get the
+		// timezone from the stored string
+		if (us != null) {
+			timezone = timezoneUtil.getTimezoneByUser(us);
 		} else {
-			Configuration conf = cfgManagement.getConfKey(3L,
-					"default.timezone");
-			if (conf != null) {
-				jNameTimeZone = conf.getConf_value();
-			}
+			timezone = timezoneUtil.getTimezoneByInternalJName(member
+					.getOmTimeZone().getJname());
 		}
 
-		OmTimeZone omTimeZone = omTimeZoneDaoImpl.getOmTimeZone(jNameTimeZone);
+		// Get text messages
+		String subject = formatUpdateSubject(language_id, appointment, user,
+				timezone);
 
-		String timeZoneName = omTimeZone.getIcal();
+		String message = formatUpdateMessage(language_id, appointment, user,
+				timezone, invitorName);
 
-		Calendar cal = Calendar.getInstance();
-		cal.setTimeZone(TimeZone.getTimeZone(timeZoneName));
-		int offset = cal.get(Calendar.ZONE_OFFSET)
-				+ cal.get(Calendar.DST_OFFSET);
-
-		Date starttime = new Date(appointment.getAppointmentStarttime()
-				.getTime() + offset);
-		Date endtime = new Date(appointment.getAppointmentEndtime().getTime()
-				+ offset);
-
-		Fieldlanguagesvalues labelid1155 = fieldmanagment
-				.getFieldByIdAndLanguage(new Long(1155), language_id);
-
-		String message = labelid1155.getValue() + " "
-				+ appointment.getAppointmentName();
-
-		if (appointment.getAppointmentDescription().length() != 0) {
-
-			Fieldlanguagesvalues labelid1152 = fieldmanagment
-					.getFieldByIdAndLanguage(new Long(1152), language_id);
-			message += labelid1152.getValue()
-					+ appointment.getAppointmentDescription();
-
-		}
-
-		Fieldlanguagesvalues labelid1153 = fieldmanagment
-				.getFieldByIdAndLanguage(new Long(1153), language_id);
-		Fieldlanguagesvalues labelid1154 = fieldmanagment
-				.getFieldByIdAndLanguage(new Long(1154), language_id);
-
-		message += "<br/>" + labelid1153.getValue() + ' '
-				+ CalendarPatterns.getDateWithTimeByMiliSeconds(starttime)
-				+ " (" + timeZoneName + ")" + "<br/>";
-
-		message += labelid1154.getValue() + ' '
-				+ CalendarPatterns.getDateWithTimeByMiliSeconds(endtime) + " ("
-				+ timeZoneName + ")" + "<br/>";
-
-		Fieldlanguagesvalues labelid1156 = fieldmanagment
-				.getFieldByIdAndLanguage(new Long(1156), language_id);
-		message += labelid1156.getValue() + invitorName + "<br/>";
-
-		// checking reminderType
-		if (appointment.getRemind().getTypId() == 1) {
-			log.debug("no remindertype defined -> no cancel of invitation");
-		} else if (appointment.getRemind().getTypId() == 2) {
-			log.debug("ReminderType simple mail -> sending simple mail...");
+		// checking reminderType and send emails, reminder type 1 receives
+		// nothing
+		if (appointment.getRemind().getTypId() == 2) {
 			sendInvitationUpdateMail(member.getEmail(), appointment, user
-					.getAdresses().getEmail(), labelid1155.getValue() + " "
-					+ appointment.getAppointmentName(), message);
+					.getAdresses().getEmail(), subject, message);
 		} else if (appointment.getRemind().getTypId() == 3) {
 			try {
-				sendInvitationIcalUpdateMail(
-						member.getEmail(),
+				sendInvitationIcalUpdateMail(member.getEmail(),
 						member.getFirstname() + " " + member.getLastname(),
-						appointment,
-						canceling_user_id,
-						member.getInvitor(),
-						language_id,
-						starttime,
-						endtime,
-						jNameTimeZone,
-						labelid1155.getValue() + " "
-								+ appointment.getAppointmentName(), message);
+						appointment, canceling_user_id, member.getInvitor(),
+						language_id, appointment.getAppointmentStarttime(),
+						appointment.getAppointmentEndtime(), timezone, subject,
+						message);
 			} catch (Exception e) {
 				log.error("Error sending IcalUpdateMail for User "
 						+ member.getEmail() + " : " + e.getMessage());
 			}
 		}
 
+	}
+
+	private String formatUpdateSubject(Long language_id,
+			Appointment appointment, Users user, TimeZone timezone) {
+		try {
+
+			Fieldlanguagesvalues labelid1155 = fieldmanagment
+					.getFieldByIdAndLanguage(new Long(1155), language_id);
+
+			String message = labelid1155.getValue() + " "
+					+ appointment.getAppointmentName();
+
+			if (appointment.getAppointmentDescription().length() != 0) {
+
+				Fieldlanguagesvalues labelid1152 = fieldmanagment
+						.getFieldByIdAndLanguage(new Long(1152), language_id);
+				message += labelid1152.getValue()
+						+ appointment.getAppointmentDescription();
+
+			}
+
+			message += " "
+					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
+							appointment.getAppointmentStarttime(), timezone)
+					+ " - "
+					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
+							appointment.getAppointmentEndtime(), timezone);
+
+			return message;
+
+		} catch (Exception err) {
+			log.error("Could not format update subject");
+			return "Error formatUpdateSubject";
+		}
+	}
+
+	private String formatUpdateMessage(Long language_id,
+			Appointment appointment, Users user, TimeZone timezone,
+			String invitorName) {
+		try {
+
+			Fieldlanguagesvalues labelid1155 = fieldmanagment
+					.getFieldByIdAndLanguage(new Long(1155), language_id);
+
+			String message = labelid1155.getValue() + " "
+					+ appointment.getAppointmentName();
+
+			if (appointment.getAppointmentDescription().length() != 0) {
+
+				Fieldlanguagesvalues labelid1152 = fieldmanagment
+						.getFieldByIdAndLanguage(new Long(1152), language_id);
+				message += labelid1152.getValue()
+						+ appointment.getAppointmentDescription();
+
+			}
+
+			Fieldlanguagesvalues labelid1153 = fieldmanagment
+					.getFieldByIdAndLanguage(new Long(1153), language_id);
+			Fieldlanguagesvalues labelid1154 = fieldmanagment
+					.getFieldByIdAndLanguage(new Long(1154), language_id);
+
+			message += "<br/>"
+					+ labelid1153.getValue()
+					+ ' '
+					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
+							appointment.getAppointmentStarttime(), timezone)
+					+ "<br/>";
+
+			message += labelid1154.getValue()
+					+ ' '
+					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
+							appointment.getAppointmentEndtime(), timezone)
+					+ "<br/>";
+
+			Fieldlanguagesvalues labelid1156 = fieldmanagment
+					.getFieldByIdAndLanguage(new Long(1156), language_id);
+			message += labelid1156.getValue() + invitorName + "<br/>";
+
+			return message;
+
+		} catch (Exception err) {
+			log.error("Could not format update message");
+			return "Error formatUpdateMessage";
+		}
 	}
 
 	// -----------------------------------------------------------------------------------------------
@@ -462,8 +508,8 @@ public class Invitationmanagement {
 			Long rooms_id, String conferencedomain,
 			Boolean isPasswordProtected, String invitationpass, Integer valid,
 			Date validFrom, Date validTo, Long createdBy, Long appointMentId,
-			Boolean invitor, Long language_id, String jNameTimeZone,
-			Date gmtTimeStart, Date gmtTimeEnd, Long appointmentId) {
+			Boolean invitor, Long language_id, TimeZone timezone,
+			Long appointmentId) {
 		log.debug("addInvitationIcalLink");
 
 		try {
@@ -488,32 +534,8 @@ public class Invitationmanagement {
 					// period
 					invitation.setIsValidByTime(true);
 					invitation.setCanBeUsedOnlyOneTime(false);
-
-					// This has to be in the Server's time cause otherwise it is
-					// not
-					// in the correct time-zone for the comparison later on if
-					// the invitation is still valid
-					// and subtract 5 minutes for users to access early
-
-					// Calendar cal = Calendar.getInstance();
-					// int offset = cal.get(Calendar.ZONE_OFFSET) +
-					// cal.get(Calendar.DST_OFFSET);
-					//
-					// log.debug("addAppointment offset :: "+offset);
-					//
-					// Date appointmentstart = new Date(gmtTimeStart.getTime() +
-					// offset);
-					// Date appointmentend = new Date(gmtTimeEnd.getTime() +
-					// offset);
-					//
-					// Date gmtTimeStartShifted = new
-					// Date(appointmentstart.getTime() - ( 5 * 60 * 1000 ) );
-
-					Date gmtTimeStartShifted = new Date(gmtTimeStart.getTime()
-							- (5 * 60 * 1000));
-
-					invitation.setValidFrom(gmtTimeStartShifted);
-					invitation.setValidTo(gmtTimeEnd);
+					invitation.setValidFrom(validFrom);
+					invitation.setValidTo(validTo);
 				} else {
 					// one-time
 					invitation.setIsValidByTime(false);
@@ -545,7 +567,7 @@ public class Invitationmanagement {
 					this.sendInvitionIcalLink(username, message, baseurl,
 							email, subject, invitation.getHash(),
 							appointMentId, createdBy, invitor, language_id,
-							validFrom, validTo, jNameTimeZone);
+							validFrom, validTo, timezone);
 					return invitationId;
 				}
 			}
@@ -675,7 +697,7 @@ public class Invitationmanagement {
 	// --------------------------------------------------------------------------------------------------------------
 	private String sendInvitationIcalCancelMail(String email, String userName,
 			Appointment point, Long organizer_userId, Boolean invitor,
-			Date startdate, Date enddate, String jNameTimeZone, String subject,
+			Date startdate, Date enddate, TimeZone timezone, String subject,
 			String message) throws Exception {
 		log.debug("sendInvitationIcalCancelMail");
 
@@ -686,7 +708,8 @@ public class Invitationmanagement {
 		// OmTimeZone omTimeZone =
 		// omTimeZoneDaoImpl.getOmTimeZone(jNameTimeZone);
 
-		IcalHandler handler = new IcalHandler(omTimeZoneDaoImpl, IcalHandler.ICAL_METHOD_CANCEL);
+		IcalHandler handler = new IcalHandler(omTimeZoneDaoImpl,
+				IcalHandler.ICAL_METHOD_CANCEL);
 
 		// refresh appointment
 		point = appointmentLogic.getAppointMentById(point.getAppointmentId());
@@ -709,7 +732,7 @@ public class Invitationmanagement {
 		end.setTime(enddate);
 
 		handler.addNewMeeting(start, end, point.getAppointmentName(), atts,
-				subject, attendeeList, point.getIcalId(), jNameTimeZone);
+				subject, attendeeList, point.getIcalId(), timezone);
 
 		log.debug(handler.getICalDataAsString());
 
@@ -731,15 +754,15 @@ public class Invitationmanagement {
 	// --------------------------------------------------------------------------------------------------------------
 	private String sendInvitationIcalUpdateMail(String email, String userName,
 			Appointment point, Long organizer_userId, Boolean invitor,
-			Long language_id, Date starttime, Date endtime,
-			String jNameTimeZone, String subject, String message)
-			throws Exception {
+			Long language_id, Date starttime, Date endtime, TimeZone timeZone,
+			String subject, String message) throws Exception {
 		log.debug("sendInvitationIcalUpdateMail");
 
 		// Defining Organizer
 		Users user = userManagement.getUserById(organizer_userId);
 
-		IcalHandler handler = new IcalHandler(omTimeZoneDaoImpl, IcalHandler.ICAL_METHOD_REQUEST);
+		IcalHandler handler = new IcalHandler(omTimeZoneDaoImpl,
+				IcalHandler.ICAL_METHOD_REQUEST);
 
 		// refresh appointment
 		point = appointmentLogic.getAppointMentById(point.getAppointmentId());
@@ -762,7 +785,7 @@ public class Invitationmanagement {
 		end.setTime(endtime);
 
 		handler.addNewMeeting(start, end, point.getAppointmentName(), atts,
-				subject, attendeeList, point.getIcalId(), jNameTimeZone);
+				subject, attendeeList, point.getIcalId(), timeZone);
 
 		log.debug(handler.getICalDataAsString());
 
@@ -788,7 +811,7 @@ public class Invitationmanagement {
 			String baseurl, String email, String subject,
 			String invitationsHash, Long appointMentId, Long organizer_userId,
 			Boolean invitor, Long language_id, Date starttime, Date endtime,
-			String jNametimeZone) {
+			TimeZone timezone) {
 		try {
 
 			String invitation_link = baseurl + "?invitationHash="
@@ -824,18 +847,18 @@ public class Invitationmanagement {
 						.getEmail(), user.getLogin(), invitor);
 			}
 
-			GregorianCalendar start = new GregorianCalendar();
+			GregorianCalendar start = new GregorianCalendar(timezone);
 			start.setTime(starttime); // Must be the calculated date base on the
 										// time zone
 
-			GregorianCalendar end = new GregorianCalendar();
+			GregorianCalendar end = new GregorianCalendar(timezone);
 			end.setTime(endtime); // Must be the calculated date base on the
 									// time zone
 
 			// Create ICal Message
 			String meetingId = handler.addNewMeeting(start, end,
 					point.getAppointmentName(), atts, invitation_link,
-					organizerAttendee, point.getIcalId(), jNametimeZone);
+					organizerAttendee, point.getIcalId(), timezone);
 
 			// Writing back meetingUid
 			if (point.getIcalId() == null || point.getIcalId().length() < 1) {
@@ -1004,28 +1027,22 @@ public class Invitationmanagement {
 					}
 
 				} else if (invitation.getIsValidByTime()) {
-					Date today = new Date();
 
-					Calendar cal = Calendar.getInstance();
-					int offset = cal.get(Calendar.ZONE_OFFSET)
-							+ cal.get(Calendar.DST_OFFSET);
+					Calendar now = Calendar.getInstance();
 
-					log.debug("addAppointment offset :: " + offset);
-
-					Date appointmentstart = new Date(invitation.getValidFrom()
-							.getTime() + offset);
-					Date appointmentend = new Date(invitation.getValidTo()
-							.getTime() + offset);
-
-					if (appointmentstart.getTime() <= today.getTime()
-							&& appointmentend.getTime() >= today.getTime()) {
+					if (invitation.getValidFrom().getTime() <= now.getTime().getTime()
+							&& invitation.getValidTo().getTime() >= now.getTime().getTime()) {
 						this.updateInvitation(invitation);
 						// invitation.setInvitationpass(null);
+						invitation.setAllowEntry(true);
 						return invitation;
 					} else {
+						
 						// Invitation is of type *period* and is not valid
 						// anymore
-						return new Long(-50);
+						invitation.setAllowEntry(false);
+						
+						return invitation;
 					}
 				} else {
 					// Invitation is not limited, neither time nor single-usage

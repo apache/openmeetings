@@ -13,7 +13,6 @@ import org.openmeetings.app.persistence.beans.basic.Configuration;
 import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.persistence.beans.invitation.Invitations;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
-import org.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
@@ -98,12 +97,6 @@ public class InvitationService implements IPendingServiceCallback {
 
 			Date dFrom = calFrom.getTime();
 			Date dTo = calTo.getTime();
-
-			log.info("validFromDate: "
-					+ CalendarPatterns.getDateWithTimeByMiliSeconds(dFrom));
-			log.info("validToDate: "
-					+ CalendarPatterns
-							.getDateWithTimeByMiliSeconds(validToDate));
 
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
