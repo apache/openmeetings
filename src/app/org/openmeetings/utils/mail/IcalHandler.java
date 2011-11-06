@@ -26,18 +26,16 @@ import net.fortuna.ical4j.model.property.Uid;
 import net.fortuna.ical4j.model.property.Version;
 import net.fortuna.ical4j.util.UidGenerator;
 
-import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 /**
  * 
- * @author o.becherer
+ * @author o.becherer, seba.wagner
  * 
  */
 public class IcalHandler {
-	private final OmTimeZoneDaoImpl omTimeZoneDaoImpl;
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			MailHandler.class, ScopeApplicationAdapter.webAppRootKey);
@@ -61,9 +59,8 @@ public class IcalHandler {
 	 *            (@see IcalHandler Constants)
 	 * @throws Exception
 	 */
-	public IcalHandler(OmTimeZoneDaoImpl omTimeZoneDaoImpl, String methodType) {
+	public IcalHandler(String methodType) {
 		log.debug("Icalhandler method type : " + methodType);
-		this.omTimeZoneDaoImpl = omTimeZoneDaoImpl;
 		
 		icsCalendar = new net.fortuna.ical4j.model.Calendar();
 

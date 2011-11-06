@@ -16,7 +16,6 @@ import javax.persistence.Query;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
-import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.calendar.management.AppointmentLogic;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
@@ -60,8 +59,6 @@ public class Invitationmanagement {
 	private Usermanagement userManagement;
 	@Autowired
 	private Fieldmanagment fieldmanagment;
-	@Autowired
-	private OmTimeZoneDaoImpl omTimeZoneDaoImpl;
 	@Autowired
 	private ManageCryptStyle manageCryptStyle;
 	@Autowired
@@ -708,8 +705,7 @@ public class Invitationmanagement {
 		// OmTimeZone omTimeZone =
 		// omTimeZoneDaoImpl.getOmTimeZone(jNameTimeZone);
 
-		IcalHandler handler = new IcalHandler(omTimeZoneDaoImpl,
-				IcalHandler.ICAL_METHOD_CANCEL);
+		IcalHandler handler = new IcalHandler(IcalHandler.ICAL_METHOD_CANCEL);
 
 		// refresh appointment
 		point = appointmentLogic.getAppointMentById(point.getAppointmentId());
@@ -761,8 +757,7 @@ public class Invitationmanagement {
 		// Defining Organizer
 		Users user = userManagement.getUserById(organizer_userId);
 
-		IcalHandler handler = new IcalHandler(omTimeZoneDaoImpl,
-				IcalHandler.ICAL_METHOD_REQUEST);
+		IcalHandler handler = new IcalHandler(IcalHandler.ICAL_METHOD_REQUEST);
 
 		// refresh appointment
 		point = appointmentLogic.getAppointMentById(point.getAppointmentId());
@@ -823,7 +818,7 @@ public class Invitationmanagement {
 					username, message, invitation_link, language_id, starttime,
 					endtime);
 
-			IcalHandler handler = new IcalHandler(omTimeZoneDaoImpl,
+			IcalHandler handler = new IcalHandler(
 					IcalHandler.ICAL_METHOD_REQUEST);
 
 			Appointment point = appointmentLogic
@@ -1032,25 +1027,29 @@ public class Invitationmanagement {
 
 					Calendar now = Calendar.getInstance();
 
-					if (invitation.getValidFrom().getTime() <= now.getTime().getTime()
-							&& invitation.getValidTo().getTime() >= now.getTime().getTime()) {
+					if (invitation.getValidFrom().getTime() <= now.getTime()
+							.getTime()
+							&& invitation.getValidTo().getTime() >= now
+									.getTime().getTime()) {
 						this.updateInvitation(invitation);
 						// invitation.setInvitationpass(null);
 						invitation.setAllowEntry(true);
 						return invitation;
 					} else {
-						
+
 						// Invitation is of type *period* and is not valid
-						// anymore, this is an extra hook to display the time correctly
-						// in the method where it shows that the hash code does not work anymore
+						// anymore, this is an extra hook to display the time
+						// correctly
+						// in the method where it shows that the hash code does
+						// not work anymore
 						invitation.setAllowEntry(false);
-						
+
 						return invitation;
 					}
 				} else {
 					// Invitation is not limited, neither time nor single-usage
 					this.updateInvitation(invitation);
-					
+
 					invitation.setAllowEntry(true);
 					// invitation.setInvitationpass(null);
 					return invitation;

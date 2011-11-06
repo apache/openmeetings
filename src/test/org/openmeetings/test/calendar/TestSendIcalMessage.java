@@ -44,7 +44,6 @@ import net.fortuna.ical4j.util.UidGenerator;
 
 import org.junit.Test;
 import org.openmeetings.app.data.basic.Configurationmanagement;
-import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.persistence.beans.basic.Configuration;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.test.AbstractOpenmeetingsSpringTest;
@@ -63,9 +62,6 @@ public class TestSendIcalMessage extends AbstractOpenmeetingsSpringTest {
 
 	@Autowired
 	private Configurationmanagement cfgManagement;
-
-	@Autowired
-	private OmTimeZoneDaoImpl omTimeZoneDaoImpl;
 
 	private byte[] iCalMimeBody;
 
@@ -185,8 +181,6 @@ public class TestSendIcalMessage extends AbstractOpenmeetingsSpringTest {
 			String username = "shans";
 			boolean invitor = false;
 
-			String jNametimeZone = "Etc/GMT+1";
-
 			GregorianCalendar start = new GregorianCalendar();
 			Calendar start1 = Calendar.getInstance();
 			start.setTimeInMillis(start1.getTimeInMillis() + 900000);
@@ -195,7 +189,7 @@ public class TestSendIcalMessage extends AbstractOpenmeetingsSpringTest {
 			Calendar end1 = Calendar.getInstance();
 			end.setTimeInMillis(end1.getTimeInMillis() + 1800000);
 
-			IcalHandler handler = new IcalHandler(omTimeZoneDaoImpl,
+			IcalHandler handler = new IcalHandler(
 					IcalHandler.ICAL_METHOD_REQUEST);
 
 			// Transforming Meeting Members
