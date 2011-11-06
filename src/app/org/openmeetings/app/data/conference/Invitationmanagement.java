@@ -1020,9 +1020,11 @@ public class Invitationmanagement {
 							invitation.setInvitationWasUsed(true);
 							this.updateInvitation(invitation);
 							// invitation.setInvitationpass(null);
+							invitation.setAllowEntry(true);
 							return invitation;
 						}
 					} else {
+						invitation.setAllowEntry(true);
 						return invitation;
 					}
 
@@ -1039,7 +1041,8 @@ public class Invitationmanagement {
 					} else {
 						
 						// Invitation is of type *period* and is not valid
-						// anymore
+						// anymore, this is an extra hook to display the time correctly
+						// in the method where it shows that the hash code does not work anymore
 						invitation.setAllowEntry(false);
 						
 						return invitation;
@@ -1047,6 +1050,8 @@ public class Invitationmanagement {
 				} else {
 					// Invitation is not limited, neither time nor single-usage
 					this.updateInvitation(invitation);
+					
+					invitation.setAllowEntry(true);
 					// invitation.setInvitationpass(null);
 					return invitation;
 				}
