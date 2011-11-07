@@ -377,22 +377,22 @@
     </method> 
     
     <method name="drawSelectangleToHistory" args="lastActionObject,parentView">
-        this.currentlayer = new lz.drawViewNew(parentView,{
+        var tmpCurrentlayer = new lz.drawViewNew(parentView,{
             name:lastActionObject[lastActionObject.length-1],
             x:lastActionObject[lastActionObject.length-5],
             y:lastActionObject[lastActionObject.length-4],
             width:lastActionObject[lastActionObject.length-3],
             height:lastActionObject[lastActionObject.length-2],
             opacity:lastActionObject[6]});
-        new lz.drawViewInner(this.currentlayer,{
+        new lz.drawViewInner(tmpCurrentlayer,{
                 name:'_innerSelect',x:0,y:0,
                 width:lastActionObject[lastActionObject.length-3],
                 height:lastActionObject[lastActionObject.length-2]});
-        this.drawSelectangleHistory(this.currentlayer,0,0,
+        this.drawSelectangleHistory(tmpCurrentlayer,0,0,
             lastActionObject[lastActionObject.length-3],lastActionObject[lastActionObject.length-2],
             lastActionObject[1],lastActionObject[2],lastActionObject[3],lastActionObject[4],lastActionObject[5]);
             
-        this.doSWFDocumentStatus(this.currentlayer,lastActionObject[lastActionObject.length-7]);
+        this.doSWFDocumentStatus(tmpCurrentlayer,lastActionObject[lastActionObject.length-7]);
     </method>
     
     <method name="drawSelectangleHistory" args="parentObj,x1,y1,x2,y2,stroke,line,fill,strokeDis,fillDis">

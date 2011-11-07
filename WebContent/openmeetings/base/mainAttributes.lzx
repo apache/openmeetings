@@ -400,4 +400,7 @@ and some more references to temp-objects
 <!-- userdata -->
 <attribute name="sharedObject" value="null" />
 
+<attribute name="currentMicName" value="" type="string"/>
+<attribute name="currentCamName" value="" type="string"/>
+
 </library>

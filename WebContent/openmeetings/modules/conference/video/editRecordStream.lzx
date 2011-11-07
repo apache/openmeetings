@@ -88,6 +88,9 @@
         			parent.myvideocontainer.publicSID = canvas.publicSID;
         		}
         		
+        		canvas.setAttribute("currentMicName", Microphone.names[parent.chosenMic]);
+        		canvas.setAttribute("currentCamName", Camera.names[parent.chosenCam]);
+        		
         		if ($debug) Debug.write("parent.setUserAVSettings -1- ",parent.chosenSetting);
         		if ($debug) Debug.write("parent.setUserAVSettings -2- ",parent.remoteMessage);
         		

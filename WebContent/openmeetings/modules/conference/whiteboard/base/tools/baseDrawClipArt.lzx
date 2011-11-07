@@ -391,7 +391,7 @@
     <method name="drawClipArtToHistory" args="lastActionObject,parentView">
     	<![CDATA[
     	
-    	   this.currentlayer = new lz.drawViewNew(parentView,{
+    	   var tmpCurrentlayer = new lz.drawViewNew(parentView,{
                 name:lastActionObject[lastActionObject.length-1],
                 x:lastActionObject[lastActionObject.length-5],
                 y:lastActionObject[lastActionObject.length-4],
@@ -400,7 +400,7 @@
                 opacity:lastActionObject[4]
                 });
     	
-           new lz.drawClipArtWhiteBoard(this.currentlayer,{
+           new lz.drawClipArtWhiteBoard(tmpCurrentlayer,{
                                     width:lastActionObject[7],
                                     height:lastActionObject[8],
                                     stretches:'both',
@@ -413,12 +413,12 @@
                                     name:'clipart'
                                 });
              
-            if ($debug) Debug.write("x,y ",this.currentlayer.x,this.currentlayer.y,this.currentlayer.width,this.currentlayer.height);
+            if ($debug) Debug.write("x,y ",tmpCurrentlayer.x,tmpCurrentlayer.y,tmpCurrentlayer.width,tmpCurrentlayer.height);
                                 
             //Add Layer to global Layer     
-            this.layers.push(this.currentlayer);                                
+            this.layers.push(tmpCurrentlayer);                                
               
-            this.doSWFDocumentStatus(this.currentlayer,lastActionObject[lastActionObject.length-7]);
+            this.doSWFDocumentStatus(tmpCurrentlayer,lastActionObject[lastActionObject.length-7]);
     	]]>
     </method>
     
