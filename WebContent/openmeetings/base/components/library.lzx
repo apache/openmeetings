@@ -10,6 +10,7 @@
     <include href="labeltabelement.lzx" />
     
     <include href="text/" />
+    <include href="omcharts/" />
     <include href="button/" />
     <include href="clickbox/" />   
     <include href="explorer/" />    
