@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -104,55 +103,10 @@ public class Sessionmanagement {
 	}
 
 	/**
-	 * check if a given sessionID is loged in
 	 * 
 	 * @param SID
-	 * @return the User_id or 0 if not logged in
+	 * @return
 	 */
-	// public Long checkSession(String SID) {
-	// try {
-	// //log.debug("checkSession User: || "+SID);
-	// Object idf = HibernateUtil.createSession();
-	// EntityManager session = HibernateUtil.getSession();
-	// EntityTransaction tx = session.getTransaction();
-	//
-	// //session.flush();
-	// CriteriaBuilder crit = session.getCriteriaBuilder();
-	// crit.add(Restrictions.eq("session_id", SID));
-	//
-	// List<Sessiondata> sessions = crit.list();
-	// Sessiondata sessiondata = null;
-	// if (sessions != null && sessions.size() > 0) {
-	// sessiondata = sessions.get(0);
-	// }
-	//
-	// if (sessiondata!=null) session.refresh(sessiondata);
-	// //session.flush();
-	// tx.commit();
-	// HibernateUtil.closeSession(idf);
-	// //if (sessiondata!=null)
-	// log.debug("checkSession USER_ID: "+sessiondata.getUser_id());
-	//
-	// if (sessiondata!=null) updatesession(SID);
-	//
-	// //Checks if wether the Session or the User Object of that Session is set
-	// yet
-	// if (sessiondata==null || sessions.size() >0 || sessiondata.equals(null)
-	// ||
-	// sessiondata.getUser_id()==null || sessiondata.getUser_id().equals(null)
-	// || sessiondata.getUser_id().equals(new Long(0)) ) {
-	// return new Long(0);
-	// } else {
-	// return sessiondata.getUser_id();
-	// }
-	// } catch (HibernateException ex) {
-	// log.error("[checkSession]: " ,ex);
-	// } catch (Exception ex2) {
-	// log.error("[checkSession]: " ,ex2);
-	// }
-	// return null;
-	// }
-
 	public Long checkSession(String SID) {
 		try {
 
@@ -161,7 +115,7 @@ public class Sessionmanagement {
 
 			// log.debug("checkSession User: || "+SID);
 			// session.flush();
-			Query query = em.createQuery(hql);
+			TypedQuery<Sessiondata> query = em.createQuery(hql, Sessiondata.class);
 			query.setParameter("session_id", SID);
 
 			List<Sessiondata> sessions = query.getResultList();
@@ -210,7 +164,7 @@ public class Sessionmanagement {
 					+ "where c.session_id LIKE :session_id";
 
 			// log.debug("checkSession User: || "+SID);
-			Query query = em.createQuery(hql);
+			TypedQuery<Sessiondata> query = em.createQuery(hql, Sessiondata.class);
 			query.setParameter("session_id", SID);
 
 			List<Sessiondata> sessions = query.getResultList();
@@ -255,7 +209,7 @@ public class Sessionmanagement {
 					+ "where c.session_id LIKE :session_id";
 
 			// log.debug("checkSession User: || "+SID);
-			Query query = em.createQuery(hql);
+			TypedQuery<Sessiondata> query = em.createQuery(hql, Sessiondata.class);
 			query.setParameter("session_id", SID);
 
 			List<Sessiondata> sessions = query.getResultList();
@@ -303,7 +257,7 @@ public class Sessionmanagement {
 					+ "where c.session_id LIKE :session_id";
 
 			// log.debug("checkSession User: || "+SID);
-			Query query = em.createQuery(hql);
+			TypedQuery<Sessiondata> query = em.createQuery(hql, Sessiondata.class);
 			query.setParameter("session_id", SID);
 
 			List<Sessiondata> sessions = query.getResultList();
@@ -346,7 +300,7 @@ public class Sessionmanagement {
 					+ "where c.session_id LIKE :session_id";
 
 			// log.debug("checkSession User: || "+SID);
-			Query query = em.createQuery(hql);
+			TypedQuery<Sessiondata> query = em.createQuery(hql, Sessiondata.class);
 			query.setParameter("session_id", SID);
 
 			List<Sessiondata> sessions = query.getResultList();
@@ -476,7 +430,7 @@ public class Sessionmanagement {
 					+ "c.storePermanent IS NULL " + "OR "
 					+ "c.storePermanent = false " + ")";
 
-			Query query = em.createQuery(hql);
+			TypedQuery<Sessiondata> query = em.createQuery(hql, Sessiondata.class);
 			query.setParameter("refresh_time", refresh_time);
 			List<Sessiondata> fullList = query.getResultList();
 
@@ -499,10 +453,10 @@ public class Sessionmanagement {
 			log.debug("****** clearSessionTable: ");
 			Calendar rightNow = Calendar.getInstance();
 			rightNow.setTimeInMillis(rightNow.getTimeInMillis() - 1800000);
-			List l = this.getSessionToDelete(rightNow.getTime());
+			List<Sessiondata> l = this.getSessionToDelete(rightNow.getTime());
 			log.debug("clearSessionTable: " + l.size());
-			for (Iterator it = l.iterator(); it.hasNext();) {
-				Sessiondata sData = (Sessiondata) it.next();
+			for (Iterator<Sessiondata> it = l.iterator(); it.hasNext();) {
+				Sessiondata sData = it.next();
 				sData = em.find(Sessiondata.class, sData.getId());
 				em.remove(sData);
 			}
