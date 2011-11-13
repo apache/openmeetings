@@ -66,6 +66,83 @@ public class CalendarPatterns {
         return result;
     }
     
+    public static String getExportDate(Date t){
+    	if (t == null) {
+    		return "";
+    	}
+        return ""+t.getTime();
+    }
+    
+    public static Date parseImportDate(String dateString) {
+    	try {
+    		
+    		Date resultDate = null;
+    		
+    		resultDate = validDate(dateFormat__ddMMyyyyHHmmss, dateString);
+    		
+    		if ( resultDate != null ) {
+    			return resultDate;
+    		}
+    		
+    		resultDate = validDate(dateFormat__ddMMyyyy, dateString);
+    		
+    		if ( resultDate != null ) {
+    			return resultDate;
+    		}
+    		
+    		resultDate = validDate(dateString);
+    		
+    		if (dateString != null) {
+    			return resultDate;
+    		}
+    		
+    		
+    		throw new Exception ("Could not parse date string "+dateString);
+    	} catch (Exception e) {
+    		log.error("parseDate",e);
+    	}
+    	return null;
+    }
+    
+    private static Date validDate(String testdate) {
+    	try {
+    		
+    		Long t = Long.valueOf(testdate);
+    		
+    		if (t != null) {
+    			return new Date(t);
+    		}
+    		
+    	} catch (Exception err) {
+    	}
+    	return null;
+    }
+    
+    private static Date validDate(SimpleDateFormat sdf, String testdate)
+    {
+        Date resultDate = null;
+        try
+        {
+        	resultDate = sdf.parse(testdate);
+        }
+
+        // if the format of the string provided doesn't match the format we 
+        // declared in SimpleDateFormat() we will get an exception
+
+        catch (java.text.ParseException e)
+        {
+          return null;
+        }
+
+        if (!sdf.format(resultDate).equals(testdate)) 
+        {
+          return null;
+        }
+        
+        return resultDate;
+
+    }
+    
     public static String getDateWithTimeByMiliSecondsAndTimeZone(Date t, TimeZone timezone){
     	if (t == null) {
     		return null;

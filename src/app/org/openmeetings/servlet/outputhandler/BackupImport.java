@@ -37,6 +37,7 @@ import org.openmeetings.app.data.calendar.daos.AppointmentCategoryDaoImpl;
 import org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl;
 import org.openmeetings.app.data.calendar.daos.AppointmentReminderTypDaoImpl;
 import org.openmeetings.app.data.calendar.daos.MeetingMemberDaoImpl;
+import org.openmeetings.app.data.conference.PollManagement;
 import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.conference.dao.RoomModeratorsDaoImpl;
 import org.openmeetings.app.data.file.dao.FileExplorerItemDaoImpl;
@@ -61,6 +62,8 @@ import org.openmeetings.app.persistence.beans.domain.Organisation_Users;
 import org.openmeetings.app.persistence.beans.files.FileExplorerItem;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecording;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingMetaData;
+import org.openmeetings.app.persistence.beans.poll.RoomPoll;
+import org.openmeetings.app.persistence.beans.poll.RoomPollAnswers;
 import org.openmeetings.app.persistence.beans.rooms.RoomModerators;
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.rooms.Rooms_Organisation;
@@ -126,6 +129,8 @@ public class BackupImport {
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
 	private AuthLevelmanagement authLevelManagement;
+	@Autowired
+	private PollManagement pollManagement;
 
 	private final HashMap<Long, Long> usersMap = new HashMap<Long, Long>();
 	private final HashMap<Long, Long> organisationsMap = new HashMap<Long, Long>();
@@ -176,7 +181,8 @@ public class BackupImport {
 					}
 
 					ServletMultipartRequest upload = new ServletMultipartRequest(
-							httpServletRequest, ImportHelper.getMaxUploadSize(cfgManagement, user_level), "UTF8");
+							httpServletRequest, ImportHelper.getMaxUploadSize(
+									cfgManagement, user_level), "UTF8");
 					InputStream is = upload.getFileContents("Filedata");
 
 					String fileSystemName = upload.getBaseFilename("Filedata");
@@ -460,6 +466,25 @@ public class BackupImport {
 						this.importFileExplorerItems(fileExplorerListFile);
 					}
 
+					log.info("File explorer item import complete, starting file poll import");
+
+					/*
+					 * ##################### Import File-Explorer Items
+					 */
+					String roomPollListXML = completeName + File.separatorChar
+							+ "roompolls.xml";
+					File roomPollListFile = new File(roomPollListXML);
+					if (!roomPollListFile.exists()) {
+						log.debug("roomPollListFile missing");
+					} else {
+						this.importRoomPolls(roomPollListFile);
+					}
+
+					log.info("Poll import complete, starting copy of files and folders");
+
+					/*
+					 * ##################### Import real files and folders
+					 */
 					importFolders(current_dir, completeName);
 
 					log.info("File explorer item import complete, clearing temp files");
@@ -489,6 +514,114 @@ public class BackupImport {
 		}
 
 		return;
+	}
+
+	private void importRoomPolls(File roomPollListFile) {
+		try {
+
+			List<RoomPoll> roomPolls = this.getRoomPolls(roomPollListFile);
+
+			for (RoomPoll roomPoll : roomPolls) {
+
+				pollManagement.savePollBackup(roomPoll);
+
+			}
+
+		} catch (Exception err) {
+			log.error("[getRoomPolls]", err);
+		}
+
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<RoomPoll> getRoomPolls(File roomPollListFile) throws Exception {
+
+		List<RoomPoll> roomPollList = new LinkedList<RoomPoll>();
+
+		SAXReader reader = new SAXReader();
+		Document document = reader.read(roomPollListFile);
+
+		Element root = document.getRootElement();
+
+		for (Iterator<Element> i = root.elementIterator(); i.hasNext();) {
+
+			Element itemObject = i.next();
+
+			if (itemObject.getName().equals("roompolls")) {
+
+				for (Iterator<Element> innerIter = itemObject
+						.elementIterator("roompoll"); innerIter.hasNext();) {
+
+					Element roompollObject = innerIter.next();
+
+					String pollname = unformatString(roompollObject.element(
+							"pollname").getText());
+					String pollquestion = unformatString(roompollObject
+							.element("pollquestion").getText());
+					Boolean archived = importBooleanType(unformatString(roompollObject
+							.element("archived").getText()));
+					Date created = CalendarPatterns
+							.parseImportDate(unformatString(roompollObject
+									.element("created").getText()));
+					Long createdbyuserid = importLongType(unformatString(roompollObject
+							.element("createdbyuserid").getText()));
+					Long polltypeid = importLongType(unformatString(roompollObject
+							.element("polltypeid").getText()));
+					Long roomid = importLongType(unformatString(roompollObject
+							.element("roomid").getText()));
+					
+					RoomPoll roomPoll = new RoomPoll();
+					roomPoll.setPollName(pollname);
+					roomPoll.setPollQuestion(pollquestion);
+					if (archived != null) {
+						roomPoll.setArchived(archived.booleanValue());
+					} else {
+						roomPoll.setArchived(true);
+					}
+					roomPoll.setCreated(created);
+					roomPoll.setCreatedBy(usersDao.getUser(getNewId(createdbyuserid, Maps.USERS)));
+					roomPoll.setPollType(pollManagement.getPollType(polltypeid));
+					roomPoll.setRoom(roommanagement.getRoomById(getNewId(roomid, Maps.ROOMS)));
+					roomPoll.setRoomPollAnswerList(new LinkedList<RoomPollAnswers>());
+					
+					Element roompollanswers = roompollObject
+							.element("roompollanswers");
+
+					for (Iterator<Element> innerIterAnswers = roompollanswers
+							.elementIterator("roompollanswer"); innerIterAnswers
+							.hasNext();) {
+
+						Element innerIterAnswerObj = innerIterAnswers.next();
+
+						Integer pointlist = importIntegerType(unformatString(innerIterAnswerObj
+								.element("pointlist").getText()));
+						Boolean answer = importBooleanType(unformatString(innerIterAnswerObj
+								.element("answer").getText()));
+						Date votedate = CalendarPatterns
+								.parseImportDate(unformatString(innerIterAnswerObj
+										.element("votedate").getText()));
+						Long voteduserid = importLongType(unformatString(innerIterAnswerObj
+								.element("voteduserid").getText()));
+						
+						RoomPollAnswers roomPollAnswers = new RoomPollAnswers();
+						roomPollAnswers.setPointList(pointlist);
+						roomPollAnswers.setAnswer(answer);
+						roomPollAnswers.setVoteDate(votedate);
+						roomPollAnswers.setVotedUser(usersDao.getUser(getNewId(voteduserid, Maps.USERS)));
+						
+						roomPoll.getRoomPollAnswerList().add(roomPollAnswers);
+					}
+					
+					roomPollList.add(roomPoll);
+
+				}
+
+			}
+
+		}
+
+		return roomPollList;
+
 	}
 
 	public void copyDirectory(File sourceLocation, File targetLocation)
@@ -581,8 +714,8 @@ public class BackupImport {
 								.element("user_id").getText()));
 
 						us.setAge(CalendarPatterns
-								.parseDate(unformatString(itemUsers.element(
-										"age").getText())));
+								.parseImportDate(unformatString(itemUsers
+										.element("age").getText())));
 						us.setAvailible(importIntegerType(unformatString(itemUsers
 								.element("availible").getText())));
 						us.setDeleted(unformatString(itemUsers.element(
@@ -671,8 +804,8 @@ public class BackupImport {
 						us.setStatus(importIntegerType(unformatString(itemUsers
 								.element("status").getText())));
 						us.setRegdate(CalendarPatterns
-								.parseDate(unformatString(itemUsers.element(
-										"regdate").getText())));
+								.parseImportDate(unformatString(itemUsers
+										.element("regdate").getText())));
 						us.setTitle_id(importIntegerType(unformatString(itemUsers
 								.element("title_id").getText())));
 						us.setLevel_id(importLongType(unformatString(itemUsers
@@ -782,8 +915,11 @@ public class BackupImport {
 								Element organisationObject = organisationIterator
 										.next();
 
-								Long organisation_id = getNewId(importLongType(unformatString(organisationObject
-										.element("organisation_id").getText())), Maps.ORGANISATIONS);
+								Long organisation_id = getNewId(
+										importLongType(unformatString(organisationObject
+												.element("organisation_id")
+												.getText())),
+										Maps.ORGANISATIONS);
 								Long user_id = importLongType(unformatString(organisationObject
 										.element("user_id").getText()));
 								Boolean isModerator = importBooleanType(unformatString(organisationObject
@@ -934,7 +1070,7 @@ public class BackupImport {
 										.element("room_id").getText())),
 								Maps.ROOMS);
 						Date inserted = CalendarPatterns
-								.parseDateWithHour(unformatString(flvObject
+								.parseImportDate(unformatString(flvObject
 										.element("inserted").getText()));
 						Boolean isFolder = importBooleanType(unformatString(flvObject
 								.element("isFolder").getText()));
@@ -947,10 +1083,10 @@ public class BackupImport {
 						Boolean isRecording = importBooleanType(unformatString(flvObject
 								.element("isRecording").getText()));
 						Date recordEnd = CalendarPatterns
-								.parseDateWithHour(unformatString(flvObject
+								.parseImportDate(unformatString(flvObject
 										.element("recordEnd").getText()));
 						Date recordStart = CalendarPatterns
-								.parseDateWithHour(unformatString(flvObject
+								.parseImportDate(unformatString(flvObject
 										.element("recordStart").getText()));
 
 						FlvRecording flvRecording = new FlvRecording();
@@ -1013,7 +1149,7 @@ public class BackupImport {
 							Boolean audioIsValid = importBooleanType(unformatString(flvrecordingmetadataObj
 									.element("audioIsValid").getText()));
 							Date inserted1 = CalendarPatterns
-									.parseDateWithHour(unformatString(flvrecordingmetadataObj
+									.parseImportDate(unformatString(flvrecordingmetadataObj
 											.element("inserted").getText()));
 							Boolean isAudioOnly = importBooleanType(unformatString(flvrecordingmetadataObj
 									.element("isAudioOnly").getText()));
@@ -1022,13 +1158,13 @@ public class BackupImport {
 							Boolean isVideoOnly = importBooleanType(unformatString(flvrecordingmetadataObj
 									.element("isVideoOnly").getText()));
 							Date recordEnd1 = CalendarPatterns
-									.parseDateWithHour(unformatString(flvrecordingmetadataObj
+									.parseImportDate(unformatString(flvrecordingmetadataObj
 											.element("recordEnd").getText()));
 							Date recordStart1 = CalendarPatterns
-									.parseDateWithHour(unformatString(flvrecordingmetadataObj
+									.parseImportDate(unformatString(flvrecordingmetadataObj
 											.element("recordStart").getText()));
 							Date updated = CalendarPatterns
-									.parseDateWithHour(unformatString(flvrecordingmetadataObj
+									.parseImportDate(unformatString(flvrecordingmetadataObj
 											.element("updated").getText()));
 
 							FlvRecordingMetaData flvrecordingmetadata = new FlvRecordingMetaData();
@@ -1203,7 +1339,7 @@ public class BackupImport {
 								importLongType(unformatString(pmObject.element(
 										"to").getText())), Maps.USERS));
 						Date inserted = CalendarPatterns
-								.parseDateWithHour(unformatString(pmObject
+								.parseImportDate(unformatString(pmObject
 										.element("inserted").getText()));
 						Boolean isContactRequest = importBooleanType(unformatString(pmObject
 								.element("isContactRequest").getText()));
@@ -1356,7 +1492,8 @@ public class BackupImport {
 						organisation.setName(name);
 						organisation.setDeleted(deleted);
 
-						Long newOrgID = organisationmanagement.addOrganisationObj(organisation);
+						Long newOrgID = organisationmanagement
+								.addOrganisationObj(organisation);
 						organisationsMap.put(organisation_id, newOrgID);
 					}
 				}
@@ -1581,11 +1718,11 @@ public class BackupImport {
 						Long categoryId = importLongType(unformatString(appointmentsObject
 								.element("categoryId").getText()));
 						Date appointmentStarttime = CalendarPatterns
-								.parseDateWithHour(unformatString(appointmentsObject
+								.parseImportDate(unformatString(appointmentsObject
 										.element("appointmentStarttime")
 										.getText()));
 						Date appointmentEndtime = CalendarPatterns
-								.parseDateWithHour(unformatString(appointmentsObject
+								.parseImportDate(unformatString(appointmentsObject
 										.element("appointmentEndtime")
 										.getText()));
 						String deleted = unformatString(appointmentsObject
@@ -1993,10 +2130,10 @@ public class BackupImport {
 										.element("insertedBy").getText())),
 								Maps.USERS);
 						Date inserted = CalendarPatterns
-								.parseDateWithHour(unformatString(fileExplorerItemObj
+								.parseImportDate(unformatString(fileExplorerItemObj
 										.element("inserted").getText()));
 						Date updated = CalendarPatterns
-								.parseDateWithHour(unformatString(fileExplorerItemObj
+								.parseImportDate(unformatString(fileExplorerItemObj
 										.element("updated").getText()));
 						String deleted = unformatString(fileExplorerItemObj
 								.element("deleted").getText());

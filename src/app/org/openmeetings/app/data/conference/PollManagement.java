@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.user.Usermanagement;
@@ -43,9 +44,8 @@ public class PollManagement {
 		return pt.getPollTypesId();
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<PollType> getPollTypes() {
-		Query q = em.createQuery("SELECT pt FROM PollType pt");
+		TypedQuery<PollType> q = em.createQuery("SELECT pt FROM PollType pt",PollType.class);
 		return q.getResultList();
 	}
 	
@@ -68,6 +68,11 @@ public class PollManagement {
 		em.persist(roomP);
 		return roomP;
 	}
+	
+	public void savePollBackup(RoomPoll rp) {
+		em.persist(rp);
+	}
+
 
 	public RoomPoll updatePoll(RoomPoll rp) {
 		return em.merge(rp);
@@ -100,11 +105,22 @@ public class PollManagement {
 		return null;
 	}
 	
-	@SuppressWarnings("unchecked")
+	public List<RoomPoll> getPollListBackup() {
+		try {
+			TypedQuery<RoomPoll> q = em.createQuery("SELECT rp FROM RoomPoll rp",RoomPoll.class);
+			return q.getResultList();
+		} catch (NoResultException nre) {
+			//expected
+		} catch (Exception err) {
+			log.error("[getPoll]", err);
+		}
+		return null;
+	}
+	
 	public List<RoomPoll> getArchivedPollList(Long room_id) {
 		try {
 			log.debug(" :: getPoll :: " + room_id);
-			Query q = em.createQuery("SELECT rp FROM RoomPoll rp WHERE rp.room.rooms_id = :room_id AND rp.archived = :archived");
+			TypedQuery<RoomPoll> q = em.createQuery("SELECT rp FROM RoomPoll rp WHERE rp.room.rooms_id = :room_id AND rp.archived = :archived",RoomPoll.class);
 			q.setParameter("room_id", room_id);
 			q.setParameter("archived", true);
 			return q.getResultList();

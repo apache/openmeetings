@@ -16,6 +16,8 @@ import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
+import org.red5.server.api.service.IPendingServiceCall;
+import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.api.service.IServiceCapableConnection;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author swagner
  * 
  */
-public class PollService {
+public class PollService implements IPendingServiceCallback {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			PollService.class, ScopeApplicationAdapter.webAppRootKey);
@@ -209,5 +211,10 @@ public class PollService {
 			log.error("[getArchivedPollList]", err);
 		}
 		return null;
+	}
+
+	public void resultReceived(IPendingServiceCall arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }
