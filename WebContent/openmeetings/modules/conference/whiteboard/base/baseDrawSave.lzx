@@ -64,7 +64,7 @@
      -->
     <attribute name="sendPartURL" value="http://www.webbase-design.de/dokeos/videoconference/createimagefrombitmap.php" type="string" />
     
-    <!-- create Image from hole Array
+    <!-- create Image from whole Array
     	Large Images will not be rendered correctly here cause
     	there can be a timeout -->
     <attribute name="sendURL" value="http://www.webbase-design.de/dokeos/videoconference/createimagefrombitmap.php" type="string" />

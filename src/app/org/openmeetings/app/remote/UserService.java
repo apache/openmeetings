@@ -252,7 +252,7 @@ public class UserService {
 	}
 
 	/**
-	 * gets a hole user-list(admin-role only)
+	 * gets a whole user-list(admin-role only)
 	 * 
 	 * @param SID
 	 * @param start

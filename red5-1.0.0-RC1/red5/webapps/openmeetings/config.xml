@@ -55,7 +55,7 @@ of the red5-servlet
 <proxyType>none</proxyType>
 	
 <!--
-	These colors are the main colors and style the hole application
+	These colors are the main colors and style the whole application
  -->
 <basebgcolorizer>0x669AE6</basebgcolorizer>
 <baseMousecolorizer>0x7BA8EA</baseMousecolorizer>

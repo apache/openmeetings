@@ -41,7 +41,7 @@ these properties will be overwritten by config.xml -->
 <attribute name="rtmpsslport" value="443" type="string" />
 	
 <!---
-	These colors are the main colors and style the hole application
+	These colors are the main colors and style the whole application
  -->
 <attribute name="baseColorScheme" value="lightsteelblue" type="string" />
 <attribute name="basebgcolorizer" value="" type="string" />	

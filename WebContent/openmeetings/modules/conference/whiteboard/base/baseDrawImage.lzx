@@ -231,7 +231,7 @@
   	
   	<!-- 
   		this handler is implemented also in remoteWhiteboard.lzx to sync a Local Object list
-  		but throws NO Update Event, cause its only needed Locally, the hole Sync Process
+  		but throws NO Update Event, cause its only needed Locally, the whole Sync Process
   		has a different Sync-Object for Loading the complete Object List from the Sever.
   		Each Object is loaded Locally, once all Objects are loaded the Complete-Event is broadcasted
   		to the server, but every Item on the List is only controlled locally
