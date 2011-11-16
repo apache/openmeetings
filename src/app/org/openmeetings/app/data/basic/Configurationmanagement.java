@@ -67,31 +67,6 @@ public class Configurationmanagement {
 		return null;
 	}
 
-	public static void main(String... args) throws SecurityException,
-			NoSuchMethodException, IllegalArgumentException,
-			InstantiationException, IllegalAccessException,
-			InvocationTargetException {
-
-		Class<Integer> typeObject = Integer.class;
-		String returnValue = "15";
-
-		if (typeObject.isAssignableFrom(returnValue.getClass())) {
-			Integer t = typeObject.cast(returnValue);
-			System.out.println("t " + t);
-		} else {
-			System.out.println("cannot be cast to Integer ");
-
-			Constructor<Integer> c = typeObject.getConstructor(returnValue
-					.getClass());
-
-			Integer k = c.newInstance(returnValue);
-
-			System.out.println("k " + k);
-
-		}
-
-	}
-
 	/**
 	 * Return a object using a custom type and a default value if the key is not present
 	 * 

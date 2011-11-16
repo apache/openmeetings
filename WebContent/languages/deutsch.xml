@@ -997,7 +997,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Die von Ihnen angegebenen Passwörter sind nicht identisch.</value>
   </string>
   <string id="331" name="resetpass">
-    <value>4 oder mehr Buchstaben. Groß- und Kleinschreibung beachten!</value>
+    <value>Benutzername oder Passwort sind zu kurz, bitte geben Sie mindestens folgende Anzahl an zeichen an Benutzername / Passwort:</value>
   </string>
   <string id="332" name="resetpass">
     <value>Passwort gespeichert. Sie können sich nun damit einloggen.</value>
@@ -4250,5 +4250,8 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="1415" name="chart_pie">
     <value>Pie Chart</value>
+  </string>
+    <string id="1416" name="sign_up_validation">
+    <value>Bitte geben Sie eine EMail an</value>
   </string>
 </language>

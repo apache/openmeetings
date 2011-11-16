@@ -4324,4 +4324,7 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="1415" name="chart_pie">
     <value>Pie Chart</value>
   </string>
+    <string id="1416" name="sign_up_validation">
+    <value>Please enter email</value>
+  </string>
 </language>

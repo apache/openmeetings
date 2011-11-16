@@ -218,7 +218,7 @@ function checkEmail()
     	</li><li>
     	<label for="configmailpass">SMTP-Userpass (email_userpass)</label>
     	<input name="configmailpass" id="configmailpass" size="27" 
-    		title="Enter the mail-userpass" type="text" /><br/>
+    		title="Enter the mail-userpass" type="password" /><br/>
     	</li><li>
         <label for="mailusetls">Enable TLS in Mail Server Auth</label>
     	<select name="mailusetls" id="mailusetls" 

@@ -301,8 +301,7 @@
 						
 						var addInfo = "" + value.validFrom +"<br/> - <br/>"+ value.validTo;
 						
-						var dlg = new lz.rpcErrorDialog(canvas,{errorid:-50,addInfo:addInfo});
-                        lz.Focus.setFocus(dlg);
+						new lz.rpcErrorDialog(canvas,{errorid:-50,addInfo:addInfo});
 						
 					}
 					

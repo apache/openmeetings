@@ -478,7 +478,7 @@ public class ImportInitvalues {
 		cfgManagement.addConfByKey(3, "user.login.minimum.length", "4", null,
 				"Number of chars needed in a user login");
 		
-		cfgManagement.addConfByKey(3, "user.pass.minimum.length", "15", null,
+		cfgManagement.addConfByKey(3, "user.pass.minimum.length", "4", null,
 				"Number of chars needed in a user login");
 		
 	}

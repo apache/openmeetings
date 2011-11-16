@@ -6,6 +6,9 @@
     docking="true" resizeable="false" closable="false" 
     width="460" height="230"
      x="$once{ canvas.width/2 - this.width/2 }"  y="60">
+     
+    <attribute name="user_login_minimum_length" type="number" value="4" />
+    <attribute name="user_pass_minimum_length" type="number" value="4" />
     
     <handler name="onclose">
         if (this.childObj!=null) this.childObj.close();
@@ -166,10 +169,6 @@
 	<labelText name="domain_label" labelid="1372" width="300" y="144" resize="false" x="2" />     
     <resetCombobox name="domain" width="330" y="144" x="120" editable="false">
     	<handler name="oninit">
-    		//this.addItem("localhost","localhost");
-    		//this.addItem("eu.p-f.biz","SA-MeetingEU");
-    		//this.addItem("am.p-f.biz","SA-MeetingAM");
-    		//this.addItem("ap.p-f.biz","SA-MeetingAP");
     		//this.selectItemAt(0);
     		this.getActiveLdapConfigs.doCall();
     	</handler>
@@ -216,10 +215,16 @@
     <simpleLabelButton labelid="123" name="_register" width="120" y="$once{ parent.height-40 }" 
         visible="false" x="10" height="22">
         <handler name="onclick">
-            this.parent._register.setAttribute('visible',false);
-            this.parent.childObj = new lz.registerNewUser(canvas,{refObj:this.parent});     
-            lz.Keys.removeKeyComboCall(this.parent.pressEnter, ["enter"]);
-            //parent.showRegForm.doStart();
+	        <![CDATA[
+	            this.parent._register.setAttribute('visible',false);
+	            this.parent.childObj = new lz.registerNewUser(canvas,{
+	            									refObj:this.parent,
+	            									user_login_minimum_length:parent.user_login_minimum_length,
+	            									user_pass_minimum_length:parent.user_pass_minimum_length
+	            								});     
+	            lz.Keys.removeKeyComboCall(this.parent.pressEnter, ["enter"]);
+	            //parent.showRegForm.doStart();
+            ]]>
         </handler>
     </simpleLabelButton>     
     
@@ -420,6 +425,8 @@
             if (value[1].conf_value==1){
                 parent._facebook.setAttribute('visible',true);
             }
+            parent.user_login_minimum_length = Number(value[2].conf_value);
+            parent.user_pass_minimum_length = Number(value[3].conf_value);
         </handler>  
     </netRemoteCallHib>    
     

@@ -313,10 +313,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>input data error</value>
   </string>
   <string id="103" name="min4username">
-    <value>Case sensitive with 4 or more characters</value>
+    <value>Password and or login is too short</value>
   </string>
   <string id="104" name="min4pass">
-    <value>Password must be at least 4 characters in length</value>
+    <value>Password and or login is too short</value>
   </string>
   <string id="105" name="usernametaken">
     <value>The username is already used</value>
@@ -997,7 +997,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>The passwords you entered weren't identical</value>
   </string>
   <string id="331" name="resetpass">
-    <value>Case sensitive with 4 or more characters</value>
+    <value>Password and or username too short, required minimum length for Username / Password are: </value>
   </string>
   <string id="332" name="resetpass">
     <value>Password set. You can now login.</value>
@@ -4250,5 +4250,8 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="1415" name="chart_pie">
     <value>Pie Chart</value>
+  </string>
+  <string id="1416" name="sign_up_validation">
+    <value>Please enter email</value>
   </string>
 </language>

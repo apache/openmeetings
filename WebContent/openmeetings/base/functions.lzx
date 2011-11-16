@@ -335,6 +335,14 @@ function getStringTimeByTimeStamp(tStamp){
     return ''+hours+':'+minutes+':'+seconds;
 }  
 
+
+function strtrim(str)
+{
+    for(var i = 0; str.charCodeAt(i) < 33; i++);
+    for(var j = str.length-1; str.charCodeAt(j) < 33; j--);
+    return str.substring(i, j+1);
+}
+
 ]]>
 </script>
 		

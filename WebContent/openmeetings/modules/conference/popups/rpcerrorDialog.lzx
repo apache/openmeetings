@@ -7,6 +7,10 @@
 	
 	<handler name="oninit">
         this.bringToFront();
+        lz.Focus.setFocus(this);
+        if (errorid != 0) {
+			this.getErrorByCode.doCall();
+		}
     </handler>
 	
     <attribute name="errortext" value="" type="string" />
@@ -40,9 +44,6 @@
 
 	<handler name="oninit">
 		lz.ModeManager.makeModal(this);
-		if (errorid != 0) {
-			this.getErrorByCode.doCall();
-		}
 	</handler>
     <handler name="onclose">
         lz.ModeManager.release(this);

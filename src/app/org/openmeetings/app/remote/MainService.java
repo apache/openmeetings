@@ -745,6 +745,8 @@ public class MainService implements IPendingServiceCallback {
 			List<Configuration> cList = new LinkedList<Configuration>();
 			cList.add(cfgManagement.getConfKey(3, "allow_frontend_register"));
 			cList.add(cfgManagement.getConfKey(3, "show.facebook.login"));
+			cList.add(cfgManagement.getConfKey(3, "user.login.minimum.length"));
+			cList.add(cfgManagement.getConfKey(3, "user.pass.minimum.length"));
 
 			return cList;
 		} catch (Exception err) {

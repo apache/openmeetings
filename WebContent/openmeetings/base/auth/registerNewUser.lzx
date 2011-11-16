@@ -8,6 +8,9 @@
     <attribute name="refObj" value="null" />
     <attribute name="regObject" value="null" />
     
+    <attribute name="user_login_minimum_length" type="number" value="4" />
+    <attribute name="user_pass_minimum_length" type="number" value="4" />
+    
     <handler name="oninit">
     	<![CDATA[
             var pressEnter = new LzDelegate(this, "register");
@@ -118,20 +121,28 @@
     <simpleLabelButton name="registerB" labelid="121" width="120" x="240" y="332">
     	<handler name="onclick">
             <![CDATA[
-                var pwd1 = this.parent.userpass1.getText();
-                var pwd2 = this.parent.userpass2.getText();            
+                var pwd1 = strtrim(this.parent.userpass1.getText());
+                var pwd2 = strtrim(this.parent.userpass2.getText());   
+                var login = strtrim(this.parent.username.getText());     
+                var email = strtrim(this.parent.email.getText()); 
                 if (pwd1!=pwd2) {
-					new lz.rpcErrorDialog(canvas.main_content._content.inner,{errorid:-6});
-				} else if(pwd1.length<4){
-                    new lz.rpcErrorDialog(canvas.main_content._content.inner,{errorid:-7});
+					new lz.rpcErrorDialog(canvas,{errorid:-6});
+				} else if(pwd1.length<parent.user_pass_minimum_length 
+						|| login<parent.user_login_minimum_length){
+				    var addInfo = "<br/> "
+				    					+ parent.user_pass_minimum_length + " / " 
+				    					+ parent.user_login_minimum_length;
+                    new lz.rpcErrorDialog(canvas,{errorid:-7,addInfo:addInfo});
+                } else if (email=="") {
+                    new lz.rpcErrorDialog(canvas,{errorid:-53});
                 } else {
                     this.parent.regObject = new Array();
                     this.parent.regObject["SID"]=canvas.sessionId;
-                    this.parent.regObject["Username"]=this.parent.username.getText();
+                    this.parent.regObject["Username"]=login;
                     this.parent.regObject["Userpass"]=this.parent.userpass1.getText();
                     this.parent.regObject["lastname"]=this.parent.lastname.getText();
                     this.parent.regObject["firstname"]=this.parent.firstname.getText();
-                    this.parent.regObject["email"]=this.parent.email.getText();
+                    this.parent.regObject["email"]=email;
                     this.parent.regObject["jNameTimeZone"]=this.parent._timeZone.getValue();
                     this.parent.regObject["age"]=0;
                     this.parent.regObject["street"]='';
