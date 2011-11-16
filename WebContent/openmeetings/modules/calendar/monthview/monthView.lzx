@@ -111,23 +111,34 @@
     	</view> 
     	 
    <handler name="oninit">
-   	  
-
-   	   this.dayNamesLabelIds = [459,453,454,455,456,457,458];
-   	   this.dayLabelNamesLabelIds = [466,460,461,462,463,464,465];
-	   this.monthnames = [canvas.getLabelName(469),canvas.getLabelName(470),
-							canvas.getLabelName(471),canvas.getLabelName(472),
-							canvas.getLabelName(473),canvas.getLabelName(474),
-							canvas.getLabelName(475),canvas.getLabelName(476),
-							canvas.getLabelName(477),canvas.getLabelName(478),
-							canvas.getLabelName(479),canvas.getLabelName(480)]
-								
-   	   if ($debug) Debug.write("this month: ",this);
-   	   if ($debug) Debug.write("this month _startDate: ",parent.parent.parent._startDate);
-   	   this.showingdate = parent.parent.parent._startDate;
-   	   
-   	   this.init();
-   	   
+   	   <![CDATA[
+	   	   
+	   	   this.dayNamesLabelIds = [453,454,455,456,457,458,459];
+	   	   
+		   switch (canvas.firstdayinweek) {
+	   	   	  case 0:
+	   	   	  	this.dayLabelNamesLabelIds = [453,454,455,456,457,458,459];
+	   	   	  	break;
+	   	   	  case 1:
+	   	   	  	this.dayLabelNamesLabelIds = [466,460,461,462,463,464,465];
+	   	   	  	break;
+	   	   	  	
+	   	   }
+	   	   
+	   	   
+		   this.monthnames = [canvas.getLabelName(469),canvas.getLabelName(470),
+								canvas.getLabelName(471),canvas.getLabelName(472),
+								canvas.getLabelName(473),canvas.getLabelName(474),
+								canvas.getLabelName(475),canvas.getLabelName(476),
+								canvas.getLabelName(477),canvas.getLabelName(478),
+								canvas.getLabelName(479),canvas.getLabelName(480)]
+									
+	   	   if ($debug) Debug.write("this month: ",this);
+	   	   if ($debug) Debug.write("this month _startDate: ",parent.parent.parent._startDate);
+	   	   this.showingdate = parent.parent.parent._startDate;
+	   	   
+	   	   this.init();
+   	   ]]>
    </handler>
    
    <method name="init">
