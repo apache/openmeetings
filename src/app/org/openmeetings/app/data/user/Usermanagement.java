@@ -454,13 +454,13 @@ public class Usermanagement {
 	public Long updateUser(long user_level, Long user_id, Long level_id,
 			String login, String password, String lastname, String firstname,
 			Date age, String street, String additionalname, String zip,
-			long states_id, String town, Long language_id, int availible, String telefon,
-			String fax, String mobil, String email, String comment, int status,
-			List<?> organisations, int title_id, String phone, String sip_user,
-			String sip_pass, String sip_auth, Boolean generateSipUserData,
-			String jNameTimeZone, Boolean forceTimeZoneCheck,
-			String userOffers, String userSearchs, Boolean showContactData,
-			Boolean showContactDataToContacts) {
+			long states_id, String town, Long language_id, int availible,
+			String telefon, String fax, String mobil, String email,
+			String comment, int status, List<?> organisations, int title_id,
+			String phone, String sip_user, String sip_pass, String sip_auth,
+			Boolean generateSipUserData, String jNameTimeZone,
+			Boolean forceTimeZoneCheck, String userOffers, String userSearchs,
+			Boolean showContactData, Boolean showContactDataToContacts) {
 
 		if (authLevelManagement.checkUserLevel(user_level) && user_id != 0) {
 			try {
@@ -954,7 +954,7 @@ public class Usermanagement {
 	 * @param availible
 	 * @param status
 	 * @param login
-	 * @param Userpass
+	 * @param password
 	 * @param lastname
 	 * @param firstname
 	 * @param email
@@ -972,7 +972,7 @@ public class Usermanagement {
 	 *         or mail is empty
 	 */
 	public Long registerUserInit(long user_level, long level_id, int availible,
-			int status, String login, String Userpass, String lastname,
+			int status, String login, String password, String lastname,
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, long states_id,
 			String town, long language_id, boolean sendWelcomeMessage,
@@ -987,8 +987,20 @@ public class Usermanagement {
 		// Moderators will get a temp update of there UserLevel to add Users to
 		// their Group
 		if (authLevelManagement.checkModLevel(user_level)) {
+
+			Integer userLoginMinimumLength = cfgManagement.getConfValue(
+					"user.login.minimum.length", Integer.class, "4");
+			Integer userPassMinimumLength = cfgManagement.getConfValue(
+					"user.pass.minimum.length", Integer.class, "4");
+
+			if (userLoginMinimumLength == null || userPassMinimumLength == null) {
+				new Exception(
+						"user.login.minimum.length or user.pass.minimum.length problem");
+			}
+
 			// Check for required data
-			if (login.length() >= 4 && Userpass.length() >= 4) {
+			if (login.length() >= userLoginMinimumLength.intValue()
+					&& password.length() >= userPassMinimumLength.intValue()) {
 				// Check for duplicates
 				boolean checkName = usersDao.checkUserLogin(login);
 				boolean checkEmail = emailManagement.checkUserEMail(email);
@@ -1006,7 +1018,7 @@ public class Usermanagement {
 						// We need to pass the baseURL to check if this is
 						// really set to be send
 						String sendMail = emailManagement.sendMail(login,
-								Userpass, email, link, sendConfirmation);
+								password, email, link, sendConfirmation);
 						if (!sendMail.equals("success"))
 							return new Long(-19);
 					}
@@ -1024,7 +1036,7 @@ public class Usermanagement {
 					}
 
 					Long user_id = addUser(level_id, availible, status,
-							firstname, login, lastname, language_id, Userpass,
+							firstname, login, lastname, language_id, password,
 							address_id, age, hash, sip_user, sip_pass,
 							sip_auth, generateSipUserData, jName_timezone,
 							forceTimeZoneCheck, userOffers, userSearchs,
@@ -1152,7 +1164,7 @@ public class Usermanagement {
 
 			em.flush();
 			em.refresh(users);
-			
+
 			Long user_id = users.getUser_id();
 
 			return user_id;
@@ -1263,11 +1275,11 @@ public class Usermanagement {
 			users.setDeleted("false");
 
 			em.persist(users);
-			
+
 			em.refresh(users);
-			
-			//em.flush();
-			
+
+			// em.flush();
+
 			long user_id = users.getUser_id();
 
 			return user_id;
@@ -1355,7 +1367,8 @@ public class Usermanagement {
 					savedUser.setTitle_id(Integer.parseInt(values.get(
 							"title_id").toString()));
 
-					savedUser.setLanguage_id(Long.parseLong(values.get("languages_id").toString()));
+					savedUser.setLanguage_id(Long.parseLong(values.get(
+							"languages_id").toString()));
 					savedUser.setOmTimeZone(omTimeZoneDaoImpl
 							.getOmTimeZone((values.get("jnameTimeZone")
 									.toString())));

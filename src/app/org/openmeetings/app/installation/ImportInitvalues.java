@@ -475,6 +475,12 @@ public class ImportInitvalues {
 		cfgManagement.addConfByKey(3, "number.minutes.reminder.send", "15", null,
 				"The number of minutes before reminder emails are send. Set to 0 to disable reminder emails");
 		
+		cfgManagement.addConfByKey(3, "user.login.minimum.length", "4", null,
+				"Number of chars needed in a user login");
+		
+		cfgManagement.addConfByKey(3, "user.pass.minimum.length", "15", null,
+				"Number of chars needed in a user login");
+		
 	}
 
 	
