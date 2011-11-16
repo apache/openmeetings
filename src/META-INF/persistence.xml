@@ -62,8 +62,7 @@
         <properties>
             <property name="openjpa.ConnectionProperties"
                 value="DriverClassName=org.apache.derby.jdbc.ClientDriver,
-                                  Url=jdbc:derby:openmeetings;create=true, 
-                                  create=true,
+                                  Url=jdbc:derby:openmeetings;create=true,
                                   MaxActive=100, 
                                   MaxWait=10000, 
                                   TestOnBorrow=true, 
