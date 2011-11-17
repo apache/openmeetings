@@ -52,9 +52,9 @@ public class RoomWebServiceFacade {
 		return this.geRoomServiceProxy().getRoomsPublic(SID, roomtypes_id);
 	}
 
-	public void deleteFlvRecording(String SID, Long flvRecordingId)
+	public boolean deleteFlvRecording(String SID, Long flvRecordingId)
 			throws AxisFault {
-		this.geRoomServiceProxy().deleteFlvRecording(SID, flvRecordingId);
+		return this.geRoomServiceProxy().deleteFlvRecording(SID, flvRecordingId);
 	}
 
 	public FLVRecordingReturn[] getFlvRecordingByExternalUserId(String SID,

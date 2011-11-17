@@ -97,7 +97,7 @@ public class RoomWebService {
 		}
 	}
 
-	public void deleteFlvRecording(String SID, Long flvRecordingId)
+	public boolean deleteFlvRecording(String SID, Long flvRecordingId)
 			throws AxisFault {
 		try {
 
@@ -105,14 +105,15 @@ public class RoomWebService {
 			Long user_level = userManagement.getUserLevelByID(users_id);
 
 			if (authLevelManagement.checkWebServiceLevel(user_level)) {
-				flvRecordingDao.deleteFlvRecording(flvRecordingId);
-
+				return flvRecordingDao.deleteFlvRecording(flvRecordingId);
 			}
-			// return null;
+
 		} catch (Exception err) {
 			log.error("[deleteFlvRecording] ", err);
 			throw new AxisFault(err.getMessage());
 		}
+		
+		return false;
 	}
 
 	public FLVRecordingReturn[] getFlvRecordingByExternalUserId(String SID,

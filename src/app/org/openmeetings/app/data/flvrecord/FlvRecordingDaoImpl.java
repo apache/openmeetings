@@ -443,10 +443,14 @@ public class FlvRecordingDaoImpl {
 	/**
 	 * @param fileExplorerItemId
 	 */
-	public void deleteFlvRecording(Long flvRecordingId) {
+	public boolean deleteFlvRecording(Long flvRecordingId) {
 		try {
 			
 			FlvRecording fId = this.getFlvRecordingById(flvRecordingId);
+			
+			if (fId == null) {
+				return false;
+			}
 			
 			fId.setDeleted("true");
 			fId.setUpdated(new Date());
@@ -459,9 +463,13 @@ public class FlvRecordingDaoImpl {
 			    }
 			}
 			
+			return true;
+			
 		} catch (Exception ex2) {
 			log.error("[deleteFileExplorerItem]: ",ex2);
 		}
+		
+		return false;
 	}
 
 	/**
