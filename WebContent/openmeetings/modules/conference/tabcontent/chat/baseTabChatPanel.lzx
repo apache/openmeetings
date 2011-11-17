@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+	<!-- 
+	#################################################
+	Provides functions to chat and extends the chat with the panel for blinking
+	when new messages arrive when the tab is closed
+	#################################################
+	 -->
+
+	<class name="baseTabChatPanel" extends="basePropertyPanel">
+
+		<attribute name="fadeDelegate" value="null" />
+		<attribute name="doBlink" value="false" type="boolean" />
+
+		<handler name="oninit">
+			this.fadeDelegate = new LzDelegate( this, "showText" );
+		</handler>
+
+		<handler name="onisopen" args="o">
+			if ($debug) Debug.write("onisopen",o);
+			if (o) {
+				canvas._chatcontent.doInitByOpen();
+				this.doBlink = false;
+				this._newMessage.setAttribute("visibility","hidden");
+				this._newMessage.setAttribute( "opacity", 0 );
+				this.content.setAttribute("visibility","visible");
+			} else {
+				this.content.setAttribute("visibility","hidden");
+			}
+		</handler>
+
+		<method name="startBlink">
+			if ($debug) Debug.write("startBlink",this.opacity);
+			if (this.isopen) return;
+			if (this.doBlink) {
+				if ($debug) Debug.write("doBlink already started !!!");
+			} else {
+				if ($debug) Debug.write("doBlink");
+				this.doBlink = true;
+				this._newMessage.setAttribute("visibility","visible");
+				lz.Timer.addTimer( this.fadeDelegate , 1000 );
+			}
+		</method>
+
+		<method name="showText">
+			if (this.doBlink) {
+				if ($debug) Debug.write("showText",this._newMessage.opacity);
+				lz.Timer.addTimer( this.fadeDelegate , 1000 );
+				if (this._newMessage.opacity == 0) {
+					this._newMessage.animate( "opacity", 1.0, 400 );
+				} else {
+					this._newMessage.animate( "opacity", 0, 400 );
+				}
+			} else {
+				this._newMessage.setAttribute("visibility","hidden");
+			}
+		</method>
+
+		<chatTab name="content" y="22" height="${ parent.height-22 }"
+			visibility="hidden" width="${ parent.width }" />
+			
+		<labelText labelid="1199" x="${ parent.width - this.width }" bgcolor="0xFFFFFF"
+        		   y="2" fontsize="10" fontstyle="bold" fgcolor="0xFF3300" />
+
+		<view name="_newMessage" y="0" x="${ parent.width-this.width }"
+			visibility="hidden">
+			<view x="1" y="2" resource="chat_message_incoming_rsc" />
+			<labelText x="22" y="2" fgcolor="0xFFFFFF" fontstyle="bold"
+				labelid="1417" />
+		</view>
+
+	</class>
+
+</library>

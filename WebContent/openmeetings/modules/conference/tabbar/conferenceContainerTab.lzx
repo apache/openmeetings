@@ -37,7 +37,7 @@
 	<attribute name="uploadTapIsInited" value="false" type="boolean" />
 	<attribute name="membersTapIsInited" value="false" type="boolean" />
     
-    <openmeetingsTabButton name="b1" iconresourcename="ksirc_rsc2" labelid="244" x="1" y="0" 
+    <openmeetingsTabButton iconresourcename="ksirc_rsc2" labelid="244" x="1" y="0" 
     					   opacity="1">
          
         <handler name="oninit">

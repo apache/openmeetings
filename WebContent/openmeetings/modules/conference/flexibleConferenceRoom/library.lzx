@@ -3,7 +3,7 @@
 	
 	<resource name="users_tab_btn" src="resources/kdmconfig.png" />
 	<resource name="files_tab_btn" src="resources/folder_yellow.png" />
-	
+	<resource name="chat_message_incoming_rsc" src="resources/ledlightgreen.png" />
 	
 	<resource name="sidebar_tab_btn">
 		<frame src="resources/sidebar_close.png" />

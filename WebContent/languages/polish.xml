@@ -4327,4 +4327,7 @@ transmitowania głosu i obrazu wideo.</value>
     <string id="1416" name="sign_up_validation">
     <value>Please enter email</value>
   </string>
+  <string id="1417" name="chat_notification">
+    <value>New message(s)</value>
+  </string>
 </language>

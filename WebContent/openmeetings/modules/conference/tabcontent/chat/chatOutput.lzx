@@ -74,7 +74,7 @@
     <method name="addChatHistory" args="value,client">
         <![CDATA[
             //if($debug) Debug.write("chatOutput/addChatHistory: ",value,client);
-            parent.parent.parent.b1.startBlink();
+            canvas.currentBaseConferenceRoom._chatPanelStrict.startBlink();
             //is Right To Left ? not checked for the moment
             if (value[7]){
                 var username = client.firstname+" "+client.lastname;
