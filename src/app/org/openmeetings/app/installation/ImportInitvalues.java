@@ -481,6 +481,9 @@ public class ImportInitvalues {
 		cfgManagement.addConfByKey(3, "user.pass.minimum.length", "4", null,
 				"Number of chars needed in a user login");
 		
+		cfgManagement.addConfByKey(3, "calendar.conference.rooms.default.size", "50", null,
+				"Default number of participants conference room created via calendar");
+		
 	}
 
 	

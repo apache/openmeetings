@@ -131,11 +131,14 @@ public class AppointmentLogic {
 
 		// TODO:Add this user as the default Moderator of the Room
 
+		Long numberOfParticipants = cfgManagement.getConfValue(
+				"calendar.conference.rooms.default.size", Long.class, "50");
+
 		Long room_id = roommanagement.addRoom(3, // Userlevel
 				appointmentName, // name
 				roomType, // RoomType
 				"", // Comment
-				new Long(8), // Number of participants
+				numberOfParticipants, // Number of participants
 				true, // public
 				null, // Organisations
 				true, // Appointment
@@ -446,25 +449,23 @@ public class AppointmentLogic {
 								+ inv.getInvitations_id());
 						continue;
 					}
-					
+
 					TimeZone tZone = null;
-					
+
 					if (mm.getOmTimeZone() != null) {
-						tZone = timezoneUtil.getTimezoneByOmTimeZoneId(mm.getOmTimeZone().getOmtimezoneId());
+						tZone = timezoneUtil.getTimezoneByOmTimeZoneId(mm
+								.getOmTimeZone().getOmtimezoneId());
 					} else {
 						tZone = TimeZone.getDefault();
 					}
-					
+
 					String subject = generateSubject(labelid1158, ment, tZone);
 
 					String message = generateMessage(labelid1158, ment,
 							language_id, labelid1153, labelid1154, tZone);
 
-					invitationManagement.sendInvitationReminderLink(
-							message,
-							inv.getBaseUrl(),
-							mm.getEmail(),
-							subject, 
+					invitationManagement.sendInvitationReminderLink(message,
+							inv.getBaseUrl(), mm.getEmail(), subject,
 							inv.getHash());
 
 					inv.setUpdatetime(new Date());
@@ -473,15 +474,15 @@ public class AppointmentLogic {
 			}
 		}
 	}
-	
+
 	private String generateSubject(Fieldlanguagesvalues labelid1158,
 			Appointment ment, TimeZone timezone) {
-		
+
 		String message = labelid1158.getValue() + " "
 				+ ment.getAppointmentName();
 
-		message += ' '
-				+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
+		message += ' ' + CalendarPatterns
+				.getDateWithTimeByMiliSecondsAndTimeZone(
 						ment.getAppointmentStarttime(), timezone);
 
 		message += " - "
@@ -489,9 +490,8 @@ public class AppointmentLogic {
 						ment.getAppointmentEndtime(), timezone);
 
 		return message;
-		
-	}
 
+	}
 
 	/**
 	 * Generate a localized message including the time and date of the meeting
@@ -507,7 +507,8 @@ public class AppointmentLogic {
 	 */
 	private String generateMessage(Fieldlanguagesvalues labelid1158,
 			Appointment ment, Long language_id,
-			Fieldlanguagesvalues labelid1153, Fieldlanguagesvalues labelid1154, TimeZone timezone) {
+			Fieldlanguagesvalues labelid1153, Fieldlanguagesvalues labelid1154,
+			TimeZone timezone) {
 
 		String message = labelid1158.getValue() + " "
 				+ ment.getAppointmentName();
