@@ -12,7 +12,7 @@
 	<property name="main.out.dir" value="${basedir}/bin"/>
 	
 	<!-- Red5 dir -->
-	<property name="red5.server.dir" value="red5-1.0.0-RC1"/>
+	<property name="red5.server.dir" value="red5-1.0.0-r4297"/>
 
 	<!-- screen.out.dir -->
 	<property name="screen.out.dir" value="${basedir}/screen_compile" />
@@ -42,18 +42,19 @@
 
 	<!-- Distribution properties -->
 	<property name="project.distname" value="openmeetings"/>
+	<property name="dist.webapps.dir" value="${dist.dir}/red5/webapps/${project.distname}"/>
 
 	<!-- screenshare.out.dir -->
-	<property name="screenshare.out.dir" value="${dist.dir}/red5/webapps/${project.distname}/red5-screenshare" />
+	<property name="screenshare.out.dir" value="${dist.webapps.dir}/red5-screenshare" />
 	
 	<!-- libraries -->
 	<property name="project.lib" value="${basedir}/lib"/>
 
 	<!-- LPS Properties -->
-	<property name="out.dir.swf" value = "${basedir}/${dist.dir}/red5/webapps/${project.distname}/" />
+	<property name="out.dir.swf" value = "${basedir}/${dist.webapps.dir}/" />
 	<property name="laszlo.home" value="${basedir}/openlaszlo"/>
 	<property name="webcontent.src.dir" value="${basedir}/WebContent"/>
-	<property name="laszlo.src.dir" value="${webcontent.src.dir}/${project.distname}"/>
+	<property name="laszlo.src.dir" value="${webcontent.src.dir}/src"/>
 	<property name="laszlo.debug" value="false"/>
 	<property name="laszlo.proxied" value = "solo"/>
 
@@ -70,7 +71,7 @@
 	<property name="openjpa.lib" value="${project.lib}/openjpa2"/>
 	<!--JDBC Drivers-->
 	<property name="database.lib" value="${project.lib}/database" />
-	<property name="red5.lib" value="${basedir}/${red5.server.dir}/red5" />
+	<property name="red5.lib" value="${basedir}/${red5.server.dir}/dist" />
 	<property name="red5.server.lib" value="${red5.lib}/lib" />
 	<property name="spring.lib" value="${project.lib}/spring" />
 	<property name="upload.lib" value="${project.lib}/upload" />
@@ -90,6 +91,10 @@
 	<property name="java2swf.lib" value="${project.lib}/java2swf" />
 	<!-- Junit -->
 	<property name="junit.lib" value="${project.lib}/junit" />
+	<!-- Mina -->
+	<property name="mina.lib" value="${project.lib}/mina" />
+	<!-- Apache RAT -->
+	<property name="rat.lib" value="${project.lib}/rat" />
 	<!-- Svn Task -->
 	<property name="svntask.lib" value="${project.lib}/svntask-1.0.8"/>
 
@@ -114,6 +119,7 @@
 		<fileset dir="${ical.lib}" includes="*.jar"/>
 		<fileset dir="${java2swf.lib}" includes="*.jar"/>
 		<fileset dir="${jmf.lib}" includes="*.jar"/>
+		<fileset dir="${mina.lib}" includes="*.jar"/>
 		<fileset dir="${junit.lib}" includes="*.jar"/>
 		<fileset dir="${screenshare.lib}" includes="*kunststoff.jar"/>
 	</path>
@@ -153,19 +159,24 @@
 		<copy todir="${screenshare.out.dir}" filtering="true">
 			<fileset dir="${screenshare.lib}" />
 		</copy>
-		<copy todir="${dist.dir}" filtering="true">
-			<fileset dir="${red5.server.dir}">
+		<copy todir="${red5.root}" filtering="true">
+			<fileset dir="${red5.server.dir}/dist">
 				<exclude name="**/*.fla"/>
 			</fileset>
 		</copy>
+		<copy todir="${dist.webapps.dir}">
+			<fileset dir="${webcontent.src.dir}/openmeetings"/>
+		</copy>
 		<copy todir="${dist.dir}/red5/lib">
 			<fileset dir="${spring.lib}"/>
+			<fileset dir="${slf4j.lib}"/>
+			<fileset dir="${mina.lib}"/>
 		</copy>
 
 		<!-- this package contains the javax.persistance.* API of JAVA-EE-6 -->
 		<copy file="${openjpa.lib}/geronimo-jpa_2.0_spec-1.1.jar" todir="${dist.dir}/red5/lib"/>
 
-		<copy todir="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/lib">
+		<copy todir="${dist.webapps.dir}/WEB-INF/lib">
 			<fileset dir="${openjpa.lib}">
 				<include name="*.jar"/>
 				<exclude name="commons-collections-3.2.1.jar"/>
@@ -174,15 +185,15 @@
 			</fileset>
 		</copy>
 
-		<copy todir="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/red5-services">
+		<copy todir="${dist.webapps.dir}/WEB-INF/red5-services">
 			<fileset dir="${webcontent.src.dir}/WEB-INF/red5-services" includes="*.xml"/>
 		</copy>
-		<copy todir="${dist.dir}/red5/webapps/${project.distname}">
+		<copy todir="${dist.webapps.dir}">
 			<fileset dir="${webcontent.src.dir}">
 				<include name="*.html"/>
 			</fileset>
 		</copy>
-		<copy todir="${dist.dir}/red5/webapps/${project.distname}/WEB-INF">
+		<copy todir="${dist.webapps.dir}/WEB-INF">
 			<fileset dir="${webcontent.src.dir}/WEB-INF">
 				<include name="*.xml"/>
 				<include name="*.properties"/>
@@ -191,10 +202,10 @@
 		</copy>
 
 		<chmod dir="${dist.dir}/red5" perm="755" includes="**/*.sh"/>
-		<chmod dir="${dist.dir}/red5/webapps/${project.distname}/screen" perm="755" includes="**/*.sh"/>
-		<chmod dir="${dist.dir}/red5/webapps/${project.distname}/jod" perm="755" includes="**/*.sh"/>
+		<chmod dir="${dist.webapps.dir}/screen" perm="755" includes="**/*.sh"/>
+		<chmod dir="${dist.webapps.dir}/jod" perm="755" includes="**/*.sh"/>
 
-		<copy todir="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/lib">
+		<copy todir="${dist.webapps.dir}/WEB-INF/lib">
 			<fileset dir="${axis2.lib}">
 				<include name="*.jar"/>
 				<exclude name="commons-codec-1.3.jar"/>
@@ -209,26 +220,26 @@
 			<fileset dir="${jmf.lib}" includes="*.jar"/>
 		</copy>
 
-		<copy todir="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/classes/META-INF">
+		<copy todir="${dist.webapps.dir}/WEB-INF/classes/META-INF">
 			<fileset file="src/META-INF/*.xml">
 				<exclude name="services.xml"/>
 			</fileset>
 		</copy>
 
-		<chmod dir="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/lib" perm="755" includes="**/*.sh"/>
+		<chmod dir="${dist.webapps.dir}/WEB-INF/lib" perm="755" includes="**/*.sh"/>
 
 		<!-- add language files from .war version -->
-		<copy todir="${dist.dir}/red5/webapps/${project.distname}/languages">
+		<copy todir="${dist.webapps.dir}/languages">
 			<fileset dir="WebContent/languages">
 			</fileset>
 		</copy>
-		<copy todir="${dist.dir}/red5/webapps/${project.distname}/conf">
+		<copy todir="${dist.webapps.dir}/conf">
 			<fileset dir="WebContent/conf">
 			</fileset>
 		</copy>
 
 		<!-- add templates
-		<copy todir="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/classes">
+		<copy todir="${dist.webapps.dir}/WEB-INF/classes">
 			<fileset dir="src/templates" />
 		</copy>
 		 -->
@@ -291,7 +302,7 @@
 		<manifestclasspath property="jar.classpath" jarfile="${project.distname}.jar">
 			<classpath refid="compile.classpath"/>
 		</manifestclasspath>
-		<jar destfile="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/lib/${project.distname}.jar">
+		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}.jar">
 			<fileset dir="${classes.dir}">
 				<include name="**"/>
 				<exclude name="**/test/**"/>
@@ -309,7 +320,7 @@
 				<attribute name="Svn-Revision" value="${svn.version}" />
 			</manifest>
 		</jar>
-		<jar destfile="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/lib/${project.distname}-templates.jar">
+		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-templates.jar">
             <fileset dir="${classes.dir}">
                 <include name="**"/>
                 <exclude name="**/org/**"/>
@@ -322,7 +333,7 @@
                 <attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
             </manifest>
         </jar>  
-		<jar destfile="${dist.dir}/red5/webapps/${project.distname}/screen/screenviewer.jar">
+		<jar destfile="${dist.webapps.dir}/screen/screenviewer.jar">
 			<fileset dir="${classes.dir}">
 				<include name="**/webstart/**"/>
 				<include name="**/*png"/>
@@ -333,7 +344,7 @@
 				<attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
 			</manifest>
 		</jar>
-		<jar destfile="${dist.dir}/red5/webapps/${project.distname}/screen/${project.distname}-client.jar">
+		<jar destfile="${dist.webapps.dir}/screen/${project.distname}-client.jar">
 			<fileset dir="${classes.dir}">
 				<include name="log4j.properties" />
 				<include name="**/client/**"/>
@@ -345,7 +356,7 @@
 				<attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
 			</manifest>
 		</jar>
-		<jar destfile="${dist.dir}/red5/webapps/${project.distname}/screen/viewer.jar">
+		<jar destfile="${dist.webapps.dir}/screen/viewer.jar">
 			<fileset dir="${classes.dir}">
 				<include name="**/jrdesktop/**"/>
 				<include name="**/*png"/>
@@ -356,7 +367,7 @@
 				<attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
 			</manifest>
 		</jar>
-		<jar destfile="${dist.dir}/red5/webapps/${project.distname}/screen/rtpviewer.jar">
+		<jar destfile="${dist.webapps.dir}/screen/rtpviewer.jar">
 			<fileset dir="${classes.dir}">
 				<include name="log4j.properties" />
 				<include name="**/de/**"/>
@@ -370,13 +381,13 @@
 		</jar>
 
 		<!-- Build WebServices -->
-		<jar destfile="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/services/OpenMeetingsService.aar">
+		<jar destfile="${dist.webapps.dir}/WEB-INF/services/OpenMeetingsService.aar">
 			<fileset dir="src/">
 				<include name="META-INF/services.xml"/>
 			</fileset>
 		</jar>
 
-		<jar destfile="${dist.dir}/red5/webapps/${project.distname}/WEB-INF/lib/openmeetings-WebService.jar">
+		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/openmeetings-WebService.jar">
 			<fileset dir="${classes.dir}">
 				<include name="**/openmeetings/axis/**"/>
 			</fileset>
@@ -410,7 +421,7 @@
         <tstamp prefix="build">
             <format property="TODAY" pattern="d-MMMM-yyyy" locale="en"/>
         </tstamp>
-		<jar destfile="${dist.dir}/red5/webapps/${project.distname}/screen/rtpapplet.jar">
+		<jar destfile="${dist.webapps.dir}/screen/rtpapplet.jar">
 			<fileset dir="${classes.dir}">
 				<include name="**/applet/**"/>
 			</fileset>
@@ -441,7 +452,7 @@
             lazy="false"
             >
 			<path>
-				<fileset dir="${dist.dir}/red5/webapps/${project.distname}/screen" >
+				<fileset dir="${dist.webapps.dir}/screen" >
 					<include name="**/*.jar" />
 
 				</fileset>
@@ -560,7 +571,6 @@
 	<path id="jpa.enhancement.classpath">
 		<pathelement path="${classes.dir}"/>
 		<!-- lib contains all of the jars that came with the OpenJPA binary download -->
-		<fileset dir="${openjpa.lib}" includes="*.jar" />
 		<fileset dir="${openjpa.lib}" includes="*.jar" />
 	</path>
 

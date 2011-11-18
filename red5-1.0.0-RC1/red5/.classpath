@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry excluding="**/.svn/*|org/red5/server/script/rhino/" kind="src" path="src"/>
-	<classpathentry excluding="**/.svn/*" kind="src" path="test"/>
-	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?ivyXmlPath=ivy.xml&amp;confs=default%2Cjava6%2Cutest%2Ceclipse&amp;ivySettingsPath=project%3A%2F%2F%2Fivysettings.xml&amp;doRetrieve=true&amp;retrievePattern=lib%2F%5Bartifact%5D-%5Brevision%5D.%5Bext%5D&amp;retrieveSync=false&amp;retrieveConfs=eclipse%2Cutest%2Cjava6%2Cdefault&amp;retrieveTypes=*&amp;acceptedTypes=jar&amp;sourceTypes=source&amp;javadocTypes=javadoc&amp;sourceSuffixes=-source%2C-sources%2C-src&amp;javadocSuffixes=-javadoc%2C-javadocs%2C-doc%2C-docs&amp;alphaOrder=false&amp;resolveInWorkspace=false"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="output" path="bin"/>
-</classpath>

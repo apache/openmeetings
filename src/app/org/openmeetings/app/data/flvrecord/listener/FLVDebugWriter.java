@@ -39,7 +39,6 @@ import org.red5.io.object.Serializer;
 import org.red5.io.utils.IOUtils;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * A Writer is used to write the contents of a FLV file
@@ -168,8 +167,6 @@ public class FLVDebugWriter implements ITagWriter {
 	public void writeHeader() throws IOException {
 		//Header fields (in same order than spec, for comparison purposes)
 		FLVHeader flvHeader = new FLVHeader();
-		flvHeader.setSignature("FLV".getBytes());
-		flvHeader.setVersion ((byte)0x01);
 		flvHeader.setFlagReserved01 ((byte) 0x0);
 		flvHeader.setFlagAudio (true);
 		flvHeader.setFlagReserved02 ((byte) 0x0);
