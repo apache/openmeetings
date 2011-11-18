@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project>
-<project name="openmeetings" basedir="./" default="dist">
+<project name="openmeetings" basedir="./" default="dist"
+	xmlns:rat="antlib:org.apache.rat.anttasks"
+    xmlns="antlib:org.apache.tools.ant"
+    >
 
 	<!-- Sources and output dirs -->
 	<property name="main.src.dir" value="${basedir}/src/app"/>
@@ -606,6 +609,31 @@
 	<!-- Build entire project -->
 	<target name="build project" depends="clean, prepare, compile"/>
 
+	<!-- define the RAT task -->
+	<taskdef
+		uri="antlib:org.apache.rat.anttasks"
+	    resource="org/apache/rat/anttasks/antlib.xml">
+	    <classpath>
+			<fileset dir="${rat.lib}" includes="*.jar" />
+			<path refid="compile.classpath" />
+	    </classpath>
+	</taskdef>
+	
+	<target name="report_rat">
+		<rat:report>
+	        <fileset dir="${main.src.dir}"/>
+	        <fileset dir="${webstart.src.dir}"/>
+	        <fileset dir="${templates.src.dir}"/>
+	        <fileset dir="${test.src.dir}"/>
+	        <fileset dir="${server.src.dir}"/>
+	        <fileset dir="${client.src.dir}"/>
+	        <fileset dir="${screen.src.dir}"/>
+	        <fileset dir="${fileservice.src.dir}"/>
+	        <fileset dir="${roomservice.src.dir}"/>
+	        <fileset dir="${userservice.src.dir}"/>
+	    </rat:report>
+	</target>
+    
 	<!-- Unit Tests -->
 	<property name="om.dist.webapp" value="${red5.root}/webapps/${project.distname}"/>
 
