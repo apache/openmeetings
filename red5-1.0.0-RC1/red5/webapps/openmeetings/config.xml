@@ -250,7 +250,7 @@ of the red5-servlet
 
 <dashboardModuleStartScreen>mainDashboard</dashboardModuleStartScreen>
 
-<dashboardModuleCalendar>lzCalendar</dashboardModuleCalendar>
+<dashboardModuleCalendar>calendar</dashboardModuleCalendar>
 
 
 <!-- Conference Room Modules -->

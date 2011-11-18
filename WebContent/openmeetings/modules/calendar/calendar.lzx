@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <library>
 	
-<class name="calendar" extends="view" > 
+<class name="calendar" extends="baseContentView" > 
 
     <attribute name="detailsInited" value="false" type="boolean"/>
 

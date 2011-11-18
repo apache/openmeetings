@@ -152,6 +152,10 @@
                         ondata="this.showData.apply()">
                         <!-- no harm in calling apply on a state that's already
                             been applied -->
+                            
+                        <handler name="ony" args="y">
+	                		if ($debug) Debug.write("ony ",y);
+	                	</handler>
 
                         <state name="showData" applied="false">
                             <calendar_event name="events" pixellock="true">
@@ -168,9 +172,16 @@
                 </view>
 
                 <state applied="${classroot.opened}">
-                    <scrollbar visible="${scrollable}"/>
+                    <scrollbar visible="${scrollable}">
+                    	<handler name="oninit" >
+	                		if ($debug) Debug.write("oninit scrollbar  ",this.scrolltarget,this);
+	                	</handler>
+                	</scrollbar>
                 </state>
                 <view name="scrollview" visible="false">
+                
+                	
+                
                     <state name="scrollState" applied="false" 
                            onapply="parent.bringToFront()">
                     </state>

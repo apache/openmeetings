@@ -132,7 +132,7 @@
 
         <!-- METHODS -->
         <handler name="oninit">
-            //Debug.write("ONINIT: this =" + this);
+            if ($debug) Debug.write("ONINIT: this =" , this);
             this.mdel = new LzDelegate(this,"trackmouse");
             this.clipdel = new LzDelegate(this,"checkClip");
             this.hidedel = new LzDelegate(this,"checkHide");
@@ -164,7 +164,7 @@
         </method>
 
         <method name="setSelectedEvent" args="e , sdrag "><![CDATA[
-            //Debug.write( 'setSelectedEvent ' , e );
+            if ($debug) Debug.write( 'setSelectedEvent ' , e , sdrag );
             if ( e == this['followview'] ){
                 if ( sdrag && !this.dragging ){
                     this.domousedown();
