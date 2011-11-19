@@ -70,13 +70,12 @@
 	<classpathentry kind="lib" path="lib/openjpa2/commons-lang-2.4.jar"/>
 	<classpathentry kind="lib" path="lib/openjpa2/dom4j-1.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/openjpa2/geronimo-jms_1.1_spec-1.1.1.jar"/>
-	<classpathentry kind="lib" path="lib/openjpa2/geronimo-jpa_2.0_spec-1.1.jar" sourcepath="C:/Users/swagner/.m2/repository/org/apache/geronimo/specs/geronimo-jpa_2.0_spec/1.1/geronimo-jpa_2.0_spec-1.1-sources.jar"/>
+	<classpathentry kind="lib" path="lib/openjpa2/geronimo-jpa_2.0_spec-1.1.jar" />
 	<classpathentry kind="lib" path="lib/openjpa2/geronimo-jta_1.1_spec-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/openjpa2/geronimo-validation_1.0_spec-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/openjpa2/openjpa-2.1.0.jar"/>
 	<classpathentry kind="lib" path="lib/openjpa2/org.apache.bval.bundle-0.2-incubating.jar"/>
 	<classpathentry kind="lib" path="lib/openjpa2/serp-1.13.1.jar"/>
-	<classpathentry kind="lib" path="lib/slf4j/slf4j-api-1.5.10.jar"/>
 	<classpathentry kind="lib" path="lib/upload/commons-digester-1.8.jar"/>
 	<classpathentry kind="lib" path="lib/upload/commons-transaction-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/upload/multipartrequest.jar"/>
@@ -173,5 +172,11 @@
 	<classpathentry kind="lib" path="red5-1.0.0-r4297/dist/lib/quartz-1.8.5.jar"/>
 	<classpathentry kind="lib" path="lib/mina/mina-core-2.0.4.jar"/>
 	<classpathentry kind="lib" path="WebContent/openmeetings/screen/kunststoff.jar"/>
+	<classpathentry kind="lib" path="lib/spring/org.springframework.aop-3.0.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring/org.springframework.aspects-3.0.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring/org.springframework.jdbc-3.0.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring/org.springframework.orm-3.0.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring/org.springframework.web.servlet-3.0.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="red5-1.0.0-r4297/dist/lib/com.springsource.org.aopalliance-1.0.0.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

@@ -20,6 +20,10 @@
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 	
+	<tx:annotation-driven transaction-manager="jpaTransactionManager" />
+    <context:annotation-config />
+    <context:component-scan base-package="org.openmeetings"/>
+	
     <!-- New Class for the Streaming Handlers -->
     <bean id="web.handler" class="org.openmeetings.app.remote.red5.ScopeApplicationAdapter"/>
     <bean id="openmeetings.ClientListManager" class="org.openmeetings.app.remote.red5.ClientListManager" />
@@ -163,9 +167,4 @@
   	<bean id="backupExport" class="org.openmeetings.servlet.outputhandler.BackupExport" />
   	<bean id="backupImport" class="org.openmeetings.servlet.outputhandler.BackupImport" />
 
-	<tx:annotation-driven transaction-manager="jpaTransactionManager"/>
-	
-	<context:annotation-config />
-	<context:component-scan base-package="org.openmeetings"/>
-	
 </beans>
