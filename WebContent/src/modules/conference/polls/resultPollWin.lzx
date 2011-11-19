@@ -8,18 +8,22 @@
 		<attribute name="roomPoll" value="null" />
 		<attribute name="archPolls" value="null" />
 		<attribute name="resultpollvotes" value="null" />
+ 		<attribute name="displayedPoll" value="null" />
 
 		<handler name="oninit">
-			this.displayResults(roomPoll);
+			displayResults(roomPoll);
 		</handler>
-
+		
 		<method name="displayResults" args="poll">
 		<![CDATA[
+			displayedPoll = poll;
 			this.content.setAttribute("visible", poll != null);
 			if (poll == null) {
 				this.head.setAttribute('text', canvas.getLabelName(41));
+				updateButtons();
 				return;
 			}
+			updateButtons();
 			this.head.setAttribute('text',
 					(canvas.user_id == poll.createdBy.user_id ? canvas
 							.getLabelName(1411) : poll.createdBy.login)
@@ -105,18 +109,17 @@
 				funcname="pollservice.getArchivedPollList" remotecontext="$once{ canvas.thishib }">
 				<handler name="ondata" args="value">
 				<![CDATA[
-
-
+					parent.removeAll();
 					if ($debug)
 						Debug.write("getArchivedPollList ", value);
 
-					if (value == null) {
-						this.parent.setAttribute("visible", false);
-						this.parent.parent.archPollLbl.setAttribute("visible",
-								false);
+					this.parent.parent.archPolls = value;
+					var noArch = (value == null || (value != null && value.length == 0));
+					parent.setAttribute("visible", !noArch);
+					parent.parent.archPollLbl.setAttribute("visible", !noArch);
+					if (noArch) {
 						return;
 					}
-					this.parent.parent.archPolls = value;
 					if (this.parent.parent.roomPoll != null) {
 						this.parent.addItem(
 								this.parent.parent.roomPoll.pollName + "("
@@ -131,9 +134,11 @@
 				]]>
 				</handler>
 			</netRemoteCallHib>
+			
 			<handler name="oninit">
 				this.getArchivedPollList.doCall();
 			</handler>
+			
 			<handler name="onselect" args="sel">
 				if ($debug)
 					Debug.write("onselect ", sel);
@@ -141,6 +146,16 @@
 						? this.parent.archPolls[sel.value]
 						: this.parent.roomPoll);
 			</handler>
+			
+			<method name="removeAll">
+			<![CDATA[
+				var currentCount = this.cblist.getNumItems();
+				if ($debug) Debug.write("currentCount = ", currentCount);
+				for (var i = 0; i < currentCount; ++i) {
+					this.removeItemAt(0);
+				}
+			]]>
+            </method>
 		</resetCombobox>
 		
 		<labelText x="2" y="42" name="head" fontstyle="bold" />
@@ -159,11 +174,8 @@
 				<labeldTextListItem labelid="1414" value="0"/>
 				<labeldTextListItem labelid="1415" value="1" selected="true" />
 				<handler name="onselect" args="sel">
-					if ($debug)
-						Debug.write("onselect ", sel);
+					if ($debug) Debug.write("onselect ", sel);
 					var val = parent.parent._archPolls.getValue();
-					if ($debug)
-						Debug.write("AAAAA ", val);
 					parent.parent.displayResults(val > -1
 							? parent.parent.archPolls[val]
 							: parent.parent.roomPoll);
@@ -173,6 +185,56 @@
 			<labelText y="146" labelid="40" x="2" />
 		</view>
 		
+		<method name="updateButtons">
+		<![CDATA[
+			_deletePoll.setAttribute("visible", canvas.ismoderator && displayedPoll != null);
+			var hasArch = _archPolls.cblist.getNumItems() > 0;
+			_closePoll.setAttribute("visible", _deletePoll.visible && (!hasArch || (hasArch && _archPolls.getValue() == -1)));
+		]]>
+		</method>
+		
+		<simpleLabelButton name="_deletePoll" labelid="1420" width="100"
+			x="2" y="$once{ parent.height-22 }"
+            onclick="new lz.confirmDeleteWindow(parent, {refObj: this, labelid: 1420, messagelabelid: 1421});"
+            >
+		    <netRemoteCallHib name="deletePoll" funcname="pollservice.deletePoll" remotecontext="$once{ canvas.thishib }" >   
+		        <netparam><method name="getValue"> var poll = parent.parent.parent.displayedPoll; return poll != null ? poll.roomPollId : -1; </method></netparam> 
+		        <handler name="ondata" args="value">
+				<![CDATA[
+					var p = parent.parent;
+					var archCount = p._archPolls.cblist.getNumItems();
+		        	var hasArch = archCount > 0;
+		        	if (!hasArch || (hasArch && p._archPolls.getValue() == -1)) {
+			        	p.roomPoll = null;
+		        	}
+		        	if (archCount) {
+		        		p.displayResults(null);
+		        	}
+		        	p._archPolls.getArchivedPollList.doCall();
+				]]>
+		        </handler>
+		    </netRemoteCallHib>
+			<method name="confirmDelete">
+				deletePoll.doCall();
+			</method>
+        </simpleLabelButton>
+            
+		<simpleLabelButton name="_closePoll" labelid="1418" width="100"
+			x="104" y="$once{ parent.height-22 }"
+            onclick="new lz.confirmDeleteWindow(parent, {refObj: this, labelid: 1418, confirmlabelid: 85, messagelabelid: 1419});"
+            >
+		    <netRemoteCallHib name="closePoll" funcname="pollservice.closePoll" remotecontext="$once{ canvas.thishib }" >   
+		        <handler name="ondata" args="value">
+		        	parent.parent.roomPoll = null;
+		        	parent.parent._archPolls.getArchivedPollList.doCall();
+		        </handler>
+		    </netRemoteCallHib>
+			<method name="confirmDelete">
+				if ($debug) Debug.write("parent._archPolls.getValue(); ", parent._archPolls.getValue());
+				closePoll.doCall();
+			</method>
+        </simpleLabelButton>
+            
 		<simpleLabelButton labelid="25" width="100" x="$once{ parent.width-102 }"
             y="$once{ parent.height-22 }" onclick="this.parent.close();" />
 		

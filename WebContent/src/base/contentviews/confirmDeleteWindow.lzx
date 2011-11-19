@@ -5,9 +5,8 @@
     docking="true" width="264" x="450" y="20" height="200">
     
     <attribute name="refObj" value="null" />
-    
-    
     <attribute name="messagelabelid" value="153" type="number" />
+    <attribute name="confirmlabelid" value="154" type="number" />
     
     <handler name="oninit">
         lz.ModeManager.makeModal(this);
@@ -20,7 +19,7 @@
     <labelText labelid="$once{ parent.messagelabelid }" y="22" x="4"
     		   width="$once{ parent.width - 8 }" multiline="true"/>
     
-    <simpleLabelButton labelid="154" width="100" x="40" y="170">
+    <simpleLabelButton labelid="$once{ parent.confirmlabelid }" width="100" x="40" y="170">
         <handler name="onclick">
             //Debug.write("confirm");
             this.parent.refObj.confirmDelete();

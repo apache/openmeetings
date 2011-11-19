@@ -78,16 +78,29 @@ public class PollManagement {
 		return em.merge(rp);
 	}
 
-	public void clearRoomPollList(Long room_id){
+	public boolean closePoll(Long room_id){
 		try {
-			log.debug(" :: clearRoomPollList :: ");
+			log.debug(" :: closePoll :: ");
 			Query q = em.createQuery("UPDATE RoomPoll rp SET rp.archived = :archived WHERE rp.room.rooms_id = :rooms_id");
 			q.setParameter("rooms_id", room_id);
 			q.setParameter("archived", true);
-			q.executeUpdate();
+			return q.executeUpdate() > 0;
 		} catch (Exception err) {
-			log.error("[clearRoomPollList]", err);
+			log.error("[closePoll]", err);
 		}
+		return false;
+	}
+
+	public boolean deletePoll(Long poll_id){
+		try {
+			log.debug(" :: deletePoll :: ");
+			Query q = em.createQuery("DELETE FROM RoomPoll rp WHERE rp.roomPollId = :roomPollId");
+			q.setParameter("roomPollId", poll_id);
+			return q.executeUpdate() > 0;
+		} catch (Exception err) {
+			log.error("[deletePoll]", err);
+		}
+		return false;
 	}
 
 	public RoomPoll getPoll(Long room_id) {

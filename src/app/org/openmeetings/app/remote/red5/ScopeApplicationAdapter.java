@@ -87,8 +87,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	private UsersDaoImpl usersDao;
 	@Autowired
 	private MeetingMemberDaoImpl meetingMemberDao;
-	@Autowired
-	private PollManagement pollManagement;
 
 	// This is the Folder where all executables are written
 	// for windows platform
@@ -758,16 +756,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			}
 
 			this.clientListManager.removeClient(currentClient.getStreamid());
-
-			// If this Room is empty clear the Room Poll List
-			HashMap<String, RoomClient> rcpList = this.clientListManager
-					.getClientListByRoom(room_id);
-			log.debug("roomLeave rcpList size: " + rcpList.size());
-			if (rcpList.size() == 0) {
-				pollManagement.clearRoomPollList(room_id);
-				// log.debug("clearRoomPollList cleared");
-			}
-
 		} catch (Exception err) {
 			log.error("[roomLeaveByScope]", err);
 		}

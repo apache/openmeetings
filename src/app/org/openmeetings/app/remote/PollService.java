@@ -55,7 +55,7 @@ public class PollService implements IPendingServiceCallback {
 
 			if (rc.getIsMod()) {
 				// will move all existing polls to the archive
-				pollManagement.clearRoomPollList(rc.getRoom_id());
+				pollManagement.closePoll(rc.getRoom_id());
 				
 				sendNotification(currentcon, "newPoll",
 						new Object[] { pollManagement.createPoll(rc,
@@ -72,8 +72,48 @@ public class PollService implements IPendingServiceCallback {
 		return returnValue;
 	}
 
-	public void clearRoomPollList(Long room_id) {
-		pollManagement.clearRoomPollList(room_id);
+	public boolean closePoll() {
+		try {
+			log.debug("closePoll: ");
+
+			IConnection currentcon = Red5.getConnectionLocal();
+			RoomClient rc = clientListManager.getClientByStreamId(currentcon
+					.getClient().getId());
+
+			log.debug("rc: " + rc.getStreamid() + " " + rc.getUsername() + " "
+					+ rc.getIsMod());
+
+			if (rc.getIsMod()) {
+				// will move all existing polls to the archive
+				return pollManagement.closePoll(rc.getRoom_id());
+			}
+
+		} catch (Exception err) {
+			log.error("[closePoll]", err);
+		}
+		return false;
+	}
+
+	public boolean deletePoll(Long poll_id) {
+		try {
+			log.debug("closePoll: ");
+
+			IConnection currentcon = Red5.getConnectionLocal();
+			RoomClient rc = clientListManager.getClientByStreamId(currentcon
+					.getClient().getId());
+
+			log.debug("rc: " + rc.getStreamid() + " " + rc.getUsername() + " "
+					+ rc.getIsMod());
+
+			if (rc.getIsMod()) {
+				// will move all existing polls to the archive
+				return pollManagement.deletePoll(poll_id);
+			}
+
+		} catch (Exception err) {
+			log.error("[closePoll]", err);
+		}
+		return false;
 	}
 
 	public void sendNotification(IConnection current, String clientFunction,

@@ -4256,4 +4256,16 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1417" name="chat_notification">
     <value>New message(s)</value>
   </string>
+  <string id="1418" name="poll_close">
+    <value>Close Poll</value>
+  </string>
+  <string id="1419" name="poll_close_confirm">
+    <value>Are you sure you want to close this Poll? No one will be able to vote</value>
+  </string>
+  <string id="1420" name="poll_delete">
+    <value>Delete Poll</value>
+  </string>
+  <string id="1421" name="poll_delete_confirm">
+    <value>Are you sure you want to delete this Poll? The results will be deleted as well.</value>
+  </string>
 </language>
