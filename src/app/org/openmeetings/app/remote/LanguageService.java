@@ -90,25 +90,25 @@ public class LanguageService {
 		return null;
 	}
 
-	public Long addLanguage(String SID, String langName) {
+	public Long addLanguage(String SID, String langName, String code) {
 		Long users_id = sessionManagement.checkSession(SID);
 		Long user_level = userManagement.getUserLevelByID(users_id);
 		if (authLevelManagement.checkAdminLevel(user_level)) {
 			if (langName.length() == 0)
 				return new Long(-30);
-			return fieldLanguageDaoImpl.addLanguage(langName, false);
+			return fieldLanguageDaoImpl.addLanguage(langName, false, code);
 		}
 		return null;
 	}
 
-	public Long updateLanguage(String SID, Long language_id, String langName) {
+	public Long updateLanguage(String SID, Long language_id, String langName, String code) {
 		Long users_id = sessionManagement.checkSession(SID);
 		Long user_level = userManagement.getUserLevelByID(users_id);
 		if (authLevelManagement.checkAdminLevel(user_level)) {
 			if (langName.length() == 0)
 				return new Long(-30);
 			return fieldLanguageDaoImpl.updateFieldLanguage(language_id,
-					langName, "false");
+					langName, code, "false");
 		}
 		return null;
 	}
@@ -118,7 +118,7 @@ public class LanguageService {
 		Long user_level = userManagement.getUserLevelByID(users_id);
 		if (authLevelManagement.checkAdminLevel(user_level)) {
 			return fieldLanguageDaoImpl.updateFieldLanguage(language_id, "",
-					"true");
+					"", "true");
 		}
 		return null;
 	}

@@ -28,7 +28,7 @@ public class FieldLanguageDaoImpl {
 	@PersistenceContext
 	private EntityManager em;
 
-	public Long addLanguage(String langName, Boolean langRtl) {
+	public Long addLanguage(String langName, Boolean langRtl, String code) {
 		try {
 
 			FieldLanguage fl = new FieldLanguage();
@@ -36,6 +36,7 @@ public class FieldLanguageDaoImpl {
 			fl.setDeleted("false");
 			fl.setName(langName);
 			fl.setRtl(langRtl);
+			fl.setCode(code);
 
 			fl = em.merge(fl);
 			Long languages_id = fl.getLanguage_id();
@@ -58,12 +59,14 @@ public class FieldLanguageDaoImpl {
 	}
 
 	public Long updateFieldLanguage(Long language_id, String langName,
-			String deleted) {
+			String code, String deleted) {
 		try {
 			FieldLanguage fl = this.getFieldLanguageById(language_id);
 			fl.setUpdatetime(new Date());
 			if (langName.length() > 0)
 				fl.setName(langName);
+			if (code.length() > 0)
+				fl.setCode(code);
 			fl.setDeleted(deleted);
 			this.updateLanguage(fl);
 			return language_id;
@@ -109,6 +112,7 @@ public class FieldLanguageDaoImpl {
 					+ "WHERE c.deleted <> :deleted ";
 			Query query = em.createQuery(hql);
 			query.setParameter("deleted", "true");
+			@SuppressWarnings("unchecked")
 			List<FieldLanguage> ll = query.getResultList();
 			return ll;
 		} catch (Exception ex2) {

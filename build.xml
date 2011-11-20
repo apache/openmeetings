@@ -498,7 +498,7 @@
 		</java>
 	</target>
 
-	<target name="compile" depends="prepare, resources, compile.only"/>
+	<target name="compile" depends="prepare, compile.only"/>
 	
 	<!-- Normal build of application
     compiler="org.eclipse.jdt.core.JDTCompilerAdapter" -->
@@ -534,7 +534,7 @@
 		</javac>
 	</target>
 
-	<target name="compile.screen.share" depends="prepare.mkdir">
+	<target name="compile.screen.share" depends="clean.classes, prepare.mkdir, resources">
 		<echo message="Compile screen share to ${screen.out.dir}" />
 		<!-- compile screen share -->
 		<javac debug="on" debuglevel="lines,vars,source" srcdir="${screen.src.dir}" destdir="${screen.out.dir}" >
@@ -560,10 +560,13 @@
 	<!-- Remove classes directory for clean build -->
 	<target name="clean" depends="cleanForBinary" description="Prepare for clean build" />
 
-	<target name="cleanForBinary" description="Clean For Binary">
+	<target name="clean.classes" description="Clean Classes">
+		<delete dir="${main.out.dir}"/>
+	</target>
+
+	<target name="cleanForBinary" depends="clean.classes" description="Clean For Binary">
 		<delete dir="${dist.dir}"/>
 		<delete dir="${screen.out.dir}"/>
-		<delete dir="${main.out.dir}"/>
 		<delete dir="${report.dir}"/>
 		<delete dir="${derbydb.dir}" />
 		<delete dir="${basedir}/log" />

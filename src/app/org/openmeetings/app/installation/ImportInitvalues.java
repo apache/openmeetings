@@ -689,16 +689,18 @@ public class ImportInitvalues {
 					.intValue();
 
 			String rtl = item.attribute("rightToLeft").getValue();
+			String code = item.attribute("code").getValue();
 
 			LinkedHashMap<String, Object> lang = new LinkedHashMap<String, Object>();
 			lang.put("id", id);
 			lang.put("name", country);
 			lang.put("rtl", rtl);
+			lang.put("code", code);
 			// log.error("getLanguageFiles "+country);
 			languages.put(id, lang);
 
 		}
-		log.debug("Countries ADDED ");
+		log.debug("Languages ADDED ");
 		return languages;
 
 	}
@@ -770,6 +772,7 @@ public class ImportInitvalues {
 
 			String langName = (String) lang.get("name");
 			String rtl = (String) lang.get("rtl");
+			String code = (String) lang.get("code");
 
 			System.out.println("loadInitLanguages rtl from xml: " + rtl);
 
@@ -779,7 +782,7 @@ public class ImportInitvalues {
 				langRtl = true;
 
 			Long languages_id = fieldLanguageDaoImpl.addLanguage(langName,
-					langRtl);
+					langRtl, code);
 
 			SAXReader reader = new SAXReader();
 			Document document = reader.read(filePath + langName + ".xml");

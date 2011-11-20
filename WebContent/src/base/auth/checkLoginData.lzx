@@ -20,6 +20,8 @@
     </handler>
     
     <handler name="oninit">
+    	canvas.thishib.setDefaultUserLanguage();
+    	
     	_mainScrollBar.setAttribute("visibility","hidden");
         lz.Focus.setFocus(this.username,true);
     </handler>
@@ -283,12 +285,14 @@
             <![CDATA[
             //The onResult-Handler will be called be the rtmpconnection
             	if ($debug) {
-                    Debug.write("user.lang: ",value.language_id);
-                    Debug.write("loginUser: ",value);
+                    Debug.write("user.lang: ", value.language_id);
+                    Debug.write("loginUser: ", value);
                 }
             	
                 if (!(value<0)){
-                    hib.userlang = isNaN(value.language_id) ? canvas.default_lang_id :  Number(value.language_id);
+                	if (!isNaN(Number(value.language_id))) {
+                    	hib.userlang = Number(value.language_id);
+                    }
                     
                     var g = canvas.getUserData();
                     if (this.parent._savelogindata.getValue()) {

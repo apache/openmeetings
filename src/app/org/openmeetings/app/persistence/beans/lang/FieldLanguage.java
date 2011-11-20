@@ -30,9 +30,10 @@ public class FieldLanguage implements Serializable {
 	private String deleted;
 	@Column(name="rtl")
 	private Boolean rtl;
+	@Column(name="code")
+	private String code;
 	
     public FieldLanguage() {
-		super();
 	}
 
 	public Long getLanguage_id() {
@@ -77,7 +78,10 @@ public class FieldLanguage implements Serializable {
 		this.rtl = rtl;
 	}
 
-	
-	
-
+	public String getCode() {
+		return code;
+	}
+	public void setCode(String code) {
+		this.code = code;
+	}
 }

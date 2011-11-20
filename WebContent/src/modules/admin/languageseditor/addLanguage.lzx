@@ -26,6 +26,7 @@
 		<attribute name="tempValue" value="0" type="number" />
         <netparam><method name="getValue"> return canvas.sessionId;</method></netparam> 
         <netparam><method name="getValue"> return parent.parent.langName.getText();</method></netparam>  
+        <netparam><method name="getValue"> return parent.parent.langCode.getText();</method></netparam>  
         <handler name="ondata" args="value">
             //The onResult-Handler will be called be the rtmpconnection
 			if($debug) Debug.write(value);
@@ -37,6 +38,10 @@
     <!-- 365:Name -->
     <labelText labelid="365" width="200" y="54" x="2"/>
         <customEdittext name="langName" y="54" x="140" width="170" />
+	
+    <!-- 1422:Code -->
+    <labelText labelid="1422" width="200" y="74" x="2"/>
+        <customEdittext name="langCode" y="74" x="140" width="170" />
 	
 	<!-- 366:add language  -->
     <simpleLabelButton name="_btn" labelid="366" width="120" x="230" 

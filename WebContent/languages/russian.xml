@@ -4275,4 +4275,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1421" name="poll_delete_confirm">
     <value>Are you sure you want to delete this Poll? The results will be deleted as well.</value>
   </string>
+  <string id="1422" name="language_code">
+    <value>Language ISO Code</value>
+  </string>
 </language>

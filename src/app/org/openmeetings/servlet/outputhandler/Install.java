@@ -3,7 +3,6 @@ package org.openmeetings.servlet.outputhandler;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -57,6 +56,67 @@ public class Install extends VelocityViewServlet {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			Install.class, ScopeApplicationAdapter.webAppRootKey);
 
+	private Template getStep2Template(HttpServletRequest httpServletRequest, Context ctx, String lang) throws Exception {
+		String header = httpServletRequest.getHeader("Accept-Language");
+		String[] headerList = header != null ? header.split(",") : new String[0];
+		String headCode = headerList.length > 0 ? headerList[0] : "en";
+		
+		String filePath = getServletContext().getRealPath("/")
+				+ ImportInitvalues.languageFolderName;
+		LinkedHashMap<Integer, LinkedHashMap<String, Object>> allLanguagesAll = getImportInitvalues()
+				.getLanguageFiles(filePath);
+		LinkedHashMap<Integer, String> allLanguages = new LinkedHashMap<Integer, String>();
+		//first iteration for preferred language
+		Integer prefKey = -1;
+		String prefName = null;
+		for (Integer key : allLanguagesAll.keySet()) {
+			String langName = (String) allLanguagesAll.get(key).get("name");
+			String langCode = (String) allLanguagesAll.get(key).get("code");
+			if (langCode != null) {
+				if (headCode.equals(langCode)) {
+					prefKey = key;
+					prefName = langName;
+					break;
+				} else if (headCode.startsWith(langCode)) {
+					prefKey = key;
+					prefName = langName;
+				}
+			}
+		}
+		allLanguages.put(prefKey, prefName);
+		for (Integer key : allLanguagesAll.keySet()) {
+			String langName = (String) allLanguagesAll.get(key).get("name");
+			if (key != prefKey) {
+				allLanguages.put(key, langName);
+			}
+		}
+
+		LinkedHashMap<String, String> allFonts = new LinkedHashMap<String, String>();
+		allFonts.put("TimesNewRoman", "TimesNewRoman");
+		allFonts.put("Verdana", "Verdana");
+		allFonts.put("Arial", "Arial");
+
+		LinkedHashMap<String, String> allTimeZones = new LinkedHashMap<String, String>();
+		List<OmTimeZone> omTimeZoneList = getImportInitvalues()
+				.getTimeZones(filePath);
+		log.debug("omTimeZoneList :: " + omTimeZoneList.size());
+		for (OmTimeZone omTimeZone : omTimeZoneList) {
+			String labelName = omTimeZone.getJname() + " ("
+					+ omTimeZone.getLabel() + ")";
+			log.debug("labelName :: " + labelName);
+			allTimeZones.put(omTimeZone.getJname(), labelName);
+		}
+
+		Template tpl = super.getTemplate("install_step1_"
+				+ lang + ".vm");
+		ctx.put("allLanguages", allLanguages);
+		ctx.put("allFonts", allFonts);
+		ctx.put("allTimeZones", allTimeZones);
+		StringWriter writer = new StringWriter();
+		tpl.merge(ctx, writer);
+
+		return tpl;
+	}
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -87,11 +147,11 @@ public class Install extends VelocityViewServlet {
 					+ ScopeApplicationAdapter.configDirName
 					+ File.separatorChar;
 
-			if (command == null) {
-				log.debug("command equals null");
+			File installerFile = new File(working_dir
+					+ InstallationDocumentHandler.installFileName);
 
-				File installerFile = new File(working_dir
-						+ InstallationDocumentHandler.installFileName);
+			if (command == null || !installerFile.exists()) {
+				log.debug("command equals null");
 
 				if (!installerFile.exists()) {
 
@@ -127,44 +187,7 @@ public class Install extends VelocityViewServlet {
 					int i = InstallationDocumentHandler.getInstance()
 							.getCurrentStepNumber(working_dir);
 					if (i == 0) {
-						String filePath = getServletContext().getRealPath("/")
-								+ ImportInitvalues.languageFolderName;
-						LinkedHashMap<Integer, LinkedHashMap<String, Object>> allLanguagesAll = getImportInitvalues()
-								.getLanguageFiles(filePath);
-						LinkedHashMap<Integer, String> allLanguages = new LinkedHashMap<Integer, String>();
-						for (Iterator<Integer> iter = allLanguagesAll.keySet()
-								.iterator(); iter.hasNext();) {
-							Integer key = iter.next();
-							String langName = (String) allLanguagesAll.get(key)
-									.get("name");
-							allLanguages.put(key, langName);
-						}
-
-						LinkedHashMap<String, String> allFonts = new LinkedHashMap<String, String>();
-						allFonts.put("TimesNewRoman", "TimesNewRoman");
-						allFonts.put("Verdana", "Verdana");
-						allFonts.put("Arial", "Arial");
-
-						LinkedHashMap<String, String> allTimeZones = new LinkedHashMap<String, String>();
-						List<OmTimeZone> omTimeZoneList = getImportInitvalues()
-								.getTimeZones(filePath);
-						log.debug("omTimeZoneList :: " + omTimeZoneList.size());
-						for (OmTimeZone omTimeZone : omTimeZoneList) {
-							String labelName = omTimeZone.getJname() + " ("
-									+ omTimeZone.getLabel() + ")";
-							log.debug("labelName :: " + labelName);
-							allTimeZones.put(omTimeZone.getJname(), labelName);
-						}
-
-						Template tpl = super.getTemplate("install_step1_"
-								+ lang + ".vm");
-						ctx.put("allLanguages", allLanguages);
-						ctx.put("allFonts", allFonts);
-						ctx.put("allTimeZones", allTimeZones);
-						StringWriter writer = new StringWriter();
-						tpl.merge(ctx, writer);
-
-						return tpl;
+						return getStep2Template(httpServletRequest, ctx, lang);
 					} else {
 						return getVelocityView().getVelocityEngine()
 								.getTemplate("install_step2_" + lang + ".vm");
@@ -176,51 +199,7 @@ public class Install extends VelocityViewServlet {
 				int i = InstallationDocumentHandler.getInstance()
 						.getCurrentStepNumber(working_dir);
 				if (i == 0) {
-
-					log.debug("do init installation");
-
-					// update to next step
-					// InstallationDocumentHandler.getInstance().createDocument(working_dir+InstallationDocumentHandler.installFileName,1);
-
-					String filePath = getServletContext().getRealPath("/")
-							+ ImportInitvalues.languageFolderName;
-					LinkedHashMap<Integer, LinkedHashMap<String, Object>> allLanguagesAll = getImportInitvalues()
-							.getLanguageFiles(filePath);
-					LinkedHashMap<Integer, String> allLanguages = new LinkedHashMap<Integer, String>();
-					for (Iterator<Integer> iter = allLanguagesAll.keySet()
-							.iterator(); iter.hasNext();) {
-						Integer key = iter.next();
-						String langName = (String) allLanguagesAll.get(key)
-								.get("name");
-						allLanguages.put(key, langName);
-					}
-
-					LinkedHashMap<String, String> allFonts = new LinkedHashMap<String, String>();
-					allFonts.put("TimesNewRoman", "TimesNewRoman");
-					allFonts.put("Verdana", "Verdana");
-					allFonts.put("Arial", "Arial");
-
-					LinkedHashMap<String, String> allTimeZones = new LinkedHashMap<String, String>();
-					List<OmTimeZone> omTimeZoneList = getImportInitvalues()
-							.getTimeZones(filePath);
-					log.debug("omTimeZoneList :: " + omTimeZoneList.size());
-					for (OmTimeZone omTimeZone : omTimeZoneList) {
-						String labelName = omTimeZone.getJname() + " ("
-								+ omTimeZone.getLabel() + ")";
-						log.debug("labelName :: " + labelName);
-						allTimeZones.put(omTimeZone.getJname(), labelName);
-					}
-
-					Template tpl = super.getTemplate("install_step1_" + lang
-							+ ".vm");
-					ctx.put("allLanguages", allLanguages);
-					ctx.put("allFonts", allFonts);
-					ctx.put("allTimeZones", allTimeZones);
-					StringWriter writer = new StringWriter();
-					tpl.merge(ctx, writer);
-
-					return tpl;
-
+					return getStep2Template(httpServletRequest, ctx, lang);
 				} else {
 					ctx.put("error",
 							"This Step of the installation has already been done. continue with step 2 <A HREF='?command=step2'>continue with step 2</A>");

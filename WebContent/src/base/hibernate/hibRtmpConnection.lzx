@@ -227,14 +227,65 @@
             parent.getDefaultLanguage.doCall();
         </handler>  
     </netRemoteCallHib>    
-    
+
+	<method name="setDefaultUserLanguage">
+	<![CDATA[
+		if (userlang == -1 && canvas.language_id != 0) {
+			userlang = canvas.language_id;
+		} else if (userlang == -1) {
+			var lang_id = canvas.default_lang_id;
+			
+			var browserLang = flash.external.ExternalInterface.call("function(){return window.navigator.systemLanguage || window.navigator.userLanguage || window.navigator.language;}");
+			if (browserLang == null) {
+				browserLang = "" + System.capabilities.language;
+			}
+			if (browserLang != null && browserLang.length > 1) {
+				var lngCode = browserLang.substring(0, 2);
+				
+				//openlaszlo XPath is able to search nothing, so will iterate
+				var xpath = "languagesSet:/item";
+				var list = languagesSet.getPointer().xpathQuery(xpath);
+				
+				var partMatch = -1, fullMatch = -1; 
+				for (var i = 1; list != null && i <= list.length; ++i) {
+					xpath = "languagesSet:/item[" + i + "]/code/text()";
+					var val = languagesSet.getPointer().xpathQuery(xpath);
+					if (val != null && val.length > 1) {
+						var partCode = ("" + val).substring(0, 2);
+						
+						if (browserLang == val) {
+							fullMatch = i;
+						} else if (lngCode == val) {
+							partMatch = i;
+						} else if (partCode == lngCode) {
+							partMatch = i;
+						}
+					}
+				}
+				if (partMatch != -1 || fullMatch != -1) {
+					i = (fullMatch != -1) ? fullMatch : partMatch;
+					xpath = "languagesSet:/item[" + i + "]/language_id/text()";
+					lang_id = languagesSet.getPointer().xpathQuery(xpath);
+				}
+			}
+			
+            if (canvas.language_id == 0) {
+            	userlang = lang_id;
+            } else {
+            	userlang = canvas.language_id;
+            }
+		}
+	]]>
+	</method>
+	
     <netRemoteCallHib name="logoutUser" funcname="xmlcrm.logoutUser"
         remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" 
         isCallBackHandler="true">
         <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
         <handler name="sendCallBack">
+        <![CDATA[
             //The onResult-Handler will be called be the rtmpconnection
-            if ($debug) Debug.write("sendCallBack logoutUser: ",value);    
+            if ($debug) Debug.write("sendCallBack logoutUser: ");    
             parent.initlanguageLoaded = false;
             
             var g = canvas.getUserData();
@@ -248,9 +299,12 @@
             canvas.setUserData(g);
             canvas.setColorStyle(canvas.baseColorScheme);
             
-            parent.userlang = canvas.default_lang_id;
+            parent.userlang = -1;
+            setDefaultUserLanguage();
+
         	parent.getLanguageByIdAndMax.start = 0;
         	parent.getLanguageByIdAndMax.doCall();
+        ]]>
         </handler>          
     </netRemoteCallHib>     
     
@@ -273,11 +327,7 @@
             //The onResult-Handler will be called be the rtmpconnection
             canvas.default_lang_id = value;
             if ($debug) Debug.write("getDefaultLanguage: ",value,"; canvas.lang = ", canvas.language_id);
-            if (canvas.language_id==0){
-            	parent.userlang = canvas.default_lang_id;
-            } else {
-            	parent.userlang = canvas.language_id;
-            }
+            setDefaultUserLanguage();
             parent.getLanguageByIdAndMax.doCall();
         </handler>  
     </netRemoteCallHib>      
