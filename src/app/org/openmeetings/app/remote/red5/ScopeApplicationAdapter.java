@@ -99,9 +99,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	public static String profilesPrefix = "profile_";
 
 	public static String configKeyCryptClassName = null;
-
+	public static Boolean whiteboardDrawStatus = null;
+	
 	private static long broadCastCounter = 0;
-
 	public static boolean initComplete = false;
 
 	public synchronized void resultReceived(IPendingServiceCall arg0) {
@@ -2501,10 +2501,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 						whiteboardObj);
 			}
 
-			Configuration conf = cfgManagement.getConfKey(3,
-					"show.whiteboard.draw.status");
-			boolean showDrawStatus = conf != null
-					&& "1".equals(conf.getConf_value());
+			boolean showDrawStatus = getWhiteboardDrawStatus();
 
 			// Notify all Clients of that Scope (Room)
 			Collection<Set<IConnection>> conCollection = current.getScope()
@@ -2631,10 +2628,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			sendObject.put("id", whiteboardId);
 			sendObject.put("param", whiteboardObjParam);
 
-			Configuration conf = cfgManagement.getConfKey(3,
-					"show.whiteboard.draw.status");
-			boolean showDrawStatus = conf != null
-					&& "1".equals(conf.getConf_value());
+			boolean showDrawStatus = getWhiteboardDrawStatus();
 
 			// Notify all Clients of that Scope (Room)
 			Collection<Set<IConnection>> conCollection = current.getScope()
@@ -3895,8 +3889,15 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		return roomClientList;
 	}
 
+	private boolean getWhiteboardDrawStatus() {
+		if (ScopeApplicationAdapter.whiteboardDrawStatus == null) {
+			String drawStatus = cfgManagement.getConfValue("show.whiteboard.draw.status", String.class, "0");
+			ScopeApplicationAdapter.whiteboardDrawStatus = "1".equals(drawStatus);
+		}
+		return ScopeApplicationAdapter.whiteboardDrawStatus;
+	}
+	
 	public String getCryptKey() {
-		// public String getCryptKey() {
 		try {
 
 			if (ScopeApplicationAdapter.configKeyCryptClassName == null) {

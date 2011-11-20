@@ -1,7 +1,6 @@
 package org.openmeetings.app.data.basic;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -284,6 +283,11 @@ public class Configurationmanagement {
 				if (!em.contains(conf)) {
 					conf = em.merge(conf);
 				}
+			}
+			if ("crypt_ClassName".equals(conf.getConf_key())) {
+				ScopeApplicationAdapter.configKeyCryptClassName = conf.getConf_value();
+			} else if ("show.whiteboard.draw.status".equals(conf.getConf_key())) {
+				ScopeApplicationAdapter.whiteboardDrawStatus = "1".equals(conf.getConf_value());
 			}
 			return conf.getConfiguration_id();
 		} catch (Exception ex2) {
