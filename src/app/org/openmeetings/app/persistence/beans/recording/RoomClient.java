@@ -14,7 +14,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 
-
 @Entity
 @Table(name = "roomclient")
 public class RoomClient implements Serializable {
