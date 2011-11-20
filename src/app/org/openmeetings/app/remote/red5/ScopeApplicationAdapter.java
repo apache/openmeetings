@@ -18,7 +18,6 @@ import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.calendar.daos.MeetingMemberDaoImpl;
 import org.openmeetings.app.data.calendar.management.AppointmentLogic;
-import org.openmeetings.app.data.conference.PollManagement;
 import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.logs.ConferenceLogDaoImpl;
 import org.openmeetings.app.data.user.Usermanagement;
@@ -55,10 +54,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		IPendingServiceCallback, IStreamAwareScopeHandler {
-	
+
 	public static String webAppRootKey = null;
 	public static String webAppRootPath = null;
-	
+
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			ScopeApplicationAdapter.class,
 			ScopeApplicationAdapter.webAppRootKey);
@@ -1268,16 +1267,22 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			for (Set<IConnection> conset : conCollection) {
 				for (IConnection conn : conset) {
 					if (conn != null) {
-						RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+						RoomClient rcl = this.clientListManager
+								.getClientByStreamId(conn.getClient().getId());
 						if (rcl == null) {
 							// continue;
-						} else if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+						} else if (rcl.getIsScreenClient() != null
+								&& rcl.getIsScreenClient()) {
 							// continue;
 						} else {
-							log.debug("Send Flag to Client: " + rcl.getUsername());
+							log.debug("Send Flag to Client: "
+									+ rcl.getUsername());
 							if (conn instanceof IServiceCapableConnection) {
-								((IServiceCapableConnection) conn).invoke( "setNewBroadCastingFlag", new Object[] { currentClient }, this);
-								log.debug("sending setNewBroadCastingFlag to " + conn);
+								((IServiceCapableConnection) conn).invoke(
+										"setNewBroadCastingFlag",
+										new Object[] { currentClient }, this);
+								log.debug("sending setNewBroadCastingFlag to "
+										+ conn);
 							}
 						}
 					}
@@ -1296,37 +1301,47 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			log.debug("*..*giveExclusiveAudio publicSID: " + publicSID);
 
 			IConnection current = Red5.getConnectionLocal();
-			//String streamid = current.getClient().getId();
+			// String streamid = current.getClient().getId();
 
-			RoomClient currentClient = this.clientListManager.getClientByPublicSID(publicSID);
+			RoomClient currentClient = this.clientListManager
+					.getClientByPublicSID(publicSID);
 
 			if (currentClient == null) {
 				return -1L;
 			}
 
-			//Put the mod-flag to true for this client
-            currentClient.setMicMuted(false);
-			this.clientListManager.updateClientByStreamId(currentClient.getStreamid(), currentClient);
+			// Put the mod-flag to true for this client
+			currentClient.setMicMuted(false);
+			this.clientListManager.updateClientByStreamId(
+					currentClient.getStreamid(), currentClient);
 
-			//Notify all clients of the same scope (room)
-			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+			// Notify all clients of the same scope (room)
+			Collection<Set<IConnection>> conCollection = current.getScope()
+					.getConnections();
 			for (Set<IConnection> conset : conCollection) {
 				for (IConnection conn : conset) {
 					if (conn != null) {
-						RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+						RoomClient rcl = this.clientListManager
+								.getClientByStreamId(conn.getClient().getId());
 						if (rcl == null) {
-							//continue;
-						} else if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
-    						//continue;
-    					} else {
-                            if (rcl != currentClient) {
-                                rcl.setMicMuted(true);
-			                    this.clientListManager.updateClientByStreamId(rcl.getStreamid(), rcl);
-                            }
-							log.debug("Send Flag to Client: "+rcl.getUsername());
+							// continue;
+						} else if (rcl.getIsScreenClient() != null
+								&& rcl.getIsScreenClient()) {
+							// continue;
+						} else {
+							if (rcl != currentClient) {
+								rcl.setMicMuted(true);
+								this.clientListManager.updateClientByStreamId(
+										rcl.getStreamid(), rcl);
+							}
+							log.debug("Send Flag to Client: "
+									+ rcl.getUsername());
 							if (conn instanceof IServiceCapableConnection) {
-								((IServiceCapableConnection) conn).invoke("receiveExclusiveAudioFlag",new Object[] { currentClient }, this);
-								log.debug("sending receiveExclusiveAudioFlag to " + conn);
+								((IServiceCapableConnection) conn).invoke(
+										"receiveExclusiveAudioFlag",
+										new Object[] { currentClient }, this);
+								log.debug("sending receiveExclusiveAudioFlag to "
+										+ conn);
 							}
 						}
 					}
@@ -1334,30 +1349,32 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			}
 
 		} catch (Exception err) {
-			log.error("[giveExclusiveAudio]",err);
+			log.error("[giveExclusiveAudio]", err);
 		}
 		return -1L;
 	}
 
-    public synchronized Long switchMicMuted(String publicSID, boolean mute) {
+	public synchronized Long switchMicMuted(String publicSID, boolean mute) {
 		try {
 			log.debug("*..*switchMicMuted publicSID: " + publicSID);
 
-			RoomClient currentClient = this.clientListManager.getClientByPublicSID(publicSID);
+			RoomClient currentClient = this.clientListManager
+					.getClientByPublicSID(publicSID);
 			if (currentClient == null) {
 				return -1L;
 			}
 
-            currentClient.setMicMuted(mute);
-			this.clientListManager.updateClientByStreamId(currentClient.getStreamid(), currentClient);
+			currentClient.setMicMuted(mute);
+			this.clientListManager.updateClientByStreamId(
+					currentClient.getStreamid(), currentClient);
 
 			HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
 			newMessage.put(0, "updateMuteStatus");
 			newMessage.put(1, currentClient);
 			this.sendMessageWithClient(newMessage);
-			
+
 		} catch (Exception err) {
-			log.error("[switchMicMuted]",err);
+			log.error("[switchMicMuted]", err);
 		}
 		return 0L;
 	}
@@ -2469,15 +2486,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			// log.debug("***** sendVars: " + actionObject.get(0));
 
 			if (action != null && action.equals("whiteboardObj")) {
-				// log.debug("***** sendVars: " + actionObject.get(1));
-				// log.debug("***** sendVars: " + actionObject.get(2));
 				// Update Whiteboard Object
 				List actionObject = (List) whiteboardObj.get(3);
 				WhiteboardManagement.getInstance().updateWhiteboardObject(
 						room_id, actionObject);
 			} else if (action != null && action.equals("moveMap")) {
-				// log.debug("***** sendVars: " + actionObject.get(1));
-				// log.debug("***** sendVars: " + actionObject.get(2));
 				// Update Whiteboard Object
 				List actionObject = (List) whiteboardObj.get(3);
 				WhiteboardManagement.getInstance().updateWhiteboardObjectPos(
@@ -2487,14 +2500,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 				WhiteboardManagement.getInstance().addWhiteBoardObject(room_id,
 						whiteboardObj);
 			}
-			// int numberOfUsers = 0;
-
-			// This is no longer necessary
-			// boolean ismod = currentClient.getIsMod();
-
-			// log.debug("*..*ismod: " + ismod);
-
-			// if (ismod) {
 
 			Configuration conf = cfgManagement.getConfKey(3,
 					"show.whiteboard.draw.status");
@@ -2508,45 +2513,34 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 				for (IConnection conn : conset) {
 					if (conn != null) {
 						if (conn instanceof IServiceCapableConnection) {
-							RoomClient rcl = this.clientListManager
-									.getClientByStreamId(conn.getClient()
-											.getId());
-							if (rcl == null) {
-								// continue;
-							} else if (rcl.getIsScreenClient() != null
-									&& rcl.getIsScreenClient()) {
+
+							if (conn.getClient().getId()
+									.equals(current.getClient().getId())) {
 								continue;
-							} else {
-								// log.debug("*..*idremote: " +
-								// rcl.getStreamid());
-								// log.debug("*..* sendVars room_id IS EQUAL: "
-								// + currentClient.getStreamid() + " asd " +
-								// rcl.getStreamid() + " IS eq? "
-								// +currentClient.getStreamid().equals(rcl.getStreamid()));
-								if (!currentClient.getStreamid().equals(
-										rcl.getStreamid())) {
-									((IServiceCapableConnection) conn)
-											.invoke("sendVarsToWhiteboard",
-													new Object[] {
-															showDrawStatus ? currentClient
-																	: null,
-															whiteboardObj },
-													this);
-									// log.debug("sending sendVarsToWhiteboard to "
-									// + conn + " rcl " + rcl);
-									// numberOfUsers++;
-								}
+							}
+
+							RoomClient rcl = this.clientListManager
+									.getSyncClientByStreamId(conn.getClient()
+											.getId());
+
+							if (rcl == null) {
+								continue;
+							}
+
+							if (!currentClient.getStreamid().equals(
+									rcl.getStreamid())) {
+								((IServiceCapableConnection) conn)
+										.invoke("sendVarsToWhiteboard",
+												new Object[] {
+														(showDrawStatus ? currentClient
+																: null),
+														whiteboardObj }, this);
 							}
 						}
 					}
 				}
 			}
 
-			// return numberOfUsers;
-			// } else {
-			// // log.debug("*..*you are not allowed to send: "+ismod);
-			// return -1;
-			// }
 		} catch (Exception err) {
 			log.error("[sendVars]", err);
 		}
@@ -2564,14 +2558,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		//
 		try {
 
-			// In previous version this has been always a Map, now its a List
-			// so I re-wrapp that class to be a Map again.
-			// swagner 13.02.2009
-			// log.debug("*..*sendVars1: " + whiteboardObjParam);
-			// log.debug("*..*sendVars2: " + whiteboardObjParam.getClass());
-			// log.debug("*..*sendVars3: " +
-			// whiteboardObjParam.getClass().getName());
-
 			Map whiteboardObj = new HashMap();
 			int i = 0;
 			for (Iterator iter = whiteboardObjParam.iterator(); iter.hasNext();) {
@@ -2580,8 +2566,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 				whiteboardObj.put(i, obj);
 				i++;
 			}
-
-			// Map whiteboardObj = (Map) whiteboardObjParam;
 
 			// Check if this User is the Mod:
 			IConnection current = Red5.getConnectionLocal();
@@ -2659,32 +2643,27 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 				for (IConnection conn : conset) {
 					if (conn != null) {
 						if (conn instanceof IServiceCapableConnection) {
-							RoomClient rcl = this.clientListManager
-									.getClientByStreamId(conn.getClient()
-											.getId());
-							if ((rcl == null)
-									|| (rcl.getIsScreenClient() != null && rcl
-											.getIsScreenClient())) {
+							if (conn.getClient().getId()
+									.equals(current.getClient().getId())) {
 								continue;
-							} else {
-								// log.debug("*..*idremote: " +
-								// rcl.getStreamid());
-								// log.debug("*..* sendVars room_id IS EQUAL: "
-								// + currentClient.getStreamid() + " asd " +
-								// rcl.getStreamid() + " IS eq? "
-								// +currentClient.getStreamid().equals(rcl.getStreamid()));
-								if (!currentClient.getStreamid().equals(
-										rcl.getStreamid())) {
-									((IServiceCapableConnection) conn)
-											.invoke("sendVarsToWhiteboardById",
-													new Object[] {
-															showDrawStatus ? currentClient
-																	: null,
-															sendObject }, this);
-									// log.debug("sending sendVarsToWhiteboard to "
-									// + conn + " rcl " + rcl);
-									// numberOfUsers++;
-								}
+							}
+
+							RoomClient rcl = this.clientListManager
+									.getSyncClientByStreamId(conn.getClient()
+											.getId());
+
+							if (rcl == null) {
+								continue;
+							}
+
+							if (!currentClient.getStreamid().equals(
+									rcl.getStreamid())) {
+								((IServiceCapableConnection) conn).invoke(
+										"sendVarsToWhiteboardById",
+										new Object[] {
+												showDrawStatus ? currentClient
+														: null, sendObject },
+										this);
 							}
 						}
 					}

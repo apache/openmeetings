@@ -75,6 +75,40 @@ public class ClientListManager {
 		}
 		return null;
 	}
+	
+	/**
+	 * Additionally checks if the client receives sync events
+	 * 
+	 * Sync events will no be broadcasted to:
+	 * - Screensharing users
+	 * - Audio/Video connections only
+	 * 
+	 * @param streamId
+	 * @return
+	 */
+	public synchronized RoomClient getSyncClientByStreamId(String streamId) {
+		try {
+			if (!clientList.containsKey(streamId)) {
+				log.debug("Tried to get a non existing Client " + streamId);
+				return null;
+			}
+			
+			RoomClient rcl = clientList.get(streamId);
+			
+			if (rcl == null) {
+				return null;
+			}
+			
+			if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+				return null;
+			}
+			
+			return clientList.get(streamId);
+		} catch (Exception err) {
+			log.error("[getClientByStreamId]", err);
+		}
+		return null;
+	}
 
 	public synchronized RoomClient getClientByPublicSID(String publicSID) {
 		try {
