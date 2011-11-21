@@ -331,7 +331,7 @@ public class AppointmentDaoImpl {
 			Date appointmentend, Boolean isDaily, Boolean isWeekly,
 			Boolean isMonthly, Boolean isYearly,
 			AppointmentCategory appointmentCategory,
-			AppointmentReminderTyps appointmentReminderTyps, List mmClient,
+			AppointmentReminderTyps appointmentReminderTyps, @SuppressWarnings("rawtypes") List mmClient,
 			Long users_id, String baseUrl, Long language_id,
 			Boolean isPasswordProtected, String password) {
 		try {
@@ -404,7 +404,7 @@ public class AppointmentDaoImpl {
 			String appointmentDescription, Date appointmentstart,
 			Date appointmentend, Boolean isDaily, Boolean isWeekly,
 			Boolean isMonthly, Boolean isYearly, Long categoryId, Long remind,
-			List mmClient, Long users_id, String baseUrl, Long language_id,
+			@SuppressWarnings("rawtypes") List mmClient, Long users_id, String baseUrl, Long language_id,
 			Boolean isPasswordProtected, String password, String iCalTimeZone) {
 
 		log.debug("AppointmentDAOImpl.updateAppointment");

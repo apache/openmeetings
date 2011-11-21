@@ -108,7 +108,6 @@
 	<!-- No Interface -->
 	<bean id="manageCryptStyle" class="org.openmeetings.utils.crypt.ManageCryptStyle" />
 	<bean id="openXGHttpClient" class="org.openmeetings.app.sip.xmlrpc.OpenXGHttpClient" />
-	<bean id="appointmentCategoryLogic" class="org.openmeetings.app.data.calendar.management.AppointmentCategoryLogic" />
 	<bean id="whiteboardConvertionJobManager" class="org.openmeetings.app.data.record.WhiteboardConvertionJobManager" />
 	<bean id="generateImage" class="org.openmeetings.app.documents.GenerateImage" />
 	<bean id="generateThumbs" class="org.openmeetings.app.documents.GenerateThumbs" />

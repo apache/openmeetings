@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.persistence.beans.basic.SOAPLogin;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -71,7 +71,7 @@ public class SOAPLoginDaoImpl {
 		try {
 			String hql = "select sl from SOAPLogin as sl "
 					+ "WHERE sl.hash LIKE :hash";
-			Query query = em.createQuery(hql);
+			TypedQuery<SOAPLogin> query = em.createQuery(hql, SOAPLogin.class);
 			query.setParameter("hash", hash);
 			List<SOAPLogin> sList = query.getResultList();
 

@@ -6,6 +6,7 @@ public class SearchResult {
 	
 	private String objectName;
 	private Long records;
+	@SuppressWarnings("rawtypes")
 	private List result;
 	private Long errorId;
 	

@@ -7,8 +7,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
-import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.persistence.beans.calendar.MeetingMember;
@@ -27,8 +27,6 @@ public class MeetingMemberDaoImpl {
 	private EntityManager em;
 	@Autowired
 	private AppointmentDaoImpl appointmentDao;
-	@Autowired
-	private OmTimeZoneDaoImpl omTimeZoneDaoImpl;
 	@Autowired
 	private UsersDaoImpl usersDao;
 
@@ -60,8 +58,8 @@ public class MeetingMemberDaoImpl {
 	public List<MeetingMember> getMeetingMembers() {
 		try {
 			String hql = "select app from MeetingMember app";
-
-			Query query = em.createQuery(hql);
+			
+			TypedQuery<MeetingMember> query = em.createQuery(hql, MeetingMember.class);
 
 			List<MeetingMember> meetingMembers = query.getResultList();
 
@@ -81,7 +79,7 @@ public class MeetingMemberDaoImpl {
 					+ "WHERE app.deleted <> :deleted "
 					+ "AND app.appointment.appointmentId = :appointmentId";
 
-			Query query = em.createQuery(hql);
+			TypedQuery<MeetingMember> query = em.createQuery(hql, MeetingMember.class);
 			query.setParameter("deleted", true);
 			query.setParameter("appointmentId", appointmentId);
 

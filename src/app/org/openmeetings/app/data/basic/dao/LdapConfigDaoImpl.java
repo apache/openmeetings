@@ -175,6 +175,7 @@ public class LdapConfigDaoImpl {
 			log.debug("selectMaxFromConfigurations ");
 			//get all users
 			Query query = em.createQuery("select count(c.ldapConfigId) from LdapConfig c where c.deleted LIKE 'false'"); 
+			@SuppressWarnings("rawtypes")
 			List ll = query.getResultList();
 			log.debug("selectMaxFromLdapConfig"+(Long)ll.get(0));
 			return (Long)ll.get(0);				
@@ -213,7 +214,7 @@ public class LdapConfigDaoImpl {
 					"AND c.isActive = :isActive ";
 			
 			//get all users
-			Query query = em.createQuery(hql);
+			TypedQuery<LdapConfig> query = em.createQuery(hql, LdapConfig.class);
 			query.setParameter("isActive", true);
 			List<LdapConfig> ll = query.getResultList();
 			
@@ -232,7 +233,7 @@ public class LdapConfigDaoImpl {
 					"where c.deleted LIKE 'false' ";
 			
 			//get all users
-			Query query = em.createQuery(hql);
+			TypedQuery<LdapConfig> query = em.createQuery(hql, LdapConfig.class);
 			List<LdapConfig> ll = query.getResultList();
 			
 			return ll;				

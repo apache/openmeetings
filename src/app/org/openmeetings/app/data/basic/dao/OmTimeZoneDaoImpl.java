@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -50,7 +50,7 @@ public class OmTimeZoneDaoImpl {
 			String hql = "select sl from OmTimeZone as sl "
 					+ "ORDER BY sl.orderId";
 
-			Query query = em.createQuery(hql);
+			TypedQuery<OmTimeZone> query = em.createQuery(hql, OmTimeZone.class);
 			List<OmTimeZone> sList = query.getResultList();
 
 			for (OmTimeZone omTimeZone : sList) {
@@ -70,7 +70,7 @@ public class OmTimeZoneDaoImpl {
 		try {
 			String hql = "select sl from OmTimeZone as sl "
 					+ "WHERE sl.jname LIKE :jname";
-			Query query = em.createQuery(hql);
+			TypedQuery<OmTimeZone> query = em.createQuery(hql, OmTimeZone.class);
 			query.setParameter("jname", jname);
 			List<OmTimeZone> sList = query.getResultList();
 
@@ -88,7 +88,7 @@ public class OmTimeZoneDaoImpl {
 		try {
 			String hql = "select sl from OmTimeZone as sl "
 					+ "WHERE sl.omtimezoneId = :omtimezoneId";
-			Query query = em.createQuery(hql);
+			TypedQuery<OmTimeZone> query = em.createQuery(hql, OmTimeZone.class);
 			query.setParameter("omtimezoneId", omtimezoneId);
 			List<OmTimeZone> sList = query.getResultList();
 

@@ -2,9 +2,7 @@ package org.openmeetings.app.data.calendar.management;
 
 import java.util.TimeZone;
 
-import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
-import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.calendar.daos.MeetingMemberDaoImpl;
 import org.openmeetings.app.data.conference.Invitationmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
@@ -16,7 +14,6 @@ import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.math.CalendarPatterns;
-import org.openmeetings.utils.math.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,19 +26,13 @@ public class MeetingMemberLogic {
 	@Autowired
 	private AppointmentLogic appointmentLogic;
 	@Autowired
-	private Configurationmanagement cfgManagement;
-	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
 	private Fieldmanagment fieldmanagment;
 	@Autowired
-	private OmTimeZoneDaoImpl omTimeZoneDaoImpl;
-	@Autowired
 	private Invitationmanagement invitationManagement;
 	@Autowired
 	private MeetingMemberDaoImpl meetingMemberDao;
-	@Autowired
-	private TimezoneUtil timezoneUtil;
 
 	/**
 	 * This can be either an internal or an external user, internal users have a
