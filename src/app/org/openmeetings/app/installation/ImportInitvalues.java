@@ -484,6 +484,8 @@ public class ImportInitvalues {
 		cfgManagement.addConfByKey(3, "calendar.conference.rooms.default.size", "50", null,
 				"Default number of participants conference room created via calendar");
 		
+		cfgManagement.addConfByKey(3, "use.old.style.ffmpeg.map.option", "0", null,
+				"specify a 1 if you would like to use old FFMPEG -map option with 0.0 instead of 0:0");
 	}
 
 	

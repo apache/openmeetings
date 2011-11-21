@@ -52,8 +52,17 @@ public class FlvInterviewReConverter {
 	@Autowired
 	private GenerateThumbs generateThumbs;
 	
+	private String FFMPEG_MAP_PARAM = ":";
+	
 	public void startConversion(Long flvRecordingId, Integer leftSideLoud, Integer rightSideLoud, Integer leftSideTime, Integer rightSideTime) {
 		try {
+			
+			String use_old_style_ffmpeg_map = configurationmanagement
+					.getConfValue("use.old.style.ffmpeg.map.option",
+							String.class, "0");
+			if (use_old_style_ffmpeg_map.equals("1")) {
+				FFMPEG_MAP_PARAM = ".";
+			}
 			
 			log.debug("++++++++++++ leftSideLoud :: "+leftSideLoud);
 			log.debug("++++++++++++ rightSideLoud :: "+rightSideLoud);
@@ -977,7 +986,7 @@ public class FlvInterviewReConverter {
 				sString += argv_alternateDownload[i] + " ";
 				//log.debug(" i " + i + " argv-i " + argv_previewFLV[i]);
 			}
-			log.debug(kString);
+			log.debug(sString);
 			log.debug("END alternateDownLoad ################# ");
 
 			returnLog.add(GenerateSWF.executeScript("alternateDownload",

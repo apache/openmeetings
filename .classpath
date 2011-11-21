@@ -178,5 +178,8 @@
 	<classpathentry kind="lib" path="lib/spring/org.springframework.web.servlet-3.0.6.RELEASE.jar"/>
 	<classpathentry kind="lib" path="red5-1.0.0-r4297/dist/lib/com.springsource.org.aopalliance-1.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/database/mysql-connector-java-5.1.18-bin.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j/logback-core-0.9.28.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j/logback-classic-0.9.28.jar"/>
+	<classpathentry kind="lib" path="red5-1.0.0-r4297/dist/lib/commons-pool-1.5.6.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
