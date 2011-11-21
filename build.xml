@@ -359,17 +359,6 @@
 				<attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
 			</manifest>
 		</jar>
-		<jar destfile="${dist.webapps.dir}/screen/viewer.jar">
-			<fileset dir="${classes.dir}">
-				<include name="**/jrdesktop/**"/>
-				<include name="**/*png"/>
-			</fileset>
-			<manifest>
-				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com"/>
-				<attribute name="Built-On" value="${build.TODAY}"/>
-				<attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
-			</manifest>
-		</jar>
 		<jar destfile="${dist.webapps.dir}/screen/rtpviewer.jar">
 			<fileset dir="${classes.dir}">
 				<include name="log4j.properties" />

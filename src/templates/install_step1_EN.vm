@@ -301,7 +301,6 @@ function checkEmail()
     	<select name="screen_viewer" id="screen_viewer" size="1">
     		<option value="4" selected>Rtmp Viewer (Standard)</option>
 	      	<option value="3">ODSP Viewer</option>
-	        <option value="1">JRDesktop</option>
 	        <option value="2">JMF RTP Sharer</option>
 	    </select><br />	
 		</li>
