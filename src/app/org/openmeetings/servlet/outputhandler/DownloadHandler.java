@@ -23,8 +23,8 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 public class DownloadHandler extends HttpServlet {
 	private static final long serialVersionUID = 7243653203578587544L;
 
-	private static final Logger log = Red5LoggerFactory
-			.getLogger(DownloadHandler.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(
+			DownloadHandler.class, ScopeApplicationAdapter.webAppRootKey);
 
 	private static final String defaultImageName = "deleted.jpg";
 	private static final String defaultProfileImageName = "profile_pic.jpg";
@@ -67,7 +67,7 @@ public class DownloadHandler extends HttpServlet {
 			}
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -126,13 +126,13 @@ public class DownloadHandler extends HttpServlet {
 				if (parentPath == null) {
 					parentPath = "nomodule";
 				}
-				
+
 				String requestedFile = httpServletRequest
 						.getParameter("fileName");
 				if (requestedFile == null) {
 					requestedFile = "";
 				}
-				
+
 				// make a complete name out of domain(organisation) + roomname
 				String roomName = room_id;
 				// trim whitespaces cause it is a directory name
@@ -258,21 +258,20 @@ public class DownloadHandler extends HttpServlet {
 								requestedFile = DownloadHandler.defaultChatImageName;
 							}
 							// request for an image
-							full_path = current_dir + File.separatorChar
-									+ "default" + File.separatorChar
-									+ requestedFile;
+							full_path = current_dir + "default"
+									+ File.separatorChar + requestedFile;
 						} else if (requestedFile.endsWith(".swf")) {
 							requestedFile = DownloadHandler.defaultSWFName;
 							// request for a SWFPresentation
-							full_path = current_dir + File.separatorChar
-									+ "default" + File.separatorChar
+							full_path = current_dir + "default"
+									+ File.separatorChar
 									+ DownloadHandler.defaultSWFName;
 						} else {
 							// Any document, must be a download request
 							// OR a Moodle Loggedin User
 							requestedFile = DownloadHandler.defaultImageName;
-							full_path = current_dir + File.separatorChar
-									+ "default" + File.separatorChar
+							full_path = current_dir + "default"
+									+ File.separatorChar
 									+ DownloadHandler.defaultImageName;
 						}
 					}
@@ -289,11 +288,11 @@ public class DownloadHandler extends HttpServlet {
 						// no file to handle abort processing
 						return;
 					}
-					//Requested file is outside OM webapp folder
+					// Requested file is outside OM webapp folder
 					if (!f2.getCanonicalPath().startsWith(current_dir)) {
 						throw new Exception("Invalid file requested");
 					}
-					
+
 					// Get file and handle download
 					RandomAccessFile rf = new RandomAccessFile(full_path, "r");
 
