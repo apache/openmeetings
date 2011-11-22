@@ -11,6 +11,7 @@
 	<classpathentry kind="src" path="src/userservice"/>
 	<classpathentry kind="src" path="WebContent/WEB-INF"/>
 	<classpathentry excluding="app/|client/|fileservice/|red5-screenshare/|roomservice/|screenviewer/|server/|templates/|test/|userservice/" including="META-INF/" kind="src" path="src"/>
+	<classpathentry kind="src" path="src/dtdgenerator"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="lib" path="lib/velocity/velocity-1.6.2.jar"/>
