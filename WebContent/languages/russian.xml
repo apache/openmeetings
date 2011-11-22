@@ -904,7 +904,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Персональный контент</value>
   </string>
   <string id="300" name="subnavi">
-    <value/>
+    <value></value>
   </string>
   <string id="301" name="conferencebar">
     <value>Модерация</value>
@@ -1168,16 +1168,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Импорт</value>
   </string>
   <string id="388" name="languageseditor">
-    <value>Экспорт в XML - эти файлы можно использовать для:
-        - Внесения в проект
-        - Импорта в другую систему
-        - Резервного копирования
-        - Кастомизации
-        - Помещения в директорию "language" при следующей инсталляции </value>
+    <value>Экспорт в XML - эти файлы можно использовать для: - Внесения в проект - Импорта в другую систему - Резервного копирования - Кастомизации - Помещения в директорию "language" при следующей инсталляции</value>
   </string>
   <string id="389" name="languageseditor">
-    <value>Выберите какой файл языка импортировать. Выберите язык в Combobox.
-           Неважно, какое имя у этого файла, он будет импортирован в этот язык!</value>
+    <value>Выберите какой файл языка импортировать. Выберите язык в Combobox. Неважно, какое имя у этого файла, он будет импортирован в этот язык!</value>
   </string>
   <string id="390" name="importwindow">
     <value>импорт - выберите файл</value>
@@ -1210,7 +1204,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Присоединившиеся:</value>
   </string>
   <string id="400" name="roomslist">
-    <value/>
+    <value></value>
   </string>
   <string id="401" name="roomslist">
     <value>Пользователи в этой комнате:</value>
@@ -1235,7 +1229,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="408" name="roomslist">
     <value>с:</value>
-  </string>	
+  </string>
   <string id="409" name="record">
     <value>проиграть записи</value>
   </string>
@@ -1262,7 +1256,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="417" name="record">
     <value>Запись:</value>
-  </string>	
+  </string>
   <string id="418" name="record_error_msg">
     <value>Кто-то уже записывает в данный момент:</value>
   </string>
@@ -1304,7 +1298,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="431" name="paint_tool_letter">
     <value>изменить размер шрифта</value>
-  </string>	
+  </string>
   <string id="432" name="recordingslist_delete">
     <value>Удалить запись</value>
   </string>
@@ -1336,7 +1330,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Дата</value>
   </string>
   <string id="442" name="chat_clear_history">
-    <value>Удалить Server-Chatlog</value>
+    <value>Удалить лог чата на сервере</value>
   </string>
   <string id="443" name="chat_overall_header">
     <value>Чат</value>
@@ -1349,7 +1343,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="446" name="chat_emot_win">
     <value>Иконки эмоций</value>
-  </string>	
+  </string>
   <string id="447" name="choose_video_settings">
     <value>Изменить Published Devices</value>
   </string>
@@ -1363,10 +1357,11 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Только видео</value>
   </string>
   <string id="451" name="choose_video_settings_combo">
-    <value>без аудио и видео (статическое изображение)</value>
+    <value>без аудио и видео (статическое изобр.)</value>
   </string>
   <string id="452" name="choose_video_settings_info_text">
-    <value>Аудио/видео с вашего компьютера не будет опубликовано, опубликована будет только картинка из вашего профиля. Выберите эту установку, если вы испытываете проблемы с шириной канала или если у вас медленное соединение с Интернетом</value>  </string>
+    <value>Аудио/видео с вашего компьютера не будет опубликовано, опубликована будет только картинка из вашего профиля. Выберите эту установку, если вы испытываете проблемы с шириной канала или если у вас медленное соединение с Интернетом</value>
+  </string>
   <string id="453" name="calendar_dayname_monday">
     <value>ПН</value>
   </string>
@@ -1388,7 +1383,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="459" name="calendar_dayname_sunday">
     <value>ВС</value>
   </string>
-  <string id="460" name="calendar_dayname_MondayLabel">
+  <string id="460" name="calendar_dayname_monday">
     <value>Понедельник</value>
   </string>
   <string id="461" name="calendar_dayname_TuesdayLabel">
@@ -1410,10 +1405,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Воскресенье</value>
   </string>
   <string id="467" name="calendar_weeknumber_header">
-    <value>CW</value>
+    <value>КН</value>
   </string>
   <string id="468" name="calendar_weeknumber_headerTooltip">
-    <value>Calendar week</value>
+    <value>Календарная неделя</value>
   </string>
   <string id="469" name="calendar_monthnames">
     <value>Январь</value>
@@ -1453,10 +1448,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="481" name="calendarwin_header">
     <value>Календарь</value>
-  </string>	
+  </string>
   <string id="482" name="roomadmin_labelNumberOfParticipants">
     <value>Участники</value>
-  </string>	
+  </string>
   <string id="483" name="roomValue_advancedSettings">
     <value>Показать установки Layout</value>
   </string>
@@ -1498,13 +1493,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="496" name="roomAdmin_layout_files">
     <value>Ширина | Высота</value>
-  </string>	
+  </string>
   <string id="497" name="moderator_gone_message">
     <value>Модератор покинул комнату. Сейчас нет модераторов. Вы можете запросить функции модератора, либо подождать.</value>
   </string>
   <string id="498" name="moderator_message_event_no_mod">
     <value>В этой комнате нет модератора, но есть участники. Вы можете запросить функции модератора или подождать</value>
-  </string>	
+  </string>
   <string id="499" name="feedback_template_subject">
     <value>Обратная связь $APP_NAME</value>
   </string>
@@ -1561,7 +1556,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="517" name="reset_password_mail_subject">
     <value>Переустановка пароля $APP_NAME</value>
-  </string>	
+  </string>
   <string id="518" name="dateRegExpError">
     <value>Пожалуйста, введите дату, например 24.12.2001 (dd.mm.yyyy)</value>
   </string>
@@ -1596,7 +1591,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Период</value>
   </string>
   <string id="529" name="invitation_window_valid">
-    <value>One-Time</value>
+    <value>Однократно</value>
   </string>
   <string id="530" name="invitation_window_validFromLabel">
     <value>Действует от:</value>
@@ -1630,7 +1625,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="540" name="audio_video">
     <value>Синхронизовать аудио/видео</value>
-  </string>	
+  </string>
   <string id="541" name="errorCode_invalidSession">
     <value>Корректный логин, но эта сессия неактивна или не записана на сервере. Вам нужно получит новый ID сессии и перелогиниться</value>
   </string>
@@ -1642,7 +1637,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="544" name="debug_message_recording">
     <value>У этого рекордера - Beta-версия</value>
-  </string>	
+  </string>
   <string id="545" name="propertyPanelXValue">
     <value>x</value>
   </string>
@@ -1669,16 +1664,16 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="553" name="propertyOpacitySlider">
     <value>Изменить прозрачность</value>
-  </string>	
+  </string>
   <string id="554" name="browserOpen">
-    <value>Browser открыть</value>
-  </string>	
+    <value>Браузер открыть</value>
+  </string>
   <string id="555" name="browserClose">
-    <value>Browser закрыть</value>
-  </string>	
+    <value>Браузер закрыть</value>
+  </string>
   <string id="556" name="connectionLostMessage">
     <value>Потеряно соединение с сервером. Загрузите заново приложение, либо проверьте вашу сеть.</value>
-  </string>  
+  </string>
   <string id="557" name="557">
     <value>Указатель</value>
   </string>
@@ -1689,19 +1684,19 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Синхронизация пользователей, подождите</value>
   </string>
   <string id="560" name="exportToSVG">
-    <value>&lt;u&gt;Загрузить рисунок как SVG&lt;/u&gt;</value>
+    <value></value>
   </string>
   <string id="561" name="exportToImage">
-    <value>&lt;u&gt;Загрузить рисунок как PNG&lt;/u&gt;</value>
+    <value></value>
   </string>
   <string id="562" name="exportToImage">
-    <value>&lt;u&gt;Загрузить рисунок как JPG&lt;/u&gt;</value>
+    <value></value>
   </string>
   <string id="563" name="exportToImage">
-    <value>&lt;u&gt;Загрузить рисунок как PDF&lt;/u&gt;</value>
+    <value></value>
   </string>
   <string id="564" name="exportToImage">
-    <value>&lt;u&gt;Загрузить рисунок как TIF&lt;/u&gt;</value>
+    <value></value>
   </string>
   <string id="565" name="calendarLabel">
     <value>Напоминатель:</value>
@@ -1761,13 +1756,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Посмотреть записанные совещания и лекции</value>
   </string>
   <string id="584" name="tooltip main-menu">
-    <value>Совещание - проведите конференцию с 4 участниками (число участников может доходить до 16)&lt;br/&gt;у каждого будет аудио/видео</value>
+    <value>Совещание - проведите конференцию с 4 участниками (число участников может доходить до 16)у каждого будет аудио/видео</value>
   </string>
   <string id="585" name="tooltip main-menu">
-    <value>Лекция - проведите конференцию с участниками, число которых - до 200&lt;br/&gt;Аудио/видео будет только у модератора</value>
+    <value>Лекция - проведите конференцию с участниками, число которых – до 200Аудио/видео будет только у модератора</value>
   </string>
   <string id="586" name="tooltip main-menu">
-    <value>Создание пользователей, комнат, организаций&lt;br/&gt; + изменить конфигурацию</value>
+    <value>Создание пользователей, комнат, организаций + изменить конфигурацию</value>
   </string>
   <string id="587" name="room Administration roomclients list">
     <value>Сейчас пользователи в этой комнате</value>
@@ -1780,15 +1775,15 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="590" name="room Administration roomclients list">
     <value>У</value>
-  </string>  
+  </string>
   <string id="591" name="swf sync message">
     <value>Загрузка документа. Подождите, пока клиент синхронизируется.</value>
-  </string>  
+  </string>
   <string id="592" name="upload dialog">
     <value>Загружено, конвертация документа</value>
   </string>
   <string id="593" name="upload dialog">
-    <value>Начать </value>
+    <value>Начать</value>
   </string>
   <string id="594" name="upload dialog">
     <value>Импорт файла. Выберите файл на вашем компьютере.</value>
@@ -1804,7 +1799,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="598" name="confadmin value list">
     <value>Значение</value>
-  </string>  
+  </string>
   <string id="599" name="connection administration panel">
     <value>ID потока</value>
   </string>
@@ -1818,17 +1813,17 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Комната / Scope</value>
   </string>
   <string id="603" name="connection administration panel">
-    <value>Выбросить пользов-ля</value>
+    <value>Выбросить польз-ля</value>
   </string>
   <string id="604" name="kick user confirmation dialog">
-    <value>Выбросить пользователя</value>
+    <value>Выбросить польз-ля</value>
   </string>
   <string id="605" name="kick user confirmation dialog">
-    <value>Вы действительно хотите отключит этого клиента? Клиент может залогиниться вновь&lt;br/&gt;</value>
+    <value>Вы действительно хотите отключит этого клиента? Клиент может залогиниться вновь</value>
   </string>
   <string id="606" name="kick user message dialog">
     <value>Ваша сессия завершена администратором или модератором.</value>
-  </string>  
+  </string>
   <string id="607" name="useralterself_phone">
     <value>Телефон</value>
   </string>
@@ -1842,7 +1837,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>(Ре)старт аудио/видео или изменение установок устройства</value>
   </string>
   <string id="611" name="participents panel">
-    <value>Разрешить этому пользователю рисовать на доске</value>
+    <value>Разрешить этому польз-лю рисовать на доске</value>
   </string>
   <string id="612" name="participents panel">
     <value>Запретить рисовать на доске</value>
@@ -1858,10 +1853,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="616" name="conferencePanels">
     <value>Чат</value>
-  </string>  
+  </string>
   <string id="617" name="organization choose info">
     <value>Вашей учетной записи соответствует несколько организаций. Пожалуйста, выберите одну организацию для данной сессии.</value>
-  </string>  
+  </string>
   <string id="618" name="error message room full">
     <value>Эта комната заполнена. Попробуйте попозже.</value>
   </string>
@@ -1869,7 +1864,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Тип комнаты</value>
   </string>
   <string id="620" name="appointed_room">
-    <value>Appointment Room</value>
+    <value>Комната назначений</value>
   </string>
   <string id="621" name="servertime">
     <value>Время сервера</value>
@@ -1891,7 +1886,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="627" name="inv_reminder_text_click_text_help">
     <value>Если не удаётся перейти по ссылке, скопируйте этот URL в браузер:</value>
-  </string>  
+  </string>
   <string id="628" name="btn_search_intern">
     <value>имеющиеся пользователи</value>
   </string>
@@ -1904,7 +1899,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="631" name="lbl_name">
     <value>Фамилия</value>
   </string>
-   <string id="632" name="lbl_email">
+  <string id="632" name="lbl_email">
     <value>e-mail</value>
   </string>
   <string id="633" name="logoutConfirm_title">
@@ -1917,7 +1912,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Действия</value>
   </string>
   <string id="636" name="room admin">
-    <value>Демонстрационная комната</value>
+    <value>Демо комната</value>
   </string>
   <string id="637" name="room admin">
     <value>Время демонстрации</value>
@@ -1926,7 +1921,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Таймер совещания</value>
   </string>
   <string id="639" name="meeting Timer">
-    <value>Это - демонстрационная комната. Чтобы отключить это сообщение, либо создайте личную комнату, либо установите собственный сервер. Вы автоматически будете отключены от комнаты через: </value>
+    <value>Это - демо комната. Чтобы отключить это сообщение, либо создайте личную комнату, либо установите собственный сервер. Вы автоматически будете отключены от комнаты через:</value>
   </string>
   <string id="640" name="meeting room administration">
     <value>Модерируется</value>
@@ -1971,7 +1966,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Хотите сделать этого пользователя модератором этой организации?</value>
   </string>
   <string id="654" name="error message">
-    <value>Выберите организации перед тем, как добавлять в нее пользователей</value>
+    <value>Выберите организации перед тем, как добавлять в неё пользователей</value>
   </string>
   <string id="655" name="choose user window">
     <value>Модератор организации</value>
@@ -1989,13 +1984,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Хотите, чтобы пользователь не был модератором в этой организации?</value>
   </string>
   <string id="660" name="moderation">
-    <value>Добавление или удаление пользователя/комнаты, относящихся к вашей организации</value>
+    <value>Добавление или удаление польз-ля/комнаты, относящихся к вашейорганизации</value>
   </string>
   <string id="661" name="delete confirm question">
     <value>Вы действительно хотите удалить эту запись?</value>
   </string>
   <string id="662" name="delete confirm question user moderation">
-    <value>Вы действительно хотите удалить этого пользователя из вашей организации? В этом случае вы лишь удалите пользователем и организацией, а для полного удаления пользователя нужно будет зайти на панель администрирования.</value>
+    <value>Вы действительно хотите удалить этого польз-ля из вашей организации? В этом случае вы лишь удалите пользователем из организации, а для полного удаления пользователя нужно зайти на панель администрирования.</value>
   </string>
   <string id="663" name="error message self deleting">
     <value>Вы не можете удалить себя</value>
@@ -2049,7 +2044,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Модератор</value>
   </string>
   <string id="680" name="event user list">
-    <value>Модерация: Выберите пользователя из списка для того, чтобы дать ему доступ к доске, модерации или к видео.</value>
+    <value>Модерация: Выберите поль-ля из списка для того, чтобы дать ему доступ к доске, модерации или видео.</value>
   </string>
   <string id="681" name="event user list">
     <value>Этот пользователь уже модератор, поэтому он автоматически имеет право рисовать.</value>
@@ -2091,7 +2086,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>желает стать модератором. Для того, чтобы разрешить или запретить функцию модерации, используйте иконки статуса рядом с именами пользователей в списке пользователей.</value>
   </string>
   <string id="694" name="apply for whiteboard">
-    <value>желает рисовать на доске. Для того, чтобы разрешить или запретить рисовать на доске, используйте иконки статуса рядом с именами пользователей в списке пользователей.</value>
+    <value>желает рисовать на доске. Для того, чтобы разрешить или запретить рисовать на доске, используйте иконки статуса рядом с именами в списке пользователей.</value>
   </string>
   <string id="695" name="695">
     <value>желает сделать своё Аудио/Видео общим. Для того, чтобы разрешить или запретить пользователям делать Аудио/Видео общим, используйте иконки статуса рядом с именами пользователей в списке пользователей.</value>
@@ -2169,7 +2164,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Удалить файл</value>
   </string>
   <string id="720" name="file explorer">
-    <value>Вы не можете рисовать на доске. Вам нужно либо стать модератором, либо получить от модератора право рисовать на доске. Вы можете попросить модератора предоставить вам такое право.</value>
+    <value>Вы не можете рисовать на доске. Вам нужно либо стать модератором, либо получить от модератора право на рисование. Вы можете попросить модератора предоставить вам такое право.</value>
   </string>
   <string id="721" name="property panel">
     <value>Свойства документа</value>
@@ -2205,7 +2200,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Нажмите, чтобы начать публиковать ваш экран</value>
   </string>
   <string id="732" name="sharing client">
-    <value>Начать сеанс: сделать экран общим</value>
+    <value>Начать: сделать общим</value>
   </string>
   <string id="733" name="sharing client">
     <value>Остановить сеанс</value>
@@ -2236,7 +2231,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="742" name="sharing client">
     <value>Соединение завершено сервером</value>
-  </string> 
+  </string>
   <string id="743" name="sharing viewer">
     <value>Отмена</value>
   </string>
@@ -2244,11 +2239,11 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Запустить внешний</value>
   </string>
   <string id="745" name="sharing viewer">
-    <value>Полностью закрыв сессию, вы не сможете больше перезапустить просмотрщик для этой сессии</value>
+    <value>Полностью закрыв сессию, вы не сможете больше перезапустить просмотрщик для неё</value>
   </string>
   <string id="746" name="sharing viewer">
     <value>Подтвердите закрытие сессии просмотрщика</value>
-  </string> 
+  </string>
   <string id="747" name="sharing viewer">
     <value>Сделать экран общим</value>
   </string>
@@ -2309,11 +2304,11 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="766" name="test setup">
     <value>СТОП</value>
   </string>
-  <string id="767" name="test setup">
+  <string id="767" name="767">
     <value>Уровень звука</value>
   </string>
   <string id="768" name="start view">
-    <value>Нажмите Старт</value>
+    <value>Старт</value>
   </string>
   <string id="769" name="start view">
     <value>Участвуйте в конференции</value>
@@ -2322,10 +2317,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Начните лекцию</value>
   </string>
   <string id="771" name="start view">
-    <value>Выберите комнаты</value>
+    <value>Выбор комнаты</value>
   </string>
   <string id="772" name="start view">
-    <value>Проверьте а/видео</value>
+    <value>Настройки</value>
   </string>
   <string id="773" name="start view">
     <value>К конференции</value>
@@ -2337,26 +2332,25 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Начать запись</value>
   </string>
   <string id="776" name="test setup">
-    <value>Не показывать Аудио/Видео (запись) при входе в конференцию</value>
+    <value>Не показывать окно проверки аудио/записи видео при входе в конференцию</value>
   </string>
   <string id="777" name="overview room">
     <value>Публичные комнаты</value>
   </string>
   <string id="778" name="overview room">
-    <value>Публичными комнатами могут воспользоваться все пользователи</value>
+    <value>Публичными комнатами могут пользоваться все пользователи</value>
   </string>
   <string id="779" name="overview room">
-    <value>Приветные комнаты</value>
+    <value>Приватные комнаты</value>
   </string>
   <string id="780" name="Private Rooms">
-    <value>Приватными комнатами могут воспользоваться только пользователи, принадлежащие той же организации</value>
+    <value>Приватными комнатами могут пользоваться только пользователи из той же организации</value>
   </string>
   <string id="781" name="overview room">
     <value>Мои комнаты</value>
   </string>
   <string id="782" name="overview room">
-    <value>Комнаты этой секции - для персонального использования. Они созданы через календарь, у них есть начало и конец жизни. Эти комнаты перечислены в этой секции только то время, пока ими можно воспользоваться.
-</value>
+    <value>Комнаты этой секции - для персонального использования. Они созданы через календарь, у них есть начало и конец жизни. Эти комнаты перечислены здесь только то время, пока ими можно пользоваться.</value>
   </string>
   <string id="783" name="restricted room">
     <value>Для этого действия вы должны быть модератором</value>
@@ -2392,13 +2386,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Выберите комнату для совещания</value>
   </string>
   <string id="794" name="calendar">
-    <value>В календаре есть несохранённые события. Сохраните их, или удалите.</value>
+    <value>В календаре есть несохранённые события. Сохраните их или удалите.</value>
   </string>
   <string id="795" name="calendar">
-    <value>Добавьте хотя бы одного участника в это совещание</value>
+    <value>Добавьте хотя бы одного участника в совещание</value>
   </string>
   <string id="796" name="calendar">
-    <value>Вы на самом деле хотите удалить это событие?</value>
+    <value>Вы действительно хотите удалить это событие?</value>
   </string>
   <string id="797" name="calendar">
     <value>Предупреждение</value>
@@ -2422,13 +2416,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Участники</value>
   </string>
   <string id="804" name="dashboard">
-    <value>$APP_NAME, платформа ваших веб-конференций. Вы можете 1) следуя инструкциям, нажать кнопку "Старт", и участвовать в конференции или 2) перейти в календарь и назначить время конференции.</value>
+    <value>$APP_NAME - платформа ваших веб-конференций. Вы можете 1) следуя инструкциям, нажать кнопку "Старт" и участвовать в конференции или 2) перейти в календарь и назначить время.</value>
   </string>
   <string id="805" name="dashboard">
     <value>Запланировать</value>
   </string>
   <string id="806" name="lzcalendar">
-    <value>Для того чтобы назначить конференцию, добавьте новое событие в календарь. Для каждого события в календаре будет создана отдельная комната. Вы и все участники получите e-mail со ссылкой на комнату.&lt;br/&gt;&lt;br/&gt;Вы можете выбрать различные типы комнат - у каждого типа своя схема общения и модерации. Также можно выбрать различные типы e-mail нотификации.</value>
+    <value>Чтобы назначить конференцию, добавьте новое событие в календарь.</value>
   </string>
   <string id="807" name="lzcalendar">
     <value>Нужна помощь?</value>
@@ -2443,7 +2437,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Добавить</value>
   </string>
   <string id="811" name="lzcalendar">
-    <value>Ни один пользователь не выбран. Сначала выберите пункт из списка, а затем нажмите "Добавить".</value>
+    <value>Ни один пользователь не выбран. Выберите его из списка, а затем нажмите "Добавить".</value>
   </string>
   <string id="812" name="lzcalendar">
     <value>Добавить участника</value>
@@ -2461,7 +2455,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Модератор по умолчанию</value>
   </string>
   <string id="817" name="room admin">
-    <value>Супермодератор</value>
+    <value>Супер</value>
   </string>
   <string id="818" name="room admin">
     <value>ID</value>
@@ -2479,22 +2473,22 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Является супермодератором</value>
   </string>
   <string id="823" name="room admin">
-    <value>Если комната модерируется, пользователь с правами модератора или администратора автоматически становятся модераторами, когда входят в комнату. Если вам это не нужно, а Вы лишь хотите, чтобы определённый пользователь стал модератором, используйте опцию "модератор по умолчанию".</value>
+    <value>Если комната модерируется, пользователь с правами модератора илиадминистратора автоматически становится модератором при входе. Если вам это не нужно, а Вы лишь хотите, чтобы определённый польз-ль стал модератором, используйте опцию "модератор по умолчанию".</value>
   </string>
   <string id="824" name="room admin">
-    <value>Супермодератор всегда становится модератором, когда входит в комнату. Никто не может снять флаг модерации у него.</value>
+    <value>Супермодератор всегда становится модератором при входе в комнату. У него нельзя снять флаг модерации.</value>
   </string>
   <string id="825" name="room admin">
-    <value>Сделать пользователя супермодератором</value>
+    <value>Сделать польз-ля супермодератором</value>
   </string>
   <string id="826" name="room admin">
-    <value>Снять флаг супермодерации с пользователя</value>
+    <value>Снять флаг супермодерации с польз-ля</value>
   </string>
   <string id="827" name="room admin">
     <value>У</value>
   </string>
   <string id="828" name="room admin">
-    <value>Если для комнаты вы добавите организацию, то только пользователи из этой организации будут иметь доступ к ней (Это действительно только если флаг isPublic не установлен)</value>
+    <value>Если для комнаты вы добавите организацию, только пользователи этой организации будут иметь доступ к ней (действительно только если флаг isPublic не установлен)</value>
   </string>
   <string id="829" name="room admin">
     <value>Модерация</value>
@@ -2509,22 +2503,22 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Вы уверены?</value>
   </string>
   <string id="833" name="confirm delete">
-    <value>Вы действительно хотите удалить эту запись? Чтобы запомнить эти изменения, нажмите кнопку сохранения</value>
+    <value>Вы действительно хотите удалить запись? Чтобы запомнить изменения, нажмите кнопку сохранения</value>
   </string>
   <string id="834" name="user choose error">
-    <value>Ни один пользователь не выбран. Пожалуйста, выберите пользователя</value>
+    <value>Пользователь не выбран. Пожалуйста, выберите пользователя</value>
   </string>
   <string id="835" name="room admin">
-    <value>Добавить нового модератора по умолчанию</value>
+    <value>Добавить модератора по умолчанию</value>
   </string>
   <string id="836" name="room admin">
-    <value>Хотите добавить флаг супермодератора этому пользователю? Чтобы сохранить эти данные, вам нужно сохранить объект комнаты.</value>
+    <value>Хотите добавить флаг супермодератора этому пользователю? Чтобы сохранить это, сохраните объект комнаты.</value>
   </string>
   <string id="837" name="room admin">
-    <value>Вы действительно хотите удалить флаг супермодератора у того пользователя? Чтобы сохранить эти данные, вам нужно сохранить объект комнаты.</value>
+    <value>Вы действительно хотите удалить флаг супермодератора у пользователя? Чтобы сохранить это, сохраните объект комнаты.</value>
   </string>
   <string id="838" name="super moderator">
-    <value>Этот пользователь - супермодератор. Вы не можете удалить флаг модератора у Супермодертора.</value>
+    <value>Этот польз-ль - супермодератор. Вы не можете удалить флаг модератора у него.</value>
   </string>
   <string id="839" name="confirm delete">
     <value>Вы действительно хотите удалить этот файл/папку?</value>
@@ -2542,122 +2536,122 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Свойства</value>
   </string>
   <string id="844" name="screen sharer">
-    <value>Show mouse position to viewers</value>
+    <value>Показывать позицию мыши зрителям</value>
   </string>
   <string id="845" name="publish option">
-    <value>Share Audio with SIP Applet</value>
+    <value>Совместно использовать аудио и SIP</value>
   </string>
   <string id="846" name="publish option">
-    <value>Share Audio with SIP and Video with Flash</value>
+    <value>Совмистно использовать аудио с SIP и видео с флеш</value>
   </string>
   <string id="847" name="document panel">
     <value>Full-Fit</value>
   </string>
   <string id="848" name="screen share">
-    <value>View Screen</value>
+    <value>Смотреть экран</value>
   </string>
   <string id="849" name="screen share">
-    <value>The user</value>
+    <value>Пользователь</value>
   </string>
   <string id="850" name="screen share">
-    <value>wants to share its screen. Do you want to see it?</value>
+    <value>хочет сделать экран общим. Хотите видеть его?</value>
   </string>
   <string id="851" name="screen share">
-    <value>Close</value>
+    <value>Закрыть</value>
   </string>
   <string id="852" name="screen sharer">
-    <value>Zoom</value>
+    <value>Масштаб</value>
   </string>
   <string id="853" name="screen sharer">
-    <value>The Session was closed by the sharing User!</value>
+    <value>Сессия была закрыта хозяином экрана!</value>
   </string>
   <string id="854" name="screen sharer">
-    <value>Pause</value>
+    <value>Пауза</value>
   </string>
   <string id="855" name="screen sharer">
-    <value>New Screen Sharing</value>
+    <value>Новый общий экран</value>
   </string>
   <string id="856" name="presenter mini icon">
-    <value>Minimize</value>
+    <value>Минимизировать</value>
   </string>
   <string id="857" name="presenter mini icon">
-    <value>Maximize</value>
+    <value>Максимизировать</value>
   </string>
   <string id="858" name="flvrecording">
-    <value>Video</value>
+    <value>Видео</value>
   </string>
   <string id="859" name="flvrecording">
-    <value>Recording Timeline</value>
+    <value>Сроки записи</value>
   </string>
   <string id="860" name="flvrecording">
-    <value>My Recordings</value>
+    <value>Мои записи</value>
   </string>
   <string id="861" name="flvrecording">
-    <value>Public Recordings</value>
+    <value>Публичные записи</value>
   </string>
   <string id="862" name="flvrecording">
-    <value>Info</value>
+    <value>Инфо</value>
   </string>
   <string id="863" name="flvrecording">
-    <value>Name</value>
+    <value>Имя</value>
   </string>
   <string id="864" name="flvrecording">
-    <value>Length</value>
+    <value>Длина</value>
   </string>
   <string id="865" name="flvrecording">
-    <value>Date</value>
+    <value>Дата</value>
   </string>
   <string id="866" name="flvrecording">
-    <value>By</value>
+    <value>От</value>
   </string>
   <string id="867" name="flvrecording">
-    <value>PLAY</value>
+    <value>ИГРАТЬ</value>
   </string>
   <string id="868" name="flvrecording">
-    <value>Main - Video</value>
+    <value>Главное - видео</value>
   </string>
   <string id="869" name="screen share">
-    <value>Recording</value>
+    <value>Запись</value>
   </string>
   <string id="870" name="screen share">
-    <value>You may record and share your screen at the same time. To enable others to see your screen just hit the start button on the top. To only record the Session it is sufficient to click start recording.</value>
+    <value>Вы можете записывать и делать экран общим одновременно. Чтобы сделать экран общим, нажмите кнопку “Cтарт” сверху. Чтобы только записывать сессию, нажмите "Начать запись".</value>
   </string>
   <string id="871" name="screen share">
-    <value>Start Recording</value>
+    <value>Начать запись</value>
   </string>
   <string id="872" name="screen share">
-    <value>Stop Recording</value>
+    <value>Остановить запись</value>
   </string>
   <string id="873" name="flvrecording">
-    <value>Download the FLV-File</value>
+    <value>Загрузить файл FLV</value>
   </string>
   <string id="874" name="flvrecording">
-    <value>Room</value>
+    <value>Комната</value>
   </string>
   <string id="875" name="flvrecording">
-    <value>Play</value>
+    <value>Играть</value>
   </string>
   <string id="876" name="flvrecording">
-    <value>Stop</value>
+    <value>Стоп</value>
   </string>
   <string id="877" name="flvrecording">
-    <value>User has microphone on</value>
+    <value>Микрофон польз-ля включен</value>
   </string>
   <string id="878" name="sharing client">
-    <value>Stop Sharing</value>
+    <value>Остановить общий доступ</value>
   </string>
   <string id="879" name="room config">
-    <value>Allow User Questions</value>
+    <value>Разрешить вопросы</value>
   </string>
   <string id="880" name="room config">
-    <value>Turn this off to prevent that any user is disturbing you in this room. Effect is that the Button to ask for Moderation ("I have a question") is not visible.</value>
+    <value>Выключите, чтобы чтобы пользователи в комнате вам не мешали.</value>
   </string>
   <string id="881" name="room config">
-    <value>Rights</value>
-  </string>  
+    <value>Права</value>
+  </string>
   <string id="882" name="flvrecording">
-    <value>Download as AVI</value>
-  </string>  
+    <value>Загрузить как AVI</value>
+  </string>
   <string id="883" name="flvrecording">
     <value>FLV</value>
   </string>
@@ -2665,235 +2659,235 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>AVI</value>
   </string>
   <string id="885" name="flvrecording">
-    <value>Raw Screenvideo</value>
+    <value>Сырое видео</value>
   </string>
   <string id="886" name="flvrecording">
-    <value>Audio only</value>
+    <value>Только аудио</value>
   </string>
   <string id="887" name="flvrecording">
-    <value>The have been errors while processing the Recording.</value>
+    <value>При обработке записи возникли ошибки.</value>
   </string>
   <string id="888" name="flvrecording">
-    <value>The Recording is not yet ready for watching. Please retry in a couple of minutes again.</value>
+    <value>Запись ещё не готова. Попробуйте снова через пару минут.</value>
   </string>
   <string id="889" name="flvrecording">
-    <value>Log:</value>
+    <value>Лог:</value>
   </string>
   <string id="890" name="flvrecording">
-    <value>Recorder Message</value>
+    <value>Сообщение рекордера</value>
   </string>
   <string id="891" name="flvrecording">
     <value>Ok</value>
   </string>
   <string id="892" name="sip applet">
-    <value>SIP Applet is not Ready</value>
+    <value>Апплет SIP не готов</value>
   </string>
   <string id="893" name="user administration">
-    <value>SIP-Account Settings</value>
+    <value>Установки аккаунта SIP</value>
   </string>
   <string id="894" name="user administration">
-    <value>SIP settings for each user. You can turn on or off SIP via the Administration &gt; Configuration (Key: enable_sip). The SIP data for each user should be created automatically.</value>
+    <value>Установки SIP для каждого пользователя.</value>
   </string>
   <string id="895" name="user administration">
-    <value>SIP-User</value>
+    <value>Польз-ль SIP</value>
   </string>
   <string id="896" name="user administration">
-    <value>Sip-Pass</value>
+    <value>Пароль Sip</value>
   </string>
   <string id="897" name="user administration">
     <value>Sip-Auth-Id</value>
   </string>
   <string id="898" name="sip status message">
-    <value>The Login to the SIP Gateway has failed. You should check the authentification data of your SIP-Provider and the SIP-Account Data for each User. As Administrator you are still able to login and check the Configuration. As User or Moderator you will be blocked from any interaction.</value>
+    <value>Неправильный логин к шлюзу SIP. Проверьте данные ауфентикациивашего провайдера SIP и данные аккаунта SIP для каждого польз-ля. Администратор может сделать проверку через пункт меню Конфигурация. Пользователи и модераторы заблокированы от любых взаимодействий.</value>
   </string>
   <string id="899" name="sip status message">
-    <value>The Login to the SIP Gateway has failed. Contact your Service Team!</value>
+    <value>Неправильный логин для шлюза SIP. Обратитесь в службу поддержки!</value>
   </string>
   <string id="900" name="sip status message">
-    <value>Logging in to SIP-Gateway ...</value>
+    <value>Войти в шлюз SIP</value>
   </string>
   <string id="901" name="sip status message">
-    <value>Logging in to SIP-Gateway ...</value>
+    <value>Войти в шлюз SIP</value>
   </string>
   <string id="902" name="flvrecording">
-    <value>Show Log</value>
+    <value>Показать лог</value>
   </string>
   <string id="903" name="flvrecording">
-    <value>Log messages from post recorder process</value>
+    <value>Лог процесса записи</value>
   </string>
   <string id="904" name="sip login">
-    <value>SIP-Applet Message</value>
+    <value>Сообщения апплета SIP</value>
   </string>
   <string id="905" name="sip login">
-    <value>The SIP-Applet is not ready. Accept the Applet please and click ok!</value>
+    <value>Апплет SIP не готов. Примите апплет и нажмите ok!</value>
   </string>
   <string id="906" name="moderator pop up">
-    <value>Get Moderation</value>
+    <value>Стать модератором</value>
   </string>
   <string id="907" name="lzcalendar">
-    <value>Save Appointment Changes</value>
+    <value>Сохранить изменения назначения</value>
   </string>
   <string id="908" name="lzcalendar">
-    <value>The appointement has been changed. Do you want to save those changes? &lt;br/&gt;&lt;br/&gt;All attendees of the appointment will receive a EMail with the updated date and time (depending on the notification type of this appointment).</value>
+    <value>Назначение было изменено. Сохранить изменения? Все участники получат мейл с изменённой датой и временем (в зависимости от типа нотификаций этого назначения).</value>
   </string>
   <string id="909" name="flv recorder error message">
-    <value>To access other recordings you have to login the $APP_NAME Application.</value>
+    <value>Для доступа к другим записям войдите в приложение $APP_NAME.</value>
   </string>
   <string id="910" name="interview video pod">
-    <value>Choose the User for this Video</value>
+    <value>Выберите пользователя для этого видео</value>
   </string>
   <string id="911" name="interview video choose user">
-    <value>Available Users for this Pod</value>
+    <value>Доступные пользователи для этого Pod</value>
   </string>
   <string id="912" name="interview info">
-    <value>You are a Moderator in this Interview. You can decide who is speaking in this interview and you can start / stop the recording of the Session.</value>
+    <value>Вы модератор этого интервью. Вы можете решать, кому говорить, и можете начинать / останавливать запись</value>
   </string>
   <string id="913" name="interview button recording">
-    <value>Start Recording</value>
+    <value>Начать запись</value>
   </string>
   <string id="914" name="interview button recording">
-    <value>Stop Recording</value>
+    <value>Остановить запись</value>
   </string>
   <string id="915" name="interview error message">
-    <value>The recording of the Interview is already started.</value>
+    <value>Запись интервью уже начата.</value>
   </string>
   <string id="916" name="interview error message">
-    <value>The recording is already stopped or not been started yet.</value>
+    <value>Запись уже остановлена или ещё не начата.</value>
   </string>
   <string id="917" name="interview recording message">
-    <value>The recording for this interview is already started!</value>
+    <value>Запись этого интервью уже начата!</value>
   </string>
   <string id="918" name="interview error message">
-    <value>Cancel</value>
+    <value>Отменить</value>
   </string>
   <string id="919" name="interview error message">
-    <value>The post-processing of an interview takes 5 minutes per 1 minute interview. The current progress of the interview post-processing transcoding is:</value>
+    <value>Обработка интервью занимает 5 минут на каждую минуту интервью. Текущий прогресс обработки:</value>
   </string>
   <string id="920" name="sip creation">
-    <value>You have to enter your password again to auto create the SIP Data</value>
+    <value>Введите пароль снова, чтобы автоматически создать данные SIP</value>
   </string>
   <string id="921" name="sip creation">
-    <value>Auto generate SIP Data</value>
+    <value>Авто-генерация SIP</value>
   </string>
   <string id="922" name="fileexplorer">
-    <value>You cannot move this file or folder into its own sub folder!</value>
+    <value>Вы не можете переместить этот файл или папку в его собственную подпапку!</value>
   </string>
   <string id="923" name="file explorer ">
-    <value>Home drive size</value>
+    <value>Размер домашнего накопителя</value>
   </string>
   <string id="924" name="file explorer">
-    <value>Public drive size</value>
+    <value>Размер публичного накопителя</value>
   </string>
   <string id="925" name="user-admin">
-    <value>License Settings</value>
+    <value>Лицензионные установки</value>
   </string>
   <string id="926" name="user-admin">
-    <value>You can either bind the user to a expire Date or to a maximum number of minutes when you enable licensing.</value>
+    <value>Вы можете либо назначить дату конца срока действия, либо макс. число минут срока действия лицензии.</value>
   </string>
   <string id="927" name="user-admin">
-    <value>Check license</value>
+    <value>Проверить лицензию</value>
   </string>
   <string id="928" name="user-admin">
-    <value>Flatrate</value>
+    <value>Единая ставка</value>
   </string>
   <string id="929" name="user-admin">
-    <value>Expire date</value>
+    <value>Дата конца срока действия</value>
   </string>
   <string id="930" name="user-admin">
-    <value>Seconds left</value>
+    <value>Осталось секунд</value>
   </string>
   <string id="931" name="user-admin">
-    <value>Total time</value>
+    <value>Общее время</value>
   </string>
   <string id="932" name="user-license">
-    <value>Your License has expired. You need to buy new minutes (Pay-per-minute) or a volume flatrate.</value>
+    <value>Ваша лицензия истекла. Вам нужно купить новые минуты либо заплатить по единой ставке.</value>
   </string>
   <string id="933" name="user-license">
-    <value>Click and buy</value>
+    <value>Нажмите и купите</value>
   </string>
   <string id="934" name="user-license">
-    <value>Time Left on your account:</value>
+    <value>Оставшееся время вашего аккаунта:</value>
   </string>
   <string id="935" name="user-license">
-    <value>User License Info</value>
+    <value>Информация о лицензии</value>
   </string>
   <string id="936" name="user-license">
-    <value>Info</value>
+    <value>Информация</value>
   </string>
   <string id="937" name="user-license">
-    <value>Close</value>
+    <value>Закрыть</value>
   </string>
   <string id="938" name="license-info">
-    <value>Your license has expired. You need either to buy a minute package (Pay-per-minute) or a volume flatrate.</value>
+    <value>Ваша лицензия истекла. Вам необходимо купить новые минуты либо заплатить по единой ставке.</value>
   </string>
   <string id="939" name="user-license">
-    <value>License settings</value>
+    <value>Установки лицензии</value>
   </string>
   <string id="940" name="user-license">
-    <value>You can either buy minutes to make Web-Conferencing (Pay-per-minute).&lt;br/&gt;&lt;br/&gt; Or you buy a volume flatrate about 3-12 months.&lt;br/&gt;&lt;br/&gt;Sending invitations (direct links into Conference Rooms) or creating conference Rooms via the Calendar with external Users is only allowed with a volume flatrate!</value>
+    <value>Вы можете купить минуты для того, чтобы проводить веб-конференции. Или заплатите по единой ставке за 3-12 месяцев.Посылка приглашений (прямые ссылки на комнаты) или создание конференций с внешними польз-лями через календарь возможны только в случае оплаты по единой ставке!</value>
   </string>
   <string id="941" name="user-license">
-    <value>Buy 60 Minutes 9,99 EURO (16 Cent per Minute)</value>
+    <value>Купить 60 минут за 9,99 евро (16 центов за минуту)</value>
   </string>
   <string id="942" name="user-license">
-    <value>Buy 5 hours 19,99 EURO (6 Cent per minute)</value>
+    <value>Купить 5 часов за 19,99 евро (6 центов за минуту)</value>
   </string>
   <string id="943" name="user-license">
-    <value>Buy 3 month for 29,99 EURO (9,99 Euro per Month)</value>
+    <value>Купить 3 месяца за 29,99 евро (9,99 евро за месяц)</value>
   </string>
   <string id="944" name="user-license">
-    <value>Buy 6 month for 39,99 EURO (6,66 Euro per month)</value>
+    <value>Купить 6 месяцев за 39,99 евро (6,66 евро за месяц)</value>
   </string>
   <string id="945" name="user-license">
-    <value>Pay-per-minute</value>
+    <value>Платить поминутно</value>
   </string>
   <string id="946" name="user-license">
-    <value>Volume flatrate</value>
+    <value>Единая ставка</value>
   </string>
   <string id="947" name="user-license">
-    <value>You have unlimited License</value>
+    <value>У вас неограниченная лицензия</value>
   </string>
   <string id="948" name="user-license">
-    <value>Your license will expire at:</value>
+    <value>Ваша лицензия истекает:</value>
   </string>
   <string id="949" name="user-license">
-    <value>You bought Pay-per-minute. You still have:</value>
+    <value>Вы купили поминутную лицензию. У вас есть:</value>
   </string>
   <string id="950" name="user-license">
-    <value>Buy new credit!</value>
+    <value>Купите новый кредит</value>
   </string>
   <string id="951" name="user-license">
-    <value>Want your own Server?</value>
+    <value>Хотите свой собственный сервер?</value>
   </string>
   <string id="952" name="user-license">
-    <value>You would like to have $APP_NAME installed on your Server or integrated into your Moodle, SugarCRM, Website or Intranet? Prizings start at 500 Euro per Installation!</value>
+    <value>Вы хотите ecnfyjdbnm $APP_NAME на ваш сервер или интегрироваться с Moodle, SugarCRM, веб-сайтом или внутренней сетью? Цены начинаются с 500 евро за инстолляцию!</value>
   </string>
   <string id="953" name="user-license">
-    <value>Or send us a message</value>
+    <value>или послать сообщение</value>
   </string>
   <string id="954" name="user-license">
-    <value>Answer to:</value>
+    <value>Ответить:</value>
   </string>
   <string id="955" name="user-license">
-    <value>Message:</value>
+    <value>Сообщение:</value>
   </string>
   <string id="956" name="user-license">
-    <value>Send</value>
+    <value>Послать</value>
   </string>
   <string id="957" name="user-license">
-    <value>Click here to get contact Info and Prizings</value>
+    <value>Нажмите здесь, чтобы получить контактную информацию ипрайс-лист</value>
   </string>
   <string id="958" name="payment-form">
-    <value>Credit Card Details</value>
+    <value>Кредитная карта</value>
   </string>
   <string id="959" name="payment-form">
-    <value>Firstname</value>
+    <value>Имя</value>
   </string>
   <string id="960" name="payment-form">
-    <value>Lastname</value>
+    <value>Фамилия</value>
   </string>
   <string id="961" name="payment-form">
-    <value>Credit Card Type</value>
+    <value>Тип карты</value>
   </string>
   <string id="962" name="payment-form">
     <value>VISA Card</value>
@@ -2908,187 +2902,187 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>American Express</value>
   </string>
   <string id="966" name="payment-form">
-    <value>Credit Card Number</value>
+    <value>Номер карты</value>
   </string>
   <string id="967" name="payment-form">
-    <value>Expiration Date</value>
+    <value>Срок окончания действия</value>
   </string>
   <string id="968" name="payment-form">
-    <value>Card Verification Number</value>
+    <value>Номер для верификации карты</value>
   </string>
   <string id="969" name="payment-form">
-    <value>Billing Address</value>
+    <value>Платёжный адрес</value>
   </string>
   <string id="970" name="payment-form">
-    <value>Address</value>
+    <value>Адрес</value>
   </string>
   <string id="971" name="payment-form">
     <value></value>
   </string>
   <string id="972" name="payment-form">
-    <value>City</value>
+    <value>Город</value>
   </string>
   <string id="973" name="payment-form">
-    <value>Country</value>
+    <value>Страна</value>
   </string>
   <string id="974" name="payment-form">
-    <value>State (Only US)</value>
+    <value>Штат (Только US)</value>
   </string>
   <string id="975" name="payment-form">
-    <value>ZIP</value>
+    <value>Индекс</value>
   </string>
   <string id="976" name="payment-form">
-    <value>Amount</value>
+    <value>Кол-во</value>
   </string>
   <string id="977" name="payment-form">
-    <value>Submit</value>
+    <value>Послать</value>
   </string>
   <string id="978" name="payment-form">
-    <value>Step 1: $APP_NAME - Payment Form</value>
+    <value>Шаг 1: $APP_NAME - Платёжная форма</value>
   </string>
   <string id="979" name="payment-form">
     <value>EMail</value>
   </string>
   <string id="980" name="payment-form">
-    <value>Click "Check out with Paypal" to pay.&lt;br/&gt; Paypal accepts VISA, MasterCard, Discover or American Express. &lt;br/&gt;It does not require to sign up with Paypal. &lt;br/&gt;Citizens from Germany can also pay with direct debit (Per Lastschrift-Einzug).</value>
+    <value>Нажмите "Послать через PayPal" чтобы заплатить. Paypal принимает VISA, MasterCard, Discover или American Express. PaypAL не требует подписи.Граждене Германии могут также платить с дебетовой карты (Per Lastschrift-Einzug).</value>
   </string>
   <string id="981" name="payment-form">
-    <value>Thank you for buying $APP_NAME. &lt;br/&gt; &lt;br/&gt; As soon as we received the payment your account will be updated.&lt;br/&gt; You will receive an EMail with your invoice as PDF.&lt;br/&gt;You can also check current and past transactions in your profile settings.&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;You can close this browser window/tab now and return to $APP_NAME.</value>
+    <value>Спасибо за покупку $APP_NAME. Как только мы получим ваш платёж, ваш аккаунт будет изменён. Вы поллучите письмо с вашим счётом в формате PDF.Вы также можете проверять текущие и прошлые операции в вашем профайле.Сейчас вы можете закрыть ваше окно браузера и вернуться к $APP_NAME.</value>
   </string>
   <string id="982" name="payment-form">
-    <value>Submit and Buy!</value>
+    <value>Отправьте и купите!</value>
   </string>
   <string id="983" name="payment-from">
-    <value>Click and Buy!</value>
+    <value>нажмите и купите!</value>
   </string>
   <string id="984" name="payment-from">
-    <value>Step 3: $APP_NAME Payment - Check order and buy!</value>
+    <value>Шаг 3: Платёж за $APP_NAME - проверьте заявку и купите!</value>
   </string>
   <string id="985" name="payment-from">
-    <value>Name</value>
+    <value>Имя</value>
   </string>
   <string id="986" name="payment-mail">
-    <value>Payment received!</value>
+    <value>Платёж получен!</value>
   </string>
   <string id="987" name="payment-mail">
-    <value>Hi,</value>
+    <value>Здравствуйте,</value>
   </string>
   <string id="988" name="payment-mail">
-    <value>We have received your payment. Your user profile is updated now. See attached your Invoice. The Invoice and all past Invoice can also be downloaded in your user profile.</value>
+    <value>Мы получили ваш платёж. Ваш профайл изменён. Смотрите прикреплённый счёт. Этот и все предыдущие счета могут также быть загружены в ваш профайл.</value>
   </string>
   <string id="989" name="payment-mail">
-    <value>Thank you for using $APP_NAME!</value>
+    <value>Спасибо за использование $APP_NAME!</value>
   </string>
   <string id="990" name="payment-mail">
-    <value>Payment Received $APP_NAME -</value>
+    <value>Платёж получен $APP_NAME -</value>
   </string>
   <string id="991" name="user-settings">
-    <value>Payment and Transaction Status</value>
+    <value>Статус платежа и транзакции</value>
   </string>
   <string id="992" name="user-settings">
-    <value>Transcation Hash</value>
+    <value>Хэш транзакций</value>
   </string>
   <string id="993" name="user-settings">
-    <value>Minutes</value>
+    <value>Минуты</value>
   </string>
   <string id="994" name="user-settings">
-    <value>Months</value>
+    <value>Месяцы</value>
   </string>
   <string id="995" name="user-settings">
     <value>EUR</value>
   </string>
   <string id="996" name="user-settings">
-    <value>Status</value>
+    <value>Статус</value>
   </string>
   <string id="997" name="user-settings">
-    <value>Invoice</value>
+    <value>Счёт</value>
   </string>
   <string id="998" name="user-settings">
     <value></value>
   </string>
   <string id="999" name="error-license-flat">
-    <value>You need to buy a volume flatrate to be able to send invitations or create meetings via the calendar. With Pay-per-minute it is only possible for you to access $APP_NAME. You cannot allow 3th Parties to access a Meeting.</value>
+    <value>Для того, чтобы посылать приглашения или создавать митинги через календарь, Вы должны платить по единой ставке. Для поминутной тарификации возможен только доступп к $APP_NAME. Вы не можете разрешить сторонним участникам доступ к митингу.</value>
   </string>
   <string id="1000" name="error user">
-    <value>This Email is already used by another User.</value>
+    <value>Этот email уже используется другим пользователем.</value>
   </string>
   <string id="1001" name="room-admin">
-    <value>SIP-Settings</value>
+    <value>Установки SIP</value>
   </string>
   <string id="1002" name="room-admin">
-    <value>The Conference Number and PIN is automatically created via the OpenXG RPC-Gateway</value>
+    <value>Номер конференции и PIN автоматически созданы через шлюз OpenXG RPC</value>
   </string>
   <string id="1003" name="room-admin">
-    <value>SIP Number</value>
+    <value>Номер SIP</value>
   </string>
   <string id="1004" name="room-admin">
     <value>PIN</value>
   </string>
   <string id="1005" name="whiteboard">
-    <value>Clear objects on current slide only!</value>
+    <value>Очистить объекты только на текущем слайде!</value>
   </string>
   <string id="1006" name="co-browser">
-    <value>Only the URL entered in the Status bar is send to participants!</value>
+    <value>Только введённый в строке состояния URL посылается участникам!</value>
   </string>
   <string id="1007" name="team-split">
-    <value>Make Team-Rooms [Breakout session]</value>
+    <value>Сделать групповые комнаты [Breakout session]</value>
   </string>
   <string id="1008" name="team-split">
-    <value>Choose users for a new Team-Room!</value>
+    <value>Выберите пользователей для групповой комнаты!</value>
   </string>
   <string id="1009" name="team-split">
-    <value>You can choose users here and create a new Conference Room ("Team Room") for them. The chosen users will automatically switch to the new Team-Room or get a notification. Team-Room Moderators will get additionally a list of current rooms so that they can switch to each room if there are is need for a Moderator.</value>
+    <value>Здесь вы можете выбрать пользователей и создать новую групповую комнату для конференций для них. Выбранные пользователи будут автоматически перемещены в новую комнату или получат сообщение. Модераторы получат список текущих комнат так, чтобы они могли переключаться на каждую комнату, если нужно.</value>
   </string>
   <string id="1010" name="team-split">
-    <value>Username</value>
+    <value>Имя пользователя</value>
   </string>
   <string id="1011" name="team-split">
-    <value>Login</value>
+    <value>Логин</value>
   </string>
   <string id="1012" name="team-split">
     <value></value>
   </string>
   <string id="1013" name="team-split">
-    <value>Users for the new Team-Room:</value>
+    <value>Пользователи в новой групповой комнате:</value>
   </string>
   <string id="1014" name="team-split">
-    <value>Create Team-Room</value>
+    <value>Создать групповую комнату</value>
   </string>
   <string id="1015" name="team-split">
-    <value>Cancel</value>
+    <value>Отмена</value>
   </string>
   <string id="1016" name="team-split">
-    <value>Choose at least one user for the Team-Room!</value>
+    <value>Выберите хотя бы одного пользователя для комнаты!</value>
   </string>
   <string id="1017" name="team-split">
-    <value>Add user to team</value>
+    <value>Добавить пользователя в группу</value>
   </string>
   <string id="1018" name="team-split">
-    <value>Remove user from Team-Room</value>
+    <value>Удалить пользователя из комнаты</value>
   </string>
   <string id="1019" name="team-split">
-    <value>User is Team-Room Moderator (He is able to manage Team-Rooms and users of the Team-Room can ask him to come inside)</value>
+    <value>Пользователь - модератор групповой комнаты (Он может управлять комнатами и пользователи комнаты могут просить его прийти)</value>
   </string>
   <string id="1020" name="team-split">
-    <value>Roomtype</value>
+    <value>Тип комнаты</value>
   </string>
   <string id="1021" name="team-split">
-    <value>If you check "Force user to switch to new Team-Room" all chosen users will automatically switch to the newly created Team-Room. Otherwise they get a notification with a button that they &lt;i&gt;can&lt;/i&gt; switch to the new room. Team-Moderators always have the free choice to manage the Team-Rooms and switch between them.</value>
+    <value>Если вы выберете "Переключить пользователя на новую групповую комнату" все выбранные пользователи будут автоматически переключены на новую комнату. Иначе они получат нотификацию с кнопкой, которой они переключиться на новую комнату. Модераторы всегда имеют выбор в управлении комнатами и переключении между ними.</value>
   </string>
   <string id="1022" name="team-split">
-    <value>Manage Team-Rooms</value>
+    <value>Управление групповыми комнатами</value>
   </string>
   <string id="1023" name="team-split">
-    <value>You can switch here between all Team-Rooms that you are assigned as Team-Room Moderator. Users inside the Team-Room can send you a message, for example to ask you to come to their room and help them. You can also terminate the Team-Room and all Users will be logged out.</value>
+    <value>Вы можете переключаться между всеми групповыми комнатами, в которых вы модератор. Пользователи внутри комнаты могут посылать вам сообщения, например просить вас зайти в икомнату и помочь. Вы можете также прервать комнату, и все пользователи будут выведены оттуда.</value>
   </string>
   <string id="1024" name="team-split">
-    <value>Force user to switch to new Team-Room</value>
+    <value>Переместить пользователя в новую комнату</value>
   </string>
   <string id="1025" name="team-split">
-    <value>Name</value>
+    <value>Имя</value>
   </string>
   <string id="1026" name="team-split">
-    <value>Created</value>
+    <value>Создано</value>
   </string>
   <string id="1027" name="team-split">
     <value></value>
@@ -3097,199 +3091,199 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value></value>
   </string>
   <string id="1029" name="team-split">
-    <value>Users available</value>
+    <value>Доступные пользователи</value>
   </string>
   <string id="1030" name="team-split">
-    <value>Add a user with the plus from the left or remove it with the cross from the right!</value>
+    <value>Добавьте польз-ля плюсом слева или удалите крестиком справа!</value>
   </string>
   <string id="1031" name="team-split">
-    <value>1) Team-Room settings</value>
+    <value>1) Установки групповой комнаты</value>
   </string>
   <string id="1032" name="team-split">
-    <value>2) Add users to the Team-Room</value>
+    <value>2) Добавить пользователя в групповую комнату</value>
   </string>
   <string id="1033" name="team-split">
-    <value>Team-Room Name</value>
+    <value>Название групповой комнаты</value>
   </string>
   <string id="1034" name="team-split">
-    <value>Team-Room</value>
+    <value>Групповая комната</value>
   </string>
   <string id="1035" name="team-split">
-    <value>Change to the Room</value>
+    <value>Изменить для комнаты</value>
   </string>
   <string id="1036" name="team-split">
-    <value>Switch to this Team-Room</value>
+    <value>Переключиться на эту групповую комнату</value>
   </string>
   <string id="1037" name="team-split">
-    <value>Terminate Team-Room and logout all Users</value>
+    <value>Прервать групповую комнату и заставить всех пользователей выйти</value>
   </string>
   <string id="1038" name="team-split">
-    <value>New Team-Room</value>
+    <value>Новая групповая комната</value>
   </string>
   <string id="1039" name="team-split">
-    <value>There is a new Team-Room available for you.</value>
+    <value>Есть новая групповая комната, доступная для вас.</value>
   </string>
   <string id="1040" name="team-split">
-    <value>Switch to Team-Room</value>
+    <value>Переключиться на групповую комнату</value>
   </string>
   <string id="1041" name="team-split">
-    <value>Team-Room Actions</value>
+    <value>Действия групповой комнаты</value>
   </string>
   <string id="1042" name="team-split">
-    <value>You can re-open this window via the main menu in the "Actions" section!</value>
+    <value>Вы можете переоткрыть это окно через пункт Действия меню!</value>
   </string>
   <string id="1043" name="team-split">
-    <value>Send message to Team-Room Moderator</value>
+    <value>Послать сообщение модератору групповой комнаты</value>
   </string>
   <string id="1044" name="team-split">
-    <value>New Team-Room</value>
+    <value>Новая групповая комната</value>
   </string>
   <string id="1045" name="team-split">
-    <value>There is a new Team-Room available. You can switch to that Room. Team-Rooms are like "Workgroups" with additionally possibilities to ask the Team-Room Moderator for help. Your Team-Rooms are also available in the "My Meetings" section.</value>
+    <value>Есть новая доступная групповая комната. Вы можете переключиться на неё. Групповые комнаты похожи на "рабочие" с дополнительной возможностью задавать вопросы модератору. Ваши комнаты также доступны в разделе "Мои Митинги".</value>
   </string>
   <string id="1046" name="team-split">
-    <value>Switch to Team-Room</value>
+    <value>Перейти в групповую комнату</value>
   </string>
   <string id="1047" name="team-split">
-    <value>Created by:</value>
+    <value>Создано:</value>
   </string>
   <string id="1048" name="team-split">
-    <value>Team-Room name:</value>
+    <value>Название групповой комнаты:</value>
   </string>
   <string id="1049" name="team-split">
-    <value>This Window will stay open even if you leave the room!</value>
+    <value>Это окно останется открытым даже если вы выйдете из комнаты!</value>
   </string>
   <string id="1050" name="team-split">
-    <value>Users for this Team-Room</value>
+    <value>Польз-ли этой групповой комнаты</value>
   </string>
   <string id="1051" name="team-split">
-    <value>3) Other Team-Rooms that you could switch to</value>
+    <value>3) Другие групповые комнаты, к которым вы можете перейти</value>
   </string>
   <string id="1052" name="team-split">
-    <value>Send a message to the Team-Room Moderators. For example if you need help in Moderating the Room or if you have a question about the topic.</value>
+    <value>Послать сообщение модераторам групповой комнаты. Например, если вам нужна помощь в модерации или у вас есть вопрос по теме.</value>
   </string>
   <string id="1053" name="team-split">
-    <value>Send</value>
+    <value>Послать</value>
   </string>
   <string id="1054" name="team-split">
-    <value>2) Users that are invited to this Team-Room</value>
+    <value>2) Пользователи, приглашённые в эту комнату</value>
   </string>
   <string id="1055" name="team-split">
-    <value>Is Team-Room Moderator</value>
+    <value>Модератор групповой комнаты</value>
   </string>
   <string id="1056" name="team-split">
-    <value>These are all users that the moderator has invited to this Team-Room.</value>
+    <value>Это - люди, которых модератор пригласил в эту групповую комнату.</value>
   </string>
   <string id="1057" name="team-split">
-    <value>There is no Team-Moderator logged in at the moment!</value>
+    <value>Сейчас в этой комнате нет залогиненных модераторов!</value>
   </string>
   <string id="1058" name="team-split">
-    <value>Please enter a message</value>
+    <value>Пожалуйста, введите сообщение</value>
   </string>
   <string id="1059" name="team-split">
-    <value>Please help us, we have a problem in our Team-Room!</value>
+    <value>Помогите, в нашей групповой комнате проблемы!</value>
   </string>
   <string id="1060" name="team-split">
-    <value>A user from a Team-Room requests your help.</value>
+    <value>Пользователь из групповой уомнаты просит помощи.</value>
   </string>
   <string id="1061" name="team-split">
-    <value>Team-Room request for help</value>
+    <value>Запрос групповой комнаты для помощи</value>
   </string>
   <string id="1062" name="team-split">
-    <value>Message:</value>
+    <value>Сообщение:</value>
   </string>
   <string id="1063" name="team-split">
-    <value>From:</value>
+    <value>От:</value>
   </string>
   <string id="1064" name="team-split">
-    <value>You are currently not in any Team-Room. But you can switch here to all Team-Rooms that you have access to.</value>
+    <value>Сейчас вы не находитесь ни в какой групповой комнате. Но можете преключиться на комнаты, к котоым имеете доступ, здесь.</value>
   </string>
   <string id="1065" name="backupContent">
-    <value>Backup the System. The Backup includes all User generated data. The configuration is not included as well as the language labels. Because those values are imported with the System Installer. To update your System, export your old system (1) re-install into a new database the new package (2) and import the Backup file again (3). The Backup should be imported before generating data in the newly installed system.</value>
+    <value>Бэкап системы. Включает все данные, сгенерированные пользователем. Не включается конфигурация и метки языка, потому что они импортируются системным инстоллятором. Для апдейта, сэкспортируйте вашу старую систему (1) преустановите новые пакеты для новой базы данных (2) и симпортируйте файл бэкапа снова (3). Бэкап должен быть симпортирован перед генерацией данных в новой системе.</value>
   </string>
   <string id="1066" name="backupContent">
-    <value>System Backup</value>
+    <value>Системный бэкап</value>
   </string>
   <string id="1067" name="user-list">
-    <value>Allow user to share Screen/Record</value>
+    <value>Позволить пользователю делать его экран/запись общим</value>
   </string>
   <string id="1068" name="user-list">
-    <value>Deny user to share Screen/Record</value>
+    <value>Запретить пользователю делать его экран/запись общим</value>
   </string>
   <string id="1069" name="user-list">
-    <value>User is Moderator, he can do anything!</value>
+    <value>Пользователь-модератор, и может делать что угодно!</value>
   </string>
   <string id="1070" name="apply for screen/recording">
-    <value>would like to share/record screen.</value>
+    <value>хотел бы сделать его экран/запись общим.</value>
   </string>
   <string id="1071" name="moderation mini icons">
-    <value>You are allowed to share/record screen</value>
+    <value>Вам разрешается оделать экран/запись общим</value>
   </string>
   <string id="1072" name="moderation mini icons">
-    <value>Apply for right to share/record screen.</value>
+    <value>Применить права для общих экрана и записи.</value>
   </string>
   <string id="1073" name="moderation mini icons conference">
-    <value>Allow/Deny right to share/record screen.</value>
+    <value>Позволить или запретить делать экран или запись общими.</value>
   </string>
   <string id="1074" name="sound icon">
-    <value>Turn sound off</value>
+    <value>Выключить звук</value>
   </string>
   <string id="1075" name="sound icon">
-    <value>Turn sound on</value>
+    <value>Включить звук</value>
   </string>
   <string id="1076" name="room administration">
-    <value>Audio only room</value>
+    <value>Только с аудио</value>
   </string>
   <string id="1077" name="room administration">
-    <value>Turn this Flag on and the users will have only the Audio-Option and no Video in a conference room. This can by good to save bandwidth.</value>
+    <value>Установите этот флаг, и польз-ли будут иметь только звук опции без видео в комнате для конференций. Полезно для уменьшения нагрузки сети.</value>
   </string>
   <string id="1078" name="user list">
-    <value>Allow Remote Control (During Screen Sharing)</value>
+    <value>Позволить удалённый контроль (для общего экрана)</value>
   </string>
   <string id="1079" name="user list">
-    <value>Deny Remote Control (During Screen Sharing)</value>
+    <value>Запретить удалённый контроль (для общего экрана)</value>
   </string>
   <string id="1080" name="user list">
-    <value>Apply for right to Remote Control Screen (During Screen Sharing)</value>
+    <value>Применить к правам удалённого контроля (для общего экрана)</value>
   </string>
   <string id="1081" name="user list">
-    <value>You are allowed to Remote Control Screen (During Screen Sharing)</value>
+    <value>У вас нет прав на удалённый контроль (для общего экрана)</value>
   </string>
   <string id="1082" name="apply for remote control">
-    <value>would like to remote control screen.</value>
+    <value>хочет удалённый контроль для общего экрана.</value>
   </string>
   <string id="1083" name="user list">
-    <value>User is Moderator, he can do anything! [Remote Desktop Control]</value>
+    <value>Пользователь - модератор он может делать всё</value>
   </string>
   <string id="1084" name="user list">
-    <value>Allow/Deny right to Remote Control Screen (During Screen Sharing)</value>
+    <value>Позволить тлт запретить удалённый контроль (для общего экрана)</value>
   </string>
   <string id="1085" name="right click screen share">
-    <value>1) Your PC to remote PC: To copy and paste text from your clipboard into the remote controlled screen, click on the screen, then right click in the text field and choose "Insert" from the context (right click) menu.&lt;br/&gt;&lt;br/&gt;2) From remote PC to your PC: To copy text from the remote PC to your PC's clipboard, highlight the text with the mouse on the remote screen, then right-click on the remote screen and choose &lt;i&gt;Copy highlighted text&lt;/i&gt;</value>
+    <value>1) ваш PC удалённому PC: Чтобы скопировать и вставить текст из вашего буфера обмена в удалённый экран, нажмите на экран, потом кликните в текстовом поле и выберите "Вставить" из контекстного меню.2) С удалённого PC на ваш PC: Чтобы скопировать текст с удалённого PC в ваш буфер обмена, выделите текст на удалённом, кликните и выберите</value>
   </string>
   <string id="1086" name="right click screen share">
-    <value>Copy and Paste text from your PC to remote PC and vice-versa.</value>
+    <value>Скопировать и вставить текст с вашего PC на удалённый PC и наоборот.</value>
   </string>
   <string id="1087" name="right click screen share">
-    <value>Copy highlighted text</value>
+    <value>Скопировать выделенный текст</value>
   </string>
   <string id="1088" name="right click screen share">
-    <value>How to copy n paste</value>
+    <value>Как скопировать и вставить</value>
   </string>
   <string id="1089" name="screen-sharer-quality">
-    <value>Quality of the ScreenShare:</value>
+    <value>Качество общего доступа к экрану:</value>
   </string>
   <string id="1090" name="screen-sharer-quality">
-    <value>Very high Quality</value>
+    <value>Очень высокое качество</value>
   </string>
   <string id="1091" name="screen-sharer-quality">
-    <value>High Quality</value>
+    <value>Высокое качество</value>
   </string>
   <string id="1092" name="screen-sharer-quality">
-    <value>Medium Quality</value>
+    <value>Среднее качество</value>
   </string>
   <string id="1093" name="screen-sharer-quality">
-    <value>Low Quality</value>
+    <value>Низкое качество</value>
   </string>
   <string id="1094" name="keyboard-input">
     <value>en_US</value>
@@ -3298,25 +3292,25 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>de_DE</value>
   </string>
   <string id="1096" name="keyboard-input">
-    <value>Keyboard:</value>
+    <value>Клавиатура:</value>
   </string>
   <string id="1097" name="keyboard-input">
-    <value>Close Webinar!</value>
+    <value>Закрыть вебинар!</value>
   </string>
   <string id="1098" name="keyboard-input">
-    <value>The Webinar is already closed, you will be redirected to some interesting offerings in</value>
+    <value>Вебинар уже закрыт, вы будете перенаправлены в</value>
   </string>
   <string id="1099" name="room config">
-    <value>Close Room</value>
+    <value>Закрыть комнату</value>
   </string>
   <string id="1100" name="room config">
-    <value>Exit URL</value>
+    <value>Закрыть URL</value>
   </string>
   <string id="1101" name="room config">
-    <value>Room termination settings</value>
+    <value>Установки прерывания комнаты</value>
   </string>
   <string id="1102" name="room config">
-    <value>If the room is closed users will be redirected to the exit URL.</value>
+    <value>Если комната закрыта, пользователь будет перенаправлен на выход.</value>
   </string>
   <string id="1103" name="ldap config">
     <value>Ldap</value>
@@ -3325,841 +3319,841 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>ID</value>
   </string>
   <string id="1105" name="ldap config">
-    <value>Name</value>
+    <value>Имя</value>
   </string>
   <string id="1106" name="ldap config">
-    <value>Config File</value>
+    <value>Конфигурационный файл</value>
   </string>
   <string id="1107" name="ldap config">
-    <value>Ldap Config</value>
+    <value>Конфигурация Ldap</value>
   </string>
   <string id="1108" name="ldap config">
-    <value>Name</value>
+    <value>название</value>
   </string>
   <string id="1109" name="ldap config">
-    <value>Enabled</value>
+    <value>Включено</value>
   </string>
   <string id="1110" name="ldap config">
-    <value>Inserted</value>
+    <value>Вставлено</value>
   </string>
   <string id="1111" name="ldap config">
-    <value>Inserted by</value>
+    <value>Вставлено</value>
   </string>
   <string id="1112" name="ldap config">
-    <value>Updated</value>
+    <value>Изменено</value>
   </string>
   <string id="1113" name="ldap config">
-    <value>Updated by</value>
+    <value>Изменено</value>
   </string>
   <string id="1114" name="ldap config">
-    <value>The config files are in the same folder as the hibernate.cfg.xml. You need to manually upload the files to this folder. Changes to the config file are immediately online.</value>
+    <value>Конфигурационные файлы в той же папке, что и hibernate.cfg.xml. Загрузите файлы в папку вручную. Изменения конфиг-файлов происходят немедленно онлайн.</value>
   </string>
   <string id="1115" name="ldap config">
-    <value>Config file name</value>
+    <value>Имя конфиг-файла</value>
   </string>
   <string id="1116" name="ldap config">
-    <value>If you enable "Add Domain to username" the value of the field "domain" is added to each login that the user enters in the login box. This is useful if the Login in the Ldap is stored including the domain name. Example: User enters "hans" domain is specified as "localhost.com", login that is verified against Ldap is: hans@localhost.com</value>
+    <value>Если вы включите "добавить домен к имени", значение поля "домен" добавится к каждому логину, который вводится при входе в систему. Это удобно, если логин в Ldap запоминается с доменным именем. Например: пользователь вводит "hans", домен установлен в "localhost.com", логин, который проверяется для Ldap будет: hans@localhost.com</value>
   </string>
   <string id="1117" name="ldap config">
-    <value>Add Domain to username</value>
+    <value>Добавить домен к имени</value>
   </string>
   <string id="1118" name="ldap config">
-    <value>Domain</value>
+    <value>Домен</value>
   </string>
   <string id="1119" name="remote control">
-    <value>Insert</value>
+    <value>Вставить</value>
   </string>
   <string id="1120" name="remote control">
-    <value>Copy highlighted text</value>
+    <value>Скопировать выделенный текст</value>
   </string>
   <string id="1121" name="remote control">
-    <value>Remote Clipboard Text</value>
+    <value>Удалть текст из буфера обмена</value>
   </string>
   <string id="1122" name="remote control">
-    <value>Show remote Clipboard</value>
+    <value>Показать удалённый буфер обмена</value>
   </string>
   <string id="1123" name="right click screen share">
-    <value>Do not show again</value>
+    <value>Не показывать снова</value>
   </string>
   <string id="1124" name="right click screen share">
-    <value>Copy text here ...</value>
+    <value>Скопировать текст здесь.</value>
   </string>
   <string id="1125" name="right click screen share">
-    <value>You need the right to remote control (or the moderation) to copy and paste text to or from the remote screen.</value>
+    <value>Вам нужны права для удалённого контроля (или модерация), чтобы скопировать и вставить текст в или из удалённого экрана.</value>
   </string>
   <string id="1126" name="right click screen share">
-    <value>Edit default settings ...</value>
+    <value>Установки по умолчанию.</value>
   </string>
   <string id="1127" name="right click screen share">
-    <value>Do not show info box in Remote Control about Copy and Paste</value>
+    <value>Не показывать информацию о копировании и вставке в удалённом доступе</value>
   </string>
   <string id="1128" name="calendar">
-    <value>Save</value>
+    <value>Сохранить</value>
   </string>
   <string id="1129" name="calendar">
-    <value>Remove</value>
+    <value>Удалить</value>
   </string>
   <string id="1130" name="calendar">
-    <value>Cancel</value>
+    <value>Отменить</value>
   </string>
   <string id="1131" name="chat invite user">
-    <value>Invite user to conference room</value>
+    <value>Пригласить польз-ля в комнату для конференций</value>
   </string>
   <string id="1132" name="chat invite user">
-    <value>Choose a conference room. The invited user will get a message with your name and a link to the room.</value>
+    <value>Выбрать комнату для конференций. Приглашённый пользователь получит сообщение с вашим именем и ссылку на комнату.</value>
   </string>
   <string id="1133" name="chat user">
-    <value>Connected since:</value>
+    <value>Присоединён с:</value>
   </string>
   <string id="1134" name="chat invite user">
-    <value>Enter room after sending invitation</value>
+    <value>Войдите в комнату после отправки приглашения</value>
   </string>
   <string id="1135" name="chat invite user">
-    <value>Invite</value>
+    <value>Пригласить</value>
   </string>
   <string id="1136" name="chat invite user">
-    <value>Message</value>
+    <value>Сообщение</value>
   </string>
   <string id="1137" name="chat invite user">
-    <value>would like to invite you to the conference room:</value>
+    <value>хотелось бы пригласить вас в комнату для конференций:</value>
   </string>
   <string id="1138" name="chat invite user">
-    <value>Invite message</value>
+    <value>Приглашение</value>
   </string>
   <string id="1139" name="chat invite user">
-    <value>Send Invitation</value>
+    <value>Послать приглашение</value>
   </string>
   <string id="1140" name="chat invite user">
-    <value>did &lt;b&gt;not&lt;/b&gt; accept your invitation!</value>
+    <value>принял ваше приглашение!</value>
   </string>
   <string id="1141" name="chat invite user">
-    <value>Accept</value>
+    <value>Принять</value>
   </string>
   <string id="1142" name="chat invite user">
-    <value>Deny</value>
+    <value>Отказать</value>
   </string>
   <string id="1143" name="user profile">
-    <value>Timezone</value>
+    <value>Таймзона</value>
   </string>
   <string id="1144" name="appointment notification">
-    <value>Event Details</value>
+    <value>Детали события</value>
   </string>
   <string id="1145" name="appointment notification">
-    <value>Name</value>
+    <value>Имя</value>
   </string>
   <string id="1146" name="appointment notification">
-    <value>Description</value>
+    <value>Описание</value>
   </string>
   <string id="1147" name="appointment notification">
-    <value>Created by</value>
+    <value>Создано</value>
   </string>
   <string id="1148" name="user administration">
-    <value>TimeZone Message</value>
+    <value>Сообщение в ТЗ</value>
   </string>
   <string id="1149" name="user administration">
-    <value>Check "TimeZone Message" to give users a message next time they login to update their profile.</value>
+    <value>Включите "Сообщение в таймзоне", чтобы попросить пользователя сменить свой профайл при след. логине.</value>
   </string>
   <string id="1150" name="time zone update message">
-    <value>Please check the time zone in your user profile.</value>
+    <value>пожалуйста проверьте таймзону в вашем профайле.</value>
   </string>
   <string id="1151" name="calendar invitation message">
-    <value>New $APP_NAME conference:</value>
+    <value>Новая конференция $APP_NAME:</value>
   </string>
   <string id="1152" name="calendar invitation message">
-    <value>Details:&lt;br/&gt;</value>
+    <value>Детали:</value>
   </string>
   <string id="1153" name="calendar invitation message">
-    <value>Start:</value>
+    <value>Старт:</value>
   </string>
   <string id="1154" name="calendar invitation message">
-    <value>End:</value>
+    <value>Конец:</value>
   </string>
   <string id="1155" name="calendar invitation message">
-    <value>Changed $APP_NAME conference:</value>
+    <value>Изменённая конференция $APP_NAME:</value>
   </string>
   <string id="1156" name="calendar invitation message">
-    <value>Organizer:</value>
+    <value>Организатор:</value>
   </string>
   <string id="1157" name="calendar invitation message">
-    <value>Canceled $APP_NAME conference:</value>
+    <value>Отменённая конференция $APP_NAME:</value>
   </string>
   <string id="1158" name="calendar invitation message">
-    <value>$APP_NAME conference Reminder:</value>
+    <value>Напоминание конференции $APP_NAME:</value>
   </string>
   <string id="1159" name="user settings">
-    <value>Community settings</value>
+    <value>Общие установки</value>
   </string>
   <string id="1160" name="user settings">
-    <value>Show contact data to everybody</value>
+    <value>Показывать контактные данные всем</value>
   </string>
   <string id="1161" name="user settings">
-    <value>Add fields of interest that you offer or that you are searching to find interesting partners for a conference. Comma separate the terms (for example: Medical Service, Health assurance, ...)</value>
+    <value>Добавить поля ваших интересов или интересов ваших партнёров в конференцию. Запятая разделяет термины (например: медицинские услуги, забота о здоровье, ...)</value>
   </string>
   <string id="1162" name="user settings">
-    <value>My offerings</value>
+    <value>Мои предложения</value>
   </string>
   <string id="1163" name="user settings">
-    <value>My interests</value>
+    <value>Мои интересы</value>
   </string>
   <string id="1164" name="user settings">
-    <value>Name</value>
+    <value>Имя</value>
   </string>
   <string id="1165" name="user settings">
-    <value>Timezone</value>
+    <value>Таймзона</value>
   </string>
   <string id="1166" name="user settings">
-    <value>Fields of interest</value>
+    <value>Области интересов</value>
   </string>
   <string id="1167" name="user settings">
-    <value>Contact information</value>
+    <value>Контактная информация</value>
   </string>
   <string id="1168" name="user settings">
-    <value>Show contact data to contacts only</value>
+    <value>Показывать контактные данные только контактам</value>
   </string>
   <string id="1169" name="user settings">
-    <value>Show contact data to nobody</value>
+    <value>Не показывать контактные данные никому</value>
   </string>
   <string id="1170" name="user settings">
-    <value>My Profile</value>
+    <value>Мой профайл</value>
   </string>
   <string id="1171" name="user settings">
-    <value>Edit settings</value>
+    <value>Редактировать установки</value>
   </string>
   <string id="1172" name="user settings">
-    <value>Search users</value>
+    <value>Искать пользователей</value>
   </string>
   <string id="1173" name="user settings">
-    <value>Watch your profile like other see you</value>
+    <value>Посмотреть ваш профайл, как его видят другие</value>
   </string>
   <string id="1174" name="user settings">
-    <value>Edit your settings, add your interests to be found</value>
+    <value>Редактировать ваши установки, добавить интересы для поиска</value>
   </string>
   <string id="1175" name="user settings">
-    <value>Search for other users and extend your network</value>
+    <value>Искать других пользователей и расширить вашу сеть</value>
   </string>
   <string id="1176" name="user search">
-    <value>Search</value>
+    <value>Искать</value>
   </string>
   <string id="1177" name="user search">
-    <value>User offers</value>
+    <value>Польз-ль предлагает</value>
   </string>
   <string id="1178" name="user search">
-    <value>User looks for</value>
+    <value>Польз-ль ищет</value>
   </string>
   <string id="1179" name="user search">
-    <value>Freetext</value>
+    <value>Свободный текст</value>
   </string>
   <string id="1180" name="user search">
-    <value>Name</value>
+    <value>Имя</value>
   </string>
   <string id="1181" name="user search">
-    <value>Timezone</value>
+    <value>Таймзона</value>
   </string>
   <string id="1182" name="user search">
-    <value>Offers</value>
+    <value>Предложения</value>
   </string>
   <string id="1183" name="user search">
-    <value>Searchs</value>
+    <value>Поиски</value>
   </string>
   <string id="1184" name="user search">
-    <value>Searchresult</value>
+    <value>Результаты поиска</value>
   </string>
   <string id="1185" name="user search">
-    <value>Actions</value>
+    <value>Действия</value>
   </string>
   <string id="1186" name="user search">
-    <value>Add to contacts</value>
+    <value>Добавить в контакты</value>
   </string>
   <string id="1187" name="user search">
-    <value>Send message</value>
+    <value>Послать сообщение</value>
   </string>
   <string id="1188" name="user search">
-    <value>Contacts and Messages</value>
+    <value>Контакты и сообщения</value>
   </string>
   <string id="1189" name="user search">
-    <value>Pending contacts</value>
+    <value>Ожидающие контакты</value>
   </string>
   <string id="1190" name="user contacts">
-    <value>Accept</value>
+    <value>Принять</value>
   </string>
   <string id="1191" name="user contacts">
-    <value>Deny</value>
+    <value>Запретить</value>
   </string>
   <string id="1192" name="user contact request">
-    <value>Hi,</value>
+    <value>Здравствуйте,</value>
   </string>
   <string id="1193" name="user contact request">
-    <value>would like to add you as contact.</value>
+    <value>хочет добавить вас в список контактов.</value>
   </string>
   <string id="1194" name="user contact request">
-    <value>Check your contact requests in $APP_NAME or click on those links to accept or deny the request</value>
+    <value>Проверьте запросы вашего контакта в $APP_NAME или пойдите по этой ссылке, чтобы on принять или отклонить запрос</value>
   </string>
   <string id="1195" name="add user contact">
-    <value>This user is already in your contact list or has received an invitation to your contact list that is not answered yet.</value>
+    <value>Этот пользователь уже в вашем списке контактов или получил приглашение добавиться в список, но не ответил.</value>
   </string>
   <string id="1196" name="user contact mail">
-    <value>Your contact list</value>
+    <value>Ваш список контактов</value>
   </string>
   <string id="1197" name="user contacts">
-    <value>Edit your contact and messages,&lt;br/&gt; manage your pending contacts!</value>
+    <value>Редактируйте ваши контакты и сообщения, управляйте ожидающими контактами!</value>
   </string>
   <string id="1198" name="user contacts">
-    <value>confirmed you as contact!</value>
+    <value>подтвердил вас как контакт!</value>
   </string>
   <string id="1199" name="chat info message">
     <value></value>
   </string>
   <string id="1200" name="chat log icon">
-    <value>Show / Copy chat log</value>
+    <value>Показать или скопировать лог</value>
   </string>
   <string id="1201" name="chat log window">
-    <value>Chat Log</value>
+    <value>Лог чата</value>
   </string>
   <string id="1202" name="private message">
-    <value>From</value>
+    <value>От</value>
   </string>
   <string id="1203" name="private message">
-    <value>Subject</value>
+    <value>Тема</value>
   </string>
   <string id="1204" name="private message">
-    <value>Send</value>
+    <value>Послать</value>
   </string>
   <string id="1205" name="private message">
     <value></value>
   </string>
   <string id="1206" name="private message">
-    <value>Messages</value>
+    <value>Сообщения</value>
   </string>
   <string id="1207" name="private message">
-    <value>New Mail</value>
+    <value>Новый мейл</value>
   </string>
   <string id="1208" name="private message">
-    <value>Click to write a new message to any of your contacts</value>
+    <value>Нажмите, чтобы написать сообщение вашему контакту</value>
   </string>
   <string id="1209" name="private message">
-    <value>Write new message</value>
+    <value>Напишите новое сообщение</value>
   </string>
   <string id="1210" name="private message">
-    <value>To:</value>
+    <value>Кому:</value>
   </string>
   <string id="1211" name="private message">
-    <value>Subject:</value>
+    <value>Тема:</value>
   </string>
   <string id="1212" name="whiteboard full-fit">
-    <value>Enable full fit and the whiteboard will zoom the whole whiteboard so that all&lt;br/&gt;documents are visible according to each participants screen resolution.</value>
+    <value>Включиите full fit и доска будет масштабироваться так, чтобы все документы становились видимыми в соответствии с разрешением экрана каждого участника.</value>
   </string>
   <string id="1213" name="user-list">
-    <value>Kick user</value>
+    <value>Выгнать пользователя</value>
   </string>
   <string id="1214" name="user-list">
-    <value>You cannot kick yourself out of the conference room! If you want to leave it close the browser or use the exit button!</value>
+    <value>Вы не можете выгнать сами себя из комнаты!Если вы хотите покинуть её, закройте окно браузера или используйте кнопку Выход!</value>
   </string>
   <string id="1215" name="kick-user">
-    <value>Do you really want to disconnect this user from this conference room?</value>
+    <value>Вы действительно хотите выгнать этого пользователя из комнаты?</value>
   </string>
   <string id="1216" name="kick-user">
-    <value>Confirm action ...</value>
+    <value>Подтвердите действие ...</value>
   </string>
   <string id="1217" name="kick-user">
-    <value>You cannot kick a Super-Moderator out of a room!</value>
+    <value>Вы не можете выгнать супер-модератора из комнаты!</value>
   </string>
   <string id="1218" name="private message">
-    <value>Book conference room</value>
+    <value>Зарезервировать комнату</value>
   </string>
   <string id="1219" name="private message">
-    <value>Start</value>
+    <value>Старт</value>
   </string>
   <string id="1220" name="private message">
-    <value>End</value>
+    <value>Конец</value>
   </string>
   <string id="1221" name="private message">
-    <value>Add an optional request for meeting to the message and create a conference room. The Event is then copied in the calendar of every participant.</value>
+    <value>Добавьте дополнительный запрос для митинга и создайте комнату для конференций. Событие скопируется в календарь каждого участника.</value>
   </string>
   <string id="1222" name="private message">
-    <value>Inbox</value>
+    <value>Входящие</value>
   </string>
   <string id="1223" name="private message">
-    <value>Sent</value>
+    <value>Посланные</value>
   </string>
   <string id="1224" name="private message">
-    <value>Trash</value>
+    <value>Корзина</value>
   </string>
   <string id="1225" name="private message">
-    <value>This is you! You cannot add yourself as your own contact.</value>
+    <value>Это вы! Вы не можете добавить себя в свои контакты.</value>
   </string>
   <string id="1226" name="user contacts">
-    <value>The user is already denied!</value>
+    <value>Пользователь уже отклонён!</value>
   </string>
   <string id="1227" name="user contacts">
-    <value>The user is already approved!</value>
+    <value>Пользователь уже подтверждён!</value>
   </string>
   <string id="1228" name="user contacts">
-    <value>This user contact hash is invalid!</value>
+    <value>Хеш контактов этого пользователя невалиден!</value>
   </string>
   <string id="1229" name="user contacts">
-    <value>User added to contact list!</value>
+    <value>Пользователь добавлен в список контактов!</value>
   </string>
   <string id="1230" name="user contacts">
-    <value>User denied as contact and removed from pending contact list!</value>
+    <value>Пользователь отклонён как контакт и удалён из списка ожидающих!</value>
   </string>
   <string id="1231" name="user contacts">
-    <value>There is no such contact!</value>
+    <value>Нет такого контакта!</value>
   </string>
   <string id="1232" name="user contacts">
-    <value>Would you really like to remove that contact?</value>
+    <value>Вы действительно хотите удалить этот контакт?</value>
   </string>
   <string id="1233" name="user contacts">
-    <value>Confirm contact removal</value>
+    <value>Подтвердите удаление контакта</value>
   </string>
   <string id="1234" name="user contacts">
-    <value>Delete contact from list</value>
+    <value>Удалить контакт из списка</value>
   </string>
   <string id="1235" name="user profile">
-    <value>User Profile</value>
+    <value>Профайл пользователя</value>
   </string>
   <string id="1236" name="user profile">
-    <value>Show user profile</value>
+    <value>Показать профайл пользователя</value>
   </string>
   <string id="1237" name="private message">
-    <value>Messages</value>
+    <value>Сообщения</value>
   </string>
   <string id="1238" name="private message">
-    <value>Search</value>
+    <value>Поиск</value>
   </string>
   <string id="1239" name="private message">
-    <value>Select all</value>
+    <value>Все</value>
   </string>
   <string id="1240" name="private message">
-    <value>Select none</value>
+    <value>Никто</value>
   </string>
   <string id="1241" name="private message">
-    <value>Select unread</value>
+    <value>Непрочит.</value>
   </string>
   <string id="1242" name="private message">
-    <value>Select read</value>
+    <value>Прочитанные</value>
   </string>
   <string id="1243" name="private message">
-    <value>Move to folder ...</value>
+    <value>К папке ...</value>
   </string>
   <string id="1244" name="private message">
-    <value>Add new folder ...</value>
+    <value>Новая папка ...</value>
   </string>
   <string id="1245" name="private message">
-    <value>Delete</value>
+    <value>Удалить</value>
   </string>
   <string id="1246" name="private message">
-    <value>Deleted mails are still in your trash folder!</value>
+    <value>Удалённый мейл всё ещё в корзине!</value>
   </string>
   <string id="1247" name="private message">
-    <value>Mark unread</value>
+    <value>Непрочит.</value>
   </string>
   <string id="1248" name="private message">
-    <value>Mark read</value>
+    <value>Прочитанное</value>
   </string>
   <string id="1249" name="private message">
-    <value>Answer</value>
+    <value>Ответить</value>
   </string>
   <string id="1250" name="private message">
-    <value>Answer everybody</value>
+    <value>Ответить всем</value>
   </string>
   <string id="1251" name="private message">
-    <value>Forward</value>
+    <value>Переслать</value>
   </string>
   <string id="1252" name="private message">
-    <value>Actions ...</value>
+    <value>Действия ...</value>
   </string>
   <string id="1253" name="user contacts">
-    <value>Send private message</value>
+    <value>Послать приватное сообщение</value>
   </string>
   <string id="1254" name="private message">
-    <value>Nothing selected!</value>
+    <value>Ничего не выбрано!</value>
   </string>
   <string id="1255" name="private message">
-    <value>Move to Inbox</value>
+    <value>Перейти во входящие</value>
   </string>
   <string id="1256" name="private message">
-    <value>Delete (final)</value>
+    <value>Удалить (окончательно)</value>
   </string>
   <string id="1257" name="private message">
-    <value>This action cannot be undone!</value>
+    <value>Действие не может быть отменено!</value>
   </string>
   <string id="1258" name="private message">
-    <value>Add folder</value>
+    <value>Новая папка</value>
   </string>
   <string id="1259" name="private message">
-    <value>Add folders and organize your messages!</value>
+    <value>Добавить папки и упорядочить сообщения!</value>
   </string>
   <string id="1260" name="private message">
-    <value>Add folder</value>
+    <value>Добавить папку</value>
   </string>
   <string id="1261" name="private message">
-    <value>Add</value>
+    <value>Добавить</value>
   </string>
   <string id="1262" name="private message folder">
-    <value>Delete folder</value>
+    <value>Удалить папку</value>
   </string>
   <string id="1263" name="private message folder">
-    <value>You cannot delete this folder, there are still messages inside! Delete first the messages or move them to another folder.</value>
+    <value>Вы не можете удалить эту папку, там есть сообщения! Удалите их или переместите их в другую папку.</value>
   </string>
   <string id="1264" name="private message folder">
-    <value>Edit name</value>
+    <value>Редактировать имя</value>
   </string>
   <string id="1265" name="private message folder">
-    <value>Do you really want to delete this folder? There is no way to undo that.</value>
+    <value>Вы действительно хотите удалить эту папку? Её нельзя восстановить.</value>
   </string>
   <string id="1266" name="user contacts">
-    <value>Your request was send to the user. The user will receive a notification to accept or deny your request. Only accepted requests are in your contact list of course!</value>
+    <value>Ваш запрос был послан пользователю. Пользователь получит нотификацию о подтверждении или отклонении. Только подтверждённые запросы могут быть в вашем списке контактов!</value>
   </string>
   <string id="1267" name="user contacts">
-    <value>Message</value>
+    <value>Сообщение</value>
   </string>
   <string id="1268" name="user view profile">
-    <value>The user does not share his personal contact data.</value>
+    <value>Пользователь не дал совместного доступа к его персональным данным.</value>
   </string>
   <string id="1269" name="user view profile">
-    <value>The user does share his personal contact data only to contacts.</value>
+    <value>Пользователь разрешил доступ к своим персональным данным только контактам.</value>
   </string>
   <string id="1270" name="user view profile">
-    <value>Address &amp; Phone</value>
+    <value>Адрес и телефон</value>
   </string>
   <string id="1271" name="error code">
-    <value>You invitation code is no valid, the code is only valid during this specific date and time:</value>
+    <value>Код вашего приглашения невалиден, он действует только в определённый период времени.</value>
   </string>
   <string id="1272" name="user calendar">
-    <value>This event is connected to several calendars of other users. Your change will also update their calendar. Would you really like to update the event?</value>
+    <value>Это событие связано с несколькими календарями других пользователей. Ваши изменения также изменят их календари. Выхотите изменить событие?</value>
   </string>
   <string id="1273" name="user calendar">
-    <value>Confirm update</value>
+    <value>Подтвердите изменение</value>
   </string>
   <string id="1274" name="user contacts">
-    <value>Allow contact to see my calendar (view only)</value>
+    <value>Позволить контакту видеть мой календарь (только просмотр)</value>
   </string>
   <string id="1275" name="user contacts">
-    <value>Do not share calendar</value>
+    <value>Не давать доступа к календарю</value>
   </string>
   <string id="1276" name="user contacts">
-    <value>Calendar of contacts</value>
+    <value>Календарь контактов</value>
   </string>
   <string id="1277" name="user contacts">
-    <value>Your contacts need to approve you first to be able to see their calendar.</value>
+    <value>Ваши контакты должны разрешить вам доступ, прежде чем вы сможете видеть их календари.</value>
   </string>
   <string id="1278" name="user contacts">
-    <value>You cannot store or delete events from other calendars then your own!</value>
+    <value>Вы не можете сохранить или удалить событияиз чужих календарей!</value>
   </string>
   <string id="1279" name="user contacts">
-    <value>Show my own calendar again!</value>
+    <value>Показать мой календарь снова!</value>
   </string>
   <string id="1280" name="user calendar">
-    <value>This event is connected to several calendars of other users. Your action will also delete the event from their calendar. Would you really like to delete the event?</value>
+    <value>Это событие связано с календарями других пользователей. Ваши действия также удалят сообытие из этих календарей. Вы хотите удалить событие?</value>
   </string>
   <string id="1281" name="user calendar">
-    <value>Confirm action</value>
+    <value>Подтвердите действие</value>
   </string>
   <string id="1282" name="user calendar">
-    <value>Enter room</value>
+    <value>Войти в комнату</value>
   </string>
   <string id="1283" name="user calendar">
-    <value>Access the conference room</value>
+    <value>Доступ к комнате</value>
   </string>
   <string id="1284" name="private message">
-    <value>There is a conference room and event booked with this private message.</value>
+    <value>К этому приватному сообщению зарезервированы комната и событие.</value>
   </string>
   <string id="1285" name="user calendar">
-    <value>You need to store the event first!</value>
+    <value>Сперва соххраните событие!</value>
   </string>
   <string id="1286" name="access rooms error">
-    <value>There is no such room available. The event in the calendar and connected room is already deleted!</value>
+    <value>Нет таких доступных комнат. Событиен в календаре и п рисоединённая комната уже удалены!</value>
   </string>
   <string id="1287" name="nick name">
-    <value>Choose your nickname</value>
+    <value>Выберите ваш ник</value>
   </string>
   <string id="1288" name="nick name">
-    <value>Firstname</value>
+    <value>Имя</value>
   </string>
   <string id="1289" name="nick name">
-    <value>Lastname</value>
+    <value>Фамилия</value>
   </string>
   <string id="1290" name="nick name">
-    <value>Email</value>
+    <value>Мейл</value>
   </string>
   <string id="1291" name="nick name">
     <value>Ok</value>
   </string>
   <string id="1292" name="nick name">
-    <value>Minimum length 4 chars! For both, firstname and lastname.</value>
+    <value>Мин. длина - 4 символа для имени и фамилии вместе!.</value>
   </string>
   <string id="1293" name="nick name">
-    <value>Please enter a valid email!</value>
+    <value>Введите валидный мейл</value>
   </string>
   <string id="1294" name="auth from">
     <value>Facebook</value>
   </string>
   <string id="1295" name="auth form">
-    <value>Login with your Facebook account</value>
+    <value>Войти как Facebook аккаунт</value>
   </string>
   <string id="1296" name="view profile">
-    <value>Member since</value>
+    <value>Записан с</value>
   </string>
   <string id="1297" name="direct login message">
-    <value>You've logged with your Facebook account. You should update your profile with the correct email. Otherwise you will not receive invitations and private messages from other users.</value>
+    <value>Вы зашли с аккаунта Facebook. Вам необходимо прописать правильный мейл в профайл, иначе вы не сможете получать приглашения и приватные сообщения.</value>
   </string>
   <string id="1298" name="direct login message header">
-    <value>Message</value>
+    <value>Сообщение</value>
   </string>
   <string id="1299" name="direct login message checkbox control">
-    <value>Do not show update profile message again</value>
+    <value>Больше не показывать сообщение об изменении профайла</value>
   </string>
   <string id="1300" name="profile settings button">
-    <value>more display options ...</value>
+    <value>Ещё настройки дисплея ...</value>
   </string>
   <string id="1301" name="private message">
-    <value>New private message:</value>
+    <value>Новое приватное сообщение:</value>
   </string>
   <string id="1302" name="private message">
-    <value>Click here to visit your profile to see the full message ...</value>
+    <value>Нажмите сюда, чтобы перейти к профайлу и прочитать сообщение ...</value>
   </string>
   <string id="1303" name="private message">
-    <value>Reply</value>
+    <value>Ответить</value>
   </string>
   <string id="1304" name="dashboard">
-    <value>Rooms and chats</value>
+    <value>Комнаты и чаты</value>
   </string>
   <string id="1305" name="dashboard">
-    <value>My rooms</value>
+    <value>Мои комнаты</value>
   </string>
   <string id="1306" name="my rooms">
-    <value>My conference room (for 1-16 users)</value>
+    <value>Моя комната для конференций(до 16 польз-лей)</value>
   </string>
   <string id="1307" name="my rooms">
-    <value>My webinar room (for 1-120 users)</value>
+    <value>Моя комната для вебинаров (до 120 польз-лей)</value>
   </string>
   <string id="1308" name="room administration">
-    <value>Owner Id</value>
+    <value>Id владельца</value>
   </string>
   <string id="1309" name="login error">
-    <value>Please enter a password</value>
+    <value>Введите пароль</value>
   </string>
   <string id="1310" name="login error">
-    <value>You need an account with User-Level User, Moderator or Admin</value>
+    <value>Вам нужен аккаунт уровня пользователя, модератора или админа</value>
   </string>
   <string id="1311" name="user administration">
-    <value>Web-Service (only access via SOAP)</value>
+    <value>Web-сервис (только через SOAP)</value>
   </string>
   <string id="1312" name="upload file explorer">
-    <value>Do directly load to whiteboard</value>
+    <value>Напрямую загрузите на доску</value>
   </string>
   <string id="1313" name="whiteboard close confirmation">
-    <value>Do you really want to remove this whiteboard? This action cannot be undone!</value>
+    <value>Вы действительно хотите удалить эту доску? Это действие не может быть отменено!</value>
   </string>
   <string id="1314" name="whiteboard load WML">
-    <value>Load to whiteboard</value>
+    <value>Загрузить на доску</value>
   </string>
   <string id="1315" name="recording flag">
-    <value>Do not forget start recording! One user per room always needs to start it to have the recording afterwards.</value>
+    <value>Не забудьте начать запись! 1 пользователь в комнате хочет начать её.</value>
   </string>
   <string id="1316" name="recording flag">
-    <value>Start Recording</value>
+    <value>Начать запись</value>
   </string>
   <string id="1317" name="shape">
-    <value>Arrow</value>
+    <value>Стрелка</value>
   </string>
   <string id="1318" name="shape">
-    <value>Circle</value>
+    <value>Круг</value>
   </string>
   <string id="1319" name="shape">
-    <value>Line</value>
+    <value>Линия</value>
   </string>
   <string id="1320" name="shape">
-    <value>Square</value>
+    <value>Квадрат</value>
   </string>
   <string id="1321" name="shape">
-    <value>Triangle</value>
+    <value>Треугольник</value>
   </string>
   <string id="1322" name="icon">
-    <value>Text/Note</value>
+    <value>Текст</value>
   </string>
   <string id="1323" name="icon">
-    <value>Cliparts</value>
+    <value>Фигуры</value>
   </string>
   <string id="1324" name="icon">
-    <value>Draw Free</value>
+    <value>Рисовать</value>
   </string>
   <string id="1325" name="icon">
-    <value>Select/Move</value>
+    <value>Выделить/Переместить</value>
   </string>
   <string id="1326" name="icon">
-    <value>Draw Shape</value>
+    <value>Рисовть форму</value>
   </string>
   <string id="1327" name="icon">
-    <value>Cut/Move</value>
+    <value>Вырезать или Переместить</value>
   </string>
   <string id="1328" name="icon">
-    <value>Zoom In/Out</value>
+    <value>Масштаб</value>
   </string>
   <string id="1329" name="icon">
-    <value>Print</value>
+    <value>Печать</value>
   </string>
   <string id="1330" name="icon">
-    <value>Undo</value>
+    <value>Отмена</value>
   </string>
   <string id="1331" name="icon">
-    <value>Trash</value>
+    <value>Корзина</value>
   </string>
   <string id="1332" name="icon">
-    <value>Add Grid</value>
+    <value>Добавить решётку</value>
   </string>
   <string id="1333" name="icon">
-    <value>Share File</value>
+    <value>Сделать файл общим</value>
   </string>
   <string id="1334" name="icon submenu">
-    <value>Select Shape</value>
+    <value>Выбрать форму</value>
   </string>
   <string id="1335" name="icon submenu">
-    <value>Select Clipart</value>
+    <value>Выбрать фигуру</value>
   </string>
   <string id="1336" name="submenu">
-    <value>Copy</value>
+    <value>Скопировать</value>
   </string>
   <string id="1337" name="submenu">
-    <value>Cut</value>
+    <value>Вырезать</value>
   </string>
   <string id="1338" name="submenu">
-    <value>Paste</value>
+    <value>Вставить</value>
   </string>
   <string id="1339" name="submenu">
-    <value>Delete</value>
+    <value>Удалить</value>
   </string>
   <string id="1340" name="submenu">
-    <value>Do you really want to delete the complete content on the whiteboard?</value>
+    <value>Вы действительно хотите удалить контент с доски?</value>
   </string>
   <string id="1341" name="submenu">
-    <value>Load directly to whiteboard</value>
+    <value>Загрузить прямо на доску</value>
   </string>
-    <string id="1342" name="attendees">
-    <value>Attendees</value>
+  <string id="1342" name="attendees">
+    <value>Участники</value>
   </string>
   <string id="1343" name="atendee manager">
-    <value>Attendee Manager</value>
+    <value>Менеджер участников</value>
   </string>
   <string id="1344" name="atendee manager">
-    <value>Present</value>
+    <value>Присутствуют</value>
   </string>
   <string id="1345" name="atendee manager">
-    <value>Remote Controll</value>
+    <value>Удалённый контроль</value>
   </string>
   <string id="1346" name="atendee manager">
-    <value>Eject</value>
+    <value>Извлечь</value>
   </string>
   <string id="1347" name="chat">
-    <value>Chat</value>
+    <value>Чат</value>
   </string>
   <string id="1348" name="invite attendee">
-    <value>Invite Attendees</value>
+    <value>Пригласить участников</value>
   </string>
   <string id="1349" name="invite attendee">
-    <value>By Email</value>
+    <value>По eMail</value>
   </string>
   <string id="1350" name="invite attendee">
-    <value>User is moderator</value>
+    <value>Пользователь - модератор</value>
   </string>
   <string id="1351" name="invite attendee">
-    <value>User has webcam switched on</value>
+    <value>У пользователя включена камера</value>
   </string>
   <string id="1352" name="fill_option">
-    <value>Deactivate shape fill</value>
+    <value>Деактивировать заполнение формы</value>
   </string>
   <string id="1353" name="fill_option">
-    <value>Activate shape fill</value>
+    <value>Активировать заполнение формы</value>
   </string>
   <string id="1354" name="icon">
-    <value>Snap to Grid</value>
+    <value>Привязять к решётке</value>
   </string>
   <string id="1355" name="allow_recording">
-    <value>Allow recording</value>
+    <value>Разрешить запись</value>
   </string>
   <string id="1356" name="wait_for_recording">
-    <value>Wait for recording</value>
+    <value>Подождать запись</value>
   </string>
   <string id="1357" name="hide_top_bar">
-    <value>Hide topbar</value>
+    <value>Скрыть панель инстр.</value>
   </string>
   <string id="1358" name="fileExplorer">
-    <value>Play video</value>
+    <value>Играть видео</value>
   </string>
   <string id="1359" name="submenu">
-    <value>Do you really want to delete the content on the current slide?</value>
+    <value>Вы действительно хотите удалить содержание текущего слайда?</value>
   </string>
   <string id="1360" name="activity_window">
-    <value>Accept and grant user right</value>
+    <value>Принять и назначить пользовательские права</value>
   </string>
   <string id="1361" name="activity_window">
-    <value>Deny</value>
+    <value>Отклонить</value>
   </string>
   <string id="1362" name="activity_window">
-    <value>I</value>
+    <value>Я</value>
   </string>
   <string id="1363" name="activity_window">
-    <value>Activities and actions</value>
+    <value>Активность и действия</value>
   </string>
   <string id="1364" name="whiteboard">
-    <value>Remove whiteboard</value>
+    <value>Удалённая доска</value>
   </string>
   <string id="1365" name="whiteboard">
-    <value>You need the moderation or the right to draw on the whiteboard to remove whiteboards!</value>
+    <value>Вы должны быть модератором или иметь права на рисование на доске, чтобы удалить доску!</value>
   </string>
   <string id="1366" name="whiteboard">
-    <value>Not allowed</value>
+    <value>Не разрешено</value>
   </string>
   <string id="1367" name="user_left_act_msg">
-    <value> has left the room.</value>
+    <value>покинул комнату.</value>
   </string>
   <string id="1368" name="clipart icons">
-    <value>Math icons</value>
+    <value>Основные иконки</value>
   </string>
   <string id="1369" name="clipart icons">
-    <value>No category</value>
+    <value>Без категории</value>
   </string>
   <string id="1370" name="login_screen">
-    <value>Color-Style</value>
+    <value>Цвет-стиль</value>
   </string>
   <string id="1371" name="login_screen">
-    <value>Quality</value>
+    <value>Качество</value>
   </string>
   <string id="1372" name="login_screen">
-    <value>Domain</value>
+    <value>Домен</value>
   </string>
   <string id="1373" name="login_screen">
-    <value>visit</value>
+    <value>посетить</value>
   </string>
   <string id="1374" name="login_screen">
-    <value>redorange</value>
+    <value>красно-оранжевый</value>
   </string>
   <string id="1375" name="login_screen">
-    <value>mediumseagreen</value>
+    <value>цвет морской волны</value>
   </string>
   <string id="1376" name="login_screen">
-    <value>steelblue</value>
+    <value>Стальной</value>
   </string>
   <string id="1377" name="login_screen">
-    <value>lightsteelblue</value>
+    <value>светлосероголубой</value>
   </string>
   <string id="1378" name="login_screen">
-    <value>goldenred</value>
+    <value>золотистый</value>
   </string>
   <string id="1379" name="login_screen">
-    <value>silvergray</value>
+    <value>серебряно-серый</value>
   </string>
   <string id="1380" name="login_screen">
-    <value>userdefined</value>
+    <value>пользовательский</value>
   </string>
   <string id="1381" name="login_screen">
-    <value>best</value>
+    <value>лучший</value>
   </string>
   <string id="1382" name="login_screen">
-    <value>upload</value>
+    <value>загрузка</value>
   </string>
   <string id="1383" name="login_screen">
-    <value>medium</value>
+    <value>средний</value>
   </string>
   <string id="1384" name="mute micro">
     <value>Mute microphone globally</value>
