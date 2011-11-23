@@ -1,3 +1,62 @@
+<!ELEMENT import ANY > 
+<!ATTLIST import 
+    href  CDATA  #IMPLIED 
+    proxied CDATA  #IMPLIED 
+    stage CDATA  #IMPLIED 
+>
+<!ELEMENT include ANY > 
+<!ATTLIST include 
+    href  CDATA  #REQUIRED 
+    type CDATA  #IMPLIED 
+>
+<!ELEMENT library ANY > 
+<!ATTLIST library 
+    proxied  CDATA  #IMPLIED 
+    validate CDATA  #IMPLIED 
+>
+<!ELEMENT attribute ANY > 
+<!ATTLIST attribute 
+    name  CDATA  #REQUIRED 
+    required CDATA  #IMPLIED
+    allocation CDATA  #IMPLIED 
+    style CDATA  #IMPLIED 
+    type CDATA  #IMPLIED 
+    value CDATA  #IMPLIED 
+>
+<!ELEMENT class ANY > 
+<!ATTLIST class 
+    name  CDATA  #REQUIRED 
+    required CDATA  #IMPLIED
+    allocation CDATA  #IMPLIED 
+    style CDATA  #IMPLIED 
+    type CDATA  #IMPLIED 
+    value CDATA  #IMPLIED 
+>
+<!ELEMENT canvas ANY > 
+<!ATTLIST canvas 
+    allowfullscreen  CDATA  #IMPLIED 
+    appbuilddate CDATA  #IMPLIED 
+    dataloadtimeout CDATA  #IMPLIED 
+    datasets CDATA  #IMPLIED 
+    defaultdataprovider CDATA  #IMPLIED 
+    defaultdataprovider CDATA  #IMPLIED 
+    embedfonts CDATA  #IMPLIED 
+    framerate CDATA  #IMPLIED 
+    fullscreen CDATA  #IMPLIED 
+    httpdataprovider CDATA  #IMPLIED 
+    httpdataprovider CDATA  #IMPLIED 
+    lpsbuild CDATA  #IMPLIED 
+    lpsbuilddate CDATA  #IMPLIED 
+    lpsrelease CDATA  #IMPLIED 
+    lpsversion CDATA  #IMPLIED 
+    mediaerrortimeout CDATA  #IMPLIED 
+    medialoadtimeout CDATA  #IMPLIED 
+    percentcreated CDATA  #IMPLIED 
+    proxied CDATA  #IMPLIED 
+    runtime CDATA  #IMPLIED 
+    screenorientation CDATA  #IMPLIED 
+    scriptlimits CDATA  #IMPLIED 
+>
 <!ELEMENT styledtext ANY > 
 <!ATTLIST styledtext 
     yscroll CDATA  #IMPLIED 
