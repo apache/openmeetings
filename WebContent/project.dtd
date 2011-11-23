@@ -232,25 +232,6 @@
     name CDATA  #IMPLIED 
     wsdl CDATA  #IMPLIED 
 >
-<!ELEMENT customEdittext (  handler )* >
-<!ATTLIST customEdittext 
-    align CDATA  #IMPLIED 
-    enabled CDATA  #IMPLIED 
-    fontsize CDATA  #IMPLIED 
-    height CDATA  #IMPLIED 
-    labelid CDATA  #IMPLIED 
-    multiline CDATA  #IMPLIED 
-    name CDATA  #IMPLIED 
-    onafterCheck CDATA  #IMPLIED 
-    password CDATA  #IMPLIED 
-    regexpType CDATA  #IMPLIED 
-    text CDATA  #IMPLIED 
-    visibility CDATA  #IMPLIED 
-    visible CDATA  #IMPLIED 
-    width CDATA  #IMPLIED 
-    x CDATA  #IMPLIED 
-    y CDATA  #IMPLIED 
->
 <!ELEMENT view (  animator | attribute | baseChooseIcon | baseChooseIconFLVView | baseChooseIconView | baseDrawSave | baseVideoStream | baseVideoStreamDevice | basebutton | basebuttonrepeater | basescrollarrow | basescrollthumb | basescrolltrack | browserButton | button | calButton | calendarMonthView | calendarWeekView | calendar_day | changeWidthSlider | chatOutput | checkbox | colorRectChooseSmall | colorRow | combobox | conferenceRoomSidebarTabButton | customEdittext | customInputtext | customScrollEdittext | datapath | dateField | dayname | devVideoView | documentIconTopPanel | documentsLoaderIcon | dragstate | drawDocumentPanelItem | dtmfButton | editUserContacts | editUserProfile | edittext | fillColorChoose | flvMetaInfoContentArea | gridsliderlayout | handler | hscrollbar | ibutton | iconStepButtonWizzard | image | info_Panel | innerList | innerListPagingContent | inputtext | inputtextbox | labelCheckbox | labelExplorerBox | labelText | labelTextWidthTooltip | labelTooltip | lineColorChoose | mainToolsLeftPanel | mainToolsLeftPanelPointer | mainToolsTopPanel | menuListItemUserProfile | menubarButton | method | miniIcons | miniIconsPresenter | moderationMiniIconRestricted | monitorListItemView | netRemoteCallHib | newHScrollbar | newvscrollbar | overAllChat | overAllChatOutput | overAllChatTabBottom | playVideoView | propertyPanelLetterButton | radiogroup | remoteWhiteboard | resetCombobox | resizelayout | roomListDetails | rssBox | rtlText | scrolledittext | searchUserProfile | selectionmanager | simpleLabelButton | simpleLabelRoundButton | simplelayout | simpletimelayout | stableborderlayout | state | text | textbox | turnOverListHeaderItemSimple | turnOverListOrderedPaged | videoObjectPlayScreenShare | videoview | view | viewUserProfile | vscrollbar | weekbkgnd | wrappinglayout )* >
 <!ATTLIST view 
     align CDATA  #IMPLIED 
@@ -288,6 +269,25 @@
     stretches CDATA  #IMPLIED 
     text CDATA  #IMPLIED 
     valign CDATA  #IMPLIED 
+    visibility CDATA  #IMPLIED 
+    visible CDATA  #IMPLIED 
+    width CDATA  #IMPLIED 
+    x CDATA  #IMPLIED 
+    y CDATA  #IMPLIED 
+>
+<!ELEMENT customEdittext (  handler )* >
+<!ATTLIST customEdittext 
+    align CDATA  #IMPLIED 
+    enabled CDATA  #IMPLIED 
+    fontsize CDATA  #IMPLIED 
+    height CDATA  #IMPLIED 
+    labelid CDATA  #IMPLIED 
+    multiline CDATA  #IMPLIED 
+    name CDATA  #IMPLIED 
+    onafterCheck CDATA  #IMPLIED 
+    password CDATA  #IMPLIED 
+    regexpType CDATA  #IMPLIED 
+    text CDATA  #IMPLIED 
     visibility CDATA  #IMPLIED 
     visible CDATA  #IMPLIED 
     width CDATA  #IMPLIED 
@@ -1063,7 +1063,6 @@
     id CDATA  #IMPLIED 
     motion CDATA  #IMPLIED 
     name CDATA  #IMPLIED 
-    onstart CDATA  #IMPLIED 
     onstop CDATA  #IMPLIED 
     relative CDATA  #IMPLIED 
     start CDATA  #IMPLIED 
@@ -1159,7 +1158,7 @@
     x CDATA  #IMPLIED 
     y CDATA  #IMPLIED 
 >
-<!ELEMENT handler EMPTY > 
+<!ELEMENT handler ( #PCDATA ) > 
 <!ATTLIST handler 
     args CDATA  #IMPLIED 
     method CDATA  #IMPLIED 
@@ -1362,12 +1361,12 @@
 <!ATTLIST videoObjectPlayScreenShare 
     name CDATA  #IMPLIED 
 >
-<!ELEMENT valueregionstyle (  labelstyle | linestyle | regionstyle )* >
-<!ATTLIST valueregionstyle 
-    name CDATA  #IMPLIED 
->
 <!ELEMENT chartstyle (  axisstyle | chartbgstyle | datastylelist | plotstyle | valuelinestyle | valuepointstyle | valueregionstyle )* >
 <!ATTLIST chartstyle 
+    name CDATA  #IMPLIED 
+>
+<!ELEMENT valueregionstyle (  labelstyle | linestyle | regionstyle )* >
+<!ATTLIST valueregionstyle 
     name CDATA  #IMPLIED 
 >
 <!ELEMENT radiobutton EMPTY > 
@@ -1795,7 +1794,7 @@
     width CDATA  #IMPLIED 
     y CDATA  #IMPLIED 
 >
-<!ELEMENT method EMPTY > 
+<!ELEMENT method ( #PCDATA ) > 
 <!ATTLIST method 
     args CDATA  #IMPLIED 
     event CDATA  #IMPLIED 

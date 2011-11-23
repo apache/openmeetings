@@ -43,6 +43,17 @@ public class ElementList {
 		elementList.put(name, element);
 
 	}
+	
+	public final String[] TEXT_OPTION_ENABLED = { "handler", "method", "text" };
+	
+	private boolean checkAllowSingleTextNode(String key) {
+		for (String textOption : TEXT_OPTION_ENABLED) {
+			if (textOption.equals(key)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public void filePrint(boolean debug) {
 		try {
@@ -74,7 +85,13 @@ public class ElementList {
 					}
 					sBuilder.append(" )* >\n");
 				} else {
-					sBuilder.append("<!ELEMENT " + key + " EMPTY > \n");
+					
+					if (checkAllowSingleTextNode(key)) {
+						sBuilder.append("<!ELEMENT " + key + " ( #PCDATA ) > \n");
+					} else {
+						sBuilder.append("<!ELEMENT " + key + " EMPTY > \n");
+					}
+					
 				}
 				
 				if (element.getAttributes().size() > 0) {

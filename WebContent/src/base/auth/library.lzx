@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<library>
+<!DOCTYPE library SYSTEM "/project.dtd">
+<library >
     
     <resource name="icon_facebook_rsc_png" src="icon_facebook.png" />
-    
+
 	<include href="resetForm.lzx" />
     <include href="checkLoginData.lzx" />
     <include href="registerNewUser.lzx" />

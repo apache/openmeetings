@@ -1,0 +1,6 @@
+<class name="font">
+
+    <attribute name="name" />
+    <attribute name="src" />
+    
+</class>

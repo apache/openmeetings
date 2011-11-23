@@ -7,7 +7,6 @@ import java.util.LinkedList;
 
 import javax.xml.parsers.SAXParserFactory;
 
-import org.openlaszlo.generator.elements.ClassElementList;
 import org.openlaszlo.generator.elements.ElementList;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
@@ -20,9 +19,9 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 
-public class GenerateDTD implements ContentHandler {
+public class SimpleGenerateDTD implements ContentHandler {
 	
-	private ClassElementList elementList = new ClassElementList();
+	private ElementList elementList = new ElementList();
 	
 	FilenameFilter folderFilter = new FilenameFilter(){
 		 public boolean accept(File b, String name) {
@@ -42,15 +41,13 @@ public class GenerateDTD implements ContentHandler {
 	     }
 	};
 	
-	private String currentClassName = "";
-
-	private String currentFile;
+	private LinkedList<String> openNodes = new LinkedList<String>();
 	
 	public static void main(String... args) {
-		new GenerateDTD("openlaszlo/lps/");  //"WebContent/src/"
+		new SimpleGenerateDTD("WebContent/src/");
 	}
 	
-	public GenerateDTD(String basePath) {
+	public SimpleGenerateDTD(String basePath) {
 		this.scanFolder(basePath);
 		
 		// elementList.filePrint();
@@ -87,8 +84,6 @@ public class GenerateDTD implements ContentHandler {
 	public void scanFile(String filePath) {
 		try {
 			
-			this.currentFile = filePath;
-			
 			InputSource is = new InputSource(filePath);
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			factory.setValidating(false);
@@ -118,7 +113,7 @@ public class GenerateDTD implements ContentHandler {
 
 	public void startDocument() throws SAXException {
 		// TODO Auto-generated method stub
-		currentClassName = "";
+		openNodes = new LinkedList<String>();
 	}
 
 	public void endDocument() throws SAXException {
@@ -139,45 +134,17 @@ public class GenerateDTD implements ContentHandler {
 
 	public void startElement(String uri, String localName, String qName,
 			Attributes atts) throws SAXException {
-		try {
+		
 		//System.out.println("startElement "+qName);
-			if (qName.equals("class") || qName.equals("interface") ) {
-				
-				String className = atts.getValue("name");
-				
-				if (className == null) {
-					return;
-				}
-				
-				String extendsName = atts.getValue("extends");
-				
-				if (extendsName == null) {
-					if (className.equals("node")) {
-						extendsName = "";
-					} else {
-						extendsName = "node";
-					}
-				}
-				
-				currentClassName = className;
-				elementList.addClassElement(className, extendsName);
-				
-			} else if (qName.equals("attribute")) {
-				
-				if (currentClassName.length() == 0) {
-					return;
-				}
-				
-				String attrName = atts.getValue("name");
-				if (attrName != null) {
-					elementList.addClassAttribute(attrName, false, currentClassName);
-				}
-				
-			}
-		} catch (Exception err) {
-			System.err.println("Error in File "+currentFile);
-			err.printStackTrace();
+		String currentParent = "";
+		if (openNodes.size() > 0) {
+			currentParent = openNodes.getLast();
 		}
+		
+		elementList.addElement(qName, atts, currentParent);
+		
+		openNodes.add(qName);
+		
 	}
 
 	public void endElement(String uri, String localName, String qName)
@@ -185,7 +152,7 @@ public class GenerateDTD implements ContentHandler {
 		// TODO Auto-generated method stub
 		
 		//Removes last occurrence of the element
-		//openNodes.removeLastOccurrence(qName);
+		openNodes.removeLastOccurrence(qName);
 		
 	}
 

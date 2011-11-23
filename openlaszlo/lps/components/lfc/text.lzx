@@ -1,0 +1,30 @@
+<class name="text">
+
+	<attribute name="antiAliasType" />
+	<attribute name="cdata" />
+	<attribute name="direction" />
+	<attribute name="gridFit" />
+	<attribute name="hscroll" />
+	<attribute name="letterspacing" />
+	<attribute name="lineheight" />
+	<attribute name="maxhscroll" />
+	<attribute name="maxlength" />
+	<attribute name="maxscroll" />
+	<attribute name="multiline" />
+	<attribute name="pattern" />
+	<attribute name="resize" />
+	<attribute name="scroll" />
+	<attribute name="scrollevents" />
+	<attribute name="scrollheight" />
+	<attribute name="scrollwidth" />
+	<attribute name="selectable" />
+	<attribute name="sharpness" />
+	<attribute name="text" />
+	<attribute name="textalign" />
+	<attribute name="textdecoration" />
+	<attribute name="textindent" />
+	<attribute name="thickness" />
+	<attribute name="xscroll" />
+	<attribute name="yscroll" />
+
+</class>

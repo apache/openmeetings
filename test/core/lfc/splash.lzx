@@ -1,0 +1,11 @@
+<class name="splash">
+
+    <attribute name="persistent" />
+    <attribute name="center" />
+    <attribute name="name" />
+    <attribute name="ratio" />
+    <attribute name="resource" />
+    <attribute name="x" />
+    <attribute name="y" />
+
+</class>

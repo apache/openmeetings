@@ -1,0 +1,5 @@
+<class name="audio">
+
+    <attribute name="src" />
+    
+</class>
