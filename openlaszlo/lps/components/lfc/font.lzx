@@ -1,4 +1,4 @@
-<class name="font">
+<class name="font" extends="node">
 
     <attribute name="name" />
     <attribute name="src" />

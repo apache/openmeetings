@@ -45,15 +45,6 @@
     type CDATA  #IMPLIED 
     value CDATA  #IMPLIED 
 >
-<!ELEMENT class ANY > 
-<!ATTLIST class 
-    name  CDATA  #REQUIRED 
-    required CDATA  #IMPLIED
-    allocation CDATA  #IMPLIED 
-    style CDATA  #IMPLIED 
-    type CDATA  #IMPLIED 
-    value CDATA  #IMPLIED 
->
 <!ELEMENT canvas ANY > 
 <!ATTLIST canvas 
     allowfullscreen  CDATA  #IMPLIED 

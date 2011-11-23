@@ -1,4 +1,4 @@
-<class name="splash">
+<class name="splash" extends="node">
 
     <attribute name="persistent" />
     <attribute name="center" />

@@ -1,4 +1,4 @@
-<class name="text">
+<class name="text" extends="view">
 
 	<attribute name="antiAliasType" />
 	<attribute name="cdata" />

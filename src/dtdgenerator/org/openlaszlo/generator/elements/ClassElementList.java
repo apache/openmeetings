@@ -39,25 +39,7 @@ public class ClassElementList {
 		element.getAttributes().add(new ClassAttribute(name, required));
 	}
 	
-	private void debugPrint() {
-		
-		for (Entry<String, ClassElement> entry : elementList
-				.entrySet()) {
-			
-			String className = entry.getKey();
-			ClassElement element = entry.getValue();
-			
-			System.out.println("TAG "+className+ " " + element.getParentAsString());
-			
-			String tString = "   -> Attributes: ";
-			for (ClassAttribute attr : element.getAllClassAttributes()) {
-				tString += " "+attr.getName();
-			}
-			
-			System.out.println(tString);
-			
-		}
-	}
+	
 
 	public void fixParents() {
 		
@@ -85,6 +67,24 @@ public class ClassElementList {
 
 	}
 	
+	private void generateBaseClassTag() {
+
+		ClassElement element = new ClassElement();
+		element.setParentAsString("");
+		
+		element.getAttributes().add(new ClassAttribute("extends", false));
+		
+		for (Entry<String, ClassElement> entry : elementList
+				.entrySet()) {
+			
+			ClassElement elementTemp = entry.getValue();
+			element.getAttributes().addAll(elementTemp.getAllClassAttributes());
+		}
+		
+		elementList.put("class", element);
+		
+	}
+	
 	public final String[] TEXT_OPTION_ENABLED = { "handler", "method", "text" };
 	
 	private boolean checkAllowSingleTextNode(String key) {
@@ -104,6 +104,8 @@ public class ClassElementList {
 			}
 			
 			this.fixParents();
+			
+			this.generateBaseClassTag();
 			
 			f.createNewFile();
 			
@@ -160,56 +162,12 @@ public class ClassElementList {
 				
 			}
 			
-//			for (Entry<String, Element> entry : elementList
-//					.entrySet()) {
-//				
-//				String key = entry.getKey();
-//				Element element = entry.getValue();
-//				
-//				StringBuilder sBuilder = new StringBuilder();
-//
-//				if (element.getChildelements().size()>0) {
-//					sBuilder.append("<!ELEMENT " + key + " ( ");
-//					int i = 0;
-//					for (String child : element.getChildelements()) {
-//						if (i!=0) {
-//							sBuilder.append(" |");
-//						}
-//						sBuilder.append(" "+child+"");
-//						i++;
-//					}
-//					sBuilder.append(" )* >\n");
-//				} else {
-//					
-//					if (checkAllowSingleTextNode(key)) {
-//						sBuilder.append("<!ELEMENT " + key + " ( #PCDATA ) > \n");
-//					} else {
-//						sBuilder.append("<!ELEMENT " + key + " EMPTY > \n");
-//					}
-//					
-//				}
-//				
-//				if (element.getAttributes().size() > 0) {
-//					sBuilder.append("<!ATTLIST " + key + " \n");
-//		
-//					for (String attribute : element.getAttributes()) {
-//						sBuilder.append("    " + attribute + " CDATA  #IMPLIED \n");
-//					}
-//					sBuilder.append(">\n");
-//				}
-//				
-//				if (debug) {
-//					System.out.print(sBuilder);
-//				}
-//				
-//				ou.write(sBuilder.toString().getBytes());
-//
-//			}
-			
 			ou.close();
 		} catch (Exception err) {
 			err.printStackTrace();
 		}
 	}
+
+	
 
 }

@@ -1,4 +1,4 @@
-<class name="frame" >
+<class name="frame" extends="node">
 
     <attribute name="src" />
     

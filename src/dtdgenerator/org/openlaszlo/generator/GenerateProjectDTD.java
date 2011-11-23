@@ -63,10 +63,13 @@ public class GenerateProjectDTD implements ContentHandler {
 	}
 	
 	public GenerateProjectDTD(String basePath) {
+		
+		this.scanFolder("openlaszlo/lps/");
+		
 		this.scanFolder(basePath);
 		
 		// elementList.filePrint();
-		elementList.filePrint(true, "project.dtd", "test/lzx.dtd");
+		elementList.filePrint(true, "project.dtd", "test/basic.dtd");
 	}
 	
 	public void scanFolder(String filePath) {
@@ -164,10 +167,12 @@ public class GenerateProjectDTD implements ContentHandler {
 				String extendsName = atts.getValue("extends");
 				
 				if (extendsName == null) {
-					if (className.equals("node")) {
+					if (className.equals("view")) {
+						extendsName = "node";
+					} else if (className.equals("node")) {
 						extendsName = "";
 					} else {
-						extendsName = "node";
+						extendsName = "view";
 					}
 				}
 				
