@@ -4,6 +4,18 @@
     proxied CDATA  #IMPLIED 
     stage CDATA  #IMPLIED 
 >
+<!ELEMENT handler ANY > 
+<!ATTLIST handler 
+    name  CDATA  #IMPLIED 
+    reference CDATA  #IMPLIED 
+    args CDATA  #IMPLIED 
+>
+<!ELEMENT method ANY > 
+<!ATTLIST method 
+    name  CDATA  #IMPLIED 
+    allocation CDATA  #IMPLIED 
+    args CDATA  #IMPLIED 
+>
 <!ELEMENT include ANY > 
 <!ATTLIST include 
     href  CDATA  #REQUIRED 
