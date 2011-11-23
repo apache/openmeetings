@@ -3,6 +3,7 @@ package org.openlaszlo.generator.elements;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.io.RandomAccessFile;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -95,9 +96,9 @@ public class ClassElementList {
 		return false;
 	}
 
-	public void filePrint(boolean debug) {
+	public void filePrint(boolean debug, String fileName, String baseDtd) {
 		try {
-			File f = new File("lzx.dtd");
+			File f = new File(fileName);
 			if (f.exists()){
 				f.delete();
 			}
@@ -107,6 +108,25 @@ public class ClassElementList {
 			f.createNewFile();
 			
 			OutputStream ou = new FileOutputStream(f);
+			
+			//ou.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>".getBytes());
+			
+			if (baseDtd.length() > 0) {
+				
+				// Get file and handle download
+				RandomAccessFile rf = new RandomAccessFile(baseDtd, "r");
+					
+				byte[] buffer = new byte[1024];
+				int readed = -1;
+
+				while ((readed = rf.read(buffer, 0, buffer.length)) > -1) {
+					ou.write(buffer, 0, readed);
+				}
+
+				rf.close();
+
+			}
+			
 			
 			for (Entry<String, ClassElement> entry : elementList
 					.entrySet()) {

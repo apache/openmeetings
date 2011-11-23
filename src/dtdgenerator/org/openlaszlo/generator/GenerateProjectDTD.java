@@ -20,7 +20,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 
-public class GenerateDTD implements ContentHandler {
+public class GenerateProjectDTD implements ContentHandler {
 	
 	private ClassElementList elementList = new ClassElementList();
 	
@@ -30,9 +30,21 @@ public class GenerateDTD implements ContentHandler {
 			  if (name.startsWith(".")) {
 	    		  return false;
 	    	  }
+			  
 	    	  String absPath = b.getAbsolutePath()+File.separatorChar+name;
 	    	  File f = new File (absPath);
-	          return f.isDirectory();
+	    	  
+	    	  if (f.isDirectory()) {
+	    		  
+	    		  File checkForIgnore = new File(absPath+File.separatorChar+".ignore_dtd");
+	    		  if (checkForIgnore.exists()) {
+	    			  return false;
+	    		  }
+	    		  
+	    		  return true;
+	    	  }
+	    	  
+	          return false;
 	     }
 	};
 	
@@ -47,14 +59,14 @@ public class GenerateDTD implements ContentHandler {
 	private String currentFile;
 	
 	public static void main(String... args) {
-		new GenerateDTD("openlaszlo/lps/");  //"WebContent/src/"
+		new GenerateProjectDTD("WebContent/src/");
 	}
 	
-	public GenerateDTD(String basePath) {
+	public GenerateProjectDTD(String basePath) {
 		this.scanFolder(basePath);
 		
 		// elementList.filePrint();
-		elementList.filePrint(true);
+		elementList.filePrint(true, "project.dtd", "test/lzx.dtd");
 	}
 	
 	public void scanFolder(String filePath) {
