@@ -182,5 +182,6 @@
 	<classpathentry kind="lib" path="lib/slf4j/logback-core-0.9.28.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j/logback-classic-0.9.28.jar"/>
 	<classpathentry kind="lib" path="red5-1.0.0-r4297/dist/lib/commons-pool-1.5.6.jar"/>
+	<classpathentry kind="lib" path="lib/xml/trang.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
