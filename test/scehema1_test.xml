@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lzx:canvas xmlns:lzx="http://www.laszlosystems.com/2003/05/lzx"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+ xmlns:schema1="http://custom.namespace.org/schema1"
+ xsi:schemaLocation="http://www.laszlosystems.com/2003/05/lzx lzx.xsd 
+ http://custom.namespace.org/schema1 schema1.xsd">
+
+
+<lzx:font name="asdasd" >
+    <lzx:face src="asdas" style="bold"/>
+</lzx:font>
+
+<lzx:view onclick="asdasd" width="${ parent.width-10 }">
+    
+</lzx:view>
+
+
+</lzx:canvas>

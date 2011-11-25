@@ -1,0 +1,7 @@
+<class name="class">
+
+    <attribute name="name" />
+    <attribute name="extends" />
+    <attribute name="with" />
+    
+</class>

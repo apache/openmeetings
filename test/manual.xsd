@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	elementFormDefault="qualified" targetNamespace="http://custom.namespace.org/schema1"
+	xmlns:lzx="http://www.laszlosystems.com/2003/05/lzx"
+	xmlns:schema1="http://custom.namespace.org/schema1">
+	
+	<xsd:import namespace="http://www.laszlosystems.com/2003/05/lzx" 
+       schemaLocation="lzx.xsd"/>
+
+	<xsd:element name="view" type="schema1:viewType" >
+
+	</xsd:element>
+
+    <xsd:element name="raster" type="schema1:baseType" >
+
+    </xsd:element>
+    
+    <xsd:complexType name="baseType">
+      <xsd:choice minOccurs="1">
+        <xsd:element ref="lzx:view" />
+      </xsd:choice>
+    </xsd:complexType>
+
+	<xsd:element name="asd" type="schema1:asdType"></xsd:element>
+
+	<xsd:complexType name="asdType">
+        <xsd:attribute name="id" type="xsd:string" use="required"></xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:complexType name="viewType">
+      <xsd:group ref="schema1:viewContent" minOccurs="1" />
+    </xsd:complexType>
+    
+    <xsd:group name="viewContent">
+        <xsd:sequence>
+            <xsd:choice minOccurs="1" maxOccurs="unbounded">
+                <xsd:choice>
+                    <xsd:element ref="lzx:view" minOccurs="1" maxOccurs="unbounded"></xsd:element>
+                    <xsd:element ref="schema1:asd" />
+                </xsd:choice>
+            </xsd:choice>
+        </xsd:sequence>
+    </xsd:group>
+    
+</xsd:schema>

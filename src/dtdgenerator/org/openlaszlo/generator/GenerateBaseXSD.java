@@ -52,7 +52,7 @@ public class GenerateBaseXSD implements ContentHandler {
 		this.scanFolder(basePath);
 		
 		// elementList.filePrint();
-		elementList.filePrint(true, "lzx.dtd", "");
+		elementList.xsdPrint(true, "test/test_base_lzx");
 	}
 	
 	public void scanFolder(String filePath) {

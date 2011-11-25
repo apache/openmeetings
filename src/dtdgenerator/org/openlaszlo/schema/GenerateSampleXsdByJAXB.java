@@ -29,7 +29,6 @@ public class GenerateSampleXsdByJAXB {
 			        return new StreamResult(new File(baseDir,suggestedFileName));
 			    }
 			}
-			
 			JAXBContext context = JAXBContext.newInstance(View.class, MyView.class);
 			
 			context.generateSchema(new MySchemaOutputResolver());

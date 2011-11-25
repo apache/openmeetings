@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema1:asd id="" xmlns:lzx="http://www.laszlosystems.com/2003/05/lzx"
+	xmlns:schema1="http://custom.namespace.org/schema1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://custom.namespace.org/schema1 manual.xsd "></schema1:asd>

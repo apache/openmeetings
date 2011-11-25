@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<canvas xmlns="http://www.laszlosystems.com/2003/05/lzx"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-xsi:schemaLocation="http://www.laszlosystems.com/2003/05/lzx lzx.xsd ">
+<canvas 
+    
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	 xmlns="http://www.laszlosystems.com/2003/05/lzx"
+	 xmlns:schema1="http://custom.namespace.org/schema1" 
+	 xsi:schemaLocation="http://www.laszlosystems.com/2003/05/lzx lzx.xsd 
+	 http://custom.namespace.org/schema1 manual.xsd">
 
 
 <font name="asdasd" >
