@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <canvas xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 xsi:noNamespaceSchemaLocation="lzx_base.xsd">
-<view name="asd"/>
+<view name="asd" />
 </canvas>

@@ -8,7 +8,7 @@ xsi:schemaLocation="http://www.laszlosystems.com/2003/05/lzx lzx.xsd ">
     <face src="asdas" style="bold"/>
 </font>
 
-<view onclick="asdasd">
+<view onclick="asdasd" width="${ parent.width-10 }">
     
 </view>
 

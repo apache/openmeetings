@@ -88,6 +88,7 @@
             if (this.publicSID == canvas.publicSID) {
             	this._toolbar._resync._tip.setAttribute("labelid",610);
             }
+            this._giveExclusiveAudioView.bringToFront();
             
         ]]>
     
@@ -447,7 +448,49 @@
         </miniIconsPresenter> 
          --> 
         
-    </view>         
+    </view>
+
+    <view name="_giveExclusiveAudioView" x="${(parent.width)*0.5 - 20}" y="${(parent.height)*0.5 - 20}"
+            visible="false">
+        <miniIcons name="_micButton" width="40" height="40" resource="mic_rsc" showhandcursor="true">
+            <handler name="onclick">
+                <![CDATA[
+                    canvas.thishib.giveExclusiveAudio.publicSID = parent.parent.publicSID;
+                    canvas.thishib.giveExclusiveAudio.doCall();
+                ]]>
+            </handler>
+            <labelTooltip labelid="1386" />
+        </miniIcons>
+    </view>
+
+    <handler name="onmouseover">
+        <![CDATA[
+        if (this.isInterview) {
+            return;
+        }
+        if (this.minimized) {
+            return;
+        }
+        var itIsMyVideo = (canvas.publicSID == this.publicSID);
+        if (canvas.ismoderator || itIsMyVideo) {
+            this._giveExclusiveAudioView.setAttribute("visible", true);
+        }
+        ]]>
+    </handler>
+
+    <handler name="onmouseout">
+        <![CDATA[
+        if (this.isInterview) {
+            return;
+        }
+        if (this.minimized) {
+            return;
+        }
+        if (canvas.ismoderator) {
+            this._giveExclusiveAudioView.setAttribute("visible", false);
+        }
+        ]]>
+    </handler>
     
     <dragstate name="dragger" />
     <resizestate name="rs"/>
@@ -501,6 +544,17 @@
         	}
         }
         ]]>
+    </method>
+
+    <method name="simpleMuteMicrophone" args="micMuted">
+        if (micMuted) {
+            if ($debug) Debug.write("############ SET GAIN 0");
+            this._chatvideoinner._videostream.micro.setGain(0);
+        } else {
+            if ($debug) Debug.write("############ SET GAIN 50");
+            this._chatvideoinner._videostream.micro.setGain(50);
+        }
+        this.setMicMuted(micMuted);
     </method>
 
     <!--

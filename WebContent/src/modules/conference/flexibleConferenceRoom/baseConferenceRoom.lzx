@@ -133,7 +133,18 @@
     <method name="ringring">
     	if ($debug) Debug.write("ringring - ringring - ringring");
     </method>
-    
+
+    <handler name="onkeydown" reference="lz.Keys" args="keyCode">
+        var GIVE_EXCLUSIVE_AUDIO_KEY = 123; // F12
+
+        if (GIVE_EXCLUSIVE_AUDIO_KEY == keyCode) {
+            var obj = canvas._videocontainer.getVideoObjectByPublicSID(canvas.publicSID);
+            if (null != obj) {
+                obj._giveExclusiveAudioView._micButton.onclick.sendEvent();
+            }
+            return;
+        }
+    </handler>
     
 </class>
 
