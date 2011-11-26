@@ -12,12 +12,11 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import com.thaiopensource.relaxng.translate.Driver;
-
-import org.apache.xml.resolver.helpers.BootstrapResolver;
 import org.openlaszlo.generator.elements.ClassAttribute;
 import org.openlaszlo.generator.elements.ClassElement;
 import org.w3c.dom.Document;
+
+import com.thaiopensource.relaxng.translate.Driver;
 
 public class GenerateXsd {
 	
@@ -52,7 +51,7 @@ public class GenerateXsd {
 
 			ClassElement canvas = new ClassElement();
 			canvas.getAllClassAttributes().add(
-					new ClassAttribute("width", false));
+					new ClassAttribute("width", false, "", null));
 
 			this.addElement(schema, "canvas", canvas);
 			

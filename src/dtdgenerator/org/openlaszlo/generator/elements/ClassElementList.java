@@ -28,14 +28,14 @@ public class ClassElementList {
 	}
 
 	public void addClassAttribute(String name, boolean required,
-			String className) throws Exception {
+			String className, String type, String defaultValue) throws Exception {
 		ClassElement element = elementList.get(className);
 
 		if (element == null) {
 			throw new Exception("Class not available " + className + " " + name);
 		}
 
-		element.getAttributes().add(new ClassAttribute(name, required));
+		element.getAttributes().add(new ClassAttribute(name, required, type, defaultValue));
 	}
 
 	public void fixParents() {
@@ -61,23 +61,6 @@ public class ClassElementList {
 			}
 
 		}
-
-	}
-
-	private void generateBaseClassTag() {
-
-		ClassElement element = new ClassElement();
-		element.setParentAsString("");
-
-		element.getAttributes().add(new ClassAttribute("extends", false));
-
-		for (Entry<String, ClassElement> entry : elementList.entrySet()) {
-
-			ClassElement elementTemp = entry.getValue();
-			element.getAttributes().addAll(elementTemp.getAllClassAttributes());
-		}
-
-		elementList.put("class", element);
 
 	}
 
@@ -185,11 +168,19 @@ public class ClassElementList {
 			
 			XsdUtil xsdUtil = new XsdUtil();
 			
-			xsdUtil.generateXsdHeader(headerBuilder);
+			xsdUtil.writeXsdHeader(headerBuilder);
 			
 			ou.write(headerBuilder.toString().getBytes());
 			
+			//collect all items with classroot "node"
 			for (Entry<String, ClassElement> entry : elementList.entrySet()) {
+				
+				ClassElement cElement = entry.getValue();
+				if (cElement.getClassRoot().equals("node")  || cElement.getParent() == null) {
+					if (!cElement.isRoot()) {
+						xsdUtil.registerAllowedSubElement(cElement);
+					}
+				}
 				
 			}
 
@@ -213,11 +204,12 @@ public class ClassElementList {
 
 			}
 			
-			StringBuilder footerBuilder = new StringBuilder();
+			StringBuilder stringBuilder = new StringBuilder();
 			
-			xsdUtil.generateXsdFooter(footerBuilder);
+			xsdUtil.writeBaseAllowedSubElements(stringBuilder);
+			xsdUtil.generateXsdFooter(stringBuilder);
 			
-			ou.write(footerBuilder.toString().getBytes());
+			ou.write(stringBuilder.toString().getBytes());
 
 			ou.close();
 			

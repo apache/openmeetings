@@ -174,8 +174,22 @@ public class GenerateBaseDTD implements ContentHandler {
 				}
 				
 				String attrName = atts.getValue("name");
+				
+				String requiredAsStr = atts.getValue("required");
+				boolean required = false;
+				if (requiredAsStr != null && requiredAsStr.equals("true")) {
+					required = true;
+				}
+				
+				String type = atts.getValue("type");
+				if (type == null) {
+					type = "string";
+				} 
+				
+				String defaultValue = atts.getValue("value");
+
 				if (attrName != null) {
-					elementList.addClassAttribute(attrName, false, currentClassName);
+					elementList.addClassAttribute(attrName, required, currentClassName, type, defaultValue);
 				}
 				
 			}

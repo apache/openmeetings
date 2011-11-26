@@ -1,6 +1,0 @@
-<class name="inputtext" extends="text">
-
-    <attribute name="enabled" />
-    <attribute name="password" />
-
-</class>

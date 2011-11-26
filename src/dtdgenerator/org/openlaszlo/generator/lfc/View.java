@@ -2,9 +2,9 @@ package org.openlaszlo.generator.lfc;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlAttribute;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -20,7 +20,7 @@ public class View extends Node {
 	public Boolean aasilent;
 	@XmlAttribute
 	public Integer aatabindex;
-	@XmlEnum
+	@XmlEnum(String.class)
 	public enum align  { left, center, right };
 	@XmlAttribute
 	public String backgroundrepeat;

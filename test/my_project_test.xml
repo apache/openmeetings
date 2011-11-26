@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<canvas xmlns="http://localhost/openlaszlo/lzx" 
+			xmlns:project="http://localhost/project/lzx" 
+			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+			xsi:schemaLocation="http://localhost/openlaszlo/lzx my.xsd 
+			http://localhost/project/lzx my_project.xsd ">
+    <project:custom_menu_item></project:custom_menu_item>
+
+</canvas>

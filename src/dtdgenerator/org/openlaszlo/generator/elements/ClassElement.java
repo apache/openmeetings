@@ -85,6 +85,14 @@ public class ClassElement implements Comparable<ClassElement> {
 
 		}
 	}
+	
+	public String getClassRoot() {
+		if (this.parent != null) {
+			return this.parent.getClassRoot();
+		}
+		
+		return this.name;
+	}
 
 	@Override
 	public boolean equals(Object obj) {

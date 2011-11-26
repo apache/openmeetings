@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	elementFormDefault="qualified" targetNamespace="http://localhost/project/lzx"
+	xmlns:lzx="http://localhost/openlaszlo/lzx"
+	xmlns:project="http://localhost/project/lzx">
+	
+	<xs:import namespace="http://localhost/openlaszlo/lzx" 
+		schemaLocation="my.xsd"/>
+       
+	<xs:element name="custom_menu_item" type="project:custom_menu_item" />
+	<xs:complexType name="custom_menu_item" mixed="true">
+		<xs:complexContent>
+			<xs:extension base="lzx:button">
+				<xs:attribute name="custom_prop" type="xs:string" default="null" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+</xs:schema>
