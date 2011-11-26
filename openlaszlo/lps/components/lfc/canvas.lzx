@@ -1,0 +1,25 @@
+<class name="canvas" isRoot="true" extends="view">
+	
+	<attribute name="allowfullscreen" type="boolean"/>
+    <attribute name="appbuilddate" type="string"/>
+    <attribute name="dataloadtimeout" type="number"/>
+    <attribute name="datasets" type="string"/>
+    <attribute name="defaultdataprovider" type="string"/>
+    <attribute name="defaultdataprovider" type="string"/>
+    <attribute name="framerate" type="number"/>
+    <attribute name="fullscreen" type="boolean"/>
+    <attribute name="httpdataprovider" type="string"/>
+    <attribute name="httpdataprovider" type="string"/>
+    <attribute name="lpsbuild" type="string"/>
+    <attribute name="lpsbuilddate" type="string"/>
+    <attribute name="lpsrelease" type="string"/>
+    <attribute name="lpsversion" type="string"/>
+    <attribute name="mediaerrortimeout" type="number"/>
+    <attribute name="medialoadtimeout" type="number"/>
+    <attribute name="percentcreated" type="number"/>
+    <attribute name="proxied" type="string"/>
+    <attribute name="runtime" type="string"/>
+    <attribute name="screenorientation" type="boolean"/>
+    <attribute name="scriptlimits" type="string"/>
+    	
+</class>

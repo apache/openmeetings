@@ -3,26 +3,21 @@ package org.openlaszlo.generator;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FilenameFilter;
-import java.util.LinkedList;
 
 import javax.xml.parsers.SAXParserFactory;
 
 import org.openlaszlo.generator.elements.ClassElementList;
-import org.openlaszlo.generator.elements.ElementList;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
-import org.xml.sax.DTDHandler;
 import org.xml.sax.EntityResolver;
-import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 
 public class GenerateBaseDTD implements ContentHandler {
 	
-	private ClassElementList elementList = new ClassElementList();
+	private final ClassElementList elementList = new ClassElementList();
 	
 	FilenameFilter folderFilter = new FilenameFilter(){
 		 public boolean accept(File b, String name) {
@@ -162,8 +157,15 @@ public class GenerateBaseDTD implements ContentHandler {
 					}
 				}
 				
+				String isRootAsStr = atts.getValue("isRoot");
+				boolean isRoot = false;
+				if (isRootAsStr != null && isRootAsStr.equals("true")) {
+					isRoot = true;
+				}
+				
 				currentClassName = className;
-				elementList.addClassElement(className, extendsName);
+				elementList.addClassElement(className, extendsName, isRoot);
+				
 				
 			} else if (qName.equals("attribute")) {
 				

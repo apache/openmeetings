@@ -1,0 +1,4 @@
+<class name="import" extends="false">
+	<attribute name="href" type="string" />
+	<attribute name="type" type="pattern" value="text|xml" />
+</class>

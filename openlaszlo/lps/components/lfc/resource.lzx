@@ -1,4 +1,4 @@
-<class name="resource" extends="node">
+<class name="resource" extends="false">
 
     <attribute name="name" />
     <attribute name="offsetx" />

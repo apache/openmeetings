@@ -1,0 +1,6 @@
+<class name="state" extends="node">
+    
+    <attribute name="applied" value="false" type="boolean" />
+    <attribute name="pooling" value="false" type="boolean" />
+    
+</class>

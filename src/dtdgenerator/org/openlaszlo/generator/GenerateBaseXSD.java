@@ -17,7 +17,7 @@ import org.xml.sax.XMLReader;
 
 public class GenerateBaseXSD implements ContentHandler {
 	
-	private ClassElementList elementList = new ClassElementList();
+	private final ClassElementList elementList = new ClassElementList();
 	
 	FilenameFilter folderFilter = new FilenameFilter(){
 		 public boolean accept(File b, String name) {
@@ -52,7 +52,7 @@ public class GenerateBaseXSD implements ContentHandler {
 		this.scanFolder(basePath);
 		
 		// elementList.filePrint();
-		elementList.xsdPrint(true, "test/test_base_lzx");
+		elementList.xsdPrint(true, "test/my.xsd");
 	}
 	
 	public void scanFolder(String filePath) {
@@ -155,10 +155,18 @@ public class GenerateBaseXSD implements ContentHandler {
 					} else {
 						extendsName = "node";
 					}
+				} else if (extendsName.equals("false")) {
+					extendsName = "";
+				}
+				
+				String isRootAsStr = atts.getValue("isRoot");
+				boolean isRoot = false;
+				if (isRootAsStr != null && isRootAsStr.equals("true")) {
+					isRoot = true;
 				}
 				
 				currentClassName = className;
-				elementList.addClassElement(className, extendsName);
+				elementList.addClassElement(className, extendsName, isRoot);
 				
 			} else if (qName.equals("attribute")) {
 				

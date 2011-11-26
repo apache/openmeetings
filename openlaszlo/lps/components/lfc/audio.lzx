@@ -1,4 +1,4 @@
-<class name="audio" extends="node">
+<class name="audio" extends="false">
 
     <attribute name="src" />
     

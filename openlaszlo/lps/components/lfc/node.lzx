@@ -1,4 +1,4 @@
-<class name="node">
+<class name="node" >
 
 	<attribute name="classroot" />
 	<attribute name="cloneManager" />

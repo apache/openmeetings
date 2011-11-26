@@ -1,0 +1,4 @@
+<class name="library" isRoot="true">
+	<attribute name="proxied" type="string" />
+    <attribute name="validate" type="boolean" />
+</class>

@@ -1,6 +1,6 @@
-<class name="font" extends="node">
+<class name="font" extends="false">
 
-    <attribute name="name" />
-    <attribute name="src" />
+    <attribute name="name" type="token" />
+    <attribute name="src" type="url" />
     
 </class>

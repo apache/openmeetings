@@ -1,4 +1,6 @@
-<class name="face" extends="font">
+<class name="face" extends="false">
 
+    <attribute name="src" type="url" />
+    <attribute name="style" type="pattern" value="bold|italic|bold italic|italic bold|plain"/>
     
 </class>

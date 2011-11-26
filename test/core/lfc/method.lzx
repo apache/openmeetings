@@ -1,0 +1,5 @@
+<class name="method" extends="false">
+	<attribute name="name" type="string" required="true" />
+	<attribute name="args" default="" type="string"/>
+	<attribute name="allocation" type="pattern" value="instance|class"/>
+</class>

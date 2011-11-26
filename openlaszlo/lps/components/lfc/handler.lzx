@@ -1,0 +1,6 @@
+<class name="handler" extends="false">
+	<attribute name="name" type="string" required="true" />
+	<attribute name="reference" default="this" type="reference"/>
+	<attribute name="args" default="" type="string"/>
+	<attribute name="method" type="string"/>
+</class>

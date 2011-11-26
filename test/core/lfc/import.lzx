@@ -1,0 +1,5 @@
+<class name="import" extends="node">
+	<attribute name="href" type="string" />
+	<attribute name="proxied" type="string" />
+	<attribute name="stage" type="pattern" value="late|defer" />
+</class>

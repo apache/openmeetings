@@ -1,42 +1,25 @@
 package org.openlaszlo.generator.elements;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
-import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-
-import org.w3c.dom.Document;
-import org.xml.sax.Attributes;
-
-import com.sun.tools.xjc.Driver;
 
 public class ClassElementList {
 
 	// Using natural order ?!
-	private Map<String, ClassElement> elementList = new HashMap<String, ClassElement>();
+	private final Map<String, ClassElement> elementList = new HashMap<String, ClassElement>();
 
-	public void addClassElement(String name, String parent) {
+	public void addClassElement(String name, String parent, boolean isRoot) {
 		ClassElement element = elementList.get(name);
 
 		if (element == null) {
 			element = new ClassElement();
+			element.setName(name);
+			element.setRoot(isRoot);
 		}
 
 		element.setParentAsString(parent);
@@ -180,68 +163,133 @@ public class ClassElementList {
 		}
 	}
 	
-
-	private DocumentBuilder documentBuilder;
-	private TransformerFactory transformerFactory;
-	private Transformer transformer;
-
-	public void xsdPrint(boolean b, String fileName) {
+	public void xsdPrint(boolean debug, String fileName) {
 		try {
+			
 			this.fixParents();
-
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			documentBuilder = dbf.newDocumentBuilder();
-			transformerFactory = TransformerFactory.newInstance();
-			transformer = transformerFactory.newTransformer();
-			Document schema = documentBuilder.newDocument();
-
-			schema.appendChild(schema.createElement("schema"));
-
-			ClassElement canvas = new ClassElement();
-			canvas.getAllClassAttributes().add(
-					new ClassAttribute("width", false));
-
-			this.addElement(schema, "canvas", canvas);
 			
-			
-			
-			StringWriter sw = new StringWriter();
-			
-			transformer.transform(new DOMSource(schema), new StreamResult(sw));
-			
-			System.out.println(sw);
-			
-			File f = new File(fileName+".xml");
+			File f = new File(fileName);
 			if (f.exists()) {
 				f.delete();
 			}
+
+			this.fixParents();
+
+			// this.generateBaseClassTag();
+
 			f.createNewFile();
+
 			OutputStream ou = new FileOutputStream(f);
-			ou.write(sw.toString().getBytes());
 			
-			String[] args = { fileName+".xml", fileName+".xsd" };
+			StringBuilder headerBuilder = new StringBuilder();
 			
-			Driver.main(args);
+			XsdUtil xsdUtil = new XsdUtil();
+			
+			xsdUtil.generateXsdHeader(headerBuilder);
+			
+			ou.write(headerBuilder.toString().getBytes());
+			
+			for (Entry<String, ClassElement> entry : elementList.entrySet()) {
+				
+			}
+
+
+			for (Entry<String, ClassElement> entry : elementList.entrySet()) {
+
+				String className = entry.getKey();
+				ClassElement element = entry.getValue();
+				
+				element.clearDuplicated();
+
+				StringBuilder sBuilder = new StringBuilder();
+
+				xsdUtil.writeComplexType(sBuilder, className, element);
+
+				if (debug) {
+					System.out.print(sBuilder);
+				}
+
+				ou.write(sBuilder.toString().getBytes());
+
+			}
+			
+			StringBuilder footerBuilder = new StringBuilder();
+			
+			xsdUtil.generateXsdFooter(footerBuilder);
+			
+			ou.write(footerBuilder.toString().getBytes());
+
+			ou.close();
+			
+			
 			
 		} catch (Exception err) {
-			err.printStackTrace();
+			
 		}
-
 	}
+	
 
-	private void addElement(Document document, String name,
-			ClassElement classElement) {
-
-		org.w3c.dom.Element e = document.createElement(name);
-
-		for (ClassAttribute attr : classElement.getAllClassAttributes()) {
-
-			e.setAttribute(attr.getName(), "string");
-
-		}
-
-		document.getDocumentElement().appendChild(e);
-
-	}
+//	private DocumentBuilder documentBuilder;
+//	private TransformerFactory transformerFactory;
+//	private Transformer transformer;
+//
+//	public void xsdPrint(boolean b, String fileName) {
+//		try {
+//			this.fixParents();
+//
+//			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+//			documentBuilder = dbf.newDocumentBuilder();
+//			transformerFactory = TransformerFactory.newInstance();
+//			transformer = transformerFactory.newTransformer();
+//			Document schema = documentBuilder.newDocument();
+//
+//			schema.appendChild(schema.createElement("schema"));
+//
+//			ClassElement canvas = new ClassElement();
+//			canvas.getAllClassAttributes().add(
+//					new ClassAttribute("width", false));
+//
+//			this.addElement(schema, "canvas", canvas);
+//			
+//			
+//			
+//			StringWriter sw = new StringWriter();
+//			
+//			transformer.transform(new DOMSource(schema), new StreamResult(sw));
+//			
+//			System.out.println(sw);
+//			
+//			File f = new File(fileName+".xml");
+//			if (f.exists()) {
+//				f.delete();
+//			}
+//			f.createNewFile();
+//			OutputStream ou = new FileOutputStream(f);
+//			ou.write(sw.toString().getBytes());
+//			
+//			String[] args = { fileName+".xml", fileName+".xsd" };
+//			
+//			Driver.main(args);
+//			
+//		} catch (Exception err) {
+//			err.printStackTrace();
+//		}
+//
+//	}
+//
+//	private void addElement(Document document, String name,
+//			ClassElement classElement) {
+//
+//		org.w3c.dom.Element e = document.createElement(name);
+//
+//		for (ClassAttribute attr : classElement.getAllClassAttributes()) {
+//
+//			e.setAttribute(attr.getName(), "string");
+//
+//		}
+//
+//		document.getDocumentElement().appendChild(e);
+//
+//	}
 
 }

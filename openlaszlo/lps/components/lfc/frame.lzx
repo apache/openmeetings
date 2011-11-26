@@ -1,5 +1,6 @@
-<class name="frame" extends="node">
+<class name="frame" extends="false">
 
-    <attribute name="src" />
+    <attribute name="name" type="token" />
+    <attribute name="src" type="src" />
     
 </class>
