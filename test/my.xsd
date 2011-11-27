@@ -725,139 +725,405 @@
   </xs:complexContent>
   </xs:complexType>
 <xs:element name="view" type="lzx:view" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ The &lt;view&gt; is the most basic viewable element in an OpenLaszlo application. Anything that is displayed on the canvas is a view or extends the view class. A view is a rectangle, which can be visible or invisible, and which can contain other views or display "resources" such as images, .swf files, or other supported media. One view controls one displayable resource. The view system is strictly hierarchical; that is, each view has a single parent but can have multiple children.  </xs:documentation>
+</xs:annotation>
 </xs:element>
   <xs:complexType name="view" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:node">
-      <xs:attribute name="yscale" type="xs:string" >
+      <xs:attribute name="yscale" type="xs:string" default="1" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	Specifies this vertical scale for this and all child views. </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="yoffset" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+Specifies a translation point for drawing of this view. If the yoffset is set, then rotation and y position will be calculated by first adding the yoffset.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="y" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The vertical offset of this view's upper left corner from the upper left corner of its container  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
-      <xs:attribute name="xscale" type="xs:string" >
+      <xs:attribute name="xscale" type="xs:string" default="1" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	Specifies this horizontal scale for this and all child views. </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="xoffset" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	Specifies a translation point for drawing of this view. If the xoffset is set, then rotation and x position will be calculated by first adding the xoffset.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="x" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The horizontal offset of this view's upper left corner from the upper left corner of its container.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="with" type="xs:string" >
 </xs:attribute>
       <xs:attribute name="width" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+The width of the view. Can be set to either a number, or null, to indicate that the view should be sized to hold its content. If the view is set to stretch its resource, the resource will be resized to the new value. When read, reflects the actual size of the view.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="visible" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	A value of true means that this view is shown. A value of false means that this view is hidden. Note that an otherwise clickable view that is not visible will have no click region and will not be clickable.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
-      <xs:attribute name="visibility" type="xs:string" >
+      <xs:attribute name="visibility" type="xs:string" default="collapse" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	A value of "visible" means that this view is shown. A value of "hidden" means that this view is hidden. Setting this attribute to "collapse" means that the runtime will hide this view when: its opacity is zero, it has a datapath that does not match a node, or it is loading its media. In this case, the the value of the 'visible' attribute of the view will reflect the view's current visible state. 
+	One of: hidden|visible|collapse </xs:documentation>
+</xs:annotation>
 </xs:attribute>
-      <xs:attribute name="valign" type="xs:string" >
+      <xs:attribute name="valign" type="xs:string" default="top" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	Sets the vertical alignment for the view to the given value. The alignment is based on the height of this view as compared to the height of the view's immediateparent. 
+	One of: 	"top" | "middle" | "bottom" | constraint </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="usegetbounds" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	True if this view requires a call to getBounds() for accurate width and height measurement. This may be necessary when an offset or rotation are applied.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="unstretchedwidth" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	If stretches is not set to none, the width that this view would be if it weren't stretched. This attribute can be used to scale a view by a percentage of its original size, or to determine the aspect ratio for a view.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="unstretchedheight" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	If stretches is not set to none, the height that this view would be if it weren't stretched. This attribute can be used to scale a view by a percentage of its original size, or to determine the aspect ratio for a view.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="totalframes" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The total number of frames for this view's resource. </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="tintcolor" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	Sets the color offset, based on a hexadecimal color string, e.g. '#ff00ff'. See setColorTransform() for details. </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="subviews" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	An array of the subviews that are children of this view. This is initialized to an empty array for views that have no subviews.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
-      <xs:attribute name="stretches" type="xs:string" >
+      <xs:attribute name="stretches" type="xs:string" default="none" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	Setting stretches causes a view to change its coordinate space so that everything it contains (resources and other views) fit exactly into the view's width and/or height. The default for this property is "none". This is used to resize a view's contents by setting its width and/or height. 
+	One of: 	"width" | "height" | "both" | "none" </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="source" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The URL from which to load the resource for this view. If this attribute is set, the media for the view is loaded at runtime.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="showhandcursor" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	Show or hide the hand cursor for this view, if clickable </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="shadowdistance" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The distance for the drop shadow, in pixels </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="shadowcolor" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+The color for the drop shadow </xs:documentation>
+</xs:annotation>
 </xs:attribute>
-      <xs:attribute name="shadowblurradius" type="xs:string" >
+      <xs:attribute name="shadowblurradius" type="xs:string" default="4" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+The blur radius for the drop shadow, in pixels. A negative value will cause the shadow to be inset. </xs:documentation>
+</xs:annotation>
 </xs:attribute>
-      <xs:attribute name="shadowangle" type="xs:string" >
+      <xs:attribute name="shadowangle" type="xs:string" default="0" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The angle for the drop shadow, in degrees </xs:documentation>
+</xs:annotation>
 </xs:attribute>
-      <xs:attribute name="rotation" type="xs:string" >
+      <xs:attribute name="rotation" type="xs:string" default="0" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The rotation value for the view (in degrees). Value may be less than zero or greater than 360.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="resourcewidth" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+The width of the resource that this view attached </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="resourceheight" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The height of the resource that this view attached </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="resource" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+A resource that is presented in the background of this view. The value can be either the name of a resource defined with the resource tag, a URL, or a pathname. If the value is a URL, the resource is requested when the view is displayed. If it's a pathname, the file named by the pathname is compiled into the application, and attached to this view.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="proxyurl" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The url of the proxy server, if the app is running in proxied mode. proxyurl can be null, a URL string, or a function.
+
+    If the value is a string, treat it as a URL to the proxy server.
+    If the value is a function, it should return the URL of the proxy server.
+
+The default proxy policy references the proxyurl of the canvas.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="playing" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	If true, this view is currently playing. Setting to true causes the view to play, false causes playback to stop. </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="pixellock" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ 	The view system supports sub-pixel positioning to enable smooth animation. This may be turned off to make the view snap to a pixel boundary by setting pixellock to true.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="opacity" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The opacity of the view's contents. 1.0 is opaque; 0.0 is totally transparent (invisible).  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="mask" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	Reference to closest masked view in the hierarchy at or above this one  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="loadratio" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	For views whose resource is loaded at runtime, ratio of the loaded bytes to the total bytes. This is a number between zero and 1.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="layout" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	A CSS declaration of property: value pairs of layout attributes, which are used to create a layout that is attached to this view. If there is a class property, it names the class of the layout to be created, otherwise &lt;simplelayout&gt; is used. To remove the previously set layout, use {'class': 'none'} Examples: layout="axis: x", layout="class: constantlayout", layout="axis: y", layout="axis: x; spacing: 5".  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="height" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The height of the view. Can be set to either a number, or null, to indicate that the view should be sized to hold its content. If the view is set to stretch its resource, the resource will be resized to the new value. When read, reflects the actual size of the view.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="hassetwidth" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	If true, then this view has an assigned or constrained width, and the view will not be sized to its contents.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="hassetheight" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	If true, then this view has an assigned or constrained height, and the view will not be sized to its contents.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="hasdirectionallayout" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+If true, sprite will use TLF text framework class that supports bidirectional text layout. </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="framesloadratio" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	For views whose resource is loaded at runtime, the ratio of the loaded frames to the total frames. This is a number between zero and 1.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="frame" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	If this view has a multi-frame resource, this allows setting which resource frame is displayed. Defaults to the first frame (1). See also the resource attribute. Setting this attribute will change the frame that is being displayed by the resource associated with this view. The first frame of the resource is frame 1. Setting a view's 'donttrackplay' option to true will allow the view's resource to play without updating the value of the view's frame property. This can save CPU usage in cases where the application doesn't need to know what frame the resource is showing while it is playing.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="fontstyle" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The style to use to render text fields that appear inside of this view. One of "plain", "bold" , "italic" or "bolditalic".  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="fontsize" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	Pixel size to use to render text which appears inside this view. The default is 8.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="font" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The font to use for any &lt;text&gt; or &lt;inputtext&gt; elements that appear inside this view. Like all the font properties (fontstyle and fontsize too) these properties cascade down the view hierarchy until a new value is specified.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="focustrap" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	If true, this view "traps" the focus, for example in a window or dialog. See focus manager (lz.Focus) for more details.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="focusable" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	If true, this view will receive focus events. See focus manager (lz.Focus) for more details.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="fgcolor" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+The foreground color of any &lt;text&gt; or &lt;inputtext&gt; elements that appear inside this view. To apply a color transform, see tintcolor. May be set to any valid CSS color specification. When read, will be read as the equivalent numeric value. To retrieve a CSS color specification, use this.presentAttribute('fgcolor', 'color'). Default is 0 (black).  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="cursor" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The cursor to display when the mouse is over this view. Any resource ID can be used as a cursor, or '' for the default cursor. This attribute can be set for any view with clickable=true.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="cornerradius" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The corner radius for the background, e.g. '4' or a list of up to 8 numbers '4 0 0 4 / 2 0 0 2'. Per http://www.w3.org/TR/css3-background/#the-border-radius the 8 values for each radii are given in the order top-left, top-right, bottom-right, bottom-left. If you use the '/' notation, the values before the slash are the horizontal radii, and the values after the slash are the vertical radii.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="contextmenu" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+The context menu installed on this view </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="context" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ 	Contains a reference to the raw drawing context. The oncontext event is sent when the context is ready to use, which can take some time in IE DHTML.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="colortransform" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	color transforms everything contained in the view (except the background) by the transformation dictionary given in o. The dictionary has the following possible keys: o.redMultiplier: multiplier for red component (0 to 1) defaults to 1 o.redOffset: offset for red component (-255 to 255) defaults to 0 o.greenMultiplier: multiplier for green component (0 to 1) defaults to 1 o.greenOffset: offset for green component (-255 to 255) defaults to 0 o.blueMultiplier: multiplier for blue component (0 to 1) defaults to 1 o.blueOffset: offset for blue component (-255 to 255) defaults to 0 o.alphaMultiplier: multiplier for alpha component (0 to 1) defaults to 1 o.alphaOffset: offset for alpha component (-255 to 255) defaults to 0  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
-      <xs:attribute name="clip" type="xs:string" >
+      <xs:attribute name="clip" type="xs:string" default="false" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ 	Clip the view's contents to its size. </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="clickregion" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	Setting to a vector-based resource changes the clickable hotspot for the mouse. Check capabilities.clickregion before using to avoid debugger warnings.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
-      <xs:attribute name="clickable" type="xs:string" >
+      <xs:attribute name="clickable" type="xs:string" default="false" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	If true, this view intercepts click events; otherwise they are passed to its container. This defaults to true if the view defines a mouse event handler or a cursor. </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="capabilities" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+An object containing properties corresponding to the current runtime's capabilities. For example, capabilities.rotation is true in swf and recent versions of Safari and Firefox.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
-      <xs:attribute name="cachebitmap" type="xs:string" >
+      <xs:attribute name="cachebitmap" type="xs:string" default="false" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	A value of true means that this view's bitmap will be cached, if available. </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="bgcolor" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The background color of the view. Setting bgcolor to null will make the view transparent. May be set to any valid CSS color specification. When read, will be read as the equivalent numeric value. To retrieve a CSS color specification, use this.presentAttribute('bgcolor', 'color'). Default is null (transparent).  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
-      <xs:attribute name="backgroundrepeat" type="xs:string" >
+      <xs:attribute name="backgroundrepeat" type="xs:string" default="norepeat" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	Setting backgroundrepeat causes a view to repeat its resource to fit the view's width and/or height. Can be 'repeat', 'repeat-x', 'repeat-y' or 'norepeat' per the CSS1 background-repeat style. 
+	One of: 	"repeat" | "repeat-x" | "repeat-y" | "norepeat" </xs:documentation>
+</xs:annotation>
 </xs:attribute>
-      <xs:attribute name="align" type="xs:string" >
+      <xs:attribute name="align" type="xs:string" default="left" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+Sets the alignment for the view to the given value. The alignment is based on the size of this view as compared to the size of the view's immediate parent. 
+	One of: 	"left" | "center" | "right" | constraint </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="aatabindex" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	Set accessibility tab order </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="aasilent" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ 	Set accessibility silencing/unsilencing </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="aaname" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ 	Set accessibility description </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="aadescription" type="xs:string" >
 </xs:attribute>
       <xs:attribute name="aaactive" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ 	Activate/inactivate children for accessibility </xs:documentation>
+</xs:annotation>
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
@@ -1063,11 +1329,25 @@
   </xs:complexContent>
   </xs:complexType>
 <xs:element name="face" type="lzx:face" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Defines a font face or style within the font family that the outer element defines.
+ </xs:documentation>
+</xs:annotation>
 </xs:element>
   <xs:complexType name="face" mixed="true">
       <xs:attribute name="style" type="xs:string" default="bold|italic|bold italic|italic bold|plain" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	Corresponds to the fontstyle attribute of a view.
+    One of: 	bold | italic | bold italic | italic bold | plain  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="src" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The path of a file that contains the source for this object. </xs:documentation>
+</xs:annotation>
 </xs:attribute>
   </xs:complexType>
 <xs:element name="simplelayout" type="lzx:simplelayout" >
@@ -4428,10 +4708,74 @@ By default, this will be an instance of LzHTTPDataProvider, which will also be p
   </xs:complexContent>
   </xs:complexType>
 <xs:element name="script" type="lzx:script" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Client executed script </xs:documentation>
+</xs:annotation>
 </xs:element>
   <xs:complexType name="script" mixed="true">
       <xs:attribute name="src" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Client executed script </xs:documentation>
+</xs:annotation>
 </xs:attribute>
+  </xs:complexType>
+<xs:element name="datapointer" type="lzx:datapointer" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+The binder between data and nodes.
+Datapaths are used to merge data hierarchies with the hierarchy of an OpenLaszlo application. This is done using the the XPath syntax supported by lz.datapointer. When a node is given a datapath attribute, a datapath with the given value as its XPath is created. If the datapath retrieves a node (i.e. it doesn't terminate in an attribute getter or a () operator) then the node is mapped to that data context and all child nodes will implicitly share the datacontext, but no further action is taken. If the datapath retrieves data, rather than just a node, a few extra things happen. First, the node's data property is set and the node's ondata event is sent. Second, the node's applyData method is called with the data as the argument. In cases where a datapath matches more than one data node, the view with the matching datapath is replicated once for each data node that matches, and a lz.ReplicationManager takes over the view's spot in its parent.
+
+When a node is replicated, an LzReplicationManager takes it's place, and an onclones will be sent when the node's clones are updated.
+
+A node can only have one datapath, and datapaths always have the name datapath. Additional options available on datapath such as pooling and replication are specified by writing the &lt;datapath&gt; tag as a separate node. 
+ </xs:documentation>
+</xs:annotation>
+</xs:element>
+  <xs:complexType name="datapointer" mixed="true">
+  <xs:complexContent>
+  <xs:extension base="lzx:node">
+      <xs:attribute name="xpath" type="xs:string" >
+</xs:attribute>
+      <xs:attribute name="rerunxpath" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	This determines the behavior of the datapointer in response to notification that the dataset the datapointer is mapped to has changed. If rerunxpath is true, the datapointer will always rerun its remembered XPath (set with the xpath property). If it is false, the datapointer will only verify that the node it is pointing to is still in the dataset. If it isn't, the datapointer will rerun its remembered xpath (if it has one) or will print a debug message if any further attempt is made to use its current node as the basis for a relative XPath query.  </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="p" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The LzDataNodeMixin that the datapointer is pointing to. Calling setAttribute on p calls LzDatapointer.setPointer.  </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="context" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The reference to a clonemanager from a clone. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+  </xs:extension>
+  </xs:complexContent>
+  </xs:complexType>
+<xs:element name="contextmenu" type="lzx:contextmenu" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+A contextual menu </xs:documentation>
+</xs:annotation>
+</xs:element>
+  <xs:complexType name="contextmenu" mixed="true">
+  <xs:complexContent>
+  <xs:extension base="lzx:node">
+      <xs:attribute name="delegate" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+		Sets the delegate which will be called when a menu item is selected. An onselect event is also sent.</xs:documentation>
+</xs:annotation>
+</xs:attribute>
+  </xs:extension>
+  </xs:complexContent>
   </xs:complexType>
 <xs:element name="basefocusview" type="lzx:basefocusview" >
 </xs:element>
@@ -4509,44 +4853,136 @@ By default, this will be an instance of LzHTTPDataProvider, which will also be p
   </xs:complexContent>
   </xs:complexType>
 <xs:element name="node" type="lzx:node" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+The base class for all Laszlo classes.
+JavaScript: lz.node
+The lz.node class provides the basic interface for OpenLaszlo objects: parent/child hierarchy, setters, interaction with the instantiator, and reference resolution. New nodes (and subclasses thereof) can be created by new-ing the class, like this: var mynode= new LzNode( parent , args ); where parent is the parent for the new node, and args is an Object whose name/value pairs are attributes to be set on the new node.  </xs:documentation>
+</xs:annotation>
 </xs:element>
   <xs:complexType name="node" mixed="true">
   <xs:group ref="lzx:topLevelElements" />
       <xs:attribute name="transition" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	Allows node attributes to be automatically animated when set. A string of transitions, according to the css3 transition spec http://dev.w3.org/csswg/css3-transitions/#the-transition-shorthand-property- e.g. 'x 2s'. Note that transition-delay is not currently supported. [transition-property || transition-duration || transition-timing-function || transition-delay [, [transition-property || transition-duration || transition-timing-function || transition-delay]]*  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="subnodes" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	An array of all of the LzNodes which consider this LzNode their parent. This list is similar to the subviews list, but it contains all the children of this node, not just the view children.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="styleclass" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	
+A space-separated list of CSS classes that can be used in a stylesheet to select this node.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="placement" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	Instructions to this element's container about where it should go within its container's internal hierarchy. See the LzNode.determinePlacement method. Defaults to the container itself.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="parent" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	Reference to the node that was passed as this node's ancestor in the constructor. If this node was created by declaring it in a tag, the parent will be its lexical parent. Its lexical parent is the tag that encloses it. Allow a null parent so that nodes can be garbage collected when they are no longer needed. See also, immediateparent.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="options" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	A CSS declaration of property: value pairs that modify the interaction of this node with controllers such as replicators and layouts. For example, setting options="ignorelayout: true" on a view will cause the view to not be controlled by any layout.
+[Note] 	Note
+The options that affect particular controllers and replicators are documented with each controller and replicator.
+[Note] 	Note
+options should not be accessed directly. You must use getOption and setOption to get or set the value of an option.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="nodeLevel" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The depth of this node in the overall node hierarchy </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="name" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The name for this subnode. If given, then this node's parent and immediate parent will store a pointer to this node as the given name value.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
-      <xs:attribute name="initstage" type="xs:string" >
+      <xs:attribute name="initstage" type="xs:string" default="normal" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The execution of a node's init method and sending of the oninit event is under the control of its initstage attribute, as follows:
+
+immediate
+    The init method is called immediately as the last stage of instantiation. 
+early
+    The init method is called immediately after the view and its children have been instantiated. 
+normal
+    The init method is called when the parent is initialized. 
+late
+    The init method is called during idle time. To check whether init has been called, check the inited property. Force calling init using the completeInstantiation method. 
+defer
+    The init method will not be called unless explicitly requested by the completeInstantiation method. 
+
+	 </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="inited" type="xs:string" >
 </xs:attribute>
       <xs:attribute name="immediateparent" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	Reference to this nodes's parent in the node hierarchy. This will be different from "parent" when a class uses placement or defaultplacement to assign a subnode a specific place. For example, always use immediateparent to get a mouse position in your views coordinate system.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="ignoreplacement" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	Overrides placement attribute (and defaultplacement in lexical parent). See the LzNode.determinePlacement method. Defaults to false.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="id" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	A unique identifier for this element. Can be used as a global variable name in JavaScript code.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="defaultplacement" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	An attribute used in container classes. If set to a non-null value, this forces this node to run its determinePlacement method for any node whose parent is this node. If the subnode has its own placement attribute, determinePlacement will be called with that value, otherwise it will be called with this value. Note that a class's defaultplacement attribute only applies to children in subclasses or in instances, not to the children of the class itself. This means that if a class and its subclass both define a defaultplacement attribute, the attribute will be set to one value before the subclass children are created and to a different one after they are created. See the determinePlacement method.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="datapath" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	A shorthand version of &lt;datapath&gt;, specifies the data source for this node and its children. You write a string to datapath; reading datapath will yield a lz.datapath. If the value begins with an identifier followed by a colon, the identifier names a dataset, and the portion of the string after the colon is an XPath description of a portion of the data. Otherwise the entire attribute value is an XPath description of the data, relative to the data source of this node's parent element. Examples: "mydata:", "mydata:/a/b", "/a/b".  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="data" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The data context for the node </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="cloneManager" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	If this node is replicated due to data replication, the LzReplicationManager which controls this node.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="classroot" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	A reference to the node that is an instance of the &lt;class&gt; where this node is defined. Members of state subclasses do not define classroot. This is convenient to use when you want to access an attribute of the class in a method or event handler that is nested deep in the node hierarchy. For example, to set the bgcolor of the class object, instead of parent.parent.parent.setAttribute(bgcolor, 0xFFFFFF) you can simply use classroot.setAttribute(bgcolor, 0xFFFFFF).  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
   </xs:complexType>
 <xs:element name="webapprpc" type="lzx:webapprpc" >
@@ -4657,11 +5093,32 @@ By default, this will be an instance of LzHTTPDataProvider, which will also be p
   </xs:complexContent>
   </xs:complexType>
 <xs:element name="frame" type="lzx:frame" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+
+A frame of a multi-frame resource.
+
+The &lt;frame&gt; tag is used to define a single frame of a multi-frame &lt;resource&gt;. A multi-frame resource contains several images which can be toggled among by script commands.
+
+Multiple frame tags can be declared consecutively to produce a single resource constructed of an unlimited number of frames. Such composed resources are often used to conveniently implement mouse rollovers, button states, or other UI elements where alternate views of a resource are required. Once a multi-frame resource has been defined and presented within a &lt;view&gt;, the developer can designate which frame is actively visible through the use of the view's setResourceNumber method.
+
+Multi-frame resources can be used in conjunction with components such as &lt;basebutton&gt;, which pre-define complex button behavior using frames designated by the user. 
+
+ </xs:documentation>
+</xs:annotation>
 </xs:element>
   <xs:complexType name="frame" mixed="true">
       <xs:attribute name="src" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The path of a file that contains the source for this object. </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="name" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The name of a variable that will be set to this object when the application is started. If this element is directly within a &lt;canvas&gt; or &lt;library&gt; element, the global variable and the canvas property with this name will be set to this object. If this element is within another object, that object's property with this name will be set to this object.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
   </xs:complexType>
 <xs:element name="chartzoomer" type="lzx:chartzoomer" >
@@ -6178,9 +6635,21 @@ By default, this will be an instance of LzHTTPDataProvider, which will also be p
   </xs:complexContent>
   </xs:complexType>
 <xs:element name="audio" type="lzx:audio" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+Imports an audio file.
+[Warning]This tag is obsolete. Its functionality has been replaced by the &lt;resource&gt; tag. 
+ </xs:documentation>
+</xs:annotation>
 </xs:element>
   <xs:complexType name="audio" mixed="true">
       <xs:attribute name="src" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+Imports an audio file.
+[Warning]This tag is obsolete. Its functionality has been replaced by the &lt;resource&gt; tag. 
+ </xs:documentation>
+</xs:annotation>
 </xs:attribute>
   </xs:complexType>
 <xs:element name="basecomponent" type="lzx:basecomponent" >
@@ -8427,20 +8896,6 @@ By default, this will be an instance of LzHTTPDataProvider, which will also be p
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="basestyle" type="lzx:basestyle" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- base style for all chart styles
-      @access public
-  </xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="basestyle" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:view">
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="form" type="lzx:form" >
 </xs:element>
   <xs:complexType name="form" mixed="true">
@@ -8506,6 +8961,20 @@ By default, this will be an instance of LzHTTPDataProvider, which will also be p
               @keywords private </xs:documentation>
 </xs:annotation>
 </xs:attribute>
+  </xs:extension>
+  </xs:complexContent>
+  </xs:complexType>
+<xs:element name="basestyle" type="lzx:basestyle" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ base style for all chart styles
+      @access public
+  </xs:documentation>
+</xs:annotation>
+</xs:element>
+  <xs:complexType name="basestyle" mixed="true">
+  <xs:complexContent>
+  <xs:extension base="lzx:view">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -9300,6 +9769,67 @@ Implementes the Stroke rendering lines </xs:documentation>
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
+<xs:element name="datapath" type="lzx:datapath" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+A cursor in a dataset.
+A datapointer is an object that represents a pointer to a node in a lz.dataset. The datapointer can be repositioned using either cursor movements calls such as LzDatapointer.selectNext(), or by running an XPath request via LzDatapointer.setXPath().
+
+Datapointers support a subset of the XPath specification, which uses a notation similar to the UNIX file-system to refer to nodes within a dataset. Once a datapointer is bound to a node in a dataset it will keep pointing to that node until it is moved. If the dataset is edited, the behavior of the datapointer will be controlled by its rerunxpath attribute. If this attribute is true, it will continue pointing to its current node as long as it is valid. 
+ </xs:documentation>
+</xs:annotation>
+</xs:element>
+  <xs:complexType name="datapath" mixed="true">
+  <xs:complexContent>
+  <xs:extension base="lzx:datapointer">
+      <xs:attribute name="spacing" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The spacing (in pixels) between replicated views.
+[Note] 	Note
+This attribute is only available if replication is set to either "lazy" or "resize".  </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="sortpath" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+An XPath to use to obtain the sort key for sorting if replication occurs. To change this attribute, use .setAttribute('sortpath', ...),  </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="sortorder" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The order to use to sort the dataset if replication occurs. One of "ascending" or "descending" to use built in dictionary sort, or a function which compares two strings and returns 1 if the strings are in order, 0 if they are the same, and -1 if they are out of order. To change this attribute, use setAttribute('sortorder', ...).  </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="replication" type="xs:string" default="normal" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	Determines whether to use normal or lazy replication, if the datapath matches more than one node. See the section on Replication in the Guide for information about the use of this attribute.
+[Note] 	Note
+The choice of replication style implies a choice of replication manager. Each replication manager may have additional attributes which are specified as attributes of the datapath. For example, lz.LazyReplicationManager takes axis and spacing attributes. See the documentaion for the corresponding replication manager for detailed information on these additional attributes.
+
+One of: 	'normal' | 'lazy' | 'resize'  </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="pooling" type="xs:string" default="false" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+		This attribute applies to datapaths which match multiple nodes and force replication. If pooling is true, views that are data-bound to this datapath are recycled if the dataset changes. Otherwise, views are deleted when the data nodes they are bound to disappear, and created when new data nodes match the datapath. See the section on Pooling in the Guide for information about the use of this attribute. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="axis" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The direction in which the replicated elements will be layed out.
+		Note
+This attribute is only available if replication is set to either "lazy" or "resize".  
+	One of: "x" | "y"  </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+  </xs:extension>
+  </xs:complexContent>
+  </xs:complexType>
 <xs:element name="sliderthumb" type="lzx:sliderthumb" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -9410,13 +9940,32 @@ Implementes the Stroke rendering lines </xs:documentation>
   </xs:complexContent>
   </xs:complexType>
 <xs:element name="inputtext" type="lzx:inputtext" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+
+The basic input-text element.
+JavaScript: lz.inputtext
+
+This tag creates an area of the canvas that the user can use to edit text. It is equivalent to the HTML &lt;input type="text"&gt;, &lt;input type="password"&gt;, and textarea tags.
+
+See the documentation for the &lt;text&gt; tag for a description of the width and height attributes, and of scrolling. 
+ </xs:documentation>
+</xs:annotation>
 </xs:element>
   <xs:complexType name="inputtext" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:text">
       <xs:attribute name="password" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	If true, the inputtext contents will be obscured </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="enabled" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	If true, the inputtext will be editable </xs:documentation>
+</xs:annotation>
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
@@ -11122,11 +11671,27 @@ You can set allocation to class to get static attributes. Static properties are 
   </xs:complexContent>
   </xs:complexType>
 <xs:element name="font" type="lzx:font" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+Tag for including fonts.
+The &lt;font&gt; tag is used to import fonts into an LZX application. Each font in an LZX application has a source file (in TrueType format), a name, and a style (plain, bold, italic, or bold italic).
+
+A font element within a &lt;canvas&gt; or &lt;library&gt; defines a font, which can be referenced by the font attribute of a view, or by the face attribute of the &lt;font&gt; tag within HTML markup. A font element can define a single font face or style, by using the src attribute to refer to a TrueType font that is included in the application. 
+ </xs:documentation>
+</xs:annotation>
 </xs:element>
   <xs:complexType name="font" mixed="true">
       <xs:attribute name="src" type="xs:string" >
 </xs:attribute>
       <xs:attribute name="name" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+Tag for including fonts.
+The &lt;font&gt; tag is used to import fonts into an LZX application. Each font in an LZX application has a source file (in TrueType format), a name, and a style (plain, bold, italic, or bold italic).
+
+A font element within a &lt;canvas&gt; or &lt;library&gt; defines a font, which can be referenced by the font attribute of a view, or by the face attribute of the &lt;font&gt; tag within HTML markup. A font element can define a single font face or style, by using the src attribute to refer to a TrueType font that is included in the application. 
+ </xs:documentation>
+</xs:annotation>
 </xs:attribute>
   </xs:complexType>
 <xs:element name="gridtext" type="lzx:gridtext" >
@@ -11216,18 +11781,6 @@ You can set allocation to class to get static attributes. Static properties are 
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="class" type="lzx:class" >
-</xs:element>
-  <xs:complexType name="class" mixed="true">
-      <xs:attribute name="with" type="xs:string" >
-</xs:attribute>
-      <xs:attribute name="name" type="xs:string" use="required" >
-</xs:attribute>
-      <xs:attribute name="implements" type="xs:string" >
-</xs:attribute>
-      <xs:attribute name="extends" type="xs:string" >
-</xs:attribute>
-  </xs:complexType>
 <xs:element name="focusoverlay" type="lzx:focusoverlay" >
 </xs:element>
   <xs:complexType name="focusoverlay" mixed="true">
@@ -11243,6 +11796,18 @@ You can set allocation to class to get static attributes. Static properties are 
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
+  </xs:complexType>
+<xs:element name="class" type="lzx:class" >
+</xs:element>
+  <xs:complexType name="class" mixed="true">
+      <xs:attribute name="with" type="xs:string" >
+</xs:attribute>
+      <xs:attribute name="name" type="xs:string" use="required" >
+</xs:attribute>
+      <xs:attribute name="implements" type="xs:string" >
+</xs:attribute>
+      <xs:attribute name="extends" type="xs:string" >
+</xs:attribute>
   </xs:complexType>
 <xs:element name="menuitem" type="lzx:menuitem" >
 </xs:element>
@@ -11377,6 +11942,48 @@ You can set allocation to class to get static attributes. Static properties are 
 <xs:annotation>
 <xs:documentation xml:lang="en">
  @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+  </xs:extension>
+  </xs:complexContent>
+  </xs:complexType>
+<xs:element name="contextmenuitem" type="lzx:contextmenuitem" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+A menu item within a context menu </xs:documentation>
+</xs:annotation>
+</xs:element>
+  <xs:complexType name="contextmenuitem" mixed="true">
+  <xs:complexContent>
+  <xs:extension base="lzx:node">
+      <xs:attribute name="visible" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	Sets the visibility of the menu item. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="separatorbefore" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	Draw a horizontal separator line before this item in the menu. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="enabled" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ 	Sets the enabled status of the menu item. If false, the menu item is grayed out and will not respond to clicks  </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="delegate" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ 	Sets the delegate which will be called when the menu item is selected. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="caption" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+		Sets the text which is displayed for the menu item</xs:documentation>
 </xs:annotation>
 </xs:attribute>
   </xs:extension>
@@ -12937,15 +13544,35 @@ You can set allocation to class to get static attributes. Static properties are 
   </xs:complexContent>
   </xs:complexType>
 <xs:element name="resource" type="lzx:resource" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+A tag that defines a media object that can be associated with a view. </xs:documentation>
+</xs:annotation>
 </xs:element>
   <xs:complexType name="resource" mixed="true">
       <xs:attribute name="src" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The path of a file that contains the source for this object. </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="offsety" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The y offset of a bitmap resource used for a custom cursor. </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="offsetx" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The x offset of a bitmap resource used for a custom cursor. </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="name" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The name of a variable that will be set to this object when the application is started. If this element is directly within a canvas or library element, the global variable and the canvas property with this name will be set to this object. If this element is within another object, that object's property with this name will be set to this object.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
   </xs:complexType>
 <xs:element name="datatip" type="lzx:datatip" >
@@ -13203,20 +13830,6 @@ You can set allocation to class to get static attributes. Static properties are 
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="_dbg_horiz_scrollbar" type="lzx:_dbg_horiz_scrollbar" >
-</xs:element>
-  <xs:complexType name="_dbg_horiz_scrollbar" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:node">
-      <xs:attribute name="thumbwidth" type="xs:string" default="24" >
-</xs:attribute>
-      <xs:attribute name="autoscroll" type="xs:string" default="true" >
-</xs:attribute>
-      <xs:attribute name="arrowbuttonwidth" type="xs:string" default="12" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="floatinglist" type="lzx:floatinglist" >
 </xs:element>
   <xs:complexType name="floatinglist" mixed="true">
@@ -13234,6 +13847,20 @@ You can set allocation to class to get static attributes. Static properties are 
 <xs:documentation xml:lang="en">
  @keywords private </xs:documentation>
 </xs:annotation>
+</xs:attribute>
+  </xs:extension>
+  </xs:complexContent>
+  </xs:complexType>
+<xs:element name="_dbg_horiz_scrollbar" type="lzx:_dbg_horiz_scrollbar" >
+</xs:element>
+  <xs:complexType name="_dbg_horiz_scrollbar" mixed="true">
+  <xs:complexContent>
+  <xs:extension base="lzx:node">
+      <xs:attribute name="thumbwidth" type="xs:string" default="24" >
+</xs:attribute>
+      <xs:attribute name="autoscroll" type="xs:string" default="true" >
+</xs:attribute>
+      <xs:attribute name="arrowbuttonwidth" type="xs:string" default="12" >
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
@@ -13272,6 +13899,192 @@ You can set allocation to class to get static attributes. Static properties are 
 </xs:annotation>
 </xs:attribute>
       <xs:attribute name="engaged" type="xs:string" default="false" >
+</xs:attribute>
+  </xs:extension>
+  </xs:complexContent>
+  </xs:complexType>
+<xs:element name="dataset" type="lzx:dataset" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+An in-memory xml-style data hierarchy. </xs:documentation>
+</xs:annotation>
+</xs:element>
+  <xs:complexType name="dataset" mixed="true">
+  <xs:complexContent>
+  <xs:extension base="lzx:node">
+      <xs:attribute name="type" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	When set to "http" or "soap", the dataset interprets it's src attribute as a URL to be loaded at runtime. If the "src" attribute is set to a URL (e.g., starts with "http:") then the type attribute implicitly becomes "http".  </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="trimwhitespace" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	When true, the server will trim whitespace in the XML data (defaults to false).  </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="timeout" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The numer of milliseconds to wait before the request times out, and an ontimeout event is sent. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="src" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The source for requests made by this dataset. The value can be a pathname or an absolute or relative URL. If the value is a URL (starts with "http:"), the dataset will be configured to load its data at runtime. Otherwise, the data is included inline into the application at compile time.  </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="sel" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	Selection state of this node, used by dataselectionmanager </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="secureport" type="xs:string" default="443" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	TCP port number to use for secure (HTTPS) requests </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="request" type="xs:string" default="false" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	If true, the datset will make a request upon initialization </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="rawdata" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	Holds raw data response string from data source </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="querytype" type="xs:string" default="GET" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+HTTP request method. Value must be one of "GET" or "POST". </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="querystring" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	A string to be appended to the request that the dataset makes.  </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="proxyurl" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The URL of the proxy server, for proxied requests </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="proxied" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+Sets whether or not the dataset makes its request directly to the target server or via the server proxy. Inherits value from canvas.proxied flag.  </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="postbody" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	Used to send a string as the entire body of a POST request. For a POST request, setting postbody to a non-null string value will send that string as the complete body of the POST request. In this case any other query parameters that have been set via setQueryParam dataset will be ignored. The behavior of a GET request with a non-null postbody is not defined. Note, the swf8 runtime is forced to XML-quote the postbody, due to limitations in the Flash 8 player API. This restriction is not present in later swf runtimes, or in the DHTML runtime.  </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="parentNode" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ 	The parent of this node </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="params" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	An lz.Param object which holds query key-value pairs. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="ownerDocument" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The owner document for this node. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="nsprefix" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	When true, the server will preserve namespace prefixes on data node names and attribute names  </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="nodeType" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ 	The type of this node one of lz.DataElement.DOCUMENT_NODE, lz.DataElement.ELEMENT_NODE or lz.DataElement.TEXT_NODE </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="nodeName" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ 	The name of this node. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="multirequest" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	Create a new data request object for each request. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="getresponseheaders" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	When true, the proxy server (if making a proxied request) will encode and send the HTTP response headers along with the data (defaults to false). Due to a lack of a native API to get this information, SOLO SWF applications will always return an empty set. When making a proxied request, getresponseheaders must be true in order for the response headers to be retrieved via the getResponseHeader or getAllResponseHeaders methods.  </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="dataprovider" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ 	Holds a pointer to the DataProvider which handles data load requests for this dataset. Default value is canvas.defaultdataprovider  </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="credentialled" type="xs:string" default="false" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+When true, the withCredentials property on the XHR object will be set to true, allowing credentialled cross-origin resource sharing (CORS) requests. If withCredentials is not set for a CORS request using credentials, the browser will not set any cookies sent by the server. See http://www.w3.org/TR/cors/#access-control-allow-credentials-respons and http://dev.w3.org/2006/webapi/XMLHttpRequest-2/#the-withcredentials-attribute for more information.  </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="clientcacheable" type="xs:string" default="false" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ 	When true, data responses can be cached by the client (browser). When false, a unique valued argument will be added to the request string in the format '__lzbc__=1204685840777' to defeat the browser's cache.  </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="childNodes" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	An array of children of this node </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="cacheable" type="xs:string" default="false" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	When true, the server will attempt to cache response (defaults to false). There are security concerns when this field is true. When this field is true, you will usually want the getresponseheaders field to be false. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="autorequest" type="xs:string" default="false" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	If true, changes to src or querystring attributes cause doRequest() to be called automatically. If false, doRequest() must be called manually when src or querystring attributes change.  </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="attributes" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ The dictionary of attributes for this node. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="acceptencodings" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	When true, the server will accept encoded responses for this request. Encoded responses require more work for the LPS (encoding the response) and client (decoding the response) in trade for lower network bandwidth usage.  </xs:documentation>
+</xs:annotation>
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>

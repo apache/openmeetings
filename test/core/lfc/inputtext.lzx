@@ -1,6 +1,15 @@
-<class name="inputtext" extends="text">
+<!---
+The basic input-text element.
+JavaScript: lz.inputtext
 
-    <attribute name="enabled" />
+This tag creates an area of the canvas that the user can use to edit text. It is equivalent to the HTML <input type="text">, <input type="password">, and textarea tags.
+
+See the documentation for the <text> tag for a description of the width and height attributes, and of scrolling. 
+ -->
+<class name="inputtext" extends="text">
+	<!---	If true, the inputtext will be editable -->
+    <attribute name="enabled" type="boolean"/>
+    <!---	If true, the inputtext contents will be obscured -->
     <attribute name="password" />
 
 </class>

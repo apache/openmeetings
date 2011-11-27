@@ -10,4 +10,5 @@
     <custombaseslider ></custombaseslider>
     <basetabslider ></basetabslider>
 <attribute name="asdasd" ></attribute>
+<view height="2"></view>
 </canvas>

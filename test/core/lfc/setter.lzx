@@ -1,3 +1,4 @@
+<!--- A tag to declare or override attribute setter methods. -->
 <class name="setter" extends="false">
     <attribute name="name" type="string" />
     <attribute name="args" type="string" />

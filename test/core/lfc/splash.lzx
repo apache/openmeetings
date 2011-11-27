@@ -1,3 +1,4 @@
+<!--- Controls the presentation while the application is loading.  -->
 <class name="splash" extends="node">
 
     <attribute name="persistent" />

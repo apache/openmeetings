@@ -1,3 +1,4 @@
+<!--- Client executed script -->
 <class name="script" extends="false">
     <attribute name="src" type="string" />
 </class>

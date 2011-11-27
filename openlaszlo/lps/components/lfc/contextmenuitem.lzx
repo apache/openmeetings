@@ -1,0 +1,7 @@
+<!---A contextual menu -->
+<class name="contextmenu" extends="node">
+
+	<!---		Sets the delegate which will be called when a menu item is selected. An onselect event is also sent.-->
+	<attribute name="delegate" />
+	
+</class>
