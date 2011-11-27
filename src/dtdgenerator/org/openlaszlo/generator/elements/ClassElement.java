@@ -12,6 +12,7 @@ public class ClassElement implements Comparable<ClassElement> {
 									// parsed
 	private ClassElement parent;
 	private boolean isRoot = false;
+	private String comment;
 
 	public String getName() {
 		return name;
@@ -51,6 +52,14 @@ public class ClassElement implements Comparable<ClassElement> {
 
 	public void setRoot(boolean isRoot) {
 		this.isRoot = isRoot;
+	}
+	
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 
 	/**

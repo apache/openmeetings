@@ -2,6 +2,7 @@
 
     <attribute name="name" />
     <attribute name="extends" />
+    <attribute name="implements" />
     <attribute name="with" />
     
 </class>

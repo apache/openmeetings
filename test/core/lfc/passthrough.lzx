@@ -1,0 +1,5 @@
+<class name="passthrough" extends="false">
+	
+	<attribute name="when" type="string"/>
+	
+</class>

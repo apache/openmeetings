@@ -164,7 +164,7 @@ public class GenerateBaseDTD implements ContentHandler {
 				}
 				
 				currentClassName = className;
-				elementList.addClassElement(className, extendsName, isRoot);
+				elementList.addClassElement(className, extendsName, isRoot, "");
 				
 				
 			} else if (qName.equals("attribute")) {
@@ -189,7 +189,7 @@ public class GenerateBaseDTD implements ContentHandler {
 				String defaultValue = atts.getValue("value");
 
 				if (attrName != null) {
-					elementList.addClassAttribute(attrName, required, currentClassName, type, defaultValue);
+					elementList.addClassAttribute(attrName, required, currentClassName, type, defaultValue, "");
 				}
 				
 			}

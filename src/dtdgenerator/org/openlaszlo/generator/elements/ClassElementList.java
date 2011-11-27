@@ -13,13 +13,14 @@ public class ClassElementList {
 	// Using natural order ?!
 	private final Map<String, ClassElement> elementList = new HashMap<String, ClassElement>();
 
-	public void addClassElement(String name, String parent, boolean isRoot) {
+	public void addClassElement(String name, String parent, boolean isRoot, String currentComment) {
 		ClassElement element = elementList.get(name);
 
 		if (element == null) {
 			element = new ClassElement();
 			element.setName(name);
 			element.setRoot(isRoot);
+			element.setComment(currentComment);
 		}
 
 		element.setParentAsString(parent);
@@ -28,14 +29,14 @@ public class ClassElementList {
 	}
 
 	public void addClassAttribute(String name, boolean required,
-			String className, String type, String defaultValue) throws Exception {
+			String className, String type, String defaultValue, String currentComment) throws Exception {
 		ClassElement element = elementList.get(className);
 
 		if (element == null) {
 			throw new Exception("Class not available " + className + " " + name);
 		}
 
-		element.getAttributes().add(new ClassAttribute(name, required, type, defaultValue));
+		element.getAttributes().add(new ClassAttribute(name, required, type, defaultValue, currentComment));
 	}
 
 	public void fixParents() {

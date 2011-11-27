@@ -5,5 +5,9 @@
 			xsi:schemaLocation="http://localhost/openlaszlo/lzx my.xsd 
 			http://localhost/project/lzx my_project.xsd ">
     <project:custom_menu_item></project:custom_menu_item>
-
+    
+    <drawview miterLimit="10" x="1" name="peter"></drawview>
+    <custombaseslider ></custombaseslider>
+    <basetabslider ></basetabslider>
+<attribute name="asdasd" ></attribute>
 </canvas>

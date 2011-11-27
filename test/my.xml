@@ -8,6 +8,8 @@
 	</handler>
 	<text id="asd">
 	</text>
+	<view width="100"></view>
+	<drawview ></drawview>
 	
 	<inputtext enabled=""></inputtext>
 	

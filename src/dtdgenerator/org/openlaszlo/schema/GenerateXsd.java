@@ -51,7 +51,7 @@ public class GenerateXsd {
 
 			ClassElement canvas = new ClassElement();
 			canvas.getAllClassAttributes().add(
-					new ClassAttribute("width", false, "", null));
+					new ClassAttribute("width", false, "", null, ""));
 
 			this.addElement(schema, "canvas", canvas);
 			

@@ -77,7 +77,10 @@ public class XsdUtil {
 			ClassElement classElement) throws Exception {
 
 		sb.append("<" + XsdUtil.xsdPrefix + ":element name=\"" + className + "\" ");
-		sb.append("type=\"" + xsdProjectPrefix + ":" + className + "\" />\n");
+		sb.append("type=\"" + xsdProjectPrefix + ":" + className + "\" >\n");
+		//Write documentation into Element
+		writeDocumentation(sb, classElement.getComment());
+		sb.append("</" + XsdUtil.xsdPrefix + ":element>\n");
 		
 		sb.append(XsdUtil.tabSpace + "<" + XsdUtil.xsdPrefix
 				+ ":complexType name=\"" + className + "\" mixed=\"true\">\n");
@@ -90,17 +93,6 @@ public class XsdUtil {
 
 	}
 	
-	public static void main(String... args) {
-		
-		String t = "this.othersb && this.othersb.visible";
-		
-		String t2 = t.replaceAll("&", "&amp;");
-		
-		System.out.println(t);
-		System.out.println(t2);
-		
-	}
-
 	private void writeAttributes(StringBuilder sb, ClassElement classElement)
 			throws Exception {
 		
@@ -122,7 +114,11 @@ public class XsdUtil {
 
 			sb.append("<" + XsdUtil.xsdPrefix + ":attribute name=\"" + classAttribute.getName() + "\" ");
 			
-			sb.append("type=\"" + XsdUtil.xsdPrefix + ":string\" ");
+			if (false && classAttribute.getType() != null && classAttribute.getType() != "") {
+				sb.append("type=\"" + XsdUtil.xsdPrefix + ":"+classAttribute.getType()+"\" ");
+			} else {
+				sb.append("type=\"" + XsdUtil.xsdPrefix + ":string\" ");
+			}
 			
 			if (classAttribute.isRequired()) {
 				sb.append("use=\"required\" ");
@@ -136,7 +132,12 @@ public class XsdUtil {
 						+"\" ");
 			}
 			
-			sb.append("/>\n");
+			sb.append(">\n");
+			
+			//Write documentation into Element
+			writeDocumentation(sb, classAttribute.getComment());
+			
+			sb.append("</" + XsdUtil.xsdPrefix + ":attribute>\n");
 
 		}
 		
@@ -146,6 +147,20 @@ public class XsdUtil {
 			sb.append(XsdUtil.tabSpace + "</" + XsdUtil.xsdPrefix +":complexContent>\n");
 		}
 		
+	}
+	
+	private void writeDocumentation(StringBuilder sb, String comment) {
+		if (comment == null || comment.equals("")) {
+			return;
+		}
+		
+		sb.append("<" + XsdUtil.xsdPrefix + ":annotation>\n");
+		sb.append("<" + XsdUtil.xsdPrefix + ":documentation xml:lang=\"en\">\n");
+        sb.append(comment.replaceAll("&", "&amp;")
+				.replaceAll("<", "&lt;")
+				.replaceAll(">", "&gt;"));
+        sb.append("</" + XsdUtil.xsdPrefix + ":documentation>\n");
+        sb.append("</" + XsdUtil.xsdPrefix + ":annotation>\n");
 	}
 
 }

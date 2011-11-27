@@ -14,8 +14,9 @@ import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+import org.xml.sax.ext.LexicalHandler;
 
-public class GenerateBaseXSD implements ContentHandler {
+public class GenerateBaseXSD implements ContentHandler, LexicalHandler {
 	
 	private final ClassElementList elementList = new ClassElementList();
 	
@@ -43,6 +44,8 @@ public class GenerateBaseXSD implements ContentHandler {
 	private String currentClassName = "";
 
 	private String currentFile;
+	
+	private String currentComment = "";
 	
 	public static void main(String... args) {
 		new GenerateBaseXSD("openlaszlo/lps/");  //"WebContent/src/"
@@ -89,7 +92,7 @@ public class GenerateBaseXSD implements ContentHandler {
 			
 			InputSource is = new InputSource(filePath);
 			SAXParserFactory factory = SAXParserFactory.newInstance();
-			factory.setValidating(false);
+			//factory.setValidating(false);
 			XMLReader parser = factory.newSAXParser().getXMLReader();
 			
 			parser.setEntityResolver(new EntityResolver() {
@@ -99,7 +102,10 @@ public class GenerateBaseXSD implements ContentHandler {
 				}
 			});
 
-			
+			parser.setProperty(
+				      "http://xml.org/sax/properties/lexical-handler",
+				      this
+				      ); 
 			parser.setContentHandler(this);
             parser.parse(is);
             
@@ -166,7 +172,7 @@ public class GenerateBaseXSD implements ContentHandler {
 				}
 				
 				currentClassName = className;
-				elementList.addClassElement(className, extendsName, isRoot);
+				elementList.addClassElement(className, extendsName, isRoot, currentComment);
 				
 			} else if (qName.equals("attribute")) {
 				
@@ -190,7 +196,7 @@ public class GenerateBaseXSD implements ContentHandler {
 				String defaultValue = atts.getValue("value");
 
 				if (attrName != null) {
-					elementList.addClassAttribute(attrName, required, currentClassName, type, defaultValue);
+					elementList.addClassAttribute(attrName, required, currentClassName, type, defaultValue, currentComment);
 				}
 				
 			}
@@ -202,17 +208,13 @@ public class GenerateBaseXSD implements ContentHandler {
 
 	public void endElement(String uri, String localName, String qName)
 			throws SAXException {
-		// TODO Auto-generated method stub
-		
-		//Removes last occurrence of the element
-		//openNodes.removeLastOccurrence(qName);
-		
+		// Clear comments
+		currentComment = "";
 	}
 
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
 		// TODO Auto-generated method stub
-		
 	}
 
 	public void ignorableWhitespace(char[] ch, int start, int length)
@@ -228,6 +230,46 @@ public class GenerateBaseXSD implements ContentHandler {
 	}
 
 	public void skippedEntity(String name) throws SAXException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void comment(char[] ch, int start, int length) throws SAXException {
+		String text = new String(ch, start, length);
+		if (text.startsWith("-")) {
+			System.err.println("Comment: "+text+ " File "+currentFile);
+			currentComment = text.substring(1, length);
+		}
+		
+	}
+
+	public void endCDATA() throws SAXException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void endDTD() throws SAXException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void endEntity(String name) throws SAXException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void startCDATA() throws SAXException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void startDTD(String name, String publicId, String systemId)
+			throws SAXException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void startEntity(String name) throws SAXException {
 		// TODO Auto-generated method stub
 		
 	}
