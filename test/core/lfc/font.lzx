@@ -1,0 +1,6 @@
+<class name="font" extends="false">
+
+    <attribute name="name" type="token" />
+    <attribute name="src" type="url" />
+    
+</class>

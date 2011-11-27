@@ -1,0 +1,5 @@
+<class name="audio" extends="false">
+
+    <attribute name="src" />
+    
+</class>

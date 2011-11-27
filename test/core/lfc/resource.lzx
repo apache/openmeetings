@@ -1,0 +1,8 @@
+<class name="resource" extends="false">
+
+    <attribute name="name" />
+    <attribute name="offsetx" />
+    <attribute name="offsety" />
+    <attribute name="src" />
+    
+</class>

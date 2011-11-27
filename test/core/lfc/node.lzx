@@ -1,0 +1,22 @@
+<class name="node" >
+
+	<attribute name="classroot" />
+	<attribute name="cloneManager" />
+	<attribute name="data" />
+	<attribute name="datapath" />
+	<attribute name="defaultplacement" />
+	<attribute name="id" />
+	<attribute name="ignoreplacement" />
+	<attribute name="immediateparent" />
+	<attribute name="inited" />
+	<attribute name="initstage" />
+	<attribute name="name" />
+	<attribute name="nodeLevel" />
+	<attribute name="options" />
+	<attribute name="parent" />
+	<attribute name="placement" />
+	<attribute name="styleclass" />
+	<attribute name="subnodes" />
+	<attribute name="transition" />
+
+</class>
