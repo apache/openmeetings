@@ -8,4 +8,9 @@ A font element within a <canvas> or <library> defines a font, which can be refer
     <attribute name="name" type="token" />
     <attribute name="src" type="url" />
     
+    <!--- HTML specific -->
+    <attribute name="color" type="string" />
+    <attribute name="face" type="string" />
+    <attribute name="size" type="string" />
+    
 </class>

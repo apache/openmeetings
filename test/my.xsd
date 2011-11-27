@@ -595,6 +595,14 @@
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
+<xs:element name="_internalinputtext" type="lzx:_internalinputtext" >
+</xs:element>
+  <xs:complexType name="_internalinputtext" mixed="true">
+  <xs:complexContent>
+  <xs:extension base="lzx:inputtext">
+  </xs:extension>
+  </xs:complexContent>
+  </xs:complexType>
 <xs:element name="videolibraryicon" type="lzx:videolibraryicon" >
 </xs:element>
   <xs:complexType name="videolibraryicon" mixed="true">
@@ -610,14 +618,6 @@
 </xs:attribute>
       <xs:attribute name="aspectRatio" type="xs:string" default="1" >
 </xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="_internalinputtext" type="lzx:_internalinputtext" >
-</xs:element>
-  <xs:complexType name="_internalinputtext" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:inputtext">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -1427,19 +1427,6 @@ Sets the alignment for the view to the given value. The alignment is based on th
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="columnchartplotarea" type="lzx:columnchartplotarea" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- @keywords private
-     plotarea of column chart </xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="columnchartplotarea" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:virtualdrawview">
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="datepickerday" type="lzx:datepickerday" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -1450,6 +1437,19 @@ Sets the alignment for the view to the given value. The alignment is based on th
   <xs:complexType name="datepickerday" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:basedatepickerday">
+  </xs:extension>
+  </xs:complexContent>
+  </xs:complexType>
+<xs:element name="columnchartplotarea" type="lzx:columnchartplotarea" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private
+     plotarea of column chart </xs:documentation>
+</xs:annotation>
+</xs:element>
+  <xs:complexType name="columnchartplotarea" mixed="true">
+  <xs:complexContent>
+  <xs:extension base="lzx:virtualdrawview">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -2576,6 +2576,45 @@ Sets the alignment for the view to the given value. The alignment is based on th
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
+<xs:element name="b" type="lzx:b" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ HTML specific </xs:documentation>
+</xs:annotation>
+</xs:element>
+  <xs:complexType name="b" mixed="true">
+  </xs:complexType>
+<xs:element name="a" type="lzx:a" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ HTML specific </xs:documentation>
+</xs:annotation>
+</xs:element>
+  <xs:complexType name="a" mixed="true">
+      <xs:attribute name="target" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+	The value of this attribute determines where the link target will be displayed. The interpretation is the same as in HTML, where the "current frame" is the frame containing the LZX application. The value must be a name beginning with an alphabetic character, or one of the following:
+
+_blank
+    The user agent should load the designated document in a new, unnamed window. 
+_parent
+    The user agent should load the document into the full, original window (thus canceling all other frames). This value is equivalent to _self if the current frame has no parent. 
+_self
+    The user agent should load the document in the same frame as the element that refers to this target. 
+_top
+    The user agent should load the document into the immediate FRAMESET parent of the current frame. This value is equivalent to _self if the current frame has no parent. 
+
+	 </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="href" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ 	The link target </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+  </xs:complexType>
 <xs:element name="linechart" type="lzx:linechart" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -2761,6 +2800,22 @@ This class complete the chart style class in case the developer has not defined 
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
+<xs:element name="i" type="lzx:i" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ HTML specific </xs:documentation>
+</xs:annotation>
+</xs:element>
+  <xs:complexType name="i" mixed="true">
+  </xs:complexType>
+<xs:element name="u" type="lzx:u" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ HTML specific </xs:documentation>
+</xs:annotation>
+</xs:element>
+  <xs:complexType name="u" mixed="true">
+  </xs:complexType>
 <xs:element name="hscrollbar" type="lzx:hscrollbar" >
 </xs:element>
   <xs:complexType name="hscrollbar" mixed="true">
@@ -2891,6 +2946,14 @@ This class complete the chart style class in case the developer has not defined 
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
+  </xs:complexType>
+<xs:element name="p" type="lzx:p" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ HTML specific </xs:documentation>
+</xs:annotation>
+</xs:element>
+  <xs:complexType name="p" mixed="true">
   </xs:complexType>
 <xs:element name="javarpc" type="lzx:javarpc" >
 </xs:element>
@@ -3345,6 +3408,14 @@ See the Guide for a complete discussion. Also see the &lt;include&gt; tag. </xs:
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
+  </xs:complexType>
+<xs:element name="br" type="lzx:br" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ HTML specific </xs:documentation>
+</xs:annotation>
+</xs:element>
+  <xs:complexType name="br" mixed="true">
   </xs:complexType>
 <xs:element name="basescrolltrack" type="lzx:basescrolltrack" >
 </xs:element>
@@ -7000,6 +7071,14 @@ Imports an audio file.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
+<xs:element name="pre" type="lzx:pre" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ HTML specific </xs:documentation>
+</xs:annotation>
+</xs:element>
+  <xs:complexType name="pre" mixed="true">
+  </xs:complexType>
 <xs:element name="wrappinglayout" type="lzx:wrappinglayout" >
 </xs:element>
   <xs:complexType name="wrappinglayout" mixed="true">
@@ -9842,19 +9921,6 @@ This attribute is only available if replication is set to either "lazy" or "resi
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="linechartplotarea" type="lzx:linechartplotarea" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- @keywords private
-     plotarea of linechart </xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="linechartplotarea" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:virtualdrawview">
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="datepicker" type="lzx:datepicker" >
 </xs:element>
   <xs:complexType name="datepicker" mixed="true">
@@ -9882,6 +9948,19 @@ This attribute is only available if replication is set to either "lazy" or "resi
  @keywords public </xs:documentation>
 </xs:annotation>
 </xs:attribute>
+  </xs:extension>
+  </xs:complexContent>
+  </xs:complexType>
+<xs:element name="linechartplotarea" type="lzx:linechartplotarea" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private
+     plotarea of linechart </xs:documentation>
+</xs:annotation>
+</xs:element>
+  <xs:complexType name="linechartplotarea" mixed="true">
+  <xs:complexContent>
+  <xs:extension base="lzx:virtualdrawview">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -10688,22 +10767,6 @@ You can set allocation to class to get static attributes. Static properties are 
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="debugger_shadow_bottom" type="lzx:debugger_shadow_bottom" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- 
-    Drop shadow for the bottom of the debugger window
-
-    @keywords private
-</xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="debugger_shadow_bottom" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:node">
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="edittext" type="lzx:edittext" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -10793,6 +10856,46 @@ You can set allocation to class to get static attributes. Static properties are 
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
+  </xs:complexType>
+<xs:element name="debugger_shadow_bottom" type="lzx:debugger_shadow_bottom" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ 
+    Drop shadow for the bottom of the debugger window
+
+    @keywords private
+</xs:documentation>
+</xs:annotation>
+</xs:element>
+  <xs:complexType name="debugger_shadow_bottom" mixed="true">
+  <xs:complexContent>
+  <xs:extension base="lzx:node">
+  </xs:extension>
+  </xs:complexContent>
+  </xs:complexType>
+<xs:element name="img" type="lzx:img" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ HTML specific </xs:documentation>
+</xs:annotation>
+</xs:element>
+  <xs:complexType name="img" mixed="true">
+      <xs:attribute name="width" type="xs:string" >
+</xs:attribute>
+      <xs:attribute name="vspace" type="xs:string" >
+</xs:attribute>
+      <xs:attribute name="src" type="xs:string" >
+</xs:attribute>
+      <xs:attribute name="hspace" type="xs:string" >
+</xs:attribute>
+      <xs:attribute name="height" type="xs:string" >
+</xs:attribute>
+      <xs:attribute name="align" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ HTML specific </xs:documentation>
+</xs:annotation>
+</xs:attribute>
   </xs:complexType>
 <xs:element name="basebuttonrepeater" type="lzx:basebuttonrepeater" >
 </xs:element>
@@ -11683,6 +11786,8 @@ A font element within a &lt;canvas&gt; or &lt;library&gt; defines a font, which 
   <xs:complexType name="font" mixed="true">
       <xs:attribute name="src" type="xs:string" >
 </xs:attribute>
+      <xs:attribute name="size" type="xs:string" >
+</xs:attribute>
       <xs:attribute name="name" type="xs:string" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -11691,6 +11796,14 @@ The &lt;font&gt; tag is used to import fonts into an LZX application. Each font 
 
 A font element within a &lt;canvas&gt; or &lt;library&gt; defines a font, which can be referenced by the font attribute of a view, or by the face attribute of the &lt;font&gt; tag within HTML markup. A font element can define a single font face or style, by using the src attribute to refer to a TrueType font that is included in the application. 
  </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="face" type="xs:string" >
+</xs:attribute>
+      <xs:attribute name="color" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ HTML specific </xs:documentation>
 </xs:annotation>
 </xs:attribute>
   </xs:complexType>
