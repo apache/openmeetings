@@ -1,3 +1,6 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
 <!---
 A frame of a multi-frame resource.
 
@@ -16,3 +19,4 @@ Multi-frame resources can be used in conjunction with components such as <basebu
     <attribute name="src" type="src" />
     
 </class>
+</library>

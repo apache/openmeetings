@@ -1,3 +1,6 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
 <!--- Controls the presentation while the application is loading.  -->
 <class name="splash" extends="node">
 
@@ -10,3 +13,5 @@
     <attribute name="y" />
 
 </class>
+
+</library>

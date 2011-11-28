@@ -1,3 +1,6 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
 <!---An in-memory xml-style data hierarchy. -->
 <class name="dataset" extends="node">
 
@@ -65,3 +68,5 @@
   	<attribute name="type" />
  	
 </class>
+
+</library>

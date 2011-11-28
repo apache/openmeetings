@@ -1,3 +1,6 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
 <!---Tag for including fonts.
 The <font> tag is used to import fonts into an LZX application. Each font in an LZX application has a source file (in TrueType format), a name, and a style (plain, bold, italic, or bold italic).
 
@@ -5,8 +8,8 @@ A font element within a <canvas> or <library> defines a font, which can be refer
  -->
 <class name="font" extends="false">
 
-    <attribute name="name" type="token" />
-    <attribute name="src" type="url" />
+    <attribute name="name" type="string" />
+    <attribute name="src" type="string" />
     
     <!--- HTML specific -->
     <attribute name="color" type="string" />
@@ -14,3 +17,5 @@ A font element within a <canvas> or <library> defines a font, which can be refer
     <attribute name="size" type="string" />
     
 </class>
+
+</library>

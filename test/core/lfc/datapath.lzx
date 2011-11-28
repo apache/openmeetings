@@ -1,3 +1,6 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
 <!---A cursor in a dataset.
 A datapointer is an object that represents a pointer to a node in a lz.dataset. The datapointer can be repositioned using either cursor movements calls such as LzDatapointer.selectNext(), or by running an XPath request via LzDatapointer.setXPath().
 
@@ -33,3 +36,5 @@ This attribute is only available if replication is set to either "lazy" or "resi
 	<attribute name="spacing" type="number" />
 	
 </class>
+
+</library>

@@ -5,15 +5,23 @@ import java.util.TreeSet;
 
 public class XsdUtil {
 
-	public static String xsdPrefix = "xs";
+	private String xsdPrefix = "xs";
 
-	public static String xsdProjectPrefix = "lzx";
+	private String xsdProjectPrefix = "lzx";
 
-	public static String nameSpace = "http://localhost/openlaszlo/lzx";
+	private String nameSpace = "http://localhost/openlaszlo/lzx";
 
-	public static String tabSpace = "  ";
+	private String tabSpace = "  ";
 	
-	public static String topLevelElementName = "topLevelElements";
+	private String topLevelElementName = "topLevelElements";
+	
+	public void setNameSpace(String nameSpace2) {
+		this.nameSpace = nameSpace2;
+	}
+	
+	public void setXsdProjectPrefix(String xsdProjectPrefix2) {
+		this.xsdProjectPrefix = xsdProjectPrefix2;
+	}
 
 	private final SortedSet<ClassElement> allowedElements = new TreeSet<ClassElement>();
 
@@ -23,36 +31,36 @@ public class XsdUtil {
 	
 	public void writeBaseAllowedSubElements(StringBuilder sb) throws Exception {
 
-		sb.append("<" + XsdUtil.xsdPrefix
-				+ ":group name=\""+ XsdUtil.topLevelElementName +"\">\n");
-		sb.append("<" + XsdUtil.xsdPrefix +":sequence>\n");
-		sb.append("<" + XsdUtil.xsdPrefix +":choice minOccurs=\"0\" maxOccurs=\"unbounded\">\n");
+		sb.append("<" + xsdPrefix
+				+ ":group name=\""+ topLevelElementName +"\">\n");
+		sb.append("<" + xsdPrefix +":sequence>\n");
+		sb.append("<" + xsdPrefix +":choice minOccurs=\"0\" maxOccurs=\"unbounded\">\n");
 		
-		sb.append("<" + XsdUtil.xsdPrefix +":any />\n");
+		sb.append("<" + xsdPrefix +":any />\n");
 		
-		sb.append("</" + XsdUtil.xsdPrefix +":choice>\n");
-		sb.append("</" + XsdUtil.xsdPrefix +":sequence>\n");
-		sb.append("</" + XsdUtil.xsdPrefix +":group>\n");
+		sb.append("</" + xsdPrefix +":choice>\n");
+		sb.append("</" + xsdPrefix +":sequence>\n");
+		sb.append("</" + xsdPrefix +":group>\n");
 		
 
 	}
 
 	public void writeAllowedSubElements(StringBuilder sb) throws Exception {
 
-		sb.append("<" + XsdUtil.xsdPrefix
-				+ ":group name=\""+ XsdUtil.topLevelElementName +"\">\n");
-		sb.append("<" + XsdUtil.xsdPrefix +":sequence>\n");
-		sb.append("<" + XsdUtil.xsdPrefix +":choice minOccurs=\"0\" maxOccurs=\"unbounded\">\n");
+		sb.append("<" + xsdPrefix
+				+ ":group name=\""+ topLevelElementName +"\">\n");
+		sb.append("<" + xsdPrefix +":sequence>\n");
+		sb.append("<" + xsdPrefix +":choice minOccurs=\"0\" maxOccurs=\"unbounded\">\n");
 		
 		for(ClassElement cl : allowedElements) {
 			
-			sb.append("<" + XsdUtil.xsdPrefix +":element ref=\""+XsdUtil.xsdProjectPrefix+":"+cl.getName()+"\"/>\n");
+			sb.append("<" + xsdPrefix +":element ref=\""+xsdProjectPrefix+":"+cl.getName()+"\"/>\n");
 			
 		}
 		
-		sb.append("</" + XsdUtil.xsdPrefix +":choice>\n");
-		sb.append("</" + XsdUtil.xsdPrefix +":sequence>\n");
-		sb.append("</" + XsdUtil.xsdPrefix +":group>\n");
+		sb.append("</" + xsdPrefix +":choice>\n");
+		sb.append("</" + xsdPrefix +":sequence>\n");
+		sb.append("</" + xsdPrefix +":group>\n");
 		
 
 	}
@@ -61,34 +69,34 @@ public class XsdUtil {
 
 		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 
-		sb.append("<" + XsdUtil.xsdPrefix + ":schema ");
-		sb.append("xmlns:" + XsdUtil.xsdPrefix + "=\"http://www.w3.org/2001/XMLSchema\" ");
+		sb.append("<" + xsdPrefix + ":schema ");
+		sb.append("xmlns:" + xsdPrefix + "=\"http://www.w3.org/2001/XMLSchema\" ");
 		sb.append("elementFormDefault=\"qualified\" \n");
-		sb.append(XsdUtil.tabSpace + "targetNamespace=\"" + XsdUtil.nameSpace + "\" \n");
-		sb.append(XsdUtil.tabSpace + "xmlns:" + XsdUtil.xsdProjectPrefix + "=\"" + XsdUtil.nameSpace + "\">\n");
+		sb.append(tabSpace + "targetNamespace=\"" + nameSpace + "\" \n");
+		sb.append(tabSpace + "xmlns:" + xsdProjectPrefix + "=\"" + nameSpace + "\">\n");
 
 	}
 
 	public void generateXsdFooter(StringBuilder sb) throws Exception {
-		sb.append("</" + XsdUtil.xsdPrefix + ":schema>\n");
+		sb.append("</" + xsdPrefix + ":schema>\n");
 	}
 
 	public void writeComplexType(StringBuilder sb, String className,
 			ClassElement classElement) throws Exception {
 
-		sb.append("<" + XsdUtil.xsdPrefix + ":element name=\"" + className + "\" ");
+		sb.append("<" + xsdPrefix + ":element name=\"" + className + "\" ");
 		sb.append("type=\"" + xsdProjectPrefix + ":" + className + "\" >\n");
 		//Write documentation into Element
 		writeDocumentation(sb, classElement.getComment());
-		sb.append("</" + XsdUtil.xsdPrefix + ":element>\n");
+		sb.append("</" + xsdPrefix + ":element>\n");
 		
-		sb.append(XsdUtil.tabSpace + "<" + XsdUtil.xsdPrefix
+		sb.append(tabSpace + "<" + xsdPrefix
 				+ ":complexType name=\"" + className + "\" mixed=\"true\">\n");
 
 		// Write Attributes to Element
 		writeAttributes(sb, classElement);
 
-		sb.append(XsdUtil.tabSpace + "</" + XsdUtil.xsdPrefix
+		sb.append(tabSpace + "</" + xsdPrefix
 				+ ":complexType>\n");
 
 	}
@@ -97,27 +105,29 @@ public class XsdUtil {
 			throws Exception {
 		
 		if (!classElement.getParentAsString().equals("")) {
-			sb.append(XsdUtil.tabSpace + "<" + XsdUtil.xsdPrefix +":complexContent>\n");
+			sb.append(tabSpace + "<" + xsdPrefix +":complexContent>\n");
 	
-			sb.append(XsdUtil.tabSpace + "<" + XsdUtil.xsdPrefix
+			sb.append(tabSpace + "<" + xsdPrefix
 					+ ":extension base=\"" + xsdProjectPrefix + ":" + classElement.getParentAsString()
 					+ "\">\n");
 		}
 		
 		if (classElement.getName().equals("node")) {
-			sb.append(XsdUtil.tabSpace + "<" + XsdUtil.xsdPrefix +":group ref=\"" + xsdProjectPrefix + ":"+ XsdUtil.topLevelElementName +"\" />\n");
+			sb.append(tabSpace + "<" + xsdPrefix +":group ref=\"" + xsdProjectPrefix + ":"+ topLevelElementName +"\" />\n");
+		} else if (!classElement.getClassRoot().equals("node")) {
+			sb.append(tabSpace + "<" + xsdPrefix +":group ref=\"" + xsdProjectPrefix + ":"+ topLevelElementName +"\" />\n");
 		}
 		
 		for (ClassAttribute classAttribute : classElement.getAttributes()) {
 
-			sb.append(XsdUtil.tabSpace + XsdUtil.tabSpace + XsdUtil.tabSpace);
+			sb.append(tabSpace + tabSpace + tabSpace);
 
-			sb.append("<" + XsdUtil.xsdPrefix + ":attribute name=\"" + classAttribute.getName() + "\" ");
+			sb.append("<" + xsdPrefix + ":attribute name=\"" + classAttribute.getName() + "\" ");
 			
 			if (false && classAttribute.getType() != null && classAttribute.getType() != "") {
-				sb.append("type=\"" + XsdUtil.xsdPrefix + ":"+classAttribute.getType()+"\" ");
+				sb.append("type=\"" + xsdPrefix + ":"+classAttribute.getType()+"\" ");
 			} else {
-				sb.append("type=\"" + XsdUtil.xsdPrefix + ":string\" ");
+				sb.append("type=\"" + xsdPrefix + ":string\" ");
 			}
 			
 			if (classAttribute.isRequired()) {
@@ -137,14 +147,14 @@ public class XsdUtil {
 			//Write documentation into Element
 			writeDocumentation(sb, classAttribute.getComment());
 			
-			sb.append("</" + XsdUtil.xsdPrefix + ":attribute>\n");
+			sb.append("</" + xsdPrefix + ":attribute>\n");
 
 		}
 		
 		if (!classElement.getParentAsString().equals("")) {
-			sb.append(XsdUtil.tabSpace + "</" + XsdUtil.xsdPrefix + ":extension>\n");
+			sb.append(tabSpace + "</" + xsdPrefix + ":extension>\n");
 			
-			sb.append(XsdUtil.tabSpace + "</" + XsdUtil.xsdPrefix +":complexContent>\n");
+			sb.append(tabSpace + "</" + xsdPrefix +":complexContent>\n");
 		}
 		
 	}
@@ -154,13 +164,13 @@ public class XsdUtil {
 			return;
 		}
 		
-		sb.append("<" + XsdUtil.xsdPrefix + ":annotation>\n");
-		sb.append("<" + XsdUtil.xsdPrefix + ":documentation xml:lang=\"en\">\n");
+		sb.append("<" + xsdPrefix + ":annotation>\n");
+		sb.append("<" + xsdPrefix + ":documentation xml:lang=\"en\">\n");
         sb.append(comment.replaceAll("&", "&amp;")
 				.replaceAll("<", "&lt;")
 				.replaceAll(">", "&gt;"));
-        sb.append("</" + XsdUtil.xsdPrefix + ":documentation>\n");
-        sb.append("</" + XsdUtil.xsdPrefix + ":annotation>\n");
+        sb.append("</" + xsdPrefix + ":documentation>\n");
+        sb.append("</" + xsdPrefix + ":annotation>\n");
 	}
 
 }

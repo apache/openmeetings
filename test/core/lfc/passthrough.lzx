@@ -1,4 +1,7 @@
-<!--- Provides a way to import SWF10 declarations. -->
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
+            <!--- Provides a way to import SWF10 declarations. -->
 <class name="passthrough" extends="false">
 	<!--
 	The possible compile time constants are:
@@ -28,3 +31,5 @@
 	<attribute name="when" type="string"/>
 	
 </class>
+
+</library>

@@ -7,6 +7,7 @@ import java.io.FilenameFilter;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.openlaszlo.generator.elements.ClassElementList;
+import org.openlaszlo.generator.elements.XsdUtil;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.EntityResolver;
@@ -48,14 +49,26 @@ public class GenerateBaseXSD implements ContentHandler, LexicalHandler {
 	private String currentComment = "";
 	
 	public static void main(String... args) {
-		new GenerateBaseXSD("openlaszlo/lps/");  //"WebContent/src/"
+		
+		GenerateBaseXSD generateBaseXSD = new GenerateBaseXSD();
+		
+		generateBaseXSD.getXsdUtil().setNameSpace("http://localhost/openlaszlo/lzx");
+		generateBaseXSD.getXsdUtil().setXsdProjectPrefix("lzx");
+		
+		generateBaseXSD.scanFolder("openlaszlo/lps/");
+		generateBaseXSD.scanFolder("test/core/lfc/");
+		
+		generateBaseXSD.printXsd("lzx.xsd");
+		
 	}
 	
-	public GenerateBaseXSD(String basePath) {
-		this.scanFolder(basePath);
-		
-		// elementList.filePrint();
-		elementList.xsdPrint(true, "test/my.xsd");
+	public void printXsd(String fileName) {
+		elementList.xsdPrint(false, fileName);
+		System.out.println("written file to "+fileName);
+	}
+	
+	public XsdUtil getXsdUtil() {
+		return elementList.getXsdUtil();
 	}
 	
 	public void scanFolder(String filePath) {
@@ -174,7 +187,7 @@ public class GenerateBaseXSD implements ContentHandler, LexicalHandler {
 				currentClassName = className;
 				elementList.addClassElement(className, extendsName, isRoot, currentComment);
 				
-			} else if (qName.equals("attribute")) {
+			} else if (qName.equals("attribute") || qName.equals("event")) {
 				
 				if (currentClassName.length() == 0) {
 					return;
@@ -237,7 +250,6 @@ public class GenerateBaseXSD implements ContentHandler, LexicalHandler {
 	public void comment(char[] ch, int start, int length) throws SAXException {
 		String text = new String(ch, start, length);
 		if (text.startsWith("-")) {
-			System.err.println("Comment: "+text+ " File "+currentFile);
 			currentComment = text.substring(1, length);
 		}
 		

@@ -9,6 +9,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class ClassElementList {
+	
+	private XsdUtil xsdUtil = new XsdUtil();
+	
+	public XsdUtil getXsdUtil(){
+		return xsdUtil;
+	}
 
 	// Using natural order ?!
 	private final Map<String, ClassElement> elementList = new HashMap<String, ClassElement>();
@@ -167,7 +173,7 @@ public class ClassElementList {
 			
 			StringBuilder headerBuilder = new StringBuilder();
 			
-			XsdUtil xsdUtil = new XsdUtil();
+			
 			
 			xsdUtil.writeXsdHeader(headerBuilder);
 			

@@ -1,3 +1,6 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
 <!--- 
 The canvas is the container for all views within an application.
 
@@ -8,7 +11,7 @@ The <canvas> tag is the document root of an LZX application file. It contains cl
 See the Guide for a complete discussion of the <canvas> tag. 
  -->
 <class name="canvas" isRoot="true" extends="view">
-	
+
 	<!--- Whether fullscreen display state is supported for the SWFx runtimes. -->
 	<attribute name="allowfullscreen" type="boolean"/>
 	<!---  A String specifying the date and time of the application build. "2008-09-12T14:15:12Z" -->
@@ -55,3 +58,5 @@ This will be an instance of LzHTTPDataProvider, which implements HTTP request tr
     <attribute name="scriptlimits" type="string"/>
     	
 </class>
+
+</library>

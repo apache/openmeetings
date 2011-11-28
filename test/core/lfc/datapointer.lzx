@@ -1,3 +1,7 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
+            
 <!---The binder between data and nodes.
 Datapaths are used to merge data hierarchies with the hierarchy of an OpenLaszlo application. This is done using the the XPath syntax supported by lz.datapointer. When a node is given a datapath attribute, a datapath with the given value as its XPath is created. If the datapath retrieves a node (i.e. it doesn't terminate in an attribute getter or a () operator) then the node is mapped to that data context and all child nodes will implicitly share the datacontext, but no further action is taken. If the datapath retrieves data, rather than just a node, a few extra things happen. First, the node's data property is set and the node's ondata event is sent. Second, the node's applyData method is called with the data as the argument. In cases where a datapath matches more than one data node, the view with the matching datapath is replicated once for each data node that matches, and a lz.ReplicationManager takes over the view's spot in its parent.
 
@@ -19,3 +23,5 @@ A node can only have one datapath, and datapaths always have the name datapath. 
 	<attribute name="xpath" />
 	
 </class>
+
+</library>

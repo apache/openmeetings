@@ -9,6 +9,7 @@
 </xs:annotation>
 </xs:element>
   <xs:complexType name="passthrough" mixed="true">
+  <xs:group ref="lzx:topLevelElements" />
       <xs:attribute name="when" type="xs:string" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -98,6 +99,32 @@
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
+<xs:element name="event" type="lzx:event" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ The sender in Laszlo's point-to-point event system.
+Events underly most of the functionality in OpenLaszlo applications. Unlike events in similar systems, OpenLaszlo's events are point-to-point, meaning that there is no general broadcast mechanism for events, and events do not trickle up or down the instance hierarchy. Instead, objects called &lt;handler&gt;s use LzDelegate.register() to register to receive events.
+
+An event is implicitly declared for every attribute of a class or instance and sent when that attribute is changed. So, for instance, if a class has an attribute foo, you can receive events when foo changes by registering for the onfoo event.
+
+Events are sent with a single argument, which usually conveys information about the property that changed. The default behavior of the LzEventable.setAttribute() method is to set the named property and send the event called "on" + property. This is general mechanism that updates constraints in a OpenLaszlo programs. For instance, when a view changes its x position, it sends the event onx with the new value for its x property.
+
+Example:
+&lt;handler name="onavalue" reference="eventSender" args="v"&gt;
+  this.setAttribute('x' , v);
+&lt;/handler&gt; 
+ </xs:documentation>
+</xs:annotation>
+</xs:element>
+  <xs:complexType name="event" mixed="true">
+  <xs:group ref="lzx:topLevelElements" />
+      <xs:attribute name="name" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ The name of the event </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+  </xs:complexType>
 <xs:element name="inittimer" type="lzx:inittimer" >
 </xs:element>
   <xs:complexType name="inittimer" mixed="true">
@@ -138,6 +165,19 @@
 <xs:annotation>
 <xs:documentation xml:lang="en">
  Rollback value for the baseformitem. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onvalue" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Event sent whenever checkbox value changes. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onchanged" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Event sent when baseformitem is changed. Only sent once when true
+              or once when false. </xs:documentation>
 </xs:annotation>
 </xs:attribute>
       <xs:attribute name="ignoreform" type="xs:string" default="false" >
@@ -297,6 +337,48 @@
               @keywords final  </xs:documentation>
 </xs:annotation>
 </xs:attribute>
+      <xs:attribute name="onstream" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Event sent when stream changes. 
+              @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onsilencetimeout" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Event sent when microphone timeout changes. 
+              @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onsilencelevel" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Event sent when microphone silence level changes. 
+              @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onlevel" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Event sent when microphone level changes. 
+              @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="ongain" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Event sent when microphone gain changes. 
+              @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onechosuppression" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Event sent when microphone echosuppression changes. 
+              @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
       <xs:attribute name="level" type="xs:string" default="0" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -383,6 +465,8 @@
 <xs:documentation xml:lang="en">
  an optional prefix URL to load from. If specified, the url will be appended to this prefix.</xs:documentation>
 </xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onsrc" type="xs:string" >
 </xs:attribute>
       <xs:attribute name="lastloaded" type="xs:string" default="" >
 <xs:annotation>
@@ -858,6 +942,276 @@ The default proxy policy references the proxyurl of the canvas.  </xs:documentat
 	The opacity of the view's contents. 1.0 is opaque; 0.0 is totally transparent (invisible).  </xs:documentation>
 </xs:annotation>
 </xs:attribute>
+      <xs:attribute name="ony" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+event for changes to view's y property </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onx" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+event for changes to view's x property </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onwidth" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+event for changes to view's width property </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onvisible" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+Sent when the view changes visibility (true/false) </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="ontouch" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+The ontouch event is sent when a touch device receives a multitouch event. The value sent with the event is an array of objects with with two properties: clientX and clientY. Currently supported only in iOS on DHTML. Note that Android Webkit doesn't send multitouch events - see http://www.quirksmode.org/mobile/tableTouch.html </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="ontimeout" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+Sent when the request to load media for the view times out </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onstop" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+Sent when a view's resource that is capable of playing is stopped. This is only called if stop is called directly; when a resource hits its last frame, the lz.view event onlastframe is called. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onshadowdistance" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+Sent when shadowdistance changes </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onshadowcolor" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+Sent when shadowcolor changes </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onshadowblurradius" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+Sent when shadowblurradius changes </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onshadowangle" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+Sent when shadowangle changes </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onremovesubview" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+Event called when this view removes a subview </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onplaying" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+Sent when a view begins playing its resource </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onplay" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+Sent when a view begins playing its resource </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onopacity" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+Sent when a view changes its opacity </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onmouseupoutside" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+The onmouseup event is sent when the pointing device button is released outside the element it went down on. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onmouseup" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+The onmouseup event is sent when the pointing device button is released over an element. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onmousetrackup" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+Sent when the mouse button is released over a view that is registered to an active track group. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onmousetrackover" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+Sent when the mouse is over a view that is registered to an active track group. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onmousetrackout" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+Sent when the mouse leaves the visible area of a view that previously sent an 'ontrackover' event. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onmouseover" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+The onmouseover event is sent when the pointing device is moved onto an element. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onmouseout" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+The onmouseout event is sent when the pointing device is moved so that is is no longer over an element. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onmousedragout" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+The onmousedragout event is sent when the pointing device is moved off the element while the button is down. down. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onmousedragin" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+The onmousedragin event is sent when the pointing device button has moved off the element and back on again while the button is down. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onmousedown" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+The onmousedown event is sent when the pointing device button is pressed over an element. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onloadratio" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+Sends a percentage (0-1) reflecting the amount of a media file that's been downloaded. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onload" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+Send when the view finishes loading media. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onlastframe" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+Sent when the view sets its frame (resource number) to the last frame. This can be used to find out when a streaming media clip is done playing. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onkeyup" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ The onkeyup event is sent when this view has the focus and a key is released. This event is sent with the keycode for the key that went up. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onkeydown" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ The onkeydown event is sent when this view has the focus and a key is pressed down. Multiple key down events are sent for a key that is held down. If you want the script executed only once, use onkeyup. This event is sent with the keycode for the key that is down.</xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onheight" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Event for changes to view's height property</xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="ongesture" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+The ongesture event is sent when a touch device receives a gesture event. The value sent with the event is an object with two properties: scale and rotation. Currently supported only in iOS on DHTML. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onframesloadratio" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Sends a percentage (0-1) reflecting the number of frames downloaded.</xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onframe" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Sent onidle while view is playing its resource</xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onfocus" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ The onfocus event is sent when an element receives focus either by the pointing device or by tabbing navigation.</xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onerror" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Sent when there is an error loading the view's resource. The argument sent with the event is an error string.</xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="ondblclick" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ The ondblclick event is sent when the pointing device button is double clicked over an element.</xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="oncornerradius" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Sent when cornerradius changes</xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="oncontext" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Sent when the drawing context is ready to use, which can take some time in IE DHTML.</xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onclip" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ The onclip event is sent when the clip attribute of a view is changed</xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onclickable" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Event for changes to view's clickable property</xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onclick" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+   The onclick event is sent when the pointing device button is clicked over an element.</xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onblur" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+  The onblur event is sent when an element loses focus either by the pointing device or by tabbing navigation.</xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onbackgroundrepeat" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ event for changes to view's backgroundrepeat property </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onaddsubview" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+Event called when this view adds a subview </xs:documentation>
+</xs:annotation>
+</xs:attribute>
       <xs:attribute name="mask" type="xs:string" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -1112,6 +1466,13 @@ Sets the alignment for the view to the given value. The alignment is based on th
   <xs:complexType name="baseform" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:node">
+      <xs:attribute name="onchanged" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Event sent when baseformitem is changed. Only sent once when true
+              or once when false. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
       <xs:attribute name="formdata" type="xs:string" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -1159,6 +1520,41 @@ Sets the alignment for the view to the given value. The alignment is based on th
   <xs:complexType name="mediadevice" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:node">
+      <xs:attribute name="ondevicename" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Event sent when device name changes.
+              @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="ondeviceindex" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Event sent when device index changes. 
+              @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="oncapturing" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Event sent when capturing flag changes.
+              @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onallowed" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Event sent when allowed status changes.
+              @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onactive" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Event sent when active flag changes.
+              @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
       <xs:attribute name="devicename" type="xs:string" default="" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -1336,6 +1732,7 @@ Sets the alignment for the view to the given value. The alignment is based on th
 </xs:annotation>
 </xs:element>
   <xs:complexType name="face" mixed="true">
+  <xs:group ref="lzx:topLevelElements" />
       <xs:attribute name="style" type="xs:string" default="bold|italic|bold italic|italic bold|plain" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -1458,6 +1855,30 @@ Sets the alignment for the view to the given value. The alignment is based on th
   <xs:complexType name="basetabelement" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:baselistitem">
+      <xs:attribute name="onopenstop" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Sent at the end of the open animation. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onopenstart" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Sent at the start of the open animation. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onclosestop" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Sent at the end of the close animation. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onclosestart" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Sent at the start of the close animation. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
       <xs:attribute name="minheight" type="xs:string" default="22" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -1583,6 +2004,45 @@ Sets the alignment for the view to the given value. The alignment is based on th
 <xs:annotation>
 <xs:documentation xml:lang="en">
  Check to see if this tree is open. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onselected" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ This event gets triggered whenever this tree is selected. The
+              value of the selection (true or false) is sent with this
+              event.
+              Note the args of this has changed from the previous release. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onselect" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ This event gets triggered whenever this tree is selected. This
+              tree is sent with the event. The tree root also receives this
+              event. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onopen" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ This event gets triggered whenever this tree is open. The open
+              value of this tree is also sent. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onfocused" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ This event gets triggered whenever this tree is focused. The value
+              of the focus (true or false) is sent with this event. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onfocus" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ This event gets triggered whenever the tree's focus is
+              changed. This tree is sent with the event. The tree root also
+              receives this event.</xs:documentation>
 </xs:annotation>
 </xs:attribute>
       <xs:attribute name="multiselect" type="xs:string" default="false" >
@@ -1868,6 +2328,67 @@ Sets the alignment for the view to the given value. The alignment is based on th
     </xs:documentation>
 </xs:annotation>
 </xs:attribute>
+      <xs:attribute name="onurl" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="ontype" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onstop" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Event sent when playing or recording stops.
+    </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onstart" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Event sent when playing or recording starts.
+    </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onmode" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onmetadata" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Event sent when metadata is received, whose parameter is a 
+    dictionary of metadata.  </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="oninsufficientbandwidth" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Event sent when insufficient bandwidth.
+    </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="oncuepoint" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Event sent when a cue point occurs,
+          whose parameter is a dictionary of metadata.
+    </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onbuffertime" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Event sent when buffertime is changed.
+         @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
       <xs:attribute name="mutevideo" type="xs:string" default="false" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -2140,6 +2661,7 @@ Sets the alignment for the view to the given value. The alignment is based on th
 </xs:annotation>
 </xs:element>
   <xs:complexType name="setter" mixed="true">
+  <xs:group ref="lzx:topLevelElements" />
       <xs:attribute name="name" type="xs:string" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -2583,6 +3105,7 @@ Sets the alignment for the view to the given value. The alignment is based on th
 </xs:annotation>
 </xs:element>
   <xs:complexType name="b" mixed="true">
+  <xs:group ref="lzx:topLevelElements" />
   </xs:complexType>
 <xs:element name="a" type="lzx:a" >
 <xs:annotation>
@@ -2591,6 +3114,7 @@ Sets the alignment for the view to the given value. The alignment is based on th
 </xs:annotation>
 </xs:element>
   <xs:complexType name="a" mixed="true">
+  <xs:group ref="lzx:topLevelElements" />
       <xs:attribute name="target" type="xs:string" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -2628,6 +3152,25 @@ _top
   <xs:complexType name="linechart" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:basechart">
+      <xs:attribute name="onminimum" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Whenever minimum, maximum, altminimum and altmaximum are changed, the
+            chart needs to be redrawn entirely.  (Normally, tick and data labels aren't
+            redrawn, because it would be far too huge a resource drag to continually
+            break down and rebuild them whenever a person zoomed in.  Instead, they're
+            constrained to scale to the appropriate distances from each other.)  When
+            the mins and maxes are changed, however, the scaling gets thrown off for
+            existing objects.  These handlers ensures that when these values are changed,
+            the labels are broken down and redrawn. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onmaximum" type="xs:string" >
+</xs:attribute>
+      <xs:attribute name="onaltminimum" type="xs:string" >
+</xs:attribute>
+      <xs:attribute name="onaltmaximum" type="xs:string" >
+</xs:attribute>
       <xs:attribute name="lastlinenotvis" type="xs:string" default="false" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -2792,6 +3335,7 @@ This class complete the chart style class in case the developer has not defined 
 </xs:annotation>
 </xs:element>
   <xs:complexType name="i" mixed="true">
+  <xs:group ref="lzx:topLevelElements" />
   </xs:complexType>
 <xs:element name="valuepointstyle" type="lzx:valuepointstyle" >
 <xs:annotation>
@@ -2815,6 +3359,7 @@ This class complete the chart style class in case the developer has not defined 
 </xs:annotation>
 </xs:element>
   <xs:complexType name="u" mixed="true">
+  <xs:group ref="lzx:topLevelElements" />
   </xs:complexType>
 <xs:element name="hscrollbar" type="lzx:hscrollbar" >
 </xs:element>
@@ -2874,6 +3419,46 @@ This class complete the chart style class in case the developer has not defined 
 <xs:annotation>
 <xs:documentation xml:lang="en">
  Indicates where the legend box will be positioned, default: right </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onitemmouseup" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ event that allows custom action for mouse up event
+            @param Number item: The identifier legend item
+         </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onitemmouseover" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ event that allows custom action for mouse over event
+            @param Number item: The identifier legend item
+         </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onitemmouseout" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ event that allows custom action for mouse out event
+            @param Number item: The identifier legend item
+         </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onitemmousedown" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ event that allows custom action for mouse down event
+            @param Number item: The identifier legend item
+         </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onitemmouseclick" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ event that allows custom action for mouse click event
+            @param Number item: The identifier legend item
+         </xs:documentation>
 </xs:annotation>
 </xs:attribute>
       <xs:attribute name="legendborder" type="xs:string" default="true" >
@@ -2954,6 +3539,7 @@ This class complete the chart style class in case the developer has not defined 
 </xs:annotation>
 </xs:element>
   <xs:complexType name="p" mixed="true">
+  <xs:group ref="lzx:topLevelElements" />
   </xs:complexType>
 <xs:element name="library" type="lzx:library" >
 <xs:annotation>
@@ -3338,6 +3924,12 @@ See the Guide for a complete discussion. Also see the &lt;include&gt; tag. </xs:
  The color of the piece.  Determined by attributes on dataseries. </xs:documentation>
 </xs:annotation>
 </xs:attribute>
+      <xs:attribute name="onexploded" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ The events that handle explosion of pieces. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
       <xs:attribute name="label" type="xs:string" default="null" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -3416,6 +4008,7 @@ See the Guide for a complete discussion. Also see the &lt;include&gt; tag. </xs:
 </xs:annotation>
 </xs:element>
   <xs:complexType name="br" mixed="true">
+  <xs:group ref="lzx:topLevelElements" />
   </xs:complexType>
 <xs:element name="basescrolltrack" type="lzx:basescrolltrack" >
 </xs:element>
@@ -3454,6 +4047,19 @@ See the Guide for a complete discussion. Also see the &lt;include&gt; tag. </xs:
 <xs:documentation xml:lang="en">
  If set, this is the remote object context in which funcname is run
               from. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onerror" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ This event is triggered when an error occurs. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="ondata" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ This event is triggered when data is returned from a remote
+              method. </xs:documentation>
 </xs:annotation>
 </xs:attribute>
       <xs:attribute name="inforeturnvalue" type="xs:string" default="false" >
@@ -4022,6 +4628,18 @@ See the Guide for a complete discussion. Also see the &lt;include&gt; tag. </xs:
               Use 0 if the resource has at least 2 frames, but there is no over
               state.
               @keywords final </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onresourceviewcount" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ This event is sent when the resourceviewcount changes. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onclick" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ This event is sent when button the clicked. </xs:documentation>
 </xs:annotation>
 </xs:attribute>
       <xs:attribute name="normalResourceNumber" type="xs:string" default="1" >
@@ -4701,6 +5319,36 @@ By default, this will be an instance of LzHTTPDataProvider, which will also be p
     </xs:documentation>
 </xs:annotation>
 </xs:attribute>
+      <xs:attribute name="ontext" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ The ontext event is generated whenever the rte text content changes. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="oneditorready" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ The oneditor event is generated whenever the rte editor is completely loaded. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="on_text" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @access private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="on_rte_loaded" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @access private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="on_editorready" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @access private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
       <xs:attribute name="extra_plugins" type="xs:string" default="" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -4785,6 +5433,7 @@ By default, this will be an instance of LzHTTPDataProvider, which will also be p
 </xs:annotation>
 </xs:element>
   <xs:complexType name="script" mixed="true">
+  <xs:group ref="lzx:topLevelElements" />
       <xs:attribute name="src" type="xs:string" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -4857,6 +5506,18 @@ A contextual menu </xs:documentation>
 <xs:annotation>
 <xs:documentation xml:lang="en">
  a reference to the view that is currently focused </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="ontarget" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onactive" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
 </xs:annotation>
 </xs:attribute>
       <xs:attribute name="duration" type="xs:string" default="400" >
@@ -5072,6 +5733,7 @@ Multi-frame resources can be used in conjunction with components such as &lt;bas
 </xs:annotation>
 </xs:element>
   <xs:complexType name="frame" mixed="true">
+  <xs:group ref="lzx:topLevelElements" />
       <xs:attribute name="src" type="xs:string" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -5164,6 +5826,16 @@ Multi-frame resources can be used in conjunction with components such as &lt;bas
 <xs:documentation xml:lang="en">
  Turns on / off the slider's filled area. </xs:documentation>
 </xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onvalue" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onminvalue" type="xs:string" >
+</xs:attribute>
+      <xs:attribute name="onmaxvalue" type="xs:string" >
 </xs:attribute>
       <xs:attribute name="minvalue" type="xs:string" default="0" >
 <xs:annotation>
@@ -5728,6 +6400,30 @@ Multi-frame resources can be used in conjunction with components such as &lt;bas
     </xs:documentation>
 </xs:annotation>
 </xs:attribute>
+      <xs:attribute name="ontotaltime" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="ontime" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onstream" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onprogress" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
       <xs:attribute name="maxwidth" type="xs:string" default="${parent.width}" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -5762,6 +6458,18 @@ Multi-frame resources can be used in conjunction with components such as &lt;bas
 <xs:annotation>
 <xs:documentation xml:lang="en">
  the number of frames in a state </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onstatenum" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onstatelength" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
 </xs:annotation>
 </xs:attribute>
       <xs:attribute name="maxstate" type="xs:string" default="0" >
@@ -5941,6 +6649,18 @@ Multi-frame resources can be used in conjunction with components such as &lt;bas
 <xs:annotation>
 <xs:documentation xml:lang="en">
  used when an item is selected, such as in a list </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onstylechanged" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private  </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onisdefault" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private  </xs:documentation>
 </xs:annotation>
 </xs:attribute>
       <xs:attribute name="menuitembgcolor" type="xs:string" default="textfieldcolor" >
@@ -6125,6 +6845,18 @@ Multi-frame resources can be used in conjunction with components such as &lt;bas
  @keywords private </xs:documentation>
 </xs:annotation>
 </xs:attribute>
+      <xs:attribute name="onscrollmax" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords public </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onscrollable" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
       <xs:attribute name="mousewheelevent_on" type="xs:string" default="onfocus" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -6206,6 +6938,18 @@ Multi-frame resources can be used in conjunction with components such as &lt;bas
 <xs:documentation xml:lang="en">
  Whether this item is selected. Our containing list will adopt the value
               of this component when it is selected. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onselected" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Event sent when this item is selected. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onselect" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Event sent when the user makes a selection. </xs:documentation>
 </xs:annotation>
 </xs:attribute>
       <xs:attribute name="_valuedatapath" type="xs:string" default="null" >
@@ -6600,6 +7344,38 @@ Multi-frame resources can be used in conjunction with components such as &lt;bas
  The initial selected item. </xs:documentation>
 </xs:annotation>
 </xs:attribute>
+      <xs:attribute name="ontext" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onselect" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ This event is triggered whenever the user makes a selection. It
+              may be used as a script in the combobox tag or as an event method.
+              </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onitemclassname" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="oneditable" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="ondefaultselection" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ This event is sent when the default selection is set.  </xs:documentation>
+</xs:annotation>
+</xs:attribute>
       <xs:attribute name="mousedownintext" type="xs:string" default="false" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -6714,6 +7490,7 @@ Imports an audio file.
 </xs:annotation>
 </xs:element>
   <xs:complexType name="audio" mixed="true">
+  <xs:group ref="lzx:topLevelElements" />
       <xs:attribute name="src" type="xs:string" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -6752,6 +7529,31 @@ Imports an audio file.
   if null, the style is set to the inherited style from the parent
                component, if no parent component the style will be the canvas
                'defaultstyle' attribute </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onstyle" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @access private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onisdefault" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ event: when isdefault changes
+              @access private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onfocusable" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @access private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="on_enabled" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @access private </xs:documentation>
 </xs:annotation>
 </xs:attribute>
       <xs:attribute name="isdefault" type="xs:string" >
@@ -6956,6 +7758,13 @@ Imports an audio file.
               fits into the available bandwidth </xs:documentation>
 </xs:annotation>
 </xs:attribute>
+      <xs:attribute name="onshow" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Event sent when show flag changes. 
+              @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
       <xs:attribute name="height" type="xs:string" default="null" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -7078,6 +7887,7 @@ Imports an audio file.
 </xs:annotation>
 </xs:element>
   <xs:complexType name="pre" mixed="true">
+  <xs:group ref="lzx:topLevelElements" />
   </xs:complexType>
 <xs:element name="wrappinglayout" type="lzx:wrappinglayout" >
 </xs:element>
@@ -7226,6 +8036,12 @@ Imports an audio file.
     </xs:documentation>
 </xs:annotation>
 </xs:attribute>
+      <xs:attribute name="ontarget" type="xs:string" >
+</xs:attribute>
+      <xs:attribute name="onsrc" type="xs:string" >
+</xs:attribute>
+      <xs:attribute name="onready" type="xs:string" >
+</xs:attribute>
       <xs:attribute name="mouseevents" type="xs:string" default="true" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -7339,6 +8155,20 @@ Imports an audio file.
 <xs:documentation xml:lang="en">
  When true, the first click on a list item selects it and the
               second click deselects it. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onselect" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ This event is triggered whenever the user makes a selection it may
+              used as a script in the tag or as an event method. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onitemclassname" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ This event is triggered whenever the itemclassname attribute 
+              changes. </xs:documentation>
 </xs:annotation>
 </xs:attribute>
       <xs:attribute name="multiselect" type="xs:string" default="false" >
@@ -7520,13 +8350,14 @@ Imports an audio file.
 <xs:element name="handler" type="lzx:handler" >
 </xs:element>
   <xs:complexType name="handler" mixed="true">
-      <xs:attribute name="reference" type="xs:string" >
+  <xs:group ref="lzx:topLevelElements" />
+      <xs:attribute name="reference" type="xs:string" default="this" >
 </xs:attribute>
       <xs:attribute name="name" type="xs:string" use="required" >
 </xs:attribute>
       <xs:attribute name="method" type="xs:string" >
 </xs:attribute>
-      <xs:attribute name="args" type="xs:string" >
+      <xs:attribute name="args" type="xs:string" default="" >
 </xs:attribute>
   </xs:complexType>
 <xs:element name="tooltip" type="lzx:tooltip" >
@@ -7655,6 +8486,19 @@ Imports an audio file.
             @type String
             @access private
         </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onerror" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Event sent when an error occurs
+            @access private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onconnect" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Event sent when connection established. </xs:documentation>
 </xs:annotation>
 </xs:attribute>
       <xs:attribute name="objectencoding" type="xs:string" default="0" >
@@ -8356,6 +9200,37 @@ Imports an audio file.
               @keywords readonly </xs:documentation>
 </xs:annotation>
 </xs:attribute>
+      <xs:attribute name="onunload" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ This event is triggered when the remote object is unloaded.
+              @access public
+        </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onload" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ This event is triggered when the remote object is loaded.
+              @access public </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onerror" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ This event is triggered when an error or timeout occurs associated
+              with getting this object or calling one of its remote methods. 
+              @access public </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="ondata" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ This event is triggered when declared inner calls do not handle
+              their ondata events. 
+              @access public </xs:documentation>
+</xs:annotation>
+</xs:attribute>
       <xs:attribute name="autoload" type="xs:string" default="true" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -8486,6 +9361,12 @@ Imports an audio file.
  @keywords private </xs:documentation>
 </xs:annotation>
 </xs:attribute>
+      <xs:attribute name="ondefaultstyle" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private  </xs:documentation>
+</xs:annotation>
+</xs:attribute>
       <xs:attribute name="lastsdown" type="xs:string" default="null" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -8550,6 +9431,18 @@ Imports an audio file.
   <xs:complexType name="tree" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:basetree">
+      <xs:attribute name="onclick" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Clicking on the icon or text triggers this event. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onactivate" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Double-clicking on the icon or text triggers this event. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
       <xs:attribute name="icon" type="xs:string" default="lztree_folder_rsc" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -8804,6 +9697,7 @@ Imports an audio file.
 </xs:annotation>
 </xs:element>
   <xs:complexType name="import" mixed="true">
+  <xs:group ref="lzx:topLevelElements" />
       <xs:attribute name="type" type="xs:string" default="text|xml" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -9084,6 +9978,8 @@ Imports an audio file.
   <xs:extension base="lzx:basestyle">
       <xs:attribute name="version" type="xs:string" default="0" >
 </xs:attribute>
+      <xs:attribute name="onversion" type="xs:string" >
+</xs:attribute>
       <xs:attribute name="datastyleindex" type="xs:string" default="0" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -9246,6 +10142,13 @@ Implementes the Stroke rendering lines </xs:documentation>
               result value using the onresult event. </xs:documentation>
 </xs:annotation>
 </xs:attribute>
+      <xs:attribute name="onresult" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ This event is sent when a button is pressed. Use this to check the
+              result value. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
       <xs:attribute name="maxtextwidth" type="xs:string" default="${Math.round(parent.width/3) - inset_left - inset_right                     - content_inset_left - content_inset_right}" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -9332,6 +10235,12 @@ Implementes the Stroke rendering lines </xs:documentation>
  a boolean indicating whether or not the menu is in opened </xs:documentation>
 </xs:annotation>
 </xs:attribute>
+      <xs:attribute name="onopened" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
       <xs:attribute name="menu_ref" type="xs:string" default="false" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -9412,6 +10321,36 @@ Implementes the Stroke rendering lines </xs:documentation>
 <xs:documentation xml:lang="en">
  Datapointer to selected item. 
               @keywords readonly </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onselected" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Event sent when an item is selected. Sends selected item. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onselect" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Event sent when an item is selected. Sends selected item. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onisopen" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Called when combobox opens or closes </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="oncombofocus" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ The equivalent for onfocus for combobox. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="oncomboblur" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ The equivalent for onblur for combobox. </xs:documentation>
 </xs:annotation>
 </xs:attribute>
       <xs:attribute name="menuclassname" type="xs:string" default="" >
@@ -9732,6 +10671,8 @@ Implementes the Stroke rendering lines </xs:documentation>
 </xs:attribute>
       <xs:attribute name="ownerGrid" type="xs:string" default="null" >
 </xs:attribute>
+      <xs:attribute name="onselected" type="xs:string" >
+</xs:attribute>
       <xs:attribute name="needsSetRegularColor" type="xs:string" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -9981,6 +10922,16 @@ This attribute is only available if replication is set to either "lazy" or "resi
  @keywords private
          [Flash] XML xmlresult: an XML object to add results to </xs:documentation>
 </xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onteststart" type="xs:string" >
+</xs:attribute>
+      <xs:attribute name="ontestfinish" type="xs:string" >
+</xs:attribute>
+      <xs:attribute name="ontestfail" type="xs:string" >
+</xs:attribute>
+      <xs:attribute name="onsuitestart" type="xs:string" >
+</xs:attribute>
+      <xs:attribute name="onsuitefinish" type="xs:string" >
 </xs:attribute>
       <xs:attribute name="nextTest" type="xs:string" >
 <xs:annotation>
@@ -10252,6 +11203,16 @@ See the documentation for the &lt;text&gt; tag for a description of the width an
   <xs:complexType name="command" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:node">
+      <xs:attribute name="onselect" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+
+    If the command is active, this event is sent
+    when the keys array are pressed simultaneously.
+    @lzxtype event
+  </xs:documentation>
+</xs:annotation>
+</xs:attribute>
       <xs:attribute name="keys" type="xs:string" default="null" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -10421,6 +11382,10 @@ See the documentation for the &lt;text&gt; tag for a description of the width an
 <xs:documentation xml:lang="en">
  Determines if the vertical grid lines are going to be used </xs:documentation>
 </xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onRenderStop" type="xs:string" >
+</xs:attribute>
+      <xs:attribute name="onRenderStart" type="xs:string" >
 </xs:attribute>
       <xs:attribute name="miny" type="xs:string" default="0" >
 <xs:annotation>
@@ -10601,13 +11566,14 @@ See the documentation for the &lt;text&gt; tag for a description of the width an
 </xs:annotation>
 </xs:element>
   <xs:complexType name="method" mixed="true">
+  <xs:group ref="lzx:topLevelElements" />
       <xs:attribute name="name" type="xs:string" use="required" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
   The name of a variable that will be set to this object when the application is started. If this element is directly within a canvas or library element, the global variable and the canvas property with this name will be set to this object. If this element is within another object, that object's property with this name will be set to this object. </xs:documentation>
 </xs:annotation>
 </xs:attribute>
-      <xs:attribute name="args" type="xs:string" >
+      <xs:attribute name="args" type="xs:string" default="" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
  The parameter names of this method. The value of this attribute is a comma-separated list of JavaScript identifiers. </xs:documentation>
@@ -10750,6 +11716,10 @@ You can set allocation to class to get static attributes. Static properties are 
   <xs:extension base="lzx:node">
       <xs:attribute name="shadowsize" type="xs:string" default="5" >
 </xs:attribute>
+      <xs:attribute name="oncornerresourcenumber" type="xs:string" >
+</xs:attribute>
+      <xs:attribute name="onbottomvisible" type="xs:string" >
+</xs:attribute>
       <xs:attribute name="offsety" type="xs:string" default="10" >
 </xs:attribute>
       <xs:attribute name="inset" type="xs:string" default="10" >
@@ -10880,6 +11850,7 @@ You can set allocation to class to get static attributes. Static properties are 
 </xs:annotation>
 </xs:element>
   <xs:complexType name="img" mixed="true">
+  <xs:group ref="lzx:topLevelElements" />
       <xs:attribute name="width" type="xs:string" >
 </xs:attribute>
       <xs:attribute name="vspace" type="xs:string" >
@@ -10906,6 +11877,12 @@ You can set allocation to class to get static attributes. Static properties are 
 <xs:annotation>
 <xs:documentation xml:lang="en">
   @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onmousestilldown" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords public </xs:documentation>
 </xs:annotation>
 </xs:attribute>
       <xs:attribute name="isMouseDown" type="xs:string" default="false" >
@@ -11034,6 +12011,42 @@ You can set allocation to class to get static attributes. Static properties are 
  Indicates if this trackgroup is currently tracking or not.
               It can bet set to turn tracking on or off, or use the methods
               activatetrackgroup and deactivatetrackgroup </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="ontracking" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onmousetrackouttop" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onmousetrackoutright" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onmousetrackoutleft" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onmousetrackoutbottom" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onboundsref" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
 </xs:annotation>
 </xs:attribute>
       <xs:attribute name="deactivateevents" type="xs:string" default="['onmouseup']" >
@@ -11556,6 +12569,18 @@ You can set allocation to class to get static attributes. Static properties are 
               calculated height of rows. </xs:documentation>
 </xs:annotation>
 </xs:attribute>
+      <xs:attribute name="onshownitems" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onselect" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Event sent when the grid selection changes.</xs:documentation>
+</xs:annotation>
+</xs:attribute>
       <xs:attribute name="multiselect" type="xs:string" default="true" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -11741,6 +12766,12 @@ You can set allocation to class to get static attributes. Static properties are 
  Whether to alternate lengths of tick lines. </xs:documentation>
 </xs:annotation>
 </xs:attribute>
+      <xs:attribute name="ondrawaxis" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Refreshes drawn chart when direction changes. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
       <xs:attribute name="numbars" type="xs:string" default="0" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -11784,6 +12815,7 @@ A font element within a &lt;canvas&gt; or &lt;library&gt; defines a font, which 
 </xs:annotation>
 </xs:element>
   <xs:complexType name="font" mixed="true">
+  <xs:group ref="lzx:topLevelElements" />
       <xs:attribute name="src" type="xs:string" >
 </xs:attribute>
       <xs:attribute name="size" type="xs:string" >
@@ -11867,9 +12899,16 @@ A font element within a &lt;canvas&gt; or &lt;library&gt; defines a font, which 
 <xs:element name="class" type="lzx:class" >
 </xs:element>
   <xs:complexType name="class" mixed="true">
+  <xs:group ref="lzx:topLevelElements" />
       <xs:attribute name="with" type="xs:string" >
 </xs:attribute>
       <xs:attribute name="name" type="xs:string" use="required" >
+</xs:attribute>
+      <xs:attribute name="isRoot" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ internal only </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="implements" type="xs:string" >
 </xs:attribute>
@@ -12213,6 +13252,12 @@ A menu item within a context menu </xs:documentation>
               @keywords final </xs:documentation>
 </xs:annotation>
 </xs:attribute>
+      <xs:attribute name="onpattern" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
       <xs:attribute name="multiline" type="xs:string" default="false" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -12368,6 +13413,8 @@ A menu item within a context menu </xs:documentation>
  If true, then instances of the replicated instance are reused
             when possible </xs:documentation>
 </xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onnodes" type="xs:string" >
 </xs:attribute>
       <xs:attribute name="nodes" type="xs:string" default="null" >
 <xs:annotation>
@@ -13025,6 +14072,12 @@ A menu item within a context menu </xs:documentation>
 </xs:attribute>
       <xs:attribute name="startx" type="xs:string" default="$once{this.x}" >
 </xs:attribute>
+      <xs:attribute name="onhaswindowfocus" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
       <xs:attribute name="mousedel" type="xs:string" default="null" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -13132,13 +14185,40 @@ A menu item within a context menu </xs:documentation>
   </xs:complexContent>
   </xs:complexType>
 <xs:element name="state" type="lzx:state" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+  A description of an instance hierarchy that can be applied and removed at runtime.
+JavaScript: lz.state 
+
+A state is an object that holds its children and attributes for creation or application at a later time when the state's apply method is called. In addition to representing visual state by adding and removing children from a view, states are often used to control constraints which are applied and removed at different times during the run of an application.
+
+For the most part, the declarative style used in OpenLaszlo applications represents an initial state for the application. All modification to application state can be made using the script API's, but it is often convenient to declaratively describe a bit of application state which may be selectively applied or removed at runtime. The &lt;state&gt; tag is provided for this purpose.
+
+Everything within a &lt;state&gt; tag acts as if it were written inside the parent when the state is applied. States can contain attributes, methods, and other nodes.
+
+When a state is removed, any children or constraints created when the state was applied are then removed, but attributes that were set by the application of the state are not restored. 
+
+ </xs:documentation>
+</xs:annotation>
 </xs:element>
   <xs:complexType name="state" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:node">
       <xs:attribute name="pooling" type="xs:string" default="false" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+
+        If true, the state will merely hide any views it has created when it is removed (not applied), instead of destroying them. 
+         </xs:documentation>
+</xs:annotation>
 </xs:attribute>
       <xs:attribute name="applied" type="xs:string" default="false" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ 
+        Whether or not the state is applied. setAttribute('applied', true) will apply the state. setAttribute('applied', false) will remove the state.
+         </xs:documentation>
+</xs:annotation>
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
@@ -13150,6 +14230,7 @@ A menu item within a context menu </xs:documentation>
 </xs:annotation>
 </xs:element>
   <xs:complexType name="attribute" mixed="true">
+  <xs:group ref="lzx:topLevelElements" />
       <xs:attribute name="value" type="xs:string" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -13164,7 +14245,7 @@ A menu item within a context menu </xs:documentation>
  The CSS property name that can be used to set the value of this attribute under the control of a &lt;stylesheet&gt; (See Chapter 19. Cascading Style Sheets ). style can be any valid CSS property name, and need not be the same as the attribute name; for example you could use the standard CSS property name background-color as the style of the bgcolor attribute. When an attribute has a style property, the value property acts as the default value for the attribute: in the absence of any applicable CSS rule specifying the corresponding property, the attribute will be given the default value. In the case of dynamic CSS, the attribute will revert to the default value if CSS was applied and is removed. (See Dynamic CSS .) </xs:documentation>
 </xs:annotation>
 </xs:attribute>
-      <xs:attribute name="required" type="xs:string" >
+      <xs:attribute name="required" type="xs:string" default="false" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
  True if this is a required attribute. </xs:documentation>
@@ -13222,6 +14303,30 @@ You can set allocation to class to get static attributes. Static properties are 
 <xs:annotation>
 <xs:documentation xml:lang="en">
  read only </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="ontotaltime" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="ontime" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onstream" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onprogress" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
 </xs:annotation>
 </xs:attribute>
       <xs:attribute name="min" type="xs:string" default="0" >
@@ -13663,6 +14768,7 @@ A tag that defines a media object that can be associated with a view. </xs:docum
 </xs:annotation>
 </xs:element>
   <xs:complexType name="resource" mixed="true">
+  <xs:group ref="lzx:topLevelElements" />
       <xs:attribute name="src" type="xs:string" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -13749,6 +14855,24 @@ A tag that defines a media object that can be associated with a view. </xs:docum
 <xs:documentation xml:lang="en">
  used to adjust the width of the content when a scrollbar is present
               @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onshownitems" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onmousetrackoutright" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ event not used - declared to remove debugger warnings </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onmousetrackoutleft" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ event not used - declared to remove debugger warnings </xs:documentation>
 </xs:annotation>
 </xs:attribute>
       <xs:attribute name="minheight" type="xs:string" default="24" >
@@ -13878,6 +15002,48 @@ A tag that defines a media object that can be associated with a view. </xs:docum
 <xs:annotation>
 <xs:documentation xml:lang="en">
  The volume for video playback, a float from 0 to 1. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onurl" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="ontype" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onstream" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onplayvolume" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onmic" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="oncam" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="onautoplay" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ @keywords private </xs:documentation>
 </xs:annotation>
 </xs:attribute>
       <xs:attribute name="mic" type="xs:string" default="null" >

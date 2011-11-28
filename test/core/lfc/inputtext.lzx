@@ -1,3 +1,6 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
 <!---
 The basic input-text element.
 JavaScript: lz.inputtext
@@ -13,3 +16,4 @@ See the documentation for the <text> tag for a description of the width and heig
     <attribute name="password" />
 
 </class>
+</library>

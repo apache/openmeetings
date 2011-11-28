@@ -1,3 +1,6 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
 <!--Provides a prototype for all objects of that class
 
 A class describes the state and behavior that all objects of that class share. An object of a given class is called an instance of that class.
@@ -11,4 +14,9 @@ The following example defines the class Hello, and instantiates myHello (an inst
     <attribute name="implements" />
     <attribute name="with" />
     
+    <!--- internal only -->
+    <attribute name="isRoot" type="boolean"/>
+    
 </class>
+
+</library>

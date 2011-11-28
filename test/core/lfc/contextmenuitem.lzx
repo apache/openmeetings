@@ -1,3 +1,6 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
 <!---A contextual menu -->
 <class name="contextmenu" extends="node">
 
@@ -5,3 +8,5 @@
 	<attribute name="delegate" />
 	
 </class>
+
+</library>

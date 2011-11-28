@@ -1,4 +1,7 @@
-<!--- The <view> is the most basic viewable element in an OpenLaszlo application. Anything that is displayed on the canvas is a view or extends the view class. A view is a rectangle, which can be visible or invisible, and which can contain other views or display "resources" such as images, .swf files, or other supported media. One view controls one displayable resource. The view system is strictly hierarchical; that is, each view has a single parent but can have multiple children.  -->
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
+            <!--- The <view> is the most basic viewable element in an OpenLaszlo application. Anything that is displayed on the canvas is a view or extends the view class. A view is a rectangle, which can be visible or invisible, and which can contain other views or display "resources" such as images, .swf files, or other supported media. One view controls one displayable resource. The view system is strictly hierarchical; that is, each view has a single parent but can have multiple children.  -->
 <class name="view" extends="node" >
  <!--- 	Activate/inactivate children for accessibility -->
 	<attribute name="aaactive" type="boolean" />
@@ -141,4 +144,98 @@ The default proxy policy references the proxyurl of the canvas.  -->
 	<!-- extra attributes -->
 	<attribute name="with" />
 	
+	
+	<!---Event called when this view adds a subview -->   
+	<event name="onaddsubview" />
+	<!--- event for changes to view's backgroundrepeat property -->
+    <event name="onbackgroundrepeat" />
+    <!---  The onblur event is sent when an element loses focus either by the pointing device or by tabbing navigation.--> 
+    <event name="onblur" />
+    <!---   The onclick event is sent when the pointing device button is clicked over an element.--> 
+    <event name="onclick" />
+    <!--- Event for changes to view's clickable property--> 
+    <event name="onclickable" />
+    <!--- The onclip event is sent when the clip attribute of a view is changed--> 
+    <event name="onclip" />
+    <!--- Sent when the drawing context is ready to use, which can take some time in IE DHTML.-->
+    <event name="oncontext" /> 
+    <!--- Sent when cornerradius changes-->
+    <event name="oncornerradius" />
+    <!--- The ondblclick event is sent when the pointing device button is double clicked over an element.-->
+    <event name="ondblclick" /> 
+    <!--- Sent when there is an error loading the view's resource. The argument sent with the event is an error string.-->
+    <event name="onerror" />
+    <!--- The onfocus event is sent when an element receives focus either by the pointing device or by tabbing navigation.-->
+    <event name="onfocus" />
+    <!--- Sent onidle while view is playing its resource-->
+    <event name="onframe" /> 
+    <!--- Sends a percentage (0-1) reflecting the number of frames downloaded.-->
+    <event name="onframesloadratio" /> 
+    <!---The ongesture event is sent when a touch device receives a gesture event. The value sent with the event is an object with two properties: scale and rotation. Currently supported only in iOS on DHTML. -->
+    <event name="ongesture" />
+    <!--- Event for changes to view's height property-->
+    <event name="onheight" />
+    <!--- The onkeydown event is sent when this view has the focus and a key is pressed down. Multiple key down events are sent for a key that is held down. If you want the script executed only once, use onkeyup. This event is sent with the keycode for the key that is down.-->
+    <event name="onkeydown" />
+    <!--- The onkeyup event is sent when this view has the focus and a key is released. This event is sent with the keycode for the key that went up. -->
+    <event name="onkeyup" />
+    <!---Sent when the view sets its frame (resource number) to the last frame. This can be used to find out when a streaming media clip is done playing. -->
+    <event name="onlastframe" />
+    <!---Send when the view finishes loading media. -->
+    <event name="onload" />
+    <!---Sends a percentage (0-1) reflecting the amount of a media file that's been downloaded. -->
+    <event name="onloadratio" />
+    <!---The onmousedown event is sent when the pointing device button is pressed over an element. -->
+    <event name="onmousedown" />
+    <!---The onmousedragin event is sent when the pointing device button has moved off the element and back on again while the button is down. -->
+    <event name="onmousedragin" />
+    <!---The onmousedragout event is sent when the pointing device is moved off the element while the button is down. down. -->
+    <event name="onmousedragout" /> 
+    <!---The onmouseout event is sent when the pointing device is moved so that is is no longer over an element. -->
+    <event name="onmouseout" />
+    <!---The onmouseover event is sent when the pointing device is moved onto an element. -->
+    <event name="onmouseover" />
+    <!---Sent when the mouse leaves the visible area of a view that previously sent an 'ontrackover' event. -->
+    <event name="onmousetrackout" />
+    <!---Sent when the mouse is over a view that is registered to an active track group. -->
+    <event name="onmousetrackover" />
+    <!---Sent when the mouse button is released over a view that is registered to an active track group. -->
+    <event name="onmousetrackup" />
+    <!---The onmouseup event is sent when the pointing device button is released over an element. -->
+    <event name="onmouseup" />
+    <!---The onmouseup event is sent when the pointing device button is released outside the element it went down on. -->
+    <event name="onmouseupoutside" />
+    <!---Sent when a view changes its opacity -->
+    <event name="onopacity" />
+    <!---Sent when a view begins playing its resource -->
+    <event name="onplay" />
+    <!---Sent when a view begins playing its resource -->
+    <event name="onplaying" />
+    <!---Event called when this view removes a subview -->
+    <event name="onremovesubview" />
+    <!---Sent when shadowangle changes -->
+    <event name="onshadowangle" />
+    <!---Sent when shadowblurradius changes -->
+    <event name="onshadowblurradius" />
+    <!---Sent when shadowcolor changes -->
+    <event name="onshadowcolor" />
+    <!---Sent when shadowdistance changes -->
+    <event name="onshadowdistance" />
+    <!---Sent when a view's resource that is capable of playing is stopped. This is only called if stop is called directly; when a resource hits its last frame, the lz.view event onlastframe is called. -->
+    <event name="onstop" />
+    <!---Sent when the request to load media for the view times out -->
+    <event name="ontimeout" />
+    <!---The ontouch event is sent when a touch device receives a multitouch event. The value sent with the event is an array of objects with with two properties: clientX and clientY. Currently supported only in iOS on DHTML. Note that Android Webkit doesn't send multitouch events - see http://www.quirksmode.org/mobile/tableTouch.html -->
+    <event name="ontouch" />
+    <!---Sent when the view changes visibility (true/false) -->
+    <event name="onvisible" />
+    <!---event for changes to view's width property -->
+    <event name="onwidth" />
+    <!---event for changes to view's x property -->
+    <event name="onx" />
+    <!---event for changes to view's y property --> 
+    <event name="ony" />
+	
 </class>
+
+</library>

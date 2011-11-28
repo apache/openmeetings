@@ -1,3 +1,6 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
 <!---The base class for all Laszlo classes.
 JavaScript: lz.node
 The lz.node class provides the basic interface for OpenLaszlo objects: parent/child hierarchy, setters, interaction with the instantiator, and reference resolution. New nodes (and subclasses thereof) can be created by new-ing the class, like this: var mynode= new LzNode( parent , args ); where parent is the parent for the new node, and args is an Object whose name/value pairs are attributes to be set on the new node.  -->
@@ -58,3 +61,5 @@ A space-separated list of CSS classes that can be used in a stylesheet to select
 	<attribute name="transition" />
 
 </class>
+
+</library>

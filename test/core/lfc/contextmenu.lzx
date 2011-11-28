@@ -1,3 +1,6 @@
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
 <!---A menu item within a context menu -->
 <class name="contextmenuitem" extends="node">
 
@@ -18,3 +21,5 @@
 	
 		
 </class>
+
+</library>

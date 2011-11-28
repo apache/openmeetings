@@ -1,4 +1,6 @@
-<library>
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
 <!--- HTML specific -->
 <class name="a" extends="false">
 	<!--- 	The link target -->

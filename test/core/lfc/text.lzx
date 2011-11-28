@@ -1,4 +1,7 @@
-<!---The basic text display element. -->
+<library xmlns="http://localhost/openlaszlo/lzx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://localhost/openlaszlo/lzx ./../../../lzx.xsd">
+            <!---The basic text display element. -->
 <class name="text" extends="view">
 <!--- Antialias type for this text, Flash only One of:  "normal" | "subpixel" | "advanced" -->
 	<attribute name="antiAliasType" value="normal|subpixel|advanced" />
@@ -54,3 +57,5 @@
 	<attribute name="yscroll" type="number"/>
 
 </class>
+
+</library>
