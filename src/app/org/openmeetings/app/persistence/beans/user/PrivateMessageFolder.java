@@ -19,7 +19,7 @@ public class PrivateMessageFolder implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	
-	@Column(name="private_message_folder_id")
+	@Column(name="msg_folder_id")
 	private long privateMessageFolderId;
 	@Column(name="folder_name")
 	private String folderName;

@@ -20,7 +20,7 @@ public class Fieldlanguagesvalues implements Serializable {
 	private static final long serialVersionUID = 1965055047163639210L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="fieldlanguagesvalues_id")
+	@Column(name="lang_val_id")
 	private Long fieldlanguagesvalues_id;
 	@Column(name="fieldvalues_id")
 	private Long fieldvalues_id;

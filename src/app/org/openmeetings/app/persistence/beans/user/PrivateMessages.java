@@ -25,7 +25,7 @@ public class PrivateMessages implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	
-	@Column(name="private_message_id")
+	@Column(name="msg_id")
 	private long privateMessageId;
 	@Column(name="subject")
 	private String subject;

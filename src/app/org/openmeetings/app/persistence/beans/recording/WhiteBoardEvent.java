@@ -23,9 +23,9 @@ public class WhiteBoardEvent implements Serializable {
 	private static final long serialVersionUID = -1745738413294075264L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
-	@Column(name="recording_whiteboardevent_id")
+	@Column(name="wb_event_id")
 	private Long whiteBoardEventId = null;
+	
 	@Column(name="starttime")
 	private Long starttime;
 	

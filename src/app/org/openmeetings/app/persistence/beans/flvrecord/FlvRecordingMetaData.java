@@ -16,9 +16,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 /**
  * 
- * @hibernate.class table="flvrecording_metadata"
- * lazy="false"
- *
  */
 @Entity
 @Table(name = "flvrecording_metadata")
@@ -30,9 +27,9 @@ public class FlvRecordingMetaData implements Serializable {
 	private static final long serialVersionUID = 8444176152324513716L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
-	@Column(name="flvrecording_metadata_id")
+	@Column(name="flv_meta_id")
 	private long flvRecordingMetaDataId;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="flvrecording_id", nullable=true)
 	private FlvRecording flvRecording;

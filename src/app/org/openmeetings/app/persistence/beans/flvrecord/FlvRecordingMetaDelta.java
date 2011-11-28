@@ -11,8 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 /**
  * 
- * @hibernate.class table="flvrecording_meta_delta"
- * lazy="false"
  *
  */
 @Entity
@@ -25,7 +23,7 @@ public class FlvRecordingMetaDelta implements Serializable {
 	private static final long serialVersionUID = -733483974696234137L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="flvrecording_meta_delta_id")
+	@Column(name="flv_delta_id")
 	private long flvRecordingMetaDeltaId;
 	@Column(name="flvrecording_metadata_id")
 	private Long flvRecordingMetaDataId;

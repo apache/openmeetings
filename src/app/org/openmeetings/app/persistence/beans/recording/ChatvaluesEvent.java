@@ -27,9 +27,9 @@ public class ChatvaluesEvent implements Serializable {
 	//see WhiteboardEvent for Documentation, Comments
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
-	@Column(name="recording_chatvaluesevent_id")
+	@Column(name="chat_event_id")
 	private Long chatvaluesEventId;
+	
 	@Column(name="starttime")
 	private Long starttime;
 	@Lob

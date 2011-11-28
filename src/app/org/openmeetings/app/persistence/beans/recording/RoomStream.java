@@ -22,9 +22,9 @@ public class RoomStream implements Serializable {
 	private static final long serialVersionUID = -5168450841189553968L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
-	@Column(name="recording_roomstream_id")
+	@Column(name="roomstream_id")
 	private Long roomStreamId;
+	
 	@Column(name="streamname")
 	private String streamName;
 	@Column(name="streamstart")

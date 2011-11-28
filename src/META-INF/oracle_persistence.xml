@@ -60,16 +60,17 @@
 		<class>org.openmeetings.app.persistence.beans.files.FileExplorerItem</class>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		<properties>
-				<property name="openjpa.RuntimeUnenhancedClasses" value="supported"/>
-				<property name="openjpa.ConnectionDriverName" value="oracle.jdbc.driver.OracleDriver"/>
-                               <property name="openjpa.ConnectionProperties" value="username=SYSTEM, password=admin"/>
-                               <property name="openjpa.ConnectionURL" value="jdbc:oracle:thin:@localhost:1521:openmeetings"/>
-				<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema"/>
-      			<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
-				<property name="openjpa.DataCache" value="true"/>
-				<property name="openjpa.QueryCache" value="true"/> 
-				<property name="openjpa.jdbc.DBDictionary"  value="batchLimit=100"/> 
-				<property name="openjpa.jdbc.QuerySQLCache"  value="false"/> 
+			<property name="openjpa.RuntimeUnenhancedClasses" value="supported"/>
+			<property name="openjpa.ConnectionDriverName" value="oracle.jdbc.driver.OracleDriver"/>
+			<property name="openjpa.ConnectionProperties" value="username=SYSTEM, password=admin"/>
+			<property name="openjpa.ConnectionURL" value="jdbc:oracle:thin:@localhost:1521:openmeetings"/>
+			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema"/>
+			<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
+			<property name="openjpa.DataCache" value="true"/>
+			<property name="openjpa.QueryCache" value="true"/> 
+			<property name="openjpa.jdbc.DBDictionary" value="BatchLimit=100" />
+			<property name="openjpa.jdbc.DBDictionary" value="oracle(UseTriggersForAutoAssign=true, MaxAutoAssignNameLength=28, BatchLimit=100)" />
+			<property name="openjpa.jdbc.QuerySQLCache" value="false"/> 
     	</properties>
 	</persistence-unit>
 </persistence>

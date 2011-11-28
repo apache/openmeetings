@@ -26,9 +26,9 @@ public class RecordingConversionJob implements Serializable {
 	private static final long serialVersionUID = -1553612596973538373L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
-	@Column(name="recording_conversion_job_id")
+	@Column(name="job_id")
 	private long recordingConversionJobId;
+	
 	@Column(name="imagenumber")
 	private Long imageNumber = 0L;
 	@ManyToOne(fetch = FetchType.EAGER)

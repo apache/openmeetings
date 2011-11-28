@@ -20,9 +20,9 @@ public class OpenXGReturnObject implements Serializable {
 	private static final long serialVersionUID = -5240675684036197687L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
-	@Column(name="open_xg_return_object_id")
+	@Column(name="object_id")
 	private Long openXGReturnObjectId;
+	
 	@Column(name="method_name")
 	private String methodName;
 	@Column(name="inserted")
