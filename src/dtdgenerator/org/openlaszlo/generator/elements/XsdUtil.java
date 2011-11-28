@@ -1,12 +1,10 @@
 package org.openlaszlo.generator.elements;
 
 import java.io.RandomAccessFile;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 public class XsdUtil {
 
-	private String xsdPrefix = "xs";
+	private final String xsdPrefix = "xs";
 
 	private String xsdBasePrefix = "lzx";
 	
@@ -14,9 +12,9 @@ public class XsdUtil {
 
 	private String nameSpace = "http://localhost/openlaszlo/lzx";
 
-	private String tabSpace = "  ";
+	private final String tabSpace = "  ";
 	
-	private String topLevelElementName = "topLevelElements";
+	private final String topLevelElementName = "topLevelElements";
 	
 	private boolean enableImport = false;
 	private String importNS;

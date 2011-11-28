@@ -6,15 +6,13 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import org.xml.sax.Attributes;
 
 public class ElementList {
 
 	// Using natural order ?!
-	private Map<String, Element> elementList = new HashMap<String, Element>();
+	private final Map<String, Element> elementList = new HashMap<String, Element>();
 
 	public void addElement(String name, Attributes attributes, String memoryLastElement) {
 		

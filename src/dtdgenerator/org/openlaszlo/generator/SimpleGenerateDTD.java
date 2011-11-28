@@ -10,18 +10,15 @@ import javax.xml.parsers.SAXParserFactory;
 import org.openlaszlo.generator.elements.ElementList;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
-import org.xml.sax.DTDHandler;
 import org.xml.sax.EntityResolver;
-import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 
 public class SimpleGenerateDTD implements ContentHandler {
 	
-	private ElementList elementList = new ElementList();
+	private final ElementList elementList = new ElementList();
 	
 	FilenameFilter folderFilter = new FilenameFilter(){
 		 public boolean accept(File b, String name) {
