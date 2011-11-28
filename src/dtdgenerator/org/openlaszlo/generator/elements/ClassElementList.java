@@ -227,6 +227,12 @@ public class ClassElementList {
 			
 		}
 	}
+
+	public ClassElement checkClassAttribute(String qName) {
+		
+		return elementList.get(qName);
+		
+	}
 	
 
 //	private DocumentBuilder documentBuilder;

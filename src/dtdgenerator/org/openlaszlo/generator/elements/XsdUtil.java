@@ -40,6 +40,10 @@ public class XsdUtil {
 	public String getImportXsdPrefix() {
 		return xsdBasePrefix;
 	}
+	
+	public String getProjectXsdPrefix() {
+		return xsdProjectPrefix;
+	}
 
 	public void writeBaseAllowedSubElements(StringBuilder sb) throws Exception {
 

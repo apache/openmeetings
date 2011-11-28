@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<canvas xmlns="http://localhost/openlaszlo/lzx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:project="http://localhost/openlaszlo/project"
+	xsi:schemaLocation="http://localhost/openlaszlo/lzx ../lzx.xsd 
+	http://localhost/openlaszlo/project ../project.xsd">
+	
+	<project:_recorderClickMask></project:_recorderClickMask>
+	<project:activityList x="123"></project:activityList>
+	
+	
+	
+</canvas>
