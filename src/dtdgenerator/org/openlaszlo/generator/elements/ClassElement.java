@@ -73,7 +73,7 @@ public class ClassElement implements Comparable<ClassElement> {
 		if (this.parent != null) {
 			attributes.addAll(parent.getAllClassAttributes());
 		} else {
-			System.err.println("Has no parent " + this.parentAsString);
+			// System.err.println("Has no parent " + this.parentAsString);
 		}
 
 		return attributes;

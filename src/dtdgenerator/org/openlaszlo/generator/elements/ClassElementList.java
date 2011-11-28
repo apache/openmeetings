@@ -50,15 +50,18 @@ public class ClassElementList {
 		for (Entry<String, ClassElement> entry : elementList.entrySet()) {
 
 			ClassElement element = entry.getValue();
-			String className = entry.getKey();
+			//String className = entry.getKey();
 
 			String parentAsString = element.getParentAsString();
-			if (parentAsString.length() > 0) {
+			if (parentAsString != null && parentAsString.length() > 0) {
 				ClassElement parent = elementList.get(parentAsString);
 
 				if (parent == null) {
-					System.err.println("Could not find parent "
-							+ parentAsString + " Classname " + className);
+//					System.err.println("Could not find parent "
+//							+ parentAsString + " Classname " + className);
+					
+					element.setParentAsString(xsdUtil.getImportXsdPrefix()+":"+parentAsString);
+					
 				}
 
 				element.setParent(parent);
@@ -155,8 +158,6 @@ public class ClassElementList {
 	
 	public void xsdPrint(boolean debug, String fileName, String staticFileSectionFilepath) {
 		try {
-			
-			this.fixParents();
 			
 			File f = new File(fileName);
 			if (f.exists()) {

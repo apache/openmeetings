@@ -42,6 +42,7 @@
         <view name="contents" x="3" y="19" height="${parent.height - 27}" 
               width="${parent.width - 6}" bgcolor="#9BA9B1" /> 
 
+        <!--- @keywords private -->
         <attribute name="defaultplacement" value="contents" type="string"/>
         
         <!-- METHODS -->

@@ -16,8 +16,11 @@
     <class name="infoTab" extends="basetabelement" clickable="false" bgcolor="0xEEF0EB" >
 
         <!-- ATTRIBUTES -->
+        
+        <!--- @keywords private -->
         <attribute name="minheight" value="21"/>
         <attribute name="label" type="string" />
+        <!---@keywords private -->
         <attribute name="defaultplacement" value="interior" type="string"/>
 
 		<attribute name="labelid" type="number" setter="setLabelId(labelid)" />
@@ -36,6 +39,7 @@
                 bgcolor="0xC6C7C4" y="$once{parent.height - 1}"  />
             <text name="ttl" width="150" x="5" y="1" fontstyle="bold"
                 fgcolor="0x222222" pixellock="true"  >
+                <!--- @keywords private -->
                 <attribute name="text" value="${classroot.label}"/>
             </text>
             <view name="arrowref" resource="infoTabImage"

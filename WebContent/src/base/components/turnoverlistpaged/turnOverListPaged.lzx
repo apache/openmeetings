@@ -23,6 +23,7 @@
     <event name="oncallnext" />
     <event name="oncallpre" />
     
+    <!--- @keywords private -->
     <event name="onload" />
     
     <event name="rerender" />

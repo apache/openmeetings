@@ -16,8 +16,9 @@
     
     <!--
     <attribute name="enabled" value="true" type="boolean" />
-     -->
+    
 	<attribute name="text" value="defaulttext" type="text" />
+	 -->
     
     <attribute name="resourceItem" value="" type="string" />
     

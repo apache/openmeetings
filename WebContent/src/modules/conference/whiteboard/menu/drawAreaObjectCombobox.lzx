@@ -71,7 +71,8 @@
     	}
     ]]>
     </method>
-	         
+	  
+	<!--- @keywords private -->       
     <attribute name="text_y" value="-2"/>
     
     

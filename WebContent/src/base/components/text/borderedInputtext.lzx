@@ -2,7 +2,9 @@
 <library>
 
 <class name="borderedInputtext" extends="view" bgcolor="$once{ canvas.basebgcolorizer }" >
+    <!---@keywords private -->
 	<attribute name="width" value="200" type="size" />
+	<!---@keywords private -->
 	<attribute name="height" value="18" type="size" />
     <attribute name="tvalue" type="string" value="default"/>
     <attribute name="sendchange" value="false" type="boolean" />
@@ -19,6 +21,7 @@
         this.editable=value;
     	this.field.setEnabled(value);
     </method>
+    <!---@keywords private -->
     <event name="onblur" />
     <method name="setItemEnabled" args="value">
     	this.field.setEnabled(value);
@@ -61,7 +64,9 @@
 </class>
 
 <class name="borderedMultiInputtext" extends="view">
+    <!---@keywords private -->
 	<attribute name="width" value="200" type="size" />
+    <!---@keywords private -->	
 	<attribute name="height" value="18" type="size" />
     <attribute name="tvalue" type="string" value="default"/>
     <attribute name="sendchange" value="false" type="boolean" />
@@ -81,7 +86,8 @@
     <method name="setItemEnabled" args="value">
     	this.field.setEnabled(value);
     </method>    
-    <attribute name="maxlength" value="null" type="number"/>         	
+    <attribute name="maxlength" value="null" type="number"/>       
+    <!---@keywords private -->  	
 	<attribute name="bgcolor" value="0xA3B2CC" type="color" />
 	<attribute name="text" type="string" value="" />
 		<!-- -->
@@ -119,7 +125,9 @@
 </class>
 
 <class name="borderedPasswordText" extends="view">
+    <!---@keywords private -->
 	<attribute name="width" value="200" type="size" />
+	<!---@keywords private -->
 	<attribute name="height" value="18" type="size" />
     <attribute name="tvalue" type="string" value="default"/>
     <attribute name="sendchange" value="false" type="boolean" />
@@ -139,8 +147,10 @@
     <method name="setItemEnabled" args="value">
     	this.field.setEnabled(value);
     </method>    
-    <attribute name="maxlength" value="null" type="number"/>         	
+    <attribute name="maxlength" value="null" type="number"/>  
+    <!---@keywords private -->       	
 	<attribute name="bgcolor" value="0xA3B2CC" type="color" />
+	<!---@keywords private -->
 	<attribute name="text" type="string" value="" />
 		<!-- -->
   <inputtext name="field" fontsize="10" text="${ this.parent.text }" x="1" y="1" bgcolor="0xFFFFFF" 

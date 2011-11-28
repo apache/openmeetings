@@ -18,6 +18,10 @@ public class XsdUtil {
 	
 	private String topLevelElementName = "topLevelElements";
 	
+	private boolean enableImport = false;
+	private String importNS;
+	private String importFile;
+	
 	public void setNameSpace(String nameSpace2) {
 		this.nameSpace = nameSpace2;
 	}
@@ -25,13 +29,18 @@ public class XsdUtil {
 	public void setXsdProjectPrefix(String xsdProjectPrefix2) {
 		this.xsdProjectPrefix = xsdProjectPrefix2;
 	}
-
-//	private final SortedSet<ClassElement> allowedElements = new TreeSet<ClassElement>();
-
-//	public void registerAllowedSubElement(ClassElement classElement) {
-//		allowedElements.add(classElement);
-//	}
 	
+	public void setImport(String importNS2, String importPrefix, String importFile2) {
+		enableImport = true;
+		xsdBasePrefix = importPrefix;
+		importNS = importNS2;
+		importFile = importFile2;
+	}
+	
+	public String getImportXsdPrefix() {
+		return xsdBasePrefix;
+	}
+
 	public void writeBaseAllowedSubElements(StringBuilder sb) throws Exception {
 
 		sb.append("<" + xsdPrefix
@@ -48,28 +57,6 @@ public class XsdUtil {
 
 	}
 
-	
-	
-//	public void writeAllowedSubElements(StringBuilder sb) throws Exception {
-//
-//		sb.append("<" + xsdPrefix
-//				+ ":group name=\""+ topLevelElementName +"\">\n");
-//		sb.append("<" + xsdPrefix +":sequence>\n");
-//		sb.append("<" + xsdPrefix +":choice minOccurs=\"0\" maxOccurs=\"unbounded\">\n");
-//		
-//		for(ClassElement cl : allowedElements) {
-//			
-//			sb.append("<" + xsdPrefix +":element ref=\""+xsdProjectPrefix+":"+cl.getName()+"\"/>\n");
-//			
-//		}
-//		
-//		sb.append("</" + xsdPrefix +":choice>\n");
-//		sb.append("</" + xsdPrefix +":sequence>\n");
-//		sb.append("</" + xsdPrefix +":group>\n");
-//		
-//
-//	}
-
 	public void writeXsdHeader(StringBuilder sb, String staticFileSectionFilepath) throws Exception {
 
 		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
@@ -78,29 +65,35 @@ public class XsdUtil {
 		sb.append("xmlns:" + xsdPrefix + "=\"http://www.w3.org/2001/XMLSchema\" ");
 		sb.append("elementFormDefault=\"qualified\" \n");
 		sb.append(tabSpace + "targetNamespace=\"" + nameSpace + "\" \n");
+		
+		if (enableImport) {
+			sb.append(tabSpace + "xmlns:" + xsdBasePrefix + "=\"" + importNS + "\" \n");
+		}
+		
 		sb.append(tabSpace + "xmlns:" + xsdProjectPrefix + "=\"" + nameSpace + "\">\n");
 
 		this.writeStaticImports(sb, staticFileSectionFilepath);
 		
+		if (enableImport) {
+			writeImport(sb);
+		}
 	}
 	
-	public void writeStaticImports(StringBuilder sb, String staticFileSectionFilepath) throws Exception {
-		
+	private void writeStaticImports(StringBuilder sb, String staticFileSectionFilepath) throws Exception {
 		if (staticFileSectionFilepath.length() > 0) {
-
 			// Get file and handle download
 			RandomAccessFile rf = new RandomAccessFile(staticFileSectionFilepath, "r");
-
 			String newLine = "";
-			
 			while ((newLine = rf.readLine()) != null) {
 				sb.append(newLine+"\n");
 			}
-
 			rf.close();
-
 		}
-		
+	}
+	
+	private void writeImport(StringBuilder sb) {
+		sb.append("<" + xsdPrefix + ":import namespace=\""+importNS+"\" "); 
+		sb.append("schemaLocation=\""+importFile+"\"/>");
 	}
 
 	public void generateXsdFooter(StringBuilder sb) throws Exception {
@@ -133,15 +126,26 @@ public class XsdUtil {
 		if (!classElement.getParentAsString().equals("")) {
 			sb.append(tabSpace + "<" + xsdPrefix +":complexContent>\n");
 	
-			sb.append(tabSpace + "<" + xsdPrefix
-					+ ":extension base=\"" + xsdProjectPrefix + ":" + classElement.getParentAsString()
-					+ "\">\n");
+			if (classElement.getParentAsString().startsWith(xsdBasePrefix)) {
+				sb.append(tabSpace + "<" + xsdPrefix
+						+ ":extension base=\"" + classElement.getParentAsString()
+						+ "\">\n");
+			} else {
+				sb.append(tabSpace + "<" + xsdPrefix
+						+ ":extension base=\"" + xsdProjectPrefix + ":" + classElement.getParentAsString()
+						+ "\">\n");
+			}
+			
 		}
 		
-		if (classElement.getName().equals("node")) {
-			sb.append(tabSpace + "<" + xsdPrefix +":group ref=\"" + xsdProjectPrefix + ":"+ topLevelElementName +"\" />\n");
-		} else if (!classElement.getClassRoot().equals("node")) {
-			sb.append(tabSpace + "<" + xsdPrefix +":group ref=\"" + xsdProjectPrefix + ":"+ topLevelElementName +"\" />\n");
+		if (enableImport) {
+			
+		} else {
+			if (classElement.getName().equals("node")) {
+				sb.append(tabSpace + "<" + xsdPrefix +":group ref=\"" + xsdProjectPrefix + ":"+ topLevelElementName +"\" />\n");
+			} else if (!classElement.getClassRoot().equals("node")) {
+				sb.append(tabSpace + "<" + xsdPrefix +":group ref=\"" + xsdProjectPrefix + ":"+ topLevelElementName +"\" />\n");
+			}
 		}
 		
 		for (ClassAttribute classAttribute : classElement.getAttributes()) {
@@ -181,6 +185,12 @@ public class XsdUtil {
 		
 	}
 	
+	/**
+	 * Fixes the attribute values, the type will always point to the base XSD
+	 * not to the projects XSD
+	 * @param classAttribute
+	 * @param sb
+	 */
 	private void fixAttributeTypeRestriction(ClassAttribute classAttribute, StringBuilder sb) {
 		
 		if (classAttribute.getType() == null && classAttribute.getType().equals("string")) {
@@ -228,5 +238,7 @@ public class XsdUtil {
         sb.append("</" + xsdPrefix + ":documentation>\n");
         sb.append("</" + xsdPrefix + ":annotation>\n");
 	}
+
+	
 
 }

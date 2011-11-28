@@ -7,16 +7,16 @@ A class describes the state and behavior that all objects of that class share. A
 
 The following example defines the class Hello, and instantiates myHello (an instance of that class).
 -->
-<class name="class" extends="false">
+<class name="class" extends="view">
 
     <attribute name="name" type="token" required="true" />
     <attribute name="extends" />
     <attribute name="implements" />
     <attribute name="with" />
     
-    <!--- internal only -->
     <attribute name="isRoot" type="boolean"/>
     
 </class>
+
 
 </library>
