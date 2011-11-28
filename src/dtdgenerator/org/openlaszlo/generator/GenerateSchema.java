@@ -1,17 +1,10 @@
 package org.openlaszlo.generator;
 
-import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
 import java.io.FilenameFilter;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -307,17 +300,17 @@ public class GenerateSchema implements ContentHandler, LexicalHandler {
 		replaceClassElementList = new ArrayList<String>();
 	}
 	
-	private String projectXsdReplacement = "<canvas xmlns=\"http://localhost/openlaszlo/lzx\" "
-			+ "xmlns:project=\"http://localhost/project/lzx\" "
-			+ "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "
-			+ "xsi:schemaLocation=\"http://localhost/openlaszlo/lzx ../../my.xsd "
-			+ "http://localhost/project/lzx ../../project.xsd \"";
+	private final String projectXsdReplacement = "<canvas xmlns=\"http://localhost/openlaszlo/lzx\"\n"
+			+ "    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" \n"
+			+ "    xmlns:project=\"http://localhost/openlaszlo/project\" \n"
+			+ "    xsi:schemaLocation=\"http://localhost/openlaszlo/lzx /lzx.xsd  \n"
+			+ "    http://localhost/openlaszlo/project /project.xsd\" \n";
 	
-	private String libraryXsdReplacement = "<library xmlns=\"http://localhost/openlaszlo/lzx\" "
-			+ "xmlns:project=\"http://localhost/project/lzx\" "
-			+ "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "
-			+ "xsi:schemaLocation=\"http://localhost/openlaszlo/lzx ../../my.xsd "
-			+ "http://localhost/project/lzx ../../project.xsd \"";
+	private final String libraryXsdReplacement = "<library xmlns=\"http://localhost/openlaszlo/lzx\"\n"
+			+ "    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" \n"
+			+ "    xmlns:project=\"http://localhost/openlaszlo/project\" \n"
+			+ "    xsi:schemaLocation=\"http://localhost/openlaszlo/lzx /lzx.xsd  \n"
+			+ "    http://localhost/openlaszlo/project /project.xsd\" \n";
 
 	public void endDocument() throws SAXException {
 		// TODO Auto-generated method stub
@@ -344,8 +337,8 @@ public class GenerateSchema implements ContentHandler, LexicalHandler {
 						
 					}
 					
-					//resultingLine.replaceAll("canvas", projectXsdReplacement);
-					resultingLine.replaceAll("\\<library", libraryXsdReplacement);
+					resultingLine = resultingLine.replaceAll("<canvas", projectXsdReplacement);
+					resultingLine = resultingLine.replaceAll("<library", libraryXsdReplacement);
 					
 					encodedLines.add(resultingLine);
 					
@@ -356,7 +349,7 @@ public class GenerateSchema implements ContentHandler, LexicalHandler {
 				File outputFolder = new File(outputPath);
 				outputFolder.mkdirs();
 				
-				File fOut = new File(outputPath + fInput.getName());
+				File fOut = new File(outputPath + fInput.getName()+".xml");
 				
 				FileUtils.writeLines(fOut, "UTF-8", encodedLines);
 				
@@ -406,7 +399,7 @@ public class GenerateSchema implements ContentHandler, LexicalHandler {
 					if (className.equals("node")) {
 						extendsName = "";
 					} else {
-						extendsName = "node";
+						extendsName = "view";
 					}
 				} else if (extendsName.equals("false")) {
 					extendsName = "";

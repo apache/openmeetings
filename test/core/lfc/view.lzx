@@ -235,6 +235,11 @@ The default proxy policy references the proxyurl of the canvas.  -->
     <event name="onx" />
     <!---event for changes to view's y property --> 
     <event name="ony" />
+    
+    <!--- This element is only available in the splash SWF specific -->
+    <attribute name="center" type="boolean"/>
+    <!--- This element is only available in the splash SWF specific -->
+    <attribute name="ratio" type="boolean"/>
 	
 </class>
 

@@ -13,7 +13,7 @@ public class GenerateProjectXSD extends GenerateSchema {
 		
 		generateBaseXSD.getXsdUtil().setImport("http://localhost/openlaszlo/lzx","lzx", "lzx.xsd");
 		
-		generateBaseXSD.printXsd("project.xsd","");
+		generateBaseXSD.printXsd("WebContent/project.xsd","");
 		
 	}
 	

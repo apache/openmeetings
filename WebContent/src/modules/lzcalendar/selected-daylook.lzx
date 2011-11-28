@@ -100,16 +100,18 @@
         </method>
 
         <state name="followstate" applied="false">
+        	<!--- @keywords private -->
             <attribute name="x" value="${dayview.getAttributeRelative( 'x',
                                                         canvas )}"/>
+            <!--- @keywords private -->
             <attribute name="y" value="${dayview.getAttributeRelative( 'y',
                                                         canvas )}"/>
-
+            <!--- @keywords private -->
             <attribute name="width" value="${this.dayview.width}"/>
-
+            <!--- @keywords private -->
             <attribute name="height"
                        value="${this.dayview.height}"/>
-
+            <!--- @keywords private -->
             <attribute name="open" value="${dayview.opened}"/>
         </state>    
     </class>

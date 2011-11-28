@@ -190,13 +190,6 @@
   <xs:complexType name="radiogroup" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:baselist">
-      <xs:attribute name="layout" type="xs:string" default="class: simplelayout; axis: y; spacing:5" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- The layout to use for the radiogroup. Note: if you use a different layout,
-              be sure to include the layout library file. </xs:documentation>
-</xs:annotation>
-</xs:attribute>
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -265,7 +258,7 @@ Example:
 </xs:element>
   <xs:complexType name="inittimer" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -357,7 +350,7 @@ Example:
 </xs:element>
   <xs:complexType name="datapoints" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -372,7 +365,7 @@ Example:
 </xs:element>
   <xs:complexType name="valuepoints" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="tip" type="xs:string" default="" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -453,11 +446,7 @@ Example:
  icon resource name prefix </xs:documentation>
 </xs:annotation>
 </xs:attribute>
-      <xs:attribute name="fontsize" type="xs:string" default="11" >
-</xs:attribute>
       <xs:attribute name="fontcolor" type="lzx:color" default="0x373B56" >
-</xs:attribute>
-      <xs:attribute name="font" type="xs:string" default="Verdana" >
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
@@ -466,7 +455,7 @@ Example:
 </xs:element>
   <xs:complexType name="fisheye" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="start_size" type="xs:string" default="24" >
 </xs:attribute>
       <xs:attribute name="halo_size" type="xs:string" default="20" >
@@ -581,7 +570,7 @@ Example:
 </xs:element>
   <xs:complexType name="image" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="src" type="xs:string" default="" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -669,7 +658,7 @@ Example:
 </xs:element>
   <xs:complexType name="databar" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="totalsets" type="lzx:number" default="0" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -739,7 +728,7 @@ Example:
 </xs:element>
   <xs:complexType name="basevalidator" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="trim" type="lzx:boolean" default="true" >
 </xs:attribute>
       <xs:attribute name="requiredErrorstring" type="xs:string" default="this field is required." >
@@ -761,7 +750,7 @@ Example:
 </xs:element>
   <xs:complexType name="autocompletecombobox" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="defaulttext" type="xs:string" default="Type Here" >
 </xs:attribute>
       <xs:attribute name="contentpath" type="xs:string" >
@@ -927,7 +916,7 @@ Example:
 </xs:element>
   <xs:complexType name="videolibraryicon" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="selected" type="xs:string" default="false" >
 </xs:attribute>
       <xs:attribute name="over" type="xs:string" default="false" >
@@ -1155,6 +1144,12 @@ The width of the resource that this view attached </xs:documentation>
 <xs:annotation>
 <xs:documentation xml:lang="en">
 A resource that is presented in the background of this view. The value can be either the name of a resource defined with the resource tag, a URL, or a pathname. If the value is a URL, the resource is requested when the view is displayed. If it's a pathname, the file named by the pathname is compiled into the application, and attached to this view.  </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="ratio" type="lzx:boolean" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ This element is only available in the splash SWF specific </xs:documentation>
 </xs:annotation>
 </xs:attribute>
       <xs:attribute name="proxyurl" type="xs:string" >
@@ -1594,6 +1589,12 @@ The context menu installed on this view </xs:documentation>
 	If true, this view intercepts click events; otherwise they are passed to its container. This defaults to true if the view defines a mouse event handler or a cursor. </xs:documentation>
 </xs:annotation>
 </xs:attribute>
+      <xs:attribute name="center" type="lzx:boolean" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ This element is only available in the splash SWF specific </xs:documentation>
+</xs:annotation>
+</xs:attribute>
       <xs:attribute name="capabilities" type="xs:string" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -1709,7 +1710,7 @@ Sets the alignment for the view to the given value. The alignment is based on th
 </xs:element>
   <xs:complexType name="baseform" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="onchanged" type="xs:string" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -1945,8 +1946,6 @@ Sets the alignment for the view to the given value. The alignment is based on th
   <xs:complexType name="newvscrollbar" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:basescrollbar">
-      <xs:attribute name="y" type="xs:string" default="${parent.thumb.y+parent.thumb.height}" >
-</xs:attribute>
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -2031,7 +2030,7 @@ Sets the alignment for the view to the given value. The alignment is based on th
 </xs:element>
   <xs:complexType name="multiplefileupload" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="numfields" type="xs:string" default="1" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -2058,8 +2057,6 @@ Sets the alignment for the view to the given value. The alignment is based on th
   <xs:complexType name="newhscrollbar" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:basescrollbar">
-      <xs:attribute name="x" type="xs:string" default="${parent.thumb.x+parent.thumb.width}" >
-</xs:attribute>
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -2133,12 +2130,6 @@ Sets the alignment for the view to the given value. The alignment is based on th
 <xs:documentation xml:lang="en">
  Content is automatically hidden when tabelement is closed. To
               override, set this attribute to false. </xs:documentation>
-</xs:annotation>
-</xs:attribute>
-      <xs:attribute name="height" type="xs:string" default="$once{minheight}" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- The height of the tabelement. </xs:documentation>
 </xs:annotation>
 </xs:attribute>
       <xs:attribute name="headerheight" type="lzx:number" default="$once{minheight}" >
@@ -2247,25 +2238,11 @@ Sets the alignment for the view to the given value. The alignment is based on th
               of the focus (true or false) is sent with this event. </xs:documentation>
 </xs:annotation>
 </xs:attribute>
-      <xs:attribute name="onfocus" type="xs:string" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- This event gets triggered whenever the tree's focus is
-              changed. This tree is sent with the event. The tree root also
-              receives this event.</xs:documentation>
-</xs:annotation>
-</xs:attribute>
       <xs:attribute name="multiselect" type="lzx:boolean" default="false" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
  Meaningful only in root. Whether to multiselect items.
               @keywords final </xs:documentation>
-</xs:annotation>
-</xs:attribute>
-      <xs:attribute name="layout" type="xs:string" default="class: simplelayout; axis: y; spacing: 0" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- Layout for children. </xs:documentation>
 </xs:annotation>
 </xs:attribute>
       <xs:attribute name="isleaf" type="lzx:boolean" default="false" >
@@ -2333,7 +2310,7 @@ Sets the alignment for the view to the given value. The alignment is based on th
 </xs:element>
   <xs:complexType name="debug" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -2348,7 +2325,7 @@ Sets the alignment for the view to the given value. The alignment is based on th
 </xs:element>
   <xs:complexType name="datacolumn" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="values" type="xs:string" default="$once{null}" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -2386,7 +2363,7 @@ Sets the alignment for the view to the given value. The alignment is based on th
 </xs:element>
   <xs:complexType name="hsplitpane" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="sizer_width" type="xs:string" default="5" >
 </xs:attribute>
       <xs:attribute name="rhs_placed" type="lzx:boolean" default="false" >
@@ -2710,7 +2687,7 @@ Sets the alignment for the view to the given value. The alignment is based on th
 </xs:element>
   <xs:complexType name="_plainfloatshadow" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="shadowsize" type="xs:string" default="1.5" >
 </xs:attribute>
       <xs:attribute name="offsety" type="xs:string" default="10" >
@@ -2723,10 +2700,6 @@ Sets the alignment for the view to the given value. The alignment is based on th
   <xs:complexType name="scrollbar" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:basescrollbar">
-      <xs:attribute name="y" type="xs:string" default="${parent.thumb.y+parent.thumb.height}" >
-</xs:attribute>
-      <xs:attribute name="x" type="xs:string" default="${parent.thumb.x+parent.thumb.width}" >
-</xs:attribute>
       <xs:attribute name="disabledbgcolor" type="xs:string" default="null" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -2862,7 +2835,7 @@ Sets the alignment for the view to the given value. The alignment is based on th
 </xs:element>
   <xs:complexType name="colorbox" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="obj" type="xs:string" default="null" >
 </xs:attribute>
       <xs:attribute name="color" type="xs:string" default="null" >
@@ -3269,7 +3242,7 @@ This class complete the chart style class in case the developer has not defined 
 </xs:element>
   <xs:complexType name="styleparser" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="style" type="xs:string" default="${null}" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -3391,8 +3364,6 @@ This class complete the chart style class in case the developer has not defined 
   <xs:complexType name="hscrollbar" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:basescrollbar">
-      <xs:attribute name="x" type="xs:string" default="${parent.thumb.x+parent.thumb.width}" >
-</xs:attribute>
       <xs:attribute name="disabledbgcolor" type="xs:string" default="null" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -3576,7 +3547,7 @@ See the Guide for a complete discussion. Also see the &lt;include&gt; tag. </xs:
 </xs:element>
   <xs:complexType name="library" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="validate" type="lzx:boolean" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -3924,7 +3895,7 @@ See the Guide for a complete discussion. Also see the &lt;include&gt; tag. </xs:
 </xs:element>
   <xs:complexType name="opttree" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="openattrpath" type="xs:string" default="@__OPTTREE_META_open" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -4162,7 +4133,7 @@ See the Guide for a complete discussion. Also see the &lt;include&gt; tag. </xs:
 </xs:element>
   <xs:complexType name="vbox" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="spacing" type="xs:string" default="0" >
 </xs:attribute>
       <xs:attribute name="inset" type="xs:string" default="0" >
@@ -4273,7 +4244,7 @@ See the Guide for a complete discussion. Also see the &lt;include&gt; tag. </xs:
 </xs:element>
   <xs:complexType name="hbox" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="spacing" type="xs:string" default="0" >
 </xs:attribute>
       <xs:attribute name="inset" type="xs:string" default="0" >
@@ -4558,13 +4529,7 @@ See the Guide for a complete discussion. Also see the &lt;include&gt; tag. </xs:
 </xs:element>
   <xs:complexType name="custombaseslider" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
-      <xs:attribute name="width" type="xs:string" default="100" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- @keyword private </xs:documentation>
-</xs:annotation>
-</xs:attribute>
+  <xs:extension base="lzx:view">
       <xs:attribute name="valueratio" type="xs:string" default="(this.maxlimit  - this.minlimit) / this.width" >
 </xs:attribute>
       <xs:attribute name="startlabel" type="xs:string" default="this.minlimit" >
@@ -4621,12 +4586,6 @@ See the Guide for a complete discussion. Also see the &lt;include&gt; tag. </xs:
 <xs:annotation>
 <xs:documentation xml:lang="en">
  This event is sent when the resourceviewcount changes. </xs:documentation>
-</xs:annotation>
-</xs:attribute>
-      <xs:attribute name="onclick" type="xs:string" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- This event is sent when button the clicked. </xs:documentation>
 </xs:annotation>
 </xs:attribute>
       <xs:attribute name="normalResourceNumber" type="lzx:number" default="1" >
@@ -4928,7 +4887,7 @@ The basic text display element. </xs:documentation>
 </xs:element>
   <xs:complexType name="chartactionhelper" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="chart" type="xs:string" default="${null}" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -5016,6 +4975,8 @@ See the Guide for a complete discussion of the &lt;canvas&gt; tag.
   <xs:complexType name="canvas" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:view">
+      <xs:attribute name="title" type="xs:string" default="string" >
+</xs:attribute>
       <xs:attribute name="scriptlimits" type="xs:string" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -5109,6 +5070,8 @@ This will be an instance of LzHTTPDataProvider, which implements HTTP request tr
 defaultdataprovider is bound to the system default DataProvider.
 By default, this will be an instance of LzHTTPDataProvider, which will also be pointed to by the canvas.httpdataprovider. </xs:documentation>
 </xs:annotation>
+</xs:attribute>
+      <xs:attribute name="debug" type="xs:string" default="boolean" >
 </xs:attribute>
       <xs:attribute name="datasets" type="xs:string" >
 <xs:annotation>
@@ -5434,7 +5397,7 @@ A contextual menu </xs:documentation>
 </xs:element>
   <xs:complexType name="basefocusview" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="target" type="xs:string" default="null" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -5747,7 +5710,7 @@ Multi-frame resources can be used in conjunction with components such as &lt;bas
 </xs:element>
   <xs:complexType name="chartzoomer" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="zoomcolor" type="lzx:color" default="${parent.zoomcolor}" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -5776,8 +5739,6 @@ Multi-frame resources can be used in conjunction with components such as &lt;bas
   <xs:complexType name="windowpanel" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:basewindow">
-      <xs:attribute name="width" type="xs:string" default="${this.content.width + this.inset_left + this.inset_right}" >
-</xs:attribute>
       <xs:attribute name="titlearea_inset_top" type="xs:string" default="6" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -5814,8 +5775,6 @@ Multi-frame resources can be used in conjunction with components such as &lt;bas
 <xs:documentation xml:lang="en">
  The bottom inset for the window content area. </xs:documentation>
 </xs:annotation>
-</xs:attribute>
-      <xs:attribute name="height" type="xs:string" default="${this.content.height + this.inset_top + this.inset_bottom}" >
 </xs:attribute>
       <xs:attribute name="closeable" type="xs:string" default="false" >
 <xs:annotation>
@@ -6112,7 +6071,7 @@ Multi-frame resources can be used in conjunction with components such as &lt;bas
 </xs:element>
   <xs:complexType name="viewlistmanager" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="pools" type="xs:string" default="${new Object()}" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -6235,13 +6194,7 @@ Multi-frame resources can be used in conjunction with components such as &lt;bas
 </xs:element>
   <xs:complexType name="streamprogress" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
-      <xs:attribute name="width" type="xs:string" default="0" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- starting/current width (default: 0) </xs:documentation>
-</xs:annotation>
-</xs:attribute>
+  <xs:extension base="lzx:view">
       <xs:attribute name="totaltime" type="xs:string" default="0" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -6272,10 +6225,6 @@ Multi-frame resources can be used in conjunction with components such as &lt;bas
 <xs:documentation xml:lang="en">
  max width that this will grow to (defaults to parent's width </xs:documentation>
 </xs:annotation>
-</xs:attribute>
-      <xs:attribute name="height" type="xs:string" default="10" >
-</xs:attribute>
-      <xs:attribute name="bgcolor" type="xs:string" default="green" >
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
@@ -6324,7 +6273,7 @@ Multi-frame resources can be used in conjunction with components such as &lt;bas
 </xs:element>
   <xs:complexType name="videovolumebutton" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="volumeInternal" type="xs:string" default="1.0" >
 </xs:attribute>
       <xs:attribute name="volume" type="xs:string" default="${this.mute ? 0.0 : this.volumeInternal}" >
@@ -6356,10 +6305,6 @@ Multi-frame resources can be used in conjunction with components such as &lt;bas
   <xs:complexType name="basescrollthumb" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:basecomponent">
-      <xs:attribute name="y" type="xs:string" default="${this.thumbControl(this.immediateparent.getMouse( 'y' ))}" >
-</xs:attribute>
-      <xs:attribute name="x" type="xs:string" default="${this.thumbControl(this.immediateparent.getMouse( 'x' ))}" >
-</xs:attribute>
       <xs:attribute name="doffset" type="xs:string" default="this.getMouse( 'y' )" >
 </xs:attribute>
   </xs:extension>
@@ -6515,8 +6460,6 @@ Multi-frame resources can be used in conjunction with components such as &lt;bas
   <xs:complexType name="basescrollbar" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:basecomponent">
-      <xs:attribute name="width" type="xs:string" default="${this.othersb &amp;&amp; this.othersb.visible                        ? this.immediateparent.width - this.othersb.width                         : this.immediateparent.width }" >
-</xs:attribute>
       <xs:attribute name="usemousewheel" type="xs:string" default="true" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -6594,8 +6537,6 @@ Multi-frame resources can be used in conjunction with components such as &lt;bas
  If true, the mousewheel is active for the focusview.
               @keywords read-only </xs:documentation>
 </xs:annotation>
-</xs:attribute>
-      <xs:attribute name="height" type="xs:string" default="${this.othersb &amp;&amp; this.othersb.visible                         ? this.immediateparent.height - this.othersb.height                        : this.immediateparent.height}" >
 </xs:attribute>
       <xs:attribute name="focusview" type="xs:string" default="null" >
 <xs:annotation>
@@ -6739,7 +6680,7 @@ Multi-frame resources can be used in conjunction with components such as &lt;bas
 </xs:element>
   <xs:complexType name="mred" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="urls" type="xs:string" default="[ 'http://www.openlaszlo.org/images/edsurf.gif',                      'http://www.openlaszlo.org/images/ednpals2.gif',                      'http://www.openlaszlo.org/images/edchess1.jpg',                      'http://www.openlaszlo.org/images/edandalaninbarn.jpg'                    ]" >
 </xs:attribute>
       <xs:attribute name="urlnum" type="xs:string" default="0" >
@@ -6965,7 +6906,7 @@ Multi-frame resources can be used in conjunction with components such as &lt;bas
 </xs:element>
   <xs:complexType name="colormenuitem" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="mycolor" type="xs:string" >
 </xs:attribute>
   </xs:extension>
@@ -6979,7 +6920,7 @@ Multi-frame resources can be used in conjunction with components such as &lt;bas
 </xs:element>
   <xs:complexType name="sliderknob" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="minx" type="xs:string" default="0" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -7287,7 +7228,7 @@ Imports an audio file.
 </xs:element>
   <xs:complexType name="basecomponent" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="text" type="xs:string" default="" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -7351,13 +7292,6 @@ Imports an audio file.
 <xs:annotation>
 <xs:documentation xml:lang="en">
  set to true when this component will receive enter key events </xs:documentation>
-</xs:annotation>
-</xs:attribute>
-      <xs:attribute name="focusable" type="lzx:boolean" default="true" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- when true, the component can be focused. 
-              @access private </xs:documentation>
 </xs:annotation>
 </xs:attribute>
       <xs:attribute name="enabled" type="xs:string" default="true" >
@@ -7442,7 +7376,7 @@ Imports an audio file.
 </xs:element>
   <xs:complexType name="toggletext" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="text" type="xs:string" >
 </xs:attribute>
       <xs:attribute name="editing" type="xs:string" default="false" >
@@ -7473,7 +7407,7 @@ Imports an audio file.
 </xs:element>
   <xs:complexType name="photo" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -7511,7 +7445,7 @@ Imports an audio file.
 </xs:element>
   <xs:complexType name="baseslidertrack" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -7526,7 +7460,7 @@ Imports an audio file.
 </xs:element>
   <xs:complexType name="colorpot" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="mycolor" type="lzx:color" default="#000000" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -7625,14 +7559,12 @@ Imports an audio file.
 </xs:element>
   <xs:complexType name="resizeview_x" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="right" type="xs:string" >
 </xs:attribute>
       <xs:attribute name="middle" type="xs:string" >
 </xs:attribute>
       <xs:attribute name="left" type="xs:string" >
-</xs:attribute>
-      <xs:attribute name="frame" type="xs:string" >
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
@@ -7776,7 +7708,7 @@ Imports an audio file.
 </xs:element>
   <xs:complexType name="frametimer" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="fps" type="lzx:number" default="0" >
 </xs:attribute>
       <xs:attribute name="delta" type="lzx:number" default="0" >
@@ -7788,12 +7720,10 @@ Imports an audio file.
 </xs:element>
   <xs:complexType name="resizeview_y" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="top" type="xs:string" >
 </xs:attribute>
       <xs:attribute name="middle" type="xs:string" >
-</xs:attribute>
-      <xs:attribute name="frame" type="xs:string" >
 </xs:attribute>
       <xs:attribute name="bottom" type="xs:string" >
 </xs:attribute>
@@ -8066,7 +7996,7 @@ Imports an audio file.
 </xs:element>
   <xs:complexType name="rtmpconnection" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="status" type="xs:string" default="disconnected" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -8094,13 +8024,6 @@ Imports an audio file.
             @type String
             @access private
         </xs:documentation>
-</xs:annotation>
-</xs:attribute>
-      <xs:attribute name="onerror" type="xs:string" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- Event sent when an error occurs
-            @access private </xs:documentation>
 </xs:annotation>
 </xs:attribute>
       <xs:attribute name="onconnect" type="xs:string" >
@@ -8223,8 +8146,6 @@ Imports an audio file.
  Text padding. </xs:documentation>
 </xs:annotation>
 </xs:attribute>
-      <xs:attribute name="frame" type="xs:string" default="${classroot.tabstate}" >
-</xs:attribute>
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -8237,7 +8158,7 @@ Imports an audio file.
 </xs:element>
   <xs:complexType name="basechart" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="zoomcolor" type="lzx:color" default="#DDDDDD" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -8766,7 +8687,7 @@ Currently the best way to change them at runtime is to apply a &amp;lt;style&amp
 </xs:element>
   <xs:complexType name="basezoomarea" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="starty" type="lzx:number" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -8843,12 +8764,6 @@ Currently the best way to change them at runtime is to apply a &amp;lt;style&amp
   <xs:complexType name="tree" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:basetree">
-      <xs:attribute name="onclick" type="xs:string" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- Clicking on the icon or text triggers this event. </xs:documentation>
-</xs:annotation>
-</xs:attribute>
       <xs:attribute name="onactivate" type="xs:string" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -8886,7 +8801,7 @@ Currently the best way to change them at runtime is to apply a &amp;lt;style&amp
 </xs:element>
   <xs:complexType name="chartdata" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -8972,7 +8887,7 @@ Currently the best way to change them at runtime is to apply a &amp;lt;style&amp
 </xs:element>
   <xs:complexType name="piechart" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="selectedpie" type="xs:string" default="$once{null}" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -9042,7 +8957,7 @@ Currently the best way to change them at runtime is to apply a &amp;lt;style&amp
 </xs:element>
   <xs:complexType name="menuarrow" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -9053,13 +8968,8 @@ Currently the best way to change them at runtime is to apply a &amp;lt;style&amp
 </xs:annotation>
 </xs:element>
   <xs:complexType name="import" mixed="true">
-  <xs:group ref="lzx:topLevelElements" />
-      <xs:attribute name="type" type="xs:string" default="text|xml" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
-  If this attribute has the value text , the content of the target file is included as text. Otherwise, it is read as XML.  </xs:documentation>
-</xs:annotation>
-</xs:attribute>
+  <xs:complexContent>
+  <xs:extension base="lzx:node">
       <xs:attribute name="stage" type="xs:string" default="late|defer" >
 </xs:attribute>
       <xs:attribute name="proxied" type="xs:string" >
@@ -9070,6 +8980,8 @@ Currently the best way to change them at runtime is to apply a &amp;lt;style&amp
   A reference to a target file whose content is treated as a loadable module </xs:documentation>
 </xs:annotation>
 </xs:attribute>
+  </xs:extension>
+  </xs:complexContent>
   </xs:complexType>
 <xs:element name="textlistitem" type="lzx:textlistitem" >
 </xs:element>
@@ -9095,7 +9007,7 @@ Currently the best way to change them at runtime is to apply a &amp;lt;style&amp
 </xs:element>
   <xs:complexType name="rtmpstatus" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="rtmpc" type="xs:string" default="null" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -9227,7 +9139,7 @@ Currently the best way to change them at runtime is to apply a &amp;lt;style&amp
 </xs:element>
   <xs:complexType name="basetooltip" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="text" type="xs:string" default="Default Value" >
 </xs:attribute>
   </xs:extension>
@@ -9238,12 +9150,6 @@ Currently the best way to change them at runtime is to apply a &amp;lt;style&amp
   <xs:complexType name="form" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:baseform">
-      <xs:attribute name="y" type="xs:string" default="${classroot.content.y +                                  classroot.content.height +                                 classroot.spacing}" >
-</xs:attribute>
-      <xs:attribute name="x" type="xs:string" default="${classroot.content.x +                                  classroot.content.width +                                  - this.width}" >
-</xs:attribute>
-      <xs:attribute name="width" type="xs:string" default="${classroot.width - classroot.inset_left                                               - classroot.inset_right}" >
-</xs:attribute>
       <xs:attribute name="spacing" type="xs:string" default="10" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -9275,8 +9181,6 @@ Currently the best way to change them at runtime is to apply a &amp;lt;style&amp
 <xs:documentation xml:lang="en">
  The bottom inset for content appearing within form. </xs:documentation>
 </xs:annotation>
-</xs:attribute>
-      <xs:attribute name="height" type="xs:string" default="${this.inset_top + this.content.height +                   (buttonplace.height != 0 ?  buttonplace.height + spacing : 0) +                       this.inset_bottom}" >
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
@@ -9747,11 +9651,32 @@ Implementes the Stroke rendering lines </xs:documentation>
 </xs:element>
   <xs:complexType name="row" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="label" type="xs:string" >
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
+  </xs:complexType>
+<xs:element name="include" type="lzx:include" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ The &lt;include&gt; tag is used to include source code contained in another file. See the Guide for a complete discussion. Also see the &lt;library&gt; tag. </xs:documentation>
+</xs:annotation>
+</xs:element>
+  <xs:complexType name="include" mixed="true">
+  <xs:group ref="lzx:topLevelElements" />
+      <xs:attribute name="type" type="xs:string" default="text|xml" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+  If this attribute has the value text , the content of the target file is included as text. Otherwise, it is read as XML.  </xs:documentation>
+</xs:annotation>
+</xs:attribute>
+      <xs:attribute name="href" type="xs:string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+  A reference to a target file whose content is included in the application that contains this include element. </xs:documentation>
+</xs:annotation>
+</xs:attribute>
   </xs:complexType>
 <xs:element name="menutrackgroup" type="lzx:menutrackgroup" >
 </xs:element>
@@ -10098,10 +10023,6 @@ Implementes the Stroke rendering lines </xs:documentation>
   <xs:complexType name="basegridrow" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:basecomponent">
-      <xs:attribute name="x" type="xs:string" default="${ownerGrid.header.hcontent.x}" >
-</xs:attribute>
-      <xs:attribute name="width" type="xs:string" default="${Math.max(                          ownerGrid.header.hcontent.width, ownerGrid.width )}" >
-</xs:attribute>
       <xs:attribute name="styleRegularColor" type="lzx:color" default="black" >
 </xs:attribute>
       <xs:attribute name="selectedColor" type="lzx:color" default="black" >
@@ -10122,12 +10043,6 @@ Implementes the Stroke rendering lines </xs:documentation>
 </xs:attribute>
       <xs:attribute name="highlightColor" type="lzx:color" default="black" >
 </xs:attribute>
-      <xs:attribute name="focustrap" type="xs:string" default="true" >
-</xs:attribute>
-      <xs:attribute name="clickable" type="xs:string" default="$once{selectable}" >
-</xs:attribute>
-      <xs:attribute name="bgcolor" type="xs:string" default="${this.getBGColor( this.highlighted, this.selected )}" >
-</xs:attribute>
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -10135,7 +10050,7 @@ Implementes the Stroke rendering lines </xs:documentation>
 </xs:element>
   <xs:complexType name="basedatepickerday" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="selected" type="lzx:boolean" default="false" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -10182,7 +10097,7 @@ Implementes the Stroke rendering lines </xs:documentation>
 </xs:element>
   <xs:complexType name="viewspoolmanager" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="pools" type="xs:string" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -10408,7 +10323,7 @@ This attribute is only available if replication is set to either "lazy" or "resi
 </xs:element>
   <xs:complexType name="colorslider" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -10470,7 +10385,7 @@ Sent whenever the text field is enabled. </xs:documentation>
 </xs:element>
   <xs:complexType name="videoscreen" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="volume" type="xs:string" default="1.0" >
 </xs:attribute>
       <xs:attribute name="videoWidth" type="xs:string" default="${             Math.min(this.innerWidth,                      this.innerHeight * this.aspectRatio)}" >
@@ -10625,7 +10540,7 @@ Sent whenever the text field is enabled. </xs:documentation>
 </xs:element>
   <xs:complexType name="fileupload" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="uploadenable" type="lzx:boolean" default="false" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -10804,7 +10719,7 @@ A general hotspot for points inside a circle.
 </xs:element>
   <xs:complexType name="basedatepickerweek" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="dayclass" type="xs:string" default="$once{classroot.dayclass}" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -10819,7 +10734,7 @@ A general hotspot for points inside a circle.
 </xs:element>
   <xs:complexType name="videolibrarypopup" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="yourY" type="xs:string" default="0" >
 </xs:attribute>
       <xs:attribute name="yourX" type="xs:string" default="0" >
@@ -10881,7 +10796,7 @@ A general hotspot for points inside a circle.
 </xs:element>
   <xs:complexType name="basetabpanecontent" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -10896,7 +10811,7 @@ A general hotspot for points inside a circle.
 </xs:element>
   <xs:complexType name="borderinput" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="text" type="xs:string" >
 </xs:attribute>
       <xs:attribute name="labelwidth" type="lzx:number" default="80" >
@@ -11068,7 +10983,7 @@ A general hotspot for points inside a circle.
 </xs:element>
   <xs:complexType name="ZoomView" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="text" type="xs:string" >
 </xs:attribute>
       <xs:attribute name="opened" type="xs:string" >
@@ -11095,8 +11010,6 @@ A general hotspot for points inside a circle.
   <xs:complexType name="gridcolumn" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:basegridcolumn">
-      <xs:attribute name="width" type="xs:string" default="${ classroot.width -                                           ( parent.resizable &amp;&amp; parent['resizer'] ?                                             parent['resizer'].width : 0 ) }" >
-</xs:attribute>
       <xs:attribute name="sortable" type="lzx:boolean" default="true" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -11129,7 +11042,7 @@ A general hotspot for points inside a circle.
 </xs:element>
   <xs:complexType name="item" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="showcomponenthelpers" type="xs:string" default="false" >
 </xs:attribute>
       <xs:attribute name="root" type="xs:string" default="this" >
@@ -11182,7 +11095,7 @@ You can set allocation to class to get static attributes. Static properties are 
 </xs:element>
   <xs:complexType name="baseopttreenode" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="startdragdelay" type="xs:string" default="800" >
 </xs:attribute>
       <xs:attribute name="startdragdel" type="xs:string" default="null" >
@@ -11285,7 +11198,7 @@ You can set allocation to class to get static attributes. Static properties are 
 </xs:element>
   <xs:complexType name="dragger" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="text" type="xs:string" >
 </xs:attribute>
   </xs:extension>
@@ -11353,8 +11266,6 @@ You can set allocation to class to get static attributes. Static properties are 
   <xs:complexType name="vscrollbar" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:basescrollbar">
-      <xs:attribute name="y" type="xs:string" default="${parent.thumb.y+parent.thumb.height}" >
-</xs:attribute>
       <xs:attribute name="disabledbgcolor" type="xs:string" default="null" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -11395,7 +11306,7 @@ returning back to the first point added to close the polygon.
 </xs:element>
   <xs:complexType name="debugger_shadow_right" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -11519,7 +11430,7 @@ returning back to the first point added to close the polygon.
 </xs:element>
   <xs:complexType name="_floatshadow" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="shadowsize" type="xs:string" default="5" >
 </xs:attribute>
       <xs:attribute name="oncornerresourcenumber" type="xs:string" >
@@ -11545,12 +11456,6 @@ returning back to the first point added to close the polygon.
   <xs:complexType name="edittext" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:baseformitem">
-      <xs:attribute name="width" type="xs:string" default="106" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- The width of the edit text box. </xs:documentation>
-</xs:annotation>
-</xs:attribute>
       <xs:attribute name="text_y" type="lzx:number" default="${multiline ? 2 : Math.round(((this.height - this.field.getTextHeight())/2))} " >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -11596,12 +11501,6 @@ returning back to the first point added to close the polygon.
  The maximum number of chars that can be entered. </xs:documentation>
 </xs:annotation>
 </xs:attribute>
-      <xs:attribute name="height" type="xs:string" default="26" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- The height of the edit text box. </xs:documentation>
-</xs:annotation>
-</xs:attribute>
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -11617,7 +11516,7 @@ returning back to the first point added to close the polygon.
 </xs:element>
   <xs:complexType name="debugger_shadow_bottom" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -11698,21 +11597,6 @@ returning back to the first point added to close the polygon.
   <xs:complexType name="menubar" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:basecomponent">
-      <xs:attribute name="width" type="xs:string" default="${immediateparent.width + 1}" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- in a window, the menubar's width  needs to extend one more pixel 
-             past its container ( which has the same width as the content ) so
-             it's default width is immediateparent.width + 1
-             @access private </xs:documentation>
-</xs:annotation>
-</xs:attribute>
-      <xs:attribute name="height" type="xs:string" default="20" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- @access private </xs:documentation>
-</xs:annotation>
-</xs:attribute>
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -11739,7 +11623,7 @@ to work the view in which it is defined must be clickable.
 </xs:element>
   <xs:complexType name="imagemap" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="exclusive" type="lzx:boolean" default="true" >
 </xs:attribute>
   </xs:extension>
@@ -11812,7 +11696,7 @@ to work the view in which it is defined must be clickable.
 </xs:element>
   <xs:complexType name="basetrackgroup" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="trackingrate" type="xs:string" default="150" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -11869,7 +11753,7 @@ to work the view in which it is defined must be clickable.
 </xs:element>
   <xs:complexType name="shadowbox" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="shadowleft" type="xs:string" default="false" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -12104,7 +11988,7 @@ to work the view in which it is defined must be clickable.
 </xs:element>
   <xs:complexType name="colorrow" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -12137,7 +12021,7 @@ to work the view in which it is defined must be clickable.
 </xs:element>
   <xs:complexType name="videoplayer" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="url" type="xs:string" default="" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -12317,8 +12201,6 @@ to work the view in which it is defined must be clickable.
   <xs:complexType name="basegrid" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:basecomponent">
-      <xs:attribute name="width" type="xs:string" default="${ header.hcontent.width }" >
-</xs:attribute>
       <xs:attribute name="spacing" type="lzx:number" default="0" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -12458,7 +12340,7 @@ to work the view in which it is defined must be clickable.
 </xs:element>
   <xs:complexType name="DebugObject" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="debugWrite" type="lzx:boolean" default="false" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -12472,7 +12354,7 @@ to work the view in which it is defined must be clickable.
 </xs:element>
   <xs:complexType name="videoslider" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="waspaused" type="xs:string" default="true" >
 </xs:attribute>
       <xs:attribute name="volume" type="xs:string" default="${this.controls.volumebutton.volume}" >
@@ -12620,7 +12502,7 @@ A font element within a &lt;canvas&gt; or &lt;library&gt; defines a font, which 
 </xs:element>
   <xs:complexType name="fileuploadlist" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="selected" type="lzx:boolean" default="false" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -12632,8 +12514,6 @@ A font element within a &lt;canvas&gt; or &lt;library&gt; defines a font, which 
 <xs:documentation xml:lang="en">
  Events</xs:documentation>
 </xs:annotation>
-</xs:attribute>
-      <xs:attribute name="onerror" type="xs:string" >
 </xs:attribute>
       <xs:attribute name="oncomplete" type="xs:string" >
 </xs:attribute>
@@ -12675,12 +12555,6 @@ A font element within a &lt;canvas&gt; or &lt;library&gt; defines a font, which 
   <xs:complexType name="listitem" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:baselistitem">
-      <xs:attribute name="height" type="xs:string" default="20" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- The height of the listitem. </xs:documentation>
-</xs:annotation>
-</xs:attribute>
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -12767,18 +12641,7 @@ A menu item within a context menu </xs:documentation>
 </xs:element>
   <xs:complexType name="basedragimage" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
-      <xs:attribute name="y" type="xs:string" default="${this.immediateparent.getMouse( 'y' ) - this.ydoffset}" >
-</xs:attribute>
-      <xs:attribute name="x" type="xs:string" default="${this.immediateparent.getMouse( 'x' ) - this.xdoffset}" >
-</xs:attribute>
-      <xs:attribute name="source" type="xs:string" default="null" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- the view where the drag was initiated
-          @keywords read-only </xs:documentation>
-</xs:annotation>
-</xs:attribute>
+  <xs:extension base="lzx:view">
       <xs:attribute name="dropgroup" type="xs:string" default="droptarget" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -12952,12 +12815,6 @@ A menu item within a context menu </xs:documentation>
   <xs:complexType name="baseedittext" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:baseformitem">
-      <xs:attribute name="width" type="xs:string" default="106" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- The width of the edit text box. </xs:documentation>
-</xs:annotation>
-</xs:attribute>
       <xs:attribute name="pattern" type="xs:string" default="$once{null}" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -12992,18 +12849,6 @@ A menu item within a context menu </xs:documentation>
 <xs:documentation xml:lang="en">
  The maximum number of chars that can be entered. Default is
               unlimited. </xs:documentation>
-</xs:annotation>
-</xs:attribute>
-      <xs:attribute name="height" type="xs:string" default="20" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- The height of the edit text box. </xs:documentation>
-</xs:annotation>
-</xs:attribute>
-      <xs:attribute name="fontsize" type="xs:string" default="13" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- Font size of the text. </xs:documentation>
 </xs:annotation>
 </xs:attribute>
   </xs:extension>
@@ -13051,7 +12896,7 @@ A menu item within a context menu </xs:documentation>
 </xs:element>
   <xs:complexType name="marker" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -13059,7 +12904,7 @@ A menu item within a context menu </xs:documentation>
 </xs:element>
   <xs:complexType name="droptarget" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="text" type="xs:string" >
 </xs:attribute>
   </xs:extension>
@@ -13170,7 +13015,7 @@ A menu item within a context menu </xs:documentation>
 </xs:element>
   <xs:complexType name="legendtitle" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="ttsize" type="xs:string" default="10" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -13258,7 +13103,7 @@ A menu item within a context menu </xs:documentation>
 </xs:element>
   <xs:complexType name="dataseries" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="ydatapath" type="xs:string" default="" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -13602,11 +13447,7 @@ A menu item within a context menu </xs:documentation>
   <xs:extension base="lzx:basecomponent">
       <xs:attribute name="ydoffset" type="xs:string" default="this.getMouse( 'y' )" >
 </xs:attribute>
-      <xs:attribute name="y" type="xs:string" default="${this.state != 3 ? setDragPos('y', this.immediateparent.getMouse( 'y' )) : this.immediateparent.getMouse( 'y' ) - this.ydoffset}" >
-</xs:attribute>
       <xs:attribute name="xdoffset" type="xs:string" default="this.getMouse( 'x' )" >
-</xs:attribute>
-      <xs:attribute name="x" type="xs:string" default="${this.state != 3 ? setDragPos('x', this.immediateparent.getMouse( 'x' )) : this.immediateparent.getMouse( 'x' ) - this.xdoffset}" >
 </xs:attribute>
       <xs:attribute name="state" type="xs:string" default="1" >
 <xs:annotation>
@@ -13656,7 +13497,7 @@ A menu item within a context menu </xs:documentation>
 </xs:element>
   <xs:complexType name="videothumbnail" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="url" type="xs:string" default="" >
 </xs:attribute>
       <xs:attribute name="type" type="xs:string" default="http" >
@@ -13672,13 +13513,7 @@ A menu item within a context menu </xs:documentation>
 </xs:element>
   <xs:complexType name="simpleinputtext" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
-      <xs:attribute name="width" type="xs:string" default="100" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- The width of the input box. </xs:documentation>
-</xs:annotation>
-</xs:attribute>
+  <xs:extension base="lzx:view">
       <xs:attribute name="textOpacity" type="xs:string" default="1" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -13690,8 +13525,6 @@ A menu item within a context menu </xs:documentation>
 <xs:documentation xml:lang="en">
  The text for input. </xs:documentation>
 </xs:annotation>
-</xs:attribute>
-      <xs:attribute name="opacity" type="xs:string" default="parent.textOpacity" >
 </xs:attribute>
       <xs:attribute name="focusborderOpacity" type="xs:string" default="1" >
 <xs:annotation>
@@ -13733,7 +13566,7 @@ A menu item within a context menu </xs:documentation>
 </xs:element>
   <xs:complexType name="ulink" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="text" type="xs:string" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -13837,6 +13670,12 @@ When a state is removed, any children or constraints created when the state was 
  The CSS property name that can be used to set the value of this attribute under the control of a &lt;stylesheet&gt; (See Chapter 19. Cascading Style Sheets ). style can be any valid CSS property name, and need not be the same as the attribute name; for example you could use the standard CSS property name background-color as the style of the bgcolor attribute. When an attribute has a style property, the value property acts as the default value for the attribute: in the absence of any applicable CSS rule specifying the corresponding property, the attribute will be given the default value. In the case of dynamic CSS, the attribute will revert to the default value if CSS was applied and is removed. (See Dynamic CSS .) </xs:documentation>
 </xs:annotation>
 </xs:attribute>
+      <xs:attribute name="setter" type="xs:string" default="string" >
+<xs:annotation>
+<xs:documentation xml:lang="en">
+ Delegate the event to a method on changes through setAttribute('...',$value) </xs:documentation>
+</xs:annotation>
+</xs:attribute>
       <xs:attribute name="required" type="lzx:boolean" default="false" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -13866,7 +13705,7 @@ You can set allocation to class to get static attributes. Static properties are 
 </xs:element>
   <xs:complexType name="streamscrubber" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="totaltime" type="xs:string" default="0" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -13944,13 +13783,7 @@ You can set allocation to class to get static attributes. Static properties are 
 </xs:element>
   <xs:complexType name="LzDebugWindow" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
-      <xs:attribute name="y" type="xs:string" default="${canvas.height * .95 - this.height}" >
-</xs:attribute>
-      <xs:attribute name="x" type="xs:string" default="${canvas.width * .95 - this.width}" >
-</xs:attribute>
-      <xs:attribute name="width" type="xs:string" default="${canvas.width * .9}" >
-</xs:attribute>
+  <xs:extension base="lzx:view">
       <xs:attribute name="title" type="xs:string" default="" >
 </xs:attribute>
       <xs:attribute name="smallInputAreaHeight" type="xs:string" default="29" >
@@ -13982,10 +13815,6 @@ You can set allocation to class to get static attributes. Static properties are 
       <xs:attribute name="keep_height_on_canvas" type="xs:string" default="false" >
 </xs:attribute>
       <xs:attribute name="isLoaded" type="xs:string" default="false" >
-</xs:attribute>
-      <xs:attribute name="height" type="xs:string" default="${canvas.height *.5}" >
-</xs:attribute>
-      <xs:attribute name="focustrap" type="xs:string" default="true" >
 </xs:attribute>
       <xs:attribute name="evalloader" type="xs:string" default="null" >
 </xs:attribute>
@@ -14152,14 +13981,6 @@ You can set allocation to class to get static attributes. Static properties are 
               even if the rows are wider than the grid.</xs:documentation>
 </xs:annotation>
 </xs:attribute>
-      <xs:attribute name="layout" type="xs:string" default="placement : 'hcontent';axis:'x' ; spacing:-1" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- The layout of attribute of the grid is set up to control
-              the way that the header columns are situated. Changing this 
-              property changes the header column layout.</xs:documentation>
-</xs:annotation>
-</xs:attribute>
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -14196,7 +14017,7 @@ You can set allocation to class to get static attributes. Static properties are 
 </xs:element>
   <xs:complexType name="_dbg_lztextscroller" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="visiblelines" type="xs:string" default="4" >
 </xs:attribute>
       <xs:attribute name="thumbheight" type="xs:string" default="24" >
@@ -14228,13 +14049,6 @@ You can set allocation to class to get static attributes. Static properties are 
  Class to instantiate tab items for basetabsbar. Can be
               overridden by basetabpane.
               @keywords final </xs:documentation>
-</xs:annotation>
-</xs:attribute>
-      <xs:attribute name="layout" type="xs:string" default="class: simplelayout; axis: y; spacing: 0" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- Basetab's layout for its basetabsbar and basetabscontent
-              area. </xs:documentation>
 </xs:annotation>
 </xs:attribute>
       <xs:attribute name="inset_top" type="lzx:number" default="8" >
@@ -14586,7 +14400,7 @@ A tag that defines a media object that can be associated with a view. </xs:docum
 </xs:element>
   <xs:complexType name="_dbg_horiz_scrollbar" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="thumbwidth" type="xs:string" default="24" >
 </xs:attribute>
       <xs:attribute name="autoscroll" type="xs:string" default="true" >
@@ -14617,8 +14431,6 @@ A tag that defines a media object that can be associated with a view. </xs:docum
   <xs:extension base="lzx:baseopttreenode">
       <xs:attribute name="mousein" type="xs:string" default="false" >
 </xs:attribute>
-      <xs:attribute name="bgcolor" type="xs:string" default="${ mousein ? 0xCCCCEE  :                                             ( highlight ? 0xEECCCC : null ) }" >
-</xs:attribute>
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -14626,7 +14438,7 @@ A tag that defines a media object that can be associated with a view. </xs:docum
 </xs:element>
   <xs:complexType name="fisheye_item" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="tooltip" type="xs:string" default="${this.text}" >
 </xs:attribute>
       <xs:attribute name="text" type="xs:string" >
@@ -14652,7 +14464,7 @@ A tag that defines a media object that can be associated with a view. </xs:docum
 </xs:element>
   <xs:complexType name="videotogglebutton" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="tracking" type="xs:string" default="false" >
 </xs:attribute>
       <xs:attribute name="over" type="xs:string" default="false" >
@@ -14883,7 +14695,7 @@ When true, the withCredentials property on the XHR object will be set to true, a
 </xs:element>
   <xs:complexType name="basechartbacking" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="drawready" type="lzx:boolean" default="false" >
 <xs:annotation>
 <xs:documentation xml:lang="en">

@@ -13,7 +13,7 @@ public class GenerateBaseXSD extends GenerateSchema {
 		generateBaseXSD.scanFolder("openlaszlo/lps/");
 		generateBaseXSD.scanFolder("test/core/lfc/");
 		
-		generateBaseXSD.printXsd("lzx.xsd","test/core/static_simpleTypes.txt");
+		generateBaseXSD.printXsd("WebContent/lzx.xsd","test/core/static_simpleTypes.txt");
 		
 	}
 	

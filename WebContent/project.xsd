@@ -529,7 +529,7 @@
 </xs:element>
   <xs:complexType name="ibutton" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="overRsrcNumber" type="lzx:number" default="2" >
 </xs:attribute>
       <xs:attribute name="normalRsrcNumber" type="lzx:number" default="1" >
@@ -615,7 +615,7 @@
 </xs:element>
   <xs:complexType name="monitorListItemView" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -1060,7 +1060,7 @@ This is used in the conference.
 </xs:element>
   <xs:complexType name="devmediadevice" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -1717,7 +1717,7 @@ This is used in the conference.
 </xs:element>
   <xs:complexType name="basepanel" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -1825,7 +1825,7 @@ This is used in the conference.
 </xs:element>
   <xs:complexType name="colorPot" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="mycolorString" type="xs:string" default="0x000000" >
 </xs:attribute>
       <xs:attribute name="mycolor" type="lzx:color" default="0x000000" >
@@ -1945,7 +1945,7 @@ This is used in the conference.
 </xs:element>
   <xs:complexType name="monitorSubListItem" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="textitem" type="xs:string" default="def" >
 </xs:attribute>
       <xs:attribute name="lableid" type="lzx:number" default="0" >
@@ -2346,16 +2346,8 @@ This is used in the conference.
 </xs:element>
   <xs:complexType name="selectedDayLook" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
-      <xs:attribute name="y" type="xs:string" default="${dayview.getAttributeRelative( 'y',                                                         canvas )}" >
-</xs:attribute>
-      <xs:attribute name="x" type="xs:string" default="${dayview.getAttributeRelative( 'x',                                                         canvas )}" >
-</xs:attribute>
-      <xs:attribute name="width" type="xs:string" default="${this.dayview.width}" >
-</xs:attribute>
+  <xs:extension base="lzx:view">
       <xs:attribute name="open" type="xs:string" >
-</xs:attribute>
-      <xs:attribute name="height" type="xs:string" default="${this.dayview.height}" >
 </xs:attribute>
       <xs:attribute name="dayview" type="xs:string" default="null" >
 </xs:attribute>
@@ -2468,7 +2460,7 @@ This is used in the conference.
 </xs:element>
   <xs:complexType name="singletonErrorPopupHolder" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="error" type="xs:string" >
 </xs:attribute>
       <xs:attribute name="dialogPresent" type="xs:string" default="0" >
@@ -3080,7 +3072,7 @@ This is used in the conference.
 </xs:element>
   <xs:complexType name="textbox" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="bordercolor" type="xs:string" default="0x000000" >
 </xs:attribute>
   </xs:extension>
@@ -3210,16 +3202,10 @@ This is used in the conference.
 </xs:element>
   <xs:complexType name="eventSelectorbar" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="yoff" type="lzx:number" default="0" >
 </xs:attribute>
-      <xs:attribute name="y" type="xs:string" default="${classroot['followview'].getAttributeRelative( 'y',                                                                     this)}" >
-</xs:attribute>
       <xs:attribute name="xoff" type="lzx:number" default="0" >
-</xs:attribute>
-      <xs:attribute name="x" type="xs:string" default="${classroot['followview'].getAttributeRelative( 'x',                                                                     this )}" >
-</xs:attribute>
-      <xs:attribute name="width" type="xs:string" default="${classroot['followview'].classroot.eventwidth}" >
 </xs:attribute>
       <xs:attribute name="startDragDel" type="xs:string" default="null" >
 </xs:attribute>
@@ -3235,11 +3221,7 @@ This is used in the conference.
 </xs:attribute>
       <xs:attribute name="mdel" type="xs:string" default="null" >
 </xs:attribute>
-      <xs:attribute name="hour" type="xs:string" default="$path{'@hour'}" >
-</xs:attribute>
       <xs:attribute name="hidedel" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="height" type="xs:string" default="${classroot['followview'].height}" >
 </xs:attribute>
       <xs:attribute name="freedragging" type="lzx:boolean" default="false" >
 </xs:attribute>
@@ -4529,7 +4511,7 @@ This is used in the conference.
 </xs:element>
   <xs:complexType name="colorRow" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -4701,7 +4683,9 @@ This is used in the conference.
 </xs:element>
   <xs:complexType name="simpleLabelButton" mixed="true">
   <xs:complexContent>
-  <xs:extension base="project:calButton">
+  <xs:extension base="lzx:button">
+      <xs:attribute name="labelid" type="lzx:number" >
+</xs:attribute>
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -4887,7 +4871,7 @@ This is used in the conference.
 </xs:element>
   <xs:complexType name="conferencecontainertab" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -5359,7 +5343,7 @@ This is used in the conference.
 </xs:element>
   <xs:complexType name="omlegenditem" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="tBox" type="xs:string" default="" >
 </xs:attribute>
       <xs:attribute name="linevisible" type="lzx:boolean" default="false" >
@@ -5378,7 +5362,7 @@ This is used in the conference.
 </xs:element>
   <xs:complexType name="drawArrowWhiteBoard" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -5536,20 +5520,12 @@ This is used in the conference.
 </xs:element>
   <xs:complexType name="calButton" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="yadjust" type="lzx:number" default="2" >
-</xs:attribute>
-      <xs:attribute name="y" type="xs:string" default="parent.yadjust - 1" >
-</xs:attribute>
-      <xs:attribute name="x" type="xs:string" default="parent.bkgnd.lft.leftinset - 1" >
-</xs:attribute>
-      <xs:attribute name="text" type="xs:string" default="parent.label" >
 </xs:attribute>
       <xs:attribute name="rightinset" type="xs:string" default="0" >
 </xs:attribute>
       <xs:attribute name="rightcap" type="xs:string" default="oval" >
-</xs:attribute>
-      <xs:attribute name="resource" type="xs:string" default="leftcap_oval" >
 </xs:attribute>
       <xs:attribute name="overRsrcNumber" type="lzx:number" default="2" >
 </xs:attribute>
@@ -5579,9 +5555,7 @@ This is used in the conference.
 </xs:attribute>
       <xs:attribute name="deselectRsrcNumber" type="lzx:number" default="4" >
 </xs:attribute>
-      <xs:attribute name="defaultY" type="lzx:number" default="0" >
-</xs:attribute>
-      <xs:attribute name="applied" type="xs:string" default="classroot.leftcap == 'oval'" >
+      <xs:attribute name="applied" type="xs:string" default="classroot.leftcap == 'rect'" >
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
@@ -5688,7 +5662,7 @@ This is used in the conference.
 </xs:element>
   <xs:complexType name="drawClipArtWhiteBoard" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="clipArtEndy" type="lzx:number" default="0" >
 </xs:attribute>
       <xs:attribute name="clipArtEndx" type="lzx:number" default="0" >
@@ -5714,7 +5688,7 @@ This is used in the conference.
 </xs:element>
   <xs:complexType name="dayname" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -7145,7 +7119,7 @@ This is used in the conference.
 </xs:element>
   <xs:complexType name="innerList" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -7936,7 +7910,7 @@ This is used in the conference.
 </xs:element>
   <xs:complexType name="baseVideoView" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -8066,7 +8040,7 @@ This is used in the conference.
 </xs:element>
   <xs:complexType name="simplebasetabpane" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -8288,7 +8262,7 @@ This is used in the conference.
 </xs:element>
   <xs:complexType name="calendar_day" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="year" type="lzx:number" default="0" >
 </xs:attribute>
       <xs:attribute name="startdate" type="xs:string" default="1" >
@@ -9076,7 +9050,7 @@ This is used in the conference.
 </xs:element>
   <xs:complexType name="browserjavascriptcallback" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="value" type="xs:string" >
 </xs:attribute>
       <xs:attribute name="timer" type="lzx:number" default="10" >
@@ -9158,7 +9132,7 @@ This is used in the conference.
 </xs:element>
   <xs:complexType name="fileUpload" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
+  <xs:extension base="lzx:view">
       <xs:attribute name="isOnlyZip" type="lzx:boolean" default="false" >
 </xs:attribute>
       <xs:attribute name="isOnlyXml" type="lzx:boolean" default="false" >
@@ -9577,13 +9551,7 @@ This is used in the conference.
 </xs:element>
   <xs:complexType name="calendar_event" mixed="true">
   <xs:complexContent>
-  <xs:extension base="lzx:node">
-      <xs:attribute name="y" type="xs:string" default="${this.startTime * this.pixelPerMin + (pixelPerMin * 30)}" >
-</xs:attribute>
-      <xs:attribute name="x" type="xs:string" default="24" >
-</xs:attribute>
-      <xs:attribute name="text" type="xs:string" default="${ classroot.startHour }" >
-</xs:attribute>
+  <xs:extension base="lzx:view">
       <xs:attribute name="startTime" type="xs:string" default="${this.startHour * 60 + Number( this.startMin )}" >
 </xs:attribute>
       <xs:attribute name="startMin" type="xs:string" default="$path{'start[1]/@minute'}" >
@@ -9600,8 +9568,6 @@ This is used in the conference.
 </xs:attribute>
       <xs:attribute name="hiColor" type="lzx:color" default="0xDDDDDD" >
 </xs:attribute>
-      <xs:attribute name="height" type="xs:string" default="${Math.max( 22, ( this.endTime - this.startTime )                                               * this.pixelPerMin )}" >
-</xs:attribute>
       <xs:attribute name="endTime" type="xs:string" default="${this.endHour * 60 + Number( this.endMin )}" >
 </xs:attribute>
       <xs:attribute name="endMin" type="xs:string" default="$path{'end[1]/@minute'}" >
@@ -9609,8 +9575,6 @@ This is used in the conference.
       <xs:attribute name="endHour" type="xs:string" default="$path{'end[1]/@hour'}" >
 </xs:attribute>
       <xs:attribute name="defaultTimes" type="xs:string" default="{startHour: 0, startMin: 0, endHour: 0, endMin: 0}" >
-</xs:attribute>
-      <xs:attribute name="datacontrolsvisibility" type="xs:string" default="false" >
 </xs:attribute>
       <xs:attribute name="category" type="xs:string" default="$path{'category[1]/@value'}" >
 </xs:attribute>

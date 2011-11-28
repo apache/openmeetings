@@ -17,23 +17,7 @@
     <include href="eventselector.lzx"/>
     
     
-    <dataset name="myData">
-        <myXML>
-            <person show="simpsons">
-              <firstName>Homer</firstName>
-              <lastName>Simpson</lastName>
-            </person>
-            <person show="simpsons">
-              <firstName>Marge</firstName>
-              <lastName>Simpson</lastName>
-            </person>
-            <person show="simpsons">
-              <firstName>Montgomery</firstName>
-              <lastName>Burns</lastName>
-            </person>
-          </myXML>
-       
-    </dataset>
+    <dataset name="myData" />
     
     <method name="loadSomeData">
         Debug.write("loadSomeData");

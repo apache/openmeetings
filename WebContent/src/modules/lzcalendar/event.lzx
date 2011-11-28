@@ -88,7 +88,7 @@
         <text name="timeArea" fgcolor="#4B5D6C"
               width="35" height="20" x="2" y="3" resize="true"
               visible="$once{!this.classroot.classroot.opened}">
-
+            <!--- @keywords private -->
             <attribute name="text" 
                         value="${ classroot.startHour }" type="text" />
 
@@ -98,6 +98,7 @@
                     data are hidden. 'datacontrolsvisibility' set to false
                     allows us to control when events are shown without
                     interference from the data binding -->
+                <!--- @keywords private -->
                 <attribute name="datacontrolsvisibility" value="false"/>
             </datapath>
             <setter name="text" args="h">
@@ -133,11 +134,13 @@
         <state name="timeLayout" applied="${this.parent.classroot.opened}"
                onapply="parent.openToggle(true)"
                onremove="parent.openToggle(false)">
-
+            <!--- @keywords private -->
             <attribute name="x"
                        value="24"/>
+            <!--- @keywords private -->
             <attribute name="y"
                        value="${this.startTime * this.pixelPerMin + (pixelPerMin * 30)}"/>
+            <!--- @keywords private -->
             <attribute name="height"
                        value="${Math.max( 22, ( this.endTime - this.startTime )
                                               * this.pixelPerMin )}" />

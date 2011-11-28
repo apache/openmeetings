@@ -56,6 +56,10 @@ This will be an instance of LzHTTPDataProvider, which implements HTTP request tr
     <attribute name="screenorientation" type="boolean"/>
     <!---   A CSS declaration of property: value pairs used to advise the underlying runtime of desired recursion and timeout limits. Not all runtimes respect this advice. The default value is runtime dependent, but typically recursion is at least 100 and timeout at least 10 (seconds). Example: scriptlimits="recursion: 256, timeout: 15"-->
     <attribute name="scriptlimits" type="string"/>
+    
+    <attribute name="debug" value="boolean" />
+    
+    <attribute name="title" value="string" />
     	
 </class>
 

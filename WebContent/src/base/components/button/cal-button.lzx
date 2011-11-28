@@ -50,26 +50,37 @@
         <view name="bkgnd" width="100%">
             <view name="lft">
                 <state name="oval">
+                	<!--- @keywords private -->
                     <attribute name="applied" value="classroot.leftcap == 'oval'" when="always"/>
+                    <!--- @keywords private -->
                     <attribute name="resource"   value="leftcap_oval" />
+                    <!--- @keywords private -->
                     <attribute name="leftinset"  value="classroot.leftinset == 0?  8:classroot.leftinset" when="always" />
                </state>
 
                 <state name="roundrect">
+                	<!--- @keywords private -->
                     <attribute name="applied" value="classroot.leftcap == 'roundrect'" when="always"/>
+                    <!--- @keywords private -->
                     <attribute name="resource" value="leftcap_roundrect" />
+                    <!--- @keywords private -->
                     <attribute name="leftinset"  value="classroot.leftinset == 0?  5:classroot.leftinset" when="always" />
                 </state>
 
                 <state name="rect">
                     <attribute name="applied" value="classroot.leftcap == 'rect'" when="always"/>
+                    <!--- @keywords private -->
                     <attribute name="resource" value="leftcap_rect" />
+                    <!--- @keywords private -->
                     <attribute name="leftinset"  value="classroot.leftinset == 0?  6:classroot.leftinset" when="always" />
                 </state>
 
                  <state name="shear">
+                 	<!--- @keywords private -->
                     <attribute name="applied" value="classroot.leftcap == 'shear'" when="always"/>
+                    <!--- @keywords private -->
                     <attribute name="resource" value="leftcap_shear" />
+                    <!--- @keywords private -->
                     <attribute name="leftinset"  value="classroot.leftinset == 0?  3:classroot.leftinset" when="always" />
                 </state>
            </view>
@@ -78,26 +89,38 @@
 
             <view name="rgt">
                 <state name="oval">
+                	<!--- @keywords private -->
                     <attribute name="applied" value="classroot.rightcap == 'oval'" when="always"/>
+                    <!--- @keywords private -->
                     <attribute name="resource"    value="rightcap_oval" />
+                    <!--- @keywords private -->
                     <attribute name="rightinset"  value="classroot.rightinset == 0?  12:classroot.rightinset" when="always" />
                 </state>
 
                 <state name="rect">
+                	<!--- @keywords private -->
                     <attribute name="applied" value="classroot.rightcap == 'rect'" when="always"/>
+                    <!--- @keywords private -->
                     <attribute name="resource" value="rightcap_rect" />
+                    <!--- @keywords private -->
                     <attribute name="rightinset"  value="classroot.rightinset == 0?  9:classroot.rightinset" when="always" />
                </state>
 
                 <state name="roundrect">
+                	<!--- @keywords private -->
                     <attribute name="applied" value="classroot.rightcap == 'roundrect'" when="always"/>
+                    <!--- @keywords private -->
                     <attribute name="resource" value="rightcap_roundrect" />
+                    <!--- @keywords private -->
                     <attribute name="rightinset"  value="classroot.rightinset == 0?  9:classroot.rightinset" when="always" />
               </state>
 
                 <state name="shear">
+                	<!--- @keywords private -->
                     <attribute name="applied" value="classroot.rightcap == 'shear'" when="always"/>
+                    <!--- @keywords private -->
                     <attribute name="resource" value="rightcap_shear" />
+                    <!--- @keywords private -->
                     <attribute name="rightinset"  value="classroot.rightinset == 0?  5:classroot.rightinset" when="always" />
                 </state>
             </view>
@@ -106,18 +129,25 @@
 
         <!-- EXTRA STATES FOR SUPPORTING VIEWS AND METHODS FOR UPDATING -->
         <state name="measuretextwidth" >
+        	<!--- @keywords private -->
             <attribute name="applied"   value="classroot.label != ''" when="always"/>
             <!-- if applied is TRUE, then button has a label so add text view support -->
 
             <text name="title_hilite" opacity=".4" width="200" fgcolor="#143B45" >
+            	<!--- @keywords private -->
                 <attribute name="y"    value="parent.yadjust - 1" when="once"/>
+                <!--- @keywords private -->
                 <attribute name="x"    value="parent.bkgnd.lft.leftinset - 1" when="always" />
+                <!--- @keywords private -->
                 <attribute name="text" value="parent.label" when="always" />
             </text>
             <text name="title" fgcolor="white" 
                  pixellock="true" width="200" >
+            	<!--- @keywords private -->
                 <attribute name="y"    value="parent.yadjust" when="once"/>
+                <!--- @keywords private -->
                 <attribute name="x"    value="parent.bkgnd.lft.leftinset" when="always" />
+                <!--- @keywords private -->
                 <attribute name="text" value="parent.label" when="always" />
             </text>
 
@@ -152,7 +182,9 @@
             <!-- if applied is TRUE, then button has an icon so add icon support -->
 
             <view name="iconv" x="${parent.leftinset}" oninit="this.placeicon()" >
+            	<!--- @keywords private -->
                 <attribute name="resource" value="parent.icon" when="always"/>
+                <!--- @keywords private -->
                 <attribute name="defaultY" type="number" value="0"/>
                 <method name="placeicon">
                     this.defaultY = Math.floor((this.parent.height - this.height)/2.0);

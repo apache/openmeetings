@@ -65,6 +65,7 @@
 
             <text name="timeArea" fgcolor="#4B5D6C"
                   datapath="start[1]" y="5" x="2" resize="true">
+            	<!--- @keywords private -->
                   <attribute name="hour" value="$path{'@hour'}"/>
                 <handler name="onhour">
                     <![CDATA[
@@ -100,15 +101,18 @@
             </view>
 
             <state name="followstate">
+            	<!--- @keywords private -->
                 <attribute name="x"
                         value="${classroot['followview'].getAttributeRelative( 'x',
                                                                     this )}"/>
+                <!--- @keywords private -->
                 <attribute name="y"
                         value="${classroot['followview'].getAttributeRelative( 'y',
                                                                     this)}"/>
+                <!--- @keywords private -->
                 <attribute name="width"
                    value="${classroot['followview'].classroot.eventwidth}"/>
-
+                <!--- @keywords private -->
                 <attribute name="height"
                         value="${classroot['followview'].height}"/>
 
@@ -117,11 +121,11 @@
         </view>
 
         <state name="clipSizing" >
-
+            <!--- @keywords private -->
             <attribute name="y"
               value="${this['followview'].classroot.details.bgrect.getAttributeRelative(
                                                 'y' , this)}"/>
-
+            <!--- @keywords private -->
             <attribute name="height"
                        value="${this['followview'].classroot.details.bgrect.height}"/>
 

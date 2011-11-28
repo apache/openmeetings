@@ -26,6 +26,9 @@ You can set allocation to class to get static attributes. Static properties are 
 	<!---  The initial value of the attribute. The type of this value is specified by the value of the type attribute; if that attribute is not present, it's the type of this attribute in this element's tag. The attribute is given this value when the element is created. -->
 	<attribute name="value" />
 	
+	<!--- Delegate the event to a method on changes through setAttribute('...',$value) -->
+	<attribute name="setter" value="string" />
+	
 </class>
 
 </library>
