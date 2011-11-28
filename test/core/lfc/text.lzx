@@ -56,6 +56,23 @@
 	<!---  The y scroll offset of the content in pixels (a negative number specifying how many pixels the content should be scrolled vertically). Default 0. NOTE: A constraint or handler on onyscroll will automatically enable updating the attribute. -->
 	<attribute name="yscroll" type="number"/>
 
+	<event name="ondirection" />      
+	<event name="onhscroll"/>   
+	<event name="onlineheight"/>     
+	<event name="onmaxhscroll"/>     
+	<event name="onmaxlength"/>      
+	<event name="onmaxscroll"/>       
+	<event name="onpattern"/>  
+	<event name="onscroll"/>     
+	<event name="onscrollevents"/>   
+	<event name="onscrollheight"/>   
+	<event name="onscrollwidth"/>    
+	<event name="onselectable"/> 
+	<!--_Sent when a clickable HTML link in the text field is clicked. Event data is a string with the link value. See the makeTextLink method. -->    
+	<event name="ontextlink"/>  
+	<event name="onxscroll"/>    
+	<event name="onyscroll"/>
+
 </class>
 
 </library>

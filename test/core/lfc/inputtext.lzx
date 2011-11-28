@@ -15,5 +15,8 @@ See the documentation for the <text> tag for a description of the width and heig
     <!---	If true, the inputtext contents will be obscured -->
     <attribute name="password" />
 
+    <!---Sent whenever the text field is enabled. -->
+    <event name="onenabled" />
+    
 </class>
 </library>

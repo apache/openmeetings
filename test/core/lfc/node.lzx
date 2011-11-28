@@ -16,7 +16,7 @@ The lz.node class provides the basic interface for OpenLaszlo objects: parent/ch
 	<!---	An attribute used in container classes. If set to a non-null value, this forces this node to run its determinePlacement method for any node whose parent is this node. If the subnode has its own placement attribute, determinePlacement will be called with that value, otherwise it will be called with this value. Note that a class's defaultplacement attribute only applies to children in subclasses or in instances, not to the children of the class itself. This means that if a class and its subclass both define a defaultplacement attribute, the attribute will be set to one value before the subclass children are created and to a different one after they are created. See the determinePlacement method.  -->
 	<attribute name="defaultplacement" />
 	<!---	A unique identifier for this element. Can be used as a global variable name in JavaScript code.  -->
-	<attribute name="id" />
+	<attribute name="id" type="token"/>
 	<!---	Overrides placement attribute (and defaultplacement in lexical parent). See the LzNode.determinePlacement method. Defaults to false.  -->
 	<attribute name="ignoreplacement" />
 	<!---	Reference to this nodes's parent in the node hierarchy. This will be different from "parent" when a class uses placement or defaultplacement to assign a subnode a specific place. For example, always use immediateparent to get a mouse position in your views coordinate system.  -->
@@ -39,7 +39,7 @@ defer
 	 -->
 	<attribute name="initstage" value="normal"/>
 	<!---	The name for this subnode. If given, then this node's parent and immediate parent will store a pointer to this node as the given name value.  -->
-	<attribute name="name" />
+	<attribute name="name" type="token"/>
 	<!---	The depth of this node in the overall node hierarchy -->
 	<attribute name="nodeLevel" type="number"/>
 	<!---	A CSS declaration of property: value pairs that modify the interaction of this node with controllers such as replicators and layouts. For example, setting options="ignorelayout: true" on a view will cause the view to not be controlled by any layout.
@@ -59,6 +59,13 @@ A space-separated list of CSS classes that can be used in a stylesheet to select
 	<attribute name="subnodes" />
 	<!---	Allows node attributes to be automatically animated when set. A string of transitions, according to the css3 transition spec http://dev.w3.org/csswg/css3-transitions/#the-transition-shorthand-property- e.g. 'x 2s'. Note that transition-delay is not currently supported. [transition-property || transition-duration || transition-timing-function || transition-delay [, [transition-property || transition-duration || transition-timing-function || transition-delay]]*  -->
 	<attribute name="transition" />
+	
+	<!---This is the first event a node sends, right at the end of the instantiation process, but before any subnodes have been created or references resolved -->
+	<event name="onconstruct" />
+	<!---The ondata script is executed when the data selected by a view's datapath changes. -->
+    <event name="ondata" />
+    <!---This event is sent after the node's init method has been called. Simple actions that need to occur after the node's children have been initialized can be assigned to this event. For more complex initialization, see the init method. -->
+    <event name="oninit" /> 
 
 </class>
 

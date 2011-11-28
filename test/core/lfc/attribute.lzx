@@ -13,7 +13,7 @@ instance
 You can set allocation to class to get static attributes. Static properties are attached to the class itself, for example lz.classname . -->
     <attribute name="allocation" type="string" value="instance|class" />
 	<!--- The name of the attribute. -->
-	<attribute name="name" type="string" required="true"/>
+	<attribute name="name" type="token" required="true"/>
 	<!--- True if this is a required attribute. -->
 	<attribute name="required" type="boolean" value="false" />
 	<!--- The CSS property name that can be used to set the value of this attribute under the control of a <stylesheet> (See Chapter 19. Cascading Style Sheets ). style can be any valid CSS property name, and need not be the same as the attribute name; for example you could use the standard CSS property name background-color as the style of the bgcolor attribute. When an attribute has a style property, the value property acts as the default value for the attribute: in the absence of any applicable CSS rule specifying the corresponding property, the attribute will be given the default value. In the case of dynamic CSS, the attribute will revert to the default value if CSS was applied and is removed. (See Dynamic CSS .) -->

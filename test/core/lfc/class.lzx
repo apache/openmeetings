@@ -9,7 +9,7 @@ The following example defines the class Hello, and instantiates myHello (an inst
 -->
 <class name="class" extends="false">
 
-    <attribute name="name" type="string" required="true" />
+    <attribute name="name" type="token" required="true" />
     <attribute name="extends" />
     <attribute name="implements" />
     <attribute name="with" />

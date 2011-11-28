@@ -1,5 +1,6 @@
 package org.openlaszlo.generator.elements;
 
+import java.io.RandomAccessFile;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -7,6 +8,8 @@ public class XsdUtil {
 
 	private String xsdPrefix = "xs";
 
+	private String xsdBasePrefix = "lzx";
+	
 	private String xsdProjectPrefix = "lzx";
 
 	private String nameSpace = "http://localhost/openlaszlo/lzx";
@@ -23,11 +26,11 @@ public class XsdUtil {
 		this.xsdProjectPrefix = xsdProjectPrefix2;
 	}
 
-	private final SortedSet<ClassElement> allowedElements = new TreeSet<ClassElement>();
+//	private final SortedSet<ClassElement> allowedElements = new TreeSet<ClassElement>();
 
-	public void registerAllowedSubElement(ClassElement classElement) {
-		allowedElements.add(classElement);
-	}
+//	public void registerAllowedSubElement(ClassElement classElement) {
+//		allowedElements.add(classElement);
+//	}
 	
 	public void writeBaseAllowedSubElements(StringBuilder sb) throws Exception {
 
@@ -45,27 +48,29 @@ public class XsdUtil {
 
 	}
 
-	public void writeAllowedSubElements(StringBuilder sb) throws Exception {
+	
+	
+//	public void writeAllowedSubElements(StringBuilder sb) throws Exception {
+//
+//		sb.append("<" + xsdPrefix
+//				+ ":group name=\""+ topLevelElementName +"\">\n");
+//		sb.append("<" + xsdPrefix +":sequence>\n");
+//		sb.append("<" + xsdPrefix +":choice minOccurs=\"0\" maxOccurs=\"unbounded\">\n");
+//		
+//		for(ClassElement cl : allowedElements) {
+//			
+//			sb.append("<" + xsdPrefix +":element ref=\""+xsdProjectPrefix+":"+cl.getName()+"\"/>\n");
+//			
+//		}
+//		
+//		sb.append("</" + xsdPrefix +":choice>\n");
+//		sb.append("</" + xsdPrefix +":sequence>\n");
+//		sb.append("</" + xsdPrefix +":group>\n");
+//		
+//
+//	}
 
-		sb.append("<" + xsdPrefix
-				+ ":group name=\""+ topLevelElementName +"\">\n");
-		sb.append("<" + xsdPrefix +":sequence>\n");
-		sb.append("<" + xsdPrefix +":choice minOccurs=\"0\" maxOccurs=\"unbounded\">\n");
-		
-		for(ClassElement cl : allowedElements) {
-			
-			sb.append("<" + xsdPrefix +":element ref=\""+xsdProjectPrefix+":"+cl.getName()+"\"/>\n");
-			
-		}
-		
-		sb.append("</" + xsdPrefix +":choice>\n");
-		sb.append("</" + xsdPrefix +":sequence>\n");
-		sb.append("</" + xsdPrefix +":group>\n");
-		
-
-	}
-
-	public void writeXsdHeader(StringBuilder sb) throws Exception {
+	public void writeXsdHeader(StringBuilder sb, String staticFileSectionFilepath) throws Exception {
 
 		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 
@@ -75,6 +80,27 @@ public class XsdUtil {
 		sb.append(tabSpace + "targetNamespace=\"" + nameSpace + "\" \n");
 		sb.append(tabSpace + "xmlns:" + xsdProjectPrefix + "=\"" + nameSpace + "\">\n");
 
+		this.writeStaticImports(sb, staticFileSectionFilepath);
+		
+	}
+	
+	public void writeStaticImports(StringBuilder sb, String staticFileSectionFilepath) throws Exception {
+		
+		if (staticFileSectionFilepath.length() > 0) {
+
+			// Get file and handle download
+			RandomAccessFile rf = new RandomAccessFile(staticFileSectionFilepath, "r");
+
+			String newLine = "";
+			
+			while ((newLine = rf.readLine()) != null) {
+				sb.append(newLine+"\n");
+			}
+
+			rf.close();
+
+		}
+		
 	}
 
 	public void generateXsdFooter(StringBuilder sb) throws Exception {
@@ -124,11 +150,7 @@ public class XsdUtil {
 
 			sb.append("<" + xsdPrefix + ":attribute name=\"" + classAttribute.getName() + "\" ");
 			
-			if (false && classAttribute.getType() != null && classAttribute.getType() != "") {
-				sb.append("type=\"" + xsdPrefix + ":"+classAttribute.getType()+"\" ");
-			} else {
-				sb.append("type=\"" + xsdPrefix + ":string\" ");
-			}
+			fixAttributeTypeRestriction(classAttribute, sb);
 			
 			if (classAttribute.isRequired()) {
 				sb.append("use=\"required\" ");
@@ -157,6 +179,40 @@ public class XsdUtil {
 			sb.append(tabSpace + "</" + xsdPrefix +":complexContent>\n");
 		}
 		
+	}
+	
+	private void fixAttributeTypeRestriction(ClassAttribute classAttribute, StringBuilder sb) {
+		
+		if (classAttribute.getType() == null && classAttribute.getType().equals("string")) {
+			//this is duplicated as the default handler at the end is also string
+			//however in 80 per cent it is string so catching this early makes
+			//the loop faster.
+			sb.append("type=\"" + xsdPrefix + ":string\" ");
+		} else if (classAttribute.getType().equals("number")) {
+			sb.append("type=\"" + xsdBasePrefix + ":number\" ");
+		} else if (classAttribute.getType().equals("color")) {
+			sb.append("type=\"" + xsdBasePrefix + ":color\" ");
+		} else if (classAttribute.getType().equals("boolean")) {
+			sb.append("type=\"" + xsdBasePrefix + ":boolean\" ");
+		} else if (classAttribute.getType().equals("constraint")) {
+			sb.append("type=\"" + xsdBasePrefix + ":constraint\" ");
+		} else if (classAttribute.getType().equals("size")) {
+			sb.append("type=\"" + xsdBasePrefix + ":size\" ");
+		} else if (classAttribute.getType().equals("size")) {
+			sb.append("type=\"" + xsdBasePrefix + ":size\" ");
+		} else if (classAttribute.getType().equals("opacity")) {
+			sb.append("type=\"" + xsdBasePrefix + ":opacity\" ");
+		} else if (classAttribute.getType().equals("opacity")) {
+			sb.append("type=\"" + xsdBasePrefix + ":opacity\" ");
+		} else if (classAttribute.getType().equals("percentage")) {
+			sb.append("type=\"" + xsdBasePrefix + ":percentage\" ");
+		} else if (classAttribute.getType().equals("css")) {
+			sb.append("type=\"" + xsdBasePrefix + ":css\" ");
+		} else if (classAttribute.getType().equals("token")) {
+			sb.append("type=\"" + xsdBasePrefix + ":token\" ");
+		} else {
+			sb.append("type=\"" + xsdPrefix + ":string\" ");
+		}
 	}
 	
 	private void writeDocumentation(StringBuilder sb, String comment) {

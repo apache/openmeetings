@@ -153,7 +153,7 @@ public class ClassElementList {
 		}
 	}
 	
-	public void xsdPrint(boolean debug, String fileName) {
+	public void xsdPrint(boolean debug, String fileName, String staticFileSectionFilepath) {
 		try {
 			
 			this.fixParents();
@@ -173,23 +173,23 @@ public class ClassElementList {
 			
 			StringBuilder headerBuilder = new StringBuilder();
 			
-			
-			
-			xsdUtil.writeXsdHeader(headerBuilder);
+			xsdUtil.writeXsdHeader(headerBuilder, staticFileSectionFilepath);
 			
 			ou.write(headerBuilder.toString().getBytes());
 			
-			//collect all items with classroot "node"
-			for (Entry<String, ClassElement> entry : elementList.entrySet()) {
-				
-				ClassElement cElement = entry.getValue();
-				if (cElement.getClassRoot().equals("node")  || cElement.getParent() == null) {
-					if (!cElement.isRoot()) {
-						xsdUtil.registerAllowedSubElement(cElement);
-					}
-				}
-				
-			}
+			
+			
+//			//collect all items with classroot "node"
+//			for (Entry<String, ClassElement> entry : elementList.entrySet()) {
+//				
+//				ClassElement cElement = entry.getValue();
+//				if (cElement.getClassRoot().equals("node")  || cElement.getParent() == null) {
+//					if (!cElement.isRoot()) {
+//						xsdUtil.registerAllowedSubElement(cElement);
+//					}
+//				}
+//				
+//			}
 
 
 			for (Entry<String, ClassElement> entry : elementList.entrySet()) {

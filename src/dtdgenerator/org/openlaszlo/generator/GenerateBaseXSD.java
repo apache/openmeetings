@@ -58,12 +58,12 @@ public class GenerateBaseXSD implements ContentHandler, LexicalHandler {
 		generateBaseXSD.scanFolder("openlaszlo/lps/");
 		generateBaseXSD.scanFolder("test/core/lfc/");
 		
-		generateBaseXSD.printXsd("lzx.xsd");
+		generateBaseXSD.printXsd("lzx.xsd","test/core/static_simpleTypes.txt");
 		
 	}
 	
-	public void printXsd(String fileName) {
-		elementList.xsdPrint(false, fileName);
+	public void printXsd(String fileName, String staticFileSectionFilepath) {
+		elementList.xsdPrint(false, fileName, staticFileSectionFilepath);
 		System.out.println("written file to "+fileName);
 	}
 	
