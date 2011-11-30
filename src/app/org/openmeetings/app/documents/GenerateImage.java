@@ -36,12 +36,12 @@ public class GenerateImage {
 		return pathToImageMagic;
 	}
 
-	public HashMap<String, HashMap<String, Object>> convertImage(
+	public HashMap<String, HashMap<String, String>> convertImage(
 			String current_dir, String fileName, String fileExt,
 			String roomName, String fileNameShort, boolean fullProcessing)
 			throws Exception {
 
-		HashMap<String, HashMap<String, Object>> returnMap = new HashMap<String, HashMap<String, Object>>();
+		HashMap<String, HashMap<String, String>> returnMap = new HashMap<String, HashMap<String, String>>();
 
 		String working_imgdir = current_dir + "upload" + File.separatorChar
 				+ roomName + File.separatorChar;
@@ -66,9 +66,9 @@ public class GenerateImage {
 
 		log.debug("##### convertImage destinationFile: " + destinationFile);
 
-		HashMap<String, Object> processJPG = this.convertSingleJpg(
+		HashMap<String, String> processJPG = this.convertSingleJpg(
 				fileFullPath, destinationFile);
-		HashMap<String, Object> processThumb = generateThumbs.generateThumb(
+		HashMap<String, String> processThumb = generateThumbs.generateThumb(
 				"_thumb_", current_dir, destinationFile, 50);
 
 		returnMap.put("processJPG", processJPG);
@@ -81,11 +81,11 @@ public class GenerateImage {
 		return returnMap;
 	}
 
-	public HashMap<String, HashMap<String, Object>> convertImageUserProfile(
+	public HashMap<String, HashMap<String, String>> convertImageUserProfile(
 			String current_dir, String fileName, String fileExt, Long users_id,
 			String fileNameShort, boolean fullProcessing) throws Exception {
 
-		HashMap<String, HashMap<String, Object>> returnMap = new HashMap<String, HashMap<String, Object>>();
+		HashMap<String, HashMap<String, String>> returnMap = new HashMap<String, HashMap<String, String>>();
 
 		String working_imgdir = current_dir + "upload" + File.separatorChar
 				+ "profiles" + File.separatorChar
@@ -111,14 +111,14 @@ public class GenerateImage {
 		}
 
 		String destinationFile = working_imgdir + fileName;
-		HashMap<String, Object> processJPG = this.convertSingleJpg(
+		HashMap<String, String> processJPG = this.convertSingleJpg(
 				fileFullPath, destinationFile);
 
-		HashMap<String, Object> processThumb1 = generateThumbs.generateThumb(
+		HashMap<String, String> processThumb1 = generateThumbs.generateThumb(
 				"_chat_", current_dir, destinationFile, 40);
-		HashMap<String, Object> processThumb2 = generateThumbs.generateThumb(
+		HashMap<String, String> processThumb2 = generateThumbs.generateThumb(
 				"_profile_", current_dir, destinationFile, 126);
-		HashMap<String, Object> processThumb3 = generateThumbs.generateThumb(
+		HashMap<String, String> processThumb3 = generateThumbs.generateThumb(
 				"_big_", current_dir, destinationFile, 240);
 
 		returnMap.put("processJPG", processJPG);
@@ -146,7 +146,7 @@ public class GenerateImage {
 	 * -density 150 -resize 800
 	 * 
 	 */
-	private HashMap<String, Object> convertSingleJpg(String inputFile,
+	private HashMap<String, String> convertSingleJpg(String inputFile,
 			String outputfile) {
 		String[] argv = new String[] { getPathToImageMagic(), inputFile,
 				outputfile + ".jpg" };
@@ -161,7 +161,7 @@ public class GenerateImage {
 
 	}
 
-	public HashMap<String, Object> convertImageByTypeAndSize(String inputFile,
+	public HashMap<String, String> convertImageByTypeAndSize(String inputFile,
 			String outputfile, int width, int height) {
 		String[] argv = new String[] { getPathToImageMagic(), "-size",
 				width + "x" + height, inputFile, outputfile };
@@ -169,7 +169,7 @@ public class GenerateImage {
 				argv);
 	}
 
-	public HashMap<String, Object> convertImageByTypeAndSizeAndDepth(
+	public HashMap<String, String> convertImageByTypeAndSizeAndDepth(
 			String inputFile, String outputfile, int width, int height,
 			int depth) {
 		String[] argv = new String[] { getPathToImageMagic(), "-size",

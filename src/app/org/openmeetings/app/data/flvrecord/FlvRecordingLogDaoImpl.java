@@ -28,6 +28,7 @@ public class FlvRecordingLogDaoImpl {
 			
 			Query query = em.createQuery(hql);
 			query.setParameter("flvRecordingId", flvRecordingId);
+			@SuppressWarnings("unchecked")
 			List<FlvRecordingLog> flvRecordingList = query.getResultList();
 			
 			return flvRecordingList;
@@ -52,7 +53,7 @@ public class FlvRecordingLogDaoImpl {
 		}
 	}
 	
-	public Long addFLVRecordingLog(String msgType, FlvRecording flvRecording, HashMap<String, Object> returnMap) {
+	public Long addFLVRecordingLog(String msgType, FlvRecording flvRecording, HashMap<String, String> returnMap) {
 		try { 
 			
 			String exitValue = returnMap.get("exitValue").toString();
@@ -61,7 +62,7 @@ public class FlvRecordingLogDaoImpl {
 			
 			for (Iterator<String> iter = returnMap.keySet().iterator();iter.hasNext();) {
 				String key = iter.next();
-				String value = returnMap.get(key).toString();
+				String value = returnMap.get(key);
 				fullMessage += key + "-" + value + "<br/>";
 			}
 			

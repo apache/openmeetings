@@ -2,12 +2,13 @@ package org.openmeetings.app.data.flvrecord.converter;
 
 import org.springframework.core.task.TaskExecutor;
 
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class FlvRecorderConverterTask {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecorderConverterTask.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecorderConverterTask.class, ScopeApplicationAdapter.webAppRootKey);
 
 	//Spring loaded
 	private TaskExecutor taskExecutor;

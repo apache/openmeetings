@@ -64,17 +64,17 @@ public class FileProcessor {
 		
 	}
 	
-	public HashMap<String, HashMap<String, Object>> processFile(Long userId, Long room_id, 
+	public HashMap<String, HashMap<String, String>> processFile(Long userId, Long room_id, 
 			boolean isOwner, InputStream is, Long parentFolderId, String fileSystemName, 
 			String current_dir, Map<String, Object> hs, Long externalFileId, 
 			String externalType) throws Exception {
 		
-		HashMap<String, HashMap<String, Object>> returnError = new HashMap<String, HashMap<String, Object>>();
+		HashMap<String, HashMap<String, String>> returnError = new HashMap<String, HashMap<String, String>>();
 		
-		HashMap<String, Object> returnAttributes = new HashMap<String, Object>();
+		HashMap<String, String> returnAttributes = new HashMap<String, String>();
         returnAttributes.put("process", "");
         returnAttributes.put("command", "");
-        returnAttributes.put("exitValue",0);
+        returnAttributes.put("exitValue", "0");
         returnAttributes.put("error","");
 		
 		//prepare the necessary folders
@@ -109,7 +109,7 @@ public class FileProcessor {
         // if it is a presenation it will be copied to another place
         if (!(canBeConverted || isPdf || isImage || isVideo || isAsIs)) {
         	returnAttributes.put("error","The file type cannot be converted");
-        	returnAttributes.put("exitValue",-1);
+        	returnAttributes.put("exitValue", "-1");
             return returnError;
         }
 
@@ -176,7 +176,7 @@ public class FileProcessor {
         log.debug("fileExplorerItemId: " + fileExplorerItemId);
         
         
-        returnAttributes.put("fileExplorerItemId",fileExplorerItemId);
+        returnAttributes.put("fileExplorerItemId", "" + fileExplorerItemId);
         
         log.debug("canBeConverted: " + canBeConverted);
         if (canBeConverted) {
@@ -198,7 +198,7 @@ public class FileProcessor {
                     newFileSystemName, newFileExtDot, "files",
                     newFileSystemName, false);
         } else if (isAsIs) {
-            HashMap<String, Object> processThumb = generateThumbs.generateThumb("_thumb_", current_dir, completeName, 50);
+            HashMap<String, String> processThumb = generateThumbs.generateThumb("_thumb_", current_dir, completeName, 50);
             returnError.put("processThumb", processThumb);
         } else if (isVideo) {
              flvExplorerConverter.startConversion(fileExplorerItemId, completeName + newFileExtDot);

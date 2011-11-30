@@ -105,12 +105,12 @@ public class FileExplorerUploadHandler extends UploadHandler {
 		String fileSystemName = upload.getBaseFilename("Filedata");
 		log.debug("fileSystemName: " + fileSystemName);
 
-		HashMap<String, HashMap<String, Object>> returnError = getFileProcessor()
+		HashMap<String, HashMap<String, String>> returnError = getFileProcessor()
 				.processFile(userId, room_id_to_Store, isOwner, is,
 						parentFolderId, fileSystemName, current_dir, hs, 0L, ""); // externalFilesId,
 																					// externalType
 
-		HashMap<String, Object> returnAttributes = returnError
+		HashMap<String, String> returnAttributes = returnError
 				.get("returnAttributes");
 
 		// Flash cannot read the response of an upload

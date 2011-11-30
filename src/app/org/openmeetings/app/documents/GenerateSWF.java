@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -28,38 +29,20 @@ public class GenerateSWF {
 
 	public final static String execExt = isPosix ? "" : ".exe";
 
-	public static HashMap<String, Object> executeScript(String process,
+	public static HashMap<String, String> executeScript(String process,
 			String[] argv) {
-		HashMap<String, Object> returnMap = new HashMap<String, Object>();
+		HashMap<String, String> returnMap = new HashMap<String, String>();
 		returnMap.put("process", process);
 		log.debug("process: " + process);
 		log.debug("args: " + Arrays.toString(argv));
 
 		try {
-			// Runtime rt = Runtime.getRuntime();
 			returnMap.put("command", Arrays.toString(argv));
 
 			// By using the process Builder we have access to modify the
 			// environment variables
 			// that is handy to set variables to run it inside eclipse
 			ProcessBuilder pb = new ProcessBuilder(argv);
-
-			// Map<String, String> env = pb.environment();
-
-			// System.out.println("key "+"pb.toString"+" value "+pb.toString());
-			//
-			// System.out.println("key "+"os.name"+" value "+System.getProperty("os.name").toUpperCase());
-			// System.out.println("key "+"isPosix"+" value "+isPosix);
-			// System.out.println("key "+"execExt"+" value "+execExt);
-
-			// for (Iterator<String> iter =
-			// env.keySet().iterator();iter.hasNext();) {
-			// String key = iter.next();
-			//
-			// System.out.println("key "+key+" value "+env.get(key));
-			// //log.debug("key "+key);
-			//
-			// }
 
 			Process proc = pb.start();
 
@@ -78,13 +61,13 @@ public class GenerateSWF {
 			try {
 				worker.join(timeout);
 				if (worker.exit != null) {
-					returnMap.put("exitValue", worker.exit);
+					returnMap.put("exitValue", "" + worker.exit);
 					log.debug("exitVal: " + worker.exit);
 					returnMap.put("error", errorWatcher.error);
 				} else {
 					returnMap.put("exception", "timeOut");
 					returnMap.put("error", errorWatcher.error);
-					returnMap.put("exitValue", -1);
+					returnMap.put("exitValue", "-1");
 
 					throw new TimeoutException();
 				}
@@ -95,7 +78,7 @@ public class GenerateSWF {
 				Thread.currentThread().interrupt();
 
 				returnMap.put("error", ex.getMessage());
-				returnMap.put("exitValue", -1);
+				returnMap.put("exitValue", "-1");
 
 				throw ex;
 			} finally {
@@ -107,7 +90,7 @@ public class GenerateSWF {
 			// Any other exception is shown in debug window
 			t.printStackTrace();
 			returnMap.put("error", t.getMessage());
-			returnMap.put("exitValue", -1);
+			returnMap.put("exitValue", "-1");
 		}
 		return returnMap;
 	}
@@ -137,10 +120,10 @@ public class GenerateSWF {
 		private final InputStreamReader isr;
 		private final BufferedReader br;
 
-		private ErrorStreamWatcher(Process process) {
+		private ErrorStreamWatcher(Process process) throws UnsupportedEncodingException {
 			error = "";
 			stderr = process.getErrorStream();
-			isr = new InputStreamReader(stderr);
+			isr = new InputStreamReader(stderr, "UTF-8");
 			br = new BufferedReader(isr);
 		}
 
@@ -197,7 +180,7 @@ public class GenerateSWF {
 		return pathToSWFTools;
 	}
 
-	public HashMap<String, Object> generateSwf(String current_dir,
+	public HashMap<String, String> generateSwf(String current_dir,
 			String originalFolder, String destinationFolder, String fileNamePure) {
 		
 		// Create the Content of the Converter Script (.bat or .sh File)
@@ -215,7 +198,7 @@ public class GenerateSWF {
 	/**
 	 * Generates an SWF from the list of files.
 	 */
-	public HashMap<String, Object> generateSwfByImages(List<String> images,
+	public HashMap<String, String> generateSwfByImages(List<String> images,
 			String outputfile, int fps) {
 		List<String> argvList = Arrays.asList(new String[] {
 				getPathToSwfTools() + "png2swf" + execExt, "-s", "insertstop", // Insert
@@ -228,13 +211,13 @@ public class GenerateSWF {
 
 		argvList.addAll(images);
 		return executeScript("generateSwfByImages",
-				(String[]) argvList.toArray());
+				argvList.toArray(new String[0]));
 	}
 
 	/**
 	 * Combines a bunch of SWFs into one SWF by concatenate.
 	 */
-	public HashMap<String, Object> generateSWFByCombine(List<String> swfs,
+	public HashMap<String, String> generateSWFByCombine(List<String> swfs,
 			String outputswf, int fps) {
 		List<String> argvList = Arrays.asList(new String[] {
 				getPathToSwfTools() + "swfcombine" + execExt, "-s",
@@ -243,10 +226,10 @@ public class GenerateSWF {
 
 		argvList.addAll(swfs);
 		return executeScript("generateSwfByImages",
-				(String[]) argvList.toArray());
+				argvList.toArray(new String[0]));
 	}
 
-	public HashMap<String, Object> generateSWFByFFMpeg(String inputWildCard,
+	public HashMap<String, String> generateSWFByFFMpeg(String inputWildCard,
 			String outputswf, int fps, int width, int height) {
 		// FIXME: ffmpeg should be on the system path
 		String[] argv = new String[] { "ffmpeg" + execExt, "-r",

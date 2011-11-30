@@ -19,14 +19,14 @@ public class GeneratePDF {
 	@Autowired
 	private GenerateSWF generateSWF;
 
-	public HashMap<String, HashMap<String, Object>> convertPDF(
+	public HashMap<String, HashMap<String, String>> convertPDF(
 			String current_dir, String fileName, String fileExt,
 			String roomName, boolean fullProcessing, String completeName)
 			throws Exception {
 
-		HashMap<String, HashMap<String, Object>> returnError = new HashMap<String, HashMap<String, Object>>();
+		HashMap<String, HashMap<String, String>> returnError = new HashMap<String, HashMap<String, String>>();
 
-		HashMap<String, Object> processPDF = new HashMap<String, Object>();
+		HashMap<String, String> processPDF = new HashMap<String, String>();
 		processPDF.put("process", "processPDF");
 
 		String working_imgdir = current_dir + "upload" + File.separatorChar
@@ -56,9 +56,9 @@ public class GeneratePDF {
 					"error",
 					"convertPDF + ERROR: Folder could not create "
 							+ f.getAbsolutePath());
-			processPDF.put("exitValue", -1);
+			processPDF.put("exitValue", "-1");
 		} else {
-			processPDF.put("exitValue", 0);
+			processPDF.put("exitValue", "0");
 		}
 		returnError.put("processPDF", processPDF);
 
@@ -67,14 +67,14 @@ public class GeneratePDF {
 
 		log.debug("fullProcessing: " + fullProcessing);
 		if (fullProcessing) {
-			HashMap<String, Object> processOpenOffice = this.doJodConvert(
+			HashMap<String, String> processOpenOffice = doJodConvert(
 					current_dir, fileFullPath, destinationFolder, fileName);
 			returnError.put("processOpenOffice", processOpenOffice);
-			HashMap<String, Object> processThumb = generateThumbs
+			HashMap<String, String> processThumb = generateThumbs
 					.generateBatchThumb(current_dir, destinationFolder
 							+ fileName + ".pdf", destinationFolder, 80, "thumb");
 			returnError.put("processThumb", processThumb);
-			HashMap<String, Object> processSWF = generateSWF
+			HashMap<String, String> processSWF = generateSWF
 					.generateSwf(current_dir, destinationFolder,
 							destinationFolder, fileName);
 			returnError.put("processSWF", processSWF);
@@ -82,12 +82,12 @@ public class GeneratePDF {
 
 			log.debug("-- generateBatchThumb --");
 
-			HashMap<String, Object> processThumb = generateThumbs
+			HashMap<String, String> processThumb = generateThumbs
 					.generateBatchThumb(current_dir, fileFullPath,
 							destinationFolder, 80, "thumb");
 			returnError.put("processThumb", processThumb);
 
-			HashMap<String, Object> processSWF = generateSWF.generateSwf(
+			HashMap<String, String> processSWF = generateSWF.generateSwf(
 					current_dir, (new File(fileFullPath)).getParentFile()
 							.getAbsolutePath() + File.separatorChar,
 					destinationFolder, fileName);
@@ -101,13 +101,13 @@ public class GeneratePDF {
 		FileHelper.moveRec(fileToBeMoved, fileWhereToMove);
 
 		if (fullProcessing) {
-			HashMap<String, Object> processXML = CreateLibraryPresentation
+			HashMap<String, String> processXML = CreateLibraryPresentation
 					.getInstance().generateXMLDocument(outputfolder,
 							fileName + fileExt, fileName + ".pdf",
 							fileName + ".swf");
 			returnError.put("processXML", processXML);
 		} else {
-			HashMap<String, Object> processXML = CreateLibraryPresentation
+			HashMap<String, String> processXML = CreateLibraryPresentation
 					.getInstance().generateXMLDocument(outputfolder,
 							fileName + fileExt, null, fileName + ".swf");
 			returnError.put("processXML", processXML);
@@ -119,7 +119,7 @@ public class GeneratePDF {
 	/**
 	 * Generates PDF and thumbs (and swf).
 	 */
-	public HashMap<String, Object> doJodConvert(String current_dir,
+	public HashMap<String, String> doJodConvert(String current_dir,
 			String fileFullPath, String destinationFolder, String outputfile) {
 		// Path to all JARs of JOD
 		String jodClassPathFolder = current_dir + "jod" + File.separatorChar;

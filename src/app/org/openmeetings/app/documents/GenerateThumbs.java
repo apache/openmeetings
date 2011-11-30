@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
-import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -19,22 +18,9 @@ public class GenerateThumbs {
 			.getLogger(GenerateThumbs.class);
 
 	@Autowired
-	private Configurationmanagement cfgManagement;
-	@Autowired
 	private GenerateImage generateImage;
 
-	private String getPathToImageMagick() {
-		String pathToImageMagick = cfgManagement.getConfKey(3,
-				"imagemagick_path").getConf_value();
-		if (!pathToImageMagick.equals("")
-				&& !pathToImageMagick.endsWith(File.separator)) {
-			pathToImageMagick += File.separator;
-		}
-		pathToImageMagick += "convert" + GenerateSWF.execExt;
-		return pathToImageMagick;
-	}
-
-	public HashMap<String, Object> generateThumb(String pre,
+	public HashMap<String, String> generateThumb(String pre,
 			String current_dir, String filepath, Integer thumbSize) {
 		// Init variables
 		File f = new File(filepath);
@@ -61,7 +47,7 @@ public class GenerateThumbs {
 		}
 	}
 
-	public HashMap<String, Object> decodePDF(String inputfile, String outputfile) {
+	public HashMap<String, String> decodePDF(String inputfile, String outputfile) {
 
 		String[] argv = new String[] { generateImage.getPathToImageMagic(), // FIXME
 				inputfile, outputfile };
@@ -74,7 +60,7 @@ public class GenerateThumbs {
 
 	}
 
-	public HashMap<String, Object> generateBatchThumb(String current_dir,
+	public HashMap<String, String> generateBatchThumb(String current_dir,
 			String inputfile, String outputpath, Integer thumbSize, String pre) {
 
 		if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") == -1) {
@@ -99,7 +85,7 @@ public class GenerateThumbs {
 		}
 	}
 
-	public HashMap<String, Object> generateImageBatchByWidth(
+	public HashMap<String, String> generateImageBatchByWidth(
 			String current_dir, String inputfile, String outputpath,
 			Integer thumbWidth, String pre) {
 
@@ -114,15 +100,14 @@ public class GenerateThumbs {
 		}
 	}
 
-	public HashMap<String, Object> processImageWindows(String[] args) {
-		HashMap<String, Object> returnMap = new HashMap<String, Object>();
+	public HashMap<String, String> processImageWindows(String[] args) {
+		HashMap<String, String> returnMap = new HashMap<String, String>();
 		returnMap.put("process", "processImageWindows");
 		try {
 
 			// Init variables
 			String[] cmd;
 			String executable_fileName = "";
-			String pathToIMagick = this.getPathToImageMagick();
 
 			String runtimeFile = "interviewMerge.bat";
 			executable_fileName = ScopeApplicationAdapter.batchFileFir
@@ -175,13 +160,12 @@ public class GenerateThumbs {
 			}
 			returnMap.put("error", error);
 			int exitVal = proc.waitFor();
-			// log.debug("exitVal: "+exitVal);
-			returnMap.put("exitValue", exitVal);
+			returnMap.put("exitValue", "" + exitVal);
 			return returnMap;
 		} catch (Throwable t) {
 			t.printStackTrace();
 			returnMap.put("error", t.getMessage());
-			returnMap.put("exitValue", -1);
+			returnMap.put("exitValue", "-1");
 			return returnMap;
 		}
 	}

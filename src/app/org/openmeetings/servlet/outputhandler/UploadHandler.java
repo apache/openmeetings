@@ -238,7 +238,7 @@ public class UploadHandler extends HttpServlet {
 	private void uploadFile(boolean userProfile, Long userId, String roomName,
 			InputStream is, String fileSystemName, Map<String, Object> hs)
 			throws Exception {
-		HashMap<String, HashMap<String, Object>> returnError = new HashMap<String, HashMap<String, Object>>();
+		HashMap<String, HashMap<String, String>> returnError = new HashMap<String, HashMap<String, String>>();
 
 		// Get the current user directory
 		String currentDir = getServletContext().getRealPath("/");
@@ -389,7 +389,7 @@ public class UploadHandler extends HttpServlet {
 			log.debug("isEncrypted :: " + isEncrypted);
 
 			@SuppressWarnings("unused")
-			HashMap<String, Object> returnError2 = new HashMap<String, Object>();
+			HashMap<String, String> returnError2 = new HashMap<String, String>();
 
 			if (isEncrypted) {
 				// Do convert pdf to other pdf first
@@ -439,12 +439,12 @@ public class UploadHandler extends HttpServlet {
 				// User Profile Update
 				this.deleteUserProfileFiles(currentDir, userId);
 				// is UserProfile Picture
-				HashMap<String, Object> processThumb1 = getGenerateThumbs()
+				HashMap<String, String> processThumb1 = getGenerateThumbs()
 						.generateThumb("_chat_", currentDir, completeName, 40);
-				HashMap<String, Object> processThumb2 = getGenerateThumbs()
+				HashMap<String, String> processThumb2 = getGenerateThumbs()
 						.generateThumb("_profile_", currentDir, completeName,
 								126);
-				HashMap<String, Object> processThumb3 = getGenerateThumbs()
+				HashMap<String, String> processThumb3 = getGenerateThumbs()
 						.generateThumb("_big_", currentDir, completeName, 240);
 				returnError.put("processThumb1", processThumb1);
 				returnError.put("processThumb2", processThumb2);
@@ -460,7 +460,7 @@ public class UploadHandler extends HttpServlet {
 				getScopeApplicationAdapter().updateUserSessionObject(userId,
 						pictureuri);
 			} else {
-				HashMap<String, Object> processThumb = getGenerateThumbs()
+				HashMap<String, String> processThumb = getGenerateThumbs()
 						.generateThumb("_thumb_", currentDir, completeName, 50);
 				returnError.put("processThumb", processThumb);
 			}

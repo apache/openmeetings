@@ -119,13 +119,13 @@ public class FileWebService {
 				LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
 				hs.put("user", externalUser);
 
-				HashMap<String, HashMap<String, Object>> returnError = fileProcessor
+				HashMap<String, HashMap<String, String>> returnError = fileProcessor
 						.processFile(externalUser.getUser_id(), room_id,
 								isOwner, inputstream, parentFolderId,
 								fileSystemName, current_dir, hs,
 								externalFileId, externalType);
 
-				HashMap<String, Object> returnAttributes = returnError
+				HashMap<String, String> returnAttributes = returnError
 						.get("returnAttributes");
 
 				// Flash cannot read the response of an upload
@@ -147,7 +147,7 @@ public class FileWebService {
 				for (Iterator<String> iter = returnError.keySet().iterator(); iter
 						.hasNext();) {
 
-					HashMap<String, Object> returnAttribute = returnError
+					HashMap<String, String> returnAttribute = returnError
 							.get(iter.next());
 
 					fileImportErrors[i] = new FileImportError();
@@ -237,13 +237,13 @@ public class FileWebService {
 				LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
 				hs.put("user", internalUser);
 
-				HashMap<String, HashMap<String, Object>> returnError = fileProcessor
+				HashMap<String, HashMap<String, String>> returnError = fileProcessor
 						.processFile(internalUser.getUser_id(), room_id,
 								isOwner, inputstream, parentFolderId,
 								fileSystemName, current_dir, hs,
 								externalFileId, externalType);
 
-				HashMap<String, Object> returnAttributes = returnError
+				HashMap<String, String> returnAttributes = returnError
 						.get("returnAttributes");
 
 				// Flash cannot read the response of an upload
@@ -265,7 +265,7 @@ public class FileWebService {
 				for (Iterator<String> iter = returnError.keySet().iterator(); iter
 						.hasNext();) {
 
-					HashMap<String, Object> returnAttribute = returnError
+					HashMap<String, String> returnAttribute = returnError
 							.get(iter.next());
 
 					fileImportErrors[i] = new FileImportError();

@@ -27,9 +27,9 @@ public class CreateLibraryPresentation {
 	}
 	
 	
-	public HashMap<String,Object> generateXMLDocument(String targetDirectory, String originalDocument, 
+	public HashMap<String,String> generateXMLDocument(String targetDirectory, String originalDocument, 
 			String pdfDocument, String swfDocument){
-		HashMap<String,Object> returnMap = new HashMap<String,Object>();
+		HashMap<String,String> returnMap = new HashMap<String,String>();
 		returnMap.put("process", "generateXMLDocument");		
 		try {
 			
@@ -92,13 +92,13 @@ public class CreateLibraryPresentation {
 	        writer.write( document );
 	        writer.close();
 			
-	        returnMap.put("exitValue", 0);
+	        returnMap.put("exitValue", "0");
 	        
 			return returnMap;
 		} catch (Exception err) {
 			err.printStackTrace();
 			returnMap.put("error", err.getMessage());
-			returnMap.put("exitValue", -1);
+			returnMap.put("exitValue", "-1");
 			return returnMap;
 		}
 	}
