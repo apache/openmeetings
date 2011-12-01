@@ -637,7 +637,7 @@
 	            }
 	            if (value != null && value.length > 0) {
 	                if ($debug) Debug.write("Give exclusive audio keycode is: ", value[0].conf_value);
-	                parent.setAttribute('GIVE_EXCLUSIVE_AUDIO_KEY', value[0].conf_value);
+	                canvas.setAttribute('GIVE_EXCLUSIVE_AUDIO_KEY', value[0].conf_value);
 	            } else {
 	               if ($debug) Debug.warn("xmlcrm.getGeneralOptions empty!");
  	            }
