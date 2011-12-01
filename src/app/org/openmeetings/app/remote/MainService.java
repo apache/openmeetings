@@ -738,6 +738,21 @@ public class MainService implements IPendingServiceCallback {
 	public Configuration allowFrontendRegister(String SID) {
 		return cfgManagement.getConfKey(3, "allow_frontend_register");
 	}
+	
+	public List<Configuration> getGeneralOptions(String SID) {
+		try {
+			
+			List<Configuration> cList = new LinkedList<Configuration>();
+			
+			cList.add(cfgManagement.getConfKey(3, "exclusive.audio.keycode"));
+			
+			return cList;
+			
+		} catch (Exception err) {
+			log.error("[getLoginOptions]",err);
+		}
+		return null;
+	}
 
 	public List<Configuration> getLoginOptions(String SID) {
 		try {
@@ -747,6 +762,8 @@ public class MainService implements IPendingServiceCallback {
 			cList.add(cfgManagement.getConfKey(3, "show.facebook.login"));
 			cList.add(cfgManagement.getConfKey(3, "user.login.minimum.length"));
 			cList.add(cfgManagement.getConfKey(3, "user.pass.minimum.length"));
+			cList.add(cfgManagement.getConfKey(3, "user.pass.minimum.length"));
+			
 
 			return cList;
 		} catch (Exception err) {

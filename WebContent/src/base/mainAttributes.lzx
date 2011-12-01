@@ -405,4 +405,7 @@ and some more references to temp-objects
 
 <attribute name="currentBaseConferenceRoom" value="null" />
 
+<!--F12-->
+<attribute name="GIVE_EXCLUSIVE_AUDIO_KEY" value="123"/> 
+
 </library>

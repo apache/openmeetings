@@ -625,8 +625,25 @@
             if (canvas.thishib.loaderVar != null) {
               canvas.thishib.loaderVar.setProgress();
             }
-            parent.getUserSalutations.doCall();
+            parent.getGeneralOptions.doCall();
         </handler>  
+    </netRemoteCallHib>
+    
+    <netRemoteCallHib name="getGeneralOptions" funcname="xmlcrm.getGeneralOptions" >
+        <handler name="ondata" args="value">
+	        <![CDATA[
+	            if (canvas.thishib.loaderVar != null) {
+	              canvas.thishib.loaderVar.setProgress();
+	            }
+	            if (value != null && value.length > 0) {
+	                if ($debug) Debug.write("Give exclusive audio keycode is: ", value[0].conf_value);
+	                parent.setAttribute('GIVE_EXCLUSIVE_AUDIO_KEY', value[0].conf_value);
+	            } else {
+	               if ($debug) Debug.warn("xmlcrm.getGeneralOptions empty!");
+ 	            }
+	            parent.getUserSalutations.doCall();
+            ]]>
+        </handler>
     </netRemoteCallHib>
     
     <netRemoteCallHib name="setCurrentUserOrganization" funcname="xmlcrm.setCurrentUserOrganization">

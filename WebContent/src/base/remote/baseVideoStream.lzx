@@ -232,10 +232,11 @@
 		@param number volume Number between 0 and 100
 	 -->
     <method name="setVolume" args="volume">
-        if ($debug) Debug.write(this.soundRef,volume,this.soundRef.getVolume());
+        if ($debug) Debug.write(this.soundRef,volume);
         if (this.soundRef == null) {
         	return;
         }
+        if ($debug) Debug.write(this.soundRef.getVolume());
         this.soundRef.setVolume(volume);
     </method>	
 	
