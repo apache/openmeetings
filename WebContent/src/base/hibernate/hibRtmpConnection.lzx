@@ -300,7 +300,7 @@
             canvas.setColorStyle(canvas.baseColorScheme);
             
             parent.userlang = -1;
-            setDefaultUserLanguage();
+            parent.setDefaultUserLanguage();
 
         	parent.getLanguageByIdAndMax.start = 0;
         	parent.getLanguageByIdAndMax.doCall();
@@ -327,7 +327,7 @@
             //The onResult-Handler will be called be the rtmpconnection
             canvas.default_lang_id = value;
             if ($debug) Debug.write("getDefaultLanguage: ",value,"; canvas.lang = ", canvas.language_id);
-            setDefaultUserLanguage();
+            parent.setDefaultUserLanguage();
             parent.getLanguageByIdAndMax.doCall();
         </handler>  
     </netRemoteCallHib>      
@@ -498,17 +498,21 @@
         <netparam><method name="getValue">return parent.step;</method></netparam> 
         <handler name="ondata" args="value">
         	<![CDATA[
-			if($debug) Debug.write("hibRtmpConnection/userlang:[",parent.parent.userlang,"]");
+			if($debug) Debug.write("hibRtmpConnection/userlang:[",parent.userlang,"]");
         		//if($debug) Debug.write("hibRtmpConnection/getLanguageByIdAndMax:[",value,"]");
         		setLabelObjectByHundred(this.start,value);
 	            //The onResult-Handler will be called be the rtmpconnection
 	            if (this.start <= max){
 	            	this.start += this.step;
-					canvas.thishib.loaderVar.setProgress();
+	            	if (canvas.thishib.loaderVar != null) {
+					   canvas.thishib.loaderVar.setProgress();
+					}
 					this.doCall();
 	            } else {
 		            if (parent.initlanguageLoaded){
-		            	canvas.thishib.loaderVar.setProgress();
+		                if (canvas.thishib.loaderVar != null) {
+		            	    canvas.thishib.loaderVar.setProgress();
+		            	}
 		            	parent.getRoomTypes.doCall();
 		            } else {
 		            	parent.initlanguageLoaded=true;
@@ -607,7 +611,9 @@
             //The onResult-Handler will be called be the rtmpconnection
             //Debug.write("getStates: ",value);
             canvas.statesInitValues = value;
-            canvas.thishib.loaderVar.setProgress();
+            if (canvas.thishib.loaderVar != null) {
+              canvas.thishib.loaderVar.setProgress();
+            }
             parent.getTimeZones.doCall();
         </handler>  
     </netRemoteCallHib>  
@@ -616,7 +622,9 @@
         <handler name="ondata" args="value">
             //The onResult-Handler will be called be the rtmpconnection
             //Debug.write("getStates: ",value);
-            canvas.thishib.loaderVar.setProgress();
+            if (canvas.thishib.loaderVar != null) {
+              canvas.thishib.loaderVar.setProgress();
+            }
             parent.getUserSalutations.doCall();
         </handler>  
     </netRemoteCallHib>
@@ -641,10 +649,14 @@
             canvas.salutationsInitValues = value;
 			//check for password reset
 			if (canvas.isResetUsername){
-				canvas.thishib.loaderVar.close();
+			    if (canvas.thishib.loaderVar != null) {
+				  canvas.thishib.loaderVar.close();
+				}
 				new lz.resetPassword(canvas.main_content._content.inner);
 			} else { 
-				canvas.thishib.loaderVar.close();
+			    if (canvas.thishib.loaderVar != null) {
+				   canvas.thishib.loaderVar.close();
+				}
 				//do not show loggin-PopUp for the test-Application
 				if (parent.testAppLoading){ 
 					canvas.loadNextStepTestApp();
@@ -652,18 +664,21 @@
 					
 					if (canvas.isinitRoomDirect || canvas.remoteUserLogin 
                                 || canvas.directUserLogin || canvas.secureRemoteUserLogin){
-                        canvas.thishib.loaderVar.setProgress();
+                        if (canvas.thishib.loaderVar != null) {
+                          canvas.thishib.loaderVar.setProgress();
+                        }
                         if($debug) Debug.write("isinitRoomDirect or remoteUserLogin is true");
                         parent.markSessionAsLogedIn.doCall();
                     } else {
-                        canvas.thishib.loaderVar.setProgress();
-                    
+                        if (canvas.thishib.loaderVar != null) {
+                          canvas.thishib.loaderVar.setProgress();
+                        }
 				
     					//Check if user is auto-logged in by session
     					var g = canvas.getUserData();
                         if($debug) Debug.write("checkLoginData/g: ",g);
                         var storedSession = g["storedSession"];
-                        if($debug) Debug.write("checkLoginData/save: ",save);
+                        if($debug) Debug.write("checkLoginData/save: ",storedSession);
                         
                         parent.loginByRemember.currentHashSession = storedSession;
                         parent.loginByRemember.doCall();
@@ -787,7 +802,9 @@
             //The onResult-Handler will be called be the rtmpconnection
             //Debug.write("getRoomTypes ",value);
             canvas.roomTypesInitValues = value;
-            canvas.thishib.loaderVar.setProgress();
+            if (canvas.thishib.loaderVar != null) {
+              canvas.thishib.loaderVar.setProgress();
+            }
             parent.setUsernameAndSession.doCall();
         </handler>  
     </netRemoteCallHib>    	 
@@ -851,7 +868,9 @@
             <handler name="ondata" args="value">
                 //The onResult-Handler will be called be the rtmpconnection
                 if ($debug) Debug.write("setUsernameAndSession: ",canvas.user_id,value);
-                canvas.thishib.loaderVar.setProgress();
+                if (canvas.thishib.loaderVar != null) {
+                  canvas.thishib.loaderVar.setProgress();
+                }
                 parent.getNavi.doCall();                    
             </handler>  
         </netRemoteCallHib>        

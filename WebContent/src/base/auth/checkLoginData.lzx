@@ -286,7 +286,6 @@
             <![CDATA[
             //The onResult-Handler will be called be the rtmpconnection
             	if ($debug) {
-                    Debug.write("user.lang: ", value.language_id);
                     Debug.write("loginUser: ", value);
                 }
             	

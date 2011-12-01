@@ -14,9 +14,9 @@
 	
 	<handler name="oninit">
 		<![CDATA[
-			if($debug) Debug.write("chatParticipants/WIDTH: ",this.picture_uri);
+			if($debug) Debug.write("chatParticipants/picture_uri: ",this.picture_uri);
 			
-			if (this.picture_uri.startsWith("http")) {
+			if (this.picture_uri != null && this.picture_uri.startsWith("http")) {
 				
 				this._userpic.setAttribute('src',this.picture_uri);  
 				
