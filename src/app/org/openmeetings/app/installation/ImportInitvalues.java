@@ -486,6 +486,10 @@ public class ImportInitvalues {
 		
 		cfgManagement.addConfByKey(3, "use.old.style.ffmpeg.map.option", "0", null,
 				"specify a 1 if you would like to use old FFMPEG -map option with 0.0 instead of 0:0");
+
+        // give exclusive audio key code
+        cfgManagement.addConfByKey(3, "exclusive.audio.keycode", "123", null,
+				"A hot key code for the 'give exclusive audio' functionality. 123 if F12");
 	}
 
 	

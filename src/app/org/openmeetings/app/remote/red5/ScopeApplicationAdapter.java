@@ -3917,4 +3917,13 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		return null;
 	}
 
+    public String getExclusiveAudioKeyCode() {
+        Configuration conf = cfgManagement.getConfKey(3, "exclusive.audio.keycode");
+        if (null != conf) {
+            return conf.getConf_value();
+        } else {
+            return null;
+        }
+    }
+
 }

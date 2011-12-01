@@ -1318,25 +1318,13 @@
                     //The onResult-Handler will be called be the rtmpconnection
                     var obj = canvas._videocontainer.getVideoObjectByPublicSID(value.publicSID);
 
-                    var iHaveAudio = (canvas.publicSID == value.publicSID);
                     for (var i=0; i<obj.parent.subviews.length; i++) {
-                        var itIsMyVideo = (canvas.publicSID == obj.parent.subviews[i].publicSID);
-                        var heHasAudio = (value.publicSID == obj.parent.subviews[i].publicSID);
-                        if (iHaveAudio) {
-                            if (itIsMyVideo) {
-                                obj.parent.subviews[i].simpleMuteMicrophone(false);
-                            } else {
-                                obj.parent.subviews[i].setMicMuted(true);
-                            }
-                        } else {
-                            if (itIsMyVideo) {
-                                obj.parent.subviews[i].simpleMuteMicrophone(true);
-                            } else if (heHasAudio){
-                                obj.parent.subviews[i].setMicMuted(false);
-                            } else {
-                                obj.parent.subviews[i].setMicMuted(true);
-                            }
-                        }
+                        var videoObj = obj.parent.subviews[i];
+                        var rcl = new Object();
+
+                        rcl.publicSID = videoObj.publicSID;
+                        rcl.micMuted = !(value.publicSID == videoObj.publicSID);
+                        canvas.setMuteStatus(rcl);
                     }
                 ]]>
             </handler>

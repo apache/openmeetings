@@ -47,6 +47,7 @@
 
     <handler name="oninit">
         <![CDATA[
+            this.getExclusiveAudioKeyCode.doCall();
             _mainScrollBar.setAttribute("visibility","hidden");
             
             if ($debug) Debug.write("roomobj: ",this.roomobj);
@@ -134,10 +135,18 @@
     	if ($debug) Debug.write("ringring - ringring - ringring");
     </method>
 
-    <handler name="onkeydown" reference="lz.Keys" args="keyCode">
-        var GIVE_EXCLUSIVE_AUDIO_KEY = 123; // F12
+    <attribute name="GIVE_EXCLUSIVE_AUDIO_KEY" value="123"/> <!--F12-->
+    <netRemoteCallHib name="getExclusiveAudioKeyCode" funcname="getExclusiveAudioKeyCode" remotecontext="$once{ canvas.thishib }">
+        <handler name="ondata" args="value">
+            if (null != value) {
+                if ($debug) Debug.write("Give exclusive audio keycode is changed to: ", value);
+                parent.setAttribute('GIVE_EXCLUSIVE_AUDIO_KEY', value);
+            }
+        </handler>
+    </netRemoteCallHib>
 
-        if (GIVE_EXCLUSIVE_AUDIO_KEY == keyCode) {
+    <handler name="onkeydown" reference="lz.Keys" args="keyCode">
+        if (this.GIVE_EXCLUSIVE_AUDIO_KEY == keyCode) {
             var obj = canvas._videocontainer.getVideoObjectByPublicSID(canvas.publicSID);
             if (null != obj) {
                 obj._giveExclusiveAudioView._micButton.onclick.sendEvent();

@@ -450,8 +450,7 @@
         
     </view>
 
-    <view name="_giveExclusiveAudioView" x="${(parent.width)*0.5 - 20}" y="${(parent.height)*0.5 - 20}"
-            visible="false">
+    <view name="_giveExclusiveAudioView" valign="middle" align="center" visible="false">
         <miniIcons name="_micButton" width="40" height="40" resource="mic_rsc" showhandcursor="true">
             <handler name="onclick">
                 <![CDATA[
@@ -471,8 +470,8 @@
         if (this.minimized) {
             return;
         }
-        var itIsMyVideo = (canvas.publicSID == this.publicSID);
-        if (canvas.ismoderator || itIsMyVideo) {
+
+        if (canvas.ismoderator || !this.isremote) {
             this._giveExclusiveAudioView.setAttribute("visible", true);
         }
         ]]>
@@ -486,9 +485,7 @@
         if (this.minimized) {
             return;
         }
-        if (canvas.ismoderator) {
-            this._giveExclusiveAudioView.setAttribute("visible", false);
-        }
+        this._giveExclusiveAudioView.setAttribute("visible", false);
         ]]>
     </handler>
     
@@ -544,17 +541,6 @@
         	}
         }
         ]]>
-    </method>
-
-    <method name="simpleMuteMicrophone" args="micMuted">
-        if (micMuted) {
-            if ($debug) Debug.write("############ SET GAIN 0");
-            this._chatvideoinner._videostream.micro.setGain(0);
-        } else {
-            if ($debug) Debug.write("############ SET GAIN 50");
-            this._chatvideoinner._videostream.micro.setGain(50);
-        }
-        this.setMicMuted(micMuted);
     </method>
 
     <!--
