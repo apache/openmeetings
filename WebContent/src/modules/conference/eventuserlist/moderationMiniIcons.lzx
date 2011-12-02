@@ -46,9 +46,15 @@
             this._allowRemote.isActive = false;
             this._allowRemote.setAttribute("showhandcursor",false);
             this._allowRemote._text.setAttribute("text",canvas.getLabelName(1083));
+
+            this._allowExclusiveAudio.setAttribute("visibility","visible");
+            this._allowExclusiveAudio.isActive = false;
+            this._allowExclusiveAudio.setAttribute("showhandcursor",false);
+            this._allowExclusiveAudio._text.setAttribute("text",canvas.getLabelName(1083));
             
             this._denyScreen.setAttribute("visibility","hidden");
             this._denyRemote.setAttribute("visibility","hidden");
+            this._denyExclusiveAudio.setAttribute("visibility","hidden");
         } else {
             if (parent.refObj.canShare) {
                 this._allowScreen.setAttribute("visibility","visible");
@@ -70,6 +76,17 @@
 			} else {
 				this._allowRemote.setAttribute("visibility","hidden");
 				this._denyRemote.setAttribute("visibility","visible");
+			}
+
+            if (parent.refObj.canGiveAudio) {
+    			this._allowExclusiveAudio.setAttribute("visibility","visible");
+                this._allowExclusiveAudio.isActive = true;
+                this._allowExclusiveAudio.setAttribute("showhandcursor",true);
+                this._allowExclusiveAudio._text.setAttribute("text",canvas.getLabelName(1425));
+                this._denyExclusiveAudio.setAttribute("visibility","hidden");
+			} else {
+				this._allowExclusiveAudio.setAttribute("visibility","hidden");
+				this._denyExclusiveAudio.setAttribute("visibility","visible");
 			}
         }
         
@@ -285,6 +302,35 @@
         <labelTooltip labelid="1386" />
     </miniIcons>
      -->
+
+    <miniIcons name="_allowExclusiveAudio" x="60" width="16" height="16" y="-18"
+               resource="participents_exclusive_audio_rsc" showhandcursor="true">
+    	<attribute name="isActive" value="true" type="boolean" />
+        <handler name="onclick">
+        	<![CDATA[
+                if ($debug) Debug.write("Deny Give Exclusive Audio: ",parent.parent.refObj.publicSID);
+                if (canvas.ismoderator && this.isActive) {
+                	canvas.thishib.setCanGiveAudio.publicSID = parent.parent.refObj.publicSID;
+                    canvas.thishib.setCanGiveAudio.canGiveAudio = false;
+                    canvas.thishib.setCanGiveAudio.doCall();
+                }
+            ]]>
+        </handler>
+        <labelTooltip name="_text" labelid="1425" />
+    </miniIcons>
+
+    <miniIcons name="_denyExclusiveAudio" x="60" width="16" height="16" opacity="0.5" y="-18"
+               resource="participents_exclusive_audio_rsc" showhandcursor="true">
+        <handler name="onclick">
+            if ($debug) Debug.write("Allow Give Exclusive Audio: ",parent.parent.refObj.publicSID);
+            if (canvas.ismoderator) {
+                canvas.thishib.setCanGiveAudio.publicSID = parent.parent.refObj.publicSID;
+                canvas.thishib.setCanGiveAudio.canGiveAudio = true;
+                canvas.thishib.setCanGiveAudio.doCall();
+            }
+        </handler>
+        <labelTooltip labelid="1424" />
+    </miniIcons>
 
 	<miniIcons name="_kickUser" x="60" width="16" height="16" y="18"
                resource="kick_user_rsc" showhandcursor="true">

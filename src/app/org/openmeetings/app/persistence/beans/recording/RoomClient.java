@@ -80,6 +80,8 @@ public class RoomClient implements Serializable {
 	private Boolean canShare = false;
 	@Column(name="canRemote")
 	private Boolean canRemote = false;
+    @Column(name="canGiveAudio")
+    private Boolean canGiveAudio = false;
 	@Column(name="connected_since")
 	private Date connectedSince;
 	@Column(name="formated_date")
@@ -613,6 +615,13 @@ public class RoomClient implements Serializable {
 	}
 	public void setCanRemote(Boolean canRemote) {
 		this.canRemote = canRemote;
+	}
+
+    public Boolean getCanGiveAudio() {
+		return canGiveAudio;
+	}
+	public void setCanGiveAudio(Boolean canGiveAudio) {
+		this.canGiveAudio = canGiveAudio;
 	}
 
 	public Boolean getAllowRecording() {

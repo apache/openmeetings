@@ -470,8 +470,8 @@
         if (this.minimized) {
             return;
         }
-
-        if (canvas.ismoderator || !this.isremote) {
+        var canGiveAudioHimself = !this.isremote && canvas.isAllowedToGiveExclusiveAudio;
+        if (canvas.ismoderator || canGiveAudioHimself) {
             this._giveExclusiveAudioView.setAttribute("visible", true);
         }
         ]]>

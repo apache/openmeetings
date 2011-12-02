@@ -47,10 +47,14 @@
             
             this._allowRemote.setAttribute("visibility","visible");
             this._allowRemote.isActive = false;
+
+            this._allowExclusiveAudio.setAttribute("visibility","visible");
+            this._allowExclusiveAudio.isActive = false;
             
             //this._canDraw._text.setAttribute("text",canvas.getLabelName(681));
             this._denyScreen.setAttribute("visibility","hidden");
             this._denyRemote.setAttribute("visibility","hidden");
+            this._denyExclusiveAudio.setAttribute("visibility","hidden");
         } else {
             if (canvas.isAllowedToScreenShare) {
                 this._allowScreen.setAttribute("visibility","visible");
@@ -69,6 +73,15 @@
             } else {
             	this._allowRemote.setAttribute("visibility","hidden");
             	this._denyRemote.setAttribute("visibility","visible");
+            }
+
+            if (canvas.isAllowedToGiveExclusiveAudio) {
+                this._allowExclusiveAudio.setAttribute("visibility","visible");
+            	this._allowExclusiveAudio.isActive = true;
+            	this._denyExclusiveAudio.setAttribute("visibility","hidden");
+            } else {
+                this._allowExclusiveAudio.setAttribute("visibility","hidden");
+            	this._denyExclusiveAudio.setAttribute("visibility","visible");
             }
         }
         
@@ -246,6 +259,27 @@
             }
         </handler>
         <labelTooltip name="_tip" labelid="1395" />
+    </miniIcons>
+
+    <miniIcons name="_allowExclusiveAudio" x="60" width="16" height="16"
+               resource="participents_exclusive_audio_rsc" showhandcursor="false">
+    	<attribute name="isActive" value="true" type="boolean" />
+        <handler name="onclick">
+        	<![CDATA[
+                if ($debug) Debug.write("Deny Give Exclusive Audio: ",canvas.publicSID);
+            ]]>
+        </handler>
+        <labelTooltip name="_text" labelid="1425" />
+    </miniIcons>
+
+    <miniIcons name="_denyExclusiveAudio" x="60" width="16" height="16" opacity="0.5"
+               resource="participents_exclusive_audio_rsc" showhandcursor="true">
+        <handler name="onclick">
+            if ($debug) Debug.write("Allow Give Exclusive Audio: ",canvas.publicSID);
+            var tDate = new Date();
+            canvas.thishib.sendMessageWithClient.sendMessage("applyForGiveExclusiveAudioOn",tDate.getTime());
+        </handler>
+        <labelTooltip labelid="1424" />
     </miniIcons>
 	
 </class>

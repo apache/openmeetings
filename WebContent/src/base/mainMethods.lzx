@@ -778,6 +778,15 @@ if (cItem == null) {
     ]]>
 </method>
 
+<method name="setExclusiveAudioAllowStatus" args="roomClientObj">
+    <![CDATA[
+        if ($debug) Debug.write("giveExclusiveAudioStatus changes ###### ");
+        if (roomClientObj.publicSID==canvas.publicSID) {
+            canvas.setAttribute("isAllowedToGiveExclusiveAudio",roomClientObj.canGiveAudio);
+        }
+    ]]>
+</method>
+
 <method name="setMuteStatus" args="roomClientObj">
 	<![CDATA[
         if ($debug) Debug.write("setMuteStatus changes ###### ",roomClientObj.micMuted);

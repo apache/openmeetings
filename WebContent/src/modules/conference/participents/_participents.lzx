@@ -207,6 +207,15 @@
             }
         ]]>
     </handler>
+
+    <handler name="onexclusiveAudioAllowStatus" reference="canvas" args="rclObject">
+        <![CDATA[
+            if (this.refObj.publicSID == rclObject.publicSID) {
+                this.refObj.canGiveAudio = rclObject.canGiveAudio;
+                this.updateIcons();
+            }
+        ]]>
+    </handler>
     
     <!--
         Set actions to update the User-Rights and Information what he can do

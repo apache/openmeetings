@@ -428,6 +428,9 @@
         <handler name="ondrawAllowStatus" reference="canvas" args="drawObject">
             this.updateIcons();
         </handler>
+        <handler name="onexclusiveAudioAllowStatus" reference="canvas" args="rclObject">
+            this.updateIcons();
+        </handler>
         <handler name="onlastBroadCastingUser" reference="canvas" args="userObject">
             this.updateIcons();
         </handler>

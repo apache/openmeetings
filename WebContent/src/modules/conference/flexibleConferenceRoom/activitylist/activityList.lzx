@@ -126,7 +126,24 @@
     <labelText text="$once{ parent.message }" multiline="true" x="40"
                width="$once{ parent.width - 60 }" font="Helvetica"/>
                
-</class>    
+</class>
+
+<class name="activityListRestrictedRoomApplyForGiveExclusiveAudioOn" extends="baseItemActivityList"
+	   labelidToolTipOkButton="1428">
+
+    <method name="applyObject">
+        canvas.thishib.setCanGiveAudio.publicSID = this.rcl.publicSID;
+        canvas.thishib.setCanGiveAudio.canGiveAudio = true;
+        canvas.thishib.setCanGiveAudio.doCall();
+        this.sendClearMessage(true);
+    </method>
+
+    <view resource="participents_exclusive_audio_rsc" x="2" y="2" />
+
+    <labelText text="$once{ parent.message }" multiline="true" x="40"
+               width="$once{ parent.width - 60 }" font="Helvetica"/>
+
+</class>
 	
 <class name="activityListRestrictedRoomApplyForMuteOff" extends="baseItemActivityList" 
 	   labelidToolTipOkButton="1401">
@@ -376,6 +393,28 @@
                                         
             this._list._list.scrollToMax();                                        
         ]]>                      
+    </method>
+
+    <method name="applyForGiveExclusiveAudioOn" args="rcl,tStamp">
+        <![CDATA[
+            if (rcl.publicSID == canvas.publicSID) {
+                var txt = "<b>"+canvas.getLabelName(1362)+"</b> " +
+                           canvas.getLabelName(1427) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+            } else {
+                var txt = rcl.firstname + " " + rcl.lastname + " " +
+                                   "[" + rcl.username + "] " +
+                                   canvas.getLabelName(1426) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+            }
+
+            new lz.activityListRestrictedRoomApplyForGiveExclusiveAudioOn(this._list._list,{
+                                            message:txt,
+                                            width:this._list.width-14,
+                                            rcl:rcl,
+                                            tStamp:tStamp
+                                        });
+
+            this._list._list.scrollToMax();
+        ]]>
     </method>
     
     <method name="applyForMuteOff" args="rcl,tStamp">

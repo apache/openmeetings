@@ -6,6 +6,7 @@
     <resource name="participents_isMod_rsc" src="resources/kdmconfig.png" />
     <resource name="participents_allow_drawing_rsc" src="resources/color_line.png" />
     <resource name="participents_deny_drawing_rsc" src="resources/color_line_dis.png" />
+    <resource name="participents_exclusive_audio_rsc" src="resources/exclusive_audio_permission.png" />
     
     <include href="participentList.lzx" />
     <include href="participentListItem.lzx" />

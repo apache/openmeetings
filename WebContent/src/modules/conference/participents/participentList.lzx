@@ -144,7 +144,7 @@
     
     <participentsTable name="_table" y="20" /> 
 
-    <view name="_miniIcons" x="132" y="0" height="18">
+    <view name="_miniIcons" x="112" y="0" height="18">
         
         <view width="1" height="${ parent.parent.height }" x="0"
             bgcolor="$once{ canvas.basebgcolorizer }" />
@@ -169,14 +169,20 @@
         <view name="_icon_remote" x="62" y="3" resource="remote_allow_rsc" onclick="" showhandcursor="false">
             <labelTooltip labelid="1084" />
         </view>
-        
+
         <view width="1" height="${ parent.parent.height }" x="80"
             bgcolor="$once{ canvas.basebgcolorizer }" />
-        <view name="_icon_sync" x="82" y="3" resource="av_allow_rsc" onclick="" showhandcursor="false">
+        <view name="_icon_remote" x="82" y="3" resource="participents_exclusive_audio_rsc" onclick="" showhandcursor="false">
+            <labelTooltip labelid="1423" />
+        </view>
+        
+        <view width="1" height="${ parent.parent.height }" x="100"
+            bgcolor="$once{ canvas.basebgcolorizer }" />
+        <view name="_icon_sync" x="102" y="3" resource="av_allow_rsc" onclick="" showhandcursor="false">
             <labelTooltip labelid="610" />
         </view>
         
-        <view width="1" height="${ parent.parent.height }" x="122"
+        <view width="1" height="${ parent.parent.height }" x="142"
             bgcolor="$once{ canvas.basebgcolorizer }" />
     </view>
     <view name="headerDivisionLine" width="${ parent.width }" 

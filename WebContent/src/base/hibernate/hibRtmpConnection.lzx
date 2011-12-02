@@ -1513,6 +1513,21 @@
                 ]]>
             </handler>   
         </netRemoteCallHib>
+
+        <netRemoteCallHib name="setCanGiveAudio" funcname="whiteboardservice.setCanGiveAudio"
+                       remotecontext="$once{ canvas.thishib }">
+            <attribute name="publicSID" value="" type="string" />
+            <attribute name="canGiveAudio" value="true" type="boolean" />
+            <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+            <netparam><method name="getValue">return parent.publicSID;</method></netparam>
+            <netparam><method name="getValue">return parent.canGiveAudio;</method></netparam>
+            <handler name="ondata" args="value">
+                <![CDATA[
+                    //The onResult-Handler will be called be the rtmpconnection
+                    if ($debug) Debug.write("setCanGiveAudio : ",value);
+                ]]>
+            </handler>
+        </netRemoteCallHib>
         
         <!--
             @deprecated It is not used anymore
@@ -1745,6 +1760,9 @@
                 	canvas.setDrawAllowStatus(value.message[1]);
                 	//Notify all Listeners for change of the item
                     canvas.setAttribute("drawAllowStatus",value.message[1]);
+                } else if (value.message[0]=='updateGiveAudioStatus') {
+                    canvas.setExclusiveAudioAllowStatus(value.message[1]);
+                    canvas.setAttribute("exclusiveAudioAllowStatus",value.message[1]);
                 } else if (value.message[0]=='applyForModeration'){
                     //if (canvas.ismoderator) {
                     	if ($debug) Debug.write("Somebody wants the Moderation ",value.client);
@@ -1859,6 +1877,8 @@
                 	canvas.currentActivityList.applyForMuteOn(value.client,value.message[1]);
                 } else if (value.message[0]=='applyForMuteOff'){
                 	canvas.currentActivityList.applyForMuteOff(value.client,value.message[1]);
+                } else if (value.message[0]=='applyForGiveExclusiveAudioOn'){
+                	canvas.currentActivityList.applyForGiveExclusiveAudioOn(value.client,value.message[1]);
                 } else {
                     if ($debug) Debug.warn("sendVarsToMessageWithClient unkown message ",value);
                 }

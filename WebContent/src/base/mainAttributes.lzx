@@ -104,6 +104,11 @@ these properties will be overwritten by config.xml -->
 
 <attribute name="drawAllowStatus" value="null"/>
 
+<!-- this attribute holds an object of type RoomClient
+the LAST RoomClient Object that has been changed the giveExclusiveAudio status
+-->
+<attribute name="exclusiveAudioAllowStatus" value="null"/>
+
 <!--
     this value indicates if this user is allowed to draw to the Whiteboard
     If this user is currently Moderator => he ALWAYS can draw to whiteboard
@@ -345,6 +350,8 @@ and some more references to temp-objects
 <attribute name="isAllowedToScreenShare" value="false" type="boolean" />
 
 <attribute name="isAllowedToRemoteControl" value="false" type="boolean" />
+
+<attribute name="isAllowedToGiveExclusiveAudio" value="false" type="boolean" />
 
 <attribute name="lzCalendarInfoTab" value="null"/>
 

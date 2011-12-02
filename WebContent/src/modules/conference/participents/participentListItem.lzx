@@ -102,6 +102,15 @@
             }
         ]]>
     </handler>
+
+    <handler name="onexclusiveAudioAllowStatus" reference="canvas" args="rclObject">
+        <![CDATA[
+            if (this.refObj.publicSID == rclObject.publicSID) {
+                this.refObj.canGiveAudio = rclObject.canGiveAudio;
+                this.updateIcons();
+            }
+        ]]>
+    </handler>
     
     <handler name="onmicMutedStatusChangedItem" reference="canvas" args="roomClientObj">
     	<![CDATA[
@@ -143,6 +152,11 @@
                 this._miniIcons._allowRemote.setAttribute("showhandcursor",false);
                 this._miniIcons._allowRemote._text.setAttribute("text","");
                 this._miniIcons._denyRemote.setAttribute("visibility","hidden");
+
+                this._miniIcons._allowExclusiveAudio.setAttribute("visibility","visible");
+                this._miniIcons._allowExclusiveAudio.setAttribute("showhandcursor",false);
+                this._miniIcons._allowExclusiveAudio._text.setAttribute("text","");
+                this._miniIcons._denyExclusiveAudio.setAttribute("visibility","hidden");
                 
                 if (canvas.ismoderator) {
                 	this._x._kickUser.setAttribute("visibility","visible");
@@ -206,6 +220,18 @@
                         this._miniIcons._allowRemote._text.setAttribute("text",canvas.getLabelName(1079));
                         this._miniIcons._denyRemote.setAttribute("visibility","visible");
                     }
+
+                    if (this.refObj.canGiveAudio) {
+                    	this._miniIcons._allowExclusiveAudio.setAttribute("visibility","visible");
+                        this._miniIcons._allowExclusiveAudio.setAttribute("showhandcursor",true);
+                        this._miniIcons._allowExclusiveAudio._text.setAttribute("text",canvas.getLabelName(1083));
+                        this._miniIcons._denyExclusiveAudio.setAttribute("visibility","hidden");
+                    } else {
+                    	this._miniIcons._allowExclusiveAudio.setAttribute("visibility","hidden");
+                        this._miniIcons._allowExclusiveAudio.setAttribute("showhandcursor",false);
+                        this._miniIcons._allowExclusiveAudio._text.setAttribute("text",canvas.getLabelName(1425));
+                        this._miniIcons._denyExclusiveAudio.setAttribute("visibility","visible");
+                    }
                     
                 } else {
                 	this._x._kickUser.setAttribute("visibility","hidden");
@@ -228,14 +254,22 @@
                     } else {
                         this._miniIcons._allowRemote.setAttribute("visibility","hidden");
                     }
+
+                    if (this.refObj.canGiveAudio) {
+                    	this._miniIcons._allowExclusiveAudio.setAttribute("visibility","visible");
+                    } else {
+                    	this._miniIcons._allowExclusiveAudio.setAttribute("visibility","hidden");
+                    }
                     
                     //No Update action available
                     this._miniIcons._canDrawModerator.setAttribute("visibility","hidden");
                     this._miniIcons._denyShare.setAttribute("visibility","hidden");
                     this._miniIcons._denyRemote.setAttribute("visibility","hidden");
+                    this._miniIcons._denyExclusiveAudio.setAttribute("visibility","hidden");
                     this._miniIcons._canDraw.setAttribute("showhandcursor",false);
                     this._miniIcons._canDraw._text.setAttribute("text","");
                     this._miniIcons._allowRemote._text.setAttribute("text","");
+                    this._miniIcons._allowExclusiveAudio._text.setAttribute("text","");
                     this._miniIcons._allowShare._text.setAttribute("text","");
                     
                 }
@@ -307,7 +341,20 @@
                 if ($debug) Debug.write("setCanRemote : ",value);
             ]]>
         </handler>   
-    </netRemoteCallHib>     
+    </netRemoteCallHib>
+
+    <netRemoteCallHib name="setCanGiveAudio" funcname="whiteboardservice.setCanGiveAudio"
+                   remotecontext="$once{ canvas.thishib }">
+        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+        <netparam><method name="getValue">return parent.parent.refObj.publicSID;</method></netparam>
+        <netparam><method name="getValue">return !parent.parent.refObj.canGiveAudio;</method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+                //The onResult-Handler will be called be the rtmpconnection
+                if ($debug) Debug.write("setCanGiveAudio : ",value);
+            ]]>
+        </handler>
+    </netRemoteCallHib>
             
     <handler name="onmouseover">
         this.setAttribute('bgcolor',canvas.baseMousecolorizer);
@@ -402,7 +449,7 @@
 	    </miniIcons>   
     </view>
     
-    <view name="_miniIcons" x="133" y="22" height="18">
+    <view name="_miniIcons" x="113" y="22" height="18">
         
         <miniIcons name="_isMod" x="0" width="16" resource="participents_isactive" 
                    height="16" showhandcursor="false">
@@ -529,9 +576,33 @@
             </handler>
             <labelTooltip labelid="1078" />
         </miniIcons>
+
+        <miniIcons name="_allowExclusiveAudio" x="80" width="16" resource="participents_isactive"
+                   height="16" showhandcursor="false" >
+            <handler name="onclick">
+                <![CDATA[
+                    //if the label is set and this is a Moderator then this user should
+                    //allow the click event => the click event will trigger
+                    //this user away from beeing able to give exclusive audio
+                    if (canvas.ismoderator && this._text.text.length != 0) {
+                        if ($debug) Debug.write("Do it");
+                        parent.parent.setCanGiveAudio.doCall();
+                    }
+                ]]>
+            </handler>
+            <labelTooltip name="_text" text="" labelid="1425" />
+        </miniIcons>
+
+        <miniIcons name="_denyExclusiveAudio" x="80" width="16" opacity="0.5"
+                   resource="participents_isactive" height="16" showhandcursor="true">
+            <handler name="onclick">
+                parent.parent.setCanGiveAudio.doCall();
+            </handler>
+            <labelTooltip labelid="1424" />
+        </miniIcons>
         
         
-        <miniIcons name="_restartDevice" x="80" width="16" height="16" resource="resyncuser_rsc" showhandcursor="true">
+        <miniIcons name="_restartDevice" x="100" width="16" height="16" resource="resyncuser_rsc" showhandcursor="true">
             <handler name="onclick">
                 if ($debug) Debug.write("parent.parent.refObj.publicSID: ",parent.parent.refObj.publicSID);
                 var myvideocontainer = canvas._videocontainer.getNewVideoObject(parent.parent.refObj.publicSID);
@@ -541,7 +612,7 @@
             <labelTooltip labelid="610" />
         </miniIcons>
         
-        <view name="_loudness" x="100" >
+        <view name="_loudness" x="120" >
             <view x="0" y="0" name="loudness" resource="speaking" opacity="0.2"
                   onmouseover="" onmouseout="" >        
                 <labelTooltip inittwice="true" labelid="372" />

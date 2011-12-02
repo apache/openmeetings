@@ -4278,4 +4278,22 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1422" name="language_code">
     <value>Language ISO Code</value>
   </string>
+  <string id="1423" name="exclusive_audio_permission">
+    <value>Allow/Deny right to give exclusive audio.</value>
+  </string>
+  <string id="1424" name="allow_exclusive_audio_permission">
+    <value>Allow user to give exclusive audio</value>
+  </string>
+  <string id="1425" name="deny_exclusive_audio_permission">
+    <value>Deny user to give exclusive audio</value>
+  </string>
+  <string id="1426" name="excl_audio apply self on message">
+    <value>would like to get a permission for exclusive audio.</value>
+  </string>
+  <string id="1427" name="excl_audio apply of message">
+    <value>want that the moderator gives me a permission for exclusive audio.</value>
+  </string>
+  <string id="1428" name="excl_audio status icons">
+    <value>Give a permission for exclusive audio.</value>
+  </string>
 </language>

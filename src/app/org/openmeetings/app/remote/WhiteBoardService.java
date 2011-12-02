@@ -322,6 +322,48 @@ public class WhiteBoardService implements IPendingServiceCallback {
 		return null;
 	}
 
+    public Boolean setCanGiveAudio(String SID, String publicSID, boolean canGiveAudio) {
+		try {
+            log.debug("[setCanGiveAudio] " + SID + ", " + publicSID + ", " + canGiveAudio);
+			IConnection current = Red5.getConnectionLocal();
+			String streamid = current.getClient().getId();
+			RoomClient currentClient = this.clientListManager
+					.getClientByStreamId(streamid);
+
+			Long users_id = sessionManagement.checkSession(SID);
+			Long user_level = userManagement.getUserLevelByID(users_id);
+
+			if (authLevelManagement.checkUserLevel(user_level)) {
+
+				if (currentClient.getIsMod()) {
+					RoomClient rcl = this.clientListManager
+							.getClientByPublicSID(publicSID);
+
+					if (rcl != null) {
+                        rcl.setCanGiveAudio(canGiveAudio);
+						this.clientListManager.updateClientByStreamId(
+								rcl.getStreamid(), rcl);
+
+						HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
+						newMessage.put(0, "updateGiveAudioStatus");
+						newMessage.put(1, rcl);
+						this.scopeApplicationAdapter
+								.sendMessageWithClient(newMessage);
+
+					} else {
+						return false;
+					}
+				} else {
+					return false;
+				}
+			}
+
+		} catch (Exception err) {
+			log.error("[setCanGiveAudio]", err);
+		}
+		return null;
+	}
+
 	public WhiteboardSyncLockObject startNewSyncprocess() {
 		try {
 

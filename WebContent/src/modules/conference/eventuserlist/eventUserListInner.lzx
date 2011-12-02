@@ -184,7 +184,7 @@
     </view>
     
     <moderationMiniIconsEventUserList name="_applyAndStatusIcons" 
-						  x="$once{ parent.width-this.width-4 }" y="2" />
+						  x="$once{ parent.width-this.width-20 }" y="2" />
     
     <!--
     <eventUserListTable name="_table" /> 
@@ -235,6 +235,23 @@
                     }
                 }
                 
+                parent._applyAndStatusIcons.updateIcons();
+            ]]>
+        </handler>
+
+        <handler name="onexclusiveAudioAllowStatus" reference="canvas" args="rclObject">
+            <![CDATA[
+                //search for the user and update its exclusiveAudioStatusIcon
+                var vList = parent._table.innerList.subviews;
+                for (var i=0;i<vList.length;i++) {
+                    //vList[i].updateIconByMod();
+                    if (vList[i].refObj.publicSID == rclObject.publicSID) {
+                    	vList[i].refObj.canGiveAudio = rclObject.canGiveAudio;
+                    	vList[i].updateIconByMod();
+                    	break;
+                    }
+                }
+
                 parent._applyAndStatusIcons.updateIcons();
             ]]>
         </handler>

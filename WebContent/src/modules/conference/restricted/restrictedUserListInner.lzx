@@ -165,7 +165,7 @@
     </view>
     
     <moderationMiniIconsEventUserList name="_applyAndStatusIcons" 
-                          x="$once{ parent.width-this.width-4 }" y="2" />
+                          x="$once{ parent.width-this.width-20 }" y="2" />
     
     
     <turnOverListOrderedPaged name="_table" showTopBar="false" x="1"
@@ -517,6 +517,37 @@
                         parent._table.renderList[i].canDraw = drawObject.canDraw;
                         parent._table.renderList[i].canShare = drawObject.canShare;
                         parent._table.renderList[i].canRemote = drawObject.canRemote;
+                        break;
+                    }
+                }
+
+                parent._applyAndStatusIcons.updateIcons();
+            ]]>
+        </handler>
+
+        <handler name="onexclusiveAudioAllowStatus" reference="canvas" args="rclObject">
+            <![CDATA[
+
+                if ($debug) Debug.write(" :: exclusiveAudioAllowStatus :: ",rclObject.canGiveAudio);
+
+                //search for the user and update its exclusiveAudioStatusIcon
+                var vList = parent._table._innerlist._inn._inn.subviews;
+                for (var i=0;i<vList.length;i++) {
+                    //vList[i].updateIconByMod();
+                    if (vList[i].refObj.publicSID == rclObject.publicSID) {
+                        vList[i].refObj.canGiveAudio = rclObject.canGiveAudio;
+                        vList[i].canGiveAudio = rclObject.canGiveAudio;
+                        vList[i].updateIconByModScroll();
+                        vList[i].updateModeratorIcons();
+                        break;
+                    }
+                }
+
+                var vList = parent._table.renderList;
+                for (var i=0;i<vList.length;i++) {
+                    //vList[i].updateIconByMod();
+                    if (vList[i].publicSID == rclObject.publicSID) {
+                        parent._table.renderList[i].canGiveAudio = rclObject.canGiveAudio;
                         break;
                     }
                 }
