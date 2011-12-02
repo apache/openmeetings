@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
     
-<!-- #######################
+<!--- 
 	Class editRecordStream
 	
 	Description:
@@ -14,7 +14,7 @@
  -->
  
 <class name="editRecordStream"  extends="labelExplorerBox" labelid="51"
-	width="300" height="250" x="14" y="-340" >
+	width="300" height="286" x="14" y="-440" >
 
     <attribute name="myvideocontainer" value="null" />
     
@@ -30,6 +30,9 @@
     <attribute name="doDefaultAnimation" value="true" type="boolean" />
     
     <attribute name="isInterview" value="false" type="boolean" />
+    
+    <attribute name="cam_default_width" value="320" type="number" />
+    <attribute name="cam_default_height" value="240" type="number" />
     
 	<handler name="oninit">
 		<![CDATA[
@@ -117,7 +120,11 @@
     		var valCam = this.chosenCam;
 			var valMic = this.chosenMic;
 			var settings = this.chosenSetting;
+			this.myvideocontainer.setDefaultVideoSize(this.cam_default_width,this.cam_default_height);
+			
+			//make a local ref so path is easier to read
 			var videoview = this.myvideocontainer._chatvideoinner._videostream;
+			
 	    	if ($debug) Debug.write("this.myvideocontainer: ",this.myvideocontainer);
 	    	if ($debug) Debug.write(valCam,valMic,settings);
 			this.myvideocontainer.setAttribute('isremote',false);
@@ -140,6 +147,7 @@
 					if ($debug) Debug.warn("IS INTERVIEW ");
 				    _camera.setQuality(0,98);
 				} else {
+				    if ($debug) Debug.warn("Publishing Video with Size :3: ",videoview.width,videoview.height);
 					_camera.setMode(videoview.width,videoview.height,canvas.framesPerSecond,true);
 					if ($debug) Debug.warn("IS NO INTERVIEW ");
 					_camera.setQuality(canvas.bandwidthNeededBest,canvas.camQualityBest);
@@ -265,11 +273,15 @@
     			this.parent.availibleMicsLabel.setAttribute("visibility",micVisible);
     			this.parent.availibleMics.setAttribute("visibility",micVisible);	   
     			this.parent.infoTextNoAV.setAttribute("visibility",textVisible);
+    			this.parent.availibleResolutionsLabel.setAttribute("visibility",camVisible);
+    			this.parent.availibleResolutionsWarning.setAttribute("visibility",camVisible);
+    			this.parent.availibleResolutions.setAttribute("visibility",camVisible);
         	]]>
         </handler>
     </resetCombobox>    
      
-    <labelText name="availibleCamsLabel" labelid="52" fontsize="11" x="10" y="80" width="$once{ parent.width-20 }" />
+    <labelText name="availibleCamsLabel" labelid="52" fontsize="11" 
+                x="10" y="80" width="$once{ parent.width-20 }" />
 
     <resetCombobox fontsize="11" name="availibleCams" x="10" y="100" width="280" editable="false">
         <handler name="oninit">
@@ -290,8 +302,9 @@
         </handler>
     </resetCombobox>
     
+    <labelText name="availibleMicsLabel" labelid="53" fontsize="11" 
+               x="10" y="120" width="$once{ parent.width-20 }" />
     
-
     <resetCombobox fontsize="11" name="availibleMics"  x="10" y="140" width="280" editable="false">
         <handler name="oninit">
             <![CDATA[
@@ -312,13 +325,50 @@
     </resetCombobox>
     
     <labelText name="infoTextNoAV" labelid="452" multiline="true" width="280" 
-    		   fontsize="11" x="10" y="80" visibility="hidden" />
+    		   fontsize="11" x="10" y="180" visibility="hidden" />
                
-    <labelText name="availibleMicsLabel" labelid="53" fontsize="11" 
-    		   x="10" y="120" width="$once{ parent.width-20 }" />
+    <labelText name="availibleResolutionsLabel" labelid="1429" 
+            fontsize="11" x="10" y="164" width="$once{ parent.width-20 }" />
+            
+    <view name="availibleResolutionsWarning" x="272" y="164" 
+            resource="warning_icon_popup_devices_rsc" clickable="true" >
+        <labelTooltip multiline="true" labelid="1430" />
+    </view>         
+            
+    <resetCombobox fontsize="11" name="availibleResolutions" x="10" shownitems="10"
+                y="184" width="280" editable="false" >
+        <!--- @keywords private -->
+        <attribute name="counter" value="0" />
+        <handler name="onselect" args="item">
+            //if ($debug) Debug.write("onselect w ", item.cam_width);
+            //if ($debug) Debug.write("onselect h ", item.cam_height);
+            parent.cam_default_width = item.cam_width;
+            parent.cam_default_height = item.cam_height;
+        </handler>
+        <textlistitem datapath="myConfigSet:/config/availableCameraResolutions/resolution" >
+            <!--- @keywords private -->
+            <attribute name="cam_width" value="320" type="number" />
+            <!--- @keywords private -->
+            <attribute name="cam_height" value="240" type="number" />
+            <handler name="ondata">
+                // if ($debug) Debug.write("ondata ", this);
+                var type = this.datapath.xpathQuery('@type');
+                this.cam_width = Number(this.datapath.xpathQuery('@width'));
+                this.cam_height = Number(this.datapath.xpathQuery('@height'));
+                this.setAttribute("text",""+this.cam_width+"x"+this.cam_height+" ["+type+"]");
+                var isDefault = this.datapath.xpathQuery('@isDefault');
+                if (isDefault == "true") {
+                    if ($debug) Debug.write("Found default one ",type);
+                    parent.selectItemAt(parent.counter);
+                    parent.onselect.sendEvent(this);
+                }
+                parent.counter+=1;
+            </handler>
+        </textlistitem>
+    </resetCombobox>      
     
     <!-- Remember Me -->    
-    <labelCheckbox name="holddatainSO" labelid="762" x="10" y="210" >
+    <labelCheckbox name="holddatainSO" labelid="762" x="10" y="260" >
         <handler name="oninit">
             var g = canvas.getUserData();
             var save = g["savecamdata"];
@@ -328,7 +378,7 @@
     </labelCheckbox>
     
     <simpleLabelButton fontsize="11" visibility="${ (parent.isInterview) ? 'visible' : 'hidden' }" 
-                       labelid="54" x="80" y="180" width="100">
+                       labelid="54" x="80" y="240" width="100">
         <handler name="onclick">
             this.parent.storelocaldata();
             this.parent.chosenCam = parent.availibleCams.getValue();
@@ -343,14 +393,14 @@
     </simpleLabelButton>
     
     <simpleLabelButton fontsize="11" visibility="${ (parent.isInterview) ? 'visible' : 'hidden' }" 
-                       labelid="918" x="190" y="180" width="100">
+                       labelid="918" x="190" y="240" width="100">
         <handler name="onclick">
             parent.close();
         </handler>
     </simpleLabelButton>
     
     <simpleLabelButton fontsize="11" visibility="${ (!parent.isInterview) ? 'visible' : 'hidden' }" 
-    				   labelid="54" x="190" y="180" width="100">
+    				   labelid="54" x="190" y="240" width="100">
         <handler name="onclick">
         	this.parent.storelocaldata();
         	this.parent.chosenCam = parent.availibleCams.getValue();

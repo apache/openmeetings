@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<config>
+<config 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="openmeetings-config.xsd">
 
 <!-- URL/IP to use for the Server
     if this value is empty it will try to connect to the 
@@ -12,7 +14,7 @@
 Port to use for the Server
 To this port the default server lookup is done
 
-You can find all this configuraiton in your red5-Config in: $RED5_HOME/conf/red5.properties
+You can find all this configuration in your red5-Config in: $RED5_HOME/conf/red5.properties
  -->
 <rtmpport>1935</rtmpport>
 
@@ -212,6 +214,26 @@ of the red5-servlet
  -->
 <defaultWhiteboardWidth>2400</defaultWhiteboardWidth>  
 <defaultWhiteboardHeight>1200</defaultWhiteboardHeight>  
+
+<!-- Available Configurations -->
+
+<availableCameraResolutions>
+    <resolution type="4:3" width="40" height="30" isDefault="false" />
+    <resolution type="4:3" width="80" height="60" isDefault="false" />
+    <resolution type="4:3" width="120" height="90" isDefault="true" />
+    <resolution type="QQVGA 4:3" width="160" height="120" isDefault="false" />
+    <resolution type="4:3" width="240" height="160" isDefault="false" />
+    <resolution type="HVGA 4:3" width="320" height="240" isDefault="false" />
+    <resolution type="4:3" width="480" height="320" isDefault="false" />
+    <resolution type="4:3" width="640" height="480" isDefault="false" />
+    <resolution type="XGA 4:3" width="1024" height="768" isDefault="false" />
+    <resolution type="16:9" width="256" height="150" isDefault="false" />
+    <resolution type="WQVGA 9:5" width="432" height="240" isDefault="false" />
+    <resolution type="pseudo 16:9" width="480" height="234" isDefault="false" />
+    <resolution type="16:9" width="512" height="300" isDefault="false" />
+    <resolution type="nHD 16:9" width="640" height="360" isDefault="false" />
+    <resolution type="16:9" width="1024" height="600" isDefault="false" />
+</availableCameraResolutions>
     
  
 <!-- Module Configuration -->

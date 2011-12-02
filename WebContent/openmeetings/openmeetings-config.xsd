@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="config">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="rtmphostlocal"/>
+        <xs:element ref="rtmpport"/>
+        <xs:element ref="rtmpTunnelport"/>
+        <xs:element ref="rtmpsslport"/>
+        <xs:element ref="useSSL"/>
+        <xs:element ref="red5httpport"/>
+        <xs:element ref="protocol"/>
+        <xs:element ref="proxyType"/>
+        <xs:element ref="basebgcolorizer"/>
+        <xs:element ref="baseMousecolorizer"/>
+        <xs:element ref="baseMouseOvercolorizer"/>
+        <xs:element ref="currentappname"/>
+        <xs:element ref="currentappnameurl"/>
+        <xs:element ref="currentappnamebugurl"/>
+        <xs:element ref="loudnessAcitviation"/>
+        <xs:element ref="webAppRootKey"/>
+        <xs:element ref="httpRootKey"/>
+        <xs:element ref="showWindowEffect"/>
+        <xs:element ref="showRecording"/>
+        <xs:element ref="firstdayinweek"/>
+        <xs:element ref="framesPerSecond"/>
+        <xs:element ref="bandwidthNeededNormal"/>
+        <xs:element ref="bandwidthNeededBest"/>
+        <xs:element ref="camQualityNormal"/>
+        <xs:element ref="camQualityBest"/>
+        <xs:element ref="microphoneRateNormal"/>
+        <xs:element ref="microphoneRateBest"/>
+        <xs:element ref="defaultWhiteboardWidth"/>
+        <xs:element ref="defaultWhiteboardHeight"/>
+        <xs:element ref="availableCameraResolutions"/>
+        <xs:element ref="adminModuleUser"/>
+        <xs:element ref="adminModuleRoom"/>
+        <xs:element ref="adminModuleOrg"/>
+        <xs:element ref="adminModuleLanguages"/>
+        <xs:element ref="adminModuleConnections"/>
+        <xs:element ref="adminModuleConfiguration"/>
+        <xs:element ref="adminModuleBackup"/>
+        <xs:element ref="adminModuleLDAP"/>
+        <xs:element ref="moderatorModuleUser"/>
+        <xs:element ref="moderatorModuleRoom"/>
+        <xs:element ref="dashboardModuleStartScreen"/>
+        <xs:element ref="dashboardModuleCalendar"/>
+        <xs:element ref="conferenceModuleRoomList"/>
+        <xs:element ref="conferenceRoomModule"/>
+        <xs:element ref="eventModuleRoomList"/>
+        <xs:element ref="eventRoomModule"/>
+        <xs:element ref="restrictedRoomModule"/>
+        <xs:element ref="interviewRoomModule"/>
+        <xs:element ref="recordModule"/>
+        <xs:element ref="userSettingsModule"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="rtmphostlocal">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="rtmpport" type="xs:integer"/>
+  <xs:element name="rtmpTunnelport" type="xs:integer"/>
+  <xs:element name="rtmpsslport" type="xs:integer"/>
+  <xs:element name="useSSL" type="xs:NCName"/>
+  <xs:element name="red5httpport" type="xs:integer"/>
+  <xs:element name="protocol" type="xs:NCName"/>
+  <xs:element name="proxyType" type="xs:NCName"/>
+  <xs:element name="basebgcolorizer" type="xs:NMTOKEN"/>
+  <xs:element name="baseMousecolorizer" type="xs:NMTOKEN"/>
+  <xs:element name="baseMouseOvercolorizer" type="xs:NMTOKEN"/>
+  <xs:element name="currentappname" type="xs:NCName"/>
+  <xs:element name="currentappnameurl" type="xs:anyURI"/>
+  <xs:element name="currentappnamebugurl" type="xs:anyURI"/>
+  <xs:element name="loudnessAcitviation" type="xs:integer"/>
+  <xs:element name="webAppRootKey" type="xs:NCName"/>
+  <xs:element name="httpRootKey" type="xs:string"/>
+  <xs:element name="showWindowEffect" type="xs:NCName"/>
+  <xs:element name="showRecording" type="xs:NCName"/>
+  <xs:element name="firstdayinweek" type="xs:integer"/>
+  <xs:element name="framesPerSecond" type="xs:integer"/>
+  <xs:element name="bandwidthNeededNormal" type="xs:integer"/>
+  <xs:element name="bandwidthNeededBest" type="xs:integer"/>
+  <xs:element name="camQualityNormal" type="xs:integer"/>
+  <xs:element name="camQualityBest" type="xs:integer"/>
+  <xs:element name="microphoneRateNormal" type="xs:integer"/>
+  <xs:element name="microphoneRateBest" type="xs:integer"/>
+  <xs:element name="defaultWhiteboardWidth" type="xs:integer"/>
+  <xs:element name="defaultWhiteboardHeight" type="xs:integer"/>
+  <xs:element name="availableCameraResolutions">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="resolution"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="resolution">
+    <xs:complexType>
+      <xs:attribute name="height" use="required" type="xs:integer"/>
+      <xs:attribute name="isDefault" use="required" type="xs:boolean"/>
+      <xs:attribute name="type" use="required"/>
+      <xs:attribute name="width" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="adminModuleUser" type="xs:NCName"/>
+  <xs:element name="adminModuleRoom" type="xs:NCName"/>
+  <xs:element name="adminModuleOrg" type="xs:NCName"/>
+  <xs:element name="adminModuleLanguages" type="xs:NCName"/>
+  <xs:element name="adminModuleConnections" type="xs:NCName"/>
+  <xs:element name="adminModuleConfiguration" type="xs:NCName"/>
+  <xs:element name="adminModuleBackup" type="xs:NCName"/>
+  <xs:element name="adminModuleLDAP" type="xs:NCName"/>
+  <xs:element name="moderatorModuleUser" type="xs:NCName"/>
+  <xs:element name="moderatorModuleRoom" type="xs:NCName"/>
+  <xs:element name="dashboardModuleStartScreen" type="xs:NCName"/>
+  <xs:element name="dashboardModuleCalendar" type="xs:NCName"/>
+  <xs:element name="conferenceModuleRoomList" type="xs:NCName"/>
+  <xs:element name="conferenceRoomModule" type="xs:NCName"/>
+  <xs:element name="eventModuleRoomList" type="xs:NCName"/>
+  <xs:element name="eventRoomModule" type="xs:NCName"/>
+  <xs:element name="restrictedRoomModule" type="xs:NCName"/>
+  <xs:element name="interviewRoomModule" type="xs:NCName"/>
+  <xs:element name="recordModule" type="xs:NCName"/>
+  <xs:element name="userSettingsModule" type="xs:NCName"/>
+</xs:schema>

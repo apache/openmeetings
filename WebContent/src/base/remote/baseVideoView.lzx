@@ -36,12 +36,12 @@
 	</method>
     
     <handler name="onwidth" args="w">
-    	if ($debug) Debug.info("onwidth ",this.width,this.height);
+    	if ($debug) Debug.info("applySizeToVid onwidth ",this.width,this.height);
         this.applySizeToVid();
     </handler> 
     
     <handler name="onheight" args="h">
-    	if ($debug) Debug.info("onheight ",this.width,this.height);
+    	if ($debug) Debug.info("applySizeToVid onheight ",this.width,this.height);
         this.applySizeToVid();
     </handler>
     

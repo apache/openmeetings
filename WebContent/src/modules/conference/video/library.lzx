@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 
+    
+    <resource name="warning_icon_popup_devices_rsc" src="resources/messagebox_warning.png" />
+
 	<resource name="chatbgitem" src="resources/bgitemvideochat.swf" />
 	
 	<resource name="showusercontextclose" src="resources/error.png" />

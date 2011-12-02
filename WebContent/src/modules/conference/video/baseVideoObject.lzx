@@ -8,7 +8,8 @@
 	or a self-video (broadcasting a cam/mic)
  -->
     
-<class name="baseVideoObject" extends="view" bgcolor="0x000000" width="132" height="120">
+<class name="baseVideoObject" extends="view" 
+            bgcolor="0x000000" width="122" height="101">
 	 
 	<!--- @keywords private -->
 	<attribute name="chatpartnername" value="" type="string" />
@@ -79,10 +80,10 @@
                 //return;
             }
             
-            var prop1 = [this, "width"];
-            var prop2 = [this, "height"];
-            this.applyConstraintMethod("setItemContraints", prop1);
-            this.applyConstraintMethod("setItemContraints", prop2);
+            //var prop1 = [this, "width"];
+            //var prop2 = [this, "height"];
+            //this.applyConstraintMethod("setItemContraints", prop1);
+            //this.applyConstraintMethod("setItemContraints", prop2);
             this.setShadow();   
             
             if (this.publicSID == canvas.publicSID) {
@@ -157,7 +158,7 @@
         ]]>              
     </method>   
         
-    <!-- respect ratio and keep minimum width / height -->
+    <!-- respect ratio and keep minimum width / height
     <method name="setItemContraints" args="w">
         <![CDATA[
             if (!this.respectRatio) {
@@ -176,6 +177,7 @@
             this.setAttribute("height",h);
         ]]>
     </method>
+     -->
         
 	
 	<method name="updateAVSettingsSymbol" args="rcl">
@@ -521,12 +523,12 @@
 
         if (roomClientObj.publicSID == this.publicSID) {
             if (roomClientObj.publicSID == canvas.publicSID) {
-            	if ($debug) Debug.write("Set Mute for Client :: ",roomClientObj.username);
+            	if ($debug) Debug.write("Set Mute for Client :: ",roomClientObj);
                 if (roomClientObj.micMuted) {
                 	if ($debug) Debug.write("############ SET GAIN 0");
                     this._chatvideoinner._videostream.micro.setGain(0);
                 } else {
-                	if ($debug) Debug.write("############ SET GAIN 50");
+                	if ($debug) Debug.write("############ SET GAIN 50 micro: ",this._chatvideoinner._videostream.micro);
                     this._chatvideoinner._videostream.micro.setGain(50);
                 }
             }

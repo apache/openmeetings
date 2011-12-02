@@ -4290,4 +4290,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1428" name="excl_audio status icons">
     <value>Give a permission for exclusive audio.</value>
   </string>
+  <string id="1429" name="cam_resolution">
+    <value>Kamera-Auflösung</value>
+  </string>
+  <string id="1430" name="cam_resolution_info">
+    <value>Die Kamera-Auslösung hat einen direkten Einfluss auf die verbrauchte Upload-Bandbreite!</value>
+  </string>
 </language>

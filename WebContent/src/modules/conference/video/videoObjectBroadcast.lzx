@@ -9,9 +9,14 @@
 
  
 <class name="videoObjectBroadcast" extends="baseVideoObject" isremote="false">
-  <attribute name="ratioW" value="1" />
-  <attribute name="ratioH" value="1" />
-  <handler name="oninit">
+
+    <attribute name="ratioW" value="1" />
+    <attribute name="ratioH" value="1" />
+    
+    <attribute name="videoInsetX" value="2" type="number" />
+    <attribute name="videoInsetY" value="21" type="number" />
+    
+    <handler name="oninit">
      <![CDATA[
         //Display widget defined in mother class
         this.syncuser.bringToFront()
@@ -19,17 +24,30 @@
         this.showuser.bringToFront();
         this._resizeview.bringToFront();
      ]]>
-  </handler>
-
-	<view name="_chatvideoinner" x="1" y="20" height="${parent.height-21}" width="${parent.width-2}">
+    </handler>
+    
+    <!---
+        Change the video resolution by chaning pod size
+     -->
+    <method name="setDefaultVideoSize" args="w,h">
+        this.setAttribute("width",w+this.videoInsetX);
+        this.setAttribute("height",h+this.videoInsetY);
+        if ($debug) Debug.info("setDefaultVideoSize ",this.width,this.height);
+    </method>
+  
+	<view name="_chatvideoinner" x="$once{ parent.videoInsetX-1 }" 
+	       y="$once{ parent.videoInsetY-1 }" 
+	       height="${parent.height-parent.videoInsetY}" 
+	       width="${parent.width-parent.videoInsetX}">
+	       
 		<view name="r" resource="chatbgitem" x="1" y="2" stretches="both" 
 			  width="$once{parent.width}" height="$once{parent.height}" />
+			  
 		<handler name="oninit">
 			this.r.setAttribute('frame',5);
 		</handler>
 		
-		<baseVideoStreamDevice name="_videostream" mode="broadcast"
-						 width="${parent.width}" height="${parent.height}" bgcolor="black">
+		<baseVideoStreamDevice name="_videostream" mode="broadcast" bgcolor="black">
 			<handler name="onlevel">
                 <![CDATA[
                     //if (this.level > 0) {
