@@ -244,6 +244,7 @@
     	    			myvideocontainer._chatvideoinner._videostream.playStream(object.broadCastID,-1);
                         myvideocontainer.setAttribute("visibility","visible");
     	    		} else {
+    	    			myvideocontainer.setDefaultVideoSize(object.VWidth,object.VHeight);
     	    			myvideocontainer._chatvideoinner._videostream.playStream(object.broadCastID,-1);	
                         myvideocontainer.setAttribute("visibility","visible");
     	    			if ($debug) Debug.warn("start play");
@@ -294,7 +295,7 @@
         invoked whenever a User starts to Stream Video in this Room, 
         interviewPodId has only a meaning in the Room Type Interview
      -->        
-    <method name="startStream" args="publicSID,broadcastId,firstname,lastname,interviewPodId">
+    <method name="startStream" args="publicSID,broadcastId,firstname,lastname,interviewPodId,width,height">
 		<![CDATA[
 			//if ($debug) Debug.write("startStream broadcastId: ",broadcastId);
 			var obj = this.getVideoObjectByPublicSID(publicSID);
@@ -305,6 +306,7 @@
 			
 			//if ($debug) Debug.write("startStream obj: ",obj);
 			if (obj != null ){
+				obj.setDefaultVideoSize(width,height);
 				obj._chatvideoinner._videostream.playStream(broadcastId,-1);
 				obj.setAttribute('chatpartnername',firstname+' '+lastname);
 			} else {

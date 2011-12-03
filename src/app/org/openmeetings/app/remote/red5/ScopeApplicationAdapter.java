@@ -1454,7 +1454,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	 * @return
 	 */
 	public synchronized RoomClient setUserAVSettings(String avsettings,
-			Object newMessage) {
+			Object newMessage, Integer vWidth, Integer vHeight) {
 		try {
 
 			IConnection current = Red5.getConnectionLocal();
@@ -1462,6 +1462,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			RoomClient currentClient = this.clientListManager
 					.getClientByStreamId(streamid);
 			currentClient.setAvsettings(avsettings);
+			currentClient.setVWidth(vWidth);
+			currentClient.setVHeight(vHeight);
 			// Long room_id = currentClient.getRoom_id();
 			this.clientListManager.updateClientByStreamId(streamid,
 					currentClient);

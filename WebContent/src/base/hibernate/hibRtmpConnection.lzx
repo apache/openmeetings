@@ -1061,7 +1061,7 @@
                 if (value.isScreenClient) {
                     return;
                 }
-                canvas._videocontainer.startStream(value.publicSID,value.broadCastID,value.firstname,value.lastname,value.interviewPodId); 
+                canvas._videocontainer.startStream(value.publicSID,value.broadCastID,value.firstname,value.lastname,value.interviewPodId,value.VWidth,value.VHeight); 
             </handler>   
         </netRemoteCallHib> 
            

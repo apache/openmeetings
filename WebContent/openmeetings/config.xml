@@ -218,14 +218,14 @@ of the red5-servlet
 <!-- Available Configurations -->
 
 <availableCameraResolutions>
-    <resolution type="4:3" width="40" height="30" isDefault="false" />
-    <resolution type="4:3" width="80" height="60" isDefault="false" />
-    <resolution type="4:3" width="120" height="90" isDefault="true" />
-    <resolution type="QQVGA 4:3" width="160" height="120" isDefault="false" />
-    <resolution type="4:3" width="240" height="160" isDefault="false" />
-    <resolution type="HVGA 4:3" width="320" height="240" isDefault="false" />
-    <resolution type="4:3" width="480" height="320" isDefault="false" />
-    <resolution type="4:3" width="640" height="480" isDefault="false" />
+    <resolution type="4:3 (~6 KByte/sec)" width="40" height="30" isDefault="false" />
+    <resolution type="4:3 (~12 KByte/sec)" width="80" height="60" isDefault="false" />
+    <resolution type="4:3 (~20 KByte/sec)" width="120" height="90" isDefault="true" />
+    <resolution type="QQVGA 4:3 (~36 KByte/sec)" width="160" height="120" isDefault="false" />
+    <resolution type="4:3 (~40 KByte/sec)" width="240" height="180" isDefault="false" />
+    <resolution type="HVGA 4:3 (~56 KByte/sec)" width="320" height="240" isDefault="false" />
+    <resolution type="4:3  (~60 KByte/sec)" width="480" height="360" isDefault="false" />
+    <resolution type="4:3 (~68 KByte/sec)" width="640" height="480" isDefault="false" />
     <resolution type="XGA 4:3" width="1024" height="768" isDefault="false" />
     <resolution type="16:9" width="256" height="150" isDefault="false" />
     <resolution type="WQVGA 9:5" width="432" height="240" isDefault="false" />

@@ -42,6 +42,8 @@
 	<!--- @keywords private -->
 	<method name="createStream">
 		this._ns =  new NetStream(this._findnc());
+		if ($debug) Debug.write("this._ns ",this._ns);
+		if ($debug) Debug.write("this._ns.client ",this._ns.client);
 		var t = this;
 		this._ns.onStatus = function(info) {
 	    	_root.Debug.write("simpleNetStream onStatus",info);

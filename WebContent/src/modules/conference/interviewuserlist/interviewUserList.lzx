@@ -283,7 +283,7 @@
     <!--
         invoked whenever a User starts to Stream Video in this Room
      -->		
-	<method name="startStream" args="publicSID,broadcastId,firstname,lastname,interviewPodId">
+	<method name="startStream" args="publicSID,broadcastId,firstname,lastname,interviewPodId,width,height">
 		<![CDATA[
 			if ($debug) Debug.warn("startStream broadcastId: ",publicSID,broadcastId,firstname,lastname,interviewPodId);
 			
