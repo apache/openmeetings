@@ -32,7 +32,6 @@
     <method name="setDefaultVideoSize" args="w,h">
         this.setAttribute("width",w+this.videoInsetX);
         this.setAttribute("height",h+this.videoInsetY);
-        if ($debug) Debug.info("setDefaultVideoSize ",this.width,this.height);
     </method>
   
 	<view name="_chatvideoinner" x="$once{ parent.videoInsetX-1 }" 
