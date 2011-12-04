@@ -48,9 +48,11 @@
 	        } else {
 	        	//In case the user presses the Sync Button this box should 
                 //not close automatically and do the user-prefered values
-                if(save && !this.isSyncUpdate) {
+                if(save && !this.isSyncUpdate && this.checkLocalDataComplete()) {
                     this.chosenCam = g["cam"];
                     this.chosenMic = g["mic"];
+                    this.cam_default_width = g["width"];
+                    this.cam_default_height = g["height"];
                     this.chosenSetting = g["avstored"];
                     this.remoteMessage = new Array();
                     this.remoteMessage[0] = 'avsettings';
@@ -62,11 +64,17 @@
                     }
                 }
 	        }
-	        
-            
-            
         ]]>
 	</handler>
+	
+	<method name="checkLocalDataComplete">
+		<![CDATA[
+		    var g = canvas.getUserData();
+            if (g["width"] > 0 && g["height"] > 0) {
+            	return true;
+            }
+		]]>
+	</method>
     
     <method name="storelocaldata">
         <![CDATA[
@@ -76,6 +84,8 @@
         g["mic"] = this.availibleMics.getValue();
         g["avstored"] = this.availibleSettings.getValue();
         g["savecamdata"] = this.holddatainSO.getValue();
+        g["width"] = this.cam_default_width;
+        g["height"] = this.cam_default_height;
         canvas.setUserData(g);
         ]]>
     </method>   	
@@ -353,18 +363,33 @@
             <!--- @keywords private -->
             <attribute name="cam_height" value="240" type="number" />
             <handler name="ondata">
-                // if ($debug) Debug.write("ondata ", this);
-                var type = this.datapath.xpathQuery('@type');
-                this.cam_width = Number(this.datapath.xpathQuery('@width'));
-                this.cam_height = Number(this.datapath.xpathQuery('@height'));
-                this.setAttribute("text",""+this.cam_width+"x"+this.cam_height+" ["+type+"]");
-                var isDefault = this.datapath.xpathQuery('@isDefault');
-                if (isDefault == "true") {
-                    if ($debug) Debug.write("Found default one ",type);
-                    parent.selectItemAt(parent.counter);
-                    parent.onselect.sendEvent(this);
-                }
-                parent.counter+=1;
+            	<![CDATA[
+                    // if ($debug) Debug.write("ondata ", this);
+                    var type = this.datapath.xpathQuery('@type');
+                    this.cam_width = Number(this.datapath.xpathQuery('@width'));
+                    this.cam_height = Number(this.datapath.xpathQuery('@height'));
+                    this.setAttribute("text",""+this.cam_width+"x"+this.cam_height+" ["+type+"]");
+                    var isDefault = this.datapath.xpathQuery('@isDefault');
+                    
+                    var g = canvas.getUserData();
+                    var width = g["width"];
+                    var height = g["height"];
+                    if (width!=null && width > 0 && height!=null && height>0) {
+                    	
+                    	if (width == this.cam_width && height == this.cam_height) {
+                    		parent.selectItemAt(parent.counter);
+                            parent.onselect.sendEvent(this);
+                    	}
+                    	
+                    } else {
+                        if (isDefault == "true") {
+                            if ($debug) Debug.write("Found default one ",type);
+                            parent.selectItemAt(parent.counter);
+                            parent.onselect.sendEvent(this);
+                        }
+                    }
+                    parent.counter+=1;
+                ]]>
             </handler>
         </textlistitem>
     </resetCombobox>      
