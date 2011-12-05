@@ -136,11 +136,14 @@
     
     <handler name="onkeydown" reference="lz.Keys" args="keyCode">
         if (canvas.GIVE_EXCLUSIVE_AUDIO_KEY == keyCode) {
-            var obj = canvas._videocontainer.getVideoObjectByPublicSID(canvas.publicSID);
-            if (null != obj) {
-                obj._giveExclusiveAudioView._micButton.onclick.sendEvent();
+            if (canvas.ismoderator || canvas.isAllowedToGiveExclusiveAudio) {
+
+                var obj = canvas._videocontainer.getVideoObjectByPublicSID(canvas.publicSID);
+                if (null != obj) {
+                    obj._giveExclusiveAudioView._micButton.onclick.sendEvent();
+                }
+                return;
             }
-            return;
         }
     </handler>
     
