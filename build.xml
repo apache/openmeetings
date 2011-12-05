@@ -157,6 +157,10 @@
 		<mkdir dir="${main.out.dir}" />
 	</target>
 	
+	<condition property="db.provider" value="${db}" else="derby">
+		<isset property="db" />
+	</condition>
+
 	<!-- Check timestamp on files -->
 	<target name="prepare" depends="prepare.mkdir">
 		<copy todir="${screenshare.out.dir}" filtering="true">
@@ -228,17 +232,18 @@
 				<exclude name="services.xml"/>
 			</fileset>
 		</copy>
+		<copy file="src/META-INF/${db.provider}_persistence.xml"
+			tofile="${dist.webapps.dir}/WEB-INF/classes/META-INF/persistence.xml"/>
+		
 
 		<chmod dir="${dist.webapps.dir}/WEB-INF/lib" perm="755" includes="**/*.sh"/>
 
 		<!-- add language files from .war version -->
 		<copy todir="${dist.webapps.dir}/languages">
-			<fileset dir="WebContent/languages">
-			</fileset>
+			<fileset dir="WebContent/languages"/>
 		</copy>
 		<copy todir="${dist.webapps.dir}/conf">
-			<fileset dir="WebContent/conf">
-			</fileset>
+			<fileset dir="WebContent/conf"/>
 		</copy>
 
 		<!-- add templates
@@ -580,7 +585,7 @@
 		<!-- invoke the enhancer -->
 		<openjpac>
 			<classpath refid="jpa.enhancement.classpath"/>
-			<config propertiesFile="src/META-INF/persistence.xml"/>
+			<config propertiesFile="src/META-INF/${db.provider}_persistence.xml"/>
 		</openjpac>
 		<echo message="Enhancing complete."/>
 	</target>
