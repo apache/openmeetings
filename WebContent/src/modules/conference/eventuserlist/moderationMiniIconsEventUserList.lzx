@@ -267,9 +267,13 @@
         <handler name="onclick">
         	<![CDATA[
                 if ($debug) Debug.write("Deny Give Exclusive Audio: ",canvas.publicSID);
+                if (canvas.ismoderator || canvas.isAllowedToGiveExclusiveAudio) {
+	                canvas.thishib.giveExclusiveAudio.publicSID = canvas.publicSID;
+	                canvas.thishib.giveExclusiveAudio.doCall();
+                }
             ]]>
         </handler>
-        <labelTooltip name="_text" labelid="1425" />
+        <labelTooltip name="_text" labelid="1433" />
     </miniIcons>
 
     <miniIcons name="_denyExclusiveAudio" x="60" width="16" height="16" opacity="0.5"
@@ -279,7 +283,7 @@
             var tDate = new Date();
             canvas.thishib.sendMessageWithClient.sendMessage("applyForGiveExclusiveAudioOn",tDate.getTime());
         </handler>
-        <labelTooltip labelid="1424" />
+        <labelTooltip labelid="1432" />
     </miniIcons>
 	
 </class>

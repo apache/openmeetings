@@ -4305,4 +4305,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1431" name="exclusive_audio_error">
     <value>You don't have the right to give yourself or others exclusive audio. You need to apply for the right from the moderator or ask the moderator to give you exclusive audio.</value>
   </string>
+  <string id="1432" name="exclusive_audio_ask">
+    <value>I would like to get the right for exclusive audio</value>
+  </string>
+  <string id="1433" name="exclusive_audio_action">
+    <value>Give exclusive audio to me (alternatively click on your video pod or press F12)</value>
+  </string>
 </language>
