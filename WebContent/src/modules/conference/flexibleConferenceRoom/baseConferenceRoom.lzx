@@ -143,6 +143,8 @@
                     obj._giveExclusiveAudioView._micButton.onclick.sendEvent();
                 }
                 return;
+            } else {
+                new lz.rpcErrorDialog(canvas.main_content._content.inner,{errorid:-54});
             }
         }
     </handler>

@@ -246,7 +246,7 @@
             this.parent.errormess.setAttribute('text','');
             
             if (this.parent.userpass.getText().length == 0) {
-            	new lz.rpcErrorDialog(canvas.main_content._content.inner,{errorid:51});
+            	new lz.rpcErrorDialog(canvas.main_content._content.inner,{errorid:-51});
             	return;
             }
             

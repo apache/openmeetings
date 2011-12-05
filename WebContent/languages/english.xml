@@ -4162,7 +4162,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Unmute microphone globally</value>
   </string>
   <string id="1386" name="give exclusive audio">
-    <value>Mute microphone of others</value>
+    <value>Mute microphone of others / Give exclusive audio to me (You can also press F12)</value>
   </string>
   <string id="1387" name="mute self message">
     <value>You are globally muted by the moderator. You cannot unmute yourself!</value>
@@ -4285,7 +4285,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>would like to get a permission for exclusive audio.</value>
   </string>
   <string id="1427" name="excl_audio apply of message">
-    <value>want that the moderator gives me a permission for exclusive audio.</value>
+    <value>would like to have permission for exclusive audio.</value>
   </string>
   <string id="1428" name="excl_audio status icons">
     <value>Give a permission for exclusive audio.</value>
@@ -4295,5 +4295,8 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   </string>
   <string id="1430" name="cam_resolution_info">
     <value>Changing the resolution affects bandwidth, bigger picture needs more bandwith!</value>
+  </string>
+  <string id="1431" name="exclusive_audio_error">
+    <value>You don't have the right to give yourself or others exclusive audio. You need to apply for the right from the moderator or ask the moderator to give you exclusive audio.</value>
   </string>
 </language>

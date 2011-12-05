@@ -291,18 +291,6 @@
         <labelTooltip name="_text" text="" labelid="1407" />
     </miniIcons>
     
-    <!--
-    <miniIcons name="_giveExclusiveAudio" x="60" width="16" height="16"
-               resource="mic_rsc" showhandcursor="true">
-        <handler name="onclick">
-            if ($debug) Debug.write("give giveExclusiveAudio: ",parent.parent.refObj.publicSID);
-            canvas.thishib.giveExclusiveAudio.publicSID = parent.parent.refObj.publicSID;
-            canvas.thishib.giveExclusiveAudio.doCall();
-        </handler>
-        <labelTooltip labelid="1386" />
-    </miniIcons>
-     -->
-
     <miniIcons name="_allowExclusiveAudio" x="60" width="16" height="16" y="-18"
                resource="participents_exclusive_audio_rsc" showhandcursor="true">
     	<attribute name="isActive" value="true" type="boolean" />

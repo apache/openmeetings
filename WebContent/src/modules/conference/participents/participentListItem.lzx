@@ -381,17 +381,6 @@
     <labelText name="_lastName" fontsize="10" x="40" y="20" text="$once{ parent.lastname }" />
     
     <view name="_x" x="132" y="2">
-    	<!--
-	    <miniIcons name="_giveExclusiveAudio" x="84" width="16" height="16"
-	               resource="mic_rsc" showhandcursor="true">
-	            <handler name="onclick">
-	                if ($debug) Debug.write("give giveExclusiveAudio: ",parent.parent.refObj.publicSID);
-	                canvas.thishib.giveExclusiveAudio.publicSID = parent.parent.refObj.publicSID;
-	                canvas.thishib.giveExclusiveAudio.doCall();
-	            </handler>
-	            <labelTooltip labelid="1386" />
-	    </miniIcons>
-	     -->
 	     
 	    <miniIcons name="_mute" x="82" width="16" height="16" resource="mute_micro_btn_rsc" showhandcursor="true" >
             <handler name="onclick">

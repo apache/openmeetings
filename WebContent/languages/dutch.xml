@@ -4292,4 +4292,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1430" name="cam_resolution_info">
     <value>Changing the resolution affects bandwidth, bigger picture needs more bandwith!</value>
   </string>
+  <string id="1431" name="exclusive_audio_error">
+    <value>You don't have the right to give yourself or others exclusive audio. You need to apply for the right from the moderator or ask the moderator to give you exclusive audio.</value>
+  </string>
 </language>
