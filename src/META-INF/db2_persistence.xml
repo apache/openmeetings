@@ -60,7 +60,7 @@
 		<class>org.openmeetings.app.persistence.beans.files.FileExplorerItem</class>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		<properties>
-			<property name="openjpa.RuntimeUnenhancedClasses" value="supported"/>
+			<property name="openjpa.RuntimeUnenhancedClasses" value="unsupported"/>
 			<property name="openjpa.ConnectionDriverName" value="com.ibm.db2.jcc.DB2Driver"/>
 			<property name="openjpa.ConnectionProperties" value="username=db2admin, password=admin"/>
 			<property name="openjpa.ConnectionURL" value="jdbc:db2://localhost:50000/openmeet"/>
