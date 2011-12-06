@@ -289,8 +289,12 @@ public class DownloadHandler extends HttpServlet {
 						return;
 					}
 					// Requested file is outside OM webapp folder
-					if (!f2.getCanonicalPath().startsWith(current_dir)) {
-						throw new Exception("Invalid file requested");
+					File curDirFile = new File(current_dir);
+					if (!f2.getCanonicalPath()
+							.startsWith(curDirFile.getCanonicalPath())) {
+						throw new Exception("Invalid file requested: f2.cp == "
+								+ f2.getCanonicalPath() + "; curDir.cp == "
+								+ curDirFile.getCanonicalPath());
 					}
 
 					// Get file and handle download
