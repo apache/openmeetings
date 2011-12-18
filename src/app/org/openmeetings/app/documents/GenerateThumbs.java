@@ -150,14 +150,14 @@ public class GenerateThumbs {
 			Process proc = rt.exec(cmd);
 
 			InputStream stderr = proc.getErrorStream();
-			InputStreamReader isr = new InputStreamReader(stderr);
-			BufferedReader br = new BufferedReader(isr);
+			BufferedReader br = new BufferedReader(new InputStreamReader(stderr));
 			String line = null;
 			String error = "";
 			while ((line = br.readLine()) != null) {
 				error += line;
 				// log.debug("line: "+line);
 			}
+			br.close();
 			returnMap.put("error", error);
 			int exitVal = proc.waitFor();
 			returnMap.put("exitValue", "" + exitVal);

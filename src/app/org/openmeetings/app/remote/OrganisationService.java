@@ -9,6 +9,7 @@ import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.persistence.beans.domain.Organisation;
+import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -38,7 +39,7 @@ public class OrganisationService {
 	 * @param SID
 	 * @return
 	 */
-	public SearchResult getOrganisations(String SID, int start, int max,
+	public SearchResult<Organisation> getOrganisations(String SID, int start, int max,
 			String orderby, boolean asc) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
@@ -132,7 +133,7 @@ public class OrganisationService {
 	 * @param asc
 	 * @return
 	 */
-	public SearchResult getUsersByOrganisation(String SID,
+	public SearchResult<Users> getUsersByOrganisation(String SID,
 			long organisation_id, int start, int max, String orderby,
 			boolean asc) {
 		try {
@@ -144,7 +145,7 @@ public class OrganisationService {
 								start, max, orderby, asc);
 			} else {
 				log.error("Need Administration Account");
-				SearchResult sResult = new SearchResult();
+				SearchResult<Users> sResult = new SearchResult<Users>();
 				sResult.setErrorId(-26L);
 				return sResult;
 			}

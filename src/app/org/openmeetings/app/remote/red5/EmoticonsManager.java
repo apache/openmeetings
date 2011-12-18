@@ -49,6 +49,7 @@ public class EmoticonsManager {
 		    while (reader.ready()) {
 		    	xmlString += reader.readLine();
 		    }
+		    reader.close();
 		    emotfilesList = (LinkedList<LinkedList<String>>) xStream.fromXML(xmlString);
 		    ChatString.getInstance().replaceAllRegExp();
 		    

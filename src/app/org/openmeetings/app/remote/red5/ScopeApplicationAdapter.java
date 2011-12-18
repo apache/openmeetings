@@ -48,12 +48,11 @@ import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.api.service.IServiceCapableConnection;
 import org.red5.server.api.stream.IBroadcastStream;
-import org.red5.server.api.stream.IStreamAwareScopeHandler;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class ScopeApplicationAdapter extends ApplicationAdapter implements
-		IPendingServiceCallback, IStreamAwareScopeHandler {
+		IPendingServiceCallback {
 
 	public static String webAppRootKey = null;
 	public static String webAppRootPath = null;

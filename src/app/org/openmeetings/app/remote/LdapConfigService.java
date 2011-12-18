@@ -87,12 +87,12 @@ public class LdapConfigService {
 	 * @param language_id
 	 * @return
 	 */
-	public SearchResult getLdapConfigs(String SID, int start, int max, String orderby, boolean asc){
+	public SearchResult<LdapConfig> getLdapConfigs(String SID, int start, int max, String orderby, boolean asc){
         Long users_id = sessionManagement.checkSession(SID);
         Long user_level = userManagement.getUserLevelByID(users_id);
         if (authLevelManagement.checkAdminLevel(user_level)){
         	
-        	SearchResult searchResult = new SearchResult();
+        	SearchResult<LdapConfig> searchResult = new SearchResult<LdapConfig>();
         	searchResult.setObjectName(LdapConfig.class.getName());
         	searchResult.setResult(this.ldapConfigDaoImpl.getLdapConfigs(start, max, orderby, asc));
         	searchResult.setRecords(this.ldapConfigDaoImpl.selectMaxFromLdapConfig());

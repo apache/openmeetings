@@ -39,7 +39,7 @@ public class LibraryWmlLoader {
 		    while (reader.ready()) {
 		    	xmlString += reader.readLine();
 		    }
-			
+		    reader.close();
 		    //lMap = (LinkedHashMap) xStream.fromXML(xmlString);
 		   ArrayList lMapList = (ArrayList) xStream.fromXML(xmlString);
 			

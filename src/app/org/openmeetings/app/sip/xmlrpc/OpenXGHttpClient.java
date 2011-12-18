@@ -59,7 +59,7 @@ public class OpenXGHttpClient {
 			String email = "test@test.de";
 			String password = "password";
 
-			UserSipData sipData = this.openSIPgUserCreateUser(first_name,
+			this.openSIPgUserCreateUser(first_name,
 					middle_i, last_name, email, password, "test");
 
 		} catch (Exception err) {

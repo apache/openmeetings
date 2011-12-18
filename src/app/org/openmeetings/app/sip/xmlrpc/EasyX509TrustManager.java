@@ -6,9 +6,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
-import com.sun.net.ssl.TrustManagerFactory;
-import com.sun.net.ssl.TrustManager;
-import com.sun.net.ssl.X509TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import org.apache.commons.logging.Log; 
 import org.apache.commons.logging.LogFactory;
 
@@ -56,16 +56,18 @@ public class EasyX509TrustManager implements X509TrustManager
     }
 
     /**
+     * @throws CertificateException 
      * @see com.sun.net.ssl.X509TrustManager#isClientTrusted(X509Certificate[])
      */
-    public boolean isClientTrusted(X509Certificate[] certificates) {
-        return this.standardTrustManager.isClientTrusted(certificates);
+    public void checkClientTrusted(X509Certificate[] certificates, String arg) throws CertificateException {
+   		standardTrustManager.checkClientTrusted(certificates, arg);
     }
 
     /**
+     * @throws CertificateException 
      * @see com.sun.net.ssl.X509TrustManager#isServerTrusted(X509Certificate[])
      */
-    public boolean isServerTrusted(X509Certificate[] certificates) {
+    public void checkServerTrusted(X509Certificate[] certificates, String arg) throws CertificateException {
         if ((certificates != null) && LOG.isDebugEnabled()) {
             LOG.debug("Server certificate chain:");
             for (int i = 0; i < certificates.length; i++) {
@@ -79,11 +81,9 @@ public class EasyX509TrustManager implements X509TrustManager
             }
             catch (CertificateException e) {
                 LOG.error(e.toString());
-                return false;
             }
-            return true;
         } else {
-            return this.standardTrustManager.isServerTrusted(certificates);
+            standardTrustManager.checkServerTrusted(certificates, arg);
         }
     }
 

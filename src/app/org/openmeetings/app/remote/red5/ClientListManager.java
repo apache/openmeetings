@@ -256,9 +256,9 @@ public class ClientListManager {
 		return rclList;
 	}
 
-	public synchronized SearchResult getListByStartAndMax(int start, int max,
+	public synchronized SearchResult<RoomClient> getListByStartAndMax(int start, int max,
 			String orderby, boolean asc) {
-		SearchResult sResult = new SearchResult();
+		SearchResult<RoomClient> sResult = new SearchResult<RoomClient>();
 		sResult.setObjectName(RoomClient.class.getName());
 		sResult.setRecords(Long.valueOf(clientList.size()).longValue());
 		LinkedList<RoomClient> myList = new LinkedList<RoomClient>();

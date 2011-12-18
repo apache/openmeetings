@@ -82,18 +82,17 @@ public class InvitationService implements IPendingServiceCallback {
 			log.info("validFromHour: " + validFromHour);
 			log.info("validFromMinute: " + validFromMinute);
 
-			// TODO: Remove deprecated Java-Date handlers
 			Calendar calFrom = Calendar.getInstance();
-			int year = validFromDate.getYear() + 1900;
-			int month = validFromDate.getMonth();
-			int date = validFromDate.getDate();
-			calFrom.set(year, month, date, validFromHour, validFromMinute, 0);
+			calFrom.setTime(validFromDate);
+			calFrom.set(Calendar.HOUR_OF_DAY, validFromHour);
+			calFrom.set(Calendar.MINUTE, validFromMinute);
+			calFrom.set(Calendar.SECOND, 0);
 
 			Calendar calTo = Calendar.getInstance();
-			int yearTo = validToDate.getYear() + 1900;
-			int monthTo = validToDate.getMonth();
-			int dateTo = validToDate.getDate();
-			calTo.set(yearTo, monthTo, dateTo, validToHour, validToMinute, 0);
+			calTo.setTime(validToDate);
+			calTo.set(Calendar.HOUR_OF_DAY, validToHour);
+			calTo.set(Calendar.MINUTE, validToMinute);
+			calTo.set(Calendar.SECOND, 0);
 
 			Date dFrom = calFrom.getTime();
 			Date dTo = calTo.getTime();

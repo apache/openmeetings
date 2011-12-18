@@ -19,6 +19,7 @@ public class OpenXGCustomXMLMarshall {
 
 	public static synchronized OpenXGCustomXMLMarshall getInstance() {
 		if (instance == null) {
+			log.debug("instance created");
 			instance = new OpenXGCustomXMLMarshall();
 		}
 		return instance;

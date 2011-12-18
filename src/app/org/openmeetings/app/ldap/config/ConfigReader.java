@@ -201,7 +201,7 @@ public class ConfigReader {
         while((line = br.readLine()) != null) {
         	result.add(line);
         }
-        
+        br.close();
         return result;
 	}
 	//--------------------------------------------------------------------------------------

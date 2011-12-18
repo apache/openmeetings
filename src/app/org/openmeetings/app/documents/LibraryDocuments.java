@@ -14,6 +14,7 @@ public class LibraryDocuments {
 
 	public static synchronized LibraryDocuments getInstance() {
 		if (instance == null) {
+			log.debug("instance created");
 			instance = new LibraryDocuments();
 		}
 		return instance;

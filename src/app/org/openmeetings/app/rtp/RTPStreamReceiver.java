@@ -22,7 +22,6 @@ import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
@@ -42,7 +41,6 @@ public class RTPStreamReceiver implements  ReceiveStreamListener,SessionListener
 	
 	/** contains sessionData */
 	private RTPScreenSharingSession sessionData;
-	private ClientListManager clientListManager;
 	
 	/** The basic RTPmanager for a romm, receiving the webstart client stream */
 	private RTPManager basicManager = null;
@@ -65,7 +63,6 @@ public class RTPStreamReceiver implements  ReceiveStreamListener,SessionListener
 	public RTPStreamReceiver(ClientListManager clientListManager, RTPScreenSharingSession session) throws Exception {
 		log.debug("RTPStreamReceiver Konstruktor");
 		this.sessionData = session;
-		this.clientListManager = clientListManager;
 		
 		basicManager = RTPManager.newInstance();
 		//basicManager.addSessionListener(this);

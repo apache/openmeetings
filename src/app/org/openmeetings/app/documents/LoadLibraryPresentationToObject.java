@@ -37,7 +37,8 @@ public class LoadLibraryPresentationToObject {
 	        Element root = document.getRootElement();
 	        Integer k = 0;
 	        
-	        for (Iterator<Element> i = root.elementIterator(); i.hasNext(); ) {
+	        for (@SuppressWarnings("unchecked")
+			Iterator<Element> i = root.elementIterator(); i.hasNext(); ) {
 	            Element item = i.next();
 	            log.error(item.getName());
 	            
@@ -84,7 +85,8 @@ public class LoadLibraryPresentationToObject {
 
 			LinkedList<FilesObject> thumbMap = new LinkedList<FilesObject>();
 			
-			for (Iterator<Element> i = fileElement.elementIterator(); i.hasNext(); ) {
+			for (@SuppressWarnings("unchecked")
+			Iterator<Element> i = fileElement.elementIterator(); i.hasNext(); ) {
 				Element thumbElement = i.next();
 				log.info("createListObjectLibraryByFileDocumentThumbs"+thumbElement);
 				FilesObject singleThumb = new FilesObject();

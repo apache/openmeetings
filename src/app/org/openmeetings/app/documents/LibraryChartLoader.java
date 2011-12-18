@@ -3,7 +3,6 @@ package org.openmeetings.app.documents;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 import org.openmeetings.utils.Logger;
 
@@ -44,7 +43,7 @@ public class LibraryChartLoader {
             while (reader.ready()) {
                 xmlString += reader.readLine();
             }
-
+            reader.close();
             // lMap = (LinkedHashMap) xStream.fromXML(xmlString);
             ArrayList lMapList = (ArrayList) xStream.fromXML(xmlString);
 

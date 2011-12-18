@@ -144,7 +144,7 @@ public class LanguageService {
 	 * @param language_id
 	 * @return
 	 */
-	public SearchResult getFieldsByLanguage(String SID, int start, int max,
+	public SearchResult<Fieldvalues> getFieldsByLanguage(String SID, int start, int max,
 			String orderby, boolean asc, Long language_id) {
 		Long users_id = sessionManagement.checkSession(SID);
 		Long user_level = userManagement.getUserLevelByID(users_id);

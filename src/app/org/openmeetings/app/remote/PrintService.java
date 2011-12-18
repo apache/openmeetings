@@ -32,14 +32,14 @@ public class PrintService {
 	 * 
 	 */
 	
-	public String addPrintList(String SID, List map, int width, int height) {
+	public String addPrintList(String SID, @SuppressWarnings("rawtypes") List map, int width, int height) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 	        Long user_level = userManagement.getUserLevelByID(users_id);
 	        if (authLevelManagement.checkUserLevel(user_level)) {
 	        	String hashRaw = ""+new Date();
 	        	String hash = MD5.do_checksum(hashRaw);
-	        	this.addPrintItembyMap(hash, map, width, height);
+	        	PrintService.addPrintItembyMap(hash, map, width, height);
 	        	return hash;
 	        }
 		} catch (Exception err) {
@@ -56,7 +56,7 @@ public class PrintService {
 		return itemList;
 	}
 	
-	public static synchronized void addPrintItembyMap(String hash, List map, int width, int height) throws Exception {
+	public static synchronized void addPrintItembyMap(String hash, @SuppressWarnings("rawtypes") List map, int width, int height) throws Exception {
 		PrintBean pBean = new PrintBean(hash, map, width, height);
 		currentExportList.put(hash, pBean);
 	}

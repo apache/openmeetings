@@ -166,18 +166,14 @@ public class LdapAuthBase {
 		
 		try{
 			// search
-			NamingEnumeration results = authContext.search(searchScope, filter, constraints);
-			
-			int y = 0;
+			NamingEnumeration<SearchResult> results = authContext.search(searchScope, filter, constraints);
 			
 			// Stepping through the data
 			while (results != null && results.hasMore()) {
 			     HashMap<String, String> innerMap = new HashMap<String, String>();
 			     
-				 y++;
-				 
 				 // Next result
-			     SearchResult si = (SearchResult) results.next();
+			     SearchResult si = results.next();
 			     
 			     if(si == null){
 			    	 continue;
@@ -232,7 +228,7 @@ public class LdapAuthBase {
 		try {
 			results = authContext.search(searchBase, searchFilter,  searchCtls);
 			while (results.hasMore()) {
-				SearchResult searchResult = (SearchResult) results.next();
+				SearchResult searchResult = results.next();
 				String cn = searchResult.getName();
 				Attributes attributes = searchResult.getAttributes();
 				Attribute attrib = attributes.get("uid");

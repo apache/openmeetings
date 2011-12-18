@@ -25,7 +25,7 @@ public class ConfigurationService {
 	/*
 	 * Configuration Handlers
 	 */    
-    public SearchResult getAllConf(String SID, int start ,int max, String orderby, boolean asc){
+    public SearchResult<Configuration> getAllConf(String SID, int start ,int max, String orderby, boolean asc){
         Long users_id = sessionManagement.checkSession(SID);
         Long user_level = userManagement.getUserLevelByID(users_id);     	
         return cfgManagement.getAllConf(user_level, start, max, orderby, asc);
@@ -37,13 +37,13 @@ public class ConfigurationService {
         return cfgManagement.getConfByConfigurationId(user_level,configuration_id);
     }
     
-    public Long saveOrUpdateConfiguration(String SID,LinkedHashMap values){
+    public Long saveOrUpdateConfiguration(String SID,@SuppressWarnings("rawtypes") LinkedHashMap values){
         Long users_id = sessionManagement.checkSession(SID);
         Long user_level = userManagement.getUserLevelByID(users_id);     	
         return cfgManagement.saveOrUpdateConfiguration(user_level,values, users_id);
     }
     
-    public Long deleteConfiguration(String SID,LinkedHashMap values){
+    public Long deleteConfiguration(String SID,@SuppressWarnings("rawtypes") LinkedHashMap values){
         Long users_id = sessionManagement.checkSession(SID);
         Long user_level = userManagement.getUserLevelByID(users_id);     	
         return cfgManagement.deleteConfByConfiguration(user_level, values, users_id);

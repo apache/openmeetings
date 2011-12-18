@@ -1,19 +1,18 @@
 package org.openmeetings.app.documents;
 
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.io.FileInputStream;
+import java.util.Iterator;
 
-import org.slf4j.Logger;
+import org.dom4j.Document;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.openmeetings.app.data.file.dto.LibraryPresenationThumbs;
 import org.openmeetings.app.data.file.dto.LibraryPresentation;
 import org.openmeetings.app.data.file.dto.LibraryPresentationFile;
 import org.openmeetings.app.data.file.dto.LibraryPresentationThumb;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
-import org.dom4j.Document;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
+import org.slf4j.Logger;
 
 public class LoadLibraryPresentation {
 	
@@ -39,7 +38,8 @@ public class LoadLibraryPresentation {
 	        
 	        Element root = document.getRootElement();
 	        
-	        for ( Iterator<Element> i = root.elementIterator(); i.hasNext(); ) {
+	        for ( @SuppressWarnings("unchecked")
+			Iterator<Element> i = root.elementIterator(); i.hasNext(); ) {
 	        	
 	            Element item = i.next();
 	            
@@ -108,8 +108,8 @@ public class LoadLibraryPresentation {
 			thumbMap.setName(fileElement.getName());
 			
 			Integer k = 0;
-			for ( Iterator<Element> i = fileElement.elementIterator(); i.hasNext(); ) {
-				Element thumbElement = i.next();
+			for ( @SuppressWarnings("unchecked")
+			Iterator<Element> i = fileElement.elementIterator(); i.hasNext(); i.next()) {
 				k++;
 			}
 			
@@ -117,7 +117,8 @@ public class LoadLibraryPresentation {
 			
 			
 			k = 0;
-			for ( Iterator<Element> i = fileElement.elementIterator(); i.hasNext(); ) {
+			for ( @SuppressWarnings("unchecked")
+			Iterator<Element> i = fileElement.elementIterator(); i.hasNext(); ) {
 				Element thumbElement = i.next();
 				//log.info("createListObjectLibraryByFileDocumentThumbs"+thumbElement);
 				LibraryPresentationThumb singleThumb = new LibraryPresentationThumb();

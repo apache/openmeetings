@@ -11,9 +11,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
-import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
-import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.data.calendar.management.AppointmentLogic;
 import org.openmeetings.app.data.conference.Roommanagement;
@@ -51,11 +49,7 @@ public class ConferenceService {
 	@Autowired
 	private Sessionmanagement sessionManagement;
 	@Autowired
-	private Configurationmanagement cfgManagement;
-	@Autowired
 	private Usermanagement userManagement;
-	@Autowired
-	private OmTimeZoneDaoImpl omTimeZoneDaoImpl;
 	@Autowired
 	private Roommanagement roommanagement;
 	@Autowired
@@ -166,7 +160,7 @@ public class ConferenceService {
 	 * @param organisation_id
 	 * @return
 	 */
-	public SearchResult getRoomsByOrganisation(String SID,
+	public SearchResult<Rooms_Organisation> getRoomsByOrganisation(String SID,
 			long organisation_id, int start, int max, String orderby,
 			boolean asc) {
 
@@ -480,7 +474,7 @@ public class ConferenceService {
 	 * @param asc
 	 * @return
 	 */
-	public SearchResult getRooms(String SID, int start, int max,
+	public SearchResult<Rooms> getRooms(String SID, int start, int max,
 			String orderby, boolean asc, String search) {
 		log.debug("getRooms");
 
@@ -490,7 +484,7 @@ public class ConferenceService {
 				search);
 	}
 
-	public SearchResult getRoomsWithCurrentUsers(String SID, int start,
+	public SearchResult<Rooms> getRoomsWithCurrentUsers(String SID, int start,
 			int max, String orderby, boolean asc) {
 		log.debug("getRooms");
 
@@ -745,7 +739,7 @@ public class ConferenceService {
 		return null;
 	}
 
-	public SearchResult getRoomClientsMap(String SID, int start, int max,
+	public SearchResult<RoomClient> getRoomClientsMap(String SID, int start, int max,
 			String orderby, boolean asc) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
