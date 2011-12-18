@@ -22,9 +22,13 @@
 			<p>There is a System Backup and Import tool. Login as Administrator
 				and Goto > Backup
 			</p>
-			<img src="/images/system_backup.png" title="System backup"></img>
+			<a class="fancybox-buttons" data-fancybox-group="button"
+				href="images/system_backup.png">
+				<img src="images/system_backup.png" alt="" width="512" height="170" />
+			</a>
 			<p>
-				The Text in the Administration>Backup section actually just says it
+				The Text in the Administration>Backup section actually just says
+				it
 				all. The backup contains users, rooms, organizations and
 				appointements (Invitations and Reminders are NOT included in the
 				Backup and Reminders will not be send again!). The Backup contains

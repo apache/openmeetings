@@ -22,23 +22,30 @@
 			<p>Features:</p>
 			<ul>
 				<li>edit the labels of any language, changes will take effect as
-					soon as you re-login </li>
+					soon as you re-login
+				</li>
 				<li>add new languages (for example to fit your co-operative design
-					and language of your company) </li>
+					and language of your company)
+				</li>
 				<li>export the language-files to an XML File (these language Files
 					can be used for your next installation or as contribution to the
-					project) </li>
+					project)
+				</li>
 				<li>
 					import of language files (
 					<i>you should restart the server if you face problems, as the
-						database cache might be invalid</i>
+						database cache might be invalid
+					</i>
 					)
 				</li>
 			</ul>
 			<p>Screen from the Administration Panel: </p>
 			<p>
-				<img
-					src="images/langeditor_screen_v2.png" />
+				<a class="fancybox-buttons" data-fancybox-group="button"
+					href="images/langeditor_screen_v2.png">
+					<img src="images/langeditor_screen_v2.png" alt="" width="475"
+						height="324" />
+				</a>
 			</p>
 
 		</section>

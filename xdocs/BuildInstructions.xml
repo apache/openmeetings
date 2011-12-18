@@ -50,11 +50,11 @@
 			</p>
 			<p>To compile the client you can also use ant: </p>
 			<div class="xmlcode">
-				ant # compiles a complete package into the folder dist
-				ant compile.laszlo.main # compiles the client into main.swf8.swf
-				ant
-				compile.laszlo.main.debug # compiles the debug-client into
-				maindebug.swf8.swf
+				ant # compiles a complete package into the folder dist<br/>
+				ant compile.laszlo.main # compiles the client into main.swf8.swf<br/>
+				ant<br/>
+				compile.laszlo.main.debug # compiles the debug-client into<br/>
+				maindebug.swf8.swf<br/>
 			</div>
 			<p>To compile just the openmeetings JAR file: </p>
 			<div class="xmlcode">
@@ -128,27 +128,40 @@
 					2) Change Perspective to SVN Repository Exploring:
 					<br />
 					<br />
-					<img src="images/checkout_1.png" />
+					<a class="fancybox-buttons" data-fancybox-group="button"
+						href="images/checkout_1.png">
+						<img src="images/checkout_1.png" alt="" width="400" height="289" />
+					</a>
+
 				</p>
 				<p>
 					3) Select SVN Repository Exploring and click ok.
 					<br />
 					<br />
-					<img src="images/checkout_2.png" />
+					<a class="fancybox-buttons" data-fancybox-group="button"
+						href="images/checkout_2.png">
+						<img src="images/checkout_2.png" alt="" width="304" height="417" />
+					</a>
 				</p>
 				<p>
 					4) A new Dialog in Eclipse opens
 					<strong>SVN Repositories</strong>
 					<br />
 					<br />
-					<img src="images/checkout_3.png" />
+					<a class="fancybox-buttons" data-fancybox-group="button"
+						href="images/checkout_3.png">
+						<img src="images/checkout_3.png" alt="" width="460" height="102" />
+					</a>
 				</p>
 				<p>
 					5) Click on the icon with the plus in the top right corner in the
 					SVN Repository Dialog
 					<br />
 					<br />
-					<img src="images/checkout_4.png" />
+					<a class="fancybox-buttons" data-fancybox-group="button"
+						href="images/checkout_4.png">
+						<img src="images/checkout_4.png" alt="" width="57" height="38" />
+					</a>
 				</p>
 				<p>
 					6) Add the URL
@@ -157,7 +170,10 @@
 					and click Finish
 					<br />
 					<br />
-					<img src="images/checkout_5.png" />
+					<a class="fancybox-buttons" data-fancybox-group="button"
+						href="images/checkout_5.png">
+						<img src="images/checkout_5.png" alt="" width="455" height="272" />
+					</a>
 				</p>
 				<p>
 					7) After download is complete you see a new Source Repository in
@@ -165,30 +181,39 @@
 					<strong>checkout</strong>
 					<br />
 					<br />
-					<img src="images/checkout_6.png" />
+					<a class="fancybox-buttons" data-fancybox-group="button"
+						href="images/checkout_6.png">
+						<img src="images/checkout_6.png" alt="" width="340" height="135" />
+					</a>
 				</p>
 				<p>
 					8) In the Dialog the opens now just click next
 					<br />
 					<br />
-					<img src="images/checkout_7.png" />
+					<a class="fancybox-buttons" data-fancybox-group="button"
+						href="images/checkout_7.png">
+						<img src="images/checkout_7.png" alt="" width="390" height="338" />
+					</a>
 				</p>
 				<p>
 					9) In the next Dialog just click Finish, Eclipse will then download
 					the sources
 					<br />
 					<br />
-					<img src="images/checkout_8.png" />
+					<a class="fancybox-buttons" data-fancybox-group="button"
+						href="images/checkout_8.png">
+						<img src="images/checkout_8.png" alt="" width="390" height="338" />
+					</a>
 				</p>
 				<p>
 					10) After the download is complete you will see a new Project in
 					the Package Explorer Dialog of Eclipse
 					<br />
 					<br />
-					<img src="images/checkout_9.png">
-
-					</img>
-
+					<a class="fancybox-buttons" data-fancybox-group="button"
+						href="images/checkout_9.png">
+						<img src="images/checkout_9.png" alt="" width="310" height="297" />
+					</a>
 				</p>
 			</subsection>
 
@@ -251,7 +276,8 @@
 				to Ghostscript cannot be read from the system_path. Unfortunately
 				you cannot overwrite that in the Configuration as its an internal
 				link of Ghostscript. However in production environment you will not
-				run into this Issue, its a development problem. </p>
+				run into this Issue, its a development problem.
+			</p>
 		</section>
 
 	</body>
