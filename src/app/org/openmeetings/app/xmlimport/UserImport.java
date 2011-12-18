@@ -6,9 +6,9 @@ import java.util.Iterator;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import org.openmeetings.app.data.user.Addressmanagement;
 import org.openmeetings.app.data.user.Emailmanagement;
 import org.openmeetings.app.data.user.Organisationmanagement;
+import org.openmeetings.app.data.user.Statemanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.user.Users;
@@ -27,11 +27,11 @@ public class UserImport {
 	@Autowired
 	private Organisationmanagement organisationmanagement;
 	@Autowired
-	private Addressmanagement addressmanagement;
-	@Autowired
 	private Emailmanagement emailManagement;
 	@Autowired
 	private UsersDaoImpl usersDao;
+	@Autowired
+	private Statemanagement statemanagement;
 
 	public Long addUsersByDocument(InputStream is) throws Exception {
 
@@ -129,10 +129,8 @@ public class UserImport {
 
 			// check for duplicate Login or mail:
 			if (usersDao.checkUserLogin(us.getLogin()) && mailCheck) {
-				Long address_id = addressmanagement.saveAddress(street, zip,
-						town, state_id, additionalname, comment, fax, phone, email);
-
-				us.setAdresses(addressmanagement.getAdressbyId(address_id));
+				us.setAdresses(street, zip,
+						town, statemanagement.getStateById(state_id), additionalname, comment, fax, phone, email);
 
 				userManagement.addUser(us);
 

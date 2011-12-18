@@ -1,5 +1,6 @@
 package org.openmeetings.app.remote;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -16,7 +17,6 @@ import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl;
 import org.openmeetings.app.data.calendar.daos.MeetingMemberDaoImpl;
 import org.openmeetings.app.data.conference.Roommanagement;
-import org.openmeetings.app.data.user.Addressmanagement;
 import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Salutationmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
@@ -24,7 +24,6 @@ import org.openmeetings.app.data.user.dao.PrivateMessageFolderDaoImpl;
 import org.openmeetings.app.data.user.dao.PrivateMessagesDaoImpl;
 import org.openmeetings.app.data.user.dao.UserContactsDaoImpl;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
-import org.openmeetings.app.persistence.beans.adresses.Adresses;
 import org.openmeetings.app.persistence.beans.domain.Organisation;
 import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.persistence.beans.recording.RoomClient;
@@ -79,8 +78,6 @@ public class UserService {
 	private Organisationmanagement organisationmanagement;
 	@Autowired
 	private ManageCryptStyle manageCryptStyle;
-	@Autowired
-	private Addressmanagement addressmanagement;
 	@Autowired
 	private Roommanagement roommanagement;
 	@Autowired
@@ -322,7 +319,7 @@ public class UserService {
 	 * @param regObjectObj
 	 * @return
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	public Long saveOrUpdateUser(String SID, Object regObjectObj) {
 		try {
 			LinkedHashMap argObjectMap = (LinkedHashMap) regObjectObj;
@@ -334,8 +331,12 @@ public class UserService {
 			}
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
-
-			List organisations = (List) argObjectMap.get("organisations");
+			
+			List<?> orgO = (List<?>)argObjectMap.get("organisations");
+			List<Long> orgIds = new ArrayList<Long>(orgO.size());
+			for (Object o : orgO) {
+				orgIds.add(Long.valueOf((Integer)o));
+			}
 			Date age = null;
 			if (argObjectMap.get("userage") instanceof Date) {
 				age = (Date) argObjectMap.get("userage");
@@ -369,7 +370,7 @@ public class UserService {
 						argObjectMap.get("town").toString(),
 						new Long(argObjectMap.get("language_id").toString()),
 						true,
-						organisations,
+						orgIds,
 						argObjectMap.get("phone").toString(),
 						"",
 						false,
@@ -423,7 +424,7 @@ public class UserService {
 								Integer.valueOf(
 										argObjectMap.get("status").toString())
 										.intValue(),
-								organisations,
+								orgIds,
 								Integer.valueOf(
 										argObjectMap.get("title_id").toString())
 										.intValue(),
@@ -474,20 +475,6 @@ public class UserService {
 
 					// Setting user deleted
 					Long userId = usersDao.deleteUserID(user_idClient);
-
-					Users user = userManagement.checkAdmingetUserById(
-							user_level, userId);
-
-					// Updating address
-					Adresses ad = user.getAdresses();
-
-					if (ad != null) {
-						ad.setDeleted("true");
-
-						addressmanagement.updateAdress(ad);
-						log.debug("deleteUserId : Address updated");
-
-					}
 
 					return userId;
 				} else {

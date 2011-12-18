@@ -1,5 +1,6 @@
 package org.openmeetings.app.installation;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -559,11 +560,15 @@ public class ImportInitvalues {
 			Long default_lang_id = Long.parseLong(configdefaultLang);
 			if (default_lang_id == null) default_lang_id = 1L;
 			
+			// Add default group
+			Long organisation_id = organisationmanagement.addOrganisation(
+					defaultOrganisationName, 1);
+			
 			// BaseUrl as param is empty as we do not send an EMAIL here
 			Long user_id = userManagement.registerUserInit(new Long(3), 3, 1,
 					1, username, userpass, "lastname", "firstname", email,
 					new java.util.Date(), "street", "no", "fax", "zip", 1,
-					"town", default_lang_id, false, null, "phone", "", false, "", "", "",
+					"town", default_lang_id, false, Arrays.asList(organisation_id), "phone", "", false, "", "", "",
 					false, timeZone, false, "", "", false, true);
 
 			log.debug("Installation - User Added user-Id " + user_id);
@@ -573,14 +578,6 @@ public class ImportInitvalues {
 						"Could not add user user returns a negative error message: "
 								+ user_id);
 			}
-
-			// Add default group
-			Long organisation_id = organisationmanagement.addOrganisation(
-					defaultOrganisationName, user_id);
-
-			// Add user to default group
-			organisationmanagement.addUserToOrganisation(user_id,
-					organisation_id, null, "");
 		} catch (Exception e) {
 			log.error("[loadInitUserAndOrganisation] ", e);
 		}

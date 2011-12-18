@@ -52,9 +52,7 @@
 		<class>org.openmeetings.app.persistence.beans.user.Salutations</class>
 		<class>org.openmeetings.app.persistence.beans.user.UserContacts</class>
 		<class>org.openmeetings.app.persistence.beans.user.Userdata</class>
-		<class>org.openmeetings.app.persistence.beans.user.Usergroups</class>
 		<class>org.openmeetings.app.persistence.beans.user.Userlevel</class>
-		<class>org.openmeetings.app.persistence.beans.user.Users_Usergroups</class>
 		<class>org.openmeetings.app.persistence.beans.user.UserSipData</class>
 		<class>org.openmeetings.app.persistence.beans.user.Users</class>
 		<class>org.openmeetings.app.persistence.beans.files.FileExplorerItem</class>

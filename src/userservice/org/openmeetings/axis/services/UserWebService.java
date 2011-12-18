@@ -11,11 +11,9 @@ import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.basic.dao.SOAPLoginDaoImpl;
 import org.openmeetings.app.data.beans.basic.ErrorResult;
 import org.openmeetings.app.data.beans.basic.SearchResult;
-import org.openmeetings.app.data.user.Addressmanagement;
 import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
-import org.openmeetings.app.persistence.beans.adresses.Adresses;
 import org.openmeetings.app.persistence.beans.basic.Configuration;
 import org.openmeetings.app.persistence.beans.basic.ErrorValues;
 import org.openmeetings.app.persistence.beans.basic.RemoteSessionObject;
@@ -48,8 +46,6 @@ public class UserWebService {
 	private ErrorManagement errorManagement;
 	@Autowired
 	private Organisationmanagement organisationmanagement;
-	@Autowired
-	private Addressmanagement addressmanagement;
 	@Autowired
 	private SOAPLoginDaoImpl soapLoginDao;
 	@Autowired
@@ -333,20 +329,6 @@ public class UserWebService {
 				// Setting user deleted
 				usersDao.deleteUserID(userId);
 
-				Users user = userManagement.checkAdmingetUserById(user_level,
-						userId);
-
-				// Updating address
-				Adresses ad = user.getAdresses();
-
-				if (ad != null) {
-					ad.setDeleted("true");
-
-					addressmanagement.updateAdress(ad);
-					log.debug("deleteUserId : Address updated");
-
-				}
-
 				return userId;
 
 			} else {
@@ -381,20 +363,6 @@ public class UserWebService {
 
 				// Setting user deleted
 				usersDao.deleteUserID(userId);
-
-				Users user = userManagement.checkAdmingetUserById(user_level,
-						userId);
-
-				// Updating address
-				Adresses ad = user.getAdresses();
-
-				if (ad != null) {
-					ad.setDeleted("true");
-
-					addressmanagement.updateAdress(ad);
-					log.debug("deleteUserId : Address updated");
-
-				}
 
 				return userId;
 

@@ -1,9 +1,9 @@
 package org.openmeetings.app.data.user;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -79,8 +79,6 @@ public class Usermanagement {
 	private Organisationmanagement organisationmanagement;
 	@Autowired
 	private ManageCryptStyle manageCryptStyle;
-	@Autowired
-	private Addressmanagement addressmanagement;
 	@Autowired
 	private OpenXGHttpClient openXGHttpClient;
 	@Autowired
@@ -293,7 +291,7 @@ public class Usermanagement {
 					}
 
 					log.debug("loginUser " + users.getOrganisation_users());
-					if (users.getOrganisation_users() != null) {
+					if (!users.getOrganisation_users().isEmpty()) {
 						log.debug("loginUser size "
 								+ users.getOrganisation_users().size());
 					} else {
@@ -336,11 +334,6 @@ public class Usermanagement {
 				sessionManagement.updateUserWithoutSession(SID, u.getUser_id());
 
 				return u;
-
-			} else {
-
-				return null;
-
 			}
 
 		} catch (Exception ex2) {
@@ -530,9 +523,7 @@ public class Usermanagement {
 							return new Long(-7);
 						}
 					}
-
-					addressmanagement.updateAdress(us.getAdresses()
-							.getAdresses_id(), street, zip, town, states_id,
+					us.setAdresses(street, zip, town, statemanagement.getStateById(states_id),
 							additionalname, comment, fax, email, phone);
 					// emailManagement.updateUserEmail(mail.getMail().getMail_id(),user_id,
 					// email);
@@ -849,45 +840,45 @@ public class Usermanagement {
 			String additionalname, String fax, String zip, long states_id,
 			String town, long language_id, String phone, String baseURL,
 			boolean generateSipUserData, String jNameTimeZone) {
+		
+		boolean sendConfirmation = baseURL != null
+				&& !baseURL.isEmpty()
+				&& 1 == cfgManagement.getConfValue(
+						"sendEmailWithVerficationCode", Integer.class, "0");
+		
+		return registerUser(login, Userpass, lastname, firstname, email, age,
+				street, additionalname, fax, zip, states_id, town, language_id,
+				phone, baseURL, generateSipUserData, jNameTimeZone, sendConfirmation);
+	}
+
+	public Long registerUserNoEmail(String login, String Userpass,
+			String lastname, String firstname, String email, Date age,
+			String street, String additionalname, String fax, String zip,
+			long states_id, String town, long language_id, String phone,
+			boolean generateSipUserData, String jNameTimeZone) {
+		
+		return registerUser(login, Userpass, lastname, firstname, email, age,
+				street, additionalname, fax, zip, states_id, town, language_id,
+				phone, "", generateSipUserData, jNameTimeZone, false);
+	}
+
+	private Long registerUser(String login, String Userpass, String lastname,
+			String firstname, String email, Date age, String street,
+			String additionalname, String fax, String zip, long states_id,
+			String town, long language_id, String phone, String baseURL,
+			boolean generateSipUserData, String jNameTimeZone, Boolean sendConfirmation) {
 		try {
 			// Checks if FrontEndUsers can register
-			if (cfgManagement.getConfKey(3, "allow_frontend_register")
-					.getConf_value().equals("1")) {
-
-				Boolean sendConfirmation = false;
-				Integer sendEmailWithVerficationCode = Integer
-						.valueOf(
-								cfgManagement.getConfKey(3,
-										"sendEmailWithVerficationCode")
-										.getConf_value()).intValue();
-
-				// Send Confirmation can only be true when the baseURL is set,
-				// when you add a new user through the Administration panel
-				// the baseURL is not set so sendConfirmation = false and there
-				// will be
-				// neither an Email nor will this method return a negative error
-				// id
-				if (baseURL.length() != 0 && sendEmailWithVerficationCode == 1) {
-					sendConfirmation = true;
-				}
-
+			if ("1".equals(cfgManagement.getConfValue("allow_frontend_register", String.class, "0"))) {
+				
 				// TODO: Read and generate SIP-Data via RPC-Interface Issue 1098
 
 				Long user_id = this.registerUserInit(3, 1, 0, 1, login,
 						Userpass, lastname, firstname, email, age, street,
 						additionalname, fax, zip, states_id, town, language_id,
-						true, new LinkedList<Object>(), phone, baseURL,
+						true, Arrays.asList(cfgManagement.getConfValue("default_domain_id", Long.class, null)),phone, baseURL,
 						sendConfirmation, "", "", "", generateSipUserData,
 						jNameTimeZone, false, "", "", false, true);
-
-				// Get the default organisation_id of registered users
-				if (user_id > 0) {
-					long organisation_id = Long.valueOf(
-							cfgManagement.getConfKey(3, "default_domain_id")
-									.getConf_value()).longValue();
-					organisationmanagement.addUserToOrganisation(user_id,
-							organisation_id, user_id, "");
-				}
 
 				if (sendConfirmation) {
 					return new Long(-40);
@@ -897,51 +888,6 @@ public class Usermanagement {
 			}
 		} catch (Exception e) {
 			log.error("[registerUser]", e);
-		}
-		return null;
-	}
-
-	public Long registerUserNoEmail(String login, String Userpass,
-			String lastname, String firstname, String email, Date age,
-			String street, String additionalname, String fax, String zip,
-			long states_id, String town, long language_id, String phone,
-			boolean generateSipUserData, String jNameTimeZone) {
-		try {
-			// Checks if FrontEndUsers can register
-			if (cfgManagement.getConfKey(3, "allow_frontend_register")
-					.getConf_value().equals("1")) {
-
-				Boolean sendConfirmation = false;
-				Boolean sendWelcomeMessage = false;
-				String baseURL = "";
-
-				// TODO: Read and generate SIP-Data via RPC-Interface Issue 1098
-
-				Long user_id = this.registerUserInit(3, 1, 0, 1, login,
-						Userpass, lastname, firstname, email, age, street,
-						additionalname, fax, zip, states_id, town, language_id,
-						sendWelcomeMessage, new LinkedList<Object>(), phone,
-						baseURL, sendConfirmation, "", "", "",
-						generateSipUserData, jNameTimeZone, false, "", "",
-						false, true);
-
-				// Get the default organisation_id of registered users
-				if (user_id > 0) {
-					long organisation_id = Long.valueOf(
-							cfgManagement.getConfKey(3, "default_domain_id")
-									.getConf_value()).longValue();
-					organisationmanagement.addUserToOrganisation(user_id,
-							organisation_id, user_id, "");
-				}
-
-				if (sendConfirmation) {
-					return new Long(-40);
-				}
-
-				return user_id;
-			}
-		} catch (Exception e) {
-			log.error("[registerUserNoEmail]", e);
 		}
 		return null;
 	}
@@ -976,7 +922,7 @@ public class Usermanagement {
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, long states_id,
 			String town, long language_id, boolean sendWelcomeMessage,
-			List<Object> organisations, String phone, String baseURL,
+			List<Long> organisations, String phone, String baseURL,
 			Boolean sendConfirmation, String sip_user, String sip_pass,
 			String sip_auth, boolean generateSipUserData,
 			String jName_timezone, Boolean forceTimeZoneCheck,
@@ -1022,12 +968,16 @@ public class Usermanagement {
 						if (!sendMail.equals("success"))
 							return new Long(-19);
 					}
-					Long address_id = addressmanagement.saveAddress(street,
-							zip, town, states_id, additionalname, "", fax,
-							phone, email);
-					if (address_id == null) {
-						return new Long(-22);
-					}
+					Adresses adr =  new Adresses();
+					adr.setStreet(street);
+					adr.setZip(zip);
+					adr.setTown(town);
+					adr.setStates(statemanagement.getStateById(states_id));
+					adr.setAdditionalname(additionalname);
+					adr.setComment("");
+					adr.setFax(fax);
+					adr.setPhone(phone);
+					adr.setEmail(email);
 
 					// If this user needs first to click his E-Mail verification
 					// code then set the status to 0
@@ -1037,10 +987,10 @@ public class Usermanagement {
 
 					Long user_id = addUser(level_id, availible, status,
 							firstname, login, lastname, language_id, password,
-							address_id, age, hash, sip_user, sip_pass,
+							adr, age, hash, sip_user, sip_pass,
 							sip_auth, generateSipUserData, jName_timezone,
 							forceTimeZoneCheck, userOffers, userSearchs,
-							showContactData, showContactDataToContacts);
+							showContactData, showContactDataToContacts, organisations);
 					log.debug("Added user-Id " + user_id);
 					if (user_id == null) {
 						return new Long(-111);
@@ -1052,10 +1002,7 @@ public class Usermanagement {
 					 * (adress_emails_id==null) { return new Long(-112); }
 					 */
 
-					organisationmanagement.addUserOrganisationsByHashMap(
-							user_id, organisations);
-
-					if (address_id > 0 && user_id > 0) {
+					if (adr.getAdresses_id() > 0 && user_id > 0) {
 						return user_id;
 					} else {
 						return new Long(-16);
@@ -1090,16 +1037,16 @@ public class Usermanagement {
 	 * @param language_id
 	 * @param Userpass
 	 *            is MD5-crypted
-	 * @param adress_id
+	 * @param Adresses adress
 	 * @return user_id or error null
 	 */
 	public Long addUser(long level_id, int availible, int status,
 			String firstname, String login, String lastname, long language_id,
-			String userpass, long adress_id, Date age, String hash,
+			String userpass, Adresses adress, Date age, String hash,
 			String sip_user, String sip_pass, String sip_auth,
 			boolean generateSipUserData, String jName_timezone,
 			Boolean forceTimeZoneCheck, String userOffers, String userSearchs,
-			Boolean showContactData, Boolean showContactDataToContacts) {
+			Boolean showContactData, Boolean showContactDataToContacts, List<Long> orgIds) {
 		try {
 
 			Users users = new Users();
@@ -1107,7 +1054,7 @@ public class Usermanagement {
 			users.setLogin(login);
 			users.setLastname(lastname);
 			users.setAge(age);
-			users.setAdresses(addressmanagement.getAdressbyId(adress_id));
+			users.setAdresses(adress);
 			users.setAvailible(availible);
 			users.setLastlogin(new Date());
 			users.setLasttrans(new Long(0));
@@ -1159,15 +1106,13 @@ public class Usermanagement {
 					.createPassPhrase(userpass));
 			users.setRegdate(new Date());
 			users.setDeleted("false");
-
-			users = em.merge(users);
-
-			em.flush();
-			em.refresh(users);
-
-			Long user_id = users.getUser_id();
-
-			return user_id;
+			
+			//new user add organizations without checks
+			List<Organisation_Users> orgList = users.getOrganisation_users();
+			for (Long orgId : orgIds) {
+				orgList.add(organisationmanagement.getOrgUser(orgId, null, ""));
+			}
+			return addUser(users);
 
 		} catch (Exception ex2) {
 			log.error("[registerUser]", ex2);
@@ -1205,7 +1150,7 @@ public class Usermanagement {
 
 	public Long addUserWithExternalKey(long level_id, int availible,
 			int status, String firstname, String login, String lastname,
-			long language_id, String userpass, Long adress_id, Date age,
+			long language_id, String userpass, Adresses address, Date age,
 			String hash, Long externalUserId, String externalUserType,
 			boolean generateSipUserData, String email, String jNameTimeZone,
 			String pictureuri) {
@@ -1216,12 +1161,11 @@ public class Usermanagement {
 			users.setLastname(lastname);
 			users.setAge(age);
 
-			if (adress_id != null && adress_id > 0) {
-				users.setAdresses(addressmanagement.getAdressbyId(adress_id));
+			if (address != null) {
+				users.setAdresses(address);
 			} else {
-				adress_id = addressmanagement.saveAddress("", "", "", 1L, "",
+				users.setAdresses("", "", "", statemanagement.getStateById(1L), "",
 						"", "", "", email);
-				users.setAdresses(addressmanagement.getAdressbyId(adress_id));
 			}
 
 			users.setAvailible(availible);
@@ -1292,9 +1236,11 @@ public class Usermanagement {
 
 	public Long addUser(Users usr) {
 		try {
-			usr = em.merge(usr);
-			Long user_id = usr.getUser_id();
-			return user_id;
+			em.persist(usr);
+			//em.refresh(usr);
+			em.flush();
+
+			return usr.getUser_id();
 		} catch (Exception ex2) {
 			log.error("[addUser]", ex2);
 		}
@@ -1303,11 +1249,6 @@ public class Usermanagement {
 
 	public Long addUserBackup(Users usr) {
 		try {
-
-			Long adresses_id = addressmanagement.saveAddressObj(usr
-					.getAdresses());
-
-			usr.setAdresses(addressmanagement.getAdressbyId(adresses_id));
 
 			Long userSipDataId = userSipDataDao.addUserSipData(usr
 					.getUserSipData());
@@ -1411,7 +1352,6 @@ public class Usermanagement {
 							statemanagement.getStateById(Long.parseLong(values
 									.get("state_id").toString())));
 
-					addressmanagement.updateAdress(savedUser.getAdresses());
 					savedUser.setShowContactData(Boolean.valueOf(values.get(
 							"showContactData").toString()));
 					savedUser.setShowContactDataToContacts(Boolean
@@ -1462,22 +1402,14 @@ public class Usermanagement {
 
 			// check if Mail given
 			if (email.length() > 0) {
-				Adresses addr = addressmanagement.retrieveAddressByEmail(email);
-				// log.debug("addr_e "+addr_e);
-				if (addr != null) {
-					// log.debug("getAdresses_id "+addr_e.getAdresses_id());
-					Users us = usersDao.getUserByAdressesId(addr
-							.getAdresses_id());
-					if (us != null) {
-						this.sendHashByUser(us, appLink);
-						return new Long(-4);
-					} else {
-						return new Long(-9);
-					}
+				// log.debug("getAdresses_id "+addr_e.getAdresses_id());
+				Users us = usersDao.getUserByEmail(email);
+				if (us != null) {
+					this.sendHashByUser(us, appLink);
+					return new Long(-4);
 				} else {
 					return new Long(-9);
 				}
-				// check if username given
 			} else if (username.length() > 0) {
 				Users us = usersDao.getUserByName(username);
 				if (us != null) {
@@ -1790,25 +1722,7 @@ public class Usermanagement {
 	}
 
 	public void updateUser(Users user) {
-		try {
-			if (user.getUser_id() > 0) {
-				try {
-					if (user.getUser_id() == null) {
-						em.persist(user);
-					} else {
-						if (!em.contains(user)) {
-							em.merge(user);
-						}
-					}
-				} catch (Exception ex2) {
-					log.error("[updateUser] ", ex2);
-				}
-			} else {
-				log.error("[updateUser] " + "Error: No USER_ID given ");
-			}
-		} catch (Exception e) {
-			log.error("[updateUser]", e);
-		}
+		usersDao.updateUser(user);
 	}
 
 	/**

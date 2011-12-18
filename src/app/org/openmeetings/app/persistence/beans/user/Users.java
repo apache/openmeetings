@@ -1,6 +1,7 @@
 package org.openmeetings.app.persistence.beans.user;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,16 +14,23 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.openmeetings.app.persistence.beans.adresses.Adresses;
+import org.openmeetings.app.persistence.beans.adresses.States;
 import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.persistence.beans.basic.Sessiondata;
 import org.openmeetings.app.persistence.beans.domain.Organisation_Users;
 
 @Entity
+@NamedQueries({
+    @NamedQuery(name="getUsersByOrganisationId",
+    	query="SELECT u FROM Users u WHERE u.deleted = 'false' AND u.organisation_users.organisation.organisation_id = :organisation_id")
+})
 @Table(name = "users")
 public class Users implements Serializable {
 
@@ -72,7 +80,7 @@ public class Users implements Serializable {
 	private String activatehash;
 
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "adresses_id", insertable = true, updatable = true)
 	private Adresses adresses;
 	
@@ -82,11 +90,10 @@ public class Users implements Serializable {
 	private Userdata rechnungsaddressen;
 	@Transient
 	private Userdata lieferadressen;
-	private Usergroups[] usergroups;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id", insertable = true, updatable = true)
-	private List<Organisation_Users> organisation_users;
+	private List<Organisation_Users> organisation_users = new ArrayList<Organisation_Users>();
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "userSipDataId", insertable = true, updatable = true)
@@ -130,6 +137,23 @@ public class Users implements Serializable {
 
 	public void setAdresses(Adresses adresses) {
 		this.adresses = adresses;
+	}
+
+	public void setAdresses(String street, String zip, String town,
+			States state, String additionalname, String comment, String fax,
+			String phone, String email) {
+		if (this.adresses == null) {
+			this.adresses = new Adresses();
+		}
+		this.adresses.setStreet(street);
+		this.adresses.setZip(zip);
+		this.adresses.setTown(town);
+		this.adresses.setStates(state);
+		this.adresses.setAdditionalname(additionalname);
+		this.adresses.setComment(comment);
+		this.adresses.setFax(fax);
+		this.adresses.setPhone(phone);
+		this.adresses.setEmail(email);
 	}
 
 	public Date getAge() {
@@ -246,14 +270,6 @@ public class Users implements Serializable {
 		this.title_id = title_id;
 	}
 
-	public Usergroups[] getUsergroups() {
-		return usergroups;
-	}
-
-	public void setUsergroups(Usergroups[] usergroups) {
-		this.usergroups = usergroups;
-	}
-
 	public Userlevel getUserlevel() {
 		return userlevel;
 	}
@@ -308,7 +324,9 @@ public class Users implements Serializable {
 
 	public void setOrganisation_users(
 			List<Organisation_Users> organisation_users) {
-		this.organisation_users = organisation_users;
+		if (organisation_users != null) {
+			this.organisation_users = organisation_users;
+		}
 	}
 
 	public String getResethash() {

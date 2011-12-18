@@ -14,6 +14,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang.StringUtils;
+import org.openmeetings.app.persistence.beans.adresses.Adresses;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.crypt.ManageCryptStyle;
@@ -47,12 +48,7 @@ public class UsersDaoImpl {
 					users = (Users) query.getSingleResult();
 				} catch (NoResultException ex) {
 				}
-
-				// Somehow the Organizations are missing here o
-
 				return users;
-				// TODO: Add Usergroups to user
-				// users.setUsergroups(ResHandler.getGroupmanagement().getUserGroups(user_id));
 			} catch (Exception ex2) {
 				log.error("getUser", ex2);
 			}
@@ -86,9 +82,10 @@ public class UsersDaoImpl {
 				Users us = getUser(USER_ID);
 				us.setDeleted("true");
 				us.setUpdatetime(new Date());
-				// result +=
-				// Groupmanagement.getInstance().deleteUserFromAllGroups(new
-				// Long(USER_ID));
+				Adresses adr = us.getAdresses();
+				if (adr != null) {
+					adr.setDeleted("true");
+				}
 
 				if (us.getUser_id() == null) {
 					em.persist(us);
@@ -250,13 +247,13 @@ public class UsersDaoImpl {
 		return null;
 	}
 
-	public Users getUserByAdressesId(Long adresses_id) {
+	public Users getUserByEmail(String email) {
 		try {
 			String hql = "SELECT u FROM Users as u "
-					+ " where u.adresses.adresses_id = :adresses_id"
+					+ " where u.adresses.email = :email"
 					+ " AND u.deleted <> :deleted";
 			Query query = em.createQuery(hql);
-			query.setParameter("adresses_id", adresses_id);
+			query.setParameter("email", email);
 			query.setParameter("deleted", "true");
 			Users us = null;
 			try {

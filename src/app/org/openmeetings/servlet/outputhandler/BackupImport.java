@@ -50,7 +50,6 @@ import org.openmeetings.app.data.user.dao.PrivateMessageFolderDaoImpl;
 import org.openmeetings.app.data.user.dao.PrivateMessagesDaoImpl;
 import org.openmeetings.app.data.user.dao.UserContactsDaoImpl;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
-import org.openmeetings.app.persistence.beans.adresses.Adresses;
 import org.openmeetings.app.persistence.beans.adresses.States;
 import org.openmeetings.app.persistence.beans.basic.Configuration;
 import org.openmeetings.app.persistence.beans.basic.LdapConfig;
@@ -885,19 +884,9 @@ public class BackupImport {
 							statemanagement.getStateById(1L);
 						}
 
-						Adresses adr = new Adresses();
-						adr.setAdditionalname(additionalname);
-						adr.setComment(comment);
-						adr.setStarttime(new Date());
-						adr.setFax(fax);
-						adr.setStreet(street);
-						adr.setTown(town);
-						adr.setZip(zip);
-						adr.setStates(st);
-						adr.setPhone(phone);
-						adr.setEmail(email);
-
-						us.setAdresses(adr);
+						us.setAdresses(street, zip, town,
+								st, additionalname, comment, fax,
+								phone, email);
 
 						HashSet<Organisation_Users> orgUsers = new HashSet<Organisation_Users>();
 
@@ -920,8 +909,6 @@ public class BackupImport {
 												.element("organisation_id")
 												.getText())),
 										Maps.ORGANISATIONS);
-								Long user_id = importLongType(unformatString(organisationObject
-										.element("user_id").getText()));
 								Boolean isModerator = importBooleanType(unformatString(organisationObject
 										.element("isModerator").getText()));
 								String commentOrg = unformatString(organisationObject
@@ -932,7 +919,6 @@ public class BackupImport {
 								Organisation_Users orgUser = new Organisation_Users();
 								orgUser.setOrganisation(organisationmanagement
 										.getOrganisationByIdBackup(organisation_id));
-								orgUser.setUser_id(user_id);
 								orgUser.setIsModerator(isModerator);
 								orgUser.setComment(commentOrg);
 								orgUser.setStarttime(new Date());
@@ -955,10 +941,8 @@ public class BackupImport {
 							Organisation_Users organisationUsers = orgUserIterator
 									.next();
 
-							organisationUsers.setUser_id(actualNewUserId);
-
 							organisationmanagement
-									.addOrganisationUserObj(organisationUsers);
+									.addOrganisationUserObj(actualNewUserId, organisationUsers);
 
 						}
 

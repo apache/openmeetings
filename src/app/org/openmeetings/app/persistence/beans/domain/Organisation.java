@@ -9,9 +9,19 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
+@NamedQueries({
+	@NamedQuery(name="getOrganisationById",
+		query="SELECT c FROM Organisation AS c WHERE c.organisation_id = :organisation_id AND c.deleted <> :deleted")
+	, @NamedQuery(name="getAnyOrganisationById",
+		query="SELECT c FROM Organisation AS c WHERE c.organisation_id = :organisation_id")
+	, @NamedQuery(name="getOrganisationsByUserId",
+		query="SELECT u.organisation_users.organisation FROM Users u WHERE u.deleted = 'false' AND u.user_id = :user_id")
+})
 @Table(name = "organisation")
 public class Organisation implements Serializable {
 	private static final long serialVersionUID = 99123580264065654L;

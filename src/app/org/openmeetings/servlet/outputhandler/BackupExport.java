@@ -1729,8 +1729,6 @@ public class BackupExport {
 
 				user_organisation.addElement("deleted").addCDATA(
 						formatString("" + orgUsers.getDeleted()));
-				user_organisation.addElement("user_id").addCDATA(
-						formatString("" + orgUsers.getUser_id()));
 				user_organisation.addElement("isModerator").addCDATA(
 						formatString("" + orgUsers.getIsModerator()));
 				user_organisation.addElement("comment").addCDATA(

@@ -1,6 +1,5 @@
 package org.openmeetings.app.data.user;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -12,7 +11,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -190,11 +188,11 @@ public class Organisationmanagement {
 	private Long selectMaxFromOrganisations() {
 		try {
 			// get all users
-			Query query = em
-					.createQuery("select max(c.organisation_id) from Organisation c where c.deleted LIKE 'false'");
-			List<?> ll = query.getResultList();
-			log.debug("selectMaxFromOrganisations" + ll.get(0));
-			return (Long) ll.get(0);
+			TypedQuery<Long> query = em
+					.createQuery("select max(c.organisation_id) from Organisation c where c.deleted LIKE 'false'", Long.class);
+			Long l = query.getSingleResult();
+			log.debug("selectMaxFromOrganisations" + l);
+			return l;
 		} catch (Exception ex2) {
 			log.error("[selectMaxFromUsers] ", ex2);
 		}
@@ -355,13 +353,12 @@ public class Organisationmanagement {
 	 */
 	public Organisation getOrganisationById(long organisation_id) {
 		try {
-			Query query = em
-					.createQuery("select c from Organisation as c where c.organisation_id = :organisation_id AND c.deleted <> :deleted");
+			TypedQuery<Organisation> query = em.createNamedQuery("getOrganisationById", Organisation.class);
 			query.setParameter("organisation_id", organisation_id);
 			query.setParameter("deleted", "true");
 			Organisation o = null;
 			try {
-				o = (Organisation) query.getSingleResult();
+				o = query.getSingleResult();
 			} catch (NoResultException e) {
 				// o = null;
 			}
@@ -374,12 +371,11 @@ public class Organisationmanagement {
 
 	public Organisation getOrganisationByIdBackup(long organisation_id) {
 		try {
-			Query query = em
-					.createQuery("select c from Organisation as c where c.organisation_id = :organisation_id");
+			TypedQuery<Organisation> query = em.createNamedQuery("getAnyOrganisationById", Organisation.class);
 			query.setParameter("organisation_id", organisation_id);
 			Organisation o = null;
 			try {
-				o = (Organisation) query.getSingleResult();
+				o = query.getSingleResult();
 			} catch (NoResultException e) {
 				// o = null;
 			}
@@ -391,21 +387,7 @@ public class Organisationmanagement {
 	}
 
 	public Organisation getOrganisationByIdAndDeleted(long organisation_id) {
-		try {
-			Query query = em
-					.createQuery("select c from Organisation as c where c.organisation_id = :organisation_id");
-			query.setParameter("organisation_id", organisation_id);
-			Organisation o = null;
-			try {
-				o = (Organisation) query.getSingleResult();
-			} catch (NoResultException e) {
-				// o = null;
-			}
-			return o;
-		} catch (Exception ex2) {
-			log.error("[getOrganisationByIdAndDeleted]", ex2);
-		}
-		return null;
+		return getOrganisationByIdBackup(organisation_id);
 	}
 
 	public Long deleteOrganisation(long user_level, long organisation_id,
@@ -461,13 +443,7 @@ public class Organisationmanagement {
 			Long insertedby, String comment) {
 		try {
 			if (this.getOrganisation_UserByUserAndOrganisation(user_id, organisation_id) == null) {
-				Organisation_Users orgUser = new Organisation_Users();
-				orgUser.setOrganisation(getOrganisationById(organisation_id));
-				orgUser.setUser_id(user_id);
-				orgUser.setDeleted("false");
-				orgUser.setComment(comment);
-
-				return addOrganisationUserObj(orgUser);
+				return addOrganisationUserObj(user_id, getOrgUser(organisation_id, insertedby, comment));
 			} else {
 				return -35L;
 			}
@@ -476,19 +452,27 @@ public class Organisationmanagement {
 		}
 		return null;
 	}
-
-	public Long addOrganisationUserObj(Organisation_Users orgUser) {
+	
+	public Organisation_Users getOrgUser(Long organisation_id,
+			Long insertedby, String comment) {
+		
+		Organisation_Users orgUser = new Organisation_Users();
+		orgUser.setOrganisation(getOrganisationById(organisation_id));
+		orgUser.setDeleted("false");
+		orgUser.setComment(comment);
+		
+		return orgUser;
+	}
+	
+	public Long addOrganisationUserObj(Long user_id, Organisation_Users orgUser) {
 		try {
-			Users u = usersDao.getUser(orgUser.getUser_id());
+			Users u = usersDao.getUser(user_id);
 			
 			orgUser.setStarttime(new Date());
 			orgUser = em.merge(orgUser);
 
 			//user should be updated to have recent organisation_users list
 			List<Organisation_Users> l = u.getOrganisation_users();
-			if (l == null) {
-				l = new ArrayList<Organisation_Users>();
-			}
 			l.add(orgUser);
 			u.setOrganisation_users(l);
 			usersDao.updateUser(u);
@@ -503,21 +487,14 @@ public class Organisationmanagement {
 	public Organisation_Users getOrganisation_UserByUserAndOrganisation(
 			long user_id, long organisation_id) {
 		try {
-
 			log.debug("getOrganisation_UserByUserAndOrganisation " + user_id
 					+ "  " + organisation_id);
 
-			Query q = em
-				.createQuery("select c from Organisation_Users c where c.deleted = 'false' AND c.organisation.organisation_id = :organisation_id AND c.user_id = :user_id");
+			TypedQuery<Organisation_Users> q = em.createNamedQuery("getOrganisation_UserByUserAndOrganisation", Organisation_Users.class);
 			q.setParameter("organisation_id", organisation_id);
 			q.setParameter("user_id", user_id);
-			@SuppressWarnings("unchecked")
-			List<Organisation_Users> ll = q.getResultList();
-			log.debug("getOrganisation_UserByUserAndOrganisation: " + ll.size());
-			if (ll.size() > 0) {
-				return ll.get(0);
-			}
-
+			List<Organisation_Users> oul = q.getResultList();
+			return oul.size() > 0 ? oul.get(0) : null;
 		} catch (Exception ex2) {
 			log.error("[getOrganisation_UserByUserAndOrganisation]", ex2);
 		}
@@ -576,14 +553,12 @@ public class Organisationmanagement {
 
 	private Long selectMaxUsersByOrganisationId(long organisation_id) {
 		try {
-			Query query = em
-				.createQuery("select c.organisation_users_id from Organisation_Users c where c.deleted = 'false' AND c.organisation.organisation_id = :organisation_id");
+			TypedQuery<Long> query = em.createNamedQuery("selectMaxUsersByOrganisationId", Long.class);
 			query.setParameter("organisation_id", organisation_id);
 
-			@SuppressWarnings("rawtypes")
-			List ll = query.getResultList();
-			log.debug("selectMaxUsersByOrganisationId" + ll.size());
-			return new Long(ll.size());
+			Long l = query.getSingleResult();
+			log.debug("selectMaxUsersByOrganisationId" + l);
+			return l;
 
 		} catch (Exception ex2) {
 			log.error("[getUsersByOrganisationId]", ex2);
@@ -605,14 +580,11 @@ public class Organisationmanagement {
 	public List<Users> getUsersByOrganisationId(long organisation_id, int start,
 			int max, String orderby, boolean asc) {
 		try {
-			String hql = 
-				"SELECT c FROM Users c "
-				+ "WHERE c.deleted = 'false' "
-				+ "AND c.user_id IN ("
-				+ "	SELECT ou.user_id FROM Organisation_Users ou "
-				+ " WHERE ou.deleted = 'false' "
-				+ "		AND ou.organisation.organisation_id = :organisation_id "
-				+ ")";
+			String hql =
+				"SELECT c FROM "
+				+ "Users c "
+				+ ", IN(c.organisation_users) ou "
+				+ "WHERE c.deleted = 'false' AND ou.organisation.organisation_id = :organisation_id ";
 			if (orderby.startsWith("c.")) {
 				hql += "ORDER BY " + orderby;
 			} else {
@@ -624,12 +596,11 @@ public class Organisationmanagement {
 				hql += " DESC";
 			}
 
-			Query q = em.createQuery(hql);
+			TypedQuery<Users> q = em.createQuery(hql, Users.class);
 			q.setParameter("organisation_id", organisation_id);
 			q.setFirstResult(start);
 			q.setMaxResults(max);
 
-			@SuppressWarnings("unchecked")
 			List<Users> userL = q.getResultList();
 			return userL;
 		} catch (Exception ex2) {
@@ -647,18 +618,10 @@ public class Organisationmanagement {
 		try {
 
 			// get all users
-			Query q = em
-					.createQuery("select c from Organisation_Users c where c.deleted = 'false' AND c.organisation.organisation_id = :organisation_id");
+			TypedQuery<Users> q = em.createNamedQuery("getUsersByOrganisationId", Users.class);
 			q.setParameter("organisation_id", organisation_id);
-			@SuppressWarnings("unchecked")
-			List<Organisation_Users> userOrg = q.getResultList();
-			List<Users> userL = new LinkedList<Users>();
-			for (Iterator<Organisation_Users> it = userOrg.iterator(); it
-					.hasNext();) {
-				Organisation_Users us = it.next();
-				userL.add(usersDao.getUser(us.getUser_id()));
-			}
-			Collections.sort(userL, new UsersLoginComperator());
+			List<Users> userL = q.getResultList();
+			Collections.sort(userL, new UsersLoginComparator());
 			return userL;
 
 		} catch (Exception ex2) {
@@ -667,10 +630,9 @@ public class Organisationmanagement {
 		return null;
 	}
 
-	class UsersLoginComperator implements Comparator<Users> {
-		@SuppressWarnings("null")
+	class UsersLoginComparator implements Comparator<Users> {
 		public int compare(Users o1, Users o2) {
-			if (o1 != null || o2 != null)
+			if (o1 == null || o2 == null)
 				return 0;
 
 			return o1.getLogin().compareTo(o2.getLogin());
@@ -691,19 +653,11 @@ public class Organisationmanagement {
 			long user_id, int start, int max, String orderby, boolean asc) {
 		try {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
-				String hql = 
-					"SELECT o FROM Organisation o "
-					+ "WHERE o.deleted = 'false' "
-					+ "AND o.organisation_id IN ("
-					+ "	SELECT ou.organisation.organisation_id FROM Organisation_Users ou "
-					+ " WHERE ou.deleted = 'false' "
-					+ "		AND ou.user_id = :user_id "
-					+ ")";
-				Query q = em.createQuery(hql);
+				TypedQuery<Organisation> q = em.createNamedQuery("getOrganisationsByUserId", Organisation.class);
 				q.setParameter("user_id", user_id);
 				q.setFirstResult(start);
 				q.setMaxResults(max);
-				@SuppressWarnings("unchecked")
+
 				List<Organisation> userOrg = q.getResultList();
 
 				return userOrg;
@@ -728,37 +682,16 @@ public class Organisationmanagement {
 			long user_id, int start, int max, String orderby, boolean asc) {
 		try {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
-				// get all organisations
-				List<Organisation> allOrgs = this.getOrganisations(0, 1000000,
-						orderby, asc);
-				List<Organisation> orgUser = this.getOrganisationsByUserId(
-						user_level, user_id, start, max, orderby, asc);
-
-				List<Organisation> returnList = new LinkedList<Organisation>();
-				boolean notInList = true;
-
-				for (Iterator<Organisation> it = allOrgs.iterator(); it
-						.hasNext();) {
-					Organisation org = it.next();
-					notInList = true;
-					for (Iterator<Organisation> it2 = orgUser.iterator(); it2
-							.hasNext();) {
-						Organisation orgObj = it2.next();
-						// log.error("orgObj ID: "+orgObj.getOrganisation_id());
-						// log.error("orgUser ID: "+org.getOrganisation_id());
-						if (orgObj.getOrganisation_id().equals(
-								org.getOrganisation_id())) {
-							notInList = false;
-							// log.error("found notinList: "+notInList);
-							break;
-						}
-					}
-					// log.error("notinList: "+notInList);
-					if (notInList)
-						returnList.add(org);
-				}
-
-				return returnList;
+				String qSQL =
+					"SELECT o FROM Organisation AS o "
+					+ "WHERE o.organisation_id NOT IN ("
+					+ "	SELECT ou.organisation.organisation_id "
+					+ "	FROM Users u, IN(u.organisation_users) ou WHERE u.deleted = 'false' AND u.user_id = :user_id)";
+				TypedQuery<Organisation> q = em.createQuery(qSQL, Organisation.class);
+				q.setParameter("user_id", user_id);
+				q.setFirstResult(start);
+				q.setMaxResults(max);
+				return q.getResultList();
 			}
 		} catch (Exception ex2) {
 			log.error("[getRestOrganisationsByUserId]", ex2);
@@ -820,7 +753,7 @@ public class Organisationmanagement {
 	 * @param organisations
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings("rawtypes") //FIXME need to refactor
 	public Long updateUserOrganisationsByUser(Users us, List organisations) {
 		try {
 			LinkedList<Long> orgIdsToAdd = new LinkedList<Long>();

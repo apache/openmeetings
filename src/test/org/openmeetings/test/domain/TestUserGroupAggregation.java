@@ -21,24 +21,24 @@ public class TestUserGroupAggregation extends AbstractOpenmeetingsSpringTest {
 	@Test
 	public void testitNow() {
 
-		List orgUser = organisationmanagement.getOrganisationsByUserId(3, 1, 0,
+		List<Organisation> orgUser = organisationmanagement.getOrganisationsByUserId(3, 1, 0,
 				100, "organisation_id", true);
 
 		log.error("testitNow" + orgUser.size());
 
-		for (Iterator it2 = orgUser.iterator(); it2.hasNext();) {
-			Organisation orgUserObj = (Organisation) it2.next();
+		for (Iterator<Organisation> it2 = orgUser.iterator(); it2.hasNext();) {
+			Organisation orgUserObj = it2.next();
 			log.error("testitNow" + orgUserObj.getOrganisation_id());
 			log.error(orgUserObj.getName());
 		}
 
-		List orgUser2 = organisationmanagement.getRestOrganisationsByUserId(3,
+		List<Organisation> orgUser2 = organisationmanagement.getRestOrganisationsByUserId(3,
 				1, 0, 100, "organisation_id", true);
 
 		log.error("testitNow" + orgUser2.size());
 
-		for (Iterator it2 = orgUser2.iterator(); it2.hasNext();) {
-			Organisation orgUserObj = (Organisation) it2.next();
+		for (Iterator<Organisation> it2 = orgUser2.iterator(); it2.hasNext();) {
+			Organisation orgUserObj = it2.next();
 			log.error("testitNow" + orgUserObj.getOrganisation_id());
 			log.error(orgUserObj.getName());
 		}

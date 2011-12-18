@@ -60,7 +60,6 @@
 	<bean id="appointmentReminderTypDaoImpl" class="org.openmeetings.app.data.calendar.daos.AppointmentReminderTypDaoImpl" />
 	<bean id="appointmentCategoryDaoImpl" class="org.openmeetings.app.data.calendar.daos.AppointmentCategoryDaoImpl" />
 	<bean id="roommanagement" class="org.openmeetings.app.data.conference.Roommanagement" />
-	<bean id="addressmanagement" class="org.openmeetings.app.data.user.Addressmanagement" />
 	<bean id="organisationmanagement" class="org.openmeetings.app.data.user.Organisationmanagement" />
 	<bean id="salutationmanagement" class="org.openmeetings.app.data.user.Salutationmanagement" />
 	<bean id="errorManagement" class="org.openmeetings.app.data.basic.ErrorManagement" />
@@ -87,7 +86,6 @@
 	<bean id="flvRecordingLogDao" class="org.openmeetings.app.data.flvrecord.FlvRecordingLogDaoImpl"/>
 	<bean id="flvRecordingMetaDataDao" class="org.openmeetings.app.data.flvrecord.FlvRecordingMetaDataDaoImpl"/>
 	<bean id="flvRecordingMetaDeltaDao" class="org.openmeetings.app.data.flvrecord.FlvRecordingMetaDeltaDaoImpl"/>
-	<bean id="groupManagement" class="org.openmeetings.app.data.user.Groupmanagement"/>
 	<bean id="ldapConfigDao" class="org.openmeetings.app.data.basic.dao.LdapConfigDaoImpl"/>
 	<bean id="invitationManagement" class="org.openmeetings.app.data.conference.Invitationmanagement"/>
 	<bean id="meetingMemberDao" class="org.openmeetings.app.data.calendar.daos.MeetingMemberDaoImpl"/>

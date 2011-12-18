@@ -11,9 +11,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
+@NamedQueries({
+	@NamedQuery(name="selectMaxUsersByOrganisationId",
+		query="SELECT COUNT(c.organisation_users_id) FROM Organisation_Users c WHERE c.deleted = 'false' AND c.organisation.organisation_id = :organisation_id")
+	, @NamedQuery(name="getOrganisation_UserByUserAndOrganisation",
+		query="SELECT ou FROM Users u, IN(u.organisation_users) ou WHERE u.deleted = 'false' AND u.user_id = :user_id AND ou.organisation.organisation_id = :organisation_id")
+})
 @Table(name = "organisation_users")
 public class Organisation_Users implements Serializable {
 
@@ -29,7 +37,7 @@ public class Organisation_Users implements Serializable {
 
 	@Column(name = "user_id")
 	private Long user_id;
-	
+
 	@Column(name = "starttime")
 	private Date starttime;
 	

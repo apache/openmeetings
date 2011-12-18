@@ -218,7 +218,7 @@ public class MainService implements IPendingServiceCallback {
 			if (o == null)
 				return null;
 
-			if (o.getOrganisation_users() == null) {
+			if (o.getOrganisation_users().isEmpty()) {
 				throw new Exception("Users has no organization assigned");
 			}
 
@@ -1083,35 +1083,6 @@ public class MainService implements IPendingServiceCallback {
 	 * ResHandler.updateWarenkorb(SID, WAREN_ID, status, ZAHLUNGS_ID, LIEFER_ID,
 	 * amount, comment); } public String deleteWarenkorb(String SID, int
 	 * WAREN_ID){ return ResHandler.deleteWarenkorb(SID,WAREN_ID); }
-	 */
-
-	/*
-	 * UserGroup Management Handlers
-	 * 
-	 * public Usergroups[] getAllGroups(String SID){ return
-	 * ResHandler.getAllGroups(SID); } public List getAllUsers(String SID,int
-	 * start, int max){ Long users_id =
-	 * Sessionmanagement.getInstance().checkSession(SID); long user_level =
-	 * userManagement.getUserLevelByID(users_id); return
-	 * userManagement.getusersAdmin(user_level,start,max); } public
-	 * Users_Usergroups getSingleGroup(String SID,int GROUP_ID){ return
-	 * ResHandler.getSingleGroup(SID, GROUP_ID); } public Users_Usergroups
-	 * getGroupUsers(String SID,int GROUP_ID){ return
-	 * ResHandler.getGroupUsers(SID,GROUP_ID); } public String
-	 * addUserToGroup(String SID,int GROUP_ID,int USER_ID,String comment){
-	 * return ResHandler.addUserToGroup(SID,GROUP_ID,USER_ID,comment); } public
-	 * String updateUserGroup(String SID,int UID,int GROUP_ID,int USER_ID,String
-	 * comment){ return
-	 * ResHandler.updateUserGroup(SID,UID,GROUP_ID,USER_ID,comment); } public
-	 * String deleteUserGroupByID(String SID,int UID){ return
-	 * ResHandler.deleteUserGroupByID(SID,UID); } public String addGroup(String
-	 * SID,String name,int freigabe,String description,String comment){ return
-	 * ResHandler.addGroup(SID,name,freigabe,description,comment); } public
-	 * String updateGroup(String SID,int GROUP_ID,int freigabe, String name,
-	 * String description, String comment){ return
-	 * ResHandler.updateGroup(SID,GROUP_ID,freigabe, name, description,
-	 * comment); } public String deleteGroup(String SID,int GROUP_ID){ return
-	 * ResHandler.deleteGroup(SID,GROUP_ID); }
 	 */
 
 }
