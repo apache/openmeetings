@@ -15,13 +15,31 @@
 * limitations under the License.
 */
 body {
+	color: #000000;
+	margin: 0;
+	background: #fafafa;
 	font: 10pt Verdana, Arial, Helvetica, sans-serif;
+	  
+}
+.mainbody {
+	margin-left: 40px;
+	margin-right: 40px;
+	-moz-box-shadow: 4px 0px 5px #666666;
+	-webkit-box-shadow: 4px 0px 5px #666666;
+	box-shadow: 4px 0px 5px #666666;
+}
+.superbody {
+	background: #FFFFFF;
+	-moz-box-shadow: -4px 0px 5px #666666;
+	-webkit-box-shadow: -4px 0px 5px #666666;
+	box-shadow: -4px 0px 5px #666666;
 }
 
 /* Box CSS  */
 div {
 	margin: 0;
 }
+
 
 .ro {
 	background: url(2b.png) top right no-repeat;
