@@ -2,9 +2,14 @@ package org.openmeetings.doc;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
+import org.apache.velocity.tools.generic.EscapeTool;
 
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.MethodDoc;
@@ -16,60 +21,66 @@ public class WebServiceDoclet {
 
 	static final String basePath = "docs";
 	static final String templateName = "ApiMethodsTemplate.vm";
+	static final String templateNameIndex = "ApiClassesTemplate.vm";
 
 	public static boolean start(RootDoc root) {
 
 		try {
+			
+			Velocity.init();
 			out("Start WebServiceDoclet templateNameNew " + templateName);
-
+			
+			ArrayList<Map<String,String>> classesParsed = new ArrayList<Map<String,String>>(root.classes().length);
+			
 			// iterate over all classes.
 			ClassDoc[] classes = root.classes();
 			for (int i = 0; i < classes.length; i++) {
 				// iterate over all methods and print their names.
-				MethodDoc[] methods = classes[i].methods();
-
-				Velocity.init();
+				
 				VelocityContext vContext = new VelocityContext();
 				vContext.put("className", classes[i].name());
 				vContext.put("classComment", classes[i].commentText());
 				
 				String defaultOutputName = classes[i].name();
 				for (Tag tag : classes[i].tags()) {
-					out("Class Tag "+tag.name() + " || "+tag.text());
-					if (tag.name().equals("webservice")) {
+					if (tag.name().equals("@webservice")) {
 						defaultOutputName = tag.text();
 					}
 				}
 				
 				vContext.put("webServiceName", defaultOutputName);
 				
+				HashMap<String,String> classItem = new HashMap<String,String>();
+				classItem.put("name",defaultOutputName);
+				classItem.put("comment",classes[i].commentText());
+				classesParsed.add(classItem);
+				
 				vContext.put("methods", classes[i].methods());
-
+				
 				FileWriter strWriter = new FileWriter(basePath
 						+ File.separatorChar + defaultOutputName + ".html");
 
 				Velocity.mergeTemplate(basePath + File.separatorChar
 						+ templateName, "UTF-8", vContext, strWriter);
-
-				out("Methods");
-				out("-------");
-				for (int j = 0; j < methods.length; j++) {
-					out("Method: name = " + methods[j].name() + " Comment "
-							+ methods[j].commentText() + " Return Type "
-							+ methods[j].returnType().simpleTypeName());
-					int k = 0;
-					for (ParamTag parameter : methods[j].paramTags()) {
-						out("Param : "
-								+ parameter.parameterName()
-								+ " Type: "
-								+ methods[j].parameters()[k].type()
-										.simpleTypeName() + " "
-								+ parameter.parameterComment());
-						k++;
-					}
-				}
+				
+				strWriter.flush();
+				strWriter.close();
 
 			}
+			
+			
+			VelocityContext vIndexContext = new VelocityContext();
+			vIndexContext.put("classes", classesParsed);
+			
+			FileWriter newFileIndexWriter = new FileWriter(basePath
+					+ File.separatorChar + "WebserviceIndex.html");
+
+			Velocity.mergeTemplate(basePath + File.separatorChar
+					+ templateNameIndex, "UTF-8", vIndexContext, newFileIndexWriter);
+			
+			newFileIndexWriter.flush();
+			newFileIndexWriter.close();
+			
 
 		} catch (Exception err) {
 			err.printStackTrace();

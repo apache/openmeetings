@@ -35,6 +35,15 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+/**
+ * 
+ * Contains methods to import and upload files into the Files section of the
+ * conference room and the personal drive of any user
+ * 
+ * @author sebawagner
+ * @webservice FileService
+ * 
+ */
 public class FileWebService {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
@@ -178,7 +187,6 @@ public class FileWebService {
 	}
 
 	/**
-	 * 
 	 * Import file from external source
 	 * 
 	 * to upload a file to a room-drive you specify: internalUserId, user if of
@@ -190,9 +198,10 @@ public class FileWebService {
 	 * room id isOwner = 1 parentFolderId = -2
 	 * 
 	 * @param SID
+	 *            The SID of the User. This SID must be marked as logged in
 	 * @param internalUserId
 	 *            the openmeetings user id => If the file should goto a private
-	 *            section of any user, this number needs to be set
+	 *            section of any user, this number needs to be se
 	 * @param externalFileId
 	 *            the external file-type to identify the file later
 	 * @param externalType
@@ -296,19 +305,26 @@ public class FileWebService {
 	}
 
 	/**
-	 * 
 	 * to add a folder to the private drive, set parentFileExplorerItemId = 0
 	 * and isOwner to 1/true and externalUserId/externalUserType to a valid user
 	 * 
 	 * @param SID
+	 *            The SID of the User. This SID must be marked as logged in
 	 * @param externalUserId
-	 * @param externalUserType
+	 *            the external file-type to identify the file later
 	 * @param parentFileExplorerItemId
-	 * @param fileName
+	 * @param folderName
+	 *            the name of the folder
 	 * @param room_id
+	 *            the room Id, if the file goes to the private folder of an
+	 *            user, you can set a random number here
 	 * @param isOwner
+	 *            specify a 1/true AND parentFolderId==-2 to make the file goto
+	 *            the private section
 	 * @param externalFilesid
+	 *            the external file-type to identify the file later
 	 * @param externalType
+	 *            the name of the external system
 	 * @return
 	 * @throws AxisFault
 	 */
@@ -364,18 +380,17 @@ public class FileWebService {
 	}
 
 	/**
-	 * 
 	 * to add a folder to the private drive, set parentFileExplorerItemId = 0
 	 * and isOwner to 1/true and userId to a valid user
 	 * 
-	 * @param SID
-	 * @param userId
-	 * @param parentFileExplorerItemId
-	 * @param fileName
-	 * @param room_id
-	 * @param isOwner
-	 * @param externalFilesid
-	 * @param externalType
+	 * @param SID The SID of the User. This SID must be marked as logged in
+	 * @param userId the openmeetings user id 
+	 * @param parentFileExplorerItemId specify a parentFolderId==-2 AND isOwner == 1/true AND to make the file goto the private section  
+	 * @param folderName the name of the folder 
+	 * @param room_id the room Id, if the file goes to the private folder of an user, you can set a random number here 
+	 * @param isOwner specify a 1/true AND parentFolderId==-2 to make the file goto the private section 
+	 * @param externalFilesid the external file-type to identify the file later 
+	 * @param externalType the name of the external system 
 	 * @return
 	 * @throws AxisFault
 	 */
@@ -430,9 +445,13 @@ public class FileWebService {
 	 * Add a folder by the current user - similar to RTMP Call
 	 * 
 	 * @param SID
+	 *            The SID of the User. This SID must be marked as logged in
 	 * @param parentFileExplorerItemId
+	 *            parent folder id
 	 * @param fileName
+	 *            the file name
 	 * @param room_id
+	 *            the room id
 	 * @param isOwner
 	 * @return
 	 */
@@ -483,8 +502,11 @@ public class FileWebService {
 	 * deletes a file by its external Id and type
 	 * 
 	 * @param SID
+	 *            The SID of the User. This SID must be marked as logged in
 	 * @param externalFilesid
+	 *            the od of the file or folder
 	 * @param externalType
+	 *            the externalType
 	 * @return
 	 */
 	public Long deleteFileOrFolderByExternalIdAndType(String SID,
@@ -513,7 +535,9 @@ public class FileWebService {
 	 * deletes files or folders based on it id
 	 * 
 	 * @param SID
+	 *            The SID of the User. This SID must be marked as logged in
 	 * @param fileExplorerItemId
+	 *            the id of the file or folder
 	 * @return
 	 */
 	public Long deleteFileOrFolder(String SID, Long fileExplorerItemId)
@@ -541,7 +565,9 @@ public class FileWebService {
 	 * deletes files or folders based on it id
 	 * 
 	 * @param SID
+	 *            The SID of the User. This SID must be marked as logged in
 	 * @param fileExplorerItemId
+	 *            the id of the file or folder
 	 * @return
 	 */
 	public Long deleteFileOrFolderSelf(String SID, Long fileExplorerItemId)
@@ -566,6 +592,12 @@ public class FileWebService {
 		return null;
 	}
 
+	/**
+	 * Get available import File Extension allowed during import
+	 * 
+	 * @return
+	 * @throws AxisFault
+	 */
 	public String[] getImportFileExtensions() throws AxisFault {
 		try {
 
@@ -577,6 +609,14 @@ public class FileWebService {
 		return null;
 	}
 
+	/**
+	 * Get a LibraryPresentation-Object for a certain file
+	 * 
+	 * @param SID
+	 * @param parentFolder
+	 * @return
+	 * @throws AxisFault
+	 */
 	public LibraryPresentation getPresentationPreviewFileExplorer(String SID,
 			String parentFolder) throws AxisFault {
 
@@ -617,6 +657,18 @@ public class FileWebService {
 
 	}
 
+	/**
+	 * Get a File Explorer Object by a given Room and owner id
+	 * 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as logged in
+	 * @param room_id
+	 *            Room id
+	 * @param owner_id
+	 *            Owner id
+	 * @return
+	 * @throws AxisFault
+	 */
 	public FileExplorerObject getFileExplorerByRoom(String SID, Long room_id,
 			Long owner_id) throws AxisFault {
 
@@ -678,6 +730,16 @@ public class FileWebService {
 		}
 	}
 
+	/**
+	 * Get a File Explorer Object by a given Room
+	 * 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as logged in
+	 * @param room_id
+	 *            Room Id
+	 * @return
+	 * @throws AxisFault
+	 */
 	public FileExplorerObject getFileExplorerByRoomSelf(String SID, Long room_id)
 			throws AxisFault {
 
@@ -738,6 +800,22 @@ public class FileWebService {
 		}
 	}
 
+	/**
+	 * Get FileExplorerItem list by parent folder
+	 * 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as logged in
+	 * @param parentFileExplorerItemId
+	 *            the parent folder id
+	 * @param room_id
+	 *            the room id
+	 * @param isOwner
+	 *            true if its a private drive
+	 * @param owner_id
+	 *            the owner id
+	 * @return
+	 * @throws AxisFault
+	 */
 	public FileExplorerItem[] getFileExplorerByParent(String SID,
 			Long parentFileExplorerItemId, Long room_id, Boolean isOwner,
 			Long owner_id) throws AxisFault {
@@ -773,6 +851,21 @@ public class FileWebService {
 		return null;
 	}
 
+	/**
+	 * 
+	 * Get FileExplorerItem[] by parent and owner id
+	 * 
+	 * @param SID
+	 *            SID The SID of the User. This SID must be marked as logged in
+	 * @param parentFileExplorerItemId
+	 *            the parent folder id
+	 * @param room_id
+	 *            the room id
+	 * @param isOwner
+	 *            true to request private drive
+	 * @return
+	 * @throws AxisFault
+	 */
 	public FileExplorerItem[] getFileExplorerByParentSelf(String SID,
 			Long parentFileExplorerItemId, Long room_id, Boolean isOwner)
 			throws AxisFault {
@@ -807,6 +900,18 @@ public class FileWebService {
 		return null;
 	}
 
+	/**
+	 * update a file or folder name
+	 * 
+	 * @param SID
+	 *            SID The SID of the User. This SID must be marked as logged in
+	 * @param fileExplorerItemId
+	 *            file or folder id
+	 * @param fileName
+	 *            new file or folder name
+	 * @return
+	 * @throws AxisFault
+	 */
 	public Long updateFileOrFolderName(String SID, Long fileExplorerItemId,
 			String fileName) throws AxisFault {
 
@@ -830,6 +935,19 @@ public class FileWebService {
 		return null;
 	}
 
+	/**
+	 * 
+	 * update a file or folder name
+	 * 
+	 * @param SID
+	 *            SID The SID of the User. This SID must be marked as logged in
+	 * @param fileExplorerItemId
+	 *            file or folder id
+	 * @param fileName
+	 *            new file or folder name
+	 * @return
+	 * @throws AxisFault
+	 */
 	public Long updateFileOrFolderNameSelf(String SID, Long fileExplorerItemId,
 			String fileName) throws AxisFault {
 
@@ -865,6 +983,26 @@ public class FileWebService {
 		return null;
 	}
 
+	/**
+	 * move a file or folder
+	 * 
+	 * @param SID
+	 *            SID The SID of the User. This SID must be marked as logged in
+	 * @param fileExplorerItemId
+	 *            current file or folder id to be moved
+	 * @param newParentFileExplorerItemId
+	 *            new parent folder id
+	 * @param room_id
+	 *            room id
+	 * @param isOwner
+	 *            if true owner id will be set
+	 * @param moveToHome
+	 *            if true move to private drive
+	 * @param owner_id
+	 *            owner id
+	 * @return
+	 * @throws AxisFault
+	 */
 	public Long moveFile(String SID, Long fileExplorerItemId,
 			Long newParentFileExplorerItemId, Long room_id, Boolean isOwner,
 			Boolean moveToHome, Long owner_id) throws AxisFault {
@@ -906,6 +1044,24 @@ public class FileWebService {
 		return null;
 	}
 
+	/**
+	 * move a file or folder
+	 * 
+	 * @param SID
+	 *            SID The SID of the User. This SID must be marked as logged in
+	 * @param fileExplorerItemId
+	 *            current file or folder id to be moved
+	 * @param newParentFileExplorerItemId
+	 *            new parent folder id
+	 * @param room_id
+	 *            room id
+	 * @param isOwner
+	 *            if true owner id will be set
+	 * @param moveToHome
+	 *            move to private drive
+	 * @return
+	 * @throws AxisFault
+	 */
 	public Long moveFileSelf(String SID, Long fileExplorerItemId,
 			Long newParentFileExplorerItemId, Long room_id, Boolean isOwner,
 			Boolean moveToHome) throws AxisFault {

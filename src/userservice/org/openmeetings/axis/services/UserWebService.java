@@ -29,6 +29,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
+/**
+ * 
+ * The Service contains methods to login and create hash to directly enter
+ * conference rooms, recordings or the application in general
+ * 
+ * @author sebawagner
+ * @webservice UserService
+ * 
+ */
 public class UserWebService {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
@@ -55,25 +64,32 @@ public class UserWebService {
 	@Autowired
 	private AuthLevelmanagement authLevelManagement;
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * load this session id before doing anything else Returns an Object of Type
+	 * Sessiondata, this contains a sessionId, use that sessionId in all Methods
 	 * 
-	 * @see org.openmeetings.axis.services.IUserWebService#getSession()
+	 * @return
 	 */
 	public Sessiondata getSession() {
 		log.debug("SPRING LOADED getSession -- ");
 		return mainService.getsessiondata();
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * uth function, use the SID you get by getSession, return positive means
+	 * logged-in, if negative its an ErrorCode, you have to invoke the Method
+	 * getErrorByCode to get the Text-Description of that ErrorCode
 	 * 
-	 * @see
-	 * org.openmeetings.axis.services.IUserWebService#loginUser(java.lang.String
-	 * , java.lang.String, java.lang.String)
+	 * @param SID
+	 *            The SID from getSession
+	 * @param username
+	 *            Username from OpenMeetings, the user has to have Admin-rights
+	 * @param userpass
+	 *            Userpass from OpenMeetings
+	 * @return
 	 */
-	public Long loginUser(String SID, String username, String userpass) {
-		log.debug("UserService.loginuser");
+	public Long loginUser(String SID, String username, String userpass)
+			throws AxisFault {
 		try {
 			Object obj = userManagement.loginUser(SID, username, userpass,
 					null, false);
@@ -81,7 +97,6 @@ public class UserWebService {
 				return new Long(-1);
 			}
 			String objName = obj.getClass().getName();
-			log.debug("objName: " + objName);
 			if (objName.equals("java.lang.Long")) {
 				return (Long) obj;
 			} else {
@@ -93,15 +108,21 @@ public class UserWebService {
 		return new Long(-1);
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * loads an Error-Object. If a Method returns a negative Result, its an
+	 * Error-id, it needs a language_id to specify in which language you want to
+	 * display/read the error-message. English has the Language-ID one, for
+	 * different one see the list of languages
 	 * 
-	 * @see
-	 * org.openmeetings.axis.services.IUserWebService#getErrorByCode(java.lang
-	 * .String, java.lang.Long, java.lang.Long)
+	 * @param SID
+	 *            The SID from getSession
+	 * @param errorid
+	 *            the error id (negative Value here!)
+	 * @param language_id
+	 *            The id of the language
+	 * @return
 	 */
 	public ErrorResult getErrorByCode(String SID, Long errorid, Long language_id) {
-		log.debug("UserService.getErrorbyCode");
 		try {
 			if (errorid < 0) {
 				ErrorValues eValues = errorManagement
@@ -111,7 +132,8 @@ public class UserWebService {
 							.getFieldByIdAndLanguage(
 									eValues.getFieldvalues_id(), language_id);
 					Fieldlanguagesvalues typeValue = fieldmanagment
-							.getFieldByIdAndLanguage(errorManagement.getErrorType(eValues.getErrortype_id())
+							.getFieldByIdAndLanguage(errorManagement
+									.getErrorType(eValues.getErrortype_id())
 									.getFieldvalues_id(), language_id);
 					if (errorValue != null) {
 						return new ErrorResult(errorid, errorValue.getValue(),
@@ -128,14 +150,42 @@ public class UserWebService {
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Adds a new Usre like through the Frontend, but also does activates the
+	 * Account To do SSO see the methods to create a hash and use those ones!
 	 * 
-	 * @see
-	 * org.openmeetings.axis.services.IUserWebService#addNewUser(java.lang.String
-	 * , java.lang.String, java.lang.String, java.lang.String, java.lang.String,
-	 * java.lang.String, java.lang.String, java.lang.String, java.lang.String,
-	 * java.lang.String, long, java.lang.String, long, java.lang.String)
+	 * @param SID
+	 *            The SID from getSession
+	 * @param username
+	 *            any username
+	 * @param userpass
+	 *            any userpass
+	 * @param lastname
+	 *            any lastname
+	 * @param firstname
+	 *            any firstname
+	 * @param email
+	 *            any email
+	 * @param additionalname
+	 *            any additionalname
+	 * @param street
+	 *            any street
+	 * @param zip
+	 *            any zip
+	 * @param fax
+	 *            any fax
+	 * @param states_id
+	 *            a valid states_id
+	 * @param town
+	 *            any town
+	 * @param language_id
+	 *            the language_id
+	 * @param baseURL
+	 *            the baseURL is needed to send the Initial Email correctly to
+	 *            that User, otherwise the Link in the EMail that the new User
+	 *            will reveive is not valid
+	 * @return
+	 * @throws AxisFault
 	 */
 	public Long addNewUser(String SID, String username, String userpass,
 			String lastname, String firstname, String email,
@@ -192,15 +242,44 @@ public class UserWebService {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Adds a new User like through the Frontend, but also does activates the
+	 * Account
 	 * 
-	 * @see
-	 * org.openmeetings.axis.services.IUserWebService#addNewUserWithTimeZone
-	 * (java.lang.String, java.lang.String, java.lang.String, java.lang.String,
-	 * java.lang.String, java.lang.String, java.lang.String, java.lang.String,
-	 * java.lang.String, java.lang.String, long, java.lang.String, long,
-	 * java.lang.String, java.lang.String)
+	 * @param SID
+	 *            The SID from getSession
+	 * @param username
+	 *            any username
+	 * @param userpass
+	 *            any userpass
+	 * @param lastname
+	 *            any lastname
+	 * @param firstname
+	 *            any firstname
+	 * @param email
+	 *            any email
+	 * @param additionalname
+	 *            any additionalname
+	 * @param street
+	 *            any street
+	 * @param zip
+	 *            any zip
+	 * @param fax
+	 *            any fax
+	 * @param states_id
+	 *            a valid states_id
+	 * @param town
+	 *            any town
+	 * @param language_id
+	 *            the language_id
+	 * @param baseURL
+	 *            the baseURL is needed to send the Initial Email correctly to
+	 *            that User, otherwise the Link in the EMail that the new User
+	 *            will reveive is not valid
+	 * @param jNameTimeZone
+	 *            the name of the timezone for the user
+	 * @return
+	 * @throws AxisFault
 	 */
 	public Long addNewUserWithTimeZone(String SID, String username,
 			String userpass, String lastname, String firstname, String email,
@@ -249,15 +328,48 @@ public class UserWebService {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Adds a new User like through the Frontend, but also does activates the
+	 * Account, sends NO email (no matter what you configured) and sets the
+	 * users external user id and type
 	 * 
-	 * @see
-	 * org.openmeetings.axis.services.IUserWebService#addNewUserWithExternalType
-	 * (java.lang.String, java.lang.String, java.lang.String, java.lang.String,
-	 * java.lang.String, java.lang.String, java.lang.String, java.lang.String,
-	 * java.lang.String, java.lang.String, long, java.lang.String, long,
-	 * java.lang.String, java.lang.Long, java.lang.String)
+	 * Use the methods to create a hash for SSO, creating users is not required
+	 * for SSO
+	 * 
+	 * @param SID
+	 *            The SID from getSession
+	 * @param username
+	 *            any username
+	 * @param userpass
+	 *            any userpass
+	 * @param lastname
+	 *            any lastname
+	 * @param firstname
+	 *            any firstname
+	 * @param email
+	 *            any email
+	 * @param additionalname
+	 *            any additionalname
+	 * @param street
+	 *            any street
+	 * @param zip
+	 *            any zip
+	 * @param fax
+	 *            any fax
+	 * @param states_id
+	 *            a valid states_id
+	 * @param town
+	 *            any town
+	 * @param language_id
+	 *            the language_id
+	 * @param jNameTimeZone
+	 *            the name of the timezone for the user
+	 * @param externalUserId
+	 *            externalUserId
+	 * @param externalUserType
+	 *            externalUserType
+	 * @return
+	 * @throws AxisFault
 	 */
 	public Long addNewUserWithExternalType(String SID, String username,
 			String userpass, String lastname, String firstname, String email,
@@ -312,12 +424,16 @@ public class UserWebService {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
 	 * 
-	 * @see
-	 * org.openmeetings.axis.services.IUserWebService#deleteUserById(java.lang
-	 * .String, java.lang.Long)
+	 * Delete a certain user by its id
+	 * 
+	 * @param SID
+	 *            The SID from getSession
+	 * @param userId
+	 *            the openmeetings user id
+	 * @return
+	 * @throws AxisFault
 	 */
 	public Long deleteUserById(String SID, Long userId) throws AxisFault {
 		try {
@@ -341,12 +457,18 @@ public class UserWebService {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
 	 * 
-	 * @see org.openmeetings.axis.services.IUserWebService#
-	 * deleteUserByExternalUserIdAndType(java.lang.String, java.lang.Long,
-	 * java.lang.String)
+	 * Delete a certain user by its external user id
+	 * 
+	 * @param SID
+	 *            The SID from getSession
+	 * @param externalUserId
+	 *            externalUserId
+	 * @param externalUserType
+	 *            externalUserId
+	 * @return
+	 * @throws AxisFault
 	 */
 	public Long deleteUserByExternalUserIdAndType(String SID,
 			Long externalUserId, String externalUserType) throws AxisFault {
@@ -376,14 +498,28 @@ public class UserWebService {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * deprecated use setUserObjectAndGenerateRoomHash
 	 * 
-	 * @see
-	 * org.openmeetings.axis.services.IUserWebService#setUserObject(java.lang
-	 * .String, java.lang.String, java.lang.String, java.lang.String,
-	 * java.lang.String, java.lang.String)
+	 * Description: sets the SessionObject for a certain SID, after setting this
+	 * Session-Object you can use the SID + a RoomId to enter any Room.
+	 * 
+	 * @param SID
+	 *            The SID from getSession
+	 * @param username
+	 *            any username
+	 * @param firstname
+	 *            any firstname
+	 * @param lastname
+	 *            any lastname
+	 * @param profilePictureUrl
+	 *            any profilePictureUrl
+	 * @param email
+	 *            any email
+	 * @return
+	 * @throws AxisFault
 	 */
+	@Deprecated
 	public Long setUserObject(String SID, String username, String firstname,
 			String lastname, String profilePictureUrl, String email)
 			throws AxisFault {
@@ -423,14 +559,32 @@ public class UserWebService {
 		// return new Long(-1);
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * deprecated use setUserObjectAndGenerateRoomHash
 	 * 
-	 * @see
-	 * org.openmeetings.axis.services.IUserWebService#setUserObjectWithExternalUser
-	 * (java.lang.String, java.lang.String, java.lang.String, java.lang.String,
-	 * java.lang.String, java.lang.String, java.lang.Long, java.lang.String)
+	 * Description: sets the SessionObject for a certain SID, after setting this
+	 * Session-Object you can use the SID + a RoomId to enter any Room.
+	 * 
+	 * @param SID
+	 *            The SID from getSession
+	 * @param username
+	 *            any username
+	 * @param firstname
+	 *            any firstname
+	 * @param lastname
+	 *            any lastname
+	 * @param profilePictureUrl
+	 *            any profilePictureUrl
+	 * @param email
+	 *            any email
+	 * @param externalUserId
+	 *            if you have any external user Id you may set it here
+	 * @param externalUserType
+	 *            you can specify your system-name here, for example "moodle"
+	 * @return
+	 * @throws AxisFault
 	 */
+	@Deprecated
 	public Long setUserObjectWithExternalUser(String SID, String username,
 			String firstname, String lastname, String profilePictureUrl,
 			String email, Long externalUserId, String externalUserType)
@@ -473,21 +627,42 @@ public class UserWebService {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Description: sets the SessionObject for a certain SID, after setting this
+	 * Session-Object you can use the SID + a RoomId to enter any Room. ...
+	 * Session-Hashs are deleted 15 minutes after the creation if not used.
 	 * 
-	 * @see org.openmeetings.axis.services.IUserWebService#
-	 * setUserObjectAndGenerateRoomHash(java.lang.String, java.lang.String,
-	 * java.lang.String, java.lang.String, java.lang.String, java.lang.String,
-	 * java.lang.Long, java.lang.String, java.lang.Long, int, int)
+	 * @param SID
+	 *            The SID from getSession
+	 * @param username
+	 *            any username
+	 * @param firstname
+	 *            any firstname
+	 * @param lastname
+	 *            any lastname
+	 * @param profilePictureUrl
+	 *            any profilePictureUrl
+	 * @param email
+	 *            any email
+	 * @param externalUserId
+	 *            if you have any external user Id you may set it here
+	 * @param externalUserType
+	 *            you can specify your system-name here, for example "moodle"
+	 * @param room_id
+	 *            the room id the user should be logged in
+	 * @param becomeModeratorAsInt
+	 *            0 means no Moderator, 1 means Moderator
+	 * @param showAudioVideoTestAsInt
+	 *            0 means don't show Audio/Video Test, 1 means show Audio/Video
+	 *            Test Application before the user is logged into the room
+	 * @return
+	 * @throws AxisFault
 	 */
 	public String setUserObjectAndGenerateRoomHash(String SID, String username,
 			String firstname, String lastname, String profilePictureUrl,
 			String email, Long externalUserId, String externalUserType,
 			Long room_id, int becomeModeratorAsInt, int showAudioVideoTestAsInt)
 			throws AxisFault {
-		log.debug("UserService.setUserObject");
-
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
@@ -546,13 +721,40 @@ public class UserWebService {
 		return "" + new Long(-1);
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
 	 * 
-	 * @see org.openmeetings.axis.services.IUserWebService#
-	 * setUserObjectAndGenerateRoomHashByURL(java.lang.String, java.lang.String,
-	 * java.lang.String, java.lang.String, java.lang.String, java.lang.String,
-	 * java.lang.Long, java.lang.String, java.lang.Long, int, int)
+	 * Description: sets the SessionObject for a certain SID, after setting this
+	 * Session-Object you can use the SID + a RoomId to enter any Room.
+	 * 
+	 * ++ the user can press f5 to reload the page / use the link several times,
+	 * the SOAP Gateway does remember the IP of the user and the will only the
+	 * first user that enters the room allow to re-enter. ... Session-Hashs are
+	 * deleted 15 minutes after the creation if not used.
+	 * 
+	 * @param SID
+	 *            The SID from getSession
+	 * @param username
+	 *            any username
+	 * @param firstname
+	 *            any firstname
+	 * @param lastname
+	 *            any lastname
+	 * @param profilePictureUrl
+	 *            any profilePictureUrl
+	 * @param email
+	 *            any email any email
+	 * @param externalUserId
+	 *            if you have any external user Id you may set it here
+	 * @param externalUserType
+	 *            you can specify your system-name here, for example "moodle"
+	 * @param room_id
+	 *            the room id the user should be logged in
+	 * @param becomeModeratorAsInt
+	 *            0 means no Moderator, 1 means Moderator
+	 * @param showAudioVideoTestAsInt
+	 *            0 means don't show Audio/Video Test, 1 means show Audio/Video
+	 *            Test Application before the user is logged into the room
+	 * @return
 	 */
 	public String setUserObjectAndGenerateRoomHashByURL(String SID,
 			String username, String firstname, String lastname,
@@ -618,22 +820,50 @@ public class UserWebService {
 		return "" + new Long(-1);
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
 	 * 
-	 * @see org.openmeetings.axis.services.IUserWebService#
-	 * setUserObjectAndGenerateRoomHashByURLAndRecFlag(java.lang.String,
-	 * java.lang.String, java.lang.String, java.lang.String, java.lang.String,
-	 * java.lang.String, java.lang.Long, java.lang.String, java.lang.Long, int,
-	 * int, int)
+	 * Description: sets the SessionObject for a certain SID, after setting this
+	 * Session-Object you can use the SID + a RoomId to enter any Room.
+	 * 
+	 * ++ the user can press f5 to reload the page / use the link several times,
+	 * the SOAP Gateway does remember the IP of the user and the will only the
+	 * first user that enters the room allow to re-enter. ... Session-Hashs are
+	 * deleted 15 minutes after the creation if not used.
+	 * 
+	 * ++ sets the flag if the user can do recording in the conference room
+	 * 
+	 * @param SID
+	 *            The SID from getSession
+	 * @param username
+	 *            any username
+	 * @param firstname
+	 *            any firstname
+	 * @param lastname
+	 *            any lastname
+	 * @param profilePictureUrl
+	 *            any profilePictureUrl
+	 * @param email
+	 *            any email
+	 * @param externalUserId
+	 *            if you have any external user Id you may set it here
+	 * @param externalUserType
+	 *            you can specify your system-name here, for example "moodle"
+	 * @param room_id
+	 *            the room id the user should be logged in
+	 * @param becomeModeratorAsInt
+	 *            0 means no Moderator, 1 means Moderator
+	 * @param showAudioVideoTestAsInt
+	 *            0 means don't show Audio/Video Test, 1 means show Audio/Video
+	 *            Test Application before the user is logged into the room
+	 * @param allowRecording
+	 *            0 means don't allow Recording, 1 means allow Recording
+	 * @return
 	 */
 	public String setUserObjectAndGenerateRoomHashByURLAndRecFlag(String SID,
 			String username, String firstname, String lastname,
 			String profilePictureUrl, String email, Long externalUserId,
 			String externalUserType, Long room_id, int becomeModeratorAsInt,
 			int showAudioVideoTestAsInt, int allowRecording) {
-		log.debug("UserService.setUserObject");
-
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
@@ -697,13 +927,33 @@ public class UserWebService {
 		return "" + new Long(-1);
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
 	 * 
-	 * @see
-	 * org.openmeetings.axis.services.IUserWebService#setUserObjectMainLandingZone
-	 * (java.lang.String, java.lang.String, java.lang.String, java.lang.String,
-	 * java.lang.String, java.lang.String, java.lang.Long, java.lang.String)
+	 * Description: sets the SessionObject for a certain SID, after setting this
+	 * Session-Object you can use the SID and directly login into the dashboard
+	 * 
+	 * ++ the user can press f5 to reload the page / use the link several times,
+	 * the SOAP Gateway does remember the IP of the user and the will only the
+	 * first user that enters the room allow to re-enter. ... Session-Hashs are
+	 * deleted 15 minutes after the creation if not used.
+	 * 
+	 * @param SID
+	 *            The SID from getSession
+	 * @param username
+	 *            any username
+	 * @param firstname
+	 *            any firstname
+	 * @param lastname
+	 *            any lastname
+	 * @param profilePictureUrl
+	 *            any absolute profilePictureUrl
+	 * @param email
+	 *            any email
+	 * @param externalUserId
+	 *            if you have any external user Id you may set it here
+	 * @param externalUserType
+	 *            you can specify your system-name here, for example "moodle"
+	 * @return
 	 */
 	public String setUserObjectMainLandingZone(String SID, String username,
 			String firstname, String lastname, String profilePictureUrl,
@@ -761,14 +1011,48 @@ public class UserWebService {
 		return "" + new Long(-1);
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
 	 * 
-	 * @see
-	 * org.openmeetings.axis.services.IUserWebService#setUserAndNickName(java
-	 * .lang.String, java.lang.String, java.lang.String, java.lang.String,
-	 * java.lang.String, java.lang.String, java.lang.Long, java.lang.String,
-	 * java.lang.Long, int, int, int)
+	 * Description: sets the SessionObject for a certain SID, after setting this
+	 * Session-Object you can use the SID + a RoomId to enter any Room.
+	 * 
+	 * ++ the user can press f5 to reload the page / use the link several times,
+	 * the SOAP Gateway does remember the IP of the user and the will only the
+	 * first user that enters the room allow to re-enter. ... Session-Hashs are
+	 * deleted 15 minutes after the creation if not used.
+	 * 
+	 * ++ Additionally you can set a param showNickNameDialogAsInt, the effect
+	 * if that param is 1 is, that the user gets a popup where he can enter his
+	 * nickname right before he enters the conference room. All nicknames and
+	 * emails users enter are logged in the conferencelog table.
+	 * 
+	 * @param SID
+	 *            The SID from getSession
+	 * @param username
+	 *            any username
+	 * @param firstname
+	 *            any firstname
+	 * @param lastname
+	 *            any lastname
+	 * @param profilePictureUrl
+	 *            any profilePictureUrl
+	 * @param email
+	 *            any email
+	 * @param externalUserId
+	 *            if you have any external user Id you may set it here
+	 * @param externalUserType
+	 *            you can specify your system-name here, for example "moodle"
+	 * @param room_id
+	 *            the room id the user should be logged in
+	 * @param becomeModeratorAsInt
+	 *            0 means no Moderator, 1 means Moderator
+	 * @param showAudioVideoTestAsInt
+	 *            0 means don't show Audio/Video Test, 1 means show Audio/Video
+	 *            Test Application before the user is logged into the room
+	 * @param showNickNameDialogAsInt
+	 *            0 means do not show the popup to enter a nichname, 1 means
+	 *            that there is a popup to enter the nickname for the conference
+	 * @return
 	 */
 	public String setUserAndNickName(String SID, String username,
 			String firstname, String lastname, String profilePictureUrl,
@@ -776,9 +1060,6 @@ public class UserWebService {
 			Long room_id, int becomeModeratorAsInt,
 			int showAudioVideoTestAsInt, int showNickNameDialogAsInt) {
 		try {
-
-			log.debug("UserService.setUserObjectAndGenerateRoomHashByURLAndNick");
-
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			if (authLevelManagement.checkWebServiceLevel(user_level)) {
@@ -839,19 +1120,29 @@ public class UserWebService {
 		return "" + new Long(-1);
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Use this method to access a Recording instead of Room
 	 * 
-	 * @see org.openmeetings.axis.services.IUserWebService#
-	 * setUserObjectAndGenerateRecordingHashByURL(java.lang.String,
-	 * java.lang.String, java.lang.String, java.lang.String, java.lang.Long,
-	 * java.lang.String, java.lang.Long)
+	 * @param SID
+	 *            The SID from getSession
+	 * @param username
+	 *            any username
+	 * @param firstname
+	 *            any firstname
+	 * @param lastname
+	 *            any lastname
+	 * @param externalUserId
+	 *            if you have any external user Id you may set it here
+	 * @param externalUserType
+	 *            you can specify your system-name here, for example "moodle"
+	 * @param recording_id
+	 *            the id of the recording, get a List of all Recordings with
+	 *            RoomService::getFlvRecordingByExternalRoomType
+	 * @return
 	 */
 	public String setUserObjectAndGenerateRecordingHashByURL(String SID,
 			String username, String firstname, String lastname,
 			Long externalUserId, String externalUserType, Long recording_id) {
-		log.debug("UserService.setUserObject");
-
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
@@ -899,13 +1190,21 @@ public class UserWebService {
 		return "" + new Long(-1);
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
 	 * 
-	 * @see
-	 * org.openmeetings.axis.services.IUserWebService#addUserToOrganisation(
-	 * java.lang.String, java.lang.Long, java.lang.Long, java.lang.Long,
-	 * java.lang.String)
+	 * Add a user to a certain organization
+	 * 
+	 * @param SID
+	 *            The SID from getSession
+	 * @param user_id
+	 *            the user id
+	 * @param organisation_id
+	 *            the organization id
+	 * @param insertedby
+	 *            user id of the operating user
+	 * @param comment
+	 *            any comment
+	 * @return
 	 */
 	public Long addUserToOrganisation(String SID, Long user_id,
 			Long organisation_id, Long insertedby, String comment) {
@@ -926,12 +1225,22 @@ public class UserWebService {
 		return new Long(-1);
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Search users and return them
 	 * 
-	 * @see
-	 * org.openmeetings.axis.services.IUserWebService#getUsersByOrganisation
-	 * (java.lang.String, long, int, int, java.lang.String, boolean)
+	 * @param SID
+	 *            The SID from getSession
+	 * @param organisation_id
+	 *            the organization id
+	 * @param start
+	 *            first record
+	 * @param max
+	 *            max records
+	 * @param orderby
+	 *            orderby clause
+	 * @param asc
+	 *            asc or desc
+	 * @return
 	 */
 	public SearchResult getUsersByOrganisation(String SID,
 			long organisation_id, int start, int max, String orderby,
@@ -955,12 +1264,15 @@ public class UserWebService {
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Kick a user by its public SID
 	 * 
-	 * @see
-	 * org.openmeetings.axis.services.IUserWebService#kickUserByPublicSID(java
-	 * .lang.String, java.lang.String)
+	 * @param SID
+	 *            The SID from getSession
+	 * @param publicSID
+	 *            the publicSID (you can get it from the call to get users in a
+	 *            room)
+	 * @return
 	 */
 	public Boolean kickUserByPublicSID(String SID, String publicSID) {
 		try {

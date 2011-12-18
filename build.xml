@@ -420,7 +420,7 @@
 	</target>
 	
 	<!-- Compile JAR -->
-	<target name="jar" description="Make Archive" depends="enhance, jar.only, jar.screen.share">
+	<target name="jar" description="Make Archive" depends="enhance, build.only.webservice.doc, jar.only, jar.screen.share">
         <tstamp prefix="build">
             <format property="TODAY" pattern="d-MMMM-yyyy" locale="en"/>
         </tstamp>
@@ -648,31 +648,30 @@
     </path>
 	
 	<target name="build.webservice.doc" depends="compile.only"> 
-		
 		<javadoc classpathref="build.webservice.classpath">  
-			
+			<source file="src/userservice/org/openmeetings/axis/services/UserWebService.java" />
 			<source file="src/roomservice/org/openmeetings/axis/services/RoomWebService.java" />
-			
+			<source file="src/fileservice/org/openmeetings/axis/services/FileWebService.java" />
 			<doclet name="org.openmeetings.doc.WebServiceDoclet" pathref="build.webservice.classpath">
 			</doclet>
-			
 		</javadoc>  
-		
 	</target>
 	
 	<target name="build.only.webservice.doc" > 
-	        
-	        <javadoc classpathref="build.webservice.classpath">  
-	            
-	            <source file="src/roomservice/org/openmeetings/axis/services/RoomWebService.java" />
-	            
-	            <doclet name="org.openmeetings.doc.WebServiceDoclet" pathref="build.webservice.classpath">
-	            </doclet>
-	            
-	        </javadoc>  
-	        
-	    </target>
-	<!-- path="${classes.dir}" -->
+        <javadoc classpathref="build.webservice.classpath">  
+        	<source file="src/userservice/org/openmeetings/axis/services/UserWebService.java" />
+            <source file="src/roomservice/org/openmeetings/axis/services/RoomWebService.java" />
+        	<source file="src/fileservice/org/openmeetings/axis/services/FileWebService.java" />
+            <doclet name="org.openmeetings.doc.WebServiceDoclet" pathref="build.webservice.classpath">
+            </doclet>
+        </javadoc>  
+		<copy todir="${dist.webapps.dir}/docs">
+			<fileset dir="${basedir}/docs/">
+				<include name="*.html"/>
+				<include name="*.css"/>
+			</fileset>
+		</copy>
+    </target>
     
 	<!-- Unit Tests -->
 	<property name="om.dist.webapp" value="${red5.root}/webapps/${project.distname}"/>
