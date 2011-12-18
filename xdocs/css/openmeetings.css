@@ -53,3 +53,8 @@ ul {
 	margin: 0;
 	padding: 0;
 }
+.xmlcode {
+	margin-left: 20px;
+	background-color: #eeeeee;
+	color: #0000ff;
+}

@@ -28,8 +28,43 @@
 
 			<p>For example for the method getSession in the UserService, you would use this URL via REST:
 			</p>
-			<a href="http://demo.openmeetings.de/openmeetings/services/UserService/getSession">http://demo.openmeetings.de/openmeetings/services/UserService/getSession</a>
-
+			<p>Sample URL: </p><a href="http://demo.openmeetings.de/openmeetings/services/UserService/getSession">http://demo.openmeetings.de/openmeetings/services/UserService/getSession</a>
+			<p>Result: </p>
+			<div class="xmlcode">
+				&#60;ns:getSessionResponse&#62;<br/>
+				&#60;ns:return type="org.openmeetings.app.hibernate.beans.basic.Sessiondata"&#62;<br/>
+				&#160;&#160;&#60;ax219:id&#62;156971&#60;/ax219:id&#62;<br/>
+				&#160;&#160;&#60;ax219:language_id xsi:nil="true"/&#62;<br/>
+				&#160;&#160;&#60;ax219:organization_id xsi:nil="true"/&#62;<br/>
+				&#160;&#160;&#60;ax219:refresh_time&#62;2011-07-03T14:40:44.000Z&#60;/ax219:refresh_time&#62;<br/>
+				&#160;&#160;&#60;ax219:sessionXml xsi:nil="true"/&#62;<br/>
+				&#160;&#160;&#60;ax219:session_id&#62;26584705202d7c1de6cc8e7e28890e3d&#60;/ax219:session_id&#62;<br/>
+				&#160;&#160;&#60;ax219:starttermin_time&#62;2011-07-03T14:40:44.000Z&#60;/ax219:starttermin_time&#62;<br/>
+				&#160;&#160;&#60;ax219:storePermanent xsi:nil="true"/&#62;<br/>
+				&#160;&#160;&#60;ax219:user_id xsi:nil="true"/&#62;<br/>
+				&#60;/ns:return&#62;<br/>
+				&#60;/ns:getSessionResponse&#62;<br/>
+			</div>
+			<p>To login a user the call to auth would be:</p>
+			<p>Sample URL: </p><a href="http://demo.openmeetings.de/openmeetings/services/UserService/loginUser?SID=26584705202d7c1de6cc8e7e28890e3d&#38;username=hans&#38;userpass=test">http://demo.openmeetings.de/openmeetings/services/UserService/loginUser?SID=26584705202d7c1de6cc8e7e28890e3d&#38;username=han&#38;userpass=test</a>
+			<p>Result: </p>
+			<div class="xmlcode">
+				&#60;ns:loginUserResponse&#62;<br/>
+				&#160;&#160;&#60;ns:return&#62;-11&#60;/ns:return&#62;<br/>
+				&#60;/ns:loginUserResponse&#62;<br/>
+			</div>
+			<p>=> It does return -10, which is the error id cause we will not write down a SOAP login to our public server in this wiki. However the correct way to check this error would be to invoke the call to get the localized error message. So we invoke the method to get the error via REST:</p>
+			<p>Sample URL: </p><a href="http://demo.openmeetings.de/openmeetings/services/UserService/getErrorByCode?SID=26584705202d7c1de6cc8e7e28890e3d&#38;errorid=-10&#38;language_id=1">http://demo.openmeetings.de/openmeetings/services/UserService/getErrorByCode?SID=26584705202d7c1de6cc8e7e28890e3d&#38;errorid=-10&#38;language_id=1</a>
+			<p>Result:</p>
+			<div class="xmlcode">
+				&#60;ns:getErrorByCodeResponse&#62;<br/>
+				&#60;ns:return type="org.openmeetings.app.data.beans.basic.ErrorResult"&#62;<br/>
+				&#160;&#160;&#60;ax218:errmessage&#62;Username not found&#60;/ax218:errmessage&#62;<br/>
+				&#160;&#160;&#60;ax218:errorId&#62;-10&#60;/ax218:errorId&#62;<br/>
+				&#160;&#160;&#60;ax218:errortype&#62;Error&#60;/ax218:errortype&#62;<br/>
+				&#60;/ns:return&#62;<br/>
+				&#60;/ns:getErrorByCodeResponse&#62;<br/>
+			</div>
 		</section>
 
 

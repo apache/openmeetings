@@ -32,6 +32,11 @@
         <item name="Dependencies"           href="/dependencies.html"/>
     </menu>
     
+    <menu name="Integration">
+        <item name="SOAP/REST API"          href="/SoapRestAPI.html"/>
+        <item name="REST API Sample"           href="/RestAPI.html"/>
+    </menu>
+    
     <!-- 
     <menu name="Integration">
         <item name="SOAP/REST API"          href="/integration_api.html"/>
