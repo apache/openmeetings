@@ -25,6 +25,7 @@ limitations under the License.
 		<meta name="author" value="OpenMeetings Team">
 		<meta name="email" value="sebawagner@apache.org">
 		<title>OpenMeetings API Methods</title>
+		<link rel="stylesheet" type="text/css" href="openmeetings_docs.css">
         </head>
 	<body>
 	
@@ -32,10 +33,28 @@ limitations under the License.
 	   <p>$classComment<p>
 	   <p>WSDL sample Url: <a href="http://localhost:5080/openmeetings/services/$webServiceName?wsdl">http://localhost:5080/openmeetings/services/$webServiceName?wsdl</a><p>
 	
+	<!-- Links to Methods -->
+	   <h3>Index of Methods available in $className</h3>
+	   
+       <div class="navigation">
+	   #foreach ( $method in $methods )
+            #if ($method.isPublic()) 
+                <div>
+                <a href="#$method.name()"><b>$method.name()</b></a><br/>
+                <div class="navigation_comment"><i >$method.commentText()</div>
+                </div>
+           #end
+        #end
+        </div>
+	   
+	    <h3>Methods Details in $className</h3>
+	
 		#foreach ( $method in $methods )
 		    #if ($method.isPublic()) 
-    		    <hr width="100%" />
-    			<a name="$method.name()"><b>$method.name() (
+		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="$method.name()" ><b>$method.name() (
     			#set ($index = 0) 
     			#foreach ( $parameter in $method.parameters() )
     			   #if ($index > 0) 
@@ -46,19 +65,24 @@ limitations under the License.
     			#end
     			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  $method.commentText()
     			</p>
     			<p>
                   Return Type: $method.returnType()
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			   #set ($index = 0) 
     			   #foreach ( $parameter in $method.paramTags() )
     			   <tr>
@@ -71,7 +95,9 @@ limitations under the License.
                    
                    #set ($index = $index+1) 
                    #end
+                   </tbody>
     			</table>
+    		  </div>
     	   #end
 		#end
 	

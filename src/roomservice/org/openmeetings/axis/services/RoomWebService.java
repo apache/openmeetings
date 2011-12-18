@@ -780,6 +780,8 @@ public class RoomWebService {
 
 	/**
 	 * 
+	 * adds a new room with options for user questions and audio only
+	 * 
 	 * @param SID The SID of the User. This SID must be marked as Loggedin 
 	 * @param name
 	 *            Name of the Room

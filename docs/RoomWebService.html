@@ -25,6 +25,7 @@ limitations under the License.
 		<meta name="author" value="OpenMeetings Team">
 		<meta name="email" value="sebawagner@apache.org">
 		<title>OpenMeetings API Methods</title>
+		<link rel="stylesheet" type="text/css" href="openmeetings_docs.css">
         </head>
 	<body>
 	
@@ -32,13 +33,206 @@ limitations under the License.
 	   <p>RoomService contains methods to manipulate rooms and create invitation hash<p>
 	   <p>WSDL sample Url: <a href="http://localhost:5080/openmeetings/services/RoomWebService?wsdl">http://localhost:5080/openmeetings/services/RoomWebService?wsdl</a><p>
 	
-				        		    <hr width="100%" />
-    			<a name="getRoomsPublic"><b>getRoomsPublic (
+	<!-- Links to Methods -->
+	   <h3>Index of Methods available in RoomWebService</h3>
+	   
+       <div class="navigation">
+	                               <div>
+                <a href="#getRoomsPublic"><b>getRoomsPublic</b></a><br/>
+                <div class="navigation_comment"><i >Returns an Object of Type RoomsList which contains a list of
+ Room-Objects. Every Room-Object contains a Roomtype and all informations
+ about that Room. The List of current-users in the room is Null if you get
+ them via SOAP. The Roomtype can be 1 for conference rooms or 2 for
+ audience rooms.</div>
+                </div>
+                                               <div>
+                <a href="#deleteFlvRecording"><b>deleteFlvRecording</b></a><br/>
+                <div class="navigation_comment"><i >Deletes a flv recording</div>
+                </div>
+                                               <div>
+                <a href="#getFlvRecordingByExternalUserId"><b>getFlvRecordingByExternalUserId</b></a><br/>
+                <div class="navigation_comment"><i >Gets a list of flv recordings</div>
+                </div>
+                                               <div>
+                <a href="#getFlvRecordingByExternalRoomTypeAndCreator"><b>getFlvRecordingByExternalRoomTypeAndCreator</b></a><br/>
+                <div class="navigation_comment"><i >Gets a list of flv recordings</div>
+                </div>
+                                               <div>
+                <a href="#getFlvRecordingByExternalRoomTypeByList"><b>getFlvRecordingByExternalRoomTypeByList</b></a><br/>
+                <div class="navigation_comment"><i >Gets a list of flv recordings</div>
+                </div>
+                                               <div>
+                <a href="#getFlvRecordingByExternalRoomType"><b>getFlvRecordingByExternalRoomType</b></a><br/>
+                <div class="navigation_comment"><i >Gets a list of flv recordings</div>
+                </div>
+                                               <div>
+                <a href="#getFlvRecordingByRoomId"><b>getFlvRecordingByRoomId</b></a><br/>
+                <div class="navigation_comment"><i >Get list of recordings</div>
+                </div>
+                                               <div>
+                <a href="#getRoomTypes"><b>getRoomTypes</b></a><br/>
+                <div class="navigation_comment"><i >List of available room types</div>
+                </div>
+                                               <div>
+                <a href="#getRoomCounters"><b>getRoomCounters</b></a><br/>
+                <div class="navigation_comment"><i >Returns current users for rooms ids</div>
+                </div>
+                                               <div>
+                <a href="#getRoomById"><b>getRoomById</b></a><br/>
+                <div class="navigation_comment"><i >returns a conference room object</div>
+                </div>
+                                               <div>
+                <a href="#getRoomWithCurrentUsersById"><b>getRoomWithCurrentUsersById</b></a><br/>
+                <div class="navigation_comment"><i ></div>
+                </div>
+                                               <div>
+                <a href="#getRoomWithClientObjectsById"><b>getRoomWithClientObjectsById</b></a><br/>
+                <div class="navigation_comment"><i >Returns a object of type RoomReturn</div>
+                </div>
+                                               <div>
+                <a href="#getRooms"><b>getRooms</b></a><br/>
+                <div class="navigation_comment"><i >Returns a List of Objects of Rooms You can use "name" as value for
+ orderby or rooms_id</div>
+                </div>
+                                               <div>
+                <a href="#getRoomsWithCurrentUsers"><b>getRoomsWithCurrentUsers</b></a><br/>
+                <div class="navigation_comment"><i >Returns a List of Objects of Rooms You can use "name" as value for
+ orderby or rooms_id. It also fills the attribute currentUsers in the
+ Room-Object</div>
+                </div>
+                                               <div>
+                <a href="#addRoom"><b>addRoom</b></a><br/>
+                <div class="navigation_comment"><i >TODO: Fix Organization Issue
+ 
+ deprecated use addRoomWithModeration instead</div>
+                </div>
+                                               <div>
+                <a href="#addRoomWithModeration"><b>addRoomWithModeration</b></a><br/>
+                <div class="navigation_comment"><i >Create a conference room</div>
+                </div>
+                                               <div>
+                <a href="#addRoomWithModerationAndQuestions"><b>addRoomWithModerationAndQuestions</b></a><br/>
+                <div class="navigation_comment"><i >this SOAP Method has an additional param to enable or disable the buttons
+ to apply for moderation this does only work in combination with the
+ room-type restricted</div>
+                </div>
+                                               <div>
+                <a href="#addRoomWithModerationQuestionsAndAudioType"><b>addRoomWithModerationQuestionsAndAudioType</b></a><br/>
+                <div class="navigation_comment"><i >adds a new room with options for user questions and audio only</div>
+                </div>
+                                               <div>
+                <a href="#getRoomIdByExternalId"><b>getRoomIdByExternalId</b></a><br/>
+                <div class="navigation_comment"><i >Checks if a room with this exteralRoomId + externalRoomType does exist,
+ if yes it returns the room id if not, it will create the room and then
+ return the room id of the newly created room</div>
+                </div>
+                                               <div>
+                <a href="#updateRoom"><b>updateRoom</b></a><br/>
+                <div class="navigation_comment"><i >TODO: Fix Organization Issue deprecated use updateRoomWithModeration</div>
+                </div>
+                                               <div>
+                <a href="#updateRoomWithModeration"><b>updateRoomWithModeration</b></a><br/>
+                <div class="navigation_comment"><i >Updates a conference room by its room id</div>
+                </div>
+                                               <div>
+                <a href="#updateRoomWithModerationAndQuestions"><b>updateRoomWithModerationAndQuestions</b></a><br/>
+                <div class="navigation_comment"><i ></div>
+                </div>
+                                               <div>
+                <a href="#deleteRoom"><b>deleteRoom</b></a><br/>
+                <div class="navigation_comment"><i >Delete a room by its room id</div>
+                </div>
+                                               <div>
+                <a href="#kickUser"><b>kickUser</b></a><br/>
+                <div class="navigation_comment"><i >kick all uses of a certain room</div>
+                </div>
+                                               <div>
+                <a href="#addRoomWithModerationAndExternalType"><b>addRoomWithModerationAndExternalType</b></a><br/>
+                <div class="navigation_comment"><i >Add a new conference room with option to set the external room type, the
+ external room type should be set if multiple applications use the same
+ OpenMeetings instance</div>
+                </div>
+                                               <div>
+                <a href="#addRoomWithModerationExternalTypeAndAudioType"><b>addRoomWithModerationExternalTypeAndAudioType</b></a><br/>
+                <div class="navigation_comment"><i >Adds a new room with options for audio only</div>
+                </div>
+                                               <div>
+                <a href="#addRoomWithModerationAndRecordingFlags"><b>addRoomWithModerationAndRecordingFlags</b></a><br/>
+                <div class="navigation_comment"><i >Adds a new room with options for recording</div>
+                </div>
+                                               <div>
+                <a href="#addRoomWithModerationExternalTypeAndTopBarOption"><b>addRoomWithModerationExternalTypeAndTopBarOption</b></a><br/>
+                <div class="navigation_comment"><i >Add a conference room with options to disable the top menu bar in the
+ conference room</div>
+                </div>
+                                               <div>
+                <a href="#getInvitationHash"><b>getInvitationHash</b></a><br/>
+                <div class="navigation_comment"><i >Create a Invitation hash and optionally send it by mail the From to Date
+ is as String as some SOAP libraries do not accept Date Objects in SOAP
+ Calls Date is parsed as dd.mm.yyyy, time as hh:mm (don't forget the
+ leading zero's)</div>
+                </div>
+                                               <div>
+                <a href="#sendInvitationHash"><b>sendInvitationHash</b></a><br/>
+                <div class="navigation_comment"><i >Create a Invitation hash and optionally send it by mail the From to Date
+ is as String as some SOAP libraries do not accept Date Objects in SOAP
+ Calls Date is parsed as dd.mm.yyyy, time as hh:mm (don't forget the
+ leading zero's)</div>
+                </div>
+                                               <div>
+                <a href="#sendInvitationHashWithDateObject"><b>sendInvitationHashWithDateObject</b></a><br/>
+                <div class="navigation_comment"><i >Create a Invitation hash and optionally send it by mail the From to Date
+ is as String as some SOAP libraries do not accept Date Objects in SOAP
+ Calls Date is parsed as dd.mm.yyyy, time as hh:mm (don't forget the
+ leading zero's)</div>
+                </div>
+                                               <div>
+                <a href="#getRoomsWithCurrentUsersByList"><b>getRoomsWithCurrentUsersByList</b></a><br/>
+                <div class="navigation_comment"><i >Return a RoomReturn Object with information of the current users of a
+ conference room</div>
+                </div>
+                                               <div>
+                <a href="#getRoomsWithCurrentUsersByListAndType"><b>getRoomsWithCurrentUsersByListAndType</b></a><br/>
+                <div class="navigation_comment"><i >Return a RoomReturn Object with information of the current users of a
+ conference room with option to search for special external room types</div>
+                </div>
+                                               <div>
+                <a href="#addRoomWithModerationAndExternalTypeAndStartEnd"><b>addRoomWithModerationAndExternalTypeAndStartEnd</b></a><br/>
+                <div class="navigation_comment"><i >Adds a conference room that is only available for a period of time</div>
+                </div>
+                                               <div>
+                <a href="#addMeetingMemberRemindToRoom"><b>addMeetingMemberRemindToRoom</b></a><br/>
+                <div class="navigation_comment"><i >Add a meeting member to a certain room. This is the same as adding an
+ external user to a event in the calendar.</div>
+                </div>
+                                               <div>
+                <a href="#addExternalMeetingMemberRemindToRoom"><b>addExternalMeetingMemberRemindToRoom</b></a><br/>
+                <div class="navigation_comment"><i >Add a meeting member to a certain room. This is the same as adding an
+ external user to a event in the calendar. with a certain time zone</div>
+                </div>
+                                               <div>
+                <a href="#closeRoom"><b>closeRoom</b></a><br/>
+                <div class="navigation_comment"><i >Method to remotely close or open rooms. If a room is closed all users
+ inside the room and all users that try to enter it will be redirected to
+ the redirectURL that is defined in the Room-Object.
+ 
+ Returns positive value if authentication was successful.</div>
+                </div>
+                           </div>
+	   
+	    <h3>Methods Details in RoomWebService</h3>
+	
+				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getRoomsPublic" ><b>getRoomsPublic (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   Long roomtypes_id
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  Returns an Object of Type RoomsList which contains a list of
  Room-Objects. Every Room-Object contains a Roomtype and all informations
@@ -49,13 +243,16 @@ limitations under the License.
     			<p>
                   Return Type: org.openmeetings.app.persistence.beans.rooms.Rooms[]
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -72,27 +269,36 @@ limitations under the License.
                      <td valign="top"></th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="deleteFlvRecording"><b>deleteFlvRecording (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="deleteFlvRecording" ><b>deleteFlvRecording (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   Long flvRecordingId
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  Deletes a flv recording
     			</p>
     			<p>
                   Return Type: boolean
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -109,27 +315,36 @@ limitations under the License.
                      <td valign="top">the id of the recording</th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="getFlvRecordingByExternalUserId"><b>getFlvRecordingByExternalUserId (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getFlvRecordingByExternalUserId" ><b>getFlvRecordingByExternalUserId (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   String externalUserId
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  Gets a list of flv recordings
     			</p>
     			<p>
                   Return Type: org.openmeetings.axis.services.FLVRecordingReturn[]
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -146,9 +361,13 @@ limitations under the License.
                      <td valign="top">the externalUserId</th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="getFlvRecordingByExternalRoomTypeAndCreator"><b>getFlvRecordingByExternalRoomTypeAndCreator (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getFlvRecordingByExternalRoomTypeAndCreator" ><b>getFlvRecordingByExternalRoomTypeAndCreator (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   String externalRoomType
@@ -156,19 +375,24 @@ limitations under the License.
     			       			   Long insertedBy
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  Gets a list of flv recordings
     			</p>
     			<p>
                   Return Type: org.openmeetings.axis.services.FLVRecordingReturn[]
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -193,27 +417,36 @@ limitations under the License.
                      <td valign="top">the userId that created the recording</th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="getFlvRecordingByExternalRoomTypeByList"><b>getFlvRecordingByExternalRoomTypeByList (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getFlvRecordingByExternalRoomTypeByList" ><b>getFlvRecordingByExternalRoomTypeByList (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   String externalRoomType
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  Gets a list of flv recordings
     			</p>
     			<p>
                   Return Type: java.util.List
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -230,27 +463,36 @@ limitations under the License.
                      <td valign="top">externalRoomType specified when creating the room</th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="getFlvRecordingByExternalRoomType"><b>getFlvRecordingByExternalRoomType (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getFlvRecordingByExternalRoomType" ><b>getFlvRecordingByExternalRoomType (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   String externalRoomType
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  Gets a list of flv recordings
     			</p>
     			<p>
                   Return Type: org.openmeetings.app.persistence.beans.flvrecord.FlvRecording[]
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -267,27 +509,36 @@ limitations under the License.
                      <td valign="top">externalRoomType specified when creating the room</th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="getFlvRecordingByRoomId"><b>getFlvRecordingByRoomId (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getFlvRecordingByRoomId" ><b>getFlvRecordingByRoomId (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   Long roomId
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  Get list of recordings
     			</p>
     			<p>
                   Return Type: org.openmeetings.app.persistence.beans.flvrecord.FlvRecording[]
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -304,25 +555,34 @@ limitations under the License.
                      <td valign="top">the room id</th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="getRoomTypes"><b>getRoomTypes (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getRoomTypes" ><b>getRoomTypes (
     			    			    			       			   String SID
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  List of available room types
     			</p>
     			<p>
                   Return Type: org.openmeetings.app.persistence.beans.rooms.RoomTypes[]
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -331,9 +591,13 @@ limitations under the License.
                      <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="getRoomCounters"><b>getRoomCounters (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getRoomCounters" ><b>getRoomCounters (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   Integer roomId1
@@ -357,19 +621,24 @@ limitations under the License.
     			       			   Integer roomId10
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  Returns current users for rooms ids
     			</p>
     			<p>
                   Return Type: org.openmeetings.axis.services.RoomCountBean[]
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -458,27 +727,36 @@ limitations under the License.
                      <td valign="top"></th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="getRoomById"><b>getRoomById (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getRoomById" ><b>getRoomById (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   long rooms_id
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  returns a conference room object
     			</p>
     			<p>
                   Return Type: org.openmeetings.app.persistence.beans.rooms.Rooms
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -495,27 +773,36 @@ limitations under the License.
                      <td valign="top">the room id</th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="getRoomWithCurrentUsersById"><b>getRoomWithCurrentUsersById (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getRoomWithCurrentUsersById" ><b>getRoomWithCurrentUsersById (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   long rooms_id
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  
     			</p>
     			<p>
                   Return Type: org.openmeetings.app.persistence.beans.rooms.Rooms
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -532,27 +819,36 @@ limitations under the License.
                      <td valign="top"></th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="getRoomWithClientObjectsById"><b>getRoomWithClientObjectsById (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getRoomWithClientObjectsById" ><b>getRoomWithClientObjectsById (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   long rooms_id
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  Returns a object of type RoomReturn
     			</p>
     			<p>
                   Return Type: org.openmeetings.axis.services.RoomReturn
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -569,9 +865,13 @@ limitations under the License.
                      <td valign="top"></th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="getRooms"><b>getRooms (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getRooms" ><b>getRooms (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   int start
@@ -583,6 +883,8 @@ limitations under the License.
     			       			   boolean asc
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  Returns a List of Objects of Rooms You can use "name" as value for
  orderby or rooms_id
@@ -590,13 +892,16 @@ limitations under the License.
     			<p>
                   Return Type: org.openmeetings.app.data.beans.basic.SearchResult
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -637,9 +942,13 @@ limitations under the License.
                      <td valign="top">Asc or Desc sort ordering</th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="getRoomsWithCurrentUsers"><b>getRoomsWithCurrentUsers (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getRoomsWithCurrentUsers" ><b>getRoomsWithCurrentUsers (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   int start
@@ -651,6 +960,8 @@ limitations under the License.
     			       			   boolean asc
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  Returns a List of Objects of Rooms You can use "name" as value for
  orderby or rooms_id. It also fills the attribute currentUsers in the
@@ -659,13 +970,16 @@ limitations under the License.
     			<p>
                   Return Type: org.openmeetings.app.data.beans.basic.SearchResult
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -706,9 +1020,13 @@ limitations under the License.
                      <td valign="top">Asc or Desc sort ordering</th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="addRoom"><b>addRoom (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="addRoom" ><b>addRoom (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   String name
@@ -752,6 +1070,8 @@ limitations under the License.
     			       			   Integer filesPanelWidth
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  TODO: Fix Organization Issue
  
@@ -760,13 +1080,16 @@ limitations under the License.
     			<p>
                   Return Type: java.lang.Long
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -935,9 +1258,13 @@ limitations under the License.
                      <td valign="top"></th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="addRoomWithModeration"><b>addRoomWithModeration (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="addRoomWithModeration" ><b>addRoomWithModeration (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   String name
@@ -959,19 +1286,24 @@ limitations under the License.
     			       			   Boolean isModeratedRoom
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  Create a conference room
     			</p>
     			<p>
                   Return Type: java.lang.Long
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -1057,9 +1389,13 @@ limitations under the License.
             set a user as default Moderator</th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="addRoomWithModerationAndQuestions"><b>addRoomWithModerationAndQuestions (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="addRoomWithModerationAndQuestions" ><b>addRoomWithModerationAndQuestions (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   String name
@@ -1083,6 +1419,8 @@ limitations under the License.
     			       			   Boolean allowUserQuestions
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  this SOAP Method has an additional param to enable or disable the buttons
  to apply for moderation this does only work in combination with the
@@ -1091,13 +1429,16 @@ limitations under the License.
     			<p>
                   Return Type: java.lang.Long
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -1192,9 +1533,13 @@ limitations under the License.
             moderation</th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="addRoomWithModerationQuestionsAndAudioType"><b>addRoomWithModerationQuestionsAndAudioType (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="addRoomWithModerationQuestionsAndAudioType" ><b>addRoomWithModerationQuestionsAndAudioType (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   String name
@@ -1220,19 +1565,24 @@ limitations under the License.
     			       			   Boolean isAudioOnly
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
-    			  
+    			  adds a new room with options for user questions and audio only
     			</p>
     			<p>
                   Return Type: java.lang.Long
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -1335,9 +1685,13 @@ limitations under the License.
                      <td valign="top">enable or disable the video / or audio-only</th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="getRoomIdByExternalId"><b>getRoomIdByExternalId (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getRoomIdByExternalId" ><b>getRoomIdByExternalId (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   String name
@@ -1363,6 +1717,8 @@ limitations under the License.
     			       			   String externalRoomType
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  Checks if a room with this exteralRoomId + externalRoomType does exist,
  if yes it returns the room id if not, it will create the room and then
@@ -1371,13 +1727,16 @@ limitations under the License.
     			<p>
                   Return Type: java.lang.Long
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -1481,9 +1840,13 @@ limitations under the License.
             example "moodle"</th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="updateRoom"><b>updateRoom (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="updateRoom" ><b>updateRoom (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   Long rooms_id
@@ -1531,19 +1894,24 @@ limitations under the License.
     			       			   Boolean appointment
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  TODO: Fix Organization Issue deprecated use updateRoomWithModeration
     			</p>
     			<p>
                   Return Type: java.lang.Long
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -1720,9 +2088,13 @@ limitations under the License.
                      <td valign="top"></th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="updateRoomWithModeration"><b>updateRoomWithModeration (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="updateRoomWithModeration" ><b>updateRoomWithModeration (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   Long room_id
@@ -1746,19 +2118,24 @@ limitations under the License.
     			       			   Boolean isModeratedRoom
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  Updates a conference room by its room id
     			</p>
     			<p>
                   Return Type: java.lang.Long
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -1852,9 +2229,13 @@ limitations under the License.
             to set a user as default Moderator</th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="updateRoomWithModerationAndQuestions"><b>updateRoomWithModerationAndQuestions (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="updateRoomWithModerationAndQuestions" ><b>updateRoomWithModerationAndQuestions (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   Long room_id
@@ -1880,19 +2261,24 @@ limitations under the License.
     			       			   Boolean allowUserQuestions
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  
     			</p>
     			<p>
                   Return Type: java.lang.Long
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -1995,27 +2381,36 @@ limitations under the License.
             moderation</th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="deleteRoom"><b>deleteRoom (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="deleteRoom" ><b>deleteRoom (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   long rooms_id
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  Delete a room by its room id
     			</p>
     			<p>
                   Return Type: java.lang.Long
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -2032,27 +2427,36 @@ limitations under the License.
                      <td valign="top"></th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="kickUser"><b>kickUser (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="kickUser" ><b>kickUser (
     			    			    			       			   String SID_Admin
     			       			    			       			     , 
     			       			   Long room_id
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  kick all uses of a certain room
     			</p>
     			<p>
                   Return Type: java.lang.Boolean
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -2069,9 +2473,13 @@ limitations under the License.
                      <td valign="top">the room id</th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="addRoomWithModerationAndExternalType"><b>addRoomWithModerationAndExternalType (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="addRoomWithModerationAndExternalType" ><b>addRoomWithModerationAndExternalType (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   String name
@@ -2095,6 +2503,8 @@ limitations under the License.
     			       			   String externalRoomType
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  Add a new conference room with option to set the external room type, the
  external room type should be set if multiple applications use the same
@@ -2103,13 +2513,16 @@ limitations under the License.
     			<p>
                   Return Type: java.lang.Long
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -2204,9 +2617,13 @@ limitations under the License.
             external systems using same OpenMeetings instance)</th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="addRoomWithModerationExternalTypeAndAudioType"><b>addRoomWithModerationExternalTypeAndAudioType (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="addRoomWithModerationExternalTypeAndAudioType" ><b>addRoomWithModerationExternalTypeAndAudioType (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   String name
@@ -2234,19 +2651,24 @@ limitations under the License.
     			       			   Boolean isAudioOnly
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  Adds a new room with options for audio only
     			</p>
     			<p>
                   Return Type: java.lang.Long
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -2358,9 +2780,13 @@ limitations under the License.
                      <td valign="top">enable or disable the video / or audio-only</th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="addRoomWithModerationAndRecordingFlags"><b>addRoomWithModerationAndRecordingFlags (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="addRoomWithModerationAndRecordingFlags" ><b>addRoomWithModerationAndRecordingFlags (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   String name
@@ -2392,19 +2818,24 @@ limitations under the License.
     			       			   Boolean allowRecording
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  Adds a new room with options for recording
     			</p>
     			<p>
                   Return Type: java.lang.Long
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -2533,9 +2964,13 @@ limitations under the License.
                      <td valign="top">if the recording option is available or not</th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="addRoomWithModerationExternalTypeAndTopBarOption"><b>addRoomWithModerationExternalTypeAndTopBarOption (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="addRoomWithModerationExternalTypeAndTopBarOption" ><b>addRoomWithModerationExternalTypeAndTopBarOption (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   String name
@@ -2569,6 +3004,8 @@ limitations under the License.
     			       			   Boolean hideTopBar
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  Add a conference room with options to disable the top menu bar in the
  conference room
@@ -2576,13 +3013,16 @@ limitations under the License.
     			<p>
                   Return Type: java.lang.Long
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -2719,9 +3159,13 @@ limitations under the License.
                      <td valign="top">if the top bar in the conference room is visible or not</th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="getInvitationHash"><b>getInvitationHash (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getInvitationHash" ><b>getInvitationHash (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   String username
@@ -2743,6 +3187,8 @@ limitations under the License.
     			       			   String validToTime
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  Create a Invitation hash and optionally send it by mail the From to Date
  is as String as some SOAP libraries do not accept Date Objects in SOAP
@@ -2752,13 +3198,16 @@ limitations under the License.
     			<p>
                   Return Type: java.lang.String
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -2844,9 +3293,13 @@ limitations under the License.
                      <td valign="top">time in Format of hh:mm only of interest if valid is type 2</th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="sendInvitationHash"><b>sendInvitationHash (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="sendInvitationHash" ><b>sendInvitationHash (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   String username
@@ -2882,6 +3335,8 @@ limitations under the License.
     			       			   Boolean sendMail
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  Create a Invitation hash and optionally send it by mail the From to Date
  is as String as some SOAP libraries do not accept Date Objects in SOAP
@@ -2891,13 +3346,16 @@ limitations under the License.
     			<p>
                   Return Type: java.lang.String
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -3044,9 +3502,13 @@ limitations under the License.
             to the email</th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="sendInvitationHashWithDateObject"><b>sendInvitationHashWithDateObject (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="sendInvitationHashWithDateObject" ><b>sendInvitationHashWithDateObject (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   String username
@@ -3078,6 +3540,8 @@ limitations under the License.
     			       			   Boolean sendMail
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  Create a Invitation hash and optionally send it by mail the From to Date
  is as String as some SOAP libraries do not accept Date Objects in SOAP
@@ -3087,13 +3551,16 @@ limitations under the License.
     			<p>
                   Return Type: java.lang.String
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -3222,9 +3689,13 @@ limitations under the License.
             to the email</th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="getRoomsWithCurrentUsersByList"><b>getRoomsWithCurrentUsersByList (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getRoomsWithCurrentUsersByList" ><b>getRoomsWithCurrentUsersByList (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   int start
@@ -3236,6 +3707,8 @@ limitations under the License.
     			       			   boolean asc
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  Return a RoomReturn Object with information of the current users of a
  conference room
@@ -3243,13 +3716,16 @@ limitations under the License.
     			<p>
                   Return Type: java.util.List
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -3290,9 +3766,13 @@ limitations under the License.
                      <td valign="top">Asc or Desc sort ordering</th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="getRoomsWithCurrentUsersByListAndType"><b>getRoomsWithCurrentUsersByListAndType (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getRoomsWithCurrentUsersByListAndType" ><b>getRoomsWithCurrentUsersByListAndType (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   int start
@@ -3306,6 +3786,8 @@ limitations under the License.
     			       			   String externalRoomType
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  Return a RoomReturn Object with information of the current users of a
  conference room with option to search for special external room types
@@ -3313,13 +3795,16 @@ limitations under the License.
     			<p>
                   Return Type: java.util.List
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -3368,9 +3853,13 @@ limitations under the License.
                      <td valign="top">the external room type</th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="addRoomWithModerationAndExternalTypeAndStartEnd"><b>addRoomWithModerationAndExternalTypeAndStartEnd (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="addRoomWithModerationAndExternalTypeAndStartEnd" ><b>addRoomWithModerationAndExternalTypeAndStartEnd (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   String name
@@ -3410,19 +3899,24 @@ limitations under the License.
     			       			   String redirectURL
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  Adds a conference room that is only available for a period of time
     			</p>
     			<p>
                   Return Type: java.lang.Long
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -3582,9 +4076,13 @@ limitations under the License.
                      <td valign="top">URL Users will be lead to if the Conference Time is elapsed</th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="addMeetingMemberRemindToRoom"><b>addMeetingMemberRemindToRoom (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="addMeetingMemberRemindToRoom" ><b>addMeetingMemberRemindToRoom (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   Long room_id
@@ -3600,6 +4098,8 @@ limitations under the License.
     			       			   Long language_id
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  Add a meeting member to a certain room. This is the same as adding an
  external user to a event in the calendar.
@@ -3607,13 +4107,16 @@ limitations under the License.
     			<p>
                   Return Type: java.lang.Long
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -3672,9 +4175,13 @@ limitations under the License.
             meeting member</th>
                    </tr>
                    
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="addExternalMeetingMemberRemindToRoom"><b>addExternalMeetingMemberRemindToRoom (
+                                                         </tbody>
+    			</table>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="addExternalMeetingMemberRemindToRoom" ><b>addExternalMeetingMemberRemindToRoom (
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   Long room_id
@@ -3694,6 +4201,8 @@ limitations under the License.
     			       			   String invitorName
     			       			    			)
     			</b></a>
+    			</div>
+    			</div>
     			<p>
     			  Add a meeting member to a certain room. This is the same as adding an
  external user to a event in the calendar. with a certain time zone
@@ -3701,13 +4210,16 @@ limitations under the License.
     			<p>
                   Return Type: java.lang.Long
                 </p>
-    			
-    			<table style="margin-left:20px">
+    			<p>Params:</p>
+    			<table rules="all" border="1">
+    			   <thead>
     			   <tr>
     			     <th width="200" align="left">Type</th>
     			     <th width="200" align="left">Fieldname</th>
     			     <th width="400" align="left">Description</th>
     			   </tr>
+    			   </thead>
+    			   <tbody>
     			       			       			   <tr>
                      <td valign="top">
                        String
@@ -3716,104 +4228,4 @@ limitations under the License.
                      <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
                    </tr>
                    
-                                          			   <tr>
-                     <td valign="top">
-                       Long
-                     </th>
-                     <td valign="top">room_id</th>
-                     <td valign="top">The Room Id the meeting member is going to be added</th>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                       String
-                     </th>
-                     <td valign="top">firstname</th>
-                     <td valign="top">The first name of the meeting member</th>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                       String
-                     </th>
-                     <td valign="top">lastname</th>
-                     <td valign="top">The last name of the meeting member</th>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                       String
-                     </th>
-                     <td valign="top">email</th>
-                     <td valign="top">The email of the Meeting member</th>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                       String
-                     </th>
-                     <td valign="top">baseUrl</th>
-                     <td valign="top">The baseUrl, this is important to send the correct link in the
-            invitation to the meeting member</th>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                       Long
-                     </th>
-                     <td valign="top">language_id</th>
-                     <td valign="top">The ID of the language, for the email that is send to the
-            meeting member</th>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                       String
-                     </th>
-                     <td valign="top">jNameTimeZone</th>
-                     <td valign="top">name of the timezone</th>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                       String
-                     </th>
-                     <td valign="top">invitorName</th>
-                     <td valign="top">name of invitation creators</th>
-                   </tr>
-                   
-                                          			</table>
-    	   				        		    <hr width="100%" />
-    			<a name="closeRoom"><b>closeRoom (
-    			    			    			       			   String SID
-    			       			    			       			     , 
-    			       			   Long room_id
-    			       			    			       			     , 
-    			       			   Boolean status
-    			       			    			)
-    			</b></a>
-    			<p>
-    			  Method to remotely close or open rooms. If a room is closed all users
- inside the room and all users that try to enter it will be redirected to
- the redirectURL that is defined in the Room-Object.
- 
- Returns positive value if authentication was successful.
-    			</p>
-    			<p>
-                  Return Type: int
-                </p>
-    			
-    			<table style="margin-left:20px">
-    			   <tr>
-    			     <th width="200" align="left">Type</th>
-    			     <th width="200" align="left">Fieldname</th>
-    			     <th width="400" align="left">Description</th>
-    			   </tr>
-    			       			       			   <tr>
-                     <td valign="top">
-                       String
-                     </th>
-                     <td valign="top">SID</th>
-                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
-                   </tr>
-         
+  
