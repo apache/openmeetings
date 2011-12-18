@@ -29,7 +29,7 @@ limitations under the License.
             <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
 
                                                     <meta name="author" value="
-			Sebastian Wagner
+			OpenMeetings Team
 		">
             <meta name="email" value="sebawagner@apache.org">
             
@@ -333,13 +333,161 @@ limitations under the License.
                                                                     <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="Introduction"><strong>Introduction</strong></a>
+          <a name="OpenMeetings Installation"><strong>OpenMeetings Installation</strong></a>
           <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
         </font>
       </td></tr>
       <tr><td>
         <blockquote>
-                                    <p> For a detailed instruction which services, methods and params are available see the list in the SoapMethods. ALL methods that are implemented for the SOAP API are also available via REST. 
+                                    <p>
+				To update from past versions or migrate see
+				<a href="Upgrade.html">Upgrade</a>
+				.
+				If you are looking for commercial help you might contact
+				<a href="http://www.openmeetings.de" target="_BLANK" rel="nofollow">openmeetings.de
+				</a>
+			</p>
+                                                <p>
+				<a href="downloads.html" rel="nofollow">
+					<img src="images/installation_instructions.png" alt="Grafik" />
+				</a>
+			</p>
+                                                <ol>
+				<li>
+					<b>Recommendation for production environment</b>
+					<div style="margin-top: 10px; margin-bottom:10px">
+						By default OpenMeetings uses the integrated Apache Derby database.
+						For production environment you should consider using
+						<a href="MySQLConfig.html">MySQL</a>
+						,
+						<a href="/PostgresConfig.html">Postgres</a>
+						, or for example
+						<a href="IBMDB2Config.html">IBM DB2</a>
+						, or
+						<a href="OracleConfig.html">Oracle</a>
+					</div>
+				</li>
+				<li>
+					<b>Enabling Image Upload and import to whiteboard</b>
+					<div style="margin-top: 10px; margin-bottom:10px">
+						Install
+						<b>ImageMagick</b>
+						on the server, you can get more information on
+						<a href="http://www.imagemagick.org" rel="nofollow" target="_BLANK">http://www.imagemagick.org
+						</a>
+						regarding installation. The instructions
+						for installation can be
+						found there
+						<a href="http://www.imagemagick.org/script/binary-releases.php" target="_BLANK" rel="nofollow">http://www.imagemagick.org/script/binary-releases.php
+						</a>
+						,
+						however on
+						most Linux systems you can get it via your favorite
+						package
+						managers (apt-get it)
+					</div>
+				</li>
+				<li>
+					<b>Enabling import of PDFs into whiteboard</b>
+					<div style="margin-top: 10px; margin-bottom:10px">
+						<ul>
+							<li>
+								Install
+								<b>GhostScript</b>
+								on the server, you can get more
+								information on
+								<a href="http://pages.cs.wisc.edu/~ghost/" target="_BLANK" rel="nofollow">
+									http://pages.cs.wisc.edu/~ghost/
+								</a>
+								regarding
+								installation. The instructions for installation can be
+								found
+								there, however on most Linux systems you can get it via
+								your
+								favorite package managers (apt-get it).
+							</li>
+							<li>
+								Install
+								<b>SWFTools</b>
+								on the server, you can get more information
+								on
+								<a href="http://www.swftools.org/" target="_BLANK" rel="nofollow">http://www.swftools.org/
+								</a>
+								regarding installation. Some of the
+								Linux distributions already
+								have it in there package manager (see
+								<a href="http://packages.debian.org/unstable/utils/swftools" target="_BLANK" rel="nofollow">http://packages.debian.org/unstable/utils/swftools
+								</a>
+								), the
+								recommended version of SWFTools is 0.9 as prior version
+								have a
+								bug that does lead to wrong object dimensions at
+								whiteboard
+							</li>
+						</ul>
+					</div>
+				</li>
+				<li>
+					<b>Enabling import of .doc, .docx, .ppt, .pptx, ... all Office
+						Documents into whitebaord
+					</b>
+					<div style="margin-top: 10px; margin-bottom:10px">
+						<b>OpenOffice-Service</b>
+						started and listening on port 8100, see
+						OpenOfficeConverter for
+						details
+					</div>
+				</li>
+				<li>
+					<b>Enabling Recording and import of .avi, .flv, .mov and .mp4 into
+						whiteboard
+					</b>
+					<div style="margin-top: 10px; margin-bottom:10px">
+						<ul>
+							<li>
+								Install
+								<b>FFMpeg</b>
+								. You should get FFMPEG in an up to date copy!
+								For
+								Windows you can
+								download a Build for example from
+								<a href="http://ffmpeg.zeranoe.com/builds/" target="_BLANK" rel="nofollow">http://ffmpeg.zeranoe.com/builds/ </a>
+								Linux or OSx Users should be
+								able to use one of the various
+								Installation Instructions on the
+								Web. You need to enable
+								libmp3lame!
+							</li>
+							<li>
+								Install
+								<b>SoX</b>
+								<a href="http://sox.sourceforge.net/" target="_BLANK" rel="nofollow">http://sox.sourceforge.net/
+								</a>
+								. You should install SoX in a up
+								to date copy! SoX 12.xx will NOT
+								work!
+							</li>
+						</ul>
+					</div>
+				</li>
+			</ol>
+                            </blockquote>
+        </p>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td ><!-- bgcolor="#EEEEEE" -->
+        <font color="#000000" face="verdana,arial,helvetica,sanserif">
+          <a name="Ports, NAT Settings, Customize"><strong>Ports, NAT Settings, Customize</strong></a>
+          <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
+        </font>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <p>
+				See
+				<a href="PPortSettings.html">PortSettings</a>
 			</p>
                             </blockquote>
         </p>
@@ -349,54 +497,194 @@ limitations under the License.
                                                 <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="How to invoke Services via REST"><strong>How to invoke Services via REST</strong></a>
+          <a name="VMWare"><strong>VMWare</strong></a>
           <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
         </font>
       </td></tr>
       <tr><td>
         <blockquote>
-                                    <p>For example for the method getSession in the UserService, you would use this URL via REST:
-			</p>
-                                                <p>Sample URL: </p>
-                                                <a href="http://demo.openmeetings.de/openmeetings/services/UserService/getSession">http://demo.openmeetings.de/openmeetings/services/UserService/getSession</a>
-                                                <p>Result: </p>
-                                                <div class="xmlcode">
-				&lt;ns:getSessionResponse&gt;<br />
-				&lt;ns:return type="org.openmeetings.app.hibernate.beans.basic.Sessiondata"&gt;<br />
-				??&lt;ax219:id&gt;156971&lt;/ax219:id&gt;<br />
-				??&lt;ax219:language_id xsi:nil="true"/&gt;<br />
-				??&lt;ax219:organization_id xsi:nil="true"/&gt;<br />
-				??&lt;ax219:refresh_time&gt;2011-07-03T14:40:44.000Z&lt;/ax219:refresh_time&gt;<br />
-				??&lt;ax219:sessionXml xsi:nil="true"/&gt;<br />
-				??&lt;ax219:session_id&gt;26584705202d7c1de6cc8e7e28890e3d&lt;/ax219:session_id&gt;<br />
-				??&lt;ax219:starttermin_time&gt;2011-07-03T14:40:44.000Z&lt;/ax219:starttermin_time&gt;<br />
-				??&lt;ax219:storePermanent xsi:nil="true"/&gt;<br />
-				??&lt;ax219:user_id xsi:nil="true"/&gt;<br />
-				&lt;/ns:return&gt;<br />
-				&lt;/ns:getSessionResponse&gt;<br />
-			</div>
-                                                <p>To login a user the call to auth would be:</p>
-                                                <p>Sample URL: </p>
-                                                <a href="http://demo.openmeetings.de/openmeetings/services/UserService/loginUser?SID=26584705202d7c1de6cc8e7e28890e3d&amp;username=hans&amp;userpass=test">http://demo.openmeetings.de/openmeetings/services/UserService/loginUser?SID=26584705202d7c1de6cc8e7e28890e3d&amp;username=han&amp;userpass=test</a>
-                                                <p>Result: </p>
-                                                <div class="xmlcode">
-				&lt;ns:loginUserResponse&gt;<br />
-				??&lt;ns:return&gt;-11&lt;/ns:return&gt;<br />
-				&lt;/ns:loginUserResponse&gt;<br />
-			</div>
-                                                <p>=&gt; It does return -10, which is the error id cause we will not write down a SOAP login to our public server in this wiki. However the correct way to check this error would be to invoke the call to get the localized error message. So we invoke the method to get the error via REST:</p>
-                                                <p>Sample URL: </p>
-                                                <a href="http://demo.openmeetings.de/openmeetings/services/UserService/getErrorByCode?SID=26584705202d7c1de6cc8e7e28890e3d&amp;errorid=-10&amp;language_id=1">http://demo.openmeetings.de/openmeetings/services/UserService/getErrorByCode?SID=26584705202d7c1de6cc8e7e28890e3d&amp;errorid=-10&amp;language_id=1</a>
-                                                <p>Result:</p>
-                                                <div class="xmlcode">
-				&lt;ns:getErrorByCodeResponse&gt;<br />
-				&lt;ns:return type="org.openmeetings.app.data.beans.basic.ErrorResult"&gt;<br />
-				??&lt;ax218:errmessage&gt;Username not found&lt;/ax218:errmessage&gt;<br />
-				??&lt;ax218:errorId&gt;-10&lt;/ax218:errorId&gt;<br />
-				??&lt;ax218:errortype&gt;Error&lt;/ax218:errortype&gt;<br />
-				&lt;/ns:return&gt;<br />
-				&lt;/ns:getErrorByCodeResponse&gt;<br />
-			</div>
+                                    <ul>
+				<li>
+					See
+					<a href="http://nightly.openmeetings.de/openmeetings/builds/vmware/" rel="nofollow">http://nightly.openmeetings.de/openmeetings/builds/vmware/</a>
+				</li>
+				<li>
+					VMWare 1.6.1
+					<a href="http://openstudio.no-ip.info/2011/01/openmeetings-1-6-rc1-vmware-appliance-using-ubuntu-server-10-04-lts/" rel="nofollow">blog-entry</a>
+				</li>
+				<li>
+					<a href="/p/openmeetings/wiki/VMWareImageDebian051">VMWareImageDebian051</a>
+				</li>
+				<li>
+					<a href="/p/openmeetings/wiki/VMWareImageMoodlePackOM052">VMWareImageMoodlePackOM052</a>
+				</li>
+				<li>
+					<a href="/p/openmeetings/wiki/VMImageRev2056">VMImageRev2056</a>
+				</li>
+				<li>
+					<a href="/p/openmeetings/wiki/VMWareImageRunningOpenmeetingsV1_0RC1">VMWareImageRunningOpenmeetingsV1_0RC1</a>
+				</li>
+			</ul>
+                            </blockquote>
+        </p>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td ><!-- bgcolor="#EEEEEE" -->
+        <font color="#000000" face="verdana,arial,helvetica,sanserif">
+          <a name="Hardware Requirements"><strong>Hardware Requirements</strong></a>
+          <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
+        </font>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <ul>
+				<li>
+					Minimalistic requirement (without Document Converters, Recorder and
+					Upload feature) 1GHz CPU 1 GB RAM (
+					<i>server-side</i>
+					)
+				</li>
+				<li>
+					Recommended requirement 2x/4x 2GHz ++ CPU (32 or 64Bit) 4GB RAM. If
+					you have a 64Bit Operating System check if there is a OpenOffice
+					64Bit Version
+					<a href="http://download.openoffice.org/other.html#de" rel="nofollow">available
+						for your OS
+					</a>
+					(
+					<i>server-side</i>
+					)
+				</li>
+				<li>
+					Headset/Microphone recommendation: Logitech ClearChat PC Wireless,
+					for example from
+					<a href="http://www.amazon.de/Logitech-ClearChat-kabelloser-Kopfh%C3%B6rer-Transmitter/dp/B00166WSN4" rel="nofollow">Amazon</a>
+					or
+					<a href="http://shop.ebay.com/i.html?_nkw=Logitech+ClearChat.+Wireless&amp;_sacat=0&amp;_trksid=p3286.m270.l1313&amp;LH_BIN=1&amp;LH_IncludeSIF=1&amp;_odkw=Logitech+ClearChat+PC&amp;_osacat=0" rel="nofollow">EBay Auctions</a>
+					(
+					<i>cient-side</i>
+					).
+					<a href="/p/openmeetings/wiki/RecommendedHardwareList">See all recommendations</a>
+					for cameras, headsets and speakerphones.
+				</li>
+			</ul>
+                            </blockquote>
+        </p>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td ><!-- bgcolor="#EEEEEE" -->
+        <font color="#000000" face="verdana,arial,helvetica,sanserif">
+          <a name="Debian, Links, Changelog, VoIP"><strong>Debian, Links, Changelog, VoIP</strong></a>
+          <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
+        </font>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <ul>
+				<li>
+					for VoIP and SIP Integration see also
+					<a href="/p/openmeetings/wiki/VoIPAndSIP">VoIPAndSIP</a>
+				</li>
+				<li>
+					<a href="/p/openmeetings/wiki/MeetingsLive">Ubuntu Live DVD</a>
+					<a href="/p/openmeetings/wiki/MeetingsLive">MeetingsLive</a>
+					<a href="http://meetingslive.sourceforge.net/" rel="nofollow">http://meetingslive.sourceforge.net/
+					</a>
+				</li>
+				<li>
+					<a href="/p/openmeetings/wiki/InstallationCentOS5">Installation on CentOS 5</a>
+				</li>
+				<li>
+					<a href="/p/openmeetings/wiki/InstallationRHELS">Installation on RHELS 5.6</a>
+				</li>
+				<li>
+					<a href="/p/openmeetings/wiki/OpenmeetingsEnUbuntu">Instalar Openmeetings en Ubuntu 10.04 (Spanish)</a>
+				</li>
+				<li>
+					<a href="/p/openmeetings/wiki/UbuntuLucidLTS">Install openmeetings on Ubuntu 10.04 LTS</a>
+				</li>
+				<li>
+					<a href="http://liberamemoria.blogspot.com/2009/02/instalando-openmeetings-07-rc-2-en.html" rel="nofollow">Espanol Version for Debian Installation</a>
+				</li>
+				<li>
+					<a href="http://aitinet.com/blog/wp-content/uploads/2009/08/TUTORIAL-PARA-INSTALACAO-DO-RED5-E-OPENMEETINGS-NO-LINUX-DEBIAN-LENNY-51.pdf" rel="nofollow">Portuguese Version for Debian Installation of 0.9 RC1</a>
+				</li>
+				<li>
+					<a href="http://marc-muehlfeld.de/openmeetings/" rel="nofollow">CentOS
+						Installation Tutorial von Marc Mühlfeld
+					</a>
+				</li>
+				<li>
+					<a href="http://code.google.com/p/openmeetings/wiki/Automatic_script_installation_for_Debian" rel="nofollow">Automatic script installation for Debian</a>
+				</li>
+				<li>
+					<a href="/p/openmeetings/wiki/InstallationDebian">InstallationDebian</a>
+				</li>
+				<li>
+					<a href="/p/openmeetings/wiki/qosTips">qosTips</a>
+				</li>
+				<li>
+					French version of Installation Instructions:
+					<a href="http://flash.54n.free.fr/?/Root/Debian/OpenMeetings-Installation" rel="nofollow">http://flash.54n.free.fr/?/Root/Debian/OpenMeetings-Installation
+					</a>
+				</li>
+			</ul>
+                            </blockquote>
+        </p>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td ><!-- bgcolor="#EEEEEE" -->
+        <font color="#000000" face="verdana,arial,helvetica,sanserif">
+          <a name="Tips and Tricks"><strong>Tips and Tricks</strong></a>
+          <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
+        </font>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <ul>
+				<li>
+					Use the Debug-Application: Enter in your browser
+					<a href="http://$RED-HOST:$RED5-PORT/openmeetings/maindebug.lzx.lzr=swf8.swf" rel="nofollow">http://$RED-HOST:$RED5-PORT/openmeetings/maindebug.lzx.lzr=swf8.swf
+					</a>
+					for example
+					<a href="http://localhost:5080/openmeetings/maindebug.lzx.lzr=swf8.swf" rel="nofollow">http://localhost:5080/openmeetings/maindebug.lzx.lzr=swf8.swf
+					</a>
+				</li>
+				<li>If you have Problems with conversion-jobs check your Red5-Log
+					output. There will be error Messages which help you. You must
+					install OpenOffice, ImageMagick, GhostScript and SWFTools to run
+					all conversion-Jobs correctly.
+				</li>
+				<li>if you have problems in converting Files check the Batch-Scripts
+					in $OPENMEETINGS_HOME/jod
+				</li>
+				<li>
+					If you want to use red5 as a service (without red5.bat), you need
+					to move red5\wrapper\wrapper.exe to red5\wrapper.exe. Then change
+					some path in conf\wrapper.conf (like ..\lib\foo.jar to
+					lib\foo.jar). And finally change the register key in
+					HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet
+					<a href="/p/openmeetings/w/edit/CurrentControlSet">?</a>
+					\Services\Red5\ImagePath
+					<a href="/p/openmeetings/w/edit/ImagePath">?</a>
+					to point to the new wrapper.
+				</li>
+				<li>
+					you can query a Mysql Database to get the schema_collection by
+					using this query:
+					<div class="xmlcode">
+						SELECT Table_name, TABLE_COLLATION FROM
+						information_schema.tables WHERE table_schema = 'openmeetings'
+						ORDER BY table_name DESC
+					</div>
+				</li>
+			</ul>
                             </blockquote>
         </p>
       </td></tr>

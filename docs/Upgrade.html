@@ -29,7 +29,7 @@ limitations under the License.
             <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
 
                                                     <meta name="author" value="
-			Sebastian Wagner
+			OpenMeetings Team
 		">
             <meta name="email" value="sebawagner@apache.org">
             
@@ -39,7 +39,7 @@ limitations under the License.
             
             
             
-            <title>Apache OpenMeetings - Home</title>
+            <title>Apache OpenMeetings - Upgrade</title>
             <link rel="stylesheet" type="text/css" href="css/openmeetings.css">
         </head>
 
@@ -333,70 +333,25 @@ limitations under the License.
                                                                     <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="Introduction"><strong>Introduction</strong></a>
+          <a name="Upgrading OpenMeetings"><strong>Upgrading OpenMeetings</strong></a>
           <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
         </font>
       </td></tr>
       <tr><td>
         <blockquote>
-                                    <p> For a detailed instruction which services, methods and params are available see the list in the SoapMethods. ALL methods that are implemented for the SOAP API are also available via REST. 
+                                    <p>There is a System Backup and Import tool. Login as Administrator
+				and Goto &gt; Backup
 			</p>
-                            </blockquote>
-        </p>
-      </td></tr>
-      <tr><td><br/></td></tr>
-    </table>
-                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr><td ><!-- bgcolor="#EEEEEE" -->
-        <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="How to invoke Services via REST"><strong>How to invoke Services via REST</strong></a>
-          <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
-        </font>
-      </td></tr>
-      <tr><td>
-        <blockquote>
-                                    <p>For example for the method getSession in the UserService, you would use this URL via REST:
+                                                <img src="./images/system_backup.png" width="" height="" align="">
+                                                <p>
+				The Text in the Administration&gt;Backup section actually just says it
+				all. The backup contains users, rooms, organizations and
+				appointements (Invitations and Reminders are NOT included in the
+				Backup and Reminders will not be send again!). The Backup contains
+				also all uploaded Files and Documents and will re-import them again.
+
+				Max Upload Size is 1000 MB.
 			</p>
-                                                <p>Sample URL: </p>
-                                                <a href="http://demo.openmeetings.de/openmeetings/services/UserService/getSession">http://demo.openmeetings.de/openmeetings/services/UserService/getSession</a>
-                                                <p>Result: </p>
-                                                <div class="xmlcode">
-				&lt;ns:getSessionResponse&gt;<br />
-				&lt;ns:return type="org.openmeetings.app.hibernate.beans.basic.Sessiondata"&gt;<br />
-				??&lt;ax219:id&gt;156971&lt;/ax219:id&gt;<br />
-				??&lt;ax219:language_id xsi:nil="true"/&gt;<br />
-				??&lt;ax219:organization_id xsi:nil="true"/&gt;<br />
-				??&lt;ax219:refresh_time&gt;2011-07-03T14:40:44.000Z&lt;/ax219:refresh_time&gt;<br />
-				??&lt;ax219:sessionXml xsi:nil="true"/&gt;<br />
-				??&lt;ax219:session_id&gt;26584705202d7c1de6cc8e7e28890e3d&lt;/ax219:session_id&gt;<br />
-				??&lt;ax219:starttermin_time&gt;2011-07-03T14:40:44.000Z&lt;/ax219:starttermin_time&gt;<br />
-				??&lt;ax219:storePermanent xsi:nil="true"/&gt;<br />
-				??&lt;ax219:user_id xsi:nil="true"/&gt;<br />
-				&lt;/ns:return&gt;<br />
-				&lt;/ns:getSessionResponse&gt;<br />
-			</div>
-                                                <p>To login a user the call to auth would be:</p>
-                                                <p>Sample URL: </p>
-                                                <a href="http://demo.openmeetings.de/openmeetings/services/UserService/loginUser?SID=26584705202d7c1de6cc8e7e28890e3d&amp;username=hans&amp;userpass=test">http://demo.openmeetings.de/openmeetings/services/UserService/loginUser?SID=26584705202d7c1de6cc8e7e28890e3d&amp;username=han&amp;userpass=test</a>
-                                                <p>Result: </p>
-                                                <div class="xmlcode">
-				&lt;ns:loginUserResponse&gt;<br />
-				??&lt;ns:return&gt;-11&lt;/ns:return&gt;<br />
-				&lt;/ns:loginUserResponse&gt;<br />
-			</div>
-                                                <p>=&gt; It does return -10, which is the error id cause we will not write down a SOAP login to our public server in this wiki. However the correct way to check this error would be to invoke the call to get the localized error message. So we invoke the method to get the error via REST:</p>
-                                                <p>Sample URL: </p>
-                                                <a href="http://demo.openmeetings.de/openmeetings/services/UserService/getErrorByCode?SID=26584705202d7c1de6cc8e7e28890e3d&amp;errorid=-10&amp;language_id=1">http://demo.openmeetings.de/openmeetings/services/UserService/getErrorByCode?SID=26584705202d7c1de6cc8e7e28890e3d&amp;errorid=-10&amp;language_id=1</a>
-                                                <p>Result:</p>
-                                                <div class="xmlcode">
-				&lt;ns:getErrorByCodeResponse&gt;<br />
-				&lt;ns:return type="org.openmeetings.app.data.beans.basic.ErrorResult"&gt;<br />
-				??&lt;ax218:errmessage&gt;Username not found&lt;/ax218:errmessage&gt;<br />
-				??&lt;ax218:errorId&gt;-10&lt;/ax218:errorId&gt;<br />
-				??&lt;ax218:errortype&gt;Error&lt;/ax218:errortype&gt;<br />
-				&lt;/ns:return&gt;<br />
-				&lt;/ns:getErrorByCodeResponse&gt;<br />
-			</div>
                             </blockquote>
         </p>
       </td></tr>
