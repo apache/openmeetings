@@ -388,7 +388,7 @@ public class FlvInterviewConverter extends BaseConverter {
 				currentTimeInMilliSeconds += 1000;
 
 				double cLength = 100 * ((double) currentTimeInMilliSeconds)
-						/ ((double) completeLengthInSeconds);
+						/ completeLengthInSeconds;
 
 				int progress = Double.valueOf(cLength).intValue();
 

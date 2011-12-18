@@ -3,7 +3,7 @@ package org.openmeetings.app.data.record.dao;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.persistence.beans.recording.RoomRecording;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -28,12 +28,12 @@ public class RoomRecordingDaoImpl {
 			String hql = "select r from RoomRecording r " +
 					"WHERE r.roomrecordingId = :roomrecordingId ";
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<RoomRecording> query = em.createQuery(hql, RoomRecording.class);
 			query.setParameter("roomrecordingId",roomrecordingId);
 			
 			RoomRecording roomRecording = null;
 			try {
-				roomRecording = (RoomRecording) query.getSingleResult();
+				roomRecording = query.getSingleResult();
 		    } catch (NoResultException ex) {
 		    }
 			

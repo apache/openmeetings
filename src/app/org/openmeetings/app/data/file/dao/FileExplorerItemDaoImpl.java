@@ -6,7 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.persistence.beans.files.FileExplorerItem;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -87,12 +87,11 @@ public class FileExplorerItemDaoImpl {
                     + "AND c.room_id = :room_id " + "AND c.ownerId = :ownerId "
                     + "ORDER BY c.isFolder DESC, c.fileName ";
 
-			Query query = em.createQuery(hql);
+			TypedQuery<FileExplorerItem> query = em.createQuery(hql, FileExplorerItem.class);
 			query.setParameter("deleted", "true");
 			query.setParameter("room_id",room_id);
 			query.setParameter("ownerId",ownerId);
 			
-			@SuppressWarnings("unchecked")
 			List<FileExplorerItem> fileExplorerList = query.getResultList();
 
             return fileExplorerList;
@@ -114,13 +113,12 @@ public class FileExplorerItemDaoImpl {
 					"AND c.parentFileExplorerItemId = :parentFileExplorerItemId " +
 					"ORDER BY c.isFolder DESC, c.fileName ";
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<FileExplorerItem> query = em.createQuery(hql, FileExplorerItem.class);
 			query.setParameter("deleted", "true");
 			query.setParameter("room_id",room_id);
 			query.setParameter("parentFileExplorerItemId", parentFileExplorerItemId);
 			
-			@SuppressWarnings("unchecked")
-	        FileExplorerItem[] fileExplorerList = (FileExplorerItem[]) query.getResultList().toArray(new FileExplorerItem[0]);
+	        FileExplorerItem[] fileExplorerList = query.getResultList().toArray(new FileExplorerItem[0]);
 			
 			return fileExplorerList;
         } catch (Exception ex2) {
@@ -140,13 +138,12 @@ public class FileExplorerItemDaoImpl {
                     + "AND c.parentFileExplorerItemId = :parentFileExplorerItemId "
                     + "ORDER BY c.isFolder DESC, c.fileName ";
 
-			Query query = em.createQuery(hql);
+			TypedQuery<FileExplorerItem> query = em.createQuery(hql, FileExplorerItem.class);
 			query.setParameter("deleted", "true");
 			query.setParameter("ownerId",ownerId);
 			query.setParameter("parentFileExplorerItemId", parentFileExplorerItemId);
 			
-			@SuppressWarnings("unchecked")
-            FileExplorerItem[] fileExplorerList = (FileExplorerItem[]) query.getResultList().toArray(new FileExplorerItem[0]);
+            FileExplorerItem[] fileExplorerList = query.getResultList().toArray(new FileExplorerItem[0]);
 
             return fileExplorerList;
         } catch (Exception ex2) {
@@ -165,12 +162,11 @@ public class FileExplorerItemDaoImpl {
                     + "AND c.parentFileExplorerItemId = :parentFileExplorerItemId "
                     + "ORDER BY c.isFolder DESC, c.fileName ";
 
-			Query query = em.createQuery(hql);
+			TypedQuery<FileExplorerItem> query = em.createQuery(hql, FileExplorerItem.class);
 			query.setParameter("deleted", "true");
 			query.setParameter("parentFileExplorerItemId", parentFileExplorerItemId);
 			
-			@SuppressWarnings("unchecked")
-            FileExplorerItem[] fileExplorerList = (FileExplorerItem[]) query.getResultList().toArray(new FileExplorerItem[0]);
+            FileExplorerItem[] fileExplorerList = query.getResultList().toArray(new FileExplorerItem[0]);
 
             return fileExplorerList;
         } catch (Exception ex2) {
@@ -187,12 +183,12 @@ public class FileExplorerItemDaoImpl {
             String hql = "SELECT c FROM FileExplorerItem c "
                     + "WHERE c.fileExplorerItemId = :fileExplorerItemId";
 
-			Query query = em.createQuery(hql);
+			TypedQuery<FileExplorerItem> query = em.createQuery(hql, FileExplorerItem.class);
 			query.setParameter("fileExplorerItemId", fileExplorerItemId);
 			
 			FileExplorerItem fileExplorerList = null;
 			try {
-				fileExplorerList = (FileExplorerItem) query.getSingleResult();
+				fileExplorerList = query.getSingleResult();
 		    } catch (NoResultException ex) {
 		    }
 
@@ -212,13 +208,13 @@ public class FileExplorerItemDaoImpl {
                     + "WHERE c.externalFileId = :externalFileId " +
             		"AND c.externalType LIKE :externalType";
 
-			Query query = em.createQuery(hql);
+			TypedQuery<FileExplorerItem> query = em.createQuery(hql, FileExplorerItem.class);
 			query.setParameter("externalFileId", externalFileId);
 			query.setParameter("externalType", externalType);
 			
 			FileExplorerItem fileExplorerList = null;
 			try {
-				fileExplorerList = (FileExplorerItem) query.getSingleResult();
+				fileExplorerList = query.getSingleResult();
 		    } catch (NoResultException ex) {
 		    }
 
@@ -236,9 +232,8 @@ public class FileExplorerItemDaoImpl {
 
             String hql = "SELECT c FROM FileExplorerItem c ";
 
-			Query query = em.createQuery(hql);
+			TypedQuery<FileExplorerItem> query = em.createQuery(hql, FileExplorerItem.class);
 
-			@SuppressWarnings("unchecked")
             List<FileExplorerItem> fileExplorerList = query.getResultList();
 
             return fileExplorerList;

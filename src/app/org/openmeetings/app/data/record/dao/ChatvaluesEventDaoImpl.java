@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.persistence.beans.recording.ChatvaluesEvent;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -25,7 +25,7 @@ public class ChatvaluesEventDaoImpl {
 			String hql = "select c from ChatvaluesEvent as c " +
 						"where c.roomRecording.roomrecordingId = :roomrecordingId";
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<ChatvaluesEvent> query = em.createQuery(hql, ChatvaluesEvent.class);
 			query.setParameter("roomrecordingId", roomrecordingId);
 			List<ChatvaluesEvent> ll = query.getResultList();
 			

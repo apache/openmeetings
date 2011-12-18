@@ -6,7 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.persistence.beans.user.PrivateMessageFolder;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -57,12 +57,12 @@ public class PrivateMessageFolderDaoImpl {
 			String hql = "select c from PrivateMessageFolder c " +
 						"where c.privateMessageFolderId = :privateMessageFolderId ";
 
-			Query query = em.createQuery(hql); 
+			TypedQuery<PrivateMessageFolder> query = em.createQuery(hql, PrivateMessageFolder.class); 
 			query.setParameter("privateMessageFolderId", privateMessageFolderId);
 			
 			PrivateMessageFolder privateMessageFolder = null;
 			try {
-				privateMessageFolder = (PrivateMessageFolder) query.getSingleResult();
+				privateMessageFolder = query.getSingleResult();
 		    } catch (NoResultException ex) {
 		    }
 			
@@ -77,7 +77,7 @@ public class PrivateMessageFolderDaoImpl {
 		try {
 			String hql = "select c from PrivateMessageFolder c ";
 
-			Query query = em.createQuery(hql); 
+			TypedQuery<PrivateMessageFolder> query = em.createQuery(hql, PrivateMessageFolder.class); 
 			
 			List<PrivateMessageFolder> privateMessageFolders = query.getResultList();
 			
@@ -109,7 +109,7 @@ public class PrivateMessageFolderDaoImpl {
 			String hql = "select c from PrivateMessageFolder c " +
 						"where c.userId = :userId ";
 
-			Query query = em.createQuery(hql); 
+			TypedQuery<PrivateMessageFolder> query = em.createQuery(hql, PrivateMessageFolder.class); 
 			query.setParameter("userId", userId);
 			
 			List<PrivateMessageFolder> privateMessageFolders = query.getResultList();

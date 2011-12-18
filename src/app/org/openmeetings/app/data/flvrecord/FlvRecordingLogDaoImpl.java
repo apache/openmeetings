@@ -7,7 +7,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecording;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingLog;
@@ -26,9 +26,8 @@ public class FlvRecordingLogDaoImpl {
 		try {
 			String hql = "select c from FlvRecordingLog as c where c.flvRecording.flvRecordingId = :flvRecordingId";
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<FlvRecordingLog> query = em.createQuery(hql, FlvRecordingLog.class);
 			query.setParameter("flvRecordingId", flvRecordingId);
-			@SuppressWarnings("unchecked")
 			List<FlvRecordingLog> flvRecordingList = query.getResultList();
 			
 			return flvRecordingList;

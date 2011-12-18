@@ -8,7 +8,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -93,11 +92,10 @@ public class Configurationmanagement {
 			// that handles it
 			if (typeObject.isAssignableFrom(defaultValue.getClass())) {
 				return typeObject.cast(defaultValue);
-			} else {
-				Constructor<T> c = typeObject.getConstructor(defaultValue
-						.getClass());
-				return c.newInstance(defaultValue);
 			}
+			Constructor<T> c = typeObject.getConstructor(defaultValue
+					.getClass());
+			return c.newInstance(defaultValue);
 
 		} catch (Exception err) {
 			log.error(
@@ -113,12 +111,12 @@ public class Configurationmanagement {
 			log.debug("getConfByConfigurationId1: user_level " + user_level);
 			if (authLevelManagement.checkAdminLevel(user_level)) {
 				Configuration configuration = null;
-				Query query = em
-						.createQuery("select c from Configuration as c where c.configuration_id = :configuration_id");
+				TypedQuery<Configuration> query = em
+						.createQuery("select c from Configuration as c where c.configuration_id = :configuration_id", Configuration.class);
 				query.setParameter("configuration_id", configuration_id);
 				query.setMaxResults(1);
 				try {
-					configuration = (Configuration) query.getSingleResult();
+					configuration = query.getSingleResult();
 				} catch (NoResultException e) {
 				}
 				log.debug("getConfByConfigurationId4: " + configuration);
@@ -191,9 +189,8 @@ public class Configurationmanagement {
 		try {
 			log.debug("selectMaxFromConfigurations ");
 			// get all users
-			Query query = em
-					.createQuery("select count(c.configuration_id) from Configuration c where c.deleted = 'false'");
-			@SuppressWarnings("unchecked")
+			TypedQuery<Long> query = em
+					.createQuery("select count(c.configuration_id) from Configuration c where c.deleted = 'false'", Long.class);
 			List<Long> ll = query.getResultList();
 			log.debug("selectMaxFromConfigurations" + ll.get(0));
 			return ll.get(0);

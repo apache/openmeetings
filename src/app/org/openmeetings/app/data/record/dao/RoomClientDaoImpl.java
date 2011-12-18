@@ -3,7 +3,7 @@ package org.openmeetings.app.data.record.dao;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.persistence.beans.recording.RoomClient;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -52,14 +52,14 @@ public class RoomClientDaoImpl {
 			
 			log.debug("hql: "+hql);
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<RoomClient> query = em.createQuery(hql, RoomClient.class);
 			query.setParameter("publicSID",publicSID);
 			
 			log.debug("Number OF Records: "+query.getResultList().size());
 			
 			RoomClient roomClient = null;
 			try {
-				roomClient = (RoomClient) query.getSingleResult();
+				roomClient = query.getSingleResult();
 		    } catch (NoResultException ex) {
 		    }
 			
@@ -78,12 +78,12 @@ public class RoomClientDaoImpl {
 			String hql = "select r from RoomClient r " +
 					"WHERE r.roomClientId = :roomClientId ";
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<RoomClient> query = em.createQuery(hql, RoomClient.class);
 			query.setParameter("roomClientId",roomClientId);
 			
 			RoomClient roomClient = null;
 			try {
-				roomClient = (RoomClient) query.getSingleResult();
+				roomClient = query.getSingleResult();
 		    } catch (NoResultException ex) {
 		    }
 			

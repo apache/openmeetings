@@ -5,7 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.persistence.beans.recording.RecordingConversionJob;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -42,11 +42,11 @@ public class RecordingConversionJobDaoImpl {
 			String hql = "select c from RecordingConversionJob as c " +
 						"where c.recordingConversionJobId = :recordingConversionJobId ";
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<RecordingConversionJob> query = em.createQuery(hql, RecordingConversionJob.class);
 			query.setParameter("recordingConversionJobId", recordingConversionJobId);
 			RecordingConversionJob recordingConversionJob = null;
 			try {
-				recordingConversionJob = (RecordingConversionJob) query.getSingleResult();
+				recordingConversionJob = query.getSingleResult();
 		    } catch (NoResultException ex) {
 		    }
 			
@@ -64,11 +64,11 @@ public class RecordingConversionJobDaoImpl {
 			String hql = "select c from RecordingConversionJob as c " +
 						"where c.recording.recording_id = :recording_id ";
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<RecordingConversionJob> query = em.createQuery(hql, RecordingConversionJob.class);
 			query.setParameter("recording_id", recording_id);
 			RecordingConversionJob recordingConversionJob = null;
 			try {
-				recordingConversionJob = (RecordingConversionJob) query.getSingleResult();
+				recordingConversionJob = query.getSingleResult();
 		    } catch (NoResultException ex) {
 		    }
 			
@@ -94,7 +94,7 @@ public class RecordingConversionJobDaoImpl {
 						"where c.ended IS NULL " +
 						"AND c.startedPngConverted IS NULL";
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<RecordingConversionJob> query = em.createQuery(hql, RecordingConversionJob.class);
 			List<RecordingConversionJob> ll = query.getResultList();
 			
 			return ll;
@@ -118,7 +118,7 @@ public class RecordingConversionJobDaoImpl {
 						"where c.ended IS NOT NULL " +
 						"AND c.endPngConverted IS NULL";
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<RecordingConversionJob> query = em.createQuery(hql, RecordingConversionJob.class);
 			List<RecordingConversionJob> ll = query.getResultList();
 			
 			return ll;
@@ -137,7 +137,7 @@ public class RecordingConversionJobDaoImpl {
 						"where c.endPngConverted IS NOT NULL " +
 						"AND c.endSWFConverted IS NULL";
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<RecordingConversionJob> query = em.createQuery(hql, RecordingConversionJob.class);
 			List<RecordingConversionJob> ll = query.getResultList();
 			
 			return ll;

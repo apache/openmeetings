@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -128,13 +127,13 @@ public class LdapConfigDaoImpl {
 				       	"WHERE c.ldapConfigId = :ldapConfigId " +
 				       	"AND c.deleted LIKE :deleted";
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<LdapConfig> query = em.createQuery(hql, LdapConfig.class);
 			query.setParameter("ldapConfigId", ldapConfigId);
 			query.setParameter("deleted", "false");
 	
 			LdapConfig ldapConfig = null;
 			try {
-				ldapConfig = (LdapConfig) query.getSingleResult();
+				ldapConfig = query.getSingleResult();
 		    } catch (NoResultException ex) {
 		    }
 			
@@ -174,11 +173,10 @@ public class LdapConfigDaoImpl {
 		try {
 			log.debug("selectMaxFromConfigurations ");
 			//get all users
-			Query query = em.createQuery("select count(c.ldapConfigId) from LdapConfig c where c.deleted LIKE 'false'"); 
-			@SuppressWarnings("rawtypes")
-			List ll = query.getResultList();
-			log.debug("selectMaxFromLdapConfig"+(Long)ll.get(0));
-			return (Long)ll.get(0);				
+			TypedQuery<Long> query = em.createQuery("select count(c.ldapConfigId) from LdapConfig c where c.deleted LIKE 'false'", Long.class); 
+			List<Long> ll = query.getResultList();
+			log.debug("selectMaxFromLdapConfig" + ll.get(0));
+			return ll.get(0);
 		} catch (Exception ex2) {
 			log.error("[selectMaxFromLdapConfig] ",ex2);
 		}

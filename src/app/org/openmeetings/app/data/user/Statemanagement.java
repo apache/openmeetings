@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.persistence.beans.adresses.States;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -60,13 +60,13 @@ public class Statemanagement {
 	 */
 	public States getStateById(long state_id) {
 		try {
-			Query query = em
-					.createQuery("select c from States as c where c.state_id = :state_id AND c.deleted <> :deleted");
+			TypedQuery<States> query = em
+					.createQuery("select c from States as c where c.state_id = :state_id AND c.deleted <> :deleted", States.class);
 			query.setParameter("state_id", state_id);
 			query.setParameter("deleted", "true");
-			List ll = query.getResultList();
+			List<States> ll = query.getResultList();
 			if (ll.size() > 0) {
-				return (States) ll.get(0);
+				return ll.get(0);
 			}
 		} catch (Exception ex2) {
 			log.error("getStateById", ex2);
@@ -81,8 +81,8 @@ public class Statemanagement {
 	 */
 	public List<States> getStates() {
 		try {
-			Query query = em
-					.createQuery("select c from States as c where c.deleted <> :deleted");
+			TypedQuery<States> query = em
+					.createQuery("select c from States as c where c.deleted <> :deleted", States.class);
 			query.setParameter("deleted", "true");
 			List<States> ll = query.getResultList();
 			return ll;

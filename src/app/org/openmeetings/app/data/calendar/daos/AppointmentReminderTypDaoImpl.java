@@ -6,7 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.calendar.AppointmentReminderTyps;
@@ -36,14 +36,13 @@ public class AppointmentReminderTypDaoImpl {
 					+ "WHERE app.deleted <> :deleted "
 					+ "AND app.typId = :typId";
 
-			Query query = em.createQuery(hql);
+			TypedQuery<AppointmentReminderTyps> query = em.createQuery(hql, AppointmentReminderTyps.class);
 			query.setParameter("deleted", "true");
 			query.setParameter("typId", typId);
 
 			AppointmentReminderTyps appointmentReminderTyps = null;
 			try {
-				appointmentReminderTyps = (AppointmentReminderTyps) query
-						.getSingleResult();
+				appointmentReminderTyps = query.getSingleResult();
 			} catch (NoResultException ex) {
 			}
 
@@ -138,10 +137,9 @@ public class AppointmentReminderTypDaoImpl {
 			String hql = "select a from AppointmentReminderTyps a "
 					+ "WHERE a.deleted <> :deleted ";
 
-			Query query = em.createQuery(hql);
+			TypedQuery<AppointmentReminderTyps> query = em.createQuery(hql, AppointmentReminderTyps.class);
 			query.setParameter("deleted", "true");
 
-			@SuppressWarnings("unchecked")
 			List<AppointmentReminderTyps> listAppointmentReminderTyp = query
 					.getResultList();
 

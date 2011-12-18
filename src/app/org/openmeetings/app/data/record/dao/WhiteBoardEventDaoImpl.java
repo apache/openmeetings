@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.persistence.beans.recording.WhiteBoardEvent;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -26,7 +26,7 @@ public class WhiteBoardEventDaoImpl {
 					"where wbe.starttime between :startTime and :endTime " +
 					"AND wbe.roomRecording.roomrecordingId = :roomrecordingId";
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<WhiteBoardEvent> query = em.createQuery(hql, WhiteBoardEvent.class);
 			query.setParameter("startTime", startTime);
 			query.setParameter("endTime", endTime);
 			query.setParameter("roomrecordingId", roomrecordingId);

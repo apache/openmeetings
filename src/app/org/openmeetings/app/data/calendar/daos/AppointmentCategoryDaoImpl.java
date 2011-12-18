@@ -6,7 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
@@ -37,13 +37,13 @@ public class AppointmentCategoryDaoImpl {
 					+ "WHERE app.deleted <> :deleted "
 					+ "AND app.categoryId = :categoryId";
 
-			Query query = em.createQuery(hql);
+			TypedQuery<AppointmentCategory> query = em.createQuery(hql, AppointmentCategory.class);
 			query.setParameter("deleted", "true");
 			query.setParameter("categoryId", categoryId);
 
 			AppointmentCategory appointCategory = null;
 			try {
-				appointCategory = (AppointmentCategory) query.getSingleResult();
+				appointCategory = query.getSingleResult();
 			} catch (NoResultException ex) {
 			}
 
@@ -133,10 +133,9 @@ public class AppointmentCategoryDaoImpl {
 			String hql = "select a from AppointmentCategory a "
 					+ "WHERE a.deleted <> :deleted ";
 
-			Query query = em.createQuery(hql);
+			TypedQuery<AppointmentCategory> query = em.createQuery(hql, AppointmentCategory.class);
 			query.setParameter("deleted", "true");
 
-			@SuppressWarnings("unchecked")
 			List<AppointmentCategory> listAppointmentCategory = query
 					.getResultList();
 

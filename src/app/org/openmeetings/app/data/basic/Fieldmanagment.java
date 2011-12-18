@@ -11,7 +11,6 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -56,13 +55,13 @@ public class Fieldmanagment {
 				return null;
 			}
 
-			Query query = em
-					.createQuery("select f from Fieldlanguagesvalues f WHERE f.language_id = :language_id AND f.fieldvalues_id = :fieldvalues_id");
+			TypedQuery<Fieldlanguagesvalues> query = em
+					.createQuery("select f from Fieldlanguagesvalues f WHERE f.language_id = :language_id AND f.fieldvalues_id = :fieldvalues_id", Fieldlanguagesvalues.class);
 			query.setParameter("fieldvalues_id", fieldvalues_id);
 			query.setParameter("language_id", language_id);
 			Fieldlanguagesvalues flv = null;
 			try {
-				flv = performReplace((Fieldlanguagesvalues) query.getSingleResult());
+				flv = performReplace(query.getSingleResult());
 			} catch (NoResultException ex) {
 			}
 
@@ -117,11 +116,10 @@ public class Fieldmanagment {
 
 			Fieldlanguagesvalues flv = null;
 
-			Query query = em.createQuery(hql);
+			TypedQuery<Fieldlanguagesvalues> query = em.createQuery(hql, Fieldlanguagesvalues.class);
 
 			query.setParameter("fieldvalues_id", fieldvalues_id);
 			query.setParameter("language_id", language_id);
-			@SuppressWarnings("unchecked")
 			List<Fieldlanguagesvalues> fList = query.getResultList();
 
 			if (fList.size() > 0) {
@@ -155,10 +153,9 @@ public class Fieldmanagment {
 	public List<Fieldlanguagesvalues> getAllFieldsByLanguage(Long language_id) {
 		try {
 
-			Query query = em
-					.createQuery("select f from Fieldlanguagesvalues f WHERE f.language_id = :language_id ");
+			TypedQuery<Fieldlanguagesvalues> query = em
+					.createQuery("select f from Fieldlanguagesvalues f WHERE f.language_id = :language_id ", Fieldlanguagesvalues.class);
 			query.setParameter("language_id", language_id);
-			@SuppressWarnings("unchecked")
 			List<Fieldlanguagesvalues> returnList = performReplace(query.getResultList());
 
 			return returnList;
@@ -176,12 +173,11 @@ public class Fieldmanagment {
 					+ "WHERE f.language_id = :language_id "
 					+ "AND f.fieldvalues_id >= :start AND f.fieldvalues_id <  :max";
 
-			Query query = em.createQuery(sql);
+			TypedQuery<Fieldlanguagesvalues> query = em.createQuery(sql, Fieldlanguagesvalues.class);
 			query.setParameter("language_id", language_id);
 			query.setParameter("start", new Long(start));
 			query.setParameter("max", new Long(start + max));
 
-			@SuppressWarnings("unchecked")
 			List<Fieldlanguagesvalues> results = performReplace(query.getResultList());
 			List<Map<String, Object>> returnList = new LinkedList<Map<String, Object>>();
 			if (results.size() != 0) {
@@ -250,12 +246,11 @@ public class Fieldmanagment {
 			String sql = "select f from Fieldlanguagesvalues f WHERE f.language_id = :language_id "
 					+ "AND f.fieldvalues_id >= :start AND f.fieldvalues_id <  :max";
 
-			Query query = em.createQuery(sql);
+			TypedQuery<Fieldlanguagesvalues> query = em.createQuery(sql, Fieldlanguagesvalues.class);
 			query.setParameter("language_id", language_id);
 			query.setParameter("start", start);
 			query.setParameter("max", start + max);
 
-			@SuppressWarnings("unchecked")
 			List<Fieldlanguagesvalues> returnList = performReplace(query.getResultList());
 			FieldLanguage fieldLanguage = fieldLanguageDaoImpl
 					.getFieldLanguageById(language_id);
@@ -494,11 +489,11 @@ public class Fieldmanagment {
 	}
 
 	private Long selectMaxFromFieldsValues() throws Exception {
-		Query query = em
-				.createQuery("select max(c.fieldvalues_id) from Fieldvalues c where c.deleted = 'false'");
-		List<?> ll = query.getResultList();
+		TypedQuery<Long> query = em
+				.createQuery("select max(c.fieldvalues_id) from Fieldvalues c where c.deleted = 'false'", Long.class);
+		List<Long> ll = query.getResultList();
 		// log.error((Long)ll.get(0));
-		return (Long) ll.get(0);
+		return ll.get(0);
 	}
 
 	private List<Fieldvalues> getMixedFieldValuesList(int start, int max,
@@ -545,11 +540,11 @@ public class Fieldmanagment {
 
 	public Fieldvalues getFieldvaluesById(Long fieldvalues_id) {
 		String hql = "select f from Fieldvalues f WHERE f.fieldvalues_id = :fieldvalues_id ";
-		Query query = em.createQuery(hql);
+		TypedQuery<Fieldvalues> query = em.createQuery(hql, Fieldvalues.class);
 		query.setParameter("fieldvalues_id", fieldvalues_id);
 		Fieldvalues fv = null;
 		try {
-			fv = (Fieldvalues) query.getSingleResult();
+			fv = query.getSingleResult();
 		} catch (NoResultException ex) {
 		}
 		return fv;
@@ -558,11 +553,11 @@ public class Fieldmanagment {
 	private Fieldlanguagesvalues getFieldlanguagesvaluesById(
 			Long fieldlanguagesvalues_id) throws Exception {
 		String hql = "select f from Fieldlanguagesvalues f WHERE f.fieldlanguagesvalues_id = :fieldlanguagesvalues_id ";
-		Query query = em.createQuery(hql);
+		TypedQuery<Fieldlanguagesvalues> query = em.createQuery(hql, Fieldlanguagesvalues.class);
 		query.setParameter("fieldlanguagesvalues_id", fieldlanguagesvalues_id);
 		Fieldlanguagesvalues flv = null;
 		try {
-			flv = performReplace((Fieldlanguagesvalues) query.getSingleResult());
+			flv = performReplace(query.getSingleResult());
 		} catch (NoResultException ex) {
 		}
 		return flv;

@@ -11,7 +11,7 @@ import java.util.Vector;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Configurationmanagement;
@@ -933,13 +933,13 @@ public class Invitationmanagement {
 					+ "WHERE invi.deleted <> :deleted "
 					+ "AND invi.invitations_id = :invid";
 
-			Query query = em.createQuery(hql);
+			TypedQuery<Invitations> query = em.createQuery(hql, Invitations.class);
 			query.setParameter("deleted", "true");
 			query.setParameter("invid", invId);
 
 			Invitations inv = null;
 			try {
-				inv = (Invitations) query.getSingleResult();
+				inv = query.getSingleResult();
 			} catch (NoResultException ex) {
 			}
 
@@ -958,13 +958,13 @@ public class Invitationmanagement {
 					+ "WHERE invi.deleted <> :deleted "
 					+ "AND invi.invitations_id = :invid";
 
-			Query query = em.createQuery(hql);
+			TypedQuery<Invitations> query = em.createQuery(hql, Invitations.class);
 			query.setParameter("deleted", "true");
 			query.setParameter("invid", invId);
 
 			Invitations inv = null;
 			try {
-				inv = (Invitations) query.getSingleResult();
+				inv = query.getSingleResult();
 			} catch (NoResultException ex) {
 			}
 
@@ -986,12 +986,12 @@ public class Invitationmanagement {
 			String hql = "select c from Invitations as c "
 					+ "where c.hash LIKE :hashCode "
 					+ "AND c.deleted = :deleted";
-			Query query = em.createQuery(hql);
+			TypedQuery<Invitations> query = em.createQuery(hql, Invitations.class);
 			query.setParameter("hashCode", hashCode);
 			query.setParameter("deleted", "false");
 			Invitations invitation = null;
 			try {
-				invitation = (Invitations) query.getSingleResult();
+				invitation = query.getSingleResult();
 			} catch (NoResultException ex) {
 			}
 
@@ -1123,10 +1123,9 @@ public class Invitationmanagement {
 			String hql = "select a from Invitations a "
 					+ "WHERE a.appointmentId = :appointmentId  ";
 
-			Query query = em.createQuery(hql);
+			TypedQuery<Invitations> query = em.createQuery(hql, Invitations.class);
 			query.setParameter("appointmentId", appointmentId);
 
-			@SuppressWarnings("unchecked")
 			List<Invitations> listInvitations = query.getResultList();
 
 			for (Invitations inv : listInvitations) {

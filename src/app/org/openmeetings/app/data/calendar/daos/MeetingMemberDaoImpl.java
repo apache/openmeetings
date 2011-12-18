@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
@@ -38,13 +37,13 @@ public class MeetingMemberDaoImpl {
 					+ "WHERE app.deleted <> :deleted "
 					+ "AND app.meetingMemberId = :meetingMemberId";
 
-			Query query = em.createQuery(hql);
+			TypedQuery<MeetingMember> query = em.createQuery(hql, MeetingMember.class);
 			query.setParameter("deleted", true);
 			query.setParameter("meetingMemberId", meetingMemberId);
 
 			MeetingMember meetingMember = null;
 			try {
-				meetingMember = (MeetingMember) query.getSingleResult();
+				meetingMember = query.getSingleResult();
 			} catch (NoResultException ex) {
 			}
 

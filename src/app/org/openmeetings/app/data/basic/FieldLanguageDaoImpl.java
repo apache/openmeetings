@@ -6,7 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.persistence.beans.lang.FieldLanguage;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -91,12 +91,12 @@ public class FieldLanguageDaoImpl {
 			String hql = "select c from FieldLanguage as c "
 					+ "WHERE c.deleted <> :deleted "
 					+ "AND c.language_id = :language_id";
-			Query query = em.createQuery(hql);
+			TypedQuery<FieldLanguage> query = em.createQuery(hql, FieldLanguage.class);
 			query.setParameter("deleted", "true");
 			query.setParameter("language_id", language_id);
 			FieldLanguage fl = null;
 			try {
-				fl = (FieldLanguage) query.getSingleResult();
+				fl = query.getSingleResult();
 			} catch (NoResultException ex) {
 			}
 			return fl;
@@ -110,9 +110,8 @@ public class FieldLanguageDaoImpl {
 		try {
 			String hql = "select c from FieldLanguage as c "
 					+ "WHERE c.deleted <> :deleted ";
-			Query query = em.createQuery(hql);
+			TypedQuery<FieldLanguage> query = em.createQuery(hql, FieldLanguage.class);
 			query.setParameter("deleted", "true");
-			@SuppressWarnings("unchecked")
 			List<FieldLanguage> ll = query.getResultList();
 			return ll;
 		} catch (Exception ex2) {

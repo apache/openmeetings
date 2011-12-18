@@ -5,7 +5,7 @@ import java.util.Date;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.persistence.beans.user.UserSipData;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -29,11 +29,11 @@ public class UserSipDataDaoImpl {
 			
 			String hql = "select c from UserSipData as c where c.userSipDataId = :userSipDataId";
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<UserSipData> query = em.createQuery(hql, UserSipData.class);
 			query.setParameter("userSipDataId", userSipDataId);
 			UserSipData userSipData = null;
 			try {
-				userSipData = (UserSipData) query.getSingleResult();
+				userSipData = query.getSingleResult();
 		    } catch (NoResultException ex) {
 		    }
 			

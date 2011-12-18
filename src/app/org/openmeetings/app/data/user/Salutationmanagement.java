@@ -1,7 +1,6 @@
 package org.openmeetings.app.data.user;
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -71,8 +70,7 @@ public class Salutationmanagement {
 			CriteriaQuery<Salutations> select = cq.select(from);
 			TypedQuery<Salutations> q = em.createQuery(select);
 			List<Salutations> ll = q.getResultList();
-			for (Iterator it4 = ll.iterator(); it4.hasNext();) {
-				Salutations ti = (Salutations) it4.next();
+			for (Salutations ti : ll) {
 				ti.setLabel(fieldmanagment.getFieldByIdAndLanguage(
 						ti.getFieldvalues_id(), language_id));
 			}

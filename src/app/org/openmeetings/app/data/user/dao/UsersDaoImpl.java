@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -40,12 +39,12 @@ public class UsersDaoImpl {
 	public Users getUser(Long user_id) {
 		if (user_id != null && user_id > 0) {
 			try {
-				Query query = em.createQuery("select c from Users as c where c.user_id = :user_id");
+				TypedQuery<Users> query = em.createQuery("select c from Users as c where c.user_id = :user_id", Users.class);
 				query.setParameter("user_id", user_id);
 
 				Users users = null;
 				try {
-					users = (Users) query.getSingleResult();
+					users = query.getSingleResult();
 				} catch (NoResultException ex) {
 				}
 				return users;
@@ -110,10 +109,10 @@ public class UsersDaoImpl {
 	public Long selectMaxFromUsers() {
 		try {
 			// get all users
-			Query query = em.createQuery("select count(c.user_id) from Users c where c.deleted = 'false'");
-			List<?> ll = query.getResultList();
+			TypedQuery<Long> query = em.createQuery("select count(c.user_id) from Users c where c.deleted = 'false'", Long.class);
+			List<Long> ll = query.getResultList();
 			log.info("selectMaxFromUsers" + ll.get(0));
-			return (Long) ll.get(0);
+			return ll.get(0);
 		} catch (Exception ex2) {
 			log.error("[selectMaxFromUsers] ", ex2);
 		}
@@ -191,15 +190,15 @@ public class UsersDaoImpl {
 
 			log.debug("Show HQL: " + hql);
 
-			Query query = em.createQuery(hql);
+			TypedQuery<Long> query = em.createQuery(hql, Long.class);
 
 			// log.debug("id: "+folderId);
-			List<?> ll = query.getResultList();
+			List<Long> ll = query.getResultList();
 
 			// log.error((Long)ll.get(0));
-			Long i = (Long) ll.get(0);
+			Long i = ll.get(0);
 
-			return new Long(i);
+			return i;
 		} catch (Exception ex2) {
 			log.error("[getAllUserMax]: ", ex2);
 		}
@@ -214,7 +213,7 @@ public class UsersDaoImpl {
 	 */
 	public boolean checkUserLogin(String DataValue) {
 		try {
-			Query query = em.createQuery("select c from Users as c where c.login = :DataValue AND c.deleted <> :deleted");
+			TypedQuery<Users> query = em.createQuery("select c from Users as c where c.login = :DataValue AND c.deleted <> :deleted", Users.class);
 			query.setParameter("DataValue", DataValue);
 			query.setParameter("deleted", "true");
 			int count = query.getResultList().size();
@@ -232,12 +231,12 @@ public class UsersDaoImpl {
 		try {
 			String hql = "SELECT u FROM Users as u "
 					+ " where u.login = :login" + " AND u.deleted <> :deleted";
-			Query query = em.createQuery(hql);
+			TypedQuery<Users> query = em.createQuery(hql, Users.class);
 			query.setParameter("login", login);
 			query.setParameter("deleted", "true");
 			Users us = null;
 			try {
-				us = (Users) query.getSingleResult();
+				us = query.getSingleResult();
 			} catch (NoResultException ex) {
 			}
 			return us;
@@ -252,12 +251,12 @@ public class UsersDaoImpl {
 			String hql = "SELECT u FROM Users as u "
 					+ " where u.adresses.email = :email"
 					+ " AND u.deleted <> :deleted";
-			Query query = em.createQuery(hql);
+			TypedQuery<Users> query = em.createQuery(hql, Users.class);
 			query.setParameter("email", email);
 			query.setParameter("deleted", "true");
 			Users us = null;
 			try {
-				us = (Users) query.getSingleResult();
+				us = query.getSingleResult();
 			} catch (NoResultException ex) {
 			}
 			return us;
@@ -274,12 +273,12 @@ public class UsersDaoImpl {
 			String hql = "SELECT u FROM Users as u "
 					+ " where u.resethash = :resethash"
 					+ " AND u.deleted <> :deleted";
-			Query query = em.createQuery(hql);
+			TypedQuery<Users> query = em.createQuery(hql, Users.class);
 			query.setParameter("resethash", hash);
 			query.setParameter("deleted", "true");
 			Users us = null;
 			try {
-				us = (Users) query.getSingleResult();
+				us = query.getSingleResult();
 			} catch (NoResultException ex) {
 			}
 			if (us != null) {
@@ -326,11 +325,11 @@ public class UsersDaoImpl {
 					+ "OR lower(c.lastname) LIKE :search " + ")";
 
 			// get all users
-			Query query = em.createQuery(hql);
+			TypedQuery<Long> query = em.createQuery(hql, Long.class);
 			query.setParameter("search", StringUtils.lowerCase(search));
-			List<?> ll = query.getResultList();
+			List<Long> ll = query.getResultList();
 			log.info("selectMaxFromUsers" + ll.get(0));
-			return (Long) ll.get(0);
+			return ll.get(0);
 		} catch (Exception ex2) {
 			log.error("[selectMaxFromUsers] ", ex2);
 		}

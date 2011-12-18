@@ -10,7 +10,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -729,12 +728,12 @@ public class Usermanagement {
 				return new Long(1);
 			}
 
-			Query query = em
-					.createQuery("select c from Users as c where c.user_id = :user_id AND c.deleted <> 'true'");
+			TypedQuery<Users> query = em
+					.createQuery("select c from Users as c where c.user_id = :user_id AND c.deleted <> 'true'", Users.class);
 			query.setParameter("user_id", user_id);
 			Users us = null;
 			try {
-				us = (Users) query.getSingleResult();
+				us = query.getSingleResult();
 			} catch (NoResultException e) {
 				// u=null}
 			}
@@ -760,12 +759,12 @@ public class Usermanagement {
 				return new Long(1);
 			}
 
-			Query query = em
-					.createQuery("select c from Users as c where c.user_id = :user_id AND c.deleted <> 'true'");
+			TypedQuery<Users> query = em
+					.createQuery("select c from Users as c where c.user_id = :user_id AND c.deleted <> 'true'", Users.class);
 			query.setParameter("user_id", user_id);
 			Users us = null;
 			try {
-				us = (Users) query.getSingleResult();
+				us = query.getSingleResult();
 			} catch (NoResultException e) {
 				// u=null}
 			}
@@ -1696,12 +1695,12 @@ public class Usermanagement {
 			String hql = "SELECT u FROM Users as u "
 					+ " where u.activatehash = :activatehash"
 					+ " AND u.deleted <> :deleted";
-			Query query = em.createQuery(hql);
+			TypedQuery<Users> query = em.createQuery(hql, Users.class);
 			query.setParameter("activatehash", hash);
 			query.setParameter("deleted", "true");
 			Users u = null;
 			try {
-				u = (Users) query.getSingleResult();
+				u = query.getSingleResult();
 			} catch (NoResultException e) {
 				// u=null}
 			}

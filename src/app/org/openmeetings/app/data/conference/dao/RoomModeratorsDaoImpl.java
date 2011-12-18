@@ -9,7 +9,7 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.persistence.beans.rooms.RoomModerators;
@@ -74,13 +74,13 @@ public class RoomModeratorsDaoImpl {
 		try {
 			String hql = "select c from RoomModerators as c where c.roomModeratorsId = :roomModeratorsId";
 
-			Query query = em.createQuery(hql);
+			TypedQuery<RoomModerators> query = em.createQuery(hql, RoomModerators.class);
 
 			query.setParameter("roomModeratorsId", roomModeratorsId);
 
 			RoomModerators roomModerators = null;
 			try {
-				roomModerators = (RoomModerators) query.getSingleResult();
+				roomModerators = query.getSingleResult();
 			} catch (NoResultException ex) {
 			}
 
@@ -98,12 +98,11 @@ public class RoomModeratorsDaoImpl {
 			String hql = "select c from RoomModerators as c "
 					+ "where c.roomId = :roomId AND c.deleted <> :deleted";
 
-			Query query = em.createQuery(hql);
+			TypedQuery<RoomModerators> query = em.createQuery(hql, RoomModerators.class);
 
 			query.setParameter("deleted", "true");
 			query.setParameter("roomId", roomId);
 
-			@SuppressWarnings("unchecked")
 			List<RoomModerators> roomModerators = query.getResultList();
 
 			return roomModerators;
@@ -124,13 +123,12 @@ public class RoomModeratorsDaoImpl {
 					+ "AND c.deleted <> :deleted "
 					+ "AND c.user.user_id = :user_id";
 
-			Query query = em.createQuery(hql);
+			TypedQuery<RoomModerators> query = em.createQuery(hql, RoomModerators.class);
 
 			query.setParameter("deleted", "true");
 			query.setParameter("roomId", roomId);
 			query.setParameter("user_id", user_id);
 
-			@SuppressWarnings("unchecked")
 			List<RoomModerators> roomModerators = query.getResultList();
 
 			return roomModerators;

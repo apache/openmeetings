@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.persistence.beans.user.UserContacts;
@@ -98,14 +99,14 @@ public class UserContactsDaoImpl {
 			String hql = "select count(c.userContactId) from UserContacts c " +
 							"where c.contact.user_id = :user_id AND c.owner.user_id = :ownerId ";
 			
-			Query query = em.createQuery(hql); 
+			TypedQuery<Long> query = em.createQuery(hql, Long.class); 
 			query.setParameter("user_id", user_id);
 			query.setParameter("ownerId", ownerId);
-			List ll = query.getResultList();
+			List<Long> ll = query.getResultList();
 			
-			log.info("checkUserContacts"+(Long)ll.get(0));
+			log.info("checkUserContacts" + ll.get(0));
 			
-			return (Long)ll.get(0);
+			return ll.get(0);
 			
 		} catch (Exception e) {
 			log.error("[checkUserContacts]",e);
@@ -119,7 +120,7 @@ public class UserContactsDaoImpl {
 			String hql = "select c from UserContacts c " +
 							"where c.hash like :hash ";
 			
-			Query query = em.createQuery(hql); 
+			TypedQuery<UserContacts> query = em.createQuery(hql, UserContacts.class); 
 			query.setParameter("hash", hash);
 			List<UserContacts> ll = query.getResultList();
 			
@@ -142,7 +143,7 @@ public class UserContactsDaoImpl {
 							"AND c.pending = :pending " +
 							"AND c.contact.deleted <> 'true'";
 			
-			Query query = em.createQuery(hql); 
+			TypedQuery<UserContacts> query = em.createQuery(hql, UserContacts.class);
 			query.setParameter("ownerId", ownerId);
 			query.setParameter("pending", pending);
 			List<UserContacts> ll = query.getResultList();
@@ -163,7 +164,7 @@ public class UserContactsDaoImpl {
 							"AND c.shareCalendar = :shareCalendar " +
 							"AND c.contact.deleted <> 'true'";
 			
-			Query query = em.createQuery(hql); 
+			TypedQuery<UserContacts> query = em.createQuery(hql, UserContacts.class); 
 			query.setParameter("contactId", contactId);
 			query.setParameter("shareCalendar", shareCalendar);
 			List<UserContacts> ll = query.getResultList();
@@ -184,7 +185,7 @@ public class UserContactsDaoImpl {
 							"AND c.pending = :pending " +
 							"AND c.contact.deleted <> 'true'";
 			
-			Query query = em.createQuery(hql); 
+			TypedQuery<UserContacts> query = em.createQuery(hql, UserContacts.class); 
 			query.setParameter("user_id", user_id);
 			query.setParameter("pending", pending);
 			List<UserContacts> ll = query.getResultList();
@@ -203,11 +204,11 @@ public class UserContactsDaoImpl {
 			String hql = "select c from UserContacts c " +
 							"where c.userContactId = :userContactId";
 			
-			Query query = em.createQuery(hql); 
+			TypedQuery<UserContacts> query = em.createQuery(hql, UserContacts.class); 
 			query.setParameter("userContactId", userContactId);
 			UserContacts userContacts = null;
 			try {
-				userContacts = (UserContacts) query.getSingleResult();
+				userContacts = query.getSingleResult();
 		    } catch (NoResultException ex) {
 		    }
 			
@@ -224,7 +225,7 @@ public class UserContactsDaoImpl {
 			
 			String hql = "select c from UserContacts c ";
 			
-			Query query = em.createQuery(hql); 
+			TypedQuery<UserContacts> query = em.createQuery(hql, UserContacts.class); 
 			List<UserContacts> userContacts = query.getResultList();
 			
 			return userContacts;

@@ -5,7 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.persistence.beans.recording.Recording;
@@ -60,7 +60,7 @@ public class RecordingDaoImpl {
 	public List<Recording> getRecordings() {
 		try {
 			String hql = "select c from Recording as c where c.deleted <> :deleted";
-			Query query = em.createQuery(hql);
+			TypedQuery<Recording> query = em.createQuery(hql, Recording.class);
 			query.setParameter("deleted", "true");
 			List<Recording> ll = query.getResultList();
 			return ll;
@@ -73,7 +73,7 @@ public class RecordingDaoImpl {
 	public List<Recording> getRecordingsByRoom(Long rooms_id) {
 		try {
 			String hql = "select c from Recording as c where c.rooms.rooms_id = :rooms_id AND c.deleted <> :deleted";
-			Query query = em.createQuery(hql);
+			TypedQuery<Recording> query = em.createQuery(hql, Recording.class);
 			query.setParameter("rooms_id", rooms_id);
 			query.setParameter("deleted", "true");
 			List<Recording> ll = query.getResultList();
@@ -89,7 +89,7 @@ public class RecordingDaoImpl {
 			String hql = "select c from Recording as c "
 					+ "where c.whiteBoardConverted = :whiteBoardConverted "
 					+ "AND c.deleted <> :deleted";
-			Query query = em.createQuery(hql);
+			TypedQuery<Recording> query = em.createQuery(hql, Recording.class);
 			query.setParameter("whiteBoardConverted", false);
 			query.setParameter("deleted", "true");
 			List<Recording> ll = query.getResultList();
@@ -105,7 +105,7 @@ public class RecordingDaoImpl {
 			String hql = "select c from Recording as c where " + where
 					+ " c.deleted <> :deleted";
 			log.error("getRecordingsByWhereClause: " + hql);
-			Query query = em.createQuery(hql);
+			TypedQuery<Recording> query = em.createQuery(hql, Recording.class);
 			query.setParameter("deleted", "true");
 			List<Recording> ll = query.getResultList();
 			return ll;
@@ -118,12 +118,12 @@ public class RecordingDaoImpl {
 	public Recording getRecordingById(Long recording_id) {
 		try {
 			String hql = "select c from Recording as c where c.recording_id = :recording_id AND c.deleted <> :deleted";
-			Query query = em.createQuery(hql);
+			TypedQuery<Recording> query = em.createQuery(hql, Recording.class);
 			query.setParameter("recording_id", recording_id);
 			query.setParameter("deleted", "true");
 			Recording rec = null;
 			try {
-				rec = (Recording) query.getSingleResult();
+				rec = query.getSingleResult();
 			} catch (NoResultException ex) {
 			}
 			return rec;

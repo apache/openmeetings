@@ -13,6 +13,7 @@ import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.persistence.beans.poll.PollType;
 import org.openmeetings.app.persistence.beans.poll.RoomPoll;
+import org.openmeetings.app.persistence.beans.poll.RoomPollAnswers;
 import org.openmeetings.app.persistence.beans.recording.RoomClient;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -50,9 +51,9 @@ public class PollManagement {
 	}
 	
 	public PollType getPollType(Long typeId) {
-		Query q = em.createQuery("SELECT pt FROM PollType pt WHERE pt.pollTypesId = :pollTypesId");
+		TypedQuery<PollType> q = em.createQuery("SELECT pt FROM PollType pt WHERE pt.pollTypesId = :pollTypesId", PollType.class);
 		q.setParameter("pollTypesId", typeId);
-		return (PollType)q.getSingleResult();
+		return q.getSingleResult();
 	}
 	
 	public RoomPoll createPoll(RoomClient rc, String pollName, String pollQuestion, Long pollTypeId) {
@@ -106,10 +107,10 @@ public class PollManagement {
 	public RoomPoll getPoll(Long room_id) {
 		try {
 			log.debug(" :: getPoll :: " + room_id);
-			Query q = em.createQuery("SELECT rp FROM RoomPoll rp WHERE rp.room.rooms_id = :room_id AND rp.archived = :archived");
+			TypedQuery<RoomPoll> q = em.createQuery("SELECT rp FROM RoomPoll rp WHERE rp.room.rooms_id = :room_id AND rp.archived = :archived", RoomPoll.class);
 			q.setParameter("room_id", room_id);
 			q.setParameter("archived", false);
-			return (RoomPoll)q.getSingleResult();
+			return q.getSingleResult();
 		} catch (NoResultException nre) {
 			//expected
 		} catch (Exception err) {
@@ -148,10 +149,10 @@ public class PollManagement {
 	public boolean hasPoll(Long room_id) {
 		try {
 			log.debug(" :: hasPoll :: " + room_id);
-			Query q = em.createQuery("SELECT COUNT(rp) FROM RoomPoll rp WHERE rp.room.rooms_id = :room_id AND rp.archived = :archived");
+			TypedQuery<Long> q = em.createQuery("SELECT COUNT(rp) FROM RoomPoll rp WHERE rp.room.rooms_id = :room_id AND rp.archived = :archived", Long.class);
 			q.setParameter("room_id", room_id);
 			q.setParameter("archived", false);
-			return (Long)q.getSingleResult() > 0;
+			return q.getSingleResult() > 0;
 		} catch (NoResultException nre) {
 			//expected
 		} catch (Exception err) {
@@ -163,8 +164,8 @@ public class PollManagement {
 	public boolean hasVoted(Long room_id, Long userid) {
 		try {
 			log.debug(" :: hasVoted :: " + room_id + ", " + userid);
-			Query q = em.createQuery("SELECT rpa FROM RoomPollAnswers rpa "
-				+ "WHERE rpa.roomPoll.room.rooms_id = :room_id AND rpa.votedUser.user_id = :userid AND rpa.roomPoll.archived = :archived");
+			TypedQuery<RoomPollAnswers> q = em.createQuery("SELECT rpa FROM RoomPollAnswers rpa "
+				+ "WHERE rpa.roomPoll.room.rooms_id = :room_id AND rpa.votedUser.user_id = :userid AND rpa.roomPoll.archived = :archived", RoomPollAnswers.class);
 			q.setParameter("room_id", room_id);
 			q.setParameter("userid", userid);
 			q.setParameter("archived", false);

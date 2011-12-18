@@ -6,7 +6,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.persistence.beans.basic.Naviglobal;
 import org.openmeetings.app.persistence.beans.basic.Navimain;
@@ -67,11 +67,10 @@ public class Navimanagement {
 		try {
 
 			// CriteriaBuilder crit = em.getCriteriaBuilder();
-			Query query = em.createQuery("select c from Naviglobal as c "
+			TypedQuery<Naviglobal> query = em.createQuery("select c from Naviglobal as c "
 					+ "where c.level_id <= :level_id AND "
-					+ "c.deleted LIKE 'false' " + "order by c.naviorder");
+					+ "c.deleted LIKE 'false' " + "order by c.naviorder", Naviglobal.class);
 			query.setParameter("level_id", user_level);
-			@SuppressWarnings("unchecked")
 			List<Naviglobal> navi = query.getResultList();
 
 			return navi;

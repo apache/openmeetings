@@ -9,7 +9,6 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -100,12 +99,11 @@ public class Roommanagement {
 	 * 
 	 * @return List of RoomTypes
 	 */
-	@SuppressWarnings("unchecked")
 	public List<RoomTypes> getAllRoomTypes(Long user_level) {
 		try {
 			if (authLevelManagement.checkUserLevel(user_level)) {
-				Query query = em
-						.createQuery("select c from RoomTypes as c where c.deleted <> :deleted");
+				TypedQuery<RoomTypes> query = em
+						.createQuery("select c from RoomTypes as c where c.deleted <> :deleted", RoomTypes.class);
 				query.setParameter("deleted", "true");
 				List<RoomTypes> ll = query.getResultList();
 				return ll;
@@ -124,8 +122,8 @@ public class Roommanagement {
 	 */
 	public RoomTypes getRoomTypesById(long roomtypes_id) {
 		try {
-			Query query = em
-					.createQuery("select c from RoomTypes as c where c.roomtypes_id = :roomtypes_id AND c.deleted <> :deleted");
+			TypedQuery<RoomTypes> query = em
+					.createQuery("select c from RoomTypes as c where c.roomtypes_id = :roomtypes_id AND c.deleted <> :deleted", RoomTypes.class);
 			query.setParameter("roomtypes_id", roomtypes_id);
 			query.setParameter("deleted", "true");
 			List<?> ll = query.getResultList();
@@ -200,12 +198,12 @@ public class Roommanagement {
 			String hql = "select c from Rooms as c where c.rooms_id = :rooms_id AND c.deleted <> :deleted";
 			Rooms room = null;
 
-			Query query = em.createQuery(hql);
+			TypedQuery<Rooms> query = em.createQuery(hql, Rooms.class);
 			query.setParameter("rooms_id", rooms_id);
 			query.setParameter("deleted", "true");
-			List<?> ll = query.getResultList();
+			List<Rooms> ll = query.getResultList();
 			if (ll.size() > 0) {
-				room = (Rooms) ll.get(0);
+				room = ll.get(0);
 			}
 
 			if (room != null) {
@@ -233,7 +231,7 @@ public class Roommanagement {
 			String hql = "select c from Rooms as c JOIN c.roomtype as rt "
 					+ "where c.externalRoomId = :externalRoomId AND c.externalRoomType = :externalRoomType "
 					+ "AND rt.roomtypes_id = :roomtypes_id AND c.deleted <> :deleted";
-			Query query = em.createQuery(hql);
+			TypedQuery<Rooms> query = em.createQuery(hql, Rooms.class);
 			query.setParameter("externalRoomId", externalRoomId);
 			query.setParameter("externalRoomType", externalRoomType);
 			query.setParameter("roomtypes_id", roomtypes_id);
@@ -391,11 +389,11 @@ public class Roommanagement {
 			}
 
 			// get all users
-			Query query = em.createQuery(hql);
+			TypedQuery<Long> query = em.createQuery(hql, Long.class);
 			query.setParameter("search", search);
-			List<?> ll = query.getResultList();
+			List<Long> ll = query.getResultList();
 			log.debug("Number of records" + ll.get(0));
-			return (Long) ll.get(0);
+			return ll.get(0);
 		} catch (Exception ex2) {
 			log.error("[selectMaxFromRooms] ", ex2);
 		}
@@ -447,7 +445,6 @@ public class Roommanagement {
 	 * @param asc
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Rooms> getRoomsInternatlByHQL(int start, int max,
 			String orderby, boolean asc, String search) {
 		try {
@@ -469,7 +466,7 @@ public class Roommanagement {
 				hql += " DESC";
 			}
 
-			Query query = em.createQuery(hql);
+			TypedQuery<Rooms> query = em.createQuery(hql, Rooms.class);
 			query.setParameter("search", search);
 			query.setFirstResult(start);
 			query.setMaxResults(max);
@@ -539,7 +536,6 @@ public class Roommanagement {
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<Rooms_Organisation> getOrganisationsByRoom(long user_level,
 			long rooms_id) {
 		try {
@@ -547,7 +543,7 @@ public class Roommanagement {
 				String hql = "select c from Rooms_Organisation as c "
 						+ "where c.room.rooms_id = :rooms_id "
 						+ "AND c.deleted <> :deleted";
-				Query q = em.createQuery(hql);
+				TypedQuery<Rooms_Organisation> q = em.createQuery(hql, Rooms_Organisation.class);
 
 				q.setParameter("rooms_id", rooms_id);
 				q.setParameter("deleted", "true");
@@ -574,13 +570,12 @@ public class Roommanagement {
 						+ "JOIN r.roomtype as rt "
 						+ "WHERE "
 						+ "r.ispublic=:ispublic and r.deleted=:deleted and rt.roomtypes_id=:roomtypes_id";
-				Query q = em.createQuery(queryString);
+				TypedQuery<Rooms> q = em.createQuery(queryString, Rooms.class);
 				//
 				q.setParameter("ispublic", true);
 				q.setParameter("deleted", "false");
 				q.setParameter("roomtypes_id", new Long(roomtypes_id));
 
-				@SuppressWarnings("unchecked")
 				List<Rooms> ll = q.getResultList();
 
 				return ll;
@@ -612,9 +607,8 @@ public class Roommanagement {
 
 			queryString += ")";
 
-			Query q = em.createQuery(queryString);
+			TypedQuery<Rooms> q = em.createQuery(queryString, Rooms.class);
 
-			@SuppressWarnings("unchecked")
 			List<Rooms> ll = q.getResultList();
 
 			return ll;
@@ -633,11 +627,10 @@ public class Roommanagement {
 						+ "r.ispublic = :ispublic and r.deleted <> :deleted "
 						+ "ORDER BY r.name ASC";
 
-				Query q = em.createQuery(queryString);
+				TypedQuery<Rooms> q = em.createQuery(queryString, Rooms.class);
 
 				q.setParameter("ispublic", true);
 				q.setParameter("deleted", "true");
-				@SuppressWarnings("unchecked")
 				List<Rooms> ll = q.getResultList();
 
 				return ll;
@@ -662,12 +655,11 @@ public class Roommanagement {
 				String queryString = "SELECT r from Rooms r "
 						+ "JOIN r.roomtype as rt " + "WHERE "
 						+ "r.deleted=:deleted and r.appointment=:appointed";
-				Query q = em.createQuery(queryString);
+				TypedQuery<Rooms> q = em.createQuery(queryString, Rooms.class);
 				//
 				q.setParameter("appointed", true);
 				q.setParameter("deleted", "false");
 
-				@SuppressWarnings("unchecked")
 				List<Rooms> ll = q.getResultList();
 
 				return ll;
@@ -695,12 +687,11 @@ public class Roommanagement {
 				String queryString = "SELECT r from Rooms r "
 						+ "JOIN r.roomtype as rt " + "WHERE "
 						+ "r.ispublic=:ispublic and r.deleted=:deleted";
-				Query q = em.createQuery(queryString);
+				TypedQuery<Rooms> q = em.createQuery(queryString, Rooms.class);
 				//
 				q.setParameter("ispublic", true);
 				q.setParameter("deleted", "false");
 
-				@SuppressWarnings("unchecked")
 				List<Rooms> ll = q.getResultList();
 				return ll;
 			}
@@ -998,12 +989,11 @@ public class Roommanagement {
 						+ "where c.room.roomtypes_id = :roomtypes_id "
 						+ "AND c.organisation.organisation_id = :organisation_id "
 						+ "AND c.deleted <> :deleted";
-				Query q = em.createQuery(hql);
+				TypedQuery<Rooms_Organisation> q = em.createQuery(hql, Rooms_Organisation.class);
 
 				q.setParameter("roomtypes_id", roomtypes_id);
 				q.setParameter("organisation_id", organisation_id);
 				q.setParameter("deleted", "true");
-				@SuppressWarnings("unchecked")
 				List<Rooms_Organisation> ll = q.getResultList();
 
 				return ll;
@@ -1033,12 +1023,11 @@ public class Roommanagement {
 						+ "AND c.organisation.deleted <> :deleted "
 						+ "ORDER BY c.room.name ASC";
 
-				Query query = em.createQuery(hql);
+				TypedQuery<Rooms_Organisation> query = em.createQuery(hql, Rooms_Organisation.class);
 
 				query.setParameter("organisation_id", organisation_id);
 				query.setParameter("deleted", "true");
 
-				@SuppressWarnings("unchecked")
 				List<Rooms_Organisation> ll = query.getResultList();
 
 				return ll;
@@ -1078,11 +1067,10 @@ public class Roommanagement {
 			String hql = "select c from Rooms_Organisation as c "
 					+ "where c.organisation.organisation_id = :organisation_id "
 					+ "AND c.deleted <> :deleted";
-			Query q = em.createQuery(hql);
+			TypedQuery<Rooms_Organisation> q = em.createQuery(hql, Rooms_Organisation.class);
 
 			q.setParameter("organisation_id", organisation_id);
 			q.setParameter("deleted", "true");
-			@SuppressWarnings("unchecked")
 			List<Rooms_Organisation> ll = q.getResultList();
 
 			return ll.size();
@@ -1119,13 +1107,12 @@ public class Roommanagement {
 				hql += " DESC";
 			}
 
-			Query q = em.createQuery(hql);
+			TypedQuery<Rooms_Organisation> q = em.createQuery(hql, Rooms_Organisation.class);
 
 			q.setParameter("organisation_id", organisation_id);
 			q.setParameter("deleted", "true");
 			q.setFirstResult(start);
 			q.setMaxResults(max);
-			@SuppressWarnings("unchecked")
 			List<Rooms_Organisation> ll = q.getResultList();
 
 			return ll;
@@ -1142,12 +1129,11 @@ public class Roommanagement {
 					+ "where c.room.rooms_id = :rooms_id "
 					+ "AND c.organisation.organisation_id = :organisation_id "
 					+ "AND c.deleted <> :deleted";
-			Query q = em.createQuery(hql);
+			TypedQuery<Rooms_Organisation> q = em.createQuery(hql, Rooms_Organisation.class);
 
 			q.setParameter("rooms_id", rooms_id);
 			q.setParameter("organisation_id", organisation_id);
 			q.setParameter("deleted", "true");
-			@SuppressWarnings("unchecked")
 			List<Rooms_Organisation> ll = q.getResultList();
 
 			if (ll.size() > 0) {
@@ -1169,11 +1155,10 @@ public class Roommanagement {
 			String hql = "select c from Rooms_Organisation as c "
 					+ "where c.room.rooms_id = :rooms_id "
 					+ "AND c.deleted <> :deleted";
-			Query q = em.createQuery(hql);
+			TypedQuery<Rooms_Organisation> q = em.createQuery(hql, Rooms_Organisation.class);
 
 			q.setParameter("rooms_id", rooms_id);
 			q.setParameter("deleted", "true");
-			@SuppressWarnings("unchecked")
 			List<Rooms_Organisation> ll = q.getResultList();
 			return ll;
 		} catch (Exception ex2) {
@@ -1677,11 +1662,10 @@ public class Roommanagement {
 
 			Rooms room = null;
 
-			Query query = em.createQuery(hql);
+			TypedQuery<Rooms> query = em.createQuery(hql, Rooms.class);
 			query.setParameter("ownerId", ownerId);
 			query.setParameter("roomtypesId", roomtypesId);
 			query.setParameter("deleted", "true");
-			@SuppressWarnings("unchecked")
 			List<Rooms> ll = query.getResultList();
 			if (ll.size() > 0) {
 				room = ll.get(0);

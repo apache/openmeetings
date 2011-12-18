@@ -10,7 +10,6 @@ import java.util.TimeZone;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -78,11 +77,10 @@ public class AppointmentDaoImpl {
 				+ "WHERE a.deleted <> :deleted "
 				+ "AND a.room.rooms_id = :room_id ";
 
-		Query query = em.createQuery(hql);
+		TypedQuery<Appointment> query = em.createQuery(hql, Appointment.class);
 		query.setParameter("deleted", "true");
 		query.setParameter("room_id", room_id);
 
-		@SuppressWarnings("unchecked")
 		List<Appointment> appoint = query.getResultList();
 
 		if (appoint.size() > 0) {
@@ -101,13 +99,13 @@ public class AppointmentDaoImpl {
 					+ "WHERE a.deleted <> :deleted "
 					+ "AND a.appointmentId = :appointmentId ";
 
-			Query query = em.createQuery(hql);
+			TypedQuery<Appointment> query = em.createQuery(hql, Appointment.class);
 			query.setParameter("deleted", "true");
 			query.setParameter("appointmentId", appointmentId);
 
 			Appointment appoint = null;
 			try {
-				appoint = (Appointment) query.getSingleResult();
+				appoint = query.getSingleResult();
 			} catch (NoResultException ex) {
 			}
 			return appoint;
@@ -123,12 +121,12 @@ public class AppointmentDaoImpl {
 			String hql = "select a from Appointment a "
 					+ "WHERE a.appointmentId = :appointmentId ";
 
-			Query query = em.createQuery(hql);
+			TypedQuery<Appointment> query = em.createQuery(hql, Appointment.class);
 			query.setParameter("appointmentId", appointmentId);
 
 			Appointment appoint = null;
 			try {
-				appoint = (Appointment) query.getSingleResult();
+				appoint = query.getSingleResult();
 			} catch (NoResultException ex) {
 			}
 
@@ -778,13 +776,13 @@ public class AppointmentDaoImpl {
 					+ "WHERE a.deleted <> :deleted "
 					+ "AND a.appointmentStarttime > :appointmentStarttime ";
 
-			Query query = em.createQuery(hql);
+			TypedQuery<Appointment> query = em.createQuery(hql, Appointment.class);
 			query.setParameter("deleted", "true");
 			query.setParameter("appointmentStarttime", appointmentStarttime);
 
 			Appointment appoint = null;
 			try {
-				appoint = (Appointment) query.getSingleResult();
+				appoint = query.getSingleResult();
 			} catch (NoResultException ex) {
 			}
 

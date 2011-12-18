@@ -6,7 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.persistence.beans.basic.ErrorType;
 import org.openmeetings.app.persistence.beans.basic.ErrorValues;
@@ -43,9 +43,8 @@ public class ErrorManagement {
 		try {
 			String hql = "select c from ErrorType as c "
 					+ "WHERE c.deleted <> :deleted ";
-			Query query = em.createQuery(hql);
+			TypedQuery<ErrorType> query = em.createQuery(hql, ErrorType.class);
 			query.setParameter("deleted", "true");
-			@SuppressWarnings("unchecked")
 			List<ErrorType> ll = query.getResultList();
 			return ll;
 		} catch (Exception ex2) {
@@ -58,10 +57,10 @@ public class ErrorManagement {
 		try {
 			String hql = "select c from ErrorType as c "
 					+ "WHERE c.deleted <> :deleted AND c.errortype_id = :errortype_id";
-			Query query = em.createQuery(hql);
+			TypedQuery<ErrorType> query = em.createQuery(hql, ErrorType.class);
 			query.setParameter("deleted", "true");
 			query.setParameter("errortype_id", errortype_id);
-			return (ErrorType) query.getSingleResult();
+			return query.getSingleResult();
 		} catch (Exception ex2) {
 			log.error("[getErrorType(" + errortype_id + ")]", ex2);
 		}
@@ -120,12 +119,12 @@ public class ErrorManagement {
 			String hql = "select c from ErrorValues as c "
 					+ " where c.errorvalues_id = :errorvalues_id "
 					+ " AND c.deleted <> :deleted";
-			Query query = em.createQuery(hql);
+			TypedQuery<ErrorValues> query = em.createQuery(hql, ErrorValues.class);
 			query.setParameter("errorvalues_id", errorvalues_id);
 			query.setParameter("deleted", "true");
 			ErrorValues e = null;
 			try {
-				e = (ErrorValues) query.getSingleResult();
+				e = query.getSingleResult();
 			} catch (NoResultException ex) {
 			}
 			return e;
