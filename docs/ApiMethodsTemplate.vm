@@ -121,6 +121,21 @@ limitations under the License.
     			#else
     				<i>No Params</i>
     			#end
+    			<br/>
+    			REST Sample Call/URL:<br/>
+    			#set ($link = "http://localhost:5080/openmeetings/services/"+$webServiceName+"/"+$method.name()) 
+    			#set ($index = 0)
+    			#foreach ( $parameter in $method.parameters() )
+    				#if ($index == 0)
+    					#set ($link = $link+"?") 
+    				#else
+    					#set ($link = $link+"&") 
+    				#end
+    				#set ($link = $link + $parameter.name()+"=VALUE") 
+    				#set ($index = $index+1)
+				#end
+				<a href="$link">$link</a>
+    			</a>
     		  </div>
     	   #end
 		#end
