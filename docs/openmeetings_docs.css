@@ -31,6 +31,11 @@ th {
 .method_header {
 	background-color: #cccccc;
 	width: 100%;
+	border-style: solid;
+	border-color: #666666;
+	border-width: 2px;
+	font-size: 11pt;
+	color: #0000FF;
 }
 .navigation {
 	margin-left: 40px;
