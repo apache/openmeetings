@@ -309,7 +309,7 @@
 				<image href="images/backup.png" fullhref="images/backup.png"
 					title="Backup" width="200" height="115" />
 				<text>
-					You can backup the hole user-generated data including files
+					You can backup all user-generated data including files
 					uploaded by the users in a single ZIP file and import that ZIP into
 					a new installation of OpenMeetings again.
 				</text>
