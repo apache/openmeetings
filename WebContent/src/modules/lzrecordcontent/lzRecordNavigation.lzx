@@ -235,14 +235,14 @@
             
             var restSeconds = deltaInSeconds - (minutes*60);
             
-            var timeInMinutes = minutes+" min "+restSeconds+" sek";
+            var timeInMinutes = minutes+" min "+restSeconds+" sec";
             
             if (minutes > 60) {
                 var hours = Math.floor(minutes/60);
                 
                 var restMinutes = minutes - (hours*60);
                 
-                var timeInMinutes = hours+" h "+restMinutes+" min "+restSeconds+" sek";
+                var timeInMinutes = hours+" h "+restMinutes+" min "+restSeconds+" sec";
             }
             
             this._recordingsInfo.content.recordingName = rec.fileHash;
@@ -413,6 +413,9 @@
             <customEdittext name="right" x="$once{ parent.width - 68 }" width="26" text="0" y="20"/>
             
             <view name="_show_log1" resource="flv_reload_rsc" y="18" x="$once{ parent.width - 36 }">
+            	<handler name="oninit">
+            		if ($debug) Debug.write("_show_log1::oninit ", this);
+            	</handler> 
                 <handler name="onclick" args="clickObj">
                     parent.parent.parent.parent._recordingsViewMain.restartConversion(parent.left.getText(),parent.right.getText(),parent.leftTime.getText(),parent.rightTime.getText());
                 </handler>

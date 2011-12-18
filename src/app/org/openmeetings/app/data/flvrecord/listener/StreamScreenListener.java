@@ -20,8 +20,6 @@ public class StreamScreenListener extends ListenerAdapter {
 
 	private int startTimeStamp = -1;
 
-	private long byteCount = 0;
-
 	private Date startedSessionScreenTimeDate = null;
 
 	private long initialDelta = 0;
@@ -84,8 +82,6 @@ public class StreamScreenListener extends ListenerAdapter {
 			if (data.limit() == 0) {
 				return;
 			}
-
-			this.byteCount += data.limit();
 
 			if (startTimeStamp == -1) {
 

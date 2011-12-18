@@ -265,11 +265,11 @@ public class Roommanagement {
 		return null;
 	}
 
-	public SearchResult getRooms(long user_level, int start, int max,
+	public SearchResult<Rooms> getRooms(long user_level, int start, int max,
 			String orderby, boolean asc, String search) {
 		try {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
-				SearchResult sResult = new SearchResult();
+				SearchResult<Rooms> sResult = new SearchResult<Rooms>();
 				sResult.setRecords(this.selectMaxFromRooms(search));
 				sResult.setObjectName(Rooms.class.getName());
 				sResult.setResult(this.getRoomsInternatlByHQL(start, max,
@@ -282,11 +282,11 @@ public class Roommanagement {
 		return null;
 	}
 
-	public SearchResult getRoomsWithCurrentUsers(long user_level, int start,
+	public SearchResult<Rooms> getRoomsWithCurrentUsers(long user_level, int start,
 			int max, String orderby, boolean asc) {
 		try {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
-				SearchResult sResult = new SearchResult();
+				SearchResult<Rooms> sResult = new SearchResult<Rooms>();
 				sResult.setRecords(this.selectMaxFromRooms(""));
 				sResult.setObjectName(Rooms.class.getName());
 
@@ -1052,13 +1052,13 @@ public class Roommanagement {
 		return null;
 	}
 
-	public SearchResult getRoomsOrganisationByOrganisationId(long user_level,
+	public SearchResult<Rooms_Organisation> getRoomsOrganisationByOrganisationId(long user_level,
 			long organisation_id, int start, int max, String orderby,
 			boolean asc) {
 		try {
 			if (authLevelManagement.checkModLevel(user_level)) {
 
-				SearchResult sResult = new SearchResult();
+				SearchResult<Rooms_Organisation> sResult = new SearchResult<Rooms_Organisation>();
 				sResult.setObjectName(Rooms_Organisation.class.getName());
 				sResult.setRecords(this.selectMaxFromRoomsByOrganisation(
 						organisation_id).longValue());

@@ -2,12 +2,11 @@ package org.openmeetings.app.data.beans.basic;
 
 import java.util.List;
 
-public class SearchResult {
+public class SearchResult<T> {
 	
 	private String objectName;
 	private Long records;
-	@SuppressWarnings("rawtypes")
-	private List result;
+	private List<T> result;
 	private Long errorId;
 	
 	public String getObjectName() {
@@ -22,10 +21,10 @@ public class SearchResult {
 	public void setRecords(Long records) {
 		this.records = records;
 	}
-	public List getResult() {
+	public List<T> getResult() {
 		return result;
 	}
-	public void setResult(List result) {
+	public void setResult(List<T> result) {
 		this.result = result;
 	}
 	public Long getErrorId() {

@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.persistence.beans.logs.ConferenceLogType;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -43,7 +43,7 @@ public class ConferenceLogTypeDaoImpl {
 			String hql = "select a from ConferenceLogType a " +
 					"WHERE a.eventType = :eventType ";
 					
-			Query query = em.createQuery(hql);
+			TypedQuery<ConferenceLogType> query = em.createQuery(hql, ConferenceLogType.class);
 			query.setParameter("eventType",eventType);
 			
 			//Seems like this does throw an error sometimes cause it does not return a unique Result

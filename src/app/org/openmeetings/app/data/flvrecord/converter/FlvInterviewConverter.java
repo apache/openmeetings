@@ -23,7 +23,6 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class FlvInterviewConverter extends BaseConverter {
-	private int initCutSeconds = 0;
 	private int leftSideLoud = 1;
 	private int rightSideLoud = 1;
 	private Integer leftSideTime = 0;
@@ -43,13 +42,8 @@ public class FlvInterviewConverter extends BaseConverter {
 	@Autowired
 	private GenerateThumbs generateThumbs;
 
-	private String FFMPEG_MAP_PARAM = ":";
-
 	public void startReConversion(Long flvRecordingId, Integer leftSideLoud,
 			Integer rightSideLoud, Integer leftSideTime, Integer rightSideTime) {
-		if (isUseOldStyleFfmpegMap()) {
-			FFMPEG_MAP_PARAM = ".";
-		}
 
 		log.debug("++++++++++++ leftSideLoud :: " + leftSideLoud);
 		log.debug("++++++++++++ rightSideLoud :: " + rightSideLoud);
@@ -62,6 +56,8 @@ public class FlvInterviewConverter extends BaseConverter {
 
 		log.debug("++++++++++++ this.leftSideLoud :: " + this.leftSideLoud);
 		log.debug("++++++++++++ this.rightSideLoud :: " + this.rightSideLoud);
+		log.debug("++++++++++++ this.leftSideTime :: " + this.leftSideTime);
+		log.debug("++++++++++++ this.rightSideTime :: " + this.rightSideTime);
 		startConversion(flvRecordingId, true);
 	}
 
@@ -131,7 +127,7 @@ public class FlvInterviewConverter extends BaseConverter {
 						.getFlvRecordingId());
 
 		stripAudioFirstPass(flvRecording, returnLog, listOfFullWaveFiles,
-				streamFolderName);
+				streamFolderName, metaDataList);
 		try {
 			// Merge Wave to Full Length
 			String streamFolderGeneralName = getStreamFolderName();
@@ -646,13 +642,13 @@ public class FlvInterviewConverter extends BaseConverter {
 			Process proc = rt.exec(cmd);
 
 			InputStream stderr = proc.getErrorStream();
-			InputStreamReader isr = new InputStreamReader(stderr);
-			BufferedReader br = new BufferedReader(isr);
+			BufferedReader br = new BufferedReader(new InputStreamReader(stderr));
 			String line = null;
 			String error = "";
 			while ((line = br.readLine()) != null) {
 				error += line;
 			}
+			br.close();
 			returnMap.put("error", error);
 			int exitVal = proc.waitFor();
 			returnMap.put("exitValue", "" + exitVal);

@@ -1,5 +1,7 @@
 package org.openmeetings.app.data.flvrecord.converter;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.task.TaskExecutor;
 
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -10,14 +12,11 @@ public class FlvRecorderConverterTask {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecorderConverterTask.class, ScopeApplicationAdapter.webAppRootKey);
 
-	//Spring loaded
+	@Autowired
+	@Qualifier("openmeetings.TaskExecutor")
 	private TaskExecutor taskExecutor;
+	@Autowired
 	private FlvRecorderConverter flvRecorderConverter;
-	
-	public FlvRecorderConverterTask(TaskExecutor taskExecutor, FlvRecorderConverter flvRecorderConverter) {
-		this.taskExecutor = taskExecutor;
-		this.flvRecorderConverter = flvRecorderConverter;
-	}
 
 	public void startConversionThread(final Long flvRecordingId) {
 		try {

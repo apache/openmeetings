@@ -6,9 +6,10 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingMetaData;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class FlvRecordingMetaDataDaoImpl {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecordingMetaDataDaoImpl.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecordingMetaDataDaoImpl.class,
+			ScopeApplicationAdapter.webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
@@ -29,12 +31,12 @@ public class FlvRecordingMetaDataDaoImpl {
 			String hql = "SELECT c FROM FlvRecordingMetaData c " +
 					"WHERE c.flvRecordingMetaDataId = :flvRecordingMetaDataId";
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<FlvRecordingMetaData> query = em.createQuery(hql, FlvRecordingMetaData.class);
 			query.setParameter("flvRecordingMetaDataId", flvRecordingMetaDataId);
 			
 			FlvRecordingMetaData flvRecordingMetaData = null;
 			try {
-				flvRecordingMetaData = (FlvRecordingMetaData) query.getSingleResult();
+				flvRecordingMetaData = query.getSingleResult();
 		    } catch (NoResultException ex) {
 		    }
 			
@@ -53,7 +55,7 @@ public class FlvRecordingMetaDataDaoImpl {
 					"WHERE c.flvRecording.flvRecordingId = :flvRecordingId " +
 					"AND c.deleted <> :deleted ";
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<FlvRecordingMetaData> query = em.createQuery(hql, FlvRecordingMetaData.class);
 			query.setParameter("flvRecordingId", flvRecordingId);
 			query.setParameter("deleted", "true");
 			
@@ -78,7 +80,7 @@ public class FlvRecordingMetaDataDaoImpl {
 						"(c.isAudioOnly = true OR (c.isAudioOnly = false AND c.isVideoOnly = false))" +
 					")";
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<FlvRecordingMetaData> query = em.createQuery(hql, FlvRecordingMetaData.class);
 			query.setParameter("flvRecordingId", flvRecordingId);
 			
 			List<FlvRecordingMetaData> flvRecordingMetaDatas = query.getResultList();
@@ -98,7 +100,7 @@ public class FlvRecordingMetaDataDaoImpl {
 					"WHERE c.flvRecording.flvRecordingId = :flvRecordingId " +
 					"AND c.isScreenData = true";
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<FlvRecordingMetaData> query = em.createQuery(hql, FlvRecordingMetaData.class);
 			query.setParameter("flvRecordingId", flvRecordingId);
 			
 			List<FlvRecordingMetaData> flvRecordingMetaDatas = query.getResultList();

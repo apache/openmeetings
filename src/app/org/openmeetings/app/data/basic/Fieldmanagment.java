@@ -478,10 +478,10 @@ public class Fieldmanagment {
 		return new Long(-1);
 	}
 
-	public SearchResult getFieldsByLanguage(int start, int max, String orderby,
+	public SearchResult<Fieldvalues> getFieldsByLanguage(int start, int max, String orderby,
 			boolean asc, Long language_id) {
 		try {
-			SearchResult sresult = new SearchResult();
+			SearchResult<Fieldvalues> sresult = new SearchResult<Fieldvalues>();
 			sresult.setObjectName(Fieldlanguagesvalues.class.getName());
 			sresult.setRecords(this.selectMaxFromFieldsValues());
 			sresult.setResult(this.getMixedFieldValuesList(start, max, orderby,

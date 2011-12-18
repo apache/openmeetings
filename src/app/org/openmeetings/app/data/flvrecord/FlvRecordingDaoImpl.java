@@ -6,9 +6,10 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecording;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,8 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 public class FlvRecordingDaoImpl {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecordingDaoImpl.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecordingDaoImpl.class,
+			ScopeApplicationAdapter.webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
 	
@@ -30,12 +31,12 @@ public class FlvRecordingDaoImpl {
 			String hql = "SELECT c FROM FlvRecording c " +
 					"WHERE c.flvRecordingId = :flvRecordingId";
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
 			query.setParameter("flvRecordingId", flvRecordingId);
 			
 			FlvRecording flvRecording = null;
 			try {
-				flvRecording = (FlvRecording) query.getSingleResult();
+				flvRecording = query.getSingleResult();
 		    } catch (NoResultException ex) {
 		    }
 			return flvRecording;
@@ -51,7 +52,7 @@ public class FlvRecordingDaoImpl {
 			String hql = "SELECT c FROM FlvRecording c " +
 							"WHERE c.deleted <> :deleted ";
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
 			query.setParameter("deleted", "true");
 			
 			List<FlvRecording> flvRecordings = query.getResultList();
@@ -75,7 +76,7 @@ public class FlvRecordingDaoImpl {
 					"AND u.externalUserId = :externalUserId " +
 					"AND c.deleted <> :deleted ";
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
 			query.setParameter("externalUserId", externalUserId);
 			query.setParameter("deleted", "true");
 			
@@ -101,7 +102,7 @@ public class FlvRecordingDaoImpl {
 					"AND c.insertedBy LIKE :insertedBy " +
 					"AND c.deleted <> :deleted ";
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
 			query.setParameter("externalRoomType", externalRoomType);
 			query.setParameter("insertedBy", insertedBy);
 			query.setParameter("deleted", "true");
@@ -122,7 +123,7 @@ public class FlvRecordingDaoImpl {
 			
 			String hql = "SELECT c FROM FlvRecording c ";
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
 			
 			List<FlvRecording> flvRecordings = query.getResultList();
 			
@@ -143,7 +144,7 @@ public class FlvRecordingDaoImpl {
 					"AND r.externalRoomType LIKE :externalRoomType " +
 					"AND c.deleted <> :deleted ";
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
 			query.setParameter("externalRoomType", externalRoomType);
 			query.setParameter("deleted", "true");
 			
@@ -167,7 +168,7 @@ public class FlvRecordingDaoImpl {
 					"AND (c.parentFileExplorerItemId IS NULL OR c.parentFileExplorerItemId = 0) " +
 					"ORDER BY c.isFolder DESC, c.fileName ";
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
 			query.setParameter("deleted", "true");
 			
 			List<FlvRecording> flvRecordingList = query.getResultList();
@@ -188,7 +189,7 @@ public class FlvRecordingDaoImpl {
 					"AND (c.parentFileExplorerItemId IS NULL OR c.parentFileExplorerItemId = 0) " +
 					"ORDER BY c.isFolder DESC, c.fileName ";
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
 			query.setParameter("organization_id", organization_id);
 			query.setParameter("deleted", "true");
 			
@@ -210,7 +211,7 @@ public class FlvRecordingDaoImpl {
 					"AND (c.parentFileExplorerItemId IS NULL OR c.parentFileExplorerItemId = 0) " +
 					"ORDER BY c.isFolder DESC, c.fileName ";
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
 			query.setParameter("deleted", "true");
 			query.setParameter("ownerId",ownerId);
 			
@@ -232,7 +233,7 @@ public class FlvRecordingDaoImpl {
 					"AND c.parentFileExplorerItemId = :parentFileExplorerItemId " +
 					"ORDER BY c.isFolder DESC, c.fileName ";
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
 			query.setParameter("deleted", "true");
 			query.setParameter("ownerId",ownerId);
 			query.setParameter("parentFileExplorerItemId", parentFileExplorerItemId);
@@ -254,7 +255,7 @@ public class FlvRecordingDaoImpl {
 					"AND c.room_id = :room_id " +
 					"ORDER BY c.isFolder DESC, c.fileName ";
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
 			query.setParameter("deleted", "true");
 			query.setParameter("room_id",room_id);
 			
@@ -275,7 +276,7 @@ public class FlvRecordingDaoImpl {
 					"AND c.parentFileExplorerItemId = :parentFileExplorerItemId " +
 					"ORDER BY c.isFolder DESC, c.fileName ";
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
 			query.setParameter("deleted", "true");
 			query.setParameter("parentFileExplorerItemId", parentFileExplorerItemId);
 			

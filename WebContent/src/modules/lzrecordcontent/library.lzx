@@ -13,6 +13,7 @@
     <resource name="icon_flv_recording_video_start_rsc" src="resources/icon_flv_recording_video_start.png" />
     
     <resource name="recorder_show_log_rsc" src="resources/messagebox_info.png" />
+    <resource name="flv_reload_rsc" src="resources/reload.png" />
     
     <include href="baseChooseIconFLVView.lzx" />
     <include href="messageRecordingWin.lzx" />

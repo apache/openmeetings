@@ -111,12 +111,20 @@ public abstract class BaseConverter {
 		return argv_full_sox;
 	}
 	
-	protected void stripAudioFirstPass(FlvRecording flvRecording, List<HashMap<String, String>> returnLog, List<String> listOfFullWaveFiles, String streamFolderName) {
-		try {
-			List<FlvRecordingMetaData> metaDataList = flvRecordingMetaDataDaoImpl
-					.getFlvRecordingMetaDataAudioFlvsByRecording(flvRecording
-							.getFlvRecordingId());
+	protected void stripAudioFirstPass(FlvRecording flvRecording,
+			List<HashMap<String, String>> returnLog,
+			List<String> listOfFullWaveFiles, String streamFolderName) {
+		List<FlvRecordingMetaData> metaDataList = flvRecordingMetaDataDaoImpl
+				.getFlvRecordingMetaDataAudioFlvsByRecording(flvRecording
+						.getFlvRecordingId());
+		stripAudioFirstPass(flvRecording, returnLog, listOfFullWaveFiles, streamFolderName, metaDataList);
+	}
 	
+	protected void stripAudioFirstPass(FlvRecording flvRecording,
+			List<HashMap<String, String>> returnLog,
+			List<String> listOfFullWaveFiles, String streamFolderName,
+			List<FlvRecordingMetaData> metaDataList) {
+		try {
 			// Init variables
 			log.debug("### meta Data Number - " + metaDataList.size());
 			log.debug("###################################################");

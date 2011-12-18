@@ -138,11 +138,11 @@ public class Configurationmanagement {
 		return null;
 	}
 
-	public SearchResult getAllConf(long user_level, int start, int max,
+	public SearchResult<Configuration> getAllConf(long user_level, int start, int max,
 			String orderby, boolean asc) {
 		try {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
-				SearchResult sresult = new SearchResult();
+				SearchResult<Configuration> sresult = new SearchResult<Configuration>();
 				sresult.setRecords(this.selectMaxFromConfigurations());
 				sresult.setResult(this.getConfigurations(start, max, orderby,
 						asc));

@@ -4,9 +4,10 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingMetaDelta;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class FlvRecordingMetaDeltaDaoImpl {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecordingMetaDeltaDaoImpl.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecordingMetaDeltaDaoImpl.class,
+			ScopeApplicationAdapter.webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
 	
@@ -28,7 +30,7 @@ public class FlvRecordingMetaDeltaDaoImpl {
 			String hql = "SELECT c FROM FlvRecordingMetaDelta c " +
 					"WHERE c.flvRecordingMetaDataId = :flvRecordingMetaDataId";
 			
-			Query query = em.createQuery(hql);
+			TypedQuery<FlvRecordingMetaDelta> query = em.createQuery(hql, FlvRecordingMetaDelta.class);
 			query.setParameter("flvRecordingMetaDataId", flvRecordingMetaDataId);
 			
 			List<FlvRecordingMetaDelta> flvRecordingMetaDeltas = query.getResultList();
