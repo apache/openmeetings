@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- Copyright 2006 The Apache Software Foundation Licensed under the Apache 
+	License, Version 2.0 (the "License"); you may not use this file except in 
+	compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+	Unless required by applicable law or agreed to in writing, software distributed 
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+	the specific language governing permissions and limitations under the License. -->
+<document>
+
+	<properties>
+		<title>Branding and Colors</title>
+		<author email="sebawagner@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="Editing Logo / Text on top">
+
+			<p>In the config.xml there are some configuration variables
+			</p>
+			<div class="xmlcode">
+				&lt;!--
+				<br />
+				Name of the Application
+				<br />
+				this is the Top-Icon Name of the Application
+				<br />
+				--&gt;
+				<br />
+				&lt;currentappname&gt;OpenMeetings 1.8.3
+				r4343&lt;/currentappname&gt;
+				<br />
+				&lt;!--
+				<br />
+				URL to the Home of the Application
+				<br />
+				this is the URL which is used if you click on the Top-icon
+				<br />
+				--&gt;
+				<br />
+				&lt;currentappnameurl&gt;http://openmeetings.googlecode.com&lt;/currentappnameurl&gt;
+				<br />
+				&lt;!--
+				<br />
+				URL to Bugs/Support
+				<br />
+				this is the URL which is used if you click on *report a bug*
+				<br />
+				--&gt;
+				<br />
+				&lt;currentappnamebugurl&gt;http://code.google.com/p/openmeetings/issues/list&lt;/currentappnamebugurl&gt;
+			</div>
+
+			<p>Addtionally the browser-bar title can be configured in the
+				Openmeetings > Administration > Configuration.
+			</p>
+			<p>
+				Config Key:
+				<tt>application.name</tt>
+			</p>
+
+		</section>
+
+		<section name="Editing Colors">
+
+
+			<p>To change the color scheme you can simply edit the config.xml,
+				there are 3 color settings, the whole application is styled using
+				those:
+			</p>
+
+			<div class="xmlcode">
+				&lt;!--
+				<br />
+				These colors are the main colors and style the whole application
+				<br />
+				--&gt;
+				<br />
+				&lt;basebgcolorizer&gt;0x669AE6&lt;/basebgcolorizer&gt;
+				<br />
+				&lt;baseMousecolorizer&gt;0x7BA8EA&lt;/baseMousecolorizer&gt;
+				<br />
+				&lt;baseMouseOvercolorizer&gt;0x99BBEE&lt;/baseMouseOvercolorizer&gt;
+				<br />
+			</div>
+
+		</section>
+
+	</body>
+
+</document>

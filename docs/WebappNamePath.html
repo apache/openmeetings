@@ -29,7 +29,8 @@ limitations under the License.
             <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
 
                                                     <meta name="author" value="
- Sebastian Wagner">
+			OpenMeetings Team
+		">
             <meta name="email" value="sebawagner@apache.org">
             
            
@@ -38,7 +39,7 @@ limitations under the License.
             
             
             
-            <title>Apache OpenMeetings - Project Team</title>
+            <title>Apache OpenMeetings - Webapp Name / Path</title>
             <link rel="stylesheet" type="text/css" href="css/openmeetings.css">
         </head>
 
@@ -332,138 +333,143 @@ limitations under the License.
                                                                     <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="OpenMeetings Committers"><strong>OpenMeetings Committers</strong></a>
+          <a name="Renaming /openmeetings context"><strong>Renaming /openmeetings context</strong></a>
           <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
         </font>
       </td></tr>
       <tr><td>
         <blockquote>
                                     <p>
-The people listed below have made significant contributions to Podling by
-working long and hard to make quality software for the rest of the world to
-use.
-</p>
+				If you want to have
+				<tt>http://yourcorp.com:5080/yourmeetings</tt>
+				instead of
+				<tt>http://yourcorp.com:5080/openmeetings</tt>
+				you need to do the following
+			</p>
+                                                <ol>
+				<li>stop openmmetings if it is running </li>
+				<li>
+					go to openmeetings install dir (for ex.
+					<tt>/opt/red5</tt>
+					)
+				</li>
+				<li>
+					rename
+					<tt>/opt/red5/webapps/openmeetings</tt>
+					to
+					<tt>/opt/red5/webapps/yourmeetings</tt>
+					(for ex.
+					<tt>mv /opt/red5/webapps/openmeetings
+						/opt/red5/webapps/yourmeetings
+					</tt>
+					)
+				</li>
+				<li>
+					open
+					<tt>/opt/red5/webapps/yourmeetings/config.xml</tt>
+					using your favorite text editor (for ex.
+					<tt>vim /opt/red5/webapps/yourmeetings/config.xml</tt>
+					)
+				</li>
+				<li>
+					find and modify
+					<tt>&lt;webAppRootKey&gt;openmeetings&lt;/webAppRootKey&gt;</tt>
+					to be
+					<tt>&lt;webAppRootKey&gt;</tt>
+					<strong>yourmeetings</strong>
+					<tt>&lt;/webAppRootKey&gt;</tt>
+				</li>
+				<li>
+					find and modify
+					<tt>&lt;httpRootKey&gt;/openmeetings/&lt;/httpRootKey&gt;</tt>
+					to be
+					<tt>&lt;httpRootKey&gt;</tt>
+					<strong>/yourmeetings/</strong>
+					<tt>&lt;/httpRootKey&gt;</tt>
+				</li>
+			</ol>
+                            </blockquote>
+        </p>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td ><!-- bgcolor="#EEEEEE" -->
+        <font color="#000000" face="verdana,arial,helvetica,sanserif">
+          <a name="Changing hard-coded application name in string labels"><strong>Changing hard-coded application name in string labels</strong></a>
+          <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
+        </font>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <p>
+				To have
+				<i>Your Application Name</i>
+				instead of
+				<i>Openmeetings</i>
+				in
+				<strong>all</strong>
+				text labels you need to do the following
+			</p>
+                                                <ol>
+				<li>
+					ensure
+					<strong>
+						<tt>$APP_NAME</tt>
+					</strong>
+					placeholder is used in
+					<i>all</i>
+					strings you have added and/or modified (all strings bundled into
+					Openmeetings already have this placeholder)
+				</li>
+				<li>login to Openmeetings as user with administrator privileges </li>
+				<li>
+					go to
+					<tt>Administration -&gt; Configuration</tt>
+				</li>
+				<li>
+					find and edit configuration with name
+					<strong>
+						<tt>application.name</tt>
+					</strong>
+				</li>
+				<li>
+					Set its value to be
+					<i>
+						<tt>Your Application Name</tt>
+					</i>
+				</li>
+				<li>
+					<tt>Save</tt>
+				</li>
+				<li>reload page or relogin </li>
+			</ol>
                                                 <p>
-If you would like to contribute to Podling, please see the
-LINK TO CONFLUENCE
- to find areas where you can contribute.
-If there is nothing in there that suits your interest, but you still have
-ideas, please feel free to suggest them on the mailing list.
-</p>
+			All string will display
+			<i>
+				<tt>Your Application Name</tt>
+			</i>
+			in place of
+			<i>
+				<tt>Openmeetings</tt>
+			</i>
+			</p>
                                                 <p>
-If you would like to become a committer, please see
-<a href="get-involved.html">Get Involved</a>.
-</p>
-                                                <table>
-                        <tr>
-                        <th bgcolor="#039acc" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Name
-            </font>
-</th>
-                                <th bgcolor="#039acc" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Organization
-            </font>
-</th>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Sebastian Wagner
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Alexei Fedotov
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Evgeny Rovinsky
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Maxim Solodovnik
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Oliver Becherer
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Eugen Schwert
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Sascha Xander
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Johnny Strom
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-            </table>
+				Please
+				<i>NOTE</i>
+				there are 3 additional properties in the config.xml file which
+				should be modified for
+				<strong>TOTAL</strong>
+				Openmeetings clean up:
+			</p>
+                                                <div class="xmlcode">
+				&lt;currentappname&gt;OpenMeetings&lt;/currentappname&gt;
+				<br />
+				&lt;currentappnameurl&gt;http://openmeetings.googlecode.com&lt;/currentappnameurl&gt;
+				<br />
+				&lt;currentappnamebugurl&gt;http://code.google.com/p/openmeetings/issues/list&lt;/currentappnamebugurl&gt;
+				<br />
+			</div>
                             </blockquote>
         </p>
       </td></tr>

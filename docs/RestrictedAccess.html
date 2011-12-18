@@ -29,7 +29,8 @@ limitations under the License.
             <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
 
                                                     <meta name="author" value="
- Sebastian Wagner">
+			OpenMeetings Team
+		">
             <meta name="email" value="sebawagner@apache.org">
             
            
@@ -38,7 +39,7 @@ limitations under the License.
             
             
             
-            <title>Apache OpenMeetings - Project Team</title>
+            <title>Apache OpenMeetings - How to restrict access to your Openmeetings server</title>
             <link rel="stylesheet" type="text/css" href="css/openmeetings.css">
         </head>
 
@@ -332,138 +333,63 @@ limitations under the License.
                                                                     <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="OpenMeetings Committers"><strong>OpenMeetings Committers</strong></a>
+          <a name="Server Side"><strong>Server Side</strong></a>
           <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
         </font>
       </td></tr>
       <tr><td>
         <blockquote>
-                                    <p>
-The people listed below have made significant contributions to Podling by
-working long and hard to make quality software for the rest of the world to
-use.
-</p>
+                                    <p>You can protect your OpenMeetings instance from beeing accessed
+				from 3th party by using the file:
+			</p>
+                                                <p>$RED5_HOME/webapps/openmeetings/WEB-INF/red5-web.properties </p>
+                                                <p>Content: </p>
+                                                <div class="xmlcode">
+				webapp.virtualHosts=*,localhost, 127.0.0.1
+			</div>
+                                                <a href="http://code.google.com/p/openmeetings/source/browse/trunk/singlewebapp/WebContent/WEB-INF/red5-web.properties" rel="nofollow">http://code.google.com/p/openmeetings/source/browse/trunk/singlewebapp/WebContent/WEB-INF/red5-web.properties
+			</a>
+                            </blockquote>
+        </p>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td ><!-- bgcolor="#EEEEEE" -->
+        <font color="#000000" face="verdana,arial,helvetica,sanserif">
+          <a name="Client Side"><strong>Client Side</strong></a>
+          <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
+        </font>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <p>And you can restrict the access also for the client side: Every
+				Flash Plugin will check a file called "crossdomain.xml" before it
+				tries to access the server using rtmp/RPC. This file is located: </p>
+                                                <p>$RED5_HOME/webapps/root/crossdomain.xml </p>
+                                                <p>Content: </p>
+                                                <div class="xmlcode">
+				&lt;?xml version="1.0"?&gt;<br />
+				&lt;cross-domain-policy&gt;<br />
+				        &lt;site-control permitted-cross-domain-policies="all"/&gt;<br />
+				        &lt;allow-access-from domain="localhost" to-ports="20-65535"/&gt;<br />
+				        &lt;allow-access-from domain="*.local" to-ports="20-65535"/&gt;<br />
+				&lt;/cross-domain-policy&gt;<br />
+			</div>
                                                 <p>
-If you would like to contribute to Podling, please see the
-LINK TO CONFLUENCE
- to find areas where you can contribute.
-If there is nothing in there that suits your interest, but you still have
-ideas, please feel free to suggest them on the mailing list.
-</p>
+				Sample file:
+				<a href="http://code.google.com/p/openmeetings/source/browse/trunk/singlewebapp/red5-1.0.0-RC1/red5/webapps/root/crossdomain.xml" rel="nofollow">http://code.google.com/p/openmeetings/source/browse/trunk/singlewebapp/red5-1.0.0-RC1/red5/webapps/root/crossdomain.xml
+				</a>
+			</p>
                                                 <p>
-If you would like to become a committer, please see
-<a href="get-involved.html">Get Involved</a>.
-</p>
-                                                <table>
-                        <tr>
-                        <th bgcolor="#039acc" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Name
-            </font>
-</th>
-                                <th bgcolor="#039acc" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Organization
-            </font>
-</th>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Sebastian Wagner
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Alexei Fedotov
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Evgeny Rovinsky
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Maxim Solodovnik
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Oliver Becherer
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Eugen Schwert
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Sascha Xander
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Johnny Strom
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-            </table>
+					If you accessing your application behind an Apache Webservre (using
+					mod_proxy or mod_jk2) be careful to make the crossdomain.xml
+					accessible. Flash will always search for this file in the www-root
+					directory of every URL you connect to. You might use
+					<a href="https://addons.mozilla.org/de/firefox/addon/firebug/" rel="nofollow">FireBug
+					</a>
+					for example to lookup requests.
+				</p>
                             </blockquote>
         </p>
       </td></tr>

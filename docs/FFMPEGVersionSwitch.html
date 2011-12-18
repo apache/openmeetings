@@ -29,7 +29,8 @@ limitations under the License.
             <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
 
                                                     <meta name="author" value="
- Sebastian Wagner">
+			OpenMeetings Team
+		">
             <meta name="email" value="sebawagner@apache.org">
             
            
@@ -38,7 +39,7 @@ limitations under the License.
             
             
             
-            <title>Apache OpenMeetings - Project Team</title>
+            <title>Apache OpenMeetings - Howto switch between different versions of FFMPEG </title>
             <link rel="stylesheet" type="text/css" href="css/openmeetings.css">
         </head>
 
@@ -332,138 +333,51 @@ limitations under the License.
                                                                     <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="OpenMeetings Committers"><strong>OpenMeetings Committers</strong></a>
+          <a name="Default Configuration"><strong>Default Configuration</strong></a>
+          <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
+        </font>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <p>FFMPEG has a change in its API (possibly since GIT revision
+				88bfe4518)
+			</p>
+                                                <p>Since Version 1.9.x of OpenMeetings: By default OpenMeetings
+				expects you to have a new version of FFMPEG on your OpenMeetings
+				server installed and it will use the new API style to communicate
+				with FFMPEG.
+			</p>
+                            </blockquote>
+        </p>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td ><!-- bgcolor="#EEEEEE" -->
+        <font color="#000000" face="verdana,arial,helvetica,sanserif">
+          <a name="Switching to old FFMPEG API"><strong>Switching to old FFMPEG API</strong></a>
           <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
         </font>
       </td></tr>
       <tr><td>
         <blockquote>
                                     <p>
-The people listed below have made significant contributions to Podling by
-working long and hard to make quality software for the rest of the world to
-use.
-</p>
+				If you want to switch to the old style you can change that using the
+				config key:
+				<tt>use.old.style.ffmpeg.map.option</tt>
+			</p>
                                                 <p>
-If you would like to contribute to Podling, please see the
-LINK TO CONFLUENCE
- to find areas where you can contribute.
-If there is nothing in there that suits your interest, but you still have
-ideas, please feel free to suggest them on the mailing list.
-</p>
-                                                <p>
-If you would like to become a committer, please see
-<a href="get-involved.html">Get Involved</a>.
-</p>
-                                                <table>
-                        <tr>
-                        <th bgcolor="#039acc" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Name
-            </font>
-</th>
-                                <th bgcolor="#039acc" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Organization
-            </font>
-</th>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Sebastian Wagner
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Alexei Fedotov
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Evgeny Rovinsky
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Maxim Solodovnik
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Oliver Becherer
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Eugen Schwert
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Sascha Xander
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Johnny Strom
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-            </table>
+				Set this value to
+				<tt>1</tt>
+				to have the old params in the API call to FFMPEG.
+			</p>
+                                                <p>References:  </p>
+                                                <ul>
+				<li>
+					<a href="http://ffmpeg-users.933282.n4.nabble.com/Invalid-stream-specifier-0-Stream-map-0-0-matches-no-streams-Changes-in-FFMPEG-map-option-td4091165.html" rel="nofollow">http://ffmpeg-users.933282.n4.nabble.com/Invalid-stream-specifier-0-Stream-map-0-0-matches-no-streams-Changes-in-FFMPEG-map-option-td4091165.html
+					</a>
+				</li>
+			</ul>
                             </blockquote>
         </p>
       </td></tr>

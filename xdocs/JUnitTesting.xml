@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- Copyright 2006 The Apache Software Foundation Licensed under the Apache 
+	License, Version 2.0 (the "License"); you may not use this file except in 
+	compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+	Unless required by applicable law or agreed to in writing, software distributed 
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+	the specific language governing permissions and limitations under the License. -->
+<document>
+
+	<properties>
+		<title>JUnit Testing</title>
+		<author email="sebawagner@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="Introduction">
+
+			<p>
+				Automatic tests are the significant part of development process.
+				Below is the instruction of how to run Openmeetings
+				<a href="http://junit.org" rel="nofollow">JUnit</a>
+				tests.
+			</p>
+		</section>
+
+		<section name="Details">
+
+
+			<ol>
+				<li>running tests using command line: </li>
+				<ul>
+					<li>all tests: </li>
+					<div class="xmlcode">
+						ant test
+					</div>
+					<li>subset of tests by mask: </li>
+					<div class="xmlcode">
+						ant -Dtestcases=TestError* test
+					</div>
+				</ul>
+				<li>running tests from Eclipse IDE: </li>
+				<ul>
+					<li>
+						copy src/META-INF/
+						<strong>
+							yourdb
+							<tt>_</tt>
+						</strong>
+						persistence.xml to src/META-INF/persistence.xml
+					</li>
+					<li>Start Eclipse </li>
+					<li>Load workspace with Openmeetings project (or refresh existing
+						project)
+					</li>
+					<li>Select "Debug Configurations..." </li>
+				</ul>
+			</ol>
+			<p>
+				<img src="images/DebugConfigurations.png" />
+			</p>
+			<ul>
+				<li>Create New Junit configuration, give it a name and select test
+					class
+				</li>
+			</ul>
+			<p>
+				<img src="images/NewConfiguration.png" />
+			</p>
+			<ul>
+				<li>Select Arguments tab </li>
+				<li>Add the following code to the VM section </li>
+				<div class="xmlcode">
+					-javaagent:${workspace_loc:ROOT}/lib/openjpa2/openjpa-2.1.0.jar
+					-Dwebapps.root=__
+					&lt;FULL PATH TO
+					OPENMEETINGS&gt;__\dist\red5\webapps\openmeetings
+				</div>
+			</ul>
+			<p>
+				<img src="images/Arguments.png" />
+			</p>
+			<ul>
+				<li>Select Debug </li>
+
+			</ul>
+
+		</section>
+
+	</body>
+
+</document>

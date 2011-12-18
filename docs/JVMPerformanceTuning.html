@@ -29,7 +29,8 @@ limitations under the License.
             <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
 
                                                     <meta name="author" value="
- Sebastian Wagner">
+			OpenMeetings Team
+		">
             <meta name="email" value="sebawagner@apache.org">
             
            
@@ -38,7 +39,7 @@ limitations under the License.
             
             
             
-            <title>Apache OpenMeetings - Project Team</title>
+            <title>Apache OpenMeetings - Performance Tuning</title>
             <link rel="stylesheet" type="text/css" href="css/openmeetings.css">
         </head>
 
@@ -332,138 +333,50 @@ limitations under the License.
                                                                     <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="OpenMeetings Committers"><strong>OpenMeetings Committers</strong></a>
+          <a name="Performance Tuning"><strong>Performance Tuning</strong></a>
           <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
         </font>
       </td></tr>
       <tr><td>
         <blockquote>
-                                    <p>
-The people listed below have made significant contributions to Podling by
-working long and hard to make quality software for the rest of the world to
-use.
-</p>
+                                    <p>To use the optimum of performance from your server there is a
+				start-script for red5 available that does some basic settings in the
+				JVM. It is called red5-highperf.sh. It is recommended to use that
+				script for production and high-load scenarios.
+			</p>
+                                                <div class="xmlcode">
+				#!/bin/bash
+				<br />
+				<br />
+				if [ -z "$RED5_HOME" ]; then export RED5_HOME=.; fi
+				<br />
+				<br />
+				# Previous option set
+				<br />
+				export JAVA_OPTS="-Xrs -Xms512M -Xmx1024M -Xss128K -XX:NewSize=256m
+				-XX:SurvivorRatio=16 -XX:MinHeapFreeRatio=20
+				-XX:+ExplicitGCInvokesConcurrent -Djava.net.preferIPv4Stack=true
+				-Xverify:none"
+				<br />
+				<br />
+				# start Red5
+				<br />
+				echo "Setting Hi Performance Options"
+				<br />
+				exec $RED5_HOME/red5.sh &gt;&gt; $RED5_HOME/log/jvm.stdout 2&gt;&amp;1 &amp;
+				<br />
+			</div>
+                                                <p>You have to exclude the "-XX:+UseConcMarkSweepGC" param from the
+				default red5-highperf.sh to make it functional! However if you are a
+				performance expert you might also play with the values to find
+				perfect matches for your use-case.
+			</p>
                                                 <p>
-If you would like to contribute to Podling, please see the
-LINK TO CONFLUENCE
- to find areas where you can contribute.
-If there is nothing in there that suits your interest, but you still have
-ideas, please feel free to suggest them on the mailing list.
-</p>
-                                                <p>
-If you would like to become a committer, please see
-<a href="get-involved.html">Get Involved</a>.
-</p>
-                                                <table>
-                        <tr>
-                        <th bgcolor="#039acc" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Name
-            </font>
-</th>
-                                <th bgcolor="#039acc" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Organization
-            </font>
-</th>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Sebastian Wagner
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Alexei Fedotov
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Evgeny Rovinsky
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Maxim Solodovnik
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Oliver Becherer
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Eugen Schwert
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Sascha Xander
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Johnny Strom
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-            </table>
+				For a complete overview about possible arguments and their meaning
+				see:
+				<a href="http://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html#PerformanceTuning" rel="nofollow">http://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html#PerformanceTuning
+				</a>
+			</p>
                             </blockquote>
         </p>
       </td></tr>

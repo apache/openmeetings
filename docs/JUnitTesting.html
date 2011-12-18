@@ -29,7 +29,8 @@ limitations under the License.
             <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
 
                                                     <meta name="author" value="
- Sebastian Wagner">
+			OpenMeetings Team
+		">
             <meta name="email" value="sebawagner@apache.org">
             
            
@@ -38,7 +39,7 @@ limitations under the License.
             
             
             
-            <title>Apache OpenMeetings - Project Team</title>
+            <title>Apache OpenMeetings - JUnit Testing</title>
             <link rel="stylesheet" type="text/css" href="css/openmeetings.css">
         </head>
 
@@ -332,138 +333,89 @@ limitations under the License.
                                                                     <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="OpenMeetings Committers"><strong>OpenMeetings Committers</strong></a>
+          <a name="Introduction"><strong>Introduction</strong></a>
           <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
         </font>
       </td></tr>
       <tr><td>
         <blockquote>
                                     <p>
-The people listed below have made significant contributions to Podling by
-working long and hard to make quality software for the rest of the world to
-use.
-</p>
+				Automatic tests are the significant part of development process.
+				Below is the instruction of how to run Openmeetings
+				<a href="http://junit.org" rel="nofollow">JUnit</a>
+				tests.
+			</p>
+                            </blockquote>
+        </p>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td ><!-- bgcolor="#EEEEEE" -->
+        <font color="#000000" face="verdana,arial,helvetica,sanserif">
+          <a name="Details"><strong>Details</strong></a>
+          <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
+        </font>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <ol>
+				<li>running tests using command line: </li>
+				<ul>
+					<li>all tests: </li>
+					<div class="xmlcode">
+						ant test
+					</div>
+					<li>subset of tests by mask: </li>
+					<div class="xmlcode">
+						ant -Dtestcases=TestError* test
+					</div>
+				</ul>
+				<li>running tests from Eclipse IDE: </li>
+				<ul>
+					<li>
+						copy src/META-INF/
+						<strong>
+							yourdb
+							<tt>_</tt>
+						</strong>
+						persistence.xml to src/META-INF/persistence.xml
+					</li>
+					<li>Start Eclipse </li>
+					<li>Load workspace with Openmeetings project (or refresh existing
+						project)
+					</li>
+					<li>Select "Debug Configurations..." </li>
+				</ul>
+			</ol>
                                                 <p>
-If you would like to contribute to Podling, please see the
-LINK TO CONFLUENCE
- to find areas where you can contribute.
-If there is nothing in there that suits your interest, but you still have
-ideas, please feel free to suggest them on the mailing list.
-</p>
+				<img src="images/DebugConfigurations.png" />
+			</p>
+                                                <ul>
+				<li>Create New Junit configuration, give it a name and select test
+					class
+				</li>
+			</ul>
                                                 <p>
-If you would like to become a committer, please see
-<a href="get-involved.html">Get Involved</a>.
-</p>
-                                                <table>
-                        <tr>
-                        <th bgcolor="#039acc" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Name
-            </font>
-</th>
-                                <th bgcolor="#039acc" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Organization
-            </font>
-</th>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Sebastian Wagner
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Alexei Fedotov
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Evgeny Rovinsky
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Maxim Solodovnik
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Oliver Becherer
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Eugen Schwert
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Sascha Xander
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Johnny Strom
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                Independent
-            </font>
-</td>
-            </tr>
-            </table>
+				<img src="images/NewConfiguration.png" />
+			</p>
+                                                <ul>
+				<li>Select Arguments tab </li>
+				<li>Add the following code to the VM section </li>
+				<div class="xmlcode">
+					-javaagent:${workspace_loc:ROOT}/lib/openjpa2/openjpa-2.1.0.jar
+					-Dwebapps.root=__
+					&lt;FULL PATH TO
+					OPENMEETINGS&gt;__\dist\red5\webapps\openmeetings
+				</div>
+			</ul>
+                                                <p>
+				<img src="images/Arguments.png" />
+			</p>
+                                                <ul>
+				<li>Select Debug </li>
+
+			</ul>
                             </blockquote>
         </p>
       </td></tr>
