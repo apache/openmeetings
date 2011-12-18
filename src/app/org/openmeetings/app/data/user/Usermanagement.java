@@ -108,11 +108,11 @@ public class Usermanagement {
 	 * @param orderby
 	 * @return
 	 */
-	public SearchResult getUsersList(long user_level, int start, int max,
+	public SearchResult<Users> getUsersList(long user_level, int start, int max,
 			String orderby, boolean asc) {
 		try {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
-				SearchResult sresult = new SearchResult();
+				SearchResult<Users> sresult = new SearchResult<Users>();
 				sresult.setObjectName(Users.class.getName());
 				sresult.setRecords(usersDao.selectMaxFromUsers());
 
@@ -131,8 +131,8 @@ public class Usermanagement {
 				TypedQuery<Users> q = em.createQuery(cq);
 				q.setFirstResult(start);
 				q.setMaxResults(max);
-				@SuppressWarnings("unused")
 				List<Users> ll = q.getResultList();
+				sresult.setResult(ll);
 				return sresult;
 			}
 		} catch (Exception ex2) {
@@ -141,10 +141,10 @@ public class Usermanagement {
 		return null;
 	}
 
-	public SearchResult getAllUserByRange(String search, int start, int max,
+	public SearchResult<Users> getAllUserByRange(String search, int start, int max,
 			String orderby, boolean asc) {
 		try {
-			SearchResult sresult = new SearchResult();
+			SearchResult<Users> sresult = new SearchResult<Users>();
 			sresult.setObjectName(Users.class.getName());
 			sresult.setRecords(usersDao.getAllUserMax(search));
 
@@ -186,7 +186,7 @@ public class Usermanagement {
 
 			log.debug("Show HQL: " + hql);
 
-			Query query = em.createQuery(hql);
+			TypedQuery<Users> query = em.createQuery(hql, Users.class);
 			// query.setParameter("macomUserId", userId);
 
 			// query
@@ -194,7 +194,6 @@ public class Usermanagement {
 			// else ((Criteria) query).addOrder(Order.desc(orderby));
 			query.setFirstResult(start);
 			query.setMaxResults(max);
-			@SuppressWarnings("unchecked")
 			List<Users> ll = query.getResultList();
 
 			sresult.setResult(ll);
@@ -245,11 +244,10 @@ public class Usermanagement {
 					+ "(c.login LIKE :userOrEmail OR c.adresses.email LIKE :userOrEmail  ) "
 					+ "AND c.deleted <> :deleted";
 
-			Query query = em.createQuery(hql);
+			TypedQuery<Users> query = em.createQuery(hql, Users.class);
 			query.setParameter("userOrEmail", userOrEmail);
 			query.setParameter("deleted", "true");
 
-			@SuppressWarnings("unchecked")
 			List<Users> ll = query.getResultList();
 
 			log.debug("debug SIZE: " + ll.size());
@@ -407,11 +405,10 @@ public class Usermanagement {
 	public List<Userdata> getUserdataDashBoard(Long user_id) {
 		if (user_id.longValue() > 0) {
 			try {
-				Query query = em
-						.createQuery("select c from Userdata as c where c.user_id = :user_id AND c.deleted <> :deleted");
+				TypedQuery<Userdata> query = em
+						.createQuery("select c from Userdata as c where c.user_id = :user_id AND c.deleted <> :deleted", Userdata.class);
 				query.setParameter("user_id", user_id.longValue());
 				query.setParameter("deleted", "true");
-				@SuppressWarnings("unchecked")
 				List<Userdata> ll = query.getResultList();
 				return ll;
 			} catch (Exception ex2) {
@@ -425,13 +422,12 @@ public class Usermanagement {
 		Userdata userdata = new Userdata();
 		if (user_id.longValue() > 0) {
 			try {
-				Query query = em
-						.createQuery("select c from Userdata as c where c.user_id = :user_id AND c.data_key = :data_key AND c.deleted <> :deleted");
+				TypedQuery<Userdata> query = em
+						.createQuery("select c from Userdata as c where c.user_id = :user_id AND c.data_key = :data_key AND c.deleted <> :deleted", Userdata.class);
 				query.setParameter("user_id", user_id.longValue());
 				query.setParameter("data_key", DATA_KEY);
 				query.setParameter("deleted", "true");
-				for (@SuppressWarnings("unchecked")
-				Iterator<Userdata> it2 = query.getResultList().iterator(); it2
+				for (Iterator<Userdata> it2 = query.getResultList().iterator(); it2
 						.hasNext();) {
 					userdata = it2.next();
 				}
@@ -449,7 +445,7 @@ public class Usermanagement {
 			Date age, String street, String additionalname, String zip,
 			long states_id, String town, Long language_id, int availible,
 			String telefon, String fax, String mobil, String email,
-			String comment, int status, List<?> organisations, int title_id,
+			String comment, int status, List<Long> organisations, int title_id,
 			String phone, String sip_user, String sip_pass, String sip_auth,
 			Boolean generateSipUserData, String jNameTimeZone,
 			Boolean forceTimeZoneCheck, String userOffers, String userSearchs,
@@ -703,12 +699,11 @@ public class Usermanagement {
 	private Userlevel getUserLevel(Long level_id) {
 		Userlevel userlevel = new Userlevel();
 		try {
-			Query query = em
-					.createQuery("select c from Userlevel as c where c.level_id = :level_id AND c.deleted <> :deleted");
+			TypedQuery<Userlevel> query = em
+					.createQuery("select c from Userlevel as c where c.level_id = :level_id AND c.deleted <> :deleted", Userlevel.class);
 			query.setParameter("level_id", level_id.longValue());
 			query.setParameter("deleted", "true");
-			for (@SuppressWarnings("unchecked")
-			Iterator<Userlevel> it2 = query.getResultList().iterator(); it2
+			for(Iterator<Userlevel> it2 = query.getResultList().iterator(); it2
 					.hasNext();) {
 				userlevel = it2.next();
 			}
@@ -1130,12 +1125,11 @@ public class Usermanagement {
 					+ "AND c.externalUserType LIKE :externalUserType "
 					+ "AND c.deleted <> :deleted";
 
-			Query query = em.createQuery(hql);
+			TypedQuery<Users> query = em.createQuery(hql, Users.class);
 			query.setParameter("externalUserId", externalUserId);
 			query.setParameter("externalUserType", externalUserType);
 			query.setParameter("deleted", "true");
 
-			@SuppressWarnings("unchecked")
 			List<Users> users = query.getResultList();
 
 			if (users.size() > 0) {
@@ -1542,11 +1536,10 @@ public class Usermanagement {
 				+ "(c.login LIKE :userOrEmail OR c.adresses.email LIKE :userOrEmail  ) "
 				+ "AND c.externalUserId IS NULL " + "AND c.deleted <> :deleted";
 
-		Query query = em.createQuery(hql);
+		TypedQuery<Users> query = em.createQuery(hql, Users.class);
 		query.setParameter("userOrEmail", userOrEmail);
 		query.setParameter("deleted", "true");
 
-		@SuppressWarnings("unchecked")
 		List<Users> ll = query.getResultList();
 
 		if (ll.size() > 1) {
@@ -1568,10 +1561,9 @@ public class Usermanagement {
 		String hql = "SELECT c from Users AS c " + "WHERE "
 				+ "c.adresses.email LIKE :userOrEmail";
 
-		Query query = em.createQuery(hql);
+		TypedQuery<Users> query = em.createQuery(hql, Users.class);
 		query.setParameter("userOrEmail", userOrEmail);
 
-		@SuppressWarnings("unchecked")
 		List<Users> ll = query.getResultList();
 
 		if (ll.size() > 1) {
@@ -1734,7 +1726,7 @@ public class Usermanagement {
 	 * @param search
 	 * @return
 	 */
-	public SearchResult getUsersListWithSearch(Long user_level, int start,
+	public SearchResult<Users> getUsersListWithSearch(Long user_level, int start,
 			int max, String orderby, boolean asc, String search) {
 		try {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
@@ -1764,13 +1756,13 @@ public class Usermanagement {
 				}
 				log.debug("getUsersList search: " + search);
 
-				SearchResult sresult = new SearchResult();
+				SearchResult<Users> sresult = new SearchResult<Users>();
 				sresult.setObjectName(Users.class.getName());
 				sresult.setRecords(usersDao
 						.selectMaxFromUsersWithSearch(search));
 
 				// get all users
-				Query query = em.createQuery(hql);
+				TypedQuery<Users> query = em.createQuery(hql, Users.class);
 				query.setParameter("search", StringUtils.lowerCase(search));
 				query.setMaxResults(max);
 				query.setFirstResult(start);
@@ -1874,7 +1866,7 @@ public class Usermanagement {
 			log.debug("hql :: " + hql);
 
 			// get all users
-			Query query = em.createQuery(hql);
+			TypedQuery<Users> query = em.createQuery(hql, Users.class);
 
 			if (searchTxt.length() != 0 && userOffers.length() != 0
 					&& userSearchs.length() != 0) {
@@ -1923,7 +1915,6 @@ public class Usermanagement {
 			query.setMaxResults(max);
 			query.setFirstResult(start);
 
-			@SuppressWarnings("unchecked")
 			List<Users> userList = query.getResultList();
 
 			return userList;
@@ -2016,7 +2007,7 @@ public class Usermanagement {
 			log.debug("hql :: " + hql);
 
 			// get all users
-			Query query = em.createQuery(hql);
+			TypedQuery<Long> query = em.createQuery(hql, Long.class);
 
 			if (searchTxt.length() != 0 && userOffers.length() != 0
 					&& userSearchs.length() != 0) {
@@ -2062,10 +2053,9 @@ public class Usermanagement {
 
 			}
 
-			@SuppressWarnings("rawtypes")
-			List userList = query.getResultList();
+			List<Long> userList = query.getResultList();
 
-			return (Long) userList.get(0);
+			return userList.get(0);
 
 		} catch (Exception ex2) {
 			log.error("[getUsersList] ", ex2);
@@ -2108,16 +2098,15 @@ public class Usermanagement {
 			}
 
 			// get all users
-			Query query = em.createQuery(hql);
+			TypedQuery<Long> query = em.createQuery(hql, Long.class);
 			query.setParameter("search", StringUtils.lowerCase(searchTxt));
 			query.setParameter("userOffers", StringUtils.lowerCase(userOffers));
 			query.setParameter("userSearchs",
 					StringUtils.lowerCase(userSearchs));
 
-			@SuppressWarnings("rawtypes")
-			List ll = query.getResultList();
+			List<Long> ll = query.getResultList();
 
-			return (Long) ll.get(0);
+			return ll.get(0);
 
 		} catch (Exception ex2) {
 			log.error("[searchMaxUserProfile] " + ex2);

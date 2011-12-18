@@ -111,11 +111,11 @@ public class Organisationmanagement {
 	 * @param orderby
 	 * @return
 	 */
-	public SearchResult getOrganisations(long user_level, int start, int max,
+	public SearchResult<Organisation> getOrganisations(long user_level, int start, int max,
 			String orderby, boolean asc) {
 		try {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
-				SearchResult sresult = new SearchResult();
+				SearchResult<Organisation> sresult = new SearchResult<Organisation>();
 				sresult.setObjectName(Organisation.class.getName());
 				sresult.setRecords(this.selectMaxFromOrganisations());
 				sresult.setResult(this.getOrganisations(start, max, orderby,
@@ -410,6 +410,9 @@ public class Organisationmanagement {
 	 */
 	public Long deleteOrganisation(long organisation_id, long updatedby) {
 		try {
+			em.createNamedQuery("deleteUsersFromOrganisation")
+				.setParameter("organisation_id", organisation_id)
+				.executeUpdate();
 
 			Organisation org = this.getOrganisationById(organisation_id);
 			org.setDeleted("true");
@@ -533,12 +536,12 @@ public class Organisationmanagement {
 		return null;
 	}
 
-	public SearchResult getUsersSearchResultByOrganisationId(
+	public SearchResult<Users> getUsersSearchResultByOrganisationId(
 			long organisation_id, int start, int max, String orderby,
 			boolean asc) {
 		try {
 
-			SearchResult sResult = new SearchResult();
+			SearchResult<Users> sResult = new SearchResult<Users>();
 			sResult.setObjectName(Users.class.getName());
 			sResult.setRecords(selectMaxUsersByOrganisationId(organisation_id));
 			sResult.setResult(getUsersByOrganisationId(organisation_id,
@@ -708,20 +711,8 @@ public class Organisationmanagement {
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("rawtypes")
-	private boolean checkOrgInList(Long orgId, List org) throws Exception {
-		// log.error("checkOrgInList "+orgId);
-		for (Iterator it = org.iterator(); it.hasNext();) {
-			Integer key = (Integer) it.next();
-			Long newOrgId = key.longValue();
-			// log.error("[checkOrgInList 1]: newOrgId "+newOrgId);
-			// log.error("[checkOrgInList 2]: org "+orgId);
-			if (newOrgId.equals(orgId)) {
-				// log.error("checkOrgInList 3 found");
-				return true;
-			}
-		}
-		return false;
+	private boolean checkOrgInList(Long orgId, List<Long> org) throws Exception {
+		return org != null && org.contains(orgId);
 	}
 
 	/**
@@ -732,11 +723,9 @@ public class Organisationmanagement {
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("rawtypes")
-	private boolean checkOrgInStoredList(long orgId, List org) throws Exception {
+	private boolean checkOrgInStoredList(long orgId, List<Organisation_Users> org) throws Exception {
 		// log.debug("checkOrgInStoredList "+orgId);
-		for (Iterator it = org.iterator(); it.hasNext();) {
-			Organisation_Users orgUsers = (Organisation_Users) it.next();
+		for (Organisation_Users orgUsers : org) {
 			// log.debug("checkOrgInStoredList 2 "+orgUsers.getOrganisation().getOrganisation_id());
 			if (orgUsers.getOrganisation().getOrganisation_id().equals(orgId)) {
 				// log.debug("checkOrgInStoredList 3 found");
@@ -753,27 +742,21 @@ public class Organisationmanagement {
 	 * @param organisations
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes") //FIXME need to refactor
-	public Long updateUserOrganisationsByUser(Users us, List organisations) {
+	//FIXME need to refactor
+	public Long updateUserOrganisationsByUser(Users us, List<Long> organisations) {
 		try {
 			LinkedList<Long> orgIdsToAdd = new LinkedList<Long>();
 			LinkedList<Long> orgIdsToDelete = new LinkedList<Long>();
 
 			if (us.getOrganisation_users() != null) {
-
-				for (Iterator it = organisations.iterator(); it.hasNext();) {
-					Integer key = (Integer) it.next();
-					Long orgIdToAdd = key.longValue();
+				for (Long orgIdToAdd : organisations) {
 					boolean isAlreadyStored = this.checkOrgInStoredList(
 							orgIdToAdd, us.getOrganisation_users());
 					if (!isAlreadyStored)
 						orgIdsToAdd.add(orgIdToAdd);
 				}
 
-				for (Iterator it = us.getOrganisation_users().iterator(); it
-						.hasNext();) {
-					Organisation_Users orgUsers = (Organisation_Users) it
-							.next();
+				for (Organisation_Users orgUsers : us.getOrganisation_users()) {
 					Long orgIdStored = orgUsers.getOrganisation()
 							.getOrganisation_id();
 					// log.error("updateUserOrganisationsByUser check1 : "+orgIdStored);
@@ -784,15 +767,13 @@ public class Organisationmanagement {
 				}
 
 				// log.error("updateUserOrganisationsByUser size ADD: "+orgIdsToAdd.size());
-				for (Iterator it = orgIdsToAdd.iterator(); it.hasNext();) {
-					Long orgToAdd = (Long) it.next();
+				for (Long orgToAdd : orgIdsToAdd) {
 					this.addUserToOrganisation(us.getUser_id(), orgToAdd,
 							us.getUser_id(), "");
 				}
 
 				// log.error("updateUserOrganisationsByUser size DELETE: "+orgIdsToDelete.size());
-				for (Iterator it = orgIdsToDelete.iterator(); it.hasNext();) {
-					Long orgToDel = (Long) it.next();
+				for (Long orgToDel : orgIdsToDelete) {
 					this.deleteUserFromOrganisation(new Long(3),
 							us.getUser_id(), orgToDel);
 				}

@@ -257,7 +257,7 @@ public class UserService {
 	 * @param orderby
 	 * @return
 	 */
-	public SearchResult getUserList(String SID, int start, int max,
+	public SearchResult<Users> getUserList(String SID, int start, int max,
 			String orderby, boolean asc) {
 		Long users_id = sessionManagement.checkSession(SID);
 		Long user_level = userManagement.getUserLevelByID(users_id);
@@ -265,7 +265,7 @@ public class UserService {
 				.getUsersList(user_level, start, max, orderby, asc);
 	}
 
-	public SearchResult getUserListWithSearch(String SID, int start, int max,
+	public SearchResult<Users> getUserListWithSearch(String SID, int start, int max,
 			String orderby, boolean asc, String search) {
 		Long users_id = sessionManagement.checkSession(SID);
 		Long user_level = userManagement.getUserLevelByID(users_id);
@@ -283,7 +283,7 @@ public class UserService {
 	 * @param orderby
 	 * @return
 	 */
-	public SearchResult getAllUserBySearchRange(String SID, String search,
+	public SearchResult<Users> getAllUserBySearchRange(String SID, String search,
 			int start, int max, String orderby, boolean asc) {
 		return userManagement.getAllUserByRange(search, start, max, orderby,
 				asc);
@@ -549,7 +549,7 @@ public class UserService {
 		return null;
 	}
 
-	public SearchResult searchUserProfile(String SID, String searchTxt,
+	public SearchResult<Users> searchUserProfile(String SID, String searchTxt,
 			String userOffers, String userSearchs, String orderBy, int start,
 			int max, boolean asc) {
 		try {
@@ -558,7 +558,7 @@ public class UserService {
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				SearchResult searchResult = new SearchResult();
+				SearchResult<Users> searchResult = new SearchResult<Users>();
 				searchResult.setObjectName(Users.class.getName());
 				List<Users> userList = userManagement.searchUserProfile(
 						searchTxt, userOffers, userSearchs, orderBy, start,
@@ -1074,7 +1074,7 @@ public class UserService {
 
 	}
 
-	public SearchResult getInbox(String SID, String search, String orderBy,
+	public SearchResult<PrivateMessages> getInbox(String SID, String search, String orderBy,
 			int start, Boolean asc, Integer max) {
 		try {
 
@@ -1083,7 +1083,7 @@ public class UserService {
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				SearchResult searchResult = new SearchResult();
+				SearchResult<PrivateMessages> searchResult = new SearchResult<PrivateMessages>();
 				searchResult.setObjectName(Users.class.getName());
 				List<PrivateMessages> userList = privateMessagesDao
 						.getPrivateMessagesByUser(users_id, search, orderBy,
@@ -1106,7 +1106,7 @@ public class UserService {
 		return null;
 	}
 
-	public SearchResult getSend(String SID, String search, String orderBy,
+	public SearchResult<PrivateMessages> getSend(String SID, String search, String orderBy,
 			Integer start, Boolean asc, Integer max) {
 		try {
 
@@ -1115,7 +1115,7 @@ public class UserService {
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				SearchResult searchResult = new SearchResult();
+				SearchResult<PrivateMessages> searchResult = new SearchResult<PrivateMessages>();
 				searchResult.setObjectName(Users.class.getName());
 				List<PrivateMessages> userList = privateMessagesDao
 						.getSendPrivateMessagesByUser(users_id, search,
@@ -1138,7 +1138,7 @@ public class UserService {
 		return null;
 	}
 
-	public SearchResult getTrash(String SID, String search, String orderBy,
+	public SearchResult<PrivateMessages> getTrash(String SID, String search, String orderBy,
 			Integer start, Boolean asc, Integer max) {
 		try {
 
@@ -1147,7 +1147,7 @@ public class UserService {
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				SearchResult searchResult = new SearchResult();
+				SearchResult<PrivateMessages> searchResult = new SearchResult<PrivateMessages>();
 				searchResult.setObjectName(Users.class.getName());
 				List<PrivateMessages> userList = privateMessagesDao
 						.getTrashPrivateMessagesByUser(users_id, search,
@@ -1170,7 +1170,7 @@ public class UserService {
 		return null;
 	}
 
-	public SearchResult getFolder(String SID, Long privateMessageFolderId,
+	public SearchResult<PrivateMessages> getFolder(String SID, Long privateMessageFolderId,
 			String search, String orderBy, Integer start, Boolean asc,
 			Integer max) {
 		try {
@@ -1180,7 +1180,7 @@ public class UserService {
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				SearchResult searchResult = new SearchResult();
+				SearchResult<PrivateMessages> searchResult = new SearchResult<PrivateMessages>();
 				searchResult.setObjectName(Users.class.getName());
 				List<PrivateMessages> userList = privateMessagesDao
 						.getFolderPrivateMessagesByUser(users_id, search,

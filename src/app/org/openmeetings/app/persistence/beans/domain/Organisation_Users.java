@@ -21,6 +21,8 @@ import javax.persistence.Table;
 		query="SELECT COUNT(c.organisation_users_id) FROM Organisation_Users c WHERE c.deleted = 'false' AND c.organisation.organisation_id = :organisation_id")
 	, @NamedQuery(name="getOrganisation_UserByUserAndOrganisation",
 		query="SELECT ou FROM Users u, IN(u.organisation_users) ou WHERE u.deleted = 'false' AND u.user_id = :user_id AND ou.organisation.organisation_id = :organisation_id")
+	, @NamedQuery(name="deleteUsersFromOrganisation",
+	query="DELETE FROM Organisation_Users c WHERE c.organisation.organisation_id = :organisation_id")
 })
 @Table(name = "organisation_users")
 public class Organisation_Users implements Serializable {
