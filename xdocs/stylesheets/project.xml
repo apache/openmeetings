@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Apache OpenMeetings Project"
+        href="http://incubator.apache.org/openmeetings/">
+
+    <title>Apache OpenMeetings</title>
+    <!--  -->
+    <logo href="/images/logo-2.jpg">Apache OpenMeetings</logo>
+	
+    <body>
+
+    <menu name="General">
+        <item name="Home"                   href="/index.html"/>
+        <item name="License"                href="/license.html"/>
+        <item name="ASF"                    href="http://www.apache.org/"/>
+        <item name="Downloads"              href="/downloads.html"/>
+        <!-- 
+        <item name="Installation"           href="/installation.html"/>
+        <item name="Support"                href="/support.html"/>
+         -->
+    </menu>
+
+    <menu name="Community">
+        <item name="Get Involved"           href="/get-involved.html"/>
+        <item name="Committers"             href="/team-list.html"/>
+        <item name="Mailing Lists"          href="/mail-lists.html"/>
+        <item name="Wiki"                   href="https://cwiki.apache.org/OPENMEETINGS/" />
+    </menu>
+
+    <menu name="Development">
+        <item name="Source Code"            href="/svn.html"/>
+        <item name="JIRA"                   href="http://issues.apache.org/jira/browse/OPENMEETINGS"/>
+        <item name="Dependencies"           href="/dependencies.html"/>
+    </menu>
+    
+    <!-- 
+    <menu name="Integration">
+        <item name="SOAP/REST API"          href="/integration_api.html"/>
+        <item name="LDAP and ADS"           href="/integration_ldap.html"/>
+        <item name="VoIP and SIP"           href="/integration_voip.html"/>
+        <item name="Moodle Plugin"          href="/moodle_plugin.html"/>
+        <item name="SugarCRM Plugin"        href="/sugarcrm_plugin.html"/>
+    </menu>
+     -->
+     
+    
+
+    </body>
+</project>

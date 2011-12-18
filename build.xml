@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project>
-<project name="openmeetings" basedir="./" default="dist"
-	xmlns:rat="antlib:org.apache.rat.anttasks"
-    xmlns="antlib:org.apache.tools.ant"
-    >
+<project name="openmeetings" basedir="./" default="dist" xmlns:rat="antlib:org.apache.rat.anttasks" xmlns="antlib:org.apache.tools.ant">
 
 	<!-- Sources and output dirs -->
-	<property name="main.src.dir" value="${basedir}/src/app"/>
-	<property name="webstart.src.dir" value="${basedir}/src/screenviewer"/>
-	<property name="templates.src.dir" value="${basedir}/src/templates"/>
-	<property name="test.src.dir" value="${basedir}/src/test"/>
-	<property name="server.src.dir" value="${basedir}/src/server"/>
-	<property name="client.src.dir" value="${basedir}/src/client"/>
-	<property name="main.out.dir" value="${basedir}/bin"/>
-	
+	<property name="main.src.dir" value="${basedir}/src/app" />
+	<property name="webstart.src.dir" value="${basedir}/src/screenviewer" />
+	<property name="templates.src.dir" value="${basedir}/src/templates" />
+	<property name="test.src.dir" value="${basedir}/src/test" />
+	<property name="server.src.dir" value="${basedir}/src/server" />
+	<property name="client.src.dir" value="${basedir}/src/client" />
+	<property name="main.out.dir" value="${basedir}/bin" />
+
 	<!-- Red5 dir -->
-	<property name="red5.server.dir" value="red5-1.0.0-r4297"/>
+	<property name="red5.server.dir" value="red5-1.0.0-r4297" />
 
 	<!-- screen.out.dir -->
 	<property name="screen.out.dir" value="${basedir}/screen_compile" />
 	<!-- screen.src.dir -->
 	<property name="screen.src.dir" value="${basedir}/src/red5-screenshare" />
-	
+
 	<!-- hudson config -->
 	<property environment="env" />
 
@@ -30,51 +27,51 @@
 	<property name="build.target" value="/home/swagner/apache-tomcat-6.0.18/webapps/openmeetings/builds/" />
 
 	<!-- Axis2 Services -->
-	<property name="fileservice.src.dir" value="${basedir}/src/fileservice"/>
-	<property name="roomservice.src.dir" value="${basedir}/src/roomservice"/>
-	<property name="userservice.src.dir" value="${basedir}/src/userservice"/>
-	
-	<!-- Doclet Classes -->
-	<property name="doclet.src.dir" value="${basedir}/src/docgenerator"/>
+	<property name="fileservice.src.dir" value="${basedir}/src/fileservice" />
+	<property name="roomservice.src.dir" value="${basedir}/src/roomservice" />
+	<property name="userservice.src.dir" value="${basedir}/src/userservice" />
 
-	<property name="classes.dir" value="${basedir}/bin"/>
-	<property name="dist.dir" value="dist"/>
-	<property name="red5.root" value="${dist.dir}/red5"/>
-	<property name="report.dir" value="${basedir}/junitreport"/>
-	<property name="derbydb.dir" value="${basedir}/openmeetings"/>
+	<!-- Doclet Classes -->
+	<property name="doclet.src.dir" value="${basedir}/src/docgenerator" />
+
+	<property name="classes.dir" value="${basedir}/bin" />
+	<property name="dist.dir" value="dist" />
+	<property name="red5.root" value="${dist.dir}/red5" />
+	<property name="report.dir" value="${basedir}/junitreport" />
+	<property name="derbydb.dir" value="${basedir}/openmeetings" />
 
 	<!-- Conf dirs -->
-	<property name="conf.dir" value="${basedir}/conf"/>
+	<property name="conf.dir" value="${basedir}/conf" />
 
 	<!-- Distribution properties -->
-	<property name="project.distname" value="openmeetings"/>
-	<property name="dist.webapps.dir" value="${dist.dir}/red5/webapps/${project.distname}"/>
+	<property name="project.distname" value="openmeetings" />
+	<property name="dist.webapps.dir" value="${dist.dir}/red5/webapps/${project.distname}" />
 
 	<!-- screenshare.out.dir -->
 	<property name="screenshare.out.dir" value="${dist.webapps.dir}/red5-screenshare" />
-	
+
 	<!-- libraries -->
-	<property name="project.lib" value="${basedir}/lib"/>
+	<property name="project.lib" value="${basedir}/lib" />
 
 	<!-- LPS Properties -->
-	<property name="out.dir.swf" value = "${basedir}/${dist.webapps.dir}/" />
-	<property name="laszlo.home" value="${basedir}/openlaszlo"/>
-	<property name="webcontent.src.dir" value="${basedir}/WebContent"/>
-	<property name="laszlo.src.dir" value="${webcontent.src.dir}/src"/>
-	<property name="laszlo.debug" value="false"/>
-	<property name="laszlo.proxied" value = "solo"/>
+	<property name="out.dir.swf" value="${basedir}/${dist.webapps.dir}/" />
+	<property name="laszlo.home" value="${basedir}/openlaszlo" />
+	<property name="webcontent.src.dir" value="${basedir}/WebContent" />
+	<property name="laszlo.src.dir" value="${webcontent.src.dir}/src" />
+	<property name="laszlo.debug" value="false" />
+	<property name="laszlo.proxied" value="solo" />
 
-	<path id = "laszlo.lib">
+	<path id="laszlo.lib">
 		<!-- swf8 -->
-		<fileset dir = "${laszlo.home}/WEB-INF/lib" includes="saxon-6.5.3-lz-p1.jar jakarta-regexp-1.2.jar
-			commons-collections.jar jdom.jar log4j-1.2.6.jar lps-4.9.0.jar batik-all-flex.jar velocity-dep-1.4-flex.jar"/>
+		<fileset dir="${laszlo.home}/WEB-INF/lib" includes="saxon-6.5.3-lz-p1.jar jakarta-regexp-1.2.jar
+			commons-collections.jar jdom.jar log4j-1.2.6.jar lps-4.9.0.jar batik-all-flex.jar velocity-dep-1.4-flex.jar" />
 		<!-- swf10 -->
-		<fileset dir = "${laszlo.home}/WEB-INF/lib" includes="mxmlc*.jar flex-messaging-common.jar swfutils.jar asc.jar
-			fxgutils.jar"/>
+		<fileset dir="${laszlo.home}/WEB-INF/lib" includes="mxmlc*.jar flex-messaging-common.jar swfutils.jar asc.jar
+			fxgutils.jar" />
 	</path>
 
 	<!-- Open JPA -->
-	<property name="openjpa.lib" value="${project.lib}/openjpa2"/>
+	<property name="openjpa.lib" value="${project.lib}/openjpa2" />
 	<!--JDBC Drivers-->
 	<property name="database.lib" value="${project.lib}/database" />
 	<property name="red5.lib" value="${basedir}/${red5.server.dir}/dist" />
@@ -102,58 +99,55 @@
 	<!-- Apache RAT -->
 	<property name="rat.lib" value="${project.lib}/rat" />
 	<!-- Svn Task -->
-	<property name="svntask.lib" value="${project.lib}/svntask-1.0.8"/>
+	<property name="svntask.lib" value="${project.lib}/svntask-1.0.8" />
 
 	<!-- screenshare.lib -->
 	<property name="screenshare.lib" value="${basedir}/WebContent/red5-screenshare" />
 	<!-- JDK Tools -->
-    <property name="jdk.tools" value="${project.lib}/java_16_jdk" />
+	<property name="jdk.tools" value="${project.lib}/java_16_jdk" />
 
 	<!-- compile classpath -->
 	<path id="compile.classpath">
-		<fileset dir="${openjpa.lib}" includes="*.jar"/>
-		<fileset dir="${spring.lib}" includes="*.jar"/>
-		<fileset dir="${project.lib}" includes="*.jar"/>
-		<fileset dir="${red5.lib}" includes="*.jar"/>
-		<fileset dir="${red5.server.lib}" includes="*.jar"/>
-		<fileset dir="${upload.lib}" includes="*.jar"/>
-		<fileset dir="${xstream.lib}" includes="*.jar"/>
-		<fileset dir="${junit.lib}" includes="*.jar" excludes="red5.jar"/>
-		<fileset dir="${web.lib}" includes="*.jar"/>
-		<fileset dir="${slf4j.lib}" includes="*.jar"/>
-		<fileset dir="${axis2.lib}" includes="*.jar"/>
-		<fileset dir="${velocity.lib}" includes="*.jar"/>
-		<fileset dir="${batik.lib}" includes="*.jar"/>
-		<fileset dir="${ical.lib}" includes="*.jar"/>
-		<fileset dir="${java2swf.lib}" includes="*.jar"/>
-		<fileset dir="${jmf.lib}" includes="*.jar"/>
-		<fileset dir="${mina.lib}" includes="*.jar"/>
-		<fileset dir="${junit.lib}" includes="*.jar"/>
-		<fileset dir="${screenshare.lib}" includes="*kunststoff.jar"/>
-		<fileset dir="${jdk.tools}" includes="*.jar"/>
+		<fileset dir="${openjpa.lib}" includes="*.jar" />
+		<fileset dir="${spring.lib}" includes="*.jar" />
+		<fileset dir="${project.lib}" includes="*.jar" />
+		<fileset dir="${red5.lib}" includes="*.jar" />
+		<fileset dir="${red5.server.lib}" includes="*.jar" />
+		<fileset dir="${upload.lib}" includes="*.jar" />
+		<fileset dir="${xstream.lib}" includes="*.jar" />
+		<fileset dir="${junit.lib}" includes="*.jar" excludes="red5.jar" />
+		<fileset dir="${web.lib}" includes="*.jar" />
+		<fileset dir="${slf4j.lib}" includes="*.jar" />
+		<fileset dir="${axis2.lib}" includes="*.jar" />
+		<fileset dir="${velocity.lib}" includes="*.jar" />
+		<fileset dir="${batik.lib}" includes="*.jar" />
+		<fileset dir="${ical.lib}" includes="*.jar" />
+		<fileset dir="${java2swf.lib}" includes="*.jar" />
+		<fileset dir="${jmf.lib}" includes="*.jar" />
+		<fileset dir="${mina.lib}" includes="*.jar" />
+		<fileset dir="${junit.lib}" includes="*.jar" />
+		<fileset dir="${screenshare.lib}" includes="*kunststoff.jar" />
+		<fileset dir="${jdk.tools}" includes="*.jar" />
 	</path>
 
 	<!-- screenshare classpath -->
 	<path id="screenshare.classpath">
-		<fileset dir="${screenshare.lib}" includes="*.jar"/>
+		<fileset dir="${screenshare.lib}" includes="*.jar" />
 	</path>
 
 	<!-- build webapp -->
 
-	<target name="dist" description="binary distribution of OpenMeetings"
-        depends="cleanForBinary, jar, compile.laszlo.main, enhance, signWebStartJars">
+	<target name="dist" description="binary distribution of OpenMeetings" depends="cleanForBinary, jar, compile.laszlo.main, enhance, signWebStartJars">
 
 	</target>
 
 	<!-- compiles the sources without the laszlo client -->
-	<target name="dist-test" description="binary distribution of OpenMeetings"
-        depends="cleanForBinary, jar, signWebStartJars">
+	<target name="dist-test" description="binary distribution of OpenMeetings" depends="cleanForBinary, jar, signWebStartJars">
 
 	</target>
 
 	<!-- compiles the sources only with laszlo debug client -->
-	<target name="dist-debug" description="binary distribution of OpenMeetings"
-        depends="cleanForBinary, jar, compile.laszlo.main.debug, signWebStartJars">
+	<target name="dist-debug" description="binary distribution of OpenMeetings" depends="cleanForBinary, jar, compile.laszlo.main.debug, signWebStartJars">
 
 	</target>
 
@@ -162,7 +156,7 @@
 		<mkdir dir="${dist.dir}" />
 		<mkdir dir="${main.out.dir}" />
 	</target>
-	
+
 	<condition property="db.provider" value="${db}" else="derby">
 		<isset property="db" />
 	</condition>
@@ -174,82 +168,81 @@
 		</copy>
 		<copy todir="${red5.root}" filtering="true">
 			<fileset dir="${red5.server.dir}/dist">
-				<exclude name="**/*.fla"/>
+				<exclude name="**/*.fla" />
 			</fileset>
 		</copy>
 		<copy todir="${dist.webapps.dir}">
-			<fileset dir="${webcontent.src.dir}/openmeetings"/>
+			<fileset dir="${webcontent.src.dir}/openmeetings" />
 		</copy>
 		<copy todir="${dist.dir}/red5/lib">
-			<fileset dir="${spring.lib}"/>
-			<fileset dir="${slf4j.lib}"/>
-			<fileset dir="${mina.lib}"/>
+			<fileset dir="${spring.lib}" />
+			<fileset dir="${slf4j.lib}" />
+			<fileset dir="${mina.lib}" />
 		</copy>
 
 		<!-- this package contains the javax.persistance.* API of JAVA-EE-6 -->
-		<copy file="${openjpa.lib}/geronimo-jpa_2.0_spec-1.1.jar" todir="${dist.dir}/red5/lib"/>
+		<copy file="${openjpa.lib}/geronimo-jpa_2.0_spec-1.1.jar" todir="${dist.dir}/red5/lib" />
 
 		<copy todir="${dist.webapps.dir}/WEB-INF/lib">
 			<fileset dir="${openjpa.lib}">
-				<include name="*.jar"/>
-				<exclude name="commons-collections-3.2.1.jar"/>
+				<include name="*.jar" />
+				<exclude name="commons-collections-3.2.1.jar" />
 				<!-- this jar is already in the servers-lib -->
-				<exclude name="geronimo-jpa_2.0_spec-1.1.jar"/>
+				<exclude name="geronimo-jpa_2.0_spec-1.1.jar" />
 			</fileset>
 		</copy>
 
 		<copy todir="${dist.webapps.dir}/WEB-INF/red5-services">
-			<fileset dir="${webcontent.src.dir}/WEB-INF/red5-services" includes="*.xml"/>
+			<fileset dir="${webcontent.src.dir}/WEB-INF/red5-services" includes="*.xml" />
 		</copy>
 		<copy todir="${dist.webapps.dir}">
 			<fileset dir="${webcontent.src.dir}">
-				<include name="*.html"/>
+				<include name="*.html" />
 			</fileset>
 		</copy>
 		<copy todir="${dist.webapps.dir}/WEB-INF">
 			<fileset dir="${webcontent.src.dir}/WEB-INF">
-				<include name="*.xml"/>
-				<include name="*.properties"/>
-				<exclude name="root-*.xml"/>
+				<include name="*.xml" />
+				<include name="*.properties" />
+				<exclude name="root-*.xml" />
 			</fileset>
 		</copy>
 
-		<chmod dir="${dist.dir}/red5" perm="755" includes="**/*.sh"/>
-		<chmod dir="${dist.webapps.dir}/screen" perm="755" includes="**/*.sh"/>
-		<chmod dir="${dist.webapps.dir}/jod" perm="755" includes="**/*.sh"/>
+		<chmod dir="${dist.dir}/red5" perm="755" includes="**/*.sh" />
+		<chmod dir="${dist.webapps.dir}/screen" perm="755" includes="**/*.sh" />
+		<chmod dir="${dist.webapps.dir}/jod" perm="755" includes="**/*.sh" />
 
 		<copy todir="${dist.webapps.dir}/WEB-INF/lib">
 			<fileset dir="${axis2.lib}">
-				<include name="*.jar"/>
-				<exclude name="commons-codec-1.3.jar"/>
+				<include name="*.jar" />
+				<exclude name="commons-codec-1.3.jar" />
 			</fileset>
-			<fileset dir="${velocity.lib}"/>
-			<fileset dir="${batik.lib}"/>
-			<fileset dir="${upload.lib}"/>
-			<fileset dir="${xstream.lib}"/>
-			<fileset dir="${database.lib}"/>
-			<fileset dir="${ical.lib}"/>
-			<fileset dir="${java2swf.lib}"/>
-			<fileset dir="${jmf.lib}" includes="*.jar"/>
+			<fileset dir="${velocity.lib}" />
+			<fileset dir="${batik.lib}" />
+			<fileset dir="${upload.lib}" />
+			<fileset dir="${xstream.lib}" />
+			<fileset dir="${database.lib}" />
+			<fileset dir="${ical.lib}" />
+			<fileset dir="${java2swf.lib}" />
+			<fileset dir="${jmf.lib}" includes="*.jar" />
 		</copy>
 
 		<copy todir="${dist.webapps.dir}/WEB-INF/classes/META-INF">
 			<fileset file="src/META-INF/*.xml">
-				<exclude name="services.xml"/>
+				<exclude name="services.xml" />
 			</fileset>
 		</copy>
-		<copy file="src/META-INF/${db.provider}_persistence.xml"
-			tofile="${dist.webapps.dir}/WEB-INF/classes/META-INF/persistence.xml"/>
-		
+		<copy file="src/META-INF/${db.provider}_persistence.xml" tofile="${dist.webapps.dir}/WEB-INF/classes/META-INF/persistence.xml" />
 
-		<chmod dir="${dist.webapps.dir}/WEB-INF/lib" perm="755" includes="**/*.sh"/>
+
+		<chmod dir="${dist.webapps.dir}/WEB-INF/lib" perm="755" includes="**/*.sh" />
 
 		<!-- add language files from .war version -->
 		<copy todir="${dist.webapps.dir}/languages">
-			<fileset dir="WebContent/languages"/>
+			<fileset dir="WebContent/languages" />
 		</copy>
 		<copy todir="${dist.webapps.dir}/conf">
-			<fileset dir="WebContent/conf"/>
+			<fileset dir="WebContent/conf" />
 		</copy>
 
 		<!-- add templates
@@ -258,7 +251,7 @@
 		</copy>
 		 -->
 
-		<tstamp/>
+		<tstamp />
 	</target>
 
 
@@ -269,30 +262,30 @@
 		<copy todir="${main.out.dir}" includeEmptyDirs="yes">
 			<fileset dir="${main.src.dir}">
 				<patternset>
-					<include name="**/*.conf"/>
-					<include name="**/*.properties"/>
-					<include name="**/*.xml"/>
-					<include name="**/*.png"/>
-					<include name="**/*.vm"/>
+					<include name="**/*.conf" />
+					<include name="**/*.properties" />
+					<include name="**/*.xml" />
+					<include name="**/*.png" />
+					<include name="**/*.vm" />
 				</patternset>
 			</fileset>
 			<fileset dir="${webstart.src.dir}">
 				<patternset>
-					<include name="**/*.conf"/>
-					<include name="**/*.properties"/>
-					<include name="**/*.xml"/>
-					<include name="**/*.png"/>
-					<include name="**/*.vm"/>
+					<include name="**/*.conf" />
+					<include name="**/*.properties" />
+					<include name="**/*.xml" />
+					<include name="**/*.png" />
+					<include name="**/*.vm" />
 				</patternset>
 			</fileset>
 
 			<fileset dir="${templates.src.dir}">
 				<patternset>
-					<include name="**/*.conf"/>
-					<include name="**/*.properties"/>
-					<include name="**/*.xml"/>
-					<include name="**/*.png"/>
-					<include name="**/*.vm"/>
+					<include name="**/*.conf" />
+					<include name="**/*.properties" />
+					<include name="**/*.xml" />
+					<include name="**/*.png" />
+					<include name="**/*.vm" />
 				</patternset>
 			</fileset>
 		</copy>
@@ -301,8 +294,8 @@
 		<copy todir="${screen.out.dir}" includeEmptyDirs="yes">
 			<fileset dir="${screen.src.dir}">
 				<patternset>
-					<include name="**/*.xml"/>
-					<include name="**/*.png"/>
+					<include name="**/*.xml" />
+					<include name="**/*.png" />
 				</patternset>
 			</fileset>
 		</copy>
@@ -311,266 +304,248 @@
 
 	<target name="jar.only" depends="enhance.only, current_revision">
 		<tstamp prefix="build">
-			<format property="TODAY" pattern="d-MMMM-yyyy" locale="en"/>
+			<format property="TODAY" pattern="d-MMMM-yyyy" locale="en" />
 		</tstamp>
 		<manifestclasspath property="jar.classpath" jarfile="${project.distname}.jar">
-			<classpath refid="compile.classpath"/>
+			<classpath refid="compile.classpath" />
 		</manifestclasspath>
 		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}.jar">
 			<fileset dir="${classes.dir}">
-				<include name="**"/>
-				<exclude name="**/test/**"/>
-				<exclude name="**/axis/**"/>
-				<exclude name="**/webstart/**"/>
-				<exclude name="**/client/**"/>
-				<exclude name="**/*.png"/>
-				<exclude name="**/*.vm"/>
-				<exclude name="log4j.properties"/>
+				<include name="**" />
+				<exclude name="**/test/**" />
+				<exclude name="**/axis/**" />
+				<exclude name="**/webstart/**" />
+				<exclude name="**/client/**" />
+				<exclude name="**/*.png" />
+				<exclude name="**/*.vm" />
+				<exclude name="log4j.properties" />
 			</fileset>
 			<manifest>
-				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com"/>
-				<attribute name="Built-On" value="${build.TODAY}"/>
-				<attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
+				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com" />
+				<attribute name="Built-On" value="${build.TODAY}" />
+				<attribute name="Class-Path" value="conf/ ${jar.classpath}" />
 				<attribute name="Svn-Revision" value="${svn.version}" />
 			</manifest>
 		</jar>
 		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-templates.jar">
-            <fileset dir="${classes.dir}">
-                <include name="**"/>
-                <exclude name="**/org/**"/>
-                <exclude name="**/*.png"/>
-                <exclude name="**/*.properties"/>
-            </fileset>
-            <manifest>
-                <attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com"/>
-                <attribute name="Built-On" value="${build.TODAY}"/>
-                <attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
-            </manifest>
-        </jar>  
-		<jar destfile="${dist.webapps.dir}/screen/screenviewer.jar">
 			<fileset dir="${classes.dir}">
-				<include name="**/webstart/**"/>
-				<include name="**/*png"/>
+				<include name="**" />
+				<exclude name="**/org/**" />
+				<exclude name="**/*.png" />
+				<exclude name="**/*.properties" />
 			</fileset>
 			<manifest>
-				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com"/>
-				<attribute name="Built-On" value="${build.TODAY}"/>
-				<attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
+				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com" />
+				<attribute name="Built-On" value="${build.TODAY}" />
+				<attribute name="Class-Path" value="conf/ ${jar.classpath}" />
+			</manifest>
+		</jar>
+		<jar destfile="${dist.webapps.dir}/screen/screenviewer.jar">
+			<fileset dir="${classes.dir}">
+				<include name="**/webstart/**" />
+				<include name="**/*png" />
+			</fileset>
+			<manifest>
+				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com" />
+				<attribute name="Built-On" value="${build.TODAY}" />
+				<attribute name="Class-Path" value="conf/ ${jar.classpath}" />
 			</manifest>
 		</jar>
 		<jar destfile="${dist.webapps.dir}/screen/${project.distname}-client.jar">
 			<fileset dir="${classes.dir}">
 				<include name="log4j.properties" />
-				<include name="**/client/**"/>
-				<include name="**/*png"/>
+				<include name="**/client/**" />
+				<include name="**/*png" />
 			</fileset>
 			<manifest>
-				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com"/>
-				<attribute name="Built-On" value="${build.TODAY}"/>
-				<attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
+				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com" />
+				<attribute name="Built-On" value="${build.TODAY}" />
+				<attribute name="Class-Path" value="conf/ ${jar.classpath}" />
 			</manifest>
 		</jar>
 		<jar destfile="${dist.webapps.dir}/screen/rtpviewer.jar">
 			<fileset dir="${classes.dir}">
 				<include name="log4j.properties" />
-				<include name="**/de/**"/>
-				<exclude name="**/applet/**"/>
+				<include name="**/de/**" />
+				<exclude name="**/applet/**" />
 			</fileset>
 			<manifest>
-				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com"/>
-				<attribute name="Built-On" value="${build.TODAY}"/>
-				<attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
+				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com" />
+				<attribute name="Built-On" value="${build.TODAY}" />
+				<attribute name="Class-Path" value="conf/ ${jar.classpath}" />
 			</manifest>
 		</jar>
 
 		<!-- Build WebServices -->
 		<jar destfile="${dist.webapps.dir}/WEB-INF/services/OpenMeetingsService.aar">
 			<fileset dir="src/">
-				<include name="META-INF/services.xml"/>
+				<include name="META-INF/services.xml" />
 			</fileset>
 		</jar>
 
 		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/openmeetings-WebService.jar">
 			<fileset dir="${classes.dir}">
-				<include name="**/openmeetings/axis/**"/>
+				<include name="**/openmeetings/axis/**" />
 			</fileset>
 		</jar>
 	</target>
-	
+
 	<target name="dist.screen.share" description="Make Screen Share Archive" depends="jar.screen.share, signWebStartJars" />
-	
+
 	<target name="jar.screen.share" description="Make Screen Share Archive" depends="compile.screen.share">
-        <tstamp prefix="build">
-            <format property="TODAY" pattern="d-MMMM-yyyy" locale="en"/>
-        </tstamp>
-    	<manifestclasspath property="jar2.classpath" jarfile="${project.distname}.jar">
-            <classpath refid="screenshare.classpath"/>
-        </manifestclasspath>
+		<tstamp prefix="build">
+			<format property="TODAY" pattern="d-MMMM-yyyy" locale="en" />
+		</tstamp>
+		<manifestclasspath property="jar2.classpath" jarfile="${project.distname}.jar">
+			<classpath refid="screenshare.classpath" />
+		</manifestclasspath>
 		<!-- Screen Share -->
 		<jar destfile="${screenshare.out.dir}/red5-screenshare.jar">
 			<fileset dir="${screen.out.dir}">
-				<include name="**/**"/>
+				<include name="**/**" />
 			</fileset>
 			<manifest>
-				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com"/>
-				<attribute name="Built-On" value="${build.TODAY}"/>
-				<attribute name="Class-Path" value="conf/ ${jar2.classpath}"/>
+				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com" />
+				<attribute name="Built-On" value="${build.TODAY}" />
+				<attribute name="Class-Path" value="conf/ ${jar2.classpath}" />
 			</manifest>
 		</jar>
 	</target>
-	
+
 	<!-- Compile JAR -->
 	<target name="jar" description="Make Archive" depends="enhance, build.only.webservice.doc, jar.only, jar.screen.share">
-        <tstamp prefix="build">
-            <format property="TODAY" pattern="d-MMMM-yyyy" locale="en"/>
-        </tstamp>
+		<tstamp prefix="build">
+			<format property="TODAY" pattern="d-MMMM-yyyy" locale="en" />
+		</tstamp>
 		<jar destfile="${dist.webapps.dir}/screen/rtpapplet.jar">
 			<fileset dir="${classes.dir}">
-				<include name="**/applet/**"/>
+				<include name="**/applet/**" />
 			</fileset>
 			<manifest>
-				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com"/>
-				<attribute name="Built-On" value="${build.TODAY}"/>
-				<attribute name="Class-Path" value="conf/ ${jar.classpath}"/>
+				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com" />
+				<attribute name="Built-On" value="${build.TODAY}" />
+				<attribute name="Class-Path" value="conf/ ${jar.classpath}" />
 			</manifest>
 		</jar>
 	</target>
 
 	<target name="signWebStartJars">
 		<delete file="filetest.keystore" />
-		<genkey alias="filetest"
-          storepass="secret"
-          keystore="filetest.keystore"
-          verbose="true">
+		<genkey alias="filetest" storepass="secret" keystore="filetest.keystore" verbose="true">
 			<dname>
-				<param name="CN" value="Sebastian Wagner"/>
-				<param name="OU" value="technology"/>
-				<param name="O"  value="openmeetings.googlecode.com"/>
-				<param name="C"  value="DE"/>
+				<param name="CN" value="Sebastian Wagner" />
+				<param name="OU" value="technology" />
+				<param name="O" value="openmeetings.googlecode.com" />
+				<param name="C" value="DE" />
 			</dname>
 		</genkey>
-		<signjar
-            alias="filetest" keystore="filetest.keystore"
-            storepass="secret"
-            lazy="false"
-            >
+		<signjar alias="filetest" keystore="filetest.keystore" storepass="secret" lazy="false">
 			<path>
-				<fileset dir="${dist.webapps.dir}/screen" >
+				<fileset dir="${dist.webapps.dir}/screen">
 					<include name="**/*.jar" />
 
 				</fileset>
-				<fileset dir="${screenshare.out.dir}" >
+				<fileset dir="${screenshare.out.dir}">
 					<include name="**/*.jar" />
 				</fileset>
 			</path>
 		</signjar>
 	</target>
 
-	<target name = "compile.laszlo.main" depends="compile.laszlo.main.debug">
-		<java classname = "org.openlaszlo.compiler.Main" fork = "true"
-	        newenvironment="true"
-	        failonerror="true"
-	        dir = "${laszlo.src.dir}"
-	        classpathref="laszlo.lib"
-	       >
-			<jvmarg value = "-DLPS_HOME=${laszlo.home}"/>
-			<jvmarg value = "-Dlzdebug=${laszlo.debug}"/>
-			<jvmarg value = "-Dlzproxied=${laszlo.proxied}"/>
-			<jvmarg value = "-Xms1024M"/>
-			<jvmarg value = "-Xmx1024M"/>
+	<target name="compile.laszlo.main" depends="compile.laszlo.main.debug">
+		<java classname="org.openlaszlo.compiler.Main" fork="true" newenvironment="true" failonerror="true" dir="${laszlo.src.dir}" classpathref="laszlo.lib">
+			<jvmarg value="-DLPS_HOME=${laszlo.home}" />
+			<jvmarg value="-Dlzdebug=${laszlo.debug}" />
+			<jvmarg value="-Dlzproxied=${laszlo.proxied}" />
+			<jvmarg value="-Xms1024M" />
+			<jvmarg value="-Xmx1024M" />
 			<arg line="--runtime=swf8 --dir ${out.dir.swf} --mcache on --onerror warn main.lzx" />
 		</java>
 	</target>
 
-	<target name = "compile.laszlo.main.debug">
-		<java classname = "org.openlaszlo.compiler.Main" fork = "true"
-	        newenvironment="true"
-	        failonerror="true"
-	        dir = "${laszlo.src.dir}"
-	        classpathref="laszlo.lib"
-	       >
-			<jvmarg value = "-DLPS_HOME=${laszlo.home}"/>
-			<jvmarg value = "-Dlzdebug=${laszlo.debug}"/>
-			<jvmarg value = "-Dlzproxied=${laszlo.proxied}"/>
-			<jvmarg value = "-Xms1024M"/>
-			<jvmarg value = "-Xmx1024M"/>
+	<target name="compile.laszlo.main.debug">
+		<java classname="org.openlaszlo.compiler.Main" fork="true" newenvironment="true" failonerror="true" dir="${laszlo.src.dir}" classpathref="laszlo.lib">
+			<jvmarg value="-DLPS_HOME=${laszlo.home}" />
+			<jvmarg value="-Dlzdebug=${laszlo.debug}" />
+			<jvmarg value="-Dlzproxied=${laszlo.proxied}" />
+			<jvmarg value="-Xms1024M" />
+			<jvmarg value="-Xmx1024M" />
 			<arg line="--runtime=swf8 --dir ${out.dir.swf} --mcache on --onerror warn maindebug.lzx" />
 		</java>
 	</target>
 
-	<target name="compile" depends="prepare, compile.only"/>
-	
+	<target name="compile" depends="prepare, compile.only" />
+
 	<!-- Normal build of application
     compiler="org.eclipse.jdt.core.JDTCompilerAdapter" -->
 	<target name="compile.only" depends="compile.screen.share">
 		<echo message="Compile main to ${main.out.dir}">
 		</echo>
-		<javac debug="on" debuglevel="lines,vars,source" destdir="${main.out.dir}" >
+		<javac debug="on" debuglevel="lines,vars,source" destdir="${main.out.dir}">
 			<src path="${server.src.dir}" />
 			<src path="${main.src.dir}" />
-			<classpath refid="compile.classpath"/>
-			<compilerarg value="-Aopenjpa.metamodel=true"/>
+			<classpath refid="compile.classpath" />
+			<compilerarg value="-Aopenjpa.metamodel=true" />
 		</javac>
-		<javac debug="on" debuglevel="lines,vars,source" srcdir="${doclet.src.dir}" destdir="${main.out.dir}" >
-            <classpath refid="compile.classpath"/>
-        </javac>
-		<javac debug="on" debuglevel="lines,vars,source" srcdir="${webstart.src.dir}" destdir="${main.out.dir}" >
-			<classpath refid="compile.classpath"/>
+		<javac debug="on" debuglevel="lines,vars,source" srcdir="${doclet.src.dir}" destdir="${main.out.dir}">
+			<classpath refid="compile.classpath" />
 		</javac>
-		<javac debug="on" debuglevel="lines,vars,source" srcdir="${templates.src.dir}" destdir="${main.out.dir}" >
-			<classpath refid="compile.classpath"/>
+		<javac debug="on" debuglevel="lines,vars,source" srcdir="${webstart.src.dir}" destdir="${main.out.dir}">
+			<classpath refid="compile.classpath" />
 		</javac>
-		<javac debug="on" debuglevel="lines,vars,source" srcdir="${client.src.dir}" destdir="${main.out.dir}" >
-			<classpath refid="compile.classpath"/>
+		<javac debug="on" debuglevel="lines,vars,source" srcdir="${templates.src.dir}" destdir="${main.out.dir}">
+			<classpath refid="compile.classpath" />
 		</javac>
-		<javac debug="on" debuglevel="lines,vars,source" srcdir="${test.src.dir}" destdir="${main.out.dir}" >
-			<classpath refid="compile.classpath"/>
+		<javac debug="on" debuglevel="lines,vars,source" srcdir="${client.src.dir}" destdir="${main.out.dir}">
+			<classpath refid="compile.classpath" />
 		</javac>
-		<javac debug="on" debuglevel="lines,vars,source" srcdir="${fileservice.src.dir}" destdir="${main.out.dir}" >
-			<classpath refid="compile.classpath"/>
+		<javac debug="on" debuglevel="lines,vars,source" srcdir="${test.src.dir}" destdir="${main.out.dir}">
+			<classpath refid="compile.classpath" />
 		</javac>
-		<javac debug="on" debuglevel="lines,vars,source" srcdir="${roomservice.src.dir}" destdir="${main.out.dir}" >
-			<classpath refid="compile.classpath"/>
+		<javac debug="on" debuglevel="lines,vars,source" srcdir="${fileservice.src.dir}" destdir="${main.out.dir}">
+			<classpath refid="compile.classpath" />
 		</javac>
-		<javac debug="on" debuglevel="lines,vars,source" srcdir="${userservice.src.dir}" destdir="${main.out.dir}" >
-			<classpath refid="compile.classpath"/>
+		<javac debug="on" debuglevel="lines,vars,source" srcdir="${roomservice.src.dir}" destdir="${main.out.dir}">
+			<classpath refid="compile.classpath" />
+		</javac>
+		<javac debug="on" debuglevel="lines,vars,source" srcdir="${userservice.src.dir}" destdir="${main.out.dir}">
+			<classpath refid="compile.classpath" />
 		</javac>
 	</target>
 
 	<target name="compile.screen.share" depends="clean.classes, prepare.mkdir, resources">
 		<echo message="Compile screen share to ${screen.out.dir}" />
 		<!-- compile screen share -->
-		<javac debug="on" debuglevel="lines,vars,source" srcdir="${screen.src.dir}" destdir="${screen.out.dir}" >
-			<classpath refid="screenshare.classpath"/>
+		<javac debug="on" debuglevel="lines,vars,source" srcdir="${screen.src.dir}" destdir="${screen.out.dir}">
+			<classpath refid="screenshare.classpath" />
 		</javac>
 	</target>
-	
+
 	<target name="doStartServer" depends="compile">
 		<junit>
-			<classpath refid="compile.classpath"/>
-			<formatter type="plain"/>
+			<classpath refid="compile.classpath" />
+			<formatter type="plain" />
 
 			<test name="org.openmeetings.server.TestSocket" />
 		</junit>
 	</target>
 
 	<target name="hudson" depends="dist">
-		<mkdir dir="${build.target}${build.number.hudson}"/>
-		<zip destfile="${build.target}${build.number.hudson}/openmeetings_r${build.svn.hudson}.zip"
-		       basedir="${dist.dir}/red5" />
+		<mkdir dir="${build.target}${build.number.hudson}" />
+		<zip destfile="${build.target}${build.number.hudson}/openmeetings_r${build.svn.hudson}.zip" basedir="${dist.dir}/red5" />
 	</target>
 
 	<!-- Remove classes directory for clean build -->
 	<target name="clean" depends="cleanForBinary" description="Prepare for clean build" />
 
 	<target name="clean.classes" description="Clean Classes">
-		<delete dir="${main.out.dir}"/>
+		<delete dir="${main.out.dir}" />
 	</target>
 
 	<target name="cleanForBinary" depends="clean.classes" description="Clean For Binary">
-		<delete dir="${dist.dir}"/>
-		<delete dir="${screen.out.dir}"/>
-		<delete dir="${report.dir}"/>
+		<delete dir="${dist.dir}" />
+		<delete dir="${screen.out.dir}" />
+		<delete dir="${report.dir}" />
 		<delete dir="${derbydb.dir}" />
 		<delete dir="${basedir}/log" />
 		<delete file="filetest.keystore" />
@@ -578,109 +553,164 @@
 	</target>
 
 	<path id="jpa.enhancement.classpath">
-		<pathelement path="${classes.dir}"/>
+		<pathelement path="${classes.dir}" />
 		<!-- lib contains all of the jars that came with the OpenJPA binary download -->
 		<fileset dir="${openjpa.lib}" includes="*.jar" />
 	</path>
 
 	<!-- define the openjpac task -->
 	<taskdef name="openjpac" classname="org.apache.openjpa.ant.PCEnhancerTask">
-		<classpath refid="jpa.enhancement.classpath"/>
+		<classpath refid="jpa.enhancement.classpath" />
 	</taskdef>
 
 	<target name="enhance" depends="compile, enhance.only" />
-	
+
 	<target name="enhance.only" depends="compile.only">
 		<!-- invoke the enhancer -->
 		<openjpac>
-			<classpath refid="jpa.enhancement.classpath"/>
-			<config propertiesFile="src/META-INF/${db.provider}_persistence.xml"/>
+			<classpath refid="jpa.enhancement.classpath" />
+			<config propertiesFile="src/META-INF/${db.provider}_persistence.xml" />
 		</openjpac>
-		<echo message="Enhancing complete."/>
+		<echo message="Enhancing complete." />
 	</target>
 
 	<target name="current_revision">
 		<typedef resource="com/googlecode/svntask/svntask.xml">
 			<classpath>
-				<fileset dir="${svntask.lib}" includes="*.jar"/>
+				<fileset dir="${svntask.lib}" includes="*.jar" />
 			</classpath>
 		</typedef>
-		
-		<svn><info path="." revisionProperty="svn.version" /></svn>
-		
+
+		<svn>
+			<info path="." revisionProperty="svn.version" />
+		</svn>
+
 		<!-- Display svn revision number -->
 		<echo>Current revision: ${svn.version}</echo>
 	</target>
-	
+
 	<!-- Build entire project -->
-	<target name="build project" depends="clean, prepare, compile"/>
+	<target name="build project" depends="clean, prepare, compile" />
 
 	<!-- define the RAT task -->
-	<taskdef
-		uri="antlib:org.apache.rat.anttasks"
-	    resource="org/apache/rat/anttasks/antlib.xml">
-	    <classpath>
+	<taskdef uri="antlib:org.apache.rat.anttasks" resource="org/apache/rat/anttasks/antlib.xml">
+		<classpath>
 			<fileset dir="${rat.lib}" includes="*.jar" />
 			<path refid="compile.classpath" />
-	    </classpath>
+		</classpath>
 	</taskdef>
-	
+
 	<target name="report_rat">
 		<rat:report>
-	        <fileset dir="${main.src.dir}"/>
-	        <fileset dir="${webstart.src.dir}"/>
-	        <fileset dir="${templates.src.dir}"/>
-	        <fileset dir="${test.src.dir}"/>
-	        <fileset dir="${server.src.dir}"/>
-	        <fileset dir="${client.src.dir}"/>
-	        <fileset dir="${screen.src.dir}"/>
-	        <fileset dir="${fileservice.src.dir}"/>
-	        <fileset dir="${roomservice.src.dir}"/>
-	        <fileset dir="${userservice.src.dir}"/>
-	    </rat:report>
+			<fileset dir="${main.src.dir}" />
+			<fileset dir="${webstart.src.dir}" />
+			<fileset dir="${templates.src.dir}" />
+			<fileset dir="${test.src.dir}" />
+			<fileset dir="${server.src.dir}" />
+			<fileset dir="${client.src.dir}" />
+			<fileset dir="${screen.src.dir}" />
+			<fileset dir="${fileservice.src.dir}" />
+			<fileset dir="${roomservice.src.dir}" />
+			<fileset dir="${userservice.src.dir}" />
+		</rat:report>
 	</target>
-	
+
 	<!--  depends="compile" depends="compile.only" -->
-	
+
 	<path id="build.webservice.classpath">
 		<pathelement path="${classes.dir}" />
-		<path refid="compile.classpath" /> 
-    </path>
-	
-	<target name="build.webservice.doc" depends="compile.only"> 
-		<javadoc classpathref="build.webservice.classpath">  
+		<path refid="compile.classpath" />
+	</path>
+
+	<target name="build.webservice.doc" depends="compile.only">
+		<javadoc classpathref="build.webservice.classpath">
 			<source file="src/userservice/org/openmeetings/axis/services/UserWebService.java" />
 			<source file="src/roomservice/org/openmeetings/axis/services/RoomWebService.java" />
 			<source file="src/fileservice/org/openmeetings/axis/services/FileWebService.java" />
 			<doclet name="org.openmeetings.doc.WebServiceDoclet" pathref="build.webservice.classpath">
 			</doclet>
-		</javadoc>  
+		</javadoc>
 	</target>
-	
-	<target name="build.only.webservice.doc" > 
-        <javadoc classpathref="build.webservice.classpath">  
-        	<source file="src/userservice/org/openmeetings/axis/services/UserWebService.java" />
-            <source file="src/roomservice/org/openmeetings/axis/services/RoomWebService.java" />
-        	<source file="src/fileservice/org/openmeetings/axis/services/FileWebService.java" />
-            <doclet name="org.openmeetings.doc.WebServiceDoclet" pathref="build.webservice.classpath">
-            </doclet>
-        </javadoc>  
-		<copy todir="${dist.webapps.dir}/docs">
-			<fileset dir="${basedir}/docs/">
-				<include name="*.html"/>
-				<include name="*.css"/>
+
+	<property name="docs.dest" value="docs" />
+	<property name="docs.src" value="xdocs" />
+
+	<!-- Anakia Build classpath -->
+	<path id="anakia.classpath">
+		<fileset dir="./lib/anakia">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<taskdef name="anakia" classname="org.apache.velocity.anakia.AnakiaTask">
+
+		<classpath>
+			<path refid="anakia.classpath" />
+		</classpath>
+
+	</taskdef>
+
+	<target name="build.only.webservice.doc">
+		<javadoc classpathref="build.webservice.classpath">
+			<source file="src/userservice/org/openmeetings/axis/services/UserWebService.java" />
+			<source file="src/roomservice/org/openmeetings/axis/services/RoomWebService.java" />
+			<source file="src/fileservice/org/openmeetings/axis/services/FileWebService.java" />
+			<doclet name="org.openmeetings.doc.WebServiceDoclet" pathref="build.webservice.classpath">
+			</doclet>
+		</javadoc>
+
+		<anakia basedir="${docs.src}" destdir="${docs.dest}/" extension=".html" style="./site.vsl" projectFile="stylesheets/project.xml" excludes="**/stylesheets/** empty.xml" includes="**/*.xml" lastModifiedCheck="true" templatePath="xdocs/stylesheets">
+		</anakia>
+
+		<copy todir="${docs.dest}/images" filtering="no">
+			<fileset dir="${docs.src}/images">
+				<include name="**/*.gif" />
+				<include name="**/*.jpeg" />
+				<include name="**/*.jpg" />
+				<include name="**/*.png" />
 			</fileset>
 		</copy>
-    </target>
-    
+
+		<copy todir="${docs.dest}/css" filtering="no">
+			<fileset dir="${docs.src}/css">
+				<include name="**/*.css" />
+				<include name="**/*.gif" />
+				<include name="**/*.png" />
+			</fileset>
+		</copy>
+
+		<copy todir="${dist.webapps.dir}/docs">
+			<fileset dir="${basedir}/docs/">
+				<include name="*.html" />
+				<include name="*.css" />
+			</fileset>
+		</copy>
+		<copy todir="${dist.webapps.dir}/docs/images">
+			<fileset dir="${basedir}/docs/images/">
+				<include name="**/*.gif" />
+				<include name="**/*.jpeg" />
+				<include name="**/*.jpg" />
+				<include name="**/*.png" />
+			</fileset>
+		</copy>
+		<copy todir="${dist.webapps.dir}/docs/css">
+			<fileset dir="${basedir}/docs/css/">
+				<include name="**/*.css" />
+				<include name="**/*.gif" />
+				<include name="**/*.png" />
+			</fileset>
+		</copy>
+	</target>
+
 	<!-- Unit Tests -->
-	<property name="om.dist.webapp" value="${red5.root}/webapps/${project.distname}"/>
+	<property name="om.dist.webapp" value="${red5.root}/webapps/${project.distname}" />
 
 	<condition property="junit.test.pattern" value="${testcases}" else="Test*">
 		<isset property="testcases" />
 	</condition>
-	
-	<condition property="junit.test.formatter" value="${test.formatter}" else="xml"> <!-- plain -->
+
+	<condition property="junit.test.formatter" value="${test.formatter}" else="xml">
+		<!-- plain -->
 		<isset property="test.formatter" />
 	</condition>
 
@@ -697,18 +727,18 @@
 		<pathelement path="${basedir}/WebContent/WEB-INF" />
 	</path>
 	<target name="test" depends="enhance" description="Will run all tests unless -Dtestcases=_file_name_pattern_ will be passed">
-		<mkdir dir="${report.dir}"/>
+		<mkdir dir="${report.dir}" />
 		<property name="myclsp" refid="junit.classpath" />
 		<!--		<echo message="${myclsp}" /> -->
 		<junit printsummary="yes">
-			<classpath refid="junit.classpath"/>
-			<jvmarg value="-Dred5.root=${red5.root}"/>
-			<jvmarg value="-Dred5.config_root=${red5.root}/conf"/>
-			<jvmarg value="-Dwebapps.root=${basedir}/${om.dist.webapp}"/>
+			<classpath refid="junit.classpath" />
+			<jvmarg value="-Dred5.root=${red5.root}" />
+			<jvmarg value="-Dred5.config_root=${red5.root}/conf" />
+			<jvmarg value="-Dwebapps.root=${basedir}/${om.dist.webapp}" />
 			<formatter type="${junit.test.formatter}" />
 			<batchtest fork="yes" todir="${report.dir}">
 				<fileset dir="${main.out.dir}">
-					<include name="org/openmeetings/test/**/${junit.test.pattern}"/>
+					<include name="org/openmeetings/test/**/${junit.test.pattern}" />
 				</fileset>
 			</batchtest>
 		</junit>
@@ -719,9 +749,9 @@
 			<report todir="${report.dir}" />
 		</junitreport>
 	</target>
-	<target name="smoke.test" depends="dist" description="Will run 'Smoke' subset of tests" >
-	  <antcall target="test">
-	    <param name="junit.test.pattern" value="TestSmoke*"/>
-	  </antcall>
+	<target name="smoke.test" depends="dist" description="Will run 'Smoke' subset of tests">
+		<antcall target="test">
+			<param name="junit.test.pattern" value="TestSmoke*" />
+		</antcall>
 	</target>
 </project>

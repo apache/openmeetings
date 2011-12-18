@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!--
+
+    Copyright 2006 The Apache Software Foundation
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+
+<document>
+
+<properties>
+<title>Mailing Lists</title>
+<author email="sebawagner@apache.org">
+ Sebastian Wagner</author>
+</properties>
+
+<body>
+<section name="Apache OpenMeetings Mailing Lists">
+
+<p>
+There are currently three publicly available mailing lists for OpenMeetings. 
+</p>
+<p>
+The commits list is for notification of commits to the OpenMeetings repository.
+</p>
+<p>
+The dev list is for internal discussion among the OpenMeetings developers. It is
+open to the public if you are interested in seeing how the sausage is made.
+</p>
+
+<table>
+<tr>
+<td>
+<p><strong>User List</strong> : 
+<a  href="mailto:openmeetings-user@incubator.apache.org">
+openmeetings-user@incubator.apache.org</a> </p>
+</td>
+<td>
+<p> <a  class="external" rel="nofollow" 
+href="mailto:openmeetings-user-subscribe@incubator.apache.org">
+Subscribe</a> </p>
+</td>
+<td>
+<p> <a  class="external" rel="nofollow" 
+href="mailto:openmeetings-user-unsubscribe@incubator.apache.org">
+Unsubscribe</a> </p>
+</td>
+<td>
+<p>
+<a href="http://mail-archives.apache.org/mod_mbox/incubator-openmeetings-user/">
+Archive</a>
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><strong>Commits List</strong> : 
+<a  href="mailto:openmeetings-commits@incubator.apache.org">
+openmeetings-commits@incubator.apache.org</a> </p>
+</td>
+<td>
+<p> <a  class="external" rel="nofollow" 
+href="mailto:openmeetings-commits-subscribe@incubator.apache.org">
+Subscribe</a> </p>
+</td>
+<td>
+<p> <a  class="external" rel="nofollow" 
+href="mailto:openmeetings-commits-unsubscribe@incubator.apache.org">
+Unsubscribe</a> </p>
+</td>
+<td>
+<p>
+<a href="http://mail-archives.apache.org/mod_mbox/incubator-openmeetings-commits/">
+Archive</a>
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><strong>Developer List</strong> : 
+<a  href="mailto:openmeetings-dev@incubator.apache.org">
+openmeetings-dev@incubator.apache.org</a> </p>
+</td>
+<td>
+<p> <a  class="external" rel="nofollow" 
+href="mailto:openmeetings-dev-subscribe@incubator.apache.org">
+Subscribe</a> </p>
+</td>
+<td>
+<p> <a  class="external" rel="nofollow" 
+href="mailto:openmeetings-dev-unsubscribe@incubator.apache.org">
+Unsubscribe</a> </p>
+</td>
+<td>
+<p>
+<a href="http://mail-archives.apache.org/mod_mbox/incubator-openmeetings-dev">
+Archive</a>
+</p>
+</td>
+</tr>
+</table>
+
+</section>
+</body>
+</document>
+

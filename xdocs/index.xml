@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- Copyright 2006 The Apache Software Foundation Licensed under the Apache 
+	License, Version 2.0 (the "License"); you may not use this file except in 
+	compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+	Unless required by applicable law or agreed to in writing, software distributed 
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+	the specific language governing permissions and limitations under the License. -->
+<document>
+
+	<properties>
+		<title>Home</title>
+		<author email="sebawagner@apache.org">
+			Sebastian Wagner
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="Welcome to Apache OpenMeetings">
+
+			<p> Openmeetings provides video conferencing, instant messaging,
+				white board, collaborative document editing and other groupware
+				tools using API functions of the Red5 Streaming Server for Remoting
+				and Streaming.
+			</p>
+
+			<p>
+				OpenMeetings is a project of the Apache Incubator, the old project
+				website at
+				<a href="http://code.google.com/p/openmeetings/" target="_BLANK">GoogleCode
+				</a>
+				will receive no updates anymore. The website at Apache is the only
+				place that receives updates.
+			</p>
+
+		</section>
+
+		<section name="OpenMeetings News">
+
+			<p>
+				<strong>OpenMeetings has been accepted into the Apache Incubator
+					(2011-11-12).
+				</strong>
+			</p>
+
+		</section>
+
+		<section name="OpenMeetings Community">
+
+			<p>
+				<strong>Who we are</strong>
+				<blockquote>
+					<a href="team-list.html">List of committers</a>
+					.
+				</blockquote>
+			</p>
+			<p>
+				<strong>Users!</strong>
+				<blockquote>
+					We'd love to have you involved. Check out the
+					<a href="get-involved.html">Get involved</a>
+					.
+				</blockquote>
+			</p>
+
+		</section>
+
+		<section name="OpenMeetings Features">
+
+			<feature title="Audio and Video Conferencing">
+
+				<image href="images/54882.jpg" title="Web Cams" width="200"
+					height="140" />
+				<image href="images/choose_divice.png" title="Device" width="200"
+					height="170" />
+				<text>
+					There are four options to use OpenMeetings audio/video functions,
+					which you can select during a conference session.
+					<ul>
+						<blockquote>
+							<li>audio + video</li>
+							<li>audio only</li>
+							<li>video only</li>
+							<li>picture only</li>
+
+						</blockquote>
+					</ul>
+					Additional you can change video-/audio-quality, resize webcam
+					size
+					and choose your input devices.
+				</text>
+
+			</feature>
+
+			<feature title="Meeting recording and Screen sharing">
+
+				<image href="images/desktopsharing.png" title="Screensharing-/recording"
+					width="140" height="150" />
+				<image href="images/recordings_timeleine.png" title="Device"
+					width="200" height="115" />
+				<text>
+					<ul>
+						<li>Recorded sessions contain everything including sound recorded
+							from all audio streams in exactly the way you've seen it in the
+							conference.
+						</li>
+					</ul>
+					<ul>
+						<li>Recorded sessions can be downloaded as AVI/FLV files.</li>
+					</ul>
+					<ul>
+						<li>Possibility to select a screen area for sharing.</li>
+					</ul>
+					<ul>
+						<li>Different quality steps for Screensharing.</li>
+					</ul>
+					<ul>
+						<li>Watch and organize recordings in an integrated Drag and Drop
+							File-Explorer
+						</li>
+					</ul>
+				</text>
+
+			</feature>
+
+			<feature title="File Explorer">
+
+				<image href="images/file_smal.png" title="File Explorer"
+					width="200" height="115" />
+				<text>
+					Advanced File-Explorer in every conference room, Drag and Drop
+					interface for managing uploaded files, including the possibility to
+					create a document tree with folders.
+					<br />
+					<br />
+					Private and Public Drive in
+					File-Explorer. The File-Explorer has two
+					different views, one is the
+					<b>Private Drive</b>
+					and the other the
+					<b>Public Drive</b>
+					. The Private Drive
+					always contains the same files.
+					Those files are
+					visible only to the
+					user currently loggedin. The
+					Public Drive is not
+					bound to the user,
+					but to the conference room
+					instead. All users in
+					the conference room
+					have access to the Public
+					Drive.
+				</text>
+
+			</feature>
+
+			<feature title="Moderating System">
+
+				<image href="images/right_management.png" title="Right management"
+					width="200" height="115" />
+				<text>
+					During a conference, the moderator can adjust the user permission
+					to every user individually .
+					<ul>
+						<li>
+							<img class="alignnone" title="Allow modaration" src="images/moderator.png"
+								alt="" />
+							Allow/Deny moderation
+						</li>
+						<li>
+							<img class="alignnone" title="Whiteboard Access" src="images/whiteboard_access.png"
+								alt="" />
+							Allow/Deny to draw on white board
+						</li>
+						<li>
+							<img class="alignnone" title="Screenshare" src="images/screenshare.png"
+								alt="" />
+							Allow/Deny screen-sharing/record screen
+						</li>
+						<li>
+							<img class="alignnone" title="Remote control" src="images/mouse.png"
+								alt="" />
+							Allow/Deny Remote Control Screen
+						</li>
+						<li>
+							<img class="alignnone" title="Video Audio" src="images/audio_video.png"
+								alt="" />
+							(Re-) Start Audio, Video or Device settings.
+							Drive.
+						</li>
+					</ul>
+				</text>
+
+			</feature>
+
+
+			<feature title="Chat and whiteboarding">
+
+				<image href="http://www.openmeetings.de/images/whiteboard.png"
+					title="Whiteboard" width="200" height="115" />
+				<image href="http://www.openmeetings.de/images/chat.png"
+					title="Chat in Conference Room" width="200" height="40" />
+				<text>
+					Multi-Whiteboard, you can add new whiteboard instances, each
+					white
+					board can have the full range of tools and documents inside.
+					<br />
+					<br />
+					Save white boards. You can save each whiteboard instance as a file.
+					The file is located in the File-Explorer and can be drag n' drop'ed
+					to the white board again and organized like any other document,
+					image or folder.
+					<br />
+					<br />
+					White board with drawing, writing, Drag n' Drop, Resizing, Images
+					(Drag n'
+					Drop from File-Explorer), Symbol(s)/Cliparts .
+					<br />
+					<br />
+					Full-fit does rescale the document on the screen to be 100% visible
+					on all
+					screens no matter what kind of screen resolution different
+					users
+					have.
+					<br />
+					<br />
+					You can import from a wide range of document formats (PDF, DOC,
+					ODT, PPT, et cetera...)
+				</text>
+
+			</feature>
+
+			<feature title="User and room management">
+
+				<image href="http://www.openmeetings.de/images/dashboard.png"
+					title="Dashboard with MyRooms" width="200" height="115" />
+				<text>
+					You can manage users and multiple organizations in a single
+					OpenMeetings instance. You can also create users that only have
+					access via the SOAP-API.
+					<br />
+					<br />
+					MyRooms section. Each user has by default 2 personal rooms that
+					are
+					always accessible exclusively for that user. There are buttons
+					to
+					enter those rooms from the Dashboard.
+					<br />
+					<br />
+					You can assign conference room to all users, or you can assign them
+					only to specific user-groups.
+				</text>
+
+			</feature>
+
+			<feature title="Private message center">
+				<image href="http://www.openmeetings.de/images/privat_messages.png"
+					title="Private Messages and Contact Search" width="200" height="115" />
+				<text>
+					Send users messages and organize them in folders. You can book
+					conference rooms by sending private messages. The booked event
+					automatically is in your and the participants calendar, changes to
+					that event will be populated to all users booked to the event.
+					<br />
+					<br />
+					User contacts, you can search users and add them to your contacts.
+					You
+					can even give them the right to see your calendar.
+				</text>
+			</feature>
+
+			<feature title="Calendaring">
+				<image href="http://www.openmeetings.de/images/calendar.png"
+					title="Calendar" width="200" height="115" />
+				<text>
+					<ul>
+						<li>Plan your conferencing and invite attendees from !OpenMeetings
+							or External.
+						</li>
+						<li>The invited attendees will recieve an E-mail with details to
+							the meetings and a link with a secure hash to the conference
+							room.
+						</li>
+						<li>Share your calendar with your contacts.</li>
+					</ul>
+				</text>
+			</feature>
+
+			<feature title="Polls and Votes">
+				<image href="http://www.openmeetings.de/images/poll.png"
+					title="Create a poll" width="200" height="115" />
+				<image href="http://www.openmeetings.de/images/vote.png"
+					title="Vote" width="200" height="115" />
+				<image href="http://www.openmeetings.de/images/pollresult.png"
+					title="Pollresult" width="200" height="115" />
+				<text>
+					You can create a poll with yes/no or 1-10 questions, let the
+					user
+					vote and see the voting results.
+					<br />
+					<br />
+					Polls can be stored and results viewed as pie-chart
+				</text>
+			</feature>
+
+			<feature title="Backup">
+				<image href="http://www.openmeetings.de/images/backup.png"
+					title="Backup" width="200" height="115" />
+				<text>
+					You can backup the hole user-generated data including files
+					uploaded by the users in a single ZIP file and import that ZIP into
+					a new installation of OpenMeetings again.
+				</text>
+			</feature>
+
+
+		</section>
+
+	</body>
+</document>
+
+
+
+
+
