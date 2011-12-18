@@ -32,9 +32,20 @@
         <item name="Dependencies"           href="/dependencies.html"/>
     </menu>
     
+    <menu name="Configuration">
+    	<item name="DB Sample Configurations" >
+    		<subitem name="Apache Derby" href="/ApacheDerbyConfig.html" />
+    		<subitem name="IBM DB2" href="/IBMDB2Config.html" />
+    		<subitem name="Oracle" href="/OracleConfig.html" />
+    		<subitem name="MySQL" href="/MySQLConfig.html" />
+    		<subitem name="Postgres" href="/PostgresConfig.html" />
+    	</item>
+    </menu>
+    
     <menu name="Integration">
-        <item name="SOAP/REST API"          href="/SoapRestAPI.html"/>
-        <item name="REST API Sample"           href="/RestAPI.html"/>
+        <item name="SOAP/REST API"          href="/SoapRestAPI.html" />
+        <item name="REST API Sample"        href="/RestAPI.html" />
+        <item name="Ldap and ADS"           href="/LdapAndADS.html" />
     </menu>
     
     <!-- 

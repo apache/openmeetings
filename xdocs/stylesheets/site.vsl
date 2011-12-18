@@ -254,9 +254,20 @@ limitations under the License.
 		       <ul>
 		        #foreach ( $item in $menu.getChildren() )
 		            #set ($name = $item.getAttributeValue("name"))
-		            <font color="$menutablefg" face="arial,helvetica,sanserif" size="2pt">
-		            	<li>#projectanchor($name $item.getAttributeValue("href"))</li>
-		        	</font>
+		            #if ( $item.getAttributeValue("href").length() > 0 )
+			            <font color="$menutablefg" face="arial,helvetica,sanserif" size="2pt">
+			            	<li>#projectanchor($name $item.getAttributeValue("href"))</li>
+			        	</font>
+		        	#else
+		            	<li><font color="$menutablefg" face="arial,helvetica,sanserif" size="2pt">$name</font>
+		            		<ul>
+		            		#foreach ( $subitem in $item.getChildren() )
+		            			#set ($name = $subitem.getAttributeValue("name"))
+		            			<li>#projectanchor($name $subitem.getAttributeValue("href"))</li>
+		            		#end
+		            		</ul>
+		            	</li>
+		        	#end
 		        #end
 		        </ul>
 	        </div>

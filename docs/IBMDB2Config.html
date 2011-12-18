@@ -29,8 +29,9 @@ limitations under the License.
             <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
 
                                                     <meta name="author" value="
- Sebastian Wagner">
-            <meta name="email" value="sebawagner@apache.org">
+			Apache OpenMeetings Documentation Team
+		">
+            <meta name="email" value="sebawagner@incubator.apache.org">
             
            
             
@@ -38,7 +39,7 @@ limitations under the License.
             
             
             
-            <title>Apache OpenMeetings - Mailing Lists</title>
+            <title>Apache OpenMeetings - IBM DB2 Configuration</title>
             <link rel="stylesheet" type="text/css" href="css/openmeetings.css">
         </head>
 
@@ -241,135 +242,101 @@ limitations under the License.
                                                                     <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="Apache OpenMeetings Mailing Lists"><strong>Apache OpenMeetings Mailing Lists</strong></a>
+          <a name="IBM DB2 Configuration"><strong>IBM DB2 Configuration</strong></a>
           <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
         </font>
       </td></tr>
       <tr><td>
         <blockquote>
+                                        <table border="0" cellspacing="0" cellpadding="0" width="100%">
+      <tr><td bgcolor="#EFEFEF">
+        <font color="#000000" face="arial,helvetica,sanserif">
+          <a name="Before you start"><strong>Before you start</strong></a>
+        </font>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <i>Tested with IBM DB2 Express-C 9.7.x</i>
+                                                <ul>
+					<li>
+						Get the IBM Data Server Driver for JDBC and SQLJ from IBM website:
+						<a href="https://www14.software.ibm.com/webapp/iwm/web/preLogin.do?source=swg-idsdjs">https://www14.software.ibm.com/webapp/iwm/web/preLogin.do?source=swg-idsdjs
+						</a>
+					</li>
+					<li>Copy JDBC driver db2jcc4.jar to
+						webapps/openmeetings/WEB-INF/lib/
+					</li>
+					<li>
+						Create database for OpenMeetings using a pagesize bigger or equal
+						8K, sample query:
+						<br />
+						<div class="xmlcode">
+							CREATE DATABASE openmeet AUTOMATIC STORAGE YES ON 'C:' DBPATH ON 'C:'
+							USING CODESET UTF-8 TERRITORY DE COLLATE USING System PAGESIZE 16
+							K
+						</div>
+					</li>
+					<li>If you encounter issues, you can drop the db again and delete
+						the file $red5/webapps/openmeetings/conf/install.xml and then run
+						the web based installer again </li>
+				</ul>
+                            </blockquote>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                    <table border="0" cellspacing="0" cellpadding="0" width="100%">
+      <tr><td bgcolor="#EFEFEF">
+        <font color="#000000" face="arial,helvetica,sanserif">
+          <a name="Steps todo"><strong>Steps todo</strong></a>
+        </font>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <ul>
+					<li>
+						Rename:
+						<br />
+						$red5/webapps/openmeetings/WEB-INF/classes/META-INF/db2_persistence.xml
+						<br />
+						to
+						<br />
+						$red5/webapps/openmeetings/WEB-INF/classes/META-INF/persistence.xml
+					</li>
+					<li>
+						Prepare Database Settings - go to
+						openmeetings_version_no_xx/webapps/openmeetings/WEB-INF/classes/META-INF/persistence.xml
+						<br />
+						Alter config values in persistence.xml connectionURL, username and
+						password with your values
+					</li>
+					<li>
+						Run red5-service and goto the web-based installer:
+						http://localhost:5080/openmeetings/install
+					</li>
+				</ul>
+                            </blockquote>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                    <table border="0" cellspacing="0" cellpadding="0" width="100%">
+      <tr><td bgcolor="#EFEFEF">
+        <font color="#000000" face="arial,helvetica,sanserif">
+          <a name="DB2 Sample Configuration"><strong>DB2 Sample Configuration</strong></a>
+        </font>
+      </td></tr>
+      <tr><td>
+        <blockquote>
                                     <p>
-There are currently three publicly available mailing lists for OpenMeetings. 
-</p>
-                                                <p>
-The commits list is for notification of commits to the OpenMeetings repository.
-</p>
-                                                <p>
-The dev list is for internal discussion among the OpenMeetings developers. It is
-open to the public if you are interested in seeing how the sausage is made.
-</p>
-                                                <table>
-                        <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                
-<p><strong>User List</strong> : 
-<a href="mailto:openmeetings-user@incubator.apache.org">
-openmeetings-user@incubator.apache.org</a> </p>
-
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                
-<p> <a class="external" rel="nofollow" href="mailto:openmeetings-user-subscribe@incubator.apache.org">
-Subscribe</a> </p>
-
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                
-<p> <a class="external" rel="nofollow" href="mailto:openmeetings-user-unsubscribe@incubator.apache.org">
-Unsubscribe</a> </p>
-
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                
-<p>
-<a href="http://mail-archives.apache.org/mod_mbox/incubator-openmeetings-user/">
-Archive</a>
-</p>
-
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                
-<p><strong>Commits List</strong> : 
-<a href="mailto:openmeetings-commits@incubator.apache.org">
-openmeetings-commits@incubator.apache.org</a> </p>
-
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                
-<p> <a class="external" rel="nofollow" href="mailto:openmeetings-commits-subscribe@incubator.apache.org">
-Subscribe</a> </p>
-
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                
-<p> <a class="external" rel="nofollow" href="mailto:openmeetings-commits-unsubscribe@incubator.apache.org">
-Unsubscribe</a> </p>
-
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                
-<p>
-<a href="http://mail-archives.apache.org/mod_mbox/incubator-openmeetings-commits/">
-Archive</a>
-</p>
-
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                
-<p><strong>Developer List</strong> : 
-<a href="mailto:openmeetings-dev@incubator.apache.org">
-openmeetings-dev@incubator.apache.org</a> </p>
-
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                
-<p> <a class="external" rel="nofollow" href="mailto:openmeetings-dev-subscribe@incubator.apache.org">
-Subscribe</a> </p>
-
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                
-<p> <a class="external" rel="nofollow" href="mailto:openmeetings-dev-unsubscribe@incubator.apache.org">
-Unsubscribe</a> </p>
-
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                
-<p>
-<a href="http://mail-archives.apache.org/mod_mbox/incubator-openmeetings-dev">
-Archive</a>
-</p>
-
-            </font>
-</td>
-            </tr>
-            </table>
+					There is a sample configuration for IBM DB2 that ships with
+					every
+					release in:
+					<br />
+					/webapps/openmeetings/WEB-INF/classes/META-INF/db2_persistence.xml
+				</p>
+                            </blockquote>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
                             </blockquote>
         </p>
       </td></tr>
