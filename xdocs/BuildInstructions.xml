@@ -50,15 +50,15 @@
 			</p>
 			<p>To compile the client you can also use ant: </p>
 			<div class="xmlcode">
-				ant # compiles a complete package into the folder dist<br/>
-				ant compile.laszlo.main # compiles the client into main.swf8.swf<br/>
-				ant<br/>
-				compile.laszlo.main.debug # compiles the debug-client into<br/>
-				maindebug.swf8.swf<br/>
+				ant<span style="margin-left: 200px;"># compiles a complete package into the folder dist</span><br/>
+				ant compile.laszlo.main<span style="margin-left: 70px;"># compiles the client into main.swf8.swf</span><br/>
+				ant compile.laszlo.main.debug<span style="margin-left: 30px;"># compiles the debug-client into maindebug.swf8.swf</span><br/>
+				ant -Ddb=&lt;name of DB&gt;<span style="margin-left: 50px;"># will copy &lt;name of DB&gt;_persistense.xml to persistense.xml</span><br/>
+				<span style="margin-left: 230px;">#(for ex. ant -Ddb=mysql will set mysql as default DB)</span>
 			</div>
 			<p>To compile just the openmeetings JAR file: </p>
 			<div class="xmlcode">
-				ant -f build_openmeetings_jar.xml
+				ant jar.only
 			</div>
 			<p>
 				To run Junit tests using ANT see
