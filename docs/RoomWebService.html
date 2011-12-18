@@ -1,0 +1,3819 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+Copyright 1999-2004 The Apache Software Foundation
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+    <!-- ====================================================================== -->
+    <!-- GENERATED FILE, DO NOT EDIT, EDIT THE TEMPLATE INSTEAD! -->
+    <!-- Main Page Section -->
+    <!-- ====================================================================== -->
+    
+     <html>
+        <head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+		<meta name="author" value="OpenMeetings Team">
+		<meta name="email" value="sebawagner@apache.org">
+		<title>OpenMeetings API Methods</title>
+        </head>
+	<body>
+	
+	   <h3>Class: RoomWebService</h3>
+	   <p>RoomService contains methods to manipulate rooms and create invitation hash<p>
+	   <p>WSDL sample Url: <a href="http://localhost:5080/openmeetings/services/RoomWebService?wsdl">http://localhost:5080/openmeetings/services/RoomWebService?wsdl</a><p>
+	
+				        		    <hr width="100%" />
+    			<a name="getRoomsPublic"><b>getRoomsPublic (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long roomtypes_id
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  Returns an Object of Type RoomsList which contains a list of
+ Room-Objects. Every Room-Object contains a Roomtype and all informations
+ about that Room. The List of current-users in the room is Null if you get
+ them via SOAP. The Roomtype can be 1 for conference rooms or 2 for
+ audience rooms.
+    			</p>
+    			<p>
+                  Return Type: org.openmeetings.app.persistence.beans.rooms.Rooms[]
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">roomtypes_id</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="deleteFlvRecording"><b>deleteFlvRecording (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long flvRecordingId
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  Deletes a flv recording
+    			</p>
+    			<p>
+                  Return Type: boolean
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">flvRecordingId</th>
+                     <td valign="top">the id of the recording</th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="getFlvRecordingByExternalUserId"><b>getFlvRecordingByExternalUserId (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String externalUserId
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  Gets a list of flv recordings
+    			</p>
+    			<p>
+                  Return Type: org.openmeetings.axis.services.FLVRecordingReturn[]
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">externalUserId</th>
+                     <td valign="top">the externalUserId</th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="getFlvRecordingByExternalRoomTypeAndCreator"><b>getFlvRecordingByExternalRoomTypeAndCreator (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String externalRoomType
+    			       			    			       			     , 
+    			       			   Long insertedBy
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  Gets a list of flv recordings
+    			</p>
+    			<p>
+                  Return Type: org.openmeetings.axis.services.FLVRecordingReturn[]
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">externalRoomType</th>
+                     <td valign="top">externalRoomType specified when creating the room</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">insertedBy</th>
+                     <td valign="top">the userId that created the recording</th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="getFlvRecordingByExternalRoomTypeByList"><b>getFlvRecordingByExternalRoomTypeByList (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String externalRoomType
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  Gets a list of flv recordings
+    			</p>
+    			<p>
+                  Return Type: java.util.List
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">externalRoomType</th>
+                     <td valign="top">externalRoomType specified when creating the room</th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="getFlvRecordingByExternalRoomType"><b>getFlvRecordingByExternalRoomType (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String externalRoomType
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  Gets a list of flv recordings
+    			</p>
+    			<p>
+                  Return Type: org.openmeetings.app.persistence.beans.flvrecord.FlvRecording[]
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">externalRoomType</th>
+                     <td valign="top">externalRoomType specified when creating the room</th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="getFlvRecordingByRoomId"><b>getFlvRecordingByRoomId (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long roomId
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  Get list of recordings
+    			</p>
+    			<p>
+                  Return Type: org.openmeetings.app.persistence.beans.flvrecord.FlvRecording[]
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">roomId</th>
+                     <td valign="top">the room id</th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="getRoomTypes"><b>getRoomTypes (
+    			    			    			       			   String SID
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  List of available room types
+    			</p>
+    			<p>
+                  Return Type: org.openmeetings.app.persistence.beans.rooms.RoomTypes[]
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="getRoomCounters"><b>getRoomCounters (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Integer roomId1
+    			       			    			       			     , 
+    			       			   Integer roomId2
+    			       			    			       			     , 
+    			       			   Integer roomId3
+    			       			    			       			     , 
+    			       			   Integer roomId4
+    			       			    			       			     , 
+    			       			   Integer roomId5
+    			       			    			       			     , 
+    			       			   Integer roomId6
+    			       			    			       			     , 
+    			       			   Integer roomId7
+    			       			    			       			     , 
+    			       			   Integer roomId8
+    			       			    			       			     , 
+    			       			   Integer roomId9
+    			       			    			       			     , 
+    			       			   Integer roomId10
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  Returns current users for rooms ids
+    			</p>
+    			<p>
+                  Return Type: org.openmeetings.axis.services.RoomCountBean[]
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">roomId1</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">roomId2</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">roomId3</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">roomId4</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">roomId5</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">roomId6</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">roomId7</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">roomId8</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">roomId9</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">roomId10</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="getRoomById"><b>getRoomById (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   long rooms_id
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  returns a conference room object
+    			</p>
+    			<p>
+                  Return Type: org.openmeetings.app.persistence.beans.rooms.Rooms
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       long
+                     </th>
+                     <td valign="top">rooms_id</th>
+                     <td valign="top">the room id</th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="getRoomWithCurrentUsersById"><b>getRoomWithCurrentUsersById (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   long rooms_id
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  
+    			</p>
+    			<p>
+                  Return Type: org.openmeetings.app.persistence.beans.rooms.Rooms
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       long
+                     </th>
+                     <td valign="top">rooms_id</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="getRoomWithClientObjectsById"><b>getRoomWithClientObjectsById (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   long rooms_id
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  Returns a object of type RoomReturn
+    			</p>
+    			<p>
+                  Return Type: org.openmeetings.axis.services.RoomReturn
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       long
+                     </th>
+                     <td valign="top">rooms_id</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="getRooms"><b>getRooms (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   int start
+    			       			    			       			     , 
+    			       			   int max
+    			       			    			       			     , 
+    			       			   String orderby
+    			       			    			       			     , 
+    			       			   boolean asc
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  Returns a List of Objects of Rooms You can use "name" as value for
+ orderby or rooms_id
+    			</p>
+    			<p>
+                  Return Type: org.openmeetings.app.data.beans.basic.SearchResult
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       int
+                     </th>
+                     <td valign="top">start</th>
+                     <td valign="top">The id you want to start</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       int
+                     </th>
+                     <td valign="top">max</th>
+                     <td valign="top">The maximum you want to get</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">orderby</th>
+                     <td valign="top">The column it will be ordered</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       boolean
+                     </th>
+                     <td valign="top">asc</th>
+                     <td valign="top">Asc or Desc sort ordering</th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="getRoomsWithCurrentUsers"><b>getRoomsWithCurrentUsers (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   int start
+    			       			    			       			     , 
+    			       			   int max
+    			       			    			       			     , 
+    			       			   String orderby
+    			       			    			       			     , 
+    			       			   boolean asc
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  Returns a List of Objects of Rooms You can use "name" as value for
+ orderby or rooms_id. It also fills the attribute currentUsers in the
+ Room-Object
+    			</p>
+    			<p>
+                  Return Type: org.openmeetings.app.data.beans.basic.SearchResult
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       int
+                     </th>
+                     <td valign="top">start</th>
+                     <td valign="top">The id you want to start</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       int
+                     </th>
+                     <td valign="top">max</th>
+                     <td valign="top">The maximum you want to get</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">orderby</th>
+                     <td valign="top">The column it will be ordered</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       boolean
+                     </th>
+                     <td valign="top">asc</th>
+                     <td valign="top">Asc or Desc sort ordering</th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="addRoom"><b>addRoom (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String name
+    			       			    			       			     , 
+    			       			   Long roomtypes_id
+    			       			    			       			     , 
+    			       			   String comment
+    			       			    			       			     , 
+    			       			   Long numberOfPartizipants
+    			       			    			       			     , 
+    			       			   Boolean ispublic
+    			       			    			       			     , 
+    			       			   Integer videoPodWidth
+    			       			    			       			     , 
+    			       			   Integer videoPodHeight
+    			       			    			       			     , 
+    			       			   Integer videoPodXPosition
+    			       			    			       			     , 
+    			       			   Integer videoPodYPosition
+    			       			    			       			     , 
+    			       			   Integer moderationPanelXPosition
+    			       			    			       			     , 
+    			       			   Boolean showWhiteBoard
+    			       			    			       			     , 
+    			       			   Integer whiteBoardPanelXPosition
+    			       			    			       			     , 
+    			       			   Integer whiteBoardPanelYPosition
+    			       			    			       			     , 
+    			       			   Integer whiteBoardPanelHeight
+    			       			    			       			     , 
+    			       			   Integer whiteBoardPanelWidth
+    			       			    			       			     , 
+    			       			   Boolean showFilesPanel
+    			       			    			       			     , 
+    			       			   Integer filesPanelXPosition
+    			       			    			       			     , 
+    			       			   Integer filesPanelYPosition
+    			       			    			       			     , 
+    			       			   Integer filesPanelHeight
+    			       			    			       			     , 
+    			       			   Integer filesPanelWidth
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  TODO: Fix Organization Issue
+ 
+ deprecated use addRoomWithModeration instead
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">name</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">roomtypes_id</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">comment</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">numberOfPartizipants</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">ispublic</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">videoPodWidth</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">videoPodHeight</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">videoPodXPosition</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">videoPodYPosition</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">moderationPanelXPosition</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">showWhiteBoard</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">whiteBoardPanelXPosition</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">whiteBoardPanelYPosition</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">whiteBoardPanelHeight</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">whiteBoardPanelWidth</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">showFilesPanel</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">filesPanelXPosition</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">filesPanelYPosition</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">filesPanelHeight</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">filesPanelWidth</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="addRoomWithModeration"><b>addRoomWithModeration (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String name
+    			       			    			       			     , 
+    			       			   Long roomtypes_id
+    			       			    			       			     , 
+    			       			   String comment
+    			       			    			       			     , 
+    			       			   Long numberOfPartizipants
+    			       			    			       			     , 
+    			       			   Boolean ispublic
+    			       			    			       			     , 
+    			       			   Boolean appointment
+    			       			    			       			     , 
+    			       			   Boolean isDemoRoom
+    			       			    			       			     , 
+    			       			   Integer demoTime
+    			       			    			       			     , 
+    			       			   Boolean isModeratedRoom
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  Create a conference room
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">name</th>
+                     <td valign="top">Name of the Room</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">roomtypes_id</th>
+                     <td valign="top">Type of that room (1 = Conference, 2 = Audience, 3 =
+            Restricted, 4 = Interview)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">comment</th>
+                     <td valign="top">any comment</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">numberOfPartizipants</th>
+                     <td valign="top">the maximum users allowed in this room</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">ispublic</th>
+                     <td valign="top">If this room is public (use true if you don't deal with
+            different Organizations)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">appointment</th>
+                     <td valign="top">is it a Calendar Room (use false by default)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">isDemoRoom</th>
+                     <td valign="top">is it a Demo Room with limited time (use false by default)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">demoTime</th>
+                     <td valign="top">time in seconds after the user will be logged out (only
+            enabled if isDemoRoom is true)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">isModeratedRoom</th>
+                     <td valign="top">Users have to wait untill a Moderator arrives. Use the
+            becomeModerator param in setUserObjectAndGenerateRoomHash to
+            set a user as default Moderator</th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="addRoomWithModerationAndQuestions"><b>addRoomWithModerationAndQuestions (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String name
+    			       			    			       			     , 
+    			       			   Long roomtypes_id
+    			       			    			       			     , 
+    			       			   String comment
+    			       			    			       			     , 
+    			       			   Long numberOfPartizipants
+    			       			    			       			     , 
+    			       			   Boolean ispublic
+    			       			    			       			     , 
+    			       			   Boolean appointment
+    			       			    			       			     , 
+    			       			   Boolean isDemoRoom
+    			       			    			       			     , 
+    			       			   Integer demoTime
+    			       			    			       			     , 
+    			       			   Boolean isModeratedRoom
+    			       			    			       			     , 
+    			       			   Boolean allowUserQuestions
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  this SOAP Method has an additional param to enable or disable the buttons
+ to apply for moderation this does only work in combination with the
+ room-type restricted
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">name</th>
+                     <td valign="top">Name of the Room</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">roomtypes_id</th>
+                     <td valign="top">Type of that room (1 = Conference, 2 = Audience, 3 =
+            Restricted, 4 = Interview)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">comment</th>
+                     <td valign="top">any comment</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">numberOfPartizipants</th>
+                     <td valign="top">the maximum users allowed in this room</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">ispublic</th>
+                     <td valign="top">If this room is public (use true if you don't deal with
+            different Organizations)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">appointment</th>
+                     <td valign="top">is it a Calendar Room (use false by default)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">isDemoRoom</th>
+                     <td valign="top">is it a Demo Room with limited time (use false by default)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">demoTime</th>
+                     <td valign="top">time in seconds after the user will be logged out (only
+            enabled if isDemoRoom is true)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">isModeratedRoom</th>
+                     <td valign="top">Users have to wait untill a Moderator arrives. Use the
+            becomeModerator param in setUserObjectAndGenerateRoomHash to
+            set a user as default Moderator</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">allowUserQuestions</th>
+                     <td valign="top">enable or disable the button to allow users to apply for
+            moderation</th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="addRoomWithModerationQuestionsAndAudioType"><b>addRoomWithModerationQuestionsAndAudioType (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String name
+    			       			    			       			     , 
+    			       			   Long roomtypes_id
+    			       			    			       			     , 
+    			       			   String comment
+    			       			    			       			     , 
+    			       			   Long numberOfPartizipants
+    			       			    			       			     , 
+    			       			   Boolean ispublic
+    			       			    			       			     , 
+    			       			   Boolean appointment
+    			       			    			       			     , 
+    			       			   Boolean isDemoRoom
+    			       			    			       			     , 
+    			       			   Integer demoTime
+    			       			    			       			     , 
+    			       			   Boolean isModeratedRoom
+    			       			    			       			     , 
+    			       			   Boolean allowUserQuestions
+    			       			    			       			     , 
+    			       			   Boolean isAudioOnly
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">name</th>
+                     <td valign="top">Name of the Room</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">roomtypes_id</th>
+                     <td valign="top">Type of that room (1 = Conference, 2 = Audience, 3 =
+            Restricted, 4 = Interview)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">comment</th>
+                     <td valign="top">any comment</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">numberOfPartizipants</th>
+                     <td valign="top">the maximum users allowed in this room</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">ispublic</th>
+                     <td valign="top">If this room is public (use true if you don't deal with
+            different Organizations)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">appointment</th>
+                     <td valign="top">is it a Calendar Room (use false by default)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">isDemoRoom</th>
+                     <td valign="top">is it a Demo Room with limited time (use false by default)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">demoTime</th>
+                     <td valign="top">time in seconds after the user will be logged out (only
+            enabled if isDemoRoom is true)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">isModeratedRoom</th>
+                     <td valign="top">Users have to wait until a Moderator arrives. Use the
+            becomeModerator param in setUserObjectAndGenerateRoomHash to
+            set a user as default Moderator</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">allowUserQuestions</th>
+                     <td valign="top">enable or disable the button to allow users to apply for
+            moderation</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">isAudioOnly</th>
+                     <td valign="top">enable or disable the video / or audio-only</th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="getRoomIdByExternalId"><b>getRoomIdByExternalId (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String name
+    			       			    			       			     , 
+    			       			   Long roomtypes_id
+    			       			    			       			     , 
+    			       			   String comment
+    			       			    			       			     , 
+    			       			   Long numberOfPartizipants
+    			       			    			       			     , 
+    			       			   Boolean ispublic
+    			       			    			       			     , 
+    			       			   Boolean appointment
+    			       			    			       			     , 
+    			       			   Boolean isDemoRoom
+    			       			    			       			     , 
+    			       			   Integer demoTime
+    			       			    			       			     , 
+    			       			   Boolean isModeratedRoom
+    			       			    			       			     , 
+    			       			   Long externalRoomId
+    			       			    			       			     , 
+    			       			   String externalRoomType
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  Checks if a room with this exteralRoomId + externalRoomType does exist,
+ if yes it returns the room id if not, it will create the room and then
+ return the room id of the newly created room
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">name</th>
+                     <td valign="top">Name of the room</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">roomtypes_id</th>
+                     <td valign="top">Type of that room (1 = Conference, 2 = Audience, 3 =
+            Restricted, 4 = Interview)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">comment</th>
+                     <td valign="top">any comment</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">numberOfPartizipants</th>
+                     <td valign="top">the maximum users allowed in this room</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">ispublic</th>
+                     <td valign="top">If this room is public (use true if you don't deal with
+            different Organizations)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">appointment</th>
+                     <td valign="top">is it a Calendar Room? (use false if not sure what that means)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">isDemoRoom</th>
+                     <td valign="top">is it a Demo Room with limited time? (use false if not sure
+            what that means)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">demoTime</th>
+                     <td valign="top">time in seconds after the user will be logged out (only
+            enabled if isDemoRoom is true)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">isModeratedRoom</th>
+                     <td valign="top">Users have to wait untill a Moderator arrives. Use the
+            becomeModerator param in setUserObjectAndGenerateRoomHash to
+            set a user as default Moderator</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">externalRoomId</th>
+                     <td valign="top">your external room id may set here</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">externalRoomType</th>
+                     <td valign="top">you can specify your system-name or type of room here, for
+            example "moodle"</th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="updateRoom"><b>updateRoom (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long rooms_id
+    			       			    			       			     , 
+    			       			   String name
+    			       			    			       			     , 
+    			       			   Long roomtypes_id
+    			       			    			       			     , 
+    			       			   String comment
+    			       			    			       			     , 
+    			       			   Long numberOfPartizipants
+    			       			    			       			     , 
+    			       			   Boolean ispublic
+    			       			    			       			     , 
+    			       			   Integer videoPodWidth
+    			       			    			       			     , 
+    			       			   Integer videoPodHeight
+    			       			    			       			     , 
+    			       			   Integer videoPodXPosition
+    			       			    			       			     , 
+    			       			   Integer videoPodYPosition
+    			       			    			       			     , 
+    			       			   Integer moderationPanelXPosition
+    			       			    			       			     , 
+    			       			   Boolean showWhiteBoard
+    			       			    			       			     , 
+    			       			   Integer whiteBoardPanelXPosition
+    			       			    			       			     , 
+    			       			   Integer whiteBoardPanelYPosition
+    			       			    			       			     , 
+    			       			   Integer whiteBoardPanelHeight
+    			       			    			       			     , 
+    			       			   Integer whiteBoardPanelWidth
+    			       			    			       			     , 
+    			       			   Boolean showFilesPanel
+    			       			    			       			     , 
+    			       			   Integer filesPanelXPosition
+    			       			    			       			     , 
+    			       			   Integer filesPanelYPosition
+    			       			    			       			     , 
+    			       			   Integer filesPanelHeight
+    			       			    			       			     , 
+    			       			   Integer filesPanelWidth
+    			       			    			       			     , 
+    			       			   Boolean appointment
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  TODO: Fix Organization Issue deprecated use updateRoomWithModeration
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">rooms_id</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">name</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">roomtypes_id</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">comment</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">numberOfPartizipants</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">ispublic</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">videoPodWidth</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">videoPodHeight</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">videoPodXPosition</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">videoPodYPosition</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">moderationPanelXPosition</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">showWhiteBoard</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">whiteBoardPanelXPosition</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">whiteBoardPanelYPosition</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">whiteBoardPanelHeight</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">whiteBoardPanelWidth</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">showFilesPanel</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">filesPanelXPosition</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">filesPanelYPosition</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">filesPanelHeight</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">filesPanelWidth</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="updateRoomWithModeration"><b>updateRoomWithModeration (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long room_id
+    			       			    			       			     , 
+    			       			   String name
+    			       			    			       			     , 
+    			       			   Long roomtypes_id
+    			       			    			       			     , 
+    			       			   String comment
+    			       			    			       			     , 
+    			       			   Long numberOfPartizipants
+    			       			    			       			     , 
+    			       			   Boolean ispublic
+    			       			    			       			     , 
+    			       			   Boolean appointment
+    			       			    			       			     , 
+    			       			   Boolean isDemoRoom
+    			       			    			       			     , 
+    			       			   Integer demoTime
+    			       			    			       			     , 
+    			       			   Boolean isModeratedRoom
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  Updates a conference room by its room id
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">room_id</th>
+                     <td valign="top">the room id to update</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">name</th>
+                     <td valign="top">new name of the room</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">roomtypes_id</th>
+                     <td valign="top">new type of room (1 = Conference, 2 = Audience, 3 =
+            Restricted, 4 = Interview)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">comment</th>
+                     <td valign="top">new comment</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">numberOfPartizipants</th>
+                     <td valign="top">new numberOfParticipants</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">ispublic</th>
+                     <td valign="top">is public</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">appointment</th>
+                     <td valign="top">if the room is an appointment</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">isDemoRoom</th>
+                     <td valign="top">is it a Demo Room with limited time? (use false if not sure
+            what that means)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">demoTime</th>
+                     <td valign="top">time in seconds after the user will be logged out (only
+            enabled if isDemoRoom is true)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">isModeratedRoom</th>
+                     <td valign="top">Users have to wait until a Moderator arrives. Use the
+            becomeModerator parameter in setUserObjectAndGenerateRoomHash
+            to set a user as default Moderator</th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="updateRoomWithModerationAndQuestions"><b>updateRoomWithModerationAndQuestions (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long room_id
+    			       			    			       			     , 
+    			       			   String name
+    			       			    			       			     , 
+    			       			   Long roomtypes_id
+    			       			    			       			     , 
+    			       			   String comment
+    			       			    			       			     , 
+    			       			   Long numberOfPartizipants
+    			       			    			       			     , 
+    			       			   Boolean ispublic
+    			       			    			       			     , 
+    			       			   Boolean appointment
+    			       			    			       			     , 
+    			       			   Boolean isDemoRoom
+    			       			    			       			     , 
+    			       			   Integer demoTime
+    			       			    			       			     , 
+    			       			   Boolean isModeratedRoom
+    			       			    			       			     , 
+    			       			   Boolean allowUserQuestions
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">room_id</th>
+                     <td valign="top">the room id to update</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">name</th>
+                     <td valign="top">new name of the room</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">roomtypes_id</th>
+                     <td valign="top">new type of room (1 = Conference, 2 = Audience, 3 =
+            Restricted, 4 = Interview)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">comment</th>
+                     <td valign="top">new comment</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">numberOfPartizipants</th>
+                     <td valign="top">new numberOfParticipants</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">ispublic</th>
+                     <td valign="top">is public</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">appointment</th>
+                     <td valign="top">if the room is an appointment</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">isDemoRoom</th>
+                     <td valign="top">is it a Demo Room with limited time? (use false if not sure
+            what that means)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">demoTime</th>
+                     <td valign="top">time in seconds after the user will be logged out (only
+            enabled if isDemoRoom is true)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">isModeratedRoom</th>
+                     <td valign="top">Users have to wait until a Moderator arrives. Use the
+            becomeModerator parameter in setUserObjectAndGenerateRoomHash
+            to set a user as default Moderator</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">allowUserQuestions</th>
+                     <td valign="top">enable or disable the button to allow users to apply for
+            moderation</th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="deleteRoom"><b>deleteRoom (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   long rooms_id
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  Delete a room by its room id
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       long
+                     </th>
+                     <td valign="top">rooms_id</th>
+                     <td valign="top"></th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="kickUser"><b>kickUser (
+    			    			    			       			   String SID_Admin
+    			       			    			       			     , 
+    			       			   Long room_id
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  kick all uses of a certain room
+    			</p>
+    			<p>
+                  Return Type: java.lang.Boolean
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin _Admin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">room_id</th>
+                     <td valign="top">the room id</th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="addRoomWithModerationAndExternalType"><b>addRoomWithModerationAndExternalType (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String name
+    			       			    			       			     , 
+    			       			   Long roomtypes_id
+    			       			    			       			     , 
+    			       			   String comment
+    			       			    			       			     , 
+    			       			   Long numberOfPartizipants
+    			       			    			       			     , 
+    			       			   Boolean ispublic
+    			       			    			       			     , 
+    			       			   Boolean appointment
+    			       			    			       			     , 
+    			       			   Boolean isDemoRoom
+    			       			    			       			     , 
+    			       			   Integer demoTime
+    			       			    			       			     , 
+    			       			   Boolean isModeratedRoom
+    			       			    			       			     , 
+    			       			   String externalRoomType
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  Add a new conference room with option to set the external room type, the
+ external room type should be set if multiple applications use the same
+ OpenMeetings instance
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">name</th>
+                     <td valign="top">new name of the room</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">roomtypes_id</th>
+                     <td valign="top">new type of room (1 = Conference, 2 = Audience, 3 =
+            Restricted, 4 = Interview)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">comment</th>
+                     <td valign="top">new comment</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">numberOfPartizipants</th>
+                     <td valign="top">new numberOfParticipants</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">ispublic</th>
+                     <td valign="top">is public</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">appointment</th>
+                     <td valign="top">if the room is an appointment</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">isDemoRoom</th>
+                     <td valign="top">is it a Demo Room with limited time? (use false if not sure
+            what that means)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">demoTime</th>
+                     <td valign="top">time in seconds after the user will be logged out (only
+            enabled if isDemoRoom is true)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">isModeratedRoom</th>
+                     <td valign="top">Users have to wait until a Moderator arrives. Use the
+            becomeModerator parameter in setUserObjectAndGenerateRoomHash
+            to set a user as default Moderator</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">externalRoomType</th>
+                     <td valign="top">the external room type (can be used to identify different
+            external systems using same OpenMeetings instance)</th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="addRoomWithModerationExternalTypeAndAudioType"><b>addRoomWithModerationExternalTypeAndAudioType (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String name
+    			       			    			       			     , 
+    			       			   Long roomtypes_id
+    			       			    			       			     , 
+    			       			   String comment
+    			       			    			       			     , 
+    			       			   Long numberOfPartizipants
+    			       			    			       			     , 
+    			       			   Boolean ispublic
+    			       			    			       			     , 
+    			       			   Boolean appointment
+    			       			    			       			     , 
+    			       			   Boolean isDemoRoom
+    			       			    			       			     , 
+    			       			   Integer demoTime
+    			       			    			       			     , 
+    			       			   Boolean isModeratedRoom
+    			       			    			       			     , 
+    			       			   String externalRoomType
+    			       			    			       			     , 
+    			       			   Boolean allowUserQuestions
+    			       			    			       			     , 
+    			       			   Boolean isAudioOnly
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  Adds a new room with options for audio only
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">name</th>
+                     <td valign="top">new name of the room</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">roomtypes_id</th>
+                     <td valign="top">new type of room (1 = Conference, 2 = Audience, 3 =
+            Restricted, 4 = Interview)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">comment</th>
+                     <td valign="top">new comment</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">numberOfPartizipants</th>
+                     <td valign="top">new numberOfParticipants</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">ispublic</th>
+                     <td valign="top">is public</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">appointment</th>
+                     <td valign="top">if the room is an appointment</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">isDemoRoom</th>
+                     <td valign="top">is it a Demo Room with limited time? (use false if not sure
+            what that means)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">demoTime</th>
+                     <td valign="top">time in seconds after the user will be logged out (only
+            enabled if isDemoRoom is true)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">isModeratedRoom</th>
+                     <td valign="top">Users have to wait until a Moderator arrives. Use the
+            becomeModerator parameter in setUserObjectAndGenerateRoomHash
+            to set a user as default Moderator</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">externalRoomType</th>
+                     <td valign="top">the external room type (can be used to identify different
+            external systems using same OpenMeetings instance)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">allowUserQuestions</th>
+                     <td valign="top">enable or disable the button to allow users to apply for
+            moderation</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">isAudioOnly</th>
+                     <td valign="top">enable or disable the video / or audio-only</th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="addRoomWithModerationAndRecordingFlags"><b>addRoomWithModerationAndRecordingFlags (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String name
+    			       			    			       			     , 
+    			       			   Long roomtypes_id
+    			       			    			       			     , 
+    			       			   String comment
+    			       			    			       			     , 
+    			       			   Long numberOfPartizipants
+    			       			    			       			     , 
+    			       			   Boolean ispublic
+    			       			    			       			     , 
+    			       			   Boolean appointment
+    			       			    			       			     , 
+    			       			   Boolean isDemoRoom
+    			       			    			       			     , 
+    			       			   Integer demoTime
+    			       			    			       			     , 
+    			       			   Boolean isModeratedRoom
+    			       			    			       			     , 
+    			       			   String externalRoomType
+    			       			    			       			     , 
+    			       			   Boolean allowUserQuestions
+    			       			    			       			     , 
+    			       			   Boolean isAudioOnly
+    			       			    			       			     , 
+    			       			   Boolean waitForRecording
+    			       			    			       			     , 
+    			       			   Boolean allowRecording
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  Adds a new room with options for recording
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">name</th>
+                     <td valign="top">new name of the room</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">roomtypes_id</th>
+                     <td valign="top">new type of room (1 = Conference, 2 = Audience, 3 =
+            Restricted, 4 = Interview)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">comment</th>
+                     <td valign="top">new comment</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">numberOfPartizipants</th>
+                     <td valign="top">new numberOfParticipants</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">ispublic</th>
+                     <td valign="top">is public</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">appointment</th>
+                     <td valign="top">if the room is an appointment</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">isDemoRoom</th>
+                     <td valign="top">is it a Demo Room with limited time? (use false if not sure
+            what that means)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">demoTime</th>
+                     <td valign="top">time in seconds after the user will be logged out (only
+            enabled if isDemoRoom is true)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">isModeratedRoom</th>
+                     <td valign="top">Users have to wait until a Moderator arrives. Use the
+            becomeModerator parameter in setUserObjectAndGenerateRoomHash
+            to set a user as default Moderator</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">externalRoomType</th>
+                     <td valign="top">the external room type (can be used to identify different
+            external systems using same OpenMeetings instance)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">allowUserQuestions</th>
+                     <td valign="top">enable or disable the button to allow users to apply for
+            moderation</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">isAudioOnly</th>
+                     <td valign="top">enable or disable the video / or audio-only</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">waitForRecording</th>
+                     <td valign="top">if the users in the room will get a notification that they
+            should start recording before they do a conference</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">allowRecording</th>
+                     <td valign="top">if the recording option is available or not</th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="addRoomWithModerationExternalTypeAndTopBarOption"><b>addRoomWithModerationExternalTypeAndTopBarOption (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String name
+    			       			    			       			     , 
+    			       			   Long roomtypes_id
+    			       			    			       			     , 
+    			       			   String comment
+    			       			    			       			     , 
+    			       			   Long numberOfPartizipants
+    			       			    			       			     , 
+    			       			   Boolean ispublic
+    			       			    			       			     , 
+    			       			   Boolean appointment
+    			       			    			       			     , 
+    			       			   Boolean isDemoRoom
+    			       			    			       			     , 
+    			       			   Integer demoTime
+    			       			    			       			     , 
+    			       			   Boolean isModeratedRoom
+    			       			    			       			     , 
+    			       			   String externalRoomType
+    			       			    			       			     , 
+    			       			   Boolean allowUserQuestions
+    			       			    			       			     , 
+    			       			   Boolean isAudioOnly
+    			       			    			       			     , 
+    			       			   Boolean waitForRecording
+    			       			    			       			     , 
+    			       			   Boolean allowRecording
+    			       			    			       			     , 
+    			       			   Boolean hideTopBar
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  Add a conference room with options to disable the top menu bar in the
+ conference room
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">name</th>
+                     <td valign="top">new name of the room</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">roomtypes_id</th>
+                     <td valign="top">new type of room (1 = Conference, 2 = Audience, 3 =
+            Restricted, 4 = Interview)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">comment</th>
+                     <td valign="top">new comment</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">numberOfPartizipants</th>
+                     <td valign="top">new numberOfParticipants</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">ispublic</th>
+                     <td valign="top">is public</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">appointment</th>
+                     <td valign="top">if the room is an appointment</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">isDemoRoom</th>
+                     <td valign="top">is it a Demo Room with limited time? (use false if not sure
+            what that means)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">demoTime</th>
+                     <td valign="top">time in seconds after the user will be logged out (only
+            enabled if isDemoRoom is true)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">isModeratedRoom</th>
+                     <td valign="top">Users have to wait until a Moderator arrives. Use the
+            becomeModerator parameter in setUserObjectAndGenerateRoomHash
+            to set a user as default Moderator</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">externalRoomType</th>
+                     <td valign="top">the external room type (can be used to identify different
+            external systems using same OpenMeetings instance)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">allowUserQuestions</th>
+                     <td valign="top">enable or disable the button to allow users to apply for
+            moderation</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">isAudioOnly</th>
+                     <td valign="top">enable or disable the video / or audio-only</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">waitForRecording</th>
+                     <td valign="top">if the users in the room will get a notification that they
+            should start recording before they do a conference</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">allowRecording</th>
+                     <td valign="top">if the recording option is available or not</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">hideTopBar</th>
+                     <td valign="top">if the top bar in the conference room is visible or not</th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="getInvitationHash"><b>getInvitationHash (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String username
+    			       			    			       			     , 
+    			       			   Long room_id
+    			       			    			       			     , 
+    			       			   Boolean isPasswordProtected
+    			       			    			       			     , 
+    			       			   String invitationpass
+    			       			    			       			     , 
+    			       			   Integer valid
+    			       			    			       			     , 
+    			       			   String validFromDate
+    			       			    			       			     , 
+    			       			   String validFromTime
+    			       			    			       			     , 
+    			       			   String validToDate
+    			       			    			       			     , 
+    			       			   String validToTime
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  Create a Invitation hash and optionally send it by mail the From to Date
+ is as String as some SOAP libraries do not accept Date Objects in SOAP
+ Calls Date is parsed as dd.mm.yyyy, time as hh:mm (don't forget the
+ leading zero's)
+    			</p>
+    			<p>
+                  Return Type: java.lang.String
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin 
+            a valid Session Token</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">username</th>
+                     <td valign="top">the username of the User that he will get</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">room_id</th>
+                     <td valign="top">the conference room id of the invitation</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">isPasswordProtected</th>
+                     <td valign="top">if the invitation is password protected</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">invitationpass</th>
+                     <td valign="top">the password for accessing the conference room via the
+            invitation hash</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">valid</th>
+                     <td valign="top">the type of validation for the hash 1: endless, 2: from-to
+            period, 3: one-time</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">validFromDate</th>
+                     <td valign="top">Date in Format of dd.mm.yyyy only of interest if valid is type
+            2</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">validFromTime</th>
+                     <td valign="top">time in Format of hh:mm only of interest if valid is type 2</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">validToDate</th>
+                     <td valign="top">Date in Format of dd.mm.yyyy only of interest if valid is type
+            2</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">validToTime</th>
+                     <td valign="top">time in Format of hh:mm only of interest if valid is type 2</th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="sendInvitationHash"><b>sendInvitationHash (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String username
+    			       			    			       			     , 
+    			       			   String message
+    			       			    			       			     , 
+    			       			   String baseurl
+    			       			    			       			     , 
+    			       			   String email
+    			       			    			       			     , 
+    			       			   String subject
+    			       			    			       			     , 
+    			       			   Long room_id
+    			       			    			       			     , 
+    			       			   String conferencedomain
+    			       			    			       			     , 
+    			       			   Boolean isPasswordProtected
+    			       			    			       			     , 
+    			       			   String invitationpass
+    			       			    			       			     , 
+    			       			   Integer valid
+    			       			    			       			     , 
+    			       			   String validFromDate
+    			       			    			       			     , 
+    			       			   String validFromTime
+    			       			    			       			     , 
+    			       			   String validToDate
+    			       			    			       			     , 
+    			       			   String validToTime
+    			       			    			       			     , 
+    			       			   Long language_id
+    			       			    			       			     , 
+    			       			   Boolean sendMail
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  Create a Invitation hash and optionally send it by mail the From to Date
+ is as String as some SOAP libraries do not accept Date Objects in SOAP
+ Calls Date is parsed as dd.mm.yyyy, time as hh:mm (don't forget the
+ leading zero's)
+    			</p>
+    			<p>
+                  Return Type: java.lang.String
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin 
+            a valid Session Token</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">username</th>
+                     <td valign="top">the Username of the User that he will get</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">message</th>
+                     <td valign="top">the Message in the Email Body send with the invitation if
+            sendMail is true</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">baseurl</th>
+                     <td valign="top">the baseURL for the Infivations link in the Mail Body if
+            sendMail is true</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">email</th>
+                     <td valign="top">the Email to send the invitation to if sendMail is true</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">subject</th>
+                     <td valign="top">the subject of the Email send with the invitation if sendMail
+            is true</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">room_id</th>
+                     <td valign="top">the conference room id of the invitation</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">conferencedomain</th>
+                     <td valign="top">the domain of the room (keep empty)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">isPasswordProtected</th>
+                     <td valign="top">if the invitation is password protected</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">invitationpass</th>
+                     <td valign="top">the password for accessing the conference room via the
+            invitation hash</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">valid</th>
+                     <td valign="top">the type of validation for the hash 1: endless, 2: from-to
+            period, 3: one-time</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">validFromDate</th>
+                     <td valign="top">Date in Format of dd.mm.yyyy only of interest if valid is type
+            2</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">validFromTime</th>
+                     <td valign="top">time in Format of hh:mm only of interest if valid is type 2</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">validToDate</th>
+                     <td valign="top">Date in Format of dd.mm.yyyy only of interest if valid is type
+            2</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">validToTime</th>
+                     <td valign="top">time in Format of hh:mm only of interest if valid is type 2</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">language_id</th>
+                     <td valign="top">the language id of the EMail that is send with the invitation
+            if sendMail is true</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">sendMail</th>
+                     <td valign="top">if sendMail is true then the RPC-Call will send the invitation
+            to the email</th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="sendInvitationHashWithDateObject"><b>sendInvitationHashWithDateObject (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String username
+    			       			    			       			     , 
+    			       			   String message
+    			       			    			       			     , 
+    			       			   String baseurl
+    			       			    			       			     , 
+    			       			   String email
+    			       			    			       			     , 
+    			       			   String subject
+    			       			    			       			     , 
+    			       			   Long room_id
+    			       			    			       			     , 
+    			       			   String conferencedomain
+    			       			    			       			     , 
+    			       			   Boolean isPasswordProtected
+    			       			    			       			     , 
+    			       			   String invitationpass
+    			       			    			       			     , 
+    			       			   Integer valid
+    			       			    			       			     , 
+    			       			   Date fromDate
+    			       			    			       			     , 
+    			       			   Date toDate
+    			       			    			       			     , 
+    			       			   Long language_id
+    			       			    			       			     , 
+    			       			   Boolean sendMail
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  Create a Invitation hash and optionally send it by mail the From to Date
+ is as String as some SOAP libraries do not accept Date Objects in SOAP
+ Calls Date is parsed as dd.mm.yyyy, time as hh:mm (don't forget the
+ leading zero's)
+    			</p>
+    			<p>
+                  Return Type: java.lang.String
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin 
+            a valid Session Token</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">username</th>
+                     <td valign="top">the Username of the User that he will get</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">message</th>
+                     <td valign="top">the Message in the Email Body send with the invitation if
+            sendMail is true</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">baseurl</th>
+                     <td valign="top">the baseURL for the Infivations link in the Mail Body if
+            sendMail is true</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">email</th>
+                     <td valign="top">the Email to send the invitation to if sendMail is true</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">subject</th>
+                     <td valign="top">the subject of the Email send with the invitation if sendMail
+            is true</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">room_id</th>
+                     <td valign="top">the conference room id of the invitation</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">conferencedomain</th>
+                     <td valign="top">the domain of the room (keep empty)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">isPasswordProtected</th>
+                     <td valign="top">if the invitation is password protected</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">invitationpass</th>
+                     <td valign="top">the password for accessing the conference room via the
+            invitation hash</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">valid</th>
+                     <td valign="top">the type of validation for the hash 1: endless, 2: from-to
+            period, 3: one-time</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Date
+                     </th>
+                     <td valign="top">fromDate</th>
+                     <td valign="top">Date as Date Object only of interest if valid is type 2</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Date
+                     </th>
+                     <td valign="top">toDate</th>
+                     <td valign="top">Date as Date Object only of interest if valid is type 2</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">language_id</th>
+                     <td valign="top">the language id of the EMail that is send with the invitation
+            if sendMail is true</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">sendMail</th>
+                     <td valign="top">if sendMail is true then the RPC-Call will send the invitation
+            to the email</th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="getRoomsWithCurrentUsersByList"><b>getRoomsWithCurrentUsersByList (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   int start
+    			       			    			       			     , 
+    			       			   int max
+    			       			    			       			     , 
+    			       			   String orderby
+    			       			    			       			     , 
+    			       			   boolean asc
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  Return a RoomReturn Object with information of the current users of a
+ conference room
+    			</p>
+    			<p>
+                  Return Type: java.util.List
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       int
+                     </th>
+                     <td valign="top">start</th>
+                     <td valign="top">The id you want to start</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       int
+                     </th>
+                     <td valign="top">max</th>
+                     <td valign="top">The maximum you want to get</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">orderby</th>
+                     <td valign="top">The column it will be ordered</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       boolean
+                     </th>
+                     <td valign="top">asc</th>
+                     <td valign="top">Asc or Desc sort ordering</th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="getRoomsWithCurrentUsersByListAndType"><b>getRoomsWithCurrentUsersByListAndType (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   int start
+    			       			    			       			     , 
+    			       			   int max
+    			       			    			       			     , 
+    			       			   String orderby
+    			       			    			       			     , 
+    			       			   boolean asc
+    			       			    			       			     , 
+    			       			   String externalRoomType
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  Return a RoomReturn Object with information of the current users of a
+ conference room with option to search for special external room types
+    			</p>
+    			<p>
+                  Return Type: java.util.List
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       int
+                     </th>
+                     <td valign="top">start</th>
+                     <td valign="top">The id you want to start</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       int
+                     </th>
+                     <td valign="top">max</th>
+                     <td valign="top">The maximum you want to get</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">orderby</th>
+                     <td valign="top">The column it will be ordered</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       boolean
+                     </th>
+                     <td valign="top">asc</th>
+                     <td valign="top">Asc or Desc sort ordering</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">externalRoomType</th>
+                     <td valign="top">the external room type</th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="addRoomWithModerationAndExternalTypeAndStartEnd"><b>addRoomWithModerationAndExternalTypeAndStartEnd (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String name
+    			       			    			       			     , 
+    			       			   Long roomtypes_id
+    			       			    			       			     , 
+    			       			   String comment
+    			       			    			       			     , 
+    			       			   Long numberOfPartizipants
+    			       			    			       			     , 
+    			       			   Boolean ispublic
+    			       			    			       			     , 
+    			       			   Boolean appointment
+    			       			    			       			     , 
+    			       			   Boolean isDemoRoom
+    			       			    			       			     , 
+    			       			   Integer demoTime
+    			       			    			       			     , 
+    			       			   Boolean isModeratedRoom
+    			       			    			       			     , 
+    			       			   String externalRoomType
+    			       			    			       			     , 
+    			       			   String validFromDate
+    			       			    			       			     , 
+    			       			   String validFromTime
+    			       			    			       			     , 
+    			       			   String validToDate
+    			       			    			       			     , 
+    			       			   String validToTime
+    			       			    			       			     , 
+    			       			   Boolean isPasswordProtected
+    			       			    			       			     , 
+    			       			   String password
+    			       			    			       			     , 
+    			       			   Long reminderTypeId
+    			       			    			       			     , 
+    			       			   String redirectURL
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  Adds a conference room that is only available for a period of time
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">name</th>
+                     <td valign="top">new name of the room</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">roomtypes_id</th>
+                     <td valign="top">new type of room (1 = Conference, 2 = Audience, 3 =
+            Restricted, 4 = Interview)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">comment</th>
+                     <td valign="top">new comment</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">numberOfPartizipants</th>
+                     <td valign="top">new numberOfParticipants</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">ispublic</th>
+                     <td valign="top">is public</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">appointment</th>
+                     <td valign="top">if the room is an appointment</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">isDemoRoom</th>
+                     <td valign="top">is it a Demo Room with limited time? (use false if not sure
+            what that means)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Integer
+                     </th>
+                     <td valign="top">demoTime</th>
+                     <td valign="top">time in seconds after the user will be logged out (only
+            enabled if isDemoRoom is true)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">isModeratedRoom</th>
+                     <td valign="top">Users have to wait until a Moderator arrives. Use the
+            becomeModerator parameter in setUserObjectAndGenerateRoomHash
+            to set a user as default Moderator</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">externalRoomType</th>
+                     <td valign="top">the external room type (can be used to identify different
+            external systems using same OpenMeetings instance)</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">validFromDate</th>
+                     <td valign="top">valid from as Date format: dd.MM.yyyy</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">validFromTime</th>
+                     <td valign="top">valid to as time format: mm:hh</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">validToDate</th>
+                     <td valign="top">valid to Date format: dd.MM.yyyy</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">validToTime</th>
+                     <td valign="top">valid to time format: mm:hh</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Boolean
+                     </th>
+                     <td valign="top">isPasswordProtected</th>
+                     <td valign="top">If the links send via EMail to invited people is password
+            protected</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">password</th>
+                     <td valign="top">Password for Invitations send via Mail</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">reminderTypeId</th>
+                     <td valign="top">1=none, 2=simple mail, 3=ICAL</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">redirectURL</th>
+                     <td valign="top">URL Users will be lead to if the Conference Time is elapsed</th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="addMeetingMemberRemindToRoom"><b>addMeetingMemberRemindToRoom (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long room_id
+    			       			    			       			     , 
+    			       			   String firstname
+    			       			    			       			     , 
+    			       			   String lastname
+    			       			    			       			     , 
+    			       			   String email
+    			       			    			       			     , 
+    			       			   String baseUrl
+    			       			    			       			     , 
+    			       			   Long language_id
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  Add a meeting member to a certain room. This is the same as adding an
+ external user to a event in the calendar.
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">room_id</th>
+                     <td valign="top">The Room Id the meeting member is going to be added</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">firstname</th>
+                     <td valign="top">The first name of the meeting member</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">lastname</th>
+                     <td valign="top">The last name of the meeting member</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">email</th>
+                     <td valign="top">The email of the Meeting member</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">baseUrl</th>
+                     <td valign="top">The baseUrl, this is important to send the correct link in the
+            invitation to the meeting member</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">language_id</th>
+                     <td valign="top">The ID of the language, for the email that is send to the
+            meeting member</th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="addExternalMeetingMemberRemindToRoom"><b>addExternalMeetingMemberRemindToRoom (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long room_id
+    			       			    			       			     , 
+    			       			   String firstname
+    			       			    			       			     , 
+    			       			   String lastname
+    			       			    			       			     , 
+    			       			   String email
+    			       			    			       			     , 
+    			       			   String baseUrl
+    			       			    			       			     , 
+    			       			   Long language_id
+    			       			    			       			     , 
+    			       			   String jNameTimeZone
+    			       			    			       			     , 
+    			       			   String invitorName
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  Add a meeting member to a certain room. This is the same as adding an
+ external user to a event in the calendar. with a certain time zone
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">room_id</th>
+                     <td valign="top">The Room Id the meeting member is going to be added</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">firstname</th>
+                     <td valign="top">The first name of the meeting member</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">lastname</th>
+                     <td valign="top">The last name of the meeting member</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">email</th>
+                     <td valign="top">The email of the Meeting member</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">baseUrl</th>
+                     <td valign="top">The baseUrl, this is important to send the correct link in the
+            invitation to the meeting member</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       Long
+                     </th>
+                     <td valign="top">language_id</th>
+                     <td valign="top">The ID of the language, for the email that is send to the
+            meeting member</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">jNameTimeZone</th>
+                     <td valign="top">name of the timezone</th>
+                   </tr>
+                   
+                                          			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">invitorName</th>
+                     <td valign="top">name of invitation creators</th>
+                   </tr>
+                   
+                                          			</table>
+    	   				        		    <hr width="100%" />
+    			<a name="closeRoom"><b>closeRoom (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long room_id
+    			       			    			       			     , 
+    			       			   Boolean status
+    			       			    			)
+    			</b></a>
+    			<p>
+    			  Method to remotely close or open rooms. If a room is closed all users
+ inside the room and all users that try to enter it will be redirected to
+ the redirectURL that is defined in the Room-Object.
+ 
+ Returns positive value if authentication was successful.
+    			</p>
+    			<p>
+                  Return Type: int
+                </p>
+    			
+    			<table style="margin-left:20px">
+    			   <tr>
+    			     <th width="200" align="left">Type</th>
+    			     <th width="200" align="left">Fieldname</th>
+    			     <th width="400" align="left">Description</th>
+    			   </tr>
+    			       			       			   <tr>
+                     <td valign="top">
+                       String
+                     </th>
+                     <td valign="top">SID</th>
+                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</th>
+                   </tr>
+         

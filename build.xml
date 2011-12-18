@@ -33,6 +33,9 @@
 	<property name="fileservice.src.dir" value="${basedir}/src/fileservice"/>
 	<property name="roomservice.src.dir" value="${basedir}/src/roomservice"/>
 	<property name="userservice.src.dir" value="${basedir}/src/userservice"/>
+	
+	<!-- Doclet Classes -->
+	<property name="doclet.src.dir" value="${basedir}/src/docgenerator"/>
 
 	<property name="classes.dir" value="${basedir}/bin"/>
 	<property name="dist.dir" value="dist"/>
@@ -103,6 +106,8 @@
 
 	<!-- screenshare.lib -->
 	<property name="screenshare.lib" value="${basedir}/WebContent/red5-screenshare" />
+	<!-- JDK Tools -->
+    <property name="jdk.tools" value="${project.lib}/java_16_jdk" />
 
 	<!-- compile classpath -->
 	<path id="compile.classpath">
@@ -125,6 +130,7 @@
 		<fileset dir="${mina.lib}" includes="*.jar"/>
 		<fileset dir="${junit.lib}" includes="*.jar"/>
 		<fileset dir="${screenshare.lib}" includes="*kunststoff.jar"/>
+		<fileset dir="${jdk.tools}" includes="*.jar"/>
 	</path>
 
 	<!-- screenshare classpath -->
@@ -505,6 +511,9 @@
 			<classpath refid="compile.classpath"/>
 			<compilerarg value="-Aopenjpa.metamodel=true"/>
 		</javac>
+		<javac debug="on" debuglevel="lines,vars,source" srcdir="${doclet.src.dir}" destdir="${main.out.dir}" >
+            <classpath refid="compile.classpath"/>
+        </javac>
 		<javac debug="on" debuglevel="lines,vars,source" srcdir="${webstart.src.dir}" destdir="${main.out.dir}" >
 			<classpath refid="compile.classpath"/>
 		</javac>
@@ -630,6 +639,40 @@
 	        <fileset dir="${userservice.src.dir}"/>
 	    </rat:report>
 	</target>
+	
+	<!--  depends="compile" depends="compile.only" -->
+	
+	<path id="build.webservice.classpath">
+		<pathelement path="${classes.dir}" />
+		<path refid="compile.classpath" /> 
+    </path>
+	
+	<target name="build.webservice.doc" depends="compile.only"> 
+		
+		<javadoc classpathref="build.webservice.classpath">  
+			
+			<source file="src/roomservice/org/openmeetings/axis/services/RoomWebService.java" />
+			
+			<doclet name="org.openmeetings.doc.WebServiceDoclet" pathref="build.webservice.classpath">
+			</doclet>
+			
+		</javadoc>  
+		
+	</target>
+	
+	<target name="build.only.webservice.doc" > 
+	        
+	        <javadoc classpathref="build.webservice.classpath">  
+	            
+	            <source file="src/roomservice/org/openmeetings/axis/services/RoomWebService.java" />
+	            
+	            <doclet name="org.openmeetings.doc.WebServiceDoclet" pathref="build.webservice.classpath">
+	            </doclet>
+	            
+	        </javadoc>  
+	        
+	    </target>
+	<!-- path="${classes.dir}" -->
     
 	<!-- Unit Tests -->
 	<property name="om.dist.webapp" value="${red5.root}/webapps/${project.distname}"/>
@@ -637,7 +680,7 @@
 	<condition property="junit.test.pattern" value="${testcases}" else="Test*">
 		<isset property="testcases" />
 	</condition>
-
+	
 	<condition property="junit.test.formatter" value="${test.formatter}" else="xml"> <!-- plain -->
 		<isset property="test.formatter" />
 	</condition>

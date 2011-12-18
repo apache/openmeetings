@@ -52,6 +52,13 @@ public class RoomWebServiceFacade {
 		return this.geRoomServiceProxy().getRoomsPublic(SID, roomtypes_id);
 	}
 
+	/**
+	 * Deletes a flv recording 
+	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param flvRecordingId the id of the recording 
+	 * @return
+	 * @throws AxisFault
+	 */
 	public boolean deleteFlvRecording(String SID, Long flvRecordingId)
 			throws AxisFault {
 		return this.geRoomServiceProxy().deleteFlvRecording(SID, flvRecordingId);
