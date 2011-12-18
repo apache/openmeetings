@@ -199,104 +199,96 @@ limitations under the License.
                   Return Type: org.openmeetings.axis.services.FileImportError[]
                 </p>
     			<p>Params:</p>
-    			<table rules="all" border="1">
-    			   <thead>
-    			   <tr>
-    			     <th width="200" align="left">Type</th>
-    			     <th width="200" align="left">Fieldname</th>
-    			     <th width="400" align="left">Description</th>
-    			   </tr>
-    			   </thead>
-    			   <tbody>
-    			       			       			   <tr>
-                     <td valign="top">
-                     	                     		0 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">SID</td>
-                     <td valign="top"></td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		1 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">externalUserId</td>
-                     <td valign="top">the external user id => If the file should goto a private
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top"></td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">externalUserId</td>
+	                     <td valign="top">the external user id => If the file should goto a private
             section of any user, this number needs to be set</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		2 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">externalFileId</td>
-                     <td valign="top">the external file-type to identify the file later</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		3 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">externalType</td>
-                     <td valign="top">the name of the external system</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		4 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">room_id</td>
-                     <td valign="top">the room Id, if the file goes to the private folder of an
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">externalFileId</td>
+	                     <td valign="top">the external file-type to identify the file later</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalType</td>
+	                     <td valign="top">the name of the external system</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">room_id</td>
+	                     <td valign="top">the room Id, if the file goes to the private folder of an
             user, you can set a random number here</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		5 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       boolean
-                     </td>
-                     <td valign="top">isOwner</td>
-                     <td valign="top">specify a 1/true AND parentFolderId==-2 to make the file goto
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		boolean
+	                     		                     </td>
+	                     <td valign="top">isOwner</td>
+	                     <td valign="top">specify a 1/true AND parentFolderId==-2 to make the file goto
             the private section</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		6 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">path</td>
-                     <td valign="top">http-path where we can grab the file from, the file has to be
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">path</td>
+	                     <td valign="top">http-path where we can grab the file from, the file has to be
             accessible from the OpenMeetings server</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		7 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">parentFolderId</td>
-                     <td valign="top">specify a parentFolderId==-2 AND isOwner == 1/true AND to make
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">parentFolderId</td>
+	                     <td valign="top">specify a parentFolderId==-2 AND isOwner == 1/true AND to make
             the file goto the private section</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		8 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">fileSystemName</td>
-                     <td valign="top">the filename => Important WITH file extension!</td>
-                   </tr>
-                   
-                                                         </tbody>
-    			</table>
-    		  </div>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">fileSystemName</td>
+	                     <td valign="top">the filename => Important WITH file extension!</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
 		        <div style="margin-left:10px">
@@ -339,104 +331,96 @@ limitations under the License.
                   Return Type: org.openmeetings.axis.services.FileImportError[]
                 </p>
     			<p>Params:</p>
-    			<table rules="all" border="1">
-    			   <thead>
-    			   <tr>
-    			     <th width="200" align="left">Type</th>
-    			     <th width="200" align="left">Fieldname</th>
-    			     <th width="400" align="left">Description</th>
-    			   </tr>
-    			   </thead>
-    			   <tbody>
-    			       			       			   <tr>
-                     <td valign="top">
-                     	                     		0 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">SID</td>
-                     <td valign="top">The SID of the User. This SID must be marked as logged in</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		1 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">internalUserId</td>
-                     <td valign="top">the openmeetings user id => If the file should goto a private
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">internalUserId</td>
+	                     <td valign="top">the openmeetings user id => If the file should goto a private
             section of any user, this number needs to be se</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		2 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">externalFileId</td>
-                     <td valign="top">the external file-type to identify the file later</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		3 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">externalType</td>
-                     <td valign="top">the name of the external system</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		4 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">room_id</td>
-                     <td valign="top">the room Id, if the file goes to the private folder of an
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">externalFileId</td>
+	                     <td valign="top">the external file-type to identify the file later</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalType</td>
+	                     <td valign="top">the name of the external system</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">room_id</td>
+	                     <td valign="top">the room Id, if the file goes to the private folder of an
             user, you can set a random number here</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		5 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       boolean
-                     </td>
-                     <td valign="top">isOwner</td>
-                     <td valign="top">specify a 1/true AND parentFolderId==-2 to make the file goto
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		boolean
+	                     		                     </td>
+	                     <td valign="top">isOwner</td>
+	                     <td valign="top">specify a 1/true AND parentFolderId==-2 to make the file goto
             the private section</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		6 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">path</td>
-                     <td valign="top">http-path where we can grab the file from, the file has to be
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">path</td>
+	                     <td valign="top">http-path where we can grab the file from, the file has to be
             accessible from the OpenMeetings server</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		7 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">parentFolderId</td>
-                     <td valign="top">specify a parentFolderId==-2 AND isOwner == 1/true AND to make
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">parentFolderId</td>
+	                     <td valign="top">specify a parentFolderId==-2 AND isOwner == 1/true AND to make
             the file goto the private section</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		8 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">fileSystemName</td>
-                     <td valign="top">the filename => Important WITH file extension!</td>
-                   </tr>
-                   
-                                                         </tbody>
-    			</table>
-    		  </div>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">fileSystemName</td>
+	                     <td valign="top">the filename => Important WITH file extension!</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
 		        <div style="margin-left:10px">
@@ -470,92 +454,85 @@ limitations under the License.
                   Return Type: java.lang.Long
                 </p>
     			<p>Params:</p>
-    			<table rules="all" border="1">
-    			   <thead>
-    			   <tr>
-    			     <th width="200" align="left">Type</th>
-    			     <th width="200" align="left">Fieldname</th>
-    			     <th width="400" align="left">Description</th>
-    			   </tr>
-    			   </thead>
-    			   <tbody>
-    			       			       			   <tr>
-                     <td valign="top">
-                     	                     		0 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">SID</td>
-                     <td valign="top">The SID of the User. This SID must be marked as logged in</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		1 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">externalUserId</td>
-                     <td valign="top">the external file-type to identify the file later</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		2 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">parentFileExplorerItemId</td>
-                     <td valign="top"></td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		3 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">folderName</td>
-                     <td valign="top">the name of the folder</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		4 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">room_id</td>
-                     <td valign="top">the room Id, if the file goes to the private folder of an
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">externalUserId</td>
+	                     <td valign="top">the external file-type to identify the file later</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">parentFileExplorerItemId</td>
+	                     <td valign="top"></td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">folderName</td>
+	                     <td valign="top">the name of the folder</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">room_id</td>
+	                     <td valign="top">the room Id, if the file goes to the private folder of an
             user, you can set a random number here</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		5 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Boolean
-                     </td>
-                     <td valign="top">isOwner</td>
-                     <td valign="top">specify a 1/true AND parentFolderId==-2 to make the file goto
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isOwner</td>
+	                     <td valign="top">specify a 1/true AND parentFolderId==-2 to make the file goto
             the private section</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		6 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">externalFilesid</td>
-                     <td valign="top">the external file-type to identify the file later</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		7 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">externalType</td>
-                     <td valign="top">the name of the external system</td>
-                   </tr>
-                   
-                                                         </tbody>
-    			</table>
-    		  </div>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">externalFilesid</td>
+	                     <td valign="top">the external file-type to identify the file later</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalType</td>
+	                     <td valign="top">the name of the external system</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
 		        <div style="margin-left:10px">
@@ -589,90 +566,83 @@ limitations under the License.
                   Return Type: java.lang.Long
                 </p>
     			<p>Params:</p>
-    			<table rules="all" border="1">
-    			   <thead>
-    			   <tr>
-    			     <th width="200" align="left">Type</th>
-    			     <th width="200" align="left">Fieldname</th>
-    			     <th width="400" align="left">Description</th>
-    			   </tr>
-    			   </thead>
-    			   <tbody>
-    			       			       			   <tr>
-                     <td valign="top">
-                     	                     		0 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">SID</td>
-                     <td valign="top">The SID of the User. This SID must be marked as logged in</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		1 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">userId</td>
-                     <td valign="top">the openmeetings user id</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		2 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">parentFileExplorerItemId</td>
-                     <td valign="top">specify a parentFolderId==-2 AND isOwner == 1/true AND to make the file goto the private section</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		3 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">folderName</td>
-                     <td valign="top">the name of the folder</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		4 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">room_id</td>
-                     <td valign="top">the room Id, if the file goes to the private folder of an user, you can set a random number here</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		5 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Boolean
-                     </td>
-                     <td valign="top">isOwner</td>
-                     <td valign="top">specify a 1/true AND parentFolderId==-2 to make the file goto the private section</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		6 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">externalFilesid</td>
-                     <td valign="top">the external file-type to identify the file later</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		7 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">externalType</td>
-                     <td valign="top">the name of the external system</td>
-                   </tr>
-                   
-                                                         </tbody>
-    			</table>
-    		  </div>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">userId</td>
+	                     <td valign="top">the openmeetings user id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">parentFileExplorerItemId</td>
+	                     <td valign="top">specify a parentFolderId==-2 AND isOwner == 1/true AND to make the file goto the private section</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">folderName</td>
+	                     <td valign="top">the name of the folder</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">room_id</td>
+	                     <td valign="top">the room Id, if the file goes to the private folder of an user, you can set a random number here</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isOwner</td>
+	                     <td valign="top">specify a 1/true AND parentFolderId==-2 to make the file goto the private section</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">externalFilesid</td>
+	                     <td valign="top">the external file-type to identify the file later</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalType</td>
+	                     <td valign="top">the name of the external system</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
 		        <div style="margin-left:10px">
@@ -699,63 +669,59 @@ limitations under the License.
                   Return Type: java.lang.Long
                 </p>
     			<p>Params:</p>
-    			<table rules="all" border="1">
-    			   <thead>
-    			   <tr>
-    			     <th width="200" align="left">Type</th>
-    			     <th width="200" align="left">Fieldname</th>
-    			     <th width="400" align="left">Description</th>
-    			   </tr>
-    			   </thead>
-    			   <tbody>
-    			       			       			   <tr>
-                     <td valign="top">
-                     	                     		0 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">SID</td>
-                     <td valign="top">The SID of the User. This SID must be marked as logged in</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		1 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">parentFileExplorerItemId</td>
-                     <td valign="top">parent folder id</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		2 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">fileName</td>
-                     <td valign="top">the file name</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		3 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">room_id</td>
-                     <td valign="top">the room id</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		4 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Boolean
-                     </td>
-                     <td valign="top">isOwner</td>
-                     <td valign="top"></td>
-                   </tr>
-                   
-                                                         </tbody>
-    			</table>
-    		  </div>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">parentFileExplorerItemId</td>
+	                     <td valign="top">parent folder id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">fileName</td>
+	                     <td valign="top">the file name</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">room_id</td>
+	                     <td valign="top">the room id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isOwner</td>
+	                     <td valign="top"></td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
 		        <div style="margin-left:10px">
@@ -778,45 +744,43 @@ limitations under the License.
                   Return Type: java.lang.Long
                 </p>
     			<p>Params:</p>
-    			<table rules="all" border="1">
-    			   <thead>
-    			   <tr>
-    			     <th width="200" align="left">Type</th>
-    			     <th width="200" align="left">Fieldname</th>
-    			     <th width="400" align="left">Description</th>
-    			   </tr>
-    			   </thead>
-    			   <tbody>
-    			       			       			   <tr>
-                     <td valign="top">
-                     	                     		0 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">SID</td>
-                     <td valign="top">The SID of the User. This SID must be marked as logged in</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		1 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">externalFilesid</td>
-                     <td valign="top">the od of the file or folder</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		2 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">externalType</td>
-                     <td valign="top">the externalType</td>
-                   </tr>
-                   
-                                                         </tbody>
-    			</table>
-    		  </div>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">externalFilesid</td>
+	                     <td valign="top">the od of the file or folder</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalType</td>
+	                     <td valign="top">the externalType</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
 		        <div style="margin-left:10px">
@@ -837,36 +801,35 @@ limitations under the License.
                   Return Type: java.lang.Long
                 </p>
     			<p>Params:</p>
-    			<table rules="all" border="1">
-    			   <thead>
-    			   <tr>
-    			     <th width="200" align="left">Type</th>
-    			     <th width="200" align="left">Fieldname</th>
-    			     <th width="400" align="left">Description</th>
-    			   </tr>
-    			   </thead>
-    			   <tbody>
-    			       			       			   <tr>
-                     <td valign="top">
-                     	                     		0 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">SID</td>
-                     <td valign="top">The SID of the User. This SID must be marked as logged in</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		1 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">fileExplorerItemId</td>
-                     <td valign="top">the id of the file or folder</td>
-                   </tr>
-                   
-                                                         </tbody>
-    			</table>
-    		  </div>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">fileExplorerItemId</td>
+	                     <td valign="top">the id of the file or folder</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
 		        <div style="margin-left:10px">
@@ -887,36 +850,35 @@ limitations under the License.
                   Return Type: java.lang.Long
                 </p>
     			<p>Params:</p>
-    			<table rules="all" border="1">
-    			   <thead>
-    			   <tr>
-    			     <th width="200" align="left">Type</th>
-    			     <th width="200" align="left">Fieldname</th>
-    			     <th width="400" align="left">Description</th>
-    			   </tr>
-    			   </thead>
-    			   <tbody>
-    			       			       			   <tr>
-                     <td valign="top">
-                     	                     		0 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">SID</td>
-                     <td valign="top">The SID of the User. This SID must be marked as logged in</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		1 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">fileExplorerItemId</td>
-                     <td valign="top">the id of the file or folder</td>
-                   </tr>
-                   
-                                                         </tbody>
-    			</table>
-    		  </div>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">fileExplorerItemId</td>
+	                     <td valign="top">the id of the file or folder</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
 		        <div style="margin-left:10px">
@@ -934,18 +896,9 @@ limitations under the License.
                   Return Type: java.lang.String[]
                 </p>
     			<p>Params:</p>
-    			<table rules="all" border="1">
-    			   <thead>
-    			   <tr>
-    			     <th width="200" align="left">Type</th>
-    			     <th width="200" align="left">Fieldname</th>
-    			     <th width="400" align="left">Description</th>
-    			   </tr>
-    			   </thead>
-    			   <tbody>
-    			       			                      </tbody>
-    			</table>
-    		  </div>
+    			    			
+    			    				<i>No Params</i>
+    			    		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
 		        <div style="margin-left:10px">
@@ -966,36 +919,35 @@ limitations under the License.
                   Return Type: org.openmeetings.app.data.file.dto.LibraryPresentation
                 </p>
     			<p>Params:</p>
-    			<table rules="all" border="1">
-    			   <thead>
-    			   <tr>
-    			     <th width="200" align="left">Type</th>
-    			     <th width="200" align="left">Fieldname</th>
-    			     <th width="400" align="left">Description</th>
-    			   </tr>
-    			   </thead>
-    			   <tbody>
-    			       			       			   <tr>
-                     <td valign="top">
-                     	                     		0 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">SID</td>
-                     <td valign="top"></td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		1 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">parentFolder</td>
-                     <td valign="top"></td>
-                   </tr>
-                   
-                                                         </tbody>
-    			</table>
-    		  </div>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top"></td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">parentFolder</td>
+	                     <td valign="top"></td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
 		        <div style="margin-left:10px">
@@ -1018,45 +970,43 @@ limitations under the License.
                   Return Type: org.openmeetings.app.data.file.dto.FileExplorerObject
                 </p>
     			<p>Params:</p>
-    			<table rules="all" border="1">
-    			   <thead>
-    			   <tr>
-    			     <th width="200" align="left">Type</th>
-    			     <th width="200" align="left">Fieldname</th>
-    			     <th width="400" align="left">Description</th>
-    			   </tr>
-    			   </thead>
-    			   <tbody>
-    			       			       			   <tr>
-                     <td valign="top">
-                     	                     		0 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">SID</td>
-                     <td valign="top">The SID of the User. This SID must be marked as logged in</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		1 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">room_id</td>
-                     <td valign="top">Room id</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		2 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">owner_id</td>
-                     <td valign="top">Owner id</td>
-                   </tr>
-                   
-                                                         </tbody>
-    			</table>
-    		  </div>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">room_id</td>
+	                     <td valign="top">Room id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">owner_id</td>
+	                     <td valign="top">Owner id</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
 		        <div style="margin-left:10px">
@@ -1077,36 +1027,35 @@ limitations under the License.
                   Return Type: org.openmeetings.app.data.file.dto.FileExplorerObject
                 </p>
     			<p>Params:</p>
-    			<table rules="all" border="1">
-    			   <thead>
-    			   <tr>
-    			     <th width="200" align="left">Type</th>
-    			     <th width="200" align="left">Fieldname</th>
-    			     <th width="400" align="left">Description</th>
-    			   </tr>
-    			   </thead>
-    			   <tbody>
-    			       			       			   <tr>
-                     <td valign="top">
-                     	                     		0 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">SID</td>
-                     <td valign="top">The SID of the User. This SID must be marked as logged in</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		1 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">room_id</td>
-                     <td valign="top">Room Id</td>
-                   </tr>
-                   
-                                                         </tbody>
-    			</table>
-    		  </div>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">room_id</td>
+	                     <td valign="top">Room Id</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
 		        <div style="margin-left:10px">
@@ -1133,63 +1082,59 @@ limitations under the License.
                   Return Type: org.openmeetings.app.persistence.beans.files.FileExplorerItem[]
                 </p>
     			<p>Params:</p>
-    			<table rules="all" border="1">
-    			   <thead>
-    			   <tr>
-    			     <th width="200" align="left">Type</th>
-    			     <th width="200" align="left">Fieldname</th>
-    			     <th width="400" align="left">Description</th>
-    			   </tr>
-    			   </thead>
-    			   <tbody>
-    			       			       			   <tr>
-                     <td valign="top">
-                     	                     		0 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">SID</td>
-                     <td valign="top">The SID of the User. This SID must be marked as logged in</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		1 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">parentFileExplorerItemId</td>
-                     <td valign="top">the parent folder id</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		2 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">room_id</td>
-                     <td valign="top">the room id</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		3 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Boolean
-                     </td>
-                     <td valign="top">isOwner</td>
-                     <td valign="top">true if its a private drive</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		4 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">owner_id</td>
-                     <td valign="top">the owner id</td>
-                   </tr>
-                   
-                                                         </tbody>
-    			</table>
-    		  </div>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">parentFileExplorerItemId</td>
+	                     <td valign="top">the parent folder id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">room_id</td>
+	                     <td valign="top">the room id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isOwner</td>
+	                     <td valign="top">true if its a private drive</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">owner_id</td>
+	                     <td valign="top">the owner id</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
 		        <div style="margin-left:10px">
@@ -1214,54 +1159,51 @@ limitations under the License.
                   Return Type: org.openmeetings.app.persistence.beans.files.FileExplorerItem[]
                 </p>
     			<p>Params:</p>
-    			<table rules="all" border="1">
-    			   <thead>
-    			   <tr>
-    			     <th width="200" align="left">Type</th>
-    			     <th width="200" align="left">Fieldname</th>
-    			     <th width="400" align="left">Description</th>
-    			   </tr>
-    			   </thead>
-    			   <tbody>
-    			       			       			   <tr>
-                     <td valign="top">
-                     	                     		0 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">SID</td>
-                     <td valign="top">SID The SID of the User. This SID must be marked as logged in</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		1 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">parentFileExplorerItemId</td>
-                     <td valign="top">the parent folder id</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		2 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">room_id</td>
-                     <td valign="top">the room id</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		3 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Boolean
-                     </td>
-                     <td valign="top">isOwner</td>
-                     <td valign="top">true to request private drive</td>
-                   </tr>
-                   
-                                                         </tbody>
-    			</table>
-    		  </div>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">SID The SID of the User. This SID must be marked as logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">parentFileExplorerItemId</td>
+	                     <td valign="top">the parent folder id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">room_id</td>
+	                     <td valign="top">the room id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isOwner</td>
+	                     <td valign="top">true to request private drive</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
 		        <div style="margin-left:10px">
@@ -1284,45 +1226,43 @@ limitations under the License.
                   Return Type: java.lang.Long
                 </p>
     			<p>Params:</p>
-    			<table rules="all" border="1">
-    			   <thead>
-    			   <tr>
-    			     <th width="200" align="left">Type</th>
-    			     <th width="200" align="left">Fieldname</th>
-    			     <th width="400" align="left">Description</th>
-    			   </tr>
-    			   </thead>
-    			   <tbody>
-    			       			       			   <tr>
-                     <td valign="top">
-                     	                     		0 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">SID</td>
-                     <td valign="top">SID The SID of the User. This SID must be marked as logged in</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		1 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">fileExplorerItemId</td>
-                     <td valign="top">file or folder id</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		2 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">fileName</td>
-                     <td valign="top">new file or folder name</td>
-                   </tr>
-                   
-                                                         </tbody>
-    			</table>
-    		  </div>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">SID The SID of the User. This SID must be marked as logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">fileExplorerItemId</td>
+	                     <td valign="top">file or folder id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">fileName</td>
+	                     <td valign="top">new file or folder name</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
 		        <div style="margin-left:10px">
@@ -1345,45 +1285,43 @@ limitations under the License.
                   Return Type: java.lang.Long
                 </p>
     			<p>Params:</p>
-    			<table rules="all" border="1">
-    			   <thead>
-    			   <tr>
-    			     <th width="200" align="left">Type</th>
-    			     <th width="200" align="left">Fieldname</th>
-    			     <th width="400" align="left">Description</th>
-    			   </tr>
-    			   </thead>
-    			   <tbody>
-    			       			       			   <tr>
-                     <td valign="top">
-                     	                     		0 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">SID</td>
-                     <td valign="top">SID The SID of the User. This SID must be marked as logged in</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		1 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">fileExplorerItemId</td>
-                     <td valign="top">file or folder id</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		2 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">fileName</td>
-                     <td valign="top">new file or folder name</td>
-                   </tr>
-                   
-                                                         </tbody>
-    			</table>
-    		  </div>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">SID The SID of the User. This SID must be marked as logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">fileExplorerItemId</td>
+	                     <td valign="top">file or folder id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">fileName</td>
+	                     <td valign="top">new file or folder name</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
 		        <div style="margin-left:10px">
@@ -1414,81 +1352,75 @@ limitations under the License.
                   Return Type: java.lang.Long
                 </p>
     			<p>Params:</p>
-    			<table rules="all" border="1">
-    			   <thead>
-    			   <tr>
-    			     <th width="200" align="left">Type</th>
-    			     <th width="200" align="left">Fieldname</th>
-    			     <th width="400" align="left">Description</th>
-    			   </tr>
-    			   </thead>
-    			   <tbody>
-    			       			       			   <tr>
-                     <td valign="top">
-                     	                     		0 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">SID</td>
-                     <td valign="top">SID The SID of the User. This SID must be marked as logged in</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		1 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">fileExplorerItemId</td>
-                     <td valign="top">current file or folder id to be moved</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		2 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">newParentFileExplorerItemId</td>
-                     <td valign="top">new parent folder id</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		3 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">room_id</td>
-                     <td valign="top">room id</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		4 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Boolean
-                     </td>
-                     <td valign="top">isOwner</td>
-                     <td valign="top">if true owner id will be set</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		5 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Boolean
-                     </td>
-                     <td valign="top">moveToHome</td>
-                     <td valign="top">if true move to private drive</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		6 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">owner_id</td>
-                     <td valign="top">owner id</td>
-                   </tr>
-                   
-                                                         </tbody>
-    			</table>
-    		  </div>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">SID The SID of the User. This SID must be marked as logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">fileExplorerItemId</td>
+	                     <td valign="top">current file or folder id to be moved</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">newParentFileExplorerItemId</td>
+	                     <td valign="top">new parent folder id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">room_id</td>
+	                     <td valign="top">room id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isOwner</td>
+	                     <td valign="top">if true owner id will be set</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">moveToHome</td>
+	                     <td valign="top">if true move to private drive</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">owner_id</td>
+	                     <td valign="top">owner id</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
 		        <div style="margin-left:10px">
@@ -1517,72 +1449,67 @@ limitations under the License.
                   Return Type: java.lang.Long
                 </p>
     			<p>Params:</p>
-    			<table rules="all" border="1">
-    			   <thead>
-    			   <tr>
-    			     <th width="200" align="left">Type</th>
-    			     <th width="200" align="left">Fieldname</th>
-    			     <th width="400" align="left">Description</th>
-    			   </tr>
-    			   </thead>
-    			   <tbody>
-    			       			       			   <tr>
-                     <td valign="top">
-                     	                     		0 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       String
-                     </td>
-                     <td valign="top">SID</td>
-                     <td valign="top">SID The SID of the User. This SID must be marked as logged in</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		1 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">fileExplorerItemId</td>
-                     <td valign="top">current file or folder id to be moved</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		2 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">newParentFileExplorerItemId</td>
-                     <td valign="top">new parent folder id</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		3 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Long
-                     </td>
-                     <td valign="top">room_id</td>
-                     <td valign="top">room id</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		4 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Boolean
-                     </td>
-                     <td valign="top">isOwner</td>
-                     <td valign="top">if true owner id will be set</td>
-                   </tr>
-                   
-                                          			   <tr>
-                     <td valign="top">
-                     	                     		5 Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	                       Boolean
-                     </td>
-                     <td valign="top">moveToHome</td>
-                     <td valign="top">move to private drive</td>
-                   </tr>
-                   
-                                                         </tbody>
-    			</table>
-    		  </div>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">SID The SID of the User. This SID must be marked as logged in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">fileExplorerItemId</td>
+	                     <td valign="top">current file or folder id to be moved</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">newParentFileExplorerItemId</td>
+	                     <td valign="top">new parent folder id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">room_id</td>
+	                     <td valign="top">room id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isOwner</td>
+	                     <td valign="top">if true owner id will be set</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">moveToHome</td>
+	                     <td valign="top">move to private drive</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
 		        <div style="margin-left:10px">
@@ -1600,18 +1527,9 @@ limitations under the License.
                   Return Type: org.openmeetings.app.data.basic.files.TestObject
                 </p>
     			<p>Params:</p>
-    			<table rules="all" border="1">
-    			   <thead>
-    			   <tr>
-    			     <th width="200" align="left">Type</th>
-    			     <th width="200" align="left">Fieldname</th>
-    			     <th width="400" align="left">Description</th>
-    			   </tr>
-    			   </thead>
-    			   <tbody>
-    			       			                      </tbody>
-    			</table>
-    		  </div>
+    			    			
+    			    				<i>No Params</i>
+    			    		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
 		        <div style="margin-left:10px">
@@ -1630,18 +1548,11 @@ limitations under the License.
                   Return Type: org.apache.axiom.om.OMElement
                 </p>
     			<p>Params:</p>
-    			<table rules="all" border="1">
-    			   <thead>
-    			   <tr>
-    			     <th width="200" align="left">Type</th>
-    			     <th width="200" align="left">Fieldname</th>
-    			     <th width="400" align="left">Description</th>
-    			   </tr>
-    			   </thead>
-    			   <tbody>
-    			       			                      </tbody>
-    			</table>
-    		  </div>
+    			    				<b>Warning:</b><i> Params in this method do not seem to be correctly documentated</i>
+    				<br/><br/>
+    			    			
+    			    				<i>No Params</i>
+    			    		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
 		        <div style="margin-left:10px">
@@ -1660,18 +1571,11 @@ limitations under the License.
                   Return Type: void
                 </p>
     			<p>Params:</p>
-    			<table rules="all" border="1">
-    			   <thead>
-    			   <tr>
-    			     <th width="200" align="left">Type</th>
-    			     <th width="200" align="left">Fieldname</th>
-    			     <th width="400" align="left">Description</th>
-    			   </tr>
-    			   </thead>
-    			   <tbody>
-    			       			                      </tbody>
-    			</table>
-    		  </div>
+    			    				<b>Warning:</b><i> Params in this method do not seem to be correctly documentated</i>
+    				<br/><br/>
+    			    			
+    			    				<i>No Params</i>
+    			    		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
 		        <div style="margin-left:10px">
@@ -1690,18 +1594,11 @@ limitations under the License.
                   Return Type: void
                 </p>
     			<p>Params:</p>
-    			<table rules="all" border="1">
-    			   <thead>
-    			   <tr>
-    			     <th width="200" align="left">Type</th>
-    			     <th width="200" align="left">Fieldname</th>
-    			     <th width="400" align="left">Description</th>
-    			   </tr>
-    			   </thead>
-    			   <tbody>
-    			       			                      </tbody>
-    			</table>
-    		  </div>
+    			    				<b>Warning:</b><i> Params in this method do not seem to be correctly documentated</i>
+    				<br/><br/>
+    			    			
+    			    				<i>No Params</i>
+    			    		  </div>
     	   			
 	
 	</body>

@@ -85,32 +85,42 @@ limitations under the License.
                   Return Type: $method.returnType()
                 </p>
     			<p>Params:</p>
-    			<table rules="all" border="1">
-    			   <thead>
-    			   <tr>
-    			     <th width="200" align="left">Type</th>
-    			     <th width="200" align="left">Fieldname</th>
-    			     <th width="400" align="left">Description</th>
-    			   </tr>
-    			   </thead>
-    			   <tbody>
-    			   #set ($index = 0) 
-    			   #foreach ( $parameter in $method.paramTags() )
-    			   <tr>
-                     <td valign="top">
-                     	#if ($method.parameters().size() > $index) 
-                     		$index Doclet Param Mismatch: fix JavaDocs in this Method!
-                     	#end 
-                       $method.parameters().get($index).type().simpleTypeName()
-                     </td>
-                     <td valign="top">$parameter.parameterName()</td>
-                     <td valign="top">$parameter.parameterComment()</td>
-                   </tr>
-                   
-                   #set ($index = $index+1) 
-                   #end
-                   </tbody>
-    			</table>
+    			#if ( $method.paramTags().size() != $method.parameters().size() ) 
+    				<b>Warning:</b><i> Params in this method do not seem to be correctly documentated</i>
+    				<br/><br/>
+    			#end
+    			
+    			#if ($method.paramTags().size() > 0) 
+	    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   #set ($index = 0) 
+	    			   #foreach ( $parameter in $method.paramTags() )
+	    			   <tr>
+	                     <td valign="top">
+	                     	#if ($method.parameters().size() <= $index) 
+	                     		$index Doclet Param Mismatch: fix JavaDocs in this Method!
+	                     	#else
+	                     		$method.parameters().get($index).type().simpleTypeName()
+	                     	#end 
+	                     </td>
+	                     <td valign="top">$parameter.parameterName()</td>
+	                     <td valign="top">$parameter.parameterComment()</td>
+	                   </tr>
+	                   
+	                   #set ($index = $index+1) 
+	                   #end
+	                   </tbody>
+	    			</table>
+    			#else
+    				<i>No Params</i>
+    			#end
     		  </div>
     	   #end
 		#end
