@@ -29,7 +29,7 @@
 <section name="Apache OpenMeetings Mailing Lists">
 
 <p>
-There are currently three publicly available mailing lists for OpenMeetings. 
+There are currently 4 publicly available mailing lists for OpenMeetings. 
 </p>
 <p>
 The commits list is for notification of commits to the OpenMeetings repository.
@@ -54,6 +54,29 @@ Subscribe</a> </p>
 <td>
 <p> <a  class="external" rel="nofollow" 
 href="mailto:openmeetings-user-unsubscribe@incubator.apache.org">
+Unsubscribe</a> </p>
+</td>
+<td>
+<p>
+<a href="http://mail-archives.apache.org/mod_mbox/incubator-openmeetings-user/">
+Archive</a>
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><strong>Spanish User List</strong> : 
+<a  href="mailto:openmeetings-user-espanol@incubator.apache.org">
+openmeetings-user-espanol@incubator.apache.org</a> </p>
+</td>
+<td>
+<p> <a  class="external" rel="nofollow" 
+href="mailto:openmeetings-user-espanol-subscribe@incubator.apache.org">
+Subscribe</a> </p>
+</td>
+<td>
+<p> <a  class="external" rel="nofollow" 
+href="mailto:openmeetings-user-espanol-unsubscribe@incubator.apache.org">
 Unsubscribe</a> </p>
 </td>
 <td>
