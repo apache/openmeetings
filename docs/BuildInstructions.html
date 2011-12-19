@@ -71,7 +71,225 @@ limitations under the License.
 			$(function() {
 				$( "#accordion" ).accordion({
 					autoHeight: false,
-					navigation: false
+					navigation: true,
+					navigationFilter: function () {
+						var sidebarHrefArray = this.href.split("/");
+    					var sideBarLastString = sidebarHrefArray[sidebarHrefArray.length - 1].toLowerCase();
+						
+						if (sideBarLastString.indexOf("#") == -1) {
+							return false;
+						}
+						
+												/* document.location.href */
+						var currentSection = "";
+						
+						var currentLocation = "";
+						var currentLink = "";
+						if (false) {
+						
+						}
+    										        					            					            	
+					            	else if (document.location.href.indexOf("/index.html") > 0) {
+					            		currentLocation = "General";
+					            		currentLink = "/index.html".substr(1, "/index.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/license.html") > 0) {
+					            		currentLocation = "General";
+					            		currentLink = "/license.html".substr(1, "/license.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("http://www.apache.org/") > 0) {
+					            		currentLocation = "General";
+					            		currentLink = "http://www.apache.org/".substr(1, "http://www.apache.org/".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/downloads.html") > 0) {
+					            		currentLocation = "General";
+					            		currentLink = "/downloads.html".substr(1, "/downloads.html".length);
+					            	} 
+					            	
+					        				        		    										        					            					            	
+					            	else if (document.location.href.indexOf("/installation.html") > 0) {
+					            		currentLocation = "InstallationandUpgrade";
+					            		currentLink = "/installation.html".substr(1, "/installation.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/Upgrade.html") > 0) {
+					            		currentLocation = "InstallationandUpgrade";
+					            		currentLink = "/Upgrade.html".substr(1, "/Upgrade.html".length);
+					            	} 
+					            	
+					        				        		    										        					            					            	
+					            	else if (document.location.href.indexOf("/get-involved.html") > 0) {
+					            		currentLocation = "Community";
+					            		currentLink = "/get-involved.html".substr(1, "/get-involved.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/team-list.html") > 0) {
+					            		currentLocation = "Community";
+					            		currentLink = "/team-list.html".substr(1, "/team-list.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/mail-lists.html") > 0) {
+					            		currentLocation = "Community";
+					            		currentLink = "/mail-lists.html".substr(1, "/mail-lists.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("https://cwiki.apache.org/OPENMEETINGS/") > 0) {
+					            		currentLocation = "Community";
+					            		currentLink = "https://cwiki.apache.org/OPENMEETINGS/".substr(1, "https://cwiki.apache.org/OPENMEETINGS/".length);
+					            	} 
+					            	
+					        				        		    										        					            					            	
+					            	else if (document.location.href.indexOf("/svn.html") > 0) {
+					            		currentLocation = "Development";
+					            		currentLink = "/svn.html".substr(1, "/svn.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("http://issues.apache.org/jira/browse/OPENMEETINGS") > 0) {
+					            		currentLocation = "Development";
+					            		currentLink = "http://issues.apache.org/jira/browse/OPENMEETINGS".substr(1, "http://issues.apache.org/jira/browse/OPENMEETINGS".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/dependencies.html") > 0) {
+					            		currentLocation = "Development";
+					            		currentLink = "/dependencies.html".substr(1, "/dependencies.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/BuildInstructions.html") > 0) {
+					            		currentLocation = "Development";
+					            		currentLink = "/BuildInstructions.html".substr(1, "/BuildInstructions.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/JUnitTesting.html") > 0) {
+					            		currentLocation = "Development";
+					            		currentLink = "/JUnitTesting.html".substr(1, "/JUnitTesting.html".length);
+					            	} 
+					            	
+					        				        		    										        					            					            	
+					            	else if (document.location.href.indexOf("/SoapRestAPI.html") > 0) {
+					            		currentLocation = "Integration";
+					            		currentLink = "/SoapRestAPI.html".substr(1, "/SoapRestAPI.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/RestAPI.html") > 0) {
+					            		currentLocation = "Integration";
+					            		currentLink = "/RestAPI.html".substr(1, "/RestAPI.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/LdapAndADS.html") > 0) {
+					            		currentLocation = "Integration";
+					            		currentLink = "/LdapAndADS.html".substr(1, "/LdapAndADS.html".length);
+					            	} 
+					            	
+					        				        		    										        					            				            						            			else if (document.location.href.indexOf("/ApacheDerbyConfig.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/ApacheDerbyConfig.html".substr(1, "/ApacheDerbyConfig.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/IBMDB2Config.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/IBMDB2Config.html".substr(1, "/IBMDB2Config.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/OracleConfig.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/OracleConfig.html".substr(1, "/OracleConfig.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/MySQLConfig.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/MySQLConfig.html".substr(1, "/MySQLConfig.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/PostgresConfig.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/PostgresConfig.html".substr(1, "/PostgresConfig.html".length);
+						            	} 
+				            							        				        							            				            						            			else if (document.location.href.indexOf("/Internationalisation.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/Internationalisation.html".substr(1, "/Internationalisation.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/LanguageEditor.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/LanguageEditor.html".substr(1, "/LanguageEditor.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/TimeZoneHandling.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/TimeZoneHandling.html".substr(1, "/TimeZoneHandling.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/EditTemplates.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/EditTemplates.html".substr(1, "/EditTemplates.html".length);
+						            	} 
+				            							        				        							            				            						            			else if (document.location.href.indexOf("/PortSettings.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/PortSettings.html".substr(1, "/PortSettings.html".length);
+						            	} 
+				            							        				        							            				            						            			else if (document.location.href.indexOf("/JVMPerformanceTuning.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/JVMPerformanceTuning.html".substr(1, "/JVMPerformanceTuning.html".length);
+						            	} 
+				            							        				        							            				            						            			else if (document.location.href.indexOf("/BrandingAndColors.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/BrandingAndColors.html".substr(1, "/BrandingAndColors.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/WebappNamePath.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/WebappNamePath.html".substr(1, "/WebappNamePath.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/Navigation.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/Navigation.html".substr(1, "/Navigation.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/Dashboard.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/Dashboard.html".substr(1, "/Dashboard.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/CalendarAndTimezone.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/CalendarAndTimezone.html".substr(1, "/CalendarAndTimezone.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/WebcamResolutions.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/WebcamResolutions.html".substr(1, "/WebcamResolutions.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/GeneralConfiguration.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/GeneralConfiguration.html".substr(1, "/GeneralConfiguration.html".length);
+						            	} 
+				            							        				        							            				            						            			else if (document.location.href.indexOf("/RestrictedAccess.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/RestrictedAccess.html".substr(1, "/RestrictedAccess.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/RTMPSAndHTTPS.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/RTMPSAndHTTPS.html".substr(1, "/RTMPSAndHTTPS.html".length);
+						            	} 
+				            							        				        							            				            						            			else if (document.location.href.indexOf("/GetVersionInfo.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/GetVersionInfo.html".substr(1, "/GetVersionInfo.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/FFMPEGVersionSwitch.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/FFMPEGVersionSwitch.html".substr(1, "/FFMPEGVersionSwitch.html".length);
+						            	} 
+				            							        				        		    					    					
+    					currentLink = currentLink.toLowerCase();
+    					currentLocation = currentLocation.toLowerCase();
+    					
+						return sideBarLastString == currentLink+"#"+currentLocation;
+					}
 				});
 			});
 			</script>
@@ -97,7 +315,18 @@ limitations under the License.
 						afterLoad : function() {
 							this.title = 'Image ' + (this.index + 1) + ' of ' + this.group.length + (this.title ? ' - ' + this.title : '');
 						}
-					});		
+					});	
+					$('#accordion a').each(function() {
+				      var a = $(this);
+				      var href = a.attr("href");
+				      if (href.indexOf("#") == -1) {
+				      	  var compareIt = href.substr(2, href.length);
+					      if (document.location.href.indexOf(compareIt)!= -1) {
+					       a.addClass('active');
+					      }
+				      }
+				    });
+										
 				});
 			</script>	
 						
@@ -147,7 +376,7 @@ limitations under the License.
     <!-- ============================================================ -->
     <div id="accordion" width="100%">
     
-            	<h3><a href="#">General</a></h3>
+            	<h3><a href="#General">General</a></h3>
     	<div  width="100%">
 	        	            	            	    <a href="./index.html">Home</a>
 <br/>
@@ -158,14 +387,14 @@ limitations under the License.
 	        		        	            	            	    <a href="./downloads.html">Downloads</a>
 <br/>
 	        		            	</div>
-        	<h3><a href="#">Installation and Upgrade</a></h3>
+        	<h3><a href="#InstallationandUpgrade">Installation and Upgrade</a></h3>
     	<div  width="100%">
 	        	            	            	    <a href="./installation.html">Installation</a>
 <br/>
 	        		        	            	            	    <a href="./Upgrade.html">Upgrade</a>
 <br/>
 	        		            	</div>
-        	<h3><a href="#">Community</a></h3>
+        	<h3><a href="#Community">Community</a></h3>
     	<div  width="100%">
 	        	            	            	    <a href="./get-involved.html">Get Involved</a>
 <br/>
@@ -176,7 +405,7 @@ limitations under the License.
 	        		        	            	            	    <a href=".https://cwiki.apache.org/OPENMEETINGS/">Wiki</a>
 <br/>
 	        		            	</div>
-        	<h3><a href="#">Development</a></h3>
+        	<h3><a href="#Development">Development</a></h3>
     	<div  width="100%">
 	        	            	            	    <a href="./svn.html">Source Code</a>
 <br/>
@@ -189,7 +418,7 @@ limitations under the License.
 	        		        	            	            	    <a href="./JUnitTesting.html">JUnit Testing</a>
 <br/>
 	        		            	</div>
-        	<h3><a href="#">Integration</a></h3>
+        	<h3><a href="#Integration">Integration</a></h3>
     	<div  width="100%">
 	        	            	            	    <a href="./SoapRestAPI.html">SOAP/REST API</a>
 <br/>
@@ -198,7 +427,7 @@ limitations under the License.
 	        		        	            	            	    <a href="./LdapAndADS.html">Ldap and ADS</a>
 <br/>
 	        		            	</div>
-        	<h3><a href="#">Configuration</a></h3>
+        	<h3><a href="#Configuration">Configuration</a></h3>
     	<div  width="100%">
 	        	            	            	<b>DB Sample Configurations</b><br/>
 	            			            			    <a href="./ApacheDerbyConfig.html">Apache Derby</a>

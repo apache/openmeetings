@@ -21,6 +21,10 @@ body {
 	font: 10pt Verdana, Arial, Helvetica, sans-serif;
 	  
 }
+.active {
+	font-style: italic;
+}
+
 .mainbody {
 	margin-left: 40px;
 	margin-right: 40px;

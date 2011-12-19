@@ -248,7 +248,7 @@ limitations under the License.
     
     #set ($menus = $project.getChild("body").getChildren("menu"))
     #foreach ( $menu in $menus )
-    	<h3><a href="#">$menu.getAttributeValue("name")</a></h3>
+    	<h3><a href="#$menu.getAttributeValue("name").replaceAll(" ","")">$menu.getAttributeValue("name")</a></h3>
     	<div  width="100%">
 	        #foreach ( $item in $menu.getChildren() )
 	            #set ($name = $item.getAttributeValue("name"))
@@ -400,7 +400,51 @@ limitations under the License.
 			$(function() {
 				$( "#accordion" ).accordion({
 					autoHeight: false,
-					navigation: false
+					navigation: true,
+					navigationFilter: function () {
+						var sidebarHrefArray = this.href.split("/");
+    					var sideBarLastString = sidebarHrefArray[sidebarHrefArray.length - 1].toLowerCase();
+						
+						if (sideBarLastString.indexOf("#") == -1) {
+							return false;
+						}
+						
+						#set ($menus = $project.getChild("body").getChildren("menu"))
+						/* document.location.href */
+						var currentSection = "";
+						
+						var currentLocation = "";
+						var currentLink = "";
+						if (false) {
+						
+						}
+    					#foreach ( $menu in $menus )
+					        #foreach ( $item in $menu.getChildren() )
+					            #set ($name = $item.getAttributeValue("name"))
+					            #if ( $item.getAttributeValue("href").length() > 0 )
+					            	
+					            	else if (document.location.href.indexOf("$item.getAttributeValue("href")") > 0) {
+					            		currentLocation = "$menu.getAttributeValue("name").replaceAll(" ","")";
+					            		currentLink = "$item.getAttributeValue("href")".substr(1, "$item.getAttributeValue("href")".length);
+					            	} 
+					            	
+					        	#else
+				            		#foreach ( $subitem in $item.getChildren() )
+				            			#set ($name = $subitem.getAttributeValue("name"))
+				            			else if (document.location.href.indexOf("$subitem.getAttributeValue("href")") > 0) {
+				            				currentLocation = "$menu.getAttributeValue("name").replaceAll(" ","")";
+					            			currentLink = "$subitem.getAttributeValue("href")".substr(1, "$subitem.getAttributeValue("href")".length);
+						            	} 
+				            		#end
+					        	#end
+			        		#end
+    					#end
+    					
+    					currentLink = currentLink.toLowerCase();
+    					currentLocation = currentLocation.toLowerCase();
+    					
+						return sideBarLastString == currentLink+"#"+currentLocation;
+					}
 				});
 			});
 			</script>
@@ -426,7 +470,18 @@ limitations under the License.
 						afterLoad : function() {
 							this.title = 'Image ' + (this.index + 1) + ' of ' + this.group.length + (this.title ? ' - ' + this.title : '');
 						}
-					});		
+					});	
+					$('#accordion a').each(function() {
+				      var a = $(this);
+				      var href = a.attr("href");
+				      if (href.indexOf("#") == -1) {
+				      	  var compareIt = href.substr(2, href.length);
+					      if (document.location.href.indexOf(compareIt)!= -1) {
+					       a.addClass('active');
+					      }
+				      }
+				    });
+										
 				});
 			</script>	
 						
