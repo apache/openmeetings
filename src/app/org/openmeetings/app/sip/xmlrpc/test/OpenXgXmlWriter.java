@@ -1,6 +1,15 @@
 package org.openmeetings.app.sip.xmlrpc.test;
 
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.xml.XMLConstants;
+
 import org.apache.ws.commons.serialize.XMLWriter;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
@@ -8,18 +17,6 @@ import org.slf4j.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.charset.Charset;
-
-import javax.xml.XMLConstants;
 
 public class OpenXgXmlWriter implements XMLWriter {
 
@@ -35,7 +32,7 @@ public class OpenXgXmlWriter implements XMLWriter {
 	private Writer debugw;
 	
 	private Locator l;
-	private java.util.Map delayedPrefixes;
+	private Map<String, String> delayedPrefixes;
 	int curIndent = 0;
 	private int state;
 	private boolean declarating, indenting, flushing;
@@ -98,7 +95,7 @@ public class OpenXgXmlWriter implements XMLWriter {
 	public void startPrefixMapping(String prefix, String namespaceURI)
 	throws SAXException {
 		if (delayedPrefixes == null) {
-			delayedPrefixes = new java.util.HashMap();
+			delayedPrefixes = new HashMap<String, String>();
 		}
 		if ("".equals(prefix)) {
 			if (namespaceURI.equals(prefix)) {
@@ -179,19 +176,6 @@ public class OpenXgXmlWriter implements XMLWriter {
 			} catch (IOException e) {
 				throw new SAXException("Failed to flush target writer: " + e.getMessage(), e);
 			}
-		}
-	}
-	
-	private String readFile(String path) throws IOException {
-		FileInputStream stream = new FileInputStream(new File(path));
-		try {
-			FileChannel fc = stream.getChannel();
-			MappedByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc
-					.size());
-			/* Instead of using default, pass in a decoder. */
-			return Charset.forName("ISO-8859-1").decode(bb).toString();
-		} finally {
-			stream.close();
 		}
 	}
 	
@@ -365,13 +349,11 @@ public class OpenXgXmlWriter implements XMLWriter {
 					}
 				}
 				if (delayedPrefixes != null  &&  delayedPrefixes.size() > 0) {
-					for (java.util.Iterator iter = delayedPrefixes.entrySet().iterator();
-					iter.hasNext();  ) {
-						java.util.Map.Entry entry = (java.util.Map.Entry) iter.next();
+					for (Map.Entry<String, String> entry : delayedPrefixes.entrySet()) {
 						w.write(' ');
-						w.write((String) entry.getKey());
+						w.write(entry.getKey());
 						w.write("=\"");
-						w.write((String) entry.getValue());
+						w.write(entry.getValue());
 						w.write('"');
 					}
 					delayedPrefixes.clear();

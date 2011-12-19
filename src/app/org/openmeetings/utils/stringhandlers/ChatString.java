@@ -1,16 +1,16 @@
 package org.openmeetings.utils.stringhandlers;
 
-import java.util.Iterator;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
+import java.util.Iterator;
 import java.util.LinkedList;
-import org.slf4j.Logger;
-import org.red5.logging.Red5LoggerFactory;
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
-import java.util.regex.PatternSyntaxException;
+import java.util.regex.Pattern;
+
 import org.openmeetings.app.remote.red5.EmoticonsManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 public class ChatString {
 	

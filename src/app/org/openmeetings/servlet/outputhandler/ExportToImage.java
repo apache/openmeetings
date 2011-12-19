@@ -224,7 +224,7 @@ public class ExportToImage extends HttpServlet {
 					while ((readed = rf.read(buffer, 0, buffer.length)) > -1) {
 						outStream.write(buffer, 0, readed);
 					}
-
+					outStream.close();
 					rf.close();
 
 					out.flush();

@@ -15,7 +15,8 @@ import org.red5.logging.Red5LoggerFactory;
  */
 
 public class GeomPoint extends Point {
-	
+	private static final long serialVersionUID = 5729830653403076829L;
+	@SuppressWarnings("unused")
 	private static final Logger log = Red5LoggerFactory.getLogger(GeomPoint.class, ScopeApplicationAdapter.webAppRootKey);
 
 	public GeomPoint add(GeomPoint p) {
@@ -125,7 +126,7 @@ public class GeomPoint extends Point {
 	 * @return
 	 */
 	public static double linearInterpolation(double a, double b, float t) {
-		return (double)(a + t * (b - a));
+		return a + t * (b - a);
 	}
 	
 
@@ -143,8 +144,6 @@ public class GeomPoint extends Point {
 			
 			double k2 = (b2.getY()-b1.getY()) / (b2.getX()-b1.getX());
 			//log.debug("k2: "+k2);
-			double diff = (b2.getY()-b1.getY());
-			//log.debug("diff: "+diff);
 			//log.debug("b1.getY(): "+b1.getY());
 			//log.debug("b2.getY(): "+b2.getY());
 			// an infinite directional constant means the line is vertical

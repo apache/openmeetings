@@ -2,7 +2,6 @@ package org.openmeetings.screen.codec.beans;
 
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 
 /**
  * @author sebastianwagner

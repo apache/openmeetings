@@ -1,7 +1,6 @@
 package org.openmeetings.client.screen;
 
 import org.apache.log4j.Logger;
-import org.openmeetings.client.transport.ClientTransportMinaPool;
 import org.openmeetings.screen.codec.CaptureScreenByMode;
  
 /**

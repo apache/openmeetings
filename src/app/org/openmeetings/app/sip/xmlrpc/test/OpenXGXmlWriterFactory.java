@@ -3,26 +3,16 @@ package org.openmeetings.app.sip.xmlrpc.test;
 import java.io.BufferedWriter;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 
-import org.apache.ws.commons.serialize.CharSetXMLWriter;
+import org.apache.ws.commons.serialize.XMLWriter;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.common.XmlRpcStreamConfig;
-import org.apache.xmlrpc.serializer.BaseXmlWriterFactory;
 import org.apache.xmlrpc.serializer.XmlWriterFactory;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.xml.sax.helpers.AttributesImpl;
-
-import org.apache.xmlrpc.XmlRpcException;
 import org.xml.sax.ContentHandler;
-
-
-
-import org.apache.ws.commons.serialize.XMLWriter;
-import org.apache.ws.commons.serialize.XMLWriterImpl;
 
 
 

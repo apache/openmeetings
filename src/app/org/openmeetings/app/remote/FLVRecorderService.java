@@ -1020,7 +1020,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 		return 0;
 	}
 
-	public Long restartInterviewConversion(String SID, Long flvRecordingId,
+	public Long restartConversion(String SID, Long flvRecordingId,
 			Integer leftSideLoud, Integer rightSideLoud, Integer leftSideTime,
 			Integer rightSideTime) {
 		try {
@@ -1033,21 +1033,20 @@ public class FLVRecorderService implements IPendingServiceCallback {
 				FlvRecording flvRecording = this.flvRecordingDaoImpl
 						.getFlvRecordingById(flvRecordingId);
 
-				if (flvRecording.getIsInterview() == null
-						|| !flvRecording.getIsInterview()) {
-					return -1L;
-				}
-
 				flvRecording.setPreviewImage(null);
 
 				flvRecording.setProgressPostProcessing(0);
 
 				this.flvRecordingDaoImpl.updateFlvRecording(flvRecording);
 
-				this.flvInterviewReConverterTask.startConversionThread(
+				if (flvRecording.getIsInterview() == null
+						|| !flvRecording.getIsInterview()) {
+					flvRecorderConverterTask.startConversionThread(flvRecordingId);
+				} else {
+					flvInterviewReConverterTask.startConversionThread(
 						flvRecordingId, leftSideLoud, rightSideLoud,
 						leftSideTime, rightSideTime);
-
+				}
 			}
 		} catch (Exception err) {
 			log.error("[restartInterviewConversion] ", err);

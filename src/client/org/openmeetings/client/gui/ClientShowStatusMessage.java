@@ -2,7 +2,6 @@ package org.openmeetings.client.gui;
 
 import org.apache.log4j.Logger;
 import org.openmeetings.client.beans.ClientConnectionBean;
-import org.openmeetings.client.transport.ClientTransportMinaPool;
 
 /**
  * @author sebastianwagner
@@ -10,7 +9,8 @@ import org.openmeetings.client.transport.ClientTransportMinaPool;
  */
 public class ClientShowStatusMessage {
 	
-	private static Logger log = Logger.getLogger(ClientTransportMinaPool.class);
+	@SuppressWarnings("unused")
+	private static Logger log = Logger.getLogger(ClientShowStatusMessage.class);
 	
 	public static void showStatusMessage(String message) {
 		try {

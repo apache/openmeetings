@@ -1,9 +1,7 @@
 package org.openmeetings.client.gui;
 
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
@@ -14,7 +12,9 @@ import org.apache.log4j.Logger;
  *
  */
 public class ImagePanel extends JPanel {
-	
+	private static final long serialVersionUID = -7984328751866538787L;
+
+
 	private static Logger log = Logger.getLogger(ImagePanel.class);
 
 	

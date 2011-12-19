@@ -1,17 +1,7 @@
 package org.openmeetings.app.sip.xmlrpc.test;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.charset.Charset;
-
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpVersion;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.RequestEntity;
-import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.crypt.MD5;
 import org.red5.logging.Red5LoggerFactory;
@@ -103,19 +93,6 @@ public class OpenXGWrapperClient {
 			
 		} catch (Exception err) {
 			log.error("[testConnection]",err);
-		}
-	}
-	
-	private String readFile(String path) throws IOException {
-		FileInputStream stream = new FileInputStream(new File(path));
-		try {
-			FileChannel fc = stream.getChannel();
-			MappedByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc
-					.size());
-			/* Instead of using default, pass in a decoder. */
-			return Charset.forName("ISO-8859-1").decode(bb).toString();
-		} finally {
-			stream.close();
 		}
 	}
 	

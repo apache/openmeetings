@@ -2,7 +2,6 @@ package org.openmeetings.servlet.outputhandler;
 
 import java.util.Date;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -81,7 +80,6 @@ public class ActivateUser extends VelocityViewServlet {
 			}
 
 			String hash = httpServletRequest.getParameter("u");
-			ServletContext context = getServletContext();
 			String loginURL = ScopeApplicationAdapter.webAppRootPath;
 
 			ctx.put("APP_NAME", getConfigurationmanagement().getAppName());

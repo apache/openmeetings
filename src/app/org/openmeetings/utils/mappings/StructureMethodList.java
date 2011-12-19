@@ -28,14 +28,12 @@ public class StructureMethodList {
 	 * 
 	 */
 
-	public LinkedHashMap<String,LinkedHashMap<String,Object>> parseClassToMethodList(Class targetClass){
+	public LinkedHashMap<String,LinkedHashMap<String,Object>> parseClassToMethodList(Class<?> targetClass){
 		try {
 			LinkedHashMap<String,LinkedHashMap<String,Object>> returnMap = new LinkedHashMap<String,LinkedHashMap<String,Object>>();
 			
 			for (Field field : targetClass.getDeclaredFields()) {
 				String fieldName = field.getName();
-				Class fieldTypeClass = field.getType();
-				//log.error("fieldTypeClass Name " + fieldTypeClass.getName() );
 				String capitalizedFieldName = StringUtils.capitalize(fieldName);
 				String setterPre = "set";
 				
@@ -44,7 +42,7 @@ public class StructureMethodList {
 					if(method.getName().equals(setterPre + capitalizedFieldName)){
 						String methodName = method.getName();
 						
-						Class[] paramTypes = method.getParameterTypes();
+						Class<?>[] paramTypes = method.getParameterTypes();
 						//log.error("parseClassToMethodList methodName: "+methodName);
 						if (methodName.startsWith("set")) {
 							//Found setter get Attribute name

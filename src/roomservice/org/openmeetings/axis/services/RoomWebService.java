@@ -598,7 +598,7 @@ public class RoomWebService {
 	 *            Asc or Desc sort ordering
 	 * @return
 	 */
-	public SearchResult getRooms(String SID, int start, int max,
+	public SearchResult<Rooms> getRooms(String SID, int start, int max,
 			String orderby, boolean asc) {
 		return conferenceService.getRooms(SID, start, max, orderby, asc, "");
 	}
@@ -619,7 +619,7 @@ public class RoomWebService {
 	 *            Asc or Desc sort ordering
 	 * @return
 	 */
-	public SearchResult getRoomsWithCurrentUsers(String SID, int start,
+	public SearchResult<Rooms> getRoomsWithCurrentUsers(String SID, int start,
 			int max, String orderby, boolean asc) {
 		return conferenceService.getRoomsWithCurrentUsers(SID, start, max,
 				orderby, asc);

@@ -1,18 +1,16 @@
 package org.openmeetings.utils.mappings;
 
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.LinkedHashMap;
-import java.util.Iterator;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-import org.slf4j.Logger;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * Class to cast any LinkedHashMap to its JavaBean repraesentant
@@ -52,7 +50,7 @@ public class CastMapToObject {
 		return instance;
 	}	
 	
-	public Object castByGivenObject(Map values, Class targetClass){
+	public Object castByGivenObject(Map<String, ?> values, Class<?> targetClass){
 		try {
 //			if (valuesObj.getClass().getClass().getName().equals(ObjectMap.class.getName())){
 //				ObjectMap values = (ObjectMap) valuesObj;
@@ -68,7 +66,7 @@ public class CastMapToObject {
 			
 			for ( Field anyField : targetClass.getDeclaredFields() )  { 
 				String fieldName = anyField.getName(); 
-				Class fieldType = anyField.getType();
+				Class<?> fieldType = anyField.getType();
 				String fieldTypeName = anyField.getType().getName(); 
 
 				if (this.compareTypeNameToBasicTypes(fieldTypeName)) {
@@ -88,14 +86,14 @@ public class CastMapToObject {
 							if (methodSummery.get("setter")!=null) {
 	
 								String methodSetterName = methodSummery.get("setter").toString();
-								Class[] paramTypes = (Class[]) methodSummery.get("setterParamTypes");
+								Class<?>[] paramTypes = (Class[]) methodSummery.get("setterParamTypes");
 								Method m = targetClass.getMethod(methodSetterName, paramTypes);
 								
-								Class paramType = paramTypes[0];
+								Class<?> paramType = paramTypes[0];
 								
 								//try to cast the Given Object to the necessary Object
 								if (t!=null && !paramType.getName().equals(t.getClass().getName())){
-									for (Constructor crt : paramType.getConstructors()) {
+									for (Constructor<?> crt : paramType.getConstructors()) {
 										if (crt.getParameterTypes()[0].getName().equals("java.lang.String")){
 											t = crt.newInstance(t.toString());	
 										}
@@ -117,7 +115,7 @@ public class CastMapToObject {
 						
 					} else if (Modifier.isPublic(mod) && !Modifier.isFinal(mod)){
 						if (t!=null && !anyField.getType().getName().equals(t.getClass().getName())){
-							for (Constructor crt : anyField.getType().getConstructors()) {
+							for (Constructor<?> crt : anyField.getType().getConstructors()) {
 								if (crt.getParameterTypes()[0].getName().equals("java.lang.String")){
 									t = crt.newInstance(t.toString());
 								}
@@ -153,13 +151,13 @@ public class CastMapToObject {
 						if (valueOfHashMap!=null){
 //							log.error("compareBeanTypeToAllowedListTypes true " + valueOfHashMap.getClass().getName());
 							String valueTypeOfHashMap = valueOfHashMap.getClass().getName();
-							HashSet s = new HashSet();
 							
 							if (this.compareTypeNameToAllowedListTypes(valueTypeOfHashMap)) {
-								Map m = (Map) valueOfHashMap;
-								for (Iterator it = m.keySet().iterator();it.hasNext();) {
+								Map<?, ?> m = (Map<?, ?>) valueOfHashMap;
+								for (Iterator<?> it = m.keySet().iterator();it.hasNext();) {
 									String key = it.next().toString();
 //									log.error("key: "+key);
+									@SuppressWarnings("unused")
 									Object listObject = m.get(key);
 //									log.error("listObject: "+listObject);
 //									log.error("listObject: "+listObject.getClass().getName());
@@ -196,10 +194,10 @@ public class CastMapToObject {
 										if (methodSummery.get("setter")!=null) {
 				
 											String methodSetterName = methodSummery.get("setter").toString();
-											Class[] paramTypes = (Class[]) methodSummery.get("setterParamTypes");
+											Class<?>[] paramTypes = (Class[]) methodSummery.get("setterParamTypes");
 											Method m = targetClass.getMethod(methodSetterName, paramTypes);
 											
-											Class paramType = paramTypes[0];
+											Class<?> paramType = paramTypes[0];
 											//log.error("paramType: "+paramType.getName());
 											if (paramType.isPrimitive() && t==null){
 												//cannot cast null to primitve
@@ -247,7 +245,7 @@ public class CastMapToObject {
 	private boolean compareTypeNameToBasicTypes(String fieldTypeName) {
 		try {
 			
-			for (Iterator it = CastBasicTypes.getCompareTypesSimple().iterator();it.hasNext();) {
+			for (Iterator<String> it = CastBasicTypes.getCompareTypesSimple().iterator();it.hasNext();) {
 				if (fieldTypeName.equals(it.next())) return true;
 			}
 			
@@ -261,7 +259,7 @@ public class CastMapToObject {
 	private boolean compareTypeNameToAllowedListTypes(String fieldTypeName) {
 		try {
 			//log.error("compareTypeNameToAllowedListTypes"+ fieldTypeName);
-			for (Iterator it = CastBasicTypes.getAllowedListTypes().iterator();it.hasNext();) {
+			for (Iterator<String> it = CastBasicTypes.getAllowedListTypes().iterator();it.hasNext();) {
 				if (fieldTypeName.equals(it.next())) return true;
 			}
 			

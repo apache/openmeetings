@@ -1,15 +1,16 @@
 package org.openmeetings.client.gui;
 
-import java.util.List;
-import java.util.LinkedList;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 import javax.imageio.ImageIO;
@@ -21,7 +22,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 
@@ -49,15 +49,11 @@ public class ClientViewerScreen {
 	private JLabel textWarningArea;
 	private JScrollPane scrollPane;
 	private JPanel scrollContent;
-	private ImageIcon menupointer;
-	private ImagePanel menupointerPanel;
 	
 	private String label728 = "Desktop Viewer";
 	private String label729 = "exit";
 	public String label736 = "End of Session";
 	public String label742 = "Connection was closed by Server";
-	
-	private boolean mousePointerLoaded = false;
 	
 	private List<ImagePanel> imageScreens = new LinkedList<ImagePanel>();
 	
@@ -110,8 +106,6 @@ public class ClientViewerScreen {
 	//		 see http://developer.java.sun.com/developer/bugParade/bugs/4155617.html
 			UIManager.getLookAndFeelDefaults().put( "ClassLoader", getClass().getClassLoader()  );
 			
-			
-			menupointer = createImageIcon("/menupointer.png");
 			
 			Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 			

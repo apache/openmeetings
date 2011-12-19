@@ -128,6 +128,7 @@ public class MethodGateway extends HttpServlet {
 				OutputStream out = httpServletResponse.getOutputStream();
 
 				out.write(xmlString.getBytes());
+				out.close();
 				return;
 			}
 
@@ -144,6 +145,7 @@ public class MethodGateway extends HttpServlet {
 				OutputStream out = httpServletResponse.getOutputStream();
 
 				out.write(xmlString.getBytes());
+				out.close();
 				return;
 			}
 
@@ -164,6 +166,7 @@ public class MethodGateway extends HttpServlet {
 					OutputStream out = httpServletResponse.getOutputStream();
 
 					out.write(xmlString.getBytes());
+					out.close();
 					return;
 				} else if (method.equals("loginUser")) {
 
@@ -195,6 +198,7 @@ public class MethodGateway extends HttpServlet {
 					OutputStream out = httpServletResponse.getOutputStream();
 
 					out.write(xmlString.getBytes());
+					out.close();
 					return;
 				} else if (method.equals("setUserObject")) {
 
@@ -239,32 +243,11 @@ public class MethodGateway extends HttpServlet {
 					OutputStream out = httpServletResponse.getOutputStream();
 
 					out.write(xmlString.getBytes());
+					out.close();
 					return;
 				}
 
 			} else if (service.equals("roomservice")) {
-
-				// public Long addRoom(String SID,
-				// String name,
-				// Long roomtypes_id ,
-				// String comment, Long numberOfPartizipants,
-				// Boolean ispublic,
-				// Integer videoPodWidth,
-				// Integer videoPodHeight,
-				// Integer videoPodXPosition,
-				// Integer videoPodYPosition,
-				// Integer moderationPanelXPosition,
-				// Boolean showWhiteBoard,
-				// Integer whiteBoardPanelXPosition,
-				// Integer whiteBoardPanelYPosition,
-				// Integer whiteBoardPanelHeight,
-				// Integer whiteBoardPanelWidth,
-				// Boolean showFilesPanel,
-				// Integer filesPanelXPosition,
-				// Integer filesPanelYPosition,
-				// Integer filesPanelHeight,
-				// Integer filesPanelWidth) {
-
 				if (method.equals("addRoom")) {
 
 					String SID = httpServletRequest.getParameter("SID");
@@ -298,6 +281,7 @@ public class MethodGateway extends HttpServlet {
 					OutputStream out = httpServletResponse.getOutputStream();
 
 					out.write(xmlString.getBytes());
+					out.close();
 					return;
 				}
 

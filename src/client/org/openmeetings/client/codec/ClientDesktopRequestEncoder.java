@@ -16,8 +16,6 @@ import org.openmeetings.client.gui.ClientStartScreen;
 import org.openmeetings.client.screen.ClientCaptureScreen;
 import org.openmeetings.client.util.ClientPacketizer;
 
-import java.util.zip.*;
-
 
 /**
  * @author sebastianwagner

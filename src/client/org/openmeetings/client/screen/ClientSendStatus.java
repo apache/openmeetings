@@ -15,6 +15,7 @@ import org.openmeetings.client.util.ClientPacketizer;
  */
 public class ClientSendStatus extends BaseSendPacketToServer {
 	
+	@SuppressWarnings("unused")
 	private static Logger log = Logger.getLogger(ClientSendStatus.class);
 
 	public void sendStart() throws Exception {

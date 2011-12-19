@@ -5,7 +5,8 @@ import java.awt.Dimension;
 import java.awt.Color;
 
 public class ClientBlankArea extends JLabel {
-    Dimension minSize = new Dimension(100, 50);
+	private static final long serialVersionUID = -824649802543748756L;
+	Dimension minSize = new Dimension(100, 50);
 
     public ClientBlankArea(Color color) {
         setBackground(color);

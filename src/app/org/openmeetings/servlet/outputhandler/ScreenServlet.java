@@ -209,6 +209,7 @@ public class ScreenServlet extends HttpServlet {
 			HttpServletResponse httpServletResponse) throws ServletException,
 			IOException {
 
+		OutputStream out = httpServletResponse.getOutputStream();
 		try {
 			System.out.println("ScreenServlet Call");
 			Long users_id = getSessionManagement().checkSession(sid);
@@ -230,20 +231,15 @@ public class ScreenServlet extends HttpServlet {
 						doProcess = true;
 					} else {
 						log.debug("User already left room, block Screen - logical Room Leave");
-						OutputStream out = httpServletResponse
-								.getOutputStream();
 						String returnValue = "close";
 						out.write(returnValue.getBytes());
-						// return;
 					}
 				}
 
 				if (!userIsInRoom) {
 					log.debug("User already left room, block Screen - Browser Closed");
-					OutputStream out = httpServletResponse.getOutputStream();
 					String returnValue = "close";
 					out.write(returnValue.getBytes());
-					// return;
 				}
 
 				if (doProcess) {
@@ -276,9 +272,8 @@ public class ScreenServlet extends HttpServlet {
 					InputStream is = upload.getFileContents("Filedata");
 
 					// trim whitespace
-					@SuppressWarnings("deprecation")
 					String fileSystemName = StringUtils.deleteWhitespace(upload
-							.getFileSystemName("Filedata"));
+							.getBaseFilename("Filedata"));
 
 					String newFileSystemName = StringComparer.getInstance()
 							.compareForRealPaths(
@@ -341,8 +336,9 @@ public class ScreenServlet extends HttpServlet {
 			log.error("ee " + e);
 			e.printStackTrace();
 			throw new ServletException(e);
+		} finally {
+			out.close();
 		}
-
 	}
 
 	/**
@@ -437,6 +433,7 @@ public class ScreenServlet extends HttpServlet {
 				boolean userIsInRoom = false;
 				boolean doProcess = false;
 
+				OutputStream out = httpServletResponse.getOutputStream();
 				RoomClient rcl = getClientListManager().getClientByPublicSID(publicSID);
 				if (rcl != null) {
 					log.debug("found RoomClient");
@@ -447,20 +444,18 @@ public class ScreenServlet extends HttpServlet {
 						doProcess = true;
 					} else {
 						log.debug("User already left room, block Screen - logical Room Leave");
-						OutputStream out = httpServletResponse
-								.getOutputStream();
 						String returnValue = "close";
 						out.write(returnValue.getBytes());
+						
 					}
 				}
 
 				if (!userIsInRoom) {
 					log.debug("User already left room, block Screen - Browser Closed");
-					OutputStream out = httpServletResponse.getOutputStream();
 					String returnValue = "close";
 					out.write(returnValue.getBytes());
-					// return;
 				}
+				out.close();
 
 				if (doProcess) {
 					// make a complete name out of domain(organisation) +
@@ -509,9 +504,11 @@ public class ScreenServlet extends HttpServlet {
 					while ((leng = is.read(buffy, 0, buffy.length)) > -1) {
 						bos.write(buffy, 0, leng);
 					}
-
+					is.close();
+					
 					byte[] ba = bos.toByteArray();
-
+					bos.close();
+					
 					if (ba.length < 59)
 						return;
 

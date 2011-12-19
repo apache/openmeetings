@@ -10,7 +10,9 @@ import javax.swing.JComponent;
  *
  */
 public class ClientCorner extends JComponent {
-    protected void paintComponent(Graphics g) {
+	private static final long serialVersionUID = -3407636607902521760L;
+
+	protected void paintComponent(Graphics g) {
         // Fill me with dirty brown/orange.
         g.setColor(new Color(230, 163, 4));
         g.fillRect(0, 0, getWidth(), getHeight());

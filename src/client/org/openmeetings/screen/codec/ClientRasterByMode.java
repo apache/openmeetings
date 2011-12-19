@@ -9,7 +9,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.zip.GZIPOutputStream;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -18,7 +17,6 @@ import javax.imageio.stream.ImageOutputStream;
 
 import org.apache.log4j.Logger;
 import org.openmeetings.client.beans.ClientConnectionBean;
-import org.openmeetings.client.beans.ClientImageFrame;
 import org.openmeetings.client.beans.ClientVirtualScreenBean;
 import org.openmeetings.screen.codec.beans.ClientImageFrameModus;
 

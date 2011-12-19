@@ -1,6 +1,5 @@
 package org.openmeetings.screen.codec;
 
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.LinkedList;
 import java.util.List;
@@ -153,26 +152,6 @@ public class CaptureScreenByMode {
 			
 		}
 		
-	}
-	
-	private boolean imagesAreEqual(BufferedImage image1, BufferedImage image2) throws Exception {
-		
-		for (int width = 0;width < image1.getWidth(); width ++) {
-			
-			for (int height = 0;height < image1.getHeight(); height ++) {
-				
-				int color1 = image1.getRGB(width, height);
-				int color2 = image2.getRGB(width, height);
-				
-				if (color1 != color2) {
-					return false;
-				}
-				
-			}
-			
-		}
-		
-		return true;
 	}
 	
 	private void sendByteBuffer(ClientImageFrameModus clientImageFrameModus, int modus) {

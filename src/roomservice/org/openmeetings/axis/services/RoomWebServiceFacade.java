@@ -131,13 +131,13 @@ public class RoomWebServiceFacade {
 				rooms_id);
 	}
 
-	public SearchResult getRooms(String SID, int start, int max,
+	public SearchResult<Rooms> getRooms(String SID, int start, int max,
 			String orderby, boolean asc) throws AxisFault {
 		return this.geRoomServiceProxy()
 				.getRooms(SID, start, max, orderby, asc);
 	}
 
-	public SearchResult getRoomsWithCurrentUsers(String SID, int start,
+	public SearchResult<Rooms> getRoomsWithCurrentUsers(String SID, int start,
 			int max, String orderby, boolean asc) throws AxisFault {
 		return this.geRoomServiceProxy().getRoomsWithCurrentUsers(SID, start,
 				max, orderby, asc);

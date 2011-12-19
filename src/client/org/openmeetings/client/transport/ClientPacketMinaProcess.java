@@ -1,22 +1,16 @@
 package org.openmeetings.client.transport;
 
-import org.apache.log4j.Logger;
 import java.net.InetSocketAddress;
-import java.net.SocketAddress;
 
+import org.apache.log4j.Logger;
 import org.apache.mina.core.buffer.IoBuffer;
-import org.apache.mina.core.future.CloseFuture;
 import org.apache.mina.core.future.ConnectFuture;
 import org.apache.mina.core.future.IoFutureListener;
 import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
-
-import org.apache.mina.transport.socket.SocketSessionConfig;
-import org.apache.mina.transport.socket.nio.NioDatagramConnector;
 import org.apache.mina.transport.socket.nio.NioSocketConnector;
-
 import org.openmeetings.client.beans.ClientConnectionBean;
 import org.openmeetings.client.beans.ClientCursorStatus;
 import org.openmeetings.client.beans.ClientFrameBean;
@@ -135,9 +129,6 @@ public class ClientPacketMinaProcess extends IoHandlerAdapter {
         log.debug("Message recv...");
         
         if (message instanceof ClientFrameBean) {
-			
-			SocketAddress remoteAddress = session.getRemoteAddress();
-			
 			log.debug("Recv Frame Bean ");
 			
 			ClientViewerScreen.instance.addClientFrameBean((ClientFrameBean) message);
@@ -147,9 +138,6 @@ public class ClientPacketMinaProcess extends IoHandlerAdapter {
 		if (message instanceof ClientStatusBean) {
 			
 			ClientStatusBean cBean = (ClientStatusBean) message;
-			
-			SocketAddress remoteAddress = session.getRemoteAddress();
-			
 			log.debug("Recv Status Bean "+cBean.getMode());
 			
 			if (cBean.getMode() == 4) {
@@ -166,9 +154,6 @@ public class ClientPacketMinaProcess extends IoHandlerAdapter {
 		if (message instanceof ClientCursorStatus) {
 			
 			ClientCursorStatus clientCursorStatus = (ClientCursorStatus) message;
-			
-			SocketAddress remoteAddress = session.getRemoteAddress();
-			
 			log.debug("Recv Status Bean "+clientCursorStatus.getMode());
 			
 			ClientViewerScreen.instance.updateCursor(clientCursorStatus);

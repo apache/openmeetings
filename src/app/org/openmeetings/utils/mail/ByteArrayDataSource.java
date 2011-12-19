@@ -18,7 +18,7 @@ public class ByteArrayDataSource implements DataSource {
 			while ((ch = is.read()) != -1)
 				os.write(ch);
 			data = os.toByteArray();
-
+			os.close();
 		} catch (IOException ioex) {
 		}
 	}

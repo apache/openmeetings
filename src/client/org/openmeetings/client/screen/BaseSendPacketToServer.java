@@ -1,13 +1,6 @@
 package org.openmeetings.client.screen;
 
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-
 import org.apache.log4j.Logger;
-import org.openmeetings.client.beans.ClientConnectionBean;
-import org.openmeetings.client.gui.ClientStartScreen;
-import org.openmeetings.client.transport.ClientTransportMinaPool;
 
 /**
  * @author sebastianwagner

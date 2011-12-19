@@ -3,11 +3,7 @@ package org.openmeetings.client.screen;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.PointerInfo;
-import java.util.Date;
 import java.util.List;
-
-import javax.imageio.ImageIO;
-import javax.imageio.ImageWriter;
 
 import org.apache.log4j.Logger;
 import org.openmeetings.client.beans.ClientConnectionBean;
@@ -35,8 +31,6 @@ public class ClientCaptureScreen {
 	public static long frameCalculated = 0;
 	
 	
-	private Date startDate;
-
 	public static void main(String[] args) {
 		//new ClientCaptureScreen();
 	}
@@ -53,7 +47,6 @@ public class ClientCaptureScreen {
 	public ClientCaptureScreen(boolean sendSingle) {
 		try {
 			log.debug("captureScreenStart");
-			this.startDate = new Date();
 			//StartScreen.instance.showBandwidthWarning("capture publicSID: "+publicSID);
 			ClientConnectionBean.isloading = true;
 			if (sendSingle) {
@@ -69,7 +62,6 @@ public class ClientCaptureScreen {
 	public ClientCaptureScreen(int mode) {
 		try {
 			log.debug("captureScreenStart");
-			this.startDate = new Date();
 			//StartScreen.instance.showBandwidthWarning("capture publicSID: "+publicSID);
 			ClientConnectionBean.isloading = true;
 			this.captureMode(mode);
@@ -193,128 +185,5 @@ public class ClientCaptureScreen {
 			}
 			
 		}
-		
-//		ClientPacketizer packetizer = new ClientPacketizer();
-//		
-//		for (ClientImageFrame clientImageFrame : clientImageFrames) {
-//			
-//			if (ClientRasterList.checkFrame(clientImageFrame)) {
-//				
-//				//Split this Package in the MAX MTU Size for our payload
-//				
-//				if (clientImageFrame.getPayload().length <= ClientConnectionBean.maxPayLoadSize) {
-//				
-//					byte[] packetFrame = packetizer.doPacketize(ClientConnectionBean.mode,ClientConnectionBean.getFrameNumber(), 
-//											ClientConnectionBean.publicSID, clientImageFrame.getRect(), 0, 1, clientImageFrame.getPayload());
-//					
-//					this.sendPacketToServer(packetFrame);
-//					
-//				} else {
-//
-//					//log.debug("Frames ?? "+ClientConnectionBean.maxPayLoadSize+" "+clientImageFrame.getPayload().length);
-//
-//					//log.debug("Frames ?? "+Math.floor(ClientConnectionBean.maxPayLoadSize / clientImageFrame.getPayload().length));
-//					
-//					int frameNumbers = Double.valueOf(Math.floor(clientImageFrame.getPayload().length / ClientConnectionBean.maxPayLoadSize)).intValue();
-//					
-//					log.debug("frameNumbers "+frameNumbers);
-//					
-//					for (int i=0;i<frameNumbers;i++) {
-//						
-//						byte[] packetFrameSplit = this.extractByte(clientImageFrame.getPayload(), i*ClientConnectionBean.maxPayLoadSize, ClientConnectionBean.maxPayLoadSize);
-//						
-//						
-//						byte[] packetFrame = packetizer.doPacketize(ClientConnectionBean.mode,ClientConnectionBean.getFrameNumber(), 
-//								ClientConnectionBean.publicSID, clientImageFrame.getRect(), i, frameNumbers, packetFrameSplit);
-//		
-//						this.sendPacketToServer(packetFrame);
-//						
-//					}
-//					
-//					
-//				}
-//			}
-//			
-//		}
-		
 	}
-	
-	private byte[] extractByte(byte[] incomingByte, int start, int length) throws Exception {
-		byte[] newByte = new byte[length];
-		
-		int index = 0;
-		for (int i=start;i<start+length;i++) {
-			
-			newByte[index] = incomingByte[i];
-			
-			index++;
-		}
-		
-		return newByte;
-	}
-
-//	public ClientImageFrame bufferImage() {
-//		try {
-//
-//			ClientImageFrame clientImageFrame = new ClientImageFrame();
-//			
-//			ByteArrayOutputStream out = new ByteArrayOutputStream();
-//			
-//			Rectangle screenRectangle = new Rectangle(
-//					ClientVirtualScreenBean.vScreenSpinnerX,ClientVirtualScreenBean.vScreenSpinnerY,
-//					ClientVirtualScreenBean.vScreenSpinnerWidth,ClientVirtualScreenBean.vScreenSpinnerHeight);
-//			Robot robot = ClientVirtualScreenBean.robot;
-//			if (robot==null) robot = new Robot();
-//			//StartScreen.instance.showBandwidthWarning("capture  "+(new java.util.Date())+" and "+screenRectangle);
-//			
-//			
-//			screenRectangle = new Rectangle(200,0,400,400);
-//			
-//			BufferedImage imageScreen = robot.createScreenCapture(screenRectangle);
-//
-//			//Scale the image reduce size ... TODO: Later Stage
-//			
-//			Date endTime = new Date();
-//			long timeInSeconds = (endTime.getTime()-this.startDate.getTime())/1000;
-//			
-//			log.debug("1 buffer start , end , delta "+this.startDate+" "+endTime+" :timeInSeconds: "+timeInSeconds);
-//				
-//	ImageWriter writer = ImageIO.getImageWritersByFormatName( "jpg" ).next();
-//	writer.setOutput(ImageIO.createImageOutputStream(out));
-//	ImageWriteParam iwparam = new JPEGImageWriteParam(
-//			Locale.getDefault());
-//	iwparam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-//	iwparam.setCompressionQuality(imgQuality);
-//
-//	writer.write(null, new IIOImage(imageScreen, null, null),
-//			iwparam);
-//			
-//			imageScreen.flush();
-//						
-//			//StartScreen.instance.showBandwidthWarning("capture Date and Size: "+(new java.util.Date())+" and "+out.size());
-//			
-//			log.debug("LENGHT: "+out.toByteArray().length);
-//			
-//			clientImageFrame.setPayload(out.toByteArray());
-//			clientImageFrame.setRect(screenRectangle);
-//			
-//			return clientImageFrame;
-//
-//		} catch (FileNotFoundException e) {
-//			System.out.println(e);
-//			e.printStackTrace();
-//		} catch (IOException ioe) {
-//			System.out.println(ioe);
-//			ioe.printStackTrace();
-//		} catch (Exception e) {
-//			System.out.println(e);
-//			e.printStackTrace();
-//		}
-//		return null;
-//	}
-	
-	
-	
-
-	
 }

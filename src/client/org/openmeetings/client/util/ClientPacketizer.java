@@ -53,10 +53,6 @@ public class ClientPacketizer {
 				throw new Exception("Payload bigger then Max MTU "+lengthPayload);
 			}
 			
-			//Integer frameSize = 4 * 10 + lengthSecurityToken;
-			Integer frameSize = 4 * 10 + lengthSecurityToken + lengthPayload;
-			
-			
 			log.debug("mode "+mode);
 			log.debug("sequenceNumber "+sequenceNumber);
 			log.debug("lengthSecurityToken "+lengthSecurityToken);
