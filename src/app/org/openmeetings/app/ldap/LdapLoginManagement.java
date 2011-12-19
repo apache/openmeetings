@@ -32,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class LdapLoginManagement {
 
+	
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			LdapLoginManagement.class, ScopeApplicationAdapter.webAppRootKey);
 
