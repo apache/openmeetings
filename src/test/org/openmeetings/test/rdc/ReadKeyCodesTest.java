@@ -4,11 +4,12 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class ReadKeyCodesTest extends Frame implements KeyListener {
+	private static final long serialVersionUID = -1722917067803656922L;
 	String msg1 = "";
 	String msg2 = "";
 
 	public static void main(String[] args) {
-		ReadKeyCodesTest wnd = new ReadKeyCodesTest();
+		new ReadKeyCodesTest();
 	}
 
 	public ReadKeyCodesTest() {

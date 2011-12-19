@@ -2,7 +2,6 @@ package org.openmeetings.test.jai;
 
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.util.Date;
 
 import junit.framework.TestCase;
 
@@ -11,7 +10,6 @@ import org.apache.batik.dom.svg.SVGDOMImplementation;
 import org.apache.batik.svggen.SVGGraphics2D;
 import org.apache.log4j.Logger;
 import org.junit.Test;
-import org.openmeetings.servlet.outputhandler.ExportToImage;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -24,8 +22,6 @@ public class TestSVGTextExporterArrow extends TestCase {
 	public void testGetDiagramList() {
 		try {
 			
-			
-			ExportToImage exportToImageTest = new ExportToImage();
 			
 	        // Get a DOMImplementation.
 	        DOMImplementation domImpl =
@@ -67,22 +63,10 @@ public class TestSVGTextExporterArrow extends TestCase {
 //	        		new Color(255,0,0));
 	    
 	    
-	        SVGGraphics2D svgGenerator10 = new SVGGraphics2D(svgGenerator);
-	        //SVGGraphics2D svgGenerator2 = new SVGGraphics2D(document);
-	        
-	        //NOTE: Font.ITALIC+Font.BOLD = Font AND Bold !
-//	        GeomPoint start = new GeomPoint();
-//	        start.setLocation(100,100);
-//	        GeomPoint end = new GeomPoint();
-//	        end.setLocation(300,600);
-//	        exportToImageTest.drawArrow(svgGenerator10, start, end, 4, new Float(0.5),new Color(255,0,0),new Color(0,0,255));
-	        
 	        // Finally, stream out SVG to the standard output using
 	        // UTF-8 encoding.
 	        boolean useCSS = true; // we want to use CSS style attributes
 	        //Writer out = new OutputStreamWriter(System.out, "UTF-8");
-	        
-	        String requestedFile = "diagram_xyz_"+new Date().getTime()+".svg";
 	        
 	        //OutputStream out = httpServletResponse.getOutputStream();
 			//httpServletResponse.setContentType("APPLICATION/OCTET-STREAM");
@@ -92,13 +76,6 @@ public class TestSVGTextExporterArrow extends TestCase {
 	        //StringWriter out = new StringWriter();
 	        
 	        svgGenerator.stream(out, useCSS);
-	        String xmlDef = out.toString();
-	        
-	        
-	        //log.debug("String: "+xmlDef);
-	        
-	        
-			
 		} catch (Exception er) {
 			log.error("ERROR ", er);
 			System.out.println("Error exporting: " + er);

@@ -1,8 +1,8 @@
 package de.medint.rtpsharer.main;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -56,7 +56,7 @@ public class ServletFunctions {
 		dstream.close();
 		
 		 // read the output from the URL
-		DataInputStream in = new DataInputStream(new BufferedInputStream(c.getInputStream()));
+		BufferedReader in = new BufferedReader(new InputStreamReader(c.getInputStream()));
 		
 		String sIn = in.readLine();
 		while (sIn != null) {
@@ -65,7 +65,7 @@ public class ServletFunctions {
 			}
 			sIn += in.readLine();
 		}
-		
+		in.close();
 		c = null;
 		
 	}
@@ -103,7 +103,7 @@ public class ServletFunctions {
 		dstream.close();
 		
 		 // read the output from the URL
-		DataInputStream in = new DataInputStream(new BufferedInputStream(c.getInputStream()));
+		BufferedReader in = new BufferedReader(new InputStreamReader(c.getInputStream()));
 		
 		String sIn = in.readLine();
 		while (sIn != null) {
@@ -112,7 +112,7 @@ public class ServletFunctions {
 			}
 			sIn += in.readLine();
 		}
-		
+		in.close();
 		c = null;
 		
 	}

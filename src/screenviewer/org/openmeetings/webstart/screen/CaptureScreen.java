@@ -205,7 +205,7 @@ public class CaptureScreen {
 				}
 				sIn += in.readLine();
 			}
-
+			in.close();
 			StartScreen.instance.showBandwidthWarning("Input Stream: " + sIn);
 
 			Date endTime2 = new Date();

@@ -18,7 +18,8 @@ import javax.media.protocol.*;
  *	This PlayerApplet is a mixture of SUNs reference RTP Implementations AVReceive2 and RTPPlayerApplet
  */
 public class RTPPlayerApplet extends Applet implements ControllerListener, ReceiveStreamListener, SessionListener, ActionListener{
-    
+	private static final long serialVersionUID = -6570612551345737261L;
+
 	/** Destination Host */
     InetAddress destaddr;
     
@@ -267,8 +268,6 @@ public class RTPPlayerApplet extends Applet implements ControllerListener, Recei
    
     //-----------------------------------------------------------------------------------------------
     public void actionPerformed(ActionEvent event){
-        Button button = (Button)event.getSource();
-       
     }
     //-----------------------------------------------------------------------------------------------
     
@@ -293,7 +292,6 @@ public class RTPPlayerApplet extends Applet implements ControllerListener, Recei
     //-----------------------------------------------------------------------------------------------
     public synchronized void update( ReceiveStreamEvent evt) {
     	
-    	RTPManager mgr = (RTPManager)evt.getSource();
     	Participant participant = evt.getParticipant();	// could be null.
     	ReceiveStream stream = evt.getReceiveStream();  // could be null.
 

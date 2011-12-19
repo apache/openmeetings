@@ -114,9 +114,9 @@ public class TestDebugConnection extends TestCase {
 		    	
 		    	if (result instanceof Map) {
 		    		
-		    		Map mapResults = (Map) result;
+		    		Map<?, ?> mapResults = (Map<?, ?>) result;
 		    		
-		    		for (Iterator iter = mapResults.keySet().iterator();iter.hasNext();) {
+		    		for (Iterator<?> iter = mapResults.keySet().iterator();iter.hasNext();) {
 		    			
 		    			Object key = iter.next();
 		    			log.debug("-- key "+key+" value "+mapResults.get(key));
@@ -223,9 +223,9 @@ public class TestDebugConnection extends TestCase {
 		    	
 		    	if (result instanceof Map) {
 		    		
-		    		Map mapResults = (Map) result;
+		    		Map<?, ?> mapResults = (Map<?, ?>) result;
 		    		
-		    		for (Iterator iter = mapResults.keySet().iterator();iter.hasNext();) {
+		    		for (Iterator<?> iter = mapResults.keySet().iterator();iter.hasNext();) {
 		    			
 		    			Object key = iter.next();
 		    			log.debug("-- key "+key+" value "+mapResults.get(key));

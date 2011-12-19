@@ -1,13 +1,8 @@
 package org.openmeetings.server.servlets;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.util.Date;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,9 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.server.beans.ServerFrameBean;
-import org.openmeetings.server.beans.ServerSharingSessionBean;
 import org.openmeetings.server.cache.ServerSharingSessionList;
-import org.openmeetings.servlet.outputhandler.ScreenServlet;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 

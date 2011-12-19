@@ -8,6 +8,7 @@ import org.apache.axis2.transport.http.HTTPConstants;
 import org.openmeetings.app.data.beans.basic.ErrorResult;
 import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.persistence.beans.basic.Sessiondata;
+import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -169,6 +170,7 @@ public class UserWebServiceFacade {
 	 * @return
 	 * @throws AxisFault
 	 */
+	@Deprecated
 	public Long setUserObject(String SID, String username, String firstname,
 			String lastname, String profilePictureUrl, String email)
 			throws AxisFault {
@@ -195,6 +197,7 @@ public class UserWebServiceFacade {
 	 * @return
 	 * @throws AxisFault
 	 */
+	@Deprecated
 	public Long setUserObjectWithExternalUser(String SID, String username,
 			String firstname, String lastname, String profilePictureUrl,
 			String email, Long externalUserId, String externalUserType)
@@ -277,7 +280,7 @@ public class UserWebServiceFacade {
 				organisation_id, insertedby, comment);
 	}
 
-	public SearchResult getUsersByOrganisation(String SID,
+	public SearchResult<Users> getUsersByOrganisation(String SID,
 			long organisation_id, int start, int max, String orderby,
 			boolean asc) throws AxisFault {
 		return getUserServiceProxy().getUsersByOrganisation(SID,

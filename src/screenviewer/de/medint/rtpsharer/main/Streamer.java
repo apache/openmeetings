@@ -25,11 +25,10 @@ import javax.media.protocol.PushBufferStream;
 import javax.media.rtp.RTPManager;
 import javax.media.rtp.SendStream;
 import javax.media.rtp.SessionAddress;
-import javax.media.rtp.rtcp.SourceDescription;
 
 import org.apache.log4j.Logger;
 
-import de.medint.rtpsharer.datasource.*;
+import de.medint.rtpsharer.datasource.ImageDataSource;
 import de.medint.rtpsharer.util.ConfigUtil;
 
 
@@ -155,7 +154,6 @@ public class Streamer {
 		InetAddress ipAddr;
 		SendStream sendStream;
 		int port;
-		SourceDescription srcDesList[];
 
 		for (int i = 0; i < pbss.length; i++) {
 		    try {
@@ -438,11 +436,9 @@ public class Streamer {
 
 			    // All controller events, send a notification
 			    // to the waiting thread in waitForState method.
-			    if (ce instanceof ControllerEvent) {
-			    	synchronized (getStateLock()) {
-			    		getStateLock().notifyAll();
-			    	}
-			    }
+		    	synchronized (getStateLock()) {
+		    		getStateLock().notifyAll();
+		    	}
 			}
 	 }
 	 

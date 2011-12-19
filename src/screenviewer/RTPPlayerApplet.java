@@ -30,22 +30,39 @@
 
 
 import java.applet.Applet;
-import javax.media.rtp.*;
-import javax.media.rtp.rtcp.*;
-import javax.media.rtp.event.*;
-import com.sun.media.rtp.RTPSessionMgr;
-import java.io.*;
-import java.awt.*;
-import java.util.Vector;
-import java.net.*;
-import java.awt.event.*;
-import java.lang.String;
-import javax.media.*;
-import javax.media.protocol.*;
-import com.sun.media.*;
-import com.sun.media.ui.*;
+import java.awt.BorderLayout;
+import java.awt.Button;
+import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Panel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.lang.SecurityException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Vector;
+
+import javax.media.Controller;
+import javax.media.ControllerEvent;
+import javax.media.ControllerListener;
+import javax.media.Manager;
+import javax.media.Player;
+import javax.media.RealizeCompleteEvent;
+import javax.media.SizeChangeEvent;
+import javax.media.protocol.DataSource;
+import javax.media.rtp.RTPManager;
+import javax.media.rtp.ReceiveStream;
+import javax.media.rtp.ReceiveStreamListener;
+import javax.media.rtp.SessionAddress;
+import javax.media.rtp.SessionManagerException;
+import javax.media.rtp.event.NewReceiveStreamEvent;
+import javax.media.rtp.event.ReceiveStreamEvent;
+import javax.media.rtp.event.RemotePayloadChangeEvent;
+import javax.media.rtp.rtcp.SourceDescription;
+
+import com.sun.media.ui.PlayerWindow;
 
 
 // This RTP applet will allow a user to playback streams for one audio
@@ -58,15 +75,14 @@ import java.lang.SecurityException;
 // the SessionManager.
 public class RTPPlayerApplet  extends Applet implements
 			ControllerListener, ReceiveStreamListener, ActionListener{
-  
-    
-    InetAddress destaddr;
+	private static final long serialVersionUID = -5446392658711235770L;
+	InetAddress destaddr;
     String address;
     String portstr;
     String media;
     Player videoplayer = null;
-    SessionManager videomgr = null;
-    SessionManager audiomgr = null;
+    RTPManager videomgr = null;
+    RTPManager audiomgr = null;
     Component visualComponent = null;
     Component controlComponent = null;
     Panel panel = null;
@@ -76,7 +92,7 @@ public class RTPPlayerApplet  extends Applet implements
     GridBagConstraints c = null;
         int width = 320;
     int height =0;
-    Vector playerlist = new Vector();
+    Vector<Player> playerlist = new Vector<Player>();
    
     
     public void init(){
@@ -88,7 +104,7 @@ public class RTPPlayerApplet  extends Applet implements
         if (media.equals("On")){
             address = getParameter("videosession");
             portstr = getParameter("videoport");
-            StartSessionManager(address,
+            startSessionManager(address,
                                 StrToInt(portstr),
                                 "video");
             if (videomgr == null){
@@ -108,7 +124,7 @@ public class RTPPlayerApplet  extends Applet implements
         if (media.equals("On")){
             address = getParameter("audiosession");
             portstr = getParameter("audioport");
-            StartSessionManager(address,
+            startSessionManager(address,
                                 StrToInt(portstr),
                                 "audio");
             if (audiomgr == null){
@@ -133,8 +149,7 @@ public class RTPPlayerApplet  extends Applet implements
         }
         if (playerlist == null)
             return;
-        for (int i =0; i < playerlist.size(); i++){
-            Player player = (Player)playerlist.elementAt(i);
+        for (Player player : playerlist) {
             if (player != null)
                 new PlayerWindow(player);
         }
@@ -146,8 +161,7 @@ public class RTPPlayerApplet  extends Applet implements
         }
         if (playerlist == null)
             return;
-        for (int i =0; i < playerlist.size(); i++){
-            Player player = (Player)playerlist.elementAt(i);
+        for (Player player : playerlist) {
             if (player != null){
                 player.close();
             }
@@ -161,13 +175,14 @@ public class RTPPlayerApplet  extends Applet implements
         String reason = "Shutdown RTP Player";
         
         if (videomgr != null){
-            videomgr.closeSession(reason);
+        	videomgr.removeTargets(reason);
+            videomgr.dispose();
             videoplayer = null;
             videomgr = null;
         }
-        
         if (audiomgr != null){
-            audiomgr.closeSession(reason);
+        	audiomgr.removeTargets(reason);
+            audiomgr.dispose();
             audiomgr = null;
         }
         super.destroy();
@@ -175,9 +190,6 @@ public class RTPPlayerApplet  extends Applet implements
             
    
     public void actionPerformed(ActionEvent event){
-        Button button = (Button)event.getSource();
-       
-            
     }
     
     public String getAddress(){
@@ -273,7 +285,7 @@ public class RTPPlayerApplet  extends Applet implements
     }
 
     public void update( ReceiveStreamEvent event){
-        SessionManager source =(SessionManager)event.getSource();
+    	RTPManager source =(RTPManager)event.getSource();
         Player newplayer = null;
         // create a new player if a new recvstream is detected
         if (event instanceof NewReceiveStreamEvent){
@@ -300,13 +312,13 @@ public class RTPPlayerApplet  extends Applet implements
                 else{// controller listener and start is taken care of
                     // in playerWindiow 
                     if (playerlist != null)
-                        playerlist.addElement((Object)newplayer);
+                        playerlist.addElement(newplayer);
                     new PlayerWindow(newplayer);
                 }
             }// if (source == videomgr)
             if (source == audiomgr){
                 if (playerlist != null)
-                        playerlist.addElement((Object)newplayer);
+                        playerlist.addElement(newplayer);
                 new PlayerWindow(newplayer);
             }
         }// if (event instanceof NewReceiveStreamEvent)
@@ -324,12 +336,12 @@ public class RTPPlayerApplet  extends Applet implements
         
     }// end of RTPSessionUpdate
         
-    private SessionManager StartSessionManager(String destaddrstr,
+    private RTPManager startSessionManager(String destaddrstr,
                                                   int port,
                                                   String media){
         // this method create a new RTPSessionMgr and adds this applet
         // as a SessionListener, before calling initSession() and startSession()
-        SessionManager mymgr = new RTPSessionMgr();
+        RTPManager mymgr = RTPManager.newInstance();
         if (media.equals("video"))
             videomgr = mymgr;
         if (media.equals("audio"))
@@ -340,10 +352,10 @@ public class RTPPlayerApplet  extends Applet implements
         
         // for initSession() we must generate a CNAME and fill in the
         // RTP Session address and port
-        String cname = mymgr.generateCNAME();
+        String cname = SourceDescription.generateCNAME();
         String username = "jmf-user";
 
-        SessionAddress localaddr = new SessionAddress();
+        SessionAddress[] localaddr = {new SessionAddress()};
         
         try{
             destaddr = InetAddress.getByName(destaddrstr);
@@ -396,12 +408,12 @@ public class RTPPlayerApplet  extends Applet implements
         
         // call initSession() and startSession() of the RTPsessionManager
         try{
-            mymgr.initSession(localaddr,
-                              mymgr.generateSSRC(),
+            mymgr.initialize(localaddr,
                               userdesclist,
                               0.05,
-                              0.25);
-            mymgr.startSession(sessaddr,1,null);
+                              0.25,
+                              null /*EncryptionInfo encryptionInfo*/);
+            mymgr.addTarget(sessaddr);
         }catch (SessionManagerException e){
           System.err.println("RTPPlayerApplet: RTPSM Exception " + e.getMessage());
           e.printStackTrace();

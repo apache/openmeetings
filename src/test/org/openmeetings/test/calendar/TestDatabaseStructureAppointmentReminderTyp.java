@@ -2,9 +2,7 @@ package org.openmeetings.test.calendar;
 
 //import groovy.sql.Sql;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -31,10 +29,6 @@ public class TestDatabaseStructureAppointmentReminderTyp extends AbstractOpenmee
 			cal.set(2008, 9, 2);
 			cal.get(Calendar.DAY_OF_MONTH);
 			cal.getTime();
-
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-			Date date = format.parse("2008-11-07");
-			Date date2 = format.parse("2008-11-08");
 
 			appointmentReminderTypDaoImpl.addAppointmentReminderTyps(1L,
 					"test 5 min", "comment");

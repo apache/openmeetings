@@ -1,29 +1,21 @@
 package org.openmeetings.server.cache;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.zip.GZIPInputStream;
 
-//import org.slf4j.Logger;
-import org.red5.logging.Red5LoggerFactory;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.server.beans.ServerFrameBean;
 import org.openmeetings.server.beans.ServerFrameCursorStatus;
 import org.openmeetings.server.beans.ServerSharingSessionBean;
-import org.openmeetings.server.beans.ServerSharingViewerBean;
 import org.openmeetings.server.beans.ServerStatusBean;
 import org.openmeetings.server.socket.ServerSocketMinaProcess;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+//import org.slf4j.Logger;
 
 /**
  * @author sebastianwagner
@@ -354,70 +346,6 @@ public class ServerSharingSessionList {
 		return null;
 	}
 	
-	
-	/**
-	 * @param serverSharingSessionBean
-	 */
-	private static void writeImagesToStandardDirectory(
-			ServerSharingSessionBean serverSharingSessionBean) {
-		try {
-			
-			String webappDir = ScopeApplicationAdapter.webAppPath;
-			
-			String baseDir = webappDir + File.separatorChar + "upload" + File.separatorChar + "screens" + File.separatorChar;
-			
-			File f = new File(baseDir);
-			if (!f.exists() || !f.canWrite()) {
-				throw new Exception("Directory is Not writeable or does not exist "+baseDir);
-			}
-			
-			String sessionDIR = baseDir + serverSharingSessionBean.getPublicSID() + File.separatorChar;
-			
-			f = new File(sessionDIR);
-			if (!f.exists()) {
-				f.mkdir();
-			}
-			
-			int i=1;
-			for (ServerFrameBean serverFrameBean : serverSharingSessionBean.getServerFrameBeans()) {
-				
-				
-				String gzipPath = sessionDIR + "pic_"+i+".gzip";
-				
-				FileOutputStream fos_1 = new FileOutputStream(gzipPath);
-				fos_1.write(serverFrameBean.getImageBytes());
-				fos_1.close();
-				
-				
-				ByteArrayInputStream byteGzipIn = new ByteArrayInputStream(serverFrameBean.getImageBytes());
-	    		GZIPInputStream gZipIn = new GZIPInputStream(byteGzipIn);
-
-	    		ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
-	    		
-	    		byte[] buffer = new byte[1024];
-	    		int count = 0;
-	    		while ((count = gZipIn.read(buffer)) > 0 ){
-	    			bytesOut.write(buffer,0,count);
-				}
-				bytesOut.close();
-				gZipIn.close();
-				
-				log.debug("gZipIn CLosed");
-				
-				String imagePath = sessionDIR + "pic_"+i+".jpg";
-				
-				FileOutputStream fos = new FileOutputStream(imagePath);
-				fos.write(bytesOut.toByteArray());
-				fos.close();
-				
-				i++;
-			}
-			
-		} catch (Exception err) {
-			log.error("[writeImagesToStandardDirectory]",err);
-		}
-	}
-
 	public static synchronized ServerSharingSessionBean getServerSharingSessionBeanByPublicSID(String publicSID) {
 		try {
 			

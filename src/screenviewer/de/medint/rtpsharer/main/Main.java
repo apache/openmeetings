@@ -1,22 +1,21 @@
 package de.medint.rtpsharer.main;
 
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.ComponentOrientation;
-import java.awt.BorderLayout;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import java.awt.Point;
-import java.net.InetAddress;
-
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JMenuItem;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JFrame;
-import javax.swing.JDialog;
 
 import org.apache.log4j.Logger;
 
@@ -30,34 +29,9 @@ public class Main {
 	private static Streamer streamer = null;
 	
 
-	/** FrameRate */
-	private static int frameRate = 20;
-	
-	/** TargetVideoheight */
-	//private static int videoHeight = 768; //=> See ConfigUtil
-	
-	/** TargerVideoWidth*/
-	//private static int videoWidth = 1024; //=> See ConfigUtil
-	
-	/** Quality */
-	private static float quality = 1;
-	
-	/** Connected */
-	private static boolean connection = false;
-	
-	/** Session ID OM*/
-	private static String SID = null;
-	
-	/** Room id OM */
-	private static String ROOM = null;
-	
 	/** Publilc SID */
 	private static String PUBLICSID = null;
 	
-	/** Servlet URL for Function calls */
-	private static String servletUrl = null;
-	
-
 	// Visual Components
 	private JFrame jFrame = null;  //  @jve:decl-index=0:visual-constraint="44,8"
 	private JPanel jContentPane = null;

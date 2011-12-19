@@ -70,7 +70,7 @@ public class GenerateXsd {
 			f.createNewFile();
 			OutputStream ou = new FileOutputStream(f);
 			ou.write(sw.toString().getBytes());
-			
+			ou.close();
 			String[] args = { fileName+".xml", fileName+".xsd" };
 			
 			Driver.main(args);

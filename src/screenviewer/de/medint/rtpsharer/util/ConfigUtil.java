@@ -1,6 +1,5 @@
 package de.medint.rtpsharer.util;
 
-import de.medint.rtpsharer.main.Streamer;
 
 /**
  * @author sebastianwagner

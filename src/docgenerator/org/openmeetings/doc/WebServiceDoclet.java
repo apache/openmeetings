@@ -2,18 +2,14 @@ package org.openmeetings.doc;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-import org.apache.velocity.tools.generic.EscapeTool;
 
 import com.sun.javadoc.ClassDoc;
-import com.sun.javadoc.MethodDoc;
-import com.sun.javadoc.ParamTag;
 import com.sun.javadoc.RootDoc;
 import com.sun.javadoc.Tag;
 

@@ -21,12 +21,6 @@ public class CaptureRobot {
 	/** Rectangle, from which screencapture is taken*/
 	private Rectangle captureDimension;
 	
-	/** Point on x axis to define start of capture rectangle*/
-	private int captureX = 0;
-	
-	/** Point on y axis to define start of capture rectangle*/
-	private int captureY = 0;
-	
 	/** Capture Width */
 	private int captureWidth = 0;
 	
@@ -67,8 +61,6 @@ public class CaptureRobot {
 		checkParams(x, y, width, height, scaledWidth, scaledHeight);
 		
 		// Take over checked values
-		captureX = x;
-		captureY = y;
 		captureWidth = width;
 		captureHeight = height;
 		this.scaledHeight = scaledHeight;
@@ -164,7 +156,7 @@ public class CaptureRobot {
 			throw new RuntimeException("Error on scaling : input null");
 		
 		
-		BufferedImage ret = (BufferedImage)input;
+		BufferedImage ret = input;
 		
 		int w, h;
 		

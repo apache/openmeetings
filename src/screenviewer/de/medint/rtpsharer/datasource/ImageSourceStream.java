@@ -168,7 +168,7 @@ class ImageSourceStream implements PushBufferStream, Runnable {
  		    if (started && transferHandler != null) {
  			transferHandler.transferData(this);
  			try {
- 			    Thread.currentThread().sleep( 10 );
+ 			    Thread.sleep( 10 );
  			} catch (InterruptedException ise) {
  			}
  		    }
@@ -200,7 +200,7 @@ class ImageSourceStream implements PushBufferStream, Runnable {
 
 	public Object getControl(String controlType) {
 	       try {
-	          Class  cls = Class.forName(controlType);
+	          Class<?> cls = Class.forName(controlType);
 	          Object cs[] = getControls();
 	          for (int i = 0; i < cs.length; i++) {
 	             if (cls.isInstance(cs[i]))

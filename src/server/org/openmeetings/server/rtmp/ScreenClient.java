@@ -5,15 +5,6 @@ package org.openmeetings.server.rtmp;
 import java.io.IOException;
 
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
-import org.red5.io.IStreamableFile;
-import org.red5.io.ITag;
-import org.red5.io.ITagWriter;
-import org.red5.io.ITagReader;
-import org.red5.io.flv.impl.FLVService;
-import org.red5.io.flv.impl.FLV;
-import org.red5.io.flv.impl.FLVReader;
-import org.red5.io.flv.impl.Tag;
-import org.red5.io.IoConstants;
 import org.red5.io.utils.ObjectMap;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.event.IEvent;
@@ -21,10 +12,10 @@ import org.red5.server.api.event.IEventDispatcher;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.net.rtmp.Channel;
-import org.red5.server.net.rtmp.RTMPClient;
-import org.red5.server.net.rtmp.INetStreamEventHandler;
-import org.red5.server.net.rtmp.RTMPConnection;
 import org.red5.server.net.rtmp.ClientExceptionHandler;
+import org.red5.server.net.rtmp.INetStreamEventHandler;
+import org.red5.server.net.rtmp.RTMPClient;
+import org.red5.server.net.rtmp.RTMPConnection;
 import org.red5.server.net.rtmp.codec.RTMP;
 import org.red5.server.net.rtmp.event.AudioData;
 import org.red5.server.net.rtmp.event.IRTMPEvent;
@@ -32,11 +23,8 @@ import org.red5.server.net.rtmp.event.Notify;
 import org.red5.server.net.rtmp.event.VideoData;
 import org.red5.server.net.rtmp.message.Header;
 import org.red5.server.net.rtmp.status.StatusCodes;
-import org.red5.server.net.rtmp.event.SerializeUtils;
 import org.red5.server.stream.AbstractClientStream;
 import org.red5.server.stream.IStreamData;
-import org.red5.server.stream.message.RTMPMessage;
-
 import org.slf4j.Logger;
 
 /**
@@ -62,18 +50,6 @@ public class ScreenClient extends RTMPClient implements INetStreamEventHandler,
     private String playName;
 
     private RTMPConnection conn;
-
-    private ITagWriter writer;
-
-    private ITagReader reader;
-
-    private int videoTs = 0;
-
-    private int audioTs = 0;
-
-    private int kt = 0;
-
-    private int kt2 = 0;
 
     //private ByteBuffer buffer;
 
@@ -107,7 +83,8 @@ public class ScreenClient extends RTMPClient implements INetStreamEventHandler,
         super.onInvoke( conn, channel, header, notify, rtmp );
 
         try {
-            ObjectMap< String, String > map = (ObjectMap) notify.getCall().getArguments()[ 0 ];
+            @SuppressWarnings("unchecked")
+			ObjectMap< String, String > map = (ObjectMap<String, String>) notify.getCall().getArguments()[ 0 ];
             String code = map.get( "code" );
 
             if ( StatusCodes.NS_PLAY_STOP.equals( code ) ) {
@@ -137,11 +114,6 @@ public class ScreenClient extends RTMPClient implements INetStreamEventHandler,
 
         createdPlayStream = false;
         startPublish = false;
-
-        videoTs = 0;
-        audioTs = 0;
-        kt = 0;
-        kt2 = 0;
 
         try {
             connect( host, port, app, this );
@@ -188,8 +160,9 @@ public class ScreenClient extends RTMPClient implements INetStreamEventHandler,
 
         logger.debug( "onStreamEvent " + notify );
 
-        ObjectMap map = (ObjectMap) notify.getCall().getArguments()[ 0 ];
-        String code = (String) map.get( "code" );
+        @SuppressWarnings("unchecked")
+		ObjectMap< String, String > map = (ObjectMap< String, String >) notify.getCall().getArguments()[ 0 ];
+        String code = map.get( "code" );
 
         if ( StatusCodes.NS_PUBLISH_START.equals( code ) ) {
             logger.debug( "onStreamEvent Publish start" );

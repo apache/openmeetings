@@ -32,22 +32,22 @@ public class TestNavi extends AbstractOpenmeetingsSpringTest {
 
             Long organization_id = iter.next().getOrganisation()
                     .getOrganisation_id();
-            List ll = mService.getNavi(sessionData.getSession_id(), 1, organization_id);
+            List<Naviglobal> ll = mService.getNavi(sessionData.getSession_id(), 1, organization_id);
 
             System.out.println("NaviGlobal size: " + ll.size());
 
-            for (Iterator it2 = ll.iterator(); it2.hasNext();) {
-                Naviglobal navigl = (Naviglobal) it2.next();
+            for (Iterator<Naviglobal> it2 = ll.iterator(); it2.hasNext();) {
+                Naviglobal navigl = it2.next();
                 System.out.println(navigl.getLabel().getValue());
-                List s = navigl.getMainnavi();
+                List<Navimain> s = navigl.getMainnavi();
 
-                for (Iterator it3 = s.iterator(); it3.hasNext();) {
-                    Navimain navim = (Navimain) it3.next();
+                for (Iterator<Navimain> it3 = s.iterator(); it3.hasNext();) {
+                    Navimain navim = it3.next();
                     System.out.println("-->" + navim.getLabel().getValue());
 
-                    for (Iterator it4 = navim.getSubnavi().iterator(); it4
+                    for (Iterator<Navisub> it4 = navim.getSubnavi().iterator(); it4
                             .hasNext();) {
-                        Navisub navis = (Navisub) it4.next();
+                        Navisub navis = it4.next();
                         System.out.println("---->"
                                 + navis.getLabel().getValue());
                     }

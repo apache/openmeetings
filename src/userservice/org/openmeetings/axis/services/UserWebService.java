@@ -1242,7 +1242,7 @@ public class UserWebService {
 	 *            asc or desc
 	 * @return
 	 */
-	public SearchResult getUsersByOrganisation(String SID,
+	public SearchResult<Users> getUsersByOrganisation(String SID,
 			long organisation_id, int start, int max, String orderby,
 			boolean asc) {
 		try {
@@ -1254,7 +1254,7 @@ public class UserWebService {
 								start, max, orderby, asc);
 			} else {
 				log.error("Need Administration Account");
-				SearchResult sResult = new SearchResult();
+				SearchResult<Users> sResult = new SearchResult<Users>();
 				sResult.setErrorId(-26L);
 				return sResult;
 			}

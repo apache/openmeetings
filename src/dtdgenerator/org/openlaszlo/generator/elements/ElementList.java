@@ -108,6 +108,7 @@ public class ElementList {
 				ou.write(sBuilder.toString().getBytes());
 
 			}
+			ou.close();
 		} catch (Exception err) {
 			err.printStackTrace();
 		}

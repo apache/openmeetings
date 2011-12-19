@@ -62,9 +62,9 @@ public class KeyCodesTest extends Frame implements KeyListener {
 		
 		System.out.println("keyPressed CHAR3 "+event.getKeyChar());
 		
-		System.out.println("keyPressed CHAR4 "+event.getKeyText(event.getKeyCode()));
+		System.out.println("keyPressed CHAR4 "+KeyEvent.getKeyText(event.getKeyCode()));
 		
-		System.out.println("keyPressed CHAR5 "+event.getKeyText(myCode));
+		System.out.println("keyPressed CHAR5 "+KeyEvent.getKeyText(myCode));
 		
 		System.out.println("keyPressed isActionKey "+event.isActionKey());
 		System.out.println("keyPressed isAltDown "+event.isAltDown());

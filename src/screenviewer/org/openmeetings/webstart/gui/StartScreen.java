@@ -1,26 +1,33 @@
 package org.openmeetings.webstart.gui;
 
+import java.awt.Color;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Date;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.BufferedImage;
-
 import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.quartz.impl.StdSchedulerFactory;
-import org.quartz.SchedulerFactory;
+import org.openmeetings.webstart.beans.ConnectionBean;
+import org.openmeetings.webstart.screen.BlankArea;
+import org.openmeetings.webstart.screen.ScreenJob;
+import org.quartz.JobDetail;
 import org.quartz.Scheduler;
+import org.quartz.SchedulerFactory;
 import org.quartz.Trigger;
 import org.quartz.TriggerUtils;
-import org.quartz.JobDetail;
-
-import org.openmeetings.webstart.beans.ConnectionBean;
-import org.openmeetings.webstart.screen.ScreenJob;
-import org.openmeetings.webstart.screen.BlankArea;
+import org.quartz.impl.StdSchedulerFactory;
 
 public class StartScreen {
 

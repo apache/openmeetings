@@ -9,17 +9,6 @@ import org.junit.Test;
 
 public class TestChatLinking extends TestCase {
 	
-	private Pattern patternUrl = null;
-	private Matcher matchers = null;
-
-	//private String url = "^(([\\w]+)?:\\/)?\\/?([^:\\/\\s]+)((\\/\\w+)*?\\/)?([\\w\\-\\.]+[^#?\\s]+)(.*)?(#[\\w\\-]+)?$";
-	private String url = "(?i)(\\b(http://|https://|www.|ftp://|file:/|mailto:)\\S+)(\\s+)";
-	private String linkBefore = "<u><FONT color=\"#0000CC\"><a href=\"";
-	private String linkMiddleOne = "\" title=\"";
-	private String linkMiddleTwo = "\" target=\"_blank\">";
-	private String linkAfter = "</a></FONT></u>";
-	private String output, protocol;
-	
 	@Test
 	public void testChatParser(){
 		try {

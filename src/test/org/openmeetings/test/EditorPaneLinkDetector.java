@@ -33,6 +33,7 @@ import javax.swing.text.html.parser.ParserDelegator;
  *  
  */
 public class EditorPaneLinkDetector extends JEditorPane {
+	private static final long serialVersionUID = 2811878994346374017L;
 
 	/**
 	 * Creates a <code>EditorPaneLinkDetector</code>.
@@ -106,6 +107,11 @@ public class EditorPaneLinkDetector extends JEditorPane {
 	}
 
 	protected class HTMLDocLinkDetector extends HTMLDocument {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1226244167782160437L;
 
 		public HTMLDocLinkDetector(StyleSheet ss) {
 			super(ss);
@@ -219,7 +225,7 @@ public class EditorPaneLinkDetector extends JEditorPane {
 
 			if (matcher.find()) {
 				String url = matcher.group(1);
-				String prefix = matcher.group(2);
+				//String prefix = matcher.group(2);
 				String endingSpaces = matcher.group(3);
 
 				// to ignore characters after the caret

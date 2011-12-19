@@ -21,7 +21,7 @@ AbstractOpenmeetingsSpringTest {
 	
 	@Test
 	public void getAppoinment() {
-		
+		log.debug("getAppoinment enter");
 		Long userId = 1L;
 		
 		Calendar starttime = GregorianCalendar.getInstance();

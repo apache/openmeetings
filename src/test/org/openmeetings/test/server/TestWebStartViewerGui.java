@@ -26,7 +26,7 @@ public class TestWebStartViewerGui extends TestCase {
 			String publicSID = "testw";
 			String record = "no";
 			
-			ClientViewerScreen clientViewerScreen = new ClientViewerScreen(url,"4445", SID, room, domain, publicSID, record,"");
+			new ClientViewerScreen(url,"4445", SID, room, domain, publicSID, record,"");
 		   
 			try {
 	            Thread.sleep(100000000);
