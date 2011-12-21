@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="conferenceMicrophonesRoom" extends="baseConferenceRoom">
+
+    <handler name="oninit">
+
+    	if (this.roomobj.hideTopBar == null || !this.roomobj.hideTopBar) {
+            new lz.conferenceMenubar(canvas._conferencemenu);
+            canvas._conferencemenu.setAttribute('visibility','visible');
+    	} else {
+    		canvas._mainbgcontentNavi.setAttribute('height',0);
+            canvas.setAttribute('naviHeight',0);
+            canvas.setAttribute('naviHeightDelta',0);
+            canvas._conferencemenu.setAttribute('visibility','hidden');
+            canvas._mainbgcontentNavi.setAttribute('visibility','hidden');
+    	}
+
+        new lz.moderationPanel(canvas._moderatormenu,{
+                    name:'_moderationPanel',align:'right',
+                    allowUserQuestions:this.roomobj.allowUserQuestions,
+                    roomName:this.roomobj.name
+                });
+
+        //,{x:this.roomobj.moderationPanelXPosition}
+
+        if(roomobj.appointment){
+            canvas.appointmentNotificationPopUp =
+            	new lz.appointmentNotificationPopUp(canvas.conferenceView,{
+            			name:'appDetail', roomobj:this.roomobj });
+        } else{
+            if ($debug) Debug.write("no appointed meeting");
+        }
+
+        if (this.roomobj.isDemoRoom) {
+            if (this.roomobj.demoTime != null) {
+                if ($debug) Debug.warn("THIS IS A DEMO ROOM THAT SHOULD CLOSE AFTER SEC: ",this.roomobj.demoTime);
+                this.meetingTimer = new lz.meetingTimer(canvas,{refObj:this,roomobj:this.roomobj});
+            }
+        }
+
+        canvas.currentBaseConferenceRoom = this;
+
+        this._chatPanelStrict.toggleopen();
+
+    </handler>
+
+    <handler name="ontabcontentleave">
+        if ($debug) Debug.write("################# ontabcontentleave:",this);
+
+        canvas.currentBaseConferenceRoom = null;
+
+        //reset the right to draw on WHiteboard as the RoomClient Object will be destroyed also
+        //on server-Side the canDraw status will be false again when you relogin the same room
+        canvas.isAllowedToDraw = true;
+
+        _mainScrollBar.setAttribute("visibility","visible");
+
+        if (canvas._videocontainer!=null){
+            canvas._videocontainer.resetAllValues();
+            canvas._videocontainer = null;
+        }
+        if (canvas._chatcontent!=null){
+            canvas._chatcontent = null;
+        }
+        if (canvas._mymod!=null){
+            canvas._mymod = null;
+        }
+
+        if (this.meetingTimer != null) {
+            this.meetingTimer.close();
+        }
+
+        if (canvas._drawarea.letterObjectIsActive){
+            canvas._drawarea.currentletterObj.destroy();
+        }
+
+        if (canvas.currentFileExplorer != null) {
+        	canvas.currentFileExplorer = null;
+        }
+
+        if (canvas.currentActivityList != null) {
+        	canvas.currentActivityList = null;
+        }
+
+        canvas._screens.clearAllSessions();
+        this.logicalRoomLeave.doCall();
+        if ($debug) Debug.write("############ this.logicalRoomLeave ",this.logicalRoomLeave);
+    </handler>
+
+    <netRemoteCallHib name="logicalRoomLeave" funcname="logicalRoomLeave" remotecontext="$once{ canvas.thishib }" >
+        <handler name="ondata" args="value">
+            if ($debug) Debug.write("############# logicalRoomLeave: ",value);
+            //this.parent.destroy();
+            canvas.thishib.reconnectAfterRoomleft = true;
+            canvas.thishib.reconnectedRoomInstance = this.parent;
+
+            // Reconnect User to default Scope
+            canvas.thishib.userScope = "hibernate";
+            var src = hib.protocollName+'://'+canvas.rtmphostlocal+':'+hib.protocollPort+'/'+canvas.webAppRootKey+'/'+hib.userScope;
+            canvas.thishib.setAttribute('src',src);
+            canvas.thishib.disconnect();
+            canvas._mainbgcontentNavi.setAttribute('height',canvas.naviHeight);
+            canvas.setAttribute('naviHeightDelta',canvas.naviHeight);
+            canvas._conferencemenu.removeAll();
+            canvas._conferencemenu.setAttribute('visibility','hidden');
+        </handler>
+    </netRemoteCallHib>
+
+    <conferenceRoomSidebar name="_sidePanel" />
+
+    <baseTabChatPanel name="_chatPanelStrict" labelid="616"
+       height="200" x="${ parent._sidePanel.width }"
+       y="${ canvas.height - (this.height) - 28 }"
+       width="${ canvas.width - parent._sidePanel.width }" />
+
+    <fixedFileExplorerWhiteboardPanel name="_whiteboard" labelid="615"
+        y="0" x="${ parent._sidePanel.width }" restricted="true"
+        width="${ canvas.width - parent._sidePanel.width }"
+        height="${ canvas.height - (parent._chatPanelStrict.height) - 28 }" />
+
+    <!--
+        ###############################
+        This is the container for all Videos
+     -->
+    <commonVideoViewContent name="_videoviewcontent" />
+
+</class>
+
+</library>

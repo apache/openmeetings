@@ -51,6 +51,8 @@
         <xs:element ref="eventRoomModule"/>
         <xs:element ref="restrictedRoomModule"/>
         <xs:element ref="interviewRoomModule"/>
+        <xs:element ref="restrictedMicrophonesRoomModule"/>
+        <xs:element ref="conferenceMicrophonesRoomModule"/>
         <xs:element ref="recordModule"/>
         <xs:element ref="userSettingsModule"/>
       </xs:sequence>
@@ -120,6 +122,8 @@
   <xs:element name="eventRoomModule" type="xs:NCName"/>
   <xs:element name="restrictedRoomModule" type="xs:NCName"/>
   <xs:element name="interviewRoomModule" type="xs:NCName"/>
+  <xs:element name="restrictedMicrophonesRoomModule" type="xs:NCName"/>
+  <xs:element name="conferenceMicrophonesRoomModule" type="xs:NCName"/>
   <xs:element name="recordModule" type="xs:NCName"/>
   <xs:element name="userSettingsModule" type="xs:NCName"/>
 </xs:schema>

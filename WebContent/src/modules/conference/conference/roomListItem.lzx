@@ -133,6 +133,10 @@
                 this.roomClassName = canvas.interviewRoomModule;
             } else if (this.roomType == 5) {
                 this.roomClassName = canvas.customRoomModule;
+            } else if (this.roomType == 6) {
+                this.roomClassName = canvas.restrictedMicrophonesRoomModule;
+            } else if (this.roomType == 7) {
+                this.roomClassName = canvas.conferenceMicrophonesRoomModule;
             } else {
 				if ($debug) Debug.warn("Not known RoomType: ",this.roomType);
 			}

@@ -26,6 +26,7 @@ import org.openmeetings.app.persistence.beans.basic.Configuration;
 import org.openmeetings.app.persistence.beans.calendar.Appointment;
 import org.openmeetings.app.persistence.beans.calendar.MeetingMember;
 import org.openmeetings.app.persistence.beans.recording.RoomClient;
+import org.openmeetings.app.persistence.beans.rooms.RoomTypes;
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.FLVRecorderService;
@@ -1378,6 +1379,30 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		return 0L;
 	}
 
+    public synchronized Boolean getMicMutedByPublicSID(String publicSID) {
+        try {
+			log.debug("*..*getMicMutedByPublicSID publicSID: " + publicSID);
+
+			IConnection current = Red5.getConnectionLocal();
+			RoomClient currentClient = this.clientListManager.getClientByPublicSID(publicSID);
+			if (currentClient == null) {
+				return true;
+			}
+
+			//Put the mod-flag to true for this client
+            Boolean muted = currentClient.getMicMuted();
+            log.debug("*..*getMicMutedByPublicSID hasFloor: " + muted);
+            if (null == muted) {
+                muted = true;
+            }
+
+            return muted;
+        } catch (Exception err) {
+			log.error("[getMicMutedByPublicSID]",err);
+		}
+		return true;
+    }
+
 	/**
 	 * Invoked by a User whenever he want to become moderator this is needed,
 	 * cause if the room has no moderator yet there is no-one he can ask to get
@@ -1621,6 +1646,12 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			this.clientListManager.updateClientByStreamId(streamid,
 					currentClient);
 
+            Rooms room = roommanagement.getRoomById(room_id);
+            RoomTypes type = room.getRoomtype();
+            if (type.getMicrophones().equals( Boolean.TRUE.toString() )) {
+                whiteBoardService.setCanGiveAudio(currentClient, true);
+            }
+
 			// Log the User
 			conferenceLogDao.addConferenceLog("roomEnter",
 					currentClient.getUser_id(), streamid, room_id,
@@ -1640,8 +1671,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 					.getRoomClients(room_id);
 
 			// appointed meeting or moderated Room?
-			Rooms room = roommanagement.getRoomById(room_id);
-
 			// Check Max Users first
 			if (room.getNumberOfPartizipants() != null
 					&& clientListRoom.size() > room.getNumberOfPartizipants()) {

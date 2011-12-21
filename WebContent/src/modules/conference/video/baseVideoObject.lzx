@@ -51,6 +51,8 @@
     <attribute name="isShowMicMute" value="false" type="boolean"/>
     
     <attribute name="isMutedByModerator" value="false" type="boolean"/>
+
+    <attribute name="isMicrophonesRoom" value="false" type="boolean"/>
 	
 	<handler name="onisremote" args="r">
 		this.isremote = r;
@@ -65,6 +67,7 @@
             	this._toolbar._showusercontext.setAttribute("visibility","hidden");
             	this._toolbar._minimize.setAttribute("visibility","hidden");
             	this._resizeview.setAttribute("visibility","hidden");
+            	this._innerbottom.setAttribute("visibility","hidden");
             	return;
             }
             
@@ -73,9 +76,9 @@
                 this._toolbar._minimize.setAttribute("visibility","hidden");
                 this._resizeview.setAttribute("visibility","hidden");
                 this._toolbar.setAttribute("visibility","hidden");
-                this._resizeview.setAttribute("visibility","hidden");
-                this._loudness.setAttribute("visibility","hidden");
+                //this._loudness.setAttribute("visibility","hidden");
                 this._innertop.setAttribute("visibility","hidden");
+                this._innerbottom.setAttribute("visibility","hidden");
                 
                 //return;
             }
@@ -90,10 +93,31 @@
             	this._toolbar._resync._tip.setAttribute("labelid",610);
             }
             this._giveExclusiveAudioView.bringToFront();
+
+            var roomType = canvas.currentRoomObject.roomtype;
+            this.isMicrophonesRoom = ('true' == roomType.microphones);
+            if (isMicrophonesRoom) {
+                this._innertop.setAttribute("bgcolor", "0xFF6600");
+                this._innerbottom.setAttribute("bgcolor", "0xFF6600");
+            } else {
+                this._innerbottom.setAttribute("visibility", "hidden");
+            }
             
         ]]>
-    
     </handler>
+
+    <netRemoteCallHib name="getMicMutedByPublicSID" funcname="getMicMutedByPublicSID" remotecontext="${ canvas.thishib }">
+        <netparam><method name="getValue">return parent.parent.publicSID;</method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+            //The onResult-Handler will be called be the rtmpconnection
+            var rcl = new Object();
+            rcl.publicSID = parent.publicSID;
+            rcl.micMuted = value;
+            canvas.setMuteStatus(rcl);
+            ]]>
+        </handler>
+    </netRemoteCallHib>
 
 	<handler name="ony">
 		<![CDATA[
@@ -330,12 +354,16 @@
                     if (this.subviews[eg].name != "_toolbar" 
                             && this.subviews[eg].name != "_innertop"
                             && this.subviews[eg].name != "_loudness"
-                            && this.subviews[eg].name != "_micView") {
+                            && this.subviews[eg].name != "_micView"
+                            && this.subviews[eg].name != "_innerbottom"
+                            && this.subviews[eg].name != "_resizeview") {
                          this.subviews[eg].setAttribute("visibility","visible");   
                     }
                 }
                 
-                
+                if (isMicrophonesRoom) {
+                    this._innerbottom.setAttribute("visibility", "visible");
+                }
             
                 this.respectRatio = true;
             }
@@ -359,9 +387,18 @@
 		        lz.Cursor.unlock();
 		    </handler>
         </text>
-	</view>	
+	</view>
+
+    <view name="_innerbottom" width="${parent.width }" y="${parent.height - 18 }"
+		  height="18" bgcolor="$once{ canvas.basebgcolorizer }">
+        <text text="${canvas.getLabelName(1434)}"
+              width="${ parent.width-2 }" fgcolor="white"
+              name="title"
+  			fontsize="9"/>
+    </view>
     
-	<view name="_loudness" x="1" y="${parent.height - 20}">
+	<view name="_loudness" x="1" 
+			y="${parent.height - 20 - ((parent._innerbottom.visible) ? 18 : 0) }">
 		<view x="2" y="2" name="loudness" resource="speaking" opacity="0.2"
 			  onmouseover="" onmouseout="" >		
 			<labelTooltip inittwice="true" labelid="372" />
@@ -378,8 +415,7 @@
 	</view>
      -->
 
-    <view name="_resizeview" x="${ this.parent.width - 17 }" 
-          y="${ this.parent.height - 17 }" 
+    <view name="_resizeview" x="${ this.parent.width - 16 }" valign="bottom"
         resource="explorer_resize_rsc" cursor="explorer_resizemouse_rsc" 
         onmousedown="this.parent.doResize(true)"
         onmouseup="this.parent.doResize(false)" >
@@ -631,9 +667,21 @@
         if (micMuted) {
             this._toolbar._mute._tip.setAttribute("labelid","1406");
             this._toolbar._mute._itemRsc.setAttribute('frame',2);
+            if (isMicrophonesRoom) {
+                var label = canvas.getLabelName(1435);
+                this._innertop.setAttribute('bgcolor', canvas.basebgcolorizer);
+                this._innerbottom.setAttribute('bgcolor', canvas.basebgcolorizer);
+                this._innerbottom.title.setAttribute('text', label);
+            }
         } else {
             this._toolbar._mute._tip.setAttribute("labelid","1405");
             this._toolbar._mute._itemRsc.setAttribute('frame',1);
+            if (isMicrophonesRoom) {
+                var label = canvas.getLabelName(1434);
+                this._innertop.setAttribute('bgcolor', "0xFF6600");
+                this._innerbottom.setAttribute('bgcolor', "0xFF6600");
+                this._innerbottom.title.setAttribute('text', label);
+            }
         }
         ]]>
     </method>

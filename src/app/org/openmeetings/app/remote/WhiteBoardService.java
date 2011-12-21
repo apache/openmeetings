@@ -334,22 +334,12 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			Long user_level = userManagement.getUserLevelByID(users_id);
 
 			if (authLevelManagement.checkUserLevel(user_level)) {
-
 				if (currentClient.getIsMod()) {
 					RoomClient rcl = this.clientListManager
 							.getClientByPublicSID(publicSID);
 
 					if (rcl != null) {
-                        rcl.setCanGiveAudio(canGiveAudio);
-						this.clientListManager.updateClientByStreamId(
-								rcl.getStreamid(), rcl);
-
-						HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
-						newMessage.put(0, "updateGiveAudioStatus");
-						newMessage.put(1, rcl);
-						this.scopeApplicationAdapter
-								.sendMessageWithClient(newMessage);
-
+                        setCanGiveAudio(rcl, canGiveAudio);
 					} else {
 						return false;
 					}
@@ -363,6 +353,18 @@ public class WhiteBoardService implements IPendingServiceCallback {
 		}
 		return null;
 	}
+
+    public void setCanGiveAudio(RoomClient rcl, boolean canGiveAudio) {
+        rcl.setCanGiveAudio(canGiveAudio);
+        this.clientListManager.updateClientByStreamId(
+                rcl.getStreamid(), rcl);
+
+        HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
+        newMessage.put(0, "updateGiveAudioStatus");
+        newMessage.put(1, rcl);
+        this.scopeApplicationAdapter
+                .sendMessageWithClient(newMessage);
+    }
 
 	public WhiteboardSyncLockObject startNewSyncprocess() {
 		try {

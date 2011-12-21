@@ -15,13 +15,12 @@
   
   <attribute name="videoInsetX" value="2" type="number" />
   <attribute name="videoInsetY" value="21" type="number" />
+  <attribute name="bottomBarWidth" value="0" type="number" />
     
   <handler name="oninit">
      <![CDATA[
         if ($debug) Debug.write("Init videoObjectPlayBroadcast ",this.name);
-     
         //Display widget defined in mother class
-        this.syncuser.bringToFront()
         this._loudness.bringToFront();
         this.showuser.bringToFront();
         this._resizeview.bringToFront();
@@ -33,12 +32,19 @@
      -->
     <method name="setDefaultVideoSize" args="w,h">
         this.setAttribute("width",w+this.videoInsetX);
-        this.setAttribute("height",h+this.videoInsetY);
+        
+        var roomType = canvas.currentRoomObject.roomtype;
+        this.isMicrophonesRoom = ('true' == roomType.microphones);
+        if (isMicrophonesRoom) {
+        	this.setAttribute("bottomBarWidth",this._innertop.height);
+        }
+        
+        this.setAttribute("height",h+this.videoInsetY+this.bottomBarWidth);
     </method>
 
 	<view name="_chatvideoinner" x="$once{ parent.videoInsetX-1 }" 
            y="$once{ parent.videoInsetY-1 }" 
-           height="${parent.height-parent.videoInsetY}" 
+           height="${parent.height-parent.videoInsetY-parent.bottomBarWidth}" 
            width="${parent.width-parent.videoInsetX}" >
         
         <attribute name="initH"/>

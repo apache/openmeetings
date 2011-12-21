@@ -496,19 +496,25 @@ public class ImportInitvalues {
 	
 	public void loadDefaultRooms(boolean createRooms) {
 
-		long conference_Id = roommanagement.addRoomType("conference");
+		long conference_Id = roommanagement.addRoomType("conference", false);
 		log.debug("conference_Id: " + conference_Id);
-		long audience_Id = roommanagement.addRoomType("audience");
+		long audience_Id = roommanagement.addRoomType("audience", false);
 		log.debug("audience_Id: " + audience_Id);
 
-		long restricted_Id = roommanagement.addRoomType("restricted");
+		long restricted_Id = roommanagement.addRoomType("restricted", false);
 		log.debug("restricted_Id: " + restricted_Id);
 
-		long interview_Id = roommanagement.addRoomType("interview");
+		long interview_Id = roommanagement.addRoomType("interview", false);
 		log.debug("interview_Id: " + interview_Id);
 
-		long custom_Id = roommanagement.addRoomType("custom");
+		long custom_Id = roommanagement.addRoomType("custom", false);
 		log.debug("custom_Id: " + custom_Id);
+
+        long restr_micro_Id = roommanagement.addRoomType("restricted microphones", true);
+		log.debug("restr_micro_Id: " + restr_micro_Id);
+
+        long conf_micro_Id = roommanagement.addRoomType("conference microphones", true);
+		log.debug("conf_micro_Id: " + conf_micro_Id);
 		
 		if (createRooms) {
 			roommanagement.addRoom(3, "public Interview Room", interview_Id, "",
@@ -530,6 +536,14 @@ public class ImportInitvalues {
 	
 			roommanagement.addRoom(3, "public Restricted Room", restricted_Id, "",
 					new Long(100), true, null, false, false, null, false, null,
+					true, false, false, "", "", "", null, null, null, false);
+
+            roommanagement.addRoom(3, "restricted Microphones Room", restr_micro_Id, "",
+					new Long(100), true, null, false, false, null, false, null,
+					true, false, false, "", "", "", null, null, null, false);
+
+            roommanagement.addRoom(3, "conference Microphones Room", conf_micro_Id, "",
+					new Long(32), true, null, false, false, null, false, null,
 					true, false, false, "", "", "", null, null, null, false);
 	
 			long room2 = roommanagement.addRoom(3, "private Conference Room",
