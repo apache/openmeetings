@@ -355,8 +355,7 @@
                             && this.subviews[eg].name != "_innertop"
                             && this.subviews[eg].name != "_loudness"
                             && this.subviews[eg].name != "_micView"
-                            && this.subviews[eg].name != "_innerbottom"
-                            && this.subviews[eg].name != "_resizeview") {
+                            && this.subviews[eg].name != "_innerbottom") {
                          this.subviews[eg].setAttribute("visibility","visible");   
                     }
                 }
@@ -389,7 +388,7 @@
         </text>
 	</view>
 
-    <view name="_innerbottom" width="${parent.width }" y="${parent.height - 18 }"
+    <view name="_innerbottom" width="${parent.width - 2}" x="1" y="${parent.height - 19}"
 		  height="18" bgcolor="$once{ canvas.basebgcolorizer }">
         <text text="${canvas.getLabelName(1434)}"
               width="${ parent.width-2 }" fgcolor="white"
