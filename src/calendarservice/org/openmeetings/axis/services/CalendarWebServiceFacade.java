@@ -37,5 +37,9 @@ public class CalendarWebServiceFacade {
 		return null;
 	}
 
+	public List<Appointment> getAppointmentByRange(String SID, Date starttime,
+			Date endtime) throws AxisFault {
+		return getCalendarServiceProxy().getAppointmentByRange(SID, starttime, endtime);
+	}
 
 }
