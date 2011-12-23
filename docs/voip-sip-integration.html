@@ -39,7 +39,7 @@ limitations under the License.
             
             
             
-            <title>Apache OpenMeetings - Port settings</title>
+            <title>Apache OpenMeetings - VoIP and SIP Integration</title>
             <link rel="stylesheet" type="text/css" href="css/openmeetings.css">
             <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
             
@@ -766,176 +766,37 @@ limitations under the License.
                                                                     <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="Default Configuration"><strong>Default Configuration</strong></a>
+          <a name="VoIP and SIP Integration"><strong>VoIP and SIP Integration</strong></a>
           <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
         </font>
       </td></tr>
       <tr><td>
         <blockquote>
-                                    <ul>
-				<li>Port 5080: HTTP (For example for file upload and download) </li>
-				<li>Port 1935: RTMP (Flash Stream and Remoting/RPC) </li>
-				<li>Port 8088: RTMP over HTTP-Tunneling (rtmpT) </li>
-			</ul>
-                                                <p>Additionally red5 uses some ports internally. However those ports
-				are not in use by OpenMeetings by default.
+                                    <p>
+				There are multiple ways to integrate with VoIP and or SIP.
+				OpenMeetings does not provide out of the box a ready to run VoIP
+				integration / integration to cell phone or usual land lane.
+				The
+				nature of such integrations is that it depends heavily on the
+				infrastructure that you are using and where you would like to
+				integrate OpenMeetings into.
+				<br />
+				<br />
+				It also depends on a number of factors of which OpenMeetings is
+				impossible to set up for you, for example setting up your VoIP
+				server or provide you with a range of telefone numbers reserved for
+				conference calls in your national phone network.
+				Such an integration
+				project is likely to become a consulting job for a
+				telecommunications consultant.
+				<br />
+				<br />
+				To get help on the integration you can contact the
+				<a href="mail-lists.html">mailing lists</a>
+				or for example somebody from the list of
+				<a href="commercial-support.html">commercial support</a>
+				.
 			</p>
-                            </blockquote>
-        </p>
-      </td></tr>
-      <tr><td><br/></td></tr>
-    </table>
-                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr><td ><!-- bgcolor="#EEEEEE" -->
-        <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="Configure alternative ports"><strong>Configure alternative ports</strong></a>
-          <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
-        </font>
-      </td></tr>
-      <tr><td>
-        <blockquote>
-                                    <p>You need to change two files: </p>
-                                                <ul>
-				<li>Server-Side configuration: $RED5_HOME/conf/red5.properties, you
-					need to restart the red5-service so that changes are online.
-				</li>
-				<li>Client-Side configuration:
-					$RED5_HOME/webapps/openmeetings/config.xml, you need to clear your
-					browser cache after changing the file.
-				</li>
-				<blockquote>Every server side configuration has a client side
-					representive
-				</blockquote>
-			</ul>
-                                                <p />
-                                                <table>
-                        <tr>
-                        <th bgcolor="#039acc" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                 Config-Name 
-            </font>
-</th>
-                                <th bgcolor="#039acc" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                 Default-value 
-            </font>
-</th>
-                                <th bgcolor="#039acc" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                 Name in red5.properties 
-            </font>
-</th>
-                                <th bgcolor="#039acc" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                 Name in config.xml 
-            </font>
-</th>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                 HTTP 
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                 5080 
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                 http.port 
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                 red5httpport 
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                 RTMP 
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                 1935 
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                 rtmp.port 
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                 rtmpport 
-            </font>
-</td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                 RTMPT 
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                 8088 
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                 rtmpt.host 
-            </font>
-</td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-                 rtmpTunnelport 
-            </font>
-</td>
-            </tr>
-            </table>
-                            </blockquote>
-        </p>
-      </td></tr>
-      <tr><td><br/></td></tr>
-    </table>
-                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr><td ><!-- bgcolor="#EEEEEE" -->
-        <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="Preventing Firewall issues"><strong>Preventing Firewall issues</strong></a>
-          <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
-        </font>
-      </td></tr>
-      <tr><td>
-        <blockquote>
-                                    <p>A common way of bypassing the firewall is to change HTTP port to
-				80 and rtmpT to 443. </p>
-                                                <p>A short description about the connection mechanism: The
-				application first tries connecting to rtmp 3 times, because rtmp is
-				the protocol that is less performance hungry. If that fails the
-				application will fallback to rtmpT. </p>
-                                                <p>Most firewalls do allow traffic on port 443 and they normally do
-				not analyse the packets, because 443 is normally SSL encrypted, so
-				the firewall should not be able to read the packets at all. </p>
-                            </blockquote>
-        </p>
-      </td></tr>
-      <tr><td><br/></td></tr>
-    </table>
-                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr><td ><!-- bgcolor="#EEEEEE" -->
-        <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="OpenMeetings over SSL"><strong>OpenMeetings over SSL</strong></a>
-          <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
-        </font>
-      </td></tr>
-      <tr><td>
-        <blockquote>
-                                    <p>You can run OpenMeetings completely over SSL. See <a href="RTMPSAndHTTPS.html">RTMPSAndHTTPS</a>. </p>
                             </blockquote>
         </p>
       </td></tr>

@@ -30,7 +30,7 @@
 				<br />
 				--&gt;
 				<br />
-				&lt;currentappname&gt;OpenMeetings 1.8.3
+				&lt;currentappname&gt;OpenMeetings 1.9.x
 				r4343&lt;/currentappname&gt;
 				<br />
 				&lt;!--
@@ -41,7 +41,7 @@
 				<br />
 				--&gt;
 				<br />
-				&lt;currentappnameurl&gt;http://openmeetings.googlecode.com&lt;/currentappnameurl&gt;
+				&lt;currentappnameurl&gt;http://incubator.apache.org/openmeetings/&lt;/currentappnameurl&gt;
 				<br />
 				&lt;!--
 				<br />
@@ -51,7 +51,7 @@
 				<br />
 				--&gt;
 				<br />
-				&lt;currentappnamebugurl&gt;http://code.google.com/p/openmeetings/issues/list&lt;/currentappnamebugurl&gt;
+				&lt;currentappnamebugurl&gt;http://incubator.apache.org/openmeetings/&lt;/currentappnamebugurl&gt;
 			</div>
 
 			<p>Addtionally the browser-bar title can be configured in the

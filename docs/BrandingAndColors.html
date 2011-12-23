@@ -112,6 +112,12 @@ limitations under the License.
 					            		currentLink = "/downloads.html".substr(1, "/downloads.html".length);
 					            	} 
 					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/commercial-support.html") > 0) {
+					            		currentLocation = "General";
+					            		currentLink = "/commercial-support.html".substr(1, "/commercial-support.html".length);
+					            	} 
+					            	
 					        				        		    										        					            					            	
 					            	else if (document.location.href.indexOf("/installation.html") > 0) {
 					            		currentLocation = "InstallationandUpgrade";
@@ -194,6 +200,12 @@ limitations under the License.
 					            	else if (document.location.href.indexOf("/LdapAndADS.html") > 0) {
 					            		currentLocation = "Integration";
 					            		currentLink = "/LdapAndADS.html".substr(1, "/LdapAndADS.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/voip-sip-integration.html") > 0) {
+					            		currentLocation = "Integration";
+					            		currentLink = "/voip-sip-integration.html".substr(1, "/voip-sip-integration.html".length);
 					            	} 
 					            	
 					        				        		    										        					            				            						            			else if (document.location.href.indexOf("/ApacheDerbyConfig.html") > 0) {
@@ -386,6 +398,8 @@ limitations under the License.
 <br/>
 	        		        	            	            	    <a href="./downloads.html">Downloads</a>
 <br/>
+	        		        	            	            	    <a href="./commercial-support.html">Commercial Support</a>
+<br/>
 	        		            	</div>
         	<h3><a href="#InstallationandUpgrade">Installation and Upgrade</a></h3>
     	<div  width="100%">
@@ -425,6 +439,8 @@ limitations under the License.
 	        		        	            	            	    <a href="./RestAPI.html">REST API Sample</a>
 <br/>
 	        		        	            	            	    <a href="./LdapAndADS.html">Ldap and ADS</a>
+<br/>
+	        		        	            	            	    <a href="./voip-sip-integration.html">VoIP and SIP</a>
 <br/>
 	        		            	</div>
         	<h3><a href="#Configuration">Configuration</a></h3>
@@ -510,6 +526,10 @@ limitations under the License.
 			        	</font>
 		        			        		            			            <font color="#000000" face="arial,helvetica,sanserif" size="2pt">
 			            	<li>    <a href="./downloads.html">Downloads</a>
+</li>
+			        	</font>
+		        			        		            			            <font color="#000000" face="arial,helvetica,sanserif" size="2pt">
+			            	<li>    <a href="./commercial-support.html">Commercial Support</a>
 </li>
 			        	</font>
 		        			        		        </ul>
@@ -636,6 +656,10 @@ limitations under the License.
 			            	<li>    <a href="./LdapAndADS.html">Ldap and ADS</a>
 </li>
 			        	</font>
+		        			        		            			            <font color="#000000" face="arial,helvetica,sanserif" size="2pt">
+			            	<li>    <a href="./voip-sip-integration.html">VoIP and SIP</a>
+</li>
+			        	</font>
 		        			        		        </ul>
 	        </div>
 	      </div>
@@ -759,7 +783,7 @@ limitations under the License.
 				<br />
 				--&gt;
 				<br />
-				&lt;currentappname&gt;OpenMeetings 1.8.3
+				&lt;currentappname&gt;OpenMeetings 1.9.x
 				r4343&lt;/currentappname&gt;
 				<br />
 				&lt;!--
@@ -770,7 +794,7 @@ limitations under the License.
 				<br />
 				--&gt;
 				<br />
-				&lt;currentappnameurl&gt;http://openmeetings.googlecode.com&lt;/currentappnameurl&gt;
+				&lt;currentappnameurl&gt;http://incubator.apache.org/openmeetings/&lt;/currentappnameurl&gt;
 				<br />
 				&lt;!--
 				<br />
@@ -780,7 +804,7 @@ limitations under the License.
 				<br />
 				--&gt;
 				<br />
-				&lt;currentappnamebugurl&gt;http://code.google.com/p/openmeetings/issues/list&lt;/currentappnamebugurl&gt;
+				&lt;currentappnamebugurl&gt;http://incubator.apache.org/openmeetings/&lt;/currentappnamebugurl&gt;
 			</div>
                                                 <p>Addtionally the browser-bar title can be configured in the
 				Openmeetings &gt; Administration &gt; Configuration.

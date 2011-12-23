@@ -248,18 +248,10 @@
 					<a href="http://www.openlaszlo.org/getstarted" rel="nofollow">ScreenCast</a>
 				</li>
 				<li>
-					<a href="http://code.google.com/p/openmeetings/source/browse"
+					<a href="http://incubator.apache.org/openmeetings/svn.html"
 						rel="nofollow">
 						browse SVN source
 					</a>
-				</li>
-				<li>
-					<a href="http://code.google.com/p/openmeetings/source/list" rel="nofollow">SVN
-						change history
-					</a>
-				</li>
-				<li>
-					<a href="/p/openmeetings/wiki/BuildSources">old Instructions</a>
 				</li>
 			</ul>
 
