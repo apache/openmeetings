@@ -29,13 +29,13 @@ public class RoomWebServiceFacade {
 				.getProperty(HTTPConstants.MC_HTTP_SERVLETCONTEXT);
 	}
 
-	private RoomWebService geRoomServiceProxy() {
+	private RoomWebService getRoomServiceProxy() {
 		try {
 			ApplicationContext context = WebApplicationContextUtils
 					.getWebApplicationContext(getServletContext());
 			return (RoomWebService) context.getBean("roomWebService");
 		} catch (Exception err) {
-			log.error("[geRoomServiceProxy]", err);
+			log.error("[getRoomServiceProxy]", err);
 		}
 		return null;
 	}
@@ -49,7 +49,7 @@ public class RoomWebServiceFacade {
 
 	public Rooms[] getRoomsPublic(String SID, Long roomtypes_id)
 			throws AxisFault {
-		return this.geRoomServiceProxy().getRoomsPublic(SID, roomtypes_id);
+		return this.getRoomServiceProxy().getRoomsPublic(SID, roomtypes_id);
 	}
 
 	/**
@@ -61,55 +61,55 @@ public class RoomWebServiceFacade {
 	 */
 	public boolean deleteFlvRecording(String SID, Long flvRecordingId)
 			throws AxisFault {
-		return this.geRoomServiceProxy().deleteFlvRecording(SID, flvRecordingId);
+		return this.getRoomServiceProxy().deleteFlvRecording(SID, flvRecordingId);
 	}
 
 	public FLVRecordingReturn[] getFlvRecordingByExternalUserId(String SID,
 			String externalUserId) throws AxisFault {
-		return this.geRoomServiceProxy().getFlvRecordingByExternalUserId(SID,
+		return this.getRoomServiceProxy().getFlvRecordingByExternalUserId(SID,
 				externalUserId);
 	}
 
 	public FLVRecordingReturn[] getFlvRecordingByExternalRoomTypeAndCreator(
 			String SID, String externalRoomType, Long insertedBy)
 			throws AxisFault {
-		return this.geRoomServiceProxy()
+		return this.getRoomServiceProxy()
 				.getFlvRecordingByExternalRoomTypeAndCreator(SID,
 						externalRoomType, insertedBy);
 	}
 
 	public List<FlvRecording> getFlvRecordingByExternalRoomTypeByList(
 			String SID, String externalRoomType) throws AxisFault {
-		return this.geRoomServiceProxy()
+		return this.getRoomServiceProxy()
 				.getFlvRecordingByExternalRoomTypeByList(SID, externalRoomType);
 	}
 
 	public FlvRecording[] getFlvRecordingByExternalRoomType(String SID,
 			String externalRoomType) throws AxisFault {
-		return this.geRoomServiceProxy().getFlvRecordingByExternalRoomType(SID,
+		return this.getRoomServiceProxy().getFlvRecordingByExternalRoomType(SID,
 				externalRoomType);
 	}
 
 	public FlvRecording[] getFlvRecordingByRoomId(String SID, Long roomId)
 			throws AxisFault {
-		return this.geRoomServiceProxy().getFlvRecordingByRoomId(SID, roomId);
+		return this.getRoomServiceProxy().getFlvRecordingByRoomId(SID, roomId);
 	}
 
 	public RoomTypes[] getRoomTypes(String SID) throws AxisFault {
-		return this.geRoomServiceProxy().getRoomTypes(SID);
+		return this.getRoomServiceProxy().getRoomTypes(SID);
 	}
 
 	public RoomCountBean[] getRoomCounters(String SID, Integer roomId1,
 			Integer roomId2, Integer roomId3, Integer roomId4, Integer roomId5,
 			Integer roomId6, Integer roomId7, Integer roomId8, Integer roomId9,
 			Integer roomId10) throws AxisFault {
-		return this.geRoomServiceProxy().getRoomCounters(SID, roomId1, roomId2,
+		return this.getRoomServiceProxy().getRoomCounters(SID, roomId1, roomId2,
 				roomId3, roomId4, roomId5, roomId6, roomId7, roomId8, roomId9,
 				roomId10);
 	}
 
 	public Rooms getRoomById(String SID, long rooms_id) {
-		return this.geRoomServiceProxy().getRoomById(SID, rooms_id);
+		return this.getRoomServiceProxy().getRoomById(SID, rooms_id);
 	}
 
 	/**
@@ -121,25 +121,25 @@ public class RoomWebServiceFacade {
 	@Deprecated
 	public Rooms getRoomWithCurrentUsersById(String SID, long rooms_id)
 			throws AxisFault {
-		return this.geRoomServiceProxy().getRoomWithCurrentUsersById(SID,
+		return this.getRoomServiceProxy().getRoomWithCurrentUsersById(SID,
 				rooms_id);
 	}
 
 	public RoomReturn getRoomWithClientObjectsById(String SID, long rooms_id)
 			throws AxisFault {
-		return this.geRoomServiceProxy().getRoomWithClientObjectsById(SID,
+		return this.getRoomServiceProxy().getRoomWithClientObjectsById(SID,
 				rooms_id);
 	}
 
 	public SearchResult<Rooms> getRooms(String SID, int start, int max,
 			String orderby, boolean asc) throws AxisFault {
-		return this.geRoomServiceProxy()
+		return this.getRoomServiceProxy()
 				.getRooms(SID, start, max, orderby, asc);
 	}
 
 	public SearchResult<Rooms> getRoomsWithCurrentUsers(String SID, int start,
 			int max, String orderby, boolean asc) throws AxisFault {
-		return this.geRoomServiceProxy().getRoomsWithCurrentUsers(SID, start,
+		return this.getRoomServiceProxy().getRoomsWithCurrentUsers(SID, start,
 				max, orderby, asc);
 	}
 
@@ -182,7 +182,7 @@ public class RoomWebServiceFacade {
 			Boolean showFilesPanel, Integer filesPanelXPosition,
 			Integer filesPanelYPosition, Integer filesPanelHeight,
 			Integer filesPanelWidth) throws AxisFault {
-		return this.geRoomServiceProxy().addRoom(SID, name, roomtypes_id,
+		return this.getRoomServiceProxy().addRoom(SID, name, roomtypes_id,
 				comment, numberOfPartizipants, ispublic, videoPodWidth,
 				videoPodHeight, videoPodXPosition, videoPodYPosition,
 				moderationPanelXPosition, showWhiteBoard,
@@ -196,7 +196,7 @@ public class RoomWebServiceFacade {
 			Long roomtypes_id, String comment, Long numberOfPartizipants,
 			Boolean ispublic, Boolean appointment, Boolean isDemoRoom,
 			Integer demoTime, Boolean isModeratedRoom) throws AxisFault {
-		return this.geRoomServiceProxy().addRoomWithModeration(SID, name,
+		return this.getRoomServiceProxy().addRoomWithModeration(SID, name,
 				roomtypes_id, comment, numberOfPartizipants, ispublic,
 				appointment, isDemoRoom, demoTime, isModeratedRoom);
 	}
@@ -224,7 +224,7 @@ public class RoomWebServiceFacade {
 			Boolean ispublic, Boolean appointment, Boolean isDemoRoom,
 			Integer demoTime, Boolean isModeratedRoom,
 			Boolean allowUserQuestions) throws AxisFault {
-		return this.geRoomServiceProxy().addRoomWithModerationAndQuestions(SID,
+		return this.getRoomServiceProxy().addRoomWithModerationAndQuestions(SID,
 				name, roomtypes_id, comment, numberOfPartizipants, ispublic,
 				appointment, isDemoRoom, demoTime, isModeratedRoom,
 				allowUserQuestions);
@@ -235,7 +235,7 @@ public class RoomWebServiceFacade {
 			Long numberOfPartizipants, Boolean ispublic, Boolean appointment,
 			Boolean isDemoRoom, Integer demoTime, Boolean isModeratedRoom,
 			Boolean allowUserQuestions, Boolean isAudioOnly) throws AxisFault {
-		return this.geRoomServiceProxy()
+		return this.getRoomServiceProxy()
 				.addRoomWithModerationQuestionsAndAudioType(SID, name,
 						roomtypes_id, comment, numberOfPartizipants, ispublic,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
@@ -263,7 +263,7 @@ public class RoomWebServiceFacade {
 			Boolean ispublic, Boolean appointment, Boolean isDemoRoom,
 			Integer demoTime, Boolean isModeratedRoom, Long externalRoomId,
 			String externalRoomType) throws AxisFault {
-		return this.geRoomServiceProxy().getRoomIdByExternalId(SID, name,
+		return this.getRoomServiceProxy().getRoomIdByExternalId(SID, name,
 				roomtypes_id, comment, numberOfPartizipants, ispublic,
 				appointment, isDemoRoom, demoTime, isModeratedRoom,
 				externalRoomId, externalRoomType);
@@ -309,7 +309,7 @@ public class RoomWebServiceFacade {
 			Boolean showFilesPanel, Integer filesPanelXPosition,
 			Integer filesPanelYPosition, Integer filesPanelHeight,
 			Integer filesPanelWidth, Boolean appointment) throws AxisFault {
-		return this.geRoomServiceProxy().updateRoom(SID, rooms_id, name,
+		return this.getRoomServiceProxy().updateRoom(SID, rooms_id, name,
 				roomtypes_id, comment, numberOfPartizipants, ispublic,
 				videoPodWidth, videoPodHeight, videoPodXPosition,
 				videoPodYPosition, moderationPanelXPosition, showWhiteBoard,
@@ -323,7 +323,7 @@ public class RoomWebServiceFacade {
 			Long roomtypes_id, String comment, Long numberOfPartizipants,
 			Boolean ispublic, Boolean appointment, Boolean isDemoRoom,
 			Integer demoTime, Boolean isModeratedRoom) throws AxisFault {
-		return this.geRoomServiceProxy().updateRoomWithModeration(SID, room_id,
+		return this.getRoomServiceProxy().updateRoomWithModeration(SID, room_id,
 				name, roomtypes_id, comment, numberOfPartizipants, ispublic,
 				appointment, isDemoRoom, demoTime, isModeratedRoom);
 	}
@@ -333,17 +333,17 @@ public class RoomWebServiceFacade {
 			Long numberOfPartizipants, Boolean ispublic, Boolean appointment,
 			Boolean isDemoRoom, Integer demoTime, Boolean isModeratedRoom,
 			Boolean allowUserQuestions) throws AxisFault {
-		return this.geRoomServiceProxy().updateRoomWithModeration(SID, room_id,
+		return this.getRoomServiceProxy().updateRoomWithModeration(SID, room_id,
 				name, roomtypes_id, comment, numberOfPartizipants, ispublic,
 				appointment, isDemoRoom, demoTime, isModeratedRoom);
 	}
 
 	public Long deleteRoom(String SID, long rooms_id) throws AxisFault {
-		return this.geRoomServiceProxy().deleteRoom(SID, rooms_id);
+		return this.getRoomServiceProxy().deleteRoom(SID, rooms_id);
 	}
 
 	public Boolean kickUser(String SID_Admin, Long room_id) throws AxisFault {
-		return this.geRoomServiceProxy().kickUser(SID_Admin, room_id);
+		return this.getRoomServiceProxy().kickUser(SID_Admin, room_id);
 	}
 
 	public Long addRoomWithModerationAndExternalType(String SID, String name,
@@ -351,7 +351,7 @@ public class RoomWebServiceFacade {
 			Boolean ispublic, Boolean appointment, Boolean isDemoRoom,
 			Integer demoTime, Boolean isModeratedRoom, String externalRoomType)
 			throws AxisFault {
-		return this.geRoomServiceProxy().addRoomWithModerationAndExternalType(
+		return this.getRoomServiceProxy().addRoomWithModerationAndExternalType(
 				SID, name, roomtypes_id, comment, numberOfPartizipants,
 				ispublic, appointment, isDemoRoom, demoTime, isModeratedRoom,
 				externalRoomType);
@@ -363,7 +363,7 @@ public class RoomWebServiceFacade {
 			Boolean isDemoRoom, Integer demoTime, Boolean isModeratedRoom,
 			String externalRoomType, Boolean allowUserQuestions,
 			Boolean isAudioOnly) throws AxisFault {
-		return this.geRoomServiceProxy()
+		return this.getRoomServiceProxy()
 				.addRoomWithModerationExternalTypeAndAudioType(SID, name,
 						roomtypes_id, comment, numberOfPartizipants, ispublic,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
@@ -376,7 +376,7 @@ public class RoomWebServiceFacade {
 			Integer demoTime, Boolean isModeratedRoom, String externalRoomType,
 			Boolean allowUserQuestions, Boolean isAudioOnly,
 			Boolean waitForRecording, Boolean allowRecording) throws AxisFault {
-		return this.geRoomServiceProxy()
+		return this.getRoomServiceProxy()
 				.addRoomWithModerationAndRecordingFlags(SID, name,
 						roomtypes_id, comment, numberOfPartizipants, ispublic,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
@@ -391,7 +391,7 @@ public class RoomWebServiceFacade {
 			String externalRoomType, Boolean allowUserQuestions,
 			Boolean isAudioOnly, Boolean waitForRecording,
 			Boolean allowRecording, Boolean hideTopBar) throws AxisFault {
-		return this.geRoomServiceProxy()
+		return this.getRoomServiceProxy()
 				.addRoomWithModerationExternalTypeAndTopBarOption(SID, name,
 						roomtypes_id, comment, numberOfPartizipants, ispublic,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
@@ -439,7 +439,7 @@ public class RoomWebServiceFacade {
 			Boolean isPasswordProtected, String invitationpass, Integer valid,
 			String validFromDate, String validFromTime, String validToDate,
 			String validToTime) throws AxisFault {
-		return this.geRoomServiceProxy().getInvitationHash(SID, username,
+		return this.getRoomServiceProxy().getInvitationHash(SID, username,
 				room_id, isPasswordProtected, invitationpass, valid,
 				validFromDate, validFromTime, validToDate, validToTime);
 
@@ -505,7 +505,7 @@ public class RoomWebServiceFacade {
 			String invitationpass, Integer valid, String validFromDate,
 			String validFromTime, String validToDate, String validToTime,
 			Long language_id, Boolean sendMail) throws AxisFault {
-		return this.geRoomServiceProxy().sendInvitationHash(SID, username,
+		return this.getRoomServiceProxy().sendInvitationHash(SID, username,
 				message, baseurl, email, subject, room_id, conferencedomain,
 				isPasswordProtected, invitationpass, valid, validFromDate,
 				validFromTime, validToDate, validToTime, language_id, sendMail);
@@ -564,7 +564,7 @@ public class RoomWebServiceFacade {
 			Long room_id, String conferencedomain, Boolean isPasswordProtected,
 			String invitationpass, Integer valid, Date fromDate, Date toDate,
 			Long language_id, Boolean sendMail) throws AxisFault {
-		return this.geRoomServiceProxy().sendInvitationHashWithDateObject(SID,
+		return this.getRoomServiceProxy().sendInvitationHashWithDateObject(SID,
 				username, message, baseurl, email, subject, room_id,
 				conferencedomain, isPasswordProtected, invitationpass, valid,
 				fromDate, toDate, language_id, sendMail);
@@ -572,14 +572,14 @@ public class RoomWebServiceFacade {
 
 	public List<RoomReturn> getRoomsWithCurrentUsersByList(String SID,
 			int start, int max, String orderby, boolean asc) throws AxisFault {
-		return this.geRoomServiceProxy().getRoomsWithCurrentUsersByList(SID,
+		return this.getRoomServiceProxy().getRoomsWithCurrentUsersByList(SID,
 				start, max, orderby, asc);
 	}
 
 	public List<RoomReturn> getRoomsWithCurrentUsersByListAndType(String SID,
 			int start, int max, String orderby, boolean asc,
 			String externalRoomType) throws AxisFault {
-		return this.geRoomServiceProxy().getRoomsWithCurrentUsersByListAndType(
+		return this.getRoomServiceProxy().getRoomsWithCurrentUsersByListAndType(
 				SID, start, max, orderby, asc, externalRoomType);
 	}
 
@@ -591,7 +591,7 @@ public class RoomWebServiceFacade {
 			String validFromTime, String validToDate, String validToTime,
 			Boolean isPasswordProtected, String password, Long reminderTypeId,
 			String redirectURL) throws AxisFault {
-		return this.geRoomServiceProxy()
+		return this.getRoomServiceProxy()
 				.addRoomWithModerationAndExternalTypeAndStartEnd(SID, name,
 						roomtypes_id, comment, numberOfPartizipants, ispublic,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
@@ -603,7 +603,7 @@ public class RoomWebServiceFacade {
 	public Long addMeetingMemberRemindToRoom(String SID, Long room_id,
 			String firstname, String lastname, String email, String baseUrl,
 			Long language_id) throws AxisFault {
-		return this.geRoomServiceProxy().addMeetingMemberRemindToRoom(SID,
+		return this.getRoomServiceProxy().addMeetingMemberRemindToRoom(SID,
 				room_id, firstname, lastname, email, baseUrl, language_id);
 	}
 
@@ -611,14 +611,14 @@ public class RoomWebServiceFacade {
 			String firstname, String lastname, String email, String baseUrl,
 			Long language_id, String jNameTimeZone, String invitorName)
 			throws AxisFault {
-		return this.geRoomServiceProxy().addExternalMeetingMemberRemindToRoom(
+		return this.getRoomServiceProxy().addExternalMeetingMemberRemindToRoom(
 				SID, room_id, firstname, lastname, email, baseUrl, language_id,
 				jNameTimeZone, invitorName);
 	}
 
 	public int closeRoom(String SID, Long room_id, Boolean status)
 			throws AxisFault {
-		return this.geRoomServiceProxy().closeRoom(SID, room_id, status);
+		return this.getRoomServiceProxy().closeRoom(SID, room_id, status);
 	}
 
 }

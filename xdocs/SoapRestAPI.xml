@@ -28,7 +28,8 @@
 					<div style="margin-left:20px">
 						<i>The Service contains methods to login and create hash to
 							directly enter
-							conference rooms, recordings or the application in general
+							conference rooms, recordings or the application in
+							general
 						</i>
 					</div>
 				</div>
@@ -39,7 +40,8 @@
 					<br />
 					<div style="margin-left:20px">
 						<i>RoomService contains methods to manipulate rooms and create
-							invitation hash</i>
+							invitation hash
+						</i>
 					</div>
 				</div>
 				<div>
@@ -51,6 +53,17 @@
 						<i>Contains methods to import and upload files into the Files
 							section of the
 							conference room and the personal drive of any user
+						</i>
+					</div>
+				</div>
+				<div>
+					<a href="CalendarService.html" target="_BLANK">
+						<b>CalendarService</b>
+					</a>
+					<br />
+					<div style="margin-left:20px">
+						<i>CalendarService contains methods to create, edit delete
+							calendar meetings
 						</i>
 					</div>
 				</div>

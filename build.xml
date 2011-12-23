@@ -30,6 +30,7 @@
 	<property name="fileservice.src.dir" value="${basedir}/src/fileservice" />
 	<property name="roomservice.src.dir" value="${basedir}/src/roomservice" />
 	<property name="userservice.src.dir" value="${basedir}/src/userservice" />
+	<property name="calendarservice.src.dir" value="${basedir}/src/calendarservice" />
 
 	<!-- Doclet Classes -->
 	<property name="doclet.src.dir" value="${basedir}/src/docgenerator" />
@@ -511,6 +512,9 @@
 		<javac debug="on" debuglevel="lines,vars,source" srcdir="${userservice.src.dir}" destdir="${main.out.dir}">
 			<classpath refid="compile.classpath" />
 		</javac>
+		<javac debug="on" debuglevel="lines,vars,source" srcdir="${calendarservice.src.dir}" destdir="${main.out.dir}">
+			<classpath refid="compile.classpath" />
+		</javac>
 	</target>
 
 	<target name="compile.screen.share" depends="clean.classes, prepare.mkdir, resources">
@@ -612,6 +616,7 @@
 			<fileset dir="${fileservice.src.dir}" />
 			<fileset dir="${roomservice.src.dir}" />
 			<fileset dir="${userservice.src.dir}" />
+			<fileset dir="${calendarservice.src.dir}" />
 		</rat:report>
 	</target>
 
@@ -627,6 +632,7 @@
 			<source file="src/userservice/org/openmeetings/axis/services/UserWebService.java" />
 			<source file="src/roomservice/org/openmeetings/axis/services/RoomWebService.java" />
 			<source file="src/fileservice/org/openmeetings/axis/services/FileWebService.java" />
+			<source file="src/calendarservice/org/openmeetings/axis/services/CalendarWebService.java" />
 			<doclet name="org.openmeetings.doc.WebServiceDoclet" pathref="build.webservice.classpath">
 			</doclet>
 		</javadoc>
@@ -655,6 +661,7 @@
 			<source file="src/userservice/org/openmeetings/axis/services/UserWebService.java" />
 			<source file="src/roomservice/org/openmeetings/axis/services/RoomWebService.java" />
 			<source file="src/fileservice/org/openmeetings/axis/services/FileWebService.java" />
+			<source file="src/calendarservice/org/openmeetings/axis/services/CalendarWebService.java" />
 			<doclet name="org.openmeetings.doc.WebServiceDoclet" pathref="build.webservice.classpath">
 			</doclet>
 		</javadoc>
