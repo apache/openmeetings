@@ -18,6 +18,12 @@
 				this.invitation_pass.setAttribute('visibility','visible');
 			} else {
 				this.showLoginStep();
+                if ($debug) Debug.write("invitationQuickLoader:oninit userlang = [",userlang,"]; canvas.lang = [",canvas.language_id,"]");
+                if (canvas.language_id > 0) {
+                    this.getRoomClients.doCall();
+                } else {
+                    this.showLoginStep();
+                }
 			}
 		</handler>
 		
@@ -141,10 +147,15 @@
 	            <handler name="ondata" args="value">
 	            	//The onResult-Handler will be called be the rtmpconnection
                   	<![CDATA[
+                        var selVal = canvas.language_id;
+                        var found = false;
                   		for (var i=0;i<value.length;i++){
 	                  		this.parent.addItem(value[i].name,value[i].language_id);
+                            if (value[i].language_id == selVal) {
+                                found = true;
+                            }
 		                }
-                		this.parent.selectItem(value[0].language_id);
+                		this.parent.selectItem((found) ? selVal : value[0].language_id);
 		            ]]>
 				</handler>  
 			</netRemoteCallHib>

@@ -7,7 +7,7 @@
 		label: send invitation
 	-->
 	<class name="inviteMainWindow" extends="labelExplorerBox" labelid="214" 
-			docking="true" closable="true" width="464" x="200" y="100" height="410">
+			docking="true" closable="true" width="464" x="200" y="100" height="440">
 		
 		<attribute name="roomType" value="conference" type="string" />
 		<attribute name="baseUrl" value="http://www.denic.de" type="string" />
@@ -113,9 +113,29 @@
          			   fontsize="11" style="componentStyle">
             <labeldTextListItem datapath="timeZoneSet:/item" text="$path{ 'frontEndLabel/text()' }" 
                 value="$path{ 'jname/text()' }" />
-        </resetCombobox>    
+        </resetCombobox>
          
-		<!-- label: send -->
+		<labelText labelid="59" width="200" y="374" x="4" />
+        <resetCombobox name="_languages" editable="false" y="374" width="270" x="120"
+         			   fontsize="11" style="componentStyle">
+            <netRemoteCallHib name="getLanguages" funcname="languageservice.getLanguages" remotecontext="$once{ canvas.thishib }" >
+                <handler name="oninit">
+                    this.doCall();
+                </handler>
+
+                <handler name="ondata" args="value">
+                    //The onResult-Handler will be called be the rtmpconnection
+                    <![CDATA[
+                        for (var i=0; i<value.length; i++) {
+                            parent.addItem(value[i].name,value[i].language_id);
+                        }
+                        parent.selectItem(canvas.language_id);
+                    ]]>
+                </handler>
+            </netRemoteCallHib>
+        </resetCombobox>
+
+        <!-- label: send -->
 		<simpleLabelButton labelid="218" x="$once{ parent.width-260 }" width="120" y="$once{ parent.height-26 }">
 			<handler name="onclick">
 				<![CDATA[
@@ -167,8 +187,8 @@
 	            <netparam name="validFromTime"><method name="getValue">return parent.parent._timeFrom.getText();</method></netparam>
 	            <netparam name="validToDate"><method name="getValue">return parent.parent._valid_to.getDate();</method></netparam>
 	            <netparam name="validToTime"><method name="getValue">return parent.parent._timeTo.getText();</method></netparam>
-                <netparam><method name="getValue">return hib.userlang;</method></netparam>
-                <netparam><method name="getValue">return parent.parent._timeZone.getValue();</method></netparam>
+                <netparam name="language_id"><method name="getValue">return parent.parent._languages.getValue();</method></netparam>
+                <netparam name="jNameTimeZone"><method name="getValue">return parent.parent._timeZone.getValue();</method></netparam>
                 
 	            <handler name="ondata" args="value">
 	            	<![CDATA[

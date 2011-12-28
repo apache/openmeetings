@@ -577,7 +577,15 @@ public class Invitationmanagement {
 	// ---------------------------------------------------------------------------------------------------------
 
 	/**
-	 * 
+     * @param username
+     * @param message
+     * @param baseurl
+     * @param email
+     * @param subject
+     * @param invitationsHash
+     * @param dStart
+     * @param dEnd
+	 * @param language_id   If it is >0 then "&language=" is added to the link
 	 */
 	private String sendInvitionLink(String username, String message,
 			String baseurl, String email, String subject,
@@ -586,6 +594,10 @@ public class Invitationmanagement {
 
 			String invitation_link = baseurl + "?invitationHash="
 					+ invitationsHash;
+
+            if (language_id > 0) {
+                invitation_link += "&language=" + language_id.toString();
+            }
 
 			// Long default_lang_id = Long.valueOf(cfgManagement.
 			// getConfKey(3,"default_lang_id").getConf_value()).longValue();
@@ -800,6 +812,13 @@ public class Invitationmanagement {
 	 * @param email
 	 * @param subject
 	 * @param invitationsHash
+	 * @param appointMentId
+     * @param organizer_userId
+     * @param invitor
+     * @param language_id   If it is >0 then "&language=" is added to the link
+     * @param starttime
+     * @param endtime
+     * @param timezone
 	 * @return
 	 */
 	public String sendInvitionIcalLink(String username, String message,
@@ -811,6 +830,10 @@ public class Invitationmanagement {
 
 			String invitation_link = baseurl + "?invitationHash="
 					+ invitationsHash;
+
+            if (language_id > 0) {
+                invitation_link += "&language=" + language_id.toString();
+            }
 
 			// Long default_lang_id = Long.valueOf(cfgManagement.
 			// getConfKey(3,"default_lang_id").getConf_value()).longValue();

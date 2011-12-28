@@ -57,6 +57,8 @@ public class InvitationService implements IPendingServiceCallback {
 	 * @param validFromTime
 	 * @param validToDate
 	 * @param validToTime
+	 * @param language_id
+     * @param jNameTimeZone
 	 * @return
 	 */
 	public String sendInvitationHash(String SID, String username,
