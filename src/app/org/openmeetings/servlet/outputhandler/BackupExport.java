@@ -1394,8 +1394,12 @@ public class BackupExport {
 			room_organisation.addElement("organisation_id").addCDATA(
 					formatString(""
 							+ roomOrg.getOrganisation().getOrganisation_id()));
-			room_organisation.addElement("rooms_id").addCDATA(
-					formatString("" + roomOrg.getRoom().getRooms_id()));
+			if (roomOrg.getRoom() != null) {
+				room_organisation.addElement("rooms_id").addCDATA(
+						formatString("" + roomOrg.getRoom().getRooms_id()));
+			} else {
+				room_organisation.addElement("rooms_id").addCDATA("0");
+			}
 			room_organisation.addElement("deleted").addCDATA(
 					formatString("" + roomOrg.getDeleted()));
 
