@@ -302,7 +302,7 @@ public class LdapLoginManagement {
 			ldap_user_attr_lastname = LDAP_KEY_LASTNAME;
 		}
 		if (ldap_user_attr_firstname == null) {
-			ldap_user_attr_firstname = LDAP_KEY_LASTNAME;
+			ldap_user_attr_firstname = LDAP_KEY_FIRSTNAME;
 		}
 		if (ldap_user_attr_mail == null) {
 			ldap_user_attr_mail = LDAP_KEY_MAIL;
