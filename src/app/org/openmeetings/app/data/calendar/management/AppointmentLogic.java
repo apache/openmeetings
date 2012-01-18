@@ -153,7 +153,8 @@ public class AppointmentLogic {
 				"", // sipNumber
 				"", // conferencePIN
 				null, // ownerID
-				null, null, false //
+				null, null, false, false //
+, false, false, false, false
 				);
 
 		log.debug("Appointmentlogic.saveAppointment : Room - " + room_id);

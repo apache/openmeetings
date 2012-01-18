@@ -41,6 +41,11 @@
         this.waitForRecording.setValue(false);
         this.allowRecording.setValue(false);
         this.hideTopBar.setValue(false);
+        this.hideChat.setValue(false);        
+        this.hideActivitiesAndActions.setValue(false);
+        this.hideFilesExplorer.setValue(false);
+        this.hideActionsMenu.setValue(false);
+        this.hideScreenSharing.setValue(false);
 	</handler>
 	
     <handler name="ondelete" >
@@ -156,6 +161,36 @@
                 this.hideTopBar.setValue(false);
             }
             
+            if (obj.hideChat != null && obj.hideChat){
+                this.hideChat.setValue(true);
+            } else {
+                this.hideChat.setValue(false);
+            }
+            
+            if (obj.hideActivitiesAndActions != null && obj.hideActivitiesAndActions){
+                this.hideActivitiesAndActions.setValue(true);
+            } else {
+                this.hideActivitiesAndActions.setValue(false);
+            }
+            
+            if (obj.hideFilesExplorer != null && obj.hideFilesExplorer){
+                this.hideFilesExplorer.setValue(true);
+            } else {
+                this.hideFilesExplorer.setValue(false);
+            }
+            
+            if (obj.hideActionsMenu != null && obj.hideActionsMenu){
+                this.hideActionsMenu.setValue(true);
+            } else {
+                this.hideActionsMenu.setValue(false);
+            }
+            
+            if (obj.hideScreenSharing != null && obj.hideScreenSharing){
+                this.hideScreenSharing.setValue(true);
+            } else {
+                this.hideScreenSharing.setValue(false);
+            }
+            
             this._listRoomModerators.getRoomModeratorsByRoomId.doCall();
         ]]>
     </method>
@@ -241,6 +276,17 @@
             this.sendObject["allowRecording"] = parent.allowRecording.getValue();
             
             this.sendObject["hideTopBar"] = parent.hideTopBar.getValue();
+            
+            this.sendObject["hideChat"] = parent.hideChat.getValue();
+            
+            this.sendObject["hideActivitiesAndActions"] = parent.hideActivitiesAndActions.getValue();
+            
+            this.sendObject["hideFilesExplorer"] = parent.hideFilesExplorer.getValue();
+            
+            this.sendObject["hideActionsMenu"] = parent.hideActionsMenu.getValue();
+            
+            this.sendObject["hideScreenSharing"] = parent.hideScreenSharing.getValue();
+            
             
             var ownerId = parent.ownerId.getText();
             if (ownerId == "") ownerId = 0;
@@ -464,7 +510,21 @@
  
     <labelText labelid="1357" width="200" y="900" resize="false" x="2" />  
         <labelCheckbox name="hideTopBar" width="270" y="900" x="130" fontsize="11" />
- 
+        
+    <labelText labelid="1436" width="200" y="920" resize="false" x="2" />  
+        <labelCheckbox name="hideChat" width="270" y="920" x="130" fontsize="11" />
+        
+    <labelText labelid="1437" width="200" y="940" resize="false" x="2" />  
+        <labelCheckbox name="hideActivitiesAndActions" width="270" y="940" x="130" fontsize="11" />
+        
+    <labelText labelid="1438" width="200" y="960" resize="false" x="2" />  
+        <labelCheckbox name="hideFilesExplorer" width="270" y="960" x="130" fontsize="11" />
+    
+    <labelText labelid="1439" width="200" y="980" resize="false" x="2" />  
+        <labelCheckbox name="hideActionsMenu" width="270" y="980" x="130" fontsize="11" />
+ 	
+ 	<labelText labelid="1440" width="200" y="1000" resize="false" x="2" />  
+        <labelCheckbox name="hideScreenSharing" width="270" y="1000" x="130" fontsize="11" />
                                   
     <!-- RoomClient List Right Side -->
     <labelText labelid="587" width="300" y="40" resize="false" 

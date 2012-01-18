@@ -704,10 +704,14 @@ public class Roommanagement {
 
 	/**
 	 * adds a new Record to the table rooms
-	 * 
 	 * @param name
 	 * @param roomtypes_id
 	 * @param ispublic
+	 * @param hideActivitiesAndActions TODO
+	 * @param hideFilesExplorer TODO
+	 * @param hideActionsMenu TODO
+	 * @param hideScreenSharing TODO
+	 * 
 	 * @return id of the newly created room or NULL
 	 */
 	public Long addRoom(long user_level, String name, long roomtypes_id,
@@ -718,7 +722,8 @@ public class Roommanagement {
 			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean isClosed,
 			String redirectURL, String sipNumber, String conferencePin,
 			Long ownerId, Boolean waitForRecording, Boolean allowRecording,
-			Boolean hideTopBar) {
+			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, Boolean hideFilesExplorer, 
+			Boolean hideActionsMenu, Boolean hideScreenSharing) {
 
 		try {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
@@ -752,6 +757,12 @@ public class Roommanagement {
 
 				r.setWaitForRecording(waitForRecording);
 				r.setAllowRecording(allowRecording);
+				
+				r.setHideChat(hideChat);
+				r.setHideActivitiesAndActions(hideActivitiesAndActions);
+				r.setHideActionsMenu(hideActionsMenu);
+				r.setHideFilesExplorer(hideFilesExplorer);
+				r.setHideScreenSharing(hideScreenSharing);	
 
 				// handle SIP Issues
 				OpenXGReturnObject openXGReturnObject = openXGHttpClient
@@ -1259,12 +1270,16 @@ public class Roommanagement {
 
 	/**
 	 * Update a Record in the rooms table
-	 * 
 	 * @param rooms_id
 	 * @param roomtypes_id
 	 * @param name
 	 * @param ispublic
 	 * @param comment
+	 * @param hideActivitiesAndActions TODO
+	 * @param hideFilesExplorer TODO
+	 * @param hideActionsMenu TODO
+	 * @param hideScreenSharing TODO
+	 * 
 	 * @return
 	 */
 	public Long updateRoom(long user_level, long rooms_id, long roomtypes_id,
@@ -1275,7 +1290,8 @@ public class Roommanagement {
 			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean isClosed,
 			String redirectURL, String sipNumber, String conferencePin,
 			Long ownerId, Boolean waitForRecording, Boolean allowRecording,
-			Boolean hideTopBar) {
+			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, 
+			Boolean hideFilesExplorer, Boolean hideActionsMenu, Boolean hideScreenSharing) {
 		try {
 
 			log.debug("*** updateRoom numberOfPartizipants: "
@@ -1287,7 +1303,8 @@ public class Roommanagement {
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
 						roomModerators, allowUserQuestions, isAudioOnly,
 						isClosed, redirectURL, sipNumber, conferencePin,
-						ownerId, waitForRecording, allowRecording, hideTopBar);
+						ownerId, waitForRecording, allowRecording, hideTopBar, hideChat, 
+						hideActivitiesAndActions, hideFilesExplorer, hideActionsMenu, hideScreenSharing);
 
 			}
 
@@ -1305,7 +1322,7 @@ public class Roommanagement {
 			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean isClosed,
 			String redirectURL, String sipNumber, String conferencePin,
 			Long ownerId, Boolean waitForRecording, Boolean allowRecording,
-			Boolean hideTopBar) {
+			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, Boolean hideFilesExplorer, Boolean hideActionsMenu, Boolean hideScreenSharing) {
 		try {
 			log.debug("*** updateRoom numberOfPartizipants: "
 					+ numberOfPartizipants);
@@ -1337,6 +1354,12 @@ public class Roommanagement {
 
 			r.setWaitForRecording(waitForRecording);
 			r.setAllowRecording(allowRecording);
+			
+			r.setHideChat(hideChat);
+			r.setHideActivitiesAndActions(hideActivitiesAndActions);
+			r.setHideActionsMenu(hideActionsMenu);
+			r.setHideFilesExplorer(hideFilesExplorer);
+			r.setHideScreenSharing(hideScreenSharing);			
 
 			if (r.getRooms_id() == null) {
 				em.persist(r);
@@ -1694,7 +1717,7 @@ public class Roommanagement {
 						"", // redirectURL
 						"", // sipNumber
 						"", // conferencePin
-						ownerId, null, null, false);
+						ownerId, null, null, false, false, false, false, false, false);
 
 				if (rooms_id != null) {
 					return this.getRoomById(rooms_id);

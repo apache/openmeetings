@@ -618,7 +618,13 @@ public class ConferenceService {
 								.valueOf(argObjectMap.get("allowRecording")
 										.toString()), Boolean
 								.valueOf(argObjectMap.get("hideTopBar")
-										.toString()));
+										.toString()), 
+								Boolean.valueOf(argObjectMap.get("hideChat").toString()),
+								Boolean.valueOf(argObjectMap.get("hideActivitiesAndActions").toString()),
+								Boolean.valueOf(argObjectMap.get("hideFilesExplorer").toString()),
+								Boolean.valueOf(argObjectMap.get("hideActionsMenu").toString()),
+								Boolean.valueOf(argObjectMap.get("hideScreenSharing").toString())						
+						);
 			} else if (rooms_id > 0) {
 				return roommanagement
 						.updateRoom(
@@ -659,9 +665,15 @@ public class ConferenceService {
 								Boolean.valueOf(argObjectMap.get(
 										"waitForRecording").toString()),
 								Boolean.valueOf(argObjectMap.get(
-										"allowRecording").toString()), Boolean
-										.valueOf(argObjectMap.get("hideTopBar")
-												.toString()));
+										"allowRecording").toString()), 
+								Boolean.valueOf(argObjectMap.get("hideTopBar").toString()),
+								Boolean.valueOf(argObjectMap.get("hideChat").toString()),
+								Boolean.valueOf(argObjectMap.get("hideActivitiesAndActions").toString()),
+								Boolean.valueOf(argObjectMap.get("hideFilesExplorer").toString()),
+								Boolean.valueOf(argObjectMap.get("hideActionsMenu").toString()),
+								Boolean.valueOf(argObjectMap.get("hideScreenSharing").toString())
+								);
+												
 			}
 
 		} catch (Exception e) {

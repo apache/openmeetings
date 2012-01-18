@@ -81,7 +81,7 @@
 				value="quit" /> -->
 		</_labelMenu>
 
-		<_labelMenu labelid="635" width="250">
+		<_labelMenu labelid="635" width="250" name="_actions">
 
 			<handler name="oninit">
 	                <![CDATA[
@@ -94,6 +94,11 @@
 	                    	lblPollResult.setCommand(cmd_pollResults_nokey);
 	                    	lblPollVote.setCommand(cmd_checkPollVoted_nokey);
 	                    }
+	                    //hideActionsMenu
+	                    if(canvas.currentRoomObj.hideActionsMenu){	                    	
+	                    	parent.mbarcontent.subviews[2].setAttribute("visible", false);
+	                    }
+	                    
 	                ]]>
 			</handler>
 			<!-- <_labelMenuItem labelid="1097" enabled="${ canvas.ismoderator }"> 
@@ -215,6 +220,12 @@
 			</_labelMenu>
 
 			<_labelMenu labelid="635" width="250">
+				<handler name="oninit">
+					//hideActionsMenu
+					if(canvas.currentRoomObj.hideActionsMenu){	                    	
+	                    parent.mbarcontent.subviews[1].setAttribute("visible", false);
+	                }
+				</handler>
 				<!-- <_labelMenuItem labelid="1097" enabled="${ canvas.ismoderator }"> 
 					<handler name="onselect" args="sel"> canvas.thishib.closeRoom.room_id = hib.currentroomid; 
 					canvas.thishib.closeRoom.isClosed = true; canvas.thishib.closeRoom.doCall(); 
@@ -307,6 +318,12 @@
 			visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }">
 
 			<_labelMenu labelid="635" width="250">
+				<handler name="oninit">
+					//hideActionsMenu
+					if(canvas.currentRoomObj.hideActionsMenu){						                  	
+		                   parent.mbarcontent.subviews[0].setAttribute("visible", false);
+		             }
+	             </handler>
 				<!-- <_labelMenuItem labelid="1097" enabled="${ canvas.ismoderator }"> 
 					<handler name="onselect" args="sel"> canvas.thishib.closeRoom.room_id = hib.currentroomid; 
 					canvas.thishib.closeRoom.isClosed = true; canvas.thishib.closeRoom.doCall(); 

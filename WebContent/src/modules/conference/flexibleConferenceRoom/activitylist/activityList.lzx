@@ -283,7 +283,8 @@
 
 <class name="activityList" y="${ parent.height - 200 }" x="0"
 	   extends="basePropertyPanelWhiteboard" height="200" 
-         width="$once{ parent.width-18 }" labelid="1363" >
+         width="$once{ parent.width-18 }" labelid="1363" 
+         visibility="${((canvas.currentRoomObj.hideActivitiesAndActions == true) ? 'hidden':'visible')}">
     
     <handler name="oninit">
         canvas.currentActivityList = this;

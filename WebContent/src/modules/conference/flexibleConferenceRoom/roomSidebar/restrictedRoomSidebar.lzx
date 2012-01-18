@@ -87,7 +87,7 @@
                 currentIconRsc="users_tab_btn" x="0" labelid="613" />
         
         <conferenceRoomSidebarTabButton name="filesTabButton" 
-                visible="${ (!parent.parent.restricted) ? true : (((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false ))) }"                     
+                visible="${ (!parent.parent.restricted) ? true : ((canvas.currentRoomObj.hideFilesExplorer) ? false : ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false ))) }"                     
                 currentIconRsc="files_tab_btn"
                 x="$once{ ((parent.width-2)/2)+2 }" labelid="614" />
         
@@ -98,10 +98,11 @@
     
     <restrictedUserList name="_videocontainer" y="36" 
 			    width="$once{ parent.width-10 }" 
-			   height="${ parent.height-236 }" />
+			   height="${ parent.height-((canvas.currentRoomObj.hideActivitiesAndActions == true) ? 36:236) }" />
 			   
     <view y="${ parent.height - 201 }" width="$once{ parent.width-10 }" height="2"
-        name="_border" bgcolor="$once{ canvas.basebgcolorizer }" />
+        name="_border" bgcolor="$once{ canvas.basebgcolorizer }" 
+        visibility="${((canvas.currentRoomObj.hideActivitiesAndActions == true) ? 'hidden':'visible')}"/>
                
     <activityList name="_activityList" />
     

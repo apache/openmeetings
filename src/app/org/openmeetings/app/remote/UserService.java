@@ -955,7 +955,7 @@ public class UserService {
 							"", // sipNumber
 							"", // conferencePIN
 							null, // ownerId
-							null, null, false);
+							null, null, false, false, false, false, false, false);
 
 					room = roommanagement.getRoomById(room_id);
 

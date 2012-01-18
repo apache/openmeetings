@@ -116,6 +116,21 @@ public class Rooms implements Serializable {
     
 	@Column(name = "hide_top_bar")
 	private Boolean hideTopBar = false;
+	
+	@Column(name = "hide_chat")
+	private Boolean hideChat = false;
+	
+	@Column(name = "hide_activities_and_actions")
+	private Boolean hideActivitiesAndActions = false;
+	
+	@Column(name = "hide_files_explorer")
+	private Boolean hideFilesExplorer = false;
+	
+	@Column(name = "hide_actions_menu")
+	private Boolean hideActionsMenu = false;
+	
+	@Column(name = "hide_screen_sharing")
+	private Boolean hideScreenSharing = false;
     
 	public String getComment() {
 		return comment;
@@ -298,6 +313,41 @@ public class Rooms implements Serializable {
 	}
 	public void setHideTopBar(Boolean hideTopBar) {
 		this.hideTopBar = hideTopBar;
+	}
+	
+	public Boolean getHideChat() {
+		return hideChat;
+	}
+	public void setHideChat(Boolean hideChat) {
+		this.hideChat = hideChat;
+	}
+	
+	public Boolean getHideActivitiesAndActions() {
+		return hideActivitiesAndActions;
+	}
+	public void setHideActivitiesAndActions(Boolean hideActivitiesAndActions) {
+		this.hideActivitiesAndActions = hideActivitiesAndActions;
+	}
+	
+	public Boolean getHideFilesExplorer() {
+		return hideFilesExplorer;
+	}
+	public void setHideFilesExplorer(Boolean hideFilesExplorer) {
+		this.hideFilesExplorer = hideFilesExplorer;
+	}
+	
+	public Boolean getHideActionsMenu() {
+		return hideActionsMenu;
+	}
+	public void setHideActionsMenu(Boolean hideActionsMenu) {
+		this.hideActionsMenu = hideActionsMenu;
+	}
+	
+	public Boolean getHideScreenSharing() {
+		return hideScreenSharing;
+	}
+	public void setHideScreenSharing(Boolean hideScreenSharing) {
+		this.hideScreenSharing = hideScreenSharing;
 	}
 	
 	

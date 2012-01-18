@@ -672,7 +672,7 @@ public class RoomWebService {
 			return roommanagement.addRoom(user_level, name, roomtypes_id,
 					comment, numberOfPartizipants, ispublic, null, false,
 					false, null, false, null, true, false, false, "", "", "",
-					null, null, null, false);
+					null, null, null, false, false, false, false, false, false);
 		} catch (Exception err) {
 			log.error("[addRoom] ", err);
 		}
@@ -718,7 +718,7 @@ public class RoomWebService {
 			return roommanagement.addRoom(user_level, name, roomtypes_id,
 					comment, numberOfPartizipants, ispublic, null, appointment,
 					isDemoRoom, demoTime, isModeratedRoom, null, true, false,
-					false, "", "", "", null, null, null, false);
+					false, "", "", "", null, null, null, false, false, false, false, false, false);
 		} catch (Exception err) {
 			log.error("[addRoomWithModeration] ", err);
 		}
@@ -771,7 +771,7 @@ public class RoomWebService {
 					comment, numberOfPartizipants, ispublic, null, appointment,
 					isDemoRoom, demoTime, isModeratedRoom, null,
 					allowUserQuestions, false, false, "", "", "", null, null,
-					null, false);
+					null, false, false, false, false, false, false);
 		} catch (Exception err) {
 			log.error("[addRoomWithModerationAndQuestions] ", err);
 		}
@@ -826,7 +826,7 @@ public class RoomWebService {
 					comment, numberOfPartizipants, ispublic, null, appointment,
 					isDemoRoom, demoTime, isModeratedRoom, null,
 					allowUserQuestions, isAudioOnly, false, "", "", "", null,
-					null, null, false);
+					null, null, false, false, false, false, false, false);
 		} catch (Exception err) {
 			log.error("[addRoomWithModerationQuestionsAndAudioType] ", err);
 			throw new AxisFault(err.getMessage());
@@ -949,7 +949,7 @@ public class RoomWebService {
 						roomtypes_id, name, ispublic, comment,
 						numberOfPartizipants, null, appointment, false, null,
 						false, null, true, false, false, "", "", "", null,
-						null, null, false);
+						null, null, false, false, false, false, false, false);
 			}
 		} catch (Exception err) {
 			log.error("[addRoom] ", err);
@@ -1000,7 +1000,7 @@ public class RoomWebService {
 						name, ispublic, comment, numberOfPartizipants, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
 						null, true, false, false, "", "", "", null, null, null,
-						false);
+						false, false, false, false, false, false);
 			}
 		} catch (Exception err) {
 			log.error("[updateRoomWithModeration] ", err);
@@ -1054,7 +1054,7 @@ public class RoomWebService {
 						name, ispublic, comment, numberOfPartizipants, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
 						null, allowUserQuestions, false, false, "", "", "",
-						null, null, null, false);
+						null, null, null, false, false, false, false, false, false);
 			}
 		} catch (Exception err) {
 			log.error("[updateRoomWithModerationAndQuestions] ", err);

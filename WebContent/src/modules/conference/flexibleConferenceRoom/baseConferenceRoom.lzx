@@ -102,6 +102,15 @@
                 	
                 }
             }
+            
+            if(this._chatPanelStrict){
+	            if (this.roomobj.hideChat == null || !this.roomobj.hideChat) {            
+	           	 	this._chatPanelStrict.setAttribute('visibility','visible');
+		    	} else {
+		    		this._chatPanelStrict.setAttribute('visibility','hidden');    		   		
+		    	}
+            }
+            
         ]]>
     </handler>
     

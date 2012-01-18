@@ -4317,4 +4317,19 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1435" name="micro is off">
     <value>Microphone is muted</value>
   </string>
+  <string id="1436" name="hide_chat">
+    <value>Hide chat</value>
+  </string>
+  <string id="1437" name="hide_activities_and_actions">
+    <value>Hide activities</value>
+  </string>
+  <string id="1438" name="hide_files_explorer">
+    <value>Hide files explorer</value>
+  </string>
+  <string id="1439" name="hide_actions_menu">
+    <value>Hide actions menu</value>
+  </string>
+  <string id="1440" name="hide_screen_sharing">
+    <value>Hide screen sharing</value>
+  </string>
 </language>

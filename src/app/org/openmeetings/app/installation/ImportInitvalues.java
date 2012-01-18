@@ -519,48 +519,48 @@ public class ImportInitvalues {
 		if (createRooms) {
 			roommanagement.addRoom(3, "public Interview Room", interview_Id, "",
 					new Long(16), true, null, false, false, null, false, null,
-					true, false, false, "", "", "", null, null, null, false);
+					true, false, false, "", "", "", null, null, null, false, false, false, false, false, false);
 	
 			roommanagement.addRoom(3, "public Conference Room", conference_Id, "",
 					new Long(32), true, null, false, false, null, false, null,
-					true, false, false, "", "", "", null, null, null, false);
+					true, false, false, "", "", "", null, null, null, false, false, false, false, false, false);
 	
 			roommanagement.addRoom(3, "public Video Only Room", conference_Id, "",
 					new Long(32), true, null, false, false, null, false, null,
-					true, false, false, "", "", "", null, null, null, false);
+					true, false, false, "", "", "", null, null, null, false, false, false, false, false, false);
 	
 			roommanagement.addRoom(3, "public Video And Whiteboard Room",
 					conference_Id, "", new Long(32), true, null, false, false,
 					null, false, null, true, false, false, "", "", "", null, null,
-					null, false);
+					null, false, false, false, false, false, false);
 	
 			roommanagement.addRoom(3, "public Restricted Room", restricted_Id, "",
 					new Long(100), true, null, false, false, null, false, null,
-					true, false, false, "", "", "", null, null, null, false);
+					true, false, false, "", "", "", null, null, null, false, false, false, false, false, false);
 
             roommanagement.addRoom(3, "restricted Microphones Room", restr_micro_Id, "",
 					new Long(100), true, null, false, false, null, false, null,
-					true, false, false, "", "", "", null, null, null, false);
+					true, false, false, "", "", "", null, null, null, false, false, false, false, false, false);
 
             roommanagement.addRoom(3, "conference Microphones Room", conf_micro_Id, "",
 					new Long(32), true, null, false, false, null, false, null,
-					true, false, false, "", "", "", null, null, null, false);
+					true, false, false, "", "", "", null, null, null, false, false, false, false, false, false);
 	
 			long room2 = roommanagement.addRoom(3, "private Conference Room",
 					conference_Id, "", new Long(32), false, null, false, false,
 					null, false, null, true, false, false, "", "", "", null, null,
-					null, false);
+					null, false, false, false, false, false, false);
 	
 			roommanagement.addRoomToOrganisation(3, room2, 1);
 	
 			roommanagement.addRoom(3, "public Audience Room", audience_Id, "",
 					new Long(32), true, null, false, false, null, false, null,
-					true, false, false, "", "", "", null, null, null, false);
+					true, false, false, "", "", "", null, null, null, false, false, false, false, false, false);
 	
 			long room4 = roommanagement.addRoom(3, "private Audience Room",
 					audience_Id, "", new Long(32), false, null, false, false, null,
 					false, null, true, false, false, "", "", "", null, null, null,
-					false);
+					false, false, false, false, false, false);
 	
 			roommanagement.addRoomToOrganisation(3, room4, 1);
 		}

@@ -69,10 +69,11 @@
     
     <interviewUserList name="_videocontainer" y="36"
 			   width="$once{ parent.width-10 }" 
-               height="${ parent.height-236 }" />
+               height="${ parent.height-((canvas.currentRoomObj.hideActivitiesAndActions == true) ? 36:236) }" />
                
     <view y="${ parent.height - 201 }" width="$once{ parent.width-10 }" height="2"
-        name="_border" bgcolor="$once{ canvas.basebgcolorizer }" />
+        name="_border" bgcolor="$once{ canvas.basebgcolorizer }" 
+        visibility="${((canvas.currentRoomObj.hideActivitiesAndActions == true) ? 'hidden':'visible')}"/>
                
     <activityList name="_activityList" />
     
