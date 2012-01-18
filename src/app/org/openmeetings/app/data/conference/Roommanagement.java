@@ -711,7 +711,7 @@ public class Roommanagement {
 	 * @param hideFilesExplorer TODO
 	 * @param hideActionsMenu TODO
 	 * @param hideScreenSharing TODO
-	 * 
+	 * @param hideWhiteboard TODO
 	 * @return id of the newly created room or NULL
 	 */
 	public Long addRoom(long user_level, String name, long roomtypes_id,
@@ -723,7 +723,7 @@ public class Roommanagement {
 			String redirectURL, String sipNumber, String conferencePin,
 			Long ownerId, Boolean waitForRecording, Boolean allowRecording,
 			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, Boolean hideFilesExplorer, 
-			Boolean hideActionsMenu, Boolean hideScreenSharing) {
+			Boolean hideActionsMenu, Boolean hideScreenSharing, Boolean hideWhiteboard) {
 
 		try {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
@@ -763,7 +763,8 @@ public class Roommanagement {
 				r.setHideActionsMenu(hideActionsMenu);
 				r.setHideFilesExplorer(hideFilesExplorer);
 				r.setHideScreenSharing(hideScreenSharing);	
-
+				r.setHideWhiteboard(hideWhiteboard);
+				
 				// handle SIP Issues
 				OpenXGReturnObject openXGReturnObject = openXGHttpClient
 						.openSIPgCreateConference();
@@ -1279,7 +1280,7 @@ public class Roommanagement {
 	 * @param hideFilesExplorer TODO
 	 * @param hideActionsMenu TODO
 	 * @param hideScreenSharing TODO
-	 * 
+	 * @param hideWhiteboard TODO
 	 * @return
 	 */
 	public Long updateRoom(long user_level, long rooms_id, long roomtypes_id,
@@ -1291,7 +1292,7 @@ public class Roommanagement {
 			String redirectURL, String sipNumber, String conferencePin,
 			Long ownerId, Boolean waitForRecording, Boolean allowRecording,
 			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, 
-			Boolean hideFilesExplorer, Boolean hideActionsMenu, Boolean hideScreenSharing) {
+			Boolean hideFilesExplorer, Boolean hideActionsMenu, Boolean hideScreenSharing, Boolean hideWhiteboard) {
 		try {
 
 			log.debug("*** updateRoom numberOfPartizipants: "
@@ -1304,7 +1305,7 @@ public class Roommanagement {
 						roomModerators, allowUserQuestions, isAudioOnly,
 						isClosed, redirectURL, sipNumber, conferencePin,
 						ownerId, waitForRecording, allowRecording, hideTopBar, hideChat, 
-						hideActivitiesAndActions, hideFilesExplorer, hideActionsMenu, hideScreenSharing);
+						hideActivitiesAndActions, hideFilesExplorer, hideActionsMenu, hideScreenSharing, hideWhiteboard);
 
 			}
 
@@ -1322,7 +1323,8 @@ public class Roommanagement {
 			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean isClosed,
 			String redirectURL, String sipNumber, String conferencePin,
 			Long ownerId, Boolean waitForRecording, Boolean allowRecording,
-			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, Boolean hideFilesExplorer, Boolean hideActionsMenu, Boolean hideScreenSharing) {
+			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, Boolean hideFilesExplorer, 
+			Boolean hideActionsMenu, Boolean hideScreenSharing, Boolean hideWhiteboard) {
 		try {
 			log.debug("*** updateRoom numberOfPartizipants: "
 					+ numberOfPartizipants);
@@ -1359,7 +1361,8 @@ public class Roommanagement {
 			r.setHideActivitiesAndActions(hideActivitiesAndActions);
 			r.setHideActionsMenu(hideActionsMenu);
 			r.setHideFilesExplorer(hideFilesExplorer);
-			r.setHideScreenSharing(hideScreenSharing);			
+			r.setHideScreenSharing(hideScreenSharing);
+			r.setHideWhiteboard(hideWhiteboard);
 
 			if (r.getRooms_id() == null) {
 				em.persist(r);
@@ -1717,7 +1720,7 @@ public class Roommanagement {
 						"", // redirectURL
 						"", // sipNumber
 						"", // conferencePin
-						ownerId, null, null, false, false, false, false, false, false);
+						ownerId, null, null, false, false, false, false, false, false, false);
 
 				if (rooms_id != null) {
 					return this.getRoomById(rooms_id);

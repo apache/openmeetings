@@ -193,7 +193,10 @@
     		//if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ",publicSID);
     		
     		var videoContainer = parent.parent._videoviewcontent;
-            
+            if(canvas.currentRoomObj.hideWhiteboard){
+            	videoContainer = _videoviewcontent_hideWhiteboard._inn;
+            }
+    		
     		//for (var i=0;i<this._videoviewcontent.subviews.length;i++){
     		//	if ($debug) Debug.write("getVideoObjectByBroadCastId6 broadcastId: ",this._videoviewcontent.subviews[i].broadcastId);
     		//	if ($debug) Debug.write("getVideoObjectByBroadCastId7 streamid,user_id: ",this._videoviewcontent.subviews[i].clientVars.streamid,this._videoviewcontent.subviews[i].clientVars.user_id);
@@ -383,7 +386,9 @@
 				this.broadCastViewRef = obj;
 			} else {
                 var videoContainer = parent.parent._videoviewcontent;
-                
+                if(canvas.currentRoomObj.hideWhiteboard){
+            		videoContainer = _videoviewcontent_hideWhiteboard._inn;
+            	}
                 //Get a Free VideoView Slot
                 var freePos = videoContainer.getVideoObjectFreePos(40, 100, 100);
                 
@@ -412,7 +417,9 @@
 			}
 			
             var videoContainer = parent.parent._videoviewcontent;
-            
+            if(canvas.currentRoomObj.hideWhiteboard){
+            	videoContainer = _videoviewcontent_hideWhiteboard._inn;
+            }
             //Get a Free VideoView Slot
             var freePos = videoContainer.getVideoObjectFreePos(40, 100, 100);
             

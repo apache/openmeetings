@@ -46,6 +46,7 @@
         this.hideFilesExplorer.setValue(false);
         this.hideActionsMenu.setValue(false);
         this.hideScreenSharing.setValue(false);
+        this.hideWhiteboard.setValue(false);        
 	</handler>
 	
     <handler name="ondelete" >
@@ -191,6 +192,12 @@
                 this.hideScreenSharing.setValue(false);
             }
             
+            if (obj.hideWhiteboard != null && obj.hideWhiteboard){
+                this.hideWhiteboard.setValue(true);
+            } else {
+                this.hideWhiteboard.setValue(false);
+            }
+            
             this._listRoomModerators.getRoomModeratorsByRoomId.doCall();
         ]]>
     </method>
@@ -287,6 +294,7 @@
             
             this.sendObject["hideScreenSharing"] = parent.hideScreenSharing.getValue();
             
+            this.sendObject["hideWhiteboard"] = parent.hideWhiteboard.getValue();            
             
             var ownerId = parent.ownerId.getText();
             if (ownerId == "") ownerId = 0;
@@ -525,6 +533,9 @@
  	
  	<labelText labelid="1440" width="200" y="1000" resize="false" x="2" />  
         <labelCheckbox name="hideScreenSharing" width="270" y="1000" x="130" fontsize="11" />
+        
+    <labelText labelid="1441" width="200" y="1020" resize="false" x="2" />  
+        <labelCheckbox name="hideWhiteboard" width="270" y="1020" x="130" fontsize="11" />
                                   
     <!-- RoomClient List Right Side -->
     <labelText labelid="587" width="300" y="40" resize="false" 

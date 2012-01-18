@@ -131,7 +131,11 @@ public class Rooms implements Serializable {
 	
 	@Column(name = "hide_screen_sharing")
 	private Boolean hideScreenSharing = false;
+	
+	@Column(name = "hide_whiteboard")
+	private Boolean hideWhiteboard = false;
     
+	
 	public String getComment() {
 		return comment;
 	}
@@ -348,6 +352,13 @@ public class Rooms implements Serializable {
 	}
 	public void setHideScreenSharing(Boolean hideScreenSharing) {
 		this.hideScreenSharing = hideScreenSharing;
+	}
+	
+	public Boolean getHideWhiteboard() {
+		return hideWhiteboard;
+	}
+	public void setHideWhiteboard(Boolean hideWhiteboard) {
+		this.hideWhiteboard = hideWhiteboard;
 	}
 	
 	

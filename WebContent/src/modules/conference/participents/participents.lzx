@@ -168,31 +168,51 @@
      -->
     <method name="getVideoObjectByPublicSID" args="publicSID">
         <![CDATA[
-            //if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ",publicSID,parent.parent);
-            
-            //for (var i=0;i<this._videoviewcontent.subviews.length;i++){
-            //  if ($debug) Debug.write("getVideoObjectByBroadCastId6 broadcastId: ",this._videoviewcontent.subviews[i].broadcastId);
-            //  if ($debug) Debug.write("getVideoObjectByBroadCastId7 streamid,user_id: ",this._videoviewcontent.subviews[i].clientVars.streamid,this._videoviewcontent.subviews[i].clientVars.user_id);
-            //}
-            var videoContainer = this._videoviewcontent;
-            if (this.userNewVideoContainer) {
-                videoContainer = parent.parent._videoviewcontent;
-            }
-            
-            for (var i=0;i<videoContainer.subviews.length;i++){
-                //if ($debug) Debug.write("getVideoObjectByBroadCastId2 broadcastId VIEW: ",this._videoviewcontent.subviews[i].broadcastId);
-                //if ($debug) Debug.write("getVideoObjectByBroadCastId3 broadcastId SEARCH: ",broadcastId);
-                //if ($debug) Debug.write("getVideoObjectByBroadCastId4 obj: ",this._videoviewcontent.subviews[i]);
-                //if ($debug) Debug.write("getVideoObjectByBroadCastId5 streamid,user_id: ",this._videoviewcontent.subviews[i].clientVars.streamid,this._videoviewcontent.subviews[i].clientVars.user_id);
-                if (videoContainer.subviews[i].publicSID==publicSID){
-                    return videoContainer.subviews[i];
-                }
-            }
-            
-            if ($debug) Debug.warn(" - getVideoObjectByPublicSID - DID NOT FIND THE USER BY ",publicSID);
-            
-            return null;
-            
+        	if(canvas.currentRoomObj.hideWhiteboard){
+        		var videoContainer = _videoviewcontent_hideWhiteboard._inn;
+        		//if (this.userNewVideoContainer) {
+	              //  videoContainer = parent.parent._videoviewcontent;
+	            //}
+	            
+	            for (var i=0;i<videoContainer.subviews.length;i++){
+	                //if ($debug) Debug.write("getVideoObjectByBroadCastId2 broadcastId VIEW: ",this._videoviewcontent.subviews[i].broadcastId);
+	                //if ($debug) Debug.write("getVideoObjectByBroadCastId3 broadcastId SEARCH: ",broadcastId);
+	                //if ($debug) Debug.write("getVideoObjectByBroadCastId4 obj: ",this._videoviewcontent.subviews[i]);
+	                //if ($debug) Debug.write("getVideoObjectByBroadCastId5 streamid,user_id: ",this._videoviewcontent.subviews[i].clientVars.streamid,this._videoviewcontent.subviews[i].clientVars.user_id);
+	                if (videoContainer.subviews[i].publicSID==publicSID){
+	                    return videoContainer.subviews[i];
+	                }
+	            }
+	            
+	            if ($debug) Debug.warn(" - getVideoObjectByPublicSID - DID NOT FIND THE USER BY ",publicSID);
+	            
+	            return null;
+        	}else{
+	            //if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ",publicSID,parent.parent);
+	            
+	            //for (var i=0;i<this._videoviewcontent.subviews.length;i++){
+	            //  if ($debug) Debug.write("getVideoObjectByBroadCastId6 broadcastId: ",this._videoviewcontent.subviews[i].broadcastId);
+	            //  if ($debug) Debug.write("getVideoObjectByBroadCastId7 streamid,user_id: ",this._videoviewcontent.subviews[i].clientVars.streamid,this._videoviewcontent.subviews[i].clientVars.user_id);
+	            //}
+	            var videoContainer = this._videoviewcontent;
+	            if (this.userNewVideoContainer) {
+	                videoContainer = parent.parent._videoviewcontent;
+	            }
+	            
+	            for (var i=0;i<videoContainer.subviews.length;i++){
+	                //if ($debug) Debug.write("getVideoObjectByBroadCastId2 broadcastId VIEW: ",this._videoviewcontent.subviews[i].broadcastId);
+	                //if ($debug) Debug.write("getVideoObjectByBroadCastId3 broadcastId SEARCH: ",broadcastId);
+	                //if ($debug) Debug.write("getVideoObjectByBroadCastId4 obj: ",this._videoviewcontent.subviews[i]);
+	                //if ($debug) Debug.write("getVideoObjectByBroadCastId5 streamid,user_id: ",this._videoviewcontent.subviews[i].clientVars.streamid,this._videoviewcontent.subviews[i].clientVars.user_id);
+	                if (videoContainer.subviews[i].publicSID==publicSID){
+	                    return videoContainer.subviews[i];
+	                }
+	            }
+	            
+	            if ($debug) Debug.warn(" - getVideoObjectByPublicSID - DID NOT FIND THE USER BY ",publicSID);
+	            
+	            return null;
+        	}
         ]]>
     </method>           
 
@@ -295,6 +315,34 @@
      -->
     <method name="getNewVideoObject" args="publicSID">
         <![CDATA[
+        if(canvas.currentRoomObj.hideWhiteboard){
+        	var obj = this.getVideoObjectByPublicSID(publicSID);
+            if (obj!=null){
+                this.broadCastViewRef = obj;
+            } else {
+                
+                var videoContainer = _videoviewcontent_hideWhiteboard._inn;
+                if (this.userNewVideoContainer) {
+                    videoContainer = _videoviewcontent_hideWhiteboard._inn;
+                }
+                
+                if ($debug) Debug.warn("videoContainer ",videoContainer);
+                
+                //Get a Free VideoView Slot
+                var freePos = videoContainer.getVideoObjectFreePos(40, 100, 100);
+                
+                this.broadCastViewRef = new lz.videoObjectBroadcast(videoContainer,{
+                        publicSID:publicSID,
+                        x:freePos[0],y:freePos[1],
+                        hidebyAudioOnly:true
+                    });
+                canvas.currentusercolor = this.getColorForUser();
+                this.broadCastViewRef._chatvideoinner.r.destroy();
+                canvas.thishib.setAudienceModus.doCall();
+                this.broadCastViewRef.setAttribute('chatpartnername',hib.userobject.firstname+' '+hib.userobject.lastname);
+            }
+            return this.broadCastViewRef;
+        }else{
             var obj = this.getVideoObjectByPublicSID(publicSID);
             if (obj!=null){
                 this.broadCastViewRef = obj;
@@ -321,6 +369,7 @@
                 this.broadCastViewRef.setAttribute('chatpartnername',hib.userobject.firstname+' '+hib.userobject.lastname);
             }
             return this.broadCastViewRef;
+        }
         ]]>
     </method>
     
@@ -331,6 +380,24 @@
      -->
     <method name="getNewVideoObjectByPos" args="publicSID">
         <![CDATA[
+        if(canvas.currentRoomObj.hideWhiteboard){
+        	var obj = this.getVideoObjectByPublicSID(publicSID);
+            if (obj!=null){
+                return obj;
+            }
+            var videoContainer = _videoviewcontent_hideWhiteboard._inn;
+            if (this.userNewVideoContainer) {
+                videoContainer = _videoviewcontent_hideWhiteboard._inn;
+            }
+            
+            //Get a Free VideoView Slot
+            var freePos = videoContainer.getVideoObjectFreePos(40, 100, 100);
+            
+            return new lz.videoObjectPlayBroadcast(videoContainer,{
+                    publicSID:publicSID,
+                    x:freePos[0],y:freePos[1]
+                });
+        }else{
             var obj = this.getVideoObjectByPublicSID(publicSID);
             if (obj!=null){
                 return obj;
@@ -347,6 +414,7 @@
                     publicSID:publicSID,
                     x:freePos[0],y:freePos[1]
                 });
+        }
         ]]>
     </method>
     

@@ -4325,4 +4325,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1440" name="hide_screen_sharing">
     <value>Hide screen sharing</value>
   </string>
+  <string id="1441" name="hide_whiteboard">
+    <value>Hide whiteboard</value>
+  </string>
 </language>

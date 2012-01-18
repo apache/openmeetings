@@ -272,7 +272,7 @@ public class MethodGateway extends HttpServlet {
 							name, roomtypes_id, comment, numberOfPartizipants,
 							ispublic, null, false, false, null, false, null,
 							true, false, false, "", "", "", null, null, null,
-							false, false, false, false, false, false);
+							false, false, false, false, false, false, false);
 
 					XStream xStream = new XStream(new XppDriver());
 					xStream.setMode(XStream.NO_REFERENCES);

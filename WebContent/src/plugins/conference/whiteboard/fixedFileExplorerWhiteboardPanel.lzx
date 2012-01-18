@@ -58,7 +58,7 @@
 </class>
     
 <class name="fixedFileExplorerWhiteboardPanel" extends="basePropertyPanelWhiteboard" 
-	   labelid="615">
+	   labelid="615" visible="${((canvas.currentRoomObj.hideWhiteboard) ? false:true)}">
 	
 	<!--
 	

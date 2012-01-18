@@ -672,7 +672,7 @@ public class RoomWebService {
 			return roommanagement.addRoom(user_level, name, roomtypes_id,
 					comment, numberOfPartizipants, ispublic, null, false,
 					false, null, false, null, true, false, false, "", "", "",
-					null, null, null, false, false, false, false, false, false);
+					null, null, null, false, false, false, false, false, false, false);
 		} catch (Exception err) {
 			log.error("[addRoom] ", err);
 		}
@@ -718,7 +718,7 @@ public class RoomWebService {
 			return roommanagement.addRoom(user_level, name, roomtypes_id,
 					comment, numberOfPartizipants, ispublic, null, appointment,
 					isDemoRoom, demoTime, isModeratedRoom, null, true, false,
-					false, "", "", "", null, null, null, false, false, false, false, false, false);
+					false, "", "", "", null, null, null, false, false, false, false, false, false, false);
 		} catch (Exception err) {
 			log.error("[addRoomWithModeration] ", err);
 		}
@@ -771,7 +771,7 @@ public class RoomWebService {
 					comment, numberOfPartizipants, ispublic, null, appointment,
 					isDemoRoom, demoTime, isModeratedRoom, null,
 					allowUserQuestions, false, false, "", "", "", null, null,
-					null, false, false, false, false, false, false);
+					null, false, false, false, false, false, false, false);
 		} catch (Exception err) {
 			log.error("[addRoomWithModerationAndQuestions] ", err);
 		}
@@ -826,9 +826,83 @@ public class RoomWebService {
 					comment, numberOfPartizipants, ispublic, null, appointment,
 					isDemoRoom, demoTime, isModeratedRoom, null,
 					allowUserQuestions, isAudioOnly, false, "", "", "", null,
-					null, null, false, false, false, false, false, false);
+					null, null, false, false, false, false, false, false, false);
 		} catch (Exception err) {
 			log.error("[addRoomWithModerationQuestionsAndAudioType] ", err);
+			throw new AxisFault(err.getMessage());
+		}
+	}
+	
+	/**
+	 * 
+	 * adds a new room with options for user questions, audio only and hide
+	 * 
+	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param name
+	 *            Name of the Room
+	 * @param roomtypes_id
+	 *            Type of that room (1 = Conference, 2 = Audience, 3 =
+	 *            Restricted, 4 = Interview)
+	 * @param comment
+	 *            any comment
+	 * @param numberOfPartizipants
+	 *            the maximum users allowed in this room
+	 * @param ispublic
+	 *            If this room is public (use true if you don't deal with
+	 *            different Organizations)
+	 * @param appointment
+	 *            is it a Calendar Room (use false by default)
+	 * @param isDemoRoom
+	 *            is it a Demo Room with limited time (use false by default)
+	 * @param demoTime
+	 *            time in seconds after the user will be logged out (only
+	 *            enabled if isDemoRoom is true)
+	 * @param isModeratedRoom
+	 *            Users have to wait until a Moderator arrives. Use the
+	 *            becomeModerator param in setUserObjectAndGenerateRoomHash to
+	 *            set a user as default Moderator
+	 * @param allowUserQuestions
+	 *            enable or disable the button to allow users to apply for
+	 *            moderation
+	 * @param isAudioOnly
+	 *            enable or disable the video / or audio-only
+	 * 
+	 * @param hideTopBar
+	 *            hide or show TopBar
+	 * @param hideChat
+	 *            hide or show Chat           
+	 * @param hideActivitiesAndActions
+	 *            hide or show Activities And Actions
+	 * @param hideFilesExplorer
+	 *            hide or show Files Explorer
+	 * @param hideActionsMenu
+	 *            hide or show Actions Menu
+	 * @param hideScreenSharing
+	 *            hide or show Screen Sharing           
+	 * @param hideWhiteboard
+	 *            hide or show Whiteboard. If whitboard is hidden, video pods and scrollbar  appear instead.
+	 * @return
+	 * @throws AxisFault
+	 */
+	public Long addRoomWithModerationQuestionsAudioTypeAndHideOptions(String SID,
+			String name, Long roomtypes_id, String comment,
+			Long numberOfPartizipants, Boolean ispublic, Boolean appointment,
+			Boolean isDemoRoom, Integer demoTime, Boolean isModeratedRoom,
+			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean hideTopBar, Boolean hideChat, 
+			Boolean hideActivitiesAndActions, Boolean hideFilesExplorer, 
+			Boolean hideActionsMenu, Boolean hideScreenSharing, 
+			Boolean hideWhiteboard) throws AxisFault {
+		try {
+			Long users_id = sessionManagement.checkSession(SID);
+			Long user_level = userManagement.getUserLevelByID(users_id);
+			return roommanagement.addRoom(user_level, name, roomtypes_id,
+					comment, numberOfPartizipants, ispublic, null, appointment,
+					isDemoRoom, demoTime, isModeratedRoom, null,
+					allowUserQuestions, isAudioOnly, false, "", "", "", null,
+					null, null, hideTopBar, hideChat, hideActivitiesAndActions, hideFilesExplorer, 
+					hideActionsMenu, hideScreenSharing, hideWhiteboard);
+		} catch (Exception err) {
+			log.error("[addRoomWithModerationQuestionsAudioTypeAndHideOptions] ", err);
 			throw new AxisFault(err.getMessage());
 		}
 	}
@@ -949,7 +1023,7 @@ public class RoomWebService {
 						roomtypes_id, name, ispublic, comment,
 						numberOfPartizipants, null, appointment, false, null,
 						false, null, true, false, false, "", "", "", null,
-						null, null, false, false, false, false, false, false);
+						null, null, false, false, false, false, false, false, false);
 			}
 		} catch (Exception err) {
 			log.error("[addRoom] ", err);
@@ -1000,7 +1074,7 @@ public class RoomWebService {
 						name, ispublic, comment, numberOfPartizipants, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
 						null, true, false, false, "", "", "", null, null, null,
-						false, false, false, false, false, false);
+						false, false, false, false, false, false, false);
 			}
 		} catch (Exception err) {
 			log.error("[updateRoomWithModeration] ", err);
@@ -1054,7 +1128,85 @@ public class RoomWebService {
 						name, ispublic, comment, numberOfPartizipants, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
 						null, allowUserQuestions, false, false, "", "", "",
-						null, null, null, false, false, false, false, false, false);
+						null, null, null, false, false, false, false, false, false, false);
+			}
+		} catch (Exception err) {
+			log.error("[updateRoomWithModerationAndQuestions] ", err);
+		}
+		return new Long(-1);
+	}
+	
+	/**
+	 * 
+	 * update room with options for user questions, audio only and hide
+	 * 
+	 * * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param room_id
+	 *            the room id to update
+	 * @param name
+	 *            new name of the room
+	 * @param roomtypes_id
+	 *            new type of room (1 = Conference, 2 = Audience, 3 =
+	 *            Restricted, 4 = Interview)
+	 * @param comment
+	 *            new comment
+	 * @param numberOfPartizipants
+	 *            new numberOfParticipants
+	 * @param ispublic
+	 *            is public
+	 * @param appointment
+	 *            if the room is an appointment
+	 * @param isDemoRoom
+	 *            is it a Demo Room with limited time? (use false if not sure
+	 *            what that means)
+	 * @param demoTime
+	 *            time in seconds after the user will be logged out (only
+	 *            enabled if isDemoRoom is true)
+	 * @param isModeratedRoom
+	 *            Users have to wait until a Moderator arrives. Use the
+	 *            becomeModerator parameter in setUserObjectAndGenerateRoomHash
+	 *            to set a user as default Moderator
+	 * @param allowUserQuestions
+	 *            enable or disable the button to allow users to apply for
+	 *            moderation
+	 * @param isAudioOnly
+	 *            enable or disable the video / or audio-only
+	 * 
+	 * @param hideTopBar
+	 *            hide or show TopBar
+	 * @param hideChat
+	 *            hide or show Chat           
+	 * @param hideActivitiesAndActions
+	 *            hide or show Activities And Actions
+	 * @param hideFilesExplorer
+	 *            hide or show Files Explorer
+	 * @param hideActionsMenu
+	 *            hide or show Actions Menu
+	 * @param hideScreenSharing
+	 *            hide or show Screen Sharing           
+	 * @param hideWhiteboard
+	 *            hide or show Whiteboard. If whitboard is hidden, video pods and scrollbar  appear instead.
+	 * @return
+	 * @throws AxisFault
+	 */	
+	public Long updateRoomWithModerationQuestionsAudioTypeAndHideOptions(String SID, Long room_id,
+			String name, Long roomtypes_id, String comment,
+			Long numberOfPartizipants, Boolean ispublic, Boolean appointment,
+			Boolean isDemoRoom, Integer demoTime, Boolean isModeratedRoom,
+			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean hideTopBar, Boolean hideChat, 
+			Boolean hideActivitiesAndActions, Boolean hideFilesExplorer, 
+			Boolean hideActionsMenu, Boolean hideScreenSharing, 
+			Boolean hideWhiteboard) {
+		try {
+			Long users_id = sessionManagement.checkSession(SID);
+			Long user_level = userManagement.getUserLevelByID(users_id);
+			if (authLevelManagement.checkWebServiceLevel(user_level)) {
+				return roommanagement.updateRoomInternal(room_id, roomtypes_id,
+						name, ispublic, comment, numberOfPartizipants, null,
+						appointment, isDemoRoom, demoTime, isModeratedRoom,
+						null, allowUserQuestions, false, false, "", "", "",
+						null, null, null, hideTopBar, hideChat, hideActivitiesAndActions, hideFilesExplorer, 
+						hideActionsMenu, hideScreenSharing, hideWhiteboard);
 			}
 		} catch (Exception err) {
 			log.error("[updateRoomWithModerationAndQuestions] ", err);

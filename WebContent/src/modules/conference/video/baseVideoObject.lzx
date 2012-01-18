@@ -130,6 +130,10 @@
                 return;
             }
             
+            if (canvas.currentRoomObj.hideWhiteboard) {
+                return;
+            }
+            
 			var bounds = this.getBounds();
 			var parentBounds = canvas.getBounds();
 			if ( bounds.y < 0 )
