@@ -1381,9 +1381,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 
     public synchronized Boolean getMicMutedByPublicSID(String publicSID) {
         try {
-			log.debug("*..*getMicMutedByPublicSID publicSID: " + publicSID);
-
-			IConnection current = Red5.getConnectionLocal();
 			RoomClient currentClient = this.clientListManager.getClientByPublicSID(publicSID);
 			if (currentClient == null) {
 				return true;
@@ -1391,7 +1388,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 
 			//Put the mod-flag to true for this client
             Boolean muted = currentClient.getMicMuted();
-            log.debug("*..*getMicMutedByPublicSID hasFloor: " + muted);
             if (null == muted) {
                 muted = true;
             }
@@ -1414,9 +1410,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	 */
 	public synchronized Long applyForModeration(String publicSID) {
 		try {
-
-			// IConnection current = Red5.getConnectionLocal();
-			// String streamid = current.getClient().getId();
 
 			RoomClient currentClient = this.clientListManager
 					.getClientByPublicSID(publicSID);
@@ -1514,16 +1507,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 								((IServiceCapableConnection) conn).invoke(
 										"sendVarsToMessageWithClient",
 										new Object[] { hsm }, this);
-								log.debug("sending setUserObjectNewOneFour to "
-										+ conn);
-
-								// if somebody is recording in this room add the
-								// event
-								// if (rcl.getIsRecording()) {
-								// StreamService.addRoomClientAVSetEvent(currentClient,
-								// rcl.getRoomRecordingName(),
-								// conn.getRemoteAddress());
-								// }
 							}
 						}
 					}
@@ -1561,19 +1544,13 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 					// cause at this moment, the user should wait untill a
 					// Moderator enters the Room
 					if (clientModeratorListRoom.size() == 0) {
-
 						return false;
-
 					} else {
-
 						return true;
-
 					}
 
 				} else {
-
 					return true;
-
 				}
 
 			} else {
@@ -1581,7 +1558,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 				// FIXME: TODO: For Rooms that are created as Appointment we
 				// have to check that too
 				// but I don't know yet the Logic behind it - swagner 19.06.2009
-
 				return true;
 
 			}
@@ -1903,13 +1879,16 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		return null;
 	}
 
-	public synchronized HashMap<String, RoomClient> getRoomClients(Long room_id) {
+	/**
+	 * Get current clients
+	 * 
+	 * @param room_id
+	 * @return
+	 */
+	private HashMap<String, RoomClient> getRoomClients(Long room_id) {
 		try {
 
 			HashMap<String, RoomClient> roomClientList = new HashMap<String, RoomClient>();
-
-			// log.debug("roomClientList :: Number of Users :: "+roomClientList.size()+" ::room_id:: "+room_id);
-
 			HashMap<String, RoomClient> clientListRoom = this.clientListManager
 					.getClientListByRoom(room_id);
 			for (Iterator<String> iter = clientListRoom.keySet().iterator(); iter
@@ -1917,8 +1896,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 				String key = iter.next();
 				RoomClient rcl = this.clientListManager
 						.getClientByStreamId(key);
-				// log.debug("#+#+#+#+##+## logicalRoomEnter ClientList key: "+rcl.getRoom_id()+" "+room_id);
-				// log.debug("set to ++ for client: "+rcl.getStreamid());
 				// Add user to List
 				roomClientList.put(key, rcl);
 			}
@@ -1930,19 +1907,26 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		return null;
 	}
 
+	/**
+	 * This method is invoked when the user has disconnected and reconnects to
+	 * the Gateway with the new scope
+	 * 
+	 * @param SID
+	 * @param userId
+	 * @param username
+	 * @param firstname
+	 * @param lastname
+	 * @param picture_uri
+	 * @return
+	 */
 	public synchronized RoomClient setUsernameReconnect(String SID,
 			Long userId, String username, String firstname, String lastname,
 			String picture_uri) {
 		try {
-			log.debug("#*#*#*#*#*#*# setUsername userId: " + userId
-					+ " username: " + username + " firstname: " + firstname
-					+ " lastname: " + lastname);
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
 			RoomClient currentClient = this.clientListManager
 					.getClientByStreamId(streamid);
-
-			log.debug("[setUsername] id: " + currentClient.getStreamid());
 
 			currentClient.setUsername(username);
 			currentClient.setUser_id(userId);
@@ -1950,7 +1934,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			currentClient.setUserObject(userId, username, firstname, lastname);
 
 			// Update Session Data
-			log.debug("UDPATE SESSION " + SID + ", " + userId);
 			sessionManagement.updateUserWithoutSession(SID, userId);
 
 			Users user = userManagement.getUserById(userId);
@@ -1966,7 +1949,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			Users us = usersDao.getUser(userId);
 			if (us != null && us.getPictureuri() != null) {
 				// set Picture-URI
-				log.debug("###### SET PICTURE URI");
 				currentClient.setPicture_uri(us.getPictureuri());
 			}
 			this.clientListManager.updateClientByStreamId(streamid,
@@ -1991,15 +1973,10 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	public synchronized RoomClient setUsernameAndSession(String SID,
 			Long userId, String username, String firstname, String lastname) {
 		try {
-			log.debug("#*#*#*#*#*#*# setUsername userId: " + userId
-					+ " username: " + username + " firstname: " + firstname
-					+ " lastname: " + lastname);
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
 			RoomClient currentClient = this.clientListManager
 					.getClientByStreamId(streamid);
-
-			log.debug("[setUsername] id: " + currentClient.getStreamid());
 
 			currentClient.setUsername(username);
 			currentClient.setUser_id(userId);
@@ -2022,7 +1999,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			Users us = usersDao.getUser(userId);
 			if (us != null && us.getPictureuri() != null) {
 				// set Picture-URI
-				log.debug("###### SET PICTURE URI");
 				currentClient.setPicture_uri(us.getPictureuri());
 			}
 			this.clientListManager.updateClientByStreamId(streamid,
