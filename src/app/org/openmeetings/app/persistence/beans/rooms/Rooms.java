@@ -57,28 +57,12 @@ public class Rooms implements Serializable {
 	@Column(name = "externalRoomType")
 	private String externalRoomType;
 	
+	@Column(name = "is_microphone_exclusive")
+	private Boolean isMicrophoneExclusive;
+	
 	/**
 	 * Layout of Room
 	 */
-//	private Integer videoPodWidth = new Integer(290);
-//	private Integer videoPodHeight = new Integer(280);
-//	private Integer videoPodXPosition = new Integer(2);
-//	private Integer videoPodYPosition = new Integer(2);
-//	
-//	private Integer moderationPanelXPosition = new Integer(400);
-//	
-//	private Boolean showWhiteBoard = new Boolean(true);
-//	private Integer whiteBoardPanelXPosition = new Integer(296);
-//	private Integer whiteBoardPanelYPosition = new Integer(2);
-//	private Integer whiteBoardPanelHeight = new Integer(592);
-//	private Integer whiteBoardPanelWidth = new Integer(660);
-//	
-//	private Boolean showFilesPanel = new Boolean(true);
-//	private Integer filesPanelXPosition = new Integer(2);
-//	private Integer filesPanelYPosition = new Integer(284);
-//	private Integer filesPanelHeight = new Integer(310);
-//	private Integer filesPanelWidth = new Integer(290);	
-	
 	@Transient
 	private List<RoomClient> currentusers;
 	

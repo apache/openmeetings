@@ -130,6 +130,10 @@ limitations under the License.
                 <div class="navigation_comment"><i >adds a new room with options for user questions and audio only</i></div>
                 </div>
                                                <div>
+                <a href="#addRoomWithModerationQuestionsAudioTypeAndHideOptions"><b>addRoomWithModerationQuestionsAudioTypeAndHideOptions</b></a><br/>
+                <div class="navigation_comment"><i >adds a new room with options for user questions, audio only and hide</i></div>
+                </div>
+                                               <div>
                 <a href="#getRoomIdByExternalId"><b>getRoomIdByExternalId</b></a><br/>
                 <div class="navigation_comment"><i >Checks if a room with this exteralRoomId + externalRoomType does exist,
  if yes it returns the room id if not, it will create the room and then
@@ -146,6 +150,12 @@ limitations under the License.
                                                <div>
                 <a href="#updateRoomWithModerationAndQuestions"><b>updateRoomWithModerationAndQuestions</b></a><br/>
                 <div class="navigation_comment"><i ></i></div>
+                </div>
+                                               <div>
+                <a href="#updateRoomWithModerationQuestionsAudioTypeAndHideOptions"><b>updateRoomWithModerationQuestionsAudioTypeAndHideOptions</b></a><br/>
+                <div class="navigation_comment"><i >update room with options for user questions, audio only and hide
+ 
+ * @param SID The SID of the User. This SID must be marked as Loggedin</i></div>
                 </div>
                                                <div>
                 <a href="#deleteRoom"><b>deleteRoom</b></a><br/>
@@ -1826,6 +1836,235 @@ limitations under the License.
     	   				    		      <div class="method">
 		        <div class="method_header">
 		        <div style="margin-left:10px">
+    			<a name="addRoomWithModerationQuestionsAudioTypeAndHideOptions" ><b>addRoomWithModerationQuestionsAudioTypeAndHideOptions</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>addRoomWithModerationQuestionsAudioTypeAndHideOptions (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String name
+    			       			    			       			     , 
+    			       			   Long roomtypes_id
+    			       			    			       			     , 
+    			       			   String comment
+    			       			    			       			     , 
+    			       			   Long numberOfPartizipants
+    			       			    			       			     , 
+    			       			   Boolean ispublic
+    			       			    			       			     , 
+    			       			   Boolean appointment
+    			       			    			       			     , 
+    			       			   Boolean isDemoRoom
+    			       			    			       			     , 
+    			       			   Integer demoTime
+    			       			    			       			     , 
+    			       			   Boolean isModeratedRoom
+    			       			    			       			     , 
+    			       			   Boolean allowUserQuestions
+    			       			    			       			     , 
+    			       			   Boolean isAudioOnly
+    			       			    			       			     , 
+    			       			   Boolean hideTopBar
+    			       			    			       			     , 
+    			       			   Boolean hideChat
+    			       			    			       			     , 
+    			       			   Boolean hideActivitiesAndActions
+    			       			    			       			     , 
+    			       			   Boolean hideFilesExplorer
+    			       			    			       			     , 
+    			       			   Boolean hideActionsMenu
+    			       			    			       			     , 
+    			       			   Boolean hideScreenSharing
+    			       			    			       			     , 
+    			       			   Boolean hideWhiteboard
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  adds a new room with options for user questions, audio only and hide
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">name</td>
+	                     <td valign="top">Name of the Room</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">roomtypes_id</td>
+	                     <td valign="top">Type of that room (1 = Conference, 2 = Audience, 3 =
+            Restricted, 4 = Interview)</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">comment</td>
+	                     <td valign="top">any comment</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">numberOfPartizipants</td>
+	                     <td valign="top">the maximum users allowed in this room</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">ispublic</td>
+	                     <td valign="top">If this room is public (use true if you don't deal with
+            different Organizations)</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">appointment</td>
+	                     <td valign="top">is it a Calendar Room (use false by default)</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isDemoRoom</td>
+	                     <td valign="top">is it a Demo Room with limited time (use false by default)</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Integer
+	                     		                     </td>
+	                     <td valign="top">demoTime</td>
+	                     <td valign="top">time in seconds after the user will be logged out (only
+            enabled if isDemoRoom is true)</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isModeratedRoom</td>
+	                     <td valign="top">Users have to wait until a Moderator arrives. Use the
+            becomeModerator param in setUserObjectAndGenerateRoomHash to
+            set a user as default Moderator</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">allowUserQuestions</td>
+	                     <td valign="top">enable or disable the button to allow users to apply for
+            moderation</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isAudioOnly</td>
+	                     <td valign="top">enable or disable the video / or audio-only</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">hideTopBar</td>
+	                     <td valign="top">hide or show TopBar</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">hideChat</td>
+	                     <td valign="top">hide or show Chat</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">hideActivitiesAndActions</td>
+	                     <td valign="top">hide or show Activities And Actions</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">hideFilesExplorer</td>
+	                     <td valign="top">hide or show Files Explorer</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">hideActionsMenu</td>
+	                     <td valign="top">hide or show Actions Menu</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">hideScreenSharing</td>
+	                     <td valign="top">hide or show Screen Sharing</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">hideWhiteboard</td>
+	                     <td valign="top">hide or show Whiteboard. If whitboard is hidden, video pods and scrollbar  appear instead.</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/RoomService/addRoomWithModerationQuestionsAudioTypeAndHideOptions?SID=VALUE&name=VALUE&roomtypes_id=VALUE&comment=VALUE&numberOfPartizipants=VALUE&ispublic=VALUE&appointment=VALUE&isDemoRoom=VALUE&demoTime=VALUE&isModeratedRoom=VALUE&allowUserQuestions=VALUE&isAudioOnly=VALUE&hideTopBar=VALUE&hideChat=VALUE&hideActivitiesAndActions=VALUE&hideFilesExplorer=VALUE&hideActionsMenu=VALUE&hideScreenSharing=VALUE&hideWhiteboard=VALUE">http://localhost:5080/openmeetings/services/RoomService/addRoomWithModerationQuestionsAudioTypeAndHideOptions?SID=VALUE&name=VALUE&roomtypes_id=VALUE&comment=VALUE&numberOfPartizipants=VALUE&ispublic=VALUE&appointment=VALUE&isDemoRoom=VALUE&demoTime=VALUE&isModeratedRoom=VALUE&allowUserQuestions=VALUE&isAudioOnly=VALUE&hideTopBar=VALUE&hideChat=VALUE&hideActivitiesAndActions=VALUE&hideFilesExplorer=VALUE&hideActionsMenu=VALUE&hideScreenSharing=VALUE&hideWhiteboard=VALUE</a>
+    			</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
     			<a name="getRoomIdByExternalId" ><b>getRoomIdByExternalId</b></a>
     			</div>
     			</div>
@@ -2547,6 +2786,241 @@ limitations under the License.
     			    			<br/>
     			REST Sample Call/URL:<br/>
     			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/RoomService/updateRoomWithModerationAndQuestions?SID=VALUE&room_id=VALUE&name=VALUE&roomtypes_id=VALUE&comment=VALUE&numberOfPartizipants=VALUE&ispublic=VALUE&appointment=VALUE&isDemoRoom=VALUE&demoTime=VALUE&isModeratedRoom=VALUE&allowUserQuestions=VALUE">http://localhost:5080/openmeetings/services/RoomService/updateRoomWithModerationAndQuestions?SID=VALUE&room_id=VALUE&name=VALUE&roomtypes_id=VALUE&comment=VALUE&numberOfPartizipants=VALUE&ispublic=VALUE&appointment=VALUE&isDemoRoom=VALUE&demoTime=VALUE&isModeratedRoom=VALUE&allowUserQuestions=VALUE</a>
+    			</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="updateRoomWithModerationQuestionsAudioTypeAndHideOptions" ><b>updateRoomWithModerationQuestionsAudioTypeAndHideOptions</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>updateRoomWithModerationQuestionsAudioTypeAndHideOptions (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long room_id
+    			       			    			       			     , 
+    			       			   String name
+    			       			    			       			     , 
+    			       			   Long roomtypes_id
+    			       			    			       			     , 
+    			       			   String comment
+    			       			    			       			     , 
+    			       			   Long numberOfPartizipants
+    			       			    			       			     , 
+    			       			   Boolean ispublic
+    			       			    			       			     , 
+    			       			   Boolean appointment
+    			       			    			       			     , 
+    			       			   Boolean isDemoRoom
+    			       			    			       			     , 
+    			       			   Integer demoTime
+    			       			    			       			     , 
+    			       			   Boolean isModeratedRoom
+    			       			    			       			     , 
+    			       			   Boolean allowUserQuestions
+    			       			    			       			     , 
+    			       			   Boolean isAudioOnly
+    			       			    			       			     , 
+    			       			   Boolean hideTopBar
+    			       			    			       			     , 
+    			       			   Boolean hideChat
+    			       			    			       			     , 
+    			       			   Boolean hideActivitiesAndActions
+    			       			    			       			     , 
+    			       			   Boolean hideFilesExplorer
+    			       			    			       			     , 
+    			       			   Boolean hideActionsMenu
+    			       			    			       			     , 
+    			       			   Boolean hideScreenSharing
+    			       			    			       			     , 
+    			       			   Boolean hideWhiteboard
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  update room with options for user questions, audio only and hide
+ 
+ * @param SID The SID of the User. This SID must be marked as Loggedin
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			<p>Params:</p>
+    			    				<b>Warning:</b><i> Params in this method do not seem to be correctly documentated</i>
+    				<br/><br/>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">room_id</td>
+	                     <td valign="top">the room id to update</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">name</td>
+	                     <td valign="top">new name of the room</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">roomtypes_id</td>
+	                     <td valign="top">new type of room (1 = Conference, 2 = Audience, 3 =
+            Restricted, 4 = Interview)</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">comment</td>
+	                     <td valign="top">new comment</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">numberOfPartizipants</td>
+	                     <td valign="top">new numberOfParticipants</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">ispublic</td>
+	                     <td valign="top">is public</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">appointment</td>
+	                     <td valign="top">if the room is an appointment</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isDemoRoom</td>
+	                     <td valign="top">is it a Demo Room with limited time? (use false if not sure
+            what that means)</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">demoTime</td>
+	                     <td valign="top">time in seconds after the user will be logged out (only
+            enabled if isDemoRoom is true)</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Integer
+	                     		                     </td>
+	                     <td valign="top">isModeratedRoom</td>
+	                     <td valign="top">Users have to wait until a Moderator arrives. Use the
+            becomeModerator parameter in setUserObjectAndGenerateRoomHash
+            to set a user as default Moderator</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">allowUserQuestions</td>
+	                     <td valign="top">enable or disable the button to allow users to apply for
+            moderation</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isAudioOnly</td>
+	                     <td valign="top">enable or disable the video / or audio-only</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">hideTopBar</td>
+	                     <td valign="top">hide or show TopBar</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">hideChat</td>
+	                     <td valign="top">hide or show Chat</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">hideActivitiesAndActions</td>
+	                     <td valign="top">hide or show Activities And Actions</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">hideFilesExplorer</td>
+	                     <td valign="top">hide or show Files Explorer</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">hideActionsMenu</td>
+	                     <td valign="top">hide or show Actions Menu</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">hideScreenSharing</td>
+	                     <td valign="top">hide or show Screen Sharing</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">hideWhiteboard</td>
+	                     <td valign="top">hide or show Whiteboard. If whitboard is hidden, video pods and scrollbar  appear instead.</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/RoomService/updateRoomWithModerationQuestionsAudioTypeAndHideOptions?SID=VALUE&room_id=VALUE&name=VALUE&roomtypes_id=VALUE&comment=VALUE&numberOfPartizipants=VALUE&ispublic=VALUE&appointment=VALUE&isDemoRoom=VALUE&demoTime=VALUE&isModeratedRoom=VALUE&allowUserQuestions=VALUE&isAudioOnly=VALUE&hideTopBar=VALUE&hideChat=VALUE&hideActivitiesAndActions=VALUE&hideFilesExplorer=VALUE&hideActionsMenu=VALUE&hideScreenSharing=VALUE&hideWhiteboard=VALUE">http://localhost:5080/openmeetings/services/RoomService/updateRoomWithModerationQuestionsAudioTypeAndHideOptions?SID=VALUE&room_id=VALUE&name=VALUE&roomtypes_id=VALUE&comment=VALUE&numberOfPartizipants=VALUE&ispublic=VALUE&appointment=VALUE&isDemoRoom=VALUE&demoTime=VALUE&isModeratedRoom=VALUE&allowUserQuestions=VALUE&isAudioOnly=VALUE&hideTopBar=VALUE&hideChat=VALUE&hideActivitiesAndActions=VALUE&hideFilesExplorer=VALUE&hideActionsMenu=VALUE&hideScreenSharing=VALUE&hideWhiteboard=VALUE</a>
     			</a>
     		  </div>
     	   				    		      <div class="method">
