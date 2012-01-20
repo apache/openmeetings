@@ -194,7 +194,7 @@
     		
     		var videoContainer = parent.parent._videoviewcontent;
             if(canvas.currentRoomObj.hideWhiteboard){
-            	videoContainer = _videoviewcontent_hideWhiteboard._inn;
+            	videoContainer = canvas.currentBaseConferenceRoom._videoviewcontent_hideWhiteboard._inn;
             }
     		
     		//for (var i=0;i<this._videoviewcontent.subviews.length;i++){
@@ -387,7 +387,7 @@
 			} else {
                 var videoContainer = parent.parent._videoviewcontent;
                 if(canvas.currentRoomObj.hideWhiteboard){
-            		videoContainer = _videoviewcontent_hideWhiteboard._inn;
+            		videoContainer = canvas.currentBaseConferenceRoom._videoviewcontent_hideWhiteboard._inn;
             	}
                 //Get a Free VideoView Slot
                 var freePos = videoContainer.getVideoObjectFreePos(40, 100, 100);
@@ -418,7 +418,7 @@
 			
             var videoContainer = parent.parent._videoviewcontent;
             if(canvas.currentRoomObj.hideWhiteboard){
-            	videoContainer = _videoviewcontent_hideWhiteboard._inn;
+            	videoContainer = canvas.currentBaseConferenceRoom._videoviewcontent_hideWhiteboard._inn;
             }
             //Get a Free VideoView Slot
             var freePos = videoContainer.getVideoObjectFreePos(40, 100, 100);

@@ -169,7 +169,7 @@
     <method name="getVideoObjectByPublicSID" args="publicSID">
         <![CDATA[
         	if(canvas.currentRoomObj.hideWhiteboard){
-        		var videoContainer = _videoviewcontent_hideWhiteboard._inn;
+        		var videoContainer = canvas.currentBaseConferenceRoom._videoviewcontent_hideWhiteboard._inn;
         		//if (this.userNewVideoContainer) {
 	              //  videoContainer = parent.parent._videoviewcontent;
 	            //}
@@ -321,9 +321,9 @@
                 this.broadCastViewRef = obj;
             } else {
                 
-                var videoContainer = _videoviewcontent_hideWhiteboard._inn;
+                var videoContainer = canvas.currentBaseConferenceRoom._videoviewcontent_hideWhiteboard._inn;
                 if (this.userNewVideoContainer) {
-                    videoContainer = _videoviewcontent_hideWhiteboard._inn;
+                    videoContainer = canvas.currentBaseConferenceRoom._videoviewcontent_hideWhiteboard._inn;
                 }
                 
                 if ($debug) Debug.warn("videoContainer ",videoContainer);
@@ -385,9 +385,9 @@
             if (obj!=null){
                 return obj;
             }
-            var videoContainer = _videoviewcontent_hideWhiteboard._inn;
+            var videoContainer = canvas.currentBaseConferenceRoom._videoviewcontent_hideWhiteboard._inn;
             if (this.userNewVideoContainer) {
-                videoContainer = _videoviewcontent_hideWhiteboard._inn;
+                videoContainer = canvas.currentBaseConferenceRoom._videoviewcontent_hideWhiteboard._inn;
             }
             
             //Get a Free VideoView Slot

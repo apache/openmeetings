@@ -107,7 +107,7 @@
     
     <eventRoomSidebar name="_sidePanel" />
     
-    <view name="_videoviewcontent_hideWhiteboard" id="_videoviewcontent_hideWhiteboard" y="0" x="${ parent._sidePanel.width }"
+    <view name="_videoviewcontent_hideWhiteboard" y="0" x="${ parent._sidePanel.width }"
 		  width="${canvas.width-parent._sidePanel.width}" height="${canvas.height-(parent._chatPanelStrict.height) - 
         ((parent._chatPanelStrict.visibility == 'hidden') ? 5:28)}" clip="true" 
 		  visibility="${((canvas.currentRoomObj.hideWhiteboard) ? 'visible':'hidden')}">
