@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 	
-<class name="innerlistViewParticipentsTable" extends="view" 
+<class name="innerlistViewparticipantsTable" extends="view" 
     width="258" bgcolor="$once{ canvas.basebgcolorizer }" >
     <simplelayout name="_layout" axis="y" spacing="0" />
 </class>
     
-<class name="participentsTable" extends="view" height="${ parent.height-20 }" 
+<class name="participantsTable" extends="view" height="${ parent.height-20 }" 
     bgcolor="0xFFFFFF" x="2" y="6" clip="true" width="$once{ parent.width-4 }" >
-        <innerlistViewParticipentsTable name="innerList" />
+        <innerlistViewparticipantsTable name="innerList" />
     <vscrollbar />
 </class>
 
@@ -33,7 +33,7 @@
     </handler>
 </class>
     
-<class name="participentList" extends="view"  width="$once{ parent.width }" height="${ parent.height-22 }" 
+<class name="participantList" extends="view"  width="$once{ parent.width }" height="${ parent.height-22 }" 
        bgcolor="$once{ canvas.basebgcolorizer }" y="22">
     <!-- clip="true" -->
     
@@ -44,7 +44,7 @@
 
     <method name="addItem" args="object">
         <![CDATA[
-            if ($debug) Debug.write("participentList addItem: ",object,object.publicSID);
+            if ($debug) Debug.write("participantList addItem: ",object,object.publicSID);
             
             for (var i=0;i<this._table.innerList.subviews.length;i++) {
                 if (this._table.innerList.subviews[i].refObj.publicSID == object.publicSID) {
@@ -61,7 +61,7 @@
                 lastname += " *";
             }
             
-            new lz.participentListItem(this._table.innerList,{
+            new lz.participantListItem(this._table.innerList,{
                     user_id:object.user_id,
                     isSuperModerator:object.isSuperModerator,
                     firstname:object.firstname,
@@ -112,7 +112,7 @@
     
     <method name="clearList">
         this._table.destroy();
-        new lz.participentsTable(this,{name:'_table'});
+        new lz.participantsTable(this,{name:'_table'});
     </method>
     
     <!--- get a Objects List Item
@@ -142,19 +142,19 @@
         ]]>
     </method>
     
-    <participentsTable name="_table" y="20" /> 
+    <participantsTable name="_table" y="20" /> 
 
     <view name="_miniIcons" x="112" y="0" height="18">
         
         <view width="1" height="${ parent.parent.height }" x="0"
             bgcolor="$once{ canvas.basebgcolorizer }" />
-        <view name="_icon_mod" x="2" y="3" resource="participents_isMod_rsc" onclick="" showhandcursor="false">
+        <view name="_icon_mod" x="2" y="3" resource="participants_isMod_rsc" onclick="" showhandcursor="false">
             <labelTooltip labelid="608" />
         </view>
         
         <view width="1" height="${ parent.parent.height }" x="20"
             bgcolor="$once{ canvas.basebgcolorizer }" />
-        <view name="_icon_draw" x="22" y="3" resource="participents_allow_drawing_rsc" onclick="" showhandcursor="false">
+        <view name="_icon_draw" x="22" y="3" resource="participants_allow_drawing_rsc" onclick="" showhandcursor="false">
             <labelTooltip labelid="609" />
         </view>
         
@@ -172,7 +172,7 @@
 
         <view width="1" height="${ parent.parent.height }" x="80"
             bgcolor="$once{ canvas.basebgcolorizer }" />
-        <view name="_icon_remote" x="82" y="3" resource="participents_exclusive_audio_rsc" onclick="" showhandcursor="false">
+        <view name="_icon_remote" x="82" y="3" resource="participants_exclusive_audio_rsc" onclick="" showhandcursor="false">
             <labelTooltip labelid="1423" />
         </view>
         

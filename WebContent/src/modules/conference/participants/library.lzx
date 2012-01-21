@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+    
+    <resource name="participants_isactive" src="resources/button_ok.png" />
+    
+    <resource name="participants_isMod_rsc" src="resources/kdmconfig.png" />
+    <resource name="participants_allow_drawing_rsc" src="resources/color_line.png" />
+    <resource name="participants_deny_drawing_rsc" src="resources/color_line_dis.png" />
+    <resource name="participants_exclusive_audio_rsc" src="resources/microphone2.png" />
+    
+    <include href="participantList.lzx" />
+    <include href="participantListItem.lzx" />
+    <include href="participants.lzx" />
+    
+</library>

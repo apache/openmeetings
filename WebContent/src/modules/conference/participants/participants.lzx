@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
     
-<class name="participents" extends="baseRoomInnerList" 
+<class name="participants" extends="baseRoomInnerList" 
        height="$once{ parent.height-34 }">
 
     <!--- holds a references to the videoview which is broadcasting -->
@@ -36,6 +36,10 @@
             this.reconnectSuccess();
         }
     </handler>
+    
+    <method name="initList">
+    	//
+    </method>
                   
     <method name="reconnectSuccess">
         if ($debug) Debug.write("User Reloged In");
@@ -71,7 +75,7 @@
                 if ($debug) Debug.write("canvas.becomemoderator: ",canvas.becomemoderator);
                 if ($debug) Debug.write("canvas.becomeSuperModerator: ",canvas.becomeSuperModerator);
                 
-                canvas.currentusercolor = parent._participents.getColorForUser();
+                canvas.currentusercolor = parent.getColorForUser();
                 
                 var organisation_id = 1;
             
@@ -246,13 +250,13 @@
                 myvideocontainer.updateAVSettingsSymbol(object);
                 
                 //do add others
-                this._participents.addItem(object);
+                this._participants.addItem(object);
                 
                 return myvideocontainer;
             } else {
                 
                 //do add self too
-                this._participents.addItem(object);
+                this._participants.addItem(object);
                 
             }
            
@@ -278,7 +282,7 @@
             }
 
             //Do Add it anyway
-            this._participents.addItem(object);
+            this._participants.addItem(object);
         ]]>
     </method>
         
@@ -427,7 +431,7 @@
     <method name="setSpeakingByPos" args="publicSID,bool">
         <![CDATA[
             var obj = this.getVideoObjectByPublicSID(publicSID);
-            var objList = this._participents.getVideoObjectByPublicSID(publicSID);
+            var objList = this._participants.getVideoObjectByPublicSID(publicSID);
             if (bool){
                 obj._loudness.loudness.setAttribute('opacity',1);
                 objList._miniIcons._loudness.loudness.setAttribute('opacity',1);
@@ -462,7 +466,7 @@
             if ($debug) Debug.write("disconnectclient: ",publicSID);
             
             var obj = this.getVideoObjectByPublicSID(publicSID);
-            var objList = this._participents.getVideoObjectByPublicSID(publicSID);
+            var objList = this._participants.getVideoObjectByPublicSID(publicSID);
             
             //if ($debug) Debug.write("disconnectclient obj: ",obj);
             if (obj == null) {
@@ -509,7 +513,7 @@
         </handler>
     </moderationMiniIconsEventUserList>
     
-    <participentList name="_participents" />
+    <participantList name="_participants" />
     
     <commonVideoViewContent name="_videoviewcontent" />
     

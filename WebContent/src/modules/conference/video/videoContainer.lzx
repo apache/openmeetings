@@ -4,7 +4,7 @@
 <!---
         Container view including all audio/video - views for a Meeting
         
-        @keywords deprecated see participents.lzx
+        @keywords deprecated see participants.lzx
  -->
  
 <class name="videoContainer" extends="view">

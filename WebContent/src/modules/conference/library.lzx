@@ -15,7 +15,7 @@
         <!-- throws an Exception
 	<include href="browser/"/>  
          -->
-    <include href="participents/" /> 
+    <include href="participants/" /> 
     <include href="interviewuserlist/" /> 
     <include href="eventuserlist/" />
     <include href="restricted/" />

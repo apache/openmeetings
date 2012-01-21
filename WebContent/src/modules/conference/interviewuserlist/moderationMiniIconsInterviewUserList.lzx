@@ -17,7 +17,7 @@
         }
     </method>
 	
-    <miniIcons name="_isMod" x="0" width="16" resource="participents_isMod_rsc" 
+    <miniIcons name="_isMod" x="0" width="16" resource="participants_isMod_rsc" 
     		   height="16" showhandcursor="false">
         <handler name="onclick">
             <![CDATA[
@@ -27,7 +27,7 @@
         <labelTooltip name="_text" labelid="688" />
     </miniIcons>
     
-    <miniIcons name="_isModAddbutton" opacity="0.5" x="0" width="16" resource="participents_isMod_rsc" height="16">
+    <miniIcons name="_isModAddbutton" opacity="0.5" x="0" width="16" resource="participants_isMod_rsc" height="16">
         <handler name="onclick">
             <![CDATA[
                 //Apply for Moderation

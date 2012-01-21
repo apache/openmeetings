@@ -138,7 +138,7 @@
         this.sendClearMessage(true);
     </method>
 
-    <view resource="participents_exclusive_audio_rsc" x="2" y="2" />
+    <view resource="participants_exclusive_audio_rsc" x="2" y="2" />
 
     <labelText text="$once{ parent.message }" multiline="true" x="40"
                width="$once{ parent.width - 60 }" font="Helvetica"/>
@@ -207,7 +207,7 @@
         this.sendClearMessage(true);
     </method>   
     
-    <view resource="participents_allow_drawing_rsc" x="2" y="2" />
+    <view resource="participants_allow_drawing_rsc" x="2" y="2" />
     
     <labelText text="$once{ parent.message }" multiline="true" x="20"
                width="$once{ parent.width - 40 }" font="Helvetica"/>
@@ -274,7 +274,7 @@
         this.sendClearMessage(true);
     </method>   
     
-    <view resource="participents_isMod_rsc" x="2" y="2" />
+    <view resource="participants_isMod_rsc" x="2" y="2" />
     
     <labelText text="$once{ parent.message }" multiline="true" x="20"
                width="$once{ parent.width - 40 }" font="Helvetica"/>

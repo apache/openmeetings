@@ -2,9 +2,9 @@
 <library>
     
 <!-- 
-    The Width of each item is set in the participentList-Class
+    The Width of each item is set in the participantList-Class
  -->
-<class name="participentListItem" extends="view" bgcolor="0xFFFFFF" height="40" 
+<class name="participantListItem" extends="view" bgcolor="0xFFFFFF" height="40" 
        showhandcursor="false">
     
     <attribute name="connectedSince" value="" type="string" />
@@ -440,7 +440,7 @@
     
     <view name="_miniIcons" x="113" y="22" height="18">
         
-        <miniIcons name="_isMod" x="0" width="16" resource="participents_isactive" 
+        <miniIcons name="_isMod" x="0" width="16" resource="participants_isactive" 
                    height="16" showhandcursor="false">
             <handler name="onclick">
                 <![CDATA[
@@ -465,7 +465,7 @@
             <labelTooltip name="_text" text="" />
         </miniIcons>
         
-        <miniIcons name="_isModAddbutton" opacity="0.5" x="0" width="16" resource="participents_isactive" 
+        <miniIcons name="_isModAddbutton" opacity="0.5" x="0" width="16" resource="participants_isactive" 
                    height="16" showhandcursor="true">
             <handler name="onclick">
                 <![CDATA[
@@ -484,7 +484,7 @@
             <labelTooltip name="_text" labelid="676" />
         </miniIcons>
             
-        <miniIcons name="_canDraw" x="20" width="16" resource="participents_isactive" 
+        <miniIcons name="_canDraw" x="20" width="16" resource="participants_isactive" 
                    height="16" showhandcursor="false" >
             <handler name="onclick">
                 <![CDATA[
@@ -502,7 +502,7 @@
         </miniIcons>
         
         <miniIcons name="_canDrawModerator" x="20" width="16" opacity="0.5"
-                   resource="participents_isactive" height="16" showhandcursor="true">
+                   resource="participants_isactive" height="16" showhandcursor="true">
             <handler name="onclick">
                 //Do it 
                 if ($debug) Debug.write("Do it");
@@ -511,7 +511,7 @@
             <labelTooltip labelid="611" />
         </miniIcons>
         
-        <miniIcons name="_allowShare" x="40" width="16" resource="participents_isactive" 
+        <miniIcons name="_allowShare" x="40" width="16" resource="participants_isactive" 
                    height="16" showhandcursor="false" >
             <handler name="onclick">
                 <![CDATA[
@@ -529,7 +529,7 @@
         </miniIcons>
         
         <miniIcons name="_denyShare" x="40" width="16" opacity="0.5"
-                   resource="participents_isactive" height="16" showhandcursor="true">
+                   resource="participants_isactive" height="16" showhandcursor="true">
             <handler name="onclick">
                 //Do it 
                 if ($debug) Debug.write("Do it");
@@ -539,7 +539,7 @@
         </miniIcons>
         
         
-        <miniIcons name="_allowRemote" x="60" width="16" resource="participents_isactive" 
+        <miniIcons name="_allowRemote" x="60" width="16" resource="participants_isactive" 
                    height="16" showhandcursor="false" >
             <handler name="onclick">
                 <![CDATA[
@@ -557,7 +557,7 @@
         </miniIcons>
         
         <miniIcons name="_denyRemote" x="60" width="16" opacity="0.5"
-                   resource="participents_isactive" height="16" showhandcursor="true">
+                   resource="participants_isactive" height="16" showhandcursor="true">
             <handler name="onclick">
                 //Do it 
                 if ($debug) Debug.write("Do it");
@@ -566,7 +566,7 @@
             <labelTooltip labelid="1078" />
         </miniIcons>
 
-        <miniIcons name="_allowExclusiveAudio" x="80" width="16" resource="participents_isactive"
+        <miniIcons name="_allowExclusiveAudio" x="80" width="16" resource="participants_isactive"
                    height="16" showhandcursor="false" >
             <handler name="onclick">
                 <![CDATA[
@@ -583,7 +583,7 @@
         </miniIcons>
 
         <miniIcons name="_denyExclusiveAudio" x="80" width="16" opacity="0.5"
-                   resource="participents_isactive" height="16" showhandcursor="true">
+                   resource="participants_isactive" height="16" showhandcursor="true">
             <handler name="onclick">
                 parent.parent.setCanGiveAudio.doCall();
             </handler>

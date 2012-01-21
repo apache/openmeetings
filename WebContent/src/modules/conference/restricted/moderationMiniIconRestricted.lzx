@@ -114,7 +114,7 @@
 	</handler>
         
     <miniIcons name="_isMod" x="0" width="16" showhandcursor="true"
-    		   resource="participents_isMod_rsc" height="16">
+    		   resource="participants_isMod_rsc" height="16">
         <handler name="onclick">
             <![CDATA[
             
@@ -143,7 +143,7 @@
     </miniIcons>
     
     <miniIcons name="_isModAddbutton" opacity="0.5" x="0" showhandcursor="true"
-    		   width="16" resource="participents_isMod_rsc" height="16">
+    		   width="16" resource="participants_isMod_rsc" height="16">
         <handler name="onclick">
             <![CDATA[
                 //if the label is set and this is a Moderator then this user should
@@ -161,7 +161,7 @@
         <labelTooltip name="_text" labelid="676" />
     </miniIcons>
         
-    <miniIcons name="_canDraw" x="20" width="16" resource="participents_allow_drawing_rsc" 
+    <miniIcons name="_canDraw" x="20" width="16" resource="participants_allow_drawing_rsc" 
                height="16" showhandcursor="false" >
     	<attribute name="isActive" value="true" type="boolean" />
         <handler name="onclick">
@@ -183,7 +183,7 @@
     </miniIcons>
     
     <miniIcons name="_canDrawModerator" x="20" width="16" opacity="0.5"
-               resource="participents_allow_drawing_rsc" height="16" showhandcursor="true">
+               resource="participants_allow_drawing_rsc" height="16" showhandcursor="true">
         <handler name="onclick">
             //Do it 
             if (canvas.ismoderator) {
@@ -309,7 +309,7 @@
     </miniIcons>
 
     <miniIcons name="_allowExclusiveAudio" x="136" width="16" height="16"
-               resource="participents_exclusive_audio_rsc" showhandcursor="true">
+               resource="participants_exclusive_audio_rsc" showhandcursor="true">
     	<attribute name="isActive" value="true" type="boolean" />
         <handler name="onclick">
         	<![CDATA[
@@ -325,7 +325,7 @@
     </miniIcons>
 
     <miniIcons name="_denyExclusiveAudio" x="136" width="16" height="16" opacity="0.5"
-               resource="participents_exclusive_audio_rsc" showhandcursor="true">
+               resource="participants_exclusive_audio_rsc" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("Allow Give Exclusive Audio: ",parent.parent.parent.refObj.publicSID);
             if (canvas.ismoderator) {

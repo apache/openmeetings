@@ -16,7 +16,7 @@
 	<handler name="onallowUserQuestions" args="bool">
 		if (bool != null) {
 			if (!bool) {
-				this._participents._applyAndStatusIcons.destroy();
+				this._participants._applyAndStatusIcons.destroy();
 			}
 		}
 	</handler>
@@ -80,7 +80,7 @@
                 if ($debug) Debug.write("canvas.becomemoderator: ",canvas.becomemoderator);
                 if ($debug) Debug.write("canvas.becomeSuperModerator: ",canvas.becomeSuperModerator);
                 
-                canvas.currentusercolor = parent._participents.getColorForUser();
+                canvas.currentusercolor = parent._participants.getColorForUser();
                 
                 var organisation_id = 1;
             
@@ -149,7 +149,7 @@
             canvas.thishib.checkLzRecording.doCall();
             
             //Render and Show User-List
-            parent._participents.sortAndRenderList();
+            parent._participants.sortAndRenderList();
             
             canvas._chatcontent.doInit();	
             ]]>
@@ -227,7 +227,7 @@
 			if (streamid!=canvas.streamid){
 				
 				//do add others
-                this._participents.initialAddItem(object);
+                this._participants.initialAddItem(object);
                 
                 //if ($debug) Debug.write("???????? object.isBroadcasting :: ",object.isBroadcasting);
                 
@@ -264,7 +264,7 @@
 			} else {
                 
                 //do add self too
-                this._participents.initialAddItem(object);
+                this._participants.initialAddItem(object);
                 
                 return null;
             }
@@ -280,7 +280,7 @@
 			if (streamid!=canvas.streamid){
 				
 				//do add others
-                this._participents.addItem(object);
+                this._participants.addItem(object);
                 
                 //if ($debug) Debug.write("???????? object.isBroadcasting :: ",object.isBroadcasting);
                 
@@ -317,7 +317,7 @@
 			} else {
                 
                 //do add self too
-                this._participents.addItem(object);
+                this._participants.addItem(object);
                 
                 return null;
             }
@@ -345,7 +345,7 @@
     		}
 
     		//Do Add it anyway
-    		this._participents.addItem(object);
+    		this._participants.addItem(object);
 		]]>
 	</method>
 		
@@ -477,7 +477,7 @@
 			//if ($debug) Debug.write("disconnectclient: ",publicSID);
 			
 			var obj = this.getVideoObjectByPublicSID(publicSID);
-            var objList = this._participents.disconnectclient(publicSID);
+            var objList = this._participants.disconnectclient(publicSID);
 			
 			//if ($debug) Debug.write("disconnectclient obj: ",obj);
 			
@@ -507,7 +507,7 @@
 		]]>
 	</method>
     
-    <restrictedUserListInner name="_participents" />
+    <restrictedUserListInner name="_participants" />
     
 </class>
 

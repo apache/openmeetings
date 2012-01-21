@@ -36,11 +36,11 @@
             if (this.selected.name == "userTabButton") {
                 if ($debug) Debug.write("-- userTabButton");
                 this._files.setAttribute("visibility","hidden");
-                this._videocontainer._participents.setAttribute("visibility","visible");
+                this._videocontainer._participants.setAttribute("visibility","visible");
             } else if (this.selected.name == "filesTabButton") {
                 if ($debug) Debug.write("-- filesTabButton");
                 this._files.setAttribute("visibility","visible");
-                this._videocontainer._participents.setAttribute("visibility","hidden");
+                this._videocontainer._participants.setAttribute("visibility","hidden");
             }
         ]]>
     </method>

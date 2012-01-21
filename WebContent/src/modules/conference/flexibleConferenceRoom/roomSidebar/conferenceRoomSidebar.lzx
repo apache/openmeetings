@@ -23,12 +23,12 @@
                 if ($debug) Debug.write("-- userTabButton");
                 this._files.setAttribute("visibility","hidden");
                 this._videocontainer._applyAndStatusIcons.setAttribute("visibility","visible");
-                this._videocontainer._participents.setAttribute("visibility","visible");
+                this._videocontainer._participants.setAttribute("visibility","visible");
             } else if (this.selected.name == "filesTabButton") {
                 if ($debug) Debug.write("-- filesTabButton");
                 this._files.setAttribute("visibility","visible");
                 this._videocontainer._applyAndStatusIcons.setAttribute("visibility","hidden");
-                this._videocontainer._participents.setAttribute("visibility","hidden");
+                this._videocontainer._participants.setAttribute("visibility","hidden");
             }
         ]]>
     </method>
@@ -82,7 +82,7 @@
     <fileExplorer name="_files" y="16" width="$once{ parent.width-12 }"
                height="${ parent.height-216 }" visibility="hidden" />
     
-    <participents name="_videocontainer" y="36" userNewVideoContainer="true"
+    <participants name="_videocontainer" y="36" userNewVideoContainer="true"
                   width="$once{ parent.width-10 }" 
                height="${ parent.height-((canvas.currentRoomObj.hideActivitiesAndActions == true) ? 36:236) }" />
                

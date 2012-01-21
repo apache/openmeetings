@@ -109,7 +109,7 @@
     
     <simplelayout axis="x" spacing="2" />
 	
-    <miniIcons name="_isMod" x="0" width="16" resource="participents_isMod_rsc" 
+    <miniIcons name="_isMod" x="0" width="16" resource="participants_isMod_rsc" 
     		   height="16" showhandcursor="false">
         <handler name="onclick">
             <![CDATA[
@@ -119,7 +119,7 @@
         <labelTooltip name="_text" labelid="688" />
     </miniIcons>
     
-    <miniIcons name="_isModAddbutton" opacity="0.5" x="0" width="16" resource="participents_isMod_rsc" height="16">
+    <miniIcons name="_isModAddbutton" opacity="0.5" x="0" width="16" resource="participants_isMod_rsc" height="16">
         <handler name="onclick">
             <![CDATA[
                 //Apply for Moderation
@@ -129,7 +129,7 @@
         <labelTooltip name="_text" labelid="685" />
     </miniIcons>
         
-    <miniIcons name="_canDraw" x="20" width="16" resource="participents_allow_drawing_rsc" 
+    <miniIcons name="_canDraw" x="20" width="16" resource="participants_allow_drawing_rsc" 
                height="16" showhandcursor="false" >
         <attribute name="isActive" value="true" type="boolean" />
         <handler name="onclick">
@@ -141,7 +141,7 @@
     </miniIcons>
     
     <miniIcons name="_canDrawModerator" x="20" width="16" opacity="0.5"
-               resource="participents_allow_drawing_rsc" height="16" showhandcursor="true">
+               resource="participants_allow_drawing_rsc" height="16" showhandcursor="true">
         <handler name="onclick">
             //Ask for Right to Draw on Whiteboard
             var tDate = new Date();
@@ -262,7 +262,7 @@
     </miniIcons>
 
     <miniIcons name="_allowExclusiveAudio" x="60" width="16" height="16"
-               resource="participents_exclusive_audio_rsc" showhandcursor="false">
+               resource="participants_exclusive_audio_rsc" showhandcursor="false">
     	<attribute name="isActive" value="true" type="boolean" />
         <handler name="onclick">
         	<![CDATA[
@@ -277,7 +277,7 @@
     </miniIcons>
 
     <miniIcons name="_denyExclusiveAudio" x="60" width="16" height="16" opacity="0.5"
-               resource="participents_exclusive_audio_rsc" showhandcursor="true">
+               resource="participants_exclusive_audio_rsc" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("Allow Give Exclusive Audio: ",canvas.publicSID);
             var tDate = new Date();

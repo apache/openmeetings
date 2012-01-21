@@ -67,7 +67,7 @@
                 if ($debug) Debug.write("canvas.becomemoderator: ",canvas.becomemoderator);
                 if ($debug) Debug.write("canvas.becomeSuperModerator: ",canvas.becomeSuperModerator);
                 
-                canvas.currentusercolor = parent._participents.getColorForUser();
+                canvas.currentusercolor = parent._participants.getColorForUser();
                 
                 var organisation_id = 1;
             
@@ -213,7 +213,7 @@
 			if (streamid!=canvas.streamid){
 				
 				//do add others
-                this._participents.addItem(object);
+                this._participants.addItem(object);
                 
                 if ($debug) Debug.write("???????? object.isBroadcasting :: ",object.isBroadcasting,object.interviewPodId);
                 
@@ -248,7 +248,7 @@
 			} else {
                 
                 //do add self too
-                this._participents.addItem(object);
+                this._participants.addItem(object);
                 
                 return null;
             }
@@ -276,7 +276,7 @@
     		}
 
     		//Do Add it anyway
-    		this._participents.addItem(object);
+    		this._participants.addItem(object);
 		]]>
 	</method>
 		
@@ -435,7 +435,7 @@
 			//if ($debug) Debug.write("disconnectclient: ",publicSID);
 			
 			var obj = this.getVideoObjectByPublicSID(publicSID);
-            var objList = this._participents.getVideoObjectByPublicSID(publicSID);
+            var objList = this._participants.getVideoObjectByPublicSID(publicSID);
 			
 			//if ($debug) Debug.write("disconnectclient obj: ",obj);
 			
@@ -461,7 +461,7 @@
 		}
 	</method>
     
-    <interviewListInner name="_participents" />
+    <interviewListInner name="_participants" />
     
 	<commonVideoViewContent name="_videoviewcontent"/>
 	
