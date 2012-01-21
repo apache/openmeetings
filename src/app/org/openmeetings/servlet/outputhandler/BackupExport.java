@@ -930,6 +930,42 @@ public class BackupExport {
 				r.setShowMicrophoneStatus(false);
 				room.addElement("showMicrophoneStatus").addCDATA("" + r.getShowMicrophoneStatus());
 			}
+			
+			if (r.getHideActionsMenu() != null) {
+				room.addElement("hideActionsMenu").addCDATA("" + r.getHideActionsMenu());
+			} else {
+				room.addElement("hideActionsMenu").addCDATA("");
+			}
+			
+			if (r.getHideActivitiesAndActions() != null) {
+				room.addElement("hideActivitiesAndActions").addCDATA("" + r.getHideActivitiesAndActions());
+			} else {
+				room.addElement("hideActivitiesAndActions").addCDATA("");
+			}
+			
+			if (r.getHideChat() != null) {
+				room.addElement("hideChat").addCDATA("" + r.getHideChat());
+			} else {
+				room.addElement("hideChat").addCDATA("");
+			}
+			
+			if (r.getHideFilesExplorer() != null) {
+				room.addElement("hideFilesExplorer").addCDATA("" + r.getHideFilesExplorer());
+			} else {
+				room.addElement("hideFilesExplorer").addCDATA("");
+			}
+			
+			if (r.getHideScreenSharing() != null) {
+				room.addElement("hideScreenSharing").addCDATA("" + r.getHideScreenSharing());
+			} else {
+				room.addElement("hideScreenSharing").addCDATA("");
+			}
+			
+			if (r.getHideWhiteboard() != null) {
+				room.addElement("hideWhiteboard").addCDATA("" + r.getHideWhiteboard());
+			} else {
+				room.addElement("hideWhiteboard").addCDATA("");
+			}
 
 			room.addElement("isClosed").addCDATA("" + r.getIsClosed());
 			room.addElement("redirectURL").addCDATA("" + r.getRedirectURL());

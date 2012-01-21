@@ -1961,6 +1961,42 @@ public class BackupImport {
 							redirectURL = unformatString(roomObject.element(
 									"redirectURL").getText());
 						}
+						
+						Boolean hideActionsMenu = false;
+						if (roomObject.element("hideActionsMenu") != null) {
+							hideTopBar = importBooleanType(unformatString(roomObject
+									.element("hideActionsMenu").getText()));
+						}
+						
+						Boolean hideActivitiesAndActions = false;
+						if (roomObject.element("hideActivitiesAndActions") != null) {
+							hideTopBar = importBooleanType(unformatString(roomObject
+									.element("hideActivitiesAndActions").getText()));
+						}
+						
+						Boolean hideChat = false;
+						if (roomObject.element("hideChat") != null) {
+							hideTopBar = importBooleanType(unformatString(roomObject
+									.element("hideChat").getText()));
+						}
+						
+						Boolean hideFilesExplorer = false;
+						if (roomObject.element("hideFilesExplorer") != null) {
+							hideTopBar = importBooleanType(unformatString(roomObject
+									.element("hideFilesExplorer").getText()));
+						}
+						
+						Boolean hideScreenSharing = false;
+						if (roomObject.element("hideScreenSharing") != null) {
+							hideTopBar = importBooleanType(unformatString(roomObject
+									.element("hideScreenSharing").getText()));
+						}
+						
+						Boolean hideWhiteboard = false;
+						if (roomObject.element("hideWhiteboard") != null) {
+							hideTopBar = importBooleanType(unformatString(roomObject
+									.element("hideWhiteboard").getText()));
+						}
 
 						Rooms room = new Rooms();
 						room.setRooms_id(rooms_id);
@@ -1987,7 +2023,13 @@ public class BackupImport {
 						room.setWaitForRecording(waitForRecording);
 						room.setHideTopBar(hideTopBar);
 						room.setAllowRecording(allowRecording);
-						room.setShowMicrophoneStatus(showMicrophoneStatus);
+						room.setShowMicrophoneStatus(showMicrophoneStatus);						
+						room.setHideActionsMenu(hideActionsMenu);
+						room.setHideActivitiesAndActions(hideActivitiesAndActions);
+						room.setHideChat(hideChat);
+						room.setHideFilesExplorer(hideFilesExplorer);
+						room.setHideScreenSharing(hideScreenSharing);
+						room.setHideWhiteboard(hideWhiteboard);
 
 						Long roomId = room.getRooms_id();
 
