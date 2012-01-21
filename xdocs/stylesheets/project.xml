@@ -70,6 +70,7 @@
     		<subitem name="Dashboard" href="/Dashboard.html" />
     		<subitem name="Calendar and timezone" href="/CalendarAndTimezone.html" />
     		<subitem name="Webcam resolutions" href="/WebcamResolutions.html" />
+    		<subitem name="Custom room type" href="/CustomRoomTypeHowTo.html" />
     		<subitem name="General Configuration" href="/GeneralConfiguration.html" />
     	</item>
     	<item name="Security" >

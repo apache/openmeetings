@@ -29,8 +29,9 @@ limitations under the License.
             <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
 
                                                     <meta name="author" value="
- OpenMeetings Documentation Team">
-            <meta name="email" value="OpenMeetings-dev@incubator.apache.org">
+            OpenMeetings Team
+		">
+            <meta name="email" value="sebawagner@apache.org">
             
            
             
@@ -38,7 +39,7 @@ limitations under the License.
             
             
             
-            <title>Apache OpenMeetings - Get Involved</title>
+            <title>Apache OpenMeetings - Howto create a custom room type in OpenMeetings</title>
             <link rel="stylesheet" type="text/css" href="css/openmeetings.css">
             <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
             
@@ -761,35 +762,19 @@ limitations under the License.
                                                                     <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="How do I contribute, give feedback, fix bugs and so on?"><strong>How do I contribute, give feedback, fix bugs and so on?</strong></a>
+          <a name="Why creating a custom room type in OpenMeetings"><strong>Why creating a custom room type in OpenMeetings</strong></a>
           <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
         </font>
       </td></tr>
       <tr><td>
         <blockquote>
-                                    <p>
-The Apache OpenMeetings project really needs and appreciates any contributions,
-including documentation help, source code and feedback. Suggested
-changes should come in the form of source code and/or very detailed
-and constructive feedback.
-</p>
-                                                <ul>
-<li>
-Discussion occurs on the <a href="mail-lists.html">OpenMeetings mailing lists</a>
-</li>
-<li>
-Information on access to the project source code is 
-available <a href="svn.html">here</a>.
-</li>
-<li>
-Bugs and other issues can be posted on the project 
-<a href=" http://issues.apache.org/jira/secure/BrowseProject.jspa?id=0 ">JIRA</a>
-</li>
-<li>
-Additional documentation and discussion can be found on the project
-<a href="http://wiki.apache.org/incubator/OpenMeetings">wiki</a>
-</li>
-</ul>
+                                    <p>If you want to create your own styled room the best thing to do in 
+            order to be "update-save" is to create your own custom room type. There is an empty configuration 
+				by default shipped with every release of OpenMeetings, the room type "custom" (ID = 5).<br />
+				<br />
+            You can use that and extend it, or you can add more room types to fit your use case.
+			</p>
+                                                <p />
                             </blockquote>
         </p>
       </td></tr>
@@ -798,50 +783,86 @@ Additional documentation and discussion can be found on the project
                                                 <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="How do I become a committer?"><strong>How do I become a committer?</strong></a>
+          <a name="Create your own room type class (User Interface)"><strong>Create your own room type class (User Interface)</strong></a>
           <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
         </font>
       </td></tr>
       <tr><td>
         <blockquote>
-                                    <p>If you're interested in committing to the project: </p>
+                                    <p>Letes start with creating your custom room type class.
+				<br />
+					Therefore you could for example start by duplicating an existing one, from <br />
+					<tt>src/modules/conference/flexibleConferenceRoom</tt> folder, for example the 
+			flexibleConferenceRoom.lzx, generate a duplicate, change the name, for example to 
+			myCustomConferenceRoom.lzx, and edit the class name inside the file name="flexibleConferenceRoom" to
+			name="myCustomConferenceRoom". Also don't miss to add an entry to library.lzx so that the compiler 
+			finds your new class.
+			</p>
+                            </blockquote>
+        </p>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td ><!-- bgcolor="#EEEEEE" -->
+        <font color="#000000" face="verdana,arial,helvetica,sanserif">
+          <a name="Create nesseccary entries in configuration tables"><strong>Create nesseccary entries in configuration tables</strong></a>
+          <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
+        </font>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <p>You first need to create a number of configuration files </p>
                                                 <ul>
-<li><p> You'll need to fill out some legal paperwork and go through 
-a process to get an apache committer account: See 
-<a class="external" rel="nofollow" href="http://apache.org/dev/new-committers-guide.html">
-New Committers Guide</a>, 
-<a class="external" rel="nofollow" href="http://apache.org/dev/contributors.html"> Contributors</a>, and 
-<a class="external" rel="nofollow" href="http://apache.org/dev/committers.html"> Committers</a> 
-for more details. </p>
-
-</li>
-<li><p> After you've received an email from 
-<a href="mailto:root@apache.org">root@apache.org</a> 
-with your committer account information, change your initial password: 
-Login by 'ssh -l &lt;username&gt; people.apache.org'; 
-run 'passwd'; 
-run 'svnpasswd'.  See 
-<a class="external" rel="nofollow" href="http://apache.org/dev/version-control.html">Committer Subversion Access
-</a>. 
-</p>
-</li>
-<li><p> Check out the OpenMeetings sources and test your svn account: 
-<a href="http://svn.apache.org/viewcvs.cgi/incubator/OpenMeetings/">
-SubversionRepository</a>. 
-</p>
-
-</li>
-<li><p> Sign up for a 
-<a class="external" rel="nofollow" href="http://wiki.apache.org/incubator/UserPreferences">WiKi</a> account. 
-</p>
-</li>
-<li><p> Sign up for an 
-<a class="external" rel="nofollow" href="http://issues.apache.org/jira/">
-ASF JIRA</a> account. 
-</p>
-</li>
-
-</ul>
+				<li>To have your roomtype available everytime you install OpenMeetings you need to add 
+					it to the default rooms: <tt>ImportInitvalues.java Method: loadDefaultRooms()</tt>. Add your entry here. 
+				You can choose any random name for the room. The ID is the important trigger for the room type 
+				to identify later. You need to run the installer so that your new room type is in the database.</li>
+				
+				<li>Add your room type in the default module configuration: 
+					<tt>src/base/moduleConfiguration.lzx</tt>, 
+				here you need to add a default class name for your room type </li>
+				
+				<li>Add your room type in the real configuration: config.xml, add a new entry.
+					<br />
+					You should fix also the file <tt>openmeetings-config.xsd</tt> that is the Schema file for the config.xml.
+				</li>
+        		
+				<li>Add a parser entry to modify the room type mapping: 
+					<tt>base/mainMethods.lzx method: myinit</tt>. You 
+        		can see some example parsing, you should add your one similar to the existing room types.</li>
+        		
+			</ul>
+                            </blockquote>
+        </p>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td ><!-- bgcolor="#EEEEEE" -->
+        <font color="#000000" face="verdana,arial,helvetica,sanserif">
+          <a name="Link your room type config with your room type class "><strong>Link your room type config with your room type class </strong></a>
+          <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
+        </font>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <p>Now you need to make sure that everytime the conference room is created 
+			your new class "myCustomConferenceRoom" is used. There are 3 places you need to add your mapping.</p>
+                                                <ul>
+				<li>In the global mapping: 
+					<tt>base/mainMethods.lzx method name="setRoomValues"</tt> 
+				</li>
+				<li>In file: 
+					<tt>modules/conference/conference/roomListItem.lzx method name="initRoom"</tt> 
+				</li>
+				<li>In file: 
+					<tt>modules/invitation/autoloaderBarOnly.lzx netRemoteCallHib name="setUsernameAndSession"</tt> 
+				</li>
+			</ul>
+                                                <p>Thats it. You can add/edit/delete your room with the new room type in the Administration &gt; Rooms interface of 
+			OpenMeetings like any other room.</p>
+                                                <p>If you need to have this room type available as option in the Calendar UI, you need to add it to the combobox manually.</p>
                             </blockquote>
         </p>
       </td></tr>
