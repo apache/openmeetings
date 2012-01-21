@@ -137,7 +137,8 @@ public class GenerateImage {
 		us.setPictureuri(pictureuri);
 		usersDao.updateUser(us);
 
-		scopeApplicationAdapter.updateUserSessionObject(users_id, pictureuri);
+		//FIXME: After uploading a new picture all other clients should refresh
+		//scopeApplicationAdapter.updateUserSessionObject(users_id, pictureuri);
 
 		return returnMap;
 	}

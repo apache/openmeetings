@@ -457,8 +457,7 @@ public class UploadHandler extends HttpServlet {
 				us.setPictureuri(pictureuri);
 				getUsersDao().updateUser(us);
 
-				getScopeApplicationAdapter().updateUserSessionObject(userId,
-						pictureuri);
+				//FIXME: After updating the picture url all other users should refresh
 			} else {
 				HashMap<String, String> processThumb = getGenerateThumbs()
 						.generateThumb("_thumb_", currentDir, completeName, 50);
