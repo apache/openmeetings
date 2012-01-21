@@ -319,16 +319,6 @@ of the red5-servlet
 <interviewRoomModule>interviewConferenceRoom</interviewRoomModule>
 
 <!-- #############################################
-    Restricted Microphones Room
- -->
-<restrictedMicrophonesRoomModule>restrictedMicrophonesRoom</restrictedMicrophonesRoomModule>
-
-<!-- #############################################
-    Conference Microphones Room
- -->
-<conferenceMicrophonesRoomModule>conferenceMicrophonesRoom</conferenceMicrophonesRoomModule>
-
-<!-- #############################################
     Event Room Modules
  -->
 

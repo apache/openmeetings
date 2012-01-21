@@ -271,8 +271,16 @@ public class MethodGateway extends HttpServlet {
 					Long returnVal = getRoommanagement().addRoom(user_level,
 							name, roomtypes_id, comment, numberOfPartizipants,
 							ispublic, null, false, false, null, false, null,
-							true, false, false, "", "", "", null, null, null,
-							false, false, false, false, false, false, false);
+							true, false, false, "", "", "", null, null, null, 
+							false, // hideTopBar
+							false, // hideChat
+							false, // hideActivitiesAndActions
+							false, // hideFilesExplorer
+							false, // hideActionsMenu
+							false, // hideScreenSharing 
+							false, // hideWhiteboard
+							false //showMicrophoneStatus
+							);
 
 					XStream xStream = new XStream(new XppDriver());
 					xStream.setMode(XStream.NO_REFERENCES);

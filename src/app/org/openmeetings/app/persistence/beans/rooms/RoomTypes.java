@@ -28,8 +28,6 @@ public class RoomTypes implements Serializable {
 	private String name;
 	@Column(name = "deleted")
 	private String deleted;
-    @Column(name = "microphones")
-	private String microphones;
 
     
 	public String getName() {
@@ -67,11 +65,4 @@ public class RoomTypes implements Serializable {
 		this.deleted = deleted;
 	}
 
-    public String getMicrophones() {
-        return microphones;
-    }
-
-    public void setMicrophones(String microphones) {
-        this.microphones = microphones;
-    }
 }

@@ -4402,4 +4402,7 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="1441" name="hide_whiteboard">
     <value>Hide whiteboard</value>
   </string>
+  <string id="1442" name="show microphone status">
+    <value>Show micro status in video</value>
+  </string>
 </language>

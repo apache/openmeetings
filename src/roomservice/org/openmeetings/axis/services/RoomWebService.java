@@ -672,7 +672,16 @@ public class RoomWebService {
 			return roommanagement.addRoom(user_level, name, roomtypes_id,
 					comment, numberOfPartizipants, ispublic, null, false,
 					false, null, false, null, true, false, false, "", "", "",
-					null, null, null, false, false, false, false, false, false, false);
+					null, null, null, 
+					false, // hideTopBar
+					false, // hideChat
+					false, // hideActivitiesAndActions
+					false, // hideFilesExplorer
+					false, // hideActionsMenu
+					false, // hideScreenSharing 
+					false, // hideWhiteboard
+					false //showMicrophoneStatus
+					);
 		} catch (Exception err) {
 			log.error("[addRoom] ", err);
 		}
@@ -718,7 +727,16 @@ public class RoomWebService {
 			return roommanagement.addRoom(user_level, name, roomtypes_id,
 					comment, numberOfPartizipants, ispublic, null, appointment,
 					isDemoRoom, demoTime, isModeratedRoom, null, true, false,
-					false, "", "", "", null, null, null, false, false, false, false, false, false, false);
+					false, "", "", "", null, null, null, 
+					false, // hideTopBar
+					false, // hideChat
+					false, // hideActivitiesAndActions
+					false, // hideFilesExplorer
+					false, // hideActionsMenu
+					false, // hideScreenSharing 
+					false, // hideWhiteboard
+					false //showMicrophoneStatus
+					);
 		} catch (Exception err) {
 			log.error("[addRoomWithModeration] ", err);
 		}
@@ -771,7 +789,16 @@ public class RoomWebService {
 					comment, numberOfPartizipants, ispublic, null, appointment,
 					isDemoRoom, demoTime, isModeratedRoom, null,
 					allowUserQuestions, false, false, "", "", "", null, null,
-					null, false, false, false, false, false, false, false);
+					null, 
+					false, // hideTopBar
+					false, // hideChat
+					false, // hideActivitiesAndActions
+					false, // hideFilesExplorer
+					false, // hideActionsMenu
+					false, // hideScreenSharing 
+					false, // hideWhiteboard
+					false //showMicrophoneStatus
+					);
 		} catch (Exception err) {
 			log.error("[addRoomWithModerationAndQuestions] ", err);
 		}
@@ -826,7 +853,16 @@ public class RoomWebService {
 					comment, numberOfPartizipants, ispublic, null, appointment,
 					isDemoRoom, demoTime, isModeratedRoom, null,
 					allowUserQuestions, isAudioOnly, false, "", "", "", null,
-					null, null, false, false, false, false, false, false, false);
+					null, null, 
+					false, // hideTopBar
+					false, // hideChat
+					false, // hideActivitiesAndActions
+					false, // hideFilesExplorer
+					false, // hideActionsMenu
+					false, // hideScreenSharing 
+					false, // hideWhiteboard
+					false //showMicrophoneStatus
+					);
 		} catch (Exception err) {
 			log.error("[addRoomWithModerationQuestionsAndAudioType] ", err);
 			throw new AxisFault(err.getMessage());
@@ -900,7 +936,7 @@ public class RoomWebService {
 					isDemoRoom, demoTime, isModeratedRoom, null,
 					allowUserQuestions, isAudioOnly, false, "", "", "", null,
 					null, null, hideTopBar, hideChat, hideActivitiesAndActions, hideFilesExplorer, 
-					hideActionsMenu, hideScreenSharing, hideWhiteboard);
+					hideActionsMenu, hideScreenSharing, hideWhiteboard, false);
 		} catch (Exception err) {
 			log.error("[addRoomWithModerationQuestionsAudioTypeAndHideOptions] ", err);
 			throw new AxisFault(err.getMessage());
@@ -1023,7 +1059,16 @@ public class RoomWebService {
 						roomtypes_id, name, ispublic, comment,
 						numberOfPartizipants, null, appointment, false, null,
 						false, null, true, false, false, "", "", "", null,
-						null, null, false, false, false, false, false, false, false);
+						null, null, 
+						false, // hideTopBar
+						false, // hideChat
+						false, // hideActivitiesAndActions
+						false, // hideFilesExplorer
+						false, // hideActionsMenu
+						false, // hideScreenSharing 
+						false, // hideWhiteboard
+						false //showMicrophoneStatus
+						);
 			}
 		} catch (Exception err) {
 			log.error("[addRoom] ", err);
@@ -1073,8 +1118,16 @@ public class RoomWebService {
 				return roommanagement.updateRoomInternal(room_id, roomtypes_id,
 						name, ispublic, comment, numberOfPartizipants, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
-						null, true, false, false, "", "", "", null, null, null,
-						false, false, false, false, false, false, false);
+						null, true, false, false, "", "", "", null, null, null, 
+						false, // hideTopBar
+						false, // hideChat
+						false, // hideActivitiesAndActions
+						false, // hideFilesExplorer
+						false, // hideActionsMenu
+						false, // hideScreenSharing 
+						false, // hideWhiteboard
+						false //showMicrophoneStatus
+						);
 			}
 		} catch (Exception err) {
 			log.error("[updateRoomWithModeration] ", err);
@@ -1128,7 +1181,16 @@ public class RoomWebService {
 						name, ispublic, comment, numberOfPartizipants, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
 						null, allowUserQuestions, false, false, "", "", "",
-						null, null, null, false, false, false, false, false, false, false);
+						null, null, null, 
+						false, // hideTopBar
+						false, // hideChat
+						false, // hideActivitiesAndActions
+						false, // hideFilesExplorer
+						false, // hideActionsMenu
+						false, // hideScreenSharing 
+						false, // hideWhiteboard
+						false //showMicrophoneStatus
+						);
 			}
 		} catch (Exception err) {
 			log.error("[updateRoomWithModerationAndQuestions] ", err);
@@ -1206,7 +1268,9 @@ public class RoomWebService {
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
 						null, allowUserQuestions, false, false, "", "", "",
 						null, null, null, hideTopBar, hideChat, hideActivitiesAndActions, hideFilesExplorer, 
-						hideActionsMenu, hideScreenSharing, hideWhiteboard);
+						hideActionsMenu, hideScreenSharing, hideWhiteboard, 
+						false // showMicrophoneStatus
+						);
 			}
 		} catch (Exception err) {
 			log.error("[updateRoomWithModerationAndQuestions] ", err);

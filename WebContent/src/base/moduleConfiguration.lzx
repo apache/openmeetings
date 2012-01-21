@@ -91,16 +91,6 @@ these properties can be overwritten by config.xml -->
 <attribute name="interviewRoomModule" value="interviewConferenceRoom" type="string" />
 
 <!-- #############################################
-    Restricted Microphones Room
- -->
-<attribute name="restrictedMicrophonesRoomModule" value="restrictedMicrophonesRoom" type="string" />
-
-<!-- #############################################
-    Conference Microphones Room
- -->
-<attribute name="conferenceMicrophonesRoomModule" value="conferenceMicrophonesRoom" type="string" />
-
-<!-- #############################################
     Event Room Modules
  -->
 

@@ -94,9 +94,8 @@
             }
             this._giveExclusiveAudioView.bringToFront();
 
-            var roomType = canvas.currentRoomObject.roomtype;
-            this.isMicrophonesRoom = ('true' == roomType.microphones);
-            if (isMicrophonesRoom) {
+            this.isMicrophonesRoom = canvas.currentRoomObject.showMicrophoneStatus;
+            if (canvas.currentRoomObject.showMicrophoneStatus) {
                 this._innertop.setAttribute("bgcolor", "0xFF6600");
                 this._innerbottom.setAttribute("bgcolor", "0xFF6600");
             } else {

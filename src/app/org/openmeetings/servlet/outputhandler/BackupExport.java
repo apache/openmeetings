@@ -923,6 +923,13 @@ public class BackupExport {
 				r.setIspublic(false);
 				room.addElement("ispublic").addCDATA("" + r.getIspublic());
 			}
+			
+			if (r.getShowMicrophoneStatus() != null) {
+				room.addElement("showMicrophoneStatus").addCDATA("" + r.getShowMicrophoneStatus());
+			} else {
+				r.setShowMicrophoneStatus(false);
+				room.addElement("showMicrophoneStatus").addCDATA("" + r.getShowMicrophoneStatus());
+			}
 
 			room.addElement("isClosed").addCDATA("" + r.getIsClosed());
 			room.addElement("redirectURL").addCDATA("" + r.getRedirectURL());

@@ -624,7 +624,8 @@ public class ConferenceService {
 								Boolean.valueOf(argObjectMap.get("hideFilesExplorer").toString()),
 								Boolean.valueOf(argObjectMap.get("hideActionsMenu").toString()),
 								Boolean.valueOf(argObjectMap.get("hideScreenSharing").toString()),
-								Boolean.valueOf(argObjectMap.get("hideWhiteboard").toString())
+								Boolean.valueOf(argObjectMap.get("hideWhiteboard").toString()),
+								Boolean.valueOf(argObjectMap.get("showMicrophoneStatus").toString())
 						);
 			} else if (rooms_id > 0) {
 				return roommanagement
@@ -673,7 +674,8 @@ public class ConferenceService {
 								Boolean.valueOf(argObjectMap.get("hideFilesExplorer").toString()),
 								Boolean.valueOf(argObjectMap.get("hideActionsMenu").toString()),
 								Boolean.valueOf(argObjectMap.get("hideScreenSharing").toString()),
-								Boolean.valueOf(argObjectMap.get("hideWhiteboard").toString())
+								Boolean.valueOf(argObjectMap.get("hideWhiteboard").toString()),
+								Boolean.valueOf(argObjectMap.get("showMicrophoneStatus").toString())
 								);
 												
 			}

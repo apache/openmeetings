@@ -1915,6 +1915,8 @@ public class BackupImport {
 								"sipNumber").getText());
 						String conferencePin = unformatString(roomObject
 								.element("conferencePin").getText());
+						Boolean showMicrophoneStatus = importBooleanType(unformatString(roomObject
+								.element("showMicrophoneStatus").getText()));
 
 						Long ownerId = null;
 						if (roomObject.element("ownerid") != null) {
@@ -1985,6 +1987,7 @@ public class BackupImport {
 						room.setWaitForRecording(waitForRecording);
 						room.setHideTopBar(hideTopBar);
 						room.setAllowRecording(allowRecording);
+						room.setShowMicrophoneStatus(showMicrophoneStatus);
 
 						Long roomId = room.getRooms_id();
 

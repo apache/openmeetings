@@ -496,71 +496,154 @@ public class ImportInitvalues {
 	
 	public void loadDefaultRooms(boolean createRooms) {
 
-		long conference_Id = roommanagement.addRoomType("conference", false);
+		long conference_Id = roommanagement.addRoomType("conference (1-25 users)");
 		log.debug("conference_Id: " + conference_Id);
-		long audience_Id = roommanagement.addRoomType("audience", false);
+		long audience_Id = roommanagement.addRoomType("audience (1-50 users)");
 		log.debug("audience_Id: " + audience_Id);
 
-		long restricted_Id = roommanagement.addRoomType("restricted", false);
+		long restricted_Id = roommanagement.addRoomType("restricted  (1-150 users)");
 		log.debug("restricted_Id: " + restricted_Id);
 
-		long interview_Id = roommanagement.addRoomType("interview", false);
+		long interview_Id = roommanagement.addRoomType("interview  (1:1 meeting with recording)");
 		log.debug("interview_Id: " + interview_Id);
 
-		long custom_Id = roommanagement.addRoomType("custom", false);
+		long custom_Id = roommanagement.addRoomType("custom (extension point for your plugin)");
 		log.debug("custom_Id: " + custom_Id);
 
-        long restr_micro_Id = roommanagement.addRoomType("restricted microphones", true);
-		log.debug("restr_micro_Id: " + restr_micro_Id);
-
-        long conf_micro_Id = roommanagement.addRoomType("conference microphones", true);
-		log.debug("conf_micro_Id: " + conf_micro_Id);
-		
 		if (createRooms) {
 			roommanagement.addRoom(3, "public Interview Room", interview_Id, "",
 					new Long(16), true, null, false, false, null, false, null,
-					true, false, false, "", "", "", null, null, null, false, false, false, false, false, false, false);
+					true, false, false, "", "", "", null, null, null, 
+					false, // hideTopBar
+					false, // hideChat
+					false, // hideActivitiesAndActions
+					false, // hideFilesExplorer
+					false, // hideActionsMenu
+					false, // hideScreenSharing 
+					false, // hideWhiteboard
+					false //showMicrophoneStatus
+					);
 	
 			roommanagement.addRoom(3, "public Conference Room", conference_Id, "",
 					new Long(32), true, null, false, false, null, false, null,
-					true, false, false, "", "", "", null, null, null, false, false, false, false, false, false, false);
+					true, false, false, "", "", "", null, null, null, 
+					false, // hideTopBar
+					false, // hideChat
+					false, // hideActivitiesAndActions
+					false, // hideFilesExplorer
+					false, // hideActionsMenu
+					false, // hideScreenSharing 
+					false, // hideWhiteboard
+					false //showMicrophoneStatus
+					);
 	
 			roommanagement.addRoom(3, "public Video Only Room", conference_Id, "",
 					new Long(32), true, null, false, false, null, false, null,
-					true, false, false, "", "", "", null, null, null, false, false, false, false, false, false, false);
+					true, false, false, "", "", "", null, null, null, 
+					false, // hideTopBar
+					false, // hideChat
+					false, // hideActivitiesAndActions
+					false, // hideFilesExplorer
+					false, // hideActionsMenu
+					false, // hideScreenSharing 
+					false, // hideWhiteboard
+					false //showMicrophoneStatus
+					);
 	
 			roommanagement.addRoom(3, "public Video And Whiteboard Room",
 					conference_Id, "", new Long(32), true, null, false, false,
 					null, false, null, true, false, false, "", "", "", null, null,
-					null, false, false, false, false, false, false, false);
+					null, 
+					false, // hideTopBar
+					false, // hideChat
+					false, // hideActivitiesAndActions
+					false, // hideFilesExplorer
+					false, // hideActionsMenu
+					false, // hideScreenSharing 
+					false, // hideWhiteboard
+					false //showMicrophoneStatus
+					);
 	
 			roommanagement.addRoom(3, "public Restricted Room", restricted_Id, "",
 					new Long(100), true, null, false, false, null, false, null,
-					true, false, false, "", "", "", null, null, null, false, false, false, false, false, false, false);
+					true, false, false, "", "", "", null, null, null, 
+					false, // hideTopBar
+					false, // hideChat
+					false, // hideActivitiesAndActions
+					false, // hideFilesExplorer
+					false, // hideActionsMenu
+					false, // hideScreenSharing 
+					false, // hideWhiteboard
+					false //showMicrophoneStatus
+					);
 
-            roommanagement.addRoom(3, "restricted Microphones Room", restr_micro_Id, "",
+            roommanagement.addRoom(3, "restricted room with micro option set", restricted_Id, "",
 					new Long(100), true, null, false, false, null, false, null,
-					true, false, false, "", "", "", null, null, null, false, false, false, false, false, false, false);
+					true, false, false, "", "", "", null, null, null, 
+					false, // hideTopBar
+					false, // hideChat
+					false, // hideActivitiesAndActions
+					false, // hideFilesExplorer
+					false, // hideActionsMenu
+					false, // hideScreenSharing 
+					false, // hideWhiteboard
+					true //showMicrophoneStatus
+					);
 
-            roommanagement.addRoom(3, "conference Microphones Room", conf_micro_Id, "",
+            roommanagement.addRoom(3, "conference room with micro option set", conference_Id, "",
 					new Long(32), true, null, false, false, null, false, null,
-					true, false, false, "", "", "", null, null, null, false, false, false, false, false, false, false);
+					true, false, false, "", "", "", null, null, null, 
+					false, // hideTopBar
+					false, // hideChat
+					false, // hideActivitiesAndActions
+					false, // hideFilesExplorer
+					false, // hideActionsMenu
+					false, // hideScreenSharing 
+					false, // hideWhiteboard
+					true //showMicrophoneStatus
+					);
 	
 			long room2 = roommanagement.addRoom(3, "private Conference Room",
 					conference_Id, "", new Long(32), false, null, false, false,
 					null, false, null, true, false, false, "", "", "", null, null,
-					null, false, false, false, false, false, false, false);
+					null, 
+					false, // hideTopBar
+					false, // hideChat
+					false, // hideActivitiesAndActions
+					false, // hideFilesExplorer
+					false, // hideActionsMenu
+					false, // hideScreenSharing 
+					false, // hideWhiteboard
+					false //showMicrophoneStatus
+					);
 	
 			roommanagement.addRoomToOrganisation(3, room2, 1);
 	
 			roommanagement.addRoom(3, "public Audience Room", audience_Id, "",
 					new Long(32), true, null, false, false, null, false, null,
-					true, false, false, "", "", "", null, null, null, false, false, false, false, false, false, false);
+					true, false, false, "", "", "", null, null, null, 
+					false, // hideTopBar
+					false, // hideChat
+					false, // hideActivitiesAndActions
+					false, // hideFilesExplorer
+					false, // hideActionsMenu
+					false, // hideScreenSharing 
+					false, // hideWhiteboard
+					false //showMicrophoneStatus
+					);
 	
 			long room4 = roommanagement.addRoom(3, "private Audience Room",
 					audience_Id, "", new Long(32), false, null, false, false, null,
-					false, null, true, false, false, "", "", "", null, null, null,
-					false, false, false, false, false, false, false);
+					false, null, true, false, false, "", "", "", null, null, null, 
+					false, // hideTopBar
+					false, // hideChat
+					false, // hideActivitiesAndActions
+					false, // hideFilesExplorer
+					false, // hideActionsMenu
+					false, // hideScreenSharing 
+					false, // hideWhiteboard
+					false //showMicrophoneStatus
+					);
 	
 			roommanagement.addRoomToOrganisation(3, room4, 1);
 		}

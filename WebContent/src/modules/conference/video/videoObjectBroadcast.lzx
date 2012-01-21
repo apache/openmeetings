@@ -29,9 +29,8 @@
      -->
     <method name="setDefaultVideoSize" args="w,h">
         this.setAttribute("width",w+this.videoInsetX);
-        var roomType = canvas.currentRoomObject.roomtype;
-        this.isMicrophonesRoom = ('true' == roomType.microphones);
-        if (isMicrophonesRoom) {
+        this.isMicrophonesRoom = canvas.currentRoomObject.showMicrophoneStatus;
+        if (canvas.currentRoomObject.showMicrophoneStatus) {
         	this.setAttribute("bottomBarHeight",this._innertop.height + 1);
         }
         this.setAttribute("height",h+this.videoInsetY+this.bottomBarHeight);

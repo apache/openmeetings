@@ -1441,8 +1441,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 					currentClient);
 
             Rooms room = roommanagement.getRoomById(room_id);
-            RoomTypes type = room.getRoomtype();
-            if (type.getMicrophones().equals( "true" )) {
+            if (room.getShowMicrophoneStatus()) {
             	currentClient.setCanGiveAudio(true);
             }
 

@@ -57,15 +57,6 @@ public class Rooms implements Serializable {
 	@Column(name = "externalRoomType")
 	private String externalRoomType;
 	
-	@Column(name = "is_microphone_exclusive")
-	private Boolean isMicrophoneExclusive;
-	
-	/**
-	 * Layout of Room
-	 */
-	@Transient
-	private List<RoomClient> currentusers;
-	
 	@Column(name = "isdemoroom")
 	private Boolean isDemoRoom;
 	@Column(name = "demo_time")
@@ -97,7 +88,10 @@ public class Rooms implements Serializable {
 	private Boolean waitForRecording; //Show warning that user has to start recording
 	@Column(name = "allow_recording")
 	private Boolean allowRecording; //Show or show not the recording option in a conference room
-    
+	
+	/**
+	 * Layout of Room
+	 */
 	@Column(name = "hide_top_bar")
 	private Boolean hideTopBar = false;
 	
@@ -118,6 +112,15 @@ public class Rooms implements Serializable {
 	
 	@Column(name = "hide_whiteboard")
 	private Boolean hideWhiteboard = false;
+	
+	@Column(name = "show_microphone_status")
+	private Boolean showMicrophoneStatus = false;
+	
+	/*
+	 * Non persistent attributes 
+	 */
+	@Transient
+	private List<RoomClient> currentusers;
     
 	
 	public String getComment() {
@@ -345,6 +348,11 @@ public class Rooms implements Serializable {
 		this.hideWhiteboard = hideWhiteboard;
 	}
 	
-	
+	public Boolean getShowMicrophoneStatus() {
+		return showMicrophoneStatus;
+	}
+	public void setShowMicrophoneStatus(Boolean showMicrophoneStatus) {
+		this.showMicrophoneStatus = showMicrophoneStatus;
+	}
     
 }

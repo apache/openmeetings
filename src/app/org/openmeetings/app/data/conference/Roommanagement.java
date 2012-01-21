@@ -67,13 +67,12 @@ public class Roommanagement {
 	 * @param name
 	 * @return ID of new created roomtype or null
 	 */
-	public Long addRoomType(String name, Boolean microphones) {
+	public Long addRoomType(String name) {
 		try {
 			RoomTypes rtype = new RoomTypes();
 			rtype.setName(name);
 			rtype.setStarttime(new Date());
 			rtype.setDeleted("false");
-            rtype.setMicrophones(microphones.toString());
 			rtype = em.merge(rtype);
 			long returnId = rtype.getRoomtypes_id();
 			return returnId;
@@ -723,7 +722,8 @@ public class Roommanagement {
 			String redirectURL, String sipNumber, String conferencePin,
 			Long ownerId, Boolean waitForRecording, Boolean allowRecording,
 			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, Boolean hideFilesExplorer, 
-			Boolean hideActionsMenu, Boolean hideScreenSharing, Boolean hideWhiteboard) {
+			Boolean hideActionsMenu, Boolean hideScreenSharing, Boolean hideWhiteboard,
+			Boolean showMicrophoneStatus) {
 
 		try {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
@@ -764,6 +764,7 @@ public class Roommanagement {
 				r.setHideFilesExplorer(hideFilesExplorer);
 				r.setHideScreenSharing(hideScreenSharing);	
 				r.setHideWhiteboard(hideWhiteboard);
+				r.setShowMicrophoneStatus(showMicrophoneStatus);
 				
 				// handle SIP Issues
 				OpenXGReturnObject openXGReturnObject = openXGHttpClient
@@ -1292,7 +1293,8 @@ public class Roommanagement {
 			String redirectURL, String sipNumber, String conferencePin,
 			Long ownerId, Boolean waitForRecording, Boolean allowRecording,
 			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, 
-			Boolean hideFilesExplorer, Boolean hideActionsMenu, Boolean hideScreenSharing, Boolean hideWhiteboard) {
+			Boolean hideFilesExplorer, Boolean hideActionsMenu, Boolean hideScreenSharing, Boolean hideWhiteboard,
+			Boolean showMicrophoneStatus) {
 		try {
 
 			log.debug("*** updateRoom numberOfPartizipants: "
@@ -1305,7 +1307,8 @@ public class Roommanagement {
 						roomModerators, allowUserQuestions, isAudioOnly,
 						isClosed, redirectURL, sipNumber, conferencePin,
 						ownerId, waitForRecording, allowRecording, hideTopBar, hideChat, 
-						hideActivitiesAndActions, hideFilesExplorer, hideActionsMenu, hideScreenSharing, hideWhiteboard);
+						hideActivitiesAndActions, hideFilesExplorer, hideActionsMenu, 
+						hideScreenSharing, hideWhiteboard, showMicrophoneStatus);
 
 			}
 
@@ -1324,7 +1327,8 @@ public class Roommanagement {
 			String redirectURL, String sipNumber, String conferencePin,
 			Long ownerId, Boolean waitForRecording, Boolean allowRecording,
 			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, Boolean hideFilesExplorer, 
-			Boolean hideActionsMenu, Boolean hideScreenSharing, Boolean hideWhiteboard) {
+			Boolean hideActionsMenu, Boolean hideScreenSharing, Boolean hideWhiteboard, 
+			Boolean showMicrophoneStatus) {
 		try {
 			log.debug("*** updateRoom numberOfPartizipants: "
 					+ numberOfPartizipants);
@@ -1363,6 +1367,7 @@ public class Roommanagement {
 			r.setHideFilesExplorer(hideFilesExplorer);
 			r.setHideScreenSharing(hideScreenSharing);
 			r.setHideWhiteboard(hideWhiteboard);
+			r.setShowMicrophoneStatus(showMicrophoneStatus);
 
 			if (r.getRooms_id() == null) {
 				em.persist(r);
@@ -1703,7 +1708,7 @@ public class Roommanagement {
 			} else {
 				log.debug("Could not find room " + ownerId + " || "
 						+ roomtypesId);
-
+				
 				Long rooms_id = this.addRoom(3L, roomName, roomtypesId,
 						"My Rooms of ownerId " + ownerId,
 						(roomtypesId == 1) ? 25L : 150L, // numberOfPartizipants
@@ -1720,7 +1725,16 @@ public class Roommanagement {
 						"", // redirectURL
 						"", // sipNumber
 						"", // conferencePin
-						ownerId, null, null, false, false, false, false, false, false, false);
+						ownerId, null, null, 
+						false, // hideTopBar
+						false, // hideChat
+						false, // hideActivitiesAndActions
+						false, // hideFilesExplorer
+						false, // hideActionsMenu
+						false, // hideScreenSharing 
+						false, // hideWhiteboard
+						false //showMicrophoneStatus
+						);
 
 				if (rooms_id != null) {
 					return this.getRoomById(rooms_id);
