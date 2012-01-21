@@ -20,7 +20,5 @@
     <include href="flexibleEventRoom.lzx" />
     <include href="restrictedConferenceRoom.lzx" />
     <include href="interviewConferenceRoom.lzx" />
-    <include href="restrictedMicrophonesRoom.lzx" />
-    <include href="conferenceMicrophonesRoom.lzx" />
     
 </library>
