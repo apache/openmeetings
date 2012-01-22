@@ -14,6 +14,7 @@
 	<classpathentry kind="src" path="src/dtdgenerator"/>
 	<classpathentry kind="src" path="src/docgenerator"/>
 	<classpathentry kind="src" path="src/calendarservice"/>
+	<classpathentry kind="src" path="src/ooconverter"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry exported="true" kind="lib" path="lib/velocity/velocity-1.6.2.jar">

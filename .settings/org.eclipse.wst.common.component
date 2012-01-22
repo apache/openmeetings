@@ -17,6 +17,7 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/dtdgenerator"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/docgenerator"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/calendarservice"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/ooconverter"/>
         <property name="java-output-path"/>
         <property name="context-root" value="/"/>
     </wb-module>
