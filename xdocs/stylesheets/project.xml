@@ -80,9 +80,12 @@
     		<subitem name="Restricted Access" href="/RestrictedAccess.html" />
     		<subitem name="RTMPS and HTTPS" href="/RTMPSAndHTTPS.html" />
     	</item>
+    	<item name="Converters" >
+    		<subitem name="OpenOffice Converter" href="/OpenOfficeConverter.html" />
+            <subitem name="FFMPEG Version Switch" href="/FFMPEGVersionSwitch.html" />
+        </item>
     	<item name="Misc" >
     		<subitem name="Get version info" href="/GetVersionInfo.html" />
-    		<subitem name="FFMPEG Version Switch" href="/FFMPEGVersionSwitch.html" />
     	</item>
     </menu>
     
