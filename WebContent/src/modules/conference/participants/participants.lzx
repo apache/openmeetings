@@ -333,7 +333,7 @@
                 if ($debug) Debug.warn("videoContainer ",videoContainer);
                 
                 //Get a Free VideoView Slot
-                var freePos = videoContainer.getVideoObjectFreePos(40, 100, 100);
+                var freePos = videoContainer.getVideoObjectFreePos(10, 100, 100);
                 
                 this.broadCastViewRef = new lz.videoObjectBroadcast(videoContainer,{
                         publicSID:publicSID,
@@ -395,7 +395,7 @@
             }
             
             //Get a Free VideoView Slot
-            var freePos = videoContainer.getVideoObjectFreePos(40, 100, 100);
+            var freePos = videoContainer.getVideoObjectFreePos(10, 100, 100);
             
             return new lz.videoObjectPlayBroadcast(videoContainer,{
                     publicSID:publicSID,

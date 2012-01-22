@@ -104,14 +104,14 @@
                       listType="eventUserListTableWithNames" />
     
     <view name="_videoviewcontent_hideWhiteboard" y="0" x="${ parent._sidePanel.width }"
-          width="${canvas.width-parent._sidePanel.width}" height="${canvas.height-(parent._chatPanelStrict.height) - 
+		  width="${canvas.width-parent._sidePanel.width}" height="${canvas.height-(parent._chatPanelStrict.height) - 
         ((parent._chatPanelStrict.visibility == 'hidden') ? 5:28)}" clip="true" 
-          visibility="${((canvas.currentRoomObj.hideWhiteboard) ? 'visible':'hidden')}">
-            <commonVideoViewContentHideWhiteboard name="_inn" width="${parent.width}">              
-                <!--<wrappinglayout axis="x" spacing="10"/>-->
-            </commonVideoViewContentHideWhiteboard>
-            <vscrollbar name="_attenddeescrollbar" visibility="visible"></vscrollbar>
-    </view>
+		  visibility="${((canvas.currentRoomObj.hideWhiteboard) ? 'visible':'hidden')}">
+			<view name="_inn" width="${parent.width-10}">				
+				<wrappinglayout axis="x" spacing="10"/>
+			</view>
+			<vscrollbar name="_attenddeescrollbar" visibility="visible"></vscrollbar>
+	</view>
     
     <baseTabChatPanel name="_chatPanelStrict" labelid="616"
        height="200" x="${ parent._sidePanel.width }"  

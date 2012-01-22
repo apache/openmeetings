@@ -4405,4 +4405,7 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="1442" name="show microphone status">
     <value>Show micro status in video</value>
   </string>
+  <string id="1443" name="layout_options">
+    <value>Layout options</value>
+  </string>
 </language>

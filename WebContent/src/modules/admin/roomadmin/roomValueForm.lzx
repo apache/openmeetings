@@ -525,29 +525,34 @@
     <labelText labelid="1356" width="200" y="900" resize="false" x="2" visibility="hidden" />  
         <labelCheckbox name="allowRecording" width="270" y="900" x="180" fontsize="11" visibility="hidden" />
  
-    <labelText labelid="1357" width="200" y="920" resize="false" x="2" />  
-        <labelCheckbox name="hideTopBar" width="270" y="920" x="180" fontsize="11" />
-        
-    <labelText labelid="1436" width="200" y="940" resize="false" x="2" />  
-        <labelCheckbox name="hideChat" width="270" y="940" x="180" fontsize="11" />
-        
-    <labelText labelid="1437" width="200" y="960" resize="false" x="2" />  
-        <labelCheckbox name="hideActivitiesAndActions" width="270" y="960" x="180" fontsize="11" />
-        
-    <labelText labelid="1438" width="200" y="980" resize="false" x="2" />  
-        <labelCheckbox name="hideFilesExplorer" width="270" y="980" x="180" fontsize="11" />
-    
-    <labelText labelid="1439" width="200" y="1000" resize="false" x="2" />  
-        <labelCheckbox name="hideActionsMenu" width="270" y="1000" x="180" fontsize="11" />
  	
- 	<labelText labelid="1440" width="200" y="1020" resize="false" x="2" />  
-        <labelCheckbox name="hideScreenSharing" width="270" y="1020" x="180" fontsize="11" />
+ 	<!-- Room Layout options -->
+    <labelText labelid="1443" width="200" y="920" fontstyle="bold"
+               resize="false" x="2"/>  
+ 
+    <labelText labelid="1357" width="200" y="960" resize="false" x="2" />  
+        <labelCheckbox name="hideTopBar" width="270" y="960" x="180" fontsize="11" />
         
-    <labelText labelid="1441" width="200" y="1040" resize="false" x="2" />  
-        <labelCheckbox name="hideWhiteboard" width="270" y="1040" x="180" fontsize="11" />
+    <labelText labelid="1436" width="200" y="980" resize="false" x="2" />  
+        <labelCheckbox name="hideChat" width="270" y="980" x="180" fontsize="11" />
+        
+    <labelText labelid="1437" width="200" y="1000" resize="false" x="2" />  
+        <labelCheckbox name="hideActivitiesAndActions" width="270" y="1000" x="180" fontsize="11" />
+        
+    <labelText labelid="1438" width="200" y="1020" resize="false" x="2" />  
+        <labelCheckbox name="hideFilesExplorer" width="270" y="1020" x="180" fontsize="11" />
+    
+    <labelText labelid="1439" width="200" y="1040" resize="false" x="2" />  
+        <labelCheckbox name="hideActionsMenu" width="270" y="1040" x="180" fontsize="11" />
+ 	
+ 	<labelText labelid="1440" width="200" y="1060" resize="false" x="2" />  
+        <labelCheckbox name="hideScreenSharing" width="270" y="1060" x="180" fontsize="11" />
+        
+    <labelText labelid="1441" width="200" y="1080" resize="false" x="2" />  
+        <labelCheckbox name="hideWhiteboard" width="270" y="1080" x="180" fontsize="11" />
      
-    <labelText labelid="1442" width="200" y="1060" resize="false" x="2" />  
-        <labelCheckbox name="showMicrophoneStatus" width="270" y="1060" x="180" fontsize="11" />
+    <labelText labelid="1442" width="200" y="1100" resize="false" x="2" />  
+        <labelCheckbox name="showMicrophoneStatus" width="270" y="1100" x="180" fontsize="11" />
                                   
     <!-- RoomClient List Right Side -->
     <labelText labelid="587" width="300" y="40" resize="false" 
