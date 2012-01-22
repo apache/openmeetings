@@ -122,7 +122,7 @@
     
     <baseTabChatPanel name="_chatPanelStrict" labelid="616"
        height="200" x="${ parent._sidePanel.width }"  
-       y="${ canvas.height - (this.height) - 28 }" 
+       y="${ canvas.height - (this.height) - ((canvas.currentRoomObj.hideTopBar) ? 0:28) }" 
        width="${ canvas.width - parent._sidePanel.width }" />    
        
 </class>

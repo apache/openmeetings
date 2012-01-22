@@ -2,7 +2,7 @@
 <library>
 
 <class name="conferenceRoomSidebar" extends="view" width="280" 
-       height="${ canvas.height - 28 }" y="0" clip="true">
+       height="${ canvas.height - ((canvas.currentRoomObj.hideTopBar) ? 0:28) }" y="0" clip="true">
     
     <attribute name="selected" value="null" />
     
