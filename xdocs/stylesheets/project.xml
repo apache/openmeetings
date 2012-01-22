@@ -63,13 +63,16 @@
     	<item name="Performance" >
     		<subitem name="JVM performance tuning" href="/JVMPerformanceTuning.html" />
     	</item>
-    	<item name="Customization" >
+    	<item name="User Interface">
     		<subitem name="Branding and Colors" href="/BrandingAndColors.html" />
+    		<subitem name="Dashboard" href="/Dashboard.html" />
+    		<subitem name="Webcam resolutions" href="/WebcamResolutions.html" />
+    		<subitem name="Room layout options" href="/ConferenceRoomLayoutOptions.html" />
+    	</item>
+    	<item name="Customization" >
     		<subitem name="Webapp name/path" href="/WebappNamePath.html" />
     		<subitem name="Navigation" href="/Navigation.html" />
-    		<subitem name="Dashboard" href="/Dashboard.html" />
     		<subitem name="Calendar and timezone" href="/CalendarAndTimezone.html" />
-    		<subitem name="Webcam resolutions" href="/WebcamResolutions.html" />
     		<subitem name="Custom room type" href="/CustomRoomTypeHowTo.html" />
     		<subitem name="General Configuration" href="/GeneralConfiguration.html" />
     	</item>
