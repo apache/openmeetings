@@ -68,6 +68,8 @@ public class LdapLoginManagement {
 																							// or
 																							// 'no'
 
+	public static final String CONFIGKEY_LDAP_USE_LOWER_CASE = "ldap_use_lower_case";
+	
 	/***
 	 * for future use (lemeur) public static final String
 	 * CONFIGKEY_LDAP_USER_EXTRAFILTER = "ldap_user_extrafilter"; public static
@@ -297,6 +299,12 @@ public class LdapLoginManagement {
 				.get(CONFIGKEY_LDAP_KEY_COUNTRY);
 		String ldap_user_attr_town = configData.get(CONFIGKEY_LDAP_KEY_TOWN);
 		String ldap_user_attr_phone = configData.get(CONFIGKEY_LDAP_KEY_PHONE);
+		
+		String ldap_use_lower_case = configData.get(CONFIGKEY_LDAP_USE_LOWER_CASE);
+		
+		if (ldap_use_lower_case.equals("true")) {
+			user = user.toLowerCase();
+		}
 
 		if (ldap_user_attr_lastname == null) {
 			ldap_user_attr_lastname = LDAP_KEY_LASTNAME;
