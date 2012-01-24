@@ -656,7 +656,12 @@
 
 	</taskdef>
 
-	<target name="build.only.webservice.doc">
+    <target name="anakia">
+		<anakia basedir="${docs.src}" destdir="${docs.dest}/" extension=".html" style="./site.vsl" projectFile="stylesheets/project.xml" excludes="**/stylesheets/** empty.xml" includes="**/*.xml" lastModifiedCheck="true" templatePath="xdocs/stylesheets">
+		</anakia>
+    </target>
+
+	<target name="build.only.webservice.doc" depends="anakia">
 		<javadoc classpathref="build.webservice.classpath">
 			<source file="src/userservice/org/openmeetings/axis/services/UserWebService.java" />
 			<source file="src/roomservice/org/openmeetings/axis/services/RoomWebService.java" />
@@ -665,9 +670,6 @@
 			<doclet name="org.openmeetings.doc.WebServiceDoclet" pathref="build.webservice.classpath">
 			</doclet>
 		</javadoc>
-
-		<anakia basedir="${docs.src}" destdir="${docs.dest}/" extension=".html" style="./site.vsl" projectFile="stylesheets/project.xml" excludes="**/stylesheets/** empty.xml" includes="**/*.xml" lastModifiedCheck="true" templatePath="xdocs/stylesheets">
-		</anakia>
 
 		<copy todir="${docs.dest}/images" filtering="no">
 			<fileset dir="${docs.src}/images">

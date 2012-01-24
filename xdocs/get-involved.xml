@@ -29,12 +29,11 @@ available <a href="svn.html">here</a>.
 </li>
 <li>
 Bugs and other issues can be posted on the project 
-<a href="
-http://issues.apache.org/jira/secure/BrowseProject.jspa?id=0 ">JIRA</a>
+<a href="https://issues.apache.org/jira/browse/OPENMEETINGS">JIRA</a> (<a href="https://issues.apache.org/jira/secure/Signup!default.jspa">sign up</a>).
 </li>
 <li>
-Additional documentation and discussion can be found on the project
-<a href="http://wiki.apache.org/incubator/OpenMeetings">wiki</a>
+Additional documentation and discussion can be contributed to the project
+<a href="https://cwiki.apache.org/confluence/display/OPENMEETINGS">Wiki</a> (<a href="https://cwiki.apache.org/confluence/signup.action">sign up</a>).
 </li>
 </ul>
 
@@ -71,17 +70,6 @@ href="http://apache.org/dev/version-control.html">Committer Subversion Access
 SubversionRepository</a>. 
 </p>
 
-</li>
-<li><p> Sign up for a 
-<a  class="external" rel="nofollow" 
-href="http://wiki.apache.org/incubator/UserPreferences">WiKi</a> account. 
-</p>
-</li>
-<li><p> Sign up for an 
-<a  class="external" rel="nofollow" 
-href="http://issues.apache.org/jira/">
-ASF JIRA</a> account. 
-</p>
 </li>
 
 </ul>
