@@ -1,15 +1,56 @@
-
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License") +  you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package de.medint.rtpsharer.applet;
 
 import java.applet.Applet;
-import javax.media.rtp.*;
-import javax.media.rtp.event.*;
-import java.awt.*;
-import java.net.*;
-import java.awt.event.*;
-import java.lang.String;
-import javax.media.*;
-import javax.media.protocol.*;
+import java.awt.BorderLayout;
+import java.awt.Button;
+import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Panel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.InetAddress;
+
+import javax.media.Controller;
+import javax.media.ControllerEvent;
+import javax.media.ControllerListener;
+import javax.media.Player;
+import javax.media.RealizeCompleteEvent;
+import javax.media.SizeChangeEvent;
+import javax.media.protocol.DataSource;
+import javax.media.rtp.Participant;
+import javax.media.rtp.RTPControl;
+import javax.media.rtp.RTPManager;
+import javax.media.rtp.ReceiveStream;
+import javax.media.rtp.ReceiveStreamListener;
+import javax.media.rtp.SessionAddress;
+import javax.media.rtp.SessionListener;
+import javax.media.rtp.event.ByeEvent;
+import javax.media.rtp.event.NewParticipantEvent;
+import javax.media.rtp.event.NewReceiveStreamEvent;
+import javax.media.rtp.event.ReceiveStreamEvent;
+import javax.media.rtp.event.RemotePayloadChangeEvent;
+import javax.media.rtp.event.SessionEvent;
+import javax.media.rtp.event.StreamMappedEvent;
 
 
 /**
