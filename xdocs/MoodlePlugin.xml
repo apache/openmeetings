@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- Copyright 2006 The Apache Software Foundation Licensed under the Apache 
+	License, Version 2.0 (the "License"); you may not use this file except in 
+	compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+	Unless required by applicable law or agreed to in writing, software distributed 
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+	the specific language governing permissions and limitations under the License. -->
+<document>
+
+	<properties>
+		<title>Moodle Plugin</title>
+		<author email="sebawagner@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+
+		<section name="Moodle Plugin for OpenMeetings">
+			<p>
+				You can get the latest Version of the Plugin for Moodle from the
+				<a href="/downloads.html">downloads</a>
+				.
+			</p>
+			<p>
+				You can find the OpenMeetings Plugin also in the
+				<a href="http://moodle.org/plugins/view.php?plugin=mod_openmeetings"
+					target="_BLANK" rel="nofollow">Moodle Plugin database</a>
+				.
+			</p>
+			<p>
+				A demo version of the Moodle plugin is available at
+				<a href="http://moodle.openmeetings.de" target="_BLANK" rel="nofollow">moodle.openmeetings.de
+				</a>
+				.
+			</p>
+		</section>
+
+		<section name="Installation the Moodle Plugin for OpenMeetings">
+			<p>
+				You simply download the ZIP package and unzip it to Moodle's mod
+				directory.
+				<br />
+				The you visit the admin interface of Moodle, for example
+				<a href="http://$your_moodle_host/$MOODLE_WWW_ROOT/admin" target="_BLANK"
+					rel="nofollow">http://$your_moodle_host/$MOODLE_WWW_ROOT/admin</a>
+			</p>
+			<p>In Moodle's module configuration web-interface you will find the
+				Plugin's configuration
+			</p>
+			<a class="fancybox-buttons" data-fancybox-group="button"
+				href="images/moodle_plugin_conference.png">
+				<img src="images/moodle_plugin_conference.png" alt="" width="500"
+					height="400" />
+			</a>
+		</section>
+
+	</body>
+
+</document>
