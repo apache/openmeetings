@@ -9,7 +9,7 @@
   with the License.  You may obtain a copy of the License at
   
       http://www.apache.org/licenses/LICENSE-2.0
-    	  
+          
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -1520,10 +1520,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Es gibt momentan keinen Moderator in diesen Raum. Sie müssen die Moderation beantragen oder warten.</value>
   </string>
   <string id="499" name="feedback_template_subject">
-    <value>Feedback $APP_NAME</value>
+    <value>Feedback OpenMeetings</value>
   </string>
   <string id="500" name="invitation_template_head">
-    <value>$APP_NAME - Einladung</value>
+    <value>OpenMeetings - Einladung</value>
   </string>
   <string id="501" name="invitation_text_from">
     <value>Nachricht von Teilnehmer:</value>
@@ -1541,7 +1541,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Wenn der Link fehlerhaft dargestellt wird, kopieren Sie bitte folgenden Link in die Adresszeile ihres Browsers:</value>
   </string>
   <string id="506" name="registering_mail_text_head">
-    <value>$APP_NAME Registrierung</value>
+    <value>OpenMeetings Registrierung</value>
   </string>
   <string id="507" name="registering_mail_text_head2">
     <value>Ihre Benutzerdaten:</value>
@@ -1556,13 +1556,13 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>E-Mail:</value>
   </string>
   <string id="511" name="registering_mail_text_bye">
-    <value>$APP_NAME-Team</value>
+    <value>OpenMeetings-Team</value>
   </string>
   <string id="512" name="register_mail_subject">
-    <value>$APP_NAME Registrierung</value>
+    <value>OpenMeetings Registrierung</value>
   </string>
   <string id="513" name="reset_password_template_head">
-    <value>$APP_NAME - Passwort zurücksetzen</value>
+    <value>OpenMeetings - Passwort zurücksetzen</value>
   </string>
   <string id="514" name="reset_password_template_test_link">
     <value>Klicken Sie hier, um ein neues Passwort einzugeben:</value>
@@ -1574,7 +1574,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Wenn der Link fehlerhaft dargestellt wird, kopieren Sie bitte folgenden Link in die Adresszeile Ihres Browsers:</value>
   </string>
   <string id="517" name="reset_password_mail_subject">
-    <value>$APP_NAME Password Reset</value>
+    <value>OpenMeetings Password Reset</value>
   </string>
   <string id="518" name="dateRegExpError">
     <value>Bitte geben Sie ein gültiges Datum an, zum Beispiel 24.12.2001 (dd.mm.yyyy)</value>
@@ -1889,7 +1889,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Server Zeit</value>
   </string>
   <string id="622" name="inv_reminder_template_head">
-    <value>$APP_NAME - Erinnerung</value>
+    <value>OpenMeetings - Erinnerung</value>
   </string>
   <string id="623" name="inv_reminder_text_from">
     <value>Nachricht von Teilnehmer:</value>
@@ -2417,7 +2417,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Warnung</value>
   </string>
   <string id="798" name="calendar">
-    <value>Neues Event</value>
+    <value>Neuer Event</value>
   </string>
   <string id="799" name="calendar">
     <value>Tag</value>
@@ -2435,7 +2435,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Teilnehmer</value>
   </string>
   <string id="804" name="dashboard">
-    <value>$APP_NAME, Ihre Web Konferenz Plattform. Entweder starten Sie sofort ein Meeting indem Sie den 1-2-3 Anweisungen folgen oder Sie benutzen den Kalender um eine Konferenz zu planen.</value>
+    <value>OpenMeetings, Ihre Web Konferenz Plattform. Entweder starten Sie sofort ein Meeting indem Sie den 1-2-3 Anweisungen folgen oder Sie benutzen den Kalender um eine Konferenz zu planen.</value>
   </string>
   <string id="805" name="dashboard">
     <value>Konferenz planen</value>
@@ -2750,7 +2750,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>The appointement has been changed. Do you want to save those changes? &lt;br/&gt;&lt;br/&gt;All attendees of the appointment will receive a EMail with the updated date and time (depending on the notification type of this appointment).</value>
   </string>
   <string id="909" name="flv recorder error message">
-    <value>To access other recordings you have to login the $APP_NAME Application.</value>
+    <value>To access other recordings you have to login the OpenMeetings Application.</value>
   </string>
   <string id="910" name="interview video pod">
     <value>Choose the User for this Video</value>
@@ -2879,7 +2879,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Want your own Server?</value>
   </string>
   <string id="952" name="user-license">
-    <value>You would like to have $APP_NAME installed on your Server or integrated into your Moodle, SugarCRM, Website or Intranet? Prizings start at 500 Euro per Installation!</value>
+    <value>You would like to have OpenMeetings installed on your Server or integrated into your Moodle, SugarCRM, Website or Intranet? Prizings start at 500 Euro per Installation!</value>
   </string>
   <string id="953" name="user-license">
     <value>Or send us a message</value>
@@ -2957,7 +2957,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Submit</value>
   </string>
   <string id="978" name="payment-form">
-    <value>Step 1: $APP_NAME - Payment Form</value>
+    <value>Step 1: OpenMeetings - Payment Form</value>
   </string>
   <string id="979" name="payment-form">
     <value>EMail</value>
@@ -2966,7 +2966,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Click "Check out with Paypal" to pay.&lt;br/&gt; Paypal accepts VISA, MasterCard, Discover or American Express. &lt;br/&gt;It does not require to sign up with Paypal. &lt;br/&gt;Citizens from Germany can also pay with direct debit (Per Lastschrift-Einzug).</value>
   </string>
   <string id="981" name="payment-form">
-    <value>Thank you for buying $APP_NAME. &lt;br/&gt; &lt;br/&gt; As soon as we received the payment your account will be updated.&lt;br/&gt; You will receive an EMail with your invoice as PDF.&lt;br/&gt;You can also check current and past transactions in your profile settings.&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;You can close this browser window/tab now and return to $APP_NAME.</value>
+    <value>Thank you for buying OpenMeetings. &lt;br/&gt; &lt;br/&gt; As soon as we received the payment your account will be updated.&lt;br/&gt; You will receive an EMail with your invoice as PDF.&lt;br/&gt;You can also check current and past transactions in your profile settings.&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;You can close this browser window/tab now and return to OpenMeetings.</value>
   </string>
   <string id="982" name="payment-form">
     <value>Submit and Buy!</value>
@@ -2975,7 +2975,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Click and Buy!</value>
   </string>
   <string id="984" name="payment-from">
-    <value>Step 3: $APP_NAME Payment - Check order and buy!</value>
+    <value>Step 3: OpenMeetings Payment - Check order and buy!</value>
   </string>
   <string id="985" name="payment-from">
     <value>Name</value>
@@ -2990,10 +2990,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>We have received your payment. Your user profile is updated now. See attached your Invoice. The Invoice and all past Invoice can also be downloaded in your user profile.</value>
   </string>
   <string id="989" name="payment-mail">
-    <value>Thank you for using $APP_NAME!</value>
+    <value>Thank you for using OpenMeetings!</value>
   </string>
   <string id="990" name="payment-mail">
-    <value>Payment Received $APP_NAME -</value>
+    <value>Payment Received OpenMeetings -</value>
   </string>
   <string id="991" name="user-settings">
     <value>Payment and Transaction Status</value>
@@ -3020,7 +3020,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value></value>
   </string>
   <string id="999" name="error-license-flat">
-    <value>You need to buy a volume flatrate to be able to send invitations or create meetings via the calendar. With Pay-per-minute it is only possible for you to access $APP_NAME. You cannot allow 3th Parties to access a Meeting.</value>
+    <value>You need to buy a volume flatrate to be able to send invitations or create meetings via the calendar. With Pay-per-minute it is only possible for you to access OpenMeetings. You cannot allow 3th Parties to access a Meeting.</value>
   </string>
   <string id="1000" name="error user">
     <value>This Email is already used by another User.</value>
@@ -3401,10 +3401,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>You need the right to remote control (or the moderation) to copy and paste text to or from the remote screen.</value>
   </string>
   <string id="1126" name="right click screen share">
-    <value>Edit default settings ...</value>
+    <value>Bearbeite Einstellungen</value>
   </string>
   <string id="1127" name="right click screen share">
-    <value>Do not show info box in Remote Control about Copy and Paste</value>
+    <value>Zeige keine Info-Box in der Remote Control über Kopieren und Einfügen</value>
   </string>
   <string id="1128" name="calendar">
     <value>Save</value>
@@ -3476,7 +3476,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Please check the time zone in your user profile.</value>
   </string>
   <string id="1151" name="calendar invitation message">
-    <value>New $APP_NAME conference:</value>
+    <value>New OpenMeetings conference:</value>
   </string>
   <string id="1152" name="calendar invitation message">
     <value>Details:&lt;br/&gt;</value>
@@ -3488,16 +3488,16 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>End:</value>
   </string>
   <string id="1155" name="calendar invitation message">
-    <value>Changed $APP_NAME conference:</value>
+    <value>Changed OpenMeetings conference:</value>
   </string>
   <string id="1156" name="calendar invitation message">
     <value>Organizer:</value>
   </string>
   <string id="1157" name="calendar invitation message">
-    <value>Canceled $APP_NAME conference:</value>
+    <value>Canceled OpenMeetings conference:</value>
   </string>
   <string id="1158" name="calendar invitation message">
-    <value>$APP_NAME conference Reminder:</value>
+    <value>OpenMeetings conference Reminder:</value>
   </string>
   <string id="1159" name="user settings">
     <value>Community settings</value>
@@ -3605,7 +3605,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>would like to add you as contact.</value>
   </string>
   <string id="1194" name="user contact request">
-    <value>Check your contact requests in $APP_NAME or click on those links to accept or deny the request</value>
+    <value>Check your contact requests in OpenMeetings or click on those links to accept or deny the request</value>
   </string>
   <string id="1195" name="add user contact">
     <value>This user is already in your contact list or has received an invitation to your contact list that is not answered yet.</value>
@@ -3659,10 +3659,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Subject:</value>
   </string>
   <string id="1212" name="whiteboard full-fit">
-    <value>Enable full fit and the whiteboard will zoom the whole whiteboard so that all&lt;br/&gt;documents are visible according to each participants screen resolution.</value>
+    <value>Aktiviere Größenanpassung, sodass auf das ganze Whiteboard gezoomt wird&lt;br/&gt;und der Benutzer alle Dokumente sieht.</value>
   </string>
   <string id="1213" name="user-list">
-    <value>Kick user</value>
+    <value>entferne Benutzer</value>
   </string>
   <string id="1214" name="user-list">
     <value>You cannot kick yourself out of the conference room! If you want to leave it close the browser or use the exit button!</value>
@@ -3836,7 +3836,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Address &amp; Phone</value>
   </string>
   <string id="1271" name="error code">
-    <value>You invitation code is no valid, the code is only valid during this specific date and time:</value>
+    <value>You invitation code is no valid, the code is only valid for a period of time.</value>
   </string>
   <string id="1272" name="user calendar">
     <value>This event is connected to several calendars of other users. Your change will also update their calendar. Would you really like to update the event?</value>
@@ -3920,7 +3920,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Message</value>
   </string>
   <string id="1299" name="direct login message checkbox control">
-    <value>Do not show update profile message again</value>
+    <value>Zeige Profil-Update-Nachricht nicht noch einmal</value>
   </string>
   <string id="1300" name="profile settings button">
     <value>more display options ...</value>
@@ -4048,7 +4048,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1341" name="submenu">
     <value>Load directly to whiteboard</value>
   </string>
-    <string id="1342" name="attendees">
+  <string id="1342" name="attendees">
     <value>Attendees</value>
   </string>
   <string id="1343" name="atendee manager">
@@ -4112,10 +4112,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>I</value>
   </string>
   <string id="1363" name="activity_window">
-    <value>Activities and actions</value>
+    <value>Aktivitäten und Aktionen</value>
   </string>
   <string id="1364" name="whiteboard">
-    <value>Remove whiteboard</value>
+    <value>Lösche Whiteboard</value>
   </string>
   <string id="1365" name="whiteboard">
     <value>You need the moderation or the right to draw on the whiteboard to remove whiteboards!</value>
@@ -4124,7 +4124,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Not allowed</value>
   </string>
   <string id="1367" name="user_left_act_msg">
-    <value> has left the room.</value>
+    <value>has left the room.</value>
   </string>
   <string id="1368" name="clipart icons">
     <value>Math icons</value>
@@ -4271,7 +4271,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Pie Chart</value>
   </string>
     <string id="1416" name="sign_up_validation">
-    <value>Please enter email</value>
+    <value>Bitte geben Sie eine EMail an</value>
   </string>
   <string id="1417" name="chat_notification">
     <value>Neue Nachricht(en)</value>
@@ -4310,10 +4310,10 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
     <value>Give a permission for exclusive audio.</value>
   </string>
   <string id="1429" name="cam_resolution">
-    <value>Cam resolution</value>
+    <value>Kamera-Auflösung</value>
   </string>
   <string id="1430" name="cam_resolution_info">
-    <value>Changing the resolution affects bandwidth, bigger picture needs more bandwith!</value>
+    <value>Die Kamera-Auslösung hat einen direkten Einfluss auf die verbrauchte Upload-Bandbreite!</value>
   </string>
   <string id="1431" name="exclusive_audio_error">
     <value>You don't have the right to give yourself or others exclusive audio. You need to apply for the right from the moderator or ask the moderator to give you exclusive audio.</value>
