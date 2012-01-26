@@ -69,7 +69,7 @@
   <xs:element name="basebgcolorizer" type="xs:NMTOKEN"/>
   <xs:element name="baseMousecolorizer" type="xs:NMTOKEN"/>
   <xs:element name="baseMouseOvercolorizer" type="xs:NMTOKEN"/>
-  <xs:element name="currentappname" type="xs:NCName"/>
+  <xs:element name="currentappname" type="xs:string"/>
   <xs:element name="currentappnameurl" type="xs:anyURI"/>
   <xs:element name="currentappnamebugurl" type="xs:anyURI"/>
   <xs:element name="loudnessAcitviation" type="xs:integer"/>

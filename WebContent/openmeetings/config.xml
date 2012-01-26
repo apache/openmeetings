@@ -86,19 +86,19 @@ of the red5-servlet
     Name of the Application
     this is the Top-Icon Name of the Application
  -->    
-<currentappname>OpenMeetings</currentappname>    
+<currentappname>Apache OpenMeetings</currentappname>    
     
 <!-- 
     URL to the Home of the Application
     this is the URL which is used if you click on the Top-icon
 -->    
-<currentappnameurl>http://openmeetings.googlecode.com</currentappnameurl>        
+<currentappnameurl>http://incubator.apache.org/openmeetings</currentappnameurl>        
 
 <!--
     URL to Bugs/Support
     this is the URL which is used if you click on *report a bug*
  -->
-<currentappnamebugurl>http://code.google.com/p/openmeetings/issues/list</currentappnamebugurl>   
+<currentappnamebugurl>https://issues.apache.org/jira/browse/OPENMEETINGS</currentappnamebugurl>   
         
 <!--
     Video-Settings
