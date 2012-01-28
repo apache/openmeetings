@@ -15,7 +15,6 @@
 	<classpathentry kind="src" path="src/dtdgenerator"/>
 	<classpathentry kind="src" path="src/docgenerator"/>
 	<classpathentry kind="src" path="src/calendarservice"/>
-	<classpathentry kind="src" path="src/ooconverter"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry exported="true" kind="lib" path="lib/velocity/velocity-1.6.2.jar">
@@ -488,7 +487,7 @@
 			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/axis2-1.6/commons-cli-1.2.jar">
+	<classpathentry exported="true" kind="lib" path="lib/axis2-1.6/commons-cli-1.2.jar" sourcepath="C:/Users/swagner/.m2/repository/commons-cli/commons-cli/1.2/commons-cli-1.2-sources.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
 		</attributes>
