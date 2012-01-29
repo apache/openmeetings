@@ -19,9 +19,12 @@
 package org.openmeetings.app.documents;
 
 import java.io.File;
+import java.io.FilenameFilter;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.commons.transaction.util.FileHelper;
+import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -36,6 +39,8 @@ public class GeneratePDF {
 	private GenerateThumbs generateThumbs;
 	@Autowired
 	private GenerateSWF generateSWF;
+	@Autowired
+	private Configurationmanagement cfgManagement;
 
 	public HashMap<String, HashMap<String, String>> convertPDF(
 			String current_dir, String fileName, String fileExt,
@@ -135,35 +140,65 @@ public class GeneratePDF {
 	}
 
 	/**
-	 * Generates PDF and thumbs (and swf).
+	 * Generates PDF using JOD Library (external library)
 	 */
 	public HashMap<String, String> doJodConvert(String current_dir,
 			String fileFullPath, String destinationFolder, String outputfile) {
-		// Path to all JARs of JOD
-		String jodClassPathFolder = current_dir + "jod" + File.separatorChar;
+		try {
 
-		// Create the Content of the Converter Script (.bat or .sh File)
-		String[] argv = new String[] {
-				"java",
-				"-cp",
-				"\"" + jodClassPathFolder + "commons-cli-1.2.jar\" -cp \""
-						+ jodClassPathFolder + "commons-io-1.4.jar\" -cp \""
-						+ jodClassPathFolder
-						+ "jodconverter-2.2.2.jar\" -cp \""
-						+ jodClassPathFolder
-						+ "jodconverter-cli-2.2.2.jar\" -cp \""
-						+ jodClassPathFolder + "juh-3.0.1.jar\" -cp \""
-						+ jodClassPathFolder + "jurt-3.0.1.jar\" -cp \""
-						+ jodClassPathFolder + "ridl-3.0.1.jar\" -cp \""
-						+ jodClassPathFolder + "slf4j-api-1.5.6.jar\" -cp \""
-						+ jodClassPathFolder + "slf4j-jdk14-1.5.6.jar\" -cp \""
-						+ jodClassPathFolder + "unoil-3.0.1.jar\" -cp \""
-						+ jodClassPathFolder + "xstream-1.3.1.jar\"", "-jar",
-				jodClassPathFolder + "jodconverter-cli-2.2.2.jar",
-				fileFullPath, destinationFolder + outputfile + ".pdf" };
+			String jodPath = cfgManagement.getConfValue("jod.path",
+					String.class, "./jod");
 
-		return GenerateSWF.executeScript("doJodConvert", argv);
+			File jodFolder = new File(jodPath);
+			if (!jodFolder.exists() || !jodFolder.isDirectory()) {
+				new Exception("Path to JOD Library folder does not exist");
+			}
 
+			ArrayList<String> argv = new ArrayList<String>();
+			argv.add("java");
+
+			String jodConverterJar = "";
+
+			for (String jarFiles : jodFolder.list(new FilenameFilter() {
+				public boolean accept(File file1, String name) {
+					return name.endsWith(".jar");
+				}
+			})) {
+				argv.add("-cp");
+				if (jarFiles.startsWith("jodconverter")) {
+					jodConverterJar = jarFiles;
+				}
+				argv.add(jodFolder.getAbsolutePath() + File.separatorChar
+						+ jarFiles);
+			}
+			if (jodConverterJar.length() == 0) {
+				new Exception(
+						"Could not find jodConverter JAR file in JOD folder");
+			}
+
+			argv.add("-jar");
+			argv.add(jodFolder.getAbsolutePath() + File.separatorChar
+					+ jodConverterJar);
+			argv.add(fileFullPath);
+			argv.add(destinationFolder + outputfile + ".pdf");
+
+			return GenerateSWF.executeScript("doJodConvert",
+					argv.toArray(new String[argv.size()]));
+
+		} catch (Exception ex) {
+			log.error("doJodConvert", ex);
+			return buildErrorMessage("doJodConvert", ex.getMessage(), ex);
+		}
+	}
+
+	private HashMap<String, String> buildErrorMessage(String process,
+			String error, Exception ex) {
+		HashMap<String, String> returnMap = new HashMap<String, String>();
+		returnMap.put("process", process);
+		returnMap.put("exception", ex.toString());
+		returnMap.put("error", error);
+		returnMap.put("exitValue", "-1");
+		return returnMap;
 	}
 
 }

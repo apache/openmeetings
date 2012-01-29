@@ -285,6 +285,12 @@ function checkEmail()
         <input name="sox_path" id="sox_path" size="27" title="Enter the path to SoX, leave blank if SoX is successfully installed to system-path" type="text" />    
         <p><i>see also <a href="http://code.google.com/p/openmeetings/wiki/ConvertersInstallation" target="_blank">ConvertersInstallation</a></i></p>  
         </li>
+	<li>
+        <label for="jod_path">JOD Path</label>
+        <input name="jod_path" id="jod_path" size="27" value="./jodconverter-core-3.0-beta-4/lib" 
+		title="The path to JOD library (http://code.google.com/p/jodconverter), configure the path to point to the lib directory of JOD that contains also the jodconverter-core-version.jar" type="text" />    
+        <p><i>see also <a href="http://code.google.com/p/openmeetings/wiki/ConvertersInstallation" target="_blank">ConvertersInstallation</a></i></p>  
+        </li>
     </fieldset>      
     
     <fieldset id="userConf2">

@@ -104,10 +104,17 @@ public class GenerateSWF {
 			}
 		} catch (TimeoutException e) {
 			// Timeout exception is processed above
+			log.error("executeScript",e);
+			e.printStackTrace();
+			returnMap.put("error", e.getMessage());
+			returnMap.put("exception", e.toString());
+			returnMap.put("exitValue", "-1");
 		} catch (Throwable t) {
 			// Any other exception is shown in debug window
+			log.error("executeScript",t);
 			t.printStackTrace();
 			returnMap.put("error", t.getMessage());
+			returnMap.put("exception", t.toString());
 			returnMap.put("exitValue", "-1");
 		}
 		return returnMap;

@@ -88,7 +88,7 @@ public class ImportInitvalues {
 	private AppointmentReminderTypDaoImpl appointmentReminderTypDaoImpl;
 	@Autowired
 	private PollManagement pollManagement;
-	
+
 	public void loadMainMenu() {
 
 		userManagement.addUserLevel("User", 1);
@@ -252,7 +252,7 @@ public class ImportInitvalues {
 			String openxg_client_domain, String openxg_community_code,
 			String openxg_language_code, String openxg_adminid,
 			String sip_language_phonecode, String sip_phonerange_start,
-			String sip_phonerange) {
+			String sip_phonerange, String jodPath) {
 
 		cfgManagement
 				.addConfByKey(
@@ -261,9 +261,9 @@ public class ImportInitvalues {
 						crypt_ClassName,
 						null,
 						"This Class is used for Authentification-Crypting. "
-						+ "Be carefull what you do here! If you change it while "
-						+ "running previous Pass of users will not be workign anymore! "
-						+ "for more Information see http://code.google.com/p/openmeetings/wiki/CustomCryptMechanism");
+								+ "Be carefull what you do here! If you change it while "
+								+ "running previous Pass of users will not be workign anymore! "
+								+ "for more Information see http://code.google.com/p/openmeetings/wiki/CustomCryptMechanism");
 
 		cfgManagement.addConfByKey(3, "screen_viewer", screen_viewer, null,
 				"ScreenViewer Type(0==standard, 1== jrdesktop)");
@@ -296,7 +296,8 @@ public class ImportInitvalues {
 		cfgManagement.addConfByKey(3, "mail.smtp.starttls.enable", mailusetls,
 				null, "Enable TLS 1=true, 0=false");
 
-		cfgManagement.addConfByKey(3, "application.name", Configurationmanagement.DEFAULT_APP_NAME, null,
+		cfgManagement.addConfByKey(3, "application.name",
+				Configurationmanagement.DEFAULT_APP_NAME, null,
 				"Name of the Browser Title window");
 
 		// "1" == "EN"
@@ -488,203 +489,233 @@ public class ImportInitvalues {
 						null,
 						"Display name of the user who draw the current object (User Name auto-disapper after 3 seconds.");
 
-		cfgManagement.addConfByKey(3, "max_upload_size", new Integer(ImportHelper.DEFAULT_MAX_UPLOAD_SIZE).toString(), null,
-				"Maximum size of upload file (bytes)"); //defaults to 1GB
+		cfgManagement.addConfByKey(3, "max_upload_size", new Integer(
+				ImportHelper.DEFAULT_MAX_UPLOAD_SIZE).toString(), null,
+				"Maximum size of upload file (bytes)"); // defaults to 1GB
 
-		cfgManagement.addConfByKey(3, "number.minutes.reminder.send", "15", null,
-				"The number of minutes before reminder emails are send. Set to 0 to disable reminder emails");
-		
+		cfgManagement
+				.addConfByKey(
+						3,
+						"number.minutes.reminder.send",
+						"15",
+						null,
+						"The number of minutes before reminder emails are send. Set to 0 to disable reminder emails");
+
 		cfgManagement.addConfByKey(3, "user.login.minimum.length", "4", null,
 				"Number of chars needed in a user login");
-		
+
 		cfgManagement.addConfByKey(3, "user.pass.minimum.length", "4", null,
 				"Number of chars needed in a user login");
-		
-		cfgManagement.addConfByKey(3, "calendar.conference.rooms.default.size", "50", null,
-				"Default number of participants conference room created via calendar");
-		
-		cfgManagement.addConfByKey(3, "use.old.style.ffmpeg.map.option", "0", null,
-				"specify a 1 if you would like to use old FFMPEG -map option with 0.0 instead of 0:0");
 
-        // give exclusive audio key code
-        cfgManagement.addConfByKey(3, "exclusive.audio.keycode", "123", null,
-				"A hot key code for the 'give exclusive audio' functionality. 123 if F12");
+		cfgManagement
+				.addConfByKey(3, "calendar.conference.rooms.default.size",
+						"50", null,
+						"Default number of participants conference room created via calendar");
+
+		cfgManagement
+				.addConfByKey(
+						3,
+						"use.old.style.ffmpeg.map.option",
+						"0",
+						null,
+						"specify a 1 if you would like to use old FFMPEG -map option with 0.0 instead of 0:0");
+
+		// give exclusive audio key code
+		cfgManagement
+				.addConfByKey(
+						3,
+						"exclusive.audio.keycode",
+						"123",
+						null,
+						"A hot key code for the 'give exclusive audio' functionality. Keycode 123 is F12");
+
+		cfgManagement
+				.addConfByKey(
+						3,
+						"jod.path",
+						jodPath,
+						null,
+						"The path to JOD library (http://code.google.com/p/jodconverter), configure the path to point to the lib directory of JOD that contains also the jodconverter-core-version.jar");
+
 	}
 
-	
 	public void loadDefaultRooms(boolean createRooms) {
 
-		long conference_Id = roommanagement.addRoomType("conference (1-25 users)");
+		long conference_Id = roommanagement
+				.addRoomType("conference (1-25 users)");
 		log.debug("conference_Id: " + conference_Id);
 		long audience_Id = roommanagement.addRoomType("audience (1-50 users)");
 		log.debug("audience_Id: " + audience_Id);
 
-		long restricted_Id = roommanagement.addRoomType("restricted  (1-150 users)");
+		long restricted_Id = roommanagement
+				.addRoomType("restricted  (1-150 users)");
 		log.debug("restricted_Id: " + restricted_Id);
 
-		long interview_Id = roommanagement.addRoomType("interview  (1:1 meeting with recording)");
+		long interview_Id = roommanagement
+				.addRoomType("interview  (1:1 meeting with recording)");
 		log.debug("interview_Id: " + interview_Id);
 
-		long custom_Id = roommanagement.addRoomType("custom (extension point for your plugin)");
+		long custom_Id = roommanagement
+				.addRoomType("custom (extension point for your plugin)");
 		log.debug("custom_Id: " + custom_Id);
 
 		if (createRooms) {
-			roommanagement.addRoom(3, "public Interview Room", interview_Id, "",
-					new Long(16), true, null, false, false, null, false, null,
-					true, false, false, "", "", "", null, null, null, 
+			roommanagement.addRoom(3, "public Interview Room", interview_Id,
+					"", new Long(16), true, null, false, false, null, false,
+					null, true, false, false, "", "", "", null, null, null,
 					false, // hideTopBar
 					false, // hideChat
 					false, // hideActivitiesAndActions
 					false, // hideFilesExplorer
 					false, // hideActionsMenu
-					false, // hideScreenSharing 
+					false, // hideScreenSharing
 					false, // hideWhiteboard
-					false //showMicrophoneStatus
+					false // showMicrophoneStatus
 					);
-	
-			roommanagement.addRoom(3, "public Conference Room", conference_Id, "",
-					new Long(32), true, null, false, false, null, false, null,
-					true, false, false, "", "", "", null, null, null, 
+
+			roommanagement.addRoom(3, "public Conference Room", conference_Id,
+					"", new Long(32), true, null, false, false, null, false,
+					null, true, false, false, "", "", "", null, null, null,
 					false, // hideTopBar
 					false, // hideChat
 					false, // hideActivitiesAndActions
 					false, // hideFilesExplorer
 					false, // hideActionsMenu
-					false, // hideScreenSharing 
+					false, // hideScreenSharing
 					false, // hideWhiteboard
-					false //showMicrophoneStatus
+					false // showMicrophoneStatus
 					);
-	
-			roommanagement.addRoom(3, "public Video Only Room", conference_Id, "",
-					new Long(32), true, null, false, false, null, false, null,
-					true, false, false, "", "", "", null, null, null, 
+
+			roommanagement.addRoom(3, "public Video Only Room", conference_Id,
+					"", new Long(32), true, null, false, false, null, false,
+					null, true, false, false, "", "", "", null, null, null,
 					false, // hideTopBar
 					false, // hideChat
 					false, // hideActivitiesAndActions
 					false, // hideFilesExplorer
 					false, // hideActionsMenu
-					false, // hideScreenSharing 
+					false, // hideScreenSharing
 					false, // hideWhiteboard
-					false //showMicrophoneStatus
+					false // showMicrophoneStatus
 					);
-	
+
 			roommanagement.addRoom(3, "public Video And Whiteboard Room",
 					conference_Id, "", new Long(32), true, null, false, false,
-					null, false, null, true, false, false, "", "", "", null, null,
-					null, 
-					false, // hideTopBar
+					null, false, null, true, false, false, "", "", "", null,
+					null, null, false, // hideTopBar
 					false, // hideChat
 					false, // hideActivitiesAndActions
 					false, // hideFilesExplorer
 					false, // hideActionsMenu
-					false, // hideScreenSharing 
+					false, // hideScreenSharing
 					false, // hideWhiteboard
-					false //showMicrophoneStatus
-					);
-	
-			roommanagement.addRoom(3, "public Restricted Room", restricted_Id, "",
-					new Long(100), true, null, false, false, null, false, null,
-					true, false, false, "", "", "", null, null, null, 
-					false, // hideTopBar
-					false, // hideChat
-					false, // hideActivitiesAndActions
-					false, // hideFilesExplorer
-					false, // hideActionsMenu
-					false, // hideScreenSharing 
-					false, // hideWhiteboard
-					false //showMicrophoneStatus
+					false // showMicrophoneStatus
 					);
 
-            roommanagement.addRoom(3, "restricted room with micro option set", restricted_Id, "",
-					new Long(100), true, null, false, false, null, false, null,
-					true, false, false, "", "", "", null, null, null, 
+			roommanagement.addRoom(3, "public Restricted Room", restricted_Id,
+					"", new Long(100), true, null, false, false, null, false,
+					null, true, false, false, "", "", "", null, null, null,
 					false, // hideTopBar
 					false, // hideChat
 					false, // hideActivitiesAndActions
 					false, // hideFilesExplorer
 					false, // hideActionsMenu
-					false, // hideScreenSharing 
+					false, // hideScreenSharing
 					false, // hideWhiteboard
-					true //showMicrophoneStatus
+					false // showMicrophoneStatus
 					);
 
-            roommanagement.addRoom(3, "conference room with micro option set", conference_Id, "",
-					new Long(32), true, null, false, false, null, false, null,
-					true, false, false, "", "", "", null, null, null, 
-					false, // hideTopBar
+			roommanagement.addRoom(3, "restricted room with micro option set",
+					restricted_Id, "", new Long(100), true, null, false, false,
+					null, false, null, true, false, false, "", "", "", null,
+					null, null, false, // hideTopBar
 					false, // hideChat
 					false, // hideActivitiesAndActions
 					false, // hideFilesExplorer
 					false, // hideActionsMenu
-					false, // hideScreenSharing 
+					false, // hideScreenSharing
 					false, // hideWhiteboard
-					true //showMicrophoneStatus
+					true // showMicrophoneStatus
 					);
-	
+
+			roommanagement.addRoom(3, "conference room with micro option set",
+					conference_Id, "", new Long(32), true, null, false, false,
+					null, false, null, true, false, false, "", "", "", null,
+					null, null, false, // hideTopBar
+					false, // hideChat
+					false, // hideActivitiesAndActions
+					false, // hideFilesExplorer
+					false, // hideActionsMenu
+					false, // hideScreenSharing
+					false, // hideWhiteboard
+					true // showMicrophoneStatus
+					);
+
 			long room2 = roommanagement.addRoom(3, "private Conference Room",
 					conference_Id, "", new Long(32), false, null, false, false,
-					null, false, null, true, false, false, "", "", "", null, null,
-					null, 
-					false, // hideTopBar
+					null, false, null, true, false, false, "", "", "", null,
+					null, null, false, // hideTopBar
 					false, // hideChat
 					false, // hideActivitiesAndActions
 					false, // hideFilesExplorer
 					false, // hideActionsMenu
-					false, // hideScreenSharing 
+					false, // hideScreenSharing
 					false, // hideWhiteboard
-					false //showMicrophoneStatus
+					false // showMicrophoneStatus
 					);
-	
+
 			roommanagement.addRoomToOrganisation(3, room2, 1);
-	
+
 			roommanagement.addRoom(3, "public Audience Room", audience_Id, "",
 					new Long(32), true, null, false, false, null, false, null,
-					true, false, false, "", "", "", null, null, null, 
-					false, // hideTopBar
+					true, false, false, "", "", "", null, null, null, false, // hideTopBar
 					false, // hideChat
 					false, // hideActivitiesAndActions
 					false, // hideFilesExplorer
 					false, // hideActionsMenu
-					false, // hideScreenSharing 
+					false, // hideScreenSharing
 					false, // hideWhiteboard
-					false //showMicrophoneStatus
+					false // showMicrophoneStatus
 					);
-	
+
 			long room4 = roommanagement.addRoom(3, "private Audience Room",
-					audience_Id, "", new Long(32), false, null, false, false, null,
-					false, null, true, false, false, "", "", "", null, null, null, 
-					false, // hideTopBar
+					audience_Id, "", new Long(32), false, null, false, false,
+					null, false, null, true, false, false, "", "", "", null,
+					null, null, false, // hideTopBar
 					false, // hideChat
 					false, // hideActivitiesAndActions
 					false, // hideFilesExplorer
 					false, // hideActionsMenu
-					false, // hideScreenSharing 
+					false, // hideScreenSharing
 					false, // hideWhiteboard
-					false //showMicrophoneStatus
+					false // showMicrophoneStatus
 					);
-	
+
 			roommanagement.addRoomToOrganisation(3, room4, 1);
 		}
 	}
 
 	public void loadInitUserAndOrganisation(String username, String userpass,
-			String email, String defaultOrganisationName, String timeZone, String configdefaultLang) {
+			String email, String defaultOrganisationName, String timeZone,
+			String configdefaultLang) {
 		// Add user
 		try {
-			
+
 			Long default_lang_id = Long.parseLong(configdefaultLang);
-			if (default_lang_id == null) default_lang_id = 1L;
-			
+			if (default_lang_id == null)
+				default_lang_id = 1L;
+
 			// Add default group
 			Long organisation_id = organisationmanagement.addOrganisation(
 					defaultOrganisationName, 1);
-			
+
 			// BaseUrl as param is empty as we do not send an EMAIL here
 			Long user_id = userManagement.registerUserInit(new Long(3), 3, 1,
 					1, username, userpass, "lastname", "firstname", email,
 					new java.util.Date(), "street", "no", "fax", "zip", 1,
-					"town", default_lang_id, false, Arrays.asList(organisation_id), "phone", "", false, "", "", "",
-					false, timeZone, false, "", "", false, true);
+					"town", default_lang_id, false,
+					Arrays.asList(organisation_id), "phone", "", false, "", "",
+					"", false, timeZone, false, "", "", false, true);
 
 			log.debug("Installation - User Added user-Id " + user_id);
 

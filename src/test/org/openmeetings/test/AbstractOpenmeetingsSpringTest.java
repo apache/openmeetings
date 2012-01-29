@@ -83,6 +83,7 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 	private static final String sip_language_phonecode = "";
 	private static final String sip_phonerange_start = "";
 	private static final String sip_phonerange = "";
+	private static final String jodPath = "./jod/lib";
 	private static final String username = "junit";
 	private static final String userpass = "test";
 	private static final String orgname = "smoketest";
@@ -179,7 +180,8 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 				sip_forcetunnel, sip_openxg_enable, openxg_wrapper_url,
 				openxg_client_id, openxg_client_secret, openxg_client_domain,
 				openxg_community_code, openxg_language_code, openxg_adminid,
-				sip_language_phonecode, sip_phonerange_start, sip_phonerange);
+				sip_language_phonecode, sip_phonerange_start, sip_phonerange,
+				jodPath);
 
 		importInitvalues.loadInitUserAndOrganisation(username, userpass,
 				useremail, orgname, timeZone, configdefaultLang);

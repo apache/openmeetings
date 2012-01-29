@@ -328,6 +328,9 @@ public class Install extends VelocityViewServlet {
 
 					String timeZone = httpServletRequest
 							.getParameter("timeZone");
+					
+					String jodPath = httpServletRequest
+							.getParameter("jodPath");
 
 					log.debug("step 0+ start init with values. " + username
 							+ " ***** " + useremail + " " + orgname + " "
@@ -364,7 +367,8 @@ public class Install extends VelocityViewServlet {
 							openxg_client_secret, openxg_client_domain,
 							openxg_community_code, openxg_language_code,
 							openxg_adminid, sip_language_phonecode,
-							sip_phonerange_start, sip_phonerange);
+							sip_phonerange_start, sip_phonerange,
+							jodPath);
 
 					getImportInitvalues().loadInitUserAndOrganisation(username,
 							userpass, useremail, orgname, timeZone, configdefaultLang);
