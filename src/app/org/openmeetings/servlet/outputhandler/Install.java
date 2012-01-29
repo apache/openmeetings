@@ -330,7 +330,7 @@ public class Install extends VelocityViewServlet {
 							.getParameter("timeZone");
 					
 					String jodPath = httpServletRequest
-							.getParameter("jodPath");
+							.getParameter("jod_path");
 
 					log.debug("step 0+ start init with values. " + username
 							+ " ***** " + useremail + " " + orgname + " "
