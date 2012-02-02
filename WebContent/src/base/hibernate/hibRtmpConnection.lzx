@@ -248,13 +248,64 @@
         </handler>  
     </netRemoteCallHib>    
     
+    <method name="setDefaultUserLanguage">
+	    <![CDATA[
+	        if (userlang == -1 && canvas.language_id != 0) {
+	            userlang = canvas.language_id;
+	        } else if (userlang == -1) {
+	            var lang_id = canvas.default_lang_id;
+	            
+	            var browserLang = flash.external.ExternalInterface.call("function(){return window.navigator.systemLanguage || window.navigator.userLanguage || window.navigator.language;}");
+	            if (browserLang == null) {
+	                browserLang = "" + System.capabilities.language;
+	            }
+	            if (browserLang != null && browserLang.length > 1) {
+	                var lngCode = browserLang.substring(0, 2);
+	                
+	                //openlaszlo XPath is able to search nothing, so will iterate
+	                var xpath = "languagesSet:/item";
+	                var list = languagesSet.getPointer().xpathQuery(xpath);
+	                
+	                var partMatch = -1, fullMatch = -1; 
+	                for (var i = 1; list != null && i <= list.length; ++i) {
+	                    xpath = "languagesSet:/item[" + i + "]/code/text()";
+	                    var val = languagesSet.getPointer().xpathQuery(xpath);
+	                    if (val != null && val.length > 1) {
+	                        var partCode = ("" + val).substring(0, 2);
+	                        
+	                        if (browserLang == val) {
+	                            fullMatch = i;
+	                        } else if (lngCode == val) {
+	                            partMatch = i;
+	                        } else if (partCode == lngCode) {
+	                            partMatch = i;
+	                        }
+	                    }
+	                }
+	                if (partMatch != -1 || fullMatch != -1) {
+	                    i = (fullMatch != -1) ? fullMatch : partMatch;
+	                    xpath = "languagesSet:/item[" + i + "]/language_id/text()";
+	                    lang_id = languagesSet.getPointer().xpathQuery(xpath);
+	                }
+	            }
+	            
+	            if (canvas.language_id == 0) {
+	                userlang = lang_id;
+	            } else {
+	                userlang = canvas.language_id;
+	            }
+	        }
+	    ]]>
+    </method>
+    
     <netRemoteCallHib name="logoutUser" funcname="xmlcrm.logoutUser"
         remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" 
         isCallBackHandler="true">
         <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
         <handler name="sendCallBack">
+        <![CDATA[
             //The onResult-Handler will be called be the rtmpconnection
-            if ($debug) Debug.write("sendCallBack logoutUser: ",value);    
+            if ($debug) Debug.write("sendCallBack logoutUser: ");    
             parent.initlanguageLoaded = false;
             
             var g = canvas.getUserData();
@@ -268,9 +319,12 @@
             canvas.setUserData(g);
             canvas.setColorStyle(canvas.baseColorScheme);
             
-            parent.userlang = canvas.default_lang_id;
+            parent.userlang = -1;
+            parent.setDefaultUserLanguage();
+
             parent.getLanguageByIdAndMax.start = 0;
             parent.getLanguageByIdAndMax.doCall();
+        ]]>
         </handler>          
     </netRemoteCallHib>     
     
@@ -322,7 +376,6 @@
                         var addInfo = "" + value.validFrom +"<br/> - <br/>"+ value.validTo;
                         
                         var dlg = new lz.rpcErrorDialog(canvas,{errorid:-50,addInfo:addInfo});
-                        lz.Focus.setFocus(dlg);
                         
                     }
                     
@@ -470,18 +523,21 @@
         <netparam><method name="getValue">return parent.step;</method></netparam> 
         <handler name="ondata" args="value">
             <![CDATA[
-            if($debug) Debug.write("hibRtmpConnection/userlang:[",parent.parent.userlang,"]");
+            if($debug) Debug.write("hibRtmpConnection/userlang:[",parent.userlang,"]");
                 //if($debug) Debug.write("hibRtmpConnection/getLanguageByIdAndMax:[",value,"]");
                 setLabelObjectByHundred(this.start,value);
-                canvas.lc.send(canvas.rtmp_lc_name, "hibAdapter_setLabelObjectByHundred", this.start, value);
                 //The onResult-Handler will be called be the rtmpconnection
                 if (this.start <= max){
                     this.start += this.step;
-                    canvas.thishib.loaderVar.setProgress();
+                    if (canvas.thishib.loaderVar != null) {
+                       canvas.thishib.loaderVar.setProgress();
+                    }
                     this.doCall();
                 } else {
                     if (parent.initlanguageLoaded){
-                        canvas.thishib.loaderVar.setProgress();
+                        if (canvas.thishib.loaderVar != null) {
+                            canvas.thishib.loaderVar.setProgress();
+                        }
                         parent.getRoomTypes.doCall();
                     } else {
                         parent.initlanguageLoaded=true;
@@ -590,8 +646,25 @@
             //The onResult-Handler will be called be the rtmpconnection
             //Debug.write("getStates: ",value);
             canvas.thishib.loaderVar.setProgress();
-            parent.getUserSalutations.doCall();
+            parent.getGeneralOptions.doCall();
         </handler>  
+    </netRemoteCallHib>
+    
+    <netRemoteCallHib name="getGeneralOptions" funcname="xmlcrm.getGeneralOptions" >
+        <handler name="ondata" args="value">
+            <![CDATA[
+                if (canvas.thishib.loaderVar != null) {
+                  canvas.thishib.loaderVar.setProgress();
+                }
+                if (value != null && value.length > 0) {
+                    //if ($debug) Debug.write("Give exclusive audio keycode is: ", value[0].conf_value);
+                    canvas.setAttribute('GIVE_EXCLUSIVE_AUDIO_KEY', value[0].conf_value);
+                } else {
+                   if ($debug) Debug.warn("xmlcrm.getGeneralOptions empty!");
+                }
+                parent.getUserSalutations.doCall();
+            ]]>
+        </handler>
     </netRemoteCallHib>
     
     <netRemoteCallHib name="setCurrentUserOrganization" funcname="xmlcrm.setCurrentUserOrganization">
@@ -614,10 +687,14 @@
             canvas.salutationsInitValues = value;
             //check for password reset
             if (canvas.isResetUsername){
-                canvas.thishib.loaderVar.close();
+                if (canvas.thishib.loaderVar != null) {
+                  canvas.thishib.loaderVar.close();
+                }
                 new lz.resetPassword(canvas.main_content._content.inner);
             } else { 
-                canvas.thishib.loaderVar.close();
+                if (canvas.thishib.loaderVar != null) {
+                   canvas.thishib.loaderVar.close();
+                }
                 //do not show loggin-PopUp for the test-Application
                 if (parent.testAppLoading){ 
                     canvas.loadNextStepTestApp();
@@ -625,18 +702,21 @@
                     
                     if (canvas.isinitRoomDirect || canvas.remoteUserLogin 
                                 || canvas.directUserLogin || canvas.secureRemoteUserLogin){
-                        canvas.thishib.loaderVar.setProgress();
+                        if (canvas.thishib.loaderVar != null) {
+                          canvas.thishib.loaderVar.setProgress();
+                        }
                         if($debug) Debug.write("isinitRoomDirect or remoteUserLogin is true");
                         parent.markSessionAsLogedIn.doCall();
                     } else {
-                        canvas.thishib.loaderVar.setProgress();
-                    
+                        if (canvas.thishib.loaderVar != null) {
+                          canvas.thishib.loaderVar.setProgress();
+                        }
                 
                         //Check if user is auto-logged in by session
                         var g = canvas.getUserData();
                         if($debug) Debug.write("checkLoginData/g: ",g);
                         var storedSession = g["storedSession"];
-                        if($debug) Debug.write("checkLoginData/save: ",save);
+                        if($debug) Debug.write("checkLoginData/save: ",storedSession);
                         
                         parent.loginByRemember.currentHashSession = storedSession;
                         parent.loginByRemember.doCall();
@@ -825,7 +905,9 @@
             <handler name="ondata" args="value">
                 //The onResult-Handler will be called be the rtmpconnection
                 if ($debug) Debug.write("setUsernameAndSession: ",canvas.user_id,value);
-                canvas.thishib.loaderVar.setProgress();
+                if (canvas.thishib.loaderVar != null) {
+                  canvas.thishib.loaderVar.setProgress();
+                }
                 parent.getNavi.doCall();                    
             </handler>  
         </netRemoteCallHib>        
@@ -1268,7 +1350,6 @@
             <netparam><method name="getValue">return parent.publicSID;</method></netparam>
         </netRemoteCallHib>
 
-<!--
         <netRemoteCallHib name="receiveExclusiveAudioFlag" funcname="receiveExclusiveAudioFlag">
             <netparam><method name="getValue">return null;</method></netparam>
             <handler name="ondata" args="value">
@@ -1277,24 +1358,16 @@
                     var obj = canvas._videocontainer.getVideoObjectByPublicSID(value.publicSID);
 
                     for (var i=0; i<obj.parent.subviews.length; i++) {
-                        if (canvas.publicSID == obj.parent.subviews[i].publicSID) {
-                            if (canvas.publicSID == value.publicSID) {
-                                obj.parent.subviews[i].muteMicrophone(false);
-                            } else {
-                                obj.parent.subviews[i].muteMicrophone(true);
-                            }
-                        } else {
-                            if (obj.parent.subviews[i].publicSID == value.publicSID) {
-                                obj.parent.subviews[i].setMicMuted(false);
-                            } else {
-                                obj.parent.subviews[i].setMicMuted(true);
-                            }
-                        }
+                        var videoObj = obj.parent.subviews[i];
+                        var rcl = new Object();
+
+                        rcl.publicSID = videoObj.publicSID;
+                        rcl.micMuted = !(value.publicSID == videoObj.publicSID);
+                        canvas.setMuteStatus(rcl);
                     }
                 ]]>
             </handler>
         </netRemoteCallHib>
-         -->
 
         <netRemoteCallHib name="switchMicMuted" funcname="switchMicMuted">
             <attribute name="publicSID" value="" type="string" />
@@ -1698,6 +1771,9 @@
                     canvas.setDrawAllowStatus(value.message[1]);
                     //Notify all Listeners for change of the item
                     canvas.setAttribute("drawAllowStatus",value.message[1]);
+                } else if (value.message[0]=='updateGiveAudioStatus') {
+                    canvas.setExclusiveAudioAllowStatus(value.message[1]);
+                    canvas.setAttribute("exclusiveAudioAllowStatus",value.message[1]);                    
                 } else if (value.message[0]=='applyForModeration'){
                     //if (canvas.ismoderator) {
                         if ($debug) Debug.write("Somebody wants the Moderation ",value.client);
@@ -1812,6 +1888,8 @@
                     canvas.currentActivityList.applyForMuteOn(value.client,value.message[1]);
                 } else if (value.message[0]=='applyForMuteOff'){
                     canvas.currentActivityList.applyForMuteOff(value.client,value.message[1]);
+                } else if (value.message[0]=='applyForGiveExclusiveAudioOn'){
+                    canvas.currentActivityList.applyForGiveExclusiveAudioOn(value.client,value.message[1]);
                 } else {
                     if ($debug) Debug.warn("sendVarsToMessageWithClient unkown message ",value);
                 }

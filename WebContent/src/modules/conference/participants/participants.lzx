@@ -59,6 +59,8 @@
     <method name="initList">
     	//
     </method>
+    
+    <commonVideoComponentAdapter name="_videoviewcontent" />
                   
     <method name="reconnectSuccess">
         if ($debug) Debug.write("User Reloged In");
@@ -533,8 +535,6 @@
     </moderationMiniIconsEventUserList>
     
     <participantList name="_participants" />
-    
-    <commonVideoViewContent name="_videoviewcontent" />
     
 </class>
 

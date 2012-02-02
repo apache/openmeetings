@@ -122,6 +122,14 @@
                     
                 }
             }
+            
+            if(this._chatPanelStrict){
+                if (this.roomobj.hideChat == null || !this.roomobj.hideChat) {            
+                    this._chatPanelStrict.setAttribute('visibility','visible');
+                } else {
+                    this._chatPanelStrict.setAttribute('visibility','hidden');                  
+                }
+            }            
         ]]>
     </handler>
     
@@ -154,6 +162,20 @@
         if ($debug) Debug.write("ringring - ringring - ringring");
     </method>
     
+    <handler name="onkeydown" reference="lz.Keys" args="keyCode">
+        if (canvas.GIVE_EXCLUSIVE_AUDIO_KEY == keyCode) {
+            if (canvas.ismoderator || canvas.isAllowedToGiveExclusiveAudio) {
+
+                var obj = canvas._videocontainer.getVideoObjectByPublicSID(canvas.publicSID);
+                if (null != obj) {
+                    obj._giveExclusiveAudioView._micButton.onclick.sendEvent();
+                }
+                return;
+            } else {
+                new lz.rpcErrorDialog(canvas.main_content._content.inner,{errorid:-54});
+            }
+        }
+    </handler>
     
 </class>
 
