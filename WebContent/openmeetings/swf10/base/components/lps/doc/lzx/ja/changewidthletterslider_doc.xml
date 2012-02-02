@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="changewidthletterslider">
+   <doc>
+	背景が白のedittextとbuttonを持つ60×24picの小さなview。
+	changewidthlettersliderクラス,closableviewletterクラス,chagewidthlettersliderwinクラス
+	を一つのファイルにしているので、ファイルを分けましょう。
+	*第１行目にutf encoding tagの記述が抜けています。	
+   </doc>
+ </class>
+ <class name="closableviewletter">
+   <doc>
+   </doc>
+ </class>
+ <class name="chagewidthlettersliderwin">
+   <doc>
+   </doc>
+ </class>
+</rlzxdoc>

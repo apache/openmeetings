@@ -1,0 +1,627 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+
+<!---
+	Base container for a client, can be either:
+	a remote-video (subscribing/playing a video)
+	or a self-video (broadcasting a cam/mic)
+ -->
+    
+<class name="baseVideoObject" extends="view" bgcolor="0x000000" width="132" height="120">
+
+    <switch>
+	  <when property="$as3">
+		<passthrough>
+		  import flash.filters.DropShadowFilter;
+          import flash.media.*
+		</passthrough>
+	  </when>
+	</switch>
+	 
+	<!--- @keywords private -->
+	<attribute name="chatpartnername" value="" type="string" />
+	<!--- @keywords private -->
+	<attribute name="showUserProfilePic" type="boolean" value="false" />
+	
+	<!--- color of this user, this is the color the user will also use for his chat-color -->
+	<attribute name="usercolor" value="0" type="number" />
+		
+	<!--- publicSID is a hash-value to identify a user -->
+	<attribute name="publicSID" value="" type="string" />
+
+	<!--- micMuted indicates if the microphone is currently turned sound or gain to 0 -->
+    <attribute name="micMuted" value="false" type="boolean" />
+	
+	<!--- @keywords private -->
+	<attribute name="isremote" value="true" type="boolean" />
+	
+	<!--- @keywords private -->
+	<attribute name="clientVars" value="null" />
+    
+    <!--- @keywords private -->
+    <attribute name="isResizing" value="false" type="boolean" />
+    
+    <!--- @keywords private -->
+    <attribute name="isInterview" value="false" type="boolean" />
+    
+    <attribute name="respectRatio" value="true" type="boolean" />
+    
+    <attribute name="minimized" value="false" type="boolean" />
+    
+    <attribute name="hidebyAudioOnly" value="false" type="boolean" />
+    
+    <attribute name="custom" value="false" type="boolean" />
+    
+    <attribute name="initH" value="40" type="number" />
+    <attribute name="initW" value="40" type="number" />
+
+    <attribute name="isShowMicMute" value="false" type="boolean"/>
+
+    <attribute name="isMutedByModerator" value="false" type="boolean"/>
+	
+	<handler name="onisremote" args="r">
+		this.isremote = r;
+	</handler>
+    
+    <handler name="oninit">
+        <![CDATA[
+            this.clientVars = new Array();
+            this.clientVars['User']='No User Connected';
+            
+            if (this.isInterview) {
+            	this._toolbar._showusercontext.setAttribute("visibility","hidden");
+            	this._toolbar._minimize.setAttribute("visibility","hidden");
+            	this._resizeview.setAttribute("visibility","hidden");
+            	return;
+            }
+            
+            if (this.custom) {
+                this._toolbar._showusercontext.setAttribute("visibility","hidden");
+                this._toolbar._minimize.setAttribute("visibility","hidden");
+                this._resizeview.setAttribute("visibility","hidden");
+                this._toolbar.setAttribute("visibility","hidden");
+                this._resizeview.setAttribute("visibility","hidden");
+                this._loudness.setAttribute("visibility","hidden");
+                this._innertop.setAttribute("visibility","hidden");
+                
+                //return;
+            }
+            
+            var prop1 = [this, "width"];
+            var prop2 = [this, "height"];
+            this.applyConstraintMethod("setItemContraintsWidth", prop1);
+            this.applyConstraintMethod("setItemContraintsHeight", prop2);
+            this.setShadow();
+            
+            if (this.publicSID == canvas.publicSID) {
+            	this._toolbar._resync._tip.setAttribute("labelid",610);
+            }
+        ]]>
+    
+    </handler>
+	
+	<handler name="ony">
+		<![CDATA[
+		
+		    if (this.isInterview) {
+                return;
+            }
+            
+            if (this.custom) {
+                return;
+            }
+            
+			var bounds = this.getBounds();
+			var parentBounds = canvas.getBounds();
+			if ( bounds.y < 0 )
+			{
+				this.setAttribute('y',0);
+			}
+			
+			if ( bounds.y > ( parentBounds.height - bounds.height ) )
+			{			
+				this.setAttribute('y', parentBounds.height - bounds.height );
+			}
+		]]>
+	</handler>
+
+	<handler name="onx">
+		<![CDATA[
+		
+            if (this.isInterview) {
+                return;
+            }	
+            
+            if (this.custom) {
+                return;
+            }
+		
+			var bounds = this.getBounds();
+			var parentBounds = canvas.getBounds();
+			if ( bounds.x < 0 )
+			{
+				this.setAttribute('x',0);
+			}
+			
+			if ( bounds.x > ( parentBounds.width - bounds.width ) )
+			{
+				this.setAttribute('x', parentBounds.width - bounds.width );
+			}
+		]]>
+	</handler>
+	
+    <method name="setShadow">
+        <![CDATA[
+        if (this.isinited){
+            this.normalMC = this.getDisplayObject();
+            //Debug.write(this.normalMC);
+            ////Debug.write("this.normalMC: ",this.normalMC);
+            ////Debug.write("this: ",this);
+            this.displacementMap = new flash.filters.DropShadowFilter();
+            this.normalMC.filters = [this.displacementMap];
+        }
+        ]]>              
+    </method>   
+        
+    <!-- respect ratio and keep minimum width / height -->
+    <method name="setItemContraintsWidth" args="unused">
+        <![CDATA[
+            if (!this.respectRatio) {
+                return;
+            }
+            var h=this.width * this.initH/this.initW;
+            h=((h < this.initH ) ? initH : h);
+
+            if ($debug) Debug.write("setItemContraintsWidth",this.respectRatio,'orig',this.height,this.width,'new h',h);
+
+            this.setAttribute("height",h);
+        ]]>
+    </method>
+
+    <method name="setItemContraintsHeight" args="unused">
+        <![CDATA[
+            if (!this.respectRatio) {
+                return;
+            }
+            var w=this.height * this.initW/this.initH;
+            w=((w < this.initW ) ? initW : w);
+
+            if ($debug) Debug.write("setItemContraintsHeight",this.respectRatio,'orig',this.height,this.width,'new w',w);
+
+            this.setAttribute("width",w);
+        ]]>
+    </method>
+	
+	<method name="updateAVSettingsSymbol" args="rcl">
+		//FIXME: Set a Symbol wether this Client is Audio(only)/Video(only), both or Profile Picture 
+		if ($debug) Debug.warn("updateAVSettingsSymbol TODO ",rcl);
+	</method>
+
+
+    
+    <method name="doResize" args="bool">
+        if ($debug) Debug.write("doResize ",bool);
+        if(bool) {
+            dragHelper.create();
+        } else {
+            dragHelper.remove();
+        }
+        if (this.isInterview) {
+            return;
+        }   
+        
+        if (this.custom) {
+                return;
+        }
+        
+        if (bool) {
+            this.isResizing = true;
+            this.rs.apply();
+        } else {
+            this.isResizing = false;
+            this.rs.remove();
+        }
+    </method>
+    
+    <!--- resets all values and stops the streaming -->
+    <method name="resetValues">
+      <![CDATA[
+    	this.clientVars=null;
+    	if (this.showUserProfilePic && !this.isremote){
+    		this._chatvideoinner.userProfilePic.destroy();
+    		this.showUserProfilePic = false;
+    	}
+    	if ($debug) Debug.write("resetValues: ",this.isremote);
+    	if (this.isremote){
+    		this._chatvideoinner._videostream.restart();
+    	} else {
+    		this._chatvideoinner._videostream.stop();
+    	}
+     ]]>
+    </method>
+    <method name="setVideouserProfilePic" args="value">
+    	if ($debug) Debug.write("### setVideouserProfilePic ",value);
+    	this.deleteVideoConfProfilePic(value);
+    	new lz.videoUserProfilePicSWF10(this._chatvideoinner,{name:'userProfilePic',value:value});
+    	this.showUserProfilePic = true;
+    </method>    
+    <method name="deleteVideoConfProfilePic" args="value">
+    	if ($debug) Debug.write("### deleteVideoConfProfilePic ",value);
+        if ($debug) Debug.write("delete ",this.showUserProfilePic);
+    	if (this.showUserProfilePic){
+    		this._chatvideoinner.userProfilePic.destroy();
+    		this.showUserProfilePic = false;
+    	}
+    </method>    
+    
+        <!--- @keywords private  -->
+    <method name="_startDragState" args="obj">
+    	
+        if (this.isInterview) {
+            return;
+        }    	
+        
+        if (this.custom) {
+            return;
+        }
+
+        dragHelper.create();
+
+        this.bringToFront();
+        parent.bringToFront();
+        this.dragger.apply();
+    </method> 
+    
+        <!--- @keywords private  -->
+    <method name="_removeDragState" args="obj">
+    	<![CDATA[
+	        lz.Cursor.unlock();
+	        
+	        if (this.x < 0) {
+	        	this.setAttribute("x",20);
+	        }
+	        
+	        if (this.y < 0) {
+	        	this.setAttribute("y",20);
+	        }
+	        
+	        if (this.x+this.width > parent.width) {
+	        	this.setAttribute("x",parent.width - this.width - 20);
+	        }
+	        
+	        if (this.y+this.height > parent.height) {
+	        	this.setAttribute("y",parent.height - this.height - 20);
+	        }
+
+	        dragHelper.remove();
+
+	        this.dragger.remove();
+        
+        ]]>
+    </method>
+    
+    <method name="minimize">
+        <![CDATA[
+        
+            this.respectRatio = false;
+        
+            this.setAttribute("minimized",true);
+            
+            this._toolbar._minimize.setAttribute("visibility","hidden");
+            this._toolbar._maximize2.setAttribute("visibility","visible");
+            
+            for (var eg in this.subviews) {
+                if (this.subviews[eg].name != "_toolbar" 
+                        && this.subviews[eg].name != "_innertop"
+                        && this.subviews[eg].name != "_loudness"
+                        && this.subviews[eg].name != "_micView") {
+                     this.subviews[eg].setAttribute("visibility","hidden");   
+                }
+            }
+            
+            this._loudness.setAttribute("x",this.width - 84 - (this.isShowMicMute ? 20 : 0));
+            this._loudness.bringToFront();
+            
+            this.initialHeight = this.height;
+            //this.setAttribute("height",20);
+            this._minimizeZoom.setAttribute("to",20);
+            this._minimizeZoom.doStart();
+        ]]>
+    </method>
+    
+    <method name="reminimize">
+        <![CDATA[
+            this.setAttribute("minimized",false);
+            
+            this._toolbar._minimize.setAttribute("visibility","visible");
+            this._toolbar._maximize2.setAttribute("visibility","hidden");
+            
+            this._loudness.setAttribute("x",1);
+            this._micView.setAttribute("x",21);
+            
+            //this.setAttribute("height",this.initialHeight); 
+            this._minimizeZoom.setAttribute("to",this.initialHeight);
+            this._minimizeZoom.doStart();
+        ]]>
+    </method>    
+    
+    <method name="reminimizeComplete">
+        <![CDATA[
+            if (!this.minimized) {
+                
+                for (var eg in this.subviews) {
+                    if (this.subviews[eg].name != "_toolbar" 
+                            && this.subviews[eg].name != "_innertop"
+                            && this.subviews[eg].name != "_loudness"
+                            && this.subviews[eg].name != "_micView") {
+                         this.subviews[eg].setAttribute("visibility","visible");   
+                    }
+                }
+                
+                
+            
+                this.respectRatio = true;
+            }
+            
+        ]]>
+    </method>    
+
+	<view name="_innertop" width="${parent.width-2 }" 
+		  height="18" x="1" y="1" bgcolor="$once{ canvas.basebgcolorizer }">
+  		<text text="${ parent.parent.chatpartnername }" 
+              onmousedown="parent.parent._startDragState(this)" 
+              onmouseup="parent.parent._removeDragState(this)"
+              width="${ parent.width-2 }" fgcolor="white"
+  			fontsize="9">
+            <handler name="onmouseover">
+		        //cursor="arrow_draw_panel_cursor" 
+		        lz.Cursor.setCursorGlobal("arrow_draw_panel_cursor");
+		    </handler>
+		    
+		    <handler name="onmouseout">
+		        lz.Cursor.unlock();
+		    </handler>
+        </text>
+	</view>	
+    
+	<view name="_loudness" x="1" y="${parent.height - 20}">
+		<view x="2" y="2" name="loudness" resource="speaking" opacity="0.2"
+			  onmouseover="" onmouseout="" >		
+			<labelTooltip inittwice="true" labelid="372" />
+		</view>
+	</view>
+
+    <!--
+	<view name="showuser" x="${ parent.width-20 }" y="2" width="20"
+		onmouseover="" onmouseup="" resource="showusercontext">
+		<handler name="onclick">
+			new lz.remoteUserDetails(parent);
+		</handler>
+		<labelTooltip inittwice="true" labelid="68" />
+	</view>
+     -->
+
+    <view name="_resizeview" x="${ this.parent.width - 17 }" 
+          y="${ this.parent.height - 17 }" 
+        resource="explorer_resize_rsc" cursor="explorer_resizemouse_rsc" 
+        onmousedown="this.parent.doResize(true)"
+        onmouseup="this.parent.doResize(false)" >
+        <handler name="oninit">
+            //if ($debug) Debug.write("setTint");
+            //TODO: Fix this, does not work at the moment
+            //canvas.protocol + '://code.google.com/p/openmeetings/issues/detail?id=470
+            this.setColor(canvas.baseMousecolorizer);
+        </handler>      
+    </view>
+    
+    <view name="_toolbar" x="${ parent.width-this.width-2 }" layout="axis:x;spacing:0" y="2">     
+        
+        <attribute name="isload" value="true" type="boolean"/>        
+        
+        <miniIconsPresenter name="_minimize"
+            iconRessourceName="btn_presenter_minimize">
+            <handler name="onclick">
+                this.parent.parent.minimize();
+            </handler>
+            <labelTooltip labelid="856" />
+        </miniIconsPresenter>
+        
+        <miniIconsPresenter name="_maximize2" visibility="hidden"
+            iconRessourceName="btn_presenter_maximize">
+            <handler name="onclick">
+                this.parent.parent.reminimize();
+            </handler>
+            <labelTooltip labelid="857" />
+        </miniIconsPresenter>
+        
+        <miniIconsPresenter name="_mute" width="16" height="16" iconRessourceName="mute_micro_btn_rsc">
+            <handler name="onclick">
+                parent.parent.silenceMicrophone(!parent.parent.micMuted);
+            </handler>
+            <labelTooltip name="_tip" labelid="1405" />
+        </miniIconsPresenter>
+        
+        <miniIconsPresenter name="_resync"
+            iconRessourceName="resyncuser_rsc">
+            <handler name="onclick">
+                parent.parent.resetValues();
+                if(!this.parent.parent.isremote) {
+                	if ($debug) Debug.write("editRecordStream ################# baseVideObject ");
+                    if(canvas.inner.editRecordStream != null) canvas.inner.editRecordStream.destroy();
+                	if (this.parent.parent.isInterview) {
+                		new lz.editRecordStreamSWF10(canvas.inner,{
+                                name:"editRecordStream",
+                			    doDefaultAnimation:false,
+                                align:'center',valign:'middle',
+                			    isInterview:true,
+                			    myvideocontainer:parent.parent,
+                                isSyncUpdate:true});
+                	} else {
+                		new lz.editRecordStreamSWF10(canvas.inner,{
+                                name:"editRecordStream",
+                                isSyncUpdate:true});
+                	}
+                }
+            </handler>
+            <labelTooltip name="_tip" labelid="540" />
+        </miniIconsPresenter>  
+        
+        <!--<miniIconsPresenter name="_showusercontext"-->
+            <!--iconRessourceName="showusercontext">-->
+            <!--<handler name="onclick">-->
+                <!--new lz.remoteUserDetails(parent.parent);-->
+            <!--</handler>-->
+            <!--<labelTooltip labelid="68" />-->
+        <!--</miniIconsPresenter>  -->
+        
+    </view>         
+    
+    <dragstate name="dragger" />
+    <resizestate name="rs"/>
+    <dragHelper name="dragHelper"/>
+    
+    <animator name="_minimizeZoom" attribute="height" 
+              duration="750" to="20" start="false">
+        <handler name="onstop" args="s">
+            parent.reminimizeComplete();
+        </handler>
+    </animator>
+
+    <handler name="onismoderator" reference="canvas" args="m">
+        if ($debug) Debug.write("###### ismoderator ", m);
+        <![CDATA[
+
+        if (this.minimized) {
+            this._loudness.setAttribute("x",this.width - 84 - (this.isShowMicMute ? 20 : 0));
+            this._loudness.bringToFront();
+        }
+        ]]>
+    </handler>
+
+    <!--
+        This will mute the Microphone only to the person that is speaking
+        if the gain is set to zero NOBODY will hear 'em
+     -->
+    <method name="muteMicrophone" args="roomClientObj">
+        <![CDATA[
+
+        if ($debug) Debug.write("############ muteMicrophone ",roomClientObj.micMuted);
+
+        if (roomClientObj.publicSID == this.publicSID) {
+            if (roomClientObj.publicSID == canvas.publicSID) {
+            	if ($debug) Debug.write("Set Mute for Client :: ",roomClientObj.username);
+                if (roomClientObj.micMuted) {
+                	if ($debug) Debug.write("############ SET GAIN 0");
+                    this._chatvideoinner._videostream.micro.gain = 0;
+                } else {
+                	if ($debug) Debug.write("############ SET GAIN 50");
+                	this._chatvideoinner._videostream.micro.gain = 50;
+                }
+            }
+            this.isMutedByModerator = roomClientObj.micMuted;
+            this.setMicMuted(roomClientObj.micMuted);
+
+        } else {
+        	if (!roomClientObj.micMuted) {
+        		//Make sure sound is on, in case a user has set it locally to 0
+        		//in other words: overwrite any local settings
+        		this._chatvideoinner._videostream.setSoundVolume(100);
+        	}
+        }
+        ]]>
+    </method>
+
+    <!--
+        This will mute it only locally, that means on other screens
+        the user might be still online and loud
+     -->
+    <method name="silenceMicrophone" args="mute">
+        <![CDATA[
+
+        if (this.publicSID == canvas.publicSID) {
+        	//self sound turned off
+        	if (mute) {
+            	new lz.confirmationSingle(canvas,{
+                                               labelid:1388,labeliderror:1389,
+                                               refReturnMethod:'confirmGloballyOff',
+                                               refObj:this,showCheckBox:false});
+                return;
+        	} else {
+        	    canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_switchMicMuted', this.publicSID, false);
+        	}
+        } else {
+        	//disable this action for now
+        	if (!canvas.ismoderator) {
+        		new lz.labelerrorPopup(canvas,{errorlabelid:1409});
+        		return;
+        	}
+        	//you can not unmute it locally by putting sound to 100 cause the gain is set to zero globally in the micro of the sender!
+        	//so setting the sound/volume on the other remote clients has zero effect
+        	if (this.isMutedByModerator && !canvas.ismoderator) {
+                //FIXME: That is not true, you could restart audio/video ...
+                var errorlabelid = 1402;
+                if (this.publicSID == canvas.publicSID) {
+                    errorlabelid = 1387;
+                }
+                new lz.labelerrorPopup(canvas,{errorlabelid:errorlabelid});
+                return;
+            }
+        	if (canvas.ismoderator) {
+        		if (mute) {
+                    new lz.confirmationSingle(canvas,{
+                                                   labelid:1392,labeliderror:1393,
+                                                   refReturnMethod:'confirmGloballyOff',
+                                                   refObj:this,showCheckBox:false});
+                    return;
+                } else {
+                    canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_switchMicMuted', this.publicSID, false);
+                }
+        	} else {
+            	if (mute) {
+            		new lz.confirmationSingle(canvas,{
+                                                   labelid:1390,labeliderror:1391,
+                                                   refReturnMethod:'confirmLocallyOff',
+                                                   refObj:this,showCheckBox:false});
+                    return;
+                } else {
+                    this._chatvideoinner._videostream.setSoundVolume(100);
+                }
+        	}
+        }
+        this.setMicMuted(mute);
+        ]]>
+    </method>
+
+    <method name="confirmGloballyOff" args="bool,t" >
+    	if ($debug) Debug.write("confirmGloballyOff :: ",bool);
+    	if (bool) {
+            canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_switchMicMuted', this.publicSID, true);
+    	}
+    </method>
+
+    <method name="confirmLocallyOff" args="bool,t" >
+        if ($debug) Debug.write("confirmLocallyOff :: ",bool);
+        if (bool) {
+        	this.setMicMuted(true);
+            this._chatvideoinner._videostream.setSoundVolume(0);
+        }
+    </method>
+
+    <method name="setMicMuted" args="micMuted">
+        <![CDATA[
+        this.micMuted = micMuted;
+        if (micMuted) {
+            this._toolbar._mute._tip.setAttribute("labelid","1406");
+            this._toolbar._mute._itemRsc.setAttribute('frame',2);
+        } else {
+            this._toolbar._mute._tip.setAttribute("labelid","1405");
+            this._toolbar._mute._itemRsc.setAttribute('frame',1);
+        }
+        ]]>
+    </method>
+    
+</class>
+
+
+</library>

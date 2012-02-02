@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+	<!-- new Library -->
+	<include href="baseVideoView.lzx" />
+	<include href="baseVideoStream.lzx" />
+	<include href="baseVideoStreamDevice.lzx" />
+	<include href="rtmpConnection.lzx" />
+	<include href="sharedObject.lzx" />
+    
+</library>

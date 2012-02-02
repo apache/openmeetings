@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="tableCombobox" extends="combobox" editable="false" fontsize="10" style="componentStyle">
+    <attribute name="initvalue" type="string" />
+    <attribute name="tvalue" type="string" />
+    <attribute name="sendchange" value="false" type="boolean" />
+    <handler name="oninit">
+        this.parent.parent.parent.parent.loadModsCombo(this);
+        this.selectItem(this.initvalue);
+    </handler>
+    <handler name="onblur">
+        if (this.sendchange) this.parent.sendchange(this,tvalue,this.getValue());
+    </handler>
+</class>
+
+</library>

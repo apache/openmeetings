@@ -1,0 +1,855 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- methods for main.lzx -->
+
+<library>
+    
+    <!--<class name="confmenucommand" extends="command">-->
+        <!--<method name="reInit">-->
+            <!---->
+            <!--if($debug) Debug.write("reInit");-->
+            <!---->
+            <!--if(canvas.isrtl == 'true'){-->
+                <!--if($debug) Debug.write("reInit : resetting key");-->
+            <!---->
+                <!--this.setAttribute('key', '');-->
+            <!--}-->
+            <!---->
+            <!--if($debug) Debug.write("reInit : not rtl");-->
+            <!---->
+            <!---->
+        <!--</method>-->
+    <!--</class>-->
+    <!---->
+    <!--<confmenucommand id="cmd_applyforMod" onselect="canvas.doActionmenu('applyForMod')" />-->
+    <!--<confmenucommand id="cmd_createPoll" onselect="canvas.doActionmenu('createPoll')" key="['ALT','Shift','P']"/> -->
+    <!--<confmenucommand id="cmd_pollResults" onselect="canvas.doActionmenu('pollResults')" key="['ALT','Shift','R']"/> -->
+    <!--<confmenucommand id="cmd_checkPollVoted" onselect="canvas.doActionmenu('checkPollVoted')" key="['ALT','Shift','V']"/> -->
+    <!--<confmenucommand id="cmd_importFile" onselect="canvas.doActionmenu('importFile')" key="['ALT','Shift','I']"/> -->
+    <!--<confmenucommand id="cmd_editCamMicSettings" onselect="canvas.doActionmenu('editCamMicSettings')" key="['ALT','Shift','1']"/> -->
+    <!--<confmenucommand id="cmd_editBoardSettings" onselect="canvas.doActionmenu('editBoardSettings')" key="['ALT','Shift','2']"/>   -->
+    <!--<confmenucommand id="cmd_quit" onselect="canvas.doActionmenu('quit')" key="['ALT','Shift','E']"/> -->
+    <!---->
+    <!--<confmenucommand id="cmd_applyforMod_nokey" onselect="canvas.doActionmenu('applyForMod')" />-->
+    <!--<confmenucommand id="cmd_createPoll_nokey" onselect="canvas.doActionmenu('createPoll')" /> -->
+    <!--<confmenucommand id="cmd_pollResults_nokey" onselect="canvas.doActionmenu('pollResults')" /> -->
+    <!--<confmenucommand id="cmd_checkPollVoted_nokey" onselect="canvas.doActionmenu('checkPollVoted')" /> -->
+    <!--<confmenucommand id="cmd_importFile_nokey" onselect="canvas.doActionmenu('importFile')" /> -->
+    <!--<confmenucommand id="cmd_editCamMicSettings_nokey" onselect="canvas.doActionmenu('editCamMicSettings')"/> -->
+    <!--<confmenucommand id="cmd_editBoardSettings_nokey" onselect="canvas.doActionmenu('editBoardSettings')" />   -->
+    <!--<confmenucommand id="cmd_quit_nokey" onselect="canvas.doActionmenu('quit')" /> -->
+    <!---->
+    <!--&lt;!&ndash;-->
+    <!--<command id="cmd_browser_open" onselect="canvas.doActionmenu('browser_open')" key="['ALT','Shift','B']"/>   -->
+    <!--<command id="cmd_browser_close" onselect="canvas.doActionmenu('browser_close')" key="['ALT','Shift','b']"/> -->
+     <!--&ndash;&gt;-->
+     <!---->
+    <!--<confmenucommand id="cmd_invitation" onselect="canvas.doAction('invitation')" /> -->
+    <!---->
+    <!--<confmenucommand id="cmd_editWhiteboardDefault" onselect="canvas.doActionmenu('editWhiteboardDefault')" key="['ALT','Shift','9']"/> -->
+    <!---->
+    <!---->
+    <!--<confmenucommand id="cmd_coBrowser" onselect="canvas.doActionmenu('browser_open')" key="['ALT','Shift','B']"/> -->
+    <!--<confmenucommand id="cmd_coBrowser_nokey" onselect="canvas.doActionmenu('browser_open')" /> -->
+   <!---->
+    <!--<confmenucommand id="cmd_exportFilePNG" onselect="canvas.doWhiteboardActionmenu('exportFilePNG')" />-->
+    <!--<confmenucommand id="cmd_exportFileJPG" onselect="canvas.doWhiteboardActionmenu('exportFileJPG')" />-->
+    <!--<confmenucommand id="cmd_exportFilePDF" onselect="canvas.doWhiteboardActionmenu('exportFilePDF')" />-->
+    <!--<confmenucommand id="cmd_exportFileSVG" onselect="canvas.doWhiteboardActionmenu('exportFileSVG')" />-->
+    <!--<confmenucommand id="cmd_exportFileTIF" onselect="canvas.doWhiteboardActionmenu('exportFileTIF')" />-->
+    <!---->
+    <!---->
+        <!---->
+    <!--<dataset type="http" name="languageData" request="false" -->
+        <!--src="${ canvas.currentlanguage+'.xml' }" proxied="false">-->
+        <!--<handler name="ondata" args="value">-->
+            <!--parent.parseLanugageObject(value);-->
+        <!--</handler>-->
+    <!--</dataset>-->
+
+    <!--<method name="openMeetingsMenuItemHandler">-->
+        <!--lz.Browser.loadURL("http://code.google.com/p/openmeetings/", "Openmeetings Homepage");  -->
+    <!--</method>    -->
+
+    <method name="myinit">
+        <![CDATA[
+        canvas.mediaerrortimeout = 30000;
+        canvas.medialoadtimeout = 30000;
+        
+        if($debug) Debug.write("main.lzx/config.xml ondata",this);
+        
+        //Set Config-values by config.xml, see comments on config.xml
+        this.setAttribute('rtmphostlocal',canvas.myConfigSet.getPointer().xpathQuery('config/rtmphostlocal/text()'));   
+        this.setAttribute('rtmpport',Number(canvas.myConfigSet.getPointer().xpathQuery('config/rtmpport/text()')));  
+        this.setAttribute('rtmpTunnelport',Number(canvas.myConfigSet.getPointer().xpathQuery('config/rtmpTunnelport/text()'))); 
+        this.setAttribute('rtmpsslport',Number(canvas.myConfigSet.getPointer().xpathQuery('config/rtmpsslport/text()'))); 
+        
+        var userSSLString = canvas.myConfigSet.getPointer().xpathQuery('config/useSSL/text()');
+        if ($debug) Debug.write("userSSLString",userSSLString)
+        if (userSSLString == "yes") {
+            this.setAttribute('useSSL',true);
+        }
+        
+        this.setAttribute('red5httpport',Number(canvas.myConfigSet.getPointer().xpathQuery('config/red5httpport/text()')));  
+        this.setAttribute('basebgcolorizer',canvas.myConfigSet.getPointer().xpathQuery('config/basebgcolorizer/text()'));  
+        this.setAttribute('baseMousecolorizer',canvas.myConfigSet.getPointer().xpathQuery('config/baseMousecolorizer/text()'));  
+        this.setAttribute('baseMouseOvercolorizer',canvas.myConfigSet.getPointer().xpathQuery('config/baseMouseOvercolorizer/text()'));  
+        this.setAttribute('currentappname',canvas.myConfigSet.getPointer().xpathQuery('config/currentappname/text()'));  
+        this.setAttribute('currentappnameurl',canvas.myConfigSet.getPointer().xpathQuery('config/currentappnameurl/text()'));  
+        this.setAttribute('currentappnamebugurl',canvas.myConfigSet.getPointer().xpathQuery('config/currentappnamebugurl/text()'));
+        this.setAttribute('loudnessAcitviation',canvas.myConfigSet.getPointer().xpathQuery('config/loudnessAcitviation/text()'));
+        this.setAttribute('webAppRootKey',canvas.myConfigSet.getPointer().xpathQuery('config/webAppRootKey/text()'));
+        this.setAttribute('showWindowEffect',canvas.myConfigSet.getPointer().xpathQuery('config/showWindowEffect/text()'));
+        this.setAttribute('firstdayinweek',canvas.myConfigSet.getPointer().xpathQuery('config/firstdayinweek/text()'));
+        this.setAttribute('showRecording',canvas.myConfigSet.getPointer().xpathQuery('config/showRecording/text()'));
+        
+        //old menubar is not active anymore
+        //this.setAttribute('showmodernWhiteBoard',canvas.myConfigSet.getPointer().xpathQuery('config/showmodernWhiteBoard/text()'));
+        
+        //Audio-Video-Settings
+        this.setAttribute('framesPerSecond',Number(canvas.myConfigSet.getPointer().xpathQuery('config/framesPerSecond/text()')));  
+        this.setAttribute('bandwidthNeededNormal',Number(canvas.myConfigSet.getPointer().xpathQuery('config/bandwidthNeededNormal/text()')));  
+        this.setAttribute('bandwidthNeededBest',Number(canvas.myConfigSet.getPointer().xpathQuery('config/bandwidthNeededBest/text()')));  
+        this.setAttribute('camQualityNormal',Number(canvas.myConfigSet.getPointer().xpathQuery('config/camQualityNormal/text()')));  
+        this.setAttribute('camQualityBest',Number(canvas.myConfigSet.getPointer().xpathQuery('config/camQualityBest/text()')));  
+        this.setAttribute('microphoneRateNormal',Number(canvas.myConfigSet.getPointer().xpathQuery('config/microphoneRateNormal/text()')));  
+        this.setAttribute('microphoneRateBest',Number(canvas.myConfigSet.getPointer().xpathQuery('config/microphoneRateBest/text()')));  
+        
+        this.setAttribute('defaultWhiteboardWidth',Number(canvas.myConfigSet.getPointer().xpathQuery('config/defaultWhiteboardWidth/text()')));  
+        this.setAttribute('defaultWhiteboardHeight',Number(canvas.myConfigSet.getPointer().xpathQuery('config/defaultWhiteboardHeight/text()')));  
+        
+        
+        this.setAttribute('adminModuleUser',canvas.myConfigSet.getPointer().xpathQuery('config/adminModuleUser/text()'));  
+        this.setAttribute('adminModuleRoom',canvas.myConfigSet.getPointer().xpathQuery('config/adminModuleRoom/text()'));  
+        this.setAttribute('adminModuleOrg',canvas.myConfigSet.getPointer().xpathQuery('config/adminModuleOrg/text()'));  
+        this.setAttribute('adminModuleLanguages',canvas.myConfigSet.getPointer().xpathQuery('config/adminModuleLanguages/text()'));  
+        this.setAttribute('adminModuleConnections',canvas.myConfigSet.getPointer().xpathQuery('config/adminModuleConnections/text()'));  
+        this.setAttribute('adminModuleConfiguration',canvas.myConfigSet.getPointer().xpathQuery('config/adminModuleConfiguration/text()'));  
+        this.setAttribute('adminModuleBackup',canvas.myConfigSet.getPointer().xpathQuery('config/adminModuleBackup/text()'));  
+        
+        this.setAttribute('moderatorModuleUser',canvas.myConfigSet.getPointer().xpathQuery('config/moderatorModuleUser/text()'));  
+        this.setAttribute('moderatorModuleRoom',canvas.myConfigSet.getPointer().xpathQuery('config/moderatorModuleRoom/text()'));  
+        
+        this.setAttribute('dashboardModuleStartScreen',canvas.myConfigSet.getPointer().xpathQuery('config/dashboardModuleStartScreen/text()'));  
+        this.setAttribute('dashboardModuleCalendar',canvas.myConfigSet.getPointer().xpathQuery('config/dashboardModuleCalendar/text()'));  
+        
+        this.setAttribute('conferenceModuleRoomList',canvas.myConfigSet.getPointer().xpathQuery('config/conferenceModuleRoomList/text()'));  
+        this.setAttribute('conferenceRoomModule',canvas.myConfigSet.getPointer().xpathQuery('config/conferenceRoomModule/text()'));  
+        
+        this.setAttribute('eventModuleRoomList',canvas.myConfigSet.getPointer().xpathQuery('config/eventModuleRoomList/text()'));  
+        this.setAttribute('eventRoomModule',canvas.myConfigSet.getPointer().xpathQuery('config/eventRoomModule/text()'));  
+        
+        this.setAttribute('restrictedRoomModule',canvas.myConfigSet.getPointer().xpathQuery('config/restrictedRoomModule/text()'));  
+        
+        this.setAttribute('interviewRoomModule',canvas.myConfigSet.getPointer().xpathQuery('config/interviewRoomModule/text()'));  
+        
+        
+        this.setAttribute('userSettingsModule',canvas.myConfigSet.getPointer().xpathQuery('config/userSettingsModule/text()'));  
+        
+        this.setAttribute('recordModule',canvas.myConfigSet.getPointer().xpathQuery('config/recordModule/text()'));  
+        
+        this.setAttribute('httpRootKey',canvas.myConfigSet.getPointer().xpathQuery('config/httpRootKey/text()'));  
+
+
+        //mainBaseText.setAttribute('text',canvas.currentappname);
+        //mainBaseText.setShadow();
+        //mainBaseTextLabel.setAttribute('text',canvas.currentappnameurl);
+
+
+        var _url = this.getDisplayObject().loaderInfo.url;
+        if($debug) Debug.write("_url: ",_url);
+
+        var cleanUrl = _url;
+
+        var hasParams = _url.indexOf("?");
+        if (hasParams != -1) {
+            cleanUrl = _url.substr(0,hasParams-1);
+        }
+
+        if ($debug) Debug.write("_url ",_url,cleanUrl);
+        var doubleSlash = cleanUrl.indexOf("//");
+        var isNotPort80 = cleanUrl.indexOf(":", doubleSlash+2);
+        if ($debug) Debug.write("isNotPort80: ",isNotPort80,doubleSlash);
+        if (isNotPort80!=-1){
+            //Debug.write("isNotPort80: ",doubleSlash+2, _url.indexOf(":", doubleSlash+2)-doubleSlash-2);
+            var server = cleanUrl.substr(doubleSlash+2, _url.indexOf(":", doubleSlash+2)-doubleSlash-2);
+        } else {
+            var server = cleanUrl.substr(doubleSlash+2, _url.indexOf("/", doubleSlash+2)-doubleSlash-2);
+        }
+
+        if ($debug) Debug.write("this zielnr: ",this,server);
+
+        this.setAttribute('rtmphost',server);
+
+        if (this.rtmphostlocal.length==0){
+            this.setAttribute('rtmphostlocal',server);
+        }
+
+        //Check for Invitation
+        var invitationHash = lz.Browser.getInitArg('invitationHash');
+
+        if ($debug) Debug.info("###################### -1 ");
+        if ($debug) Debug.info("invitationHash :: ",invitationHash);
+
+        if (invitationHash != undefined){
+            canvas.isinitRoomDirect = true;
+            canvas.invitationHash = invitationHash;
+        }
+
+        var secureHash = lz.Browser.getInitArg('secureHash');
+        if (secureHash != undefined){
+            canvas.secureRemoteUserLogin = true;
+            canvas.secureHash = secureHash;
+        }
+
+        if ($debug) Debug.info("###################### -2 ");
+
+        //sid=fe9ea55284e0b23991b1c1089b2c8f64&roomid=1
+        var sid = lz.Browser.getInitArg('sid');
+        var initroomid = lz.Browser.getInitArg('roomid');
+        if (sid != undefined && initroomid != undefined){
+            canvas.remoteUserLogin = true;
+            canvas.initroomid = initroomid;
+            canvas.remoteUserSid = sid;
+        }
+
+        var directRoomId = lz.Browser.getInitArg('directRoomId');
+        if (directRoomId != undefined) {
+            canvas.directUserLogin = true;
+            canvas.directRoomId = directRoomId;
+        }
+
+        var language = lz.Browser.getInitArg('language');
+        if (language != undefined) {
+            canvas.language_id = Number(language);
+        }
+
+        //check for reset password
+        var hash = lz.Browser.getInitArg('hash');
+        if (hash!=undefined){
+            canvas.isResetUsername = true;
+            canvas.resetHash = hash;
+        }
+
+        var cuserItem = lz.Browser.getInitArg('cuser');
+        if (cuserItem!=undefined){
+            canvas.cuser = cuserItem;
+
+            //Lookup additional actions
+            var tAccept = lz.Browser.getInitArg('tAccept');
+            if (tAccept != undefined) {
+            	canvas.cuserStatus = tAccept;
+            } else {
+            	canvas.cuserStatus = "none";
+            }
+
+        }
+
+        var moodleRoom = lz.Browser.getInitArg('moodleRoom');
+        var becomemoderator = lz.Browser.getInitArg('becomemoderator');
+
+        if (becomemoderator != undefined) {
+            if (becomemoderator == "2"){
+                canvas.becomemoderator = true;
+            } else {
+                canvas.becomemoderator = false;
+            }
+        }
+
+        if (moodleRoom != undefined){
+            canvas.isMoodleRoom = true;
+
+            var moodleWwwRoot = lz.Browser.getInitArg('wwwroot');
+            var moodleUserId = lz.Browser.getInitArg('user_id');
+            var moodlePicture = lz.Browser.getInitArg('picture');
+
+            if (moodleWwwRoot != undefined) {
+                canvas.moodleWwwRoot = moodleWwwRoot;
+            }
+            if (moodleUserId != undefined) {
+                canvas.moodleUserId = Number(moodleUserId);
+            }
+            if (moodlePicture != undefined) {
+                canvas.moodlePicture = moodlePicture;
+            }
+        }
+
+
+        hib.protocollPort = canvas.rtmpport;
+
+        if (canvas.useSSL) {
+            hib.protocollName = "rtmps";
+            hib.protocollPort = canvas.rtmpsslport;
+        }
+
+        var scopeRoomId = lz.Browser.getInitArg('scopeRoomId');
+        if (scopeRoomId != undefined){
+            hib.userScope = scopeRoomId;
+        }
+
+        //Debug.write("rtmphostlocal,rtmphost: ",canvas.rtmphostlocal,canvas.rtmphost);
+        var src = hib.protocollName+'://'+canvas.rtmphostlocal+':'+hib.protocollPort+'/'+canvas.webAppRootKey+'/'+hib.userScope;
+
+        if($debug) Debug.write("src: ",src);
+
+        canvas.thishib.setAttribute('src',src);
+        //canvas.thishib.loaderVar = new lz.autoLoader(canvas);
+        //canvas.thishib.loaderVar._src.setAttribute('text',src);
+        canvas.thishib.connect();
+
+        if($debug) Debug.write("canvas.currentNC: ",canvas.currentNC);
+        ]]>
+    </method>
+    
+    <method name="getLabelName" args="id">
+        //if($debug) Debug.write("main.lzx/getLabelName()",id);
+        return getLabelTag(id);
+    </method>
+    
+    <!--
+        exportFilePNG exportFileJPG exportFilePDF exportFileSVG exportFileTIF
+     -->
+     
+    <!--<method name="doWhiteboardActionmenu" args="action">-->
+        <!--if (action == "exportFilePNG") {-->
+            <!--canvas._drawarea.confirmSaveAsImageTypeExport("image","png");-->
+        <!--} else if (action == "exportFileJPG") {-->
+            <!--canvas._drawarea.confirmSaveAsImageTypeExport("image","jpg");-->
+        <!--} else if (action == "exportFilePDF") {-->
+            <!--canvas._drawarea.confirmSaveAsImageTypeExport("image","pdf");-->
+        <!--} else if (action == "exportFileSVG") {-->
+            <!--canvas._drawarea.confirmSaveAsImageExport("image");-->
+        <!--} else if (action == "exportFileTIF") {-->
+            <!--canvas._drawarea.confirmSaveAsImageTypeExport("image","tif");-->
+        <!--}-->
+    <!--</method>-->
+
+    <!--&lt;!&ndash; you can delete this comment. It was just memo.-->
+            <!--Mar 24 2008 onokeiji@gmail.com-->
+         <!--moved from modules/conference/conference/conferenceMenubar.lzx-->
+    <!--&ndash;&gt;-->
+    <!--<method name="doActionmenu" args="stringSub">-->
+        <!--<![CDATA[-->
+            <!--if($debug) Debug.write("doActionmenu: ",stringSub);-->
+            <!--if (canvas._conferencemenu.visibility == 'visible'){-->
+                <!--if (stringSub=='editWhiteboardDefault') {-->
+                    <!--new lz.editWhiteboardDefault(canvas.main_content._content.inner);-->
+                <!--} else if (stringSub=='createPoll') {-->
+                    <!--new lz.createPollWin(canvas.main_content._content.inner);-->
+                <!--} else if (stringSub=='pollResults') {-->
+                    <!--this.getVotes.doCall();-->
+                <!--} else if (stringSub=='checkPollVoted') {-->
+                    <!--this.checkHasVoted.doCall();-->
+                <!--} else if (stringSub=='importFile') {-->
+                    <!--//new lz.uploadWindow(canvas.main_content._content.inner,{x:60,uploadmodule:canvas.uploadmoduleimg,isOnlyImage:true});-->
+                    <!---->
+                	<!--new lz.uploadWindowExplorer(canvas.main_content._content.inner,{-->
+                            <!--x:60,uploadmodule:canvas.uploadmoduleimg,-->
+                            <!--parentFolderId:0,-->
+                            <!--isOwner:false,-->
+                            <!--fileExplorerRef:null,-->
+                            <!--isOnlyImage:true,-->
+                            <!--servletName:'FileExplorerUploadHandler'-->
+                        <!--});-->
+                	<!---->
+                <!--} else if (stringSub=='applyForMod') {-->
+                    <!--if ($debug) Debug.info("Apply For Mod through doActionmenu");-->
+                    <!--//new lz.applyForModeration(canvas.main_content._content.inner);-->
+                    <!--canvas.thishib.applyForModeration.doCall();-->
+                <!--} else if (stringSub=='editCamMicSettings') {-->
+                    <!--new lz.changeDevice(canvas.main_content._content.inner);-->
+                <!--} else if (stringSub=='editBoardSettings') {-->
+                    <!--new lz.editWhiteboardDefault(canvas.main_content._content.inner);-->
+                <!--} else if (stringSub=='quit') {-->
+                    <!---->
+                    <!--quicklink('meetings')-->
+                <!---->
+                <!--} else if( stringSub == "browser_open" ){-->
+                    <!--var browserPanelWidth  = canvas.browserPanelWidth;-->
+                    <!--var browserPanelHeight = canvas.browserPanelHeight;-->
+
+                    <!--if ($debug) Debug.write( "is browser[open] ? ", canvas.main_content._content.inner.conferenceBrowser );-->
+                    <!--if ($debug) Debug.write( "is browser[browserPanelWidth] ? ", browserPanelWidth );-->
+                    <!--if ($debug) Debug.write( "is browser[browserPanelHeight] ? ", browserPanelHeight );-->
+
+                <!--//ブラウザのインスタンスを確認して、あれば開く。なければ作成する-->
+                    <!--if( !canvas.conferenceBrowserIsinited ){-->
+                        <!--if ($debug) Debug.write( "if this" );-->
+                        <!--new lz.conferenceBrowser( canvas.main_content._content.inner,{-->
+                                                         <!--name:'conferenceBrowser',y:30,-->
+                                                         <!--width:canvas.width-220, -->
+                                                         <!--height:canvas.height-100,-->
+                                                         <!--width:browserPanelWidth, -->
+                                                         <!--height:browserPanelHeight-->
+                                                     <!--});-->
+                    <!--} else{Debug.write( "else this" );-->
+                    <!--with( canvas.main_content._content.inner ){-->
+                            <!--conferenceBrowser.htmlviewer.setVisible( true );-->
+                            <!--conferenceBrowser.setVisible( true );-->
+                    <!--}-->
+                <!--}-->
+             <!--} else if( stringSub == "browser_close" ){-->
+                <!--// 開いているブラウザをアニメーションで移動する　hieght=0  -->
+                <!--Debug.write( "is browser[close] ? ", canvas.main_content._content.inner.conferenceBrowser );-->
+                <!--with( canvas.main_content._content.inner ){-->
+                    <!--if( conferenceBrowser  != undefined ){-->
+                            <!--conferenceBrowser.htmlviewer.setVisible( false );-->
+                            <!--conferenceBrowser.setVisible( false );-->
+                    <!--}-->
+                <!--}-->
+            <!--}-->
+          <!--}-->
+        <!--]]>-->
+    <!--</method> -->
+    <!---->
+    <!--<method name="startBrowser" args="objMessage">-->
+        <!--<![CDATA[-->
+            <!--if( !canvas.conferenceBrowserIsinited ){-->
+                        <!--if ($debug) Debug.write( "if this" );-->
+                <!--new lz.conferenceBrowser(canvas.main_content._content.inner,{-->
+                                             <!--name:'conferenceBrowser',y:30,-->
+                                             <!--width:canvas.width-220, -->
+                                             <!--height:canvas.height-100,-->
+                                             <!--initedByUser:false,-->
+                                             <!--initURL:objMessage[1]-->
+                                        <!--});-->
+            <!--} else{Debug.write( "else this" );-->
+                <!--with( canvas.main_content._content.inner ){-->
+                        <!--conferenceBrowser.htmlviewer.setVisible( true );-->
+                        <!--conferenceBrowser.setVisible( true );-->
+                        <!--conferenceBrowser.newBrowserURL(objMessage[1]);-->
+                <!--}-->
+            <!--}-->
+        <!--]]>-->
+    <!--</method>   -->
+    <!---->
+    <!--<method name="closeBrowser" args="objMessage">-->
+        <!--<![CDATA[-->
+            <!--if( canvas.conferenceBrowserIsinited ){-->
+                <!--with( canvas.main_content._content.inner ){-->
+                        <!--conferenceBrowser.close();-->
+                <!--}-->
+            <!--}-->
+        <!--]]>-->
+    <!--</method>-->
+    <!---->
+    <!--<netRemoteCallHib name="getVotes" funcname="pollservice.getVotes" remotecontext="$once{ canvas.thishib }" >-->
+        <!--<handler name="ondata" args="value">-->
+                <!--<![CDATA[-->
+                    <!--if (value!=null){-->
+                        <!--new lz.resultPollWin(canvas.main_content._content.inner,{createdBy:value.createdBy.username,pollDate:value.pollDate,pollQuestion:value.pollQuestion,pollTypeId:value.pollTypeId,roomPollAnswerList:value.roomPollAnswerList,roomPollId:value.roomPollId,roomScopeName:value.roomScopeName});-->
+                    <!--} else {-->
+                        <!--new lz.messageWin(canvas.main_content._content.inner,{labeliderror:41});-->
+               <!--}-->
+            <!--]]>-->
+          <!--</handler>   -->
+    <!--</netRemoteCallHib>  -->
+        <!---->
+    <!--<netRemoteCallHib name="checkHasVoted" funcname="pollservice.checkHasVoted" remotecontext="$once{ canvas.thishib }" >-->
+        <!--<handler name="ondata" args="value">-->
+            <!--<![CDATA[-->
+                      <!--if (value==1){-->
+                        <!--parent.getPoll.doCall();-->
+                      <!--} else if (value==-1){-->
+                        <!--new lz.messageWin(canvas.main_content._content.inner,{labeliderror:31});-->
+                      <!--} else if (value==-2){-->
+                            <!--new lz.messageWin(canvas.main_content._content.inner,{labeliderror:41});-->
+                <!--}-->
+            <!--]]>-->
+        <!--</handler>   -->
+    <!--</netRemoteCallHib> -->
+    <!---->
+    <!--<netRemoteCallHib name="getPoll" funcname="pollservice.getPoll" remotecontext="$once{ canvas.thishib }" >-->
+        <!--<handler name="ondata" args="value">-->
+            <!--<![CDATA[-->
+                <!--if (value!=null){-->
+                     <!--new lz.answerPoll(canvas.main_content._content.inner,{createdBy:value.createdBy.username,pollDate:value.pollDate,pollQuestion:value.pollQuestion,pollTypeId:value.pollTypeId,roomPollAnswerList:value.roomPollAnswerList,roomPollId:value.roomPollId,roomScopeName:value.roomScopeName});-->
+                <!--}-->
+            <!--]]>-->
+        <!--</handler>-->
+    <!--</netRemoteCallHib> -->
+    <!---->
+    <method name="setRoomValues" args="roomTypeId,roomId,roomObj">
+        if ($debug) Debug.warn("setRoomValues ",roomTypeId,roomId,roomObj);
+        if (roomTypeId==1){
+                canvas.isConference = true;
+            } else {
+                canvas.isConference = false;
+        }
+
+        //this is needed cause in the rpc-method *getCurrentModeratorList* we check if its roomtype_id == 3
+        //and if roomtype_id == 3 we will not show any *There is no Moderator* Warning Dialog
+        canvas.currentRoomObject = roomObj;
+
+        if($debug) Debug.write("canvas.currentRoomObject", canvas.currentRoomObject);
+
+        //TODO:fixme
+        //hib.currentroomid = roomId;
+    </method>
+    <!---->
+    <!--<method name="roomClosed">-->
+        <!--<![CDATA[-->
+        <!---->
+            <!--if ($debug) Debug.write("canvas.currentRoomObject ",canvas.currentRoomObject);-->
+            <!---->
+            <!--new lz.redirectBox(canvas,{redirectURL:canvas.currentRoomObject.redirectURL});-->
+        <!---->
+        <!--]]>-->
+    <!--</method>-->
+                 <!---->
+        <!---->
+
+
+<!--<method name="parseLanugageObject" args="obj">-->
+
+    <!--////Debug.write('parseLanugageObject: ',obj);-->
+    <!--////Debug.write('parseLanugageObject: ',obj.childNodes);-->
+    <!--<![CDATA[-->
+    <!--var t = new Array();-->
+    <!--for (var i=0;i<obj.childNodes.length;i++){-->
+        <!--for (var k=0;k<obj.childNodes[i].childNodes.length;k++){-->
+            <!--////Debug.write(obj.childNodes[i].childNodes[k]);-->
+            <!--var t2 = new Array();-->
+            <!--t2[obj.childNodes[i].childNodes[k].childNodes[0].nodeName]=obj.childNodes[i].childNodes[k].childNodes[0].childNodes[0].data;-->
+            <!--t2[obj.childNodes[i].childNodes[k].childNodes[1].nodeName]=obj.childNodes[i].childNodes[k].childNodes[1].childNodes[0].data;-->
+            <!--t.push(t2);-->
+        <!--}-->
+    <!--}-->
+    <!--setLabelObject(t);-->
+    <!--canvas.initScreen();-->
+    <!--//Debug.write(t);-->
+    <!--]]>-->
+<!--</method>-->
+
+<!--&lt;!&ndash; Data Source Definition &ndash;&gt;-->
+<!--<dataset name="getSessionVarsData" request="false" proxied="false"-->
+    <!--querytype="POST" src="${ 'http://'+canvas.rtmphost+'/webrooms/checksession.php' }" -->
+    <!--type="http" >-->
+    <!--<handler name="ondata" args="value">-->
+    <!---->
+        <!--//Debug.write(value);-->
+        <!--canvas.setAttribute('currentcourse',value.childNodes[0].childNodes[0].childNodes[0].childNodes[0].data);-->
+        <!--canvas.setAttribute('currentcourseName',canvas.currentcourse);-->
+        <!--canvas.setAttribute('currentcourseNameLong',value.childNodes[0].childNodes[0].childNodes[1].childNodes[0].data);-->
+        <!--canvas.setAttribute('currentlanguage',value.childNodes[0].childNodes[0].childNodes[8].childNodes[0].data);-->
+
+        <!--canvas.setAttribute('currentusename',value.childNodes[0].childNodes[1].childNodes[2].childNodes[0].data+' '+value.childNodes[0].childNodes[1].childNodes[1].childNodes[0].data);-->
+        <!---->
+        <!--canvas.setAttribute('user_id',value.childNodes[0].childNodes[1].childNodes[0].childNodes[0].data);-->
+        <!--canvas.setAttribute('firstName',value.childNodes[0].childNodes[1].childNodes[1].childNodes[0].data);-->
+        <!--canvas.setAttribute('lastName',value.childNodes[0].childNodes[1].childNodes[2].childNodes[0].data);-->
+        <!--canvas.setAttribute('mail',value.childNodes[0].childNodes[1].childNodes[3].childNodes[0].data);-->
+        <!--canvas.setAttribute('lastLogin','');-->
+        <!--canvas.setAttribute('official_code',value.childNodes[0].childNodes[1].childNodes[5].childNodes[0].data);-->
+        <!--canvas.setAttribute('picture_uri','');-->
+        <!--canvas.setAttribute('language',value.childNodes[0].childNodes[1].childNodes[7].childNodes[0].data);-->
+
+        <!--//Debug.write(value.childNodes[0].childNodes[1].childNodes[0].childNodes[0].data);-->
+        <!--//Debug.write(value.childNodes[0].childNodes[1].childNodes[1].childNodes[0].data);-->
+        <!--//Debug.write(value.childNodes[0].childNodes[1].childNodes[2].childNodes[0].data);-->
+        <!--//Debug.write(value.childNodes[0].childNodes[1].childNodes[3].childNodes[0].data);-->
+        <!--//Debug.write(value.childNodes[0].childNodes[1].childNodes[4].childNodes[0].data);-->
+        <!--//Debug.write(value.childNodes[0].childNodes[1].childNodes[5].childNodes[0].data);-->
+        <!--//Debug.write(value.childNodes[0].childNodes[1].childNodes[6].childNodes[0].data);-->
+        <!--//Debug.write(value.childNodes[0].childNodes[1].childNodes[7].childNodes[0].data);-->
+        <!---->
+        <!--switch (canvas.currentlanguage){-->
+            <!--case 'english':-->
+            <!--break;-->
+            <!--case 'german':-->
+            <!--break;-->
+            <!--case 'french':-->
+            <!--break;          -->
+            <!--default:-->
+            <!--canvas.setAttribute('currentlanguage','english');-->
+            <!--break;-->
+        <!--}-->
+        <!---->
+        <!--var addIt='conf';-->
+        <!--if (!canvas.isConference){-->
+            <!--addIt='meet'-->
+        <!--}-->
+        <!--canvas.setAttribute('currentcourse',canvas.rtmphost+canvas.currentcourse+addIt);-->
+        <!--canvas.setAttribute('currentuser',value.childNodes[0].childNodes[1].childNodes[5].childNodes[0].data);-->
+        <!---->
+        <!--canvas.setAttribute('loadingmessage','loading language data');-->
+        <!--canvas.languageData.doRequest();-->
+    <!--</handler>-->
+<!--</dataset>-->
+
+
+<!--<method name="getSessionVars" args="">-->
+    <!--canvas.setAttribute('loadingmessage','loading session data');-->
+    <!--var d=getSessionVarsData;-->
+    <!--d.doRequest();-->
+<!--</method>-->
+
+
+<!--<method name="addBroswerTabHistory" args="value">-->
+    <!--<![CDATA[-->
+    <!--//Debug.write("addBroswerTabHistory: ",value);-->
+    <!--_browserhistory.addItem(value);-->
+    <!--this.browserTabHistory.push(value);-->
+    <!--]]>-->
+<!--</method>-->
+  <!---->
+
+<!--<method name="analyzeModerationList" args="newList">-->
+    <!--<![CDATA[-->
+    <!---->
+       <!--canvas.newModeratorList = new Array();-->
+       <!--canvas.removeModeratorList = new Array();-->
+       <!---->
+       <!--for (var i=0;i<canvas.currentModeratorList.length;i++) {-->
+            <!--canvas.currentModeratorList[i].found = false;-->
+       <!--}-->
+       <!---->
+       <!--for (var i=0;i<canvas.currentModeratorList.length;i++) {-->
+            <!---->
+            <!--for (var k=0;k<newList.length;k++) {-->
+                <!--if (newList[k].publicSID == canvas.currentModeratorList[i].publicSID) {-->
+                    <!---->
+                    <!--canvas.currentModeratorList[i].found = true;-->
+                    <!---->
+                <!--}-->
+            <!--}-->
+            <!---->
+        <!--}-->
+        <!---->
+        <!--for (var k=0;k<newList.length;k++) {-->
+            <!--newList[k].found = false;-->
+        <!--}-->
+       <!---->
+        <!--for (var k=0;k<newList.length;k++) {-->
+            <!---->
+            <!--for (var i=0;i<canvas.currentModeratorList.length;i++) {-->
+                <!---->
+                <!--if (newList[k].publicSID == canvas.currentModeratorList[i].publicSID) {-->
+                    <!---->
+                    <!--newList[k].found = true;-->
+                    <!---->
+                <!--}-->
+                <!---->
+            <!--}-->
+            <!---->
+        <!--}-->
+        <!---->
+        <!--for (var k=0;k<newList.length;k++) {-->
+            <!---->
+            <!--if (!newList[k].found) {-->
+                <!---->
+                <!--canvas.newModeratorList.push(newList[k]);-->
+                <!---->
+            <!--}-->
+            <!---->
+        <!--}-->
+        <!---->
+        <!--for (var i=0;i<canvas.currentModeratorList.length;i++) {-->
+            <!---->
+            <!--if (!canvas.currentModeratorList[i].found) {-->
+                <!--canvas.removeModeratorList.push(canvas.currentModeratorList[i])-->
+            <!--}-->
+            <!---->
+        <!--}-->
+        <!---->
+        <!--if ($debug) Debug.write("newModeratorList :: ",canvas.newModeratorList);-->
+        <!--if ($debug) Debug.write("removeModeratorList :: ",canvas.removeModeratorList);-->
+    <!---->
+    <!--]]>-->
+<!--</method>-->
+
+<!--&lt;!&ndash;-->
+<!--<method name="setModeratorName" args="mod">-->
+    <!--<![CDATA[-->
+        <!--this.moderatorName = mod;-->
+        <!--canvas._mymod.mymodText.setAttribute('text',canvas.getLabelName(98)+' '+this.moderatorName);-->
+        <!--if ($debug) Debug.write("canvas.moderatorStreamID==canvas.streamid",-->
+                                <!--(canvas.moderatorStreamID==canvas.streamid),-->
+                                <!--canvas.moderatorStreamID,canvas.streamid);-->
+        <!--if (canvas.moderatorStreamID==canvas.streamid){-->
+            <!--this.setAttribute('ismoderator',true);-->
+        <!--} else {-->
+            <!--this.setAttribute('ismoderator',false);-->
+        <!--}-->
+    <!--]]>-->
+<!--</method>-->
+ <!--&ndash;&gt;-->
+ <!---->
+<!--<method name="updateModerationFlag">-->
+    <!--<![CDATA[-->
+        <!--if ($debug) Debug.write("updateModerationFlag",canvas.currentModeratorList);-->
+        <!---->
+        <!--var isCurrentModerator = false;-->
+        <!---->
+        <!--for (var i=0;i<canvas.currentModeratorList.length;i++) {-->
+            <!---->
+            <!--var item = canvas.currentModeratorList[i];-->
+            <!---->
+    <!---->
+            <!--if (canvas.publicSID == item.publicSID) {-->
+                <!--isCurrentModerator = true;-->
+            <!--}-->
+            <!---->
+        <!--}-->
+        <!---->
+        <!--this.setAttribute('ismoderator',isCurrentModerator);-->
+        <!---->
+    <!--]]>-->
+<!--</method> -->
+
+<!--&lt;!&ndash;-->
+<!--var cItem = canvas._mymod.currentModerators.getItem(item.publicSID);-->
+
+<!--if (cItem == null) {-->
+    <!--canvas._mymod.currentModerators.addItem(item.firstname + ' ' + item.lastname,item.publicSID);-->
+<!--} else {-->
+    <!--if ($debug) Debug.warn("Already Moderator in Combobox List");-->
+<!--}-->
+ <!--&ndash;&gt;-->
+            <!---->
+
+<!--<method name="getIsModeratorByPublicSID" args="publicSID">-->
+    <!--<![CDATA[-->
+    <!---->
+        <!--//if ($debug) Debug.write("getIsModeratorByPublicSID ",publicSID);-->
+    <!---->
+        <!--for (var i=0;i<canvas.currentModeratorList.length;i++) {-->
+            <!---->
+            <!--var item = canvas.currentModeratorList[i];-->
+            <!---->
+            <!--//if ($debug) Debug.write("publicSID ? item.publicSID ",publicSID,item.publicSID);-->
+            <!---->
+            <!--if (publicSID == item.publicSID) {-->
+                <!--return true;-->
+            <!--}-->
+        <!--}-->
+        <!---->
+        <!--return false;-->
+    <!--]]>-->
+<!--</method>-->
+ <!---->
+
+<!--<method name="doAction" args="action">-->
+    <!--if (action == "invitation") {-->
+        <!--new lz.inviteMainWindow(canvas.main_content._content.inner);-->
+    <!--}-->
+<!--</method>-->
+
+<!--<method name="setDrawAllowStatus" args="drawObj">-->
+    <!--<![CDATA[-->
+        <!--if ($debug) Debug.write("drawAllowStatus changes ###### ");-->
+        <!--if (drawObj.publicSID==canvas.publicSID) {-->
+            <!--canvas.setAttribute("isAllowedToDraw",drawObj.canDraw);-->
+            <!--canvas.setAttribute("isAllowedToScreenShare",drawObj.canShare);-->
+            <!--canvas.setAttribute("isAllowedToRemoteControl",drawObj.canRemote);-->
+        <!--}-->
+    <!--]]>-->
+<!--</method>-->
+
+<!--<method name="addFolderSequence" args="foldername">-->
+    <!--<![CDATA[-->
+    <!--this.uploadmoduleimgfolder = '/';-->
+    <!--this.uploadmoduleimgfolder += foldername;-->
+    <!--this.setAttribute('uploadmoduleimgfolder',this.uploadmoduleimgfolder);-->
+    <!--]]>-->
+<!--</method>-->
+    <!---->
+    <!---->
+<!--&lt;!&ndash; country validation &ndash;&gt;-->
+<!--<method name="validateCountry" args="str">-->
+    <!--////Debug.write("validateCountry: ",str);-->
+    <!--str = str.toLowerCase();-->
+    <!--<![CDATA[-->
+        <!--if (str.length!=0){-->
+            <!--var a = new Array();-->
+            <!--for (var i=0;i<canvas.statesInitValues.length;i++){-->
+                <!--var st = canvas.statesInitValues[i].name.toLowerCase();-->
+                <!--if (st.startsWith(str))a.push(canvas.statesInitValues[i]);-->
+                <!--//this.addItem(canvas.statesInitValues[i].name,canvas.statesInitValues[i].state_id);-->
+            <!--}-->
+            <!--return a;-->
+        <!--}-->
+    <!--]]> -->
+<!--</method>-->
+    <!---->
+<!--<method name="getCountryRecord" args="id">-->
+    <!--return canvas.statesInitValues[id];-->
+<!--</method>-->
+    <!---->
+<!--<handler name="onmousewheeldelta" reference="lz.Keys" args="d">-->
+    <!--var obj = getCurrentMouseWheelObject();-->
+    <!--////Debug.write("onmousewheeldelta 12: ",d,obj);-->
+    <!--<![CDATA[-->
+        <!--if (obj!=null) {-->
+            <!--obj.step(-d);-->
+        <!--}-->
+    <!--]]>-->
+<!--</handler>    -->
+
+<!--<method name="reverseWordingsBySplit" args="str">-->
+    <!--<![CDATA[-->
+        <!--var words_arr = str.split( " " ); // an array of chars-->
+        <!--for ( var i = 0, str = ""; i < words_arr.length; i++ ) // reverse their order-->
+        <!--{-->
+            <!--str += words_arr[ words_arr.length - i - 1 ];-->
+            <!--if (words_arr.length != 1) {-->
+                <!--str += " ";-->
+            <!--}-->
+        <!--}-->
+        <!--return str;-->
+        <!---->
+    <!--]]>-->
+<!--</method> -->
+
+<!--<method name="reverseAll" args="str">-->
+    <!--<![CDATA[-->
+        <!--var words_arr = str.split( "" ); // an array of chars-->
+        <!--for ( var i = 0, str = ""; i < words_arr.length; i++ ) // reverse their order-->
+        <!--{-->
+            <!--str += words_arr[ words_arr.length - i - 1 ];-->
+            <!---->
+        <!--}-->
+        <!--return str;-->
+        <!---->
+    <!--]]>-->
+<!--</method> -->
+    <!---->
+<!--<method name="reverseWords" args="str">-->
+    <!--<![CDATA[-->
+        <!--if ( str == "" || str == null ) return ""; // undefined-->
+        <!--// first char indicates the main directive of str (rtl/ltr)-->
+        <!--if ( isLTR( str.charCodeAt( 0 ) ) ) return str; // english or number-->
+        <!--var words_arr = str.split( "" ); // an array of chars-->
+        <!--for ( var i = 0, str = ""; i < words_arr.length; i++ ) // reverse their order-->
+            <!--str += words_arr[ words_arr.length - i - 1 ];-->
+        <!--return str;-->
+    <!--]]>-->
+<!--</method>-->
+    <!---->
+<!--<method name="isLTR" args="c">-->
+    <!--<![CDATA[-->
+        <!--return ( c >= 48 && c <= 57 || c >= 65 && c <= 90 || c >= 97 && c <= 122 );-->
+    <!--]]>-->
+<!--</method>-->
+
+<!--<method name="isHEB" args="c">-->
+    <!--<![CDATA[-->
+        <!--return ( c >= 224 && c <= 250 );-->
+    <!--]]>-->
+<!--</method>    -->
+
+<!--<method name="setTextAlign" args="obj,type">-->
+    <!--switch ( type ) {-->
+        <!--case "left" :-->
+            <!--obj.setX( 0 );-->
+        <!--break;-->
+        <!--case "center" :-->
+            <!--obj.setX( this.parent.width / 2 - this.getTextWidth() / 2 );-->
+        <!--break;-->
+        <!--case "right" :-->
+            <!--obj.setX( this.parent.width - this.getTextWidth() );-->
+        <!--break;-->
+    <!--}-->
+<!--</method>  -->
+
+</library>

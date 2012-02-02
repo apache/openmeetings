@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+ 
+ 	<class name="fileUpload">
+         <switch>
+             <when property="$as3">
+                 <passthrough>
+                     import flash.net.FileReference;
+                 </passthrough>
+             </when>
+         </switch>
+
+         <!--  Show all Documents in FileBrowser -->
+ 		<attribute name="isOnlyImage" value="false" type="boolean" />
+ 		
+ 		<!-- Show only PowerPoint Presentations in FileBrowser -->
+ 		<attribute name="isOnlyPpt" value="false" type="boolean" />
+ 		
+ 		<!-- Show only XML Files in FileBrowser -->
+ 		<attribute name="isOnlyXml" value="false" type="boolean" />
+ 		
+ 		<!-- Show only ZIP Files in FileBrowser -->
+ 		<attribute name="isOnlyZip" value="false" type="boolean" />
+ 		
+ 		<!-- Show only Images Files in FileBrowser -->
+ 		<attribute name="isOnlyProfile" value="false" type="boolean" />
+        
+        <attribute name="fr" value="null" />
+ 		 		
+		<handler name="oninit" args="invoker">
+		<![CDATA[
+			this.fr = new FileReference();
+			//Debug.write(fr);
+    		this.fr.onHTTPError = function(fr, httpError){
+            	Debug.write('onHTTPError function: ' + httpError);
+            	new lz.errorPopup(canvas,{error:'Err2: '+httpError});
+			}
+			this.fr.onIOError = function(fr){
+                Debug.write.write('onIOError function');
+				new lz.errorPopup(canvas,{error:'onIOError invoked '});
+			}
+			function callbackFunction ( e ) {
+                Debug.write( e.data );
+			}		
+			this.fr.onSecurityError = function(fr, errorString){
+                Debug.write('onSecurityError function: ' + errorString);
+            	new lz.errorPopup(canvas,{error:'Err2: '+errorString});
+			}
+			this.fr.addListener(invoker, callbackFunction);
+		]]>
+		</handler>
+
+		<method name="browse">
+		<![CDATA[	
+		
+			if (this.isOnlyZip) {
+				
+				var allTypes = new Array();
+				var imageTypes = new Object();
+				imageTypes.description = "Powerpoint (*.zip)";
+				imageTypes.extension = "*.zip";
+				allTypes.push(imageTypes); 				
+				fr.browse(allTypes);
+				
+			} else if (this.isOnlyImage){
+				var allTypes = new Array();
+
+				var imageTypes = new Object();
+				imageTypes.description = "Allowed Files";
+				imageTypes.extension = "*.txt; *.ppt; *.pptx; *.odp; *.odt; *.wpd; *.doc; *.docx; *.rtf; *.txt; *.ods; *.sxc; *.xls; *.xlsx; *.sxi; *.pdf; *.avi; *.mov; *.flv; *.mp4; *.tga; *.xcf; *.wpg; *.ico; *.ttf; *.pcd; *.pcds; *.ps; *.psd; *.tiff; *.bmp; *.svg; *.dpx; *.exr; *.jpg; *.jpeg; *.gif; *.png";
+				allTypes.push(imageTypes); 
+				
+				imageTypes = new Object();
+				imageTypes.extension = "*.txt; *.ppt; *.pptx; *.odp; *.odt; *.wpd; *.doc; *.docx; *.rtf; *.txt; *.ods; *.sxc; *.xls; *.xlsx; *.sxi; *.pdf";
+				imageTypes.description = "Documents";
+				allTypes.push(imageTypes);
+				
+				imageTypes = new Object();
+                imageTypes.extension = "*.avi; *.mov; *.flv; *.mp4";
+                imageTypes.description = "Videos";
+                allTypes.push(imageTypes);
+				
+				imageTypes = new Object();
+				imageTypes.extension = "*.tga; *.xcf; *.wpg; *.ico; *.ttf; *.pcd; *.pcds; *.ps; *.psd; *.tiff; *.bmp; *.svg; *.dpx; *.exr; *.jpg; *.jpeg; *.gif; *.png";
+				imageTypes.description = "Pictures";
+				allTypes.push(imageTypes);
+
+				fr.browse(allTypes);	
+			} else if(this.isOnlyPpt){	
+				var allTypes = new Array();
+				var imageTypes = new Object();
+				imageTypes.description = "Powerpoint (*.ppt, *.odp)";
+				imageTypes.extension = "*.ppt; *.odp;";
+				allTypes.push(imageTypes); 				
+				fr.browse(allTypes);
+			} else if(this.isOnlyXml){	
+				var allTypes = new Array();
+				var imageTypes = new Object();
+				imageTypes.description = "Powerpoint (*.xml)";
+				imageTypes.extension = "*.xml;";
+				allTypes.push(imageTypes); 				
+				fr.browse(allTypes);
+			} else if(this.isOnlyProfile){	
+				var allTypes = new Array();
+				var imageTypes = new Object();
+				imageTypes.description = "Allowed Files (*.psd, *.tiff, *.bmp, *.svg, *.dpx, *.exr, *.jpg, *.jpeg, *.gif, *.png)";
+				imageTypes.extension = "*.psd; *.tiff; *.bmp; *.svg; *.dpx; *.exr; *.jpg; *.jpeg; *.gif; *.png";
+				allTypes.push(imageTypes); 				
+				fr.browse(allTypes);
+			} else {	
+				fr.browse();
+			}
+		]]>
+		</method>
+
+		<method name="getName"><![CDATA[
+			return this.fr.name;
+		]]>
+		</method>
+
+		<method name="upload" args="url"><![CDATA[
+			Debug.write("url: ",url,this.fr);
+			this.fr.upload(url);
+		]]>
+		</method>
+		
+    <method name="onCancel" args="fr">
+        <![CDATA[
+            Debug.write('onCancel invoked');
+        ]]>
+    </method>
+    
+    <method name="onComplete" args="fr">
+        <![CDATA[
+            Debug.write('onComplete invoked');
+            canvas.filedialogRef.progressBar.setValue(100);
+            //canvas.filedialogRef.upload.setAttribute('enabled', false);
+            if (canvas.filedialogRef.sendCompleted)canvas.filedialogRef.sendCompleted.sendEvent();
+        ]]>
+    </method>
+    
+    <method name="onHTTPError" args="fr, httpError">
+        <![CDATA[
+            Debug.write('onHTTPError invoked: ' + httpError);
+        ]]>
+    </method>
+    
+    <method name="onIOError" args="fr">
+        <![CDATA[
+            Debug.write('onIOError invoked',fr);
+        ]]>
+    </method>
+    
+    <method name="onOpen" args="fr">
+        <![CDATA[
+            Debug.write('onOpen invoked',fr);
+        ]]>
+    </method>
+    
+    <method name="onSecurityError" args="fr, errorString">
+        <![CDATA[
+            Debug.write('onSecurityError invoked: ' + errorString);
+        ]]>
+    </method>
+		
+ 	</class>
+ 	
+ </library>

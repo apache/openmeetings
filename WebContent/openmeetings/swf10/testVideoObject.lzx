@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+    <class name="testVideoObject" extends="view" bgcolor="0x000000" width="132" height="120" onmousedown="dragger.setAttribute('applied', true)" onmouseup="dragger.setAttribute('applied', false)">
+        <dragstate name="dragger"/>>
+    </class>
+</library>

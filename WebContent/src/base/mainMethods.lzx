@@ -9,7 +9,7 @@
   with the License.  You may obtain a copy of the License at
   
       http://www.apache.org/licenses/LICENSE-2.0
-    	  
+          
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -110,12 +110,12 @@
         this.setAttribute('userMousecolorizer',canvas.myConfigSet.getPointer().xpathQuery('config/baseMousecolorizer/text()'));
         this.setAttribute('userMouseOvercolorizer',canvas.myConfigSet.getPointer().xpathQuery('config/baseMouseOvercolorizer/text()'));
         if (this.baseColorScheme == "lightsteelblue" &&
-        	(this.userbgcolorizer != "0x3F5B9E"
-        	|| this.baseMousecolorizer != "0xC4D5E6"
-        	|| this.baseMouseOvercolorizer != "0xC4D5E6"))
+            (this.userbgcolorizer != "0x3F5B9E"
+            || this.baseMousecolorizer != "0xC4D5E6"
+            || this.baseMouseOvercolorizer != "0xC4D5E6"))
         {
-	        this.setAttribute('baseColorScheme', "userdefined");
-	    }
+            this.setAttribute('baseColorScheme', "userdefined");
+        }
         this.setColorStyle(this.baseColorScheme);
         
         this.setAttribute('currentappname',canvas.myConfigSet.getPointer().xpathQuery('config/currentappname/text()'));  
@@ -176,7 +176,29 @@
         
         this.setAttribute('protocol',canvas.myConfigSet.getPointer().xpathQuery('config/protocol/text()'));  
         
-        this.setAttribute('proxyType',canvas.myConfigSet.getPointer().xpathQuery('config/proxyType/text()'));  
+        this.setAttribute('proxyType',canvas.myConfigSet.getPointer().xpathQuery('config/proxyType/text()'));
+
+        var pMap = {};
+        if($debug) Debug.write("Param query: ", _url.substr(_url.indexOf("?")+1));
+        var params:Array = _url.substr(_url.indexOf('?')+1).split('&');
+        for(var i:Number=0; i<params.length; i++ ) {
+            if($debug) Debug.write(params[i]);
+            var tokens:Array = params[i].split('=');
+            pMap[tokens[0]] = tokens[1];
+            if($debug) Debug.write("param: ", tokens[0], "=", tokens[1]);
+        }
+
+        if($debug) Debug.write("Params: ", pMap);
+
+        this.setAttribute('lc_SID', pMap['lcSID']);
+        this.setAttribute('vid_lc_name', this.lc_SID + "__videoLC");
+        this.setAttribute('rtmp_lc_name', this.lc_SID + "__rtmpLC");
+        this.setAttribute('videoComp_lc_name', this.lc_SID + "__streamLC");
+        this.setAttribute('videoComp_lc_callback_name', this.lc_SID + "__streamLC_cback");
+
+        var videoComp_lc = new LocalConnection();
+        videoComp_lc.connect(this.videoComp_lc_name);
+        this.setAttribute('videoComp_lc', videoComp_lc);
         
         
         mainBaseText.setAttribute('text',canvas.currentappname);
@@ -262,9 +284,9 @@
             //Lookup additional actions
             var tAccept = lz.Browser.getInitArg('tAccept');
             if (tAccept != undefined) {
-            	canvas.cuserStatus = tAccept;
+                canvas.cuserStatus = tAccept;
             } else {
-            	canvas.cuserStatus = "none";
+                canvas.cuserStatus = "none";
             }
             
         }
@@ -363,7 +385,7 @@
                 } else if (stringSub=='importFile') {
                     //new lz.uploadWindow(canvas.main_content._content.inner,{x:60,uploadmodule:canvas.uploadmoduleimg,isOnlyImage:true});
                     
-                	new lz.uploadWindowExplorer(canvas.main_content._content.inner,{
+                    new lz.uploadWindowExplorer(canvas.main_content._content.inner,{
                             x:60,uploadmodule:canvas.uploadmoduleimg,
                             parentFolderId:0,
                             isOwner:false,
@@ -371,7 +393,7 @@
                             isOnlyImage:true,
                             servletName:'FileExplorerUploadHandler'
                         });
-                	
+                    
                 } else if (stringSub=='applyForMod') {
                     if ($debug) Debug.info("Apply For Mod through doActionmenu");
                     //new lz.applyForModeration(canvas.main_content._content.inner);
@@ -392,7 +414,7 @@
                     if ($debug) Debug.write( "is browser[browserPanelWidth] ? ", browserPanelWidth );
                     if ($debug) Debug.write( "is browser[browserPanelHeight] ? ", browserPanelHeight );
 
-                //ブラウザのインスタンスを確認して、あれば開く。なければ作成する
+                //ãƒ–ãƒ©ã‚¦ã‚¶ã�®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç¢ºèª�ã�—ã�¦ã€�ã�‚ã‚Œã�°é–‹ã��ã€‚ã�ªã�‘ã‚Œã�°ä½œæˆ�ã�™ã‚‹
                     if( !canvas.conferenceBrowserIsinited ){
                         if ($debug) Debug.write( "if this" );
                         new lz.conferenceBrowser( canvas.main_content._content.inner,{
@@ -409,7 +431,7 @@
                     }
                 }
              } else if( stringSub == "browser_close" ){
-                // 開いているブラウザをアニメーションで移動する　hieght=0  
+                // é–‹ã�„ã�¦ã�„ã‚‹ãƒ–ãƒ©ã‚¦ã‚¶ã‚’ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã�§ç§»å‹•ã�™ã‚‹ã€€hieght=0  
                 Debug.write( "is browser[close] ? ", canvas.main_content._content.inner.conferenceBrowser );
                 with( canvas.main_content._content.inner ){
                     if( conferenceBrowser  != undefined ){
@@ -455,7 +477,7 @@
     
     <netRemoteCallHib name="getVotes" funcname="pollservice.getVotes" remotecontext="$once{ canvas.thishib }" >
         <handler name="ondata" args="value">
-        	new lz.resultPollWin(canvas.main_content._content.inner, {roomPoll: value});
+            new lz.resultPollWin(canvas.main_content._content.inner, {roomPoll: value});
         </handler>   
     </netRemoteCallHib>  
         
@@ -477,18 +499,18 @@
         <handler name="ondata" args="value">
             <![CDATA[
                 if (value!=null){
-                	if ($debug) Debug.write(":: getPoll: ", value);
+                    if ($debug) Debug.write(":: getPoll: ", value);
                      new lz.answerPoll(
-                     	canvas.main_content._content.inner
-                     	, {
-                     		createdBy: value.createdBy.login
-                     		, pollDate: value.created
-                     		, pollQuestion: value.pollQuestion
-                     		, pollTypeId: value.pollType.pollTypesId
-                     		, roomPollAnswerList: value.roomPollAnswerList
-                     		, roomPollId: value.roomPollId
-                     		, roomScopeName: value.roomScopeName
-                     	}
+                        canvas.main_content._content.inner
+                        , {
+                            createdBy: value.createdBy.login
+                            , pollDate: value.created
+                            , pollQuestion: value.pollQuestion
+                            , pollTypeId: value.pollType.pollTypesId
+                            , roomPollAnswerList: value.roomPollAnswerList
+                            , roomPollId: value.roomPollId
+                            , roomScopeName: value.roomScopeName
+                        }
                      );
                 }
             ]]>
@@ -797,17 +819,8 @@ if (cItem == null) {
     ]]>
 </method>
 
-<method name="setExclusiveAudioAllowStatus" args="roomClientObj">
-    <![CDATA[
-        if ($debug) Debug.write("giveExclusiveAudioStatus changes ###### ");
-        if (roomClientObj.publicSID==canvas.publicSID) {
-            canvas.setAttribute("isAllowedToGiveExclusiveAudio",roomClientObj.canGiveAudio);
-        }
-    ]]>
-</method>
-
 <method name="setMuteStatus" args="roomClientObj">
-	<![CDATA[
+    <![CDATA[
         if ($debug) Debug.write("setMuteStatus changes ###### ",roomClientObj.micMuted);
         //Check for self status
         if (roomClientObj.publicSID==canvas.publicSID) {
@@ -928,31 +941,31 @@ if (cItem == null) {
 </method>  
 
 <method name="initSharedObject">
-	if (canvas.sharedObject == null) {
-		if($debug) Debug.write("canvas.initSharedObject sharedObject IS null");
-    	canvas.sharedObject = new lz.sharedObject();
-	    canvas.sharedObject.getLocal('userdata');
+    if (canvas.sharedObject == null) {
+        if($debug) Debug.write("canvas.initSharedObject sharedObject IS null");
+        canvas.sharedObject = new lz.sharedObject();
+        canvas.sharedObject.getLocal('userdata');
     }
 </method>
 
 <method name="getUserData">
-	canvas.initSharedObject();
+    canvas.initSharedObject();
     var g = canvas.sharedObject.getData('userdata');
     if (g==null) {
-		if($debug) Debug.write("sharedObject.getData IS null");
-    	g = new Array();
+        if($debug) Debug.write("sharedObject.getData IS null");
+        g = new Array();
     }
     return g;
 </method>
 
 <method name="setUserData" args="g">
-	canvas.initSharedObject();
+    canvas.initSharedObject();
     canvas.sharedObject.setData('userdata', g);
     canvas.sharedObject.flush();
 </method>
 
 <method name="setColorStyle" args="value">
-	var val = value;
+    var val = value;
     if (val == "mediumseagreen"){
         canvas.setAttribute('basebgcolorizer',"0x3CB371");
         canvas.setAttribute('baseMousecolorizer',"0x66CC8E");
@@ -982,7 +995,7 @@ if (cItem == null) {
         canvas.setAttribute('baseMousecolorizer', canvas.userMousecolorizer);
         canvas.setAttribute('baseMouseOvercolorizer', canvas.userMouseOvercolorizer);
     } else {
-    	val = null;
+        val = null;
     }
     
     return val;

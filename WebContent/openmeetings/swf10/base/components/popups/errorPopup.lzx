@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="errorPopup" extends="labelExplorerBox" labelid="204"
+	docking="true" resizeable="false" closable="true" y="100"
+    x="$once{ parent.width/2 - this.width/2 }" height="160" width="324">
+
+	<attribute name="error" value="" type="string" />
+	
+	<attribute name="makeModal" value="false" type="boolean" />
+	
+	<handler name="oninit">
+	   if (this.makeModal) {
+	       lz.ModeManager.makeModal(this);
+	   }
+	</handler>
+	
+	<handler name="onclose">
+       if (this.makeModal) {
+           lz.ModeManager.releaseAll();
+       }
+    </handler>
+
+	<view x="4" resource="warning_icon_rsc" y="24" />
+
+	<view y="24" width="$once{ parent.width - 40 }" height="130" x="30" clip="true">
+		<text fontsize="10" fontstyle="bold" text="${ parent.parent.error }"
+			multiline="true" width="$once{ parent.width - 16 }" selectable="true" />
+	</view>
+    
+    <simpleLabelButton labelid="642" width="100" x="$once{ parent.width-105 }" 
+           y="$once{ parent.height-24 }" 
+           onclick="this.parent.close();" />
+
+</class>
+
+<class name="labelerrorPopup" extends="errorPopup">
+
+    <attribute name="errorlabelid" type="number" setter="setErrorLabelId(errorlabelid)" />
+    <method name="setErrorLabelId" args="errorlabelid" >
+        this.errorlabelid = errorlabelid;
+        this.setAttribute("error",canvas.getLabelName(this.errorlabelid));
+        if ($debug) Debug.write("labelerrorPopup: ",canvas.getLabelName(this.errorlabelid));
+    </method>
+    
+
+</class>
+
+<class name="singletonErrorPopup" extends="errorPopup">
+	<handler name="oninit">
+		lz.singletonErrorPopupHolder.dialogPresent = 1;
+		lz.singletonErrorPopupHolder.dialogObject = this;
+	</handler>
+	
+	<handler name="ondestroy">
+		lz.singletonErrorPopupHolder.dialogPresent = 0;
+		lz.singletonErrorPopupHolder.dialogObject = null;
+	</handler>
+</class>
+
+<class name="singletonErrorPopupHolder">
+	<attribute name="error" type="string" setter="setError(error)"/>
+	<attribute name="dialogPresent" allocation="class" value="0" />
+	<attribute name="dialogObject" allocation="class" />
+	
+	<method name="setError" args="error">
+	
+		if ( lz.singletonErrorPopupHolder.dialogPresent == 0 )
+		{
+			lz.singletonErrorPopupHolder.dialogPresent = 1;
+			lz.singletonErrorPopupHolder.dialogObject = new lz.singletonErrorPopup(canvas,{error:error});
+		}
+		else
+		{
+			lz.singletonErrorPopupHolder.dialogObject.error = error;
+		}
+	</method>
+</class>
+
+</library>

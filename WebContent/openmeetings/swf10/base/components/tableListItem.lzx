@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="tableListItem" extends="view"
+    bgcolor="${ ( this.isaltered ) ? 0xFF0000 : 0xFFFFF }" height="22">
+    
+    <handler name="oninit">
+        this.changeholder = new Array();
+    </handler>
+
+    <attribute name="isdatarecord" value="true" type="boolean" />
+    
+    <attribute name="changeholder" value="null" />
+    <attribute name="isaltered" value="false" type="boolean" />
+
+    <method name="sendchange" args="obj,oldv,newv">
+        ////Debug.write("check Update");
+        var t = false;
+        for (var eg in this.changeholder){
+            if (this.changeholder[eg][0]==obj){
+                t = true;
+                this.changeholder[eg][1]=oldv;
+                this.changeholder[eg][2]=newv;
+                break;
+            }
+        }
+        if (!t) this.changeholder.push(new Array(obj,oldv,newv));
+        
+        t = false;
+        for (var eg in this.changeholder){
+            if (this.changeholder[eg][1]!=this.changeholder[eg][2]){
+                t = true;
+                break;
+            }
+        }
+        
+        this.setAttribute('isaltered',t);
+        this._doupdate.setValue(t);
+        this.parent.parent.parent.sendchange(this);
+        
+    </method>
+    <simplelayout axis="x" spacing="3" inset="2" />
+
+</class>
+
+</library>

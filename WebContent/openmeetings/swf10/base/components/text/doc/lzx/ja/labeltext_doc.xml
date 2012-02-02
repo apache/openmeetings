@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="labeltext_doc">
+   <doc>
+   	ラベル付きのtextクラス。
+   </doc>
+ </class>
+</rlzxdoc>

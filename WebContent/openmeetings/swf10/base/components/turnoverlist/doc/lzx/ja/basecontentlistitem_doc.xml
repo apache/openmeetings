@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="basecontentlistitem">
+   <doc>
+	mouseover/outで背景色が変わり、onclickでクリックされたobjectを'parent.parent.parent.parent'
+	に送信します。
+	*'parent'が4つもついて,class外に依存しています。変更しましょう。
+   </doc>
+ </class>
+</rlzxdoc>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+	<resource name="chatbgitem" src="resources/bgitemvideochat.swf" />
+
+	<resource name="showusercontextclose" src="resources/error.png" />
+	<resource name="showusercontext" src="resources/1downarrow.png" />
+	<resource name="resyncuser_rsc" src="resources/noatunloopsong.png" />
+
+	<resource name="speaking" src="resources/speaking.png" />
+	<resource name="mute_btn_rsc">
+		<frame src="resources/icon_mute.png" />
+		<frame src="resources/icon_mute_red.png" />
+	</resource>
+    <resource name="mute_micro_btn_rsc">
+		<frame src="resources/micro_on.png" />
+		<frame src="resources/micro_off.png" />
+	</resource>
+
+	<resource name="lz_recorder_play" src="resources/webstart_play.png" />
+
+    <include href="videoUserProfilePicSWF10.lzx" />
+    <!--<include href="remoteUserDetails.lzx" />-->
+    <include href="editRecordStreamSWF10.lzx" />
+    <include href="baseVideoObject.lzx" />
+    <include href="videoObjectBroadcast.lzx" />
+    <include href="videoObjectPlayBroadcast.lzx" />
+    <include href="videoObjectTestBroadcast.lzx" />
+    <include href="videoObjectPlayTestBroadcast.lzx" />
+    
+    <!--
+    <include href="videoContainer.lzx" />
+     -->
+    
+</library>

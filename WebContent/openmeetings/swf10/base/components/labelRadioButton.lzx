@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="labelRadioButton" extends="radiobutton" style="componentStyle">
+
+	<attribute name="labelid" value="0" type="number" setter="setLabelId(labelid)" />
+	<method name="setLabelId" args="_labelid" >
+		this.labelid = _labelid;
+		this.setAttribute('text',canvas.getLabelName(this.labelid));
+	</method>
+	
+</class>
+
+</library>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+
+<!---
+	contains microphone and camera for broadcasting,
+	this class is used only in Meetings-Modus
+ -->
+
+ 
+<class name="videoObjectBroadcast" extends="baseVideoObject" isremote="false">
+  <attribute name="interviewPodId" value="-1" />
+  <attribute name="ratioW" value="1" />
+  <attribute name="ratioH" value="1" />
+  <handler name="oninit">
+     <![CDATA[
+        //Display widget defined in mother class
+        if(this.syncuser) this.syncuser.bringToFront();
+        this._loudness.bringToFront();
+        if(this.showuser) this.showuser.bringToFront();
+        this._resizeview.bringToFront();
+     ]]>
+  </handler>
+
+	<view name="_chatvideoinner" x="1" y="20" height="${parent.height-21}" width="${parent.width-2}">
+		<view name="r" resource="chatbgitem" x="1" y="2" stretches="both" 
+			  width="$once{parent.width}" height="$once{parent.height}" />
+		<handler name="oninit">
+			this.r.setAttribute('frame',5);
+            this.initH = this.height;
+            this.initW = this.width;
+		</handler>
+		
+		<baseVideoStreamDevice name="_videostream" mode="broadcast"
+						 width="${parent.width}" height="${parent.height}" bgcolor="black" />
+		
+	</view>	
+</class>
+
+
+</library>

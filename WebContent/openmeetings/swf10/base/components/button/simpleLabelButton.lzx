@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="simpleLabelButton" extends="button" fontstyle="bold"
+	   fontsize="11" height="20" style="componentStyle">
+
+	<attribute name="labelid" type="number" setter="setLabelId(labelid)" />
+	<method name="setLabelId" args="_labelid" >
+		this.labelid = _labelid;
+		this.setAttribute('text',canvas.getLabelName(this.labelid));
+	</method>
+	
+</class>
+
+<class name="simpleLabelRoundButton" extends="roundrectbutton" 
+	   fontsize="11" height="20" style="componentStyle" fontstyle="bold">
+
+    <attribute name="labelid" type="number" setter="setLabelId(labelid)" />
+    <method name="setLabelId" args="_labelid" >
+        this.labelid = _labelid;
+        this.setAttribute('text',canvas.getLabelName(this.labelid));
+    </method>
+    
+</class>
+
+<class name="simpleLabelButtonTooltip" extends="button" fontstyle="bold"
+	   fontsize="11" height="20" style="componentStyle">
+	
+	<attribute name="tooltipId" type="number" value="0" />
+
+	<attribute name="labelid" type="number" setter="setLabelId(labelid)" />
+	<method name="setLabelId" args="_labelid" >
+		this.labelid = _labelid;
+		this.setAttribute('text',canvas.getLabelName(this.labelid));
+	</method>
+	<labelTooltip labelid="$once{ parent.tooltipId }" />
+</class>
+
+</library>

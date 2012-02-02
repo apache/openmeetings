@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+	<include href="resources/" />
+	
+	<include href="baseBoundingBorderView.lzx" />
+	<include href="basePanel.lzx" />
+	<include href="baseTopPanel.lzx" />
+	<include href="baseLeftPanel.lzx" />
+	<include href="panelBoundBox.lzx" />
+	<include href="basePropertyPanel.lzx" />
+
+    
+</library>

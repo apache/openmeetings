@@ -1,0 +1,29 @@
+<library>
+	
+<class name="hidePropertyView" extends="view"
+	   width="$once{ parent.width }" height="$once{ parent.height }"
+	   opacity="0.7" bgcolor="0xFFFFFF" />
+
+<class name="basePropertySelector" extends="view">
+	
+	<!--- position of the SliderWin or ColorPicker -->
+	<attribute name="boxPosition" value="down" type="string" />
+	
+	<attribute name="isEnabled" value="true" type="boolean" />
+	<attribute name="enabledView" value="null" />
+	
+	<method name="setEnabled" args="b">
+		this.setAttribute('isEnabled',b);
+		if (this.enabledView != null) {
+			this.enabledView.destroy();
+			this.enabledView = null;
+		}
+		if (!b) {
+			this.enabledView = new lz.hidePropertyView(this);
+		} 
+	</method>
+    
+    
+</class>
+
+</library>

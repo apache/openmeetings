@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+    <include href="incubator/roundrectbutton.lzx" />
+    <include href="cal-button.lzx" />
+    
+	<include href="aquaButton.lzx" />
+	<include href="blueButton.lzx" />
+	<include href="labelBlueButton.lzx" />
+	<include href="simpleLabelButton.lzx" />
+    <include href="baseChooseIcon.lzx" />
+
+</library>

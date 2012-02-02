@@ -9,7 +9,7 @@
   with the License.  You may obtain a copy of the License at
   
       http://www.apache.org/licenses/LICENSE-2.0
-    	  
+          
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -25,50 +25,64 @@
 <!-- 
 ##########################################################
 these properties will be overwritten by config.xml -->  
-    
-<!--- URL/IP to use for the Server 192.168.178.28 
-	inno02.fh-pforzheim.de macbook 192.168.2.103
-	192.168.2.102 bxlug.homelinux.org 213.219.160.72
-	    if this value is empty it will try to connect to the 
+
+<attribute name="vid_lc_name" value="" type="String"/>
+
+<attribute name="lc"/>
+
+<attribute name="rtmp_lc_name" value="" type="String"/>
+
+<attribute name="rtmp_lc"/>
+
+<attribute name="videoComp_lc_name" value="" type="String"/>
+
+<attribute name="videoComp_lc_callback_name" value="" type="String"/>
+
+<attribute name="videoComp_lc"/>
+
+<!--- URL/IP to use for the Server 192.168.178.28
+    inno02.fh-pforzheim.de macbook 192.168.2.103
+    192.168.2.102 bxlug.homelinux.org 213.219.160.72
+        if this value is empty it will try to connect to the 
     domain-name it has been loading from
     -->
 <attribute name="rtmphostlocal" value="" type="string" />
  
 <!---  
-	Port to use for the Server
-	To this port the default server lookup is done
-	
-	You can find all this configuraiton in your red5-Config in: $RED5_HOME/conf/red5.properties
+    Port to use for the Server
+    To this port the default server lookup is done
+    
+    You can find all this configuraiton in your red5-Config in: $RED5_HOME/conf/red5.properties
  -->
 <attribute name="rtmpport" value="1935" type="string" />
 
 <!--- 
-	Port to use for the Server
-	To this port the fallback is done once the default rtmport failed
-	this should workaround 99% of all firewalls
+    Port to use for the Server
+    To this port the fallback is done once the default rtmport failed
+    this should workaround 99% of all firewalls
  -->
 <attribute name="rtmpTunnelport" value="8088" type="string" />
 
 <!--- 
-	Port to use for the Server
-	This port is used to connec to the http-servlet
-	of the red5-servlet
+    Port to use for the Server
+    This port is used to connec to the http-servlet
+    of the red5-servlet
  -->
 <attribute name="red5httpport" value="5080" type="string" />
 
 <attribute name="useSSL" value="false" type="boolean" />
 <attribute name="rtmpsslport" value="443" type="string" />
-	
+    
 <!---
-	These colors are the main colors and style the whole application
+    These colors are the main colors and style the hole application
  -->
 <attribute name="baseColorScheme" value="lightsteelblue" type="string" />
-<attribute name="basebgcolorizer" value="" type="string" />	
-<attribute name="baseMousecolorizer" value="" type="string" />	
-<attribute name="baseMouseOvercolorizer" value="" type="string" />  	
-<attribute name="userbgcolorizer" value="0x3F5B9E" type="string" />	
-<attribute name="userMousecolorizer" value="0xC4D5E6" type="string" />	
-<attribute name="userMouseOvercolorizer" value="0xC4D5E6" type="string" />  	
+<attribute name="basebgcolorizer" value="" type="string" /> 
+<attribute name="baseMousecolorizer" value="" type="string" />  
+<attribute name="baseMouseOvercolorizer" value="" type="string" />      
+<attribute name="userbgcolorizer" value="0x3F5B9E" type="string" /> 
+<attribute name="userMousecolorizer" value="0xC4D5E6" type="string" />  
+<attribute name="userMouseOvercolorizer" value="0xC4D5E6" type="string" />      
 
 <attribute name="bgColorMenu" value="0xEEF0EB" type="string" />
 <attribute name="fontColorHeader" value="0x000000" type="string" />
@@ -84,7 +98,7 @@ these properties will be overwritten by config.xml -->
 <attribute name="showAudioVideoTest" value="true" type="boolean" />
 
 <!--
-	Id of the Recording that is played when access the Recordings Player via Direct Link URL
+    Id of the Recording that is played when access the Recordings Player via Direct Link URL
  -->
 <attribute name="roomRecordingId" value="0" type="number" />
 
@@ -122,11 +136,6 @@ these properties will be overwritten by config.xml -->
  -->
 
 <attribute name="drawAllowStatus" value="null"/>
-
-<!-- this attribute holds an object of type RoomClient
-the LAST RoomClient Object that has been changed the giveExclusiveAudio status
--->
-<attribute name="exclusiveAudioAllowStatus" value="null"/>
 
 <!--
     this value indicates if this user is allowed to draw to the Whiteboard
@@ -167,9 +176,9 @@ the LAST RoomClient Object that has been changed the giveExclusiveAudio status
     -swagner
  -->
 <attribute name="_nc" value="null" />
-	
+    
 <attribute name="vaquality" value="best" type="string" />
-	
+    
 <!--
 <attribute name="moderatorStreamID" value="" type="string" />
 <attribute name="moderatorationObject" value="" type="string" />
@@ -184,9 +193,9 @@ the LAST RoomClient Object that has been changed the giveExclusiveAudio status
 
 <attribute name="loadingmessage" value="" type="string" />
 <!--- 
-	The state of the Application
-	At the beginning you should choose how many users are allowed to
-	login simultaniously
+    The state of the Application
+    At the beginning you should choose how many users are allowed to
+    login simultaniously
  -->
 <attribute name="islogedin" value="false" type="boolean" />
    
@@ -199,8 +208,8 @@ the LAST RoomClient Object that has been changed the giveExclusiveAudio status
 <attribute name="foldersequence" value="null" />
 <attribute name="uploadmoduleimgfolder" value="" type="string" />
 <!---
-	Can be either 2 or 4
-	But theoretically there is no limit
+    Can be either 2 or 4
+    But theoretically there is no limit
  -->
 <attribute name="numberofallowedpartners" value="0" type="number" />
 
@@ -226,7 +235,7 @@ the LAST RoomClient Object that has been changed the giveExclusiveAudio status
 <attribute name="roomTypesInitValues" value="null" />
 
 <!--- Audio-Video Quality Settings
-	overwritten by values from the config.xml 
+    overwritten by values from the config.xml 
  -->
 <attribute name="framesPerSecond" value="30" type="number" />
 <attribute name="bandwidthNeededNormal" value="16384" type="number" />
@@ -235,7 +244,7 @@ the LAST RoomClient Object that has been changed the giveExclusiveAudio status
 <attribute name="camQualityBest" value="75" type="number" />
 <attribute name="microphoneRateNormal" value="22" type="number" /> 
 <attribute name="microphoneRateBest" value="44" type="number" /> 
-		
+        
 <!--- Reference to the current active drawarea -->
 <attribute name="_drawarea" value="null" /> 
 
@@ -255,8 +264,8 @@ the LAST RoomClient Object that has been changed the giveExclusiveAudio status
 <!--- User porperties -->
 <attribute name="currentusercolor" value="0" type="number" />
 <attribute name="currentuserpos" value="0" type="number" />
-	
-<attribute name="currentModApply" value="null" />	
+    
+<attribute name="currentModApply" value="null" />   
 
 <attribute name="sessionObject" value="null" />
 <attribute name="sessionId" value="" type="string" />
@@ -285,7 +294,7 @@ the LAST RoomClient Object that has been changed the giveExclusiveAudio status
 <attribute name="remoteUserSid" value="" type="string" />
 
 <!--- attributes for direct room access via remoteUser
-	This is using the advanced methods to prevent abuse
+    This is using the advanced methods to prevent abuse
  -->
 <attribute name="secureRemoteUserLogin" value="false" type="boolean" />
 <attribute name="secureHash" value="" type="string" />
@@ -315,10 +324,10 @@ and some more references to temp-objects
 <attribute name="isrtl" value="false" type="boolean" />    
 
 <!---
-	Attributes for browser panel size.
-	Those attributes are used to determine size of browser class (modules/conference/browser/conferenecBrowser.lzx)
-	in base/mainMethods.lzx.
-		2008 Apr 9 commented by onokeiji@gmail.com
+    Attributes for browser panel size.
+    Those attributes are used to determine size of browser class (modules/conference/browser/conferenecBrowser.lzx)
+    in base/mainMethods.lzx.
+        2008 Apr 9 commented by onokeiji@gmail.com
 -->
 <attribute name="browserPanelWidth" value="600"/>
 <attribute name="browserPanelHeight" value="500"/>
@@ -370,8 +379,6 @@ and some more references to temp-objects
 
 <attribute name="isAllowedToRemoteControl" value="false" type="boolean" />
 
-<attribute name="isAllowedToGiveExclusiveAudio" value="false" type="boolean" />
-
 <attribute name="lzCalendarInfoTab" value="null"/>
 
 <attribute name="roomJumpId" value="0" type="number" />
@@ -379,14 +386,14 @@ and some more references to temp-objects
 <attribute name="userContacts" value="null" />
 
 <!--
-	Loads a User profile page directly instead of loading the Dashboard
-	cuser is a hash that can be found in the UserContacts Table
- -->	 
+    Loads a User profile page directly instead of loading the Dashboard
+    cuser is a hash that can be found in the UserContacts Table
+ -->     
 <attribute name="cuser" value="" type="string"/>
 
 <!--
-	Indicates if the user does accept or deny a user contact request
- -->	
+    Indicates if the user does accept or deny a user contact request
+ -->    
 <attribute name="cuserStatus" value="none" type="string"/>
 
 <!--
@@ -428,10 +435,5 @@ and some more references to temp-objects
 
 <attribute name="currentMicName" value="" type="string"/>
 <attribute name="currentCamName" value="" type="string"/>
-
-<attribute name="currentBaseConferenceRoom" value="null" />
-
-<!--F12-->
-<attribute name="GIVE_EXCLUSIVE_AUDIO_KEY" value="123"/> 
 
 </library>

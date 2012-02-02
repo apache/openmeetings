@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="turnOverTextItem" extends="text" fontsize="11" resize="false">
+	<view height="$once{ parent.parent.height }" width="1" 
+        align="right" bgcolor="black" />
+</class>
+        
+</library>

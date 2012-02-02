@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+	
+	<include href="browserjavascriptcallback.lzx" />
+	<include href="borderedInputtext.lzx" />
+	<include href="labelText.lzx" />
+	<include href="labelTooltip.lzx" />
+    <include href="customEdittext.lzx" />
+    <include href="customscrollEdittext.lzx" />
+    <include href="customInputtext.lzx" />
+
+</library>

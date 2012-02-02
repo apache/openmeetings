@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="calendarwindow">
+   <doc>
+	カレンダーのClickable icon。通常は*小さな*カレンダーだが、クリックされると（多分）カレンダーが
+	大きく表示される。このクラスではクリックされたときに自分をdestroy()して消している。
+	*datepickerと代替可能(?)
+   </doc>
+ </class>
+</rlzxdoc>

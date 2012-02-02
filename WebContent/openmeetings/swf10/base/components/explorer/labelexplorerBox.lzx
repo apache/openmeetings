@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="labelExplorerBox" extends="explorerBox" >
+
+	<attribute name="labelid" type="number" setter="setLabelId(labelid)" />
+	<method name="setLabelId" args="_labelid" >
+		this.labelid = _labelid;
+		this.title=canvas.getLabelName(this.labelid);
+	</method>
+	
+</class>
+
+</library>

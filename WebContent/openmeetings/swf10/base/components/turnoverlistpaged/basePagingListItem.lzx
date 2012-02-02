@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="basePagingListItem" extends="baseContentListItem" height="20"> 
+
+	<attribute name="itemId" value="0" type="number" />
+    
+</class>
+
+
+<class name="comoboxListItemNoHeaders" extends="basePagingListItem" >
+    
+    <attribute name="text" value="" type="string" />
+    
+    <text width="100" height="20" resize="false" fontsize="10"
+          text="${ parent.text }" />
+          
+    <labelTooltip text="${ parent.text }" />
+    
+</class>
+
+</library>

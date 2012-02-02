@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+    <include href="remote/" />
+    <include href="components/" />
+    <include href="hibernate/" />
+    <!--<include href="contentviews/" />-->
+    <!--<include href="usermanage/" />-->
+    <!--<include href="navi/" />-->
+<!---->
+    <!--<include href="auth/" />-->
+
+<!-- Not Used ? 2008.3.21 Kuze
+    <include href="tabbar/" />
+-->
+	<!-- for main.lzx -->
+	<!--<include href="externalJavaScript.lzx" />-->
+    <include href="functions.lzx" />
+    <!--<include href="sipfunctions.lzx" />	-->
+	<include href="mainAttributes.lzx" />
+	<include href="mainDatasets.lzx" />
+	<include href="mainMethods.lzx" />
+	<!--<include href="logoutConfirm.lzx" />-->
+	
+	<!-- 
+	   Defines the Core Classes that gets loaded in the Main Navigation
+	 -->
+	<!--<include href="moduleConfiguration.lzx" />-->
+
+
+</library>

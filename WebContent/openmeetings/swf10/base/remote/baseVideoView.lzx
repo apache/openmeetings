@@ -1,0 +1,81 @@
+<library>
+
+
+<!---
+	This class provides the basic functions for the video-output
+
+	    @START_CODE
+            <baseVideoView x="20" y="20" width="320" height="240" bgcolor="black" />
+        @END_CODE
+ -->
+
+<class name="baseVideoView" width="${parent.width}" height="${parent.height}">
+
+    <passthrough when="$as3">
+        import flash.media.*;
+        import flash.net.NetConnection;
+        import flash.net.NetStream;
+    </passthrough>
+
+    <attribute name="_sound" value="null"/>
+
+	<method name="init"><![CDATA[
+        super.init();
+        var width = 320;
+        var height = 240;
+        if (this.height > 0 && this.height < 1024) height = this.height;
+        if (this.width > 0 && this.width < 1024) width = this.width;
+        var mc = new Video(width, height);
+        this.sprite.addChild(mc);
+        this.__LZvideo = mc;
+        this.applySizeToVid();
+    ]]></method>
+
+	<method name="applySizeToVid">
+		var vid = this._getflashvideo();
+        if(vid) {
+            vid.width = this.width;
+            vid.height = this.height;
+        } else {
+            if ($debug) Debug.warn("applySizeToVid IS NULL ",this.width,this.height);
+        }
+	</method>
+
+    <handler name="onwidth" args="w">
+    	//if ($debug) Debug.info("onwidth ",this.width,this.height);
+        this.applySizeToVid();
+    </handler>
+
+    <handler name="onheight" args="h">
+    	//if ($debug) Debug.info("onheight ",this.width,this.height);
+        this.applySizeToVid();
+    </handler>
+
+	<method name="_getflashvideo">
+		<![CDATA[
+            //Debug.write("_getflashvideo()");
+            return this.__LZvideo;
+        ]]>
+    </method>
+
+    <method name="attachCamera" args="camera">
+        var vid = this._getflashvideo();
+    	vid.attachCamera(camera);
+    </method>
+
+    <!--- shows the Video (NetStream) in the View -->
+    <method name="attachVideo" args="video">
+    	var vid = this._getflashvideo();
+    	vid.attachNetStream(video);
+    </method>
+
+    <method name="clear">
+        var vid = this._getflashvideo();
+    	vid.attachNetStream(null);
+		this.__LZvideo.clear();
+	</method>
+
+</class>
+
+
+</library>

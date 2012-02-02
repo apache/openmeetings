@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="tablecombombox">
+   <doc>
+   	初期状態で選択されているデータを'tValue'属性に設定できるcomboboxクラス。<br/>
+   	*'parent.parent...'と呼び出し側に依存しているので要変更。
+   </doc>
+ </class>
+</rlzxdoc>

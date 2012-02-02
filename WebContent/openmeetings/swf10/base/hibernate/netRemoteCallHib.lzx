@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="netRemoteCallHib" extends="netremotecall">
+
+	<!-- this should be the contentSaveWindow -->
+	<attribute name="returnObj" value="null" />
+	 
+	<!-- if true this object will register at the update-observer -->
+	<attribute name="registerObject" value="false" type="boolean" />
+	
+	<!-- show Error Messages with normal Box -->
+    <attribute name="activeErrorHandler" value="false" type="boolean" />	
+    
+	<!-- show Error Messages with normal Box -->
+    <attribute name="showLoading" value="true" type="boolean" />    
+	
+	<!-- show Error Messages with Callback Box -->
+	<attribute name="isCallBackHandler" value="false" type="boolean" />	
+	
+	<handler name="oninit">
+		if (this.registerObject) this.parent.addViewToObserver(this);
+	</handler>	
+	<method name="doCall">
+        //if (this.showLoading) canvas._loadingAll.setAttribute('visible',true);
+		//if($debug) Debug.write("netRemoteCallHib/doCall: [ " , this.funcname , " ]",this.parent);
+		this.callRPC(null);
+	</method>
+	
+	<event name="sendCallBack" />
+	
+	<!--
+
+	 -->
+	<handler name="ondata" args="value">
+		<![CDATA[
+			//Debug.write("ondata: ",this.funcname,value);
+			
+			//if (this.showLoading) canvas._loadingAll.setAttribute('visible',false);
+			
+			//Another Error Handler for the Form-Components
+			if (this.returnObj!=null && Number(value)>0) {
+				//Debug.write("this.returnObj.processNext");
+				this.returnObj.processNext();
+			} else if (this.returnObj!=null && Number(value)<0) {
+				this.returnObj.errorByCode(Number(value));
+			} else if (this.returnObj!=null && value==null) {
+				this.returnObj.errorByCode(-1);
+			}
+			
+            if (this.activeErrorHandler) {
+                if (Number(value)<0){
+                    Debug.warn("Received Error ID: ",value);					
+					if (this.isCallBackHandler) 
+					{
+						var dlg = new lz.callbackRpcErrorDialog(canvas,{callBackObject:this,errorid:Number(value)});						
+						lz.Focus.setFocus(dlg);
+					} else {
+						var dlg = new lz.rpcErrorDialog(canvas,{errorid:Number(value)});
+						lz.Focus.setFocus(dlg);
+					}
+                }
+            }			
+		]]>
+	</handler>	
+</class>
+
+</library>

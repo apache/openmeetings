@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="countryCombobox" extends="resetCombobox" editable="false" 
+	   fontsize="11" style="componentStyle">
+    
+    <attribute name="refObj" value="null" />
+    
+    <attribute name="doUpdate" value="false" type="boolean"/>
+    
+    <handler name="onselect" args="sel">
+        if ($debug) Debug.write("onselect ",sel,this.refObj,this.doUpdate);
+    	if (this.refObj != null) {
+    		if (this.doUpdate) {
+    			
+    			this.refObj.setSelectedValue(sel.text,sel.value);
+    			
+    			this.setAttribute("visibility","hidden");
+    			this.doUpdate = false;
+    			
+    		}
+    	}
+    </handler>
+    
+    <handler name="onisopen" args="o">
+        if ($debug) Debug.write("on isopen ",o);
+        
+        if (!o) {
+            lz.Timer.addTimer( new LzDelegate( this, "removeItem" ), 200 );
+        }
+    </handler>
+    
+    <!--
+        You can close the combobox without selection, for that purpose we need
+        another way to trigger a close event
+     -->
+    <method name="removeItem" args="o">
+        if (this.visibility == "visible") {
+	        this.setAttribute("visibility","hidden");
+	        this.doUpdate = false;
+        }
+    </method>
+    
+    <labeldTextListItem datapath="countrySet:/item" text="$path{ 'name/text()' }" 
+                value="$path{ 'state_id/text()' }" />
+   
+</class>
+
+</library>

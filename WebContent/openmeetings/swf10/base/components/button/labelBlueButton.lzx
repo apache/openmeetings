@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="labelBlueButton" extends="blueButton" >
+
+	<attribute name="labelid" value="0" type="number" setter="setLabelId(labelid)" />
+	<method name="setLabelId" args="_labelid" >
+		this.labelid = _labelid;
+		//Debug.write(this.labelid);
+		this.setAttribute('text',canvas.getLabelName(this.labelid));
+	</method>
+	
+</class>
+
+</library>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+ 
+ <class name="backupImportWindow" extends="labelExplorerBox" labelid="390"
+    docking="true" closable="true" width="264" x="200" height="200">
+    
+    <handler name="oninit">
+    	lz.ModeManager.makeModal(this);
+    	canvas.currentUploadWindow = this;
+    </handler>
+    
+    <handler name="onclose">
+    	lz.ModeManager.release(this);
+    </handler>
+    
+    <attribute name="winobj" value="null" />
+	<attribute name="sessionid" value="" type="string" />
+    
+    <attribute name="uploadmodule" value="users" type="string" />
+    <attribute name="secondid" value="0" type="number" />
+    
+ 	<fileUpload name="myFileUpload" isOnlyZip="true" >
+		<method name="onComplete" args="fr">
+			if ($debug) Debug.write("oncomplete ",fr);
+			this.parent.progressBar.setValue(100);
+			this.parent.upload.setAttribute('enabled', false);
+			this.parent.upload.setAttribute("visible",false);
+			this.parent.browse.setAttribute("visible",false);
+			this.parent.txtFile.setAttribute("visible",false);		
+			this.parent.close();
+		</method>
+
+		<method name="onProgress" args="fr, bytesLoaded, bytesTotal">
+			<![CDATA[
+				this.parent.progressBar.setValue(bytesLoaded * 100 / bytesTotal);
+				if (Math.round(bytesLoaded * 100 / bytesTotal)==100){
+					this.parent.progressBar.setAttribute('visible',false);
+					this.parent.progress2.setAttribute('visible',true);
+				}
+			]]>
+		</method>
+    
+	    <method name="onHTTPError" args="fr, httpError">
+	        <![CDATA[
+	            Debug.write('onHTTPError invoked: ' + httpError);
+	            new lz.errorPopup(canvas,{error:'HTTP-ERROR: '+httpError});
+	            this.parent.close();            
+	        ]]>
+	    </method>
+    
+		<method name="onSelect" args="fr">
+			//Debug.write("onSelect: ",getName());
+			this.parent.txtFile.setAttribute('text',getName());
+			this.parent.upload.setAttribute('enabled', true);
+		</method>
+	</fileUpload>
+	
+	<borderedInputtext x="10" fontsize="11" y="60" width="200" name="txtFile" editable="false" />
+
+	<button fontsize="11" name="browse" x="10" y="80" text="browse" width="200" height="20">
+		<handler name="onclick">
+			parent.myFileUpload.browse();
+		</handler>
+	</button>
+
+<!-- moduleName=videoconf1'; -->
+	<button name="upload" x="10" y="100" text="Upload" width="200" enabled="false" height="20">
+		<handler name="onclick">
+			<![CDATA[
+			var uploadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+				+canvas.httpRootKey+'BackupImport?sid='+canvas.sessionId
+				+'&publicSID='+canvas.publicSID;
+            if ($debug) Debug.write("uploadurl: ",uploadurl);
+			parent.myFileUpload.upload(uploadurl);
+			]]>
+		</handler>
+	</button>
+	<text name="progress2" visible="false" x="10" y="140" width="200" >Converting Document</text>
+	<view name="progressBar" x="10" y="140" width="200" height="10" bgcolor="#C6CEDF">
+		<view x="1" y="1" width="198" height="8" bgcolor="#FFFFFF"/>
+		<view name="status" x="1" y="1" height="8" bgcolor="#D6DEEF"/>
+		<method name="setValue" args="value">
+			<![CDATA[
+                status.setAttribute('width', value * 198 / 100);
+                percent.setAttribute('text',Math.round(value) + '%');
+			]]>
+		</method>
+		<text name="percent" align="center" resize="true" y="-18" fontstyle="bold" 
+			fontsize="10" fgcolor="#555555"/>
+	</view>
+	
+	<button name="_close" x="90" y="170" text="cancel" width="160" height="20">
+		<handler name="onclick">
+			Debug.write("this.parent: ",this.parent);
+			this.parent.close();
+		</handler>
+	</button>
+</class>
+	
+</library>
+ 

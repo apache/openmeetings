@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<canvas>
+   
+<include href="customscrollEdittext.lzx" />
+
+<view width="600" height="600" bgcolor="0xCCCCCC">
+        <customScrollEdittext name="adress_comment" y="460" x="120" width="270" 
+                        height="70" text="" />
+                        
+</view>                        
+</canvas>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="hibAdapter">
+    <switch>
+        <when property="$as3">
+            <passthrough>
+                import flash.net.LocalConnection;
+            </passthrough>
+        </when>
+    </switch>
+
+    <handler name="oninit"><![CDATA[
+        var client = {};
+        client.t = this;
+
+        client.hibAdapter_setLabelObjectByHundred = this.hibAdapter_setLabelObjectByHundred;
+        client.setRoomValues = this.setRoomValues;
+        client.getRoomTypes = this.getRoomTypes;
+
+        var rtmpLC:LocalConnection = new LocalConnection();
+        rtmpLC.connect(canvas.rtmp_lc_name);
+        rtmpLC.client=client;
+        canvas.setAttribute("rtmp_lc", rtmpLC);
+    ]]></handler>
+
+    <method name="hibAdapter_setLabelObjectByHundred" args="start,value">
+        //if($debug) Debug.write("hibAdapter_setLabelObjectByHundred",start,value);
+        setLabelObjectByHundred(start,value);
+    </method>
+
+    <method name="setRoomValues" args="roomtypes_id,rooms_id,value">
+        if($debug) Debug.write("setRoomValues",value);
+        canvas.setRoomValues(roomtypes_id,rooms_id,value);
+    </method>
+
+    <method name="getRoomTypes" args="value">
+        canvas.roomTypesInitValues = value;
+    </method>
+
+</class>
+
+</library>

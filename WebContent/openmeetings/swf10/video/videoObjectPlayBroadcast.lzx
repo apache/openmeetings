@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+
+<!---
+	Contains no microphone or camera Object, this view can only 
+	subscribe to a video or live-stream
+
+ -->
+					   
+<class name="videoObjectPlayBroadcast" extends="baseVideoObject" isremote="true">
+  <attribute name="interviewPodId" value="-1" />
+  <attribute name="ratioW" value="1" />
+  <attribute name="ratioH" value="1" />
+  <handler name="oninit">
+     <![CDATA[
+        if ($debug) Debug.write("Init videoObjectPlayBroadcast ",this.name);
+     
+        //Display widget defined in mother class
+        if(this.syncuser) this.syncuser.bringToFront()
+        this._loudness.bringToFront();
+        if(this.showuser) this.showuser.bringToFront();
+        this._resizeview.bringToFront();
+     ]]>
+   </handler>
+
+	<view name="_chatvideoinner" x="1" y="20" width="${parent.width-2}" height="${parent.height-21}" >
+        
+        <attribute name="initH"/>
+        <attribute name="initW"/>
+        
+        <handler name="oninit">
+            this.r.setAttribute('frame',5);
+            this.initH = this.height;
+            this.initW = this.width;
+        </handler>
+
+        <view name="r"></view>
+		<!--<view name="r" resource="chatbgitem" width="${parent.width}"-->
+            <!--height="${parent.height}" stretches="both" />-->
+
+        <baseVideoStream name="_videostream" bgcolor="black" 
+              width="${parent.width}" height="${parent.height}" />
+        
+	</view>
+
+</class>
+
+</library>

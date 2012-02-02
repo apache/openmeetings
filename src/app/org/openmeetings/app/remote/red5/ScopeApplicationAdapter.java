@@ -44,7 +44,6 @@ import org.openmeetings.app.persistence.beans.basic.Configuration;
 import org.openmeetings.app.persistence.beans.calendar.Appointment;
 import org.openmeetings.app.persistence.beans.calendar.MeetingMember;
 import org.openmeetings.app.persistence.beans.recording.RoomClient;
-import org.openmeetings.app.persistence.beans.rooms.RoomTypes;
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.FLVRecorderService;
@@ -1076,7 +1075,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			IConnection current = Red5.getConnectionLocal();
 			// String streamid = current.getClient().getId();
 
-			RoomClient currentClient = this.clientListManager
+            RoomClient currentClient = this.clientListManager
 					.getClientByPublicSID(publicSID);
 
 			if (currentClient == null) {
@@ -1086,9 +1085,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			currentClient.setIsBroadcasting(value);
 			currentClient.setInterviewPodId(interviewPodId);
 
-			// Put the mod-flag to true for this client
-			this.clientListManager.updateClientByStreamId(
-					currentClient.getStreamid(), currentClient);
+            // Put the mod-flag to true for this client
+		    this.clientListManager.updateClientByStreamId(
+		    		currentClient.getStreamid(), currentClient);
 
 			// Notify all clients of the same scope (room)
 			Collection<Set<IConnection>> conCollection = current.getScope()

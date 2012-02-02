@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="dragHelper">
+
+    <attribute name="dragHelper" value="null" />
+
+    <method name="create">
+        if(this.dragHelper != null ) this.dragHelper.destroy();
+        this.dragHelper = new lz.view(canvas, {width:canvas.width,height:canvas.height,x:'0',y:'0', bgcolor:'0xFFFFFF', opacity:0.01,clickable:true});
+        this.dragHelper.sendInFrontOf(canvas.mainComponent);
+    </method>
+
+    <method name="remove">
+        this.dragHelper.destroy();
+        this.dragHelper = null;
+    </method>
+
+</class>
+
+</library>

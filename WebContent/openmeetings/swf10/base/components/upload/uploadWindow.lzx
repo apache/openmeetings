@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+ 
+ <class name="uploadWindow" extends="labelExplorerBox" labelid="304"
+    docking="true" closable="true" width="264" x="200" height="200">
+    
+    <handler name="oninit">
+    	lz.ModeManager.makeModal(this);
+        canvas.currentUploadWindow = this;
+    </handler>
+    
+    <handler name="onclose">
+    	lz.ModeManager.release(this);
+    </handler>
+    
+    <attribute name="winobj" value="null" />
+	<attribute name="sessionid" value="" type="string" />
+	<attribute name="usersid" value="" type="string" />
+	<attribute name="singleslidesmodule_id" type="string" value="" />
+	
+	<attribute name="servletName" value="UploadHandler" type="string" />
+	<attribute name="parentFolderId" value="0" type="number" />
+    
+    <attribute name="uploadmodule" value="videoconf1" type="string" />
+    
+    <attribute name="isOnlyImage" value="false" type="boolean" />
+    <attribute name="isOnlyPpt" value="false" type="boolean" />
+    <attribute name="isOnlyProfile" value="false" type="boolean" />
+    <attribute name="isOnlyXml" value="false" type="boolean" />
+    
+    <attribute name="isdefaultreturn" value="true" type="boolean" />
+    <attribute name="returnObj" value="true" type="boolean" />
+    
+ 	<fileUpload name="myFileUpload" isOnlyImage="${ this.parent.isOnlyImage }" 
+ 		 isOnlyPpt="${ this.parent.isOnlyPpt }" isOnlyProfile="${ this.parent.isOnlyProfile }" 
+ 		 isOnlyXml="${ this.parent.isOnlyXml }">
+		<method name="onComplete" args="fr">
+            if ($debug) Debug.write("oncomplete ",fr);
+        </method>
+        <method name="onCompleteByRemote">
+            
+            if ($debug) Debug.write("onCompleteByRemote ");
+            this.parent.progressBar.setValue(100);
+            this.parent.upload.setAttribute('enabled', false);
+            this.parent.upload.setAttribute("visible",false);
+            this.parent.browse.setAttribute("visible",false);
+            this.parent.txtFile.setAttribute("visible",false);
+
+            if (parent.isdefaultreturn) {
+            var tempSendArray = new Array ();
+            tempSendArray[0] = 'fileslist';
+            var nowTime = new Date();
+            var datumsString = nowTime.getHours()+':'+nowTime.getMinutes();
+            tempSendArray[1] = datumsString;
+            //Debug.write("Setting Message");
+            tempSendArray[2] = 'newfile';
+            tempSendArray[3] = canvas.currentusename;
+            //Debug.write("send: ",tempSendArray);
+            canvas.objMessage = tempSendArray;
+            canvas.thishib.sendMessage.doCall();
+
+            } else {
+                parent.returnObj.sendRefresh();
+            }
+            this.parent.close();
+            
+        </method>
+
+		<method name="onProgress" args="fr, bytesLoaded, bytesTotal"><![CDATA[
+			this.parent.progressBar.setValue(bytesLoaded * 100 / bytesTotal);
+			if (Math.round(bytesLoaded * 100 / bytesTotal)==100){
+				this.parent.progressBar.setAttribute('visible',false);
+				this.parent.progress2.setAttribute('visible',true);
+			}
+		]]>
+		</method>
+    
+	    <method name="onHTTPError" args="fr, httpError">
+	        <![CDATA[
+	            Debug.write('onHTTPError invoked: ' + httpError);
+	            new lz.errorPopup(canvas,{error:'HTTP-ERROR: '+httpError});
+	            this.parent.close();
+		  		var tempSendArray = new Array ();
+		  		tempSendArray[0] = 'fileslist';
+		  		var nowTime = new Date();
+		  		var datumsString = nowTime.getHours()+':'+nowTime.getMinutes();
+		  		tempSendArray[1] = datumsString;
+	  			//Debug.write("Setting Message");
+	  			tempSendArray[2] = 'newfile';
+	  			tempSendArray[3] = canvas.currentusename;
+		  		//Debug.write("send: ",tempSendArray);
+		  		canvas.objMessage = tempSendArray;
+		  		//TODO:fixme
+		  		//hib.sendMessage.doCall();
+                canvas.thishib.sendMessage.doCall();
+	        ]]>
+	    </method>
+    
+		<method name="onSelect" args="fr">
+			//Debug.write("onSelect: ",getName());
+			this.parent.txtFile.setAttribute('text',getName());
+			this.parent.upload.setAttribute('enabled', true);
+		</method>
+	</fileUpload>
+    
+    <labelText x="10" width="250" y="24" multiline="true" name="txtFileDescr" labelid="594" />
+	
+	<labelText x="10" fontsize="11" y="60" width="250" name="txtFile" multiline="true" 
+			   resize="false" fgcolor="0x666666" />
+
+	<simpleLabelButton fontsize="11" name="browse" x="10" y="80" labelid="596" width="250" height="20">
+		<handler name="onclick">
+			parent.myFileUpload.browse();
+		</handler>
+	</simpleLabelButton>
+
+    <!-- moduleName=videoconf1'; -->
+	<simpleLabelButton name="upload" x="10" y="100" labelid="593" width="250" enabled="false" height="20">
+		<handler name="onclick">
+			<![CDATA[
+			var uploadurl = 'http://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+ parent.servletName +'?' +
+					'moduleName='+this.parent.uploadmodule +
+                    '&publicSID='+canvas.publicSID +
+                    '&filename='+encodeURIComponent(parent.txtFile.text) +
+                    '&parentFolderId='+parent.parentFolderId +
+					'&room_id='+canvas.thishib.currentroomid +
+					'&sid='+canvas.sessionId;
+            if ($debug) Debug.write("uploadurl: ",uploadurl);
+			parent.myFileUpload.upload(uploadurl);
+			]]>
+		</handler>
+	</simpleLabelButton>
+    
+    <labelText labelid="592" name="progress2" visible="false" x="10" y="140" 
+    		   width="250" multiline="true" />
+    		   
+	<view name="progressBar" x="10" y="138" width="250" visible="false" height="10" bgcolor="#C6CEDF">
+		<view x="1" y="1" width="248" height="8" bgcolor="#FFFFFF"/>
+		<view name="status" x="1" y="1" height="8" bgcolor="#D6DEEF"/>
+		<method name="setValue" args="value">
+			<![CDATA[
+                this.setAttribute("visible",true);
+                status.setAttribute('width', value * 248 / 100);
+                percent.setAttribute('text',Math.round(value) + '%');
+			]]>
+		</method>
+		<text name="percent" align="center" resize="true" y="-18" fontstyle="bold" 
+			fontsize="10" fgcolor="#555555" />
+	</view>
+	
+	<simpleLabelButton name="_close" x="100" y="172" labelid="595" width="160" height="20">
+		<handler name="onclick">
+			if ($debug) Debug.write("this.parent: ",this.parent);
+			this.parent.close();
+		</handler>
+	</simpleLabelButton>
+</class>
+	
+</library>
+ 

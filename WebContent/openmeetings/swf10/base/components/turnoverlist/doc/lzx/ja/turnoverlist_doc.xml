@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="turnoverlist">
+   <doc>	innerlistクラス,turnoverlistクラスが一つのファイルにあります。
+	innerlistクラスはaxis:y,spacing:2のレイアウトで固定されたviewクラスで
+	turnoverlistクラスで多用しています。他のクラスで使っていなければこのまま同梱
+	でもよさそうです。
+	button/comboboxが沢山つかわれていて、どこかの部品のようですがこのクラスがどこでつかわれているかわかりません。
+   </doc>
+ </class>
+</rlzxdoc>

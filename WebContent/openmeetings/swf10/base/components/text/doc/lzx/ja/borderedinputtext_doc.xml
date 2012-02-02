@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="boarderedinputtext">
+   <doc>
+   	view内にinputtextクラスを入れ子にして'境界線'があるように見せている。他のboarderd*クラス<br/>
+   	との違いは、inputtextクラスのattribute設定が違うだけに見えます。<br/>
+   	[boarderedinputtext] multiline=false<br/>
+   	[*multiinputtext]    multiline=true<br/>
+   	[*passwordtext]      password=true
+   </doc>
+ </class>
+ <class name="boarderedmultiinputtext">
+   <doc>
+   </doc>
+ </class>
+ <class name="boarderedpasswordtext">
+   <doc>
+   </doc>
+ </class>
+</rlzxdoc>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rlzxdoc>
+ <class name="aquabutton">
+   <doc>
+	aqua_rsc1/2/3のgroup resourceを設定しています。
+	*使っていないファイル(?)
+   </doc>
+ </class>
+</rlzxdoc>

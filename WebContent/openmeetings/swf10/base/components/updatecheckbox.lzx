@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="updatecheckbox" extends="checkbox" style="componentStyle">
+    <attribute name="tvalue" type="boolean" value="false"/>
+    <attribute name="sendchange" value="false" type="boolean" />       
+    <handler name="onblur">
+        if (this.parent.sendchange) this.parent.sendchange(this,tvalue,this.getValue()); 
+    </handler>  
+</class>
+
+<class name="labelCheckbox" extends="checkbox" style="componentStyle" fontsize="11" >
+	<attribute name="labelid" type="number" setter="setLabelId(labelid)" />
+	<method name="setLabelId" args="_labelid" >
+		this.labelid = _labelid;
+		this.setAttribute('text',canvas.getLabelName(this.labelid));
+	</method>
+</class>
+
+</library>

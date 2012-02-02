@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+
+<!-- 
+
+NOTICE:
+All contents regarding "chat" are moved to /modules/chat/globalMethods.lzx
+Issue353. 2008.3.28 H.kuze(minamotonoason)
+
+-->
+
+
+<script>
+<![CDATA[
+
+var labelObj;
+    
+var tempActionForNavi = '';
+
+// Load Labels from List
+var labels = new Array();
+
+String.prototype.startsWith = function(prefix) {
+    return (this.indexOf(prefix) === 0);
+};	
+
+var _labelObject = new Array();
+
+var RegExpTooltiplist = null;
+
+function disablesTooltips(obj){
+  if(RegExpTooltiplist!=null){
+    RegExpTooltiplist.destroy();
+    RegExpTooltiplist=null;
+  }
+  RegExpTooltiplist = obj;
+}
+
+function setLabelObject(lableObj){
+	_labelObject = lableObj;
+}
+
+function getLabelObjectById(labelid){
+	for (var i=0;i<_labelObject.length;i++){
+		if (Number(_labelObject[i]['labelid'])==labelid){
+			return _labelObject[i];
+		}
+	}
+}
+
+function getLabelNameGlob(labelid){
+	for (var i=0;i<_labelObject.length;i++){
+		if (Number(_labelObject[i]['labelid'])==labelid){
+			return _labelObject[i]['labelvalue'];
+		}
+	}
+}
+//Debug.write("end init");
+    
+var currentMouseWheelObject = null;
+    
+function setCurrentMouseWheelObject(obj) {
+    currentMouseWheelObject=obj;
+}    
+function getCurrentMouseWheelObject(obj) {
+    return currentMouseWheelObject;
+}  
+function disableCurrentMouseWheelObject() {
+    currentMouseWheelObject=null;
+}  
+
+function setLabelObjectByHundred(no,obj){
+    //if($debug) Debug.write("FUNC/setLabelObjectByHundred");
+    if(no!=0) no = Math.floor(no/100);
+    //Debug.write("SetLabelObject: ",no,obj);
+    labels[no] = obj;
+}
+
+function getLabelTag(labelid){
+    //if($debug) Debug.write("FUNC/getLabelTag",labelid);
+    var no = Math.floor(labelid/100);
+    return getLabelTagByNo(no,labelid);
+}
+
+function getLabelTagByNo(no,labelid){
+    var labeltag = "";
+    var l = labels[no];
+    //if ($debug) Debug.write("Search label tag in: ",labelid,labels[no]);
+    for (var eg=0;eg<=l.length;eg++){
+        if (l[eg].id==labelid){
+            // if($debug) Debug.write("FUNC/getLabelTagByNo",no,labelid,l[eg].value);
+            if($debug) {
+            	return l[eg].value+" ["+labelid+"]";
+            } else {
+                return l[eg].value;
+            }
+        }
+    }
+    return "Error Missing ["+labelid+"]";
+}
+
+//function quicklink(action){
+//  // if($debug) Debug.write("FUNC/quicklink",action);
+//	//canvas._mainbgcontentNavi.subviews[1].subviews[1].doAction(action);
+//	mainmenuList.doAction(action);
+//}
+    
+function quicklinkAct(action){
+    // if($debug) Debug.write("FUNC/quicklinkAct",action);
+    var t = new Array();
+    t.action = action;
+    loadContent(t,null,null);
+}            
+
+function loadContent(obj,parentobj,preparentobj){
+    // if($debug) Debug.write("FUNC/loadContent: ",obj.action);
+    
+    tempActionForNavi = obj.action;
+
+	if (obj.action!="logout")
+	{
+		if (!clearStageContent(obj)) 
+		{
+			loadContentByTempActionForNavi();
+		}
+	}
+	else
+	{
+		new lz.logoutConfirm(canvas,{objectsToClean: obj});
+	}
+    
+}
+    
+function loadContentByTempActionForNavi(){
+    // if($debug) Debug.write("FUNC/loadContentByTempActionForNavi");
+    
+	if (canvas.roomJumpId != 0) {
+		
+		canvas.initroomid = canvas.roomJumpId;
+        canvas.thishib.getRoomById.doCall();
+		canvas.roomJumpId = 0;
+		
+	} else {
+		
+        if($debug) Debug.write("FUNC/loadContentByString -1- ",tempActionForNavi);
+        if($debug) Debug.write("FUNC/loadContentByString -2- ",canvas[tempActionForNavi]);
+        if($debug) Debug.write("FUNC/loadContentByString -3- ",lz[canvas[tempActionForNavi]]);
+        
+        new lz[canvas[tempActionForNavi]](canvas.main_content._content.inner);
+	}
+}    
+
+function clearStageContent(obj){
+    // if($debug) Debug.write("FUNC/clearStageContent: ",obj);
+    //can be called with zero arguments
+    //if (arguments.length!=0) obj.parent.parent.clearAllSubItemLists();  
+    
+    return canvas.main_content._content.clearAll();
+}
+function setLabelObject(labelObjRef){
+    // if($debug) Debug.write("FUNC/setLabelObject",labelObjRef);
+    labelObj = labelObjRef;
+}
+
+function getLabelNameXMLCRM(labelid){
+    // if($debug) Debug.write("FUNC/getLabelNameXMLCRM",labelid);
+    for (var i=0;i<labelObj.length;i++){
+        if (labelid==labelObj[i].fieldvalues_id){
+            return labelObj[i].value;
+        }
+    }
+    
+}
+
+function getStringTime(){
+    var dateObj = new Date();
+    var hours = dateObj.getHours();
+    if (hours<10) hours="0"+hours;
+    var minutes = dateObj.getMinutes();
+    if (minutes<10) minutes="0"+minutes;
+    return ''+hours+':'+minutes;
+}   
+
+function getStringTimeWithSeconds(){
+    var dateObj = new Date();
+    var hours = dateObj.getHours();
+    if (hours<10) hours="0"+hours;
+    var minutes = dateObj.getMinutes();
+    if (minutes<10) minutes="0"+minutes;
+    var seconds = dateObj.getSeconds();
+    if (seconds<10) seconds="0"+seconds;
+    return ''+hours+':'+minutes+':'+seconds;
+}   
+
+function parseDateToString(dateObj){
+    // if($debug) Debug.write("FUNC/parseDateToString",dateObj);
+    if (dateObj==null) return "";
+    var d = dateObj.getDate();
+    if (d<10) d = "0"+d;
+    var m = dateObj.getMonth()+1;
+    if (m<10) m = "0"+m;
+    var y = dateObj.getFullYear();
+    if (y<10) y = "0"+y;
+    return d+'.'+m+'.'+y;
+}
+
+function parseDateToStringTimeOnly(dateObj){
+    // if($debug) Debug.write("FUNC/parseDateToStringTime",dateObj);
+    if (dateObj==null) return "";
+    var d = dateObj.getDate();
+    if (d<10) d = "0"+d;
+    var mo = dateObj.getMonth()+1;
+    if (mo<10) mo = "0"+mo;
+    var y = dateObj.getFullYear();
+    if (y<10) y = "0"+y;
+    var h = dateObj.getHours();
+    if (h<10) h = "0"+h;    
+    var m = dateObj.getMinutes();
+    if (m<10) m = "0"+m;        
+    return h+':'+m;
+}
+
+function parseTimeStringToDate(t){
+    // if($debug) Debug.write("FUNC/parseStringToTime",t);
+    if (t.length==5){
+        var d = 1;
+        var m = 1;
+        var y = 1970;
+        var std = Number(t.substring(0, 2));
+        var min = Number(t.substring(3, 5));
+        if (!isNaN(d) && !isNaN(m) && !isNaN(y)){
+            if ($debug) Debug.write("parseTimeStringToDate: ",new Date(y, m-1, d, std, min))
+            return new Date(y, m-1, d, std, min);
+        } else {
+            return new Date();
+        }
+    } else {
+        return new Date();
+    }
+}
+
+function parseDateToStringTime(dateObj){
+    // if($debug) Debug.write("FUNC/parseDateToStringTime",dateObj);
+    if (dateObj==null) return "";
+    var d = dateObj.getDate();
+    if (d<10) d = "0"+d;
+    var mo = dateObj.getMonth()+1;
+    if (mo<10) mo = "0"+mo;
+    var y = dateObj.getFullYear();
+    if (y<10) y = "0"+y;
+    var h = dateObj.getHours();
+    if (h<10) h = "0"+h;    
+    var m = dateObj.getMinutes();
+    if (m<10) m = "0"+m;        
+    return d+'.'+mo+'.'+y+' '+h+':'+m;
+}
+
+function parseDateToStringTimeSecunds(dateObj){
+    // if($debug) Debug.write("FUNC/parseDateToStringTime",dateObj);
+    if (dateObj==null) return "";
+    var d = dateObj.getDate();
+    if (d<10) d = "0"+d;
+    var mo = dateObj.getMonth()+1;
+    if (mo<10) mo = "0"+mo;
+    var y = dateObj.getFullYear();
+    if (y<10) y = "0"+y;
+    var h = dateObj.getHours();
+    if (h<10) h = "0"+h;    
+    var m = dateObj.getMinutes();
+    if (m<10) m = "0"+m; 
+    var s = dateObj.getSeconds();
+    if (s<10) s = "0"+s; 
+    return d+'.'+mo+'.'+y+' '+h+':'+m+':'+s;
+}
+
+function parseStringToDate(t){
+    // if($debug) Debug.write("FUNC/parseStringToDate",t);
+    if (t.length==10){
+        var d = Number(t.substring(0, 2));
+        var m = Number(t.substring(3, 5));
+        var y = Number(t.substring(6, 10));
+        if (!isNaN(d) && !isNaN(m) && !isNaN(y)){
+            return new Date(y, m-1, d);
+        } else {
+            return new Date();
+        }
+    } else {
+        return new Date();
+    }
+}
+
+function parseStringToDateTime(t){
+    // if($debug) Debug.write("FUNC/parseStringToDate",t);
+    if (t.length==15){
+        var d = Number(t.substring(0, 2));
+        var m = Number(t.substring(3, 5));
+        var y = Number(t.substring(6, 10));
+        var h = Number(t.substring(10, 12));
+        var min = Number(t.substring(13, 15));
+        if (!isNaN(d) && !isNaN(m) && !isNaN(y)){
+            if ($debug) Debug.write("parseStringToDateTime+: ",new Date(y, m-1, d, h, min))
+            return new Date(y, m-1, d, h, min);
+        } else {
+            return new Date();
+        }
+    } else {
+        return new Date();
+    }
+}
+
+function getStringDateFileSave(){
+    // if($debug) Debug.write("FUNC/getStringDateFileSave");
+    var dateObj = new Date();
+    var hours = dateObj.getHours();
+    if (hours<10) hours="0"+hours;
+    var minutes = dateObj.getMinutes();
+    if (minutes<10) minutes="0"+minutes;
+    var date = dateObj.getDate();
+    if (date<10) date="0"+date;
+    var month = dateObj.getMonth()+1;
+    if (month<10) month="0"+month;
+    return date+'_'+month+'_'+dateObj.getFullYear()+'_at_'+hours+'_'+minutes;
+} 
+
+function getStringTimeByTimeStamp(tStamp){
+    if ($debug) Debug.write("getStringTimeByTimeStamp "+tStamp);
+    var dateObj = new Date(tStamp);
+    var hours = dateObj.getHours();
+    if (hours<10) hours="0"+hours;
+    var minutes = dateObj.getMinutes();
+    if (minutes<10) minutes="0"+minutes;
+    var seconds = dateObj.getSeconds();
+    if (seconds<10) seconds="0"+seconds;
+    return ''+hours+':'+minutes+':'+seconds;
+}  
+
+]]>
+</script>
+		
+</library>
