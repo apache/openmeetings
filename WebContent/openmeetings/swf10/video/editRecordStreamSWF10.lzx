@@ -59,7 +59,7 @@
 	        //In case its an Audio-Only Room this box should not close automatically
             if ($debug) Debug.write("canvas.currentRoomObject: ", canvas.currentRoomObject);
 
-	        if (canvas.currentRoomObject.isAudioOnly) {
+	        if (false) { // canvas.currentRoomObject.isAudioOnly
 	        	this._chooseDeviceAnimation.doStart();
 	        } else {
 	        	//In case the user presses the Sync Button this box should
@@ -273,7 +273,7 @@
         <handler name="oninit">
             <![CDATA[
 
-                if (canvas.currentRoomObject.isAudioOnly) {
+                if (false) { //canvas.currentRoomObject.isAudioOnly
                     this.addItem(canvas.getLabelName(449),"a");
                     //this.addItem(canvas.getLabelName(845),"s");
                     //this.addItem(canvas.getLabelName(846),"sv");

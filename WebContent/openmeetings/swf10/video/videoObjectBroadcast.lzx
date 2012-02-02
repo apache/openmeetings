@@ -62,7 +62,7 @@
          </baseVideoStreamDevice>
          
          <view name="_activityLevel" width="6" x="2" y="2" opacity="0.5" bgcolor="0x00FF00" 
-              height="0" bcolor="0xFFFFFF">
+              height="0" >
         </view> 
 		
 	</view>	
