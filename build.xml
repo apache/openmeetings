@@ -57,6 +57,7 @@
 	<property name="out.dir.swf" value="${basedir}/${dist.webapps.dir}/" />
 	<property name="laszlo.home" value="${basedir}/openlaszlo" />
 	<property name="webcontent.src.dir" value="${basedir}/WebContent" />
+	<property name="laszlo.as3.src.dir" value="${webcontent.src.dir}/openmeetings" />
 	<property name="laszlo.src.dir" value="${webcontent.src.dir}/src" />
 	<property name="laszlo.debug" value="false" />
 	<property name="laszlo.proxied" value="solo" />
@@ -453,7 +454,7 @@
 	<target name="client.debug.only" depends="compile.laszlo.main.debug.as3,compile.laszlo.main.debug" />
 
 	<target name="compile.laszlo.main.as3" depends="compile.laszlo.main.debug.as3">
-		<java classname="org.openlaszlo.compiler.Main" fork="true" newenvironment="true" failonerror="true" dir="${laszlo.src.dir}" classpathref="laszlo.lib">
+		<java classname="org.openlaszlo.compiler.Main" fork="true" newenvironment="true" failonerror="true" dir="${laszlo.as3.src.dir}" classpathref="laszlo.lib">
 			<jvmarg value="-DLPS_HOME=${laszlo.home}" />
 			<jvmarg value="-Dlzdebug=${laszlo.debug}" />
 			<jvmarg value="-Dlzproxied=${laszlo.proxied}" />
@@ -464,7 +465,7 @@
 	</target>
 
 	<target name="compile.laszlo.main.debug.as3">
-		<java classname="org.openlaszlo.compiler.Main" fork="true" newenvironment="true" failonerror="true" dir="${laszlo.src.dir}" classpathref="laszlo.lib">
+		<java classname="org.openlaszlo.compiler.Main" fork="true" newenvironment="true" failonerror="true" dir="${laszlo.as3.src.dir}" classpathref="laszlo.lib">
 			<jvmarg value="-DLPS_HOME=${laszlo.home}" />
 			<jvmarg value="-Dlzdebug=${laszlo.debug}" />
 			<jvmarg value="-Dlzproxied=${laszlo.proxied}" />
