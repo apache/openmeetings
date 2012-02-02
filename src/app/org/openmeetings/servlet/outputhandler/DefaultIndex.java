@@ -140,7 +140,7 @@ public class DefaultIndex extends VelocityViewServlet {
 			// Parse the Param for the SWF URL
 			String swf = httpServletRequest.getParameter("swf");
 			if (swf == null) {
-				ctx.put("SWF_URL", "main.swf8.swf");
+				ctx.put("SWF_URL", "main.as3.swf10.swf");
 			} else {
 				ctx.put("SWF_URL", swf);
 			}

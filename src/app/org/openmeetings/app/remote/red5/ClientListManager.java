@@ -128,6 +128,7 @@ public class ClientListManager {
 		return null;
 	}
 
+
 	public synchronized RoomClient getClientByPublicSID(String publicSID) {
 		try {
 			for (Iterator<String> iter = clientList.keySet().iterator(); iter
