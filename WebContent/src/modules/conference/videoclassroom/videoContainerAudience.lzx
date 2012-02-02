@@ -37,6 +37,8 @@
 	<attribute name="allUsers" value="null" />
 	<attribute name="modLoaded" value="false" type="boolean" />
 	
+	<attribute name="showsVideoInSeparateComponent" value="true" type="boolean" />
+	
 	<handler name="oninit">
 		canvas.thishib.modus = "audience";
 		canvas._videocontainer=this;

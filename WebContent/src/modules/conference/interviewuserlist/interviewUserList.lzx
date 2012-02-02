@@ -9,7 +9,7 @@
   with the License.  You may obtain a copy of the License at
   
       http://www.apache.org/licenses/LICENSE-2.0
-    	  
+          
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -22,21 +22,23 @@
 
  
 <class name="interviewUserList" extends="view" width="$once{ parent.width }" 
-	   height="${ parent.height-34 }">
+       height="${ parent.height-34 }">
 
-	<!--- holds a references to the videoview which is broadcasting -->
-	<attribute name="broadCastViewRef" value="null" />
-	
-	<!--- colors for each user -->
-	<attribute name="colorArray" value="null" />
-	
-	<handler name="oninit">
-		//set modus
-		canvas.thishib.modus = "interview";
-		
-		//set reference, this reference will be cleared at *ontabcontenctleave* event
-		canvas._videocontainer=this;
-		
+    <!--- holds a references to the videoview which is broadcasting -->
+    <attribute name="broadCastViewRef" value="null" />
+    
+    <!--- colors for each user -->
+    <attribute name="colorArray" value="null" />
+
+    <attribute name="showsVideoInSeparateComponent" value="false" type="boolean" />
+    
+    <handler name="oninit">
+        //set modus
+        canvas.thishib.modus = "interview";
+        
+        //set reference, this reference will be cleared at *ontabcontenctleave* event
+        canvas._videocontainer=this;
+        
         // Reconnect User to its Room Id
         canvas.thishib.userScope = canvas.thishib.currentroomid;
         var src = hib.protocollName+'://'+canvas.rtmphostlocal+':'+hib.protocollPort+'/'+canvas.webAppRootKey+'/'+hib.userScope;
@@ -53,7 +55,9 @@
             //The user is already in the correct Scope
             this.reconnectSuccess();
         }
-	</handler>
+
+        _videoviewcontent.initVideoContainer(40, 281, 281);
+    </handler>
                   
     <method name="reconnectSuccess">
         if ($debug) Debug.warn("User Reloged In ",canvas.becomemoderator);
@@ -67,12 +71,12 @@
         <netparam><method name="getValue">return hib.currentroomid;</method></netparam>
         <handler name="ondata" args="value">
             <![CDATA[
-	            if ($debug) Debug.write("getRoomModeratorsByRoomId: ",value);
-	            canvas.becomeSuperModerator = false;
+                if ($debug) Debug.write("getRoomModeratorsByRoomId: ",value);
+                canvas.becomeSuperModerator = false;
                 
                 parent.setRoomValues.applyDefaultModeration = canvas.becomemoderator;
                 
-	            for (var i=0;i<value.length;i++) {
+                for (var i=0;i<value.length;i++) {
                     
                     if (value[i].user.user_id == canvas.user_id) {
                         parent.setRoomValues.applyDefaultModeration = true;
@@ -82,11 +86,11 @@
                     }
                     
                 }
-	            
+                
                 if ($debug) Debug.write("canvas.becomemoderator: ",canvas.becomemoderator);
                 if ($debug) Debug.write("canvas.becomeSuperModerator: ",canvas.becomeSuperModerator);
                 
-                canvas.currentusercolor = parent._participants.getColorForUser();
+                canvas.currentusercolor = parent._participents.getColorForUser();
                 
                 var organisation_id = 1;
             
@@ -98,15 +102,15 @@
                 }
                 
                 this.parent.setRoomValues.organisation_id = organisation_id;
-	            this.parent.setRoomValues.doCall();
+                this.parent.setRoomValues.doCall();
             
             ]]>
         </handler>
     </netRemoteCallHib>     
 
-  	<netRemoteCallHib name="setRoomValues" funcname="setRoomValues" remotecontext="$once{ canvas.thishib }" >   
-    	<attribute name="applyDefaultModeration" value="false" type="boolean" />
-    	<attribute name="organisation_id" value="0" type="number" />
+    <netRemoteCallHib name="setRoomValues" funcname="setRoomValues" remotecontext="$once{ canvas.thishib }" >   
+        <attribute name="applyDefaultModeration" value="false" type="boolean" />
+        <attribute name="organisation_id" value="0" type="number" />
         <netparam><method name="getValue">return hib.currentroomid;</method></netparam>
         <netparam><method name="getValue">return parent.applyDefaultModeration;</method></netparam>
         <netparam><method name="getValue">return canvas.becomeSuperModerator;</method></netparam>
@@ -133,357 +137,341 @@
             }
             
             var value = roomStatus.clientMap;
-			
+            
             //if ($debug) Debug.write("+++++++++++++++++ getClientListScope : ",value);
             for (var i in value){
-            	if ( value[i].streamid == canvas.streamid ) {
+                if ( value[i].streamid == canvas.streamid ) {
                     canvas.isAllowedToDraw = value[i].canDraw;
                 }
 
-            	//if ($debug) Debug.write("getClientListScope value: ",value[i]);
-        		this.parent.addItem(value[i].connectedSince,value[i].isMod,value[i].streamid,value[i].username,
-        		              '',value[i].formatedDate,value[i].userpos,value[i].usercolor,value[i]);
+                //if ($debug) Debug.write("getClientListScope value: ",value[i]);
+                this.parent.addItem(value[i].connectedSince,value[i].isMod,value[i].streamid,value[i].username,
+                              '',value[i].formatedDate,value[i].userpos,value[i].usercolor,value[i]);
             }
             //this content must be inited _after_ setting the default values
             canvas.thishib.getCurrentModeratorList.doCall(); 
             //FIXME Issue-1076
             canvas.thishib.checkLzRecording.doCall();
-            canvas._chatcontent.doInit();			
+            canvas._chatcontent.doInit();           
             ]]>
-		</handler>	
-  	</netRemoteCallHib>
+        </handler>  
+    </netRemoteCallHib>
 
-	<!-- invoked if another client logs into the room 
-	after choosing devices -->     
+    <!-- invoked if another client logs into the room 
+    after choosing devices -->     
     <method name="setAVSettingsToClient" args="rcl">
-    	if ($debug) Debug.write("setAVSettingsToClient ",rcl.publicSID,rcl);
-    	
-    	if (canvas.publicSID == rcl.publicSID) {
-    		//we do not throw this event back to the same user again!
-    		return;
-    	}
-    	
-    	var obj = this.getVideoObjectByPublicSID(rcl.publicSID);
-    	
-    	if (obj == null) {
-    		obj = this.getNewVideoObjectByPos(rcl.publicSID,rcl.interviewPodId);
-    	}
-    	
-    	if ($debug) Debug.write("setAVSettingsToClient: ",obj,rcl.avsettings);
-		if (rcl.avsettings=="n"){
+        if ($debug) Debug.write("setAVSettingsToClient ",rcl.publicSID,rcl);
+        
+        if (canvas.publicSID == rcl.publicSID) {
+            //we do not throw this event back to the same user again!
+            return;
+        }
+        
+        var obj = this.getVideoObjectByPublicSID(rcl.publicSID);
+        
+        if (obj == null) {
+            obj = this.getNewVideoObjectByPos(rcl.publicSID,rcl.interviewPodId);
+        }
+        
+        if ($debug) Debug.write("setAVSettingsToClient: ",obj,rcl.avsettings);
+        if (rcl.avsettings=="n"){
             obj.setAttribute("visibility","hidden");
-			obj.setVideouserProfilePic(rcl);
-		} else if (rcl.avsettings=="a"){
-			obj.setVideouserProfilePic(rcl);
+            obj.setVideouserProfilePic(rcl);
+        } else if (rcl.avsettings=="a"){
+            obj.setVideouserProfilePic(rcl);
             obj.setAttribute("visibility","visible");
-		} else {
-			obj.deleteVideoConfProfilePic();
+            if(rcl.publicSID != canvas.publicSID) {
+                this.startStream(rcl.publicSID, rcl.broadCastID, rcl.firstname, rcl.lastname, rcl.interviewPodId);
+            }
+        } else {
+            obj.deleteVideoConfProfilePic();
             obj.setAttribute("visibility","visible");
-		}
-		obj.clientVars = rcl;
-    	obj.updateAVSettingsSymbol(rcl);
+            if(rcl.publicSID != canvas.publicSID) {
+                this.startStream(rcl.publicSID, rcl.broadCastID, rcl.firstname, rcl.lastname, rcl.interviewPodId);
+            }
+        }
+        obj.clientVars = rcl;
+        obj.updateAVSettingsSymbol(rcl);
     </method> 
     
 
     <!--- get a baseVideoObject by a Users publicSID
-    	@param string publicSID publicSID
-   	 -->
+        @param string publicSID publicSID
+     -->
     <method name="getVideoObjectByPublicSID" args="publicSID">
-    	<![CDATA[
-    		//if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ",publicSID);
-    		
-    		var videoContainer = canvas._drawarea._videoviewcontent;
+        <![CDATA[
+            //if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ",publicSID);
             
-    		//for (var i=0;i<this._videoviewcontent.subviews.length;i++){
-    		//	if ($debug) Debug.write("getVideoObjectByBroadCastId6 broadcastId: ",this._videoviewcontent.subviews[i].broadcastId);
-    		//	if ($debug) Debug.write("getVideoObjectByBroadCastId7 streamid,user_id: ",this._videoviewcontent.subviews[i].clientVars.streamid,this._videoviewcontent.subviews[i].clientVars.user_id);
-    		//}
-    		
-            //if ($debug) Debug.write("getVideoObjectByBroadCastId2 VIEW: ",canvas.publicSID);
-            
-    		for (var i=0;i<videoContainer.subviews.length;i++){
-    			//if ($debug) Debug.write("getVideoObjectByBroadCastId2 broadcastId VIEW: ",videoContainer.subviews[i].broadcastId);
-    			//if ($debug) Debug.write("getVideoObjectByBroadCastId3: ",videoContainer.subviews[i]._videoPlay.publicSID);
-    			//if ($debug) Debug.write("getVideoObjectByBroadCastId4: ",videoContainer.subviews[i]._videoBroadCast.publicSID);
-    			//if ($debug) Debug.write("getVideoObjectByBroadCastId5 streamid,user_id: ",videoContainer.subviews[i].clientVars.streamid,videoContainer.subviews[i].clientVars.user_id);
-    			if (videoContainer.subviews[i]._videoPlay.publicSID == publicSID){
-    				videoContainer.subviews[i]._videoPlay.setAttribute("visibility","visible");
-    				return videoContainer.subviews[i]._videoPlay;
-    			}
-    			if (videoContainer.subviews[i]._videoBroadCast.publicSID == publicSID){
-    				videoContainer.subviews[i]._videoPlay.setAttribute("visibility","visible");
+            var videoContainer = canvas._drawarea._videoviewcontent;
+
+            for (var i=0;i<videoContainer.subviews.length;i++){
+                //if ($debug) Debug.write("getVideoObjectByPublicSID: videoContainer.subviews[i]._videoPlay",videoContainer.subviews[i]._videoPlay);
+                if (videoContainer.subviews[i]._videoPlay.publicSID == publicSID){
                     return videoContainer.subviews[i]._videoPlay;
                 }
-    		}
-    		
-    		if ($debug) Debug.warn(" - getVideoObjectByPublicSID - DID NOT FIND THE USER BY ",publicSID);
-            
-            return null;
-    		
-    	]]>
-    </method>       	
+            }
 
-	<method name="addItem" args="connectedSince,isMod,streamid,username,userroom,formatedDate,position,color,object">
-		<![CDATA[
-			if ($debug) Debug.write("addItem :: ",object);
-			//if ($debug) Debug.write("initializeStreams addItem: ",connectedSince,isMod,streamid,username,formatedDate);
+            if ($debug) Debug.warn(" - getVideoObjectByPublicSID - DID NOT FIND THE USER BY ",publicSID);
+
+            return null;
+            
+        ]]>
+    </method>           
+
+    <method name="addItem" args="connectedSince,isMod,streamid,username,userroom,formatedDate,position,color,object">
+        <![CDATA[
+            if ($debug) Debug.write("addItem :: ",object);
+            //if ($debug) Debug.write("initializeStreams addItem: ",connectedSince,isMod,streamid,username,formatedDate);
             
             //Do init only in case this stream is NOT the same as we are
-			if (streamid!=canvas.streamid){
-				
-				//do add others
-                this._participants.addItem(object);
+            if (streamid!=canvas.streamid){
+                
+                //do add others
+                this._participents.addItem(object);
                 
                 if ($debug) Debug.write("???????? object.isBroadcasting :: ",object.isBroadcasting,object.interviewPodId);
                 
-				if (object.isBroadcasting) {
-					
-					if ($debug) Debug.write("###### object.isBroadcasting ########");
-					
-    	            var myvideocontainer = this.getNewVideoObjectByPos(object.publicSID,object.interviewPodId);
-    		  		myvideocontainer.clientVars = object;
-    		  		myvideocontainer.setAttribute('chatpartnername',object.firstname+' '+object.lastname);
-    		  		if ($debug) Debug.write("object.avsettings: ",object.avsettings);
-    		  		if (object.avsettings=="n"){
-    	    			myvideocontainer.setVideouserProfilePic(object);
+                if (object.isBroadcasting) {
+                    
+                    if ($debug) Debug.write("###### object.isBroadcasting ########");
+                    
+                    var myvideocontainer = this.getNewVideoObjectByPos(object.publicSID,object.interviewPodId);
+                    myvideocontainer.clientVars = object;
+                    myvideocontainer.setAttribute('chatpartnername',object.firstname+' '+object.lastname);
+                    if ($debug) Debug.write("object.avsettings: ",object.avsettings);
+                    if (object.avsettings=="n"){
+                        myvideocontainer.setVideouserProfilePic(object);
                         //myvideocontainer.setAttribute("visibility","hidden");
-    	    		} else if (object.avsettings=="a"){
-    	    			myvideocontainer.setVideouserProfilePic(object);
-    	    			if ($debug) Debug.warn("start play");
-    	    			myvideocontainer._chatvideoinner._videostream.playStream(object.broadCastID,-1);
+                    } else if (object.avsettings=="a"){
+                        myvideocontainer.setVideouserProfilePic(object);
+                        if ($debug) Debug.warn("start play");
+                        myvideocontainer._chatvideoinner._videostream.playStream(object.broadCastID,-1);
                         myvideocontainer.setAttribute("visibility","visible");
-    	    		} else {
-    	    			myvideocontainer._chatvideoinner._videostream.playStream(object.broadCastID,-1);	
+                    } else {
+                        myvideocontainer._chatvideoinner._videostream.playStream(object.broadCastID,-1);    
                         myvideocontainer.setAttribute("visibility","visible");
-    	    			if ($debug) Debug.warn("start play");
-    	    		}
-    	    		myvideocontainer.updateAVSettingsSymbol(object);
+                        if ($debug) Debug.warn("start play");
+                    }
+                    myvideocontainer.updateAVSettingsSymbol(object);
                     return myvideocontainer;
                     
-				} else {
-					return null;
-				}
-		  		
-			} else {
+                } else {
+                    return null;
+                }
+                
+            } else {
                 
                 //do add self too
-                this._participants.addItem(object);
+                this._participents.addItem(object);
                 
                 return null;
             }
            
-		]]>
-	</method>
-	
-	<method name="addClientItem" args="connectedSince,isMod,streamid,username,room_id,formatedDate,position,color,object">
-		<![CDATA[
-		if ($debug) Debug.write("### initializeStreams addClientItem: ",connectedSince,isMod,streamid,username,room_id,formatedDate);
-		
-    		if (canvas.publicSID != object.publicSID){
-    			
-    			if (object.isBroadcasting) {
+        ]]>
+    </method>
+    
+    <method name="addClientItem" args="connectedSince,isMod,streamid,username,room_id,formatedDate,position,color,object">
+        <![CDATA[
+        if ($debug) Debug.write("### initializeStreams addClientItem: ",connectedSince,isMod,streamid,username,room_id,formatedDate);
+        
+            if (canvas.publicSID != object.publicSID){
+                
+                if (object.isBroadcasting) {
                     var myvideocontainer = this.getNewVideoObjectByPos(object.publicSID,object.interviewPodId);
-        	  		myvideocontainer.clientVars = object;
-        	  		myvideocontainer.setAttribute('chatpartnername',object.firstname+' '+object.lastname);
-        	  		if ($debug) Debug.write("addClientItem avsettings: ",object.avsettings);
-            		if (object.avsettings=="n" || object.avsettings=="a"){
-            			myvideocontainer.setVideouserProfilePic(object);
-            		}
-            		myvideocontainer.updateAVSettingsSymbol(object);
-    			}
-    			
-    		}
+                    myvideocontainer.clientVars = object;
+                    myvideocontainer.setAttribute('chatpartnername',object.firstname+' '+object.lastname);
+                    if ($debug) Debug.write("addClientItem avsettings: ",object.avsettings);
+                    if (object.avsettings=="n" || object.avsettings=="a"){
+                        myvideocontainer.setVideouserProfilePic(object);
+                    }
+                    myvideocontainer.updateAVSettingsSymbol(object);
+                }
+                
+            }
 
-    		//Do Add it anyway
-    		this._participants.addItem(object);
-		]]>
-	</method>
-		
+            //Do Add it anyway
+            this._participents.addItem(object);
+        ]]>
+    </method>
+        
     <!--
         invoked whenever a User starts to Stream Video in this Room
-     -->		
-	<method name="startStream" args="publicSID,broadcastId,firstname,lastname,interviewPodId,width,height">
-		<![CDATA[
-			if ($debug) Debug.warn("startStream broadcastId: ",publicSID,broadcastId,firstname,lastname,interviewPodId);
-			
-			if (canvas.publicSID == publicSID) {
-				if ($debug) Debug.warn("startStream Event should never be thrown back to its sender");
-				return;
-			}
-			
-			var obj = this.getVideoObjectByPublicSID(publicSID);
-			
-			if (obj == null) {
+     -->        
+    <method name="startStream" args="publicSID,broadcastId,firstname,lastname,interviewPodId">
+        <![CDATA[
+            if ($debug) Debug.warn("startStream broadcastId: ",publicSID,broadcastId,firstname,lastname,interviewPodId);
+            
+            if (canvas.publicSID == publicSID) {
+                if ($debug) Debug.warn("startStream Event should never be thrown back to its sender");
+                return;
+            }
+            
+            var obj = this.getVideoObjectByPublicSID(publicSID);
+            
+            if (obj == null) {
                 obj = this.getNewVideoObjectByPos(publicSID,interviewPodId);
             }
-			
-			if ($debug) Debug.write("startStream obj: ",obj);
-			
-			if (obj != null ){
-				obj._chatvideoinner._videostream.playStream(broadcastId,-1);
-				obj.setAttribute('chatpartnername',firstname+' '+lastname);
-			} else {
-				if ($debug) Debug.warn("Could Not find the correct obj to startStream - This should not happen logically",publicSID);
-			}
-		]]>
-	</method>
-
-    <method name="updateMuteStatusVideoView" args="roomClient">
-        <![CDATA[
-            var videoContainer = canvas._drawarea._videoviewcontent;
-            for (var i=0;i<videoContainer.subviews.length;i++){
-            	videoContainer.subviews[i]._videoPlay.muteMicrophone(roomClient);
-            	videoContainer.subviews[i]._videoBroadCast.muteMicrophone(roomClient);
+            
+            if ($debug) Debug.write("startStream obj: ",obj);
+            
+            if (obj != null ){
+                obj._chatvideoinner._videostream.playStream(broadcastId,-1);
+                obj.setAttribute('chatpartnername',firstname+' '+lastname);
+            } else {
+                if ($debug) Debug.warn("Could Not find the correct obj to startStream - This should not happen logically",publicSID);
             }
         ]]>
     </method>
-	
-	<!-- 
-		This method returns an object of type videoObjectBroadcast
-		you can only publish you a/v with this object
-		@param string broadcastId broadcastId
-	 -->
-	<method name="getNewVideoObject" args="publicSID">
-		<![CDATA[
-			var obj = this.getVideoObjectByPublicSID(publicSID);
-			if (obj!=null){
-				this.broadCastViewRef = obj;
-			} else {
+
+    <method name="updateMuteStatusVideoView" args="roomClient">
+        <![CDATA[
+            this._videoviewcontent.updateMuteStatusVideoView(roomClient);
+            var videoContainer = canvas._drawarea._videoviewcontent;
+            for (var i=0;i<videoContainer.subviews.length;i++){
+                videoContainer.subviews[i]._videoPlay.muteMicrophone(roomClient);
+            }
+        ]]>
+    </method>
+    
+    <!-- 
+        This method returns an object of type videoObjectBroadcast
+        you can only publish you a/v with this object
+        @param string broadcastId broadcastId
+     -->
+    <method name="getNewVideoObject" args="publicSID">
+        <![CDATA[
+            var obj = this.getVideoObjectByPublicSID(publicSID);
+            if (obj!=null){
+                this.broadCastViewRef = obj;
+            } else {
                 
-				if ($debug) Debug.error("getNewVideoObject :: ",publicSID);
-				if ($debug) Debug.error("getNewVideoObject :: ",publicSID);
-				if ($debug) Debug.error("getNewVideoObject :: ",publicSID);
-				if ($debug) Debug.error("getNewVideoObject :: ",publicSID);
-				if ($debug) Debug.error("getNewVideoObject :: ",publicSID);
-				
-			}
-			return this.broadCastViewRef;
-		]]>
-	</method>
-	
-	<!---
-		returns a new object of type videoObjectPlayBroadcast
-		you can only play a stream not publish you a/v with this object
-		@param string broadcastId broadcastId
-	 -->
-	<method name="getNewVideoObjectByPos" args="publicSID,interviewPodId">
-		<![CDATA[
-		
+                if ($debug) Debug.error("getNewVideoObject :: ",publicSID);
+                if ($debug) Debug.error("getNewVideoObject :: ",publicSID);
+                if ($debug) Debug.error("getNewVideoObject :: ",publicSID);
+                if ($debug) Debug.error("getNewVideoObject :: ",publicSID);
+                if ($debug) Debug.error("getNewVideoObject :: ",publicSID);
+                
+            }
+            return this.broadCastViewRef;
+        ]]>
+    </method>
+    
+    <!---
+        returns a new object of type videoObjectPlayBroadcast
+        you can only play a stream not publish you a/v with this object
+        @param string broadcastId broadcastId
+     -->
+    <method name="getNewVideoObjectByPos" args="publicSID,interviewPodId">
+        <![CDATA[
+        
             if ($debug) Debug.write("getNewVideoObjectByPos :: ",publicSID,interviewPodId);
-		
-			var obj = this.getVideoObjectByPublicSID(publicSID);
-			
-			if ($debug) Debug.write("FOUND :: ",obj);
-			
-			if (obj!=null){
-				return obj;
-			}
-			
+        
+            var obj = this.getVideoObjectByPublicSID(publicSID);
+            
+            if ($debug) Debug.write("FOUND :: ",obj);
+            
+            if (obj!=null){
+                return obj;
+            }
+            
             var videoContainer = canvas._drawarea._videoviewcontent;
             
             for (var i=0;i<videoContainer.subviews.length;i++) {
-            	
-            	if (videoContainer.subviews[i].interviewPodId == interviewPodId) {
-            		videoContainer.subviews[i]._videoPlay.publicSID = publicSID;
-            		if ($debug) Debug.write("videoContainer.subviews[i] ",videoContainer.subviews[i]);
-            		videoContainer.subviews[i]._videoPlay.setAttribute("visibility","visible");
-            		return videoContainer.subviews[i]._videoPlay;
-            	}
-            	
+                
+                if (videoContainer.subviews[i].interviewPodId == interviewPodId) {
+                    videoContainer.subviews[i]._videoPlay.publicSID = publicSID;
+                    if ($debug) Debug.write("videoContainer.subviews[i] ",videoContainer.subviews[i]);
+                    videoContainer.subviews[i]._videoPlay.setAttribute("visibility","visible");
+                    return videoContainer.subviews[i]._videoPlay;
+                }
+                
             }
             
             if ($debug) Debug.error("Interview Room Error :: Could not find right Interview Pod [interviewPodId,publicSID] ",interviewPodId,publicSID);
             
-			return null;
-		]]>
-	</method>
-	
-	<!--- 
-		invoked remotely by Red5-notification 
-		shows a green light if somebody is speaking
-		@param string broadcastId broadcastId
-		@param boolean bool show light on/off
-	-->
-	<method name="setSpeakingByPos" args="publicSID,bool">
-		<![CDATA[
-			var obj = this.getVideoObjectByPublicSID(publicSID);
-			//if ($debug) Debug.write("setSpeakingByPos :: ",publicSID,bool,obj);
-			if (bool){
-				if (canvas.publicSID != publicSID) {
-					obj._loudness.loudness.setAttribute('opacity',1);
-				} else if (obj.parent._videoBroadCast.visibility == "visible") {
-					obj.parent._videoBroadCast._loudness.loudness.setAttribute('opacity',1);
-				}
-			} else {
-				if (canvas.publicSID != publicSID) {
-					obj._loudness.loudness.setAttribute('opacity',0.2);
-				} else if (obj.parent._videoBroadCast.visibility == "visible") {
-					obj.parent._videoBroadCast._loudness.loudness.setAttribute('opacity',0.2);
-				}
-			}
-		]]>
-	</method>	
-	
-	<!--- 
-		stops the streaming but does not destroy the view
-		@param int broadcastId broadcastId
-	 -->
-	<method name="closeStreamClient" args="publicSID">
-		<![CDATA[
-			if ($debug) Debug.write("closeStreamclient: ",publicSID);
-			var obj = this.getVideoObjectByPublicSID(publicSID);
-			if ($debug) Debug.write("closeStreamclient obj: ",obj);
-			if (obj != null){
-				obj.resetValues();
-			}
-			return obj;
-		]]>
-	</method>
-	
-	<method name="removeVideoByUser" args="userObject">
-		var obj = this.closeStreamClient(userObject.publicSID);
-		obj.destroy();
-	</method>
-	
-	<!--- 
-		stops the streaming but and destroys the view
-		@param int broadcastId broadcastId
-	 -->
-	<method name="disconnectclient" args="publicSID">
-		<![CDATA[
-			//if ($debug) Debug.write("disconnectclient: ",publicSID);
-			
-			var obj = this.getVideoObjectByPublicSID(publicSID);
-            var objList = this._participants.getVideoObjectByPublicSID(publicSID);
-			
-			//if ($debug) Debug.write("disconnectclient obj: ",obj);
-			
-			if (obj != null){
-				if ($debug) Debug.write("disconnectclient objList: ",objList);
-				obj.resetValues();
-				//We will only hide this here cause we will need it again!
-				obj.setAttribute("visibility","hidden");
-			}
+            return null;
+        ]]>
+    </method>
+    
+    <!--- 
+        invoked remotely by Red5-notification 
+        shows a green light if somebody is speaking
+        @param string broadcastId broadcastId
+        @param boolean bool show light on/off
+    -->
+    <method name="setSpeakingByPos" args="publicSID,bool">
+        <![CDATA[
+            if ($debug) Debug.write("setSpeakingByPos :: ",publicSID,bool,obj);
+
+            var obj = this.getVideoObjectByPublicSID(publicSID);
+            if (bool){
+                obj._loudness.loudness.setAttribute('opacity',1);
+            } else {
+                obj._loudness.loudness.setAttribute('opacity',0.2);
+            }
+        ]]>
+    </method>   
+    
+    <!--- 
+        stops the streaming but does not destroy the view
+        @param int broadcastId broadcastId
+     -->
+    <method name="closeStreamClient" args="publicSID">
+        <![CDATA[
+            if ($debug) Debug.write("closeStreamclient: ",publicSID);
+            var obj = this.getVideoObjectByPublicSID(publicSID);
+            if ($debug) Debug.write("closeStreamclient obj: ",obj);
+            if (obj != null){
+                obj.resetValues();
+            }
+            return obj;
+        ]]>
+    </method>
+    
+    <method name="removeVideoByUser" args="userObject">
+        var obj = this.closeStreamClient(userObject.publicSID);
+        obj.destroy();
+    </method>
+    
+    <!--- 
+        stops the streaming but and destroys the view
+        @param int broadcastId broadcastId
+     -->
+    <method name="disconnectclient" args="publicSID">
+        <![CDATA[
+            //if ($debug) Debug.write("disconnectclient: ",publicSID);
+            
+            var obj = this.getVideoObjectByPublicSID(publicSID);
+            var objList = this._participents.getVideoObjectByPublicSID(publicSID);
+            
+            //if ($debug) Debug.write("disconnectclient obj: ",obj);
+            
+            if (obj != null){
+                if ($debug) Debug.write("disconnectclient obj: ",obj);
+                obj.resetValues();
+                //We will only hide this here cause we will need it again!
+                obj.setAttribute("visibility","hidden");
+            }
             if (objList != null){
-            	if ($debug) Debug.write("disconnectclient objList: ",objList);
+                if ($debug) Debug.write("disconnectclient objList: ",objList);
                 objList.resetValues();
                 objList.destroy();
             }
-			return null;
-		]]>
-	</method>	
-	
-	<method name="resetAllValues">
-		var videoContainer = canvas._drawarea._videoviewcontent;
-		for (var eg in videoContainer.subviews){
-			videoContainer.subviews[eg].resetValues();
-		}
-	</method>
+            return null;
+        ]]>
+    </method>   
     
-    <interviewListInner name="_participants" />
+    <method name="resetAllValues">
+        var videoContainer = canvas._drawarea._videoviewcontent;
+        for (var eg in videoContainer.subviews){
+            videoContainer.subviews[eg].resetValues();
+        }
+    </method>
     
-	<commonVideoViewContent name="_videoviewcontent"/>
-	
+    <interviewListInner name="_participents" />
+    
+    <commonVideoComponentAdapter name="_videoviewcontent"/>
+    
 </class>
 
 </library>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="commonVideoComponentAdapter" extends="view">
+
+    <handler name="oninit">
+        canvas.videoComp_lc.lc_switchMicMuted = function(publicSID, tMute) {
+            if ($debug) Debug.write("lc_switchMicMuted", publicSID, tMute);
+            canvas.thishib.switchMicMuted.setMute(publicSID, tMute);
+        };
+    </handler>
+
+    <handler name="onismoderator" reference="canvas" args="m">
+        canvas.lc.send(canvas.vid_lc_name, "ismoderatorChanged", m);
+    </handler>
+
+    <!--
+        set size of video objects
+    -->
+    <method name="initVideoContainer" args="offsetLength,videoWidth,videoHeight">
+        canvas.lc.send(canvas.vid_lc_name, "initVideoContainer", canvas.publicSID,canvas.firstName,canvas.lastName,offsetLength,videoWidth,videoHeight);
+    </method>
+
+    <!--
+        Creates video object
+    -->
+    <method name="createVideo" args="publicSID,displayName,broadcastId,avsettings,interviewPodId">
+        canvas.lc.send(canvas.vid_lc_name, "createVideo", publicSID, displayName, broadcastId, avsettings, interviewPodId);
+    </method>
+
+    <method name="createVideoObject" args="publicSID,isBroadcasting,interviewPodId">
+        canvas.lc.send(canvas.vid_lc_name, "createVideoObject", publicSID, isBroadcasting, interviewPodId);
+    </method>
+
+    <!--
+        invoked whenever a User starts to Stream Video in this Room,
+        interviewPodId has only a meaning in the Room Type Interview
+     -->
+    <method name="startStream" args="publicSID,broadcastId,firstname,lastname,interviewPodId">
+        canvas.lc.send(canvas.vid_lc_name, "startStream", publicSID,broadcastId,firstname,lastname,interviewPodId);
+    </method>
+
+    <!---
+        invoked remotely by Red5-notification
+        shows a green light if somebody is speaking
+        @param string broadcastId broadcastId
+        @param boolean bool show light on/off
+    -->
+    <method name="setSpeakingByPos" args="publicSID,bool">
+        canvas.lc.send(canvas.vid_lc_name, "setSpeakingByPos", publicSID, bool);
+    </method>
+
+    <!---
+        stops the streaming but does not destroy the view
+        @param int broadcastId broadcastId
+     -->
+    <method name="closeStreamClient" args="publicSID">
+        canvas.lc.send(canvas.vid_lc_name, "closeStreamClient", publicSID);
+    </method>
+
+    <!---
+        stops the streaming but and destroys the view
+        @param int broadcastId broadcastId
+     -->
+    <method name="disconnectclient" args="publicSID">
+        canvas.lc.send(canvas.vid_lc_name, "disconnectclient", publicSID);
+    </method>
+
+    <method name="resetAllValues">
+        canvas.lc.send(canvas.vid_lc_name, "resetAllValues");
+    </method>
+
+    <!-- invoked if another client logs into the room
+    after choosing devices -->
+    <method name="setAVSettingsToClient" args="rcl">
+        canvas.lc.send(canvas.vid_lc_name, "setAVSettingsToClient", rcl);
+    </method>
+
+    <method name="createEditRecordStream" args="syncUpdate"><![CDATA[
+        //this.syncUpdate = syncUpdate;
+        //h.getBroadCastId.doCall();
+        canvas.lc.send(canvas.vid_lc_name, "createEditRecordStream", syncUpdate);
+    ]]></method>
+
+    <method name="removeVideoByUser" args="publicSID">
+        canvas.lc.send(canvas.vid_lc_name, "removeVideoByUser", publicSID);
+    </method>
+
+    <!--
+        Mutes/unmutes a sound of user's video
+        with the publicSID
+    -->
+    <method name="muteSound" args="publicSID">
+        canvas.lc.send(canvas.vid_lc_name, "muteSound", publicSID);
+    </method>
+
+    <!--
+        Updates microphone's state of roomClient
+    -->
+    <method name="updateMuteStatusVideoView" args="roomClient">
+        canvas.lc.send(canvas.vid_lc_name, "updateMuteStatusVideoView", roomClient);
+    </method>
+
+</class>
+
+</library>

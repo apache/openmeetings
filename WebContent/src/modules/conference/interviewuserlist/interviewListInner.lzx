@@ -9,7 +9,7 @@
   with the License.  You may obtain a copy of the License at
   
       http://www.apache.org/licenses/LICENSE-2.0
-    	  
+          
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -19,60 +19,60 @@
   
 -->
 <library>
-	
+    
 <class name="interviewListTable" extends="view" y="60" 
        height="${ parent.height-64-parent.moderationPanel.height }"
         bgcolor="0xFFFFFF" x="2" clip="true" width="$once{ parent.width-4 }" >
         <innerlistViewEventUserListTable name="innerList" />
     <vscrollbar />
-</class>	
+</class>    
 
 <class name="interviewListInner" extends="baseRoomInnerList"  
-	   width="$once{ parent.width }" height="${ parent.height }" 
+       width="$once{ parent.width }" height="${ parent.height }" 
        bgcolor="$once{ canvas.basebgcolorizer }" >
-	
-	<attribute name="selectedItem" value="null" />
-	
-    <attribute name="sortType" value="alphabetical" type="string" />	
-	
-	<handler name="oninit">
-		<![CDATA[
-			this.initList();
-		]]>
-	</handler>
-	
+    
+    <attribute name="selectedItem" value="null" />
+    
+    <attribute name="sortType" value="alphabetical" type="string" />    
+    
+    <handler name="oninit">
+        <![CDATA[
+            this.initList();
+        ]]>
+    </handler>
+    
     <!-- clip="true" -->
     
     <view width="$once{ parent.width-2 }" height="${ parent.height-2 }" 
         x="1" y="1" bgcolor="white" />
 
     <method name="addItem" args="object">
-    	<![CDATA[
+        <![CDATA[
             if ($debug) Debug.write("eventUserList addItem: ",object,object.publicSID);
             
             for (var i=0;i<this._table.innerList.subviews.length;i++) {
-            	if (this._table.innerList.subviews[i].refObj.publicSID == object.publicSID) {
-            		//if ($debug) Debug.warn("Already on List, do not add twice");
-            		return;
-            	}
+                if (this._table.innerList.subviews[i].refObj.publicSID == object.publicSID) {
+                    //if ($debug) Debug.warn("Already on List, do not add twice");
+                    return;
+                }
             }
             
             var lastname = object.lastname;
-	        if (object.isSuperModerator) {
-	            lastname += " *";
-	        }
+            if (object.isSuperModerator) {
+                lastname += " *";
+            }
             
             new lz.interviewUserListItem(this._table.innerList,{
-    	            user_id:object.user_id,
-    	            firstname:object.firstname,
+                    user_id:object.user_id,
+                    firstname:object.firstname,
                     isSuperModerator:object.isSuperModerator,
-    	            lastname:lastname,
-    	            refObj:object,
-    	            connectedSince:object.connectedSince,
-    	            isMod:object.isMod,
-    	            streamid:object.streamid,
-    	            username:object.username,
-    	            formatedDate:object.formatedDate
+                    lastname:lastname,
+                    refObj:object,
+                    connectedSince:object.connectedSince,
+                    isMod:object.isMod,
+                    streamid:object.streamid,
+                    username:object.username,
+                    formatedDate:object.formatedDate
                 });
             
             this.sortUserList();
@@ -112,8 +112,8 @@
         
     
     <method name="initList">
-    	new lz.interviewListTable(this,{name:'_table'});
-    	this.moderationPanel.bringToFront();
+        new lz.interviewListTable(this,{name:'_table'});
+        this.moderationPanel.bringToFront();
     </method>
     
     <method name="clearList">
@@ -127,17 +127,9 @@
     <method name="getVideoObjectByPublicSID" args="publicSID">
         <![CDATA[
             //if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ",publicSID);
-            
-            //for (var i=0;i<this._videoviewcontent.subviews.length;i++){
-            //  if ($debug) Debug.write("getVideoObjectByBroadCastId6 broadcastId: ",this._videoviewcontent.subviews[i].broadcastId);
-            //  if ($debug) Debug.write("getVideoObjectByBroadCastId7 streamid,user_id: ",this._videoviewcontent.subviews[i].clientVars.streamid,this._videoviewcontent.subviews[i].clientVars.user_id);
-            //}
-            
+
             for (var i=0;i<this._table.innerList.subviews.length;i++){
-                //if ($debug) Debug.write("getVideoObjectByBroadCastId2 broadcastId VIEW: ",this._videoviewcontent.subviews[i].broadcastId);
-                //if ($debug) Debug.write("getVideoObjectByBroadCastId3 broadcastId SEARCH: ",broadcastId);
-                //if ($debug) Debug.write("getVideoObjectByBroadCastId4 obj: ",this._videoviewcontent.subviews[i]);
-                //if ($debug) Debug.write("getVideoObjectByBroadCastId5 streamid,user_id: ",this._videoviewcontent.subviews[i].clientVars.streamid,this._videoviewcontent.subviews[i].clientVars.user_id);
+                //if ($debug) Debug.write("getVideoObjectByPublicSID : this._table.innerList.subviews[i]",this._table.innerList.subviews[i]);
                 if (this._table.innerList.subviews[i].refObj.publicSID==publicSID){
                     return this._table.innerList.subviews[i];
                 }
@@ -150,29 +142,29 @@
 
     <method name="selectItem" args="itemObj">
         <![CDATA[
-    	if ($debug) Debug.write("selectItem ",itemObj);
-    	
-    	if (canvas.ismoderator) {
+        if ($debug) Debug.write("selectItem ",itemObj);
+        
+        if (canvas.ismoderator) {
             if (this.selectedItem != null && this.selectedItem != itemObj) {
                 this.selectedItem.deselect();
             }
             
             this.selectedItem = itemObj;
             if (this.selectedItem.isSelected) {
-            	this.selectedItem.deselect();
+                this.selectedItem.deselect();
             } else {
-            	this.selectedItem.select();
+                this.selectedItem.select();
             }
-    	}
+        }
         ]]>
     </method>
 
     <view name="userStatus" layout="axis:y">
-    	<view>
-    		 <view resource="userstatus_multiframe_rsc" frame="1" />
-    		 <labelText x="16" labelid="677" />
+        <view>
+             <view resource="userstatus_multiframe_rsc" frame="1" />
+             <labelText x="16" labelid="677" />
         </view>
-    	<view>
+        <view>
              <view resource="userstatus_multiframe_rsc" frame="2" />
              <labelText x="16" labelid="678" />
         </view>
@@ -183,15 +175,15 @@
     </view>
     
     <moderationMiniIconsInterviewUserList name="_applyAndStatusIcons" 
-						  x="$once{ parent.width-this.width-4 }" y="2" />
+                          x="$once{ parent.width-this.width-4 }" y="2" />
     
     <!--
     <eventUserListTable name="_table" /> 
      -->
     <view name="moderationPanel" height="0" clip="true" 
-    	  y="${ parent.height - this.height - 2 }">
-    	
-    	<handler name="onismoderator" reference="canvas" args="m">
+          y="${ parent.height - this.height - 2 }">
+        
+        <handler name="onismoderator" reference="canvas" args="m">
             if ($debug) Debug.write("###### ismoderator ",m);
             <![CDATA[
                 //this.isMod = canvas.getIsModeratorByPublicSID(this.refObj.publicSID);
@@ -206,24 +198,24 @@
                 for (var i=0;i<vList.length;i++) {
                     //vList[i].updateIconByMod();
                     if (vList[i].refObj.publicSID == drawObject.publicSID) {
-                    	vList[i].refObj.canDraw = drawObject.canDraw;
-                    	vList[i].updateIconByMod();
-                    	break;
+                        vList[i].refObj.canDraw = drawObject.canDraw;
+                        vList[i].updateIconByMod();
+                        break;
                     }
                 }
             ]]>
         </handler>
         
         <handler name="onlastBroadCastingUser" reference="canvas" args="userObject">
-        	<![CDATA[
-            	
-            	if (!userObject.isBroadcasting) {
-            		//Stop Broadcasting and close Dialog
-            		//Search, stop and remove video
-            		parent.parent.removeVideoByUser(userObject);
-            	}
-            	
-            	//search for the user and update its drawStatusIcon
+            <![CDATA[
+                
+                if (!userObject.isBroadcasting) {
+                    //Stop Broadcasting and close Dialog
+                    //Search, stop and remove video
+                    parent.parent.removeVideoByUser(userObject);
+                }
+                
+                //search for the user and update its drawStatusIcon
                 var vList = parent._table.innerList.subviews;
                 for (var i=0;i<vList.length;i++) {
                     //vList[i].updateIconByMod();
@@ -239,25 +231,25 @@
         </handler>
         
         <method name="updateIcons">
-        	<![CDATA[
-            	if (canvas.ismoderator) {
-            		this.showItem.doStart();
-            	} else {
-            		this.setAttribute("height",0);
-            	}
-            	var vList = parent._table.innerList.subviews;
-            	
-            	for (var i=0;i<vList.length;i++) {
-            		vList[i].updateIconByMod();
-            	}
-            	parent._applyAndStatusIcons.updateIcons();
-        	]]>
+            <![CDATA[
+                if (canvas.ismoderator) {
+                    this.showItem.doStart();
+                } else {
+                    this.setAttribute("height",0);
+                }
+                var vList = parent._table.innerList.subviews;
+                
+                for (var i=0;i<vList.length;i++) {
+                    vList[i].updateIconByMod();
+                }
+                parent._applyAndStatusIcons.updateIcons();
+            ]]>
         </method>
         
         <labelText labelid="912" width="270" x="0" multiline="true" y="0" />
-    	
-    	<animator name="showItem" attribute="height" 
-    			  to="60" duration="1000" start="false" />
+        
+        <animator name="showItem" attribute="height" 
+                  to="60" duration="1000" start="false" />
     </view>
 
 </class>

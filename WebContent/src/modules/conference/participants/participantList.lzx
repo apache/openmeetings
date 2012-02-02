@@ -60,6 +60,30 @@
     
     <view width="$once{ parent.width-2 }" height="${ parent.height-2 }" 
         x="1" y="1" bgcolor="white" />
+        
+    <handler name="oninit">
+        <![CDATA[
+            var items = this._table.innerList.subnodes;
+            canvas.videoComp_lc.lc_setSoundMuted = function(publicSID,isMuted) {
+                if ($debug) Debug.write("lc_setSoundMuted: publicSID, isMuted",publicSID, isMuted);
+
+                for (var i=1; i<items.length; i++) {
+                    var listItem = items[i];
+                    if (listItem.refObj.publicSID == publicSID) {
+                        var muteView = listItem._miniIcons._mute;
+                        if (isMuted) {
+                            muteView.setAttribute('frame', 2);
+                            muteView._tip.setAttribute('labelid', 1075);
+                        } else {
+                            muteView.setAttribute('frame', 1);
+                            muteView._tip.setAttribute('labelid', 1074);
+                        }
+                        break;
+                    }
+                }
+            };
+        ]]>
+    </handler>
 
     <method name="addItem" args="object">
         <![CDATA[
@@ -132,6 +156,19 @@
     <method name="clearList">
         this._table.destroy();
         new lz.participantsTable(this,{name:'_table'});
+    </method>
+    
+    <method name="disconnectclient" args="publicSID">
+        <![CDATA[
+            for (var i=0;i<this._table.innerList.subviews.length;i++){
+                if (this._table.innerList.subviews[i].refObj.publicSID==publicSID){
+                    var item = this._table.innerList.subviews[i];
+                    item.resetValues();
+                    item.destroy();
+                    break;
+                }
+            }
+        ]]>
     </method>
     
     <!--- get a Objects List Item

@@ -34,6 +34,8 @@
 	<!--- colors for each user -->
 	<attribute name="colorArray" value="null" />
 	
+	<attribute name="showsVideoInSeparateComponent" value="true" type="boolean" />
+	
 	<handler name="oninit">
 		//set modus
 		canvas.thishib.modus = "conference";

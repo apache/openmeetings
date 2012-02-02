@@ -409,6 +409,7 @@
                     } else {
                         new lz.labelerrorPopup(canvas,{errorlabelid:1409});
                     }
+                    // TODO: canvas._videocontainer._videoviewcontent.muteSound(parent.parent.refObj.publicSID);
                 ]]>
             </handler>
             <labelTooltip name="_text" text="" labelid="1407" />
@@ -612,9 +613,10 @@
         
         <miniIcons name="_restartDevice" x="100" width="16" height="16" resource="resyncuser_rsc" showhandcursor="true">
             <handler name="onclick">
+                //TODO: local connection call
                 if ($debug) Debug.write("parent.parent.refObj.publicSID: ",parent.parent.refObj.publicSID);
                 var myvideocontainer = canvas._videocontainer.getNewVideoObject(parent.parent.refObj.publicSID);
-                myvideocontainer.resetValues();
+                // myvideocontainer.resetValues();
                 new lz.editRecordStream(canvas.main_content._content.inner,{isSyncUpdate:true});
             </handler>
             <labelTooltip labelid="610" />

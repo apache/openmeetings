@@ -9,7 +9,7 @@
   with the License.  You may obtain a copy of the License at
   
       http://www.apache.org/licenses/LICENSE-2.0
-    	  
+          
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -19,28 +19,28 @@
   
 -->
 <library>
-	
+    
 
 <class name="interviewVideoChooseUser" extends="guiPresenter" resizeable="false"
     width="220" height="100" closable="true" labelid="910" y="10" minimizable="false">
-	
-	<attribute name="refObj" value="null" />
-	
-	<handler name="oninit">
-		this.getClientListScope.doCall();
-	</handler>
-	
-	<!--
+    
+    <attribute name="refObj" value="null" />
+    
+    <handler name="oninit">
+        this.getClientListScope.doCall();
+    </handler>
+    
+    <!--
     public synchronized HashMap<String,RoomClient> getClientListScope()
      -->
-	<netRemoteCallHib name="getClientListScope" funcname="getClientListScope" 
-					  remotecontext="$once{ canvas.thishib }" >   
+    <netRemoteCallHib name="getClientListScope" funcname="getClientListScope" 
+                      remotecontext="$once{ canvas.thishib }" >   
         <handler name="ondata" args="value">
-        	<![CDATA[
+            <![CDATA[
                 if ($debug) Debug.write("+++++++++++++++++ getClientListScope : ",value);
                 
                 for (var i in value) {
-                	parent._users.addItem(value[i].firstname+','+value[i].lastname+' ['+value[i].username+']',value[i].publicSID);
+                    parent._users.addItem(value[i].firstname+','+value[i].lastname+' ['+value[i].username+']',value[i].publicSID);
                 }
                 
                 parent._users.selectItemAt(0);
@@ -48,11 +48,11 @@
             ]]>
         </handler>  
     </netRemoteCallHib>
-	
-	<labelText labelid="911" x="2" y="22"/>
-	
-	<resetCombobox name="_users" x="2" y="42" width="$once{ parent.width-4 }"/>
-	
+    
+    <labelText labelid="911" x="2" y="22"/>
+    
+    <resetCombobox name="_users" x="2" y="42" width="$once{ parent.width-4 }"/>
+    
     <simpleLabelButton labelid="61" width="100" x="$once{ parent.width - 105 }" y="$once{ parent.height - 26 }">
         <handler name="onclick">
             this.parent.close();
@@ -61,44 +61,55 @@
     
     <simpleLabelButton labelid="60" width="100" x="$once{ parent.width - 210 }" y="$once{ parent.height - 26 }">
         <handler name="onclick">
-        	var valueCombobox = parent._users.getValue();
+            var valueCombobox = parent._users.getValue();
             if (this.parent.refObj.sendConfirmation(valueCombobox)) {
-            	this.parent.close();
+                this.parent.close();
             }
         </handler>
     </simpleLabelButton>   
-	
+    
 </class>
  
 <class name="interviewVideoBox" extends="view" width="322" height="281" bgcolor="0x000000">
 
     <attribute name="interviewPodId" value="0" type="number" />
+
+    <!--<handler name="onx" args="x">-->
+        <!--if ($debug) Debug.write("# x", this.getAttributeRelative('x', canvas));-->
+        <!--canvas.lc.send(canvas.vid_lc_name, "videoOnMove", this.interviewPodId, this.getAttributeRelative('x', canvas), this.getAttributeRelative('y', canvas));-->
+    <!--</handler>-->
     
     <method name="startInterView">
-    	if ($debug) Debug.write("startInterView :: ");
-    	new lz.editRecordStream(this,{isInterview:true,
-                	   myvideocontainer:this._videoBroadCast,
-                	   doDefaultAnimation:false,
-                	   align:'center',valign:'middle'
-                	});
+        if ($debug) Debug.write("startInterView :: ");
+        //canvas._videocontainer._videoviewcontent.createVideoObject(canvas.publicSID, true, this.interviewPodId);
+        var t = this;
+        canvas.videoComp_lc.onStartBroadcast = function(broadCastID, settings) {
+            //TODO: settings
+            if ($debug) Debug.write("onStartBroadcast :: ", broadCastID, settings);
+            t._videoPlay.setAttribute('chatpartnername',canvas.firstName+' '+canvas.lastName);
+            t._videoPlay._chatvideoinner._videostream.playStream(broadCastID, -1);
+            t._videoPlay.setAttribute("visibility","visible");
+            t._videoPlay.setAttribute("publicSID", canvas.publicSID);
+        };
+        new lz.editRecordStream(this,{isInterview:true});
     </method>
 
     <method name="sendConfirmation" args="publicSID">
-    	if ($debug) Debug.write("sendConfirmation :: ",publicSID);
-    	
-    	canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = publicSID;
+        if ($debug) Debug.write("sendConfirmation :: ",publicSID);
+        
+        canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = publicSID;
         canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
         canvas.thishib.setBroadCastingFlag.interviewPodId = this.interviewPodId;
         canvas.thishib.setBroadCastingFlag.doCall(); 
         
-    	//this.sendMessageWithClientByPublicSID.publicSID = publicSID;
-    	//this.sendMessageWithClientByPublicSID.messageObject = new Object();
-    	//this.sendMessageWithClientByPublicSID.messageObject["message"] = "allowInterview";
-    	//this.sendMessageWithClientByPublicSID.messageObject["action"] = "showVideoDeviceSettings";
-    	//this.sendMessageWithClientByPublicSID.messageObject["interviewPodId"] = this.interviewPodId;
-    	//this.sendMessageWithClientByPublicSID.doCall();
-    	
-    	return true;
+        //this.sendMessageWithClientByPublicSID.publicSID = publicSID;
+        //this.sendMessageWithClientByPublicSID.messageObject = new Object();
+        //this.sendMessageWithClientByPublicSID.messageObject["message"] = "allowInterview";
+        //this.sendMessageWithClientByPublicSID.messageObject["action"] = "showVideoDeviceSettings";
+        //this.sendMessageWithClientByPublicSID.messageObject["interviewPodId"] = this.interviewPodId;
+        //this.sendMessageWithClientByPublicSID.doCall();
+        
+        return true;
     </method>
     
     <!--
@@ -118,28 +129,24 @@
         </handler>  
     </netRemoteCallHib>
     
-	<simpleLabelButton labelid="910" height="30" valign="middle" align="center"
-			   visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }">
-		<handler name="onclick" args="refObj">
-			new lz.interviewVideoChooseUser(canvas,{
-				           isInterview:true,
-            			   x:this.getAttributeRelative("x",canvas)-10,
-            			   y:this.getAttributeRelative("y",canvas)-20,
-            			   width:this.width+20,
-            			   refObj:parent
-            			});
-		</handler>
-	</simpleLabelButton>
-    	
-    	
+    <simpleLabelButton labelid="910" height="30" valign="middle" align="center"
+               visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }">
+        <handler name="onclick" args="refObj">
+            new lz.interviewVideoChooseUser(canvas,{
+                           isInterview:true,
+                           x:this.getAttributeRelative("x",canvas)-10,
+                           y:this.getAttributeRelative("y",canvas)-20,
+                           width:this.width+20,
+                           refObj:parent
+                        });
+        </handler>
+    </simpleLabelButton>
+        
+        
     <videoObjectPlayBroadcast name="_videoPlay" isInterview="true" visibility="hidden" 
-    						  width="$once{ parent.width }" height="$once{ parent.height }" />
-    
-    
-    <videoObjectBroadcast name="_videoBroadCast" isInterview="true" visibility="hidden" 
                               width="$once{ parent.width }" height="$once{ parent.height }" />
-	
-	
+    
+    
 </class>
 
 
