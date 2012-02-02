@@ -133,6 +133,8 @@
     		var valCam = this.chosenCam;
 			var valMic = this.chosenMic;
 			var settings = this.chosenSetting;
+			this.myvideocontainer.setDefaultVideoSize(this.cam_default_width,this.cam_default_height);
+            
 			var videoview = this.myvideocontainer._chatvideoinner._videostream;
 	    	if ($debug) Debug.write("this.myvideocontainer: ",this.myvideocontainer);
 	    	if ($debug) Debug.write(valCam,valMic,settings);

@@ -21,11 +21,7 @@
 
 	<method name="init"><![CDATA[
         super.init();
-        var width = 320;
-        var height = 240;
-        if (this.height > 0 && this.height < 1024) height = this.height;
-        if (this.width > 0 && this.width < 1024) width = this.width;
-        var mc = new Video(width, height);
+        var mc = new Video(this.width, this.height);
         this.sprite.addChild(mc);
         this.__LZvideo = mc;
         this.applySizeToVid();

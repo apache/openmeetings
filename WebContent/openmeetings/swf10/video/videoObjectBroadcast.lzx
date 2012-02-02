@@ -12,29 +12,61 @@
   <attribute name="interviewPodId" value="-1" />
   <attribute name="ratioW" value="1" />
   <attribute name="ratioH" value="1" />
+  
+  <attribute name="videoInsetX" value="2" type="number" />
+  <attribute name="videoInsetY" value="21" type="number" />
+  <attribute name="bottomBarHeight" value="0" type="number" />
+  
   <handler name="oninit">
      <![CDATA[
-        //Display widget defined in mother class
-        if(this.syncuser) this.syncuser.bringToFront();
         this._loudness.bringToFront();
-        if(this.showuser) this.showuser.bringToFront();
         this._resizeview.bringToFront();
      ]]>
   </handler>
+  
+     <!---
+        Change the video resolution by chaning pod size
+     -->
+    <method name="setDefaultVideoSize" args="w,h">
+        this.setAttribute("width",w+this.videoInsetX);
+        this.isMicrophonesRoom = canvas.currentRoomObject.showMicrophoneStatus;
+        if (canvas.currentRoomObject.showMicrophoneStatus) {
+            this.setAttribute("bottomBarHeight",this._innertop.height + 1);
+        }
+        this.setAttribute("height",h+this.videoInsetY+this.bottomBarHeight);
+    </method>
 
-	<view name="_chatvideoinner" x="1" y="20" height="${parent.height-21}" width="${parent.width-2}">
+	<view name="_chatvideoinner" x="$once{ parent.videoInsetX-1 }" 
+           y="$once{ parent.videoInsetY-1 }" 
+           height="${parent.height-parent.videoInsetY-parent.bottomBarHeight}" 
+           width="${parent.width-parent.videoInsetX}">
+           
 		<view name="r" resource="chatbgitem" x="1" y="2" stretches="both" 
 			  width="$once{parent.width}" height="$once{parent.height}" />
+			  
 		<handler name="oninit">
 			this.r.setAttribute('frame',5);
-            this.initH = this.height;
-            this.initW = this.width;
 		</handler>
 		
-		<baseVideoStreamDevice name="_videostream" mode="broadcast"
-						 width="${parent.width}" height="${parent.height}" bgcolor="black" />
+		<baseVideoStreamDevice name="_videostream" mode="broadcast">
+		  <handler name="onlevel">
+                <![CDATA[
+                    //if (this.level > 0) {
+                        //parent._activityLevel.bringToFront();
+                        //parent._activityLevel.setAttribute("visibility","visible");
+                    //}
+                    var fullLength = parent.height-24;
+                    parent._activityLevel.setAttribute("height",this.level*(fullLength/100));
+                ]]>
+            </handler>
+         </baseVideoStreamDevice>
+         
+         <view name="_activityLevel" width="6" x="2" y="2" opacity="0.5" bgcolor="0x00FF00" 
+              height="0" bcolor="0xFFFFFF">
+        </view> 
 		
 	</view>	
+	
 </class>
 
 
