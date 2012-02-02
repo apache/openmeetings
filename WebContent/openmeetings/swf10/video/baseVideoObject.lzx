@@ -8,7 +8,7 @@
 	or a self-video (broadcasting a cam/mic)
  -->
     
-<class name="baseVideoObject" extends="view" bgcolor="0x000000" width="132" height="120">
+<class name="baseVideoObject" extends="view" bgcolor="0x000000" width="122" height="101">
 
     <switch>
 	  <when property="$as3">
@@ -59,6 +59,8 @@
     <attribute name="isShowMicMute" value="false" type="boolean"/>
 
     <attribute name="isMutedByModerator" value="false" type="boolean"/>
+    
+    <attribute name="isMicrophonesRoom" value="false" type="boolean"/>
 	
 	<handler name="onisremote" args="r">
 		this.isremote = r;
@@ -88,15 +90,25 @@
                 //return;
             }
             
-            var prop1 = [this, "width"];
-            var prop2 = [this, "height"];
-            this.applyConstraintMethod("setItemContraintsWidth", prop1);
-            this.applyConstraintMethod("setItemContraintsHeight", prop2);
+            //var prop1 = [this, "width"];
+            //var prop2 = [this, "height"];
+            //this.applyConstraintMethod("setItemContraintsWidth", prop1);
+            //this.applyConstraintMethod("setItemContraintsHeight", prop2);
             this.setShadow();
             
             if (this.publicSID == canvas.publicSID) {
-            	this._toolbar._resync._tip.setAttribute("labelid",610);
+                this._toolbar._resync._tip.setAttribute("labelid",610);
             }
+            this._giveExclusiveAudioView.bringToFront();
+            
+            this.isMicrophonesRoom = canvas.currentRoomObject.showMicrophoneStatus;
+            if (canvas.currentRoomObject.showMicrophoneStatus) {
+                this._innertop.setAttribute("bgcolor", "0xFF6600");
+                this._innerbottom.setAttribute("bgcolor", "0xFF6600");
+            } else {
+                this._innerbottom.setAttribute("visibility", "hidden");
+            }
+            
         ]]>
     
     </handler>
@@ -112,19 +124,23 @@
                 return;
             }
             
-			var bounds = this.getBounds();
-			var parentBounds = canvas.getBounds();
-			if ( bounds.y < 0 )
-			{
-				this.setAttribute('y',0);
-			}
-			
-			if ( bounds.y > ( parentBounds.height - bounds.height ) )
-			{			
-				this.setAttribute('y', parentBounds.height - bounds.height );
-			}
-		]]>
-	</handler>
+			if (canvas.currentRoomObj.hideWhiteboard) {
+                return;
+            }
+            
+            var bounds = this.getBounds();
+            var parentBounds = canvas.getBounds();
+            if ( bounds.y < 0 )
+            {
+                this.setAttribute('y',0);
+            }
+            
+            if ( bounds.y > ( parentBounds.height - bounds.height ) )
+            {           
+                this.setAttribute('y', parentBounds.height - bounds.height );
+            }
+        ]]>
+    </handler>
 
 	<handler name="onx">
 		<![CDATA[
@@ -138,18 +154,18 @@
             }
 		
 			var bounds = this.getBounds();
-			var parentBounds = canvas.getBounds();
-			if ( bounds.x < 0 )
-			{
-				this.setAttribute('x',0);
-			}
-			
-			if ( bounds.x > ( parentBounds.width - bounds.width ) )
-			{
-				this.setAttribute('x', parentBounds.width - bounds.width );
-			}
-		]]>
-	</handler>
+            var parentBounds = canvas.getBounds();
+            if ( bounds.x < 0 )
+            {
+                this.setAttribute('x',0);
+            }
+            
+            if ( bounds.x > ( parentBounds.width - bounds.width ) )
+            {
+                this.setAttribute('x', parentBounds.width - bounds.width );
+            }
+        ]]>
+    </handler>
 	
     <method name="setShadow">
         <![CDATA[
@@ -354,36 +370,47 @@
                     if (this.subviews[eg].name != "_toolbar" 
                             && this.subviews[eg].name != "_innertop"
                             && this.subviews[eg].name != "_loudness"
-                            && this.subviews[eg].name != "_micView") {
+                            && this.subviews[eg].name != "_micView"
+                            && this.subviews[eg].name != "_innerbottom") {
                          this.subviews[eg].setAttribute("visibility","visible");   
                     }
                 }
                 
-                
+                if (isMicrophonesRoom) {
+                    this._innerbottom.setAttribute("visibility", "visible");
+                }
             
                 this.respectRatio = true;
             }
             
         ]]>
-    </method>    
+    </method>   
 
 	<view name="_innertop" width="${parent.width-2 }" 
-		  height="18" x="1" y="1" bgcolor="$once{ canvas.basebgcolorizer }">
-  		<text text="${ parent.parent.chatpartnername }" 
+          height="18" x="1" y="1" bgcolor="$once{ canvas.basebgcolorizer }">
+        <text text="${ parent.parent.chatpartnername }" 
               onmousedown="parent.parent._startDragState(this)" 
               onmouseup="parent.parent._removeDragState(this)"
               width="${ parent.width-2 }" fgcolor="white"
-  			fontsize="9">
+            fontsize="9">
             <handler name="onmouseover">
-		        //cursor="arrow_draw_panel_cursor" 
-		        lz.Cursor.setCursorGlobal("arrow_draw_panel_cursor");
-		    </handler>
-		    
-		    <handler name="onmouseout">
-		        lz.Cursor.unlock();
-		    </handler>
+                //cursor="arrow_draw_panel_cursor" 
+                lz.Cursor.setCursorGlobal("arrow_draw_panel_cursor");
+            </handler>
+            
+            <handler name="onmouseout">
+                lz.Cursor.unlock();
+            </handler>
         </text>
-	</view>	
+    </view>
+    
+    <view name="_innerbottom" width="${parent.width - 2}" x="1" y="${parent.height - 19}"
+          height="18" bgcolor="$once{ canvas.basebgcolorizer }">
+        <text text="${canvas.getLabelName(1434)}"
+              width="${ parent.width-2 }" fgcolor="white"
+              name="title"
+            fontsize="9"/>
+    </view>
     
 	<view name="_loudness" x="1" y="${parent.height - 20}">
 		<view x="2" y="2" name="loudness" resource="speaking" opacity="0.2"
@@ -402,8 +429,7 @@
 	</view>
      -->
 
-    <view name="_resizeview" x="${ this.parent.width - 17 }" 
-          y="${ this.parent.height - 17 }" 
+    <view name="_resizeview" x="${ this.parent.width - 16 }" valign="bottom"
         resource="explorer_resize_rsc" cursor="explorer_resizemouse_rsc" 
         onmousedown="this.parent.doResize(true)"
         onmouseup="this.parent.doResize(false)" >
@@ -417,7 +443,36 @@
     
     <view name="_toolbar" x="${ parent.width-this.width-2 }" layout="axis:x;spacing:0" y="2">     
         
-        <attribute name="isload" value="true" type="boolean"/>        
+        <attribute name="isload" value="true" type="boolean"/>  
+        
+        <miniIconsPresenter name="_resync"
+            iconRessourceName="resyncuser_rsc">
+            <handler name="onclick">
+                parent.parent.resetValues();
+                if(!this.parent.parent.isremote) {
+                    if ($debug) Debug.write("editRecordStream ################# baseVideObject ");
+                    if (this.parent.parent.isInterview) {
+                        new lz.editRecordStream(parent.parent.parent,{
+                                doDefaultAnimation:false,
+                                align:'center',valign:'middle',
+                                isInterview:true,
+                                myvideocontainer:parent.parent,
+                                isSyncUpdate:true});
+                    } else {
+                        new lz.editRecordStream(canvas.main_content._content.inner,{
+                                isSyncUpdate:true});
+                    }
+                }
+            </handler>
+            <labelTooltip name="_tip" labelid="540" />
+        </miniIconsPresenter>       
+        
+        <miniIconsPresenter name="_mute" width="16" height="16" iconRessourceName="mute_micro_btn_rsc">
+            <handler name="onclick">
+                parent.parent.silenceMicrophone(!parent.parent.micMuted);
+            </handler>
+            <labelTooltip name="_tip" labelid="1405" />
+        </miniIconsPresenter>  
         
         <miniIconsPresenter name="_minimize"
             iconRessourceName="btn_presenter_minimize">
@@ -435,47 +490,56 @@
             <labelTooltip labelid="857" />
         </miniIconsPresenter>
         
-        <miniIconsPresenter name="_mute" width="16" height="16" iconRessourceName="mute_micro_btn_rsc">
+        <!--
+        <miniIconsPresenter name="_showusercontext"
+            iconRessourceName="showusercontext">
             <handler name="onclick">
-                parent.parent.silenceMicrophone(!parent.parent.micMuted);
+                new lz.remoteUserDetails(parent.parent);
             </handler>
-            <labelTooltip name="_tip" labelid="1405" />
-        </miniIconsPresenter>
+            <labelTooltip labelid="68" />
+        </miniIconsPresenter> 
+         --> 
         
-        <miniIconsPresenter name="_resync"
-            iconRessourceName="resyncuser_rsc">
+    </view>
+
+    <view name="_giveExclusiveAudioView" valign="middle" align="center" visible="false">
+        <miniIcons name="_micButton" width="40" height="40" resource="mic_rsc" showhandcursor="true">
             <handler name="onclick">
-                parent.parent.resetValues();
-                if(!this.parent.parent.isremote) {
-                	if ($debug) Debug.write("editRecordStream ################# baseVideObject ");
-                    if(canvas.inner.editRecordStream != null) canvas.inner.editRecordStream.destroy();
-                	if (this.parent.parent.isInterview) {
-                		new lz.editRecordStreamSWF10(canvas.inner,{
-                                name:"editRecordStream",
-                			    doDefaultAnimation:false,
-                                align:'center',valign:'middle',
-                			    isInterview:true,
-                			    myvideocontainer:parent.parent,
-                                isSyncUpdate:true});
-                	} else {
-                		new lz.editRecordStreamSWF10(canvas.inner,{
-                                name:"editRecordStream",
-                                isSyncUpdate:true});
-                	}
-                }
+                <![CDATA[
+                    canvas.thishib.giveExclusiveAudio.publicSID = parent.parent.publicSID;
+                    canvas.thishib.giveExclusiveAudio.doCall();
+                ]]>
             </handler>
-            <labelTooltip name="_tip" labelid="540" />
-        </miniIconsPresenter>  
-        
-        <!--<miniIconsPresenter name="_showusercontext"-->
-            <!--iconRessourceName="showusercontext">-->
-            <!--<handler name="onclick">-->
-                <!--new lz.remoteUserDetails(parent.parent);-->
-            <!--</handler>-->
-            <!--<labelTooltip labelid="68" />-->
-        <!--</miniIconsPresenter>  -->
-        
-    </view>         
+            <labelTooltip labelid="1386" />
+        </miniIcons>
+    </view>
+
+    <handler name="onmouseover">
+        <![CDATA[
+        if (this.isInterview) {
+            return;
+        }
+        if (this.minimized) {
+            return;
+        }
+        var canGiveAudioHimself = !this.isremote && canvas.isAllowedToGiveExclusiveAudio;
+        if (canvas.ismoderator || canGiveAudioHimself) {
+            this._giveExclusiveAudioView.setAttribute("visible", true);
+        }
+        ]]>
+    </handler>
+
+    <handler name="onmouseout">
+        <![CDATA[
+        if (this.isInterview) {
+            return;
+        }
+        if (this.minimized) {
+            return;
+        }
+        this._giveExclusiveAudioView.setAttribute("visible", false);
+        ]]>
+    </handler>  
     
     <dragstate name="dragger" />
     <resizestate name="rs"/>
@@ -491,43 +555,43 @@
     <handler name="onismoderator" reference="canvas" args="m">
         if ($debug) Debug.write("###### ismoderator ", m);
         <![CDATA[
-
+        
         if (this.minimized) {
             this._loudness.setAttribute("x",this.width - 84 - (this.isShowMicMute ? 20 : 0));
             this._loudness.bringToFront();
         }
         ]]>
     </handler>
-
+    
     <!--
         This will mute the Microphone only to the person that is speaking
         if the gain is set to zero NOBODY will hear 'em
      -->
     <method name="muteMicrophone" args="roomClientObj">
         <![CDATA[
-
+        
         if ($debug) Debug.write("############ muteMicrophone ",roomClientObj.micMuted);
 
         if (roomClientObj.publicSID == this.publicSID) {
             if (roomClientObj.publicSID == canvas.publicSID) {
-            	if ($debug) Debug.write("Set Mute for Client :: ",roomClientObj.username);
+                if ($debug) Debug.write("Set Mute for Client :: ",roomClientObj);
                 if (roomClientObj.micMuted) {
-                	if ($debug) Debug.write("############ SET GAIN 0");
-                    this._chatvideoinner._videostream.micro.gain = 0;
+                    if ($debug) Debug.write("############ SET GAIN 0");
+                    this._chatvideoinner._videostream.micro.setGain(0);
                 } else {
-                	if ($debug) Debug.write("############ SET GAIN 50");
-                	this._chatvideoinner._videostream.micro.gain = 50;
+                    if ($debug) Debug.write("############ SET GAIN 50 micro: ",this._chatvideoinner._videostream.micro);
+                    this._chatvideoinner._videostream.micro.setGain(50);
                 }
             }
             this.isMutedByModerator = roomClientObj.micMuted;
             this.setMicMuted(roomClientObj.micMuted);
-
+            
         } else {
-        	if (!roomClientObj.micMuted) {
-        		//Make sure sound is on, in case a user has set it locally to 0
-        		//in other words: overwrite any local settings
-        		this._chatvideoinner._videostream.setSoundVolume(100);
-        	}
+            if (!roomClientObj.micMuted) {
+                //Make sure sound is on, in case a user has set it locally to 0
+                //in other words: overwrite any local settings
+                this._chatvideoinner._videostream.setVolume(100);
+            }
         }
         ]]>
     </method>
@@ -614,9 +678,21 @@
         if (micMuted) {
             this._toolbar._mute._tip.setAttribute("labelid","1406");
             this._toolbar._mute._itemRsc.setAttribute('frame',2);
+            if (isMicrophonesRoom) {
+                var label = canvas.getLabelName(1435);
+                this._innertop.setAttribute('bgcolor', canvas.basebgcolorizer);
+                this._innerbottom.setAttribute('bgcolor', canvas.basebgcolorizer);
+                this._innerbottom.title.setAttribute('text', label);
+            }
         } else {
             this._toolbar._mute._tip.setAttribute("labelid","1405");
             this._toolbar._mute._itemRsc.setAttribute('frame',1);
+            if (isMicrophonesRoom) {
+                var label = canvas.getLabelName(1434);
+                this._innertop.setAttribute('bgcolor', "0xFF6600");
+                this._innerbottom.setAttribute('bgcolor', "0xFF6600");
+                this._innerbottom.title.setAttribute('text', label);
+            }
         }
         ]]>
     </method>
