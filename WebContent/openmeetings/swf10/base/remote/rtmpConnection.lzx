@@ -60,6 +60,13 @@
                     s = 2;
                     break;
                 }
+                
+                case "NetConnection.Connect.Closed": {
+                    msg = stats.info.code;
+                    this._nc = null;
+                    s = 0;
+                    break;
+                }
 
                 default: {
                     msg = stats.info.code;

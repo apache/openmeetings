@@ -17,6 +17,8 @@
         client.hibAdapter_setLabelObjectByHundred = this.hibAdapter_setLabelObjectByHundred;
         client.setRoomValues = this.setRoomValues;
         client.getRoomTypes = this.getRoomTypes;
+        client.disconnect = this.disconnect;
+        client.reconnectSuccess = this.reconnectSuccess;
 
         var rtmpLC:LocalConnection = new LocalConnection();
         rtmpLC.connect(canvas.rtmp_lc_name);
@@ -36,6 +38,17 @@
 
     <method name="getRoomTypes" args="value">
         canvas.roomTypesInitValues = value;
+    </method>
+    
+    <method name="reconnectSuccess" args="connection_url">
+        if($debug) Debug.write("reconnectSuccess",connection_url);
+        canvas.thishib.setAttribute('src',connection_url);
+        canvas.thishib.connect();
+    </method>
+    
+    <method name="disconnect" >
+        if($debug) Debug.write("Do disconnect");
+        canvas.thishib.disconnect();
     </method>
 
 </class>

@@ -27,6 +27,10 @@
 
 <resource name="explorer_resize_rsc" src="resizer.swf" />
 
+<resource name="btn_presenter_minimize" src="minimize_up.png" />
+<resource name="btn_presenter_maximize" src="maximize_up.png" />
+<resource name="btn_presenter_maximize2" src="maximize2_up.png" />
+
 <resource name="btn_presenter_close">
     <frame src="close_up.png" />
     <frame src="close_mo.png" />

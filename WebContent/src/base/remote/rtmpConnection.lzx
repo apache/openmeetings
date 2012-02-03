@@ -26,6 +26,7 @@
     	
     	<event name="onconnect"/>
     	<event name="onerror"/>
+    	<event name="ondisconnect" />
         
         <!-- this attribute holds a reference to the current/last called netremoteCall,
         in case of error you can debug that way which call did fail -->
@@ -94,6 +95,7 @@
         </method>	
         
         <method name="disconnect">
+            this.ondisconnect.sendEvent();
         	canvas.currentNC = null;
             this._nc.close();
         </method>

@@ -144,12 +144,12 @@
 			var _camera = null;
 			if (valMic != null) {
 			     _micro = Microphone.getMicrophone(valMic);
-			     _micro.codec = SoundCodec.SPEEX;
-			     _micro.framesPerPacket = 1;
-			     _micro.setSilenceLevel(0, 2000);
-			     _micro.gain = 50;
-			     // this has no effect if enhanced microphone is obtained
 			     if (_micro != null) {
+				     _micro.codec = SoundCodec.SPEEX;
+				     _micro.framesPerPacket = 1;
+				     _micro.setSilenceLevel(0, 2000);
+				     _micro.gain = 50;
+				     // this has no effect if enhanced microphone is obtained
 	                //Microphone setUseEchoSupression(bool)
 	                _micro.setUseEchoSuppression(true);
 	            }
@@ -162,32 +162,17 @@
 
 			//Microphone.set
 			if ($debug) Debug.write("canvas.vaquality: ",canvas.vaquality, "canvas.microphoneRateBest: ",canvas.microphoneRateBest);
-			if (canvas.vaquality=="best") {
-				if (_micro != null) {
-				    _micro.rate = canvas.microphoneRateBest;
-				}
-				if (_camera != null) {
-    				if ($debug) Debug.write("_camera.setQuality BEST: ",this.isInterview,(canvas.bandwidthNeededBest*2),canvas.camQualityBest);
-    				if (this.isInterview) {
-    					_camera.setMode(videoview.width,videoview.height,24,true);
-    					if ($debug) Debug.warn("IS INTERVIEW ");
-    				    _camera.setQuality(0,98);
-    				} else {
-    					_camera.setMode(videoview.width,videoview.height,canvas.framesPerSecond,true);
-    					if ($debug) Debug.warn("IS NO INTERVIEW ");
-    					_camera.setQuality(canvas.bandwidthNeededBest,canvas.camQualityBest);
-    				}
-				}
-			} else {
-				if (_camera != null) {
-    				_camera.setMode(videoview.width,videoview.height,canvas.framesPerSecond,true);
-    				if ($debug) Debug.write("_camera.setQuality NORMAL: ",canvas.bandwidthNeededNormal,canvas.camQualityNormal);
-                    _camera.setQuality(canvas.bandwidthNeededNormal,canvas.camQualityNormal);
-				} 
-				if (_micro != null) {
-    				_micro.setRate(canvas.microphoneRateNormal);
-    				//_micro.setSilenceLevel(canvas.loudnessAcitviation);
-				}
+			if (_camera != null) {
+   				if ($debug) Debug.write("_camera.setQuality BEST: ",this.isInterview,(canvas.bandwidthNeededBest*2),canvas.camQualityBest);
+   				if (this.isInterview) {
+   					_camera.setMode(videoview.width,videoview.height,24,true);
+   					if ($debug) Debug.warn("IS INTERVIEW ");
+   				    _camera.setQuality(0,98);
+   				} else {
+   					_camera.setMode(videoview.width,videoview.height,canvas.framesPerSecond,true);
+   					if ($debug) Debug.warn("IS NO INTERVIEW ");
+   					_camera.setQuality(canvas.bandwidthNeededBest,canvas.camQualityBest);
+   				}
 			}
 
 			

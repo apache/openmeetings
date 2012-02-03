@@ -136,6 +136,10 @@
         canvas.lc.send(canvas.vid_lc_name, "reconnect", canvas.thishib.src);
     </handler>
     
+    <handler name="ondisconnect">
+        canvas.lc.send(canvas.rtmp_lc_name, "disconnect", canvas.thishib.src);
+    </handler>
+    
     <method name="reconnectComplete">
          if (this.reconnectionAction){
             this.reconnectionAction = false;

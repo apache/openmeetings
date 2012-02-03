@@ -64,6 +64,7 @@
                   
     <method name="reconnectSuccess">
         if ($debug) Debug.write("User Reloged In");
+        canvas.lc.send(canvas.rtmp_lc_name, "reconnectSuccess", canvas.thishib.src);
         //set default values and get already availible streams
         this.getRoomModeratorsByRoomId.doCall();
     </method>
