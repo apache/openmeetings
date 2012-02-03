@@ -25,8 +25,8 @@
     ]]></handler>
 
     <method name="hibAdapter_setLabelObjectByHundred" args="start,value">
-        if($debug) Debug.write("hibAdapter_setLabelObjectByHundred",start,value);
-        // setLabelObjectByHundred(start,value);
+        // if($debug) Debug.write("hibAdapter_setLabelObjectByHundred",start,value);
+        setLabelObjectByHundred(start,value);
     </method>
 
     <method name="setRoomValues" args="roomtypes_id,rooms_id,value">

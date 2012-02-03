@@ -27,6 +27,12 @@
 
 <resource name="explorer_resize_rsc" src="resizer.swf" />
 
+<resource name="btn_presenter_close">
+    <frame src="close_up.png" />
+    <frame src="close_mo.png" />
+    <frame src="close_dn.png" />
+</resource> 
+
 <resource name="explorer_resizemouse_rsc" src="resizemouse.png" />
 
 

@@ -34,9 +34,9 @@
     </method>
     
     <method name="getLabelName" args="id">
-    	return "label "+id;
+    	// return "label "+id;
         //if($debug) Debug.write("main.lzx/getLabelName()",id);
-        // return getLabelTag(id);
+        return getLabelTag(id);
     </method>
     
 </library>

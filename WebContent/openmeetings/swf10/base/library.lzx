@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 
+    <include href="functions.lzx" />
+    <include href="mainAttributes.lzx" />
+    <include href="mainDatasets.lzx" />
+    <include href="mainMethods.lzx" />
+    
     <include href="remote/" />
     <include href="components/" />
     <include href="hibernate/" />
-
-	<include href="mainAttributes.lzx" />
-	<include href="mainDatasets.lzx" />
-	<include href="mainMethods.lzx" />
 	
 </library>
