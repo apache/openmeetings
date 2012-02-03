@@ -50,14 +50,13 @@
 			
             if (this.activeErrorHandler) {
                 if (Number(value)<0){
-                    Debug.warn("Received Error ID: ",value);					
+                    if ($debug) Debug.warn("Received Error ID: ",value);					
 					if (this.isCallBackHandler) 
 					{
-						var dlg = new lz.callbackRpcErrorDialog(canvas,{callBackObject:this,errorid:Number(value)});						
-						lz.Focus.setFocus(dlg);
+					   //TODO: Fix error messages
+					   
 					} else {
-						var dlg = new lz.rpcErrorDialog(canvas,{errorid:Number(value)});
-						lz.Focus.setFocus(dlg);
+					   //TODO: Fix error messages
 					}
                 }
             }			

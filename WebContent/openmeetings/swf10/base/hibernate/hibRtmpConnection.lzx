@@ -26,67 +26,8 @@
     </method>
 </class>
 
-<class name="hibRtmpConnection" extends="rtmpConnection" debug="false"
-    src="$once{ this.protocollName+'://'+canvas.rtmphostlocal+':'+this.protocollPort+'/'+canvas.webAppRootKey+'/'+this.userScope }" >
+<class name="hibRtmpConnection" extends="rtmpConnection" debug="false" src="" >
 
-	<attribute name="protocollName" type="string" value="rtmp" />
-  	<attribute name="protocollPort" type="string" value="$once{ canvas.rtmpport }" />
-    <attribute name="counterror" type="number" value="0" />
-    
-    <attribute name="loaderVar" value="null" />
-    
-    <attribute name="userScope" value="hibernate" type="string" />
-    
-    <!-- refreshing the session regulary -->
-    <attribute name="refreshDelegate" value="null" />
-    
-    <!-- UserId-->
-    <attribute name="UserID" value="1" type="number" />
-    <!-- reconnect after each conferenceView -->
-    <attribute name="reconnectAfterRoomleft" type="boolean" value="false" />
-    <attribute name="reconnectedRoomInstance" value="null" />
-    
-    <attribute name="reconnectionAction" value="false" type="boolean" />
-    <attribute name="reconnectObjRef" value="null" />
-         
-     <attribute name="userobject" value="null" />
-     
-     <!-- default will be loaded on startup -->
-     <attribute name="userlang" value="1" type="number" />
-     
-     <!-- The default Language will be loaded on init  -->
-     <attribute name="initlanguageLoaded" value="false" type="boolean" />
-     
-     <!-- This domain is the orgdomain used in the video-conference -->
-     <attribute name="conferencedomain" value="public" type="string" />
-     
-     <!-- if this connection is used for testing the app
-     see test-setup.lzx -->
-     <attribute name="testAppLoading" value="false" type="boolean" />
-     
-     <!-- 
-     	the real ROOM_ID
-     -->
-     <attribute name="currentroomid" value="0" type="number" />
-     
-     <!-- This is the current domain the user has logged-in -->
-     <attribute name="currentdomain" value="domain1" type="string" />
-     <attribute name="currentdomainObj" value="domain1" type="string" />
-     
-     <!--- the current Invitation-Object -->
-     <attribute name="currentInvitation" value="null" />
-	
-	<!-- shows what kind of conferenceView it is at the moment
-		wether its conferenceView or audienceView -->
-	<attribute name="modus" value="" type="string" />
-    
-    <!-- shows what kind of room the use is public or private -->
-    <attribute name="roomtype" value="" type="string" />
-        
-    <attribute name="showKickMessage" value="false" type="boolean"/>
-    <attribute name="showFullMessage" value="false" type="boolean"/>
-         
-         
      <!--
         The onconnect Method is triggered several times:
              - When you enter a room the NetConnection will close and reconnect to the Scope of the Room
@@ -94,7 +35,7 @@
       -->
      <handler name="onconnect">
 		if($debug) Debug.write("hibRtmpConnection/onconnect");
-        this.overwritePublicSID.doCall();
+        // this.overwritePublicSID.doCall();
         //this.setUsernameReconnect.doCall();
     </handler>
 
@@ -106,8 +47,9 @@
         </handler>
     </netRemoteCallHib>
 
-    <handler name="onerror" >
-        this.connect();
+    <handler name="onerror" args="value">
+        if ($debug) Debug.write("Connection error ",value);
+        // this.connect();
     </handler>
     
 </class>

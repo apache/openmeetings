@@ -11,35 +11,12 @@
         
         if($debug) Debug.write("main.lzx/config.xml ondata",this);
         
-        //Set Config-values by config.xml, see comments on config.xml
-        this.setAttribute('rtmphostlocal',canvas.myConfigSet.getPointer().xpathQuery('config/rtmphostlocal/text()'));   
-        this.setAttribute('rtmpport',Number(canvas.myConfigSet.getPointer().xpathQuery('config/rtmpport/text()')));  
-        this.setAttribute('rtmpTunnelport',Number(canvas.myConfigSet.getPointer().xpathQuery('config/rtmpTunnelport/text()'))); 
-        this.setAttribute('rtmpsslport',Number(canvas.myConfigSet.getPointer().xpathQuery('config/rtmpsslport/text()'))); 
-        
-        var userSSLString = canvas.myConfigSet.getPointer().xpathQuery('config/useSSL/text()');
-        if ($debug) Debug.write("userSSLString",userSSLString)
-        if (userSSLString == "yes") {
-            this.setAttribute('useSSL',true);
-        }
-        
-        this.setAttribute('red5httpport',Number(canvas.myConfigSet.getPointer().xpathQuery('config/red5httpport/text()')));  
         this.setAttribute('basebgcolorizer',canvas.myConfigSet.getPointer().xpathQuery('config/basebgcolorizer/text()'));  
         this.setAttribute('baseMousecolorizer',canvas.myConfigSet.getPointer().xpathQuery('config/baseMousecolorizer/text()'));  
         this.setAttribute('baseMouseOvercolorizer',canvas.myConfigSet.getPointer().xpathQuery('config/baseMouseOvercolorizer/text()'));  
-        this.setAttribute('currentappname',canvas.myConfigSet.getPointer().xpathQuery('config/currentappname/text()'));  
-        this.setAttribute('currentappnameurl',canvas.myConfigSet.getPointer().xpathQuery('config/currentappnameurl/text()'));  
-        this.setAttribute('currentappnamebugurl',canvas.myConfigSet.getPointer().xpathQuery('config/currentappnamebugurl/text()'));
-        this.setAttribute('loudnessAcitviation',canvas.myConfigSet.getPointer().xpathQuery('config/loudnessAcitviation/text()'));
-        this.setAttribute('webAppRootKey',canvas.myConfigSet.getPointer().xpathQuery('config/webAppRootKey/text()'));
-        this.setAttribute('showWindowEffect',canvas.myConfigSet.getPointer().xpathQuery('config/showWindowEffect/text()'));
-        this.setAttribute('firstdayinweek',canvas.myConfigSet.getPointer().xpathQuery('config/firstdayinweek/text()'));
-        this.setAttribute('showRecording',canvas.myConfigSet.getPointer().xpathQuery('config/showRecording/text()'));
-        
-        //old menubar is not active anymore
-        //this.setAttribute('showmodernWhiteBoard',canvas.myConfigSet.getPointer().xpathQuery('config/showmodernWhiteBoard/text()'));
         
         //Audio-Video-Settings
+        this.setAttribute('loudnessAcitviation',canvas.myConfigSet.getPointer().xpathQuery('config/loudnessAcitviation/text()'));
         this.setAttribute('framesPerSecond',Number(canvas.myConfigSet.getPointer().xpathQuery('config/framesPerSecond/text()')));  
         this.setAttribute('bandwidthNeededNormal',Number(canvas.myConfigSet.getPointer().xpathQuery('config/bandwidthNeededNormal/text()')));  
         this.setAttribute('bandwidthNeededBest',Number(canvas.myConfigSet.getPointer().xpathQuery('config/bandwidthNeededBest/text()')));  
@@ -48,189 +25,11 @@
         this.setAttribute('microphoneRateNormal',Number(canvas.myConfigSet.getPointer().xpathQuery('config/microphoneRateNormal/text()')));  
         this.setAttribute('microphoneRateBest',Number(canvas.myConfigSet.getPointer().xpathQuery('config/microphoneRateBest/text()')));  
         
-        this.setAttribute('defaultWhiteboardWidth',Number(canvas.myConfigSet.getPointer().xpathQuery('config/defaultWhiteboardWidth/text()')));  
-        this.setAttribute('defaultWhiteboardHeight',Number(canvas.myConfigSet.getPointer().xpathQuery('config/defaultWhiteboardHeight/text()')));  
-        
-        
-        this.setAttribute('adminModuleUser',canvas.myConfigSet.getPointer().xpathQuery('config/adminModuleUser/text()'));  
-        this.setAttribute('adminModuleRoom',canvas.myConfigSet.getPointer().xpathQuery('config/adminModuleRoom/text()'));  
-        this.setAttribute('adminModuleOrg',canvas.myConfigSet.getPointer().xpathQuery('config/adminModuleOrg/text()'));  
-        this.setAttribute('adminModuleLanguages',canvas.myConfigSet.getPointer().xpathQuery('config/adminModuleLanguages/text()'));  
-        this.setAttribute('adminModuleConnections',canvas.myConfigSet.getPointer().xpathQuery('config/adminModuleConnections/text()'));  
-        this.setAttribute('adminModuleConfiguration',canvas.myConfigSet.getPointer().xpathQuery('config/adminModuleConfiguration/text()'));  
-        this.setAttribute('adminModuleBackup',canvas.myConfigSet.getPointer().xpathQuery('config/adminModuleBackup/text()'));  
-        
-        this.setAttribute('moderatorModuleUser',canvas.myConfigSet.getPointer().xpathQuery('config/moderatorModuleUser/text()'));  
-        this.setAttribute('moderatorModuleRoom',canvas.myConfigSet.getPointer().xpathQuery('config/moderatorModuleRoom/text()'));  
-        
-        this.setAttribute('dashboardModuleStartScreen',canvas.myConfigSet.getPointer().xpathQuery('config/dashboardModuleStartScreen/text()'));  
-        this.setAttribute('dashboardModuleCalendar',canvas.myConfigSet.getPointer().xpathQuery('config/dashboardModuleCalendar/text()'));  
-        
-        this.setAttribute('conferenceModuleRoomList',canvas.myConfigSet.getPointer().xpathQuery('config/conferenceModuleRoomList/text()'));  
-        this.setAttribute('conferenceRoomModule',canvas.myConfigSet.getPointer().xpathQuery('config/conferenceRoomModule/text()'));  
-        
-        this.setAttribute('eventModuleRoomList',canvas.myConfigSet.getPointer().xpathQuery('config/eventModuleRoomList/text()'));  
-        this.setAttribute('eventRoomModule',canvas.myConfigSet.getPointer().xpathQuery('config/eventRoomModule/text()'));  
-        
-        this.setAttribute('restrictedRoomModule',canvas.myConfigSet.getPointer().xpathQuery('config/restrictedRoomModule/text()'));  
-        
-        this.setAttribute('interviewRoomModule',canvas.myConfigSet.getPointer().xpathQuery('config/interviewRoomModule/text()'));  
-        
-        
-        this.setAttribute('userSettingsModule',canvas.myConfigSet.getPointer().xpathQuery('config/userSettingsModule/text()'));  
-        
-        this.setAttribute('recordModule',canvas.myConfigSet.getPointer().xpathQuery('config/recordModule/text()'));  
-        
         this.setAttribute('httpRootKey',canvas.myConfigSet.getPointer().xpathQuery('config/httpRootKey/text()'));  
-
-
-        //mainBaseText.setAttribute('text',canvas.currentappname);
-        //mainBaseText.setShadow();
-        //mainBaseTextLabel.setAttribute('text',canvas.currentappnameurl);
-
 
         var _url = this.getDisplayObject().loaderInfo.url;
         if($debug) Debug.write("_url: ",_url);
-
-        var cleanUrl = _url;
-
-        var hasParams = _url.indexOf("?");
-        if (hasParams != -1) {
-            cleanUrl = _url.substr(0,hasParams-1);
-        }
-
-        if ($debug) Debug.write("_url ",_url,cleanUrl);
-        var doubleSlash = cleanUrl.indexOf("//");
-        var isNotPort80 = cleanUrl.indexOf(":", doubleSlash+2);
-        if ($debug) Debug.write("isNotPort80: ",isNotPort80,doubleSlash);
-        if (isNotPort80!=-1){
-            //Debug.write("isNotPort80: ",doubleSlash+2, _url.indexOf(":", doubleSlash+2)-doubleSlash-2);
-            var server = cleanUrl.substr(doubleSlash+2, _url.indexOf(":", doubleSlash+2)-doubleSlash-2);
-        } else {
-            var server = cleanUrl.substr(doubleSlash+2, _url.indexOf("/", doubleSlash+2)-doubleSlash-2);
-        }
-
-        if ($debug) Debug.write("this zielnr: ",this,server);
-
-        this.setAttribute('rtmphost',server);
-
-        if (this.rtmphostlocal.length==0){
-            this.setAttribute('rtmphostlocal',server);
-        }
-
-        //Check for Invitation
-        var invitationHash = lz.Browser.getInitArg('invitationHash');
-
-        if ($debug) Debug.info("###################### -1 ");
-        if ($debug) Debug.info("invitationHash :: ",invitationHash);
-
-        if (invitationHash != undefined){
-            canvas.isinitRoomDirect = true;
-            canvas.invitationHash = invitationHash;
-        }
-
-        var secureHash = lz.Browser.getInitArg('secureHash');
-        if (secureHash != undefined){
-            canvas.secureRemoteUserLogin = true;
-            canvas.secureHash = secureHash;
-        }
-
-        if ($debug) Debug.info("###################### -2 ");
-
-        //sid=fe9ea55284e0b23991b1c1089b2c8f64&roomid=1
-        var sid = lz.Browser.getInitArg('sid');
-        var initroomid = lz.Browser.getInitArg('roomid');
-        if (sid != undefined && initroomid != undefined){
-            canvas.remoteUserLogin = true;
-            canvas.initroomid = initroomid;
-            canvas.remoteUserSid = sid;
-        }
-
-        var directRoomId = lz.Browser.getInitArg('directRoomId');
-        if (directRoomId != undefined) {
-            canvas.directUserLogin = true;
-            canvas.directRoomId = directRoomId;
-        }
-
-        var language = lz.Browser.getInitArg('language');
-        if (language != undefined) {
-            canvas.language_id = Number(language);
-        }
-
-        //check for reset password
-        var hash = lz.Browser.getInitArg('hash');
-        if (hash!=undefined){
-            canvas.isResetUsername = true;
-            canvas.resetHash = hash;
-        }
-
-        var cuserItem = lz.Browser.getInitArg('cuser');
-        if (cuserItem!=undefined){
-            canvas.cuser = cuserItem;
-
-            //Lookup additional actions
-            var tAccept = lz.Browser.getInitArg('tAccept');
-            if (tAccept != undefined) {
-            	canvas.cuserStatus = tAccept;
-            } else {
-            	canvas.cuserStatus = "none";
-            }
-
-        }
-
-        var moodleRoom = lz.Browser.getInitArg('moodleRoom');
-        var becomemoderator = lz.Browser.getInitArg('becomemoderator');
-
-        if (becomemoderator != undefined) {
-            if (becomemoderator == "2"){
-                canvas.becomemoderator = true;
-            } else {
-                canvas.becomemoderator = false;
-            }
-        }
-
-        if (moodleRoom != undefined){
-            canvas.isMoodleRoom = true;
-
-            var moodleWwwRoot = lz.Browser.getInitArg('wwwroot');
-            var moodleUserId = lz.Browser.getInitArg('user_id');
-            var moodlePicture = lz.Browser.getInitArg('picture');
-
-            if (moodleWwwRoot != undefined) {
-                canvas.moodleWwwRoot = moodleWwwRoot;
-            }
-            if (moodleUserId != undefined) {
-                canvas.moodleUserId = Number(moodleUserId);
-            }
-            if (moodlePicture != undefined) {
-                canvas.moodlePicture = moodlePicture;
-            }
-        }
-
-
-        hib.protocollPort = canvas.rtmpport;
-
-        if (canvas.useSSL) {
-            hib.protocollName = "rtmps";
-            hib.protocollPort = canvas.rtmpsslport;
-        }
-
-        var scopeRoomId = lz.Browser.getInitArg('scopeRoomId');
-        if (scopeRoomId != undefined){
-            hib.userScope = scopeRoomId;
-        }
-
-        //Debug.write("rtmphostlocal,rtmphost: ",canvas.rtmphostlocal,canvas.rtmphost);
-        var src = hib.protocollName+'://'+canvas.rtmphostlocal+':'+hib.protocollPort+'/'+canvas.webAppRootKey+'/'+hib.userScope;
-
-        if($debug) Debug.write("src: ",src);
-
-        canvas.thishib.setAttribute('src',src);
-        //canvas.thishib.loaderVar = new lz.autoLoader(canvas);
-        //canvas.thishib.loaderVar._src.setAttribute('text',src);
-        canvas.thishib.connect();
-
-        if($debug) Debug.write("canvas.currentNC: ",canvas.currentNC);
+        
         ]]>
     </method>
     

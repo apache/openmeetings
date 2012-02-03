@@ -3,6 +3,7 @@
 
     <include href="resetCombobox.lzx" />
     <include href="miniIconsPresenter.lzx" />
+    <include href="labelCheckbox.lzx" />
     
     <include href="text/" />
     <include href="button/" />
