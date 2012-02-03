@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<descr>
-	checkboxを継承したクラスで、表示言語の変更を行っている(?)
-	*updatecheckboxクラスとlabelcheckboxクラスが一つのファイルに記述されています。
-	privateでもなく、相関もありませんので別ファイルにしましょう。
-	*"parent.parent.."がソース中にあり実装依存が強いです。
-</descr>

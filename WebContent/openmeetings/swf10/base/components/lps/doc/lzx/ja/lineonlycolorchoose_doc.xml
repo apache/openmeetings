@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<rlzxdoc>
- <class name="lineonlycolorchoose">
-   <doc>
-	whiteboard → paintの線(draw line)色選択機能。
-   </doc>
- </class>
-</rlzxdoc>

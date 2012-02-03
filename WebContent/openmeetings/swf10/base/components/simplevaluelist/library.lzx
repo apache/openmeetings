@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<library>
-
-	<include href="simpleValueList.lzx" />
-    <include href="recordValueList.lzx" />
-
-</library>

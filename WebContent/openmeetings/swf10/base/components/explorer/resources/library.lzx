@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 
+<resource src="presenter_thumb.swf" name="presenter_thumb_rsc" />
+
 <resource src="explorerbar.png" name="explorer_thumb_rsc" />
 
 <resource src="cancel.png" name="close_explorer_window_new_rsc" />

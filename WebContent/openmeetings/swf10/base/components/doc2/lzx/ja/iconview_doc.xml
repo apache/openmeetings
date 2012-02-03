@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<descr>
-	マウス操作による表示アイコンのリソースを切り替える、汎用コンポーネントクラス。
-	mouseover/onmouseout/onmousedown/onmouseupの各イベントが実装されています。
-	attributeの"enabled"がtrueの時のみ効果があります。
-</descr>

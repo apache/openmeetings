@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<descr>
-	arrayを持つviewの拡張クラス。オブジェクトの新/旧を"holder"に送っているが
-	具体的に何をしているのかは親の実装によるようでわからない。
-	*"parent.parent...."がソース中にあり、実装に依存しすぎている。<simplelayout/>tagは
-	削除してもいいのでは？
-</descr>

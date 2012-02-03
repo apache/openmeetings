@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<rlzxdoc>
- <class name="iconview">
-   <doc>
-   	onmouseover/onmouseout/onmousedown/onmouseupの各操作でリソース画像<br/>
-   	の設定を変えています。
-   </doc>
- </class>
-</rlzxdoc>

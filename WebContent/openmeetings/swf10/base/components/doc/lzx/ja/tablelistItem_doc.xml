@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<rlzxdoc>
- <class name="tablelistItem">
-   <doc>
-   	フォルダ変更を行うためのviewクラス。<br/>
-   	*'parent.parent...'と呼び出し側に依存しているので要変更。
-   </doc>
- </class>
-</rlzxdoc>
