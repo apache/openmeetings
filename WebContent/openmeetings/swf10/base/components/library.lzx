@@ -1,28 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 
-    <include href="iconView.lzx" />
     <include href="resetCombobox.lzx" />
-    <include href="updatecheckbox.lzx" />
-    <include href="tableCombobox.lzx" />
-    <include href="tableListItem.lzx" />
-    <include href="labelRadioButton.lzx" />
-    <include href="labeltabelement.lzx" />
-    
     <include href="miniIconsPresenter.lzx" />
     
     <include href="text/" />
     <include href="button/" />
     <include href="explorer/" /> 
       
-    <!-- 
-    <include href="list/" />
-    <include href="turnoverlist/" />
-    <include href="turnoverlistpaged/" />
-    <include href="calendar/" />
-    <include href="simplevaluelist/" />
-    <include href="upload/" /> 
-    <include href="validbox/" />
-     -->
-
 </library>
