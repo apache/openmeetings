@@ -54,14 +54,16 @@
         //this.getBroadCastId.doCall();
         var t = this;
         canvas.lc.send(canvas.vid_lc_name, "createEditRecordStream", this.syncUpdate, this.isInterview);
-        canvas.videoComp_lc.lc_getBroadCastId = function(chosenSetting,remoteMessage) {
+        canvas.videoComp_lc.lc_getBroadCastId = function(chosenSetting,remoteMessage,cam_default_width,cam_default_height) {
             if ($debug) Debug.write("lc_getBroadCastId",chosenSetting,remoteMessage);
             t.chosenSetting = chosenSetting;
             t.remoteMessage = remoteMessage;
+            t.cam_default_width = cam_default_width;
+            t.cam_default_height = cam_default_height;
             t.getBroadCastId.doCall();
         };
         canvas.videoComp_lc.sendNotification = function(objMessage) {
-            if ($debug) Debug.write("Level sendNotification ",this.isgreater);
+            //if ($debug) Debug.write("Level sendNotification ",this.isgreater);
             t.objMessage = objMessage;
             t.sendMessage.doCall();
         };
@@ -82,8 +84,8 @@
                 
                 if ($debug) Debug.write("parent.setUserAVSettings -1- ",parent.chosenSetting);
                 if ($debug) Debug.write("parent.setUserAVSettings -2- ",parent.remoteMessage);
-                if ($debug) Debug.write("parent.setUserAVSettings -3- ",parent.chosenSetting);
-                if ($debug) Debug.write("parent.setUserAVSettings -4- ",parent.remoteMessage);
+                if ($debug) Debug.write("parent.setUserAVSettings -3- ",parent.cam_default_width);
+                if ($debug) Debug.write("parent.setUserAVSettings -4- ",parent.cam_default_height);
                 
                 parent.setUserAVSettings.doCall();
             ]]>

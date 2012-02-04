@@ -74,7 +74,7 @@
                     this.remoteMessage[0] = 'avsettings';
                     this.remoteMessage[2] = this.chosenSetting; 
                     //this.getBroadCastId.doCall();
-                    canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_getBroadCastId', this.chosenSetting, this.remoteMessage);
+                    canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_getBroadCastId', this.chosenSetting, this.remoteMessage, this.cam_default_width, this.cam_default_height);
                 } else {
                     if (this.doDefaultAnimation) {
                         this._chooseDeviceAnimation.doStart();
@@ -491,8 +491,8 @@
             this.parent.remoteMessage[1] = "0";
             this.parent.remoteMessage[2] = this.parent.chosenSetting;
             //this.parent.getBroadCastId.doCall();
-            if ($debug) Debug.write(canvas.videoComp_lc_name, 'lc_getBroadCastId', this.parent.chosenSetting, this.parent.remoteMessage);
-            canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_getBroadCastId', this.parent.chosenSetting, this.parent.remoteMessage);
+            if ($debug) Debug.write('lc_getBroadCastId', this.parent.chosenSetting, this.parent.remoteMessage, this.parent.cam_default_width, this.parent.cam_default_height);
+            canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_getBroadCastId', this.parent.chosenSetting, this.parent.remoteMessage, this.parent.cam_default_width, this.parent.cam_default_height);
         </handler>
     </simpleLabelButton>
 
@@ -515,8 +515,8 @@
 			this.parent.remoteMessage[1] = "0";
 			this.parent.remoteMessage[2] = this.parent.chosenSetting;
             //this.parent.getBroadCastId.doCall();
-            if ($debug) Debug.write(canvas.videoComp_lc_name, 'lc_getBroadCastId', this.parent.chosenSetting, this.parent.remoteMessage);
-            canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_getBroadCastId', this.parent.chosenSetting, this.parent.remoteMessage);
+            if ($debug) Debug.write('lc_getBroadCastId', this.parent.chosenSetting, this.parent.remoteMessage, this.parent.cam_default_width, this.parent.cam_default_height);
+            canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_getBroadCastId', this.parent.chosenSetting, this.parent.remoteMessage, this.parent.cam_default_width, this.parent.cam_default_height);
         </handler>
     </simpleLabelButton>
 

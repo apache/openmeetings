@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <canvas debug="true" width="100%" height="100%" title="OpenMeetings">
-
+	
     <switch>
         <when property="$as3">
             <passthrough>
@@ -9,6 +9,8 @@
             </passthrough>
         </when>
     </switch>
+    
+    <debug fontsize="11" oninit="Debug.showInternalProperties = true" width="40%" y="50%" x="60%" height="50%" />
 
     <include href="swf10/testVideoObject.lzx" />
 
