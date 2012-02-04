@@ -40,8 +40,9 @@
         canvas.roomTypesInitValues = value;
     </method>
     
-    <method name="reconnectSuccess" args="connection_url">
+    <method name="reconnectSuccess" args="connection_url,publicSID">
         if($debug) Debug.write("reconnectSuccess",connection_url);
+        canvas.publicSID = publicSID;
         canvas.thishib.setAttribute('src',connection_url);
         canvas.thishib.connect();
     </method>

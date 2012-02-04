@@ -20,10 +20,11 @@
 -->
 <library>
 	
-	<!-- new Library -->
+	<!-- new Library
 	<include href="baseVideoView.lzx" />
 	<include href="baseVideoStream.lzx" />
 	<include href="baseVideoStreamDevice.lzx" />
+	 -->
 	<include href="rtmpConnection.lzx" />
 	<include href="sharedObject.lzx" />
     

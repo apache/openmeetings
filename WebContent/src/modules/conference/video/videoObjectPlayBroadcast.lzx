@@ -72,8 +72,7 @@
             this.initW = this.width;
         </handler>
         
-		<view name="r" resource="chatbgitem" width="${parent.width}" 
-            height="${parent.height}" stretches="both" />
+        <view name="r"></view>
 
         <baseVideoStream name="_videostream" bgcolor="black" 
               width="${parent.width}" height="${parent.height}" />

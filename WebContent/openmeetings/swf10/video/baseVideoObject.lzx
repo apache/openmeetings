@@ -115,31 +115,25 @@
 	
 	<handler name="ony">
 		<![CDATA[
-		    if ($debug) Debug.write("ony 1 ");
 		    if (this.isInterview) {
                 return;
             }
-            if ($debug) Debug.write("ony 2 ");
             if (this.custom) {
                 return;
             }
-            if ($debug) Debug.write("ony 3 ");
-			if (canvas.currentRoomObj.hideWhiteboard) {
+			if (canvas.currentRoomObject.hideWhiteboard) {
                 return;
             }
-            if ($debug) Debug.write("ony 4 ");
             var bounds = this.getBounds();
             var parentBounds = canvas.getBounds();
             if ( bounds.y < 0 )
             {
                 this.setAttribute('y',0);
             }
-            if ($debug) Debug.write("ony 5 ");
             if ( bounds.y > ( parentBounds.height - bounds.height ) )
             {           
                 this.setAttribute('y', parentBounds.height - bounds.height );
             }
-            if ($debug) Debug.write("ony 6 ");
         ]]>
     </handler>
 

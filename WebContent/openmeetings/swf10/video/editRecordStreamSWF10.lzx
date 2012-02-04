@@ -98,7 +98,7 @@
     -->
     <method name="clb_getBroadCastId" args="value">
         if ($debug) Debug.write("getBroadCastId",value,canvas.publicSID);
-        this.myvideocontainer = canvas._videoComponent.createVideoObject(canvas.publicSID, true, -1);
+        this.myvideocontainer = canvas._videoComponent.createVideoObject(canvas.publicSID, true, -1, value);
         this.myvideocontainer.setAttribute("visibility","hidden");
     </method>
 

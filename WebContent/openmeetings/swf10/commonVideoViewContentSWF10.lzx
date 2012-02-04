@@ -39,7 +39,7 @@
             client.clearAll = this.clearAll;
             client.removeVideoByUser = this.removeVideoByUser;
             client.muteSound = this.muteSound;
-            client.videoOnMove = this.videoOnMove;
+            // client.videoOnMove = this.videoOnMove; function not in use ?! swagner 04.02.2012
             client.updateMuteStatusVideoView = this.updateMuteStatusVideoView;
             client.ismoderatorChanged = this.ismoderatorChanged;
 
@@ -75,7 +75,7 @@
 				});
 	</method>
 
-    <method name="createVideoObject" args="publicSID,isBroadcasting,interviewPodId">
+    <method name="createVideoObject" args="publicSID,isBroadcasting,interviewPodId,object">
         if($debug) Debug.info("createVideoObject, publicSID: ",publicSID, "isBroadcasting: ", isBroadcasting);
         var vidContainer = getVideoObjectByPublicSID(publicSID);
         if(vidContainer == null) {
@@ -83,34 +83,63 @@
             vidContainer.publicSID = publicSID;
             vidContainer.setAttribute("interviewPodId", interviewPodId);
         }
+        vidContainer.clientVars = object;
         vidContainer.setAttribute('visibility','hidden');
         return vidContainer;
     </method>
 
-    <method name="createVideo" args="publicSID,displayName,broadcastId,avsettings,interviewPodId">
+    <method name="createVideo" args="publicSID,displayName,broadcastId,avsettings,interviewPodId,object">
         <![CDATA[
             if($debug) Debug.info("createVideo, publicSID: ",publicSID,"broadcastId: ",broadcastId,"AVsettings: ",avsettings);
+            if ($debug) Debug.write(" createVideo ALL vars ",object);
             var vidContainer = getVideoObjectByPublicSID(publicSID);
             if(vidContainer == null) {
                 vidContainer = this.getNewVideoObjectByPos(publicSID);
+                vidContainer.clientVars = object;
                 vidContainer.setAttribute('chatpartnername',displayName);
                 if (avsettings=="n"){
-                    //vidContainer.setVideouserProfilePic(object);
+                    vidContainer.setVideouserProfilePic(object);
                 } else if (avsettings=="a"){
-                    //vidContainer.setVideouserProfilePic(object);
+                    vidContainer.setVideouserProfilePic(object);
                     if ($debug) Debug.warn("start play");
                     vidContainer._chatvideoinner._videostream.playStream(broadcastId,-1);
                     vidContainer.setAttribute("visibility","visible");
                 } else {
+                	vidContainer.setDefaultVideoSize(object.VWidth,object.VHeight);
                     vidContainer._chatvideoinner._videostream.playStream(broadcastId,-1);
                     vidContainer.setAttribute("visibility","visible");
                 }
                 //vidContainer.updateAVSettingsSymbol(object);
                 vidContainer.setAttribute("interviewPodId", interviewPodId);
+                
+                vidContainer.updateAVSettingsSymbol(object);
             }
 
         ]]>
     </method>
+    
+    <!--
+    <method name="addClientItem" args="connectedSince,isMod,streamid,username,room_id,formatedDate,position,color,object">
+        <![CDATA[
+            if ($debug) Debug.write("### initializeStreams addClientItem: ",connectedSince,isMod,streamid,username,room_id,formatedDate);
+        
+            if (canvas.publicSID != object.publicSID){
+                
+                
+                var myvideocontainer = this.getNewVideoObjectByPos(object.publicSID);
+                myvideocontainer.clientVars = object;
+                myvideocontainer.setAttribute('chatpartnername',object.firstname+' '+object.lastname);
+                if ($debug) Debug.write("addClientItem avsettings: ",object.avsettings);
+                if (object.avsettings=="n" || object.avsettings=="a"){
+                    myvideocontainer.setVideouserProfilePic(object);
+                }
+                myvideocontainer.updateAVSettingsSymbol(object);
+                
+            }
+
+        ]]>
+    </method>
+     -->
 
     <method name="getVideoObjectByPublicSID" args="publicSID">
     	<![CDATA[
@@ -310,27 +339,17 @@
         } else if (rcl.avsettings=="a"){
             obj.setVideouserProfilePic(rcl);
             obj.setAttribute("visibility","hidden");
-            //TODO: fixme: startStream must be called by rtmp
-            // For some reason the method 'startStream' is not called by rtmp, so workaround here
-            if(rcl.publicSID != canvas.publicSID) {
-                this.startStream(rcl.publicSID, rcl.broadCastID, rcl.firstname, rcl.lastname, rcl.interviewPodId);
-            }
         } else {
             obj.deleteVideoConfProfilePic(null);
-            //TODO: fixme: startStream must be called by rtmp
-            // For some reason the method 'startStream' is not called by rtmp, so workaround here
-            if(rcl.publicSID != canvas.publicSID) {
-                this.startStream(rcl.publicSID, rcl.broadCastID, rcl.firstname, rcl.lastname, rcl.interviewPodId);
-            }
             obj.setAttribute("visibility","visible");
         }
         obj.thisVars = rcl;
         obj.updateAVSettingsSymbol(rcl);
     </method>
 
-    <method name="startStream" args="publicSID,broadcastId,firstname,lastname,interviewPodId">
+    <method name="startStream" args="publicSID,broadcastId,firstname,lastname,interviewPodId,width,height">
         <![CDATA[
-            if ($debug) Debug.write("startStream publicSID: ", publicSID, ", broadcastId: ",broadcastId);
+            if ($debug) Debug.write("startStream: ", publicSID,broadcastId,firstname,lastname,interviewPodId,width,height);
             var obj = this.getVideoObjectByPublicSID(publicSID);
             //if ($debug) Debug.write("startStream obj: ",obj);
             if (obj != null ){
@@ -354,7 +373,11 @@
             }
         ]]>
     </method>
-
+    
+    
+        
+    <!--
+    function not in use ?! swagner 04.02.2012
     <method name="videoOnMove" args="interviewPodId, x, y">
         if($debug) Debug.write("videoOnY: ", interviewPodId, y);
         var obj = getVideoObjectByInterviewPodId(interviewPodId);
@@ -364,6 +387,7 @@
             obj.setAttribute('y', y);
         }
     </method>
+     -->
 
 </class>
 

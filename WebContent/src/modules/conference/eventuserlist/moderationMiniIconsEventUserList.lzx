@@ -104,6 +104,8 @@
             }
         }
         
+        if ($debug) Debug.write("+ STATUS ICONS + ",this.showAvIcons,canvas.isBroadCasting);
+        
         if (this.showAvIcons) {
 	        if (canvas.isBroadCasting) {
 	            this._allowDevice.setAttribute("visibility","hidden");

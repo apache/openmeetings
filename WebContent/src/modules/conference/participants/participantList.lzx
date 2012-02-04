@@ -225,7 +225,7 @@
         <view name="_icon_remote" x="62" y="3" resource="remote_allow_rsc" onclick="" showhandcursor="false">
             <labelTooltip labelid="1084" />
         </view>
-
+    
         <view width="1" height="${ parent.parent.height }" x="80"
             bgcolor="$once{ canvas.basebgcolorizer }" />
         <view name="_icon_remote" x="82" y="3" resource="participants_exclusive_audio_rsc" onclick="" showhandcursor="false">

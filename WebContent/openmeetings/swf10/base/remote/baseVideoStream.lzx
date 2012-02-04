@@ -52,7 +52,10 @@
 	<method name="createStream">
 		if($debug) Debug.write("createStream: 1");
 		var tStream = this._findnc();
-        if($debug) Debug.write("createStream: 2", tStream);
+        if($debug) Debug.write("createStream: 2", tStream,tStream.connected);
+        if (!tStream.connected) {
+        	if ($debug) Debug.warn("NetConnection is not connected");
+        }
 		this._ns = new NetStream(tStream);
 		if($debug) Debug.write("createStream: 3", this._ns);
 		this._ns.client = this;
@@ -80,6 +83,9 @@
     <!--- Find the Flash NetConnection object.
           @keywords private -->
     <method name="_findnc">
+    	if (canvas.currentNC == null) {
+    		if ($debug) Debug.warn("canvas.currentNC is NULL, maybe connection did fail?");
+    	}
         return canvas.currentNC;
     </method>
 
