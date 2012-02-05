@@ -102,8 +102,9 @@ There is no login any more
 				this.parent.parent.close();
 				canvas._hideit.setAttribute('visible',false);
 				canvas._videocontainer.initializeStreams();
-				if(!canvas.isConference)
-				 new lz.editRecordStream(canvas);
+				if(!canvas.isConference) {
+				 canvas._videocontainer._videoviewcontent.showDevicePopUp(false,false);
+				}
 	
 			</handler>
 		</simpleLabelButton>

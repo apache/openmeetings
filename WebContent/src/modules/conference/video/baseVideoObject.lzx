@@ -457,17 +457,11 @@
             <handler name="onclick">
                 parent.parent.resetValues();
                 if(!this.parent.parent.isremote) {
-                    if ($debug) Debug.write("editRecordStream ################# baseVideObject ");
+                    if ($debug) Debug.write("showDevicePopUp ################# baseVideObject ");
                     if (this.parent.parent.isInterview) {
-                        new lz.editRecordStream(parent.parent.parent,{
-                                doDefaultAnimation:false,
-                                align:'center',valign:'middle',
-                                isInterview:true,
-                                myvideocontainer:parent.parent,
-                                isSyncUpdate:true});
+                    	canvas._videocontainer._videoviewcontent.showDevicePopUp(true,true);
                     } else {
-                        new lz.editRecordStream(canvas.main_content._content.inner,{
-                                isSyncUpdate:true});
+                    	canvas._videocontainer._videoviewcontent.showDevicePopUp(true,false);
                     }
                 }
             </handler>

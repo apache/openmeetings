@@ -617,7 +617,7 @@
                 if ($debug) Debug.write("parent.parent.refObj.publicSID: ",parent.parent.refObj.publicSID);
                 var myvideocontainer = canvas._videocontainer.getNewVideoObject(parent.parent.refObj.publicSID);
                 // myvideocontainer.resetValues();
-                new lz.editRecordStream(canvas.main_content._content.inner,{isSyncUpdate:true});
+                canvas._videocontainer._videoviewcontent.showDevicePopUp(true,false);
             </handler>
             <labelTooltip labelid="610" />
         </miniIcons>

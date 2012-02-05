@@ -44,9 +44,8 @@
 	
 	<resource name="lz_recorder_play" src="resources/webstart_play.png" />
 	
-	<include href="editRecordStream.lzx" />
-   
     <!--
+    <include href="editRecordStream.lzx" />
     <include href="videoUserProfilePic.lzx" />
     <include href="remoteUserDetails.lzx" />
     

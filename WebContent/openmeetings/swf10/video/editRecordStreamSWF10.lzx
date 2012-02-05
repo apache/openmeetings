@@ -36,6 +36,9 @@
 
     <attribute name="remoteMessage" value="null" />
 
+    <!---
+        if true the user will see the dialog no matter if he has choosen "do not show again" or not
+     -->
     <attribute name="isSyncUpdate" value="false" type="boolean" />
 
     <attribute name="doDefaultAnimation" value="true" type="boolean" />

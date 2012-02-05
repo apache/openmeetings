@@ -91,7 +91,7 @@
             t._videoPlay.setAttribute("visibility","visible");
             t._videoPlay.setAttribute("publicSID", canvas.publicSID);
         };
-        new lz.editRecordStream(this,{isInterview:true});
+        canvas._videocontainer._videoviewcontent.showDevicePopUp(false,true);
     </method>
 
     <method name="sendConfirmation" args="publicSID">

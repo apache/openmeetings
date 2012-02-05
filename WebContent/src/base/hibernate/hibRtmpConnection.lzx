@@ -976,8 +976,8 @@
                     
                     if (canvas.ismoderator){
                         if (this.parent.modus == "conference"){
-                            if ($debug) Debug.write("############## editRecordStream 3");
-                            new lz.editRecordStream(canvas.main_content._content.inner);
+                            if ($debug) Debug.write("############## showDevicePopUp 3");
+                            canvas._videocontainer._videoviewcontent.showDevicePopUp(false,false);
                         }
                     } else if (value==null){
                         //I think we never can run into this! value is always != null, this is from a previous implementation
@@ -985,25 +985,17 @@
                         //no moderator availible
                         //check if this is conferenceViewmodus
                         if (this.parent.modus == "conference"){
-                            if ($debug) Debug.write("############## editRecordStream 4");
-                            new lz.editRecordStream(canvas.main_content._content.inner);
+                            if ($debug) Debug.write("############## showDevicePopUp 4");
+                            canvas._videocontainer._videoviewcontent.showDevicePopUp(false,false);
                         } else {
                             // in audienceView modus you get no notification
                             // cause you are not able to register your stream
                             // as non moderator
-                            
-                            //FIXME: If there is no Moderator at this point there 
-                            //should be a message to apply for it
-                            //if (!canvas._videocontainer.modLoaded){
-                            //    if ($debug) Debug.write("############## editRecordStream 5");
-                            //    messageAlreadyThrown = true;
-                            //    new lz.errorModeratorPopup(canvas,{error:canvas.getLabelName(498)});
-                            //}                           
                         }       
                     } else {
                         if (this.parent.modus == "conference"){
-                            if ($debug) Debug.write("############## editRecordStream 1a");
-                            new lz.editRecordStream(canvas.main_content._content.inner);
+                            if ($debug) Debug.write("############## showDevicePopUp 1a");
+                            canvas._videocontainer._videoviewcontent.showDevicePopUp(false,false);
                         }
                     }
                     canvas._drawarea.onopenWhiteBoard.sendEvent();
@@ -1028,56 +1020,6 @@
             </handler>
         </netRemoteCallHib>
         
-        <!-- 
-        <netRemoteCallHib name="getCurrentModerator" funcname="getCurrentModerator">
-            <handler name="ondata" args="value">
-                <![CDATA[
-                    //The onResult-Handler will be called be the rtmpconnection
-                    if ($debug) Debug.write("############ getCurrentModerator: ",value);
-                    if (value!=null){
-                        canvas.setAttribute('moderatorationObject',value);
-                        canvas.setAttribute('moderatorStreamID',value.streamid);
-                        canvas.setAttribute('moderatorName',value.firstname+' '+value.lastname);
-                    } else {
-                        canvas.setAttribute('moderatorationObject',null);
-                        canvas.setAttribute('moderatorStreamID',"");
-                        canvas.setAttribute('moderatorName',"");
-                        
-                        new lz.labelerrorPopup(canvas,{errorlabelid:641});
-                    }
-                    
-                    if ($debug) Debug.write("throw event to drawarea: ",canvas.moderatorStreamID,canvas.ismoderator);
-                    if (canvas.ismoderator){
-                        if ($debug) Debug.write("############## editRecordStream 3");
-                        new lz.editRecordStream(canvas.main_content._content.inner);
-                    } else if (value==null){
-                        if ($debug) Debug.write("############   value IS NULL: ",this.parent.modus);
-                        //no moderator availible
-                        //check if this is conferenceViewmodus
-                        if (this.parent.modus == "conference"){
-                            if ($debug) Debug.write("############## editRecordStream 4");
-                            new lz.editRecordStream(canvas.main_content._content.inner);
-                        } else {
-                            // in audienceView modus you get no notification
-                            // cause you are not able to register your stream
-                            // as non moderator
-                            if (!canvas._videocontainer.modLoaded){
-                                if ($debug) Debug.write("############## editRecordStream 5");
-                                new lz.errorModeratorPopup(canvas,{error:canvas.getLabelName(498)});
-                            }                           
-                        }       
-                    } else {
-                        if (this.parent.modus == "conference"){
-                            if ($debug) Debug.write("############## editRecordStream 1a");
-                            new lz.editRecordStream(canvas.main_content._content.inner);
-                        }
-                    }
-                    canvas._drawarea.onopenWhiteBoard.sendEvent();
-                ]]>
-            </handler>  
-        </netRemoteCallHib> 
-         -->
-               
         <netRemoteCallHib name="newStream" funcname="newStream">
             <handler name="ondata" args="value">
                 //The onResult-Handler will be called be the rtmpconnection
@@ -1335,7 +1277,7 @@
                             if (canvas.thishib.modus == "interview") {
                                canvas._drawarea.newInterviewStarting(value);
                             } else {
-                                new lz.editRecordStream(canvas.main_content._content.inner);
+                            	canvas._videocontainer._videoviewcontent.showDevicePopUp(false,false);
                             }
                             
                             canvas.setAttribute("isBroadCasting",true);
@@ -1539,48 +1481,6 @@
             </handler>   
         </netRemoteCallHib>
         
-        <!--
-            @deprecated It is not used anymore
-        
-        <netRemoteCallHib name="setModerator" funcname="setModerator">
-            <netparam name="vars"><method name="getValue">return canvas.streamid;</method></netparam>
-            <handler name="ondata" args="value">
-                <![CDATA[
-                //The onResult-Handler will be called be the rtmpconnection
-                //Debug.write(" onResult setModerator : ",value);                   
-                ]]>
-            </handler>   
-        </netRemoteCallHib>    
-         --> 
-         
-        <!--
-            @deprecated It is not used anymore
-        
-        <netRemoteCallHib name="setNewModerator" funcname="setNewModerator">
-            <netparam name="vars"><method name="getValue">return canvas.streamid;</method></netparam>
-            <handler name="ondata" args="value">
-                <![CDATA[
-                    //The onResult-Handler will be called be the rtmpconnection
-                    //Debug.write("setNewModerator : ",value,value.firstname+' '+value.lastname);
-                    canvas.setAttribute('moderatorationObject',value);
-                    canvas.setAttribute('moderatorStreamID',value.streamid);
-                    canvas.setAttribute('moderatorName',value.firstname+' '+value.lastname);
-                    //in audienceView Modus this requires that the new user will be
-                    //streamed
-                    if (parent.modus == "audience"){
-                        canvas._videocontainer.clearAllVideoRefernces();
-                        if (canvas.ismoderator){
-                            if ($debug) Debug.write("############## editRecordStream 5 setNewModerator ");
-                            new lz.editRecordStream(canvas.main_content._content.inner);
-                        } else {
-                            //Debug.warn("canvas._videocontainer.getClientListScope.doCall");
-                        }
-                    }
-                ]]>
-            </handler>   
-        </netRemoteCallHib> 
-         -->
-         
         <netRemoteCallHib name="setNewModeratorByList" funcname="setNewModeratorByList">
             <handler name="ondata" args="value">
                 <![CDATA[

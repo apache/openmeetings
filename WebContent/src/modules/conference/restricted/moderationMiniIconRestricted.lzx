@@ -280,8 +280,6 @@
             if ($debug) Debug.write("ALLOW: ",parent.parent.parent.refObj.publicSID);
             //var myvideocontainer = canvas._videocontainer.getNewVideoObject(parent.parent.refObj.publicSID);
             //myvideocontainer.resetValues();
-            //new lz.editRecordStream(canvas.main_content._content.inner,{isSyncUpdate:true});
-            
             canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = parent.parent.parent.refObj.publicSID;
             canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
             canvas.thishib.setBroadCastingFlag.doCall(); 
@@ -294,7 +292,6 @@
             if ($debug) Debug.write("ALLOW: ",parent.parent.parent.refObj.publicSID);
             //var myvideocontainer = canvas._videocontainer.getNewVideoObject(parent.parent.refObj.publicSID);
             //myvideocontainer.resetValues();
-            //new lz.editRecordStream(canvas.main_content._content.inner,{isSyncUpdate:true});
             canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = parent.parent.parent.refObj.publicSID;
             canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = false;
             canvas.thishib.setBroadCastingFlag.doCall(); 

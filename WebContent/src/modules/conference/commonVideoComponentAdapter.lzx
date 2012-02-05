@@ -10,22 +10,35 @@
         };
     </handler>
     
+    <!---
+    Show the popup with the possibility to choose the device settings
+    @param isSyncUpdate show the popup also if the user has clicked the "do not show again" chceckbox
+    @param isInterview 
+     -->
+    <method name="showDevicePopUp" args="isSyncUpdate,isInterview">
+        canvas.lc.send(canvas.vid_lc_name, "createEditRecordStream", isSyncUpdate, isInterview);
+    </method>
+    
+    <!---
+        Invoked after the user enters the room to connect the SWF10 app to the server via rtmp(t/s)
+     -->
     <method name="reconnectSuccess">
     	canvas.lc.send(canvas.rtmp_lc_name, "reconnectSuccess", canvas.thishib.src, canvas.publicSID);
     </method>
 
+    
     <handler name="onismoderator" reference="canvas" args="m">
         canvas.lc.send(canvas.vid_lc_name, "ismoderatorChanged", m);
     </handler>
 
-    <!--
+    <!---
         set size of video objects
     -->
     <method name="initVideoContainer" args="offsetLength,videoWidth,videoHeight">
         canvas.lc.send(canvas.vid_lc_name, "initVideoContainer", canvas.publicSID,canvas.firstName,canvas.lastName,offsetLength,videoWidth,videoHeight);
     </method>
 
-    <!--
+    <!---
         Creates video object
     -->
     <method name="createVideo" args="publicSID,displayName,broadcastId,avsettings,interviewPodId,object">
@@ -36,7 +49,7 @@
         canvas.lc.send(canvas.vid_lc_name, "createVideoObject", publicSID, isBroadcasting, interviewPodId,object);
     </method>
 
-    <!--
+    <!---
         invoked whenever a User starts to Stream Video in this Room,
         interviewPodId has only a meaning in the Room Type Interview
      -->
@@ -74,7 +87,8 @@
         canvas.lc.send(canvas.vid_lc_name, "resetAllValues");
     </method>
 
-    <!-- invoked if another client logs into the room
+    <!---
+     invoked if another client logs into the room
     after choosing devices -->
     <method name="setAVSettingsToClient" args="rcl">
         canvas.lc.send(canvas.vid_lc_name, "setAVSettingsToClient", rcl);
@@ -98,13 +112,13 @@
         canvas.lc.send(canvas.vid_lc_name, "muteSound", publicSID);
     </method>
 
-    <!--
+    <!---
         Updates microphone's state of roomClient
     -->
     <method name="updateMuteStatusVideoView" args="roomClient">
         canvas.lc.send(canvas.vid_lc_name, "updateMuteStatusVideoView", roomClient);
     </method>
-
+    
 </class>
 
 </library>

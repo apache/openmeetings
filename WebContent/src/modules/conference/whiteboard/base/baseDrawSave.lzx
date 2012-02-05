@@ -262,8 +262,8 @@
 		} else if (isInitLoader){
 			//check if this is conferenceView or audienceView modus
 			if (canvas.thishib.modus == "conference"){
-				if ($debug) Debug.write("############## editRecordStream 1 xyz");
-				new lz.editRecordStream(canvas.main_content._content.inner);	
+				if ($debug) Debug.write("############## showDevicePopUp 1 xyz");
+				canvas._videocontainer._videoviewcontent.showDevicePopUp(false,false);
 			} else if(canvas.thishib.modus == "audience"){
 				//check in audince modus if this user is the current moderator
 				//this users cannot be the moderator cause he has downloaded
@@ -504,8 +504,8 @@
 		if (this.isInitLoader){
 			//check if this is conferenceView or audienceView modus
 			if (canvas.thishib.modus == "conference"){
-				if ($debug) Debug.write("############## editRecordStream 2 xyz");
-				new lz.editRecordStream(canvas.main_content._content.inner);	
+				if ($debug) Debug.write("############## showDevicePopUp 2 xyz");
+				canvas._videocontainer._videoviewcontent.showDevicePopUp(false,false);
 			} else if(canvas.thishib.modus == "audience"){
 				//check in audince modus if this user is the current moderator
 				//this users cannot be the moderator cause he has downloaded
