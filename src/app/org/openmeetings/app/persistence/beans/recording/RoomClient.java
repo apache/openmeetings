@@ -66,10 +66,13 @@ public class RoomClient implements Serializable {
 	private int vX = 0;
 	@Column(name="vY")
 	private int vY = 0;
+	/**
+	 * StreamPublishName is used in the screen sharing client to publish the stream
+	 */
 	@Column(name="streamPublishName")
 	private String streamPublishName = "";
 	
-	/*
+	/**
 	 * an unique PUBLIC id,
 	 * this ID is needed as people can reconnect and will get a new 
 	 * streamid, but we need to know if this is still the same user
@@ -78,6 +81,9 @@ public class RoomClient implements Serializable {
 	 * the private  Session ID is not written to the RoomClient-Class
 	 * as every instance of the RoomClient is send to all connected users
 	 * 
+	 * publicSID can be empty if a audio/video user is connected but 
+	 * didn't choose any device settings or the connection really just
+	 * has been initialized
 	 */
 	@Column(name="public_sid")
 	private String publicSID = "";
@@ -106,6 +112,17 @@ public class RoomClient implements Serializable {
 	private String formatedDate;
 	@Column(name="isScreenClient")
 	private Boolean isScreenClient = false;
+	/**
+	 * If true this client is only used to stream audio/video events, 
+	 * he should not receive any sync events / push messages 
+	 * 
+	 * null means not initialized yet
+	 * true the user is an audio/video connection
+	 * false the user is a regular user with full session object
+	 * 
+	 */
+	@Column(name="isAVClient")
+	private Boolean isAVClient = null;
 	
 	/*
 	 * the color of the user, only needed in 4x4 Conference, in these rooms each user has its own
@@ -648,6 +665,14 @@ public class RoomClient implements Serializable {
 
 	public void setAllowRecording(Boolean allowRecording) {
 		this.allowRecording = allowRecording;
+	}
+
+	public Boolean getIsAVClient() {
+		return isAVClient;
+	}
+
+	public void setIsAVClient(Boolean isAVClient) {
+		this.isAVClient = isAVClient;
 	}
 	
 	

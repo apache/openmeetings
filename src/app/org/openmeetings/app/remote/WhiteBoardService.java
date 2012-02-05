@@ -229,7 +229,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 
 				if (currentClient.getIsMod()) {
 					RoomClient rcl = this.clientListManager
-							.getClientByPublicSID(publicSID);
+							.getClientByPublicSID(publicSID, false);
 
 					if (rcl != null) {
 						rcl.setCanDraw(canDraw);
@@ -271,7 +271,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 
 				if (currentClient.getIsMod()) {
 					RoomClient rcl = this.clientListManager
-							.getClientByPublicSID(publicSID);
+							.getClientByPublicSID(publicSID, false);
 
 					if (rcl != null) {
 						rcl.setCanShare(canShare);
@@ -313,7 +313,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 
 				if (currentClient.getIsMod()) {
 					RoomClient rcl = this.clientListManager
-							.getClientByPublicSID(publicSID);
+							.getClientByPublicSID(publicSID, false);
 
 					if (rcl != null) {
 						rcl.setCanRemote(canRemote);
@@ -354,7 +354,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			if (authLevelManagement.checkUserLevel(user_level)) {
 				if (currentClient.getIsMod()) {
 					RoomClient rcl = this.clientListManager
-							.getClientByPublicSID(publicSID);
+							.getClientByPublicSID(publicSID, false);
 
 					if (rcl != null) {
 						rcl.setCanGiveAudio(canGiveAudio);

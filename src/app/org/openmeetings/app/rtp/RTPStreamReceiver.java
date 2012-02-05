@@ -101,7 +101,7 @@ public class RTPStreamReceiver implements  ReceiveStreamListener,SessionListener
 		
 		while(iter.hasNext()){
 			String clientSID = iter.next();
-			RoomClient client = clientListManager.getClientByPublicSID(clientSID);
+			RoomClient client = clientListManager.getClientByPublicSID(clientSID, false);
 			
 			log.debug("Adding Target for room " +session.getRoom().getRooms_id() + " : " + client.getUserip() + "/" + viewers.get(clientSID));
 			

@@ -1548,7 +1548,7 @@ public class UserService {
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
 				RoomClient rcl = this.clientListManager
-						.getClientByPublicSID(publicSID);
+						.getClientByPublicSID(publicSID, false);
 
 				if (rcl == null) {
 					return true;

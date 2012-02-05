@@ -103,13 +103,14 @@
         <handler name="ondata" args="value">
             <![CDATA[
                 if ($debug) Debug.write("getBroadCastId",value,canvas.publicSID);
-
                 parent.myvideocontainer = canvas._videoComponent.createVideoObject(canvas.publicSID, true, -1, value);
 
                 if ($debug) Debug.write("parent.setUserAVSettings -1- ",parent.chosenSetting);
                 if ($debug) Debug.write("parent.setUserAVSettings -2- ",parent.remoteMessage);
                 if ($debug) Debug.write("parent.setUserAVSettings -3- ",parent.cam_default_width);
                 if ($debug) Debug.write("parent.setUserAVSettings -4- ",parent.cam_default_height);
+                if ($debug) Debug.write("parent.setUserAVSettings -5- ",canvas.currentRoomObject.rooms_id);
+                if ($debug) Debug.write("parent.setUserAVSettings -6- ",canvas.publicSID);
                 
                 parent.setUserAVSettings.doCall();
             ]]>
@@ -122,12 +123,13 @@
         <netparam><method name="getValue">return parent.parent.remoteMessage;</method></netparam>
         <netparam><method name="getValue">return parent.parent.cam_default_width;</method></netparam>
         <netparam><method name="getValue">return parent.parent.cam_default_height;</method></netparam>
+        <netparam><method name="getValue">return parent.parent.cam_default_height;</method></netparam>
+        <netparam><method name="getValue">return canvas.publicSID;</method></netparam>
         <handler name="ondata" args="value">
             <![CDATA[
                 if ($debug) Debug.write("setUserAVSettings",value);
                 parent.currentClient = value;
                 parent.doninitalize();
-                //canvas.videoComp_lc.send(canvas.videoComp_lc_callback_name, 'clb_setUserAVSettings', value);
             ]]>
         </handler>   
     </netRemoteCallHib>  

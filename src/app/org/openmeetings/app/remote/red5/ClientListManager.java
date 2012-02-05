@@ -40,6 +40,38 @@ public class ClientListManager {
 
 	@Autowired
 	private ManageCryptStyle manageCryptStyle;
+	
+	/**
+	 * Get current clients and extends the room client with its potential 
+	 * audio/video client and settings
+	 * 
+	 * @param room_id
+	 * @return
+	 */
+	public HashMap<String, RoomClient> getRoomClients(Long room_id) {
+		try {
+
+			HashMap<String, RoomClient> roomClientList = new HashMap<String, RoomClient>();
+			HashMap<String, RoomClient> clientListRoom = this.getClientListByRoom(room_id);
+			for (Iterator<String> iter = clientListRoom.keySet().iterator(); iter
+					.hasNext();) {
+				String key = iter.next();
+				RoomClient rcl = this.getClientByStreamId(key);
+				
+				if (rcl.getIsAVClient() == null || rcl.getIsAVClient()) {
+					continue;
+				}
+				
+				// Add user to List
+				roomClientList.put(key, rcl);
+			}
+
+			return roomClientList;
+		} catch (Exception err) {
+			log.error("[getRoomClients]", err);
+		}
+		return null;
+	}
 
 	public synchronized RoomClient addClientListItem(String streamId,
 			String scopeName, Integer remotePort, String remoteAddress,
@@ -129,14 +161,20 @@ public class ClientListManager {
 	}
 
 
-	public synchronized RoomClient getClientByPublicSID(String publicSID) {
+	public synchronized RoomClient getClientByPublicSID(String publicSID, Boolean isAVClient) {
 		try {
 			for (Iterator<String> iter = clientList.keySet().iterator(); iter
 					.hasNext();) {
 				RoomClient rcl = clientList.get(iter.next());
-				if (rcl.getPublicSID().equals(publicSID)) {
-					return rcl;
+				
+				if (!rcl.getPublicSID().equals(publicSID)) {
+					continue;
 				}
+				if (rcl.getIsAVClient() == null || rcl.getIsAVClient() != isAVClient) {
+					continue;
+				}
+				
+				return rcl;
 			}
 		} catch (Exception err) {
 			log.error("[getClientByPublicSID]", err);
@@ -155,6 +193,40 @@ public class ClientListManager {
 			}
 		} catch (Exception err) {
 			log.error("[getClientByPublicSID]", err);
+		}
+		return null;
+	}
+	
+	/**
+	 * Update the session object of the audio/video-connection and additionally swap the 
+	 * values to the session object of the user that holds the full session object
+	 * @param streamId
+	 * @param rcm
+	 * @return
+	 */
+	public synchronized Boolean updateAVClientByStreamId(String streamId,
+			RoomClient rcm) {
+		try {
+			
+			//get the corresponding user session object and update the settings
+			RoomClient rclUsual = getClientByPublicSID(rcm.getPublicSID(), false);
+			if (rclUsual != null) {
+				rclUsual.setBroadCastID(rcm.getBroadCastID());
+				rclUsual.setAvsettings(rcm.getAvsettings());
+				rclUsual.setVHeight(rcm.getVHeight());
+				rclUsual.setVWidth(rcm.getVWidth());
+				rclUsual.setVX(rcm.getVX());
+				rclUsual.setVY(rcm.getVY());
+				if (clientList.containsKey(rclUsual.getStreamid())) {
+					clientList.put(rclUsual.getStreamid(), rclUsual);
+				} else {
+					 log.debug("Tried to update a non existing Client " + rclUsual.getStreamid());
+				}
+			}
+			
+			updateClientByStreamId(streamId, rcm);
+		} catch (Exception err) {
+			log.error("[updateAVClientByStreamId]", err);
 		}
 		return null;
 	}
@@ -207,23 +279,33 @@ public class ClientListManager {
 			for (Iterator<String> iter = clientList.keySet().iterator(); iter
 					.hasNext();) {
 				String key = iter.next();
-				// log.debug("getClientList key: "+key);
 				RoomClient rcl = clientList.get(key);
-				// same room, same domain
-				if (room_id != null && room_id.equals(rcl.getRoom_id())) {
-					if (rcl.getIsScreenClient() != null
-							&& rcl.getIsScreenClient()) {
-						// continue
-					} else {
-						roomClientList.put(key, rcl);
-					}
+				
+				// client initialized and same room
+				if (rcl.getRoom_id() == null || !room_id.equals(rcl.getRoom_id())) {
+					continue;
 				}
+				if (rcl.getIsScreenClient() == null ||
+						rcl.getIsScreenClient()) {
+					continue;
+				}
+				if (rcl.getIsAVClient() == null || 
+						rcl.getIsAVClient()) {
+					continue;
+				}
+					
+				//Only parse really those users out that are really a full session object 
+				//and no pseudo session object like the audio/video or screen sharing connection 
+				roomClientList.put(key, rcl);
+					
 			}
 		} catch (Exception err) {
 			log.error("[getClientListByRoom]", err);
 		}
 		return roomClientList;
 	}
+	
+	
 
 	// FIXME seems to be copy/pasted with previous one
 	public synchronized HashMap<String, RoomClient> getClientListByRoomAll(

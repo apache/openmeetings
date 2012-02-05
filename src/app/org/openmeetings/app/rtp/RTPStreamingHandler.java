@@ -143,7 +143,7 @@ public class RTPStreamingHandler {
 		// Should be retrieved via Clientlist to receive the "extern" IP, seen
 		// by red5
 		RoomClient rcl = clientListManager.getClientByPublicSID(
-				publicSID);
+				publicSID, false);
 
 		if (rcl == null)
 			throw new Exception("Could not retrieve RoomClient for publicSID");

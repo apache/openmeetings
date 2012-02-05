@@ -239,7 +239,7 @@ public class ScreenServlet extends HttpServlet {
 				boolean userIsInRoom = false;
 				boolean doProcess = false;
 
-				RoomClient rcl = getClientListManager().getClientByPublicSID(publicSID);
+				RoomClient rcl = getClientListManager().getClientByPublicSID(publicSID, false);
 				if (rcl != null) {
 					log.debug("found RoomClient");
 					if (rcl.getRoom_id() != null
@@ -452,7 +452,7 @@ public class ScreenServlet extends HttpServlet {
 				boolean doProcess = false;
 
 				OutputStream out = httpServletResponse.getOutputStream();
-				RoomClient rcl = getClientListManager().getClientByPublicSID(publicSID);
+				RoomClient rcl = getClientListManager().getClientByPublicSID(publicSID, false);
 				if (rcl != null) {
 					log.debug("found RoomClient");
 					if (rcl.getRoom_id() != null

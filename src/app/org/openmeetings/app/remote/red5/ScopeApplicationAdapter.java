@@ -402,7 +402,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 
 				RoomClient currentScreenUser = this.clientListManager
 						.getClientByPublicSID(currentClient
-								.getStreamPublishName());
+								.getStreamPublishName(), false);
 
 				currentClient.setFirstname(currentScreenUser.getFirstname());
 				currentClient.setLastname(currentScreenUser.getLastname());
@@ -685,14 +685,13 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	@Override
 	public synchronized void streamPublishStart(IBroadcastStream stream) {
 		try {
-
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
 			RoomClient currentClient = this.clientListManager
 					.getClientByStreamId(streamid);
 
 			// Notify all the clients that the stream had been started
-			log.debug("start streamPublishStart broadcast start: "
+			System.out.println("start streamPublishStart broadcast start: "
 					+ stream.getPublishedName() + "CONN " + current);
 
 			// In case its a screen sharing we start a new Video for that
@@ -702,71 +701,66 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 
 				this.clientListManager.updateClientByStreamId(current
 						.getClient().getId(), currentClient);
-
 			}
+			//If its an audio/video client then send the session object with the full 
+			//data to everybody
+			else if (currentClient.getIsAVClient() != null && currentClient.getIsAVClient()) {
+				currentClient = this.clientListManager.getClientByPublicSID(
+											currentClient.getPublicSID(), false);
+			}
+			
+			System.out.println("newStream SEND");
 
 			// Notify all users of the same Scope
-			// We need to iterate through the streams to cathc if anybody is
-			// recording
+			// We need to iterate through the streams to catch if anybody is recording
 			Collection<Set<IConnection>> conCollection = current.getScope()
 					.getConnections();
 			for (Set<IConnection> conset : conCollection) {
 				for (IConnection conn : conset) {
 					if (conn != null) {
 						if (conn instanceof IServiceCapableConnection) {
-							if (conn.equals(current)) {
-								RoomClient rcl = this.clientListManager
-										.getClientByStreamId(conn.getClient()
-												.getId());
-								if (rcl == null) {
-									// continue;
-								} else if (rcl.getIsRecording()) {
-									// StreamService.addRecordingByStreamId(current,
-									// streamid, currentClient,
-									// rcl.getFlvRecordingId());
-
-									this.flvRecorderService
-											.addRecordingByStreamId(current,
-													streamid, currentClient,
-													rcl.getFlvRecordingId());
-
-								}
+							
+							RoomClient rcl = this.clientListManager
+									.getClientByStreamId(conn.getClient()
+											.getId());
+							
+							if (rcl == null) {
+								System.out.println("RCL IS NULL newStream SEND");
 								continue;
-							} else {
-								RoomClient rcl = this.clientListManager
-										.getClientByStreamId(conn.getClient()
-												.getId());
-								// log.debug("is this users still alive? :"+rcl);
-								// Check if the Client is in the same room and
-								// same domain
-								if (rcl == null) {
-									// continue;
-								} else {
-									IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
-									// log.info("IServiceCapableConnection ID "
-									// + iStream.getClient().getId());
-									if (rcl.getIsScreenClient() != null
-											&& rcl.getIsScreenClient()) {
-										// continue;
-									} else {
-										iStream.invoke("newStream",
-												new Object[] { currentClient },
-												this);
-									}
-
-									if (rcl.getIsRecording()) {
-										// StreamService.addRecordingByStreamId(current,
-										// streamid, currentClient,
-										// rcl.getFlvRecordingId());
-										this.flvRecorderService
-												.addRecordingByStreamId(
-														current, streamid,
-														currentClient,
-														rcl.getFlvRecordingId());
-
-									}
-								}
 							}
+							if (rcl.getPublicSID() == "") {
+								System.out.println("publicSID IS NULL newStream SEND");
+								continue;
+							}
+							if (rcl.getIsAVClient() == null || rcl.getIsAVClient()) {
+								System.out.println("RCL getIsAVClient newStream SEND");
+								continue;
+							}
+							if (rcl.getIsScreenClient() == null || rcl.getIsScreenClient()) {
+								System.out.println("RCL getIsScreenClient newStream SEND");
+								continue;
+							}
+
+							if (rcl.getIsRecording()) {
+								System.out.println("RCL getIsRecording newStream SEND");
+								this.flvRecorderService
+										.addRecordingByStreamId(current,
+												streamid, currentClient,
+												rcl.getFlvRecordingId());
+							}
+							
+							if (rcl.getPublicSID().equals(currentClient.getPublicSID())) {
+								System.out.println("RCL publicSID is equal newStream SEND");
+								continue;
+							}
+							
+							System.out.println("RCL SEND is equal newStream SEND "+rcl.getPublicSID()+" || "+rcl.getUserport());
+								
+							IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
+							iStream.invoke("newStream",
+									new Object[] { currentClient },
+									this);
+
 						}
 					}
 				}
@@ -924,7 +918,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			// String streamid = current.getClient().getId();
 
 			RoomClient currentClient = this.clientListManager
-					.getClientByPublicSID(publicSID);
+					.getClientByPublicSID(publicSID, false);
 
 			if (currentClient == null) {
 				return -1L;
@@ -1017,7 +1011,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			// String streamid = current.getClient().getId();
 
 			RoomClient currentClient = this.clientListManager
-					.getClientByPublicSID(publicSID);
+					.getClientByPublicSID(publicSID, false);
 
 			if (currentClient == null) {
 				return -1L;
@@ -1076,7 +1070,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			// String streamid = current.getClient().getId();
 
             RoomClient currentClient = this.clientListManager
-					.getClientByPublicSID(publicSID);
+					.getClientByPublicSID(publicSID, false);
 
 			if (currentClient == null) {
 				return -1L;
@@ -1132,7 +1126,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			// String streamid = current.getClient().getId();
 
 			RoomClient currentClient = this.clientListManager
-					.getClientByPublicSID(publicSID);
+					.getClientByPublicSID(publicSID, false);
 
 			if (currentClient == null) {
 				return -1L;
@@ -1187,7 +1181,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			log.debug("*..*switchMicMuted publicSID: " + publicSID);
 
 			RoomClient currentClient = this.clientListManager
-					.getClientByPublicSID(publicSID);
+					.getClientByPublicSID(publicSID, false);
 			if (currentClient == null) {
 				return -1L;
 			}
@@ -1209,7 +1203,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 
     public synchronized Boolean getMicMutedByPublicSID(String publicSID) {
         try {
-			RoomClient currentClient = this.clientListManager.getClientByPublicSID(publicSID);
+			RoomClient currentClient = this.clientListManager.getClientByPublicSID(publicSID, false);
 			if (currentClient == null) {
 				return true;
 			}
@@ -1240,7 +1234,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		try {
 
 			RoomClient currentClient = this.clientListManager
-					.getClientByPublicSID(publicSID);
+					.getClientByPublicSID(publicSID, false);
 
 			List<RoomClient> currentModList = this.clientListManager
 					.getCurrentModeratorByRoom(currentClient.getRoom_id());
@@ -1299,7 +1293,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	 * @return
 	 */
 	public synchronized RoomClient setUserAVSettings(String avsettings,
-			Object newMessage, Integer vWidth, Integer vHeight) {
+			Object newMessage, Integer vWidth, Integer vHeight, 
+			long room_id, String publicSID) {
 		try {
 
 			IConnection current = Red5.getConnectionLocal();
@@ -1307,10 +1302,13 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			RoomClient currentClient = this.clientListManager
 					.getClientByStreamId(streamid);
 			currentClient.setAvsettings(avsettings);
+			currentClient.setRoom_id(room_id);
+			currentClient.setPublicSID(publicSID);
+			currentClient.setIsAVClient(true);
 			currentClient.setVWidth(vWidth);
 			currentClient.setVHeight(vHeight);
 			// Long room_id = currentClient.getRoom_id();
-			this.clientListManager.updateClientByStreamId(streamid,
+			this.clientListManager.updateAVClientByStreamId(streamid,
 					currentClient);
 
 			HashMap<String, Object> hsm = new HashMap<String, Object>();
@@ -1437,6 +1435,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			RoomClient currentClient = this.clientListManager
 					.getClientByStreamId(streamid);
 			currentClient.setRoom_id(room_id);
+			currentClient.setIsAVClient(false);
 			currentClient.setRoomEnter(new Date());
 			currentClient.setOrganization_id(organization_id);
 
@@ -1476,7 +1475,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 															// number
 
 			// Check for Moderation LogicalRoom ENTER
-			HashMap<String, RoomClient> clientListRoom = this
+			HashMap<String, RoomClient> clientListRoom = this.clientListManager
 					.getRoomClients(room_id);
 
 			// appointed meeting or moderated Room? => Check Max Users first
@@ -1702,34 +1701,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			return roomStatus;
 		} catch (Exception err) {
 			log.error("[setRoomValues]", err);
-		}
-		return null;
-	}
-
-	/**
-	 * Get current clients
-	 * 
-	 * @param room_id
-	 * @return
-	 */
-	private HashMap<String, RoomClient> getRoomClients(Long room_id) {
-		try {
-
-			HashMap<String, RoomClient> roomClientList = new HashMap<String, RoomClient>();
-			HashMap<String, RoomClient> clientListRoom = this.clientListManager
-					.getClientListByRoom(room_id);
-			for (Iterator<String> iter = clientListRoom.keySet().iterator(); iter
-					.hasNext();) {
-				String key = iter.next();
-				RoomClient rcl = this.clientListManager
-						.getClientByStreamId(key);
-				// Add user to List
-				roomClientList.put(key, rcl);
-			}
-
-			return roomClientList;
-		} catch (Exception err) {
-			log.error("[getRoomClients]", err);
 		}
 		return null;
 	}
@@ -2469,7 +2440,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 
 			// Get Room Id to send it to the correct Scope
 			RoomClient currentClient = this.clientListManager
-					.getClientByPublicSID(publicSID);
+					.getClientByPublicSID(publicSID, false);
 
 			if (currentClient == null) {
 				return;
@@ -2564,7 +2535,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 
 			// Get Room Id to send it to the correct Scope
 			RoomClient currentClient = this.clientListManager
-					.getClientByPublicSID(publicSID);
+					.getClientByPublicSID(publicSID, false);
 
 			if (currentClient == null) {
 				return;
@@ -2783,7 +2754,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 
 			// Get Room Id to send it to the correct Scope
 			RoomClient currentClient = this.clientListManager
-					.getClientByPublicSID(publicSID);
+					.getClientByPublicSID(publicSID, false);
 
 			if (currentClient == null) {
 				return;
@@ -2860,7 +2831,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 
 			// Get Room Id to send it to the correct Scope
 			RoomClient currentClient = this.clientListManager
-					.getClientByPublicSID(publicSID);
+					.getClientByPublicSID(publicSID, false);
 
 			if (currentClient == null) {
 				throw new Exception(
@@ -2933,7 +2904,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 
 			// Get Room Id to send it to the correct Scope
 			RoomClient currentClient = this.clientListManager
-					.getClientByPublicSID(publicSID);
+					.getClientByPublicSID(publicSID, false);
 
 			if (currentClient == null) {
 				currentClient = this.clientListManager

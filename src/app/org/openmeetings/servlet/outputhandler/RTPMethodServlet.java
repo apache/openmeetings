@@ -270,7 +270,7 @@ public class RTPMethodServlet extends HttpServlet {
 			// also the HOST, PORT must be set correctly in the
 			// RTPScreenSharingSession-Object
 			RoomClient rcl = getClientListManager().getClientByPublicSID(
-					publicSID);
+					publicSID, false);
 
 			HashMap<String, Integer> viewers = session.getViewers();
 

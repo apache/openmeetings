@@ -19,7 +19,7 @@
   
   <handler name="oninit">
      <![CDATA[
-        if ($debug) Debug.write("Init videoObjectPlayBroadcast ",this.name);
+        if ($debug) Debug.write("Init videoObjectPlayBroadcast ",this.isremote,this.clientVars);
         //Display widget defined in mother class
         this._loudness.bringToFront();
         this._resizeview.bringToFront();

@@ -69,6 +69,10 @@
         this.getRoomModeratorsByRoomId.doCall();
     </method>
     
+    <!---
+        Returns a list of all moderators of the current room and parses 
+        if the current user should receive the supermoderator flag or not
+     -->
     <netRemoteCallHib name="getRoomModeratorsByRoomId" funcname="conferenceservice.getRoomModeratorsByRoomId" 
                       remotecontext="$once{ canvas.thishib }" >  
         <netparam><method name="getValue">return canvas.sessionId;</method></netparam>    
@@ -117,6 +121,9 @@
         </handler>
     </netRemoteCallHib>     
 
+    <!---
+        Returns a list of all users currently in the conference room
+     -->
     <netRemoteCallHib name="setRoomValues" funcname="setRoomValues" remotecontext="$once{ canvas.thishib }" >   
         <attribute name="applyDefaultModeration" value="false" type="boolean" />
         <attribute name="organisation_id" value="0" type="number" />
@@ -161,81 +168,14 @@
         </handler>  
     </netRemoteCallHib>
 
-    <!-- invoked if another client logs into the room 
-    after choosing devices -->     
+    <!---
+        invoked if another client logs into the room 
+        after choosing devices
+     -->     
     <method name="setAVSettingsToClient" args="rcl">
-        if ($debug) Debug.write("setAVSettingsToClient ",rcl.publicSID,rcl);
-        var obj = this.getVideoObjectByPublicSID(rcl.publicSID);
-        if ($debug) Debug.write("setAVSettingsToClient: ",obj,rcl.avsettings);
-        if (obj == null) {
-            if ($debug) Debug.warn("Could Not Find Instance setAVSettingsToClient ",rcl.publicSID);
-            return;
-        }
-        if (rcl.avsettings=="n"){
-            obj.setAttribute("visibility","hidden");
-            obj.setVideouserProfilePic(rcl);
-        } else if (rcl.avsettings=="a"){
-            obj.setVideouserProfilePic(rcl);
-            obj.setAttribute("visibility","hidden");
-        } else {
-            obj.deleteVideoConfProfilePic();
-            obj.setAttribute("visibility","visible");
-        }
-        obj.clientVars = rcl;
-        obj.updateAVSettingsSymbol(rcl);
+        this._videoviewcontent.setAVSettingsToClient(rcl);
     </method> 
     
-
-    <!--- get a baseVideoObject by a Users publicSID
-        @param string publicSID publicSID
-     -->
-    <method name="getVideoObjectByPublicSID" args="publicSID">
-        <![CDATA[
-        	if(canvas.currentRoomObj.hideWhiteboard){
-        		var videoContainer = canvas.currentBaseConferenceRoom._videoviewcontent_hideWhiteboard._inn;
-	            
-	            for (var i=0;i<videoContainer.subviews.length;i++){
-	                //if ($debug) Debug.write("getVideoObjectByBroadCastId2 broadcastId VIEW: ",this._videoviewcontent.subviews[i].broadcastId);
-	                //if ($debug) Debug.write("getVideoObjectByBroadCastId3 broadcastId SEARCH: ",broadcastId);
-	                //if ($debug) Debug.write("getVideoObjectByBroadCastId4 obj: ",this._videoviewcontent.subviews[i]);
-	                //if ($debug) Debug.write("getVideoObjectByBroadCastId5 streamid,user_id: ",this._videoviewcontent.subviews[i].clientVars.streamid,this._videoviewcontent.subviews[i].clientVars.user_id);
-	                if (videoContainer.subviews[i].publicSID==publicSID){
-	                    return videoContainer.subviews[i];
-	                }
-	            }
-	            
-	            if ($debug) Debug.warn(" - getVideoObjectByPublicSID - DID NOT FIND THE USER BY ",publicSID);
-	            
-	            return null;
-        	}else{
-	            //if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ",publicSID,parent.parent);
-	            
-	            //for (var i=0;i<this._videoviewcontent.subviews.length;i++){
-	            //  if ($debug) Debug.write("getVideoObjectByBroadCastId6 broadcastId: ",this._videoviewcontent.subviews[i].broadcastId);
-	            //  if ($debug) Debug.write("getVideoObjectByBroadCastId7 streamid,user_id: ",this._videoviewcontent.subviews[i].clientVars.streamid,this._videoviewcontent.subviews[i].clientVars.user_id);
-	            //}
-	            var videoContainer = this._videoviewcontent;
-	            if (this.userNewVideoContainer) {
-	                videoContainer = parent.parent._videoviewcontent;
-	            }
-	            
-	            for (var i=0;i<videoContainer.subviews.length;i++){
-	                //if ($debug) Debug.write("getVideoObjectByBroadCastId2 broadcastId VIEW: ",this._videoviewcontent.subviews[i].broadcastId);
-	                //if ($debug) Debug.write("getVideoObjectByBroadCastId3 broadcastId SEARCH: ",broadcastId);
-	                //if ($debug) Debug.write("getVideoObjectByBroadCastId4 obj: ",this._videoviewcontent.subviews[i]);
-	                //if ($debug) Debug.write("getVideoObjectByBroadCastId5 streamid,user_id: ",this._videoviewcontent.subviews[i].clientVars.streamid,this._videoviewcontent.subviews[i].clientVars.user_id);
-	                if (videoContainer.subviews[i].publicSID==publicSID){
-	                    return videoContainer.subviews[i];
-	                }
-	            }
-	            
-	            if ($debug) Debug.warn(" - getVideoObjectByPublicSID - DID NOT FIND THE USER BY ",publicSID);
-	            
-	            return null;
-        	}
-        ]]>
-    </method>           
-
     <method name="addItem" args="connectedSince,isMod,streamid,username,userroom,formatedDate,position,color,object">
         <![CDATA[
             if ($debug) Debug.write("initializeStreams addItem: ",connectedSince,object);

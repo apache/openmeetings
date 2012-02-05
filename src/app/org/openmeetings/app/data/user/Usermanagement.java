@@ -1675,7 +1675,7 @@ public class Usermanagement {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
 
 				RoomClient rcl = clientListManager
-						.getClientByPublicSID(publicSID);
+						.getClientByPublicSID(publicSID, false);
 
 				if (rcl == null) {
 					return true;
