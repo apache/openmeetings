@@ -114,11 +114,11 @@ public class RoomClient implements Serializable {
 	private Boolean isScreenClient = false;
 	/**
 	 * If true this client is only used to stream audio/video events, 
-	 * he should not receive any sync events / push messages 
-	 * 
-	 * null means not initialized yet
-	 * true the user is an audio/video connection
-	 * false the user is a regular user with full session object
+	 * he should not receive any sync events / push messages <br/>
+	 * <br/>
+	 * null means not initialized yet<br/>
+	 * true the user is an audio/video connection<br/>
+	 * false the user is a regular user with full session object<br/>
 	 * 
 	 */
 	@Column(name="isAVClient")
@@ -667,6 +667,10 @@ public class RoomClient implements Serializable {
 		this.allowRecording = allowRecording;
 	}
 
+	/**
+	 * @see RoomClient#isAVClient
+	 * @return
+	 */
 	public Boolean getIsAVClient() {
 		return isAVClient;
 	}
