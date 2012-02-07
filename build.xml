@@ -211,7 +211,6 @@
 
 		<chmod dir="${dist.dir}/red5" perm="755" includes="**/*.sh" />
 		<chmod dir="${dist.webapps.dir}/screen" perm="755" includes="**/*.sh" />
-		<chmod dir="${dist.webapps.dir}/jod" perm="755" includes="**/*.sh" />
 
 		<copy todir="${dist.webapps.dir}/WEB-INF/lib">
 			<fileset dir="${axis2.lib}">
