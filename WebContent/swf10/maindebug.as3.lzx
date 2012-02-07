@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<canvas debug="false" width="100%" height="100%" title="OpenMeetings">
-
+<canvas debug="true" width="100%" height="100%" title="OpenMeetings">
+	
     <switch>
         <when property="$as3">
             <passthrough>
@@ -9,8 +9,10 @@
             </passthrough>
         </when>
     </switch>
+    
+    <debug fontsize="11" oninit="Debug.showInternalProperties = true" width="40%" y="50%" x="60%" height="50%" />
 
-    <include href="swf10/testVideoObject.lzx" />
+    <include href="testVideoObject.lzx" />
 
     <silverstyle name="componentStyle" basecolor="0xFFFFFF" textcolor="0x000000" />
 
@@ -30,17 +32,17 @@
 
     <attribute name="videoComp_lc" />
 
-    <include href="swf10/base/" />
+    <include href="base/" />
 
-    <include href="swf10/video/" />
+    <include href="video/" />
 
-    <include href="swf10/commonVideoViewContentSWF10.lzx" />
+    <include href="commonVideoViewContentSWF10.lzx" />
 
-    <include href="swf10/hibAdapter.lzx" />
+    <include href="hibAdapter.lzx" />
 
-    <include href="swf10/miniIcons.lzx" />
+    <include href="miniIcons.lzx" />
 
-    <include href="swf10/dragHelper.lzx" />
+    <include href="dragHelper.lzx" />
 
     <view name="mainComponent" width="${canvas.width}" height="${canvas.height}">
         <text id="mainBaseText"> </text>
@@ -63,7 +65,7 @@
         videoComp_lc_cback.connect(this.videoComp_lc_callback_name);
         this.setAttribute('videoComp_lc',videoComp_lc_cback);
 
-        var request:URLRequest = new URLRequest("main.swf8.swf?lzproxied=solo&lcSID="+canvas.lc_SID);
+        var request:URLRequest = new URLRequest("maindebug.swf8.swf?lzproxied=solo&lcSID="+canvas.lc_SID);
         var loader:Loader = new Loader();
         loader.load(request);
         this.mainComponent.sprite.addChild(loader);
@@ -74,30 +76,5 @@
     ]]></handler>
 
     <view name="inner"></view>
-
-    <!--<commonVideoViewContent name="_videoComponent"/>-->
-    <!--<hibAdapter/>-->
-
-    <!--<view x="${canvas.width/2}" width="100" height="20" bgcolor="0xFF0000" opacity="0.5">-->
-        <!--<passthrough when="$as3">-->
-            <!--import flash.net.*;-->
-            <!--import flash.display.*;-->
-        <!--</passthrough>-->
-        <!--<text>Test SWF10</text>-->
-        <!--<handler name="onclick">-->
-            <!--var dragHelper = new lz.view(canvas, {name:'dragHelper',width:canvas.width,height:canvas.height,x:'0',y:'0',bgcolor:'0xAAAAFF', opacity:0.5});-->
-            <!--dragHelper.bringToFront();-->
-        <!--</handler>-->
-    <!--</view>-->
-
-
-
-    <!--<view name="debug" width="800" height="300" onmousedown="dragger.setAttribute('applied', true)" onmouseup="dragger.setAttribute('applied', false)" bgcolor="0x555555">-->
-        <!--<dragstate name="dragger"/>-->
-        <!--<text name="console" multiline="true" y="20" bgcolor="0xAAAAAA" width="100%"></text>-->
-        <!--<method name="write" args="text">-->
-            <!--this.console.setAttribute('text', this.console.getText() + '\n' + text);-->
-        <!--</method>-->
-    <!--</view>-->
 
 </canvas>
