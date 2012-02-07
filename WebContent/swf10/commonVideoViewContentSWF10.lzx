@@ -22,7 +22,7 @@
             var client = {};
             client.t = this;
 
-            client.reconnect = this.reconnect;
+            //client.reconnect = this.reconnect;
             client.initVideoContainer = this.initVideoContainer;
             client.createEditRecordStream = this.createEditRecordStream;
             client.createVideoObject = this.createVideoObject;
@@ -49,11 +49,13 @@
             canvas.setAttribute("lc", lc);
         ]]>
     </handler>
-
+    
+    <!-- 
     <method name="reconnect" args="src">
         canvas.thishib.setAttribute('src',src);
         canvas.thishib.disconnect();
     </method>
+     -->
 
     <method name="initVideoContainer" args="publicSID,firstName,lastName,offsetLength,videoWidth,videoHeight">
         canvas.setAttribute("publicSID",publicSID);
@@ -143,9 +145,10 @@
 
     <method name="getVideoObjectByPublicSID" args="publicSID">
     	<![CDATA[
-    		//if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ",publicSID);
+    		if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ",publicSID);
 
         	for (var i=0;i<this.subviews.length;i++){
+        	    if ($debug) Debug.write("this.subviews[i].publicSID ",this.subviews[i].publicSID);
     			if (this.subviews[i].publicSID==publicSID){
     				return this.subviews[i];
     			}
@@ -190,7 +193,10 @@
                     });
 
 				this.broadCastViewRef._chatvideoinner.r.destroy();
-				//this.broadCastViewRef.setAttribute('chatpartnername',hib.userobject.firstname+' '+hib.userobject.lastname);
+				
+				if ($debug) Debug.write("getNewVideoObject canvas.userobject ",publicSID,canvas.userobject);
+				
+				this.broadCastViewRef.setAttribute('chatpartnername',canvas.userobject.firstname+' '+canvas.userobject.lastname);
 			}
 			return this.broadCastViewRef;
 		]]>

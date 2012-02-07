@@ -9,6 +9,7 @@
 	<resource name="showusercontext" src="resources/1downarrow.png" />
 	<resource name="resyncuser_rsc" src="resources/noatunloopsong.png" />
 
+    <resource name="mic_rsc" src="resources/mic.png" />
 	<resource name="speaking" src="resources/speaking.png" />
 	<resource name="mute_btn_rsc">
 		<frame src="resources/icon_mute.png" />

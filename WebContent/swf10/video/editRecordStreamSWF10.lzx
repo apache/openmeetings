@@ -276,8 +276,6 @@
 	    			break;
 	    	}
 
-	        this.myvideocontainer.setAttribute('chatpartnername',canvas.firstName+' '+canvas.lastName);
-
 	        this.close();
         ]]>
     </method>

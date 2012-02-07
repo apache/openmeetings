@@ -75,6 +75,7 @@
             	this._toolbar._showusercontext.setAttribute("visibility","hidden");
             	this._toolbar._minimize.setAttribute("visibility","hidden");
             	this._resizeview.setAttribute("visibility","hidden");
+            	this._innerbottom.setAttribute("visibility","hidden");
             	return;
             }
             
@@ -86,6 +87,7 @@
                 this._resizeview.setAttribute("visibility","hidden");
                 this._loudness.setAttribute("visibility","hidden");
                 this._innertop.setAttribute("visibility","hidden");
+                this._innerbottom.setAttribute("visibility","hidden");
                 
                 //return;
             }
@@ -407,7 +409,8 @@
             fontsize="9"/>
     </view>
     
-	<view name="_loudness" x="1" y="${parent.height - 20}">
+	<view name="_loudness" x="1" 
+	       y="${parent.height - 20 - ((parent._innerbottom.visible) ? 18 : 0) }">
 		<view x="2" y="2" name="loudness" resource="speaking" opacity="0.2"
 			  onmouseover="" onmouseout="" >		
 			<labelTooltip inittwice="true" labelid="372" />

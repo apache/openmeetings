@@ -23,9 +23,8 @@
         Invoked after the user enters the room to connect the SWF10 app to the server via rtmp(t/s)
      -->
     <method name="reconnectSuccess">
-    	canvas.lc.send(canvas.rtmp_lc_name, "reconnectSuccess", canvas.thishib.src, canvas.publicSID);
+    	canvas.lc.send(canvas.rtmp_lc_name, "reconnectSuccess", canvas.thishib.src, canvas.publicSID, hib.userobject);
     </method>
-
     
     <handler name="onismoderator" reference="canvas" args="m">
         canvas.lc.send(canvas.vid_lc_name, "ismoderatorChanged", m);
