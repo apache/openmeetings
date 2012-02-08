@@ -55,6 +55,9 @@
     </method>
 
     <handler name="oninit"><![CDATA[
+    
+        var tInitArgsArry = new Array('secureHash','invitationHash','sid','roomid','directRoomId','language','hash','cuser','tAccept','moodleRoom','becomemoderator','wwwroot','user_id','picture','scopeRoomId');
+    
         this.setAttribute('lc_SID', this.getLCSID());
         this.setAttribute('vid_lc_name', lc_SID + '__videoLC');
         this.setAttribute('rtmp_lc_name', lc_SID + '__rtmpLC');
@@ -64,8 +67,17 @@
         var videoComp_lc_cback:LocalConnection = new LocalConnection();
         videoComp_lc_cback.connect(this.videoComp_lc_callback_name);
         this.setAttribute('videoComp_lc',videoComp_lc_cback);
-
-        var request:URLRequest = new URLRequest("maindebug.swf8.swf?lzproxied=solo&lcSID="+canvas.lc_SID);
+        
+        var tqueryString = "";
+        for (var i=0;i<tInitArgsArry.length;i++) {
+            if ($debug) Debug.write(tInitArgsArry[i],lz.Browser.getInitArg(tInitArgsArry[i]));
+            var tValue = lz.Browser.getInitArg(tInitArgsArry[i]);
+            if (tValue != undefined) {
+                tqueryString += "&"+tInitArgsArry[i]+"="+tValue;
+            }
+        }
+        
+        var request:URLRequest = new URLRequest("maindebug.swf8.swf?lzproxied=solo&lcSID"+tqueryString);
         var loader:Loader = new Loader();
         loader.load(request);
         this.mainComponent.sprite.addChild(loader);

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <canvas debug="false" width="100%" height="100%" title="OpenMeetings">
-
+    
     <switch>
         <when property="$as3">
             <passthrough>
@@ -9,7 +9,7 @@
             </passthrough>
         </when>
     </switch>
-
+    
     <include href="testVideoObject.lzx" />
 
     <silverstyle name="componentStyle" basecolor="0xFFFFFF" textcolor="0x000000" />
@@ -53,6 +53,9 @@
     </method>
 
     <handler name="oninit"><![CDATA[
+    
+        var tInitArgsArry = new Array('secureHash','invitationHash','sid','roomid','directRoomId','language','hash','cuser','tAccept','moodleRoom','becomemoderator','wwwroot','user_id','picture','scopeRoomId');
+    
         this.setAttribute('lc_SID', this.getLCSID());
         this.setAttribute('vid_lc_name', lc_SID + '__videoLC');
         this.setAttribute('rtmp_lc_name', lc_SID + '__rtmpLC');
@@ -62,8 +65,17 @@
         var videoComp_lc_cback:LocalConnection = new LocalConnection();
         videoComp_lc_cback.connect(this.videoComp_lc_callback_name);
         this.setAttribute('videoComp_lc',videoComp_lc_cback);
-
-        var request:URLRequest = new URLRequest("main.swf8.swf?lzproxied=solo&lcSID="+canvas.lc_SID);
+        
+        var tqueryString = "";
+        for (var i=0;i<tInitArgsArry.length;i++) {
+            if ($debug) Debug.write(tInitArgsArry[i],lz.Browser.getInitArg(tInitArgsArry[i]));
+            var tValue = lz.Browser.getInitArg(tInitArgsArry[i]);
+            if (tValue != undefined) {
+                tqueryString += "&"+tInitArgsArry[i]+"="+tValue;
+            }
+        }
+        
+        var request:URLRequest = new URLRequest("maindebug.swf8.swf?lzproxied=solo&lcSID"+tqueryString);
         var loader:Loader = new Loader();
         loader.load(request);
         this.mainComponent.sprite.addChild(loader);
@@ -74,30 +86,5 @@
     ]]></handler>
 
     <view name="inner"></view>
-
-    <!--<commonVideoViewContent name="_videoComponent"/>-->
-    <!--<hibAdapter/>-->
-
-    <!--<view x="${canvas.width/2}" width="100" height="20" bgcolor="0xFF0000" opacity="0.5">-->
-        <!--<passthrough when="$as3">-->
-            <!--import flash.net.*;-->
-            <!--import flash.display.*;-->
-        <!--</passthrough>-->
-        <!--<text>Test SWF10</text>-->
-        <!--<handler name="onclick">-->
-            <!--var dragHelper = new lz.view(canvas, {name:'dragHelper',width:canvas.width,height:canvas.height,x:'0',y:'0',bgcolor:'0xAAAAFF', opacity:0.5});-->
-            <!--dragHelper.bringToFront();-->
-        <!--</handler>-->
-    <!--</view>-->
-
-
-
-    <!--<view name="debug" width="800" height="300" onmousedown="dragger.setAttribute('applied', true)" onmouseup="dragger.setAttribute('applied', false)" bgcolor="0x555555">-->
-        <!--<dragstate name="dragger"/>-->
-        <!--<text name="console" multiline="true" y="20" bgcolor="0xAAAAAA" width="100%"></text>-->
-        <!--<method name="write" args="text">-->
-            <!--this.console.setAttribute('text', this.console.getText() + '\n' + text);-->
-        <!--</method>-->
-    <!--</view>-->
 
 </canvas>
