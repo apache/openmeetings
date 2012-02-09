@@ -34,6 +34,7 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.FieldLanguageDaoImpl;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.basic.Sessionmanagement;
@@ -55,7 +56,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 public class LangExport extends HttpServlet {
 	private static final long serialVersionUID = 243294279856160463L;
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			LangExport.class, ScopeApplicationAdapter.webAppRootKey);
+			LangExport.class, OpenmeetingsVariables.webAppRootKey);
 
 	public Sessionmanagement getSessionManagement() {
 		try {

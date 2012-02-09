@@ -25,14 +25,14 @@ import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.remote.red5.EmoticonsManager;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class ChatString {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(ChatString.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ChatString.class, OpenmeetingsVariables.webAppRootKey);
 	
 	private static ChatString instance = null;
 	

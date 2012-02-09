@@ -25,6 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.mina.core.buffer.IoBuffer;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDeltaDaoImpl;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingMetaDelta;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -77,7 +78,7 @@ public class StreamTranscodingListener implements IStreamListener {
 
 	private int duration;
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(StreamTranscodingListener.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(StreamTranscodingListener.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
 	private FlvRecordingMetaDeltaDaoImpl flvRecordingMetaDeltaDao;
 

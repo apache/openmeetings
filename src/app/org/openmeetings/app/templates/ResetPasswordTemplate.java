@@ -22,9 +22,9 @@ import java.io.StringWriter;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ public class ResetPasswordTemplate extends VelocityLoader {
 	private static final String tamplateName = "resetPass.vm";
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			FeedbackTemplate.class, ScopeApplicationAdapter.webAppRootKey);
+			FeedbackTemplate.class, OpenmeetingsVariables.webAppRootKey);
 
 	public String getResetPasswordTemplate(String reset_link,
 			Long default_lang_id) {

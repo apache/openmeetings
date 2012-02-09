@@ -32,10 +32,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.persistence.beans.basic.Sessiondata;
 import org.openmeetings.app.persistence.beans.recording.RoomClient;
 import org.openmeetings.app.remote.red5.ClientListManager;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -53,7 +53,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class Sessionmanagement {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			Sessionmanagement.class, ScopeApplicationAdapter.webAppRootKey);
+			Sessionmanagement.class, OpenmeetingsVariables.webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
 

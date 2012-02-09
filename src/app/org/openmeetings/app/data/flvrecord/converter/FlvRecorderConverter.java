@@ -23,13 +23,13 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.flvrecord.FlvRecordingDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingLogDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDataDaoImpl;
 import org.openmeetings.app.documents.GenerateSWF;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecording;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingMetaData;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class FlvRecorderConverter extends BaseConverter {
 
 	private static final Logger log = Red5LoggerFactory
-			.getLogger(FlvRecorderConverter.class, ScopeApplicationAdapter.webAppRootKey);
+			.getLogger(FlvRecorderConverter.class, OpenmeetingsVariables.webAppRootKey);
 
 	// Spring loaded Beans
 	@Autowired

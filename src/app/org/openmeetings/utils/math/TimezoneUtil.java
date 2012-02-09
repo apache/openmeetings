@@ -22,12 +22,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.persistence.beans.basic.Configuration;
 import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.persistence.beans.user.Users;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class TimezoneUtil {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			TimezoneUtil.class, ScopeApplicationAdapter.webAppRootKey);
+			TimezoneUtil.class, OpenmeetingsVariables.webAppRootKey);
 
 	public static void main(String... args) {
 

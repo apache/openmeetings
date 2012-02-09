@@ -34,6 +34,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.calendar.management.MeetingMemberLogic;
 import org.openmeetings.app.data.conference.Invitationmanagement;
@@ -46,7 +47,6 @@ import org.openmeetings.app.persistence.beans.calendar.AppointmentReminderTyps;
 import org.openmeetings.app.persistence.beans.calendar.MeetingMember;
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.user.Users;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.math.CalendarPatterns;
 import org.openmeetings.utils.math.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
@@ -58,7 +58,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AppointmentDaoImpl {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			AppointmentDaoImpl.class, ScopeApplicationAdapter.webAppRootKey);
+			AppointmentDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired

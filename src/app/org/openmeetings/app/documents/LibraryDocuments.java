@@ -18,13 +18,13 @@
  */
 package org.openmeetings.app.documents;
 
-import org.slf4j.Logger;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 public class LibraryDocuments {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(LibraryDocuments.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(LibraryDocuments.class, OpenmeetingsVariables.webAppRootKey);
 
 	private static LibraryDocuments instance;
 

@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.server.beans.ServerFrameBean;
 import org.openmeetings.server.cache.ServerSharingSessionList;
 import org.red5.logging.Red5LoggerFactory;
@@ -39,7 +39,7 @@ import org.slf4j.Logger;
  */
 public class ServerOutputHandler extends HttpServlet {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(ServerOutputHandler.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ServerOutputHandler.class, OpenmeetingsVariables.webAppRootKey);
 
 	/**
 	 * 

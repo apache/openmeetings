@@ -21,6 +21,7 @@ package org.openmeetings.app.remote;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.beans.basic.SearchResult;
@@ -28,7 +29,6 @@ import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.persistence.beans.domain.Organisation;
 import org.openmeetings.app.persistence.beans.user.Users;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class OrganisationService {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			OrganisationService.class, ScopeApplicationAdapter.webAppRootKey);
+			OrganisationService.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
 	private Sessionmanagement sessionManagement;
 	@Autowired

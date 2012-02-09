@@ -31,9 +31,9 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang.StringUtils;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.persistence.beans.adresses.Adresses;
 import org.openmeetings.app.persistence.beans.user.Users;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -43,7 +43,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class UsersDaoImpl {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(UsersDaoImpl.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(UsersDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired

@@ -36,6 +36,7 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
@@ -53,7 +54,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 public class CalendarServlet extends HttpServlet {
 	private static final long serialVersionUID = 2192254610711799347L;
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			Calendar.class, ScopeApplicationAdapter.webAppRootKey);
+			Calendar.class, OpenmeetingsVariables.webAppRootKey);
 
 	public AppointmentLogic getAppointmentLogic() {
 		try {

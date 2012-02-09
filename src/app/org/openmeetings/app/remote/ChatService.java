@@ -19,28 +19,27 @@
 package org.openmeetings.app.remote;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
-import java.util.Calendar;
+import java.util.List;
 import java.util.Set;
-import java.lang.Integer;
 
-import org.slf4j.Logger;
+import org.openmeetings.app.OpenmeetingsVariables;
+import org.openmeetings.app.persistence.beans.recording.RoomClient;
+import org.openmeetings.app.remote.red5.ClientListManager;
+import org.openmeetings.app.remote.red5.EmoticonsManager;
+import org.openmeetings.utils.stringhandlers.ChatString;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.api.service.IServiceCapableConnection;
-import org.openmeetings.app.persistence.beans.recording.RoomClient;
-import org.openmeetings.app.remote.red5.ClientListManager;
-import org.openmeetings.app.remote.red5.EmoticonsManager;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
-import org.openmeetings.utils.stringhandlers.ChatString;
+import org.slf4j.Logger;
 
 /**
  * 
@@ -55,7 +54,7 @@ public class ChatService implements IPendingServiceCallback {
 	//number of items in the Chatroom history
 	private static final int chatRoomHistory = 50;
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(ChatService.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ChatService.class, OpenmeetingsVariables.webAppRootKey);
 	
 	private static LinkedHashMap<Long,List<HashMap<String,Object>>> myChats = new LinkedHashMap<Long,List<HashMap<String,Object>>>();
 	

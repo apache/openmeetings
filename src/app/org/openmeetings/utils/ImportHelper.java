@@ -18,14 +18,14 @@
  */
 package org.openmeetings.utils;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.persistence.beans.basic.Configuration;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 
 public class ImportHelper {
 	private static final org.slf4j.Logger log = Red5LoggerFactory.getLogger(
-			ImportHelper.class, ScopeApplicationAdapter.webAppRootKey);
+			ImportHelper.class, OpenmeetingsVariables.webAppRootKey);
 	public static final int DEFAULT_MAX_UPLOAD_SIZE = 1024 * 1024 * 1024; // 1GB
 
 	public static final int getMaxUploadSize(

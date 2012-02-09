@@ -18,7 +18,7 @@
  */
 package org.openmeetings.server.util;
 
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.server.beans.ServerFrameBean;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -28,7 +28,7 @@ import org.slf4j.Logger;
  */
 public class DePacketizerUtil {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(DePacketizerUtil.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(DePacketizerUtil.class, OpenmeetingsVariables.webAppRootKey);
 	
 	public ServerFrameBean handleReceivingBytes(byte[] incomingBytes) {
 		try {

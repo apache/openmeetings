@@ -28,10 +28,10 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang.StringUtils;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.user.PrivateMessages;
 import org.openmeetings.app.persistence.beans.user.Users;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class PrivateMessagesDaoImpl {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(PrivateMessagesDaoImpl.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(PrivateMessagesDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
 	

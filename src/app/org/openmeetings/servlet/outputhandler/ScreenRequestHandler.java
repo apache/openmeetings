@@ -25,6 +25,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.context.Context;
 import org.apache.velocity.tools.view.VelocityViewServlet;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.basic.Sessionmanagement;
@@ -42,7 +43,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 public class ScreenRequestHandler extends VelocityViewServlet {
 	private static final long serialVersionUID = 2381722235536488913L;
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			ScreenRequestHandler.class, ScopeApplicationAdapter.webAppRootKey);
+			ScreenRequestHandler.class, OpenmeetingsVariables.webAppRootKey);
 
 	public Sessionmanagement getSessionManagement() {
 		try {
@@ -398,8 +399,7 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 						ctx.put("startUpClass", startUpClass);
 						ctx.put("codebase", codebase);
 						ctx.put("red5-host", rtmphostlocal);
-						ctx.put("red5-app",
-								ScopeApplicationAdapter.webAppRootKey + "/"
+						ctx.put("red5-app", OpenmeetingsVariables.webAppRootKey + "/"
 										+ room);
 
 						Configuration configuration = getCfgManagement()

@@ -37,6 +37,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang.StringUtils;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
@@ -77,7 +78,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class Usermanagement {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			Usermanagement.class, ScopeApplicationAdapter.webAppRootKey);
+			Usermanagement.class, OpenmeetingsVariables.webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;

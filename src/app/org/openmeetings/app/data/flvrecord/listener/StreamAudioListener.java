@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.Date;
 
 import org.apache.mina.core.buffer.IoBuffer;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDeltaDaoImpl;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingMetaDelta;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -49,7 +50,7 @@ public class StreamAudioListener extends ListenerAdapter {
 	private int duration = 0;
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			StreamAudioListener.class, ScopeApplicationAdapter.webAppRootKey);
+			StreamAudioListener.class, OpenmeetingsVariables.webAppRootKey);
 
 	// Autowire is not possible
 	private final FlvRecordingMetaDeltaDaoImpl flvRecordingMetaDeltaDao;

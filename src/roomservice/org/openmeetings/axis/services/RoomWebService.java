@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.axis2.AxisFault;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.beans.basic.SearchResult;
@@ -61,7 +62,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class RoomWebService {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			RoomWebService.class, ScopeApplicationAdapter.webAppRootKey);
+			RoomWebService.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
 	private AppointmentDaoImpl appointmentDao;

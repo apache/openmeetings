@@ -25,7 +25,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 
 import org.dom4j.Element;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -34,7 +34,7 @@ import com.thoughtworks.xstream.io.xml.XppDriver;
 
 public class LibraryWmlLoader {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(LibraryWmlLoader.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(LibraryWmlLoader.class, OpenmeetingsVariables.webAppRootKey);
 	
 	@SuppressWarnings("unused")
 	private static final String fileExt = ".wml";

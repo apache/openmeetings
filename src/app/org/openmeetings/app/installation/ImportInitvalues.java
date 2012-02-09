@@ -28,6 +28,7 @@ import java.util.List;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.ErrorManagement;
 import org.openmeetings.app.data.basic.FieldLanguageDaoImpl;
@@ -43,7 +44,6 @@ import org.openmeetings.app.data.user.Salutationmanagement;
 import org.openmeetings.app.data.user.Statemanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.ImportHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -52,7 +52,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ImportInitvalues {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			ImportInitvalues.class, ScopeApplicationAdapter.webAppRootKey);
+			ImportInitvalues.class, OpenmeetingsVariables.webAppRootKey);
 
 	public static final String languageFolderName = "languages/";
 	private static final String nameOfLanguageFile = "languages.xml";

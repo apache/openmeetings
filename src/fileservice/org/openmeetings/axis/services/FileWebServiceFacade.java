@@ -23,10 +23,10 @@ import javax.servlet.ServletContext;
 import org.apache.axis2.AxisFault;
 import org.apache.axis2.context.MessageContext;
 import org.apache.axis2.transport.http.HTTPConstants;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.file.dto.FileExplorerObject;
 import org.openmeetings.app.data.file.dto.LibraryPresentation;
 import org.openmeetings.app.persistence.beans.files.FileExplorerItem;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.context.ApplicationContext;
@@ -35,7 +35,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 public class FileWebServiceFacade {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			FileWebServiceFacade.class, ScopeApplicationAdapter.webAppRootKey);
+			FileWebServiceFacade.class, OpenmeetingsVariables.webAppRootKey);
 
 	private ServletContext getServletContext() throws Exception {
 		MessageContext mc = MessageContext.getCurrentMessageContext();

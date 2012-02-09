@@ -46,6 +46,7 @@ import org.apache.commons.lang.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
@@ -100,7 +101,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class BackupImport {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			BackupImport.class, ScopeApplicationAdapter.webAppRootKey);
+			BackupImport.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
 	private AppointmentDaoImpl appointmentDao;

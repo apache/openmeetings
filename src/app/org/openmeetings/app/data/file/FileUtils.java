@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.file.dao.FileExplorerItemDaoImpl;
 import org.openmeetings.app.persistence.beans.files.FileExplorerItem;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -37,7 +38,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class FileUtils {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			FileProcessor.class, ScopeApplicationAdapter.webAppRootKey);
+			FileProcessor.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
 	private FileExplorerItemDaoImpl fileExplorerItemDao;

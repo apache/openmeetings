@@ -24,19 +24,19 @@ import java.awt.Image;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.imageio.ImageIO;
 
 import org.apache.batik.svggen.SVGGraphics2D;
-import org.slf4j.Logger;
-import org.red5.logging.Red5LoggerFactory;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.geom.GeomPoint;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 public class WhiteboardMapToSVG extends BatikMethods {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(WhiteboardMapToSVG.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(WhiteboardMapToSVG.class, OpenmeetingsVariables.webAppRootKey);
 
 	private WhiteboardMapToSVG() {
 	}

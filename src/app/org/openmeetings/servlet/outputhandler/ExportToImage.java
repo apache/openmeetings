@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.batik.dom.GenericDOMImplementation;
 import org.apache.batik.dom.svg.SVGDOMImplementation;
 import org.apache.batik.svggen.SVGGraphics2D;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.batik.beans.PrintBean;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.record.WhiteboardMapToSVG;
@@ -54,7 +55,7 @@ import org.w3c.dom.Element;
 public class ExportToImage extends HttpServlet {
 	private static final long serialVersionUID = -3535998254746084297L;
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			ExportToImage.class, ScopeApplicationAdapter.webAppRootKey);
+			ExportToImage.class, OpenmeetingsVariables.webAppRootKey);
 
 	public Sessionmanagement getSessionManagement() {
 		try {

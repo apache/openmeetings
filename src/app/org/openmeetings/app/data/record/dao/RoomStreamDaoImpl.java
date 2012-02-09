@@ -24,8 +24,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.persistence.beans.recording.RoomStream;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class RoomStreamDaoImpl {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(RoomStreamDaoImpl.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(RoomStreamDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired

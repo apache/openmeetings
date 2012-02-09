@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.beans.basic.SearchResult;
@@ -43,7 +44,6 @@ import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.rooms.Rooms_Organisation;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.red5.ClientListManager;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.math.CalendarPatterns;
 import org.openmeetings.utils.math.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
@@ -60,7 +60,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ConferenceService {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			ConferenceService.class, ScopeApplicationAdapter.webAppRootKey);
+			ConferenceService.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
 	private AppointmentLogic appointmentLogic;

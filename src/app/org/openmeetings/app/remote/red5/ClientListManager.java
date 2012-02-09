@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.persistence.beans.recording.RoomClient;
 import org.openmeetings.utils.crypt.ManageCryptStyle;
@@ -36,7 +37,7 @@ public class ClientListManager {
 	private static HashMap<String, RoomClient> clientList = new HashMap<String, RoomClient>();
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			ClientListManager.class, ScopeApplicationAdapter.webAppRootKey);
+			ClientListManager.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
 	private ManageCryptStyle manageCryptStyle;

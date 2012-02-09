@@ -18,6 +18,7 @@
  */
 package org.openmeetings.utils.crypt;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
@@ -27,7 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ManageCryptStyle {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			ManageCryptStyle.class, ScopeApplicationAdapter.webAppRootKey);
+			ManageCryptStyle.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
 	private Configurationmanagement cfgManagement;
 

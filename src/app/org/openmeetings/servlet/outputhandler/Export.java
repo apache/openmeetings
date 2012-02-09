@@ -34,6 +34,7 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.user.Organisationmanagement;
@@ -57,7 +58,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 public class Export extends HttpServlet {
 	private static final long serialVersionUID = 8527093674786692472L;
 	private static final Logger log = Red5LoggerFactory.getLogger(Export.class,
-			ScopeApplicationAdapter.webAppRootKey);
+			OpenmeetingsVariables.webAppRootKey);
 
 	public Sessionmanagement getSessionManagement() {
 		try {

@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.conference.whiteboard.BrowserStatus;
 import org.openmeetings.app.conference.whiteboard.RoomStatus;
 import org.openmeetings.app.conference.whiteboard.WhiteboardManagement;
@@ -72,12 +73,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		IPendingServiceCallback {
 
-	public static String webAppRootKey = null;
-	public static String webAppRootPath = null;
-
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			ScopeApplicationAdapter.class,
-			ScopeApplicationAdapter.webAppRootKey);
+			OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
 	private ClientListManager clientListManager;
@@ -914,7 +912,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 
 			log.debug("*..*addModerator publicSID: " + publicSID);
 
-			IConnection current = Red5.getConnectionLocal();
 			// String streamid = current.getClient().getId();
 
 			RoomClient currentClient = this.clientListManager
@@ -1825,7 +1822,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			IScope globalScope = getContext().getGlobalScope();
 
 			IScope webAppKeyScope = globalScope
-					.getScope(ScopeApplicationAdapter.webAppRootKey);
+					.getScope(OpenmeetingsVariables.webAppRootKey);
 
 			log.debug("webAppKeyScope " + webAppKeyScope);
 
@@ -2436,7 +2433,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 
 			IScope globalScope = getContext().getGlobalScope();
 			IScope webAppKeyScope = globalScope
-					.getScope(ScopeApplicationAdapter.webAppRootKey);
+					.getScope(OpenmeetingsVariables.webAppRootKey);
 
 			// Get Room Id to send it to the correct Scope
 			RoomClient currentClient = this.clientListManager
@@ -2529,7 +2526,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 
 			IScope globalScope = getContext().getGlobalScope();
 			IScope webAppKeyScope = globalScope
-					.getScope(ScopeApplicationAdapter.webAppRootKey);
+					.getScope(OpenmeetingsVariables.webAppRootKey);
 
 			// log.debug("webAppKeyScope "+webAppKeyScope);
 
@@ -2748,7 +2745,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 
 			IScope globalScope = getContext().getGlobalScope();
 			IScope webAppKeyScope = globalScope
-					.getScope(ScopeApplicationAdapter.webAppRootKey);
+					.getScope(OpenmeetingsVariables.webAppRootKey);
 
 			// log.debug("webAppKeyScope "+webAppKeyScope);
 
@@ -2825,7 +2822,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			IScope globalScope = getContext().getGlobalScope();
 
 			IScope webAppKeyScope = globalScope
-					.getScope(ScopeApplicationAdapter.webAppRootKey);
+					.getScope(OpenmeetingsVariables.webAppRootKey);
 
 			// log.debug("webAppKeyScope "+webAppKeyScope);
 
@@ -2898,7 +2895,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			IScope globalScope = getContext().getGlobalScope();
 
 			IScope webAppKeyScope = globalScope
-					.getScope(ScopeApplicationAdapter.webAppRootKey);
+					.getScope(OpenmeetingsVariables.webAppRootKey);
 
 			// log.debug("webAppKeyScope "+webAppKeyScope);
 
@@ -3252,7 +3249,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 
 			IScope globalScope = getContext().getGlobalScope();
 			IScope webAppKeyScope = globalScope
-					.getScope(ScopeApplicationAdapter.webAppRootKey);
+					.getScope(OpenmeetingsVariables.webAppRootKey);
 
 			String scopeName = "hibernate";
 			// If set then its a NON default Scope

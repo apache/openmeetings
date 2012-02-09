@@ -27,7 +27,7 @@ import org.apache.ws.commons.serialize.XMLWriter;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.common.XmlRpcStreamConfig;
 import org.apache.xmlrpc.serializer.XmlWriterFactory;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.xml.sax.ContentHandler;
@@ -36,7 +36,7 @@ import org.xml.sax.ContentHandler;
 
 public class OpenXGXmlWriterFactory implements XmlWriterFactory {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(OpenXGXmlWriterFactory.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(OpenXGXmlWriterFactory.class, OpenmeetingsVariables.webAppRootKey);
 	
 	protected XMLWriter newXmlWriter() {
 		return new OpenXgXmlWriter();

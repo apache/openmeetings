@@ -23,9 +23,9 @@ import java.util.Date;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.persistence.beans.logs.ConferenceLog;
 import org.openmeetings.app.persistence.beans.logs.ConferenceLogType;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ConferenceLogDaoImpl {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(ConferenceLogDaoImpl.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ConferenceLogDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired

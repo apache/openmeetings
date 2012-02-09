@@ -22,11 +22,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.persistence.beans.adresses.Adresses;
 import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.templates.RegisterUserTemplate;
 import org.openmeetings.utils.mail.MailHandler;
 import org.red5.logging.Red5LoggerFactory;
@@ -38,7 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class Emailmanagement {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			Emailmanagement.class, ScopeApplicationAdapter.webAppRootKey);
+			Emailmanagement.class, OpenmeetingsVariables.webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;

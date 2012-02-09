@@ -18,10 +18,10 @@
  */
 package org.openmeetings.app.data.conference;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.templates.FeedbackTemplate;
 import org.openmeetings.utils.mail.MailHandler;
 import org.red5.logging.Red5LoggerFactory;
@@ -30,7 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class Feedbackmanagement {
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			Feedbackmanagement.class, ScopeApplicationAdapter.webAppRootKey);
+			Feedbackmanagement.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
 	private Configurationmanagement cfgManagement;

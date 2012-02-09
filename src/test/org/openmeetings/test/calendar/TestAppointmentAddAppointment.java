@@ -28,8 +28,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.calendar.management.AppointmentLogic;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -40,7 +40,7 @@ public class TestAppointmentAddAppointment extends
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			TestAppointmentAddAppointment.class,
-			ScopeApplicationAdapter.webAppRootKey);
+			OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
 	private AppointmentLogic appointmentLogic;

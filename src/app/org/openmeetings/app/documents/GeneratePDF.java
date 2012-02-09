@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.commons.transaction.util.FileHelper;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class GeneratePDF {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			GeneratePDF.class, ScopeApplicationAdapter.webAppRootKey);
+			GeneratePDF.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
 	private GenerateThumbs generateThumbs;

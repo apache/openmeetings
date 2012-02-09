@@ -27,9 +27,9 @@ import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Configurationmanagement;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class LoadAtomRssFeed {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			LoadAtomRssFeed.class, ScopeApplicationAdapter.webAppRootKey);
+			LoadAtomRssFeed.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
 	private Configurationmanagement cfgManagement;
 	@Autowired

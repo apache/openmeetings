@@ -22,6 +22,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
@@ -30,7 +31,6 @@ import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.persistence.beans.basic.Configuration;
 import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.persistence.beans.invitation.Invitations;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
@@ -40,7 +40,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class InvitationService implements IPendingServiceCallback {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			InvitationService.class, ScopeApplicationAdapter.webAppRootKey);
+			InvitationService.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
 	private Sessionmanagement sessionManagement;
 	@Autowired

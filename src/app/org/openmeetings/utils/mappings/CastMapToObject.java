@@ -26,7 +26,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -55,7 +55,7 @@ import org.slf4j.Logger;
 
 public class CastMapToObject {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(CastMapToObject.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(CastMapToObject.class, OpenmeetingsVariables.webAppRootKey);
 	
 	private CastMapToObject() {}
 

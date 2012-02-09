@@ -23,7 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.remote.red5.WhiteBoardObjectListManager;
 import org.openmeetings.app.remote.red5.WhiteBoardObjectListManagerById;
 import org.red5.logging.Red5LoggerFactory;
@@ -32,7 +32,7 @@ import org.slf4j.Logger;
 public class WhiteboardManagement {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			WhiteboardManagement.class, ScopeApplicationAdapter.webAppRootKey);
+			WhiteboardManagement.class, OpenmeetingsVariables.webAppRootKey);
 
 	private WhiteboardManagement() {
 	}

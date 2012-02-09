@@ -44,7 +44,7 @@ import net.fortuna.ical4j.model.property.Uid;
 import net.fortuna.ical4j.model.property.Version;
 import net.fortuna.ical4j.util.UidGenerator;
 
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -56,7 +56,7 @@ import org.slf4j.Logger;
 public class IcalHandler {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			MailHandler.class, ScopeApplicationAdapter.webAppRootKey);
+			MailHandler.class, OpenmeetingsVariables.webAppRootKey);
 
 	/** ICal instance */
 	private final net.fortuna.ical4j.model.Calendar icsCalendar;

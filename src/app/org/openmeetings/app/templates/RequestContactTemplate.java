@@ -22,7 +22,7 @@ import java.io.StringWriter;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -32,7 +32,7 @@ public class RequestContactTemplate extends VelocityLoader {
 
 	private static final Logger log = Red5LoggerFactory
 			.getLogger(RequestContactTemplate.class,
-					ScopeApplicationAdapter.webAppRootKey);
+					OpenmeetingsVariables.webAppRootKey);
 
 	public String getRequestContactTemplate(String message, String accept_link,
 			String deny_link, String openmeetings_link) {

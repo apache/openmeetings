@@ -24,7 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.server.beans.ServerSharingViewerBean;
 import org.openmeetings.server.beans.ServerViewerRegisterBean;
 import org.red5.logging.Red5LoggerFactory;
@@ -36,7 +36,7 @@ import org.slf4j.Logger;
  */
 public class ServerSharingViewersList {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(ServerSharingSessionList.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ServerSharingSessionList.class, OpenmeetingsVariables.webAppRootKey);
 
 	private static Map<String,List<ServerSharingViewerBean>> viewerSessions = new HashMap<String,List<ServerSharingViewerBean>>();
 	/**

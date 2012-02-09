@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.utils.stringhandlers.StringComparer;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -41,7 +41,7 @@ import com.thoughtworks.xstream.io.xml.XppDriver;
 
 public class LibraryDocumentConverter {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(LibraryDocumentConverter.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(LibraryDocumentConverter.class, OpenmeetingsVariables.webAppRootKey);
 	
 	private static final String fileExt = ".wml";
 	

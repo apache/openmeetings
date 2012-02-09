@@ -21,6 +21,7 @@ package org.openmeetings.app.documents;
 import java.io.File;
 import java.util.HashMap;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.user.Users;
@@ -32,14 +33,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class GenerateImage {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			GenerateImage.class, ScopeApplicationAdapter.webAppRootKey);
+			GenerateImage.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
 	private Configurationmanagement cfgManagement;
 	@Autowired
 	private UsersDaoImpl usersDao;
-	@Autowired
-	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
 	private GenerateThumbs generateThumbs;
 

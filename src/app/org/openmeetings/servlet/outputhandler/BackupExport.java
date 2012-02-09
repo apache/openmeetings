@@ -43,6 +43,7 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.basic.dao.LdapConfigDaoImpl;
@@ -77,7 +78,6 @@ import org.openmeetings.app.persistence.beans.user.PrivateMessageFolder;
 import org.openmeetings.app.persistence.beans.user.PrivateMessages;
 import org.openmeetings.app.persistence.beans.user.UserContacts;
 import org.openmeetings.app.persistence.beans.user.Users;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -91,7 +91,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class BackupExport {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			BackupExport.class, ScopeApplicationAdapter.webAppRootKey);
+			BackupExport.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
 	private AppointmentDaoImpl appointmentDao;

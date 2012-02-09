@@ -21,6 +21,7 @@ package org.openmeetings.app.rtp;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.user.Usermanagement;
@@ -28,7 +29,6 @@ import org.openmeetings.app.persistence.beans.recording.RoomClient;
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.red5.ClientListManager;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class RTPStreamingHandler {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			RTPStreamingHandler.class, ScopeApplicationAdapter.webAppRootKey);
+			RTPStreamingHandler.class, OpenmeetingsVariables.webAppRootKey);
 	
 	@Autowired
 	private Sessionmanagement sessionManagement;

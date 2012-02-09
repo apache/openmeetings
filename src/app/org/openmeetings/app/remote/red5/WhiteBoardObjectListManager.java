@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.conference.whiteboard.WhiteboardObject;
 import org.openmeetings.app.conference.whiteboard.WhiteboardSyncLockObject;
 
@@ -34,7 +35,7 @@ public class WhiteBoardObjectListManager {
 	
 	private static HashMap<Long,Map<String,Map<String,WhiteboardSyncLockObject>>> whiteBoardObjectSyncList = new HashMap<Long,Map<String,Map<String,WhiteboardSyncLockObject>>>();
 
-	private static final Logger log = Red5LoggerFactory.getLogger(WhiteBoardObjectListManager.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(WhiteBoardObjectListManager.class, OpenmeetingsVariables.webAppRootKey);
 
 	private static WhiteBoardObjectListManager instance = null;
 

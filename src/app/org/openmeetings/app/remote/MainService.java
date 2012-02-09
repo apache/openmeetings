@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Navimanagement;
@@ -75,7 +76,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
  */
 public class MainService implements IPendingServiceCallback {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(MainService.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(MainService.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
 	private ClientListManager clientListManager;

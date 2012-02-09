@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.flvrecord.FlvRecordingDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingLogDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDataDaoImpl;
@@ -48,7 +49,7 @@ public class FlvInterviewConverter extends BaseConverter {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			FlvInterviewConverter.class,
-			ScopeApplicationAdapter.webAppRootKey);
+			OpenmeetingsVariables.webAppRootKey);
 
 	// Spring loaded Beans
 	@Autowired

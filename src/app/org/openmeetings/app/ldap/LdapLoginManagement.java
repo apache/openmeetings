@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Vector;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.basic.dao.LdapConfigDaoImpl;
@@ -52,7 +53,7 @@ public class LdapLoginManagement {
 
 	
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			LdapLoginManagement.class, ScopeApplicationAdapter.webAppRootKey);
+			LdapLoginManagement.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
 	private Sessionmanagement sessionManagement;

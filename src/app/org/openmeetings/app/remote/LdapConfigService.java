@@ -22,13 +22,13 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.basic.dao.LdapConfigDaoImpl;
 import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.persistence.beans.basic.LdapConfig;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +50,7 @@ public class LdapConfigService {
 	@Autowired
 	private AuthLevelmanagement authLevelManagement;
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(LdapConfigService.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(LdapConfigService.class, OpenmeetingsVariables.webAppRootKey);
 	
 	public Long deleteLdapConfigById(String SID, Long ldapConfigId) {
         Long users_id = sessionManagement.checkSession(SID);

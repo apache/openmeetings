@@ -35,6 +35,7 @@ import org.apache.axiom.om.OMElement;
 import org.apache.axis2.AxisFault;
 import org.apache.axis2.context.MessageContext;
 import org.apache.axis2.transport.http.HTTPConstants;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.basic.files.TestObject;
@@ -65,7 +66,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class FileWebService {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			FileWebService.class, ScopeApplicationAdapter.webAppRootKey);
+			FileWebService.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
 	private Sessionmanagement sessionManagement;
 	@Autowired

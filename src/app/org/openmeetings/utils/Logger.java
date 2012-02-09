@@ -18,7 +18,7 @@
  */
 package org.openmeetings.utils;
 
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 
 public class Logger {
@@ -27,7 +27,7 @@ public class Logger {
     public Logger() {
         StackTraceElement ste = Thread.currentThread().getStackTrace()[1];
         log = Red5LoggerFactory.getLogger(ste.getClass(),
-                ScopeApplicationAdapter.webAppRootKey);
+        		OpenmeetingsVariables.webAppRootKey);
     }
     
     private String getMethodMessage() {

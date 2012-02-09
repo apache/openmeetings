@@ -35,11 +35,11 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.persistence.beans.lang.FieldLanguage;
 import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.persistence.beans.lang.Fieldvalues;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +54,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class Fieldmanagment {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			Fieldmanagment.class, ScopeApplicationAdapter.webAppRootKey);
+			Fieldmanagment.class, OpenmeetingsVariables.webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;

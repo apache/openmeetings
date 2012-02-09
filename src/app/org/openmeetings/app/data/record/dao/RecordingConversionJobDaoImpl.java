@@ -25,8 +25,8 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.persistence.beans.recording.RecordingConversionJob;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class RecordingConversionJobDaoImpl {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(RecordingConversionJobDaoImpl.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(RecordingConversionJobDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
 	

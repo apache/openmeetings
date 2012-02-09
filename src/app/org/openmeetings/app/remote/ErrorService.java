@@ -18,12 +18,12 @@
  */
 package org.openmeetings.app.remote;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.ErrorManagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.beans.basic.ErrorResult;
 import org.openmeetings.app.persistence.beans.basic.ErrorValues;
 import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class ErrorService {
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			ErrorService.class, ScopeApplicationAdapter.webAppRootKey);
+			ErrorService.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
 	private Fieldmanagment fieldmanagment;

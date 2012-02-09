@@ -18,7 +18,7 @@
  */
 package org.openmeetings.app.data.flvrecord.converter;
 
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ import org.springframework.core.task.TaskExecutor;
 public class FlvInterviewReConverterTask {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			FlvInterviewReConverterTask.class,
-			ScopeApplicationAdapter.webAppRootKey);
+			OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
 	@Qualifier("openmeetings.TaskExecutor")

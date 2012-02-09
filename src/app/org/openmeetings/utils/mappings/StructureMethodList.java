@@ -18,18 +18,18 @@
  */
 package org.openmeetings.utils.mappings;
 
-import java.util.LinkedHashMap;
-import java.lang.reflect.Method;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.LinkedHashMap;
 
-import org.slf4j.Logger;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
-import org.red5.logging.Red5LoggerFactory;
 import org.apache.commons.lang.StringUtils;
+import org.openmeetings.app.OpenmeetingsVariables;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 public class StructureMethodList {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(StructureMethodList.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(StructureMethodList.class, OpenmeetingsVariables.webAppRootKey);
 	
 	private StructureMethodList() {}
 

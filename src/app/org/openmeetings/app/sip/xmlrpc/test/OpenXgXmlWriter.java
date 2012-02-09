@@ -29,7 +29,7 @@ import java.util.Map;
 import javax.xml.XMLConstants;
 
 import org.apache.ws.commons.serialize.XMLWriter;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.xml.sax.Attributes;
@@ -38,7 +38,7 @@ import org.xml.sax.SAXException;
 
 public class OpenXgXmlWriter implements XMLWriter {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(OpenXgXmlWriter.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(OpenXgXmlWriter.class, OpenmeetingsVariables.webAppRootKey);
 
 	private static final int STATE_OUTSIDE = 0;
 	private static final int STATE_IN_START_ELEMENT = 1;

@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.persistence.beans.recording.RoomClient;
 import org.openmeetings.app.remote.red5.ClientListManager;
@@ -48,7 +49,7 @@ public class RTPMethodServlet extends HttpServlet {
 	private static final long serialVersionUID = 6781441755140201613L;
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			ScreenRequestHandler.class, ScopeApplicationAdapter.webAppRootKey);
+			ScreenRequestHandler.class, OpenmeetingsVariables.webAppRootKey);
 	public static final String METHOD_START = "streamer_start";
 	public static final String METHOD_STOP = "streamer_stop";
 

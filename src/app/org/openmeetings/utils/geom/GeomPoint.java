@@ -20,9 +20,9 @@ package org.openmeetings.utils.geom;
 
 import java.awt.Point;
 
-import org.slf4j.Logger;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * 
@@ -35,7 +35,7 @@ import org.red5.logging.Red5LoggerFactory;
 public class GeomPoint extends Point {
 	private static final long serialVersionUID = 5729830653403076829L;
 	@SuppressWarnings("unused")
-	private static final Logger log = Red5LoggerFactory.getLogger(GeomPoint.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(GeomPoint.class, OpenmeetingsVariables.webAppRootKey);
 
 	public GeomPoint add(GeomPoint p) {
 		GeomPoint gPoint = new GeomPoint();

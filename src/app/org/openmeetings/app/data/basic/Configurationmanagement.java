@@ -32,6 +32,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.basic.Configuration;
@@ -47,7 +48,7 @@ public class Configurationmanagement {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			Configurationmanagement.class,
-			ScopeApplicationAdapter.webAppRootKey);
+			OpenmeetingsVariables.webAppRootKey);
 
 	public static final String DEFAULT_APP_NAME = "OpenMeetings";
 

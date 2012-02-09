@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -42,7 +43,7 @@ public class DownloadHandler extends HttpServlet {
 	private static final long serialVersionUID = 7243653203578587544L;
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			DownloadHandler.class, ScopeApplicationAdapter.webAppRootKey);
+			DownloadHandler.class, OpenmeetingsVariables.webAppRootKey);
 
 	private static final String defaultImageName = "deleted.jpg";
 	private static final String defaultProfileImageName = "profile_pic.jpg";

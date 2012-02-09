@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -40,7 +41,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 public class ScreenViewHandler extends HttpServlet {
 	private static final long serialVersionUID = -2221780306064491855L;
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			ScreenViewHandler.class, ScopeApplicationAdapter.webAppRootKey);
+			ScreenViewHandler.class, OpenmeetingsVariables.webAppRootKey);
 
 	public Sessionmanagement getSessionManagement() {
 		try {

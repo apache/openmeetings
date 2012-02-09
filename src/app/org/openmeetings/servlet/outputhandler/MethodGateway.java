@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.conference.Roommanagement;
@@ -47,7 +48,7 @@ public class MethodGateway extends HttpServlet {
 
 	private static final long serialVersionUID = -2954875038645746731L;
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			MethodGateway.class, ScopeApplicationAdapter.webAppRootKey);
+			MethodGateway.class, OpenmeetingsVariables.webAppRootKey);
 
 	public Sessionmanagement getSessionManagement() {
 		try {

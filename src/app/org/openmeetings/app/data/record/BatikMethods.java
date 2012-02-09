@@ -34,8 +34,8 @@ import javax.swing.JTextArea;
 
 import org.apache.batik.dom.svg.SVGDOMImplementation;
 import org.apache.batik.svggen.SVGGraphics2D;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.geom.ArrowStyle;
 import org.openmeetings.utils.geom.GeomPoint;
 import org.red5.logging.Red5LoggerFactory;
@@ -46,7 +46,7 @@ import org.w3c.dom.Element;
 
 public class BatikMethods {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(BatikMethods.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(BatikMethods.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
 	private Configurationmanagement cfgManagement;
 

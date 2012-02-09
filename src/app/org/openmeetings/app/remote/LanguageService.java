@@ -22,6 +22,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.FieldLanguageDaoImpl;
@@ -32,7 +33,6 @@ import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.persistence.beans.lang.FieldLanguage;
 import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.persistence.beans.lang.Fieldvalues;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class LanguageService {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			LanguageService.class, ScopeApplicationAdapter.webAppRootKey);
+			LanguageService.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
 	private Sessionmanagement sessionManagement;
 	@Autowired

@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.conference.whiteboard.WhiteboardManagement;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
@@ -59,7 +60,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ConferenceLibrary implements IPendingServiceCallback {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			ConferenceLibrary.class, ScopeApplicationAdapter.webAppRootKey);
+			ConferenceLibrary.class, OpenmeetingsVariables.webAppRootKey);
 
 	// Beans, see red5-web.xml
 	private ClientListManager clientListManager = null;

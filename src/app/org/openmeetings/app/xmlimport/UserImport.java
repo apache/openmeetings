@@ -24,13 +24,13 @@ import java.util.Iterator;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.user.Emailmanagement;
 import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Statemanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.user.Users;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -39,7 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class UserImport {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			UserImport.class, ScopeApplicationAdapter.webAppRootKey);
+			UserImport.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired

@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.velocity.Template;
 import org.apache.velocity.context.Context;
 import org.apache.velocity.tools.view.VelocityViewServlet;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.user.Usermanagement;
@@ -40,7 +41,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 public class ActivateUser extends VelocityViewServlet {
 	private static final long serialVersionUID = -8892729047921796170L;
 	private static Logger log = Red5LoggerFactory.getLogger(ActivateUser.class,
-			ScopeApplicationAdapter.webAppRootKey);
+			OpenmeetingsVariables.webAppRootKey);
 
 	private Configurationmanagement getConfigurationmanagement() {
 		try {
@@ -98,7 +99,7 @@ public class ActivateUser extends VelocityViewServlet {
 			}
 
 			String hash = httpServletRequest.getParameter("u");
-			String loginURL = ScopeApplicationAdapter.webAppRootPath;
+			String loginURL = OpenmeetingsVariables.webAppRootPath;
 
 			ctx.put("APP_NAME", getConfigurationmanagement().getAppName());
 			if (hash == null) {

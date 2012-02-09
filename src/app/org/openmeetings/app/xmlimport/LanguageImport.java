@@ -24,18 +24,18 @@ import java.util.Iterator;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.FieldLanguageDaoImpl;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.persistence.beans.lang.Fieldvalues;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class LanguageImport {
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			LanguageImport.class, ScopeApplicationAdapter.webAppRootKey);
+			LanguageImport.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
 	private Fieldmanagment fieldmanagment;

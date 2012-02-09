@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.velocity.Template;
 import org.apache.velocity.context.Context;
 import org.apache.velocity.tools.view.VelocityViewServlet;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
@@ -51,7 +52,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 public class RTPSharerServlet extends VelocityViewServlet {
 	private static final long serialVersionUID = -3803050458625713769L;
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			RTPSharerServlet.class, ScopeApplicationAdapter.webAppRootKey);
+			RTPSharerServlet.class, OpenmeetingsVariables.webAppRootKey);
 
 	public Sessionmanagement getSessionManagement() {
 		try {

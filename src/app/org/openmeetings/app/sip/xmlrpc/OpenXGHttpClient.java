@@ -32,11 +32,11 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.persistence.beans.basic.Configuration;
 import org.openmeetings.app.persistence.beans.sip.OpenXGReturnObject;
 import org.openmeetings.app.persistence.beans.user.UserSipData;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.sip.xmlrpc.custom.OpenXGCustomXMLMarshall;
 import org.openmeetings.app.sip.xmlrpc.custom.dao.OpenXGReturnObjectDaoImpl;
 import org.openmeetings.utils.crypt.MD5;
@@ -51,7 +51,7 @@ import org.w3c.dom.NodeList;
 public class OpenXGHttpClient {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			OpenXGHttpClient.class, ScopeApplicationAdapter.webAppRootKey);
+			OpenXGHttpClient.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
 	private Configurationmanagement cfgManagement;
 	@Autowired

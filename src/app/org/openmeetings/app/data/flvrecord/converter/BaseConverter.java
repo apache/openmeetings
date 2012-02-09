@@ -22,6 +22,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDataDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDeltaDaoImpl;
@@ -36,7 +37,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class BaseConverter {
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			BaseConverter.class, ScopeApplicationAdapter.webAppRootKey);
+			BaseConverter.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
 	private Configurationmanagement configurationmanagement;

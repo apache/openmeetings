@@ -23,9 +23,9 @@ import java.util.Date;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ public class InvitationTemplate extends VelocityLoader {
 	private Fieldmanagment fieldmanagment;
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			InvitationTemplate.class, ScopeApplicationAdapter.webAppRootKey);
+			InvitationTemplate.class, OpenmeetingsVariables.webAppRootKey);
 
 	public String getRegisterInvitationTemplate(String user, String message,
 			String invitation_link, Long default_lang_id, Date dStart, Date dEnd) {

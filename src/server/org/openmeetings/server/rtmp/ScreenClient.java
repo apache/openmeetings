@@ -22,7 +22,7 @@ package org.openmeetings.server.rtmp;
 //import org.apache.mina.common.ByteBuffer;
 import java.io.IOException;
 
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.red5.io.utils.ObjectMap;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.event.IEvent;
@@ -52,8 +52,7 @@ import org.slf4j.Logger;
 public class ScreenClient extends RTMPClient implements INetStreamEventHandler, 
 		ClientExceptionHandler, IPendingServiceCallback {
 
-	private static final Logger logger = Red5LoggerFactory.getLogger(ScreenClient.class, ScopeApplicationAdapter.webAppRootKey);
-    //private static final Logger logger = Red5LoggerFactory.getLogger( RTMPUser.class );
+	private static final Logger logger = Red5LoggerFactory.getLogger(ScreenClient.class, OpenmeetingsVariables.webAppRootKey);
 
     public boolean createdPlayStream = false;
 
@@ -68,9 +67,6 @@ public class ScreenClient extends RTMPClient implements INetStreamEventHandler,
     private String playName;
 
     private RTMPConnection conn;
-
-    //private ByteBuffer buffer;
-
 
     // ------------------------------------------------------------------------
     //

@@ -19,11 +19,11 @@
 package org.openmeetings.server.codec;
 
 
-import org.apache.mina.filter.codec.ProtocolDecoderOutput;
-import org.apache.mina.filter.codec.CumulativeProtocolDecoder;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.apache.mina.filter.codec.CumulativeProtocolDecoder;
+import org.apache.mina.filter.codec.ProtocolDecoderOutput;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.server.beans.ServerFrameBean;
 import org.openmeetings.server.beans.ServerFrameCursorStatus;
 import org.openmeetings.server.beans.ServerStatusBean;
@@ -38,7 +38,7 @@ import org.slf4j.Logger;
  */
 public class ServerDesktopRequestDecoder extends CumulativeProtocolDecoder {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(ServerDesktopRequestDecoder.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ServerDesktopRequestDecoder.class, OpenmeetingsVariables.webAppRootKey);
 
 	private static final String DECODER_STATE_KEY = ServerDesktopRequestDecoder.class.getName() + ".STATE";
 

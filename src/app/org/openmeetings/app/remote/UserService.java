@@ -26,6 +26,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
@@ -72,7 +73,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class UserService {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			UserService.class, ScopeApplicationAdapter.webAppRootKey);
+			UserService.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
 	private ClientListManager clientListManager;

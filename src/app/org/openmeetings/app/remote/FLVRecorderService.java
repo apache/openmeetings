@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.conference.Roommanagement;
@@ -63,7 +64,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class FLVRecorderService implements IPendingServiceCallback {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			FLVRecorderService.class, ScopeApplicationAdapter.webAppRootKey);
+			FLVRecorderService.class, OpenmeetingsVariables.webAppRootKey);
 
 	// Spring Beans
 	@Autowired

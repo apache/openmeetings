@@ -25,6 +25,7 @@ import java.util.LinkedList;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.utils.stringhandlers.ChatString;
 import org.red5.server.api.IScope;
 
@@ -33,7 +34,7 @@ import com.thoughtworks.xstream.io.xml.XppDriver;
 
 public class EmoticonsManager {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(EmoticonsManager.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(EmoticonsManager.class, OpenmeetingsVariables.webAppRootKey);
 	
 	private static LinkedList<LinkedList<String>> emotfilesList = new LinkedList<LinkedList<String>>();
 

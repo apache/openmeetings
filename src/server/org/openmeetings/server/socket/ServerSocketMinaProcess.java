@@ -27,7 +27,7 @@ import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.logging.LoggingFilter;
 import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.server.beans.ServerFrameBean;
 import org.openmeetings.server.beans.ServerFrameCursorStatus;
 import org.openmeetings.server.beans.ServerSharingSessionBean;
@@ -47,7 +47,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class ServerSocketMinaProcess {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(ServerSocketMinaProcess.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ServerSocketMinaProcess.class, OpenmeetingsVariables.webAppRootKey);
 	
 	private static NioSocketAcceptor acceptor = null;
 	

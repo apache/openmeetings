@@ -21,6 +21,7 @@ package org.openmeetings.app.remote;
 import java.util.Date;
 import java.util.List;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl;
@@ -31,7 +32,6 @@ import org.openmeetings.app.persistence.beans.calendar.Appointment;
 import org.openmeetings.app.persistence.beans.rooms.RoomTypes;
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.user.Users;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class CalendarService {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			CalendarService.class, ScopeApplicationAdapter.webAppRootKey);
+			CalendarService.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
 	private AppointmentDaoImpl appointmentDao;

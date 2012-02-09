@@ -20,7 +20,7 @@ package org.openmeetings.app.sip.xmlrpc.test;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.utils.crypt.MD5;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 
 public class OpenXGWrapperClient {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(OpenXGWrapperClient.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(OpenXGWrapperClient.class, OpenmeetingsVariables.webAppRootKey);
 
 	private static OpenXGWrapperClient instance = null;
 

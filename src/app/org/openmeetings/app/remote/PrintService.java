@@ -22,11 +22,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.batik.beans.PrintBean;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.crypt.MD5;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -35,7 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class PrintService {
 
 
-	private static final Logger log = Red5LoggerFactory.getLogger(PrintService.class, ScopeApplicationAdapter.webAppRootKey);	
+	private static final Logger log = Red5LoggerFactory.getLogger(PrintService.class, OpenmeetingsVariables.webAppRootKey);	
 	
 	private static HashMap<String,PrintBean> currentExportList = new HashMap<String,PrintBean>();
 	@Autowired

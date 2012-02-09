@@ -24,17 +24,17 @@ import java.util.Iterator;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.file.dto.LibraryPresenationThumbs;
 import org.openmeetings.app.data.file.dto.LibraryPresentation;
 import org.openmeetings.app.data.file.dto.LibraryPresentationFile;
 import org.openmeetings.app.data.file.dto.LibraryPresentationThumb;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class LoadLibraryPresentation {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(LoadLibraryPresentation.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(LoadLibraryPresentation.class, OpenmeetingsVariables.webAppRootKey);
 	
 	private static LoadLibraryPresentation instance;
 

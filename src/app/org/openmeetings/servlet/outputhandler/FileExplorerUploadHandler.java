@@ -27,6 +27,7 @@ import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.file.FileProcessor;
 import org.openmeetings.app.data.file.dao.FileExplorerItemDaoImpl;
@@ -41,7 +42,7 @@ public class FileExplorerUploadHandler extends UploadHandler {
 	private static final long serialVersionUID = 2848421357849982426L;
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			FileExplorerUploadHandler.class,
-			ScopeApplicationAdapter.webAppRootKey);
+			OpenmeetingsVariables.webAppRootKey);
 
 	public FileExplorerItemDaoImpl getFileExplorerItemDao() {
 		try {

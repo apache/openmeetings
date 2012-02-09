@@ -26,6 +26,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.conference.Roommanagement;
@@ -106,7 +107,7 @@ public class StreamService implements IPendingServiceCallback {
 	private AuthLevelmanagement authLevelManagement;
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			StreamService.class, ScopeApplicationAdapter.webAppRootKey);
+			StreamService.class, OpenmeetingsVariables.webAppRootKey);
 
 	private static LinkedHashMap<String, RoomRecording> roomRecordingList = new LinkedHashMap<String, RoomRecording>();
 

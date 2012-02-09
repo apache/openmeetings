@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.velocity.Template;
 import org.apache.velocity.context.Context;
 import org.apache.velocity.tools.view.VelocityViewServlet;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.documents.InstallationDocumentHandler;
 import org.openmeetings.app.installation.ImportInitvalues;
@@ -72,7 +73,7 @@ public class Install extends VelocityViewServlet {
 	}
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			Install.class, ScopeApplicationAdapter.webAppRootKey);
+			Install.class, OpenmeetingsVariables.webAppRootKey);
 
 	private Template getStep2Template(HttpServletRequest httpServletRequest, Context ctx, String lang) throws Exception {
 		String header = httpServletRequest.getHeader("Accept-Language");
@@ -147,7 +148,7 @@ public class Install extends VelocityViewServlet {
 			HttpServletResponse httpServletResponse, Context ctx) {
 
 		try {
-			ctx.put("APP_ROOT", ScopeApplicationAdapter.webAppRootKey);
+			ctx.put("APP_ROOT", OpenmeetingsVariables.webAppRootKey);
 
 			if (getImportInitvalues() == null || getConfigurationmanagement() == null) {
 				return getVelocityView().getVelocityEngine().getTemplate(

@@ -28,9 +28,9 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.persistence.beans.basic.Configuration;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ import org.springframework.core.task.TaskExecutor;
 public class MailThread {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			MailHandler.class, ScopeApplicationAdapter.webAppRootKey);
+			MailHandler.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
 	private Configurationmanagement cfgManagement;

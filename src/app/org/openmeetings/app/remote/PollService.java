@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.conference.PollManagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.persistence.beans.poll.PollType;
@@ -48,7 +49,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class PollService implements IPendingServiceCallback {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			PollService.class, ScopeApplicationAdapter.webAppRootKey);
+			PollService.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
 	private ClientListManager clientListManager;

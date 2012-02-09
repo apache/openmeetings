@@ -29,6 +29,7 @@ import java.util.Map;
 import org.apache.batik.dom.GenericDOMImplementation;
 import org.apache.batik.dom.svg.SVGDOMImplementation;
 import org.apache.batik.svggen.SVGGraphics2D;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.record.dao.RecordingConversionJobDaoImpl;
 import org.openmeetings.app.data.record.dao.RecordingDaoImpl;
 import org.openmeetings.app.data.record.dao.WhiteBoardEventDaoImpl;
@@ -78,7 +79,7 @@ public class WhiteboardConvertionJobManagerSWFTools {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			WhiteboardConvertionJobManagerSWFTools.class,
-			ScopeApplicationAdapter.webAppRootKey);
+			OpenmeetingsVariables.webAppRootKey);
 	@Autowired
 	private RecordingDaoImpl recordingDao;
 	@Autowired

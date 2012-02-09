@@ -20,7 +20,7 @@ package org.openmeetings.utils;
 
 import javax.servlet.ServletContextEvent;
 
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.red5.logging.ContextLoggingListener;
 
 public class OMContextListener extends ContextLoggingListener {
@@ -30,10 +30,10 @@ public class OMContextListener extends ContextLoggingListener {
 	}
 
 	public void contextInitialized(ServletContextEvent event) {
-		ScopeApplicationAdapter.webAppRootKey = pathToName(event);
-		ScopeApplicationAdapter.webAppRootPath = "/" + ScopeApplicationAdapter.webAppRootKey;
-		System.setProperty("current_openmeetings_context_name", ScopeApplicationAdapter.webAppRootKey);
-		System.setProperty("webapp.contextPath", ScopeApplicationAdapter.webAppRootPath);
+		OpenmeetingsVariables.webAppRootKey = pathToName(event);
+		OpenmeetingsVariables.webAppRootPath = "/" + OpenmeetingsVariables.webAppRootKey;
+		System.setProperty("current_openmeetings_context_name", OpenmeetingsVariables.webAppRootKey);
+		System.setProperty("webapp.contextPath", OpenmeetingsVariables.webAppRootPath);
 		System.setProperty("logback.configurationFile", "logback-config.xml");
 		super.contextInitialized(event);
 	}

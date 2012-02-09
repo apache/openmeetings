@@ -25,13 +25,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.file.dao.FileExplorerItemDaoImpl;
 import org.openmeetings.app.data.flvrecord.converter.FlvExplorerConverter;
 import org.openmeetings.app.documents.GenerateImage;
 import org.openmeetings.app.documents.GeneratePDF;
 import org.openmeetings.app.documents.GenerateThumbs;
 import org.openmeetings.app.persistence.beans.files.FileExplorerItem;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.StoredFile;
 import org.openmeetings.utils.crypt.MD5;
 import org.red5.logging.Red5LoggerFactory;
@@ -40,7 +40,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class FileProcessor {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(FileProcessor.class, ScopeApplicationAdapter.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(FileProcessor.class, OpenmeetingsVariables.webAppRootKey);
 
 	//Spring loaded Beans
 	@Autowired

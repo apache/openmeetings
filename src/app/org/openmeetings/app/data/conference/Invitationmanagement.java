@@ -31,6 +31,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
@@ -42,7 +43,6 @@ import org.openmeetings.app.persistence.beans.calendar.MeetingMember;
 import org.openmeetings.app.persistence.beans.invitation.Invitations;
 import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.persistence.beans.user.Users;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.templates.InvitationTemplate;
 import org.openmeetings.utils.crypt.MD5;
 import org.openmeetings.utils.crypt.ManageCryptStyle;
@@ -65,7 +65,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class Invitationmanagement {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			Invitationmanagement.class, ScopeApplicationAdapter.webAppRootKey);
+			Invitationmanagement.class, OpenmeetingsVariables.webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;

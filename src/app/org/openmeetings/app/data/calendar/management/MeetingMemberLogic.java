@@ -20,6 +20,7 @@ package org.openmeetings.app.data.calendar.management;
 
 import java.util.TimeZone;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.calendar.daos.MeetingMemberDaoImpl;
 import org.openmeetings.app.data.conference.Invitationmanagement;
@@ -30,7 +31,6 @@ import org.openmeetings.app.persistence.beans.calendar.MeetingMember;
 import org.openmeetings.app.persistence.beans.invitation.Invitations;
 import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.persistence.beans.user.Users;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -39,7 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class MeetingMemberLogic {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			MeetingMemberLogic.class, ScopeApplicationAdapter.webAppRootKey);
+			MeetingMemberLogic.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
 	private AppointmentLogic appointmentLogic;

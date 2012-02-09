@@ -21,6 +21,7 @@ package org.openmeetings.axis.services;
 import java.util.Date;
 
 import org.apache.axis2.AxisFault;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.ErrorManagement;
@@ -39,7 +40,6 @@ import org.openmeetings.app.persistence.beans.basic.Sessiondata;
 import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.MainService;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +59,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 public class UserWebService {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			UserWebService.class, ScopeApplicationAdapter.webAppRootKey);
+			UserWebService.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
 	private Sessionmanagement sessionManagement;
