@@ -26,17 +26,19 @@
 ##########################################################
 these properties will be overwritten by config.xml -->  
 
-<attribute name="vid_lc_name" value="" type="String"/>
+<attribute name="vid_lc_name" value="" type="string"/>
+
+<attribute name="lc_SID" value="" type="string"/>
 
 <attribute name="lc"/>
 
-<attribute name="rtmp_lc_name" value="" type="String"/>
+<attribute name="rtmp_lc_name" value="" type="string"/>
 
 <attribute name="rtmp_lc"/>
 
-<attribute name="videoComp_lc_name" value="" type="String"/>
+<attribute name="videoComp_lc_name" value="" type="string"/>
 
-<attribute name="videoComp_lc_callback_name" value="" type="String"/>
+<attribute name="videoComp_lc_callback_name" value="" type="string"/>
 
 <attribute name="videoComp_lc"/>
 

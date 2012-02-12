@@ -22,6 +22,7 @@
 
         var rtmpLC:LocalConnection = new LocalConnection();
         rtmpLC.connect(canvas.rtmp_lc_name);
+        if ($debug) Debug.write("Connect to LocalConnection ",canvas.rtmp_lc_name);
         rtmpLC.client=client;
         canvas.setAttribute("rtmp_lc", rtmpLC);
     ]]></handler>
@@ -41,7 +42,7 @@
     </method>
     
     <method name="reconnectSuccess" args="connection_url,publicSID,userobject">
-        if($debug) Debug.write("reconnectSuccess",connection_url);
+        if($debug) Debug.write("reconnectSuccess",connection_url,publicSID,userobject);
         canvas.publicSID = publicSID;
         canvas.userobject = userobject;
         canvas.thishib.setAttribute('src',connection_url);

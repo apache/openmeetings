@@ -689,6 +689,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 					.getClientByStreamId(streamid);
 
 			// Notify all the clients that the stream had been started
+			log.debug("start streamPublishStart broadcast start: "
+					+ stream.getPublishedName() + "CONN " + current);
 			System.out.println("start streamPublishStart broadcast start: "
 					+ stream.getPublishedName() + "CONN " + current);
 

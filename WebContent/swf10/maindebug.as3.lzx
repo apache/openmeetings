@@ -70,14 +70,18 @@
         
         var tqueryString = "";
         for (var i=0;i<tInitArgsArry.length;i++) {
-            if ($debug) Debug.write(tInitArgsArry[i],lz.Browser.getInitArg(tInitArgsArry[i]));
+            // if ($debug) Debug.write(tInitArgsArry[i],lz.Browser.getInitArg(tInitArgsArry[i]));
             var tValue = lz.Browser.getInitArg(tInitArgsArry[i]);
             if (tValue != undefined) {
                 tqueryString += "&"+tInitArgsArry[i]+"="+tValue;
             }
         }
         
-        var request:URLRequest = new URLRequest("maindebug.swf8.swf?lzproxied=solo&lcSID"+tqueryString);
+        var tSWFURL = "maindebug.swf8.swf?lzproxied=solo&lc_SID="+lc_SID+tqueryString;
+        
+        if ($debug) Debug.write("tSWFURL :: ",tSWFURL);
+        
+        var request:URLRequest = new URLRequest(tSWFURL);
         var loader:Loader = new Loader();
         loader.load(request);
         this.mainComponent.sprite.addChild(loader);

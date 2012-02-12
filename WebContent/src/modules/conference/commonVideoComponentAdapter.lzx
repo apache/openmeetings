@@ -23,6 +23,7 @@
         Invoked after the user enters the room to connect the SWF10 app to the server via rtmp(t/s)
      -->
     <method name="reconnectSuccess">
+    	if ($debug) Debug.write("Send reconnectSuccess to ",canvas.rtmp_lc_name);
     	canvas.lc.send(canvas.rtmp_lc_name, "reconnectSuccess", canvas.thishib.src, canvas.publicSID, hib.userobject);
     </method>
     

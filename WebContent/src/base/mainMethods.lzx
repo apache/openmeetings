@@ -178,19 +178,16 @@
         
         this.setAttribute('proxyType',canvas.myConfigSet.getPointer().xpathQuery('config/proxyType/text()'));
 
-        var pMap = {};
-        if($debug) Debug.write("Param query: ", _url.substr(_url.indexOf("?")+1));
-        var params:Array = _url.substr(_url.indexOf('?')+1).split('&');
-        for(var i:Number=0; i<params.length; i++ ) {
-            if($debug) Debug.write(params[i]);
-            var tokens:Array = params[i].split('=');
-            pMap[tokens[0]] = tokens[1];
-            if($debug) Debug.write("param: ", tokens[0], "=", tokens[1]);
+        var lc_SID = lz.Browser.getInitArg('lc_SID');
+        
+        if($debug) Debug.write("lc_SID: ", lc_SID);
+        
+        if (lc_SID == undefined) {
+        	new lz.errorPopup(canvas,{'error':'You are loading the wrong SWF, there is no lz_SID given'});
+        	return;
         }
 
-        if($debug) Debug.write("Params: ", pMap);
-
-        this.setAttribute('lc_SID', pMap['lcSID']);
+        this.setAttribute('lc_SID', lc_SID);
         this.setAttribute('vid_lc_name', this.lc_SID + "__videoLC");
         this.setAttribute('rtmp_lc_name', this.lc_SID + "__rtmpLC");
         this.setAttribute('videoComp_lc_name', this.lc_SID + "__streamLC");
