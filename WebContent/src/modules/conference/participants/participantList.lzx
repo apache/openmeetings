@@ -163,7 +163,6 @@
             for (var i=0;i<this._table.innerList.subviews.length;i++){
                 if (this._table.innerList.subviews[i].refObj.publicSID==publicSID){
                     var item = this._table.innerList.subviews[i];
-                    item.resetValues();
                     item.destroy();
                     break;
                 }

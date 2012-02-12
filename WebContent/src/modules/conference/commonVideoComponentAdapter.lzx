@@ -4,10 +4,14 @@
 <class name="commonVideoComponentAdapter" extends="view">
 
     <handler name="oninit">
+    	var t = this;
         canvas.videoComp_lc.lc_switchMicMuted = function(publicSID, tMute) {
             if ($debug) Debug.write("lc_switchMicMuted", publicSID, tMute);
             canvas.thishib.switchMicMuted.setMute(publicSID, tMute);
         };
+        canvas.videoComp_lc.as3ConnectionSuccess = function() {
+        	t.parent.as3ConnectionSuccess();
+        }
     </handler>
     
     <!---

@@ -51,10 +51,6 @@
 		<baseVideoStreamDevice name="_videostream" mode="broadcast">
 		  <handler name="onlevel">
                 <![CDATA[
-                    //if (this.level > 0) {
-                        //parent._activityLevel.bringToFront();
-                        //parent._activityLevel.setAttribute("visibility","visible");
-                    //}
                     var fullLength = parent.height-24;
                     parent._activityLevel.setAttribute("height",this.level*(fullLength/100));
                 ]]>

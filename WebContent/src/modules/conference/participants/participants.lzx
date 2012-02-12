@@ -64,10 +64,23 @@
                   
     <method name="reconnectSuccess">
         if ($debug) Debug.write("User Reloged In");
+        //Send to SWF10 video-container to connect on the conference room url 
+        //and wait for the as3ConnectionSuccess-Event
         this._videoviewcontent.reconnectSuccess();
-        //set default values and get already availible streams
+    </method>
+    
+    <!---
+        We need to wait till the video-container / as3 app has the connection established
+        otherwise it can happen that the video tries to start playing before the rtmp-connection
+        was established
+     -->
+    <method name="as3ConnectionSuccess">
+    	if ($debug) Debug.write("as3ConnectionSuccess continue loading");
+    	//set default values and get already availible streams
         this.getRoomModeratorsByRoomId.doCall();
     </method>
+    
+    
     
     <!---
         Returns a list of all moderators of the current room and parses 

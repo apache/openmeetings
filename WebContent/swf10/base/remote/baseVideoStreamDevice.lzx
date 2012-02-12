@@ -115,22 +115,29 @@
      -->
 	<handler name="onlevel">
 		<![CDATA[
+		
+		    //if ($debug) Debug.write("onlevel ",this.level);
+		
 		    if (!this.doSendNotification){
 		    	return;
 		    }
+		    
+		    var tVal = null;
 		
-    		//this.parent.parent.parent._loudness.loudness.setAttribute('text',this.level);
-			if (this.level>canvas.loudnessAcitviation) {
-				if (!this.isgreater) {
-					this.isgreater = true;
-					this.sendNotification();
-				}
+    		//greater 5 means the green dot starts to blink if the loudness is greater then 5%
+    		//it makes no sense to set this to zero as there will be 1000 of events send 
+    		//per minute to change the status just of this icon, swagner 12.02.2012
+			if (this.level>5) {
+				tVal = true;
 			} else {
-				if (this.isgreater) {
-					this.isgreater = false;
-					this.sendNotification();
-				}
+				tVal = false;
 			}
+			
+			if (this.isgreater != tVal) {
+				this.isgreater = tVal;
+				this.sendNotification();
+			}
+			
 		]]>
 	</handler>    
 	<method name="sendNotification">
@@ -139,8 +146,15 @@
   		this.objMessage[0] = 'audioActivity';
   		this.objMessage[1] = this.isgreater;
   		this.objMessage[2] = parent.parent.publicSID;
-	  	canvas.videoComp_lc.send(canvas.videoComp_lc_name, "sendNotification", this.objMessage);
+  		if ($debug) Debug.write("Level sendNotification ",this.objMessage);
+  		this.sendMessage.doCall();
+	  	//canvas.videoComp_lc.send(canvas.videoComp_lc_name, "sendNotification", this.objMessage);
 	</method>
+	
+	<netRemoteCallHib name="sendMessage" funcname="sendMessage" 
+        remotecontext="$once{ canvas.thishib }" showLoading="false" > 
+        <netparam><method name="getValue"> return parent.parent.objMessage; </method></netparam>
+    </netRemoteCallHib>     
 
 </class>
 

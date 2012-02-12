@@ -1513,7 +1513,7 @@
                     //Debug.write("sendVarsToMessage : ",value);
                     if (value[0]=='audioActivity'){
                         //canvas.currentModApply
-                        //Debug.write("audioActivity Client ",value[1],value[2]);
+                        //if ($debug) Debug.write("audioActivity Client ",value[1],value[2]);
                         if (canvas._videocontainer.showsVideoInSeparateComponent) {
                             canvas.lc.send(canvas.vid_lc_name, "setSpeakingByPos", value[2],value[1]);
                         } else {

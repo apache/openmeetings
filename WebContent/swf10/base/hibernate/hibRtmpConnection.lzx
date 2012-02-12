@@ -34,7 +34,8 @@
              - When you leave the room again it will be re-connected to the default scope again
       -->
      <handler name="onconnect">
-		if($debug) Debug.write("hibRtmpConnection/onconnect");
+		if($debug) Debug.info("hibRtmpConnection/onconnect send to LocalConnection ");
+		canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'as3ConnectionSuccess');
         // this.overwritePublicSID.doCall();
         //this.setUsernameReconnect.doCall();
     </handler>
