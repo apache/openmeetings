@@ -33,6 +33,8 @@
     <include href="base/" />
 
     <include href="video/" />
+    
+    <include href="audioVideoTest/" />
 
     <include href="commonVideoViewContentSWF10.lzx" />
 

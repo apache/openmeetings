@@ -84,16 +84,25 @@ Test the setup values before you enter a room
     	]]>
     </handler>
     
+    <method name="justClose">
+        canvas._loadingAll.hideLoading();
+        if ($debug) Debug.write("canvas.rtmp_lc_name", canvas.rtmp_lc_name, "closeInitTestingApplication");
+        canvas.lc.send(canvas.rtmp_lc_name, "closeInitTestingApplication");
+        // it would be handy to make a little timer here as the localConnection's event is slower
+        this.close();
+    </method>
+    
     <method name="storeSettings">
         <![CDATA[
             canvas._loadingAll.hideLoading();
+            canvas.lc.send(canvas.rtmp_lc_name, "closeInitTestingApplication");
         
             //Debug.write("sharedobject store ");
-            var g = canvas.getUserData();
-            g["cam"] = this.currentSharing.availibleCams.getValue();
-            g["mic"] = this.currentSharing.availibleMics.getValue();
-            g["showAudioVideoTest"] = this.holddatainSO.getValue();
-            canvas.setUserData(g);
+            //var g = canvas.getUserData();
+            //g["cam"] = this.currentSharing.availibleCams.getValue();
+            //g["mic"] = this.currentSharing.availibleMics.getValue();
+            //g["showAudioVideoTest"] = this.holddatainSO.getValue();
+            //canvas.setUserData(g);
             
             this.startConference();
         ]]>
@@ -136,7 +145,7 @@ Test the setup values before you enter a room
     
     <simpleLabelButton name="_cancel" labelid="760" width="100" x="$once{ parent.width-105 }" 
            y="$once{ parent.height-30 }" height="28"  
-           onclick="this.parent.close();" />
+           onclick="this.parent.justClose();" />
 
 </class>
 

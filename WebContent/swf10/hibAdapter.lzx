@@ -2,6 +2,9 @@
 <library>
 
 <class name="hibAdapter">
+
+    <attribute name="testingApplication" value="null" />
+
     <switch>
         <when property="$as3">
             <passthrough>
@@ -20,6 +23,7 @@
         client.disconnect = this.disconnect;
         client.reconnectSuccess = this.reconnectSuccess;
         client.doInitTestingApplication = this.doInitTestingApplication;
+        client.closeInitTestingApplication = this.closeInitTestingApplication;
 
         var rtmpLC:LocalConnection = new LocalConnection();
         rtmpLC.connect(canvas.rtmp_lc_name);
@@ -57,7 +61,16 @@
     
     <method name="doInitTestingApplication" args="x,y">
         if($debug) Debug.write("doInitTestingApplication ",x,y);
-        new lz.testingApplication(canvas,{name:'currentSharing',x:x+1,y:y+24});
+        this.testingApplication = new lz.testingApplication(canvas,{name:'currentSharing',x:x+1,y:y+24});
+    </method>
+    
+    <method name="closeInitTestingApplication">
+        if($debug) Debug.write("closeInitTestingApplication ");
+        if (this.testingApplication != null) {
+            this.testingApplication.storeSettings();
+            this.testingApplication.destroy();
+            this.testingApplication = null;
+        }
     </method>
 
 </class>

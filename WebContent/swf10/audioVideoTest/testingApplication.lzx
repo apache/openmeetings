@@ -62,6 +62,18 @@ Test the setup values before you enter a room
 		}
 	</method>
 	
+	<method name="storeSettings">
+        <![CDATA[
+            if ($debug) Debug.write("storeSettings ");
+            var t:SharedObject = SharedObject.getLocal('userdata');
+            var g = t.data;
+            if (g==null) g = new Array();
+            g["cam"] = this.availibleCams.getValue();
+            g["mic"] = this.availibleMics.getValue();
+            t.flush();
+        ]]>
+    </method>   
+	
 	<method name="doninitalize">
         <![CDATA[
         
