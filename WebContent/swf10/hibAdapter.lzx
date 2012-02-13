@@ -19,6 +19,7 @@
         client.getRoomTypes = this.getRoomTypes;
         client.disconnect = this.disconnect;
         client.reconnectSuccess = this.reconnectSuccess;
+        client.doInitTestingApplication = this.doInitTestingApplication;
 
         var rtmpLC:LocalConnection = new LocalConnection();
         rtmpLC.connect(canvas.rtmp_lc_name);
@@ -52,6 +53,11 @@
     <method name="disconnect" >
         if($debug) Debug.write("Do disconnect");
         canvas.thishib.disconnect();
+    </method>
+    
+    <method name="doInitTestingApplication" args="x,y">
+        if($debug) Debug.write("doInitTestingApplication ",x,y);
+        new lz.testingApplication(canvas,{name:'currentSharing',x:x+1,y:y+24});
     </method>
 
 </class>

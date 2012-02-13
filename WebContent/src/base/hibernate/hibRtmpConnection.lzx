@@ -159,8 +159,7 @@
                 return;
             } else if (this.showKickMessage) {
                 new lz.labelerrorPopup(canvas,{errorlabelid:606});
-                canvas._loadingAll.setAttribute("visibility","visible");
-                canvas._loadingAll.subviews[0].destroy();
+                canvas._loadingAll.hideContentOnly();
                 return;
             } else if (this.reconnectionAction){
                 this.connect();

@@ -93,6 +93,9 @@
 	<!--- @keywords private  -->
 	<attribute name="initheight" value="0" type="number" />
 	
+	<!-- do not allow draging of window -->
+	<attribute name="allowDragging" value="true" type="boolean" />
+	
 	<!--- @keywords private store initial height so toggleopen can reset height  -->
 	<handler name="oninit">
 		this.initheight=this.height;
@@ -169,7 +172,10 @@
 	
 	<!--- @keywords private  -->
 	<method name="_removeDragState" args="obj">
-		//It's important to remove the dragger and do docking stuff before you check for conencted Boxes
+	    if (!this.allowDragging) {
+	       return;
+	    }
+		//It's important to remove the dragger and do docking stuff before you check for connected Boxes
 		dragger.remove();
 		if (obj==this){
 			if (docking) arrangePosition();
@@ -192,6 +198,9 @@
 		or by a Box which is connected to this Box!  -->
 	<method name="_startDragState" args="obj">
 		this.bringToFront();
+		if (!this.allowDragging) {
+           return;
+        }
 		_calcdockingList();
 		for (var eg in this.dockinglist){
 			if(this.dockinglist[eg].docking){

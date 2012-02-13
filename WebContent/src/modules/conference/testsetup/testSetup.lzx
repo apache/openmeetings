@@ -47,8 +47,9 @@ Test the setup values before you enter a room
     
 </class> 
  
-<class name="testSetup" extends="labelExplorerBox" labelid="757" x="$once{ parent.width/2 - 300 }" 
-    y="100" docking="true" resizeable="false" closable="true" width="600" height="400">
+<class name="testSetup" extends="labelExplorerBox" labelid="757" allowDragging="false" 
+    x="$once{ parent.width/2 - 300 }" y="100" docking="true" resizeable="false" 
+    closable="true" width="600" height="400">
 
     <attribute name="roomClassName" type="string" value="" />
     
@@ -75,7 +76,9 @@ Test the setup values before you enter a room
             		this._cancel.setAttribute("visibility","hidden");
             	}
             	
-                new lz.testingApplication(this,{name:'currentSharing'});
+            	canvas._loadingAll.hideContentOnly();
+            	if ($debug) Debug.write("canvas.rtmp_lc_name", canvas.rtmp_lc_name, "initTestingApplication", this.x, this.y);
+            	canvas.lc.send(canvas.rtmp_lc_name, "doInitTestingApplication", this.x, this.y);
             }
             
     	]]>
@@ -83,6 +86,7 @@ Test the setup values before you enter a room
     
     <method name="storeSettings">
         <![CDATA[
+            canvas._loadingAll.hideLoading();
         
             //Debug.write("sharedobject store ");
             var g = canvas.getUserData();

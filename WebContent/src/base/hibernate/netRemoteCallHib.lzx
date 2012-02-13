@@ -41,7 +41,7 @@
 		if (this.registerObject) this.parent.addViewToObserver(this);
 	</handler>	
 	<method name="doCall">
-        if (this.showLoading) canvas._loadingAll.setAttribute('visible',true);
+        if (this.showLoading) canvas._loadingAll.showLoading();
 		//if($debug) Debug.write("netRemoteCallHib/doCall: [ " , this.funcname , " ]",this.parent);
 		this.callRPC();
 	</method>
@@ -55,7 +55,7 @@
 		<![CDATA[
 			//Debug.write("ondata: ",this.funcname,value);
 			
-			if (this.showLoading) canvas._loadingAll.setAttribute('visible',false);
+			if (this.showLoading) canvas._loadingAll.hideLoading();
 			
 			//Another Error Handler for the Form-Components
 			if (this.returnObj!=null && Number(value)>0) {

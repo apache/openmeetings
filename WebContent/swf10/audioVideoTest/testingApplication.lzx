@@ -1,23 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!--
-  Licensed to the Apache Software Foundation (ASF) under one
-  or more contributor license agreements.  See the NOTICE file
-  distributed with this work for additional information
-  regarding copyright ownership.  The ASF licenses this file
-  to you under the Apache License, Version 2.0 (the
-  "License"); you may not use this file except in compliance
-  with the License.  You may obtain a copy of the License at
-  
-      http://www.apache.org/licenses/LICENSE-2.0
-    	  
-  Unless required by applicable law or agreed to in writing,
-  software distributed under the License is distributed on an
-  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-  KIND, either express or implied.  See the License for the
-  specific language governing permissions and limitations
-  under the License.
-  
--->
 <library>
 
 <!-- 
@@ -27,7 +8,18 @@ Test the setup values before you enter a room
 
  -->
  
-<class name="testingApplication" extends="view" x="1" y="24">
+<class name="testingApplication" extends="view" width="600" height="400">
+
+    <switch>
+        <when property="$as3">
+            <passthrough>
+                import flash.media.Camera;
+                import flash.media.Microphone;
+                import flash.net.SharedObject;
+                import flash.media.SoundCodec;
+            </passthrough>
+        </when>
+    </switch>
 	
 	<attribute name="lastRecorded" value="" type="string" />
 	
@@ -89,10 +81,40 @@ Test the setup values before you enter a room
             if ($debug) Debug.write("videoview: ",videoview);
             if ($debug) Debug.write(valCam,valMic);
             
-            var _micro = Microphone.get(valMic);
-            var _camera = Camera.get(valCam);
+            var _micro = null;
+            var _camera = null;
+            if (valMic != null) {
+                 _micro = Microphone.getMicrophone(valMic);
+                 if (_micro != null) {
+                     _micro.codec = SoundCodec.SPEEX;
+                     _micro.framesPerPacket = 1;
+                     _micro.setSilenceLevel(0, 2000);
+                     _micro.gain = 50;
+                     // this has no effect if enhanced microphone is obtained
+                    //Microphone setUseEchoSupression(bool)
+                    _micro.setUseEchoSuppression(true);
+                }
+            }
+            if (valCam != null) {
+                _camera = Camera.getCamera(valCam);
+            }
+            
             if ($debug) Debug.write("_camera.setMode: ",videoview.width,videoview.height,canvas.framesPerSecond,true);
-            _camera.setMode(videoview.width,videoview.height,canvas.framesPerSecond,true);
+
+            //Microphone.set
+            if ($debug) Debug.write("canvas.vaquality: ",canvas.vaquality, "canvas.microphoneRateBest: ",canvas.microphoneRateBest);
+            if (_camera != null) {
+                if ($debug) Debug.write("_camera.setQuality BEST: ",this.isInterview,(canvas.bandwidthNeededBest*2),canvas.camQualityBest);
+                if (this.isInterview) {
+                    _camera.setMode(videoview.width,videoview.height,24,true);
+                    if ($debug) Debug.warn("IS INTERVIEW ");
+                    _camera.setQuality(0,98);
+                } else {
+                    _camera.setMode(videoview.width,videoview.height,canvas.framesPerSecond,true);
+                    if ($debug) Debug.warn("IS NO INTERVIEW ");
+                    _camera.setQuality(canvas.bandwidthNeededBest,canvas.camQualityBest);
+                }
+            }
             
             //The First start-timer message will come from the Flash Object
             
@@ -102,22 +124,6 @@ Test the setup values before you enter a room
             if (!_camera.muted) {
                 this.startTimer();
             }
-            
-            
-            //Microphone.set
-            if (canvas.vaquality=="best") {
-                _micro.setRate(canvas.microphoneRateBest);
-                if ($debug) Debug.write("_camera.setQuality BEST: ",canvas.bandwidthNeededBest,canvas.camQualityBest);
-                _camera.setQuality(canvas.bandwidthNeededBest,canvas.camQualityBest);
-            } else {
-                _micro.setRate(canvas.microphoneRateNormal);
-                _micro.setSilenceLevel(canvas.loudnessAcitviation);
-                if ($debug) Debug.write("_camera.setQuality NORMAL: ",canvas.bandwidthNeededNormal,canvas.camQualityNormal);
-                _camera.setQuality(canvas.bandwidthNeededNormal,canvas.camQualityNormal);
-            }
-            
-            //Microphone setUseEchoSupression(bool)
-            _micro.setUseEchoSuppression(true);
 
             //start recording of client stream
             
@@ -171,11 +177,19 @@ Test the setup values before you enter a room
     </method>
 	
 	<labelText fontstyle="bold" labelid="758"
-			   width="$once{ parent.parent.width-2 }" height="30" multiline="true" /> 
+			   width="$once{ parent.width-2 }" height="30" multiline="true" /> 
 	
 	<labelText name="availibleCamsLabel" labelid="52" fontsize="11" x="2" y="40" />
 
     <resetCombobox fontsize="11" name="availibleCams" x="10" y="60" width="260" editable="false">
+        <switch>
+            <when property="$as3">
+                <passthrough>
+                    import flash.media.Camera;
+                    import flash.net.SharedObject;
+                </passthrough>
+            </when>
+        </switch>
         <handler name="oninit">
             <![CDATA[
                 //Get all availible Cam's
@@ -185,10 +199,15 @@ Test the setup values before you enter a room
                     this.addItem(tw[eg],eg);
                     r=eg;
                 }
-                var g = canvas.getUserData();
-                var cam = g["cam"];
+                var t:SharedObject = SharedObject.getLocal('userdata');
+                var g = t.data;
+                if (g!=null){
+                    var cam = g["cam"];
+                } else {
+                    var cam = r;
+                }
                 if (cam=='undefined' || cam =='' || cam == null) cam=r;
-                this.selectItem(String(cam));    
+                this.selectItem(String(cam));
 
             ]]>
         </handler>
@@ -197,6 +216,14 @@ Test the setup values before you enter a room
     <labelText name="availibleMicsLabel" labelid="53" fontsize="11" x="2" y="84" />
 
     <resetCombobox fontsize="11" name="availibleMics"  x="10" y="104" width="260" editable="false">
+        <switch>
+            <when property="$as3">
+                <passthrough>
+                    import flash.media.Microphone;
+                    import flash.net.SharedObject;
+                </passthrough>
+            </when>
+        </switch>
         <handler name="oninit">
             <![CDATA[
                 //Get all availible Mic's
@@ -206,11 +233,16 @@ Test the setup values before you enter a room
                     r=eg;
                     this.addItem(tw[eg],eg);
                 }
-                
-                var g = canvas.getUserData();
-                var mic = g["mic"];
+
+                var t:SharedObject = SharedObject.getLocal('userdata');
+                var g = t.data;
+                if (g!=null){
+                    var mic = g["mic"];
+                } else {
+                    var mic = r;
+                }
                 if (mic=='undefined' || mic =='' || mic ==null) mic=r;
-                this.selectItem(String(mic));  
+                this.selectItem(String(mic));
             ]]>
         </handler>
     </resetCombobox>
@@ -279,14 +311,14 @@ Test the setup values before you enter a room
     </simpleLabelRoundButtonIcon>
      -->
      
-    <simpleLabelRoundButtonIcon name="_play" y="190" x="490" visibility="hidden"
-                ressourceIcon="test_setup_play_rsc"
-                width="86" tlabelid="764" 
+     <!-- ressourceIcon="test_setup_play_rsc" -->
+    <simpleLabelButton name="_play" y="190" x="490" visibility="hidden"
+                width="86" labelid="764" 
                 enabled="false">
         <handler name="onclick">
             parent.doPlay();
         </handler>
-    </simpleLabelRoundButtonIcon>
+    </simpleLabelButton>
      
     <labelText labelid="767" x="340" y="224" />
     
@@ -331,7 +363,7 @@ Test the setup values before you enter a room
     <view y="294" resource="test_setup_info_rsc" x="10" />
     
     <labelText fontstyle="bold" labelid="765" x="39" y="290"
-               width="$once{ parent.parent.width-50 }" multiline="true" /> 
+               width="$once{ parent.width-50 }" multiline="true" /> 
     
 </class>
 	
