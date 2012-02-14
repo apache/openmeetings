@@ -37,16 +37,16 @@
 					<a rel="nofollow" href="http://www.udl.es/" target="_blank">Universitat de Lleida </a>
 				</li>
 				<li>
-					<a rel="nofollow" href="http://www.upv.es/" target="_blank">Universidad Politécnica de Valencia </a>
+					<a rel="nofollow" href="http://www.upv.es/" target="_blank">Universidad Polit&#233;cnica de Valencia </a>
 				</li>
 				<li>
 					<a rel="nofollow" href="http://www.um.es/" target="_blank">Universidad de Murcia</a>
 				</li>
 				<li>
-					<a rel="nofollow" href="http://www.unavarra.es/" target="_blank">Universidad Pública de Navarra</a>
+					<a rel="nofollow" href="http://www.unavarra.es/" target="_blank">Universidad P&#250;blica de Navarra</a>
 				</li>
 				<li>
-					<a rel="nofollow" href="http://www.ucam.edu/" target="_blank">Universidad Católica San Antonio de Murcia
+					<a rel="nofollow" href="http://www.ucam.edu/" target="_blank">Universidad Cat&#243;lica San Antonio de Murcia
 					</a>
 				</li>
 			</ul>
@@ -77,7 +77,7 @@
 		<section name="Source">
 			<p>
 				You can download and build the source code
-				<a rel="nofollow"
+				<a rel="nofollow" target="_blank" 
 					href="https://source.sakaiproject.org/contrib/samoo/adobeconnectpro-openmeetings-integration/trunk/">here</a>
 			</p>
 		</section>
