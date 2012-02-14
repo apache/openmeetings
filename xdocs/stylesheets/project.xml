@@ -45,6 +45,7 @@
     
     <menu name="Plugins">
         <item name="Moodle Plugin"          href="/MoodlePlugin.html" />
+        <item name="Sakai Plugin"          href="/SakaiPlugin.html" />
     </menu>
     
     <menu name="Configuration">

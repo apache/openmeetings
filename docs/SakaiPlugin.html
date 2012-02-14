@@ -29,9 +29,9 @@ limitations under the License.
             <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
 
                                                     <meta name="author" value="
-			Apache OpenMeetings Documentation Team
+			OpenMeetings Team
 		">
-            <meta name="email" value="sebawagner@incubator.apache.org">
+            <meta name="email" value="sebawagner@apache.org">
             
            
             
@@ -39,7 +39,7 @@ limitations under the License.
             
             
             
-            <title>Apache OpenMeetings - Postgres Configuration</title>
+            <title>Apache OpenMeetings - Sakai Plugin</title>
             <link rel="stylesheet" type="text/css" href="css/openmeetings.css">
             <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
             
@@ -844,92 +844,120 @@ limitations under the License.
                                                                     <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="Postgres Configuration"><strong>Postgres Configuration</strong></a>
+          <a name="Introduction"><strong>Introduction</strong></a>
           <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
         </font>
       </td></tr>
       <tr><td>
         <blockquote>
-                                        <table border="0" cellspacing="0" cellpadding="0" width="100%">
-      <tr><td bgcolor="#EFEFEF">
-        <font color="#000000" face="arial,helvetica,sanserif">
-          <a name="Before you start"><strong>Before you start</strong></a>
+                                    <p>
+				In 2010,
+				<a rel="nofollow" href="http://www.samoo.es" target="_blank">Samoo company
+				</a>
+				has developed a plugin that integrates Sakai LMS and OpenMeetings
+				.
+			</p>
+                                                <p>
+				The plugin was developed for some Spanish Universities that use
+				Sakai and belongs to
+				<a rel="nofollow" target="_blank" href="https://confluence.sakaiproject.org/display/SPANISH/S2G+-+Spanish+Sakai+Group">"Spanish Sakai Universities"</a>
+				group:
+			</p>
+                                                <ul>
+				<li>
+					<a rel="nofollow" href="http://www.udl.es/" target="_blank">Universitat de Lleida </a>
+				</li>
+				<li>
+					<a rel="nofollow" href="http://www.upv.es/" target="_blank">Universidad Politécnica de Valencia </a>
+				</li>
+				<li>
+					<a rel="nofollow" href="http://www.um.es/" target="_blank">Universidad de Murcia</a>
+				</li>
+				<li>
+					<a rel="nofollow" href="http://www.unavarra.es/" target="_blank">Universidad Pública de Navarra</a>
+				</li>
+				<li>
+					<a rel="nofollow" href="http://www.ucam.edu/" target="_blank">Universidad Católica San Antonio de Murcia
+					</a>
+				</li>
+			</ul>
+                            </blockquote>
+        </p>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td ><!-- bgcolor="#EEEEEE" -->
+        <font color="#000000" face="verdana,arial,helvetica,sanserif">
+          <a name="Features"><strong>Features</strong></a>
+          <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
         </font>
       </td></tr>
       <tr><td>
         <blockquote>
-                                    <ul>
-					<li>Make sure that you have set utf8 as default/server-character-set 
-					</li>
-					<li>
-						make sure Postgres is listening on TCP/IP connections!
-						<br />
-						To verify if Postgres connection is working: OpenMeetings will
-						automatically create all tables in the database and all tables
-						should have utf8 as encoding/collation!
-					</li>
-					<li>If you encounter issues, you can drop the db again and delete
-						the file $red5/webapps/openmeetings/conf/install.xml and then run
-						the web based installer again
-					</li>
-				</ul>
+                                    <p>The plugin contains the following features: </p>
+                                                <ul>
+				<li>Create videoconference rooms through Sakai: </li>
+				<ol>
+					<li>Integrated with calendar </li>
+					<li>Integrated with announcements </li>
+					<li>Sends an email to all site participants </li>
+					<li>Rooms restricted to site groups </li>
+					<li>Configurable room type </li>
+				</ol>
+			</ul>
+                                                <p />
+                                                <ul>
+				<li>Future requirements </li>
+				<ol>
+					<li>Publish room recordings to students </li>
+					<li>Room reservation </li>
+				</ol>
+			</ul>
                             </blockquote>
+        </p>
       </td></tr>
       <tr><td><br/></td></tr>
     </table>
-                                                    <table border="0" cellspacing="0" cellpadding="0" width="100%">
-      <tr><td bgcolor="#EFEFEF">
-        <font color="#000000" face="arial,helvetica,sanserif">
-          <a name="Steps todo"><strong>Steps todo</strong></a>
-        </font>
-      </td></tr>
-      <tr><td>
-        <blockquote>
-                                    <ul>
-					<li>
-						Rename:
-						<br />
-						$red5/webapps/openmeetings/WEB-INF/classes/META-INF/postgres_persistence.xml
-						<br />
-						to
-						<br />
-						$red5/webapps/openmeetings/WEB-INF/classes/META-INF/persistence.xml
-					</li>
-					<li>
-						Prepare Database Settings - go to
-						openmeetings_version_no_xx/webapps/openmeetings/WEB-INF/classes/META-INF/persistence.xml
-						<br />
-						Alter config values in persistence.xml DB_HOST USER_NAME USER_PASS
-						with your values
-					</li>
-					<li>
-						Run red5-service and goto the web-based installer:
-						http://localhost:5080/openmeetings/install
-					</li>
-				</ul>
-                            </blockquote>
-      </td></tr>
-      <tr><td><br/></td></tr>
-    </table>
-                                                    <table border="0" cellspacing="0" cellpadding="0" width="100%">
-      <tr><td bgcolor="#EFEFEF">
-        <font color="#000000" face="arial,helvetica,sanserif">
-          <a name="Postgres Sample Configuration"><strong>Postgres Sample Configuration</strong></a>
+                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td ><!-- bgcolor="#EEEEEE" -->
+        <font color="#000000" face="verdana,arial,helvetica,sanserif">
+          <a name="Source"><strong>Source</strong></a>
+          <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
         </font>
       </td></tr>
       <tr><td>
         <blockquote>
                                     <p>
-					There is a sample configuration for Postgres that ships with
-					every
-					release in:
-					<br />
-					/webapps/openmeetings/WEB-INF/classes/META-INF/postgres_persistence.xml
-				</p>
+				You can download and build the source code
+				<a rel="nofollow" href="https://source.sakaiproject.org/contrib/samoo/adobeconnectpro-openmeetings-integration/trunk/">here</a>
+			</p>
                             </blockquote>
+        </p>
       </td></tr>
       <tr><td><br/></td></tr>
     </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td ><!-- bgcolor="#EEEEEE" -->
+        <font color="#000000" face="verdana,arial,helvetica,sanserif">
+          <a name="Installation and documentation"><strong>Installation and documentation</strong></a>
+          <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
+        </font>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <p>
+				The documentation resides in the
+				<a rel="nofollow" target="_blank" href="https://confluence.sakaiproject.org/display/OPENMTG/Home">Sakai confluence space</a>
+			</p>
+                                                <p>
+				Please contact the mailing list for further information. For
+				commercial support you can also contact
+				<a rel="nofollow" href="http://www.samoo.es" target="_blank">Samoo company</a>
+				or other companies from the list of
+				<a href="commercial-support.html">commercial support</a>
+				.
+			</p>
                             </blockquote>
         </p>
       </td></tr>
