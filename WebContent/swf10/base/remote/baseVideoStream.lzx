@@ -124,7 +124,7 @@
             this.mode = "play";
             this.createStream();
             //invokes Method in baseVideoView which shows the stream
-            this.attachNetStream(this._ns);
+            this.attachVideo(this._ns);
             //FIXME: Commented out, cause this leads to Buffer-Full/Buffer-Empty Events
             //after re-syncing the stream
 
@@ -173,9 +173,9 @@
 
         if (camReference!=null) {
             this.setAttribute('camera',camReference);
-            this._ns.attachVideo(camReference);
+            this._ns.attachCamera(camReference);
             //invokes Method in baseVideoView which shows the cam
-            this.attachVideo(camReference);
+            this.attachCamera(camReference);
         }
         if (micReference!=null) {
             this.setAttribute('micro',micReference);
@@ -220,18 +220,15 @@
 	     this._stop();
 	     this.playStream(this.streamName ,this.delay);
 	</method>
-	<!---
-		bufferTime : Number [read-only]
-		The number of seconds assigned to the buffer by NetStream.setBufferTime().
-		The default value is .1(one-tenth of a second).
-		To determine the number of seconds currently in the buffer, use NetStream.bufferLength.
-	-->
+	
 	<method name="setBuffer" args="time">
+	    if ($debug) Debug.warn("setBuffer has no 1:1 equivalent in AS3 ");
+	    return;
 		if(this._ns!=null){
 			this.bufferTime = time;
 			this._ns.setBufferTime(time);
 		} else {
-			if ($debug) Debug.warn("setBuffer but no NetStream inited",this);
+			if ($debug) Debug.warn("setBuffer but no NetStream initialized",this);
 		}
 	</method>
 

@@ -16,7 +16,7 @@
     
 	<view name="_chatvideoinner" x="0" y="0" height="$once{parent.height}" width="$once{parent.width}">
 		
-		<baseVideoStreamDevice name="_videostream" mode="broadcast"
+		<baseVideoStreamDevice name="_videostream" mode="broadcast" sendNotificationViaLocalConnection="false"
 						 width="${parent.width}" height="${parent.height}" bgcolor="black">
 			<handler name="sendCameraStatus" args="camStatus">
                 if ($debug) Debug.write("sendCameraStatus",camStatus);

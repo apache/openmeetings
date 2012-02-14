@@ -197,7 +197,6 @@
         videoComp_lc.connect(this.videoComp_lc_name);
         this.setAttribute('videoComp_lc', videoComp_lc);
         
-        
         mainBaseText.setAttribute('text',canvas.currentappname);
         mainBaseText.setShadow();
         mainBaseTextLabel.setAttribute('text',canvas.currentappnameurl);  

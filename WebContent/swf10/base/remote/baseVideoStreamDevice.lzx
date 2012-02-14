@@ -44,6 +44,12 @@
 	
 	<attribute name="doSendNotification" value="true" type="boolean" />	
 	
+	<!---
+	   If true the component will send an event via LocalConnection 
+	   when sound is louder or less 5%
+	 -->
+	<attribute name="sendNotificationViaLocalConnection" value="true" type="boolean" />
+	
 	<event name="sendCameraStatus" />
     
     <event name="sendMicroStatus" />
@@ -142,11 +148,14 @@
 	</handler>    
 	<method name="sendNotification">
 		//if ($debug) Debug.write("Level sendNotification ",this.isgreater);
+		if (!this.sendNotificationViaLocalConnection) {
+		  return;
+		}
   		this.objMessage = new Array ();
   		this.objMessage[0] = 'audioActivity';
   		this.objMessage[1] = this.isgreater;
   		this.objMessage[2] = parent.parent.publicSID;
-  		if ($debug) Debug.write("Level sendNotification ",this.objMessage);
+  		//if ($debug) Debug.write("Level sendNotification ",this.objMessage);
   		this.sendMessage.doCall();
 	  	//canvas.videoComp_lc.send(canvas.videoComp_lc_name, "sendNotification", this.objMessage);
 	</method>

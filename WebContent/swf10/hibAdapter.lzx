@@ -59,18 +59,23 @@
         canvas.thishib.disconnect();
     </method>
     
-    <method name="doInitTestingApplication" args="x,y">
+    <method name="doInitTestingApplication" args="x,y,connection_url">
         if($debug) Debug.write("doInitTestingApplication ",x,y);
+        canvas.thishib.setAttribute('src',connection_url);
+        canvas.thishib.connect();
         this.testingApplication = new lz.testingApplication(canvas,{name:'currentSharing',x:x+1,y:y+24});
     </method>
     
     <method name="closeInitTestingApplication">
+    	canvas.thishib.disconnect();
         if($debug) Debug.write("closeInitTestingApplication ");
         if (this.testingApplication != null) {
             this.testingApplication.storeSettings();
             this.testingApplication.destroy();
             this.testingApplication = null;
         }
+        if ($debug) Debug.write("Send confirmation of close back to: ",canvas.videoComp_lc_name);
+        canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'closeInitTestingApplicationConfirm');
     </method>
 
 </class>

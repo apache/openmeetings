@@ -59,6 +59,10 @@ Test the setup values before you enter a room
     
     <attribute name="isDirectLink" value="false" type="boolean" />
     
+    <!--- @keywords private if doJustClose is true the confirmation will be wait and 
+    then the window just closed -->
+    <attribute name="doJustClose" value="false" type="boolean" />
+    
     <handler name="oninit">
     	<![CDATA[
     	   
@@ -76,20 +80,34 @@ Test the setup values before you enter a room
             		this._cancel.setAttribute("visibility","hidden");
             	}
             	
+		        var t = this;
+        		canvas.videoComp_lc.closeInitTestingApplicationConfirm = function() {
+		        	if ($debug) Debug.write("LC closeInitTestingApplicationConfirm");
+	        		t.closeInitTestingApplicationConfirm();
+		        }
+            	
             	canvas._loadingAll.hideContentOnly();
             	if ($debug) Debug.write("canvas.rtmp_lc_name", canvas.rtmp_lc_name, "initTestingApplication", this.x, this.y);
-            	canvas.lc.send(canvas.rtmp_lc_name, "doInitTestingApplication", this.x, this.y);
+            	canvas.lc.send(canvas.rtmp_lc_name, "doInitTestingApplication", this.x, this.y, canvas.thishib.src);
             }
             
     	]]>
     </handler>
     
     <method name="justClose">
+    	this.doJustClose = true;
         canvas._loadingAll.hideLoading();
         if ($debug) Debug.write("canvas.rtmp_lc_name", canvas.rtmp_lc_name, "closeInitTestingApplication");
         canvas.lc.send(canvas.rtmp_lc_name, "closeInitTestingApplication");
-        // it would be handy to make a little timer here as the localConnection's event is slower
-        this.close();
+    </method>
+    
+    <method name="closeInitTestingApplicationConfirm">
+    	if ($debug) Debug.write("closeInitTestingApplicationConfirm ");
+    	if (this.doJustClose) {	
+    		this.close();
+    	} else {
+    		this.startConference();
+    	}
     </method>
     
     <method name="storeSettings">
@@ -104,7 +122,6 @@ Test the setup values before you enter a room
             //g["showAudioVideoTest"] = this.holddatainSO.getValue();
             //canvas.setUserData(g);
             
-            this.startConference();
         ]]>
     </method>   
     
