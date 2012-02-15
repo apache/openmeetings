@@ -223,7 +223,7 @@ public class RoomClient implements Serializable {
 	@Column(name="startStreaming")
 	boolean startStreaming = false;
 	@Column(name="screenPublishStarted")
-	private Boolean screenPublishStarted;
+	private boolean screenPublishStarted = false;
 	
 	/*
 	 * Indicates if this User is broadcasting his stream at all
@@ -610,10 +610,10 @@ public class RoomClient implements Serializable {
 		this.flvRecordingMetaDataId = flvRecordingMetaDataId;
 	}
 
-	public Boolean getScreenPublishStarted() {
+	public boolean isScreenPublishStarted() {
 		return screenPublishStarted;
 	}
-	public void setScreenPublishStarted(Boolean screenPublishStarted) {
+	public void setScreenPublishStarted(boolean screenPublishStarted) {
 		this.screenPublishStarted = screenPublishStarted;
 	}
 
@@ -678,6 +678,23 @@ public class RoomClient implements Serializable {
 	public void setIsAVClient(Boolean isAVClient) {
 		this.isAVClient = isAVClient;
 	}
+
+	/**
+	 * To improve our trace log
+	 */
+	@Override
+	public String toString() {
+
+		return super.toString() //
+				+ " StreamId: " + this.getStreamid() //
+				+ " isScreenClient: " + this.getIsScreenClient() //
+				+ " flvRecordingId: " + this.getFlvRecordingId() //
+				+ " screenPublishStarted: " + this.isScreenPublishStarted() //
+				+ " flvRecordingMetaDataId: " + this.getFlvRecordingMetaDataId() //
+				+ " isRecording: " + this.getIsRecording() //
+				;
+	}
+	
 	
 	
 }

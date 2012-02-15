@@ -1079,107 +1079,107 @@ public class ScreenShare extends RTMPClient implements INetStreamEventHandler, C
         
                 } else if (call.getServiceMethodName().equals("setConnectionAsSharingClient")) {
                                 
-                                //logger.debug("call get Method Name "+call.getServiceMethodName());
-                                
-                                Object o = call.getResult();
-                                
-                                //logger.debug("Result Map Type "+o.getClass().getName());
-                                
-                                Map returnMap = (Map) o;
-                                
-                                //logger.debug("result "+returnMap.get("result"));
-                                
-                                //for (Iterator iter = returnMap.keySet().iterator();iter.hasNext();) {
-                                //        logger.debug("key "+iter.next());
-                                //}
-                                
-                                if (!Boolean.valueOf(returnMap.get("alreadyPublished").toString()).booleanValue()) {
-                                        
-                                        //logger.debug("Stream not yet started - do it ");
-                                        
-                                        createStream( this );
-                                        
-                                } else {
-                                        
-                                        if (this.capture != null) {
-                                                this.capture.resetBuffer();
-                                        }
-                                        
-                                        //logger.debug("The Stream was already started ");
-                                }
-                                
-                                if (returnMap.get("modus") != null) {
-                                        if (returnMap.get("modus").toString().equals("startStreaming")) {
-                                                this.startButton.setEnabled(false);
-                                                this.stopButton.setEnabled(true);
-                                        } else if (returnMap.get("modus").toString().equals("startRecording")) {
-                                                this.startButtonRecording.setEnabled(false);
-                                                this.stopButtonRecording.setEnabled(true);
-                                        }
-                                } else {
-                                        throw new Exception("Could not aquire modus for event setConnectionAsSharingClient");
-                                }
-                                
-                        } else if (call.getServiceMethodName().equals("createStream")) {
-                                        
-                                publishStreamId = (Integer) call.getResult();
-                                logger.debug( "createPublishStream result stream id: " + publishStreamId );
-                                logger.debug( "publishing video by name: " + publishName );
-                                publish( publishStreamId, publishName, "live", this );
-        
-                                logger.debug( "setup capture thread");
-        
-                                capture = new CaptureScreen(VirtualScreenBean.vScreenSpinnerX,
-                                                                                        VirtualScreenBean.vScreenSpinnerY,
-                                                                                        VirtualScreenBean.vScreenSpinnerWidth,
-                                                                                        VirtualScreenBean.vScreenSpinnerHeight,
-                                                                                        VirtualScreenBean.vScreenResizeX,
-                                                                                        VirtualScreenBean.vScreenResizeY
-                                														);
-        
-                                if (thread == null)
-                                {
-                                        thread = new Thread(capture);
-                                        thread.start();
-                                }
-                                capture.start();
-        
-                        } else if (call.getServiceMethodName().equals("screenSharerAction")) {
-                                
-                                logger.debug("call ### get Method Name "+call.getServiceMethodName());
-                                
-                                Object o = call.getResult();
-                                
-                                logger.debug("Result Map Type "+o.getClass().getName());
-                                
-                                Map returnMap = (Map) o;
-                                
-                                //logger.debug("result "+returnMap.get("result"));
-                                
-                                //for (Iterator iter = returnMap.keySet().iterator();iter.hasNext();) {
-                                //        logger.debug("key "+iter.next());
-                                //}
-                                
-                                if (returnMap.get("result").equals("stopAll")) {
-                                
-                                        logger.debug("Stopping to stream, there is neither a Desktop Sharing nor Recording anymore");
-                                        
-                                        stopStream();
-                                
-                                }
-                                
-                                //logger.debug("Stop No Doubt!");
-                                //stopStream();
+                        //logger.debug("call get Method Name "+call.getServiceMethodName());
                         
-                        } else if (call.getServiceMethodName().equals("setNewCursorPosition")) {
+                        Object o = call.getResult();
+                        
+                        //logger.debug("Result Map Type "+o.getClass().getName());
+                        
+                        Map returnMap = (Map) o;
+                        
+                        //logger.debug("result "+returnMap.get("result"));
+                        
+                        //for (Iterator iter = returnMap.keySet().iterator();iter.hasNext();) {
+                        //        logger.debug("key "+iter.next());
+                        //}
+                        
+                        if (!Boolean.valueOf(returnMap.get("alreadyPublished").toString()).booleanValue()) {
                                 
-                                //Do not do anything
+                                //logger.debug("Stream not yet started - do it ");
+                                
+                                createStream( this );
                                 
                         } else {
                                 
-                                logger.debug("Unkown method "+call.getServiceMethodName());
+                                if (this.capture != null) {
+                                        this.capture.resetBuffer();
+                                }
                                 
+                                //logger.debug("The Stream was already started ");
                         }
+                        
+                        if (returnMap.get("modus") != null) {
+                                if (returnMap.get("modus").toString().equals("startStreaming")) {
+                                        this.startButton.setEnabled(false);
+                                        this.stopButton.setEnabled(true);
+                                } else if (returnMap.get("modus").toString().equals("startRecording")) {
+                                        this.startButtonRecording.setEnabled(false);
+                                        this.stopButtonRecording.setEnabled(true);
+                                }
+                        } else {
+                                throw new Exception("Could not aquire modus for event setConnectionAsSharingClient");
+                        }
+                        
+                } else if (call.getServiceMethodName().equals("createStream")) {
+                                
+                        publishStreamId = (Integer) call.getResult();
+                        logger.debug( "createPublishStream result stream id: " + publishStreamId );
+                        logger.debug( "publishing video by name: " + publishName );
+                        publish( publishStreamId, publishName, "live", this );
+
+                        logger.debug( "setup capture thread");
+
+                        capture = new CaptureScreen(VirtualScreenBean.vScreenSpinnerX,
+                                                                                VirtualScreenBean.vScreenSpinnerY,
+                                                                                VirtualScreenBean.vScreenSpinnerWidth,
+                                                                                VirtualScreenBean.vScreenSpinnerHeight,
+                                                                                VirtualScreenBean.vScreenResizeX,
+                                                                                VirtualScreenBean.vScreenResizeY
+                        														);
+
+                        if (thread == null)
+                        {
+                                thread = new Thread(capture);
+                                thread.start();
+                        }
+                        capture.start();
+
+                } else if (call.getServiceMethodName().equals("screenSharerAction")) {
+                        
+                        logger.debug("call ### get Method Name "+call.getServiceMethodName());
+                        
+                        Object o = call.getResult();
+                        
+                        logger.debug("Result Map Type "+o.getClass().getName());
+                        
+                        Map returnMap = (Map) o;
+                        
+                        //logger.debug("result "+returnMap.get("result"));
+                        
+                        //for (Iterator iter = returnMap.keySet().iterator();iter.hasNext();) {
+                        //        logger.debug("key "+iter.next());
+                        //}
+                        
+                        if (returnMap.get("result").equals("stopAll")) {
+                        
+                                logger.debug("Stopping to stream, there is neither a Desktop Sharing nor Recording anymore");
+                                
+                                stopStream();
+                        
+                        }
+                        
+                        //logger.debug("Stop No Doubt!");
+                        //stopStream();
+                
+                } else if (call.getServiceMethodName().equals("setNewCursorPosition")) {
+                        
+                        //Do not do anything
+                        
+                } else {
+                        
+                        logger.debug("Unkown method "+call.getServiceMethodName());
+                        
+                }
                 
         } catch (Exception err) {
                 logger.error("[resultReceived]",err);

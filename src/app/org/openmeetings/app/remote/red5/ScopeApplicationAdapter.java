@@ -374,8 +374,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 
 				// if is already started screen sharing, then there is no need
 				// to start it again
-				if (currentClient.getScreenPublishStarted() != null
-						&& currentClient.getScreenPublishStarted()) {
+				if (currentClient.isScreenPublishStarted()) {
 					returnMap.put("alreadyPublished", true);
 				}
 
@@ -691,8 +690,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			// Notify all the clients that the stream had been started
 			log.debug("start streamPublishStart broadcast start: "
 					+ stream.getPublishedName() + "CONN " + current);
-			System.out.println("start streamPublishStart broadcast start: "
-					+ stream.getPublishedName() + "CONN " + current);
 
 			// In case its a screen sharing we start a new Video for that
 			if (currentClient.getIsScreenClient()) {
@@ -709,7 +706,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 											currentClient.getPublicSID(), false);
 			}
 			
-			System.out.println("newStream SEND");
+			log.debug("newStream SEND");
 
 			// Notify all users of the same Scope
 			// We need to iterate through the streams to catch if anybody is recording
@@ -725,36 +722,38 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 											.getId());
 							
 							if (rcl == null) {
-								System.out.println("RCL IS NULL newStream SEND");
+								log.debug("RCL IS NULL newStream SEND");
 								continue;
 							}
+							
+							log.debug("check send to "+rcl);
+							
 							if (rcl.getPublicSID() == "") {
-								System.out.println("publicSID IS NULL newStream SEND");
+								log.debug("publicSID IS NULL newStream SEND");
 								continue;
 							}
-							if (rcl.getIsAVClient() == null || rcl.getIsAVClient()) {
-								System.out.println("RCL getIsAVClient newStream SEND");
-								continue;
-							}
-							if (rcl.getIsScreenClient() == null || rcl.getIsScreenClient()) {
-								System.out.println("RCL getIsScreenClient newStream SEND");
-								continue;
-							}
-
 							if (rcl.getIsRecording()) {
-								System.out.println("RCL getIsRecording newStream SEND");
+								log.debug("RCL getIsRecording newStream SEND");
 								this.flvRecorderService
 										.addRecordingByStreamId(current,
 												streamid, currentClient,
 												rcl.getFlvRecordingId());
 							}
-							
-							if (rcl.getPublicSID().equals(currentClient.getPublicSID())) {
-								System.out.println("RCL publicSID is equal newStream SEND");
+							if (rcl.getIsAVClient() == null || rcl.getIsAVClient()) {
+								log.debug("RCL getIsAVClient newStream SEND");
+								continue;
+							}
+							if (rcl.getIsScreenClient() == null || rcl.getIsScreenClient()) {
+								log.debug("RCL getIsScreenClient newStream SEND");
 								continue;
 							}
 							
-							System.out.println("RCL SEND is equal newStream SEND "+rcl.getPublicSID()+" || "+rcl.getUserport());
+							if (rcl.getPublicSID().equals(currentClient.getPublicSID())) {
+								log.debug("RCL publicSID is equal newStream SEND");
+								continue;
+							}
+							
+							log.debug("RCL SEND is equal newStream SEND "+rcl.getPublicSID()+" || "+rcl.getUserport());
 								
 							IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
 							iStream.invoke("newStream",

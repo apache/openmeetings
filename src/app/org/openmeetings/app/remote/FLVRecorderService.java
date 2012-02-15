@@ -149,6 +149,8 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	public String recordMeetingStream(String roomRecordingName, String comment,
 			Boolean isInterview) {
 		try {
+			
+			log.debug(":: recordMeetingStream ::");
 
 			IConnection current = Red5.getConnectionLocal();
 			RoomClient currentClient = this.clientListManager
@@ -199,8 +201,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 							if (rcl.getIsScreenClient()) {
 
 								if (rcl.getFlvRecordingId() != null
-										&& rcl.getScreenPublishStarted() != null
-										&& rcl.getScreenPublishStarted()) {
+										&& rcl.isScreenPublishStarted()) {
 
 									String streamName_Screen = generateFileName(
 											flvRecordingId, rcl
@@ -466,8 +467,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 							if (rcl.getIsScreenClient()) {
 
 								if (rcl.getFlvRecordingId() != null
-										&& rcl.getScreenPublishStarted() != null
-										&& rcl.getScreenPublishStarted()) {
+										&& rcl.isScreenPublishStarted()) {
 
 									// Stop FLV Recording
 									stopRecordingShow(conn,
@@ -599,8 +599,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			if (rcl.getIsScreenClient()) {
 
 				if (rcl.getFlvRecordingId() != null
-						&& rcl.getScreenPublishStarted() != null
-						&& rcl.getScreenPublishStarted()) {
+						&& rcl.isScreenPublishStarted()) {
 
 					// Stop FLV Recording
 					// FIXME: Is there really a need to stop it manually if the
@@ -649,8 +648,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			if (rcl.getIsScreenClient()) {
 
 				if (rcl.getFlvRecordingId() != null
-						&& rcl.getScreenPublishStarted() != null
-						&& rcl.getScreenPublishStarted()) {
+						&& rcl.isScreenPublishStarted()) {
 
 					String streamName_Screen = generateFileName(flvRecordingId,
 							rcl.getStreamPublishName().toString());
