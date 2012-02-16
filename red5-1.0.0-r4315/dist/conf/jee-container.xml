@@ -21,6 +21,7 @@
 		        <property name="redirectPort"><value>${https.port}</value></property>
                 <property name="enableLookups"><value>false</value></property>
                 <property name="useIPVHosts"><value>true</value></property>
+                <property name="URIEncoding"><value>${http.URIEncoding}</value></property>
 			</bean>
 	    </property>
 	    	
@@ -57,7 +58,7 @@
 	</bean>
 	
 	<!-- RTMPT (dedicated server) -->
-
+<!--
 	<bean id="rtmpt.server" class="org.red5.server.tomcat.rtmpt.RTMPTLoader" init-method="init" lazy-init="true">
 	
 		<property name="webappFolder" value="${red5.root}/webapps" />
@@ -98,7 +99,7 @@
 		</property>		
 
 	</bean>
-
+-->
 	
 	<!-- RTMPS (dedicated server) -->	
 <!--

@@ -57,10 +57,10 @@
 		<level value="WARN" />
 	</logger>
 	<logger name="org.red5.server.messaging.InMemoryPushPushPipe">
-		<level value="WARN" />
+		<level value="INFO" />
 	</logger>
 	<logger name="org.red5.server.net">
-		<level value="WARN" />
+		<level value="INFO" />
 	</logger>
 	<logger name="org.red5.server.net.rtmpt.RTMPTServlet">
 		<level value="WARN" />
@@ -69,7 +69,7 @@
 		<level value="WARN" />
 	</logger>
 	<logger name="org.red5.server.net.proxy">
-		<level value="WARN" />
+		<level value="INFO" />
 	</logger>
 	<logger name="org.red5.server.net.remoting">
 		<level value="WARN" />
@@ -77,23 +77,14 @@
 	<logger name="org.red5.server.net.rtmp">
 		<level value="WARN" />
 	</logger>	
-	<logger name="org.red5.server.net.rtmp.RTMPHandler">
-		<level value="WARN" />
-	</logger>
 	<logger name="org.red5.server.net.rtmp.BaseRTMPHandler">
 		<level value="OFF" />
-	</logger>
-	<logger name="org.red5.server.net.rtmp.codec">
-		<level value="WARN" />
 	</logger>
 	<logger name="org.red5.server.net.rtmp.RTMPMinaIoHandler">
 		<level value="OFF" />
 	</logger>
-	<logger name="org.red5.server.net.rtmp.RTMPMinaTransport">
-		<level value="WARN" />
-	</logger>
 	<logger name="org.red5.server.net.rtmp.status">
-		<level value="WARN" />
+		<level value="INFO" />
 	</logger>
 	<logger name="org.red5.server.net.rtmpt">
 		<level value="WARN" />
@@ -105,7 +96,7 @@
 		<level value="WARN" />
 	</logger>	
 	<logger name="org.red5.server.service">
-		<level value="WARN" />
+		<level value="INFO" />
 	</logger>
 	<logger name="org.red5.server.so">
 		<level value="WARN" />
@@ -116,15 +107,7 @@
 	<logger name="org.red5.server.stream.consumer">
 		<level value="WARN" />
 	</logger>
-<!-- 
-    <logger name="org.red5.server.stream.consumer.FileConsumer">
-        <level value="TRACE" />
-    </logger>	
- -->
 	<logger name="org.red5.server.net.mrtmp">
-		<level value="WARN" />
-	</logger>
-	<logger name="org.red5.server.net.mrtmp.codec">
 		<level value="WARN" />
 	</logger>
 	<!-- Mina -->			
@@ -135,7 +118,7 @@
 		<level value="WARN" />
 	</logger>
 	<logger name="org.red5.server.adapter.MultiThreadedApplicationAdapter" >
-		<level value="WARN"/>
+		<level value="INFO"/>
 	</logger>
 	<!-- Apache commons -->
 	<logger name="org.apache.commons">
@@ -146,35 +129,26 @@
 	</logger>
 	<!-- Apache catalina / tomcat -->
     <logger name="org.red5.server.tomcat">
-        <level value="WARN" />
+        <level value="INFO" />
     </logger>
     <logger name="org.apache.catalina">
         <level value="WARN" />
     </logger>
-    <logger name="org.apache.catalina.loader">
-        <level value="WARN" />
-    </logger>
-	<logger name="org.apache.catalina.realm">
-		<level value="WARN" />
-	</logger>
-	<logger name="org.apache.catalina.session">
-		<level value="WARN" />
-	</logger>
 	<logger name="org.apache.jasper">
-		<level value="WARN" />
+		<level value="INFO" />
 	</logger>
 	<logger name="org.apache.tomcat">
-		<level value="WARN" />
+		<level value="INFO" />
 	</logger>
 	<logger name="org.apache.tomcat.util.net">
 		<level value="WARN" />
 	</logger>
 	<logger name="org.apache.coyote.http11">
-		<level value="WARN" />
+		<level value="INFO" />
 	</logger>
 	<!-- Spring -->
 	<logger name="org.springframework">
-		<level value="WARN" />
+		<level value="INFO" />
 	</logger>
 	<logger name="org.springframework.beans.factory">
 		<level value="INFO" />
@@ -186,7 +160,7 @@
 		<level value="WARN" />
 	</logger>
 	<logger name="org.springframework.web.context">
-		<level value="WARN" />
+		<level value="INFO" />
 	</logger>
 	<logger name="org.springframework.web.context.support">
 		<level value="WARN" />
@@ -201,14 +175,4 @@
 	<logger name="ch.qos">
 		<level value="WARN" />
 	</logger>
-    <!-- Jetty -->
-    <logger name="org.red5.server.jetty">
-        <level value="WARN" />
-    </logger>
-    <logger name="org.mortbay">
-        <level value="WARN" />
-    </logger>
-    <logger name="org.eclipse.jetty">
-        <level value="WARN" />
-    </logger>
 </configuration>

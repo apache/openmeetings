@@ -52,6 +52,7 @@
 		        <property name="port"><value>${http.port}</value></property>
 		        <property name="redirectPort"><value>${https.port}</value></property>
 		        <property name="enableLookups"><value>false</value></property>
+		        <property name="URIEncoding"><value>${http.URIEncoding}</value></property>
 			</bean>
 	    </property>
 	    	

@@ -12,7 +12,7 @@
 	<property name="main.out.dir" value="${basedir}/bin" />
 
 	<!-- Red5 dir -->
-	<property name="red5.server.dir" value="red5-1.0.0-r4297" />
+	<property name="red5.server.dir" value="red5-1.0.0-r4315" />
 
 	<!-- screen.out.dir -->
 	<property name="screen.out.dir" value="${basedir}/screen_compile" />
