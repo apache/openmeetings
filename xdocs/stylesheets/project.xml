@@ -25,7 +25,8 @@
         <item name="Get Involved"           href="/get-involved.html"/>
         <item name="Committers"             href="/team-list.html"/>
         <item name="Mailing Lists"          href="/mail-lists.html"/>
-    	<item name="Wiki"                   href="http://cwiki.apache.org/OPENMEETINGS/" />
+        <item name="Tutorials (Plugin/Installation)"                   href="http://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+related+to+OpenMeetings" />
+    	<item name="Wiki"                   href="http://cwiki.apache.org/confluence/display/OPENMEETINGS/" />
     </menu>
 
     <menu name="Development">
