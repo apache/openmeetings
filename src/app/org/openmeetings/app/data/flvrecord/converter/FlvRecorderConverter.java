@@ -270,7 +270,6 @@ public class FlvRecorderConverter extends BaseConverter {
 						"generateFFMPEG", flvRecording, returnMap);
 			}
 
-			if (true) return;
 			// Delete Wave Files
 			for (String fileName : listOfFullWaveFiles) {
 				File audio = new File(fileName);
