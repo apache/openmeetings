@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<!---
+    The playBackVideoStream is used in the recording playerback to show the video
+ -->
+<class name="playBackVideoStream" extends="baseVideoStream" bgcolor="0x000000" visibility="hidden">
+    
+    <attribute name="timerDelegate" value="null"/>
+    <attribute name="timerDelegateStarted" value="false" type="boolean"/>
+    
+    <handler name="oninit">
+        this.timerDelegate = new LzDelegate( this, "calcProgressBar" );
+    </handler>
+    
+    <handler name="onclick">
+        canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'togglePlayRecordingStream');
+    </handler>
+    
+    <method name="playRecordingStream" args="streamName,delay">
+        this.playStream(streamName,delay);
+        this.timerDelegateStarted = true;
+        lz.Timer.addTimer( this.timerDelegate , 1000 );
+    </method>
+    
+    <method name="stopRecording">
+        this._stop();
+        lz.Timer.removeTimer(this.timerDelegate);
+        this.timerDelegateStarted = false;
+    </method>
+    
+    <handler name="onPlayStatusEvent" args="info">
+        if ($debug) Debug.write("onPlayStatusEvent ",info);
+        if (info.code ==  "NetStream.Play.Complete" ) {
+            canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'stopRecordingStream');
+        }
+    </handler>
+    <handler name="onMetaDataEvent" args="info">
+        if ($debug) Debug.write("onMetaData ",info);
+    </handler>
+    
+    <method name="calcProgressBar" args="tObjRef">
+        if ($debug) Debug.write("calcProgressBar updateRecordingStreamTime",this._ns.time)
+        canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'updateRecordingStreamTime',this._ns.time);
+        if (this.timerDelegateStarted) {
+            lz.Timer.addTimer( this.timerDelegate , 1000 );
+        }
+    </method>
+    
+</class>	
+
+</library>

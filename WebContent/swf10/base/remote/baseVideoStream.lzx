@@ -243,6 +243,19 @@
             this._ns.soundTransform = new SoundTransform(volume/100.0);
         }
     </method>
+    
+    <method name="pause" args="pauseStatus">
+    	if ($debug) Debug.write("do Pause",pauseStatus);
+    	if (this._ns==null){
+    		if ($debug) Debug.warn("No NetStream");
+    		return;
+    	}
+    	if (pauseStatus) {
+    		this._ns.pause();
+    	} else {
+    		this._ns.resume();
+    	}
+    </method>
 
 </class>
 

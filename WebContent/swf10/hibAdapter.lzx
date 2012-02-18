@@ -31,6 +31,7 @@
         client.playRecordingStream = this.playRecordingStream;
         client.updateRecordingVideoPosition = this.updateRecordingVideoPosition;
         client.stopRecordingStream = this.stopRecordingStream;
+        client.pauseRecordingPlayback = this.pauseRecordingPlayback;
 
         var rtmpLC:LocalConnection = new LocalConnection();
         rtmpLC.connect(canvas.rtmp_lc_name);
@@ -147,48 +148,18 @@
         this.baseVideoStream.stopRecording();
         this.baseVideoStream.setAttribute("visibility","hidden");
     </method>
-
-</class>
-
-<class name="playBackVideoStream" extends="baseVideoStream" bgcolor="0x000000" visibility="hidden">
-	
-	<attribute name="timerDelegate" value="null"/>
-    <attribute name="timerDelegateStarted" value="false" type="boolean"/>
-	
-	<handler name="oninit">
-		this.timerDelegate = new LzDelegate( this, "calcProgressBar" );
-	</handler>
-	
-	<method name="playRecordingStream" args="streamName,delay">
-		this.playStream(streamName,delay);
-		this.timerDelegateStarted = true;
-        lz.Timer.addTimer( this.timerDelegate , 1000 );
-	</method>
-	
-	<method name="stopRecording">
-		this._stop();
-		lz.Timer.removeTimer(this.timerDelegate);
-		this.timerDelegateStarted = false;
-	</method>
-	
-	<handler name="onPlayStatusEvent" args="info">
-        if ($debug) Debug.write("onPlayStatusEvent ",info);
-        if (info.code ==  "NetStream.Play.Complete" ) {
-            canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'stopRecordingStream');
-        }
-    </handler>
-    <handler name="onMetaDataEvent" args="info">
-        if ($debug) Debug.write("onMetaData ",info);
-    </handler>
     
-    <method name="calcProgressBar">
-    	if ($debug) Debug.write("calcProgressBar updateRecordingStreamTime",this._ns.time)
-    	canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'updateRecordingStreamTime',this._ns.time);
-    	if (this.timerDelegateStarted) {
-    		lz.Timer.addTimer( this.timerDelegate , 1000 );
-    	}
+    <!--- 
+        pauses the current video or continue at the same position
+     -->
+    <method name="pauseRecordingPlayback" args="pauseBool">
+    	if($debug) Debug.write("pauseRecordingPlayback ");
+        if (this.baseVideoStream == null) {
+            return;
+        }
+        this.baseVideoStream.pause(pauseBool);
     </method>
-	
+
 </class>
 
 </library>

@@ -29,5 +29,6 @@
     <include href="videoObjectPlayBroadcast.lzx" />
     <include href="videoObjectTestBroadcast.lzx" />
     <include href="videoObjectPlayTestBroadcast.lzx" />
+    <include href="playBackVideoStream.lzx" />
     
 </library>

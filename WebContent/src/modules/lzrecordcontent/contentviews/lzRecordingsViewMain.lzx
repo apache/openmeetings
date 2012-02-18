@@ -32,8 +32,14 @@
         
         <attribute name="recordingName" value="" type="string"/>
         
+        <!---
+        isPaused is true if a video is running but paused
+         -->
         <attribute name="isPaused" value="false" type="boolean"/>
         
+        <!--- 
+            Shows if there is currently a video running
+         -->
         <attribute name="timerDelegateStarted" value="false" type="boolean"/>
         
         <attribute name="recordingLog" value="" type="string"/>
@@ -127,7 +133,6 @@
         	
         		this.stopStream();
         	    this.isPaused = false;
-        	    
         	    
         	    var hasFailed = false;
         			
@@ -367,8 +372,13 @@
             	</handler>
             	
             	<handler name="onUpdateRecordingStreamTime">
-            		if ($debug) Debug.write("updateRecordingStreamTime ");
+            		if ($debug) Debug.write("onUpdateRecordingStreamTime ");
             		parent.parent.calcProgressBar();
+            	</handler>
+            	
+            	<handler name="onTogglePlayRecordingStream">
+            		if ($debug) Debug.write("onTogglePlayRecordingStream ");
+            		parent.parent.toggleStream();
             	</handler>
             	
             </lzRecordingsViewAdapter>

@@ -30,6 +30,7 @@
 	<attribute name="currentTime" value="0" type="number" />
 	
 	<event name="onUpdateRecordingStreamTime" />
+	<event name="onTogglePlayRecordingStream" />
     
     <method name="getTime">
         return this.currentTime;
@@ -46,6 +47,11 @@
             t.currentTime = newTime;
             t.onUpdateRecordingStreamTime.sendEvent();
         }
+        canvas.videoComp_lc.togglePlayRecordingStream = function() {
+        	if ($debug) Debug.write("LC togglePlayRecordingStream ::");
+        	t.onTogglePlayRecordingStream.sendEvent();
+        }
+        
 	</handler>
 	
 	<method name="connect">
@@ -76,7 +82,8 @@
 	</method>
 	
 	<method name="pause" args="pauseBool">
-		if ($debug) Debug.write("pauseBool",pauseBool);
+		if ($debug) Debug.write("lzRecordingsViewAdapter::pause value: ",pauseBool);
+		canvas.lc.send(canvas.rtmp_lc_name, "pauseRecordingPlayback", pauseBool);
 	</method>
 	
 	<method name="stop">
