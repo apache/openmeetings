@@ -29,6 +29,7 @@
 
     <handler name="oninit">
         _mainScrollBar.setAttribute("visibility","hidden");
+        this._recordingsViewMain.connect();
     </handler>
     
     <handler name="ontabcontentleave">

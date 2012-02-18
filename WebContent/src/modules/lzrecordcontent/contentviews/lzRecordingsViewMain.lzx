@@ -45,6 +45,10 @@
         	this.timerDelegate = new LzDelegate( this, "calcProgressBar" );
         </handler>
         
+        <method name="connect">
+        	this._content._videostream.connect();
+        </method>
+        
         <method name="showLog">
         	if ($debug) Debug.write("getFlvRecordingLog flvRecordingId ",this.getFlvRecordingLog.flvRecordingId);
         	this.getFlvRecordingLog.doCall();
@@ -294,7 +298,7 @@
         
         <method name="pauseStream">
         	this.isPaused = !this.isPaused;
-        	this._content._videostream._ns.pause(this.isPaused);
+        	this._content._videostream.pause(this.isPaused);
         </method>
         
         <method name="seekStream" args="newX">
@@ -310,7 +314,7 @@
                     
                     if ($debug) Debug.write("seekStream :: flvTime ",flvTime);
                     
-                    this._content._videostream._ns.seek(flvTime);
+                    this._content._videostream.seek(flvTime);
         	   	
                 }
         	
@@ -365,6 +369,12 @@
                 </view>
             </view>
             
+            <lzRecordingsViewAdapter name="_videostream">
+            	
+            	
+            </lzRecordingsViewAdapter>
+            
+            <!--
             <baseVideoStream name="_videostream" bgcolor="0x000000"
                   width="${parent.width}" height="${parent.height}">
             	<handler name="onPlayStatus" args="info">
@@ -377,6 +387,7 @@
                     if ($debug) Debug.write("onMetaData ",info);
                 </handler>
             </baseVideoStream>
+             -->
             
         </view>
         

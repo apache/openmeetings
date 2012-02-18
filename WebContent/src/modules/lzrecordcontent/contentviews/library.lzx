@@ -23,6 +23,7 @@
 
     <include href="lzRecordingsViewMain.lzx" />
     <include href="lzRecordingsViewBottom.lzx" />
+    <include href="lzRecordingsViewAdapter.lzx" />
 
 
 </library>

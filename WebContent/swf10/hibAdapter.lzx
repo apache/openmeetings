@@ -4,6 +4,7 @@
 <class name="hibAdapter">
 
     <attribute name="testingApplication" value="null" />
+    <attribute name="baseVideoStream" value="null" />
 
     <switch>
         <when property="$as3">
@@ -22,8 +23,11 @@
         client.getRoomTypes = this.getRoomTypes;
         client.disconnect = this.disconnect;
         client.reconnectSuccess = this.reconnectSuccess;
+        //Test application to record 5 seconds
         client.doInitTestingApplication = this.doInitTestingApplication;
         client.closeInitTestingApplication = this.closeInitTestingApplication;
+        //Recording Player
+        client.connectRecordingPlayer = this.connectRecordingPlayer;
 
         var rtmpLC:LocalConnection = new LocalConnection();
         rtmpLC.connect(canvas.rtmp_lc_name);
@@ -59,6 +63,9 @@
         canvas.thishib.disconnect();
     </method>
     
+    <!---
+        Starts the 5 second audio/video testing application and connect to RTMP
+     -->
     <method name="doInitTestingApplication" args="x,y,connection_url">
         if($debug) Debug.write("doInitTestingApplication ",x,y);
         canvas.thishib.setAttribute('src',connection_url);
@@ -66,6 +73,10 @@
         this.testingApplication = new lz.testingApplication(canvas,{name:'currentSharing',x:x+1,y:y+24});
     </method>
     
+    <!---
+        Stops and destroys the view with the audio/video testing application
+        and send confirmation back via LocalConnection
+     -->
     <method name="closeInitTestingApplication">
     	canvas.thishib.disconnect();
         if($debug) Debug.write("closeInitTestingApplication ");
@@ -77,7 +88,38 @@
         if ($debug) Debug.write("Send confirmation of close back to: ",canvas.videoComp_lc_name);
         canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'closeInitTestingApplicationConfirm');
     </method>
+    
+    <!---
+        Initializes video playback component
+        and connect to RTMP
+     -->
+    <method name="connectRecordingPlayer" args="connection_url,x,y,width,height">
+    	if($debug) Debug.write("connectRecordingPlayer ", connection_url,x,y,width,height);
+    	canvas.thishib.setAttribute('src',connection_url);
+        canvas.thishib.connect();
+        this.baseVideoStream = new lz.playBackVideoStream(canvas,{
+            x:x,
+            y:y,
+            width:width,
+            height:height
+        });
+    </method> 
+    
 
+</class>
+
+<class name="playBackVideoStream" extends="baseVideoStream" bgcolor="0x000000" visibility="hidden">
+	
+	<handler name="onPlayStatus" args="info">
+        if ($debug) Debug.write("onPlayStatus ",info);
+        if (info.code ==  "NetStream.Play.Complete" ) {
+            parent.parent.stopStream();
+        }
+    </handler>
+    <handler name="onMetaData" args="info">
+        if ($debug) Debug.write("onMetaData ",info);
+    </handler>
+	
 </class>
 
 </library>
