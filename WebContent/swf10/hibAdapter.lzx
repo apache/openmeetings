@@ -32,6 +32,8 @@
         client.updateRecordingVideoPosition = this.updateRecordingVideoPosition;
         client.stopRecordingStream = this.stopRecordingStream;
         client.pauseRecordingPlayback = this.pauseRecordingPlayback;
+        client.seekRecordingPlayback = this.seekRecordingPlayback;
+        client.stopAndCloseRecordingConnection = this.stopAndCloseRecordingConnection;
 
         var rtmpLC:LocalConnection = new LocalConnection();
         rtmpLC.connect(canvas.rtmp_lc_name);
@@ -115,6 +117,7 @@
     <method name="playRecordingStream" args="streamName,delay,x,y,width,height">
     	if($debug) Debug.write("playRecordingStream ",streamName,x,y,width,height);
     	if (this.baseVideoStream == null) {
+    		if ($debug) Debug.warn("baseVideoStream is NULL");
     		return;
     	}
     	this.baseVideoStream.setAttribute("x",x);
@@ -130,6 +133,7 @@
      -->    
     <method name="updateRecordingVideoPosition" args="width,height">
     	if (this.baseVideoStream == null) {
+    		if ($debug) Debug.warn("baseVideoStream is NULL");
             return;
         }
         this.baseVideoStream.setAttribute("width",width);
@@ -142,6 +146,7 @@
     <method name="stopRecordingStream">
     	if($debug) Debug.write("stopRecordingStream ");
         if (this.baseVideoStream == null) {
+        	if ($debug) Debug.warn("baseVideoStream is NULL");
             return;
         }
         if($debug) Debug.write(" stopRecording ");
@@ -155,9 +160,33 @@
     <method name="pauseRecordingPlayback" args="pauseBool">
     	if($debug) Debug.write("pauseRecordingPlayback ");
         if (this.baseVideoStream == null) {
+        	if ($debug) Debug.warn("baseVideoStream is NULL");
             return;
         }
         this.baseVideoStream.pause(pauseBool);
+    </method>
+    
+    <method name="seekRecordingPlayback" args="flvTime">
+    	if($debug) Debug.write("seekRecordingPlayback ",flvTime);
+        if (this.baseVideoStream == null) {
+        	if ($debug) Debug.warn("baseVideoStream is NULL");
+            return;
+        }
+        this.baseVideoStream.seekStream(flvTime);
+    </method>
+    
+    <method name="stopAndCloseRecordingConnection">
+    	if($debug) Debug.write("stopAndCloseRecordingConnection ");
+        if (this.baseVideoStream == null) {
+        	if ($debug) Debug.warn("baseVideoStream is NULL");
+            return;
+        }
+        this.baseVideoStream.stopRecording();
+        this.baseVideoStream.destroy();
+        this.baseVideoStream = null;
+        canvas.thishib.disconnect();
+        // send back confirmation to leave the module
+        canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'recordingStoppedAndDisconnected');
     </method>
 
 </class>

@@ -31,6 +31,7 @@
 	
 	<event name="onUpdateRecordingStreamTime" />
 	<event name="onTogglePlayRecordingStream" />
+	<event name="onRecordingStoppedAndDisconnected" />
     
     <method name="getTime">
         return this.currentTime;
@@ -51,7 +52,10 @@
         	if ($debug) Debug.write("LC togglePlayRecordingStream ::");
         	t.onTogglePlayRecordingStream.sendEvent();
         }
-        
+        canvas.videoComp_lc.recordingStoppedAndDisconnected = function() {
+            if ($debug) Debug.write("LC togglePlayRecordingStream ::");
+            t.onRecordingStoppedAndDisconnected.sendEvent();
+        }
 	</handler>
 	
 	<method name="connect">
@@ -79,6 +83,7 @@
 	
 	<method name="seek" args="flvTime">
 		if ($debug) Debug.write("seek ",flvTime);
+		canvas.lc.send(canvas.rtmp_lc_name, "seekRecordingPlayback", flvTime);
 	</method>
 	
 	<method name="pause" args="pauseBool">
@@ -89,6 +94,11 @@
 	<method name="stop">
 		if ($debug) Debug.write("SEND stop ");
 		canvas.lc.send(canvas.rtmp_lc_name, "stopRecordingStream");
+	</method>
+	
+	<method name="stopAndCloseConnection">
+		if ($debug) Debug.write("SEND stopAndCloseConnection ");
+        canvas.lc.send(canvas.rtmp_lc_name, "stopAndCloseRecordingConnection");
 	</method>
 	
 </class>

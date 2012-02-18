@@ -25,7 +25,7 @@
 	View for recorded contents list.
 	When you select 'Recordings' on the top menu, this class shows the list.
 -->
-<class name="lzRecordContent" extends="baseContentView">	
+<class name="lzRecordContent" extends="baseContentView" destroyByMethod="true">	
 
     <handler name="oninit">
         _mainScrollBar.setAttribute("visibility","hidden");
@@ -34,12 +34,19 @@
     
     <handler name="ontabcontentleave">
         _mainScrollBar.setAttribute("visibility","visible");
-        this._recordingsViewMain.stopStream();
+        this._recordingsViewMain.stopStreamAndCloseRecorder();
     </handler>    
         
     <lzRecordNavigation name="_navigationArea" />
     
-    <lzRecordingsViewMain name="_recordingsViewMain" />
+    <lzRecordingsViewMain name="_recordingsViewMain">
+    	
+    	<handler name="onRecordingStoppedAndDisconnected" args="tRef">
+    		parent.destroy();
+    		loadContentByTempActionForNavi();
+    	</handler>
+    	
+    </lzRecordingsViewMain>
     
     <lzRecordingsViewBottom name="_recordingsViewBottom" />
 

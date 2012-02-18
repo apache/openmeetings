@@ -244,6 +244,10 @@
         }
     </method>
     
+    <!---
+        pause or resumes the NetStream
+        @args pauseStatus true pause, false resume
+     -->
     <method name="pause" args="pauseStatus">
     	if ($debug) Debug.write("do Pause",pauseStatus);
     	if (this._ns==null){
@@ -255,6 +259,20 @@
     	} else {
     		this._ns.resume();
     	}
+    </method>
+    
+    <!---
+        Seek the stream to a flvTime
+        this might only work if there are keyframes in the FLV, normally it should 
+        try to use the nearest keyframe available for the specified time.
+     -->
+    <method name="seekStream" args="flvTime">
+    	if ($debug) Debug.write("do seek",flvTime);
+        if (this._ns==null){
+            if ($debug) Debug.warn("No NetStream");
+            return;
+        }
+        this._ns.seek(flvTime);
     </method>
 
 </class>

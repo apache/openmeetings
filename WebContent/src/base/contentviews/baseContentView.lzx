@@ -22,6 +22,11 @@
     
 <class name="baseContentView" extends="view">
 
+    <!---
+        If destroyByMethod is true, the clear content call will not destroy the views, but the method 
+        ontabcontentleave is still invoked, this can be handy if some connections must be closed before 
+        destroying / leaving the module, you could probably also use it to confirm leaving the module 
+     -->
     <attribute name="destroyByMethod" value="false" type="boolean" />
     
     <event name="ontabcontentleave" />

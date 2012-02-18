@@ -46,6 +46,9 @@
         
         <attribute name="deltaInSeconds" value="0" type="number"/>
         
+        <!-- invoked after the connection in the audio/video container was closed -->
+        <event name="onRecordingStoppedAndDisconnected" />
+        
         <method name="connect">
         	this._content._videostream.connect();
         </method>
@@ -314,15 +317,26 @@
             ]]>
         </method>
         
+        <method name="stopStreamAndCloseRecorder">
+        	this._stopStream();
+            this._content._videostream.stopAndCloseConnection();
+        </method>
+        
         <method name="stopStream">
+            this._stopStream();
+            this._content._videostream.stop();
+        </method>
+        
+        <!---
+            @keywords private
+         -->
+        <method name="_stopStream">
         	if (this.timerDelegateStarted) {
-        		this.timerDelegateStarted = false;
+                this.timerDelegateStarted = false;
             }
-            parent._recordingsViewBottom.stopProgress();
+        	parent._recordingsViewBottom.stopProgress();
             this._progress._progressbar._time.setAttribute("text","");
             this._progress._progressbar._pointer.setAttribute("x",0);
-            this._content._preview.bringToFront();
-            this._content._videostream.stop();
         </method>
         
         <view name="_content" height="${ parent.height-32-18 }" y="32">
@@ -334,10 +348,7 @@
                 <![CDATA[
                     var prop2 = [this, "height"];
                     this.applyConstraintMethod("setItemContraints", prop2);
-                    
                     this.setItemContraints(0);
-                    
-                    this._preview.bringToFront();
                 ]]>
             </handler>
             
@@ -381,22 +392,12 @@
             		parent.parent.toggleStream();
             	</handler>
             	
-            </lzRecordingsViewAdapter>
-            
-            <!--
-            <baseVideoStream name="_videostream" bgcolor="0x000000"
-                  width="${parent.width}" height="${parent.height}">
-            	<handler name="onPlayStatus" args="info">
-            		if ($debug) Debug.write("onPlayStatus ",info);
-            		if (info.code ==  "NetStream.Play.Complete" ) {
-            			parent.parent.stopStream();
-            		}
+            	<handler name="onRecordingStoppedAndDisconnected">
+            		if ($debug) Debug.write("onRecordingStoppedAndDisconnected ");
+            		parent.parent.onRecordingStoppedAndDisconnected.sendEvent();
             	</handler>
-            	<handler name="onMetaData" args="info">
-                    if ($debug) Debug.write("onMetaData ",info);
-                </handler>
-            </baseVideoStream>
-             -->
+            	
+            </lzRecordingsViewAdapter>
             
         </view>
         
