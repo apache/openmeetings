@@ -715,7 +715,7 @@
     </target>
 
 	<target name="build.only.webservice.doc" depends="anakia">
-		<javadoc classpathref="build.webservice.classpath">
+		<javadoc classpathref="build.webservice.classpath" useexternalfile="true">
 			<source file="src/userservice/org/openmeetings/axis/services/UserWebService.java" />
 			<source file="src/roomservice/org/openmeetings/axis/services/RoomWebService.java" />
 			<source file="src/fileservice/org/openmeetings/axis/services/FileWebService.java" />
