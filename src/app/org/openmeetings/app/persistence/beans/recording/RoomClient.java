@@ -35,7 +35,7 @@ import javax.persistence.Transient;
 @Entity
 @Table(name = "roomclient")
 public class RoomClient implements Serializable {
-	   
+	
 	private static final long serialVersionUID = 1831858089607111565L;
 
 	@Id
@@ -692,6 +692,9 @@ public class RoomClient implements Serializable {
 				+ " screenPublishStarted: " + this.isScreenPublishStarted() //
 				+ " flvRecordingMetaDataId: " + this.getFlvRecordingMetaDataId() //
 				+ " isRecording: " + this.getIsRecording() //
+				+ " isAVClient: " + this.getIsAVClient() //
+				+ " broadCastID: " + this.getBroadCastID() //
+				+ " avsettings: " + this.getAvsettings() //
 				;
 	}
 	

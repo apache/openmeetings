@@ -843,7 +843,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 													.getClient().getId());
 									if (clientFunction.equals("closeStream")
 											&& rcl.getIsRecording()) {
-										log.debug("*** sendClientBroadcastNotifications Any Client is Recording - stop that");
+										log.debug("*** stopRecordingShowForClient Any Client is Recording - stop that");
 										// StreamService.stopRecordingShowForClient(conn,
 										// currentClient,
 										// rcl.getRoomRecordingName(), false);

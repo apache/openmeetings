@@ -186,8 +186,8 @@
 			if (valMic != null) {
 			     _micro = Microphone.getMicrophone(valMic);
 			     if (_micro != null) {
-				     _micro.codec = SoundCodec.SPEEX;
-				     _micro.framesPerPacket = 1;
+				     _micro.codec = SoundCodec.NELLYMOSER;
+				     //_micro.framesPerPacket = 1;
 				     _micro.setSilenceLevel(0, 2000);
 				     _micro.gain = 50;
 				     // this has no effect if enhanced microphone is obtained

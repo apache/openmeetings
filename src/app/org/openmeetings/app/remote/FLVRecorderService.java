@@ -237,9 +237,10 @@ public class FLVRecorderService implements IPendingServiceCallback {
 							// if the user does publish av, a, v
 							// But we only record av or a, video only is not
 							// interesting
-							(rcl.getAvsettings().equals("av")
+							(rcl.getIsAVClient() &&
+									(rcl.getAvsettings().equals("av")
 									|| rcl.getAvsettings().equals("a")
-									|| rcl.getAvsettings().equals("v")) {
+									|| rcl.getAvsettings().equals("v"))) {
 
 								String streamName = generateFileName(
 										flvRecordingId,
@@ -357,7 +358,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	 * @param broadcastId
 	 */
 	@Deprecated
-	public void _stopRecordingShow(IConnection conn, String broadcastId) {
+	public void _stopRecordingShowASD(IConnection conn, String broadcastId) {
 		try {
 
 			log.debug("** stopRecordingShow: " + conn);
@@ -388,6 +389,12 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	public void stopRecordingShow(IConnection conn, String broadcastId,
 			Long flvRecordingMetaDataId) {
 		try {
+			
+			if (flvRecordingMetaDataId == null) {
+				//this should be fixed, can be useful for debugging, after all this is an error
+				//but we don't want the application to completely stop the process
+				log.error("flvRecordingMetaDataId is null");
+			}
 
 			log.debug("** stopRecordingShow: " + conn);
 			log.debug("### Stop recording show for broadcastId: " + broadcastId
@@ -402,6 +409,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 
 			ClientBroadcastStream stream = (ClientBroadcastStream) streamToClose;
 
+			//Iterate through all stream listeners and stop the appropriate
 			if (stream.getStreamListeners() != null) {
 
 				for (Iterator<IStreamListener> iter = stream
@@ -462,7 +470,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 							// currentClient }, this);
 							// }
 
-							log.debug("is this users still alive? :" + rcl);
+							log.debug("is this users still alive? stop it :" + rcl);
 
 							if (rcl.getIsScreenClient()) {
 
@@ -481,9 +489,10 @@ public class FLVRecorderService implements IPendingServiceCallback {
 													new Date());
 								}
 
-							} else if (rcl.getAvsettings().equals("av")
+							} else if (rcl.getIsAVClient()
+									&& (rcl.getAvsettings().equals("av")
 									|| rcl.getAvsettings().equals("a")
-									|| rcl.getAvsettings().equals("v")) {
+									|| rcl.getAvsettings().equals("v"))) {
 
 								stopRecordingShow(conn,
 										String.valueOf(rcl.getBroadCastID())
@@ -593,8 +602,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			// the same type of event.
 			// StreamService.addRoomClientEnterEventFunc(rcl, roomrecordingName,
 			// rcl.getUserip(), false);
-			log.error("### stopRecordingShowForClient: " + rcl.getIsRecording()
-					+ "," + rcl.getUsername() + "," + rcl.getUserip());
+			log.debug("### stopRecordingShowForClient: " + rcl);
 
 			if (rcl.getIsScreenClient()) {
 
@@ -614,13 +622,13 @@ public class FLVRecorderService implements IPendingServiceCallback {
 									rcl.getFlvRecordingMetaDataId(), new Date());
 				}
 
-			} else if ((rcl.getAvsettings().equals("a")
-					|| rcl.getAvsettings().equals("v") || rcl.getAvsettings()
-					.equals("av"))) {
+			} else if (rcl.getIsAVClient() && 
+					(rcl.getAvsettings().equals("a")
+					|| rcl.getAvsettings().equals("v") 
+					|| rcl.getAvsettings().equals("av"))) {
 
 				// FIXME: Is there really a need to stop it manually if the user
-				// just
-				// stops the stream?
+				// just stops the stream?
 				stopRecordingShow(conn, String.valueOf(rcl.getBroadCastID())
 						.toString(), rcl.getFlvRecordingMetaDataId());
 
@@ -680,9 +688,10 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			} else if
 			// if the user does publish av, a, v
 			// But we only record av or a, video only is not interesting
-			(rcl.getAvsettings().equals("av")
+			(rcl.getIsAVClient() && 
+					(rcl.getAvsettings().equals("av")
 					|| rcl.getAvsettings().equals("a")
-					|| rcl.getAvsettings().equals("v")) {
+					|| rcl.getAvsettings().equals("v"))) {
 
 				String streamName = generateFileName(flvRecordingId, String
 						.valueOf(rcl.getBroadCastID()).toString());
