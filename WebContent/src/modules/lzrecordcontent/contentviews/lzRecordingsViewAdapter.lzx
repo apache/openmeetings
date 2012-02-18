@@ -27,20 +27,49 @@
 -->
 <class name="lzRecordingsViewAdapter" extends="view">
 	
+	<attribute name="currentTime" value="0" type="number" />
+	
+	<event name="onUpdateRecordingStreamTime" />
+    
+    <method name="getTime">
+        return this.currentTime;
+    </method>
+	
+	<handler name="oninit">
+		var t = this;
+        canvas.videoComp_lc.stopRecordingStream = function() {
+            if ($debug) Debug.write("LC stopRecordingStream");
+            t.parent.parent.stopStream();
+        }
+        canvas.videoComp_lc.updateRecordingStreamTime = function(newTime) {
+            if ($debug) Debug.write("LC updateRecordingStreamTime ::",newTime);
+            t.currentTime = newTime;
+            t.onUpdateRecordingStreamTime.sendEvent();
+        }
+	</handler>
+	
 	<method name="connect">
 		if ($debug) Debug.write("connect");
 		var tx = this.getAttributeRelative("x",canvas);
 		var ty = this.getAttributeRelative("y",canvas);
-		canvas.lc.send(canvas.rtmp_lc_name, "connectRecordingPlayer", canvas.thishib.src, tx, ty, parent.width, parent.height);
+		canvas.lc.send(canvas.rtmp_lc_name, "connectRecordingPlayer", canvas.thishib.src, tx, ty, this.width, this.height);
 	</method>
 	
 	<method name="disconnect">
 		if ($debug) Debug.write("disconnect");
 	</method>
 	
-	<method name="playStream" args="stream">
-		if ($debug) Debug.write("playStream ",stream);
+	<method name="playStream" args="stream,delay">
+		var tx = this.getAttributeRelative("x",canvas);
+        var ty = this.getAttributeRelative("y",canvas);
+        this.currentTime = 0;
+		if ($debug) Debug.write("playRecordingStream ",stream, delay, tx, ty, this.width, this.height);
+		canvas.lc.send(canvas.rtmp_lc_name, "playRecordingStream", stream, delay, tx, ty, this.width, this.height);
 	</method>
+	
+	<method name="updateRecordingVideoPosition">
+        canvas.lc.send(canvas.rtmp_lc_name, "updateRecordingVideoPosition", this.width, this.height);
+    </method>
 	
 	<method name="seek" args="flvTime">
 		if ($debug) Debug.write("seek ",flvTime);
@@ -51,7 +80,8 @@
 	</method>
 	
 	<method name="stop">
-		if ($debug) Debug.write("stop ");
+		if ($debug) Debug.write("SEND stop ");
+		canvas.lc.send(canvas.rtmp_lc_name, "stopRecordingStream");
 	</method>
 	
 </class>

@@ -278,7 +278,7 @@
     </method>
     
     <method name="playRecording">
-        if ($debug) Debug.write("playReording :: ");
+        if ($debug) Debug.write("playRecording :showMetaData: ");
         parent._recordingsViewBottom.showMetaData(this.currentRecording);
     </method>   
     

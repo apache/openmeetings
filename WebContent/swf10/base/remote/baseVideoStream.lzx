@@ -42,8 +42,9 @@
 		@keywords final -->
 	<attribute name="soundRefMC" value="null" />
 
-	<event name="onMetaData" />
-	<event name="onPlayStatus" />
+	<event name="onMetaDataEvent" />
+	<event name="onPlayStatusEvent" />
+	<event name="onCuePointEvent" />
 
 	<!-- save value for restart -->
         <attribute name="streamName" />
@@ -62,19 +63,20 @@
         <!--if($debug) Debug.write("simpleNetStream onStatus",info);-->
     <!--]]></handler>-->
 
-    <handler name="onCuePoint" args="info"><![CDATA[
+    <method name="onCuePoint" args="info"><![CDATA[
         if($debug) Debug.write("simpleNetStream onCuePoint",info);
-    ]]></handler>
+        this.onCuePointEvent.sendEvent(info);
+    ]]></method>
 
-    <handler name="onPlayStatus" args="info"><![CDATA[
+    <method name="onPlayStatus" args="info"><![CDATA[
         if($debug) Debug.write("simpleNetStream onPlayStatus",info);
-        this.onPlayStatus.sendEvent(info);
-    ]]></handler>
+        this.onPlayStatusEvent.sendEvent(info);
+    ]]></method>
 
-    <handler name="onMetaData" args="info"><![CDATA[
+    <method name="onMetaData" args="info"><![CDATA[
         if($debug) Debug.write("simpleNetStream onMetaData",info);
-        this.onMetaData.sendEvent(info);
-    ]]></handler>
+        this.onMetaDataEvent.sendEvent(info);
+    ]]></method>
 
     <!--- Find the Flash NetConnection object.
           @keywords private -->

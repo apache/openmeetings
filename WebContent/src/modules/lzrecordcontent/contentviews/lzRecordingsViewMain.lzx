@@ -34,16 +34,11 @@
         
         <attribute name="isPaused" value="false" type="boolean"/>
         
-        <attribute name="timerDelegate" value="null"/>
         <attribute name="timerDelegateStarted" value="false" type="boolean"/>
         
         <attribute name="recordingLog" value="" type="string"/>
         
         <attribute name="deltaInSeconds" value="0" type="number"/>
-        
-        <handler name="oninit">
-        	this.timerDelegate = new LzDelegate( this, "calcProgressBar" );
-        </handler>
         
         <method name="connect">
         	this._content._videostream.connect();
@@ -185,7 +180,6 @@
 				if (recording.previewImage != null && recording.previewImage != "") {
 					
 	            	this.recordingName = recording.fileHash;
-	            	this.getStreamLength.doCall();
 	            	
 	            	this._content.initW = recording.flvWidth;
 	            	this._content.initH = recording.flvHeight;
@@ -233,9 +227,9 @@
         <method name="calcProgressBar">
         	<![CDATA[
         	
-        	   var flvTime = this._content._videostream._ns.time;
+        	   var flvTime = this._content._videostream.getTime();
         	   
-        	   //if ($debug) Debug.write("flvTime :: ",flvTime);
+        	   if ($debug) Debug.write("flvTime :calcProgressBar: ",flvTime);
         	   parent._recordingsViewBottom.showProgress(flvTime);
         	   
         	   this._progress._progressbar._pointer.setAttribute("visibility","visible");
@@ -262,8 +256,6 @@
         	
         	   this._progress._progressbar._pointer.setAttribute("x",tNewX);
         	   
-        	   lz.Timer.addTimer( this.timerDelegate , 1000 );
-        	
         	]]>
         </method>
         
@@ -277,13 +269,9 @@
         		
         		if (!this.timerDelegateStarted) {
         			this.timerDelegateStarted = true;
-                    lz.Timer.addTimer( this.timerDelegate , 1000 );
                 }
                 
             	this._content._videostream.bringToFront();
-            	
-            	if ($debug) Debug.write("PLAY STREAM ",this.recordingName);
-            	
                 this._content._videostream.playStream(this.recordingName,0);
         	}
         </method>
@@ -324,7 +312,6 @@
         <method name="stopStream">
         	if (this.timerDelegateStarted) {
         		this.timerDelegateStarted = false;
-                lz.Timer.removeTimer( this.timerDelegate );
             }
             parent._recordingsViewBottom.stopProgress();
             this._progress._progressbar._time.setAttribute("text","");
@@ -369,8 +356,20 @@
                 </view>
             </view>
             
-            <lzRecordingsViewAdapter name="_videostream">
+            <lzRecordingsViewAdapter name="_videostream" width="${parent.width}" height="${parent.height}">
             	
+            	<handler name="onwidth" args="w">
+            		this.updateRecordingVideoPosition();
+            	</handler>
+            	
+            	<handler name="onheight" args="h">
+            		this.updateRecordingVideoPosition();
+            	</handler>
+            	
+            	<handler name="onUpdateRecordingStreamTime">
+            		if ($debug) Debug.write("updateRecordingStreamTime ");
+            		parent.parent.calcProgressBar();
+            	</handler>
             	
             </lzRecordingsViewAdapter>
             

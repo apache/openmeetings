@@ -28,6 +28,9 @@
         client.closeInitTestingApplication = this.closeInitTestingApplication;
         //Recording Player
         client.connectRecordingPlayer = this.connectRecordingPlayer;
+        client.playRecordingStream = this.playRecordingStream;
+        client.updateRecordingVideoPosition = this.updateRecordingVideoPosition;
+        client.stopRecordingStream = this.stopRecordingStream;
 
         var rtmpLC:LocalConnection = new LocalConnection();
         rtmpLC.connect(canvas.rtmp_lc_name);
@@ -105,20 +108,86 @@
         });
     </method> 
     
+    <!---
+        plays a recorded stream
+     -->
+    <method name="playRecordingStream" args="streamName,delay,x,y,width,height">
+    	if($debug) Debug.write("playRecordingStream ",streamName,x,y,width,height);
+    	if (this.baseVideoStream == null) {
+    		return;
+    	}
+    	this.baseVideoStream.setAttribute("x",x);
+    	this.baseVideoStream.setAttribute("y",y);
+    	this.baseVideoStream.setAttribute("width",width);
+    	this.baseVideoStream.setAttribute("height",height);
+    	this.baseVideoStream.setAttribute("visibility","visible");
+    	this.baseVideoStream.playRecordingStream(streamName,delay);
+    </method>
+    
+    <!---
+        Updates the width/height property of the recording playback video 
+     -->    
+    <method name="updateRecordingVideoPosition" args="width,height">
+    	if (this.baseVideoStream == null) {
+            return;
+        }
+        this.baseVideoStream.setAttribute("width",width);
+        this.baseVideoStream.setAttribute("height",height);
+    </method>
+    
+    <!---
+        stops and hides the recording playback video
+     -->
+    <method name="stopRecordingStream">
+    	if($debug) Debug.write("stopRecordingStream ");
+        if (this.baseVideoStream == null) {
+            return;
+        }
+        if($debug) Debug.write(" stopRecording ");
+        this.baseVideoStream.stopRecording();
+        this.baseVideoStream.setAttribute("visibility","hidden");
+    </method>
 
 </class>
 
 <class name="playBackVideoStream" extends="baseVideoStream" bgcolor="0x000000" visibility="hidden">
 	
-	<handler name="onPlayStatus" args="info">
-        if ($debug) Debug.write("onPlayStatus ",info);
+	<attribute name="timerDelegate" value="null"/>
+    <attribute name="timerDelegateStarted" value="false" type="boolean"/>
+	
+	<handler name="oninit">
+		this.timerDelegate = new LzDelegate( this, "calcProgressBar" );
+	</handler>
+	
+	<method name="playRecordingStream" args="streamName,delay">
+		this.playStream(streamName,delay);
+		this.timerDelegateStarted = true;
+        lz.Timer.addTimer( this.timerDelegate , 1000 );
+	</method>
+	
+	<method name="stopRecording">
+		this._stop();
+		lz.Timer.removeTimer(this.timerDelegate);
+		this.timerDelegateStarted = false;
+	</method>
+	
+	<handler name="onPlayStatusEvent" args="info">
+        if ($debug) Debug.write("onPlayStatusEvent ",info);
         if (info.code ==  "NetStream.Play.Complete" ) {
-            parent.parent.stopStream();
+            canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'stopRecordingStream');
         }
     </handler>
-    <handler name="onMetaData" args="info">
+    <handler name="onMetaDataEvent" args="info">
         if ($debug) Debug.write("onMetaData ",info);
     </handler>
+    
+    <method name="calcProgressBar">
+    	if ($debug) Debug.write("calcProgressBar updateRecordingStreamTime",this._ns.time)
+    	canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'updateRecordingStreamTime',this._ns.time);
+    	if (this.timerDelegateStarted) {
+    		lz.Timer.addTimer( this.timerDelegate , 1000 );
+    	}
+    </method>
 	
 </class>
 
