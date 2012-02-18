@@ -159,12 +159,6 @@
 		<servlet-class>org.openmeetings.servlet.outputhandler.CalendarServlet</servlet-class>
 	</servlet>
     <servlet>
-        <description>MethodGateway</description>
-        <display-name>MethodGateway</display-name>
-        <servlet-name>MethodGateway</servlet-name>
-        <servlet-class>org.openmeetings.servlet.outputhandler.MethodGateway</servlet-class>
-    </servlet>
-    <servlet>
         <description>DefaultIndex</description>
         <display-name>DefaultIndex</display-name>
         <servlet-name>DefaultIndex</servlet-name>
@@ -267,10 +261,6 @@
 		<servlet-name>Calendar</servlet-name>
 		<url-pattern>/Calendar</url-pattern>
 	</servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>MethodGateway</servlet-name>
-        <url-pattern>/MethodGateway</url-pattern>
-    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>DefaultIndex</servlet-name>
         <url-pattern>/sipindex.html</url-pattern>
