@@ -136,8 +136,16 @@
                 g["usercolor"] = val;
                 canvas.setUserData(g);
                 
+                var uName = parent.username.getText();
+                var uPass = parent.userpass.getText();
+                var uSave = parent._savelogindata.getValue();
+                var uDomain = parent.domain.getValue();
                 this.parent.close();
-                new lz.checkLoginData(canvas.main_content._content.inner);
+                var login = new lz.checkLoginData(canvas.main_content._content.inner);
+                login.username.setText(uName);
+                login.userpass.setText(uPass);
+                login._savelogindata.setValue(uSave);
+                login.domain.setValue(uDomain);
             }
         </handler>
         <handler name="onkeyup" args="key">

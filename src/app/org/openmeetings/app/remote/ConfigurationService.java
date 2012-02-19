@@ -55,13 +55,13 @@ public class ConfigurationService {
         return cfgManagement.getConfByConfigurationId(user_level,configuration_id);
     }
     
-    public Long saveOrUpdateConfiguration(String SID,@SuppressWarnings("rawtypes") LinkedHashMap values){
+    public Long saveOrUpdateConfiguration(String SID, LinkedHashMap<String, ?> values){
         Long users_id = sessionManagement.checkSession(SID);
         Long user_level = userManagement.getUserLevelByID(users_id);     	
-        return cfgManagement.saveOrUpdateConfiguration(user_level,values, users_id);
+        return cfgManagement.saveOrUpdateConfiguration(user_level, values, users_id);
     }
     
-    public Long deleteConfiguration(String SID,@SuppressWarnings("rawtypes") LinkedHashMap values){
+    public Long deleteConfiguration(String SID, LinkedHashMap<String, ?> values){
         Long users_id = sessionManagement.checkSession(SID);
         Long user_level = userManagement.getUserLevelByID(users_id);     	
         return cfgManagement.deleteConfByConfiguration(user_level, values, users_id);

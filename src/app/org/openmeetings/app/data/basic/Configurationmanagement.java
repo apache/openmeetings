@@ -244,7 +244,7 @@ public class Configurationmanagement {
 	}
 
 	public Long saveOrUpdateConfiguration(long user_level,
-			@SuppressWarnings("rawtypes") LinkedHashMap values, Long users_id) {
+			LinkedHashMap<String, ?> values, Long users_id) {
 		try {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
 				Configuration conf = (Configuration) CastMapToObject
@@ -313,7 +313,7 @@ public class Configurationmanagement {
 	}
 
 	public Long deleteConfByConfiguration(long user_level,
-			@SuppressWarnings("rawtypes") LinkedHashMap values, Long users_id) {
+			LinkedHashMap<String, ?> values, Long users_id) {
 		try {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
 				Configuration conf = (Configuration) CastMapToObject
