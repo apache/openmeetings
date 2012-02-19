@@ -186,7 +186,7 @@
 
         this._ns.publish(streamName,"record");
     </method>
-
+    
 	<!---
 		Stops playing or broadcasting a Stream and clears the Video-Object
 	 -->

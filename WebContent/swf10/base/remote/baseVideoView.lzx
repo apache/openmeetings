@@ -29,7 +29,7 @@
 
 	<method name="applySizeToVid">
 		var vid = this._getflashvideo();
-        if(vid) {
+        if(vid != null) {
             vid.width = this.width;
             vid.height = this.height;
         } else {

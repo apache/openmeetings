@@ -98,7 +98,7 @@ Test the setup values before you enter a room
             if (valMic != null) {
                  _micro = Microphone.getMicrophone(valMic);
                  if (_micro != null) {
-                     _micro.codec = SoundCodec.SPEEX;
+                     _micro.codec = SoundCodec.NELLYMOSER;
                      _micro.framesPerPacket = 1;
                      _micro.setSilenceLevel(0, 2000);
                      _micro.gain = 50;
@@ -179,13 +179,13 @@ Test the setup values before you enter a room
     		
     		this._btnStartRecording.setAttribute("enabled",true);
     		
-    		videoview.stop();
+    		videoview._stop();
     		
     		this.doPlay();
     	}
     	
     	var videoviewViewer = this._viewer._chatvideoinner._videostream;
-        videoviewViewer.stop();
+        videoviewViewer._stop();
     </method>
 	
 	<labelText fontstyle="bold" labelid="758"
@@ -325,8 +325,7 @@ Test the setup values before you enter a room
      
      <!-- ressourceIcon="test_setup_play_rsc" -->
     <simpleLabelButton name="_play" y="190" x="490" visibility="hidden"
-                width="86" labelid="764" 
-                enabled="false">
+                width="86" labelid="764" >
         <handler name="onclick">
             parent.doPlay();
         </handler>
@@ -342,7 +341,13 @@ Test the setup values before you enter a room
     	
     	<method name="_updateLevel" args="no">
     		<![CDATA[
-    		    //if ($debug) Debug.write("activityLevel",parent._publisher._chatvideoinner._videostream.micro.activityLevel);
+    		    //if ($debug) Debug.write("_updateLevel",no,parent._publisher._chatvideoinner._videostream.micro);
+    		    //if ($debug) Debug.write("_updateLevel",parent._publisher._chatvideoinner._videostream.micro);
+    		    //if ($debug) Debug.write("_updateLevel",parent._publisher._chatvideoinner._videostream.micro.activityLevel);
+    		    if (parent._publisher._chatvideoinner._videostream.micro == null)
+    		    {
+    		    	return;
+    		    }
     		    this.setNewLevel(parent._publisher._chatvideoinner._videostream.micro.activityLevel);
     		]]>
     	</method>

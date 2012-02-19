@@ -249,7 +249,7 @@
     	if (this.isremote){
     		this._chatvideoinner._videostream.restart();
     	} else {
-    		this._chatvideoinner._videostream.stop();
+    		this._chatvideoinner._videostream._stop();
     	}
      ]]>
     </method>

@@ -101,17 +101,21 @@
 		]]>
 	</handler>
 	
-    <!--- Handler for updating the microphone activity level attribute. 
-          @keywords private -->
-    <method name="_updateLevel" args="arg">
-    	<![CDATA[
-            var level = this.micro.activityLevel;
-            if (level < 0) {
-                level = 0;
-            }
-            if (level != this.level) {
-                this.setAttribute("level", level);
-            }
+	<!--- Handler for updating the microphone activity level attribute. 
+			  @keywords private -->
+	<method name="_updateLevel" args="arg">
+		<![CDATA[
+			if (this.micro == null) {
+				return;
+			}
+			var level = this.micro.activityLevel;
+			if (level < 0) {
+				level = 0;
+			}
+
+			if (level != this.level) {
+				this.setAttribute("level", level);
+			}
 		]]>
 	</method>	
 	
@@ -119,10 +123,10 @@
 	    these methods send a Notification to all Connected users of a 
 	    Room about the onActivity-Change
      -->
-	<handler name="onlevel">
+	<handler name="onlevel" args="level">
 		<![CDATA[
 		
-		    //if ($debug) Debug.write("onlevel ",this.level);
+		    //if ($debug) Debug.write("onlevel ",this.level,level);
 		
 		    if (!this.doSendNotification){
 		    	return;
@@ -133,19 +137,22 @@
     		//greater 5 means the green dot starts to blink if the loudness is greater then 5%
     		//it makes no sense to set this to zero as there will be 1000 of events send 
     		//per minute to change the status just of this icon, swagner 12.02.2012
-			if (this.level>5) {
+			if (level>8) {
 				tVal = true;
 			} else {
 				tVal = false;
 			}
 			
 			if (this.isgreater != tVal) {
+				if ($debug) Debug.write("Level sendNotification ",this.isgreater,tVal,level);
 				this.isgreater = tVal;
 				this.sendNotification();
 			}
 			
 		]]>
 	</handler>    
+	
+	
 	<method name="sendNotification">
 		//if ($debug) Debug.write("Level sendNotification ",this.isgreater);
 		if (!this.sendNotificationViaLocalConnection) {
