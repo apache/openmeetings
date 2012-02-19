@@ -672,7 +672,7 @@ public class LdapLoginManagement {
 				jName_timeZone = conf.getConf_value();
 			}
 
-			// CHeck if LDAP Users get a SIP Account Issue 1099
+			// Check if LDAP Users get a SIP Account Issue 1099
 
 			newUserId = userManagement.registerUserInit(
 					2,// user_level
@@ -682,7 +682,8 @@ public class LdapLoginManagement {
 					login,// loginname
 					passwd,// passwd
 					lastname, firstname, email, new java.util.Date(), street,
-					additionalname, fax, zip, state_id, town, 0, false, // sendWelcomeMessage
+					additionalname, fax, zip, state_id, town,
+					cfgManagement.getConfValue("default_lang_id", Long.class, "0"), false, // sendWelcomeMessage
 					null, phone, "",// BaseURL is empty as we do not send an
 									// Email here
 					false,// send verification code
