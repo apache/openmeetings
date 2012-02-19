@@ -40,7 +40,6 @@ public class StoredFile {
                     "ttf", // TrueType font
                     "xcf", // GIMP image
                     "wpg", // Word Perfect Graphics
-                    "txt", // Raw text file
                     "bmp", "ico", // Microsoft Icon
                     "tga", // Truevision Targa
                     "jpg", "jpeg" }));

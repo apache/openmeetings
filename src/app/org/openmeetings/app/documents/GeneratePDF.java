@@ -151,7 +151,7 @@ public class GeneratePDF {
 
 			File jodFolder = new File(jodPath);
 			if (!jodFolder.exists() || !jodFolder.isDirectory()) {
-				new Exception("Path to JOD Library folder does not exist");
+				throw new Exception("Path to JOD Library folder does not exist");
 			}
 
 			ArrayList<String> argv = new ArrayList<String>();
@@ -172,7 +172,7 @@ public class GeneratePDF {
 						+ jarFiles);
 			}
 			if (jodConverterJar.length() == 0) {
-				new Exception(
+				throw new Exception(
 						"Could not find jodConverter JAR file in JOD folder");
 			}
 
