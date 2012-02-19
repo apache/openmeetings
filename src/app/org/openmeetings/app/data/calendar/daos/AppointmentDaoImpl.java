@@ -840,6 +840,9 @@ public class AppointmentDaoImpl {
 	public List<Appointment> getTodaysAppointmentsbyRangeAndMember(Long userId) {
 		log.debug("getAppoitmentbyRangeAndMember : UserID - " + userId);
 
+		//this query returns duplicates if the user books an appointment with
+		//his own user as second meeting-member, swagner 19.02.2012
+		
 		String hql = "SELECT app from MeetingMember mm "
 				+ "JOIN mm.appointment as app "
 				+ "WHERE mm.userid.user_id= :userId "
