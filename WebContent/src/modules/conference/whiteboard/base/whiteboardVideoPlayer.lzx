@@ -20,9 +20,9 @@
 -->
 <library>
 
-<class name="whiteboardVideoPlayer" extends="guiPresenter" y="100"
-    docking="true" resizeable="true" closable="false" width="322" 
-    x="$once{ parent.width/2 - this.width/2 }" height="300">
+<class name="whiteboardVideoPlayer" extends="guiPresenter" 
+    docking="false" resizeable="false" closable="true" minimizable="false"
+    x="0" y="0" width="${ parent.width }" height="${ parent.height }">
 	
 	<attribute name="fileExplorerItemId" value="0" type="number" />
 	
@@ -36,6 +36,10 @@
     <attribute name="isLoaded" value="false" type="boolean" />
 	
 	<attribute name="sendInit" value="false" type="boolean" />
+	
+	<attribute name="flv_width" value="0" type="number" /> 
+	
+    <attribute name="flv_height" value="0" type="number" /> 
 	
 	<handler name="oninit">
 		this.timerDelegate = new LzDelegate( this, "calcProgressBar" );
@@ -100,29 +104,69 @@
     </method>
     
     <method name="startStream">
-    	
-    	if (!this.isLoaded) {
-    		return;
-    	}
-    	
-    	if ($debug) Debug.write("startStream ",this.recordingName);
-    	
-    	if (this.recordingName != "") {
-    		
-    		this.isPaused = false;
-    		
-    		if (!this.timerDelegateStarted) {
-    			this.timerDelegateStarted = true;
-                lz.Timer.addTimer( this.timerDelegate , 1000 );
+    	<![CDATA[
+	    	if (!this.isLoaded) {
+	    		return;
+	    	}
+	    	
+	    	if ($debug) Debug.write("startStream ",this.recordingName);
+	    	
+	    	if (this.recordingName != "") {
+	    		
+	    		this.isPaused = false;
+	    		
+	    		if (!this.timerDelegateStarted) {
+	    			this.timerDelegateStarted = true;
+	                lz.Timer.addTimer( this.timerDelegate , 1000 );
+	            }
+	            
+	        	this._content._videostream.bringToFront();
+	        	
+	        	if ($debug) Debug.write("PLAY STREAM ",this.recordingName);
+	        	
+	        	var tObjectDimension = calcVideoWidthHeight();
+	        	
+	        	if ($debug) Debug.write("SEND ",this.recordingName,0,tObjectDimension.x,tObjectDimension.y,tObjectDimension.width,tObjectDimension.height);
+	        	
+	            // this._content._videostream.playStream(this.recordingName,0,tObjectDimension.x,tObjectDimension.y,tObjectDimension.width,tObjectDimension.height);
+	    	}
+    	]]>
+    </method>   
+    
+    <!---
+        calculates the new x, y, width and height of the video so that it is 100% 
+        visible in the container
+     -->
+    <method name="calcVideoWidthHeight">
+        <![CDATA[
+        
+            if ($debug) Debug.write("calcVideoWidthHeight ",this.flv_width,this.flv_height);
+        
+            var ratio = this.flv_width / this.flv_height;
+            
+            //max height of container is new height of video;
+            //calc new width and x-position of video
+            var newHeight = this.height;
+            var newWidth = ratio * newHeight; 
+            var newx = (this.width - newWidth) / 2;
+            var newy = 0;
+            
+            if ($debug) Debug.write("calcVideoWidthHeight",ratio,this.width,this.height,newWidth,newHeight,newx,newy);
+         
+            if (newWidth > this.width) {
+                newWidth = this.width;
+                newHeight = newWidth / ratio;
+                newx = 0;
+                newy = (this.height - newHeight) / 2;
             }
             
-        	this._content._videostream.bringToFront();
-        	
-        	if ($debug) Debug.write("PLAY STREAM ",this.recordingName);
-        	
-            this._content._videostream.playStream(this.recordingName,0);
-    	}
-    </method>   
+            var t = {'x':newx,'y':newy,'width':newWidth,'height':newHeight};
+            
+            if ($debug) Debug.write("t",t);
+            
+            return {'x':newx,'y':newy,'width':newWidth,'height':newHeight};
+        ]]>
+    </method>
     
     <method name="calcProgressBar">
     	<![CDATA[

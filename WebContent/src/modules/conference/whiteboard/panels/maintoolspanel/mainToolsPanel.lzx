@@ -123,7 +123,9 @@
 	<mainToolsPanelItem name="clipart" modi="clipart" labelid="1323" >
         
         <handler name="oninit">
-        	this._bgIcon.setAttribute("visibility","hidden");
+            if (this["_bgIcon"]) {
+        	   this._bgIcon.setAttribute("visibility","hidden");
+        	}
             var imageurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey
                                             +'public/cliparts/thumb/'
                                             +canvas._drawarea.currentClipArtRessourceName;

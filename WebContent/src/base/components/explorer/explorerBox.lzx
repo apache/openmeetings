@@ -223,7 +223,7 @@
 		//check for dockable stuff which is connected to this Box
 		for (var eg in this.parent.subviews){
 			//check that you do not calc with yourself
-			if (this.parent.subviews[eg]!=this && this.parent.subviews[eg].docking){
+			if (this.parent.subviews[eg]!=this && this.parent.subviews[eg]["docking"] && this.parent.subviews[eg].docking){
 				// there are 4 cases which have to be proofed to check every possible situation
 				var proof=false;
 
@@ -251,7 +251,7 @@
 				
 		for (var eg in this.parent.subviews){
 			//check that you do not calc with yourself
-			if (this.parent.subviews[eg]!=this && this.parent.subviews[eg].docking){
+			if (this.parent.subviews[eg]!=this && this.parent.subviews[eg]["docking"] && this.parent.subviews[eg].docking){
 				// there are 4 cases which have to be proofed to check every possible situation
 				//left box-border
 				if ( ( ((this.x+this.width)-this.parent.subviews[eg].x) < this.dockingbarrier ) && ( ((this.x+this.width)-this.parent.subviews[eg].x) > -this.dockingbarrier ) &&  ( (this.y+this.height) > this.parent.subviews[eg].y ) &&  ( this.y < (this.parent.subviews[eg].y+this.parent.subviews[eg].height) ) ){

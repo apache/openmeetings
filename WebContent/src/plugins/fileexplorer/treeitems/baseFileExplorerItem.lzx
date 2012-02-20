@@ -330,7 +330,11 @@
 	
 	<method name="deselectItem">
 		this.selected = false;
-        this._fileName.setAttribute("bgcolor",0xFFFFFF);
+		if (this["_fileName"]) {
+            this._fileName.setAttribute("bgcolor",0xFFFFFF);
+        } else {
+            if ($debug) Debug.warn("deselectItem:: _fileName is NULL ",this);
+        }
     </method>
 	
 	<method name="clearContent">
@@ -428,6 +432,8 @@
                                             fileHash:fileExplorerItem.fileHash,
                                             isFolder:false,isImage:true,
                                             fileIcon:'file_explorer_video_rsc',
+                                            flvHeight:fileExplorerItem.flvHeight,
+                                            flvWidth:fileExplorerItem.flvWidth,
                                             refObjListRoot:this.refObjListRoot
                                         });
                 } else if (fileExplorerItem.isStoredWmlFile) { 

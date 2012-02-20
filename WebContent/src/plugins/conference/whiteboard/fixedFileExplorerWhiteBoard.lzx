@@ -115,11 +115,11 @@
         ////Debug.write(" g[image] ",storedImageDate);
         if (storedImageDate["clearField"] && !storedImageDate["askagainclear"]){
             canvas._drawarea.setModus('plain');
-            Debug.write(" canvas._drawarea.addNewImage 1 ",this.downloadurl,this.x,this.y);
+            if ($debug) Debug.write(" canvas._drawarea.addNewImage 1 ",this.downloadurl,this.x,this.y);
             canvas._drawarea.addNewImage(this.downloadurl,this.x,this.y,this.baseurl,this.fileName,this.moduleName,this.parentPath,this.room,this.domain);
         } else if (!storedImageDate["askagainclear"] && !storedImageDate["clearField"]){
             canvas._drawarea.addNewImage(this.downloadurl,this.x,this.y,this.baseurl,this.fileName,this.moduleName,this.parentPath,this.room,this.domain);
-            Debug.write(" canvas._drawarea.addNewImage 2 ",this.downloadurl,this.x,this.y);
+            if ($debug) Debug.write(" canvas._drawarea.addNewImage 2 ",this.downloadurl,this.x,this.y);
         } else if (storedImageDate["askagainclear"]){
             this.confirmdialog = new lz.confirmationBox(canvas.main_content._content.inner,{labelid:62,labeliderror:63,refObj:this});
         } else {

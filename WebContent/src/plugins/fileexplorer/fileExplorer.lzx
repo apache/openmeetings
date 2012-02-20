@@ -143,8 +143,7 @@
     
     <method name="playVideo" args="itemObj">
     	this.selectItem(itemObj);
-    	
-    	canvas._drawarea.playVideoSynced(itemObj.fileExplorerItemId,itemObj.fileName);
+    	canvas._drawarea.playVideoSynced(itemObj.fileExplorerItemId,itemObj.fileName,itemObj.flvWidth,itemObj.flvHeight);
     </method>
     
     <method name="loadFiles">
@@ -158,7 +157,6 @@
                 
                 this.getFileExplorerByRoomSelf.setAttribute("src",downloadurl);
                 if ($debug) Debug.write("getFileExplorerByRoomSelf doRequest 1 ",downloadurl);
-                if ($debug) Debug.write("getFileExplorerByRoomSelf doRequest 2 ",downloadurl.src);
                 this.getFileExplorerByRoomSelf.doRequest();
     	    }
         ]]>
@@ -400,6 +398,8 @@
                                             fileHash:fileExplorerItem.fileHash,
                                             isFolder:false,isImage:true,
                                             fileIcon:'file_explorer_video_rsc',
+                                            flvHeight:fileExplorerItem.flvHeight,
+                                            flvWidth:fileExplorerItem.flvWidth,
                                             refObjListRoot:this
                                         });
                 } else if (fileExplorerItem.isStoredWmlFile) { 
@@ -478,6 +478,8 @@
                                             fileHash:fileExplorerItem.fileHash,
                                             isFolder:false,isImage:true,
                                             fileIcon:'file_explorer_video_rsc',
+                                            flvHeight:fileExplorerItem.flvHeight,
+                                            flvWidth:fileExplorerItem.flvWidth,
                                             refObjListRoot:this
                                         });
                 } else if (fileExplorerItem.isStoredWmlFile) { 

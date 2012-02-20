@@ -70,6 +70,7 @@
     </handler>
     
     <method name="close">
+    <![CDATA[
     	//This can happen when the confirmation pops up
     	if (this.alreadySent) {
     		return;
@@ -86,7 +87,7 @@
     		
     		if ($debug) Debug.write("this.overItem ",this.overItem);
     		
-    		if (this.overItem.isTrashCan) {
+    		if (this.overItem["isTrashCan"] && this.overItem.isTrashCan) {
     			if ($debug) Debug.write("SEND TO GARBAGE");
     			this.fileExplorerItemId = this.refObj.fileExplorerItemId;
     			new lz.confirmationSingle(canvas,{
@@ -95,7 +96,7 @@
             			   labeliderror:713,
             			   showCheckBox:false
             			});
-    		} else if (this.overItem.isFolder){
+    		} else if (this.overItem["isFolder"] && this.overItem.isFolder){
     			if ($debug) Debug.write("MOVE ITEM",this.refObj.fileExplorerItemId);
     			if ($debug) Debug.write("MOVE TO PARENT",this.overItem.fileExplorerItemId);
     			this.fileExplorerItemId = this.refObj.fileExplorerItemId;
@@ -133,7 +134,7 @@
     	} else {
     		this.destroy();
     	}
-    	
+    ]]>	
     </method>
     
     <method name="sendConfirmation" args="bool,askAgain">

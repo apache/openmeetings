@@ -167,7 +167,7 @@
         </view>  
         
     <text y="1" name="_long" text="..." fgcolor="0xFFFFFF"
-        x="${ parent.width-28 }" fontsize="$once{ canvas.defaultFontSize }" />
+        x="${ parent.width-28 }" fontsize="10" />
 
     <labelTooltip text="${ parent.btnName }" />
 </class>

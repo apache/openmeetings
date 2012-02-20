@@ -61,19 +61,27 @@
 	        } else {
 	            yVal -= 24;
 	        }
-	        this.holder.setAttribute('x',xVal);
-	        this.holder.setAttribute('y',yVal);
+	        if (this.holder!=null)  {
+	           this.holder.setAttribute('x',xVal);
+	           this.holder.setAttribute('y',yVal);
+            }
         ]]>        
     </handler>
     <handler name="onmouseout" reference="this.parent">
-        this.holder.destroy();
+        this.cleanHolder();
     </handler>
     <handler name="onmouseup" reference="this.parent">
-        this.holder.destroy();
+        this.cleanHolder();
     </handler>
     <handler name="onclick" reference="this.parent">
-        this.holder.destroy();
-    </handler>    
+        this.cleanHolder();
+    </handler>   
+    <method name="cleanHolder">
+        if (this.holder!=null) {
+            this.holder.destroy();
+            this.holder = null; 
+        }
+    </method> 
     <attribute name="labelid" type="number" setter="setLabelId(labelid)" />
     <method name="setLabelId" args="_labelid" >
         this.labelid = _labelid;

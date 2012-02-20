@@ -99,7 +99,7 @@
 			this._content.changeOpacitySlider.setEnabled(false);
 		}
 		
-		if (drawmodus == 'letter'){
+		if (drawArea.drawmodus == 'letter'){
             this._content._italic.setAttribute('enabled',true);
             this._content._bold.setAttribute('enabled',true);           
         } else {
