@@ -37,7 +37,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class GenerateSWF {
 
 	private static final Logger log = Red5LoggerFactory
-			.getLogger(GeneratePDF.class);
+			.getLogger(GenerateSWF.class);
 
 	@Autowired
 	private Configurationmanagement cfgManagement;
@@ -56,6 +56,7 @@ public class GenerateSWF {
 
 		try {
 			returnMap.put("command", Arrays.toString(argv));
+			returnMap.put("out","");
 
 			// By using the process Builder we have access to modify the
 			// environment variables
@@ -73,9 +74,10 @@ public class GenerateSWF {
 			Worker worker = new Worker(proc);
 			InputStreamWatcher inputWatcher = new InputStreamWatcher(proc);
 			errorWatcher.start();
-			worker.start();
-
 			inputWatcher.start();
+			worker.start();
+			
+			
 			try {
 				worker.join(timeout);
 				if (worker.exit != null) {
@@ -102,6 +104,7 @@ public class GenerateSWF {
 			} finally {
 				proc.destroy();
 			}
+			
 		} catch (TimeoutException e) {
 			// Timeout exception is processed above
 			log.error("executeScript",e);
@@ -117,6 +120,7 @@ public class GenerateSWF {
 			returnMap.put("exception", t.toString());
 			returnMap.put("exitValue", "-1");
 		}
+		
 		return returnMap;
 	}
 
@@ -158,7 +162,6 @@ public class GenerateSWF {
 				String line = br.readLine();
 				while (line != null) {
 					error += line;
-					log.debug("line: " + line);
 					line = br.readLine();
 				}
 			} catch (IOException ioexception) {
@@ -168,11 +171,14 @@ public class GenerateSWF {
 	}
 
 	// This one just reads script's output stream so it can
-	// finish normally, see issue 801
+	// finish normally, see issue 801 http://code.google.com/p/openmeetings/issues/detail?id=801
+	// needs verification, swagner 21.02.2012
 	private static class InputStreamWatcher extends Thread {
+		
 		private final InputStream stderr;
 		private final InputStreamReader isr;
 		private final BufferedReader br;
+		public String message;
 
 		private InputStreamWatcher(Process process) {
 			stderr = process.getInputStream();
@@ -191,6 +197,11 @@ public class GenerateSWF {
 				return;
 			}
 		}
+		
+		public String getOutputString() {
+			return message;
+		}
+		
 	}
 
 	private String getPathToSwfTools() {

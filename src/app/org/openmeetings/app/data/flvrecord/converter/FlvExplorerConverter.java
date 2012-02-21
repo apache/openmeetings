@@ -21,6 +21,8 @@ package org.openmeetings.app.data.flvrecord.converter;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.file.dao.FileExplorerItemDaoImpl;
@@ -41,8 +43,18 @@ public class FlvExplorerConverter extends BaseConverter {
 	private FileExplorerItemDaoImpl fileExplorerItemDaoImpl;
 	@Autowired
 	private FlvRecordingLogDaoImpl flvRecordingLogDaoImpl;
+	
+	private class FlvDimension {
+		public FlvDimension(int width, int height) {
+			this.width = width;
+			this.height = height;
+		}
+		public int width = 0;
+		public int height = 0;
+	}
 
-	public void startConversion(Long fileExplorerItemId, String moviePath) {
+	public List<HashMap<String, String>> startConversion(Long fileExplorerItemId, String moviePath) {
+		List<HashMap<String, String>> returnLog = new LinkedList<HashMap<String, String>>();
 		try {
 
 			FileExplorerItem fileExplorerItem = this.fileExplorerItemDaoImpl
@@ -51,41 +63,44 @@ public class FlvExplorerConverter extends BaseConverter {
 			log.debug("fileExplorerItem "
 					+ fileExplorerItem.getFileExplorerItemId());
 
-			// Strip Audio out of all Audio-FLVs
-			this.convertToFLV(fileExplorerItem, moviePath);
+			//  Convert to FLV
+			return this.convertToFLV(fileExplorerItem, moviePath);
 
 			// Add empty pieces at the beginning and end of the wav
 
 		} catch (Exception err) {
 			log.error("[startConversion]", err);
+			HashMap<String, String> returnMap = new HashMap<String, String>();
+			returnMap.put("process", "startConversion");
+			returnMap.put("error", err.getMessage());
+			returnMap.put("exception", err.toString());
+			returnMap.put("exitValue", "-1");
+			returnLog.add(returnMap);
 		}
+
+		return returnLog;
 
 	}
 
-	private void convertToFLV(FileExplorerItem fileExplorerItem,
+	private List<HashMap<String, String>> convertToFLV(FileExplorerItem fileExplorerItem,
 			String moviePath) {
+		List<HashMap<String, String>> returnLog = new LinkedList<HashMap<String, String>>();
 		try {
-
-			List<HashMap<String, String>> returnLog = new LinkedList<HashMap<String, String>>();
 
 			String streamFolderName = getStreamFolderName("hibernate");
 
 			String outputFullFlv = streamFolderName + "UPLOADFLV_"
 					+ fileExplorerItem.getFileExplorerItemId() + ".flv";
 
-			int flvWidth = 300;
-			int flvHeight = 240;
-
-			fileExplorerItem.setFlvWidth(flvWidth);
-			fileExplorerItem.setFlvHeight(flvHeight);
 			fileExplorerItem.setIsVideo(true);
 
 			String[] argv_fullFLV = null;
 
 			argv_fullFLV = new String[] { getPathToFFMPEG(), "-i", moviePath,
 					"-ar", "22050", "-acodec", "libmp3lame", "-ab", "32k",
-					"-s", flvWidth + "x" + flvHeight, "-vcodec", "flv",
+					"-vcodec", "flv",
 					outputFullFlv };
+			// "-s", flvWidth + "x" + flvHeight, 
 
 			log.debug("START generateFullFLV ################# ");
 			String tString = "";
@@ -95,9 +110,20 @@ public class FlvExplorerConverter extends BaseConverter {
 			}
 			log.debug(tString);
 			log.debug("END generateFullFLV ################# ");
+			
+			HashMap<String, String> returnMapConvertFLV = GenerateSWF.executeScript("uploadFLV ID :: "
+					+ fileExplorerItem.getFileExplorerItemId(), argv_fullFLV);
+			
+			//Parse the width height from the FFMPEG output
+			FlvDimension flvDimension = getFlvDimension(returnMapConvertFLV.get("error"));
+			int flvWidth = flvDimension.width;
+			int flvHeight = flvDimension.height;
+			
+			
+			fileExplorerItem.setFlvWidth(flvWidth);
+			fileExplorerItem.setFlvHeight(flvHeight);
 
-			returnLog.add(GenerateSWF.executeScript("uploadFLV ID :: "
-					+ fileExplorerItem.getFileExplorerItemId(), argv_fullFLV));
+			returnLog.add(returnMapConvertFLV);
 
 			String hashFileFullNameJPEG = "UPLOADFLV_"
 					+ fileExplorerItem.getFileExplorerItemId() + ".jpg";
@@ -131,11 +157,38 @@ public class FlvExplorerConverter extends BaseConverter {
 				this.flvRecordingLogDaoImpl.addFLVRecordingLog(
 						"generateFFMPEG", null, returnMap);
 			}
+			
+			
 
 		} catch (Exception err) {
 			log.error("[convertToFLV]", err);
+			HashMap<String, String> returnMap = new HashMap<String, String>();
+			returnMap.put("process", "convertToFLV");
+			returnMap.put("error", err.getMessage());
+			returnMap.put("exception", err.toString());
+			returnMap.put("exitValue", "-1");
+			returnLog.add(returnMap);
 		}
 
+		return returnLog;
 	}
-
+	
+	private FlvDimension getFlvDimension(String txt) throws Exception {
+		
+		Pattern p = Pattern.compile("\\d{2,4}(x)\\d{2,4}");
+		
+		Matcher matcher = p.matcher(txt);
+		
+		while ( matcher.find() ) {
+			String foundResolution = txt.substring(matcher.start(), matcher.end());
+			
+			String[] resultions = foundResolution.split("x");
+			
+			return new FlvDimension(Integer.valueOf(resultions[0]).intValue(), Integer.valueOf(resultions[1]).intValue());
+			
+	    }
+		
+		return null;
+	}
+	
 }

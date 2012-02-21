@@ -23,6 +23,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.openmeetings.app.OpenmeetingsVariables;
@@ -219,7 +220,13 @@ public class FileProcessor {
             HashMap<String, String> processThumb = generateThumbs.generateThumb("_thumb_", current_dir, completeName, 50);
             returnError.put("processThumb", processThumb);
         } else if (isVideo) {
-             flvExplorerConverter.startConversion(fileExplorerItemId, completeName + newFileExtDot);
+        	List<HashMap<String, String>> returnList = flvExplorerConverter.startConversion(fileExplorerItemId, completeName + newFileExtDot);
+        	
+        	int i=0;
+        	for (HashMap<String, String> returnMap : returnList) {
+        		returnError.put("processFLV "+i, returnMap);
+        	}
+        	
         }
 		
         returnError.put("returnAttributes", returnAttributes);
