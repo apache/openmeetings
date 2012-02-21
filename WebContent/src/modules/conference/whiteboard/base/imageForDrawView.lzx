@@ -22,6 +22,8 @@
 
 <class name="imageForDrawView" extends="image" stretches="both">
 	
+	<event name="prepareForDelete" />
+	
 	<attribute name="downloadurl" value="" type="string" />
 		
 	<attribute name="alterModus" value="true" type="boolean" />

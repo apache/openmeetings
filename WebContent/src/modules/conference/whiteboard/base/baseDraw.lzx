@@ -267,6 +267,7 @@
         
             if (this.boundingref!=null) this.boundingref.removeIt();
             while (this.subviews.length > 1) {
+                this.subviews[1].prepareForDelete.sendEvent();
                 this.subviews[1].destroy();
             }
             while (this.basdrawredoView.subviews.length > 0) {
@@ -461,13 +462,16 @@
 	<method name="deleteItemByNameSync" args="objName">
     	<![CDATA[
     	    if ($debug) Debug.write("deleteItemByNameSync :: ",objName);
-    		this[objName].destroy();
-    		if (this.boundingref!=null) this.boundingref.removeIt();
+    	    this[objName].prepareForDelete.sendEvent();
+    	    this[objName].destroy();
+            if (this.boundingref!=null) this.boundingref.removeIt();
+    		
     		var pos = -1;
     		for (var eg=0;eg<this.layers.length;eg++){
     			if (this.layers[eg]['name']==objName) {
     				pos = eg;
     				//Debug.write("Found Object in Layer: ",eg);
+    				this.layers[eg].prepareForDelete.sendEvent();
     				this.layers[eg].destroy();
     			}
     		}	
@@ -581,6 +585,7 @@
 			this.layers.push(this.currentlayer);
 			this.baseactionobjectList.push(lastActionObject);
 			//Remove this View
+			lastelement.prepareForDelete.sendEvent();
 			lastelement.destroy();
 			this.checkStepLayers();
 			this.onsharedMessage('redo',lastActionObject);
@@ -620,6 +625,7 @@
 			this.redolayers.push(this.currentlayer);
 			this.baseredoactionobjectList.push(lastActionObject);
 			//Remove this View
+			lastelement.prepareForDelete.sendEvent();
 			lastelement.destroy();
 			this.checkStepLayers();		
 			this.onsharedMessage('undo',lastActionObject);

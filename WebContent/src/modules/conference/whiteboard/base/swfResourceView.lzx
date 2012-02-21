@@ -21,6 +21,8 @@
 <library>
     
 <class name="swfResourceView" extends="view" >
+	
+	<event name="prepareForDelete" />
     
     <attribute name="refObj" value="null" />
 	<attribute name="alterModus" value="true" type="boolean" />

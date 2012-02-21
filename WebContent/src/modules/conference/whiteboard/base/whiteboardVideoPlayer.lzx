@@ -21,15 +21,16 @@
 <library>
 
 <class name="whiteboardVideoPlayer" extends="guiPresenter" 
-    docking="false" resizeable="false" closable="true" minimizable="false"
+    docking="false" resizeable="false" closable="false" minimizable="false"
     x="0" y="0" width="${ parent.width }" height="${ parent.height }">
 	
 	<attribute name="fileExplorerItemId" value="0" type="number" />
 	
-    <attribute name="timerDelegate" value="null" />
     <attribute name="timerDelegateStarted" value="false" type="boolean" />
     
-    <attribute name="deltaInSeconds" value="0" type="number" />	
+    <attribute name="deltaInSeconds" value="0" type="number" />
+    
+    <attribute name="currentTime" value="0" type="number" /> 	
     
     <attribute name="recordingName" value="" type="string" />
     
@@ -40,18 +41,53 @@
 	<attribute name="flv_width" value="0" type="number" /> 
 	
     <attribute name="flv_height" value="0" type="number" /> 
-	
+    
 	<handler name="oninit">
-		this.timerDelegate = new LzDelegate( this, "calcProgressBar" );
 		if ($debug) Debug.write("whiteboardVideoPlayer :: ",this.fileExplorerItemId);
 		
 		this.recordingName = "UPLOADFLV_" + this.fileExplorerItemId + ".flv";
-		
+		calcVideoWidthHeight();
 		this.copyFileToCurrentRoom.doCall();
+		
+		var t = this;
+		canvas.videoComp_lc.stopRecordingStream = function(tName) {
+            if ($debug) Debug.write("LC stopRecordingStream",tName,(t.name == tName));
+            if (t.name == tName) {
+            	t.stopStream();
+            }
+        }
+        canvas.videoComp_lc.metaWhiteboardPlaybackStream = function(tName,duration) {
+            if ($debug) Debug.write("LC metaWhiteboardPlaybackStream",tName,duration,(t.name == tName));
+            if (t.name == tName) {
+                t.deltaInSeconds = duration;
+                t.setDuration();
+            }
+        }
+        canvas.videoComp_lc.updateWhiteboardStreamTime = function(tName,time) {
+            //if ($debug) Debug.write("LC metaWhiteboardPlaybackStream",tName,time,(t.name == tName));
+            if (t.name == tName) {
+                t.currentTime = time;
+                t.calcProgressBar();
+            }
+        }
+		
+	</handler>
+	
+	<handler name="prepareForDelete" args="tRef">
+		if ($debug) Debug.write("--- prepareForDelete ");
+		this.stopStream();
 	</handler>
 	
 	<handler name="onclose">
 		this.stopStreamPlay();
+	</handler>
+	
+	<handler name="onwidth">
+		calcVideoWidthHeight();
+	</handler>
+	
+	<handler name="onheight">
+		calcVideoWidthHeight();
 	</handler>
 	
 	<!--
@@ -117,11 +153,8 @@
 	    		
 	    		if (!this.timerDelegateStarted) {
 	    			this.timerDelegateStarted = true;
-	                lz.Timer.addTimer( this.timerDelegate , 1000 );
 	            }
 	            
-	        	this._content._videostream.bringToFront();
-	        	
 	        	if ($debug) Debug.write("PLAY STREAM ",this.recordingName);
 	        	
 	        	var tObjectDimension = calcVideoWidthHeight();
@@ -129,6 +162,11 @@
 	        	if ($debug) Debug.write("SEND ",this.recordingName,0,tObjectDimension.x,tObjectDimension.y,tObjectDimension.width,tObjectDimension.height);
 	        	
 	            // this._content._videostream.playStream(this.recordingName,0,tObjectDimension.x,tObjectDimension.y,tObjectDimension.width,tObjectDimension.height);
+	            
+	        	var tx = this.getAttributeRelative("x",canvas)+tObjectDimension.x+this._content.x;
+	        	var ty = this.getAttributeRelative("y",canvas)+tObjectDimension.y+this._content.y;
+	        	
+	            canvas.lc.send(canvas.rtmp_lc_name, "playbackWhiteboardVideo",this.name,this.recordingName,0,tx,ty,tObjectDimension.width,tObjectDimension.height);
 	    	}
     	]]>
     </method>   
@@ -146,73 +184,74 @@
             
             //max height of container is new height of video;
             //calc new width and x-position of video
-            var newHeight = this.height;
+            var newHeight = this._content.height;
             var newWidth = ratio * newHeight; 
-            var newx = (this.width - newWidth) / 2;
+            var newx = (this._content.width - newWidth) / 2;
             var newy = 0;
             
-            if ($debug) Debug.write("calcVideoWidthHeight",ratio,this.width,this.height,newWidth,newHeight,newx,newy);
+            if ($debug) Debug.write("calcVideoWidthHeight",ratio,this._content.width,this._content.height,newWidth,newHeight,newx,newy);
          
-            if (newWidth > this.width) {
-                newWidth = this.width;
+            if (newWidth > this._content.width) {
+                newWidth = this._content.width;
                 newHeight = newWidth / ratio;
                 newx = 0;
-                newy = (this.height - newHeight) / 2;
+                newy = (this._content.height - newHeight) / 2;
             }
             
             var t = {'x':newx,'y':newy,'width':newWidth,'height':newHeight};
             
             if ($debug) Debug.write("t",t);
             
+            this._content._preview.setAttribute("x",newx);
+            this._content._preview.setAttribute("y",newy);
+            this._content._preview.setAttribute("width",newWidth);
+            this._content._preview.setAttribute("height",newHeight);
+            
             return {'x':newx,'y':newy,'width':newWidth,'height':newHeight};
+        ]]>
+    </method>
+    
+    <method name="setDuration">
+    	<![CDATA[
+           if ($debug) Debug.write("setDuration ",this.deltaInSeconds);
+           var tString = "";
+           if (this.deltaInSeconds > 60) {
+               var minutes = Math.floor(this.deltaInSeconds/60);
+               var restSeconds = Math.round(this.deltaInSeconds) - ( minutes * 60 );
+               tString = minutes + " min " + restSeconds + " sec";
+           } else {
+               tString = Math.round(this.deltaInSeconds) + " sec";
+           }
+           this._progress._progressbar._duration.setAttribute("text",tString);
         ]]>
     </method>
     
     <method name="calcProgressBar">
     	<![CDATA[
-    	
-    	//if ($debug) Debug.write("this._content._videostream._ns",this._content._videostream._ns);
-    	
-    	   var flvTime = this._content._videostream._ns.time;
-    	   
+    	   if ($debug) Debug.write("calcProgressBar ",this.currentTime);
     	   this._progress._progressbar._pointer.setAttribute("visibility","visible");
-    	   
     	   var tString = "";
-    	   
-    	   if (flvTime > 60) {
-    	   	
-    	   	   var minutes = Math.floor(flvTime/60);
-    	   	   
-    	   	   var restSeconds = Math.round(flvTime) - ( minutes * 60 );
-    	   	   
+    	   if (this.currentTime > 60) {
+    	   	   var minutes = Math.floor(this.currentTime/60);
+    	   	   var restSeconds = Math.round(this.currentTime) - ( minutes * 60 );
     	   	   tString = minutes + " min " + restSeconds + " sec";
-    	   	
     	   } else {
-    	   	
-    	   	   tString = Math.round(flvTime) + " sec";
-    	   
+    	   	   tString = Math.round(this.currentTime) + " sec";
     	   }
-    	   
     	   this._progress._progressbar._time.setAttribute("text",tString);
-    	   
-    	   var tNewX = Math.round((this._progress._progressbar.width / this.deltaInSeconds) * flvTime);
-    	
+    	   var tNewX = Math.round((this._progress._progressbar.width / this.deltaInSeconds) * this.currentTime);
     	   this._progress._progressbar._pointer.setAttribute("x",tNewX);
-    	   
-    	   lz.Timer.addTimer( this.timerDelegate , 1000 );
-    	
     	]]>
     </method> 
 	
 	<method name="stopStream">
     	if (this.timerDelegateStarted) {
     		this.timerDelegateStarted = false;
-            lz.Timer.removeTimer( this.timerDelegate );
         }
         this._progress._progressbar._time.setAttribute("text","");
         this._progress._progressbar._pointer.setAttribute("x",0);
-        this._content._preview.bringToFront();
-        this._content._videostream.stop();
+        if ($debug) Debug.write("SEND stopWhiteboardVideo ",this.name);
+        canvas.lc.send(canvas.rtmp_lc_name, "stopWhiteboardVideo",this.name);
     </method>
     
     <method name="toggleStream">
@@ -221,10 +260,10 @@
     	}
     </method>
 	
-	<view name="_content" height="${ parent.height-62 }" 
+	<view name="_content" height="${ parent.height-62 }" bgcolor="0x000000"
 		  y="22" x="1" width="${ parent.width-1 }">
 		
-		<view name="_preview" width="${parent.width}" height="${parent.height}" bgcolor="0x000000">
+		<view name="_preview" width="0" height="0" >
         	<image name="imagePreview" stretches="both"
         		   width="${parent.width}" height="${parent.height}" />
             <handler name="onclick">
@@ -237,20 +276,6 @@
             </view>
         </view>
 	
-	    <baseVideoStream name="_videostream" bgcolor="0x000000" y="0" 
-	          width="${ parent.width }" height="${ parent.height }">
-	    	<handler name="onPlayStatus" args="info">
-	    		if ($debug) Debug.write("onPlayStatus ",info);
-	    		if (info.code ==  "NetStream.Play.Complete" ) {
-	    			parent.parent.stopStream();
-	    		}
-	    	</handler>
-	    	<handler name="onMetaData" args="info">
-	            if ($debug) Debug.warn("onMetaData ",info);
-	            parent.parent.deltaInSeconds = Number(info.duration);
-	        </handler>
-	    </baseVideoStream>
-    
 	</view>
 
     <view name="_progress" height="18" y="${ parent.height - 40 }" width="${ parent.width-2 }"

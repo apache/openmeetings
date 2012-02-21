@@ -34,6 +34,8 @@
         client.pauseRecordingPlayback = this.pauseRecordingPlayback;
         client.seekRecordingPlayback = this.seekRecordingPlayback;
         client.stopAndCloseRecordingConnection = this.stopAndCloseRecordingConnection;
+        client.playbackWhiteboardVideo = this.playbackWhiteboardVideo;
+        client.stopWhiteboardVideo = this.stopWhiteboardVideo;
 
         var rtmpLC:LocalConnection = new LocalConnection();
         rtmpLC.connect(canvas.rtmp_lc_name);
@@ -187,6 +189,42 @@
         canvas.thishib.disconnect();
         // send back confirmation to leave the module
         canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'recordingStoppedAndDisconnected');
+    </method>
+    
+    <!---
+        Start playback of whiteboard video
+     -->
+    <method name="playbackWhiteboardVideo" args="tName,recordingName,seek,tx,ty,twidth,theight">
+    	<![CDATA[
+    	   if($debug) Debug.write("playbackWhiteboardVideo ",tName,recordingName,seek,tx,ty,twidth,theight);
+    	   if (this[tName]) {
+    	   	 if ($debug) Debug.warn("playbackWhiteboardVideo there was already a video with the same name");
+    	   	 this[tName]._stop();
+    	   	 this[tName].destroy();
+    	   }
+    	   
+    	   new lz.playBackWhiteboardVideo(this,{
+                	       name:tName,
+                	       x:tx,
+                	       y:ty,
+                	   	   width:twidth,
+                	   	   height:theight
+                	   });
+    	   
+    	   this[tName].playVideoStream(recordingName,0);
+    	]]>
+    </method>
+    
+    <method name="stopWhiteboardVideo" args="tName">
+    	<![CDATA[
+    	   if($debug) Debug.write("stopWhiteboardVideo ",tName);
+           if (this[tName]) {
+             this[tName].stopVideo();
+             this[tName].destroy();
+           } else {
+           	 if ($debug) Debug.warn("stopWhiteboardVideo could not find video to stop");
+           }
+    	]]>
     </method>
 
 </class>

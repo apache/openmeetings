@@ -55,6 +55,8 @@
     <attribute name="initwidth" value="0" type="number" />
     <attribute name="initheight" value="0" type="number" />
     
+    <event name="prepareForDelete" />
+    
     <handler name="oninit">
         this.initwidth=this.width;
         this.initheight=this.height;

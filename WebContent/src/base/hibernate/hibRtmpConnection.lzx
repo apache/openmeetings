@@ -1948,7 +1948,7 @@
                 new lz.chatParticipants(parentObj,{
                              user_id:value.user_id,
                              publicSID:value.publicSID,
-                             connectedSince:canvas.getLabelName(1133)+' '+parseDateToStringTimeSecunds(value.connectedSince),
+                             connectedSince:canvas.getLabelName(1133)+' '+parseDateToStringTimeSeconds(value.connectedSince),
                              username:value.firstname+", "+value.lastname
                          });                
             }

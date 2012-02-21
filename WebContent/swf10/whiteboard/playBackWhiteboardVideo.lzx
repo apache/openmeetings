@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<!---
+    The playBackVideoStream is used in the recording playerback to show the video
+ -->
+<class name="playBackWhiteboardVideo" extends="baseVideoStream" bgcolor="0x000000">
+	
+	<attribute name="timerDelegate" value="null"/>
+    <attribute name="timerDelegateStarted" value="false" type="boolean"/>
+    
+    <handler name="oninit">
+        this.timerDelegate = new LzDelegate( this, "calcProgressBar" );
+    </handler>
+    
+    <method name="playVideoStream" args="streamName,delay">
+        this.playStream(streamName,delay);
+        this.timerDelegateStarted = true;
+        lz.Timer.addTimer( this.timerDelegate , 1000 );
+    </method>
+    
+    <method name="stopVideo">
+        this._stop();
+        lz.Timer.removeTimer(this.timerDelegate);
+        this.timerDelegateStarted = false;
+    </method>
+	
+	<handler name="onPlayStatusEvent" args="info">
+        if ($debug) Debug.write("onPlayStatus ",info);
+        if (info.code ==  "NetStream.Play.Complete" ) {
+        	if ($debug) Debug.write("-- stopStream");
+            //parent.parent.stopStream();
+            canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'stopWhiteboardPlaybackStream', this.name);
+        }
+    </handler>
+    <handler name="onMetaDataEvent" args="info">
+        if ($debug) Debug.warn("onMetaData ",info);
+        if ($debug) Debug.write("parent.parent.deltaInSeconds ",Number(info.duration));
+        //parent.parent.deltaInSeconds = Number(info.duration);
+        canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'metaWhiteboardPlaybackStream', this.name, Number(info.duration));
+    </handler>
+    
+    <method name="calcProgressBar" args="tObjRef">
+        //if ($debug) Debug.write("calcProgressBar updateRecordingStreamTime",this._ns.time)
+        canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'updateWhiteboardStreamTime',this.name, this._ns.time);
+        if (this.timerDelegateStarted) {
+            lz.Timer.addTimer( this.timerDelegate , 1000 );
+        }
+    </method>
+	
+</class>
+
+</library>

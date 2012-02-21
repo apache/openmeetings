@@ -37,6 +37,10 @@
     <include href="video/" />
     
     <include href="audioVideoTest/" />
+    
+    <include href="lzrecorder/" />
+    
+    <include href="whiteboard/" />
 
     <include href="commonVideoViewContentSWF10.lzx" />
 

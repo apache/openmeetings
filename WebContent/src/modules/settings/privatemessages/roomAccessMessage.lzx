@@ -46,8 +46,8 @@
                 }
                 //private Date appointmentStarttime;
                 //private Date appointmentEndtime;
-                parent._content._labels._start._text.setAttribute("text",parseDateToStringTimeSecunds(value.appointmentStarttime));
-                parent._content._labels._end._text.setAttribute("text",parseDateToStringTimeSecunds(value.appointmentEndtime));
+                parent._content._labels._start._text.setAttribute("text",parseDateToStringTimeSeconds(value.appointmentStarttime));
+                parent._content._labels._end._text.setAttribute("text",parseDateToStringTimeSeconds(value.appointmentEndtime));
             ]]>
         </handler>
     </netRemoteCallHib> 

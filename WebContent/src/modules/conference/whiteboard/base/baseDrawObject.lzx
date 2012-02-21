@@ -746,7 +746,7 @@
         
             var tName = 'flv'+this.getCounter();
             
-            this.currentlayer = new lz.whiteboardVideoPlayer(parent.parent,{
+            this.currentlayer = new lz.whiteboardVideoPlayer(this,{
                                             name:tName,
                                             fileExplorerItemId:fileExplorerItemId,
                                             title:fileName,
@@ -800,7 +800,7 @@
         
             if ($debug) Debug.write("drawFlvToHistory PLAY :: ",lastActionObject[3]);
         
-            this.currentlayer = new lz.whiteboardVideoPlayer(parent.parent,{
+            this.currentlayer = new lz.whiteboardVideoPlayer(this,{
                                             name:lastActionObject[lastActionObject.length-1],
                                             fileExplorerItemId:lastActionObject[1],
                                             title:lastActionObject[2],

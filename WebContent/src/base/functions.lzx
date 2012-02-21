@@ -276,7 +276,7 @@ function parseDateToStringTime(dateObj){
     return d+'.'+mo+'.'+y+' '+h+':'+m;
 }
 
-function parseDateToStringTimeSecunds(dateObj){
+function parseDateToStringTimeSeconds(dateObj){
     // if($debug) Debug.write("FUNC/parseDateToStringTime",dateObj);
     if (dateObj==null) return "";
     var d = dateObj.getDate();
