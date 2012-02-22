@@ -65,9 +65,8 @@
     <handler name="ontabcontentleave">
         if ($debug) Debug.write("################# ontabcontentleave:",this);
         
+        //close all screensharings, videos and closes the rtmp connection in the remote host
         this._screenSharingAdapter.closeAllScreenSharings();
-        
-        canvas.currentBaseConferenceRoom = null;
         
         //reset the right to draw on WHiteboard as the RoomClient Object will be destroyed also
         //on server-Side the canDraw status will be false again when you relogin the same room
@@ -107,6 +106,8 @@
         this.logicalRoomLeave.doCall();
         if ($debug) Debug.write("############ this.logicalRoomLeave ",this.logicalRoomLeave);
     </handler>
+    
+    
 
     <netRemoteCallHib name="logicalRoomLeave" funcname="logicalRoomLeave" remotecontext="$once{ canvas.thishib }" >
         <handler name="ondata" args="value">
@@ -114,6 +115,7 @@
             //this.parent.destroy();
             canvas.thishib.reconnectAfterRoomleft = true;
             canvas.thishib.reconnectedRoomInstance = this.parent;
+            canvas.currentBaseConferenceRoom = null;
             
             // Reconnect User to default Scope
             canvas.thishib.userScope = "hibernate";

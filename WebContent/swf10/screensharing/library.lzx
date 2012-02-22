@@ -20,6 +20,7 @@
 -->
 <library>
     
+	<resource name="menupointer_rsc" src="resources/menupointer.png" />
 	
 	<include href="screenSharingDialog.lzx" />
     <include href="videoObjectPlayScreenShare.lzx" />

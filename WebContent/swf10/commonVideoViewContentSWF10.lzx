@@ -36,7 +36,6 @@
             client.setSpeakingByPos = this.setSpeakingByPos;
             client.setAVSettingsToClient = this.setAVSettingsToClient;
             client.startStream = this.startStream;
-            client.clearAll = this.clearAll;
             client.removeVideoByUser = this.removeVideoByUser;
             client.muteSound = this.muteSound;
             // client.videoOnMove = this.videoOnMove; function not in use ?! swagner 04.02.2012

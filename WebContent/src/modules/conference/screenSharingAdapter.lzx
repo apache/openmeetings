@@ -58,6 +58,7 @@
 	 -->
 	<method name="closeAllScreenSharings" >
 		//Send via LocalConnection to SWF10 container
+		if ($debug) Debug.write("closeAllScreenSharings SEND");
 		canvas.lc.send(canvas.rtmp_lc_name, "closeAllScreenSharings");
 	</method>
 	

@@ -925,7 +925,7 @@
                 	<![CDATA[
                 	this.bringToFront();
                     var t:SharedObject = SharedObject.getLocal('userdata');
-                    var g = g.data;
+                    var g = t.data;
                     if (g["image"]!=null) {
                     	if ($debug) Debug.write("g[image][donotaskagainrdc] ",g["image"]["donotaskagainrdc"]);
                         if ($debug) Debug.write("g[image] ",g["image"]);
@@ -962,7 +962,7 @@
                     <handler name="oninit">
                     	<![CDATA[
                     	    var t:SharedObject = SharedObject.getLocal('userdata');
-                            var g = g.data;
+                            var g = t.data;
                             if (g["image"]!=null) {
                             	if ($debug) Debug.write("g[image]",g["image"]);
                                 if (g["image"]["donotaskagainrdc"] != null && g["image"]["donotaskagainrdc"] == true) {
@@ -979,7 +979,7 @@
                     	}
                         if ($debug) Debug.write("onselect ",v);
                         var t:SharedObject = SharedObject.getLocal('userdata');
-                        var g = g.data;
+                        var g = t.data;
                         if (g["image"]==null) g["image"]=new Array();
                         g["image"]["donotaskagainrdc"]=v;
                         

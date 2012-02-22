@@ -211,7 +211,7 @@
     	   	 this[tName].destroy();
     	   }
     	   
-    	   new lz.playBackWhiteboardVideo(this,{
+    	   new lz.playBackWhiteboardVideo(this.whiteboardVideos,{
                 	       name:tName,
                 	       x:tx,
                 	       y:ty,
@@ -226,9 +226,9 @@
     <method name="stopWhiteboardVideo" args="tName">
     	<![CDATA[
     	   if($debug) Debug.write("stopWhiteboardVideo ",tName);
-           if (this[tName]) {
-             this[tName].stopVideo();
-             this[tName].destroy();
+           if (this.whiteboardVideos[tName]) {
+             this.whiteboardVideos[tName].stopVideo();
+             this.whiteboardVideos[tName].destroy();
            } else {
            	 if ($debug) Debug.warn("stopWhiteboardVideo could not find video to stop");
            }
@@ -286,16 +286,20 @@
 	</method>
 	
 	<!---
-	   Closes all single screen sharing playback videos
+	   Closes all screen sharing playback videos, whiteboard videos, user videos 
+	   and closes the rtmp connection
 	 -->
-	<method name="closeAllScreenSharings" args="value">
+	<method name="closeAllScreenSharings">
         <![CDATA[
-            if ($debug) Debug.write("closeAllScreenSharings ",value);
+            if ($debug) Debug.write("RECEIVE closeAllScreenSharings ");
             if (canvas.screenSharingDialogContainer != null) {
                 canvas.screenSharingDialogContainer.closeAll();
                 canvas.screenSharingDialogContainer.destroy();
                 canvas.screenSharingDialogContainer = null;
             }
+            this.whiteboardVideos.clearAll();
+            parent._videoComponent.clearAll();
+            canvas.thishib.disconnect();
         ]]>
     </method>
     
@@ -311,6 +315,20 @@
 			}
 		]]>
 	</method>
+    
+    <!--
+        Container to hold all whiteboard videos
+     -->	
+	<view name="whiteboardVideos">
+		<method name="clearAll">
+    		<![CDATA[
+    			for (var eg in this.subviews) {
+    				this.subviews[eg].stopVideo();
+    				this.subviews[eg].destroy();
+    			}
+    		]]>
+		</method>
+	</view>
      
 
 </class>
