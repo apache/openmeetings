@@ -36,6 +36,8 @@
 
     <include href="video/" />
     
+    <include href="screensharing/" />
+    
     <include href="audioVideoTest/" />
     
     <include href="lzrecorder/" />
@@ -98,5 +100,5 @@
     ]]></handler>
 
     <view name="inner"></view>
-
+    
 </canvas>

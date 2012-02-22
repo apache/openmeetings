@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<canvas debug="false" width="100%" height="100%" title="OpenMeetings">
-    
+<canvas width="100%" height="100%" title="OpenMeetings">
+	
     <switch>
         <when property="$as3">
             <passthrough>
@@ -33,6 +33,8 @@
     <include href="base/" />
 
     <include href="video/" />
+    
+    <include href="screensharing/" />
     
     <include href="audioVideoTest/" />
     
@@ -96,5 +98,5 @@
     ]]></handler>
 
     <view name="inner"></view>
-
+    
 </canvas>

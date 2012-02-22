@@ -4,40 +4,51 @@
 
 <library>
 	
-<!---
-	These colors are the main colors and style the hole application
- -->
-<attribute name="basebgcolorizer" value="0x3F5B9E" type="string" />	
-<attribute name="baseMousecolorizer" value="0xC4D5E6" type="string" />	
-<attribute name="baseMouseOvercolorizer" value="0xC4D5E6" type="string" />  	
+	<!---
+		These colors are the main colors and style the hole application
+	 -->
+	<attribute name="basebgcolorizer" value="0x3F5B9E" type="string" />	
+	<attribute name="baseMousecolorizer" value="0xC4D5E6" type="string" />	
+	<attribute name="baseMouseOvercolorizer" value="0xC4D5E6" type="string" />  	
 
-<!--- Audio-Video Quality Settings
-	overwritten by values from the config.xml 
- -->
-<attribute name="framesPerSecond" value="30" type="number" />
-<attribute name="bandwidthNeededNormal" value="16384" type="number" />
-<attribute name="bandwidthNeededBest" value="32768" type="number" />
-<attribute name="camQualityNormal" value="75" type="number" />
-<attribute name="camQualityBest" value="75" type="number" />
-<attribute name="microphoneRateNormal" value="22" type="number" /> 
-<attribute name="microphoneRateBest" value="44" type="number" /> 
+	<!--- 
+	   Audio-Video Quality Settings
+		overwritten by values from the config.xml 
+	 -->
+	<attribute name="framesPerSecond" value="30" type="number" />
+	<attribute name="bandwidthNeededNormal" value="16384" type="number" />
+	<attribute name="bandwidthNeededBest" value="32768" type="number" />
+	<attribute name="camQualityNormal" value="75" type="number" />
+	<attribute name="camQualityBest" value="75" type="number" />
+	<attribute name="microphoneRateNormal" value="22" type="number" /> 
+	<attribute name="microphoneRateBest" value="44" type="number" /> 
 		
 
-<!--- 
-Holds a reference to the current VideoCOntainer Object
-containing the VideoViews
-and some more references to temp-objects
- -->
-<attribute name="_videocontainer" value="null" />
+	<!--- 
+        Holds a reference to the current VideoCOntainer Object
+        containing the VideoViews
+        and some more references to temp-objects
+	 -->
+	<attribute name="_videocontainer" value="null" />
 
-<attribute name="currentNC" value="null" />
+	<attribute name="currentNC" value="null" />
 
-<attribute name="currentRoomObject" value="null"/>
+	<attribute name="currentRoomObject" value="null"/>
 
-<attribute name="userobject" value="null"/>
+	<attribute name="userobject" value="null"/>
 
-<attribute name="webAppRootKey" value="" type="string" />
+	<attribute name="webAppRootKey" value="" type="string" />
 
-<attribute name="httpRootKey" value="/" type="string" />
+	<attribute name="httpRootKey" value="/" type="string" />
+
+	<!---
+		A reference to the current screenSharingDialogContainer or 
+		null if there is nothing to stream
+	 -->
+	<attribute name="screenSharingDialogContainer" value="null" />
+	
+	<attribute name="isAllowedToRemoteControl" value="true" type="boolean" />
+	
+	<attribute name="ismoderator" value="true" type="boolean" />
 
 </library>

@@ -6,6 +6,7 @@
     <include href="labelCheckbox.lzx" />
     
     <include href="text/" />
+    <include href="lps/" />
     <include href="button/" />
     <include href="explorer/" /> 
       

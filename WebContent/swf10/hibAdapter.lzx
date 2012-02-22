@@ -26,7 +26,8 @@
         //Test application to record 5 seconds
         client.doInitTestingApplication = this.doInitTestingApplication;
         client.closeInitTestingApplication = this.closeInitTestingApplication;
-        //Recording Player
+        
+        //Recording Player Whiteboard
         client.connectRecordingPlayer = this.connectRecordingPlayer;
         client.playRecordingStream = this.playRecordingStream;
         client.updateRecordingVideoPosition = this.updateRecordingVideoPosition;
@@ -36,6 +37,13 @@
         client.stopAndCloseRecordingConnection = this.stopAndCloseRecordingConnection;
         client.playbackWhiteboardVideo = this.playbackWhiteboardVideo;
         client.stopWhiteboardVideo = this.stopWhiteboardVideo;
+        
+        //Screen sharing player
+        client.newScreenSharing = this.newScreenSharing;
+        client.newScreenSharings = this.newScreenSharings;
+        client.closeScreenSharing = this.closeScreenSharing;
+        client.closeAllScreenSharings = this.closeAllScreenSharings;
+        client.updateCursorScreenSharing = this.updateCursorScreenSharing;
 
         var rtmpLC:LocalConnection = new LocalConnection();
         rtmpLC.connect(canvas.rtmp_lc_name);
@@ -226,6 +234,84 @@
            }
     	]]>
     </method>
+    
+    <!---
+       #################################
+       Methods to handle screen sharing video playback and cursor
+     -->
+     
+    <!---
+        Adds a new screen sharing playback video
+     -->
+    <method name="newScreenSharing" args="value">
+    	<![CDATA[
+    	   if (value.streamPublishName != canvas.publicSID) {
+                if (canvas.screenSharingDialogContainer == null) {
+                    canvas.screenSharingDialogContainer = new lz.screenSharingDialogContainer(canvas);
+                }
+                new lz.screenSharingDialog(canvas.screenSharingDialogContainer,{
+                            initObject:value 
+                        }); 
+            } else {
+                if ($debug) Debug.warn("Self Screen Sharing");
+            }
+    	]]>
+    </method> 
+    
+    <!---
+        Add a list of screen sharing playback videos 
+        (initially when entering the room invoked)
+     -->
+    <method name="newScreenSharings" args="value">
+     	<![CDATA[
+     	    for (var eg in value) {
+                this.newScreenSharing(value[eg]);
+            }
+     	]]>
+    </method>
+   
+    <!---
+        Close a single screen sharing playback video
+     --> 
+	<method name="closeScreenSharing" args="value">
+		<![CDATA[
+			if (canvas.screenSharingDialogContainer != null) {
+				var obj = canvas.screenSharingDialogContainer
+						.searchForSession(value.streamPublishName);
+				if (obj) {
+					obj.doClose();
+				}
+			}
+		]]>
+	</method>
+	
+	<!---
+	   Closes all single screen sharing playback videos
+	 -->
+	<method name="closeAllScreenSharings" args="value">
+        <![CDATA[
+            if ($debug) Debug.write("closeAllScreenSharings ",value);
+            if (canvas.screenSharingDialogContainer != null) {
+                canvas.screenSharingDialogContainer.closeAll();
+                canvas.screenSharingDialogContainer.destroy();
+                canvas.screenSharingDialogContainer = null;
+            }
+        ]]>
+    </method>
+    
+    <!---
+        Update the position of the cursor from the sharing screen
+     -->
+	<method name="updateCursorScreenSharing" args="value">
+		<![CDATA[
+			if (canvas.screenSharingDialogContainer != null) {
+				var obj = canvas.screenSharingDialogContainer
+						.searchForSession(value.streamPublishName);
+				obj.updateCursor(value.cursor_x, value.cursor_y);
+			}
+		]]>
+	</method>
+     
 
 </class>
 

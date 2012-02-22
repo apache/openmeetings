@@ -61,9 +61,7 @@
 				labeliderror:790,showCheckBox:false});
 			</handler>
 			<method name="sendConfirmation" args="confirm,bool">
-                if (canvas.screenSharingDialogContainer != null) {
-                    canvas.screenSharingDialogContainer.destroy();
-                }
+                canvas.currentBaseConferenceRoom._screenSharingAdapter.closeAllScreenSharings();
                 if (canvas.appointmentNotificationPopUp != null) {
                 	canvas.appointmentNotificationPopUp.destroy();
                 }
@@ -210,9 +208,7 @@
 				labeliderror:790,showCheckBox:false});
 			</handler>
 			<method name="sendConfirmation" args="confirm,bool">
-                if (canvas.screenSharingDialogContainer != null) {
-                    canvas.screenSharingDialogContainer.destroy();
-                }
+                canvas.currentBaseConferenceRoom._screenSharingAdapter.closeAllScreenSharings();
                 if (canvas.appointmentNotificationPopUp != null) {
                 	canvas.appointmentNotificationPopUp.destroy();
                 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 
-<class name="commonVideoComponentAdapter" extends="view">
+<class name="commonVideoComponentAdapter" extends="node">
 
     <handler name="oninit">
     	var t = this;

@@ -65,6 +65,8 @@
     <handler name="ontabcontentleave">
         if ($debug) Debug.write("################# ontabcontentleave:",this);
         
+        this._screenSharingAdapter.closeAllScreenSharings();
+        
         canvas.currentBaseConferenceRoom = null;
         
         //reset the right to draw on WHiteboard as the RoomClient Object will be destroyed also
@@ -100,7 +102,8 @@
         	canvas.currentActivityList = null;
         }
         
-        canvas._screens.clearAllSessions();
+        //@deprecated we will not use old screen sharing implementation
+        //canvas._screens.clearAllSessions();
         this.logicalRoomLeave.doCall();
         if ($debug) Debug.write("############ this.logicalRoomLeave ",this.logicalRoomLeave);
     </handler>

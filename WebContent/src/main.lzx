@@ -18,7 +18,7 @@
   under the License.
   
 -->
-<canvas debug="false" width="100%" height="100%" title="OpenMeetings">
+<canvas width="100%" height="100%" title="OpenMeetings">
     
 <!-- 
     If you use maindebug.lzx, main.lzx with debug=true is loaded. 
@@ -185,7 +185,4 @@
     <text name="_text" align="right" y="56" fontsize="14" fgcolor="red">Loading...</text>
 </view>
 
-<screenSharingContainer name="_screens" />
-    
-    
 </canvas>

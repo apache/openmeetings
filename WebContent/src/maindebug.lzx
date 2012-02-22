@@ -186,7 +186,4 @@
     <text name="_text" align="right" y="56" fontsize="14" fgcolor="red">Loading...</text>
 </view>
 
-<screenSharingContainer name="_screens" />
-    
-    
 </canvas>

@@ -2607,6 +2607,10 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		}
 	}
 
+	/**
+	 * @deprecated we will not use further the old screensharing implementation
+	 * @return
+	 */
 	public List<ScreenSharingMessage> checkSharingSession() {
 		try {
 			IConnection current = Red5.getConnectionLocal();

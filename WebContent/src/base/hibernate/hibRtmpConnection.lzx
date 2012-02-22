@@ -1014,7 +1014,8 @@
                             }
                         }
                     }
-                    parent.checkSharingSession.doCall();
+                    //@deprecated call to old screensharing implementation
+                    //parent.checkSharingSession.doCall();
                 ]]>
             </handler>
         </netRemoteCallHib>
@@ -1036,14 +1037,7 @@
                 if ($debug) Debug.write("**** closeStream: ",value);
                 if (value.isScreenClient) {
                     if ($debug) Debug.write(" onResult stopRed5ScreenSharing : ",value.streamPublishName); 
-                    
-                    if (canvas.screenSharingDialogContainer != null) {
-                        var obj = canvas.screenSharingDialogContainer.searchForSession(value.streamPublishName);
-                        if (obj) {
-                            obj.doClose();
-                        }
-                    }
-                    
+                    canvas.currentBaseConferenceRoom._screenSharingAdapter.closeScreenSharing(value);
                 } else {
                     //free the VideoContainer
                     //canvas._videocontainer.closeStreamClient(value.publicSID);
@@ -1054,16 +1048,15 @@
             </handler>   
         </netRemoteCallHib>  
         
+        <!---
+            Event is invoked if a red5 stream sharing is closed
+         -->
         <netRemoteCallHib name="stopRed5ScreenSharing" funcname="stopRed5ScreenSharing">
             <handler name="ondata" args="value">
                 //The onResult-Handler will be called be the rtmpconnection
                 if ($debug) Debug.write("**** closeStream: ",value);
                 if ($debug) Debug.write(" onResult stopRed5ScreenSharing : ",value.streamPublishName); 
-                
-                if (canvas.screenSharingDialogContainer != null) {
-                    var obj = canvas.screenSharingDialogContainer.searchForSession(value.streamPublishName);
-                    obj.doClose();
-                }
+                canvas.currentBaseConferenceRoom._screenSharingAdapter.closeScreenSharing(value);
             </handler>   
         </netRemoteCallHib> 
              
@@ -1348,11 +1341,8 @@
             <handler name="ondata" args="value">
                 <![CDATA[
                     //The onResult-Handler will be called be the rtmpconnection
-                    //if ($debug) Debug.write(" onResult newRed5ScreenCursor : ",value);   
-                    if (canvas.screenSharingDialogContainer != null) {
-                        var obj = canvas.screenSharingDialogContainer.searchForSession(value.streamPublishName);
-                        obj.updateCursor(value.cursor_x,value.cursor_y);
-                    }
+                    //if ($debug) Debug.write(" onResult newRed5ScreenCursor : ",value);  
+                    canvas.currentBaseConferenceRoom._screenSharingAdapter.updateCursorScreenSharing(value);
                 ]]>
             </handler>   
         </netRemoteCallHib>
@@ -1371,20 +1361,10 @@
                     //if ($debug) Debug.write(" onResult newRed5ScreenSharing 1 : ",value);  
                     //if ($debug) Debug.write(" onResult newRed5ScreenSharing 2 : ",value.streamid); 
                     //if ($debug) Debug.write(" onResult newRed5ScreenSharing 3 : ",canvas.streamid); 
-                    
                     if ($debug) Debug.write(" onResult newRed5ScreenSharing 4 : ",value.streamPublishName); 
                     if ($debug) Debug.write(" onResult newRed5ScreenSharing 5 : ",canvas.publicSID); 
                     
-                    if (value.streamPublishName != canvas.publicSID) {
-                        if (canvas.screenSharingDialogContainer == null) {
-                            canvas.screenSharingDialogContainer = new lz.screenSharingDialogContainer(canvas);
-                        }
-                        new lz.screenSharingDialog(canvas.screenSharingDialogContainer,{
-                                    initObject:value 
-                                }); 
-                    } else {
-                        if ($debug) Debug.warn("Self Screen Sharing");
-                    }
+                    canvas.currentBaseConferenceRoom._screenSharingAdapter.newScreenSharing(value);
                 ]]>
             </handler>   
         </netRemoteCallHib>
@@ -1394,17 +1374,11 @@
                 <![CDATA[
                     //The onResult-Handler will be called be the rtmpconnection
                     if ($debug) Debug.write(" onResult checkRed5ScreenSharing : ",value);  
-                    
                     if (value != null) {
-                        
-                        for (var eg in value) {
-                            parent.newRed5ScreenSharing.ondata.sendEvent(value[eg]);
-                        }
-                        
+                    	canvas.currentBaseConferenceRoom._screenSharingAdapter.newScreenSharings(value);
                     } else {
                         if ($debug) Debug.warn("Self Screen Sharing");
                     }
-                    
                 ]]>
             </handler>   
         </netRemoteCallHib>
@@ -2010,8 +1984,8 @@
     </netRemoteCallHib>  
     
     <!-- ###########################
-    New Screen Sharing Methods 
-     -->
+    New Screen Sharing Methods
+    @deprecated 
     <netRemoteCallHib name="newScreenSharing" funcname="newScreenSharing">
         <handler name="ondata" args="value">
             <![CDATA[
@@ -2029,8 +2003,8 @@
         </handler>   
     </netRemoteCallHib>  
     
-    <!-- newScreenCursorPosition
-     -->
+    newScreenCursorPosition
+    @deprecated
     <netRemoteCallHib name="newScreenCursorPosition" funcname="newScreenCursorPosition">
         <handler name="ondata" args="value">
             <![CDATA[
@@ -2044,6 +2018,7 @@
         </handler>   
     </netRemoteCallHib>
     
+    @deprecated
     <netRemoteCallHib name="newScreenFrame" funcname="newScreenFrame">
         <handler name="ondata" args="value">
             <![CDATA[
@@ -2058,6 +2033,7 @@
         </handler>   
     </netRemoteCallHib>  
     
+    @deprecated
     <netRemoteCallHib name="checkSharingSession" funcname="checkSharingSession">
         <handler name="ondata" args="value">
             <![CDATA[
@@ -2072,6 +2048,7 @@
             ]]>
         </handler>   
     </netRemoteCallHib>  
+     -->
     
     
     <!-- Recording of Meetings -->

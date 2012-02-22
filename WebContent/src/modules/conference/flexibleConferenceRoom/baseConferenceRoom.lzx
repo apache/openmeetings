@@ -177,6 +177,8 @@
         }
     </handler>
     
+    <screenSharingAdapter name="_screenSharingAdapter" />
+    
 </class>
 
 </library>

@@ -376,8 +376,6 @@ and some more references to temp-objects
 
 <attribute name="currentRoomObject" value="null"/>
 
-<attribute name="screenSharingDialogContainer" value="null"/>
-
 <attribute name="appointmentNotificationPopUp" value="null"/>
 
 <attribute name="conferenceBrowserIsinited" value="false" type="boolean" />
