@@ -77,7 +77,11 @@
     <method name="as3ConnectionSuccess">
     	if ($debug) Debug.write("as3ConnectionSuccess continue loading");
     	//set default values and get already availible streams
-        this.getRoomModeratorsByRoomId.doCall();
+    	//it can happen that if you click to exit the room the views are not 
+    	//not cleaned up yet and you receive this event from the LocalConnection
+    	if (this["getRoomModeratorsByRoomId"]) {
+            this.getRoomModeratorsByRoomId.doCall();
+    	}
     </method>
     
     

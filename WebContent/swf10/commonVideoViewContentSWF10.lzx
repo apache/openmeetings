@@ -324,6 +324,10 @@
         <![CDATA[
             //if ($debug) Debug.write("setSpeakingByPos ",publicSID,bool);
             var obj = this.getVideoObjectByPublicSID(publicSID);
+            if (obj == null) {
+            	if ($debug) Debug.warn("Could not find user for setSpeakingByPos ",publicSID,bool);
+            	return;
+            }
             if (bool){
                 obj._loudness.loudness.setAttribute('opacity',1);
             } else {
