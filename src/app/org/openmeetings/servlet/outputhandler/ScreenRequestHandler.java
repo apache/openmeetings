@@ -34,7 +34,6 @@ import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.rtp.RTPScreenSharingSession;
 import org.openmeetings.app.rtp.RTPStreamingHandler;
-import org.openmeetings.server.socket.ServerSocketMinaProcess;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.context.ApplicationContext;
@@ -220,9 +219,8 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 					.getConfKey(3L, "screen_viewer");
 
 			String template = "screencast_odsp_sharertemplate.vm";
-			// template = "screencast_odsp_sharertemplate.vm";
-			ctx.put("PORT", ServerSocketMinaProcess.port);
 
+			
 			log.debug("language_id :: " + language_id);
 
 			Fieldmanagment fieldmanagment = getFieldmanagment();
@@ -357,12 +355,8 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 
 					} else if (conf_i == 3) {
 
-						// For the UDP Sharer, we need some additional
-						// information
+						// Sharing option 3 is no more actively maintained and in the source available
 
-						template = "screencast_odsp_sharertemplate.vm";
-						ctx.put("PORT", ServerSocketMinaProcess.port);
-						log.debug("Creating JNLP Template for TCP solution");
 
 					} else if (conf_i == 4) {
 
@@ -435,11 +429,7 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 				} catch (Exception e) {
 					log.error("invalid configuration value for key screen_viewer!");
 				}
-			} else if (mode.equals("viewer")) {
-				template = "screencast_odsp_viewertemplate.vm";
-				ctx.put("PORT", ServerSocketMinaProcess.port);
-				log.debug("Creating JNLP Template for UDP solution");
-			}
+			} 
 
 			log.debug("template " + template);
 

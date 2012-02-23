@@ -2,11 +2,9 @@
 <classpath>
 	<classpathentry kind="src" path="src/app"/>
 	<classpathentry kind="src" path="src/src_tool"/>
-	<classpathentry kind="src" path="src/client"/>
 	<classpathentry kind="src" path="src/fileservice"/>
 	<classpathentry kind="src" path="src/roomservice"/>
 	<classpathentry kind="src" path="src/screenviewer"/>
-	<classpathentry kind="src" path="src/server"/>
 	<classpathentry kind="src" path="src/templates"/>
 	<classpathentry kind="src" path="src/test"/>
 	<classpathentry kind="src" path="src/userservice"/>

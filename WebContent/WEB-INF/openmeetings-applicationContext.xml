@@ -129,8 +129,6 @@
 	<bean id="generateImage" class="org.openmeetings.app.documents.GenerateImage" />
 	<bean id="generateThumbs" class="org.openmeetings.app.documents.GenerateThumbs" />
 	<bean id="generatePDF" class="org.openmeetings.app.documents.GeneratePDF" />
-	<bean id="serverSharingSessionList" class="org.openmeetings.server.cache.ServerSharingSessionList" />
-	<bean id="serverSocketMinaProcess" class="org.openmeetings.server.socket.ServerSocketMinaProcess" />
 	<bean id="whiteboardConvertionJobManagerSWFTools" class="org.openmeetings.app.data.record.WhiteboardConvertionJobManagerSWFTools" />
 	<bean id="mailHandler" class="org.openmeetings.utils.mail.MailHandler" />
 	<bean id="feedbackManagement" class="org.openmeetings.app.data.conference.Feedbackmanagement" />

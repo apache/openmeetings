@@ -320,8 +320,6 @@ function checkEmail()
         <label for="screen_viewer">Screenviewer Config</label>
     	<select name="screen_viewer" id="screen_viewer" size="1">
     		<option value="4" selected>Rtmp Viewer (Standard)</option>
-	      	<option value="3">ODSP Viewer</option>
-	        <option value="2">JMF RTP Sharer</option>
 	    </select><br />	
 		</li>
     	<p><i>
