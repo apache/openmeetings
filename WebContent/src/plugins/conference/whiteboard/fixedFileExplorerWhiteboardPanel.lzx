@@ -78,7 +78,7 @@
     
 <class name="fixedFileExplorerWhiteboardPanel" extends="basePropertyPanelWhiteboard" 
 	   labelid="615" visible="${((canvas.currentRoomObj.hideWhiteboard) ? false:true)}">
-	
+	<attribute name="whiteboardCount" value="0" type="number" />	
 	<!--
 	
 	 -->
@@ -128,11 +128,13 @@
 								    	});
     	var tempWidth = this._bar.getCurrentSize();
     	
+    	var whiteboardName = canvas.getLabelName(615) + (whiteboardCount > 0 ? " " + whiteboardCount : "");
+    	whiteboardCount++;
     	var tWhiteboardBtn = new lz.whiteboardMiniButton(this._bar,{
                             	   objRef:whiteboard,
                             	   width:tempWidth,
                             	   isactive:true,
-                            	   btnName:canvas.getLabelName(615)+" "+whiteboardId
+                            	   btnName: whiteboardName
                             	});
         
         this._bar.currentBtn = tWhiteboardBtn;                    	
