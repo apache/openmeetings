@@ -32,8 +32,6 @@ import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.persistence.beans.basic.Configuration;
 import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
-import org.openmeetings.app.rtp.RTPScreenSharingSession;
-import org.openmeetings.app.rtp.RTPStreamingHandler;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.context.ApplicationContext;
@@ -84,19 +82,6 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 		return null;
 	}
 
-	public RTPStreamingHandler getRtpStreamingHandler() {
-		try {
-			if (ScopeApplicationAdapter.initComplete) {
-				ApplicationContext context = WebApplicationContextUtils
-						.getWebApplicationContext(getServletContext());
-				return (RTPStreamingHandler) context
-						.getBean("rtpStreamingHandler");
-			}
-		} catch (Exception err) {
-			log.error("[getRtpStreamingHandler]", err);
-		}
-		return null;
-	}
 
 	@Override
 	public Template handleRequest(HttpServletRequest httpServletRequest,
@@ -104,9 +89,7 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 
 		try {
 
-			if (getRtpStreamingHandler() == null
-					|| getRtpStreamingHandler() == null
-					|| getSessionManagement() == null) {
+			if (getSessionManagement() == null) {
 				return getVelocityView().getVelocityEngine().getTemplate(
 						"booting.vm");
 			}
@@ -214,13 +197,7 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 			httpServletResponse.setHeader("Content-Disposition",
 					"Inline; filename=\"" + requestedFile + "\"");
 
-			// Check , which screenviewer is to be used
-			org.openmeetings.app.persistence.beans.basic.Configuration conf = getCfgManagement()
-					.getConfKey(3L, "screen_viewer");
 
-			String template = "screencast_odsp_sharertemplate.vm";
-
-			
 			log.debug("language_id :: " + language_id);
 
 			Fieldmanagment fieldmanagment = getFieldmanagment();
@@ -321,123 +298,79 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 
 			log.debug("Creating JNLP Template for TCP solution");
 
-			if (mode.equals("sharer") && conf != null) {
-				String confVal = conf.getConf_value();
+			if (mode.equals("sharer")) {
 
 				try {
-					int conf_i = Integer.parseInt(confVal);
 
-					if (conf_i == 0) {
+					log.debug("RTMP Sharer labels :: " + label_sharer);
 
-						// I've disabled the HTTP-Sharer Option for now as it
-						// makes
-						// trouble for external Users to use it
-						template = "screencast_odsp_sharertemplate.vm";
+					codebase = "http://" + rtmphostlocal + ":"
+							+ red5httpport + httpRootKey
+							+ "red5-screenshare";
 
-					} else if (conf_i == 1) {
-						template = "screencast_jrdesktop.vm";
-						log.debug("Creating JNLP Template for jrdesktop solution");
-					} else if (conf_i == 2) {
+					String connectionType = httpServletRequest
+							.getParameter("connectionType");
+					if (connectionType == null) {
+						new Exception("No connectionType ");
+					}
 
-						// Storing Session data
-						RTPScreenSharingSession session = getRtpStreamingHandler()
-								.storeSessionForRoom(room, users_id, publicSID,
-										rtmphostlocal, -1);
+					String startUpClass = "org.red5.screen.webstart.ScreenShare";
+					if (connectionType.equals("rtmpt")) {
+						startUpClass = "org.red5.screen.webstart.ScreenShareRTMPT";
+					}
 
-						// For the RTP Sharer, we need some additional
-						// information
-						ctx.put("HOST", rtmphostlocal);
-						ctx.put("PORT", session.getIncomingRTPPort());
-						template = "screencast_rtp.vm";
-						log.debug("Creating JNLP Template for RTP solution");
+					String orgIdAsString = httpServletRequest
+							.getParameter("organization_id");
+					if (orgIdAsString == null) {
+						new Exception(
+								"orgIdAsString is empty could not start sharer");
+						return null;
+					}
 
-						log.debug("Stored RTPSession Data for Room " + room);
+					ctx.put("organization_id", orgIdAsString);
 
-					} else if (conf_i == 3) {
+					ctx.put("startUpClass", startUpClass);
+					ctx.put("codebase", codebase);
+					ctx.put("red5-host", rtmphostlocal);
+					ctx.put("red5-app", OpenmeetingsVariables.webAppRootKey + "/"
+									+ room);
 
-						// Sharing option 3 is no more actively maintained and in the source available
+					Configuration configuration = getCfgManagement()
+							.getConfKey(3L, "default.quality.screensharing");
+					String default_quality_screensharing = "1";
+					if (configuration != null) {
+						default_quality_screensharing = configuration
+								.getConf_value();
+					}
 
+					ctx.put("default_quality_screensharing",
+							default_quality_screensharing);
 
-					} else if (conf_i == 4) {
+					ctx.put("user_id", users_id);
 
-						log.debug("RTMP Sharer labels :: " + label_sharer);
+					String port = httpServletRequest.getParameter("port");
+					if (port == null) {
+						new Exception("port is empty: ");
+						return null;
+					}
+					ctx.put("port", port);
 
-						// Red5-Screen Share with RTMP Client
-						template = "screenshare.vm";
+					String allowRecording = httpServletRequest
+							.getParameter("allowRecording");
+					if (allowRecording == null) {
+						new Exception("allowRecording is empty: ");
+						return null;
+					}
+					ctx.put("allowRecording", allowRecording);
 
-						codebase = "http://" + rtmphostlocal + ":"
-								+ red5httpport + httpRootKey
-								+ "red5-screenshare";
-
-						String connectionType = httpServletRequest
-								.getParameter("connectionType");
-						if (connectionType == null) {
-							new Exception("No connectionType ");
-						}
-
-						String startUpClass = "org.red5.screen.webstart.ScreenShare";
-						if (connectionType.equals("rtmpt")) {
-							startUpClass = "org.red5.screen.webstart.ScreenShareRTMPT";
-						}
-
-						String orgIdAsString = httpServletRequest
-								.getParameter("organization_id");
-						if (orgIdAsString == null) {
-							new Exception(
-									"orgIdAsString is empty could not start sharer");
-							return null;
-						}
-
-						ctx.put("organization_id", orgIdAsString);
-
-						ctx.put("startUpClass", startUpClass);
-						ctx.put("codebase", codebase);
-						ctx.put("red5-host", rtmphostlocal);
-						ctx.put("red5-app", OpenmeetingsVariables.webAppRootKey + "/"
-										+ room);
-
-						Configuration configuration = getCfgManagement()
-								.getConfKey(3L, "default.quality.screensharing");
-						String default_quality_screensharing = "1";
-						if (configuration != null) {
-							default_quality_screensharing = configuration
-									.getConf_value();
-						}
-
-						ctx.put("default_quality_screensharing",
-								default_quality_screensharing);
-
-						ctx.put("user_id", users_id);
-
-						String port = httpServletRequest.getParameter("port");
-						if (port == null) {
-							new Exception("port is empty: ");
-							return null;
-						}
-						ctx.put("port", port);
-
-						String allowRecording = httpServletRequest
-								.getParameter("allowRecording");
-						if (allowRecording == null) {
-							new Exception("allowRecording is empty: ");
-							return null;
-						}
-						ctx.put("allowRecording", allowRecording);
-
-					} else
-						log.debug("Creating JNLP Template for default solution");
 				} catch (Exception e) {
 					log.error("invalid configuration value for key screen_viewer!");
 				}
 			} 
 
-			log.debug("template " + template);
+			String template = "screenshare.vm";
 
 			return getVelocityView().getVelocityEngine().getTemplate(template);
-
-			// }
-
-			// return null;
 
 		} catch (Exception er) {
 			log.error("[ScreenRequestHandler]", er);

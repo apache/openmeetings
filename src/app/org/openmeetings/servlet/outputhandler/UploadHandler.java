@@ -52,8 +52,6 @@ import org.slf4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import com.itextpdf.text.pdf.PdfReader;
-
 public class UploadHandler extends HttpServlet {
 
 	private static final long serialVersionUID = 8955335681521483484L;
@@ -382,28 +380,32 @@ public class UploadHandler extends HttpServlet {
 			returnError = getGeneratePDF().convertPDF(currentDir, newFileName,
 					newFileExtDot, roomName, true, completeName);
 		} else if (isPdf) {
-			boolean isEncrypted = false;
-			try {
-				// Check if PDF is encrpyted
-				PdfReader pdfReader = new PdfReader(completeName
-						+ newFileExtDot);
-
-				log.debug("pdfReader.isEncrypted() :: "
-						+ pdfReader.isEncrypted());
-
-				log.debug("isMetadataEncrypted : "
-						+ pdfReader.isMetadataEncrypted());
-				log.debug("is128Key : " + pdfReader.is128Key());
-				log.debug("isEncrypted : " + pdfReader.isEncrypted());
-
-				if (pdfReader.isEncrypted()) {
-					isEncrypted = true;
-				}
-
-			} catch (Exception err) {
-				log.error("isEncrypted ", err);
-				isEncrypted = true;
-			}
+			
+			boolean isEncrypted = true; 
+			
+			// Check requires iText.jar => iText is AGPL and won't work with Apache Release
+//			boolean isEncrypted = false;
+//			try {
+//				// Check if PDF is encrpyted
+//				PdfReader pdfReader = new PdfReader(completeName
+//						+ newFileExtDot);
+//
+//				log.debug("pdfReader.isEncrypted() :: "
+//						+ pdfReader.isEncrypted());
+//
+//				log.debug("isMetadataEncrypted : "
+//						+ pdfReader.isMetadataEncrypted());
+//				log.debug("is128Key : " + pdfReader.is128Key());
+//				log.debug("isEncrypted : " + pdfReader.isEncrypted());
+//
+//				if (pdfReader.isEncrypted()) {
+//					isEncrypted = true;
+//				}
+//
+//			} catch (Exception err) {
+//				log.error("isEncrypted ", err);
+//				isEncrypted = true;
+//			}
 
 			log.debug("isEncrypted :: " + isEncrypted);
 

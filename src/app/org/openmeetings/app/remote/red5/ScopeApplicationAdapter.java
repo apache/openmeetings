@@ -2706,6 +2706,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		}
 		return null;
 	}
+	
+	//FIXME: legacy code, needs to be removed
+	public boolean checkSharerSession() {
+		return true;
+	}
 
 	/**
 	 * Stop the recording of the streams and send event to connected users of scope

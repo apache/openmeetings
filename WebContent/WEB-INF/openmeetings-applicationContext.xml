@@ -140,7 +140,6 @@
 	<bean id="authLevelManagement" class="org.openmeetings.app.data.basic.AuthLevelmanagement" />
 	<bean id="generateSWF" class="org.openmeetings.app.documents.GenerateSWF" />
 	<bean id="fileUtils" class="org.openmeetings.app.data.file.FileUtils" />
-	<bean id="rtpStreamingHandler" class="org.openmeetings.app.rtp.RTPStreamingHandler" />
 	<bean id="ldapLoginManagement" class="org.openmeetings.app.ldap.LdapLoginManagement" />
 	<bean id="timezoneUtil" class="org.openmeetings.utils.math.TimezoneUtil" />
 	

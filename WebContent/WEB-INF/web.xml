@@ -93,28 +93,8 @@
         <servlet-class>org.openmeetings.servlet.outputhandler.Install</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>UploadHandler</servlet-name>
-        <servlet-class>org.openmeetings.servlet.outputhandler.UploadHandler</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>FileExplorerUploadHandler</servlet-name>
         <servlet-class>org.openmeetings.servlet.outputhandler.FileExplorerUploadHandler</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>ScreenServlet</servlet-name>
-        <servlet-class>org.openmeetings.servlet.outputhandler.ScreenServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>RtpSharerServlet</servlet-name>
-        <servlet-class>org.openmeetings.servlet.outputhandler.RTPSharerServlet</servlet-class>
-    </servlet>
-     <servlet>
-        <servlet-name>RTPMethodServlet</servlet-name>
-        <servlet-class>org.openmeetings.servlet.outputhandler.RTPMethodServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>ScreenViewHandler</servlet-name>
-        <servlet-class>org.openmeetings.servlet.outputhandler.ScreenViewHandler</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ScreenRequestHandler</servlet-name>
@@ -189,28 +169,8 @@
         <url-pattern>/install</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>UploadHandler</servlet-name>
-        <url-pattern>/UploadHandler</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>FileExplorerUploadHandler</servlet-name>
         <url-pattern>/FileExplorerUploadHandler</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ScreenServlet</servlet-name>
-        <url-pattern>/ScreenServlet</url-pattern>
-    </servlet-mapping>
-     <servlet-mapping>
-        <servlet-name>RtpSharerServlet</servlet-name>
-        <url-pattern>/RtpSharerServlet</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>RTPMethodServlet</servlet-name>
-        <url-pattern>/RTPMethodServlet</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ScreenViewHandler</servlet-name>
-        <url-pattern>/ScreenViewHandler</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ScreenRequestHandler</servlet-name>

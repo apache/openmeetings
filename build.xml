@@ -4,7 +4,6 @@
 
 	<!-- Sources and output dirs -->
 	<property name="main.src.dir" value="${basedir}/src/app" />
-	<property name="webstart.src.dir" value="${basedir}/src/screenviewer" />
 	<property name="templates.src.dir" value="${basedir}/src/templates" />
 	<property name="test.src.dir" value="${basedir}/src/test" />
 	<property name="main.out.dir" value="${basedir}/bin" />
@@ -84,15 +83,12 @@
 	<property name="ical.lib" value="${project.lib}/ical4j" />
 	<!-- Apache Axis2 -->
 	<property name="axis2.lib" value="${project.lib}/axis2-1.6" />
-	<!-- JMF Libe -->
-	<property name="jmf.lib" value="${project.lib}/jmf" />
 	<!-- SLF4J -->
 	<property name="slf4j.lib" value="${project.lib}/slf4j" />
 	<!-- Apache Velocity -->
 	<property name="velocity.lib" value="${project.lib}/velocity" />
 	<!-- Apache Batik -->
 	<property name="batik.lib" value="${project.lib}/batik_17" />
-	<property name="java2swf.lib" value="${project.lib}/java2swf" />
 	<!-- Junit -->
 	<property name="junit.lib" value="${project.lib}/junit" />
 	<!-- Mina -->
@@ -123,8 +119,6 @@
 		<fileset dir="${velocity.lib}" includes="*.jar" />
 		<fileset dir="${batik.lib}" includes="*.jar" />
 		<fileset dir="${ical.lib}" includes="*.jar" />
-		<fileset dir="${java2swf.lib}" includes="*.jar" />
-		<fileset dir="${jmf.lib}" includes="*.jar" />
 		<fileset dir="${mina.lib}" includes="*.jar" />
 		<fileset dir="${junit.lib}" includes="*.jar" />
 		<fileset dir="${screenshare.lib}" includes="*kunststoff.jar" />
@@ -247,7 +241,6 @@
 		</copy>
 
 		<chmod dir="${dist.dir}/red5" perm="755" includes="**/*.sh" />
-		<chmod dir="${dist.webapps.dir}/screen" perm="755" includes="**/*.sh" />
 
 		<copy todir="${dist.webapps.dir}/WEB-INF/lib">
 			<fileset dir="${axis2.lib}">
@@ -259,8 +252,6 @@
 			<fileset dir="${xstream.lib}" />
 			<fileset dir="${database.lib}" />
 			<fileset dir="${ical.lib}" />
-			<fileset dir="${java2swf.lib}" />
-			<fileset dir="${jmf.lib}" includes="*.jar" />
 		</copy>
 
 		<copy todir="${dist.webapps.dir}/WEB-INF/classes/META-INF">
@@ -304,16 +295,6 @@
 					<include name="**/*.vm" />
 				</patternset>
 			</fileset>
-			<fileset dir="${webstart.src.dir}">
-				<patternset>
-					<include name="**/*.conf" />
-					<include name="**/*.properties" />
-					<include name="**/*.xml" />
-					<include name="**/*.png" />
-					<include name="**/*.vm" />
-				</patternset>
-			</fileset>
-
 			<fileset dir="${templates.src.dir}">
 				<patternset>
 					<include name="**/*.conf" />
@@ -375,49 +356,13 @@
 				<attribute name="Class-Path" value="conf/ ${jar.classpath}" />
 			</manifest>
 		</jar>
-		<jar destfile="${dist.webapps.dir}/screen/screenviewer.jar">
-			<fileset dir="${classes.dir}">
-				<include name="**/webstart/**" />
-				<include name="**/*png" />
-			</fileset>
-			<manifest>
-				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com" />
-				<attribute name="Built-On" value="${build.TODAY}" />
-				<attribute name="Class-Path" value="conf/ ${jar.classpath}" />
-			</manifest>
-		</jar>
-		<jar destfile="${dist.webapps.dir}/screen/${project.distname}-client.jar">
-			<fileset dir="${classes.dir}">
-				<include name="log4j.properties" />
-				<include name="**/client/**" />
-				<include name="**/*png" />
-			</fileset>
-			<manifest>
-				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com" />
-				<attribute name="Built-On" value="${build.TODAY}" />
-				<attribute name="Class-Path" value="conf/ ${jar.classpath}" />
-			</manifest>
-		</jar>
-		<jar destfile="${dist.webapps.dir}/screen/rtpviewer.jar">
-			<fileset dir="${classes.dir}">
-				<include name="log4j.properties" />
-				<include name="**/de/**" />
-				<exclude name="**/applet/**" />
-			</fileset>
-			<manifest>
-				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com" />
-				<attribute name="Built-On" value="${build.TODAY}" />
-				<attribute name="Class-Path" value="conf/ ${jar.classpath}" />
-			</manifest>
-		</jar>
-
+		
 		<!-- Build WebServices -->
 		<jar destfile="${dist.webapps.dir}/WEB-INF/services/OpenMeetingsService.aar">
 			<fileset dir="src/">
 				<include name="META-INF/services.xml" />
 			</fileset>
 		</jar>
-
 		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/openmeetings-WebService.jar">
 			<fileset dir="${classes.dir}">
 				<include name="**/openmeetings/axis/**" />
@@ -452,16 +397,6 @@
 		<tstamp prefix="build">
 			<format property="TODAY" pattern="d-MMMM-yyyy" locale="en" />
 		</tstamp>
-		<jar destfile="${dist.webapps.dir}/screen/rtpapplet.jar">
-			<fileset dir="${classes.dir}">
-				<include name="**/applet/**" />
-			</fileset>
-			<manifest>
-				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com" />
-				<attribute name="Built-On" value="${build.TODAY}" />
-				<attribute name="Class-Path" value="conf/ ${jar.classpath}" />
-			</manifest>
-		</jar>
 	</target>
 
 	<target name="signWebStartJars">
@@ -476,9 +411,6 @@
 		</genkey>
 		<signjar alias="filetest" keystore="filetest.keystore" storepass="secret" lazy="false">
 			<path>
-				<fileset dir="${dist.webapps.dir}/screen">
-					<include name="**/*.jar" />
-				</fileset>
 				<fileset dir="${screenshare.out.dir}">
 					<include name="**/*.jar" />
 				</fileset>
@@ -544,9 +476,6 @@
 			<compilerarg value="-Aopenjpa.metamodel=true" />
 		</javac>
 		<javac debug="on" debuglevel="lines,vars,source" srcdir="${doclet.src.dir}" destdir="${main.out.dir}">
-			<classpath refid="compile.classpath" />
-		</javac>
-		<javac debug="on" debuglevel="lines,vars,source" srcdir="${webstart.src.dir}" destdir="${main.out.dir}">
 			<classpath refid="compile.classpath" />
 		</javac>
 		<javac debug="on" debuglevel="lines,vars,source" srcdir="${templates.src.dir}" destdir="${main.out.dir}">
@@ -659,7 +588,6 @@
 	<target name="report_rat">
 		<rat:report>
 			<fileset dir="${main.src.dir}" />
-			<fileset dir="${webstart.src.dir}" />
 			<fileset dir="${templates.src.dir}" />
 			<fileset dir="${test.src.dir}" />
 			<fileset dir="${screen.src.dir}" />
