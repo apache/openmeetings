@@ -196,8 +196,12 @@
 			<fileset dir="${red5.server.dir}/dist/lib" includes="commons-codec*.jar" />
 			<fileset dir="${red5.server.dir}/dist/lib" includes="httpclient*.jar" />
 			<fileset dir="${red5.server.dir}/dist/lib" includes="httpcore*.jar" />
+			<fileset dir="${red5.server.dir}/dist/lib" includes="bcprov-jdk16*.jar" />
+			<fileset dir="${red5.server.dir}/dist/lib" includes="ehcache-core*.jar" />
+			<fileset dir="${red5.server.dir}/dist/lib" includes="commons-beanutils*.jar" />
 			<fileset dir="${red5.server.dir}/dist" includes="red5.jar" />
 			<fileset dir="${spring.lib}" includes="org.springframework.context-*.jar" />
+			<fileset dir="${spring.lib}" includes="org.springframework.core-*.jar" />
 			<fileset dir="${slf4j.lib}" includes="logback*.jar" />
 			<fileset dir="${mina.lib}" includes="mina-core*.jar" />
 			<fileset dir="${slf4j.lib}" includes="slf4j-api*.jar" />

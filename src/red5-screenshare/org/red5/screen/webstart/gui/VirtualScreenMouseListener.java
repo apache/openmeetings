@@ -18,40 +18,38 @@
  */
 package org.red5.screen.webstart.gui;
 
-import javax.swing.event.MouseInputAdapter;
-
-import org.red5.screen.webstart.ScreenShare;
-
-import java.awt.event.MouseEvent;
 import java.awt.Cursor;
+import java.awt.event.MouseEvent;
+
+import javax.swing.event.MouseInputAdapter;
 
 
 public class VirtualScreenMouseListener extends MouseInputAdapter  {
-
+	private VirtualScreen vs;
 	private int x = 0;
 	private int y = 0;
-
+	
+	public VirtualScreenMouseListener(VirtualScreen vs) {
+		this.vs = vs;
+	}
+	
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		ScreenShare.instance.t.setCursor( Cursor.getPredefinedCursor( Cursor.HAND_CURSOR ) ) ;
+		vs.css.t.setCursor( Cursor.getPredefinedCursor( Cursor.HAND_CURSOR ) ) ;
 	}
 
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		ScreenShare.instance.t.setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR ) ) ;
+		vs.css.t.setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR ) ) ;
 	}
 
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		VirtualScreen.instance.showWarning=false;
+		vs.showWarning=false;
 		this.x = e.getX();
 		this.y = e.getY();
 		System.out.println(this.x+" "+this.y);
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		VirtualScreen.instance.showWarning=true;
+		vs.showWarning=true;
 	}
 
 	public void mouseDragged(MouseEvent e) {
@@ -62,13 +60,13 @@ public class VirtualScreenMouseListener extends MouseInputAdapter  {
 		int newYPosition = VirtualScreenBean.vScreenSpinnerY-(this.y-newY);
 		//System.out.println(newX+" "+newY+" "+newXPosition);
 		if (newXPosition>=0) {
-			ScreenShare.instance.jVScreenXSpin.setValue(newXPosition);
+			vs.css.jVScreenXSpin.setValue(newXPosition);
 		}
 		if (newYPosition>=0) {
-			ScreenShare.instance.jVScreenYSpin.setValue(newYPosition);
+			vs.css.jVScreenYSpin.setValue(newYPosition);
 		}
 		
-		VirtualScreen.instance.calcRescaleFactors();
+		vs.calcRescaleFactors();
 	}
 
 }
