@@ -489,7 +489,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 													new Date());
 								}
 
-							} else if (rcl.getIsAVClient()
+							} else if (rcl.getIsAVClient() != null && rcl.getIsAVClient()
 									&& (rcl.getAvsettings().equals("av")
 									|| rcl.getAvsettings().equals("a")
 									|| rcl.getAvsettings().equals("v"))) {

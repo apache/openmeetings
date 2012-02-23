@@ -672,7 +672,7 @@ public class RoomClient implements Serializable {
 	 * @return
 	 */
 	public Boolean getIsAVClient() {
-		return isAVClient == null ? false : isAVClient;
+		return isAVClient;
 	}
 
 	public void setIsAVClient(Boolean isAVClient) {
