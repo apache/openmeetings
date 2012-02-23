@@ -29,17 +29,17 @@ limitations under the License.
 	</security>	
 	<resources> 
 		<j2se version='1.4+'/> 
-        <jar href='red5-screenshare.jar'/> 
-        <jar href="apache-commons.jar"/> 
-        <jar href="commons-httpclient-3.1.jar"/> 
         <jar href="commons-codec-1.6.jar"/> 
-        <jar href="apache-mina.jar"/> 
-        <jar href="bouncycastle.jar"/> 
-        <jar href="kunststoff.jar"/> 
-        <jar href="logback.jar"/>
+        <jar href="kunststoff.jar"/>
+        <jar href="logback-classic-0.9.28.jar"/> 
+        <jar href="logback-core-0.9.28.jar"/>
         <jar href="red5.jar"/>
-        <jar href="slf4j.jar"/>
-        <jar href="spring.jar"/> 
+        <jar href="red5-screenshare.jar"/>
+        <jar href="org.springframework.context-3.0.6.RELEASE.jar" />
+        <jar href="mina-core-2.0.4.jar" />
+        <jar href="slf4j-api-1.6.1.jar" />
+        <jar href="httpclient-4.1.2.jar" />
+        <jar href="httpcore-4.1.3.jar" />
     </resources> 
     <application-desc main-class='$startUpClass'>
     	<argument>$red5-host</argument> 

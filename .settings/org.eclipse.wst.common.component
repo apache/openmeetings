@@ -18,6 +18,7 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/docgenerator"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/calendarservice"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/src_tool"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/red5-screenshare"/>
         <property name="java-output-path"/>
         <property name="context-root" value="/"/>
     </wb-module>

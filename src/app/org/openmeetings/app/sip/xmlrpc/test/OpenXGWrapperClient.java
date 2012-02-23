@@ -18,8 +18,12 @@
  */
 package org.openmeetings.app.sip.xmlrpc.test;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.utils.crypt.MD5;
 import org.red5.logging.Red5LoggerFactory;
@@ -76,20 +80,20 @@ public class OpenXGWrapperClient {
 	        String strURL = "http://127.0.0.1:5080/rpc_client/rpc_gateway_wrapper.php";
 	        
 	        // Prepare HTTP post
-	        PostMethod post = new PostMethod(strURL);
+	        HttpPost post = new HttpPost(strURL);
 	        
-	        post.setParameter("userid", userid);
+	        post.getParams().setParameter("userid", userid);
 	        
-	        post.setParameter("domain", domain);
-	        post.setParameter("first_name", first_name);
-	        post.setParameter("middle_i", middle_i);
-	        post.setParameter("last_name", last_name);
-	        post.setParameter("password", password);
-	        post.setParameter("community_code", community_code);
-	        post.setParameter("language_code", language_code);
-	        post.setParameter("email", email);
-	        post.setParameter("adminid", adminid);
-	        post.setParameter("action", "OpenSIPg.UserCreate");
+	        post.getParams().setParameter("domain", domain);
+	        post.getParams().setParameter("first_name", first_name);
+	        post.getParams().setParameter("middle_i", middle_i);
+	        post.getParams().setParameter("last_name", last_name);
+	        post.getParams().setParameter("password", password);
+	        post.getParams().setParameter("community_code", community_code);
+	        post.getParams().setParameter("language_code", language_code);
+	        post.getParams().setParameter("email", email);
+	        post.getParams().setParameter("adminid", adminid);
+	        post.getParams().setParameter("action", "OpenSIPg.UserCreate");
 	        
 	        String digest = this.digest_calculate(new Object[]{client_id, userid, domain,
 					 first_name, middle_i, last_name,
@@ -97,18 +101,20 @@ public class OpenXGWrapperClient {
 					 language_code, email, adminid,
 					 client_secret});
 	        
-	        post.setParameter("digest", digest);
+	        post.getParams().setParameter("digest", digest);
 	        
 	        // Get HTTP client
-	        HttpClient httpclient = new HttpClient();
+	        HttpClient httpclient = new DefaultHttpClient();
 	        // Execute request
-            int result = httpclient.executeMethod(post);
+            HttpResponse response = httpclient.execute(post);
             // Display status code
-            System.out.println("Response status code: " + result);
+            System.out.println("Response status code: " + response.getStatusLine().getStatusCode());
             // Display response
             System.out.println("Response body: ");
-            System.out.println(post.getResponseBodyAsString());
-			
+            HttpEntity entity = response.getEntity();
+            if (entity != null) {
+            	System.out.println(EntityUtils.toString(entity));
+            }
 		} catch (Exception err) {
 			log.error("[testConnection]",err);
 		}

@@ -18,85 +18,68 @@
  */
 package org.red5.screen.webstart;
 
-import java.io.*;
-import java.util.*;
-
-import org.apache.mina.common.ByteBuffer;
-import org.red5.io.IStreamableFile;
-import org.red5.io.ITag;
-import org.red5.io.ITagWriter;
-import org.red5.io.ITagReader;
-import org.red5.io.flv.impl.FLVService;
-import org.red5.io.flv.impl.FLV;
-import org.red5.io.flv.impl.FLVReader;
-import org.red5.io.flv.impl.Tag;
-import org.red5.io.IoConstants;
-import org.red5.io.utils.ObjectMap;
-import org.red5.screen.webstart.tgui.VirtualScreen;
-import org.red5.screen.webstart.tgui.VirtualScreenBean;
-import org.red5.server.api.IConnection;
-import org.red5.server.api.Red5;
-import org.red5.server.api.event.IEvent;
-import org.red5.server.api.event.IEventDispatcher;
-import org.red5.server.api.service.IPendingServiceCall;
-import org.red5.server.api.service.IPendingServiceCallback;
-import org.red5.server.api.service.IServiceCapableConnection;
-import org.red5.server.net.rtmp.Channel;
-import org.red5.server.net.rtmpt.RTMPTClient;
-import org.red5.server.net.rtmp.INetStreamEventHandler;
-import org.red5.server.net.rtmp.RTMPConnection;
-import org.red5.server.net.rtmp.ClientExceptionHandler;
-import org.red5.server.net.rtmp.codec.RTMP;
-import org.red5.server.net.rtmp.event.IRTMPEvent;
-import org.red5.server.net.rtmp.event.Notify;
-import org.red5.server.net.rtmp.event.VideoData;
-import org.red5.server.net.rtmp.message.Header;
-import org.red5.server.net.rtmp.status.StatusCodes;
-import org.red5.server.net.rtmp.event.SerializeUtils;
-import org.red5.server.stream.AbstractClientStream;
-import org.red5.server.stream.IStreamData;
-import org.red5.server.stream.message.RTMPMessage;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.PointerInfo;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.Robot;
 import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBuffer;
-import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBuffer;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.zip.DeflaterOutputStream;
-import java.util.Date;
-
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.image.*;
-import java.io.*;
-import javax.imageio.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JSpinner;
+import javax.swing.UIManager;
+
+import org.apache.mina.core.buffer.IoBuffer;
+import org.red5.io.ITagReader;
+import org.red5.io.ITagWriter;
+import org.red5.io.utils.ObjectMap;
+import org.red5.screen.webstart.tgui.VirtualScreen;
+import org.red5.screen.webstart.tgui.VirtualScreenBean;
+import org.red5.server.api.event.IEvent;
+import org.red5.server.api.service.IPendingServiceCall;
+import org.red5.server.api.service.IPendingServiceCallback;
+import org.red5.server.net.rtmp.Channel;
+import org.red5.server.net.rtmp.ClientExceptionHandler;
+import org.red5.server.net.rtmp.INetStreamEventHandler;
+import org.red5.server.net.rtmp.RTMPConnection;
+import org.red5.server.net.rtmp.codec.RTMP;
+import org.red5.server.net.rtmp.event.Notify;
+import org.red5.server.net.rtmp.event.VideoData;
+import org.red5.server.net.rtmp.message.Header;
+import org.red5.server.net.rtmp.status.StatusCodes;
+import org.red5.server.net.rtmpt.RTMPTClient;
+import org.red5.server.stream.message.RTMPMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHandler, ClientExceptionHandler, IPendingServiceCallback {
 
@@ -114,7 +97,7 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
     public int audioTs = 0;
     public int kt = 0;
     public int kt2 = 0;
-    public ByteBuffer buffer;
+    public IoBuffer buffer;
 	public CaptureScreen capture = null;
 	public Thread thread = null;
 
@@ -1181,7 +1164,7 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 		if (!startPublish) return;
 
         if ( buffer == null ) {
-            buffer = ByteBuffer.allocate( 1024 );
+            buffer = IoBuffer.allocate( 1024 );
             buffer.setAutoExpand( true );
         }
 
@@ -1199,8 +1182,7 @@ public class ScreenShareRTMPT extends RTMPTClient implements INetStreamEventHand
 //            System.out.println( "+++ " + videoData);
 //        }
 
-        RTMPMessage rtmpMsg = new RTMPMessage();
-        rtmpMsg.setBody( videoData );
+        RTMPMessage rtmpMsg = RTMPMessage.build(videoData);
         publishStreamData( publishStreamId, rtmpMsg );
     }
 

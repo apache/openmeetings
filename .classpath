@@ -11,10 +11,11 @@
 	<classpathentry kind="src" path="src/test"/>
 	<classpathentry kind="src" path="src/userservice"/>
 	<classpathentry kind="src" path="WebContent/WEB-INF"/>
-	<classpathentry excluding="app/|client/|fileservice/|red5-screenshare/|roomservice/|screenviewer/|server/|templates/|test/|userservice/|src_tool/" including="META-INF/" kind="src" path="src"/>
+	<classpathentry excluding="app/|client/|fileservice/|red5-screenshare/|roomservice/|screenviewer/|server/|templates/|test/|userservice/|src_tool/|red5-screenshare/" including="META-INF/" kind="src" path="src"/>
 	<classpathentry kind="src" path="src/dtdgenerator"/>
 	<classpathentry kind="src" path="src/docgenerator"/>
 	<classpathentry kind="src" path="src/calendarservice"/>
+	<classpathentry kind="src" path="src/red5-screenshare"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry exported="true" kind="lib" path="lib/velocity/velocity-1.6.2.jar">
@@ -497,11 +498,6 @@
 			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/axis2-1.6/commons-httpclient-3.1.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
-		</attributes>
-	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="lib/axis2-1.6/commons-io-1.4.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
@@ -533,11 +529,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="lib/axis2-1.6/geronimo-ws-metadata_2.0_spec-1.1.2.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
-		</attributes>
-	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/axis2-1.6/httpcore-4.0.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
 		</attributes>

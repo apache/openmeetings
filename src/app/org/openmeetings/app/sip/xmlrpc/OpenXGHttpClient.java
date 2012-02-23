@@ -22,16 +22,29 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Date;
 
+import javax.net.ssl.SSLContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpVersion;
-import org.apache.commons.httpclient.methods.ByteArrayRequestEntity;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.RequestEntity;
-import org.apache.commons.httpclient.protocol.Protocol;
-import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpVersion;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.entity.AbstractHttpEntity;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.params.HttpProtocolParams;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.persistence.beans.basic.Configuration;
@@ -371,8 +384,8 @@ public class OpenXGHttpClient {
 			String strURL = openxg_wrapper_url.getConf_value();
 
 			// Prepare HTTP post
-			PostMethod post = new PostMethod(strURL);
-			post.addRequestHeader("User-Agent", "OpenSIPg XML_RPC Client");
+			HttpPost post = new HttpPost(strURL);
+			post.addHeader("User-Agent", "OpenSIPg XML_RPC Client");
 
 			// Get the XML-String representative
 			String stringToPost = OpenXGCustomXMLMarshall.getInstance()
@@ -413,43 +426,40 @@ public class OpenXGHttpClient {
 			String strURL = openxg_wrapper_url.getConf_value();
 
 			// Prepare HTTP post
-			PostMethod post = new PostMethod(strURL);
-			post.addRequestHeader("User-Agent", "OpenSIPg XML_RPC Client");
+			HttpPost post = new HttpPost(strURL);
+			post.addHeader("User-Agent", "OpenSIPg XML_RPC Client");
 
 			// log.debug(stringToPost);
 
-			RequestEntity entity = new ByteArrayRequestEntity(
+			AbstractHttpEntity entity = new ByteArrayEntity(
 					stringToPost.getBytes(Charset.forName("ISO-8859-1")));
 
 			// Prepare HTTP post
-
-			post.getParams().setContentCharset("ISO-8859-1");
-			post.getParams().setVersion(HttpVersion.HTTP_1_0);
+			HttpParams params = post.getParams();
+			HttpProtocolParams.setContentCharset(params, "utf-8");
+			HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
+			post.setParams(params);
 
 			// Request content will be retrieved directly
 			// from the input stream
-			post.setRequestEntity(entity);
-
-			Protocol easyhttps = new Protocol("https",
-					(ProtocolSocketFactory) new EasySSLProtocolSocketFactory(),
-					443);
-			Protocol.registerProtocol("https", easyhttps);
+			post.setEntity(entity);
 
 			// Get HTTP client
-			HttpClient httpclient = new HttpClient();
+			HttpClient httpclient = getHttpClient();
 
 			// Execute request
-			int result = httpclient.executeMethod(post);
-
+			HttpResponse response = httpclient.execute(post);
+			int resCode = response.getStatusLine().getStatusCode();
+			
 			// Display status code
-			log.debug("Response status code: " + result);
+			log.debug("Response status code: " + response);
 
-			if (result == 200) {
+			if (resCode == 200) {
+	            HttpEntity ent = response.getEntity();
+				String responseBody = (ent != null) ? EntityUtils.toString(ent) : "";
+				log.debug("parseReturnBody " + responseBody);
 
-				log.debug("parseReturnBody " + post.getResponseBodyAsString());
-
-				OpenXGReturnObject oIG = this.parseOpenXGReturnBody(post
-						.getResponseBodyAsStream());
+				OpenXGReturnObject oIG = this.parseOpenXGReturnBody(ent.getContent());
 
 				log.debug("oIG 1 " + oIG.getStatus_code());
 				log.debug("oIG 2 " + oIG.getStatus_string());
@@ -576,4 +586,23 @@ public class OpenXGHttpClient {
 		return null;
 	}
 
+	public HttpClient getHttpClient() {
+	    try {
+	        SSLSocketFactory sf = new SSLSocketFactory(SSLContext.getInstance("TLS"), SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+
+	        HttpParams params = new BasicHttpParams();
+	        HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
+	        HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
+
+	        SchemeRegistry registry = new SchemeRegistry();
+	        registry.register(new Scheme("http", 80, PlainSocketFactory.getSocketFactory()));
+	        registry.register(new Scheme("https", 443, sf));
+
+	        ClientConnectionManager ccm = new ThreadSafeClientConnManager(registry);
+
+	        return new DefaultHttpClient(ccm, params);
+	    } catch (Exception e) {
+	        return new DefaultHttpClient();
+	    }
+	}
 }

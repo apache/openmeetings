@@ -70,7 +70,7 @@ public class ScreenClient extends RTMPClient implements INetStreamEventHandler,
 
     // ------------------------------------------------------------------------
     //
-    // Overide
+    // Override
     //
     // ------------------------------------------------------------------------
 
