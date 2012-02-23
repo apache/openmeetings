@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.openmeetings.srctool;
+package org.openmeetings.test.asf;
 
 import java.io.BufferedReader;
 import java.io.File;

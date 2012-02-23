@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/app"/>
-	<classpathentry kind="src" path="src/src_tool"/>
 	<classpathentry kind="src" path="src/fileservice"/>
 	<classpathentry kind="src" path="src/roomservice"/>
 	<classpathentry kind="src" path="src/templates"/>
