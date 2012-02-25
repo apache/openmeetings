@@ -23,8 +23,8 @@
             client.t = this;
 
             //client.reconnect = this.reconnect;
-            client.initVideoContainer = this.initVideoContainer;
             client.createEditRecordStream = this.createEditRecordStream;
+            client.initVideoContainer = this.initVideoContainer;
             client.createVideoObject = this.createVideoObject;
             client.createVideo = this.createVideo;
             client.getVideoObjectByPublicSID = this.getVideoObjectByPublicSID;
@@ -65,14 +65,16 @@
         this.setAttribute("videoHeight",videoHeight);
     </method>
 
-	<method name="createEditRecordStream" args="syncUpdate,isInterview">
-		if($debug) Debug.info("createEditRecordStream,",syncUpdate,isInterview);
+	<method name="createEditRecordStream" args="syncUpdate,isInterview,interviewPodId,tx,ty,twidth,theight">
+		if($debug) Debug.info("createEditRecordStream,",syncUpdate,isInterview,interviewPodId,tx,ty,twidth,theight);
 		if (canvas.inner.editRecordStream != null)
 			canvas.inner.editRecordStream.destroy();
 		new lz.editRecordStreamSWF10(canvas.inner, {
-					name : "editRecordStream",
-					isSyncUpdate : syncUpdate,
-					isInterview : isInterview
+					name:"editRecordStream",
+					isSyncUpdate:syncUpdate,
+					isInterview:isInterview,
+					tx:tx, 
+					ty:ty
 				});
 	</method>
 

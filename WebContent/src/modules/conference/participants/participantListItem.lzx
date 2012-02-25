@@ -615,7 +615,7 @@
             <handler name="onclick">
                 //TODO: local connection call
                 if ($debug) Debug.write("parent.parent.refObj.publicSID: ",parent.parent.refObj.publicSID);
-                canvas._videocontainer._videoviewcontent.showDevicePopUp(true,false);
+                canvas._videocontainer._videoviewcontent.showDevicePopUp(true);
             </handler>
             <labelTooltip labelid="610" />
         </miniIcons>

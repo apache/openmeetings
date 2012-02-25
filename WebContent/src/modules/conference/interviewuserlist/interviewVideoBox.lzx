@@ -81,17 +81,9 @@
     
     <method name="startInterView">
         if ($debug) Debug.write("startInterView :: ");
-        //canvas._videocontainer._videoviewcontent.createVideoObject(canvas.publicSID, true, this.interviewPodId);
-        var t = this;
-        canvas.videoComp_lc.onStartBroadcast = function(broadCastID, settings) {
-            //TODO: settings
-            if ($debug) Debug.write("onStartBroadcast :: ", broadCastID, settings);
-            t._videoPlay.setAttribute('chatpartnername',canvas.firstName+' '+canvas.lastName);
-            t._videoPlay._chatvideoinner._videostream.playStream(broadCastID, -1);
-            t._videoPlay.setAttribute("visibility","visible");
-            t._videoPlay.setAttribute("publicSID", canvas.publicSID);
-        };
-        canvas._videocontainer._videoviewcontent.showDevicePopUp(false,true);
+        var tx = this.getAttributeRelative("x",canvas);
+        var ty = this.getAttributeRelative("y",canvas);
+        canvas._videocontainer._videoviewcontent.showDevicePopUpInterview(false,this.interviewPodId,tx,ty,this.width,this.height);
     </method>
 
     <method name="sendConfirmation" args="publicSID">
@@ -142,10 +134,10 @@
         </handler>
     </simpleLabelButton>
         
-        
+    <!--
     <videoObjectPlayBroadcast name="_videoPlay" isInterview="true" visibility="hidden" 
                               width="$once{ parent.width }" height="$once{ parent.height }" />
-    
+     -->
     
 </class>
 

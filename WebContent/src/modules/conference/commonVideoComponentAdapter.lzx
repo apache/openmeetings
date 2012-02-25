@@ -2,6 +2,7 @@
 <library>
 
 <class name="commonVideoComponentAdapter" extends="node">
+	
 
     <handler name="oninit">
     	var t = this;
@@ -15,12 +16,25 @@
     </handler>
     
     <!---
-    Show the popup with the possibility to choose the device settings
-    @param isSyncUpdate show the popup also if the user has clicked the "do not show again" chceckbox
-    @param isInterview 
+        Show the popup with the possibility to choose the device settings
+        @param isSyncUpdate show the popup also if the user has clicked the "do not show again" chceckbox
+        @param interviewPodId the view id
+        @param tx x-position
+        @param ty y-position
+        @param twidth width-position
+        @param theight height-position
      -->
-    <method name="showDevicePopUp" args="isSyncUpdate,isInterview">
-        canvas.lc.send(canvas.vid_lc_name, "createEditRecordStream", isSyncUpdate, isInterview);
+    <method name="showDevicePopUpInterview" args="isSyncUpdate,interviewPodId,tx,ty,twidth,theight">
+    	if ($debug) Debug.write("showDevicePopUpInterview ",isSyncUpdate,interviewPodId,tx,ty,twidth,theight);
+        canvas.lc.send(canvas.vid_lc_name, "createEditRecordStream", isSyncUpdate, true, interviewPodId,tx,ty,twidth,theight);
+    </method>
+    
+    <!---
+        Show the popup with the possibility to choose the device settings
+        @param isSyncUpdate show the popup also if the user has clicked the "do not show again" chceckbox
+     -->
+    <method name="showDevicePopUp" args="isSyncUpdate">
+        canvas.lc.send(canvas.vid_lc_name, "createEditRecordStream", isSyncUpdate, false, 0, 0, 0, 0, 0);
     </method>
     
     <!---

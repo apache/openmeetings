@@ -45,6 +45,15 @@
 
     <attribute name="isInterview" value="false" type="boolean" />
     
+    <!---
+        If isInterview is true the view will be placed at tx,ty and not fade in
+     -->
+    <attribute name="tx" value="0" type="number"/>
+    <!---
+        If isInterview is true the view will be placed at tx,ty and not fade in
+     -->
+    <attribute name="ty" value="0" type="number"/>
+    
     <attribute name="cam_default_width" value="320" type="number" />
     <attribute name="cam_default_height" value="240" type="number" />
 
@@ -79,10 +88,15 @@
                     //this.getBroadCastId.doCall();
                     canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_getBroadCastId', this.chosenSetting, this.remoteMessage, this.cam_default_width, this.cam_default_height);
                 } else {
-                    if (this.doDefaultAnimation) {
+                    if (this.doDefaultAnimation && !this.isInterview) {
                         this._chooseDeviceAnimation.doStart();
                     }
                 }
+	        }
+	        
+	        if (this.isInterview) {
+	        	this.setAttribute("x",tx);
+	        	this.setAttribute("y",ty);
 	        }
         ]]>
 	</handler>
@@ -438,15 +452,18 @@
                fontsize="11" x="10" y="180" visibility="hidden" />
                
     <labelText name="availibleResolutionsLabel" labelid="1429" 
-            fontsize="11" x="10" y="164" width="$once{ parent.width-20 }" />
+            fontsize="11" x="10" y="164" width="$once{ parent.width-20 }" 
+            visibility="${ (!parent.isInterview) ? 'visible' : 'hidden' }" />
             
     <view name="availibleResolutionsWarning" x="272" y="164" 
-            resource="warning_icon_popup_devices_rsc" clickable="true" >
+            resource="warning_icon_popup_devices_rsc" clickable="true" 
+            visibility="${ (!parent.isInterview) ? 'visible' : 'hidden' }">
         <labelTooltip multiline="true" labelid="1430" />
     </view>     
     
     <resetCombobox fontsize="11" name="availibleResolutions" x="10" shownitems="10"
-                y="184" width="280" editable="false" >
+                y="184" width="280" editable="false" 
+                visibility="${ (!parent.isInterview) ? 'visible' : 'hidden' }">
         <!--- @keywords private -->
         <attribute name="counter" value="0" />
         <handler name="onselect" args="item">

@@ -976,7 +976,7 @@
                     if (canvas.ismoderator){
                         if (this.parent.modus == "conference"){
                             if ($debug) Debug.write("############## showDevicePopUp 3");
-                            canvas._videocontainer._videoviewcontent.showDevicePopUp(false,false);
+                            canvas._videocontainer._videoviewcontent.showDevicePopUp(false);
                         }
                     } else if (value==null){
                         //I think we never can run into this! value is always != null, this is from a previous implementation
@@ -985,7 +985,7 @@
                         //check if this is conferenceViewmodus
                         if (this.parent.modus == "conference"){
                             if ($debug) Debug.write("############## showDevicePopUp 4");
-                            canvas._videocontainer._videoviewcontent.showDevicePopUp(false,false);
+                            canvas._videocontainer._videoviewcontent.showDevicePopUp(false);
                         } else {
                             // in audienceView modus you get no notification
                             // cause you are not able to register your stream
@@ -994,7 +994,7 @@
                     } else {
                         if (this.parent.modus == "conference"){
                             if ($debug) Debug.write("############## showDevicePopUp 1a");
-                            canvas._videocontainer._videoviewcontent.showDevicePopUp(false,false);
+                            canvas._videocontainer._videoviewcontent.showDevicePopUp(false);
                         }
                     }
                     canvas._drawarea.onopenWhiteBoard.sendEvent();
@@ -1269,7 +1269,7 @@
                             if (canvas.thishib.modus == "interview") {
                                canvas._drawarea.newInterviewStarting(value);
                             } else {
-                            	canvas._videocontainer._videoviewcontent.showDevicePopUp(false,false);
+                            	canvas._videocontainer._videoviewcontent.showDevicePopUp(false);
                             }
                             
                             canvas.setAttribute("isBroadCasting",true);

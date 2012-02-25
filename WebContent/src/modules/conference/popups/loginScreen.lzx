@@ -103,7 +103,7 @@ There is no login any more
 				canvas._hideit.setAttribute('visible',false);
 				canvas._videocontainer.initializeStreams();
 				if(!canvas.isConference) {
-				 canvas._videocontainer._videoviewcontent.showDevicePopUp(false,false);
+				 canvas._videocontainer._videoviewcontent.showDevicePopUp(false);
 				}
 	
 			</handler>
