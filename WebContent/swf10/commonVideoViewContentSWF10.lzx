@@ -65,26 +65,34 @@
         this.setAttribute("videoHeight",videoHeight);
     </method>
 
-	<method name="createEditRecordStream" args="syncUpdate,isInterview,interviewPodId,tx,ty,twidth,theight">
-		if($debug) Debug.info("createEditRecordStream,",syncUpdate,isInterview,interviewPodId,tx,ty,twidth,theight);
+	<method name="createEditRecordStream" args="syncUpdate,isInterview,interviewPodId">
+		if($debug) Debug.info("createEditRecordStream,",syncUpdate,isInterview,interviewPodId);
 		if (canvas.inner.editRecordStream != null)
 			canvas.inner.editRecordStream.destroy();
 		new lz.editRecordStreamSWF10(canvas.inner, {
 					name:"editRecordStream",
 					isSyncUpdate:syncUpdate,
 					isInterview:isInterview,
-					tx:tx, 
-					ty:ty
+					interviewPodId:interviewPodId
 				});
 	</method>
 
     <method name="createVideoObject" args="publicSID,isBroadcasting,interviewPodId,object">
-        if($debug) Debug.info("createVideoObject, publicSID: ",publicSID, "isBroadcasting: ", isBroadcasting);
+        if($debug) Debug.info("createVideoObject, publicSID: ",publicSID, "isBroadcasting: ", isBroadcasting, "object", object);
         var vidContainer = getVideoObjectByPublicSID(publicSID);
         if(vidContainer == null) {
             vidContainer = isBroadcasting ? this.getNewVideoObject(publicSID) : this.getNewVideoObjectByPos(publicSID);
             vidContainer.publicSID = publicSID;
-            vidContainer.setAttribute("interviewPodId", interviewPodId);
+            
+        }
+        if ($debug) Debug.write("Is interview ? ",canvas.isInterview);
+        if (canvas.isInterview) {
+        	if ($debug) Debug.write("Is interview ",interviewPodId,"x",canvas["interviewPod"+interviewPodId+"_x"]);
+        	vidContainer.setAttribute("interviewPodId", interviewPodId);
+        	vidContainer.setAttribute("x",canvas["interviewPod"+interviewPodId+"_x"]);
+            vidContainer.setAttribute("y",canvas["interviewPod"+interviewPodId+"_y"]);
+            vidContainer.setAttribute("width",322);
+            vidContainer.setAttribute("height",281);
         }
         vidContainer.clientVars = object;
         vidContainer.setAttribute('visibility','hidden');
@@ -173,8 +181,11 @@
             var freePos = this.getVideoObjectFreePos(this.offsetLength,this.videoWidth,this.videoHeight);
 
             return new lz.videoObjectPlayBroadcast(this,{
-                    publicSID:publicSID, width:videoWidth,height:videoHeight,
-                    x:freePos[0],y:freePos[1]
+                    publicSID:publicSID,
+                    width:videoWidth,
+                    height:videoHeight,
+                    x:freePos[0],
+                    y:freePos[1]
                 });
         ]]>
     </method>
@@ -190,7 +201,9 @@
 
 				this.broadCastViewRef = new lz.videoObjectBroadcast(this,{
 	                    publicSID:publicSID, width:videoWidth,height:videoHeight,
-	                    x:freePos[0],y:freePos[1]
+	                    x:freePos[0],
+	                    y:freePos[1],
+	                    isInterview:canvas.isInterview
                     });
 
 				this.broadCastViewRef._chatvideoinner.r.destroy();

@@ -61,7 +61,7 @@
         if ($debug) Debug.warn("User Reloged In ",canvas.becomemoderator);
         //Send to SWF10 video-container to connect on the conference room url 
         //and wait for the as3ConnectionSuccess-Event
-        this._videoviewcontent.reconnectSuccess();
+        this._videoviewcontent.reconnectSuccess(true);
     </method>
     
     <!---
@@ -104,7 +104,7 @@
                 if ($debug) Debug.write("canvas.becomemoderator: ",canvas.becomemoderator);
                 if ($debug) Debug.write("canvas.becomeSuperModerator: ",canvas.becomeSuperModerator);
                 
-                canvas.currentusercolor = parent._participents.getColorForUser();
+                canvas.currentusercolor = parent._participants.getColorForUser();
                 
                 var organisation_id = 1;
             

@@ -43,19 +43,10 @@
 
     <attribute name="doDefaultAnimation" value="true" type="boolean" />
 
-    <attribute name="isInterview" value="false" type="boolean" />
-    
-    <!---
-        If isInterview is true the view will be placed at tx,ty and not fade in
-     -->
-    <attribute name="tx" value="0" type="number"/>
-    <!---
-        If isInterview is true the view will be placed at tx,ty and not fade in
-     -->
-    <attribute name="ty" value="0" type="number"/>
-    
     <attribute name="cam_default_width" value="320" type="number" />
     <attribute name="cam_default_height" value="240" type="number" />
+    
+    <attribute name="interviewPodId" value="0" type="number" />
 
 	<handler name="oninit">
 		<![CDATA[
@@ -88,15 +79,16 @@
                     //this.getBroadCastId.doCall();
                     canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_getBroadCastId', this.chosenSetting, this.remoteMessage, this.cam_default_width, this.cam_default_height);
                 } else {
-                    if (this.doDefaultAnimation && !this.isInterview) {
+                    if (this.doDefaultAnimation && !canvas.isInterview) {
                         this._chooseDeviceAnimation.doStart();
                     }
                 }
 	        }
 	        
-	        if (this.isInterview) {
-	        	this.setAttribute("x",tx);
-	        	this.setAttribute("y",ty);
+	        if (canvas.isInterview) {
+	        	if ($debug) Debug.write("Is interview ",interviewPodId);
+                this.setAttribute("x",canvas["interviewPod"+interviewPodId+"_x"]);
+                this.setAttribute("y",canvas["interviewPod"+interviewPodId+"_y"]);
 	        }
         ]]>
 	</handler>
@@ -117,7 +109,7 @@
         <handler name="ondata" args="value">
             <![CDATA[
                 if ($debug) Debug.write("getBroadCastId",value,canvas.publicSID);
-                parent.myvideocontainer = canvas._videoComponent.createVideoObject(canvas.publicSID, true, -1, value);
+                parent.myvideocontainer = canvas._videoComponent.createVideoObject(canvas.publicSID, true, parent.interviewPodId, canvas.userobject);
 
                 if ($debug) Debug.write("parent.setUserAVSettings -1- ",parent.chosenSetting);
                 if ($debug) Debug.write("parent.setUserAVSettings -2- ",parent.remoteMessage);
@@ -188,7 +180,9 @@
     		var valCam = this.chosenCam;
 			var valMic = this.chosenMic;
 			var settings = this.chosenSetting;
-			this.myvideocontainer.setDefaultVideoSize(this.cam_default_width,this.cam_default_height);
+			if (!canvas.isInterview) {
+			    this.myvideocontainer.setDefaultVideoSize(this.cam_default_width,this.cam_default_height);
+			}
             
 			var videoview = this.myvideocontainer._chatvideoinner._videostream;
 	    	if ($debug) Debug.write("this.myvideocontainer: ",this.myvideocontainer);
@@ -218,8 +212,9 @@
 			//Microphone.set
 			if ($debug) Debug.write("canvas.vaquality: ",canvas.vaquality, "canvas.microphoneRateBest: ",canvas.microphoneRateBest);
 			if (_camera != null) {
-   				if ($debug) Debug.write("_camera.setQuality BEST: ",this.isInterview,(canvas.bandwidthNeededBest*2),canvas.camQualityBest);
-   				if (this.isInterview) {
+   				if ($debug) Debug.write("_camera.setQuality BEST: ",canvas.isInterview,(canvas.bandwidthNeededBest*2),canvas.camQualityBest);
+   				if (canvas.isInterview) {
+   					//we need a fixed frame rate for the videos to merge them later on
    					_camera.setMode(videoview.width,videoview.height,24,true);
    					if ($debug) Debug.warn("IS INTERVIEW ");
    				    _camera.setQuality(0,98);
@@ -240,7 +235,7 @@
                     break;
                 case "vs":
                     videoview.broadcast(this.currentClient.broadCastID,_camera,null);
-                    if(isInterview) {
+                    if(canvas.isInterview) {
                         canvas.videoComp_lc.send(canvas.videoComp_lc_name, "onStartBroadcast", this.currentClient.broadCastID, settings);
                     } else {
                         this.myvideocontainer.setAttribute("visibility","visible");
@@ -248,7 +243,7 @@
                     break;
 	    		case "av":
 	    			videoview.broadcast(this.currentClient.broadCastID,_camera,_micro);
-                    if(isInterview) {
+                    if(canvas.isInterview) {
                         canvas.videoComp_lc.send(canvas.videoComp_lc_name, "onStartBroadcast", this.currentClient.broadCastID, settings);
                     } else {
                         this.myvideocontainer.setAttribute("visibility","visible");
@@ -257,7 +252,7 @@
 	    			break;
 	    		case "a":
 	    			videoview.broadcast(this.currentClient.broadCastID,null,_micro);
-                    if(isInterview) {
+                    if(canvas.isInterview) {
                         canvas.videoComp_lc.send(canvas.videoComp_lc_name, "onStartBroadcast", this.currentClient.broadCastID, settings);
                     } else {
                         if (this.myvideocontainer.hidebyAudioOnly) {
@@ -272,7 +267,7 @@
 	    			break;
 	    		case "v":
 	    			videoview.broadcast(this.currentClient.broadCastID,_camera,null);
-	    			if(isInterview) {
+	    			if(canvas.isInterview) {
                         canvas.videoComp_lc.send(canvas.videoComp_lc_name, "onStartBroadcast", this.currentClient.broadCastID, settings);
                     } else {
                         this.myvideocontainer.setAttribute("visibility","visible");
@@ -453,17 +448,17 @@
                
     <labelText name="availibleResolutionsLabel" labelid="1429" 
             fontsize="11" x="10" y="164" width="$once{ parent.width-20 }" 
-            visibility="${ (!parent.isInterview) ? 'visible' : 'hidden' }" />
+            visibility="${ (!canvas.isInterview) ? 'visible' : 'hidden' }" />
             
     <view name="availibleResolutionsWarning" x="272" y="164" 
             resource="warning_icon_popup_devices_rsc" clickable="true" 
-            visibility="${ (!parent.isInterview) ? 'visible' : 'hidden' }">
+            visibility="${ (!canvas.isInterview) ? 'visible' : 'hidden' }">
         <labelTooltip multiline="true" labelid="1430" />
     </view>     
     
     <resetCombobox fontsize="11" name="availibleResolutions" x="10" shownitems="10"
                 y="184" width="280" editable="false" 
-                visibility="${ (!parent.isInterview) ? 'visible' : 'hidden' }">
+                visibility="${ (!canvas.isInterview) ? 'visible' : 'hidden' }">
         <!--- @keywords private -->
         <attribute name="counter" value="0" />
         <handler name="onselect" args="item">
@@ -535,7 +530,7 @@
         </handler>
     </labelCheckbox>
 
-    <simpleLabelButton fontsize="11" visibility="${ (parent.isInterview) ? 'visible' : 'hidden' }"
+    <simpleLabelButton fontsize="11" visibility="${ (canvas.isInterview) ? 'visible' : 'hidden' }"
                        labelid="54" x="80" y="240" width="100">
         <handler name="onclick">
             this.parent.storelocaldata();
@@ -552,14 +547,14 @@
         </handler>
     </simpleLabelButton>
 
-    <simpleLabelButton fontsize="11" visibility="${ (parent.isInterview) ? 'visible' : 'hidden' }"
+    <simpleLabelButton fontsize="11" visibility="${ (canvas.isInterview) ? 'visible' : 'hidden' }"
                        labelid="918" x="190" y="240" width="100">
         <handler name="onclick">
             parent.close();
         </handler>
     </simpleLabelButton>
 
-    <simpleLabelButton fontsize="11" visibility="${ (!parent.isInterview) ? 'visible' : 'hidden' }"
+    <simpleLabelButton fontsize="11" visibility="${ (!canvas.isInterview) ? 'visible' : 'hidden' }"
     				   labelid="54" x="190" y="240" width="100">
         <handler name="onclick">
         	this.parent.storelocaldata();

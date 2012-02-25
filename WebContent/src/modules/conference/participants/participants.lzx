@@ -66,7 +66,7 @@
         if ($debug) Debug.write("User Reloged In");
         //Send to SWF10 video-container to connect on the conference room url 
         //and wait for the as3ConnectionSuccess-Event
-        this._videoviewcontent.reconnectSuccess();
+        this._videoviewcontent.reconnectSuccess(false);
     </method>
     
     <!---
