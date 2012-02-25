@@ -59,13 +59,8 @@
     
     <simplelayout axis="y" spacing="2" />
     
-    <commonVideoViewContent name="_videoviewcontent" align="center" >
+    <commonVideoViewContent name="_videoviewcontent" x="40" >
 
-        <!--<handler name="onx" args="x">-->
-            <!--interviewVideoBox1.setAttribute('x',interviewVideoBox1.x);-->
-            <!--interviewVideoBox2.setAttribute('x',interviewVideoBox2.x);-->
-        <!--</handler>-->
-        
         <simplelayout axis="x" spacing="2" />
         
         <interviewVideoBox name="interviewVideoBox1" interviewPodId="1" >

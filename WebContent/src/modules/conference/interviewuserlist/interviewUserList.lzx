@@ -184,7 +184,7 @@
             //Do init only in case this stream is NOT the same as we are
             if (streamid!=canvas.streamid){
                 //if ($debug) Debug.write("???????? object.isBroadcasting :: ",object.isBroadcasting);
-                this._videoviewcontent.createVideo(object.publicSID, object.firstname+' '+object.lastname, object.broadCastID, object.avsettings, -1, object);
+                this._videoviewcontent.createVideo(object.publicSID, object.firstname+' '+object.lastname, object.broadCastID, object.avsettings, object.interviewPodId, object);
             }
            
             //do add self too
@@ -197,7 +197,7 @@
         if ($debug) Debug.write("### initializeStreams addClientItem: ",connectedSince,isMod,streamid,username,room_id,formatedDate);
 
         if (canvas.publicSID != object.publicSID){
-            this._videoviewcontent.createVideoObject(object.publicSID, false, -1, object);
+            this._videoviewcontent.createVideoObject(object.publicSID, false, object.interviewPodId, object);
         }
 
         //Do Add it anyway

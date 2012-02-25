@@ -125,6 +125,16 @@
                 
                 vidContainer.updateAVSettingsSymbol(object);
             }
+            
+            if ($debug) Debug.write("Is interview ? ",canvas.isInterview);
+            if (canvas.isInterview && interviewPodId != null && interviewPodId > 0) {
+                if ($debug) Debug.write("Is interview ",interviewPodId,"x",canvas["interviewPod"+interviewPodId+"_x"]);
+                vidContainer.setAttribute("interviewPodId", interviewPodId);
+                vidContainer.setAttribute("x",canvas["interviewPod"+interviewPodId+"_x"]);
+                vidContainer.setAttribute("y",canvas["interviewPod"+interviewPodId+"_y"]);
+                vidContainer.setAttribute("width",322);
+                vidContainer.setAttribute("height",281);
+            }
 
         ]]>
     </method>
@@ -185,7 +195,8 @@
                     width:videoWidth,
                     height:videoHeight,
                     x:freePos[0],
-                    y:freePos[1]
+                    y:freePos[1],
+                    isInterview:canvas.isInterview
                 });
         ]]>
     </method>
@@ -382,6 +393,18 @@
                 obj.setDefaultVideoSize(width,height);
                 obj.setAttribute('chatpartnername',firstname+' '+lastname);
             }
+            //we have to do this again when the stream starts, the initial video 
+            //component does not know the interviewPodId as the user has not selected 
+            //which interview video pod he is going to use
+            if (canvas.isInterview && interviewPodId != null && interviewPodId > 0) {
+                if ($debug) Debug.write("Is interview ",interviewPodId,"x",canvas["interviewPod"+interviewPodId+"_x"]);
+                obj.setAttribute("interviewPodId", interviewPodId);
+                obj.setAttribute("x",canvas["interviewPod"+interviewPodId+"_x"]);
+                obj.setAttribute("y",canvas["interviewPod"+interviewPodId+"_y"]);
+                obj.setAttribute("width",322);
+                obj.setAttribute("height",281);
+            }
+            
         ]]>
     </method>
 

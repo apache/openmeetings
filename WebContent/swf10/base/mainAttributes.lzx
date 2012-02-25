@@ -56,10 +56,10 @@
 	<!--
 	   Those values are fixed values of the video positions of the videos from the interview room type
 	 -->
-	<attribute name="interviewPod1_x" value="340.5" type="number" />
+	<attribute name="interviewPod1_x" value="320" type="number" />
 	<attribute name="interviewPod1_y" value="28" type="number" />
 	
-	<attribute name="interviewPod2_x" value="664.5" type="number" />
+	<attribute name="interviewPod2_x" value="644" type="number" />
     <attribute name="interviewPod2_y" value="28" type="number" />
 
 </library>
