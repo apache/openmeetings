@@ -95,6 +95,8 @@ Test the setup values before you enter a room
     </handler>
     
     <method name="justClose">
+    	this._enterMeeting.setAttribute("enabled",false);
+        this._cancel.setAttribute("enabled",false);
     	this.doJustClose = true;
         canvas._loadingAll.hideLoading();
         if ($debug) Debug.write("canvas.rtmp_lc_name", canvas.rtmp_lc_name, "closeInitTestingApplication");
@@ -112,6 +114,8 @@ Test the setup values before you enter a room
     
     <method name="storeSettings">
         <![CDATA[
+            this._enterMeeting.setAttribute("enabled",false);
+            this._cancel.setAttribute("enabled",false);
             canvas._loadingAll.hideLoading();
             canvas.lc.send(canvas.rtmp_lc_name, "closeInitTestingApplication");
         
