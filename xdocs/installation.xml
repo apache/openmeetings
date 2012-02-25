@@ -23,14 +23,15 @@
 				To update from past versions or migrate see
 				<a href="Upgrade.html">Upgrade</a>
 				.
-				If you are looking for commercial help you might contact
-				<a href="http://www.openmeetings.de" target="_BLANK" rel="nofollow">openmeetings.de
-				</a>
+				If you are looking for commercial help have a look at
+				<a href="commercial-support.html" target="_BLANK" rel="nofollow">commercial support
+				</a>.
 			</p>
 			<p>
 				<a href="downloads.html" rel="nofollow">
 					<img src="images/installation_instructions.png" alt="Grafik" />
 				</a>
+				<p><i>Note: OpenMeetings requires SUN JRE, not openJDK!</i></p>
 			</p>
 			<ol>
 				<li>
