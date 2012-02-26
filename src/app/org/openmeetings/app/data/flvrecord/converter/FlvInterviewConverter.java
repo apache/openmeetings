@@ -641,7 +641,7 @@ public class FlvInterviewConverter extends BaseConverter {
 			// Create the Content of the Converter Script (.bat or .sh File)
 			String fileContent = pathToIMagick + " " + file1 + " " + file2
 					+ " " + "+append" + " " + file3
-					+ ScopeApplicationAdapter.lineSeperator + "exit";
+					+ ScopeApplicationAdapter.lineSeperator + "";
 
 			File previous = new File(executable_fileName);
 			if (previous.exists()) {

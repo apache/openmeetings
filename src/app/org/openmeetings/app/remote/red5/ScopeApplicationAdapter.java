@@ -129,8 +129,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 
 			log.debug("webAppPath : " + webAppPath);
 			log.debug("batchFileFir : " + batchFileFir);
-			// batchFileFir = webAppPath + File.separatorChar + "jod" +
-			// File.separatorChar;
 
 			// Only load this Class one time
 			// Initially this value might by empty, because the DB is empty yet
@@ -1073,7 +1071,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
             // Put the mod-flag to true for this client
 		    this.clientListManager.updateClientByStreamId(
 		    		currentClient.getStreamid(), currentClient);
-
+		    
 			// Notify all clients of the same scope (room)
 			Collection<Set<IConnection>> conCollection = current.getScope()
 					.getConnections();
@@ -1083,20 +1081,23 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 						RoomClient rcl = this.clientListManager
 								.getClientByStreamId(conn.getClient().getId());
 						if (rcl == null) {
-							// continue;
+							continue;
 						} else if (rcl.getIsScreenClient() != null
 								&& rcl.getIsScreenClient()) {
-							// continue;
-						} else {
-							log.debug("Send Flag to Client: "
-									+ rcl.getUsername());
-							if (conn instanceof IServiceCapableConnection) {
-								((IServiceCapableConnection) conn).invoke(
-										"setNewBroadCastingFlag",
-										new Object[] { currentClient }, this);
-								log.debug("sending setNewBroadCastingFlag to "
-										+ conn);
-							}
+							continue;
+						} else if (rcl.getIsAVClient() != null
+								&& rcl.getIsAVClient()) {
+							continue;
+						}
+						
+						log.debug("Send Flag to Client: "
+								+ rcl.getUsername());
+						if (conn instanceof IServiceCapableConnection) {
+							((IServiceCapableConnection) conn).invoke(
+									"setNewBroadCastingFlag",
+									new Object[] { currentClient }, this);
+							log.debug("sending setNewBroadCastingFlag to "
+									+ conn);
 						}
 					}
 				}
@@ -1285,7 +1286,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	 */
 	public synchronized RoomClient setUserAVSettings(String avsettings,
 			Object newMessage, Integer vWidth, Integer vHeight, 
-			long room_id, String publicSID) {
+			long room_id, String publicSID, Integer interviewPodId) {
 		try {
 
 			IConnection current = Red5.getConnectionLocal();
@@ -1298,6 +1299,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			currentClient.setIsAVClient(true);
 			currentClient.setVWidth(vWidth);
 			currentClient.setVHeight(vHeight);
+			currentClient.setInterviewPodId(interviewPodId);
 			// Long room_id = currentClient.getRoom_id();
 			this.clientListManager.updateAVClientByStreamId(streamid,
 					currentClient);
@@ -2642,6 +2644,17 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			for (Set<IConnection> conset : conCollection) {
 				for (IConnection conn : conset) {
 					if (conn != null) {
+						
+						RoomClient rcl = this.clientListManager
+								.getClientByStreamId(conn.getClient().getId());
+						
+						if (rcl == null) {
+							continue;
+						} else if (rcl.getIsAVClient() == null || rcl.getIsAVClient()) {
+							continue;
+						} else if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+							continue;
+						}
 
 						((IServiceCapableConnection) conn).invoke(
 								"interviewStatus",

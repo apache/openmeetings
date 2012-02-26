@@ -73,9 +73,8 @@ public class FlvRecorderConverter extends BaseConverter {
 		List<HashMap<String, String>> returnLog = new LinkedList<HashMap<String, String>>();
 		List<String> listOfFullWaveFiles = new LinkedList<String>();
 		String streamFolderName = getStreamFolderName(flvRecording);
-		
-		stripAudioFirstPass(flvRecording, returnLog, listOfFullWaveFiles, streamFolderName);
 		try {
+			stripAudioFirstPass(flvRecording, returnLog, listOfFullWaveFiles, streamFolderName);
 
 			// Merge Wave to Full Length
 			String streamFolderGeneralName = getStreamFolderName();

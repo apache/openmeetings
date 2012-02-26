@@ -131,6 +131,7 @@
         <netparam><method name="getValue">return parent.parent.cam_default_height;</method></netparam>
         <netparam><method name="getValue">return parent.parent.cam_default_height;</method></netparam>
         <netparam><method name="getValue">return canvas.publicSID;</method></netparam>
+        <netparam><method name="getValue">return parent.parent.interviewPodId;</method></netparam>
         <handler name="ondata" args="value">
             <![CDATA[
                 if ($debug) Debug.write("setUserAVSettings",value);

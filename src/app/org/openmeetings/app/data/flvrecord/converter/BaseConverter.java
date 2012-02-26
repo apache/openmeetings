@@ -116,15 +116,21 @@ public abstract class BaseConverter {
 		}
 	}
 	
-	protected String[] mergeAudioToWaves(List<String> listOfFullWaveFiles, String outputFullWav) {
+	protected String[] mergeAudioToWaves(List<String> listOfFullWaveFiles, String outputFullWav) throws Exception {
 		String[] argv_full_sox = new String[listOfFullWaveFiles.size() + 3];
+		
+		log.debug(" listOfFullWaveFiles "+listOfFullWaveFiles.size()+" argv_full_sox LENGTH "+argv_full_sox.length);
+		
 		argv_full_sox[0] = getPathToSoX();
 		argv_full_sox[1] = "-m";
 
 		int i = 0;
-		for (;i < listOfFullWaveFiles.size(); ++i) {
+		for (;i < listOfFullWaveFiles.size(); i++) {
+			log.debug(" i "+i+" = "+listOfFullWaveFiles.get(i));
 			argv_full_sox[2 + i] = listOfFullWaveFiles.get(i);
 		}
+		log.debug(" i + 3 "+(i+3)+" "+outputFullWav);
+		
 		argv_full_sox[i + 3] = outputFullWav;
 		
 		return argv_full_sox;
@@ -132,7 +138,7 @@ public abstract class BaseConverter {
 	
 	protected void stripAudioFirstPass(FlvRecording flvRecording,
 			List<HashMap<String, String>> returnLog,
-			List<String> listOfFullWaveFiles, String streamFolderName) {
+			List<String> listOfFullWaveFiles, String streamFolderName) throws Exception {
 		List<FlvRecordingMetaData> metaDataList = flvRecordingMetaDataDaoImpl
 				.getFlvRecordingMetaDataAudioFlvsByRecording(flvRecording
 						.getFlvRecordingId());

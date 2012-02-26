@@ -28,6 +28,7 @@ import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDeltaDaoImpl;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingMetaDelta;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.io.ITag;
+import org.red5.io.flv.impl.FLVWriter;
 import org.red5.io.flv.impl.Tag;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IScope;
@@ -337,7 +338,11 @@ public class StreamAudioListener extends ListenerAdapter {
 				tag.setBodySize(data.limit());
 				tag.setTimestamp(timeStamp);
 				tag.setBody(data);
-
+				
+				if (this.isClosed) {
+					throw new Exception("Stream was already closed");
+				}
+				
 				writer.writeTag(tag);
 
 			}

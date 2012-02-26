@@ -146,6 +146,10 @@ public class StreamScreenListener extends ListenerAdapter {
 					return;
 				}
 			}
+			
+			if (this.isClosed) {
+				throw new Exception("Stream was already closed");
+			}
 
 			writer.writeTag(tag);
 
