@@ -22,8 +22,8 @@
 			<p>You can find all current language files here: </p>
 			<p>
 				<a
-					href="http://openmeetings.googlecode.com/svn/trunk/singlewebapp/WebContent/languages/"
-					rel="nofollow">http://openmeetings.googlecode.com/svn/trunk/singlewebapp/WebContent/languages/
+					href="https://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/WebContent/languages/"
+					rel="nofollow">https://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/WebContent/languages/
 				</a>
 			</p>
 			<p>Just take one file and translate it to your language. </p>
@@ -49,8 +49,8 @@
 			<p>
 				Once you have finished the translation you can add a new node to:
 				<a
-					href="http://openmeetings.googlecode.com/svn/trunk/singlewebapp/WebContent/languages/languages.xml"
-					rel="nofollow">http://openmeetings.googlecode.com/svn/trunk/singlewebapp/WebContent/languages/languages.xml
+					href="https://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/WebContent/languages/languages.xml"
+					rel="nofollow">https://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/WebContent/languages/languages.xml
 				</a>
 			</p>
 			<p>the name of the language should match the name of the file. Once
