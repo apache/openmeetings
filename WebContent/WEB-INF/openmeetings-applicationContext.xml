@@ -89,14 +89,12 @@
 	<bean id="fieldLanguageDaoImpl" class="org.openmeetings.app.data.basic.FieldLanguageDaoImpl"/>
 	<bean id="fieldmanagment" class="org.openmeetings.app.data.basic.Fieldmanagment"/>
 	<bean id="cfgManagement" class="org.openmeetings.app.data.basic.Configurationmanagement"/>
-	<bean id="recordingDao" class="org.openmeetings.app.data.record.dao.RecordingDaoImpl"/>
 	<bean id="appointmentDao" class="org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl"/>
 	<bean id="appointmentLogic" class="org.openmeetings.app.data.calendar.management.AppointmentLogic"/>
 	<bean id="meetingMemberLogic" class="org.openmeetings.app.data.calendar.management.MeetingMemberLogic"/>
 	<bean id="sessionManagement" class="org.openmeetings.app.data.basic.Sessionmanagement"/>
 	<bean id="userManagement" class="org.openmeetings.app.data.user.Usermanagement"/>
 	<bean id="roomModeratorsDao" class="org.openmeetings.app.data.conference.dao.RoomModeratorsDaoImpl"/>
-	<bean id="chatValuesEventDao" class="org.openmeetings.app.data.record.dao.ChatvaluesEventDaoImpl"/>
 	<bean id="conferenceLogDao" class="org.openmeetings.app.data.logs.ConferenceLogDaoImpl"/>
 	<bean id="conferenceLogTypeDao" class="org.openmeetings.app.data.logs.ConferenceLogTypeDaoImpl"/>
 	<bean id="emailManagement" class="org.openmeetings.app.data.user.Emailmanagement"/>
@@ -111,25 +109,17 @@
 	<bean id="openXGReturnObjectDao" class="org.openmeetings.app.sip.xmlrpc.custom.dao.OpenXGReturnObjectDaoImpl"/>
 	<bean id="privateMessageFolderDao" class="org.openmeetings.app.data.user.dao.PrivateMessageFolderDaoImpl"/>
 	<bean id="privateMessagesDao" class="org.openmeetings.app.data.user.dao.PrivateMessagesDaoImpl"/>
-	<bean id="recordingClientDao" class="org.openmeetings.app.data.record.dao.RecordingClientDaoImpl"/>
-	<bean id="recordingConversionJobDao" class="org.openmeetings.app.data.record.dao.RecordingConversionJobDaoImpl"/>
-	<bean id="roomClientDao" class="org.openmeetings.app.data.record.dao.RoomClientDaoImpl"/>
-	<bean id="roomRecordingDao" class="org.openmeetings.app.data.record.dao.RoomRecordingDaoImpl"/>
-	<bean id="roomStreamDao" class="org.openmeetings.app.data.record.dao.RoomStreamDaoImpl"/>
 	<bean id="soapLoginDao" class="org.openmeetings.app.data.basic.dao.SOAPLoginDaoImpl"/>
 	<bean id="userContactsDao" class="org.openmeetings.app.data.user.dao.UserContactsDaoImpl"/>
 	<bean id="userSipDataDao" class="org.openmeetings.app.data.user.dao.UserSipDataDaoImpl"/>
 	<bean id="usersDao" class="org.openmeetings.app.data.user.dao.UsersDaoImpl"/>
-	<bean id="whiteBoardEventDao" class="org.openmeetings.app.data.record.dao.WhiteBoardEventDaoImpl"/>
 	
 	<!-- No Interface -->
 	<bean id="manageCryptStyle" class="org.openmeetings.utils.crypt.ManageCryptStyle" />
 	<bean id="openXGHttpClient" class="org.openmeetings.app.sip.xmlrpc.OpenXGHttpClient" />
-	<bean id="whiteboardConvertionJobManager" class="org.openmeetings.app.data.record.WhiteboardConvertionJobManager" />
 	<bean id="generateImage" class="org.openmeetings.app.documents.GenerateImage" />
 	<bean id="generateThumbs" class="org.openmeetings.app.documents.GenerateThumbs" />
 	<bean id="generatePDF" class="org.openmeetings.app.documents.GeneratePDF" />
-	<bean id="whiteboardConvertionJobManagerSWFTools" class="org.openmeetings.app.data.record.WhiteboardConvertionJobManagerSWFTools" />
 	<bean id="mailHandler" class="org.openmeetings.utils.mail.MailHandler" />
 	<bean id="feedbackManagement" class="org.openmeetings.app.data.conference.Feedbackmanagement" />
 	<bean id="importInitvalues" class="org.openmeetings.app.installation.ImportInitvalues" />
