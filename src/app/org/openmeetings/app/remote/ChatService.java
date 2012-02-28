@@ -159,9 +159,6 @@ public class ChatService implements IPendingServiceCallback {
 	    						if (room_id!=null && room_id.equals(rcl.getRoom_id())) {
 	    							((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient",new Object[] { hsm }, this);
 	    							log.debug("sending sendVarsToMessageWithClient to " + conn);
-	    							if (rcl.getIsRecording()){
-	    								StreamService.addChatEvent(rcl.getRoomRecordingName(),hsm);
-	    							}							
 	    						} else if (rcl.getIsChatNotification()) {
 	    							if (room_id.equals(rcl.getChatUserRoomId()) && room_id != null) {
 	    								((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient",new Object[] { hsm }, this);
