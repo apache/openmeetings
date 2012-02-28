@@ -289,6 +289,9 @@
 		<dependency org="xpp3" name="xpp3" rev="1.1.4c" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
+		<dependency org="javax.mail" name="mail" rev="1.4.4" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
 
 			<!-- include type="bundle" / FIXME unable to get openjpa without  sources -->
 		<dependency org="org.mnode.ical4j" name="ical4j" rev="1.0.3" conf="openmeetings.ext->*" transitive="false"/>
