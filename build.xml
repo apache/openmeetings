@@ -93,6 +93,7 @@
 	<property name="red5-screenshare.images" value="${basedir}/WebContent/red5-screenshare" />
 	<property name="junit.lib.dir" value="${project.lib}/junit" />
 	<property name="rat.lib.dir" value="${project.lib}/rat" />
+	<property name="dtd-generator.lib.dir" value="${project.lib}/dtd-generator" />
 	
 	<property name="red5.lib" value="${basedir}/${red5.server.dir}/dist" />
 	<property name="red5.server.lib" value="${red5.lib}/lib" />
@@ -181,6 +182,7 @@
 		<mkdir dir="${red5-screenshare.lib.dir}" />
 		<mkdir dir="${junit.lib.dir}" />
 		<mkdir dir="${rat.lib.dir}" />
+		<mkdir dir="${dtd-generator.lib.dir}" />
 	</target>
 
 	<condition property="db.provider" value="${db}" else="derby">
@@ -856,6 +858,13 @@
 			<param name="ivy.lib.location" value="${rat.lib.dir}"/>
 		</antcall>
 	</target>
+	<!-- Check for dtd-generator libraries -->
+	<target name="-retrieve-dtd-generator" unless="dtd-generator.installed" description="Retrieves the libraries if needed" depends="prepare.mkdir">
+		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
+			<param name="ivy.conf.name" value="dtd"/>
+			<param name="ivy.lib.location" value="${dtd-generator.lib.dir}"/>
+		</antcall>
+	</target>
 
 	<target name="ivyclear" description="Clears out the Ivy cache">
 		<delete dir="${user.home}/.ivy2/cache/red5"/>
@@ -871,5 +880,6 @@
 		<antcall target="-retrieve-red5" inheritAll="true" inheritRefs="true"/>
 		<antcall target="-retrieve-om" inheritAll="true" inheritRefs="true"/>
 		<antcall target="-retrieve-junit" inheritAll="true" inheritRefs="true"/>
+		<antcall target="-retrieve-dtd-generator" inheritAll="true" inheritRefs="true"/>
 	</target>
 </project>

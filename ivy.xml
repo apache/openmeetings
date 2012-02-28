@@ -27,6 +27,7 @@
 		<conf name="openmeetings.axis2" description="Axis required libraries with dependencies" />
 		<conf name="junit" description="Unit testing dependencies" />
 		<conf name="rat" description="Apache Rat dependencies" />
+		<conf name="dtd" description="Dtd-generator dependencies" />
 	</configurations>
 	<dependencies>
 		<!--  START OF RED5 -->
@@ -293,6 +294,9 @@
 		<dependency org="org.mnode.ical4j" name="ical4j" rev="1.0.3" conf="openmeetings.ext->*" transitive="false"/>
 		<dependency org="org.apache.openjpa" name="openjpa" rev="2.2.0" conf="openmeetings.ext->*" transitive="false"/>
 		
+		<dependency org="javax.servlet" name="servlet-api" rev="2.5" conf="openmeetings.axis2->*" transitive="false">
+			<include type="jar" />
+		</dependency>
 		<dependency org="org.apache.ws.commons.axiom" name="axiom-impl" rev="1.2.12" conf="openmeetings.axis2->*" transitive="true"/>
 		<dependency org="org.apache.axis2" name="axis2-transport-http" rev="1.6.1" conf="openmeetings.axis2->*"/>
 		<dependency org="org.apache.axis2" name="axis2-transport-local" rev="1.6.1" conf="openmeetings.axis2->*"/>
@@ -320,6 +324,12 @@
 			<include type="jar" />
 		</dependency>
 		<!--  END OF RAT -->
+		
+		<!--  START OF DTD -->
+		<dependency org="com.thaiopensource" name="trang" rev="20091111" conf="dtd->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<!--  END OF DTD -->
 	</dependencies>
 </ivy-module>
 
