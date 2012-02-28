@@ -92,30 +92,14 @@
 	<property name="red5-screenshare.lib.dir" value="${project.lib}/red5-screenshare" />
 	<property name="red5-screenshare.images" value="${basedir}/WebContent/red5-screenshare" />
 	<property name="junit.lib.dir" value="${project.lib}/junit" />
+	<property name="rat.lib.dir" value="${project.lib}/rat" />
 	
-	<!-- Open JPA -->
-	<property name="openjpa.lib" value="${project.lib}/openjpa2" />
-	<!--JDBC Drivers-->
-	<property name="database.lib" value="${project.lib}/database" />
 	<property name="red5.lib" value="${basedir}/${red5.server.dir}/dist" />
 	<property name="red5.server.lib" value="${red5.lib}/lib" />
 	<property name="spring.lib" value="${project.lib}/spring" />
 	<property name="upload.lib" value="${project.lib}/upload" />
 	<property name="xstream.lib" value="${project.lib}/xstream" />
 	<property name="web.lib" value="${project.lib}" />
-	<property name="ical.lib" value="${project.lib}/ical4j" />
-	<!-- Apache Axis2 -->
-	<property name="axis2.lib" value="${project.lib}/axis2-1.6" />
-	<!-- SLF4J -->
-	<property name="slf4j.lib" value="${project.lib}/slf4j" />
-	<!-- Apache Velocity -->
-	<property name="velocity.lib" value="${project.lib}/velocity" />
-	<!-- Apache Batik -->
-	<property name="batik.lib" value="${project.lib}/batik_17" />
-	<!-- Mina -->
-	<property name="mina.lib" value="${project.lib}/mina" />
-	<!-- Apache RAT -->
-	<property name="rat.lib" value="${project.lib}/rat" />
 	<!-- Svn Task -->
 	<property name="svntask.lib" value="${project.lib}/svntask-1.0.8" />
 
@@ -196,6 +180,7 @@
 		<mkdir dir="${anakia.lib.dir}" />
 		<mkdir dir="${red5-screenshare.lib.dir}" />
 		<mkdir dir="${junit.lib.dir}" />
+		<mkdir dir="${rat.lib.dir}" />
 	</target>
 
 	<condition property="db.provider" value="${db}" else="derby">
@@ -216,9 +201,9 @@
 			<fileset dir="${red5.server.dir}/dist" includes="red5.jar" />
 			<fileset dir="${om.lib.dir}" includes="org.springframework.context-*.jar" />
 			<fileset dir="${om.lib.dir}" includes="org.springframework.core-*.jar" />
-			<fileset dir="${slf4j.lib}" includes="logback*.jar" />
-			<fileset dir="${mina.lib}" includes="mina-core*.jar" />
-			<fileset dir="${slf4j.lib}" includes="slf4j-api*.jar" />
+			<fileset dir="${red5.lib.dir}" includes="logback*.jar" />
+			<fileset dir="${red5.lib.dir}" includes="mina-core*.jar" />
+			<fileset dir="${red5.lib.dir}" includes="com.springsource.slf4j.api*.jar" />
 		</copy>
 		<copy todir="${red5.root}" filtering="true">
 			<fileset dir="${red5.server.dir}/dist">
@@ -564,11 +549,11 @@
 	<!-- Build entire project -->
 	<target name="build project" depends="clean, prepare, compile" />
 
-	<target name="report_rat">
+	<target name="report_rat" depends="-retrieve-rat">
 		<!-- define the RAT task -->
 		<taskdef uri="antlib:org.apache.rat.anttasks" resource="org/apache/rat/anttasks/antlib.xml">
 			<classpath>
-				<fileset dir="${rat.lib}" includes="*.jar" />
+				<fileset dir="${rat.lib.dir}" includes="*.jar" />
 				<path refid="compile.classpath" />
 			</classpath>
 		</taskdef>
@@ -862,6 +847,13 @@
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
 			<param name="ivy.conf.name" value="junit"/>
 			<param name="ivy.lib.location" value="${junit.lib.dir}"/>
+		</antcall>
+	</target>
+	<!-- Check for rat libraries -->
+	<target name="-retrieve-rat" unless="rat.installed" description="Retrieves the libraries if needed" depends="prepare.mkdir">
+		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
+			<param name="ivy.conf.name" value="rat"/>
+			<param name="ivy.lib.location" value="${rat.lib.dir}"/>
 		</antcall>
 	</target>
 

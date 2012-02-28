@@ -26,6 +26,7 @@
 		<conf name="openmeetings.ext" description="Openmeetings required libraries with different pattern" />
 		<conf name="openmeetings.axis2" description="Axis required libraries with dependencies" />
 		<conf name="junit" description="Unit testing dependencies" />
+		<conf name="rat" description="Apache Rat dependencies" />
 	</configurations>
 	<dependencies>
 		<!--  START OF RED5 -->
@@ -307,6 +308,18 @@
 			<include type="jar" />
 		</dependency>
 		<!--  END OF JUNIT -->
+		
+		<!--  START OF RAT -->
+		<dependency org="org.apache.rat" name="apache-rat-core" rev="0.8" conf="rat->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.rat" name="apache-rat-tasks" rev="0.8" conf="rat->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="commons-cli" name="commons-cli" rev="1.2" conf="rat->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<!--  END OF RAT -->
 	</dependencies>
 </ivy-module>
 
