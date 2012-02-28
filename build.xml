@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
 <!DOCTYPE project>
-<project name="openmeetings" basedir="./" default="dist" xmlns:rat="antlib:org.apache.rat.anttasks" xmlns="antlib:org.apache.tools.ant">
+<project name="openmeetings" basedir="./" default="dist"
+	xmlns:rat="antlib:org.apache.rat.anttasks"
+	xmlns="antlib:org.apache.tools.ant"
+	xmlns:ivy="antlib:org.apache.ivy.ant"
+	>
 
 	<!-- Sources and output dirs -->
 	<property name="main.src.dir" value="${basedir}/src/app" />
@@ -17,12 +34,11 @@
 	<property name="screen.src.dir" value="${basedir}/src/red5-screenshare" />
 
 	<!-- hudson config -->
-	<!-- FIXME -->
+	<!-- FIXME hardcoded version -->
 	<property name="version.number" value="2.0" />
 	<property environment="env" />
 
 	<property name="build.number.hudson" value="${env.BUILD_NUMBER}" />
-	<property name="build.svn.hudson" value="${env.SVN_REVISION}" />
 	<property name="build.target" value="/home/swagner/apache-tomcat-6.0.18/webapps/openmeetings/builds/" />
 
 	<!-- Axis2 Services -->
@@ -69,7 +85,14 @@
 		<fileset dir="${laszlo.home}/WEB-INF/lib" includes="mxmlc*.jar flex-messaging-common.jar swfutils.jar asc.jar
 			fxgutils.jar" />
 	</path>
-
+	
+	<property name="red5.lib.dir" value="${project.lib}/red5" />
+	<property name="om.lib.dir" value="${project.lib}/om" />
+	<property name="anakia.lib.dir" value="${project.lib}/anakia" />
+	<property name="red5-screenshare.lib.dir" value="${project.lib}/red5-screenshare" />
+	<property name="red5-screenshare.images" value="${basedir}/WebContent/red5-screenshare" />
+	<property name="junit.lib.dir" value="${project.lib}/junit" />
+	
 	<!-- Open JPA -->
 	<property name="openjpa.lib" value="${project.lib}/openjpa2" />
 	<!--JDBC Drivers-->
@@ -89,8 +112,6 @@
 	<property name="velocity.lib" value="${project.lib}/velocity" />
 	<!-- Apache Batik -->
 	<property name="batik.lib" value="${project.lib}/batik_17" />
-	<!-- Junit -->
-	<property name="junit.lib" value="${project.lib}/junit" />
 	<!-- Mina -->
 	<property name="mina.lib" value="${project.lib}/mina" />
 	<!-- Apache RAT -->
@@ -98,31 +119,17 @@
 	<!-- Svn Task -->
 	<property name="svntask.lib" value="${project.lib}/svntask-1.0.8" />
 
-	<!-- screenshare.lib -->
-	<property name="screenshare.lib" value="${basedir}/WebContent/red5-screenshare" />
 	<!-- JDK Tools -->
 	<property name="jdk.tools" value="${project.lib}/java_16_jdk" />
 
 	<!-- compile classpath -->
 	<path id="compile.classpath">
-		<fileset dir="${openjpa.lib}" includes="*.jar" />
-		<fileset dir="${spring.lib}" includes="*.jar" />
-		<fileset dir="${project.lib}" includes="*.jar" />
+		<fileset dir="${red5.lib.dir}" includes="*.jar" />
+		<fileset dir="${om.lib.dir}" includes="*.jar" />
 		<fileset dir="${red5.lib}" includes="*.jar" />
-		<fileset dir="${red5.server.lib}" includes="*.jar" />
-		<fileset dir="${upload.lib}" includes="*.jar" />
-		<fileset dir="${xstream.lib}" includes="*.jar" />
-		<fileset dir="${junit.lib}" includes="*.jar" excludes="red5.jar" />
-		<fileset dir="${web.lib}" includes="*.jar" />
-		<fileset dir="${slf4j.lib}" includes="*.jar" />
-		<fileset dir="${axis2.lib}" includes="*.jar" />
-		<fileset dir="${velocity.lib}" includes="*.jar" />
-		<fileset dir="${batik.lib}" includes="*.jar" />
-		<fileset dir="${ical.lib}" includes="*.jar" />
-		<fileset dir="${mina.lib}" includes="*.jar" />
-		<fileset dir="${junit.lib}" includes="*.jar" />
-		<fileset dir="${screenshare.lib}" includes="*kunststoff.jar" />
-		<fileset dir="${jdk.tools}" includes="*.jar" />
+		<fileset dir="${red5-screenshare.lib.dir}" includes="*.jar" />
+		<fileset dir="${junit.lib.dir}" includes="*.jar" />
+		<fileset dir="${project.lib}" includes="*.jar" excludes="ivy*.jar" />
 	</path>
 
 	<!-- build artefacts -->
@@ -161,7 +168,16 @@
 	<!-- build webapp -->
 
 	<target name="dist" description="binary distribution of OpenMeetings"
-		depends="cleanForBinary, jar, compile.laszlo.main, compile.laszlo.main.as3, enhance, signWebStartJars"/>
+		depends="cleanForBinary, jar, compile.laszlo.main, compile.laszlo.main.as3, enhance, signWebStartJars">
+		
+		<copy todir="${dist.dir}/red5/lib">
+			<fileset dir="${red5.lib.dir}" includes="*.jar" />
+		</copy>
+		<copy todir="${dist.webapps.dir}/WEB-INF/lib">
+			<fileset dir="${om.lib.dir}" includes="*.jar" />
+		</copy>
+
+	</target>
 
 	<!-- compiles the sources without the laszlo client -->
 	<target name="dist-test" description="binary distribution of OpenMeetings"
@@ -171,10 +187,15 @@
 	<target name="dist-debug" description="binary distribution of OpenMeetings"
 		depends="cleanForBinary, jar, compile.laszlo.main.debug, compile.laszlo.main.debug.as3, signWebStartJars"/>
 
-	<target name="prepare.mkdir">
+	<target name="prepare.mkdir" depends="-java6.check">
 		<mkdir dir="${screen.out.dir}" />
 		<mkdir dir="${dist.dir}" />
 		<mkdir dir="${main.out.dir}" />
+		<mkdir dir="${red5.lib.dir}" />
+		<mkdir dir="${om.lib.dir}" />
+		<mkdir dir="${anakia.lib.dir}" />
+		<mkdir dir="${red5-screenshare.lib.dir}" />
+		<mkdir dir="${junit.lib.dir}" />
 	</target>
 
 	<condition property="db.provider" value="${db}" else="derby">
@@ -184,16 +205,17 @@
 	<!-- Check timestamp on files -->
 	<target name="prepare" depends="prepare.mkdir">
 		<copy todir="${screenshare.out.dir}" filtering="true">
-			<fileset dir="${screenshare.lib}" />
-			<fileset dir="${red5.server.dir}/dist/lib" includes="commons-codec*.jar" />
-			<fileset dir="${red5.server.dir}/dist/lib" includes="httpclient*.jar" />
-			<fileset dir="${red5.server.dir}/dist/lib" includes="httpcore*.jar" />
-			<fileset dir="${red5.server.dir}/dist/lib" includes="bcprov-jdk16*.jar" />
-			<fileset dir="${red5.server.dir}/dist/lib" includes="ehcache-core*.jar" />
-			<fileset dir="${red5.server.dir}/dist/lib" includes="commons-beanutils*.jar" />
+			<fileset dir="${red5-screenshare.lib.dir}" includes="*.jar" />
+			<fileset dir="${red5-screenshare.images}" />
+			<fileset dir="${red5.lib.dir}" includes="commons-codec*.jar" />
+			<fileset dir="${red5.lib.dir}" includes="httpclient*.jar" />
+			<fileset dir="${red5.lib.dir}" includes="httpcore*.jar" />
+			<fileset dir="${red5.lib.dir}" includes="bcprov-jdk16*.jar" />
+			<fileset dir="${red5.lib.dir}" includes="ehcache-core*.jar" />
+			<fileset dir="${red5.lib.dir}" includes="commons-beanutils*.jar" />
 			<fileset dir="${red5.server.dir}/dist" includes="red5.jar" />
-			<fileset dir="${spring.lib}" includes="org.springframework.context-*.jar" />
-			<fileset dir="${spring.lib}" includes="org.springframework.core-*.jar" />
+			<fileset dir="${om.lib.dir}" includes="org.springframework.context-*.jar" />
+			<fileset dir="${om.lib.dir}" includes="org.springframework.core-*.jar" />
 			<fileset dir="${slf4j.lib}" includes="logback*.jar" />
 			<fileset dir="${mina.lib}" includes="mina-core*.jar" />
 			<fileset dir="${slf4j.lib}" includes="slf4j-api*.jar" />
@@ -205,23 +227,6 @@
 		</copy>
 		<copy todir="${dist.webapps.dir}">
 			<fileset dir="${webcontent.src.dir}/openmeetings" />
-		</copy>
-		<copy todir="${dist.dir}/red5/lib">
-			<fileset dir="${spring.lib}" />
-			<fileset dir="${slf4j.lib}" />
-			<fileset dir="${mina.lib}" />
-		</copy>
-
-		<!-- this package contains the javax.persistance.* API of JAVA-EE-6 -->
-		<copy file="${openjpa.lib}/geronimo-jpa_2.0_spec-1.1.jar" todir="${dist.dir}/red5/lib" />
-
-		<copy todir="${dist.webapps.dir}/WEB-INF/lib">
-			<fileset dir="${openjpa.lib}">
-				<include name="*.jar" />
-				<exclude name="commons-collections-3.2.1.jar" />
-				<!-- this jar is already in the servers-lib -->
-				<exclude name="geronimo-jpa_2.0_spec-1.1.jar" />
-			</fileset>
 		</copy>
 
 		<copy todir="${dist.webapps.dir}/WEB-INF/red5-services">
@@ -241,18 +246,6 @@
 		</copy>
 
 		<chmod dir="${dist.dir}/red5" perm="755" includes="**/*.sh" />
-
-		<copy todir="${dist.webapps.dir}/WEB-INF/lib">
-			<fileset dir="${axis2.lib}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${velocity.lib}" />
-			<fileset dir="${batik.lib}" />
-			<fileset dir="${upload.lib}" />
-			<fileset dir="${xstream.lib}" />
-			<fileset dir="${database.lib}" />
-			<fileset dir="${ical.lib}" />
-		</copy>
 
 		<copy todir="${dist.webapps.dir}/WEB-INF/classes/META-INF">
 			<fileset file="src/META-INF/*.xml">
@@ -465,9 +458,8 @@
 	</target>
 
 	<target name="compile" depends="prepare, compile.only" />
-	<!-- Normal build of application
-    compiler="org.eclipse.jdt.core.JDTCompilerAdapter" -->
-	<target name="compile.only" depends="compile.screen.share">
+
+	<target name="compile.only" depends="-retrieve-red5,-retrieve-om,-retrieve-junit,compile.screen.share">
 		<echo message="Compile main to ${main.out.dir}">
 		</echo>
 		<javac debug="on" debuglevel="lines,vars,source" destdir="${main.out.dir}">
@@ -498,7 +490,7 @@
 		</javac>
 	</target>
 
-	<target name="compile.screen.share" depends="clean.classes, prepare.mkdir, resources">
+	<target name="compile.screen.share" depends="-retrieve-red5-screenshare,clean.classes, prepare.mkdir, resources">
 		<echo message="Compile screen share to ${screen.out.dir}" />
 		<!-- compile screen share -->
 		<javac debug="on" debuglevel="lines,vars,source" srcdir="${screen.src.dir}" destdir="${screen.out.dir}">
@@ -513,11 +505,6 @@
 
 			<test name="org.openmeetings.server.TestSocket" />
 		</junit>
-	</target>
-
-	<target name="hudson" depends="dist">
-		<mkdir dir="${build.target}${build.number.hudson}" />
-		<zip destfile="${build.target}${build.number.hudson}/openmeetings_r${build.svn.hudson}.zip" basedir="${dist.dir}/red5" />
 	</target>
 
 	<!-- Remove classes directory for clean build -->
@@ -535,22 +522,22 @@
 		<delete dir="${basedir}/log" />
 		<delete file="filetest.keystore" />
 		<delete file="derby.log" />
+		<delete file="velocity.log" />
 	</target>
 
 	<path id="jpa.enhancement.classpath">
 		<pathelement path="${classes.dir}" />
-		<!-- lib contains all of the jars that came with the OpenJPA binary download -->
-		<fileset dir="${openjpa.lib}" includes="*.jar" />
+		<path refid="compile.classpath" />
 	</path>
-
-	<!-- define the openjpac task -->
-	<taskdef name="openjpac" classname="org.apache.openjpa.ant.PCEnhancerTask">
-		<classpath refid="jpa.enhancement.classpath" />
-	</taskdef>
 
 	<target name="enhance" depends="compile, enhance.only" />
 
 	<target name="enhance.only" depends="compile.only">
+		<!-- define the openjpac task -->
+		<taskdef name="openjpac" classname="org.apache.openjpa.ant.PCEnhancerTask">
+			<classpath refid="jpa.enhancement.classpath" />
+		</taskdef>
+
 		<!-- invoke the enhancer -->
 		<openjpac>
 			<classpath refid="jpa.enhancement.classpath" />
@@ -577,15 +564,15 @@
 	<!-- Build entire project -->
 	<target name="build project" depends="clean, prepare, compile" />
 
-	<!-- define the RAT task -->
-	<taskdef uri="antlib:org.apache.rat.anttasks" resource="org/apache/rat/anttasks/antlib.xml">
-		<classpath>
-			<fileset dir="${rat.lib}" includes="*.jar" />
-			<path refid="compile.classpath" />
-		</classpath>
-	</taskdef>
-
 	<target name="report_rat">
+		<!-- define the RAT task -->
+		<taskdef uri="antlib:org.apache.rat.anttasks" resource="org/apache/rat/anttasks/antlib.xml">
+			<classpath>
+				<fileset dir="${rat.lib}" includes="*.jar" />
+				<path refid="compile.classpath" />
+			</classpath>
+		</taskdef>
+
 		<rat:report>
 			<fileset dir="${main.src.dir}" />
 			<fileset dir="${templates.src.dir}" />
@@ -597,8 +584,6 @@
 			<fileset dir="${calendarservice.src.dir}" />
 		</rat:report>
 	</target>
-
-	<!--  depends="compile" depends="compile.only" -->
 
 	<path id="build.webservice.classpath">
 		<pathelement path="${classes.dir}" />
@@ -621,20 +606,20 @@
 
 	<!-- Anakia Build classpath -->
 	<path id="anakia.classpath">
-		<fileset dir="./lib/anakia">
-			<include name="**/*.jar" />
-		</fileset>
+		<path refid="compile.classpath" />
+		<fileset dir="${anakia.lib.dir}" includes="*.jar" />
+		<fileset dir="${red5.lib.dir}" includes="commons-collections*.jar,commons-lang*.jar,velocity*.jar" />
+		
 	</path>
 
-	<taskdef name="anakia" classname="org.apache.velocity.anakia.AnakiaTask">
+    <target name="anakia" depends="-retrieve-red5,-retrieve-om,-retrieve-anakia">
+    	<taskdef name="anakia" classname="org.apache.velocity.anakia.AnakiaTask">
+			<classpath>
+				<path refid="anakia.classpath" />
+			</classpath>
+    	</taskdef>
+    	
 
-		<classpath>
-			<path refid="anakia.classpath" />
-		</classpath>
-
-	</taskdef>
-
-    <target name="anakia">
 		<anakia basedir="${docs.src}" destdir="${docs.dest}/" extension=".html" style="./site.vsl" projectFile="stylesheets/project.xml" excludes="**/stylesheets/** empty.xml" includes="**/*.xml" lastModifiedCheck="true" templatePath="xdocs/stylesheets">
 		</anakia>
     </target>
@@ -759,5 +744,140 @@
 		<antcall target="test">
 			<param name="junit.test.pattern" value="TestSmoke*" />
 		</antcall>
+	</target>
+
+
+	<property name="ivy.jar" value="ivy-2.2.0.jar"/>
+	<taskdef uri="antlib:org.apache.ivy.ant" resource="org/apache/ivy/ant/antlib.xml"
+		classpath="${project.lib}/${ivy.jar}"/>
+	<property name="ivy.lib.dir" value="${project.lib}"/>
+
+	<!-- !!!!!!!!!! FIXME !!!!!!!! Check for the main libraries -->
+
+	<!-- Build Targets -->
+	<target name="-java6.check">
+		<condition property="java6.installed" value="true">
+			<and>
+               	<equals arg1="${java.specification.version}" arg2="1.6"/>
+				<matches string="${java.vm.specification.vendor}" pattern=".*[sun,oracle].*" casesensitive="false"
+			           singleline="true"/>
+				<available property="java6.installed" classname="javax.script.Bindings"/>
+			</and>
+		</condition>
+		<echo message="Using Java ${java.version} specification: ${java.specification.version}"/>
+		<fail message="Unsupported Java version - detected: ${java.version} selected: 1.6. Only Java compiler version 1.6 supported."> 
+            <condition> 
+            	<not>
+                   	<equals arg1="${java6.installed}" arg2="true"/>
+            	</not>
+            </condition> 
+        </fail> 
+	</target>
+	
+	<target name="-retrieve" description="Retrieves the libraries if needed">
+		<condition property="ivy.conf.name" value="red5">
+			<not>
+				<isset property="ivy.conf.name"/>
+			</not>
+		</condition>
+		<condition property="ivy.lib.location" value="${red5.lib.dir}">
+			<not>
+				<isset property="ivy.lib.location"/>
+			</not>
+		</condition>
+		<condition property="ivy.lib.pattern" value="[artifact]-[revision].[ext]">
+			<not>
+				<isset property="ivy.lib.pattern"/>
+			</not>
+		</condition>
+		<condition property="ivy.transitive" value="false">
+			<not>
+				<isset property="ivy.transitive"/>
+			</not>
+		</condition>
+		<echo message="Ivy conf name: ${ivy.conf.name}, destination: ${ivy.lib.location}"/>
+		<ivy:resolve file="ivy.xml" conf="${ivy.conf.name}" checkIfChanged="false" transitive="${ivy.transitive}" />
+		<ivy:retrieve conf="${ivy.conf.name}" pattern="${ivy.lib.location}/${ivy.lib.pattern}" />
+	</target>
+	
+	<!-- Check for the Red5 libraries -->
+	<target name="-retrieve-red5" unless="red5.installed" description="Retrieves the libraries if needed" depends="prepare.mkdir">
+		<!-- Ivy configuration - http://ant.apache.org/ivy/history/trunk/ant.html -->
+		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
+			<param name="ivy.conf.name" value="red5"/>
+			<param name="ivy.lib.location" value="${red5.lib.dir}"/>
+		</antcall>
+		<jar destfile="${red5.lib.dir}/javaee-api-5.1.2.om.jar">
+		    <zipfileset src="${red5.lib.dir}/javaee-api-5.1.2.jar" excludes="javax/persistence/**/*.*"/>
+		</jar>
+		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
+			<param name="ivy.conf.name" value="red5.ext"/>
+			<param name="ivy.lib.location" value="${red5.lib.dir}"/>
+			<param name="ivy.lib.pattern" value="[artifact]-[type]-[revision].[ext]"/>
+		</antcall>
+		<delete>
+			<fileset dir="${om.lib.dir}" includes="*-source*.jar"/>
+			<fileset dir="${om.lib.dir}" includes="*-javadoc*.jar"/>
+		</delete>
+		<delete file="${red5.lib.dir}/javaee-api-5.1.2.jar" />
+	</target>
+	<!-- Check for the Red5 libraries -->
+	<target name="-retrieve-om" unless="om.installed" description="Retrieves the libraries if needed" depends="prepare.mkdir">
+		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
+			<param name="ivy.conf.name" value="openmeetings"/>
+			<param name="ivy.lib.location" value="${om.lib.dir}"/>
+		</antcall>
+		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
+			<param name="ivy.conf.name" value="openmeetings.ext"/>
+			<param name="ivy.lib.location" value="${om.lib.dir}"/>
+			<param name="ivy.lib.pattern" value="[artifact]-[type]-[revision].[ext]"/>
+		</antcall>
+		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
+			<param name="ivy.conf.name" value="openmeetings.axis2"/>
+			<param name="ivy.lib.location" value="${om.lib.dir}"/>
+			<param name="ivy.lib.pattern" value="[artifact]-[type]-[revision].[ext]"/>
+			<param name="ivy.transitive" value="true" />
+		</antcall>
+		<delete>
+			<fileset dir="${om.lib.dir}" includes="*-source*.jar"/>
+			<fileset dir="${om.lib.dir}" includes="*-javadoc*.jar"/>
+		</delete>
+	</target>
+	<!-- Check for the Red5 libraries -->
+	<target name="-retrieve-anakia" unless="anakia.installed" description="Retrieves the libraries if needed" depends="prepare.mkdir">
+		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
+			<param name="ivy.conf.name" value="anakia"/>
+			<param name="ivy.lib.location" value="${anakia.lib.dir}"/>
+		</antcall>
+	</target>
+	<!-- Check for red5-screenshare libraries -->
+	<target name="-retrieve-red5-screenshare" unless="red5-screenshare.installed" description="Retrieves the libraries if needed" depends="prepare.mkdir">
+		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
+			<param name="ivy.conf.name" value="red5-screenshare"/>
+			<param name="ivy.lib.location" value="${red5-screenshare.lib.dir}"/>
+		</antcall>
+	</target>
+	<!-- Check for junit libraries -->
+	<target name="-retrieve-junit" unless="junit.installed" description="Retrieves the libraries if needed" depends="prepare.mkdir">
+		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
+			<param name="ivy.conf.name" value="junit"/>
+			<param name="ivy.lib.location" value="${junit.lib.dir}"/>
+		</antcall>
+	</target>
+
+	<target name="ivyclear" description="Clears out the Ivy cache">
+		<delete dir="${user.home}/.ivy2/cache/red5"/>
+		<!-- <delete dir="${user.home}/.ivy2/cache/openmeetings"/>FIXME !!!!! do we need this? should it be red5 ???? -->
+		<delete includeemptydirs="true">
+			<fileset dir="${project.lib}" excludes="*.jar"/>
+		</delete>
+		<ivy:cleancache/>
+	</target>
+
+	<target name="prepare-eclipse" if="java6.installed" description="Build server core" depends="-java6.check">
+		<!-- FIXME need to move -->
+		<antcall target="-retrieve-red5" inheritAll="true" inheritRefs="true"/>
+		<antcall target="-retrieve-om" inheritAll="true" inheritRefs="true"/>
+		<antcall target="-retrieve-junit" inheritAll="true" inheritRefs="true"/>
 	</target>
 </project>
