@@ -148,6 +148,7 @@
 		<copy todir="${dist.webapps.dir}/WEB-INF/lib">
 			<fileset dir="${om.lib.dir}" includes="*.jar" />
 		</copy>
+		<chmod dir="${dist.webapps.dir}/WEB-INF/lib" perm="755" includes="**/*.sh" />
 	</target>
 	
 	<target name="dist" description="binary distribution of OpenMeetings"
@@ -213,8 +214,6 @@
 			</fileset>
 		</copy>
 		<copy file="src/META-INF/${db.provider}_persistence.xml" tofile="${dist.webapps.dir}/WEB-INF/classes/META-INF/persistence.xml" />
-
-		<chmod dir="${dist.webapps.dir}/WEB-INF/lib" perm="755" includes="**/*.sh" />
 
 		<!-- add language files from .war version -->
 		<copy todir="${dist.webapps.dir}/languages">

@@ -215,6 +215,13 @@
 						<img src="images/checkout_9.png" alt="" width="310" height="297" />
 					</a>
 				</p>
+				<p>
+					11) Please run
+					<div class="xmlcode">
+						ant prepare-eclipse
+					</div>
+					to download all necessary jar files, and perform source <tt>Refresh</tt> to resolve all compilation issues.
+				</p>
 			</subsection>
 
 			<subsection name="Step3 - Deploy and Run">
