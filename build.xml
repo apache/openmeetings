@@ -215,8 +215,8 @@
 			<fileset dir="${red5.lib.dir}" includes="ehcache-core*.jar" />
 			<fileset dir="${red5.lib.dir}" includes="commons-beanutils*.jar" />
 			<fileset dir="${red5.server.dir}/dist" includes="red5.jar" />
-			<fileset dir="${om.lib.dir}" includes="org.springframework.context-*.jar" />
-			<fileset dir="${om.lib.dir}" includes="org.springframework.core-*.jar" />
+			<fileset dir="${red5.lib.dir}" includes="org.springframework.context-*.jar" />
+			<fileset dir="${red5.lib.dir}" includes="org.springframework.core-*.jar" />
 			<fileset dir="${red5.lib.dir}" includes="logback*.jar" />
 			<fileset dir="${red5.lib.dir}" includes="mina-core*.jar" />
 			<fileset dir="${red5.lib.dir}" includes="com.springsource.slf4j.api*.jar" />
@@ -399,7 +399,7 @@
 			<dname>
 				<param name="CN" value="Sebastian Wagner" />
 				<param name="OU" value="technology" />
-				<param name="O" value="openmeetings.googlecode.com" />
+				<param name="O" value="incubator.apache.org/openmeetings" />
 				<param name="C" value="DE" />
 			</dname>
 		</genkey>
