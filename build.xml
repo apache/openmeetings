@@ -164,11 +164,29 @@
 
 	<!-- compiles the sources without the laszlo client -->
 	<target name="dist-test" description="binary distribution of OpenMeetings"
-		depends="cleanForBinary, jar, signWebStartJars"/>
+		depends="cleanForBinary, jar, signWebStartJars">
+		
+		<copy todir="${dist.dir}/red5/lib">
+			<fileset dir="${red5.lib.dir}" includes="*.jar" />
+		</copy>
+		<copy todir="${dist.webapps.dir}/WEB-INF/lib">
+			<fileset dir="${om.lib.dir}" includes="*.jar" />
+		</copy>
+	
+	</target>
 
 	<!-- compiles the sources only with laszlo debug client -->
 	<target name="dist-debug" description="binary distribution of OpenMeetings"
-		depends="cleanForBinary, jar, compile.laszlo.main.debug, compile.laszlo.main.debug.as3, signWebStartJars"/>
+		depends="cleanForBinary, jar, compile.laszlo.main.debug, compile.laszlo.main.debug.as3, signWebStartJars">
+	
+		<copy todir="${dist.dir}/red5/lib">
+			<fileset dir="${red5.lib.dir}" includes="*.jar" />
+		</copy>
+		<copy todir="${dist.webapps.dir}/WEB-INF/lib">
+			<fileset dir="${om.lib.dir}" includes="*.jar" />
+		</copy>
+	
+	</target>
 
 	<target name="prepare.mkdir" depends="-java6.check">
 		<mkdir dir="${screen.out.dir}" />
