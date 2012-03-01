@@ -26,8 +26,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.openmeetings.app.OpenmeetingsVariables;
+import org.openmeetings.app.conference.session.RoomClient;
 import org.openmeetings.app.data.beans.basic.SearchResult;
-import org.openmeetings.app.persistence.beans.recording.RoomClient;
 import org.openmeetings.utils.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;

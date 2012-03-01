@@ -34,9 +34,6 @@
 
     <!-- --> 
 	<include href="meetings/" />
-	<!-- 
-	<include href="recording/" />
-	 -->
      
     <include href="admin/" />
     

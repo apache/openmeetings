@@ -24,12 +24,12 @@ import java.util.List;
 import java.util.Set;
 
 import org.openmeetings.app.OpenmeetingsVariables;
+import org.openmeetings.app.conference.session.RoomClient;
 import org.openmeetings.app.data.conference.PollManagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.persistence.beans.poll.PollType;
 import org.openmeetings.app.persistence.beans.poll.RoomPoll;
 import org.openmeetings.app.persistence.beans.poll.RoomPollAnswers;
-import org.openmeetings.app.persistence.beans.recording.RoomClient;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;

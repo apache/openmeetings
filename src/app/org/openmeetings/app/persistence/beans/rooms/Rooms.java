@@ -18,7 +18,7 @@
  */
 package org.openmeetings.app.persistence.beans.rooms;
 
-import org.openmeetings.app.persistence.beans.recording.RoomClient;
+import org.openmeetings.app.conference.session.RoomClient;
 
 import java.io.Serializable;
 import java.util.Date;

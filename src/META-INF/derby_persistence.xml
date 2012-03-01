@@ -53,14 +53,6 @@
 		<class>org.openmeetings.app.persistence.beans.poll.PollType</class>
 		<class>org.openmeetings.app.persistence.beans.poll.RoomPoll</class>
 		<class>org.openmeetings.app.persistence.beans.poll.RoomPollAnswers</class>
-		<class>org.openmeetings.app.persistence.beans.recording.ChatvaluesEvent</class>
-		<class>org.openmeetings.app.persistence.beans.recording.Recording</class>
-		<class>org.openmeetings.app.persistence.beans.recording.RecordingClient</class>
-		<class>org.openmeetings.app.persistence.beans.recording.RecordingConversionJob</class>
-		<class>org.openmeetings.app.persistence.beans.recording.RoomClient</class>
-		<class>org.openmeetings.app.persistence.beans.recording.RoomRecording</class>
-		<class>org.openmeetings.app.persistence.beans.recording.RoomStream</class>
-		<class>org.openmeetings.app.persistence.beans.recording.WhiteBoardEvent</class>
 		<class>org.openmeetings.app.persistence.beans.rooms.RoomModerators</class>
 		<class>org.openmeetings.app.persistence.beans.rooms.Rooms</class>
 		<class>org.openmeetings.app.persistence.beans.rooms.RoomTypes</class>

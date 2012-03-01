@@ -1,0 +1,673 @@
+Microsoft Windows XP [Version 5.1.2600]
+(C) Copyright 1985-2001 Microsoft Corp.
+
+V:\>D:
+
+D:\>cd work\workspaces\indigo_om_6
+
+D:\work\workspaces\indigo_om_6>cd ROOT
+
+D:\work\workspaces\indigo_om_6\ROOT>set ANT_OPTS=-Dhttp.proxyHost=proxy-1.ids.de -Dhttp.proxyPort=3128
+
+D:\work\workspaces\indigo_om_6\ROOT>ant -Ddb=mysql dist-debug
+Buildfile: D:\work\workspaces\indigo_om_6\ROOT\build.xml
+
+clean.classes:
+   [delete] Deleting directory D:\work\workspaces\indigo_om_6\ROOT\bin
+
+cleanForBinary:
+   [delete] Deleting directory D:\work\workspaces\indigo_om_6\ROOT\dist
+   [delete] Deleting directory D:\work\workspaces\indigo_om_6\ROOT\screen_compile
+   [delete] Deleting: D:\work\workspaces\indigo_om_6\ROOT\filetest.keystore
+   [delete] Deleting: D:\work\workspaces\indigo_om_6\ROOT\velocity.log
+
+-java6.check:
+     [echo] Using Java 1.6.0_25 specification: 1.6
+
+prepare.mkdir:
+    [mkdir] Created dir: D:\work\workspaces\indigo_om_6\ROOT\screen_compile
+    [mkdir] Created dir: D:\work\workspaces\indigo_om_6\ROOT\dist
+    [mkdir] Created dir: D:\work\workspaces\indigo_om_6\ROOT\bin
+
+prepare:
+     [copy] Copying 13 files to D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\red5-screenshare
+     [copy] Copying 56 files to D:\work\workspaces\indigo_om_6\ROOT\dist\red5
+     [copy] Copied 6 empty directories to 2 empty directories under D:\work\workspaces\indigo_om_6\ROOT\dist\red5
+     [copy] Copying 3011 files to D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings
+     [copy] Copied 19 empty directories to 4 empty directories under D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings
+     [copy] Copying 20 files to D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\WEB-INF\red5-services
+     [copy] Copying 1 file to D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings
+     [copy] Copying 5 files to D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\WEB-INF
+     [copy] Copying 5 files to D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\WEB-INF\classes\META-INF
+     [copy] Copying 1 file to D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\WEB-INF\classes\META-INF
+     [copy] Copying 36 files to D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\languages
+     [copy] Copying 2 files to D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\conf
+
+-retrieve-red5:
+
+-retrieve:
+     [echo] Ivy conf name: red5, destination: D:\work\workspaces\indigo_om_6\ROOT/lib/red5
+[ivy:resolve] :: Ivy 2.2.0 - 20100923230623 :: http://ant.apache.org/ivy/ ::
+[ivy:resolve] :: loading settings :: file = D:\work\workspaces\indigo_om_6\ROOT\ivysettings.xml
+[ivy:resolve] :: resolving dependencies :: apache#openmeetings;working@P60681-DEH [not transitive]
+[ivy:resolve]   confs: [red5]
+[ivy:resolve]   found javax#javaee-api;5.1.2 in googlecode
+[ivy:resolve]   found org.springframework#org.springframework.aop;3.0.6.RELEASE in springsource-release
+[ivy:resolve]   found org.springframework#org.springframework.asm;3.0.6.RELEASE in springsource-release
+[ivy:resolve]   found org.springframework#org.springframework.aspects;3.0.6.RELEASE in springsource-release
+[ivy:resolve]   found org.springframework#org.springframework.beans;3.0.6.RELEASE in springsource-release
+[ivy:resolve]   found org.springframework#org.springframework.context;3.0.6.RELEASE in springsource-release
+[ivy:resolve]   found org.springframework#org.springframework.core;3.0.6.RELEASE in springsource-release
+[ivy:resolve]   found org.springframework#org.springframework.expression;3.0.6.RELEASE in springsource-release
+[ivy:resolve]   found org.springframework#org.springframework.jdbc;3.0.6.RELEASE in springsource-release
+[ivy:resolve]   found org.springframework#org.springframework.orm;3.0.6.RELEASE in springsource-release
+[ivy:resolve]   found org.springframework#org.springframework.transaction;3.0.6.RELEASE in springsource-release
+[ivy:resolve]   found org.springframework#org.springframework.web;3.0.6.RELEASE in springsource-release
+[ivy:resolve]   found org.springframework#org.springframework.web.servlet;3.0.6.RELEASE in springsource-release
+[ivy:resolve]   found org.aopalliance#com.springsource.org.aopalliance;1.0.0 in springsource-external
+[ivy:resolve]   found cglib#cglib;2.2.2 in central
+[ivy:resolve]   found org.slf4j#com.springsource.slf4j.api;1.6.1 in springsource-external
+[ivy:resolve]   found org.slf4j#com.springsource.slf4j.bridge;1.6.1 in springsource-external
+[ivy:resolve]   found apache#jul-to-slf4j;1.6.1 in googlecode
+[ivy:resolve]   found apache#log4j-over-slf4j;1.6.1 in googlecode
+[ivy:resolve]   found apache#jcl-over-slf4j;1.6.1 in googlecode
+[ivy:resolve]   found apache#logback-classic;0.9.28 in googlecode
+[ivy:resolve]   found apache#logback-core;0.9.28 in googlecode
+[ivy:resolve]   found org.apache.commons#commons-beanutils;1.8.3 in sonatype
+[ivy:resolve]   found org.apache.commons#commons-codec;1.6 in apache
+[ivy:resolve]   found org.apache.commons#commons-collections;3.2.1 in sonatype
+[ivy:resolve]   found commons#httpcore;4.1.3 in googlecode
+[ivy:resolve]   found commons#httpclient;4.1.2 in googlecode
+[ivy:resolve]   found org.apache.commons#commons-lang3;3.1 in central
+[ivy:resolve]   found org.apache.commons#commons-modeler;2.0.1 in sonatype
+[ivy:resolve]   found org.apache.commons#commons-pool;1.5.6 in apache
+[ivy:resolve]   found org.quartz-scheduler#quartz;1.8.5 in central
+[ivy:resolve]   found net.sf.ehcache#ehcache-core;2.5.0 in central
+[ivy:resolve]   found org.apache.xerces#com.springsource.org.apache.xerces;2.9.1 in springsource-external
+[ivy:resolve]   found apache#xmlrpc;2.0.1 in sonatype
+[ivy:resolve]   found mina#mina-integration-beans;2.0.4 in googlecode
+[ivy:resolve]   found mina#mina-integration-jmx;2.0.4 in googlecode
+[ivy:resolve]   found mina#mina-core;2.0.4 in googlecode
+[ivy:resolve]   found org.objectweb.asm#com.springsource.org.objectweb.asm;3.2.0 in springsource-external
+[ivy:resolve]   found org.objectweb.asm#com.springsource.org.objectweb.asm.commons;3.2.0 in springsource-external
+[ivy:resolve]   found org.antlr#com.springsource.org.antlr;3.1.3 in springsource-external
+[ivy:resolve]   found org.codehaus.groovy#com.springsource.org.codehaus.groovy;1.7.0 in springsource-external
+[ivy:resolve]   found apache#jruby-complete;1.1.6 in googlecode
+[ivy:resolve]   found apache#jython;2.5 in googlecode
+[ivy:resolve]   found org.mozilla.javascript#com.springsource.org.mozilla.javascript;1.7.0.R2 in springsource-external
+[ivy:resolve]   found javax.xml.stream#com.springsource.javax.xml.stream;1.0.1 in springsource-external
+[ivy:resolve]   found org.springframework#spring-context-support;3.0.6.RELEASE in central
+[ivy:resolve]   found apache#jaudiotagger;2.0.4-SNAPSHOT in googlecode
+[ivy:resolve]   found apache#bcprov-jdk16;145 in googlecode
+[ivy:resolve] :: resolution report :: resolve 3407ms :: artifacts dl 31ms
+        ---------------------------------------------------------------------
+        |                  |            modules            ||   artifacts   |
+        |       conf       | number| search|dwnlded|evicted|| number|dwnlded|
+        ---------------------------------------------------------------------
+        |       red5       |   48  |   0   |   0   |   0   ||   48  |   0   |
+        ---------------------------------------------------------------------
+[ivy:retrieve] :: retrieving :: apache#openmeetings
+[ivy:retrieve]  confs: [red5]
+[ivy:retrieve]  1 artifacts copied, 47 already retrieved (1929kB/234ms)
+
+-retrieve:
+     [echo] Ivy conf name: red5.ext, destination: D:\work\workspaces\indigo_om_6\ROOT/lib/red5
+[ivy:resolve] :: Ivy 2.2.0 - 20100923230623 :: http://ant.apache.org/ivy/ ::
+[ivy:resolve] :: loading settings :: file = D:\work\workspaces\indigo_om_6\ROOT\ivysettings.xml
+[ivy:resolve] :: resolving dependencies :: apache#openmeetings;working@P60681-DEH [not transitive]
+[ivy:resolve]   confs: [red5.ext]
+[ivy:resolve]   found org.apache.geronimo.specs#geronimo-jpa_2.0_spec;1.1 in central
+[ivy:resolve] :: resolution report :: resolve 234ms :: artifacts dl 0ms
+        ---------------------------------------------------------------------
+        |                  |            modules            ||   artifacts   |
+        |       conf       | number| search|dwnlded|evicted|| number|dwnlded|
+        ---------------------------------------------------------------------
+        |     red5.ext     |   1   |   0   |   0   |   0   ||   3   |   0   |
+        ---------------------------------------------------------------------
+[ivy:retrieve] :: retrieving :: apache#openmeetings
+[ivy:retrieve]  confs: [red5.ext]
+[ivy:retrieve]  0 artifacts copied, 3 already retrieved (0kB/15ms)
+   [delete] Deleting: D:\work\workspaces\indigo_om_6\ROOT\lib\red5\javaee-api-5.1.2.jar
+
+-retrieve-om:
+
+-retrieve:
+     [echo] Ivy conf name: openmeetings, destination: D:\work\workspaces\indigo_om_6\ROOT/lib/om
+[ivy:resolve] :: Ivy 2.2.0 - 20100923230623 :: http://ant.apache.org/ivy/ ::
+[ivy:resolve] :: loading settings :: file = D:\work\workspaces\indigo_om_6\ROOT\ivysettings.xml
+[ivy:resolve] :: resolving dependencies :: apache#openmeetings;working@P60681-DEH [not transitive]
+[ivy:resolve]   confs: [openmeetings]
+[ivy:resolve]   found org.apache.axis2#axis2;1.6.1 in central
+[ivy:resolve]   found org.apache.xmlgraphics#batik-anim;1.7 in central
+[ivy:resolve]   found org.apache.xmlgraphics#batik-awt-util;1.7 in central
+[ivy:resolve]   found org.apache.xmlgraphics#batik-bridge;1.7 in central
+[ivy:resolve]   found org.apache.xmlgraphics#batik-codec;1.7 in central
+[ivy:resolve]   found org.apache.xmlgraphics#batik-css;1.7 in central
+[ivy:resolve]   found org.apache.xmlgraphics#batik-dom;1.7 in central
+[ivy:resolve]   found org.apache.xmlgraphics#batik-ext;1.7 in central
+[ivy:resolve]   found org.apache.xmlgraphics#batik-extension;1.7 in central
+[ivy:resolve]   found org.apache.xmlgraphics#batik-gui-util;1.7 in central
+[ivy:resolve]   found org.apache.xmlgraphics#batik-gvt;1.7 in central
+[ivy:resolve]   found org.apache.xmlgraphics#batik-parser;1.7 in central
+[ivy:resolve]   found org.apache.xmlgraphics#batik-rasterizer;1.7 in central
+[ivy:resolve]   found org.apache.xmlgraphics#batik-script;1.7 in central
+[ivy:resolve]   found org.apache.xmlgraphics#batik-slideshow;1.7 in central
+[ivy:resolve]   found org.apache.xmlgraphics#batik-squiggle;1.7 in central
+[ivy:resolve]   found org.apache.xmlgraphics#batik-svg-dom;1.7 in central
+[ivy:resolve]   found org.apache.xmlgraphics#batik-svggen;1.7 in central
+[ivy:resolve]   found org.apache.xmlgraphics#batik-svgpp;1.7 in central
+[ivy:resolve]   found org.apache.xmlgraphics#batik-swing;1.7 in central
+[ivy:resolve]   found org.apache.xmlgraphics#batik-transcoder;1.7 in central
+[ivy:resolve]   found org.apache.xmlgraphics#batik-ttf2svg;1.7 in central
+[ivy:resolve]   found org.apache.xmlgraphics#batik-util;1.7 in central
+[ivy:resolve]   found org.apache.xmlgraphics#batik-xml;1.7 in central
+[ivy:resolve]   found org.apache.xmlgraphics#fop;1.0 in central
+[ivy:resolve]   found org.apache.xmlgraphics#xmlgraphics-commons;1.4 in central
+[ivy:resolve]   found xml-apis#xml-apis-ext;1.3.04 in central
+[ivy:resolve]   found org.apache.derby#derby;10.8.2.2 in central
+[ivy:resolve]   found org.apache.derby#derbyclient;10.8.2.2 in central
+[ivy:resolve]   found mysql#mysql-connector-java;5.1.9 in central
+[ivy:resolve]   found postgresql#postgresql;9.1-901.jdbc4 in central
+[ivy:resolve]   found dom4j#dom4j;1.6.1 in central
+[ivy:resolve]   found org.apache.velocity#velocity;1.7 in central
+[ivy:resolve]   found org.apache.velocity#velocity-tools;2.0 in central
+[ivy:resolve]   found commons-lang#commons-lang;2.6 in central
+[ivy:resolve]   found com.thoughtworks.xstream#xstream;1.4.2 in central
+[ivy:resolve]   found org.apache.ws.commons.util#ws-commons-util;1.0.2 in central
+[ivy:resolve]   found org.apache.xmlrpc#xmlrpc-common;3.1.3 in central
+[ivy:resolve]   found org.apache.xmlrpc#xmlrpc-client;3.1.3 in central
+[ivy:resolve]   found commons-transaction#commons-transaction;1.2 in central
+[ivy:resolve]   found net.sourceforge.serp#serp;1.13.1 in central
+[ivy:resolve]   found commons-dbcp#commons-dbcp;1.4 in central
+[ivy:resolve]   found commons-digester#commons-digester;2.1 in central
+[ivy:resolve]   found xpp3#xpp3;1.1.4c in central
+[ivy:resolve]   found javax.mail#mail;1.4.4 in central
+[ivy:resolve] :: resolution report :: resolve 2313ms :: artifacts dl 62ms
+        ---------------------------------------------------------------------
+        |                  |            modules            ||   artifacts   |
+        |       conf       | number| search|dwnlded|evicted|| number|dwnlded|
+        ---------------------------------------------------------------------
+        |   openmeetings   |   45  |   0   |   0   |   0   ||   45  |   0   |
+        ---------------------------------------------------------------------
+[ivy:retrieve] :: retrieving :: apache#openmeetings
+[ivy:retrieve]  confs: [openmeetings]
+[ivy:retrieve]  0 artifacts copied, 45 already retrieved (0kB/0ms)
+
+-retrieve:
+     [echo] Ivy conf name: openmeetings.ext, destination: D:\work\workspaces\indigo_om_6\ROOT/lib/om
+[ivy:resolve] :: Ivy 2.2.0 - 20100923230623 :: http://ant.apache.org/ivy/ ::
+[ivy:resolve] :: loading settings :: file = D:\work\workspaces\indigo_om_6\ROOT\ivysettings.xml
+[ivy:resolve] :: resolving dependencies :: apache#openmeetings;working@P60681-DEH [not transitive]
+[ivy:resolve]   confs: [openmeetings.ext]
+[ivy:resolve]   found org.mnode.ical4j#ical4j;1.0.3 in central
+[ivy:resolve]   found org.apache.openjpa#openjpa;2.2.0 in central
+[ivy:resolve] :: resolution report :: resolve 157ms :: artifacts dl 15ms
+        ---------------------------------------------------------------------
+        |                  |            modules            ||   artifacts   |
+        |       conf       | number| search|dwnlded|evicted|| number|dwnlded|
+        ---------------------------------------------------------------------
+        | openmeetings.ext |   2   |   0   |   0   |   0   ||   5   |   0   |
+        ---------------------------------------------------------------------
+[ivy:retrieve] :: retrieving :: apache#openmeetings
+[ivy:retrieve]  confs: [openmeetings.ext]
+[ivy:retrieve]  3 artifacts copied, 2 already retrieved (5128kB/266ms)
+
+-retrieve:
+     [echo] Ivy conf name: openmeetings.axis2, destination: D:\work\workspaces\indigo_om_6\ROOT/lib/om
+[ivy:resolve] :: Ivy 2.2.0 - 20100923230623 :: http://ant.apache.org/ivy/ ::
+[ivy:resolve] :: loading settings :: file = D:\work\workspaces\indigo_om_6\ROOT\ivysettings.xml
+[ivy:resolve] :: resolving dependencies :: apache#openmeetings;working@P60681-DEH
+[ivy:resolve]   confs: [openmeetings.axis2]
+[ivy:resolve]   found javax.servlet#servlet-api;2.5 in central
+[ivy:resolve]   found org.apache.ws.commons.axiom#axiom-impl;1.2.12 in central
+[ivy:resolve]   found org.apache.ws.commons.axiom#axiom-api;1.2.12 in central
+[ivy:resolve]   found org.apache.geronimo.specs#geronimo-activation_1.1_spec;1.0.2 in central
+[ivy:resolve]   found org.apache.geronimo.specs#geronimo-javamail_1.4_spec;1.6 in central
+[ivy:resolve]   found commons-logging#commons-logging;1.1.1 in central
+[ivy:resolve]   found jaxen#jaxen;1.1.1 in central
+[ivy:resolve]   found org.apache.geronimo.specs#geronimo-stax-api_1.0_spec;1.0.1 in central
+[ivy:resolve]   found org.codehaus.woodstox#wstx-asl;3.2.9 in central
+[ivy:resolve]   found org.apache.axis2#axis2-transport-http;1.6.1 in central
+[ivy:resolve]   found org.apache.axis2#axis2-kernel;1.6.1 in central
+[ivy:resolve]   found org.apache.geronimo.specs#geronimo-ws-metadata_2.0_spec;1.1.2 in central
+[ivy:resolve]   found org.apache.geronimo.specs#geronimo-jta_1.1_spec;1.1 in central
+[ivy:resolve]   found commons-httpclient#commons-httpclient;3.1 in central
+[ivy:resolve]   found commons-codec#commons-codec;1.3 in central
+[ivy:resolve]   found commons-fileupload#commons-fileupload;1.2 in central
+[ivy:resolve]   found wsdl4j#wsdl4j;1.6.2 in central
+[ivy:resolve]   found org.apache.ws.commons.schema#XmlSchema;1.4.7 in central
+[ivy:resolve]   found org.apache.neethi#neethi;3.0.1 in central
+[ivy:resolve]   found org.apache.woden#woden-api;1.0M9 in central
+[ivy:resolve]   found org.apache.woden#woden-impl-dom;1.0M9 in central
+[ivy:resolve]   found org.apache.woden#woden-impl-commons;1.0M9 in central
+[ivy:resolve]   found javax.ws.rs#jsr311-api;1.0 in central
+[ivy:resolve]   found org.apache.httpcomponents#httpcore;4.0 in central
+[ivy:resolve]   found org.apache.axis2#axis2-transport-local;1.6.1 in central
+[ivy:resolve]   found org.apache.axis2#axis2-mex;1.2 in central
+[ivy:resolve]   found org.apache.axis2#axis2-jaxws;1.6.1 in central
+[ivy:resolve]   found org.apache.geronimo.specs#geronimo-annotation_1.0_spec;1.1 in central
+[ivy:resolve]   found org.apache.geronimo.specs#geronimo-jaxws_2.2_spec;1.0 in central
+[ivy:resolve]   found org.apache.axis2#axis2-saaj;1.6.1 in central
+[ivy:resolve]   found org.apache.geronimo.specs#geronimo-saaj_1.3_spec;1.0.1 in central
+[ivy:resolve]   found org.apache.ws.commons.axiom#axiom-dom;1.2.12 in central
+[ivy:resolve]   found org.apache.axis2#axis2-metadata;1.6.1 in central
+[ivy:resolve]   found xml-resolver#xml-resolver;1.2 in central
+[ivy:resolve]   found com.sun.xml.bind#jaxb-impl;2.1.7 in central
+[ivy:resolve]   found javax.xml.bind#jaxb-api;2.1 in central
+[ivy:resolve]   found javax.xml.stream#stax-api;1.0-2 in central
+[ivy:resolve]   found javax.activation#activation;1.1 in central
+[ivy:resolve]   found com.sun.xml.bind#jaxb-xjc;2.1.7 in central
+[ivy:resolve]   found com.sun.xml.ws#jaxws-tools;2.1.3 in central
+[ivy:resolve]   found xalan#xalan;2.7.0 in central
+[ivy:resolve]   found commons-io#commons-io;1.4 in central
+[ivy:resolve] :: resolution report :: resolve 2407ms :: artifacts dl 47ms
+[ivy:resolve]   :: evicted modules:
+[ivy:resolve]   javax.servlet#servlet-api;2.3 by [javax.servlet#servlet-api;2.5] in [openmeetings.axis2]
+        ---------------------------------------------------------------------
+        |                  |            modules            ||   artifacts   |
+        |       conf       | number| search|dwnlded|evicted|| number|dwnlded|
+        ---------------------------------------------------------------------
+        |openmeetings.axis2|   43  |   0   |   0   |   1   ||   50  |   0   |
+        ---------------------------------------------------------------------
+[ivy:retrieve] :: retrieving :: apache#openmeetings
+[ivy:retrieve]  confs: [openmeetings.axis2]
+[ivy:retrieve]  8 artifacts copied, 42 already retrieved (3553kB/375ms)
+
+-retrieve-junit:
+
+-retrieve:
+     [echo] Ivy conf name: junit, destination: D:\work\workspaces\indigo_om_6\ROOT/lib/junit
+[ivy:resolve] :: Ivy 2.2.0 - 20100923230623 :: http://ant.apache.org/ivy/ ::
+[ivy:resolve] :: loading settings :: file = D:\work\workspaces\indigo_om_6\ROOT\ivysettings.xml
+[ivy:resolve] :: resolving dependencies :: apache#openmeetings;working@P60681-DEH [not transitive]
+[ivy:resolve]   confs: [junit]
+[ivy:resolve]   found junit#junit;4.9 in central
+[ivy:resolve]   found org.springframework#org.springframework.test;3.0.6.RELEASE in springsource-release
+[ivy:resolve] :: resolution report :: resolve 187ms :: artifacts dl 0ms
+        ---------------------------------------------------------------------
+        |                  |            modules            ||   artifacts   |
+        |       conf       | number| search|dwnlded|evicted|| number|dwnlded|
+        ---------------------------------------------------------------------
+        |       junit      |   2   |   0   |   0   |   0   ||   2   |   0   |
+        ---------------------------------------------------------------------
+[ivy:retrieve] :: retrieving :: apache#openmeetings
+[ivy:retrieve]  confs: [junit]
+[ivy:retrieve]  0 artifacts copied, 2 already retrieved (0kB/0ms)
+
+resources:
+     [copy] Copying 21 files to D:\work\workspaces\indigo_om_6\ROOT\bin
+     [copy] Copying 8 files to D:\work\workspaces\indigo_om_6\ROOT\screen_compile
+
+compile.screen.share:
+     [echo] Compile screen share to D:\work\workspaces\indigo_om_6\ROOT/screen_compile
+    [javac] D:\work\workspaces\indigo_om_6\ROOT\build.xml:479: warning: 'includeantruntime' was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds
+    [javac] Compiling 13 source files to D:\work\workspaces\indigo_om_6\ROOT\screen_compile
+    [javac] Note: D:\work\workspaces\indigo_om_6\ROOT\src\red5-screenshare\org\red5\screen\webstart\CommonScreenShare.java uses unchecked or unsafe operations.
+    [javac] Note: Recompile with -Xlint:unchecked for details.
+
+compile.only:
+     [echo] Compile main to D:\work\workspaces\indigo_om_6\ROOT/bin
+     [echo]
+    [javac] D:\work\workspaces\indigo_om_6\ROOT\build.xml:448: warning: 'includeantruntime' was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds
+    [javac] Compiling 237 source files to D:\work\workspaces\indigo_om_6\ROOT\bin
+    [javac] Note: Starting OpenJPA Annotation Processor for Metamodel Generation
+    [javac] Note: D:\work\workspaces\indigo_om_6\ROOT\src\app\org\openmeetings\utils\mappings\CastMapToObject.java uses unchecked or unsafe operations.
+    [javac] Note: Recompile with -Xlint:unchecked for details.
+    [javac] D:\work\workspaces\indigo_om_6\ROOT\build.xml:453: warning: 'includeantruntime' was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds
+    [javac] Compiling 1 source file to D:\work\workspaces\indigo_om_6\ROOT\bin
+    [javac] D:\work\workspaces\indigo_om_6\ROOT\build.xml:456: warning: 'includeantruntime' was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds
+    [javac] D:\work\workspaces\indigo_om_6\ROOT\build.xml:459: warning: 'includeantruntime' was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds
+    [javac] Compiling 53 source files to D:\work\workspaces\indigo_om_6\ROOT\bin
+    [javac] D:\work\workspaces\indigo_om_6\ROOT\build.xml:462: warning: 'includeantruntime' was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds
+    [javac] Compiling 3 source files to D:\work\workspaces\indigo_om_6\ROOT\bin
+    [javac] D:\work\workspaces\indigo_om_6\ROOT\build.xml:465: warning: 'includeantruntime' was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds
+    [javac] Compiling 6 source files to D:\work\workspaces\indigo_om_6\ROOT\bin
+    [javac] D:\work\workspaces\indigo_om_6\ROOT\build.xml:468: warning: 'includeantruntime' was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds
+    [javac] Compiling 2 source files to D:\work\workspaces\indigo_om_6\ROOT\bin
+    [javac] D:\work\workspaces\indigo_om_6\ROOT\build.xml:471: warning: 'includeantruntime' was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds
+    [javac] Compiling 2 source files to D:\work\workspaces\indigo_om_6\ROOT\bin
+
+compile:
+
+enhance.only:
+ [openjpac] 156  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.basic.OmTimeZone".
+ [openjpac] 375  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.user.UserContacts".
+ [openjpac] 453  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.basic.LdapConfig".
+ [openjpac] 484  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingMetaDelta".
+ [openjpac] 547  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.calendar.Appointment".
+ [openjpac] 625  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.user.PrivateMessageFolder".
+ [openjpac] 656  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.basic.Navisub".
+ [openjpac] 688  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.rooms.RoomTypes".
+ [openjpac] 719  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.sip.OpenXGReturnObject".
+ [openjpac] 734  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.basic.Navimain".
+ [openjpac] 781  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.basic.Sessiondata".
+ [openjpac] 813  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.calendar.MeetingMember".
+ [openjpac] 859  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.rooms.Rooms_Organisation".
+ [openjpac] 875  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingMetaData".
+ [openjpac] 922  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.rooms.RoomModerators".
+ [openjpac] 953  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.rooms.Rooms".
+ [openjpac] 1016  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.basic.SOAPLogin".
+ [openjpac] 1047  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.basic.ErrorType".
+ [openjpac] 1078  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.user.Userlevel".
+ [openjpac] 1109  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.poll.RoomPollAnswers".
+ [openjpac] 1141  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.basic.ErrorValues".
+ [openjpac] 1156  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.user.Users".
+ [openjpac] 1219  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.lang.FieldLanguage".
+ [openjpac] 1250  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.basic.Naviglobal".
+ [openjpac] 1281  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.domain.Organisation_Users".
+ [openjpac] 1313  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.user.PrivateMessages".
+ [openjpac] 1344  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.calendar.AppointmentReminderTyps".
+ [openjpac] 1360  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.poll.RoomPoll".
+ [openjpac] 1391  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.logs.ConferenceLogType".
+ [openjpac] 1422  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingLog".
+ [openjpac] 1438  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.files.FileExplorerItem".
+ [openjpac] 1485  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.domain.Organisation".
+ [openjpac] 1500  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.poll.PollType".
+ [openjpac] 1531  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.adresses.Adresses".
+ [openjpac] 1547  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.invitation.Invitations".
+ [openjpac] 1594  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.user.Salutations".
+ [openjpac] 1610  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.user.UserSipData".
+ [openjpac] 1625  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.lang.Fieldvalues".
+ [openjpac] 1656  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.user.Userdata".
+ [openjpac] 1688  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.basic.Configuration".
+ [openjpac] 1703  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues".
+ [openjpac] 1735  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.logs.ConferenceLog".
+ [openjpac] 1766  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.adresses.States".
+ [openjpac] 1781  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.calendar.AppointmentCategory".
+ [openjpac] 1813  openmeetings  INFO   [main] openjpa.Tool - Enhancer running on type "org.openmeetings.app.persistence.beans.flvrecord.FlvRecording".
+     [echo] Enhancing complete.
+
+enhance:
+
+-retrieve-anakia:
+
+-retrieve:
+     [echo] Ivy conf name: anakia, destination: D:\work\workspaces\indigo_om_6\ROOT/lib/anakia
+[ivy:resolve] :: Ivy 2.2.0 - 20100923230623 :: http://ant.apache.org/ivy/ ::
+[ivy:resolve] :: loading settings :: file = D:\work\workspaces\indigo_om_6\ROOT\ivysettings.xml
+[ivy:resolve] :: resolving dependencies :: apache#openmeetings;working@P60681-DEH [not transitive]
+[ivy:resolve]   confs: [anakia]
+[ivy:resolve]   found org.jdom#jdom;1.1 in central
+[ivy:resolve]   found logkit#logkit;1.0.1 in central
+[ivy:resolve]   found oro#oro;2.0.8 in central
+[ivy:resolve] :: resolution report :: resolve 406ms :: artifacts dl 0ms
+        ---------------------------------------------------------------------
+        |                  |            modules            ||   artifacts   |
+        |       conf       | number| search|dwnlded|evicted|| number|dwnlded|
+        ---------------------------------------------------------------------
+        |      anakia      |   3   |   0   |   0   |   0   ||   3   |   0   |
+        ---------------------------------------------------------------------
+[ivy:retrieve] :: retrieving :: apache#openmeetings
+[ivy:retrieve]  confs: [anakia]
+[ivy:retrieve]  0 artifacts copied, 3 already retrieved (0kB/0ms)
+
+anakia:
+   [anakia] Transforming into: D:\work\workspaces\indigo_om_6\ROOT\docs
+
+build.only.webservice.doc:
+  [javadoc] Generating Javadoc
+  [javadoc] Javadoc execution
+  [javadoc] Loading source file D:\work\workspaces\indigo_om_6\ROOT\src\userservice\org\openmeetings\axis\services\UserWebService.java...
+  [javadoc] Loading source file D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java...
+  [javadoc] Loading source file D:\work\workspaces\indigo_om_6\ROOT\src\fileservice\org\openmeetings\axis\services\FileWebService.java...
+  [javadoc] Loading source file D:\work\workspaces\indigo_om_6\ROOT\src\calendarservice\org\openmeetings\axis\services\CalendarWebService.java...
+  [javadoc] Constructing Javadoc information...
+  [javadoc] SLF4J: Class path contains multiple SLF4J bindings.
+  [javadoc] SLF4J: Found binding in [jar:file:/D:/work/workspaces/indigo_om_6/ROOT/lib/red5/logback-classic-0.9.28.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+  [javadoc] SLF4J: Found binding in [jar:file:/D:/work/workspaces/indigo_om_6/ROOT/red5-1.0.0-r4315/dist/red5.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+  [javadoc] SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+  [javadoc] 14:59:32.052 [main] DEBUG org.apache.velocity - CommonsLogLogChute name is 'org.apache.velocity'
+  [javadoc] 14:59:32.052 [main] DEBUG org.apache.velocity - Initializing Velocity, Calling init()...
+  [javadoc] 14:59:32.052 [main] DEBUG org.apache.velocity - Starting Apache Velocity v1.7 (compiled: 2010-11-19 12:14:37)
+  [javadoc] 14:59:32.052 [main] DEBUG org.apache.velocity - Default Properties File: org\apache\velocity\runtime\defaults\velocity.properties
+  [javadoc] 14:59:32.052 [main] DEBUG org.apache.velocity - Trying to use logger class org.apache.velocity.runtime.log.AvalonLogChute
+  [javadoc] 14:59:32.099 [main] DEBUG org.apache.velocity - Target log system for org.apache.velocity.runtime.log.AvalonLogChute is not available (java.lang.NoClassDefFoundError: org/apache/log/format/Formatter).  Falling back to next log system...
+  [javadoc] 14:59:32.099 [main] DEBUG org.apache.velocity - Trying to use logger class org.apache.velocity.runtime.log.Log4JLogChute
+  [javadoc] 14:59:32.099 [main] DEBUG org.apache.velocity - Target log system for org.apache.velocity.runtime.log.Log4JLogChute is not available (java.lang.NoClassDefFoundError: org/apache/log4j/Appender).  Falling back to next log system...
+  [javadoc] 14:59:32.099 [main] DEBUG org.apache.velocity - Trying to use logger class org.apache.velocity.runtime.log.CommonsLogLogChute
+  [javadoc] 14:59:32.115 [main] DEBUG org.apache.velocity - Using logger class org.apache.velocity.runtime.log.CommonsLogLogChute
+  [javadoc] 14:59:32.115 [main] DEBUG org.apache.velocity - ResourceLoader instantiated: org.apache.velocity.runtime.resource.loader.FileResourceLoader
+  [javadoc] 14:59:32.115 [main] DEBUG org.apache.velocity - Do unicode file recognition:  false
+  [javadoc] 14:59:32.115 [main] DEBUG org.apache.velocity - FileResourceLoader : adding path '.'
+  [javadoc] 14:59:32.130 [main] DEBUG org.apache.velocity - ResourceCache: initialized (class org.apache.velocity.runtime.resource.ResourceCacheImpl) with class java.util.Collections$SynchronizedMap cache map.
+  [javadoc] 14:59:32.130 [main] DEBUG org.apache.velocity - Loaded System Directive: org.apache.velocity.runtime.directive.Stop
+  [javadoc] 14:59:32.208 [main] DEBUG org.apache.velocity - Loaded System Directive: org.apache.velocity.runtime.directive.Define
+  [javadoc] 14:59:32.208 [main] DEBUG org.apache.velocity - Loaded System Directive: org.apache.velocity.runtime.directive.Break
+  [javadoc] 14:59:32.208 [main] DEBUG org.apache.velocity - Loaded System Directive: org.apache.velocity.runtime.directive.Evaluate
+  [javadoc] 14:59:32.208 [main] DEBUG org.apache.velocity - Loaded System Directive: org.apache.velocity.runtime.directive.Literal
+  [javadoc] 14:59:32.208 [main] DEBUG org.apache.velocity - Loaded System Directive: org.apache.velocity.runtime.directive.Macro
+  [javadoc] 14:59:32.318 [main] DEBUG org.apache.velocity - Loaded System Directive: org.apache.velocity.runtime.directive.Parse
+  [javadoc] 14:59:32.318 [main] DEBUG org.apache.velocity - Loaded System Directive: org.apache.velocity.runtime.directive.Include
+  [javadoc] 14:59:32.318 [main] DEBUG org.apache.velocity - Loaded System Directive: org.apache.velocity.runtime.directive.Foreach
+  [javadoc] 14:59:32.349 [main] DEBUG org.apache.velocity - Created '20' parsers.
+  [javadoc] 14:59:32.349 [main] DEBUG org.apache.velocity - Velocimacro : "velocimacro.library" is not set.  Trying default library: VM_global_library.vm
+  [javadoc] 14:59:32.412 [main] DEBUG org.apache.velocity - Velocimacro : Default library not found.
+  [javadoc] 14:59:32.412 [main] DEBUG org.apache.velocity - Velocimacro : allowInline = true : VMs can be defined inline in templates
+  [javadoc] 14:59:32.412 [main] DEBUG org.apache.velocity - Velocimacro : allowInlineToOverride = false : VMs defined inline may NOT replace previous VM definitions
+  [javadoc] 14:59:32.412 [main] DEBUG org.apache.velocity - Velocimacro : allowInlineLocal = false : VMs defined inline will be global in scope if allowed.
+  [javadoc] 14:59:32.412 [main] DEBUG org.apache.velocity - Velocimacro : autoload off : VM system will not automatically reload global library macros
+  [javadoc] Start WebServiceDoclet templateNameNew ApiMethodsTemplate.vm
+  [javadoc] 14:59:32.474 [main] DEBUG org.apache.velocity - ResourceManager : found docs\ApiMethodsTemplate.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\userservice\org\openmeetings\axis\services\UserWebService.java:91: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\userservice\org\openmeetings\axis\services\UserWebService.java:109: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\userservice\org\openmeetings\axis\services\UserWebService.java:143: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\userservice\org\openmeetings\axis\services\UserWebService.java:208: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\userservice\org\openmeetings\axis\services\UserWebService.java:302: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\userservice\org\openmeetings\axis\services\UserWebService.java:392: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\userservice\org\openmeetings\axis\services\UserWebService.java:456: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\userservice\org\openmeetings\axis\services\UserWebService.java:491: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\userservice\org\openmeetings\axis\services\UserWebService.java:541: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\userservice\org\openmeetings\axis\services\UserWebService.java:606: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\userservice\org\openmeetings\axis\services\UserWebService.java:679: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\userservice\org\openmeetings\axis\services\UserWebService.java:777: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\userservice\org\openmeetings\axis\services\UserWebService.java:880: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\userservice\org\openmeetings\axis\services\UserWebService.java:976: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\userservice\org\openmeetings\axis\services\UserWebService.java:1075: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\userservice\org\openmeetings\axis\services\UserWebService.java:1161: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\userservice\org\openmeetings\axis\services\UserWebService.java:1227: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\userservice\org\openmeetings\axis\services\UserWebService.java:1263: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\userservice\org\openmeetings\axis\services\UserWebService.java:1295: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:148: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:176: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:227: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:277: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:306: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:353: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:399: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:437: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:527: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:538: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:550: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:620: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:641: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:678: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:739: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:799: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:863: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:942: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:1003: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:1063: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:1129: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:1190: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:1273: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:1307: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:1319: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:1369: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:1426: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:1490: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:1560: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:1955: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:2019: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:2116: warning - @return tag has no arguments.
+  [javadoc] 14:59:32.865 [main] DEBUG org.apache.velocity - ResourceManager : found docs\ApiMethodsTemplate.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:2233: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:2293: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\roomservice\org\openmeetings\axis\services\RoomWebService.java:2342: warning - @return tag has no arguments.
+  [javadoc] 14:59:32.959 [main] DEBUG org.apache.velocity - ResourceManager : found docs\ApiMethodsTemplate.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\fileservice\org\openmeetings\axis\services\FileWebService.java:126: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\fileservice\org\openmeetings\axis\services\FileWebService.java:245: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\fileservice\org\openmeetings\axis\services\FileWebService.java:350: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\fileservice\org\openmeetings\axis\services\FileWebService.java:416: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\fileservice\org\openmeetings\axis\services\FileWebService.java:477: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\fileservice\org\openmeetings\axis\services\FileWebService.java:531: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\fileservice\org\openmeetings\axis\services\FileWebService.java:562: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\fileservice\org\openmeetings\axis\services\FileWebService.java:592: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\fileservice\org\openmeetings\axis\services\FileWebService.java:620: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\fileservice\org\openmeetings\axis\services\FileWebService.java:639: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\fileservice\org\openmeetings\axis\services\FileWebService.java:691: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\fileservice\org\openmeetings\axis\services\FileWebService.java:762: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\fileservice\org\openmeetings\axis\services\FileWebService.java:838: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\fileservice\org\openmeetings\axis\services\FileWebService.java:888: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\fileservice\org\openmeetings\axis\services\FileWebService.java:934: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\fileservice\org\openmeetings\axis\services\FileWebService.java:970: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\fileservice\org\openmeetings\axis\services\FileWebService.java:1025: warning - @return tag has no arguments.
+  [javadoc] D:\work\workspaces\indigo_om_6\ROOT\src\fileservice\org\openmeetings\axis\services\FileWebService.java:1084: warning - @return tag has no arguments.
+  [javadoc] 14:59:33.037 [main] DEBUG org.apache.velocity - ResourceManager : found docs\ApiMethodsTemplate.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
+  [javadoc] 14:59:33.052 [main] DEBUG org.apache.velocity - ResourceManager : found docs\ApiClassesTemplate.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
+  [javadoc] 72 warnings
+     [copy] Copying 51 files to D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\docs
+     [copy] Copying 43 files to D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\docs\images
+     [copy] Copying 19 files to D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\docs\css
+     [copy] Copying 6 files to D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\docs\js
+     [copy] Copying 8 files to D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\docs\source
+     [copy] Copying 2 files to D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\docs\source\helpers
+
+current_revision:
+      [svn] info D:\work\workspaces\indigo_om_6\ROOT
+     [echo] Current revision: 1295557
+
+jar.only:
+      [jar] Building jar: D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\WEB-INF\lib\openmeetings.jar
+      [jar] Building jar: D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\WEB-INF\lib\openmeetings-templates.jar
+      [jar] Building jar: D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\WEB-INF\services\OpenMeetingsService.aar
+      [jar] Building jar: D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\WEB-INF\lib\openmeetings-WebService.jar
+
+jar.screen.share:
+      [jar] Building jar: D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\red5-screenshare\red5-screenshare.jar
+
+jar:
+
+compile.laszlo.main.debug:
+     [java] Compiling: maindebug.lzx to maindebug.swf8.swf
+     [java] Warning: Assignment to free variable curpixel in charts/styles/strokestyle.lzx (92)
+     [java] charts/common/legend.lzx:84:62: an attribute or method named 'datapath' already is defined on element legenditem
+     [java] base/components/omcharts/ompiechart.lzx:14:46: The child node <piechartplotarea name='plotarea'> conflicts with <attribute name='plotarea' type='expression'> of <class name='chart'>.  Either use a different name, or if you intend the child to be assigned to the attribute, declare the att
+ribute type to be `node`.
+     [java] modules/conference/whiteboard/toolbar/paintMenu.lzx:31:89: found an unknown attribute named "enabled" on element drawDoAndUndo, check the spelling of this attribute name
+     [java] modules/conference/whiteboard/toolbar/paintMenu.lzx:33:86: found an unknown attribute named "enabled" on element drawDoAndUndo, check the spelling of this attribute name
+     [java] modules/conference/whiteboard/panels/maintoolspanel/subMenuIconToolsToUpload.lzx:166:49: The attribute 'toolTipReference' has type expression, which cannot have an empty value.
+     [java] modules/conference/whiteboard/panels/maintoolspanel/subMenuIconToolsToUpload.lzx:397:55: found an unknown attribute named "xinset" on element simplelayout, however there is an attribute named "inset" on class attribute", did you mean to use that?
+     [java] modules/conference/polls/resultPollWin.lzx:184:90: found an unknown attribute named "text" on element view, however there is an attribute named "$lzc$set_context" on class method", did you mean to use that?
+     [java] modules/conference/polls/resultPollWin.lzx:184:90: The attribute 'text' has type expression, which cannot have an empty value.
+     [java] modules/conference/participants/participantList.lzx:224:110: element view has the same name="_icon_remote" attribute as a sibling element at modules/conference/participants/participantList.lzx:230:126
+     [java] modules/conference/participants/participantList.lzx:230:126: element view has the same name="_icon_remote" attribute as a sibling element at modules/conference/participants/participantList.lzx:224:110
+     [java] modules/conference/participants/participantList.lzx:230:126: an attribute or method named '_icon_remote' already is defined on element view
+     [java] modules/conference/flexibleConferenceRoom/flexibleConferenceRoom.lzx:153:118: found an unknown attribute named "restricted" on element fixedFileExplorerWhiteboardPanel, check the spelling of this attribute name
+     [java] modules/conference/flexibleConferenceRoom/flexibleEventRoom.lzx:150:79: found an unknown attribute named "restricted" on element fixedFileExplorerWhiteboardPanel, check the spelling of this attribute name
+     [java] modules/conference/flexibleConferenceRoom/restrictedConferenceRoom.lzx:146:134: found an unknown attribute named "restricted" on element fixedFileExplorerWhiteboardPanel, check the spelling of this attribute name
+
+compile.laszlo.main.debug.as3:
+     [java] Compiling: maindebug.as3.lzx to maindebug.as3.swf10.swf
+     [java] cleaning working dir: C:\DOKUME~1\swag\LOKALE~1\Temp\lzswf9\.\build\maindebug.as3
+     [java] Executing compiler: (cd C:\DOKUME~1\swag\LOKALE~1\Temp\lzswf9\.\build\maindebug.as3; D:\work\workspaces\indigo_om_6\ROOT\openlaszlo\WEB-INF\bin\mxmlc.exe -load-config=D:\work\workspaces\indigo_om_6\ROOT\openlaszlo\WEB-INF\frameworks\flex-config.xml -compiler.show-actionscript-warnings=fa
+lse -compiler.source-path+=C:\DOKUME~1\swag\LOKALE~1\Temp\lzswf9\.\build\maindebug.as3 -debug=true -compiler.headless-server=true -compiler.fonts.advanced-anti-aliasing=true -output C:\DOKUME~1\swag\LOKALE~1\Temp\lzswf9\.\build\maindebug.as3\app.swf -default-size 800 600 -compiler.library-path+=D:\w
+ork\workspaces\indigo_om_6\ROOT/openlaszlo\lps\includes\lfc\LFC10-debug.swc -includes $debug $profile $backtrace $runtime $swf7 $swf8 $as2 $swf9 $swf10 $as3 $dhtml $j2me $svg $js1 -target-player=10.0.0 -static-link-runtime-shared-libraries -frame two LzSpriteApplication -file-specs=C:\DOKUME~1\swag\
+LOKALE~1\Temp\lzswf9\.\build\maindebug.as3\LzPreloader.as)
+     [java] compiler output is Konfigurationsdatei D:\work\workspaces\indigo_om_6\ROOT\openlaszlo\WEB-INF\frameworks\flex-config.xml wird geladen
+     [java] C:\Dokumente und Einstellungen\swag\Lokale Einstellungen\Temp\lzswf9\build\maindebug.as3\app.swf (1340855 Byte)
+     [java]
+     [java] compiler output:
+     [java] Konfigurationsdatei D:\work\workspaces\indigo_om_6\ROOT\openlaszlo\WEB-INF\frameworks\flex-config.xml wird geladen
+     [java] C:\Dokumente und Einstellungen\swag\Lokale Einstellungen\Temp\lzswf9\build\maindebug.as3\app.swf (1340855 Byte)
+     [java]
+     [java] Done executing compiler
+
+signWebStartJars:
+   [genkey] Generating Key for filetest
+   [genkey] Erstellen von Schl³sselpaar (Typ DSA, 1.024 Bit) und selbstunterzeichnetem Zertifikat (SHA1withDSA) mit einer G³ltigkeit von 90 Tagen
+   [genkey]     f³r: CN=Sebastian Wagner, OU=technology, O=openmeetings.googlecode.com, C=DE
+   [genkey] [filetest.keystore wird gesichert.]
+  [signjar] Signing JAR: D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\red5-screenshare\bcprov-jdk16-145.jar to D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\red5-screenshare\bcprov-jdk16-145.jar as filetest
+  [signjar]
+  [signjar] Warning:
+  [signjar] The signer certificate will expire within six months.
+  [signjar] Signing JAR: D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\red5-screenshare\com.springsource.slf4j.api-1.6.1.jar to D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\red5-screenshare\com.springsource.slf4j.api-1.6.1.jar as filetest
+  [signjar]
+  [signjar] Warning:
+  [signjar] The signer certificate will expire within six months.
+  [signjar] Signing JAR: D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\red5-screenshare\commons-beanutils-1.8.3.jar to D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\red5-screenshare\commons-beanutils-1.8.3.jar as filetest
+  [signjar]
+  [signjar] Warning:
+  [signjar] The signer certificate will expire within six months.
+  [signjar] Signing JAR: D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\red5-screenshare\commons-codec-1.6.jar to D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\red5-screenshare\commons-codec-1.6.jar as filetest
+  [signjar]
+  [signjar] Warning:
+  [signjar] The signer certificate will expire within six months.
+  [signjar] Signing JAR: D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\red5-screenshare\ehcache-core-2.5.0.jar to D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\red5-screenshare\ehcache-core-2.5.0.jar as filetest
+  [signjar]
+  [signjar] Warning:
+  [signjar] The signer certificate will expire within six months.
+  [signjar] Signing JAR: D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\red5-screenshare\httpclient-4.1.2.jar to D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\red5-screenshare\httpclient-4.1.2.jar as filetest
+  [signjar]
+  [signjar] Warning:
+  [signjar] The signer certificate will expire within six months.
+  [signjar] Signing JAR: D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\red5-screenshare\httpcore-4.1.3.jar to D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\red5-screenshare\httpcore-4.1.3.jar as filetest
+  [signjar]
+  [signjar] Warning:
+  [signjar] The signer certificate will expire within six months.
+  [signjar] Signing JAR: D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\red5-screenshare\logback-classic-0.9.28.jar to D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\red5-screenshare\logback-classic-0.9.28.jar as filetest
+  [signjar]
+  [signjar] Warning:
+  [signjar] The signer certificate will expire within six months.
+  [signjar] Signing JAR: D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\red5-screenshare\logback-core-0.9.28.jar to D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\red5-screenshare\logback-core-0.9.28.jar as filetest
+  [signjar]
+  [signjar] Warning:
+  [signjar] The signer certificate will expire within six months.
+  [signjar] Signing JAR: D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\red5-screenshare\mina-core-2.0.4.jar to D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\red5-screenshare\mina-core-2.0.4.jar as filetest
+  [signjar]
+  [signjar] Warning:
+  [signjar] The signer certificate will expire within six months.
+  [signjar] Signing JAR: D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\red5-screenshare\red5-screenshare.jar to D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\red5-screenshare\red5-screenshare.jar as filetest
+  [signjar]
+  [signjar] Warning:
+  [signjar] The signer certificate will expire within six months.
+  [signjar] Signing JAR: D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\red5-screenshare\red5.jar to D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\red5-screenshare\red5.jar as filetest
+  [signjar]
+  [signjar] Warning:
+  [signjar] The signer certificate will expire within six months.
+
+dist-debug:
+
+BUILD SUCCESSFUL
+Total time: 2 minutes 29 seconds
+
+D:\work\workspaces\indigo_om_6\ROOT>cd dist\red5\lib
+
+D:\work\workspaces\indigo_om_6\ROOT\dist\red5\lib>dir
+ Datenträger in Laufwerk D: ist Daten
+ Volumeseriennummer: 0784-7FB9
+
+ Verzeichnis von D:\work\workspaces\indigo_om_6\ROOT\dist\red5\lib
+
+01.03.2012  14:58    <DIR>          .
+01.03.2012  14:58    <DIR>          ..
+               0 Datei(en)              0 Bytes
+               2 Verzeichnis(se), 10.297.991.168 Bytes frei
+
+D:\work\workspaces\indigo_om_6\ROOT\dist\red5\lib>cd ..\webapps\openmeetings\WEB-INF\lib
+
+D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\WEB-INF\lib>dir
+ Datenträger in Laufwerk D: ist Daten
+ Volumeseriennummer: 0784-7FB9
+
+ Verzeichnis von D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\WEB-INF\lib
+
+01.03.2012  14:59    <DIR>          .
+01.03.2012  14:59    <DIR>          ..
+01.03.2012  14:59            25.534 openmeetings-templates.jar
+01.03.2012  14:59            49.316 openmeetings-WebService.jar
+01.03.2012  14:59           974.418 openmeetings.jar
+               3 Datei(en)      1.049.268 Bytes
+               2 Verzeichnis(se), 10.297.991.168 Bytes frei
+
+D:\work\workspaces\indigo_om_6\ROOT\dist\red5\webapps\openmeetings\WEB-INF\lib>
