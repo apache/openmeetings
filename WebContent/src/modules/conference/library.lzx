@@ -53,7 +53,9 @@
    	<include href="popups/" />
    	<include href="moderation/" />
    	<include href="polls/" />
+   	
    	<include href="conference/" />
+   	
     <!-- throws an Exception
 	<include href="browser/"/>  
      -->
