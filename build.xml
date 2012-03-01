@@ -89,7 +89,6 @@
 	<property name="red5.lib.dir" value="${project.lib}/red5" />
 	<property name="om.lib.dir" value="${project.lib}/om" />
 	<property name="anakia.lib.dir" value="${project.lib}/anakia" />
-	<property name="red5-screenshare.lib.dir" value="${project.lib}/red5-screenshare" />
 	<property name="red5-screenshare.images" value="${basedir}/WebContent/red5-screenshare" />
 	<property name="junit.lib.dir" value="${project.lib}/junit" />
 	<property name="rat.lib.dir" value="${project.lib}/rat" />
@@ -112,7 +111,6 @@
 		<fileset dir="${red5.lib.dir}" includes="*.jar" />
 		<fileset dir="${om.lib.dir}" includes="*.jar" />
 		<fileset dir="${red5.lib}" includes="*.jar" />
-		<fileset dir="${red5-screenshare.lib.dir}" includes="*.jar" />
 		<fileset dir="${junit.lib.dir}" includes="*.jar" />
 		<fileset dir="${project.lib}" includes="*.jar" excludes="ivy*.jar" />
 	</path>
@@ -179,7 +177,6 @@
 		<mkdir dir="${red5.lib.dir}" />
 		<mkdir dir="${om.lib.dir}" />
 		<mkdir dir="${anakia.lib.dir}" />
-		<mkdir dir="${red5-screenshare.lib.dir}" />
 		<mkdir dir="${junit.lib.dir}" />
 		<mkdir dir="${rat.lib.dir}" />
 		<mkdir dir="${dtd-generator.lib.dir}" />
@@ -192,7 +189,6 @@
 	<!-- Check timestamp on files -->
 	<target name="prepare" depends="prepare.mkdir">
 		<copy todir="${screenshare.out.dir}" filtering="true">
-			<fileset dir="${red5-screenshare.lib.dir}" includes="*.jar" />
 			<fileset dir="${red5-screenshare.images}" />
 			<fileset dir="${red5.lib.dir}" includes="commons-codec*.jar" />
 			<fileset dir="${red5.lib.dir}" includes="httpclient*.jar" />
@@ -477,7 +473,7 @@
 		</javac>
 	</target>
 
-	<target name="compile.screen.share" depends="-retrieve-red5-screenshare,clean.classes, prepare.mkdir, resources">
+	<target name="compile.screen.share" depends="clean.classes, prepare.mkdir, resources">
 		<echo message="Compile screen share to ${screen.out.dir}" />
 		<!-- compile screen share -->
 		<javac debug="on" debuglevel="lines,vars,source" srcdir="${screen.src.dir}" destdir="${screen.out.dir}">
@@ -835,13 +831,6 @@
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
 			<param name="ivy.conf.name" value="anakia"/>
 			<param name="ivy.lib.location" value="${anakia.lib.dir}"/>
-		</antcall>
-	</target>
-	<!-- Check for red5-screenshare libraries -->
-	<target name="-retrieve-red5-screenshare" unless="red5-screenshare.installed" description="Retrieves the libraries if needed" depends="prepare.mkdir">
-		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
-			<param name="ivy.conf.name" value="red5-screenshare"/>
-			<param name="ivy.lib.location" value="${red5-screenshare.lib.dir}"/>
 		</antcall>
 	</target>
 	<!-- Check for junit libraries -->

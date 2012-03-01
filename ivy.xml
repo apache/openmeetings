@@ -22,7 +22,6 @@
 		<conf name="red5.ext" description="Red5 required libraries with different pattern" />
 		<conf name="openmeetings" description="Openmeetings required libraries" />
 		<conf name="anakia" description="Openmeetings required libraries" />
-		<conf name="red5-screenshare" description="Red5-screenshare required libraries" />
 		<conf name="openmeetings.ext" description="Openmeetings required libraries with different pattern" />
 		<conf name="openmeetings.axis2" description="Axis required libraries with dependencies" />
 		<conf name="junit" description="Unit testing dependencies" />
@@ -141,13 +140,6 @@
 		</dependency>
 		<!--  END OF ANAKIA -->
 
-		<!--  START OF RED5-SCREENSHARE -->
-		<dependency org="com.incors.plaf" name="kunststoff" rev="2.0.2" conf="red5-screenshare->*" transitive="false">
-			<include type="jar" />
-		</dependency>
-		<!--  END OF RED5-SCREENSHARE -->
-
-		
 		<!--  START OF OPENMEETINGS -->
 		<dependency org="org.apache.axis2" name="axis2" rev="1.6.1" conf="openmeetings->*" transitive="false">
 			<include type="jar" />

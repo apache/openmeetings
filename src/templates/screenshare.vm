@@ -30,7 +30,6 @@ limitations under the License.
 	<resources> 
 		<j2se version='1.4+'/> 
         <jar href="commons-codec-1.6.jar"/> 
-        <jar href="kunststoff.jar"/>
         <jar href="logback-classic-0.9.28.jar"/> 
         <jar href="logback-core-0.9.28.jar"/>
         <jar href="red5.jar"/>
