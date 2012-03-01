@@ -27,6 +27,7 @@
 		<conf name="junit" description="Unit testing dependencies" />
 		<conf name="rat" description="Apache Rat dependencies" />
 		<conf name="dtd" description="Dtd-generator dependencies" />
+		<conf name="svntask" description="Svn task dependencies" />
 	</configurations>
 	<dependencies>
 		<!--  START OF RED5 -->
@@ -325,6 +326,13 @@
 			<include type="jar" />
 		</dependency>
 		<!--  END OF DTD -->
+		
+		<!--  START OF svntask -->
+		<dependency org="org.tmatesoft.svnkit" name="svnkit" rev="1.7.0-beta2" conf="svntask->*" transitive="true">
+			<include type="jar" />
+		</dependency>
+		<!--  END OF svntask -->
+		
 	</dependencies>
 </ivy-module>
 

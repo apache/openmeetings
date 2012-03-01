@@ -93,18 +93,10 @@
 	<property name="junit.lib.dir" value="${project.lib}/junit" />
 	<property name="rat.lib.dir" value="${project.lib}/rat" />
 	<property name="dtd-generator.lib.dir" value="${project.lib}/dtd-generator" />
+	<property name="svntask.lib.dir" value="${project.lib}/svntask" />
 	
 	<property name="red5.lib" value="${basedir}/${red5.server.dir}/dist" />
 	<property name="red5.server.lib" value="${red5.lib}/lib" />
-	<property name="spring.lib" value="${project.lib}/spring" />
-	<property name="upload.lib" value="${project.lib}/upload" />
-	<property name="xstream.lib" value="${project.lib}/xstream" />
-	<property name="web.lib" value="${project.lib}" />
-	<!-- Svn Task -->
-	<property name="svntask.lib" value="${project.lib}/svntask-1.0.8" />
-
-	<!-- JDK Tools -->
-	<property name="jdk.tools" value="${project.lib}/java_16_jdk" />
 
 	<!-- compile classpath -->
 	<path id="compile.classpath">
@@ -120,7 +112,7 @@
 		<tstamp>
 			<format property="build.time" pattern="dd-MM-yyyy_HHmm" />
 		</tstamp>
-		<property name="archive.file.name" value="${dist.dir}/${project.distname}-${version.number}.r${svn.version}-${build.time}" />
+		<property name="archive.file.name" value="${dist.dir}/${project.distname}-${version.number}.r${svn.info.rev}-${build.time}" />
 		
 		<tar longfile="gnu" compression="gzip" destfile="${archive.file.name}-src.tar.gz">
 			<tarfileset dir="${basedir}">
@@ -149,44 +141,25 @@
 	</target>
 	
 	<!-- build webapp -->
-
-	<target name="dist" description="binary distribution of OpenMeetings"
-		depends="cleanForBinary, jar, compile.laszlo.main, compile.laszlo.main.as3, enhance, signWebStartJars">
-		
+	<target name="-copy-libraries" description="All jars downloaded by ivy copied to appropriate places">
 		<copy todir="${dist.dir}/red5/lib">
 			<fileset dir="${red5.lib.dir}" includes="*.jar" />
 		</copy>
 		<copy todir="${dist.webapps.dir}/WEB-INF/lib">
 			<fileset dir="${om.lib.dir}" includes="*.jar" />
 		</copy>
-
 	</target>
+	
+	<target name="dist" description="binary distribution of OpenMeetings"
+		depends="cleanForBinary, jar, compile.laszlo.main, compile.laszlo.main.as3, enhance, signWebStartJars, -copy-libraries"/>
 
 	<!-- compiles the sources without the laszlo client -->
 	<target name="dist-test" description="binary distribution of OpenMeetings"
-		depends="cleanForBinary, jar, signWebStartJars">
-		
-		<copy todir="${dist.dir}/red5/lib">
-			<fileset dir="${red5.lib.dir}" includes="*.jar" />
-		</copy>
-		<copy todir="${dist.webapps.dir}/WEB-INF/lib">
-			<fileset dir="${om.lib.dir}" includes="*.jar" />
-		</copy>
-	
-	</target>
+		depends="cleanForBinary, jar, signWebStartJars, -copy-libraries"/>
 
 	<!-- compiles the sources only with laszlo debug client -->
 	<target name="dist-debug" description="binary distribution of OpenMeetings"
-		depends="cleanForBinary, jar, compile.laszlo.main.debug, compile.laszlo.main.debug.as3, signWebStartJars">
-	
-		<copy todir="${dist.dir}/red5/lib">
-			<fileset dir="${red5.lib.dir}" includes="*.jar" />
-		</copy>
-		<copy todir="${dist.webapps.dir}/WEB-INF/lib">
-			<fileset dir="${om.lib.dir}" includes="*.jar" />
-		</copy>
-	
-	</target>
+		depends="cleanForBinary, jar, compile.laszlo.main.debug, compile.laszlo.main.debug.as3, signWebStartJars, -copy-libraries"/>
 
 	<target name="prepare.mkdir" depends="-java6.check">
 		<mkdir dir="${screen.out.dir}" />
@@ -198,6 +171,7 @@
 		<mkdir dir="${junit.lib.dir}" />
 		<mkdir dir="${rat.lib.dir}" />
 		<mkdir dir="${dtd-generator.lib.dir}" />
+		<mkdir dir="${svntask.lib.dir}" />
 	</target>
 
 	<condition property="db.provider" value="${db}" else="derby">
@@ -206,21 +180,6 @@
 
 	<!-- Check timestamp on files -->
 	<target name="prepare" depends="prepare.mkdir">
-		<copy todir="${screenshare.out.dir}" filtering="true">
-			<fileset dir="${red5-screenshare.images}" />
-			<fileset dir="${red5.lib.dir}" includes="commons-codec*.jar" />
-			<fileset dir="${red5.lib.dir}" includes="httpclient*.jar" />
-			<fileset dir="${red5.lib.dir}" includes="httpcore*.jar" />
-			<fileset dir="${red5.lib.dir}" includes="bcprov-jdk16*.jar" />
-			<fileset dir="${red5.lib.dir}" includes="ehcache-core*.jar" />
-			<fileset dir="${red5.lib.dir}" includes="commons-beanutils*.jar" />
-			<fileset dir="${red5.server.dir}/dist" includes="red5.jar" />
-			<fileset dir="${red5.lib.dir}" includes="org.springframework.context-*.jar" />
-			<fileset dir="${red5.lib.dir}" includes="org.springframework.core-*.jar" />
-			<fileset dir="${red5.lib.dir}" includes="logback*.jar" />
-			<fileset dir="${red5.lib.dir}" includes="mina-core*.jar" />
-			<fileset dir="${red5.lib.dir}" includes="com.springsource.slf4j.api*.jar" />
-		</copy>
 		<copy todir="${red5.root}" filtering="true">
 			<fileset dir="${red5.server.dir}/dist">
 				<exclude name="**/*.fla" />
@@ -334,7 +293,7 @@
 				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com" />
 				<attribute name="Built-On" value="${build.TODAY}" />
 				<attribute name="Class-Path" value="conf/ ${jar.classpath}" />
-				<attribute name="Svn-Revision" value="${svn.version}" />
+				<attribute name="Svn-Revision" value="${svn.info.rev}" />
 			</manifest>
 		</jar>
 		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-templates.jar">
@@ -403,6 +362,21 @@
 				<param name="C" value="DE" />
 			</dname>
 		</genkey>
+		<copy todir="${screenshare.out.dir}" filtering="true">
+			<fileset dir="${red5-screenshare.images}" />
+			<fileset dir="${red5.lib.dir}" includes="commons-codec*.jar" />
+			<fileset dir="${red5.lib.dir}" includes="httpclient*.jar" />
+			<fileset dir="${red5.lib.dir}" includes="httpcore*.jar" />
+			<fileset dir="${red5.lib.dir}" includes="bcprov-jdk16*.jar" />
+			<fileset dir="${red5.lib.dir}" includes="ehcache-core*.jar" />
+			<fileset dir="${red5.lib.dir}" includes="commons-beanutils*.jar" />
+			<fileset dir="${red5.server.dir}/dist" includes="red5.jar" />
+			<fileset dir="${red5.lib.dir}" includes="org.springframework.context-*.jar" />
+			<fileset dir="${red5.lib.dir}" includes="org.springframework.core-*.jar" />
+			<fileset dir="${red5.lib.dir}" includes="logback*.jar" />
+			<fileset dir="${red5.lib.dir}" includes="mina-core*.jar" />
+			<fileset dir="${red5.lib.dir}" includes="com.springsource.slf4j.api*.jar" />
+		</copy>
 		<signjar alias="filetest" keystore="filetest.keystore" storepass="secret" lazy="false">
 			<path>
 				<fileset dir="${screenshare.out.dir}">
@@ -547,19 +521,19 @@
 		<echo message="Enhancing complete." />
 	</target>
 
-	<target name="current_revision">
-		<typedef resource="com/googlecode/svntask/svntask.xml">
+	<target name="current_revision" depends="-retrieve-svntask">
+		<typedef resource="org/tigris/subversion/svnant/svnantlib.xml">
 			<classpath>
-				<fileset dir="${svntask.lib}" includes="*.jar" />
+				<fileset dir="${svntask.lib.dir}" includes="*.jar" />
+				<fileset dir="${project.lib}" includes="svn*.jar" />
 			</classpath>
 		</typedef>
 
-		<svn>
-			<info path="." revisionProperty="svn.version" />
+		<svnSetting svnkit="false" javahl="false" id="svn.settings" /> <!-- native svn in the path-->
+		<svn refid="svn.settings">
+			<info target="."/>
 		</svn>
-
-		<!-- Display svn revision number -->
-		<echo>Current revision: ${svn.version}</echo>
+		<echo>Current revision: ${svn.info.rev}</echo>
 	</target>
 
 	<!-- Build entire project -->
@@ -870,6 +844,14 @@
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
 			<param name="ivy.conf.name" value="dtd"/>
 			<param name="ivy.lib.location" value="${dtd-generator.lib.dir}"/>
+		</antcall>
+	</target>
+	<!-- Check for svntask libraries -->
+	<target name="-retrieve-svntask" unless="svntask.installed" description="Retrieves the libraries if needed" depends="prepare.mkdir">
+		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
+			<param name="ivy.conf.name" value="svntask"/>
+			<param name="ivy.lib.location" value="${svntask.lib.dir}"/>
+			<param name="ivy.transitive" value="true" />
 		</antcall>
 	</target>
 
