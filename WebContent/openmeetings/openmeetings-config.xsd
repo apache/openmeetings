@@ -47,8 +47,6 @@
         <xs:element ref="dashboardModuleCalendar"/>
         <xs:element ref="conferenceModuleRoomList"/>
         <xs:element ref="conferenceRoomModule"/>
-        <xs:element ref="eventModuleRoomList"/>
-        <xs:element ref="eventRoomModule"/>
         <xs:element ref="restrictedRoomModule"/>
         <xs:element ref="interviewRoomModule"/>
         <xs:element ref="recordModule"/>
@@ -116,8 +114,6 @@
   <xs:element name="dashboardModuleCalendar" type="xs:NCName"/>
   <xs:element name="conferenceModuleRoomList" type="xs:NCName"/>
   <xs:element name="conferenceRoomModule" type="xs:NCName"/>
-  <xs:element name="eventModuleRoomList" type="xs:NCName"/>
-  <xs:element name="eventRoomModule" type="xs:NCName"/>
   <xs:element name="restrictedRoomModule" type="xs:NCName"/>
   <xs:element name="interviewRoomModule" type="xs:NCName"/>
   <xs:element name="recordModule" type="xs:NCName"/>

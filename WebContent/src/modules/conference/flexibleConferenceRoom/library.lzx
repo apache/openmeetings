@@ -29,6 +29,7 @@
 		<frame src="resources/sidebar_open.png" />
 	</resource>
 	
+	<include href="moderationMiniIconsEventUserList.lzx" />
 	<include href="activitylist/" />
 	<include href="roomSidebar/" />
 	<include href="appointmentNotificationPopUp.lzx" />
@@ -36,7 +37,6 @@
     <include href="baseConferenceRoom.lzx" />
 	<include href="fixedWhiteboardPanel.lzx" />
     <include href="flexibleConferenceRoom.lzx" />
-    <include href="flexibleEventRoom.lzx" />
     <include href="restrictedConferenceRoom.lzx" />
     <include href="interviewConferenceRoom.lzx" />
     

@@ -77,20 +77,7 @@ these properties can be overwritten by config.xml -->
 
 
 <!-- #############################################
-    Event Room Modules
- -->
-
-<attribute name="eventModuleRoomList" value="allEvents" type="string" />
-
-
-<!-- #############################################
-    Event Room
- -->
-
-<attribute name="eventRoomModule" value="audienceView" type="string" />
-
-<!-- #############################################
-    Event Room
+    Restricted Room
     
     Room Layouts: flexibleRestrictedConferenceRoom,restrictedConferenceRoom
  -->

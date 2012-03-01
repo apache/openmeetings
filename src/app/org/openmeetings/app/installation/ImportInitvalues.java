@@ -542,22 +542,19 @@ public class ImportInitvalues {
 	public void loadDefaultRooms(boolean createRooms) {
 
 		long conference_Id = roommanagement
-				.addRoomType("conference (1-25 users)");
+				.addRoomType("conference (1-25 users)", false);
 		log.debug("conference_Id: " + conference_Id);
-		long audience_Id = roommanagement.addRoomType("audience (1-50 users)");
-		log.debug("audience_Id: " + audience_Id);
+		
+		//Audience room type is not in use anymore
+		roommanagement.addRoomType("audience (1-50 users)", true);
 
 		long restricted_Id = roommanagement
-				.addRoomType("restricted  (1-150 users)");
+				.addRoomType("restricted  (1-150 users)", false);
 		log.debug("restricted_Id: " + restricted_Id);
 
 		long interview_Id = roommanagement
-				.addRoomType("interview  (1:1 meeting with recording)");
+				.addRoomType("interview  (1:1 meeting with recording)", false);
 		log.debug("interview_Id: " + interview_Id);
-
-		long custom_Id = roommanagement
-				.addRoomType("custom (extension point for your plugin)");
-		log.debug("custom_Id: " + custom_Id);
 
 		if (createRooms) {
 			roommanagement.addRoom(3, "public Interview Room", interview_Id,
@@ -665,33 +662,7 @@ public class ImportInitvalues {
 					);
 
 			roommanagement.addRoomToOrganisation(3, room2, 1);
-
-			roommanagement.addRoom(3, "public Audience Room", audience_Id, "",
-					new Long(32), true, null, false, false, null, false, null,
-					true, false, false, "", "", "", null, null, null, false, // hideTopBar
-					false, // hideChat
-					false, // hideActivitiesAndActions
-					false, // hideFilesExplorer
-					false, // hideActionsMenu
-					false, // hideScreenSharing
-					false, // hideWhiteboard
-					false // showMicrophoneStatus
-					);
-
-			long room4 = roommanagement.addRoom(3, "private Audience Room",
-					audience_Id, "", new Long(32), false, null, false, false,
-					null, false, null, true, false, false, "", "", "", null,
-					null, null, false, // hideTopBar
-					false, // hideChat
-					false, // hideActivitiesAndActions
-					false, // hideFilesExplorer
-					false, // hideActionsMenu
-					false, // hideScreenSharing
-					false, // hideWhiteboard
-					false // showMicrophoneStatus
-					);
-
-			roommanagement.addRoomToOrganisation(3, room4, 1);
+			
 		}
 	}
 

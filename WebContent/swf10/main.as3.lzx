@@ -83,7 +83,7 @@
             }
         }
         
-        var tSWFURL = "maindebug.swf8.swf?lzproxied=solo&lc_SID="+lc_SID+tqueryString;
+        var tSWFURL = "main.swf8.swf?lzproxied=solo&lc_SID="+lc_SID+tqueryString;
         
         if ($debug) Debug.write("tSWFURL :: ",tSWFURL);
         

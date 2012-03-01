@@ -307,22 +307,6 @@ of the red5-servlet
 
 <conferenceRoomModule>flexibleConferenceRoom</conferenceRoomModule>
 
-
-<!-- #############################################
-    Event Room Modules
- -->
-
-<eventModuleRoomList>allEvents</eventModuleRoomList>
-
-
-<!-- #############################################
-    Event Room
-    
-    Room Layouts: flexibleEventRoom,audienceView
- -->
-
-<eventRoomModule>flexibleEventRoom</eventRoomModule>
-
 <!-- #############################################
     Event Room
     

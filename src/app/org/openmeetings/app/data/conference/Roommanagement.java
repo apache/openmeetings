@@ -85,12 +85,12 @@ public class Roommanagement {
 	 * @param name
 	 * @return ID of new created roomtype or null
 	 */
-	public Long addRoomType(String name) {
+	public Long addRoomType(String name, boolean deleted) {
 		try {
 			RoomTypes rtype = new RoomTypes();
 			rtype.setName(name);
 			rtype.setStarttime(new Date());
-			rtype.setDeleted("false");
+			rtype.setDeleted(deleted ? "true" : "false");
 			rtype = em.merge(rtype);
 			long returnId = rtype.getRoomtypes_id();
 			return returnId;

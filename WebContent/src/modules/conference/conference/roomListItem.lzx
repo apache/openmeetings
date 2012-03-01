@@ -145,7 +145,8 @@
 			if (this.roomType == 1) {
 				this.roomClassName = canvas.conferenceRoomModule;
 			} else if (this.roomType == 2) {
-				this.roomClassName = canvas.eventRoomModule;
+				new lz.labelerrorPopup(canvas,{error:'No RoomType currently available for roomTypeId 2'});
+				this.roomClassName = canvas.restrictedRoomModule;
 			} else if (this.roomType == 3) {
                 this.roomClassName = canvas.restrictedRoomModule;
             } else if (this.roomType == 4) {
