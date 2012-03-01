@@ -49,29 +49,6 @@
 		</property>
 	</bean>
 	
-	<!--  Recording  -->    
-	<bean id="openmeetings.RecordingJob" class="org.openmeetings.app.quartz.scheduler.RecordingJob"/>
-    
-	<bean id="quartzRecordingCheck" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-	    <property name="targetObject"><ref bean="openmeetings.RecordingJob"/></property>
-	    <property name="targetMethod"><value>doIt</value></property>
-	    <property name="concurrent" value="false"/>
-	</bean>
-	
-	<bean id="triggerRecording" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
-		<property name="jobDetail">
-			<ref bean="quartzRecordingCheck"/>
-		</property>
-		<property name="startDelay">
-			<!-- 5 seconds -->
-			<value>5000</value>
-		</property>
-		<property name="repeatInterval">
-			<!-- repeat every 3 seconds -->
-			<value>3000</value>
-		</property>
-	</bean>
-
 	<!--  Meeting Reminder  -->    
 	<bean id="openmeetings.MeetingReminderJob" class="org.openmeetings.app.quartz.scheduler.MeetingReminderJob"/>
 	
@@ -100,7 +77,6 @@
 	  <property name="triggers">
 	    <list>
 	      <ref local="triggerSessionClear" />
-	      <ref local="triggerRecording" />
 	      <ref local="triggerMeetingReminder" />
 	    </list>
 	  </property>

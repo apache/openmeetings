@@ -164,7 +164,6 @@
 	<classpathentry kind="lib" path="lib/red5/xmlrpc-2.0.1.jar"/>
 	<classpathentry kind="lib" path="red5-1.0.0-r4315/dist/red5.jar"/>
 	<classpathentry kind="lib" path="lib/om/servlet-api-jar-2.5.jar"/>
-	<classpathentry kind="lib" path="lib/red5-screenshare/kunststoff-2.0.2.jar"/>
 	<classpathentry kind="lib" path="lib/dtd-generator/trang-20091111.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

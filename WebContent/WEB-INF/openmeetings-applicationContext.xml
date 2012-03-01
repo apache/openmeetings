@@ -64,8 +64,7 @@
     <import resource="red5-services/pollservice.service.xml"/>  
     <import resource="red5-services/xmlcrm.service.xml"/>  
     <import resource="red5-services/languageservice.service.xml"/>  
-    <import resource="red5-services/chatservice.service.xml"/>  
-    <import resource="red5-services/streamservice.service.xml"/>  
+    <import resource="red5-services/chatservice.service.xml"/> 
     <import resource="red5-services/invitationservice.service.xml"/>  
     <import resource="red5-services/whiteboardservice.service.xml"/>  
     <import resource="red5-services/printservice.service.xml"/>  

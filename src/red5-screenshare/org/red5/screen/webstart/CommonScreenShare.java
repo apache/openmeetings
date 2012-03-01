@@ -263,11 +263,6 @@ public class CommonScreenShare {
 			ImageIcon start_btn = createImageIcon("/webstart_play.png");
 			ImageIcon stop_btn = createImageIcon("/webstart_stop.png");
 
-			UIManager
-					.setLookAndFeel(new com.incors.plaf.kunststoff.KunststoffLookAndFeel());
-			UIManager.getLookAndFeelDefaults().put("ClassLoader",
-					getClass().getClassLoader());
-
 			t = new JFrame(this.label730);
 			contentPane = t.getContentPane();
 			contentPane.setBackground(Color.WHITE);
