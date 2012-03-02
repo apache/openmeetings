@@ -2261,11 +2261,16 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 							RoomClient rcl = this.clientListManager
 									.getClientByStreamId(conn.getClient().getId());
 							
-							if (rcl == null
-									|| (rcl.getIsScreenClient() != null && rcl
-											.getIsScreenClient())) {
+							if (rcl == null) {
 								// rcl can be null if there are network problems
+								continue;
+							} else if (rcl.getIsScreenClient() != null && rcl
+											.getIsScreenClient()) {
 								// screensharing clients do not receive events
+								continue;
+							} else if (rcl.getIsAVClient() == null || rcl
+									.getIsAVClient()) {
+								// avclient or potential AVClients do not receive events
 								continue;
 							} else if (current.getClient().getId().equals(
 										conn.getClient().getId()) && !sendSelf) {
