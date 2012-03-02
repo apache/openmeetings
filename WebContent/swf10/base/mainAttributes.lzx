@@ -47,9 +47,18 @@
 	 -->
 	<attribute name="screenSharingDialogContainer" value="null" />
 	
-	<attribute name="isAllowedToRemoteControl" value="true" type="boolean" />
+	<!--
+	    this value indicates if this user is allowed to draw to the Whiteboard
+	    If this user is currently Moderator => he ALWAYS can draw to whiteboard
+	    even if this isAllowedToDraw == false
+	 -->
+	<attribute name="isAllowedToDraw" value="false" type="boolean" />
 	
-	<attribute name="ismoderator" value="true" type="boolean" />
+	<attribute name="isAllowedToScreenShare" value="false" type="boolean" />
+	
+	<attribute name="isAllowedToRemoteControl" value="false" type="boolean" />
+	
+	<attribute name="ismoderator" value="false" type="boolean" />
 	
 	<attribute name="isInterview" value="false" type="boolean" />
 	

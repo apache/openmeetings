@@ -154,7 +154,6 @@
                     } else {
                     	new lz.labelerrorPopup(canvas,{errorlabelid:682});
                     }
-                    //parent.parent.setCanDraw.doCall();
                 }
             ]]>
         </handler>
@@ -173,7 +172,6 @@
                     if ($debug) Debug.write("Do Add It");
                     hib.addModerator.publicSIDOfNewModerator = parent.parent.parent.refObj.publicSID;
                     hib.addModerator.doCall();
-                    //parent.parent.setCanDraw.doCall();
                 }
             ]]>
         </handler>
@@ -194,7 +192,6 @@
                     canvas.thishib.setCanDraw.publicSID = parent.parent.parent.refObj.publicSID;
                     canvas.thishib.setCanDraw.canDraw = false;
                     canvas.thishib.setCanDraw.doCall();
-                    //parent.parent.setCanDraw.doCall();
                 }
             ]]>
         </handler>
@@ -210,7 +207,6 @@
                 canvas.thishib.setCanDraw.publicSID = parent.parent.parent.refObj.publicSID;
                 canvas.thishib.setCanDraw.canDraw = true;
                 canvas.thishib.setCanDraw.doCall();
-                //parent.parent.setCanDraw.doCall();
             }
         </handler>
         <labelTooltip labelid="611" />
@@ -278,8 +274,6 @@
     		   resource="av_allow_rsc" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("ALLOW: ",parent.parent.parent.refObj.publicSID);
-            //var myvideocontainer = canvas._videocontainer.getNewVideoObject(parent.parent.refObj.publicSID);
-            //myvideocontainer.resetValues();
             canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = parent.parent.parent.refObj.publicSID;
             canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
             canvas.thishib.setBroadCastingFlag.doCall(); 
@@ -290,8 +284,6 @@
     <miniIcons name="_denyDevice" x="80" width="40" height="16" resource="av_deny_rsc" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("ALLOW: ",parent.parent.parent.refObj.publicSID);
-            //var myvideocontainer = canvas._videocontainer.getNewVideoObject(parent.parent.refObj.publicSID);
-            //myvideocontainer.resetValues();
             canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = parent.parent.parent.refObj.publicSID;
             canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = false;
             canvas.thishib.setBroadCastingFlag.doCall(); 
@@ -302,11 +294,7 @@
     <miniIcons name="_muteDevice" x="120" width="16" height="16" resource="mute_btn_rsc" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("mute: ",parent.parent.parent.refObj.publicSID);
-            //canvas.thishib.giveExclusiveAudio.publicSID = parent.parent.parent.refObj.publicSID;
-            //canvas.thishib.giveExclusiveAudio.doCall();
-            
             canvas.thishib.switchMicMuted.setMute(parent.parent.parent.refObj.publicSID,true);
-            
         </handler>
         <labelTooltip labelid="1384" />
     </miniIcons>
@@ -315,11 +303,7 @@
     		   showhandcursor="true" visibility="hidden">
         <handler name="onclick">
             if ($debug) Debug.write("unmute: ",parent.parent.parent.refObj.publicSID);
-            //canvas.thishib.giveExclusiveAudio.publicSID = parent.parent.parent.refObj.publicSID;
-            //canvas.thishib.giveExclusiveAudio.doCall();
-            
             canvas.thishib.switchMicMuted.setMute(parent.parent.parent.refObj.publicSID,false);
-            
         </handler>
         <labelTooltip labelid="1385" />
     </miniIcons>
@@ -388,7 +372,6 @@
             <netparam><method name="getValue"> return parent.publicSID; </method></netparam>
             <handler name="ondata" args="value">
                 if ($debug) Debug.write("kickUserByPublicSID: ",value);
-                //this.parent.destroy();
             </handler>
         </netRemoteCallHib> 
         

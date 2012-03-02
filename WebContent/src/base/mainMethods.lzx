@@ -639,17 +639,9 @@
     </handler>
 </dataset>
 
-
-<method name="getSessionVars" args="">
-    canvas.setAttribute('loadingmessage','loading session data');
-    var d=getSessionVarsData;
-    d.doRequest();
-</method>
-
-
-<method name="addBroswerTabHistory" args="value">
+<method name="addBrowserTabHistory" args="value">
     <![CDATA[
-    //Debug.write("addBroswerTabHistory: ",value);
+    //Debug.write("addBrowserTabHistory: ",value);
     _browserhistory.addItem(value);
     this.browserTabHistory.push(value);
     ]]>
@@ -657,6 +649,9 @@
   
 <!---
 @doc The function does compare the new moderator list with the old and prepares the list 
+	the removeModeratorList is used in the performance optimized user list of the restricted 
+	room type to re-render the list items only if really something has changed in any 
+	of the user list items
  -->
 <method name="analyzeModerationList" args="newList">
     <![CDATA[
@@ -673,12 +668,9 @@
                 
                 for (var k=0;k<newList.length;k++) {
                     if (newList[k].publicSID == canvas.currentModeratorList[i].publicSID) {
-                        
                         canvas.currentModeratorList[i].found = true;
-                        
                     }
                 }
-                
             }
         }
         
@@ -687,29 +679,19 @@
         }
        
         for (var k=0;k<newList.length;k++) {
-            
         	if (canvas.currentModeratorList != null) {
                 for (var i=0;i<canvas.currentModeratorList.length;i++) {
-                    
                     if (newList[k].publicSID == canvas.currentModeratorList[i].publicSID) {
-                        
                         newList[k].found = true;
-                        
                     }
-                    
                 }
         	}
-            
         }
         
         for (var k=0;k<newList.length;k++) {
-            
             if (!newList[k].found) {
-                
                 canvas.newModeratorList.push(newList[k]);
-                
             }
-            
         }
         
         if (canvas.currentModeratorList != null) {
@@ -718,93 +700,62 @@
                 if (!canvas.currentModeratorList[i].found) {
                     canvas.removeModeratorList.push(canvas.currentModeratorList[i])
                 }
-                
             }
         }
         
         if ($debug) Debug.write("newModeratorList :: ",canvas.newModeratorList);
         if ($debug) Debug.write("removeModeratorList :: ",canvas.removeModeratorList);
-    
     ]]>
 </method>
 
-<!--
-<method name="setModeratorName" args="mod">
-    <![CDATA[
-        this.moderatorName = mod;
-        canvas._mymod.mymodText.setAttribute('text',canvas.getLabelName(98)+' '+this.moderatorName);
-        if ($debug) Debug.write("canvas.moderatorStreamID==canvas.streamid",
-                                (canvas.moderatorStreamID==canvas.streamid),
-                                canvas.moderatorStreamID,canvas.streamid);
-        if (canvas.moderatorStreamID==canvas.streamid){
-            this.setAttribute('ismoderator',true);
-        } else {
-            this.setAttribute('ismoderator',false);
-        }
-    ]]>
-</method>
+<!---
+	Updates the "ismoderator" flag
+	the setAttribute method will broadcast an event to all event listeners that 
+	did subscribe using the "onismoderator" handler with reference to canvas !
+	For example in the userlist's of the roomtypes
  -->
- 
 <method name="updateModerationFlag">
     <![CDATA[
         if ($debug) Debug.write("updateModerationFlag",canvas.currentModeratorList);
-        
         var isCurrentModerator = false;
-        
         for (var i=0;i<canvas.currentModeratorList.length;i++) {
-            
             var item = canvas.currentModeratorList[i];
-            
-    
             if (canvas.publicSID == item.publicSID) {
                 isCurrentModerator = true;
             }
-            
         }
-        
         this.setAttribute('ismoderator',isCurrentModerator);
-        
     ]]>
 </method> 
 
-<!--
-var cItem = canvas._mymod.currentModerators.getItem(item.publicSID);
-
-if (cItem == null) {
-    canvas._mymod.currentModerators.addItem(item.firstname + ' ' + item.lastname,item.publicSID);
-} else {
-    if ($debug) Debug.warn("Already Moderator in Combobox List");
-}
+<!---
+	Checks if a certain publicSID is a moderator
  -->
-            
-
 <method name="getIsModeratorByPublicSID" args="publicSID">
     <![CDATA[
-    
-        //if ($debug) Debug.write("getIsModeratorByPublicSID ",publicSID);
-    
         for (var i=0;i<canvas.currentModeratorList.length;i++) {
-            
             var item = canvas.currentModeratorList[i];
-            
-            //if ($debug) Debug.write("publicSID ? item.publicSID ",publicSID,item.publicSID);
-            
             if (publicSID == item.publicSID) {
                 return true;
             }
         }
-        
         return false;
     ]]>
 </method>
  
-
+<!---
+	Load the invitation window
+ -->
 <method name="doAction" args="action">
     if (action == "invitation") {
         new lz.inviteMainWindow(canvas.main_content._content.inner);
     }
 </method>
 
+<!---
+	Sets the flags isAllowedToDraw, isAllowedToScreenShare, isAllowedToRemoteControl 
+	and broadcasts the three rights to SWF10 container
+ -->
 <method name="setDrawAllowStatus" args="roomClientObj">
     <![CDATA[
         if ($debug) Debug.write("drawAllowStatus changes ###### ");
@@ -812,15 +763,21 @@ if (cItem == null) {
             canvas.setAttribute("isAllowedToDraw",roomClientObj.canDraw);
             canvas.setAttribute("isAllowedToScreenShare",roomClientObj.canShare);
             canvas.setAttribute("isAllowedToRemoteControl",roomClientObj.canRemote);
+            canvas.lc.send(canvas.vid_lc_name, "setDrawAllowStatus", roomClientObj.canDraw, roomClientObj.canShare, roomClientObj.canRemote);
         }
     ]]>
 </method>
 
+<!---
+	Sets the flag for the isAllowedToGiveExclusiveAudio status and broadcasts it to the 
+	SWF10 container
+ -->
 <method name="setExclusiveAudioAllowStatus" args="roomClientObj">
     <![CDATA[
         if ($debug) Debug.write("giveExclusiveAudioStatus changes ###### ");
         if (roomClientObj.publicSID==canvas.publicSID) {
             canvas.setAttribute("isAllowedToGiveExclusiveAudio",roomClientObj.canGiveAudio);
+            canvas.lc.send(canvas.vid_lc_name, "setExclusiveAudioAllowStatus", roomClientObj.canGiveAudio);
         }
     ]]>
 </method>

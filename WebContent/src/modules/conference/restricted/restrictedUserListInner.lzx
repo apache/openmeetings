@@ -477,7 +477,6 @@
         <handler name="onismoderator" reference="canvas" args="m">
             if ($debug) Debug.write("###### ismoderator ",m);
             <![CDATA[
-                //this.isMod = canvas.getIsModeratorByPublicSID(this.refObj.publicSID);
                 this.updateIcons();
             ]]>
         </handler>
@@ -556,7 +555,6 @@
                 //search for the user and update its exclusiveAudioStatusIcon
                 var vList = parent._table._innerlist._inn._inn.subviews;
                 for (var i=0;i<vList.length;i++) {
-                    //vList[i].updateIconByMod();
                     if (vList[i].refObj.publicSID == rclObject.publicSID) {
                         vList[i].refObj.canGiveAudio = rclObject.canGiveAudio;
                         vList[i].canGiveAudio = rclObject.canGiveAudio;
@@ -568,7 +566,6 @@
 
                 var vList = parent._table.renderList;
                 for (var i=0;i<vList.length;i++) {
-                    //vList[i].updateIconByMod();
                     if (vList[i].publicSID == rclObject.publicSID) {
                         parent._table.renderList[i].canGiveAudio = rclObject.canGiveAudio;
                         break;
@@ -593,10 +590,8 @@
                 //search for the user and update its drawStatusIcon
                 var vList = parent._table._innerlist._inn._inn.subviews;
                 for (var i=0;i<vList.length;i++) {
-                    //vList[i].updateIconByMod();
                     if (vList[i].refObj.publicSID == userObject.publicSID) {
                         vList[i].isBroadcasting = userObject.isBroadcasting;
-                        //vList[i].updateIconByMod();
                         vList[i].updateModeratorIcons();
                         break;
                     }
@@ -604,7 +599,6 @@
                 
                 var vList = parent._table.renderList;
                 for (var i=0;i<vList.length;i++) {
-                    //vList[i].updateIconByMod();
                     if (vList[i].publicSID == userObject.publicSID) {
                         parent._table.renderList[i].isBroadcasting = userObject.isBroadcasting;
                         break;
@@ -620,7 +614,6 @@
             
                 if ($debug) Debug.write(" :: updateIcons :: ");
                 
-                //var vList = parent._table.renderList;
                 for (var i=0;i<parent._table.renderList.length;i++) {
                 
                     for (var k=0;k<canvas.newModeratorList.length;k++) {
@@ -667,13 +660,6 @@
                 
                 }
                 
-                //var vList = parent._table._innerlist._inn._inn.subviews;
-                
-                //for (var i=0;i<vList.length;i++) {
-                //    vList[i].updateIconByMod();
-                //    vList[i].updateModeratorIcons();
-                //}
-            
                 parent._applyAndStatusIcons.updateIcons();
             ]]>
         </method>

@@ -1651,115 +1651,26 @@
                     canvas.setExclusiveAudioAllowStatus(value.message[1]);
                     canvas.setAttribute("exclusiveAudioAllowStatus",value.message[1]);                    
                 } else if (value.message[0]=='applyForModeration'){
-                    //if (canvas.ismoderator) {
-                        if ($debug) Debug.write("Somebody wants the Moderation ",value.client);
-                        
-                        canvas.currentActivityList.addModerationRequest(value.client,value.message[1]);
-                        
-                        /*
-                        var txt = canvas.getLabelName(692) + " " + 
-                                   value.client.firstname + " " + value.client.lastname + " " +
-                                   "[" + value.client.username + "] " +
-                                   canvas.getLabelName(693);
-                        
-                        new lz.errorPopup(canvas,{
-                                   labelid:691,error:txt
-                                });
-                        */
-                        
-                    //}
+                    if ($debug) Debug.write("Somebody wants the Moderation ",value.client);
+                    canvas.currentActivityList.addModerationRequest(value.client,value.message[1]);
                 } else if (value.message[0]=='applyForScreen'){
-                    //if (canvas.ismoderator) {
-                        if ($debug) Debug.write("Somebody wants to share/record Screen ",value.client);
-                        
-                        canvas.currentActivityList.addScreenRequest(value.client,value.message[1]);
-                        
-                        /*
-                        var txt = canvas.getLabelName(692) + " " + 
-                                   value.client.firstname + " " + value.client.lastname + " " +
-                                   "[" + value.client.username + "] " +
-                                   canvas.getLabelName(1070);
-                        
-                        new lz.errorPopup(canvas,{
-                                   labelid:691,error:txt
-                                });
-                        */
-                    //}
+                   if ($debug) Debug.write("Somebody wants to share/record Screen ",value.client);
+                    canvas.currentActivityList.addScreenRequest(value.client,value.message[1]);
                 } else if (value.message[0]=='applyForRemote'){
-                    //if (canvas.ismoderator) {
-                        if ($debug) Debug.write("Somebody wants to remote control screen ",value.client);
-                        
-                        canvas.currentActivityList.addRemoteRequest(value.client,value.message[1]);
-                        
-                        /*
-                        var txt = canvas.getLabelName(692) + " " + 
-                                   value.client.firstname + " " + value.client.lastname + " " +
-                                   "[" + value.client.username + "] " +
-                                   canvas.getLabelName(1082);
-                        
-                        new lz.errorPopup(canvas,{
-                                   labelid:691,error:txt
-                                });
-                        */
-                    //}
+                    if ($debug) Debug.write("Somebody wants to remote control screen ",value.client);
+                    canvas.currentActivityList.addRemoteRequest(value.client,value.message[1]);
                 } else if (value.message[0]=='applyForWhiteboard'){
-                    //if (canvas.ismoderator) {
-                        if ($debug) Debug.write("Somebody wants to draw on Whiteboard ",value.client);
-                        
-                        canvas.currentActivityList.addWhiteboardRequest(value.client,value.message[1]);
-                        
-                        /*
-                        var txt = canvas.getLabelName(692) + " " + 
-                                   value.client.firstname + " " + value.client.lastname + " " +
-                                   "[" + value.client.username + "] " +
-                                   canvas.getLabelName(694);
-                        
-                        new lz.errorPopup(canvas,{
-                                   labelid:691,error:txt
-                                });
-                        */
-                        
-                    //}
+                    if ($debug) Debug.write("Somebody wants to draw on Whiteboard ",value.client);
+                    canvas.currentActivityList.addWhiteboardRequest(value.client,value.message[1]);
                 } else if (value.message[0]=='applyForA'){
-                    //if (canvas.ismoderator) {
                     if ($debug) Debug.write("Somebody wants to share A ",value.client);
-                    
                     canvas.currentActivityList.addAudioRequest(value.client,value.message[1]);
-                    
-                    //
-                        //new lz.errorPopup(canvas,{
-                         //          labelid:691,error:txt
-                        //        });
-                    //}
                 } else if (value.message[0]=='applyForAV'){
-                    //if (canvas.ismoderator) {
-                        if ($debug) Debug.write("Somebody wants to share AV ",value.client);
-                        
-                        canvas.currentActivityList.addAudioAndVideoRequest(value.client,value.message[1]);
-                        
-                        /*
-                        var txt = canvas.getLabelName(692) + " " + 
-                                   value.client.firstname + " " + value.client.lastname + " " +
-                                   "[" + value.client.username + "] " +
-                                   canvas.getLabelName(695);
-                        
-                        new lz.errorPopup(canvas,{
-                                   labelid:691,error:txt
-                                });
-                        */
-                        
-                    //}
+                    if ($debug) Debug.write("Somebody wants to share AV ",value.client);
+                    canvas.currentActivityList.addAudioAndVideoRequest(value.client,value.message[1]);
                 } else if (value.message[0]=='hideActivityObj'){
-                    //if (canvas.ismoderator) {
                     if ($debug) Debug.write("Somebody wants to hideActivityObj ",value.client);
-                    
                     canvas.currentActivityList.hideActivityObj(value);
-                    
-                    //
-                        //new lz.errorPopup(canvas,{
-                         //          labelid:691,error:txt
-                        //        });
-                    //}
                 } else if (value.message[0]=='applyForMuteOn'){
                     canvas.currentActivityList.applyForMuteOn(value.client,value.message[1]);
                 } else if (value.message[0]=='applyForMuteOff'){

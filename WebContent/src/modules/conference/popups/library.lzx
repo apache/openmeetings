@@ -23,8 +23,6 @@
 	<resource name="warning_icon_rsc" src="resources/messagebox_warning.png" />
     
     <include href="rpcerrorDialog.lzx" />
-    <include href="loginScreen.lzx" />
-    <include href="loginWeb.lzx" />
     <include href="errorPopup.lzx" />
     <include href="messageWin.lzx" />
     <include href="headerMenu.lzx" />
