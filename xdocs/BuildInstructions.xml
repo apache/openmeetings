@@ -20,15 +20,9 @@
 		<section name="Nightly Builds">
 
 			<p>
-				You can find Nightly Builds of the software at:
-				<a href="http://nightly.openmeetings.de/openmeetings/builds/" rel="nofollow">
-					http://nightly.openmeetings.de/openmeetings/builds/
-				</a>
-			</p>
-			<p>
-				The current status of the Nightly Builds can be seen here:
-				<a href="http://nightly.openmeetings.de/hudson/job/openmeetings-trunk/"
-					rel="nofollow">http://nightly.openmeetings.de/hudson/job/openmeetings-trunk/
+				You cannot find Nightly Builds of the software currently see:
+				<a href="https://issues.apache.org/jira/browse/INFRA-4438" rel="nofollow">
+					https://issues.apache.org/jira/browse/INFRA-4438
 				</a>
 			</p>
 
@@ -38,7 +32,7 @@
 			<p>Get the source: </p>
 			<div class="xmlcode">
 				svn checkout
-				http://openmeetings.googlecode.com/svn/trunk/singlewebapp/
+				https://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/
 			</div>
 			<p>Run the command: </p>
 			<div class="xmlcode">
@@ -50,11 +44,25 @@
 			</p>
 			<p>To compile the client you can also use ant: </p>
 			<div class="xmlcode">
-				ant<span style="margin-left: 200px;"># compiles a complete package into the folder dist</span><br/>
-				ant compile.laszlo.main<span style="margin-left: 70px;"># compiles the client into main.swf8.swf</span><br/>
-				ant compile.laszlo.main.debug<span style="margin-left: 30px;"># compiles the debug-client into maindebug.swf8.swf</span><br/>
-				ant -Ddb=&lt;name of DB&gt;<span style="margin-left: 50px;"># will copy &lt;name of DB&gt;_persistense.xml to persistense.xml</span><br/>
-				<span style="margin-left: 230px;">#(for ex. ant -Ddb=mysql will set mysql as default DB)</span>
+				ant
+				<span style="margin-left: 200px;"># compiles a complete package into the folder dist
+				</span>
+				<br />
+				ant compile.laszlo.main
+				<span style="margin-left: 70px;"># compiles the client into main.swf8.swf</span>
+				<br />
+				ant compile.laszlo.main.debug
+				<span style="margin-left: 30px;"># compiles the debug-client into maindebug.swf8.swf
+				</span>
+				<br />
+				ant -Ddb=&lt;name of DB&gt;
+				<span style="margin-left: 50px;"># will copy &lt;name of DB&gt;_persistense.xml to
+					persistense.xml
+				</span>
+				<br />
+				<span style="margin-left: 230px;">#(for ex. ant -Ddb=mysql will set mysql as default
+					DB)
+				</span>
 			</div>
 			<p>To compile just the openmeetings JAR file: </p>
 			<div class="xmlcode">
@@ -69,11 +77,10 @@
 		<section name="Run, Develop, Test">
 
 			<p>
-				To develop or build OpenMeetings you download the Project as regular
-				Web-Project. You need the Subclipse Plugin for Eclipse, a database
-				and a Tomcat Server installed on your system to test and debug the
-				Code. If you just need to change 3 lines of code then your probably
-				better switch to
+				To develop or build OpenMeetings you checkout the source as Eclipse
+				project. You need the Subclipse or Subversive Plugin for Eclipse. If
+				you just need to change 3 lines of code then your probably better
+				switch to
 				<a href="#How_to_build_a_distribution" rel="nofollow">How to build a
 					distribution
 				</a>
@@ -84,7 +91,7 @@
 
 				<p>To develop OpenMeetings you need at least: </p>
 				<ul>
-					<li>Eclipse in a up to date copy and Java6 </li>
+					<li>Eclipse in a up to date copy and Sun JDK6 </li>
 					<li>Subclipse or Subversive Plugin for Eclipse (to download the
 						Code
 						from the SVN Repository into Eclipse) (installable via Help
@@ -95,8 +102,7 @@
 						Marketplace)
 					</li>
 					<li>MySQL (or Postgres, or other Databases supported by Hibernate)
-					</li>
-					<li>Tomcat 6 installed on your system to test and debug the code
+						are optionally but handy to have them
 					</li>
 				</ul>
 
@@ -105,22 +111,24 @@
 			<subsection name="Step2 - Download the Source">
 
 				<p>Advanced Users: Check out the Code from the Repository as a
-					Dynamic Web-Project into Eclipse.
+					Java
+					project into Eclipse.
 				</p>
 				<p>
 					URL:
-					<a href="http://openmeetings.googlecode.com/svn/trunk/singlewebapp/"
-						rel="nofollow">http://openmeetings.googlecode.com/svn/trunk/singlewebapp/</a>
-				</p>
-				<p>Add Memory settings to Run Configuration (Run &gt; Run
-					Configurations ...) Click on Apache Tomcat &gt; Your Server Name
-					Second Tab &gt; Arguments Add: -Xms512m -Xmx1024M add the end </p>
-				<p>=&gt;
-					the webapp will install itself into Context Root. URL to run is:
 					<a
-						href="http://localhost:8080/openmeetings/maindebug.lzx?lzproxied=solo"
-						rel="nofollow">http://localhost:8080/openmeetings/maindebug.lzx?lzproxied=solo
+						href="https://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/"
+						rel="nofollow">https://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/
 					</a>
+				</p>
+				<p>To download the required JARs for building and developing
+					OpenMeetings you need to run the ANT comand:
+				</p>
+				<div class="xmlcode">
+					ant prepare-eclipse
+				</div>
+				<p>After the ANT command you need to press F5 and rebuild the
+					project from inside Eclipse
 				</p>
 				<p>Step-By-Step: </p>
 				<p>1) Start Eclipse </p>
@@ -220,7 +228,9 @@
 					<div class="xmlcode">
 						ant prepare-eclipse
 					</div>
-					to download all necessary jar files, and perform source <tt>Refresh</tt> to resolve all compilation issues.
+					to download all necessary jar files, and perform source
+					<tt>Refresh</tt>
+					to resolve all compilation issues.
 				</p>
 			</subsection>
 
@@ -255,8 +265,7 @@
 					<a href="http://www.openlaszlo.org/getstarted" rel="nofollow">ScreenCast</a>
 				</li>
 				<li>
-					<a href="http://incubator.apache.org/openmeetings/svn.html"
-						rel="nofollow">
+					<a href="http://incubator.apache.org/openmeetings/svn.html" rel="nofollow">
 						browse SVN source
 					</a>
 				</li>
@@ -266,16 +275,12 @@
 
 		<section name="Tipps and Gotchas">
 
-			<p>When you run and test OpenMeetings inside Eclipse, Eclipse may be
-				not able to do conversion using convert or pdf2swf, cause it has
-				another system_path variables set. You should goto the
-				Administration>Configuration section of OpenMeetings and set the
-				absolute Path to Image-Magick and SWFTools and it will work again.
-				Uploading of PDFs might fail because of the same reason => the path
-				to Ghostscript cannot be read from the system_path. Unfortunately
-				you cannot overwrite that in the Configuration as its an internal
-				link of Ghostscript. However in production environment you will not
-				run into this Issue, its a development problem.
+			<p>When you want to develop only client side there are handy ANT
+				tasks so that you only rebuild the SWFs, same for the Java side.
+				It
+				also takes much less time if you do use MySQL as database then
+				rebuilding the software and waiting for Apache Derby to set up the
+				database everytime you did rebuild.
 			</p>
 		</section>
 
