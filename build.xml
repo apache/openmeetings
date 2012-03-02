@@ -520,11 +520,14 @@
 		<echo message="Enhancing complete." />
 	</target>
 
+	<path id="svntask.classpath">
+		<fileset dir="${svntask.lib.dir}" includes="*.jar" />
+		<fileset dir="${project.lib}" includes="svn*.jar" />
+	</path>
 	<target name="current_revision" depends="-retrieve-svntask">
 		<typedef resource="org/tigris/subversion/svnant/svnantlib.xml">
 			<classpath>
-				<fileset dir="${svntask.lib.dir}" includes="*.jar" />
-				<fileset dir="${project.lib}" includes="svn*.jar" />
+				<path refid="svntask.classpath" />
 			</classpath>
 		</typedef>
 
@@ -538,12 +541,15 @@
 	<!-- Build entire project -->
 	<target name="build project" depends="clean, prepare, compile" />
 
+	<path id="rat.classpath">
+		<fileset dir="${rat.lib.dir}" includes="*.jar" />
+		<path refid="compile.classpath" />
+	</path>
 	<target name="report_rat" depends="-retrieve-rat">
 		<!-- define the RAT task -->
 		<taskdef uri="antlib:org.apache.rat.anttasks" resource="org/apache/rat/anttasks/antlib.xml">
 			<classpath>
-				<fileset dir="${rat.lib.dir}" includes="*.jar" />
-				<path refid="compile.classpath" />
+				<path refid="rat.classpath" />
 			</classpath>
 		</taskdef>
 
@@ -593,9 +599,9 @@
 			</classpath>
     	</taskdef>
     	
-
-		<anakia basedir="${docs.src}" destdir="${docs.dest}/" extension=".html" style="./site.vsl" projectFile="stylesheets/project.xml" excludes="**/stylesheets/** empty.xml" includes="**/*.xml" lastModifiedCheck="true" templatePath="xdocs/stylesheets">
-		</anakia>
+		<anakia basedir="${docs.src}" destdir="${docs.dest}/" extension=".html" 
+			style="./site.vsl" projectFile="stylesheets/project.xml" excludes="**/stylesheets/** empty.xml" 
+			includes="**/*.xml" lastModifiedCheck="true" templatePath="xdocs/stylesheets" />
     </target>
 
 	<target name="build.only.webservice.doc" depends="anakia">
@@ -726,10 +732,8 @@
 		classpath="${project.lib}/${ivy.jar}"/>
 	<property name="ivy.lib.dir" value="${project.lib}"/>
 
-	<!-- !!!!!!!!!! FIXME !!!!!!!! Check for the main libraries -->
-
 	<!-- Build Targets -->
-	<target name="-java6.check">
+	<target name="-java6.check" unless="java6.installed" >
 		<condition property="java6.installed" value="true">
 			<and>
                	<equals arg1="${java.specification.version}" arg2="1.6"/>
@@ -775,6 +779,7 @@
 	</target>
 	
 	<!-- Check for the Red5 libraries -->
+	<available classpathref="compile.classpath" classname="javax.persistence.spi.PersistenceProvider" property="red5.installed"/>
 	<target name="-retrieve-red5" unless="red5.installed" description="Retrieves the libraries if needed" depends="prepare.mkdir">
 		<!-- Ivy configuration - http://ant.apache.org/ivy/history/trunk/ant.html -->
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
@@ -790,12 +795,13 @@
 			<param name="ivy.lib.pattern" value="[artifact]-[type]-[revision].[ext]"/>
 		</antcall>
 		<delete>
-			<fileset dir="${om.lib.dir}" includes="*-source*.jar"/>
-			<fileset dir="${om.lib.dir}" includes="*-javadoc*.jar"/>
+			<fileset dir="${red5.lib.dir}" includes="*-source*.jar"/>
+			<fileset dir="${red5.lib.dir}" includes="*-javadoc*.jar"/>
 		</delete>
 		<delete file="${red5.lib.dir}/javaee-api-5.1.2.jar" />
 	</target>
 	<!-- Check for the Red5 libraries -->
+	<available classpathref="compile.classpath" classname="org.apache.axis2.Version" property="om.installed"/>
 	<target name="-retrieve-om" unless="om.installed" description="Retrieves the libraries if needed" depends="prepare.mkdir">
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
 			<param name="ivy.conf.name" value="openmeetings"/>
@@ -817,14 +823,16 @@
 			<fileset dir="${om.lib.dir}" includes="*-javadoc*.jar"/>
 		</delete>
 	</target>
-	<!-- Check for the Red5 libraries -->
-	<target name="-retrieve-anakia" unless="anakia.installed" description="Retrieves the libraries if needed" depends="prepare.mkdir">
+	<!-- Check for the Anakia libraries -->
+	<available classpathref="anakia.classpath" classname="org.apache.oro.text.GlobCompiler" property="anakia.installed"/>
+	<target name="-retrieve-anakia" unless="anakia.installed" description="Retrieves the libraries if needed" depends="-retrieve-red5">
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
 			<param name="ivy.conf.name" value="anakia"/>
 			<param name="ivy.lib.location" value="${anakia.lib.dir}"/>
 		</antcall>
 	</target>
 	<!-- Check for junit libraries -->
+	<available classpathref="compile.classpath" classname="org.junit.Test" property="junit.installed"/>
 	<target name="-retrieve-junit" unless="junit.installed" description="Retrieves the libraries if needed" depends="prepare.mkdir">
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
 			<param name="ivy.conf.name" value="junit"/>
@@ -832,6 +840,7 @@
 		</antcall>
 	</target>
 	<!-- Check for rat libraries -->
+	<available classpathref="rat.classpath" classname="org.apache.rat.Report" property="rat.installed"/>
 	<target name="-retrieve-rat" unless="rat.installed" description="Retrieves the libraries if needed" depends="prepare.mkdir">
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
 			<param name="ivy.conf.name" value="rat"/>
@@ -839,6 +848,8 @@
 		</antcall>
 	</target>
 	<!-- Check for dtd-generator libraries -->
+	<path id="dtd-generator.classpath" location="${dtd-generator.lib.dir}/*.jar"/>
+	<available classpathref="dtd-generator.classpath" classname="org.relaxng.datatype.Datatype" property="dtd-generator.installed"/>
 	<target name="-retrieve-dtd-generator" unless="dtd-generator.installed" description="Retrieves the libraries if needed" depends="prepare.mkdir">
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
 			<param name="ivy.conf.name" value="dtd"/>
@@ -846,6 +857,7 @@
 		</antcall>
 	</target>
 	<!-- Check for svntask libraries -->
+	<available classpathref="svntask.classpath" classname="org.tmatesoft.svn.core.SVNCommitInfo" property="svntask.installed"/>
 	<target name="-retrieve-svntask" unless="svntask.installed" description="Retrieves the libraries if needed" depends="prepare.mkdir">
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
 			<param name="ivy.conf.name" value="svntask"/>
@@ -853,10 +865,19 @@
 			<param name="ivy.transitive" value="true" />
 		</antcall>
 	</target>
+	<!-- Check for JDK 1.6 tools.jar libraries -->
+	<target name="-retrieve-tools.jar" unless="tools.jar.installed" description="Retrieves the libraries if needed">
+		<available file="${java.home}/Classes/classes.jar" type="file" property="tools.jar.path" value="${java.home}/Classes/classes.jar" />
+		<available file="${java.home}/../Classes/classes.jar" type="file" property="tools.jar.path" value="${java.home}/../Classes/classes.jar" />
+		<available file="${java.home}/lib/tools.jar" type="file" property="tools.jar.path" value="${java.home}/lib/tools.jar" />
+		<available file="${java.home}/../lib/tools.jar" type="file" property="tools.jar.path" value="${java.home}/../lib/tools.jar" />
+		<available file="${tools.jar.path}" type="file" property="tools.jar.installed" />
+		
+		<copy file="${tools.jar.path}" tofile="${project.lib}/java_16_tools.jar" />
+	</target>
 
 	<target name="ivyclear" description="Clears out the Ivy cache">
 		<delete dir="${user.home}/.ivy2/cache/red5"/>
-		<!-- <delete dir="${user.home}/.ivy2/cache/openmeetings"/>FIXME !!!!! do we need this? should it be red5 ???? -->
 		<delete includeemptydirs="true">
 			<fileset dir="${project.lib}" excludes="*.jar"/>
 		</delete>
@@ -864,10 +885,10 @@
 	</target>
 
 	<target name="prepare-eclipse" if="java6.installed" description="Build server core" depends="-java6.check">
-		<!-- FIXME need to move -->
 		<antcall target="-retrieve-red5" inheritAll="true" inheritRefs="true"/>
 		<antcall target="-retrieve-om" inheritAll="true" inheritRefs="true"/>
 		<antcall target="-retrieve-junit" inheritAll="true" inheritRefs="true"/>
 		<antcall target="-retrieve-dtd-generator" inheritAll="true" inheritRefs="true"/>
+		<antcall target="-retrieve-tools.jar" inheritAll="true" inheritRefs="true"/>
 	</target>
 </project>

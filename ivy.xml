@@ -121,12 +121,12 @@
 			rev="3.0.6.RELEASE" />
 		<!-- Crypto -->
 		<dependency name="bcprov-jdk16" rev="145" conf="red5->*" />
-		<dependency org="org.apache.geronimo.specs" name="geronimo-jpa_2.0_spec"
-			rev="1.1" conf="red5.ext->*" transitive="false">
-			<!-- include type="bundle" / FIXME unable to get openjpa without  sources -->
-		</dependency>
 		<!-- MP3 -->
 		<dependency name="jaudiotagger" rev="2.0.4-SNAPSHOT" />
+
+		<!-- include type="bundle" / FIXME unable to get openjpa without  sources -->
+		<dependency org="org.apache.geronimo.specs" name="geronimo-jpa_2.0_spec"
+			rev="1.1" conf="red5.ext->*" transitive="false"/>
 		<!--  END OF RED5 -->
 		
 		<!--  START OF ANAKIA -->
