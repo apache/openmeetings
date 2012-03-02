@@ -147,7 +147,7 @@
        width="${ canvas.width - parent._sidePanel.width }" />
        
     <fixedFileExplorerWhiteboardPanel name="_whiteboard" labelid="615"
-        y="0" x="${ parent._sidePanel.width }" restricted="true" 
+        y="0" x="${ parent._sidePanel.width }" 
         width="${ canvas.width - parent._sidePanel.width }"
         height="${ canvas.height - (parent._chatPanelStrict.height) - 
         ((parent._chatPanelStrict.visibility == 'hidden') ? 6:28) + ((canvas.currentRoomObj.hideTopBar) ? 28:0)}" />

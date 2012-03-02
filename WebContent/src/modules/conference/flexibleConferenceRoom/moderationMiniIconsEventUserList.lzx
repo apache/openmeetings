@@ -130,7 +130,7 @@
     
     <simplelayout axis="x" spacing="2" />
 	
-    <miniIcons name="_isMod" x="0" width="16" resource="participants_isMod_rsc" 
+    <miniIconsNew name="_isMod" x="0" width="16" innerResource="participants_isMod_rsc" 
     		   height="16" showhandcursor="false">
         <handler name="onclick">
             <![CDATA[
@@ -138,9 +138,9 @@
             ]]>
         </handler>
         <labelTooltip name="_text" labelid="688" />
-    </miniIcons>
+    </miniIconsNew>
     
-    <miniIcons name="_isModAddbutton" opacity="0.5" x="0" width="16" resource="participants_isMod_rsc" height="16">
+    <miniIconsNew name="_isModAddbutton" opacity="0.5" x="0" width="16" innerResource="participants_isMod_rsc" height="16">
         <handler name="onclick">
             <![CDATA[
                 //Apply for Moderation
@@ -148,9 +148,9 @@
             ]]>
         </handler>
         <labelTooltip name="_text" labelid="685" />
-    </miniIcons>
+    </miniIconsNew>
         
-    <miniIcons name="_canDraw" x="20" width="16" resource="participants_allow_drawing_rsc" 
+    <miniIconsNew name="_canDraw" x="20" width="16" innerResource="participants_allow_drawing_rsc" 
                height="16" showhandcursor="false" >
         <attribute name="isActive" value="true" type="boolean" />
         <handler name="onclick">
@@ -159,20 +159,20 @@
             ]]>
         </handler>
         <labelTooltip name="_text" labelid="689" />
-    </miniIcons>
+    </miniIconsNew>
     
-    <miniIcons name="_canDrawModerator" x="20" width="16" opacity="0.5"
-               resource="participants_allow_drawing_rsc" height="16" showhandcursor="true">
+    <miniIconsNew name="_canDrawModerator" x="20" width="16" opacity="0.5"
+               innerResource="participants_allow_drawing_rsc" height="16" showhandcursor="true">
         <handler name="onclick">
             //Ask for Right to Draw on Whiteboard
             var tDate = new Date();
             canvas.thishib.sendMessageWithClient.sendMessage("applyForWhiteboard",tDate.getTime());
         </handler>
         <labelTooltip labelid="686" />
-    </miniIcons>
+    </miniIconsNew>
     
-    <miniIcons name="_allowScreen" x="40" width="16" height="16" 
-               resource="screen_allow_rsc" showhandcursor="false">
+    <miniIconsNew name="_allowScreen" x="40" width="16" height="16" 
+               innerResource="screen_allow_rsc" showhandcursor="false">
         <attribute name="isActive" value="true" type="boolean" />
         <handler name="onclick">
             <![CDATA[
@@ -180,20 +180,20 @@
             ]]>
         </handler>
         <labelTooltip name="_text" labelid="1071" />
-    </miniIcons>
+    </miniIconsNew>
     
-    <miniIcons name="_denyScreen" x="40" width="16" height="16" opacity="0.5"
-               resource="screen_allow_rsc" showhandcursor="true">
+    <miniIconsNew name="_denyScreen" x="40" width="16" height="16" opacity="0.5"
+               innerResource="screen_allow_rsc" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("Allow Screen: ",canvas.refObj.publicSID);
             var tDate = new Date();
         	canvas.thishib.sendMessageWithClient.sendMessage("applyForScreen",tDate.getTime());
         </handler>
         <labelTooltip labelid="1072" />
-    </miniIcons>    
+    </miniIconsNew>    
     
- 	<miniIcons name="_allowRemote" x="60" width="16" height="16" 
-               resource="remote_allow_rsc" showhandcursor="false">
+ 	<miniIconsNew name="_allowRemote" x="60" width="16" height="16" 
+               innerResource="remote_allow_rsc" showhandcursor="false">
     	<attribute name="isActive" value="true" type="boolean" />
         <handler name="onclick">
         	<![CDATA[
@@ -201,21 +201,21 @@
             ]]>
         </handler>
         <labelTooltip name="_text" labelid="1081" />
-    </miniIcons>
+    </miniIconsNew>
     
-    <miniIcons name="_denyRemote" x="60" width="16" height="16" opacity="0.5"
-               resource="remote_allow_rsc" showhandcursor="true">
+    <miniIconsNew name="_denyRemote" x="60" width="16" height="16" opacity="0.5"
+               innerResource="remote_allow_rsc" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("Allow Remote: ",parent.parent.parent.refObj.publicSID);
             var tDate = new Date();
             canvas.thishib.sendMessageWithClient.sendMessage("applyForRemote",tDate.getTime());
         </handler>
         <labelTooltip labelid="1080" />
-    </miniIcons>      
+    </miniIconsNew>      
           
     
-    <miniIcons name="_allowDevice" x="80" width="40" height="16" opacity="0.5" 
-            visible="$once{ parent.showAvIcons }" resource="av_allow_rsc" showhandcursor="true">
+    <miniIconsNew name="_allowDevice" x="80" width="40" height="16" opacity="0.5" 
+            visible="$once{ parent.showAvIcons }" innerResource="av_allow_rsc" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("NOTHING: ",canvas.publicSID);
             if (canvas.ismoderator) {
@@ -231,10 +231,10 @@
             }
         </handler>
         <labelTooltip labelid="687" />
-    </miniIcons>
+    </miniIconsNew>
     
-    <miniIcons name="_denyDevice" x="80" width="40" height="16" 
-            visible="$once{ parent.showAvIcons }" resource="av_allow_rsc" showhandcursor="false">
+    <miniIconsNew name="_denyDevice" x="80" width="40" height="16" 
+            visible="$once{ parent.showAvIcons }" innerResource="av_allow_rsc" showhandcursor="false">
         <handler name="onclick">
             if ($debug) Debug.write("DENY: ",canvas.publicSID);
             //Nothing happens here
@@ -243,10 +243,10 @@
             canvas.thishib.setBroadCastingFlag.doCall(); 
         </handler>
         <labelTooltip name="_text" labelid="690" />
-    </miniIcons>
+    </miniIconsNew>
     
-    <miniIcons name="_muteDevice" x="120" width="16" height="16" 
-    		   resource="mute_btn_rsc" showhandcursor="true">
+    <miniIconsNew name="_muteDevice" x="120" width="16" height="16" 
+    		   innerResource="mute_btn_rsc" showhandcursor="true">
     	<handler name="onclick">
     		if (canvas.ismoderator) {
     			new lz.confirmationSingle(canvas.main_content._content.inner,{
@@ -266,9 +266,9 @@
             }
         </method>
         <labelTooltip name="_tip" labelid="1394" />
-    </miniIcons>
+    </miniIconsNew>
     
-    <miniIcons name="_unMuteDevice" x="120" width="16" height="16" resource="unmute_btn_rsc" 
+    <miniIconsNew name="_unMuteDevice" x="120" width="16" height="16" innerResource="unmute_btn_rsc" 
                showhandcursor="true" >
     	<handler name="onclick">
             if (canvas.ismoderator) {
@@ -280,10 +280,10 @@
             }
         </handler>
         <labelTooltip name="_tip" labelid="1395" />
-    </miniIcons>
+    </miniIconsNew>
 
-    <miniIcons name="_allowExclusiveAudio" x="60" width="16" height="16"
-               resource="participants_exclusive_audio_rsc" showhandcursor="false">
+    <miniIconsNew name="_allowExclusiveAudio" x="60" width="16" height="16"
+               innerResource="participants_exclusive_audio_rsc" showhandcursor="false">
     	<attribute name="isActive" value="true" type="boolean" />
         <handler name="onclick">
         	<![CDATA[
@@ -295,17 +295,17 @@
             ]]>
         </handler>
         <labelTooltip name="_text" labelid="1433" />
-    </miniIcons>
+    </miniIconsNew>
 
-    <miniIcons name="_denyExclusiveAudio" x="60" width="16" height="16" opacity="0.5"
-               resource="participants_exclusive_audio_rsc" showhandcursor="true">
+    <miniIconsNew name="_denyExclusiveAudio" x="60" width="16" height="16" opacity="0.5"
+               innerResource="participants_exclusive_audio_rsc" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("Allow Give Exclusive Audio: ",canvas.publicSID);
             var tDate = new Date();
             canvas.thishib.sendMessageWithClient.sendMessage("applyForGiveExclusiveAudioOn",tDate.getTime());
         </handler>
         <labelTooltip labelid="1432" />
-    </miniIcons>
+    </miniIconsNew>
 	
 </class>
 

@@ -2189,6 +2189,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		return 1;
 	}
 
+	/**
+	 * send status for shared browsing to all members except self
+	 * @param newMessage
+	 * @return
+	 */
 	@SuppressWarnings({ "rawtypes" })
 	public synchronized int sendBrowserMessageToMembers(Object newMessage) {
 		try {
@@ -2222,6 +2227,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		return 1;
 	}
 
+	/**
+	 * wrapper method
+	 * @param newMessage
+	 * @return
+	 */
 	public synchronized int sendMessageToMembers(Object newMessage) {
 		try {
 			
@@ -2238,13 +2248,15 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	 * General sync mechanism for all messages that are send from within the 
 	 * scope of the current client, but:
 	 * <ul>
-	 * <li>do not send to self</li>
+	 * <li>optionally do not send to self (see param: sendSelf)</li>
 	 * <li>do not send to clients that are screen sharing clients</li>
+	 * <li>do not send to clients that are audio/video clients (or potentially ones)</li>
 	 * <li>do not send to connections where no RoomClient is registered</li>
 	 * </ul>
 	 *  
 	 * @param remoteMethodName
 	 * @param newMessage
+	 * @param sendSelf 
 	 * @return
 	 */
 	private synchronized int syncMessageToCurrentScope(String remoteMethodName, Object newMessage, boolean sendSelf) {
@@ -2262,15 +2274,15 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 									.getClientByStreamId(conn.getClient().getId());
 							
 							if (rcl == null) {
-								// rcl can be null if there are network problems
+								// RoomClient can be null if there are network problems
 								continue;
 							} else if (rcl.getIsScreenClient() != null && rcl
 											.getIsScreenClient()) {
-								// screensharing clients do not receive events
+								// screen sharing clients do not receive events
 								continue;
 							} else if (rcl.getIsAVClient() == null || rcl
 									.getIsAVClient()) {
-								// avclient or potential AVClients do not receive events
+								// AVClients or potential AVClients do not receive events
 								continue;
 							} else if (current.getClient().getId().equals(
 										conn.getClient().getId()) && !sendSelf) {
@@ -2291,6 +2303,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		return 1;
 	}
 
+	/**
+	 * wrapper method
+	 * @param newMessage
+	 * @return
+	 */
 	public synchronized int sendMessageWithClient(Object newMessage) {
 		try {
 			sendMessageWithClientWithSyncObject(newMessage, false);
@@ -2302,6 +2319,12 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		return 1;
 	}
 	
+	/**
+	 * wrapper method
+	 * @param newMessage
+	 * @param sync
+	 * @return
+	 */
 	public synchronized int sendMessageWithClientWithSyncObject(Object newMessage, boolean sync) {
 		try {
 			IConnection current = Red5.getConnectionLocal();

@@ -27,7 +27,6 @@
     
     <include href="dynamicFileName.lzx" />
     <include href="dragItemFileExplorer.lzx" />
-    <include href="fileExplorerWindow.lzx" />
     <include href="fileExplorer.lzx" />
 
     <resource name="drag_n_drop_rsc">

@@ -20,8 +20,10 @@
 -->
 <library>
     
+    <!--  FamFam Icon Creative Commons -->
     <resource name="right_isactive_rsc" src="resources/accept.png" />
     
+    <!--  FamFam Icon Creative Commons -->
     <resource name="right_notactive_rsc" src="resources/delete.png" />
     
     <resource name="participants_isMod_rsc" src="resources/kdmconfig.png" />

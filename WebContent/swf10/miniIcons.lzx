@@ -2,6 +2,7 @@
 <library>
 
 <class name="miniIcons" extends="view" stretches="both">
+	<attribute name="showhandcursor" value="true" type="boolean" />
     <handler name="onmouseover">
     	if (this.showhandcursor) {
         	this.setAttribute("x",this.x-1);

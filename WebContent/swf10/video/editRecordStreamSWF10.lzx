@@ -307,10 +307,8 @@
         <handler name="oninit">
             <![CDATA[
 
-                if (false) { //canvas.currentRoomObject.isAudioOnly
+                if (canvas.currentRoomObject.isAudioOnly) {
                     this.addItem(canvas.getLabelName(449),"a");
-                    //this.addItem(canvas.getLabelName(845),"s");
-                    //this.addItem(canvas.getLabelName(846),"sv");
                     this.addItem(canvas.getLabelName(451),"n");
                 } else {
                 	this.addItem(canvas.getLabelName(448),"av");
@@ -321,18 +319,16 @@
                     this.addItem(canvas.getLabelName(451),"n");
                 }
 
-				//var r = "av";
-
 				var t:SharedObject = SharedObject.getLocal('userdata');
 				var g = t.data;
 				var cam = null;
 				if (g!=null){
-					var cam = g["avstored"];
+					var avstored = g["avstored"];
 				}
 
-				var tItem = this.getItem(String(cam));
+				var tItem = this.getItem(String(avstored));
 				if (tItem != null) {
-				    this.selectItem(String(cam));
+				    this.selectItem(String(avstored));
 				} else {
 					this.selectItemAt(0);
 				}
@@ -368,9 +364,9 @@
                 this.parent.availibleMicsLabel.setAttribute("visibility",micVisible);
                 this.parent.availibleMics.setAttribute("visibility",micVisible);       
                 this.parent.infoTextNoAV.setAttribute("visibility",textVisible);
-                this.parent.availibleResolutionsLabel.setAttribute("visibility",camVisible);
-                this.parent.availibleResolutionsWarning.setAttribute("visibility",camVisible);
-                this.parent.availibleResolutions.setAttribute("visibility",camVisible);
+                this.parent.availibleResolutionsLabel.setAttribute("visibility",((canvas.isInterview) ? 'hidden' : camVisible));
+                this.parent.availibleResolutionsWarning.setAttribute("visibility",((canvas.isInterview) ? 'hidden' : camVisible));
+                this.parent.availibleResolutions.setAttribute("visibility",((canvas.isInterview) ? 'hidden' : camVisible));
         	]]>
         </handler>
     </resetCombobox>
@@ -448,18 +444,15 @@
                fontsize="11" x="10" y="180" visibility="hidden" />
                
     <labelText name="availibleResolutionsLabel" labelid="1429" 
-            fontsize="11" x="10" y="164" width="$once{ parent.width-20 }" 
-            visibility="${ (!canvas.isInterview) ? 'visible' : 'hidden' }" />
+            fontsize="11" x="10" y="164" width="$once{ parent.width-20 }" />
             
     <view name="availibleResolutionsWarning" x="272" y="164" 
-            resource="warning_icon_popup_devices_rsc" clickable="true" 
-            visibility="${ (!canvas.isInterview) ? 'visible' : 'hidden' }">
+            resource="warning_icon_popup_devices_rsc" clickable="true">
         <labelTooltip multiline="true" labelid="1430" />
     </view>     
     
     <resetCombobox fontsize="11" name="availibleResolutions" x="10" shownitems="10"
-                y="184" width="280" editable="false" 
-                visibility="${ (!canvas.isInterview) ? 'visible' : 'hidden' }">
+                y="184" width="280" editable="false">
         <!--- @keywords private -->
         <attribute name="counter" value="0" />
         <handler name="onselect" args="item">

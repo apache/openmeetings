@@ -24,7 +24,6 @@
 
             //client.reconnect = this.reconnect;
             client.createEditRecordStream = this.createEditRecordStream;
-            client.initVideoContainer = this.initVideoContainer;
             client.createVideoObject = this.createVideoObject;
             client.createVideo = this.createVideo;
             client.getVideoObjectByPublicSID = this.getVideoObjectByPublicSID;
@@ -58,15 +57,6 @@
         canvas.thishib.disconnect();
     </method>
      -->
-
-    <method name="initVideoContainer" args="publicSID,firstName,lastName,offsetLength,videoWidth,videoHeight">
-        canvas.setAttribute("publicSID",publicSID);
-        canvas.setAttribute("firstName",firstName);
-        canvas.setAttribute("lastName",lastName);
-        this.setAttribute("offsetLength",offsetLength);
-        this.setAttribute("videoWidth",videoWidth);
-        this.setAttribute("videoHeight",videoHeight);
-    </method>
 
 	<method name="createEditRecordStream" args="syncUpdate,isInterview,interviewPodId">
 		if($debug) Debug.info("createEditRecordStream,",syncUpdate,isInterview,interviewPodId);
@@ -113,19 +103,19 @@
                 vidContainer.setAttribute('chatpartnername',displayName);
                 if (avsettings=="n"){
                     vidContainer.setVideouserProfilePic(object);
+                    vidContainer.setAttribute("visibility","hidden");
                 } else if (avsettings=="a"){
                     vidContainer.setVideouserProfilePic(object);
                     if ($debug) Debug.warn("start play");
                     vidContainer._chatvideoinner._videostream.playStream(broadcastId,-1);
                     vidContainer.setAttribute("visibility","visible");
                 } else {
+                    //this means avsettings is either: "v" or "av"
                 	vidContainer.setDefaultVideoSize(object.VWidth,object.VHeight);
                     vidContainer._chatvideoinner._videostream.playStream(broadcastId,-1);
                     vidContainer.setAttribute("visibility","visible");
                 }
-                //vidContainer.updateAVSettingsSymbol(object);
                 vidContainer.setAttribute("interviewPodId", interviewPodId);
-                
                 vidContainer.updateAVSettingsSymbol(object);
             }
             
@@ -142,44 +132,17 @@
         ]]>
     </method>
     
-    <!--
-    <method name="addClientItem" args="connectedSince,isMod,streamid,username,room_id,formatedDate,position,color,object">
-        <![CDATA[
-            if ($debug) Debug.write("### initializeStreams addClientItem: ",connectedSince,isMod,streamid,username,room_id,formatedDate);
-        
-            if (canvas.publicSID != object.publicSID){
-                
-                
-                var myvideocontainer = this.getNewVideoObjectByPos(object.publicSID);
-                myvideocontainer.clientVars = object;
-                myvideocontainer.setAttribute('chatpartnername',object.firstname+' '+object.lastname);
-                if ($debug) Debug.write("addClientItem avsettings: ",object.avsettings);
-                if (object.avsettings=="n" || object.avsettings=="a"){
-                    myvideocontainer.setVideouserProfilePic(object);
-                }
-                myvideocontainer.updateAVSettingsSymbol(object);
-                
-            }
-
-        ]]>
-    </method>
-     -->
-
     <method name="getVideoObjectByPublicSID" args="publicSID">
     	<![CDATA[
     		if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ",publicSID);
-
         	for (var i=0;i<this.subviews.length;i++){
         	    if ($debug) Debug.write("this.subviews[i].publicSID ",this.subviews[i].publicSID);
     			if (this.subviews[i].publicSID==publicSID){
     				return this.subviews[i];
     			}
     		}
-
     		if ($debug) Debug.warn(" - getVideoObjectByPublicSID - DID NOT FIND THE USER BY ",publicSID);
-
             return null;
-
     	]]>
     </method>
 
@@ -221,9 +184,7 @@
                     });
 
 				this.broadCastViewRef._chatvideoinner.r.destroy();
-				
 				if ($debug) Debug.write("getNewVideoObject canvas.userobject ",publicSID,canvas.userobject);
-				
 				this.broadCastViewRef.setAttribute('chatpartnername',canvas.userobject.firstname+' '+canvas.userobject.lastname);
 			}
 			return this.broadCastViewRef;
@@ -237,9 +198,7 @@
                     return this.subviews[i];
                 }
             }
-
             if ($debug) Debug.warn(" - getVideoObjectByInterviewPodId - DID NOT FIND THE USER BY ",interviewPodId);
-
             return null;
         ]]>
     </method>

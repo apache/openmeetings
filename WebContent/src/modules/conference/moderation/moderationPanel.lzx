@@ -131,79 +131,28 @@
     
     <labelText name="_roomName" fgcolor="0xFFFFFF" y="4" fontstyle="bold" fontsize="12" /> 
     
-    <!--
-    <labelText name="mymodText" resize="true" fgcolor="0xFFFFFF" y="6" labelid="98" />
-    
-    <resetCombobox name="currentModerators" width="170" y="4" editable="false"
-                       shownitems="7" />
-     -->
-    
-    <simpleLabelButton name="mod_btn" 
-               visible="${ (canvas.ismoderator) ? false : true  }"
-               width="30" height="24" y="2" style="itemStyle">
+    <miniIconsNew name="mod_btn" y="6" innerResource="applyformodicon_rsc" width="16" height="16"
+               visible="${ (canvas.ismoderator) ? false : true  }" showhandcursor="true">
         <handler name="onclick">
             //We do only ask the Moderator(s) to change Moderation
             //new lz.applyForModeration(canvas.main_content._content.inner);
             canvas.thishib.applyForModeration.doCall();
         </handler>  
-        <view x="7" y="4" name="infoview" resource="applyformodicon" />
         <labelTooltip inittwice="true" labelid="906" />      
-    </simpleLabelButton>
+    </miniIconsNew>
     
-    <!-- 
-        Uncomment when the recording functionality is back
-     -->
-     
-    <!--
-    <labelText labelid="417" y="6" width="100" fgcolor="0xFFFFFF"
-               visibility="$once{ canvas.showRecording }" />
-    
-    <simpleLabelButton name="sta_btn" width="30" height="24" y="2" style="itemStyle"
-                       visibility="$once{ canvas.showRecording }">
-        <handler name="oninit">
-            if (canvas.showRecording == "hidden") {
-                this.destroy();
-            }
-        </handler>
+    <miniIconsNew name="_doShare" y="6" innerResource="start_screensharing_rsc" width="16" height="16" 
+    			showhandcursor="true"
+               visible="${canvas.currentRoomObj.hideScreenSharing ? false : ((canvas.ismoderator) ? true : ((canvas.isAllowedToScreenShare) ? true : false )) }" >
         <handler name="onclick">
-            canvas.thishib.checkForRecording.doCall();         
-        </handler>
-        <view resource="start_recording_conf" x="3" y="1" />
-        <labelTooltip labelid="415" />
-    </simpleLabelButton>
-        
-    <simpleLabelButton name="stp_btn" width="30" height="24" y="2" style="itemStyle"
-                       visibility="hidden">
-        <handler name="onclick">
-            parent.stopRecordMeetingStream.doCall();
-        </handler>      
-        <view resource="stop_recording_conf" x="7" y="4" />
-        <labelTooltip labelid="416" />
-    </simpleLabelButton>   
-    
-    <netRemoteCallHib name="stopRecordMeetingStream" remotecontext="$once{ canvas.thishib }"
-        funcname="streamservice.stopRecordMeetingStream"  >
-        <netparam><method name="getValue">return parent.parent.recordingsName;</method></netparam>
-        <handler name="ondata" args="value">
-            //The onResult-Handler will be called be the rtmpconnection
-            Debug.write("+++++++++++++++++ stopRecordingShow: ",value); 
-        </handler>  
-    </netRemoteCallHib>  
-     -->   
-   
-    <simpleLabelButton name="_doShare" labelid="239" height="24" 
-               visible="${canvas.currentRoomObj.hideScreenSharing ? false : ((canvas.ismoderator) ? true : ((canvas.isAllowedToScreenShare) ? true : false )) }"
-               style="itemStyle" width="210" y="2">
-        <handler name="onclick">
-            //canvas._drawarea.setModus('plain');          
             this.parent.checkSharerSession.doCall();
         </handler>
-        <view y="1" x="2" resource="background_screenview_rsc" />
-    </simpleLabelButton>
+        <labelTooltip labelid="239" />
+    </miniIconsNew>
     
-    <!-- -->
     <labelText name="_inner" fgcolor="0xFF3300" y="4" />
     
+    <view width="2" />
     
 </class>
 

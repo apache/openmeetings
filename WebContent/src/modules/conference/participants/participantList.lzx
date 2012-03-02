@@ -227,13 +227,13 @@
     
         <view width="1" height="${ parent.parent.height }" x="80"
             bgcolor="$once{ canvas.basebgcolorizer }" />
-        <view name="_icon_remote" x="82" y="3" resource="participants_exclusive_audio_rsc" onclick="" showhandcursor="false">
+        <view name="_icon_exclusive_audio" x="82" y="3" resource="participants_exclusive_audio_rsc" onclick="" showhandcursor="false">
             <labelTooltip labelid="1423" />
         </view>
         
         <view width="1" height="${ parent.parent.height }" x="100"
             bgcolor="$once{ canvas.basebgcolorizer }" />
-        <view name="_icon_sync" x="102" y="3" resource="av_allow_rsc" onclick="" showhandcursor="false">
+        <view name="_icon_av_allow" x="102" y="3" resource="av_allow_rsc" onclick="" showhandcursor="false">
             <labelTooltip labelid="610" />
         </view>
         

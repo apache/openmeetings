@@ -11,6 +11,7 @@
             canvas.thishib.switchMicMuted.setMute(publicSID, tMute);
         };
         canvas.videoComp_lc.as3ConnectionSuccess = function() {
+        	//FIXME: Throws a Null Pointer Exception if the parent view was already destroyed
         	t.parent.as3ConnectionSuccess();
         }
     </handler>
@@ -48,13 +49,6 @@
     <handler name="onismoderator" reference="canvas" args="m">
         canvas.lc.send(canvas.vid_lc_name, "ismoderatorChanged", m);
     </handler>
-
-    <!---
-        set size of video objects
-    -->
-    <method name="initVideoContainer" args="offsetLength,videoWidth,videoHeight">
-        canvas.lc.send(canvas.vid_lc_name, "initVideoContainer", canvas.publicSID,canvas.firstName,canvas.lastName,offsetLength,videoWidth,videoHeight);
-    </method>
 
     <!---
         Creates video object

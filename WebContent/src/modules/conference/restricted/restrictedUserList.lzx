@@ -65,7 +65,6 @@
             //The user is already in the correct Scope
             this.reconnectSuccess();
         }
-        _videoviewcontent.initVideoContainer(40, 100, 100);
     </handler>
 
     <commonVideoComponentAdapter name="_videoviewcontent"/>

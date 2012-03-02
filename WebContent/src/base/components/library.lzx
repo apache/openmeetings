@@ -21,6 +21,7 @@
 <library>
 
     <include href="iconView.lzx" />
+    <include href="miniIconsNew.lzx" />
     <include href="resetCombobox.lzx" />
     <include href="updatecheckbox.lzx" />
     <include href="tableCombobox.lzx" />

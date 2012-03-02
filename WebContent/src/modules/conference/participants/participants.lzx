@@ -26,11 +26,6 @@
     <!--- holds a references to the videoview which is broadcasting -->
     <attribute name="broadCastViewRef" value="null" />
     
-    <!--
-       This is a variable to make it backwards compatible to the old room layout
-     -->
-    <attribute name="userNewVideoContainer" value="false" type="boolean"/>
-    
     <handler name="oninit">
         //set modus
         canvas.thishib.modus = "conference";

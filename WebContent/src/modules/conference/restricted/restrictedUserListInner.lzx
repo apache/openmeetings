@@ -21,8 +21,7 @@
 <library>
 
 <class name="restrictedUserListInner" extends="baseRoomInnerList"  
-       width="$once{ parent.width }" height="${ parent.height }" 
-       bgcolor="$once{ canvas.basebgcolorizer }" >
+       width="$once{ parent.width }" height="${ parent.height }" >
     
     <attribute name="selectedItem" value="null" />
     

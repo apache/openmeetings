@@ -54,7 +54,7 @@
 
 </class>
 
-<class name="roomListDetails" extends="view" bgcolor="0xFFFFFF" >
+<class name="roomListDetails" extends="view" >
 
 	<attribute name="roomid" value="0" type="number" />
 	<attribute name="roomname" value="" type="string" />
@@ -175,7 +175,7 @@
 	<labelText labelid="270" y="${parent._roomcomment.y}" width="50" />
 
 	<labelText name="user_label" labelid="407" y="${10 + parent._roomcomment.y + parent._roomcomment.height}" width="200" />
-	<view name="_users" bgcolor="$once{ canvas.basebgcolorizer }" width="300" y="${30 + parent._roomcomment.y + parent._roomcomment.height}"
+	<view name="_users" width="300" y="${30 + parent._roomcomment.y + parent._roomcomment.height}"
 				height="${ parent.height - parent._users.y }" >
 		<method name="clearList">
 			for (var eg in this._users._cbtext.subviews) 

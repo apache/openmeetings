@@ -316,20 +316,6 @@
     </method>
     
     <!--
-        public FileExplorerObject getFileExplorerByRoom(String SID, Long room_id)
-    
-    <netRemoteCallHib name="getFileExplorerByRoom" funcname="fileservice.getFileExplorerByRoom" 
-        remotecontext="$once{ canvas.thishib }" >   
-        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
-        <netparam><method name="getValue">return hib.currentroomid;</method></netparam>         
-        <handler name="ondata" args="value">    
-            if ($debug) Debug.write("getFileExplorerByRoom: ",value);
-            parent.parseRootItems(value);
-        </handler>
-    </netRemoteCallHib>  
-     -->
-    
-    <!--
         Parse Items and generate Output
      --> 
     <method name="parseRootItems" args="roomObject">
@@ -515,19 +501,6 @@
     
     <!--
         Borders
-     --> 
-    
-    <view name="_bg1" bgcolor="$once{ canvas.basebgcolorizer }" width="$once{ parent.width }" 
-          x="0" y="14" height="${ parent.height-14 }" />
-          
-    <view name="_bg2" bgcolor="0xFFFFFF" x="1" y="14" width="$once{ parent.width - 2 }" 
-          height="${ parent.height-15 }" />
-    
-    <!--      
-    <view name="_border1a" x="0" y="0" width="1" 
-          height="14" bgcolor="$once{ canvas.basebgcolorizer }" /> 
-    <view name="_border1b" x="${ parent.width-1 }" y="0" width="1" 
-          height="14" bgcolor="$once{ canvas.basebgcolorizer }" /> 
      -->
                
     <view name="_border2" x="0" y="${ 33 + parent._documentsTabs.height }" width="$once{ parent.width }" 
@@ -605,7 +578,7 @@
     
     <view name="_filearea" x="1" y="${ 34 + parent._documentsTabs.height }" clip="true"
           height="${ parent.height - 35 - parent._documentsTabs.height - parent._userSpace.height }" 
-          width="$once{ parent.width - 2 }">
+          width="$once{ parent.width }">
         
         <attribute name="currentTrackGroupName" value="fileExplorer" type="string" />
         
@@ -621,7 +594,7 @@
         <hscrollbar name="_hscrollbar" />
     </view>
     
-    <view name="_userSpace" height="40" valign="bottom" width="$once{ parent.width - 2 }">
+    <view name="_userSpace" height="40" valign="bottom" width="$once{ parent.width }">
     	
     	<labelText name="_userHomeSizeLabel" labelid="923" />
     	
