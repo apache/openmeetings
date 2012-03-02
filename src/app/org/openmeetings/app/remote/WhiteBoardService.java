@@ -240,7 +240,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 						newMessage.put(0, "updateDrawStatus");
 						newMessage.put(1, rcl);
 						this.scopeApplicationAdapter
-								.sendMessageWithClient(newMessage);
+								.sendMessageWithClientWithSyncObject(newMessage, true);
 
 					} else {
 						return false;
@@ -282,7 +282,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 						newMessage.put(0, "updateDrawStatus");
 						newMessage.put(1, rcl);
 						this.scopeApplicationAdapter
-								.sendMessageWithClient(newMessage);
+								.sendMessageWithClientWithSyncObject(newMessage, true);
 
 					} else {
 						return false;
@@ -324,7 +324,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 						newMessage.put(0, "updateDrawStatus");
 						newMessage.put(1, rcl);
 						this.scopeApplicationAdapter
-								.sendMessageWithClient(newMessage);
+								.sendMessageWithClientWithSyncObject(newMessage, true);
 
 					} else {
 						return false;
@@ -365,7 +365,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 				        newMessage.put(0, "updateGiveAudioStatus");
 				        newMessage.put(1, rcl);
 				        this.scopeApplicationAdapter
-				                .sendMessageWithClient(newMessage);
+				                .sendMessageWithClientWithSyncObject(newMessage, true);
 					} else {
 						return false;
 					}

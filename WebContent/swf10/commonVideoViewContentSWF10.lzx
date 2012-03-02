@@ -41,6 +41,9 @@
             // client.videoOnMove = this.videoOnMove; function not in use ?! swagner 04.02.2012
             client.updateMuteStatusVideoView = this.updateMuteStatusVideoView;
             client.ismoderatorChanged = this.ismoderatorChanged;
+            // update rights to SWF10 client
+            client.updateModerationFlag = this.updateModerationFlag;
+            client.setDrawAllowStatus = this.setDrawAllowStatus
 
             var lc:LocalConnection = new LocalConnection();
             lc.connect(canvas.vid_lc_name);
@@ -408,12 +411,13 @@
         ]]>
     </method>
 
+	<!---
+		Clear all views, probably this is caleld whenever a user leaves the room for example
+	 -->
     <method name="clearAll">
         <![CDATA[
             if ($debug) Debug.write("clearAll", this.subviews);
-            //var baseContent = this.subviews[0].close();
             while(this.subviews.length > 0) {
-                //if ($debug) Debug.write(this.subviews[0]);
                 this.subviews[0]._chatvideoinner._videostream._stop();
                 this.subviews[0].destroy();
             }
@@ -423,7 +427,29 @@
         ]]>
     </method>
     
+    <!---
+    	Update the ismoderator flag, there is no need to check here which user
+    	this happened already before sending it to the SWF10 app
+     -->
+    <method name="updateModerationFlag" args="moderator">
+    	<![CDATA[
+    		if ($debug) Debug.write("updateModerationFlag :: ",moderator);
+    		this.setAttribute('ismoderator',moderator);
+    	]]>
+    </method>
     
+    <!---
+    	Update the canDraw,canShare,canRemote flag, there is no need to check here which user
+    	this happened already before sending it to the SWF10 app
+     -->
+    <method name="setDrawAllowStatus" args="canDraw,canShare,canRemote">
+    	<![CDATA[
+    		if ($debug) Debug.write("setDrawAllowStatus :: ",canDraw,canShare,canRemote);
+    		canvas.setAttribute("isAllowedToDraw",canDraw);
+            canvas.setAttribute("isAllowedToScreenShare",canShare);
+            canvas.setAttribute("isAllowedToRemoteControl",canRemote);
+    	]]>
+    </method>
         
     <!--
     function not in use ?! swagner 04.02.2012

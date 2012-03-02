@@ -2288,6 +2288,17 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 
 	public synchronized int sendMessageWithClient(Object newMessage) {
 		try {
+			sendMessageWithClientWithSyncObject(newMessage, false);
+
+		} catch (Exception err) {
+			log.error("[sendMessageWithClient] ", err);
+			return -1;
+		}
+		return 1;
+	}
+	
+	public synchronized int sendMessageWithClientWithSyncObject(Object newMessage, boolean sync) {
+		try {
 			IConnection current = Red5.getConnectionLocal();
 			RoomClient currentClient = this.clientListManager
 					.getClientByStreamId(current.getClient().getId());
@@ -2297,7 +2308,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			hsm.put("message", newMessage);
 			
 			//Sync to all users of current scope
-			syncMessageToCurrentScope("sendVarsToMessageWithClient", hsm, false);
+			syncMessageToCurrentScope("sendVarsToMessageWithClient", hsm, sync);
 
 		} catch (Exception err) {
 			log.error("[sendMessageWithClient] ", err);

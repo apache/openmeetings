@@ -20,7 +20,9 @@
 -->
 <library>
     
-    <resource name="participants_isactive" src="resources/button_ok.png" />
+    <resource name="right_isactive_rsc" src="resources/accept.png" />
+    
+    <resource name="right_notactive_rsc" src="resources/delete.png" />
     
     <resource name="participants_isMod_rsc" src="resources/kdmconfig.png" />
     <resource name="participants_allow_drawing_rsc" src="resources/color_line.png" />

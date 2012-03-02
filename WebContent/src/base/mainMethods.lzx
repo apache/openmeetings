@@ -549,419 +549,424 @@
         }
     </method>
     
-    <method name="roomClosed">
-        <![CDATA[
-        
-            if ($debug) Debug.write("canvas.currentRoomObject ",canvas.currentRoomObject);
-            
-            new lz.redirectBox(canvas,{redirectURL:canvas.currentRoomObject.redirectURL});
-        
-        ]]>
-    </method>
+	<method name="roomClosed">
+	    <![CDATA[
+	        if ($debug) Debug.write("canvas.currentRoomObject ",canvas.currentRoomObject);
+	        new lz.redirectBox(canvas,{redirectURL:canvas.currentRoomObject.redirectURL});
+	    ]]>
+	</method>
                  
         
 
-
-<method name="parseLanugageObject" args="obj">
-
-    ////Debug.write('parseLanugageObject: ',obj);
-    ////Debug.write('parseLanugageObject: ',obj.childNodes);
-    <![CDATA[
-    var t = new Array();
-    for (var i=0;i<obj.childNodes.length;i++){
-        for (var k=0;k<obj.childNodes[i].childNodes.length;k++){
-            ////Debug.write(obj.childNodes[i].childNodes[k]);
-            var t2 = new Array();
-            t2[obj.childNodes[i].childNodes[k].childNodes[0].nodeName]=obj.childNodes[i].childNodes[k].childNodes[0].childNodes[0].data;
-            t2[obj.childNodes[i].childNodes[k].childNodes[1].nodeName]=obj.childNodes[i].childNodes[k].childNodes[1].childNodes[0].data;
-            t.push(t2);
-        }
-    }
-    setLabelObject(t);
-    canvas.initScreen();
-    //Debug.write(t);
-    ]]>
-</method>
-
-<!-- Data Source Definition -->
-<dataset name="getSessionVarsData" request="false" proxied="false"
-    querytype="POST" src="${ 'http://'+canvas.rtmphost+'/webrooms/checksession.php' }" 
-    type="http" >
-    <handler name="ondata" args="value">
-    
-        //Debug.write(value);
-        canvas.setAttribute('currentcourse',value.childNodes[0].childNodes[0].childNodes[0].childNodes[0].data);
-        canvas.setAttribute('currentcourseName',canvas.currentcourse);
-        canvas.setAttribute('currentcourseNameLong',value.childNodes[0].childNodes[0].childNodes[1].childNodes[0].data);
-        canvas.setAttribute('currentlanguage',value.childNodes[0].childNodes[0].childNodes[8].childNodes[0].data);
-
-        canvas.setAttribute('currentusename',value.childNodes[0].childNodes[1].childNodes[2].childNodes[0].data+' '+value.childNodes[0].childNodes[1].childNodes[1].childNodes[0].data);
-        
-        canvas.setAttribute('user_id',value.childNodes[0].childNodes[1].childNodes[0].childNodes[0].data);
-        canvas.setAttribute('firstName',value.childNodes[0].childNodes[1].childNodes[1].childNodes[0].data);
-        canvas.setAttribute('lastName',value.childNodes[0].childNodes[1].childNodes[2].childNodes[0].data);
-        canvas.setAttribute('mail',value.childNodes[0].childNodes[1].childNodes[3].childNodes[0].data);
-        canvas.setAttribute('lastLogin','');
-        canvas.setAttribute('official_code',value.childNodes[0].childNodes[1].childNodes[5].childNodes[0].data);
-        canvas.setAttribute('picture_uri','');
-        canvas.setAttribute('language',value.childNodes[0].childNodes[1].childNodes[7].childNodes[0].data);
-
-        //Debug.write(value.childNodes[0].childNodes[1].childNodes[0].childNodes[0].data);
-        //Debug.write(value.childNodes[0].childNodes[1].childNodes[1].childNodes[0].data);
-        //Debug.write(value.childNodes[0].childNodes[1].childNodes[2].childNodes[0].data);
-        //Debug.write(value.childNodes[0].childNodes[1].childNodes[3].childNodes[0].data);
-        //Debug.write(value.childNodes[0].childNodes[1].childNodes[4].childNodes[0].data);
-        //Debug.write(value.childNodes[0].childNodes[1].childNodes[5].childNodes[0].data);
-        //Debug.write(value.childNodes[0].childNodes[1].childNodes[6].childNodes[0].data);
-        //Debug.write(value.childNodes[0].childNodes[1].childNodes[7].childNodes[0].data);
-        
-        switch (canvas.currentlanguage){
-            case 'english':
-            break;
-            case 'german':
-            break;
-            case 'french':
-            break;          
-            default:
-            canvas.setAttribute('currentlanguage','english');
-            break;
-        }
-        
-        var addIt='conf';
-        if (!canvas.isConference){
-            addIt='meet'
-        }
-        canvas.setAttribute('currentcourse',canvas.rtmphost+canvas.currentcourse+addIt);
-        canvas.setAttribute('currentuser',value.childNodes[0].childNodes[1].childNodes[5].childNodes[0].data);
-        
-        canvas.setAttribute('loadingmessage','loading language data');
-        canvas.languageData.doRequest();
-    </handler>
-</dataset>
-
-<method name="addBrowserTabHistory" args="value">
-    <![CDATA[
-    //Debug.write("addBrowserTabHistory: ",value);
-    _browserhistory.addItem(value);
-    this.browserTabHistory.push(value);
-    ]]>
-</method>
-  
-<!---
-@doc The function does compare the new moderator list with the old and prepares the list 
-	the removeModeratorList is used in the performance optimized user list of the restricted 
-	room type to re-render the list items only if really something has changed in any 
-	of the user list items
- -->
-<method name="analyzeModerationList" args="newList">
-    <![CDATA[
-    
-       canvas.newModeratorList = new Array();
-       canvas.removeModeratorList = new Array();
-       
-       if (canvas.currentModeratorList != null) {
-           for (var i=0;i<canvas.currentModeratorList.length;i++) {
-                canvas.currentModeratorList[i].found = false;
-           }
-       
-           for (var i=0;i<canvas.currentModeratorList.length;i++) {
-                
-                for (var k=0;k<newList.length;k++) {
-                    if (newList[k].publicSID == canvas.currentModeratorList[i].publicSID) {
-                        canvas.currentModeratorList[i].found = true;
-                    }
-                }
-            }
-        }
-        
-        for (var k=0;k<newList.length;k++) {
-            newList[k].found = false;
-        }
-       
-        for (var k=0;k<newList.length;k++) {
-        	if (canvas.currentModeratorList != null) {
-                for (var i=0;i<canvas.currentModeratorList.length;i++) {
-                    if (newList[k].publicSID == canvas.currentModeratorList[i].publicSID) {
-                        newList[k].found = true;
-                    }
-                }
-        	}
-        }
-        
-        for (var k=0;k<newList.length;k++) {
-            if (!newList[k].found) {
-                canvas.newModeratorList.push(newList[k]);
-            }
-        }
-        
-        if (canvas.currentModeratorList != null) {
-            for (var i=0;i<canvas.currentModeratorList.length;i++) {
-                
-                if (!canvas.currentModeratorList[i].found) {
-                    canvas.removeModeratorList.push(canvas.currentModeratorList[i])
-                }
-            }
-        }
-        
-        if ($debug) Debug.write("newModeratorList :: ",canvas.newModeratorList);
-        if ($debug) Debug.write("removeModeratorList :: ",canvas.removeModeratorList);
-    ]]>
-</method>
-
-<!---
-	Updates the "ismoderator" flag
-	the setAttribute method will broadcast an event to all event listeners that 
-	did subscribe using the "onismoderator" handler with reference to canvas !
-	For example in the userlist's of the roomtypes
- -->
-<method name="updateModerationFlag">
-    <![CDATA[
-        if ($debug) Debug.write("updateModerationFlag",canvas.currentModeratorList);
-        var isCurrentModerator = false;
-        for (var i=0;i<canvas.currentModeratorList.length;i++) {
-            var item = canvas.currentModeratorList[i];
-            if (canvas.publicSID == item.publicSID) {
-                isCurrentModerator = true;
-            }
-        }
-        this.setAttribute('ismoderator',isCurrentModerator);
-    ]]>
-</method> 
-
-<!---
-	Checks if a certain publicSID is a moderator
- -->
-<method name="getIsModeratorByPublicSID" args="publicSID">
-    <![CDATA[
-        for (var i=0;i<canvas.currentModeratorList.length;i++) {
-            var item = canvas.currentModeratorList[i];
-            if (publicSID == item.publicSID) {
-                return true;
-            }
-        }
-        return false;
-    ]]>
-</method>
- 
-<!---
-	Load the invitation window
- -->
-<method name="doAction" args="action">
-    if (action == "invitation") {
-        new lz.inviteMainWindow(canvas.main_content._content.inner);
-    }
-</method>
-
-<!---
-	Sets the flags isAllowedToDraw, isAllowedToScreenShare, isAllowedToRemoteControl 
-	and broadcasts the three rights to SWF10 container
- -->
-<method name="setDrawAllowStatus" args="roomClientObj">
-    <![CDATA[
-        if ($debug) Debug.write("drawAllowStatus changes ###### ");
-        if (roomClientObj.publicSID==canvas.publicSID) {
-            canvas.setAttribute("isAllowedToDraw",roomClientObj.canDraw);
-            canvas.setAttribute("isAllowedToScreenShare",roomClientObj.canShare);
-            canvas.setAttribute("isAllowedToRemoteControl",roomClientObj.canRemote);
-            canvas.lc.send(canvas.vid_lc_name, "setDrawAllowStatus", roomClientObj.canDraw, roomClientObj.canShare, roomClientObj.canRemote);
-        }
-    ]]>
-</method>
-
-<!---
-	Sets the flag for the isAllowedToGiveExclusiveAudio status and broadcasts it to the 
-	SWF10 container
- -->
-<method name="setExclusiveAudioAllowStatus" args="roomClientObj">
-    <![CDATA[
-        if ($debug) Debug.write("giveExclusiveAudioStatus changes ###### ");
-        if (roomClientObj.publicSID==canvas.publicSID) {
-            canvas.setAttribute("isAllowedToGiveExclusiveAudio",roomClientObj.canGiveAudio);
-            canvas.lc.send(canvas.vid_lc_name, "setExclusiveAudioAllowStatus", roomClientObj.canGiveAudio);
-        }
-    ]]>
-</method>
-
-<method name="setMuteStatus" args="roomClientObj">
-    <![CDATA[
-        if ($debug) Debug.write("setMuteStatus changes ###### ",roomClientObj.micMuted);
-        //Check for self status
-        if (roomClientObj.publicSID==canvas.publicSID) {
-            canvas.setAttribute("micMuted",roomClientObj.micMuted);
-        }
-        
-        canvas._videocontainer.updateMuteStatusVideoView(roomClientObj);
-        
-        //Notify all Listeners for change of the item
-        canvas.setAttribute("micMutedStatusChangedItem",roomClientObj);
-    ]]>
-</method>
-
-<method name="addFolderSequence" args="foldername">
-    <![CDATA[
-    this.uploadmoduleimgfolder = '/';
-    this.uploadmoduleimgfolder += foldername;
-    this.setAttribute('uploadmoduleimgfolder',this.uploadmoduleimgfolder);
-    ]]>
-</method>
-    
-    
-<!-- country validation -->
-<method name="validateCountry" args="str">
-    ////Debug.write("validateCountry: ",str);
-    str = str.toLowerCase();
-    <![CDATA[
-        if (str.length!=0){
-            var a = new Array();
-            for (var i=0;i<canvas.statesInitValues.length;i++){
-                var st = canvas.statesInitValues[i].name.toLowerCase();
-                if (st.startsWith(str))a.push(canvas.statesInitValues[i]);
-                //this.addItem(canvas.statesInitValues[i].name,canvas.statesInitValues[i].state_id);
-            }
-            return a;
-        }
-    ]]> 
-</method>
-    
-<method name="getCountryRecord" args="id">
-    return canvas.statesInitValues[id];
-</method>
-    
-<handler name="onmousewheeldelta" reference="lz.Keys" args="d">
-    var obj = getCurrentMouseWheelObject();
-    ////Debug.write("onmousewheeldelta 12: ",d,obj);
-    <![CDATA[
-        if (obj!=null) {
-            obj.step(-d);
-        }
-    ]]>
-</handler>    
-
-<method name="reverseWordingsBySplit" args="str">
-    <![CDATA[
-        var words_arr = str.split( " " ); // an array of chars
-        for ( var i = 0, str = ""; i < words_arr.length; i++ ) // reverse their order
-        {
-            str += words_arr[ words_arr.length - i - 1 ];
-            if (words_arr.length != 1) {
-                str += " ";
-            }
-        }
-        return str;
-        
-    ]]>
-</method> 
-
-<method name="reverseAll" args="str">
-    <![CDATA[
-        var words_arr = str.split( "" ); // an array of chars
-        for ( var i = 0, str = ""; i < words_arr.length; i++ ) // reverse their order
-        {
-            str += words_arr[ words_arr.length - i - 1 ];
-            
-        }
-        return str;
-        
-    ]]>
-</method> 
-    
-<method name="reverseWords" args="str">
-    <![CDATA[
-        if ( str == "" || str == null ) return ""; // undefined
-        // first char indicates the main directive of str (rtl/ltr)
-        if ( isLTR( str.charCodeAt( 0 ) ) ) return str; // english or number
-        var words_arr = str.split( "" ); // an array of chars
-        for ( var i = 0, str = ""; i < words_arr.length; i++ ) // reverse their order
-            str += words_arr[ words_arr.length - i - 1 ];
-        return str;
-    ]]>
-</method>
-    
-<method name="isLTR" args="c">
-    <![CDATA[
-        return ( c >= 48 && c <= 57 || c >= 65 && c <= 90 || c >= 97 && c <= 122 );
-    ]]>
-</method>
-
-<method name="isHEB" args="c">
-    <![CDATA[
-        return ( c >= 224 && c <= 250 );
-    ]]>
-</method>    
-
-<method name="setTextAlign" args="obj,type">
-    switch ( type ) {
-        case "left" :
-            obj.setX( 0 );
-        break;
-        case "center" :
-            obj.setX( this.parent.width / 2 - this.getTextWidth() / 2 );
-        break;
-        case "right" :
-            obj.setX( this.parent.width - this.getTextWidth() );
-        break;
-    }
-</method>  
-
-<method name="initSharedObject">
-    if (canvas.sharedObject == null) {
-        if($debug) Debug.write("canvas.initSharedObject sharedObject IS null");
-        canvas.sharedObject = new lz.sharedObject();
-        canvas.sharedObject.getLocal('userdata');
-    }
-</method>
-
-<method name="getUserData">
-    canvas.initSharedObject();
-    var g = canvas.sharedObject.getData('userdata');
-    if (g==null) {
-        if($debug) Debug.write("sharedObject.getData IS null");
-        g = new Array();
-    }
-    return g;
-</method>
-
-<method name="setUserData" args="g">
-    canvas.initSharedObject();
-    canvas.sharedObject.setData('userdata', g);
-    canvas.sharedObject.flush();
-</method>
-
-<method name="setColorStyle" args="value">
-    var val = value;
-    if (val == "mediumseagreen"){
-        canvas.setAttribute('basebgcolorizer',"0x3CB371");
-        canvas.setAttribute('baseMousecolorizer',"0x66CC8E");
-        canvas.setAttribute('baseMouseOvercolorizer',"0x66CC8E");
-    } else if (val == "steelblue"){
-        canvas.setAttribute('basebgcolorizer',"0x4682B4");
-        canvas.setAttribute('baseMousecolorizer',"0x80AECC");
-        canvas.setAttribute('baseMouseOvercolorizer',"0x80AECC");
-    } else if (val == "redorange"){
-        canvas.setAttribute('basebgcolorizer',"0xFC8558");
-        canvas.setAttribute('baseMousecolorizer',"0xFDC4A6");
-        canvas.setAttribute('baseMouseOvercolorizer',"0xFDC4A6");
-    } else if (val == "lightsteelblue"){
-        canvas.setAttribute('basebgcolorizer',"0x3F5B9E");
-        canvas.setAttribute('baseMousecolorizer',"0xC4D5E6");
-        canvas.setAttribute('baseMouseOvercolorizer',"0xC4D5E6");
-    } else if (val == "goldenrod"){
-        canvas.setAttribute('basebgcolorizer',"0xDAA520");
-        canvas.setAttribute('baseMousecolorizer',"0xE8C064");
-        canvas.setAttribute('baseMouseOvercolorizer',"0xE8C064");
-    } else if (val == "silvergray"){
-        canvas.setAttribute('basebgcolorizer',"0xC4C8CC");
-        canvas.setAttribute('baseMousecolorizer',"0xC2C8CD");
-        canvas.setAttribute('baseMouseOvercolorizer',"0xC2C8CD");
-    } else if (val == "userdefined"){
-        canvas.setAttribute('basebgcolorizer', canvas.userbgcolorizer);
-        canvas.setAttribute('baseMousecolorizer', canvas.userMousecolorizer);
-        canvas.setAttribute('baseMouseOvercolorizer', canvas.userMouseOvercolorizer);
-    } else {
-        val = null;
-    }
-    
-    return val;
-</method>
+	
+	<method name="parseLanugageObject" args="obj">
+	
+	    ////Debug.write('parseLanugageObject: ',obj);
+	    ////Debug.write('parseLanugageObject: ',obj.childNodes);
+	    <![CDATA[
+	    var t = new Array();
+	    for (var i=0;i<obj.childNodes.length;i++){
+	        for (var k=0;k<obj.childNodes[i].childNodes.length;k++){
+	            ////Debug.write(obj.childNodes[i].childNodes[k]);
+	            var t2 = new Array();
+	            t2[obj.childNodes[i].childNodes[k].childNodes[0].nodeName]=obj.childNodes[i].childNodes[k].childNodes[0].childNodes[0].data;
+	            t2[obj.childNodes[i].childNodes[k].childNodes[1].nodeName]=obj.childNodes[i].childNodes[k].childNodes[1].childNodes[0].data;
+	            t.push(t2);
+	        }
+	    }
+	    setLabelObject(t);
+	    canvas.initScreen();
+	    //Debug.write(t);
+	    ]]>
+	</method>
+	
+	<!-- Data Source Definition -->
+	<dataset name="getSessionVarsData" request="false" proxied="false"
+	    querytype="POST" src="${ 'http://'+canvas.rtmphost+'/webrooms/checksession.php' }" 
+	    type="http" >
+	    <handler name="ondata" args="value">
+	    
+	        //Debug.write(value);
+	        canvas.setAttribute('currentcourse',value.childNodes[0].childNodes[0].childNodes[0].childNodes[0].data);
+	        canvas.setAttribute('currentcourseName',canvas.currentcourse);
+	        canvas.setAttribute('currentcourseNameLong',value.childNodes[0].childNodes[0].childNodes[1].childNodes[0].data);
+	        canvas.setAttribute('currentlanguage',value.childNodes[0].childNodes[0].childNodes[8].childNodes[0].data);
+	
+	        canvas.setAttribute('currentusename',value.childNodes[0].childNodes[1].childNodes[2].childNodes[0].data+' '+value.childNodes[0].childNodes[1].childNodes[1].childNodes[0].data);
+	        
+	        canvas.setAttribute('user_id',value.childNodes[0].childNodes[1].childNodes[0].childNodes[0].data);
+	        canvas.setAttribute('firstName',value.childNodes[0].childNodes[1].childNodes[1].childNodes[0].data);
+	        canvas.setAttribute('lastName',value.childNodes[0].childNodes[1].childNodes[2].childNodes[0].data);
+	        canvas.setAttribute('mail',value.childNodes[0].childNodes[1].childNodes[3].childNodes[0].data);
+	        canvas.setAttribute('lastLogin','');
+	        canvas.setAttribute('official_code',value.childNodes[0].childNodes[1].childNodes[5].childNodes[0].data);
+	        canvas.setAttribute('picture_uri','');
+	        canvas.setAttribute('language',value.childNodes[0].childNodes[1].childNodes[7].childNodes[0].data);
+	
+	        //Debug.write(value.childNodes[0].childNodes[1].childNodes[0].childNodes[0].data);
+	        //Debug.write(value.childNodes[0].childNodes[1].childNodes[1].childNodes[0].data);
+	        //Debug.write(value.childNodes[0].childNodes[1].childNodes[2].childNodes[0].data);
+	        //Debug.write(value.childNodes[0].childNodes[1].childNodes[3].childNodes[0].data);
+	        //Debug.write(value.childNodes[0].childNodes[1].childNodes[4].childNodes[0].data);
+	        //Debug.write(value.childNodes[0].childNodes[1].childNodes[5].childNodes[0].data);
+	        //Debug.write(value.childNodes[0].childNodes[1].childNodes[6].childNodes[0].data);
+	        //Debug.write(value.childNodes[0].childNodes[1].childNodes[7].childNodes[0].data);
+	        
+	        switch (canvas.currentlanguage){
+	            case 'english':
+	            break;
+	            case 'german':
+	            break;
+	            case 'french':
+	            break;          
+	            default:
+	            canvas.setAttribute('currentlanguage','english');
+	            break;
+	        }
+	        
+	        var addIt='conf';
+	        if (!canvas.isConference){
+	            addIt='meet'
+	        }
+	        canvas.setAttribute('currentcourse',canvas.rtmphost+canvas.currentcourse+addIt);
+	        canvas.setAttribute('currentuser',value.childNodes[0].childNodes[1].childNodes[5].childNodes[0].data);
+	        
+	        canvas.setAttribute('loadingmessage','loading language data');
+	        canvas.languageData.doRequest();
+	    </handler>
+	</dataset>
+	
+	<method name="addBrowserTabHistory" args="value">
+	    <![CDATA[
+	    //Debug.write("addBrowserTabHistory: ",value);
+	    _browserhistory.addItem(value);
+	    this.browserTabHistory.push(value);
+	    ]]>
+	</method>
+	  
+	<!---
+	@doc The function does compare the new moderator list with the old and prepares the list 
+		the removeModeratorList is used in the performance optimized user list of the restricted 
+		room type to re-render the list items only if really something has changed in any 
+		of the user list items
+	 -->
+	<method name="analyzeModerationList" args="newList">
+	    <![CDATA[
+	    
+	       canvas.newModeratorList = new Array();
+	       canvas.removeModeratorList = new Array();
+	       
+	       if (canvas.currentModeratorList != null) {
+	           for (var i=0;i<canvas.currentModeratorList.length;i++) {
+	                canvas.currentModeratorList[i].found = false;
+	           }
+	       
+	           for (var i=0;i<canvas.currentModeratorList.length;i++) {
+	                
+	                for (var k=0;k<newList.length;k++) {
+	                    if (newList[k].publicSID == canvas.currentModeratorList[i].publicSID) {
+	                        canvas.currentModeratorList[i].found = true;
+	                    }
+	                }
+	            }
+	        }
+	        
+	        for (var k=0;k<newList.length;k++) {
+	            newList[k].found = false;
+	        }
+	       
+	        for (var k=0;k<newList.length;k++) {
+	        	if (canvas.currentModeratorList != null) {
+	                for (var i=0;i<canvas.currentModeratorList.length;i++) {
+	                    if (newList[k].publicSID == canvas.currentModeratorList[i].publicSID) {
+	                        newList[k].found = true;
+	                    }
+	                }
+	        	}
+	        }
+	        
+	        for (var k=0;k<newList.length;k++) {
+	            if (!newList[k].found) {
+	                canvas.newModeratorList.push(newList[k]);
+	            }
+	        }
+	        
+	        if (canvas.currentModeratorList != null) {
+	            for (var i=0;i<canvas.currentModeratorList.length;i++) {
+	                
+	                if (!canvas.currentModeratorList[i].found) {
+	                    canvas.removeModeratorList.push(canvas.currentModeratorList[i])
+	                }
+	            }
+	        }
+	        
+	        if ($debug) Debug.write("newModeratorList :: ",canvas.newModeratorList);
+	        if ($debug) Debug.write("removeModeratorList :: ",canvas.removeModeratorList);
+	    ]]>
+	</method>
+	
+	<!---
+		Updates the "ismoderator" flag
+		the setAttribute method will broadcast an event to all event listeners that 
+		did subscribe using the "onismoderator" handler with reference to canvas !
+		For example in the userlist's of the roomtypes
+	 -->
+	<method name="updateModerationFlag">
+	    <![CDATA[
+	        if ($debug) Debug.write("updateModerationFlag",canvas.currentModeratorList);
+	        var isCurrentModerator = false;
+	        for (var i=0;i<canvas.currentModeratorList.length;i++) {
+	            var item = canvas.currentModeratorList[i];
+	            if (canvas.publicSID == item.publicSID) {
+	                isCurrentModerator = true;
+	            }
+	        }
+	        
+	        //Only send this event if the current user moderators status changes
+	        if (isCurrentModerator != this.ismoderator) {
+		        canvas.lc.send(canvas.vid_lc_name, "updateModerationFlag", isCurrentModerator);
+	        }
+	        
+	        // do always spread this event, we need to broadcast the "onismoderator" event
+	        // so that we can update the status of other users in the user list
+	        this.setAttribute('ismoderator',isCurrentModerator);
+	    ]]>
+	</method> 
+	
+	<!---
+		Checks if a certain publicSID is a moderator
+	 -->
+	<method name="getIsModeratorByPublicSID" args="publicSID">
+	    <![CDATA[
+	        for (var i=0;i<canvas.currentModeratorList.length;i++) {
+	            var item = canvas.currentModeratorList[i];
+	            if (publicSID == item.publicSID) {
+	                return true;
+	            }
+	        }
+	        return false;
+	    ]]>
+	</method>
+	 
+	<!---
+		Load the invitation window
+	 -->
+	<method name="doAction" args="action">
+	    if (action == "invitation") {
+	        new lz.inviteMainWindow(canvas.main_content._content.inner);
+	    }
+	</method>
+	
+	<!---
+		Sets the flags isAllowedToDraw, isAllowedToScreenShare, isAllowedToRemoteControl 
+		and broadcasts the three rights to SWF10 container
+	 -->
+	<method name="setDrawAllowStatus" args="roomClientObj">
+	    <![CDATA[
+	        if ($debug) Debug.write("drawAllowStatus changes ###### ");
+	        if (roomClientObj.publicSID==canvas.publicSID) {
+	            canvas.setAttribute("isAllowedToDraw",roomClientObj.canDraw);
+	            canvas.setAttribute("isAllowedToScreenShare",roomClientObj.canShare);
+	            canvas.setAttribute("isAllowedToRemoteControl",roomClientObj.canRemote);
+	            canvas.lc.send(canvas.vid_lc_name, "setDrawAllowStatus", roomClientObj.canDraw, roomClientObj.canShare, roomClientObj.canRemote);
+	        }
+	    ]]>
+	</method>
+	
+	<!---
+		Sets the flag for the isAllowedToGiveExclusiveAudio status and broadcasts it to the 
+		SWF10 container
+	 -->
+	<method name="setExclusiveAudioAllowStatus" args="roomClientObj">
+	    <![CDATA[
+	        if ($debug) Debug.write("giveExclusiveAudioStatus changes ###### ");
+	        if (roomClientObj.publicSID==canvas.publicSID) {
+	            canvas.setAttribute("isAllowedToGiveExclusiveAudio",roomClientObj.canGiveAudio);
+	            canvas.lc.send(canvas.vid_lc_name, "setExclusiveAudioAllowStatus", roomClientObj.canGiveAudio);
+	        }
+	    ]]>
+	</method>
+	
+	<method name="setMuteStatus" args="roomClientObj">
+	    <![CDATA[
+	        if ($debug) Debug.write("setMuteStatus changes ###### ",roomClientObj.micMuted);
+	        //Check for self status
+	        if (roomClientObj.publicSID==canvas.publicSID) {
+	            canvas.setAttribute("micMuted",roomClientObj.micMuted);
+	        }
+	        
+	        canvas._videocontainer.updateMuteStatusVideoView(roomClientObj);
+	        
+	        //Notify all Listeners for change of the item
+	        canvas.setAttribute("micMutedStatusChangedItem",roomClientObj);
+	    ]]>
+	</method>
+	
+	<method name="addFolderSequence" args="foldername">
+	    <![CDATA[
+	    this.uploadmoduleimgfolder = '/';
+	    this.uploadmoduleimgfolder += foldername;
+	    this.setAttribute('uploadmoduleimgfolder',this.uploadmoduleimgfolder);
+	    ]]>
+	</method>
+	    
+	    
+	<!-- country validation -->
+	<method name="validateCountry" args="str">
+	    ////Debug.write("validateCountry: ",str);
+	    str = str.toLowerCase();
+	    <![CDATA[
+	        if (str.length!=0){
+	            var a = new Array();
+	            for (var i=0;i<canvas.statesInitValues.length;i++){
+	                var st = canvas.statesInitValues[i].name.toLowerCase();
+	                if (st.startsWith(str))a.push(canvas.statesInitValues[i]);
+	                //this.addItem(canvas.statesInitValues[i].name,canvas.statesInitValues[i].state_id);
+	            }
+	            return a;
+	        }
+	    ]]> 
+	</method>
+	    
+	<method name="getCountryRecord" args="id">
+	    return canvas.statesInitValues[id];
+	</method>
+	    
+	<handler name="onmousewheeldelta" reference="lz.Keys" args="d">
+	    var obj = getCurrentMouseWheelObject();
+	    ////Debug.write("onmousewheeldelta 12: ",d,obj);
+	    <![CDATA[
+	        if (obj!=null) {
+	            obj.step(-d);
+	        }
+	    ]]>
+	</handler>    
+	
+	<method name="reverseWordingsBySplit" args="str">
+	    <![CDATA[
+	        var words_arr = str.split( " " ); // an array of chars
+	        for ( var i = 0, str = ""; i < words_arr.length; i++ ) // reverse their order
+	        {
+	            str += words_arr[ words_arr.length - i - 1 ];
+	            if (words_arr.length != 1) {
+	                str += " ";
+	            }
+	        }
+	        return str;
+	        
+	    ]]>
+	</method> 
+	
+	<method name="reverseAll" args="str">
+	    <![CDATA[
+	        var words_arr = str.split( "" ); // an array of chars
+	        for ( var i = 0, str = ""; i < words_arr.length; i++ ) // reverse their order
+	        {
+	            str += words_arr[ words_arr.length - i - 1 ];
+	            
+	        }
+	        return str;
+	        
+	    ]]>
+	</method> 
+	    
+	<method name="reverseWords" args="str">
+	    <![CDATA[
+	        if ( str == "" || str == null ) return ""; // undefined
+	        // first char indicates the main directive of str (rtl/ltr)
+	        if ( isLTR( str.charCodeAt( 0 ) ) ) return str; // english or number
+	        var words_arr = str.split( "" ); // an array of chars
+	        for ( var i = 0, str = ""; i < words_arr.length; i++ ) // reverse their order
+	            str += words_arr[ words_arr.length - i - 1 ];
+	        return str;
+	    ]]>
+	</method>
+	    
+	<method name="isLTR" args="c">
+	    <![CDATA[
+	        return ( c >= 48 && c <= 57 || c >= 65 && c <= 90 || c >= 97 && c <= 122 );
+	    ]]>
+	</method>
+	
+	<method name="isHEB" args="c">
+	    <![CDATA[
+	        return ( c >= 224 && c <= 250 );
+	    ]]>
+	</method>    
+	
+	<method name="setTextAlign" args="obj,type">
+	    switch ( type ) {
+	        case "left" :
+	            obj.setX( 0 );
+	        break;
+	        case "center" :
+	            obj.setX( this.parent.width / 2 - this.getTextWidth() / 2 );
+	        break;
+	        case "right" :
+	            obj.setX( this.parent.width - this.getTextWidth() );
+	        break;
+	    }
+	</method>  
+	
+	<method name="initSharedObject">
+	    if (canvas.sharedObject == null) {
+	        if($debug) Debug.write("canvas.initSharedObject sharedObject IS null");
+	        canvas.sharedObject = new lz.sharedObject();
+	        canvas.sharedObject.getLocal('userdata');
+	    }
+	</method>
+	
+	<method name="getUserData">
+	    canvas.initSharedObject();
+	    var g = canvas.sharedObject.getData('userdata');
+	    if (g==null) {
+	        if($debug) Debug.write("sharedObject.getData IS null");
+	        g = new Array();
+	    }
+	    return g;
+	</method>
+	
+	<method name="setUserData" args="g">
+	    canvas.initSharedObject();
+	    canvas.sharedObject.setData('userdata', g);
+	    canvas.sharedObject.flush();
+	</method>
+	
+	<method name="setColorStyle" args="value">
+	    var val = value;
+	    if (val == "mediumseagreen"){
+	        canvas.setAttribute('basebgcolorizer',"0x3CB371");
+	        canvas.setAttribute('baseMousecolorizer',"0x66CC8E");
+	        canvas.setAttribute('baseMouseOvercolorizer',"0x66CC8E");
+	    } else if (val == "steelblue"){
+	        canvas.setAttribute('basebgcolorizer',"0x4682B4");
+	        canvas.setAttribute('baseMousecolorizer',"0x80AECC");
+	        canvas.setAttribute('baseMouseOvercolorizer',"0x80AECC");
+	    } else if (val == "redorange"){
+	        canvas.setAttribute('basebgcolorizer',"0xFC8558");
+	        canvas.setAttribute('baseMousecolorizer',"0xFDC4A6");
+	        canvas.setAttribute('baseMouseOvercolorizer',"0xFDC4A6");
+	    } else if (val == "lightsteelblue"){
+	        canvas.setAttribute('basebgcolorizer',"0x3F5B9E");
+	        canvas.setAttribute('baseMousecolorizer',"0xC4D5E6");
+	        canvas.setAttribute('baseMouseOvercolorizer',"0xC4D5E6");
+	    } else if (val == "goldenrod"){
+	        canvas.setAttribute('basebgcolorizer',"0xDAA520");
+	        canvas.setAttribute('baseMousecolorizer',"0xE8C064");
+	        canvas.setAttribute('baseMouseOvercolorizer',"0xE8C064");
+	    } else if (val == "silvergray"){
+	        canvas.setAttribute('basebgcolorizer',"0xC4C8CC");
+	        canvas.setAttribute('baseMousecolorizer',"0xC2C8CD");
+	        canvas.setAttribute('baseMouseOvercolorizer',"0xC2C8CD");
+	    } else if (val == "userdefined"){
+	        canvas.setAttribute('basebgcolorizer', canvas.userbgcolorizer);
+	        canvas.setAttribute('baseMousecolorizer', canvas.userMousecolorizer);
+	        canvas.setAttribute('baseMouseOvercolorizer', canvas.userMouseOvercolorizer);
+	    } else {
+	        val = null;
+	    }
+	    
+	    return val;
+	</method>
 
 </library>

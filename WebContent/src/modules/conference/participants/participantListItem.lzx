@@ -96,13 +96,6 @@
         ]]>          
     </method>
     
-    <!--
-        if (canvas.moderatorStreamID == this.refObj.streamid) {
-            this.isMod = true;
-        } else {
-            this.isMod = false;
-        }
-     -->
     <handler name="onismoderator" reference="canvas" args="m">
         if ($debug) Debug.write("###### ismoderator ",m);
         <![CDATA[
@@ -460,7 +453,7 @@
     
     <view name="_miniIcons" x="113" y="22" height="18">
         
-        <miniIcons name="_isMod" x="0" width="16" resource="participants_isactive" 
+        <miniIcons name="_isMod" x="0" width="16" resource="right_isactive_rsc" 
                    height="16" showhandcursor="false">
             <handler name="onclick">
                 <![CDATA[
@@ -485,7 +478,7 @@
             <labelTooltip name="_text" text="" />
         </miniIcons>
         
-        <miniIcons name="_isModAddbutton" opacity="0.5" x="0" width="16" resource="participants_isactive" 
+        <miniIcons name="_isModAddbutton" opacity="0.5" x="0" width="16" resource="right_notactive_rsc" 
                    height="16" showhandcursor="true">
             <handler name="onclick">
                 <![CDATA[
@@ -504,7 +497,7 @@
             <labelTooltip name="_text" labelid="676" />
         </miniIcons>
             
-        <miniIcons name="_canDraw" x="20" width="16" resource="participants_isactive" 
+        <miniIcons name="_canDraw" x="20" width="16" resource="right_isactive_rsc" 
                    height="16" showhandcursor="false" >
             <handler name="onclick">
                 <![CDATA[
@@ -522,7 +515,7 @@
         </miniIcons>
         
         <miniIcons name="_canDrawModerator" x="20" width="16" opacity="0.5"
-                   resource="participants_isactive" height="16" showhandcursor="true">
+                   resource="right_notactive_rsc" height="16" showhandcursor="true">
             <handler name="onclick">
                 //Do it 
                 if ($debug) Debug.write("Do it");
@@ -531,7 +524,7 @@
             <labelTooltip labelid="611" />
         </miniIcons>
         
-        <miniIcons name="_allowShare" x="40" width="16" resource="participants_isactive" 
+        <miniIcons name="_allowShare" x="40" width="16" resource="right_isactive_rsc" 
                    height="16" showhandcursor="false" >
             <handler name="onclick">
                 <![CDATA[
@@ -549,7 +542,7 @@
         </miniIcons>
         
         <miniIcons name="_denyShare" x="40" width="16" opacity="0.5"
-                   resource="participants_isactive" height="16" showhandcursor="true">
+                   resource="right_notactive_rsc" height="16" showhandcursor="true">
             <handler name="onclick">
                 //Do it 
                 if ($debug) Debug.write("Do it");
@@ -559,7 +552,7 @@
         </miniIcons>
         
         
-        <miniIcons name="_allowRemote" x="60" width="16" resource="participants_isactive" 
+        <miniIcons name="_allowRemote" x="60" width="16" resource="right_isactive_rsc" 
                    height="16" showhandcursor="false" >
             <handler name="onclick">
                 <![CDATA[
@@ -577,7 +570,7 @@
         </miniIcons>
         
         <miniIcons name="_denyRemote" x="60" width="16" opacity="0.5"
-                   resource="participants_isactive" height="16" showhandcursor="true">
+                   resource="right_notactive_rsc" height="16" showhandcursor="true">
             <handler name="onclick">
                 //Do it 
                 if ($debug) Debug.write("Do it");
@@ -586,7 +579,7 @@
             <labelTooltip labelid="1078" />
         </miniIcons>
 
-        <miniIcons name="_allowExclusiveAudio" x="80" width="16" resource="participants_isactive"
+        <miniIcons name="_allowExclusiveAudio" x="80" width="16" resource="right_isactive_rsc"
                    height="16" showhandcursor="false" >
             <handler name="onclick">
                 <![CDATA[
@@ -603,7 +596,7 @@
         </miniIcons>
 
         <miniIcons name="_denyExclusiveAudio" x="80" width="16" opacity="0.5"
-                   resource="participants_isactive" height="16" showhandcursor="true">
+                   resource="right_notactive_rsc" height="16" showhandcursor="true">
             <handler name="onclick">
                 parent.parent.setCanGiveAudio.doCall();
             </handler>
