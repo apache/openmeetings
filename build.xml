@@ -25,8 +25,9 @@
 	<property name="test.src.dir" value="${basedir}/src/test" />
 	<property name="main.out.dir" value="${basedir}/bin" />
 
-	<!-- Red5 dir -->
-	<property name="red5.server.dir" value="red5-1.0.0-r4315" />
+	<!-- Red5 -->
+	<property name="red5.revision" value="4315" />
+	<property name="red5.server.dir" value="${basedir}/red5" />
 
 	<!-- screen.out.dir -->
 	<property name="screen.out.dir" value="${basedir}/screen_compile" />
@@ -86,7 +87,7 @@
 			fxgutils.jar" />
 	</path>
 	
-	<property name="red5.lib.dir" value="${project.lib}/red5" />
+	<property name="mainlibs.lib.dir" value="${project.lib}/mainlibs" />
 	<property name="om.lib.dir" value="${project.lib}/om" />
 	<property name="anakia.lib.dir" value="${project.lib}/anakia" />
 	<property name="red5-screenshare.images" value="${basedir}/WebContent/red5-screenshare" />
@@ -95,12 +96,13 @@
 	<property name="dtd-generator.lib.dir" value="${project.lib}/dtd-generator" />
 	<property name="svntask.lib.dir" value="${project.lib}/svntask" />
 	
-	<property name="red5.lib" value="${basedir}/${red5.server.dir}/dist" />
+	<property name="red5.lib" value="${red5.server.dir}/dist" />
 	<property name="red5.server.lib" value="${red5.lib}/lib" />
 
 	<!-- compile classpath -->
 	<path id="compile.classpath">
-		<fileset dir="${red5.lib.dir}" includes="*.jar" />
+		<fileset dir="${red5.server.lib}" includes="*.jar" />
+		<fileset dir="${mainlibs.lib.dir}" includes="*.jar" />
 		<fileset dir="${om.lib.dir}" includes="*.jar" />
 		<fileset dir="${red5.lib}" includes="*.jar" />
 		<fileset dir="${junit.lib.dir}" includes="*.jar" />
@@ -144,7 +146,7 @@
 	<!-- build webapp -->
 	<target name="-copy-libraries" description="All jars downloaded by ivy copied to appropriate places">
 		<copy todir="${dist.dir}/red5/lib">
-			<fileset dir="${red5.lib.dir}" includes="*.jar" />
+			<fileset dir="${mainlibs.lib.dir}" includes="*.jar" />
 		</copy>
 		<copy todir="${dist.webapps.dir}/WEB-INF/lib">
 			<fileset dir="${om.lib.dir}" includes="*.jar" />
@@ -164,10 +166,11 @@
 		depends="cleanForBinary, jar, compile.laszlo.main.debug, compile.laszlo.main.debug.as3, signWebStartJars, -copy-libraries"/>
 
 	<target name="prepare.mkdir" depends="-java6.check">
+		<mkdir dir="${red5.server.lib}" />
 		<mkdir dir="${screen.out.dir}" />
 		<mkdir dir="${dist.dir}" />
 		<mkdir dir="${main.out.dir}" />
-		<mkdir dir="${red5.lib.dir}" />
+		<mkdir dir="${mainlibs.lib.dir}" />
 		<mkdir dir="${om.lib.dir}" />
 		<mkdir dir="${anakia.lib.dir}" />
 		<mkdir dir="${junit.lib.dir}" />
@@ -365,18 +368,18 @@
 		</genkey>
 		<copy todir="${screenshare.out.dir}" filtering="true">
 			<fileset dir="${red5-screenshare.images}" />
-			<fileset dir="${red5.lib.dir}" includes="commons-codec*.jar" />
-			<fileset dir="${red5.lib.dir}" includes="httpclient*.jar" />
-			<fileset dir="${red5.lib.dir}" includes="httpcore*.jar" />
-			<fileset dir="${red5.lib.dir}" includes="bcprov-jdk16*.jar" />
-			<fileset dir="${red5.lib.dir}" includes="ehcache-core*.jar" />
-			<fileset dir="${red5.lib.dir}" includes="commons-beanutils*.jar" />
+			<fileset dir="${mainlibs.lib.dir}" includes="commons-codec*.jar" />
+			<fileset dir="${mainlibs.lib.dir}" includes="httpclient*.jar" />
+			<fileset dir="${mainlibs.lib.dir}" includes="httpcore*.jar" />
+			<fileset dir="${mainlibs.lib.dir}" includes="bcprov-jdk16*.jar" />
+			<fileset dir="${mainlibs.lib.dir}" includes="ehcache-core*.jar" />
+			<fileset dir="${mainlibs.lib.dir}" includes="commons-beanutils*.jar" />
 			<fileset dir="${red5.server.dir}/dist" includes="red5.jar" />
-			<fileset dir="${red5.lib.dir}" includes="org.springframework.context-*.jar" />
-			<fileset dir="${red5.lib.dir}" includes="org.springframework.core-*.jar" />
-			<fileset dir="${red5.lib.dir}" includes="logback*.jar" />
-			<fileset dir="${red5.lib.dir}" includes="mina-core*.jar" />
-			<fileset dir="${red5.lib.dir}" includes="com.springsource.slf4j.api*.jar" />
+			<fileset dir="${mainlibs.lib.dir}" includes="org.springframework.context-*.jar" />
+			<fileset dir="${mainlibs.lib.dir}" includes="org.springframework.core-*.jar" />
+			<fileset dir="${mainlibs.lib.dir}" includes="logback*.jar" />
+			<fileset dir="${mainlibs.lib.dir}" includes="mina-core*.jar" />
+			<fileset dir="${mainlibs.lib.dir}" includes="com.springsource.slf4j.api*.jar" />
 		</copy>
 		<signjar alias="filetest" keystore="filetest.keystore" storepass="secret" lazy="false">
 			<path>
@@ -435,9 +438,8 @@
 
 	<target name="compile" depends="prepare, compile.only" />
 
-	<target name="compile.only" depends="-retrieve-red5,-retrieve-om,-retrieve-dtd-generator,-retrieve-junit,compile.screen.share">
-		<echo message="Compile main to ${main.out.dir}">
-		</echo>
+	<target name="compile.only" depends="-retrieve-mainlibs,-retrieve-om,-retrieve-dtd-generator,-retrieve-junit,compile.screen.share">
+		<echo message="Compile main to ${main.out.dir}"/>
 		<javac debug="on" debuglevel="lines,vars,source" destdir="${main.out.dir}">
 			<src path="${main.src.dir}" />
 			<classpath refid="compile.classpath" />
@@ -526,14 +528,15 @@
 		<fileset dir="${svntask.lib.dir}" includes="*.jar" />
 		<fileset dir="${project.lib}" includes="svn*.jar" />
 	</path>
-	<target name="current_revision" depends="-retrieve-svntask">
+	<target name="-ant-task" depends="-retrieve-svntask">
 		<typedef resource="org/tigris/subversion/svnant/svnantlib.xml">
 			<classpath>
 				<path refid="svntask.classpath" />
 			</classpath>
 		</typedef>
-
 		<svnSetting svnkit="false" javahl="false" id="svn.settings" /> <!-- native svn in the path-->
+	</target>
+	<target name="current_revision" depends="-ant-task">
 		<svn refid="svn.settings">
 			<info target="."/>
 		</svn>
@@ -590,11 +593,11 @@
 	<path id="anakia.classpath">
 		<path refid="compile.classpath" />
 		<fileset dir="${anakia.lib.dir}" includes="*.jar" />
-		<fileset dir="${red5.lib.dir}" includes="commons-collections*.jar,commons-lang*.jar,velocity*.jar" />
+		<fileset dir="${mainlibs.lib.dir}" includes="commons-collections*.jar,commons-lang*.jar,velocity*.jar" />
 		
 	</path>
 
-    <target name="anakia" depends="-retrieve-red5,-retrieve-om,-retrieve-anakia">
+    <target name="anakia" depends="-retrieve-mainlibs,-retrieve-om,-retrieve-anakia">
     	<taskdef name="anakia" classname="org.apache.velocity.anakia.AnakiaTask">
 			<classpath>
 				<path refid="anakia.classpath" />
@@ -755,7 +758,7 @@
 	</target>
 	
 	<target name="-availability-check" unless="red5.installed" description="Check which libraries need to be retrieved" depends="prepare.mkdir">
-		<available classpathref="compile.classpath" classname="javax.persistence.spi.PersistenceProvider" property="red5.installed"/>
+		<available classpathref="compile.classpath" classname="javax.persistence.spi.PersistenceProvider" property="mainlib.installed"/>
 		<available classpathref="compile.classpath" classname="org.apache.axis2.Version" property="om.installed"/>
 		<available classpathref="anakia.classpath" classname="org.apache.oro.text.GlobCompiler" property="anakia.installed"/>
 		<available classpathref="compile.classpath" classname="org.junit.Test" property="junit.installed"/>
@@ -763,6 +766,7 @@
 		<available classpathref="compile.classpath" classname="com.thaiopensource.relaxng.translate.Driver" property="dtd-generator.installed"/>
 		<available classpathref="svntask.classpath" classname="org.tmatesoft.svn.core.SVNCommitInfo" property="svntask.installed"/>
 		<available file="${laszlo.home}/WEB-INF/lib" type="dir" property="laszlo.installed"/>
+		<available file="${red5.lib}/red5.sh" type="file" property="red5.installed"/>
 	</target>
 	
 	<target name="-retrieve" description="Retrieves the libraries if needed">
@@ -771,7 +775,7 @@
 				<isset property="ivy.conf.name"/>
 			</not>
 		</condition>
-		<condition property="ivy.lib.location" value="${red5.lib.dir}">
+		<condition property="ivy.lib.location" value="${mainlibs.lib.dir}">
 			<not>
 				<isset property="ivy.lib.location"/>
 			</not>
@@ -792,27 +796,42 @@
 	</target>
 	
 	<!-- Check for the Red5 libraries -->
-	<target name="-retrieve-red5" unless="red5.installed" description="Retrieves the libraries if needed" depends="-availability-check">
+	<target name="-retrieve-red5" unless="red5.installed" description="Retrieves the libraries if needed" depends="-ant-task">
+		<svn refid="svn.settings">
+			<checkout url="http://red5.googlecode.com/svn/java/server/trunk/" revision="${red5.revision}" destPath="${red5.server.dir}" />
+		</svn>
+		<subant target="dist">
+			<fileset dir="${red5.server.dir}" includes="build.xml"/>
+		</subant>
+		<echo message="JAVAEE: ${red5.server.lib}/javaee-api-5.1.2.jar" />
+		<jar destfile="${red5.server.lib}/javaee-api-5.1.2.om.jar">
+		    <zipfileset src="${red5.server.lib}/javaee-api-5.1.2.jar" excludes="javax/persistence/**/*.*"/>
+		</jar>
+		<delete file="${red5.server.lib}/javaee-api-5.1.2.jar" />
+		<delete dir="${red5.lib}/webapps/installer"/>
+		<delete dir="${red5.lib}/webapps/live"/>
+		<delete dir="${red5.lib}/webapps/vod"/>
+		<copy file="${webcontent.src.dir}/red5/jee-container.xml" todir="${red5.lib}/conf" />
+		<copy file="${webcontent.src.dir}/red5/index.html" todir="${red5.lib}/webapps/root" />
+	</target>
+	<!-- Check for the Top level libraries -->
+	<target name="-retrieve-mainlibs" unless="mainlib.installed" description="Retrieves the libraries if needed" depends="-retrieve-red5">
 		<!-- Ivy configuration - http://ant.apache.org/ivy/history/trunk/ant.html -->
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
-			<param name="ivy.conf.name" value="red5"/>
-			<param name="ivy.lib.location" value="${red5.lib.dir}"/>
+			<param name="ivy.conf.name" value="mainlib"/>
+			<param name="ivy.lib.location" value="${mainlibs.lib.dir}"/>
 		</antcall>
-		<jar destfile="${red5.lib.dir}/javaee-api-5.1.2.om.jar">
-		    <zipfileset src="${red5.lib.dir}/javaee-api-5.1.2.jar" excludes="javax/persistence/**/*.*"/>
-		</jar>
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
-			<param name="ivy.conf.name" value="red5.ext"/>
-			<param name="ivy.lib.location" value="${red5.lib.dir}"/>
+			<param name="ivy.conf.name" value="mainlib.ext"/>
+			<param name="ivy.lib.location" value="${mainlibs.lib.dir}"/>
 			<param name="ivy.lib.pattern" value="[artifact]-[type]-[revision].[ext]"/>
 		</antcall>
 		<delete>
-			<fileset dir="${red5.lib.dir}" includes="*-source*.jar"/>
-			<fileset dir="${red5.lib.dir}" includes="*-javadoc*.jar"/>
+			<fileset dir="${mainlibs.lib.dir}" includes="*-source*.jar"/>
+			<fileset dir="${mainlibs.lib.dir}" includes="*-javadoc*.jar"/>
 		</delete>
-		<delete file="${red5.lib.dir}/javaee-api-5.1.2.jar" />
 	</target>
-	<!-- Check for the Red5 libraries -->
+	<!-- Check for the OM libraries -->
 	<target name="-retrieve-om" unless="om.installed" description="Retrieves the libraries if needed" depends="-availability-check">
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
 			<param name="ivy.conf.name" value="openmeetings"/>
@@ -835,7 +854,7 @@
 		</delete>
 	</target>
 	<!-- Check for the Anakia libraries -->
-	<target name="-retrieve-anakia" unless="anakia.installed" description="Retrieves the libraries if needed" depends="-retrieve-red5">
+	<target name="-retrieve-anakia" unless="anakia.installed" description="Retrieves the libraries if needed" depends="-retrieve-mainlibs">
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
 			<param name="ivy.conf.name" value="anakia"/>
 			<param name="ivy.lib.location" value="${anakia.lib.dir}"/>
@@ -899,11 +918,12 @@
 		<ivy:cleancache/>
 	</target>
 
-	<target name="prepare-eclipse" if="java6.installed" description="Build server core" depends="-java6.check">
-		<antcall target="-retrieve-red5" inheritAll="true" inheritRefs="true"/>
+	<target name="prepare-eclipse" if="java6.installed" description="Layout various files necessary for development" depends="-java6.check">
+		<antcall target="-retrieve-mainlibs" inheritAll="true" inheritRefs="true"/>
 		<antcall target="-retrieve-om" inheritAll="true" inheritRefs="true"/>
 		<antcall target="-retrieve-junit" inheritAll="true" inheritRefs="true"/>
 		<antcall target="-retrieve-dtd-generator" inheritAll="true" inheritRefs="true"/>
 		<antcall target="-retrieve-tools.jar" inheritAll="true" inheritRefs="true"/>
+		<antcall target="-retrieve-openlaszlo" inheritAll="true" inheritRefs="true"/>
 	</target>
 </project>

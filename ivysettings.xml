@@ -24,17 +24,7 @@
 			<url name="mavencentral">
 				<artifact pattern="http://repo1.maven.org/maven2/[organisation]/[artifact]-[revision].[ext]" />
 			</url>
-			<url name="apache">
-				<artifact pattern="https://repository.apache.org/content/repositories/releases/[artifact]/[artifact]/[revision]/[artifact]-[revision].[ext]" />
-				<artifact pattern="https://repository.apache.org/content/repositories/releases/[organisation]/[artifact]/[revision]/[artifact]-[revision].[ext]" />
-			</url>
-			<url name="sonatype">
-				<artifact pattern="http://oss.sonatype.org/content/repositories/sourceforge-releases/[organisation]/[artifact]-[revision].[ext]" />
-				<artifact pattern="http://oss.sonatype.org/content/repositories/central/[artifact]/[artifact]/[revision]/[artifact]-[revision].[ext]" />
-			</url>
 			<url name="googlecode">
-				<artifact pattern="http://red5.googlecode.com/svn/repository/[artifact](-[revision]).[ext]" />
-				<artifact pattern="http://red5.googlecode.com/svn/repository/[organisation]/[artifact](-[revision]).[ext]" />
 				<artifact pattern="http://openlaszlo-openmeetings-integration.googlecode.com/svn/repository/[artifact](-[revision]).[ext]" />
 			</url>
 		</chain>
