@@ -14,7 +14,6 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/server"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/WebContent/WEB-INF"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/dtdgenerator"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/docgenerator"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/calendarservice"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/src_tool"/>

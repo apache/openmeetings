@@ -104,6 +104,7 @@
 		<fileset dir="${om.lib.dir}" includes="*.jar" />
 		<fileset dir="${red5.lib}" includes="*.jar" />
 		<fileset dir="${junit.lib.dir}" includes="*.jar" />
+		<fileset dir="${dtd-generator.lib.dir}" includes="*.jar" />
 		<fileset dir="${project.lib}" includes="*.jar" excludes="ivy*.jar" />
 	</path>
 
@@ -434,7 +435,7 @@
 
 	<target name="compile" depends="prepare, compile.only" />
 
-	<target name="compile.only" depends="-retrieve-red5,-retrieve-om,-retrieve-junit,compile.screen.share">
+	<target name="compile.only" depends="-retrieve-red5,-retrieve-om,-retrieve-dtd-generator,-retrieve-junit,compile.screen.share">
 		<echo message="Compile main to ${main.out.dir}">
 		</echo>
 		<javac debug="on" debuglevel="lines,vars,source" destdir="${main.out.dir}">
@@ -759,8 +760,7 @@
 		<available classpathref="anakia.classpath" classname="org.apache.oro.text.GlobCompiler" property="anakia.installed"/>
 		<available classpathref="compile.classpath" classname="org.junit.Test" property="junit.installed"/>
 		<available classpathref="rat.classpath" classname="org.apache.rat.Report" property="rat.installed"/>
-		<path id="dtd-generator.classpath" location="${dtd-generator.lib.dir}/*.jar"/>
-		<available classpathref="dtd-generator.classpath" classname="org.relaxng.datatype.Datatype" property="dtd-generator.installed"/>
+		<available classpathref="compile.classpath" classname="com.thaiopensource.relaxng.translate.Driver" property="dtd-generator.installed"/>
 		<available classpathref="svntask.classpath" classname="org.tmatesoft.svn.core.SVNCommitInfo" property="svntask.installed"/>
 		<available file="${laszlo.home}/WEB-INF/lib" type="dir" property="laszlo.installed"/>
 	</target>
