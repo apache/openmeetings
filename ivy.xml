@@ -28,6 +28,7 @@
 		<conf name="rat" description="Apache Rat dependencies" />
 		<conf name="dtd" description="Dtd-generator dependencies" />
 		<conf name="svntask" description="Svn task dependencies" />
+		<conf name="openlaszlo" description="Openlaszlo dependencies" />
 	</configurations>
 	<dependencies>
 		<!--  START OF RED5 -->
@@ -332,6 +333,13 @@
 			<include type="jar" />
 		</dependency>
 		<!--  END OF svntask -->
+		
+		<!--  START OF openlaszlo -->
+		<dependency org="openlaszlo" name="openlaszlo" rev="4.9" conf="openlaszlo->*" transitive="false">
+			<artifact name="openlaszlo" type="tgz"/>
+			<include type="tgz" />
+		</dependency>
+		<!--  END OF openlaszlo -->
 		
 	</dependencies>
 </ivy-module>

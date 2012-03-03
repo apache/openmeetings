@@ -173,6 +173,7 @@
 		<mkdir dir="${rat.lib.dir}" />
 		<mkdir dir="${dtd-generator.lib.dir}" />
 		<mkdir dir="${svntask.lib.dir}" />
+		<mkdir dir="${laszlo.home}" />
 	</target>
 
 	<condition property="db.provider" value="${db}" else="derby">
@@ -398,7 +399,7 @@
 		</java>
 	</target>
 
-	<target name="compile.laszlo.main.debug.as3">
+	<target name="compile.laszlo.main.debug.as3" depends="-retrieve-openlaszlo">
 		<java classname="org.openlaszlo.compiler.Main" fork="true" newenvironment="true" failonerror="true" dir="${laszlo.as3.src.dir}" classpathref="laszlo.lib">
 			<jvmarg value="-DLPS_HOME=${laszlo.home}" />
 			<jvmarg value="-Dlzdebug=${laszlo.debug}" />
@@ -420,7 +421,7 @@
 		</java>
 	</target>
 
-	<target name="compile.laszlo.main.debug">
+	<target name="compile.laszlo.main.debug" depends="-retrieve-openlaszlo">
 		<java classname="org.openlaszlo.compiler.Main" fork="true" newenvironment="true" failonerror="true" dir="${laszlo.src.dir}" classpathref="laszlo.lib">
 			<jvmarg value="-DLPS_HOME=${laszlo.home}" />
 			<jvmarg value="-Dlzdebug=${laszlo.debug}" />
@@ -761,6 +762,7 @@
 		<path id="dtd-generator.classpath" location="${dtd-generator.lib.dir}/*.jar"/>
 		<available classpathref="dtd-generator.classpath" classname="org.relaxng.datatype.Datatype" property="dtd-generator.installed"/>
 		<available classpathref="svntask.classpath" classname="org.tmatesoft.svn.core.SVNCommitInfo" property="svntask.installed"/>
+		<available file="${laszlo.home}/WEB-INF/lib" type="dir" property="laszlo.installed"/>
 	</target>
 	
 	<target name="-retrieve" description="Retrieves the libraries if needed">
@@ -878,7 +880,17 @@
 		
 		<copy file="${tools.jar.path}" tofile="${project.lib}/java_16_tools.jar" />
 	</target>
-
+	<!-- Check for Openlaszlo -->
+	<target name="-extract-tgz" description="Extracts given tar into root folder">
+		<echo message="Going to extract ${dep.file} to the ${basedir}" />
+		<untar src="${dep.file}" dest="${basedir}" compression="gzip"/>
+	</target>
+	<target name="-retrieve-openlaszlo" unless="laszlo.installed" description="Retrieves the libraries if needed" depends="-availability-check">
+		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
+			<param name="ivy.conf.name" value="openlaszlo"/>
+			<param name="ivy.lib.location" value="${laszlo.home}"/>
+		</antcall>
+	</target>
 	<target name="ivyclear" description="Clears out the Ivy cache">
 		<delete dir="${user.home}/.ivy2/cache/red5"/>
 		<delete includeemptydirs="true">
