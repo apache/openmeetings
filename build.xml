@@ -173,7 +173,6 @@
 		<mkdir dir="${rat.lib.dir}" />
 		<mkdir dir="${dtd-generator.lib.dir}" />
 		<mkdir dir="${svntask.lib.dir}" />
-		<!-- mkdir dir="${laszlo.home}1" /-->
 	</target>
 
 	<condition property="db.provider" value="${db}" else="derby">
@@ -537,10 +536,6 @@
 			<info target="."/>
 		</svn>
 		<echo>Current revision: ${svn.info.rev}</echo>
-
-		<!--svn refid="svn.settings">
-			<checkout url="http://svn.openlaszlo.org/openlaszlo/branches/4.9/WEB-INF" destPath="${laszlo.home}1/"/>
-		</svn -->
 	</target>
 
 	<!-- Build entire project -->
@@ -757,6 +752,17 @@
         </fail> 
 	</target>
 	
+	<target name="-availability-check" unless="red5.installed" description="Check which libraries need to be retrieved" depends="prepare.mkdir">
+		<available classpathref="compile.classpath" classname="javax.persistence.spi.PersistenceProvider" property="red5.installed"/>
+		<available classpathref="compile.classpath" classname="org.apache.axis2.Version" property="om.installed"/>
+		<available classpathref="anakia.classpath" classname="org.apache.oro.text.GlobCompiler" property="anakia.installed"/>
+		<available classpathref="compile.classpath" classname="org.junit.Test" property="junit.installed"/>
+		<available classpathref="rat.classpath" classname="org.apache.rat.Report" property="rat.installed"/>
+		<path id="dtd-generator.classpath" location="${dtd-generator.lib.dir}/*.jar"/>
+		<available classpathref="dtd-generator.classpath" classname="org.relaxng.datatype.Datatype" property="dtd-generator.installed"/>
+		<available classpathref="svntask.classpath" classname="org.tmatesoft.svn.core.SVNCommitInfo" property="svntask.installed"/>
+	</target>
+	
 	<target name="-retrieve" description="Retrieves the libraries if needed">
 		<condition property="ivy.conf.name" value="red5">
 			<not>
@@ -784,9 +790,7 @@
 	</target>
 	
 	<!-- Check for the Red5 libraries -->
-	<!-- available classpathref="compile.classpath" classname="javax.persistence.spi.PersistenceProvider" property="red5.installed"/ -->
-	<!--available file="${java.home}/Classes/classes.jar" type="file" --> 
-	<target name="-retrieve-red5" unless="red5.installed" description="Retrieves the libraries if needed" depends="prepare.mkdir">
+	<target name="-retrieve-red5" unless="red5.installed" description="Retrieves the libraries if needed" depends="-availability-check">
 		<!-- Ivy configuration - http://ant.apache.org/ivy/history/trunk/ant.html -->
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
 			<param name="ivy.conf.name" value="red5"/>
@@ -807,8 +811,7 @@
 		<delete file="${red5.lib.dir}/javaee-api-5.1.2.jar" />
 	</target>
 	<!-- Check for the Red5 libraries -->
-	<!-- available classpathref="compile.classpath" classname="org.apache.axis2.Version" property="om.installed"/-->
-	<target name="-retrieve-om" unless="om.installed" description="Retrieves the libraries if needed" depends="prepare.mkdir">
+	<target name="-retrieve-om" unless="om.installed" description="Retrieves the libraries if needed" depends="-availability-check">
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
 			<param name="ivy.conf.name" value="openmeetings"/>
 			<param name="ivy.lib.location" value="${om.lib.dir}"/>
@@ -830,7 +833,6 @@
 		</delete>
 	</target>
 	<!-- Check for the Anakia libraries -->
-	<!--available classpathref="anakia.classpath" classname="org.apache.oro.text.GlobCompiler" property="anakia.installed"/-->
 	<target name="-retrieve-anakia" unless="anakia.installed" description="Retrieves the libraries if needed" depends="-retrieve-red5">
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
 			<param name="ivy.conf.name" value="anakia"/>
@@ -838,33 +840,28 @@
 		</antcall>
 	</target>
 	<!-- Check for junit libraries -->
-	<!--available classpathref="compile.classpath" classname="org.junit.Test" property="junit.installed"/-->
-	<target name="-retrieve-junit" unless="junit.installed" description="Retrieves the libraries if needed" depends="prepare.mkdir">
+	<target name="-retrieve-junit" unless="junit.installed" description="Retrieves the libraries if needed" depends="-availability-check">
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
 			<param name="ivy.conf.name" value="junit"/>
 			<param name="ivy.lib.location" value="${junit.lib.dir}"/>
 		</antcall>
 	</target>
 	<!-- Check for rat libraries -->
-	<!--available classpathref="rat.classpath" classname="org.apache.rat.Report" property="rat.installed"/-->
-	<target name="-retrieve-rat" unless="rat.installed" description="Retrieves the libraries if needed" depends="prepare.mkdir">
+	<target name="-retrieve-rat" unless="rat.installed" description="Retrieves the libraries if needed" depends="-availability-check">
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
 			<param name="ivy.conf.name" value="rat"/>
 			<param name="ivy.lib.location" value="${rat.lib.dir}"/>
 		</antcall>
 	</target>
 	<!-- Check for dtd-generator libraries -->
-	<path id="dtd-generator.classpath" location="${dtd-generator.lib.dir}/*.jar"/>
-	<!--available classpathref="dtd-generator.classpath" classname="org.relaxng.datatype.Datatype" property="dtd-generator.installed"/-->
-	<target name="-retrieve-dtd-generator" unless="dtd-generator.installed" description="Retrieves the libraries if needed" depends="prepare.mkdir">
+	<target name="-retrieve-dtd-generator" unless="dtd-generator.installed" description="Retrieves the libraries if needed" depends="-availability-check">
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
 			<param name="ivy.conf.name" value="dtd"/>
 			<param name="ivy.lib.location" value="${dtd-generator.lib.dir}"/>
 		</antcall>
 	</target>
 	<!-- Check for svntask libraries -->
-	<!--available classpathref="svntask.classpath" classname="org.tmatesoft.svn.core.SVNCommitInfo" property="svntask.installed"/-->
-	<target name="-retrieve-svntask" unless="svntask.installed" description="Retrieves the libraries if needed" depends="prepare.mkdir">
+	<target name="-retrieve-svntask" unless="svntask.installed" description="Retrieves the libraries if needed" depends="-availability-check">
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
 			<param name="ivy.conf.name" value="svntask"/>
 			<param name="ivy.lib.location" value="${svntask.lib.dir}"/>
