@@ -117,17 +117,17 @@
 		
 		<tar longfile="gnu" compression="gzip" destfile="${archive.file.name}-src.tar.gz">
 			<tarfileset dir="${basedir}">
-				<include name=".settings/**" />
 				<include name="docs/**" />
-				<include name="lib/**" />
-				<include name="openlaszlo/**" />
+				<include name="lib/*.jar" />
+				<exclude name="lib/java*.jar" />
 				<include name="${red5.server.dir}/**" />
 				<include name="src/**" />
 				<include name="test/**" />
 				<include name="WebContent/**" />
 				<include name="xdocs/**" />
-				<include name="build.xml" />
-				<include name="license.txt" />
+				<include name="*.xml" />
+				<include name=".*" />
+				<include name="LICENSE" />
 			</tarfileset>
 		</tar>
 		<tar longfile="gnu" compression="gzip" destfile="${archive.file.name}.tar.gz">
