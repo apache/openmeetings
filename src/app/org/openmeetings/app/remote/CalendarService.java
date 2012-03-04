@@ -24,11 +24,15 @@ import java.util.List;
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
+import org.openmeetings.app.data.calendar.daos.AppointmentCategoryDaoImpl;
 import org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl;
+import org.openmeetings.app.data.calendar.daos.AppointmentReminderTypDaoImpl;
 import org.openmeetings.app.data.calendar.management.AppointmentLogic;
 import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.persistence.beans.calendar.Appointment;
+import org.openmeetings.app.persistence.beans.calendar.AppointmentCategory;
+import org.openmeetings.app.persistence.beans.calendar.AppointmentReminderTyps;
 import org.openmeetings.app.persistence.beans.rooms.RoomTypes;
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.user.Users;
@@ -53,6 +57,10 @@ public class CalendarService {
 	private Roommanagement roommanagement;
 	@Autowired
 	private AuthLevelmanagement authLevelManagement;
+	@Autowired
+	private AppointmentCategoryDaoImpl appointmentCategoryDaoImpl;
+	@Autowired
+	private AppointmentReminderTypDaoImpl appointmentReminderTypDaoImpl;
 
 	public List<Appointment> getAppointmentByRange(String SID, Date starttime,
 			Date endtime) {
@@ -263,6 +271,74 @@ public class CalendarService {
 
 		} catch (Exception err) {
 			log.error("[getAppointmentByRoomId]", err);
+		}
+		return null;
+	}
+	
+	public List<AppointmentCategory> getAppointmentCategoryList(String SID) {
+		log.debug("AppointmenetCategoryService.getAppointmentCategoryList SID : "
+				+ SID);
+
+		try {
+
+			Long users_id = sessionManagement.checkSession(SID);
+			Long user_level = userManagement.getUserLevelByID(users_id);
+
+			if (authLevelManagement.checkUserLevel(user_level)) {
+
+				List<AppointmentCategory> res = appointmentCategoryDaoImpl
+						.getAppointmentCategoryList();
+
+				if (res == null || res.size() < 1)
+					log.debug("no AppointmentCategories found");
+				else {
+					for (int i = 0; i < res.size(); i++) {
+						AppointmentCategory ac = res.get(i);
+						log.debug("found appCategory : " + ac.getName());
+					}
+				}
+
+				return res;
+			} else {
+				log.error("AppointmenetCategoryService.getAppointmentCategoryList : UserLevel Error");
+			}
+		} catch (Exception err) {
+			log.error("[getAppointmentCategory]", err);
+		}
+		return null;
+
+	}
+	
+	/**
+	 * 
+	 * @param SID
+	 * @return
+	 */
+	public List<AppointmentReminderTyps> getAppointmentReminderTypList(
+			String SID) {
+		log.debug("getAppointmentReminderTypList");
+
+		try {
+			Long users_id = sessionManagement.checkSession(SID);
+			Long user_level = userManagement.getUserLevelByID(users_id);
+			if (authLevelManagement.checkUserLevel(user_level)) {
+
+				List<AppointmentReminderTyps> res = appointmentReminderTypDaoImpl
+						.getAppointmentReminderTypList();
+
+				if (res == null || res.size() < 1) {
+					log.debug("no remindertyps found!");
+				} else {
+					for (int i = 0; i < res.size(); i++) {
+						log.debug("found reminder " + res.get(i).getName());
+					}
+				}
+
+				return res;
+			} else
+				log.debug("getAppointmentReminderTypList  :error - wrong authlevel!");
+		} catch (Exception err) {
+			log.error("[getAppointmentReminderTypList]", err);
 		}
 		return null;
 	}

@@ -28,6 +28,8 @@ import org.apache.axis2.context.MessageContext;
 import org.apache.axis2.transport.http.HTTPConstants;
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.persistence.beans.calendar.Appointment;
+import org.openmeetings.app.persistence.beans.calendar.AppointmentCategory;
+import org.openmeetings.app.persistence.beans.calendar.AppointmentReminderTyps;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.context.ApplicationContext;
@@ -57,7 +59,84 @@ public class CalendarWebServiceFacade {
 
 	public List<Appointment> getAppointmentByRange(String SID, Date starttime,
 			Date endtime) throws AxisFault {
-		return getCalendarServiceProxy().getAppointmentByRange(SID, starttime, endtime);
+		return getCalendarServiceProxy().getAppointmentByRange(SID, starttime,
+				endtime);
 	}
 
+	public List<Appointment> getAppointmentByRangeForUserId(String SID,
+			long userId, Date starttime, Date endtime) throws AxisFault {
+		return getCalendarServiceProxy().getAppointmentByRangeForUserId(SID,
+				userId, starttime, endtime);
+	}
+
+	public Appointment getNextAppointment(String SID) throws AxisFault {
+		return getCalendarServiceProxy().getNextAppointment(SID);
+	}
+
+	public Appointment getNextAppointmentForUserId(String SID, long userId)
+			throws AxisFault {
+		return getCalendarServiceProxy().getNextAppointmentForUserId(SID,
+				userId);
+	}
+
+	public List<Appointment> searchAppointmentByName(String SID,
+			String appointmentName) throws AxisFault {
+		return getCalendarServiceProxy().searchAppointmentByName(SID,
+				appointmentName);
+	}
+
+	public Long saveAppointment(String SID, String appointmentName,
+			String appointmentLocation, String appointmentDescription,
+			Date appointmentstart, Date appointmentend, Boolean isDaily,
+			Boolean isWeekly, Boolean isMonthly, Boolean isYearly,
+			Long categoryId, Long remind,
+			@SuppressWarnings("rawtypes") List mmClient, Long roomType,
+			String baseUrl, Long language_id) throws AxisFault {
+		return getCalendarServiceProxy().saveAppointment(SID, appointmentName,
+				appointmentLocation, appointmentDescription, appointmentstart,
+				appointmentend, isDaily, isWeekly, isMonthly, isYearly,
+				categoryId, remind, mmClient, roomType, baseUrl, language_id);
+	}
+
+	public Long updateAppointmentTimeOnly(String SID, Long appointmentId,
+			Date appointmentstart, Date appointmentend, String baseurl,
+			Long language_id) throws AxisFault {
+		return getCalendarServiceProxy().updateAppointmentTimeOnly(SID,
+				appointmentId, appointmentstart, appointmentend, baseurl,
+				language_id);
+	}
+
+	public Long updateAppointment(String SID, Long appointmentId,
+			String appointmentName, String appointmentLocation,
+			String appointmentDescription, Date appointmentstart,
+			Date appointmentend, Boolean isDaily, Boolean isWeekly,
+			Boolean isMonthly, Boolean isYearly, Long categoryId, Long remind,
+			List<?> mmClient, Long roomType, String baseurl, Long language_id)
+			throws AxisFault {
+		return getCalendarServiceProxy().updateAppointment(SID, appointmentId,
+				appointmentName, appointmentLocation, appointmentDescription,
+				appointmentstart, appointmentend, isDaily, isWeekly, isMonthly,
+				isYearly, categoryId, remind, mmClient, roomType, baseurl,
+				language_id);
+	}
+
+	public Long deleteAppointment(String SID, Long appointmentId,
+			Long language_id) throws AxisFault {
+		return getCalendarServiceProxy().deleteAppointment(SID, appointmentId,
+				language_id);
+	}
+	
+	public Appointment getAppointmentByRoomId(String SID, Long room_id) throws AxisFault {
+		return getCalendarServiceProxy().getAppointmentByRoomId(SID, room_id);
+	}
+	
+	public List<AppointmentCategory> getAppointmentCategoryList(String SID) throws AxisFault {
+		return getCalendarServiceProxy().getAppointmentCategoryList(SID);
+	}
+	
+	public List<AppointmentReminderTyps> getAppointmentReminderTypList(
+			String SID) throws AxisFault {
+		return getCalendarServiceProxy().getAppointmentReminderTypList(SID);
+	}
+	
 }

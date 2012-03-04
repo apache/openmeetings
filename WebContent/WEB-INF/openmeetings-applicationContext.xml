@@ -51,9 +51,6 @@
     <bean id="openmeetings.WhiteBoardObjectListManagerById" class="org.openmeetings.app.remote.red5.WhiteBoardObjectListManagerById" />
 
 	<!-- Services -->
-    <import resource="red5-services/appointmentcategoryservice.service.xml"/> 
-    <import resource="red5-services/appointmentreminderservice.service.xml"/>
-    <import resource="red5-services/calendarservice.service.xml"/> 
     <import resource="red5-services/meetingmemberservice.service.xml"/>  
     <import resource="red5-services/fileservice.service.xml"/>  
     <import resource="red5-services/conferenceservice.service.xml"/>  
