@@ -24,17 +24,6 @@
 	<classpathentry kind="lib" path="lib/junit/junit-4.9.jar"/>
 	<classpathentry kind="lib" path="lib/junit/org.springframework.test-3.0.6.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/om/activation-jar-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/om/axiom-api-bundle-1.2.12.jar"/>
-	<classpathentry kind="lib" path="lib/om/axiom-dom-bundle-1.2.12.jar"/>
-	<classpathentry kind="lib" path="lib/om/axiom-impl-bundle-1.2.12.jar"/>
-	<classpathentry kind="lib" path="lib/om/axis2-1.6.1.jar"/>
-	<classpathentry kind="lib" path="lib/om/axis2-jaxws-jar-1.6.1.jar"/>
-	<classpathentry kind="lib" path="lib/om/axis2-kernel-jar-1.6.1.jar"/>
-	<classpathentry kind="lib" path="lib/om/axis2-metadata-jar-1.6.1.jar"/>
-	<classpathentry kind="lib" path="lib/om/axis2-mex-jar-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/om/axis2-saaj-jar-1.6.1.jar"/>
-	<classpathentry kind="lib" path="lib/om/axis2-transport-http-bundle-1.6.1.jar"/>
-	<classpathentry kind="lib" path="lib/om/axis2-transport-local-bundle-1.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/om/batik-anim-1.7.jar"/>
 	<classpathentry kind="lib" path="lib/om/batik-awt-util-1.7.jar"/>
 	<classpathentry kind="lib" path="lib/om/batik-bridge-1.7.jar"/>
@@ -81,23 +70,15 @@
 	<classpathentry kind="lib" path="lib/om/geronimo-ws-metadata_2.0_spec-jar-1.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/om/httpcore-jar-4.0.jar"/>
 	<classpathentry kind="lib" path="lib/om/ical4j-bundle-1.0.3.jar"/>
-	<classpathentry kind="lib" path="lib/om/jaxb-api-jar-2.1.jar"/>
-	<classpathentry kind="lib" path="lib/om/jaxb-impl-jar-2.1.7.jar"/>
-	<classpathentry kind="lib" path="lib/om/jaxb-xjc-jar-2.1.7.jar"/>
 	<classpathentry kind="lib" path="lib/om/jaxen-jar-1.1.1.jar"/>
-	<classpathentry kind="lib" path="lib/om/jaxws-tools-jar-2.1.3.jar"/>
 	<classpathentry kind="lib" path="lib/om/jsr311-api-jar-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/om/mysql-connector-java-5.1.9.jar"/>
-	<classpathentry kind="lib" path="lib/om/neethi-bundle-3.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/om/openjpa-bundle-2.2.0.jar"/>
 	<classpathentry kind="lib" path="lib/om/postgresql-9.1-901.jdbc4.jar"/>
 	<classpathentry kind="lib" path="lib/om/serp-1.13.1.jar"/>
 	<classpathentry kind="lib" path="lib/om/stax-api-jar-1.0-2.jar"/>
 	<classpathentry kind="lib" path="lib/om/velocity-1.7.jar"/>
 	<classpathentry kind="lib" path="lib/om/velocity-tools-2.0.jar"/>
-	<classpathentry kind="lib" path="lib/om/woden-api-jar-1.0M9.jar"/>
-	<classpathentry kind="lib" path="lib/om/woden-impl-commons-jar-1.0M9.jar"/>
-	<classpathentry kind="lib" path="lib/om/woden-impl-dom-jar-1.0M9.jar"/>
 	<classpathentry kind="lib" path="lib/om/ws-commons-util-1.0.2.jar"/>
 	<classpathentry kind="lib" path="lib/om/wsdl4j-jar-1.6.2.jar"/>
 	<classpathentry kind="lib" path="lib/om/wstx-asl-jar-3.2.9.jar"/>
@@ -107,7 +88,6 @@
 	<classpathentry kind="lib" path="lib/om/xmlgraphics-commons-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/om/xmlrpc-client-3.1.3.jar"/>
 	<classpathentry kind="lib" path="lib/om/xmlrpc-common-3.1.3.jar"/>
-	<classpathentry kind="lib" path="lib/om/XmlSchema-bundle-1.4.7.jar"/>
 	<classpathentry kind="lib" path="lib/om/xpp3-1.1.4c.jar"/>
 	<classpathentry kind="lib" path="lib/om/xstream-1.4.2.jar"/>
 	<classpathentry kind="lib" path="lib/om/servlet-api-jar-2.5.jar"/>
@@ -162,5 +142,27 @@
 	<classpathentry kind="lib" path="red5/dist/lib/spring-expression-3.0.6.RELEASE.jar"/>
 	<classpathentry kind="lib" path="red5/dist/lib/spring-web-3.0.6.RELEASE.jar"/>
 	<classpathentry kind="lib" path="red5/dist/lib/xmlrpc-2.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/om/apache-mime4j-core-jar-0.7.2.jar"/>
+	<classpathentry kind="lib" path="lib/om/axiom-api-bundle-1.2.13-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/om/axiom-dom-bundle-1.2.13-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/om/axiom-impl-bundle-1.2.13-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/om/axis2-1.7.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/om/axis2-jaxws-jar-1.7.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/om/axis2-kernel-jar-1.7.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/om/axis2-metadata-jar-1.7.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/om/axis2-saaj-jar-1.7.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/om/axis2-transport-http-bundle-1.7.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/om/axis2-transport-local-bundle-1.7.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/om/backport-util-concurrent-3.1.jar"/>
+	<classpathentry kind="lib" path="lib/om/jaxb-api-jar-2.2.4.jar"/>
+	<classpathentry kind="lib" path="lib/om/jaxb-impl-jar-2.2.4.jar"/>
+	<classpathentry kind="lib" path="lib/om/jaxb-xjc-jar-2.2.4.jar"/>
+	<classpathentry kind="lib" path="lib/om/jaxws-tools-jar-2.2.5.jar"/>
+	<classpathentry kind="lib" path="lib/om/mail-1.4.4.jar"/>
+	<classpathentry kind="lib" path="lib/om/neethi-bundle-3.0.2-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/om/woden-api-jar-1.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/om/woden-impl-commons-jar-1.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/om/woden-impl-dom-jar-1.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/om/XmlSchema-bundle-1.4.8-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

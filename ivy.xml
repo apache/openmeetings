@@ -74,7 +74,7 @@
 		<!--  END OF ANAKIA -->
 
 		<!--  START OF OPENMEETINGS -->
-		<dependency org="org.apache.axis2" name="axis2" rev="1.6.1" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.axis2" name="axis2" rev="1.7.0-SNAPSHOT" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<dependency org="org.apache.xmlgraphics" name="batik-anim" rev="1.7" conf="openmeetings->*" transitive="false">
@@ -217,6 +217,9 @@
 		<dependency org="javax.mail" name="mail" rev="1.4.4" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
+		
+		<!-- iCal4j seems to need this JAR -->
+		<dependency org="edu.emory.mathcs" name="backport-util-concurrent" rev="3.1" conf="openmeetings->*"/>
 
 			<!-- include type="bundle" / FIXME unable to get openjpa without  sources -->
 		<dependency org="org.mnode.ical4j" name="ical4j" rev="1.0.3" conf="openmeetings.ext->*" transitive="false"/>
@@ -226,10 +229,10 @@
 			<include type="jar" />
 		</dependency>
 		<dependency org="org.apache.ws.commons.axiom" name="axiom-impl" rev="1.2.12" conf="openmeetings.axis2->*" transitive="true"/>
-		<dependency org="org.apache.axis2" name="axis2-transport-http" rev="1.6.1" conf="openmeetings.axis2->*"/>
-		<dependency org="org.apache.axis2" name="axis2-transport-local" rev="1.6.1" conf="openmeetings.axis2->*"/>
-		<dependency org="org.apache.axis2" name="axis2-mex" rev="1.2" conf="openmeetings.axis2->*"/>
-		<dependency org="org.apache.axis2" name="axis2-jaxws" rev="1.6.1" conf="openmeetings.axis2->*"/>
+		<dependency org="org.apache.axis2" name="axis2-transport-http" rev="1.7.0-SNAPSHOT" conf="openmeetings.axis2->*"/>
+		<dependency org="org.apache.axis2" name="axis2-transport-local" rev="1.7.0-SNAPSHOT" conf="openmeetings.axis2->*"/>
+		<dependency org="org.apache.axis2" name="mex" rev="1.7.0-SNAPSHOT" conf="openmeetings.axis2->*"/>
+		<dependency org="org.apache.axis2" name="axis2-jaxws" rev="1.7.0-SNAPSHOT" conf="openmeetings.axis2->*"/>
 		<!--  END OF OPENMEETINGS -->
 
 		<!--  START OF JUNIT -->
