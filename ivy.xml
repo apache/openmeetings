@@ -19,11 +19,11 @@
 	<configurations defaultconfmapping="default">
 		<conf name="default" />
 		<conf name="mainlib" extends="default" description="Top level libraries" />
-		<conf name="mainlib.ext" description="Top level libraries with different pattern" />
-		<conf name="openmeetings" description="Openmeetings required libraries" />
+		<conf name="mainlib.ext" extends="mainlib" description="Top level libraries with different pattern" />
+		<conf name="openmeetings" extends="mainlib.ext" description="Openmeetings required libraries" />
+		<conf name="openmeetings.ext" extends="openmeetings" description="Openmeetings required libraries with different pattern" />
+		<conf name="openmeetings.axis2" extends="openmeetings.ext" description="Axis required libraries with dependencies" />
 		<conf name="anakia" description="Openmeetings required libraries" />
-		<conf name="openmeetings.ext" description="Openmeetings required libraries with different pattern" />
-		<conf name="openmeetings.axis2" description="Axis required libraries with dependencies" />
 		<conf name="junit" description="Unit testing dependencies" />
 		<conf name="rat" description="Apache Rat dependencies" />
 		<conf name="dtd" description="Dtd-generator dependencies" />
@@ -32,6 +32,12 @@
 	</configurations>
 	<dependencies>
 		<!--  START OF mainlib -->
+		<dependency org="commons-fileupload" name="commons-fileupload" rev="1.2.2" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="commons-io" name="commons-io" rev="2.1" transitive="false">
+			<include type="jar" />
+		</dependency>
 		<dependency org="org.springframework" name="org.springframework.aop" rev="3.0.6.RELEASE" transitive="false">
 			<include type="jar" />
 		</dependency>
@@ -185,11 +191,6 @@
 		<dependency org="com.thoughtworks.xstream" name="xstream" rev="1.4.2" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		
-		<!--  FIXME seems to be out of date
-		<dependency org="opensymphony" name="pell-multipart" rev="2.1.5" conf="openmeetings->*" transitive="false">
-			<include type="jar" />
-		</dependency> -->
 		<dependency org="org.apache.ws.commons.util" name="ws-commons-util" rev="1.0.2" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
@@ -228,7 +229,10 @@
 		<dependency org="javax.servlet" name="servlet-api" rev="2.5" conf="openmeetings.axis2->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.ws.commons.axiom" name="axiom-impl" rev="1.2.12" conf="openmeetings.axis2->*" transitive="true"/>
+		<dependency org="org.apache.ws.commons.axiom" name="axiom-impl" rev="1.2.12" conf="openmeetings.axis2->*" transitive="true">
+			<exclude name='commons-io' />
+			<exclude name='commons-logging' />
+		</dependency>
 		<dependency org="org.apache.axis2" name="axis2-transport-http" rev="1.7.0-SNAPSHOT" conf="openmeetings.axis2->*"/>
 		<dependency org="org.apache.axis2" name="axis2-transport-local" rev="1.7.0-SNAPSHOT" conf="openmeetings.axis2->*"/>
 		<dependency org="org.apache.axis2" name="mex" rev="1.7.0-SNAPSHOT" conf="openmeetings.axis2->*"/>

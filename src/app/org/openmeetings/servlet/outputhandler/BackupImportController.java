@@ -18,8 +18,6 @@
  */
 package org.openmeetings.servlet.outputhandler;
 
-import http.utils.multipartrequest.ServletMultipartRequest;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -91,17 +89,22 @@ import org.openmeetings.app.persistence.beans.user.UserContacts;
 import org.openmeetings.app.persistence.beans.user.UserSipData;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
-import org.openmeetings.utils.ImportHelper;
 import org.openmeetings.utils.math.CalendarPatterns;
 import org.openmeetings.utils.stringhandlers.StringComparer;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
-public class BackupImport {
+@Controller
+public class BackupImportController {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			BackupImport.class, OpenmeetingsVariables.webAppRootKey);
+			BackupImportController.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
 	private AppointmentDaoImpl appointmentDao;
@@ -162,6 +165,7 @@ public class BackupImport {
 		USERS, ORGANISATIONS, APPOINTMENTS, ROOMS, MESSAGEFOLDERS, USERCONTACTS, FILEEXPLORERITEMS
 	};
 
+    @RequestMapping(value = "/backup.upload", method = RequestMethod.POST)
 	public void service(HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse, ServletContext servletCtx)
 			throws ServletException, IOException {
@@ -198,12 +202,10 @@ public class BackupImport {
 						working_dirFile.mkdir();
 					}
 
-					ServletMultipartRequest upload = new ServletMultipartRequest(
-							httpServletRequest, ImportHelper.getMaxUploadSize(
-									cfgManagement, user_level), "UTF8");
-					InputStream is = upload.getFileContents("Filedata");
-
-					String fileSystemName = upload.getBaseFilename("Filedata");
+					DefaultMultipartHttpServletRequest multipartRequest = new DefaultMultipartHttpServletRequest(httpServletRequest);
+					MultipartFile multipartFile = multipartRequest.getFile("Filedata");
+					InputStream is = multipartFile.getInputStream();
+					String fileSystemName = multipartFile.getOriginalFilename();
 
 					StringUtils.deleteWhitespace(fileSystemName);
 

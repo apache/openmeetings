@@ -99,7 +99,7 @@
                             isOwner:isOwner,
                             fileExplorerRef:this,
                             isOnlyImage:true,
-                            servletName:'FileExplorerUploadHandler'
+                            servletName:'file.upload'
                         });
     </method>
     

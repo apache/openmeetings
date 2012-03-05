@@ -384,7 +384,7 @@
                             isOwner:false,
                             fileExplorerRef:null,
                             isOnlyImage:true,
-                            servletName:'FileExplorerUploadHandler'
+                            servletName:'file.upload'
                         });
                     
                 } else if (stringSub=='applyForMod') {

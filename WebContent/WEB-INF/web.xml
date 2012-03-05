@@ -80,6 +80,10 @@
     </context-param>
     
     <!-- remove the following servlet tags if you want to disable remoting for this application -->
+	<servlet>
+		<servlet-name>spring-mvc</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+	</servlet>
     <servlet>
         <servlet-name>gateway</servlet-name>
         <servlet-class>org.red5.server.net.servlet.AMFGatewayServlet</servlet-class>
@@ -93,10 +97,6 @@
         <servlet-class>org.openmeetings.servlet.outputhandler.Install</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>FileExplorerUploadHandler</servlet-name>
-        <servlet-class>org.openmeetings.servlet.outputhandler.FileExplorerUploadHandler</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>ScreenRequestHandler</servlet-name>
         <servlet-class>org.openmeetings.servlet.outputhandler.ScreenRequestHandler</servlet-class>
     </servlet>
@@ -107,10 +107,6 @@
     <servlet>
         <servlet-name>Export</servlet-name>
         <servlet-class>org.openmeetings.servlet.outputhandler.Export</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>Import</servlet-name>
-        <servlet-class>org.openmeetings.servlet.outputhandler.Import</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ExportToImage</servlet-name>
@@ -150,12 +146,11 @@
         <servlet-name>BackupExport</servlet-name>
         <servlet-class>org.openmeetings.servlet.outputhandler.BackupExportFacade</servlet-class>
     </servlet> 
-    <servlet>
-		<description>BackupImport</description>
-      	<display-name>BackupImport</display-name>
-	    <servlet-name>BackupImport</servlet-name>
-	    <servlet-class>org.openmeetings.servlet.outputhandler.BackupImportFacade</servlet-class>
-	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>spring-mvc</servlet-name>
+		<url-pattern>*.upload</url-pattern>
+	</servlet-mapping>
     <servlet-mapping>
         <servlet-name>DownloadHandler</servlet-name>
         <url-pattern>/DownloadHandler</url-pattern>
@@ -169,10 +164,6 @@
         <url-pattern>/install</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>FileExplorerUploadHandler</servlet-name>
-        <url-pattern>/FileExplorerUploadHandler</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>ScreenRequestHandler</servlet-name>
         <url-pattern>/ScreenRequestHandler</url-pattern>
     </servlet-mapping>
@@ -183,10 +174,6 @@
     <servlet-mapping>
         <servlet-name>Export</servlet-name>
         <url-pattern>/Export</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>Import</servlet-name>
-        <url-pattern>/Import</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ExportToImage</servlet-name>
@@ -228,10 +215,6 @@
     <servlet-mapping>
         <servlet-name>BackupExport</servlet-name>
         <url-pattern>/BackupExport</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-	    <servlet-name>BackupImport</servlet-name>
-	    <url-pattern>/BackupImport</url-pattern>
     </servlet-mapping>
     <mime-mapping>
         <extension>inc</extension>

@@ -87,7 +87,7 @@
 		<handler name="onclick">
 			<![CDATA[
 			var uploadurl = canvas.protocol+'://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-				+canvas.httpRootKey+'Import?moduleName='+this.parent.uploadmodule
+				+canvas.httpRootKey+'import.upload?moduleName='+this.parent.uploadmodule
 				+'&secondid='+parent.secondid
 				+'&publicSID='+canvas.publicSID
 				+'&sid='+canvas.sessionId;

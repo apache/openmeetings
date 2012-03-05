@@ -37,7 +37,7 @@
 	<attribute name="usersid" value="" type="string" />
 	<attribute name="singleslidesmodule_id" type="string" value="" />
 	
-	<attribute name="servletName" value="UploadHandler" type="string" />
+	<attribute name="servletName" value="upload.upload" type="string" />
 	<attribute name="parentFolderId" value="0" type="number" />
     
     <attribute name="uploadmodule" value="videoconf1" type="string" />

@@ -87,7 +87,7 @@
 		<handler name="onclick">
 			<![CDATA[
 			var uploadurl = canvas.protocol+'://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-				+canvas.httpRootKey+'BackupImport?sid='+canvas.sessionId
+				+canvas.httpRootKey+'backup.upload?sid='+canvas.sessionId
 				+'&publicSID='+canvas.publicSID;
             if ($debug) Debug.write("uploadurl: ",uploadurl);
 			parent.myFileUpload.upload(uploadurl);

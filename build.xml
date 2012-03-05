@@ -436,7 +436,7 @@
 		</java>
 	</target>
 
-	<target name="compile" depends="prepare, compile.only" />
+	<target name="compile" depends="compile.only, prepare" />
 
 	<target name="compile.only" depends="-retrieve-mainlibs,-retrieve-om,-retrieve-dtd-generator,-retrieve-junit,compile.screen.share">
 		<echo message="Compile main to ${main.out.dir}"/>
@@ -780,11 +780,6 @@
 				<isset property="ivy.lib.location"/>
 			</not>
 		</condition>
-		<condition property="ivy.lib.pattern" value="[artifact]-[revision].[ext]">
-			<not>
-				<isset property="ivy.lib.pattern"/>
-			</not>
-		</condition>
 		<condition property="ivy.transitive" value="false">
 			<not>
 				<isset property="ivy.transitive"/>
@@ -792,7 +787,7 @@
 		</condition>
 		<echo message="Ivy conf name: ${ivy.conf.name}, destination: ${ivy.lib.location}"/>
 		<ivy:resolve file="ivy.xml" conf="${ivy.conf.name}" checkIfChanged="false" transitive="${ivy.transitive}" />
-		<ivy:retrieve conf="${ivy.conf.name}" pattern="${ivy.lib.location}/${ivy.lib.pattern}" />
+		<ivy:retrieve conf="${ivy.conf.name}" pattern="${ivy.lib.location}/[artifact]-[type]-[revision].[ext]" />
 	</target>
 	
 	<!-- Check for the Red5 libraries -->
@@ -811,8 +806,8 @@
 		<delete dir="${red5.lib}/webapps/installer"/>
 		<delete dir="${red5.lib}/webapps/live"/>
 		<delete dir="${red5.lib}/webapps/vod"/>
-		<copy file="${webcontent.src.dir}/red5/jee-container.xml" todir="${red5.lib}/conf" />
-		<copy file="${webcontent.src.dir}/red5/index.html" todir="${red5.lib}/webapps/root" />
+		<copy file="${webcontent.src.dir}/red5/jee-container.xml" todir="${red5.lib}/conf" overwrite="true" force="true"/>
+		<copy file="${webcontent.src.dir}/red5/index.html" todir="${red5.lib}/webapps/root" overwrite="true" force="true"/>
 	</target>
 	<!-- Check for the Top level libraries -->
 	<target name="-retrieve-mainlibs" unless="mainlib.installed" description="Retrieves the libraries if needed" depends="-retrieve-red5">
@@ -824,7 +819,6 @@
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
 			<param name="ivy.conf.name" value="mainlib.ext"/>
 			<param name="ivy.lib.location" value="${mainlibs.lib.dir}"/>
-			<param name="ivy.lib.pattern" value="[artifact]-[type]-[revision].[ext]"/>
 		</antcall>
 		<delete>
 			<fileset dir="${mainlibs.lib.dir}" includes="*-source*.jar"/>
@@ -840,15 +834,14 @@
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
 			<param name="ivy.conf.name" value="openmeetings.ext"/>
 			<param name="ivy.lib.location" value="${om.lib.dir}"/>
-			<param name="ivy.lib.pattern" value="[artifact]-[type]-[revision].[ext]"/>
 		</antcall>
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
 			<param name="ivy.conf.name" value="openmeetings.axis2"/>
 			<param name="ivy.lib.location" value="${om.lib.dir}"/>
-			<param name="ivy.lib.pattern" value="[artifact]-[type]-[revision].[ext]"/>
 			<param name="ivy.transitive" value="true" />
 		</antcall>
 		<delete>
+			<fileset dir="${om.lib.dir}" includes="commons-logging*.jar"/>
 			<fileset dir="${om.lib.dir}" includes="*-source*.jar"/>
 			<fileset dir="${om.lib.dir}" includes="*-javadoc*.jar"/>
 		</delete>

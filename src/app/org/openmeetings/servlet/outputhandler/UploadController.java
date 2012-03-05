@@ -1,42 +1,22 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License") +  you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
 package org.openmeetings.servlet.outputhandler;
-
-import http.utils.multipartrequest.ServletMultipartRequest;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.openmeetings.app.OpenmeetingsVariables;
-import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
+import org.openmeetings.app.data.file.FileProcessor;
+import org.openmeetings.app.data.file.dao.FileExplorerItemDaoImpl;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.documents.GenerateImage;
@@ -44,155 +24,71 @@ import org.openmeetings.app.documents.GeneratePDF;
 import org.openmeetings.app.documents.GenerateThumbs;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
-import org.openmeetings.utils.ImportHelper;
 import org.openmeetings.utils.StoredFile;
 import org.openmeetings.utils.stringhandlers.StringComparer;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-public class UploadHandler extends HttpServlet {
-
-	private static final long serialVersionUID = 8955335681521483484L;
-
+@Controller
+public class UploadController {
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			UploadHandler.class, OpenmeetingsVariables.webAppRootKey);
+			UploadController.class, OpenmeetingsVariables.webAppRootKey);
+	
+	@Autowired
+	private Sessionmanagement sessionManagement;
+	@Autowired
+	private Usermanagement userManagement;
+	@Autowired
+	private UsersDaoImpl usersDao;
+	@Autowired
+	private ScopeApplicationAdapter scopeApplicationAdapter;
+	@Autowired
+	private GeneratePDF generatePDF;
+	@Autowired
+	private GenerateThumbs generateThumbs;
+	@Autowired
+	private GenerateImage generateImage;
+	@Autowired
+	private FileProcessor fileProcessor;
+	@Autowired
+	private FileExplorerItemDaoImpl fileExplorerItemDao;
 
 	private String filesString[] = null;
+	
+    @RequestMapping(value = "/file.upload", method = RequestMethod.POST)
+    public void handleFileUpload(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException {
+    	handleFormUpload(request, response, true);
+    }
 
-	public Sessionmanagement getSessionManagement() {
-		try {
-			if (ScopeApplicationAdapter.initComplete) {
-				ApplicationContext context = WebApplicationContextUtils
-						.getWebApplicationContext(getServletContext());
-				return (Sessionmanagement) context.getBean("sessionManagement");
-			}
-		} catch (Exception err) {
-			log.error("[getSessionManagement]", err);
-		}
-		return null;
-	}
+    @RequestMapping(value = "/upload.upload", method = RequestMethod.POST)
+    public void handleFormUpload(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+    	handleFormUpload(request, response, false);
+    }
 
-	public Usermanagement getUserManagement() {
-		try {
-			if (ScopeApplicationAdapter.initComplete) {
-				ApplicationContext context = WebApplicationContextUtils
-						.getWebApplicationContext(getServletContext());
-				return (Usermanagement) context.getBean("userManagement");
-			}
-		} catch (Exception err) {
-			log.error("[getUserManagement]", err);
-		}
-		return null;
-	}
-
-	public UsersDaoImpl getUsersDao() {
-		try {
-			if (ScopeApplicationAdapter.initComplete) {
-				ApplicationContext context = WebApplicationContextUtils
-						.getWebApplicationContext(getServletContext());
-				return (UsersDaoImpl) context.getBean("usersDao");
-			}
-		} catch (Exception err) {
-			log.error("[getUsersDao]", err);
-		}
-		return null;
-	}
-
-	public ScopeApplicationAdapter getScopeApplicationAdapter() {
-		try {
-			if (ScopeApplicationAdapter.initComplete) {
-				ApplicationContext context = WebApplicationContextUtils
-						.getWebApplicationContext(getServletContext());
-				return (ScopeApplicationAdapter) context
-						.getBean("web.handler");
-			}
-		} catch (Exception err) {
-			log.error("[getScopeApplicationAdapter]", err);
-		}
-		return null;
-	}
-
-	public GenerateImage getGenerateImage() {
-		try {
-			if (ScopeApplicationAdapter.initComplete) {
-				ApplicationContext context = WebApplicationContextUtils
-						.getWebApplicationContext(getServletContext());
-				return (GenerateImage) context.getBean("generateImage");
-			}
-		} catch (Exception err) {
-			log.error("[getGenerateImage]", err);
-		}
-		return null;
-	}
-
-	public GenerateThumbs getGenerateThumbs() {
-		try {
-			if (ScopeApplicationAdapter.initComplete) {
-				ApplicationContext context = WebApplicationContextUtils
-						.getWebApplicationContext(getServletContext());
-				return (GenerateThumbs) context.getBean("generateThumbs");
-			}
-		} catch (Exception err) {
-			log.error("[getGenerateThumbs]", err);
-		}
-		return null;
-	}
-
-	public GeneratePDF getGeneratePDF() {
-		try {
-			if (ScopeApplicationAdapter.initComplete) {
-				ApplicationContext context = WebApplicationContextUtils
-						.getWebApplicationContext(getServletContext());
-				return (GeneratePDF) context.getBean("generatePDF");
-			}
-		} catch (Exception err) {
-			log.error("[getGeneratePDF]", err);
-		}
-		return null;
-	}
-
-	public Configurationmanagement getCfgManagement() {
-		try {
-			if (ScopeApplicationAdapter.initComplete) {
-				ApplicationContext context = WebApplicationContextUtils
-						.getWebApplicationContext(getServletContext());
-				return (Configurationmanagement) context.getBean("cfgManagement");
-			}
-		} catch (Exception err) {
-			log.error("[getUserManagement]", err);
-		}
-		return null;
-	}
-
-	@Override
-	protected void service(HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) throws ServletException,
-			IOException {
+    private void handleFormUpload(HttpServletRequest request, HttpServletResponse response, boolean isFileEx) throws ServletException {
 		log.debug("starting upload");
 		try {
-
-			if (getUserManagement() == null || getGeneratePDF() == null
-					|| getGenerateThumbs() == null) {
-				return;
-			}
-
-			int contentLength = httpServletRequest.getContentLength();
+			int contentLength = request.getContentLength();
 			if (contentLength <= 0) {
 				log.debug("ContentLength = " + contentLength + ", aborted");
 				return;
 			}
 			log.debug("uploading " + contentLength + " bytes");
 
-			String sid = httpServletRequest.getParameter("sid");
+			String sid = request.getParameter("sid");
 			if (sid == null) {
 				throw new ServletException("Missing SID");
 			}
 			log.debug("sid: " + sid);
 
-			Long userId = getSessionManagement().checkSession(sid);
-			Long userLevel = getUserManagement().getUserLevelByID(userId);
+			Long userId = sessionManagement.checkSession(sid);
+			Long userLevel = userManagement.getUserLevelByID(userId);
 			log.debug("userId = " + userId + ", userLevel = " + userLevel);
 
 			if (userLevel <= 0) {
@@ -200,36 +96,40 @@ public class UploadHandler extends HttpServlet {
 				return;
 			}
 
-			String publicSID = httpServletRequest.getParameter("publicSID");
+			String publicSID = request.getParameter("publicSID");
 			if (publicSID == null) {
 				// Always ask for Public SID
 				throw new ServletException("Missing publicSID");
 			}
 
 			LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
-			hs.put("user", getUsersDao().getUser(userId));
+			hs.put("user", usersDao.getUser(userId));
 
-			fileService(httpServletRequest, sid, userId, hs);
-			getScopeApplicationAdapter().sendMessageWithClientByPublicSID(hs,
+			if (isFileEx) {
+				fileExService(request, sid, userId, hs);
+			} else {
+				fileService(request, sid, userId, hs);
+			}
+			scopeApplicationAdapter.sendMessageWithClientByPublicSID(hs,
 					publicSID);
 		} catch (Exception e) {
 			System.out.println("Exception during upload: " + e);
 			e.printStackTrace();
 			throw new ServletException(e);
 		}
-	}
-
-	protected void fileService(HttpServletRequest httpServletRequest,
+    }
+    
+    private void fileService(HttpServletRequest request,
 			String sid, Long userId, Map<String, Object> hs)
 			throws ServletException, Exception {
 
-		String room_id = httpServletRequest.getParameter("room_id");
+		String room_id = request.getParameter("room_id");
 		if (room_id == null) {
 			room_id = "default";
 		}
 		String roomName = StringUtils.deleteWhitespace(room_id);
 
-		String moduleName = httpServletRequest.getParameter("moduleName");
+		String moduleName = request.getParameter("moduleName");
 		if (moduleName == null) {
 			moduleName = "nomodule";
 		}
@@ -239,26 +139,24 @@ public class UploadHandler extends HttpServlet {
 		}
 		boolean userProfile = moduleName.equals("userprofile");
 
-		ServletMultipartRequest upload = new ServletMultipartRequest(
-				httpServletRequest, ImportHelper.getMaxUploadSize(getCfgManagement()), "UTF8");
-		InputStream is = upload.getFileContents("Filedata");
-
-		// trim whitespace
-		String fileSystemName = upload.getBaseFilename("Filedata");
+		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest)request;
+		MultipartFile multipartFile = multipartRequest.getFile("Filedata");
+		InputStream is = multipartFile.getInputStream();
+		String fileSystemName = multipartFile.getOriginalFilename();
 		fileSystemName = StringUtils.deleteWhitespace(fileSystemName);
 
 		// Flash cannot read the response of an upload
 		// httpServletResponse.getWriter().print(returnError);
-		uploadFile(userProfile, userId, roomName, is, fileSystemName, hs);
+		uploadFile(request, userProfile, userId, roomName, is, fileSystemName, hs);
 	}
 
-	private void uploadFile(boolean userProfile, Long userId, String roomName,
+	private void uploadFile(HttpServletRequest request, boolean userProfile, Long userId, String roomName,
 			InputStream is, String fileSystemName, Map<String, Object> hs)
 			throws Exception {
 		HashMap<String, HashMap<String, String>> returnError = new HashMap<String, HashMap<String, String>>();
 
 		// Get the current user directory
-		String currentDir = getServletContext().getRealPath("/");
+		String currentDir = request.getRealPath("/");
 		String workingDir = currentDir + "upload" + File.separatorChar
 				+ roomName + File.separatorChar;
 		log.debug("workingDir: " + workingDir);
@@ -377,7 +275,7 @@ public class UploadHandler extends HttpServlet {
 		log.debug("canBeConverted: " + canBeConverted);
 		if (canBeConverted) {
 			// convert to pdf, thumbs, swf and xml-description
-			returnError = getGeneratePDF().convertPDF(currentDir, newFileName,
+			returnError = generatePDF.convertPDF(currentDir, newFileName,
 					newFileExtDot, roomName, true, completeName);
 		} else if (isPdf) {
 			
@@ -421,7 +319,7 @@ public class UploadHandler extends HttpServlet {
 
 				String outputfile = completeName + newFileExtDot;
 
-				returnError2 = getGenerateThumbs().decodePDF(inputfile,
+				returnError2 = generateThumbs.decodePDF(inputfile,
 						outputfile);
 
 				File f_old = new File(inputfile);
@@ -432,7 +330,7 @@ public class UploadHandler extends HttpServlet {
 			}
 
 			// convert to thumbs, swf and xml-description
-			returnError = getGeneratePDF().convertPDF(currentDir, newFileName,
+			returnError = generatePDF.convertPDF(currentDir, newFileName,
 					newFileExtDot, roomName, false, completeName);
 
 			// returnError.put("decodePDF", returnError2);
@@ -445,13 +343,13 @@ public class UploadHandler extends HttpServlet {
 				// User Profile Update
 				this.deleteUserProfileFiles(currentDir, userId);
 				// convert it to JPG
-				returnError = getGenerateImage().convertImageUserProfile(
+				returnError = generateImage.convertImageUserProfile(
 						currentDir, newFileName, newFileExtDot, userId,
 						newFileName, false);
 			} else {
 				// convert it to JPG
 				log.debug("##### convert it to JPG: " + userProfile);
-				returnError = getGenerateImage().convertImage(currentDir,
+				returnError = generateImage.convertImage(currentDir,
 						newFileName, newFileExtDot, roomName, newFileName,
 						false);
 			}
@@ -460,12 +358,12 @@ public class UploadHandler extends HttpServlet {
 				// User Profile Update
 				this.deleteUserProfileFiles(currentDir, userId);
 				// is UserProfile Picture
-				HashMap<String, String> processThumb1 = getGenerateThumbs()
+				HashMap<String, String> processThumb1 = generateThumbs
 						.generateThumb("_chat_", currentDir, completeName, 40);
-				HashMap<String, String> processThumb2 = getGenerateThumbs()
+				HashMap<String, String> processThumb2 = generateThumbs
 						.generateThumb("_profile_", currentDir, completeName,
 								126);
-				HashMap<String, String> processThumb3 = getGenerateThumbs()
+				HashMap<String, String> processThumb3 = generateThumbs
 						.generateThumb("_big_", currentDir, completeName, 240);
 				returnError.put("processThumb1", processThumb1);
 				returnError.put("processThumb2", processThumb2);
@@ -473,14 +371,14 @@ public class UploadHandler extends HttpServlet {
 
 				File fileNameToStore = new File(completeName + ".jpg");
 				String pictureuri = fileNameToStore.getName();
-				Users us = getUsersDao().getUser(userId);
+				Users us = usersDao.getUser(userId);
 				us.setUpdatetime(new java.util.Date());
 				us.setPictureuri(pictureuri);
-				getUsersDao().updateUser(us);
+				usersDao.updateUser(us);
 
 				//FIXME: After updating the picture url all other users should refresh
 			} else {
-				HashMap<String, String> processThumb = getGenerateThumbs()
+				HashMap<String, String> processThumb = generateThumbs
 						.generateThumb("_thumb_", currentDir, completeName, 50);
 				returnError.put("processThumb", processThumb);
 			}
@@ -520,4 +418,59 @@ public class UploadHandler extends HttpServlet {
 		}
 	}
 
+	private void fileExService(HttpServletRequest request,
+			String sid, Long userId, Map<String, Object> hs)
+			throws ServletException, Exception {
+
+		String room_idAsString = request.getParameter("room_id");
+		if (room_idAsString == null) {
+			throw new ServletException("Missing Room ID");
+		}
+
+		Long room_id_to_Store = Long.parseLong(room_idAsString);
+
+		String isOwnerAsString = request.getParameter("isOwner");
+		if (isOwnerAsString == null) {
+			throw new ServletException("Missing isOwnerAsString");
+		}
+		boolean isOwner = false;
+		if (isOwnerAsString.equals("1")) {
+			isOwner = true;
+		}
+
+		String parentFolderIdAsString = request
+				.getParameter("parentFolderId");
+		if (parentFolderIdAsString == null) {
+			throw new ServletException("Missing parentFolderId ID");
+		}
+		Long parentFolderId = Long.parseLong(parentFolderIdAsString);
+
+		String current_dir = request.getRealPath("/");
+
+		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest)request;
+		MultipartFile multipartFile = multipartRequest.getFile("Filedata");
+		InputStream is = multipartFile.getInputStream();
+		String fileSystemName = multipartFile.getOriginalFilename();
+		log.debug("fileSystemName: " + fileSystemName);
+
+		HashMap<String, HashMap<String, String>> returnError = fileProcessor
+				.processFile(userId, room_id_to_Store, isOwner, is,
+						parentFolderId, fileSystemName, current_dir, hs, 0L, ""); // externalFilesId,
+																					// externalType
+
+		HashMap<String, String> returnAttributes = returnError
+				.get("returnAttributes");
+
+		// Flash cannot read the response of an upload
+		// httpServletResponse.getWriter().print(returnError);
+		hs.put("message", "library");
+		hs.put("action", "newFile");
+		hs.put("fileExplorerItem",
+				fileExplorerItemDao.getFileExplorerItemsById(
+						Long.parseLong(returnAttributes.get(
+								"fileExplorerItemId").toString())));
+		hs.put("error", returnError);
+		hs.put("fileName", returnAttributes.get("completeName"));
+
+	}
 }
