@@ -368,18 +368,18 @@
 		</genkey>
 		<copy todir="${screenshare.out.dir}" filtering="true">
 			<fileset dir="${red5-screenshare.images}" />
-			<fileset dir="${mainlibs.lib.dir}" includes="commons-codec*.jar" />
-			<fileset dir="${mainlibs.lib.dir}" includes="httpclient*.jar" />
-			<fileset dir="${mainlibs.lib.dir}" includes="httpcore*.jar" />
-			<fileset dir="${mainlibs.lib.dir}" includes="bcprov-jdk16*.jar" />
-			<fileset dir="${mainlibs.lib.dir}" includes="ehcache-core*.jar" />
-			<fileset dir="${mainlibs.lib.dir}" includes="commons-beanutils*.jar" />
+			<fileset dir="${red5.server.lib}" includes="commons-codec*.jar" />
+			<fileset dir="${red5.server.lib}" includes="httpclient*.jar" />
+			<fileset dir="${red5.server.lib}" includes="httpcore*.jar" />
+			<fileset dir="${red5.server.lib}" includes="bcprov-jdk16*.jar" />
+			<fileset dir="${red5.server.lib}" includes="ehcache-core*.jar" />
+			<fileset dir="${red5.server.lib}" includes="commons-beanutils*.jar" />
 			<fileset dir="${red5.server.dir}/dist" includes="red5.jar" />
-			<fileset dir="${mainlibs.lib.dir}" includes="org.springframework.context-*.jar" />
-			<fileset dir="${mainlibs.lib.dir}" includes="org.springframework.core-*.jar" />
-			<fileset dir="${mainlibs.lib.dir}" includes="logback*.jar" />
-			<fileset dir="${mainlibs.lib.dir}" includes="mina-core*.jar" />
-			<fileset dir="${mainlibs.lib.dir}" includes="com.springsource.slf4j.api*.jar" />
+			<fileset dir="${red5.server.lib}" includes="spring-context-3*.jar" />
+			<fileset dir="${red5.server.lib}" includes="spring-core-*.jar" />
+			<fileset dir="${red5.server.lib}" includes="logback*.jar" />
+			<fileset dir="${red5.server.lib}" includes="mina-core*.jar" />
+			<fileset dir="${red5.server.lib}" includes="com.springsource.slf4j.api*.jar" />
 		</copy>
 		<signjar alias="filetest" keystore="filetest.keystore" storepass="secret" lazy="false">
 			<path>
@@ -842,6 +842,7 @@
 		</antcall>
 		<delete>
 			<fileset dir="${om.lib.dir}" includes="commons-logging*.jar"/>
+			<fileset dir="${om.lib.dir}" includes="httpcore-jar*.jar"/>
 			<fileset dir="${om.lib.dir}" includes="*-source*.jar"/>
 			<fileset dir="${om.lib.dir}" includes="*-javadoc*.jar"/>
 		</delete>

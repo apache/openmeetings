@@ -31,7 +31,6 @@
 	<classpathentry kind="lib" path="lib/om/geronimo-saaj_1.3_spec-jar-1.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/om/geronimo-stax-api_1.0_spec-bundle-1.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/om/geronimo-ws-metadata_2.0_spec-jar-1.1.2.jar"/>
-	<classpathentry kind="lib" path="lib/om/httpcore-jar-4.0.jar"/>
 	<classpathentry kind="lib" path="lib/om/ical4j-bundle-1.0.3.jar"/>
 	<classpathentry kind="lib" path="lib/om/jaxen-jar-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/om/jsr311-api-jar-1.0.jar"/>
