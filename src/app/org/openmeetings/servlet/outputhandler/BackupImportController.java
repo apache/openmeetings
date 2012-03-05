@@ -167,7 +167,7 @@ public class BackupImportController {
 
     @RequestMapping(value = "/backup.upload", method = RequestMethod.POST)
 	public void service(HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse, ServletContext servletCtx)
+			HttpServletResponse httpServletResponse)
 			throws ServletException, IOException {
 
 		try {
@@ -193,7 +193,7 @@ public class BackupImportController {
 
 				if (authLevelManagement.checkAdminLevel(user_level)) {
 
-					String current_dir = servletCtx.getRealPath("/");
+					String current_dir = httpServletRequest.getRealPath("/");
 					String working_dir = current_dir + "upload"
 							+ File.separatorChar + "import"
 							+ File.separatorChar;
