@@ -38,7 +38,6 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JSpinner;
-import javax.swing.UIManager;
 
 import org.apache.mina.core.buffer.IoBuffer;
 import org.red5.io.ITagReader;
@@ -415,6 +414,7 @@ public class CommonScreenShare {
 		textWarningArea.setText(warning);
 	}
 
+	@SuppressWarnings("unchecked")
 	synchronized public void sendCursorStatus() {
 		try {
 
@@ -437,6 +437,7 @@ public class CommonScreenShare {
 							Math.round(((mouseP.getY() - VirtualScreenBean.vScreenSpinnerY) * scaleFactor)
 									* Ampl_factor)).intValue();
 
+			@SuppressWarnings("rawtypes")
 			HashMap cursorPosition = new HashMap();
 			cursorPosition.put("publicSID", this.publishName);
 			cursorPosition.put("cursor_x", x);
@@ -453,11 +454,13 @@ public class CommonScreenShare {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	synchronized public void setConnectionAsSharingClient() {
 		try {
 
 			logger.debug("########## setConnectionAsSharingClient");
 
+			@SuppressWarnings("rawtypes")
 			HashMap map = new HashMap();
 			map.put("screenX", VirtualScreenBean.vScreenSpinnerX);
 			map.put("screenY", VirtualScreenBean.vScreenSpinnerY);
@@ -506,11 +509,13 @@ public class CommonScreenShare {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void captureScreenStop() {
 		try {
 
 			logger.debug("INVOKE screenSharerAction" );
 
+			@SuppressWarnings("rawtypes")
 			Map map = new HashMap();
 			map.put("stopStreaming", this.stopStreaming);
 			map.put("stopRecording", this.stopRecording);
@@ -608,6 +613,7 @@ public class CommonScreenShare {
 
 		logger.debug( "onStreamEvent " + notify );
 
+		@SuppressWarnings("rawtypes")
 		ObjectMap map = (ObjectMap) notify.getCall().getArguments()[0];
 		String code = (String) map.get("code");
 
@@ -624,6 +630,7 @@ public class CommonScreenShare {
 
 			// logger.debug("Result Map Type "+obj.getClass().getName());
 
+			@SuppressWarnings("rawtypes")
 			Map returnMap = (Map) obj;
 
 			// logger.debug("result "+returnMap.get("result"));
@@ -837,8 +844,6 @@ public class CommonScreenShare {
 
 			} else if (action.equals("show")) {
 
-				Robot robot = new Robot();
-
 				String paste = this.getClipboardText();
 
 				HashMap<Integer, String> map = new HashMap<Integer, String>();
@@ -1014,6 +1019,7 @@ public class CommonScreenShare {
 
 				// logger.debug("Result Map Type "+o.getClass().getName());
 
+				@SuppressWarnings("rawtypes")
 				Map returnMap = (Map) o;
 
 				// logger.debug("result "+returnMap.get("result"));
@@ -1092,6 +1098,7 @@ public class CommonScreenShare {
 
 				logger.debug("Result Map Type " + o.getClass().getName());
 
+				@SuppressWarnings("rawtypes")
 				Map returnMap = (Map) o;
 
 				// logger.debug("result "+returnMap.get("result"));
@@ -1176,6 +1183,7 @@ public class CommonScreenShare {
 		private volatile long timestamp = 0;
 
 		private volatile boolean active = true;
+		@SuppressWarnings("unused")
 		private volatile boolean stopped = false;
 		private byte[] previousItems = null;
 
@@ -1213,12 +1221,6 @@ public class CommonScreenShare {
 		// Public
 		//
 		// ------------------------------------------------------------------------
-
-		public void setOrigin(final int x, final int y) {
-			this.x = x;
-			this.y = y;
-		}
-
 		public void start() {
 			stopped = false;
 		}

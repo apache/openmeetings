@@ -68,6 +68,7 @@ public class BatikMethods {
 
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public void drawPointsObject(Graphics2D g2d, List pointsList, Color lineColor, int size, 
 			double xObj, double yObj, float alpha) throws Exception {
 		

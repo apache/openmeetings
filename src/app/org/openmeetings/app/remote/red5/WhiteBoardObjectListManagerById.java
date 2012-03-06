@@ -19,14 +19,12 @@
 package org.openmeetings.app.remote.red5;
 
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import org.slf4j.Logger;
-import org.red5.logging.Red5LoggerFactory;
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.conference.whiteboard.WhiteboardObject;
 import org.openmeetings.app.conference.whiteboard.WhiteboardObjectList;
-import org.openmeetings.app.conference.whiteboard.WhiteboardSyncLockObject;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 public class WhiteBoardObjectListManagerById {
 	
@@ -38,11 +36,12 @@ public class WhiteBoardObjectListManagerById {
 //	
 //	private static HashMap<Long,Map<String,Map<String,WhiteboardSyncLockObject>>> whiteBoardObjectSyncList = new HashMap<Long,Map<String,Map<String,WhiteboardSyncLockObject>>>();
 
-	private static final Logger log = Red5LoggerFactory.getLogger(WhiteBoardObjectListManagerById.class, "openmeetings");
+	private static final Logger log = Red5LoggerFactory.getLogger(WhiteBoardObjectListManagerById.class, OpenmeetingsVariables.webAppRootKey);
 
 	private static WhiteBoardObjectListManagerById instance = null;
 
 	private WhiteBoardObjectListManagerById() {
+		log.debug("WhiteBoardObjectListManagerById is constructed");
 	}
 
 	public static synchronized WhiteBoardObjectListManagerById getInstance() {

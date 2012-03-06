@@ -18,8 +18,8 @@
  */
 package org.openmeetings.servlet.outputhandler;
 
-import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import javax.servlet.ServletException;
@@ -27,9 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.openmeetings.app.OpenmeetingsVariables;
-import org.openmeetings.app.data.basic.AuthLevelmanagement;
-import org.openmeetings.app.data.basic.Sessionmanagement;
-import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.xmlimport.LanguageImport;
@@ -41,17 +38,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
 @Controller
-public class ImportController {
+public class ImportController extends AbstractUploadController {
 	private static final Logger log = Red5LoggerFactory.getLogger(ImportController.class,
 			OpenmeetingsVariables.webAppRootKey);
 
-	@Autowired
-	private Sessionmanagement sessionManagement;
-	@Autowired
-	private Usermanagement userManagement;
 	@Autowired
 	private UsersDaoImpl usersDao;
 	@Autowired
@@ -59,71 +51,43 @@ public class ImportController {
 	@Autowired
 	private UserImport userImport;
 	@Autowired
-	private AuthLevelmanagement authLevelManagement;
-	@Autowired
 	private LanguageImport languageImport;
 	
     @RequestMapping(value = "/import.upload", method = RequestMethod.POST)
-	protected void service(HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) throws ServletException,
-			IOException {
+	protected void service(HttpServletRequest request,
+			HttpServletResponse httpServletResponse) throws ServletException {
 
+    	HashMap<UploadParams, Object> params = validate(request, true);
 		try {
-			String sid = httpServletRequest.getParameter("sid");
-			if (sid == null) {
-				sid = "default";
-			}
-			log.debug("sid: " + sid);
-
-			String moduleName = httpServletRequest.getParameter("moduleName");
+			String moduleName = request.getParameter("moduleName");
 			if (moduleName == null) {
 				moduleName = "moduleName";
 			}
 			log.debug("moduleName: " + moduleName);
-			Long users_id = sessionManagement.checkSession(sid);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			InputStream is = getParam(params, UploadParams.pFile, MultipartFile.class).getInputStream();
 
-			String publicSID = httpServletRequest.getParameter("publicSID");
-			if (publicSID == null) {
-				// Always ask for Public SID
-				return;
-			}
+			if (moduleName.equals("users")) {
+				log.error("Import Users");
+				userImport.addUsersByDocument(is);
 
-			log.debug("users_id: " + users_id);
-			log.debug("user_level: " + user_level);
-			log.debug("moduleName: " + moduleName);
-
-			// if (user_level!=null && user_level > 0) {
-			if (authLevelManagement.checkAdminLevel(user_level)) {
-				DefaultMultipartHttpServletRequest multipartRequest = new DefaultMultipartHttpServletRequest(httpServletRequest);
-				MultipartFile multipartFile = multipartRequest.getFile("Filedata");
-				InputStream is = multipartFile.getInputStream();
-
-				if (moduleName.equals("users")) {
-					log.error("Import Users");
-					userImport.addUsersByDocument(is);
-
-				} else if (moduleName.equals("language")) {
-					log.error("Import Language");
-					String language = httpServletRequest
-							.getParameter("secondid");
-					if (language == null) {
-						language = "0";
-					}
-					Long language_id = Long.valueOf(language).longValue();
-					log.debug("language_id: " + language_id);
-
-					languageImport.addLanguageByDocument(
-							language_id, is);
+			} else if (moduleName.equals("language")) {
+				log.error("Import Language");
+				String language = request
+						.getParameter("secondid");
+				if (language == null) {
+					language = "0";
 				}
-			} else {
-				log.error("ERROR LangExport: not authorized FileDownload");
+				Long language_id = Long.valueOf(language).longValue();
+				log.debug("language_id: " + language_id);
+
+				languageImport.addLanguageByDocument(
+						language_id, is);
 			}
 
 			log.debug("Return And Close");
 
 			LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
-			hs.put("user", usersDao.getUser(users_id));
+			hs.put("user", usersDao.getUser(getParam(params, UploadParams.pUserId, Long.class)));
 			hs.put("message", "library");
 			hs.put("action", "import");
 
@@ -131,13 +95,12 @@ public class ImportController {
 
 			log.debug("moduleName.equals(userprofile) ! ");
 
-			scopeApplicationAdapter.sendMessageWithClientByPublicSID(hs,
-					publicSID);
-
-			return;
+			scopeApplicationAdapter.sendMessageWithClientByPublicSID(hs, 
+					getParam(params, UploadParams.pPublicSID, String.class));
 
 		} catch (Exception er) {
-			log.error("ERROR exporting:", er);
+			log.error("ERROR importing:", er);
+			throw new ServletException(er);
 		}
 	}
 

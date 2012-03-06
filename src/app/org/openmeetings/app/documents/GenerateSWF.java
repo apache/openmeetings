@@ -178,7 +178,6 @@ public class GenerateSWF {
 		private final InputStream stderr;
 		private final InputStreamReader isr;
 		private final BufferedReader br;
-		public String message;
 
 		private InputStreamWatcher(Process process) {
 			stderr = process.getInputStream();
@@ -197,11 +196,6 @@ public class GenerateSWF {
 				return;
 			}
 		}
-		
-		public String getOutputString() {
-			return message;
-		}
-		
 	}
 
 	private String getPathToSwfTools() {

@@ -200,7 +200,8 @@ public class CastMapToObject {
 								log.error(fieldType.getName());
 								
 								//Get value from  set 
-								Object t = this.castByGivenObject((Map)valueOfHashMap, fieldType);
+								@SuppressWarnings("unchecked")
+								Object t = this.castByGivenObject((Map<String, ?>)valueOfHashMap, fieldType);
 								int mod = anyField.getModifiers();
 								
 								if (Modifier.isPrivate(mod) && !Modifier.isFinal(mod)){

@@ -35,7 +35,6 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,9 +44,6 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.openmeetings.app.OpenmeetingsVariables;
-import org.openmeetings.app.data.basic.AuthLevelmanagement;
-import org.openmeetings.app.data.basic.Configurationmanagement;
-import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.basic.dao.LdapConfigDaoImpl;
 import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.calendar.daos.AppointmentCategoryDaoImpl;
@@ -62,7 +58,6 @@ import org.openmeetings.app.data.flvrecord.FlvRecordingDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDataDaoImpl;
 import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Statemanagement;
-import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.PrivateMessageFolderDaoImpl;
 import org.openmeetings.app.data.user.dao.PrivateMessagesDaoImpl;
 import org.openmeetings.app.data.user.dao.UserContactsDaoImpl;
@@ -98,22 +93,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
 @Controller
-public class BackupImportController {
+public class BackupImportController extends AbstractUploadController {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			BackupImportController.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
 	private AppointmentDaoImpl appointmentDao;
-	@Autowired
-	private Sessionmanagement sessionManagement;
-	@Autowired
-	private Configurationmanagement cfgManagement;
-	@Autowired
-	private Usermanagement userManagement;
 	@Autowired
 	private Statemanagement statemanagement;
 	@Autowired
@@ -149,8 +137,6 @@ public class BackupImportController {
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
-	private AuthLevelmanagement authLevelManagement;
-	@Autowired
 	private PollManagement pollManagement;
 
 	private final HashMap<Long, Long> usersMap = new HashMap<Long, Long>();
@@ -166,364 +152,338 @@ public class BackupImportController {
 	};
 
     @RequestMapping(value = "/backup.upload", method = RequestMethod.POST)
-	public void service(HttpServletRequest httpServletRequest,
+	public void service(HttpServletRequest request,
 			HttpServletResponse httpServletResponse)
 			throws ServletException, IOException {
 
-		try {
-
-			if (httpServletRequest.getContentLength() > 0) {
-
-				String sid = httpServletRequest.getParameter("sid");
-				if (sid == null) {
-					sid = "default";
-					throw new Exception("SID Missing");
-				}
-
-				String publicSID = httpServletRequest.getParameter("publicSID");
-				if (publicSID == null) {
-					publicSID = "default";
-					throw new Exception("publicSID Missing");
-				}
-
-				log.debug("uploading........ sid: " + sid);
-
-				Long users_id = sessionManagement.checkSession(sid);
-				Long user_level = userManagement.getUserLevelByID(users_id);
-
-				if (authLevelManagement.checkAdminLevel(user_level)) {
-
-					String current_dir = httpServletRequest.getRealPath("/");
-					String working_dir = current_dir + "upload"
-							+ File.separatorChar + "import"
-							+ File.separatorChar;
-					File working_dirFile = new File(working_dir);
-					if (!working_dirFile.exists()) {
-						working_dirFile.mkdir();
-					}
-
-					DefaultMultipartHttpServletRequest multipartRequest = new DefaultMultipartHttpServletRequest(httpServletRequest);
-					MultipartFile multipartFile = multipartRequest.getFile("Filedata");
-					InputStream is = multipartFile.getInputStream();
-					String fileSystemName = multipartFile.getOriginalFilename();
-
-					StringUtils.deleteWhitespace(fileSystemName);
-
-					int dotidx = fileSystemName.lastIndexOf('.');
-					String newFileSystemName = StringComparer.getInstance()
-							.compareForRealPaths(
-									fileSystemName.substring(0, dotidx));
-
-					String completeName = working_dir + newFileSystemName;
-
-					File f = new File(completeName + File.separatorChar);
-
-					if (f.exists()) {
-						int recursiveNumber = 0;
-						String tempd = completeName + "_" + recursiveNumber;
-						while (f.exists()) {
-							recursiveNumber++;
-							tempd = completeName + "_" + recursiveNumber;
-							f = new File(tempd + File.separatorChar);
-
-						}
-						completeName = tempd;
-					}
-
-					f.mkdir();
-
-					log.debug("##### WRITE FILE TO: " + completeName);
-
-					ZipInputStream zipinputstream = new ZipInputStream(is);
-					byte[] buf = new byte[1024];
-
-					ZipEntry zipentry = zipinputstream.getNextEntry();
-
-					while (zipentry != null) {
-						// for each entry to be extracted
-						String entryName = completeName + File.separatorChar
-								+ zipentry.getName();
-						entryName = entryName.replace('/', File.separatorChar);
-						entryName = entryName.replace('\\', File.separatorChar);
-
-						// log.debug("entryname " + entryName);
-
-						// zipentry.get
-
-						int n;
-						FileOutputStream fileoutputstream;
-						File newFile = new File(entryName);
-
-						if (zipentry.isDirectory()) {
-							if (!newFile.mkdir()) {
-								break;
-							}
-							zipentry = zipinputstream.getNextEntry();
-							continue;
-						}
-
-						File fentryName = new File(entryName);
-
-						File fparent = new File(fentryName.getParent());
-
-						if (!fparent.exists()) {
-
-							File fparentparent = new File(fparent.getParent());
-
-							if (!fparentparent.exists()) {
-
-								File fparentparentparent = new File(
-										fparentparent.getParent());
-
-								if (!fparentparentparent.exists()) {
-
-									fparentparentparent.mkdir();
-									fparentparent.mkdir();
-									fparent.mkdir();
-
-								} else {
-
-									fparentparent.mkdir();
-									fparent.mkdir();
-
-								}
-
-							} else {
-
-								fparent.mkdir();
-
-							}
-
-						}
-
-						fileoutputstream = new FileOutputStream(entryName);
-
-						while ((n = zipinputstream.read(buf, 0, 1024)) > -1) {
-							fileoutputstream.write(buf, 0, n);
-						}
-
-						fileoutputstream.close();
-						zipinputstream.closeEntry();
-						zipentry = zipinputstream.getNextEntry();
-
-					}// while
-
-					zipinputstream.close();
-
-					/*
-					 * ##################### Import Organizations
-					 */
-					String orgListXML = completeName + File.separatorChar
-							+ "organizations.xml";
-					File orgFile = new File(orgListXML);
-					if (!orgFile.exists()) {
-						throw new Exception("organizations.xml missing");
-					}
-					this.importOrganizsations(orgFile);
-
-					log.info("Organizations import complete, starting user import");
-
-					/*
-					 * ##################### Import Users
-					 */
-					String userListXML = completeName + File.separatorChar
-							+ "users.xml";
-					File userFile = new File(userListXML);
-					if (!userFile.exists()) {
-						throw new Exception("users.xml missing");
-					}
-					this.importUsers(userFile);
-
-					log.info("Users import complete, starting room import");
-
-					/*
-					 * ##################### Import Rooms
-					 */
-					String roomListXML = completeName + File.separatorChar
-							+ "rooms.xml";
-					File roomFile = new File(roomListXML);
-					if (!roomFile.exists()) {
-						throw new Exception("rooms.xml missing");
-					}
-					this.importRooms(roomFile);
-
-					log.info("Room import complete, starting room organizations import");
-
-					/*
-					 * ##################### Import Room Organisations
-					 */
-					String orgRoomListXML = completeName + File.separatorChar
-							+ "rooms_organisation.xml";
-					File orgRoomListFile = new File(orgRoomListXML);
-					if (!orgRoomListFile.exists()) {
-						throw new Exception("rooms_organisation.xml missing");
-					}
-					this.importOrgRooms(orgRoomListFile);
-
-					log.info("Room organizations import complete, starting appointement import");
-
-					/*
-					 * ##################### Import Appointements
-					 */
-					String appointementListXML = completeName
-							+ File.separatorChar + "appointements.xml";
-					File appointementListFile = new File(appointementListXML);
-					if (!appointementListFile.exists()) {
-						throw new Exception("appointements.xml missing");
-					}
-					this.importAppointements(appointementListFile);
-
-					log.info("Appointement import complete, starting meeting members import");
-
-					/*
-					 * ##################### Import MeetingMembers
-					 * 
-					 * Reminder Invitations will be NOT send!
-					 */
-					String meetingmembersListXML = completeName
-							+ File.separatorChar + "meetingmembers.xml";
-					File meetingmembersListFile = new File(
-							meetingmembersListXML);
-					if (!meetingmembersListFile.exists()) {
-						throw new Exception("meetingmembersListFile missing");
-					}
-					this.importMeetingmembers(meetingmembersListFile);
-
-					log.info("Meeting members import complete, starting ldap config import");
-
-					/*
-					 * ##################### Import LDAP Configs
-					 */
-					String ldapConfigListXML = completeName
-							+ File.separatorChar + "ldapconfigs.xml";
-					File ldapConfigListFile = new File(ldapConfigListXML);
-					if (!ldapConfigListFile.exists()) {
-						log.debug("meetingmembersListFile missing");
-						// throw new Exception
-						// ("meetingmembersListFile missing");
-					} else {
-						this.importLdapConfig(ldapConfigListFile);
-					}
-
-					log.info("Ldap config import complete, starting recordings import");
-
-					/*
-					 * ##################### Import Recordings
-					 */
-					String flvRecordingsListXML = completeName
-							+ File.separatorChar + "flvRecordings.xml";
-					File flvRecordingsListFile = new File(flvRecordingsListXML);
-					if (!flvRecordingsListFile.exists()) {
-						log.debug("flvRecordingsListFile missing");
-						// throw new Exception
-						// ("meetingmembersListFile missing");
-					} else {
-						this.importFlvRecordings(flvRecordingsListFile);
-					}
-
-					log.info("FLVrecording import complete, starting private message folder import");
-
-					/*
-					 * ##################### Import Private Message Folders
-					 */
-					String privateMessageFoldersXML = completeName
-							+ File.separatorChar + "privateMessageFolder.xml";
-					File privateMessageFoldersFile = new File(
-							privateMessageFoldersXML);
-					if (!privateMessageFoldersFile.exists()) {
-						log.debug("privateMessageFoldersFile missing");
-						// throw new Exception
-						// ("meetingmembersListFile missing");
-					} else {
-						this.importPrivateMessageFolders(privateMessageFoldersFile);
-					}
-
-					log.info("Private message folder import complete, starting private message import");
-
-					/*
-					 * ##################### Import Private Messages
-					 */
-					String privateMessagesXML = completeName
-							+ File.separatorChar + "privateMessages.xml";
-					File privateMessagesFile = new File(privateMessagesXML);
-					if (!privateMessagesFile.exists()) {
-						log.debug("privateMessagesFile missing");
-						// throw new Exception
-						// ("meetingmembersListFile missing");
-					} else {
-						this.importPrivateMessages(privateMessagesFile);
-					}
-
-					log.info("Private message import complete, starting usercontact import");
-
-					/*
-					 * ##################### Import User Contacts
-					 */
-					String userContactsXML = completeName + File.separatorChar
-							+ "userContacts.xml";
-					File userContactsFile = new File(userContactsXML);
-					if (!userContactsFile.exists()) {
-						log.debug("userContactsFile missing");
-						// throw new Exception
-						// ("meetingmembersListFile missing");
-					} else {
-						this.importUserContacts(userContactsFile);
-					}
-
-					log.info("Usercontact import complete, starting file explorer item import");
-
-					/*
-					 * ##################### Import File-Explorer Items
-					 */
-					String fileExplorerListXML = completeName
-							+ File.separatorChar + "fileExplorerItems.xml";
-					File fileExplorerListFile = new File(fileExplorerListXML);
-					if (!fileExplorerListFile.exists()) {
-						log.debug("fileExplorerListFile missing");
-						// throw new Exception
-						// ("meetingmembersListFile missing");
-					} else {
-						this.importFileExplorerItems(fileExplorerListFile);
-					}
-
-					log.info("File explorer item import complete, starting file poll import");
-
-					/*
-					 * ##################### Import File-Explorer Items
-					 */
-					String roomPollListXML = completeName + File.separatorChar
-							+ "roompolls.xml";
-					File roomPollListFile = new File(roomPollListXML);
-					if (!roomPollListFile.exists()) {
-						log.debug("roomPollListFile missing");
-					} else {
-						this.importRoomPolls(roomPollListFile);
-					}
-
-					log.info("Poll import complete, starting copy of files and folders");
-
-					/*
-					 * ##################### Import real files and folders
-					 */
-					importFolders(current_dir, completeName);
-
-					log.info("File explorer item import complete, clearing temp files");
-
-					this.deleteDirectory(f);
-
-					LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
-					hs.put("user", usersDao.getUser(users_id));
-					hs.put("message", "library");
-					hs.put("action", "import");
-					hs.put("error", "");
-					hs.put("fileName", completeName);
-
-					scopeApplicationAdapter.sendMessageWithClientByPublicSID(
-							hs, publicSID);
-
-				}
-
+    	HashMap<UploadParams, Object> params = validate(request, true);
+    	try {
+			String current_dir = context.getRealPath("/");
+			String working_dir = current_dir + "upload"
+					+ File.separatorChar + "import"
+					+ File.separatorChar;
+			File working_dirFile = new File(working_dir);
+			if (!working_dirFile.exists()) {
+				working_dirFile.mkdir();
 			}
+
+			MultipartFile multipartFile = getParam(params, UploadParams.pFile);
+			InputStream is = multipartFile.getInputStream();
+			String fileSystemName = multipartFile.getOriginalFilename();
+
+			StringUtils.deleteWhitespace(fileSystemName);
+
+			int dotidx = fileSystemName.lastIndexOf('.');
+			String newFileSystemName = StringComparer.getInstance()
+					.compareForRealPaths(
+							fileSystemName.substring(0, dotidx));
+
+			String completeName = working_dir + newFileSystemName;
+
+			File f = new File(completeName + File.separatorChar);
+
+			if (f.exists()) {
+				int recursiveNumber = 0;
+				String tempd = completeName + "_" + recursiveNumber;
+				while (f.exists()) {
+					recursiveNumber++;
+					tempd = completeName + "_" + recursiveNumber;
+					f = new File(tempd + File.separatorChar);
+
+				}
+				completeName = tempd;
+			}
+
+			f.mkdir();
+
+			log.debug("##### WRITE FILE TO: " + completeName);
+
+			ZipInputStream zipinputstream = new ZipInputStream(is);
+			byte[] buf = new byte[1024];
+
+			ZipEntry zipentry = zipinputstream.getNextEntry();
+
+			while (zipentry != null) {
+				// for each entry to be extracted
+				String entryName = completeName + File.separatorChar
+						+ zipentry.getName();
+				entryName = entryName.replace('/', File.separatorChar);
+				entryName = entryName.replace('\\', File.separatorChar);
+
+				// log.debug("entryname " + entryName);
+
+				// zipentry.get
+
+				int n;
+				FileOutputStream fileoutputstream;
+				File newFile = new File(entryName);
+
+				if (zipentry.isDirectory()) {
+					if (!newFile.mkdir()) {
+						break;
+					}
+					zipentry = zipinputstream.getNextEntry();
+					continue;
+				}
+
+				File fentryName = new File(entryName);
+
+				File fparent = new File(fentryName.getParent());
+
+				if (!fparent.exists()) {
+
+					File fparentparent = new File(fparent.getParent());
+
+					if (!fparentparent.exists()) {
+
+						File fparentparentparent = new File(
+								fparentparent.getParent());
+
+						if (!fparentparentparent.exists()) {
+
+							fparentparentparent.mkdir();
+							fparentparent.mkdir();
+							fparent.mkdir();
+
+						} else {
+
+							fparentparent.mkdir();
+							fparent.mkdir();
+
+						}
+
+					} else {
+
+						fparent.mkdir();
+
+					}
+
+				}
+
+				fileoutputstream = new FileOutputStream(entryName);
+
+				while ((n = zipinputstream.read(buf, 0, 1024)) > -1) {
+					fileoutputstream.write(buf, 0, n);
+				}
+
+				fileoutputstream.close();
+				zipinputstream.closeEntry();
+				zipentry = zipinputstream.getNextEntry();
+
+			}// while
+
+			zipinputstream.close();
+
+			/*
+			 * ##################### Import Organizations
+			 */
+			String orgListXML = completeName + File.separatorChar
+					+ "organizations.xml";
+			File orgFile = new File(orgListXML);
+			if (!orgFile.exists()) {
+				throw new Exception("organizations.xml missing");
+			}
+			this.importOrganizsations(orgFile);
+
+			log.info("Organizations import complete, starting user import");
+
+			/*
+			 * ##################### Import Users
+			 */
+			String userListXML = completeName + File.separatorChar
+					+ "users.xml";
+			File userFile = new File(userListXML);
+			if (!userFile.exists()) {
+				throw new Exception("users.xml missing");
+			}
+			this.importUsers(userFile);
+
+			log.info("Users import complete, starting room import");
+
+			/*
+			 * ##################### Import Rooms
+			 */
+			String roomListXML = completeName + File.separatorChar
+					+ "rooms.xml";
+			File roomFile = new File(roomListXML);
+			if (!roomFile.exists()) {
+				throw new Exception("rooms.xml missing");
+			}
+			this.importRooms(roomFile);
+
+			log.info("Room import complete, starting room organizations import");
+
+			/*
+			 * ##################### Import Room Organisations
+			 */
+			String orgRoomListXML = completeName + File.separatorChar
+					+ "rooms_organisation.xml";
+			File orgRoomListFile = new File(orgRoomListXML);
+			if (!orgRoomListFile.exists()) {
+				throw new Exception("rooms_organisation.xml missing");
+			}
+			this.importOrgRooms(orgRoomListFile);
+
+			log.info("Room organizations import complete, starting appointement import");
+
+			/*
+			 * ##################### Import Appointements
+			 */
+			String appointementListXML = completeName
+					+ File.separatorChar + "appointements.xml";
+			File appointementListFile = new File(appointementListXML);
+			if (!appointementListFile.exists()) {
+				throw new Exception("appointements.xml missing");
+			}
+			this.importAppointements(appointementListFile);
+
+			log.info("Appointement import complete, starting meeting members import");
+
+			/*
+			 * ##################### Import MeetingMembers
+			 * 
+			 * Reminder Invitations will be NOT send!
+			 */
+			String meetingmembersListXML = completeName
+					+ File.separatorChar + "meetingmembers.xml";
+			File meetingmembersListFile = new File(
+					meetingmembersListXML);
+			if (!meetingmembersListFile.exists()) {
+				throw new Exception("meetingmembersListFile missing");
+			}
+			this.importMeetingmembers(meetingmembersListFile);
+
+			log.info("Meeting members import complete, starting ldap config import");
+
+			/*
+			 * ##################### Import LDAP Configs
+			 */
+			String ldapConfigListXML = completeName
+					+ File.separatorChar + "ldapconfigs.xml";
+			File ldapConfigListFile = new File(ldapConfigListXML);
+			if (!ldapConfigListFile.exists()) {
+				log.debug("meetingmembersListFile missing");
+				// throw new Exception
+				// ("meetingmembersListFile missing");
+			} else {
+				this.importLdapConfig(ldapConfigListFile);
+			}
+
+			log.info("Ldap config import complete, starting recordings import");
+
+			/*
+			 * ##################### Import Recordings
+			 */
+			String flvRecordingsListXML = completeName
+					+ File.separatorChar + "flvRecordings.xml";
+			File flvRecordingsListFile = new File(flvRecordingsListXML);
+			if (!flvRecordingsListFile.exists()) {
+				log.debug("flvRecordingsListFile missing");
+				// throw new Exception
+				// ("meetingmembersListFile missing");
+			} else {
+				this.importFlvRecordings(flvRecordingsListFile);
+			}
+
+			log.info("FLVrecording import complete, starting private message folder import");
+
+			/*
+			 * ##################### Import Private Message Folders
+			 */
+			String privateMessageFoldersXML = completeName
+					+ File.separatorChar + "privateMessageFolder.xml";
+			File privateMessageFoldersFile = new File(
+					privateMessageFoldersXML);
+			if (!privateMessageFoldersFile.exists()) {
+				log.debug("privateMessageFoldersFile missing");
+				// throw new Exception
+				// ("meetingmembersListFile missing");
+			} else {
+				this.importPrivateMessageFolders(privateMessageFoldersFile);
+			}
+
+			log.info("Private message folder import complete, starting private message import");
+
+			/*
+			 * ##################### Import Private Messages
+			 */
+			String privateMessagesXML = completeName
+					+ File.separatorChar + "privateMessages.xml";
+			File privateMessagesFile = new File(privateMessagesXML);
+			if (!privateMessagesFile.exists()) {
+				log.debug("privateMessagesFile missing");
+				// throw new Exception
+				// ("meetingmembersListFile missing");
+			} else {
+				this.importPrivateMessages(privateMessagesFile);
+			}
+
+			log.info("Private message import complete, starting usercontact import");
+
+			/*
+			 * ##################### Import User Contacts
+			 */
+			String userContactsXML = completeName + File.separatorChar
+					+ "userContacts.xml";
+			File userContactsFile = new File(userContactsXML);
+			if (!userContactsFile.exists()) {
+				log.debug("userContactsFile missing");
+				// throw new Exception
+				// ("meetingmembersListFile missing");
+			} else {
+				this.importUserContacts(userContactsFile);
+			}
+
+			log.info("Usercontact import complete, starting file explorer item import");
+
+			/*
+			 * ##################### Import File-Explorer Items
+			 */
+			String fileExplorerListXML = completeName
+					+ File.separatorChar + "fileExplorerItems.xml";
+			File fileExplorerListFile = new File(fileExplorerListXML);
+			if (!fileExplorerListFile.exists()) {
+				log.debug("fileExplorerListFile missing");
+				// throw new Exception
+				// ("meetingmembersListFile missing");
+			} else {
+				this.importFileExplorerItems(fileExplorerListFile);
+			}
+
+			log.info("File explorer item import complete, starting file poll import");
+
+			/*
+			 * ##################### Import File-Explorer Items
+			 */
+			String roomPollListXML = completeName + File.separatorChar
+					+ "roompolls.xml";
+			File roomPollListFile = new File(roomPollListXML);
+			if (!roomPollListFile.exists()) {
+				log.debug("roomPollListFile missing");
+			} else {
+				this.importRoomPolls(roomPollListFile);
+			}
+
+			log.info("Poll import complete, starting copy of files and folders");
+
+			/*
+			 * ##################### Import real files and folders
+			 */
+			importFolders(current_dir, completeName);
+
+			log.info("File explorer item import complete, clearing temp files");
+
+			this.deleteDirectory(f);
+
+			LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
+			hs.put("user", usersDao.getUser(getParam(params, UploadParams.pUserId, Long.class)));
+			hs.put("message", "library");
+			hs.put("action", "import");
+			hs.put("error", "");
+			hs.put("fileName", completeName);
+
+			scopeApplicationAdapter.sendMessageWithClientByPublicSID(
+					hs, getParam(params, UploadParams.pPublicSID, String.class));
 
 		} catch (Exception e) {
 

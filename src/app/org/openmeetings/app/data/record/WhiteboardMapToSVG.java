@@ -51,6 +51,7 @@ public class WhiteboardMapToSVG extends BatikMethods {
 		return instance;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public SVGGraphics2D convertMapToSVG(SVGGraphics2D svgGenerator, List whiteBoardMap) throws Exception {
 		
 		//log.debug("convertMapToSVG: "+whiteBoardMap.size());
@@ -74,8 +75,6 @@ public class WhiteboardMapToSVG extends BatikMethods {
         		
         		Double x = Double.valueOf(graphObject.get(graphObject.size()-5).toString()).doubleValue();
         		Double y = Double.valueOf(graphObject.get(graphObject.size()-4).toString()).doubleValue();
-        		Double width = Double.valueOf(graphObject.get(graphObject.size()-3).toString()).doubleValue();
-        		Double height = Double.valueOf(graphObject.get(graphObject.size()-2).toString()).doubleValue();
         		
         		//log.debug("x,y,width,height: "+x+","+y+","+width+","+height);
         		

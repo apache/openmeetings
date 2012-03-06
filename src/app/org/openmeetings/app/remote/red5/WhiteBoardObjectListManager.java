@@ -60,17 +60,9 @@ public class WhiteBoardObjectListManager {
 	/*
 	 * Room items a Whiteboard
 	 */
+	@SuppressWarnings("rawtypes")
 	public synchronized HashMap<String,List> getWhiteBoardObjectListByRoomId(Long room_id){
-		WhiteboardObject whiteBoardObject = whiteBoardObjectList.get(room_id);
-		if (whiteBoardObject == null) {
-			whiteBoardObject = new WhiteboardObject();
-		}
-		//HashMap<String,List>roomList = whiteBoardObject.getObjList();
-		HashMap<String,List>roomList = null;
-		if (roomList == null) {
-			roomList = new HashMap<String,List>();
-		}
-		return roomList;
+		return new HashMap<String,List>();
 	}
 	
 	/*
@@ -147,7 +139,7 @@ public class WhiteBoardObjectListManager {
 		whiteBoardObjectList.put(room_id, whiteBoardObject);
 	}
 	
-	public synchronized void setWhiteBoardObjectListRoomObj(Long room_id, HashMap<String,List> roomList){
+	public synchronized void setWhiteBoardObjectListRoomObj(Long room_id, @SuppressWarnings("rawtypes") HashMap<String,List> roomList){
 		WhiteboardObject whiteBoardObject = whiteBoardObjectList.get(room_id);
 		if (whiteBoardObject == null) {
 			whiteBoardObject = new WhiteboardObject();

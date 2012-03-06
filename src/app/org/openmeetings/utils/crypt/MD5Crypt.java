@@ -165,9 +165,10 @@ static private final void clearbits(byte bits[])
 * with the unsigned value.
 */
 
+@SuppressWarnings("cast")
 static private final int bytes2u(byte inp)
 {
- return (int) inp & 0xff;
+ return ((int)inp) & 0xff;
 }
 
 /**

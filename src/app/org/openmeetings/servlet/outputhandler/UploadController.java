@@ -14,10 +14,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.openmeetings.app.OpenmeetingsVariables;
-import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.file.FileProcessor;
 import org.openmeetings.app.data.file.dao.FileExplorerItemDaoImpl;
-import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.documents.GenerateImage;
 import org.openmeetings.app.documents.GeneratePDF;
@@ -33,17 +31,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 @Controller
-public class UploadController {
+public class UploadController extends AbstractUploadController {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			UploadController.class, OpenmeetingsVariables.webAppRootKey);
 	
-	@Autowired
-	private Sessionmanagement sessionManagement;
-	@Autowired
-	private Usermanagement userManagement;
 	@Autowired
 	private UsersDaoImpl usersDao;
 	@Autowired
@@ -63,100 +56,122 @@ public class UploadController {
 	
     @RequestMapping(value = "/file.upload", method = RequestMethod.POST)
     public void handleFileUpload(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException {
-    	handleFormUpload(request, response, true);
+    	HashMap<UploadParams, Object> params = validate(request, true);
+    	try {
+	    	LinkedHashMap<String, Object> hs = prepareMessage(params);
+			String room_idAsString = request.getParameter("room_id");
+			if (room_idAsString == null) {
+				throw new ServletException("Missing Room ID");
+			}
+	
+			Long room_id_to_Store = Long.parseLong(room_idAsString);
+	
+			String isOwnerAsString = request.getParameter("isOwner");
+			if (isOwnerAsString == null) {
+				throw new ServletException("Missing isOwnerAsString");
+			}
+			boolean isOwner = false;
+			if (isOwnerAsString.equals("1")) {
+				isOwner = true;
+			}
+	
+			String parentFolderIdAsString = request
+					.getParameter("parentFolderId");
+			if (parentFolderIdAsString == null) {
+				throw new ServletException("Missing parentFolderId ID");
+			}
+			Long parentFolderId = Long.parseLong(parentFolderIdAsString);
+	
+			String current_dir = context.getRealPath("/");
+	
+			MultipartFile multipartFile = getParam(params, UploadParams.pFile);
+			InputStream is = multipartFile.getInputStream();
+			String fileSystemName = multipartFile.getOriginalFilename();
+			log.debug("fileSystemName: " + fileSystemName);
+	
+			HashMap<String, HashMap<String, String>> returnError = fileProcessor
+					.processFile(getParam(params, UploadParams.pUserId, Long.class), room_id_to_Store, isOwner, is,
+							parentFolderId, fileSystemName, current_dir, hs, 0L, ""); // externalFilesId,
+																						// externalType
+	
+			HashMap<String, String> returnAttributes = returnError
+					.get("returnAttributes");
+	
+			// Flash cannot read the response of an upload
+			// httpServletResponse.getWriter().print(returnError);
+			hs.put("message", "library");
+			hs.put("action", "newFile");
+			hs.put("fileExplorerItem",
+					fileExplorerItemDao.getFileExplorerItemsById(
+							Long.parseLong(returnAttributes.get(
+									"fileExplorerItemId").toString())));
+			hs.put("error", returnError);
+			hs.put("fileName", returnAttributes.get("completeName"));
+			sendMessage(params, hs);
+		} catch (ServletException e) {
+			throw e;
+		} catch (Exception e) {
+			log.error("Exception during upload: ", e);
+			throw new ServletException(e);
+    	}
     }
 
     @RequestMapping(value = "/upload.upload", method = RequestMethod.POST)
     public void handleFormUpload(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-    	handleFormUpload(request, response, false);
-    }
-
-    private void handleFormUpload(HttpServletRequest request, HttpServletResponse response, boolean isFileEx) throws ServletException {
-		log.debug("starting upload");
 		try {
-			int contentLength = request.getContentLength();
-			if (contentLength <= 0) {
-				log.debug("ContentLength = " + contentLength + ", aborted");
+	    	HashMap<UploadParams, Object> params = validate(request, true);
+	    	LinkedHashMap<String, Object> hs = prepareMessage(params);
+			String room_id = request.getParameter("room_id");
+			if (room_id == null) {
+				room_id = "default";
+			}
+			String roomName = StringUtils.deleteWhitespace(room_id);
+	
+			String moduleName = request.getParameter("moduleName");
+			if (moduleName == null) {
+				moduleName = "nomodule";
+			}
+			if (moduleName.equals("nomodule")) {
+				log.debug("module name missed");
 				return;
 			}
-			log.debug("uploading " + contentLength + " bytes");
-
-			String sid = request.getParameter("sid");
-			if (sid == null) {
-				throw new ServletException("Missing SID");
-			}
-			log.debug("sid: " + sid);
-
-			Long userId = sessionManagement.checkSession(sid);
-			Long userLevel = userManagement.getUserLevelByID(userId);
-			log.debug("userId = " + userId + ", userLevel = " + userLevel);
-
-			if (userLevel <= 0) {
-				log.debug("insufficient user level " + userLevel);
-				return;
-			}
-
-			String publicSID = request.getParameter("publicSID");
-			if (publicSID == null) {
-				// Always ask for Public SID
-				throw new ServletException("Missing publicSID");
-			}
-
-			LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
-			hs.put("user", usersDao.getUser(userId));
-
-			if (isFileEx) {
-				fileExService(request, sid, userId, hs);
-			} else {
-				fileService(request, sid, userId, hs);
-			}
-			scopeApplicationAdapter.sendMessageWithClientByPublicSID(hs,
-					publicSID);
+			boolean userProfile = moduleName.equals("userprofile");
+	
+			MultipartFile multipartFile = getParam(params, UploadParams.pFile);
+			InputStream is = multipartFile.getInputStream();
+			String fileSystemName = multipartFile.getOriginalFilename();
+			fileSystemName = StringUtils.deleteWhitespace(fileSystemName);
+	
+			// Flash cannot read the response of an upload
+			// httpServletResponse.getWriter().print(returnError);
+			uploadFile(request, userProfile, getParam(params, UploadParams.pUserId, Long.class), roomName, is, fileSystemName, hs);
+			sendMessage(params, hs);
+		} catch (ServletException e) {
+			throw e;
 		} catch (Exception e) {
-			System.out.println("Exception during upload: " + e);
-			e.printStackTrace();
+			log.error("Exception during upload: ", e);
 			throw new ServletException(e);
 		}
     }
+
+    private LinkedHashMap<String, Object> prepareMessage(HashMap<UploadParams, Object> params) {
+		LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
+		hs.put("user", usersDao.getUser(getParam(params, UploadParams.pUserId, Long.class)));
+		return hs;
+    }
     
-    private void fileService(HttpServletRequest request,
-			String sid, Long userId, Map<String, Object> hs)
-			throws ServletException, Exception {
-
-		String room_id = request.getParameter("room_id");
-		if (room_id == null) {
-			room_id = "default";
-		}
-		String roomName = StringUtils.deleteWhitespace(room_id);
-
-		String moduleName = request.getParameter("moduleName");
-		if (moduleName == null) {
-			moduleName = "nomodule";
-		}
-		if (moduleName.equals("nomodule")) {
-			log.debug("module name missed");
-			return;
-		}
-		boolean userProfile = moduleName.equals("userprofile");
-
-		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest)request;
-		MultipartFile multipartFile = multipartRequest.getFile("Filedata");
-		InputStream is = multipartFile.getInputStream();
-		String fileSystemName = multipartFile.getOriginalFilename();
-		fileSystemName = StringUtils.deleteWhitespace(fileSystemName);
-
-		// Flash cannot read the response of an upload
-		// httpServletResponse.getWriter().print(returnError);
-		uploadFile(request, userProfile, userId, roomName, is, fileSystemName, hs);
-	}
-
+    private void sendMessage(HashMap<UploadParams, Object> params, LinkedHashMap<String, Object> hs) {
+		scopeApplicationAdapter.sendMessageWithClientByPublicSID(hs,
+				getParam(params, UploadParams.pPublicSID, String.class));
+    }
+    
 	private void uploadFile(HttpServletRequest request, boolean userProfile, Long userId, String roomName,
 			InputStream is, String fileSystemName, Map<String, Object> hs)
 			throws Exception {
 		HashMap<String, HashMap<String, String>> returnError = new HashMap<String, HashMap<String, String>>();
 
 		// Get the current user directory
-		String currentDir = request.getRealPath("/");
+		String currentDir = context.getRealPath("/");
 		String workingDir = currentDir + "upload" + File.separatorChar
 				+ roomName + File.separatorChar;
 		log.debug("workingDir: " + workingDir);
@@ -281,34 +296,7 @@ public class UploadController {
 			
 			boolean isEncrypted = true; 
 			
-			// Check requires iText.jar => iText is AGPL and won't work with Apache Release
-//			boolean isEncrypted = false;
-//			try {
-//				// Check if PDF is encrpyted
-//				PdfReader pdfReader = new PdfReader(completeName
-//						+ newFileExtDot);
-//
-//				log.debug("pdfReader.isEncrypted() :: "
-//						+ pdfReader.isEncrypted());
-//
-//				log.debug("isMetadataEncrypted : "
-//						+ pdfReader.isMetadataEncrypted());
-//				log.debug("is128Key : " + pdfReader.is128Key());
-//				log.debug("isEncrypted : " + pdfReader.isEncrypted());
-//
-//				if (pdfReader.isEncrypted()) {
-//					isEncrypted = true;
-//				}
-//
-//			} catch (Exception err) {
-//				log.error("isEncrypted ", err);
-//				isEncrypted = true;
-//			}
-
 			log.debug("isEncrypted :: " + isEncrypted);
-
-			@SuppressWarnings("unused")
-			HashMap<String, String> returnError2 = new HashMap<String, String>();
 
 			if (isEncrypted) {
 				// Do convert pdf to other pdf first
@@ -319,8 +307,7 @@ public class UploadController {
 
 				String outputfile = completeName + newFileExtDot;
 
-				returnError2 = generateThumbs.decodePDF(inputfile,
-						outputfile);
+				generateThumbs.decodePDF(inputfile, outputfile);
 
 				File f_old = new File(inputfile);
 				if (f_old.exists()) {
@@ -416,61 +403,5 @@ public class UploadController {
 			File subf = new File(working_imgdir + fileName);
 			subf.delete();
 		}
-	}
-
-	private void fileExService(HttpServletRequest request,
-			String sid, Long userId, Map<String, Object> hs)
-			throws ServletException, Exception {
-
-		String room_idAsString = request.getParameter("room_id");
-		if (room_idAsString == null) {
-			throw new ServletException("Missing Room ID");
-		}
-
-		Long room_id_to_Store = Long.parseLong(room_idAsString);
-
-		String isOwnerAsString = request.getParameter("isOwner");
-		if (isOwnerAsString == null) {
-			throw new ServletException("Missing isOwnerAsString");
-		}
-		boolean isOwner = false;
-		if (isOwnerAsString.equals("1")) {
-			isOwner = true;
-		}
-
-		String parentFolderIdAsString = request
-				.getParameter("parentFolderId");
-		if (parentFolderIdAsString == null) {
-			throw new ServletException("Missing parentFolderId ID");
-		}
-		Long parentFolderId = Long.parseLong(parentFolderIdAsString);
-
-		String current_dir = request.getRealPath("/");
-
-		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest)request;
-		MultipartFile multipartFile = multipartRequest.getFile("Filedata");
-		InputStream is = multipartFile.getInputStream();
-		String fileSystemName = multipartFile.getOriginalFilename();
-		log.debug("fileSystemName: " + fileSystemName);
-
-		HashMap<String, HashMap<String, String>> returnError = fileProcessor
-				.processFile(userId, room_id_to_Store, isOwner, is,
-						parentFolderId, fileSystemName, current_dir, hs, 0L, ""); // externalFilesId,
-																					// externalType
-
-		HashMap<String, String> returnAttributes = returnError
-				.get("returnAttributes");
-
-		// Flash cannot read the response of an upload
-		// httpServletResponse.getWriter().print(returnError);
-		hs.put("message", "library");
-		hs.put("action", "newFile");
-		hs.put("fileExplorerItem",
-				fileExplorerItemDao.getFileExplorerItemsById(
-						Long.parseLong(returnAttributes.get(
-								"fileExplorerItemId").toString())));
-		hs.put("error", returnError);
-		hs.put("fileName", returnAttributes.get("completeName"));
-
 	}
 }
