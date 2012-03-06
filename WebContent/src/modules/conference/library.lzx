@@ -48,8 +48,6 @@
     <include href="screenSharingAdapter.lzx" />
 
 	<include href="whiteboard/" /> 
-	<!--  -->
- 	<include href="tabbar/" />
  	
    	<include href="tabcontent/" />
    	<include href="popups/" />
