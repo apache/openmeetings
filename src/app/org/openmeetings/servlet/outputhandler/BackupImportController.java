@@ -156,7 +156,7 @@ public class BackupImportController extends AbstractUploadController {
 			HttpServletResponse httpServletResponse)
 			throws ServletException, IOException {
 
-    	HashMap<UploadParams, Object> params = validate(request, true);
+    	UploadInfo info = validate(request, true);
     	try {
 			String current_dir = context.getRealPath("/");
 			String working_dir = current_dir + "upload"
@@ -167,7 +167,7 @@ public class BackupImportController extends AbstractUploadController {
 				working_dirFile.mkdir();
 			}
 
-			MultipartFile multipartFile = getParam(params, UploadParams.pFile, MultipartFile.class);
+			MultipartFile multipartFile = info.file;
 			InputStream is = multipartFile.getInputStream();
 			String fileSystemName = multipartFile.getOriginalFilename();
 
@@ -476,14 +476,14 @@ public class BackupImportController extends AbstractUploadController {
 			this.deleteDirectory(f);
 
 			LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
-			hs.put("user", usersDao.getUser(getParam(params, UploadParams.pUserId, Long.class)));
+			hs.put("user", usersDao.getUser(info.userId));
 			hs.put("message", "library");
 			hs.put("action", "import");
 			hs.put("error", "");
 			hs.put("fileName", completeName);
 
 			scopeApplicationAdapter.sendMessageWithClientByPublicSID(
-					hs, getParam(params, UploadParams.pPublicSID, String.class));
+					hs, info.publicSID);
 
 		} catch (Exception e) {
 

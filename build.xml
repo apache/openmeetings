@@ -157,9 +157,13 @@
 	<target name="dist" description="binary distribution of OpenMeetings"
 		depends="cleanForBinary, jar, compile.laszlo.main, compile.laszlo.main.as3, enhance, signWebStartJars, -copy-libraries"/>
 
-	<!-- compiles the sources without the laszlo client -->
+	<!-- compiles the sources without openlaszlo client -->
 	<target name="dist-test" description="binary distribution of OpenMeetings"
-		depends="cleanForBinary, jar, signWebStartJars, -copy-libraries"/>
+		depends="cleanForBinary, -dist-test-no-clean, signWebStartJars"/>
+
+	<!-- compiles the sources without openlaszlo client and clean -->
+	<target name="-dist-test-no-clean" description="binary distribution of OpenMeetings"
+		depends="jar, -copy-libraries"/>
 
 	<!-- compiles the sources only with laszlo debug client -->
 	<target name="dist-debug" description="binary distribution of OpenMeetings"
@@ -690,16 +694,15 @@
 	</condition>
 
 	<path id="junit.classpath">
+		<fileset dir="${junit.lib.dir}" includes="*.jar" />
 		<fileset dir="${red5.root}" includes="*.jar" />
-		<path refid="compile.classpath" />
-		<pathelement path="${classes.dir}" />
-		<pathelement path="src" />
-		<pathelement path="${red5.root}/conf" />
-		<pathelement path="${om.dist.webapp}" />
+		<fileset dir="${red5.server.lib}" includes="*.jar" />
 		<pathelement path="${om.dist.webapp}/WEB-INF" />
-		<pathelement path="${basedir}/WebContent/WEB-INF" />
+		<pathelement path="${classes.dir}" />
+		<pathelement path="${om.dist.webapp}/WEB-INF/classes" />
+		<fileset dir="${om.dist.webapp}/WEB-INF/lib" includes="*.jar" />
 	</path>
-	<target name="test" depends="enhance" description="Will run all tests unless -Dtestcases=_file_name_pattern_ will be passed">
+	<target name="test" depends="-dist-test-no-clean" description="Will run all tests unless -Dtestcases=_file_name_pattern_ will be passed">
 		<mkdir dir="${report.dir}" />
 		<property name="myclsp" refid="junit.classpath" />
 		<!--		<echo message="${myclsp}" /> -->

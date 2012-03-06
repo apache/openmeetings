@@ -36,16 +36,14 @@ public class TestWhiteboardLoad {
 			File dir = new File(
 					"C:/Users/swagner/workspaces/indigo_red6/ROOT/dist/red5/webapps/openmeetings/public/cliparts/math");
 
-			FilenameFilter getFilesOnly = new FilenameFilter() {
+			String[] files = dir.list(new FilenameFilter() {
 				public boolean accept(File b, String name) {
 					String absPath = b.getAbsolutePath() + File.separatorChar
 							+ name;
 					File f = new File(absPath);
 					return !f.isDirectory();
 				}
-			};
-
-			String[] files = dir.list(getFilesOnly);
+			});
 
 			@SuppressWarnings("unchecked")
 			Comparator<String> comparator = ComparatorUtils.naturalComparator();

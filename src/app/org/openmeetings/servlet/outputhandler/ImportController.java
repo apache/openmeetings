@@ -19,7 +19,6 @@
 package org.openmeetings.servlet.outputhandler;
 
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import javax.servlet.ServletException;
@@ -37,7 +36,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class ImportController extends AbstractUploadController {
@@ -57,14 +55,14 @@ public class ImportController extends AbstractUploadController {
 	protected void service(HttpServletRequest request,
 			HttpServletResponse httpServletResponse) throws ServletException {
 
-    	HashMap<UploadParams, Object> params = validate(request, true);
+    	UploadInfo info = validate(request, true);
 		try {
 			String moduleName = request.getParameter("moduleName");
 			if (moduleName == null) {
 				moduleName = "moduleName";
 			}
 			log.debug("moduleName: " + moduleName);
-			InputStream is = getParam(params, UploadParams.pFile, MultipartFile.class).getInputStream();
+			InputStream is = info.file.getInputStream();
 
 			if (moduleName.equals("users")) {
 				log.error("Import Users");
@@ -87,7 +85,7 @@ public class ImportController extends AbstractUploadController {
 			log.debug("Return And Close");
 
 			LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
-			hs.put("user", usersDao.getUser(getParam(params, UploadParams.pUserId, Long.class)));
+			hs.put("user", usersDao.getUser(info.userId));
 			hs.put("message", "library");
 			hs.put("action", "import");
 
@@ -96,7 +94,7 @@ public class ImportController extends AbstractUploadController {
 			log.debug("moduleName.equals(userprofile) ! ");
 
 			scopeApplicationAdapter.sendMessageWithClientByPublicSID(hs, 
-					getParam(params, UploadParams.pPublicSID, String.class));
+					info.publicSID);
 
 		} catch (Exception er) {
 			log.error("ERROR importing:", er);

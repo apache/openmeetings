@@ -33,7 +33,10 @@ public class TestClientListManager extends AbstractOpenmeetingsSpringTest {
 	@Test
 	public void addClientListItem() {
 		Random rnd = new Random();
-		assertNotNull("RoomClientId created is null", clientListManager.addClientListItem(rnd.nextLong() + "ABCDE" + rnd.nextLong(), "scopeName", 66666, "remoteAddress", "swfUrl"));
+		assertNotNull("RoomClientId created is null",
+				clientListManager.addClientListItem(rnd.nextLong() + "ABCDE"
+						+ rnd.nextLong(), "scopeName", 66666, "remoteAddress",
+						"swfUrl"));
 	}
 
 }

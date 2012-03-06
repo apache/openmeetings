@@ -56,9 +56,9 @@ public class UploadController extends AbstractUploadController {
 	
     @RequestMapping(value = "/file.upload", method = RequestMethod.POST)
     public void handleFileUpload(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException {
-    	HashMap<UploadParams, Object> params = validate(request, true);
+    	UploadInfo info = validate(request, true);
     	try {
-	    	LinkedHashMap<String, Object> hs = prepareMessage(params);
+	    	LinkedHashMap<String, Object> hs = prepareMessage(info);
 			String room_idAsString = request.getParameter("room_id");
 			if (room_idAsString == null) {
 				throw new ServletException("Missing Room ID");
@@ -84,13 +84,13 @@ public class UploadController extends AbstractUploadController {
 	
 			String current_dir = context.getRealPath("/");
 	
-			MultipartFile multipartFile = getParam(params, UploadParams.pFile, MultipartFile.class);
+			MultipartFile multipartFile = info.file;
 			InputStream is = multipartFile.getInputStream();
 			String fileSystemName = multipartFile.getOriginalFilename();
 			log.debug("fileSystemName: " + fileSystemName);
 	
 			HashMap<String, HashMap<String, String>> returnError = fileProcessor
-					.processFile(getParam(params, UploadParams.pUserId, Long.class), room_id_to_Store, isOwner, is,
+					.processFile(info.userId, room_id_to_Store, isOwner, is,
 							parentFolderId, fileSystemName, current_dir, hs, 0L, ""); // externalFilesId,
 																						// externalType
 	
@@ -107,7 +107,7 @@ public class UploadController extends AbstractUploadController {
 									"fileExplorerItemId").toString())));
 			hs.put("error", returnError);
 			hs.put("fileName", returnAttributes.get("completeName"));
-			sendMessage(params, hs);
+			sendMessage(info, hs);
 		} catch (ServletException e) {
 			throw e;
 		} catch (Exception e) {
@@ -119,8 +119,8 @@ public class UploadController extends AbstractUploadController {
     @RequestMapping(value = "/upload.upload", method = RequestMethod.POST)
     public void handleFormUpload(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 		try {
-	    	HashMap<UploadParams, Object> params = validate(request, true);
-	    	LinkedHashMap<String, Object> hs = prepareMessage(params);
+	    	UploadInfo info = validate(request, true);
+	    	LinkedHashMap<String, Object> hs = prepareMessage(info);
 			String room_id = request.getParameter("room_id");
 			if (room_id == null) {
 				room_id = "default";
@@ -137,15 +137,15 @@ public class UploadController extends AbstractUploadController {
 			}
 			boolean userProfile = moduleName.equals("userprofile");
 	
-			MultipartFile multipartFile = getParam(params, UploadParams.pFile, MultipartFile.class);
+			MultipartFile multipartFile = info.file;
 			InputStream is = multipartFile.getInputStream();
 			String fileSystemName = multipartFile.getOriginalFilename();
 			fileSystemName = StringUtils.deleteWhitespace(fileSystemName);
 	
 			// Flash cannot read the response of an upload
 			// httpServletResponse.getWriter().print(returnError);
-			uploadFile(request, userProfile, getParam(params, UploadParams.pUserId, Long.class), roomName, is, fileSystemName, hs);
-			sendMessage(params, hs);
+			uploadFile(request, userProfile, info.userId, roomName, is, fileSystemName, hs);
+			sendMessage(info, hs);
 		} catch (ServletException e) {
 			throw e;
 		} catch (Exception e) {
@@ -154,15 +154,15 @@ public class UploadController extends AbstractUploadController {
 		}
     }
 
-    private LinkedHashMap<String, Object> prepareMessage(HashMap<UploadParams, Object> params) {
+    private LinkedHashMap<String, Object> prepareMessage(UploadInfo info) {
 		LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
-		hs.put("user", usersDao.getUser(getParam(params, UploadParams.pUserId, Long.class)));
+		hs.put("user", usersDao.getUser(info.userId));
 		return hs;
     }
     
-    private void sendMessage(HashMap<UploadParams, Object> params, LinkedHashMap<String, Object> hs) {
+    private void sendMessage(UploadInfo info, LinkedHashMap<String, Object> hs) {
 		scopeApplicationAdapter.sendMessageWithClientByPublicSID(hs,
-				getParam(params, UploadParams.pPublicSID, String.class));
+				info.publicSID);
     }
     
 	private void uploadFile(HttpServletRequest request, boolean userProfile, Long userId, String roomName,

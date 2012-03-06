@@ -30,15 +30,13 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import junit.framework.TestCase;
-
 import org.apache.log4j.Logger;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 import org.junit.Test;
 import org.openmeetings.utils.crypt.MD5;
 
-public class TestDebugConnection extends TestCase {
+public class TestDebugConnection {
 	
 	private static Logger log = Logger.getLogger(TestDebugConnection.class);
 
