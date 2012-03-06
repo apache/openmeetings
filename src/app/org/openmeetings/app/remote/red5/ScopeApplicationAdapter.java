@@ -446,6 +446,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		IConnection current = Red5.getConnectionLocal();
 		RoomClient currentClient = this.clientListManager
 				.getClientByStreamId(current.getClient().getId());
+		currentClient.setIsAVClient(false);
+		clientListManager.updateClientByStreamId(current.getClient().getId(),
+				currentClient);
 		return currentClient.getPublicSID();
 	}
 

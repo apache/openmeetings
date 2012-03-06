@@ -167,7 +167,7 @@ public class BackupImportController extends AbstractUploadController {
 				working_dirFile.mkdir();
 			}
 
-			MultipartFile multipartFile = getParam(params, UploadParams.pFile);
+			MultipartFile multipartFile = getParam(params, UploadParams.pFile, MultipartFile.class);
 			InputStream is = multipartFile.getInputStream();
 			String fileSystemName = multipartFile.getOriginalFilename();
 

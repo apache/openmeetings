@@ -84,7 +84,7 @@ public class UploadController extends AbstractUploadController {
 	
 			String current_dir = context.getRealPath("/");
 	
-			MultipartFile multipartFile = getParam(params, UploadParams.pFile);
+			MultipartFile multipartFile = getParam(params, UploadParams.pFile, MultipartFile.class);
 			InputStream is = multipartFile.getInputStream();
 			String fileSystemName = multipartFile.getOriginalFilename();
 			log.debug("fileSystemName: " + fileSystemName);
@@ -137,7 +137,7 @@ public class UploadController extends AbstractUploadController {
 			}
 			boolean userProfile = moduleName.equals("userprofile");
 	
-			MultipartFile multipartFile = getParam(params, UploadParams.pFile);
+			MultipartFile multipartFile = getParam(params, UploadParams.pFile, MultipartFile.class);
 			InputStream is = multipartFile.getInputStream();
 			String fileSystemName = multipartFile.getOriginalFilename();
 			fileSystemName = StringUtils.deleteWhitespace(fileSystemName);

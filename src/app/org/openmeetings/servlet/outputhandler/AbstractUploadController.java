@@ -1,5 +1,6 @@
 package org.openmeetings.servlet.outputhandler;
 
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
 
 import javax.servlet.ServletContext;
@@ -42,14 +43,36 @@ public abstract class AbstractUploadController implements ServletContextAware {
 		, pSID
 		, pPublicSID
 	}
-
-	protected <T> T getParam(HashMap<UploadParams, Object> params, UploadParams param, Class<T> type) {
-		return getParam(params, param);
-	}
 	
-	@SuppressWarnings("unchecked")
-	protected <T> T getParam(HashMap<UploadParams, Object> params, UploadParams param) {
-		return params.containsKey(param) ? (T)params.get(param) : null;
+	/**
+	 * 
+	 * @param params
+	 * @param param
+	 * @param typeObject
+	 * @return
+	 */
+	protected <T> T getParam(HashMap<UploadParams, Object> params,
+			UploadParams param, Class<T> typeObject) {
+		try {
+			Object returnValue = params.get(param);
+			if (returnValue == null) {
+				return null;
+			}
+
+			// Either this can be directly assigned or try to find a constructor
+			// that handles it
+			if (typeObject.isAssignableFrom(returnValue.getClass())) {
+				return typeObject.cast(returnValue);
+			}
+			Constructor<T> c = typeObject
+					.getConstructor(returnValue.getClass());
+			return c.newInstance(returnValue);
+
+		} catch (Exception err) {
+			log.error("cannot be cast to return type, error in parameters for upload: "
+					+ param, err);
+			return null;
+		}
 	}
 	
     protected HashMap<UploadParams, Object> validate(HttpServletRequest request, boolean admin) throws ServletException {
