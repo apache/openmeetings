@@ -686,7 +686,6 @@
 	</condition>
 
 	<condition property="junit.test.formatter" value="${test.formatter}" else="xml">
-		<!-- plain -->
 		<isset property="test.formatter" />
 	</condition>
 
@@ -695,8 +694,6 @@
 		<path refid="compile.classpath" />
 		<pathelement path="${classes.dir}" />
 		<pathelement path="src" />
-		<fileset dir="${red5.root}/lib" includes="*.jar" />
-		<fileset dir="${database.lib}" includes="*.jar" />
 		<pathelement path="${red5.root}/conf" />
 		<pathelement path="${om.dist.webapp}" />
 		<pathelement path="${om.dist.webapp}/WEB-INF" />

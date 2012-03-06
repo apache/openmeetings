@@ -18,14 +18,12 @@
  */
 package org.openmeetings.test;
 
+import org.junit.Test;
+
 public class TestConnection {
 
-	public static void main(String[] args) {
-		try {
-			
-		} catch (Exception err) {
-			err.printStackTrace();
-		}
+	@Test
+	public void testNoop() {
 		
 	}
 }
