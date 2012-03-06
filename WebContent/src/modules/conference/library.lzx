@@ -48,7 +48,9 @@
     <include href="screenSharingAdapter.lzx" />
 
 	<include href="whiteboard/" /> 
+	<!--  -->
  	<include href="tabbar/" />
+ 	
    	<include href="tabcontent/" />
    	<include href="popups/" />
    	<include href="moderation/" />
@@ -62,9 +64,6 @@
     <include href="participants/" /> 
     <include href="interviewuserlist/" /> 
     
-    <!-- 
-    <include href="eventuserlist/" />
-     -->
     <include href="restricted/" />
     <include href="browser/" />
     <include href="testsetup/" />

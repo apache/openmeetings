@@ -138,7 +138,7 @@
     	<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
         <handler name="ondata" args="value">
         	<![CDATA[
-                Debug.write("getRssFeeds: ",value);
+                if ($debug) Debug.write("getRssFeeds: ",value);
                 parent._bottomArea._boxes.feed1.outputRSS(value.feed2);
                 //parent.feed2.feed.outputRSS(value.feed2);
             ]]>

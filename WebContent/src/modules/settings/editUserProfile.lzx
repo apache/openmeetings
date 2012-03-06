@@ -292,8 +292,24 @@
     <image y="40" x="410" name="_userpic" />
     
     <!-- 379:Upload new Image -->
-    <simpleLabelButton y="50" labelid="379" x="550"
-        onclick="new lz.uploadWindow(canvas.main_content._content.inner,{x:300,uploadmodule:'userprofile',isOnlyProfile:true,isdefaultreturn:false,returnObj:this.parent});" /> 		
+    <simpleLabelButton y="50" labelid="379" x="550">
+    <!-- 
+   	onclick="new lz.uploadWindow(canvas.main_content._content.inner,{x:300,uploadmodule:'userprofile',isOnlyProfile:true,isdefaultreturn:false,returnObj:this.parent});">
+   	 -->
+        <handler name="onclick">
+        	<![CDATA[
+	        	new lz.uploadWindowExplorer(canvas.main_content._content.inner,{
+	                            x:300,uploadmodule:'userprofile',
+	                            isOnlyProfile:true,
+	                            returnObj:this,
+	                            servletName:'upload.upload'
+	                        });
+        	]]>
+        </handler>
+        <method name="sendRefresh">
+        	parent.getUserSelf.doCall();
+        </method>
+    </simpleLabelButton>		
      
     <!-- Remember Me -->    
     <labelCheckbox name="doShowTestWizzard" labelid="776" x="430" y="156" >

@@ -41,9 +41,8 @@
 			this.getUserSelf.doCall();
         ]]>
     </handler>
-    <method name="sendRefresh">
-    	this.getUserSelf.doCall();
-    </method>
+   
+   
   	<netRemoteCallHib name="getUserSelf" funcname="userservice.getUserSelf" 
   		remotecontext="$once{ canvas.thishib }" > 
   		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
@@ -72,8 +71,23 @@
      -->
     <image y="20" x="10" name="_userpic" />
     
-    <simpleLabelButton y="40" labelid="379" x="150" width="140"
+    <simpleLabelButton y="40" labelid="379" x="150" width="140">
+    <!-- 
         onclick="new lz.uploadWindow(canvas.main_content._content.inner,{x:300,uploadmodule:'userprofile',isOnlyProfile:true,isdefaultreturn:false,returnObj:this.parent});">
+     --> 
+        <handler name="onclick">
+        	<![CDATA[
+	        	new lz.uploadWindowExplorer(canvas.main_content._content.inner,{
+	                            x:300,uploadmodule:'userprofile',
+	                            isOnlyProfile:true,
+	                            returnObj:this,
+	                            servletName:'upload.upload'
+	                        });
+        	]]>
+        </handler>
+        <method name="sendRefresh">
+        	parent.getUserSelf.doCall();
+        </method>
     	<labelTooltip labelid="379" />
     </simpleLabelButton>  
         

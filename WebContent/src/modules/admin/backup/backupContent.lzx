@@ -39,9 +39,18 @@
 	
 	<!-- System Import -->
     <simpleLabelButton text="System Import" x="30" y="140" width="200">
-	    <handler name="onclick">
+    	<handler name="onclick">
+        	<![CDATA[
+	        	new lz.uploadWindowExplorer(canvas.main_content._content.inner,{
+	                            x:300,
+	                            isOnlyZip:true,
+	                            servletName:'backup.upload'
+	                        });
+        	]]>
+        </handler>
+	    <!-- 
 	        new lz.backupImportWindow(canvas.main_content._content.inner,{x:60,y:60,uploadmodule:'users'});
-	    </handler>
+	     -->
     </simpleLabelButton> 
     
     <!-- System Backup -->

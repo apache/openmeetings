@@ -22,7 +22,9 @@
 
 	<include href="participantsPanel.lzx" />
 
+	<!--  -->
 	<include href="files/" />
+	
 	<include href="chat/" />
     
 </library>

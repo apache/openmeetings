@@ -108,7 +108,14 @@
     <!-- 387:import -->
     <simpleLabelButton labelid="387" x="387" y="32" width="75">
 	    <handler name="onclick">
-	        new lz.importWindow(canvas.main_content._content.inner,{x:60,secondid:parent.languages.getValue(),uploadmodule:'language'});
+	        //new lz.importWindow(canvas.main_content._content.inner,{x:60,secondid:parent.languages.getValue(),uploadmodule:'language'});
+        	new lz.uploadWindowExplorer(canvas.main_content._content.inner,{
+                        x:300,
+                        uploadmodule:'language',
+                        secondid:parent.languages.getValue(),
+                        isOnlyXml:true,
+                        servletName:'import.upload'
+                    });
 	    </handler>
 	    <labelTooltip multiline="true" labelid="389" />
     </simpleLabelButton>       

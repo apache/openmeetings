@@ -1304,7 +1304,7 @@
         <netRemoteCallHib name="switchMicMuted" funcname="switchMicMuted">
             <attribute name="publicSID" value="" type="string" />
             <attribute name="mute" value="false" type="boolean" />
-            <event name="onMute" args="event"/>
+            <event name="onMute" />
             <method name="setMute" args="tPublicSID,tMute">
                 this.publicSID = tPublicSID;
                 this.mute = tMute;

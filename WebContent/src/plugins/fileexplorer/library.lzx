@@ -22,7 +22,10 @@
 	
     <include href="presentations/" />
     <include href="tabbar/" />
+    
+    <!-- 
     <include href="upload/" />
+     -->
     <include href="treeitems/" />
     
     <include href="dynamicFileName.lzx" />
