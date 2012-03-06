@@ -46,7 +46,7 @@
             this._canDraw._text.setAttribute("text",canvas.getLabelName(681));
             this._canDrawModerator.setAttribute("visibility","hidden");
 		} else {
-			if (parent.parent.canDraw) {
+			if (parent.parent.refObj.canDraw) {
                 this._canDraw.setAttribute("visibility","visible");
                 this._canDraw.isActive = true;
                 this._canDraw.setAttribute("showhandcursor",true);
@@ -78,7 +78,7 @@
             this._denyRemote.setAttribute("visibility","hidden");
             this._denyExclusiveAudio.setAttribute("visibility","hidden");
 		} else {
-			if (parent.parent.canShare) {
+			if (parent.parent.refObj.canShare) {
     			this._allowScreen.setAttribute("visibility","visible");
                 this._allowScreen.isActive = true;
                 this._allowScreen.setAttribute("showhandcursor",true);
@@ -89,7 +89,7 @@
 				this._denyScreen.setAttribute("visibility","visible");
 			}
 			
-			if (parent.parent.canRemote) {
+			if (parent.parent.refObj.canRemote) {
     			this._allowRemote.setAttribute("visibility","visible");
                 this._allowRemote.isActive = true;
                 this._allowRemote.setAttribute("showhandcursor",true);
@@ -100,7 +100,7 @@
 				this._denyRemote.setAttribute("visibility","visible");
 			}
 
-            if (parent.parent.canGiveAudio) {
+            if (parent.parent.refObj.canGiveAudio) {
     			this._allowExclusiveAudio.setAttribute("visibility","visible");
                 this._allowExclusiveAudio.isActive = true;
                 this._allowExclusiveAudio.setAttribute("showhandcursor",true);
@@ -112,7 +112,7 @@
             }
 		}
 		
-		if (parent.parent.isBroadcasting) {
+		if (parent.parent.refObj.isBroadcasting) {
 			this._allowDevice.setAttribute("visibility","hidden");
 			this._denyDevice.setAttribute("visibility","visible");
 		} else {
@@ -120,9 +120,9 @@
             this._denyDevice.setAttribute("visibility","hidden");
 		}
 		
-		if ($debug) Debug.write("Set micMuted ",parent.parent.micMuted);
+		if ($debug) Debug.write("Set micMuted ",parent.parent.refObj.micMuted);
 		
-		if (parent.parent.micMuted) {
+		if (parent.parent.refObj.micMuted) {
 			this._muteDevice.setAttribute("visibility","hidden");
             this._unMuteDevice.setAttribute("visibility","visible");
 		} else {
@@ -294,7 +294,7 @@
     <miniIcons name="_muteDevice" x="120" width="16" height="16" resource="mute_btn_rsc" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("mute: ",parent.parent.parent.refObj.publicSID);
-            canvas.thishib.switchMicMuted.setMute(parent.parent.parent.refObj.publicSID,true);
+            canvas._videocontainer._videoviewcontent.muteSound(parent.parent.parent.refObj.publicSID, true);
         </handler>
         <labelTooltip labelid="1384" />
     </miniIcons>
@@ -303,7 +303,7 @@
     		   showhandcursor="true" visibility="hidden">
         <handler name="onclick">
             if ($debug) Debug.write("unmute: ",parent.parent.parent.refObj.publicSID);
-            canvas.thishib.switchMicMuted.setMute(parent.parent.parent.refObj.publicSID,false);
+            canvas._videocontainer._videoviewcontent.muteSound(parent.parent.parent.refObj.publicSID, false);
         </handler>
         <labelTooltip labelid="1385" />
     </miniIcons>

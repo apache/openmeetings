@@ -129,6 +129,16 @@
     </method>
     
     <simplelayout axis="x" spacing="2" />
+
+    <handler name="onMute" reference="canvas.thishib.switchMicMuted" args="event">
+        <![CDATA[
+            if ($debug) Debug.write("onMute ", event.publicSID, event.mute);
+            if(canvas.publicSID == event.publicSID) {
+                canvas.micMuted = event.mute;
+                this.updateIcons();
+            }
+        ]]>
+    </handler>
 	
     <miniIconsNew name="_isMod" x="0" width="16" innerResource="participants_isMod_rsc" 
     		   height="16" showhandcursor="false">
@@ -248,16 +258,7 @@
     <miniIconsNew name="_muteDevice" x="120" width="16" height="16" 
     		   innerResource="mute_btn_rsc" showhandcursor="true">
     	<handler name="onclick">
-    		if (canvas.ismoderator) {
-    			new lz.confirmationSingle(canvas.main_content._content.inner,{
-                                                   labelid:1388,labeliderror:1389,
-                                                   refReturnMethod:'confirmGloballyOff',
-                                                   refObj:this,showCheckBox:false});
-    		} else {
-    			//Apply for Right to Share Audio/Video
-                var tDate = new Date();
-                canvas.thishib.sendMessageWithClient.sendMessage("applyForMuteOn",tDate.getTime());
-    		}
+            canvas._videocontainer._videoviewcontent.muteSound(canvas.publicSID, true);
     	</handler>
     	<method name="confirmGloballyOff" args="bool,t" >
             if ($debug) Debug.write("confirmGloballyOff :: ",bool);
@@ -271,13 +272,7 @@
     <miniIconsNew name="_unMuteDevice" x="120" width="16" height="16" innerResource="unmute_btn_rsc" 
                showhandcursor="true" >
     	<handler name="onclick">
-            if (canvas.ismoderator) {
-                canvas.thishib.switchMicMuted.setMute(canvas.publicSID,false);
-            } else {
-                //Apply for Right to Share Audio/Video
-                var tDate = new Date();
-                canvas.thishib.sendMessageWithClient.sendMessage("applyForMuteOff",tDate.getTime());
-            }
+            canvas._videocontainer._videoviewcontent.muteSound(canvas.publicSID, false);
         </handler>
         <labelTooltip name="_tip" labelid="1395" />
     </miniIconsNew>
