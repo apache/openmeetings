@@ -134,6 +134,16 @@
             }
         ]]>
     </handler>
+
+    <handler name="onMute" reference="canvas.thishib.switchMicMuted" args="event">
+        <![CDATA[
+            if ($debug) Debug.write("onMute ", event.publicSID, event.mute);
+            if(this.refObj.publicSID == event.publicSID) {
+                this.refObj.micMuted = event.mute;
+                this.updateIcons();
+            }
+        ]]>
+    </handler>
     
     <!--
         Set actions to update the User-Rights and Information what he can do
@@ -397,12 +407,7 @@
 	    <miniIcons name="_mute" x="82" width="16" height="16" resource="mute_micro_btn_rsc" showhandcursor="true" >
             <handler name="onclick">
                 <![CDATA[
-                    if (canvas.ismoderator) {
-                        canvas.thishib.switchMicMuted.setMute(parent.parent.refObj.publicSID,!parent.parent.refObj.micMuted);
-                    } else {
-                        new lz.labelerrorPopup(canvas,{errorlabelid:1409});
-                    }
-                    // TODO: canvas._videocontainer._videoviewcontent.muteSound(parent.parent.refObj.publicSID);
+                    canvas._videocontainer._videoviewcontent.muteSound(parent.parent.refObj.publicSID, !parent.parent.refObj.micMuted);
                 ]]>
             </handler>
             <labelTooltip name="_text" text="" labelid="1407" />

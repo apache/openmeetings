@@ -263,11 +263,11 @@
         ]]>
     </method>
 
-    <method name="muteSound" args="publicSID">
+    <method name="muteSound" args="publicSID, bool">
         <![CDATA[
             var obj = this.getVideoObjectByPublicSID(publicSID);
             if (obj != null) {
-                obj._toolbar._mute.clickIt();
+                obj.silenceMicrophone(bool);
             }
         ]]>
     </method>
@@ -292,7 +292,9 @@
 
     <method name="removeVideoByUser" args="publicSID"><![CDATA[
         var obj = this.closeStreamclient(publicSID);
-        obj.destroy();
+        if(obj != null) {
+            obj.destroy();
+        }
     ]]></method>
 
     <method name="updateMuteStatusVideoView" args="roomClient">

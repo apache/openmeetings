@@ -10,6 +10,10 @@
             if ($debug) Debug.write("lc_switchMicMuted", publicSID, tMute);
             canvas.thishib.switchMicMuted.setMute(publicSID, tMute);
         };
+        canvas.videoComp_lc.lc_giveExclusiveAudio = function(publicSID) {
+            if ($debug) Debug.write("lc_giveExclusiveAudio", publicSID);
+            canvas.thishib.giveExclusiveAudio.setExclusiveAudio(publicSID);
+        };
         canvas.videoComp_lc.as3ConnectionSuccess = function() {
         	//FIXME: Throws a Null Pointer Exception if the parent view was already destroyed
         	t.parent.as3ConnectionSuccess();
@@ -120,8 +124,12 @@
         Mutes/unmutes a sound of user's video
         with the publicSID
     -->
-    <method name="muteSound" args="publicSID">
-        canvas.lc.send(canvas.vid_lc_name, "muteSound", publicSID);
+    <method name="muteSound" args="publicSID, bool">
+        canvas.lc.send(canvas.vid_lc_name, "muteSound", publicSID, bool);
+    </method>
+
+    <method name="giveExclusiveAudio" args="publicSID">
+        canvas.lc.send(canvas.vid_lc_name, "giveExclusiveAudio", publicSID);
     </method>
 
     <!---

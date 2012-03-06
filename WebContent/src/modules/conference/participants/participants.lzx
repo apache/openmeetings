@@ -54,16 +54,16 @@
     <method name="initList">
     	//
     </method>
-    
+
     <commonVideoComponentAdapter name="_videoviewcontent" />
-                  
+
     <method name="reconnectSuccess">
         if ($debug) Debug.write("User Reloged In");
-        //Send to SWF10 video-container to connect on the conference room url 
+        //Send to SWF10 video-container to connect on the conference room url
         //and wait for the as3ConnectionSuccess-Event
         this._videoviewcontent.reconnectSuccess(false);
     </method>
-    
+
     <!---
         We need to wait till the video-container / as3 app has the connection established
         otherwise it can happen that the video tries to start playing before the rtmp-connection
@@ -72,15 +72,15 @@
     <method name="as3ConnectionSuccess">
     	if ($debug) Debug.write("as3ConnectionSuccess continue loading");
     	//set default values and get already availible streams
-    	//it can happen that if you click to exit the room the views are not 
+    	//it can happen that if you click to exit the room the views are not
     	//not cleaned up yet and you receive this event from the LocalConnection
     	if (this["getRoomModeratorsByRoomId"]) {
             this.getRoomModeratorsByRoomId.doCall();
     	}
     </method>
-    
-    
-    
+
+
+
     <!---
         Returns a list of all moderators of the current room and parses 
         if the current user should receive the supermoderator flag or not
@@ -186,7 +186,22 @@
      -->     
     <method name="setAVSettingsToClient" args="rcl">
         this._videoviewcontent.setAVSettingsToClient(rcl);
-    </method> 
+    </method>
+
+    <method name="receiveExclusiveAudioFlag" args="publicSID">
+    <![CDATA[
+        var obj = this._participants.getVideoObjectByPublicSID(publicSID);
+
+        for (var i=0; i<obj.parent.subviews.length; i++) {
+            var item = obj.parent.subviews[i];
+            var rcl = new Object();
+
+            rcl.publicSID = item.refObj.publicSID;
+            rcl.micMuted = !(publicSID == item.refObj.publicSID);
+            canvas.setMuteStatus(rcl);
+        }
+    ]]>
+    </method>
     
     <method name="addItem" args="connectedSince,isMod,streamid,username,userroom,formatedDate,position,color,object">
         <![CDATA[

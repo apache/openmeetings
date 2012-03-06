@@ -449,14 +449,18 @@
                 if(!this.parent.parent.isremote) {
                     if ($debug) Debug.write("editRecordStream ################# baseVideObject ");
                     if (this.parent.parent.isInterview) {
-                        new lz.editRecordStream(parent.parent.parent,{
+                        //TODO: fix it
+                        new lz.editRecordStreamSWF10(canvas.inner,{
+                                name:"editRecordStream",
                                 doDefaultAnimation:false,
                                 align:'center',valign:'middle',
                                 isInterview:true,
                                 myvideocontainer:parent.parent,
                                 isSyncUpdate:true});
                     } else {
-                        new lz.editRecordStream(canvas.main_content._content.inner,{
+                        new lz.editRecordStreamSWF10(canvas.inner,{
+                                name:"editRecordStream",
+                                isInterview:false,
                                 isSyncUpdate:true});
                     }
                 }
@@ -503,8 +507,7 @@
         <miniIcons name="_micButton" width="40" height="40" resource="mic_rsc" showhandcursor="true">
             <handler name="onclick">
                 <![CDATA[
-                    canvas.thishib.giveExclusiveAudio.publicSID = parent.parent.publicSID;
-                    canvas.thishib.giveExclusiveAudio.doCall();
+                    parent.parent.giveExclusiveAudio();
                 ]]>
             </handler>
             <labelTooltip labelid="1386" />
@@ -559,6 +562,10 @@
         }
         ]]>
     </handler>
+
+    <method name="giveExclusiveAudio">
+        canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_giveExclusiveAudio', this.publicSID);
+    </method>
     
     <!--
         This will mute the Microphone only to the person that is speaking
@@ -574,10 +581,10 @@
                 if ($debug) Debug.write("Set Mute for Client :: ",roomClientObj);
                 if (roomClientObj.micMuted) {
                     if ($debug) Debug.write("############ SET GAIN 0");
-                    this._chatvideoinner._videostream.micro.setGain(0);
+                    this._chatvideoinner._videostream.muteMicro(true);
                 } else {
-                    if ($debug) Debug.write("############ SET GAIN 50 micro: ",this._chatvideoinner._videostream.micro);
-                    this._chatvideoinner._videostream.micro.setGain(50);
+                    if ($debug) Debug.write("############ SET GAIN 50");
+                    this._chatvideoinner._videostream.muteMicro(false);
                 }
             }
             this.isMutedByModerator = roomClientObj.micMuted;
@@ -609,6 +616,7 @@
                                                refObj:this,showCheckBox:false});
                 return;
         	} else {
+        	    this._chatvideoinner._videostream.muteMicro(false);
         	    canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_switchMicMuted', this.publicSID, false);
         	}
         } else {
@@ -657,6 +665,10 @@
     <method name="confirmGloballyOff" args="bool,t" >
     	if ($debug) Debug.write("confirmGloballyOff :: ",bool);
     	if (bool) {
+            this.setMicMuted(true);
+            if(this.publicSID == canvas.publicSID) {
+                this._chatvideoinner._videostream.muteMicro(true);
+            }
             canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_switchMicMuted', this.publicSID, true);
     	}
     </method>

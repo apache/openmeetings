@@ -9,7 +9,7 @@
             </passthrough>
         </when>
     </switch>
-    
+
     <include href="testVideoObject.lzx" />
 
     <silverstyle name="componentStyle" basecolor="0xFFFFFF" textcolor="0x000000" />
@@ -49,6 +49,8 @@
     <include href="miniIcons.lzx" />
 
     <include href="dragHelper.lzx" />
+
+    <include href="modules/conference/popups/" />
 
     <view name="mainComponent" width="${canvas.width}" height="${canvas.height}">
         <text id="mainBaseText"> </text>

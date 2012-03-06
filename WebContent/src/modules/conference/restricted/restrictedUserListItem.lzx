@@ -26,12 +26,12 @@
 	<attribute name="connectedSince" value="" type="string" />
 	
     <attribute name="isMod" value="false" type="boolean" />
-    <attribute name="canDraw" value="false" type="boolean" />
-    <attribute name="canShare" value="false" type="boolean" />
-    <attribute name="canRemote" value="false" type="boolean" />
-    <attribute name="canGiveAudio" value="false" type="boolean" />
-    <attribute name="isBroadcasting" value="false" type="boolean" />
-    <attribute name="micMuted" value="false" type="boolean" />
+    <!--<attribute name="canDraw" value="false" type="boolean" />-->
+    <!--<attribute name="canShare" value="false" type="boolean" />-->
+    <!--<attribute name="canRemote" value="false" type="boolean" />-->
+    <!--<attribute name="canGiveAudio" value="false" type="boolean" />-->
+    <!--<attribute name="isBroadcasting" value="false" type="boolean" />-->
+    <!--<attribute name="micMuted" value="false" type="boolean" />-->
     
     <attribute name="streamid" value="" type="string" />
     <attribute name="username" value="" type="string" />
@@ -60,8 +60,17 @@
             }
         ]]>
     </handler>
-    
-    
+
+    <handler name="onMute" reference="canvas.thishib.switchMicMuted" args="event">
+        <![CDATA[
+            if ($debug) Debug.write("onMute ", event.publicSID, event.mute);
+            if(this.refObj.publicSID == event.publicSID) {
+                this.refObj.micMuted = event.mute;
+                this.updateModeratorIcons();
+            }
+        ]]>
+    </handler>
+
 	<method name="updateIconByMod">
 		if (this.clickable) {
         	this.isMod = canvas.getIsModeratorByPublicSID(this.refObj.publicSID);
@@ -108,7 +117,7 @@
             this._content._iconsModerator.setAttribute("visibility","hidden");
     	}
     </method>
-    
+
 	<view name="_content" width="254">
 		
 		<view name="_contentIsCurrent" visible="${ parent.parent.selfItem }"

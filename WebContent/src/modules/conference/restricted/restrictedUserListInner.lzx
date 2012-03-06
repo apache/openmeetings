@@ -182,8 +182,23 @@
         </view>
     </view>
     
-    <moderationMiniIconsEventUserList name="_applyAndStatusIcons" 
-                          x="$once{ parent.width-this.width-20 }" y="2" />
+    <moderationMiniIconsEventUserList name="_applyAndStatusIcons" x="$once{ parent.width-this.width-20 }" y="2" >
+        <handler name="onismoderator" reference="canvas" args="m">
+            this.updateIcons();
+        </handler>
+        <handler name="ondrawAllowStatus" reference="canvas" args="drawObject">
+            this.updateIcons();
+        </handler>
+        <handler name="onexclusiveAudioAllowStatus" reference="canvas" args="rclObject">
+            this.updateIcons();
+        </handler>
+        <handler name="onlastBroadCastingUser" reference="canvas" args="userObject">
+            this.updateIcons();
+        </handler>
+        <handler name="onmicMutedStatusChangedItem" reference="canvas" args="userObject">
+            this.updateIcons();
+        </handler>
+    </moderationMiniIconsEventUserList>
     
     
     <turnOverListOrderedPaged name="_table" showTopBar="false" x="1"

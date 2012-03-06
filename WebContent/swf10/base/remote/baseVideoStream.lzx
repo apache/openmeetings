@@ -42,6 +42,9 @@
 		@keywords final -->
 	<attribute name="soundRefMC" value="null" />
 
+    <!--- Default mic gain -->
+    <attribute name="micGain" value="50" type="number"/>
+
 	<event name="onMetaDataEvent" />
 	<event name="onPlayStatusEvent" />
 	<event name="onCuePointEvent" />
@@ -241,6 +244,17 @@
         //this.soundRef.setVolume(volume);
         if (this._ns!=null){
             this._ns.soundTransform = new SoundTransform(volume/100.0);
+        }
+    </method>
+
+    <method name="muteMicro" args="mute">
+        if(this.micro != null) {
+            if(mute) {
+                this.setAttribute('micGain', this.micro.gain);
+                this.micro.gain = 0;
+            } else {
+                this.micro.gain = this.micGain;
+            }
         }
     </method>
     

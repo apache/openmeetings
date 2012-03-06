@@ -1285,6 +1285,10 @@
         <netRemoteCallHib name="giveExclusiveAudio" funcname="giveExclusiveAudio">
             <attribute name="publicSID" value="0" type="string" />
             <netparam><method name="getValue">return parent.publicSID;</method></netparam>
+            <method name="setExclusiveAudio" args="tPublicSID">
+                this.publicSID = tPublicSID;
+                this.doCall();
+            </method>
         </netRemoteCallHib>
 
         <netRemoteCallHib name="receiveExclusiveAudioFlag" funcname="receiveExclusiveAudioFlag">
@@ -1292,16 +1296,7 @@
             <handler name="ondata" args="value">
                 <![CDATA[
                     //The onResult-Handler will be called be the rtmpconnection
-                    var obj = canvas._videocontainer.getVideoObjectByPublicSID(value.publicSID);
-
-                    for (var i=0; i<obj.parent.subviews.length; i++) {
-                        var videoObj = obj.parent.subviews[i];
-                        var rcl = new Object();
-
-                        rcl.publicSID = videoObj.publicSID;
-                        rcl.micMuted = !(value.publicSID == videoObj.publicSID);
-                        canvas.setMuteStatus(rcl);
-                    }
+                    canvas._videocontainer.receiveExclusiveAudioFlag(value.publicSID)
                 ]]>
             </handler>
         </netRemoteCallHib>
@@ -1309,9 +1304,14 @@
         <netRemoteCallHib name="switchMicMuted" funcname="switchMicMuted">
             <attribute name="publicSID" value="" type="string" />
             <attribute name="mute" value="false" type="boolean" />
+            <event name="onMute" args="event"/>
             <method name="setMute" args="tPublicSID,tMute">
                 this.publicSID = tPublicSID;
                 this.mute = tMute;
+                var obj = new Array();
+                obj["mute"] = tMute;
+                obj["publicSID"] = tPublicSID;
+                this.onMute.sendEvent(obj);
                 this.doCall();
             </method>
             <netparam><method name="getValue">return parent.publicSID;</method></netparam>
