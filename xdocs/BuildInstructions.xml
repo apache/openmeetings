@@ -92,6 +92,7 @@
 				<p>To develop OpenMeetings you need at least: </p>
 				<ul>
 					<li>Eclipse in a up to date copy and Sun JDK6 </li>
+					<li>Apache ANT (minimum) 1.8.3</li>
 					<li>
 						Subclipse 1.8 (Subversion 1.7 required!)
 						<a href="http://subclipse.tigris.org/" target="_BLANK" rel="nofollow">http://subclipse.tigris.org/
