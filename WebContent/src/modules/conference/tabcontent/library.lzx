@@ -20,7 +20,10 @@
 -->
 <library>
 
-	<include href="files/" />
+	<resource name="messagebox_info_rsc" src="resources/messagebox_info.png" />
+	<resource name="_filesave_icon_pdf_rsc" src="resources/pdf.png" />
+	<resource name="_filesave_icon_original_rsc" src="resources/filesave.png" />
+
 	<include href="chat/" />
     
 </library>

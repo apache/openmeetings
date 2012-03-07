@@ -220,7 +220,7 @@
                 	   	   height:theight
                 	   });
     	   
-    	   this[tName].playVideoStream(recordingName,0);
+    	   this.whiteboardVideos[tName].playVideoStream(recordingName,0);
     	]]>
     </method>
     
