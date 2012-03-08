@@ -96,7 +96,7 @@
 	</text>
 	
     <miniIcons name="add" resource="edit_add_rsc" width="16" height="16" 
-                   y="2" x="$once{ parent.width - 114 }" showhandcursor="true">
+                   y="2" x="$once{ parent.width - 122 }" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("Start Conference");
             if (hib.userobject.user_id == parent.user_id) {

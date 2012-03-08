@@ -312,7 +312,7 @@
             
             <overAllChat name="_overallchat" visibility="hidden" />
             
-            <rssBox name="feed1" visibility="hidden" width="${ parent.width-2 }" 
+            <rssBox name="feed1" visibility="hidden" width="${ parent.width-4 }" 
                             height="${ parent.height }" y="0" x="2" />
 
                <!--
