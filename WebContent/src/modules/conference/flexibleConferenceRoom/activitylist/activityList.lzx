@@ -567,7 +567,7 @@
     	]]>
     </method>
     
-    <view name="_list" y="20" height="180" bgcolor="0xFFFFFF"
+    <view name="_list" y="20" height="180" bgcolor="0xEEF0EB"
     	  width="$once{ parent.width+8 }" clip="true">
         
         <view name="_list">

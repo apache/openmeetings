@@ -21,10 +21,10 @@
 <library>
 
 <!--- View of the buttom area of chat. It contains buttons of message,emoticons,clear. -->
-<class name="chatTabBottom" extends="view" >
+<class name="chatTabBottom" extends="view" height="42">
 
 		<view x="0" y="0" height="20" width="${ parent.width-2 }" name="message" 
-			  bgcolor="$once{ canvas.basebgcolorizer }">
+			  bgcolor="0xBBBBBB">
 			<method name="getText">
 				return this._ctext.getText();
 			</method>
@@ -35,19 +35,55 @@
 				x="1" y="1" bgcolor="white" >
 				<handler name="onkeyup" args="key">
 	                <![CDATA[
-	                if ($debug) Debug.write("onkeyup");
-	                
 	                var reverse = canvas.reverseAll(parent.getText());
-	                if ($debug) Debug.write("reverse : ", reverse);
 	                
-	               // parent.setText(reverse);
+	                // parent.setText(reverse);
 	                // 13 is return
 	                if ((key==27) || (key==13)) {
-	                	this.parent.parent._button._button.onclick.sendEvent();
+	                	this.parent._button.onclick.sendEvent();
 	                }
 	                ]]>
 	            </handler>
-			</customInputtext>		
+			</customInputtext>	
+			
+			<attribute name="objMessage" value="null" />
+        
+	        <simpleLabelButton name="_button" labelid="220" height="21" width="80" 
+	        		x="$once{ parent.width-80 }" > 
+	            <handler name="onclick">
+	                parent.objMessage = new Array ();
+	                parent.objMessage[0] = 'chat';
+	                //The server side will put time here
+	                parent.objMessage[1] = "";
+	                //Debug.write("Setting Message");
+	                parent.objMessage[2] = 'newtextmessage';
+	                parent.objMessage[3] = hib.userobject.login;
+	                var message = this.parent.getText();
+	                //if (parent.parent._inverseWording.getValue()) message = canvas.reverseAll(message)
+	                parent.objMessage[4] = message;
+	                parent.objMessage[5] = canvas.currentusercolor;
+	                parent.objMessage[6] = canvas.publicSID;
+	                parent.objMessage[7] = canvas.isrtl;
+	                parent.objMessage[8] = hib.userobject.user_id;
+	                if (this.parent.getText().length!=0){
+	                    //Debug.write("send: ",this.parent.objMessage);
+	                    parent.sendMessageWithClient.doCall();
+	                    this.parent.setText('');
+	                }
+	            </handler>
+	        </simpleLabelButton>
+	        
+	        <netRemoteCallHib name="sendMessageWithClient" funcname="chatservice.sendMessageWithClient" 
+	            remotecontext="$once{ canvas.thishib }" > 
+	            <netparam><method name="getValue"> return parent.parent.objMessage; </method></netparam>
+	            <handler name="ondata" args="value">
+	                <![CDATA[
+	                    //The onResult-Handler will be called be the rtmpconnection
+	                    if ($debug) Debug.write("chatservice.sendMessageWithClient getValue : ",value);
+	                ]]>
+	            </handler>   
+	        </netRemoteCallHib>
+				
 		</view>
         
     <labelCheckbox name="_inverseWording" x="2" y="24" labelid="580">
@@ -76,46 +112,6 @@
 
     <view name="_button" width="140" y="22" align="right">
         
-        <attribute name="objMessage" value="null" />
-        
-        <simpleLabelButton name="_button" labelid="220" height="21" width="80" > 
-            <handler name="onclick">
-                parent.objMessage = new Array ();
-                parent.objMessage[0] = 'chat';
-                //The server side will put time here
-                parent.objMessage[1] = "";
-                //Debug.write("Setting Message");
-                parent.objMessage[2] = 'newtextmessage';
-                parent.objMessage[3] = hib.userobject.login;
-                var message = this.parent.parent.message.getText();
-                //if (parent.parent._inverseWording.getValue()) message = canvas.reverseAll(message)
-                parent.objMessage[4] = message;
-                parent.objMessage[5] = canvas.currentusercolor;
-                parent.objMessage[6] = canvas.publicSID;
-                parent.objMessage[7] = canvas.isrtl;
-                parent.objMessage[8] = hib.userobject.user_id;
-                if (this.parent.parent.message.getText().length!=0){
-                    //Debug.write("send: ",this.parent.objMessage);
-                    parent.sendMessageWithClient.doCall();
-                    this.parent.parent.message.setText('');
-                }
-            </handler>
-        </simpleLabelButton>
-        
-        <!--
-        <miniIcons resource="copy_chat_log_rsc"	y="0" x="$once{ parent.width - 72 }" width="16" height="16" 
-				   showhandcursor="true">
-			<handler name="onclick">
-	            if ($debug) Debug.write("Start Conference");
-	            new lz.chatParticipantsInviteConference(canvas,{
-	                            publicSID:parent.publicSID,
-	                            user_id:parent.user_id
-	                        });
-	        </handler>
-	        <labelTooltip labelid="1131" />
-		</miniIcons>
-		 -->
-
         <miniIcons y="2" x="82" resource="smile_chat_log_rsc" width="16" height="16" 
                    showhandcursor="true">
             <handler name="onclick">
@@ -128,31 +124,12 @@
             </handler>
             <labelTooltip labelid="445" />
         </miniIcons>
-        <!--
-        <blueButton name="_show_emots" y="0" resourceItem="smile_chat_log_rsc"
-        			x_insetResource="2" y_insetResource="2" width="20" height="20" 
-        			width_insetResource="16" height_insetResource="16">
-            <handler name="onclick">
-                //parent.clearOverallChat.doCall();
-                var pick = new lz.emotIconsSelector(canvas,{
-                        btnRef:this.parent.parent,
-                        x:(this.getAttributeRelative('x',canvas)-140),
-                        y:(this.getAttributeRelative('y',canvas)-140)
-                    });
-                lz.ModeManager.makeModal( pick );
-            </handler>
-            <labelTooltip labelid="445" />
-            
-        </blueButton>  
-         -->
         
         <miniIcons y="2" x="102" resource="copy_chat_log_rsc" width="16" height="16" 
                    showhandcursor="true">
             <handler name="onclick">
                 <![CDATA[
-                
                     var tString = canvas._chatcontent.getLog();
-                
                     new lz.showChatLog(canvas,{
                                     error:tString
                                 });
@@ -160,23 +137,6 @@
             </handler>
             <labelTooltip labelid="1200" />
         </miniIcons>
-        <!--
-        <blueButton width="20" height="20" resourceItem="copy_chat_log_rsc"
-        			x_insetResource="2" y_insetResource="2" 
-        			width_insetResource="16" height_insetResource="16">
-            <handler name="onclick">
-                <![CDATA[
-                
-                	var tString = canvas._chatcontent.getLog();
-                
-                	new lz.showChatLog(canvas,{
-			                		error:tString
-			                	});
-                ]]>
-            </handler>
-            <labelTooltip labelid="1200" />
-        </blueButton>  
-         -->
          
         <miniIcons y="2" x="122" resource="button_cancel_rsc" width="16" height="16" 
                    showhandcursor="true">
@@ -190,22 +150,6 @@
             </handler>
             <labelTooltip labelid="442" />
         </miniIcons>  
-        <!--      
-        <blueButton width="20" height="20" resourceItem="button_cancel_rsc"
-        			x_insetResource="2" y_insetResource="2" 
-        			width_insetResource="16" height_insetResource="16">
-            
-            <handler name="onclick">
-            	if (!canvas.ismoderator) {
-        			//Do not allow
-        			new lz.labelerrorPopup(canvas,{errorlabelid:783});
-        			return;
-        		}
-                parent.clearChat.doCall();
-            </handler>
-            <labelTooltip labelid="442" />
-        </blueButton>
-         -->
         
         <view width="1" />
         
@@ -215,24 +159,11 @@
                 <![CDATA[
                     //The onResult-Handler will be called be the rtmpconnection
                     if ($debug) Debug.write("clearChat : ",value);
-                       
                 ]]>
             </handler>   
         </netRemoteCallHib>     
         
-        <netRemoteCallHib name="sendMessageWithClient" funcname="chatservice.sendMessageWithClient" 
-            remotecontext="$once{ canvas.thishib }" > 
-            <netparam><method name="getValue"> return parent.parent.objMessage; </method></netparam>
-            <handler name="ondata" args="value">
-                <![CDATA[
-                    //The onResult-Handler will be called be the rtmpconnection
-                    if ($debug) Debug.write("chatservice.sendMessageWithClient getValue : ",value);
-                ]]>
-            </handler>   
-        </netRemoteCallHib>
-        
     </view>
-
 
 </class>
 

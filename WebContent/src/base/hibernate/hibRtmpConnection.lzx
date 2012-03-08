@@ -1516,6 +1516,8 @@
                         canvas.startBrowser(value);
                     } else if(value[0]=='closeBrowserURL'){
                         canvas.closeBrowser(value);
+                    } else if(value[0]=='clearOverallChatHistory'){
+                        canvas._overallchatcontent.clear();
                     }
                     
                 ]]>
@@ -1893,73 +1895,6 @@
             ]]>
         </handler>   
     </netRemoteCallHib>  
-    
-    <!-- ###########################
-    New Screen Sharing Methods
-    @deprecated 
-    <netRemoteCallHib name="newScreenSharing" funcname="newScreenSharing">
-        <handler name="ondata" args="value">
-            <![CDATA[
-                //The onResult-Handler will be called be the rtmpconnection
-                if ($debug) Debug.write("newScreenSharing: ",value,value.deleted);
-                if (!value.deleted) {
-                    new lz.sharingSession(canvas._screens,{name:'_screen',sharingSessionObject:value});
-                } else {
-                    var screenObj = canvas._screens.searchForSession(value.s);
-                    if (screenObj != null) {
-                       screenObj.close();
-                    }
-                }
-            ]]>
-        </handler>   
-    </netRemoteCallHib>  
-    
-    newScreenCursorPosition
-    @deprecated
-    <netRemoteCallHib name="newScreenCursorPosition" funcname="newScreenCursorPosition">
-        <handler name="ondata" args="value">
-            <![CDATA[
-                //The onResult-Handler will be called be the rtmpconnection
-                //if ($debug) Debug.write("newScreenCursorPosition: ",value);
-                var screenObj = canvas._screens.searchForSession(value.s);
-                if (screenObj != null) {
-                    screenObj.updateCursor(value.x,value.y);
-                }
-            ]]>
-        </handler>   
-    </netRemoteCallHib>
-    
-    @deprecated
-    <netRemoteCallHib name="newScreenFrame" funcname="newScreenFrame">
-        <handler name="ondata" args="value">
-            <![CDATA[
-                //The onResult-Handler will be called be the rtmpconnection
-                //if ($debug) Debug.write("newScreenFrame: ",value);
-                //canvas._screens._screen.sendNewFrame(value);
-                var screenObj = canvas._screens.searchForSession(value.s);
-                if (screenObj != null) {
-                    screenObj.sendNewFrame(value);
-                }
-            ]]>
-        </handler>   
-    </netRemoteCallHib>  
-    
-    @deprecated
-    <netRemoteCallHib name="checkSharingSession" funcname="checkSharingSession">
-        <handler name="ondata" args="value">
-            <![CDATA[
-                //The onResult-Handler will be called be the rtmpconnection
-                if ($debug) Debug.write("checkSharingSession: ",value);
-                //canvas._screens._screen.sendNewFrame(value);
-                for (var i=0;i<value.length;i++) {
-                    if (!value[i].deleted) {
-                        new lz.sharingSession(canvas._screens,{name:'_screen',sharingSessionObject:value[i]});
-                    }
-                }
-            ]]>
-        </handler>   
-    </netRemoteCallHib>  
-     -->
     
     
     <!-- Recording of Meetings -->

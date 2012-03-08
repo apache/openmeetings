@@ -23,7 +23,7 @@
 
 <!--- chat output specialized for video-conference -->
 <class name="chatOutput" extends="view" height="${ parent.height-2 }" 
-            clip="true" bgcolor="0xFFFFFF" width="${ parent.width-2 }" >
+            clip="true" width="${ parent.width-2 }" bgcolor="0xFFFFFF">
 
     <attribute name="isAlreadyLoaded" value="false" type="boolean"/>
 <!---
@@ -137,7 +137,7 @@
         ]]>
     </method>
     
-    <view name="_cbtext" width="${ parent.width - 14 }" layout="axis:y;spacing:2" >
+    <view name="_cbtext" width="${ parent.width }" layout="axis:y;spacing:0" >
     	<method name="clearChatOutput">
     		<![CDATA[
     			while (this.subviews.length>0){

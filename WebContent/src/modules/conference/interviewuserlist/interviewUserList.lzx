@@ -104,7 +104,7 @@
                 if ($debug) Debug.write("canvas.becomemoderator: ",canvas.becomemoderator);
                 if ($debug) Debug.write("canvas.becomeSuperModerator: ",canvas.becomeSuperModerator);
                 
-                canvas.currentusercolor = parent._participants.getColorForUser();
+                canvas.currentusercolor = canvas.getColorForUser();
                 
                 var organisation_id = 1;
             

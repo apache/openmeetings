@@ -75,8 +75,11 @@
             ]]>
         </handler>
     </netRemoteCallHib> 
+    
+    <view width="$once{ parent.width }" height="$once{ parent.height-1 }" 
+    	bgcolor="0xFFFFFF" opacity="0.2" />
 	
-	<image name="_userpic" stretches="both">
+	<image name="_userpic" stretches="both" x="1" y="1">
 		<handler name="onload">
             <![CDATA[
                 if (this.height > 38) {

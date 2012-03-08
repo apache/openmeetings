@@ -78,6 +78,15 @@
     <confmenucommand id="cmd_exportFileTIF" onselect="canvas.doWhiteboardActionmenu('exportFileTIF')" />
     
     
+    <attribute name="colorArray" value="null" />
+    
+    <method name="getColorForUser">
+    	<![CDATA[
+    	   var colorArray = [0x92E8A4,0xC2F1FF,0xFFFCAE,0xE8C792,0xFF8073,
+                            0xE8DB87,0xAFFFB8,0xBED4FF,0xE0BBE8,0xFFBBA5];
+    	   return colorArray[Math.round(Math.random()*10)];
+    	]]>
+    </method>
         
     <dataset type="http" name="languageData" request="false" 
         src="${ canvas.currentlanguage+'.xml' }" proxied="false">
@@ -156,24 +165,19 @@
         
         this.setAttribute('dashboardModuleStartScreen',canvas.myConfigSet.getPointer().xpathQuery('config/dashboardModuleStartScreen/text()'));  
         this.setAttribute('dashboardModuleCalendar',canvas.myConfigSet.getPointer().xpathQuery('config/dashboardModuleCalendar/text()'));  
-        
         this.setAttribute('conferenceModuleRoomList',canvas.myConfigSet.getPointer().xpathQuery('config/conferenceModuleRoomList/text()'));  
         this.setAttribute('conferenceRoomModule',canvas.myConfigSet.getPointer().xpathQuery('config/conferenceRoomModule/text()'));  
-        
         this.setAttribute('restrictedRoomModule',canvas.myConfigSet.getPointer().xpathQuery('config/restrictedRoomModule/text()'));  
-        
         this.setAttribute('interviewRoomModule',canvas.myConfigSet.getPointer().xpathQuery('config/interviewRoomModule/text()'));  
-        
-        
         this.setAttribute('userSettingsModule',canvas.myConfigSet.getPointer().xpathQuery('config/userSettingsModule/text()'));  
-        
-        this.setAttribute('recordModule',canvas.myConfigSet.getPointer().xpathQuery('config/recordModule/text()'));  
-        
+        this.setAttribute('recordModule',canvas.myConfigSet.getPointer().xpathQuery('config/recordModule/text()'));
+          
         this.setAttribute('httpRootKey',canvas.myConfigSet.getPointer().xpathQuery('config/httpRootKey/text()'));
-        
         this.setAttribute('protocol',canvas.myConfigSet.getPointer().xpathQuery('config/protocol/text()'));  
-        
         this.setAttribute('proxyType',canvas.myConfigSet.getPointer().xpathQuery('config/proxyType/text()'));
+
+		//set user color
+		canvas.currentusercolor = canvas.getColorForUser();
 
         var lc_SID = lz.Browser.getInitArg('lc_SID');
         
@@ -183,6 +187,8 @@
         	new lz.errorPopup(canvas,{'error':'You are loading the wrong SWF, there is no lz_SID given'});
         	return;
         }
+        
+        
 
         this.setAttribute('lc_SID', lc_SID);
         this.setAttribute('vid_lc_name', this.lc_SID + "__videoLC");

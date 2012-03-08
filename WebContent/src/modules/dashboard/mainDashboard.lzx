@@ -227,7 +227,7 @@
                     
         </view>        
     		
-    	<view name="_boxes" height="${ parent.height-44 }" width="${ parent.width }" y="43">	
+    	<view name="_boxes" height="${ parent.height-42 }" width="${ parent.width }" y="41">	
     	
             <view name="myMeetings" height="${ parent.height }" width="${ parent.width }" visibility="hidden" >
         

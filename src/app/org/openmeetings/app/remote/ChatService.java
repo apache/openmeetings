@@ -26,12 +26,14 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.conference.session.RoomClient;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.EmoticonsManager;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.stringhandlers.ChatString;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
@@ -40,6 +42,7 @@ import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.api.service.IServiceCapableConnection;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 
@@ -47,6 +50,9 @@ import org.slf4j.Logger;
  *
  */
 public class ChatService implements IPendingServiceCallback {
+	
+	@Autowired
+	private ScopeApplicationAdapter scopeApplicationAdapter;
 
 	//the overall chatroom is jsut another room
 	private static final Long overallChatRoomName = new Long(-1);
@@ -408,6 +414,11 @@ public class ChatService implements IPendingServiceCallback {
 			myChatList = new LinkedList<HashMap<String,Object>>();
 			
 			myChats.put(overallChatRoomName,myChatList);
+			
+			//Send event to clear to all participants
+			Map<Integer,String> newMessage = new HashMap<Integer,String>();
+			newMessage.put(0, "clearOverallChatHistory");
+			scopeApplicationAdapter.sendMessageToMembers(newMessage);
 			
 			return myChatList;
 			

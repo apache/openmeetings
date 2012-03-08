@@ -34,6 +34,10 @@
         this.getOverallChatHistory.doCall();
     </method>
     
+    <method name="clear">
+    	this._cbtext.clearChatOutput();
+    </method>
+    
     <netRemoteCallHib name="getOverallChatHistory" funcname="chatservice.getOverallChatHistory" 
         remotecontext="$once{ canvas.thishib }" > 
         <handler name="ondata" args="value">
@@ -107,7 +111,7 @@
         ]]>
     </method>
     
-    <view name="_cbtext" width="$once{ parent.width }" layout="axis:y;spacing:2" >
+    <view name="_cbtext" width="$once{ parent.width }" layout="axis:y;spacing:0" >
     	<method name="clearChatOutput">
     		<![CDATA[
     			if($debug) Debug.write("overAllChatOutput/clearChatOutput ",this.subviews.length);

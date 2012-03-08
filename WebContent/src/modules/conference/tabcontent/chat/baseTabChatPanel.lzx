@@ -27,7 +27,7 @@
 	#################################################
 	 -->
 
-	<class name="baseTabChatPanel" extends="basePropertyPanel">
+	<class name="baseTabChatPanel" extends="basePropertyPanel" >
 
 		<attribute name="fadeDelegate" value="null" />
 		<attribute name="doBlink" value="false" type="boolean" />
