@@ -123,10 +123,6 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet>
-        <servlet-name>AxisAdminServlet</servlet-name>
-        <servlet-class>org.apache.axis2.transport.http.AxisAdminServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>ServerUDP</servlet-name>
         <servlet-class>org.openmeetings.server.servlets.ServerOutputHandler</servlet-class>
     </servlet>
@@ -186,19 +182,7 @@
     <!-- Axis2 -->
     <servlet-mapping>
         <servlet-name>AxisServlet</servlet-name>
-        <url-pattern>/servlet/AxisServlet</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>AxisServlet</servlet-name>
-        <url-pattern>*.jws</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>AxisServlet</servlet-name>
         <url-pattern>/services/*</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>AxisAdminServlet</servlet-name>
-        <url-pattern>/axis2-admin/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ServerUDP</servlet-name>
@@ -220,15 +204,6 @@
         <extension>inc</extension>
         <mime-type>text/plain</mime-type>
     </mime-mapping>
-    <!-- Axis2 -->
-    <error-page>
-        <error-code>404</error-code>
-        <location>/axis2-web/Error/error404.jsp</location>
-    </error-page>
-    <error-page>
-        <error-code>500</error-code>
-        <location>/axis2-web/Error/error500.jsp</location>
-    </error-page>
      
     <security-constraint>
         <web-resource-collection>
