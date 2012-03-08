@@ -19,65 +19,64 @@
 	xmlns:ivy="antlib:org.apache.ivy.ant"
 	>
 
-	<!-- Sources and output dirs -->
-	<property name="main.src.dir" value="${basedir}/src/app" />
-	<property name="templates.src.dir" value="${basedir}/src/templates" />
-	<property name="test.src.dir" value="${basedir}/src/test" />
-	<property name="main.out.dir" value="${basedir}/bin" />
-
-	<!-- Red5 -->
-	<property name="red5.revision" value="4315" />
-	<property name="red5.server.dir" value="${basedir}/red5" />
-
-	<!-- screen.out.dir -->
-	<property name="screen.out.dir" value="${basedir}/screen_compile" />
-	<!-- screen.src.dir -->
-	<property name="screen.src.dir" value="${basedir}/src/red5-screenshare" />
-
-	<!-- hudson config -->
-	<!-- FIXME hardcoded version -->
 	<property name="version.number" value="2.0" />
+	<property name="project.distname" value="openmeetings" />
 	<property environment="env" />
 
-	<property name="build.number.hudson" value="${env.BUILD_NUMBER}" />
-	<property name="build.target" value="/home/swagner/apache-tomcat-6.0.18/webapps/openmeetings/builds/" />
-
-	<!-- Axis2 Services -->
 	<property name="fileservice.src.dir" value="${basedir}/src/fileservice" />
 	<property name="roomservice.src.dir" value="${basedir}/src/roomservice" />
 	<property name="userservice.src.dir" value="${basedir}/src/userservice" />
 	<property name="calendarservice.src.dir" value="${basedir}/src/calendarservice" />
-
-	<!-- Doclet Classes -->
+	<property name="main.src.dir" value="${basedir}/src/app" />
+	<property name="templates.src.dir" value="${basedir}/src/templates" />
+	<property name="test.src.dir" value="${basedir}/src/test" />
+	<property name="screen.src.dir" value="${basedir}/src/red5-screenshare" />
 	<property name="doclet.src.dir" value="${basedir}/src/docgenerator" />
-	<property name="classes.dir" value="${basedir}/bin" />
+
 	<property name="dist.dir" value="dist" />
-	<property name="red5.root" value="${dist.dir}/red5" />
 	<property name="report.dir" value="${basedir}/junitreport" />
 	<property name="derbydb.dir" value="${basedir}/openmeetings" />
 
 	<!-- Conf dirs -->
 	<property name="conf.dir" value="${basedir}/conf" />
 
-	<!-- Distribution properties -->
-	<property name="project.distname" value="openmeetings" />
-	<property name="dist.webapps.dir" value="${dist.dir}/red5/webapps/${project.distname}" />
+	<property name="ivy.lib.dir" value="${basedir}/lib" />
+	<property name="build.base.dir" value="${basedir}/build" />
+	<property name="project.lib.dir" value="${build.base.dir}/lib" />
+	<property name="mainlibs.lib.dir" value="${project.lib.dir}/mainlibs" />
+	<property name="om.lib.dir" value="${project.lib.dir}/om" />
+	<property name="anakia.lib.dir" value="${project.lib.dir}/anakia" />
+	<property name="red5-screenshare.images" value="${basedir}/WebContent/red5-screenshare" />
+	<property name="junit.lib.dir" value="${project.lib.dir}/junit" />
+	<property name="rat.lib.dir" value="${project.lib.dir}/rat" />
+	<property name="dtd-generator.lib.dir" value="${project.lib.dir}/dtd-generator" />
+	<property name="svntask.lib.dir" value="${project.lib.dir}/svntask" />
+	
+	<property name="red5.revision" value="4315" />
+	<property name="red5.server.dir" value="${build.base.dir}/red5" />
+	<property name="red5.lib" value="${red5.server.dir}/dist" />
+	<property name="red5.server.lib" value="${red5.lib}/lib" />
+	<property name="red5.root" value="${dist.dir}/red5" />
+	<property name="dist.webapps.dir" value="${red5.root}/webapps/${project.distname}" />
 
+	<property name="laszlo.home" value="${build.base.dir}/openlaszlo" />
+	
 	<!-- screenshare.out.dir -->
 	<property name="screenshare.out.dir" value="${dist.webapps.dir}/red5-screenshare" />
 	
-	<!-- libraries -->
-	<property name="project.lib" value="${basedir}/lib" />
+	<property name="main.out.dir" value="${build.base.dir}/classes/openmeetings" />
+	<property name="screen.out.dir" value="${build.base.dir}/classes/screen_compile" />
 
 	<!-- LPS Properties -->
 	<property name="out.dir.swf" value="${basedir}/${dist.webapps.dir}/" />
-	<property name="laszlo.home" value="${basedir}/openlaszlo" />
 	<property name="webcontent.src.dir" value="${basedir}/WebContent" />
 	<property name="laszlo.as3.src.dir" value="${webcontent.src.dir}/swf10" />
 	<property name="laszlo.src.dir" value="${webcontent.src.dir}/src" />
 	<property name="laszlo.debug" value="false" />
 	<property name="laszlo.proxied" value="solo" />
 
+	<property name="keystore.file" value="${build.base.dir}/filetest.keystore" />
+	
 	<path id="laszlo.lib">
 		<!-- swf8 -->
 		<fileset dir="${laszlo.home}/WEB-INF/lib" includes="saxon-6.5.3-lz-p1.jar jakarta-regexp-1.2.jar
@@ -87,18 +86,6 @@
 			fxgutils.jar" />
 	</path>
 	
-	<property name="mainlibs.lib.dir" value="${project.lib}/mainlibs" />
-	<property name="om.lib.dir" value="${project.lib}/om" />
-	<property name="anakia.lib.dir" value="${project.lib}/anakia" />
-	<property name="red5-screenshare.images" value="${basedir}/WebContent/red5-screenshare" />
-	<property name="junit.lib.dir" value="${project.lib}/junit" />
-	<property name="rat.lib.dir" value="${project.lib}/rat" />
-	<property name="dtd-generator.lib.dir" value="${project.lib}/dtd-generator" />
-	<property name="svntask.lib.dir" value="${project.lib}/svntask" />
-	
-	<property name="red5.lib" value="${red5.server.dir}/dist" />
-	<property name="red5.server.lib" value="${red5.lib}/lib" />
-
 	<!-- compile classpath -->
 	<path id="compile.classpath">
 		<fileset dir="${red5.server.lib}" includes="*.jar" />
@@ -107,8 +94,25 @@
 		<fileset dir="${red5.lib}" includes="*.jar" />
 		<fileset dir="${junit.lib.dir}" includes="*.jar" />
 		<fileset dir="${dtd-generator.lib.dir}" includes="*.jar" />
-		<fileset dir="${project.lib}" includes="*.jar" excludes="ivy*.jar" />
+		<fileset dir="${project.lib.dir}" includes="*.jar" />
 	</path>
+
+	<target name="prepare.mkdir" depends="-java6.check">
+		<mkdir dir="${red5.server.lib}" />
+		<mkdir dir="${screen.out.dir}" />
+		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${main.out.dir}" />
+		<mkdir dir="${mainlibs.lib.dir}" />
+		<mkdir dir="${om.lib.dir}" />
+		<mkdir dir="${anakia.lib.dir}" />
+		<mkdir dir="${junit.lib.dir}" />
+		<mkdir dir="${rat.lib.dir}" />
+		<mkdir dir="${dtd-generator.lib.dir}" />
+		<mkdir dir="${svntask.lib.dir}" />
+		<mkdir dir="${laszlo.home}" />
+		<echo file="${build.base.dir}/velocity.properties" append="false"
+			>runtime.log = ${build.base.dir}/velocity.log${line.separator}</echo>
+	</target>
 
 	<!-- build artefacts -->
 	<target name="dist-bin" description="pack binary distribution" depends="dist">
@@ -145,7 +149,7 @@
 	
 	<!-- build webapp -->
 	<target name="-copy-libraries" description="All jars downloaded by ivy copied to appropriate places">
-		<copy todir="${dist.dir}/red5/lib">
+		<copy todir="${red5.root}/lib">
 			<fileset dir="${mainlibs.lib.dir}" includes="*.jar" />
 		</copy>
 		<copy todir="${dist.webapps.dir}/WEB-INF/lib">
@@ -169,21 +173,6 @@
 	<target name="dist-debug" description="binary distribution of OpenMeetings"
 		depends="cleanForBinary, jar, compile.laszlo.main.debug, compile.laszlo.main.debug.as3, signWebStartJars, -copy-libraries"/>
 
-	<target name="prepare.mkdir" depends="-java6.check">
-		<mkdir dir="${red5.server.lib}" />
-		<mkdir dir="${screen.out.dir}" />
-		<mkdir dir="${dist.dir}" />
-		<mkdir dir="${main.out.dir}" />
-		<mkdir dir="${mainlibs.lib.dir}" />
-		<mkdir dir="${om.lib.dir}" />
-		<mkdir dir="${anakia.lib.dir}" />
-		<mkdir dir="${junit.lib.dir}" />
-		<mkdir dir="${rat.lib.dir}" />
-		<mkdir dir="${dtd-generator.lib.dir}" />
-		<mkdir dir="${svntask.lib.dir}" />
-		<mkdir dir="${laszlo.home}" />
-	</target>
-
 	<condition property="db.provider" value="${db}" else="derby">
 		<isset property="db" />
 	</condition>
@@ -191,7 +180,7 @@
 	<!-- Check timestamp on files -->
 	<target name="prepare" depends="prepare.mkdir">
 		<copy todir="${red5.root}" filtering="true">
-			<fileset dir="${red5.server.dir}/dist">
+			<fileset dir="${red5.lib}">
 				<exclude name="**/*.fla" />
 			</fileset>
 		</copy>
@@ -215,7 +204,7 @@
 			</fileset>
 		</copy>
 
-		<chmod dir="${dist.dir}/red5" perm="755" includes="**/*.sh" />
+		<chmod dir="${red5.root}" perm="755" includes="**/*.sh" />
 
 		<copy todir="${dist.webapps.dir}/WEB-INF/classes/META-INF">
 			<fileset file="src/META-INF/*.xml">
@@ -287,7 +276,7 @@
 			<classpath refid="compile.classpath" />
 		</manifestclasspath>
 		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}.jar">
-			<fileset dir="${classes.dir}">
+			<fileset dir="${main.out.dir}">
 				<include name="**" />
 				<exclude name="**/test/**" />
 				<exclude name="**/axis/**" />
@@ -305,7 +294,7 @@
 			</manifest>
 		</jar>
 		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-templates.jar">
-			<fileset dir="${classes.dir}">
+			<fileset dir="${main.out.dir}">
 				<include name="**" />
 				<exclude name="**/org/**" />
 				<exclude name="**/*.png" />
@@ -325,7 +314,7 @@
 			</fileset>
 		</jar>
 		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/openmeetings-WebService.jar">
-			<fileset dir="${classes.dir}">
+			<fileset dir="${main.out.dir}">
 				<include name="**/openmeetings/axis/**" />
 			</fileset>
 		</jar>
@@ -361,8 +350,8 @@
 	</target>
 
 	<target name="signWebStartJars">
-		<delete file="filetest.keystore" />
-		<genkey alias="filetest" storepass="secret" keystore="filetest.keystore" verbose="true">
+		<delete file="${keystore.file}" />
+		<genkey alias="filetest" storepass="secret" keystore="${keystore.file}" verbose="true">
 			<dname>
 				<param name="CN" value="Sebastian Wagner" />
 				<param name="OU" value="technology" />
@@ -378,14 +367,14 @@
 			<fileset dir="${red5.server.lib}" includes="bcprov-jdk16*.jar" />
 			<fileset dir="${red5.server.lib}" includes="ehcache-core*.jar" />
 			<fileset dir="${red5.server.lib}" includes="commons-beanutils*.jar" />
-			<fileset dir="${red5.server.dir}/dist" includes="red5.jar" />
+			<fileset dir="${red5.lib}" includes="red5.jar" />
 			<fileset dir="${red5.server.lib}" includes="spring-context-3*.jar" />
 			<fileset dir="${red5.server.lib}" includes="spring-core-*.jar" />
 			<fileset dir="${red5.server.lib}" includes="logback*.jar" />
 			<fileset dir="${red5.server.lib}" includes="mina-core*.jar" />
 			<fileset dir="${red5.server.lib}" includes="com.springsource.slf4j.api*.jar" />
 		</copy>
-		<signjar alias="filetest" keystore="filetest.keystore" storepass="secret" lazy="false">
+		<signjar alias="filetest" keystore="${keystore.file}" storepass="secret" lazy="false">
 			<path>
 				<fileset dir="${screenshare.out.dir}">
 					<include name="**/*.jar" />
@@ -502,13 +491,13 @@
 		<delete dir="${report.dir}" />
 		<delete dir="${derbydb.dir}" />
 		<delete dir="${basedir}/log" />
-		<delete file="filetest.keystore" />
+		<delete file="${keystore.file}" />
 		<delete file="derby.log" />
 		<delete file="velocity.log" />
 	</target>
 
 	<path id="jpa.enhancement.classpath">
-		<pathelement path="${classes.dir}" />
+		<pathelement path="${main.out.dir}" />
 		<path refid="compile.classpath" />
 	</path>
 
@@ -530,7 +519,6 @@
 
 	<path id="svntask.classpath">
 		<fileset dir="${svntask.lib.dir}" includes="*.jar" />
-		<fileset dir="${project.lib}" includes="svn*.jar" />
 	</path>
 	<target name="-ant-task" depends="-retrieve-svntask">
 		<typedef resource="org/tigris/subversion/svnant/svnantlib.xml">
@@ -575,7 +563,7 @@
 	</target>
 
 	<path id="build.webservice.classpath">
-		<pathelement path="${classes.dir}" />
+		<pathelement path="${main.out.dir}" />
 		<path refid="compile.classpath" />
 	</path>
 
@@ -610,7 +598,9 @@
     	
 		<anakia basedir="${docs.src}" destdir="${docs.dest}/" extension=".html" 
 			style="./site.vsl" projectFile="stylesheets/project.xml" excludes="**/stylesheets/** empty.xml" 
-			includes="**/*.xml" lastModifiedCheck="true" templatePath="xdocs/stylesheets" />
+			includes="**/*.xml" lastModifiedCheck="true" templatePath="xdocs/stylesheets"
+    		velocityPropertiesFile="${build.base.dir}/velocity.properties"
+		/>
     </target>
 
 	<target name="build.only.webservice.doc" depends="anakia">
@@ -619,8 +609,7 @@
 			<source file="src/roomservice/org/openmeetings/axis/services/RoomWebService.java" />
 			<source file="src/fileservice/org/openmeetings/axis/services/FileWebService.java" />
 			<source file="src/calendarservice/org/openmeetings/axis/services/CalendarWebService.java" />
-			<doclet name="org.openmeetings.doc.WebServiceDoclet" pathref="build.webservice.classpath">
-			</doclet>
+			<doclet name="org.openmeetings.doc.WebServiceDoclet" pathref="build.webservice.classpath" />
 		</javadoc>
 
 		<copy todir="${docs.dest}/images" filtering="no">
@@ -698,7 +687,7 @@
 		<fileset dir="${red5.root}" includes="*.jar" />
 		<fileset dir="${red5.server.lib}" includes="*.jar" />
 		<pathelement path="${om.dist.webapp}/WEB-INF" />
-		<pathelement path="${classes.dir}" />
+		<pathelement path="${main.out.dir}" />
 		<pathelement path="${om.dist.webapp}/WEB-INF/classes" />
 		<fileset dir="${om.dist.webapp}/WEB-INF/lib" includes="*.jar" />
 	</path>
@@ -734,8 +723,7 @@
 
 	<property name="ivy.jar" value="ivy-2.2.0.jar"/>
 	<taskdef uri="antlib:org.apache.ivy.ant" resource="org/apache/ivy/ant/antlib.xml"
-		classpath="${project.lib}/${ivy.jar}"/>
-	<property name="ivy.lib.dir" value="${project.lib}"/>
+		classpath="${ivy.lib.dir}/${ivy.jar}"/>
 
 	<!-- Build Targets -->
 	<target name="-java6.check" unless="java6.installed" >
@@ -891,12 +879,12 @@
 		<available file="${java.home}/../lib/tools.jar" type="file" property="tools.jar.path" value="${java.home}/../lib/tools.jar" />
 		<available file="${tools.jar.path}" type="file" property="tools.jar.installed" />
 		
-		<copy file="${tools.jar.path}" tofile="${project.lib}/java_16_tools.jar" />
+		<copy file="${tools.jar.path}" tofile="${project.lib.dir}/java_16_tools.jar" />
 	</target>
 	<!-- Check for Openlaszlo -->
-	<target name="-extract-tgz" description="Extracts given tar into root folder">
-		<echo message="Going to extract ${dep.file} to the ${basedir}" />
-		<untar src="${dep.file}" dest="${basedir}" compression="gzip"/>
+	<target name="-extract-tgz" description="Extracts given tar into ${build.base.dir} folder">
+		<echo message="Going to extract ${dep.file} to the ${build.base.dir}" />
+		<untar src="${dep.file}" dest="${build.base.dir}" compression="gzip"/>
 	</target>
 	<target name="-retrieve-openlaszlo" unless="laszlo.installed" description="Retrieves the libraries if needed" depends="-availability-check">
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
@@ -907,7 +895,7 @@
 	<target name="ivyclear" description="Clears out the Ivy cache">
 		<delete dir="${user.home}/.ivy2/cache/red5"/>
 		<delete includeemptydirs="true">
-			<fileset dir="${project.lib}" excludes="*.jar"/>
+			<fileset dir="${project.lib.dir}" excludes="*.jar"/>
 		</delete>
 		<ivy:cleancache/>
 	</target>
