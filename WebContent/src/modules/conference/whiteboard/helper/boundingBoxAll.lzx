@@ -495,7 +495,7 @@
             </method>    
             
         </view>
-        <vscrollbar name="_scrollstv" /> 
+        <om_vscrollbar name="_scrollstv" /> 
         <hscrollbar name="_scrollsth" />     
     </view>
      -->

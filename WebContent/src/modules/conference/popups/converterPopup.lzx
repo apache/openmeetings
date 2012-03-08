@@ -40,7 +40,7 @@
 	<view y="24" width="${ parent.width - 4 }" height="${ parent.height - 30 }" x="2" clip="true" name="errorView">
 		<text y="30" fontsize="10" fontstyle="bold" name="errorView"
 			multiline="true" width="300" selectable="true" />
-		<vscrollbar />
+		<om_vscrollbar />
 	</view>
 
 </class>

@@ -59,7 +59,7 @@
 				</method>
 				
 			</view>
-			<vscrollbar></vscrollbar>
+			<om_vscrollbar></om_vscrollbar>
 		</view>
 		
 	</class>

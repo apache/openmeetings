@@ -20,15 +20,14 @@
 -->
 <library>
 	
-<class name="innerlistViewparticipantsTable" extends="view" 
-    width="258" bgcolor="$once{ canvas.basebgcolorizer }" >
+<class name="innerlistViewparticipantsTable" extends="view" width="258" >
     <simplelayout name="_layout" axis="y" spacing="0" />
 </class>
     
 <class name="participantsTable" extends="view" height="${ parent.height-20 }" 
-    bgcolor="0xFFFFFF" x="2" y="6" clip="true" width="$once{ parent.width-4 }" >
+    	bgcolor="0xFFFFFF" x="2" y="6" clip="true" width="$once{ parent.width-4 }" >
         <innerlistViewparticipantsTable name="innerList" />
-    <vscrollbar />
+    <om_vscrollbar />
 </class>
 
 <class name="miniIcons" extends="view" stretches="both">
@@ -53,13 +52,13 @@
 </class>
     
 <class name="participantList" extends="view"  width="$once{ parent.width }" height="${ parent.height-22 }" 
-       bgcolor="$once{ canvas.basebgcolorizer }" y="22">
+       bgcolor="0xE0E0E0" y="22">
     <!-- clip="true" -->
     
     <attribute name="sortType" value="alphabetical" type="string" />    
     
     <view width="$once{ parent.width-2 }" height="${ parent.height-2 }" 
-        x="1" y="1" bgcolor="white" />
+        x="1" y="1" bgcolor="0xFFFFFF" />
         
     <handler name="oninit">
         <![CDATA[
@@ -202,46 +201,47 @@
     <view name="_miniIcons" x="112" y="0" height="18">
         
         <view width="1" height="${ parent.parent.height }" x="0"
-            bgcolor="$once{ canvas.basebgcolorizer }" />
+            bgcolor="0xE0E0E0" />
         <view name="_icon_mod" x="2" y="3" resource="participants_isMod_rsc" onclick="" showhandcursor="false">
             <labelTooltip labelid="608" />
         </view>
         
         <view width="1" height="${ parent.parent.height }" x="20"
-            bgcolor="$once{ canvas.basebgcolorizer }" />
+            bgcolor="0xE0E0E0" />
         <view name="_icon_draw" x="22" y="3" resource="participants_allow_drawing_rsc" onclick="" showhandcursor="false">
             <labelTooltip labelid="609" />
         </view>
         
         <view width="1" height="${ parent.parent.height }" x="40"
-            bgcolor="$once{ canvas.basebgcolorizer }" />
+            bgcolor="0xE0E0E0" />
         <view name="_icon_share" x="42" y="3" resource="screen_allow_rsc" onclick="" showhandcursor="false">
             <labelTooltip labelid="1073" />
         </view>
         
         <view width="1" height="${ parent.parent.height }" x="60"
-            bgcolor="$once{ canvas.basebgcolorizer }" />
+            bgcolor="0xE0E0E0" />
         <view name="_icon_remote" x="62" y="3" resource="remote_allow_rsc" onclick="" showhandcursor="false">
             <labelTooltip labelid="1084" />
         </view>
     
         <view width="1" height="${ parent.parent.height }" x="80"
-            bgcolor="$once{ canvas.basebgcolorizer }" />
+            bgcolor="0xE0E0E0" />
         <view name="_icon_exclusive_audio" x="82" y="3" resource="participants_exclusive_audio_rsc" onclick="" showhandcursor="false">
             <labelTooltip labelid="1423" />
         </view>
         
         <view width="1" height="${ parent.parent.height }" x="100"
-            bgcolor="$once{ canvas.basebgcolorizer }" />
+            bgcolor="0xE0E0E0" />
         <view name="_icon_av_allow" x="102" y="3" resource="av_allow_rsc" onclick="" showhandcursor="false">
             <labelTooltip labelid="610" />
         </view>
         
         <view width="1" height="${ parent.parent.height }" x="142"
-            bgcolor="$once{ canvas.basebgcolorizer }" />
+            bgcolor="0xE0E0E0" />
     </view>
+    
     <view name="headerDivisionLine" width="${ parent.width }" 
-          bgcolor="$once{ canvas.basebgcolorizer }" height="1" y="20" />
+          bgcolor="0xE0E0E0" height="1" y="20" />
     
 </class>
 

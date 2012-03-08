@@ -295,7 +295,7 @@
     </view>    
     
     <!--
-    <vscrollbar name="_scrollstv"
+    <om_vscrollbar name="_scrollstv"
                 visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }" /> 
     <hscrollbar name="_scrollsth"
                 visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }" />

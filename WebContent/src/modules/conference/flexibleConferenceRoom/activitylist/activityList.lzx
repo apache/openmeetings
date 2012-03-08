@@ -584,7 +584,7 @@
             
         </view>
         
-        <vscrollbar name="myscrollbar" />
+        <om_vscrollbar name="myscrollbar" />
         
     </view>
     

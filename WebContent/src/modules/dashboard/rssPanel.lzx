@@ -47,12 +47,12 @@
             lz.Browser.loadURL(parent.link,"_blank");
         </handler>
     </labelText>
-    <view height="1" width="$once{ parent.width }" bgcolor="$once{ canvas.basebgcolorizer }" />
+    <view height="1" width="$once{ parent.width }" bgcolor="0xE0E0E0" />
 </class>    
     
-<class name="rssBox" extends="view" width="$once{ parent.width-2 }" 
-	   height="$once{ parent.height-22 }" y="22" x="1"
-    bgcolor="$once{ canvas.basebgcolorizer }" > 	
+<class name="rssBox" extends="view" width="$once{ parent.width-4 }" 
+	   height="$once{ parent.height-22 }" y="22" x="4"
+    	bgcolor="0xE0E0E0" > 	
     <method name="outputRSS" args="value">
         this.inner.outputRSS(value);
     </method>
@@ -72,8 +72,8 @@
                 }
             ]]>
         </method>
-        <view name="content" layout="axis:y" bgcolor="$once{ canvas.basebgcolorizer }" width="${ parent.width-14 }" />        
-        <vscrollbar name="_scrollbar" />
+        <view name="content" layout="axis:y" bgcolor="0xE0E0E0" width="${ parent.width-10 }" />        
+        <om_vscrollbar name="_scrollbar" />
     </view>
 </class>   
 

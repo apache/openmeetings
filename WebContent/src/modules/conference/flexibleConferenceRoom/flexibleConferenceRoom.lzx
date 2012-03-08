@@ -138,7 +138,7 @@
 			<view name="_inn" width="${parent.width-10}">				
 				<wrappinglayout axis="x" spacing="10"/>
 			</view>
-			<vscrollbar name="_attenddeescrollbar" visibility="visible"></vscrollbar>
+			<om_vscrollbar name="_attenddeescrollbar" visibility="visible"></om_vscrollbar>
 	</view>
     
     <baseTabChatPanel name="_chatPanelStrict" labelid="616"

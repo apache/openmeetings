@@ -41,7 +41,7 @@
     <view name="textInner" y="24" width="218" height="200" x="2" clip="true">
         <text name="_inner" fontsize="10" fontstyle="bold"
             multiline="true" width="190" />
-        <vscrollbar />
+        <om_vscrollbar />
     </view>
 
 </class>

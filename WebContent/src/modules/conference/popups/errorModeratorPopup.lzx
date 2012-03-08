@@ -29,7 +29,7 @@
 	<view y="24" width="218" height="170" x="2" clip="true">
 		<text y="30" fontsize="10" fontstyle="bold" text="${ parent.parent.error }"
 			multiline="true" width="190" />
-		<vscrollbar />
+		<om_vscrollbar />
 	</view>
     
     <simpleLabelButton x="20" labelid="906" y="200" width="200">

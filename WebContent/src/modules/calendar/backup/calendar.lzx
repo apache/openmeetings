@@ -143,7 +143,7 @@
 		 		</view>		
 	 		</view>
 	 		<hscrollbar />
-	 		<vscrollbar/>
+	 		<om_vscrollbar/>
  		</view>
 		
 		<view name="_termindetails" bgcolor="blue" width="400">
@@ -312,7 +312,7 @@
 		 	<!--scrolledittext-->
 		 	<scrolledittext name="_komentar" y="${parent._titel.height + parent._titel.y + 20}" visible="false" multiline="true"
 		    		  x="${parent._kategory.width + parent._kategory.x + 30}"  width="${parent._titeledit.width}" height="0">
-				<!--<vscrollbar/>-->
+				<!--<om_vscrollbar/>-->
 			</scrolledittext>	
 			
 			<view y="${parent._komentar.y + parent._komentar.height + 30}" x="35">
@@ -336,7 +336,7 @@
 					}
 					</method>	
 				</view>
-				<vscrollbar name="_vscrol"/>
+				<om_vscrollbar name="_vscrol"/>
 			</view>
 			 
 			<view name="_buttons"   y="${parent._liste.y + parent._liste.height +10}" x="${parent.width/2 -this.width/2}">

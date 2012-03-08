@@ -21,8 +21,8 @@
 <library>
 
 <!--- chat output area. It shows chat history on-init.  -->
-<class name="overAllChatOutput" extends="view" height="${ parent.height-2 }" 
-            clip="true" bgcolor="0xFFFFFF" width="${ parent.width-2 }" >
+<class name="overAllChatOutput" extends="view" height="${ parent.height-1 }" 
+            clip="true" bgcolor="0xFFFFFF" width="${ parent.width-1 }" >
 
     <handler name="oninit">
         if($debug) Debug.write("overAllChatOutput/oninit");
@@ -122,7 +122,7 @@
     	</method>
     </view>
     
-    <vscrollbar name="myscrollbar" />
+    <om_vscrollbar name="myscrollbar" />
 
 </class>
     

@@ -34,7 +34,7 @@ This is used in the conference.
         				y="24" height="${ parent.height-50 }">
         <labelText text="$once{ parent.parent.error }" width="${ parent.width - 18 }"
         		   multiline="true" resize="false" selectable="true" />
-        <vscrollbar />
+        <om_vscrollbar />
     </view>
 	
     <simpleLabelButton labelid="891" width="100" onclick="this.parent.close();" 

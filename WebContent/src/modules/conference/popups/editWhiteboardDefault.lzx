@@ -42,7 +42,7 @@
 		<view name="inner" width="$once{parent.width}" >
 			<simplelayout axis="y" spacing="2" />
 		</view>
-    	<vscrollbar />
+    	<om_vscrollbar />
     </view>
     <!-- 
     63

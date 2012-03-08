@@ -63,7 +63,7 @@
 	<labelText name="appDescr" y="46" labelid="1146" width="50"/>
 	<view name="_appDescr" x="75" y="46" width="200" height="100" bgcolor="0xFFFFFF">
 		<labelText name="_appDescr" y="24" width="184" multiline="true" /> 
-		<vscrollbar />
+		<om_vscrollbar />
 	</view>
 	
 	<labelText name="l_sdatum" labelid="1143" y="150" width="50" />

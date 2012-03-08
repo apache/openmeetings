@@ -50,7 +50,7 @@
 	 		</view>
 	 		
 		 	<hscrollbar />
-			<vscrollbar name="_scrollbar" /> 
+			<om_vscrollbar name="_scrollbar" /> 
 					
 		 </view>
 		

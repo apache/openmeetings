@@ -39,7 +39,7 @@
 		    	<weekView name="_weekView" />
 		    	
 		    	<hscrollbar />
-				<vscrollbar/> 
+				<om_vscrollbar/> 
 				<!--<scrollbar axis="y"></scrollbar>	-->	
 		    </labeltabelement>
 		    

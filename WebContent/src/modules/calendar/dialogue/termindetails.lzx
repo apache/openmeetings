@@ -386,7 +386,7 @@
     					}
 					</method>	
 				</view>
-				<vscrollbar name="_vscrol"/>
+				<om_vscrollbar name="_vscrol"/>
 			</view>
 			
 			<baseChooseIcon y="46" resourceN="edit_add" labelid="574" x="692">

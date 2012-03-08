@@ -74,12 +74,12 @@
         </method>
         
 <!--
-        <vscrollbar name="_vs" axis="y" scrollattr="pos"
+        <om_vscrollbar name="_vs" axis="y" scrollattr="pos"
             scrolltarget="parent.inp"
             x="${parent.width - this.width - parent.border + 1}" 
             stepsize="${parent.inp.lineheight}" 
             scrollmax="${parent.inp.scrollheight}">
-        </vscrollbar>
+        </om_vscrollbar>
 -->
 
         <!--- Name of class to instantiate for vertical scroll bar.

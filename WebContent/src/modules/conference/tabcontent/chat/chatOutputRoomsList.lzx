@@ -99,7 +99,7 @@
 	
 	<view name="_cbtext" width="284" layout="axis:y;spacing:2" />
 	
-	<vscrollbar name="myscrollbar" />
+	<om_vscrollbar name="myscrollbar" />
 
 </class>
 	

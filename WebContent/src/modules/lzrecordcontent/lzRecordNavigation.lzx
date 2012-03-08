@@ -377,7 +377,7 @@
         
         <view name="_contentarea" layout="axis:y;inset:1" />
         
-        <vscrollbar name="_scrollbar" />
+        <om_vscrollbar name="_scrollbar" />
         <hscrollbar name="_hscrollbar" />
     </view>  
     

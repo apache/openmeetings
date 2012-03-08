@@ -23,7 +23,7 @@
 <!-- 
     The Width of each item is set in the participantList-Class
  -->
-<class name="participantListItem" extends="view" bgcolor="0xFFFFFF" height="40" 
+<class name="participantListItem" extends="view" bgcolor="0xDADADA" height="40" 
        showhandcursor="false">
     
     <attribute name="connectedSince" value="" type="string" />
@@ -383,10 +383,10 @@
     </handler>
     
     <handler name="onmouseout">
-        this.setAttribute('bgcolor',0xFFFFFF);
+        this.setAttribute('bgcolor',0xDADADA);
     </handler>
     
-    <image name="_userpic" stretches="both">
+    <image name="_userpic" stretches="both" x="1">
         <handler name="onload">
             <![CDATA[
                 if (this.height > 38) {
@@ -394,6 +394,12 @@
                     var width = this.width/(this.height/38);
                     this.setAttribute('height',38);
                     this.setAttribute('width',width);
+                }
+                if (this.width > 38) {
+                    //If bigger then containter then scale it
+                    var height = this.height/(this.width/38);
+                    this.setAttribute('height',height);
+                    this.setAttribute('width',38);
                 }
             ]]>
         </handler>
@@ -456,7 +462,7 @@
 	    </miniIcons>   
     </view>
     
-    <view name="_miniIcons" x="113" y="22" height="18">
+    <view name="_miniIcons" x="113" y="22" height="18" >
         
         <miniIcons name="_isMod" x="0" width="16" resource="right_isactive_rsc" 
                    height="16" showhandcursor="false">
@@ -628,7 +634,7 @@
     </view>
     
     <view name="divisionLine" width="$once{ parent.width }" 
-          bgcolor="$once{ canvas.basebgcolorizer }" height="1" y="39" />
+          bgcolor="0xFFFFFF" height="1" y="39" />
     
 </class>
  

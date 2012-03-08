@@ -1147,7 +1147,7 @@
 			  width="$once{ parent.width-4 }" height="${ parent.height-86 }">
 			<labelText name="message" width="$once{ parent.width-16 }" 
 					   multiline="true" resize="false" />
-			<vscrollbar />
+			<om_vscrollbar />
 		</view>
 		
 		<view name="_answer_area" height="22" visibility="hidden"

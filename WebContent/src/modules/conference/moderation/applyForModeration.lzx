@@ -140,7 +140,7 @@
 	<view name="userslist" y="60" x="4" height="140" clip="true" width="492" bgcolor="$once{ canvas.basebgcolorizer }" >
 		<view name="userslist" y="1" x="1" height="138" clip="true" width="490" bgcolor="0xFFFFFF" >
 			<view name="userslist" layout="axis:y;spacing:2" width="$once{ parent.width }" />
-			<vscrollbar />
+			<om_vscrollbar />
 		</view>
 	</view>	
 	

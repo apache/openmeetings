@@ -289,10 +289,10 @@
                     </netRemoteCallHib> 
          
                     <!-- inn.inn.inn view would be setted object by above ondata hander. -->
-                    <view name="inn" width="480" height="${ parent.height }" bgcolor="$once{ canvas.basebgcolorizer }" >
-                        <view name="inn" x="1" y="1" width="478" height="${ parent.height-2 }" bgcolor="0xFFFFFF" clip="true" >
+                    <view name="inn" x="2" width="480" height="${ parent.height }" bgcolor="0xE0E0E0" >
+                        <view name="inn" x="1" y="1" width="${ parent.width-1 }" height="${ parent.height-1 }" bgcolor="0xFFFFFF" clip="true" >
                             <view name="inn" layout="axis:y;spacing:1"/>
-                            <vscrollbar />
+                            <om_vscrollbar />
                         </view>
                     </view>
                 </view>
@@ -312,8 +312,8 @@
             
             <overAllChat name="_overallchat" visibility="hidden" />
             
-            <rssBox name="feed1" visibility="hidden" width="${ parent.width }" 
-                            height="${ parent.height }" y="0" x="0" />
+            <rssBox name="feed1" visibility="hidden" width="${ parent.width-2 }" 
+                            height="${ parent.height }" y="0" x="2" />
 
                <!--
             <rssPanel name="feed2" x="420" y="230" visibility="hidden" />

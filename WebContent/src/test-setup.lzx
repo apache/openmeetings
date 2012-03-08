@@ -379,7 +379,7 @@
 			<button align="right" width="200" text="stopPlayBroadCast" onclick="canvas.stopPlayBroadCast()" />
 		</view>
 	</view>
-	<vscrollbar />
+	<om_vscrollbar />
 </view>
 
 </canvas>

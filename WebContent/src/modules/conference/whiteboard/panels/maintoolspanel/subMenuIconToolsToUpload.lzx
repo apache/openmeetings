@@ -397,7 +397,7 @@
     		<simplelayout axis="y" spacing="2" xinset="2" />
     	</view> 
     	
-    	<vscrollbar />
+    	<om_vscrollbar />
     </view>
     
     <!--

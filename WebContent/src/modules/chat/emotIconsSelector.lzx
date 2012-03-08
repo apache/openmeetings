@@ -82,7 +82,7 @@
 		<view name="inn" width="$once{ parent.height }" >
 			<wrappinglayout axis="x" spacing="2" />
 		</view>
-		<vscrollbar name="myscrollbar" />
+		<om_vscrollbar name="myscrollbar" />
 	</view>
     
     <view name="_close" x="$once{ parent.width-this.width-2 }" y="2"

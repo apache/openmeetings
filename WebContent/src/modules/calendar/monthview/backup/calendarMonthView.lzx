@@ -45,7 +45,7 @@
 		 		</view>	
 	 		</view> -->
 	 		<hscrollbar />
-	 		<vscrollbar/>
+	 		<om_vscrollbar/>
 		</view>
 		 
 	<!--	 <method name="setCalendarItem" args="stunden">

@@ -113,7 +113,7 @@
             </method>
         </view>
             -->
-    <vscrollbar name="_scrollbar" id="_mainScrollBar" />
+    <om_vscrollbar name="_scrollbar" id="_mainScrollBar" />
     
 </view>  
   

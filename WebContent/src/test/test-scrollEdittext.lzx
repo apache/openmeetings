@@ -31,7 +31,7 @@
         <inputtext multiline="true" width="${ parent.width - 14 }">
             
         </inputtext>
-        <vscrollbar />
+        <om_vscrollbar />
     </view>
 
 </canvas>

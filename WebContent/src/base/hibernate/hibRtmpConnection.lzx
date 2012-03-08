@@ -1830,14 +1830,8 @@
     <netRemoteCallHib name="roomConnect" funcname="roomConnect" >      
         <handler name="ondata" args="value">
             if ($debug) Debug.write("roomConnect: ",value);
-            if (canvas._overallchatcontent!=null){
-                var parentObj = canvas._overallchatcontent.parent.parent.parent._chatparticipants._list;
-                new lz.chatParticipants(parentObj,{
-                             user_id:value.user_id,
-                             publicSID:value.publicSID,
-                             connectedSince:canvas.getLabelName(1133)+' '+parseDateToStringTimeSeconds(value.connectedSince),
-                             username:value.firstname+", "+value.lastname
-                         });                
+            if (canvas._overallchatcontent != null){
+                canvas._overallchatcontent.parent.parent.parent._chatparticipants.addItem(value);
             }
         </handler>
     </netRemoteCallHib>

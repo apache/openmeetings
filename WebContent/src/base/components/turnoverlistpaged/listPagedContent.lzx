@@ -150,7 +150,7 @@
         <innerListPagingContent name="_inn" />
         
     </view>
-    <vscrollbar name="_scrollbar" stepsize="$once{ parent.itemHeight }" />
+    <om_vscrollbar name="_scrollbar" stepsize="$once{ parent.itemHeight }" />
     
     
     <hscrollbar visibility="$once{ parent.showHScrollbar }" />

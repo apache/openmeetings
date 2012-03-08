@@ -619,7 +619,7 @@
 	            		<simplelayout axis="y" spacing="1" />
 	            	</view>
 
-	            	<vscrollbar />
+	            	<om_vscrollbar />
             	</view>
             	
             	<view datapath="attendees/" width="0" height="0">

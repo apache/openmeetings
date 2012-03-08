@@ -33,7 +33,7 @@
     <!-- message and buttons area-->
     <view y="0" x="196" height="${ parent.height }" >
         <view name="_chatoutputborder" height="${ parent.height-48 }"
-            width="${ parent.parent.width - 196 }">
+            width="${ parent.parent.width - 196 }"  bgcolor="0xE0E0E0">
         	<!-- 604 -->
             <overAllChatOutput name="_chatoutput" x="1" y="1" >
                 <handler name="oninit">
@@ -47,44 +47,51 @@
     </view>
     
     <!-- chat participants area -->
-    <view x="0" y="0" name="_chatparticipants" bgcolor="0xFFFFFF"
-          height="${ parent.height-2 }" width="190" clip="true" >
+    <view x="0" y="0" name="_chatparticipants" bgcolor="0xE0E0E0"
+          height="${ parent.height-2 }" width="190" >
         <handler name="oninit">
             this.getChatOverallUsers.doCall();
         </handler>
         
-            <netRemoteCallHib name="getChatOverallUsers" funcname="chatservice.getChatOverallUsers" 
-                remotecontext="$once{ canvas.thishib }" > 
-                <handler name="ondata" args="value">
-                    <![CDATA[
-                        //The onResult-Handler will be called be the rtmpconnection
-                        if ($debug) Debug.write("getChatOverallUsers : ",value);
-                        for (var i=0;i<value.overallList.length;i++){
-                        	if ($debug) Debug.write("value.overallList[i].picture_uri",value.overallList[i].picture_uri);
-                            new lz.chatParticipants(this.parent._list,{
-                                    user_id:value.overallList[i].user_id,
-                                    publicSID:value.overallList[i].publicSID,
-                                    picture_uri:value.overallList[i].picture_uri,
-                                    connectedSince:canvas.getLabelName(1133)+' '+parseDateToStringTimeSeconds(value.overallList[i].connectedSince),
-                                    username:value.overallList[i].firstname+" "+value.overallList[i].lastname
-                                });             
-                        }
-                    ]]>
-                </handler>   
-            </netRemoteCallHib>
-            
-            <method name="removeItemById" args="user_id">
+        <netRemoteCallHib name="getChatOverallUsers" funcname="chatservice.getChatOverallUsers" 
+            remotecontext="$once{ canvas.thishib }" > 
+            <handler name="ondata" args="value">
                 <![CDATA[
-                    for (var i=0;i<this._list.subviews.length;i++) {
-                        if (this._list.subviews[i].user_id==user_id) {
-                            this._list.subviews[i].destroy();
-                        }
+                    //The onResult-Handler will be called be the rtmpconnection
+                    if ($debug) Debug.write("getChatOverallUsers : ",value);
+                    for (var i=0;i<value.overallList.length;i++){
+                    	if ($debug) Debug.write("value.overallList[i].picture_uri",value.overallList[i].picture_uri);
+                    	parent.addItem(value.overallList[i])
                     }
                 ]]>
-            </method>
+            </handler>   
+        </netRemoteCallHib>
+        
+        <method name="addItem" args="value">
+			new lz.chatParticipants(this._innerlist._list,{
+			        user_id:value.user_id,
+			        publicSID:value.publicSID,
+			        picture_uri:value.picture_uri,
+			        connectedSince:canvas.getLabelName(1133)+' '+parseDateToStringTimeSeconds(value.connectedSince),
+			        username:value.firstname+" "+value.lastname
+			    });      
+        </method>
+        
+        <method name="removeItemById" args="user_id">
+            <![CDATA[
+                for (var i=0;i<this._innerlist._list.subviews.length;i++) {
+                    if (this._innerlist._list.subviews[i].user_id==user_id) {
+                        this._innerlist._list.subviews[i].destroy();
+                    }
+                }
+            ]]>
+        </method>
             
-        <view name="_list" width="176" layout="axis:y;spacing:0" />
-        <vscrollbar name="_scroll" />
+        <view name="_innerlist" x="1" y="1" width="189" clip="true"
+        			height="${ parent.height-1 }" bgcolor="0xFFFFFF">
+	        <view name="_list" width="180" layout="axis:y;spacing:0" />
+	        <om_vscrollbar name="_scroll" />
+        </view>
     </view>
     
 </class>

@@ -22,8 +22,8 @@
 
 
 <!--- chat output specialized for video-conference -->
-<class name="chatOutput" extends="view" height="${ parent.height-2 }" 
-            clip="true" width="${ parent.width-2 }" bgcolor="0xFFFFFF">
+<class name="chatOutput" extends="view" height="${ parent.height-1 }" 
+            clip="true" width="${ parent.width-1 }" bgcolor="0xFFFFFF">
 
     <attribute name="isAlreadyLoaded" value="false" type="boolean"/>
 <!---
@@ -147,7 +147,7 @@
     	</method>
     </view>
     
-    <vscrollbar name="myscrollbar" />
+    <om_vscrollbar name="myscrollbar" />
 
 </class>
     

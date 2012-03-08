@@ -20,6 +20,8 @@
 -->
 <library>
 
+	
+
     <include href="iconView.lzx" />
     <include href="miniIconsNew.lzx" />
     <include href="resetCombobox.lzx" />
@@ -29,6 +31,7 @@
     <include href="labelRadioButton.lzx" />
     <include href="labeltabelement.lzx" />
     
+    <include href="scrollbars/" />
     <include href="text/" />
     <include href="omcharts/" />
     <include href="button/" />

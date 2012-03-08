@@ -30,7 +30,7 @@
         y="24" height="$once{ parent.height-48 }">
         <labelText labelid="$once{ parent.parent.labeliderror }" width="400"
             y="22" multiline="true" resize="false"/>
-        <vscrollbar />
+        <om_vscrollbar />
     </view>
 	
     <simpleLabelButton labelid="25" width="100" x="290" y="$once{ parent.height-22 }" 

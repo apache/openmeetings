@@ -30,9 +30,9 @@ This is used in the conference.
     bgcolor="$once{ canvas.basebgcolorizer }" 
      -->
      
-	<view name="_chatoutputborder" height="${ parent.height-46 }" width="${ parent.width }">
+	<view name="_chatoutputborder" x="4" height="${ parent.height-46 }" width="${ parent.width-4 }" bgcolor="0xE0E0E0">
 		
-		<chatOutput name="_chatoutput" x="2" y="1" >
+		<chatOutput name="_chatoutput" x="1" y="1" >
 			<handler name="oninit">
 				canvas._chatcontent = this;
 			</handler>

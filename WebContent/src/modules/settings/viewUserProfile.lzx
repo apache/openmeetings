@@ -83,7 +83,7 @@
 		
 		<viewUserProfile name="viewUserProfile" />
 		
-		<vscrollbar />
+		<om_vscrollbar />
 		
 	</view>
 	
@@ -297,14 +297,14 @@
 	
 	<view name="userOffers" x="120" y="160" height="100" width="320" clip="true" bgcolor="0xFFFFFF">
 		<labelText name="_text" multiline="true" width="$once{ parent.width- 16 }" />
-		<vscrollbar />
+		<om_vscrollbar />
 	</view>
 	
 	<labelText name="userSearchsLabel" x="10" y="270" labelid="1163" />
 	
 	<view name="userSearchs" x="120" y="270" height="100" width="320" clip="true" bgcolor="0xFFFFFF">
 		<labelText name="_text" multiline="true" width="$once{ parent.width- 16 }" />
-		<vscrollbar />
+		<om_vscrollbar />
 	</view>
 	
 	<labelText name="userContact" x="10" y="380" labelid="1167" fontstyle="bold" />

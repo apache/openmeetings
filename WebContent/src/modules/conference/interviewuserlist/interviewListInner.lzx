@@ -24,7 +24,7 @@
        height="${ parent.height-64-parent.moderationPanel.height }"
         bgcolor="0xFFFFFF" x="2" clip="true" width="$once{ parent.width-4 }" >
         <innerlistViewEventUserListTable name="innerList" />
-    <vscrollbar />
+    <om_vscrollbar />
 </class>    
 
 <class name="interviewListInner" extends="baseRoomInnerList"  

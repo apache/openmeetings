@@ -85,7 +85,7 @@
 	<!--x="${(parent.width - this.width)/2}"-->
 	<view x="10" name="_innerList" height="180" width="${this._inner.width + 15}" y="20" clip="true" >
 		<view name="_inner" layout="axis:y;spacing:2" width="460" bgcolor="$once{ canvas.baseMacomBackground }"/>
-		<vscrollbar/>
+		<om_vscrollbar/>
 		<!-- <hscrollbar/>-->
 	</view>
 </class>

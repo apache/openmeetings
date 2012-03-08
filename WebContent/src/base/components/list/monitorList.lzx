@@ -48,7 +48,7 @@
             }
         </method>   
         	<monitorListItemView name="_listItemView" /> 
-        <vscrollbar />
+        <om_vscrollbar />
     </view>                                                                                        
 </class>
 
