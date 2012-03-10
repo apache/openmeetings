@@ -33,7 +33,7 @@
 	<view name="_innerList" height="150" y="20" clip="true" >
 		<view name="_inner" layout="axis:y;spacing:2" clip="true" bgcolor="$once{ canvas.baseMacomBackground }" height="150"/>
 		<om_vscrollbar/>
-		<hscrollbar/>
+		<om_hscrollbar/>
 	</view>
 </class>
 	

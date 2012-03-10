@@ -119,7 +119,7 @@
 		<text name="_contentView" multiline="true" selectable="true" />
 		
 		<om_vscrollbar />
-		<hscrollbar />
+		<om_hscrollbar />
 		
 	</view>
     

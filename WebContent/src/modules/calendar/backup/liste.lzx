@@ -22,7 +22,7 @@
 	<class name="liste" extends="view" width="${parent.parent.parent.width}" height="${parent.parent.parent.height - 24}" y="22" clip="true">
 		<view name="_inner" layout="axis:y;spacing:2" clip="true"/>
 		<om_vscrollbar />
-		<hscrollbar name="_hscrollbar"/>
+		<om_hscrollbar name="_hscrollbar"/>
 		<method name="clearContent">
 					for (var eg in this.subviews) {
 						this.subviews[eg].destroy();
@@ -37,7 +37,7 @@
 <!--	<class name="liste" extends="view"  clip="true">
 		<view name="_inner" layout="axis:y;spacing:2" clip="true"/>
 		<om_vscrollbar />
-		<hscrollbar />
+		<om_hscrollbar />
 		<handler name="oninit">
 			//if ($debug) Debug.write("liste: ",this);
 			//if ($debug) Debug.write("width: ", parent.parent.parent.width);

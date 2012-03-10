@@ -146,7 +146,7 @@
                                +'&roomId='+hib.currentroomid;
                
                 this.getAppointmentReminderTypList.setAttribute("src",downloadurl);
-                if ($debug) Debug.write("getFileExplorerByRoomSelf doRequest 1 ",downloadurl);
+                //if ($debug) Debug.write("getAppointmentReminderTypList doRequest 1 ",downloadurl);
                 this.getAppointmentReminderTypList.doRequest();
        		]]>
        	</handler>
@@ -515,7 +515,7 @@
 					<textlistitem datapath="local:classroot.getAppointmentReminderTypList:/getAppointmentReminderTypListResponse/return"
 						text="$path{'name/text()'}" value="$path{'typId/text()'}">
 						<handler name="ondata" args="d">
-							if ($debug) Debug.write("ondata combobox ",parent);
+							//if ($debug) Debug.write("ondata combobox ",parent);
 							parent.selectItemAt(2);
 						</handler>
 					</textlistitem>

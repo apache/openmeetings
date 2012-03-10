@@ -102,7 +102,7 @@
 			    	<calendarWeekView name="_saturday" height="350"></calendarWeekView>
 			    	<calendarWeekView name="_sunday" height="350"></calendarWeekView>	
 		    	</view>
-		    	<hscrollbar />
+		    	<om_hscrollbar />
 		    </tabelement>
 		    
 		    <tabelement text="month">
@@ -112,7 +112,7 @@
 			    	<calendarMonthView height="200"></calendarMonthView>
 			    	<calendarMonthView height="200"></calendarMonthView>
 		    	</view>	
-		    	<hscrollbar />	
+		    	<om_hscrollbar />	
 		    </tabelement>
 		</tabslider>
 		
@@ -142,7 +142,7 @@
 					</method>
 		 		</view>		
 	 		</view>
-	 		<hscrollbar />
+	 		<om_hscrollbar />
 	 		<om_vscrollbar/>
  		</view>
 		

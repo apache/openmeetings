@@ -49,7 +49,7 @@
 		 		</view>				 			
 	 		</view>
 	 		
-		 	<hscrollbar />
+		 	<om_hscrollbar />
 			<om_vscrollbar name="_scrollbar" /> 
 					
 		 </view>

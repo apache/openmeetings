@@ -455,7 +455,7 @@
         </view>
     
         <om_vscrollbar name="_scrollstv"/> 
-        <hscrollbar name="_scrollsth" /> 
+        <om_hscrollbar name="_scrollsth" /> 
     
     </view>    
     

@@ -44,7 +44,7 @@
 					</method>
 		 		</view>	
 	 		</view> -->
-	 		<hscrollbar />
+	 		<om_hscrollbar />
 	 		<om_vscrollbar/>
 		</view>
 		 

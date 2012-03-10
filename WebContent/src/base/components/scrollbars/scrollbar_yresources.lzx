@@ -20,10 +20,6 @@
 -->
 <library>
 
-	<resource name="omscrolltrack_y_rsc" src="resources/y_scrolltrack.swf" />
-	
-    <resource name="omscrollbar_ythumbmiddle_rsc" src="resources/scrollthumb_y_mid.swf" />
-    <resource name="omscrollbar_ythumbtop_rsc" src="resources/scrollthumb_y_top.swf" />
-    <resource name="omscrollbar_ythumbbottom_rsc" src="resources/scrollthumb_y_bottom.swf" />
+
     
 </library>

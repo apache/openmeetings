@@ -38,7 +38,7 @@
 		    	<view resource="timetable_weekview"   />-->
 		    	<weekView name="_weekView" />
 		    	
-		    	<hscrollbar />
+		    	<om_hscrollbar />
 				<om_vscrollbar/> 
 				<!--<scrollbar axis="y"></scrollbar>	-->	
 		    </labeltabelement>

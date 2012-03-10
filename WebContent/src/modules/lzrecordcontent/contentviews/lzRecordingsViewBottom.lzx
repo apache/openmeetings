@@ -45,7 +45,7 @@
         <view name="content" layout="axis:y;spacing:2" />
         
         <om_vscrollbar />
-        <hscrollbar />
+        <om_hscrollbar />
         
     </view>
     

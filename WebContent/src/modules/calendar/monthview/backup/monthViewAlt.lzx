@@ -83,7 +83,7 @@
 	    	<calendarMonthView height="200"></calendarMonthView>
     	</view>
     	 
-    	<hscrollbar />	
+    	<om_hscrollbar />	
 	</class> 
 			    	
 </library>			    	

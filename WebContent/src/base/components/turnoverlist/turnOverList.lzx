@@ -295,7 +295,7 @@
 			<innerList name="_inn" />
 		</view>
 		<om_vscrollbar />
-		<hscrollbar />
+		<om_hscrollbar />
 	</view>
 
 </class>
