@@ -139,9 +139,20 @@
 						
 				if ($debug) Debug.write("urlObject ",urlObject);
 	            if ($debug) Debug.write("parent.baseUrl ",this.baseUrl);
-            ]]>
-        </handler>
-        
+   
+           		var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+                               +canvas.httpRootKey+'services/CalendarService/getAppointmentReminderTypList?'
+                               +'SID='+canvas.sessionId
+                               +'&roomId='+hib.currentroomid;
+               
+                this.getAppointmentReminderTypList.setAttribute("src",downloadurl);
+                if ($debug) Debug.write("getFileExplorerByRoomSelf doRequest 1 ",downloadurl);
+                this.getAppointmentReminderTypList.doRequest();
+       		]]>
+       	</handler>
+          	
+        <dataset name="getAppointmentReminderTypList" type="http" />
+	    
         <method name="saveOrUpdateAppointement">
             <![CDATA[
                 
@@ -477,40 +488,12 @@
 
             <infoTab name="notes" labelid="802" pixellock="true">
             	
-            	<handler name="oninit">
-            		this.getAppointmentReminderTypList.doCall();
-            	</handler>
             	
-            	<netRemoteCallHib name="getAppointmentReminderTypList" 
-            					  funcname="appointmentreminderservice.getAppointmentReminderTypList" 
-                              	  remotecontext="$once{ canvas.thishib }" >
-	                <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
-	                <handler name="ondata" args="valueList">
-	                    <![CDATA[
-	                    if ($debug) Debug.write("getAppointmentReminderTypList-valueList: ", valueList);
-	                    
-	                    //new combobox(parent.parent{name:_kategory,x:20})
-	                    for (var i=0;i<valueList.length;i++) {
-	                        //if ($debug) Debug.write("UserList",valueList[i]);
-	                        var id = valueList[i].typId;
-	                        var titel = valueList[i].name;              
-	                        if ($debug) Debug.write("typID",id);
-	                        if ($debug) Debug.write("titel: ",titel);                   
-	                        new lz.textlistitem(parent._erinnerungedit, {
-	                                        value : id,                                                                                     
-	                                        text:titel
-	                            
-	                                });     
-	                        parent._erinnerungedit.selectItemAt(2);
-	                    }
-	                    ]]>
-	                </handler>
-	            </netRemoteCallHib>
             	
 			 	<labelText name="_erinnerung" y="2" 
 		 			   x="10" labelid="565" width="60" />
 		 	 	
-			 	<resetCombobox name="_erinnerungedit" x="10" 
+			 	<resetCombobox name="_erinnerungedit" x="10"
 			 			  width="176" editable="false" shownitems="5" y="22" datapath="remindtype" >
 					<handler name="onvalue" args="v">						
 						if ($debug) Debug.write("_erinnerungatr: ",parent.parent.parent._erinnerungatr);
@@ -529,6 +512,13 @@
 						    this.selectItem(remTypeId);
 					    }
 					</handler>
+					<textlistitem datapath="local:classroot.getAppointmentReminderTypList:/getAppointmentReminderTypListResponse/return"
+						text="$path{'name/text()'}" value="$path{'typId/text()'}">
+						<handler name="ondata" args="d">
+							if ($debug) Debug.write("ondata combobox ",parent);
+							parent.selectItemAt(2);
+						</handler>
+					</textlistitem>
 			 	</resetCombobox> 
 	    		  
 		    	<labelText name="_roomtype" y="44" x="10" labelid="619" width="60"/>
