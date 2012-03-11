@@ -27,6 +27,7 @@ import org.apache.axis2.AxisFault;
 import org.apache.axis2.context.MessageContext;
 import org.apache.axis2.transport.http.HTTPConstants;
 import org.openmeetings.app.OpenmeetingsVariables;
+import org.openmeetings.app.data.calendar.beans.Week;
 import org.openmeetings.app.persistence.beans.calendar.Appointment;
 import org.openmeetings.app.persistence.beans.calendar.AppointmentCategory;
 import org.openmeetings.app.persistence.beans.calendar.AppointmentReminderTyps;
@@ -137,6 +138,10 @@ public class CalendarWebServiceFacade {
 	public List<AppointmentReminderTyps> getAppointmentReminderTypList(
 			String SID) throws AxisFault {
 		return getCalendarServiceProxy().getAppointmentReminderTypList(SID);
+	}
+	
+	public List<Week> getAppointmentsByWeekCalendar(int firstDayInWeek, Date startDate)  throws AxisFault{
+		return getCalendarServiceProxy().getAppointmentsByWeekCalendar(firstDayInWeek, startDate);
 	}
 	
 }

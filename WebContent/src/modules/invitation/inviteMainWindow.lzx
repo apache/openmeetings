@@ -100,7 +100,8 @@
 			
 		<!-- label: password -->
 		<labelText labelid="525" y="220" x="4" fgcolor="${ ((!parent._ispasswordProtected.value) ? 0xCCCCCC : 0x000000 ) }" />
-		<customEdittext name="_password" enabled="${ parent._ispasswordProtected.value }" width="340" x="120" y="218" />
+		<customEdittext name="_password" enabled="${ parent._ispasswordProtected.value }" password="true"
+						width="340" x="120" y="218" />
 		
 		<!-- label: validity period -->
 		<labelText labelid="526" y="252" width="120" />

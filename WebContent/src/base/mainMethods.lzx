@@ -200,6 +200,11 @@
         videoComp_lc.connect(this.videoComp_lc_name);
         this.setAttribute('videoComp_lc', videoComp_lc);
         
+        var t = this;
+    	canvas.videoComp_lc.regExpResult = function(tId,tResult) {
+      		t.regExpResult(tId,tResult);
+        }
+        
         mainBaseText.setAttribute('text',canvas.currentappname);
         mainBaseText.setShadow();
         mainBaseTextLabel.setAttribute('text',canvas.currentappnameurl);  
@@ -970,6 +975,27 @@
 	    }
 	    
 	    return val;
+	</method>
+	
+	<attribute name="regExpCounter" value="0" type="number" />
+	<attribute name="regExpResultArray" value="null" />
+	
+	<method name="doRegExpCheck" args="fieldValue,regExpV">
+		this.regExpCounter = this.regExpCounter +1;
+		canvas.lc.send(canvas.rtmp_lc_name, "regExpTest", fieldValue, regExpV, this.regExpCounter);
+		return this.regExpCounter;
+	</method>
+	
+	<method name="regExpResult" args="tId,tResult">
+		if (this.regExpResultArray == null) {
+			this.regExpResultArray = new Array();
+		}
+		this.regExpResultArray[tId] = tResult;
+		if ($debug) Debug.write("regExpResult ",tId,tResult);
+	</method>
+	
+	<method name="checkRegExpResult" args="tId">
+		return this.regExpResultArray[tId];
 	</method>
 
 </library>

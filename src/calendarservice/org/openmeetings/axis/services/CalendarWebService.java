@@ -18,12 +18,17 @@
  */
 package org.openmeetings.axis.services;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
+import org.openmeetings.app.data.calendar.beans.AppointmentDTO;
+import org.openmeetings.app.data.calendar.beans.Day;
+import org.openmeetings.app.data.calendar.beans.Week;
 import org.openmeetings.app.data.calendar.daos.AppointmentCategoryDaoImpl;
 import org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl;
 import org.openmeetings.app.data.calendar.daos.AppointmentReminderTypDaoImpl;
@@ -501,6 +506,92 @@ public class CalendarWebService {
 			log.error("[getAppointmentReminderTypList]", err);
 		}
 		return null;
+	}
+	
+	public static void main(String... args) {
+		
+		Calendar cal =Calendar.getInstance();
+		cal.set(Calendar.MONTH, 1);
+		
+		new CalendarWebService().getAppointmentsByWeekCalendar(1, cal.getTime());
+		
+	}
+	
+	public List<Week> getAppointmentsByWeekCalendar(int firstDayInWeek, Date startDate) {
+		
+		// Calculate the first day of a calendar based on the first showing day
+		// of the week
+		List<Week> weeks = new ArrayList<Week>(6);
+		Calendar currentDate = Calendar.getInstance();
+		currentDate.setTime(startDate);
+		currentDate.set(Calendar.DATE, 1);
+		
+		int currentWeekDay = currentDate.get(Calendar.DAY_OF_WEEK);
+		
+		Calendar startWeekDay = Calendar.getInstance();
+		startWeekDay.setTimeInMillis((currentDate.getTimeInMillis() - ((currentWeekDay-1) * 86400000)));
+		
+		log.debug("startWeekDay 1" +startWeekDay.getTime());
+		
+		if (currentWeekDay == 1) {
+			startWeekDay.setTimeInMillis(startWeekDay.getTimeInMillis() - ((7 - firstDayInWeek) * 86400000));
+		} else {
+			
+			if (currentWeekDay > firstDayInWeek) {
+				startWeekDay.setTimeInMillis(startWeekDay.getTimeInMillis() + (firstDayInWeek * 86400000));
+			} else {
+				startWeekDay.setTimeInMillis(startWeekDay.getTimeInMillis() - (firstDayInWeek * 86400000));
+			}
+			
+		}
+		
+		Calendar calStart = Calendar.getInstance();
+		calStart.setTime(startWeekDay.getTime());
+		
+		Calendar calEnd = Calendar.getInstance();
+		// every month page in our calendar shows 42 days
+		calEnd.setTime(new Date(startWeekDay.getTime().getTime()
+				+ (42L * 86400000L)));
+										
+		
+		List<Appointment> appointments = appointmentDao.getAppointmentsByRange(1L, calStart.getTime(), calEnd.getTime());
+		
+		log.debug("startWeekDay 2"+startWeekDay.getTime());
+		log.debug("startWeekDay Number of appointments "+appointments.size());
+		
+		long z = 0;
+		
+		for (int k = 0; k < 6; k++) { // 6 weeks per monthly summary
+			
+			Week week = new Week();
+			
+			for (int i = 0; i < 7; i++) { // 7 days a week
+				
+				Calendar tCal = Calendar.getInstance();
+				tCal.setTimeInMillis(startWeekDay.getTimeInMillis()
+						+ (z * 86400000L));
+				
+				Day day = new Day(tCal.getTime());
+				
+				for (Appointment appointment : appointments) {
+					if (appointment.appointmentStartAsCalendar().get(
+							Calendar.MONTH) == tCal.get(Calendar.MONTH)
+							&& appointment.appointmentStartAsCalendar().get(
+									Calendar.DATE) == tCal.get(Calendar.DATE)) {
+						day.getAppointments().add(
+								new AppointmentDTO(appointment));
+					}
+				}
+				
+				
+				week.getDays().add(day);
+				z++;
+			}
+			
+			weeks.add(week);
+		}
+		
+		return weeks;
 	}
 
 }

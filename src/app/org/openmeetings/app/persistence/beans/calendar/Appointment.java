@@ -19,6 +19,7 @@
 package org.openmeetings.app.persistence.beans.calendar;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -141,12 +142,24 @@ public class Appointment implements Serializable {
 		return appointmentStarttime;
 	}
 
+	public Calendar appointmentStartAsCalendar() {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(appointmentStarttime);
+		return cal;
+	}
+
 	public void setAppointmentStarttime(Date appointmentStarttime) {
 		this.appointmentStarttime = appointmentStarttime;
 	}
 
 	public Date getAppointmentEndtime() {
 		return appointmentEndtime;
+	}
+
+	public Calendar appointmentEndAsCalendar() {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(appointmentEndtime);
+		return cal;
 	}
 
 	public void setAppointmentEndtime(Date appointmentEndtime) {

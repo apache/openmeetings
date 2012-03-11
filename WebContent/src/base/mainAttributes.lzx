@@ -417,6 +417,10 @@ and some more references to temp-objects
 -->
 <attribute name="contactUser" value="0" type="number" />
 
+<attribute name="monthnames" value="['Januar','Februar','Maerz','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember']"/> 
+
+<attribute name="dayShortNames" value="null" />
+
 <!--
     Used in SOAP API to indicate if the user will see a pop up to enter its nickname
  -->

@@ -707,6 +707,8 @@ public class AppointmentDaoImpl {
 			calend.setTime(endtime);
 			calend.set(Calendar.HOUR, 23);
 			calend.set(Calendar.MINUTE, 59);
+			
+			log.debug("Start " + calstart.getTime() + " End " + calend.getTime());
 
 			String hql = "select a from Appointment a "
 					+ "WHERE a.deleted <> :deleted  "

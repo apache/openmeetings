@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+	<class name="lzCalendarGrid" extends="view" x="204" y="20" 
+					width="${ parent.width - 204 }" height="${ parent.height-20 }" >
+		
+		<attribute name="currentDate" value="null" />
+		
+		<attribute name="rowfactor" value="6" type="number" />
+		<attribute name="columnfactor" value="6" type="number" />
+		<attribute name="viewType" value="month" type="string" />
+		
+		<attribute name="reRenderLock" value="false" type="boolean" />
+		
+		<method name="setCurrentDate" args="tDate">
+			this.currentDate = tDate;
+		</method>
+		
+		<method name="isCurrentMonth" args="tMonth">
+			if (this.currentDate == null) {
+				if ($debug) Debug.warn("currentDate is NULL ");
+				return false;
+			}
+			return (tMonth == this.currentDate.getMonth());
+		</method>
+		
+		<method name="showDay" args="weekNo,dayNo">
+			this.reRenderLock = true;
+			this.setAttribute("viewType","day");
+			this.reRenderLock = false;
+			weeks.days.setAttribute('datapath','days[4]');
+			weeks.setAttribute('datapath','getAppointmentsByWeekCalendarResponse/return[2]');
+			this.setAttribute("rowfactor",1);
+			this.setAttribute("columnfactor",1);
+		</method>
+		
+		<method name="showWeek" args="weekNo">
+			this.reRenderLock = true;
+			this.setAttribute("viewType","week");
+			this.reRenderLock = false;
+			weeks.setAttribute('datapath','getAppointmentsByWeekCalendarResponse/return[2]');
+			this.setAttribute("rowfactor",1);
+			this.setAttribute("columnfactor",7);
+		</method>
+		
+		<method name="showMonth">
+			this.reRenderLock = true;
+			this.setAttribute("viewType","month");
+			this.reRenderLock = false;
+			weeks.setAttribute('datapath','getAppointmentsByWeekCalendarResponse/return');
+			this.setAttribute("rowfactor",6);
+			this.setAttribute("columnfactor",7);
+		</method>
+		
+		
+		<!-- The weeks -->
+		<view name="weeks" datapath="getAppointmentsByWeekCalendarResponse/return" 
+			width="${ parent.width }" height="${ Math.round( parent.height/classroot.rowfactor ) }" >
+			
+			<!-- The days -->
+			<view name="days" datapath="days" width="${ Math.round( parent.width/classroot.columnfactor ) }" clip="true"
+						height="${ parent.height }" bgcolor="0xDDDDDD">
+			
+				<attribute name="dayDate" value="null" />
+				
+				<attribute name="viewType" value="${ classroot.viewType }" type="string" />
+			
+				<handler name="ondata" args="d">
+					if(d is lz.DataNodeMixin){
+						var lzDataPointer = new lz.datapointer();
+						lzDataPointer.setPointer(d);
+						var xmlDate = lzDataPointer.xpathQuery('tDate/text()');
+						var splitDate = xmlDate.split("-");
+						this.dayDate = new Date(splitDate[0], Number(splitDate[1])-1, splitDate[2]);
+						this.renderView();
+					}
+				</handler>
+				
+				<method name="renderView">
+					if (this.viewType == "month") {
+						var tDay = this.dayDate.getDate();
+						var tMonth = this.dayDate.getMonth();
+						if (parent.parent.isCurrentMonth(tMonth)) {
+							this._content._title.setAttribute("fgcolor",0x000000);
+							if (tDay == 1) {
+								tDay = tDay + "." + canvas.monthnames[this.dayDate.getMonth()];
+							}
+						} else {
+							this._content._title.setAttribute("fgcolor",0xBBBBBB);
+						}
+						this._content._title.setAttribute("text",tDay);
+					} else if (this.viewType == "week") {
+						var tDay = canvas.dayShortNames[this.dayDate.getDay()] +" "+this.dayDate.getDate() + "." + (this.dayDate.getMonth()+1)+".";
+						var tMonth = this.dayDate.getMonth();
+						if (parent.parent.isCurrentMonth(tMonth)) {
+							this._content._title.setAttribute("fgcolor",0x000000);
+						} else {
+							this._content._title.setAttribute("fgcolor",0xBBBBBB);
+						}
+						this._content._title.setAttribute("text",tDay);
+					}
+				</method>
+				
+				<view name="_content" width="${ parent.width -1 }" bgcolor="0xFFFFFF"
+								height="${ parent.height -1 }">
+								
+								
+					<text name="_title" />
+					
+					<state name="month" applied="${ classroot.viewType == 'month' }">
+					
+						<view width="$once{ parent.width }" y="18">
+							<view datapath="appointments" bgcolor="0xA59CFC" width="$once{ parent.width }">
+								<text name="_time" datapath="start" >
+									<handler name="ondata" args="d">
+										this.setAttribute("text",parseTimeStringFromXmlString(d.childNodes[0].data));
+									</handler>
+								</text>
+								<text name="_title" x="36" datapath="title" text="$path{ 'text()' }" />
+							</view>
+							<simplelayout axis="y" spacing="1" />
+	 					</view>
+ 					
+ 					</state>
+ 					
+ 					<state name="week" applied="${ classroot.viewType == 'week' }">
+						
+						<view width="$once{ parent.width }" y="18">
+							<view datapath="appointments" bgcolor="0xA59CFC" width="$once{ parent.width }" height="60">
+								<handler name="ondata" args="d">
+									<![CDATA[
+										if (classroot.reRenderLock) {
+											return;
+										}
+										var dataPointer = new lz.datapointer();
+										dataPointer.setPointer(d);
+										var startDate = parseDateTimeFromXmlString(dataPointer.xpathQuery('start/text()'));
+										var endDate = parseDateTimeFromXmlString(dataPointer.xpathQuery('end/text()'));
+										
+										if ($debug) Debug.write("COMPARE -- ",startDate,endDate);
+										
+										var heightInMinutes = parent.parent.height/1440;
+										var startMin = (startDate.getHours() * 60 ) + startDate.getMinutes();
+										var endMin = (endDate.getHours() * 60 ) + endDate.getMinutes();
+										
+										this.setAttribute("y",Math.round(heightInMinutes*startMin));
+										this.setAttribute("height",Math.round((endMin - startMin)*heightInMinutes));
+										
+										if ($debug) Debug.write("y,height -- ",this.y,this.height);
+									]]>
+								</handler>
+							
+								<text name="_title" x="36" datapath="title" text="$path{ 'text()' }" />
+							</view>
+	 					</view>
+					
+					</state>
+					
+				</view>
+			
+			</view>
+			
+			<simplelayout axis="x" spacing="0" />
+		</view>
+		
+		<simplelayout axis="y" spacing="0" />
+		
+	</class>
+
+</library>

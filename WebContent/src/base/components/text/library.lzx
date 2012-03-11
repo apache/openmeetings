@@ -20,7 +20,6 @@
 -->
 <library>
 	
-	<include href="browserjavascriptcallback.lzx" />
 	<include href="borderedInputtext.lzx" />
 	<include href="labelText.lzx" />
 	<include href="labelTooltip.lzx" />

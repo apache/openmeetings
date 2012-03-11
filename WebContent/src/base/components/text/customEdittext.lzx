@@ -22,8 +22,8 @@
 
 <class name="customEdittext" extends="inputtext" bgcolor="0xFFFFFF" fontsize="11" height="20" >
 	
-	<view name="v_border" height="1"       bgcolor="black" width="$once{parent.width}" />
-    <view name="h_border" width="1"  y="1" bgcolor="black" height="$once{parent.height -1}" />
+	<view name="v_border" height="1"       bgcolor="0xE0E0E0" width="$once{parent.width}" />
+    <view name="h_border" width="1"  y="1" bgcolor="0xE0E0E0" height="$once{parent.height -1}" />
 	
 	<attribute name="labelid" type="number" setter="setLabelId(labelid)" />
 	
@@ -144,10 +144,14 @@
             
     	]]>
     </handler>
+    
+    <attribute name="callDelegate" value="null" />
+    <attribute name="regExpCheckId" value="-1" />
 	
 	<handler name="onblur">
 		<![CDATA[
 			if (this.regexpType!="none"){
+			
 				//if ($debug) Debug.write("onblur");
 				//if ($debug) Debug.write("onblur check ",this.regexpType);		
 				var fieldValue = this.getText();
@@ -176,34 +180,43 @@
 				}
 				//if ($debug) Debug.write("regExpV: ",regExpV);
 		  	    var fieldValue = this.getText();
-		  	    var regex = "/^"+regExpV+"$/";
 		  	    
-		  	    var t = "( !( (\""+ fieldValue +"\".replace("+ regex +" ,\"\").length == 0) && ( "+ regex +".test(\""+ fieldValue +"\")) ) ) ";
-	            this.bumb_1.callIt(t);
-				
+		  	    this.regExpCheckId = canvas.doRegExpCheck(this.getText(),regExpV);
+		  	    
+		  	    if(this.callDelegate == null) {
+		  	    	this.callDelegate = new LzDelegate( this, "checkRegExpResult" );
+		  	    }
+		
+				lz.Timer.resetTimer( this.callDelegate, 50 );
 			}
 		]]>
 	</handler>
 	
-    <browserjavascriptcallback name="bumb_1">
-        <handler name="onvalue" args="val">
-            if(val=="true"){
-                //Debug.warn("FALSE: ",parent.parent,parent.parent.regexperror);
+	<method name="checkRegExpResult" args="item">
+		var tResult = canvas.checkRegExpResult(this.regExpCheckId);
+     	if ($debug) Debug.write("callback",tResult);
+     
+		if(tResult == undefined || tResult == null) {
+			lz.Timer.resetTimer( this.callDelegate, 50 );
+		} else {
+			if(!tResult){
+                if ($debug) Debug.warn("FALSE: regexperror");
               	disablesTooltips(new lz.regexptip(canvas,{x:this.getAttributeRelative('x',canvas)+12,
               					y:this.getAttributeRelative('y',canvas)+26,
-              					regexptext:canvas.getLabelName(parent.regexpLabelid)}));
-              	parent.usePreContent();
-              	parent.setAttribute('isvalidInput',false);
+              					regexptext:canvas.getLabelName(this.regexpLabelid)}));
+              	this.usePreContent();
+              	this.setAttribute('isvalidInput',false);
             } else {
-              	if(!this.parent.parent.getAttribute('isvalidInput')){
+              	if(!this.isvalidInput){
                 	disablesTooltips(null);
               	}
-              	parent.setAttribute('isvalidInput',true);
+              	this.setAttribute('isvalidInput',true);
             }
-            parent.onafterCheck.sendEvent();
-        </handler>
-    </browserjavascriptcallback>    	
-
+            if ($debug) Debug.write("-- Complete --");
+            this.onafterCheck.sendEvent();
+		}
+     </method>
+	
     
     <method name="setLabelId" args="_labelid" >
         this.labelid = _labelid;
@@ -213,30 +226,6 @@
   	<method name="usePreContent">
   		this.setAttribute('text',this.preText);
   	</method>    
-  	
-    <!--
-    <browserjavascriptcallback name="bumb_1">
-        <handler name="onvalue" args="val">
-            if(val=="true"){
-            	if(parent.parent.isreport){
-                    Debug.write("TRUE: ",parent.parent,parent.parent.regexperror);
-              		disablesTooltips(new lz.regexptip(canvas,{x:this.getAttributeRelative('x',canvas)+12,y:this.getAttributeRelative('y',canvas)+12,regexptext:'Invalid Input'}));
-              	} else {
-                    Debug.write("FALSE: ",parent.parent,parent.parent.regexperror);
-              		disablesTooltips(new lz.regexptip(canvas,{x:this.getAttributeRelative('x',canvas)+12,y:this.getAttributeRelative('y',canvas)+12,regexptext:'Invalid Input'}));
-              	}
-              	parent.usePreContent();
-              	parent.setAttribute('isvalidInput',false);
-            } else {
-              	if(!this.parent.parent.getAttribute('isvalidInput')){
-                	disablesTooltips(null);
-              	}
-              	parent.setAttribute('isvalidInput',true);
-              	if (this.parent.parent.textblur) this.parent.parent.textblur.sendEvent(); 
-            }
-        </handler>
-    </browserjavascriptcallback> 
-    -->       
     
 </class>
 

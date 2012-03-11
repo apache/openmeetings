@@ -44,6 +44,9 @@
         client.closeScreenSharing = this.closeScreenSharing;
         client.closeAllScreenSharings = this.closeAllScreenSharings;
         client.updateCursorScreenSharing = this.updateCursorScreenSharing;
+        
+        //Text RegExp 
+        client.regExpTest = this.regExpTest;
 
         var rtmpLC:LocalConnection = new LocalConnection();
         rtmpLC.connect(canvas.rtmp_lc_name);
@@ -316,7 +319,23 @@
 			}
 		]]>
 	</method>
-    
+	
+	<!---
+		Make regExpTest 
+	 -->
+	<method name="regExpTest" args="fieldValue,regExStr,regExpCheckId">
+		<![CDATA[
+			var re = new RegExp(regExStr);
+			
+			var testResult = re.test( fieldValue );
+			
+			if ($debug) Debug.write(fieldValue, testResult);
+			
+			canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'regExpResult', regExpCheckId, testResult);
+			
+		]]>
+	</method>
+	
     <!--
         Container to hold all whiteboard videos
      -->	

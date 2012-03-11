@@ -20,16 +20,6 @@
 -->
 <library>
 
-
-<!-- 
-
-NOTICE:
-All contents regarding "chat" are moved to /modules/chat/globalMethods.lzx
-Issue353. 2008.3.28 H.kuze(minamotonoason)
-
--->
-
-
 <script>
 <![CDATA[
 
@@ -361,6 +351,40 @@ function strtrim(str)
     for(var i = 0; str.charCodeAt(i) < 33; i++);
     for(var j = str.length-1; str.charCodeAt(j) < 33; j--);
     return str.substring(i, j+1);
+}
+
+function parseDateStringFromXmlString(str) { 
+	//0123456789012345678901234567890
+	//2012-03-08T06:30:00.000+01:00
+	//2012-03-11T15:00:00.713Z
+	var tYear = str.substr(0,4);
+	var tMonth = str.substr(5,2);
+	var tDay = str.substr(8,2);
+	return ""+tDay+"."+tMonth+"."+tYear;
+}
+
+function parseTimeStringFromXmlString(str) { 
+	//0123456789012345678901234567890
+	//2012-03-08T06:30:00.000+01:00
+	//2012-03-11T15:00:00.713Z
+	var tHour = str.substr(11,2);
+	var tMin = str.substr(14,2);
+	
+	return ""+tHour+":"+tMin;
+}
+
+function parseDateTimeFromXmlString(str) { 
+	//0123456789012345678901234567890
+	//2012-03-08T06:30:00.000+01:00
+	//2012-03-11T15:00:00.713Z
+	var tYear = str.substr(0,4);
+	var tMonth = str.substr(5,2);
+	var tDay = str.substr(8,2);
+
+	var tHour = str.substr(11,2);
+	var tMin = str.substr(14,2);
+	
+	return new Date(tYear,tMonth,tDay,tHour,tMin,0);
 }
 
 ]]>
