@@ -19,12 +19,12 @@
   
 -->
 <library>
+
 	<!-- 
 	<include href="compontents/" />
 
 	
 	<include href="lzCalendar.lzx" />
-	
 	 -->
 	<include href="old_lzCalendar.lzx" />
     <include href="resources.lzx"/>
@@ -41,7 +41,6 @@
 	<include href="addAttendee.lzx" />
 	<include href="addExternalAttendee.lzx" />
 	<include href="confirmCancelPopup.lzx" />
-	
 	
 
 </library>
