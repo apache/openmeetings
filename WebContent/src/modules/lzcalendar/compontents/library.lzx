@@ -20,6 +20,7 @@
 -->
 <library>
 
+	<resource name="calendar_one_day_hours_index_bg_rsc" src="resources/one_day_hours.png" />
 	<resource name="calendar_day_hours_index_bg_rsc" src="resources/day_hours_index_only.png" />
 	<resource name="calendar_day_bg_rsc" src="resources/day_hours.png" />
 	<resource name="calendar_add_user_rsc" src="resources/user_add.png" />

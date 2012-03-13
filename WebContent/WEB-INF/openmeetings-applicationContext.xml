@@ -58,6 +58,7 @@
 
 	<!-- Services -->
     <import resource="red5-services/meetingmemberservice.service.xml"/>  
+    <import resource="red5-services/calendarservice.service.xml"/>  
     <import resource="red5-services/fileservice.service.xml"/>  
     <import resource="red5-services/conferenceservice.service.xml"/>  
     <import resource="red5-services/userservice.service.xml"/>  

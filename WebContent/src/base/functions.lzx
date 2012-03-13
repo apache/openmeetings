@@ -382,7 +382,7 @@ function parseDateOnlyFromXmlString(str) {
 	var tYear = str.substr(0,4);
 	var tMonth = str.substr(5,2);
 	var tDay = str.substr(8,2);
-	return new Date(tYear,tMonth,tDay);
+	return new Date(tYear,Number(tMonth)-1,tDay);
 }
 
 
@@ -399,7 +399,7 @@ function parseDateTimeFromXmlString(str) {
 	var tDay = str.substr(8,2);
 	var tHour = str.substr(11,2);
 	var tMin = str.substr(14,2);
-	return new Date(tYear,tMonth,tDay,tHour,tMin,0);
+	return new Date(tYear,Number(tMonth)-1,tDay,tHour,tMin,0);
 }
 
 ]]>
