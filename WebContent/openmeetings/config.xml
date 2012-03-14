@@ -161,7 +161,7 @@ of the red5-servlet
 	First day in the Week used by the Calendar
 	0 means Sunday
 	1 means Monday
-	this is the way how the Celendar inits a week
+	this is the way how the calendar UI shows a week
 -->
 <firstdayinweek>0</firstdayinweek>	
     

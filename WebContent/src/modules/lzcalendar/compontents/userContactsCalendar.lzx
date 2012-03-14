@@ -21,11 +21,11 @@
 <library>
 
 	<class name="userContactsCalendar" extends="list" fontsize="11" 
-		   bordersize="1" itemclassname="textlistitem">
+		   bordersize="1" itemclassname="textlistitem" scrollbarclassname="om_vscrollbar">
 		
 		<handler name="oninit">
 			this._setbordercolor = true;
-            this.setAttribute('bgcolor', canvas.basebgcolorizer);
+            this.setAttribute('bgcolor', 0xE0E0E0);
             this._setbordercolor = false;
 			this.getUserContactsWithShareCalendar.doCall();
 		</handler>

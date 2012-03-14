@@ -20,8 +20,8 @@
 -->
 <library>
 	
-<class name="helpAndBugs" extends="view" x="${ parent.width-460 }" layout="axis:x;spacing:2">
-    <view name="btn0" width="170" height="26">
+<class name="helpAndBugs" extends="view" x="${ parent.width-470 }" layout="axis:x;spacing:2">
+    <view name="btn0" width="180" height="26">
         <handler name="onmouseover">
             this._bg.setAttribute("visibility","visible");
         </handler>

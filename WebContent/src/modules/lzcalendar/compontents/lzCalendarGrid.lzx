@@ -26,10 +26,6 @@
 		<attribute name="currentDate" value="null" />
 		<attribute name="currentWeek" value="0" type="number" />
 		<attribute name="currentDay" value="0" type="number" />
-		
-		
-		<attribute name="rowfactor" value="6" type="number" />
-		<attribute name="columnfactor" value="6" type="number" />
 		<attribute name="viewType" value="month" type="string" />
 		
 		<attribute name="reRenderLock" value="false" type="boolean" />
@@ -37,6 +33,19 @@
 		<method name="setCurrentDate" args="tDate">
 			if (this.currentDate != tDate) {
 				this.currentDate = tDate;
+			}
+		</method>
+		
+		<method name="checkAndShow" args="tDate,dayIndex,weekIndex">
+			this.setCurrentDate(tDate);
+			this.currentWeek = weekIndex + 1; //the index in the xml dataset list construct starts counting with 1
+			this.currentDay = dayIndex + 1; //the index in the xml dataset list construct starts counting with 1
+			if (this.viewType == "day") {
+				this.setAttribute("viewType","none");
+				this.showDay();
+			} else if (this.viewType == "week") {
+				this.setAttribute("viewType","none");
+				this.showWeek();
 			}
 		</method>
 		
@@ -48,43 +57,22 @@
 			return (tMonth == this.currentDate.getMonth());
 		</method>
 		
-		<method name="showDay" args="weekNo">
-			<![CDATA[
-				this.reRenderLock = false;
-				var tColumnRelativeToFirstDay = this.currentDate.getDay() - canvas.firstdayinweek;
-				if (tColumnRelativeToFirstDay < 0) {
-					tColumnRelativeToFirstDay = 7 + tColumnRelativeToFirstDay;
-				}
-				
-				if ($debug) Debug.write("Column Day ",tColumnRelativeToFirstDay);
-				
-				this.currentDay = (tColumnRelativeToFirstDay+1); //Column count starts with 1 not with zero
-				this.currentWeek = 2;
-				this.setAttribute("viewType","day");
-				//rootCalenderNode.days.setAttribute('datapath','days[4]');
-				//rootCalenderNode.setAttribute('datapath','getAppointmentsByWeekCalendarResponse/return[2]');
-				this.setAttribute("rowfactor",1);
-				this.setAttribute("columnfactor",1);
-			]]>
+		<method name="showDay">
+			if ($debug) Debug.write("Show Day ",this.currentDay,this.currentWeek);
+			this.reRenderLock = false;
+			this.setAttribute("viewType","day");
 		</method>
 		
-		<method name="showWeek" args="weekNo">
+		<method name="showWeek">
 			this.reRenderLock = true;
-			this.currentWeek = 2;
 			this.setAttribute("viewType","week");
 			this.reRenderLock = false;
-			//rootCalenderNode.setAttribute('datapath','getAppointmentsByWeekCalendarResponse/return[2]');
-			this.setAttribute("rowfactor",1);
-			this.setAttribute("columnfactor",7);
 		</method>
 		
 		<method name="showMonth">
 			this.reRenderLock = true;
 			this.setAttribute("viewType","month");
 			this.reRenderLock = false;
-			//rootCalenderNode.setAttribute('datapath','getAppointmentsByWeekCalendarResponse/return');
-			this.setAttribute("rowfactor",6);
-			this.setAttribute("columnfactor",7);
 		</method>
 		
 		<state name="day" applied="${ classroot.viewType == 'day' }">

@@ -50,26 +50,44 @@
         _mainScrollBar.setAttribute("visibility","visible");
     </handler>
 
-	<method name="loadAppointments" args="tDate">
+	<method name="loadAppointments" args="tDate, dayIndex, weekIndex">
 		<![CDATA[
+			var tRelaodDataSet = false;
+			if (this.currentDate == null) {
+				tRelaodDataSet = true;
+			}
+			
+			if ($debug) Debug.write("loadAppointments ",dayIndex, weekIndex, tDate);
+			
 			this.currentDate = tDate;
-			var tDay = tDate.getDate();
+			this._lzCalendarGrid.checkAndShow(tDate,dayIndex,weekIndex);
+			
+			if (tRelaodDataSet) {
+				this.loadCalendarData();
+	        }
+	        
+	        
+		]]>
+	</method>
+	
+	<method name="loadCalendarData">
+		<![CDATA[
+			var tDay = this.currentDate.getDate();
 			if (tDay < 10) tDay = "0"+tDay;
 			
-			var tMonth = tDate.getMonth() + 1;
+			var tMonth = this.currentDate.getMonth() + 1;
 			if (tMonth < 10) tMonth = "0"+tMonth;
 		
 			var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport
 	                       +canvas.httpRootKey+'services/CalendarService/getAppointmentsByWeekCalendar?'
 	                       //+'SID='+canvas.sessionId
 	                       +'&firstDayInWeek='+canvas.firstdayinweek
-	                       +'&startDate='+tDate.getFullYear()+"-"+tMonth+"-"+tDay;
+	                       +'&startDate='+this.currentDate.getFullYear()+"-"+tMonth+"-"+tDay;
 	       
 	        this.getAppointmentsByWeekCalendar.setAttribute("src",downloadurl);
 	        if ($debug) Debug.write("getAppointmentsByWeekCalendar doRequest 1 ",downloadurl);
-	        this._lzCalendarGrid.setCurrentDate(tDate);
 	        this.getAppointmentsByWeekCalendar.doRequest();
-		]]>
+        ]]>
 	</method>
 	
 	<method name="newCalendarEvent">
@@ -114,18 +132,25 @@
 		</handler>
 	</dataset>
 	
-	<simpleLabelButton labelid="1444" height="24" width="180" x="10" y="10" >
+	<!-- 176 pixels is the width of the mini calendar -->
+	<simpleLabelButton labelid="1444" height="24" width="176" x="12" y="10" >
         <handler name="onclick">
-            parent.newCalendarEvent();
+            parent.currentDate = null;
         </handler>
     </simpleLabelButton>
 	
-	<dateSelector name="_calendar" y="40" x="2">
+	<dateSelector name="_calendar" y="40" x="12">
+		<handler name="onmonthSel" args="tMonth">
+			parent.currentDate = null;
+		</handler>
+		<handler name="onyearSel" args="tYear">
+			parent.currentDate = null;
+		</handler>
 		<handler name="onselect" args="sel">
 			if ($debug) Debug.write("onselect ",sel);
 			// check for saving
 			if (true) {
- 				parent.loadAppointments(sel);
+ 				parent.loadAppointments(sel, this.dayIndexNumber, this.weekIndexNumber);
 			} else {
 				//Check Warning
     			if ($debug) Debug.warn("Unsaved Item - Show warning");
@@ -136,9 +161,9 @@
 	
 	<view resource="messagebox_info_rsc" x="4" y="184" />
 	
-	<labelText labelid="807" x="30" y="188" fontstyle="bold" />
+	<labelText labelid="807" x="24" y="182" fontstyle="bold" />
 	
-	<labelText labelid="806" x="4" y="216" multiline="true" width="190" />
+	<labelText labelid="806" x="4" y="204" multiline="true" width="190" />
 	
 	<labelText labelid="1276" x="4" y="266" fontstyle="bold" />
 	
@@ -156,7 +181,7 @@
         <labelTooltip labelid="1279" />
     </miniIcons>
 	
-	<userContactsCalendar name="_userContacts" y="340" x="4" height="294" width="186" />
+	<userContactsCalendar name="_userContacts" y="340" x="4" height="${ parent.height - 344 }" width="186" />
 	
 	<view name="_lzCalendarTobBar" width="${ parent.width - 204 }" x="204" height="20">
 		
@@ -164,13 +189,13 @@
 		
 			<simpleLabelButton labelid="799" height="20" >
 		        <handler name="onclick">
-		            parent.parent.parent._lzCalendarGrid.showDay(1,4);
+		            parent.parent.parent._lzCalendarGrid.showDay();
 		        </handler>
 		    </simpleLabelButton>
 		    
 		    <simpleLabelButton labelid="800" height="20" >
 		        <handler name="onclick">
-		            parent.parent.parent._lzCalendarGrid.showWeek(1);
+		            parent.parent.parent._lzCalendarGrid.showWeek();
 		        </handler>
 		    </simpleLabelButton>
 		    
