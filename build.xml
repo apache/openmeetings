@@ -203,6 +203,7 @@
 				<exclude name="services.xml" />
 			</fileset>
 		</copy>
+		<copy file="src/META-INF/persistence.xml" tofile="${dist.webapps.dir}/WEB-INF/classes/META-INF/derby_persistence.xml" />
 		<copy file="src/META-INF/${db.provider}_persistence.xml" tofile="${dist.webapps.dir}/WEB-INF/classes/META-INF/persistence.xml" />
 
 		<!-- add language files from .war version -->

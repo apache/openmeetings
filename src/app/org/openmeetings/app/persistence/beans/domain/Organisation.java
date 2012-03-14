@@ -38,7 +38,7 @@ import javax.persistence.Table;
 	, @NamedQuery(name="getAnyOrganisationById",
 		query="SELECT c FROM Organisation AS c WHERE c.organisation_id = :organisation_id")
 	, @NamedQuery(name="getOrganisationsByUserId",
-		query="SELECT u.organisation_users.organisation FROM Users u WHERE u.deleted = 'false' AND u.user_id = :user_id")
+		query="SELECT ou.organisation FROM Users u, IN(u.organisation_users) ou WHERE u.deleted = 'false' AND u.user_id = :user_id")
 })
 @Table(name = "organisation")
 public class Organisation implements Serializable {
