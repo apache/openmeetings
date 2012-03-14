@@ -4305,4 +4305,7 @@ see http://code.google.com/p/openmeetings/wiki/LanguageEditor for Details
   <string id="1433" name="exclusive_audio_action">
     <value>あなたは、自分自身の手で単独話者になることができます。単独話者になるには、ここをクリックしてください。(または、あなたのビデオ画面でクリック、あるいはF12押下でも可能です)</value>
   </string>
+  <string id="1444" name="calendar new button">
+    <value>New Event</value>
+  </string>
 </language>

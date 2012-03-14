@@ -4350,4 +4350,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   <string id="1443" name="layout_options">
     <value>Layout options</value>
   </string>
+  <string id="1444" name="calendar new button">
+    <value>New Event</value>
+  </string>
 </language>
