@@ -56,6 +56,7 @@
 	<property name="red5.server.lib" value="${red5.lib}/lib" />
 	<property name="red5.root" value="${dist.dir}/red5" />
 	<property name="dist.webapps.dir" value="${red5.root}/webapps/${project.distname}" />
+	<property name="dist.persistence.dir" value="${dist.webapps.dir}/WEB-INF/classes/META-INF/" />
 
 	<property name="laszlo.home" value="${build.base.dir}/openlaszlo" />
 	
@@ -203,8 +204,8 @@
 				<exclude name="services.xml" />
 			</fileset>
 		</copy>
-		<copy file="src/META-INF/persistence.xml" tofile="${dist.webapps.dir}/WEB-INF/classes/META-INF/derby_persistence.xml" />
-		<copy file="src/META-INF/${db.provider}_persistence.xml" tofile="${dist.webapps.dir}/WEB-INF/classes/META-INF/persistence.xml" />
+		<copy file="src/META-INF/persistence.xml" tofile="${dist.persistence.dir}/derby_persistence.xml" />
+		<copy file="${dist.persistence.dir}/${db.provider}_persistence.xml" tofile="${dist.persistence.dir}/persistence.xml" />
 
 		<!-- add language files from .war version -->
 		<copy todir="${dist.webapps.dir}/languages">
@@ -265,10 +266,10 @@
 		<tstamp prefix="build">
 			<format property="TODAY" pattern="d-MMMM-yyyy" locale="en" />
 		</tstamp>
-		<manifestclasspath property="jar.classpath" jarfile="${project.distname}.jar">
+		<manifestclasspath property="jar.classpath" jarfile="${project.distname}.r${svn.info.rev}.jar">
 			<classpath refid="compile.classpath" />
 		</manifestclasspath>
-		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}.jar">
+		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}.r${svn.info.rev}.jar">
 			<fileset dir="${main.out.dir}">
 				<include name="**" />
 				<exclude name="**/test/**" />
@@ -280,13 +281,13 @@
 				<exclude name="log4j.properties" />
 			</fileset>
 			<manifest>
-				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com" />
+				<attribute name="Built-By" value="OpenMeetings - http://incubator.apache.org/openmeetings" />
 				<attribute name="Built-On" value="${build.TODAY}" />
 				<attribute name="Class-Path" value="conf/ ${jar.classpath}" />
 				<attribute name="Svn-Revision" value="${svn.info.rev}" />
 			</manifest>
 		</jar>
-		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-templates.jar">
+		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-templates.r${svn.info.rev}.jar">
 			<fileset dir="${main.out.dir}">
 				<include name="**" />
 				<exclude name="**/org/**" />
@@ -294,19 +295,20 @@
 				<exclude name="**/*.properties" />
 			</fileset>
 			<manifest>
-				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com" />
+				<attribute name="Built-By" value="OpenMeetings - http://incubator.apache.org/openmeetings" />
 				<attribute name="Built-On" value="${build.TODAY}" />
 				<attribute name="Class-Path" value="conf/ ${jar.classpath}" />
+				<attribute name="Svn-Revision" value="${svn.info.rev}" />
 			</manifest>
 		</jar>
 		
 		<!-- Build WebServices -->
-		<jar destfile="${dist.webapps.dir}/WEB-INF/services/OpenMeetingsService.aar">
+		<jar destfile="${dist.webapps.dir}/WEB-INF/services/OpenMeetingsService.r${svn.info.rev}.aar">
 			<fileset dir="src/">
 				<include name="META-INF/services.xml" />
 			</fileset>
 		</jar>
-		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/openmeetings-WebService.jar">
+		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/openmeetings-WebService.r${svn.info.rev}.jar">
 			<fileset dir="${main.out.dir}">
 				<include name="**/openmeetings/axis/**" />
 			</fileset>
@@ -487,7 +489,7 @@
 		<!-- invoke the enhancer -->
 		<openjpac>
 			<classpath refid="jpa.enhancement.classpath" />
-			<config propertiesFile="src/META-INF/${db.provider}_persistence.xml" />
+			<config propertiesFile="${dist.persistence.dir}/${db.provider}_persistence.xml" />
 		</openjpac>
 		<echo message="Enhancing complete." />
 	</target>
