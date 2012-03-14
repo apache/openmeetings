@@ -116,7 +116,7 @@
 	</target>
 
 	<!-- build artefacts -->
-	<target name="dist-bin" description="pack binary distribution" depends="dist">
+	<target name="dist-bin" description="pack binary distribution" depends="clean.all, dist">
 		<tstamp>
 			<format property="build.time" pattern="dd-MM-yyyy_HHmm" />
 		</tstamp>
