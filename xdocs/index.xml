@@ -39,6 +39,8 @@
 		<section name="OpenMeetings News">
 
 			<p>
+			    <strong>First builds are available at <a href="https://builds.apache.org/job/openmeetings">builds.apache.org</a> (2012-03-15)</strong><br/>
+			    <strong>New committer: Timur Tleukenov (2012-03-06)</strong><br/>
 			    <strong><a href="http://demo.openmeetings.de" target="_BLANK" rel="nofollow">Demo server</a> updated to r1236172 (2012-01-26)</strong><br/>
 			    <strong>New committer: German Grekhov (2011-12-26)</strong><br/>
 				<strong>OpenMeetings has been accepted into the Apache Incubator
