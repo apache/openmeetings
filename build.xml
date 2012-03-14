@@ -34,8 +34,6 @@
 	<property name="doclet.src.dir" value="${basedir}/src/docgenerator" />
 
 	<property name="dist.dir" value="dist" />
-	<property name="report.dir" value="${basedir}/junitreport" />
-	<property name="derbydb.dir" value="${basedir}/openmeetings" />
 
 	<!-- Conf dirs -->
 	<property name="conf.dir" value="${basedir}/conf" />
@@ -76,6 +74,9 @@
 	<property name="laszlo.proxied" value="solo" />
 
 	<property name="keystore.file" value="${build.base.dir}/filetest.keystore" />
+	
+	<property name="junit.base.dir" value="${build.base.dir}/junit" />
+	<property name="junit.report.dir" value="${junit.base.dir}/report" />
 	
 	<path id="laszlo.lib">
 		<!-- swf8 -->
@@ -159,11 +160,11 @@
 	</target>
 	
 	<target name="dist" description="binary distribution of OpenMeetings"
-		depends="cleanForBinary, jar, compile.laszlo.main, compile.laszlo.main.as3, enhance, signWebStartJars, -copy-libraries"/>
+		depends="clean, jar, compile.laszlo.main, compile.laszlo.main.as3, enhance, signWebStartJars, -copy-libraries"/>
 
 	<!-- compiles the sources without openlaszlo client -->
 	<target name="dist-test" description="binary distribution of OpenMeetings"
-		depends="cleanForBinary, -dist-test-no-clean, signWebStartJars"/>
+		depends="clean, -dist-test-no-clean, signWebStartJars"/>
 
 	<!-- compiles the sources without openlaszlo client and clean -->
 	<target name="-dist-test-no-clean" description="binary distribution of OpenMeetings"
@@ -171,7 +172,7 @@
 
 	<!-- compiles the sources only with laszlo debug client -->
 	<target name="dist-debug" description="binary distribution of OpenMeetings"
-		depends="cleanForBinary, jar, compile.laszlo.main.debug, compile.laszlo.main.debug.as3, signWebStartJars, -copy-libraries"/>
+		depends="clean, jar, compile.laszlo.main.debug, compile.laszlo.main.debug.as3, signWebStartJars, -copy-libraries"/>
 
 	<condition property="db.provider" value="${db}" else="derby">
 		<isset property="db" />
@@ -478,24 +479,6 @@
 		</junit>
 	</target>
 
-	<!-- Remove classes directory for clean build -->
-	<target name="clean" depends="cleanForBinary" description="Prepare for clean build" />
-
-	<target name="clean.classes" description="Clean Classes">
-		<delete dir="${main.out.dir}" />
-	</target>
-
-	<target name="cleanForBinary" depends="clean.classes" description="Clean For Binary">
-		<delete dir="${dist.dir}" />
-		<delete dir="${screen.out.dir}" />
-		<delete dir="${report.dir}" />
-		<delete dir="${derbydb.dir}" />
-		<delete dir="${basedir}/log" />
-		<delete file="${keystore.file}" />
-		<delete file="derby.log" />
-		<delete file="velocity.log" />
-	</target>
-
 	<path id="jpa.enhancement.classpath">
 		<pathelement path="${main.out.dir}" />
 		<path refid="compile.classpath" />
@@ -692,26 +675,26 @@
 		<fileset dir="${om.dist.webapp}/WEB-INF/lib" includes="*.jar" />
 	</path>
 	<target name="test" depends="-dist-test-no-clean" description="Will run all tests unless -Dtestcases=_file_name_pattern_ will be passed">
-		<mkdir dir="${report.dir}" />
+		<mkdir dir="${junit.report.dir}" />
 		<property name="myclsp" refid="junit.classpath" />
 		<!--		<echo message="${myclsp}" /> -->
-		<junit printsummary="yes">
+		<junit printsummary="yes" dir="${junit.base.dir}" tempdir="${junit.base.dir}" fork="yes" forkmode="perBatch">
 			<classpath refid="junit.classpath" />
 			<jvmarg value="-Dred5.root=${red5.root}" />
 			<jvmarg value="-Dred5.config_root=${red5.root}/conf" />
 			<jvmarg value="-Dwebapps.root=${basedir}/${om.dist.webapp}" />
 			<formatter type="${junit.test.formatter}" />
-			<batchtest fork="yes" todir="${report.dir}">
+			<batchtest todir="${junit.report.dir}">
 				<fileset dir="${main.out.dir}">
 					<include name="org/openmeetings/test/**/${junit.test.pattern}" />
 				</fileset>
 			</batchtest>
 		</junit>
-		<junitreport todir="${report.dir}">
-			<fileset dir="${report.dir}">
+		<junitreport todir="${junit.report.dir}">
+			<fileset dir="${junit.report.dir}">
 				<include name="TEST-*.xml" />
 			</fileset>
-			<report todir="${report.dir}" />
+			<report todir="${junit.report.dir}" />
 		</junitreport>
 	</target>
 	<target name="smoke.test" depends="dist" description="Will run 'Smoke' subset of tests">
@@ -892,11 +875,28 @@
 			<param name="ivy.lib.location" value="${laszlo.home}"/>
 		</antcall>
 	</target>
-	<target name="ivyclear" description="Clears out the Ivy cache">
+	
+	<!-- Clean targets -->
+	<!-- Remove classes directory for clean build -->
+	<target name="clean.classes" description="Clean Classes">
+		<delete includeemptydirs="true" dir="${main.out.dir}" />
+		<delete includeemptydirs="true" dir="${screen.out.dir}" />
+	</target>
+
+	<target name="clean.dist" description="Clean Dist dir">
+		<delete includeemptydirs="true" dir="${dist.dir}" />
+	</target>
+	
+	<target name="clean" depends="clean.classes, clean.dist" description="Clean For Binary">
+		<delete includeemptydirs="true" dir="${junit.base.dir}" />
+		<delete file="${keystore.file}" />
+	</target>
+
+	<target name="clean.all" depends="clean.dist" description="Clean All">
+		<delete includeemptydirs="true" dir="${build.base.dir}" />
+	</target>
+	<target name="clean.ivy" depends="clean.all" description="Clears out the Ivy cache">
 		<delete dir="${user.home}/.ivy2/cache/red5"/>
-		<delete includeemptydirs="true">
-			<fileset dir="${project.lib.dir}" excludes="*.jar"/>
-		</delete>
 		<ivy:cleancache/>
 	</target>
 
