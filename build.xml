@@ -124,17 +124,8 @@
 		
 		<tar longfile="gnu" compression="gzip" destfile="${archive.file.name}-src.tar.gz">
 			<tarfileset dir="${basedir}">
-				<include name="docs/**" />
-				<include name="lib/*.jar" />
-				<exclude name="lib/java*.jar" />
-				<include name="${red5.server.dir}/**" />
-				<include name="src/**" />
-				<include name="test/**" />
-				<include name="WebContent/**" />
-				<include name="xdocs/**" />
-				<include name="*.xml" />
-				<include name=".*" />
-				<include name="LICENSE" />
+				<exclude name="build/**" />
+				<exclude name="dist/**" />
 			</tarfileset>
 		</tar>
 		<tar longfile="gnu" compression="gzip" destfile="${archive.file.name}.tar.gz">
