@@ -22,6 +22,7 @@
 
 	<resource name="lz_recorder_play" src="resources/webstart_play.png" />
 
+    <include href="changeDevice.lzx" />
     <include href="videoUserProfilePicSWF10.lzx" />
     <include href="editRecordStreamSWF10.lzx" />
     <include href="baseVideoObject.lzx" />

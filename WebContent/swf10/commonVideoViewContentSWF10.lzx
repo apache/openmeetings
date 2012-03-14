@@ -42,6 +42,7 @@
             client.ismoderatorChanged = this.ismoderatorChanged;
             // update rights to SWF10 client
             client.updateModerationFlag = this.updateModerationFlag;
+            client.changeDevice = this.changeDevice;
             client.setDrawAllowStatus = this.setDrawAllowStatus
 
             var lc:LocalConnection = new LocalConnection();
@@ -410,6 +411,18 @@
             canvas.setAttribute("isAllowedToScreenShare",canShare);
             canvas.setAttribute("isAllowedToRemoteControl",canRemote);
     	]]>
+    </method>
+
+    <!---
+        Shows the window with device settings
+    -->
+    <method name="changeDevice">
+        <![CDATA[
+            if ($debug) Debug.write("changeDevice");
+            new lz.changeDevice(canvas.inner, {
+                name:"changeDeviceDialog"
+            });
+        ]]>
     </method>
         
     <!--

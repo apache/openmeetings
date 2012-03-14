@@ -400,7 +400,7 @@
                     //new lz.applyForModeration(canvas.main_content._content.inner);
                     canvas.thishib.applyForModeration.doCall();
                 } else if (stringSub=='editCamMicSettings') {
-                    new lz.changeDevice(canvas.main_content._content.inner);
+                    canvas._videocontainer._videoviewcontent.changeDevice();
                 } else if (stringSub=='editBoardSettings') {
                     new lz.editWhiteboardDefault(canvas.main_content._content.inner);
                 } else if (stringSub=='quit') {

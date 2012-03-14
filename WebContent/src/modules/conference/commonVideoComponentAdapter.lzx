@@ -138,6 +138,13 @@
     <method name="updateMuteStatusVideoView" args="roomClient">
         canvas.lc.send(canvas.vid_lc_name, "updateMuteStatusVideoView", roomClient);
     </method>
+
+    <!---
+        Shows the window with device settings
+    -->
+    <method name="changeDevice">
+        canvas.lc.send(canvas.vid_lc_name, "changeDevice");
+    </method>
     
 </class>
 
