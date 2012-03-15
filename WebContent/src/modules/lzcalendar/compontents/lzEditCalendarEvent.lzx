@@ -20,37 +20,141 @@
 -->
 <library>
 
-	<class name="lzEditCalendarEvent" extends="labelExplorerBox" labelid="815" allowDragging="false" 
-		    x="$once{ parent.width/2 - 300 }" y="100" docking="true" resizeable="false" 
-		    closable="true" width="600" height="480">
+	<class name="lzEditCalendarEvent" extends="labelExplorerBox" labelid="815" allowDragging="true" 
+		    x="$once{ parent.width/2 - 300 }" y="100" docking="false" resizeable="false" 
+		    closable="true" width="600" height="500">
 		    
 		<attribute name="reminderTypeId" value="0" type="number" />
 		
 		<attribute name="dataElement" value="null" />
 		
+		<attribute name="baseUrl" value="" type="string" />
+		
 		<dataset name="eventDS" />
 		    
 		<handler name="oninit">
-			canvas._loadingAll.hideContentOnly();
-			var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-                               +canvas.httpRootKey+'services/CalendarService/getAppointmentReminderTypList?'
-                               +'SID='+canvas.sessionId;
-               
-            this.getAppointmentReminderTypList.setAttribute("src",downloadurl);
-            this.getAppointmentReminderTypList.doRequest();
-            
-            if ($debug) Debug.write("this.dataElement ",this.dataElement);
-            
-            this.eventDS.setData(this.dataElement.childNodes);
-            
-            if ($debug) Debug.write("this.eventDS ",this.eventDS);
-            
-            lz.Focus.setFocus(this._title, false);
+			<![CDATA[
+				canvas._loadingAll.hideContentOnly();
+				
+				//Point URL to actual File
+	            var urlObject =  lz.Browser.getBaseURL();
+				//If Port is Null or undefinied use port 80
+				if (urlObject.port!=null && urlObject.port!=undefined){
+					var port = urlObject.port;
+					
+					if (port != 80) {
+						this.baseUrl = urlObject.protocol+"://"+urlObject.host+":"+port+urlObject.path;
+					} else {
+						this.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path;
+					}
+				} else {
+					this.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path;
+				}
+						
+				if ($debug) Debug.write("urlObject ",urlObject);
+	            if ($debug) Debug.write("this.baseUrl ",this.baseUrl);
+			
+				var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+	                               +canvas.httpRootKey+'services/CalendarService/getAppointmentReminderTypList?'
+	                               +'SID='+canvas.sessionId;
+	               
+	            this.getAppointmentReminderTypList.setAttribute("src",downloadurl);
+	            this.getAppointmentReminderTypList.doRequest();
+	            
+	            if ($debug) Debug.write("this.dataElement ",this.dataElement);
+	            
+	            this.eventDS.setData(this.dataElement.childNodes);
+	            
+	            if ($debug) Debug.write("this.eventDS ",this.eventDS);
+	            
+	            lz.Focus.setFocus(this._title, false);
+            ]]>
 		</handler>
 		
 		<handler name="onclose">
 			canvas._loadingAll.hideLoading();
 		</handler>
+		
+		<method name="saveAndClose">
+			<![CDATA[
+				var tMemberArgs = this._participentList.getMemberArrayValue();
+				
+				var tAppointmentStartDate = this._dateStart.getDate();
+				if ($debug) Debug.write("tAppointmentStartDate ",tAppointmentStartDate);
+				var tTimeStart = this._timeStart.getText();
+				var hours = Number(tTimeStart.substr(0,2));
+				var mins = Number(tTimeStart.substr(4,2));
+				if ($debug) Debug.write("hours:mins",hours,mins,tTimeStart.substr(4,2));
+				tAppointmentStartDate.setHours(hours);
+				tAppointmentStartDate.setMinutes(mins);
+				
+				var tAppointmentEndDate = this._dateEnd.getDate();
+				var tTimeEnd = this._timeEnd.getText();
+				var hours = Number(tTimeEnd.substr(0,2));
+				var mins = Number(tTimeEnd.substr(4,2));
+				tAppointmentEndDate.setHours(hours);
+				tAppointmentEndDate.setMinutes(mins);
+				
+				var updateurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+                               +canvas.httpRootKey+'services/CalendarService/saveAppointment';
+                var queryString = 'SID='+canvas.sessionId
+                               +'&appointmentName='+encodeURIComponent(this._title.getText())
+                               +'&appointmentLocation='+encodeURIComponent(this._location.getText())
+                               +'&appointmentDescription='+encodeURIComponent(this._descr.getText())
+                               +'&appointmentstart='+parseDateToRestDateCalendar(tAppointmentStartDate)
+                               +'&appointmentend='+parseDateToRestDateCalendar(tAppointmentEndDate)
+                               +'&isDaily='+false
+                               +'&isYearly='+false
+                               +'&categoryId='+1
+                               +'&remind='+this._reminderType.getValue()
+                               ;
+                               
+                for (var i=0;i<tMemberArgs.length;i++) {
+                	
+                	var tObject = tMemberArgs[i];
+                	queryString += '&mmClient=' + 
+                						encodeURIComponent(
+		                					tObject.meetingMemberId + ','
+				                			+ tObject.firstname + ','
+				                			+ tObject.lastname + ','
+				                			+ tObject.email + ','
+				                			+ tObject.userId + ','
+				                			+ tObject.jNameTimeZone
+				                		);
+                	
+                }
+                
+                queryString += +'&roomType='+this._roomType.getValue()
+                             +'&baseUrl='+this.baseUrl
+                             +'&languageId='+hib.userlang
+                
+                if ($debug) Debug.write(updateurl);
+                if ($debug) Debug.write(queryString);
+				
+				this.saveNewAppointment.setAttribute("src",updateurl);
+				this.saveNewAppointment.setAttribute("querystring",queryString);
+				this.saveNewAppointment.doRequest();
+			]]>
+		</method>
+		
+		<!-- 
+		String SID, String appointmentName,
+			String appointmentLocation, String appointmentDescription,
+			Date appointmentstart, Date appointmentend, Boolean isDaily,
+			Boolean isWeekly, Boolean isMonthly, Boolean isYearly,
+			Long categoryId, Long remind,
+			String[] mmClient, Long roomType,
+			String baseUrl, Long languageId
+		 -->
+		<dataset name="saveNewAppointment" type="http" querytype="POST">
+			<handler name="ondata" args="d">
+				if ($debug) Debug.write("saveNewAppointment ",d);
+				var tPointer = new lz.datapointer();
+				tPointer.setPointer(d);
+				var returnValue = tPointer.xpathQuery('saveAppointmentResponse/return/text()');
+				if ($debug) Debug.write("returnValue "+returnValue);
+			</handler>
+		</dataset>
 		
 		<dataset name="getAppointmentReminderTypList" type="http" />
 		
@@ -191,7 +295,31 @@
 			            			width:this._content.width-10
 			            		});
             	]]>
-            </method> 	  
+            </method> 	
+            
+            <method name="getMemberArrayValue">
+            	<![CDATA[
+            		var tArray = new Array();
+            		
+            		for (var i=0;i<this._content._inner.subviews.length;i++) {
+            		
+            			var tViewObj = this._content._inner.subviews[i];
+            			
+            			var tObject = new Object();
+            			tObject.meetingMemberId = tViewObj.memberId;
+		        		tObject.firstname = tViewObj.firstName;
+		        		tObject.lastname = tViewObj.lastName;
+		        		tObject.email = tViewObj.email;
+		        		tObject.userId = tViewObj.userId;
+		        		tObject.jNameTimeZone = tViewObj.jNameTimeZone;
+		        		
+		        		tArray.push(tObject);
+            		}
+            		
+            		return tArray;
+            	]]>
+            </method>
+              
           	<view name="_content" bgcolor="0xFFFFFF" x="1" y="1" clip="true"
           			width="$once{ parent.width-1 }" height="$once{ parent.height-1 }">
           		<view name="_inner">
@@ -200,21 +328,25 @@
            		<om_vscrollbar />
            	</view>
         </view>
+        
+        <!-- Location -->
+        <labelText name="_locationLabel" x="4" y="304" labelid="569" fontstyle="bold" /> 
+        
+        <customEdittext name="_location" width="$once{ parent.width-110 }" x="100" y="304" />
 		
-		<!-- Kommentar -->
-		<labelText name="_descrLabel" x="4" y="304" labelid="573" fontstyle="bold" /> 
+		<!-- Comment -->
+		<labelText name="_descrLabel" x="4" y="330" labelid="573" fontstyle="bold" /> 
 	
-		<customScrollEdittext name="_descr" y="304" x="100" width="$once{ parent.width-110 }" 
+		<customScrollEdittext name="_descr" y="330" x="100" width="$once{ parent.width-110 }" 
 			height="124" text="" /> 
 			
 		<simpleLabelButton labelid="813" width="100" x="$once{ parent.width-315 }" 
-	           y="$once{ parent.height-24 }" 
-	           onclick="this.parent.closeAndSave();">
+	           y="$once{ parent.height-24 }" >
 	        <handler name="onclick">
-	        	if (canvas.contactUser != 0) {
-                    new lz.labelerrorPopup(canvas,{errorlabelid:1278});
-                    return;
-                }
+                    //new lz.labelerrorPopup(canvas,{errorlabelid:1278});
+                    //return;
+                    
+                parent.saveAndClose();
 	        </handler>
         </simpleLabelButton>
 		

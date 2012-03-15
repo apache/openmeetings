@@ -402,6 +402,29 @@ function parseDateTimeFromXmlString(str) {
 	return new Date(tYear,Number(tMonth)-1,tDay,tHour,tMin,0);
 }
 
+/**
+ * Correct REST format for java.util.Calendar is: yyyy-mm-ddTHH:MM:SS
+ *
+ *
+ */
+function parseDateToRestDateCalendar(dateObj){
+    if($debug) Debug.write("FUNC/parseDateToStringTime 1",dateObj);
+    if (dateObj==null) return "";
+    var d = dateObj.getDate();
+    if (d<10) d = "0"+d;
+    var mo = dateObj.getMonth()+1;
+    if (mo<10) mo = "0"+mo;
+    var y = dateObj.getFullYear();
+    var h = dateObj.getHours();
+    if (h<10) h = "0"+h;    
+    var m = dateObj.getMinutes();
+    if (m<10) m = "0"+m; 
+    var s = dateObj.getSeconds();
+    if (s<10) s = "0"+s; 
+    if($debug) Debug.write("FUNC/parseDateToStringTime 2",""+y+"-"+mo+"-"+d+"T"+h+":"+m+":"+s);
+    return ""+y+"-"+mo+"-"+d+"T"+h+":"+m+":"+s;
+}
+
 ]]>
 </script>
 		

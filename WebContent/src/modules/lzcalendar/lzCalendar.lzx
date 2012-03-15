@@ -116,8 +116,9 @@
 			newAppointment.comment = "";
 			newAppointment.reminderId = 3;
 			newAppointment.roomsId = 0;
+			newAppointment.location = "";
 			newAppointment.meetingMember = new Array();
-			newAppointment.isPasswordProtected = true;
+			newAppointment.isPasswordProtected = false;
 			
 			var dataElement = LzDataElement.valueToElement(newAppointment);
 			
@@ -135,7 +136,7 @@
 	<!-- 176 pixels is the width of the mini calendar -->
 	<simpleLabelButton labelid="1444" height="24" width="176" x="12" y="10" >
         <handler name="onclick">
-            parent.currentDate = null;
+            parent.newCalendarEvent();
         </handler>
     </simpleLabelButton>
 	

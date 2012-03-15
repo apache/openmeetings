@@ -18,6 +18,7 @@
  */
 package org.openmeetings.axis.services;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -88,23 +89,23 @@ public class CalendarWebServiceFacade {
 
 	public Long saveAppointment(String SID, String appointmentName,
 			String appointmentLocation, String appointmentDescription,
-			Date appointmentstart, Date appointmentend, Boolean isDaily,
+			Calendar appointmentstart, Calendar appointmentend, Boolean isDaily,
 			Boolean isWeekly, Boolean isMonthly, Boolean isYearly,
 			Long categoryId, Long remind,
-			Long roomType,
-			String baseUrl, Long language_id) throws AxisFault {
+			String[] mmClient, Long roomType,
+			String baseUrl, Long languageId) throws AxisFault {
 		return getCalendarServiceProxy().saveAppointment(SID, appointmentName,
 				appointmentLocation, appointmentDescription, appointmentstart,
 				appointmentend, isDaily, isWeekly, isMonthly, isYearly,
-				categoryId, remind, null, roomType, baseUrl, language_id);
+				categoryId, remind, mmClient, roomType, baseUrl, languageId);
 	}
 
 	public Long updateAppointmentTimeOnly(String SID, Long appointmentId,
 			Date appointmentstart, Date appointmentend, String baseurl,
-			Long language_id) throws AxisFault {
+			Long languageId) throws AxisFault {
 		return getCalendarServiceProxy().updateAppointmentTimeOnly(SID,
 				appointmentId, appointmentstart, appointmentend, baseurl,
-				language_id);
+				languageId);
 	}
 
 	public Long updateAppointment(String SID, Long appointmentId,
@@ -112,13 +113,13 @@ public class CalendarWebServiceFacade {
 			String appointmentDescription, Date appointmentstart,
 			Date appointmentend, Boolean isDaily, Boolean isWeekly,
 			Boolean isMonthly, Boolean isYearly, Long categoryId, Long remind,
-			Long roomType, String baseurl, Long language_id)
+			Long roomType, String baseurl, Long languageId)
 			throws AxisFault {
 		return getCalendarServiceProxy().updateAppointment(SID, appointmentId,
 				appointmentName, appointmentLocation, appointmentDescription,
 				appointmentstart, appointmentend, isDaily, isWeekly, isMonthly,
 				isYearly, categoryId, remind, null, roomType, baseurl,
-				language_id);
+				languageId);
 	}
 
 	public Long deleteAppointment(String SID, Long appointmentId,

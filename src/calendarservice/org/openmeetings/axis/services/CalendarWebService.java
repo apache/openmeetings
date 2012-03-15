@@ -21,7 +21,9 @@ package org.openmeetings.axis.services;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
@@ -50,13 +52,13 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  * @author sebawagner
  * @webservice CalendarService
- *
+ * 
  */
 public class CalendarWebService {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			CalendarWebService.class, OpenmeetingsVariables.webAppRootKey);
-	
+
 	@Autowired
 	private AppointmentDaoImpl appointmentDao;
 	@Autowired
@@ -77,9 +79,12 @@ public class CalendarWebService {
 	/**
 	 * Load appointments by a start / end range for the current SID
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin
-	 * @param starttime start time, yyyy-mm-dd
-	 * @param endtime end time, yyyy-mm-dd
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
+	 * @param starttime
+	 *            start time, yyyy-mm-dd
+	 * @param endtime
+	 *            end time, yyyy-mm-dd
 	 * @return
 	 */
 	public List<Appointment> getAppointmentByRange(String SID, Date starttime,
@@ -99,18 +104,22 @@ public class CalendarWebService {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Load appointments by a start / end range for the userId
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin
-	 * @param userId the userId the calendar events should be loaded
-	 * @param starttime start time, yyyy-mm-dd
-	 * @param endtime end time, yyyy-mm-dd
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
+	 * @param userId
+	 *            the userId the calendar events should be loaded
+	 * @param starttime
+	 *            start time, yyyy-mm-dd
+	 * @param endtime
+	 *            end time, yyyy-mm-dd
 	 * @return
 	 */
-	public List<Appointment> getAppointmentByRangeForUserId(String SID, long userId, Date starttime,
-			Date endtime) {
+	public List<Appointment> getAppointmentByRangeForUserId(String SID,
+			long userId, Date starttime, Date endtime) {
 		log.debug("getAppointmentByRange : startdate - " + starttime
 				+ ", enddate - " + endtime);
 		try {
@@ -130,7 +139,8 @@ public class CalendarWebService {
 	/**
 	 * Get the next Calendar event for the current user of the SID
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @return
 	 */
 	public Appointment getNextAppointment(String SID) {
@@ -149,11 +159,12 @@ public class CalendarWebService {
 		return null;
 
 	}
-	
+
 	/**
 	 * Get the next Calendar event for userId
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @return
 	 */
 	public Appointment getNextAppointmentForUserId(String SID, long userId) {
@@ -176,8 +187,10 @@ public class CalendarWebService {
 	/**
 	 * Search a calendar event for the current SID
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin
-	 * @param appointmentName the search string
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
+	 * @param appointmentName
+	 *            the search string
 	 * @return
 	 */
 	public List<Appointment> searchAppointmentByName(String SID,
@@ -202,30 +215,56 @@ public class CalendarWebService {
 	/**
 	 * Save an appointment
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin
-	 * @param appointmentName name of the calendar event
-	 * @param appointmentLocation location info text of the calendar event
-	 * @param appointmentDescription description test of the calendar event
-	 * @param appointmentstart start as Date yyyy-mm-dd
-	 * @param appointmentend end as Date yyyy-mm-dd
-	 * @param isDaily if the calendar event should be repeated daily (not implemented)
-	 * @param isWeekly if the calendar event should be repeated weekly (not implemented)
-	 * @param isMonthly if the calendar event should be repeated monthly (not implemented)
-	 * @param isYearly if the calendar event should be repeated yearly (not implemented)
-	 * @param categoryId the category id of the calendar event
-	 * @param remind the reminder type of the calendar event
-	 * @param mmClient List of clients
-	 * @param roomType the room type for the calendar event
-	 * @param baseUrl the base URL for the invitations
-	 * @param language_id the language id of the calendar event
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
+	 * @param appointmentName
+	 *            name of the calendar event
+	 * @param appointmentLocation
+	 *            location info text of the calendar event
+	 * @param appointmentDescription
+	 *            description test of the calendar event
+	 * @param appointmentstart
+	 *            start as Date yyyy-mm-ddThh:mm:ss
+	 * @param appointmentend
+	 *            end as Date yyyy-mm-ddThh:mm:ss
+	 * @param isDaily
+	 *            if the calendar event should be repeated daily (not
+	 *            implemented)
+	 * @param isWeekly
+	 *            if the calendar event should be repeated weekly (not
+	 *            implemented)
+	 * @param isMonthly
+	 *            if the calendar event should be repeated monthly (not
+	 *            implemented)
+	 * @param isYearly
+	 *            if the calendar event should be repeated yearly (not
+	 *            implemented)
+	 * @param categoryId
+	 *            the category id of the calendar event
+	 * @param remind
+	 *            the reminder type of the calendar event
+	 * @param mmClient
+	 *            List of clients, comma separated string, <br/>
+	 *            sample: 1,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1
+	 *            to add multiple clients you can use the same GET parameter in
+	 *            the URL multiple times, for example:
+	 *            &mmClient=1,firstname,lastname,hans
+	 *            .tier@gmail.com,1,Etc/GMT+1&mmClient
+	 *            =2,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1
+	 * @param roomType
+	 *            the room type for the calendar event
+	 * @param baseUrl
+	 *            the base URL for the invitations
+	 * @param languageId
+	 *            the language id of the calendar event
 	 * @return
 	 */
 	public Long saveAppointment(String SID, String appointmentName,
 			String appointmentLocation, String appointmentDescription,
-			Date appointmentstart, Date appointmentend, Boolean isDaily,
-			Boolean isWeekly, Boolean isMonthly, Boolean isYearly,
-			Long categoryId, Long remind, @SuppressWarnings("rawtypes") List mmClient, Long roomType,
-			String baseUrl, Long language_id) {
+			Calendar appointmentstart, Calendar appointmentend,
+			Boolean isDaily, Boolean isWeekly, Boolean isMonthly,
+			Boolean isYearly, Long categoryId, Long remind, String[] mmClient,
+			Long roomType, String baseUrl, Long languageId) {
 
 		log.debug("saveAppointMent SID:" + SID + ", baseUrl : " + baseUrl);
 
@@ -236,14 +275,28 @@ public class CalendarWebService {
 			Long user_level = userManagement.getUserLevelByID(users_id);
 
 			if (authLevelManagement.checkUserLevel(user_level)) {
-				
-				//FIXME: Check if the event is also the event of the current SID
+
+				List<Map<String, String>> newList = new ArrayList<Map<String, String>>();
+
+				for (String singleClient : mmClient) {
+					String[] params = singleClient.split(",");
+					Map<String, String> map = new HashMap<String, String>();
+					map.put("meetingMemberId", params[0]);
+					map.put("firstname", params[1]);
+					map.put("lastname", params[2]);
+					map.put("email", params[3]);
+					map.put("userId", params[4]);
+					map.put("jNameTimeZone", params[5]);
+					newList.add(map);
+				}
+
+				// FIXME: Check if the event is also the event of the current
 
 				Long id = appointmentLogic.saveAppointment(appointmentName,
 						users_id, appointmentLocation, appointmentDescription,
-						appointmentstart, appointmentend, isDaily, isWeekly,
-						isMonthly, isYearly, categoryId, remind, mmClient,
-						roomType, baseUrl, language_id);
+						appointmentstart.getTime(), appointmentend.getTime(),
+						isDaily, isWeekly, isMonthly, isYearly, categoryId,
+						remind, newList, roomType, baseUrl, languageId);
 
 				return id;
 			} else {
@@ -259,17 +312,23 @@ public class CalendarWebService {
 	/**
 	 * Update an calendar event time only
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin
-	 * @param appointmentId the calendar event that should be updated
-	 * @param appointmentstart start yyyy-mm-dd
-	 * @param appointmentend end yyyy-mm-dd
-	 * @param baseurl the base URL for the invitations that will be send by email
-	 * @param language_id the language id
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
+	 * @param appointmentId
+	 *            the calendar event that should be updated
+	 * @param appointmentstart
+	 *            start yyyy-mm-dd
+	 * @param appointmentend
+	 *            end yyyy-mm-dd
+	 * @param baseurl
+	 *            the base URL for the invitations that will be send by email
+	 * @param languageId
+	 *            the language id
 	 * @return
 	 */
 	public Long updateAppointmentTimeOnly(String SID, Long appointmentId,
 			Date appointmentstart, Date appointmentend, String baseurl,
-			Long language_id) {
+			Long languageId) {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
@@ -277,18 +336,18 @@ public class CalendarWebService {
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
 				log.debug("updateAppointment");
-				//FIXME: Check if the event is also the event of the current SID
+				// FIXME: Check if the event is also the event of the current
+				// SID
 
 				log.debug("appointmentId " + appointmentId);
 
-				appointmentLogic
-						.getAppointMentById(appointmentId);
+				appointmentLogic.getAppointMentById(appointmentId);
 
 				Users user = userManagement.getUserById(users_id);
 
 				return appointmentLogic.updateAppointmentByTime(appointmentId,
 						appointmentstart, appointmentend, users_id, baseurl,
-						language_id, user.getOmTimeZone().getIcal());
+						languageId, user.getOmTimeZone().getIcal());
 			}
 		} catch (Exception err) {
 			log.error("[updateAppointment]", err);
@@ -318,7 +377,7 @@ public class CalendarWebService {
 	 * @param mmClient
 	 * @param roomType
 	 * @param baseurl
-	 * @param language_id
+	 * @param languageId
 	 * @return
 	 */
 	public Long updateAppointment(String SID, Long appointmentId,
@@ -326,7 +385,7 @@ public class CalendarWebService {
 			String appointmentDescription, Date appointmentstart,
 			Date appointmentend, Boolean isDaily, Boolean isWeekly,
 			Boolean isMonthly, Boolean isYearly, Long categoryId, Long remind,
-			List<?> mmClient, Long roomType, String baseurl, Long language_id) {
+			List<?> mmClient, Long roomType, String baseurl, Long languageId) {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
@@ -356,7 +415,7 @@ public class CalendarWebService {
 						appointmentName, appointmentDescription,
 						appointmentstart, appointmentend, isDaily, isWeekly,
 						isMonthly, isYearly, categoryId, remind, mmClient,
-						users_id, baseurl, language_id, false, "", user
+						users_id, baseurl, languageId, false, "", user
 								.getOmTimeZone().getIcal());
 			}
 		} catch (Exception err) {
@@ -432,7 +491,7 @@ public class CalendarWebService {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Get all categories of calendar events
 	 * 
@@ -472,7 +531,7 @@ public class CalendarWebService {
 		return null;
 
 	}
-	
+
 	/**
 	 * Get all reminder types for calendar events
 	 * 
@@ -507,72 +566,78 @@ public class CalendarWebService {
 		}
 		return null;
 	}
-	
+
 	public static void main(String... args) {
-		
-		Calendar cal =Calendar.getInstance();
+
+		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.MONTH, 1);
-		
-		new CalendarWebService().getAppointmentsByWeekCalendar(1, cal.getTime());
-		
+
+		new CalendarWebService()
+				.getAppointmentsByWeekCalendar(1, cal.getTime());
+
 	}
-	
-	public List<Week> getAppointmentsByWeekCalendar(int firstDayInWeek, Date startDate) {
-		
+
+	public List<Week> getAppointmentsByWeekCalendar(int firstDayInWeek,
+			Date startDate) {
+
 		// Calculate the first day of a calendar based on the first showing day
 		// of the week
 		List<Week> weeks = new ArrayList<Week>(6);
 		Calendar currentDate = Calendar.getInstance();
 		currentDate.setTime(startDate);
 		currentDate.set(Calendar.DATE, 1);
-		
+
 		int currentWeekDay = currentDate.get(Calendar.DAY_OF_WEEK);
-		
+
 		Calendar startWeekDay = Calendar.getInstance();
-		startWeekDay.setTimeInMillis((currentDate.getTimeInMillis() - ((currentWeekDay-1) * 86400000)));
-		
-		log.debug("startWeekDay 1" +startWeekDay.getTime());
-		
+		startWeekDay
+				.setTimeInMillis((currentDate.getTimeInMillis() - ((currentWeekDay - 1) * 86400000)));
+
+		log.debug("startWeekDay 1" + startWeekDay.getTime());
+
 		if (currentWeekDay == 1) {
-			startWeekDay.setTimeInMillis(startWeekDay.getTimeInMillis() - ((7 - firstDayInWeek) * 86400000));
+			startWeekDay.setTimeInMillis(startWeekDay.getTimeInMillis()
+					- ((7 - firstDayInWeek) * 86400000));
 		} else {
-			
+
 			if (currentWeekDay > firstDayInWeek) {
-				startWeekDay.setTimeInMillis(startWeekDay.getTimeInMillis() + (firstDayInWeek * 86400000));
+				startWeekDay.setTimeInMillis(startWeekDay.getTimeInMillis()
+						+ (firstDayInWeek * 86400000));
 			} else {
-				startWeekDay.setTimeInMillis(startWeekDay.getTimeInMillis() - (firstDayInWeek * 86400000));
+				startWeekDay.setTimeInMillis(startWeekDay.getTimeInMillis()
+						- (firstDayInWeek * 86400000));
 			}
-			
+
 		}
-		
+
 		Calendar calStart = Calendar.getInstance();
 		calStart.setTime(startWeekDay.getTime());
-		
+
 		Calendar calEnd = Calendar.getInstance();
 		// every month page in our calendar shows 42 days
 		calEnd.setTime(new Date(startWeekDay.getTime().getTime()
 				+ (42L * 86400000L)));
-										
-		
-		List<Appointment> appointments = appointmentDao.getAppointmentsByRange(1L, calStart.getTime(), calEnd.getTime());
-		
-		log.debug("startWeekDay 2"+startWeekDay.getTime());
-		log.debug("startWeekDay Number of appointments "+appointments.size());
-		
+
+		List<Appointment> appointments = appointmentDao.getAppointmentsByRange(
+				1L, calStart.getTime(), calEnd.getTime());
+
+		log.debug("startWeekDay 2" + startWeekDay.getTime());
+		log.debug("startWeekDay Number of appointments " + appointments.size());
+
 		long z = 0;
-		
+
 		for (int k = 0; k < 6; k++) { // 6 weeks per monthly summary
-			
+
 			Week week = new Week();
-			
+
 			for (int i = 0; i < 7; i++) { // 7 days a week
-				
+
 				Calendar tCal = Calendar.getInstance();
 				tCal.setTimeInMillis(startWeekDay.getTimeInMillis()
 						+ (z * 86400000L));
-				
+
 				Day day = new Day(tCal.getTime());
-				
+
 				for (Appointment appointment : appointments) {
 					if (appointment.appointmentStartAsCalendar().get(
 							Calendar.MONTH) == tCal.get(Calendar.MONTH)
@@ -582,15 +647,14 @@ public class CalendarWebService {
 								new AppointmentDTO(appointment));
 					}
 				}
-				
-				
+
 				week.getDays().add(day);
 				z++;
 			}
-			
+
 			weeks.add(week);
 		}
-		
+
 		return weeks;
 	}
 

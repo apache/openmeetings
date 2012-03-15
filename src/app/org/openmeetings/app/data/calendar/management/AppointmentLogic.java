@@ -21,6 +21,7 @@ package org.openmeetings.app.data.calendar.management;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 
 import org.openmeetings.app.data.basic.Configurationmanagement;
@@ -234,6 +235,12 @@ public class AppointmentLogic {
 
 					log.debug("clientMember.get('userId') "
 							+ clientMember.get("userId"));
+					
+					for (Object tString : clientMember.entrySet()) {
+						log.debug("tString " + tString);
+					}
+					log.debug("clientMember.get('meetingMemberId') "
+							+ clientMember.get("meetingMemberId"));
 
 					// We need two different timeZones, the internal Java Object
 					// TimeZone, and
@@ -284,7 +291,8 @@ public class AppointmentLogic {
 							clientMember.get("email").toString(), baseUrl,
 							userId, // meeting_organizer
 							new Boolean(false), // invitor
-							language_id, false, // isPasswordProtected
+							language_id, //language_id
+							false, // isPasswordProtected
 							"", // password
 							timezoneMember, omTimeZone, invitorName);
 

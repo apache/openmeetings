@@ -171,7 +171,7 @@
 <!-- View for "Loading" -->
 <view name="_loadingAll" visible="false" opacity="0.7" 
     width="${ canvas.width }" height="${ canvas.height }" 
-    bgcolor="0xFFFFFF" clickable="true" >
+    bgcolor="0xFFFFFF" clickable="true" showhandcursor="false">
     <method name="hideContentOnly">
         this.setAttribute("visibility","visible");
         this._text.setAttribute("visibility","hidden");
