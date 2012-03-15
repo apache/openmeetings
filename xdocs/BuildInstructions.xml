@@ -130,7 +130,7 @@
 					OpenMeetings you need to run the ANT comand:
 				</p>
 				<div class="xmlcode">
-					ant prepare-eclipse
+					ant -Ddb=&lt;your_DB&gt; prepare-eclipse
 				</div>
 				<p>After the ANT command you need to press F5 and rebuild the
 					project from inside Eclipse

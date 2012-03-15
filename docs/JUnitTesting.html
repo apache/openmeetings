@@ -894,12 +894,9 @@ limitations under the License.
 				<li>running tests from Eclipse IDE: </li>
 				<ul>
 					<li>
-						copy src/META-INF/
-						<strong>
-							yourdb
-							<tt>_</tt>
-						</strong>
-						persistence.xml to src/META-INF/persistence.xml
+						<div class="xmlcode">
+							ant -Ddb=&lt;your_DB&gt; prepare-eclipse
+						</div>
 					</li>
 					<li>Start Eclipse </li>
 					<li>Load workspace with Openmeetings project (or refresh existing
