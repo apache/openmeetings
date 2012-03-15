@@ -19,8 +19,10 @@
 	xmlns:ivy="antlib:org.apache.ivy.ant"
 	>
 
-	<property name="version.number" value="2.0" />
 	<property name="project.distname" value="openmeetings" />
+	<property name="project.version" value="2.0.0" />
+	<property name="project.status" value="SNAPSHOT" />
+	<property name="jar.suffix" value="${project.version}-${project.status}" />
 	<property environment="env" />
 
 	<property name="fileservice.src.dir" value="${basedir}/src/fileservice" />
@@ -121,7 +123,7 @@
 		<tstamp>
 			<format property="build.time" pattern="dd-MM-yyyy_HHmm" />
 		</tstamp>
-		<property name="archive.file.name" value="${dist.dir}/${project.distname}-${version.number}.r${svn.info.rev}-${build.time}" />
+		<property name="archive.file.name" value="${dist.dir}/${project.distname}-${project.version}.r${svn.info.rev}-${build.time}" />
 		
 		<tar longfile="gnu" compression="gzip" destfile="${archive.file.name}-src.tar.gz">
 			<tarfileset dir="${basedir}">
@@ -204,8 +206,7 @@
 				<exclude name="services.xml" />
 			</fileset>
 		</copy>
-		<copy file="src/META-INF/persistence.xml" tofile="${dist.persistence.dir}/derby_persistence.xml" />
-		<copy file="${dist.persistence.dir}/${db.provider}_persistence.xml" tofile="${dist.persistence.dir}/persistence.xml" />
+		<copy file="src/META-INF/${db.provider}_persistence.xml" tofile="${dist.persistence.dir}/persistence.xml" />
 
 		<!-- add language files from .war version -->
 		<copy todir="${dist.webapps.dir}/languages">
@@ -266,10 +267,10 @@
 		<tstamp prefix="build">
 			<format property="TODAY" pattern="d-MMMM-yyyy" locale="en" />
 		</tstamp>
-		<manifestclasspath property="jar.classpath" jarfile="${project.distname}.r${svn.info.rev}.jar">
+		<manifestclasspath property="jar.classpath" jarfile="${project.distname}-${jar.suffix}.jar">
 			<classpath refid="compile.classpath" />
 		</manifestclasspath>
-		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}.r${svn.info.rev}.jar">
+		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-${jar.suffix}.jar">
 			<fileset dir="${main.out.dir}">
 				<include name="**" />
 				<exclude name="**/test/**" />
@@ -287,7 +288,7 @@
 				<attribute name="Svn-Revision" value="${svn.info.rev}" />
 			</manifest>
 		</jar>
-		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-templates.r${svn.info.rev}.jar">
+		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-templates-${jar.suffix}.jar">
 			<fileset dir="${main.out.dir}">
 				<include name="**" />
 				<exclude name="**/org/**" />
@@ -303,12 +304,12 @@
 		</jar>
 		
 		<!-- Build WebServices -->
-		<jar destfile="${dist.webapps.dir}/WEB-INF/services/OpenMeetingsService.r${svn.info.rev}.aar">
+		<jar destfile="${dist.webapps.dir}/WEB-INF/services/OpenMeetingsService-${jar.suffix}.aar">
 			<fileset dir="src/">
 				<include name="META-INF/services.xml" />
 			</fileset>
 		</jar>
-		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/openmeetings-WebService.r${svn.info.rev}.jar">
+		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/openmeetings-WebService-${jar.suffix}.jar">
 			<fileset dir="${main.out.dir}">
 				<include name="**/openmeetings/axis/**" />
 			</fileset>
@@ -901,5 +902,6 @@
 		<antcall target="-retrieve-dtd-generator" inheritAll="true" inheritRefs="true"/>
 		<antcall target="-retrieve-tools.jar" inheritAll="true" inheritRefs="true"/>
 		<antcall target="-retrieve-openlaszlo" inheritAll="true" inheritRefs="true"/>
+		<copy file="src/META-INF/${db.provider}_persistence.xml" tofile="src/META-INF/persistence.xml" />
 	</target>
 </project>
