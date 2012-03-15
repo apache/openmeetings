@@ -662,17 +662,20 @@
 
 	<path id="junit.classpath">
 		<fileset dir="${junit.lib.dir}" includes="*.jar" />
+		<fileset dir="${om.dist.webapp}/WEB-INF/lib">
+			<include name="*.jar" />
+			<exclude name="openmeetings*.jar" />
+		</fileset>
 		<fileset dir="${red5.root}" includes="*.jar" />
-		<fileset dir="${red5.server.lib}" includes="*.jar" />
+		<fileset dir="${red5.root}/lib" includes="*.jar" />
 		<pathelement path="${om.dist.webapp}/WEB-INF" />
-		<pathelement path="${main.out.dir}" />
 		<pathelement path="${om.dist.webapp}/WEB-INF/classes" />
-		<fileset dir="${om.dist.webapp}/WEB-INF/lib" includes="*.jar" />
+		<pathelement path="${main.out.dir}" />
 	</path>
 	<target name="test" depends="-dist-test-no-clean" description="Will run all tests unless -Dtestcases=_file_name_pattern_ will be passed">
 		<mkdir dir="${junit.report.dir}" />
-		<property name="myclsp" refid="junit.classpath" />
-		<!--		<echo message="${myclsp}" /> -->
+		<!-- property name="myclsp" refid="junit.classpath" />
+		<echo message="${myclsp}" /-->
 		<junit printsummary="yes" dir="${junit.base.dir}" tempdir="${junit.base.dir}" fork="yes" forkmode="perBatch">
 			<classpath refid="junit.classpath" />
 			<jvmarg value="-Dred5.root=${red5.root}" />
@@ -681,7 +684,8 @@
 			<formatter type="${junit.test.formatter}" />
 			<batchtest todir="${junit.report.dir}">
 				<fileset dir="${main.out.dir}">
-					<include name="org/openmeetings/test/**/${junit.test.pattern}" />
+					<include name="org/openmeetings/test/**/${junit.test.pattern}.class" />
+					<exclude name="**/*$$*.class" />
 				</fileset>
 			</batchtest>
 		</junit>

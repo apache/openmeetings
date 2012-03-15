@@ -18,7 +18,9 @@
  */
 package org.openmeetings.test.navi;
 
-import java.util.Iterator;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.List;
 
 import org.junit.Test;
@@ -41,31 +43,26 @@ public class TestNavi extends AbstractOpenmeetingsSpringTest {
 		
 		Sessiondata sessionData = mService.getsessiondata();
 		
-		Users us = (Users) mService.loginUser(sessionData.getSession_id(), "SebastianWagner", "test",false,null,-1L);
+		Users us = (Users) mService.loginUser(sessionData.getSession_id(), username, userpass, false, null, -1L);
 		
-		System.out.println("us: "+us.getFirstname());
+		assertNotNull("User is unable to login", us);
+		System.out.println("us: "+ us.getFirstname());
 		
-        for (Iterator<Organisation_Users> iter = us.getOrganisation_users()
-                .iterator(); iter.hasNext();) {
+        for (Organisation_Users ou : us.getOrganisation_users()) {
 
-            Long organization_id = iter.next().getOrganisation()
-                    .getOrganisation_id();
+            Long organization_id = ou.getOrganisation().getOrganisation_id();
             List<Naviglobal> ll = mService.getNavi(sessionData.getSession_id(), 1, organization_id);
 
+            assertTrue("GlobalNavi size should be greater than zero: " + ll.size(), ll.size() > 0);
             System.out.println("NaviGlobal size: " + ll.size());
 
-            for (Iterator<Naviglobal> it2 = ll.iterator(); it2.hasNext();) {
-                Naviglobal navigl = it2.next();
-                System.out.println(navigl.getLabel().getValue());
-                List<Navimain> s = navigl.getMainnavi();
+            for (Naviglobal navigl : ll) {
+                System.out.println("Naviglobal label: " + navigl.getLabel().getValue());
 
-                for (Iterator<Navimain> it3 = s.iterator(); it3.hasNext();) {
-                    Navimain navim = it3.next();
+                for (Navimain navim : navigl.getMainnavi()) {
                     System.out.println("-->" + navim.getLabel().getValue());
 
-                    for (Iterator<Navisub> it4 = navim.getSubnavi().iterator(); it4
-                            .hasNext();) {
-                        Navisub navis = it4.next();
+                    for (Navisub navis : navim.getSubnavi()) {
                         System.out.println("---->"
                                 + navis.getLabel().getValue());
                     }

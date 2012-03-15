@@ -95,7 +95,7 @@ public class TestAppointmentAddAppointment extends
 			
 			Thread.sleep(3000);
 			
-			assertTrue(id != null && id > 0);
+			assertTrue("Saved appointment should have valid id: " + id, id != null && id > 0);
 
 		} catch (Exception err) {
 			log.error("[saveAppointment]", err);

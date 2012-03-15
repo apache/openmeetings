@@ -82,7 +82,6 @@
 	<classpathentry kind="lib" path="build/red5/dist/lib/spring-core-3.0.6.RELEASE.jar"/>
 	<classpathentry kind="lib" path="build/red5/dist/lib/spring-expression-3.0.6.RELEASE.jar"/>
 	<classpathentry kind="lib" path="build/red5/dist/lib/spring-web-3.0.6.RELEASE.jar"/>
-	<classpathentry kind="lib" path="build/red5/dist/lib/xmlrpc-2.0.1.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/batik-anim-jar-1.7.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/batik-awt-util-jar-1.7.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/batik-bridge-jar-1.7.jar"/>

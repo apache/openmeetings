@@ -84,8 +84,8 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 	private static final String sip_phonerange_start = "";
 	private static final String sip_phonerange = "";
 	private static final String jodPath = "./jod/lib";
-	private static final String username = "junit";
-	private static final String userpass = "test";
+	protected static final String username = "junit";
+	protected static final String userpass = "test";
 	private static final String orgname = "smoketest";
 	private static final String timeZone = "";
 	private static final String useremail = "junit@openmeetings.de";

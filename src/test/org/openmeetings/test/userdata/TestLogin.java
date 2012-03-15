@@ -35,9 +35,9 @@ public class TestLogin extends AbstractOpenmeetingsSpringTest {
 	public void testTestLogin(){
 		Sessiondata sessionData = mService.getsessiondata();
 		
-		Users us = (Users) mService.loginUser(sessionData.getSession_id(), "swagner", "test",false,null,-1L);
+		Users us = (Users) mService.loginUser(sessionData.getSession_id(), username, userpass, false, null, -1L);
 		
-		assertNotNull(us);
+		assertNotNull("User is unable to login", us);
 		
 		//mService.getLanguageById(1);
 		
