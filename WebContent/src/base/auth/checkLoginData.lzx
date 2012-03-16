@@ -63,7 +63,7 @@
     <attribute name="labeliderror" value="0" type="number" />
     <attribute name="enterPressed" type="boolean" value="false"/>
     
-    <labelText name="n1" labelid="109" width="300" y="26" resize="false" x="2"/>
+    <labelText name="n1" labelid="109" width="300" y="26" resize="false" x="2" fontstyle="bold"/>
     <customEdittext name="username" y="24" x="120" width="330" >
         <handler name="oninit">
             var g = canvas.getUserData();
@@ -86,7 +86,7 @@
         </handler>
     </customEdittext>    
 
-    <labelText name="n2" labelid="110" width="300" y="56" resize="false" x="2"/>
+    <labelText name="n2" labelid="110" width="300" y="56" resize="false" x="2" fontstyle="bold"/>
     <customEdittext name="userpass" y="54" password="true" x="120" width="330" >
         <handler name="oninit">
             var g = canvas.getUserData();
@@ -108,7 +108,7 @@
         </handler>
     </customEdittext>
     
-	<labelText name="n5" labelid="1370" width="300" y="86" resize="false" x="2"/>  
+	<labelText name="n5" labelid="1370" width="300" y="86" resize="false" x="2" fontstyle="bold"/>  
     
     <resetCombobox name="colors" width="330" y="84" x="120">
         <attribute name="initselect" value="true" type="boolean" />
@@ -164,7 +164,7 @@
         </handler>
     </resetCombobox>    
     
-    <labelText name="nlabelquality" labelid="1371" y="116" x="2" visible="true" width="140" />     
+    <labelText name="nlabelquality" labelid="1371" y="116" x="2" visible="true" width="140" fontstyle="bold"/>     
     <resetCombobox name="ncomboquality" width="330" y="114" x="120" editable="false" >
         <handler name="oninit">
             this.addItem(canvas.getLabelName(1381) + " ~ 16KB " + canvas.getLabelName(1382),"best");
@@ -196,7 +196,7 @@
         </handler>
     </resetCombobox>
         
-	<labelText name="domain_label" labelid="1372" width="300" y="144" resize="false" x="2" />     
+	<labelText name="domain_label" labelid="1372" width="300" y="144" resize="false" x="2" fontstyle="bold"/>     
     <resetCombobox name="domain" width="330" y="144" x="120" editable="false">
     	<handler name="oninit">
     		//this.selectItemAt(0);
@@ -239,7 +239,8 @@
     <labelText name="organisation_label_info" labelid="617" width="350" 
                multiline="true" y="22" resize="false" x="2" visible="false" />     
     
-    <labelText name="organisation_label" labelid="184" width="300" y="86" resize="false" x="2" visible="false" />     
+    <labelText name="organisation_label" labelid="184" width="300" y="86" 
+    			resize="false" x="2" visible="false" fontstyle="bold" />     
         <resetCombobox name="organisation" width="330" y="84" x="120" editable="false" visible="false" />
         
     <simpleLabelButton labelid="123" name="_register" width="120" y="$once{ parent.height-40 }" 

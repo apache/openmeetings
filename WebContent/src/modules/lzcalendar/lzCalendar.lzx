@@ -29,6 +29,14 @@
 	<handler name="oninit">
 		<![CDATA[
 			_mainScrollBar.setAttribute("visibility","hidden");
+			
+			var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport
+	                               +canvas.httpRootKey+'services/CalendarService/getAppointmentReminderTypList?'
+	                               +'SID='+canvas.sessionId;
+	               
+            this.getAppointmentReminderTypList.setAttribute("src",downloadurl);
+            this.getAppointmentReminderTypList.doRequest();
+			
 			canvas.monthnames = [canvas.getLabelName(469),canvas.getLabelName(470),
 								canvas.getLabelName(471),canvas.getLabelName(472),
 								canvas.getLabelName(473),canvas.getLabelName(474),
@@ -90,8 +98,27 @@
         ]]>
 	</method>
 	
-	<method name="newCalendarEvent">
+	<method name="editCalendarEvent" args="appointment">
 		<![CDATA[
+			var dataElement = null;
+			if (appointment == null) {
+				appointment = this.generateBlankEvent();
+				dataElement = LzDataElement.valueToElement(appointment);
+			} else {
+				dataElement = appointment;
+			}
+			
+			new lz.lzEditCalendarEvent(canvas,{
+								dataElement:dataElement,
+								remindertypes:getAppointmentReminderTypList,
+								lzCalendarRef:this
+							});
+		]]>
+	</method>
+	
+	<method name="generateBlankEvent">
+		<![CDATA[
+		
 			var newAppointment = new Object();
 			newAppointment.appointmentId = 0;
 			newAppointment.categoryId = 1;
@@ -101,6 +128,7 @@
 			tDate.setMilliseconds(this.currentDate.getMilliseconds());
 			tDate.setMinutes(0);
 			tDate.setSeconds(0);
+			tDate.setHours(tDate.getHours()+1);
 			if (tDate.getHours() == 23) {
 				tDate.setHours(22);
 			}
@@ -117,14 +145,14 @@
 			newAppointment.reminderId = 3;
 			newAppointment.roomsId = 0;
 			newAppointment.location = "";
-			newAppointment.meetingMember = new Array();
 			newAppointment.isPasswordProtected = false;
 			
-			var dataElement = LzDataElement.valueToElement(newAppointment);
-			
-			new lz.lzEditCalendarEvent(canvas,{dataElement:dataElement});
-		
+			return newAppointment;
 		]]>
+	</method>
+	
+	<method name="reload">
+		this.getAppointmentsByWeekCalendar.doRequest();
 	</method>
 	
 	<dataset name="getAppointmentsByWeekCalendar" type="http">
@@ -133,10 +161,12 @@
 		</handler>
 	</dataset>
 	
+	<dataset name="getAppointmentReminderTypList" type="http" />
+	
 	<!-- 176 pixels is the width of the mini calendar -->
 	<simpleLabelButton labelid="1444" height="24" width="176" x="12" y="10" >
         <handler name="onclick">
-            parent.newCalendarEvent();
+            parent.editCalendarEvent(null);
         </handler>
     </simpleLabelButton>
 	
@@ -212,7 +242,11 @@
 	</view>
 	
 	<lzCalendarGrid name="_lzCalendarGrid"
-		datapath="local:classroot.getAppointmentsByWeekCalendar:/" />
+		datapath="local:classroot.getAppointmentsByWeekCalendar:/">
+		<handler name="oncalendarEvent" args="sel">
+			parent.editCalendarEvent(sel.datapath.data.cloneNode(true));
+		</handler>	
+	</lzCalendarGrid>
 	
 </class>
 

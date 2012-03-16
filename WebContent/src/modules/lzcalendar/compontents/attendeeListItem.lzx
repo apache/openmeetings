@@ -29,11 +29,7 @@
 		<attribute name="email" value="" type="string" />
 		<attribute name="jNameTimeZone" value="" type="string" />
 		
-		<view name="member">
-			<text resize="true" text="$once{ parent.parent.firstName + ',' + parent.parent.lastName }" />
-			<text resize="true" text="$once{ '(' + parent.parent.email + ')' }" />
-			<simplelayout axis="x" spacing="2" />
-		</view>
+		<text name="memberText" width="$once{ parent.width - 18 }" />
 		
 		<miniIcons x="$once{ parent.width - 16 }" y="2" resource="calendar_delete_button" showhandcursor="true"
 				   width="16" height="16">

@@ -11,6 +11,7 @@ public class MeetingMemberDTO {
 	private String firstname;
 	private String lastname;
 	private Long userid;
+	private String jNameTimeZone;
 
 	public MeetingMemberDTO(MeetingMember meetingMemberItem) {
 		meetingMemberId = meetingMemberItem.getMeetingMemberId();
@@ -21,6 +22,8 @@ public class MeetingMemberDTO {
 		lastname = meetingMemberItem.getLastname();
 		userid = (meetingMemberItem.getUserid() != null) ? meetingMemberItem
 				.getUserid().getUser_id() : 0;
+		jNameTimeZone = (meetingMemberItem.getOmTimeZone() != null) ? meetingMemberItem
+				.getOmTimeZone().getJname() : "";
 	}
 
 	public long getMeetingMemberId() {
@@ -77,6 +80,14 @@ public class MeetingMemberDTO {
 
 	public void setUserid(Long userid) {
 		this.userid = userid;
+	}
+
+	public String getjNameTimeZone() {
+		return jNameTimeZone;
+	}
+
+	public void setjNameTimeZone(String jNameTimeZone) {
+		this.jNameTimeZone = jNameTimeZone;
 	}
 
 }

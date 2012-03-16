@@ -30,6 +30,8 @@
 		
 		<attribute name="reRenderLock" value="false" type="boolean" />
 		
+		<attribute name="calendarEvent" value="null" />
+		
 		<method name="setCurrentDate" args="tDate">
 			if (this.currentDate != tDate) {
 				this.currentDate = tDate;
@@ -73,6 +75,11 @@
 			this.reRenderLock = true;
 			this.setAttribute("viewType","month");
 			this.reRenderLock = false;
+		</method>
+		
+		<method name="selectCalendarEvent" args="tRef">
+			if ($debug) Debug.write("selectCalendarEvent ",tRef);
+			this.setAttribute("calendarEvent",tRef);
 		</method>
 		
 		<state name="day" applied="${ classroot.viewType == 'day' }">
@@ -379,6 +386,12 @@
 						
 							<view width="$once{ parent.width }" y="18">
 								<view datapath="appointments" bgcolor="0xA59CFC" width="$once{ parent.width }">
+									<handler name="onclick" >
+										var appointmentId = this.datapath.xpathQuery('appointmentId/text()');
+										if ($debug) Debug.write("click ",appointmentId);
+										parent.parent.parent.parent.parent.parent.selectCalendarEvent(this);
+										//this.setAttribute("text",parseTimeStringFromXmlString(d.childNodes[0].data));
+									</handler>
 									<text name="_time" datapath="start" >
 										<handler name="ondata" args="d">
 											this.setAttribute("text",parseTimeStringFromXmlString(d.childNodes[0].data));

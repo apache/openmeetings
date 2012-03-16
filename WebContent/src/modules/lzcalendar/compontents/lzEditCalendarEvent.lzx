@@ -27,8 +27,11 @@
 		<attribute name="reminderTypeId" value="0" type="number" />
 		
 		<attribute name="dataElement" value="null" />
+		<attribute name="remindertypes" value="null" />
 		
 		<attribute name="baseUrl" value="" type="string" />
+		
+		<attribute name="lzCalendarRef" value="null" />
 		
 		<dataset name="eventDS" />
 		    
@@ -54,16 +57,11 @@
 				if ($debug) Debug.write("urlObject ",urlObject);
 	            if ($debug) Debug.write("this.baseUrl ",this.baseUrl);
 			
-				var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-	                               +canvas.httpRootKey+'services/CalendarService/getAppointmentReminderTypList?'
-	                               +'SID='+canvas.sessionId;
-	               
-	            this.getAppointmentReminderTypList.setAttribute("src",downloadurl);
-	            this.getAppointmentReminderTypList.doRequest();
-	            
 	            if ($debug) Debug.write("this.dataElement ",this.dataElement);
 	            
-	            this.eventDS.setData(this.dataElement.childNodes);
+	            this.getAppointmentReminderTypList.setData(this.remindertypes.data);
+	            
+            	this.eventDS.setData(this.dataElement.childNodes);
 	            
 	            if ($debug) Debug.write("this.eventDS ",this.eventDS);
 	            
@@ -137,6 +135,8 @@
 			]]>
 		</method>
 		
+		<dataset name="getAppointmentReminderTypList" />
+		
 		<!-- 
 		String SID, String appointmentName,
 			String appointmentLocation, String appointmentDescription,
@@ -153,10 +153,13 @@
 				tPointer.setPointer(d);
 				var returnValue = tPointer.xpathQuery('saveAppointmentResponse/return/text()');
 				if ($debug) Debug.write("returnValue "+returnValue);
+				var tNumber = Number(returnValue);
+				if (tNumber > 0) {
+					parent.lzCalendarRef.reload();
+					parent.close();
+				}
 			</handler>
 		</dataset>
-		
-		<dataset name="getAppointmentReminderTypList" type="http" />
 		
 		<labelText name="_titleLabel" x="4" y="24" labelid="572" fontstyle="bold" /> 
 			
@@ -201,31 +204,26 @@
 		<labelText name="_reminderTypeLabel" x="4" y="76" labelid="565" fontstyle="bold" /> 
 		
 		<resetCombobox name="_reminderType" x="100" width="$once{ parent.width-110 }"
-			 			  editable="false" shownitems="5" y="76" >
+			 			  editable="false" shownitems="5" y="76" datapath="local:classroot.eventDS:/reminderId">
 			<handler name="onvalue" args="v">						
 				if ($debug) Debug.write("reminderTypeId: ",parent.reminderTypeId);
 				if(this.getValue == 0 ) {
-					parent.preminderTypeId = null;
+					parent.reminderTypeId = null;
 				} else{
   					parent.reminderTypeId = this.getValue();												
   					if ($debug) Debug.write("reminderTypeId: ",parent.reminderTypeId);
 				}
 			</handler> 
-			<handler name="ondata" args="remindtype">
-				if ($debug) Debug.write("remindtype ondata: ", remindtype);
-				var remTypeId = Number(remindtype.attributes.value);
+			<handler name="ondata" args="remindtypeNode">
+				if ($debug) Debug.write("remindtype ondata 1: ", remindtypeNode.childNodes[0].data);
+				var remTypeId = Number(remindtypeNode.childNodes[0].data);
 				if (remTypeId > 0) {
 					parent.reminderTypeId = remTypeId;
 				    this.selectItem(remTypeId);
 			    }
 			</handler>
 			<textlistitem datapath="local:classroot.getAppointmentReminderTypList:/getAppointmentReminderTypListResponse/return"
-				text="$path{'name/text()'}" value="$path{'typId/text()'}">
-				<handler name="ondata" args="d">
-					//if ($debug) Debug.write("ondata combobox ",parent);
-					parent.selectItemAt(2);
-				</handler>
-			</textlistitem>
+				text="$path{'name/text()'}" value="$path{'typId/text()'}" />
 	 	</resetCombobox> 
 	 	
 	 	<!-- Roomtype -->
@@ -285,15 +283,19 @@
            
             <method name="addListItem" args="userId,firstName,lastName,email,memberId,jNameTimeZone">
             	<![CDATA[
-            		new lz.attendeeListItem(this._content._inner,{
-			            			userId:userId,
-			            			firstName:firstName,
-			            			lastName:lastName,
-			            			email:email,
-			            			memberId:memberId,
-			            			jNameTimeZone:jNameTimeZone,
-			            			width:this._content.width-10
-			            		});
+            		var tObject = new Object();
+            		tObject.meetingMember = new Object();
+            		tObject.meetingMember.userid = userId;
+           			tObject.meetingMember.firstname = firstName;
+           			tObject.meetingMember.lastname = lastName;
+           			tObject.meetingMember.email = email;
+           			tObject.meetingMember.meetingMemberId = memberId;
+           			tObject.meetingMember.jNameTimeZone = jNameTimeZone;
+           			var tDataElement = LzDataElement.valueToElement(tObject);
+           			var tPointer = new lz.datapointer();
+           			tPointer.setPointer(tDataElement.childNodes[0]);
+           			parent.eventDS.getPointer().addNodeFromPointer(tPointer);
+           			//parent.eventDS.getPointer().updateData();
             	]]>
             </method> 	
             
@@ -323,6 +325,22 @@
           	<view name="_content" bgcolor="0xFFFFFF" x="1" y="1" clip="true"
           			width="$once{ parent.width-1 }" height="$once{ parent.height-1 }">
           		<view name="_inner">
+          			<attendeeListItem datapath="local:classroot.eventDS:/meetingMember"
+           						width="$once{ parent.parent.width-10 }">
+           				<handler name="ondata" args="d">
+           					if ($debug) Debug.write("meetingMember -- ondata ",d);
+           					var tDataPointer = new lz.datapointer();
+           					tDataPointer.setPointer(d);
+           					this.userId = tDataPointer.xpathQuery( 'userid/text()' );
+           					this.firstName = tDataPointer.xpathQuery( 'firstname/text()' );
+           					this.lastName = tDataPointer.xpathQuery( 'lastname/text()' );
+           					this.email = tDataPointer.xpathQuery( 'email/text()' );
+           					this.memberId = tDataPointer.xpathQuery( 'meetingMemberId/text()' );
+           					this.jNameTimeZone = tDataPointer.xpathQuery( 'jNameTimeZone/text()' );
+           					this.memberText.setAttribute("text",this.firstName+' '+this.lastName+' ['+this.email+']');
+           				</handler>
+           				
+     				</attendeeListItem>
           			<simplelayout axis="y" spacing="1" />
           		</view>
            		<om_vscrollbar />
