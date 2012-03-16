@@ -181,11 +181,12 @@ public class CalendarService {
 	}
 
 	public Long updateAppointment(String SID, Long appointmentId,
-			String appointmentName, String appointmentLocation,
-			String appointmentDescription, Date appointmentstart,
-			Date appointmentend, Boolean isDaily, Boolean isWeekly,
-			Boolean isMonthly, Boolean isYearly, Long categoryId, Long remind,
-			List<?> mmClient, Long roomType, String baseurl, Long language_id) {
+			String appointmentName,
+			String appointmentLocation, String appointmentDescription,
+			Date appointmentstart, Date appointmentend, Boolean isDaily,
+			Boolean isWeekly, Boolean isMonthly, Boolean isYearly,
+			Long categoryId, Long remind, @SuppressWarnings("rawtypes") List mmClient, Long roomType,
+			String baseUrl, Long language_id) {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
@@ -215,7 +216,7 @@ public class CalendarService {
 						appointmentName, appointmentDescription,
 						appointmentstart, appointmentend, isDaily, isWeekly,
 						isMonthly, isYearly, categoryId, remind, mmClient,
-						users_id, baseurl, language_id, false, "", user
+						users_id, baseUrl, language_id, false, "", user
 								.getOmTimeZone().getIcal());
 			}
 		} catch (Exception err) {

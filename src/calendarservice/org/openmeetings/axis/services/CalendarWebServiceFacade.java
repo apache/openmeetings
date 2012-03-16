@@ -110,15 +110,15 @@ public class CalendarWebServiceFacade {
 
 	public Long updateAppointment(String SID, Long appointmentId,
 			String appointmentName, String appointmentLocation,
-			String appointmentDescription, Date appointmentstart,
-			Date appointmentend, Boolean isDaily, Boolean isWeekly,
+			String appointmentDescription, Calendar appointmentstart,
+			Calendar appointmentend, Boolean isDaily, Boolean isWeekly,
 			Boolean isMonthly, Boolean isYearly, Long categoryId, Long remind,
-			Long roomType, String baseurl, Long languageId)
+			String[] mmClient, Long roomType, String baseurl, Long languageId)
 			throws AxisFault {
 		return getCalendarServiceProxy().updateAppointment(SID, appointmentId,
 				appointmentName, appointmentLocation, appointmentDescription,
 				appointmentstart, appointmentend, isDaily, isWeekly, isMonthly,
-				isYearly, categoryId, remind, null, roomType, baseurl,
+				isYearly, categoryId, remind, mmClient, roomType, baseurl,
 				languageId);
 	}
 

@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.axis2.AxisFault;
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
@@ -256,7 +257,8 @@ public class CalendarWebService {
 	 * @param baseUrl
 	 *            the base URL for the invitations
 	 * @param languageId
-	 *            the language id of the calendar event
+	 *            the language id of the calendar event, notification emails
+	 *            will be send in this language
 	 * @return
 	 */
 	public Long saveAppointment(String SID, String appointmentName,
@@ -289,8 +291,6 @@ public class CalendarWebService {
 					map.put("jNameTimeZone", params[5]);
 					newList.add(map);
 				}
-
-				// FIXME: Check if the event is also the event of the current
 
 				Long id = appointmentLogic.saveAppointment(appointmentName,
 						users_id, appointmentLocation, appointmentDescription,
@@ -335,10 +335,6 @@ public class CalendarWebService {
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				log.debug("updateAppointment");
-				// FIXME: Check if the event is also the event of the current
-				// SID
-
 				log.debug("appointmentId " + appointmentId);
 
 				appointmentLogic.getAppointMentById(appointmentId);
@@ -358,93 +354,168 @@ public class CalendarWebService {
 	}
 
 	/**
-	 * 
-	 * Update a calendar event all attributes
+	 * Save an appointment
 	 * 
 	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param appointmentId
+	 *            the id to update
 	 * @param appointmentName
+	 *            name of the calendar event
 	 * @param appointmentLocation
+	 *            location info text of the calendar event
 	 * @param appointmentDescription
+	 *            description test of the calendar event
 	 * @param appointmentstart
+	 *            start as Date yyyy-mm-ddThh:mm:ss
 	 * @param appointmentend
+	 *            end as Date yyyy-mm-ddThh:mm:ss
 	 * @param isDaily
+	 *            if the calendar event should be repeated daily (not
+	 *            implemented)
 	 * @param isWeekly
+	 *            if the calendar event should be repeated weekly (not
+	 *            implemented)
 	 * @param isMonthly
+	 *            if the calendar event should be repeated monthly (not
+	 *            implemented)
 	 * @param isYearly
+	 *            if the calendar event should be repeated yearly (not
+	 *            implemented)
 	 * @param categoryId
+	 *            the category id of the calendar event
 	 * @param remind
+	 *            the reminder type of the calendar event
 	 * @param mmClient
+	 *            List of clients, comma separated string, <br/>
+	 *            sample: 1,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1
+	 *            to add multiple clients you can use the same GET parameter in
+	 *            the URL multiple times, for example:
+	 *            &mmClient=1,firstname,lastname,hans
+	 *            .tier@gmail.com,1,Etc/GMT+1&mmClient
+	 *            =2,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1
 	 * @param roomType
-	 * @param baseurl
+	 *            the room type for the calendar event
+	 * @param baseUrl
+	 *            the base URL for the invitations
 	 * @param languageId
+	 *            the language id of the calendar event, notification emails
+	 *            will be send in this language
 	 * @return
 	 */
 	public Long updateAppointment(String SID, Long appointmentId,
 			String appointmentName, String appointmentLocation,
-			String appointmentDescription, Date appointmentstart,
-			Date appointmentend, Boolean isDaily, Boolean isWeekly,
+			String appointmentDescription, Calendar appointmentstart,
+			Calendar appointmentend, Boolean isDaily, Boolean isWeekly,
 			Boolean isMonthly, Boolean isYearly, Long categoryId, Long remind,
-			List<?> mmClient, Long roomType, String baseurl, Long languageId) {
+			String[] mmClient, Long roomType, String baseurl, Long languageId) throws AxisFault {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
+			
+			
 			if (authLevelManagement.checkUserLevel(user_level)) {
-
-				log.debug("updateAppointment");
-
-				RoomTypes rt = roommanagement.getRoomTypesById(roomType);
-
-				Appointment app = appointmentLogic
+				//check if the appointment belongs to the current user
+				Appointment appointment = appointmentLogic
 						.getAppointMentById(appointmentId);
-
-				Rooms room = app.getRoom();
-				if (room != null) {
-
-					room.setComment(appointmentDescription);
-					room.setName(appointmentName);
-					room.setRoomtype(rt);
-
-					roommanagement.updateRoomObject(room);
+				if (!appointment.getUserId().getUser_id().equals(users_id)) {
+					throw new AxisFault(
+							"The Appointment cannot be updated by the given user");
 				}
-
-				Users user = userManagement.getUserById(users_id);
-
-				return appointmentLogic.updateAppointment(appointmentId,
-						appointmentName, appointmentDescription,
-						appointmentstart, appointmentend, isDaily, isWeekly,
-						isMonthly, isYearly, categoryId, remind, mmClient,
-						users_id, baseurl, languageId, false, "", user
-								.getOmTimeZone().getIcal());
+			} else if (authLevelManagement.checkUserLevel(user_level)) {
+				//fine
+			} else {
+				throw new AxisFault("Not allowed to preform that action, Authenticate the SID first");
 			}
+
+			List<Map<String, String>> newList = new ArrayList<Map<String, String>>();
+
+			for (String singleClient : mmClient) {
+				String[] params = singleClient.split(",");
+				Map<String, String> map = new HashMap<String, String>();
+				map.put("meetingMemberId", params[0]);
+				map.put("firstname", params[1]);
+				map.put("lastname", params[2]);
+				map.put("email", params[3]);
+				map.put("userId", params[4]);
+				map.put("jNameTimeZone", params[5]);
+				newList.add(map);
+			}
+
+			log.debug("updateAppointment");
+
+			RoomTypes rt = roommanagement.getRoomTypesById(roomType);
+
+			Appointment app = appointmentLogic
+					.getAppointMentById(appointmentId);
+
+			Rooms room = app.getRoom();
+			if (room != null) {
+
+				room.setComment(appointmentDescription);
+				room.setName(appointmentName);
+				room.setRoomtype(rt);
+
+				roommanagement.updateRoomObject(room);
+			}
+
+			Users user = userManagement.getUserById(users_id);
+
+			return appointmentLogic.updateAppointment(appointmentId,
+					appointmentName, appointmentDescription,
+					appointmentstart.getTime(), appointmentend.getTime(), 
+					isDaily, isWeekly,
+					isMonthly, isYearly, categoryId, remind, newList,
+					users_id, baseurl, languageId, false, "", user
+							.getOmTimeZone().getIcal());
+			
+				
 		} catch (Exception err) {
 			log.error("[updateAppointment]", err);
-			err.printStackTrace();
+			throw new AxisFault(err.getMessage());
 		}
-		return null;
-
 	}
 
 	/**
 	 * 
 	 * delete a calendar event
 	 * 
+	 * If the given SID is from an Administrator or Web-Service user, the user
+	 * can delete any appointment.<br/>
+	 * If the SID is assigned to a simple user, he can only delete appointments
+	 * where he is also the owner/creator of the appointment
+	 * 
 	 * @param SID
+	 *            an authenticated SID
 	 * @param appointmentId
+	 *            the id to delete
 	 * @param language_id
+	 *            the language id in which the notifications for the deleted
+	 *            appointment are send
 	 * @return
 	 */
 	public Long deleteAppointment(String SID, Long appointmentId,
-			Long language_id) {
-
-		log.debug("deleteAppointment : " + appointmentId);
-
+			Long language_id) throws AxisFault {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
-			if (authLevelManagement.checkUserLevel(user_level)) {
+
+			if (authLevelManagement.checkWebServiceLevel(user_level)) {
+
+				return appointmentLogic.deleteAppointment(appointmentId,
+						users_id, language_id);
+
+			} else if (authLevelManagement.checkUserLevel(user_level)) {
+
+				Appointment appointment = appointmentLogic
+						.getAppointMentById(appointmentId);
+
+				if (!appointment.getUserId().getUser_id().equals(users_id)) {
+					throw new AxisFault(
+							"The Appointment cannot be deleted by the given user");
+				}
 
 				return appointmentLogic.deleteAppointment(appointmentId,
 						users_id, language_id);
@@ -453,9 +524,9 @@ public class CalendarWebService {
 
 		} catch (Exception err) {
 			log.error("[deleteAppointment]", err);
+			throw new AxisFault(err.getMessage());
 		}
 		return null;
-
 	}
 
 	/**

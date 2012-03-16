@@ -34,6 +34,8 @@
 		<attribute name="lzCalendarRef" value="null" />
 		
 		<dataset name="eventDS" />
+		
+		<attribute name="updateObj" value="null" />
 		    
 		<handler name="oninit">
 			<![CDATA[
@@ -61,7 +63,7 @@
 	            
 	            this.getAppointmentReminderTypList.setData(this.remindertypes.data);
 	            
-            	this.eventDS.setData(this.dataElement.childNodes);
+            	this.eventDS.setAttribute("data", this.dataElement.childNodes);
 	            
 	            if ($debug) Debug.write("this.eventDS ",this.eventDS);
 	            
@@ -75,91 +77,106 @@
 		
 		<method name="saveAndClose">
 			<![CDATA[
-				var tMemberArgs = this._participentList.getMemberArrayValue();
+				this.updateObj = new Object();
+			
+				updateObj.tMemberArgs = this._participentList.getMemberArrayValue();
 				
-				var tAppointmentStartDate = this._dateStart.getDate();
-				if ($debug) Debug.write("tAppointmentStartDate ",tAppointmentStartDate);
+				if ($debug) Debug.write("tMemberArgs: ",updateObj.tMemberArgs.length,updateObj.tMemberArgs);
+				
+				updateObj.appointmentId = Number(this.eventDS.getPointer().xpathQuery('appointmentId/text()'));
+				updateObj.appointmentstart = this._dateStart.getDate();
+				if ($debug) Debug.write("appointmentstart ",updateObj.appointmentstart);
 				var tTimeStart = this._timeStart.getText();
 				var hours = Number(tTimeStart.substr(0,2));
 				var mins = Number(tTimeStart.substr(4,2));
 				if ($debug) Debug.write("hours:mins",hours,mins,tTimeStart.substr(4,2));
-				tAppointmentStartDate.setHours(hours);
-				tAppointmentStartDate.setMinutes(mins);
+				updateObj.appointmentstart.setHours(hours);
+				updateObj.appointmentstart.setMinutes(mins);
 				
-				var tAppointmentEndDate = this._dateEnd.getDate();
+				updateObj.appointmentend = this._dateEnd.getDate();
 				var tTimeEnd = this._timeEnd.getText();
 				var hours = Number(tTimeEnd.substr(0,2));
 				var mins = Number(tTimeEnd.substr(4,2));
-				tAppointmentEndDate.setHours(hours);
-				tAppointmentEndDate.setMinutes(mins);
+				updateObj.appointmentend.setHours(hours);
+				updateObj.appointmentend.setMinutes(mins);
 				
-				var updateurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-                               +canvas.httpRootKey+'services/CalendarService/saveAppointment';
-                var queryString = 'SID='+canvas.sessionId
-                               +'&appointmentName='+encodeURIComponent(this._title.getText())
-                               +'&appointmentLocation='+encodeURIComponent(this._location.getText())
-                               +'&appointmentDescription='+encodeURIComponent(this._descr.getText())
-                               +'&appointmentstart='+parseDateToRestDateCalendar(tAppointmentStartDate)
-                               +'&appointmentend='+parseDateToRestDateCalendar(tAppointmentEndDate)
-                               +'&isDaily='+false
-                               +'&isYearly='+false
-                               +'&categoryId='+1
-                               +'&remind='+this._reminderType.getValue()
-                               ;
+                updateObj.appointmentName = this._title.getText();
+                updateObj.appointmentLocation = this._location.getText();
+                updateObj.appointmentDescription = this._descr.getText();
+                updateObj.isDaily = false;
+                updateObj.isWeekly = false;
+                updateObj.isMonthly = false;
+                updateObj.isYearly = false;
+                updateObj.categoryId = 1;
+                updateObj.remind = this._reminderType.getValue();
+                updateObj.roomType = this._roomType.getValue();
+                
+                if ($debug) Debug.write("appointmentId: ",updateObj.appointmentId);
                                
-                for (var i=0;i<tMemberArgs.length;i++) {
-                	
-                	var tObject = tMemberArgs[i];
-                	queryString += '&mmClient=' + 
-                						encodeURIComponent(
-		                					tObject.meetingMemberId + ','
-				                			+ tObject.firstname + ','
-				                			+ tObject.lastname + ','
-				                			+ tObject.email + ','
-				                			+ tObject.userId + ','
-				                			+ tObject.jNameTimeZone
-				                		);
-                	
-                }
-                
-                queryString += +'&roomType='+this._roomType.getValue()
-                             +'&baseUrl='+this.baseUrl
-                             +'&languageId='+hib.userlang
-                
-                if ($debug) Debug.write(updateurl);
-                if ($debug) Debug.write(queryString);
-				
-				this.saveNewAppointment.setAttribute("src",updateurl);
-				this.saveNewAppointment.setAttribute("querystring",queryString);
-				this.saveNewAppointment.doRequest();
+				if (updateObj.appointmentId > 0) {
+					this.updateAppointment.doCall();
+				} else {
+					this.saveAppointment.doCall();
+				} 
 			]]>
 		</method>
 		
 		<dataset name="getAppointmentReminderTypList" />
 		
-		<!-- 
-		String SID, String appointmentName,
-			String appointmentLocation, String appointmentDescription,
-			Date appointmentstart, Date appointmentend, Boolean isDaily,
-			Boolean isWeekly, Boolean isMonthly, Boolean isYearly,
-			Long categoryId, Long remind,
-			String[] mmClient, Long roomType,
-			String baseUrl, Long languageId
-		 -->
-		<dataset name="saveNewAppointment" type="http" querytype="POST">
-			<handler name="ondata" args="d">
-				if ($debug) Debug.write("saveNewAppointment ",d);
-				var tPointer = new lz.datapointer();
-				tPointer.setPointer(d);
-				var returnValue = tPointer.xpathQuery('saveAppointmentResponse/return/text()');
-				if ($debug) Debug.write("returnValue "+returnValue);
-				var tNumber = Number(returnValue);
-				if (tNumber > 0) {
-					parent.lzCalendarRef.reload();
+		<netRemoteCallHib name="saveAppointment" funcname="calendarservice.saveAppointment" 
+							  remotecontext="$once{ canvas.thishib }" >     
+			<netparam><method name="getValue">return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.appointmentName;</method></netparam>	
+			<netparam><method name="getValue">return parent.parent.updateObj.appointmentLocation;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.appointmentDescription;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.appointmentstart;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.appointmentend;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.isDaily;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.isWeekly;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.isMonthly;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.isYearly;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.categoryId;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.remind;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.tMemberArgs;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.roomType;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.baseUrl;</method></netparam>
+			<netparam><method name="getValue">return hib.userlang;</method></netparam>
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+		    		if ($debug) Debug.write("saveAppointment ",value);
+		    		parent.lzCalendarRef.reload();
 					parent.close();
-				}
-			</handler>
-		</dataset>
+	    		 ]]>
+	    	</handler>
+	    </netRemoteCallHib> 
+	    
+    	<netRemoteCallHib name="updateAppointment" funcname="calendarservice.updateAppointment" 
+						  remotecontext="$once{ canvas.thishib }" >  
+			<netparam><method name="getValue">return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.appointmentId;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.appointmentName;</method></netparam>	
+			<netparam><method name="getValue">return parent.parent.updateObj.appointmentLocation;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.appointmentDescription;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.appointmentstart;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.appointmentend;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.isDaily;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.isWeekly;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.isMonthly;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.isYearly;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.categoryId;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.remind;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.tMemberArgs;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.roomType;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.baseUrl;</method></netparam>
+			<netparam><method name="getValue">return hib.userlang;</method></netparam>
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+	    			if ($debug) Debug.write("updateAppointment ",value);
+	    			parent.lzCalendarRef.reload();
+					parent.close();
+	    		 ]]>
+	    	</handler>
+	    </netRemoteCallHib> 
 		
 		<labelText name="_titleLabel" x="4" y="24" labelid="572" fontstyle="bold" /> 
 			
@@ -235,7 +252,7 @@
 	            for (var i=0;i<canvas.roomTypesInitValues.length;i++){
 	                this.addItem(canvas.roomTypesInitValues[i].name,canvas.roomTypesInitValues[i].roomtypes_id);
 	            }
-	            this.selectItem(String(canvas.roomTypesInitValues[0].roomtypes_id));
+	            //this.selectItem(String(canvas.roomTypesInitValues[0].roomtypes_id));
 	            ]]>
 	        </handler> 
         </resetCombobox> 

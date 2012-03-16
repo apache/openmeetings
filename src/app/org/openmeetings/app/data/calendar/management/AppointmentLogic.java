@@ -319,7 +319,7 @@ public class AppointmentLogic {
 		try {
 
 			Appointment point = getAppointMentById(appointmentId);
-
+			
 			if (point == null) {
 				log.error("No appointment found for ID " + appointmentId);
 				return null;

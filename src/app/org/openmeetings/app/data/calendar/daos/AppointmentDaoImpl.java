@@ -487,12 +487,15 @@ public class AppointmentDaoImpl {
 
 				if (mmClient != null) {
 					for (int i = 0; i < mmClient.size(); i++) {
+						
 						@SuppressWarnings("rawtypes")
 						Map clientMemeber = (Map) mmClient.get(i);
 						Long meetingMemberId = Long
 								.valueOf(
 										clientMemeber.get("meetingMemberId")
 												.toString()).longValue();
+						
+						log.debug("DELETE newly CHECK meetingMemberId: {} VS {} -- ", meetingMemberId, memberRemote.getMeetingMemberId());
 
 						if (memberRemote.getMeetingMemberId().equals(
 								meetingMemberId)) {
@@ -500,12 +503,15 @@ public class AppointmentDaoImpl {
 									+ meetingMemberId + " is to be removed!");
 							// Notifying Member for Update
 							found = true;
+							break;
 						}
 
 					}
 				}
 
 				if (!found) {
+					
+					log.debug("DELETE getMeetingMemberId: {} -- ", memberRemote.getMeetingMemberId());
 
 					// Not in List in client delete it
 					meetingMemberLogic.deleteMeetingMember(
