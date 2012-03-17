@@ -22,7 +22,7 @@
 
 	<class name="lzEditCalendarEvent" extends="labelExplorerBox" labelid="815" allowDragging="true" 
 		    x="$once{ parent.width/2 - 300 }" y="100" docking="false" resizeable="false" 
-		    closable="true" width="600" height="500">
+		    closable="true" width="600" height="550">
 		    
 		<attribute name="reminderTypeId" value="0" type="number" />
 		
@@ -289,9 +289,14 @@
 				fgcolor="${ ((!parent._ispasswordProtected.value) ? 0xCCCCCC : 0x000000 ) }" />
 		<customEdittext name="_password" enabled="${ parent._ispasswordProtected.value }" password="true"
 						width="$once{ parent.width-110 }" x="100" y="154" />
+						
+		<view resource="messagebox_info_rsc" x="4" y="180" />
+	
+		<labelText name="password_info" labelid="1445" x="24" y="180" 
+							multiline="true" width="$once{ parent.width-34 }" />
 	 	
 	 	<!-- participents -->
-	 	<view name="_participentsIconBar" layout="axis:x" x="$once{ parent.width-50 }" y="180">
+	 	<view name="_participentsIconBar" layout="axis:x" x="$once{ parent.width-50 }" y="230">
 	        <baseChooseIconView labelid="812" height="20" width="19" bgcolor="0xE0E0E0"
 	                            resourceN="calendar_add_user_rsc">
 	            <handler name="onclick">
@@ -307,9 +312,9 @@
 	        <view bgcolor="0xE0E0E0" height="20" width="1" />
 	    </view>
 	 	
-	 	<labelText name="_participentLabel" x="4" y="200" labelid="803" fontstyle="bold" /> 
+	 	<labelText name="_participentLabel" x="4" y="250" labelid="803" fontstyle="bold" /> 
 	 	
-	 	<view name="_participentList" x="100" y="200" height="100" 
+	 	<view name="_participentList" x="100" y="250" height="100" 
             		  bgcolor="0xE0E0E0" width="$once{ parent.width-110 }">
            
             <method name="addListItem" args="userId,firstName,lastName,email,memberId,jNameTimeZone">
@@ -378,16 +383,16 @@
         </view>
         
         <!-- Location -->
-        <labelText name="_locationLabel" x="4" y="304" labelid="569" fontstyle="bold" /> 
+        <labelText name="_locationLabel" x="4" y="354" labelid="569" fontstyle="bold" /> 
         
         <customEdittext name="_location" 
         		datapath="local:classroot.eventDS:/location" text="$path{'text()'}" 
-        		width="$once{ parent.width-110 }" x="100" y="304" />
+        		width="$once{ parent.width-110 }" x="100" y="354" />
 		
 		<!-- Comment -->
-		<labelText name="_descrLabel" x="4" y="330" labelid="573" fontstyle="bold" /> 
+		<labelText name="_descrLabel" x="4" y="380" labelid="573" fontstyle="bold" /> 
 	
-		<customScrollEdittext name="_descr" y="330" x="100" 
+		<customScrollEdittext name="_descr" y="380" x="100" 
 				datapath="local:classroot.eventDS:/comment" text="$path{'text()'}" 
 				width="$once{ parent.width-110 }" height="124" /> 
 			

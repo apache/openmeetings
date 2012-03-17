@@ -5791,4 +5791,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   <string id="1444" name="calendar new button">
     <value>New Event</value>
   </string>
+  <string id="1445" name="calendar password info text">
+    <value>Passwortgeschützt ist nicht der Raum sondern die Einladungen die an die Teilnehmer verschickt werden! D.h. wenn Sie einen Termin mehrmals mit unterschiedlichem Passwort speichern wird jedesmal ein Link per mail zum Konferenzraum an alle Teilnehmer verschickt mit dem jeweiligem Passwort. Bereits versendete Einladungen funktionieren weiterhin!</value>
+  </string>
 </language>

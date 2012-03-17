@@ -4365,4 +4365,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   <string id="1444" name="calendar new button">
     <value>New Event</value>
   </string>
+  <string id="1445" name="calendar password info text">
+    <value>Password protected are the links to the conference that are send to the participents when you save the calendar event, not the room! That means if you save the event multiple times but with different passwords every participent receives a new link that has a different password. But old links still work once send!</value>
+  </string>
 </language>
