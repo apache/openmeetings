@@ -45,7 +45,7 @@ public class TestAddGroup extends AbstractOpenmeetingsSpringTest {
 
 		long organisation_usersid = organisationmanagement
 				.addUserToOrganisation(new Long(1), organisation_id,
-						new Long(1), "");
+						new Long(1));
 
 		log.error("new organisation_user: " + organisation_usersid);
 

@@ -146,6 +146,7 @@
 			newAppointment.roomsId = 0;
 			newAppointment.location = "";
 			newAppointment.isPasswordProtected = false;
+			newAppointment.roomTypeId = 1;
 			
 			return newAppointment;
 		]]>

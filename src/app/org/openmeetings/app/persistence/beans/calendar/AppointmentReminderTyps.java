@@ -30,6 +30,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
@@ -60,8 +61,6 @@ public class AppointmentReminderTyps implements Serializable {
 	private Date updatetime;
 	@Column(name="deleted")
 	private String deleted;
-	@Column(name="comment_field")
-	private String comment;
 	
 	public Long getTypId() {
 		return typId;
@@ -105,12 +104,4 @@ public class AppointmentReminderTyps implements Serializable {
 		this.deleted = deleted;
 	}
 	
-	public String getComment() {
-		return comment;
-	}
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
-	
-
 }

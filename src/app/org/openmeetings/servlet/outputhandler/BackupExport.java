@@ -813,7 +813,6 @@ public class BackupExport {
 				appointment.addElement("users_id").addCDATA("" + 0);
 			}
 			appointment.addElement("deleted").addCDATA("" + a.getDeleted());
-			appointment.addElement("comment").addCDATA("" + a.getComment());
 			if (a.getRemind() != null) {
 				appointment.addElement("typId").addCDATA(
 						"" + a.getRemind().getTypId());
@@ -1516,8 +1515,6 @@ public class BackupExport {
 					formatString("" + meetMember.getEmail()));
 			meetingmember.addElement("deleted").addCDATA(
 					formatString("" + meetMember.getDeleted()));
-			meetingmember.addElement("comment").addCDATA(
-					formatString("" + meetMember.getComment()));
 			meetingmember.addElement("invitor").addCDATA(
 					formatString("" + meetMember.getInvitor()));
 
@@ -1796,8 +1793,6 @@ public class BackupExport {
 						formatString("" + orgUsers.getDeleted()));
 				user_organisation.addElement("isModerator").addCDATA(
 						formatString("" + orgUsers.getIsModerator()));
-				user_organisation.addElement("comment").addCDATA(
-						formatString("" + orgUsers.getComment()));
 
 			}
 

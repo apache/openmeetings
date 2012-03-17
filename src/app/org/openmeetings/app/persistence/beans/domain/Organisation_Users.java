@@ -70,9 +70,6 @@ public class Organisation_Users implements Serializable {
 	@Column(name = "is_moderator")
 	private Boolean isModerator;
 	
-	@Column(name = "comment_field")
-	private String comment;
-
 	public Organisation getOrganisation() {
 		return organisation;
 	}
@@ -119,14 +116,6 @@ public class Organisation_Users implements Serializable {
 
 	public void setDeleted(String deleted) {
 		this.deleted = deleted;
-	}
-
-	public String getComment() {
-		return comment;
-	}
-
-	public void setComment(String comment) {
-		this.comment = comment;
 	}
 
 	public Boolean getIsModerator() {

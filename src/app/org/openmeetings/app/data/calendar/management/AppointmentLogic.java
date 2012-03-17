@@ -144,7 +144,8 @@ public class AppointmentLogic {
 			Boolean isDaily, Boolean isWeekly, Boolean isMonthly,
 			Boolean isYearly, Long categoryId, Long remind,
 			@SuppressWarnings("rawtypes") List mmClient, Long roomType,
-			String baseUrl, Long language_id) {
+			String baseUrl, Long language_id, Boolean isPasswordProtected,
+			String password) {
 
 		log.debug("Appointmentlogic.saveAppointment");
 
@@ -212,7 +213,7 @@ public class AppointmentLogic {
 					userId, appointmentLocation, appointmentDescription,
 					appointmentstart, appointmentend, isDaily, isWeekly,
 					isMonthly, isYearly, categoryId, remind, room, language_id,
-					false, "", false, user.getOmTimeZone().getJname());
+					isPasswordProtected, password, false, user.getOmTimeZone().getJname());
 
 			String invitorName = user.getFirstname() + " " + user.getLastname()
 					+ " [" + user.getAdresses().getEmail() + "]";
@@ -221,7 +222,7 @@ public class AppointmentLogic {
 			meetingMemberLogic.addMeetingMember(user.getFirstname(), user
 					.getLastname(), "", "", appointmentId, userId, user
 					.getAdresses().getEmail(), baseUrl, userId, true,
-					language_id, false, "", timezone, user.getOmTimeZone(),
+					language_id, isPasswordProtected, password, timezone, user.getOmTimeZone(),
 					invitorName);
 
 			// iterate through all members of this meeting and add them to the
@@ -292,8 +293,8 @@ public class AppointmentLogic {
 							userId, // meeting_organizer
 							new Boolean(false), // invitor
 							language_id, //language_id
-							false, // isPasswordProtected
-							"", // password
+							isPasswordProtected, // isPasswordProtected
+							password, // password
 							timezoneMember, omTimeZone, invitorName);
 
 				}
@@ -568,60 +569,6 @@ public class AppointmentLogic {
 						ment.getAppointmentEndtime(), timezone) + "<br/>";
 
 		return message;
-	}
-
-	// ----------------------------------------------------------------------------------------------
-
-	/**
-	 * 
-	 * @param appointmentId
-	 * @param appointmentName
-	 * @param appointmentDescription
-	 * @param appointmentstart
-	 * @param appointmentend
-	 * @param isDaily
-	 * @param isWeekly
-	 * @param isMonthly
-	 * @param isYearly
-	 * @param categoryId
-	 * @param remind
-	 * @param mmClient
-	 * @return
-	 */
-	public Long updateAppointment(Long appointmentId, String appointmentName,
-			String appointmentDescription, Date appointmentstart,
-			Date appointmentend, Boolean isDaily, Boolean isWeekly,
-			Boolean isMonthly, Boolean isYearly, Long categoryId, Long remind,
-			@SuppressWarnings("rawtypes") List mmClient, Long user_id,
-			String baseUrl, Long language_id, Boolean isPasswordProtected,
-			String password, String iCalTimeZone) {
-
-		try {
-
-			return appointmentDao.updateAppointment(appointmentId,
-					appointmentName, appointmentDescription, appointmentstart,
-					appointmentend, isDaily, isWeekly, isMonthly, isYearly,
-					categoryId, remind, mmClient, user_id, baseUrl,
-					language_id, isPasswordProtected, password, iCalTimeZone);
-
-		} catch (Exception err) {
-			log.error("[updateAppointment]", err);
-		}
-		return null;
-	}
-
-	public Long updateAppointmentByTime(Long appointmentId,
-			Date appointmentstart, Date appointmentend, Long user_id,
-			String baseUrl, Long language_id, String iCalTimeZone) {
-
-		try {
-			return appointmentDao.updateAppointmentByTime(appointmentId,
-					appointmentstart, appointmentend, user_id, baseUrl,
-					language_id, iCalTimeZone);
-		} catch (Exception err) {
-			log.error("[updateAppointment]", err);
-		}
-		return null;
 	}
 
 	/**

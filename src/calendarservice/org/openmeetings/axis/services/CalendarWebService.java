@@ -259,6 +259,10 @@ public class CalendarWebService {
 	 * @param languageId
 	 *            the language id of the calendar event, notification emails
 	 *            will be send in this language
+	 * @param isPasswordProtected
+	 *            if the room is password protected
+	 * @param password
+	 *            the password for the room
 	 * @return
 	 */
 	public Long saveAppointment(String SID, String appointmentName,
@@ -266,7 +270,8 @@ public class CalendarWebService {
 			Calendar appointmentstart, Calendar appointmentend,
 			Boolean isDaily, Boolean isWeekly, Boolean isMonthly,
 			Boolean isYearly, Long categoryId, Long remind, String[] mmClient,
-			Long roomType, String baseUrl, Long languageId) {
+			Long roomType, String baseUrl, Long languageId,
+			Boolean isPasswordProtected, String password) {
 
 		log.debug("saveAppointMent SID:" + SID + ", baseUrl : " + baseUrl);
 
@@ -296,7 +301,8 @@ public class CalendarWebService {
 						users_id, appointmentLocation, appointmentDescription,
 						appointmentstart.getTime(), appointmentend.getTime(),
 						isDaily, isWeekly, isMonthly, isYearly, categoryId,
-						remind, newList, roomType, baseUrl, languageId);
+						remind, newList, roomType, baseUrl, languageId,
+						isPasswordProtected, password);
 
 				return id;
 			} else {
@@ -341,7 +347,7 @@ public class CalendarWebService {
 
 				Users user = userManagement.getUserById(users_id);
 
-				return appointmentLogic.updateAppointmentByTime(appointmentId,
+				return appointmentDao.updateAppointmentByTime(appointmentId,
 						appointmentstart, appointmentend, users_id, baseurl,
 						languageId, user.getOmTimeZone().getIcal());
 			}
@@ -401,6 +407,10 @@ public class CalendarWebService {
 	 * @param languageId
 	 *            the language id of the calendar event, notification emails
 	 *            will be send in this language
+	 * @param isPasswordProtected
+	 *            if the room is password protected
+	 * @param password
+	 *            the password for the room
 	 * @return
 	 */
 	public Long updateAppointment(String SID, Long appointmentId,
@@ -408,15 +418,16 @@ public class CalendarWebService {
 			String appointmentDescription, Calendar appointmentstart,
 			Calendar appointmentend, Boolean isDaily, Boolean isWeekly,
 			Boolean isMonthly, Boolean isYearly, Long categoryId, Long remind,
-			String[] mmClient, Long roomType, String baseurl, Long languageId) throws AxisFault {
+			String[] mmClient, Long roomType, String baseurl, Long languageId,
+			Boolean isPasswordProtected, String password)
+			throws AxisFault {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
-			
-			
+
 			if (authLevelManagement.checkUserLevel(user_level)) {
-				//check if the appointment belongs to the current user
+				// check if the appointment belongs to the current user
 				Appointment appointment = appointmentLogic
 						.getAppointMentById(appointmentId);
 				if (!appointment.getUserId().getUser_id().equals(users_id)) {
@@ -424,9 +435,10 @@ public class CalendarWebService {
 							"The Appointment cannot be updated by the given user");
 				}
 			} else if (authLevelManagement.checkUserLevel(user_level)) {
-				//fine
+				// fine
 			} else {
-				throw new AxisFault("Not allowed to preform that action, Authenticate the SID first");
+				throw new AxisFault(
+						"Not allowed to preform that action, Authenticate the SID first");
 			}
 
 			List<Map<String, String>> newList = new ArrayList<Map<String, String>>();
@@ -462,15 +474,13 @@ public class CalendarWebService {
 
 			Users user = userManagement.getUserById(users_id);
 
-			return appointmentLogic.updateAppointment(appointmentId,
-					appointmentName, appointmentDescription,
-					appointmentstart.getTime(), appointmentend.getTime(), 
-					isDaily, isWeekly,
-					isMonthly, isYearly, categoryId, remind, newList,
-					users_id, baseurl, languageId, false, "", user
-							.getOmTimeZone().getIcal());
-			
-				
+			return appointmentDao.updateAppointment(appointmentId,
+					appointmentName, appointmentDescription, appointmentstart
+							.getTime(), appointmentend.getTime(), isDaily,
+					isWeekly, isMonthly, isYearly, categoryId, remind, newList,
+					users_id, baseurl, languageId, isPasswordProtected, password, user
+							.getOmTimeZone().getIcal(), appointmentLocation);
+
 		} catch (Exception err) {
 			log.error("[updateAppointment]", err);
 			throw new AxisFault(err.getMessage());

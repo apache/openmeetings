@@ -27,6 +27,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 @Entity
@@ -49,6 +50,7 @@ public class Userdata implements Serializable {
 	private Date starttime;
 	@Column(name = "updatetime")
 	private Date updatetime;
+	@Lob
 	@Column(name = "comment_field")
     private String comment;
 	@Column(name = "deleted")

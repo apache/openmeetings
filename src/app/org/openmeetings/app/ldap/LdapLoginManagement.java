@@ -713,7 +713,7 @@ public class LdapLoginManagement {
 			log.debug("Adding user '" + newUserId + "' to organization '"
 					+ organisation_id + "'");
 			organisationmanagement.addUserToOrganisation(newUserId,
-					organisation_id, newUserId, "");
+					organisation_id, newUserId);
 		}
 
 		return newUserId;

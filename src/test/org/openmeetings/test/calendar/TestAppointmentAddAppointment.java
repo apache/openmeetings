@@ -86,7 +86,7 @@ public class TestAppointmentAddAppointment extends
 					users_id, appointmentLocation, appointmentDescription,
 					appointmentstart, appointmentend, isDaily, isWeekly,
 					isMonthly, isYearly, categoryId, remind, mmClient,
-					roomType, baseUrl, language_id);
+					roomType, baseUrl, language_id, false, "");
 
 			
 			Thread.sleep(3000);

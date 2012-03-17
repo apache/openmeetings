@@ -1220,19 +1220,17 @@ public class UserWebService {
 	 *            the organization id
 	 * @param insertedby
 	 *            user id of the operating user
-	 * @param comment
-	 *            any comment
 	 * @return
 	 */
 	public Long addUserToOrganisation(String SID, Long user_id,
-			Long organisation_id, Long insertedby, String comment) {
+			Long organisation_id, Long insertedby) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			if (authLevelManagement.checkWebServiceLevel(user_level)) {
 
 				return organisationmanagement.addUserToOrganisation(user_id,
-						organisation_id, users_id, comment);
+						organisation_id, users_id);
 
 			} else {
 				return new Long(-26);

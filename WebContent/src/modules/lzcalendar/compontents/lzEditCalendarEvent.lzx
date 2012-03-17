@@ -110,6 +110,8 @@
                 updateObj.categoryId = 1;
                 updateObj.remind = this._reminderType.getValue();
                 updateObj.roomType = this._roomType.getValue();
+                updateObj.isPasswordProtected = this._ispasswordProtected.getValue();
+                updateObj.password = this._password.getText();
                 
                 if ($debug) Debug.write("appointmentId: ",updateObj.appointmentId);
                                
@@ -141,6 +143,8 @@
 			<netparam><method name="getValue">return parent.parent.updateObj.roomType;</method></netparam>
 			<netparam><method name="getValue">return parent.parent.baseUrl;</method></netparam>
 			<netparam><method name="getValue">return hib.userlang;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.isPasswordProtected;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.password;</method></netparam>
 	    	<handler name="ondata" args="value">
 	    		<![CDATA[
 		    		if ($debug) Debug.write("saveAppointment ",value);
@@ -169,6 +173,8 @@
 			<netparam><method name="getValue">return parent.parent.updateObj.roomType;</method></netparam>
 			<netparam><method name="getValue">return parent.parent.baseUrl;</method></netparam>
 			<netparam><method name="getValue">return hib.userlang;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.isPasswordProtected;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.password;</method></netparam>
 	    	<handler name="ondata" args="value">
 	    		<![CDATA[
 	    			if ($debug) Debug.write("updateAppointment ",value);
@@ -246,7 +252,15 @@
 	 	<!-- Roomtype -->
 		<labelText name="_roomTypeLabel" x="4" y="102" labelid="619" fontstyle="bold" /> 
 		
-		<resetCombobox name="_roomType" width="$once{ parent.width-110 }" y="102" x="100" editable="false" fontsize="11">
+		<resetCombobox name="_roomType" width="$once{ parent.width-110 }" y="102" x="100" editable="false" 
+					datapath="local:classroot.eventDS:/roomTypeId">
+			<handler name="ondata" args="roomTypeIdNode">
+				if ($debug) Debug.write("remindtype ondata 1: ", roomTypeIdNode.childNodes[0].data);
+				var remTypeId = Number(roomTypeIdNode.childNodes[0].data);
+				if (remTypeId > 0) {
+				    this.selectItem(remTypeId);
+			    }
+			</handler>
 	        <handler name="oninit" >
 	            <![CDATA[
 	            for (var i=0;i<canvas.roomTypesInitValues.length;i++){
@@ -356,7 +370,6 @@
            					this.jNameTimeZone = tDataPointer.xpathQuery( 'jNameTimeZone/text()' );
            					this.memberText.setAttribute("text",this.firstName+' '+this.lastName+' ['+this.email+']');
            				</handler>
-           				
      				</attendeeListItem>
           			<simplelayout axis="y" spacing="1" />
           		</view>
@@ -367,13 +380,16 @@
         <!-- Location -->
         <labelText name="_locationLabel" x="4" y="304" labelid="569" fontstyle="bold" /> 
         
-        <customEdittext name="_location" width="$once{ parent.width-110 }" x="100" y="304" />
+        <customEdittext name="_location" 
+        		datapath="local:classroot.eventDS:/location" text="$path{'text()'}" 
+        		width="$once{ parent.width-110 }" x="100" y="304" />
 		
 		<!-- Comment -->
 		<labelText name="_descrLabel" x="4" y="330" labelid="573" fontstyle="bold" /> 
 	
-		<customScrollEdittext name="_descr" y="330" x="100" width="$once{ parent.width-110 }" 
-			height="124" text="" /> 
+		<customScrollEdittext name="_descr" y="330" x="100" 
+				datapath="local:classroot.eventDS:/comment" text="$path{'text()'}" 
+				width="$once{ parent.width-110 }" height="124" /> 
 			
 		<simpleLabelButton labelid="813" width="100" x="$once{ parent.width-315 }" 
 	           y="$once{ parent.height-24 }" >

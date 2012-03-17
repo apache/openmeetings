@@ -95,8 +95,7 @@ public class AppointmentReminderTypDaoImpl {
 		return null;
 	}
 
-	public Long addAppointmentReminderTyps(Long user_id, String name,
-			String comment) {
+	public Long addAppointmentReminderTyps(Long user_id, String name) {
 		try {
 
 			AppointmentReminderTyps ac = new AppointmentReminderTyps();
@@ -105,7 +104,6 @@ public class AppointmentReminderTypDaoImpl {
 			ac.setStarttime(new Date());
 			ac.setDeleted("false");
 			ac.setUser(usersDao.getUser(user_id));
-			ac.setComment(comment);
 
 			ac = em.merge(ac);
 			Long category_id = ac.getTypId();

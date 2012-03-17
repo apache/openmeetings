@@ -29,6 +29,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -50,7 +51,8 @@ public class Configuration implements Serializable {
 	private Date starttime;
 	@Column(name="updatetime")
 	private Date updatetime;
-	@Column(name="comment_field")
+	@Lob
+	@Column(name="comment_field", length=2048)
 	private String comment;
 	@Column(name="deleted")
 	private String deleted;

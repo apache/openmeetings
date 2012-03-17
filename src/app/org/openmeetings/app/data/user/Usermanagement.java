@@ -1123,7 +1123,7 @@ public class Usermanagement {
 			//new user add organizations without checks
 			List<Organisation_Users> orgList = users.getOrganisation_users();
 			for (Long orgId : orgIds) {
-				orgList.add(organisationmanagement.getOrgUser(orgId, null, ""));
+				orgList.add(organisationmanagement.getOrgUser(orgId, null));
 			}
 			return addUser(users);
 

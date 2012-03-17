@@ -421,7 +421,7 @@ public class AppointmentDaoImpl {
 			Date appointmentend, Boolean isDaily, Boolean isWeekly,
 			Boolean isMonthly, Boolean isYearly, Long categoryId, Long remind,
 			@SuppressWarnings("rawtypes") List mmClient, Long users_id, String baseUrl, Long language_id,
-			Boolean isPasswordProtected, String password, String iCalTimeZone) {
+			Boolean isPasswordProtected, String password, String iCalTimeZone, String appointmentLocation) {
 
 		log.debug("AppointmentDAOImpl.updateAppointment");
 		try {
@@ -448,6 +448,7 @@ public class AppointmentDaoImpl {
 					appointmentstart, appointmentend);
 
 			ap.setAppointmentName(appointmentName);
+			ap.setAppointmentLocation(appointmentLocation);
 			ap.setAppointmentStarttime(appointmentstart);
 			ap.setAppointmentEndtime(appointmentend);
 			ap.setAppointmentDescription(appointmentDescription);
@@ -605,7 +606,9 @@ public class AppointmentDaoImpl {
 								sendToUserId, // sending To: External users have
 												// a 0 here
 								new Boolean(false), // invitor
-								language_id, isPasswordProtected, password,
+								language_id, 
+								isPasswordProtected, 
+								password,
 								timezoneMember, omTimeZone, invitorName);
 
 					}

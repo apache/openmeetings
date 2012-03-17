@@ -174,13 +174,13 @@ public class OrganisationService {
 	}
 
 	public Long addUserToOrganisation(String SID, Long organisation_id,
-			Long user_id, String comment) {
+			Long user_id) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			if (authLevelManagement.checkAdminLevel(user_level)) {
 				return organisationmanagement.addUserToOrganisation(user_id,
-						organisation_id, users_id, comment);
+						organisation_id, users_id);
 			} else {
 				return -26L;
 			}

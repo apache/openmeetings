@@ -31,6 +31,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
@@ -57,7 +58,8 @@ public class AppointmentCategory implements Serializable {
 	private Date updatetime;
 	@Column(name="deleted")
 	private String deleted;
-	@Column(name="comment_field")
+	@Lob
+	@Column(name="comment_field", length=2048)
 	private String comment;
 	
 	public Long getCategoryId() {

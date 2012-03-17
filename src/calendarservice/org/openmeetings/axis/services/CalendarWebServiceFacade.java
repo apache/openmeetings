@@ -89,15 +89,16 @@ public class CalendarWebServiceFacade {
 
 	public Long saveAppointment(String SID, String appointmentName,
 			String appointmentLocation, String appointmentDescription,
-			Calendar appointmentstart, Calendar appointmentend, Boolean isDaily,
-			Boolean isWeekly, Boolean isMonthly, Boolean isYearly,
-			Long categoryId, Long remind,
-			String[] mmClient, Long roomType,
-			String baseUrl, Long languageId) throws AxisFault {
+			Calendar appointmentstart, Calendar appointmentend,
+			Boolean isDaily, Boolean isWeekly, Boolean isMonthly,
+			Boolean isYearly, Long categoryId, Long remind, String[] mmClient,
+			Long roomType, String baseUrl, Long languageId,
+			Boolean isPasswordProtected, String password) throws AxisFault {
 		return getCalendarServiceProxy().saveAppointment(SID, appointmentName,
 				appointmentLocation, appointmentDescription, appointmentstart,
 				appointmentend, isDaily, isWeekly, isMonthly, isYearly,
-				categoryId, remind, mmClient, roomType, baseUrl, languageId);
+				categoryId, remind, mmClient, roomType, baseUrl, languageId,
+				isPasswordProtected, password);
 	}
 
 	public Long updateAppointmentTimeOnly(String SID, Long appointmentId,
@@ -113,13 +114,13 @@ public class CalendarWebServiceFacade {
 			String appointmentDescription, Calendar appointmentstart,
 			Calendar appointmentend, Boolean isDaily, Boolean isWeekly,
 			Boolean isMonthly, Boolean isYearly, Long categoryId, Long remind,
-			String[] mmClient, Long roomType, String baseurl, Long languageId)
-			throws AxisFault {
+			String[] mmClient, Long roomType, String baseurl, Long languageId,
+			Boolean isPasswordProtected, String password) throws AxisFault {
 		return getCalendarServiceProxy().updateAppointment(SID, appointmentId,
 				appointmentName, appointmentLocation, appointmentDescription,
 				appointmentstart, appointmentend, isDaily, isWeekly, isMonthly,
 				isYearly, categoryId, remind, mmClient, roomType, baseurl,
-				languageId);
+				languageId, isPasswordProtected, password);
 	}
 
 	public Long deleteAppointment(String SID, Long appointmentId,
@@ -127,22 +128,26 @@ public class CalendarWebServiceFacade {
 		return getCalendarServiceProxy().deleteAppointment(SID, appointmentId,
 				language_id);
 	}
-	
-	public Appointment getAppointmentByRoomId(String SID, Long room_id) throws AxisFault {
+
+	public Appointment getAppointmentByRoomId(String SID, Long room_id)
+			throws AxisFault {
 		return getCalendarServiceProxy().getAppointmentByRoomId(SID, room_id);
 	}
-	
-	public List<AppointmentCategory> getAppointmentCategoryList(String SID) throws AxisFault {
+
+	public List<AppointmentCategory> getAppointmentCategoryList(String SID)
+			throws AxisFault {
 		return getCalendarServiceProxy().getAppointmentCategoryList(SID);
 	}
-	
+
 	public List<AppointmentReminderTyps> getAppointmentReminderTypList(
 			String SID) throws AxisFault {
 		return getCalendarServiceProxy().getAppointmentReminderTypList(SID);
 	}
-	
-	public List<Week> getAppointmentsByWeekCalendar(int firstDayInWeek, Date startDate)  throws AxisFault{
-		return getCalendarServiceProxy().getAppointmentsByWeekCalendar(firstDayInWeek, startDate);
+
+	public List<Week> getAppointmentsByWeekCalendar(int firstDayInWeek,
+			Date startDate) throws AxisFault {
+		return getCalendarServiceProxy().getAppointmentsByWeekCalendar(
+				firstDayInWeek, startDate);
 	}
-	
+
 }

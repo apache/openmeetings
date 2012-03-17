@@ -292,10 +292,10 @@ public class UserWebServiceFacade {
 	}
 
 	public Long addUserToOrganisation(String SID, Long user_id,
-			Long organisation_id, Long insertedby, String comment)
+			Long organisation_id, Long insertedby)
 			throws AxisFault {
 		return getUserServiceProxy().addUserToOrganisation(SID, user_id,
-				organisation_id, insertedby, comment);
+				organisation_id, insertedby);
 	}
 
 	public SearchResult<Users> getUsersByOrganisation(String SID,

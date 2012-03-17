@@ -13,6 +13,7 @@ public class AppointmentDTO {
 	private Long categoryId;
 	private Long reminderId;
 	private Long roomId;
+	private Long roomTypeId;
 	private String title;
 	private String location;
 	private String comment;
@@ -29,6 +30,9 @@ public class AppointmentDTO {
 				.getRemind().getTypId() : null;
 		roomId = (appointment.getRoom() != null) ? appointment.getRoom()
 				.getRooms_id() : null;
+		roomTypeId = (roomId != null && appointment.getRoom().getRoomtype() != null) ? appointment
+				.getRoom().getRoomtype().getRoomtypes_id()
+				: null;
 		title = appointment.getAppointmentName();
 		location = appointment.getAppointmentLocation();
 		comment = appointment.getAppointmentDescription();
@@ -130,6 +134,14 @@ public class AppointmentDTO {
 
 	public void setMeetingMember(List<MeetingMemberDTO> meetingMember) {
 		this.meetingMember = meetingMember;
+	}
+
+	public Long getRoomTypeId() {
+		return roomTypeId;
+	}
+
+	public void setRoomTypeId(Long roomTypeId) {
+		this.roomTypeId = roomTypeId;
 	}
 
 }

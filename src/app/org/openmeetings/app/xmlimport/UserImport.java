@@ -164,7 +164,7 @@ public class UserImport {
 						Long organisation_id = Long.valueOf(
 								orgElement.getText()).longValue();
 						organisationmanagement.addUserToOrganisation(
-								us.getUser_id(), organisation_id, null, "");
+								us.getUser_id(), organisation_id, null);
 					}
 				}
 

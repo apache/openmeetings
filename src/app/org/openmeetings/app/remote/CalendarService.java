@@ -121,7 +121,8 @@ public class CalendarService {
 			Date appointmentstart, Date appointmentend, Boolean isDaily,
 			Boolean isWeekly, Boolean isMonthly, Boolean isYearly,
 			Long categoryId, Long remind, @SuppressWarnings("rawtypes") List mmClient, Long roomType,
-			String baseUrl, Long language_id) {
+			String baseUrl, Long language_id, Boolean isPasswordProtected,
+			String password) {
 
 		log.debug("saveAppointMent SID:" + SID + ", baseUrl : " + baseUrl);
 
@@ -137,7 +138,7 @@ public class CalendarService {
 						users_id, appointmentLocation, appointmentDescription,
 						appointmentstart, appointmentend, isDaily, isWeekly,
 						isMonthly, isYearly, categoryId, remind, mmClient,
-						roomType, baseUrl, language_id);
+						roomType, baseUrl, language_id, isPasswordProtected, password);
 
 				return id;
 			} else {
@@ -167,10 +168,11 @@ public class CalendarService {
 						.getAppointMentById(appointmentId);
 
 				Users user = userManagement.getUserById(users_id);
-
-				return appointmentLogic.updateAppointmentByTime(appointmentId,
+				
+				return appointmentDao.updateAppointmentByTime(appointmentId,
 						appointmentstart, appointmentend, users_id, baseurl,
 						language_id, user.getOmTimeZone().getIcal());
+
 			}
 		} catch (Exception err) {
 			log.error("[updateAppointment]", err);
@@ -181,12 +183,13 @@ public class CalendarService {
 	}
 
 	public Long updateAppointment(String SID, Long appointmentId,
-			String appointmentName,
+			String appointmentName, 
 			String appointmentLocation, String appointmentDescription,
 			Date appointmentstart, Date appointmentend, Boolean isDaily,
 			Boolean isWeekly, Boolean isMonthly, Boolean isYearly,
 			Long categoryId, Long remind, @SuppressWarnings("rawtypes") List mmClient, Long roomType,
-			String baseUrl, Long language_id) {
+			String baseUrl, Long language_id, Boolean isPasswordProtected,
+			String password) {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
@@ -212,12 +215,12 @@ public class CalendarService {
 
 				Users user = userManagement.getUserById(users_id);
 
-				return appointmentLogic.updateAppointment(appointmentId,
+				return appointmentDao.updateAppointment(appointmentId,
 						appointmentName, appointmentDescription,
 						appointmentstart, appointmentend, isDaily, isWeekly,
 						isMonthly, isYearly, categoryId, remind, mmClient,
-						users_id, baseUrl, language_id, false, "", user
-								.getOmTimeZone().getIcal());
+						users_id, baseUrl, language_id, isPasswordProtected, password, user
+								.getOmTimeZone().getIcal(), appointmentLocation);
 			}
 		} catch (Exception err) {
 			log.error("[updateAppointment]", err);

@@ -69,8 +69,6 @@ public class MeetingMember implements Serializable {
 	private Date updatetime;
 	@Column(name="deleted")
 	private Boolean deleted;
-	@Column(name="comment_field")
-	private String comment;
 	@Column(name="invitor")
 	private Boolean invitor;
 	
@@ -168,13 +166,6 @@ public class MeetingMember implements Serializable {
 	}
 	public void setDeleted(Boolean deleted) {
 		this.deleted = deleted;
-	}
-	
-	public String getComment() {
-		return comment;
-	}
-	public void setComment(String comment) {
-		this.comment = comment;
 	}
 	
 	public Boolean getInvitor() {

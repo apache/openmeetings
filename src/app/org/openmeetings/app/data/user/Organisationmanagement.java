@@ -327,7 +327,7 @@ public class Organisationmanagement {
 			for (Iterator<Long> it = usersToAdd.iterator(); it.hasNext();) {
 				Long user_id = it.next();
 				this.addUserToOrganisation(user_id, org.getOrganisation_id(),
-						insertedby, "");
+						insertedby);
 			}
 
 			for (Iterator<Long> it = usersToDel.iterator(); it.hasNext();) {
@@ -461,10 +461,10 @@ public class Organisationmanagement {
 	 * @return
 	 */
 	public Long addUserToOrganisation(Long user_id, Long organisation_id,
-			Long insertedby, String comment) {
+			Long insertedby) {
 		try {
 			if (this.getOrganisation_UserByUserAndOrganisation(user_id, organisation_id) == null) {
-				return addOrganisationUserObj(user_id, getOrgUser(organisation_id, insertedby, comment));
+				return addOrganisationUserObj(user_id, getOrgUser(organisation_id, insertedby));
 			} else {
 				return -35L;
 			}
@@ -475,12 +475,11 @@ public class Organisationmanagement {
 	}
 	
 	public Organisation_Users getOrgUser(Long organisation_id,
-			Long insertedby, String comment) {
+			Long insertedby) {
 		
 		Organisation_Users orgUser = new Organisation_Users();
 		orgUser.setOrganisation(getOrganisationById(organisation_id));
 		orgUser.setDeleted("false");
-		orgUser.setComment(comment);
 		
 		return orgUser;
 	}
@@ -787,7 +786,7 @@ public class Organisationmanagement {
 				// log.error("updateUserOrganisationsByUser size ADD: "+orgIdsToAdd.size());
 				for (Long orgToAdd : orgIdsToAdd) {
 					this.addUserToOrganisation(us.getUser_id(), orgToAdd,
-							us.getUser_id(), "");
+							us.getUser_id());
 				}
 
 				// log.error("updateUserOrganisationsByUser size DELETE: "+orgIdsToDelete.size());
@@ -817,7 +816,7 @@ public class Organisationmanagement {
 				for (Iterator it = org.iterator(); it.hasNext();) {
 					Integer key = (Integer) it.next();
 					Long newOrgId = key.longValue();
-					this.addUserToOrganisation(us, newOrgId, new Long(1), "");
+					this.addUserToOrganisation(us, newOrgId, new Long(1));
 				}
 			}
 		} catch (Exception ex) {

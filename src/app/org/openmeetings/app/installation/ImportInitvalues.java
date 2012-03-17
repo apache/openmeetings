@@ -854,11 +854,11 @@ public class ImportInitvalues {
 
 		try {
 			appointmentReminderTypDaoImpl.addAppointmentReminderTyps(-1L,
-					"do not send notification", "no reminder");
+					"do not send notification");
 			appointmentReminderTypDaoImpl.addAppointmentReminderTyps(-1L,
-					"simple email", "simple email notification");
+					"simple email");
 			appointmentReminderTypDaoImpl.addAppointmentReminderTyps(-1L,
-					"iCal email", "Ical notification");
+					"iCal email");
 
 		} catch (Exception e) {
 			log.error("Could not create ReminderType");

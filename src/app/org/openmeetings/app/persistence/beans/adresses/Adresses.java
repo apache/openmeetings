@@ -28,6 +28,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -42,7 +43,8 @@ public class Adresses implements Serializable {
 	private Long adresses_id;
 	@Column(name = "additionalname")
 	private String additionalname;
-	@Column(name = "comment_field")
+	@Lob
+	@Column(name = "comment_field", length=2048)
 	private String comment;
 	@Column(name = "fax")
 	private String fax;

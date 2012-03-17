@@ -30,6 +30,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -54,7 +55,8 @@ public class Appointment implements Serializable {
 	private Date appointmentStarttime;
 	@Column(name = "appointment_endtime")
 	private Date appointmentEndtime;
-	@Column(name = "description")
+	@Lob 
+	@Column(name = "description", length=2048)
 	private String appointmentDescription;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "category_id", nullable = true)
@@ -69,8 +71,6 @@ public class Appointment implements Serializable {
 	private Date updatetime;
 	@Column(name = "deleted")
 	private String deleted;
-	@Column(name = "comment_field")
-	private String comment;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "remind_id", nullable = true)
 	private AppointmentReminderTyps remind;
@@ -212,14 +212,6 @@ public class Appointment implements Serializable {
 
 	public void setDeleted(String deleted) {
 		this.deleted = deleted;
-	}
-
-	public String getComment() {
-		return comment;
-	}
-
-	public void setComment(String comment) {
-		this.comment = comment;
 	}
 
 	public Boolean getIsWeekly() {

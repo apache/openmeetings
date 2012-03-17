@@ -892,8 +892,6 @@ public class BackupImportController extends AbstractUploadController {
 										Maps.ORGANISATIONS);
 								Boolean isModerator = importBooleanType(unformatString(organisationObject
 										.element("isModerator").getText()));
-								String commentOrg = unformatString(organisationObject
-										.element("comment").getText());
 								String deleted = unformatString(organisationObject
 										.element("deleted").getText());
 
@@ -901,7 +899,6 @@ public class BackupImportController extends AbstractUploadController {
 								orgUser.setOrganisation(organisationmanagement
 										.getOrganisationByIdBackup(organisation_id));
 								orgUser.setIsModerator(isModerator);
-								orgUser.setComment(commentOrg);
 								orgUser.setStarttime(new Date());
 								orgUser.setDeleted(deleted);
 
@@ -1534,8 +1531,6 @@ public class BackupImportController extends AbstractUploadController {
 								.element("email").getText());
 						Boolean deleted = importBooleanType(unformatString(appointmentsObject
 								.element("deleted").getText()));
-						String comment = unformatString(appointmentsObject
-								.element("comment").getText());
 						Boolean invitor = importBooleanType(unformatString(appointmentsObject
 								.element("invitor").getText()));
 
@@ -1550,7 +1545,6 @@ public class BackupImportController extends AbstractUploadController {
 						meetingMember.setAppointmentStatus(appointmentStatus);
 						meetingMember.setEmail(email);
 						meetingMember.setDeleted(deleted);
-						meetingMember.setComment(comment);
 						meetingMember.setInvitor(invitor);
 
 						meetingmembersList.add(meetingMember);
@@ -1692,8 +1686,6 @@ public class BackupImportController extends AbstractUploadController {
 										.getText()));
 						String deleted = unformatString(appointmentsObject
 								.element("deleted").getText());
-						String comment = unformatString(appointmentsObject
-								.element("comment").getText());
 						Long typId = importLongType(unformatString(appointmentsObject
 								.element("typId").getText()));
 						Boolean isDaily = importBooleanType(unformatString(appointmentsObject
@@ -1731,7 +1723,6 @@ public class BackupImportController extends AbstractUploadController {
 						app.setAppointmentStarttime(appointmentStarttime);
 						app.setAppointmentEndtime(appointmentEndtime);
 						app.setDeleted(deleted);
-						app.setComment(comment);
 						app.setRemind(appointmentReminderTypDaoImpl
 								.getAppointmentReminderTypById(typId));
 						app.setIsDaily(isDaily);
