@@ -24,6 +24,7 @@
 	<resource name="_filesave_icon_pdf_rsc" src="resources/pdf.png" />
 	<resource name="_filesave_icon_original_rsc" src="resources/filesave.png" />
 
+	<include href="fileexplorer/"/>
 	<include href="chat/" />
     
 </library>
