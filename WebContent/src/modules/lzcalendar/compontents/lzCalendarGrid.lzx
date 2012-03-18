@@ -32,6 +32,8 @@
 		
 		<attribute name="calendarEvent" value="null" />
 		
+		<event name="onScollContent" />
+		
 		<method name="setCurrentDate" args="tDate">
 			if (this.currentDate != tDate) {
 				this.currentDate = tDate;
@@ -116,6 +118,14 @@
 				
 						<view width="${ parent.width-10 }" height="721" >
 						
+							<handler name="oninit">
+								this.setAttribute("y",parent.height-721);
+							</handler>
+							
+							<handler name="ony" args="y">
+								parent.parent.parent.parent.onScollContent.sendEvent(null);
+							</handler>
+						
 							<view name="hours" width="40" height="720" >
 									
 								<view name="dayBg2" resource="calendar_day_hours_index_bg_rsc" />
@@ -189,7 +199,12 @@
 												if ($debug) Debug.write("y,height -- ",this.y,this.height);
 											]]>
 										</handler>
-									
+										<handler name="onclick" >
+											var appointmentId = this.datapath.xpathQuery('appointmentId/text()');
+											if ($debug) Debug.write("click ",appointmentId);
+											parent.parent.parent.parent.parent.parent.parent.selectCalendarEvent(this);
+											//this.setAttribute("text",parseTimeStringFromXmlString(d.childNodes[0].data));
+										</handler>
 										<text name="_title" x="2" datapath="title" text="$path{ 'text()' }" />
 									</view>
 								</view>
@@ -244,6 +259,14 @@
 					<view width="${ parent.width }" height="${ parent.height }" clip="true" bgcolor="0xDDDDDD">
 				
 						<view width="${ parent.width-10 }" height="721" >
+						
+							<handler name="oninit">
+								this.setAttribute("y",parent.height-721);
+							</handler>
+							
+							<handler name="ony" args="y">
+								parent.parent.parent.parent.onScollContent.sendEvent(null);
+							</handler>
 						
 							<view name="hours" width="40" height="720" >
 									
@@ -315,7 +338,12 @@
 												if ($debug) Debug.write("y,height -- ",this.y,this.height);
 											]]>
 										</handler>
-									
+										<handler name="onclick" >
+											var appointmentId = this.datapath.xpathQuery('appointmentId/text()');
+											if ($debug) Debug.write("click ",appointmentId);
+											parent.parent.parent.parent.parent.parent.parent.selectCalendarEvent(this);
+											//this.setAttribute("text",parseTimeStringFromXmlString(d.childNodes[0].data));
+										</handler>
 										<text name="_title" x="2" datapath="title" text="$path{ 'text()' }" />
 									</view>
 								</view>

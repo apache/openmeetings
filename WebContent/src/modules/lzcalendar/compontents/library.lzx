@@ -26,12 +26,15 @@
 	<resource name="calendar_add_user_rsc" src="resources/user_add.png" />
 	<resource name="calendar_add_user_external_rsc" src="resources/user_go.png" />
 	<resource name="calendar_delete_button" src="resources/delete.png" />
+	<resource name="single_event_popup_background_rsc" src="resources/single_event_popup_background.swf" />
+	
 
 	<include href="addAttendee.lzx" />
 	<include href="addExternalAttendee.lzx" />
 	<include href="attendeeListItem.lzx" />
 	<include href="lzCalendarGrid.lzx" />
 	<include href="userContactsCalendar.lzx" />
+	<include href="lzViewCalendarEvent.lzx" />
 	<include href="lzEditCalendarEvent.lzx" />
 
 </library>

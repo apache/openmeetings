@@ -26,6 +26,8 @@
 				
 	<attribute name="currentDate" value="null" />
 	
+	<attribute name="lzViewCalendarEvent" value="null" />
+	
 	<handler name="oninit">
 		<![CDATA[
 			_mainScrollBar.setAttribute("visibility","hidden");
@@ -57,6 +59,12 @@
 	<handler name="ontabcontentleave" args="tRef">
         _mainScrollBar.setAttribute("visibility","visible");
     </handler>
+    
+    <method name="clearWindows">
+    	if (this.lzViewCalendarEvent != null) {
+    		this.lzViewCalendarEvent.close();
+    	}
+    </method>
 
 	<method name="loadAppointments" args="tDate, dayIndex, weekIndex">
 		<![CDATA[
@@ -114,6 +122,14 @@
 								lzCalendarRef:this
 							});
 		]]>
+	</method>
+	
+	<method name="viewCalendarEvent" args="appointment,refCalendarEventView">
+		this.lzViewCalendarEvent = new lz.lzViewCalendarEvent(canvas,{
+					dataElement:appointment,
+					lzCalendarRef:this,
+					refCalendarEventView:refCalendarEventView
+				});
 	</method>
 	
 	<method name="generateBlankEvent">
@@ -245,8 +261,11 @@
 	<lzCalendarGrid name="_lzCalendarGrid"
 		datapath="local:classroot.getAppointmentsByWeekCalendar:/">
 		<handler name="oncalendarEvent" args="sel">
-			parent.editCalendarEvent(sel.datapath.data.cloneNode(true));
+			parent.viewCalendarEvent(sel.datapath.data.cloneNode(true),sel);
 		</handler>	
+		<handler name="onScollContent" args="tRef">
+			parent.clearWindows();
+		</handler>
 	</lzCalendarGrid>
 	
 </class>

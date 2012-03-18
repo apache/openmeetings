@@ -4433,4 +4433,7 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="1445" name="calendar password info text">
     <value>Password protected are the links to the conference that are send to the participents when you save the calendar event, not the room! That means if you save the event multiple times but with different passwords every participent receives a new link that has a different password. But old links still work once send!</value>
   </string>
+  <string id="1446" name="calendar edit button">
+    <value>Edit details</value>
+  </string>
 </language>
