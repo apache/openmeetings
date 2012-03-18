@@ -21,26 +21,6 @@
 <library>
 
 	<include href="compontents/" />
-	
 	<include href="lzCalendar.lzx" />
-	<!--
-	<include href="old_lzCalendar.lzx" />
-    <include href="resources.lzx"/>
-    <include href="gridsliderlayout.lzx"/>
-    <include href="basepanel.lzx" />
-    <include href="cal-data.lzx" />
-    <include href="event.lzx" />
-    <include href="day.lzx" />
-    <include href="infopanel.lzx" />
-    <include href="simpletimelayout.lzx"/>
-    <include href="dayname.lzx"/>
-    <include href="selected-daylook.lzx"/>
-    <include href="eventselector.lzx"/>
-	<include href="addAttendee.lzx" />
-	<include href="addExternalAttendee.lzx" />
-	<include href="confirmCancelPopup.lzx" />
-	  -->
-	
-	
 
 </library>

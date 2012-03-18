@@ -76,11 +76,16 @@ limitations under the License.
                 </div>
                                                <div>
                 <a href="#updateAppointment"><b>updateAppointment</b></a><br/>
-                <div class="navigation_comment"><i >Update a calendar event all attributes</i></div>
+                <div class="navigation_comment"><i >Save an appointment</i></div>
                 </div>
                                                <div>
                 <a href="#deleteAppointment"><b>deleteAppointment</b></a><br/>
-                <div class="navigation_comment"><i >delete a calendar event</i></div>
+                <div class="navigation_comment"><i >delete a calendar event
+ 
+ If the given SID is from an Administrator or Web-Service user, the user
+ can delete any appointment.<br/>
+ If the SID is assigned to a simple user, he can only delete appointments
+ where he is also the owner/creator of the appointment</i></div>
                 </div>
                                                <div>
                 <a href="#getAppointmentByRoomId"><b>getAppointmentByRoomId</b></a><br/>
@@ -401,9 +406,9 @@ limitations under the License.
     			       			    			       			     , 
     			       			   String appointmentDescription
     			       			    			       			     , 
-    			       			   Date appointmentstart
+    			       			   Calendar appointmentstart
     			       			    			       			     , 
-    			       			   Date appointmentend
+    			       			   Calendar appointmentend
     			       			    			       			     , 
     			       			   Boolean isDaily
     			       			    			       			     , 
@@ -417,13 +422,17 @@ limitations under the License.
     			       			    			       			     , 
     			       			   Long remind
     			       			    			       			     , 
-    			       			   List mmClient
+    			       			   String mmClient
     			       			    			       			     , 
     			       			   Long roomType
     			       			    			       			     , 
     			       			   String baseUrl
     			       			    			       			     , 
-    			       			   Long language_id
+    			       			   Long languageId
+    			       			    			       			     , 
+    			       			   Boolean isPasswordProtected
+    			       			    			       			     , 
+    			       			   String password
     			       			    			)
     			</i><br/>
     			<p>
@@ -477,18 +486,18 @@ limitations under the License.
 	                   
 	                   	                   	    			   <tr>
 	                     <td valign="top">
-	                     		                     		Date
+	                     		                     		Calendar
 	                     		                     </td>
 	                     <td valign="top">appointmentstart</td>
-	                     <td valign="top">start as Date yyyy-mm-dd</td>
+	                     <td valign="top">start as Date yyyy-mm-ddThh:mm:ss</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
 	                     <td valign="top">
-	                     		                     		Date
+	                     		                     		Calendar
 	                     		                     </td>
 	                     <td valign="top">appointmentend</td>
-	                     <td valign="top">end as Date yyyy-mm-dd</td>
+	                     <td valign="top">end as Date yyyy-mm-ddThh:mm:ss</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -496,7 +505,8 @@ limitations under the License.
 	                     		                     		Boolean
 	                     		                     </td>
 	                     <td valign="top">isDaily</td>
-	                     <td valign="top">if the calendar event should be repeated daily (not implemented)</td>
+	                     <td valign="top">if the calendar event should be repeated daily (not
+            implemented)</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -504,7 +514,8 @@ limitations under the License.
 	                     		                     		Boolean
 	                     		                     </td>
 	                     <td valign="top">isWeekly</td>
-	                     <td valign="top">if the calendar event should be repeated weekly (not implemented)</td>
+	                     <td valign="top">if the calendar event should be repeated weekly (not
+            implemented)</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -512,7 +523,8 @@ limitations under the License.
 	                     		                     		Boolean
 	                     		                     </td>
 	                     <td valign="top">isMonthly</td>
-	                     <td valign="top">if the calendar event should be repeated monthly (not implemented)</td>
+	                     <td valign="top">if the calendar event should be repeated monthly (not
+            implemented)</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -520,7 +532,8 @@ limitations under the License.
 	                     		                     		Boolean
 	                     		                     </td>
 	                     <td valign="top">isYearly</td>
-	                     <td valign="top">if the calendar event should be repeated yearly (not implemented)</td>
+	                     <td valign="top">if the calendar event should be repeated yearly (not
+            implemented)</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -541,10 +554,16 @@ limitations under the License.
 	                   
 	                   	                   	    			   <tr>
 	                     <td valign="top">
-	                     		                     		List
+	                     		                     		String
 	                     		                     </td>
 	                     <td valign="top">mmClient</td>
-	                     <td valign="top">List of clients</td>
+	                     <td valign="top">List of clients, comma separated string, <br/>
+            sample: 1,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1
+            to add multiple clients you can use the same GET parameter in
+            the URL multiple times, for example:
+            &mmClient=1,firstname,lastname,hans
+            .tier@gmail.com,1,Etc/GMT+1&mmClient
+            =2,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -567,15 +586,32 @@ limitations under the License.
 	                     <td valign="top">
 	                     		                     		Long
 	                     		                     </td>
-	                     <td valign="top">language_id</td>
-	                     <td valign="top">the language id of the calendar event</td>
+	                     <td valign="top">languageId</td>
+	                     <td valign="top">the language id of the calendar event, notification emails
+            will be send in this language</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isPasswordProtected</td>
+	                     <td valign="top">if the room is password protected</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">password</td>
+	                     <td valign="top">the password for the room</td>
 	                   </tr>
 	                   
 	                   	                   	                   </tbody>
 	    			</table>
     			    			<br/>
     			REST Sample Call/URL:<br/>
-    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/saveAppointment?SID=VALUE&appointmentName=VALUE&appointmentLocation=VALUE&appointmentDescription=VALUE&appointmentstart=VALUE&appointmentend=VALUE&isDaily=VALUE&isWeekly=VALUE&isMonthly=VALUE&isYearly=VALUE&categoryId=VALUE&remind=VALUE&mmClient=VALUE&roomType=VALUE&baseUrl=VALUE&language_id=VALUE">http://localhost:5080/openmeetings/services/CalendarService/saveAppointment?SID=VALUE&appointmentName=VALUE&appointmentLocation=VALUE&appointmentDescription=VALUE&appointmentstart=VALUE&appointmentend=VALUE&isDaily=VALUE&isWeekly=VALUE&isMonthly=VALUE&isYearly=VALUE&categoryId=VALUE&remind=VALUE&mmClient=VALUE&roomType=VALUE&baseUrl=VALUE&language_id=VALUE</a>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/saveAppointment?SID=VALUE&appointmentName=VALUE&appointmentLocation=VALUE&appointmentDescription=VALUE&appointmentstart=VALUE&appointmentend=VALUE&isDaily=VALUE&isWeekly=VALUE&isMonthly=VALUE&isYearly=VALUE&categoryId=VALUE&remind=VALUE&mmClient=VALUE&roomType=VALUE&baseUrl=VALUE&languageId=VALUE&isPasswordProtected=VALUE&password=VALUE">http://localhost:5080/openmeetings/services/CalendarService/saveAppointment?SID=VALUE&appointmentName=VALUE&appointmentLocation=VALUE&appointmentDescription=VALUE&appointmentstart=VALUE&appointmentend=VALUE&isDaily=VALUE&isWeekly=VALUE&isMonthly=VALUE&isYearly=VALUE&categoryId=VALUE&remind=VALUE&mmClient=VALUE&roomType=VALUE&baseUrl=VALUE&languageId=VALUE&isPasswordProtected=VALUE&password=VALUE</a>
     			</a>
     		  </div>
     	   				    		      <div class="method">
@@ -596,7 +632,7 @@ limitations under the License.
     			       			    			       			     , 
     			       			   String baseurl
     			       			    			       			     , 
-    			       			   Long language_id
+    			       			   Long languageId
     			       			    			)
     			</i><br/>
     			<p>
@@ -660,7 +696,7 @@ limitations under the License.
 	                     <td valign="top">
 	                     		                     		Long
 	                     		                     </td>
-	                     <td valign="top">language_id</td>
+	                     <td valign="top">languageId</td>
 	                     <td valign="top">the language id</td>
 	                   </tr>
 	                   
@@ -668,7 +704,7 @@ limitations under the License.
 	    			</table>
     			    			<br/>
     			REST Sample Call/URL:<br/>
-    			    			    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/updateAppointmentTimeOnly?SID=VALUE&appointmentId=VALUE&appointmentstart=VALUE&appointmentend=VALUE&baseurl=VALUE&language_id=VALUE">http://localhost:5080/openmeetings/services/CalendarService/updateAppointmentTimeOnly?SID=VALUE&appointmentId=VALUE&appointmentstart=VALUE&appointmentend=VALUE&baseurl=VALUE&language_id=VALUE</a>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/updateAppointmentTimeOnly?SID=VALUE&appointmentId=VALUE&appointmentstart=VALUE&appointmentend=VALUE&baseurl=VALUE&languageId=VALUE">http://localhost:5080/openmeetings/services/CalendarService/updateAppointmentTimeOnly?SID=VALUE&appointmentId=VALUE&appointmentstart=VALUE&appointmentend=VALUE&baseurl=VALUE&languageId=VALUE</a>
     			</a>
     		  </div>
     	   				    		      <div class="method">
@@ -689,9 +725,9 @@ limitations under the License.
     			       			    			       			     , 
     			       			   String appointmentDescription
     			       			    			       			     , 
-    			       			   Date appointmentstart
+    			       			   Calendar appointmentstart
     			       			    			       			     , 
-    			       			   Date appointmentend
+    			       			   Calendar appointmentend
     			       			    			       			     , 
     			       			   Boolean isDaily
     			       			    			       			     , 
@@ -705,17 +741,21 @@ limitations under the License.
     			       			    			       			     , 
     			       			   Long remind
     			       			    			       			     , 
-    			       			   List mmClient
+    			       			   String mmClient
     			       			    			       			     , 
     			       			   Long roomType
     			       			    			       			     , 
     			       			   String baseurl
     			       			    			       			     , 
-    			       			   Long language_id
+    			       			   Long languageId
+    			       			    			       			     , 
+    			       			   Boolean isPasswordProtected
+    			       			    			       			     , 
+    			       			   String password
     			       			    			)
     			</i><br/>
     			<p>
-    			  Update a calendar event all attributes
+    			  Save an appointment
     			</p>
     			<p>
                   Return Type: java.lang.Long
@@ -736,7 +776,7 @@ limitations under the License.
 	                     		                     		String
 	                     		                     </td>
 	                     <td valign="top">SID</td>
-	                     <td valign="top"></td>
+	                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -744,7 +784,7 @@ limitations under the License.
 	                     		                     		Long
 	                     		                     </td>
 	                     <td valign="top">appointmentId</td>
-	                     <td valign="top"></td>
+	                     <td valign="top">the id to update</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -752,7 +792,7 @@ limitations under the License.
 	                     		                     		String
 	                     		                     </td>
 	                     <td valign="top">appointmentName</td>
-	                     <td valign="top"></td>
+	                     <td valign="top">name of the calendar event</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -760,7 +800,7 @@ limitations under the License.
 	                     		                     		String
 	                     		                     </td>
 	                     <td valign="top">appointmentLocation</td>
-	                     <td valign="top"></td>
+	                     <td valign="top">location info text of the calendar event</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -768,23 +808,23 @@ limitations under the License.
 	                     		                     		String
 	                     		                     </td>
 	                     <td valign="top">appointmentDescription</td>
-	                     <td valign="top"></td>
+	                     <td valign="top">description test of the calendar event</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
 	                     <td valign="top">
-	                     		                     		Date
+	                     		                     		Calendar
 	                     		                     </td>
 	                     <td valign="top">appointmentstart</td>
-	                     <td valign="top"></td>
+	                     <td valign="top">start as Date yyyy-mm-ddThh:mm:ss</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
 	                     <td valign="top">
-	                     		                     		Date
+	                     		                     		Calendar
 	                     		                     </td>
 	                     <td valign="top">appointmentend</td>
-	                     <td valign="top"></td>
+	                     <td valign="top">end as Date yyyy-mm-ddThh:mm:ss</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -792,7 +832,8 @@ limitations under the License.
 	                     		                     		Boolean
 	                     		                     </td>
 	                     <td valign="top">isDaily</td>
-	                     <td valign="top"></td>
+	                     <td valign="top">if the calendar event should be repeated daily (not
+            implemented)</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -800,7 +841,8 @@ limitations under the License.
 	                     		                     		Boolean
 	                     		                     </td>
 	                     <td valign="top">isWeekly</td>
-	                     <td valign="top"></td>
+	                     <td valign="top">if the calendar event should be repeated weekly (not
+            implemented)</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -808,7 +850,8 @@ limitations under the License.
 	                     		                     		Boolean
 	                     		                     </td>
 	                     <td valign="top">isMonthly</td>
-	                     <td valign="top"></td>
+	                     <td valign="top">if the calendar event should be repeated monthly (not
+            implemented)</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -816,7 +859,8 @@ limitations under the License.
 	                     		                     		Boolean
 	                     		                     </td>
 	                     <td valign="top">isYearly</td>
-	                     <td valign="top"></td>
+	                     <td valign="top">if the calendar event should be repeated yearly (not
+            implemented)</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -824,7 +868,7 @@ limitations under the License.
 	                     		                     		Long
 	                     		                     </td>
 	                     <td valign="top">categoryId</td>
-	                     <td valign="top"></td>
+	                     <td valign="top">the category id of the calendar event</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -832,15 +876,21 @@ limitations under the License.
 	                     		                     		Long
 	                     		                     </td>
 	                     <td valign="top">remind</td>
-	                     <td valign="top"></td>
+	                     <td valign="top">the reminder type of the calendar event</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
 	                     <td valign="top">
-	                     		                     		List
+	                     		                     		String
 	                     		                     </td>
 	                     <td valign="top">mmClient</td>
-	                     <td valign="top"></td>
+	                     <td valign="top">List of clients, comma separated string, <br/>
+            sample: 1,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1
+            to add multiple clients you can use the same GET parameter in
+            the URL multiple times, for example:
+            &mmClient=1,firstname,lastname,hans
+            .tier@gmail.com,1,Etc/GMT+1&mmClient
+            =2,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -848,30 +898,47 @@ limitations under the License.
 	                     		                     		Long
 	                     		                     </td>
 	                     <td valign="top">roomType</td>
-	                     <td valign="top"></td>
+	                     <td valign="top">the room type for the calendar event</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
 	                     <td valign="top">
 	                     		                     		String
 	                     		                     </td>
-	                     <td valign="top">baseurl</td>
-	                     <td valign="top"></td>
+	                     <td valign="top">baseUrl</td>
+	                     <td valign="top">the base URL for the invitations</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
 	                     <td valign="top">
 	                     		                     		Long
 	                     		                     </td>
-	                     <td valign="top">language_id</td>
-	                     <td valign="top"></td>
+	                     <td valign="top">languageId</td>
+	                     <td valign="top">the language id of the calendar event, notification emails
+            will be send in this language</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isPasswordProtected</td>
+	                     <td valign="top">if the room is password protected</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">password</td>
+	                     <td valign="top">the password for the room</td>
 	                   </tr>
 	                   
 	                   	                   	                   </tbody>
 	    			</table>
     			    			<br/>
     			REST Sample Call/URL:<br/>
-    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/updateAppointment?SID=VALUE&appointmentId=VALUE&appointmentName=VALUE&appointmentLocation=VALUE&appointmentDescription=VALUE&appointmentstart=VALUE&appointmentend=VALUE&isDaily=VALUE&isWeekly=VALUE&isMonthly=VALUE&isYearly=VALUE&categoryId=VALUE&remind=VALUE&mmClient=VALUE&roomType=VALUE&baseurl=VALUE&language_id=VALUE">http://localhost:5080/openmeetings/services/CalendarService/updateAppointment?SID=VALUE&appointmentId=VALUE&appointmentName=VALUE&appointmentLocation=VALUE&appointmentDescription=VALUE&appointmentstart=VALUE&appointmentend=VALUE&isDaily=VALUE&isWeekly=VALUE&isMonthly=VALUE&isYearly=VALUE&categoryId=VALUE&remind=VALUE&mmClient=VALUE&roomType=VALUE&baseurl=VALUE&language_id=VALUE</a>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/updateAppointment?SID=VALUE&appointmentId=VALUE&appointmentName=VALUE&appointmentLocation=VALUE&appointmentDescription=VALUE&appointmentstart=VALUE&appointmentend=VALUE&isDaily=VALUE&isWeekly=VALUE&isMonthly=VALUE&isYearly=VALUE&categoryId=VALUE&remind=VALUE&mmClient=VALUE&roomType=VALUE&baseurl=VALUE&languageId=VALUE&isPasswordProtected=VALUE&password=VALUE">http://localhost:5080/openmeetings/services/CalendarService/updateAppointment?SID=VALUE&appointmentId=VALUE&appointmentName=VALUE&appointmentLocation=VALUE&appointmentDescription=VALUE&appointmentstart=VALUE&appointmentend=VALUE&isDaily=VALUE&isWeekly=VALUE&isMonthly=VALUE&isYearly=VALUE&categoryId=VALUE&remind=VALUE&mmClient=VALUE&roomType=VALUE&baseurl=VALUE&languageId=VALUE&isPasswordProtected=VALUE&password=VALUE</a>
     			</a>
     		  </div>
     	   				    		      <div class="method">
@@ -891,6 +958,11 @@ limitations under the License.
     			</i><br/>
     			<p>
     			  delete a calendar event
+ 
+ If the given SID is from an Administrator or Web-Service user, the user
+ can delete any appointment.<br/>
+ If the SID is assigned to a simple user, he can only delete appointments
+ where he is also the owner/creator of the appointment
     			</p>
     			<p>
                   Return Type: java.lang.Long
@@ -911,7 +983,7 @@ limitations under the License.
 	                     		                     		String
 	                     		                     </td>
 	                     <td valign="top">SID</td>
-	                     <td valign="top"></td>
+	                     <td valign="top">an authenticated SID</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -919,7 +991,7 @@ limitations under the License.
 	                     		                     		Long
 	                     		                     </td>
 	                     <td valign="top">appointmentId</td>
-	                     <td valign="top"></td>
+	                     <td valign="top">the id to delete</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -927,7 +999,8 @@ limitations under the License.
 	                     		                     		Long
 	                     		                     </td>
 	                     <td valign="top">language_id</td>
-	                     <td valign="top"></td>
+	                     <td valign="top">the language id in which the notifications for the deleted
+            appointment are send</td>
 	                   </tr>
 	                   
 	                   	                   	                   </tbody>
