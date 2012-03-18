@@ -69,6 +69,10 @@
 	<method name="loadAppointments" args="tDate, dayIndex, weekIndex">
 		<![CDATA[
 			var tRelaodDataSet = false;
+			var tDateNow = new Date();
+			tDate.setHours(tDateNow.getHours());
+			tDate.setMinutes(tDateNow.getMinutes());
+			
 			if (this.currentDate == null) {
 				tRelaodDataSet = true;
 			}
@@ -141,7 +145,7 @@
 			newAppointment.title = canvas.getLabelName(1444);
 			
 			var tDate = new Date();
-			tDate.setMilliseconds(this.currentDate.getMilliseconds());
+			tDate.setTime(this.currentDate.getTime());
 			tDate.setMinutes(0);
 			tDate.setSeconds(0);
 			tDate.setHours(tDate.getHours()+1);
@@ -151,7 +155,7 @@
 			newAppointment.start = tDate;
 			
 			var tDate2 = new Date();
-			tDate.setMilliseconds(tDate.getMilliseconds());
+			tDate.setTime(tDate.getTime());
 			tDate2.setMinutes(0);
 			tDate2.setSeconds(0);
 			tDate2.setHours(tDate.getHours()+1);

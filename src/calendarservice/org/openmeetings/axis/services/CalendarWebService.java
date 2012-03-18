@@ -671,15 +671,19 @@ public class CalendarWebService {
 		int currentWeekDay = currentDate.get(Calendar.DAY_OF_WEEK);
 
 		Calendar startWeekDay = Calendar.getInstance();
-		startWeekDay
-				.setTimeInMillis((currentDate.getTimeInMillis() - ((currentWeekDay - 1) * 86400000)));
 
-		log.debug("startWeekDay 1" + startWeekDay.getTime());
+		log.debug("currentWeekDay -- " + currentWeekDay);
+		log.debug("firstDayInWeek -- " + firstDayInWeek);
 
-		if (currentWeekDay == 1) {
-			startWeekDay.setTimeInMillis(startWeekDay.getTimeInMillis()
-					- ((7 - firstDayInWeek) * 86400000));
+		if (currentWeekDay == firstDayInWeek) {
+			
+			log.debug("ARE equal currentWeekDay -- ");
+			
+			startWeekDay.setTime(currentDate.getTime());
+			
 		} else {
+			
+			startWeekDay.setTimeInMillis((currentDate.getTimeInMillis() - ((currentWeekDay - 1) * 86400000)));
 
 			if (currentWeekDay > firstDayInWeek) {
 				startWeekDay.setTimeInMillis(startWeekDay.getTimeInMillis()

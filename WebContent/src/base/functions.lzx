@@ -362,7 +362,7 @@ function parseDateTimeStringFromXmlString(str) {
 	var tDay = str.substr(8,2);
 	var tHour = str.substr(11,2);
 	var tMin = str.substr(14,2);
-	return ""+tDay+"."+tMonth+"."+tYear+""+tHour+":"+tMin;
+	return ""+tDay+"."+tMonth+"."+tYear+" "+tHour+":"+tMin;
 }
 
 function parseDateStringFromXmlString(str) { 

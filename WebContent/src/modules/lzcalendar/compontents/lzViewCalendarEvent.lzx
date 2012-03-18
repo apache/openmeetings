@@ -38,7 +38,7 @@
 				
 				if (x_canvas + this.width + 4 > canvas.width) {
 					x_canvas = canvas.width - 310;
-					var tX = canvas.getMouse("x")-x_canvas-10;
+					var tX = canvas.getMouse("x")-x_canvas-8;
 					if (tX + 24 > this.width) {
 						tX = this.width - 24;
 					}

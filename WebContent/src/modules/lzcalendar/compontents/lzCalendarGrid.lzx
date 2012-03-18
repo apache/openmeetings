@@ -104,7 +104,7 @@
 										datapath="tDate" bgcolor="0xFFFFFF" height="19" >
 							<handler name="ondata" args="d">
 								var tDate = parseDateOnlyFromXmlString(d.childNodes[0].data);
-								this.setAttribute("text",canvas.dayShortNames[tDate.getDay()]+" "+tDate.getDate()+"."+tDate.getMonth());
+								this.setAttribute("text",canvas.dayShortNames[tDate.getDay()]+" "+tDate.getDate()+"."+(tDate.getMonth()+1));
 							</handler>
 						</text>
 						
@@ -246,7 +246,7 @@
 								var tStringWeekDay = canvas.dayShortNames[tDate.getDay()];
 								if ($debug) Debug.write("Calc Week day ",tStringWeekDay,tDate.getDay(),tDate);
 								
-								this.setAttribute("text",canvas.dayShortNames[tDate.getDay()]+" "+tDate.getDate()+"."+tDate.getMonth()+".");
+								this.setAttribute("text",canvas.dayShortNames[tDate.getDay()]+" "+tDate.getDate()+"."+(tDate.getMonth()+1)+".");
 							</handler>
 						</text>
 						
