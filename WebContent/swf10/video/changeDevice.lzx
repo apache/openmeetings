@@ -143,16 +143,16 @@
         </handler>         
     </labelCheckbox>
     
-    <simpleLabelButton fontsize="11" labelid="54" x="190" y="190" width="100">
+    <simpleLabelButton fontsize="11" labelid="54" x="80" y="190" width="100">
         <handler name="onclick">
             this.parent.doninitalize();
         </handler>
     </simpleLabelButton>
     
-    <labelText labelid="56" width="300"
+    <labelText labelid="56" width="280" x="10"
     	y="150" multiline="true" resize="false"/>
     
-    <simpleLabelButton labelid="55" width="100" x="80" y="190" 
+    <simpleLabelButton labelid="55" width="100" x="190" y="190"
         onclick="this.parent.close();" />
     
 </class>
