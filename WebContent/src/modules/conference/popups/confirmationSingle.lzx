@@ -31,6 +31,8 @@
     
     <attribute name="labeliderror" value="0" type="number" />
     
+    <attribute name="doCalcPosition" value="true" type="number" />
+    
 	<view x="4" resource="warning_icon_rsc" y="24" />
 
     <labelText labelid="$once{ parent.labeliderror }" y="24" 
@@ -39,6 +41,10 @@
         
     <handler name="oninit">
         <![CDATA[
+        
+        	if (!this.doCalcPosition) {
+        		return;
+        	}
         
             //Set Position of Confirmation Box as Close as possible to the Mouse
             var x = parent.getMouse("x");

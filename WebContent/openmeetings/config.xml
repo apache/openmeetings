@@ -81,6 +81,7 @@ of the red5-servlet
 <basebgcolorizer>0x669AE6</basebgcolorizer>
 <baseMousecolorizer>0x7BA8EA</baseMousecolorizer>
 <baseMouseOvercolorizer>0x99BBEE</baseMouseOvercolorizer>
+<styleMenuBarBaseColor>0x669AE6</styleMenuBarBaseColor>
     
 <!--
     Name of the Application

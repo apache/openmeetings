@@ -42,7 +42,7 @@
 <!--- "System" panel on the dashboard -->
 <class name="infosPanel" extends="guiPresenter" resizeable="false"
     width="500" height="224" closable="true" labelid="374" y="10"><!-- 374:System -->
-	<view y="20" bgcolor="white" x="1" width="$once{ parent.width-2 }" 
+	<view y="20" bgcolor="0xEEF0EB" x="1" width="$once{ parent.width-2 }" 
 		  height="$once{ parent.height-21 }" >
         
         <labelText name="_txt" fontstyle="bold" labelid="774" y="0" x="2" />
@@ -80,41 +80,8 @@
             </handler>
             <labelTooltip labelid="805" />
         </simpleLabelButton>
-        
-        
-        <!--
-        <view resource="icon_btn_dashboard_1" y="30" x="10" />
-        
-        <labelText labelid="768" x="10" y="94" fontstyle="bold" fgcolor="0x14537C" />
-      
-	    <view resource="icon_btn_dashboard_2" y="30" x="114" />
-        
-        <labelText labelid="771" x="94" y="94" fontstyle="bold" fgcolor="0x14537C" />
-      
-        <view resource="icon_btn_dashboard_3" y="30" x="218" />
-        
-        <labelText labelid="772" x="198" y="94" fontstyle="bold" fgcolor="0x14537C" />
-      
-        <view resource="icon_btn_dashboard_4" y="30" x="322" />
-        
-        <labelText labelid="773" x="322" y="94" multiline="true" width="100"
-        		   fontstyle="bold" fgcolor="0x14537C" />
-         -->
            
 	</view>
 </class> 
 
-    <!--
-        <labelText fontstyle="bold" y="10" labelid="278" x="10" width="200" />
-        
-        <view resource="icon_btn_dashboard_1" />
-        
-    
-        <simpleLabelButton width="280" y="40" labelid="279" x="30"
-            onclick="quicklink('meetings')" />
-            
-        <simpleLabelButton width="280" y="70" labelid="280" x="30" 
-            onclick="quicklink('events')" />  
-     -->
-     
 </library>

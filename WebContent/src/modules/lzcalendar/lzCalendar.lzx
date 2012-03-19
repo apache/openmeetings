@@ -20,6 +20,7 @@
 -->
 <library>
 
+<style name="calendarButtonStyle" basecolor="0xFF3300" textcolor="0xFFFFFF" />
 
 <class name="lzCalendar" extends="baseContentView" 
 				height="${ canvas.height-canvas.naviHeight }" width="${ canvas.width }">
@@ -76,17 +77,14 @@
 			if (this.currentDate == null) {
 				tRelaodDataSet = true;
 			}
-			
 			if ($debug) Debug.write("loadAppointments ",dayIndex, weekIndex, tDate);
-			
 			this.currentDate = tDate;
+			this._lzCalendarTobBar.statusInfo.currentDate.setAttribute("text",parseDateToStringTime(this.currentDate));
 			this._lzCalendarGrid.checkAndShow(tDate,dayIndex,weekIndex);
 			
 			if (tRelaodDataSet) {
 				this.loadCalendarData();
 	        }
-	        
-	        
 		]]>
 	</method>
 	
@@ -185,7 +183,8 @@
 	<dataset name="getAppointmentReminderTypList" type="http" />
 	
 	<!-- 176 pixels is the width of the mini calendar -->
-	<simpleLabelButton labelid="1444" height="24" width="176" x="12" y="10" >
+	<simpleLabelButton labelid="1444" height="24" 
+			width="176" x="12" y="10" style="calendarButtonStyle">
         <handler name="onclick">
             parent.editCalendarEvent(null);
         </handler>
@@ -235,24 +234,40 @@
 	
 	<userContactsCalendar name="_userContacts" y="340" x="4" height="${ parent.height - 344 }" width="186" />
 	
-	<view name="_lzCalendarTobBar" width="${ parent.width - 204 }" x="204" height="20">
+	<view name="_lzCalendarTobBar" width="${ parent.width - 204 }" x="204" height="40">
+	
+		<view name="statusInfo" align="right" y="2">
+			
+			<labelText name="currentDate" fontsize="12" resize="true" fontstyle="bold" />
+			
+			<simplelayout axis="x" spacing="0" />
+		</view>
 		
-		<view name="buttons" align="right">
+		<view name="buttons" align="left" y="2">
 		
-			<simpleLabelButton labelid="799" height="20" >
+			<simpleLabelButton name="_showDay" labelid="799" height="22" >
 		        <handler name="onclick">
+		        	parent._showWeek.setAttribute("enabled",true);
+		        	parent._showMonth.setAttribute("enabled",true);
+		        	this.setAttribute("enabled",false);
 		            parent.parent.parent._lzCalendarGrid.showDay();
 		        </handler>
 		    </simpleLabelButton>
 		    
-		    <simpleLabelButton labelid="800" height="20" >
+		    <simpleLabelButton name="_showWeek" labelid="800" height="22" >
 		        <handler name="onclick">
+		        	parent._showDay.setAttribute("enabled",true);
+		        	parent._showMonth.setAttribute("enabled",true);
+		        	this.setAttribute("enabled",false);
 		            parent.parent.parent._lzCalendarGrid.showWeek();
 		        </handler>
 		    </simpleLabelButton>
 		    
-		    <simpleLabelButton labelid="801" height="20" >
+		    <simpleLabelButton name="_showMonth" labelid="801" height="22" enabled="false">
 		        <handler name="onclick">
+		        	parent._showDay.setAttribute("enabled",true);
+		        	parent._showWeek.setAttribute("enabled",true);
+		        	this.setAttribute("enabled",false);
 		            parent.parent.parent._lzCalendarGrid.showMonth();
 		        </handler>
 		    </simpleLabelButton>
@@ -262,7 +277,7 @@
 		
 	</view>
 	
-	<lzCalendarGrid name="_lzCalendarGrid"
+	<lzCalendarGrid name="_lzCalendarGrid" 
 		datapath="local:classroot.getAppointmentsByWeekCalendar:/">
 		<handler name="oncalendarEvent" args="sel">
 			parent.viewCalendarEvent(sel.datapath.data.cloneNode(true),sel);

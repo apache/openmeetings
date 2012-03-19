@@ -20,7 +20,8 @@
 -->
 <library>
 
-	<class name="lzViewCalendarEvent" extends="view" bgcolor="0xBBBBBB" width="300" height="120"  focusable="true">
+	<class name="lzViewCalendarEvent" extends="view" bgcolor="0xBBBBBB" clickable="true" 
+							showhandcursor="false" width="300" height="120"  focusable="true">
 	
 		<attribute name="dataElement" value="null" />
 		
@@ -29,6 +30,8 @@
 		<dataset name="eventDS" />
 		
 		<attribute name="refCalendarEventView" value="null" />
+		
+		<attribute name="appointmentId" value="0" type="number" />
 		
 		<handler name="oninit">
 			<![CDATA[
@@ -49,8 +52,11 @@
 				this.setAttribute("y",y_canvas-this.height-12);
 				
             	this.eventDS.setAttribute("data", this.dataElement.childNodes);
+            	
+            	this.appointmentId = this.eventDS.getPointer().xpathQuery('appointmentId/text()');
 	            
 	            if ($debug) Debug.write("this.eventDS ",this.eventDS);
+	            if ($debug) Debug.write("this.appointmentId ",this.appointmentId);
 	            
 	            lz.Focus.setFocus(this);
 	            this.setShadow();
@@ -65,6 +71,20 @@
 	            normalMC.filters = [displacementMap];
 	        ]]>              
 	    </method>
+	    
+	    <netRemoteCallHib name="deleteAppointment" funcname="calendarservice.deleteAppointment" 
+							  remotecontext="$once{ canvas.thishib }" >     
+			<netparam><method name="getValue">return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue">return parent.parent.appointmentId;</method></netparam>	
+			<netparam><method name="getValue">return hib.userlang;</method></netparam>
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+		    		if ($debug) Debug.write("deleteAppointment ",value);
+		    		parent.lzCalendarRef.reload();
+					parent.close();
+	    		 ]]>
+	    	</handler>
+	    </netRemoteCallHib> 
 	
 		<method name="close">
 			if ($debug) Debug.write("CLOSE lzViewCalendarEvent");
@@ -140,16 +160,22 @@
                    		new lz.labelerrorPopup(canvas,{errorlabelid:1285});
                    	}
 	           	</handler>
-	           	<method name="sendConfirmation" args="refObj,t">
-	           		parent.parent.deleteAppointment.doCall();
-	           	</method>
 	        </simpleLabelButton>
 			
 			<simpleLabelButton labelid="814" width="100" x="5" y="$once{ parent.height-24 }" >
 		        <handler name="onclick">
 		        	//check if event is from other user
-		        	new lz.confirmationSingle(canvas,{refObj:this,labelid:797,
-           						showCheckBox:false,labeliderror:796});
+		        	new lz.confirmationSingle(parent.parent,{
+			        				x:0,y:0,
+		        					width:parent.parent.width,
+		        					height:parent.parent.height+16,
+			        				refObj:this,labelid:797,
+	           						showCheckBox:false,
+	           						labeliderror:796,
+	           						doCalcPosition:false,
+	           						docking:false,
+	           						allowDragging:false
+           						});
 	           	</handler>
 	           	<method name="sendConfirmation" args="refObj,t">
 	           		parent.parent.deleteAppointment.doCall();

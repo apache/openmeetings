@@ -20,8 +20,8 @@
 -->
 <library>
 
-	<class name="lzCalendarGrid" extends="view" x="204" y="20" 
-					width="${ parent.width - 204 }" height="${ parent.height-20 }" >
+	<class name="lzCalendarGrid" extends="view" x="204" y="26" bgcolor="0xFFFFFF"
+					width="${ parent.width - 204 }" height="${ parent.height-26 }" >
 		
 		<attribute name="currentDate" value="null" />
 		<attribute name="currentWeek" value="0" type="number" />
@@ -174,9 +174,9 @@
 												height="720">
 									
 									<view name="dayBg2" resource="calendar_one_day_hours_index_bg_rsc" stretches="width" 
-										width="$once{ parent.width }"  ></view>
+										width="${ parent.width }"  ></view>
 												
-									<view datapath="appointments" bgcolor="0xA59CFC" width="$once{ parent.width }" height="60">
+									<view datapath="appointments" bgcolor="0xA59CFC" width="${ parent.width }" height="60">
 										<handler name="ondata" args="d">
 											<![CDATA[
 												if (classroot.reRenderLock) {
@@ -313,9 +313,9 @@
 												height="720">
 									
 									<view name="dayBg2" resource="calendar_day_bg_rsc" stretches="width" 
-										width="$once{ parent.width }"  ></view>
+										width="${ parent.width }"  ></view>
 												
-									<view datapath="appointments" bgcolor="0xA59CFC" width="$once{ parent.width }" height="60">
+									<view datapath="appointments" bgcolor="0xA59CFC" width="${ parent.width }" height="60">
 										<handler name="ondata" args="d">
 											<![CDATA[
 												if (classroot.reRenderLock) {
@@ -410,10 +410,9 @@
 										height="${ parent.height -1 }">
 										
 							<text name="_title" />
-							
 						
-							<view width="$once{ parent.width }" y="18">
-								<view datapath="appointments" bgcolor="0xA59CFC" width="$once{ parent.width }">
+							<view width="${ parent.width }" y="18">
+								<view datapath="appointments" bgcolor="0xA59CFC" width="${ parent.width }">
 									<handler name="onclick" >
 										var appointmentId = this.datapath.xpathQuery('appointmentId/text()');
 										if ($debug) Debug.write("click ",appointmentId);

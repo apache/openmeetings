@@ -131,7 +131,7 @@
 </class>
 
 
-<class name="mainNavi" extends="view" bgcolor="$once{ canvas.baseMousecolorizer }" 
+<class name="mainNavi" extends="view" bgcolor="$once{ canvas.styleMenuBarBaseColor }" 
 	   width="${ canvas.width }" y="50" >
 
     <attribute name="naviObject" value="null" />
@@ -139,25 +139,9 @@
     <attribute name="currentMainmenu" value="null" />
     <attribute name="currentSubmenu" value="null" />
 
-<!-- resource="navibar_rsc" stretches="width" -->
     <menubar width="${ parent.width }" height="34" style="menuStyle">
-    	<!--
-        <handler name="oninit">
-            this.setShadow();
-        </handler>
-        <method name="setShadow" >
-            <![CDATA[
-            if (this.isinited){
-                this.normalMC = this.getMCRef();
-                   this.displacementMap = new flash.filters.DropShadowFilter();
-                this.normalMC.filters = [this.displacementMap];
-            }
-            ]]>
-        </method>
-         -->
     </menubar>
     <menubar width="${ parent.width }" height="26" y="34" style="menuStyle">
-    	
     </menubar> 	
     <view name="itemlist" layout="axis:x;spacing:0" id="mainmenuList">
         <method name="doAction" args="action">

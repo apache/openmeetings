@@ -14,6 +14,7 @@
         <xs:element ref="basebgcolorizer"/>
         <xs:element ref="baseMousecolorizer"/>
         <xs:element ref="baseMouseOvercolorizer"/>
+        <xs:element ref="styleMenuBarBaseColor"/>
         <xs:element ref="currentappname"/>
         <xs:element ref="currentappnameurl"/>
         <xs:element ref="currentappnamebugurl"/>
@@ -67,6 +68,7 @@
   <xs:element name="basebgcolorizer" type="xs:NMTOKEN"/>
   <xs:element name="baseMousecolorizer" type="xs:NMTOKEN"/>
   <xs:element name="baseMouseOvercolorizer" type="xs:NMTOKEN"/>
+  <xs:element name="styleMenuBarBaseColor" type="xs:NMTOKEN" />
   <xs:element name="currentappname" type="xs:string"/>
   <xs:element name="currentappnameurl" type="xs:anyURI"/>
   <xs:element name="currentappnamebugurl" type="xs:anyURI"/>

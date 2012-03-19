@@ -378,6 +378,8 @@
 			</path>
 		</signjar>
 	</target>
+	
+	<target name="client.only" depends="compile.laszlo.main.as3,compile.laszlo.main" />
 
 	<target name="client.debug.only" depends="compile.laszlo.main.debug.as3,compile.laszlo.main.debug" />
 

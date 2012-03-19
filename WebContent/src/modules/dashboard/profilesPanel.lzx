@@ -24,7 +24,7 @@
 <class name="profilesPanel" extends="guiPresenter" resizeable="false"
     width="${ canvas.width - this.x - 10 }" height="224" y="10" closable="true" labelid="375" >
 	
-	<view y="20" bgcolor="0xFFFFFF" x="1" width="${ parent.width-2 }" 
+	<view y="20" bgcolor="0xEEF0EB" x="1" width="${ parent.width-2 }" 
 		  height="$once{ parent.height-21 }" clip="true">
 	
 	<handler name="oninit">
@@ -72,9 +72,6 @@
     <image y="20" x="10" name="_userpic" />
     
     <simpleLabelButton y="40" labelid="379" x="150" width="140">
-    <!-- 
-        onclick="new lz.uploadWindow(canvas.main_content._content.inner,{x:300,uploadmodule:'userprofile',isOnlyProfile:true,isdefaultreturn:false,returnObj:this.parent});">
-     --> 
         <handler name="onclick">
         	<![CDATA[
 	        	new lz.uploadWindowExplorer(canvas.main_content._content.inner,{
@@ -98,19 +95,19 @@
              
     <labelText fontstyle="bold" x="2" y="124" labelid="281" width="200"/>
     
-    <labelText name="homepage" x="2" y="140" width="290" multiline="true" >
+    <labelText name="homepage" x="2" y="140" width="$once{ parent.width - 12 }" multiline="true" >
         <attribute name="link" type="string" value="" />
         <handler name="onclick">
             lz.Browser.loadURL(this.link,"_blank");
         </handler>            
     </labelText>    
-    <labelText name="mailing" x="2" y="170" width="290" multiline="true" >
+    
+    <labelText name="mailing" x="2" y="170" width="$once{ parent.width - 12 }" multiline="true" >
         <attribute name="link" type="string" value="" />
         <handler name="onclick">
             lz.Browser.loadURL(this.link,"_blank");
         </handler>            
     </labelText> 
-     
               
 	</view>
 </class> 

@@ -24,19 +24,55 @@
     height="400" bgcolor="$once{ canvas.basebgcolorizer }" 
 	onmousedown="this._startDragState(this)" onmouseup="this._removeDragState(this)" >
 
+	<attribute name="showWindowEffect" value="false" type="boolean" />
+	
+	<attribute name="annimationStartStyle" value="center" type="string" />
+	
+	<attribute name="annimationColor" value="$once{ canvas.basebgcolorizer }" type="string" />
+
+	<event name="animationInited" />
+
     <handler name="oninit">
-    	//if($debug) Debug.write("explorerBox/oninit showWindowEffect? ",canvas.showWindowEffect);
-    	if (canvas.showWindowEffect=="y"){
-    		//if($debug) Debug.write("explorerBox/showWindowEffect == YES");
-    		new lz.boxInitEffect(parent,{x:this.x+(this.width/2)-50,y:this.y+(this.height/2)-10,zielx:this.x,ziely:this.y,zielwidth:this.width,zielheight:this.height,objRef:this});
-    	} else {
-    		this.sendAnniComplete();
-    	}
+    	<![CDATA[
+	    	//if($debug) Debug.write("explorerBox/oninit showWindowEffect? ",canvas.showWindowEffect);
+	    	if (canvas.showWindowEffect=="y" || this.showWindowEffect){
+	    		//if($debug) Debug.write("explorerBox/showWindowEffect == YES");
+	    		if (this.annimationStartStyle == "center") {
+	    			new lz.boxInitEffect(parent,{
+		    					x:this.x+(this.width/2)-50,
+		    					y:this.y+(this.height/2)-10,
+		    					zielx:this.x,
+		    					ziely:this.y,
+		    					bgcolor:annimationColor,
+		    					zielwidth:this.width,
+		    					zielheight:this.height,
+		    					objRef:this
+	    					});
+	    		} else if (this.annimationStartStyle == "mouse"){
+	    			new lz.boxInitEffect(parent,{
+		    					x:parent.getMouse("x"),
+		    					y:parent.getMouse("y"),
+		    					width:20,
+		    					zielx:this.x,
+		    					ziely:this.y,
+		    					bgcolor:annimationColor,
+		    					zielwidth:this.width,
+		    					zielheight:this.height,
+		    					objRef:this
+	    					});
+				} else {
+					if ($debug) Debug.warn("Unkown annimationStartStyle");
+				}
+	    	} else {
+	    		this.sendAnniComplete();
+	    	}
+    	]]>
     </handler>
     
     <method name="sendAnniComplete">
     	//if($debug) Debug.write("sendAnniComplete");
     	this.setAttribute('visibility','visible');
+    	this.animationInited.sendEvent(null);
     	this.setShadow(); 	
     </method>
 
