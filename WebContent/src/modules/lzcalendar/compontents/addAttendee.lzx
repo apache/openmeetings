@@ -119,7 +119,7 @@
 		   Get all users by range and parse result List into View
 		 -->
 	 	<netRemoteCallHib name="getAllUserBySearchRange" funcname="userservice.getAllUserBySearchRange" 
-	                      remotecontext="$once{ canvas.thishib }" >
+	                      remotecontext="$once{ canvas.thishib }" showLoading="false">
 	        
 	        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
 	        <netparam><method name="getValue">return parent.parent.parent._search._criteria.getText();</method></netparam>
@@ -131,7 +131,6 @@
 	        <handler name="ondata" args="valueList">
 	            <![CDATA[
 		            if ($debug) Debug.write("getAllUserBySearchRange ",valueList);
-
 		            this.parent.initValues(valueList.records);
 		    		this.parent.renderContent(valueList.result);
 	            ]]>

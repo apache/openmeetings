@@ -79,7 +79,7 @@
 			}
 			if ($debug) Debug.write("loadAppointments ",dayIndex, weekIndex, tDate);
 			this.currentDate = tDate;
-			this._lzCalendarTobBar.statusInfo.currentDate.setAttribute("text",parseDateToStringTime(this.currentDate));
+			this.statusInfo.currentDate.setAttribute("text",parseDateToStringTime(this.currentDate));
 			this._lzCalendarGrid.checkAndShow(tDate,dayIndex,weekIndex);
 			
 			if (tRelaodDataSet) {
@@ -182,15 +182,22 @@
 	
 	<dataset name="getAppointmentReminderTypList" type="http" />
 	
+	<view name="statusInfo" width="204" y="4">
+			
+			<labelText name="currentDate" align="center"
+				fontsize="12" resize="true" fontstyle="bold" />
+			
+	</view>
+	
 	<!-- 176 pixels is the width of the mini calendar -->
 	<simpleLabelButton labelid="1444" height="24" 
-			width="176" x="12" y="10" style="calendarButtonStyle">
+			width="176" x="12" y="26" style="calendarButtonStyle">
         <handler name="onclick">
             parent.editCalendarEvent(null);
         </handler>
     </simpleLabelButton>
 	
-	<dateSelector name="_calendar" y="40" x="12">
+	<dateSelector name="_calendar" y="54" x="12">
 		<handler name="onmonthSel" args="tMonth">
 			parent.currentDate = null;
 		</handler>
@@ -210,20 +217,20 @@
 		</handler> 
 	</dateSelector> 
 	
-	<view resource="messagebox_info_rsc" x="4" y="184" />
+	<view resource="messagebox_info_rsc" x="4" y="198" />
 	
-	<labelText labelid="807" x="24" y="182" fontstyle="bold" />
+	<labelText labelid="807" x="24" y="196" fontstyle="bold" />
 	
-	<labelText labelid="806" x="4" y="204" multiline="true" width="190" />
+	<labelText labelid="806" x="4" y="218" multiline="true" width="190" />
 	
-	<labelText labelid="1276" x="4" y="266" fontstyle="bold" />
+	<labelText labelid="1276" x="4" y="280" fontstyle="bold" />
 	
-	<view resource="messagebox_info_rsc" x="6" y="286" 
+	<view resource="messagebox_info_rsc" x="6" y="300" 
 		  width="16" height="16" stretches="both" />
 	
-	<labelText labelid="1277" x="24" y="282" multiline="true" width="166" />
+	<labelText labelid="1277" x="24" y="296" multiline="true" width="166" />
 	
-    <miniIcons x="172" y="322" resource="user_contact_calendar_system_undo_rsc" width="16" height="16" 
+    <miniIcons x="172" y="336" resource="user_contact_calendar_system_undo_rsc" width="16" height="16" 
                showhandcursor="true">
         <handler name="onclick">
             canvas.contactUser = 0;
@@ -232,17 +239,10 @@
         <labelTooltip labelid="1279" />
     </miniIcons>
 	
-	<userContactsCalendar name="_userContacts" y="340" x="4" height="${ parent.height - 344 }" width="186" />
+	<userContactsCalendar name="_userContacts" y="354" x="4" height="${ parent.height - 374 }" width="186" />
 	
 	<view name="_lzCalendarTobBar" width="${ parent.width - 204 }" x="204" height="40">
 	
-		<view name="statusInfo" align="right" y="2">
-			
-			<labelText name="currentDate" fontsize="12" resize="true" fontstyle="bold" />
-			
-			<simplelayout axis="x" spacing="0" />
-		</view>
-		
 		<view name="buttons" align="left" y="2">
 		
 			<simpleLabelButton name="_showDay" labelid="799" height="22" >
