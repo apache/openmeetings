@@ -74,7 +74,7 @@ Test the setup values before you enter a room
             } else if (!this.forceTest && save){
             	this.startConference();
             } else {
-            	
+
             	if (this.isDirectLink) {
             		this._enterMeeting.setAttribute("x",this.width-165);
             		this._cancel.setAttribute("visibility","hidden");
@@ -119,12 +119,10 @@ Test the setup values before you enter a room
             canvas._loadingAll.hideLoading();
             canvas.lc.send(canvas.rtmp_lc_name, "closeInitTestingApplication");
         
-            //Debug.write("sharedobject store ");
-            //var g = canvas.getUserData();
-            //g["cam"] = this.currentSharing.availibleCams.getValue();
-            //g["mic"] = this.currentSharing.availibleMics.getValue();
-            //g["showAudioVideoTest"] = this.holddatainSO.getValue();
-            //canvas.setUserData(g);
+            Debug.write("sharedobject store ");
+            var g = canvas.getUserData();
+            g["showAudioVideoTest"] = this.holddatainSO.getValue();
+            canvas.setUserData(g);
             
         ]]>
     </method>   
@@ -147,15 +145,15 @@ Test the setup values before you enter a room
     	
     	]]>
     </method>
-    
-    <!-- Remember Me -->    
+
+    <!-- Remember Me -->
     <labelCheckbox name="holddatainSO" labelid="759" x="10" y="$once{ parent.height-24 }" >
         <handler name="oninit">
             var g = canvas.getUserData();
             var save = g["showAudioVideoTest"];
             if ($debug) Debug.write("savecamdata save: ",save);
             if(save) this.setValue(true);
-        </handler>         
+        </handler>
     </labelCheckbox>
     
     <simpleLabelButton name="_enterMeeting" labelid="761" width="160" x="$once{ parent.width-270 }" 

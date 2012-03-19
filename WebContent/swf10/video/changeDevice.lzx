@@ -72,14 +72,16 @@
 
             var so:SharedObject = SharedObject.getLocal('userdata');
 	        var sdata = so.data;
-            var cam = sdata["cam"];
-            //Debug.write("cam: ",cam);
-
-            if (cam!=null || cam!=''){
-            	this.selectItem(String(cam));    
+	        var cam;
+            if (sdata != null){
+                cam = sdata["cam"];
+                if (cam == 'undefined') {
+                    cam = t;
+                }
             } else {
-           	 	this.selectItem(t);
+                cam = t;
             }
+            this.selectItem(String(cam));
             ]]>
         </handler>
     </resetCombobox>
@@ -108,14 +110,16 @@
 
             var so:SharedObject = SharedObject.getLocal('userdata');
 	        var sdata = so.data;
-            var mic = sdata["mic"];
-            //Debug.write("mic: ",mic);
-
-            if (mic!=null || mic!=''){
-            	this.selectItem(String(mic));    
+	        var mic;
+	        if (sdata != null){
+                mic = sdata["mic"];
+                if (mic == 'undefined') {
+                    mic = t;
+                }
             } else {
-           	 	this.selectItem(t);
+                mic = t;
             }
+            this.selectItem(String(mic));
             ]]>
         </handler>
     </resetCombobox>

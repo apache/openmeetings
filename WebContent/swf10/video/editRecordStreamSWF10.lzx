@@ -393,14 +393,16 @@
 				}
 				var t:SharedObject = SharedObject.getLocal('userdata');
 				var g = t.data;
-				if (g!=null){
-					var cam = g["cam"];
-				} else {
-					var cam = r;
-				}
-				if (cam=='undefined' || cam =='' || cam == null) cam=r;
-				this.selectItem(String(cam));
-
+				var cam;
+                if (g != null){
+                    cam = g["cam"];
+                    if (cam == 'undefined') {
+                        cam = r;
+                    }
+                } else {
+                    cam = r;
+                }
+                this.selectItem(String(cam));
             ]]>
         </handler>
     </resetCombobox>
@@ -429,13 +431,16 @@
 
 	            var t:SharedObject = SharedObject.getLocal('userdata');
 	            var g = t.data;
-	            if (g!=null){
-	            	var mic = g["mic"];
-	            } else {
-	            	var mic = r;
-	            }
-				if (mic=='undefined' || mic =='' || mic ==null) mic=r;
-				this.selectItem(String(mic));
+	            var mic;
+                if (g != null){
+                    mic = g["mic"];
+                    if (mic == 'undefined') {
+                        mic = r;
+                    }
+                } else {
+                    mic = r;
+                }
+                this.selectItem(String(mic));
             ]]>
         </handler>
     </resetCombobox>

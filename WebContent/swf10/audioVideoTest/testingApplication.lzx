@@ -213,14 +213,16 @@ Test the setup values before you enter a room
                 }
                 var t:SharedObject = SharedObject.getLocal('userdata');
                 var g = t.data;
-                if (g!=null){
-                    var cam = g["cam"];
+                var cam;
+                if (g != null){
+                    cam = g["cam"];
+                    if (cam == 'undefined') {
+                        cam = r;
+                    }
                 } else {
-                    var cam = r;
+                    cam = r;
                 }
-                if (cam=='undefined' || cam =='' || cam == null) cam=r;
                 this.selectItem(String(cam));
-
             ]]>
         </handler>
     </resetCombobox>
@@ -248,12 +250,15 @@ Test the setup values before you enter a room
 
                 var t:SharedObject = SharedObject.getLocal('userdata');
                 var g = t.data;
-                if (g!=null){
-                    var mic = g["mic"];
+                var mic;
+                if (g != null){
+                    mic = g["mic"];
+                    if (mic == 'undefined') {
+                        mic = r;
+                    }
                 } else {
-                    var mic = r;
+                    mic = r;
                 }
-                if (mic=='undefined' || mic =='' || mic ==null) mic=r;
                 this.selectItem(String(mic));
             ]]>
         </handler>
@@ -380,7 +385,7 @@ Test the setup values before you enter a room
     <view y="294" resource="test_setup_info_rsc" x="10" />
     
     <labelText fontstyle="bold" labelid="765" x="39" y="290"
-               width="$once{ parent.width-50 }" multiline="true" /> 
+               width="$once{ parent.width-50 }" multiline="true" />
     
 </class>
 	
