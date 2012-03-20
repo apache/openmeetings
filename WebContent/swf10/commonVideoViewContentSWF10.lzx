@@ -15,6 +15,7 @@
     <attribute name="offsetLength" type="number" value="40"/>
     <attribute name="videoWidth" type="number" value="132"/>
     <attribute name="videoHeight" type="number" value="132"/>
+    <attribute name="popupAdapter"/>
 
     <handler name="oninit">
         <![CDATA[
@@ -43,12 +44,15 @@
             // update rights to SWF10 client
             client.updateModerationFlag = this.updateModerationFlag;
             client.changeDevice = this.changeDevice;
-            client.setDrawAllowStatus = this.setDrawAllowStatus
+            client.setDrawAllowStatus = this.setDrawAllowStatus;
+            client.exitRoom = this.exitRoom;
 
             var lc:LocalConnection = new LocalConnection();
             lc.connect(canvas.vid_lc_name);
             lc.client = client;
             canvas.setAttribute("lc", lc);
+
+            popupAdapter = new lz.commonPopupAdapter();
         ]]>
     </handler>
     
@@ -423,6 +427,14 @@
                 name:"changeDeviceDialog"
             });
         ]]>
+    </method>
+
+    <!---
+        Shows the exit dialog
+    -->
+    <method name="exitRoom">
+        if ($debug) Debug.write("exitRoom");
+        popupAdapter.exitRoom();
     </method>
         
     <!--

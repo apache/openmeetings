@@ -145,6 +145,13 @@
     <method name="changeDevice">
         canvas.lc.send(canvas.vid_lc_name, "changeDevice");
     </method>
+
+    <!---
+        Shows the exit dialog
+    -->
+    <method name="exitRoom">
+        canvas.lc.send(canvas.vid_lc_name, "exitRoom");
+    </method>
     
 </class>
 

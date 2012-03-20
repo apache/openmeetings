@@ -57,16 +57,18 @@
 		<simpleLabelButton labelid="789" name="_exitbtn"
 			text_x="32" width="80" style="itemStyle" height="28">
 			<handler name="onclick">
-				new lz.confirmationSingle(canvas,{refObj:this,labelid:791,
-				labeliderror:790,showCheckBox:false});
-			</handler>
-			<method name="sendConfirmation" args="confirm,bool">
-                canvas.currentBaseConferenceRoom._screenSharingAdapter.closeAllScreenSharings();
-                if (canvas.appointmentNotificationPopUp != null) {
-                	canvas.appointmentNotificationPopUp.destroy();
+                canvas._videocontainer._videoviewcontent.exitRoom();
+                canvas.videoComp_lc.exitRoom = function(confirm) {
+                    if ($debug) Debug.write("confirm exitRoom:", confirm);
+                    if (confirm) {
+                        canvas.currentBaseConferenceRoom._screenSharingAdapter.closeAllScreenSharings();
+                        if (canvas.appointmentNotificationPopUp != null) {
+                            canvas.appointmentNotificationPopUp.destroy();
+                        }
+                        canvas.doActionmenu('quit');
+                    }
                 }
-				canvas.doActionmenu('quit');
-			</method>
+			</handler>
 			<view resource="exit_btn_rsc" y="2" x="4" />
 			<labelTooltip labelid="309" />
 		</simpleLabelButton>
@@ -204,16 +206,18 @@
 		<simpleLabelButton labelid="789" name="_exitbtn"
 			text_x="32" width="80" style="itemStyle" height="28">
 			<handler name="onclick">
-				new lz.confirmationSingle(canvas,{refObj:this,labelid:791,
-				labeliderror:790,showCheckBox:false});
-			</handler>
-			<method name="sendConfirmation" args="confirm,bool">
-                canvas.currentBaseConferenceRoom._screenSharingAdapter.closeAllScreenSharings();
-                if (canvas.appointmentNotificationPopUp != null) {
-                	canvas.appointmentNotificationPopUp.destroy();
+                canvas._videocontainer._videoviewcontent.exitRoom();
+                canvas.videoComp_lc.exitRoom = function(confirm) {
+                    if ($debug) Debug.write("confirm exitRoom:", confirm);
+                    if (confirm) {
+                        canvas.currentBaseConferenceRoom._screenSharingAdapter.closeAllScreenSharings();
+                        if (canvas.appointmentNotificationPopUp != null) {
+                            canvas.appointmentNotificationPopUp.destroy();
+                        }
+                        canvas.doActionmenu('quit');
+                    }
                 }
-				canvas.doActionmenu('quit');
-			</method>
+			</handler>
 			<view resource="exit_btn_rsc" y="2" x="4" />
 			<labelTooltip labelid="309" />
 		</simpleLabelButton>
@@ -319,12 +323,14 @@
 		<simpleLabelButton labelid="789" name="_exitbtn"
 			text_x="32" width="80" style="itemStyle" height="28">
 			<handler name="onclick">
-				new lz.confirmationSingle(canvas,{refObj:this,labelid:791,
-				labeliderror:790,showCheckBox:false});
+                canvas._videocontainer._videoviewcontent.exitRoom();
+                canvas.videoComp_lc.exitRoom = function(confirm) {
+                    if ($debug) Debug.write("confirm exitRoom:", confirm);
+                    if (confirm) {
+                        canvas.doActionmenu('quit');
+                    }
+                }
 			</handler>
-			<method name="sendConfirmation" args="confirm,bool">
-				canvas.doActionmenu('quit');
-			</method>
 			<view resource="exit_btn_rsc" y="2" x="4" />
 			<labelTooltip labelid="309" />
 		</simpleLabelButton>
