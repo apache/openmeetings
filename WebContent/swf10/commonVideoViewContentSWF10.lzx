@@ -46,6 +46,7 @@
             client.changeDevice = this.changeDevice;
             client.setDrawAllowStatus = this.setDrawAllowStatus;
             client.exitRoom = this.exitRoom;
+            client.closeWhiteboard = this.closeWhiteboard;
 
             var lc:LocalConnection = new LocalConnection();
             lc.connect(canvas.vid_lc_name);
@@ -435,6 +436,14 @@
     <method name="exitRoom">
         if ($debug) Debug.write("exitRoom");
         popupAdapter.exitRoom();
+    </method>
+
+    <!---
+        Shows the close whiteboard dialog
+    -->
+    <method name="closeWhiteboard">
+        if ($debug) Debug.write("closeWhiteboard");
+        popupAdapter.closeWhiteboard();
     </method>
         
     <!--

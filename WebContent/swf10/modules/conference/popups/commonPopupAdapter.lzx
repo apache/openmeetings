@@ -22,9 +22,9 @@
 
 <class name="exitDialog">
     <handler name="oninit">
-        if (null == canvas.inner.exitDialog || 'undefined' == canvas.inner.exitDialog) {
+        if (null == canvas.exitDialog || 'undefined' == canvas.exitDialog) {
             if ($debug) Debug.write("show exit dialog");
-            new lz.confirmationSingle(canvas.inner,{
+            new lz.confirmationSingle(canvas,{
                 refObj:this,
                 labelid:791,
                 labeliderror:790,
@@ -40,9 +40,38 @@
     </method>
 </class>
 
+<class name="closeWhiteboardDialog">
+    <handler name="oninit">
+        if (null == canvas.closeWhiteboard || 'undefined' == canvas.closeWhiteboard) {
+            if (canvas.ismoderator || canvas.isAllowedToDraw) {
+                new lz.confirmationSingle(canvas,{
+                    refObj:this,
+                    labeliderror:1313,
+                    showCheckBox:false,
+                    name:"closeWhiteboard"
+                });
+            } else {
+                new lz.errorDialog(canvas,{
+                    labelid:1366,
+                    errortext:canvas.getLabelName(1365)
+                });
+            }
+        }
+    </handler>
+
+    <method name="sendConfirmation" args="confirm,bool">
+        if ($debug) Debug.write("closeWhiteboardDialog result:", confirm);
+        canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'closeWhiteboard', confirm);
+    </method>
+</class>
+
 <class name="commonPopupAdapter">
     <method name="exitRoom">
         new lz.exitDialog();
+    </method>
+
+    <method name="closeWhiteboard">
+        new lz.closeWhiteboardDialog();
     </method>
 </class>
 

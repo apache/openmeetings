@@ -152,6 +152,13 @@
     <method name="exitRoom">
         canvas.lc.send(canvas.vid_lc_name, "exitRoom");
     </method>
+
+    <!---
+        Shows the close whiteboard dialog
+    -->
+    <method name="closeWhiteboard">
+        canvas.lc.send(canvas.vid_lc_name, "closeWhiteboard");
+    </method>
     
 </class>
 

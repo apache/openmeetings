@@ -144,25 +144,16 @@
             <handler name="onclick">
 	            <![CDATA[
 	                this.setAttribute('frame',2);
-	                if (canvas.ismoderator || canvas.isAllowedToDraw) {
-		                new lz.confirmationSingle(canvas,{
-		                           refObj:this,
-		                           labeliderror:1313,
-		                           showCheckBox:false
-		                        });
-                    } else {
-                        new lz.errorDialog(canvas,{
-		                           labelid:1366,
-		                           errortext:canvas.getLabelName(1365)
-		                        });
+	                canvas._videocontainer._videoviewcontent.closeWhiteboard();
+	                var t = this;
+                    canvas.videoComp_lc.closeWhiteboard = function(confirm) {
+                        if ($debug) Debug.write("confirm closeWhiteboard:", confirm);
+                        if (confirm) {
+                            t.parent.parent.removeObject(t.parent);
+                        }
                     }
                 ]]>
             </handler>
-            <method name="sendConfirmation" args="bool,askAgain">
-                if (bool) {
-                    this.parent.parent.removeObject(this.parent);
-                }
-            </method>
             <labelTooltip labelid="1364" />
         </view>  
         
