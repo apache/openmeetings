@@ -21,18 +21,14 @@
 <library>
 	
 	<include href="conference/" />
-	<!-- 
 	<include href="chat/" />
 	<include href="settings/" />
 	<include href="invitation/" />
     <include href="lzrecordcontent/" />
-     -->
 	<include href="dashboard/" />
-	<!-- 
 	<include href="meetings/" />
     <include href="admin/" />
     <include href="sipintegration/" />
-     -->
     <include href="lzcalendar/" />
 
 </library>

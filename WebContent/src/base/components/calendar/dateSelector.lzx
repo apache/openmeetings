@@ -225,11 +225,20 @@
 		]]>
 	</handler>	
 	
+	<method name="loadDate" args="datObj">
+		this.showingdate = datObj;
+		this.init();
+		this.showDate(this.selecteddate);
+		//this.onselect.sendEvent(this.selecteddate);
+	</method>
+	
 	<method name="init">
         <![CDATA[ 
 	        super.init();
 	        
+	        var tIsInit = false;
 	        if (this.showingdate==""){
+	        	tIsInit = true;
 	        	this.showingdate = new Date();
 	        }
 	        this.setAttribute('year',this.showingdate.getFullYear());
@@ -251,7 +260,7 @@
 	        
 	        if ($debug) Debug.write("INIT ",ref,ref.daydate);
 	        
-	        if (ref != null) {
+	        if (ref != null && tIsInit) {
 		        this.selectDate(ref.daydate, ref.dayIndexNumber, ref.weekIndexNumber);
 	        }
 		]]>
@@ -263,11 +272,33 @@
         if (this.showingdate.getMonth()== tDate.getMonth() && this.showingdate.getFullYear() == tDate.getFullYear()){
         	//Debug.write("+++++++ Found Today");
         	var ref = this.getDateRefByDateNumber(tDate.getDate(),tDate.getMonth());
+        	if (ref == null) {
+        		if ($debug) Debug.warn("Could not find date ref",tDate);
+        	}
         	ref.setAttribute('bgcolor',0xCECECE);
         	return ref;
         }
         
         return this.getDateRefByDateNumber(this.showingdate.getDate(),this.showingdate.getMonth())
+		]]>
+	</method>
+	
+	<method name="showDate" args="dateObj">
+		<![CDATA[
+		if(this.selected!=null) this.selected.setAttribute('bgcolor',"white");
+		var i=0;
+		while (i<this.content.content.content.subviews.length){
+			var k=0;
+			while (k<this.content.content.content.subviews[i].content.subviews.length){
+				var t = this.content.content.content.subviews[i].content.subviews[k].daydate;
+				if (t.getDate()==dateObj.getDate() && t.getMonth()==dateObj.getMonth()){
+					this.content.content.content.subviews[i].content.subviews[k].onclick.sendEvent(null);
+					return;
+				}
+				k++;
+			}
+			i++;
+		}
 		]]>
 	</method>
 	
@@ -300,6 +331,7 @@
 				if (t.getDate()==dateObj.getDate() && t.getMonth()==dateObj.getMonth()){
 					this.selected = this.content.content.content.subviews[i].content.subviews[k];
 					this.selected.setAttribute('bgcolor',0xCCD7E1);
+					return;
 				}
 				k++;
 			}

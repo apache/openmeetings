@@ -29,6 +29,9 @@
 	
 	<attribute name="lzViewCalendarEvent" value="null" />
 	
+	<attribute name="tStartDate" value="null" />
+	<attribute name="tEndDate" value="null" />
+	
 	<handler name="oninit">
 		<![CDATA[
 			_mainScrollBar.setAttribute("visibility","hidden");
@@ -143,20 +146,34 @@
 			newAppointment.title = canvas.getLabelName(1444);
 			
 			var tDate = new Date();
-			tDate.setTime(this.currentDate.getTime());
-			tDate.setMinutes(0);
-			tDate.setSeconds(0);
-			tDate.setHours(tDate.getHours()+1);
-			if (tDate.getHours() == 23) {
-				tDate.setHours(22);
+			
+			//There seems to be a difference in the way OpenLaszlo makes a Date to a XML string:
+			//OpenLaszlo generates a time in UTC instead of the local time when converted to an XML String
+			var timeZoneOffSetInMilliSeconds = tDate.getTimezoneOffset()*60*1000;
+			
+			if (this.tStartDate == null) {
+				tDate.setTime(this.currentDate.getTime()-timeZoneOffSetInMilliSeconds);
+				tDate.setMinutes(0);
+				tDate.setSeconds(0);
+				if (tDate.getHours() == 23) {
+					tDate.setHours(22);
+				}
+			} else {
+				tDate.setTime(this.tStartDate.getTime()-timeZoneOffSetInMilliSeconds);
+				tDate.setSeconds(0);
+				this.tStartDate = null;
 			}
 			newAppointment.start = tDate;
 			
 			var tDate2 = new Date();
-			tDate.setTime(tDate.getTime());
-			tDate2.setMinutes(0);
-			tDate2.setSeconds(0);
-			tDate2.setHours(tDate.getHours()+1);
+			if (this.tEndDate == null) {
+				tDate2.setTime(tDate.getTime());
+				tDate2.setHours(tDate.getHours()+1);
+			} else {
+				tDate2.setTime(this.tEndDate.getTime()-timeZoneOffSetInMilliSeconds);
+				tDate2.setSeconds(0);
+				this.tEndDate = null;
+			}
 			newAppointment.end = tDate2;
 			
 			newAppointment.comment = "";
@@ -183,15 +200,14 @@
 	<dataset name="getAppointmentReminderTypList" type="http" />
 	
 	<view name="statusInfo" width="204" y="4">
-			
-			<labelText name="currentDate" align="center"
-				fontsize="12" resize="true" fontstyle="bold" />
-			
+		<labelText name="currentDate" align="center"
+			fontsize="12" resize="true" fontstyle="bold" />
 	</view>
 	
 	<!-- 176 pixels is the width of the mini calendar -->
 	<simpleLabelButton labelid="1444" height="24" 
 			width="176" x="12" y="26" style="calendarButtonStyle">
+		<view resource="edit_add_rsc" x="4" y="4" />
         <handler name="onclick">
             parent.editCalendarEvent(null);
         </handler>
@@ -245,6 +261,16 @@
 	
 		<view name="buttons" align="left" y="2">
 		
+			<method name="getCurrentViewState">
+				if (!this._showDay.enabled) {
+					return "day";
+				} else if (!this._showWeek.enabled) {
+					return "week";
+				} else if (!this._showMonth.enabled) {
+					return "month";
+				}
+			</method>
+		
 			<simpleLabelButton name="_showDay" labelid="799" height="22" >
 		        <handler name="onclick">
 		        	parent._showWeek.setAttribute("enabled",true);
@@ -275,6 +301,55 @@
 			<simplelayout axis="x" spacing="0" />
 		</view>
 		
+		<view align="right" y="2">
+		
+			<simpleLabelButton name="_nextBtn" height="22" width="20">
+				<view resource="calendar_resultset_previous_rsc" x="2" y="3" />
+		        <handler name="onclick">
+		        	var tDate = parent.parent.parent.currentDate;
+		        	if (parent.parent.buttons.getCurrentViewState() == "day") {
+		        		tDate.setTime(tDate.getTime() - 86400000);
+		        	} else if (parent.parent.buttons.getCurrentViewState() == "month") {
+		        		if (tDate.getMonth() == 0) {
+		        			tDate.setMonth(11);
+		        			tDate.setFullYear(tDate.getFullYear()-1);
+		        		} else {
+		        			tDate.setMonth(tDate.getMonth()-1);
+		        		}
+		        	} else if (parent.parent.buttons.getCurrentViewState() == "week") {
+		        		tDate.setTime(tDate.getTime() - (86400000*7));
+		        	}
+		        	parent.parent.parent.currentDate = null;
+		        	if ($debug) Debug.write("loadDate :: ",tDate);
+		        	parent.parent.parent._calendar.loadDate(tDate);
+		        </handler>
+		    </simpleLabelButton>
+		    
+		    <simpleLabelButton name="_preBtn" height="22" width="20">
+				<view resource="calendar_resultset_next_rsc" x="2" y="3" />
+		        <handler name="onclick">
+		            var tDate = parent.parent.parent.currentDate;
+		        	if (parent.parent.buttons.getCurrentViewState() == "day") {
+		        		tDate.setTime(tDate.getTime() + 86400000);
+		        	} else if (parent.parent.buttons.getCurrentViewState() == "month") {
+		        		if (tDate.getMonth() == 11) {
+		        			tDate.setMonth(0);
+		        			tDate.setFullYear(tDate.getFullYear()+1);
+		        		} else {
+		        			tDate.setMonth(tDate.getMonth()+1);
+		        		}
+		        	} else if (parent.parent.buttons.getCurrentViewState() == "week") {
+		        		tDate.setTime(tDate.getTime() + (86400000*7));
+		        	}
+		        	parent.parent.parent.currentDate = null;
+		        	if ($debug) Debug.write("loadDate :: ",tDate);
+		        	parent.parent.parent._calendar.loadDate(tDate);
+		        </handler>
+		    </simpleLabelButton>
+			
+			<simplelayout axis="x" spacing="0" />
+		</view>
+		
 	</view>
 	
 	<lzCalendarGrid name="_lzCalendarGrid" 
@@ -284,6 +359,23 @@
 		</handler>	
 		<handler name="onScollContent" args="tRef">
 			parent.clearWindows();
+		</handler>
+		<handler name="onSelectDate" args="tDate">
+			parent._calendar.showDate(tDate);
+			parent._lzCalendarTobBar.buttons._showDay.onclick.sendEvent(null);
+		</handler>
+		<handler name="onNewEventDate" args="tDate">
+			parent.tStartDate = tDate;
+			//only use the date part here
+			parent.tStartDate.setHours(this.currentDate.getHours());
+			parent.tStartDate.setMinutes(0);
+			parent.tEndDate = null;
+			parent.editCalendarEvent();
+		</handler>
+		<handler name="onStartEndDate" args="tEmptyRef">
+			parent.tStartDate = this.tStartDate;
+			parent.tEndDate = this.tEndDate;
+			parent.editCalendarEvent();
 		</handler>
 	</lzCalendarGrid>
 	

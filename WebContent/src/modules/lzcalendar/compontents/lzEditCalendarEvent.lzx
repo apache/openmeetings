@@ -103,15 +103,15 @@
 				if ($debug) Debug.write("appointmentstart ",updateObj.appointmentstart);
 				var tTimeStart = this._timeStart.getText();
 				var hours = Number(tTimeStart.substr(0,2));
-				var mins = Number(tTimeStart.substr(4,2));
-				if ($debug) Debug.write("hours:mins",hours,mins,tTimeStart.substr(4,2));
+				var mins = Number(tTimeStart.substr(3,2));
+				if ($debug) Debug.write("hours:mins",hours,mins,tTimeStart.substr(4),tTimeStart);
 				updateObj.appointmentstart.setHours(hours);
 				updateObj.appointmentstart.setMinutes(mins);
 				
 				updateObj.appointmentend = this._dateEnd.getDate();
 				var tTimeEnd = this._timeEnd.getText();
 				var hours = Number(tTimeEnd.substr(0,2));
-				var mins = Number(tTimeEnd.substr(4,2));
+				var mins = Number(tTimeEnd.substr(3,2));
 				updateObj.appointmentend.setHours(hours);
 				updateObj.appointmentend.setMinutes(mins);
 				
@@ -372,6 +372,10 @@
             		
             			var tViewObj = this._content._inner.subviews[i];
             			
+            			if (!tViewObj.isLoaded) {
+            				continue;
+            			}
+            			
             			var tObject = new Object();
             			tObject.meetingMemberId = tViewObj.memberId;
 		        		tObject.firstname = tViewObj.firstName;
@@ -392,8 +396,12 @@
           		<view name="_inner">
           			<attendeeListItem datapath="local:classroot.eventDS:/meetingMember"
            						width="$once{ parent.parent.width-10 }">
+           						
+           				<attribute name="isLoaded" value="false" type="boolean" />
+           				
            				<handler name="ondata" args="d">
            					if ($debug) Debug.write("meetingMember -- ondata ",d);
+           					this.isLoaded = true;
            					var tDataPointer = new lz.datapointer();
            					tDataPointer.setPointer(d);
            					this.userId = tDataPointer.xpathQuery( 'userid/text()' );

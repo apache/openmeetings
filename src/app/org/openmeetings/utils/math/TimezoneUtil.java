@@ -112,6 +112,11 @@ public class TimezoneUtil {
 	public TimeZone getTimezoneByInternalJName(String jName) {
 
 		OmTimeZone omTimeZone = omTimeZoneDaoImpl.getOmTimeZone(jName);
+		
+		if (omTimeZone == null) {
+			log.error("There is not omTimeZone for this jName: "+jName);
+			throw new RuntimeException("There is not omTimeZone for this jName: "+jName);
+		}
 
 		TimeZone timeZone = TimeZone.getTimeZone(omTimeZone.getIcal());
 

@@ -52,7 +52,8 @@
 	    			new lz.boxInitEffect(parent,{
 		    					x:parent.getMouse("x"),
 		    					y:parent.getMouse("y"),
-		    					width:20,
+		    					width:2,
+		    					height:2,
 		    					zielx:this.x,
 		    					ziely:this.y,
 		    					bgcolor:annimationColor,

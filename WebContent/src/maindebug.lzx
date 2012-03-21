@@ -186,7 +186,7 @@
         this.setAttribute("visibility","hidden");
     </method>
     <animator name="showLoadingAnni" attribute="opacity" 
-    		from="0" to="0.7" start="false" duration="500" />
+    		from="0" to="0.7" start="false" duration="250" />
     <text name="_text" align="right" y="56" fontsize="14" fgcolor="red">Loading...</text>
 </view>
 

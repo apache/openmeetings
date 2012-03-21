@@ -27,9 +27,11 @@
 	<resource name="calendar_add_user_external_rsc" src="resources/user_go.png" />
 	<resource name="calendar_delete_button" src="resources/delete.png" />
 	<resource name="single_event_popup_background_rsc" src="resources/single_event_popup_background.swf" />
-	
+	<resource name="calendar_resultset_next_rsc" src="resources/resultset_next.png" />
+	<resource name="calendar_resultset_previous_rsc" src="resources/resultset_previous.png" />
 
 	<include href="addAttendee.lzx" />
+	<include href="lzCalGridTempDrawView.lzx" />
 	<include href="addExternalAttendee.lzx" />
 	<include href="attendeeListItem.lzx" />
 	<include href="lzCalendarGrid.lzx" />
