@@ -29,8 +29,8 @@
 			</div>
 			Sample file:
 			<a
-				href="http://code.google.com/p/openmeetings/source/browse/trunk/singlewebapp/WebContent/WEB-INF/red5-web.properties"
-				rel="nofollow">http://code.google.com/p/openmeetings/source/browse/trunk/singlewebapp/WebContent/WEB-INF/red5-web.properties
+				href="http://svn.apache.org/viewvc/incubator/openmeetings/trunk/singlewebapp/WebContent/WEB-INF/red5-web.properties"
+				rel="nofollow">http://svn.apache.org/viewvc/incubator/openmeetings/trunk/singlewebapp/WebContent/WEB-INF/red5-web.properties
 			</a>
 		</section>
 
@@ -53,8 +53,8 @@
             <p>
 				Sample file:
 				<a
-					href="http://code.google.com/p/openmeetings/source/browse/trunk/singlewebapp/red5-1.0.0-RC1/red5/webapps/root/crossdomain.xml"
-					rel="nofollow">http://code.google.com/p/openmeetings/source/browse/trunk/singlewebapp/red5-1.0.0-RC1/red5/webapps/root/crossdomain.xml
+					href="http://code.google.com/p/red5/source/browse/java/server/trunk/webapps/root/crossdomain.xml"
+					rel="nofollow">http://code.google.com/p/red5/source/browse/java/server/trunk/webapps/root/crossdomain.xml
 				</a>
 			</p>
 				<p>
