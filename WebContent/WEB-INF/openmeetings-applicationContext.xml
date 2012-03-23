@@ -246,9 +246,6 @@
 		<constructor-arg ref="mailTaskExecutor" />
 	</bean>
 
-	<!-- Axis2 Spring Services Entry <bean id="applicationContext" class="org.apache.axis2.extensions.spring.receivers.ApplicationContextHolder" 
-		/> -->
-
 	<!-- Axis2 Service Proxy's -->
 	<bean id="userWebService" class="org.openmeetings.axis.services.UserWebService" />
 	<bean id="roomWebService" class="org.openmeetings.axis.services.RoomWebService" />

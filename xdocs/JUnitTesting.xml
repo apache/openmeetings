@@ -81,7 +81,7 @@
 					-Dwebapps.root=${workspace_loc:Openmeetings}/dist/red5/webapps/openmeetings
 				</div>
 				<li>To avoid temporary files being created in OM root, modify "Working Directory" as follows</li>
-				<div class="xmlcode">${workspace_loc:ROOT}/build/junit</div>
+				<div class="xmlcode">${workspace_loc:Openmeetings}/build/junit</div>
 			</ul>
 			<p>
 				<a class="fancybox-buttons" data-fancybox-group="button"
