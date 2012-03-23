@@ -25,20 +25,9 @@
 	<property name="jar.suffix" value="${project.version}-${project.status}" />
 	<property environment="env" />
 
-	<property name="fileservice.src.dir" value="${basedir}/src/fileservice" />
-	<property name="roomservice.src.dir" value="${basedir}/src/roomservice" />
-	<property name="userservice.src.dir" value="${basedir}/src/userservice" />
-	<property name="calendarservice.src.dir" value="${basedir}/src/calendarservice" />
-	<property name="main.src.dir" value="${basedir}/src/app" />
-	<property name="templates.src.dir" value="${basedir}/src/templates" />
-	<property name="test.src.dir" value="${basedir}/src/test" />
-	<property name="screen.src.dir" value="${basedir}/src/red5-screenshare" />
-	<property name="doclet.src.dir" value="${basedir}/src/docgenerator" />
+	<property name="main.src.dir" value="${basedir}/src" />
 
 	<property name="dist.dir" value="dist" />
-
-	<!-- Conf dirs -->
-	<property name="conf.dir" value="${basedir}/conf" />
 
 	<property name="ivy.lib.dir" value="${basedir}/lib" />
 	<property name="build.base.dir" value="${basedir}/build" />
@@ -66,7 +55,6 @@
 	<property name="screenshare.out.dir" value="${dist.webapps.dir}/red5-screenshare" />
 	
 	<property name="main.out.dir" value="${build.base.dir}/classes/openmeetings" />
-	<property name="screen.out.dir" value="${build.base.dir}/classes/screen_compile" />
 
 	<!-- LPS Properties -->
 	<property name="out.dir.swf" value="${basedir}/${dist.webapps.dir}/" />
@@ -103,7 +91,6 @@
 
 	<target name="prepare.mkdir" depends="-java6.check">
 		<mkdir dir="${red5.server.lib}" />
-		<mkdir dir="${screen.out.dir}" />
 		<mkdir dir="${dist.dir}" />
 		<mkdir dir="${main.out.dir}" />
 		<mkdir dir="${mainlibs.lib.dir}" />
@@ -183,9 +170,6 @@
 			<fileset dir="${webcontent.src.dir}/openmeetings" />
 		</copy>
 
-		<copy todir="${dist.webapps.dir}/WEB-INF/red5-services">
-			<fileset dir="${webcontent.src.dir}/WEB-INF/red5-services" includes="*.xml" />
-		</copy>
 		<copy todir="${dist.webapps.dir}">
 			<fileset dir="${webcontent.src.dir}">
 				<include name="*.html" />
@@ -201,12 +185,13 @@
 
 		<chmod dir="${red5.root}" perm="755" includes="**/*.sh" />
 
-		<copy todir="${dist.webapps.dir}/WEB-INF/classes/META-INF">
+		<copy todir="${dist.persistence.dir}">
 			<fileset file="src/META-INF/*.xml">
 				<exclude name="services.xml" />
 			</fileset>
 		</copy>
-		<copy file="src/META-INF/${db.provider}_persistence.xml" tofile="${dist.persistence.dir}/persistence.xml" />
+		<echo message="db.provider == ${db.provider}"/>
+		<copy file="src/META-INF/${db.provider}_persistence.xml" tofile="${dist.persistence.dir}/persistence.xml" overwrite="true"/>
 
 		<!-- add language files from .war version -->
 		<copy todir="${dist.webapps.dir}/languages">
@@ -215,52 +200,28 @@
 		<copy todir="${dist.webapps.dir}/conf">
 			<fileset dir="WebContent/conf" />
 		</copy>
-
-		<!-- add templates
-		<copy todir="${dist.webapps.dir}/WEB-INF/classes">
-			<fileset dir="src/templates" />
-		</copy>
-		 -->
-
 		<tstamp />
 	</target>
 
-
 	<!-- Copy any resource or configuration files -->
 	<target name="resources">
-
+		<patternset id="xmlpng">
+			<include name="**/*.xml" />
+			<include name="**/*.png" />
+		</patternset>
+		<patternset id="resources">
+			<patternset refid="xmlpng"/>
+			<include name="**/*.conf" />
+			<include name="**/*.properties" />
+			<include name="**/*.vm" />
+		</patternset>
+		
 		<!-- Main Applications -->
 		<copy todir="${main.out.dir}" includeEmptyDirs="yes">
 			<fileset dir="${main.src.dir}">
-				<patternset>
-					<include name="**/*.conf" />
-					<include name="**/*.properties" />
-					<include name="**/*.xml" />
-					<include name="**/*.png" />
-					<include name="**/*.vm" />
-				</patternset>
-			</fileset>
-			<fileset dir="${templates.src.dir}">
-				<patternset>
-					<include name="**/*.conf" />
-					<include name="**/*.properties" />
-					<include name="**/*.xml" />
-					<include name="**/*.png" />
-					<include name="**/*.vm" />
-				</patternset>
+				<patternset refid="resources"/>
 			</fileset>
 		</copy>
-
-		<!-- Screen Share Application -->
-		<copy todir="${screen.out.dir}" includeEmptyDirs="yes">
-			<fileset dir="${screen.src.dir}">
-				<patternset>
-					<include name="**/*.xml" />
-					<include name="**/*.png" />
-				</patternset>
-			</fileset>
-		</copy>
-
 	</target>
 
 	<target name="jar.only" depends="enhance.only, current_revision">
@@ -275,10 +236,12 @@
 				<include name="**" />
 				<exclude name="**/test/**" />
 				<exclude name="**/axis/**" />
-				<exclude name="**/webstart/**" />
+				<exclude name="org/red5/**" />
+				<exclude name="org/openmeetings/doc/**" />
 				<exclude name="**/client/**" />
 				<exclude name="**/*.png" />
 				<exclude name="**/*.vm" />
+				<exclude name="META-INF/*.xml" />
 				<exclude name="log4j.properties" />
 			</fileset>
 			<manifest>
@@ -294,6 +257,7 @@
 				<exclude name="**/org/**" />
 				<exclude name="**/*.png" />
 				<exclude name="**/*.properties" />
+				<exclude name="META-INF/*.xml" />
 			</fileset>
 			<manifest>
 				<attribute name="Built-By" value="OpenMeetings - http://incubator.apache.org/openmeetings" />
@@ -318,7 +282,7 @@
 
 	<target name="dist.screen.share" description="Make Screen Share Archive" depends="jar.screen.share, signWebStartJars" />
 
-	<target name="jar.screen.share" description="Make Screen Share Archive" depends="compile.screen.share">
+	<target name="jar.screen.share" description="Make Screen Share Archive" depends="compile.only">
 		<tstamp prefix="build">
 			<format property="TODAY" pattern="d-MMMM-yyyy" locale="en" />
 		</tstamp>
@@ -327,9 +291,10 @@
 		</manifestclasspath>
 		<!-- Screen Share -->
 		<jar destfile="${screenshare.out.dir}/red5-screenshare.jar">
-			<fileset dir="${screen.out.dir}">
-				<include name="**/**" />
+			<fileset dir="${main.out.dir}">
+				<include name="org/red5/screen/**" />
 			</fileset>
+			<fileset file="${red5.lib}/conf/logback.xml"/>
 			<manifest>
 				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com" />
 				<attribute name="Built-On" value="${build.TODAY}" />
@@ -429,41 +394,12 @@
 
 	<target name="compile" depends="compile.only, prepare" />
 
-	<target name="compile.only" depends="-retrieve-mainlibs,-retrieve-om,-retrieve-dtd-generator,-retrieve-junit,compile.screen.share">
+	<target name="compile.only" depends="clean.classes, -retrieve-mainlibs,-retrieve-om,-retrieve-dtd-generator,-retrieve-junit,resources">
 		<echo message="Compile main to ${main.out.dir}"/>
 		<javac debug="on" debuglevel="lines,vars,source" destdir="${main.out.dir}">
 			<src path="${main.src.dir}" />
 			<classpath refid="compile.classpath" />
 			<compilerarg value="-Aopenjpa.metamodel=true" />
-		</javac>
-		<javac debug="on" debuglevel="lines,vars,source" srcdir="${doclet.src.dir}" destdir="${main.out.dir}">
-			<classpath refid="compile.classpath" />
-		</javac>
-		<javac debug="on" debuglevel="lines,vars,source" srcdir="${templates.src.dir}" destdir="${main.out.dir}">
-			<classpath refid="compile.classpath" />
-		</javac>
-		<javac debug="on" debuglevel="lines,vars,source" srcdir="${test.src.dir}" destdir="${main.out.dir}">
-			<classpath refid="compile.classpath" />
-		</javac>
-		<javac debug="on" debuglevel="lines,vars,source" srcdir="${fileservice.src.dir}" destdir="${main.out.dir}">
-			<classpath refid="compile.classpath" />
-		</javac>
-		<javac debug="on" debuglevel="lines,vars,source" srcdir="${roomservice.src.dir}" destdir="${main.out.dir}">
-			<classpath refid="compile.classpath" />
-		</javac>
-		<javac debug="on" debuglevel="lines,vars,source" srcdir="${userservice.src.dir}" destdir="${main.out.dir}">
-			<classpath refid="compile.classpath" />
-		</javac>
-		<javac debug="on" debuglevel="lines,vars,source" srcdir="${calendarservice.src.dir}" destdir="${main.out.dir}">
-			<classpath refid="compile.classpath" />
-		</javac>
-	</target>
-
-	<target name="compile.screen.share" depends="clean.classes, prepare.mkdir, resources">
-		<echo message="Compile screen share to ${screen.out.dir}" />
-		<!-- compile screen share -->
-		<javac debug="on" debuglevel="lines,vars,source" srcdir="${screen.src.dir}" destdir="${screen.out.dir}">
-			<classpath refid="compile.classpath" />
 		</javac>
 	</target>
 
@@ -532,13 +468,6 @@
 
 		<rat:report>
 			<fileset dir="${main.src.dir}" />
-			<fileset dir="${templates.src.dir}" />
-			<fileset dir="${test.src.dir}" />
-			<fileset dir="${screen.src.dir}" />
-			<fileset dir="${fileservice.src.dir}" />
-			<fileset dir="${roomservice.src.dir}" />
-			<fileset dir="${userservice.src.dir}" />
-			<fileset dir="${calendarservice.src.dir}" />
 		</rat:report>
 	</target>
 
@@ -681,6 +610,7 @@
 		<junit printsummary="yes" dir="${junit.base.dir}" tempdir="${junit.base.dir}" fork="yes" forkmode="perBatch">
 			<classpath refid="junit.classpath" />
 			<jvmarg value="-Dred5.root=${red5.root}" />
+			<jvmarg value="-Dbasedir=${basedir}" />
 			<jvmarg value="-Dred5.config_root=${red5.root}/conf" />
 			<jvmarg value="-Dwebapps.root=${basedir}/${om.dist.webapp}" />
 			<formatter type="${junit.test.formatter}" />
@@ -881,7 +811,6 @@
 	<!-- Remove classes directory for clean build -->
 	<target name="clean.classes" description="Clean Classes">
 		<delete includeemptydirs="true" dir="${main.out.dir}" />
-		<delete includeemptydirs="true" dir="${screen.out.dir}" />
 	</target>
 
 	<target name="clean.dist" description="Clean Dist dir">
@@ -908,6 +837,7 @@
 		<antcall target="-retrieve-dtd-generator" inheritAll="true" inheritRefs="true"/>
 		<antcall target="-retrieve-tools.jar" inheritAll="true" inheritRefs="true"/>
 		<antcall target="-retrieve-openlaszlo" inheritAll="true" inheritRefs="true"/>
-		<copy file="src/META-INF/${db.provider}_persistence.xml" tofile="src/META-INF/persistence.xml" />
+		<echo message="db.provider == ${db.provider}"/>
+		<copy file="src/META-INF/${db.provider}_persistence.xml" tofile="src/META-INF/persistence.xml" overwrite="true"/>
 	</target>
 </project>

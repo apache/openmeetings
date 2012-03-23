@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src/app"/>
-	<classpathentry kind="src" path="src/fileservice"/>
-	<classpathentry kind="src" path="src/roomservice"/>
-	<classpathentry kind="src" path="src/templates"/>
-	<classpathentry kind="src" path="src/test"/>
-	<classpathentry kind="src" path="src/userservice"/>
 	<classpathentry kind="src" path="WebContent/WEB-INF"/>
-	<classpathentry excluding="*" including="META-INF/" kind="src" path="src"/>
-	<classpathentry kind="src" path="src/docgenerator"/>
-	<classpathentry kind="src" path="src/calendarservice"/>
-	<classpathentry kind="src" path="src/red5-screenshare"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4">
 		<attributes>
