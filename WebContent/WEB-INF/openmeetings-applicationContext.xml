@@ -254,6 +254,7 @@
 	<bean id="roomWebService" class="org.openmeetings.axis.services.RoomWebService" />
 	<bean id="fileWebService" class="org.openmeetings.axis.services.FileWebService" />
 	<bean id="calendarWebService" class="org.openmeetings.axis.services.CalendarWebService" />
+  	<bean id="jabberWebService" class="org.openmeetings.axis.services.JabberWebService" />
 
 	<!-- Servlet Facade Beans -->
 	<bean id="backupExport" class="org.openmeetings.servlet.outputhandler.BackupExport" />
