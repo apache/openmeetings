@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+	<class name="dragEvent" extends="view">
+	
+		<attribute name="eventRef" value="null" />
+		
+		<attribute name="timeText" value="" type="string" />
+		<attribute name="titleText" value="" type="string" />
+		
+		<!---
+			If false the time part is hidden
+		 -->
+		<attribute name="showTime" value="true" type="boolean" />
+		
+		<handler name="onmouseup" reference="lz.GlobalMouse" args="who">
+	        this.close();
+	    </handler>
+		
+		<handler name="oninit">
+			lz.Cursor.showHandCursor(false);
+			lz.ModeManager.globalLockMouseEvents();
+			this.dragger.apply();
+			this.setShadow();
+		</handler>
+		
+		<method name="setShadow">
+	        <![CDATA[
+	            var normalMC = this.getDisplayObject();
+	            var displacementMap = new flash.filters.DropShadowFilter();
+	            normalMC.filters = [displacementMap];
+	        ]]>              
+	    </method>
+		
+		<method name="close">
+			this.eventRef.closeDragItem();
+			lz.Cursor.showHandCursor(true);
+			lz.ModeManager.globalUnlockMouseEvents();
+			this.dragger.remove();
+			this.destroy();
+		</method>
+		
+		<dragstate name="dragger"/>
+		
+		<view width="$once{ parent.width }" height="$once{ parent.height }" 
+						bgcolor="$once{ parent.bgcolor }">
+			<text name="_time" text="$once{ parent.parent.timeText }" 
+					visibility="$once{ (parent.parent.showTime) ? 'visible' : 'hidden' }" />
+			<text name="_title" x="$once{ (parent.parent.showTime) ? 36 : 0 }" resize="false" text="$once{ parent.parent.titleText }"
+				width="$once{ (parent.parent.showTime) ? parent.parent.width-36 : parent.parent.width }" />
+		</view>
+		
+	</class>
+
+</library>

@@ -207,7 +207,6 @@
 	<!-- 176 pixels is the width of the mini calendar -->
 	<simpleLabelButton labelid="1444" height="24" 
 			width="176" x="12" y="26" style="calendarButtonStyle">
-		<view resource="edit_add_rsc" x="4" y="4" />
         <handler name="onclick">
             parent.editCalendarEvent(null);
         </handler>

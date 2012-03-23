@@ -30,6 +30,7 @@
 	<resource name="calendar_resultset_next_rsc" src="resources/resultset_next.png" />
 	<resource name="calendar_resultset_previous_rsc" src="resources/resultset_previous.png" />
 
+	<include href="layouts/" />
 	<include href="addAttendee.lzx" />
 	<include href="lzCalGridTempDrawView.lzx" />
 	<include href="addExternalAttendee.lzx" />
