@@ -125,6 +125,9 @@
 			this.setAttribute("calendarEvent",tRef);
 		</method>
 		
+		<!-- 
+			The day grid
+		 -->
 		<state name="day" applied="${ classroot.viewType == 'day' }">
 		
 			<lzDayView currentDay="${ classroot.currentDay }">
@@ -135,6 +138,9 @@
 			
 		</state>
 		
+		<!-- 
+			The week grid
+		 -->
 		<state name="week" applied="${ classroot.viewType == 'week' }">
 		
 			<!-- A week view is nothing else then 7 days next to each other -->
@@ -147,6 +153,9 @@
 			
 		</state>
 		
+		<!-- 
+			The month grid
+		 -->
 		<state name="month" applied="${ classroot.viewType == 'month' }">
 		
 			<lzMonthView />

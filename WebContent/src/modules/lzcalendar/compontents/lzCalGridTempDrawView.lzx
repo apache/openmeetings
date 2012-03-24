@@ -30,6 +30,7 @@
 		
 		<handler name="onidle" reference="LzIdleService.LzIdle">
 			<![CDATA[
+				//Scroll calendar day view to position if neccessary
 				var tParentScrolly = parent.parent.parent.parent.getMouse("y");
 				if (tParentScrolly < 0) {
 					if (parent.parent.parent.y < 0) {
@@ -52,6 +53,8 @@
 					}
 				}
 				
+				//fix height and position depending if area is selected in top or bottom of starting 
+				//position in day view
 				var tNewMouseY = parent.getMouse("y");
 				tNewMouseY = Math.round(tNewMouseY/tPixels30Minutes)*tPixels30Minutes;
 				if (tNewMouseY > this.starty) {
@@ -77,6 +80,7 @@
 					this.setAttribute("y", parent.parent.parent.height-tPixels30Minutes);
 				}
 				
+				//show start time of new event
 				var startMinutesTotal = this.getStartMinutesTotal();
 				var startHours = Math.floor(startMinutesTotal/60);
 				var startMinutes = startMinutesTotal-(startHours*60);

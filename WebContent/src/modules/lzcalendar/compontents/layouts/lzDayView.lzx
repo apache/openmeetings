@@ -57,8 +57,14 @@
 			Prevent from re-rendering when switching the viewState 
 		 -->
 		<attribute name="reRenderLock" value="false" type="boolean" />
+		
+		<handler name="oninit">
+			//fix z-Layer
+			this._header.sendInFrontOf(this._grid);
+			this._grid.sendToBack();
+		</handler>
 			
-		<view x="41" width="${ parent.width-10 }" height="20" bgcolor="0xDDDDDD">
+		<view name="_header" x="41" width="${ parent.width-10 }" height="20" bgcolor="0xDDDDDD">
 			<view name="days" datapath="days" width="${ (parent.width-41)/classroot.daysPerWeek }" clip="true"
 								bgcolor="0xDDDDDD" height="19">
 				
@@ -98,11 +104,20 @@
 			<simplelayout axis="x" spacing="0" />
 		</view>
 		
-		<view y="20" width="${ parent.width }" height="${ parent.height-20 }">
-	
-			<view width="${ parent.width }" height="${ parent.height }" clip="true" bgcolor="0xDDDDDD">
+		<view name="dragAndDropArea" y="20" width="${ parent.width }" height="${ parent.height-20 }" clip="true">
+			
+			<view name="_content" width="${ parent.width-10 }" height="720" y="${ parent.parent._grid._bgArea._scrollArea.y }">
+				
+			
+			</view>
+			
+		</view>
 		
-				<view width="${ parent.width-10 }" height="721" >
+		<view name="_grid" y="20" width="${ parent.width }" height="${ parent.height-20 }">
+	
+			<view name="_bgArea" width="${ parent.width }" height="${ parent.height }" clip="true" bgcolor="0xDDDDDD">
+		
+				<view name="_scrollArea" width="${ parent.width-10 }" height="721" >
 				
 					<handler name="oninit">
 						this.setAttribute("y",parent.height-721);
@@ -149,13 +164,11 @@
 						</handler>
 						
 						<handler name="onmousetrackover">
-							if ($debug) Debug.write("onmousetrackover THIS DAY ",this);
-					        parent.parent.currentOverTrackView = this;
+					        classroot.currentOverTrackView = this;
 					    </handler>
 					
 					    <handler name="onmousetrackout">
-					    	if ($debug) Debug.write("onmousetrackout THIS DAY ",this);
-					        parent.parent.currentOverTrackView = null;
+					    	//We do not track out cause otherwise the dragging view would be at undefined position
 					    </handler>
 					    
 					    <handler name="onmousetrackup">
@@ -272,17 +285,22 @@
 								</handler>
 								
 								<method name="closeDragItem">
-									lz.Track.deactivate(classroot.dayViewTrackGroup);
-									classroot.currentDragEvent = null;
-									
-									if (classroot.currentOverTrackView != parent) {
-										var appointmentId = this.datapath.xpathQuery('appointmentId/text()');
-										if ($debug) Debug.write("Move to new Date appointmentId ",appointmentId);
-									} else {
-										if ($debug) Debug.write("Move to same Date");
-									}
-									
-									this.setAttribute("visibility","visible");	
+									<![CDATA[
+										var appointmentId = -1;
+										lz.Track.deactivate(classroot.dayViewTrackGroup);
+										
+										if (classroot.currentOverTrackView == null 
+													|| classroot.currentOverTrackView == parent.parent) {
+											if ($debug) Debug.write("Move to same Date or outside calendar");
+											this.setAttribute("visibility","visible");	
+										} else {
+											appointmentId = Number(this.datapath.xpathQuery('appointmentId/text()'));
+											if ($debug) Debug.write("Move to new Date appointmentId ",appointmentId);
+										}
+										
+										classroot.currentDragEvent = null;
+										return appointmentId;
+									]]>
 								</method>
 								
 								<method name="checkIfDragging" args="tRef">
@@ -295,19 +313,20 @@
 											lz.Timer.addTimer( new LzDelegate( this, "checkIfDragging" ), 250 );			
 										} else {
 											this.startedToDrag = true;
-											var startx = canvas.getMouse("x")-(this.width/2);
-											var starty = canvas.getMouse("y")-(this.height/2);
-											classroot.currentDragEvent = new lz.dragEvent(canvas,{
-														x:startx,
-														startx:startx,
-														y:starty,
-														starty:starty,
+											classroot.currentOverTrackView = null;
+											classroot.currentOverTrackView = parent.parent;
+											classroot.currentDragEvent = new lz.dragEvent(classroot.dragAndDropArea._content,{
+														x:parent.parent.parent.x,
+														startx:parent.parent.parent.x,
+														y:this.y,
+														starty:this.y,
 														bgcolor:this.bgcolor,
 														height:this.height,
 														width:this.width,
 														eventRef:this,
 														showTime:false,
-														titleText:this._title.text											
+														titleText:this._title.text,
+														calendarViewRef:classroot
 													});
 													
 											lz.Track.activate(classroot.dayViewTrackGroup);

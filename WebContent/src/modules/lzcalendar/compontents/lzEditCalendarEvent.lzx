@@ -108,7 +108,9 @@
 				updateObj.appointmentstart.setHours(hours);
 				updateObj.appointmentstart.setMinutes(mins);
 				
-				updateObj.appointmentend = this._dateEnd.getDate();
+				var tEnd = new Date();
+				tEnd.setTime(this._dateStart.getDate().getTime());
+				updateObj.appointmentend = tEnd; //this._dateEnd.getDate(); we currently do not support multi date events
 				var tTimeEnd = this._timeEnd.getText();
 				var hours = Number(tTimeEnd.substr(0,2));
 				var mins = Number(tTimeEnd.substr(3,2));
@@ -221,13 +223,13 @@
 			
 			
 		<!-- Start Date / Time -->
-		<labelText name="_dateTimeStartLabel" x="100" y="50" labelid="570" fontstyle="bold" />  
-			
-		<dateField name="_dateStart" y="50" x="146" width="104" datapath="local:classroot.eventDS:/start">
+		<dateField name="_dateStart" y="50" x="100" width="104" datapath="local:classroot.eventDS:/start">
 			<handler name="ondata" args="d">
 				this.setAttribute("text",parseDateStringFromXmlString(d.childNodes[0].data));
 			</handler>
 		</dateField>
+		
+		<labelText name="_dateTimeStartLabel" x="220" y="50" labelid="570" fontstyle="bold" /> 
 			
 		<customEdittext name="_timeStart" x="270" 
       					y="50" width="50" regexpType="time" text="08:00" datapath="local:classroot.eventDS:/start">
@@ -239,13 +241,16 @@
       	<!-- End Date / Time -->			
 		<labelText name="_dateTimeEndLabel" x="326" y="50" labelid="571" fontstyle="bold" />  
 			
+		<!-- 
+		 we currently do not support multi date events
 		<dateField name="_dateEnd" y="50" x="372" width="104" datapath="local:classroot.eventDS:/end">
 			<handler name="ondata" args="d">
 				this.setAttribute("text",parseDateStringFromXmlString(d.childNodes[0].data));
 			</handler>
 		</dateField>
+		 -->
 			
-		<customEdittext name="_timeEnd" x="496" 
+		<customEdittext name="_timeEnd" x="376" 
       					y="50" width="50" regexpType="time" text="10:00" datapath="local:classroot.eventDS:/end">
       		<handler name="ondata" args="d">
 				this.setAttribute("text",parseTimeStringFromXmlString(d.childNodes[0].data));

@@ -22,15 +22,117 @@
 
 	<class name="dragEvent" extends="view">
 	
+		<!---
+			Refrence to the current moving event in the calendar
+		 -->
 		<attribute name="eventRef" value="null" />
 		
+		<!---
+			@keywords private
+		 -->
 		<attribute name="timeText" value="" type="string" />
+		
+		<!---
+			@keywords private
+		 -->
 		<attribute name="titleText" value="" type="string" />
 		
 		<!---
 			If false the time part is hidden
 		 -->
 		<attribute name="showTime" value="true" type="boolean" />
+		
+		<!---
+			Move x,y to right position in dayview
+		 -->
+		<attribute name="fixToPositionInCalendar" value="true" type="boolean" />
+		
+		<!---
+			Reference to current grid view classroot
+		 -->
+		<attribute name="calendarViewRef" value="null" />
+		
+		<!---
+			if true only the date part is updated not the time part of the calendar event
+			when moving to another date
+		 -->
+		<attribute name="isMonthMove" value="false" type="boolean" />
+		
+		<!---
+			@keywords private
+		 -->
+		<attribute name="updateObj" value="null" />
+		
+		<!---
+			@keywords private
+		 -->
+		<attribute name="baseUrl" value="" type="string" />
+		
+		<handler name="onx" args="x">
+			if (this.fixToPositionInCalendar) {
+				this.fixToPosition();
+			}
+		</handler>
+		
+		<handler name="ony" args="y">
+			if (this.fixToPositionInCalendar) {
+				this.fixToPosition();
+			}
+		</handler>
+		
+		<!-- 
+			Scroll calendar day view to position if necessary (based on mouse position, not calendar event position!).
+			This makes only sense if fixToPositionInCalendar is true (fixToPositionInCalendar only true if we are in 
+			a day or week view where there is actually something to scroll).
+		 -->
+		<handler name="onidle" reference="LzIdleService.LzIdle">
+			<![CDATA[
+				if (!this.fixToPositionInCalendar) {
+					return;
+				}
+				var referenceToScrollView = parent.parent.parent._grid._bgArea;
+				//Scroll calendar day view to position if necessary
+				var tParentScrolly = referenceToScrollView.getMouse("y");
+				if (tParentScrolly < 0) {
+					if (referenceToScrollView._scrollArea.y < 0) {
+						if (referenceToScrollView._scrollArea.y+20 < 0) {
+							referenceToScrollView._scrollArea.setAttribute("y",referenceToScrollView._scrollArea.y+20);
+						} else {
+							referenceToScrollView._scrollArea.setAttribute("y",0);
+						}
+					}
+				} else if (referenceToScrollView.height < tParentScrolly) {
+					var maxScroll = referenceToScrollView.height - referenceToScrollView._scrollArea.height;
+					if (referenceToScrollView._scrollArea.y > maxScroll) {
+						if (referenceToScrollView._scrollArea.y-20 > maxScroll) {
+							referenceToScrollView._scrollArea.setAttribute("y",referenceToScrollView._scrollArea.y-20);
+						} else {
+							referenceToScrollView._scrollArea.setAttribute("y",maxScroll);
+						}
+					} else {
+						referenceToScrollView._scrollArea.setAttribute("y",maxScroll);
+					}
+				}
+			]]>
+		</handler>
+		
+		<method name="fixToPosition">
+			<![CDATA[
+				//if ($debug) Debug.write("fixToPosition 1 ", this.calendarViewRef);
+				//if ($debug) Debug.write("fixToPosition 2 ", this.calendarViewRef.currentOverTrackView);
+				var currentOverTrackView = this.calendarViewRef.currentOverTrackView;
+				if (currentOverTrackView == null) {
+					return;
+				}
+				if (this.y < 0) {
+					this.setAttribute("y",0);
+				} else if (this.y + this.height > parent.height) {
+					this.setAttribute("y",parent.height-this.height);
+				} 
+				this.setAttribute("x",currentOverTrackView.x);
+			
+			]]>
+		</method>
 		
 		<handler name="onmouseup" reference="lz.GlobalMouse" args="who">
 	        this.close();
@@ -52,12 +154,95 @@
 	    </method>
 		
 		<method name="close">
-			this.eventRef.closeDragItem();
-			lz.Cursor.showHandCursor(true);
-			lz.ModeManager.globalUnlockMouseEvents();
-			this.dragger.remove();
-			this.destroy();
+			<![CDATA[
+				var appointmentId = this.eventRef.closeDragItem();
+				this.dragger.remove();
+				
+				if (appointmentId > 0) {
+					this.updateObj = new Object();
+					
+					//Point URL to actual File
+		            var urlObject =  lz.Browser.getBaseURL();
+					//If Port is Null or undefinied use port 80
+					if (urlObject.port!=null && urlObject.port!=undefined){
+						var port = urlObject.port;
+						
+						if (port != 80) {
+							this.baseUrl = urlObject.protocol+"://"+urlObject.host+":"+port+urlObject.path;
+						} else {
+							this.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path;
+						}
+					} else {
+						this.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path;
+					}
+					
+					var currentOverTrackView = this.calendarViewRef.currentOverTrackView;
+					if (currentOverTrackView == null) {
+						if ($debug) Debug.warn("currentOverTrackView is NULL, error in view reference!");
+						return;
+					}
+					
+					updateObj.appointmentId = appointmentId;
+					updateObj.appointmentstart = new Date(this.calendarViewRef.currentOverTrackView.dayDate.getTime());
+					
+					//If it is only drag and dropped in month grid we only change dates no times
+					if (this.isMonthMove) {
+						var tDateStart = parseDateTimeFromXmlString(this.eventRef.datapath.xpathQuery('start/text()'));
+						updateObj.appointmentstart.setHours(tDateStart.getHours());
+						updateObj.appointmentstart.setMinutes(tDateStart.getMinutes());
+					} else {
+						
+						var heightInMinutes = parent.height/1440;
+						var tPixels30Minutes = heightInMinutes*30;
+						var startRoundBy30Minutes = Math.round(this.y/tPixels30Minutes)*tPixels30Minutes;
+						
+						updateObj.appointmentstart.setHours(Math.floor((startRoundBy30Minutes/heightInMinutes)/60));
+						updateObj.appointmentstart.setMinutes((startRoundBy30Minutes/heightInMinutes)-(updateObj.appointmentstart.getHours()*60));
+					}
+					
+					updateObj.appointmentend = new Date(this.calendarViewRef.currentOverTrackView.dayDate.getTime());
+					
+					//If it is only drag and dropped in month grid we only change dates no times
+					if (this.isMonthMove) {
+						var tDateEnd = parseDateTimeFromXmlString(this.eventRef.datapath.xpathQuery('end/text()'));
+						updateObj.appointmentend.setHours(tDateEnd.getHours());
+						updateObj.appointmentend.setMinutes(tDateEnd.getMinutes());
+					} else {
+					
+						updateObj.appointmentend.setHours(Math.floor(((startRoundBy30Minutes+this.height)/heightInMinutes)/60));
+						updateObj.appointmentend.setMinutes(((startRoundBy30Minutes+this.height)/heightInMinutes)-(updateObj.appointmentend.getHours()*60));
+					}
+					
+					if ($debug) Debug.write("New appointmentstart ",updateObj.appointmentstart);
+					if ($debug) Debug.write("New appointmentend ",updateObj.appointmentend);
+					
+					this.updateAppointmentTimeOnly.doCall();
+				} else {
+					lz.Cursor.showHandCursor(true);
+					lz.ModeManager.globalUnlockMouseEvents();
+					this.destroy();
+				}
+			]]>
 		</method>
+		
+		<netRemoteCallHib name="updateAppointmentTimeOnly" funcname="calendarservice.updateAppointmentTimeOnly" 
+							  remotecontext="$once{ canvas.thishib }" >     
+			<netparam><method name="getValue">return canvas.sessionId; </method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.appointmentId;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.appointmentstart;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.updateObj.appointmentend;</method></netparam>
+			<netparam><method name="getValue">return parent.parent.baseUrl;</method></netparam>
+			<netparam><method name="getValue">return hib.userlang;</method></netparam>
+	    	<handler name="ondata" args="value">
+	    		<![CDATA[
+		    		if ($debug) Debug.write("updateAppointmentTimeOnly ",value);
+		    		lz.Cursor.showHandCursor(true);
+					lz.ModeManager.globalUnlockMouseEvents();
+		    		parent.calendarViewRef.parent.parent.reload();
+					parent.destroy();
+	    		 ]]>
+	    	</handler>
+	    </netRemoteCallHib> 
 		
 		<dragstate name="dragger"/>
 		

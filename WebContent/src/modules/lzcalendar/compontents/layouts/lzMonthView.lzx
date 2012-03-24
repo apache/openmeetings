@@ -139,24 +139,26 @@
 										this.mouseUpDetect = true;
 										var appointmentId = this.datapath.xpathQuery('appointmentId/text()');
 										if ($debug) Debug.write("click ",appointmentId);
-										parent.parent.parent.parent.parent.parent.selectCalendarEvent(this);
-										//this.setAttribute("text",parseTimeStringFromXmlString(d.childNodes[0].data));
+										classroot.parent.selectCalendarEvent(this);
 									}
 								]]>
 							</handler>
 							
 							<method name="closeDragItem">
-								lz.Track.deactivate(parent.parent.parent.parent.parent.monthViewTrackGroup);
-								parent.parent.parent.parent.parent.currentDragEvent = null;
+								var appointmentId = -1;
+								lz.Track.deactivate(classroot.monthViewTrackGroup);
 								
-								if (parent.parent.parent.parent.parent.currentOverTrackView != parent.parent.parent) {
-									var appointmentId = this.datapath.xpathQuery('appointmentId/text()');
-									if ($debug) Debug.write("Move to new Date appointmentId ",appointmentId);
+								if (classroot.currentOverTrackView == null 
+													|| classroot.currentOverTrackView == parent.parent.parent) {
+									if ($debug) Debug.write("Move to same Date or outside calendar");
+									this.setAttribute("visibility","visible");	
 								} else {
-									if ($debug) Debug.write("Move to same Date");
+									appointmentId = Number(this.datapath.xpathQuery('appointmentId/text()'));
+									if ($debug) Debug.write("Move to new Date appointmentId ",appointmentId);
 								}
 								
-								this.setAttribute("visibility","visible");	
+								classroot.currentDragEvent = null;
+								return appointmentId;
 							</method>
 							
 							<method name="checkIfDragging" args="tRef">
@@ -171,7 +173,7 @@
 										this.startedToDrag = true;
 										var startx = canvas.getMouse("x")-(this.width/2);
 										var starty = canvas.getMouse("y")-(this.height/2);
-										parent.parent.parent.parent.parent.currentDragEvent = new lz.dragEvent(canvas,{
+										classroot.currentDragEvent = new lz.dragEvent(canvas,{
 													x:startx,
 													startx:startx,
 													y:starty,
@@ -181,10 +183,13 @@
 													width:this.width,
 													eventRef:this,
 													timeText:this._time.text,
-													titleText:this._title.text											
+													titleText:this._title.text,
+													calendarViewRef:classroot,
+													fixToPositionInCalendar:false,
+													isMonthMove:true										
 												});
 												
-										lz.Track.activate(parent.parent.parent.parent.parent.monthViewTrackGroup);
+										lz.Track.activate(classroot.monthViewTrackGroup);
 										this.setAttribute("visibility","hidden");	
 									}
 								]]>
