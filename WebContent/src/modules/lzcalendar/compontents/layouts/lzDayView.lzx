@@ -255,11 +255,18 @@
 										
 										var heightInMinutes = parent.height/1440;
 										var startMin = (startDate.getHours() * 60 ) + startDate.getMinutes();
-										var endMin = (endDate.getHours() * 60 ) + endDate.getMinutes();
-										
 										this.setAttribute("y",Math.round(heightInMinutes*startMin));
-										this.setAttribute("height",Math.round((endMin - startMin)*heightInMinutes));
 										
+										if (endDate.getFullYear() > startDate.getFullYear() 
+												|| endDate.getMonth() > startDate.getMonth()
+													|| endDate.getDate() > startDate.getDate()) {
+											//If the end date is next year or month or day we need
+											//to mark the rest of the day with the event
+											this.setAttribute("height",parent.height-this.y);
+										} else {
+											var endMin = (endDate.getHours() * 60 ) + endDate.getMinutes();
+											this.setAttribute("height",Math.round((endMin - startMin)*heightInMinutes));
+										}
 										if ($debug) Debug.write("y,height -- ",this.y,this.height);
 									]]>
 								</handler>

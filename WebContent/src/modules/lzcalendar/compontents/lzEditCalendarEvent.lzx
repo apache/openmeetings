@@ -117,6 +117,11 @@
 				updateObj.appointmentend.setHours(hours);
 				updateObj.appointmentend.setMinutes(mins);
 				
+				//if we choose 00:00 we actually mean the next day at noon
+				if (hours == 0) {
+					tEnd.setTime(tEnd.getTime()+86400000);
+				}
+				
                 updateObj.appointmentName = this._title.getText();
                 updateObj.appointmentLocation = this._location.getText();
                 updateObj.appointmentDescription = this._descr.getText();
