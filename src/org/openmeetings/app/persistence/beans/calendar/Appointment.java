@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -142,8 +143,8 @@ public class Appointment implements Serializable {
 		return appointmentStarttime;
 	}
 
-	public Calendar appointmentStartAsCalendar() {
-		Calendar cal = Calendar.getInstance();
+	public Calendar appointmentStartAsCalendar(TimeZone timeZone) {
+		Calendar cal = Calendar.getInstance(timeZone);
 		cal.setTime(appointmentStarttime);
 		return cal;
 	}
@@ -156,8 +157,8 @@ public class Appointment implements Serializable {
 		return appointmentEndtime;
 	}
 
-	public Calendar appointmentEndAsCalendar() {
-		Calendar cal = Calendar.getInstance();
+	public Calendar appointmentEndAsCalendar(TimeZone timeZone) {
+		Calendar cal = Calendar.getInstance(timeZone);
 		cal.setTime(appointmentEndtime);
 		return cal;
 	}

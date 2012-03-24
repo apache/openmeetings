@@ -32,6 +32,11 @@
 	<attribute name="tStartDate" value="null" />
 	<attribute name="tEndDate" value="null" />
 	
+	<!---
+		The user id the calendar will load the events for
+	 -->
+	<attribute name="requestUserId" value="$once{ canvas.user_id }" type="number" />
+	
 	<handler name="oninit">
 		<![CDATA[
 			_mainScrollBar.setAttribute("visibility","hidden");
@@ -101,9 +106,12 @@
 		
 			var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport
 	                       +canvas.httpRootKey+'services/CalendarService/getAppointmentsByWeekCalendar?'
-	                       //+'SID='+canvas.sessionId
+	                       +'SID='+canvas.sessionId
 	                       +'&firstDayInWeek='+canvas.firstdayinweek
-	                       +'&startDate='+this.currentDate.getFullYear()+"-"+tMonth+"-"+tDay;
+	                       +'&startDate='+this.currentDate.getFullYear()+"-"+tMonth+"-"+tDay
+	                       +'&requestUserId=' + requestUserId
+	                       +'&omTimeZoneId=' + canvas.timeZoneId
+	                       +'&javaTimeZoneName=';
 	       
 	        this.getAppointmentsByWeekCalendar.setAttribute("src",downloadurl);
 	        if ($debug) Debug.write("getAppointmentsByWeekCalendar doRequest 1 ",downloadurl);

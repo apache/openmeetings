@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.apache.axis2.AxisFault;
 import org.openmeetings.app.OpenmeetingsVariables;
@@ -44,6 +45,7 @@ import org.openmeetings.app.persistence.beans.calendar.AppointmentReminderTyps;
 import org.openmeetings.app.persistence.beans.rooms.RoomTypes;
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.user.Users;
+import org.openmeetings.utils.math.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +78,8 @@ public class CalendarWebService {
 	private AppointmentCategoryDaoImpl appointmentCategoryDaoImpl;
 	@Autowired
 	private AppointmentReminderTypDaoImpl appointmentReminderTypDaoImpl;
+	@Autowired
+	private TimezoneUtil timezoneUtil;
 
 	/**
 	 * Load appointments by a start / end range for the current SID
@@ -419,8 +423,7 @@ public class CalendarWebService {
 			Calendar appointmentend, Boolean isDaily, Boolean isWeekly,
 			Boolean isMonthly, Boolean isYearly, Long categoryId, Long remind,
 			String[] mmClient, Long roomType, String baseurl, Long languageId,
-			Boolean isPasswordProtected, String password)
-			throws AxisFault {
+			Boolean isPasswordProtected, String password) throws AxisFault {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
@@ -478,8 +481,9 @@ public class CalendarWebService {
 					appointmentName, appointmentDescription, appointmentstart
 							.getTime(), appointmentend.getTime(), isDaily,
 					isWeekly, isMonthly, isYearly, categoryId, remind, newList,
-					users_id, baseurl, languageId, isPasswordProtected, password, user
-							.getOmTimeZone().getIcal(), appointmentLocation);
+					users_id, baseurl, languageId, isPasswordProtected,
+					password, user.getOmTimeZone().getIcal(),
+					appointmentLocation);
 
 		} catch (Exception err) {
 			log.error("[updateAppointment]", err);
@@ -648,99 +652,151 @@ public class CalendarWebService {
 		return null;
 	}
 
-	public static void main(String... args) {
+	/**
+	 * Get the appointments (calendar events) for the given requestUserId <br/>
+	 * The TimeZone can be either given by the Id of the timezone in the table
+	 * "om_timezone" with the param timeZoneIdA <br/>
+	 * Or with the java name of the TimeZone in the param javaTimeZoneName
+	 * 
+	 * @param SID
+	 *            a valid user id
+	 * @param firstDayInWeek
+	 *            the first dayin week, 0=Sunday, 1=Monday, ...
+	 * @param startDate
+	 *            the date it should start with
+	 * @param requestUserId
+	 *            the user id the calendar events are requested, if it is not
+	 *            the user id of the SID then the SID's user needs to have the
+	 *            right to watch those events
+	 * @param omTimeZoneId
+	 *            the id of the timezone (alternativly use javaTimeZoneName)
+	 * @param javaTimeZoneName
+	 *            the name of the java time zone, see <a
+	 *            href="http://en.wikipedia.org/wiki/Time_zone#Java"
+	 *            target="_blank"
+	 *            >http://en.wikipedia.org/wiki/Time_zone#Java</a>
+	 * @return
+	 * @throws AxisFault
+	 */
+	public List<Week> getAppointmentsByWeekCalendar(String SID,
+			int firstDayInWeek, Date startDate, Long requestUserId,
+			Long omTimeZoneId, String javaTimeZoneName) throws AxisFault {
+		try {
 
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.MONTH, 1);
+			Long users_id = sessionManagement.checkSession(SID);
+			Long user_level = userManagement.getUserLevelByID(users_id);
+			if (authLevelManagement.checkUserLevel(user_level)) {
 
-		new CalendarWebService()
-				.getAppointmentsByWeekCalendar(1, cal.getTime());
+				TimeZone timezone = null;
 
-	}
-
-	public List<Week> getAppointmentsByWeekCalendar(int firstDayInWeek,
-			Date startDate) {
-
-		// Calculate the first day of a calendar based on the first showing day
-		// of the week
-		List<Week> weeks = new ArrayList<Week>(6);
-		Calendar currentDate = Calendar.getInstance();
-		currentDate.setTime(startDate);
-		currentDate.set(Calendar.DATE, 1);
-
-		int currentWeekDay = currentDate.get(Calendar.DAY_OF_WEEK);
-
-		Calendar startWeekDay = Calendar.getInstance();
-
-		log.debug("currentWeekDay -- " + currentWeekDay);
-		log.debug("firstDayInWeek -- " + firstDayInWeek);
-
-		if (currentWeekDay == firstDayInWeek) {
-			
-			log.debug("ARE equal currentWeekDay -- ");
-			
-			startWeekDay.setTime(currentDate.getTime());
-			
-		} else {
-			
-			startWeekDay.setTimeInMillis((currentDate.getTimeInMillis() - ((currentWeekDay - 1) * 86400000)));
-
-			if (currentWeekDay > firstDayInWeek) {
-				startWeekDay.setTimeInMillis(startWeekDay.getTimeInMillis()
-						+ (firstDayInWeek * 86400000));
-			} else {
-				startWeekDay.setTimeInMillis(startWeekDay.getTimeInMillis()
-						- (firstDayInWeek * 86400000));
-			}
-
-		}
-
-		Calendar calStart = Calendar.getInstance();
-		calStart.setTime(startWeekDay.getTime());
-
-		Calendar calEnd = Calendar.getInstance();
-		// every month page in our calendar shows 42 days
-		calEnd.setTime(new Date(startWeekDay.getTime().getTime()
-				+ (42L * 86400000L)));
-
-		List<Appointment> appointments = appointmentDao.getAppointmentsByRange(
-				1L, calStart.getTime(), calEnd.getTime());
-
-		log.debug("startWeekDay 2" + startWeekDay.getTime());
-		log.debug("startWeekDay Number of appointments " + appointments.size());
-
-		long z = 0;
-
-		for (int k = 0; k < 6; k++) { // 6 weeks per monthly summary
-
-			Week week = new Week();
-
-			for (int i = 0; i < 7; i++) { // 7 days a week
-
-				Calendar tCal = Calendar.getInstance();
-				tCal.setTimeInMillis(startWeekDay.getTimeInMillis()
-						+ (z * 86400000L));
-
-				Day day = new Day(tCal.getTime());
-
-				for (Appointment appointment : appointments) {
-					if (appointment.appointmentStartAsCalendar().get(
-							Calendar.MONTH) == tCal.get(Calendar.MONTH)
-							&& appointment.appointmentStartAsCalendar().get(
-									Calendar.DATE) == tCal.get(Calendar.DATE)) {
-						day.getAppointments().add(
-								new AppointmentDTO(appointment));
+				if (javaTimeZoneName != null && !javaTimeZoneName.isEmpty()) {
+					timezone = TimeZone.getTimeZone(javaTimeZoneName);
+					if (timezone == null) {
+						throw new Exception("Invalid javaTimeZoneName given");
 					}
 				}
 
-				week.getDays().add(day);
-				z++;
+				if (omTimeZoneId > 0) {
+					timezone = timezoneUtil
+							.getTimezoneByOmTimeZoneId(omTimeZoneId);
+				}
+
+				// Calculate the first day of a calendar based on the first
+				// showing day of the week
+				List<Week> weeks = new ArrayList<Week>(6);
+				Calendar currentDate = Calendar.getInstance();
+				currentDate.setTime(startDate);
+				currentDate.set(Calendar.DATE, 1);
+
+				int currentWeekDay = currentDate.get(Calendar.DAY_OF_WEEK);
+
+				Calendar startWeekDay = Calendar.getInstance();
+
+				log.debug("currentWeekDay -- " + currentWeekDay);
+				log.debug("firstDayInWeek -- " + firstDayInWeek);
+
+				if (currentWeekDay == firstDayInWeek) {
+
+					log.debug("ARE equal currentWeekDay -- ");
+
+					startWeekDay.setTime(currentDate.getTime());
+
+				} else {
+
+					startWeekDay
+							.setTimeInMillis((currentDate.getTimeInMillis() - ((currentWeekDay - 1) * 86400000)));
+
+					if (currentWeekDay > firstDayInWeek) {
+						startWeekDay.setTimeInMillis(startWeekDay
+								.getTimeInMillis()
+								+ (firstDayInWeek * 86400000));
+					} else {
+						startWeekDay.setTimeInMillis(startWeekDay
+								.getTimeInMillis()
+								- (firstDayInWeek * 86400000));
+					}
+
+				}
+
+				Calendar calStart = Calendar.getInstance(timezone);
+				calStart.setTime(startWeekDay.getTime());
+
+				Calendar calEnd = Calendar.getInstance(timezone);
+				// every month page in our calendar shows 42 days
+				calEnd.setTime(new Date(startWeekDay.getTime().getTime()
+						+ (42L * 86400000L)));
+
+				List<Appointment> appointments = appointmentDao
+						.getAppointmentsByRange(requestUserId,
+								calStart.getTime(), calEnd.getTime());
+
+				log.debug("startWeekDay 2" + startWeekDay.getTime());
+				log.debug("startWeekDay Number of appointments "
+						+ appointments.size());
+
+				long z = 0;
+
+				for (int k = 0; k < 6; k++) { // 6 weeks per monthly summary
+
+					Week week = new Week();
+
+					for (int i = 0; i < 7; i++) { // 7 days a week
+
+						Calendar tCal = Calendar.getInstance();
+						tCal.setTimeInMillis(startWeekDay.getTimeInMillis()
+								+ (z * 86400000L));
+
+						Day day = new Day(tCal.getTime());
+
+						for (Appointment appointment : appointments) {
+							if (appointment
+									.appointmentStartAsCalendar(timezone).get(
+											Calendar.MONTH) == tCal
+									.get(Calendar.MONTH)
+									&& appointment.appointmentStartAsCalendar(
+											timezone).get(Calendar.DATE) == tCal
+											.get(Calendar.DATE)) {
+								day.getAppointments().add(
+										new AppointmentDTO(appointment,
+												timezone));
+							}
+						}
+
+						week.getDays().add(day);
+						z++;
+					}
+
+					weeks.add(week);
+				}
+
+				return weeks;
+
 			}
 
-			weeks.add(week);
+		} catch (Exception err) {
+			log.error("[getAppointmentReminderTypList]", err);
 		}
-
-		return weeks;
+		return null;
 	}
 
 }

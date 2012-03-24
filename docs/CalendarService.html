@@ -100,12 +100,11 @@ limitations under the License.
                 <div class="navigation_comment"><i >Get all reminder types for calendar events</i></div>
                 </div>
                                                <div>
-                <a href="#main"><b>main</b></a><br/>
-                <div class="navigation_comment"><i ></i></div>
-                </div>
-                                               <div>
                 <a href="#getAppointmentsByWeekCalendar"><b>getAppointmentsByWeekCalendar</b></a><br/>
-                <div class="navigation_comment"><i ></i></div>
+                <div class="navigation_comment"><i >Get the appointments (calendar events) for the given requestUserId <br/>
+ The TimeZone can be either given by the Id of the timezone in the table
+ "om_timezone" with the param timeZoneIdA <br/>
+ Or with the java name of the TimeZone in the param javaTimeZoneName</i></div>
                 </div>
                            </div>
 	   
@@ -1152,57 +1151,102 @@ limitations under the License.
     	   				    		      <div class="method">
 		        <div class="method_header">
 		        <div style="margin-left:10px">
-    			<a name="main" ><b>main</b></a>
-    			</div>
-    			</div>
-    			
-    			Method: <i>main (
-    			    			    			       			   String args
-    			       			    			)
-    			</i><br/>
-    			<p>
-    			  
-    			</p>
-    			<p>
-                  Return Type: void
-                </p>
-    			<p>Params:</p>
-    			    				<b>Warning:</b><i> Params in this method do not seem to be correctly documentated</i>
-    				<br/><br/>
-    			    			
-    			    				<i>No Params</i>
-    			    			<br/>
-    			REST Sample Call/URL:<br/>
-    			    			    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/main?args=VALUE">http://localhost:5080/openmeetings/services/CalendarService/main?args=VALUE</a>
-    			</a>
-    		  </div>
-    	   				    		      <div class="method">
-		        <div class="method_header">
-		        <div style="margin-left:10px">
     			<a name="getAppointmentsByWeekCalendar" ><b>getAppointmentsByWeekCalendar</b></a>
     			</div>
     			</div>
     			
     			Method: <i>getAppointmentsByWeekCalendar (
-    			    			    			       			   int firstDayInWeek
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   int firstDayInWeek
     			       			    			       			     , 
     			       			   Date startDate
+    			       			    			       			     , 
+    			       			   Long requestUserId
+    			       			    			       			     , 
+    			       			   Long omTimeZoneId
+    			       			    			       			     , 
+    			       			   String javaTimeZoneName
     			       			    			)
     			</i><br/>
     			<p>
-    			  
+    			  Get the appointments (calendar events) for the given requestUserId <br/>
+ The TimeZone can be either given by the Id of the timezone in the table
+ "om_timezone" with the param timeZoneIdA <br/>
+ Or with the java name of the TimeZone in the param javaTimeZoneName
     			</p>
     			<p>
                   Return Type: java.util.List
                 </p>
     			<p>Params:</p>
-    			    				<b>Warning:</b><i> Params in this method do not seem to be correctly documentated</i>
-    				<br/><br/>
     			    			
-    			    				<i>No Params</i>
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">a valid user id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		int
+	                     		                     </td>
+	                     <td valign="top">firstDayInWeek</td>
+	                     <td valign="top">the first dayin week, 0=Sunday, 1=Monday, ...</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Date
+	                     		                     </td>
+	                     <td valign="top">startDate</td>
+	                     <td valign="top">the date it should start with</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">requestUserId</td>
+	                     <td valign="top">the user id the calendar events are requested, if it is not
+            the user id of the SID then the SID's user needs to have the
+            right to watch those events</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">omTimeZoneId</td>
+	                     <td valign="top">the id of the timezone (alternativly use javaTimeZoneName)</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">javaTimeZoneName</td>
+	                     <td valign="top">the name of the java time zone, see <a
+            href="http://en.wikipedia.org/wiki/Time_zone#Java"
+            target="_blank"
+            >http://en.wikipedia.org/wiki/Time_zone#Java</a></td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
     			    			<br/>
     			REST Sample Call/URL:<br/>
-    			    			    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/getAppointmentsByWeekCalendar?firstDayInWeek=VALUE&startDate=VALUE">http://localhost:5080/openmeetings/services/CalendarService/getAppointmentsByWeekCalendar?firstDayInWeek=VALUE&startDate=VALUE</a>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/getAppointmentsByWeekCalendar?SID=VALUE&firstDayInWeek=VALUE&startDate=VALUE&requestUserId=VALUE&omTimeZoneId=VALUE&javaTimeZoneName=VALUE">http://localhost:5080/openmeetings/services/CalendarService/getAppointmentsByWeekCalendar?SID=VALUE&firstDayInWeek=VALUE&startDate=VALUE&requestUserId=VALUE&omTimeZoneId=VALUE&javaTimeZoneName=VALUE</a>
     			</a>
     		  </div>
     	   			

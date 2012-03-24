@@ -144,10 +144,12 @@ public class CalendarWebServiceFacade {
 		return getCalendarServiceProxy().getAppointmentReminderTypList(SID);
 	}
 
-	public List<Week> getAppointmentsByWeekCalendar(int firstDayInWeek,
-			Date startDate) throws AxisFault {
-		return getCalendarServiceProxy().getAppointmentsByWeekCalendar(
-				firstDayInWeek, startDate);
+	public List<Week> getAppointmentsByWeekCalendar(String SID,
+			int firstDayInWeek, Date startDate, Long requestUserId,
+			Long omTimeZoneId, String javaTimeZoneName) throws AxisFault {
+		return getCalendarServiceProxy().getAppointmentsByWeekCalendar(SID,
+				firstDayInWeek, startDate, requestUserId, omTimeZoneId,
+				javaTimeZoneName);
 	}
 
 }

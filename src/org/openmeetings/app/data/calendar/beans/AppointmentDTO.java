@@ -3,6 +3,7 @@ package org.openmeetings.app.data.calendar.beans;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.openmeetings.app.persistence.beans.calendar.Appointment;
 import org.openmeetings.app.persistence.beans.calendar.MeetingMember;
@@ -22,7 +23,7 @@ public class AppointmentDTO {
 	private Boolean isPasswordProtected;
 	private List<MeetingMemberDTO> meetingMember = new ArrayList<MeetingMemberDTO>();
 
-	public AppointmentDTO(Appointment appointment) {
+	public AppointmentDTO(Appointment appointment, TimeZone timezone) {
 		appointmentId = appointment.getAppointmentId();
 		categoryId = (appointment.getAppointmentCategory() != null) ? appointment
 				.getAppointmentCategory().getCategoryId() : null;
@@ -36,12 +37,8 @@ public class AppointmentDTO {
 		title = appointment.getAppointmentName();
 		location = appointment.getAppointmentLocation();
 		comment = appointment.getAppointmentDescription();
-		Calendar calStart = Calendar.getInstance();
-		calStart.setTime(appointment.getAppointmentStarttime());
-		start = calStart;
-		Calendar calEnd = Calendar.getInstance();
-		calEnd.setTime(appointment.getAppointmentEndtime());
-		end = calEnd;
+		start = appointment.appointmentStartAsCalendar(timezone);
+		end = appointment.appointmentEndAsCalendar(timezone);
 		isPasswordProtected = appointment.getIsPasswordProtected();
 		for (MeetingMember meetingMemberItem : appointment.getMeetingMember()) {
 			meetingMember.add(new MeetingMemberDTO(meetingMemberItem));
