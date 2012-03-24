@@ -289,14 +289,9 @@
 										var appointmentId = -1;
 										lz.Track.deactivate(classroot.dayViewTrackGroup);
 										
-										if (classroot.currentOverTrackView == null 
-													|| classroot.currentOverTrackView == parent.parent) {
-											if ($debug) Debug.write("Move to same Date or outside calendar");
-											this.setAttribute("visibility","visible");	
-										} else {
-											appointmentId = Number(this.datapath.xpathQuery('appointmentId/text()'));
-											if ($debug) Debug.write("Move to new Date appointmentId ",appointmentId);
-										}
+										//Fixme: Prevent saving the object if it is dragged 
+										//at the exact same position as it was before
+										appointmentId = Number(this.datapath.xpathQuery('appointmentId/text()'));
 										
 										classroot.currentDragEvent = null;
 										return appointmentId;
@@ -312,13 +307,16 @@
 													&& this.rememberY == this.getMouse("y")) {
 											lz.Timer.addTimer( new LzDelegate( this, "checkIfDragging" ), 250 );			
 										} else {
+											//we need to move the object by the y position that the mouse
+											//was moved since mousedown
+											var tNewY = this.y + (this.getMouse("y") -  this.rememberY);
+										
 											this.startedToDrag = true;
-											classroot.currentOverTrackView = null;
 											classroot.currentOverTrackView = parent.parent;
 											classroot.currentDragEvent = new lz.dragEvent(classroot.dragAndDropArea._content,{
 														x:parent.parent.parent.x,
 														startx:parent.parent.parent.x,
-														y:this.y,
+														y:tNewY,
 														starty:this.y,
 														bgcolor:this.bgcolor,
 														height:this.height,

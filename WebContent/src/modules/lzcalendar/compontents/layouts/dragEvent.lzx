@@ -124,11 +124,17 @@
 				if (currentOverTrackView == null) {
 					return;
 				}
-				if (this.y < 0) {
+				
+				var heightInMinutes = parent.height/1440;
+				var tPixels30Minutes = heightInMinutes*30;
+				var tNewY = Math.round(this.y/tPixels30Minutes)*tPixels30Minutes;
+				if (tNewY < 0) {
 					this.setAttribute("y",0);
-				} else if (this.y + this.height > parent.height) {
+				} else if (tNewY + this.height > parent.height) {
 					this.setAttribute("y",parent.height-this.height);
-				} 
+				} else {
+					this.setAttribute("y",tNewY);
+				}
 				this.setAttribute("x",currentOverTrackView.x);
 			
 			]]>
