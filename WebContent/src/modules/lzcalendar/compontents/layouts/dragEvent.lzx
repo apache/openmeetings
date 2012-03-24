@@ -215,8 +215,21 @@
 						updateObj.appointmentend.setMinutes(tDateEnd.getMinutes());
 					} else {
 					
-						updateObj.appointmentend.setHours(Math.floor(((startRoundBy30Minutes+this.height)/heightInMinutes)/60));
-						updateObj.appointmentend.setMinutes(((startRoundBy30Minutes+this.height)/heightInMinutes)-(updateObj.appointmentend.getHours()*60));
+						if ($debug) Debug.write("End Hours",Math.floor(((startRoundBy30Minutes+this.height)/heightInMinutes)/60));
+						var endHours = Math.floor(((startRoundBy30Minutes+this.height)/heightInMinutes)/60);
+						
+						if (endHours >= 24) {
+							 
+							updateObj.appointmentend.setHours(0);
+							updateObj.appointmentend.setMinutes(0);
+							updateObj.appointmentend.setTime(updateObj.appointmentend.getTime()+86400000);
+							
+						} else {
+							if ($debug) Debug.write("End Minutes",((startRoundBy30Minutes+this.height)/heightInMinutes)-(updateObj.appointmentend.getHours()*60));
+							updateObj.appointmentend.setMinutes(((startRoundBy30Minutes+this.height)/heightInMinutes)-(updateObj.appointmentend.getHours()*60));
+							updateObj.appointmentend.setHours(endHours);
+						}
+						
 					}
 					
 					if ($debug) Debug.write("New appointmentstart ",updateObj.appointmentstart);
