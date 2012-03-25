@@ -43,6 +43,10 @@
 		<attribute name="isConnectedEvent" value="false" type="boolean" />
 		
 		<handler name="oninit">
+			if (this.lzCalendarRef.requestUserId != canvas.user_id) {
+				this._saveEvent.setAttribute("visibility","hidden");
+				this._deleteEvent.setAttribute("visibility","hidden");
+			}
 			this.getAppointmentReminderTypList.setData(this.remindertypes.data);
 		</handler>
 		    

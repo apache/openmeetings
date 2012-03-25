@@ -165,6 +165,16 @@
 				this.dragger.remove();
 				
 				if (appointmentId > 0) {
+				
+					if (this.calendarViewRef.parent.parent.requestUserId != canvas.user_id) {
+						new lz.labelerrorPopup(canvas,{errorlabelid:1278});
+						lz.Cursor.showHandCursor(true);
+						lz.ModeManager.globalUnlockMouseEvents();
+						this.eventRef.setAttribute("visibility","visible");
+						this.destroy();
+						return;
+					}
+				
 					this.updateObj = new Object();
 					
 					//Point URL to actual File

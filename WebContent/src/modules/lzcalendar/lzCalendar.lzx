@@ -109,7 +109,7 @@
 	                       +'SID='+canvas.sessionId
 	                       +'&firstDayInWeek='+canvas.firstdayinweek
 	                       +'&startDate='+this.currentDate.getFullYear()+"-"+tMonth+"-"+tDay
-	                       +'&requestUserId=' + requestUserId
+	                       +'&requestUserId=' + this.requestUserId
 	                       +'&omTimeZoneId=' + canvas.timeZoneId
 	                       +'&javaTimeZoneName=';
 	       
@@ -123,6 +123,10 @@
 		<![CDATA[
 			var dataElement = null;
 			if (appointment == null) {
+				if (this.requestUserId != canvas.user_id) {
+					new lz.labelerrorPopup(canvas,{errorlabelid:1278});
+					return;
+				}
 				appointment = this.generateBlankEvent();
 				dataElement = LzDataElement.valueToElement(appointment);
 			} else {
@@ -253,16 +257,26 @@
 	
 	<labelText labelid="1277" x="24" y="296" multiline="true" width="166" />
 	
-    <miniIcons x="172" y="336" resource="user_contact_calendar_system_undo_rsc" width="16" height="16" 
+    <miniIcons x="172" y="336" resource="calendar_revert_to_own_undo_rsc" width="16" height="16" 
                showhandcursor="true">
         <handler name="onclick">
-            canvas.contactUser = 0;
-            parent.lzCalendarContent.calgrid.reloadAll();
+            parent.requestUserId = canvas.user_id;
+            parent.loadCalendarData();
         </handler>
         <labelTooltip labelid="1279" />
     </miniIcons>
 	
-	<userContactsCalendar name="_userContacts" y="354" x="4" height="${ parent.height - 374 }" width="186" />
+	<userContactsCalendar name="_userContacts" y="354" x="4" height="${ parent.height - 358 }" width="186">
+		<handler name="onselectedItem" args="sel">
+			if ($debug) Debug.write("onselectedItem ",sel.tUserId,sel);
+            parent.requestUserId = sel.tUserId;
+            parent.loadCalendarData();
+        </handler>
+        <handler name="onSaveNewMessage" args="roomBooked">
+        	if ($debug) Debug.write("onSaveNewMessage ",roomBooked);
+        	parent.reload();
+        </handler>
+	</userContactsCalendar>
 	
 	<view name="_lzCalendarTobBar" width="${ parent.width - 204 }" x="204" height="40">
 	

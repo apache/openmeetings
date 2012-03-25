@@ -34,6 +34,8 @@
 	
 	<attribute name="receipents" value="null" />
 	
+	<attribute name="saveRefObj" value="null" />
+	
 	<handler name="oninit">
 		<![CDATA[
 			if (this.userObject != null) {
@@ -134,6 +136,9 @@
             	<![CDATA[
                 	//The onResult-Handler will be called be the rtmpconnection
 			if ($debug) Debug.write("sendInvitationHash : ",value);
+			if (parent.saveRefObj != null) {
+				parent.saveRefObj.saveNotification(parent._bookRoom.getValue());
+			}
 			parent.close();
            ]]>
 		</handler>   

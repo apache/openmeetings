@@ -39,11 +39,13 @@ import org.openmeetings.app.data.calendar.daos.AppointmentReminderTypDaoImpl;
 import org.openmeetings.app.data.calendar.management.AppointmentLogic;
 import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.user.Usermanagement;
+import org.openmeetings.app.data.user.dao.UserContactsDaoImpl;
 import org.openmeetings.app.persistence.beans.calendar.Appointment;
 import org.openmeetings.app.persistence.beans.calendar.AppointmentCategory;
 import org.openmeetings.app.persistence.beans.calendar.AppointmentReminderTyps;
 import org.openmeetings.app.persistence.beans.rooms.RoomTypes;
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
+import org.openmeetings.app.persistence.beans.user.UserContacts;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.utils.math.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
@@ -80,6 +82,8 @@ public class CalendarWebService {
 	private AppointmentReminderTypDaoImpl appointmentReminderTypDaoImpl;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
+	@Autowired
+	private UserContactsDaoImpl userContactsDaoImpl;
 
 	/**
 	 * Load appointments by a start / end range for the current SID
@@ -686,6 +690,16 @@ public class CalendarWebService {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			if (authLevelManagement.checkUserLevel(user_level)) {
+				
+				if (!requestUserId.equals(users_id)) {
+					UserContacts userContacts = userContactsDaoImpl
+							.getUserContactByShareCalendar(requestUserId, true,
+									users_id);
+					if (userContacts == null) {
+						throw new Exception(
+								"Your are not allowed to see this calendar");
+					}
+				}
 
 				TimeZone timezone = null;
 
@@ -795,6 +809,7 @@ public class CalendarWebService {
 
 		} catch (Exception err) {
 			log.error("[getAppointmentReminderTypList]", err);
+			throw new AxisFault(err.getMessage());
 		}
 		return null;
 	}

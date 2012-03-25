@@ -79,13 +79,13 @@ public class UserContactsDaoImpl {
 		return null;
 	}
 	
-	public Integer deleteUserContact(Long userContactId) {
+	public Integer deleteUserContact(Long userContactDeleteId) {
 		try {
 			
-			String hql = "delete from UserContacts where userContactId = :userContactId";
+			String hql = "delete from UserContacts u where u.userContactId = :userContactDeleteId";
 			
 			Query query = em.createQuery(hql);
-	        query.setParameter("userContactId",userContactId);
+			query.setParameter("userContactDeleteId", userContactDeleteId);
 	        int rowCount = query.executeUpdate();
 			
 			return rowCount;			
@@ -98,7 +98,7 @@ public class UserContactsDaoImpl {
 	public Integer deleteAllUserContacts(Long ownerId) {
 		try {
 			
-			String hql = "delete from UserContacts where owner.user_id = :ownerId";
+			String hql = "delete from UserContacts u where u.owner.user_id = :ownerId";
 			
 			Query query = em.createQuery(hql);
 	        query.setParameter("ownerId",ownerId);
@@ -174,6 +174,33 @@ public class UserContactsDaoImpl {
 		return null;
 	}
 	
+	public UserContacts getUserContactByShareCalendar(Long contactId,
+			Boolean shareCalendar, Long userId) {
+		try {
+
+			String hql = "select c from UserContacts c "
+					+ "where c.contact.user_id = :userId "
+					+ "AND c.owner.user_id = :contactId "
+					+ "AND c.shareCalendar = :shareCalendar "
+					+ "AND c.contact.deleted <> 'true'";
+
+			TypedQuery<UserContacts> query = em.createQuery(hql,
+					UserContacts.class);
+			query.setParameter("contactId", contactId);
+			query.setParameter("userId", userId);
+			query.setParameter("shareCalendar", shareCalendar);
+			List<UserContacts> ll = query.getResultList();
+
+			if (ll.size() > 0) {
+				return ll.get(0);
+			}
+
+		} catch (Exception e) {
+			log.error("[getUserContactByShareCalendar]", e);
+		}
+		return null;
+	}
+
 	public List<UserContacts> getContactsByShareCalendar(Long contactId, Boolean shareCalendar) {
 		try {
 			
