@@ -20,7 +20,7 @@
 -->
 <library>
 
-<class name="errorPopup" extends="labelExplorerBox" labelid="204"
+<class name="errorPopupSWF10" extends="labelExplorerBox" labelid="204"
 	docking="true" resizeable="false" closable="true" y="100"
     x="$once{ parent.width/2 - this.width/2 }" height="160" width="324">
 
@@ -53,45 +53,45 @@
 
 </class>
 
-<class name="labelerrorPopup" extends="errorPopup">
+<class name="labelerrorPopupSWF10" extends="errorPopupSWF10">
 
     <attribute name="errorlabelid" type="number" setter="setErrorLabelId(errorlabelid)" />
     <method name="setErrorLabelId" args="errorlabelid" >
         this.errorlabelid = errorlabelid;
         this.setAttribute("error",canvas.getLabelName(this.errorlabelid));
-        if ($debug) Debug.write("labelerrorPopup: ",canvas.getLabelName(this.errorlabelid));
+        if ($debug) Debug.write("labelerrorPopupSWF10: ",canvas.getLabelName(this.errorlabelid));
     </method>
     
 
 </class>
 
-<class name="singletonErrorPopup" extends="errorPopup">
+<class name="singletonErrorPopupSWF10" extends="errorPopupSWF10">
 	<handler name="oninit">
-		lz.singletonErrorPopupHolder.dialogPresent = 1;
-		lz.singletonErrorPopupHolder.dialogObject = this;
+		lz.singletonErrorPopupHolderSWF10.dialogPresent = 1;
+		lz.singletonErrorPopupHolderSWF10.dialogObject = this;
 	</handler>
 	
 	<handler name="ondestroy">
-		lz.singletonErrorPopupHolder.dialogPresent = 0;
-		lz.singletonErrorPopupHolder.dialogObject = null;
+		lz.singletonErrorPopupHolderSWF10.dialogPresent = 0;
+		lz.singletonErrorPopupHolderSWF10.dialogObject = null;
 	</handler>
 </class>
 
-<class name="singletonErrorPopupHolder">
+<class name="singletonErrorPopupHolderSWF10">
 	<attribute name="error" type="string" setter="setError(error)"/>
 	<attribute name="dialogPresent" allocation="class" value="0" />
 	<attribute name="dialogObject" allocation="class" />
 	
 	<method name="setError" args="error">
 	
-		if ( lz.singletonErrorPopupHolder.dialogPresent == 0 )
+		if ( lz.singletonErrorPopupHolderSWF10.dialogPresent == 0 )
 		{
-			lz.singletonErrorPopupHolder.dialogPresent = 1;
-			lz.singletonErrorPopupHolder.dialogObject = new lz.singletonErrorPopup(canvas,{error:error});
+			lz.singletonErrorPopupHolderSWF10.dialogPresent = 1;
+			lz.singletonErrorPopupHolderSWF10.dialogObject = new lz.singletonErrorPopupSWF10(canvas,{error:error});
 		}
 		else
 		{
-			lz.singletonErrorPopupHolder.dialogObject.error = error;
+			lz.singletonErrorPopupHolderSWF10.dialogObject.error = error;
 		}
 	</method>
 </class>

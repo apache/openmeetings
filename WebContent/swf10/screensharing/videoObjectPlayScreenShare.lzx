@@ -153,7 +153,7 @@
                 		   y:this.currentY
                 		});
     		} else {
-    			new lz.labelerrorPopup(canvas,{
+    			new lz.labelerrorPopupSWF10(canvas,{
                                errorlabelid:1125
                             });
     		}
@@ -180,7 +180,7 @@
                 
                 parent.sendRemoteCursorEvent.doCall();
     		} else {
-    			new lz.labelerrorPopup(canvas,{
+    			new lz.labelerrorPopupSWF10(canvas,{
                                errorlabelid:1125
                             });
     		}
@@ -196,7 +196,7 @@
         		parent.sendRemoteCursorEvent.tObject = tObject;
                 parent.sendRemoteCursorEvent.doCall();
     		} else {
-    			new lz.labelerrorPopup(canvas,{
+    			new lz.labelerrorPopupSWF10(canvas,{
                 			   errorlabelid:1125
                 			});
     		}

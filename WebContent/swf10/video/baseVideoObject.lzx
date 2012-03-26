@@ -610,7 +610,7 @@
         if (this.publicSID == canvas.publicSID) {
         	//self sound turned off
         	if (mute) {
-            	new lz.confirmationSingle(canvas,{
+            	new lz.confirmationSingleSWF10(canvas,{
                                                labelid:1388,labeliderror:1389,
                                                refReturnMethod:'confirmGloballyOff',
                                                refObj:this,showCheckBox:false});
@@ -622,7 +622,7 @@
         } else {
         	//disable this action for now
         	if (!canvas.ismoderator) {
-        		new lz.labelerrorPopup(canvas,{errorlabelid:1409});
+        		new lz.labelerrorPopupSWF10(canvas,{errorlabelid:1409});
         		return;
         	}
         	//you can not unmute it locally by putting sound to 100 cause the gain is set to zero globally in the micro of the sender!
@@ -633,12 +633,12 @@
                 if (this.publicSID == canvas.publicSID) {
                     errorlabelid = 1387;
                 }
-                new lz.labelerrorPopup(canvas,{errorlabelid:errorlabelid});
+                new lz.labelerrorPopupSWF10(canvas,{errorlabelid:errorlabelid});
                 return;
             }
         	if (canvas.ismoderator) {
         		if (mute) {
-                    new lz.confirmationSingle(canvas,{
+                    new lz.confirmationSingleSWF10(canvas,{
                                                    labelid:1392,labeliderror:1393,
                                                    refReturnMethod:'confirmGloballyOff',
                                                    refObj:this,showCheckBox:false});
@@ -648,7 +648,7 @@
                 }
         	} else {
             	if (mute) {
-            		new lz.confirmationSingle(canvas,{
+            		new lz.confirmationSingleSWF10(canvas,{
                                                    labelid:1390,labeliderror:1391,
                                                    refReturnMethod:'confirmLocallyOff',
                                                    refObj:this,showCheckBox:false});

@@ -20,7 +20,7 @@
 -->
 <library>
 
-<class name="confirmationSingle" extends="labelExplorerBox" labelid="832"
+<class name="confirmationSingleSWF10" extends="labelExplorerBox" labelid="832"
     docking="true" resizeable="false" closable="true" height="140" width="300">
 
     <attribute name="refObj" value="null" />
@@ -90,11 +90,12 @@
             this.parent.result = false;
             if (null != this.parent.refObj) {
                 if (parent.refReturnMethod == null) {
-                    this.parent.refObj.sendNoConfirmation();
+                    this.parent.refObj.sendConfirmation(false,t);
                 } else {
                     this.parent.refObj[parent.refReturnMethod](false,t);
                 }
             }
+            if ($debug) Debug.write("end");
     	</handler>
     </simpleLabelButton>
     <simpleLabelButton labelid="60" width="100" x="$once{ parent.width - 210 }" y="$once{ parent.height - 26 }">
@@ -113,7 +114,7 @@
     </simpleLabelButton>
 </class>
 
-<class name="rememberMessage" extends="labelExplorerBox" labelid="832"
+<class name="rememberMessageSWF10" extends="labelExplorerBox" labelid="832"
 	   x="$once{ canvas.width/2 - this.width/2 }" y="100"
 	   docking="true" resizeable="false" closable="true" height="140" width="300">
 

@@ -22,14 +22,13 @@
 
 <class name="exitDialog">
     <handler name="oninit">
-        if (null == canvas.exitDialog || 'undefined' == canvas.exitDialog) {
+        if (!canvas["exitDialog"]) {
             if ($debug) Debug.write("show exit dialog");
-            new lz.confirmationSingle(canvas,{
+            canvas.exitDialog = new lz.confirmationSingleSWF10(canvas,{
                 refObj:this,
                 labelid:791,
                 labeliderror:790,
-                showCheckBox:false,
-                name:"exitDialog"
+                showCheckBox:false
             });
         }
     </handler>
@@ -37,24 +36,21 @@
     <method name="sendConfirmation" args="confirm,bool">
         if ($debug) Debug.write("exitDialog result:", confirm);
         canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'exitRoom', confirm);
+        canvas.exitDialog = null;
     </method>
 </class>
 
 <class name="closeWhiteboardDialog">
     <handler name="oninit">
-        if (null == canvas.closeWhiteboard || 'undefined' == canvas.closeWhiteboard) {
+        if (!canvas["closeWhiteboardDialog"]) {
             if (canvas.ismoderator || canvas.isAllowedToDraw) {
-                new lz.confirmationSingle(canvas,{
+                canvas.closeWhiteboardDialog = new lz.confirmationSingleSWF10(canvas,{
                     refObj:this,
                     labeliderror:1313,
-                    showCheckBox:false,
-                    name:"closeWhiteboard"
+                    showCheckBox:false
                 });
             } else {
-                new lz.errorDialog(canvas,{
-                    labelid:1366,
-                    errortext:canvas.getLabelName(1365)
-                });
+                new lz.labelerrorPopupSWF10(canvas,{labelid:1366, errorlabelid:1365});
             }
         }
     </handler>
@@ -62,6 +58,7 @@
     <method name="sendConfirmation" args="confirm,bool">
         if ($debug) Debug.write("closeWhiteboardDialog result:", confirm);
         canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'closeWhiteboard', confirm);
+        canvas.closeWhiteboardDialog = null;
     </method>
 </class>
 

@@ -32,6 +32,8 @@
 
     <include href="base/" />
 
+    <include href="modules/" />
+
     <include href="video/" />
     
     <include href="screensharing/" />
@@ -49,8 +51,6 @@
     <include href="miniIcons.lzx" />
 
     <include href="dragHelper.lzx" />
-
-    <include href="modules/conference/popups/" />
 
     <view name="mainComponent" width="${canvas.width}" height="${canvas.height}">
         <text id="mainBaseText"> </text>

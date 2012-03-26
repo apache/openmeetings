@@ -2,7 +2,7 @@
 <library>
 
     <include href="commonPopupAdapter.lzx" />
-    <include href="confirmationSingle.lzx" />
-    <include href="errorPopup.lzx" />
+    <include href="confirmationSingleSWF10.lzx" />
+    <include href="errorPopupSWF10.lzx" />
     
 </library>
