@@ -19,6 +19,7 @@
 package org.openmeetings.app.remote.red5;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -436,6 +437,40 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		}
 		return null;
 	}
+
+    public synchronized List<Integer> listRoomBroadcast() {
+        List<Integer> broadcastList = new ArrayList<Integer>();
+        IConnection current = Red5.getConnectionLocal();
+        String streamid = current.getClient().getId();
+        Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+        for (Set<IConnection> conset : conCollection) {
+            for (IConnection conn : conset) {
+                if (conn != null) {
+                    RoomClient rcl = this.clientListManager
+                            .getClientByStreamId(conn
+                                    .getClient().getId());
+                    if (rcl == null) {
+                        // continue;
+                    } else if (rcl.getIsScreenClient() != null
+                            && rcl.getIsScreenClient()) {
+                        // continue;
+                    } else {
+                        if (!streamid.equals(rcl.getStreamid())) {
+                            // It is not needed to send back
+                            // that event to the actuall
+                            // Moderator
+                            // as it will be already triggered
+                            // in the result of this Function
+                            // in the Client
+                            broadcastList.add(Long.valueOf(rcl.getBroadCastID()).intValue());
+                        }
+                    }
+                }
+            }
+        }
+        return broadcastList;
+    }
+
 
 	/**
 	 * this function is invoked directly after initial connecting
@@ -2923,4 +2958,99 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		}
 		return null;
 	}
+
+    /*
+	 * SIP transport methods
+	 */
+
+    public synchronized void updateSipTransport() {
+        IConnection current = Red5.getConnectionLocal();
+        String streamid = current.getClient().getId();
+        RoomClient currentClient = this.clientListManager.getClientByStreamId(streamid);
+        log.debug("getSipConferenceMembersNumber: " + roommanagement.getSipConferenceMembersNumber(currentClient.getRoom_id()));
+        String newNumber = "("+Integer.toString(roommanagement.getSipConferenceMembersNumber(currentClient.getRoom_id())-1)+")";
+        if(!newNumber.equals(currentClient.getLastname())) {
+            currentClient.setLastname(newNumber);
+            this.clientListManager.updateClientByStreamId(streamid, currentClient);
+            log.debug("updateSipTransport: {}, {}, {}, {}", new Object[]{currentClient.getPublicSID(),
+                    currentClient.getRoom_id(), currentClient.getFirstname(), currentClient.getLastname()});
+            sendMessageWithClient(new String[]{"personal",currentClient.getFirstname(),currentClient.getLastname()});
+        }
+    }
+
+    /**
+     * Perform call to specified phone number and join to conference
+     * @param number to call
+     */
+    public synchronized void joinToConfCall(String number) {
+        IConnection current = Red5.getConnectionLocal();
+        String streamid = current.getClient().getId();
+        RoomClient currentClient = this.clientListManager.getClientByStreamId(streamid);
+        Rooms rooms = roommanagement.getRoomById(currentClient.getRoom_id());
+        log.debug("asterisk -rx \"originate Local/" + number + "@rooms extension " + rooms.getSipNumber() + "@rooms\"");
+        try {
+            Process proc = Runtime.getRuntime().exec(new String[]{"asterisk", "-rx", "originate Local/" + number + "@rooms extension " + rooms.getSipNumber() + "@rooms"});
+        } catch (IOException e) {
+            log.error("Executing asterisk originate error: ", e);
+        }
+    }
+
+    public synchronized String getSipNumber(Long room_id) {
+        Rooms rooms = roommanagement.getRoomById(room_id);
+        if(rooms != null) {
+            log.debug("getSipNumber: room_id: {}, sipNumber: {}", new Object[]{room_id, rooms.getSipNumber()});
+            return rooms.getSipNumber();
+        }
+        return null;
+    }
+
+    public synchronized void setSipTransport(Long room_id, String publicSID, String broadCastId) {
+        IConnection current = Red5.getConnectionLocal();
+        String streamid = current.getClient().getId();
+        Rooms room = roommanagement.getRoomById(room_id);
+        // Notify all clients of the same scope (room)
+        RoomClient currentClient = this.clientListManager.getClientByStreamId(streamid);
+        currentClient.setRoom_id(room_id);
+        currentClient.setRoomEnter(new Date());
+        currentClient.setFirstname("SIP Transport");
+        currentClient.setLastname("("+Integer.toString(roommanagement.getSipConferenceMembersNumber(room_id)-1)+")");
+        currentClient.setBroadCastID(Long.parseLong(broadCastId));
+        currentClient.setIsBroadcasting(true);
+        currentClient.setPublicSID(publicSID);
+        currentClient.setAvsettings("av");
+        currentClient.setVWidth(120);
+        currentClient.setVHeight(90);
+        this.clientListManager.updateClientByStreamId(streamid, currentClient);
+
+        Collection<Set<IConnection>> conCollection = current
+                .getScope().getConnections();
+        for (Set<IConnection> conset : conCollection) {
+            for (IConnection conn : conset) {
+                if (conn != null) {
+                    RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+                    if (rcl == null) {
+                        // continue;
+                    } else if (rcl.getIsScreenClient() != null
+                            && rcl.getIsScreenClient()) {
+                        // continue;
+                    } else {
+                        if (!streamid.equals(rcl.getStreamid())) {
+                            // It is not needed to send back
+                            // that event to the actuall
+                            // Moderator
+                            // as it will be already triggered
+                            // in the result of this Function
+                            // in the Client
+                            if (conn instanceof IServiceCapableConnection) {
+                                ((IServiceCapableConnection) conn).invoke("addNewUser", new Object[]{currentClient}, this);
+                                ((IServiceCapableConnection) conn).invoke("newStream", new Object[]{currentClient}, this);
+                                log.debug("sending setSipTransport to "
+                                        + conn);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

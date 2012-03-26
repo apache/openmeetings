@@ -331,7 +331,36 @@ function checkEmail()
 	    	
     	</i></p>
         
-    </fieldset>    
+    </fieldset>
+
+    <fieldset id="red5sip">
+        <legend>red5SIP Configuration</legend>
+
+        <li>
+        <label for="red5sip_enable">Enable SIP</label>
+    	<select name="red5sip_enable" id="red5sip_enable" size="1">
+    		<option value="yes">Yes</option>
+	      	<option value="no" selected>No</option>
+	    </select><br />
+	    </li>
+		<p><i>
+            Enable red5SIP integration
+        </i></p>
+        <br />
+
+        <li>
+        <label for="red5sip_room_prefix">SIP rooms prefix</label>
+        <input name="red5sip_room_prefix" id="red5sip_room_prefix" size="27" title="" type="text" value="400" />
+        <p><i>Prefix for phone number of conference rooms</i></p>
+        </li>
+
+        <li>
+        <label for="red5sip_exten_context">SIP extensions context</label>
+        <input name="red5sip_exten_context" id="red5sip_exten_context" size="27" title="" type="text" value="rooms" />
+        <p><i>Context of Asterisk extensions</i></p>
+        </li>
+
+    </fieldset>
 
     <fieldset id="sip">
     

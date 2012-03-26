@@ -47,7 +47,8 @@
     <confmenucommand id="cmd_importFile" onselect="canvas.doActionmenu('importFile')" key="['ALT','Shift','I']"/> 
     <confmenucommand id="cmd_editCamMicSettings" onselect="canvas.doActionmenu('editCamMicSettings')" key="['ALT','Shift','1']"/> 
     <confmenucommand id="cmd_editBoardSettings" onselect="canvas.doActionmenu('editBoardSettings')" key="['ALT','Shift','2']"/>   
-    <confmenucommand id="cmd_quit" onselect="canvas.doActionmenu('quit')" key="['ALT','Shift','E']"/> 
+    <confmenucommand id="cmd_quit" onselect="canvas.doActionmenu('quit')" key="['ALT','Shift','E']"/>
+    <confmenucommand id="cmd_showSipDialer" onselect="canvas.doActionmenu('showSipDialer')" key="['ALT','Shift','D']" />
     
     <confmenucommand id="cmd_applyforMod_nokey" onselect="canvas.doActionmenu('applyForMod')" />
     <confmenucommand id="cmd_createPoll_nokey" onselect="canvas.doActionmenu('createPoll')" /> 
@@ -56,7 +57,8 @@
     <confmenucommand id="cmd_importFile_nokey" onselect="canvas.doActionmenu('importFile')" /> 
     <confmenucommand id="cmd_editCamMicSettings_nokey" onselect="canvas.doActionmenu('editCamMicSettings')"/> 
     <confmenucommand id="cmd_editBoardSettings_nokey" onselect="canvas.doActionmenu('editBoardSettings')" />   
-    <confmenucommand id="cmd_quit_nokey" onselect="canvas.doActionmenu('quit')" /> 
+    <confmenucommand id="cmd_quit_nokey" onselect="canvas.doActionmenu('quit')" />
+    <confmenucommand id="cmd_showSipDialer_nokey" onselect="canvas.doActionmenu('showSipDialer')" />
     
     <!--
     <command id="cmd_browser_open" onselect="canvas.doActionmenu('browser_open')" key="['ALT','Shift','B']"/>   
@@ -402,6 +404,8 @@
                     canvas.thishib.applyForModeration.doCall();
                 } else if (stringSub=='editCamMicSettings') {
                     canvas._videocontainer._videoviewcontent.changeDevice();
+                } else if (stringSub=='showSipDialer') {
+                    new lz.sipDialer(canvas.main_content._content.inner);
                 } else if (stringSub=='editBoardSettings') {
                     new lz.editWhiteboardDefault(canvas.main_content._content.inner);
                 } else if (stringSub=='quit') {

@@ -4436,4 +4436,10 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="1446" name="calendar edit button">
     <value>Edit details</value>
   </string>
+  <string id="1447" name="sip show dialer">
+    <value>Show sip dialer</value>
+  </string>
+  <string id="1448" name="sip call">
+    <value>Call</value>
+  </string>
 </language>

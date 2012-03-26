@@ -67,6 +67,9 @@
 		<class>org.openmeetings.app.persistence.beans.user.UserSipData</class>
 		<class>org.openmeetings.app.persistence.beans.user.Users</class>
 		<class>org.openmeetings.app.persistence.beans.files.FileExplorerItem</class>
+        <class>org.openmeetings.app.persistence.beans.sip.asterisk.AsteriskSipUsers</class>
+        <class>org.openmeetings.app.persistence.beans.sip.asterisk.Extensions</class>
+        <class>org.openmeetings.app.persistence.beans.sip.asterisk.MeetMe</class>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		<properties>
 				<property name="openjpa.ConnectionProperties"
@@ -83,7 +86,8 @@
       			<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
 				<property name="openjpa.ConnectionDriverName" value="org.apache.commons.dbcp.BasicDataSource"/>
 				<property name="openjpa.DataCache" value="true"/>
-				<property name="openjpa.QueryCache" value="true"/> 
+                <!-- QueryCache disabled due to changes outside of JPA doesn't take effect with caching -->
+				<property name="openjpa.QueryCache" value="false"/>
 				<property name="openjpa.jdbc.DBDictionary"  value="batchLimit=100,tableType=myisam"/> 
 				<property name="openjpa.jdbc.QuerySQLCache"  value="false"/> 
     	</properties>

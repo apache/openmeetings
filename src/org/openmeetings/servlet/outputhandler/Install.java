@@ -285,6 +285,14 @@ public class Install extends VelocityViewServlet {
 					String screen_viewer = httpServletRequest
 							.getParameter("screen_viewer");
 
+                    // red5sip integration config
+                    String red5sip_enable = httpServletRequest
+							.getParameter("red5sip_enable");
+                    String red5sip_room_prefix = httpServletRequest
+							.getParameter("red5sip_room_prefix");
+                    String red5sip_exten_context = httpServletRequest
+							.getParameter("red5sip_exten_context");
+
 					// SIP Applet Configuration
 					String sip_enable = httpServletRequest
 							.getParameter("sip_enable");
@@ -369,7 +377,8 @@ public class Install extends VelocityViewServlet {
 							openxg_community_code, openxg_language_code,
 							openxg_adminid, sip_language_phonecode,
 							sip_phonerange_start, sip_phonerange,
-							jodPath);
+							jodPath,
+                            red5sip_enable, red5sip_room_prefix, red5sip_exten_context);
 
 					getImportInitvalues().loadInitUserAndOrganisation(username,
 							userpass, useremail, orgname, timeZone, configdefaultLang);

@@ -204,7 +204,9 @@
 	<!-- No Interface -->
 	<bean id="manageCryptStyle" class="org.openmeetings.utils.crypt.ManageCryptStyle" />
 	<bean id="openXGHttpClient" class="org.openmeetings.app.sip.xmlrpc.OpenXGHttpClient" />
-	<bean id="generateImage" class="org.openmeetings.app.documents.GenerateImage" />
+    <bean id="asteriskDbSipClient" class="org.openmeetings.app.sip.api.impl.asterisk.AsteriskDbSipClient" />
+    <bean id="asteriskDAO" class="org.openmeetings.app.sip.api.impl.asterisk.dao.AsteriskDAOImpl" />
+    <bean id="generateImage" class="org.openmeetings.app.documents.GenerateImage" />
 	<bean id="generateThumbs" class="org.openmeetings.app.documents.GenerateThumbs" />
 	<bean id="generatePDF" class="org.openmeetings.app.documents.GeneratePDF" />
 	<bean id="mailHandler" class="org.openmeetings.utils.mail.MailHandler" />

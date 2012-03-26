@@ -65,6 +65,7 @@
     <include href="restricted/" />
     <include href="browser/" />
     <include href="testsetup/" />
+    <include href="sip/" />
     
     <include href="flexibleConferenceRoom/" />
     

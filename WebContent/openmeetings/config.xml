@@ -225,8 +225,9 @@ of the red5-servlet
  -->
 <!-- Quality-Modus *normal* -->
 <microphoneRateNormal>22</microphoneRateNormal>
-<!-- Microphone Settings Quality-Modus *best* -->    
-<microphoneRateBest>44</microphoneRateBest>  
+<!-- Microphone Settings Quality-Modus *best* -->
+<!-- TODO: red5sip support only 8 -->
+<microphoneRateBest>44</microphoneRateBest>
 
 <!--
     The Size of the Whiteboard

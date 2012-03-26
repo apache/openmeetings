@@ -252,7 +252,8 @@ public class ImportInitvalues {
 			String openxg_client_domain, String openxg_community_code,
 			String openxg_language_code, String openxg_adminid,
 			String sip_language_phonecode, String sip_phonerange_start,
-			String sip_phonerange, String jodPath) {
+			String sip_phonerange, String jodPath,
+            String red5sip_enable, String red5sip_room_prefix,String red5sip_exten_context) {
 
 		cfgManagement
 				.addConfByKey(
@@ -348,6 +349,18 @@ public class ImportInitvalues {
 
 		cfgManagement.addConfByKey(3, "default.rpc.userid", "" + 1, null,
 				"The User-Id of the Control User in OpenMeetings");
+
+        // ***************************************
+        // ***************************************
+        // red5SIP Integration Coniguration Values
+        // ***************************************
+
+        cfgManagement.addConfByKey(3, "red5sip.enable", red5sip_enable, null,
+				"Enable to enable the red5SIP integration ");
+        cfgManagement.addConfByKey(3, "red5sip.room_prefix", red5sip_room_prefix, null,
+				"Enable to enable the red5SIP integration ");
+        cfgManagement.addConfByKey(3, "red5sip.exten_context", red5sip_exten_context, null,
+				"Enable to enable the red5SIP integration ");
 
 		// ***************************************
 		// ***************************************

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<library>
+
+<class name="sipDialer" extends="window" bgcolor="gray" width="200">
+    <simplelayout axis="y" spacing="5"/>
+    <labelText labelid="1003"/>
+    <view name="phoneNumber" width="100%">
+        <inputtext name="input" width="$once{parent.width-parent.del.width}" height="20" bgcolor="white"/>
+        <button name="del" x="$once{parent.input.width}" width="30" height="20" onclick="this.del();">
+            ←
+            <method name="del">
+                var t = parent.input.text;
+                if(t.length != 0) {
+                    t = t.substr(0, t.length - 1);
+                    parent.input.setAttribute('text', t);
+                }
+            </method>
+        </button>
+    </view>
+
+    <view name="dialerButtons" align="center">
+        <vbox spacing="5">
+            <hbox spacing="5">
+                <button onclick="parent.parent.parent.parent.dial('1')" width="40">1</button>
+                <button onclick="parent.parent.parent.parent.dial('2')" width="40">2</button>
+                <button onclick="parent.parent.parent.parent.dial('3')" width="40">3</button>
+            </hbox>
+            <hbox spacing="5">
+                <button onclick="parent.parent.parent.parent.dial('4')" width="40">4</button>
+                <button onclick="parent.parent.parent.parent.dial('5')" width="40">5</button>
+                <button onclick="parent.parent.parent.parent.dial('6')" width="40">6</button>
+            </hbox>
+            <hbox spacing="5">
+                <button onclick="parent.parent.parent.parent.dial('7')" width="40">7</button>
+                <button onclick="parent.parent.parent.parent.dial('8')" width="40">8</button>
+                <button onclick="parent.parent.parent.parent.dial('9')" width="40">9</button>
+            </hbox>
+            <hbox spacing="5">
+                <button onclick="parent.parent.parent.parent.dial('*')" width="40">*</button>
+                <button onclick="parent.parent.parent.parent.dial('0')" width="40">0</button>
+                <button onclick="parent.parent.parent.parent.dial('#')" width="40">#</button>
+            </hbox>
+        </vbox>
+    </view>
+    <hbox spacing="10" align="center">
+        <simpleLabelButton labelid="1448" name="callButton">
+            <handler name="onclick">
+                parent.parent.joinToConfCall.doCall();
+            </handler>
+        </simpleLabelButton>
+        <simpleLabelButton labelid="85" name="closeButton">
+            <handler name="onclick">
+                canvas.sipDialer = null;
+                parent.parent.destroy();
+            </handler>
+        </simpleLabelButton>
+    </hbox>
+    <handler name="oninit">
+        if(canvas.sipDialer != null) {
+            canvas.sipDialer.destroy();
+        }
+        canvas.setAttribute('sipDialer', this);
+        this.bringToFront();
+    </handler>
+
+    <method name="dial" args="digit">
+        this.phoneNumber.input.setAttribute('text', this.phoneNumber.input.text + digit);
+    </method>
+
+    <netRemoteCallHib name="joinToConfCall" funcname="joinToConfCall" remotecontext="$once{ canvas.thishib }">
+        <netparam><method name="getValue">return parent.parent.phoneNumber.input.text</method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+            //The onResult-Handler will be called be the rtmpconnection
+            if($debug) Debug.write("joinToConfCall : ",value);
+            ]]>
+        </handler>
+    </netRemoteCallHib>
+</class>
+
+</library>

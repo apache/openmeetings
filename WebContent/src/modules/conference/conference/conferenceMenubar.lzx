@@ -47,9 +47,9 @@
 		</method>
 	</class>
 
-	<!--- Menu for public/private conference and audience room. This class shows 
-		exit, moderator, file, setteings and poll menu. Those menu items are connected 
-		to each command that has been declared in base/mainMethods.lzx. May 24 2008 
+	<!--- Menu for public/private conference and audience room. This class shows
+		exit, moderator, file, setteings and poll menu. Those menu items are connected
+		to each command that has been declared in base/mainMethods.lzx. May 24 2008
 		commented by onokeiji@gmail.com -->
 	<class name="conferenceMenubar" extends="menubar" height="28"
 		style="itemStyle">
@@ -83,7 +83,7 @@
 	                            parent._exitbtn.destroy();
 	                    	}
 	                    }
-	                    
+
 	                    if(canvas.isrtl == 'true'){
 	                    	if ($debug) Debug.write("onInit : Setting nokey");
 	                    	lblImport.setCommand(cmd_importFile_nokey);
@@ -92,11 +92,11 @@
 			</handler>
 			<_labelMenuItem id="lblImport" labelid="15"
 				command="cmd_importFile" enabled="${ canvas.ismoderator }" />
-			<!-- <menuseparator/> <_labelMenuItem labelid="561" command="cmd_exportFilePNG" 
-				/> <_labelMenuItem labelid="562" command="cmd_exportFileJPG" /> <_labelMenuItem 
-				labelid="563" command="cmd_exportFilePDF" /> <_labelMenuItem labelid="560" 
-				command="cmd_exportFileSVG" /> <_labelMenuItem labelid="564" command="cmd_exportFileTIF" 
-				/> <menuseparator/> <_labelMenuItem name="_exitItem" labelid="309" command="cmd_quit" 
+			<!-- <menuseparator/> <_labelMenuItem labelid="561" command="cmd_exportFilePNG"
+				/> <_labelMenuItem labelid="562" command="cmd_exportFileJPG" /> <_labelMenuItem
+				labelid="563" command="cmd_exportFilePDF" /> <_labelMenuItem labelid="560"
+				command="cmd_exportFileSVG" /> <_labelMenuItem labelid="564" command="cmd_exportFileTIF"
+				/> <menuseparator/> <_labelMenuItem name="_exitItem" labelid="309" command="cmd_quit"
 				value="quit" /> -->
 		</_labelMenu>
 
@@ -104,7 +104,7 @@
 
 			<handler name="oninit">
 	                <![CDATA[
-	                   
+
 	                    if(canvas.isrtl == 'true'){
 	                    	if ($debug) Debug.write("onInit : Setting nokey");
 	                    	lblCamMic.setCommand(cmd_editCamMicSettings_nokey);
@@ -112,6 +112,7 @@
 	                    	lblPoll.setCommand(cmd_createPoll_nokey);
 	                    	lblPollResult.setCommand(cmd_pollResults_nokey);
 	                    	lblPollVote.setCommand(cmd_checkPollVoted_nokey);
+	                    	lblShowSipDialer.setCommand(cmd_showSipDialer_nokey);
 	                    }
 	                    //hideActionsMenu
 	                    if(canvas.currentRoomObj.hideActionsMenu){	                    	
@@ -133,7 +134,7 @@
 				</handler>
 			</_labelMenuItem>
 			<menuseparator />
-			<!-- <_labelMenuItem labelid="749" command="cmd_coBrowser" enabled="${ 
+			<!-- <_labelMenuItem labelid="749" command="cmd_coBrowser" enabled="${
 				canvas.ismoderator }" /> <menuseparator/> -->
 			<_labelMenuItem id="lblCamMic" labelid="306"
 				command="cmd_editCamMicSettings" />
@@ -177,14 +178,17 @@
 			<_labelMenuItem width="250" id="lblPollVote" labelid="42"
 				command="cmd_checkPollVoted" />
 			<menuseparator />
+            <_labelMenuItem width="250" id="lblShowSipDialer" labelid="1447"
+				command="cmd_showSipDialer" />
+            <menuseparator />
 			<_labelMenuItem width="250" labelid="1126"
 				command="cmd_editWhiteboardDefault" />
 		</_labelMenu>
-		
-		<!-- exit room <_labelMenu labelid="308" width="250"> </_labelMenu> <_labelMenu 
-			labelid="301" width="250"> <_labelMenuItem id="lblMod" labelid="302" command="cmd_applyforMod" 
-			/> </_labelMenu> <_labelMenu labelid="305" width="250"> <_labelMenuItem labelid="306" 
-			command="cmd_editCamMicSettings" /> <_labelMenuItem labelid="307" command="cmd_editBoardSettings" 
+
+		<!-- exit room <_labelMenu labelid="308" width="250"> </_labelMenu> <_labelMenu
+			labelid="301" width="250"> <_labelMenuItem id="lblMod" labelid="302" command="cmd_applyforMod"
+			/> </_labelMenu> <_labelMenu labelid="305" width="250"> <_labelMenuItem labelid="306"
+			command="cmd_editCamMicSettings" /> <_labelMenuItem labelid="307" command="cmd_editBoardSettings"
 			/> </_labelMenu> <_labelMenu labelid="303" width="250"> </_labelMenu> -->
 
 	</class>
@@ -258,7 +262,7 @@
 					</handler>
 				</_labelMenuItem>
 				<menuseparator />
-				<!-- <_labelMenuItem labelid="749" command="cmd_coBrowser" enabled="${ 
+				<!-- <_labelMenuItem labelid="749" command="cmd_coBrowser" enabled="${
 					canvas.ismoderator }" /> <menuseparator/> -->
 				<_labelMenuItem labelid="306" command="cmd_editCamMicSettings"
 					enabled="${ canvas.ismoderator }" />
@@ -358,7 +362,7 @@
 					</handler>
 				</_labelMenuItem>
 				<menuseparator />
-				<!-- <_labelMenuItem labelid="749" command="cmd_coBrowser" enabled="${ 
+				<!-- <_labelMenuItem labelid="749" command="cmd_coBrowser" enabled="${
 					canvas.ismoderator }" /> <menuseparator/> -->
 				<_labelMenuItem labelid="306" command="cmd_editCamMicSettings"
 					enabled="${ canvas.ismoderator }" />

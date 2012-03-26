@@ -35,17 +35,24 @@ import javax.persistence.criteria.Root;
 
 import org.openmeetings.app.conference.session.RoomClient;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
+import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.data.conference.dao.RoomModeratorsDaoImpl;
 import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
+import org.openmeetings.app.persistence.beans.basic.Configuration;
 import org.openmeetings.app.persistence.beans.domain.Organisation_Users;
 import org.openmeetings.app.persistence.beans.rooms.RoomTypes;
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.rooms.Rooms_Organisation;
 import org.openmeetings.app.persistence.beans.sip.OpenXGReturnObject;
+import org.openmeetings.app.persistence.beans.user.UserSipData;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.red5.ClientListManager;
+import org.openmeetings.app.sip.api.impl.asterisk.AsteriskDbSipClient;
+import org.openmeetings.app.sip.api.request.SIPCreateConferenceRequest;
+import org.openmeetings.app.sip.api.result.SIPCreateUserRequestResult;
+import org.openmeetings.app.sip.api.result.SipCreateConferenceRequestResult;
 import org.openmeetings.app.sip.xmlrpc.OpenXGHttpClient;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -71,6 +78,8 @@ public class Roommanagement {
 	@Autowired
 	private OpenXGHttpClient openXGHttpClient;
 	@Autowired
+	private AsteriskDbSipClient asteriskDbSipClient;
+	@Autowired
 	private RoomModeratorsDaoImpl roomModeratorsDao;
 	@Autowired
 	private UsersDaoImpl usersDao;
@@ -78,6 +87,8 @@ public class Roommanagement {
 	private AuthLevelmanagement authLevelManagement;
 	@Autowired
 	private ClientListManager clientListManager;
+    @Autowired
+	private Configurationmanagement cfgManagement;
 
 	/**
 	 * add a new Record to the table roomtypes
@@ -102,6 +113,20 @@ public class Roommanagement {
 
 	public Long addRoom(Rooms room) {
 		try {
+            /* Red5SIP integration *******************************************************************************/
+            Configuration conf = cfgManagement.getConfKey(3L, "red5sip.enable");
+            if(conf != null && conf.getConf_value().equals("yes")) {
+                if(room.getSipNumber() != null && !room.getSipNumber().isEmpty()) {
+                    asteriskDbSipClient.createSIPConference(new SIPCreateConferenceRequest(room.getSipNumber()));
+                } else {
+                    SipCreateConferenceRequestResult requestResult = asteriskDbSipClient.createSIPConference(new SIPCreateConferenceRequest());
+                    if(!requestResult.hasError()) {
+                        room.setSipNumber(requestResult.getConferenceNumber());
+                        room.setConferencePin(requestResult.getConferencePin());
+                    }
+                }
+            }
+            /*****************************************************************************************************/
 			room.setStarttime(new Date());
 			room = em.merge(room);
 			long returnId = room.getRooms_id();
@@ -719,6 +744,25 @@ public class Roommanagement {
 		return null;
 	}
 
+    /**
+     * Returns number of SIP conference participants
+     * @param rooms_id id of room
+     * @return number of participants
+     */
+    public Integer getSipConferenceMembersNumber(Long rooms_id) {
+        Configuration conf = cfgManagement.getConfKey(3L, "red5sip.enable");
+        if(conf != null && conf.getConf_value().equals("yes")) {
+            Rooms rooms = this.getRoomById(rooms_id);
+            if(rooms != null) {
+                return asteriskDbSipClient.getConferenceMembersNumber(rooms.getSipNumber());
+            } else {
+                return 0;
+            }
+        } else {
+            return null;
+        }
+    }
+
 	/**
 	 * adds a new Record to the table rooms
 	 * @param name
@@ -792,6 +836,19 @@ public class Roommanagement {
 					r.setSipNumber(openXGReturnObject.getConferenceNumber());
 					r.setConferencePin(openXGReturnObject.getConferencePin());
 				}
+
+                /* Red5SIP integration *******************************************************************************/
+                Configuration conf = cfgManagement.getConfKey(3L, "red5sip.enable");
+                if(conf != null && conf.getConf_value().equals("yes")) {
+                    SipCreateConferenceRequestResult requestResult = asteriskDbSipClient
+                            .createSIPConference(new SIPCreateConferenceRequest());
+
+                    if(!requestResult.hasError()) {
+                        r.setSipNumber(requestResult.getConferenceNumber());
+                        r.setConferencePin(requestResult.getConferencePin());
+                    }
+                }
+                /*****************************************************************************************************/
 
 				r = em.merge(r);
 				long returnId = r.getRooms_id();
