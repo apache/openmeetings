@@ -4377,4 +4377,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   <string id="1448" name="sip call">
     <value>Call</value>
   </string>
+  <string id="1449" name="calendar contact list">
+    <value>Show calendar events of contact</value>
+  </string>
 </language>

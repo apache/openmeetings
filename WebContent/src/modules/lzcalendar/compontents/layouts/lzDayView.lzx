@@ -164,7 +164,9 @@
 						</handler>
 						
 						<handler name="onmousetrackover">
-					        classroot.currentOverTrackView = this;
+							if (!classroot.currentDragEvent.dragEndOnly) {
+					        	classroot.currentOverTrackView = this;
+					        }
 					    </handler>
 					
 					    <handler name="onmousetrackout">
@@ -230,15 +232,68 @@
 								}
 							</handler>
 							
-							<view name="dayBg2" resource="calendar_one_day_hours_index_bg_rsc" stretches="width" 
-								width="${ parent.width }"  ></view>
+							<!--
+								Detect events that are parallel
+							 -->
+							<method name="calcWidthFactors" args="tItem">
+								<![CDATA[
+									for (var eg in this.subviews) {
+										if (this.subviews[eg] == tItem) {
+											continue;
+										}
+										if (!this.subviews[eg].event) {
+											continue;
+										}
 										
-							<view datapath="appointments" bgcolor="0xA59CFC" width="${ parent.width }" height="60">
+										//if ($debug) Debug.write("Cond1 ",(this.subviews[eg].y + this.subviews[eg].height >= tItem.y));
+										//if ($debug) Debug.write("Cond2 ",(this.subviews[eg].y <= tItem.y + tItem.height));
+										
+										if (this.subviews[eg].y + this.subviews[eg].height >= tItem.y 
+												&& this.subviews[eg].y <= tItem.y + tItem.height) {
+											
+											var newWidthFactor = this.subviews[eg].widthFactor+1;
+											var newInsetFactor = this.subviews[eg].insetFactor+1;
+											
+											//if ($debug) Debug.write("Found newInsetFactor,newWidthFactor: ",newInsetFactor,newWidthFactor);
+											
+											//fix width	
+											this.subviews[eg].setAttribute("widthFactor",newWidthFactor);
+											tItem.setAttribute("widthFactor",newWidthFactor);
+											
+											//fix x-position
+											if (tItem.y >= this.subviews[eg].y) {
+												//if ($debug) Debug.write("AFTER");
+												tItem.setAttribute("insetFactor",newInsetFactor);
+												this.subviews[eg].sendInFrontOf(this.dayBg2);
+											} else {
+												//if ($debug) Debug.write("BEFORE");
+												this.subviews[eg].setAttribute("insetFactor",newInsetFactor);
+												tItem.sendInFrontOf(this.dayBg2);
+											}
+											
+										}
+									}
+								]]>
+							</method>
+							
+							<view name="dayBg2" resource="calendar_one_day_hours_index_bg_rsc" stretches="width" 
+								width="${ parent.width }"  >
+								<attribute name="event" value="false" type="boolean" /> 
+							</view>
+										
+							<view datapath="appointments" bgcolor="0xA59CFC" 
+										x="${ (parent.width/this.widthFactor) * insetFactor }"
+										width="${ parent.width/this.widthFactor }" height="60">
+								
+								<attribute name="event" value="true" type="boolean" /> 
 								
 								<attribute name="rememberX" value="-1" />
 								<attribute name="rememberY" value="-1" />
 								<attribute name="mouseUpDetect" value="false" type="boolean"/>
 								<attribute name="startedToDrag" value="false" type="boolean"/>
+								
+								<attribute name="widthFactor" value="1" type="number"/>
+								<attribute name="insetFactor" value="0" type="number"/>
 							
 								<handler name="ondata" args="d">
 									<![CDATA[
@@ -246,6 +301,7 @@
 											if ($debug) Debug.info("Prevent un-neccessary Rendering!");
 											return;
 										}
+										this.setAttribute("visibility","visible");
 										var dataPointer = new lz.datapointer();
 										dataPointer.setPointer(d);
 										var startDate = parseDateTimeFromXmlString(dataPointer.xpathQuery('start/text()'));
@@ -268,6 +324,7 @@
 											this.setAttribute("height",Math.round((endMin - startMin)*heightInMinutes));
 										}
 										if ($debug) Debug.write("y,height -- ",this.y,this.height);
+										parent.calcWidthFactors(this);
 									]]>
 								</handler>
 								
@@ -314,33 +371,55 @@
 													&& this.rememberY == this.getMouse("y")) {
 											lz.Timer.addTimer( new LzDelegate( this, "checkIfDragging" ), 250 );			
 										} else {
-											//we need to move the object by the y position that the mouse
-											//was moved since mousedown
-											var tNewY = this.y + (this.getMouse("y") -  this.rememberY);
-										
-											this.startedToDrag = true;
-											classroot.currentOverTrackView = parent.parent;
-											classroot.currentDragEvent = new lz.dragEvent(classroot.dragAndDropArea._content,{
-														x:parent.parent.parent.x,
-														startx:parent.parent.parent.x,
-														y:tNewY,
-														starty:this.y,
-														bgcolor:this.bgcolor,
-														height:this.height,
-														width:this.width,
-														eventRef:this,
-														showTime:false,
-														titleText:this._title.text,
-														calendarViewRef:classroot
-													});
-													
-											lz.Track.activate(classroot.dayViewTrackGroup);
-											this.setAttribute("visibility","hidden");	
+											this.startDragItem(false);
 										}
 									]]>
 								</method>
 								
+								<method name="startDragItem" args="dragEndOnly">
+									<![CDATA[
+										//we need to move the object by the y position that the mouse
+										//was moved since mousedown
+										var tNewY = this.y + (this.getMouse("y") -  this.rememberY);
+									
+										this.startedToDrag = true;
+										classroot.currentOverTrackView = parent.parent;
+										classroot.currentDragEvent = new lz.dragEvent(classroot.dragAndDropArea._content,{
+													x:(dragEndOnly) ? this.getAttributeRelative('x',parent.parent.parent.parent) : parent.parent.parent.x,
+													startx:(dragEndOnly) ? this.getAttributeRelative('x',parent.parent.parent.parent) : parent.parent.parent.x,
+													y:(dragEndOnly) ? this.y : tNewY,
+													starty:this.y,
+													bgcolor:this.bgcolor,
+													height:this.height,
+													startheight:this.height,
+													width:(dragEndOnly) ? this.width : parent.width,
+													eventRef:this,
+													showTime:false,
+													titleText:this._title.text,
+													calendarViewRef:classroot,
+													dragEndOnly:dragEndOnly
+												});
+												
+										lz.Track.activate(classroot.dayViewTrackGroup);
+										this.setAttribute("visibility","hidden");
+									]]>
+								</method>
+								
 								<text name="_title" x="2" datapath="title" text="$path{ 'text()' }" />
+								
+								
+								<view width="20" height="4" valign="bottom" align="center" bgcolor="0xCCCCCC">
+									<handler name="onmouseover">
+										lz.Cursor.setCursorGlobal('calendar_change_event_height_rsc');
+									</handler>
+									<handler name="onmouseout">
+										lz.Cursor.restoreCursor(); 
+									</handler>
+									<handler name="onmousedown">
+										parent.startDragItem(true);
+									</handler>
+								</view>
+								
 							</view>
 						</view>
 						

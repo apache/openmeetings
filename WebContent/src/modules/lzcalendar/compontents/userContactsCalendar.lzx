@@ -67,7 +67,7 @@
 	        <handler name="onclick">
 	            parent.parent.parent.parent.selectContact(parent);
 	        </handler>
-	        <labelTooltip labelid="1447" />
+	        <labelTooltip labelid="1449" />
 	    </miniIcons>
 	    
 	</class>

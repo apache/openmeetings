@@ -20,7 +20,8 @@
 -->
 <library>
 
-	<class name="lzCalGridTempDrawView" extends="view" bgcolor="0xA59CFC" width="${ parent.width }" height="60">
+	<class name="lzCalGridTempDrawView" extends="view" opacity="0.6"
+				bgcolor="0xA59CFC" width="${ parent.width }" height="60">
 	
 		<attribute name="starty" value="-1" type="number" />
 		

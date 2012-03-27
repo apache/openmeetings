@@ -20,7 +20,7 @@
 -->
 <library>
 
-	<class name="dragEvent" extends="view">
+	<class name="dragEvent" extends="view" opacity="0.6">
 	
 		<!---
 			Refrence to the current moving event in the calendar
@@ -59,6 +59,12 @@
 		<attribute name="isMonthMove" value="false" type="boolean" />
 		
 		<!---
+			if true it cannot be dragged to another date, 
+			only the end position and its height will change
+		 -->
+		<attribute name="dragEndOnly" value="false" type="boolean" />
+		
+		<!---
 			@keywords private
 		 -->
 		<attribute name="updateObj" value="null" />
@@ -67,6 +73,11 @@
 			@keywords private
 		 -->
 		<attribute name="baseUrl" value="" type="string" />
+		
+		<!---
+			@keywords private
+		 -->
+		<attribute name="startheight" value="-1" type="number" />
 		
 		<handler name="onx" args="x">
 			if (this.fixToPositionInCalendar) {
@@ -113,30 +124,44 @@
 						referenceToScrollView._scrollArea.setAttribute("y",maxScroll);
 					}
 				}
+				
+				if (this.dragEndOnly) {
+					var heightInMinutes = parent.height/1440;
+					var tPixels30Minutes = heightInMinutes*30;
+					
+					var tNewY = Math.round(parent.getMouse("y")/tPixels30Minutes)*tPixels30Minutes;
+					
+					var newHeight = (tNewY - this.y);
+					if (newHeight >= tPixels30Minutes && newHeight+this.y <= parent.height) {
+						this.setAttribute("height",newHeight);
+					}
+					
+				}
 			]]>
 		</handler>
 		
 		<method name="fixToPosition">
 			<![CDATA[
-				//if ($debug) Debug.write("fixToPosition 1 ", this.calendarViewRef);
-				//if ($debug) Debug.write("fixToPosition 2 ", this.calendarViewRef.currentOverTrackView);
-				var currentOverTrackView = this.calendarViewRef.currentOverTrackView;
-				if (currentOverTrackView == null) {
-					return;
+				if (!this.dragEndOnly) {
+					//if ($debug) Debug.write("fixToPosition 1 ", this.calendarViewRef);
+					//if ($debug) Debug.write("fixToPosition 2 ", this.calendarViewRef.currentOverTrackView);
+					var currentOverTrackView = this.calendarViewRef.currentOverTrackView;
+					if (currentOverTrackView == null) {
+						return;
+					}
+					
+					var heightInMinutes = parent.height/1440;
+					var tPixels30Minutes = heightInMinutes*30;
+					var tNewY = Math.round(this.y/tPixels30Minutes)*tPixels30Minutes;
+					if (tNewY < 0) {
+						this.setAttribute("y",0);
+					} else if (tNewY + this.height > parent.height) {
+						this.setAttribute("y",parent.height-this.height);
+					} else {
+						this.setAttribute("y",tNewY);
+					}
+					this.setAttribute("x",currentOverTrackView.x);
 				}
-				
-				var heightInMinutes = parent.height/1440;
-				var tPixels30Minutes = heightInMinutes*30;
-				var tNewY = Math.round(this.y/tPixels30Minutes)*tPixels30Minutes;
-				if (tNewY < 0) {
-					this.setAttribute("y",0);
-				} else if (tNewY + this.height > parent.height) {
-					this.setAttribute("y",parent.height-this.height);
-				} else {
-					this.setAttribute("y",tNewY);
-				}
-				this.setAttribute("x",currentOverTrackView.x);
-			
 			]]>
 		</method>
 		
@@ -147,7 +172,9 @@
 		<handler name="oninit">
 			lz.Cursor.showHandCursor(false);
 			lz.ModeManager.globalLockMouseEvents();
-			this.dragger.apply();
+			if (!this.dragEndOnly) {
+				this.dragger.apply();
+			}
 			this.setShadow();
 		</handler>
 		
@@ -158,99 +185,109 @@
 	            normalMC.filters = [displacementMap];
 	        ]]>              
 	    </method>
+	    
+	    <method name="justFinish">
+	    	lz.Cursor.restoreCursor(); 
+	    	//lz.Cursor.showHandCursor(true);
+			lz.ModeManager.globalUnlockMouseEvents();
+			this.destroy();
+	    </method>
 		
 		<method name="close">
 			<![CDATA[
 				var appointmentId = this.eventRef.closeDragItem();
 				this.dragger.remove();
 				
-				if (appointmentId > 0) {
+				if (this.calendarViewRef.parent.parent.requestUserId != canvas.user_id) {
+					new lz.labelerrorPopup(canvas,{errorlabelid:1278});
+					lz.Cursor.showHandCursor(true);
+					lz.ModeManager.globalUnlockMouseEvents();
+					this.eventRef.setAttribute("visibility","visible");
+					this.destroy();
+					return;
+				}
 				
-					if (this.calendarViewRef.parent.parent.requestUserId != canvas.user_id) {
-						new lz.labelerrorPopup(canvas,{errorlabelid:1278});
-						lz.Cursor.showHandCursor(true);
-						lz.ModeManager.globalUnlockMouseEvents();
-						this.eventRef.setAttribute("visibility","visible");
-						this.destroy();
-						return;
-					}
+				if (this.height == this.startheight && this.dragEndOnly) {
+					this.justFinish();
+					return;
+				}
 				
-					this.updateObj = new Object();
+				if (appointmentId <= 0) {
+					this.justFinish();
+					return;
+				}
+			
+				this.updateObj = new Object();
+				
+				//Point URL to actual File
+	            var urlObject =  lz.Browser.getBaseURL();
+				//If Port is Null or undefinied use port 80
+				if (urlObject.port!=null && urlObject.port!=undefined){
+					var port = urlObject.port;
 					
-					//Point URL to actual File
-		            var urlObject =  lz.Browser.getBaseURL();
-					//If Port is Null or undefinied use port 80
-					if (urlObject.port!=null && urlObject.port!=undefined){
-						var port = urlObject.port;
-						
-						if (port != 80) {
-							this.baseUrl = urlObject.protocol+"://"+urlObject.host+":"+port+urlObject.path;
-						} else {
-							this.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path;
-						}
+					if (port != 80) {
+						this.baseUrl = urlObject.protocol+"://"+urlObject.host+":"+port+urlObject.path;
 					} else {
 						this.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path;
 					}
-					
-					var currentOverTrackView = this.calendarViewRef.currentOverTrackView;
-					if (currentOverTrackView == null) {
-						if ($debug) Debug.warn("currentOverTrackView is NULL, error in view reference!");
-						return;
-					}
-					
-					updateObj.appointmentId = appointmentId;
-					updateObj.appointmentstart = new Date(this.calendarViewRef.currentOverTrackView.dayDate.getTime());
-					
-					//If it is only drag and dropped in month grid we only change dates no times
-					if (this.isMonthMove) {
-						var tDateStart = parseDateTimeFromXmlString(this.eventRef.datapath.xpathQuery('start/text()'));
-						updateObj.appointmentstart.setHours(tDateStart.getHours());
-						updateObj.appointmentstart.setMinutes(tDateStart.getMinutes());
-					} else {
-						
-						var heightInMinutes = parent.height/1440;
-						var tPixels30Minutes = heightInMinutes*30;
-						var startRoundBy30Minutes = Math.round(this.y/tPixels30Minutes)*tPixels30Minutes;
-						
-						updateObj.appointmentstart.setHours(Math.floor((startRoundBy30Minutes/heightInMinutes)/60));
-						updateObj.appointmentstart.setMinutes((startRoundBy30Minutes/heightInMinutes)-(updateObj.appointmentstart.getHours()*60));
-					}
-					
-					updateObj.appointmentend = new Date(this.calendarViewRef.currentOverTrackView.dayDate.getTime());
-					
-					//If it is only drag and dropped in month grid we only change dates no times
-					if (this.isMonthMove) {
-						var tDateEnd = parseDateTimeFromXmlString(this.eventRef.datapath.xpathQuery('end/text()'));
-						updateObj.appointmentend.setHours(tDateEnd.getHours());
-						updateObj.appointmentend.setMinutes(tDateEnd.getMinutes());
-					} else {
-					
-						if ($debug) Debug.write("End Hours",Math.floor(((startRoundBy30Minutes+this.height)/heightInMinutes)/60));
-						var endHours = Math.floor(((startRoundBy30Minutes+this.height)/heightInMinutes)/60);
-						
-						if (endHours >= 24) {
-							 
-							updateObj.appointmentend.setHours(0);
-							updateObj.appointmentend.setMinutes(0);
-							updateObj.appointmentend.setTime(updateObj.appointmentend.getTime()+86400000);
-							
-						} else {
-							if ($debug) Debug.write("End Minutes",((startRoundBy30Minutes+this.height)/heightInMinutes)-(updateObj.appointmentend.getHours()*60));
-							updateObj.appointmentend.setMinutes(((startRoundBy30Minutes+this.height)/heightInMinutes)-(updateObj.appointmentend.getHours()*60));
-							updateObj.appointmentend.setHours(endHours);
-						}
-						
-					}
-					
-					if ($debug) Debug.write("New appointmentstart ",updateObj.appointmentstart);
-					if ($debug) Debug.write("New appointmentend ",updateObj.appointmentend);
-					
-					this.updateAppointmentTimeOnly.doCall();
 				} else {
-					lz.Cursor.showHandCursor(true);
-					lz.ModeManager.globalUnlockMouseEvents();
-					this.destroy();
+					this.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path;
 				}
+				
+				var currentOverTrackView = this.calendarViewRef.currentOverTrackView;
+				if (currentOverTrackView == null) {
+					if ($debug) Debug.warn("currentOverTrackView is NULL, error in view reference!");
+					return;
+				}
+				
+				updateObj.appointmentId = appointmentId;
+				updateObj.appointmentstart = new Date(this.calendarViewRef.currentOverTrackView.dayDate.getTime());
+				
+				//If it is only drag and dropped in month grid we only change dates no times
+				if (this.isMonthMove) {
+					var tDateStart = parseDateTimeFromXmlString(this.eventRef.datapath.xpathQuery('start/text()'));
+					updateObj.appointmentstart.setHours(tDateStart.getHours());
+					updateObj.appointmentstart.setMinutes(tDateStart.getMinutes());
+				} else {
+					
+					var heightInMinutes = parent.height/1440;
+					var tPixels30Minutes = heightInMinutes*30;
+					var startRoundBy30Minutes = Math.round(this.y/tPixels30Minutes)*tPixels30Minutes;
+					
+					updateObj.appointmentstart.setHours(Math.floor((startRoundBy30Minutes/heightInMinutes)/60));
+					updateObj.appointmentstart.setMinutes((startRoundBy30Minutes/heightInMinutes)-(updateObj.appointmentstart.getHours()*60));
+				}
+				
+				updateObj.appointmentend = new Date(this.calendarViewRef.currentOverTrackView.dayDate.getTime());
+				
+				//If it is only drag and dropped in month grid we only change dates no times
+				if (this.isMonthMove) {
+					var tDateEnd = parseDateTimeFromXmlString(this.eventRef.datapath.xpathQuery('end/text()'));
+					updateObj.appointmentend.setHours(tDateEnd.getHours());
+					updateObj.appointmentend.setMinutes(tDateEnd.getMinutes());
+				} else {
+				
+					if ($debug) Debug.write("End Hours",Math.floor(((startRoundBy30Minutes+this.height)/heightInMinutes)/60));
+					var endHours = Math.floor(((startRoundBy30Minutes+this.height)/heightInMinutes)/60);
+					
+					if (endHours >= 24) {
+						 
+						updateObj.appointmentend.setHours(0);
+						updateObj.appointmentend.setMinutes(0);
+						updateObj.appointmentend.setTime(updateObj.appointmentend.getTime()+86400000);
+						
+					} else {
+						if ($debug) Debug.write("End Minutes",((startRoundBy30Minutes+this.height)/heightInMinutes)-(updateObj.appointmentend.getHours()*60));
+						updateObj.appointmentend.setMinutes(((startRoundBy30Minutes+this.height)/heightInMinutes)-(updateObj.appointmentend.getHours()*60));
+						updateObj.appointmentend.setHours(endHours);
+					}
+					
+				}
+				
+				if ($debug) Debug.write("New appointmentstart ",updateObj.appointmentstart);
+				if ($debug) Debug.write("New appointmentend ",updateObj.appointmentend);
+				
+				this.updateAppointmentTimeOnly.doCall();
 			]]>
 		</method>
 		
@@ -265,7 +302,8 @@
 	    	<handler name="ondata" args="value">
 	    		<![CDATA[
 		    		if ($debug) Debug.write("updateAppointmentTimeOnly ",value);
-		    		lz.Cursor.showHandCursor(true);
+		    		lz.Cursor.restoreCursor(); 
+		    		//lz.Cursor.showHandCursor(true);
 					lz.ModeManager.globalUnlockMouseEvents();
 		    		parent.calendarViewRef.parent.parent.reload();
 					parent.destroy();

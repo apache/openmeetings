@@ -31,6 +31,8 @@
 	<resource name="calendar_resultset_previous_rsc" src="resources/resultset_previous.png" />
 	<resource name="calendar_contact_calendar_rsc" src="resources/calendar.png" />
 	<resource name="calendar_revert_to_own_undo_rsc" src="resources/arrow_undo.png" />
+	<resource name="calendar_change_event_height_rsc" src="resources/height_change_cursor.swf" />
+	
 
 	<include href="layouts/" />
 	<include href="addAttendee.lzx" />
