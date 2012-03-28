@@ -1533,7 +1533,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="378" name="dashboard">
-    <value>New messages</value>
+    <value>Unread messages</value>
   </string>
 
   <string id="379" name="dashboard">
@@ -3241,7 +3241,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="804" name="dashboard">
-    <value>$APP_NAME, your web conferencing platform</value>
+    <value>$APP_NAME, your web conferencing platform. You can either follow the 1-2-3 steps to enter a conference room directly or you choose the Calendar to set up and plan a meeting.</value>
   </string>
 
   <string id="805" name="dashboard">

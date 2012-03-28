@@ -1157,7 +1157,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Profil bearbeiten</value>
   </string>
   <string id="378" name="dashboard">
-    <value>Neue Nachrichten:</value>
+    <value>Ungelesene Nachrichten:</value>
   </string>
   <string id="379" name="dashboard">
     <value>Bild ändern</value>

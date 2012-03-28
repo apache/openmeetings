@@ -2435,7 +2435,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Attendees</value>
   </string>
   <string id="804" name="dashboard">
-    <value>Clickjobfair, your Web Conferencing platform</value>
+    <value>Clickjobfair, your web conferencing platform. You can either follow the 1-2-3 steps to enter a conference room directly or you choose the Calendar to set up a meeting.</value>
   </string>
   <string id="805" name="dashboard">
     <value>Plan a meeting</value>

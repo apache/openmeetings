@@ -1101,6 +1101,26 @@ public class UserService {
 		}
 
 	}
+	
+	public Long getNumberUnreadMessages(String SID) {
+		try {
+
+			Long users_id = sessionManagement.checkSession(SID);
+			Long user_level = userManagement.getUserLevelByID(users_id);
+			// users only
+			if (authLevelManagement.checkUserLevel(user_level)) {
+
+				SearchResult<PrivateMessages> searchResult = new SearchResult<PrivateMessages>();
+				searchResult.setObjectName(Users.class.getName());
+				return privateMessagesDao
+						.getNumberMessages(users_id, 0L, false);
+
+			}
+		} catch (Exception err) {
+			log.error("[getNumberUnreadMessages]", err);
+		}
+		return null;
+	}
 
 	public SearchResult<PrivateMessages> getInbox(String SID, String search, String orderBy,
 			int start, Boolean asc, Integer max) {

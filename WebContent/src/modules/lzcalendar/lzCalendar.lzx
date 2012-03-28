@@ -66,6 +66,9 @@
 	</handler>
 	
 	<handler name="ontabcontentleave" args="tRef">
+		//Make sure any cursor status is reset
+		lz.Cursor.restoreCursor();
+		lz.Cursor.showHandCursor(true);
         _mainScrollBar.setAttribute("visibility","visible");
     </handler>
     
@@ -205,6 +208,9 @@
 	
 	<dataset name="getAppointmentsByWeekCalendar" type="http">
 		<handler name="ondata" args="d">
+			//Make sure any cursor status is reset
+			lz.Cursor.restoreCursor();
+			lz.Cursor.showHandCursor(true);
 			if ($debug) Debug.write("ondata",d);
 		</handler>
 	</dataset>

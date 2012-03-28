@@ -27,6 +27,8 @@
 	
 	<attribute name="selected" value="false" type="boolean" />
 	
+	<attribute name="textFontSize" value="14" type="number" />
+	
 	<attribute name="currentIconRsc" value="" type="string"/>
 	
 	<handler name="oninit">
@@ -64,7 +66,7 @@
         this._icon.setAttribute("opacity",0.5);
         this._text.setAttribute("opacity",0.5);
         this._bg2.setAttribute("visibility","hidden");
-        this._text.setAttribute("fontstyle","plain");
+        this._text.setAttribute("fontstyle","bold");
         this._text.setAttribute("fgcolor","0xFFFFFF");
     </method>       
     
@@ -77,7 +79,7 @@
     
     <view x="4" y="6" name="_icon" resource="$once{ parent.currentIconRsc }" />
                 
-    <labelText name="_text" x="28" fontsize="14" valign="middle" 
+    <labelText name="_text" x="28" fontsize="$once{ parent.textFontSize }" valign="middle" 
                fgcolor="0xFFFFFF" labelid="$once{ parent.labelid }" />
 	
 </class>

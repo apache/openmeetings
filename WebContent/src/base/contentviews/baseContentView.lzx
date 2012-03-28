@@ -43,6 +43,9 @@
     
     <method name="close">
         if ($debug) Debug.write("close: ",this,this.destroyByMethod);
+        //Make sure any cursor status is reset
+		lz.Cursor.restoreCursor();
+		lz.Cursor.showHandCursor(true);
         this.ontabcontentleave.sendEvent();
         if (!this.destroyByMethod) this.destroy();
         return this.destroyByMethod;

@@ -40,10 +40,10 @@
 </class>
 
 <!--- "System" panel on the dashboard -->
-<class name="infosPanel" extends="guiPresenter" resizeable="false"
-    width="500" height="224" closable="true" labelid="374" y="10"><!-- 374:System -->
-	<view y="20" bgcolor="0xEEF0EB" x="1" width="$once{ parent.width-2 }" 
-		  height="$once{ parent.height-21 }" >
+<class name="infosPanel" extends="view" 
+    width="${ canvas.width - this.x - 10}" height="224" y="10">
+    
+	<view width="${ parent.width-2 }" height="$once{ parent.height }" >
         
         <labelText name="_txt" fontstyle="bold" labelid="774" y="0" x="2" />
         
@@ -62,19 +62,17 @@
         		   width="$once{ parent.width-210 }" />
         
         <simpleLabelButton labelid="788" width="196" x="$once{ parent.width-200 }" 
-               y="$once{ parent.height-80 }" height="38" 
+               y="$once{ parent.height-60 }" height="24" 
                onclick="this.parent.storeSettings();">
-            <view resource="start_conference_rsc" x="160" valign="middle" />
             <handler name="onclick">
                 quicklink('meetings');
             </handler>
             <labelTooltip labelid="769" />
         </simpleLabelButton>
         
-        <simpleLabelButton labelid="805" width="196" x="$once{ parent.width-200 }" 
-               y="$once{ parent.height-40 }" height="38" 
+        <simpleLabelButton labelid="291" width="196" x="$once{ parent.width-200 }" 
+               y="$once{ parent.height-34 }" height="24" 
                onclick="this.parent.storeSettings();">
-            <view resource="start_conference_rsc" x="160" valign="middle" />
             <handler name="onclick">
                 quicklink('dashboardModuleCalendar');
             </handler>

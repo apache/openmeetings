@@ -1533,7 +1533,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="378" name="dashboard">
-    <value>Neue Nachrichten:</value>
+    <value>Ungelesene Nachrichten:</value>
   </string>
 
   <string id="379" name="dashboard">

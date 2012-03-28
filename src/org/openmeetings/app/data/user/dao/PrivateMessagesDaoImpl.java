@@ -178,6 +178,29 @@ public class PrivateMessagesDaoImpl {
 		return null;
 	}
 	
+	public Long getNumberMessages(Long toUserId, Long privateMessageFolderId, boolean isRead) {
+		try {
+			
+			String hql = "select COUNT(c.privateMessageId) from PrivateMessages c " +
+						"where c.to.user_id = :toUserId " +
+						"AND c.isTrash = :isTrash " +
+						"AND c.owner.user_id = :toUserId " +
+						"AND c.isRead = :isRead " +
+						"AND c.privateMessageFolderId = :privateMessageFolderId ";
+
+			TypedQuery<Long> query = em.createQuery(hql, Long.class); 
+			query.setParameter("toUserId", toUserId);
+			query.setParameter("isTrash", false);
+			query.setParameter("isRead", false);
+			query.setParameter("privateMessageFolderId", privateMessageFolderId);
+			return query.getSingleResult();
+			
+		} catch (Exception e) {
+			log.error("[getNumberMessages]",e);
+		}
+		return null;
+	}
+	
 	public List<PrivateMessages> getPrivateMessagesByUser(Long toUserId, String search,
 			String orderBy, int start, Boolean asc, Long privateMessageFolderId, int max) {
 		try {

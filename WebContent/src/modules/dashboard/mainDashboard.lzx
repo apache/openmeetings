@@ -140,26 +140,18 @@
         	<![CDATA[
                 if ($debug) Debug.write("getRssFeeds: ",value);
                 parent._bottomArea._boxes.feed1.outputRSS(value.feed2);
-                //parent.feed2.feed.outputRSS(value.feed2);
             ]]>
         </handler>   
     </netRemoteCallHib>      
     
-	<infosPanel x="10" isdragable="false" minimizable="false" maximizable="false" closable="false" />
+	<profilesPanel x="10" />
 	
-	<profilesPanel x="520" isdragable="false" minimizable="false" maximizable="false" closable="false" />
+	<view height="240" x="516" width="1" bgcolor="0xE0E0E0" />
+	
+	<infosPanel x="520" />
 
-    <!--- Chat module of the dashboard. The fixed size is 810x280
-    <class name="overAllChat" extends="guiPresenter" resizeable="false"
-        width="${ canvas.width-20 }" height="${ canvas.height-360 }" 
-        y="240" x="10" closable="true" labelid="443" 
-        isdragable="false" minimizable="false" 
-                 maximizable="false" closable="false">
-     -->
-
-    <guiPresenter name="_bottomArea" resizeable="false" y="240" x="10" closable="true" labelid="1304" 
-            width="${ canvas.width-20 }" height="${ canvas.height-360 }" visibility="hidden"
-            isdragable="false" minimizable="false" maximizable="false" >
+    <view name="_bottomArea" y="240" x="0"
+            width="${ canvas.width }" height="${ canvas.height-350 }" visibility="hidden">
     	
     	<attribute name="refObjItem" value="null" />
     	
@@ -187,7 +179,7 @@
             this.refObjItem.select();
         </method>
         
-        <view width="${ parent.width-2 }" x="1" y="1" height="$once{ parent._tabbar.height }" 
+        <view width="${ parent.width }" x="0" y="1" height="$once{ parent._tabbar.height }" 
           stretches="both" resource="presenter_thumb_rsc" >
             <handler name="oninit">
                 <![CDATA[
@@ -212,7 +204,7 @@
             </method>            
         </view>
     	
-    	<view name="_tabbar" x="1" y="1" width="${ parent.width-2 }" height="36"
+    	<view name="_tabbar" x="0" y="1" width="${ parent.width }" height="30"
     		  layout="axis:x;spacing:2">
     		
     		<conferenceRoomSidebarTabButton name="myRoomsTabButton" height="$once{ parent.height }"
@@ -227,7 +219,7 @@
                     
         </view>        
     		
-    	<view name="_boxes" height="${ parent.height-42 }" width="${ parent.width }" y="41">	
+    	<view name="_boxes" height="${ parent.height-35 }" width="${ parent.width }" y="35">	
     	
             <view name="myMeetings" height="${ parent.height }" width="${ parent.width }" visibility="hidden" >
         
@@ -315,20 +307,9 @@
             <rssBox name="feed1" visibility="hidden" width="${ parent.width-4 }" 
                             height="${ parent.height }" y="0" x="2" />
 
-               <!--
-            <rssPanel name="feed2" x="420" y="230" visibility="hidden" />
-                -->
-            
     	</view>        
     	
-	   
-	
-    </guiPresenter>
-	<!--
-    <rssPanel name="feed1" x="10" y="230" />
-
-    <rssPanel name="feed2" x="420" y="230" />
-	 -->
+    </view>
 		
 </class>
 
