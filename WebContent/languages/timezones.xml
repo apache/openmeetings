@@ -19,19 +19,19 @@
   
 -->
 <timezones>
-    <timezone orderId="1" name="Etc/GMT+12" label="Fiji, New Zealand" iCal="Pacific/Fiji" />
-    <timezone orderId="2" name="Etc/GMT+11" label="Wladiwostok, Kamchatka, Solomon Islands, New Caledonia" iCal="Asia/Vladivostok" />
-    <timezone orderId="3" name="Etc/GMT+10" label="Australia" iCal="Australia/Sydney" />
-    <timezone orderId="4" name="Etc/GMT+9" label="Japan/Korea Standard Time, Zabaykalsky, East Timor" iCal="Asia/Tokyo" />
-    <timezone orderId="5" name="Etc/GMT+8" label="China Standard Time, Irkutsk, Philippines, Singapore" iCal="Asia/Singapore" />
-    <timezone orderId="6" name="Etc/GMT+7" label="Indochina Time, Krasnoyarsk, Thailand, Vietnam, Jakarta" iCal="Asia/Jakarta" />
-    <timezone orderId="7" name="Etc/GMT+6" label="Novosibirsk, Almaty, Bangladesh" iCal="Asia/Dhaka" />
+    <timezone orderId="1" name="Etc/GMT+12" label="Magadan, Fiji, New Zealand" iCal="Pacific/Fiji" />
+    <timezone orderId="2" name="Etc/GMT+11" label="Vladivostok, Kamchatka, Solomon Islands, New Caledonia" iCal="Asia/Vladivostok" />
+    <timezone orderId="3" name="Etc/GMT+10" label="Australia, Yakutsk" iCal="Australia/Sydney" />
+    <timezone orderId="4" name="Etc/GMT+9" label="Japan/Korea Standard Time, Irkutsk, East Timor" iCal="Asia/Tokyo" />
+    <timezone orderId="5" name="Etc/GMT+8" label="China Standard Time, Krasnoyarsk, Philippines, Singapore" iCal="Asia/Singapore" />
+    <timezone orderId="6" name="Etc/GMT+7" label="Novosibirsk, Indochina Time, Thailand, Vietnam, Jakarta" iCal="Asia/Jakarta" />
+    <timezone orderId="7" name="Etc/GMT+6" label="Yekaterinburg, Almaty, Bangladesh" iCal="Asia/Dhaka" />
     <timezone orderId="8" name="IST" label="Indian Standard Time GMT+5.30" iCal="Asia/Kolkata" />
-    <timezone orderId="9" name="Etc/GMT+5" label="Russia, Sverdlovsk, Uzbekistan, Pakistan, Maldives" iCal="Asia/Karachi" />
+    <timezone orderId="9" name="Etc/GMT+5" label="Uzbekistan, Pakistan, Maldives" iCal="Asia/Karachi" />
     <timezone orderId="10" name="Asia/Kabul" label="Kabul GMT+4.30 " iCal="Asia/Kabul" />
-    <timezone orderId="11" name="Etc/GMT+4" label="Georgia, Armenia, Azerbaijan, United Arab Emirates" iCal="Asia/Dubai" />
+    <timezone orderId="11" name="Etc/GMT+4" label="Moscow, Saint Petersburg, Georgia, Armenia, Azerbaijan, United Arab Emirates" iCal="Europe/Moscow" />
     <timezone orderId="12" name="Asia/Tehran" label="Tehran GMT+3.30" iCal="Asia/Tehran" />
-    <timezone orderId="13" name="Etc/GMT+3" label="Moscow, Saint Petersburg, Samara, Iraq, Saudi Arabia" iCal="Europe/Moscow" />
+    <timezone orderId="13" name="Etc/GMT+3" label="Kaliningrad, Minsk, Iraq, Saudi Arabia" iCal="Europe/Kaliningrad" />
     <timezone orderId="14" name="Etc/GMT+2" label="Finland, Lithuania, Belarus, Ukraine, Romania, Bulgaria" iCal="Europe/Helsinki" />
     <timezone orderId="15" name="Etc/GMT+1" label="France, Germany, Spain, Italy" iCal="Europe/Berlin" />
     <timezone orderId="16" name="Etc/GMT" label="Iceland, United Kingdom, Ireland" iCal="Europe/London" />
