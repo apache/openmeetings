@@ -18,11 +18,8 @@
  */
 package org.red5.screen.webstart.gui;
 
-import java.awt.Robot;
 
 public class VirtualScreenBean {
-
-
 	/**
 	 * image recalcing value's from the virtual Screen drawer
 	 */
@@ -47,13 +44,15 @@ public class VirtualScreenBean {
 	public static int vScreenSpinnerX = 0;
 	public static int vScreenSpinnerY = 0;
 	
-	public static String vScreenScaleFactor = "Medium Quality";
+	public static ScreenQuality screenQuality = ScreenQuality.Medium;
 	
 	public static int vScreenResizeX = 480;
 	public static int vScreenResizeY = 360;
 	
-
-	public static Robot robot = null;
-
-	public static Float imgQuality = new Float(0.40);
+	public enum ScreenQuality {
+		VeryHigh
+		, High
+		, Medium
+		, Low
+	}
 }

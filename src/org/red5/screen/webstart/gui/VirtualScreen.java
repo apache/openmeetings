@@ -18,27 +18,29 @@
  */
 package org.red5.screen.webstart.gui;
 
-import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Robot;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
-import javax.swing.SwingConstants;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.awt.event.*;
 
 import org.red5.screen.webstart.BlankArea;
 import org.red5.screen.webstart.CommonScreenShare;
 import org.red5.screen.webstart.ScreenShare;
+import org.red5.screen.webstart.gui.VirtualScreenBean.ScreenQuality;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +51,40 @@ public class VirtualScreen {
 	public boolean showWarning = true;
 
 	public boolean doUpdateBounds = true;
+	
+	private class KeyValue<T> {
+		private String key;
+		private T value;
+		
+		public KeyValue(String key, T value) {
+			this.key = key;
+			this.value = value;
+		}
+	 
+		@SuppressWarnings("unused")
+		public String getKey() { return key; }
+		public T getValue() { return value; }
+	 
+		@Override
+		public String toString() { return key; }
+	 
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof KeyValue) {
+				@SuppressWarnings("unchecked")
+				KeyValue<T> kv = (KeyValue<T>) obj;
+				return (kv.value.equals(this.value));
+			}
+			return false;
+		}
+	 
+		@Override
+		public int hashCode() {
+			int hash = 7;
+			hash = 97 * hash + (this.value != null ? this.value.hashCode() : 0);
+			return hash;
+		}
+	}
 	
 	public VirtualScreen(CommonScreenShare css) throws Exception {
 		this.css = css;
@@ -175,7 +211,6 @@ public class VirtualScreen {
 		css.jVScreenXSpin.setBounds(400, 170, 60, 24);
 		css.jVScreenXSpin.addChangeListener( new ChangeListener(){
 			public void stateChanged(ChangeEvent arg0) {
-				// TODO Auto-generated method stub
 				calcNewValueXSpin();
 			}
 		});
@@ -194,7 +229,6 @@ public class VirtualScreen {
 		css.jVScreenYSpin.setBounds(400, 200, 60, 24);
 		css.jVScreenYSpin.addChangeListener( new ChangeListener(){
 			public void stateChanged(ChangeEvent arg0) {
-				// TODO Auto-generated method stub
 				calcNewValueYSpin();
 			}
 		});
@@ -213,7 +247,6 @@ public class VirtualScreen {
 		css.jVScreenWidthSpin.setBounds(400, 240, 60, 24);
 		css.jVScreenWidthSpin.addChangeListener( new ChangeListener(){
 			public void stateChanged(ChangeEvent arg0) {
-				// TODO Auto-generated method stub
 				calcNewValueWidthSpin();
 			}
 		});
@@ -232,15 +265,12 @@ public class VirtualScreen {
 		css.jVScreenHeightSpin.setBounds(400, 270, 60, 24);
 		css.jVScreenHeightSpin.addChangeListener( new ChangeListener(){
 			public void stateChanged(ChangeEvent arg0) {
-				// TODO Auto-generated method stub
 				calcNewValueHeightSpin();
 			}
 		});
 		css.t.add(css.jVScreenHeightSpin);
 		
 		
-		//String[] selectResize = { css.label1090, css.label1091, css.label1092, css.label1093 };
-		String[] selectResize = { css.label1091, css.label1092, css.label1093 };
 		VirtualScreenBean.vScreenResizeX = 640;
 		VirtualScreenBean.vScreenResizeY = 400;
 		
@@ -249,84 +279,55 @@ public class VirtualScreen {
 		css.vscreenResizeLabel.setBounds(250, 300, 200,24 );
 		css.t.add(css.vscreenResizeLabel);
 		
-		JComboBox comboResize  = new JComboBox(selectResize);	
+		JComboBox comboResize  = new JComboBox();
+		comboResize.addItem(new KeyValue<ScreenQuality>(css.label1090, ScreenQuality.VeryHigh));
+		comboResize.addItem(new KeyValue<ScreenQuality>(css.label1091, ScreenQuality.High));
+		comboResize.addItem(new KeyValue<ScreenQuality>(css.label1092, ScreenQuality.Medium));
+		comboResize.addItem(new KeyValue<ScreenQuality>(css.label1093, ScreenQuality.Low));
 		comboResize.setBounds(250, 330, 200, 24);
-		comboResize.addActionListener(new GetResizeChoice()); 
+		comboResize.addActionListener(new ActionListener(){
+			@SuppressWarnings("unchecked")
+			public void actionPerformed(ActionEvent e) {
+				JComboBox cb = (JComboBox)e.getSource();
+		        VirtualScreenBean.screenQuality = ((KeyValue<ScreenQuality>)cb.getSelectedItem()).getValue();
+		        calcRescaleFactors();
+			}
+		}); 
 		comboResize.setSelectedIndex(css.defaultQualityScreensharing);
 		
 		css.jVScreenResizeMode = comboResize;
 		css.t.add(css.jVScreenResizeMode);
 		
 	}
-	class GetResizeChoice implements ActionListener
-	{
-		public void actionPerformed (ActionEvent e)
-		{
-			
-			JComboBox cb = (JComboBox)e.getSource();
-	        String petName = (String)cb.getSelectedItem();
-	        
-	        VirtualScreenBean.vScreenScaleFactor = petName;
-	        
-	        calcRescaleFactors();
-	        
-		}
-	}
 	
 	/**
 	 * Needs to be always invoked after every re-scaling
 	 */
 	void calcRescaleFactors() {
-		
 		logger.debug("calcRescaleFactors -- ");
-		if(VirtualScreenBean.vScreenScaleFactor.equals(css.label1090))
-        {
-			logger.debug("resize: X:"+Integer.valueOf(css.jVScreenWidthSpin.getValue().toString()).intValue()+
-					" Y:"+Integer.valueOf(css.jVScreenHeightSpin.getValue().toString()).intValue());
-
-			VirtualScreenBean.vScreenResizeX = Integer.valueOf(css.jVScreenWidthSpin.getValue().toString()).intValue();
-			VirtualScreenBean.vScreenResizeY = Integer.valueOf(css.jVScreenHeightSpin.getValue().toString()).intValue();
-			updateVScreenBounds();
-        }
-		else if(VirtualScreenBean.vScreenScaleFactor.equals(css.label1091))
-        {
-        	logger.debug("resize: X:"+Integer.valueOf(css.jVScreenWidthSpin.getValue().toString()).intValue()+
-        						" Y:"+Integer.valueOf(css.jVScreenHeightSpin.getValue().toString()).intValue());
-        	
-        	VirtualScreenBean.vScreenResizeX = Integer.valueOf(css.jVScreenWidthSpin.getValue().toString()).intValue();
-        	VirtualScreenBean.vScreenResizeY = Integer.valueOf(css.jVScreenHeightSpin.getValue().toString()).intValue();
-        	updateVScreenBounds();
-        }
-        else if(VirtualScreenBean.vScreenScaleFactor.equals(css.label1092))
-        {
-        	logger.debug("resize: X:"+Integer.valueOf(css.jVScreenWidthSpin.getValue().toString()).intValue()/2+
-        						" Y:"+Integer.valueOf(css.jVScreenHeightSpin.getValue().toString()).intValue()/2);
-        	
-        	VirtualScreenBean.vScreenResizeX = (Integer.valueOf(css.jVScreenWidthSpin.getValue().toString()).intValue())/2;
-        	VirtualScreenBean.vScreenResizeY = (Integer.valueOf(css.jVScreenHeightSpin.getValue().toString()).intValue())/2;
-        	updateVScreenBounds();
-        }
-        else if(VirtualScreenBean.vScreenScaleFactor.equals(css.label1093))
-        {
-        	logger.debug("resize: X:"+(Integer.valueOf(css.jVScreenWidthSpin.getValue().toString()).intValue()/8)*3+
-        						" Y:"+(Integer.valueOf(css.jVScreenHeightSpin.getValue().toString()).intValue()/8)*3);
-        	
-        	VirtualScreenBean.vScreenResizeX = (Integer.valueOf(css.jVScreenWidthSpin.getValue().toString()).intValue()/8)*3;
-        	VirtualScreenBean.vScreenResizeY = (Integer.valueOf(css.jVScreenHeightSpin.getValue().toString()).intValue()/8)*3;
-        	updateVScreenBounds();
-        }
-		
-		 logger.debug("########## calcRescaleFactors vScreenResizeX " + VirtualScreenBean.vScreenResizeX);
-         logger.debug("########## calcRescaleFactors vScreenResizeY " + VirtualScreenBean.vScreenResizeY);
-         logger.debug("########## calcRescaleFactors vScreenScaleFactor " + VirtualScreenBean.vScreenScaleFactor);
-         
+		VirtualScreenBean.vScreenResizeX = Integer.valueOf(css.jVScreenWidthSpin.getValue().toString()).intValue();
+		VirtualScreenBean.vScreenResizeY = Integer.valueOf(css.jVScreenHeightSpin.getValue().toString()).intValue();
+		switch (VirtualScreenBean.screenQuality) {
+			case VeryHigh:
+			case High:
+				break;
+			case Medium:
+				VirtualScreenBean.vScreenResizeX *= 1/2;
+				VirtualScreenBean.vScreenResizeY *= 2;
+				break;
+			case Low:
+				VirtualScreenBean.vScreenResizeX *= 3/8;
+				VirtualScreenBean.vScreenResizeY *= 3/8;
+				break;
+		}
+		logger.debug("resize: X:" + VirtualScreenBean.vScreenResizeX + " Y: " + VirtualScreenBean.vScreenResizeY);
+		updateVScreenBounds();
 	}
 
 	void calcNewValueXSpin(){
 		if (this.doUpdateBounds){
 			int newX = Integer.valueOf(css.jVScreenXSpin.getValue().toString()).intValue();
 			if(VirtualScreenBean.vScreenSpinnerWidth+newX > VirtualScreenBean.screenWidthMax){
-//				System.out.println("WARNING X "+VirtualScreenBean.vScreenSpinnerWidth+" "+newX);
 				newX=VirtualScreenBean.screenWidthMax-VirtualScreenBean.vScreenSpinnerWidth;
 				css.jVScreenXSpin.setValue(newX);
 				if (this.showWarning) css.showBandwidthWarning("Reduce the width of the SharingScreen before you try to move it left");
@@ -363,7 +364,6 @@ public class VirtualScreen {
 		if (this.doUpdateBounds){
 			int newWidth = Integer.valueOf(css.jVScreenWidthSpin.getValue().toString()).intValue();
 			if(VirtualScreenBean.vScreenSpinnerX+newWidth > VirtualScreenBean.screenWidthMax){
-//				System.out.println("WARNING WIDTH");
 				newWidth=VirtualScreenBean.screenWidthMax-VirtualScreenBean.vScreenSpinnerX;
 				css.jVScreenWidthSpin.setValue(newWidth);
 				if (this.showWarning)css.showBandwidthWarning("Reduce the x of the SharingScreen before you try to make it wider");

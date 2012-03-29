@@ -1,13 +1,11 @@
 package org.red5.screen.webstart;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.PointerInfo;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -22,14 +20,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBuffer;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.zip.DeflaterOutputStream;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -45,6 +39,7 @@ import org.red5.io.ITagWriter;
 import org.red5.io.utils.ObjectMap;
 import org.red5.screen.webstart.gui.VirtualScreen;
 import org.red5.screen.webstart.gui.VirtualScreenBean;
+import org.red5.screen.webstart.gui.VirtualScreenBean.ScreenQuality;
 import org.red5.server.api.event.IEvent;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.net.rtmp.Channel;
@@ -117,7 +112,7 @@ public class CommonScreenShare {
 	public String host = "btg199251";
 	public String app = "oflaDemo";
 	public int port = 1935;
-	public int defaultQualityScreensharing = 0;
+	public int defaultQualityScreensharing = 1;
 
 	public Long organization_id = 0L;
 	public Long user_id = null;
@@ -157,11 +152,7 @@ public class CommonScreenShare {
 	public String label1092 = "Medium Quality -";
 	public String label1093 = "Low Quality -";
 
-	public Float imgQuality = new Float(0.40);
-
-	// public Float scaleFactor = 1F;
-	public float Ampl_factor = 1.3f;
-
+	public float Ampl_factor = 1f;
 	public boolean isConnected = false;
 
 	public Map<Integer, Boolean> currentPressedKeys = new HashMap<Integer, Boolean>();
@@ -179,6 +170,9 @@ public class CommonScreenShare {
 	public void main(String[] args) {
 		try {
 			if (args.length == 9) {
+				for (String arg : args) {
+					logger.debug("arg: " + arg);
+				}
 
 				host = args[0];
 				app = args[1];
@@ -308,13 +302,6 @@ public class CommonScreenShare {
 			// *****
 			// Text Recording
 			textAreaHeaderRecording = new JLabel();
-
-			// FIXME: Set Font to bold
-			// textAreaHeaderRecording.setB
-			// Font f = textAreaHeaderRecording.getFont();
-			// textAreaHeaderRecording.setFont(f.deriveFont(f.getStyle() ^
-			// Font.BOLD));
-
 			textAreaHeaderRecording.setText(this.label869);
 			contentPane.add(textAreaHeaderRecording);
 			textAreaHeaderRecording.setBounds(10, 340, 480, 24);
@@ -421,9 +408,6 @@ public class CommonScreenShare {
 			PointerInfo a = MouseInfo.getPointerInfo();
 			Point mouseP = a.getLocation();
 
-			// Integer x = Long.valueOf(Math.round(mouseP.getX())).intValue();
-			// Integer y = Long.valueOf(Math.round(mouseP.getY())).intValue();
-			
 			Float scaleFactor = Float.valueOf(VirtualScreenBean.vScreenResizeX)
 					/ Float.valueOf(VirtualScreenBean.vScreenSpinnerWidth);
 
@@ -642,18 +626,6 @@ public class CommonScreenShare {
 				Robot robot = new Robot();
 
 				// VirtualScreenBean
-
-				// Integer x = Math.round ( ( (
-				// Float.valueOf(returnMap.get("x").toString()).floatValue()
-				// *VirtualScreenBean.vScreenResizeX
-				// )/VirtualScreenBean.vScreenSpinnerWidth) / Ampl_factor) ;
-				// Integer y = Math.round ( ( (
-				// Float.valueOf(returnMap.get("y").toString()).floatValue()
-				// *VirtualScreenBean.vScreenResizeY
-				// )/VirtualScreenBean.vScreenSpinnerHeight)/ Ampl_factor) ;
-				//
-
-				// logger.debug("x 1 "+returnMap.get("x"));
 
 				Float scaleFactor = Float
 						.valueOf(VirtualScreenBean.vScreenSpinnerWidth)
@@ -951,13 +923,10 @@ public class CommonScreenShare {
 			ex.printStackTrace();
 		}
 		return "";
-		// clippy.setContents( clippysContent ,null); //zur�cksetzen vom alten
-		// Kontext
 	}
 
 	private void pressSpecialSign(String charValue, Robot instance) {
 		Clipboard clippy = Toolkit.getDefaultToolkit().getSystemClipboard();
-		// Transferable clippysContent = clippy.getContents( null );
 		try {
 
 			Transferable transferableText = new StringSelection(charValue);
@@ -1042,7 +1011,7 @@ public class CommonScreenShare {
 					logger.debug("The Stream was already started ");
 				}
 
-				if (returnMap.get("modus") != null) {
+				if (returnMap != null && returnMap.get("modus") != null) {
 					if (returnMap.get("modus").toString()
 							.equals("startStreaming")) {
 						this.startButton.setEnabled(false);
@@ -1076,12 +1045,7 @@ public class CommonScreenShare {
 				logger.debug("setup capture thread vScreenSpinnerHeight "
 						+ VirtualScreenBean.vScreenSpinnerHeight);
 
-				capture = new CaptureScreen(VirtualScreenBean.vScreenSpinnerX,
-						VirtualScreenBean.vScreenSpinnerY,
-						VirtualScreenBean.vScreenSpinnerWidth,
-						VirtualScreenBean.vScreenSpinnerHeight,
-						VirtualScreenBean.vScreenResizeX,
-						VirtualScreenBean.vScreenResizeY);
+				capture = new CaptureScreen();
 
 				if (thread == null) {
 					thread = new Thread(capture);
@@ -1154,11 +1118,6 @@ public class CommonScreenShare {
 
 		kt++;
 
-		// if ( kt < 10 ) {
-		// logger.debug( "+++ " + videoData );
-		// System.out.println( "+++ " + videoData);
-		// }
-
 		RTMPMessage rtmpMsg = RTMPMessage.build(videoData);
 		instance.publishStreamData(publishStreamId, rtmpMsg);
 	}
@@ -1170,14 +1129,6 @@ public class CommonScreenShare {
 	// ------------------------------------------------------------------------
 
 	private final class CaptureScreen extends Object implements Runnable {
-		private volatile int x = 0;
-		private volatile int y = 0;
-		private volatile int resizeX;
-		private volatile int resizeY;
-
-		private volatile int width = resizeX; // 320
-		private volatile int height = resizeY; // 240
-
 		private int timeBetweenFrames = 1000; // frameRate
 
 		private volatile long timestamp = 0;
@@ -1185,7 +1136,7 @@ public class CommonScreenShare {
 		private volatile boolean active = true;
 		@SuppressWarnings("unused")
 		private volatile boolean stopped = false;
-		private byte[] previousItems = null;
+		private IScreenEncoder se;
 
 		// ------------------------------------------------------------------------
 		//
@@ -1193,27 +1144,9 @@ public class CommonScreenShare {
 		//
 		// ------------------------------------------------------------------------
 
-		public CaptureScreen(final int x, final int y, final int width,
-				final int height, int resizeX, int resizeY) {
-
-			this.x = x;
-			this.y = y;
-			this.width = width;
-			this.height = height;
-			this.resizeX = resizeX;
-			this.resizeY = resizeY;
-
-			if (VirtualScreenBean.vScreenScaleFactor
-					.equals(label1090)) {
-				timeBetweenFrames = 100;
-			} else {
-				timeBetweenFrames = 1000;
-			}
-
-			logger.debug("CaptureScreen: x=" + x + ", y=" + y + ", w=" + width
-					+ ", h=" + height + ",resizeX=" + resizeX + " resizeY= "
-					+ resizeY);
-
+		public CaptureScreen() {
+			timeBetweenFrames = (VirtualScreenBean.screenQuality == ScreenQuality.VeryHigh) ? 100 : 1000;
+			se = new ScreenV1Encoder();
 		}
 
 		// ------------------------------------------------------------------------
@@ -1234,7 +1167,7 @@ public class CommonScreenShare {
 		}
 
 		public void resetBuffer() {
-			this.previousItems = null;
+			se.reset();
 		}
 
 		// ------------------------------------------------------------------------
@@ -1242,89 +1175,27 @@ public class CommonScreenShare {
 		// Thread loop
 		//
 		// ------------------------------------------------------------------------
-
 		public void run() {
-			final int blockWidth = 32;
-			final int blockHeight = 32;
-
-			int frameCounter = 0;
-
-			int orig_width = width;
-			int orig_height = height;
-
 			try {
 				Robot robot = new Robot();
-
-				this.previousItems = null;
 
 				while (active) {
 					final long ctime = System.currentTimeMillis();
 
-					width = orig_width;
-					height = orig_height;
-
-					BufferedImage image = robot
-							.createScreenCapture(new Rectangle(x, y, width,
-									height));
-
-					int width_new = resizeX;
-					int height_new = resizeY;
-					width = resizeX;
-					height = resizeY;
-					// Resize to 640*480
-					// Create new (blank) image of required (scaled) size
-					BufferedImage image_raw = new BufferedImage(width_new,
-							height_new, BufferedImage.TYPE_INT_RGB);
-
-					Graphics2D graphics2D = image_raw.createGraphics();
-					graphics2D.setRenderingHint(
-							RenderingHints.KEY_INTERPOLATION,
-							RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-					graphics2D.drawImage(image, 0, 0, width_new, height_new,
-							null);
-					graphics2D.dispose();
-
-					// End resize
-
-					int scaledWidth = width;
-					int scaledHeight = height;
-
-					byte[] current = toBGR(image_raw);
-					// if (scaleFactor != 1F) {
-					//
-					// logger.debug("Calc new Scaled Instance ",scaleFactor);
-					//
-					// scaledWidth =
-					// Float.valueOf(Math.round(width*scaleFactor)).intValue();
-					// scaledHeight =
-					// Float.valueOf(Math.round(height*scaleFactor)).intValue();
-					//
-					// Image img = image_raw.getScaledInstance(scaledWidth,
-					// scaledHeight,Image.SCALE_SMOOTH);
-					//
-					// BufferedImage image_scaled = new
-					// BufferedImage(scaledWidth,
-					// scaledHeight,BufferedImage.TYPE_3BYTE_BGR);
-					//
-					// Graphics2D biContext = image_scaled.createGraphics();
-					// biContext.drawImage(img, 0, 0, null);
-					// current = toBGR(image_scaled);
-					// } else {
-					// current = toBGR(image_raw);
-					// }
+					Rectangle screen = new Rectangle(VirtualScreenBean.vScreenSpinnerX,
+							VirtualScreenBean.vScreenSpinnerY,
+							VirtualScreenBean.vScreenSpinnerWidth,
+							VirtualScreenBean.vScreenSpinnerHeight);
+					
+					BufferedImage image = robot.createScreenCapture(screen);
 
 					try {
-						// timestamp += (1000000 / timeBetweenFrames);
 						timestamp += timeBetweenFrames;
 
-						final byte[] screenBytes = encode(current,
-								this.previousItems, blockWidth, blockHeight,
-								scaledWidth, scaledHeight);
-						pushVideo(screenBytes.length, screenBytes, timestamp);
-						this.previousItems = current;
+						byte[] data = se.encode(screen, image, new Rectangle(VirtualScreenBean.vScreenResizeX,
+								VirtualScreenBean.vScreenResizeY));
 
-						if (++frameCounter % 100 == 0)
-							this.previousItems = null;
+						pushVideo(data.length, data, timestamp);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -1338,133 +1209,6 @@ public class CommonScreenShare {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}
-
-		// ------------------------------------------------------------------------
-		//
-		// Private
-		//
-		// ------------------------------------------------------------------------
-
-		private byte[] toBGR(BufferedImage image) {
-			final int width = image.getWidth();
-			final int height = image.getHeight();
-
-			byte[] buf = new byte[3 * width * height];
-
-			final DataBuffer buffer = image.getData().getDataBuffer();
-
-			for (int y = 0; y < height; y++) {
-				for (int x = 0; x < width; x++) {
-					final int rgb = buffer.getElem(y * width + x);
-					final int offset = 3 * (y * width + x);
-
-					buf[offset + 0] = (byte) (rgb & 0xFF);
-					buf[offset + 1] = (byte) ((rgb >> 8) & 0xFF);
-					buf[offset + 2] = (byte) ((rgb >> 16) & 0xFF);
-				}
-			}
-
-			return buf;
-		}
-
-		private byte[] encode(final byte[] current, final byte[] previous,
-				final int blockWidth, final int blockHeight, final int width,
-				final int height) throws Exception {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream(16 * 1024);
-
-			if (previous == null) {
-				baos.write(getTag(0x01, 0x03)); // keyframe (all cells)
-			} else {
-				baos.write(getTag(0x02, 0x03)); // frame (changed cells)
-			}
-
-			// write header
-			final int wh = width + ((blockWidth / 16 - 1) << 12);
-			final int hh = height + ((blockHeight / 16 - 1) << 12);
-
-			writeShort(baos, wh);
-			writeShort(baos, hh);
-
-			// write content
-			int y0 = height;
-			int x0 = 0;
-			int bwidth = blockWidth;
-			int bheight = blockHeight;
-
-			while (y0 > 0) {
-				bheight = Math.min(y0, blockHeight);
-				y0 -= bheight;
-
-				bwidth = blockWidth;
-				x0 = 0;
-
-				while (x0 < width) {
-					bwidth = (x0 + blockWidth > width) ? width - x0
-							: blockWidth;
-
-					final boolean changed = isChanged(current, previous, x0,
-							y0, bwidth, bheight, width, height);
-
-					if (changed) {
-						ByteArrayOutputStream blaos = new ByteArrayOutputStream(
-								4 * 1024);
-
-						DeflaterOutputStream dos = new DeflaterOutputStream(
-								blaos);
-
-						for (int y = 0; y < bheight; y++) {
-							dos.write(current, 3 * ((y0 + bheight - y - 1)
-									* width + x0), 3 * bwidth);
-						}
-
-						dos.finish();
-
-						final byte[] bbuf = blaos.toByteArray();
-						final int written = bbuf.length;
-
-						// write DataSize
-						writeShort(baos, written);
-						// write Data
-						baos.write(bbuf, 0, written);
-					} else {
-						// write DataSize
-						writeShort(baos, 0);
-					}
-
-					x0 += bwidth;
-				}
-			}
-
-			return baos.toByteArray();
-		}
-
-		private void writeShort(OutputStream os, final int n) throws Exception {
-			os.write((n >> 8) & 0xFF);
-			os.write((n >> 0) & 0xFF);
-		}
-
-		public boolean isChanged(final byte[] current, final byte[] previous,
-				final int x0, final int y0, final int blockWidth,
-				final int blockHeight, final int width, final int height) {
-			if (previous == null)
-				return true;
-
-			for (int y = y0, ny = y0 + blockHeight; y < ny; y++) {
-				final int foff = 3 * (x0 + width * y);
-				final int poff = 3 * (x0 + width * y);
-
-				for (int i = 0, ni = 3 * blockWidth; i < ni; i++) {
-					if (current[foff + i] != previous[poff + i])
-						return true;
-				}
-			}
-
-			return false;
-		}
-
-		public int getTag(final int frame, final int codec) {
-			return ((frame & 0x0F) << 4) + ((codec & 0x0F) << 0);
 		}
 	}
 }

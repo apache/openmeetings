@@ -479,8 +479,9 @@ public class ImportInitvalues {
 		cfgManagement.addConfByKey(3, "show.facebook.login", "" + 0, null,
 				"Show Facebook Login");
 
-		cfgManagement.addConfByKey(3, "default.quality.screensharing", "0",
-				null, "Default selection in ScreenSharing Quality");
+		cfgManagement.addConfByKey(3, "default.quality.screensharing", "1",
+						null,
+						"Default selection in ScreenSharing Quality:\n 0 - bigger frame rate, no resize\n 1 - no resize\n 2 - size == 1/2 of selected area\n 3 - size == 3/8 of selected area");
 
 		cfgManagement.addConfByKey(3, "default.dashboard.tab", "0", null,
 				"Default selection in Dashboard tabs as tab-index-id");
