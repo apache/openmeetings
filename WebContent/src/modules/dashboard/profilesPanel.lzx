@@ -80,40 +80,45 @@
 		        		+'&moduleName=userprofile&parentPath=&room_id='
 		        		+'&sid='+canvas.sessionId;
 		        if($debug) Debug.write("dashboard/downloadurl ",downloadurl);
-		        parent._imageProfile._userpic.setAttribute('src',downloadurl);	
+		        parent._userpic.setAttribute('src',downloadurl);	
 	        ]]>
     	</handler>
   	</netRemoteCallHib>	    
     
-    <view y="2" x="4" name="_imageProfile"  width="120" height="120">
-    	<image name="_userpic" >
+    <view y="2" x="4" name="_imageProfileBG1" width="128" height="128" 
+    				bgcolor="0xFFFFFF" opacity="0.5" >
+    </view>
     
-	    	<handler name="onload" args="d">
-	            <![CDATA[
-	                if (this.height > 116) {
-	                    //If bigger then containter then scale it
-	                    var width = this.width/(this.height/116);
-	                    this.setAttribute('height',116);
-	                    this.setAttribute('width',width);
-	                }
-	                if (this.width > 116) {
-	                	//If bigger then containter then scale it
-	                    var height = this.height/(this.width/116);
-	                    this.setAttribute('height',height);
-	                    this.setAttribute('width',116);
-	                }
-	                if($debug) Debug.write("onload ",this.height,this.width,d.height,d.width);
-	                
-	                //makes sure bottom area is updated
-	                //this._changeSize.setAttribute('y',this.height-20);
-	                //this._changeSize.setAttribute('width',this.width);
-	            ]]>
-	        </handler>
-	    	
-	    </image>
+   	<image name="_userpic" y="2" x="4" >
+   
+    	<handler name="onload" args="d">
+            <![CDATA[
+                if (this.height > 116) {
+                    //If bigger then containter then scale it
+                    var width = this.width/(this.height/116);
+                    this.setAttribute('height',116);
+                    this.setAttribute('width',width);
+                }
+                if (this.width > 116) {
+                	//If bigger then containter then scale it
+                    var height = this.height/(this.width/116);
+                    this.setAttribute('height',height);
+                    this.setAttribute('width',116);
+                }
+                if($debug) Debug.write("onload ",this.height,this.width,d.height,d.width);
+                
+                //makes sure bottom area is updated
+                //this._changeSize.setAttribute('y',this.height-20);
+                //this._changeSize.setAttribute('width',this.width);
+            ]]>
+        </handler>
+    	
+    </image>
+    
+    <view y="2" x="4" name="_imageProfileBG2" width="128" height="128" >
 	    
-	    <view name="_changeSize" height="48" width="128" y="80" bgcolor="0xFFFFFF" opacity="0.5">
-   			<labelText labelid="379" align="center" bgcolor="0xFFFFFF"/>
+	    <view name="_changeSize" height="48" width="128" y="80" bgcolor="0xFFFFFF" opacity="0.6">
+   			<labelText labelid="379" align="center" />
     		<handler name="onclick">
         		<![CDATA[
 		        	new lz.uploadWindowExplorer(canvas.main_content._content.inner,{
@@ -131,6 +136,7 @@
     	</view>
     
     </view>
+
     
     <labelText name="_username" fontstyle="bold" y="2" labelid="376" x="140" />
     

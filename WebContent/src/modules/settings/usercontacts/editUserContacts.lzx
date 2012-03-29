@@ -21,14 +21,16 @@
 <library>
 	<include href="userContacts.lzx" />
 	
-<class name="editUserContacts" extends="view" y="24" height="$once{ canvas.height - 134 }">
+<class name="editUserContacts" extends="view">
 	
 	<attribute name="contactContent" value="null"/>
 	
 	<handler name="onvisible" args="v">
 		if (v) {
 			if (this.contactContent == null) {
-				this.contactContent = new lz.editUserContactsContent(this);
+				//We do some tricks to render / to show some of the visible area 
+				//even if the UI is not yet completely rendered
+				lz.Timer.addTimer( new LzDelegate( this, "initContent" ), 250 );
 			}
 		} else {
 			if (this.contactContent != null) {
@@ -38,21 +40,28 @@
 		}
 	</handler>
 	
+	<method name="initContent" args="tRef">
+		this.contactContent = new lz.editUserContactsContent(this);
+	</method>
 	
 </class>
 
 <class name="editUserContactsContent" extends="view" height="$once{ parent.height }">
 	
+	<handler name="oninit">
+		//We do some tricks to render / to show some of the visible area 
+		//even if the UI is not yet completely rendered
+		lz.Timer.addTimer( new LzDelegate( this, "initContent" ), 250 );
+	</handler>
+	
+	<method name="initContent" args="tRef">
+		new lz.userContacts(this,{name:'_userContacts'});
+	</method>
 	
 	<privateMessages name="_privateMessages" x="0" y="0" />
 	
-	
 	<view height="$once{ parent.height }" width="1" x="$once{ canvas.width-276 }" 
-		  bgcolor="$once{ canvas.basebgcolorizer }"></view>
-	
-	
-	<userContacts name="_userContacts" />
-	
+		  bgcolor="0xCCCCCC"></view>
 	
 </class>	
 	

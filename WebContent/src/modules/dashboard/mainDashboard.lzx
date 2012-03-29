@@ -151,7 +151,7 @@
 	<infosPanel x="520" />
 
     <view name="_bottomArea" y="240" x="0"
-            width="${ canvas.width }" height="${ canvas.height-350 }" visibility="hidden">
+            width="${ canvas.width }" height="${ canvas.height-240-84 }" visibility="hidden">
     	
     	<attribute name="refObjItem" value="null" />
     	
@@ -175,51 +175,38 @@
                 this._boxes.feed1.setAttribute("visibility","visible");
             }
             
-            
             this.refObjItem.select();
         </method>
         
-        <view width="${ parent.width }" x="0" y="1" height="$once{ parent._tabbar.height }" 
-          stretches="both" resource="presenter_thumb_rsc" >
-            <handler name="oninit">
-                <![CDATA[
-                    this.setTintRGB(canvas.basebgcolorizer,90);
-                ]]>
-            </handler>
-            <method name="setTintRGB" args="color, brightness">
-                <![CDATA[
-                    if (color != "" && color != null){
-    
-                        if (brightness == null) { brightness = 0; }
-                        var rgb = color;
-                        var red=(rgb >> 16) & 0xFF;
-                        var green=(rgb >> 8) & 0xFF;
-                        var blue=rgb & 0xFF;
-            
-                        this.setColorTransform( { ra : red, ga : green, ba : blue,
-                                                    rb : 0, gb : 0, bb : 0 } );
-                                                    
-                    }
-                ]]>
-            </method>            
-        </view>
-    	
-    	<view name="_tabbar" x="0" y="1" width="${ parent.width }" height="30"
-    		  layout="axis:x;spacing:2">
+        <view name="borderBarTop" y="0"
+    			width="${ parent.width }" bgcolor="0xCCCCCC" height="1" />
+    	<view name="_tabbarBg" width="${ parent.width }" height="32" y="1" bgcolor="0xFAFAFA" />
+		<view name="borderBarBottom" y="34"
+    			width="${ parent.width }" bgcolor="0xCCCCCC" height="1" />  
+        
+    	<view name="_tabbar" x="0" y="1" width="${ parent.width }" height="32"
+    		  layout="axis:x;spacing:2;inset:2" >
+    		  
+   		 	<handler name="oninit">
+	    		for (var eg in this.subviews) {
+	            	this.subviews[eg].deselect();
+	            }
+	    	</handler>
+    		  
+    		<tabButtonMain name="myRoomsTabButton" height="$once{ parent.height }" 
+                    currentIconRsc="icon_btn_rooms_conference" labelid="1305" width="${ (parent.width-4)/3 }" />
     		
-    		<conferenceRoomSidebarTabButton name="myRoomsTabButton" height="$once{ parent.height }"
-                    currentIconRsc="icon_btn_rooms_conference" labelid="1305" width="${ (parent.width-4)/3 }"
-                    />
-    		
-            <conferenceRoomSidebarTabButton name="chatTabButton" width="${ (parent.width-4)/3 }" height="$once{ parent.height }"
+            <tabButtonMain name="chatTabButton" width="${ (parent.width-4)/3 }" height="$once{ parent.height }"
                     currentIconRsc="icon_btn_chat_dashboard" labelid="443" />
             
-            <conferenceRoomSidebarTabButton name="rssFeed1TabButton" width="${ (parent.width-4)/3 }" height="$once{ parent.height }"
+            <tabButtonMain name="rssFeed1TabButton" width="${ (parent.width-4)/3 }" height="$once{ parent.height }"
                     currentIconRsc="icon_btn_rss_conference" labelid="277" />
                     
-        </view>        
+        </view>    
+        
+          
     		
-    	<view name="_boxes" height="${ parent.height-35 }" width="${ parent.width }" y="35">	
+    	<view name="_boxes" height="${ parent.height-40 }" width="${ parent.width }" y="40">	
     	
             <view name="myMeetings" height="${ parent.height }" width="${ parent.width }" visibility="hidden" >
         

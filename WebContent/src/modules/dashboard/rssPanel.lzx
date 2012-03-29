@@ -80,10 +80,6 @@
 <class name="rssPanel" extends="guiPresenter"
     width="400" height="380" closable="true" labelid="277"
     resizeable="false">
-	<!--
-    <simpleLabelButton y="40" labelid="279" x="30"
-        onclick="quicklink('meetings')" />
-     -->
     <rssBox name="feed" />
 </class> 
 

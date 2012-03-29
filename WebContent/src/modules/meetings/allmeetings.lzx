@@ -20,7 +20,7 @@
 -->
 <library>
 
-<class name="allmeetings" extends="baseContentView" height="${ canvas.height-110 }">
+<class name="allmeetings" extends="baseContentView" height="${ canvas.height-canvas.naviHeight }">
 	<attribute name="finishedTabsQuantity" type="number" value="0"/>	
 	<attribute name="clickedButton" value="null"/>
 			
@@ -71,45 +71,29 @@
     	this.refObjItem.select();
     </method>
     
-	<!-- label: meeting room
-	<labelText fontstyle="bold" y="10" labelid="128" resize="true" width="200" />
-	 -->
-	<view width="${ canvas.width }">
+   	<view name="_tabbarBg" width="${ parent.width }" height="32" y="1" bgcolor="0xFAFAFA" />
+   	
+	<view name="borderBarBottom" y="34"
+   			width="${ parent.width }" bgcolor="0xCCCCCC" height="1" />  
+      
+	<view name="_tabbar" width="${ canvas.width }" y="1" height="32"
+  		  layout="axis:x;spacing:2;inset:2" >
+  		  	
+	 	<handler name="oninit">
+	   		for (var eg in this.subviews) {
+           		this.subviews[eg].deselect();
+            }
+            this.publicTabButton.select();
+	   	</handler>
 		
-		<view width="${ parent.width }" height="$once{ parent.height }" 
-              stretches="both" resource="presenter_thumb_rsc" >
-            <handler name="oninit">
-                <![CDATA[
-                    this.setTintRGB(canvas.basebgcolorizer,90);
-                ]]>
-            </handler>
-            <method name="setTintRGB" args="color, brightness">
-                <![CDATA[
-                    if (color != "" && color != null){
-    
-                        if (brightness == null) { brightness = 0; }
-                        var rgb = color;
-                        var red=(rgb >> 16) & 0xFF;
-                        var green=(rgb >> 8) & 0xFF;
-                        var blue=rgb & 0xFF;
-            
-                        this.setColorTransform( { ra : red, ga : green, ba : blue,
-                                                    rb : 0, gb : 0, bb : 0 } );
-                                                    
-                    }
-                ]]>
-            </method>            
-        </view>
-        
-		<conferenceRoomSidebarTabButton name="publicTabButton" selected="true"
+		<tabButtonMain name="publicTabButton" selected="true" height="$once{ parent.height }" 
         		currentIconRsc="icon_btn_rooms_conference" x="0" labelid="777" width="${ (parent.width-6)/3 }"/>
 		
-		<conferenceRoomSidebarTabButton name="privateTabButton" width="${ (parent.width-6)/3 }"
-        		x="$once{ ((parent.width)/3)+2 }" currentIconRsc="icon_btn_rooms_conference" labelid="779" />
+		<tabButtonMain name="privateTabButton" width="${ (parent.width-6)/3 }" height="$once{ parent.height }" 
+        		 currentIconRsc="icon_btn_rooms_conference" labelid="779" />
         		
-        <conferenceRoomSidebarTabButton name="myTabButton" width="${ (parent.width-6)/3 }"
-        		x="$once{ (((parent.width)/3)*2)+4 }" currentIconRsc="icon_btn_rooms_conference" labelid="781" />
-		
+        <tabButtonMain name="myTabButton" width="${ (parent.width-6)/3 }" height="$once{ parent.height }" 
+        		currentIconRsc="icon_btn_rooms_conference" labelid="781" />
 		
 	</view>
 	

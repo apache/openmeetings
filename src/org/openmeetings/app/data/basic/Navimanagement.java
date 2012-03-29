@@ -127,7 +127,8 @@ public class Navimanagement {
 
 	public void addMainStructure(String action, int naviorder,
 			long fieldvalues_id, boolean isleaf, boolean isopen, long level_id,
-			String name, long global_id, String deleted) {
+			String name, long global_id, String deleted,
+			Long tooltip_fieldvalues_id) {
 		try {
 			Navimain ng = new Navimain();
 			ng.setAction(action);
@@ -142,6 +143,7 @@ public class Navimanagement {
 			ng.setDeleted(deleted);
 			ng.setGlobal_id(global_id);
 			ng.setStarttime(new Date());
+			ng.setTooltip_fieldvalues_id(tooltip_fieldvalues_id);
 
 			em.merge(ng);
 
@@ -150,28 +152,4 @@ public class Navimanagement {
 		}
 	}
 
-	public void addSubStructure(String action, int naviorder,
-			long fieldvalues_id, boolean isleaf, boolean isopen, long level_id,
-			String name, long main_id) {
-		try {
-			Navisub ng = new Navisub();
-			ng.setAction(action);
-			ng.setComment("");
-			ng.setIcon("");
-			ng.setNaviorder(naviorder);
-			ng.setFieldvalues_id(fieldvalues_id);
-			ng.setIsleaf(isleaf);
-			ng.setIsopen(isopen);
-			ng.setLevel_id(level_id);
-			ng.setName(name);
-			ng.setDeleted("false");
-			ng.setMain_id(main_id);
-			ng.setStarttime(new Date());
-
-			em.merge(ng);
-
-		} catch (Exception ex2) {
-			log.error("addSubStructure", ex2);
-		}
-	}
 }

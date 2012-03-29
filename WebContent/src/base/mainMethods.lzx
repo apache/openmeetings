@@ -410,7 +410,7 @@
                     new lz.editWhiteboardDefault(canvas.main_content._content.inner);
                 } else if (stringSub=='quit') {
                     
-                    quicklink('meetings')
+                    quicklink('conferenceModuleRoomList')
                 
                 } else if( stringSub == "browser_open" ){
                     var browserPanelWidth  = canvas.browserPanelWidth;

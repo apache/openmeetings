@@ -315,8 +315,8 @@ the LAST RoomClient Object that has been changed the giveExclusiveAudio status
 <attribute name="isResetUsername" value="false" type="boolean" />
 <attribute name="resetHash" value="" type="string" />
     
-<attribute name="naviHeight" value="110" type="number" />    
-<attribute name="naviHeightDelta" value="110" type="number" />  
+<attribute name="naviHeight" value="84" type="number" />    
+<attribute name="naviHeightDelta" value="84" type="number" />  
 
 <attribute name="currentrecorder" value="null" /> 
 <attribute name="currentrecorder_id" value="0" type="number" /> 

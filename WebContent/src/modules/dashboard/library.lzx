@@ -30,6 +30,7 @@
     <resource name="icon_btn_rooms_conference" src="resources/network-transmit-receive2.png" />
     <resource name="icon_btn_rss_conference" src="resources/rss_small.png" />
 	 
+	<include href="tabButtonMain.lzx" />
 	<include href="infosPanel.lzx" />
 	<include href="profilesPanel.lzx" />
 	<include href="rssPanel.lzx" />

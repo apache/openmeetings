@@ -62,16 +62,16 @@
         		   width="$once{ parent.width-210 }" />
         
         <simpleLabelButton labelid="788" width="196" x="$once{ parent.width-200 }" 
-               y="$once{ parent.height-60 }" height="24" 
+               y="$once{ parent.height-80 }" height="24" 
                onclick="this.parent.storeSettings();">
             <handler name="onclick">
-                quicklink('meetings');
+                quicklink('conferenceModuleRoomList');
             </handler>
             <labelTooltip labelid="769" />
         </simpleLabelButton>
         
         <simpleLabelButton labelid="291" width="196" x="$once{ parent.width-200 }" 
-               y="$once{ parent.height-34 }" height="24" 
+               y="$once{ parent.height-54 }" height="24" 
                onclick="this.parent.storeSettings();">
             <handler name="onclick">
                 quicklink('dashboardModuleCalendar');

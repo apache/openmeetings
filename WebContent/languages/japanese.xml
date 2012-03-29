@@ -4323,4 +4323,40 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   <string id="1449" name="calendar contact list">
     <value>Show calendar events of contact</value>
   </string>
+  <string id="1450" name="tooltip menu">
+    <value>Your home!</value>
+  </string>
+  <string id="1451" name="tooltip menu">
+    <value>Plan your meetings</value>
+  </string>
+  <string id="1452" name="tooltip menu">
+    <value>Watch recording and interviews</value>
+  </string>
+  <string id="1453" name="tooltip menu">
+    <value>Choose and start a web-conference</value>
+  </string>
+  <string id="1454" name="tooltip menu">
+    <value>Manage users and rights</value>
+  </string>
+  <string id="1455" name="tooltip menu">
+    <value>Manage connections and kick users</value>
+  </string>
+  <string id="1456" name="tooltip menu">
+    <value>Manage usergroups</value>
+  </string>
+  <string id="1457" name="tooltip menu">
+    <value>Manage conference rooms</value>
+  </string>
+  <string id="1458" name="tooltip menu">
+    <value>Manage system settings</value>
+  </string>
+  <string id="1459" name="tooltip menu">
+    <value>Manage labels and wording</value>
+  </string>
+  <string id="1460" name="tooltip menu">
+    <value>Manage LDAP and ADS configurations</value>
+  </string>
+  <string id="1461" name="tooltip menu">
+    <value>Export/Import System Backups</value>
+  </string>
 </language>

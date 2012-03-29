@@ -24,7 +24,7 @@
 	View for recorded contents list.
 	When you select 'Recordings' on the top menu, this class shows the list.
 -->
-<class name="lzRecordNavigation" extends="view" width="280" height="${ canvas.height-110 }">	
+<class name="lzRecordNavigation" extends="view" width="280" height="${ canvas.height-canvas.naviHeight }">	
 
     <attribute name="isOpen" value="true" type="boolean"/>
     

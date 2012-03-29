@@ -111,9 +111,7 @@ function getLabelTagByNo(no,labelid){
 }
 
 function quicklink(action){
-    // if($debug) Debug.write("FUNC/quicklink",action);
-	//canvas._mainbgcontentNavi.subviews[1].subviews[1].doAction(action);
-	mainmenuList.doAction(action);
+	quicklinkAct(action);
 }   
     
 function quicklinkAct(action){
@@ -124,7 +122,7 @@ function quicklinkAct(action){
 }            
 
 function loadContent(obj,parentobj,preparentobj){
-    // if($debug) Debug.write("FUNC/loadContent: ",obj.action);
+    if($debug) Debug.write("FUNC/loadContent: ",obj.action);
     
     tempActionForNavi = obj.action;
 

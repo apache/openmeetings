@@ -246,7 +246,7 @@
 	
 	
 	<view height="$once{ parent.height }" width="1" x="154" 
-		  bgcolor="$once{ canvas.basebgcolorizer }"></view>
+		  bgcolor="0xCCCCCC"></view>
 	
 	<labelText name="_labelPrivateMessages" x="160" labelid="1206" fontstyle="bold" />
 	
@@ -1123,7 +1123,7 @@
 	    </netRemoteCallHib>		 
 	    
 	    <view name="_privateMessageDetailsBorder2" width="$once{ parent.width }" y="0"
-		  height="1" bgcolor="$once{ canvas.basebgcolorizer }" />
+		  height="1" bgcolor="0x666666" />
 		
 		<view name="_privateMessageDetailsBorder3" width="$once{ parent.width }" y="1"
 		  	height="61" bgcolor="0x666666" opacity="0.1" />
@@ -1141,7 +1141,7 @@
 				   x="100" y="42" resize="false" />
 		
 		<view name="_privateMessageDetailsBorder1" width="$once{ parent.width }" y="62"
-		  	height="1" bgcolor="$once{ canvas.basebgcolorizer }" />
+		  	height="1" bgcolor="0x666666" />
 		  
 		<view name="message" y="64" bgcolor="0xFFFFFF" x="2"
 			  width="$once{ parent.width-4 }" height="${ parent.height-86 }">
@@ -1154,7 +1154,7 @@
 			  y="${ parent.height-22 }" width="$once{ parent.width }">
 			
 			<view name="_privateMessageDetailsBorder2" width="$once{ parent.width }" y="0"
-                    height="1" bgcolor="$once{ canvas.basebgcolorizer }" />
+                    height="1" bgcolor="0x666666" />
 			
             <!-- label: cancel -->
             <simpleLabelButton labelid="1303" x="$once{ parent.width-130 }" width="120" y="2">

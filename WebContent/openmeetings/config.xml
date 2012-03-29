@@ -78,16 +78,16 @@ of the red5-servlet
 <!--
 	These colors are the main colors and style the whole application
  -->
-<basebgcolorizer>0x669AE6</basebgcolorizer>
-<baseMousecolorizer>0x7BA8EA</baseMousecolorizer>
-<baseMouseOvercolorizer>0x99BBEE</baseMouseOvercolorizer>
-<styleMenuBarBaseColor>0x669AE6</styleMenuBarBaseColor>
+<basebgcolorizer>0xA7ABCF</basebgcolorizer>
+<baseMousecolorizer>0xA7ABCF</baseMousecolorizer>
+<baseMouseOvercolorizer>0xA7ABCF</baseMouseOvercolorizer>
+<styleMenuBarBaseColor>0x000088</styleMenuBarBaseColor>
     
 <!--
     Name of the Application
     this is the Top-Icon Name of the Application
  -->    
-<currentappname>Apache OpenMeetings</currentappname>    
+<currentappname>Apache OpenMeetings [Incubating]</currentappname>    
     
 <!-- 
     URL to the Home of the Application

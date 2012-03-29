@@ -81,21 +81,7 @@
 <class name="userSettings" extends="baseContentView">
 	
     <handler name="oninit">
-        //this.getRssFeeds.doCall();
-        
-        //if ($debug) Debug.write("userSettings -1- ################################ ");
-        //if ($debug) Debug.write("userSettings -1- ",canvas.userSettingsModuleOpt);
-        //if ($debug) Debug.write("userSettings -1- ################################ ");
-        
         _mainScrollBar.setAttribute("visibility","hidden");
-        if (canvas.userSettingsModuleOpt == "userProfile") {
-        	this._menu._editUserProfile.onclick.sendEvent(null);
-        } else if (canvas.userSettingsModuleOpt == "userSearch") {
-            this._menu._searchUserProfile.onclick.sendEvent(null);
-            this._content._searchUserProfile.searchByUpdate();
-        } else {
-        	this._menu._editUserContacts.onclick.sendEvent(null);
-        }
     </handler>
     
     <handler name="ontabcontentleave">
@@ -104,45 +90,52 @@
     	_mainScrollBar.setAttribute("visibility","visible");
     </handler>
 	
-	<attribute name="currentSelected" value="null" />
-	
-	<method name="setSubItem" args="refObj">
-		if (this.currentSelected != null) {
-			this.currentSelected.resetItem();
-		}
-		
+	<view name="_tabbarBg" width="${ parent.width }" height="32" y="1" bgcolor="0xFAFAFA" />
+   	
+	<view name="borderBarBottom" y="34"
+   			width="${ parent.width }" bgcolor="0xCCCCCC" height="1" />  
+   			
+    <attribute name="refObjItem" value="null" />
+    
+    <method name="doSelection" args="objRef">
+    	if (this.refObjItem != null) {
+    		this.refObjItem.deselect();
+    	}
+    	this.refObjItem = objRef;
 		this._content.hideAll();
+		this._content[objRef.name].setAttribute("visibility","visible");
+    	this.refObjItem.select();
+    </method>
+      
+	<view name="_tabbar" width="${ canvas.width }" y="1" height="32"
+  		  layout="axis:x;spacing:2;inset:2" >
+  		  
+    	<handler name="oninit">
+	   		for (var eg in this.subviews) {
+           		this.subviews[eg].deselect();
+            }
+            
+            if (canvas.userSettingsModuleOpt == "userProfile") {
+	        	this._userProfile.onclick.sendEvent(null);
+	        } else if (canvas.userSettingsModuleOpt == "userSearch") {
+	            this._searchUserProfile.onclick.sendEvent(null);
+	            parent._content._searchUserProfile.searchByUpdate();
+	        } else {
+	        	this._editUserContacts.onclick.sendEvent(null);
+	        }
+	   	</handler>
 		
-		this.currentSelected = refObj;
+		<tabButtonMain name="_userProfile" selected="true" height="$once{ parent.height }" 
+        		 x="0" labelid="1170" width="${ (parent.width-10)/4 }" showIcon="false" />
+        
+        <tabButtonMain name="_editUserContacts" selected="true" height="$once{ parent.height }" 
+        		 x="0" labelid="1188" width="${ (parent.width-10)/4 }" showIcon="false" />
 		
-		this._content[refObj.name].setAttribute("visibility","visible");
-		
-	</method>
-	
-	<menubar height="24" width="$once{ canvas.width }" />
-	
-	<view name="_menu" x="1">
-		
-		<simplelayout axis="x" spacing="0" />
-		
-		<!-- -->
-		<menuListItemUserProfile name="_userProfile" labelid="1170" labelLabelid="1173">
-		</menuListItemUserProfile>
-		
-		<menuListItemUserProfile name="_editUserContacts" labelid="1188" labelLabelid="1197" >
-		</menuListItemUserProfile>
-		
-		 
-		<menuListItemUserProfile name="_editUserProfile" labelid="1171" labelLabelid="1174">
-			<!--
-			<handler name="oninit">
-				this.onclick.sendEvent(null);
-			</handler>
-			 -->
-		</menuListItemUserProfile>
-		
-		<!---->
-		<menuListItemUserProfile name="_searchUserProfile" labelid="1172" labelLabelid="1175" />
+		<tabButtonMain name="_editUserProfile" width="${ (parent.width-10)/4 }" height="$once{ parent.height }" 
+        		 labelid="1171" showIcon="false" />
+        		
+        <tabButtonMain name="_searchUserProfile" width="${ (parent.width-10)/4 }" height="$once{ parent.height }" 
+        		 labelid="1172" showIcon="false" />
 		
 	</view>
 	
@@ -154,15 +147,15 @@
 			}
 		</method>
 		
-		<viewUserProfile name="_userProfile" y="24" />
+		<viewUserProfile name="_userProfile" y="40" />
 			
-	    <editUserContacts name="_editUserContacts" visibility="hidden">
+	    <editUserContacts name="_editUserContacts" visibility="hidden"  y="40" height="$once{ canvas.height - 84 - 40 }">
 	    	
 	    </editUserContacts>
 	    
-	    <editUserProfile name="_editUserProfile" visibility="hidden" y="24" />
+	    <editUserProfile name="_editUserProfile" visibility="hidden"  y="40" />
 	    
-	    <searchUserProfile name="_searchUserProfile" visibility="hidden">
+	    <searchUserProfile name="_searchUserProfile" visibility="hidden" y="40" height="$once{ canvas.height - canvas.naviHeight - 40 }">
             
         </searchUserProfile>
     

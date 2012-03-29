@@ -529,7 +529,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="127" name="orgadmin">
-    <value>Organisations</value>
+    <value>Usergroups</value>
   </string>
 
   <string id="128" name="headconf">
@@ -541,7 +541,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="130" name="head_org">
-    <value>Organisation</value>
+    <value>Usergroups</value>
   </string>
 
   <string id="131" name="btn_enterroom">
@@ -665,7 +665,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="161" name="useralter_admin_organisation">
-    <value>Organisations</value>
+    <value>Usergroup</value>
   </string>
 
   <string id="162" name="calendar_iconlabel">
@@ -677,7 +677,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="164" name="organisationtablelist_idrow">
-    <value>Organisation ID</value>
+    <value>Usergroup ID</value>
   </string>
 
   <string id="165" name="organisationtablelist_namerow">
@@ -701,7 +701,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="170" name="orgvalue_header">
-    <value>Organisation</value>
+    <value>Usergroup</value>
   </string>
 
   <string id="171" name="orgvalue_orgname">
@@ -709,11 +709,11 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="172" name="orgvalue_orgname">
-    <value>Add organisation</value>
+    <value>Add usergroup</value>
   </string>
 
   <string id="173" name="orgvalue_orgname">
-    <value>Add organisation</value>
+    <value>Add usergroup</value>
   </string>
 
   <string id="174" name="orgvalue_userwin">
@@ -725,7 +725,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="176" name="orgvalue_userwin">
-    <value>Remove organisation</value>
+    <value>Remove usergroup</value>
   </string>
 
   <string id="177" name="orgvalue_userlist">
@@ -741,7 +741,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="180" name="orgvalue_userwinheader">
-    <value>Add user to organisation</value>
+    <value>Add user to usergroup</value>
   </string>
 
   <string id="181" name="orgvalue_userwinsearchfield">
@@ -757,7 +757,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="184" name="loginwin_chooseorganisation">
-    <value>Organisation</value>
+    <value>Usergroup</value>
   </string>
 
   <string id="185" name="loginwin_chooseorganisationbtn">
@@ -785,7 +785,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="191" name="roomadmin_header">
-    <value>Organisations</value>
+    <value>Usergroups</value>
   </string>
 
   <string id="192" name="roomadmin_header">
@@ -1117,7 +1117,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="274" name="organisation_usersicondelete">
-    <value>Delete user from organisation</value>
+    <value>Delete user from usergroup</value>
   </string>
 
   <string id="275" name="organisation_usersdeletedhead">
@@ -1125,7 +1125,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="276" name="organisation_usersalreadadded">
-    <value>This user is already a member of this organisation</value>
+    <value>This user is already a member of this usergroup</value>
   </string>
 
   <string id="277" name="dashboard_newsheader">
@@ -1393,7 +1393,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="343" name="useradmin">
-    <value>User added but you need to assign this user to an organisation, otherwise they won't be able to log in</value>
+    <value>User added but you need to assign this user to an usergroup, otherwise they won't be able to log in</value>
   </string>
 
   <string id="344" name="adminforms">
@@ -1545,7 +1545,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="381" name="backuppanel">
-    <value>All organisations must already exist</value>
+    <value>All usergroups must already exist</value>
   </string>
 
   <string id="382" name="backuppanel">
@@ -1553,7 +1553,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="383" name="backuppanel">
-    <value>By organisation</value>
+    <value>By usergroup</value>
   </string>
 
   <string id="384" name="backuppanel">
@@ -2368,7 +2368,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="586" name="tooltip main-menu">
-    <value>Create users, rooms, organisations&lt;br/&gt; and change configuration</value>
+    <value>Create users, rooms, usergroups&lt;br/&gt; and change configuration</value>
   </string>
 
   <string id="587" name="room Administration roomclients list">
@@ -2492,7 +2492,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="617" name="organization choose info">
-    <value>Your account is assigned to multiple organisations. Please choose one for this session.</value>
+    <value>Your account is assigned to multiple usergroups. Please choose one for this session.</value>
   </string>
 
   <string id="618" name="error message room full">
@@ -3145,7 +3145,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="780" name="Private Rooms">
-    <value>Private rooms are only accessible for users of the same organisation</value>
+    <value>Private rooms are only accessible for users of the same usergroup</value>
   </string>
 
   <string id="781" name="overview room">
@@ -3337,7 +3337,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="828" name="room admin">
-    <value>If you add an organisation to the room only users of that organisation have access to it</value>
+    <value>If you add an usergroup to the room only users of that usergroup have access to it</value>
   </string>
 
   <string id="829" name="room admin">
@@ -3349,7 +3349,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="831" name="room admin">
-    <value>Organisation</value>
+    <value>Usergroup</value>
   </string>
 
   <string id="832" name="confirm action">
@@ -5814,5 +5814,41 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
   <string id="1449" name="calendar contact list">
     <value>Show calendar events of contact</value>
+  </string>
+  <string id="1450" name="tooltip menu">
+    <value>Your home!</value>
+  </string>
+  <string id="1451" name="tooltip menu">
+    <value>Plan your meetings</value>
+  </string>
+  <string id="1452" name="tooltip menu">
+    <value>Watch recording and interviews</value>
+  </string>
+  <string id="1453" name="tooltip menu">
+    <value>Choose and start a web-conference</value>
+  </string>
+  <string id="1454" name="tooltip menu">
+    <value>Manage users and rights</value>
+  </string>
+  <string id="1455" name="tooltip menu">
+    <value>Manage connections and kick users</value>
+  </string>
+  <string id="1456" name="tooltip menu">
+    <value>Manage usergroups</value>
+  </string>
+  <string id="1457" name="tooltip menu">
+    <value>Manage conference rooms</value>
+  </string>
+  <string id="1458" name="tooltip menu">
+    <value>Manage system settings</value>
+  </string>
+  <string id="1459" name="tooltip menu">
+    <value>Manage labels and wording</value>
+  </string>
+  <string id="1460" name="tooltip menu">
+    <value>Manage LDAP and ADS configurations</value>
+  </string>
+  <string id="1461" name="tooltip menu">
+    <value>Export/Import System Backups</value>
   </string>
 </language>

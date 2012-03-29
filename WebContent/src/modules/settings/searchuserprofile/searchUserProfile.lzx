@@ -72,7 +72,7 @@
 </script>
 
 <!---  modules:dashboard -->
-<class name="searchUserProfile" extends="view" y="24" height="$once{ canvas.height - 140 }">	
+<class name="searchUserProfile" extends="view" >	
 
 	<method name="search">
 		<![CDATA[
