@@ -702,8 +702,13 @@
 		<delete dir="${red5.lib}/webapps/installer"/>
 		<delete dir="${red5.lib}/webapps/live"/>
 		<delete dir="${red5.lib}/webapps/vod"/>
-		<copy file="${webcontent.src.dir}/red5/jee-container.xml" todir="${red5.lib}/conf" overwrite="true" force="true"/>
+		<copy todir="${red5.lib}/conf" overwrite="true" force="true">
+			<fileset dir="${webcontent.src.dir}/red5" includes="jee-container*.xml"/>
+		</copy>
 		<copy file="${webcontent.src.dir}/red5/index.html" todir="${red5.lib}/webapps/root" overwrite="true" force="true"/>
+		<copy todir="${red5.lib}" overwrite="true" force="true">
+			<fileset dir="${webcontent.src.dir}/red5" includes="admin.*"/>
+		</copy>
 	</target>
 	<!-- Check for the Top level libraries -->
 	<target name="-retrieve-mainlibs" unless="mainlib.installed" description="Retrieves the libraries if needed" depends="-retrieve-red5">

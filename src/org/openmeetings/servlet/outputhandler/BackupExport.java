@@ -128,6 +128,283 @@ public class BackupExport {
 	@Autowired
 	private PollManagement pollManagement;
 
+	public void performExport(String filePath, String backup_dir,
+			boolean includeFiles, String omFilesDir) throws Exception {
+		/*
+		 * ##################### Backup Organizations
+		 */
+		List<Organisation> orgList = organisationmanagement
+				.getOrganisations(3L);
+
+		if (orgList != null) {
+			Document doc = this.createOrgDocument(orgList);
+
+			String orgListXML = backup_dir + "organizations.xml";
+
+			FileOutputStream fos = new FileOutputStream(orgListXML);
+
+			this.serializetoXML(fos, "UTF-8", doc);
+		}
+
+		/*
+		 * ##################### Backup Users
+		 */
+
+		List<Users> uList = usersDao.getAllUsersDeleted();
+
+		if (uList != null) {
+			log.debug("Number of Users to be deleted " + uList.size());
+
+			Document doc = this.createDocument(uList);
+
+			String userListXML = backup_dir + "users.xml";
+
+			FileOutputStream fos = new FileOutputStream(userListXML);
+
+			this.serializetoXML(fos, "UTF-8", doc);
+		}
+
+		/*
+		 * ##################### Backup Room
+		 */
+		List<Rooms> roomList = roommanagement.getBackupRooms();
+
+		if (roomList != null) {
+			Document doc = this.createRoomsDocument(roomList);
+
+			String roomListXML = backup_dir + "rooms.xml";
+
+			FileOutputStream fos = new FileOutputStream(roomListXML);
+
+			this.serializetoXML(fos, "UTF-8", doc);
+		}
+
+		/*
+		 * ##################### Backup Room Organizations
+		 */
+		List<Rooms_Organisation> roomOrgList = roommanagement
+				.getRoomsOrganisations();
+
+		if (roomOrgList != null) {
+			Document doc = this.createOrgRoomsDocument(roomOrgList);
+
+			String roomListXML = backup_dir + "rooms_organisation.xml";
+
+			FileOutputStream fos = new FileOutputStream(roomListXML);
+
+			this.serializetoXML(fos, "UTF-8", doc);
+		}
+
+		/*
+		 * ##################### Backup Appointements
+		 */
+		List<Appointment> aList = appointmentDao.getAppointments();
+
+		if (aList != null) {
+			Document doc = this.createAppointementDocument(aList);
+
+			String aListXML = backup_dir + "appointements.xml";
+
+			FileOutputStream fos = new FileOutputStream(aListXML);
+
+			this.serializetoXML(fos, "UTF-8", doc);
+
+		}
+
+		/*
+		 * ##################### Backup Meeting Members
+		 */
+		List<MeetingMember> membersList = meetingMemberDao.getMeetingMembers();
+
+		if (membersList != null) {
+			Document doc = this.createMeetingMemberDocument(membersList);
+
+			String aListXML = backup_dir + "meetingmembers.xml";
+
+			FileOutputStream fos = new FileOutputStream(aListXML);
+
+			this.serializetoXML(fos, "UTF-8", doc);
+
+		}
+
+		/*
+		 * ##################### LDAP Configs
+		 */
+		List<LdapConfig> ldapConfigList = ldapConfigDao.getLdapConfigs();
+
+		if (ldapConfigList != null) {
+			Document doc = this.createLdapConfigDocument(ldapConfigList);
+
+			String aListXML = backup_dir + "ldapconfigs.xml";
+
+			FileOutputStream fos = new FileOutputStream(aListXML);
+
+			this.serializetoXML(fos, "UTF-8", doc);
+		}
+
+		/*
+		 * ##################### Private Messages
+		 */
+		List<PrivateMessages> privateMessages = privateMessagesDao
+				.getPrivateMessages();
+
+		if (privateMessages != null) {
+			Document doc = this.createPrivateMessagesDocument(privateMessages);
+
+			String aListXML = backup_dir + "privateMessages.xml";
+
+			FileOutputStream fos = new FileOutputStream(aListXML);
+
+			this.serializetoXML(fos, "UTF-8", doc);
+		}
+
+		/*
+		 * ##################### Private Message Folders
+		 */
+		List<PrivateMessageFolder> privateMessageFolders = privateMessageFolderDao
+				.getPrivateMessageFolders();
+
+		if (privateMessageFolders != null) {
+			Document doc = this
+					.createPrivateMessageFolderDocument(privateMessageFolders);
+
+			String aListXML = backup_dir + "privateMessageFolder.xml";
+
+			FileOutputStream fos = new FileOutputStream(aListXML);
+
+			this.serializetoXML(fos, "UTF-8", doc);
+		}
+
+		/*
+		 * ##################### User Contacts
+		 */
+		List<UserContacts> userContacts = userContactsDao.getUserContacts();
+
+		if (privateMessageFolders != null) {
+			Document doc = this.createUserContactsDocument(userContacts);
+
+			String aListXML = backup_dir + "userContacts.xml";
+
+			FileOutputStream fos = new FileOutputStream(aListXML);
+
+			this.serializetoXML(fos, "UTF-8", doc);
+		}
+
+		/*
+		 * ##################### File-Explorer
+		 */
+		List<FileExplorerItem> fileExplorerList = fileExplorerItemDao
+				.getFileExplorerItems();
+
+		if (fileExplorerList != null) {
+			Document doc = this
+					.createFileExplorerItemDocument(fileExplorerList);
+
+			String aListXML = backup_dir + "fileExplorerItems.xml";
+
+			FileOutputStream fos = new FileOutputStream(aListXML);
+
+			this.serializetoXML(fos, "UTF-8", doc);
+		}
+
+		/*
+		 * ##################### Recordings
+		 */
+		List<FlvRecording> flvRecordings = flvRecordingDao
+				.getAllFlvRecordings();
+
+		for (FlvRecording flvRecording : flvRecordings) {
+			flvRecording.setFlvRecordingMetaData(flvRecordingMetaDataDao
+					.getFlvRecordingMetaDataByRecording(flvRecording
+							.getFlvRecordingId()));
+		}
+
+		if (privateMessageFolders != null) {
+			Document doc = this.createFlvRecordingDocument(flvRecordings);
+
+			String aListXML = backup_dir + "flvRecordings.xml";
+
+			FileOutputStream fos = new FileOutputStream(aListXML);
+
+			this.serializetoXML(fos, "UTF-8", doc);
+		}
+
+		/*
+		 * ##################### Polls
+		 */
+		List<RoomPoll> roomPolls = pollManagement.getPollListBackup();
+
+		if (roomPolls != null) {
+			Document doc = this.createRoomPollDocument(roomPolls);
+
+			String aListXML = backup_dir + "roompolls.xml";
+
+			FileOutputStream fos = new FileOutputStream(aListXML);
+
+			this.serializetoXML(fos, "UTF-8", doc);
+		}
+
+		if (includeFiles) {
+			/*
+			 * ##################### Backup Room Files
+			 */
+			File targetDir = new File(backup_dir + File.separatorChar
+					+ "roomFiles");
+
+			if (!targetDir.exists()) {
+				targetDir.mkdir();
+			}
+
+			File sourceDir = new File(omFilesDir + "upload"
+					+ File.separatorChar);
+
+			File[] files = sourceDir.listFiles();
+			for (File file : files) {
+				if (file.isDirectory()) {
+					if (!file.getName().equals("backup")
+							&& !file.getName().equals("import")) {
+
+						targetDir = new File(backup_dir + File.separatorChar
+								+ "roomFiles" + File.separatorChar
+								+ file.getName());
+
+						log.debug("### " + file.getName());
+
+						copyDirectory(file, targetDir);
+					}
+				}
+			}
+
+			/*
+			 * ##################### Backup Recording Files
+			 */
+			File targetDirRec = new File(backup_dir + File.separatorChar
+					+ "recordingFiles");
+
+			if (!targetDirRec.exists()) {
+				targetDirRec.mkdir();
+			}
+
+			File sourceDirRec = new File(omFilesDir + "streams"
+					+ File.separatorChar + "hibernate" + File.separatorChar);
+
+			copyDirectory(sourceDirRec, targetDirRec);
+		}
+		File backup_dirFile = new File(backup_dir);
+
+		if (!backup_dirFile.exists()) {
+			backup_dirFile.mkdir();
+		}
+
+		List<File> fileList = new ArrayList<File>();
+		log.debug("---Getting references to all files in: "
+				+ backup_dirFile.getCanonicalPath());
+		getAllFiles(backup_dirFile, fileList);
+		log.debug("---Creating zip file");
+		writeZipFile(backup_dirFile, fileList, new FileOutputStream(filePath));
+		log.debug("---Done");
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -157,9 +434,7 @@ public class BackupExport {
 
 				String includeFileOption = httpServletRequest
 						.getParameter("includeFileOption");
-				if (includeFileOption == null) {
-					includeFileOption = "yes";
-				}
+				boolean includeFiles = includeFileOption == null || "yes".equals(includeFileOption);
 
 				String moduleName = httpServletRequest
 						.getParameter("moduleName");
@@ -192,321 +467,10 @@ public class BackupExport {
 
 					String backup_dir = backup_file + File.separatorChar;
 
-					File backup_dirFile = new File(backup_dir);
-
-					if (!backup_dirFile.exists()) {
-						backup_dirFile.mkdir();
-					}
-
-					/*
-					 * ##################### Backup Organizations
-					 */
-					List<Organisation> orgList = organisationmanagement
-							.getOrganisations(3L);
-
-					if (orgList != null) {
-						Document doc = this.createOrgDocument(orgList);
-
-						String orgListXML = backup_dir + "organizations.xml";
-
-						FileOutputStream fos = new FileOutputStream(orgListXML);
-
-						this.serializetoXML(fos, "UTF-8", doc);
-
-					}
-
-					/*
-					 * ##################### Backup Users
-					 */
-
-					List<Users> uList = usersDao.getAllUsersDeleted();
-
-					if (uList != null) {
-
-						log.debug("Number of Users to be deleted "
-								+ uList.size());
-
-						Document doc = this.createDocument(uList);
-
-						String userListXML = backup_dir + "users.xml";
-
-						FileOutputStream fos = new FileOutputStream(userListXML);
-
-						this.serializetoXML(fos, "UTF-8", doc);
-
-					}
-
-					/*
-					 * ##################### Backup Room
-					 */
-					List<Rooms> roomList = roommanagement.getBackupRooms();
-
-					if (roomList != null) {
-						Document doc = this.createRoomsDocument(roomList);
-
-						String roomListXML = backup_dir + "rooms.xml";
-
-						FileOutputStream fos = new FileOutputStream(roomListXML);
-
-						this.serializetoXML(fos, "UTF-8", doc);
-
-					}
-
-					/*
-					 * ##################### Backup Room Organizations
-					 */
-					List<Rooms_Organisation> roomOrgList = roommanagement
-							.getRoomsOrganisations();
-
-					if (roomOrgList != null) {
-						Document doc = this.createOrgRoomsDocument(roomOrgList);
-
-						String roomListXML = backup_dir
-								+ "rooms_organisation.xml";
-
-						FileOutputStream fos = new FileOutputStream(roomListXML);
-
-						this.serializetoXML(fos, "UTF-8", doc);
-
-					}
-
-					/*
-					 * ##################### Backup Appointements
-					 */
-					List<Appointment> aList = appointmentDao.getAppointments();
-
-					if (aList != null) {
-						Document doc = this.createAppointementDocument(aList);
-
-						String aListXML = backup_dir + "appointements.xml";
-
-						FileOutputStream fos = new FileOutputStream(aListXML);
-
-						this.serializetoXML(fos, "UTF-8", doc);
-
-					}
-
-					/*
-					 * ##################### Backup Meeting Members
-					 */
-					List<MeetingMember> membersList = meetingMemberDao
-							.getMeetingMembers();
-
-					if (membersList != null) {
-						Document doc = this
-								.createMeetingMemberDocument(membersList);
-
-						String aListXML = backup_dir + "meetingmembers.xml";
-
-						FileOutputStream fos = new FileOutputStream(aListXML);
-
-						this.serializetoXML(fos, "UTF-8", doc);
-
-					}
-
-					/*
-					 * ##################### LDAP Configs
-					 */
-					List<LdapConfig> ldapConfigList = ldapConfigDao
-							.getLdapConfigs();
-
-					if (ldapConfigList != null) {
-						Document doc = this
-								.createLdapConfigDocument(ldapConfigList);
-
-						String aListXML = backup_dir + "ldapconfigs.xml";
-
-						FileOutputStream fos = new FileOutputStream(aListXML);
-
-						this.serializetoXML(fos, "UTF-8", doc);
-
-					}
-
-					/*
-					 * ##################### Private Messages
-					 */
-					List<PrivateMessages> privateMessages = privateMessagesDao
-							.getPrivateMessages();
-
-					if (privateMessages != null) {
-						Document doc = this
-								.createPrivateMessagesDocument(privateMessages);
-
-						String aListXML = backup_dir + "privateMessages.xml";
-
-						FileOutputStream fos = new FileOutputStream(aListXML);
-
-						this.serializetoXML(fos, "UTF-8", doc);
-					}
-
-					/*
-					 * ##################### Private Message Folders
-					 */
-					List<PrivateMessageFolder> privateMessageFolders = privateMessageFolderDao
-							.getPrivateMessageFolders();
-
-					if (privateMessageFolders != null) {
-						Document doc = this
-								.createPrivateMessageFolderDocument(privateMessageFolders);
-
-						String aListXML = backup_dir
-								+ "privateMessageFolder.xml";
-
-						FileOutputStream fos = new FileOutputStream(aListXML);
-
-						this.serializetoXML(fos, "UTF-8", doc);
-					}
-
-					/*
-					 * ##################### User Contacts
-					 */
-					List<UserContacts> userContacts = userContactsDao
-							.getUserContacts();
-
-					if (privateMessageFolders != null) {
-						Document doc = this
-								.createUserContactsDocument(userContacts);
-
-						String aListXML = backup_dir + "userContacts.xml";
-
-						FileOutputStream fos = new FileOutputStream(aListXML);
-
-						this.serializetoXML(fos, "UTF-8", doc);
-					}
-
-					/*
-					 * ##################### File-Explorer
-					 */
-					List<FileExplorerItem> fileExplorerList = fileExplorerItemDao
-							.getFileExplorerItems();
-
-					if (fileExplorerList != null) {
-
-						Document doc = this
-								.createFileExplorerItemDocument(fileExplorerList);
-
-						String aListXML = backup_dir + "fileExplorerItems.xml";
-
-						FileOutputStream fos = new FileOutputStream(aListXML);
-
-						this.serializetoXML(fos, "UTF-8", doc);
-
-					}
-
-					/*
-					 * ##################### Recordings
-					 */
-					List<FlvRecording> flvRecordings = flvRecordingDao
-							.getAllFlvRecordings();
-
-					for (FlvRecording flvRecording : flvRecordings) {
-						flvRecording
-								.setFlvRecordingMetaData(flvRecordingMetaDataDao
-										.getFlvRecordingMetaDataByRecording(flvRecording
-												.getFlvRecordingId()));
-					}
-
-					if (privateMessageFolders != null) {
-						Document doc = this
-								.createFlvRecordingDocument(flvRecordings);
-
-						String aListXML = backup_dir + "flvRecordings.xml";
-
-						FileOutputStream fos = new FileOutputStream(aListXML);
-
-						this.serializetoXML(fos, "UTF-8", doc);
-					}
-
-					/*
-					 * ##################### Polls
-					 */
-					List<RoomPoll> roomPolls = pollManagement
-							.getPollListBackup();
-
-					if (roomPolls != null) {
-
-						Document doc = this.createRoomPollDocument(roomPolls);
-
-						String aListXML = backup_dir + "roompolls.xml";
-
-						FileOutputStream fos = new FileOutputStream(aListXML);
-
-						this.serializetoXML(fos, "UTF-8", doc);
-
-					}
-
-					if (includeFileOption.equals("yes")) {
-
-						/*
-						 * ##################### Backup Room Files
-						 */
-						File targetDir = new File(backup_dir
-								+ File.separatorChar + "roomFiles");
-
-						if (!targetDir.exists()) {
-							targetDir.mkdir();
-						}
-
-						File sourceDir = new File(current_dir + "upload"
-								+ File.separatorChar);
-
-						File[] files = sourceDir.listFiles();
-						for (File file : files) {
-							if (file.isDirectory()) {
-
-								if (!file.getName().equals("backup")
-										&& !file.getName().equals("import")) {
-
-									targetDir = new File(backup_dir
-											+ File.separatorChar + "roomFiles"
-											+ File.separatorChar
-											+ file.getName());
-
-									log.debug("### " + file.getName());
-
-									copyDirectory(file, targetDir);
-
-								}
-
-							}
-						}
-
-						/*
-						 * ##################### Backup Recording Files
-						 */
-						File targetDirRec = new File(backup_dir
-								+ File.separatorChar + "recordingFiles");
-
-						if (!targetDirRec.exists()) {
-							targetDirRec.mkdir();
-						}
-
-						File sourceDirRec = new File(current_dir + "streams"
-								+ File.separatorChar + "hibernate"
-								+ File.separatorChar);
-
-						copyDirectory(sourceDirRec, targetDirRec);
-
-					}
-
 					String full_path = backup_file + ".zip";
 
-					// ZipOutputStream zos = new ZipOutputStream(new
-					// FileOutputStream(full_path));
-					//
-					// zipToDir(backup_dir, zos);
-					//
-					// zos.close();
-
-					List<File> fileList = new ArrayList<File>();
-					log.debug("---Getting references to all files in: "
-							+ backup_dirFile.getCanonicalPath());
-					getAllFiles(backup_dirFile, fileList);
-					log.debug("---Creating zip file");
-					writeZipFile(backup_dirFile, fileList,
-							new FileOutputStream(full_path));
-					log.debug("---Done");
-
+					performExport(full_path, backup_dir, includeFiles, current_dir);
+					
 					RandomAccessFile rf = new RandomAccessFile(full_path, "r");
 
 					String requestedFile = dateString + ".zip";
@@ -541,7 +505,7 @@ public class BackupExport {
 						backupFile.delete();
 					}
 
-					this.deleteDirectory(backup_dirFile);
+					deleteDirectory(new File(backup_dir));
 
 				}
 			} else {
@@ -1452,8 +1416,9 @@ public class BackupExport {
 			room_organisation.addElement("rooms_organisation_id").addCDATA(
 					formatString("" + roomOrg.getRooms_organisation_id()));
 			room_organisation.addElement("organisation_id").addCDATA(
-					formatString(""
-							+ roomOrg.getOrganisation().getOrganisation_id()));
+				"true".equals(roomOrg.getDeleted()) ? "0" :
+				formatString(""
+						+ roomOrg.getOrganisation().getOrganisation_id()));
 			if (roomOrg.getRoom() != null) {
 				room_organisation.addElement("rooms_id").addCDATA(
 						formatString("" + roomOrg.getRoom().getRooms_id()));
