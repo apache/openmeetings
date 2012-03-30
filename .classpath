@@ -32,7 +32,7 @@
 	<classpathentry kind="lib" path="build/lib/om/xml-resolver-jar-1.2.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/servlet-api-jar-2.5.jar"/>
 	<classpathentry kind="lib" path="build/lib/mainlibs/geronimo-jpa_2.0_spec-bundle-1.1.jar"/>
-	<classpathentry kind="lib" path="build/red5/dist/red5.jar"/>
+	<classpathentry kind="lib" path="build/red5/dist/red5.jar" sourcepath="build/red5/src"/>
 	<classpathentry kind="lib" path="build/red5/dist/lib/bcprov-jdk16-145.jar"/>
 	<classpathentry kind="lib" path="build/red5/dist/lib/com.springsource.javax.xml.stream-1.0.1.jar"/>
 	<classpathentry kind="lib" path="build/red5/dist/lib/com.springsource.org.antlr-3.1.3.jar"/>

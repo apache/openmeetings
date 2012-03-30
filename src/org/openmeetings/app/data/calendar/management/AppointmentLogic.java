@@ -21,7 +21,6 @@ package org.openmeetings.app.data.calendar.management;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TimeZone;
 
 import org.openmeetings.app.data.basic.Configurationmanagement;

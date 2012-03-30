@@ -21,27 +21,27 @@ package org.openmeetings.screen.webstart;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.net.rtmp.Channel;
 import org.red5.server.net.rtmp.ClientExceptionHandler;
+import org.red5.server.net.rtmp.RTMPClient;
 import org.red5.server.net.rtmp.RTMPConnection;
 import org.red5.server.net.rtmp.codec.RTMP;
 import org.red5.server.net.rtmp.event.Notify;
 import org.red5.server.net.rtmp.message.Header;
-import org.red5.server.net.rtmpt.RTMPTClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ScreenShareRTMPT extends RTMPTClient implements ClientExceptionHandler, IScreenShare {
+public class RTMPScreenShare extends RTMPClient implements ClientExceptionHandler, IScreenShare {
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(ScreenShareRTMPT.class);
+			.getLogger(RTMPScreenShare.class);
 
-	private CommonScreenShare instance = null;
+	private CoreScreenShare instance = null;
 
-	private ScreenShareRTMPT() {
-		instance = new CommonScreenShare(this);
+	private RTMPScreenShare() {
+		instance = new CoreScreenShare(this);
 	};
 
 	public static void main(String[] args) {
-		new ScreenShareRTMPT().instance.main(args);
+		new RTMPScreenShare().instance.main(args);
 	}
 	
 	// ------------------------------------------------------------------------

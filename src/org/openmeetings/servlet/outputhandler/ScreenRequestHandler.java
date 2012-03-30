@@ -82,7 +82,12 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 		return null;
 	}
 
-
+	private enum ConnectionType {
+		rtmp
+		, rtmps
+		, rtmpt
+	}
+	
 	@Override
 	public Template handleRequest(HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse, Context ctx) {
@@ -104,8 +109,7 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 
 			String publicSID = httpServletRequest.getParameter("publicSID");
 			if (publicSID == null) {
-				new Exception("publicSID is empty: " + publicSID);
-				return null;
+				throw new Exception("publicSID is empty: " + publicSID);
 			}
 
 			String room = httpServletRequest.getParameter("room");
@@ -114,48 +118,41 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 
 			String domain = httpServletRequest.getParameter("domain");
 			if (domain == null) {
-				new Exception("domain is empty: " + domain);
-				return null;
+				throw new Exception("domain is empty: " + domain);
 			}
 
 			String languageAsString = httpServletRequest
 					.getParameter("languageAsString");
 			if (languageAsString == null) {
-				new Exception("languageAsString is empty: " + domain);
-				return null;
+				throw new Exception("languageAsString is empty: " + domain);
 			}
 			Long language_id = Long.parseLong(languageAsString);
 
 			String rtmphostlocal = httpServletRequest
 					.getParameter("rtmphostlocal");
 			if (rtmphostlocal == null) {
-				new Exception("rtmphostlocal is empty: " + rtmphostlocal);
-				return null;
+				throw new Exception("rtmphostlocal is empty: " + rtmphostlocal);
 			}
 
 			String red5httpport = httpServletRequest
 					.getParameter("red5httpport");
 			if (red5httpport == null) {
-				new Exception("red5httpport is empty: " + red5httpport);
-				return null;
+				throw new Exception("red5httpport is empty: " + red5httpport);
 			}
 
 			String record = httpServletRequest.getParameter("record");
 			if (record == null) {
-				new Exception("recorder is empty: ");
-				record = "no";
+				throw new Exception("recorder is empty: ");
 			}
 
 			String mode = httpServletRequest.getParameter("mode");
 			if (mode == null) {
-				new Exception("mode is empty: ");
-				mode = "sharer";
+				throw new Exception("mode is empty: ");
 			}
 
 			String httpRootKey = httpServletRequest.getParameter("httpRootKey");
 			if (httpRootKey == null) {
-				new Exception("httpRootKey is empty could not start sharer");
-				return null;
+				throw new Exception("httpRootKey is empty could not start sharer");
 			}
 
 			// make a complete name out of domain(organisation) + roomname
@@ -308,22 +305,30 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 							+ red5httpport + httpRootKey
 							+ "red5-screenshare";
 
-					String connectionType = httpServletRequest
-							.getParameter("connectionType");
-					if (connectionType == null) {
-						new Exception("No connectionType ");
-					}
+					ConnectionType conType = ConnectionType.valueOf(httpServletRequest
+							.getParameter("connectionType"));
 
-					String startUpClass = connectionType.equals("rtmpt")
-							? "org.openmeetings.screen.webstart.ScreenShareRTMPT"
-							: "org.openmeetings.screen.webstart.ScreenShare";
+					//FIXME http:// need to be removed
+					String startUpClass;
+					switch (conType) {
+					case rtmp:
+						startUpClass = "org.openmeetings.screen.webstart.RTMPScreenShare";
+						break;
+					case rtmps:
+						startUpClass = "org.openmeetings.screen.webstart.RTMPSScreenShare";
+						break;
+					case rtmpt:
+						startUpClass = "org.openmeetings.screen.webstart.RTMPTScreenShare";
+						break;
+					default:
+						throw new Exception("Unknown connection type");
+					}
 
 					String orgIdAsString = httpServletRequest
 							.getParameter("organization_id");
 					if (orgIdAsString == null) {
-						new Exception(
+						throw new Exception(
 								"orgIdAsString is empty could not start sharer");
-						return null;
 					}
 
 					ctx.put("organization_id", orgIdAsString);
@@ -349,16 +354,14 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 
 					String port = httpServletRequest.getParameter("port");
 					if (port == null) {
-						new Exception("port is empty: ");
-						return null;
+						throw new Exception("port is empty: ");
 					}
 					ctx.put("port", port);
 
 					String allowRecording = httpServletRequest
 							.getParameter("allowRecording");
 					if (allowRecording == null) {
-						new Exception("allowRecording is empty: ");
-						return null;
+						throw new Exception("allowRecording is empty: ");
 					}
 					ctx.put("allowRecording", allowRecording);
 

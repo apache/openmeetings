@@ -36,8 +36,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.openmeetings.screen.webstart.BlankArea;
-import org.openmeetings.screen.webstart.CommonScreenShare;
-import org.openmeetings.screen.webstart.ScreenShare;
+import org.openmeetings.screen.webstart.CoreScreenShare;
+import org.openmeetings.screen.webstart.RTMPScreenShare;
 import org.openmeetings.screen.webstart.gui.VirtualScreenBean.ScreenQuality;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
 public class VirtualScreen {
 	
 	private static final Logger logger = LoggerFactory.getLogger( VirtualScreen.class );
-	CommonScreenShare css;
+	CoreScreenShare css;
 	public boolean showWarning = true;
 
 	public boolean doUpdateBounds = true;
@@ -84,7 +84,7 @@ public class VirtualScreen {
 		}
 	}
 	
-	public VirtualScreen(CommonScreenShare css) throws Exception {
+	public VirtualScreen(CoreScreenShare css) throws Exception {
 		this.css = css;
 
 		css.tFieldScreenZoom = new JLabel();
@@ -114,13 +114,13 @@ public class VirtualScreen {
 		css.vScreenIconDown = new JLabel();
 		css.vScreenIconDown.setBounds(30+(width/2)-8, 162+height-8, 16, 32);
 
-		Image im_left = ImageIO.read(ScreenShare.class.getResource("/org/openmeetings/screen/1leftarrow.png"));
+		Image im_left = ImageIO.read(RTMPScreenShare.class.getResource("/org/openmeetings/screen/1leftarrow.png"));
 		ImageIcon iIcon1 = new ImageIcon(im_left);
-		Image im_right = ImageIO.read(ScreenShare.class.getResource("/org/openmeetings/screen/1rightarrow.png"));
+		Image im_right = ImageIO.read(RTMPScreenShare.class.getResource("/org/openmeetings/screen/1rightarrow.png"));
 		ImageIcon iIcon2 = new ImageIcon(im_right);
-		Image im_up = ImageIO.read(ScreenShare.class.getResource("/org/openmeetings/screen/1uparrow.png"));
+		Image im_up = ImageIO.read(RTMPScreenShare.class.getResource("/org/openmeetings/screen/1uparrow.png"));
 		ImageIcon iIcon3 = new ImageIcon(im_up);
-		Image im_down = ImageIO.read(ScreenShare.class.getResource("/org/openmeetings/screen/1downarrow.png"));
+		Image im_down = ImageIO.read(RTMPScreenShare.class.getResource("/org/openmeetings/screen/1downarrow.png"));
 		ImageIcon iIcon4 = new ImageIcon(im_down);
 
 		JLabel jLab1 = new JLabel(iIcon1);
@@ -302,12 +302,12 @@ public class VirtualScreen {
 			case High:
 				break;
 			case Medium:
-				VirtualScreenBean.vScreenResizeX = (int)((float)VirtualScreenBean.vScreenResizeX) * 1/2;
-				VirtualScreenBean.vScreenResizeY = (int)((float)VirtualScreenBean.vScreenResizeY) * 1/2;
+				VirtualScreenBean.vScreenResizeX = (int)(1.0/2 * VirtualScreenBean.vScreenResizeX);
+				VirtualScreenBean.vScreenResizeY = (int)(1.0/2 * VirtualScreenBean.vScreenResizeY);
 				break;
 			case Low:
-				VirtualScreenBean.vScreenResizeX = (int)((float)VirtualScreenBean.vScreenResizeX) * 3/8;
-				VirtualScreenBean.vScreenResizeY = (int)((float)VirtualScreenBean.vScreenResizeY) * 3/8;
+				VirtualScreenBean.vScreenResizeX = (int)(3.0/8 * VirtualScreenBean.vScreenResizeX);
+				VirtualScreenBean.vScreenResizeY = (int)(3.0/8 * VirtualScreenBean.vScreenResizeY);
 				break;
 		}
 		logger.debug("resize: X:" + VirtualScreenBean.vScreenResizeX + " Y: " + VirtualScreenBean.vScreenResizeY);

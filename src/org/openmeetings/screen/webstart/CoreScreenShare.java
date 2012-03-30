@@ -53,10 +53,10 @@ import org.red5.server.stream.message.RTMPMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CommonScreenShare {
+public class CoreScreenShare {
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(CommonScreenShare.class);
+			.getLogger(CoreScreenShare.class);
 
 	private IScreenShare instance = null;
 	
@@ -163,7 +163,7 @@ public class CommonScreenShare {
 	//
 	// ------------------------------------------------------------------------
 
-	public CommonScreenShare(IScreenShare instance) {
+	public CoreScreenShare(IScreenShare instance) {
 		this.instance = instance;
 	};
 
