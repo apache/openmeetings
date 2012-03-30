@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export CLASSPATH=.:webapps/openmeetings/WEB-INF/classes:lib/*.jar:webapps/openmeetings/WEB-INF/lib/*.jar
+export CLASSPATH=./*:conf:lib/*:webapps/openmeetings/WEB-INF/lib/*:webapps/openmeetings/WEB-INF:webapps/openmeetings/WEB-INF/classes
 
-java -cp $CLASSPATH org.openmeetings.app.Admin
+java -cp $CLASSPATH org.openmeetings.app.Admin $*
 
