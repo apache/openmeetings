@@ -17,6 +17,13 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+/**
+ * This class provides method implementations necessary for OM to Jabber integration.
+ * 
+ * @author solomax
+ * @webservice JabberService
+ *
+ */
 public class JabberWebService {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			JabberWebService.class, OpenmeetingsVariables.webAppRootKey);
@@ -32,6 +39,13 @@ public class JabberWebService {
 	@Autowired
 	private Invitationmanagement invitationManagement;
 
+	/**
+	 * Get List<Rooms> of all rooms available to the user.
+	 * No admin rights are necessary for this call
+	 * 
+	 * @param SID The SID from UserService.getSession
+	 * @return List<Rooms> of Rooms
+	 */
 	public List<Rooms> getAvailableRooms(String SID) {
 		log.debug("getAvailableRooms enter");
 
@@ -61,6 +75,14 @@ public class JabberWebService {
 		return result;
 	}
 
+	/**
+	 * Returns the count of users currently in the Room with given id
+	 * No admin rights are necessary for this call
+	 * 
+	 * @param SID The SID from UserService.getSession
+	 * @param roomId id of the room to get users
+	 * @return number of users as int
+	 */
 	public int getUserCount(String SID, Long roomId) {
 		Long users_id = this.sessionManagement.checkSession(SID);
 		Long user_level = this.userManagement.getUserLevelByID(users_id);
@@ -72,6 +94,15 @@ public class JabberWebService {
 		return -1;
 	}
 
+	/**
+	 * Get invitation hash for the room with given id
+	 * No admin rights are necessary for this call
+	 * 
+	 * @param SID The SID from UserService.getSession
+	 * @param username The name of invited user, will be displayed in the rooms user list
+	 * @param room_id id of the room to get users
+	 * @return hash to enter the room
+	 */
 	public String getInvitationHash(String SID, String username, Long room_id) {
 		Long users_id = this.sessionManagement.checkSession(SID);
 		Long user_level = this.userManagement.getUserLevelByID(users_id);

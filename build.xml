@@ -478,10 +478,7 @@
 
 	<target name="build.webservice.doc" depends="compile.only">
 		<javadoc classpathref="build.webservice.classpath">
-			<source file="src/org/openmeetings/axis/services/UserWebService.java" />
-			<source file="src/org/openmeetings/axis/services/RoomWebService.java" />
-			<source file="src/org/openmeetings/axis/services/FileWebService.java" />
-			<source file="src/org/openmeetings/axis/services/CalendarWebService.java" />
+			<source file="src/org/openmeetings/axis/services/*WebService.java" />
 			<doclet name="org.openmeetings.doc.WebServiceDoclet" pathref="build.webservice.classpath">
 			</doclet>
 		</javadoc>
@@ -514,10 +511,7 @@
 
 	<target name="build.only.webservice.doc" depends="anakia">
 		<javadoc classpathref="build.webservice.classpath" useexternalfile="true">
-			<source file="src/org/openmeetings/axis/services/UserWebService.java" />
-			<source file="src/org/openmeetings/axis/services/RoomWebService.java" />
-			<source file="src/org/openmeetings/axis/services/FileWebService.java" />
-			<source file="src/org/openmeetings/axis/services/CalendarWebService.java" />
+			<source file="src/org/openmeetings/axis/services/*WebService.java" />
 			<doclet name="org.openmeetings.doc.WebServiceDoclet" pathref="build.webservice.classpath" />
 		</javadoc>
 

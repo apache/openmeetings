@@ -11,6 +11,12 @@ import org.slf4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+/**
+ * This class provides method entry points necessary for OM to Jabber integration.
+ * 
+ * @author solomax
+ *
+ */
 public class JabberWebServiceFacade {
 	private static final Logger log = Red5LoggerFactory
 			.getLogger(JabberWebServiceFacade.class,
@@ -34,16 +40,38 @@ public class JabberWebServiceFacade {
 		return null;
 	}
 
-	@SuppressWarnings("cast")
+	/**
+	 * Get array of all rooms available to the user.
+	 * No admin rights are necessary for this call
+	 * 
+	 * @param SID The SID from {@link UserWebService.getSession}
+	 * @return array of Rooms
+	 */
 	public Rooms[] getAvailableRooms(String SID) {
-		return ((Rooms[]) getJabberServiceProxy().getAvailableRooms(SID)
-				.toArray(new Rooms[0]));
+		return getJabberServiceProxy().getAvailableRooms(SID).toArray(new Rooms[0]);
 	}
 
+	/**
+	 * Returns the count of users currently in the Room with given id
+	 * No admin rights are necessary for this call
+	 * 
+	 * @param SID The SID from {@link UserWebService.getSession}
+	 * @param roomId id of the room to get users
+	 * @return number of users as int
+	 */
 	public int getUserCount(String SID, Long roomId) {
 		return getJabberServiceProxy().getUserCount(SID, roomId);
 	}
 
+	/**
+	 * Get invitation hash for the room with given id
+	 * No admin rights are necessary for this call
+	 * 
+	 * @param SID The SID from {@link UserWebService.getSession}
+	 * @param username The name of invited user, will be displayed in the rooms user list
+	 * @param room_id id of the room to get users
+	 * @return hash to enter the room
+	 */
 	public String getInvitationHash(String SID, String username, Long room_id) {
 		return getJabberServiceProxy()
 				.getInvitationHash(SID, username, room_id);

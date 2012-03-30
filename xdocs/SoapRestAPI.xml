@@ -67,6 +67,17 @@
 						</i>
 					</div>
 				</div>
+				<div>
+					<a href="JabberService.html" target="_BLANK">
+						<b>JabberService</b>
+					</a>
+					<br />
+					<div style="margin-left:20px">
+						<i>The Service contains methods necessary for OM to Jabber integration.
+						All methods doesn't require admin privileges to get called.
+						</i>
+					</div>
+				</div>
 			</div>
 
 		</section>
