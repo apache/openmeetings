@@ -20,7 +20,7 @@
 -->
 <library>
 
-<!-- Basecolor: C6CEDF -->
+	<include href="incubator/gradientview.lzx" /> 
 
 	<include href="resources/" />
 	

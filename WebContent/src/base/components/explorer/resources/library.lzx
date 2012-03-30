@@ -22,13 +22,8 @@
 
 <resource src="explorerbar.png" name="explorer_thumb_rsc" />
 
-<resource src="cancel.png" name="close_explorer_window_new_rsc" />
+<resource name="explorer_thumb_rsc" src="feather-16x16.png"/>
 
-<resource name="explorer_button_rsc" >
-	<frame src="explorbar_close_no.png" />
-	<frame src="explorbar_close_mo.png" />
-	<frame src="explorbar_close_dn.png" />
-</resource>
 
 <resource name="explorer_button_min_rsc" >
 	<frame src="explorbar_minimize_no.png" />

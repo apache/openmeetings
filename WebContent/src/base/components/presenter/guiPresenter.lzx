@@ -449,35 +449,14 @@
     
 	<view x="1" y="1" width="${ this.parent.width-1 }" height="20" name="_titlebar" >
 		<!-- stretches="width" -->
-		<view width="${ this.parent.parent.width-2 }" y="0" stretches="width"
-            resource="presenter_thumb_rsc" >
-            <handler name="oninit">
-            	<![CDATA[
-            		this.setTintRGB(canvas.basebgcolorizer,80);
-            	]]>
-            </handler>
-			<method name="setTintRGB" args="color, brightness">
-			    <![CDATA[
-			    if (color != "" && color != null){
-
-			        if (brightness == null) { brightness = 0; }
-			        var rgb = color;
-			        var red=(rgb >> 16) & 0xFF;
-			        var green=(rgb >> 8) & 0xFF;
-			        var blue=rgb & 0xFF;
+		<gradientview x="0" width="${ this.parent.width }" height="20"
+				colorFrom="$once{ canvas.baseMousecolorizer }"
+				colorTo="$once{ canvas.styleMenuBarBaseColor }" >
+		</gradientview>
 		
-			        this.setColorTransform( { ra : red, ga : green, ba : blue,
-			                            		rb : 0, gb : 0, bb : 0 } );
-			                            		
-			        //Debug.write(this);
-			        //Debug.write( { ra : red, ga : green, ba : blue,
-			        //                    		rb : 0, gb : 0, bb : 0 } );
-			    }
-			    ]]>
-			</method>            
-        </view>
-		<text fontsize="10" name="_title" height="17" x="6" y="1" text="${ this.parent.parent.title }" 
-			resize="true" fontstyle="bold" fgcolor="white" />
+        <text fontsize="10" height="17" x="6" y="1" text="${ this.parent.parent.title }" 
+			fgcolor="0xFFFFFF" resize="true" fontstyle="bold" />
+			
 	    <view name="_toolbar" visibility="$once{ ((parent.parent.fullToolBar) ? 'visible' : 'hidden' ) }" 
 	        x="${ parent.width-this.width-2 }" layout="axis:x;spacing:0" y="2">     
             
