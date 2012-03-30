@@ -117,46 +117,7 @@
 		
 		  <ol>
 		      <li>
-		      Add the following XML code to red5/conf/red5-core.xml before the final <tt>&lt;/beans&gt;</tt> line: 
-		      
-		      <div class="xmlcode">
-					&lt;bean id="rtmpsMinaIoHandler"<br/>
-					     <div style="margin-left:20px">
-					    class="org.red5.server.net.rtmps.RTMPSMinaIoHandler"&gt;<br/>
-					    &lt;property name="handler" ref="rtmpHandler" /&gt;<br/>
-					    &lt;property name="codecFactory" ref="rtmpCodecFactory" /&gt;<br/>
-					    &lt;property name="rtmpConnManager" ref="rtmpMinaConnManager" /&gt;<br/>
-					    </div>
-					&lt;property name="keyStorePassword" value="${rtmps.keystorepass}" /&gt;<br/>
-					   <div style="margin-left:20px">
-					    &lt;property name="keystoreFile" value="conf/keystore" /&gt;<br/>
-					    </div>
-					&lt;/bean&gt;<br/>
-					<br/>
-					&lt;bean id="rtmpsTransport" class="org.red5.server.net.rtmp.RTMPMinaTransport" init-method="start" destroy-method="stop"&gt;<br/>
-					<div style="margin-left:20px">
-					    &lt;property name="ioHandler" ref="rtmpsMinaIoHandler" /&gt;<br/>
-					    &lt;property name="connectors"&gt;<br/>
-					       <div style="margin-left:20px">
-					        &lt;list&gt;<br/>
-					            <div style="margin-left:20px">
-					            &lt;bean class="java.net.InetSocketAddress"&gt;<br/>
-					               <div style="margin-left:20px">
-					                &lt;constructor-arg index="0" type="java.lang.String" value="${rtmps.host}" /&gt;<br/>
-					                &lt;constructor-arg index="1" type="int" value="${rtmps.port}" /&gt;<br/>
-					                </div>
-					            &lt;/bean&gt;<br/>
-					            </div>
-					        &lt;/list&gt;<br/>
-					        </div>
-					    &lt;/property&gt;<br/>
-					    &lt;property name="receiveBufferSize" value="${rtmp.receive_buffer_size}" /&gt;<br/>
-					    &lt;property name="sendBufferSize" value="${rtmp.send_buffer_size}" /&gt;<br/>
-					    &lt;property name="tcpNoDelay" value="${rtmp.tcp_nodelay}" /&gt;<br/>
-					    </div>
-					&lt;/bean&gt; <br/>
-		      </div>
-		      
+		      Uncomment &lt;!-- RTMPS --&gt; section in red5/conf/red5-core.xml
 		      </li>
 
 				<li>
