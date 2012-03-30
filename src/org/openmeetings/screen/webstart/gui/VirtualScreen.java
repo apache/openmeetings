@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.red5.screen.webstart.gui;
+package org.openmeetings.screen.webstart.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -31,16 +31,14 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.red5.screen.webstart.BlankArea;
-import org.red5.screen.webstart.CommonScreenShare;
-import org.red5.screen.webstart.ScreenShare;
-import org.red5.screen.webstart.gui.VirtualScreenBean.ScreenQuality;
+import org.openmeetings.screen.webstart.BlankArea;
+import org.openmeetings.screen.webstart.CommonScreenShare;
+import org.openmeetings.screen.webstart.ScreenShare;
+import org.openmeetings.screen.webstart.gui.VirtualScreenBean.ScreenQuality;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -116,13 +114,13 @@ public class VirtualScreen {
 		css.vScreenIconDown = new JLabel();
 		css.vScreenIconDown.setBounds(30+(width/2)-8, 162+height-8, 16, 32);
 
-		Image im_left = ImageIO.read(ScreenShare.class.getResource("/org/red5/screen/1leftarrow.png"));
+		Image im_left = ImageIO.read(ScreenShare.class.getResource("/org/openmeetings/screen/1leftarrow.png"));
 		ImageIcon iIcon1 = new ImageIcon(im_left);
-		Image im_right = ImageIO.read(ScreenShare.class.getResource("/org/red5/screen/1rightarrow.png"));
+		Image im_right = ImageIO.read(ScreenShare.class.getResource("/org/openmeetings/screen/1rightarrow.png"));
 		ImageIcon iIcon2 = new ImageIcon(im_right);
-		Image im_up = ImageIO.read(ScreenShare.class.getResource("/org/red5/screen/1uparrow.png"));
+		Image im_up = ImageIO.read(ScreenShare.class.getResource("/org/openmeetings/screen/1uparrow.png"));
 		ImageIcon iIcon3 = new ImageIcon(im_up);
-		Image im_down = ImageIO.read(ScreenShare.class.getResource("/org/red5/screen/1downarrow.png"));
+		Image im_down = ImageIO.read(ScreenShare.class.getResource("/org/openmeetings/screen/1downarrow.png"));
 		ImageIcon iIcon4 = new ImageIcon(im_down);
 
 		JLabel jLab1 = new JLabel(iIcon1);
@@ -205,9 +203,7 @@ public class VirtualScreen {
 		css.vscreenXLabel.setBounds(250, 170, 150, 24);
 		css.t.add(css.vscreenXLabel);
 
-		css.jVScreenXSpin = new JSpinner(
-					new SpinnerNumberModel(VirtualScreenBean.vScreenSpinnerX, 0, VirtualScreenBean.screenWidthMax, 1)
-				);
+		css.jVScreenXSpin = new NumberSpinner(VirtualScreenBean.vScreenSpinnerX, 0, VirtualScreenBean.screenWidthMax, 1);
 		css.jVScreenXSpin.setBounds(400, 170, 60, 24);
 		css.jVScreenXSpin.addChangeListener( new ChangeListener(){
 			public void stateChanged(ChangeEvent arg0) {
@@ -223,9 +219,7 @@ public class VirtualScreen {
 		css.vscreenYLabel.setBounds(250, 200, 150, 24);
 		css.t.add(css.vscreenYLabel);
 
-		css.jVScreenYSpin = new JSpinner(
-					new SpinnerNumberModel(VirtualScreenBean.vScreenSpinnerY, 0, VirtualScreenBean.screenHeightMax, 1)
-				);
+		css.jVScreenYSpin = new NumberSpinner(VirtualScreenBean.vScreenSpinnerY, 0, VirtualScreenBean.screenHeightMax, 1);
 		css.jVScreenYSpin.setBounds(400, 200, 60, 24);
 		css.jVScreenYSpin.addChangeListener( new ChangeListener(){
 			public void stateChanged(ChangeEvent arg0) {
@@ -241,9 +235,7 @@ public class VirtualScreen {
 		css.vscreenWidthLabel.setBounds(250, 240, 150, 24);
 		css.t.add(css.vscreenWidthLabel);
 
-		css.jVScreenWidthSpin = new JSpinner(
-					new SpinnerNumberModel(VirtualScreenBean.vScreenSpinnerWidth, 0, VirtualScreenBean.screenWidthMax, 1)
-				);
+		css.jVScreenWidthSpin = new NumberSpinner(VirtualScreenBean.vScreenSpinnerWidth, 0, VirtualScreenBean.screenWidthMax, 1);
 		css.jVScreenWidthSpin.setBounds(400, 240, 60, 24);
 		css.jVScreenWidthSpin.addChangeListener( new ChangeListener(){
 			public void stateChanged(ChangeEvent arg0) {
@@ -259,9 +251,7 @@ public class VirtualScreen {
 		css.vscreenHeightLabel.setBounds(250, 270, 150, 24);
 		css.t.add(css.vscreenHeightLabel);
 
-		css.jVScreenHeightSpin = new JSpinner(
-					new SpinnerNumberModel(VirtualScreenBean.vScreenSpinnerHeight, 0, VirtualScreenBean.screenHeightMax, 1)
-				);
+		css.jVScreenHeightSpin = new NumberSpinner(VirtualScreenBean.vScreenSpinnerHeight, 0, VirtualScreenBean.screenHeightMax, 1);
 		css.jVScreenHeightSpin.setBounds(400, 270, 60, 24);
 		css.jVScreenHeightSpin.addChangeListener( new ChangeListener(){
 			public void stateChanged(ChangeEvent arg0) {
@@ -305,19 +295,19 @@ public class VirtualScreen {
 	 */
 	void calcRescaleFactors() {
 		logger.debug("calcRescaleFactors -- ");
-		VirtualScreenBean.vScreenResizeX = Integer.valueOf(css.jVScreenWidthSpin.getValue().toString()).intValue();
-		VirtualScreenBean.vScreenResizeY = Integer.valueOf(css.jVScreenHeightSpin.getValue().toString()).intValue();
+		VirtualScreenBean.vScreenResizeX = css.jVScreenWidthSpin.getValue();
+		VirtualScreenBean.vScreenResizeY = css.jVScreenHeightSpin.getValue();
 		switch (VirtualScreenBean.screenQuality) {
 			case VeryHigh:
 			case High:
 				break;
 			case Medium:
-				VirtualScreenBean.vScreenResizeX *= 1/2;
-				VirtualScreenBean.vScreenResizeY *= 2;
+				VirtualScreenBean.vScreenResizeX = (int)((float)VirtualScreenBean.vScreenResizeX) * 1/2;
+				VirtualScreenBean.vScreenResizeY = (int)((float)VirtualScreenBean.vScreenResizeY) * 1/2;
 				break;
 			case Low:
-				VirtualScreenBean.vScreenResizeX *= 3/8;
-				VirtualScreenBean.vScreenResizeY *= 3/8;
+				VirtualScreenBean.vScreenResizeX = (int)((float)VirtualScreenBean.vScreenResizeX) * 3/8;
+				VirtualScreenBean.vScreenResizeY = (int)((float)VirtualScreenBean.vScreenResizeY) * 3/8;
 				break;
 		}
 		logger.debug("resize: X:" + VirtualScreenBean.vScreenResizeX + " Y: " + VirtualScreenBean.vScreenResizeY);
@@ -326,7 +316,7 @@ public class VirtualScreen {
 
 	void calcNewValueXSpin(){
 		if (this.doUpdateBounds){
-			int newX = Integer.valueOf(css.jVScreenXSpin.getValue().toString()).intValue();
+			int newX = css.jVScreenXSpin.getValue();
 			if(VirtualScreenBean.vScreenSpinnerWidth+newX > VirtualScreenBean.screenWidthMax){
 				newX=VirtualScreenBean.screenWidthMax-VirtualScreenBean.vScreenSpinnerWidth;
 				css.jVScreenXSpin.setValue(newX);
@@ -336,7 +326,7 @@ public class VirtualScreen {
 				updateVScreenBounds();
 			}
 		} else {
-			VirtualScreenBean.vScreenSpinnerX = Integer.valueOf(css.jVScreenXSpin.getValue().toString()).intValue();
+			VirtualScreenBean.vScreenSpinnerX = css.jVScreenXSpin.getValue();
 		}
 		
 		calcRescaleFactors();
@@ -344,7 +334,7 @@ public class VirtualScreen {
 
 	void calcNewValueYSpin(){
 		if (this.doUpdateBounds){
-			int newY = Integer.valueOf(css.jVScreenYSpin.getValue().toString()).intValue();
+			int newY = css.jVScreenYSpin.getValue();
 			if(VirtualScreenBean.vScreenSpinnerHeight+newY > VirtualScreenBean.screenHeightMax){
 				newY=VirtualScreenBean.screenHeightMax-VirtualScreenBean.vScreenSpinnerHeight;
 				css.jVScreenYSpin.setValue(newY);
@@ -354,7 +344,7 @@ public class VirtualScreen {
 				updateVScreenBounds();
 			}
 		} else {
-			VirtualScreenBean.vScreenSpinnerY = Integer.valueOf(css.jVScreenYSpin.getValue().toString()).intValue();
+			VirtualScreenBean.vScreenSpinnerY = css.jVScreenYSpin.getValue();
 		}
 		
 		calcRescaleFactors();
@@ -362,7 +352,7 @@ public class VirtualScreen {
 
 	void calcNewValueWidthSpin(){
 		if (this.doUpdateBounds){
-			int newWidth = Integer.valueOf(css.jVScreenWidthSpin.getValue().toString()).intValue();
+			int newWidth = css.jVScreenWidthSpin.getValue();
 			if(VirtualScreenBean.vScreenSpinnerX+newWidth > VirtualScreenBean.screenWidthMax){
 				newWidth=VirtualScreenBean.screenWidthMax-VirtualScreenBean.vScreenSpinnerX;
 				css.jVScreenWidthSpin.setValue(newWidth);
@@ -372,7 +362,7 @@ public class VirtualScreen {
 				updateVScreenBounds();
 			}
 		} else {
-			VirtualScreenBean.vScreenSpinnerWidth = Integer.valueOf(css.jVScreenWidthSpin.getValue().toString()).intValue();
+			VirtualScreenBean.vScreenSpinnerWidth = css.jVScreenWidthSpin.getValue();
 		}
 		
 		calcRescaleFactors();
@@ -381,7 +371,7 @@ public class VirtualScreen {
 
 	void calcNewValueHeightSpin(){
 		if (this.doUpdateBounds){
-			int newHeight = Integer.valueOf(css.jVScreenHeightSpin.getValue().toString()).intValue();
+			int newHeight = css.jVScreenHeightSpin.getValue();
 			if(VirtualScreenBean.vScreenSpinnerY+newHeight > VirtualScreenBean.screenHeightMax){
 				newHeight=VirtualScreenBean.screenHeightMax-VirtualScreenBean.vScreenSpinnerY;
 				css.jVScreenHeightSpin.setValue(newHeight);
@@ -391,7 +381,7 @@ public class VirtualScreen {
 				updateVScreenBounds();
 			}
 		} else {
-			VirtualScreenBean.vScreenSpinnerHeight = Integer.valueOf(css.jVScreenHeightSpin.getValue().toString()).intValue();
+			VirtualScreenBean.vScreenSpinnerHeight = css.jVScreenHeightSpin.getValue();
 		}
 		
 		calcRescaleFactors();

@@ -1,4 +1,4 @@
-package org.red5.screen.webstart;
+package org.openmeetings.screen.webstart;
 
 import java.awt.Color;
 import java.awt.Image;
@@ -31,15 +31,15 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JSpinner;
 
 import org.apache.mina.core.buffer.IoBuffer;
+import org.openmeetings.screen.webstart.gui.NumberSpinner;
+import org.openmeetings.screen.webstart.gui.VirtualScreen;
+import org.openmeetings.screen.webstart.gui.VirtualScreenBean;
+import org.openmeetings.screen.webstart.gui.VirtualScreenBean.ScreenQuality;
 import org.red5.io.ITagReader;
 import org.red5.io.ITagWriter;
 import org.red5.io.utils.ObjectMap;
-import org.red5.screen.webstart.gui.VirtualScreen;
-import org.red5.screen.webstart.gui.VirtualScreenBean;
-import org.red5.screen.webstart.gui.VirtualScreenBean.ScreenQuality;
 import org.red5.server.api.event.IEvent;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.net.rtmp.Channel;
@@ -82,18 +82,18 @@ public class CommonScreenShare {
 	public JButton startButton;
 	public JButton stopButton;
 	public JButton exitButton;
-	public JSpinner jSpin;
+	public NumberSpinner jSpin;
 	public JLabel tFieldScreenZoom;
 	public JLabel blankArea;
 	public BlankArea virtualScreen;
 	public JLabel vscreenXLabel;
 	public JLabel vscreenYLabel;
-	public JSpinner jVScreenXSpin;
-	public JSpinner jVScreenYSpin;
+	public NumberSpinner jVScreenXSpin;
+	public NumberSpinner jVScreenYSpin;
 	public JLabel vscreenWidthLabel;
 	public JLabel vscreenHeightLabel;
-	public JSpinner jVScreenWidthSpin;
-	public JSpinner jVScreenHeightSpin;
+	public NumberSpinner jVScreenWidthSpin;
+	public NumberSpinner jVScreenHeightSpin;
 
 	public JComboBox jVScreenResizeMode;
 	public JLabel vscreenResizeLabel;
@@ -253,8 +253,8 @@ public class CommonScreenShare {
 	public void createWindow() {
 		try {
 
-			ImageIcon start_btn = createImageIcon("/org/red5/screen/webstart_play.png");
-			ImageIcon stop_btn = createImageIcon("/org/red5/screen/webstart_stop.png");
+			ImageIcon start_btn = createImageIcon("/org/openmeetings/screen/webstart_play.png");
+			ImageIcon stop_btn = createImageIcon("/org/openmeetings/screen/webstart_stop.png");
 
 			t = new JFrame(this.label730);
 			contentPane = t.getContentPane();
@@ -364,7 +364,7 @@ public class CommonScreenShare {
 			// *****
 			// Background Image
 			Image im_left = ImageIO.read(getClass()
-					.getResource("/org/red5/screen/background.png"));
+					.getResource("/org/openmeetings/screen/background.png"));
 			ImageIcon iIconBack = new ImageIcon(im_left);
 
 			JLabel jLab = new JLabel(iIconBack);

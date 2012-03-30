@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.red5.screen.webstart;
+package org.openmeetings.screen.webstart;
 
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.net.rtmp.Channel;

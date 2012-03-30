@@ -16,23 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.red5.screen.webstart.gui;
+package org.openmeetings.screen.webstart.gui;
 
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 
 import javax.swing.event.MouseInputAdapter;
 
-public class VirtualScreenYMouseListener extends MouseInputAdapter  {
-	private VirtualScreen vs;
-	private double y = 0;
 
-	public VirtualScreenYMouseListener(VirtualScreen vs) {
+public class VirtualScreenWidthMouseListener extends MouseInputAdapter  {
+	private VirtualScreen vs;
+	private double x = 0;
+
+	public VirtualScreenWidthMouseListener(VirtualScreen vs) {
 		this.vs = vs;
 	}
 	
 	public void mouseEntered(MouseEvent e) {
-		vs.css.t.setCursor( Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR) ) ;
+		vs.css.t.setCursor( Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR) ) ;
 	}
 
 	public void mouseExited(MouseEvent e) {
@@ -41,7 +42,7 @@ public class VirtualScreenYMouseListener extends MouseInputAdapter  {
 
 	public void mousePressed(MouseEvent e) {
 		vs.showWarning=false;
-		this.y = e.getY();
+		this.x = e.getX();
 //		System.out.println(this.x+" "+this.y);
 	}
 
@@ -50,17 +51,15 @@ public class VirtualScreenYMouseListener extends MouseInputAdapter  {
 	}
 
 	public void mouseDragged(MouseEvent e) {
-		double newY = e.getY();
+		double newX = e.getX();
 
-		int delta = Long.valueOf(Math.round(this.y-newY)).intValue();
-		int newYPosition = VirtualScreenBean.vScreenSpinnerY-delta;
-		int newHeight = VirtualScreenBean.vScreenSpinnerHeight+delta;
+		int newWidth = VirtualScreenBean.vScreenSpinnerWidth-Long.valueOf(Math.round(this.x-newX)).intValue();
 
-//		System.out.println(delta+" "+newYPosition+" "+newHeight);
-		if (newYPosition>=0 && newHeight>=0) {
+
+		//System.out.println(newX+"  "+newWidth);
+		if ((VirtualScreenBean.vScreenSpinnerX+newWidth)<=VirtualScreenBean.screenWidthMax) {
 			vs.doUpdateBounds=false;
-			vs.css.jVScreenYSpin.setValue(newYPosition);
-			vs.css.jVScreenHeightSpin.setValue(newHeight);
+			vs.css.jVScreenWidthSpin.setValue(newWidth);
 			vs.doUpdateBounds=true;
 			vs.updateVScreenBounds();
 			vs.calcRescaleFactors();

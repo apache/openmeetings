@@ -314,10 +314,9 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 						new Exception("No connectionType ");
 					}
 
-					String startUpClass = "org.red5.screen.webstart.ScreenShare";
-					if (connectionType.equals("rtmpt")) {
-						startUpClass = "org.red5.screen.webstart.ScreenShareRTMPT";
-					}
+					String startUpClass = connectionType.equals("rtmpt")
+							? "org.openmeetings.screen.webstart.ScreenShareRTMPT"
+							: "org.openmeetings.screen.webstart.ScreenShare";
 
 					String orgIdAsString = httpServletRequest
 							.getParameter("organization_id");

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.red5.screen.webstart.gui;
+package org.openmeetings.screen.webstart.gui;
 
 
 public class VirtualScreenBean {

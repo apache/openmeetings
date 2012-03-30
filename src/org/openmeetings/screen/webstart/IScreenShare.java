@@ -1,4 +1,4 @@
-package org.red5.screen.webstart;
+package org.openmeetings.screen.webstart;
 
 import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.messaging.IMessage;

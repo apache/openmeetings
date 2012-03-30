@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.red5.screen.webstart;
+package org.openmeetings.screen.webstart;
 
 import javax.swing.*;
 import java.awt.Dimension;

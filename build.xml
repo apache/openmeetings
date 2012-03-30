@@ -236,7 +236,7 @@
 				<include name="**" />
 				<exclude name="**/test/**" />
 				<exclude name="**/axis/**" />
-				<exclude name="org/red5/**" />
+				<exclude name="org/openmeetings/screen/**" />
 				<exclude name="org/openmeetings/doc/**" />
 				<exclude name="**/client/**" />
 				<exclude name="**/*.png" />
@@ -292,7 +292,7 @@
 		<!-- Screen Share -->
 		<jar destfile="${screenshare.out.dir}/red5-screenshare.jar">
 			<fileset dir="${main.out.dir}">
-				<include name="org/red5/screen/**" />
+				<include name="org/openmeetings/screen/**" />
 			</fileset>
 			<fileset file="${red5-screenshare.resources}/logback.xml"/>
 			<manifest>
