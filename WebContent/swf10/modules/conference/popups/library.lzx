@@ -19,6 +19,12 @@
   
 -->
 <library>
+	
+	<!-- 
+	Source: http://www.iconfinder.com/icondetails/36026/32/error_hazard_warning_icon
+	Creative Commons 3.0
+	 -->
+	<resource name="warning_icon_rsc" src="resources/warning.png" />
 
     <include href="commonPopupAdapter.lzx" />
     <include href="confirmationSingleSWF10.lzx" />

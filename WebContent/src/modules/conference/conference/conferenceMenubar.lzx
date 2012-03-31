@@ -211,7 +211,7 @@
 		<view name="_content" x="1" y="1" 
 			layout="axis:y;spacing:1" bgcolor="0xEFEFEF" >
 			
-			<conferencDropDownMenuItem labelid="213" command="cmd_importFile"
+			<conferencDropDownMenuItem labelid="15" command="cmd_importFile"
 						enabled="${ canvas.ismoderator }" />
 			
 		</view>
