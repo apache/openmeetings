@@ -22,63 +22,84 @@
 <!-- methods for main.lzx -->
 
 <library>
-    
-    <class name="confmenucommand" extends="command">
-        <method name="reInit">
-            
-            if($debug) Debug.write("reInit");
-            
-            if(canvas.isrtl == 'true'){
-                if($debug) Debug.write("reInit : resetting key");
-            
-                this.setAttribute('key', '');
-            }
-            
-            if($debug) Debug.write("reInit : not rtl");
-            
-            
-        </method>
+
+	<class name="baseconfmenucommand" extends="command" >
+    	<attribute name="enabled" value="true" type="boolean" />
     </class>
     
-    <confmenucommand id="cmd_applyforMod" onselect="canvas.doActionmenu('applyForMod')" />
-    <confmenucommand id="cmd_createPoll" onselect="canvas.doActionmenu('createPoll')" key="['ALT','Shift','P']"/> 
-    <confmenucommand id="cmd_pollResults" onselect="canvas.doActionmenu('pollResults')" key="['ALT','Shift','R']"/> 
-    <confmenucommand id="cmd_checkPollVoted" onselect="canvas.doActionmenu('checkPollVoted')" key="['ALT','Shift','V']"/> 
-    <confmenucommand id="cmd_importFile" onselect="canvas.doActionmenu('importFile')" key="['ALT','Shift','I']"/> 
-    <confmenucommand id="cmd_editCamMicSettings" onselect="canvas.doActionmenu('editCamMicSettings')" key="['ALT','Shift','1']"/> 
-    <confmenucommand id="cmd_editBoardSettings" onselect="canvas.doActionmenu('editBoardSettings')" key="['ALT','Shift','2']"/>   
-    <confmenucommand id="cmd_quit" onselect="canvas.doActionmenu('quit')" key="['ALT','Shift','E']"/>
-    <confmenucommand id="cmd_showSipDialer" onselect="canvas.doActionmenu('showSipDialer')" key="['ALT','Shift','D']" />
+    <class name="confmenucommand" extends="baseconfmenucommand" >
+    	<attribute name="actionCommand" value="" type="string" />
+    	<handler name="onselect" args="sel">
+    		if (!this.enabled) {
+    			return;
+    		}
+    		canvas.doActionmenu(this.actionCommand);
+    	</handler>
+    </class>
+        
+    <baseconfmenucommand id="cmd_shareDesktop" key="['control','d']" >
+    	<handler name="onselect" args="sel">
+    		if (!this.enabled) {
+    			return;
+    		}
+    		canvas._mymod.checkSharerSession.doCall();
+    	</handler>
+    </baseconfmenucommand>
     
-    <confmenucommand id="cmd_applyforMod_nokey" onselect="canvas.doActionmenu('applyForMod')" />
-    <confmenucommand id="cmd_createPoll_nokey" onselect="canvas.doActionmenu('createPoll')" /> 
-    <confmenucommand id="cmd_pollResults_nokey" onselect="canvas.doActionmenu('pollResults')" /> 
-    <confmenucommand id="cmd_checkPollVoted_nokey" onselect="canvas.doActionmenu('checkPollVoted')" /> 
-    <confmenucommand id="cmd_importFile_nokey" onselect="canvas.doActionmenu('importFile')" /> 
-    <confmenucommand id="cmd_editCamMicSettings_nokey" onselect="canvas.doActionmenu('editCamMicSettings')"/> 
-    <confmenucommand id="cmd_editBoardSettings_nokey" onselect="canvas.doActionmenu('editBoardSettings')" />   
-    <confmenucommand id="cmd_quit_nokey" onselect="canvas.doActionmenu('quit')" />
-    <confmenucommand id="cmd_showSipDialer_nokey" onselect="canvas.doActionmenu('showSipDialer')" />
+    <confmenucommand id="cmd_applyforMod" key="['control','1']" actionCommand="applyForMod" />
     
-    <!--
-    <command id="cmd_browser_open" onselect="canvas.doActionmenu('browser_open')" key="['ALT','Shift','B']"/>   
-    <command id="cmd_browser_close" onselect="canvas.doActionmenu('browser_close')" key="['ALT','Shift','b']"/> 
-     -->
-     
-    <confmenucommand id="cmd_invitation" onselect="canvas.doAction('invitation')" /> 
+    <confmenucommand id="cmd_applyforWhiteBoard" key="['control','2']">
+    	<handler name="onselect" args="tSel">
+    		if (!this.enabled) {
+    			return;
+    		}
+    		if ($debug) Debug.write("cmd_applyforWhiteBoard onselect",tSel);
+    		//Ask for Right to Draw on Whiteboard
+			var tDate = new Date();
+			canvas.thishib.sendMessageWithClient.sendMessage("applyForWhiteboard",tDate.getTime());
+    	</handler>
+    </confmenucommand>
     
-    <confmenucommand id="cmd_editWhiteboardDefault" onselect="canvas.doActionmenu('editWhiteboardDefault')" key="['ALT','Shift','9']"/> 
+    <baseconfmenucommand id="cmd_applyforAV" key="['control','3']">
+    	<handler name="onselect" args="tSel">
+    		if (!this.enabled) {
+    			return;
+    		}
+    		if ($debug) Debug.write("cmd_applyforAV onselect",canvas.ismoderator,tSel);
+    		if (canvas.ismoderator) {
+				//Do directly send confirmation to share Audio/Video to SELF! so that all users get
+				//the notification and the broadcasting Bit is set for this User
+				canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = canvas.publicSID;
+				canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
+				canvas.thishib.setBroadCastingFlag.doCall();
+			} else {
+				//Apply for Right to Share Audio/Video
+				var tDate = new Date();
+				canvas.thishib.sendMessageWithClient.sendMessage("applyForAV",tDate.getTime());
+			}
+    	</handler>
+    </baseconfmenucommand>
     
+    <confmenucommand id="cmd_createPoll" key="['control','6']" actionCommand="createPoll" />
+    <confmenucommand id="cmd_pollResults" key="['control','7']" actionCommand="pollResults" />
+    <confmenucommand id="cmd_checkPollVoted" key="['control','8']" actionCommand="checkPollVoted" />
+    <confmenucommand id="cmd_importFile" key="['control','f']" actionCommand="importFile" />
+    <confmenucommand id="cmd_editCamMicSettings" actionCommand="editCamMicSettings" key="['control','m']"/> 
+    <confmenucommand id="cmd_quit" actionCommand="quit" key="['control','q']"/>
+    <confmenucommand id="cmd_showSipDialer" actionCommand="showSipDialer" key="['control','0']" />
     
-    <confmenucommand id="cmd_coBrowser" onselect="canvas.doActionmenu('browser_open')" key="['ALT','Shift','B']"/> 
-    <confmenucommand id="cmd_coBrowser_nokey" onselect="canvas.doActionmenu('browser_open')" /> 
+    <confmenucommand id="cmd_invitation" actionCommand="invitation" key="['control','4']" /> 
+    <confmenucommand id="cmd_editWhiteboardDefault" actionCommand="editWhiteboardDefault" key="['control','9']"/> 
+    <confmenucommand id="cmd_coBrowser" actionCommand="browser_open" key="['control','b']"/> 
    
+    <!--  
+    	There is no image export at the moment
     <confmenucommand id="cmd_exportFilePNG" onselect="canvas.doWhiteboardActionmenu('exportFilePNG')" />
     <confmenucommand id="cmd_exportFileJPG" onselect="canvas.doWhiteboardActionmenu('exportFileJPG')" />
     <confmenucommand id="cmd_exportFilePDF" onselect="canvas.doWhiteboardActionmenu('exportFilePDF')" />
     <confmenucommand id="cmd_exportFileSVG" onselect="canvas.doWhiteboardActionmenu('exportFileSVG')" />
     <confmenucommand id="cmd_exportFileTIF" onselect="canvas.doWhiteboardActionmenu('exportFileTIF')" />
-    
+     -->
     
     <attribute name="colorArray" value="null" />
     
@@ -373,15 +394,16 @@
         }
     </method>
 
-    <!-- you can delete this comment. It was just memo.
-            Mar 24 2008 onokeiji@gmail.com
-         moved from modules/conference/conference/conferenceMenubar.lzx
-    -->
+	<!---
+		Actions connected to the shortcuts
+	 -->
     <method name="doActionmenu" args="stringSub">
         <![CDATA[
             if($debug) Debug.write("doActionmenu: ",stringSub);
             if (canvas._conferencemenu.visibility == 'visible'){
-                if (stringSub=='editWhiteboardDefault') {
+            	 if (stringSub == "invitation") {
+			        new lz.inviteMainWindow(canvas.main_content._content.inner);
+			    } else if (stringSub=='editWhiteboardDefault') {
                     new lz.editWhiteboardDefault(canvas.main_content._content.inner);
                 } else if (stringSub=='createPoll') {
                     new lz.createPollWin(canvas.main_content._content.inner);
@@ -406,8 +428,6 @@
                     canvas._videocontainer._videoviewcontent.changeDevice();
                 } else if (stringSub=='showSipDialer') {
                     new lz.sipDialer(canvas.main_content._content.inner);
-                } else if (stringSub=='editBoardSettings') {
-                    new lz.editWhiteboardDefault(canvas.main_content._content.inner);
                 } else if (stringSub=='quit') {
                     
                     quicklink('conferenceModuleRoomList')
@@ -420,9 +440,7 @@
                     if ($debug) Debug.write( "is browser[browserPanelWidth] ? ", browserPanelWidth );
                     if ($debug) Debug.write( "is browser[browserPanelHeight] ? ", browserPanelHeight );
 
-                //ãƒ–ãƒ©ã‚¦ã‚¶ã�®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç¢ºèª�ã�—ã�¦ã€�ã�‚ã‚Œã�°é–‹ã��ã€‚ã�ªã�‘ã‚Œã�°ä½œæˆ�ã�™ã‚‹
                     if( !canvas.conferenceBrowserIsinited ){
-                        if ($debug) Debug.write( "if this" );
                         new lz.conferenceBrowser( canvas.main_content._content.inner,{
                                                          name:'conferenceBrowser',y:30,
                                                          width:canvas.width-220, 
@@ -430,15 +448,14 @@
                                                          width:browserPanelWidth, 
                                                          height:browserPanelHeight
                                                      });
-                    } else{Debug.write( "else this" );
+                    } else{
                     with( canvas.main_content._content.inner ){
                             conferenceBrowser.htmlviewer.setVisible( true );
                             conferenceBrowser.setVisible( true );
                     }
                 }
              } else if( stringSub == "browser_close" ){
-                // é–‹ã�„ã�¦ã�„ã‚‹ãƒ–ãƒ©ã‚¦ã‚¶ã‚’ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã�§ç§»å‹•ã�™ã‚‹ã€€hieght=0  
-                Debug.write( "is browser[close] ? ", canvas.main_content._content.inner.conferenceBrowser );
+                if ($debug) Debug.write( "is browser[close] ? ", canvas.main_content._content.inner.conferenceBrowser );
                 with( canvas.main_content._content.inner ){
                     if( conferenceBrowser  != undefined ){
                             conferenceBrowser.htmlviewer.setVisible( false );
@@ -761,15 +778,6 @@
 	    ]]>
 	</method>
 	 
-	<!---
-		Load the invitation window
-	 -->
-	<method name="doAction" args="action">
-	    if (action == "invitation") {
-	        new lz.inviteMainWindow(canvas.main_content._content.inner);
-	    }
-	</method>
-	
 	<!---
 		Sets the flags isAllowedToDraw, isAllowedToScreenShare, isAllowedToRemoteControl 
 		and broadcasts the three rights to SWF10 container

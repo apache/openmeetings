@@ -78,9 +78,9 @@ of the red5-servlet
 <!--
 	These colors are the main colors and style the whole application
  -->
-<basebgcolorizer>0xA7ABCF</basebgcolorizer>
-<baseMousecolorizer>0xA7ABCF</baseMousecolorizer>
-<baseMouseOvercolorizer>0xA7ABCF</baseMouseOvercolorizer>
+<basebgcolorizer>0xBDC0DB</basebgcolorizer>
+<baseMousecolorizer>0xBDC0DB</baseMousecolorizer>
+<baseMouseOvercolorizer>0xBDC0DB</baseMouseOvercolorizer>
 <styleMenuBarBaseColor>0x000088</styleMenuBarBaseColor>
     
 <!--

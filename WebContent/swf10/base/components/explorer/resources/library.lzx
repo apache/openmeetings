@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 
-<resource src="presenter_thumb.swf" name="presenter_thumb_rsc" />
-
 <resource src="explorerbar.png" name="explorer_thumb_rsc" />
-
-<resource src="cancel.png" name="close_explorer_window_new_rsc" />
-
-<resource name="explorer_button_rsc" >
-	<frame src="explorbar_close_no.png" />
-	<frame src="explorbar_close_mo.png" />
-	<frame src="explorbar_close_dn.png" />
-</resource>
 
 <resource name="explorer_button_min_rsc" >
 	<frame src="explorbar_minimize_no.png" />
@@ -38,7 +28,5 @@
 </resource> 
 
 <resource name="explorer_resizemouse_rsc" src="resizemouse.png" />
-
-
 
 </library>

@@ -25,7 +25,7 @@
         fontsize="14" y="6" x="10" />
 
 
-<class name="dropDownMenuListItem" extends="view" height="36">
+<class name="baseDropDownMenuListItem" extends="view" height="36">
 
     <attribute name="action" value="" type="string" />
 
@@ -37,7 +37,8 @@
     <attribute name="textToolTip" value="" type="string" />
     
     <attribute name="isSpacer" value="false" type="boolean" />
-
+    <attribute name="text" value="" type="string" />
+    
     <handler name="onmouseover">
         this._bg.setAttribute("visibility","visible");
     </handler>
@@ -55,6 +56,10 @@
     <text text="$once{ parent.textToolTip }" name="_ctextTooltip" fontstyle="plain" fgcolor="0x666666"
         	fontsize="10" y="20" x="10" />	
    
+</class>
+
+<class name="dropDownMenuListItem" extends="baseDropDownMenuListItem" >
+
     <handler name="onclick">
         loadContent(this,null,null);
         parent.parent.close();
@@ -66,12 +71,15 @@
 	<attribute name="isSpacer" value="true" type="boolean" />
 </class>
 
-<class name="dropDownMenuList" extends="view" bgcolor="0xCCCCCC"
-		height="${ this._content.height+2 }" width="${ this._content.width+2 }">
+<class name="baseDropDownMenuList" extends="view" bgcolor="0xCCCCCC">
 		
 	<attribute name="list" value="null" />
 	
 	<attribute name="btnRef" value="null" />
+	
+	<handler name="oninit">
+		lz.ModeManager.makeModal(this);
+	</handler>
 	
 	<!--- @keywords private -->
     <method name="passModeEvent" args="eventStr,view" > 
@@ -95,33 +103,14 @@
        ]]> 
     </method>  
     
-    <handler name="oninit">
-    	lz.ModeManager.makeModal(this);
-    </handler>
-	
 	<method name="close">
 		this.btnRef.setAttribute("selected",false);
 		lz.ModeManager.release(this);
 		this.destroy();
 	</method>
 	
-	<handler name="oninit">
+	<method name="fixWidth">
 		<![CDATA[
-			for (var i=0;i<this.list.length;i++) {
-				if (i!=0) {
-					new lz.horizontalDropDownSpacer(this._content);
-				}
-                new lz.dropDownMenuListItem(this._content,{
-                			textvalue:this.list[i].name,
-                			list:this.list[i].subnavi,
-                			text:this.list[i].label.value,
-                			isopen:this.list[i].isopen,
-                			isleaf:this.list[i].isleaf,
-                			action:this.list[i].action,
-                			textToolTip:list[i].tooltip.value
-               			});
-            }
-            
             //the second round goes through the list of items, as 
             //now the maxwidth is detected we adjust the rest to it
             var maxWidth = 0;
@@ -141,6 +130,35 @@
             	}
             }
 		]]>
+	</method>
+
+</class>
+
+<class name="dropDownMenuList" extends="baseDropDownMenuList"
+		height="${ this._content.height+2 }" width="${ this._content.width+2 }">
+		
+	<handler name="oninit">
+		<![CDATA[
+			if (this.list == null) {
+				return;
+			}
+			for (var i=0;i<this.list.length;i++) {
+				if (i!=0) {
+					new lz.horizontalDropDownSpacer(this._content);
+				}
+                new lz.dropDownMenuListItem(this._content,{
+                			textvalue:this.list[i].name,
+                			list:this.list[i].subnavi,
+                			text:this.list[i].label.value,
+                			isopen:this.list[i].isopen,
+                			isleaf:this.list[i].isleaf,
+                			action:this.list[i].action,
+                			textToolTip:list[i].tooltip.value
+               			});
+            }
+            
+            this.fixWidth();
+		]]>
 	</handler>	
 	
 	<view name="_content" x="1" y="1" 
@@ -148,11 +166,11 @@
 		
 </class>
 
-<class name="mainMenuMeetingsItem" extends="view" height="34"
+<class name="baseMenuMeetingsItem" extends="view" height="34"
     width="${ this._ctext.width+36 }" >
 
     <attribute name="action" value="" type="string" />
-
+	<attribute name="text" value="" type="string" />
     <attribute name="textToolTip" value="" type="string" />
     <attribute name="_menuRef" value="null" />
     <attribute name="isopen" value="false" type="boolean" />
@@ -160,7 +178,12 @@
     <attribute name="list" value="null" />
     <attribute name="textvalue" value="null" />
     <attribute name="selected" value="false" type="boolean" />
-
+    
+    <attribute name="text_y_inset" value="6" type="number" />
+    <attribute name="text_fontsize" value="14" type="number" />
+    
+    <attribute name="down_y_inset" value="10" type="number" />
+    
     <handler name="onmouseover">
         if (!this.selected){
             this.bgc.setAttribute('visibility','visible');
@@ -186,20 +209,26 @@
     	}
     </handler>
     
-    <view width="${ parent.width-1 }" bgcolor="0xFFFFFF" opacity="0.4" height="32" y="1"
+    <view width="${ parent.width-1 }" bgcolor="0xFFFFFF" opacity="0.4" height="$once{ parent.height - 2}" y="1"
         visibility="hidden" name="bgc"/>
         
-    <view width="${ parent.width-1 }" bgcolor="0xEFEFEF" height="34" 
+    <view width="${ parent.width-1 }" bgcolor="0xEFEFEF" height="$once{ parent.height }" 
         visibility="hidden" name="bga">
         <view width="${ parent.width }" bgcolor="0xCCCCCC" height="1" />
     </view>
     
-    <view name="_icon_down" x="${ parent.width-20 }" y="10" 
+    <view name="_icon_down" x="${ parent.width-20 }" y="$once{ parent.down_y_inset }" 
     			resource="bullet_arrow_down_rsc" frame="1" />  
     
     <view width="1" height="${ parent.height }" y="0" bgcolor="0xEEEEEE" x="${ parent.width-1 }" />
     <text text="$once{ parent.text }" name="_ctext" fontstyle="plain" fgcolor="0xFFFFFF"
-        	fontsize="14" y="6" x="10" />
+        	fontsize="$once{ parent.text_fontsize }" y="$once{ parent.text_y_inset }" x="10" />
+
+    <labelTooltip name="_textToolTip" text="$once{ parent.textToolTip }" multiline="false" />
+    
+</class>
+
+<class name="mainMenuMeetingsItem" extends="baseMenuMeetingsItem" >
 
     <handler name="onclick">
     	new lz.dropDownMenuList(canvas,{
@@ -211,8 +240,6 @@
         this.parent.parent.sendOpenMenu(this);
     </handler>
 
-    <labelTooltip text="$once{ parent.textToolTip }" multiline="true" />
-    
 </class>
 
 <class name="mainNavi" extends="view" bgcolor="$once{ canvas.styleMenuBarBaseColor }" 
