@@ -48,10 +48,7 @@
 <whitestyle name="menuStyle" basecolor="${ canvas.styleMenuBarBaseColor }" 
              textcolor="0x000000" />
              
-<resource name="currentsplash" src="splash_defaultvalues.swf" />
-<resource name="configure_vidrsc" src="resources/configure.png" />
-<resource name="mainbackroundmenu_rsc" src="resources/mainbackroundmenu.png" />
-<splash><view center="true" ratio="1" resource="splash_defaultvalues.swf" /></splash>
+
 <!-- main colors: 264269 -->
 <handler name="oninit">
     //this.setAttribute('framerate',12);

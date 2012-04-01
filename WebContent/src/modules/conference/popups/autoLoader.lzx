@@ -23,8 +23,8 @@
 <class name="autoLoader" extends="view" align="center" valign="middle"
     layout="axis:y;spacing:2">
 
-	<attribute name="maxwidth" value="100" type="number" />
-	<attribute name="maxsteps" value="20" type="number" />
+	<attribute name="maxwidth" value="300" type="number" />
+	<attribute name="maxsteps" value="22" type="number" />
 	<attribute name="currentsteps" value="0" type="number" />
 	
 	<method name="close">
@@ -37,18 +37,20 @@
 	<method name="setProgress">
 		this.currentsteps += 1;
 		if($debug) Debug.write("autoLoader/setProgress ===== ",this.currentsteps);
-		var w = Math.round(((this.maxwidth-2)/this.maxsteps)*this.currentsteps);
+		var w = Math.round(((this.maxwidth)/this.maxsteps)*this.currentsteps);
 		this.loadingbar.setAttribute('visibility','visible');
 		if($debug) Debug.write("autoLoader/setResourceNumber == ",w);
-		this.loadingbar.setAttribute('frame',w);
+		this.loadingbar._loading.setAttribute('width',w);
 	</method>
     
-    <text fontsize="11" >Autoconnect</text>
     <text fontsize="11" name="error" />
     <text fontsize="11" name="_src" />
     
-    <view name="loadingbar" resource="currentsplash" 
-          x="-5" y="60" width="$once{ parent.maxwidth }" visibility="hidden" />
+    <view name="loadingbar" bgcolor="$once{ canvas.styleMenuBarBaseColor }" height="10"
+          x="-5" y="60" width="$once{ parent.maxwidth }" visibility="hidden">
+          <view x="1" y="1" width="$once{ parent.width-2 }" height="8" bgcolor="0xFFFFFF"/>
+          <view name="_loading" x="1" y="1" width="0" height="8" bgcolor="$once{ canvas.styleMenuBarBaseColor }"/>
+    </view>
 </class>
 
 </library>
