@@ -248,13 +248,17 @@
 			<conferencDropDownMenuItem labelid="24" command="cmd_createPoll" 
 						enabled="${ canvas.ismoderator }" />
 			<horizontalDropDownSpacer />			
-			<conferencDropDownMenuItem labelid="37" command="cmd_pollResults" />
+			<conferencDropDownMenuItem labelid="37" command="cmd_pollResults" 
+						enabled="true" />
 			<horizontalDropDownSpacer />
-			<conferencDropDownMenuItem labelid="42" command="cmd_checkPollVoted" />
+			<conferencDropDownMenuItem labelid="42" command="cmd_checkPollVoted" 
+						 enabled="true"/>
 			<horizontalDropDownSpacer />
-            <conferencDropDownMenuItem labelid="1447" command="cmd_showSipDialer" />
+            <conferencDropDownMenuItem labelid="1447" command="cmd_showSipDialer" 
+            			 enabled="true"/>
             <horizontalDropDownSpacer />
-			<conferencDropDownMenuItem labelid="1126" command="cmd_editWhiteboardDefault" />
+			<conferencDropDownMenuItem labelid="1126" command="cmd_editWhiteboardDefault" 
+						 enabled="true"/>
 				
 		</view>
 		

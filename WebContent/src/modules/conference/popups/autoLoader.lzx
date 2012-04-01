@@ -20,12 +20,18 @@
 -->
 <library>
     
-<class name="autoLoader" extends="view" align="center" valign="middle"
-    layout="axis:y;spacing:2">
+<class name="autoLoader" extends="view" align="center" valign="middle" pixellock="true">
 
 	<attribute name="maxwidth" value="300" type="number" />
 	<attribute name="maxsteps" value="22" type="number" />
 	<attribute name="currentsteps" value="0" type="number" />
+	
+	<!-- 
+	<handler name="oninit">
+		this.setAttribute("y",Math.round(this.y));
+		this.setAttribute("y",Math.round(this.y));
+	</handler>
+	 -->
 	
 	<method name="close">
 		canvas.main_content.setAttribute('visibility','visible');
@@ -46,10 +52,11 @@
     <text fontsize="11" name="error" />
     <text fontsize="11" name="_src" />
     
-    <view name="loadingbar" bgcolor="$once{ canvas.styleMenuBarBaseColor }" height="10"
+    <view name="loadingbar" bgcolor="$once{ canvas.styleMenuBarBaseColor }" height="10"  pixellock="true"
           x="-5" y="60" width="$once{ parent.maxwidth }" visibility="hidden">
           <view x="1" y="1" width="$once{ parent.width-2 }" height="8" bgcolor="0xFFFFFF"/>
-          <view name="_loading" x="1" y="1" width="0" height="8" bgcolor="$once{ canvas.styleMenuBarBaseColor }"/>
+          <view name="_loading" x="1" y="1" width="0" height="8"  pixellock="true" 
+          		bgcolor="$once{ canvas.styleMenuBarBaseColor }"/>
     </view>
 </class>
 
