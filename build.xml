@@ -601,7 +601,7 @@
 		<mkdir dir="${junit.report.dir}" />
 		<!-- property name="myclsp" refid="junit.classpath" />
 		<echo message="${myclsp}" /-->
-		<junit printsummary="yes" dir="${junit.base.dir}" tempdir="${junit.base.dir}" fork="yes" forkmode="perBatch">
+		<junit maxmemory="1024m" printsummary="yes" dir="${junit.base.dir}" tempdir="${junit.base.dir}" fork="yes" forkmode="perBatch">
 			<classpath refid="junit.classpath" />
 			<jvmarg value="-Dred5.root=${red5.root}" />
 			<jvmarg value="-Dbasedir=${basedir}" />
