@@ -302,7 +302,7 @@
 
 <class name="activityList" y="${ parent.height - 200 }" x="0"
 	   extends="basePropertyPanelWhiteboard" height="200" 
-         width="$once{ parent.width-18 }" labelid="1363" 
+         width="$once{ parent.width-10 }" labelid="1363" 
          visibility="${((canvas.currentRoomObj.hideActivitiesAndActions == true) ? 'hidden':'visible')}">
     
     <handler name="oninit">
@@ -567,8 +567,8 @@
     	]]>
     </method>
     
-    <view name="_list" y="20" height="180" bgcolor="0xEEF0EB"
-    	  width="$once{ parent.width+8 }" clip="true">
+    <view name="_list" y="21" height="179" bgcolor="0xEEF0EB"
+    	  width="$once{ parent.width }" clip="true">
         
         <view name="_list">
             

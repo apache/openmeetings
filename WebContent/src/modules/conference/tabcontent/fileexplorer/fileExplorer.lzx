@@ -596,13 +596,13 @@
     
     <view name="_userSpace" height="40" valign="bottom" width="$once{ parent.width }">
     	
-    	<labelText name="_userHomeSizeLabel" labelid="923" />
+    	<labelText name="_userHomeSizeLabel" labelid="923" fgcolor="0x666666" />
     	
-    	<labelText name="_userHomeSize" align="right" />
+    	<labelText name="_userHomeSize" align="right" fgcolor="0x666666" />
     	
-    	<labelText name="_roomHomeSizeLabel" labelid="924" y="20" />
+    	<labelText name="_roomHomeSizeLabel" labelid="924" y="20" fgcolor="0x666666" />
     	
-    	<labelText name="_roomHomeSize" align="right" y="20" />
+    	<labelText name="_roomHomeSize" align="right" y="20" fgcolor="0x666666" />
     	
     </view>
     

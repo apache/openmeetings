@@ -57,44 +57,37 @@
             this._doClose.doStart();
             this.isOpen = false;
             this._minimizeSidebar._icon.setAttribute("frame",2);
+            this._minimizeSidebar._icon._labelTooltip.setAttribute("labelid",857);
         } else {
             this._doOpen.doStart();
             this.isOpen = true;
             this._minimizeSidebar._icon.setAttribute("frame",1);
+            this._minimizeSidebar._icon._labelTooltip.setAttribute("labelid",856);
         }
     </method>
     
-    <view name="_head" width="$once{ parent.width-2 }" height="34">
-        <view width="${ parent.width }" height="$once{ parent.height }" 
-              stretches="both" resource="presenter_thumb_rsc" >
-            <handler name="oninit">
-                <![CDATA[
-                    this.setTintRGB(canvas.basebgcolorizer,90);
-                ]]>
-            </handler>
-            <method name="setTintRGB" args="color, brightness">
-                <![CDATA[
-                    if (color != "" && color != null){
+    <view name="borderBarTop" y="0"
+    			width="${ parent.width }" bgcolor="0xCCCCCC" height="1" />
+   	<view name="_tabbarBg" width="${ parent.width }" height="32" y="1" bgcolor="0xFAFAFA" />
+	<view name="borderBarBottom" y="34"
+   			width="${ parent.width }" bgcolor="0xCCCCCC" height="1" /> 
     
-                        if (brightness == null) { brightness = 0; }
-                        var rgb = color;
-                        var red=(rgb >> 16) & 0xFF;
-                        var green=(rgb >> 8) & 0xFF;
-                        var blue=rgb & 0xFF;
-            
-                        this.setColorTransform( { ra : red, ga : green, ba : blue,
-                                                    rb : 0, gb : 0, bb : 0 } );
-                                                    
-                    }
-                ]]>
-            </method>            
-        </view>
+    <view name="_head" y="1" width="${ parent.width-10 }" height="32"
+    		  layout="axis:x;spacing:2;inset:2" >
+    
+    	<handler name="oninit">
+    		for (var eg in this.subviews) {
+            	this.subviews[eg].deselect();
+            }
+            this.userTabButton.doSelection();
+    	</handler>
+   
+        <tabButtonMain name="userTabButton" height="$once{ parent.height }" width="$once{ (parent.width-6)/2 }"
+                currentIconRsc="users_tab_btn" labelid="613" />
         
-        <conferenceRoomSidebarTabButton name="userTabButton" selected="true"
-                currentIconRsc="users_tab_btn" x="0" labelid="613" />
-        
-        <conferenceRoomSidebarTabButton name="filesTabButton" currentIconRsc="files_tab_btn"
-                x="$once{ ((parent.width-2)/2)+2 }" labelid="614" visible="${(canvas.currentRoomObj.hideFilesExplorer ? false:true)}"/>
+        <tabButtonMain name="filesTabButton" currentIconRsc="files_tab_btn" height="$once{ parent.height }" 
+                labelid="614" width="$once{ (parent.width-6)/2 }"
+                visible="${(canvas.currentRoomObj.hideFilesExplorer ? false:true)}"/>
         
     </view>
     
@@ -105,54 +98,25 @@
                   width="$once{ parent.width-10 }" 
                height="${ parent.height-((canvas.currentRoomObj.hideActivitiesAndActions == true) ? 36:236) }" />
                
-    <view y="${ parent.height - 201 }" width="$once{ parent.width-10 }" height="2"
-        name="_border" bgcolor="$once{ canvas.basebgcolorizer }" 
-        visibility="${((canvas.currentRoomObj.hideActivitiesAndActions == true) ? 'hidden':'visible')}"/>
-               
     <activityList name="_activityList" />
     
-    <view name="_minimizeSidebar" x="${ parent.width - 10 }" width="10" 
-          bgcolor="$once{ canvas.baseMousecolorizer }" height="${ parent.height }">
+    <view name="_minimizeSidebar" x="${ parent.width - 10 }" width="10" y="1"
+          				bgcolor="0xE0E1EB" height="${ parent.height-1 }">
         <handler name="onclick">
             parent.toggleStatus();
         </handler>
-        <handler name="onmouseover">
-            this._bg1.setAttribute("visibility","visible");
-        </handler>
-        <handler name="onmouseout">
-            this._bg1.setAttribute("visibility","hidden");
-        </handler>
         
-        <view width="${ parent.width }" height="$once{ parent.height*1.4 }" 
-              stretches="both" resource="presenter_thumb_rsc" >
-            <handler name="oninit">
-                <![CDATA[
-                    this.setTintRGB(canvas.basebgcolorizer,90);
-                ]]>
-            </handler>
-            <method name="setTintRGB" args="color, brightness">
-                <![CDATA[
-                    if (color != "" && color != null){
-    
-                        if (brightness == null) { brightness = 0; }
-                        var rgb = color;
-                        var red=(rgb >> 16) & 0xFF;
-                        var green=(rgb >> 8) & 0xFF;
-                        var blue=rgb & 0xFF;
+        <view width="${ parent.width }" height="$once{ parent.height }" 
+               bgcolor="0xE0E1EB" >
+        </view>
             
-                        this.setColorTransform( { ra : red, ga : green, ba : blue,
-                                                    rb : 0, gb : 0, bb : 0 } );
-                                                    
-                    }
-                ]]>
-            </method>            
+        <view name="_icon" resource="sidebar_tab_btn" y="0">
+             <handler name="onclick">
+	            parent.parent.toggleStatus();
+	         </handler>
+	         <labelTooltip name="_labelTooltip" labelid="856" />
         </view>
         
-        <view name="_bg1" bgcolor="0xFFFFFF" width="$once{ parent.width }" 
-            height="$once{ parent.height }" opacity="0.7" visibility="hidden"/> 
-            
-        <view name="_icon" resource="sidebar_tab_btn" 
-              valign="middle" align="center" />
     </view>
     
     <animator name="_doOpen" attribute="width" to="$once{ parent.width }" 

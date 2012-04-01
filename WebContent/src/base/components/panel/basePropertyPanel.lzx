@@ -20,8 +20,7 @@
 -->
 <library>
 
-<class name="basePropertyPanel" extends="view" 
-	   bgcolor="$once{ canvas.basebgcolorizer }" >
+<class name="basePropertyPanel" extends="view" >
 	
 	<!--- @keywords private is the Box minimized  -->
 	<attribute name="isopen" value="true" type="boolean" />
@@ -61,60 +60,45 @@
     </handler>
 	
 	<view width="${ this.parent.width }" height="${ this.parent.height-2 }" 
-		  x="0" y="1" bgcolor="0xFFFFFF" />
+		  x="0" y="1"  />
+	
+    <view x="0" y="1" width="${ this.parent.width }" height="20" bgcolor="0xE0E1EB" />
+    
+    <view x="0" y="0" width="${ this.parent.width }" height="1" bgcolor="0xCCCCCC" />
+    
+    <view x="0" y="19" width="${ this.parent.width }" height="1" bgcolor="0xCCCCCC" />
+	
 		  
-        <view x="0" y="1" width="${ this.parent.width }" height="20">
+    <view x="0" y="1" width="${ this.parent.width }" height="20" >
 		
 		<handler name="onclick">
             this.parent.toggleopen();
         </handler>
-            
-		<view width="${ this.parent.parent.width }" y="0" stretches="width"
-                resource="presenter_thumb_rsc" >
-			
-            <handler name="oninit">
-            	<![CDATA[
-            		this.setTintRGB(canvas.basebgcolorizer,90);
-            		//this.setColor(canvas.basebgcolorizer);
-            	]]>
-            </handler>
-			<method name="setTintRGB" args="color, brightness">
-			    <![CDATA[
-			    if (color != "" && color != null){
-			    	
-			        if (brightness == null) { brightness = 0; }
-			        var rgb = color;
-			        var red=(rgb >> 16) & 0xFF;
-			        var green=(rgb >> 8) & 0xFF;
-			        var blue=rgb & 0xFF;
 		
-			        this.setColorTransform( { ra : red, ga : green, ba : blue,
-			                            		rb : 0, gb : 0, bb : 0 } );
-			                            		
-			        if($debug) Debug.write("explorerBox/setTintRGB",this);
-			        if($debug) Debug.write("explorerBox/setTintRGB", { ra : red, ga : green, ba : blue, rb : 0, gb : 0, bb : 0 } );
-			    }
-			    ]]>
-			</method>            
-        </view>
         <text fontsize="11" height="17" x="16" y="1" text="${ this.parent.parent.title }" 
-			fgcolor="0xFFFFFF" resize="true" fontstyle="bold" />
+			fgcolor="0x666666" resize="true" fontstyle="bold" />
+			
 		<button visible="${ this.parent.parent.closable }" x="${ this.parent.parent.width-23 }" 
 			y="1" text="X" height="18" width="20" >
 			<handler name="onmouseup">
 				this.parent.parent.close();
 			</handler>									
 		</button>
+		
 		<view visible="${ !this.parent.parent.isopen }" x="2" y="2" resource="conferenceBox_button_min_small_rsc">
 			<handler name="onmouseup">
 				this.parent.parent.toggleopen();
-			</handler>									
+			</handler>	
+			<labelTooltip name="_labelTooltip" labelid="857" />								
 		</view>
+		
 		<view visible="${ this.parent.parent.isopen }" x="2" y="2" resource="conferenceBox_button_max_small_rsc">
 			<handler name="onmouseup">
 				this.parent.parent.toggleopen();
-			</handler>									
+			</handler>
+			<labelTooltip name="_labelTooltip" labelid="856" />									
 		</view>
+		
 	</view>
 </class>
 

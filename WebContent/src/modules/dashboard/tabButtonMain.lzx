@@ -35,13 +35,17 @@
 	
 	<handler name="oninit">
 		if (this.selected) {
-			parent.parent.doSelection(this);
+			this.doSelection();
 		}
 	</handler>
 	
 	<handler name="onclick">
-		parent.parent.doSelection(this);
+		this.doSelection();
 	</handler>
+	
+	<method name="doSelection">
+		parent.parent.doSelection(this);
+	</method>
 	
 	<handler name="onmouseover">
 		if (!this.selected) {
