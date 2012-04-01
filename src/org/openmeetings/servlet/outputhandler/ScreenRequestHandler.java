@@ -145,11 +145,6 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 				throw new Exception("recorder is empty: ");
 			}
 
-			String mode = httpServletRequest.getParameter("mode");
-			if (mode == null) {
-				throw new Exception("mode is empty: ");
-			}
-
 			String httpRootKey = httpServletRequest.getParameter("httpRootKey");
 			if (httpRootKey == null) {
 				throw new Exception("httpRootKey is empty could not start sharer");
@@ -295,80 +290,77 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 
 			log.debug("Creating JNLP Template for TCP solution");
 
-			if (mode.equals("sharer")) {
+			try {
 
-				try {
+				log.debug("RTMP Sharer labels :: " + label_sharer);
 
-					log.debug("RTMP Sharer labels :: " + label_sharer);
+				codebase = "http://" + rtmphostlocal + ":" + red5httpport
+						+ httpRootKey + "red5-screenshare";
 
-					codebase = "http://" + rtmphostlocal + ":"
-							+ red5httpport + httpRootKey
-							+ "red5-screenshare";
+				ConnectionType conType = ConnectionType
+						.valueOf(httpServletRequest
+								.getParameter("connectionType"));
 
-					ConnectionType conType = ConnectionType.valueOf(httpServletRequest
-							.getParameter("connectionType"));
-
-					//FIXME http:// need to be removed
-					String startUpClass;
-					switch (conType) {
-					case rtmp:
-						startUpClass = "org.openmeetings.screen.webstart.RTMPScreenShare";
-						break;
-					case rtmps:
-						startUpClass = "org.openmeetings.screen.webstart.RTMPSScreenShare";
-						break;
-					case rtmpt:
-						startUpClass = "org.openmeetings.screen.webstart.RTMPTScreenShare";
-						break;
-					default:
-						throw new Exception("Unknown connection type");
-					}
-
-					String orgIdAsString = httpServletRequest
-							.getParameter("organization_id");
-					if (orgIdAsString == null) {
-						throw new Exception(
-								"orgIdAsString is empty could not start sharer");
-					}
-
-					ctx.put("organization_id", orgIdAsString);
-
-					ctx.put("startUpClass", startUpClass);
-					ctx.put("codebase", codebase);
-					ctx.put("red5-host", rtmphostlocal);
-					ctx.put("red5-app", OpenmeetingsVariables.webAppRootKey + "/"
-									+ room);
-
-					Configuration configuration = getCfgManagement()
-							.getConfKey(3L, "default.quality.screensharing");
-					String default_quality_screensharing = "1";
-					if (configuration != null) {
-						default_quality_screensharing = configuration
-								.getConf_value();
-					}
-
-					ctx.put("default_quality_screensharing",
-							default_quality_screensharing);
-
-					ctx.put("user_id", users_id);
-
-					String port = httpServletRequest.getParameter("port");
-					if (port == null) {
-						throw new Exception("port is empty: ");
-					}
-					ctx.put("port", port);
-
-					String allowRecording = httpServletRequest
-							.getParameter("allowRecording");
-					if (allowRecording == null) {
-						throw new Exception("allowRecording is empty: ");
-					}
-					ctx.put("allowRecording", allowRecording);
-
-				} catch (Exception e) {
-					log.error("invalid configuration value for key screen_viewer!");
+				// FIXME http:// need to be removed
+				String startUpClass;
+				switch (conType) {
+				case rtmp:
+					startUpClass = "org.openmeetings.screen.webstart.RTMPScreenShare";
+					break;
+				case rtmps:
+					startUpClass = "org.openmeetings.screen.webstart.RTMPSScreenShare";
+					break;
+				case rtmpt:
+					startUpClass = "org.openmeetings.screen.webstart.RTMPTScreenShare";
+					break;
+				default:
+					throw new Exception("Unknown connection type");
 				}
-			} 
+
+				String orgIdAsString = httpServletRequest
+						.getParameter("organization_id");
+				if (orgIdAsString == null) {
+					throw new Exception(
+							"orgIdAsString is empty could not start sharer");
+				}
+
+				ctx.put("organization_id", orgIdAsString);
+
+				ctx.put("startUpClass", startUpClass);
+				ctx.put("codebase", codebase);
+				ctx.put("red5-host", rtmphostlocal);
+				ctx.put("red5-app", OpenmeetingsVariables.webAppRootKey + "/"
+						+ room);
+
+				Configuration configuration = getCfgManagement().getConfKey(3L,
+						"default.quality.screensharing");
+				String default_quality_screensharing = "1";
+				if (configuration != null) {
+					default_quality_screensharing = configuration
+							.getConf_value();
+				}
+
+				ctx.put("default_quality_screensharing",
+						default_quality_screensharing);
+
+				ctx.put("user_id", users_id);
+
+				String port = httpServletRequest.getParameter("port");
+				if (port == null) {
+					throw new Exception("port is empty: ");
+				}
+				ctx.put("port", port);
+
+				String allowRecording = httpServletRequest
+						.getParameter("allowRecording");
+				if (allowRecording == null) {
+					throw new Exception("allowRecording is empty: ");
+				}
+				ctx.put("allowRecording", allowRecording);
+
+			} catch (Exception e) {
+				log.error("invalid configuration value for key screen_viewer!");
+			}
 
 			String template = "screenshare.vm";
 

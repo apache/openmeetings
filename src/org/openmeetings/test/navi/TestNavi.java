@@ -26,7 +26,6 @@ import java.util.List;
 import org.junit.Test;
 import org.openmeetings.app.persistence.beans.basic.Naviglobal;
 import org.openmeetings.app.persistence.beans.basic.Navimain;
-import org.openmeetings.app.persistence.beans.basic.Navisub;
 import org.openmeetings.app.persistence.beans.basic.Sessiondata;
 import org.openmeetings.app.persistence.beans.domain.Organisation_Users;
 import org.openmeetings.app.persistence.beans.user.Users;
@@ -61,11 +60,6 @@ public class TestNavi extends AbstractOpenmeetingsSpringTest {
 
                 for (Navimain navim : navigl.getMainnavi()) {
                     System.out.println("-->" + navim.getLabel().getValue());
-
-                    for (Navisub navis : navim.getSubnavi()) {
-                        System.out.println("---->"
-                                + navis.getLabel().getValue());
-                    }
 
                 }
             }

@@ -19,24 +19,17 @@
 package org.openmeetings.app.persistence.beans.basic;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Date;
 
-import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
-
-
-
 import javax.persistence.Column;
-import javax.persistence.Entity; 
-import javax.persistence.FetchType;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
 
 @Entity
 @Table(name = "navimain")
@@ -76,10 +69,6 @@ public class Navimain implements Serializable {
 	private String deleted;
 	@Transient
 	private Fieldlanguagesvalues label;
-	@OneToMany(fetch = FetchType.EAGER)
-	@JoinColumn(name="main_id")
-	@OrderBy("naviorder")
-	private List<Navisub> subnavi;
 	@Transient
 	private Fieldlanguagesvalues tooltip;
 	@Column(name="tooltip_fieldvalues_id")
@@ -170,14 +159,6 @@ public class Navimain implements Serializable {
 	public void setDeleted(String deleted) {
 		this.deleted = deleted;
 	}
-    
-    public List<Navisub> getSubnavi() {
-        return subnavi;
-    }
-
-    public void setSubnavi(List<Navisub> subnavi) {
-        this.subnavi = subnavi;
-    }
     
     public String getName() {
         return name;

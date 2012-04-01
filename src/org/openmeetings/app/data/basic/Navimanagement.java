@@ -29,7 +29,6 @@ import javax.persistence.TypedQuery;
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.persistence.beans.basic.Naviglobal;
 import org.openmeetings.app.persistence.beans.basic.Navimain;
-import org.openmeetings.app.persistence.beans.basic.Navisub;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,19 +61,6 @@ public class Navimanagement {
 						navim.getFieldvalues_id(), language_id));
 				navim.setTooltip(fieldmanagment.getFieldByIdAndLanguageByNavi(
 						navim.getTooltip_fieldvalues_id(), language_id));
-				if (navim.getSubnavi() != null) {
-					for (Iterator<Navisub> it4 = navim.getSubnavi().iterator(); it4
-							.hasNext();) {
-						Navisub navis = it4.next();
-						navis.setLabel(fieldmanagment
-								.getFieldByIdAndLanguageByNavi(
-										navis.getFieldvalues_id(), language_id));
-						navis.setTooltip(fieldmanagment
-								.getFieldByIdAndLanguageByNavi(
-										navis.getTooltip_fieldvalues_id(),
-										language_id));
-					}
-				}
 
 			}
 		}

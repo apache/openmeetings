@@ -30,7 +30,6 @@
 		<class>org.openmeetings.app.persistence.beans.basic.LdapConfig</class>
 		<class>org.openmeetings.app.persistence.beans.basic.Naviglobal</class>
 		<class>org.openmeetings.app.persistence.beans.basic.Navimain</class>
-		<class>org.openmeetings.app.persistence.beans.basic.Navisub</class>
 		<class>org.openmeetings.app.persistence.beans.basic.OmTimeZone</class>
 		<class>org.openmeetings.app.persistence.beans.basic.Sessiondata</class>
 		<class>org.openmeetings.app.persistence.beans.basic.SOAPLogin</class>
