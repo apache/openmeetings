@@ -20,6 +20,7 @@ package org.openmeetings.app.ldap;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -681,15 +682,25 @@ public class LdapLoginManagement {
 					1,// status
 					login,// loginname
 					passwd,// passwd
-					lastname, firstname, email, new java.util.Date(), street,
-					additionalname, fax, zip, state_id, town,
-					cfgManagement.getConfValue("default_lang_id", Long.class, "0"), false, // sendWelcomeMessage
-					null, phone, "",// BaseURL is empty as we do not send an
-									// Email here
+					lastname, firstname, email, 
+					new java.util.Date(), //age
+					street,
+					additionalname, fax, zip, state_id, town, 
+					cfgManagement.getConfValue("default_lang_id", Long.class,"0"), //language_id
+					false, // sendWelcomeMessage
+					Arrays.asList(cfgManagement.getConfValue("default_domain_id", Long.class, null)), //organozation Ids
+					phone, 
+					"",// BaseURL is empty as we do not send an Email here
 					false,// send verification code
 					"", "", "",// sip_user, sip_pass, sip_auth
 					true, // generate SIP Data if the config is enabled
-					jName_timeZone, false, "", "", false, true);
+					jName_timeZone, 
+					false, // forceTimeZoneCheck
+					"", //userOffers
+					"", //userSearchs
+					false, //showContactData
+					true //showContactDataToContacts
+					);
 
 		} catch (Exception e) {
 			log.error("Error creating user : " + e.getMessage());
@@ -705,15 +716,6 @@ public class LdapLoginManagement {
 			log.error("Error creating user : missing values");
 		} else {
 			log.debug("User Created!");
-
-			// Set him to Default Organisation
-			long organisation_id = Long.valueOf(
-					cfgManagement.getConfKey(3, "default_domain_id")
-							.getConf_value()).longValue();
-			log.debug("Adding user '" + newUserId + "' to organization '"
-					+ organisation_id + "'");
-			organisationmanagement.addUserToOrganisation(newUserId,
-					organisation_id, newUserId);
 		}
 
 		return newUserId;
