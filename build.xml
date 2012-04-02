@@ -485,17 +485,6 @@
 			<source file="src/org/openmeetings/axis/services/UserWebService.java" />
 			<doclet name="org.openmeetings.doc.WebServiceDoclet" pathref="build.webservice.classpath" />
 		</javadoc>
-		<!--
-		<javadoc classpathref="build.webservice.classpath">
-			<source file="src/org/openmeetings/axis/services/CalendarWebService.java" />
-			<source file="src/org/openmeetings/axis/services/FileWebService.java" />
-			<source file="src/org/openmeetings/axis/services/JabberWebService.java" />
-			<source file="src/org/openmeetings/axis/services/RoomWebService.java" />
-			<source file="src/org/openmeetings/axis/services/UserWebService.java" />
-			<doclet name="org.openmeetings.doc.WebServiceDoclet" pathref="build.webservice.classpath">
-			</doclet>
-		</javadoc>
-		 -->
 	</target>
 
 	<property name="docs.dest" value="docs" />
