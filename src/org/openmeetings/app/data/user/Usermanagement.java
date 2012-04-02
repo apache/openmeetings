@@ -1121,9 +1121,11 @@ public class Usermanagement {
 			users.setDeleted("false");
 			
 			//new user add organizations without checks
-			List<Organisation_Users> orgList = users.getOrganisation_users();
-			for (Long orgId : orgIds) {
-				orgList.add(organisationmanagement.getOrgUser(orgId, null));
+			if (orgIds != null) {
+				List<Organisation_Users> orgList = users.getOrganisation_users();
+				for (Long orgId : orgIds) {
+					orgList.add(organisationmanagement.getOrgUser(orgId, null));
+				}
 			}
 			return addUser(users);
 
