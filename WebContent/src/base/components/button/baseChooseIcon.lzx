@@ -20,16 +20,12 @@
 -->
 <library>
 
-<resource name="menuseperator_rsc" src="resources/menuseperator.png" />
-
 <resource name="background_drawchoose_rsc">
     <frame src="resources/menudraw_up.png" />
     <frame src="resources/menudraw_over.png" />
     <frame src="resources/menudraw_down.png" />
 </resource>
 
-<class name="baseMenuSeperator" resource="menuseperator_rsc" extends="view" />
- 
 <class name="baseChooseIcon" extends="view" width="24" height="24" 
 	   bgcolor="$once{ canvas.basebgcolorizer }" >
     <attribute name="resourceN" value="" type="string" />
@@ -37,7 +33,7 @@
     <view name="_bg" x="1" y="1" height="$once{ parent.height - 2 }"
     	  width="$once{ parent.width - 2 }" bgcolor="$once{ canvas.baseMousecolorizer }" />
     
-    <view name="_icon" resource="$once{ parent.resourceN }" 
+    <image name="_icon" src="$once{ canvas.getThemeImage(parent.resourceN) }" 
     	  x="$once{ (parent.width-this.width) / 2 }"
     	  y="$once{ (parent.height-this.height) / 2 }" 
     	  width="18" height="18" stretches="both"/>

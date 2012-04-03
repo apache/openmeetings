@@ -313,26 +313,26 @@
     <labelText labelid="143" width="200" y="40" resize="false" fontstyle="bold" />
     
     <labelText labelid="132" width="200" y="70" resize="false" x="2"/>
-        <customEdittext name="username" y="70" x="120" width="270" text="" />
+        <customEdittext name="username" y="70" x="120" width="270" />
 
     <labelText labelid="133" width="200" y="100" resize="false" x="2"/>
-        <customEdittext name="userpass1" y="100" password="true" x="120" width="270" text="" />
+        <customEdittext name="userpass1" y="100" password="true" x="120" width="270" />
 
     <labelText labelid="135" width="200" y="130" resize="false" x="2"/>
         <resetCombobox name="salutation" width="100" y="130" x="120" editable="false" fontsize="11">
 	        <handler name="oninit" >
 	            <![CDATA[
-	            for (var i=0;i<canvas.salutationsInitValues.length;i++){
-	                this.addItem(canvas.salutationsInitValues[i].label.value,canvas.salutationsInitValues[i].salutations_id);
-	            }
-	            this.selectItem(String(canvas.salutationsInitValues[0].salutations_id));
+		            for (var i=0;i<canvas.salutationsInitValues.length;i++){
+		                this.addItem(canvas.salutationsInitValues[i].label.value,canvas.salutationsInitValues[i].salutations_id);
+		            }
+		            this.selectItem(String(canvas.salutationsInitValues[0].salutations_id));
 	            ]]>
 	        </handler> 
         </resetCombobox> 
-        <customEdittext name="firstname" y="130" x="230" width="160" text="" />
+        <customEdittext name="firstname" y="130" x="230" width="160" />
         
     <labelText labelid="136" width="200" y="160" resize="false" x="2"/>
-        <customEdittext name="lastname" y="160" x="120" width="270" text="" />   
+        <customEdittext name="lastname" y="160" x="120" width="270" />   
         
     <labelText labelid="1143" width="200" y="190" resize="false" x="2"/>
          <resetCombobox name="_timeZone" editable="false" y="190" width="270" x="120"
@@ -365,25 +365,22 @@
 	<labelText labelid="1148" width="200" y="280" resize="false" x="2"/>  
         <labelCheckbox name="forceTimeZoneCheck" width="270" y="280" x="130" fontsize="11" />
 	
-
     <labelText labelid="137" width="200" y="310" resize="false" x="2"/>
-        <customEdittext name="email" y="310" x="120" width="310" regexpType="email" 
-        				text="" />
+        <customEdittext name="email" y="310" x="120" width="270" regexpType="email" />
         				
     <labelText labelid="607" width="200" y="340" resize="false" x="2"/>
-        <customEdittext name="phone" y="340" x="120" width="270"  
-        				text="" />
+        <customEdittext name="phone" y="340" x="120" width="270" />
         
     <labelText labelid="138" width="200" y="370" resize="false" x="2"/>
-        <dateField name="age" y="370" x="120" width="270" text="" />
+        <dateField name="age" y="370" x="120" width="270" />
         
     <labelText labelid="139" width="200" y="400" resize="false" x="2"/>
-        <customEdittext name="street" y="400" x="120" width="220" text="" />
-        <customEdittext name="house" y="400" x="350" width="40" text="" />
+        <customEdittext name="street" y="400" x="120" width="220" />
+        <customEdittext name="house" y="400" x="350" width="40" />
         
     <labelText labelid="140" width="200" y="430" resize="false" x="2"/>
-        <customEdittext name="zip" y="430" x="120" width="70" text="" />   
-        <customEdittext name="town" y="430" x="200" width="190" text="" />                        
+        <customEdittext name="zip" y="430" x="120" width="70" />   
+        <customEdittext name="town" y="430" x="200" width="190" />                        
          
     <labelText labelid="141" width="200" y="460" resize="false" x="2"/>  
 		<dynamicCombobox name="state" width="270" y="460" x="120"
@@ -416,7 +413,7 @@
 	
     <labelText labelid="142" width="200" y="550" resize="false" x="2"/>
         <customScrollEdittext name="adress_comment" y="550" x="120" width="270" 
-                        height="70" text="" />
+                        height="70" />
        
     <labelText labelid="161" width="200" y="630" resize="false" x="2"/>     
     <simpleValueList name="_organisationslist" y="630" x="120" width="270" height="100" 
@@ -485,11 +482,11 @@
     
 	<labelText labelid="1162" width="200" y="1040" resize="false" x="2"/>
         <customScrollEdittext name="userOffers" y="1040" x="120" width="270" 
-           			 height="100" text="" />	
+           			 height="100" />	
 
 	<labelText labelid="1163" width="200" y="1150" resize="false" x="2"/>
         <customScrollEdittext name="userSearchs" y="1150" x="120" width="270" 
-           			 height="100" text="" />	
+           			 height="100" />	
 		     				
 	<view y="1440" />        				
         				        				

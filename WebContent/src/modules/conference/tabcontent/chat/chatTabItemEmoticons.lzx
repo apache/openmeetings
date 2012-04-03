@@ -95,7 +95,7 @@
 		  name="header_user">
 	</text>
 	
-    <miniIcons name="add" resource="edit_add_rsc" width="16" height="16" 
+    <miniIconsImage name="add" src="$once{ canvas.getThemeImage('edit_add_rsc') }" width="16" height="16" 
                    y="2" x="$once{ parent.width - 122 }" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("Start Conference");
@@ -106,7 +106,7 @@
             parent.requestUserToContactList.doCall();
         </handler>
         <labelTooltip labelid="1186" />
-    </miniIcons>
+    </miniIconsImage>
     
     <!--
     public Long requestUserToContactList(String SID, Long userToAdd_id, 

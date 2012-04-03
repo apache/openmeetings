@@ -30,27 +30,6 @@
     <om_vscrollbar />
 </class>
 
-<class name="miniIcons" extends="view" stretches="both">
-    <handler name="onmouseover">
-        if (this.showhandcursor) {
-            this.setAttribute("x",this.x-1);
-            this.setAttribute("y",this.y-1);
-            this.setAttribute("height",this.height+2);
-            this.setAttribute("width",this.width+2);
-        }
-        parent.parent.onmouseover.sendEvent();
-    </handler>
-    <handler name="onmouseout">
-        if (this.showhandcursor) {
-            this.setAttribute("x",this.x+1);
-            this.setAttribute("y",this.y+1);
-            this.setAttribute("height",this.height-2);
-            this.setAttribute("width",this.width-2);
-        }
-        parent.parent.onmouseout.sendEvent();
-    </handler>
-</class>
-    
 <class name="participantList" extends="view"  width="$once{ parent.width }" height="${ parent.height-22 }" 
        bgcolor="0xE0E0E0" y="22">
     <!-- clip="true" -->

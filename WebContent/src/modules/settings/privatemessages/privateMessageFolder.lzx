@@ -122,13 +122,14 @@
         <labelTooltip labelid="1264" />
     </miniIcons>
 	
-	<miniIcons name="deny" y="1" x="120" resource="button_cancel_rsc" width="16" height="16" 
+	<miniIconsImage src="$once{ canvas.getThemeImage('button_cancel_rsc') }" 
+			name="deny" y="1" x="120" width="16" height="16" 
 	               showhandcursor="true">
 		<handler name="onclick">
 			parent.getFolderCount.doCall();
         </handler>
         <labelTooltip labelid="1262" />
-    </miniIcons>
+    </miniIconsImage>
     
     <!--
     public Long getFolderCount(String SID, Long privateMessageFolderId)

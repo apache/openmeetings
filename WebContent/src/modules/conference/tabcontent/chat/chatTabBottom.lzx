@@ -138,8 +138,8 @@
             <labelTooltip labelid="1200" />
         </miniIcons>
          
-        <miniIcons y="2" x="122" resource="button_cancel_rsc" width="16" height="16" 
-                   showhandcursor="true">
+        <miniIconsImage src="$once{ canvas.getThemeImage('button_cancel_rsc') }"  
+        			 y="2" x="122" width="16" height="16" showhandcursor="true">
             <handler name="onclick">
                 if (!canvas.ismoderator) {
                     //Do not allow
@@ -149,7 +149,7 @@
                 parent.clearChat.doCall();
             </handler>
             <labelTooltip labelid="442" />
-        </miniIcons>  
+        </miniIconsImage>  
         
         <view width="1" />
         

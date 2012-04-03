@@ -181,7 +181,7 @@
 
 		<view name="content">
 			
-			<view name="question" x="2" y="62" width="440" height="60" text="" bgcolor="0xFFFFFF">
+			<view name="question" x="2" y="62" width="440" height="60" bgcolor="0xFFFFFF">
 				<labelText x="0" y="0" name="text" multiline="true" 
 						   resize="false" width="$once{parent.width-14}" />
 				<om_vscrollbar/>

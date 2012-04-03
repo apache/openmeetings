@@ -132,8 +132,8 @@
                 <labelTooltip labelid="1275" />
             </miniIcons> 
 		    
-		    <miniIcons name="deny" y="1" x="60" resource="button_cancel_rsc" width="18" height="18" 
-	               showhandcursor="true">
+		    <miniIconsImage src="$once{ canvas.getThemeImage('button_cancel_rsc') }" 
+		    			name="deny" y="1" x="60" width="18" height="18" showhandcursor="true">
 				<handler name="onclick">
 					new lz.confirmationSingle(canvas.main_content._content.inner,{
                                            labelid:1233,labeliderror:1232,
@@ -146,7 +146,7 @@
 		        </method>
 		            
 		        <labelTooltip labelid="1234" />
-		    </miniIcons>
+		    </miniIconsImage>
 		    
 	    </view>
 		

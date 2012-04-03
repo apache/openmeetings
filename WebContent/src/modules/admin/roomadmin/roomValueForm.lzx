@@ -458,17 +458,6 @@
         </method>
     </simpleTurnOverList>	
     
-	<!-- 176:remove organisation
-	<baseChooseIcon resourceN="button_cancel_rsc" labelid="176" y="320" x="370" width="20" height="20"
-		onclick="new lz.confirmDeleteWindow(canvas.main_content._content.inner,{refObj:this});" >		
-		<method name="confirmDelete">
-			if (this.parent._organisationslist._selected!=null)
-				for (var i in this.parent._organisationslist._selected)	this.parent._organisationslist.removeItem(this.parent._organisationslist._selected[i].value);
-		</method>
-	</baseChooseIcon>
-     -->
-    
-    
     <!-- Limitations -->
     <labelText labelid="830" width="200" y="500" fontstyle="bold"
                resize="false" x="2"/>    
@@ -772,7 +761,7 @@
         <method name="sendConfirmation">
             this.parent.destroy();
         </method>
-        <view resource="button_cancel_rsc" align="center" valign="middle" />
+        <image src="$once{ canvas.getThemeImage('button_cancel_rsc') }" align="center" valign="middle" />
         <labelTooltip labelid="274" />
     </view>  
     
@@ -806,7 +795,8 @@
         <method name="sendConfirmation">
             this.parent.destroy();
         </method>
-        <view resource="button_cancel_rsc" align="center" valign="middle" />
+        <image src="$once{ canvas.getThemeImage('button_cancel_rsc') }"
+        		 align="center" valign="middle" />
         <labelTooltip labelid="274" />
     </view>    
     

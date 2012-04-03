@@ -1010,5 +1010,13 @@
 	<method name="checkRegExpResult" args="tId">
 		return this.regExpResultArray[tId];
 	</method>
-
+	
+	
+	<method name="getThemeImage" args="tName">
+		if ($debug) Debug.write("load Image by Name: ",tName);
+		var tPath = canvas.mainTheme.getPointer().xpathQuery("theme/resource[@name='"+tName+"']/@src");
+		if ($debug) Debug.write("tPath "+tPath);
+		return tPath;
+	</method>
+	
 </library>

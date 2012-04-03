@@ -261,7 +261,7 @@
     
     <simpleLabelButton labelid="1294" name="_facebook" width="120" y="$once{ parent.height-40 }" 
             visible="false" x="200" height="22">
-    	<view resource="icon_facebook_rsc_png" x="2" y="1"></view>
+    	<image src="$once{ canvas.getThemeImage('icon_facebook_rsc_png') }" x="2" y="1" />
         <handler name="onclick">
             lz.Browser.loadURL("http://apps.facebook.com/openmeetings/","_parent");
         </handler>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<theme>
+	
+	<resource name="icon_facebook_rsc_png" 
+				description="Icon for facebook button in login" 
+				license="Unkown"
+				src="public/themes/basic-theme/auth/icon_facebook.png" />
+	
+	<resource name="filesave_rsc" 
+				description="Save Icon" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/disk.png" />
+
+	<resource name="edit_add_rsc" 
+				description="Save Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/general/plus_icon.png" />
+
+	<resource name="reload_rsc" 
+				description="Save Icon" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/arrow_refresh.png" />
+	
+	<resource name="button_cancel_rsc" 
+				description="Save Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/general/cancel_icon.png" />
+
+	<resource name="edit_add_rsc" 
+				description="Edit Add Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/general/add.png" />
+
+
+</theme>

@@ -183,10 +183,10 @@
 		<labelText text="$once{ parent.roomname }" />
 
 		<labelText name="_users" y="26" />
-		<view name="_r" resource="reload_rsc" x="130" y="26"
+		<image name="_r" src="$once{ canvas.getThemeImage('reload_rsc') }" x="130" y="26"
 			onclick="parent.getRoomClientsListByRoomId.doCall()" >
 			<labelTooltip labelid="402" />
-		</view>
+		</image>
   
 		<method name="checkConditionsWhenButtonClicked" args="_clicked">
 		<![CDATA[

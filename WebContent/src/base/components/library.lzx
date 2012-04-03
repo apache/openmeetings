@@ -21,7 +21,7 @@
 <library>
 
 	
-
+	<include href="miniIcons.lzx" />
     <include href="iconView.lzx" />
     <include href="miniIconsNew.lzx" />
     <include href="resetCombobox.lzx" />

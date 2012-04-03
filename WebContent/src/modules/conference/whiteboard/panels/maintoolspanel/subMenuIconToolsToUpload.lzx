@@ -163,7 +163,7 @@
 		
 		<attribute name="calcItem" value="false" type="boolean" />
 		
-		<attribute name="toolTipReference" value="" />
+		<attribute name="toolTipReference" value="null" />
 		
 		<method name="clearToolTipReference">
 			if (this.toolTipReference != null) {

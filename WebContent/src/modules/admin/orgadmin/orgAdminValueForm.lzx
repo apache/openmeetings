@@ -146,16 +146,6 @@
         }
 	</method>	
     
-    <!--
-	<baseChooseIcon resourceN="button_cancel_rsc" labelid="179" y="100" x="430"
-		onclick="new lz.confirmDeleteWindow(canvas.main_content._content.inner,{refObj:this});" >		
-		<method name="confirmDelete">
-			if (this.parent._userlist._selected!=null)
-				for (var i in this.parent._userlist._selected) this.parent._userlist.removeItem(this.parent._userlist._selected[i].value);
-		</method>
-	</baseChooseIcon>	
-	-->
-    
 </class>
 	
 </library>
