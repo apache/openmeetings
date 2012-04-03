@@ -308,7 +308,6 @@
 		if (this.startdragX != this.x || this.startdragY != this.y || this.startdragWidth != this.width || this.startdragHeight != this.height){
 			//Debug.write("value changed 1");
 			this.objRef.parent.UpdateByObject(this.objRef);
-			//this.whiteboardRef.parent.canvas._drawareaalterposition.updateVal(this.objRef.name);
 			this.setStartValues();
 		}
 		if (parent.onBoundingBox) parent.onBoundingBox.sendEvent(this);
@@ -329,13 +328,11 @@
 		if (!this.canBeDragged) {
             return;
         }
-    	////Debug.write("onmouseup invoke");
     	this.dragger.remove();
 		
     	if (this.startdragX != this.x || this.startdragY != this.y || this.startdragWidth != this.width || this.startdragHeight != this.height){
 			//Debug.write("value changed 2");
 			this.objRef.parent.UpdateByObject(this.objRef);
-			//this.whiteboardRef.parent.canvas._drawareaalterposition.updateVal(this.objRef.name);
 			this.setStartValues();
 		}
 		if (parent.onBoundingBox) parent.onBoundingBox.sendEvent(this);

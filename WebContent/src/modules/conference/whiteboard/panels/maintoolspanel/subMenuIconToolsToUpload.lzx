@@ -394,27 +394,12 @@
             </method>    		 
     			
     		
-    		<simplelayout axis="y" spacing="2" xinset="2" />
+    		<simplelayout axis="y" spacing="2" inset="2" />
     	</view> 
     	
     	<om_vscrollbar />
     </view>
     
-    <!--
-    <simpleLabelButton labelid="1072" width="150" x="4" y="$once{ parent.height-22 }">
-        <handler name="onclick">
-            if ($debug) Debug.write("Upload More");
-        </handler>
-    </simpleLabelButton>  
-    
-    <simpleLabelButton labelid="1073" width="120" x="158" y="$once{ parent.height-22 }">
-        <handler name="onclick">
-            if ($debug) Debug.write("Upload More");
-            parent.chooseSelect();
-        </handler>
-    </simpleLabelButton>  
-     -->
-	
 </class>
 	
 </library>

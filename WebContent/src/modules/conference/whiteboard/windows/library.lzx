@@ -20,7 +20,6 @@
 -->
 <library>
 
-	<include href="chooseDrawAreaObjectWindow.lzx" />
 	<include href="saveAsWmlWindow.lzx" />
 	<include href="loadWhiteboardWindow.lzx" />
 	

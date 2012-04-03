@@ -661,12 +661,10 @@
 		if ($debug) Debug.write("onmousedownMethod this.drawmodus: ",this.drawmodus);
 		
 		
-		if(this.selectedObjects.length > 0){
+		if(this.selectedObjects != null && this.selectedObjects.length > 0){
 			for (var eg=0;eg<this.selectedObjects.length;eg++){
-					
 				var  objectToUpdate = this.getObjectByName(this.selectedObjects[eg][this.selectedObjects[eg].length-1]);
 	            objectToUpdate.setAttribute('opacity', 1);
-				
 			}
 		}
 		
@@ -952,16 +950,13 @@
 		////Debug.write("doSetHandBodus: ");
 		var objList = this.getObjectInBounds(this.getMouse('x'),this.getMouse('y'));
 		if(objList.length==1){
-			//this.parent.canvas._drawareaobjectcombobox.preselectedName=objList[0][objList[0].length-1];
 			this.setAttribute('drawmodus','pointer');
 			////Debug.write(objList[0][objList[0].length-1]);
 			this.doShowObjectBounds(objList[0][objList[0].length-1]);
 		} else if (objList.length>1){
-			//this.parent.canvas._drawareaobjectcombobox.preselectedName=objList[objList.length-1][objList[objList.length-1].length-1];
 			this.setAttribute('drawmodus','pointer');
 			////Debug.write(objList[objList.length-1][objList[objList.length-1].length-1]);
 			this.doShowObjectBounds(objList[objList.length-1][objList[objList.length-1].length-1]);
-			//new lz.chooseDrawAreaObjectWindow(canvas,{x:300,y:200,refObj:this,listV:objList});
 		} else {
 			this.startSelect(null);
   	 		this.startx = currentlayer.getMouse('x');

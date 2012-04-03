@@ -83,10 +83,8 @@
 	
 	<include href="incubator/lzcombobox.lzx"/> 
 	<include href="base/" />
-	<include href="menu/" />
 	<include href="windows/" />
 	<include href="helper/" />
-	<include href="toolbar/" />
 	
 	<include href="panels/" />
 	
