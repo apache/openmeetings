@@ -32,4 +32,8 @@ public class SIPCreateConferenceRequest implements ISIPRequest {
         super();
         this.sipNumber = sipNumber;
     }
+
+    public String getSipNumber() {
+        return sipNumber;
+    }
 }

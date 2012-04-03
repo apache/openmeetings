@@ -841,7 +841,7 @@ public class Roommanagement {
                 Configuration conf = cfgManagement.getConfKey(3L, "red5sip.enable");
                 if(conf != null && conf.getConf_value().equals("yes")) {
                     SipCreateConferenceRequestResult requestResult = asteriskDbSipClient
-                            .createSIPConference(new SIPCreateConferenceRequest());
+                            .createSIPConference(new SIPCreateConferenceRequest(sipNumber));
 
                     if(!requestResult.hasError()) {
                         r.setSipNumber(requestResult.getConferenceNumber());

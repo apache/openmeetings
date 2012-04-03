@@ -58,7 +58,12 @@ public class AsteriskDbSipClient implements ISIPClient {
     }
 
     public SipCreateConferenceRequestResult createSIPConference(SIPCreateConferenceRequest request) {
-        String confno = asteriskDAO.addMeetMeConference();
+        String confno;
+        if(request.getSipNumber() != null && !request.getSipNumber().isEmpty()) {
+            confno = asteriskDAO.addMeetMeConference(request.getSipNumber());
+        } else {
+            confno = asteriskDAO.addMeetMeConference();
+        }
         return new SipCreateConferenceRequestResult(confno, "") {
             public boolean hasError() {
                 return false;
