@@ -41,7 +41,7 @@
 </class>
 	
 	
-<class name="simpleValueList" extends="view" bgcolor="0x000000" >
+<class name="simpleValueList" extends="view" bgcolor="0xCCCCCC" >
 	
 	<attribute name="_selected" value="null" />
 	

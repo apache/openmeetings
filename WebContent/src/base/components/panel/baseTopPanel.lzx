@@ -35,11 +35,9 @@
 		this.title=canvas.getLabelName(this.labelid);
 	</method>
 	
-	<!-- basebgcolorizer -->
-	
-	
-	
-	<view width="$once{ this.parent.width-2 }" height="$once{ this.parent.height-2 }" x="1" y="1" bgcolor="0xFFFFFF" />
+	<view name="_bgItem" x="1" y="1" bgcolor="0xEEF0EB" 
+			width="$once{ this.parent.width-2 }" height="$once{ this.parent.height-2 }" />
+			
 	<view x="1" y="1" height="$once{ this.parent.height-2 }" width="17" 
 		  bgcolor="$once{ canvas.baseMousecolorizer }">
 		<handler name="oninit">

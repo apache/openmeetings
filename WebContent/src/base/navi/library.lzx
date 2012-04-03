@@ -20,6 +20,9 @@
 -->
 <library>
     
+    <!-- 
+    Icon from FamFam Icon Set
+     -->
     <resource name="bullet_arrow_down_rsc">
     	<frame src="resources/bullet_arrow_down.png" /> 
     	<frame src="resources/bullet_arrow_down_dark.png" /> 

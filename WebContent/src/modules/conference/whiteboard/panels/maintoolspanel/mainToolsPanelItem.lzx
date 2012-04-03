@@ -70,10 +70,10 @@
 </class>
 
 <class name="mainToolsHPanelSeperator" extends="view" bgcolor="0xCCCCCC"
-	   width="26" height="2" ></class>
+	   width="26" height="1" ></class>
 	   
 <class name="mainToolsVPanelSeperator" extends="view" bgcolor="0xCCCCCC"
-	   width="2" height="26" ></class>
+	   width="1" height="26" ></class>
 
     
 </library>

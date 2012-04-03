@@ -148,11 +148,7 @@
 			parent.parent.parent.parent.parent.close();
 		</method>
 
-		<simpleLabelButton labelid="1135" x="300" width="160" height="30" y="17">
-			<view resource="start_conference_rsc" x="130" y="4" />
-			<!--
-			<view resource="go_jump_rsc" x="$once{ parent.width-24 }" y="6" />
-			 -->
+		<simpleLabelButton labelid="1135" x="380" width="80" height="24" y="20">
 			<handler name="onclick">
 				new lz.chatParticipantsInviteMessage(canvas,{
     				    refObj:parent,

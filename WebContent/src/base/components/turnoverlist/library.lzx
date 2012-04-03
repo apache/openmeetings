@@ -20,9 +20,6 @@
 -->
 <library>
     
-	<resource name="step_back" src="resources/step_back.png" />
-	<resource name="step_fwd" src="resources/step_fwd.png" />
-    
     <resource name="step_back_two_arrow" src="resources/2leftarrow.png" />
     <resource name="step_fwd_two_arrow" src="resources/2rightarrow.png" />
     

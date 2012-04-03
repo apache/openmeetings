@@ -472,50 +472,22 @@
           visibility="$once{ (parent.showTopBar) ? 'visible' : 'hidden' }">
     	
 	    <!-- 368:goto first -->
-	    <miniIcons y="2" x="0" resource="step_back_two_arrow" width="16" height="16" 
+	    <miniIcons name="_pre1" y="2" x="0" resource="step_back_two_arrow" width="16" height="16" 
 	               showhandcursor="true">
 			<handler name="onclick">
 				parent.parent.callfirst();
 	        </handler>
 	        <labelTooltip labelid="368" />
 	    </miniIcons>
-	    <!--
-	    <blueButton y="0" resourceItem="step_back_two_arrow"
-        			x_insetResource="2" y_insetResource="2" width="20" height="20" 
-        			width_insetResource="16" height_insetResource="16"
-        			onclick="parent.parent.callfirst()">
-	    	<labelTooltip labelid="368" />
-	    </blueButton>
-	     -->
-	    <!--
-		<simpleLabelButtonTooltip name="_pre1" width="22" height="22" 
-			enabled="true" onclick="parent.parent.callfirst()" tooltipId="368">
-			<view resource="step_back_two_arrow" valign="middle" align="center" />
-		</simpleLabelButtonTooltip>
-		 -->
 	
 	    <!-- 369:goto previous -->
-	    <miniIcons y="2" x="20" resource="step_back_arrow" width="16" height="16" 
+	    <miniIcons name="_pre2" y="2" x="20" resource="step_back_arrow" width="16" height="16" 
 	               showhandcursor="true">
 			<handler name="onclick">
 				parent.parent.callpre();
 	        </handler>
 	        <labelTooltip labelid="369" />
 	    </miniIcons>
-	    <!--
-	    <blueButton y="0" resourceItem="step_back_arrow"
-        			x_insetResource="2" y_insetResource="2" width="20" height="20" 
-        			width_insetResource="16" height_insetResource="16"
-        			onclick="parent.parent.callpre()">
-	    	<labelTooltip labelid="369" />
-	    </blueButton>
-	     -->
-	    <!--
-		<simpleLabelButtonTooltip name="_pre2" width="22" height="22" 
-			enabled="false" onclick="parent.parent.callpre()" tooltipId="369" >
-			<view resource="step_back_arrow" valign="middle" align="center" />
-		</simpleLabelButtonTooltip>
-		 -->
     	<resetCombobox name="_step" width="100" x="40" editable="false" fontsize="10" height="20" >
             <attribute name="sendEventToReload" value="false" type="boolean" />
             <textlistitem value="10" text="10" />
@@ -542,105 +514,26 @@
         </resetCombobox>
         
         <!-- 370:goto next -->
-        <miniIcons y="2" x="140" resource="step_fwd_arrow" width="16" height="16" 
+        <miniIcons name="_next1" y="2" x="140" resource="step_fwd_arrow" width="16" height="16" 
 	               showhandcursor="true">
 			<handler name="onclick">
 				parent.parent.callnext();
 	        </handler>
 	        <labelTooltip labelid="370" />
 	    </miniIcons>
-	    <!--
-        <blueButton y="0" resourceItem="step_fwd_arrow"
-        			x_insetResource="2" y_insetResource="2" width="20" height="20" 
-        			width_insetResource="16" height_insetResource="16"
-        			onclick="parent.parent.callnext()">
-	    	<labelTooltip labelid="370" />
-	    </blueButton>
-	     -->
-	    <!--
-		<simpleLabelButtonTooltip name="_next1" width="22" height="22" 
-			enabled="false" onclick="parent.parent.callnext()" tooltipId="370">
-			<view resource="step_fwd_arrow" valign="middle" align="center" />
-		</simpleLabelButtonTooltip>
-		 -->
 		
 	    <!-- 371:goto last -->
-	    <miniIcons y="2" x="160" resource="step_fwd_two_arrow" width="16" height="16" 
+	    <miniIcons name="_next2" y="2" x="160" resource="step_fwd_two_arrow" width="16" height="16" 
 	               showhandcursor="true">
 			<handler name="onclick">
 				parent.parent.calllast();
 	        </handler>
 	        <labelTooltip labelid="371" />
 	    </miniIcons>
-	    <!--
-	    <blueButton y="0" resourceItem="step_fwd_two_arrow"
-        			x_insetResource="2" y_insetResource="2" width="20" height="20" 
-        			width_insetResource="16" height_insetResource="16"
-        			onclick="parent.parent.calllast()">
-	    	<labelTooltip labelid="371" />
-	    </blueButton>
-	     -->
-	    <!--
-		<simpleLabelButtonTooltip name="_next2" width="22" height="22" 
-			enabled="true" onclick="parent.parent.calllast()" tooltipId="371">
-			<view resource="step_fwd_two_arrow" valign="middle" align="center" />
-		</simpleLabelButtonTooltip>
-		 -->
 		
 		<view width="2" />
-		<!--
-        <view height="18" width="1" bgcolor="$once{ canvas.lightBackgroundBgColor }" />
-         -->
     </view>
     
-    
-    <!-- 368:goto first
-	<simpleLabelButtonTooltip name="_pre1" x="${ parent.width-196 }" width="22" height="22" 
-		enabled="true" onclick="parent.callfirst()" tooltipId="368">
-		<view x="3" y="3" oninit="this.setSource(canvas.getIconPathByName('icon_turnoverlist_first_rsc'))" />
-	</simpleLabelButtonTooltip> -->
-
-    <!-- 369:goto previous
-	<simpleLabelButtonTooltip name="_pre2" x="${ parent.width-172 }" width="22" height="22" 
-		enabled="false" onclick="parent.callpre()" tooltipId="369" >
-		<view x="3" y="3" oninit="this.setSource(canvas.getIconPathByName('icon_turnoverlist_left_rsc'))" />
-	</simpleLabelButtonTooltip> -->
-
-    <!-- combobox to decide the step number
-    <omComboBox name="languages" width="100" x="${ parent.width-149 }" 
-			  editable="false" height="22" shownitems="8">
-		<attribute name="sendEventToReload" value="false" type="boolean" />
-        <textlistitem value="10" text="10" />
-        <textlistitem value="25" text="25" />
-        <textlistitem value="50" text="50" />
-        <textlistitem value="75" text="75" />
-        <textlistitem value="100" text="100" />
-        <textlistitem value="200" text="200" />
-        <textlistitem value="500" text="500" />
-        <textlistitem value="1000" text="1000" />
-        <handler name="onselect">
-        	if (this.sendEventToReload){ 
-        		parent.setAttribute('step',Number(this.getValue()));
-        	}
-        </handler>
-        <handler name="oninit">
-        	this.selectItem(String(parent.step));
-        	this.sendEventToReload = true;
-        </handler>
-	</omComboBox> -->
-	
-	<!-- 370:goto next
-	<simpleLabelButtonTooltip name="_next1" x="${ parent.width-48 }" width="22" height="22" 
-		enabled="false" onclick="parent.callnext()" tooltipId="370">
-		<view x="3" y="3" oninit="this.setSource(canvas.getIconPathByName('icon_turnoverlist_right_rsc'))" />
-	</simpleLabelButtonTooltip> -->
-
-    <!-- 371:goto last
-	<simpleLabelButtonTooltip name="_next2" x="${ parent.width-24 }" width="22" height="22" 
-		enabled="true" onclick="parent.calllast()" tooltipId="371">
-		<view x="3" y="3" oninit="this.setSource(canvas.getIconPathByName('icon_turnoverlist_last_rsc'))" />
-	</simpleLabelButtonTooltip> -->
-	
 </class>
 
 </library>

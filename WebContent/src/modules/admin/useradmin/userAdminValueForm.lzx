@@ -458,40 +458,40 @@
     <labelText labelid="894" x="24" y="760"  fontstyle="italic"
                multiline="true" width="364" />
 
-    <labelText labelid="921" width="200" y="790" resize="false" x="2"/>  
-        <labelCheckbox name="generateSipUserData" width="270" y="790" x="140" fontsize="11" />
+    <labelText labelid="921" width="200" y="830" resize="false" x="2"/>  
+        <labelCheckbox name="generateSipUserData" width="270" y="830" x="140" fontsize="11" />
 
-    <labelText labelid="895" width="200" y="820" resize="false" x="2"/>
-        <customEdittext name="sip_user" y="820" x="120" width="270"  
+    <labelText labelid="895" width="200" y="860" resize="false" x="2"/>
+        <customEdittext name="sip_user" y="860" x="120" width="270"  
         				text="" />
         				
-	<labelText labelid="896" width="200" y="850" resize="false" x="2"/>
-        <customEdittext name="sip_pass" y="850" x="120" width="270"  
+	<labelText labelid="896" width="200" y="890" resize="false" x="2"/>
+        <customEdittext name="sip_pass" y="890" x="120" width="270"  
         				text="" />
         				
-    <labelText labelid="897" width="200" y="880" resize="false" x="2"/>
-        <customEdittext name="sip_auth" y="880" x="120" width="270"  
+    <labelText labelid="897" width="200" y="920" resize="false" x="2"/>
+        <customEdittext name="sip_auth" y="920" x="120" width="270"  
         				text="" />
         				
     <!-- Community Settings -->
-    <labelText labelid="1159" width="200" y="910" resize="false" 
+    <labelText labelid="1159" width="200" y="950" resize="false" 
                x="0" fontstyle="bold" />      				
         				
-   	<radiogroup name="showContactData" layout="class:simplelayout;axis:y;spacing:2" y="940" x="10">
+   	<radiogroup name="showContactData" layout="class:simplelayout;axis:y;spacing:2" y="980" x="10">
         <labelRadioButton labelid="1160" value="1" />
         <labelRadioButton labelid="1168" value="2" />
         <labelRadioButton labelid="1169" value="3" />
     </radiogroup> 
     
-	<labelText labelid="1162" width="200" y="1000" resize="false" x="2"/>
-        <customScrollEdittext name="userOffers" y="1000" x="120" width="270" 
+	<labelText labelid="1162" width="200" y="1040" resize="false" x="2"/>
+        <customScrollEdittext name="userOffers" y="1040" x="120" width="270" 
            			 height="100" text="" />	
 
-	<labelText labelid="1163" width="200" y="1110" resize="false" x="2"/>
-        <customScrollEdittext name="userSearchs" y="1110" x="120" width="270" 
+	<labelText labelid="1163" width="200" y="1150" resize="false" x="2"/>
+        <customScrollEdittext name="userSearchs" y="1150" x="120" width="270" 
            			 height="100" text="" />	
 		     				
-	<view y="1400" />        				
+	<view y="1440" />        				
         				        				
 </class>
 

@@ -35,10 +35,8 @@
     <include href="text/" />
     <include href="omcharts/" />
     <include href="button/" />
-    <include href="clickbox/" />   
     <include href="explorer/" />    
     <include href="panel/" />  
-    <include href="list/" />
     <include href="turnoverlist/" />
     <include href="turnoverlistpaged/" />
     <include href="calendar/" />

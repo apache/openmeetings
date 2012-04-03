@@ -24,14 +24,10 @@
     <include href="components/" /> 
     <include href="hibernate/" />
     <include href="contentviews/" />
-    <include href="usermanage/" />
     <include href="navi/" />
 
     <include href="auth/" />
 
-<!-- Not Used ? 2008.3.21 Kuze
-    <include href="tabbar/" />
--->
 	<!-- for main.lzx -->
 	<include href="externalJavaScript.lzx" />
     <include href="functions.lzx" />

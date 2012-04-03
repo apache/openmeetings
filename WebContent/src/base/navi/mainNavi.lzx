@@ -148,7 +148,6 @@
 				}
                 new lz.dropDownMenuListItem(this._content,{
                 			textvalue:this.list[i].name,
-                			list:this.list[i].subnavi,
                 			text:this.list[i].label.value,
                 			isopen:this.list[i].isopen,
                 			isleaf:this.list[i].isleaf,

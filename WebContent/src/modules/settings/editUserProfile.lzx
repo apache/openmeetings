@@ -20,7 +20,8 @@
 -->
 <library>
 	
-<class name="editUserProfile" extends="baseContentSaveView" addIsVisible="false" deleteIsVisible="false">
+<class name="editUserProfile" extends="baseContentSaveView" width="${ canvas.width - 4 }"
+	addIsVisible="false" deleteIsVisible="false">
 		
 	<!-- recordContent-id -->
 	<attribute name="user_id" value="0" type="number" />
@@ -288,31 +289,61 @@
     <simpleValueList name="_organisationslist" y="540" x="120" width="270" height="100" 
 		multiselect="true" />
 		
-		
-    <image y="40" x="410" name="_userpic" />
+	
+	<view y="42" x="414" name="_imageProfileBG1" width="128" height="128" 
+    				bgcolor="0xFFFFFF" opacity="0.5" >
+    </view>
     
-    <!-- 379:Upload new Image -->
-    <simpleLabelButton y="50" labelid="379" x="550">
-    <!-- 
-   	onclick="new lz.uploadWindow(canvas.main_content._content.inner,{x:300,uploadmodule:'userprofile',isOnlyProfile:true,isdefaultreturn:false,returnObj:this.parent});">
-   	 -->
-        <handler name="onclick">
-        	<![CDATA[
-	        	new lz.uploadWindowExplorer(canvas.main_content._content.inner,{
-	                            x:300,uploadmodule:'userprofile',
-	                            isOnlyProfile:true,
-	                            returnObj:this,
-	                            servletName:'upload.upload'
-	                        });
-        	]]>
+   	<image name="_userpic" y="42" x="414" >
+   
+    	<handler name="onload" args="d">
+            <![CDATA[
+                if (this.height > 116) {
+                    //If bigger then containter then scale it
+                    var width = this.width/(this.height/116);
+                    this.setAttribute('height',116);
+                    this.setAttribute('width',width);
+                }
+                if (this.width > 116) {
+                	//If bigger then containter then scale it
+                    var height = this.height/(this.width/116);
+                    this.setAttribute('height',height);
+                    this.setAttribute('width',116);
+                }
+                if($debug) Debug.write("onload ",this.height,this.width,d.height,d.width);
+                
+                //makes sure bottom area is updated
+                //this._changeSize.setAttribute('y',this.height-20);
+                //this._changeSize.setAttribute('width',this.width);
+            ]]>
         </handler>
-        <method name="sendRefresh">
-        	parent.getUserSelf.doCall();
-        </method>
-    </simpleLabelButton>		
-     
+    	
+    </image>
+    
+    <view y="42" x="414" name="_imageProfileBG2" width="128" height="128" >
+	    
+	    <view name="_changeSize" height="48" width="128" y="80" bgcolor="0xFFFFFF" opacity="0.6">
+   			<labelText labelid="379" align="center" />
+    		<handler name="onclick">
+        		<![CDATA[
+		        	new lz.uploadWindowExplorer(canvas.main_content._content.inner,{
+		                            x:300,uploadmodule:'userprofile',
+		                            isOnlyProfile:true,
+		                            returnObj:this,
+		                            servletName:'upload.upload'
+		                        });
+	        	]]>
+	        </handler>
+	        <method name="sendRefresh">
+	        	parent.parent.getUserSelf.doCall();
+	        </method>
+	    	<labelTooltip labelid="379" />
+    	</view>
+    
+    </view>
+	
     <!-- Remember Me -->    
-    <labelCheckbox name="doShowTestWizzard" labelid="776" x="430" y="156" >
+    <labelCheckbox name="doShowTestWizzard" labelid="776" x="430" y="186" >
         <handler name="oninit">
             var g = canvas.getUserData();
             var save = g["showAudioVideoTest"];
@@ -322,7 +353,7 @@
     </labelCheckbox>
        
     <!-- 379:Upload new Image -->
-    <simpleLabelButton y="174" labelid="1300" x="550">
+    <simpleLabelButton y="204" labelid="1300" x="550">
     	<handler name="onclick">
     		new lz.editWhiteboardDefault(parent,{x:400,y:140});
     	</handler>
@@ -330,27 +361,27 @@
       
         
     <!-- Community settings -->
-    <labelText labelid="1159" width="200" y="200" resize="false" 
+    <labelText labelid="1159" width="200" y="230" resize="false" 
                x="410" fontstyle="bold" visibility="visible"/>   
     
    <radiogroup name="showContactData" visibility="visible"
-   			layout="class:simplelayout;axis:y;spacing:2" y="230" x="420">
+   			layout="class:simplelayout;axis:y;spacing:2" y="260" x="420">
         <labelRadioButton labelid="1160" value="1" />
         <labelRadioButton labelid="1168" value="2" />
         <labelRadioButton labelid="1169" value="3" />
     </radiogroup> 
  
-    <view resource="messagebox_info_rsc" x="410" y="290" visibility="visible"/>
+    <view resource="messagebox_info_rsc" x="410" y="320" visibility="visible"/>
     
-    <labelText labelid="1161" x="434" y="290"  fontstyle="italic"
+    <labelText labelid="1161" x="434" y="320"  fontstyle="italic"
                multiline="true" width="366" visibility="visible"/>  
                  
-	<labelText labelid="1162" width="200" y="360" resize="false" x="410" visibility="visible"/>
-        <customScrollEdittext name="userOffers" y="340" x="530" width="270" 
+	<labelText labelid="1162" width="200" y="390" resize="false" x="410" visibility="visible"/>
+        <customScrollEdittext name="userOffers" y="370" x="530" width="270" 
            			 height="100" text="" visibility="visible"/>	
 
-	<labelText labelid="1163" width="200" y="470" resize="false" x="410" visibility="visible"/>
-        <customScrollEdittext name="userSearchs" y="450" x="530" width="270" 
+	<labelText labelid="1163" width="200" y="500" resize="false" x="410" visibility="visible"/>
+        <customScrollEdittext name="userSearchs" y="480" x="530" width="270" 
            			 height="100" text="" visibility="visible"/>	
            			 
 </class>

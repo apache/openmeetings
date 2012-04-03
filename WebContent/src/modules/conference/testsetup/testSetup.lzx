@@ -159,7 +159,6 @@ Test the setup values before you enter a room
     <simpleLabelButton name="_enterMeeting" labelid="761" width="160" x="$once{ parent.width-270 }" 
            y="$once{ parent.height-30 }" height="28" 
            onclick="this.parent.storeSettings();">
-    	<view resource="test_setup_start_conference_rsc" x="2" y="4" />
     </simpleLabelButton>
     
     <simpleLabelButton name="_cancel" labelid="760" width="100" x="$once{ parent.width-105 }" 
