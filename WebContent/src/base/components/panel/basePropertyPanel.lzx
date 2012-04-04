@@ -76,7 +76,7 @@
         </handler>
 		
         <text fontsize="11" height="17" x="16" y="1" text="${ this.parent.parent.title }" 
-			fgcolor="0x666666" resize="true" fontstyle="bold" />
+			fgcolor="$once{ canvas.getThemeColor('menuTextColor') }" resize="true" fontstyle="bold" />
 			
 		<button visible="${ this.parent.parent.closable }" x="${ this.parent.parent.width-23 }" 
 			y="1" text="X" height="18" width="20" >

@@ -969,14 +969,20 @@
 		if ($debug) Debug.write("load Image by Name: ",tName);
 		var tPath = canvas.mainTheme.getPointer().xpathQuery("theme/resource[@name='"+tName+"']/@src");
 		if ($debug) Debug.write("tPath "+tPath);
+		if (tPath == null) {
+			if ($debug) Debug.warn("getThemeImage - No Image found for config: ",tName);
+		}
 		return tPath;
 	</method>
 	
 	<method name="getThemeColor" args="tColor">
-		if ($debug) Debug.write("load Color by Name: ",tColor);
-		var tColor = canvas.mainTheme.getPointer().xpathQuery("theme/color[@name='"+tColor+"']/@value");
-		if ($debug) Debug.write("tColor "+tColor);
-		return tColor;
+		//if ($debug) Debug.write("load Color by Name: ",tColor);
+		var tResColor = canvas.mainTheme.getPointer().xpathQuery("theme/color[@name='"+tColor+"']/@value");
+		//if ($debug) Debug.write("tColor "+tColor);
+		if (tResColor == null) {
+			if ($debug) Debug.warn("getThemeColor - No Color found for config: ",tColor);
+		}
+		return tResColor;
 	</method>
 	
 	<method name="setBaseColors">

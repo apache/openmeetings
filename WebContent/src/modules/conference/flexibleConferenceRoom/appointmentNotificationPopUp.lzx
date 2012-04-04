@@ -67,16 +67,16 @@
 	</view>
 	
 	<labelText name="l_sdatum" labelid="1143" y="150" width="50" />
-	<labelText name="_timeZone" x="75" y="150" width="200" resize="false" bgcolor="0xFFFFFF" fgcolor="0x666666"/> 
+	<labelText name="_timeZone" x="75" y="150" width="200" resize="false" bgcolor="0xFFFFFF" fgcolor="$once{ canvas.getThemeColor('menuTextColor') }"/> 
 	
 	<labelText name="appstartlabel" y="170" labelid="570" width="50"/>
-	<labelText name="_appstart" x="75" y="170" width="200" resize="false" bgcolor="0xFFFFFF" fgcolor="0x666666"/> 
+	<labelText name="_appstart" x="75" y="170" width="200" resize="false" bgcolor="0xFFFFFF" fgcolor="$once{ canvas.getThemeColor('menuTextColor') }"/> 
 	
 	<labelText name="l_edatum" labelid="571" y="190" width="50"  />
-	<labelText name="_append" y="190" x="75" width="200" text="" resize="false" bgcolor="0xFFFFFF" fgcolor="0x666666"/> 	 
+	<labelText name="_append" y="190" x="75" width="200" text="" resize="false" bgcolor="0xFFFFFF" fgcolor="$once{ canvas.getThemeColor('menuTextColor') }"/> 	 
 	
 	<labelText name="l_createdby" labelid="1147" y="210" width="50"  />
-	<labelText name="_createdby" y="210" x="75" width="200" text="" resize="false" bgcolor="0xFFFFFF" fgcolor="0x666666"/> 	   
+	<labelText name="_createdby" y="210" x="75" width="200" text="" resize="false" bgcolor="0xFFFFFF" fgcolor="$once{ canvas.getThemeColor('menuTextColor') }"/> 	   
 	
     <simpleLabelButton labelid="1130" width="100" x="$once{ parent.width-105 }" 
            y="$once{ parent.height-24 }" onclick="this.parent.close();" />	           	

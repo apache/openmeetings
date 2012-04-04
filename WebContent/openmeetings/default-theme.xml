@@ -25,7 +25,13 @@
 				description="main border color" />	
 		
 	<color name="menuBackgroundColor" value="0xEFEFEF" 
-				description="main border color" />		
+				description="main border color" />
+				
+	<color name="menuTextColor" value="0x666666" 
+				description="color of text for menus" />
+	
+	<color name="menuTextDisabledColor" value="0xBBBBBB" 
+				description="color of text for menus" />		
 	
 	<!-- Icons -->
 	

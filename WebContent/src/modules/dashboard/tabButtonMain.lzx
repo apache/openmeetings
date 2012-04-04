@@ -68,7 +68,7 @@
 		this._text.setAttribute("fontstyle","bold");
 		this._text.setAttribute("y",6);
 		this._icon.setAttribute("y",8);
-		this._text.setAttribute("fgcolor","0x666666");
+		this._text.setAttribute("fgcolor",canvas.getThemeColor('menuTextColor'));
 	</method>
      
     <method name="deselect">
@@ -79,7 +79,7 @@
         this._text.setAttribute("y",8);
         this._icon.setAttribute("y",10);
         this._text.setAttribute("fontstyle","plain");
-        this._text.setAttribute("fgcolor","0xBBBBBB");
+        this._text.setAttribute("fgcolor",canvas.getThemeColor('menuTextDisabledColor'));
     </method>       
     
     <view name="_selectedView" bgcolor="$once{ canvas.getThemeColor('menuBackgroundColor') }" width="$once{ parent.width }" 

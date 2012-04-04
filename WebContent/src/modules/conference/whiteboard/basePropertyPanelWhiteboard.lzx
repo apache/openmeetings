@@ -67,7 +67,7 @@
     </handler>
     
     <text fontsize="11" height="17" x="2" y="1" text="${ this.parent.title }" 
-						fgcolor="0x666666" resize="true" fontstyle="bold" />
+						fgcolor="$once{ canvas.getThemeColor('menuTextColor') }" resize="true" fontstyle="bold" />
 	
 </class>
 

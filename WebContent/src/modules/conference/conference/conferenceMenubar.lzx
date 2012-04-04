@@ -146,12 +146,15 @@
 		
 		<method name="setEnabled" args="e">
 			this.enabled = e;
+			if (!this.isinited) {
+				return;
+			}
 			if (this.enabled) {
-				this._ctext.setAttribute("fgcolor",0x666666);
-				this._ctextTooltip.setAttribute("fgcolor",0x666666);
+				this._ctext.setAttribute("fgcolor",canvas.getThemeColor('menuTextColor'));
+				this._ctextTooltip.setAttribute("fgcolor",canvas.getThemeColor('menuTextColor'));
 			} else {
-				this._ctext.setAttribute("fgcolor",0xBBBBBB);
-				this._ctextTooltip.setAttribute("fgcolor",0xBBBBBB);
+				this._ctext.setAttribute("fgcolor",canvas.getThemeColor('menuTextDisabledColor'));
+				this._ctextTooltip.setAttribute("fgcolor",canvas.getThemeColor('menuTextDisabledColor'));
 			}
 			if (this.command) {
 				this.command.enabled = this.enabled;
@@ -234,7 +237,8 @@
 			<conferencDropDownMenuItem labelid="239" command="cmd_shareDesktop" 
 						enabled="${ canvas.ismoderator }" />			
 			<horizontalDropDownSpacer />
-			<conferencDropDownMenuItem labelid="306" command="cmd_editCamMicSettings" />			
+			<conferencDropDownMenuItem labelid="306" command="cmd_editCamMicSettings" 
+						enabled="true" />			
 			<horizontalDropDownSpacer />
 			<conferencDropDownMenuItem labelid="784" command="cmd_applyforMod"
 						enabled="${ !canvas.ismoderator }" />	
