@@ -498,7 +498,7 @@
                 }
                 this.objectRef = obj;
                 this.objectRef._isselected = true;
-                this.objectRef._area.setAttribute('bgcolor',canvas.basebgcolorizer);
+                this.objectRef._area.setAttribute('bgcolor',canvas.getThemeColor('basebgcolorizer'));
                 parent._drawareaMask._drawarea.setModus(this.objectRef.modi);
             }
         </method>

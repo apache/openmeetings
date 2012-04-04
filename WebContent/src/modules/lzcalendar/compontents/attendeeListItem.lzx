@@ -46,7 +46,7 @@
 			<labelTooltip labelid="814" />
 		</miniIcons>
 		
-		<view y="18" height="1" width="$once{ parent.width }" bgcolor="0xE0E0E0" />
+		<view y="18" height="1" width="$once{ parent.width }" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" />
 		
 		<labelTooltip text="$once{ canvas.getLabelName(1143) + ' ' + parent.jNameTimeZone }" />
 		

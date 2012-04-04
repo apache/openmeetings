@@ -24,13 +24,13 @@
 	bgcolor="0xFFFFFF" onmouseup="this.parent.parent.parent.parent.toggleSelected(this)" >
 	<handler name="onmouseover">
 		<![CDATA[
-			if (this.selected) this.setAttribute('bgcolor',canvas.baseMouseOvercolorizer)
-			else this.setAttribute('bgcolor',canvas.baseMouseOvercolorizer);
+			if (this.selected) this.setAttribute('bgcolor',canvas.getThemeColor('baseMouseOvercolorizer'))
+			else this.setAttribute('bgcolor',canvas.getThemeColor('baseMouseOvercolorizer'));
 		]]>
 	</handler>
 	<handler name="onmouseout">
 		<![CDATA[
-			if (this.selected)  this.setAttribute('bgcolor',canvas.baseMouseOvercolorizer)
+			if (this.selected)  this.setAttribute('bgcolor',canvas.getThemeColor('baseMouseOvercolorizer'))
 			else this.setAttribute('bgcolor',0xFFFFFF);
 		]]>
 	</handler>
@@ -41,7 +41,7 @@
 </class>
 	
 	
-<class name="simpleValueList" extends="view" bgcolor="0xCCCCCC" >
+<class name="simpleValueList" extends="view" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" >
 	
 	<attribute name="_selected" value="null" />
 	

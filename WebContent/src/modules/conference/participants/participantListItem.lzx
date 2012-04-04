@@ -379,7 +379,7 @@
     </netRemoteCallHib>
             
     <handler name="onmouseover">
-        this.setAttribute('bgcolor',canvas.baseMousecolorizer);
+        this.setAttribute('bgcolor',canvas.getThemeColor('baseMousecolorizer'));
     </handler>
     
     <handler name="onmouseout">

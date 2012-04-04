@@ -23,13 +23,6 @@
 
 <library>
 	
-	<!---
-		These colors are the main colors and style the hole application
-	 -->
-	<attribute name="basebgcolorizer" value="0x3F5B9E" type="string" />	
-	<attribute name="baseMousecolorizer" value="0xC4D5E6" type="string" />	
-	<attribute name="baseMouseOvercolorizer" value="0xC4D5E6" type="string" />  	
-
 	<!--- 
 	   Audio-Video Quality Settings
 		overwritten by values from the config.xml 

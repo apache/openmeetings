@@ -21,7 +21,7 @@
 <library>
 
 <class name="calendarWindow" extends="view" clickable="true" 
-	   bgcolor="$once{ canvas.basebgcolorizer }">	
+	   bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }">	
 
 	<attribute name="fieldRef" value="null" />
 	

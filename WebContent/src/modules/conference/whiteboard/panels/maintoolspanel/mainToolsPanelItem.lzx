@@ -23,7 +23,6 @@
 <class name="mainToolsPanelItem" extends="blueButton" 
 	   width="26" height="26">
 	
-	
 	<attribute name="modi" value="" type="string" />
 	<attribute name="labelid" value="0" type="number" />
 	
@@ -38,20 +37,7 @@
         parent.parent.parent.setSelectionWithoutEvent(this);
     </method>
 	
-	<!--
-	<view x="1" y="1" width="24" name="_area" 
-		  height="24" bgcolor="0xFFFFFF" />
-     -->
-	
-	<handler name="onmouseover">
-		if ($debug){};
-	</handler>
-	<handler name="onmouseout">
-		if ($debug){};
-	</handler>
 	<handler name="onmouseup">
-		//if (!this._isselected) this.setAttribute('bgcolor',canvas.baseMousecolorizer);
-		//this.__labeltooltip.destroyLabel();
 		//if ($debug) Debug.write("parent.parent.parent",parent.parent.parent);
 		parent.parent.parent.setSelection(this);
 	</handler>
@@ -69,10 +55,10 @@
         </handler>
 </class>
 
-<class name="mainToolsHPanelSeperator" extends="view" bgcolor="0xCCCCCC"
+<class name="mainToolsHPanelSeperator" extends="view" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }"
 	   width="26" height="1" ></class>
 	   
-<class name="mainToolsVPanelSeperator" extends="view" bgcolor="0xCCCCCC"
+<class name="mainToolsVPanelSeperator" extends="view" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }"
 	   width="1" height="26" ></class>
 
     

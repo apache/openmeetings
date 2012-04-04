@@ -20,7 +20,7 @@
 -->
 <library>
 
-	<class name="userContactsCalendarItem" extends="view" width="$once{ parent.width }" height="40" bgcolor="0xCCCCCC">
+	<class name="userContactsCalendarItem" extends="view" width="$once{ parent.width }" height="40" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }">
 		
 		<attribute name="tUserName" value="" type="string" />
 		
@@ -72,7 +72,8 @@
 	    
 	</class>
 
-	<class name="userContactsCalendar" extends="view" bgcolor="0xE0E0E0">
+	<class name="userContactsCalendar" extends="view" 
+						bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }">
 		
 		<event name="onSaveNewMessage" />
 		

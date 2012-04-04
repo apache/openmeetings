@@ -135,7 +135,7 @@
         ]]> 
     </method>
 
-    <view bgcolor="$once{ canvas.baseMousecolorizer }" width="58" height="138" x="1" y="1" />
+    <view bgcolor="$once{ canvas.getThemeColor('baseMousecolorizer') }" width="58" height="138" x="1" y="1" />
     
     <vslider name="_slider" height="120" y="10" x="10" minvalue="1" maxvalue="$once{ parent.maxvalue }" 
         initvalue="$once{ parent.initialNumber }" showrange="false" showvalue="true">

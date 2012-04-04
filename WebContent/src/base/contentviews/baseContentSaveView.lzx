@@ -44,7 +44,7 @@
 	<event name="onreload" />
 
     <view name="_savecontentbar" layout="axis:x;spacing:2;inset:2" x="2" height="28" width="$once{ parent.width }"
-        bgcolor="$once{ canvas.baseMousecolorizer }">
+        bgcolor="$once{ canvas.getThemeColor('baseMousecolorizer') }">
         <baseChooseIcon resourceN="filesave_rsc" labelid="144" y="2" 
         	onclick="this.parent.parent.doSaveEvent()" visible="$once{ parent.parent.saveIsVisible }" />
         <baseChooseIcon resourceN="edit_add_rsc" labelid="155" y="2" 

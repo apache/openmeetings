@@ -75,7 +75,7 @@
     
     <view name="_border2" x="0" y="19" options="ignorelayout: true"
           width="$once{ parent.width }" height="2" 
-          bgcolor="$once{ canvas.basebgcolorizer }" /> 
+          bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }" /> 
            
     <view name="_content" layout="axis:x">  
         <documentsLoaderIcon name="_explorerTreeView" 
@@ -83,7 +83,7 @@
             labeltext="$once{ canvas.getLabelName(717) }" />
     </view>    
     <view name="_border" height="20" width="1" 
-        bgcolor="$once{ canvas.basebgcolorizer }" />
+        bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }" />
 </class>
 
 </library>

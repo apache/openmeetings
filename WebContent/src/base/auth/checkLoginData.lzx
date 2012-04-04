@@ -86,8 +86,8 @@
         </handler>
     </customEdittext>    
 
-    <labelText name="n2" labelid="110" width="300" y="56" resize="false" x="2" fontstyle="bold"/>
-    <customEdittext name="userpass" y="54" password="true" x="120" width="330" >
+    <labelText name="n2" labelid="110" width="300" y="48" resize="false" x="2" fontstyle="bold"/>
+    <customEdittext name="userpass" y="48" password="true" x="120" width="330" >
         <handler name="oninit">
             var g = canvas.getUserData();
             if (g["userpass"]!=null) this.setAttribute('text',g["userpass"]);
@@ -108,96 +108,8 @@
         </handler>
     </customEdittext>
     
-	<labelText name="n5" labelid="1370" width="300" y="86" resize="false" x="2" fontstyle="bold"/>  
-    
-    <resetCombobox name="colors" width="330" y="84" x="120">
-        <attribute name="initselect" value="true" type="boolean" />
-        
-        <handler name="oninit">
-            this.addItem(canvas.getLabelName(1374),'redorange');
-            this.addItem(canvas.getLabelName(1375),'mediumseagreen');
-            this.addItem(canvas.getLabelName(1376),'steelblue');
-            this.addItem(canvas.getLabelName(1377),'lightsteelblue');
-            this.addItem(canvas.getLabelName(1378),'goldenrod');
-            this.addItem(canvas.getLabelName(1379),'silvergray'); 
-            this.addItem(canvas.getLabelName(1380),'userdefined'); 
-
-            var g = canvas.getUserData();
-            if($debug) Debug.write("checkLoginData/g: ",g);
-            this.selectItem((g["usercolor"] != null) ? g["usercolor"] : canvas.baseColorScheme);
-        </handler> 
-        <handler name="onselect" args="v">
-            //Debug.write("onselect: ",v.value);
-            if (this.initselect){
-                this.initselect=false;
-            } else {
-            	var val = canvas.setColorStyle(v.value);
-                var g = canvas.getUserData();
-                g["usercolor"] = val;
-                canvas.setUserData(g);
-                
-                var uName = parent.username.getText();
-                var uPass = parent.userpass.getText();
-                var uSave = parent._savelogindata.getValue();
-                var uDomain = parent.domain.getValue();
-                this.parent.close();
-                var login = new lz.checkLoginData(canvas.main_content._content.inner);
-                login.username.setText(uName);
-                login.userpass.setText(uPass);
-                login._savelogindata.setValue(uSave);
-                login.domain.setValue(uDomain);
-            }
-        </handler>
-        <handler name="onkeyup" args="key">
-            <![CDATA[
-            if ( this.parent.enterPressed && ( key == 13 ) )
-            {
-                parent.login();
-            }
-            ]]>
-        </handler>
-        <handler name="onkeydown" args="key">
-            if ( key == 13 )
-            {
-                this.parent.enterPressed = true;
-            }
-        </handler>
-    </resetCombobox>    
-    
-    <labelText name="nlabelquality" labelid="1371" y="116" x="2" visible="true" width="140" fontstyle="bold"/>     
-    <resetCombobox name="ncomboquality" width="330" y="114" x="120" editable="false" >
-        <handler name="oninit">
-            this.addItem(canvas.getLabelName(1381) + " ~ 16KB " + canvas.getLabelName(1382),"best");
-            this.addItem(canvas.getLabelName(1383) + " ~ 10KB " + canvas.getLabelName(1382),"medium");
-            var g = canvas.getUserData();
-            if($debug) Debug.write("checkLoginData/g: ",g);
-            if (g["userquality"] != null) {
-                this.selectItem(g["userquality"]);
-            } else {
-                this.selectItem("best");
-            }
-        </handler> 
-        <handler name="onselect">
-            canvas.vaquality = this.getValue();
-        </handler>
-        <handler name="onkeyup" args="key">
-            <![CDATA[
-            if ( this.parent.enterPressed && ( key == 13 ) )
-            {
-                parent.login();
-            }
-            ]]>
-        </handler>
-        <handler name="onkeydown" args="key">
-            if ( key == 13 )
-            {
-                this.parent.enterPressed = true;
-            }
-        </handler>
-    </resetCombobox>
-        
-	<labelText name="domain_label" labelid="1372" width="300" y="144" resize="false" x="2" fontstyle="bold"/>     
-    <resetCombobox name="domain" width="330" y="144" x="120" editable="false">
+	<labelText name="domain_label" labelid="1372" width="300" y="72" resize="false" x="2" fontstyle="bold"/>     
+    <resetCombobox name="domain" width="330" y="72" x="120" editable="false">
     	<handler name="oninit">
     		//this.selectItemAt(0);
     		this.getActiveLdapConfigs.doCall();
@@ -326,8 +238,6 @@
                     if (this.parent._savelogindata.getValue()) {
                         g["username"] = parent.username.getText();
                         g["userpass"] = parent.userpass.getText();
-                        g["userquality"] = parent.ncomboquality.getValue();
-                        g["usercolor"] = parent.colors.getValue();
                         g["userlang"] = hib.userlang;
                         g["userdomain"] = parent.domain.getValue();
                         g["saveuserdata"]=true;
@@ -335,8 +245,6 @@
                     } else {
                         g["username"] = '';
                         g["userpass"] = '';
-                        g["userquality"] = null;
-                        g["usercolor"] = null;
                         g["userlang"] = null;
                         g["userdomain"] = null;
                         g["saveuserdata"]=false;
@@ -421,8 +329,6 @@
                         parent.organisation_label.setAttribute('visible',true);
                         parent.organisation.setAttribute('visible',true);
                         parent.b3.setAttribute('visible',true);
-                        parent.nlabelquality.setAttribute('visible',false);
-                        parent.ncomboquality.setAttribute('visible',false);
                         parent.domain_label.setAttribute('visible',false);
                         parent.domain.setAttribute('visible',false);
                 
@@ -430,7 +336,6 @@
                             parent.organisation.addItem(value.organisation_users[i].organisation.name,String(i));
                         }
                         parent.organisation.selectItem(String(i-1));
-                        //Debug.write("multiple organisations Issue 31 http://code.google.com/p/openmeetings/issues/detail?id=31");
                     }
                     
                 }
@@ -462,8 +367,8 @@
         </handler>  
     </netRemoteCallHib>    
     
-    <labelCheckbox x="120" y="$once{ parent.height-62 }" fontsize="11"
-        name="_savelogindata" labelid="288" >
+    <labelCheckbox x="120" y="96" fontsize="11"
+        	name="_savelogindata" labelid="288" >
         <handler name="oninit">
             var g = canvas.getUserData();
             if($debug) Debug.write("checkLoginData/g: ",g);

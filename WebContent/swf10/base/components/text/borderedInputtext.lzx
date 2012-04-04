@@ -20,7 +20,7 @@
 -->
 <library>
 
-<class name="borderedInputtext" extends="view" bgcolor="$once{ canvas.basebgcolorizer }" >
+<class name="borderedInputtext" extends="view" bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }" >
 	<attribute name="width" value="200" type="size" />
 	<attribute name="height" value="18" type="size" />
     <attribute name="tvalue" type="string" value="default"/>

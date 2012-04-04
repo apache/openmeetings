@@ -39,10 +39,10 @@
     
 </class>    
 
-<class name="documentPanelVPanelSeperator" extends="view" bgcolor="0xCCCCCC"
+<class name="documentPanelVPanelSeperator" extends="view" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }"
 	   width="26" height="2" ></class>
 	   
-<class name="documentPanelHPanelSeperator" extends="view" bgcolor="0xCCCCCC"
+<class name="documentPanelHPanelSeperator" extends="view" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }"
 	   width="2" height="26" ></class>
 	   	
 <!-- not used in the moment -->	   	

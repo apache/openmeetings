@@ -340,25 +340,28 @@
 	 	
 	 	<!-- participents -->
 	 	<view name="_participentsIconBar" layout="axis:x" x="$once{ parent.width-50 }" y="230">
-	        <baseChooseIconView labelid="812" height="20" width="19" bgcolor="0xE0E0E0"
+	        <baseChooseIconView labelid="812" height="20" width="19" 
+	        		bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }"
 	                            resourceN="calendar_add_user_rsc">
 	            <handler name="onclick">
 	                new lz.addAttendee(canvas,{refObj:parent.parent._participentList});
 	            </handler>
 	        </baseChooseIconView>
-	        <baseChooseIconView labelid="629" height="20" width="19" bgcolor="0xE0E0E0"
+	        <baseChooseIconView labelid="629" height="20" width="19" 
+	        			bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }"
 	                            resourceN="calendar_add_user_external_rsc" >
 	            <handler name="onclick">
 	                new lz.addExternalAttendee(canvas,{refObj:parent.parent._participentList});
 	            </handler>
 	        </baseChooseIconView>
-	        <view bgcolor="0xE0E0E0" height="20" width="1" />
+	        <view bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" height="20" width="1" />
 	    </view>
 	 	
 	 	<labelText name="_participentLabel" x="4" y="250" labelid="803" fontstyle="bold" /> 
 	 	
 	 	<view name="_participentList" x="100" y="250" height="100" 
-            		  bgcolor="0xE0E0E0" width="$once{ parent.width-110 }">
+            		  bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" 
+            		  width="$once{ parent.width-110 }">
            
             <method name="addListItem" args="userId,firstName,lastName,email,memberId,jNameTimeZone">
             	<![CDATA[

@@ -86,7 +86,7 @@
 
 </class>
 
-<class name="dateSelectorWeekNumber" extends="view" width="24" bgcolor="$once{ canvas.basebgcolorizer }">
+<class name="dateSelectorWeekNumber" extends="view" width="24" bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }">
 
 	<attribute name="weeknumber" value="0" type="number" />	
 	<text name="_date" fgcolor="white" fontsize="10" text="$once{ parent.weeknumber }" 
@@ -94,7 +94,7 @@
 
 </class>
 
-<class name="dateSelectorWeekNumberHeader" extends="view" width="24" bgcolor="$once{ canvas.basebgcolorizer }">
+<class name="dateSelectorWeekNumberHeader" extends="view" width="24" bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }">
 
 	<attribute name="labelWeekHeader" value="" type="string" />	
 	<text name="_date" fgcolor="white" fontsize="10" text="$once{ parent.labelWeekHeader }" 
@@ -105,7 +105,8 @@
 
 </class>
 
-<class name="dateSelectorWeek" extends="baseDateSelectorComponent" bgcolor="0xE0E0E0">
+<class name="dateSelectorWeek" extends="baseDateSelectorComponent" 
+		bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }">
 
 	<attribute name="weekIndexNumber" value="-1" type="number" />
 
@@ -129,7 +130,8 @@
 </class>
 
 
-<class name="dateSelectorMonth" extends="baseDateSelectorComponent" bgcolor="0xE0E0E0" height="137" width="176">
+<class name="dateSelectorMonth" extends="baseDateSelectorComponent" 
+		bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" height="137" width="176">
             
 	<attribute name="month" value="0" type="number" />
 	<attribute name="firstweekNumber" value="0" type="number" />
@@ -141,15 +143,13 @@
         var dateRoot = parent.parent;
         //if ($debug) Debug.write("dateRoot: ",dateRoot);
         this.setAttribute('currentMonthName',dateRoot.monthnames[month]); 
-        //new lz.dateSelectorWeekNumberHeader(this.weekheader,{labelWeekHeader:canvas.getLabelName(467),bgcolor:canvas.basebgcolorizer});
         for( var i = 0 ; i < 6 ; i++ ) new lz.dateSelectorWeek(this.content,{firstweekddaydate:new Date(this.showingdate.getTime()+(604800000*i)),dayclass:dayclass,month:month,weekIndexNumber:i});  
         for( var i = 0 ; i < 7 ; i++ ) new lz.dateSelectorDayHeader(this.weekheader,{daynumber:(this.showingdate.getDay()+i)});  
-        //for( var i = 0 ; i < 6 ; i++ ) new lz.dateSelectorWeekNumber(this.weekNumber,{weeknumber:( (this.firstweekNumber+i<54) ? (this.firstweekNumber+i) : ((this.firstweekNumber+i)-53) )});
 		]]>
 	</method> 
-	<view name="header" layout="axis:x" height="18" bgcolor="0xE0E0E0">
+	<view name="header" layout="axis:x" height="18" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }">
 		<text width="20" fgcolor="0x000000" height="18" 
-			onmouseover="this.setAttribute('bgcolor',0xFFFFFF)" onmouseout="this.setAttribute('bgcolor',0xE0E0E0)">
+			onmouseover="this.setAttribute('bgcolor',0xFFFFFF)" onmouseout="this.setAttribute('bgcolor',canvas.getThemeColor('secondBorderColor'))">
 			<handler name="oninit"><![CDATA[
 				this.setAttribute('text','&#60;');]]>
 			</handler>
@@ -158,7 +158,7 @@
 			</handler>
 		</text>
 		<text width="22" fgcolor="0x000000" height="18"
-			onmouseover="this.setAttribute('bgcolor',0xFFFFFF)" onmouseout="this.setAttribute('bgcolor',0xE0E0E0)">
+			onmouseover="this.setAttribute('bgcolor',0xFFFFFF)" onmouseout="this.setAttribute('bgcolor',canvas.getThemeColor('secondBorderColor'))">
 			<handler name="oninit"><![CDATA[
 				this.setAttribute('text','&#60;&#60;');]]>
 			</handler>			
@@ -170,19 +170,19 @@
 			<text fontsize="10" fgcolor="0x000000" align="center" text="${ parent.parent.parent.currentMonthName+' '+parent.parent.parent.parent.parent.year }" resize="true" />
 		</view>
 		<text width="22" fgcolor="0x000000" text=">>" height="18"
-			onmouseover="this.setAttribute('bgcolor',0xFFFFFF)" onmouseout="this.setAttribute('bgcolor',0xE0E0E0)">
+			onmouseover="this.setAttribute('bgcolor',0xFFFFFF)" onmouseout="this.setAttribute('bgcolor',canvas.getThemeColor('secondBorderColor'))">
 			<handler name="onclick">
 				this.parent.parent.parent.parent.showNextYear();
 			</handler>
 		</text>
 		<text width="20" fgcolor="0x000000" text="  >" height="18"
-			onmouseover="this.setAttribute('bgcolor',0xFFFFFF)" onmouseout="this.setAttribute('bgcolor',0xE0E0E0)">
+			onmouseover="this.setAttribute('bgcolor',0xFFFFFF)" onmouseout="this.setAttribute('bgcolor',canvas.getThemeColor('secondBorderColor'))">
 			<handler name="onclick">
 				this.parent.parent.parent.parent.showNextMonth();
 			</handler>
 		</text>	
 	</view>
-	<view name="weekheader" layout="axis:x;spacing:1" x="1" y="18" bgcolor="0xE0E0E0"/>
+	<view name="weekheader" layout="axis:x;spacing:1" x="1" y="18" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }"/>
 	<!-- 
 	<view name="weekNumber" layout="axis:y;spacing:1" x="1" y="35" />
 	 -->

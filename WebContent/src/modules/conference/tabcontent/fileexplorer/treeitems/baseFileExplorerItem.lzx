@@ -325,7 +325,7 @@
 	
 	<method name="selectItem">
 		this.selected = true;
-		this._fileName.setAttribute("bgcolor",canvas.baseMousecolorizer);
+		this._fileName.setAttribute("bgcolor",canvas.getThemeColor('baseMousecolorizer'));
 	</method>
 	
 	<method name="deselectItem">

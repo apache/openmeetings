@@ -240,7 +240,7 @@
 	    <propertyPanelLetterButton name="_bold" x="312" y="24" labelid="87"
                                    itemResourceName="bold" />
 		
-		<view name="_delemiter" width="2" bgcolor="$once{ canvas.baseMousecolorizer }" 
+		<view name="_delemiter" width="2" bgcolor="$once{ canvas.getThemeColor('baseMousecolorizer') }" 
 			  height="$once{ parent.height - this.y - 4 }" y="20" x="338"/>
 		
 		<labelText labelid="721" y="26" x="344" />

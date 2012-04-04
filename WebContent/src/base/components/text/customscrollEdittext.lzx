@@ -42,8 +42,8 @@
           width="$once{parent.width}" 
           height="$once{parent.height}" />
           
-    <view name="v_border" height="1" bgcolor="0xE0E0E0" width="$once{parent.width}" />
-    <view name="h_border" width="1"  y="1" bgcolor="0xE0E0E0" height="$once{parent.height -1}" />
+    <view name="v_border" height="1" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" width="$once{parent.width}" />
+    <view name="h_border" width="1"  y="1" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" height="$once{parent.height -1}" />
           
     <scrolledittext name="_cbtext" width="$once{ parent.width-1 }" x="1" y="1" bgcolor="0xFFFFFF"  styleable="false"
 		height="$once{ parent.height-1 }" text="${ parent.text }" vscrollbarclassname="om_vscrollbar"

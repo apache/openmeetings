@@ -52,11 +52,11 @@
     <text fontsize="11" name="error" />
     <text fontsize="11" name="_src" />
     
-    <view name="loadingbar" bgcolor="$once{ canvas.styleMenuBarBaseColor }" height="10"  pixellock="true"
+    <view name="loadingbar" bgcolor="$once{ canvas.getThemeColor('styleMenuBarBaseColor') }" height="10"  pixellock="true"
           x="-5" y="60" width="$once{ parent.maxwidth }" visibility="hidden">
           <view x="1" y="1" width="$once{ parent.width-2 }" height="8" bgcolor="0xFFFFFF"/>
           <view name="_loading" x="1" y="1" width="0" height="8"  pixellock="true" 
-          		bgcolor="$once{ canvas.styleMenuBarBaseColor }"/>
+          		bgcolor="$once{ canvas.getThemeColor('styleMenuBarBaseColor') }"/>
     </view>
 </class>
 

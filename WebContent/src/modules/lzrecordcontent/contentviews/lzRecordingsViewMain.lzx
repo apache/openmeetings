@@ -402,15 +402,15 @@
         </view>
         
         <view name="_progress" height="18" valign="bottom" width="${ parent.width }"
-        	                   bgcolor="$once{ canvas.basebgcolorizer }">
+        	                   bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }">
         	
         	<view resource="flv_recorder_play_small_rsc" y="1" height="16" width="16"
-        		      bgcolor="$once{ canvas.baseMouseOvercolorizer }">
+        		      bgcolor="$once{ canvas.getThemeColor('baseMouseOvercolorizer') }">
         		<handler name="onmouseover">
                     this.setAttribute("bgcolor",0xFFFFFF);
                 </handler>
                 <handler name="onmouseout">
-                    this.setAttribute("bgcolor",canvas.baseMouseOvercolorizer);
+                    this.setAttribute("bgcolor",canvas.getThemeColor('baseMouseOvercolorizer'));
                 </handler>
         		<handler name="onclick">
         			parent.parent.startStream();
@@ -419,7 +419,7 @@
         	</view>
         	
         	<view name="_progressbar" x="16" width="${ parent.width - 32 }" y="1" 
-        		  height="16" bgcolor="$once{ canvas.baseMouseOvercolorizer }">
+        		  height="16" bgcolor="$once{ canvas.getThemeColor('baseMouseOvercolorizer') }">
         		
         		<view x="0" width="${ parent.width }" y="0" height="16" bgcolor="0xFFFFFF" opacity="0.5" /> 
         		
@@ -436,12 +436,12 @@
         	</view>
         	
         	<view resource="flv_recorder_stop_small_rsc" align="right" y="1" height="16" width="16"
-        		  bgcolor="$once{ canvas.baseMouseOvercolorizer }">
+        		  bgcolor="$once{ canvas.getThemeColor('baseMouseOvercolorizer') }">
         		<handler name="onmouseover">
         			this.setAttribute("bgcolor",0xFFFFFF);
         		</handler>
         		<handler name="onmouseout">
-                    this.setAttribute("bgcolor",canvas.baseMouseOvercolorizer);
+                    this.setAttribute("bgcolor",canvas.getThemeColor('baseMouseOvercolorizer'));
                 </handler>
                 <handler name="onclick">
                     parent.parent.stopStream();

@@ -61,7 +61,7 @@
 	<privateMessages name="_privateMessages" x="0" y="0" />
 	
 	<view height="$once{ parent.height }" width="1" x="$once{ canvas.width-276 }" 
-		  bgcolor="0xCCCCCC"></view>
+		  bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }"></view>
 	
 </class>	
 	

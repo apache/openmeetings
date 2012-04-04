@@ -29,7 +29,7 @@
 
 <class name="interviewListInner" extends="baseRoomInnerList"  
        width="$once{ parent.width }" height="${ parent.height }" 
-       bgcolor="$once{ canvas.basebgcolorizer }" >
+       bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }" >
     
     <attribute name="selectedItem" value="null" />
     

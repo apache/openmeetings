@@ -251,7 +251,7 @@
     </miniIcons>
 	
     <!-- =========  BgArea area  =========-->
-    <view width="$once{ parent.width }" bgcolor="0xCCCCCC"
+    <view width="$once{ parent.width }" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }"
           height="$once{ parent.height-20 }" x="0" y="20">
         <view width="$once{ parent.width-2 }" bgcolor="$once{ parent.parent.mainBgColor }"
           height="$once{ parent.height-2 }" x="1" y="1"></view>

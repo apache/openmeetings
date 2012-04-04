@@ -58,9 +58,9 @@
 	
     <view x="0" y="1" width="${ this.parent.width }" height="20" bgcolor="0xE0E1EB" />
     
-    <view x="0" y="0" width="${ this.parent.width }" height="1" bgcolor="0xCCCCCC" />
+    <view x="0" y="0" width="${ this.parent.width }" height="1" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" />
     
-    <view x="0" y="19" width="${ this.parent.width }" height="1" bgcolor="0xCCCCCC" />
+    <view x="0" y="19" width="${ this.parent.width }" height="1" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" />
 	
 	<handler name="onclick">
         this.parent.toggleopen();

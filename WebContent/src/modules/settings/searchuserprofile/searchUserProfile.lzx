@@ -149,7 +149,7 @@
            
            
     <view name="_borderLine" width="1" x="129" 
-    	  height="$once{ parent.height }" bgcolor="$once{ canvas.basebgcolorizer }" />
+    	  height="$once{ parent.height }" bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }" />
     	  
     	  
 	<view name="_searchUserResult" x="130" height="$once{ parent.height }">

@@ -21,7 +21,7 @@
 <library>
 
 <class name="interviewUserListItem" extends="view" showhandcursor="false" 
-	   bgcolor="0xCCCCCC" width="252" height="42">
+	   bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" width="252" height="42">
 	
 	<attribute name="connectedSince" value="" type="string" />
     <attribute name="isMod" value="" type="string" />
@@ -101,14 +101,6 @@
         ]]>          
     </method>
      
-    <handler name="onmouseover">
-        //this.setAttribute('bgcolor',canvas.baseMousecolorizer);
-    </handler>
-    
-    <handler name="onmouseout">
-        //this.setAttribute('bgcolor',0xFFFFFF);
-    </handler>
-    
     <handler name="onclick">
     	parent.parent.parent.selectItem(this);
     </handler>

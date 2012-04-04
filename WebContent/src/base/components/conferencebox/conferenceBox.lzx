@@ -78,7 +78,7 @@
             
             <handler name="oninit">
                 <![CDATA[
-                    this.setTintRGB(canvas.basebgcolorizer,90);
+                    this.setTintRGB(canvas.getThemeColor('basebgcolorizer'),90);
                 ]]>
             </handler>
             <method name="setTintRGB" args="color, brightness">

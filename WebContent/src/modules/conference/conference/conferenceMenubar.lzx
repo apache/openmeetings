@@ -25,7 +25,7 @@
 	<class name="interviewConferenceMenubar" extends="conferenceMenubar" viewType="interview"/>
 	
 	<class name="conferenceMenubar" extends="view" height="28" width="${ canvas.width }" 
-						bgcolor="$once{ canvas.styleMenuBarBaseColor }" >
+						bgcolor="$once{ canvas.getThemeColor('styleMenuBarBaseColor') }" >
 						
 		<attribute name="viewType" value="conference" type="string" />
 						
@@ -209,7 +209,7 @@
 			height="${ this._content.height+2 }" width="${ this._content.width+2 }">
 			
 		<view name="_content" x="1" y="1" 
-			layout="axis:y;spacing:1" bgcolor="0xEFEFEF" >
+			layout="axis:y;spacing:1" bgcolor="$once{ canvas.getThemeColor('menuBackgroundColor') }" >
 			
 			<conferencDropDownMenuItem labelid="15" command="cmd_importFile"
 						enabled="${ canvas.ismoderator }" />
@@ -226,7 +226,7 @@
 		</handler>
 			
 		<view name="_content" x="1" y="1" 
-			layout="axis:y;spacing:1" bgcolor="0xEFEFEF" >
+			layout="axis:y;spacing:1" bgcolor="$once{ canvas.getThemeColor('menuBackgroundColor') }" >
 			
 			<conferencDropDownMenuItem labelid="213" command="cmd_invitation" 
 						enabled="${ canvas.ismoderator }" />

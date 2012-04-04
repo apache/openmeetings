@@ -24,7 +24,7 @@
 <class name="chatTabBottomRoomList" extends="view" >
 
         <view x="0" y="0" height="20" width="${ parent.width }" name="message" 
-              bgcolor="$once{ canvas.basebgcolorizer }">
+              bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }">
             <method name="getText">
                 return this._ctext.getText();
             </method>
@@ -151,7 +151,7 @@
 
 <!--
 <view x="0" y="0" height="20" width="140" name="message" 
-              bgcolor="$once{ canvas.basebgcolorizer }">
+              bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }">
             <method name="getText">
                 return this._ctext.getText();
             </method>

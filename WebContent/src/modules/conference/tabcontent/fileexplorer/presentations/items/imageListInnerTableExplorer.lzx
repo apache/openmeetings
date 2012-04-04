@@ -24,7 +24,7 @@
     height="${ parent.height-2 }" 
 	bgcolor="white" x="1" y="1" clip="true">
     
-    <view name="_listcontent" bgcolor="$once{ canvas.basebgcolorizer }" width="$once{ parent.width }" >
+    <view name="_listcontent" bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }" width="$once{ parent.width }" >
         <simplelayout name="_layout" axis="y" spacing="2" inset="1" />
         
         <!--

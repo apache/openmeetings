@@ -33,7 +33,7 @@
     <!-- message and buttons area-->
     <view y="0" x="196" height="${ parent.height }" >
         <view name="_chatoutputborder" height="${ parent.height-48 }"
-            width="${ parent.parent.width - 196 }"  bgcolor="0xE0E0E0">
+            width="${ parent.parent.width - 196 }"  bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }">
         	<!-- 604 -->
             <overAllChatOutput name="_chatoutput" x="1" y="1" >
                 <handler name="oninit">
@@ -47,7 +47,7 @@
     </view>
     
     <!-- chat participants area -->
-    <view x="0" y="0" name="_chatparticipants" bgcolor="0xE0E0E0"
+    <view x="0" y="0" name="_chatparticipants" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }"
           height="${ parent.height-2 }" width="190" >
         <handler name="oninit">
             this.getChatOverallUsers.doCall();

@@ -21,7 +21,7 @@
 <library>
 
 <class name="baseChooseIconView" extends="view" width="24" height="24" 
-       bgcolor="$once{ canvas.basebgcolorizer }"  >
+       bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }"  >
     
     <attribute name="resourceN" value="" type="string" />
     <attribute name="isselected" value="false" type="boolean" />
@@ -34,7 +34,7 @@
     </handler> 
     
     <handler name="onmouseover">
-        this._bg.setAttribute("bgcolor",canvas.baseMousecolorizer);
+        this._bg.setAttribute("bgcolor",canvas.getThemeColor('baseMousecolorizer'));
     </handler>
     
     <handler name="onmouseout">

@@ -176,7 +176,7 @@
 
 	<labelText name="user_label" labelid="407" y="${10 + parent._roomcomment.y + parent._roomcomment.height}" width="200" />
 	<view name="_users" width="300" y="${30 + parent._roomcomment.y + parent._roomcomment.height}"
-				height="${ parent.height - parent._users.y }" bgcolor="0xE0E0E0">
+				height="${ parent.height - parent._users.y }" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }">
 		<method name="clearList">
 			for (var eg in this._users._cbtext.subviews) 
 				this._users._cbtext.subviews[eg].destroy();
@@ -188,23 +188,6 @@
 		</view>
 	</view>
 	
-	<!--
-	
-	<labelText name="chat_label" y="230" labelid="405" />
-	<view name="_chat" y="250" height="270" >
-		<view name="_chatoutputborder" height="${ parent.height-48 }"
-	        bgcolor="$once{ canvas.basebgcolorizer }" width="300">
-			<chatOutputRoomsList name="_chatoutput" x="1" y="1" >
-				<handler name="oninit">
-					canvas._chatcontentRPC = this;
-				</handler>
-			</chatOutputRoomsList>
-		</view>
-		<chatTabBottomRoomList name="_chattabbottom" x="0" width="300" 
-					   y="${ parent.height-46 }" />		
-	</view>
-	 -->
-
 </class>
 
 </library>

@@ -21,7 +21,7 @@
 <library>
 
 <class name="whiteboardMiniButton" extends="view" width="250" height="18" y="2"
-    bgcolor="$once{ canvas.basebgcolorizer }">
+    bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }">
      
     <attribute name="btnName" value="" type="string" />
     <attribute name="objRef" value="null" />

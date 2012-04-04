@@ -27,8 +27,8 @@
 <class name="panelBoundBox" extends="drawview" cachebitmap="false" >
 	
 	<handler name="oncontext">
-		var numberColor = this.stringRgbToInteger(canvas.basebgcolorizer);
-		var fillColor = this.stringRgbToInteger(canvas.baseMousecolorizer);
+		var numberColor = this.stringRgbToInteger(canvas.getThemeColor('basebgcolorizer'));
+		var fillColor = this.stringRgbToInteger(canvas.getThemeColor('baseMousecolorizer'));
 		this.drawBody(this,0,0,this.width,this.height,fillColor,2);
 		this.drawDottedLine(this,0,0,this.width,0,numberColor,2);
 		this.drawDottedLine(this,this.width,0,this.width,this.height,numberColor,2);

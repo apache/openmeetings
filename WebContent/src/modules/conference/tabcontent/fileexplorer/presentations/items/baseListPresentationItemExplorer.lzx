@@ -46,7 +46,7 @@
     <handler name="onmouseover">
         setCurrentMouseWheelObject(this.parent.parent._scrollbar);
         if (!this.isselected){
-            this.setAttribute('bgcolor',canvas.baseMouseOvercolorizer);
+            this.setAttribute('bgcolor',canvas.getThemeColor('baseMouseOvercolorizer'));
         }
     </handler> 
     <handler name="onmouseout">

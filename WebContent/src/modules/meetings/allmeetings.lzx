@@ -74,7 +74,7 @@
    	<view name="_tabbarBg" width="${ parent.width }" height="32" y="1" bgcolor="0xFAFAFA" />
    	
 	<view name="borderBarBottom" y="34"
-   			width="${ parent.width }" bgcolor="0xCCCCCC" height="1" />  
+   			width="${ parent.width }" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" height="1" />  
       
 	<view name="_tabbar" width="${ canvas.width }" y="1" height="32"
   		  layout="axis:x;spacing:2;inset:2" >
@@ -156,7 +156,8 @@
 					</netRemoteCallHib>
 
 					<!-- inn.inn.inn view would be setted object by above ondata hander. -->
-					<view name="inn" width="480" height="${ parent.height }" bgcolor="0xE0E0E0">
+					<view name="inn" width="480" height="${ parent.height }" 
+									bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }">
 						<view name="inn" x="1" y="1" width="479" height="${ parent.height-1 }" 
 							  		bgcolor="0xFFFFFF" clip="true" >
 							<view name="inn" layout="axis:y;spacing:1"/>
@@ -217,7 +218,8 @@
 					</netRemoteCallHib> 
 	 
 					<!-- inn.inn.inn view would be setted object by above ondata hander. -->
-					<view name="inn" width="480" height="${ parent.height }" bgcolor="0xE0E0E0">
+					<view name="inn" width="480" height="${ parent.height }" 
+									bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }">
 						<view name="inn" x="1" y="1" width="479" height="${ parent.height-1 }" bgcolor="0xFFFFFF" clip="true" >
 							<view name="inn" layout="axis:y;spacing:1"/>
 							<om_vscrollbar />
@@ -301,7 +303,8 @@
 				</netRemoteCallHib> 
 	 
 				<!-- inn.inn.inn view would be setted object by above ondata hander. -->
-				<view name="inn" width="480" height="${ parent.height }" bgcolor="0xE0E0E0">
+				<view name="inn" width="480" height="${ parent.height }" 
+								bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }">
 					<view name="inn" x="1" y="1" width="479" height="${ parent.height-1 }" bgcolor="0xFFFFFF" clip="true" >
 						<view name="inn" layout="axis:y;spacing:1"/>
 						<om_vscrollbar />

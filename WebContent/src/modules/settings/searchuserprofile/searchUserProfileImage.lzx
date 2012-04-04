@@ -26,7 +26,7 @@
 	<attribute name="profileUrl" value="" type="string" />
 	
 	<view name="_placeholderBG" width="118" x="1" y="1"
-		  height="98" bgcolor="0xEFEFEF"></view>
+		  height="98" bgcolor="$once{ canvas.getThemeColor('menuBackgroundColor') }"></view>
 	<view x="58" y="48"
 		resource="image_loading_placeholder_rsc" ></view>
 	

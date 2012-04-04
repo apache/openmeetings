@@ -30,10 +30,6 @@
         
         if($debug) Debug.write("main.lzx/config.xml ondata",this);
         
-        this.setAttribute('basebgcolorizer',canvas.myConfigSet.getPointer().xpathQuery('config/basebgcolorizer/text()'));  
-        this.setAttribute('baseMousecolorizer',canvas.myConfigSet.getPointer().xpathQuery('config/baseMousecolorizer/text()'));  
-        this.setAttribute('baseMouseOvercolorizer',canvas.myConfigSet.getPointer().xpathQuery('config/baseMouseOvercolorizer/text()'));  
-        
         //Audio-Video-Settings
         this.setAttribute('loudnessAcitviation',canvas.myConfigSet.getPointer().xpathQuery('config/loudnessAcitviation/text()'));
         this.setAttribute('framesPerSecond',Number(canvas.myConfigSet.getPointer().xpathQuery('config/framesPerSecond/text()')));  
@@ -57,5 +53,19 @@
         //if($debug) Debug.write("main.lzx/getLabelName()",id);
         return getLabelTag(id);
     </method>
+    
+    <method name="getThemeImage" args="tName">
+		if ($debug) Debug.write("load Image by Name SWF10: ",tName);
+		var tPath = canvas.mainTheme.getPointer().xpathQuery("theme/resource[@name='"+tName+"']/@src");
+		if ($debug) Debug.write("tPath SWF10 "+tPath);
+		return tPath;
+	</method>
+	
+	<method name="getThemeColor" args="tColor">
+		if ($debug) Debug.write("load Color by Name SWF10: ",tColor);
+		var tColor = canvas.mainTheme.getPointer().xpathQuery("theme/color[@name='"+tColor+"']/@value");
+		if ($debug) Debug.write("tColor SWF10 "+tColor);
+		return tColor;
+	</method>
     
 </library>

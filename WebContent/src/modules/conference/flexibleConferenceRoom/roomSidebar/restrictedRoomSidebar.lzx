@@ -79,10 +79,10 @@
     </method>
     
     <view name="borderBarTop" y="0"
-    			width="${ parent.width }" bgcolor="0xCCCCCC" height="1" />
+    			width="${ parent.width }" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" height="1" />
    	<view name="_tabbarBg" width="${ parent.width }" height="32" y="1" bgcolor="0xFAFAFA" />
 	<view name="borderBarBottom" y="34"
-   			width="${ parent.width }" bgcolor="0xCCCCCC" height="1" /> 
+   			width="${ parent.width }" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" height="1" /> 
     
     <view name="_head" y="1" width="${ parent.width-10 }" height="32"
     		  layout="axis:x;spacing:2;inset:2" >

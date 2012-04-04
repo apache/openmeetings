@@ -21,7 +21,7 @@
 <library>
 
 <class name="whiteboardBarMenu" extends="view" width="${ parent.width }" x="0" y="21" 
-    height="20" layout="axis:x;spacing:1;inset:2" bgcolor="$once{ canvas.baseMousecolorizer }">
+    height="20" layout="axis:x;spacing:1;inset:2" bgcolor="$once{ canvas.getThemeColor('baseMousecolorizer') }">
     
     <attribute name="staticwidth" type="number" value="120" />
     <attribute name="currentBtn" value="null" />

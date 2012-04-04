@@ -21,7 +21,7 @@
 <library>
 
 <class name="baseChooseIconFLVView" extends="view" width="24" height="24" 
-       bgcolor="0xE0E0E0"  >
+       bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }"  >
     
     <attribute name="resourceN" value="" type="string" />
     <attribute name="isselected" value="false" type="boolean" />
@@ -34,7 +34,7 @@
     </handler> 
     
     <handler name="onmouseover">
-        this._bg.setAttribute("bgcolor",0xE0E0E0);
+        this._bg.setAttribute("bgcolor",canvas.getThemeColor('secondBorderColor'));
     </handler>
     
     <handler name="onmouseout">

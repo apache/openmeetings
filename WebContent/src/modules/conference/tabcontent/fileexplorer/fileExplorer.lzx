@@ -504,7 +504,7 @@
      -->
                
     <view name="_border2" x="0" y="${ 33 + parent._documentsTabs.height }" width="$once{ parent.width }" 
-          height="1" bgcolor="0xE0E0E0" />     
+          height="1" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" />     
     
     <!--
         Documents - Tabbar
@@ -518,28 +518,28 @@
      --> 
      
     <view name="_fileBar" layout="axis:x" x="0" y="${ 14 + parent._documentsTabs.height }">
-        <baseChooseIconView labelid="702" height="20" width="19" bgcolor="0xE0E0E0"
+        <baseChooseIconView labelid="702" height="20" width="19" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }"
                             resourceN="file_explorer_add_file_rsc">
             <handler name="onclick">
                 if ($debug) Debug.write("Upload File");
                 parent.parent.addFile();
             </handler>
         </baseChooseIconView>
-        <baseChooseIconView labelid="703" height="20" width="19" bgcolor="0xE0E0E0"
+        <baseChooseIconView labelid="703" height="20" width="19" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }"
                             resourceN="file_explorer_add_folder_rsc" >
             <handler name="onclick">
                 if ($debug) Debug.write("Add Folder");
                 parent.parent.addFolder();
             </handler>
         </baseChooseIconView>
-        <baseChooseIconView labelid="704" height="20" width="19" bgcolor="0xE0E0E0"
+        <baseChooseIconView labelid="704" height="20" width="19" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }"
                             resourceN="file_explorer_reload_rsc" >
             <handler name="onclick">
                 if ($debug) Debug.write("Refresh Folder");
                 parent.parent.loadFiles();
             </handler>
         </baseChooseIconView>
-        <view bgcolor="0xE0E0E0" height="20" width="1" />
+        <view bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" height="20" width="1" />
     </view>
     
     <!--
@@ -549,7 +549,7 @@
     <view name="_trashBar" layout="axis:x" x="$once{ parent.width - 20 }" 
           y="${ 14 + parent._documentsTabs.height }">
         <baseChooseIconView name="_trashIcon" labelid="705" height="20" width="19" 
-                         resourceN="file_explorer_trash_rsc" bgcolor="0xE0E0E0">
+                         resourceN="file_explorer_trash_rsc" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }">
             <attribute name="isTrashCan" value="true" type="boolean" />
             <handler name="onclick">
                 if ($debug) Debug.write("Delete Folder and Files");

@@ -39,15 +39,13 @@
 <include href="modules/" />
 <include href="plugins/" />  
 
-<silverstyle name="defaultstyle" isdefault="true" basecolor="${ canvas.basebgcolorizer }" canvascolor="white" />
+<silverstyle name="defaultstyle" isdefault="true" canvascolor="white" />
 
 <silverstyle name="componentStyle" basecolor="0xFFFFFF" textcolor="0x000000" />
 
-<silverstyle name="itemStyle" basecolor="${ canvas.basebgcolorizer }" 
-             textcolor="0xFFFFFF" />
+<silverstyle name="itemStyle" textcolor="0xFFFFFF" />
 
-<whitestyle name="menuStyle" basecolor="${ canvas.styleMenuBarBaseColor }" 
-             textcolor="0x000000" />
+<whitestyle name="menuStyle" textcolor="0x000000" />
              
 <!-- main colors: 264269 -->
 <handler name="oninit">
@@ -62,8 +60,8 @@
 
 <!-- View for Contents. All Windows will be loaded on this view. -->
 <view name="main_content" y="${ canvas.naviHeightDelta }" width="${canvas.width}" 
-    height="${ canvas.height-canvas.naviHeightDelta }" bgcolor="0xEEF0EB"
-    visibility="hidden" showhandcursor="false">
+			    height="${ canvas.height-canvas.naviHeightDelta }"
+			    visibility="hidden" showhandcursor="false">
     
     <handler name="onmouseover">
         setCurrentMouseWheelObject(this._scrollbar);
@@ -87,34 +85,11 @@
             ]]>
         </method>
     </view>
-        <!-- Whats the reason for adding constraints here?
-        You cannot set the inner to strict height values, cause otherwise the scrollbar
-        won't be showing any difference, no matter if the content of *inner* is
-        bigger then the container view *main_content*
-        
-        -swagner 19.03.2008
-        
-        <view name="_content" x="0" width="${parent.width}" height="${parent.height}" layout="axis:y;spacing:2">
-            <view name="inner" width="${parent.width}" height="${parent.height}" />
-            <method name="clearAll">
-                <![CDATA[
-                    if($debug) Debug.write("main.lzx/clearAll() this.inner: ",this.inner,this.inner.subviews.length);
-                    if (this.inner.subviews.length!=0) var baseContent = this.inner.subviews[0].close();
-                    for (var eg in this.inner.subviews) {
-                        if($debug) Debug.write("clearAll this.inner.subviews: ",this.inner.subviews[eg]);
-                        if (eg!=0) this.inner.subviews[eg].close();               
-                    }
-                    return baseContent;
-                ]]>
-            </method>
-        </view>
-            -->
     <om_vscrollbar name="_scrollbar" id="_mainScrollBar" />
-    
 </view>  
   
 <!-- View for Navigation-bar and App-name -->
-<view name="_mainbgcontentNavi" x="0" y="0" bgcolor="${ canvas.bgColorMenu }" clip="true"
+<view name="_mainbgcontentNavi" x="0" y="0" clip="true"
     width="100%" height="${ canvas.naviHeight }" visibility="hidden">
     <text id="mainBaseText" x="10" y="10"
         fgcolor="${ canvas.fontColorHeader }" fontsize="20" fontstyle="bold">
@@ -140,8 +115,7 @@
 </view>
 
 <!-- View for Conference menu bar at the top side. Visible on conference -->
-<view name="_conferencemenu" y="0" x="0" width="100%" height="20"
-    bgcolor="$once{ canvas.baseMousecolorizer }" visibility="hidden" > 
+<view name="_conferencemenu" y="0" x="0" width="100%" height="20" visibility="hidden" > 
     <method name="removeAll">
         <![CDATA[
             if($debug) Debug.write("main.lzx/_coferencemenu.removeAll(): ");

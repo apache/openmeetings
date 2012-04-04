@@ -1,5 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <theme>
+
+	<!-- Colors -->
+
+	<color name="mainBackgroundColor" value="0xEEF0EB" 
+				description="main background color" />
+
+	<color name="basebgcolorizer" value="0xBDC0DB" 
+				description="Color for background" />
+				
+	<color name="baseMousecolorizer" value="0xBDC0DB" 
+				description="Color Mouseover color for list items" />
+	
+	<color name="baseMouseOvercolorizer" value="0xBDC0DB" 
+				description="Color Mouseover color for list items" />	
+	
+	<color name="styleMenuBarBaseColor" value="0x000088" 
+				description="menu bar background color" />				
+	
+	<color name="mainBorderColor" value="0xCCCCCC" 
+				description="main border color" />
+				
+	<color name="secondBorderColor" value="0xE0E0E0" 
+				description="main border color" />	
+		
+	<color name="menuBackgroundColor" value="0xEFEFEF" 
+				description="main border color" />		
+	
+	<!-- Icons -->
 	
 	<resource name="icon_facebook_rsc_png" 
 				description="Icon for facebook button in login" 
@@ -26,7 +54,7 @@
 				license="APL Author sebawagner"
 				src="public/themes/basic-theme/general/cancel_icon.png" />
 
-	<resource name="edit_add_rsc" 
+	<resource name="add_rsc" 
 				description="Edit Add Icon" 
 				license="APL Author sebawagner"
 				src="public/themes/basic-theme/general/add.png" />

@@ -67,11 +67,11 @@
     
 </class>
 
-<class name="horizontalDropDownSpacer" x="4" height="1" bgcolor="0xCCCCCC">
+<class name="horizontalDropDownSpacer" x="4" height="1" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }">
 	<attribute name="isSpacer" value="true" type="boolean" />
 </class>
 
-<class name="baseDropDownMenuList" extends="view" bgcolor="0xCCCCCC">
+<class name="baseDropDownMenuList" extends="view" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }">
 		
 	<attribute name="list" value="null" />
 	
@@ -161,7 +161,7 @@
 	</handler>	
 	
 	<view name="_content" x="1" y="1" 
-			layout="axis:y;spacing:1" bgcolor="0xEFEFEF" />
+			layout="axis:y;spacing:1" bgcolor="$once{ canvas.getThemeColor('menuBackgroundColor') }" />
 		
 </class>
 
@@ -211,9 +211,9 @@
     <view width="${ parent.width-1 }" bgcolor="0xFFFFFF" opacity="0.4" height="$once{ parent.height - 2}" y="1"
         visibility="hidden" name="bgc"/>
         
-    <view width="${ parent.width-1 }" bgcolor="0xEFEFEF" height="$once{ parent.height }" 
+    <view width="${ parent.width-1 }" bgcolor="$once{ canvas.getThemeColor('menuBackgroundColor') }" height="$once{ parent.height }" 
         visibility="hidden" name="bga">
-        <view width="${ parent.width }" bgcolor="0xCCCCCC" height="1" />
+        <view width="${ parent.width }" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" height="1" />
     </view>
     
     <view name="_icon_down" x="${ parent.width-20 }" y="$once{ parent.down_y_inset }" 
@@ -241,7 +241,7 @@
 
 </class>
 
-<class name="mainNavi" extends="view" bgcolor="$once{ canvas.styleMenuBarBaseColor }" 
+<class name="mainNavi" extends="view" bgcolor="$once{ canvas.getThemeColor('styleMenuBarBaseColor') }" 
 	   width="${ canvas.width }" y="50" >
 
     <attribute name="naviObject" value="null" />

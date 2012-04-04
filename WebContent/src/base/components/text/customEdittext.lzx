@@ -22,8 +22,8 @@
 
 <class name="customEdittext" extends="inputtext" bgcolor="0xFFFFFF" fontsize="11" height="20" >
 	
-	<view name="v_border" height="1"       bgcolor="0xE0E0E0" width="$once{parent.width}" />
-    <view name="h_border" width="1"  y="1" bgcolor="0xE0E0E0" height="$once{parent.height -1}" />
+	<view name="v_border" height="1"       bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" width="$once{parent.width}" />
+    <view name="h_border" width="1"  y="1" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" height="$once{parent.height -1}" />
 	
 	<attribute name="labelid" type="number" setter="setLabelId(labelid)" />
 	

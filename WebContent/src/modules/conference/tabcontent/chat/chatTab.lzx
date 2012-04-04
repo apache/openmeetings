@@ -24,13 +24,14 @@
 Chat tabpane class. It contains chatOutput-class and catTabBottom-class.
 This is used in the conference.
 -->
-<class name="chatTab" extends="simpleBaseTabpane" bgcolor="0xEEF0EB" x="0">
+<class name="chatTab" extends="simpleBaseTabpane" bgcolor="$once{ canvas.getThemeColor('mainBackgroundColor') }" x="0">
 
     <!--
-    bgcolor="$once{ canvas.basebgcolorizer }" 
+    bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }" 
      -->
      
-	<view name="_chatoutputborder" x="4" height="${ parent.height-46 }" width="${ parent.width-4 }" bgcolor="0xE0E0E0">
+	<view name="_chatoutputborder" x="4" height="${ parent.height-46 }" width="${ parent.width-4 }" 
+				bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }">
 		
 		<chatOutput name="_chatoutput" x="1" y="1" >
 			<handler name="oninit">

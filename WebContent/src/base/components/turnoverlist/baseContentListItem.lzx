@@ -28,7 +28,7 @@
 	
 	<method name="select">
 		this.isselected = true;
-		this.setAttribute('bgcolor',canvas.baseMouseOvercolorizer);
+		this.setAttribute('bgcolor',canvas.getThemeColor('baseMouseOvercolorizer'));
 	</method>
 	
 	<method name="deselect">
@@ -42,7 +42,7 @@
 	
 	<handler name="onmouseover">
 		if (!this.isselected) {
-			this.setAttribute('bgcolor',canvas.baseMouseOvercolorizer);
+			this.setAttribute('bgcolor',canvas.getThemeColor('baseMouseOvercolorizer'));
 		}
 	</handler>
 	
@@ -50,7 +50,7 @@
 		if (!this.isselected) {
 			this.setAttribute('bgcolor',0xFFFFFF);
 		} else {
-			this.setAttribute('bgcolor',canvas.baseMouseOvercolorizer);
+			this.setAttribute('bgcolor',canvas.getThemeColor('baseMouseOvercolorizer'));
 		}
 	</handler>
 	

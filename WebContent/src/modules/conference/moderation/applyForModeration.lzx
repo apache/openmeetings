@@ -20,14 +20,14 @@
 -->
 <library>
 
-<class name="userItem" extends="view" bgcolor="$once{ canvas.basebgcolorizer }" width="$once{ parent.width }" height="20">
+<class name="userItem" extends="view" bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }" width="$once{ parent.width }" height="20">
 	<attribute name="streamid" value="0" type="string" />
 	<attribute name="username" value="" type="string" />
 	<attribute name="hasAnswered" value="false" type="boolean" />
 	<attribute name="answer" value="false" type="boolean" />
 	
 	<view name="inner" width="$once{ parent.width-2 }" height="$once{ parent.height-2 }" x="1" y="1"
-		onmouseover="this.setAttribute('bgcolor',canvas.baseMousecolorizer)"
+		onmouseover="this.setAttribute('bgcolor',canvas.getThemeColor('baseMousecolorizer'))"
 		onmouseout="this.setAttribute('bgcolor',0xFFFFFF)" bgcolor="0xFFFFFF">
 		<labelText text="$once{ parent.parent.streamid }" width="50" />
 		<labelText text="$once{ parent.parent.username }" x="50" width="300" />
@@ -137,7 +137,7 @@
         </handler>   
     </netRemoteCallHib>      
 	
-	<view name="userslist" y="60" x="4" height="140" clip="true" width="492" bgcolor="$once{ canvas.basebgcolorizer }" >
+	<view name="userslist" y="60" x="4" height="140" clip="true" width="492" bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }" >
 		<view name="userslist" y="1" x="1" height="138" clip="true" width="490" bgcolor="0xFFFFFF" >
 			<view name="userslist" layout="axis:y;spacing:2" width="$once{ parent.width }" />
 			<om_vscrollbar />

@@ -21,7 +21,7 @@
 <library>
 
 	
-<class name="roomAccessMessage" extends="view" bgcolor="$once{ canvas.basebgcolorizer }" 
+<class name="roomAccessMessage" extends="view" bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }" 
 	   width="$once{ parent.width-16 }" height="40" y="$once{ parent.height-62 }"
 	   visibility="hidden">
 	

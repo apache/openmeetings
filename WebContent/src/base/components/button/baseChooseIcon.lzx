@@ -27,11 +27,11 @@
 </resource>
 
 <class name="baseChooseIcon" extends="view" width="24" height="24" 
-	   bgcolor="$once{ canvas.basebgcolorizer }" >
+	   bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }" >
     <attribute name="resourceN" value="" type="string" />
     
     <view name="_bg" x="1" y="1" height="$once{ parent.height - 2 }"
-    	  width="$once{ parent.width - 2 }" bgcolor="$once{ canvas.baseMousecolorizer }" />
+    	  width="$once{ parent.width - 2 }" bgcolor="$once{ canvas.getThemeColor('baseMousecolorizer') }" />
     
     <image name="_icon" src="$once{ canvas.getThemeImage(parent.resourceN) }" 
     	  x="$once{ (parent.width-this.width) / 2 }"
@@ -46,14 +46,14 @@
     <attribute name="labelid" value="0" type="number" />
     <handler name="onmouseover">
     	this.isOut = false;
-    	this._bg.setAttribute("bgcolor",canvas.baseMouseOvercolorizer);
+    	this._bg.setAttribute("bgcolor",canvas.getThemeColor('baseMouseOvercolorizer'));
     	this._icon.setAttribute("x",this._icon.x-1);
     	this._icon.setAttribute("y",this._icon.y-1);
     	this._icon.setAttribute("width",this._icon.width+2);
     	this._icon.setAttribute("height",this._icon.height+2);
     </handler>
     <handler name="onmouseout">
-    	this._bg.setAttribute("bgcolor",canvas.baseMousecolorizer);
+    	this._bg.setAttribute("bgcolor",canvas.getThemeColor('baseMousecolorizer'));
     	if (this.initX == this._icon.x) {
     		return;
     	}

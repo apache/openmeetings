@@ -292,7 +292,7 @@
         Borders
     
     
-    <view name="_bg1" bgcolor="$once{ canvas.basebgcolorizer }" width="$once{ parent.width-10 }" 
+    <view name="_bg1" bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }" width="$once{ parent.width-10 }" 
           x="0" y="0" height="${ parent.height }" />
           
            
@@ -302,7 +302,7 @@
     --> 
                
     <view name="_border2" x="0" y="19" width="$once{ parent.width-10 }" 
-          height="1" bgcolor="0xE0E0E0" />     
+          height="1" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" />     
     
     <view name="_fileBar" layout="axis:x" x="0" y="0">
         <baseChooseIconFLVView labelid="703" height="20" width="19" 
@@ -319,7 +319,8 @@
                 parent.parent.getFLVExplorerByRoom.doCall();
             </handler>
         </baseChooseIconFLVView>
-        <view bgcolor="0xE0E0E0" height="20" width="1" />
+        <view bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" 
+        				height="20" width="1" />
     </view>
     
     <!--
@@ -348,7 +349,7 @@
                 this.onmouseout.sendEvent();
             </handler> 
         </baseChooseIconFLVView>
-        <view bgcolor="0xE0E0E0" height="20" width="1" />
+        <view bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" height="20" width="1" />
     </view>
     
     <!--
@@ -518,7 +519,7 @@
      -->
      
     <view name="_minimizeSidebar" x="$once{ parent.width - 10 }" width="10" 
-          bgcolor="$once{ canvas.baseMousecolorizer }" height="${ parent.height }">
+          bgcolor="$once{ canvas.getThemeColor('baseMousecolorizer') }" height="${ parent.height }">
         <handler name="onclick">
             parent.toggleStatus();
         </handler>
@@ -533,7 +534,7 @@
               stretches="both" resource="presenter_thumb_rsc" >
             <handler name="oninit">
                 <![CDATA[
-                    this.setTintRGB(canvas.basebgcolorizer,90);
+                    this.setTintRGB(canvas.getThemeColor('basebgcolorizer'),90);
                 ]]>
             </handler>
             <method name="setTintRGB" args="color, brightness">

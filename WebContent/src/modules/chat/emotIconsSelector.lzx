@@ -21,7 +21,7 @@
 <library>
 	
 <!--- view to select emoticons. size is 160x140 -->
-<class name="emotIconsSelector" extends="closableView" bgcolor="$once{ canvas.basebgcolorizer }" 
+<class name="emotIconsSelector" extends="closableView" bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }" 
     clickable="true" width="160" height="140" >
 
     <attribute name="btnRef" value="null" />
@@ -74,7 +74,7 @@
             </handler>   
         </netRemoteCallHib>    
 
-    <view bgcolor="$once{ canvas.baseMousecolorizer }" width="$once{ parent.width-2 }" 
+    <view bgcolor="$once{ canvas.getThemeColor('baseMousecolorizer') }" width="$once{ parent.width-2 }" 
     	  height="$once{ parent.height-2 }" x="1" y="1" />
     	  
     <labelText x="1" y="1" labelid="446" /><!-- 446:Emoticons -->

@@ -20,7 +20,7 @@
 -->
 <library>
 	
-<class name="simplebaseItemActivityList" extends="view" height="40" bgcolor="$once{ canvas.baseMouseOvercolorizer }">
+<class name="simplebaseItemActivityList" extends="view" height="40" bgcolor="$once{ canvas.getThemeColor('baseMouseOvercolorizer') }">
     
     <attribute name="message" value="" type="string" />
     
@@ -61,7 +61,7 @@
     
 </class>	
 	
-<class name="baseItemActivityList" extends="view" height="40" bgcolor="$once{ canvas.baseMouseOvercolorizer }">
+<class name="baseItemActivityList" extends="view" height="40" bgcolor="$once{ canvas.getThemeColor('baseMouseOvercolorizer') }">
 	
 	<attribute name="message" value="" type="string" />
 	
@@ -567,7 +567,7 @@
     	]]>
     </method>
     
-    <view name="_list" y="21" height="179" bgcolor="0xEEF0EB"
+    <view name="_list" y="21" height="179" bgcolor="$once{ canvas.getThemeColor('mainBackgroundColor') }"
     	  width="$once{ parent.width }" clip="true">
         
         <view name="_list">

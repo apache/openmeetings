@@ -246,7 +246,7 @@
 	
 	
 	<view height="$once{ parent.height }" width="1" x="154" 
-		  bgcolor="0xCCCCCC"></view>
+		  bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }"></view>
 	
 	<labelText name="_labelPrivateMessages" x="160" labelid="1206" fontstyle="bold" />
 	

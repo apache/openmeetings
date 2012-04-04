@@ -23,7 +23,7 @@
 
 <class name="presentationFilesList" extends="view" 
        x="0" y="40" height="${ parent.height-40 }" 
-        width="${ parent.width }" bgcolor="$once{ canvas.basebgcolorizer }">
+        width="${ parent.width }" bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }">
     
     <event name="onclose" />
     
@@ -75,7 +75,7 @@
                 parent.parent.onclose.sendEvent();
             </handler>
         </baseChooseIconView>
-        <view bgcolor="$once{ canvas.basebgcolorizer }" height="20" width="1" />
+        <view bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }" height="20" width="1" />
     </view>
     
 </class>

@@ -33,7 +33,7 @@
     </handler>
     
     <handler name="onmousedown">
-        this._bg.setAttribute("bgcolor",canvas.basebgcolorizer);
+        this._bg.setAttribute("bgcolor",canvas.getThemeColor('basebgcolorizer'));
         this._bg.setAttribute("visibility","visible");
     </handler>
     

@@ -53,7 +53,7 @@
     </method>
     
     <view name="_savecontentbar" layout="axis:x;spacing:2;inset:2" x="2" height="28" width="$once{ parent.width }"
-        bgcolor="$once{ canvas.baseMousecolorizer }">
+        bgcolor="$once{ canvas.getThemeColor('baseMousecolorizer') }">
 
         <!-- 362:Add new language -->
         <baseChooseIcon resourceN="edit_add_rsc" labelid="362" y="2" 

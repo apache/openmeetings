@@ -21,7 +21,7 @@
 <library>
 
 <class name="basePanel" extends="baseBoundingBorderView" 
-	   bgcolor="$once{ canvas.basebgcolorizer }" >
+	   bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }" >
 	
 	<!--- if this Box should be closeable -->
 	<attribute name="closable" value="false" type="boolean" />
@@ -41,8 +41,7 @@
             resource="presenter_thumb_rsc" >
             <handler name="oninit">
             	<![CDATA[
-            		//this.setTintRGB(canvas.basebgcolorizer,90);
-            		this.setColor(canvas.basebgcolorizer);
+            		this.setColor(canvas.getThemeColor('basebgcolorizer'));
             	]]>
             </handler>
 			<method name="setTintRGB" args="color, brightness">

@@ -21,7 +21,7 @@
 <library>
 
 <class name="baseLeftPanel" extends="baseBoundingBorderView" 
-	   bgcolor="$once{ canvas.basebgcolorizer }" hasshadow="false">
+	   bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }" hasshadow="false">
 	
 	<!--- if this Box should be closeable -->
 	<attribute name="closable" value="false" type="boolean" />
@@ -37,16 +37,11 @@
 	
 	<!-- basebgcolorizer -->
 	
-	<view name="_bgItem" x="1" y="1" bgcolor="0xEEF0EB" 
+	<view name="_bgItem" x="1" y="1" bgcolor="$once{ canvas.getThemeColor('mainBackgroundColor') }" 
 			width="$once{ this.parent.width-2 }" height="$once{ this.parent.height-2 }" />
 	
 	<view x="1" y="1" width="$once{ this.parent.width-2 }" height="17" 
-		  bgcolor="$once{ canvas.baseMousecolorizer }">
-		<handler name="oninit">
-        	<![CDATA[
-        		//this.setColor(canvas.baseMousecolorizer);
-        	]]>
-        </handler> 
+		  bgcolor="$once{ canvas.getThemeColor('baseMousecolorizer') }">
         <handler name="onmousedown">
         	parent.onmousedown.sendEvent(parent);
         </handler>

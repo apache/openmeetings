@@ -21,7 +21,7 @@
 <library>
 
 	<class name="blueButton" extends="basecomponent" width="200" height="18" 
-	       bgcolor="0xE0E0E0" focusable="true">
+	       bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" focusable="true">
 	    
 	    <attribute name="resourceItem" value="" type="string" />
 	    
@@ -34,7 +34,7 @@
 		<method name="setText" args="txt">
 			this.setAttribute('text',txt);
 		</method>
-		<view name="_bg" x="1" y="1" bgcolor="0xEEF0EB"
+		<view name="_bg" x="1" y="1" bgcolor="$once{ canvas.getThemeColor('mainBackgroundColor') }"
 				width="${ parent.width-2 }" height="${ parent.height-2 }" />
 		<view name="_bgOver" x="1" y="1" bgcolor="0xFFFFFF" opacity="0.5" visibility="hidden"
 				width="${ parent.width-2 }" height="${ parent.height-2 }" />

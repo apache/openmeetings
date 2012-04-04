@@ -31,7 +31,7 @@
 </class>
 
 <class name="participantList" extends="view"  width="$once{ parent.width }" height="${ parent.height-22 }" 
-       bgcolor="0xE0E0E0" y="22">
+       bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" y="22">
     <!-- clip="true" -->
     
     <attribute name="sortType" value="alphabetical" type="string" />    
@@ -180,47 +180,47 @@
     <view name="_miniIcons" x="112" y="0" height="18">
         
         <view width="1" height="${ parent.parent.height }" x="0"
-            bgcolor="0xE0E0E0" />
+            bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" />
         <view name="_icon_mod" x="2" y="3" resource="participants_isMod_rsc" onclick="" showhandcursor="false">
             <labelTooltip labelid="608" />
         </view>
         
         <view width="1" height="${ parent.parent.height }" x="20"
-            bgcolor="0xE0E0E0" />
+            bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" />
         <view name="_icon_draw" x="22" y="3" resource="participants_allow_drawing_rsc" onclick="" showhandcursor="false">
             <labelTooltip labelid="609" />
         </view>
         
         <view width="1" height="${ parent.parent.height }" x="40"
-            bgcolor="0xE0E0E0" />
+            bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" />
         <view name="_icon_share" x="42" y="3" resource="screen_allow_rsc" onclick="" showhandcursor="false">
             <labelTooltip labelid="1073" />
         </view>
         
         <view width="1" height="${ parent.parent.height }" x="60"
-            bgcolor="0xE0E0E0" />
+            bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" />
         <view name="_icon_remote" x="62" y="3" resource="remote_allow_rsc" onclick="" showhandcursor="false">
             <labelTooltip labelid="1084" />
         </view>
     
         <view width="1" height="${ parent.parent.height }" x="80"
-            bgcolor="0xE0E0E0" />
+            bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" />
         <view name="_icon_exclusive_audio" x="82" y="3" resource="participants_exclusive_audio_rsc" onclick="" showhandcursor="false">
             <labelTooltip labelid="1423" />
         </view>
         
         <view width="1" height="${ parent.parent.height }" x="100"
-            bgcolor="0xE0E0E0" />
+            bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" />
         <view name="_icon_av_allow" x="102" y="3" resource="av_allow_rsc" onclick="" showhandcursor="false">
             <labelTooltip labelid="610" />
         </view>
         
         <view width="1" height="${ parent.parent.height }" x="142"
-            bgcolor="0xE0E0E0" />
+            bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" />
     </view>
     
     <view name="headerDivisionLine" width="${ parent.width }" 
-          bgcolor="0xE0E0E0" height="1" y="20" />
+          bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" height="1" y="20" />
     
 </class>
 

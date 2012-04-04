@@ -82,23 +82,23 @@
         this._text.setAttribute("fgcolor","0xBBBBBB");
     </method>       
     
-    <view name="_selectedView" bgcolor="0xEFEFEF" width="$once{ parent.width }" 
+    <view name="_selectedView" bgcolor="$once{ canvas.getThemeColor('menuBackgroundColor') }" width="$once{ parent.width }" 
             height="$once{ parent.height }" visibility="visible">
         <view name="borderRight" width="1" x="0"
-        			bgcolor="0xCCCCCC" height="$once{ parent.height }" />  
-        <view name="borderTop" width="$once{ parent.width }" bgcolor="0xCCCCCC" height="1" />
+        			bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" height="$once{ parent.height }" />  
+        <view name="borderTop" width="$once{ parent.width }" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" height="1" />
         <view name="borderLeft" width="1" x="$once{ parent.width-1 }"
-        			bgcolor="0xCCCCCC" height="$once{ parent.height }" />  
+        			bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" height="$once{ parent.height }" />  
     </view>
     
     <view name="_deselectedView" bgcolor="0xFAFAFA" 
     		width="$once{ parent.width }" y="2"
             height="$once{ parent.height-3 }" visibility="visible">
         <view name="borderRight" width="1" x="0"
-        			bgcolor="0xCCCCCC" height="$once{ parent.height }" />  
-        <view name="borderTop" width="$once{ parent.width }" bgcolor="0xCCCCCC" height="1" />
+        			bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" height="$once{ parent.height }" />  
+        <view name="borderTop" width="$once{ parent.width }" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" height="1" />
         <view name="borderLeft" width="1" x="$once{ parent.width-1 }"
-        			bgcolor="0xCCCCCC" height="$once{ parent.height }" />  
+        			bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" height="$once{ parent.height }" />  
     </view>       
           
     <view name="_bg2" bgcolor="0xFFFFFF" width="$once{ parent.width-2 }" y="3" x="1"

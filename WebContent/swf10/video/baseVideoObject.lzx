@@ -402,7 +402,7 @@
     </method>   
 
 	<view name="_innertop" width="${parent.width-2 }" 
-          height="18" x="1" y="1" bgcolor="$once{ canvas.basebgcolorizer }">
+          height="18" x="1" y="1" bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }">
         <text text="${ parent.parent.chatpartnername }" 
               onmousedown="parent.parent._startDragState(this)" 
               onmouseup="parent.parent._removeDragState(this)"
@@ -420,7 +420,7 @@
     </view>
     
     <view name="_innerbottom" width="${parent.width - 2}" x="1" y="${parent.height - 19}"
-          height="18" bgcolor="$once{ canvas.basebgcolorizer }">
+          height="18" bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }">
         <text text="${canvas.getLabelName(1434)}"
               width="${ parent.width-2 }" fgcolor="white"
               name="title"
@@ -453,7 +453,7 @@
             //if ($debug) Debug.write("setTint");
             //TODO: Fix this, does not work at the moment
             //canvas.protocol + '://code.google.com/p/openmeetings/issues/detail?id=470
-            this.setColor(canvas.baseMousecolorizer);
+            this.setColor(canvas.getThemeColor('baseMousecolorizer'));
         </handler>      
     </view>
     
@@ -708,8 +708,8 @@
             this._toolbar._mute._itemRsc.setAttribute('frame',2);
             if (isMicrophonesRoom) {
                 var label = canvas.getLabelName(1435);
-                this._innertop.setAttribute('bgcolor', canvas.basebgcolorizer);
-                this._innerbottom.setAttribute('bgcolor', canvas.basebgcolorizer);
+                this._innertop.setAttribute('bgcolor', canvas.getThemeColor('basebgcolorizer'));
+                this._innerbottom.setAttribute('bgcolor', canvas.getThemeColor('basebgcolorizer'));
                 this._innerbottom.title.setAttribute('text', label);
             }
         } else {

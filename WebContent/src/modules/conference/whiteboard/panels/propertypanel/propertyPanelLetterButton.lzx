@@ -22,7 +22,7 @@
     
 <class name="propertyPanelLetterButton" extends="view" resource="_button_rsc_letter_rsc"  
 	   x="312" y="24" height="23" width="24" 
-	bgcolor="$once{ canvas.baseMousecolorizer }" >
+	bgcolor="$once{ canvas.getThemeColor('baseMousecolorizer') }" >
 	<attribute name="itemResourceName" value="" type="string" />
 	<attribute name="currentVal" value="false" type="boolean" />
 	
@@ -50,9 +50,9 @@
     </method>
     <method name="updateByVal">
 		if (this.currentVal){
-    		this.setAttribute('bgcolor',canvas.basebgcolorizer);
+    		this.setAttribute('bgcolor',canvas.getThemeColor('basebgcolorizer'));
     	} else {
-    		this.setAttribute('bgcolor',canvas.baseMousecolorizer);
+    		this.setAttribute('bgcolor',canvas.getThemeColor('baseMousecolorizer'));
     	}    	
     </method>
     <view x="2" y="2" resource="$once{ parent.itemResourceName }" />

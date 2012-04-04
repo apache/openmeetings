@@ -99,7 +99,7 @@
 					</handler>
 					
 					<handler name="onmouseover">
-						this.setAttribute("bgcolor",0xE0E0E0);
+						this.setAttribute("bgcolor",canvas.getThemeColor('secondBorderColor'));
 					</handler>
 					
 					<handler name="onmouseout">

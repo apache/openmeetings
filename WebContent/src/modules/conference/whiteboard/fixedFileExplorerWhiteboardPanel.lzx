@@ -354,7 +354,7 @@
     </view>
     
     <view width="${ parent.width }" height="1" y="41"
-    	  bgcolor="$once{ canvas.basebgcolorizer }">
+    	  bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }">
     	<attribute name="whiteboardId" value="-1" type="number" />
     </view>
     

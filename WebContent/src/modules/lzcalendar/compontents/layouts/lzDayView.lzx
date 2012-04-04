@@ -408,7 +408,7 @@
 								<text name="_title" x="2" datapath="title" text="$path{ 'text()' }" />
 								
 								
-								<view width="20" height="4" valign="bottom" align="center" bgcolor="0xCCCCCC">
+								<view width="20" height="4" valign="bottom" align="center" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }">
 									<handler name="onmouseover">
 										lz.Cursor.setCursorGlobal('calendar_change_event_height_rsc');
 									</handler>
