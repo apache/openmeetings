@@ -25,7 +25,8 @@
 		<conf name="openmeetings.axis2" extends="openmeetings.ext" description="Axis required libraries with dependencies" />
 		<conf name="anakia" description="Openmeetings required libraries" />
 		<conf name="junit" description="Unit testing dependencies" />
-		<conf name="rat" description="Apache Rat dependencies" />
+		<conf name="cmdadmin" description="Command Line Admin dependencies" />
+		<conf name="rat" extends="cmdadmin" description="Apache Rat dependencies" />
 		<conf name="dtd" description="Dtd-generator dependencies" />
 		<conf name="svntask" description="Svn task dependencies" />
 		<conf name="openlaszlo" description="Openlaszlo dependencies" />
@@ -255,9 +256,6 @@
 		<dependency org="org.apache.rat" name="apache-rat-tasks" rev="0.8" conf="rat->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="commons-cli" name="commons-cli" rev="1.2" conf="rat->*" transitive="false">
-			<include type="jar" />
-		</dependency>
 		<!--  END OF RAT -->
 		
 		<!--  START OF DTD -->
@@ -285,6 +283,11 @@
 		</dependency>
 		<!--  END OF openlaszlo -->
 		
+		<!--  START OF Command Line Admin -->
+		<dependency org="commons-cli" name="commons-cli" rev="1.2" conf="cmdadmin->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<!--  END OF Command Line Admin -->
 	</dependencies>
 </ivy-module>
 

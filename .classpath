@@ -132,5 +132,6 @@
 	<classpathentry kind="lib" path="build/lib/dtd-generator/trang-jar-20091111.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/axis2-kernel-jar-1.7.0-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/axiom-api-bundle-1.2.13-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="build/red5/dist/commons-cli-jar-1.2.jar"/>
 	<classpathentry kind="output" path="build/classes/eclipse"/>
 </classpath>

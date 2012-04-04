@@ -399,7 +399,7 @@
 
 	<target name="compile" depends="compile.only, prepare" />
 
-	<target name="compile.only" depends="clean.classes, -retrieve-mainlibs,-retrieve-om,-retrieve-dtd-generator,-retrieve-junit,resources">
+	<target name="compile.only" depends="clean.classes, -retrieve-mainlibs,-retrieve-om,-retrieve-dtd-generator,-retrieve-junit, -retrieve-cmdadmin, resources">
 		<echo message="Compile main to ${main.out.dir}"/>
 		<javac debug="on" debuglevel="lines,vars,source" destdir="${main.out.dir}">
 			<src path="${main.src.dir}" />
@@ -668,10 +668,11 @@
 	<target name="-availability-check" unless="red5.installed" description="Check which libraries need to be retrieved" depends="prepare.mkdir">
 		<available classpathref="compile.classpath" classname="javax.persistence.spi.PersistenceProvider" property="mainlib.installed"/>
 		<available classpathref="compile.classpath" classname="org.apache.axis2.Version" property="om.installed"/>
-		<available classpathref="anakia.classpath" classname="org.apache.oro.text.GlobCompiler" property="anakia.installed"/>
 		<available classpathref="compile.classpath" classname="org.junit.Test" property="junit.installed"/>
-		<available classpathref="rat.classpath" classname="org.apache.rat.Report" property="rat.installed"/>
 		<available classpathref="compile.classpath" classname="com.thaiopensource.relaxng.translate.Driver" property="dtd-generator.installed"/>
+		<available classpathref="compile.classpath" classname="org.apache.commons.cli.CommandLine" property="cmdadmin.installed"/>
+		<available classpathref="anakia.classpath" classname="org.apache.oro.text.GlobCompiler" property="anakia.installed"/>
+		<available classpathref="rat.classpath" classname="org.apache.rat.Report" property="rat.installed"/>
 		<available classpathref="svntask.classpath" classname="org.tmatesoft.svn.core.SVNCommitInfo" property="svntask.installed"/>
 		<available file="${laszlo.home}/WEB-INF/lib" type="dir" property="laszlo.installed"/>
 		<available file="${red5.lib}/red5.sh" type="file" property="red5.installed"/>
@@ -817,6 +818,13 @@
 			<param name="ivy.lib.location" value="${laszlo.home}"/>
 		</antcall>
 	</target>
+	<!-- Check for Command line admin depandencies -->
+	<target name="-retrieve-cmdadmin" unless="cmdadmin.installed" description="Retrieves the libraries if needed" depends="-availability-check">
+		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
+			<param name="ivy.conf.name" value="cmdadmin"/>
+			<param name="ivy.lib.location" value="${red5.lib}"/>
+		</antcall>
+	</target>
 	
 	<!-- Clean targets -->
 	<!-- Remove classes directory for clean build -->
@@ -848,6 +856,7 @@
 		<antcall target="-retrieve-dtd-generator" inheritAll="true" inheritRefs="true"/>
 		<antcall target="-retrieve-tools.jar" inheritAll="true" inheritRefs="true"/>
 		<antcall target="-retrieve-openlaszlo" inheritAll="true" inheritRefs="true"/>
+		<antcall target="-retrieve-cmdadmin" inheritAll="true" inheritRefs="true"/>
 		<echo message="db.provider == ${db.provider}"/>
 		<copy file="src/META-INF/${db.provider}_persistence.xml" tofile="src/META-INF/persistence.xml" overwrite="true"/>
 	</target>

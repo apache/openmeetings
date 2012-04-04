@@ -1,6 +1,7 @@
 #!/bin/bash
+export RED5DIR=$(cd $(dirname "$0"); pwd) 
 
-export CLASSPATH=./*:conf:lib/*:webapps/openmeetings/WEB-INF/lib/*:webapps/openmeetings/WEB-INF:webapps/openmeetings/WEB-INF/classes
+export CLASSPATH=./*:conf:lib/*:$RED5DIR/webapps/openmeetings/WEB-INF/lib/*:$RED5DIR/webapps/openmeetings/WEB-INF:$RED5DIR/webapps/openmeetings/WEB-INF/classes
 
-java -cp $CLASSPATH org.openmeetings.app.Admin $*
+java -cp "$CLASSPATH" "-Dred5.home=$RED5DIR" org.openmeetings.app.Admin $*
 
