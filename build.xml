@@ -18,13 +18,12 @@
 	xmlns="antlib:org.apache.tools.ant"
 	xmlns:ivy="antlib:org.apache.ivy.ant"
 	>
+	<loadproperties srcFile="build.properties"/>
 
 	<property name="project.distname" value="openmeetings" />
-	<property name="project.version" value="2.0.0" />
-	<property name="project.status" value="SNAPSHOT" />
 	<property name="jar.suffix" value="${project.version}-${project.status}" />
 	<property environment="env" />
-
+	
 	<property name="main.src.dir" value="${basedir}/src" />
 
 	<property name="dist.dir" value="dist" />
@@ -41,7 +40,6 @@
 	<property name="dtd-generator.lib.dir" value="${project.lib.dir}/dtd-generator" />
 	<property name="svntask.lib.dir" value="${project.lib.dir}/svntask" />
 	
-	<property name="red5.revision" value="4315" />
 	<property name="red5.server.dir" value="${build.base.dir}/red5" />
 	<property name="red5.lib" value="${red5.server.dir}/dist" />
 	<property name="red5.server.lib" value="${red5.lib}/lib" />
@@ -112,10 +110,17 @@
 		</tstamp>
 		<property name="archive.file.name" value="${dist.dir}/${project.distname}-${project.version}.r${svn.info.rev}-${build.time}" />
 		
+		<copy file="build.properties" tofile="${build.base.dir}/build.properties" overwrite="true"/>
+		<echo file="${build.base.dir}/build.properties" append="true"
+			>svn.info.rev=${svn.info.rev}${line.separator}</echo>
 		<tar longfile="gnu" compression="gzip" destfile="${archive.file.name}-src.tar.gz">
 			<tarfileset dir="${basedir}">
 				<exclude name="build/**" />
 				<exclude name="dist/**" />
+				<exclude name="build.properties" />
+			</tarfileset>
+			<tarfileset dir="${build.base.dir}">
+				<include name="build.properties" />
 			</tarfileset>
 		</tar>
 		<tar longfile="gnu" compression="gzip" destfile="${archive.file.name}.tar.gz">
@@ -444,7 +449,7 @@
 		</typedef>
 		<svnSetting svnkit="false" javahl="false" id="svn.settings" /> <!-- native svn in the path-->
 	</target>
-	<target name="current_revision" depends="-ant-task">
+	<target name="current_revision" depends="-ant-task" unless="svn.info.rev">
 		<svn refid="svn.settings">
 			<info target="."/>
 		</svn>
