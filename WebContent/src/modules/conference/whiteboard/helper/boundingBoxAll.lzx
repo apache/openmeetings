@@ -410,26 +410,8 @@
 	    <handler name="onmouseout">
 	        lz.Cursor.unlock();
 	    </handler>	
-		<!--
-		<labelTooltip labelid="252" />
-		 -->
 	</view>
 	
-    <!--
-	<view resource="_boundingBoxPointer" x="${ parent.width/2-this.width/2 }" y="${ parent.height/2-this.height/2 }"
-		onmousedown="parent._applyDragstateFromThis()" onmouseup="parent._removeDragstateFromThis()"
-        onmouseover="this.parent.applyScrollbarToObject()" onmouseout="this.parent.removeScrollbarToObject()">		
-        <handler name="oninit">
-            var newMenu = new LzContextMenu();
-            newMenu.hideBuiltInItems();
-            var item1 = newMenu.makeMenuItem('remove Item', new LzDelegate(this.parent, "__LZRemoveItem"));
-            newMenu.addItem(item1);
-            this.setContextMenu(newMenu);       
-        </handler>               	
-		<labelTooltip labelid="251" />
-	</view>    
-     --> 
-    
 	<view resource="deleteIcon" y="2"  width="16" height="16"
 					x="${ parent.width-this.width-parent.innerInsetScrollbars-2 }" >
 		<handler name="onclick">
@@ -449,54 +431,6 @@
 		<labelTooltip labelid="80" />
 	</view>	    
     
-    <!--
-    <view name="_inner" y="22" width="${ parent.width }"
-        height="${ parent.height-22 }" visible="false">    
-        <view name="_inner">
-            
-            <attribute name="timeisInited" value="false" type="boolean" />
-            <attribute name="sendObjectDel" value="null" />
-            
-            <handler name="oninit">
-                if (this.parent.parent.objRef.typeOfObject=='swf') {
-                    this.sendObjectDel = new LzDelegate( this, "sendObject" );
-                }
-            </handler>
-            <handler name="onx" args="x">
-                if (this.parent.parent.objRef.typeOfObject=='swf'){
-                    this.parent.parent.objRef._swfView.setAttribute('x',x);
-                    if (!this.timeisInited){
-                        this.timeisInited=true;
-                        lz.Timer.addTimer( this.sendObjectDel, 250 );
-                    } else {
-                        lz.Timer.resetTimer( this.sendObjectDel, 250 );
-                    }
-                }
-            </handler>
-            <handler name="ony" args="y">
-                if (this.parent.parent.objRef.typeOfObject=='swf'){
-                    this.parent.parent.objRef._swfView.setAttribute('y',y);
-                    if (!this.timeisInited){
-                        this.timeisInited=true;
-                        lz.Timer.addTimer( this.sendObjectDel, 250 );
-                    } else {
-                        lz.Timer.resetTimer( this.sendObjectDel, 250 );
-                    }
-                }
-            </handler>        
-            
-            <method name="sendObject" args="itemRef">
-                //Debug.write("sendObject");
-                this.parent.parent.whiteboardRef.sendCurrentSWFObject(this.parent.parent.objRef);
-                this.timeisInited=false;
-            </method>    
-            
-        </view>
-        <om_vscrollbar name="_scrollstv" /> 
-        <om_hscrollbar name="_scrollsth" />     
-    </view>
-     -->
-    
     <view resource="_boundingBoxPointerTL" x="0" y="0" />
     <view resource="_boundingBoxPointerTR" x="${ parent.width-this.width }" y="0" />
     <view name="_gripperResize" visibility="visible"
@@ -513,7 +447,6 @@
     <view name="_gripperNoResize" visibility="hidden" 
         resource="_boundingBoxPointerURNoGripper" x="${ parent.width-this.width }" y="${ parent.height-this.height }" />
     <view resource="_boundingBoxPointerUL" x="0" y="${ parent.height-this.height }" />
-    
     
 </class>
 

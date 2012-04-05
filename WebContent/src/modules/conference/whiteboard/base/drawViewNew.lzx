@@ -20,27 +20,6 @@
 -->
 <library>
 
-<class name="drawArrowWhiteBoard" resource="drawarrow_rsc" >
-	
-	<!-- Not needed anymore, use LzView.setColor instead
-	<method name="setTint" args="color, brightness">
-	    <![CDATA[
-	    if (color != "" && color != null){
-	        if (brightness == null) { brightness = 0; }
-	        var rgb = color;
-	        var red=(rgb >> 16) & 0xFF;
-	        var green=(rgb >> 8) & 0xFF;
-	        var blue=rgb & 0xFF;
-
-	        this.setColorTransform( { ra : red, ga : green, ba : blue,
-	                            		rb : 0, gb : 0, bb : 100 } );
-	    }
-	    ]]>
-	</method>
-	 -->
-	 
-</class>
-
 <class name="drawViewInner" extends="drawview" x="0" y="0" >
 	
 </class>
