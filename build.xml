@@ -160,10 +160,6 @@
 	<target name="dist-debug" description="binary distribution of OpenMeetings"
 		depends="clean, jar, compile.laszlo.main.debug, compile.laszlo.main.debug.as3, signWebStartJars, -copy-libraries"/>
 
-	<condition property="db.provider" value="${db}" else="derby">
-		<isset property="db" />
-	</condition>
-
 	<!-- Check timestamp on files -->
 	<target name="prepare" depends="prepare.mkdir">
 		<copy todir="${red5.root}" filtering="true">
@@ -195,8 +191,8 @@
 				<exclude name="services.xml" />
 			</fileset>
 		</copy>
-		<echo message="db.provider == ${db.provider}"/>
-		<copy file="src/META-INF/${db.provider}_persistence.xml" tofile="${dist.persistence.dir}/persistence.xml" overwrite="true"/>
+		<echo message="db.provider == ${db}"/>
+		<copy file="src/META-INF/${db}_persistence.xml" tofile="${dist.persistence.dir}/persistence.xml" overwrite="true"/>
 
 		<!-- add language files from .war version -->
 		<copy todir="${dist.webapps.dir}/languages">
@@ -433,7 +429,7 @@
 		<!-- invoke the enhancer -->
 		<openjpac>
 			<classpath refid="jpa.enhancement.classpath" />
-			<config propertiesFile="${dist.persistence.dir}/${db.provider}_persistence.xml" />
+			<config propertiesFile="${dist.persistence.dir}/${db}_persistence.xml" />
 		</openjpac>
 		<echo message="Enhancing complete." />
 	</target>
@@ -857,7 +853,7 @@
 		<antcall target="-retrieve-tools.jar" inheritAll="true" inheritRefs="true"/>
 		<antcall target="-retrieve-openlaszlo" inheritAll="true" inheritRefs="true"/>
 		<antcall target="-retrieve-cmdadmin" inheritAll="true" inheritRefs="true"/>
-		<echo message="db.provider == ${db.provider}"/>
-		<copy file="src/META-INF/${db.provider}_persistence.xml" tofile="src/META-INF/persistence.xml" overwrite="true"/>
+		<echo message="db.provider == ${db}"/>
+		<copy file="src/META-INF/${db}_persistence.xml" tofile="src/META-INF/persistence.xml" overwrite="true"/>
 	</target>
 </project>
