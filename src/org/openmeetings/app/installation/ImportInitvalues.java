@@ -553,6 +553,14 @@ public class ImportInitvalues {
 						null,
 						"The path to JOD library (http://code.google.com/p/jodconverter), configure the path to point to the lib directory of JOD that contains also the jodconverter-core-version.jar");
 
+		// system-wide ldap params
+		cfgManagement.addConfByKey(
+						3, 
+						"ldap_default_id", 
+						"0", 
+						null,
+						"Ldap domain selected by default in the login screen");
+		
 	}
 
 	public void loadDefaultRooms(boolean createRooms) {

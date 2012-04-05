@@ -34,11 +34,6 @@
         if (this.childObj!=null) this.childObj.close();
     </handler>
     
-    <handler name="onconstruct">
-        var g = canvas.getUserData();
-    	canvas.setColorStyle(g["usercolor"]);
-    </handler>
-    
     <handler name="oninit">
     	canvas.thishib.setDefaultUserLanguage();
     	
@@ -142,6 +137,7 @@
                         parent.selectItemAt(0);
                     }
                     
+                    parent.parent.getLoginOptions.doCall();
                 ]]>
             </handler>  
         </netRemoteCallHib>         	 
@@ -350,9 +346,6 @@
     </netRemoteCallHib>
     
     <netRemoteCallHib name="getLoginOptions" funcname="xmlcrm.getLoginOptions" remotecontext="$once{ canvas.thishib }" >      
-        <handler name="oninit">
-            this.doCall();
-        </handler> 
         <handler name="ondata" args="value">
             //The onResult-Handler will be called be the rtmpconnection
             //Debug.write("allowFrontendRegister: ",value);
@@ -361,6 +354,9 @@
             }
             if (value[1].conf_value==1){
                 parent._facebook.setAttribute('visible',true);
+            }
+            if (value[5].conf_value > 0){
+                parent.domain.selectItemAt(value[5].conf_value);
             }
             parent.user_login_minimum_length = Number(value[2].conf_value);
             parent.user_pass_minimum_length = Number(value[3].conf_value);

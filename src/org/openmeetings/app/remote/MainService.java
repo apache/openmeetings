@@ -782,7 +782,7 @@ public class MainService implements IPendingServiceCallback {
 			cList.add(cfgManagement.getConfKey(3, "user.login.minimum.length"));
 			cList.add(cfgManagement.getConfKey(3, "user.pass.minimum.length"));
 			cList.add(cfgManagement.getConfKey(3, "user.pass.minimum.length"));
-			
+			cList.add(cfgManagement.getConfKey(3, "ldap_default_id"));
 
 			return cList;
 		} catch (Exception err) {
