@@ -137,7 +137,7 @@
 		opacity="0.3" bgcolor="0xFFFFFF">
 	</view>
 	
-	<text multiline="true" x="180" width="$once{ parent.width - 292 }" fontsize="11" selectable="true" name="multi" >
+	<text multiline="true" x="180" width="$once{ parent.width - 306 }" fontsize="11" selectable="true" name="multi" >
 		<handler name="oninit">
 			<![CDATA[
 				
