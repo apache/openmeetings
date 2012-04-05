@@ -139,7 +139,7 @@ public class BackupExport {
 		if (orgList != null) {
 			Document doc = this.createOrgDocument(orgList);
 
-			String orgListXML = backup_dir + "organizations.xml";
+			File orgListXML = new File(backup_dir, "organizations.xml");
 
 			FileOutputStream fos = new FileOutputStream(orgListXML);
 
@@ -157,7 +157,7 @@ public class BackupExport {
 
 			Document doc = this.createDocument(uList);
 
-			String userListXML = backup_dir + "users.xml";
+			File userListXML = new File(backup_dir, "users.xml");
 
 			FileOutputStream fos = new FileOutputStream(userListXML);
 
@@ -172,7 +172,7 @@ public class BackupExport {
 		if (roomList != null) {
 			Document doc = this.createRoomsDocument(roomList);
 
-			String roomListXML = backup_dir + "rooms.xml";
+			File roomListXML = new File(backup_dir, "rooms.xml");
 
 			FileOutputStream fos = new FileOutputStream(roomListXML);
 
@@ -188,7 +188,7 @@ public class BackupExport {
 		if (roomOrgList != null) {
 			Document doc = this.createOrgRoomsDocument(roomOrgList);
 
-			String roomListXML = backup_dir + "rooms_organisation.xml";
+			File roomListXML = new File(backup_dir, "rooms_organisation.xml");
 
 			FileOutputStream fos = new FileOutputStream(roomListXML);
 
@@ -203,7 +203,7 @@ public class BackupExport {
 		if (aList != null) {
 			Document doc = this.createAppointementDocument(aList);
 
-			String aListXML = backup_dir + "appointements.xml";
+			File aListXML = new File(backup_dir, "appointements.xml");
 
 			FileOutputStream fos = new FileOutputStream(aListXML);
 
@@ -219,7 +219,7 @@ public class BackupExport {
 		if (membersList != null) {
 			Document doc = this.createMeetingMemberDocument(membersList);
 
-			String aListXML = backup_dir + "meetingmembers.xml";
+			File aListXML = new File(backup_dir, "meetingmembers.xml");
 
 			FileOutputStream fos = new FileOutputStream(aListXML);
 
@@ -235,7 +235,7 @@ public class BackupExport {
 		if (ldapConfigList != null) {
 			Document doc = this.createLdapConfigDocument(ldapConfigList);
 
-			String aListXML = backup_dir + "ldapconfigs.xml";
+			File aListXML = new File(backup_dir, "ldapconfigs.xml");
 
 			FileOutputStream fos = new FileOutputStream(aListXML);
 
@@ -251,7 +251,7 @@ public class BackupExport {
 		if (privateMessages != null) {
 			Document doc = this.createPrivateMessagesDocument(privateMessages);
 
-			String aListXML = backup_dir + "privateMessages.xml";
+			File aListXML = new File(backup_dir, "privateMessages.xml");
 
 			FileOutputStream fos = new FileOutputStream(aListXML);
 
@@ -268,7 +268,7 @@ public class BackupExport {
 			Document doc = this
 					.createPrivateMessageFolderDocument(privateMessageFolders);
 
-			String aListXML = backup_dir + "privateMessageFolder.xml";
+			File aListXML = new File(backup_dir, "privateMessageFolder.xml");
 
 			FileOutputStream fos = new FileOutputStream(aListXML);
 
@@ -283,7 +283,7 @@ public class BackupExport {
 		if (privateMessageFolders != null) {
 			Document doc = this.createUserContactsDocument(userContacts);
 
-			String aListXML = backup_dir + "userContacts.xml";
+			File aListXML = new File(backup_dir, "userContacts.xml");
 
 			FileOutputStream fos = new FileOutputStream(aListXML);
 
@@ -300,7 +300,7 @@ public class BackupExport {
 			Document doc = this
 					.createFileExplorerItemDocument(fileExplorerList);
 
-			String aListXML = backup_dir + "fileExplorerItems.xml";
+			File aListXML = new File(backup_dir, "fileExplorerItems.xml");
 
 			FileOutputStream fos = new FileOutputStream(aListXML);
 
@@ -322,7 +322,7 @@ public class BackupExport {
 		if (privateMessageFolders != null) {
 			Document doc = this.createFlvRecordingDocument(flvRecordings);
 
-			String aListXML = backup_dir + "flvRecordings.xml";
+			File aListXML = new File(backup_dir, "flvRecordings.xml");
 
 			FileOutputStream fos = new FileOutputStream(aListXML);
 
@@ -337,7 +337,7 @@ public class BackupExport {
 		if (roomPolls != null) {
 			Document doc = this.createRoomPollDocument(roomPolls);
 
-			String aListXML = backup_dir + "roompolls.xml";
+			File aListXML = new File(backup_dir, "roompolls.xml");
 
 			FileOutputStream fos = new FileOutputStream(aListXML);
 
@@ -348,8 +348,7 @@ public class BackupExport {
 			/*
 			 * ##################### Backup Room Files
 			 */
-			File targetDir = new File(backup_dir + File.separatorChar
-					+ "roomFiles");
+			File targetDir = new File(backup_dir, "roomFiles");
 
 			if (!targetDir.exists()) {
 				targetDir.mkdir();
@@ -364,8 +363,7 @@ public class BackupExport {
 					if (!file.getName().equals("backup")
 							&& !file.getName().equals("import")) {
 
-						targetDir = new File(backup_dir + File.separatorChar
-								+ "roomFiles" + File.separatorChar
+						targetDir = new File(backup_dir, "roomFiles" + File.separatorChar
 								+ file.getName());
 
 						log.debug("### " + file.getName());
@@ -378,8 +376,7 @@ public class BackupExport {
 			/*
 			 * ##################### Backup Recording Files
 			 */
-			File targetDirRec = new File(backup_dir + File.separatorChar
-					+ "recordingFiles");
+			File targetDirRec = new File(backup_dir, "recordingFiles");
 
 			if (!targetDirRec.exists()) {
 				targetDirRec.mkdir();
