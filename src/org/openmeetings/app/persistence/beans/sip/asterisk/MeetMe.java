@@ -18,17 +18,18 @@
  */
 package org.openmeetings.app.persistence.beans.sip.asterisk;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "meetme")
 public class MeetMe implements Serializable {
-
-    @Id
+	private static final long serialVersionUID = 2789529517142208489L;
+	@Id
     @Column(name = "confno", nullable = false)
     String confno = "0";
     @Column(name = "pin")

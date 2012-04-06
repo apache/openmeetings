@@ -18,20 +18,19 @@
  */
 package org.openmeetings.app.sip.api.impl.asterisk.dao;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.persistence.beans.basic.Configuration;
 import org.openmeetings.app.persistence.beans.sip.asterisk.AsteriskSipUsers;
 import org.openmeetings.app.persistence.beans.sip.asterisk.Extensions;
 import org.openmeetings.app.persistence.beans.sip.asterisk.MeetMe;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class AsteriskDAOImpl {
@@ -62,6 +61,7 @@ public class AsteriskDAOImpl {
         e.setPriority(1);
         em.persist(u);
         em.persist(e);
+        log.debug("addSipUser successfull");
     }
 
     public String addMeetMeConference() {

@@ -18,6 +18,7 @@
  */
 package org.openmeetings.app.installation;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Iterator;
@@ -95,6 +96,7 @@ public class ImportInitvalues {
 		userManagement.addUserLevel("Moderator", 2);
 		userManagement.addUserLevel("Admin", 3);
 		userManagement.addUserLevel("Web-Service (only access via SOAP)", 4);
+		log.debug("UserLevels ADDED");
 
 		/*
 		 * ######################## Dashboard Menu Points
@@ -185,16 +187,17 @@ public class ImportInitvalues {
 
 		navimanagement.addMainStructure("adminModuleBackup", 21, 367, true,
 				false, 3, "Administration of Backups", 6, "false", 1461L);
+		log.debug("MainMenu ADDED");
 
 		errorManagement.addErrorType(new Long(1), new Long(322));
 		errorManagement.addErrorType(new Long(2), new Long(323));
+		log.debug("Error types ADDED");
 	}
 
 	public void loadErrorMappingsFromXML(String filePath) throws Exception {
 
 		SAXReader reader = new SAXReader();
-		Document document = reader.read(filePath
-				+ ImportInitvalues.nameOfErrorFile);
+		Document document = reader.read(new File(filePath, ImportInitvalues.nameOfErrorFile));
 
 		Element root = document.getRootElement();
 
@@ -227,52 +230,34 @@ public class ImportInitvalues {
 			errorManagement.addErrorValues(errorvalues_id, errortype_id,
 					fieldvalues_id);
 		}
-		log.error("ErrorMappings ADDED");
+		log.debug("ErrorMappings ADDED");
 	}
 
 	public void loadSalutations() {
-
 		salutationmanagement.addUserSalutation("Mr", 261);
 		salutationmanagement.addUserSalutation("Ms", 262);
 		salutationmanagement.addUserSalutation("Mrs", 841);
 		salutationmanagement.addUserSalutation("Dr", 842);
-
+		log.debug("Salutations ADDED");
 	}
 
-	public void loadConfiguration(String crypt_ClassName,
-			String allowfrontendRegister, String smtpServer, String smtpPort,
-			String referer, String mailauthname, String mailauthpass,
-			String mailusetls, String default_lang_id, String swf_path,
-			String im_path, String url_feed, String url_feed2,
-			String sendEmailAtRegister, String sendEmailWithVerficationCode,
-			String default_export_font, String screen_viewer,
-			String ffmpeg_path, String sox_path, String sip_enable,
-			String sip_realm, String sip_port, String sip_proxyname,
-			String sip_tunnel, String sip_codebase, String sip_forcetunnel,
-			String sip_openxg_enable, String openxg_wrapper_url,
-			String openxg_client_id, String openxg_client_secret,
-			String openxg_client_domain, String openxg_community_code,
-			String openxg_language_code, String openxg_adminid,
-			String sip_language_phonecode, String sip_phonerange_start,
-			String sip_phonerange, String jodPath,
-            String red5sip_enable, String red5sip_room_prefix,String red5sip_exten_context) {
-
+	public void loadConfiguration(InstallationConfig cfg) {
 		cfgManagement
 				.addConfByKey(
 						3,
 						"crypt_ClassName",
-						crypt_ClassName,
+						cfg.cryptClassName,
 						null,
 						"This Class is used for Authentification-Crypting. "
 								+ "Be carefull what you do here! If you change it while "
 								+ "running previous Pass of users will not be workign anymore! "
 								+ "for more Information see http://code.google.com/p/openmeetings/wiki/CustomCryptMechanism");
 
-		cfgManagement.addConfByKey(3, "screen_viewer", screen_viewer, null,
+		cfgManagement.addConfByKey(3, "screen_viewer", cfg.screenViewer, null,
 				"ScreenViewer Type(0==standard, 1== jrdesktop)");
 
 		cfgManagement.addConfByKey(3, "allow_frontend_register",
-				allowfrontendRegister, null, "");
+				cfg.allowFrontendRegister, null, "");
 
 		cfgManagement.addConfByKey(3, "default_group_id", "1", null, "");
 
@@ -281,22 +266,22 @@ public class ImportInitvalues {
 		cfgManagement.addConfByKey(3, "default_domain_id", "1", null, "");
 
 		// "smtp.xmlcrm.org"
-		cfgManagement.addConfByKey(3, "smtp_server", smtpServer, null,
+		cfgManagement.addConfByKey(3, "smtp_server", cfg.smtpServer, null,
 				"this is the smtp server to send messages");
 		// 25
-		cfgManagement.addConfByKey(3, "smtp_port", smtpPort, null,
+		cfgManagement.addConfByKey(3, "smtp_port", cfg.smtpPort, null,
 				"this is the smtp server port normally 25");
 		// "openmeetings@xmlcrm.org"
-		cfgManagement.addConfByKey(3, "system_email_addr", referer, null,
+		cfgManagement.addConfByKey(3, "system_email_addr", cfg.mailReferer, null,
 				"all send EMails by the system will have this address");
 		// "openmeetings@xmlcrm.org"
-		cfgManagement.addConfByKey(3, "email_username", mailauthname, null,
+		cfgManagement.addConfByKey(3, "email_username", cfg.mailAuthName, null,
 				"System auth email username");
 		//
-		cfgManagement.addConfByKey(3, "email_userpass", mailauthpass, null,
+		cfgManagement.addConfByKey(3, "email_userpass", cfg.mailAuthPass, null,
 				"System auth email password");
 
-		cfgManagement.addConfByKey(3, "mail.smtp.starttls.enable", mailusetls,
+		cfgManagement.addConfByKey(3, "mail.smtp.starttls.enable", cfg.mailUseTls,
 				null, "Enable TLS 1=true, 0=false");
 
 		cfgManagement.addConfByKey(3, "application.name",
@@ -304,28 +289,28 @@ public class ImportInitvalues {
 				"Name of the Browser Title window");
 
 		// "1" == "EN"
-		cfgManagement.addConfByKey(3, "default_lang_id", default_lang_id, null,
+		cfgManagement.addConfByKey(3, "default_lang_id", cfg.defaultLangId, null,
 				"Default System Language ID see language.xml");
 
-		cfgManagement.addConfByKey(3, "swftools_path", swf_path, null,
+		cfgManagement.addConfByKey(3, "swftools_path", cfg.swfPath, null,
 				"Path To SWF-Tools");
 
-		cfgManagement.addConfByKey(3, "imagemagick_path", im_path, null,
+		cfgManagement.addConfByKey(3, "imagemagick_path", cfg.imageMagicPath, null,
 				"Path to ImageMagick tools");
 
-		cfgManagement.addConfByKey(3, "sox_path", sox_path, null,
+		cfgManagement.addConfByKey(3, "sox_path", cfg.soxPath, null,
 				"Path To SoX-Tools");
 
-		cfgManagement.addConfByKey(3, "ffmpeg_path", ffmpeg_path, null,
+		cfgManagement.addConfByKey(3, "ffmpeg_path", cfg.ffmpegPath, null,
 				"Path To FFMPEG");
 
-		cfgManagement.addConfByKey(3, "rss_feed1", url_feed, null, "Feed URL");
+		cfgManagement.addConfByKey(3, "rss_feed1", cfg.urlFeed, null, "Feed URL");
 
-		cfgManagement.addConfByKey(3, "rss_feed2", url_feed2, null,
+		cfgManagement.addConfByKey(3, "rss_feed2", cfg.urlFeed2, null,
 				"Feed URL 2");
 
 		cfgManagement
-				.addConfByKey(3, "sendEmailAtRegister", sendEmailAtRegister,
+				.addConfByKey(3, "sendEmailAtRegister", cfg.sendEmailAtRegister,
 						null,
 						"User get a EMail with their Account data. Values: 0(No) or 1(Yes)");
 
@@ -333,7 +318,7 @@ public class ImportInitvalues {
 				.addConfByKey(
 						3,
 						"sendEmailWithVerficationCode",
-						sendEmailWithVerficationCode,
+						cfg.sendEmailWithVerficationCode,
 						null,
 						"User must activate their account by clicking on the "
 								+ "activation-link in the registering Email. Values: 0(No) or 1(Yes) "
@@ -344,7 +329,7 @@ public class ImportInitvalues {
 				.addConfByKey(
 						3,
 						"default_export_font",
-						default_export_font,
+						cfg.defaultExportFont,
 						null,
 						"The Name of the Font used for exporting/render Images from Whiteboard"
 								+ "The Font has to exist on the Server which runs Red5");
@@ -357,11 +342,11 @@ public class ImportInitvalues {
         // red5SIP Integration Coniguration Values
         // ***************************************
 
-        cfgManagement.addConfByKey(3, "red5sip.enable", red5sip_enable, null,
+        cfgManagement.addConfByKey(3, "red5sip.enable", cfg.red5SipEnable, null,
 				"Enable to enable the red5SIP integration ");
-        cfgManagement.addConfByKey(3, "red5sip.room_prefix", red5sip_room_prefix, null,
+        cfgManagement.addConfByKey(3, "red5sip.room_prefix", cfg.red5SipRoomPrefix, null,
 				"Enable to enable the red5SIP integration ");
-        cfgManagement.addConfByKey(3, "red5sip.exten_context", red5sip_exten_context, null,
+        cfgManagement.addConfByKey(3, "red5sip.exten_context", cfg.red5SipExtenContext, null,
 				"Enable to enable the red5SIP integration ");
 
 		// ***************************************
@@ -369,26 +354,26 @@ public class ImportInitvalues {
 		// SIP Applet Configuration Values
 		// ***************************************
 
-		cfgManagement.addConfByKey(3, "sip.enable", sip_enable, null,
+		cfgManagement.addConfByKey(3, "sip.enable", cfg.sipEnable, null,
 				"Enable to load the SIP Applet in the Client and "
 						+ "call the SIP Applet whenever you enter a Room");
 
-		cfgManagement.addConfByKey(3, "sip.realm", sip_realm, null,
+		cfgManagement.addConfByKey(3, "sip.realm", cfg.sipRealm, null,
 				"So called *Domain of the SIP Provider*");
 
-		cfgManagement.addConfByKey(3, "sip.port", sip_port, null, "SIP Port");
+		cfgManagement.addConfByKey(3, "sip.port", cfg.sipPort, null, "SIP Port");
 
-		cfgManagement.addConfByKey(3, "sip.proxyname", sip_proxyname, null,
+		cfgManagement.addConfByKey(3, "sip.proxyname", cfg.sipProxyName, null,
 				"SIP Proxy name (this is the outbound proxy)");
 
 		cfgManagement
-				.addConfByKey(3, "sip.tunnel", sip_tunnel, null,
+				.addConfByKey(3, "sip.tunnel", cfg.sipTunnel, null,
 						"SIP Tunnel IP + Port, format domain:port, for example 10.0.0.0:443");
 
-		cfgManagement.addConfByKey(3, "sip.codebase", sip_codebase, null,
+		cfgManagement.addConfByKey(3, "sip.codebase", cfg.sipCodebase, null,
 				"The Base-URL to load the Ringtone from");
 
-		cfgManagement.addConfByKey(3, "sip.forcetunnel", sip_forcetunnel, null,
+		cfgManagement.addConfByKey(3, "sip.forcetunnel", cfg.sipForceTunnel, null,
 				"Force usage of the tunnel");
 
 		// ***************************************
@@ -396,7 +381,7 @@ public class ImportInitvalues {
 		// OpenXG Configuration Values
 		// ***************************************
 
-		cfgManagement.addConfByKey(3, "sip.openxg.enable", sip_openxg_enable,
+		cfgManagement.addConfByKey(3, "sip.openxg.enable", cfg.sipOpenxgEnable,
 				null,
 				"Enable the OpenXG XML-RPC Gateway through the Wrapper URL");
 
@@ -404,28 +389,28 @@ public class ImportInitvalues {
 				.addConfByKey(
 						3,
 						"openxg.wrapper.url",
-						openxg_wrapper_url,
+						cfg.openxgWrapperUrl,
 						null,
 						"openxg_wrapper_url, null, OpenXG XML-RPC Wrapper URL, the Wrapper can only "
 								+ "be located on 127.0.01 by default, "
 								+ "for example http://127.0.0.1:5080/rpc_client/rpc_gateway_wrapper.php");
 
-		cfgManagement.addConfByKey(3, "openxg.client.id", openxg_client_id,
+		cfgManagement.addConfByKey(3, "openxg.client.id", cfg.openxgClientId,
 				null, "OpenXG XML-RPC Client ID");
 
 		cfgManagement.addConfByKey(3, "openxg.client.secret",
-				openxg_client_secret, null, "OpenXG XML-RPC Client Secret");
+				cfg.openxgClientSecret, null, "OpenXG XML-RPC Client Secret");
 
 		cfgManagement.addConfByKey(3, "openxg.client.domain",
-				openxg_client_domain, null, "OpenXG Domain");
+				cfg.openxgClientDomain, null, "OpenXG Domain");
 
 		cfgManagement.addConfByKey(3, "openxg.community.code",
-				openxg_community_code, null, "OpenXG Community Code");
+				cfg.openxgCommunityCode, null, "OpenXG Community Code");
 
 		cfgManagement.addConfByKey(3, "openxg.language.code",
-				openxg_language_code, null, "OpenXG Language Code");
+				cfg.openxgLanguageCode, null, "OpenXG Language Code");
 
-		cfgManagement.addConfByKey(3, "openxg.adminid", openxg_adminid, null,
+		cfgManagement.addConfByKey(3, "openxg.adminid", cfg.openxgAdminId, null,
 				"OpenXG Admin ID");
 
 		// ***************************************
@@ -434,14 +419,14 @@ public class ImportInitvalues {
 		// ***************************************
 
 		cfgManagement.addConfByKey(3, "sip.language.phonecode",
-				sip_language_phonecode, null, "For example +358 for Finland");
+				cfg.sipLanguagePhoneCode, null, "For example +358 for Finland");
 
 		cfgManagement
-				.addConfByKey(3, "sip.phonerange.start", sip_phonerange_start,
+				.addConfByKey(3, "sip.phonerange.start", cfg.sipPhoneRangeStart,
 						null,
 						"The first number in the Range of Phone Numbers in national format");
 
-		cfgManagement.addConfByKey(3, "sip.phonerange", sip_phonerange, null,
+		cfgManagement.addConfByKey(3, "sip.phonerange", cfg.sipPhoneRange, null,
 				"Amount of numbers in the Phone Range available");
 
 		cfgManagement.addConfByKey(3, "sip.phonerange.currentindex", "" + 0,
@@ -517,10 +502,10 @@ public class ImportInitvalues {
 						null,
 						"The number of minutes before reminder emails are send. Set to 0 to disable reminder emails");
 
-		cfgManagement.addConfByKey(3, "user.login.minimum.length", "4", null,
+		cfgManagement.addConfByKey(3, "user.login.minimum.length", "" + InstallationConfig.USER_LOGIN_MINIMUM_LENGTH, null,
 				"Number of chars needed in a user login");
 
-		cfgManagement.addConfByKey(3, "user.pass.minimum.length", "4", null,
+		cfgManagement.addConfByKey(3, "user.pass.minimum.length", "" + InstallationConfig.USER_PASSWORD_MINIMUM_LENGTH, null,
 				"Number of chars needed in a user login");
 
 		cfgManagement
@@ -549,7 +534,7 @@ public class ImportInitvalues {
 				.addConfByKey(
 						3,
 						"jod.path",
-						jodPath,
+						cfg.jodPath,
 						null,
 						"The path to JOD library (http://code.google.com/p/jodconverter), configure the path to point to the lib directory of JOD that contains also the jodconverter-core-version.jar");
 
@@ -561,6 +546,7 @@ public class ImportInitvalues {
 						null,
 						"Ldap domain selected by default in the login screen");
 		
+		log.debug("Configuration ADDED");
 	}
 
 	public void loadDefaultRooms(boolean createRooms) {
@@ -731,35 +717,29 @@ public class ImportInitvalues {
 	 * @throws Exception
 	 */
 	private void loadCountriesFiles(String filePath) throws Exception {
-
 		SAXReader reader = new SAXReader();
-		Document document = reader.read(filePath
-				+ ImportInitvalues.nameOfCountriesFile);
+		Document document = reader.read(new File(filePath, ImportInitvalues.nameOfCountriesFile));
 
 		Element root = document.getRootElement();
 
 		for (@SuppressWarnings("rawtypes")
 		Iterator it = root.elementIterator("country"); it.hasNext();) {
-
 			Element item = (Element) it.next();
 			String country = item.attributeValue("name");
 
 			statemanagement.addState(country);
-
 		}
+		log.debug("Countries ADDED");
 	}
 
 	private void loadTimeZoneFiles(String filePath) throws Exception {
-
 		SAXReader reader = new SAXReader();
-		Document document = reader.read(filePath
-				+ ImportInitvalues.nameOfTimeZoneFile);
+		Document document = reader.read(new File(filePath, ImportInitvalues.nameOfTimeZoneFile));
 
 		Element root = document.getRootElement();
 
 		for (@SuppressWarnings("rawtypes")
 		Iterator it = root.elementIterator("timezone"); it.hasNext();) {
-
 			Element item = (Element) it.next();
 			String timeZoneName = item.attributeValue("name");
 			String timeZoneLabel = item.attributeValue("label");
@@ -768,12 +748,11 @@ public class ImportInitvalues {
 
 			omTimeZoneDaoImpl.addOmTimeZone(timeZoneName, timeZoneLabel, iCal,
 					orderId);
-
 		}
+		log.debug("TimeZones ADDED");
 	}
 
 	public List<OmTimeZone> getTimeZones(String filePath) throws Exception {
-
 		log.debug(":: getTimeZones ::");
 
 		List<OmTimeZone> omTimeZones = new LinkedList<OmTimeZone>();
@@ -786,7 +765,6 @@ public class ImportInitvalues {
 
 		for (@SuppressWarnings("rawtypes")
 		Iterator it = root.elementIterator("timezone"); it.hasNext();) {
-
 			Element item = (Element) it.next();
 			String timeZoneName = item.attributeValue("name");
 			String timeZoneLabel = item.attributeValue("label");
@@ -798,11 +776,9 @@ public class ImportInitvalues {
 			omTimeZone.setOrderId(orderId);
 
 			omTimeZones.add(omTimeZone);
-
 		}
-
+		
 		return omTimeZones;
-
 	}
 
 	/**
@@ -819,14 +795,12 @@ public class ImportInitvalues {
 		LinkedHashMap<Integer, LinkedHashMap<String, Object>> languages = new LinkedHashMap<Integer, LinkedHashMap<String, Object>>();
 
 		SAXReader reader = new SAXReader();
-		Document document = reader.read(filePath
-				+ ImportInitvalues.nameOfLanguageFile);
+		Document document = reader.read(new File(filePath, ImportInitvalues.nameOfLanguageFile));
 
 		Element root = document.getRootElement();
 
 		for (@SuppressWarnings("unchecked")
 		Iterator<Element> it = root.elementIterator("lang"); it.hasNext();) {
-
 			Element item = it.next();
 			String country = item.getText();
 			Integer id = Integer.valueOf(item.attribute("id").getValue())
@@ -842,11 +816,9 @@ public class ImportInitvalues {
 			lang.put("code", code);
 			// log.error("getLanguageFiles "+country);
 			languages.put(id, lang);
-
 		}
 		log.debug("Languages ADDED ");
 		return languages;
-
 	}
 
 	/**
@@ -898,9 +870,9 @@ public class ImportInitvalues {
 	// ------------------------------------------------------------------------------
 	public void loadInitLanguages(String filePath) throws Exception {
 
-		this.loadCountriesFiles(filePath);
+		loadCountriesFiles(filePath);
 
-		this.loadTimeZoneFiles(filePath);
+		loadTimeZoneFiles(filePath);
 
 		LinkedHashMap<Integer, LinkedHashMap<String, Object>> listlanguages = this
 				.getLanguageFiles(filePath);
@@ -918,7 +890,7 @@ public class ImportInitvalues {
 			String rtl = (String) lang.get("rtl");
 			String code = (String) lang.get("code");
 
-			System.out.println("loadInitLanguages rtl from xml: " + rtl);
+			log.debug("loadInitLanguages rtl from xml: " + rtl);
 
 			Boolean langRtl = false;
 
@@ -929,7 +901,7 @@ public class ImportInitvalues {
 					langRtl, code);
 
 			SAXReader reader = new SAXReader();
-			Document document = reader.read(filePath + langName + ".xml");
+			Document document = reader.read(new File(filePath, langName + ".xml"));
 
 			Element root = document.getRootElement();
 
@@ -978,4 +950,24 @@ public class ImportInitvalues {
 	}
 	// ------------------------------------------------------------------------------
 
+	public void loadAll(String filePath, InstallationConfig cfg, String username,
+			String userpass, String useremail, String groupame, String timeZone) throws Exception {
+		loadMainMenu();
+		loadErrorMappingsFromXML(filePath);
+		loadInitLanguages(filePath);
+		loadSalutations();
+		// AppointMent Categories
+		loadInitAppointmentCategories();
+		// Appointment Remindertypes
+		loadInitAppointmentReminderTypes();
+		// Appointment poll types
+		loadPollTypes();
+
+		loadConfiguration(cfg);
+		
+		loadInitUserAndOrganisation(username,
+				userpass, useremail, groupame, timeZone, cfg.defaultLangId);
+		
+		loadDefaultRooms("1".equals(cfg.createDefaultRooms));
+	}
 }

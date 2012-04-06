@@ -18,7 +18,6 @@
  */
 package org.openmeetings.app.sip.api.impl.asterisk;
 
-import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.user.UserSipData;
 import org.openmeetings.app.sip.api.ISIPClient;
 import org.openmeetings.app.sip.api.impl.asterisk.dao.AsteriskDAOImpl;

@@ -18,13 +18,21 @@
  */
 package org.openmeetings.app.persistence.beans.sip.asterisk;
 
-import javax.persistence.*;
 import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "extensions")
 public class Extensions implements Serializable {
-    @Id
+	private static final long serialVersionUID = -2669622904594408644L;
+
+	@Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;

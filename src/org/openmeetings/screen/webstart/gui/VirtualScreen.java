@@ -298,9 +298,6 @@ public class VirtualScreen {
 		VirtualScreenBean.vScreenResizeX = css.jVScreenWidthSpin.getValue();
 		VirtualScreenBean.vScreenResizeY = css.jVScreenHeightSpin.getValue();
 		switch (VirtualScreenBean.screenQuality) {
-			case VeryHigh:
-			case High:
-				break;
 			case Medium:
 				VirtualScreenBean.vScreenResizeX = (int)(1.0/2 * VirtualScreenBean.vScreenResizeX);
 				VirtualScreenBean.vScreenResizeY = (int)(1.0/2 * VirtualScreenBean.vScreenResizeY);
@@ -308,6 +305,10 @@ public class VirtualScreen {
 			case Low:
 				VirtualScreenBean.vScreenResizeX = (int)(3.0/8 * VirtualScreenBean.vScreenResizeX);
 				VirtualScreenBean.vScreenResizeY = (int)(3.0/8 * VirtualScreenBean.vScreenResizeY);
+				break;
+			case VeryHigh:
+			case High:
+			default:
 				break;
 		}
 		logger.debug("resize: X:" + VirtualScreenBean.vScreenResizeX + " Y: " + VirtualScreenBean.vScreenResizeY);

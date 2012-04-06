@@ -2989,7 +2989,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
         Rooms rooms = roommanagement.getRoomById(currentClient.getRoom_id());
         log.debug("asterisk -rx \"originate Local/" + number + "@rooms extension " + rooms.getSipNumber() + "@rooms\"");
         try {
-            Process proc = Runtime.getRuntime().exec(new String[]{"asterisk", "-rx", "originate Local/" + number + "@rooms extension " + rooms.getSipNumber() + "@rooms"});
+            Runtime.getRuntime().exec(new String[]{"asterisk", "-rx", "originate Local/" + number + "@rooms extension " + rooms.getSipNumber() + "@rooms"});
         } catch (IOException e) {
             log.error("Executing asterisk originate error: ", e);
         }
@@ -3007,7 +3007,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
     public synchronized void setSipTransport(Long room_id, String publicSID, String broadCastId) {
         IConnection current = Red5.getConnectionLocal();
         String streamid = current.getClient().getId();
-        Rooms room = roommanagement.getRoomById(room_id);
         // Notify all clients of the same scope (room)
         RoomClient currentClient = this.clientListManager.getClientByStreamId(streamid);
         currentClient.setRoom_id(room_id);

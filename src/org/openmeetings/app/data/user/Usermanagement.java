@@ -953,7 +953,7 @@ public class Usermanagement {
 					"user.pass.minimum.length", Integer.class, "4");
 
 			if (userLoginMinimumLength == null || userPassMinimumLength == null) {
-				new Exception(
+				throw new Exception(
 						"user.login.minimum.length or user.pass.minimum.length problem");
 			}
 

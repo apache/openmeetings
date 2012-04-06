@@ -46,12 +46,10 @@ import org.openmeetings.app.persistence.beans.rooms.RoomTypes;
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.rooms.Rooms_Organisation;
 import org.openmeetings.app.persistence.beans.sip.OpenXGReturnObject;
-import org.openmeetings.app.persistence.beans.user.UserSipData;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.sip.api.impl.asterisk.AsteriskDbSipClient;
 import org.openmeetings.app.sip.api.request.SIPCreateConferenceRequest;
-import org.openmeetings.app.sip.api.result.SIPCreateUserRequestResult;
 import org.openmeetings.app.sip.api.result.SipCreateConferenceRequestResult;
 import org.openmeetings.app.sip.xmlrpc.OpenXGHttpClient;
 import org.red5.logging.Red5LoggerFactory;
@@ -1003,8 +1001,8 @@ public class Roommanagement {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
 				Rooms_Organisation rOrganisation = new Rooms_Organisation();
 				rOrganisation.setRoom(this.getRoomById(rooms_id));
-				log.error("addRoomToOrganisation rooms "
-						+ rOrganisation.getRoom().getName());
+				log.debug("addRoomToOrganisation rooms '"
+						+ rOrganisation.getRoom().getName() + "'");
 				rOrganisation.setStarttime(new Date());
 				rOrganisation.setOrganisation(organisationmanagement
 						.getOrganisationById(organisation_id));

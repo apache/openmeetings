@@ -34,6 +34,7 @@ import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.documents.InstallationDocumentHandler;
 import org.openmeetings.app.installation.ImportInitvalues;
+import org.openmeetings.app.installation.InstallationConfig;
 import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
@@ -241,159 +242,122 @@ public class Install extends VelocityViewServlet {
 					String useremail = httpServletRequest
 							.getParameter("useremail");
 					String orgname = httpServletRequest.getParameter("orgname");
-					String configdefault = httpServletRequest
+					InstallationConfig cfg = new InstallationConfig();
+					cfg.allowFrontendRegister = httpServletRequest
 							.getParameter("configdefault");
 
-					String configreferer = httpServletRequest
+					cfg.mailReferer = httpServletRequest
 							.getParameter("configreferer");
-					String configsmtp = httpServletRequest
+					cfg.smtpServer = httpServletRequest
 							.getParameter("configsmtp");
-					String configsmtpport = httpServletRequest
+					cfg.smtpPort = httpServletRequest
 							.getParameter("configsmtpport");
-					String configmailuser = httpServletRequest
+					cfg.mailAuthName = httpServletRequest
 							.getParameter("configmailuser");
-					String configmailpass = httpServletRequest
+					cfg.mailAuthPass = httpServletRequest
 							.getParameter("configmailpass");
-					String mailusetls = httpServletRequest
+					cfg.mailUseTls = httpServletRequest
 							.getParameter("mailusetls");
 
-					String configdefaultLang = httpServletRequest
+					cfg.defaultLangId = httpServletRequest
 							.getParameter("configdefaultLang");
-					String swf_path = httpServletRequest
+					cfg.swfPath = httpServletRequest
 							.getParameter("swftools_path");
-					String im_path = httpServletRequest
+					cfg.imageMagicPath = httpServletRequest
 							.getParameter("imagemagick_path");
-					String sendEmailAtRegister = httpServletRequest
+					cfg.sendEmailAtRegister = httpServletRequest
 							.getParameter("sendEmailAtRegister");
-					String sendEmailWithVerficationCode = httpServletRequest
+					cfg.sendEmailWithVerficationCode = httpServletRequest
 							.getParameter("sendEmailWithVerficationCode");
-					String createDefaultRooms = httpServletRequest
+					cfg.createDefaultRooms = httpServletRequest
 							.getParameter("createDefaultRooms");
 
-					String default_export_font = httpServletRequest
+					cfg.defaultExportFont = httpServletRequest
 							.getParameter("default_export_font");
 
-					String crypt_ClassName = httpServletRequest
+					cfg.cryptClassName = httpServletRequest
 							.getParameter("crypt_ClassName");
 
-					String ffmpeg_path = httpServletRequest
+					cfg.ffmpegPath = httpServletRequest
 							.getParameter("ffmpeg_path");
 
-					String sox_path = httpServletRequest
+					cfg.soxPath = httpServletRequest
 							.getParameter("sox_path");
 
-					String screen_viewer = httpServletRequest
+					cfg.screenViewer = httpServletRequest
 							.getParameter("screen_viewer");
 
                     // red5sip integration config
-                    String red5sip_enable = httpServletRequest
+                    cfg.red5SipEnable = httpServletRequest
 							.getParameter("red5sip_enable");
-                    String red5sip_room_prefix = httpServletRequest
+                    cfg.red5SipRoomPrefix = httpServletRequest
 							.getParameter("red5sip_room_prefix");
-                    String red5sip_exten_context = httpServletRequest
+                    cfg.red5SipExtenContext = httpServletRequest
 							.getParameter("red5sip_exten_context");
 
 					// SIP Applet Configuration
-					String sip_enable = httpServletRequest
+					cfg.sipEnable = httpServletRequest
 							.getParameter("sip_enable");
-					String sip_realm = httpServletRequest
+					cfg.sipRealm = httpServletRequest
 							.getParameter("sip_realm");
-					String sip_port = httpServletRequest
+					cfg.sipPort = httpServletRequest
 							.getParameter("sip_port");
-					String sip_proxyname = httpServletRequest
+					cfg.sipProxyName = httpServletRequest
 							.getParameter("sip_proxyname");
-					String sip_tunnel = httpServletRequest
+					cfg.sipTunnel = httpServletRequest
 							.getParameter("sip_tunnel");
-					String sip_codebase = httpServletRequest
+					cfg.sipCodebase = httpServletRequest
 							.getParameter("sip_codebase");
-					String sip_forcetunnel = httpServletRequest
+					cfg.sipForceTunnel = httpServletRequest
 							.getParameter("sip_forcetunnel");
 
 					// OpenXG / OpenSIPg Configuration
-					String sip_openxg_enable = httpServletRequest
+					cfg.sipOpenxgEnable = httpServletRequest
 							.getParameter("sip_openxg_enable");
-					String openxg_wrapper_url = httpServletRequest
+					cfg.openxgWrapperUrl = httpServletRequest
 							.getParameter("openxg_wrapper_url");
-					String openxg_client_id = httpServletRequest
+					cfg.openxgClientId = httpServletRequest
 							.getParameter("openxg_client_id");
-					String openxg_client_secret = httpServletRequest
+					cfg.openxgClientSecret = httpServletRequest
 							.getParameter("openxg_client_secret");
-					String openxg_client_domain = httpServletRequest
+					cfg.openxgClientDomain = httpServletRequest
 							.getParameter("openxg_client_domain");
-					String openxg_community_code = httpServletRequest
+					cfg.openxgCommunityCode = httpServletRequest
 							.getParameter("openxg_community_code");
-					String openxg_language_code = httpServletRequest
+					cfg.openxgLanguageCode = httpServletRequest
 							.getParameter("openxg_language_code");
-					String openxg_adminid = httpServletRequest
+					cfg.openxgAdminId = httpServletRequest
 							.getParameter("openxg_adminid");
 
 					// SIP Phone Range Configuration
-					String sip_language_phonecode = httpServletRequest
+					cfg.sipLanguagePhoneCode = httpServletRequest
 							.getParameter("sip_language_phonecode");
-					String sip_phonerange_start = httpServletRequest
+					cfg.sipPhoneRangeStart = httpServletRequest
 							.getParameter("sip_phonerange_start");
-					String sip_phonerange = httpServletRequest
+					cfg.sipPhoneRange = httpServletRequest
 							.getParameter("sip_phonerange");
 
 					String timeZone = httpServletRequest
 							.getParameter("timeZone");
 					
-					String jodPath = httpServletRequest
+					cfg.jodPath = httpServletRequest
 							.getParameter("jod_path");
 
 					log.debug("step 0+ start init with values. " + username
 							+ " ***** " + useremail + " " + orgname + " "
-							+ configdefault + " " + configreferer + " "
-							+ configsmtp + " " + configmailuser + " "
-							+ configmailpass + " " + configdefaultLang + " "
-							+ swf_path + " " + im_path + " " + screen_viewer);
+							+ cfg);
 
 					String filePath = getServletContext().getRealPath("/")
 							+ ImportInitvalues.languageFolderName;
 
-					String url_feed = getServletContext().getInitParameter(
+					cfg.urlFeed = getServletContext().getInitParameter(
 							"url_feed");
-					String url_feed2 = getServletContext().getInitParameter(
+					cfg.urlFeed2 = getServletContext().getInitParameter(
 							"url_feed2");
-					getImportInitvalues().loadInitLanguages(filePath);
-
-					getImportInitvalues().loadMainMenu();
-
-					getImportInitvalues().loadErrorMappingsFromXML(filePath);
-
-					getImportInitvalues().loadSalutations();
-
-					getImportInitvalues().loadConfiguration(crypt_ClassName,
-							configdefault, configsmtp, configsmtpport,
-							configreferer, configmailuser, configmailpass,
-							mailusetls, configdefaultLang, swf_path, im_path,
-							url_feed, url_feed2, sendEmailAtRegister,
-							sendEmailWithVerficationCode, default_export_font,
-							screen_viewer, ffmpeg_path, sox_path, sip_enable,
-							sip_realm, sip_port, sip_proxyname, sip_tunnel,
-							sip_codebase, sip_forcetunnel, sip_openxg_enable,
-							openxg_wrapper_url, openxg_client_id,
-							openxg_client_secret, openxg_client_domain,
-							openxg_community_code, openxg_language_code,
-							openxg_adminid, sip_language_phonecode,
-							sip_phonerange_start, sip_phonerange,
-							jodPath,
-                            red5sip_enable, red5sip_room_prefix, red5sip_exten_context);
-
-					getImportInitvalues().loadInitUserAndOrganisation(username,
-							userpass, useremail, orgname, timeZone, configdefaultLang);
-
-					getImportInitvalues().loadDefaultRooms("1".equals(createDefaultRooms));
-
-					// AppointMent Categories
-					getImportInitvalues().loadInitAppointmentCategories();
-
-					// Appointment Remindertypes
-					getImportInitvalues().loadInitAppointmentReminderTypes();
-
-					// Appointment poll types
-					getImportInitvalues().loadPollTypes();
 					
+					getImportInitvalues().loadAll(filePath, cfg, username,
+							userpass, useremail, orgname, timeZone);
+
 					// update to next step
 					log.debug("add level to install file");
 					InstallationDocumentHandler
