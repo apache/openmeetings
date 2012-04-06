@@ -20,16 +20,19 @@
 -->
 <library>
 	
+	<!-- APL Author sebawagner -->
 	<resource name="conferenceBox_button_min_small_rsc" src="box_closed_small.png" />
-    
+    <!-- APL Author sebawagner -->
     <resource name="conferenceBox_button_max_small_rsc" src="box_open_small.png" />
-    
-    
+    <!-- APL Author sebawagner -->
 	<resource name="arrow_draw_panel_cursor" src="arrow_cursor.swf" />
+	<!-- APL Author sebawagner -->
 	<resource name="arrow_resize_panel_cursor" src="arrow_cursor_resize_tool.swf" />
+	<!-- APL Author sebawagner -->
 	<resource name="arrow_rotate_panel_cursor" src="arrow_cursor_rotate_tool.swf" />
-	<resource name="arrow_draw_panel_tool_cursor" src="arrow_cursor_tool.png" />
+	<!-- APL Author sebawagner -->
 	<resource name="draw_box_vertical_rsc" src="draw_box_vertical.swf" />
+	<!-- APL Author sebawagner -->
 	<resource name="draw_box_horizontal_rsc" src="draw_box_horizontal.swf" />
     
 </library>

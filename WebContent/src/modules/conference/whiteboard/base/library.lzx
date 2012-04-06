@@ -23,7 +23,8 @@
 	<include href="drawViewNew.lzx" />
 	<include href="baseDraw.lzx" />
     
-    <include href="tools/" /> <!-- extends basedraw with drawing Tools -->
+    <!-- extends basedraw with drawing Tools -->
+    <include href="tools/" /> 
     
 	<include href="swfResourceView.lzx" />
 	<include href="baseDrawObject.lzx" />
@@ -35,21 +36,6 @@
 	<include href="baseDrawWords.lzx" />
 	<include href="whiteboardVideoPlayer.lzx" />
 	<include href="remoteWhiteboard.lzx" />
+	<include href="whiteBoardPointer.lzx" />
     
-    <class name="whiteBoardPointer" extends="view"
-           resource="pointer_whiteboard_rsc" width="20" height="20" >
-        <attribute name="userName" value="" type="string" />
-        <attribute name="fadeDelegate" value="null" />
-        <labelText x="20" text="$once{ parent.userName }" />
-        <handler name="oninit">
-            this.play();
-            this.fadeDelegate = new LzDelegate( this, "fadeText" );
-            lz.Timer.addTimer( this.fadeDelegate, 5000 );
-        </handler>
-        <method name="fadeText" args="itemObj">
-            this.destroy();
-        </method>
-    </class>
-
-
 </library>

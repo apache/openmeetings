@@ -41,16 +41,19 @@
 		<view name="_bgDown" x="1" y="1" bgcolor="0x000000" opacity="0.5" visibility="hidden"
 				width="${ parent.width-2 }" height="${ parent.height-2 }" />
 		
-	    <view name="_rscIcon" stretches="both" 
+		<view name="disAbledView" visibility="${ ( parent.enabled ) ? 'hidden' : 'visible' }"
+	          bgcolor="white" opacity="1" x="1" y="1"
+	          width="$once{ parent.width-2 }" height="$once{ parent.height-2 }" />
+		
+	    <image name="_rscIcon" stretches="both" 
+	    	  opacity="${ ( parent.enabled ) ? 1 : 0.4 }"
 		  	  x="$once{ parent.x_insetResource }" 
-	    	  y="$once{ parent.x_insetResource }" 
+	    	  y="$once{ parent.y_insetResource }" 
 	          width="$once{ parent.width_insetResource }" 
 	          height="$once{ parent.height_insetResource }" 
-	          resource="$once{ parent.resourceItem }" />
+	          src="$once{ canvas.getThemeImage(parent.resourceItem) }" />
 	          
-	    <view name="disAbledView" visibility="${ ( !parent.enabled ) ? 'visible' : 'hidden' }"
-	          bgcolor="white" opacity="0.6"
-	          width="$once{ parent.width }" height="$once{ parent.height }" />
+	    
 	     
 		<handler name="onmouseover">
 			this._rscIcon.setAttribute("x",this._rscIcon.x-1);
@@ -64,9 +67,11 @@
 			this._rscIcon.setAttribute("y",this._rscIcon.y+1);
 			this._rscIcon.setAttribute("width",this._rscIcon.width-2);
 			this._rscIcon.setAttribute("height",this._rscIcon.height-2);
-			this._bgOver.setAttribute('visibility','hidden');
 		</handler>
 		<handler name="onmousedown">
+			if (!this.enabled) {
+				return;
+			}
 			this._bgOver.setAttribute('visibility','hidden');
 			this._bgDown.setAttribute('visibility','visible');
 		</handler>

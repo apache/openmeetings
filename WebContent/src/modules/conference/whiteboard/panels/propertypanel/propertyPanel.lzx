@@ -339,18 +339,6 @@
             <labelText y="6" labelid="254" />     
             <labelText name="_totalSlideNo" y="6" width="40" />  
             
-            <!--
-            <documentPanelHPanelSeperator />
-                
-            <drawDocumentPanelItem name="b7" modi="doc_zoom_minus" resourceItem="doc_zoom_minus" 
-                labelid="259" />        
-            <drawDocumentPanelItem name="b8" modi="doc_zoom_plus" resourceItem="doc_zoom_plus" 
-                labelid="260" />    
-            
-            <labelText y="6" name="_zoom" width="30" height="24" />
-            <labelText y="6" labelid="253" />
-             -->
-            
 		</view>
 		
 		<!-- 340 -->

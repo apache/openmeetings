@@ -20,44 +20,22 @@
 -->
 <library>
 	
-	<resource name="menupointer_rsc" src="resources/menupointer.png" />
-	<resource name="line_rsc" src="resources/line.png" />
-	<resource name="uline_rsc" src="resources/uline.png" />
-	
-	<resource name="drawarrowicon_rsc" src="resources/drawarrowicon.png" />
-	
+	<!-- APL author sebawagner -->
 	<resource name="_boundingBoxPointerTR" src="resources/boundingBoxTR.png" />
+	<!-- APL author sebawagner -->
 	<resource name="_boundingBoxPointerTL" src="resources/boundingBoxTL.png" />
+	<!-- APL author sebawagner -->
 	<resource name="_boundingBoxPointerUR" src="resources/boundingBoxUR.png" />
+	<!-- APL author sebawagner -->
 	<resource name="_boundingBoxPointerURNoGripper" src="resources/boundingBoxULNoGripper.png" />
+	<!-- APL author sebawagner -->
 	<resource name="_boundingBoxPointerUL" src="resources/boundingBoxUL.png" />
+	<!-- APL author sebawagner -->
+	<resource name="pointer_whiteboard_rsc" src="resources/pointer.swf" />
 	
-	<resource name="letter" src="resources/applixware.png" />
-	<resource name="paint" src="toolbar/resources/draw-freehand.png" />
-	<resource name="saveobj" src="resources/filesave.png" />
-	<resource name="revert" src="resources/undo.png" />
-	<resource name="next" src="resources/redo.png" />
-	<resource name="plain" src="resources/editdelete.png" />
-	<resource name="plainSlides" src="resources/filenew.png" />
-	<resource name="close" src="resources/cancel.png" />
 	<resource name="bold" src="resources/bold.png" />
 	<resource name="italic" src="resources/italic.png" />
-	<resource name="deleteIcon" src="resources/cancel.png" />
-	<resource name="ellipse" src="toolbar/resources/draw-ellipse.png" />
-	<resource name="rectangle" src="toolbar/resources/draw-rectangle.png" />
-	<resource name="imageIcon" src="resources/image.png" />
-	
-	<resource name="pointer_whiteboard_rsc" src="resources/pointer.swf" />
-	<resource name="pointer_whiteboard_menu_rsc" src="resources/pointerWhiteBoard_menu_rsc.swf" />
 	    
-	<resource name="doc_next" src="resources/go-next.png" />
-	<resource name="doc_pre" src="resources/go-previous.png" />
-	<resource name="doc_first" src="resources/go-first.png" />
-	<resource name="doc_last" src="resources/go-last.png" />    
-	    
-	<resource name="doc_zoom_plus" src="resources/xmag_plus2.png" />     
-	<resource name="doc_zoom_minus" src="resources/xmag_plus.png" />                    
-	
 	<resource name="add_whiteboard_rsc" src="resources/edit_add.png" />
 	
 	<include href="incubator/lzcombobox.lzx"/> 

@@ -20,9 +20,11 @@
 -->
 <library>
 	
+	<!-- APL Author sebawagner -->
 	<resource name="_button_rsc_letter_rsc" src="resources/button_rsc.swf" />
 	
 	<include href="propertyPanelLetterButton.lzx" />  
+	<include href="drawDocumentPanelItem.lzx" />  
 	<include href="propertyPanel.lzx" />  
 	
 </library>

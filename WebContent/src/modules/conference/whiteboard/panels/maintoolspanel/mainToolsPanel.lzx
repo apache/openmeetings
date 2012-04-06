@@ -111,8 +111,7 @@
 	<mainToolsPanelItem name="hand" modi="hand" labelid="72" _isselected="true" 
 						resourceItem="menupointer_rsc" />
     <mainToolsPanelItem name="pointerWhiteboard" modi="pointerWhiteboard" 
-                        labelid="557" x_insetResource="1" y_insetResource="1"
-                        resourceItem="pointer_whiteboard_menu_rsc" />
+                        labelid="557" resourceItem="pointer_whiteboard_menu_rsc" />
 	<mainToolsPanelItem name="letter" modi="letter" labelid="73" resourceItem="letter" />
 	<mainToolsPanelItem name="paint" modi="paint" labelid="74" resourceItem="paint" />
 	<mainToolsPanelItem name="line" modi="line" labelid="75" resourceItem="line_rsc" />

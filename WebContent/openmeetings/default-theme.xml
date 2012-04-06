@@ -40,6 +40,8 @@
 				license="Unkown"
 				src="public/themes/basic-theme/auth/icon_facebook.png" />
 	
+	<!-- Save Toolbar (for example Admin section) -->
+	
 	<resource name="filesave_rsc" 
 				description="Save Icon" 
 				license="FamFam Icon Set"
@@ -65,5 +67,120 @@
 				license="APL Author sebawagner"
 				src="public/themes/basic-theme/general/add.png" />
 
+	<!-- Whiteboard Toolbar -->
+	
+	<resource name="plain" 
+				description="Toolbar Icon" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/whiteboard/cancel.png" />
+	
+	<resource name="plainSlides" 
+				description="Toolbar Icon" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/whiteboard/page_delete.png" />
+	
+	<resource name="arrow_draw_panel_tool_cursor" 
+				description="Toolbar Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/whiteboard/arrow_cursor_tool.png" />
 
+	<resource name="saveobj" 
+				description="Toolbar Icon" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/disk.png" />
+
+	<resource name="revert" 
+				description="Toolbar Icon" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/whiteboard/arrow_rotate_anticlockwise.png" />
+
+	<resource name="next" 
+				description="Toolbar Icon" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/whiteboard/arrow_rotate_clockwise.png" />
+
+	<resource name="menupointer_rsc" 
+				description="Toolbar Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/whiteboard/menupointer.png" />
+				
+	<resource name="pointer_whiteboard_menu_rsc" 
+				description="Toolbar Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/whiteboard/pointerWhiteBoard_menu_rsc.png" />
+				
+	<resource name="letter" 
+				description="Toolbar Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/whiteboard/letter.png" />
+
+	<resource name="paint" 
+				description="Toolbar Icon" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/whiteboard/pencil.png" />
+	
+	<resource name="line_rsc" 
+				description="Toolbar Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/whiteboard/line.png" />	
+	
+	<resource name="uline_rsc" 
+				description="Toolbar Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/whiteboard/uline.png" />	
+		
+	<resource name="rectangle" 
+				description="Toolbar Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/whiteboard/rectangle.png" />	
+
+	<resource name="ellipse" 
+				description="Toolbar Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/whiteboard/ellipse.png" />	
+				
+	<resource name="drawarrowicon_rsc" 
+				description="Toolbar Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/whiteboard/drawarrowicon.png" />			
+		
+	<!-- whiteboard general -->		
+				
+	<resource name="bounding_box_delete_item_rsc" 
+				description="Toolbar Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/whiteboard/cancel_icon_small.png" />		
+				
+	<!-- document Tools -->	
+	
+	<resource name="doc_next" 
+				description="Toolbar Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/whiteboard/doc_next.png" />		
+				
+	<resource name="doc_pre" 
+				description="Toolbar Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/whiteboard/doc_pre.png" />		
+				
+	<resource name="doc_first" 
+				description="Toolbar Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/whiteboard/doc_first.png" />		
+				
+	<resource name="doc_last" 
+				description="Toolbar Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/whiteboard/doc_last.png" />		
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
 </theme>
