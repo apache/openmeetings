@@ -424,7 +424,7 @@ public class BackupImportController extends AbstractUploadController {
 			hs.put("message", "library");
 			hs.put("action", "import");
 			hs.put("error", "");
-			hs.put("fileName", multipartFile.getOriginalFilename());
+			hs.put("fileName", info.filename);
 
 			scopeApplicationAdapter.sendMessageWithClientByPublicSID(
 					hs, info.publicSID);

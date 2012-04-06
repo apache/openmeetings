@@ -39,13 +39,13 @@ public abstract class AbstractUploadController implements ServletContextAware {
 		Long userId;
 		String sid;
 		String publicSID;
+		String filename;
 	}
 	
     protected UploadInfo validate(HttpServletRequest request, boolean admin) throws ServletException {
     	UploadInfo info = new UploadInfo();
 		log.debug("Starting validate");
 		try {
-
 			String sid = request.getParameter("sid");
 			if (sid == null) {
 				throw new ServletException("SID Missing");
@@ -74,6 +74,8 @@ public abstract class AbstractUploadController implements ServletContextAware {
 
 			MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest)request;
 			MultipartFile multipartFile = multipartRequest.getFile("Filedata");
+			//FIXME encoding HACK
+			info.filename = new String (multipartFile.getOriginalFilename().getBytes ("iso-8859-1"), "UTF-8");
 			long fileSize = multipartFile.getSize();
 			long maxSize = ImportHelper.getMaxUploadSize(cfgManagement);
 			log.debug("uploading " + fileSize + " bytes");

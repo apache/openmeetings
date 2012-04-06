@@ -86,12 +86,11 @@ public class UploadController extends AbstractUploadController {
 	
 			MultipartFile multipartFile = info.file;
 			InputStream is = multipartFile.getInputStream();
-			String fileSystemName = multipartFile.getOriginalFilename();
-			log.debug("fileSystemName: " + fileSystemName);
+			log.debug("fileSystemName: " + info.filename);
 	
 			HashMap<String, HashMap<String, String>> returnError = fileProcessor
 					.processFile(info.userId, room_id_to_Store, isOwner, is,
-							parentFolderId, fileSystemName, current_dir, hs, 0L, ""); // externalFilesId,
+							parentFolderId, info.filename, current_dir, hs, 0L, ""); // externalFilesId,
 																						// externalType
 	
 			HashMap<String, String> returnAttributes = returnError
@@ -139,7 +138,7 @@ public class UploadController extends AbstractUploadController {
 	
 			MultipartFile multipartFile = info.file;
 			InputStream is = multipartFile.getInputStream();
-			String fileSystemName = multipartFile.getOriginalFilename();
+			String fileSystemName = info.filename;
 			fileSystemName = StringUtils.deleteWhitespace(fileSystemName);
 	
 			// Flash cannot read the response of an upload
