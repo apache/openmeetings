@@ -2,7 +2,6 @@ package org.openmeetings.app;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.commons.cli.CommandLine;
@@ -15,13 +14,13 @@ import org.apache.commons.cli.Parser;
 import org.apache.commons.cli.PosixParser;
 import org.openmeetings.servlet.outputhandler.BackupExport;
 import org.openmeetings.servlet.outputhandler.BackupImportController;
+import org.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class Admin {
 	private static final Logger log = Red5LoggerFactory.getLogger(Admin.class);
-	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_hhmmss");
 	private boolean verbose = false;
 	private Options opts = buildOptions();
 
@@ -64,7 +63,7 @@ public class Admin {
 		if (verbose) {
 			log.error(msg, e);
 		} else {
-			log.error(msg + e.getMessage());
+			log.error(msg + " " + e.getMessage());
 		}
 		System.exit(1);
 	}
@@ -80,7 +79,7 @@ public class Admin {
 	}
 	
 	private void process(String[] args) {
-		File omHome = new File(System.getProperty("red5.home"), "webapps/openmeetings");
+		File omHome = new File(System.getenv("RED5_HOME"), "webapps/openmeetings");
 		
 		Parser parser = new PosixParser();
 		CommandLine cmdl = null;
@@ -118,14 +117,14 @@ public class Admin {
 			case backup:
 				try {
 					if (!cmdl.hasOption('f')) {
-						file = "backup_" + sdf.format(new Date()) + ".zip";
+						file = "backup_" + CalendarPatterns.getTimeForStreamId(new Date()) + ".zip";
 						System.out.println("File name was not specified, '" + file + "' will be used");
 					}
 					boolean includeFiles = Boolean.getBoolean(cmdl.getOptionValue("exclude-files", "true"));
 					BackupExport export = applicationContext.getBean(BackupExport.class);
 					File backup_dir = new File(omHome, "uploadtemp/" + System.currentTimeMillis());
 					backup_dir.mkdirs();
-					export.performExport(file, backup_dir.getAbsolutePath(), includeFiles, omHome.getAbsolutePath());
+					export.performExport(file, backup_dir, includeFiles, omHome.getAbsolutePath());
 					export.deleteDirectory(backup_dir);
 					backup_dir.delete();
 				} catch (Exception e) {
@@ -141,7 +140,7 @@ public class Admin {
 						System.exit(1);
 					}
 					BackupImportController importCtrl = applicationContext.getBean(BackupImportController.class);
-					importCtrl.performImport(new FileInputStream(backup), omHome.getAbsolutePath(), backup.getAbsolutePath());
+					importCtrl.performImport(new FileInputStream(backup), omHome.getAbsolutePath());
 				} catch (Exception e) {
 					handleError("Restore failed", e);
 				}

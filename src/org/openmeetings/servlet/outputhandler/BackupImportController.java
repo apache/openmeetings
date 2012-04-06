@@ -39,7 +39,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
@@ -85,7 +84,6 @@ import org.openmeetings.app.persistence.beans.user.UserSipData;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.math.CalendarPatterns;
-import org.openmeetings.utils.stringhandlers.StringComparer;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -151,7 +149,25 @@ public class BackupImportController extends AbstractUploadController {
 		USERS, ORGANISATIONS, APPOINTMENTS, ROOMS, MESSAGEFOLDERS, USERCONTACTS, FILEEXPLORERITEMS
 	};
 
-	public void performImport(InputStream is, String current_dir, String completeName) throws Exception {
+	public void performImport(InputStream is, String current_dir) throws Exception {
+		File working_dir = new File(current_dir, "upload"
+				+ File.separatorChar + "import");
+		if (!working_dir.exists()) {
+			working_dir.mkdir();
+		}
+
+		File f = new File(working_dir, "import_" + CalendarPatterns.getTimeForStreamId(new Date()));
+
+		int recursiveNumber = 0;
+		do {
+			if (f.exists()) {
+				f = new File(f.getAbsolutePath() + (recursiveNumber++));
+			}
+		} while (f.exists());
+		f.mkdir();
+
+		log.debug("##### WRITE FILE TO: " + f);
+		
 		ZipInputStream zipinputstream = new ZipInputStream(is);
 		byte[] buf = new byte[1024];
 
@@ -159,28 +175,17 @@ public class BackupImportController extends AbstractUploadController {
 
 		while (zipentry != null) {
 			// for each entry to be extracted
-			String entryName = completeName + File.separatorChar
-					+ zipentry.getName();
-			entryName = entryName.replace('/', File.separatorChar);
-			entryName = entryName.replace('\\', File.separatorChar);
-
-			// log.debug("entryname " + entryName);
-
-			// zipentry.get
-
 			int n;
 			FileOutputStream fileoutputstream;
-			File newFile = new File(entryName);
+			File fentryName = new File(f, zipentry.getName());
 
 			if (zipentry.isDirectory()) {
-				if (!newFile.mkdir()) {
+				if (!fentryName.mkdir()) {
 					break;
 				}
 				zipentry = zipinputstream.getNextEntry();
 				continue;
 			}
-
-			File fentryName = new File(entryName);
 
 			File fparent = new File(fentryName.getParent());
 
@@ -214,7 +219,7 @@ public class BackupImportController extends AbstractUploadController {
 
 			}
 
-			fileoutputstream = new FileOutputStream(entryName);
+			fileoutputstream = new FileOutputStream(fentryName);
 
 			while ((n = zipinputstream.read(buf, 0, 1024)) > -1) {
 				fileoutputstream.write(buf, 0, n);
@@ -231,9 +236,7 @@ public class BackupImportController extends AbstractUploadController {
 		/*
 		 * ##################### Import Organizations
 		 */
-		String orgListXML = completeName + File.separatorChar
-				+ "organizations.xml";
-		File orgFile = new File(orgListXML);
+		File orgFile = new File(f, "organizations.xml");
 		if (!orgFile.exists()) {
 			throw new Exception("organizations.xml missing");
 		}
@@ -244,9 +247,7 @@ public class BackupImportController extends AbstractUploadController {
 		/*
 		 * ##################### Import Users
 		 */
-		String userListXML = completeName + File.separatorChar
-				+ "users.xml";
-		File userFile = new File(userListXML);
+		File userFile = new File(f, "users.xml");
 		if (!userFile.exists()) {
 			throw new Exception("users.xml missing");
 		}
@@ -257,9 +258,7 @@ public class BackupImportController extends AbstractUploadController {
 		/*
 		 * ##################### Import Rooms
 		 */
-		String roomListXML = completeName + File.separatorChar
-				+ "rooms.xml";
-		File roomFile = new File(roomListXML);
+		File roomFile = new File(f, "rooms.xml");
 		if (!roomFile.exists()) {
 			throw new Exception("rooms.xml missing");
 		}
@@ -270,9 +269,7 @@ public class BackupImportController extends AbstractUploadController {
 		/*
 		 * ##################### Import Room Organisations
 		 */
-		String orgRoomListXML = completeName + File.separatorChar
-				+ "rooms_organisation.xml";
-		File orgRoomListFile = new File(orgRoomListXML);
+		File orgRoomListFile = new File(f, "rooms_organisation.xml");
 		if (!orgRoomListFile.exists()) {
 			throw new Exception("rooms_organisation.xml missing");
 		}
@@ -283,9 +280,7 @@ public class BackupImportController extends AbstractUploadController {
 		/*
 		 * ##################### Import Appointements
 		 */
-		String appointementListXML = completeName
-				+ File.separatorChar + "appointements.xml";
-		File appointementListFile = new File(appointementListXML);
+		File appointementListFile = new File(f, "appointements.xml");
 		if (!appointementListFile.exists()) {
 			throw new Exception("appointements.xml missing");
 		}
@@ -298,10 +293,7 @@ public class BackupImportController extends AbstractUploadController {
 		 * 
 		 * Reminder Invitations will be NOT send!
 		 */
-		String meetingmembersListXML = completeName
-				+ File.separatorChar + "meetingmembers.xml";
-		File meetingmembersListFile = new File(
-				meetingmembersListXML);
+		File meetingmembersListFile = new File(f, "meetingmembers.xml");
 		if (!meetingmembersListFile.exists()) {
 			throw new Exception("meetingmembersListFile missing");
 		}
@@ -312,9 +304,7 @@ public class BackupImportController extends AbstractUploadController {
 		/*
 		 * ##################### Import LDAP Configs
 		 */
-		String ldapConfigListXML = completeName
-				+ File.separatorChar + "ldapconfigs.xml";
-		File ldapConfigListFile = new File(ldapConfigListXML);
+		File ldapConfigListFile = new File(f, "ldapconfigs.xml");
 		if (!ldapConfigListFile.exists()) {
 			log.debug("meetingmembersListFile missing");
 			// throw new Exception
@@ -328,9 +318,7 @@ public class BackupImportController extends AbstractUploadController {
 		/*
 		 * ##################### Import Recordings
 		 */
-		String flvRecordingsListXML = completeName
-				+ File.separatorChar + "flvRecordings.xml";
-		File flvRecordingsListFile = new File(flvRecordingsListXML);
+		File flvRecordingsListFile = new File(f, "flvRecordings.xml");
 		if (!flvRecordingsListFile.exists()) {
 			log.debug("flvRecordingsListFile missing");
 			// throw new Exception
@@ -344,10 +332,7 @@ public class BackupImportController extends AbstractUploadController {
 		/*
 		 * ##################### Import Private Message Folders
 		 */
-		String privateMessageFoldersXML = completeName
-				+ File.separatorChar + "privateMessageFolder.xml";
-		File privateMessageFoldersFile = new File(
-				privateMessageFoldersXML);
+		File privateMessageFoldersFile = new File(f, "privateMessageFolder.xml");
 		if (!privateMessageFoldersFile.exists()) {
 			log.debug("privateMessageFoldersFile missing");
 			// throw new Exception
@@ -361,9 +346,7 @@ public class BackupImportController extends AbstractUploadController {
 		/*
 		 * ##################### Import Private Messages
 		 */
-		String privateMessagesXML = completeName
-				+ File.separatorChar + "privateMessages.xml";
-		File privateMessagesFile = new File(privateMessagesXML);
+		File privateMessagesFile = new File(f, "privateMessages.xml");
 		if (!privateMessagesFile.exists()) {
 			log.debug("privateMessagesFile missing");
 			// throw new Exception
@@ -377,9 +360,7 @@ public class BackupImportController extends AbstractUploadController {
 		/*
 		 * ##################### Import User Contacts
 		 */
-		String userContactsXML = completeName + File.separatorChar
-				+ "userContacts.xml";
-		File userContactsFile = new File(userContactsXML);
+		File userContactsFile = new File(f, "userContacts.xml");
 		if (!userContactsFile.exists()) {
 			log.debug("userContactsFile missing");
 			// throw new Exception
@@ -393,9 +374,7 @@ public class BackupImportController extends AbstractUploadController {
 		/*
 		 * ##################### Import File-Explorer Items
 		 */
-		String fileExplorerListXML = completeName
-				+ File.separatorChar + "fileExplorerItems.xml";
-		File fileExplorerListFile = new File(fileExplorerListXML);
+		File fileExplorerListFile = new File(f, "fileExplorerItems.xml");
 		if (!fileExplorerListFile.exists()) {
 			log.debug("fileExplorerListFile missing");
 			// throw new Exception
@@ -409,9 +388,7 @@ public class BackupImportController extends AbstractUploadController {
 		/*
 		 * ##################### Import File-Explorer Items
 		 */
-		String roomPollListXML = completeName + File.separatorChar
-				+ "roompolls.xml";
-		File roomPollListFile = new File(roomPollListXML);
+		File roomPollListFile = new File(f, "roompolls.xml");
 		if (!roomPollListFile.exists()) {
 			log.debug("roomPollListFile missing");
 		} else {
@@ -423,9 +400,11 @@ public class BackupImportController extends AbstractUploadController {
 		/*
 		 * ##################### Import real files and folders
 		 */
-		importFolders(current_dir, completeName);
+		importFolders(current_dir, f);
 
 		log.info("File explorer item import complete, clearing temp files");
+		
+		deleteDirectory(f);
 	}
 	
     @RequestMapping(value = "/backup.upload", method = RequestMethod.POST)
@@ -436,53 +415,16 @@ public class BackupImportController extends AbstractUploadController {
     	UploadInfo info = validate(request, true);
     	try {
 			String current_dir = context.getRealPath("/");
-			String working_dir = current_dir + "upload"
-					+ File.separatorChar + "import"
-					+ File.separatorChar;
-			File working_dirFile = new File(working_dir);
-			if (!working_dirFile.exists()) {
-				working_dirFile.mkdir();
-			}
-
 			MultipartFile multipartFile = info.file;
 			InputStream is = multipartFile.getInputStream();
-			String fileSystemName = multipartFile.getOriginalFilename();
-
-			StringUtils.deleteWhitespace(fileSystemName);
-
-			int dotidx = fileSystemName.lastIndexOf('.');
-			String newFileSystemName = StringComparer.getInstance()
-					.compareForRealPaths(
-							fileSystemName.substring(0, dotidx));
-
-			String completeName = working_dir + newFileSystemName;
-
-			File f = new File(completeName + File.separatorChar);
-
-			if (f.exists()) {
-				int recursiveNumber = 0;
-				String tempd = completeName + "_" + recursiveNumber;
-				while (f.exists()) {
-					recursiveNumber++;
-					tempd = completeName + "_" + recursiveNumber;
-					f = new File(tempd + File.separatorChar);
-
-				}
-				completeName = tempd;
-			}
-
-			f.mkdir();
-
-			log.debug("##### WRITE FILE TO: " + completeName);
-			performImport(is, current_dir, completeName);
-			deleteDirectory(f);
+			performImport(is, current_dir);
 
 			LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
 			hs.put("user", usersDao.getUser(info.userId));
 			hs.put("message", "library");
 			hs.put("action", "import");
 			hs.put("error", "");
-			hs.put("fileName", completeName);
+			hs.put("fileName", multipartFile.getOriginalFilename());
 
 			scopeApplicationAdapter.sendMessageWithClientByPublicSID(
 					hs, info.publicSID);
@@ -2195,12 +2137,11 @@ public class BackupImportController extends AbstractUploadController {
 		return null;
 	}
 
-	private void importFolders(String current_dir, String completeName)
+	private void importFolders(String current_dir, File importBaseDir)
 			throws IOException {
 
 		// Now check the room files and import them
-		File roomFilesFolder = new File(completeName + File.separatorChar
-				+ "roomFiles");
+		File roomFilesFolder = new File(importBaseDir, "roomFiles");
 
 		String library_dir = current_dir + "upload" + File.separatorChar;
 
@@ -2319,8 +2260,7 @@ public class BackupImportController extends AbstractUploadController {
 
 		// Now check the recordings and import them
 
-		File sourceDirRec = new File(completeName + File.separatorChar
-				+ "recordingFiles");
+		File sourceDirRec = new File(importBaseDir, "recordingFiles");
 
 		log.debug("sourceDirRec PATH " + sourceDirRec.getAbsolutePath());
 

@@ -1696,8 +1696,8 @@
                     } else if (value.message=='library'){
                         
                         if (value.action == 'import') {
-                            canvas.currentUploadWindow.myFileUpload.onComplete("byRemote");
-                            return
+                            canvas.currentUploadWindow.myFileUpload.onCompleteByRemote(value);
+                            return;
                         }
                         
                         var error = false;

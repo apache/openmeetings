@@ -128,8 +128,13 @@ public class BackupExport {
 	@Autowired
 	private PollManagement pollManagement;
 
-	public void performExport(String filePath, String backup_dir,
+	public void performExport(String filePath, File backup_dir,
 			boolean includeFiles, String omFilesDir) throws Exception {
+
+		if (!backup_dir.exists()) {
+			backup_dir.mkdirs();
+		}
+		
 		/*
 		 * ##################### Backup Organizations
 		 */
@@ -387,18 +392,13 @@ public class BackupExport {
 
 			copyDirectory(sourceDirRec, targetDirRec);
 		}
-		File backup_dirFile = new File(backup_dir);
-
-		if (!backup_dirFile.exists()) {
-			backup_dirFile.mkdir();
-		}
 
 		List<File> fileList = new ArrayList<File>();
 		log.debug("---Getting references to all files in: "
-				+ backup_dirFile.getCanonicalPath());
-		getAllFiles(backup_dirFile, fileList);
+				+ backup_dir.getCanonicalPath());
+		getAllFiles(backup_dir, fileList);
 		log.debug("---Creating zip file");
-		writeZipFile(backup_dirFile, fileList, new FileOutputStream(filePath));
+		writeZipFile(backup_dir, fileList, new FileOutputStream(filePath));
 		log.debug("---Done");
 	}
 	
@@ -447,25 +447,20 @@ public class BackupExport {
 					 */
 
 					String current_dir = servletCtx.getRealPath("/");
-					String working_dir = current_dir + "upload"
-							+ File.separatorChar + "backup"
-							+ File.separatorChar;
-					File working_dirFile = new File(working_dir);
+					File working_dir = new File(current_dir, "upload"
+							+ File.separatorChar + "backup");
 
-					if (!working_dirFile.exists()) {
-						working_dirFile.mkdir();
+					if (!working_dir.exists()) {
+						working_dir.mkdir();
 					}
 
 					String dateString = "backup_"
 							+ CalendarPatterns.getTimeForStreamId(new Date());
 
-					String backup_file = working_dir + File.separatorChar
-							+ dateString;
+					File backup_dir = new File(working_dir, dateString);
+					File backupFile = new File(backup_dir, dateString + ".zip");
 
-					String backup_dir = backup_file + File.separatorChar;
-
-					String full_path = backup_file + ".zip";
-
+					String full_path = backupFile.getAbsolutePath();
 					performExport(full_path, backup_dir, includeFiles, current_dir);
 					
 					RandomAccessFile rf = new RandomAccessFile(full_path, "r");
@@ -495,14 +490,12 @@ public class BackupExport {
 					out.flush();
 					out.close();
 
-					File backupFile = new File(full_path);
-
 					if (backupFile.exists()) {
 						// log.debug("DELETE :1: "+backupFile.getAbsolutePath());
 						backupFile.delete();
 					}
 
-					deleteDirectory(new File(backup_dir));
+					deleteDirectory(backup_dir);
 
 				}
 			} else {
