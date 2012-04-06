@@ -19,6 +19,7 @@
 package org.openmeetings.app.documents;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -38,13 +39,13 @@ public class LibraryWmlLoader {
 	
 	private static final String fileExt = ".wml";
 	
-	private static final String wmlFolderName = "test/";
+	private static final String wmlFolderName = "stored";
 	
 	@SuppressWarnings({ "rawtypes", "unused" })
 	public ArrayList loadWmlFile(String filePath, String fileName){
 		try {
 			LinkedHashMap lMap = new LinkedHashMap();
-			String filepathComplete = filePath + wmlFolderName + fileName;
+			String filepathComplete = filePath + wmlFolderName + File.separatorChar + fileName;
 			if (!filepathComplete.endsWith(fileExt)) {
 				filepathComplete += fileExt;
 			}
