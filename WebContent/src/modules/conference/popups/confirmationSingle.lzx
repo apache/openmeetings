@@ -33,7 +33,9 @@
     
     <attribute name="doCalcPosition" value="true" type="number" />
     
-	<view x="4" resource="warning_icon_rsc" y="24" />
+	<attribute name="iconResource" value="warning_popup_icon_rsc" type="string" />
+
+	<image x="4" src="$once{ canvas.getThemeImage(parent.iconResource) }" y="24" />
 
     <labelText labelid="$once{ parent.labeliderror }" y="24" 
     		   width="$once{ parent.width - 40 }"

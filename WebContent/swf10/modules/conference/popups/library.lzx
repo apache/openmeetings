@@ -26,7 +26,6 @@
 	 -->
 	<resource name="warning_icon_rsc" src="resources/warning.png" />
 
-    <include href="commonPopupAdapter.lzx" />
     <include href="confirmationSingleSWF10.lzx" />
     <include href="errorPopupSWF10.lzx" />
     

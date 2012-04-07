@@ -83,10 +83,4 @@
 	<attribute name="interviewPod2_x" value="644" type="number" />
     <attribute name="interviewPod2_y" value="28" type="number" />
 
-    <!--
-	   Popup dialogs attributes
-	 -->
-    <attribute name="exitDialog" value="null" />
-    <attribute name="closeWhiteboardDialog" value="null" />
-
 </library>

@@ -39,6 +39,11 @@
 				description="Icon for facebook button in login" 
 				license="Unkown"
 				src="public/themes/basic-theme/auth/icon_facebook.png" />
+				
+	<resource name="warning_popup_icon_rsc" 
+				description="Toolbar Icon" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/error.png" />	
 	
 	<!-- Save Toolbar (for example Admin section) -->
 	

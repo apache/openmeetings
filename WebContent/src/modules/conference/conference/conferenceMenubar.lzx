@@ -110,16 +110,6 @@
 		</handler>
 		<handler name="onclick">
             canvas._videocontainer._videoviewcontent.exitRoom();
-            canvas.videoComp_lc.exitRoom = function(confirm) {
-                if ($debug) Debug.write("confirm exitRoom:", confirm);
-                if (confirm) {
-                    canvas.currentBaseConferenceRoom._screenSharingAdapter.closeAllScreenSharings();
-                    if (canvas.appointmentNotificationPopUp != null) {
-                        canvas.appointmentNotificationPopUp.destroy();
-                    }
-                    canvas.doActionmenu('quit');
-                }
-            }
 		</handler>
 	    
 	    <view width="${ parent.width-1 }" bgcolor="0xFFFFFF" opacity="0.4" height="$once{ parent.height - 2}" y="1"

@@ -34,8 +34,7 @@
     <attribute name="offsetLength" type="number" value="40"/>
     <attribute name="videoWidth" type="number" value="132"/>
     <attribute name="videoHeight" type="number" value="132"/>
-    <attribute name="popupAdapter"/>
-
+    
     <handler name="oninit">
         <![CDATA[
 
@@ -72,7 +71,6 @@
             lc.client = client;
             canvas.setAttribute("lc", lc);
 
-            popupAdapter = new lz.commonPopupAdapter();
         ]]>
     </handler>
     
@@ -454,7 +452,17 @@
     -->
     <method name="exitRoom">
         if ($debug) Debug.write("exitRoom");
-        popupAdapter.exitRoom();
+        new lz.confirmationSingleSWF10(canvas,{
+                refObj:this,
+                labelid:791,
+                labeliderror:790,
+                refReturnMethod:'exitConfirmMethod',
+                showCheckBox:false
+            });
+    </method>
+    
+    <method name="exitConfirmMethod" args="bool,sharedObjectData">
+    	canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'exitRoom', bool);
     </method>
 
     <!---
@@ -462,7 +470,20 @@
     -->
     <method name="closeWhiteboard">
         if ($debug) Debug.write("closeWhiteboard");
-        popupAdapter.closeWhiteboard();
+        if (canvas.ismoderator || canvas.isAllowedToDraw) {
+            canvas.closeWhiteboardDialog = new lz.confirmationSingleSWF10(canvas,{
+                refObj:this,
+                labeliderror:1313,
+                refReturnMethod:'closeWhiteboardConfirmMethod',
+                showCheckBox:false
+            });
+        } else {
+            new lz.labelerrorPopupSWF10(canvas,{labelid:1366, errorlabelid:1365});
+        }
+    </method>
+    
+    <method name="closeWhiteboardConfirmMethod" args="bool,sharedObjectData">
+    	canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'closeWhiteboard', bool);
     </method>
         
     <!--

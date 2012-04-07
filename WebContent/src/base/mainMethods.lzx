@@ -216,7 +216,17 @@
     	canvas.videoComp_lc.regExpResult = function(tId,tResult) {
       		t.regExpResult(tId,tResult);
         }
-        
+        canvas.videoComp_lc.exitRoom = function(confirm) {
+            if ($debug) Debug.write("confirm exitRoom:", confirm);
+            if (confirm) {
+                canvas.currentBaseConferenceRoom._screenSharingAdapter.closeAllScreenSharings();
+                if (canvas.appointmentNotificationPopUp != null) {
+                    canvas.appointmentNotificationPopUp.destroy();
+                }
+                canvas.doActionmenu('quit');
+            }
+        }
+    
         mainBaseText.setAttribute('text',canvas.currentappname);
         mainBaseText.setShadow();
         mainBaseTextLabel.setAttribute('text',canvas.currentappnameurl);  
