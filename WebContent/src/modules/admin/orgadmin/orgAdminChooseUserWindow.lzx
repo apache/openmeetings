@@ -101,7 +101,6 @@
             <netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
             <netparam><method name="getValue"> return parent.parent.organisation_id; </method></netparam>
             <netparam><method name="getValue"> return parent.parent.usersId; </method></netparam>
-            <netparam><method name="getValue"> return ''; </method></netparam>
             <handler name="ondata" args="value">
                 if ($debug) Debug.write("addUserToOrganisation ",value);
                 if (value>0){
