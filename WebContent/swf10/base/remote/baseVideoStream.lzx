@@ -33,6 +33,13 @@
         </passthrough>
     </when>
     </switch>
+    
+    <attribute name="yDebug" value="-20" type="number" />
+    
+    <method name="getYDebug">
+    	this.yDebug += 20;
+    	return this.yDebug;
+    </method>
 
 	<!--- the NetStream Object
               @keywords final -->
@@ -67,6 +74,9 @@
 	<event name="onMetaDataEvent" />
 	<event name="onPlayStatusEvent" />
 	<event name="onCuePointEvent" />
+	<event name="onAsyncError" />
+	<event name="onNetStatus" />
+	<event name="onIoError" />
 
 	<!-- save value for restart -->
         <attribute name="streamName" />
@@ -78,12 +88,48 @@
         	if ($debug) Debug.warn("NetConnection is not connected");
         }
 		this._ns = new NetStream(tStream);
-		this._ns.client = this;
+		//see: http://livedocs.adobe.com/flash/9.0_de/ActionScriptLangRefV3/flash/net/NetStream.html
+        //according to the docs the construct to catch event has to be implemented like this.
+        var t = this;
+		var clientObject = new Object();
+		clientObject.onMetaData = function(metadata:Object):void {
+			t.onMetaData(metadata);
+		};
+		clientObject.onPlayStatus = function(metadata:Object):void {
+			t.onPlayStatus(metadata);
+		};
+		clientObject.onCuePoint = function(metadata:Object):void {
+			t.onCuePoint(metadata);
+		};
+		clientObject.ioError = function(error:Object):void {
+			t.ioError(error);
+		};
+		clientObject.ioError = function(error:Object):void {
+			t.ioError(error);
+		};
+		clientObject.netStatus = function(status:Object):void {
+			t.netStatus(status);
+		};
+		clientObject.asyncError = function(error:Object):void {
+			t.asyncError(error);
+		};
+		this._ns.client = clientObject;
 	</method>
-
-    <!--<handler name="onStatus" args="info"><![CDATA[-->
-        <!--if($debug) Debug.write("simpleNetStream onStatus",info);-->
-    <!--]]></handler>-->
+	
+	<method name="asyncError" args="error">
+		if($debug) Debug.write("simpleNetStream asyncError",error);
+		this.onAsyncError.sendEvent(error);
+	</method>
+	
+	<method name="netStatus" args="status">
+		if($debug) Debug.write("simpleNetStream netStatus",status);
+		this.onNetStatus.sendEvent(status);
+	</method>
+	
+	<method name="ioError" args="error">
+		if($debug) Debug.write("simpleNetStream ioError",error);
+		this.onIoError.sendEvent(error);
+	</method>
 
     <method name="onCuePoint" args="info"><![CDATA[
         if($debug) Debug.write("simpleNetStream onCuePoint",info);

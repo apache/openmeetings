@@ -45,16 +45,16 @@
     </method>
 	
 	<handler name="onPlayStatusEvent" args="info">
-        if ($debug) Debug.write("onPlayStatus ",info);
+        //if ($debug) Debug.write("onPlayStatus ",info);
         if (info.code ==  "NetStream.Play.Complete" ) {
         	if ($debug) Debug.write("-- stopStream");
             //parent.parent.stopStream();
-            canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'stopWhiteboardPlaybackStream', this.name);
+            canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'stopRecordingStream', this.name);
         }
     </handler>
     <handler name="onMetaDataEvent" args="info">
-        if ($debug) Debug.warn("onMetaData ",info);
-        if ($debug) Debug.write("parent.parent.deltaInSeconds ",Number(info.duration));
+        //if ($debug) Debug.warn("onMetaData ",info);
+        //if ($debug) Debug.write("parent.parent.deltaInSeconds ",Number(info.duration));
         //parent.parent.deltaInSeconds = Number(info.duration);
         canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'metaWhiteboardPlaybackStream', this.name, Number(info.duration));
     </handler>

@@ -32,6 +32,7 @@
 	<event name="onUpdateRecordingStreamTime" />
 	<event name="onTogglePlayRecordingStream" />
 	<event name="onRecordingStoppedAndDisconnected" />
+	<event name="onPlayComplete" />
     
     <method name="getTime">
         return this.currentTime;
