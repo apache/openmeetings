@@ -1103,7 +1103,7 @@ public class CoreScreenShare {
 
 	private final class CaptureScreen extends Object implements Runnable {
 		private int timeBetweenFrames = 1000; // frameRate
-
+		private volatile long timestamp = 0;
 		private volatile boolean active = true;
 		@SuppressWarnings("unused")
 		private volatile boolean stopped = false;
@@ -1151,19 +1151,20 @@ public class CoreScreenShare {
 				Robot robot = new Robot();
 				BufferedImage image = null;
 				while (active) {
+					final long ctime = System.currentTimeMillis();
 					Rectangle screen = new Rectangle(VirtualScreenBean.vScreenSpinnerX,
 							VirtualScreenBean.vScreenSpinnerY,
 							VirtualScreenBean.vScreenSpinnerWidth,
 							VirtualScreenBean.vScreenSpinnerHeight);
 					
-					final long ctime = System.currentTimeMillis();
 					image = robot.createScreenCapture(screen);
 
 					try {
+						timestamp += timeBetweenFrames;
 						byte[] data = se.encode(screen, image, new Rectangle(VirtualScreenBean.vScreenResizeX,
 								VirtualScreenBean.vScreenResizeY));
 
-						pushVideo(data.length, data, ctime);
+						pushVideo(data.length, data, timestamp);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
