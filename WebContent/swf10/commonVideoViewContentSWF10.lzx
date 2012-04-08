@@ -83,6 +83,7 @@
 					isInterview:isInterview,
 					interviewPodId:interviewPodId
 				});
+		return;
 	</method>
 
     <method name="createVideoObject" args="publicSID,isBroadcasting,interviewPodId,object">
@@ -143,7 +144,7 @@
                 vidContainer.setAttribute("width",322);
                 vidContainer.setAttribute("height",281);
             }
-
+			return;
         ]]>
     </method>
     
@@ -284,6 +285,7 @@
             if (obj != null) {
                 obj.silenceMicrophone(bool);
             }
+            return;
         ]]>
     </method>
 
@@ -291,6 +293,7 @@
         for (var eg in this.subviews){
             this.subviews[eg].resetValues();
         }
+        return;
     </method>
 
     <method name="closeStreamclient" args="publicSID">
@@ -310,6 +313,7 @@
         if(obj != null) {
             obj.destroy();
         }
+        return;
     ]]></method>
 
     <method name="updateMuteStatusVideoView" args="roomClient">
@@ -317,17 +321,19 @@
             for (var i=0;i<this.subviews.length;i++){
                 this.subviews[i].muteMicrophone(roomClient);
     		}
+    		return;
         ]]>
     </method>
 
     <method name="ismoderatorChanged" args="m">
         canvas.setAttribute("ismoderator", m);
+        return;
     </method>
 
 
-    <method name="setSpeakingByPos" args="publicSID,bool">
+    <method name="setSpeakingByPos" args="publicSID,bool,tControl">
         <![CDATA[
-            //if ($debug) Debug.write("setSpeakingByPos ",publicSID,bool);
+            if ($debug) Debug.write("setSpeakingByPos ",publicSID,bool,tControl);
             var obj = this.getVideoObjectByPublicSID(publicSID);
             if (obj == null) {
             	if ($debug) Debug.warn("Could not find user for setSpeakingByPos ",publicSID,bool);
@@ -338,6 +344,7 @@
             } else {
                 obj._loudness.loudness.setAttribute('opacity',0.2);
             }
+            return;
         ]]>
     </method>
 
@@ -360,6 +367,7 @@
         }
         obj.thisVars = rcl;
         obj.updateAVSettingsSymbol(rcl);
+        return;
     </method>
 
     <method name="startStream" args="publicSID,broadcastId,firstname,lastname,interviewPodId,width,height">
@@ -383,7 +391,7 @@
                 obj.setAttribute("width",322);
                 obj.setAttribute("height",281);
             }
-            
+            return;
         ]]>
     </method>
 
@@ -400,6 +408,7 @@
             if (canvas.inner.editRecordStream != null) {
                 canvas.inner.editRecordStream.destroy();
             }
+            return;
         ]]>
     </method>
     
@@ -411,6 +420,7 @@
     	<![CDATA[
     		if ($debug) Debug.write("updateModerationFlag :: ",moderator);
     		this.setAttribute('ismoderator',moderator);
+    		return;
     	]]>
     </method>
     
@@ -424,6 +434,7 @@
     		canvas.setAttribute("isAllowedToDraw",canDraw);
             canvas.setAttribute("isAllowedToScreenShare",canShare);
             canvas.setAttribute("isAllowedToRemoteControl",canRemote);
+            return;
     	]]>
     </method>
 
@@ -434,8 +445,9 @@
         <![CDATA[
             if ($debug) Debug.write("changeDevice");
             new lz.changeDevice(canvas.inner, {
-                name:"changeDeviceDialog"
-            });
+					                name:"changeDeviceDialog"
+					            });
+            return;
         ]]>
     </method>
 
@@ -451,6 +463,7 @@
                 refReturnMethod:'exitConfirmMethod',
                 showCheckBox:false
             });
+        return;
     </method>
     
     <method name="exitConfirmMethod" args="bool,sharedObjectData">
@@ -472,6 +485,7 @@
         } else {
             new lz.labelerrorPopupSWF10(canvas,{labelid:1366, errorlabelid:1365});
         }
+        return;
     </method>
     
     <method name="closeWhiteboardConfirmMethod" args="bool,sharedObjectData">

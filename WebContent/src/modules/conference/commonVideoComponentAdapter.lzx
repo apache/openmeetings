@@ -81,7 +81,7 @@
         @param boolean bool show light on/off
     -->
     <method name="setSpeakingByPos" args="publicSID,bool">
-        canvas.sendViaLocalConnection(canvas.vid_lc_name, "setSpeakingByPos", [publicSID, bool]);
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "setSpeakingByPos", [publicSID, bool, canvas.getSpeakingPosIndicator()]);
     </method>
 
     <!---
