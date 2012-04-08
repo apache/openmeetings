@@ -74,11 +74,6 @@
 
     <attribute name="interviewPodId" value="0" type="number" />
 
-    <!--<handler name="onx" args="x">-->
-        <!--if ($debug) Debug.write("# x", this.getAttributeRelative('x', canvas));-->
-        <!--canvas.lc.send(canvas.vid_lc_name, "videoOnMove", this.interviewPodId, this.getAttributeRelative('x', canvas), this.getAttributeRelative('y', canvas));-->
-    <!--</handler>-->
-    
     <method name="startInterView">
         if ($debug) Debug.write("startInterView :: ");
         var tx = this.getAttributeRelative("x",canvas);

@@ -133,11 +133,10 @@
             //Load Session Data
             this.getsessiondata.callRPC();    
         }
-        canvas.lc.send(canvas.vid_lc_name, "reconnect", canvas.thishib.src);
     </handler>
     
     <handler name="ondisconnect">
-        canvas.lc.send(canvas.rtmp_lc_name, "disconnect", canvas.thishib.src);
+        canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "disconnect", [canvas.thishib.src]);
     </handler>
     
     <method name="reconnectComplete">
@@ -508,7 +507,7 @@
                         
                     } else {
                        canvas.setRoomValues(value.roomtype.roomtypes_id,value.rooms_id,value);
-                       canvas.lc.send(canvas.rtmp_lc_name,"setRoomValues",value.roomtype.roomtypes_id,value.rooms_id,value);
+                       canvas.sendViaLocalConnection(canvas.rtmp_lc_name,"setRoomValues",[value.roomtype.roomtypes_id,value.rooms_id,value]);
                     }
                 } else {
                     new lz.labelerrorPopup(canvas,{errorlabelid:1286});
@@ -843,7 +842,7 @@
             //The onResult-Handler will be called be the rtmpconnection
             //Debug.write("getRoomTypes ",value);
             canvas.roomTypesInitValues = value;
-            canvas.lc.send(canvas.rtmp_lc_name, "getRoomTypes", value);
+            canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "getRoomTypes", [value]);
             canvas.thishib.loaderVar.setProgress();
             parent.setUsernameAndSession.doCall();
         </handler>  
@@ -1041,7 +1040,7 @@
                 } else {
                     //free the VideoContainer
                     //canvas._videocontainer.closeStreamClient(value.publicSID);
-                    canvas.lc.send(canvas.vid_lc_name, "closeStreamClient", value.publicSID);
+                    canvas.sendViaLocalConnection(canvas.vid_lc_name, "closeStreamClient", [value.publicSID]);
                     canvas.setAttribute('numberofpartners',canvas.numberofpartners-1);
                 }
                 //TODO:check first current tab
@@ -1488,7 +1487,7 @@
                         //canvas.currentModApply
                         //if ($debug) Debug.write("audioActivity Client ",value[1],value[2]);
                         if (canvas._videocontainer.showsVideoInSeparateComponent) {
-                            canvas.lc.send(canvas.vid_lc_name, "setSpeakingByPos", value[2],value[1]);
+                            canvas.sendViaLocalConnection(canvas.vid_lc_name, "setSpeakingByPos", [value[2],value[1]]);
                         } else {
                             canvas._videocontainer.setSpeakingByPos(value[2],value[1]);
                         }

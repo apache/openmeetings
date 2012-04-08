@@ -29,7 +29,7 @@
 	 -->
 	<method name="newScreenSharing" args="rcl">
 		//Send via LocalConnection to SWF10 container
-		canvas.lc.send(canvas.rtmp_lc_name, "newScreenSharing", rcl);
+		canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "newScreenSharing", [rcl]);
 	</method>
 	
 	<!---
@@ -39,7 +39,7 @@
      -->
     <method name="newScreenSharings" args="rcls">
         //Send via LocalConnection to SWF10 container
-        canvas.lc.send(canvas.rtmp_lc_name, "newScreenSharings", rcls);
+        canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "newScreenSharings", [rcls]);
     </method>
 	
 	<!--- 
@@ -49,7 +49,7 @@
 	 -->
 	<method name="closeScreenSharing" args="rcl">
 		//Send via LocalConnection to SWF10 container
-		canvas.lc.send(canvas.rtmp_lc_name, "closeScreenSharing", rcl);
+		canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "closeScreenSharing", [rcl]);
 	</method>
 	
 	<!--- 
@@ -59,7 +59,7 @@
 	<method name="closeAllScreenSharings" >
 		//Send via LocalConnection to SWF10 container
 		if ($debug) Debug.write("closeAllScreenSharings SEND");
-		canvas.lc.send(canvas.rtmp_lc_name, "closeAllScreenSharings");
+		canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "closeAllScreenSharings", null);
 	</method>
 	
 	<!--- 
@@ -69,7 +69,7 @@
 	 -->
 	<method name="updateCursorScreenSharing" args="cursorMap">
 		//Send via LocalConnection to SWF10 container
-		canvas.lc.send(canvas.rtmp_lc_name, "updateCursorScreenSharing",cursorMap);
+		canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "updateCursorScreenSharing", [cursorMap]);
 	</method>
 
 </class>

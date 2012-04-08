@@ -162,7 +162,7 @@
 	        	var tx = this.getAttributeRelative("x",canvas)+tObjectDimension.x+this._content.x;
 	        	var ty = this.getAttributeRelative("y",canvas)+tObjectDimension.y+this._content.y;
 	        	
-	            canvas.lc.send(canvas.rtmp_lc_name, "playbackWhiteboardVideo",this.name,this.recordingName,0,tx,ty,tObjectDimension.width,tObjectDimension.height);
+	            canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "playbackWhiteboardVideo", [this.name,this.recordingName,0,tx,ty,tObjectDimension.width,tObjectDimension.height]);
 	    	}
     	]]>
     </method>   
@@ -247,7 +247,7 @@
         this._progress._progressbar._time.setAttribute("text","");
         this._progress._progressbar._pointer.setAttribute("x",0);
         if ($debug) Debug.write("SEND stopWhiteboardVideo ",this.name);
-        canvas.lc.send(canvas.rtmp_lc_name, "stopWhiteboardVideo",this.name);
+        canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "stopWhiteboardVideo",[this.name]);
         this.isPaused = true;
     </method>
     

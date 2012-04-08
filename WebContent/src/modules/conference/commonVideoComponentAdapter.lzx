@@ -31,7 +31,7 @@
      -->
     <method name="showDevicePopUpInterview" args="isSyncUpdate,interviewPodId,tx,ty,twidth,theight">
     	if ($debug) Debug.write("showDevicePopUpInterview ",isSyncUpdate,interviewPodId,tx,ty,twidth,theight);
-        canvas.lc.send(canvas.vid_lc_name, "createEditRecordStream", isSyncUpdate, true, interviewPodId);
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "createEditRecordStream", [isSyncUpdate, true, interviewPodId]);
     </method>
     
     <!---
@@ -39,7 +39,8 @@
         @param isSyncUpdate show the popup also if the user has clicked the "do not show again" chceckbox
      -->
     <method name="showDevicePopUp" args="isSyncUpdate">
-        canvas.lc.send(canvas.vid_lc_name, "createEditRecordStream", isSyncUpdate, false, -1);
+    	if ($debug) Debug.write("showDevicePopUp ",isSyncUpdate);
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "createEditRecordStream", [isSyncUpdate, false, -1]);
     </method>
     
     <!---
@@ -47,22 +48,22 @@
      -->
     <method name="reconnectSuccess" args="isInterview">
     	if ($debug) Debug.write("Send reconnectSuccess to ",canvas.rtmp_lc_name);
-    	canvas.lc.send(canvas.rtmp_lc_name, "reconnectSuccess", canvas.thishib.src, canvas.publicSID, hib.userobject, isInterview);
+    	canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "reconnectSuccess", [canvas.thishib.src, canvas.publicSID, hib.userobject, isInterview]);
     </method>
     
     <handler name="onismoderator" reference="canvas" args="m">
-        canvas.lc.send(canvas.vid_lc_name, "ismoderatorChanged", m);
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "ismoderatorChanged", [m]);
     </handler>
 
     <!---
         Creates video object
     -->
     <method name="createVideo" args="publicSID,displayName,broadcastId,avsettings,interviewPodId,object">
-        canvas.lc.send(canvas.vid_lc_name, "createVideo", publicSID, displayName, broadcastId, avsettings, interviewPodId, object);
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "createVideo", [publicSID, displayName, broadcastId, avsettings, interviewPodId, object]);
     </method>
 
     <method name="createVideoObject" args="publicSID,isBroadcasting,interviewPodId,object">
-        canvas.lc.send(canvas.vid_lc_name, "createVideoObject", publicSID, isBroadcasting, interviewPodId,object);
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "createVideoObject", [publicSID, isBroadcasting, interviewPodId,object]);
     </method>
 
     <!---
@@ -70,7 +71,7 @@
         interviewPodId has only a meaning in the Room Type Interview
      -->
     <method name="startStream" args="publicSID,broadcastId,firstname,lastname,interviewPodId,vWidth,vHeight">
-        canvas.lc.send(canvas.vid_lc_name, "startStream", publicSID,broadcastId,firstname,lastname,interviewPodId,vWidth,vHeight);
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "startStream", [publicSID,broadcastId,firstname,lastname,interviewPodId,vWidth,vHeight]);
     </method>
 
     <!---
@@ -80,7 +81,7 @@
         @param boolean bool show light on/off
     -->
     <method name="setSpeakingByPos" args="publicSID,bool">
-        canvas.lc.send(canvas.vid_lc_name, "setSpeakingByPos", publicSID, bool);
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "setSpeakingByPos", [publicSID, bool]);
     </method>
 
     <!---
@@ -88,7 +89,7 @@
         @param int broadcastId broadcastId
      -->
     <method name="closeStreamClient" args="publicSID">
-        canvas.lc.send(canvas.vid_lc_name, "closeStreamClient", publicSID);
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "closeStreamClient", [publicSID]);
     </method>
 
     <!---
@@ -96,28 +97,28 @@
         @param int broadcastId broadcastId
      -->
     <method name="disconnectclient" args="publicSID">
-        canvas.lc.send(canvas.vid_lc_name, "disconnectclient", publicSID);
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "disconnectclient", [publicSID]);
     </method>
 
     <method name="resetAllValues">
-        canvas.lc.send(canvas.vid_lc_name, "resetAllValues");
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "resetAllValues",null);
     </method>
 
     <!---
      invoked if another client logs into the room
     after choosing devices -->
     <method name="setAVSettingsToClient" args="rcl">
-        canvas.lc.send(canvas.vid_lc_name, "setAVSettingsToClient", rcl);
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "setAVSettingsToClient", [rcl]);
     </method>
 
     <method name="createEditRecordStream" args="syncUpdate"><![CDATA[
         //this.syncUpdate = syncUpdate;
         //h.getBroadCastId.doCall();
-        canvas.lc.send(canvas.vid_lc_name, "createEditRecordStream", syncUpdate);
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "createEditRecordStream", [syncUpdate]);
     ]]></method>
 
     <method name="removeVideoByUser" args="publicSID">
-        canvas.lc.send(canvas.vid_lc_name, "removeVideoByUser", publicSID);
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "removeVideoByUser", [publicSID]);
     </method>
 
     <!--
@@ -125,39 +126,45 @@
         with the publicSID
     -->
     <method name="muteSound" args="publicSID, bool">
-        canvas.lc.send(canvas.vid_lc_name, "muteSound", publicSID, bool);
+    	if ($debug) Debug.write("muteSound :: ",publicSID,bool);
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "muteSound", [publicSID, bool]);
     </method>
 
     <method name="giveExclusiveAudio" args="publicSID">
-        canvas.lc.send(canvas.vid_lc_name, "giveExclusiveAudio", publicSID);
+    	if ($debug) Debug.write("giveExclusiveAudio :: ",publicSID);
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "giveExclusiveAudio", [publicSID]);
     </method>
 
     <!---
         Updates microphone's state of roomClient
     -->
     <method name="updateMuteStatusVideoView" args="roomClient">
-        canvas.lc.send(canvas.vid_lc_name, "updateMuteStatusVideoView", roomClient);
+    	if ($debug) Debug.write("updateMuteStatusVideoView :: ",roomClient);
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "updateMuteStatusVideoView", [roomClient]);
     </method>
 
     <!---
         Shows the window with device settings
     -->
     <method name="changeDevice">
-        canvas.lc.send(canvas.vid_lc_name, "changeDevice");
+    	if ($debug) Debug.write("changeDevice :: ");
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "changeDevice", null);
     </method>
 
     <!---
         Shows the exit dialog
     -->
     <method name="exitRoom">
-        canvas.lc.send(canvas.vid_lc_name, "exitRoom");
+    	if ($debug) Debug.write("exitRoom :: ");
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "exitRoom", null);
     </method>
 
     <!---
         Shows the close whiteboard dialog
     -->
     <method name="closeWhiteboard">
-        canvas.lc.send(canvas.vid_lc_name, "closeWhiteboard");
+    	if ($debug) Debug.write("closeWhiteboard :: ");
+        canvas.sendViaLocalConnection(canvas.vid_lc_name, "closeWhiteboard", null);
     </method>
     
 </class>

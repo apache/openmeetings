@@ -88,7 +88,7 @@ Test the setup values before you enter a room
             	
             	canvas._loadingAll.hideContentOnly();
             	if ($debug) Debug.write("canvas.rtmp_lc_name", canvas.rtmp_lc_name, "initTestingApplication", this.x, this.y);
-            	canvas.lc.send(canvas.rtmp_lc_name, "doInitTestingApplication", this.x, this.y, canvas.thishib.src);
+            	canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "doInitTestingApplication", [this.x, this.y, canvas.thishib.src]);
             }
             
     	]]>
@@ -100,7 +100,7 @@ Test the setup values before you enter a room
     	this.doJustClose = true;
         canvas._loadingAll.hideLoading();
         if ($debug) Debug.write("canvas.rtmp_lc_name", canvas.rtmp_lc_name, "closeInitTestingApplication");
-        canvas.lc.send(canvas.rtmp_lc_name, "closeInitTestingApplication");
+        canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "closeInitTestingApplication", null);
     </method>
     
     <method name="closeInitTestingApplicationConfirm">
@@ -117,7 +117,7 @@ Test the setup values before you enter a room
             this._enterMeeting.setAttribute("enabled",false);
             this._cancel.setAttribute("enabled",false);
             canvas._loadingAll.hideLoading();
-            canvas.lc.send(canvas.rtmp_lc_name, "closeInitTestingApplication");
+            canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "closeInitTestingApplication", null);
         
             Debug.write("sharedobject store ");
             var g = canvas.getUserData();

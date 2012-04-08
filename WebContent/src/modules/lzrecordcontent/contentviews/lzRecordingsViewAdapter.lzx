@@ -63,7 +63,7 @@
 		if ($debug) Debug.write("connect");
 		var tx = this.getAttributeRelative("x",canvas);
 		var ty = this.getAttributeRelative("y",canvas);
-		canvas.lc.send(canvas.rtmp_lc_name, "connectRecordingPlayer", canvas.thishib.src, tx, ty, this.width, this.height);
+		canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "connectRecordingPlayer", [canvas.thishib.src, tx, ty, this.width, this.height]);
 	</method>
 	
 	<method name="disconnect">
@@ -75,31 +75,31 @@
         var ty = this.getAttributeRelative("y",canvas);
         this.currentTime = 0;
 		if ($debug) Debug.write("playRecordingStream ",stream, delay, tx, ty, this.width, this.height);
-		canvas.lc.send(canvas.rtmp_lc_name, "playRecordingStream", stream, delay, tx, ty, this.width, this.height);
+		canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "playRecordingStream", [stream, delay, tx, ty, this.width, this.height]);
 	</method>
 	
 	<method name="updateRecordingVideoPosition">
-        canvas.lc.send(canvas.rtmp_lc_name, "updateRecordingVideoPosition", this.width, this.height);
+        canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "updateRecordingVideoPosition", [this.width, this.height]);
     </method>
 	
 	<method name="seek" args="flvTime">
 		if ($debug) Debug.write("seek ",flvTime);
-		canvas.lc.send(canvas.rtmp_lc_name, "seekRecordingPlayback", flvTime);
+		canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "seekRecordingPlayback", [flvTime]);
 	</method>
 	
 	<method name="pause" args="pauseBool">
 		if ($debug) Debug.write("lzRecordingsViewAdapter::pause value: ",pauseBool);
-		canvas.lc.send(canvas.rtmp_lc_name, "pauseRecordingPlayback", pauseBool);
+		canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "pauseRecordingPlayback", [pauseBool]);
 	</method>
 	
 	<method name="stop">
 		if ($debug) Debug.write("SEND stop ");
-		canvas.lc.send(canvas.rtmp_lc_name, "stopRecordingStream");
+		canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "stopRecordingStream", null);
 	</method>
 	
 	<method name="stopAndCloseConnection">
 		if ($debug) Debug.write("SEND stopAndCloseConnection ");
-        canvas.lc.send(canvas.rtmp_lc_name, "stopAndCloseRecordingConnection");
+        canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "stopAndCloseRecordingConnection", null);
 	</method>
 	
 </class>

@@ -298,7 +298,7 @@
                     
             }
             
-            if ($debug) Debug.write("onmicMutedStatusChangedItem :3: ",this.refObj.micMuted);
+            if ($debug) Debug.write("onmicMutedStatusChangedItem :3: ",this.refObj.publicSID,this.refObj.micMuted);
             
             if (this.refObj.micMuted) {
             	this._x._mute._text.setAttribute("labelid",1408);

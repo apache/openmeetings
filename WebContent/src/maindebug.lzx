@@ -74,7 +74,7 @@
         <view name="inner" />
         <method name="clearAll">
             <![CDATA[
-                canvas.lc.send(canvas.vid_lc_name, "clearAll");
+                canvas.sendViaLocalConnection(canvas.vid_lc_name, "clearAll", null);
                 if($debug) Debug.write("main.lzx/main_content._content.inner.clearAll(): ",this.inner,this.inner.subviews.length);
                 var baseContent = this.inner.subviews[0].close();
                 for (var eg in this.inner.subviews) {

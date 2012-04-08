@@ -172,8 +172,11 @@
                 this.parent.addItem(value[i].connectedSince,value[i].isMod,value[i].streamid,value[i].username,
                               '',value[i].formatedDate,value[i].userpos,value[i].usercolor,value[i]);
             }
+            
             //this content must be inited _after_ setting the default values
             canvas.thishib.getCurrentModeratorList.doCall(); 
+            
+            return;
             canvas.thishib.checkLzRecording.doCall();
             canvas._chatcontent.doInit();   
             ]]>
@@ -190,6 +193,7 @@
 
     <method name="receiveExclusiveAudioFlag" args="publicSID">
     <![CDATA[
+    	if ($debug) Debug.write("receiveExclusiveAudioFlag: ",publicSID);
         var obj = this._participants.getVideoObjectByPublicSID(publicSID);
 
         for (var i=0; i<obj.parent.subviews.length; i++) {

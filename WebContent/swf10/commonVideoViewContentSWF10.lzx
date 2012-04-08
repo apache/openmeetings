@@ -41,7 +41,6 @@
             var client = {};
             client.t = this;
 
-            //client.reconnect = this.reconnect;
             client.createEditRecordStream = this.createEditRecordStream;
             client.createVideoObject = this.createVideoObject;
             client.createVideo = this.createVideo;
@@ -74,13 +73,6 @@
         ]]>
     </handler>
     
-    <!-- 
-    <method name="reconnect" args="src">
-        canvas.thishib.setAttribute('src',src);
-        canvas.thishib.disconnect();
-    </method>
-     -->
-
 	<method name="createEditRecordStream" args="syncUpdate,isInterview,interviewPodId">
 		if($debug) Debug.info("createEditRecordStream,",syncUpdate,isInterview,interviewPodId);
 		if (canvas.inner.editRecordStream != null)
