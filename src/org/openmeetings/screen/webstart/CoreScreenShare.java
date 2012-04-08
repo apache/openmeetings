@@ -66,10 +66,6 @@ public class CoreScreenShare {
 	public String publishName;
 	public ITagWriter writer;
 	public ITagReader reader;
-	public int videoTs = 0;
-	public int audioTs = 0;
-	public int kt = 0;
-	public int kt2 = 0;
 	public IoBuffer buffer;
 	public CaptureScreen capture = null;
 	public Thread thread = null;
@@ -532,52 +528,32 @@ public class CoreScreenShare {
 		logger.debug("ScreenShare startStream");
 		this.publishName = publishName;
 
-		videoTs = 0;
-		audioTs = 0;
-		kt = 0;
-		kt2 = 0;
-
 		try {
-
 			if (!isConnected) {
 				instance.connect(host, port, app, instance);
 			} else {
 				setConnectionAsSharingClient();
 			}
-
 		} catch (Exception e) {
 			logger.error("ScreenShare startStream exception " + e);
 		}
-
 	}
 
 	protected void onInvoke(RTMPConnection conn, Channel channel,
 			Header source, Notify invoke, RTMP rtmp) {
 
 		if (invoke.getType() == IEvent.Type.STREAM_DATA) {
-			// logger.debug("Ignoring stream data notify with header: {}",
-			// source);
 			return;
 		}
-		// logger.debug("onInvoke: {}, invokeId: {}", invoke, invoke
-		// .getInvokeId());
-
-		// logger.debug("ServiceMethodName :: "+
-		// invoke.getCall().getServiceMethodName());
-		// logger.debug("Arguments :: "+ invoke.getCall().getArguments());
 
 		if (invoke.getCall().getServiceMethodName()
 				.equals("sendRemoteCursorEvent")) {
-
 			sendRemoteCursorEvent(invoke.getCall().getArguments()[0]);
-
 		}
-
 	}
 
 	public void stopStream() {
 		try {
-
 			logger.debug("ScreenShare stopStream");
 
 			isConnected = false;
@@ -586,7 +562,6 @@ public class CoreScreenShare {
 			capture.stop();
 			capture.release();
 			thread = null;
-
 		} catch (Exception e) {
 			logger.error("ScreenShare stopStream exception " + e);
 		}
@@ -1105,7 +1080,7 @@ public class CoreScreenShare {
 			return;
 
 		if (buffer == null) {
-			buffer = IoBuffer.allocate(1024);
+			buffer = IoBuffer.allocate(video.length);
 			buffer.setAutoExpand(true);
 		}
 
@@ -1115,8 +1090,6 @@ public class CoreScreenShare {
 
 		VideoData videoData = new VideoData(buffer);
 		videoData.setTimestamp((int) ts);
-
-		kt++;
 
 		RTMPMessage rtmpMsg = RTMPMessage.build(videoData);
 		instance.publishStreamData(publishStreamId, rtmpMsg);
@@ -1130,8 +1103,6 @@ public class CoreScreenShare {
 
 	private final class CaptureScreen extends Object implements Runnable {
 		private int timeBetweenFrames = 1000; // frameRate
-
-		private volatile long timestamp = 0;
 
 		private volatile boolean active = true;
 		@SuppressWarnings("unused")
@@ -1178,28 +1149,24 @@ public class CoreScreenShare {
 		public void run() {
 			try {
 				Robot robot = new Robot();
-
+				BufferedImage image = null;
 				while (active) {
-					final long ctime = System.currentTimeMillis();
-
 					Rectangle screen = new Rectangle(VirtualScreenBean.vScreenSpinnerX,
 							VirtualScreenBean.vScreenSpinnerY,
 							VirtualScreenBean.vScreenSpinnerWidth,
 							VirtualScreenBean.vScreenSpinnerHeight);
 					
-					BufferedImage image = robot.createScreenCapture(screen);
+					final long ctime = System.currentTimeMillis();
+					image = robot.createScreenCapture(screen);
 
 					try {
-						timestamp += timeBetweenFrames;
-
 						byte[] data = se.encode(screen, image, new Rectangle(VirtualScreenBean.vScreenResizeX,
 								VirtualScreenBean.vScreenResizeY));
 
-						pushVideo(data.length, data, timestamp);
+						pushVideo(data.length, data, ctime);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-
 					final int spent = (int) (System.currentTimeMillis() - ctime);
 
 					sendCursorStatus();

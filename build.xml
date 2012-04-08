@@ -327,6 +327,8 @@
 			<fileset dir="${red5.server.lib}" includes="bcprov-jdk16*.jar" />
 			<fileset dir="${red5.server.lib}" includes="ehcache-core*.jar" />
 			<fileset dir="${red5.server.lib}" includes="commons-beanutils*.jar" />
+			<fileset dir="${red5.server.lib}" includes="jcl-over-slf4j*.jar" />
+			<fileset dir="${red5.server.lib}" includes="commons-collections*.jar" />
 			<fileset dir="${red5.lib}" includes="red5.jar" />
 			<fileset dir="${red5.server.lib}" includes="spring-context-3*.jar" />
 			<fileset dir="${red5.server.lib}" includes="spring-core-*.jar" />

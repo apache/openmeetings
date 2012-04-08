@@ -18,23 +18,27 @@
  */
 package org.openmeetings.screen.webstart;
 
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.zip.DeflaterOutputStream;
+import java.util.zip.Deflater;
 
-public class ScreenV1Encoder implements IScreenEncoder {
+public class ScreenV1Encoder extends BaseScreenEncoder {
 	private BufferedImage last = null;
 	private static int KEY_FRAME_INDEX = 100;
 	private static int DEFAULT_BLOCK_SIZE = 32;
+	private static int DEFAULT_SCREEN_WIDTH = 1920;
+	private static int DEFAULT_SCREEN_HEIGHT = 1080;
 	private int keyFrameIndex;
 	private int frameCount = 0;
 	private int blockSize;
 	private Rectangle screen;
+	private ByteArrayOutputStream ba = new ByteArrayOutputStream(50 + 3 * DEFAULT_SCREEN_WIDTH * DEFAULT_SCREEN_HEIGHT);
+	private byte[] areaBuf = null;
+	private Deflater d = new Deflater(Deflater.DEFAULT_COMPRESSION);
+	private byte[] zipBuf = null;
 	
 	public ScreenV1Encoder() {
 		this(KEY_FRAME_INDEX, DEFAULT_BLOCK_SIZE);
@@ -47,30 +51,18 @@ public class ScreenV1Encoder implements IScreenEncoder {
 			throw new RuntimeException("Invalid block size passed: " + blockSize + " should be: 'from 16 to 256 in multiples of 16'");
 		}
 		this.blockSize = blockSize;
-	}
-	
-	public BufferedImage resize(BufferedImage _img, Rectangle size) {
-		BufferedImage img = _img;
-		if (_img.getWidth() != size.width || _img.getHeight() != size.height) {
-			img = new BufferedImage(size.width, size.height,
-					BufferedImage.TYPE_INT_RGB);
 
-			Graphics2D graphics2D = img.createGraphics();
-			graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-					RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-			graphics2D.drawImage(_img, 0, 0, size.width, size.height, null);
-			graphics2D.dispose();
-		}
-		return img;
+		areaBuf = new byte[3 * blockSize * blockSize];
+		zipBuf = new byte[3 * blockSize * blockSize];
 	}
 	
 	public byte[] encode(Rectangle screen, BufferedImage _img, Rectangle size) throws IOException {
 		BufferedImage img = resize(_img, size);
+		ba.reset();
 		Rectangle imgArea = new Rectangle(img.getWidth(), img.getHeight());
 		Rectangle area = getNextBlock(imgArea, null);
-		boolean isKeyFrame = (frameCount++ % keyFrameIndex) == 0 || last == null || (screen.equals(this.screen));
+		boolean isKeyFrame = (frameCount++ % keyFrameIndex) == 0 || last == null || !screen.equals(this.screen);
 		
-		ByteArrayOutputStream ba = new ByteArrayOutputStream(50 + 3 * imgArea.width * imgArea.height);
 		//header
 		ba.write(getTag(isKeyFrame ? 0x01 : 0x02, 0x03));
 		writeShort(ba, imgArea.width + ((blockSize / 16 - 1) << 12));
@@ -110,26 +102,25 @@ public class ScreenV1Encoder implements IScreenEncoder {
 
 	private void writeBytesIfChanged(ByteArrayOutputStream ba, boolean isKeyFrame, BufferedImage img, Rectangle area) throws IOException {
 		boolean changed = isKeyFrame;
-		ByteArrayOutputStream baos = new ByteArrayOutputStream(3 * area.width * area.height);
-		DeflaterOutputStream dos = new DeflaterOutputStream(baos);
+		int count = 0;
 		for (int y = area.y + area.height - 1; y >= area.y; --y) {
 			for (int x = area.x; x < area.x + area.width; ++x) {
 				int pixel = img.getRGB(x, y);
 				if (!changed && pixel != last.getRGB(x, y)) {
 					changed = true;
 				}
-				dos.write(new byte[]{
-					(byte)(pixel & 0xFF)				// Blue component
-					, (byte)((pixel >> 8) & 0xFF)		// Green component
-					, (byte)((pixel >> 16) & 0xFF)		// Red component
-				});
+				areaBuf[count++] = (byte)(pixel & 0xFF);			// Blue component
+				areaBuf[count++] = (byte)((pixel >> 8) & 0xFF);		// Green component
+				areaBuf[count++] = (byte)((pixel >> 16) & 0xFF);	// Red component
 			}
 		}
-		dos.finish();
 		if (changed) {
-			final int written = baos.size();
+			d.reset();
+			d.setInput(areaBuf, 0, count);
+			d.finish();
+			int written = d.deflate(zipBuf);
 			writeShort(ba, written);
-			ba.write(baos.toByteArray(), 0, written);
+			ba.write(zipBuf, 0, written);
 		} else {
 			writeShort(ba, 0);
 		}

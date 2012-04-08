@@ -32,6 +32,8 @@ limitations under the License.
         <jar href="bcprov-jdk16-145.jar"/> 
         <jar href="commons-beanutils-1.8.3.jar"/> 
         <jar href="commons-codec-1.6.jar"/>
+        <jar href="commons-collections-3.2.1.jar"/>
+        <jar href="jcl-over-slf4j-1.6.1.jar"/>
         <jar href="com.springsource.slf4j.api-1.6.1.jar"/>
         <jar href="ehcache-core-2.5.0.jar"/>
         <jar href="httpclient-4.1.2.jar" />
