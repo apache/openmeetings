@@ -115,7 +115,9 @@
            		this.subviews[eg].deselect();
             }
             
-            if (canvas.userSettingsModuleOpt == "userProfile") {
+            if (canvas.userSettingsModuleOpt == "editUserProfile") {
+	        	this._editUserProfile.onclick.sendEvent(null);
+	        } else if (canvas.userSettingsModuleOpt == "userProfile") {
 	        	this._userProfile.onclick.sendEvent(null);
 	        } else if (canvas.userSettingsModuleOpt == "userSearch") {
 	            this._searchUserProfile.onclick.sendEvent(null);
