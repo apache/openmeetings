@@ -246,6 +246,7 @@ public class FlvRecorderConverter extends BaseConverter {
 
 			String[] argv_alternateDownload = new String[] {
 					this.getPathToFFMPEG(), "-i", outputFullFlv,
+					"-vcodec", "copy",
 					alternateDownloadFullName };
 
 			log.debug("START alternateDownLoad ################# ");
