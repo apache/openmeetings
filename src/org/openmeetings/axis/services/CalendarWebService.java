@@ -714,6 +714,10 @@ public class CalendarWebService {
 					timezone = timezoneUtil
 							.getTimezoneByOmTimeZoneId(omTimeZoneId);
 				}
+				
+				if (timezone == null) {
+					throw new Exception("No timeZone given");
+				}
 
 				// Calculate the first day of a calendar based on the first
 				// showing day of the week
