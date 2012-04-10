@@ -71,7 +71,39 @@
 				description="Edit Add Icon" 
 				license="APL Author sebawagner"
 				src="public/themes/basic-theme/general/add.png" />
-
+				
+	<!-- Sorted list -->
+	
+	<resource name="step_back_two_arrow" 
+				description="Step to first" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/resultset_first.png" />
+				
+	<resource name="step_fwd_two_arrow" 
+				description="Step to last" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/resultset_last.png" />
+						
+    <resource name="step_back_arrow" 
+    			description="Step one back" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/resultset_previous.png" />
+    
+    <resource name="step_fwd_arrow" 
+    			description="Step one next" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/resultset_next.png" />
+				
+    <resource name="sort_up_rsc" 
+    			description="Sort up" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/resultset_up.png" />
+    
+    <resource name="sort_down_rsc" 
+    			description="Sort down" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/resultset_down.png" />
+				
 	<!-- Whiteboard Toolbar -->
 	
 	<resource name="plain" 

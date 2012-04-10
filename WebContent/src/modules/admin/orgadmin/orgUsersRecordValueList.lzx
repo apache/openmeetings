@@ -31,7 +31,7 @@
     </handler>
         
     <handler name="deleteItem" args="obj">
-        Debug.write("deleteItem: ",obj.value);
+        if ($debug) Debug.write("deleteItem: ",obj.value);
         this.usersId = Number(obj.value);
         this.deleteUserFromOrganisation.doCall();
     </handler>  

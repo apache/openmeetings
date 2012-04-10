@@ -20,11 +20,6 @@
 -->
 <library>
 
-<resource name="width_gripper_rsc" src="resources/width_gripper.swf" />
-
-<resource name="sort_asc_turnover_rsc" src="resources/sort_asc.png" />
-<resource name="sort_desc_turnover_rsc" src="resources/sort_desc.png" />
-
 <class name="turnOverListHeaderItem" extends="simpleLabelButton" clip="true" fontstyle="plain">
 
 	<attribute name="subviewsid" value="0" type="number" />
@@ -167,10 +162,10 @@
         parent.parent.parent.updateOrder(this);
     </handler>
     
-    <view name="_sortUp" visibility="hidden" stretches="both" width="8" height="8" y="6"
-        x="${parent.width - 13 }" resource="sort_up_rsc" />
-    <view name="_sortDown" visibility="hidden" stretches="both" width="8" height="8" y="6"
-        x="${parent.width - 13 }" resource="sort_down_rsc" />
+    <image name="_sortUp" visibility="hidden" stretches="both" width="8" height="8" y="6"
+        x="${parent.width - 13 }" src="$once{ canvas.getThemeImage('sort_up_rsc') }" />
+    <image name="_sortDown" visibility="hidden" stretches="both" width="8" height="8" y="6"
+        x="${parent.width - 13 }" src="$once{ canvas.getThemeImage('sort_down_rsc') }" />
 
 </class>
 

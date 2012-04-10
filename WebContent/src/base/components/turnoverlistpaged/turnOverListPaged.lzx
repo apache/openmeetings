@@ -472,22 +472,24 @@
           visibility="$once{ (parent.showTopBar) ? 'visible' : 'hidden' }">
     	
 	    <!-- 368:goto first -->
-	    <miniIcons name="_pre1" y="2" x="0" resource="step_back_two_arrow" width="16" height="16" 
-	               showhandcursor="true">
+	    <blueButton name="_pre1" y="0" x="0" resourceItem="step_back_two_arrow" 
+					x_insetResource="2" y_insetResource="2" width="20" height="20"
+				width_insetResource="16" height_insetResource="16">
 			<handler name="onclick">
 				parent.parent.callfirst();
 	        </handler>
 	        <labelTooltip labelid="368" />
-	    </miniIcons>
+	    </blueButton>
 	
 	    <!-- 369:goto previous -->
-	    <miniIcons name="_pre2" y="2" x="20" resource="step_back_arrow" width="16" height="16" 
-	               showhandcursor="true">
+	    <blueButton name="_pre2" y="0" x="20" resourceItem="step_back_arrow" 
+					x_insetResource="2" y_insetResource="2" width="20" height="20"
+				width_insetResource="16" height_insetResource="16">
 			<handler name="onclick">
 				parent.parent.callpre();
 	        </handler>
 	        <labelTooltip labelid="369" />
-	    </miniIcons>
+	    </blueButton>
     	<resetCombobox name="_step" width="100" x="40" editable="false" fontsize="10" height="20" >
             <attribute name="sendEventToReload" value="false" type="boolean" />
             <textlistitem value="10" text="10" />
@@ -514,22 +516,24 @@
         </resetCombobox>
         
         <!-- 370:goto next -->
-        <miniIcons name="_next1" y="2" x="140" resource="step_fwd_arrow" width="16" height="16" 
-	               showhandcursor="true">
+        <blueButton name="_next1" y="0" x="140" resourceItem="step_fwd_arrow" 
+					x_insetResource="2" y_insetResource="2" width="20" height="20"
+				width_insetResource="16" height_insetResource="16">
 			<handler name="onclick">
 				parent.parent.callnext();
 	        </handler>
 	        <labelTooltip labelid="370" />
-	    </miniIcons>
+	    </blueButton>
 		
 	    <!-- 371:goto last -->
-	    <miniIcons name="_next2" y="2" x="160" resource="step_fwd_two_arrow" width="16" height="16" 
-	               showhandcursor="true">
+	    <blueButton name="_next2" y="0" x="160" resourceItem="step_fwd_two_arrow" 
+					x_insetResource="2" y_insetResource="2" width="20" height="20"
+				width_insetResource="16" height_insetResource="16">
 			<handler name="onclick">
 				parent.parent.calllast();
 	        </handler>
 	        <labelTooltip labelid="371" />
-	    </miniIcons>
+	    </blueButton>
 		
 		<view width="2" />
     </view>

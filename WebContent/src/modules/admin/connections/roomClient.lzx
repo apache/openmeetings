@@ -88,9 +88,8 @@
 	</turnOverList>
 	
 	<text name="_header" fontstyle="bold" text="Sessionvars" x="790" y="2"/>
-    <!-- -->
 	<view name="_roomvalueform" x="790" y="20" clip="true" 
-		  height="${ canvas.height - 130 }" width="${ canvas.width - 790 }">
+		  height="${ canvas.height - canvas.naviHeight - 20 }" width="${ canvas.width - 790 }">
 		
 		<method name="initValueFieldsByObject" args="value">
 			<![CDATA[
@@ -117,13 +116,10 @@
 		</method>
 		
 		<text name="_contentView" multiline="true" selectable="true" />
-		
 		<om_vscrollbar />
 		<om_hscrollbar />
-		
 	</view>
     
-		
 </class>
 
 </library>

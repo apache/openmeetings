@@ -46,7 +46,7 @@
 				  value="${ parent.parent.itemSelected }" />
 		
 		<view height="$once{ parent.parent.height }" width="1" 
-        				align="right" bgcolor="black" />
+        				align="right" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" />
 	</view>
 	
 	<turnOverTextItem name="_timezone" width="80" 

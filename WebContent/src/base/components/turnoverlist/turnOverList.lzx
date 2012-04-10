@@ -194,22 +194,24 @@
     <labelText name="_records" x="2" resize="true" />
     
     <!-- 368:goto first -->
-    <miniIcons name="_pre1" y="2" x="$once{ parent.width-188 }" resource="step_back_two_arrow" width="16" height="16" 
-                   showhandcursor="true">
+    <blueButton name="_pre1" y="0" x="$once{ parent.width-188 }" resourceItem="step_back_two_arrow" 
+					x_insetResource="2" y_insetResource="2" width="20" height="20"
+					width_insetResource="16" height_insetResource="16" >
         <handler name="onclick">
             parent.callfirst();
         </handler>
         <labelTooltip labelid="368" />
-    </miniIcons>
+    </blueButton>
 
     <!-- 369:goto previous -->
-    <miniIcons name="_pre2" y="2" x="$once{ parent.width-166 }" resource="step_back_arrow" width="16" height="16" 
-                   showhandcursor="true">
+    <blueButton name="_pre2" y="0" x="$once{ parent.width-166 }" resourceItem="step_back_arrow" 
+					x_insetResource="2" y_insetResource="2" width="20" height="20"
+					width_insetResource="16" height_insetResource="16">
         <handler name="onclick">
             parent.callpre();
         </handler>
         <labelTooltip labelid="369" />
-    </miniIcons>
+    </blueButton>
 
     <!-- combobox to decide the step number -->
     <resetCombobox name="languages" width="96" x="$once{ parent.width-144 }" 
@@ -233,22 +235,24 @@
 	</resetCombobox>
 	
 	<!-- 370:goto next -->
-	<miniIcons name="_next1" y="2" x="$once{ parent.width-44 }" resource="step_fwd_arrow" width="16" height="16" 
-                   showhandcursor="true">
+	<blueButton name="_next1" y="0" x="$once{ parent.width-44 }" resourceItem="step_fwd_arrow" 
+                x_insetResource="2" y_insetResource="2" width="20" height="20"
+				width_insetResource="16" height_insetResource="16">
         <handler name="onclick">
             parent.callnext();
         </handler>
         <labelTooltip labelid="370" />
-    </miniIcons>
+    </blueButton>
 
     <!-- 371:goto last -->
-    <miniIcons name="_next2" y="2" x="$once{ parent.width-21 }" resource="step_fwd_two_arrow" width="16" height="16" 
-                   showhandcursor="true">
+    <blueButton name="_next2" y="0" x="$once{ parent.width-21 }" resourceItem="step_fwd_two_arrow" 
+				x_insetResource="2" y_insetResource="2" width="20" height="20"
+				width_insetResource="16" height_insetResource="16">
         <handler name="onclick">
             parent.calllast();
         </handler>
         <labelTooltip labelid="371" />
-    </miniIcons>
+    </blueButton>
 	
     <!-- =========  BgArea area  =========-->
     <view width="$once{ parent.width }" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }"

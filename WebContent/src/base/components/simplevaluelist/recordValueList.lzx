@@ -27,14 +27,15 @@
     
 	<turnOverTextItem text="$once{ parent.valueName }" width="226" />    
     
-	<view width="60"
+	<view width="60" height="24"
 		onclick="new lz.confirmDeleteWindow(canvas.main_content._content.inner,{refObj:this});" >		
 		<method name="confirmDelete">
             this.parent.parent.parent.parent.parent.itemToDelete=this;
 			this.parent.parent.parent.parent.parent.deleteItem.sendEvent(parent);
 		</method>
-		<image src="$once{ canvas.getThemeImage('button_cancel_rsc') }"
-			 align="center" valign="middle" />
+		<image stretches="both" width="16" height="16" 
+			 src="$once{ canvas.getThemeImage('button_cancel_rsc') }"
+			 align="center" y="4" />
 		<labelTooltip labelid="274" />
 	</view>	
 </class>
