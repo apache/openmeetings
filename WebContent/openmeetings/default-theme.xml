@@ -210,14 +210,25 @@
 				license="APL Author sebawagner"
 				src="public/themes/basic-theme/whiteboard/doc_last.png" />		
 				
-				
-				
-				
-				
-				
-				
-				
-				
-				
+	<!-- property panel -->	
+	<resource name="colorlinechoose_rsc" 
+				description="Property bar icon line color" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/whiteboard/pencil.png" />
+	
+	<resource name="colorfillchoose_rsc" 
+				description="Property bar icon fill color" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/whiteboard/paintcan.png" />
+	
+	<resource name="color_lock_rsc" 
+				description="Property bar icon color lock" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/whiteboard/lock.png" />
+	
+	<resource name="color_lock_open_rsc" 
+				description="Property bar icon color lock open" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/whiteboard/lock_open.png" />	
 				
 </theme>

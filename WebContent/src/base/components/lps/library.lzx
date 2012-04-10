@@ -20,10 +20,7 @@
 -->
 <library>
     
-	<resource name="colorlinechoose_rsc" src="resources/color_line.png" />
-	<resource name="colorlineblock_rsc" src="resources/encrypted.png" />    
-	<resource name="colorfillchoose_rsc" src="resources/color_fill.png" />
-	<resource name="colorfillblock_rsc" src="resources/encrypted.png" />
+	<!-- APL Author sebawagner -->
     <resource name="arrow_down_slider_rsc" src="resources/arrow_down_slider.png" /> 
 
 	<include href="vslider.lzx" /> 

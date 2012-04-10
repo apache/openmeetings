@@ -20,16 +20,22 @@
 -->
 <library>
 
+	<!-- APL Author sebawagner -->
 	<resource name="omscrolltrack_y_rsc" src="resources/y_scrolltrack.swf" />
 	
+	<!-- APL Author sebawagner -->
     <resource name="omscrollbar_ythumbmiddle_rsc" src="resources/scrollthumb_y_mid.swf" />
+    <!-- APL Author sebawagner -->
     <resource name="omscrollbar_ythumbtop_rsc" src="resources/scrollthumb_y_top.swf" />
+    <!-- APL Author sebawagner -->
     <resource name="omscrollbar_ythumbbottom_rsc" src="resources/scrollthumb_y_bottom.swf" />
-    
+    <!-- APL Author sebawagner -->
    	<resource name="omscrolltrack_x_rsc" src="resources/x_scrolltrack.swf" />
-	
+	<!-- APL Author sebawagner -->
     <resource name="omscrollbar_xthumbmiddle_rsc" src="resources/scrollthumb_x_mid.swf" />
+    <!-- APL Author sebawagner -->
     <resource name="omscrollbar_xthumbleft_rsc" src="resources/scrollthumb_x_left.swf" />
+    <!-- APL Author sebawagner -->
     <resource name="omscrollbar_xthumbright_rsc" src="resources/scrollthumb_x_right.swf" />
 
 	<include href="om_vscrollbar.lzx"/>

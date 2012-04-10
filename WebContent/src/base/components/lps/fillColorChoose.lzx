@@ -63,6 +63,8 @@
     		this.rgt.setAttribute('opacity',0.3);
     		this.rgt.setAttribute('enabled',false);
     		this.colorIsEnabled = false;
+    		this.rgt._lock.setAttribute("visibility","visible");
+	    	this.rgt._lock_open.setAttribute("visibility","hidden");
     	} else {
 			this._currentcolor.setAttribute('clickable',true);
     		this._currentcolor.setAttribute('opacity',1);
@@ -70,6 +72,8 @@
     		this.rgt.setAttribute('enabled',true);
     		this.onselectedColor.sendEvent(this.selectedColor);
     		this.colorIsEnabled = true;
+    		this.rgt._lock.setAttribute("visibility","hidden");
+	    	this.rgt._lock_open.setAttribute("visibility","visible");
     	}
     </method>
         
@@ -144,7 +148,8 @@
     </view>
     
     <button name="rgt" x="32" y="1" onclick="parent.toggle()" width="24" height="23" >
-    	<view x="4" y="3" resource="colorfillchoose_rsc" />
+    	<image x="4" y="3" src="$once{ canvas.getThemeImage('colorfillchoose_rsc') }"
+    			width="16" height="16" stretches="both" />
         <labelTooltip labelid="427" />
     </button>
         
@@ -158,6 +163,8 @@
 	    		parent.selectedColorDis = -1;
 	    		parent.onselectedColor.sendEvent(-1);
 	    		parent.colorIsEnabled = false;
+	    		this._lock.setAttribute("visibility","hidden");
+	    		this._lock_open.setAttribute("visibility","visible");
     		} else {
 	    		parent._currentcolor.setAttribute('clickable',true);
 	    		parent._currentcolor.setAttribute('opacity',1);
@@ -166,9 +173,14 @@
 	    		parent.selectedColorDis = 1;
 	    		parent.onselectedColor.sendEvent(parent.selectedColor);
 	    		parent.colorIsEnabled = true;
+	    		this._lock.setAttribute("visibility","visible");
+	    		this._lock_open.setAttribute("visibility","hidden");
     		}
     	</handler>
-    	<view x="4" y="3" resource="colorfillblock_rsc" />
+    	<image x="4" y="3" name="_lock" src="$once{ canvas.getThemeImage('color_lock_rsc') }"
+    			width="16" height="16" stretches="both" />
+ 	    <image x="4" y="3" name="_lock_open" src="$once{ canvas.getThemeImage('color_lock_open_rsc') }"
+    			width="16" height="16" stretches="both" visibility="hidden" />
         <labelTooltip labelid="428" />
     </button>
     

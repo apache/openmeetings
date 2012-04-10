@@ -20,10 +20,13 @@
 -->
 <library>
 
+<!-- APL Author sebawagner -->
 <resource name="regexptip_rsc_r" src="resources/regexp/regexp_bg_r.swf" />
+<!-- APL Author sebawagner -->
 <resource name="regexptip_rsc_m" src="resources/regexp/regexp_bg_m.swf" />
+<!-- APL Author sebawagner -->
 <resource name="regexptip_rsc_l" src="resources/regexp/regexp_bg_l.swf" />
-
+<!-- APL Author sebawagner -->
 <resource name="regexptip_rsc_point" src="resources/regexp/regexp_point.swf" />
 
 <class name="regexptip" extends="view">
@@ -44,7 +47,7 @@
     
     <view resource="regexptip_rsc_point" y="-7" x="12" />
 
-    <text fontsize="11" text="${ parent.regexptext}" resize="true" />
+    <text fontsize="11" text="${ parent.regexptext}" resize="true" multiline="false" />
 </class>
 
 </library>

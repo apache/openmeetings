@@ -20,18 +20,23 @@
 -->
 <library>
 
+	<!-- APL Author sebawagner -->
 	<resource src="presenter_thumb.swf" name="presenter_thumb_rsc" />
-     
+    <!-- APL Author sebawagner -->
     <resource name="btn_presenter_minimize" src="minimize_up.png" />
+    <!-- APL Author sebawagner -->
     <resource name="btn_presenter_maximize" src="maximize_up.png" />
+    <!-- APL Author sebawagner -->
     <resource name="btn_presenter_maximize2" src="maximize2_up.png" />
     
+    <!-- APL Author sebawagner -->
     <resource name="btn_presenter_close2" src="close_up.png" />
     
+    <!-- APL Author sebawagner -->
 	<resource name="btn_presenter_close">
         <frame src="close_up.png" />
         <frame src="close_mo.png" />
-        <frame src="close_dn.png" />
+        <frame src="close_up.png" />
     </resource> 
     
 </library>
