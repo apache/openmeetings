@@ -1527,9 +1527,7 @@ public class BackupExport {
 
 		Element users = root.addElement("users");
 
-		for (Iterator<Users> it = uList.iterator(); it.hasNext();) {
-			Users u = it.next();
-
+		for (Users u : uList) {
 			Element user = users.addElement("user");
 
 			user.addElement("user_id").addCDATA(

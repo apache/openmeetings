@@ -12,8 +12,8 @@ public class InstallationConfig {
 	//email
 	public String smtpPort = "25";
 	public String smtpServer = "localhost";
-	public String mailAuthName = "xyz";
-	public String mailAuthPass = "qwertz";
+	public String mailAuthName = "";
+	public String mailAuthPass = "";
 	public String mailReferer = "noreply@openmeetings.apache.org";
 	public String mailUseTls = "0";
 	//paths

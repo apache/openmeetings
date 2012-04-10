@@ -139,8 +139,7 @@ public class UsersDaoImpl {
 
 	public List<Users> getAllUsers() {
 		try {
-
-			// get all users
+			// get all non-deleted users
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 			CriteriaQuery<Users> cq = cb.createQuery(Users.class);
 			Root<Users> c = cq.from(Users.class);
@@ -150,7 +149,6 @@ public class UsersDaoImpl {
 			List<Users> ll = q.getResultList();
 
 			return ll;
-
 		} catch (Exception ex2) {
 			log.error("[getAllUsers] ", ex2);
 		}
@@ -159,20 +157,10 @@ public class UsersDaoImpl {
 
 	public List<Users> getAllUsersDeleted() {
 		try {
-
-			// get all users
-			CriteriaBuilder cb = em.getCriteriaBuilder();
-			CriteriaQuery<Users> cq = cb.createQuery(Users.class);
-			Root<Users> c = cq.from(Users.class);
-			Predicate condition = cb.equal(c.get("deleted"), "false");
-			cq.where(condition);
-			TypedQuery<Users> q = em.createQuery(cq);
-			List<Users> ll = q.getResultList();
-
-			return ll;
-
+			TypedQuery<Users> q = em.createNamedQuery("getAllUsers", Users.class);
+			return q.getResultList();
 		} catch (Exception ex2) {
-			log.error("[getAllUsers] ", ex2);
+			log.error("[getAllUsersDeleted] ", ex2);
 		}
 		return null;
 	}
