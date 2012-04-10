@@ -235,9 +235,10 @@ public class LdapAuthBase {
 	/**
 	 * @param searchBase Ldap base to begin de SUB scope search for the userDN
 	 * @param searchFilter Ldap filter to search only for the specified loginame while looking for the userDN
+	 * @param ldap_fieldname_user_principal ldap sttribute name that contains the user loginame
 	 * @return
 	 */
-	public HashMap<String, String> getUidCnHashMap(String searchBase, String searchFilter) {
+	public HashMap<String, String> getUidCnHashMap(String searchBase, String searchFilter, String ldap_fieldname_user_principal) {
 		HashMap<String, String> uidCnDictionary = new HashMap<String, String>();
 
 		SearchControls searchCtls = new SearchControls();
@@ -247,9 +248,12 @@ public class LdapAuthBase {
 			results = authContext.search(searchBase, searchFilter,  searchCtls);
 			while (results.hasMore()) {
 				SearchResult searchResult = results.next();
+				// 'cn' gets the name of the entry relative to searchbase for instance: "uid=user,ou=people"
+				// The entry DN is found by appending the searchbase. For instance if searchbase 
+				// is (dc=mydomain,dc=org), then DN="uid=user,ou=people,dc=mydomain,dc=org"
 				String cn = searchResult.getName();
 				Attributes attributes = searchResult.getAttributes();
-				Attribute attrib = attributes.get("uid");
+				Attribute attrib = attributes.get(ldap_fieldname_user_principal);
 				
 				if (attrib != null) {
 					String uid = (String) attrib.get();

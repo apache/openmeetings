@@ -395,7 +395,7 @@ public class LdapLoginManagement {
 			log.debug("LDAP server is OpenLDAP");
 			log.debug("LDAP search base: " + ldap_search_scope);
 			HashMap<String, String> uidCnDictionary = lAuth.getUidCnHashMap(
-					ldap_search_scope, ldap_search_filter);
+					ldap_search_scope, ldap_search_filter, ldap_fieldname_user_principal);
 			if (uidCnDictionary.get(user) != null) {
 				ldapUserDN = uidCnDictionary.get(user) + ","
 						+ ldap_search_scope;
