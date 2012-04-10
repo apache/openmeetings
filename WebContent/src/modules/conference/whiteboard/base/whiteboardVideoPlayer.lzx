@@ -21,7 +21,7 @@
 <library>
 
 <class name="whiteboardVideoPlayer" extends="labelExplorerBox" allowDragging="false"
-    docking="false" resizeable="false" closable="false" minimizable="false"
+    docking="false" resizeable="false" closable="false" 
     x="0" y="0" width="${ parent.width }" height="${ parent.height }">
 	
 	<attribute name="fileExplorerItemId" value="0" type="number" />

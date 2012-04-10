@@ -67,7 +67,7 @@
 		this._bg2.setAttribute("visibility","hidden");
 		this._text.setAttribute("fontstyle","bold");
 		this._text.setAttribute("y",6);
-		this._icon.setAttribute("y",8);
+		this._icon.setAttribute("y",6);
 		this._text.setAttribute("fgcolor",canvas.getThemeColor('menuTextColor'));
 	</method>
      
@@ -77,7 +77,7 @@
         this._selectedView.setAttribute("visibility","hidden");
         this._deselectedView.setAttribute("visibility","visible");
         this._text.setAttribute("y",8);
-        this._icon.setAttribute("y",10);
+        this._icon.setAttribute("y",8);
         this._text.setAttribute("fontstyle","plain");
         this._text.setAttribute("fgcolor",canvas.getThemeColor('menuTextDisabledColor'));
     </method>       
@@ -104,7 +104,7 @@
     <view name="_bg2" bgcolor="0xFFFFFF" width="$once{ parent.width-2 }" y="3" x="1"
           height="$once{ parent.height-4 }" opacity="1" visibility="hidden"/>
     
-    <view x="6" y="8" name="_icon" resource="$once{ parent.currentIconRsc }" 
+    <view x="6" y="6" name="_icon" resource="$once{ parent.currentIconRsc }" 
     				width="20" height="20" stretches="both" visible="$once{ parent.showIcon }" />
                 
     <labelText name="_text" x="$once{ (parent.showIcon) ? 28 : 6 }" fontsize="$once{ parent.textFontSize }" 
