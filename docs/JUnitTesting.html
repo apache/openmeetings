@@ -927,7 +927,8 @@ limitations under the License.
 					-javaagent:${workspace_loc:Openmeetings}/build/lib/om/openjpa-bundle-2.2.0.jar
 					-Dwebapps.root=${workspace_loc:Openmeetings}/dist/red5/webapps/openmeetings
 				</div>
-				<li>To avoid temporary files being created in OM root, modify "Working Directory" as follows</li>
+				<li>To avoid temporary files being created in OM root, modify
+					"Working Directory" as follows</li>
 				<div class="xmlcode">${workspace_loc:Openmeetings}/build/junit</div>
 			</ul>
                                                 <p>
@@ -937,6 +938,12 @@ limitations under the License.
 			</p>
                                                 <ul>
 				<li>Select Debug </li>
+
+			</ul>
+                                                <ul>
+				<li>Note: You need a file called "persistence.xml" in src/META-INF
+					if you run the JUnit test from inside Eclipse. Normally "ant
+					prepare-eclipse" should do that for you. </li>
 
 			</ul>
                             </blockquote>
