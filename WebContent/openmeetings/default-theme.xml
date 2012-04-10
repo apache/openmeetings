@@ -72,6 +72,11 @@
 				license="APL Author sebawagner"
 				src="public/themes/basic-theme/general/add.png" />
 				
+	<resource name="date_icon_rsc" 
+				description="Edit Add Icon" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/calendar_view_week.png" />
+				
 	<!-- Sorted list -->
 	
 	<resource name="step_back_two_arrow" 

@@ -20,8 +20,6 @@
 -->
 <library>
 
-<resource name="date_icon_rsc" src="resources/date.png" />
-
 <class name="dateField" extends="view" width="104">
 	
 	<attribute name="enabled" value="true" type="boolean" />
@@ -62,19 +60,20 @@
     
 	<attribute name="text" value="" type="string" />
 
-	<customEdittext name="_text" width="$once{ parent.width-20 }" regexpType="date" 
+	<customEdittext name="_text" width="$once{ parent.width-22 }" regexpType="date" 
 					align="left" text="${ parent.text }" enabled="${ parent.enabled }" />
 
-	<view resource="date_icon_rsc" align="right"
+	<blueButton resourceItem="date_icon_rsc" align="right"
 		  opacity="${ ((parent.enabled) ? 1 : 0.4) }"
-		  onmouseover="" onmouseout="" y="4">
+		  x_insetResource="2" y_insetResource="2" width="20" height="20"
+		  width_insetResource="16" height_insetResource="16">
 		<handler name="onclick">
 			if (parent.enabled) {
 				new lz.calendarWindow(this.parent.parent,{fieldRef:this.parent._text,x:this.parent.x+(this.parent.width-200),y:this.parent.y});
 			}
 		</handler>
 		<labelTooltip labelid="162" />
-	</view>
+	</blueButton>
 
 </class>
 
