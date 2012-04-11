@@ -287,7 +287,7 @@ public class Admin {
 						System.out.println("User group was not provided, or too short, should be at least 1 character long.");
 						System.exit(1);
 					}
-					String pass = cmdl.getOptionValue("pass");
+					String pass = cmdl.getOptionValue("password");
 					if (pass == null || pass.length() < InstallationConfig.USER_PASSWORD_MINIMUM_LENGTH) {
 						System.out.print("Please enter password:");
 						pass = new BufferedReader(new InputStreamReader(System.in)).readLine();
