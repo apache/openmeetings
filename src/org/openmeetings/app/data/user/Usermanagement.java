@@ -538,7 +538,7 @@ public class Usermanagement {
 						}
 					}
 					us.setAdresses(street, zip, town, statemanagement.getStateById(states_id),
-							additionalname, comment, fax, email, phone);
+							additionalname, comment, fax, phone, email);
 					// emailManagement.updateUserEmail(mail.getMail().getMail_id(),user_id,
 					// email);
 
