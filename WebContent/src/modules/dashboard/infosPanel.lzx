@@ -32,7 +32,7 @@
 		]]>
 	</handler>
     
-	<view resource="$once{ parent.resourceViewName }" />
+	<image src="$once{ canvas.getThemeImage( parent.resourceViewName ) }" />
 	
 	<labelText name="_txt" labelid="$once{ parent.labelid }" x="0" 
 			   y="64" fontstyle="bold" fgcolor="0x14537C" />

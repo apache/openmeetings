@@ -194,12 +194,12 @@
 	    	</handler>
     		  
     		<tabButtonMain name="myRoomsTabButton" height="$once{ parent.height }" 
-                    currentIconRsc="icon_btn_rooms_conference" labelid="1305" width="${ (parent.width-4)/3 }" />
+                    currentIconRsc="icon_btn_rooms_conference" labelid="1305" width="${ (parent.width-8)/3 }" />
     		
-            <tabButtonMain name="chatTabButton" width="${ (parent.width-4)/3 }" height="$once{ parent.height }"
+            <tabButtonMain name="chatTabButton" width="${ (parent.width-8)/3 }" height="$once{ parent.height }"
                     currentIconRsc="icon_btn_chat_dashboard" labelid="443" />
             
-            <tabButtonMain name="rssFeed1TabButton" width="${ (parent.width-4)/3 }" height="$once{ parent.height }"
+            <tabButtonMain name="rssFeed1TabButton" width="${ (parent.width-8)/3 }" height="$once{ parent.height }"
                     currentIconRsc="icon_btn_rss_conference" labelid="277" />
                     
         </view>    

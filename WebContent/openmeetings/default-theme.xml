@@ -236,4 +236,52 @@
 				license="FamFam Icon Set"
 				src="public/themes/basic-theme/whiteboard/lock_open.png" />	
 				
+	<!-- Dashboard -->
+	
+	<resource name="icon_btn_dashboard_1" 
+				description="Info Guide Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/dashboard/wizzard_button_1.png" />
+				
+    <resource name="icon_btn_dashboard_2" 
+    			description="Info Guide Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/dashboard/wizzard_button_2.png" />
+				
+    <resource name="icon_btn_dashboard_3" 
+    			description="Info Guide Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/dashboard/wizzard_button_3.png" />
+				
+    <resource name="icon_btn_dashboard_4" 
+    			description="Info Guide Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/dashboard/wizzard_button_4.png" />
+	
+	<resource name="icon_btn_rss_conference" 
+    			description="RSS Tab Icon" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/dashboard/feed.png" />
+	
+	<resource name="icon_btn_chat_dashboard" 
+				description="Chat Tab Icon" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/dashboard/comments.png" />
+	
+    <resource name="icon_btn_rooms_conference" 
+				description="Conference Room Tab Icon" 
+				license="APL author sebawagner"
+				src="public/themes/basic-theme/dashboard/conference_icon_normal.png" />	
+				
+	<!-- Conference room -->	
+	<resource name="users_tab_btn" 
+				description="Conference Room Tab User" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/conference/group.png" />
+		
+	<resource name="files_tab_btn" 
+				description="Conference Room Tab Files" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/conference/folder_explore.png" />	
+		
 </theme>

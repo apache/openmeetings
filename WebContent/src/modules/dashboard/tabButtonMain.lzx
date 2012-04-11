@@ -104,7 +104,7 @@
     <view name="_bg2" bgcolor="0xFFFFFF" width="$once{ parent.width-2 }" y="3" x="1"
           height="$once{ parent.height-4 }" opacity="1" visibility="hidden"/>
     
-    <view x="6" y="6" name="_icon" resource="$once{ parent.currentIconRsc }" 
+    <image x="6" y="6" name="_icon" src="$once{ canvas.getThemeImage( parent.currentIconRsc ) }" 
     				width="20" height="20" stretches="both" visible="$once{ parent.showIcon }" />
                 
     <labelText name="_text" x="$once{ (parent.showIcon) ? 28 : 6 }" fontsize="$once{ parent.textFontSize }" 

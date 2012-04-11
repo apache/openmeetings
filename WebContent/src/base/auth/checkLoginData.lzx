@@ -36,7 +36,6 @@
     
     <handler name="oninit">
     	canvas.thishib.setDefaultUserLanguage();
-    	
     	_mainScrollBar.setAttribute("visibility","hidden");
         lz.Focus.setFocus(this.username,true);
     </handler>
