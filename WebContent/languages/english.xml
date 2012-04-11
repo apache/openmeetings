@@ -3221,15 +3221,15 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="799" name="calendar">
-    <value>day</value>
+    <value>Day</value>
   </string>
 
   <string id="800" name="calendar">
-    <value>week</value>
+    <value>Week</value>
   </string>
 
   <string id="801" name="calendar">
-    <value>month</value>
+    <value>Month</value>
   </string>
 
   <string id="802" name="calendar">

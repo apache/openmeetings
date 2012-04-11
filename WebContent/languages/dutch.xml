@@ -2422,7 +2422,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>dag</value>
   </string>
   <string id="800" name="calendar">
-    <value>week</value>
+    <value>Week</value>
   </string>
   <string id="801" name="calendar">
     <value>maand</value>
