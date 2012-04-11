@@ -98,7 +98,6 @@
             }
             
             if (this.custom) {
-                this._toolbar._showusercontext.setAttribute("visibility","hidden");
                 this._toolbar._minimize.setAttribute("visibility","hidden");
                 this._resizeview.setAttribute("visibility","hidden");
                 this._toolbar.setAttribute("visibility","hidden");
@@ -435,16 +434,6 @@
 		</view>
 	</view>
 
-    <!--
-	<view name="showuser" x="${ parent.width-20 }" y="2" width="20"
-		onmouseover="" onmouseup="" resource="showusercontext">
-		<handler name="onclick">
-			new lz.remoteUserDetails(parent);
-		</handler>
-		<labelTooltip inittwice="true" labelid="68" />
-	</view>
-     -->
-
     <view name="_resizeview" x="${ this.parent.width - 16 }" valign="bottom"
         resource="explorer_resize_rsc" cursor="explorer_resizemouse_rsc" 
         onmousedown="this.parent.doResize(true)"
@@ -509,16 +498,6 @@
             </handler>
             <labelTooltip labelid="857" />
         </miniIconsPresenter>
-        
-        <!--
-        <miniIconsPresenter name="_showusercontext"
-            iconRessourceName="showusercontext">
-            <handler name="onclick">
-                new lz.remoteUserDetails(parent.parent);
-            </handler>
-            <labelTooltip labelid="68" />
-        </miniIconsPresenter> 
-         --> 
         
     </view>
 

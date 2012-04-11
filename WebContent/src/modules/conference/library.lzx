@@ -20,21 +20,13 @@
 -->
 <library>
 	
-    <resource name="resyncuser_rsc" src="resources/noatunloopsong.png" />
+	<!-- FamFam Icon Set -->
+    <resource name="resyncuser_rsc" src="resources/arrow_refresh.png" />
     
+    <!-- APL author sebawagner -->
     <resource name="speaking" src="resources/speaking.png" />
-    <resource name="mute_btn_rsc">
-        <frame src="resources/icon_mute.png" />
-        <frame src="resources/icon_mute_red.png" />
-    </resource>
-    <resource name="mute_micro_btn_rsc">
-        <frame src="resources/micro_on.png" />
-        <frame src="resources/micro_off.png" />
-    </resource>
     
-    <resource name="mute_btn_rsc" src="resources/micro_on.png" />
-    <resource name="unmute_btn_rsc" src="resources/micro_off.png" />
-    
+    <!-- APL author sebawagner -->
     <resource name="lz_recorder_play" src="resources/webstart_play.png" />
 	
     <include href="commonVideoViewContent.lzx"/>

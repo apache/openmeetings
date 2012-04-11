@@ -21,10 +21,10 @@
 <library>
 	
 	<!-- 
-	Source: http://www.iconfinder.com/icondetails/36026/32/error_hazard_warning_icon
+	FamFam Icon set
 	Creative Commons 3.0
 	 -->
-	<resource name="warning_icon_rsc" src="resources/warning.png" />
+	<resource name="warning_icon_rsc" src="resources/error.png" />
     
     <include href="rpcerrorDialog.lzx" />
     <include href="errorPopup.lzx" />

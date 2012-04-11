@@ -31,14 +31,10 @@
     
     <handler name="oninit">
         <![CDATA[
-            
             this.initList();
         ]]>
     </handler>
     
-    <view width="$once{ parent.width-2 }" height="${ parent.height-2 }" 
-        x="1" y="1" bgcolor="white" />
-        
     <method name="initialAddItem" args="object">
         <![CDATA[
             //if ($debug) Debug.write("eventUserList addItem: ",object.publicSID);
@@ -162,9 +158,7 @@
     
     
     <method name="getVideoObjectByPublicSID" args="publicSID">
-        
         if ($debug) Debug.error(" :: getVideoObjectByPublicSID :: ",publicSID);
-        
     </method>
     
     <view name="userStatus" layout="axis:y">

@@ -132,10 +132,12 @@
          
     <orgUsersRecordValueList name="_userlist" y="130" x="120" width="300" height="200" />  
 
-	<blueButton resourceItem="edit_add_rsc" labelid="178" y="100" x="400"
+	<blueButton resourceItem="edit_add_rsc" y="100" x="400"
 		x_insetResource="2" y_insetResource="2" width="20" height="20"
 		width_insetResource="16" height_insetResource="16"
-		onclick="this.parent.addOrganisationToUser()" />	
+		onclick="this.parent.addOrganisationToUser()">
+		<labelTooltip labelid="178" />
+	</blueButton>
 			
 	<method name="addOrganisationToUser">
 		if (this.organisation_id!=0) {

@@ -20,8 +20,10 @@
 -->
 <library>
 	
-    <resource name="allow_ok_icon_rsc" src="resources/button_ok.png" />
-    <resource name="allow_deny_icon_rsc" src="resources/process-stop.png" />
+	<!-- FamFam Icon Set -->
+    <resource name="allow_ok_icon_rsc" src="resources/tick.png" />
+    <!-- FamFam Icon Set -->
+    <resource name="allow_deny_icon_rsc" src="resources/cancel.png" />
   
     <include href="activityList.lzx" />
 	

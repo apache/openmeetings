@@ -4363,7 +4363,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="1083" name="user list">
-    <value>User is Moderator, he can do anything. [Remote Desktop Control]</value>
+    <value>User is Moderator, he can do anything.</value>
   </string>
 
   <string id="1084" name="user list">

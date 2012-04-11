@@ -28,17 +28,35 @@
 	
 	<resource name="chat_message_incoming_rsc" src="resources/ledlightgreen.png" />
 	
-	<resource name="screen_allow_rsc" src="resources/background_small.png" />
-    <resource name="screen_deny_rsc" src="resources/background_small_no.png" />
-    
-    <resource name="remote_allow_rsc" src="resources/mouse_remote_control.png" />
-    <resource name="remote_deny_rsc" src="resources/mouse_remote_control_no.png" />
+	<!-- FamFam Icon Set -->
+	<resource name="screen_allow_rsc" src="resources/monitor_add.png" />
+	<!-- FamFam Icon Set -->
+    <resource name="screen_deny_rsc" src="resources/monitor_delete.png" />
+    <!-- FamFam Icon Set -->
+    <resource name="remote_allow_rsc" src="resources/mouse_add.png" />
+    <!-- FamFam Icon Set -->
+    <resource name="remote_deny_rsc" src="resources/mouse_delete.png" />
 	
-	<resource name="mic_rsc" src="resources/mic.png" />
+	<!-- FamFam Icon Set -->
 	<resource name="av_allow_rsc" src="resources/audio_and_video.png" />
+	<!-- FamFam Icon Set -->
 	<resource name="av_deny_rsc" src="resources/audio_and_video_no.png" />
+	
+	<!-- APL author sebawagner -->
 	<resource name="kick_user_rsc" src="resources/cancel_icon.png" />
 	
+	<!-- APL author sebawagner -->
+	<resource name="mute_micro_btn_rsc">
+        <frame src="resources/mute_micro.png" />
+        <frame src="resources/mute_micro_red.png" />
+    </resource>
+    
+    <!-- APL author sebawagner -->
+    <resource name="mute_btn_rsc" src="resources/mute_micro.png" />
+    <!-- APL author sebawagner -->
+    <resource name="unmute_btn_rsc" src="resources/mute_micro_red.png" />
+	
+	<!-- APL author sebawagner -->
 	<resource name="sidebar_tab_btn">
 		<frame src="resources/sidebar_close.png" />
 		<frame src="resources/sidebar_open.png" />

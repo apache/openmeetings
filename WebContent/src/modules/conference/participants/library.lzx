@@ -26,10 +26,16 @@
     <!--  FamFam Icon Creative Commons -->
     <resource name="right_notactive_rsc" src="resources/delete.png" />
     
-    <resource name="participants_isMod_rsc" src="resources/kdmconfig.png" />
-    <resource name="participants_allow_drawing_rsc" src="resources/color_line.png" />
-    <resource name="participants_deny_drawing_rsc" src="resources/color_line_dis.png" />
-    <resource name="participants_exclusive_audio_rsc" src="resources/microphone2.png" />
+    <!--  FamFam Icon Creative Commons -->
+    <resource name="participants_isMod_rsc" src="resources/user_add.png" />
+    <!--  FamFam Icon Creative Commons -->
+    <resource name="participants_allow_drawing_rsc" src="resources/pencil_add.png" />
+    
+    <!--  FamFam Icon Creative Commons -->
+    <resource name="participants_deny_drawing_rsc" src="resources/pencil_delete.png" />
+    
+    <!--  APL author sebawagner -->
+    <resource name="participants_exclusive_audio_rsc" src="resources/micro_small.png" />
     
     <include href="participantList.lzx" />
     <include href="participantListItem.lzx" />

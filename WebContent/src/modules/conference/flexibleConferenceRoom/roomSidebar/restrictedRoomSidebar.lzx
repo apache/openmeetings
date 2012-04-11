@@ -20,7 +20,7 @@
 -->
 <library>
 
-<class name="restrictedRoomSidebar" extends="view" width="280" bgcolor="0xFFFFFF"
+<class name="restrictedRoomSidebar" extends="view" width="280"
        height="${ canvas.height - 28 }" y="0" clip="true">
     
     <attribute name="selected" value="null" />
