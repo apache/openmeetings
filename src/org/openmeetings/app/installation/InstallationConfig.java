@@ -25,8 +25,8 @@ public class InstallationConfig {
 	
 	public String defaultLangId = "1";
 	public String sendEmailAtRegister = "0";
-	public String urlFeed = "http://groups.google.com/group/openmeetings-user/feed/atom_v1_0_msgs.xml";
-	public String urlFeed2 = "http://groups.google.com/group/openmeetings-dev/feed/atom_v1_0_msgs.xml";
+	public String urlFeed = "http://mail-archives.apache.org/mod_mbox/incubator-openmeetings-user/?format=atom";
+	public String urlFeed2 = "http://mail-archives.apache.org/mod_mbox/incubator-openmeetings-dev/?format=atom";
 	public String sendEmailWithVerficationCode = "0";
 	public String defaultExportFont = "TimesNewRoman";
 	public String screenViewer = "4";
