@@ -29,10 +29,9 @@ public class OmHelpFormatter extends HelpFormatter {
 	}
 	
 	@Override
-	public void printOptions(PrintWriter pw, int width, Options options,
-			int leftPad, int descPad) {
+	protected StringBuffer renderOptions(StringBuffer sb, int width, Options options, int leftPad, int descPad) {
 		// TODO Auto-generated method stub
-		super.printOptions(pw, width, options, leftPad, descPad);
+		return super.renderOptions(sb, width, options, leftPad, descPad);
 	}
 	
 	@Override
