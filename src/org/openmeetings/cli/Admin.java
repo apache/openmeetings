@@ -46,36 +46,35 @@ public class Admin {
 		opts = buildOptions();
 	}
 	
-	@SuppressWarnings("static-access")
 	private Options buildOptions() {
 		Options options = new Options();
 		OptionGroup group = new OptionGroup()
-			.addOption(new OmOption("i", "i", "install", false, "Fill DB table, and make OM usable"))
-			.addOption(new OmOption("b", "b", "backup", false, "Backups OM"))
-			.addOption(new OmOption("r", "r", "restore", false, "Restores OM"))
-			.addOption(new OmOption("f", "f", "files", false, "File operations - statictics/cleanup"))
-			.addOption(new OmOption("h", "h", "help", false, "prints this message"));
+			.addOption(new OmOption("h", 0, "h", "help", false, "prints this message"))
+			.addOption(new OmOption("b", 1, "b", "backup", false, "Backups OM"))
+			.addOption(new OmOption("r", 2, "r", "restore", false, "Restores OM"))
+			.addOption(new OmOption("i", 3, "i", "install", false, "Fill DB table, and make OM usable"))
+			.addOption(new OmOption("f", 4, "f", "files", false, "File operations - statictics/cleanup"));
 		group.setRequired(true); 
 		options.addOptionGroup(group);
 		//general
 		options.addOption(new OmOption(null, "v", "verbose", false, "verbose error messages"));
 		//backup/restore
-		options.addOption(new OmOption("b", null, "exclude-files", false, "should backup exclude files [default: include]"));
-		options.addOption(new OmOption("b,r", "file", null, true, "file used for backup/restore"));
+		options.addOption(new OmOption("b", null, "exclude-files", false, "should backup exclude files [default: include]", true));
+		options.addOption(new OmOption("b,r", "file", null, true, "file used for backup/restore", "b"));
 		//install
 		options.addOption(new OmOption("i", "user", null, true, "Login name of the default user, minimum " + InstallationConfig.USER_LOGIN_MINIMUM_LENGTH + " characters"));
-		options.addOption(new OmOption("i", "pass", null, true, "Password of the default user, minimum " + InstallationConfig.USER_LOGIN_MINIMUM_LENGTH + " characters (will be prompted if not set)"));
 		options.addOption(new OmOption("i", "email", null, true, "Email of the default user"));
 		options.addOption(new OmOption("i", "group", null, true, "The name of the default user group"));
 		options.addOption(new OmOption("i", "tz", null, true, "Default server time zone, and time zone for the selected user [for ex: 'GMT+10', '-2', 'Chicago']"));
-		options.addOption(new OmOption("i", null, "system-email-address", true, "System e-mail address [default: " + cfg.mailReferer + "]"));
-		options.addOption(new OmOption("i", null, "smtp-server", true, "SMTP server for outgoing e-mails [default: " + cfg.smtpServer + "]"));
-		options.addOption(new OmOption("i", null, "smtp-port", true, "SMTP server for outgoing e-mails [default: " + cfg.smtpPort + "]"));
-		options.addOption(new OmOption("i", null, "email-auth-user", true, "Email auth username (anonymous connection will be used if not set)"));
-		options.addOption(new OmOption("i", null, "email-auth-pass", true, "Email auth password (anonymous connection will be used if not set)"));
-		options.addOption(new OmOption("i", null, "email-use-tls", false, "Is secure e-mail connection [default: no]"));
-		options.addOption(new OmOption("i", null, "skip-default-rooms", false, "Do not create default rooms [created by default]"));
-		options.addOption(new OmOption("i", null, "disable-frontend-register", false, "Do not allow front end register [allowed by default]"));
+		options.addOption(new OmOption("i", null, "password", true, "Password of the default user, minimum " + InstallationConfig.USER_LOGIN_MINIMUM_LENGTH + " characters (will be prompted if not set)", true));
+		options.addOption(new OmOption("i", null, "system-email-address", true, "System e-mail address [default: " + cfg.mailReferer + "]", true));
+		options.addOption(new OmOption("i", null, "smtp-server", true, "SMTP server for outgoing e-mails [default: " + cfg.smtpServer + "]", true));
+		options.addOption(new OmOption("i", null, "smtp-port", true, "SMTP server for outgoing e-mails [default: " + cfg.smtpPort + "]", true));
+		options.addOption(new OmOption("i", null, "email-auth-user", true, "Email auth username (anonymous connection will be used if not set)", true));
+		options.addOption(new OmOption("i", null, "email-auth-pass", true, "Email auth password (anonymous connection will be used if not set)", true));
+		options.addOption(new OmOption("i", null, "email-use-tls", false, "Is secure e-mail connection [default: no]", true));
+		options.addOption(new OmOption("i", null, "skip-default-rooms", false, "Do not create default rooms [created by default]", true));
+		options.addOption(new OmOption("i", null, "disable-frontend-register", false, "Do not allow front end register [allowed by default]", true));
 		
 		return options;
 	}
@@ -89,7 +88,9 @@ public class Admin {
 	}
 	
 	private void usage() {
-		new OmHelpFormatter().printHelp("admin", opts);
+		OmHelpFormatter formatter = new OmHelpFormatter();
+		formatter.setWidth(100);
+		formatter.printHelp("admin", opts);
 	}
 	
 	private void handleError(String msg, Exception e) {
