@@ -47,16 +47,32 @@
         
         <labelText name="_txt" fontstyle="bold" labelid="774" y="0" x="2" />
         
-        <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_1" y="30" x="30" labelid="768" />
+        <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_1" y="30" x="30" labelid="768">
+        	<handler name="onclick">
+                quicklink('conferenceModuleRoomList');
+            </handler>
+        </iconStepButtonWizzard>
         
       
-        <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_2" y="30" x="144" labelid="771" />
+        <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_2" y="30" x="144" labelid="771">
+        	<handler name="onclick">
+                quicklink('conferenceModuleRoomList');
+            </handler>
+        </iconStepButtonWizzard>
         
 
-        <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_3" y="30" x="258" labelid="772" />
+        <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_3" y="30" x="258" labelid="772" >
+        	<handler name="onclick">
+                quicklink('conferenceModuleRoomList');
+            </handler>
+        </iconStepButtonWizzard>
         
         
-        <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_4" y="30" x="382" labelid="773" />
+        <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_4" y="30" x="382" labelid="773">
+        	<handler name="onclick">
+                quicklink('conferenceModuleRoomList');
+            </handler>
+        </iconStepButtonWizzard>
         
         <labelText labelid="804" x="10" y="$once{ parent.height-80 }" multiline="true"
         		   width="$once{ parent.width-210 }" />
