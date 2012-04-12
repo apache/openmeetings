@@ -135,7 +135,7 @@
                       fileExplorerItem.fileHash,"videoconf1","/","files",hib.conferencedomain);
             	}
             }
-
+            
             if (parent.isdefaultreturn) {
             	
                 var tempSendArray = new Array ();
@@ -146,17 +146,19 @@
                 //Debug.write("Setting Message");
                 tempSendArray[2] = 'newfile';
                 tempSendArray[3] = canvas.currentusename;
-                //Debug.write("send: ",tempSendArray);
+                //if ($debug) Debug.write("send: ",tempSendArray);
                 canvas.objMessage = tempSendArray;
-                canvas.thishib.sendMessage.doCall();
+                canvas.thishib.sendMessageAll.doCall();
 
             } else {
                 parent.returnObj.sendRefresh();
             }
-            this.parent.close();
+            
             if (parent.fileExplorerRef != null) {
             	parent.fileExplorerRef.onClose.sendEvent();
             }
+            
+            parent.close();
         </method>
 
 		<method name="onProgress" args="fr, bytesLoaded, bytesTotal">

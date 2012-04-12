@@ -37,9 +37,8 @@
         lz.Track.register(this._trashBar._trashIcon, canvas.currentImagesListdraw.currentTrackGroupName);
     </handler>
     
-    
-    
     <handler name="onvisible">
+    	if ($debug) Debug.write("fileExplorer::onvisible this._selected ",this._selected);
         //This is thrown whenever an uploaded Document has completed
         if (this._selected == null) {
             this.loadFiles();

@@ -2226,6 +2226,17 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		}
 		return 1;
 	}
+	
+	public synchronized int sendMessageAll(Object newMessage) {
+		try {
+			
+			syncMessageToCurrentScope("sendVarsToMessage", newMessage, true);
+			
+		} catch (Exception err) {
+			log.error("[sendMessage]", err);
+		}
+		return 1;
+	}
 
 	/**
 	 * send status for shared browsing to all members except self
