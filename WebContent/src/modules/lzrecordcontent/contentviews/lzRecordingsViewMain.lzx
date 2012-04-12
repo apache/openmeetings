@@ -25,7 +25,7 @@
 	View for recorded contents list.
 	When you select 'Recordings' on the top menu, this class shows the list.
 -->
-<class name="lzRecordingsViewMain" extends="conferenceBox" labelid="858"
+<class name="lzRecordingsViewMain" extends="basePropertyPanel" labelid="858"
            x="${ parent._navigationArea.width + parent._navigationArea.x }"
            height="${ canvas.height - canvas.naviHeightDelta - parent._recordingsViewBottom.height }"
           width="${ canvas.width - parent._navigationArea.width - parent._navigationArea.x }">
@@ -339,7 +339,7 @@
             this._progress._progressbar._pointer.setAttribute("x",0);
         </method>
         
-        <view name="_content" height="${ parent.height-32-18 }" y="32">
+        <view name="_content" height="${ parent.height-22-18 }" y="22">
         	
     	    <attribute name="initH" value="480" type="number" />
             <attribute name="initW" value="640" type="number" />

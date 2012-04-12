@@ -64,7 +64,7 @@
         }
     </method>
     
-    <view name="_head" x="0" y="0" width="${ parent.width }" height="34" 
+    <view name="_head" x="0" y="0" width="${ parent.width }" height="24" 
     	  clickable="$once{ this.parent.closeable }" >
         
         <handler name="onclick">
@@ -72,32 +72,6 @@
         		this.parent.toggleopen();
         	}
         </handler>
-        
-        <view width="${ parent.width }" height="$once{ parent.height }" 
-              stretches="both" resource="presenter_thumb_rsc" >
-            
-            <handler name="oninit">
-                <![CDATA[
-                    this.setTintRGB(canvas.getThemeColor('basebgcolorizer'),90);
-                ]]>
-            </handler>
-            <method name="setTintRGB" args="color, brightness">
-                <![CDATA[
-	                if (color != "" && color != null){
-	
-	                    if (brightness == null) { brightness = 0; }
-	                    var rgb = color;
-	                    var red=(rgb >> 16) & 0xFF;
-	                    var green=(rgb >> 8) & 0xFF;
-	                    var blue=rgb & 0xFF;
-	        
-	                    this.setColorTransform( { ra : red, ga : green, ba : blue,
-	                                                rb : 0, gb : 0, bb : 0 } );
-	                                                
-	                }
-                ]]>
-            </method>            
-        </view>
         
         <view x="8" y="4" visible="${ this.parent.parent.closeable }">
             

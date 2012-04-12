@@ -387,12 +387,11 @@
     	
     </view>  
     
-    <conferenceBox name="_recordingsInfo" labelid="862" valign="bottom"
-                   textInset="30" closeable="true" isopen="true" closedHeight="32"
+    <basePropertyPanel name="_recordingsInfo" labelid="862" valign="bottom"
                    width="$once{ parent.width - 12 }" height="180">
         
-        <view name="content" y="34" 
-              width="$once{ parent.width }" height="$once{ parent.height - 34 }">
+        <view name="content" y="24" 
+              width="$once{ parent.width }" height="$once{ parent.height - 24 }">
             
             <attribute name="recordingName" value="" type="string" />
             <attribute name="alternateName" value="" type="string" />
@@ -459,7 +458,7 @@
             <labelText labelid="874" y="98" />
             <labelText name="_flvRoom" y="98" x="80" />
             
-            <simpleLabelButton y="120" align="right" text_padding_x="40"
+            <simpleLabelButton y="130" align="right" text_padding_x="40"
                               height="26" width="$once{ parent.width / 2 }" labelid="883">
                 <view resource="flv_download_rsc" x="4" y="2" />
                 <handler name="onclick">
@@ -484,7 +483,7 @@
             </simpleLabelButton>
             
             
-            <simpleLabelButton y="120" align="left" text_padding_x="40" 
+            <simpleLabelButton y="130" align="left" text_padding_x="40" 
                               height="26" width="$once{ parent.width / 2 }" labelid="884">
                 <view resource="flv_download_rsc" x="4" y="2" />
                 <handler name="onclick">
@@ -512,54 +511,29 @@
         
         
         
-    </conferenceBox>
+    </basePropertyPanel>
 
     <!--
         Sidebar to minimize
      -->
      
-    <view name="_minimizeSidebar" x="$once{ parent.width - 10 }" width="10" 
-          bgcolor="$once{ canvas.getThemeColor('baseMousecolorizer') }" height="${ parent.height }">
+    <view name="_minimizeSidebar" x="${ parent.width - 10 }" width="10" y="1"
+          				bgcolor="0xE0E1EB" height="${ parent.height-1 }">
         <handler name="onclick">
             parent.toggleStatus();
         </handler>
-        <handler name="onmouseover">
-            this._bg1.setAttribute("visibility","visible");
-        </handler>
-        <handler name="onmouseout">
-            this._bg1.setAttribute("visibility","hidden");
-        </handler>
         
-        <view width="${ parent.width }" height="$once{ parent.height*1.4 }" 
-              stretches="both" resource="presenter_thumb_rsc" >
-            <handler name="oninit">
-                <![CDATA[
-                    this.setTintRGB(canvas.getThemeColor('basebgcolorizer'),90);
-                ]]>
-            </handler>
-            <method name="setTintRGB" args="color, brightness">
-                <![CDATA[
-                    if (color != "" && color != null){
-    
-                        if (brightness == null) { brightness = 0; }
-                        var rgb = color;
-                        var red=(rgb >> 16) & 0xFF;
-                        var green=(rgb >> 8) & 0xFF;
-                        var blue=rgb & 0xFF;
+        <view width="${ parent.width }" height="$once{ parent.height }" 
+               bgcolor="0xE0E1EB" >
+        </view>
             
-                        this.setColorTransform( { ra : red, ga : green, ba : blue,
-                                                    rb : 0, gb : 0, bb : 0 } );
-                                                    
-                    }
-                ]]>
-            </method>            
+        <view name="_icon" resource="sidebar_tab_btn" y="0">
+             <handler name="onclick">
+	            parent.parent.toggleStatus();
+	         </handler>
+	         <labelTooltip name="_labelTooltip" labelid="856" />
         </view>
         
-        <view name="_bg1" bgcolor="0xFFFFFF" width="$once{ parent.width }" 
-            height="$once{ parent.height }" opacity="0.7" visibility="hidden"/> 
-            
-        <view name="_icon" resource="sidebar_tab_btn" 
-              valign="middle" align="center" />
     </view>
         
     <animator name="_doOpen" attribute="x" to="0" 
