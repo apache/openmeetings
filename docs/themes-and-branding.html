@@ -29,14 +29,14 @@ limitations under the License.
             <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
 
                                                     <meta name="author" value="
-			Sebastian Wagner
+			OpenMeetings Team
 		">
             <meta name="email" value="sebawagner@apache.org">
             
            
                                     
                         
-            <title>Apache OpenMeetings - Home</title>
+            <title>Apache OpenMeetings - Theme and color</title>
             <link rel="stylesheet" type="text/css" href="css/openmeetings.css">
             <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
             
@@ -861,72 +861,51 @@ limitations under the License.
                                                                     <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="Available WebServices"><strong>Available WebServices</strong></a>
+          <a name="Available with Apache OpenMeetings 2.0"><strong>Available with Apache OpenMeetings 2.0</strong></a>
           <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
         </font>
       </td></tr>
       <tr><td>
         <blockquote>
-                                    <div>
-				<div>
-					<a href="UserService.html" target="_BLANK">
-						<b>UserService</b>
-					</a>
-					<br />
-					<div style="margin-left:20px">
-						<i>The Service contains methods to login and create hash to
-							directly enter
-							conference rooms, recordings or the application in
-							general
-						</i>
-					</div>
-				</div>
-				<div>
-					<a href="RoomService.html" target="_BLANK">
-						<b>RoomService</b>
-					</a>
-					<br />
-					<div style="margin-left:20px">
-						<i>RoomService contains methods to manipulate rooms and create
-							invitation hash
-						</i>
-					</div>
-				</div>
-				<div>
-					<a href="FileService.html" target="_BLANK">
-						<b>FileService</b>
-					</a>
-					<br />
-					<div style="margin-left:20px">
-						<i>Contains methods to import and upload files into the Files
-							section of the
-							conference room and the personal drive of any user
-						</i>
-					</div>
-				</div>
-				<div>
-					<a href="CalendarService.html" target="_BLANK">
-						<b>CalendarService</b>
-					</a>
-					<br />
-					<div style="margin-left:20px">
-						<i>CalendarService contains methods to create, edit delete
-							calendar meetings
-						</i>
-					</div>
-				</div>
-				<div>
-					<a href="JabberService.html" target="_BLANK">
-						<b>JabberService</b>
-					</a>
-					<br />
-					<div style="margin-left:20px">
-						<i>The Service contains methods necessary for OM to Jabber integration.
-						All methods doesn't require admin privileges to get called.
-						</i>
-					</div>
-				</div>
-			</div>
+                                    <p>
+				Themes are only available starting with Openmeetings 2.x.
+				<br />
+				There are also more general client side configuration like port
+				configuration. Those configs are stored in the config.xml, see for
+				example
+				<a href="BrandingAndColors.html">BrandingAndColors.html</a>
+			</p>
+                            </blockquote>
+        </p>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td ><!-- bgcolor="#EEEEEE" -->
+        <font color="#000000" face="verdana,arial,helvetica,sanserif">
+          <a name="Editing the theme"><strong>Editing the theme</strong></a>
+          <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
+        </font>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <p>You can find the default theme in the SVN: </p>
+                                                <p>
+				<a href="https://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/WebContent/openmeetings/default-theme.xml" target="_BLANK" rel="nofollow">https://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/WebContent/openmeetings/default-theme.xml
+				</a>
+			</p>
+                                                <p>
+				Or if you already installed OpenMeetings on your machine at:
+				<br />
+				<tt>/webapps/openmeetings/default-theme.xml</tt>
+				<br />
+				The file contains border, background and font color definitions as
+				well as paths to icons that are loaded at runtime.
+				<br />
+				You can change the theme at runtime and just reload the browser
+				(eventually clear the browser cache) to see updates based on
+				modification in your theme.
+			</p>
                             </blockquote>
         </p>
       </td></tr>

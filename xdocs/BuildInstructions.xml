@@ -20,9 +20,9 @@
 		<section name="Nightly Builds">
 
 			<p>
-				You cannot find Nightly Builds of the software currently see:
-				<a href="https://issues.apache.org/jira/browse/INFRA-4438" rel="nofollow">
-					https://issues.apache.org/jira/browse/INFRA-4438
+				You can find Nightly Builds of the software at:
+				<a href="https://builds.apache.org/job/openmeetings/" rel="nofollow" target="_BLANK">
+					https://builds.apache.org/job/openmeetings/
 				</a>
 			</p>
 

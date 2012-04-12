@@ -66,6 +66,13 @@
 
 		<section name="Editing Colors">
 
+			<p>
+				<i>
+					With Version 2.x color and more layout specific configuration moved
+					to the theme configuration, see
+					<a href="themes-and-branding.html">themes-and-branding.html</a>
+				</i>
+			</p>
 
 			<p>To change the color scheme you can simply edit the config.xml,
 				there are 3 color settings, the whole application is styled using

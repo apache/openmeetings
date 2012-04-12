@@ -70,6 +70,7 @@
     		<subitem name="JVM performance tuning" href="/JVMPerformanceTuning.html" />
     	</item>
     	<item name="User Interface">
+    		<subitem name="Themes" href="/themes-and-branding.html" />
     		<subitem name="Branding and Colors" href="/BrandingAndColors.html" />
     		<subitem name="Dashboard" href="/Dashboard.html" />
     		<subitem name="Webcam resolutions" href="/WebcamResolutions.html" />

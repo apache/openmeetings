@@ -34,11 +34,8 @@ limitations under the License.
             <meta name="email" value="sebawagner@apache.org">
             
            
-            
-            
-            
-            
-            
+                                    
+                        
             <title>Apache OpenMeetings - Branding and Colors</title>
             <link rel="stylesheet" type="text/css" href="css/openmeetings.css">
             <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
@@ -270,7 +267,11 @@ limitations under the License.
 				            				currentLocation = "Configuration";
 					            			currentLink = "/JVMPerformanceTuning.html".substr(1, "/JVMPerformanceTuning.html".length);
 						            	} 
-				            							        				        							            				            						            			else if (document.location.href.indexOf("/BrandingAndColors.html") > 0) {
+				            							        				        							            				            						            			else if (document.location.href.indexOf("/themes-and-branding.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/themes-and-branding.html".substr(1, "/themes-and-branding.html".length);
+						            	} 
+				            						            			else if (document.location.href.indexOf("/BrandingAndColors.html") > 0) {
 				            				currentLocation = "Configuration";
 					            			currentLink = "/BrandingAndColors.html".substr(1, "/BrandingAndColors.html".length);
 						            	} 
@@ -511,6 +512,8 @@ limitations under the License.
 	            			            			    <a href="./JVMPerformanceTuning.html">JVM performance tuning</a>
 <br/>
 	            			        		        	            	            	<b>User Interface</b><br/>
+	            			            			    <a href="./themes-and-branding.html">Themes</a>
+<br/>
 	            			            			    <a href="./BrandingAndColors.html">Branding and Colors</a>
 <br/>
 	            			            			    <a href="./Dashboard.html">Dashboard</a>
@@ -793,6 +796,8 @@ limitations under the License.
 		            	</li>
 		        			        		            		            	<li><font color="#000000" face="arial,helvetica,sanserif" size="2pt">User Interface</font>
 		            		<ul>
+		            				            			<li>    <a href="./themes-and-branding.html">Themes</a>
+</li>
 		            				            			<li>    <a href="./BrandingAndColors.html">Branding and Colors</a>
 </li>
 		            				            			<li>    <a href="./Dashboard.html">Dashboard</a>
@@ -917,7 +922,14 @@ limitations under the License.
       </td></tr>
       <tr><td>
         <blockquote>
-                                    <p>To change the color scheme you can simply edit the config.xml,
+                                    <p>
+				<i>
+					With Version 2.x color and more layout specific configuration moved
+					to the theme configuration, see
+					<a href="themes-and-branding.html">themes-and-branding.html</a>
+				</i>
+			</p>
+                                                <p>To change the color scheme you can simply edit the config.xml,
 				there are 3 color settings, the whole application is styled using
 				those:
 			</p>
