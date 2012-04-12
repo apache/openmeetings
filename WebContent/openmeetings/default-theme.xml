@@ -44,6 +44,11 @@
 				description="Toolbar Icon" 
 				license="FamFam Icon Set"
 				src="public/themes/basic-theme/general/error.png" />	
+				
+	<resource name="info_text_icon_rsc" 
+				description="Info Icon" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/information.png" />
 	
 	<!-- Save Toolbar (for example Admin section) -->
 	
@@ -288,5 +293,5 @@
 				description="Conference Room Tab Icon" 
 				license="APL author sebawagner"
 				src="public/themes/basic-theme/conference/exit_button.png" />			
-		
+	
 </theme>

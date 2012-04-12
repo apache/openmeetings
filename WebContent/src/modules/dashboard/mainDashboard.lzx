@@ -276,7 +276,7 @@
                     </view>
                 </view>
                 
-                <view x="500" resource="info_text_icon_rsc" y="4" />
+                <image x="510" src="$once{ canvas.getThemeImage('info_text_icon_rsc') }" y="6" />
                 
                 <labelText labelid="782" x="530" width="${ parent.width-540 }" y="4" multiline="true" />
         

@@ -101,7 +101,7 @@
 	<view name="_conferences" height="${ parent.height-40 }" y="40">
 		<view name="PublicMeetings" height="${ parent.height }">
 			
-			<view x="4" resource="info_text_icon_rsc" />
+			<image x="10" src="$once{ canvas.getThemeImage('info_text_icon_rsc') }" />
 			
 			<labelText labelid="778" x="30" width="400" multiline="true" />
 			
@@ -177,7 +177,7 @@
 		<!-- private Meetings -->	
 		<view name="PrivateMeetings" visibility="hidden" height="${ parent.height }">
 			
-			<view x="4" resource="info_text_icon_rsc" />
+			<image x="10" src="$once{ canvas.getThemeImage('info_text_icon_rsc') }" />
 			
 			<labelText labelid="780" x="30" width="400" multiline="true" />
 				
@@ -239,7 +239,7 @@
 		<!-- Appointed Meetings -->
 		<view name="MyMeetings" visibility="hidden" height="${ parent.height }">
 			
-			<view x="4" resource="info_text_icon_rsc" />
+			<image x="10" src="$once{ canvas.getThemeImage('info_text_icon_rsc') }" />
 			
 			<labelText labelid="782" x="30" width="400" multiline="true" />
 			
@@ -249,15 +249,13 @@
 				<handler name="oninit">
 					canvas.thishib.roomtype = "public";
 					
-                    new lz.roomListItem(this.inn.inn.inn, 
-                                           {
+                    new lz.roomListItem(this.inn.inn.inn,{
                                                 roomType:1,
                                                 ispublic:true,
                                                 roomname : canvas.getLabelName(1306)
                                             });
 
-                    new lz.roomListItem(this.inn.inn.inn, 
-                                           {
+                    new lz.roomListItem(this.inn.inn.inn,{
                                                 roomType:3,
                                                 ispublic:true,
                                                 roomname : canvas.getLabelName(1307)
