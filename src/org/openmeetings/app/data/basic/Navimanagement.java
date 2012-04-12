@@ -69,14 +69,9 @@ public class Navimanagement {
 
 	public List<Naviglobal> getMainMenu(long user_level, long USER_ID) {
 		try {
-
-			// CriteriaBuilder crit = em.getCriteriaBuilder();
-			TypedQuery<Naviglobal> query = em.createQuery("select c from Naviglobal as c "
-					+ "where c.level_id <= :level_id AND "
-					+ "c.deleted LIKE 'false' " + "order by c.naviorder", Naviglobal.class);
+			TypedQuery<Naviglobal> query = em.createNamedQuery("getNavigation", Naviglobal.class);
 			query.setParameter("level_id", user_level);
 			List<Naviglobal> navi = query.getResultList();
-
 			return navi;
 		} catch (Exception ex2) {
 			log.error("getMainMenu", ex2);

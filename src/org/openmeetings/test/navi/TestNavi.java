@@ -46,7 +46,7 @@ public class TestNavi extends AbstractOpenmeetingsSpringTest {
             System.out.println("Naviglobal label: " + navigl.getLabel().getValue());
 
             for (Navimain navim : navigl.getMainnavi()) {
-                System.out.println("-->" + navim.getLabel().getValue());
+                //System.out.println("-->" + navim.getLabel().getValue());
 
             }
         }

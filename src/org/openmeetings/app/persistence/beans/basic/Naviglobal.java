@@ -33,12 +33,24 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
+@NamedQueries({
+    @NamedQuery(name="getNavigation",
+        	query="SELECT DISTINCT ng from Naviglobal ng " +
+        			"LEFT JOIN ng.mainnavi nm " +
+        			"WHERE nm.deleted LIKE 'false' " +
+        			"AND ng.level_id <= :level_id " +
+        			"AND nm.level_id <= :level_id " +
+        			"AND ng.deleted LIKE 'false' " + 
+        			"order by ng.naviorder, nm.naviorder")
+})
 @Table(name = "naviglobal")
 public class Naviglobal implements Serializable {
     
@@ -74,9 +86,8 @@ public class Naviglobal implements Serializable {
 	private Long fieldvalues_id;
 	@Column(name="tooltip_fieldvalues_id")
 	private Long tooltip_fieldvalues_id;
-	@OneToMany(fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name="global_id")
-	@OrderBy("naviorder")
     private List<Navimain> mainnavi;
 	@Transient
     private Fieldlanguagesvalues label;
