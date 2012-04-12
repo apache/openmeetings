@@ -115,7 +115,7 @@
 	    <view width="${ parent.width-1 }" bgcolor="0xFFFFFF" opacity="0.4" height="$once{ parent.height - 2}" y="1"
 	        visibility="hidden" name="bgc"/>
 	        
-	    <view resource="exit_btn_rsc" y="4" x="4" />
+	    <image src="$once{ canvas.getThemeImage( 'exit_btn_rsc' ) }" y="4" x="4" />
 	    
 	    <view width="1" height="${ parent.height }" y="0" bgcolor="0xEEEEEE" x="${ parent.width-1 }" />
 	    

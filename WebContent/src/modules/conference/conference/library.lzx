@@ -20,9 +20,6 @@
 -->
 <library>
 	
-	<resource name="messagebox_info_big_rsc" src="resources/messagebox_info.png" />
-	<resource name="exit_btn_rsc" src="resources/exit.png" />
-
 	<include href="roomListItem.lzx" />
 	<include href="roomListDetails.lzx" />
     <include href="conferenceMenubar.lzx" />

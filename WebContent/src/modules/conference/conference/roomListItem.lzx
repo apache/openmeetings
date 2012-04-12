@@ -20,8 +20,6 @@
 -->
 <library>
 
-	<resource name="waitcursor" src="resources/lzwaitcursor_rsc.swf"/>
-
 	<class name="roomListItem" extends="view" bgcolor="$once{ canvas.bgColorMenuItems }" 
 		   height="50" onmouseover="" onmouseout="" width="478" >
 
@@ -192,8 +190,6 @@
 		<![CDATA[
 			if (parent.parent.parent.parent.parent.parent.parent.parent.finishedTabsQuantity < 3) {
 				parent.parent.parent.parent.parent.parent.parent.parent.clickedButton = _clicked;
-
-				lz.Cursor.setCursorGlobal("waitcursor");
 			} else {
 				checkForMaxUsers = true;
 				getRoomClientsListByRoomId.doCall();

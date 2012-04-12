@@ -113,8 +113,8 @@
 	
 	<resource name="plain" 
 				description="Toolbar Icon" 
-				license="FamFam Icon Set"
-				src="public/themes/basic-theme/whiteboard/cancel.png" />
+				license="APL author sebawagner"
+				src="public/themes/basic-theme/whiteboard/delete_all.png" />
 	
 	<resource name="plainSlides" 
 				description="Toolbar Icon" 
@@ -282,6 +282,11 @@
 	<resource name="files_tab_btn" 
 				description="Conference Room Tab Files" 
 				license="FamFam Icon Set"
-				src="public/themes/basic-theme/conference/folder_explore.png" />	
+				src="public/themes/basic-theme/conference/folder_explore.png" />
+	
+	<resource name="exit_btn_rsc" 
+				description="Conference Room Tab Icon" 
+				license="APL author sebawagner"
+				src="public/themes/basic-theme/conference/exit_button.png" />			
 		
 </theme>
