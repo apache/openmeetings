@@ -21,7 +21,7 @@
 <library>
     
     <!-- APL Author sebawagner -->
-    <resource name="width_gripper_rsc" src="resources/width_gripper.png" />
+    <resource name="width_gripper_rsc" src="resources/width_change_cursor.swf" />
 
 	<!-- APL Author sebawagner -->
 	<resource name="sort_asc_turnover_rsc" src="resources/sort_asc.png" />

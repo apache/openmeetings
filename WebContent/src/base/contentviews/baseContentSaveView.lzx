@@ -45,15 +45,26 @@
 
     <view name="_savecontentbar" layout="axis:x;spacing:2;inset:2" x="2" height="28" width="$once{ parent.width }"
         bgcolor="$once{ canvas.getThemeColor('baseMousecolorizer') }">
-        <baseChooseIcon resourceN="filesave_rsc" labelid="144" y="2" 
-        	onclick="this.parent.parent.doSaveEvent()" visible="$once{ parent.parent.saveIsVisible }" />
-        <baseChooseIcon resourceN="edit_add_rsc" labelid="155" y="2" 
-        	onclick="this.parent.parent.doAddEvent()" visible="$once{ parent.parent.addIsVisible }" />  
-        <baseChooseIcon resourceN="reload_rsc" labelid="156" y="2" 
-        	onclick="this.parent.parent.doReloadEvent()" visible="$once{ parent.parent.refreshIsVisible }" />        
-        <baseChooseIcon resourceN="button_cancel_rsc" labelid="157" y="2" 
-        	onclick="this.parent.parent.doDeleteEvent()" visible="$once{ parent.parent.deleteIsVisible }" />
-		<labelText name="_newRecord" visibility="hidden" labelid="344" fgcolor="green" width="150" />        	 	      	
+        
+        <state applied="$once{ parent.parent.saveIsVisible }">
+	        <baseChooseIcon resourceN="filesave_rsc" labelid="144" y="2" 
+	        	onclick="this.parent.parent.doSaveEvent()" />
+        </state>	
+        <state applied="$once{ parent.parent.addIsVisible }">
+        	<baseChooseIcon resourceN="edit_add_rsc" labelid="155" y="2" 
+        		onclick="this.parent.parent.doAddEvent()" />  
+        </state>
+        <state applied="$once{ parent.parent.refreshIsVisible }">
+	        <baseChooseIcon resourceN="reload_rsc" labelid="156" y="2" 
+	        	onclick="this.parent.parent.doReloadEvent()" />
+        </state> 
+        <state applied="$once{ parent.parent.deleteIsVisible }">    
+	        <baseChooseIcon resourceN="button_cancel_rsc" labelid="157" y="2" 
+	        	onclick="this.parent.parent.doDeleteEvent()"  />
+        </state>
+        
+		<labelText name="_newRecord" visibility="hidden" labelid="344" fgcolor="green" width="150" />       
+		 	 	      	
     </view>
     
     <method name="addViewToObserver" args="obj">

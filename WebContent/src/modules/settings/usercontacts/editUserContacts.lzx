@@ -26,6 +26,7 @@
 	<attribute name="contactContent" value="null"/>
 	
 	<handler name="onvisible" args="v">
+		if ($debug) Debug.wrote("editUserContacts onvisible",v);
 		if (v) {
 			if (this.contactContent == null) {
 				//We do some tricks to render / to show some of the visible area 
@@ -41,6 +42,9 @@
 	</handler>
 	
 	<method name="initContent" args="tRef">
+		if (this.contactContent != null) {
+			return;
+		}
 		this.contactContent = new lz.editUserContactsContent(this);
 	</method>
 	

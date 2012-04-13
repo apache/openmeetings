@@ -151,19 +151,16 @@
 		
 		<viewUserProfile name="_userProfile" y="40" />
 			
-	    <editUserContacts name="_editUserContacts" visibility="hidden"  y="40" height="$once{ canvas.height - 84 - 40 }">
-	    	
-	    </editUserContacts>
-	    
+	    <editUserContacts name="_editUserContacts" visibility="hidden"  
+	    			y="40" height="$once{ canvas.height - 84 - 40 }" />
+	     
 	    <editUserProfile name="_editUserProfile" visibility="hidden"  y="40" />
 	    
-	    <searchUserProfile name="_searchUserProfile" visibility="hidden" y="40" height="$once{ canvas.height - canvas.naviHeight - 40 }">
-            
-        </searchUserProfile>
-    
+	    <searchUserProfile name="_searchUserProfile" visibility="hidden" 
+	    			y="40" height="$once{ canvas.height - canvas.naviHeight - 40 }" />
+	    			
     </view>
            			      
 </class>
-
 
 </library>

@@ -61,7 +61,7 @@
 	
 	<method name="select">
 		this.selected = true;
-		this._icon.setAttribute("opacity",1);
+		if (this.showIcon) this._icon.setAttribute("opacity",1);
         this._selectedView.setAttribute("visibility","visible");
         this._deselectedView.setAttribute("visibility","hidden");
 		this._bg2.setAttribute("visibility","hidden");
@@ -73,7 +73,7 @@
      
     <method name="deselect">
         this.selected = false;
-        this._icon.setAttribute("opacity",0.5);
+        if (this.showIcon) this._icon.setAttribute("opacity",0.5);
         this._selectedView.setAttribute("visibility","hidden");
         this._deselectedView.setAttribute("visibility","visible");
         this._text.setAttribute("y",8);
@@ -104,8 +104,10 @@
     <view name="_bg2" bgcolor="0xFFFFFF" width="$once{ parent.width-2 }" y="3" x="1"
           height="$once{ parent.height-4 }" opacity="1" visibility="hidden"/>
     
-    <image x="6" y="6" name="_icon" src="$once{ canvas.getThemeImage( parent.currentIconRsc ) }" 
-    				width="20" height="20" stretches="both" visible="$once{ parent.showIcon }" />
+    <state applied="$once{ parent.showIcon }" >
+	    <image x="6" y="6" name="_icon" src="$once{ canvas.getThemeImage( parent.currentIconRsc ) }" 
+    				width="20" height="20" stretches="both" />
+    </state>
                 
     <labelText name="_text" x="$once{ (parent.showIcon) ? 28 : 6 }" fontsize="$once{ parent.textFontSize }" 
     		valign="middle" fgcolor="0xFFFFFF" labelid="$once{ parent.labelid }" />

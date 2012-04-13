@@ -74,17 +74,13 @@
                 this._menu._next2.setAttribute('isEnabled',false);
                 this._menu._next1.setAttribute('isEnabled',false);
                 this._menu._pre2.setAttribute('isEnabled',false);
-                
-                this._menu._step.updateItemsListNumber.sendEvent();
             }
         ]]>
     </handler>  
     
     <handler name="onclickedItem" args="obj" >
         <![CDATA[
-            
             this.addToSelection(obj,false); 
-    
         ]]>
     </handler>
     
@@ -373,6 +369,7 @@
     </method>
     
     <method name="addHeaderItemOrdered" args="labelid,width,orderBy,asc,isSelected" >
+    	if ($debug) Debug.write("turnOverListHeaderItemOrdered ",labelid,width,orderBy,asc,isSelected);
         new lz.turnOverListHeaderItemOrdered(this._innerlisthead._inn,{
                 labelid:labelid,width:width,
                 orderBy:orderBy,asc:asc,isSelected:isSelected,

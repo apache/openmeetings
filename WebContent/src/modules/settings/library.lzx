@@ -20,41 +20,49 @@
 -->
 <library>
 	
+	<!-- APL Author sebawagner -->
 	<resource name="image_loading_placeholder_rsc" 
 			  src="resources/loading_symbol.swf" />
 	
+	<!-- APL Author sebawagner -->
 	<resource name="private_message_select_part_rsc" 
 			  src="resources/select_part.png" />	
-			  
+		
+	<!-- FamFam Icon Set -->
 	<resource name="private_message_send_rsc" 
-			  src="resources/folder_sent_mail.png" />	 
-			  
-	<resource name="private_message_receive_rsc" 
-			  src="resources/mail-closed-alt-receive.png" />	
-			   
+			  src="resources/email_go.png" />	 
+		
+	<!-- FamFam Icon Set -->
 	<resource name="private_message_add_rsc" 
-			  src="resources/mail-closed-add.png" />	
-			  
+			  src="resources/email_add.png" />	
+		
+	<!-- FamFam Icon Set -->	  
 	<resource name="private_message_trash_rsc" 
-			  src="resources/trash.png" />	
+			  src="resources/email_delete.png" />	
 	
+	<!-- FamFam Icon Set -->
 	<resource name="private_message_folder_add_rsc" 
-			  src="resources/folder_new.png" />		
+			  src="resources/folder_add.png" />		
 	
+	<!-- FamFam Icon Set -->	  
 	<resource name="private_message_folder_rsc" 
 			  src="resources/folder.png" />	
-			  
+		
+	<!-- FamFam Icon Set -->	  
 	<resource name="private_message_inbox_rsc" 
-			  src="resources/folder_inbox.png" />	
-			  
+			  src="resources/basket_put.png" />	
+		
+	<!-- FamFam Icon Set -->	  
 	<resource name="user_contact_calendar_add_rsc" 
-              src="resources/calendar-add.png" />  
-			  
+              src="resources/calendar_add.png" />  
+	
+	<!-- FamFam Icon Set -->		  
 	<resource name="user_contact_calendar_delete_rsc" 
-              src="resources/calendar-delete.png" /> 
-              
+              src="resources/calendar_delete.png" /> 
+      
+    <!-- FamFam Icon Set -->	        
     <resource name="user_contact_calendar_system_undo_rsc" 
-              src="resources/system-undo.png" />   
+              src="resources/arrow_undo.png" />   
    
     <include href="privatemessages/" />
     <include href="usercontacts/" />

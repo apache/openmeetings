@@ -36,6 +36,10 @@
 	<handler name="onreload" >
 		this.getUserSelf.doCall();
 	</handler>	
+	
+	<handler name="onconstruct">
+		if ($debug) Debug.write("::editUserProfile::");
+	</handler>
 
     <handler name="oninit">
 		this.getUserSelf.doCall();
@@ -377,11 +381,11 @@
                multiline="true" width="366" visibility="visible"/>  
                  
 	<labelText labelid="1162" width="200" y="390" resize="false" x="410" visibility="visible"/>
-        <customScrollEdittext name="userOffers" y="370" x="530" width="270" 
+        <customScrollEdittext name="userOffers" y="390" x="530" width="270" 
            			 height="100" text="" visibility="visible"/>	
 
 	<labelText labelid="1163" width="200" y="500" resize="false" x="410" visibility="visible"/>
-        <customScrollEdittext name="userSearchs" y="480" x="530" width="270" 
+        <customScrollEdittext name="userSearchs" y="500" x="530" width="270" 
            			 height="100" text="" visibility="visible"/>	
            			 
 </class>

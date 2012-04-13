@@ -60,9 +60,7 @@
 
 <class name="basicturnoverlistheaderitem" fontsize="9"
        extends="simpleLabelButton" clip="true">
-	<handler name="onclick">
-		this.parent.parent.parent.sendClickedItem.sendEvent(this);
-	</handler>
+	
 </class>
 
 <class name="turnoverlistheaderitem" extends="basicturnoverlistheaderitem" >
