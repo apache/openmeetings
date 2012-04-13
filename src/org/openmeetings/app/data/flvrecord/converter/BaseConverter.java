@@ -129,9 +129,9 @@ public abstract class BaseConverter {
 			log.debug(" i "+i+" = "+listOfFullWaveFiles.get(i));
 			argv_full_sox[2 + i] = listOfFullWaveFiles.get(i);
 		}
-		log.debug(" i + 3 "+(i+3)+" "+outputFullWav);
+		log.debug(" i + 2 "+(i+2)+" "+outputFullWav);
 		
-		argv_full_sox[i + 3] = outputFullWav;
+		argv_full_sox[i + 2] = outputFullWav;
 		
 		return argv_full_sox;
 	}
