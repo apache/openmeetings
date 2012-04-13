@@ -38,7 +38,7 @@
 	</handler>
     
     <method name="hideNewRecordText">
-        this._savecontentbar._newRecord.setAttribute('visibility','hidden');
+        this._newRecord.setAttribute('visibility','hidden');
     </method>
     
 	<event name="onreload" />
@@ -63,9 +63,12 @@
 	        	onclick="this.parent.parent.doDeleteEvent()"  />
         </state>
         
-		<labelText name="_newRecord" visibility="hidden" labelid="344" fgcolor="green" width="150" />       
+		  
 		 	 	      	
     </view>
+    
+    <labelText name="_newRecord" x="120"
+   						visibility="hidden" labelid="344" fgcolor="green" width="150" />     
     
     <method name="addViewToObserver" args="obj">
     	if (this.observerViews==null) this.observerViews = new Array();
@@ -73,7 +76,7 @@
     </method>
 	
 	<method name="doAddEvent">
-		this._savecontentbar._newRecord.setAttribute('visibility','visible');
+		this._newRecord.setAttribute('visibility','visible');
 		this.onnew.sendEvent();
 	</method>
     
