@@ -67,7 +67,7 @@
 		this._bg2.setAttribute("visibility","hidden");
 		this._text.setAttribute("fontstyle","bold");
 		this._text.setAttribute("y",6);
-		this._icon.setAttribute("y",6);
+		if (this.showIcon) this._icon.setAttribute("y",6);
 		this._text.setAttribute("fgcolor",canvas.getThemeColor('menuTextColor'));
 	</method>
      
@@ -77,7 +77,7 @@
         this._selectedView.setAttribute("visibility","hidden");
         this._deselectedView.setAttribute("visibility","visible");
         this._text.setAttribute("y",8);
-        this._icon.setAttribute("y",8);
+        if (this.showIcon) this._icon.setAttribute("y",8);
         this._text.setAttribute("fontstyle","plain");
         this._text.setAttribute("fgcolor",canvas.getThemeColor('menuTextDisabledColor'));
     </method>       
