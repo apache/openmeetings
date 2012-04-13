@@ -716,9 +716,13 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			RoomClient currentClient = this.clientListManager
 					.getClientByStreamId(streamid);
 
+			//We make a second object the has the reference to the object 
+			//that we will use to send to all participents
+			RoomClient clientObjectSendToSync = currentClient;
+			
 			// Notify all the clients that the stream had been started
 			log.debug("start streamPublishStart broadcast start: "
-					+ stream.getPublishedName() + "CONN " + current);
+					+ stream.getPublishedName() + " CONN " + current);
 
 			// In case its a screen sharing we start a new Video for that
 			if (currentClient.getIsScreenClient()) {
@@ -731,11 +735,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			//If its an audio/video client then send the session object with the full 
 			//data to everybody
 			else if (currentClient.getIsAVClient() != null && currentClient.getIsAVClient()) {
-				currentClient = this.clientListManager.getClientByPublicSID(
+				clientObjectSendToSync = this.clientListManager.getClientByPublicSID(
 											currentClient.getPublicSID(), false);
 			}
 			
-			log.debug("newStream SEND");
+			log.debug("newStream SEND: "+currentClient);
 
 			// Notify all users of the same Scope
 			// We need to iterate through the streams to catch if anybody is recording
@@ -786,7 +790,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 								
 							IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
 							iStream.invoke("newStream",
-									new Object[] { currentClient },
+									new Object[] { clientObjectSendToSync },
 									this);
 
 						}
@@ -1501,10 +1505,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 					currentClient.getMail(), currentClient.getFirstname(),
 					currentClient.getLastname());
 
-			log.debug("##### setRoomValues : " + currentClient.getUsername()
-					+ " " + currentClient.getStreamid()); // just a unique
-															// number
-
+			log.debug("##### setRoomValues : " + currentClient);
+			
 			// Check for Moderation LogicalRoom ENTER
 			HashMap<String, RoomClient> clientListRoom = this.clientListManager
 					.getRoomClients(room_id);

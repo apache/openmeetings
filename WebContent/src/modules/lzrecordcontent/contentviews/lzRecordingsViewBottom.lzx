@@ -21,7 +21,7 @@
 <library>
  
 <class name="flvMetaInfoContentArea" extends="view" 
-       width="${ parent.width }" height="178" clip="true">
+       width="${ parent.width }" height="168" clip="true">
 	
 	<attribute name="baseWidthForPointer" value="0" type="number"/>
 	
@@ -40,7 +40,7 @@
 		this.contentDevider._pointer.setAttribute("x",0);
 	</method>
     
-    <view name="content" width="${ parent.width }" height="178">
+    <view name="content" width="${ parent.width }" height="168">
         
         <view name="content" layout="axis:y;spacing:2" />
         
@@ -100,7 +100,7 @@
 	View for recorded contents list.
 	When you select 'Recordings' on the top menu, this class shows the list.
 -->
-<class name="lzRecordingsViewBottom" extends="basePropertyPanel" labelid="859" height="200" 
+<class name="lzRecordingsViewBottom" extends="basePropertyPanel" labelid="859" height="190" 
                    y="${ canvas.height - canvas.naviHeightDelta - this.height }" 
                    x="${ parent._navigationArea.width + parent._navigationArea.x }"
                    width="${ canvas.width - parent._navigationArea.width - parent._navigationArea.x }">
@@ -211,8 +211,8 @@
             ]]>
         </method>
         
-        <view name="content" visibility="hidden" y="22" bgcolor="0xFFFFFF"
-              width="${ parent.width }" height="178">
+        <view name="content" visibility="visible" y="22" bgcolor="0xFFFFFF"
+              width="${ parent.width }" height="168">
             
             <method name="clearContent">
                 this._content.destroy();
