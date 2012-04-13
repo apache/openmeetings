@@ -217,6 +217,7 @@
 				     _micro.codec = SoundCodec.NELLYMOSER;
 				     //_micro.framesPerPacket = 1;
 				     _micro.setSilenceLevel(0, 2000);
+				     _micro.rate = 22;
 				     _micro.gain = 50;
 				     // this has no effect if enhanced microphone is obtained
 	                //Microphone setUseEchoSupression(bool)

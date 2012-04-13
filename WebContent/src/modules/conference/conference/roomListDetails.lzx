@@ -72,30 +72,25 @@
 			this._roomname.setAttribute('text',canvas.getLabelName(406)+" "+roomname);
 			this._roomcomment.setAttribute('text', roomcomment);
 			this._users.clearList();
-			for (var i = 0;i<this.currentusers.length;i++){
-				var username = this.currentusers[i].firstname + " "
-						+ this.currentusers[i].lastname
-						+ " (" + this.currentusers[i].username + ") ";
-				 new lz.userRoomTabItem(this._users._users._cbtext,{user_id:this.currentusers[i].user_id,username:username,usertime:canvas.getLabelName(408)+parseDateToStringTime(this.currentusers[i].roomEnter)});
+			if (this.currentusers != null) {
+				for (var i = 0;i<this.currentusers.length;i++){
+					var username = this.currentusers[i].firstname + " "
+							+ this.currentusers[i].lastname
+							+ " (" + this.currentusers[i].username + ") ";
+					 new lz.userRoomTabItem(this._users._users._cbtext,{user_id:this.currentusers[i].user_id,username:username,usertime:canvas.getLabelName(408)+parseDateToStringTime(this.currentusers[i].roomEnter)});
+				}
 			}
-			
-			//canvas._chatcontentRPC.doinit();
-			//this.addClientToChatNotification.doCall();
-			
-			this.getAppointmentData.doCall();
-			
+			this.bdatum.setAttribute("visibility", "hidden");
+    		this.bzeit.setAttribute("visibility", "hidden");
+    		this.edatum.setAttribute("visibility", "hidden");
+    		this.ezeit.setAttribute("visibility", "hidden");
+    		this.l_bdatum.setAttribute("visibility", "hidden");
+    		this.l_edatum.setAttribute("visibility", "hidden");
+    		if (roomid > 0) {
+				this.getAppointmentData.doCall();
+			}
 		]]>
 	</method>
-	
-	<netRemoteCallHib name="addClientToChatNotification" remotecontext="$once{ canvas.thishib }" 
-		funcname="chatservice.addClientToChatNotification" >   
-		<netparam><method name="getValue">return parent.parent.roomid;</method></netparam>
-		<handler name="ondata" args="value">	
-		    <![CDATA[
-		    	if ($debug) Debug.write("addClientToChatNotification: ",value);
-		    ]]>	        	          				
-		</handler>	
-	</netRemoteCallHib>
 	
 	<!-- Retrieving Appointmentdata for Meeting -->
 	<netRemoteCallHib name="getAppointmentData" remotecontext="$once{ canvas.thishib }" 
@@ -114,33 +109,27 @@
 		    		parent.ezeit.setAttribute('text',parseDateToStringTimeOnly(value.appointmentEndtime));
 		    		
 		    		
-		    		parent.bdatum.setAttribute("visibility","visible");;
-		    		parent.bzeit.setAttribute("visibility","visible");;
-		    		parent.edatum.setAttribute("visibility","visible");;
-		    		parent.ezeit.setAttribute("visibility","visible");;
-		    		parent.l_bdatum.setAttribute("visibility","visible");;
-		    		parent.l_edatum.setAttribute("visibility","visible");;
+		    		parent.bdatum.setAttribute("visibility","visible");
+		    		parent.bzeit.setAttribute("visibility","visible");
+		    		parent.edatum.setAttribute("visibility","visible");
+		    		parent.ezeit.setAttribute("visibility","visible");
+		    		parent.l_bdatum.setAttribute("visibility","visible");
+		    		parent.l_edatum.setAttribute("visibility","visible");
 		    		
 		    		if ($debug) Debug.write("Appointment Start : " + value.appointmentStarttime);
 		    		if ($debug) Debug.write("Appointment End : " + value.appointmentEndtime);
 		    		
-		    		//Do change the y-Value of the Chat and users list so that there is no white space between
-                    parent.user_label.setAttribute("y",110);
-                    parent._users.setAttribute("y",130);
-                    parent.chat_label.setAttribute("y",230);
-                    parent._chat.setAttribute("y",250);
-                    
 		    	} else{
 		    		
 		    		parent.bdatum.setAttribute('text','');
 		    		parent.bzeit.setAttribute('text','');
 		    		
-		    		parent.bdatum.setAttribute('visible', false);
-		    		parent.bzeit.setAttribute('visible', false);
-		    		parent.edatum.setAttribute('visible', false);
-		    		parent.ezeit.setAttribute('visible', false);
-		    		parent.l_bdatum.setAttribute('visible', false);
-		    		parent.l_edatum.setAttribute('visible', false);
+		    		parent.bdatum.setAttribute("visibility", "hidden");
+		    		parent.bzeit.setAttribute("visibility", "hidden");
+		    		parent.edatum.setAttribute("visibility", "hidden");
+		    		parent.ezeit.setAttribute("visibility", "hidden");
+		    		parent.l_bdatum.setAttribute("visibility", "hidden");
+		    		parent.l_edatum.setAttribute("visibility", "hidden");
 		    		
 		    	}
 		    ]]>	        	          				
@@ -167,9 +156,9 @@
 	<customEdittext name="bdatum" y="40" x="75" width="100" text="" visible="false" /> 	            	
 	<customEdittext name="bzeit" x="200" y="40" width="50" regexpType="time" visible="false" />
 
-	<labelText name="l_edatum" labelid="571" y="${40 + parent.l_bdatum.visible ? 30 : 0}" width="50" visible="false" />
-	<customEdittext name="edatum" y="${parent.l_edatum.y}" x="75" width="100" text="" visible="false" />
-	<customEdittext name="ezeit" x="200" y="${parent.l_edatum.y}" width="50" regexpType="time" visible="false" />
+	<labelText name="l_edatum" labelid="571" y="60" width="50" visible="false" />
+	<customEdittext name="edatum" y="60" x="75" width="100" text="" visible="false" />
+	<customEdittext name="ezeit" x="200" y="60" width="50" regexpType="time" visible="false" />
 
 	<labelText name="_roomcomment" x="75" y="${parent.l_edatum.y + (parent.l_edatum.visible ? 30 : 0)}" width="100" text=""/>
 	<labelText labelid="270" y="${parent._roomcomment.y}" width="50" />

@@ -74,16 +74,13 @@
     			if (this.ispublic) {
     				hib.conferencedomain = "public";
     				hib.currentroomid = this.obj.rooms_id;
-    				//Debug.write("ispublic");
     			} else {
     				hib.conferencedomain = this.obj.organisation.organisation_id;
     				hib.currentroomid = this.obj.room.rooms_id;
-    				//Debug.write("non ispublic");
     			}
-    			if ($debug) Debug.write("onclick", this);
-    			parent.parent.parent.parent.parent._roomlistdetails.doinit(
-    					this.currentusers, this.roomid, this.roomname, this.roomcomment);
 			}
+			parent.parent.parent.parent.parent._roomlistdetails.doinit(
+    					this.currentusers, this.roomid, this.roomname, this.roomcomment);
 		</handler>
 
 		<method name="checkMaxUsers">
