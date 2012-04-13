@@ -45,7 +45,7 @@ public class PrivateMessagesDaoImpl {
 	
 	public Long addPrivateMessage(String subject, String message, Long parentMessageId, 
 			Users from, Users to, Users owner, Boolean bookedRoom, Rooms room,
-			Boolean isContactRequest, Long userContactId) {
+			Boolean isContactRequest, Long userContactId, String email) {
 		try {
 			PrivateMessages privateMessage = new PrivateMessages();
 			privateMessage.setInserted(new Date());
@@ -62,6 +62,7 @@ public class PrivateMessagesDaoImpl {
 			privateMessage.setIsRead(false);
 			privateMessage.setIsContactRequest(isContactRequest);
 			privateMessage.setUserContactId(userContactId);
+			privateMessage.setEmail(email);
 			
 			privateMessage = em.merge(privateMessage);
 			Long privateMessageId = privateMessage.getPrivateMessageFolderId();

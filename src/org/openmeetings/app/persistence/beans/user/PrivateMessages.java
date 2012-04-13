@@ -51,6 +51,9 @@ public class PrivateMessages implements Serializable {
 	@Column(name="message")
 	private String message;
 	
+	@Column(name="email")
+	private String email;
+	
 	@Column(name="inserted")
 	private Date inserted;
 	
@@ -191,6 +194,12 @@ public class PrivateMessages implements Serializable {
 	}
 	public void setUserContactId(Long userContactId) {
 		this.userContactId = userContactId;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	
 }

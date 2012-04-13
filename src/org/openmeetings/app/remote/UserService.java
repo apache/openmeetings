@@ -662,7 +662,7 @@ public class UserService {
 				privateMessagesDao.addPrivateMessage(user.getFirstname() + " "
 						+ user.getLastname() + " " + fValue1193.getValue(),
 						message, 0L, user, userToAdd, userToAdd, false, null,
-						true, userContactId);
+						true, userContactId, userToAdd.getAdresses().getEmail());
 
 				String link = baseURL + "?cuser=" + hash;
 
@@ -880,7 +880,7 @@ public class UserService {
 								user.getFirstname() + " " + user.getLastname()
 										+ " " + fValue1198.getValue(), message,
 								0L, userContacts.getContact(), user, user,
-								false, null, false, 0L);
+								false, null, false, 0L, user.getAdresses().getEmail());
 
 						mailHandler.sendMail(user.getAdresses().getEmail(),
 								userContacts.getContact().getFirstname()
@@ -1007,59 +1007,76 @@ public class UserService {
 					// Map receipent = (Map) recipients.get(iter.next());
 
 					// String email = receipent.get("email").toString();
-
-					Users to = userManagement.getUserByEmail(email);
-
-					if (to == null) {
-						throw new Exception("Could not find user " + email);
-					}
-
+					
 					Boolean invitor = false;
-					if (email.equals(from.getAdresses().getEmail())) {
-						invitor = true;
+					Long language_id = from.getLanguage_id();
+					if (language_id == null) {
+						language_id = Long.valueOf(
+								cfgManagement.getConfKey(3,
+										"default_lang_id").getConf_value())
+								.longValue();
+					}
+					
+					Users to = userManagement.getUserByEmail(email);
+					
+					if (to != null) {
+						
+						if (email.equals(from.getAdresses().getEmail())) {
+							invitor = true;
+						} else {
+							
+							// One message to the Send
+							privateMessagesDao.addPrivateMessage(subject, message,
+									parentMessageId, from, to, from, bookedRoom,
+									room, false, 0L, email);
+	
+							// One message to the Inbox
+							privateMessagesDao.addPrivateMessage(subject, message,
+									parentMessageId, from, to, to, bookedRoom,
+									room, false, 0L, email);
+	
+							// One copy of the Inbox message to the user
+							if (to.getLanguage_id() != null) {
+								language_id = to.getLanguage_id();
+							}
+						}
+						
 					} else {
-
+						
 						// One message to the Send
 						privateMessagesDao.addPrivateMessage(subject, message,
 								parentMessageId, from, to, from, bookedRoom,
-								room, false, 0L);
-
-						// One message to the Inbox
-						privateMessagesDao.addPrivateMessage(subject, message,
-								parentMessageId, from, to, to, bookedRoom,
-								room, false, 0L);
-
-						// One copy of the Inbox message to the user
-						Long language_id = to.getLanguage_id();
-						if (language_id == null) {
-							language_id = Long.valueOf(
-									cfgManagement.getConfKey(3,
-											"default_lang_id").getConf_value())
-									.longValue();
-						}
-
-						Fieldlanguagesvalues fValue1301 = fieldmanagment
-								.getFieldByIdAndLanguage(1301L, language_id);
-						Fieldlanguagesvalues fValue1302 = fieldmanagment
-								.getFieldByIdAndLanguage(1302L, language_id);
-
-						String aLinkHTML = "<br/><br/><a href='" + profile_link
-								+ "'>" + fValue1302.getValue() + "</a><br/>";
-
-						mailHandler.sendMail(email, fValue1301.getValue() + " "
-								+ subject, message.replaceAll("\\<.*?>", "")
-								+ aLinkHTML);
-
+								room, false, 0L, email);
+						
+						//there is no Inbox for external users
+						
 					}
+					Fieldlanguagesvalues fValue1301 = fieldmanagment
+							.getFieldByIdAndLanguage(1301L, language_id);
+					Fieldlanguagesvalues fValue1302 = fieldmanagment
+							.getFieldByIdAndLanguage(1302L, language_id);
+
+					String aLinkHTML = "";
+					if (to != null) {
+						aLinkHTML = "<br/><br/><a href='" + profile_link
+							+ "'>" + fValue1302.getValue() + "</a><br/>";
+					}
+
+					mailHandler.sendMail(email, fValue1301.getValue() + " "
+							+ subject, message.replaceAll("\\<.*?>", "")
+							+ aLinkHTML);
 
 					if (bookedRoom) {
 
 						// But add the appointment to everybody
-						this.addAppointmentToUser(subject, message, to,
-								recipients, room, appointmentstart,
-								appointmentend, invitor, true,
-								sendJNameTimeZone);
-
+						
+						if (to != null) {
+							this.addAppointmentToUser(subject, message, to,
+									recipients, room, appointmentstart,
+									appointmentend, invitor, true,
+									sendJNameTimeZone);
+						}
+						
 					}
 				}
 
@@ -1090,14 +1107,23 @@ public class UserService {
 		for (String email : recipients) {
 
 			Users meetingMember = userManagement.getUserByEmail(email);
+			
+			if (meetingMember != null) {
 
-			String firstname = meetingMember.getFirstname();
-			String lastname = meetingMember.getLastname();
+				String firstname = meetingMember.getFirstname();
+				String lastname = meetingMember.getLastname();
+	
+				meetingMemberDao.addMeetingMember(firstname, lastname, "0", "0",
+						appointmentId, meetingMember.getUser_id(), email, invitor,
+						meetingMember.getOmTimeZone(), isConnectedEvent);
 
-			meetingMemberDao.addMeetingMember(firstname, lastname, "0", "0",
-					appointmentId, meetingMember.getUser_id(), email, invitor,
-					meetingMember.getOmTimeZone(), isConnectedEvent);
-
+			} else {
+				
+				meetingMemberDao.addMeetingMember("", "", "0", "0",
+						appointmentId, null, email, invitor,
+						omTimeZoneDaoImpl.getOmTimeZone(sendJNameTimeZone), isConnectedEvent);
+				
+			}
 		}
 
 	}
