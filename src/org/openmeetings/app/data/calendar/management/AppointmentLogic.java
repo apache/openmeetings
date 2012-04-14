@@ -188,13 +188,6 @@ public class AppointmentLogic {
 
 		Rooms room = roommanagement.getRoomById(room_id);
 
-		if (room == null) {
-			log.error("Room " + room_id + " could not be found!");
-			// Not sure if we need to stop here, it could be that we will add
-			// calendar events
-			// where no room is attached in the future
-		}
-
 		try {
 
 			// Adding Invitor as Meetingmember
