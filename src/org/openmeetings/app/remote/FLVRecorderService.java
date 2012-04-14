@@ -399,6 +399,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			
 			log.debug("Stream Closing :: " + flvRecordingMetaDataId);
 			listenerAdapter.closeStream();
+			streamListeners.remove(flvRecordingMetaDataId);
 
 			ClientBroadcastStream stream = (ClientBroadcastStream) streamToClose;
 
