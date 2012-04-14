@@ -36,7 +36,7 @@ import org.red5.server.api.stream.IBroadcastStream;
 import org.red5.server.api.stream.IStreamListener;
 import org.red5.server.api.stream.IStreamPacket;
 
-public abstract class ListenerAdapter implements IStreamListener {
+public abstract class BaseStreamListener implements IStreamListener {
 	
 	protected ITagWriter writer = null;
 	
@@ -59,7 +59,7 @@ public abstract class ListenerAdapter implements IStreamListener {
 
 	protected boolean isInterview;
 	
-	public ListenerAdapter(String streamName, IScope scope, 
+	public BaseStreamListener(String streamName, IScope scope, 
 			Long flvRecordingMetaDataId, boolean isScreenData,
 			boolean isInterview) {
 		super();

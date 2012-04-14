@@ -31,7 +31,7 @@ import org.red5.server.api.stream.IBroadcastStream;
 import org.red5.server.api.stream.IStreamPacket;
 import org.slf4j.Logger;
 
-public class StreamAudioListener extends ListenerAdapter {
+public class StreamAudioListener extends BaseStreamListener {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			StreamAudioListener.class, OpenmeetingsVariables.webAppRootKey);

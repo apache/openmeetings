@@ -35,7 +35,7 @@ import org.red5.server.api.stream.IBroadcastStream;
 import org.red5.server.api.stream.IStreamPacket;
 import org.slf4j.Logger;
 
-public class StreamScreenListener extends ListenerAdapter {
+public class StreamScreenListener extends BaseStreamListener {
 
 	private int startTimeStamp = -1;
 

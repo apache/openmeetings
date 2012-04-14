@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.openmeetings.app.OpenmeetingsVariables;
@@ -39,7 +40,7 @@ import org.openmeetings.app.data.flvrecord.beans.FLVRecorderObject;
 import org.openmeetings.app.data.flvrecord.converter.FlvInterviewConverterTask;
 import org.openmeetings.app.data.flvrecord.converter.FlvInterviewReConverterTask;
 import org.openmeetings.app.data.flvrecord.converter.FlvRecorderConverterTask;
-import org.openmeetings.app.data.flvrecord.listener.ListenerAdapter;
+import org.openmeetings.app.data.flvrecord.listener.BaseStreamListener;
 import org.openmeetings.app.data.flvrecord.listener.StreamAudioListener;
 import org.openmeetings.app.data.flvrecord.listener.StreamScreenListener;
 import org.openmeetings.app.data.user.Usermanagement;
@@ -65,6 +66,16 @@ public class FLVRecorderService implements IPendingServiceCallback {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			FLVRecorderService.class, OpenmeetingsVariables.webAppRootKey);
+	
+	/**
+	 * Stores a reference to all available listeners
+	 * we need that reference, as the internal references stored 
+	 * with the red5 stream object might be gone when the user 
+	 * closes the browser.
+	 * But each listener has an asynchronous component that needs to be closed 
+	 * no matter how the user leaves the application!
+	 */
+	private static final Map<Long,BaseStreamListener> streamListeners = new HashMap<Long,BaseStreamListener>();
 
 	// Spring Beans
 	@Autowired
@@ -312,9 +323,14 @@ public class FLVRecorderService implements IPendingServiceCallback {
 
 			// Save the stream to disk.
 			if (isScreenData) {
-				stream.addStreamListener(new StreamScreenListener(streamName,
-						conn.getScope(), flvRecordingMetaDataId, isScreenData,
-						isInterview, flvRecordingMetaDataDao));
+				
+				StreamScreenListener streamScreenListener = new StreamScreenListener(streamName,
+																		conn.getScope(), flvRecordingMetaDataId, isScreenData,
+																		isInterview, flvRecordingMetaDataDao);
+				
+				streamListeners.put(flvRecordingMetaDataId, streamScreenListener);
+				
+				stream.addStreamListener(streamScreenListener);
 			} else {
 
 				log.debug("### stream " + stream);
@@ -326,51 +342,30 @@ public class FLVRecorderService implements IPendingServiceCallback {
 				log.debug("### isInterview " + isInterview);
 
 				if (isInterview) {
+					
+					StreamScreenListener streamScreenListener = new StreamScreenListener("AV_"
+																		+ streamName, conn.getScope(),
+																		flvRecordingMetaDataId, isScreenData, isInterview,
+																		flvRecordingMetaDataDao);
+					
+					streamListeners.put(flvRecordingMetaDataId, streamScreenListener);
 
 					// Additionally record the Video Signal
-					stream.addStreamListener(new StreamScreenListener("AV_"
-							+ streamName, conn.getScope(),
-							flvRecordingMetaDataId, isScreenData, isInterview,
-							flvRecordingMetaDataDao));
+					stream.addStreamListener(streamScreenListener);
 				}
+				
+				StreamAudioListener streamAudioListener = new StreamAudioListener(streamName,
+																	conn.getScope(), flvRecordingMetaDataId, isScreenData,
+																	isInterview, flvRecordingMetaDeltaDao, flvRecordingMetaDataDao);
 
-				stream.addStreamListener(new StreamAudioListener(streamName,
-						conn.getScope(), flvRecordingMetaDataId, isScreenData,
-						isInterview, flvRecordingMetaDeltaDao, flvRecordingMetaDataDao));
+				streamListeners.put(flvRecordingMetaDataId, streamAudioListener);
+
+				stream.addStreamListener(streamAudioListener);
 			}
 			// Just for Debug Purpose
 			// stream.saveAs(streamName+"_DEBUG", false);
 		} catch (Exception e) {
 			log.error("Error while saving stream: " + streamName, e);
-		}
-	}
-
-	/**
-	 * @deprecated
-	 * @param conn
-	 * @param broadcastId
-	 */
-	@Deprecated
-	public void _stopRecordingShowASD(IConnection conn, String broadcastId) {
-		try {
-
-			log.debug("** stopRecordingShow: " + conn);
-			log.debug("### Stop recording show for broadcastId: " + broadcastId
-					+ " || " + conn.getScope().getContextPath());
-
-			Object streamToClose = scopeApplicationAdapter.getBroadcastStream(
-					conn.getScope(), broadcastId);
-
-			if (streamToClose == null) {
-				log.debug("Could not aquire Stream, maybe already closed");
-			}
-
-			ClientBroadcastStream stream = (ClientBroadcastStream) streamToClose;
-			// Stop recording.
-			stream.stopRecording();
-
-		} catch (Exception err) {
-			log.error("[stopRecordingShow]", err);
 		}
 	}
 
@@ -396,43 +391,29 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			Object streamToClose = scopeApplicationAdapter.getBroadcastStream(
 					conn.getScope(), broadcastId);
 
-			if (streamToClose == null) {
-				log.debug("Could not aquire Stream, maybe already closed");
+			BaseStreamListener listenerAdapter = streamListeners.get(flvRecordingMetaDataId);
+			
+			if (listenerAdapter == null) {
+				new IllegalStateException("Could not find Listener to stop!");
 			}
+			
+			log.debug("Stream Closing :: " + flvRecordingMetaDataId);
+			listenerAdapter.closeStream();
 
 			ClientBroadcastStream stream = (ClientBroadcastStream) streamToClose;
 
-			//Iterate through all stream listeners and stop the appropriate
-			if (stream.getStreamListeners() != null) {
-
-				for (Iterator<IStreamListener> iter = stream
-						.getStreamListeners().iterator(); iter.hasNext();) {
-
-					IStreamListener iStreamListener = iter.next();
-
-					ListenerAdapter listenerAdapter = (ListenerAdapter) iStreamListener;
-
-					log.debug("Stream Closing ?? "
-							+ listenerAdapter.getFlvRecordingMetaDataId() + " "
-							+ flvRecordingMetaDataId);
-
-					if (listenerAdapter.getFlvRecordingMetaDataId().equals(
-							flvRecordingMetaDataId)) {
-						log.debug("Stream Closing :: " + flvRecordingMetaDataId);
-						listenerAdapter.closeStream();
+			//the stream can be null if the user just closes the browser without canceling the 
+			//recording before leaving
+			if (stream != null) {
+				//Iterate through all stream listeners and stop the appropriate
+				if (stream.getStreamListeners() != null) {
+	
+					for (IStreamListener iStreamListener : stream
+							.getStreamListeners()) {
+						stream.removeStreamListener(iStreamListener);
 					}
-
 				}
-
-				for (IStreamListener iStreamListener : stream
-						.getStreamListeners()) {
-					stream.removeStreamListener(iStreamListener);
-				}
-
 			}
-
-			// Just for Debugging
-			// stream.stopRecording();
 
 		} catch (Exception err) {
 			log.error("[stopRecordingShow]", err);

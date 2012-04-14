@@ -24,7 +24,7 @@
 	<classpathentry kind="lib" path="build/lib/om/ical4j-bundle-1.0.3.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/jaxen-jar-1.1.1.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/jsr311-api-jar-1.0.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/openjpa-bundle-2.2.0.jar"/>
+	<classpathentry kind="lib" path="build/lib/om/openjpa-bundle-2.2.0.jar" sourcepath="C:/Users/swagner/.m2/repository/org/apache/openjpa/openjpa/2.2.0/openjpa-2.2.0-sources.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/stax-api-jar-1.0-2.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/wsdl4j-jar-1.6.2.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/wstx-asl-jar-3.2.9.jar"/>
