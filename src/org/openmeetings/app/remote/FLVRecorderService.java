@@ -72,7 +72,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	@Autowired
 	private FlvRecordingDaoImpl flvRecordingDaoImpl;
 	@Autowired
-	private FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDaoImpl;
+	private FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDao;
 	@Autowired
 	private UsersDaoImpl usersDaoImpl;
 	@Autowired
@@ -95,8 +95,6 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	private AuthLevelmanagement authLevelManagement;
 	@Autowired
 	private FlvRecordingMetaDeltaDaoImpl flvRecordingMetaDeltaDao;
-	@Autowired
-	private final FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDao = null;
 
 	public void resultReceived(IPendingServiceCall arg0) {
 	}
@@ -203,7 +201,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 													.getStreamPublishName()
 													.toString());
 
-									Long flvRecordingMetaDataId = this.flvRecordingMetaDataDaoImpl
+									Long flvRecordingMetaDataId = this.flvRecordingMetaDataDao
 											.addFlvRecordingMetaData(
 													flvRecordingId,
 													rcl.getFirstname() + " "
@@ -253,7 +251,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 									isVideoOnly = true;
 								}
 
-								Long flvRecordingMetaDataId = this.flvRecordingMetaDataDaoImpl
+								Long flvRecordingMetaDataId = this.flvRecordingMetaDataDao
 										.addFlvRecordingMetaData(
 												flvRecordingId,
 												rcl.getFirstname() + " "
@@ -338,7 +336,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 
 				stream.addStreamListener(new StreamAudioListener(streamName,
 						conn.getScope(), flvRecordingMetaDataId, isScreenData,
-						isInterview, flvRecordingMetaDeltaDao));
+						isInterview, flvRecordingMetaDeltaDao, flvRecordingMetaDataDao));
 			}
 			// Just for Debug Purpose
 			// stream.saveAs(streamName+"_DEBUG", false);
@@ -478,7 +476,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 											rcl.getFlvRecordingMetaDataId());
 
 									// Update Meta Data
-									this.flvRecordingMetaDataDaoImpl
+									this.flvRecordingMetaDataDao
 											.updateFlvRecordingMetaDataEndDate(
 													rcl.getFlvRecordingMetaDataId(),
 													new Date());
@@ -495,7 +493,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 										rcl.getFlvRecordingMetaDataId());
 
 								// Update Meta Data
-								this.flvRecordingMetaDataDaoImpl
+								this.flvRecordingMetaDataDao
 										.updateFlvRecordingMetaDataEndDate(
 												rcl.getFlvRecordingMetaDataId(),
 												new Date());
@@ -612,7 +610,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 							rcl.getFlvRecordingMetaDataId());
 
 					// Update Meta Data
-					this.flvRecordingMetaDataDaoImpl
+					this.flvRecordingMetaDataDao
 							.updateFlvRecordingMetaDataEndDate(
 									rcl.getFlvRecordingMetaDataId(), new Date());
 				}
@@ -628,7 +626,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 						.toString(), rcl.getFlvRecordingMetaDataId());
 
 				// Update Meta Data
-				this.flvRecordingMetaDataDaoImpl
+				this.flvRecordingMetaDataDao
 						.updateFlvRecordingMetaDataEndDate(
 								rcl.getFlvRecordingMetaDataId(), new Date());
 			}
@@ -659,7 +657,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 					log.debug("##############  ADD SCREEN OF SHARER :: "
 							+ rcl.getStreamPublishName());
 
-					Long flvRecordingMetaDataId = this.flvRecordingMetaDataDaoImpl
+					Long flvRecordingMetaDataId = this.flvRecordingMetaDataDao
 							.addFlvRecordingMetaData(
 									flvRecordingId,
 									rcl.getFirstname() + " "
@@ -701,7 +699,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 					isVideoOnly = true;
 				}
 
-				Long flvRecordingMetaDataId = this.flvRecordingMetaDataDaoImpl
+				Long flvRecordingMetaDataId = this.flvRecordingMetaDataDao
 						.addFlvRecordingMetaData(flvRecordingId,
 								rcl.getFirstname() + " " + rcl.getLastname(),
 								now, isAudioOnly, isVideoOnly, false,
@@ -735,7 +733,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 						.getFlvRecordingById(flvRecordingId);
 
 				flvRecording
-						.setFlvRecordingMetaData(this.flvRecordingMetaDataDaoImpl
+						.setFlvRecordingMetaData(this.flvRecordingMetaDataDao
 								.getFlvRecordingMetaDataByRecording(flvRecordingId));
 
 				if (flvRecording.getInsertedBy() != null) {

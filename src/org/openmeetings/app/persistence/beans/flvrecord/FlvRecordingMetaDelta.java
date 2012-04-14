@@ -57,8 +57,6 @@ public class FlvRecordingMetaDelta implements Serializable {
 	private Date currentTime;
 	@Column(name="delta_time_stamp")
 	private Long deltaTimeStamp;
-	@Column(name="offset_time")
-	private Long offset;
 	@Column(name="missing_time")
 	private Long missingTime;
 	@Column(name="duration")
@@ -79,17 +77,7 @@ public class FlvRecordingMetaDelta implements Serializable {
 	private Boolean isStartPadding;
 	@Column(name="debug_status")
 	private String debugStatus;
-	@Column(name="stream_creation_time")
-	private Long streamCreationTime;
-	@Column(name="stream_creation_time_date")
-	private Date streamCreationTimeDate;
 	
-	/**
-	 *
-	 * @hibernate.id
-	 *  column="flvrecording_meta_delta_id"
-	 *  generator-class="increment"
-	 */
 	public long getFlvRecordingMetaDeltaId() {
 		return flvRecordingMetaDeltaId;
 	}
@@ -97,11 +85,6 @@ public class FlvRecordingMetaDelta implements Serializable {
 		this.flvRecordingMetaDeltaId = flvRecordingMetaDeltaId;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="flvrecording_metadata_id"
-     *  type="long"
-     */	
 	public Long getFlvRecordingMetaDataId() {
 		return flvRecordingMetaDataId;
 	}
@@ -109,11 +92,6 @@ public class FlvRecordingMetaDelta implements Serializable {
 		this.flvRecordingMetaDataId = flvRecordingMetaDataId;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="time_stamp"
-     *  type="int"
-     */	
 	public Integer getTimeStamp() {
 		return timeStamp;
 	}
@@ -121,11 +99,6 @@ public class FlvRecordingMetaDelta implements Serializable {
 		this.timeStamp = timeStamp;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="delta_time"
-     *  type="long"
-     */		
 	public Long getDeltaTime() {
 		return deltaTime;
 	}
@@ -133,11 +106,6 @@ public class FlvRecordingMetaDelta implements Serializable {
 		this.deltaTime = deltaTime;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="last_time_stamp"
-     *  type="long"
-     */	
 	public Long getLastTimeStamp() {
 		return lastTimeStamp;
 	}
@@ -145,11 +113,6 @@ public class FlvRecordingMetaDelta implements Serializable {
 		this.lastTimeStamp = lastTimeStamp;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="delta_time_stamp"
-     *  type="long"
-     */		
 	public Long getDeltaTimeStamp() {
 		return deltaTimeStamp;
 	}
@@ -157,11 +120,6 @@ public class FlvRecordingMetaDelta implements Serializable {
 		this.deltaTimeStamp = deltaTimeStamp;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="packet_time_stamp"
-     *  type="int"
-     */
 	public Integer getPacketTimeStamp() {
 		return packetTimeStamp;
 	}
@@ -169,22 +127,6 @@ public class FlvRecordingMetaDelta implements Serializable {
 		this.packetTimeStamp = packetTimeStamp;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="offset_time"
-     *  type="long"
-     */
-	public Long getOffset() {
-		return offset;
-	}
-	public void setOffset(Long offset) {
-		this.offset = offset;
-	}
-	/**
-     * @hibernate.property
-     *  column="start_time_stamp"
-     *  type="int"
-     */		
 	public Integer getStartTimeStamp() {
 		return startTimeStamp;
 	}
@@ -192,11 +134,6 @@ public class FlvRecordingMetaDelta implements Serializable {
 		this.startTimeStamp = startTimeStamp;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="missing_time"
-     *  type="long"
-     */	
 	public Long getMissingTime() {
 		return missingTime;
 	}
@@ -204,11 +141,6 @@ public class FlvRecordingMetaDelta implements Serializable {
 		this.missingTime = missingTime;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="duration"
-     *  type="int"
-     */		
 	public Integer getDuration() {
 		return duration;
 	}
@@ -216,11 +148,6 @@ public class FlvRecordingMetaDelta implements Serializable {
 		this.duration = duration;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="start_time"
-     *  type="java.util.Date"
-     */
 	public Date getStartTime() {
 		return startTime;
 	}
@@ -228,11 +155,6 @@ public class FlvRecordingMetaDelta implements Serializable {
 		this.startTime = startTime;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="current_event_time"
-     *  type="java.util.Date"
-     */	
 	public Date getCurrentTime() {
 		return currentTime;
 	}
@@ -240,11 +162,6 @@ public class FlvRecordingMetaDelta implements Serializable {
 		this.currentTime = currentTime;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="is_end_padding"
-     *  type="boolean"
-     */
 	public Boolean getIsEndPadding() {
 		return isEndPadding;
 	}
@@ -252,11 +169,6 @@ public class FlvRecordingMetaDelta implements Serializable {
 		this.isEndPadding = isEndPadding;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="is_start_padding"
-     *  type="boolean"
-     */	
 	public Boolean getIsStartPadding() {
 		return isStartPadding;
 	}
@@ -264,11 +176,6 @@ public class FlvRecordingMetaDelta implements Serializable {
 		this.isStartPadding = isStartPadding;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="debug_status"
-     *  type="string"
-     */		
 	public String getDebugStatus() {
 		return debugStatus;
 	}
@@ -276,35 +183,6 @@ public class FlvRecordingMetaDelta implements Serializable {
 		this.debugStatus = debugStatus;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="stream_creation_time"
-     *  type="long"
-     */	
-	public Long getStreamCreationTime() {
-		return streamCreationTime;
-	}
-	public void setStreamCreationTime(Long streamCreationTime) {
-		this.streamCreationTime = streamCreationTime;
-	}
-	
-	/**
-     * @hibernate.property
-     *  column="stream_creation_time_date"
-     *  type="java.util.Date"
-     */		
-	public Date getStreamCreationTimeDate() {
-		return streamCreationTimeDate;
-	}
-	public void setStreamCreationTimeDate(Date streamCreationTimeDate) {
-		this.streamCreationTimeDate = streamCreationTimeDate;
-	}
-	
-	/**
-     * @hibernate.property
-     *  column="wave_out_put_name"
-     *  type="string"
-     */	
 	public String getWaveOutPutName() {
 		return waveOutPutName;
 	}
@@ -312,11 +190,6 @@ public class FlvRecordingMetaDelta implements Serializable {
 		this.waveOutPutName = waveOutPutName;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="data_length_packet"
-     *  type="int"
-     */		
 	public Integer getDataLengthPacket() {
 		return dataLengthPacket;
 	}
@@ -324,11 +197,6 @@ public class FlvRecordingMetaDelta implements Serializable {
 		this.dataLengthPacket = dataLengthPacket;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="received_audio_data_length"
-     *  type="long"
-     */		
 	public Long getReceivedAudioDataLength() {
 		return receivedAudioDataLength;
 	}

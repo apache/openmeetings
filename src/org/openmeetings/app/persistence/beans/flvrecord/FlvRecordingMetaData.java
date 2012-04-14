@@ -21,8 +21,6 @@ package org.openmeetings.app.persistence.beans.flvrecord;
 import java.io.Serializable;
 import java.util.Date;
 
-
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -39,6 +37,12 @@ import javax.persistence.Table;
 @Table(name = "flvrecording_metadata")
 public class FlvRecordingMetaData implements Serializable {
 	
+	public Boolean getStreamReaderThreadComplete() {
+		return streamReaderThreadComplete;
+	}
+	public void setStreamReaderThreadComplete(Boolean streamReaderThreadComplete) {
+		this.streamReaderThreadComplete = streamReaderThreadComplete;
+	}
 	/**
 	 * 
 	 */
@@ -90,12 +94,11 @@ public class FlvRecordingMetaData implements Serializable {
 	@Column(name="initial_gap_seconds")
 	private Integer initialGapSeconds;
 	
-	/**
-	 *
-	 * @hibernate.id
-	 *  column="flvrecording_metadata_id"
-	 *  generator-class="increment"
-	 */
+	//this is only true when the asynchronous stream writer has 
+	//completed to write packets to the file
+	@Column(name="stream_reader_thread_complete")
+	private Boolean streamReaderThreadComplete;
+	
 	public long getFlvRecordingMetaDataId() {
 		return flvRecordingMetaDataId;
 	}
@@ -103,15 +106,6 @@ public class FlvRecordingMetaData implements Serializable {
 		this.flvRecordingMetaDataId = flvRecordingMetaDataId;
 	}
 	
-	/**
-     * @hibernate.many-to-one
-     *  cascade="none"
-     *  column="flvrecording_id"
-     *  lazy="false"
-     *  class="org.openmeetings.app.hibernate.beans.flvrecord.FlvRecording"
-     *  not-null="false"
-     *  outer-join="true"
-     */ 
 	public FlvRecording getFlvRecording() {
 		return flvRecording;
 	}
@@ -119,12 +113,6 @@ public class FlvRecordingMetaData implements Serializable {
 		this.flvRecording = flvRecording;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="record_start"
-     *  update="false"
-     *  type="java.util.Date"
-     */
 	public Date getRecordStart() {
 		return recordStart;
 	}
@@ -132,11 +120,6 @@ public class FlvRecordingMetaData implements Serializable {
 		this.recordStart = recordStart;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="record_end"
-     *  type="java.util.Date"
-     */
 	public Date getRecordEnd() {
 		return recordEnd;
 	}
@@ -144,11 +127,6 @@ public class FlvRecordingMetaData implements Serializable {
 		this.recordEnd = recordEnd;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="free_text_user_name"
-     *  type="string"
-     */
 	public String getFreeTextUserName() {
 		return freeTextUserName;
 	}
@@ -156,11 +134,6 @@ public class FlvRecordingMetaData implements Serializable {
 		this.freeTextUserName = freeTextUserName;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="is_audio_only"
-     *  type="boolean"
-     */
 	public Boolean getIsAudioOnly() {
 		return isAudioOnly;
 	}
@@ -168,11 +141,6 @@ public class FlvRecordingMetaData implements Serializable {
 		this.isAudioOnly = isAudioOnly;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="is_video_only"
-     *  type="boolean"
-     */	
 	public Boolean getIsVideoOnly() {
 		return isVideoOnly;
 	}
@@ -180,11 +148,6 @@ public class FlvRecordingMetaData implements Serializable {
 		this.isVideoOnly = isVideoOnly;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="inserted_by"
-     *  type="long"
-     */
 	public Long getInsertedBy() {
 		return insertedBy;
 	}
@@ -192,11 +155,6 @@ public class FlvRecordingMetaData implements Serializable {
 		this.insertedBy = insertedBy;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="inserted"
-     *  type="java.util.Date"
-     */ 
 	public Date getInserted() {
 		return inserted;
 	}
@@ -204,11 +162,6 @@ public class FlvRecordingMetaData implements Serializable {
 		this.inserted = inserted;
 	}
 
-    /**
-     * @hibernate.property
-     *  column="deleted"
-     *  type="string"
-     */  
 	public String getDeleted() {
 		return deleted;
 	}
@@ -216,11 +169,6 @@ public class FlvRecordingMetaData implements Serializable {
 		this.deleted = deleted;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="updated"
-     *  type="java.util.Date"
-     */ 
 	public Date getUpdated() {
 		return updated;
 	}
@@ -228,11 +176,6 @@ public class FlvRecordingMetaData implements Serializable {
 		this.updated = updated;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="is_screen_data"
-     *  type="boolean"
-     */
 	public Boolean getIsScreenData() {
 		return isScreenData;
 	}
@@ -240,11 +183,6 @@ public class FlvRecordingMetaData implements Serializable {
 		this.isScreenData = isScreenData;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="stream_name"
-     *  type="string"
-     */
 	public String getStreamName() {
 		return streamName;
 	}
@@ -252,11 +190,6 @@ public class FlvRecordingMetaData implements Serializable {
 		this.streamName = streamName;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="wav_audio_data"
-     *  type="string"
-     */
 	public String getWavAudioData() {
 		return wavAudioData;
 	}
@@ -264,11 +197,6 @@ public class FlvRecordingMetaData implements Serializable {
 		this.wavAudioData = wavAudioData;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="full_wav_audio_data"
-     *  type="string"
-     */
 	public String getFullWavAudioData() {
 		return fullWavAudioData;
 	}
@@ -276,11 +204,6 @@ public class FlvRecordingMetaData implements Serializable {
 		this.fullWavAudioData = fullWavAudioData;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="audio_is_valid"
-     *  type="boolean"
-     */
 	public Boolean getAudioIsValid() {
 		return audioIsValid;
 	}
@@ -288,11 +211,6 @@ public class FlvRecordingMetaData implements Serializable {
 		this.audioIsValid = audioIsValid;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="interiew_pod_id"
-     *  type="int"
-     */
 	public Integer getInteriewPodId() {
 		return interiewPodId;
 	}
@@ -300,15 +218,11 @@ public class FlvRecordingMetaData implements Serializable {
 		this.interiewPodId = interiewPodId;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="initial_gap_seconds"
-     *  type="int"
-     */
 	public Integer getInitialGapSeconds() {
 		return initialGapSeconds;
 	}
 	public void setInitialGapSeconds(Integer initialGapSeconds) {
 		this.initialGapSeconds = initialGapSeconds;
 	}
+	
 }

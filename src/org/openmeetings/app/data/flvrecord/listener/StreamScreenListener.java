@@ -59,7 +59,6 @@ public class StreamScreenListener extends ListenerAdapter {
 		this.flvRecordingMetaDataDao = flvRecordingMetaDataDao;
 	}
 
-	@Override
 	public void packetReceived(IBroadcastStream broadcastStream,
 			IStreamPacket streampacket) {
 		try {
@@ -163,7 +162,7 @@ public class StreamScreenListener extends ListenerAdapter {
 	}
 
 	@Override
-	public void closeStream() throws Exception {
+	public void closeStream() {
 		if (writer != null && !this.isClosed) {
 			try {
 

@@ -155,6 +155,31 @@ public abstract class BaseConverter {
 			log.debug("###################################################");
 	
 			for (FlvRecordingMetaData flvRecordingMetaData : metaDataList) {
+				
+				if (flvRecordingMetaData.getStreamReaderThreadComplete() == null) {
+					throw new Exception("StreamReaderThreadComplete Bit is NULL, error in recording");
+				}
+				
+				if (flvRecordingMetaData.getStreamReaderThreadComplete()) {
+					
+					log.debug("### meta Stream not yet written to disk" + flvRecordingMetaData.getFlvRecordingMetaDataId());
+					boolean doStop = true;
+					while(doStop) {
+						
+						log.debug("### Stream not yet written Thread Sleep - " );
+						
+						Thread.sleep(100L);
+						
+						flvRecordingMetaData = flvRecordingMetaDataDaoImpl.getFlvRecordingMetaDataById(flvRecordingMetaData.getFlvRecordingMetaDataId());
+						
+						if (flvRecordingMetaData.getStreamReaderThreadComplete()) {
+							log.debug("### Stream now written Thread continue - " );
+							doStop = false;
+						}
+						
+					}
+					
+				}
 	
 				String inputFlv = streamFolderName
 						+ flvRecordingMetaData.getStreamName() + ".flv";
@@ -199,11 +224,11 @@ public abstract class BaseConverter {
 				}
 	
 				if (flvRecordingMetaData.getAudioIsValid()) {
-	
+					
 					// Strip Wave to Full Length
 					String outputGapFullWav = outputWav;
 	
-					// Fix Gaps in Audio
+					// Fix Start/End in Audio
 					List<FlvRecordingMetaDelta> flvRecordingMetaDeltas = flvRecordingMetaDeltaDaoImpl
 							.getFlvRecordingMetaDeltaByMetaId(flvRecordingMetaData
 									.getFlvRecordingMetaDataId());

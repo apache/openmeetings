@@ -53,11 +53,6 @@ public class States implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-    /**
-     * @hibernate.property
-     *  column="name"
-     *  type="string"
-     */ 
 	public String getName() {
 		return name;
 	}

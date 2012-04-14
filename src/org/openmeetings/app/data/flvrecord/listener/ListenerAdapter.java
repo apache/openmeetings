@@ -36,7 +36,7 @@ import org.red5.server.api.stream.IBroadcastStream;
 import org.red5.server.api.stream.IStreamListener;
 import org.red5.server.api.stream.IStreamPacket;
 
-public class ListenerAdapter implements IStreamListener {
+public abstract class ListenerAdapter implements IStreamListener {
 	
 	protected ITagWriter writer = null;
 	
@@ -76,14 +76,7 @@ public class ListenerAdapter implements IStreamListener {
 		return flvRecordingMetaDataId;
 	}	
 	
-	public void packetReceived(IBroadcastStream arg0, IStreamPacket arg1) {
-		// Auto-generated method stub
-		
-	}
-
-	public void closeStream() throws Exception {
-		// Auto-generated method stub
-	}
+	public abstract void closeStream();
 	
 	/**
      * Initialization

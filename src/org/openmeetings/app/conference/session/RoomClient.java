@@ -200,12 +200,6 @@ public class RoomClient implements Serializable {
 		this.lastname = lastname;
 	}
 	
-	/**
-     * 
-     * @hibernate.id
-     *  column="roomclient_id"
-     *  generator-class="increment"
-     */
 	public Long getRoomClientId() {
 		return roomClientId;
 	}
@@ -213,11 +207,6 @@ public class RoomClient implements Serializable {
 		this.roomClientId = roomClientId;
 	}
 
-	/**
-     * @hibernate.property
-     *  column="connected_since"
-     *  type="java.util.Date"
-     */
 	public Date getConnectedSince() {
 		return connectedSince;
 	}
@@ -225,11 +214,6 @@ public class RoomClient implements Serializable {
 		this.connectedSince = connectedSince;
 	}
 	
-	/**
-     * @hibernate.property
-     *  column="is_mod"
-     *  type="boolean"
-     */
 	public Boolean getIsMod() {
 		return isMod;
 	}
