@@ -3,16 +3,11 @@ package org.openmeetings.app.data.flvrecord.listener.async;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import org.openmeetings.app.OpenmeetingsVariables;
-import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDataDaoImpl;
-import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDeltaDaoImpl;
-import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingMetaDelta;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.io.IStreamableFile;
 import org.red5.io.IStreamableFileFactory;
@@ -39,7 +34,6 @@ public abstract class BaseStreamWriter implements Runnable {
 	protected ITagWriter writer = null;
 
 	protected Long flvRecordingMetaDataId = null;
-	protected List<FlvRecordingMetaDelta> flvRecordingMetaDeltas;
 
 	protected Date startedSessionTimeDate = null;
 
@@ -55,24 +49,15 @@ public abstract class BaseStreamWriter implements Runnable {
 
 	private final BlockingQueue<CachedEvent> queue = new LinkedBlockingQueue<CachedEvent>();
 
-	// Autowire is not possible
-	protected final FlvRecordingMetaDeltaDaoImpl flvRecordingMetaDeltaDao;
-	protected final FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDao;
-
 	public BaseStreamWriter(String streamName, IScope scope,
 			Long flvRecordingMetaDataId, boolean isScreenData,
-			boolean isInterview,
-			FlvRecordingMetaDeltaDaoImpl flvRecordingMetaDeltaDao,
-			FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDao) {
+			boolean isInterview) {
 		this.startedSessionTimeDate = new Date();
 		this.isScreenData = isScreenData;
 		this.streamName = streamName;
 		this.flvRecordingMetaDataId = flvRecordingMetaDataId;
-		this.flvRecordingMetaDeltas = new LinkedList<FlvRecordingMetaDelta>();
 		this.scope = scope;
 		this.isInterview = isInterview;
-		this.flvRecordingMetaDeltaDao = flvRecordingMetaDeltaDao;
-		this.flvRecordingMetaDataDao = flvRecordingMetaDataDao;
 		try {
 			init();
 		} catch (IOException ex) {

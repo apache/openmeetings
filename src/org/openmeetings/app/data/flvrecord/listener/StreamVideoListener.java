@@ -22,30 +22,27 @@ import java.util.Date;
 
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDataDaoImpl;
-import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDeltaDaoImpl;
 import org.openmeetings.app.data.flvrecord.listener.async.CachedEvent;
-import org.openmeetings.app.data.flvrecord.listener.async.StreamAudioWriter;
+import org.openmeetings.app.data.flvrecord.listener.async.StreamVideoWriter;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IScope;
 import org.red5.server.api.stream.IBroadcastStream;
 import org.red5.server.api.stream.IStreamPacket;
 import org.slf4j.Logger;
 
-public class StreamAudioListener extends BaseStreamListener {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			StreamAudioListener.class, OpenmeetingsVariables.webAppRootKey);
-
-	private final StreamAudioWriter streamAudioWriter;
+public class StreamVideoListener extends BaseStreamListener {
 	
-	public StreamAudioListener(String streamName, IScope scope,
+	private static final Logger log = Red5LoggerFactory.getLogger(
+			StreamVideoListener.class, OpenmeetingsVariables.webAppRootKey);
+
+	private final StreamVideoWriter streamVideoWriter;
+
+	public StreamVideoListener(String streamName, IScope scope,
 			Long flvRecordingMetaDataId, boolean isScreenData,
 			boolean isInterview,
-			FlvRecordingMetaDeltaDaoImpl flvRecordingMetaDeltaDao,
 			FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDao) {
-		streamAudioWriter = new StreamAudioWriter(streamName, scope,
-				flvRecordingMetaDataId, isScreenData, isInterview,
-				flvRecordingMetaDeltaDao, flvRecordingMetaDataDao);
+		streamVideoWriter = new StreamVideoWriter(streamName, scope, flvRecordingMetaDataId, isScreenData,
+				isInterview, flvRecordingMetaDataDao);
 	}
 
 	public void packetReceived(IBroadcastStream broadcastStream,
@@ -58,7 +55,7 @@ public class StreamAudioListener extends BaseStreamListener {
 			cachedEvent.setTimestamp(streampacket.getTimestamp());
 			cachedEvent.setCurrentTime(new Date());
 
-			streamAudioWriter.append(cachedEvent);
+			streamVideoWriter.append(cachedEvent);
 
 		} catch (Exception e) {
 			log.error("[packetReceived]", e);
@@ -67,7 +64,7 @@ public class StreamAudioListener extends BaseStreamListener {
 
 	@Override
 	public void closeStream() {
-		streamAudioWriter.stop();
+		streamVideoWriter.stop();
 	}
-
+	
 }

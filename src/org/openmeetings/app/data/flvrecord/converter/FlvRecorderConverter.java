@@ -82,6 +82,31 @@ public class FlvRecorderConverter extends BaseConverter {
 			FlvRecordingMetaData flvRecordingMetaDataOfScreen = this.flvRecordingMetaDataDaoImpl
 					.getFlvRecordingMetaDataScreenFlvByRecording(flvRecording
 							.getFlvRecordingId());
+			
+			if (flvRecordingMetaDataOfScreen.getStreamReaderThreadComplete() == null) {
+				throw new Exception("StreamReaderThreadComplete Bit is NULL, error in recording");
+			}
+			
+			if (!flvRecordingMetaDataOfScreen.getStreamReaderThreadComplete()) {
+				
+				log.debug("### meta ScreenStream not yet written to disk" + flvRecordingMetaDataOfScreen.getFlvRecordingMetaDataId());
+				boolean doStop = true;
+				while(doStop) {
+					
+					log.debug("### Stream not yet written Thread Sleep - " );
+					
+					Thread.sleep(100L);
+					
+					flvRecordingMetaDataOfScreen = flvRecordingMetaDataDaoImpl.getFlvRecordingMetaDataById(flvRecordingMetaDataOfScreen.getFlvRecordingMetaDataId());
+					
+					if (flvRecordingMetaDataOfScreen.getStreamReaderThreadComplete()) {
+						log.debug("### Screen Stream now written Thread continue - " );
+						doStop = false;
+					}
+				}
+			}
+			
+			
 			String hashFileFullName = flvRecordingMetaDataOfScreen
 					.getStreamName() + "_FINAL_WAVE.wav";
 			String outputFullWav = streamFolderName + hashFileFullName;

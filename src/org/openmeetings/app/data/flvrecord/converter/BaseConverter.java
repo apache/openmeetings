@@ -157,18 +157,16 @@ public abstract class BaseConverter {
 			for (FlvRecordingMetaData flvRecordingMetaData : metaDataList) {
 				
 				if (flvRecordingMetaData.getStreamReaderThreadComplete() == null) {
-					throw new Exception("StreamReaderThreadComplete Bit is NULL, error in recording");
+					throw new IllegalStateException("StreamReaderThreadComplete Bit is NULL, error in recording");
 				}
 				
-				if (flvRecordingMetaData.getStreamReaderThreadComplete()) {
+				if (!flvRecordingMetaData.getStreamReaderThreadComplete()) {
 					
 					log.debug("### meta Stream not yet written to disk" + flvRecordingMetaData.getFlvRecordingMetaDataId());
 					boolean doStop = true;
 					while(doStop) {
 						
 						log.debug("### Stream not yet written Thread Sleep - " );
-						
-						Thread.sleep(100L);
 						
 						flvRecordingMetaData = flvRecordingMetaDataDaoImpl.getFlvRecordingMetaDataById(flvRecordingMetaData.getFlvRecordingMetaDataId());
 						
@@ -177,8 +175,8 @@ public abstract class BaseConverter {
 							doStop = false;
 						}
 						
+						Thread.sleep(100L);
 					}
-					
 				}
 	
 				String inputFlv = streamFolderName
@@ -191,6 +189,8 @@ public abstract class BaseConverter {
 				flvRecordingMetaData.setWavAudioData(hashFileName);
 	
 				File inputFlvFile = new File(inputFlv);
+				
+				log.debug("FLV File Name: {} Length: {} ",inputFlvFile.getName(), inputFlvFile.length());
 	
 				if (inputFlvFile.exists()) {
 	

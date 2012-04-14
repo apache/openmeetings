@@ -42,7 +42,7 @@ import org.openmeetings.app.data.flvrecord.converter.FlvInterviewReConverterTask
 import org.openmeetings.app.data.flvrecord.converter.FlvRecorderConverterTask;
 import org.openmeetings.app.data.flvrecord.listener.BaseStreamListener;
 import org.openmeetings.app.data.flvrecord.listener.StreamAudioListener;
-import org.openmeetings.app.data.flvrecord.listener.StreamScreenListener;
+import org.openmeetings.app.data.flvrecord.listener.StreamVideoListener;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecording;
@@ -324,7 +324,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			// Save the stream to disk.
 			if (isScreenData) {
 				
-				StreamScreenListener streamScreenListener = new StreamScreenListener(streamName,
+				StreamVideoListener streamScreenListener = new StreamVideoListener(streamName,
 																		conn.getScope(), flvRecordingMetaDataId, isScreenData,
 																		isInterview, flvRecordingMetaDataDao);
 				
@@ -343,7 +343,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 
 				if (isInterview) {
 					
-					StreamScreenListener streamScreenListener = new StreamScreenListener("AV_"
+					StreamVideoListener streamScreenListener = new StreamVideoListener("AV_"
 																		+ streamName, conn.getScope(),
 																		flvRecordingMetaDataId, isScreenData, isInterview,
 																		flvRecordingMetaDataDao);

@@ -33,13 +33,19 @@ public class StreamAudioWriter extends BaseStreamWriter {
 
 	private long byteCount = 0;
 	
+	// Autowire is not possible
+	protected final FlvRecordingMetaDeltaDaoImpl flvRecordingMetaDeltaDao;
+	protected final FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDao;
+	
 	public StreamAudioWriter(String streamName, IScope scope,
 			Long flvRecordingMetaDataId, boolean isScreenData,
 			boolean isInterview,
 			FlvRecordingMetaDeltaDaoImpl flvRecordingMetaDeltaDao,
 			FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDao) {
-		super(streamName, scope, flvRecordingMetaDataId, isScreenData, isInterview,
-				flvRecordingMetaDeltaDao, flvRecordingMetaDataDao);
+		super(streamName, scope, flvRecordingMetaDataId, isScreenData, isInterview);
+		
+		this.flvRecordingMetaDeltaDao = flvRecordingMetaDeltaDao;
+		this.flvRecordingMetaDataDao = flvRecordingMetaDataDao;
 		
 		FlvRecordingMetaData flvRecordingMetaData = flvRecordingMetaDataDao.
 								getFlvRecordingMetaDataById(flvRecordingMetaDataId);
@@ -112,8 +118,6 @@ public class StreamAudioWriter extends BaseStreamWriter {
 					flvRecordingMetaDelta.setDeltaTimeStamp(deltaTimeStamp);
 					flvRecordingMetaDelta.setStartTimeStamp(startTimeStamp);
 
-					this.flvRecordingMetaDeltas.add(flvRecordingMetaDelta);
-
 					flvRecordingMetaDeltaDao
 							.addFlvRecordingMetaDelta(flvRecordingMetaDelta);
 
@@ -179,8 +183,6 @@ public class StreamAudioWriter extends BaseStreamWriter {
 					flvRecordingMetaDelta.setDeltaTimeStamp(deltaTimeStamp);
 					flvRecordingMetaDelta.setStartTimeStamp(startTimeStamp);
 
-					this.flvRecordingMetaDeltas.add(flvRecordingMetaDelta);
-
 					flvRecordingMetaDeltaDao
 							.addFlvRecordingMetaDelta(flvRecordingMetaDelta);
 
@@ -241,8 +243,6 @@ public class StreamAudioWriter extends BaseStreamWriter {
 					.setReceivedAudioDataLength(this.byteCount);
 			flvRecordingMetaDelta.setStartTime(this.startedSessionTimeDate);
 			flvRecordingMetaDelta.setCurrentTime(new Date());
-
-			this.flvRecordingMetaDeltas.add(flvRecordingMetaDelta);
 
 			flvRecordingMetaDeltaDao
 					.addFlvRecordingMetaDelta(flvRecordingMetaDelta);
