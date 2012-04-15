@@ -1102,7 +1102,7 @@ public class CoreScreenShare {
 	// ------------------------------------------------------------------------
 
 	private final class CaptureScreen extends Object implements Runnable {
-		private int timeBetweenFrames = 1000; // frameRate
+		private int timeBetweenFrames = 500; // frameRate
 		private volatile long timestamp = 0;
 		private volatile boolean active = true;
 		@SuppressWarnings("unused")
@@ -1116,7 +1116,7 @@ public class CoreScreenShare {
 		// ------------------------------------------------------------------------
 
 		public CaptureScreen() {
-			timeBetweenFrames = (VirtualScreenBean.screenQuality == ScreenQuality.VeryHigh) ? 100 : 1000;
+			timeBetweenFrames = (VirtualScreenBean.screenQuality == ScreenQuality.VeryHigh) ? 100 : 500;
 			se = new ScreenV1Encoder();
 		}
 
