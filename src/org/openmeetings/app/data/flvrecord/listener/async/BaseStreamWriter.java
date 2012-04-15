@@ -45,19 +45,16 @@ public abstract class BaseStreamWriter implements Runnable {
 
 	protected String streamName = "";
 
-	protected boolean isInterview;
 
 	private final BlockingQueue<CachedEvent> queue = new LinkedBlockingQueue<CachedEvent>();
 
 	public BaseStreamWriter(String streamName, IScope scope,
-			Long flvRecordingMetaDataId, boolean isScreenData,
-			boolean isInterview) {
+			Long flvRecordingMetaDataId, boolean isScreenData) {
 		this.startedSessionTimeDate = new Date();
 		this.isScreenData = isScreenData;
 		this.streamName = streamName;
 		this.flvRecordingMetaDataId = flvRecordingMetaDataId;
 		this.scope = scope;
-		this.isInterview = isInterview;
 		try {
 			init();
 		} catch (IOException ex) {

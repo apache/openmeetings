@@ -36,16 +36,19 @@ public class StreamAudioWriter extends BaseStreamWriter {
 	// Autowire is not possible
 	protected final FlvRecordingMetaDeltaDaoImpl flvRecordingMetaDeltaDao;
 	protected final FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDao;
+
+	private boolean isInterview = false;
 	
 	public StreamAudioWriter(String streamName, IScope scope,
 			Long flvRecordingMetaDataId, boolean isScreenData,
 			boolean isInterview,
 			FlvRecordingMetaDeltaDaoImpl flvRecordingMetaDeltaDao,
 			FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDao) {
-		super(streamName, scope, flvRecordingMetaDataId, isScreenData, isInterview);
+		super(streamName, scope, flvRecordingMetaDataId, isScreenData);
 		
 		this.flvRecordingMetaDeltaDao = flvRecordingMetaDeltaDao;
 		this.flvRecordingMetaDataDao = flvRecordingMetaDataDao;
+		this.isInterview  = isInterview;
 		
 		FlvRecordingMetaData flvRecordingMetaData = flvRecordingMetaDataDao.
 								getFlvRecordingMetaDataById(flvRecordingMetaDataId);
@@ -59,7 +62,7 @@ public class StreamAudioWriter extends BaseStreamWriter {
 		try {
 
 			// We only care about audio at this moment
-			if (streampacket.getDataType() == 8) {
+			if (this.isInterview || streampacket.getDataType() == 8) {
 
 				if (streampacket.getTimestamp() <= 0) {
 					log.warn("Negative TimeStamp");

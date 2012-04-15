@@ -216,8 +216,7 @@ public class FlvInterviewConverter extends BaseConverter {
 			for (FlvRecordingMetaData flvRecordingMetaData : metaDataList) {
 
 				// FLV to 24 FPS Sequence AVI
-				String inputFlv = streamFolderName + "AV_"
-						+ flvRecordingMetaData.getStreamName() + ".flv";
+				String inputFlv = streamFolderName + flvRecordingMetaData.getStreamName() + ".flv";
 
 				File inputFlvFile = new File(inputFlv);
 

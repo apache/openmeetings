@@ -341,19 +341,6 @@ public class FLVRecorderService implements IPendingServiceCallback {
 				log.debug("### isScreenData " + isScreenData);
 				log.debug("### isInterview " + isInterview);
 
-				if (isInterview) {
-					
-					StreamVideoListener streamScreenListener = new StreamVideoListener("AV_"
-																		+ streamName, conn.getScope(),
-																		flvRecordingMetaDataId, isScreenData, isInterview,
-																		flvRecordingMetaDataDao);
-					
-					streamListeners.put(flvRecordingMetaDataId, streamScreenListener);
-
-					// Additionally record the Video Signal
-					stream.addStreamListener(streamScreenListener);
-				}
-				
 				StreamAudioListener streamAudioListener = new StreamAudioListener(streamName,
 																	conn.getScope(), flvRecordingMetaDataId, isScreenData,
 																	isInterview, flvRecordingMetaDeltaDao, flvRecordingMetaDataDao);
