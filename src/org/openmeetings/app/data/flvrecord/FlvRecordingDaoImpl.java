@@ -248,7 +248,7 @@ public class FlvRecordingDaoImpl {
 			String hql = "SELECT c FROM FlvRecording c " +
 					"WHERE c.deleted <> :deleted " +
 					"AND c.ownerId = :ownerId " +
-					"AND c.parentFileExplorerItemId = :parentFileExplorerItemId " +
+					"AND (c.parentFileExplorerItemId IS NULL OR c.parentFileExplorerItemId = :parentFileExplorerItemId)" +
 					"ORDER BY c.isFolder DESC, c.fileName ";
 			
 			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
