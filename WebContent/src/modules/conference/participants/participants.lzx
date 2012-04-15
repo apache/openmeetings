@@ -176,7 +176,6 @@
             //this content must be inited _after_ setting the default values
             canvas.thishib.getCurrentModeratorList.doCall(); 
             
-            return;
             canvas.thishib.checkLzRecording.doCall();
             canvas._chatcontent.doInit();   
             ]]>
