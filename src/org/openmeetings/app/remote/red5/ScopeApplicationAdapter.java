@@ -2310,7 +2310,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	 * @param sendSelf 
 	 * @return
 	 */
-	private synchronized int syncMessageToCurrentScope(String remoteMethodName, Object newMessage, boolean sendSelf) {
+	public synchronized int syncMessageToCurrentScope(String remoteMethodName, Object newMessage, boolean sendSelf) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 
