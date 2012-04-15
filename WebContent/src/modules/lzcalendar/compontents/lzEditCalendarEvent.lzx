@@ -140,6 +140,9 @@
                 updateObj.password = this._password.getText();
                 
                 if ($debug) Debug.write("appointmentId: ",updateObj.appointmentId);
+                
+                if ($debug) Debug.write("appointmentstart: ",updateObj.appointmentstart);
+                if ($debug) Debug.write("appointmentstart: ",updateObj.appointmentend);
                                
 				if (updateObj.appointmentId > 0) {
 					this.updateAppointment.doCall();

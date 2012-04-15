@@ -139,7 +139,7 @@ public class AppointmentLogic {
 
 	public Long saveAppointment(String appointmentName, Long userId,
 			String appointmentLocation, String appointmentDescription,
-			Date appointmentstartLocal, Date appointmentendLocal,
+			Date appointmentstart, Date appointmentend,
 			Boolean isDaily, Boolean isWeekly, Boolean isMonthly,
 			Boolean isYearly, Long categoryId, Long remind,
 			@SuppressWarnings("rawtypes") List mmClient, Long roomType,
@@ -192,15 +192,11 @@ public class AppointmentLogic {
 
 			// Adding Invitor as Meetingmember
 			Users user = userManagement.getUserById(userId);
-
+			
 			// Refactor the given time ignoring the Date is always UTC!
 			TimeZone timezone = timezoneUtil.getTimezoneByUser(user);
-			Date appointmentstart = TimezoneUtil
-					.reCalcDateToTimezonCalendarObj(appointmentstartLocal,
-							timezone).getTime();
-			Date appointmentend = TimezoneUtil.reCalcDateToTimezonCalendarObj(
-					appointmentendLocal, timezone).getTime();
-
+			log.debug("timezone "+timezone);
+			
 			Long appointmentId = appointmentDao.addAppointment(appointmentName,
 					userId, appointmentLocation, appointmentDescription,
 					appointmentstart, appointmentend, isDaily, isWeekly,
