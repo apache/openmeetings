@@ -1817,22 +1817,57 @@ public class BackupImportController extends AbstractUploadController {
 								.element("externalRoomType").getText());
 						Long roomtypes_id = importLongType(unformatString(roomObject
 								.element("roomtypeId").getText()));
-						Boolean isDemoRoom = importBooleanType(unformatString(roomObject
+						
+						Boolean isDemoRoom = false;
+						if (roomObject
+								.element("isDemoRoom") != null) {
+							isDemoRoom = importBooleanType(unformatString(roomObject
 								.element("isDemoRoom").getText()));
-						Integer demoTime = importIntegerType(unformatString(roomObject
+						}
+						
+						Integer demoTime = null;
+						if (roomObject
+								.element("demoTime") != null) {
+							demoTime = importIntegerType(unformatString(roomObject
 								.element("demoTime").getText()));
-						Boolean isModeratedRoom = importBooleanType(unformatString(roomObject
+						}
+						
+						Boolean isModeratedRoom = false;
+						if (roomObject.element("isModeratedRoom") != null) {
+							isModeratedRoom = importBooleanType(unformatString(roomObject
 								.element("isModeratedRoom").getText()));
-						Boolean allowUserQuestions = importBooleanType(unformatString(roomObject
+						}
+						
+						Boolean allowUserQuestions = true;
+						if (roomObject.element("allowUserQuestions") != null) {
+							allowUserQuestions = importBooleanType(unformatString(roomObject
 								.element("allowUserQuestions").getText()));
-						Boolean isAudioOnly = importBooleanType(unformatString(roomObject
+						}
+						
+						
+						Boolean isAudioOnly = false;
+						if (roomObject.element("isAudioOnly") != null) {
+							isAudioOnly = importBooleanType(unformatString(roomObject
 								.element("isAudioOnly").getText()));
-						String sipNumber = unformatString(roomObject.element(
+						}
+						
+						String sipNumber = "";
+						if (roomObject.element("sipNumber") != null) {
+							sipNumber = unformatString(roomObject.element(
 								"sipNumber").getText());
-						String conferencePin = unformatString(roomObject
-								.element("conferencePin").getText());
-						Boolean showMicrophoneStatus = importBooleanType(unformatString(roomObject
-								.element("showMicrophoneStatus").getText()));
+						}
+						
+						String conferencePin = "";
+						if (roomObject.element("conferencePin") != null) {
+							conferencePin = unformatString(roomObject
+									.element("conferencePin").getText());
+						}
+						
+						Boolean showMicrophoneStatus = false;
+						if (roomObject.element("showMicrophoneStatus") != null) {
+							showMicrophoneStatus = importBooleanType(unformatString(roomObject
+									.element("showMicrophoneStatus").getText()));
+						}
 
 						Long ownerId = null;
 						if (roomObject.element("ownerid") != null) {
