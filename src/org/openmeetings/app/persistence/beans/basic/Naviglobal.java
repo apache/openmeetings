@@ -19,12 +19,8 @@
 package org.openmeetings.app.persistence.beans.basic;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Date;
-
-import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
-
-
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,9 +32,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
 
 @Entity
 @NamedQueries({

@@ -423,8 +423,9 @@ public class CoreScreenShare {
 			cursorPosition.put("cursor_x", x);
 			cursorPosition.put("cursor_y", y);
 
-			instance.invoke("setNewCursorPosition", new Object[] { cursorPosition },
-					instance);
+			if (instance.getConnection() != null && instance.getConnection().isConnected()) {
+				instance.invoke("setNewCursorPosition", new Object[] { cursorPosition }, instance);
+			}
 
 		} catch (Exception err) {
 			System.out.println("captureScreenStart Exception: ");

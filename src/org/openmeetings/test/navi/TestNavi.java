@@ -19,6 +19,7 @@
 package org.openmeetings.test.navi;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
@@ -43,11 +44,13 @@ public class TestNavi extends AbstractOpenmeetingsSpringTest {
         System.out.println("NaviGlobal size: " + ll.size());
 
         for (Naviglobal navigl : ll) {
+        	assertNotNull("Naviglobal retrieved should not be null", navigl);
             System.out.println("Naviglobal label: " + navigl.getLabel().getValue());
 
+        	assertNotNull("Naviglobal retrieved should have Navimain entries", navigl.getMainnavi());
             for (Navimain navim : navigl.getMainnavi()) {
-                //System.out.println("-->" + navim.getLabel().getValue());
-
+            	assertNotNull("Navimain retrieved should not be null", navim);
+                System.out.println("-->" + navim.getLabel().getValue());
             }
         }
 		
