@@ -68,14 +68,19 @@
 		<class>org.openmeetings.app.persistence.beans.files.FileExplorerItem</class>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		<properties>
-				<property name="openjpa.ConnectionURL" value="jdbc:postgresql://localhost:5432/openmeetings"/>
-            	<property name="openjpa.ConnectionUserName" value="postgres"/>
-            	<property name="openjpa.ConnectionPassword" value=""/>
+			<property name="openjpa.RuntimeUnenhancedClasses" value="unsupported"/>
+            <property name="openjpa.ConnectionDriverName" value="org.apache.commons.dbcp.BasicDataSource" />
+			<property name="openjpa.ConnectionProperties"
+				value="DriverClassName=org.postgresql.Driver
+					, Url=jdbc:postgresql://localhost:5432/openmeetings
+					, MaxActive=100
+					, MaxWait=10000
+					, TestOnBorrow=true
+					, poolPreparedStatements=true
+					, Username=postgres
+					, Password=1"/>
 				<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema"/>
-		    	<property name="openjpa.RuntimeUnenhancedClasses" value="unsupported"/>
    				<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
-				<property name="openjpa.ConnectionDriverName" value="org.postgresql.Driver"/>
-				<property name="openjpa.jdbc.DBDictionary" value="postgres"/>
 				<property name="openjpa.DataCache" value="true"/>
 				<property name="openjpa.QueryCache" value="true"/> 
 				<property name="openjpa.jdbc.QuerySQLCache"  value="false"/> 

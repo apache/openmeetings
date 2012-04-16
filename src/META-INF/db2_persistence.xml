@@ -69,9 +69,16 @@
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		<properties>
 			<property name="openjpa.RuntimeUnenhancedClasses" value="unsupported"/>
-			<property name="openjpa.ConnectionDriverName" value="com.ibm.db2.jcc.DB2Driver"/>
-			<property name="openjpa.ConnectionProperties" value="username=db2admin, password=admin"/>
-			<property name="openjpa.ConnectionURL" value="jdbc:db2://localhost:50000/openmeet"/>
+            <property name="openjpa.ConnectionDriverName" value="org.apache.commons.dbcp.BasicDataSource" />
+			<property name="openjpa.ConnectionProperties"
+				value="DriverClassName=com.ibm.db2.jcc.DB2Driver
+					, Url=jdbc:db2://localhost:50000/openmeet
+					, MaxActive=100
+					, MaxWait=10000
+					, TestOnBorrow=true
+					, poolPreparedStatements=true
+					, Username=db2admin
+					, Password=admin"/>
 			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema"/>
 			<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
 			<property name="openjpa.DataCache" value="true"/>
