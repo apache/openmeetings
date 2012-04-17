@@ -299,25 +299,24 @@ public class ConferenceService {
 
 	// --------------------------------------------------------------------------------------------
 
-	public Map<String, Object> getAppointMentAndTimeZones(Long room_id,
-			Long user_id) {
-		log.debug("getAppointMentDataForRoom");
-
-		IConnection current = Red5.getConnectionLocal();
-		String streamid = current.getClient().getId();
-
-		log.debug("getCurrentRoomClient -2- " + streamid);
-
-		RoomClient currentClient = this.clientListManager
-				.getClientByStreamId(streamid);
-		currentClient.setUser_id(user_id);
-
-		Rooms room = roommanagement.getRoomById(room_id);
-
-		if (room.getAppointment() == false)
-			return null;
-
+	public Map<String, Object> getAppointMentAndTimeZones(Long room_id) {
 		try {
+			log.debug("getAppointMentDataForRoom");
+			
+			IConnection current = Red5.getConnectionLocal();
+			String streamid = current.getClient().getId();
+	
+			log.debug("getCurrentRoomClient -2- " + streamid);
+	
+			RoomClient currentClient = this.clientListManager
+					.getClientByStreamId(streamid);
+	
+			Rooms room = roommanagement.getRoomById(room_id);
+	
+			if (room.getAppointment() == false) {
+				throw new IllegalStateException("Room has no appointment");
+			}
+		
 			Appointment appointment = appointmentLogic
 					.getAppointmentByRoom(room_id);
 
@@ -326,7 +325,6 @@ public class ConferenceService {
 			returnMap.put("appointment", appointment);
 
 			Users us = userManagement.getUserById(currentClient.getUser_id());
-
 			TimeZone timezone = timezoneUtil.getTimezoneByUser(us);
 
 			returnMap.put("appointment", appointment);
@@ -339,11 +337,11 @@ public class ConferenceService {
 					"end",
 					CalendarPatterns.getDateWithTimeByMiliSeconds(
 							appointment.getAppointmentEndtime(), timezone));
-			returnMap.put("timeZone", us.getOmTimeZone().getIcal());
+			returnMap.put("timeZone", timezone.getDisplayName());
 
 			return returnMap;
 		} catch (Exception e) {
-			log.error("getAppointMentAndTimeZones " + e.getMessage());
+			log.error("getAppointMentAndTimeZones " , e );
 			return null;
 		}
 
@@ -727,6 +725,28 @@ public class ConferenceService {
 		long user_level = userManagement.getUserLevelByID(users_id);
 		return roommanagement.deleteRoomById(user_level, rooms_id);
 	}
+	
+	/**
+	 * return all participants of a room
+	 * 
+	 * @param room_id
+	 * @return
+	 */
+	public boolean isRoomFull(Long room_id) {
+		try {
+			Rooms room = roommanagement.getRoomById(room_id);
+			
+			if (room.getNumberOfPartizipants() <= this.clientListManager
+					.getClientListByRoom(room_id).size()) {
+				return true;
+			}
+			
+			return false;
+		} catch (Exception err) {
+			log.error("[isRoomFull]", err);
+		}
+		return true;
+	}
 
 	/**
 	 * return all participants of a room
@@ -737,14 +757,12 @@ public class ConferenceService {
 	public List<RoomClient> getRoomClientsListByRoomId(Long room_id) {
 		log.debug("getRoomClientsListByRoomId");
 		try {
-			// log.error("getRoomClientsListByRoomId: "+room_id);
 			LinkedList<RoomClient> clients = new LinkedList<RoomClient>();
 			HashMap<String, RoomClient> clientList = this.clientListManager
 					.getClientListByRoom(room_id);
 			for (Iterator<String> iter = clientList.keySet().iterator(); iter
 					.hasNext();) {
 				RoomClient rcl = clientList.get(iter.next());
-				// log.error("COMPARE: "+rcl.getRoom_id()+" || "+room_id);
 				clients.add(rcl);
 			}
 			return clients;

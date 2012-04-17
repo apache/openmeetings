@@ -39,7 +39,7 @@
 				this.showLoginStep();
                 if ($debug) Debug.write("invitationQuickLoader:oninit userlang = [",userlang,"]; canvas.lang = [",canvas.language_id,"]");
                 if (canvas.language_id > 0) {
-                    this.getRoomClients.doCall();
+                    this.isRoomFull.doCall();
                 } else {
                     this.showLoginStep();
                 }
@@ -59,24 +59,20 @@
 			this.checkInvitationPass.doCall();
 		</method>
 		
-		<netRemoteCallHib name="getRoomClients" funcname="getRoomClients" 
+		<netRemoteCallHib name="isRoomFull" funcname="conferenceservice.isRoomFull" 
 							remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >  	
         	<netparam name="pass"><method name="getValue">return canvas.thishib.currentInvitation.room.rooms_id;</method></netparam>
         	<handler name="ondata" args="value">
         		<![CDATA[
             		//The onResult-Handler will be called be the rtmpconnection
-            		if ($debug) Debug.write(canvas.thishib.currentInvitation.room);
-					if ($debug) Debug.write("getRoomClients: ",value);
-					var number = 0;
-					for (var eg in value) {
-						number++;
-					}
-					if ($debug) Debug.write(canvas.thishib.currentInvitation.room.numberOfPartizipants);
-					if ($debug) Debug.write("number: ",number);
-					if (canvas.thishib.currentInvitation.room.numberOfPartizipants >= number+1) {
-						parent.login();
-					} else {
+            		if ($debug) Debug.write(canvas.thishib.currentInvitation.room.rooms_id);
+					if ($debug) Debug.write("isRoomFull: ",value);
+					
+					if (value) {
 						new lz.labelerrorPopup(canvas,{errorlabelid:618});
+						parent.close();
+					} else {
+						parent.login();
 					}
             	]]>
         	</handler>   

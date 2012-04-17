@@ -1472,7 +1472,7 @@ public class Usermanagement {
 	public Users getUserById(Long id) {
 		log.debug("Usermanagement.getUserById");
 
-		if (id == 0) {
+		if (id == null || id <= 0) {
 			return null;
 		}
 		CriteriaBuilder cb = em.getCriteriaBuilder();

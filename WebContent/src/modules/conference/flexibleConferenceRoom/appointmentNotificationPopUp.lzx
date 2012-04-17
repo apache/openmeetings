@@ -34,11 +34,10 @@
 	<netRemoteCallHib name="getAppointMentAndTimeZones" remotecontext="$once{ canvas.thishib }" 
 		funcname="conferenceservice.getAppointMentAndTimeZones" >   
 		<netparam><method name="getValue">return parent.parent.roomobj.rooms_id;</method></netparam>
-		<netparam><method name="getValue">return canvas.user_id;</method></netparam>
-		
 		<handler name="ondata" args="value">	
 		    <![CDATA[
-		    	if ($debug) Debug.write("getAppointmentData: ",value);
+		    	if ($debug) Debug.write("getAppointMentAndTimeZones 1: ",parent.roomobj.rooms_id);
+		    	if ($debug) Debug.write("getAppointMentAndTimeZones 2: ",value);
 		    	
 		    	if(value!=null){
 		    		
