@@ -253,7 +253,7 @@ public class Admin {
 			cmd = Command.files;
 		}
 
-		String file = cmdl.getOptionValue('f', "");
+		String file = cmdl.getOptionValue("file", "");
 		switch(cmd) {
 			case install:
 				try {
@@ -320,7 +320,7 @@ public class Admin {
 				break;
 			case backup:
 				try {
-					if (!cmdl.hasOption('f')) {
+					if (!cmdl.hasOption("file")) {
 						file = "backup_" + CalendarPatterns.getTimeForStreamId(new Date()) + ".zip";
 						System.out.println("File name was not specified, '" + file + "' will be used");
 					}
@@ -339,7 +339,7 @@ public class Admin {
 			case restore:
 				try {
 					File backup = new File(file);
-					if (!cmdl.hasOption('f') || !backup.exists() || !backup.isFile()) {
+					if (!cmdl.hasOption("file") || !backup.exists() || !backup.isFile()) {
 						System.out.println("File should be specified, and point the the existent zip file");
 						usage();
 						System.exit(1);
