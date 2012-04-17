@@ -10,7 +10,10 @@ import java.net.URL;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Set;
+import java.util.regex.Pattern;
 
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
@@ -37,6 +40,9 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class Admin {
 	private static final Logger log = Red5LoggerFactory.getLogger(Admin.class);
+	private static final Pattern rfc2822 = Pattern.compile(
+	        "^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$"
+	);
 	private boolean verbose = false;
 	private InstallationConfig cfg = null;
 	private Options opts = null;
@@ -283,6 +289,15 @@ public class Admin {
 						System.out.println("User login was not provided, or too short, should be at least " + InstallationConfig.USER_LOGIN_MINIMUM_LENGTH + " character long.");
 						System.exit(1);
 					}
+					try {
+						if (!rfc2822.matcher(email).matches()) {
+						    throw new AddressException("Invalid address");
+						}
+						new InternetAddress(email, true);
+					} catch (AddressException ae) {
+						System.out.println("Please provide non-empty valid email: '" + email + "' is not valid.");
+						System.exit(1);
+					}
 					if (group == null || login.length() < 1) {
 						System.out.println("User group was not provided, or too short, should be at least 1 character long.");
 						System.exit(1);
@@ -296,9 +311,9 @@ public class Admin {
 							System.exit(1);
 						}
 					}
-					ImportInitvalues importInit = getApplicationContext(ctxName).getBean(ImportInitvalues.class);
-					importInit.loadAll(new File(omHome, ImportInitvalues.languageFolderName).getAbsolutePath()
-							, cfg, login, pass, email, group, tz);
+					ClassPathXmlApplicationContext ctx = getApplicationContext(ctxName);
+					ImportInitvalues importInit = ctx.getBean(ImportInitvalues.class);
+					importInit.loadAll(new File(omHome, ImportInitvalues.languageFolderName).getAbsolutePath(), cfg, login, pass, email, group, tz);
 				} catch(Exception e) {
 					handleError("Install failed", e);
 				}
