@@ -20,6 +20,7 @@ package org.openmeetings.app.remote;
 
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
@@ -36,6 +37,7 @@ import org.openmeetings.app.persistence.beans.calendar.AppointmentReminderTyps;
 import org.openmeetings.app.persistence.beans.rooms.RoomTypes;
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.user.Users;
+import org.openmeetings.utils.math.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +63,8 @@ public class CalendarService {
 	private AppointmentCategoryDaoImpl appointmentCategoryDaoImpl;
 	@Autowired
 	private AppointmentReminderTypDaoImpl appointmentReminderTypDaoImpl;
+	@Autowired
+	private TimezoneUtil timezoneUtil;
 
 	public List<Appointment> getAppointmentByRange(String SID, Date starttime,
 			Date endtime) {
@@ -118,7 +122,7 @@ public class CalendarService {
 
 	public Long saveAppointment(String SID, String appointmentName,
 			String appointmentLocation, String appointmentDescription,
-			Date appointmentstart, Date appointmentend, Boolean isDaily,
+			String appointmentstartStr, String appointmentendStr, Boolean isDaily,
 			Boolean isWeekly, Boolean isMonthly, Boolean isYearly,
 			Long categoryId, Long remind, @SuppressWarnings("rawtypes") List mmClient, Long roomType,
 			String baseUrl, Long language_id, Boolean isPasswordProtected,
@@ -133,7 +137,23 @@ public class CalendarService {
 			Long user_level = userManagement.getUserLevelByID(users_id);
 
 			if (authLevelManagement.checkUserLevel(user_level)) {
+				
+				Users us = userManagement.getUserById(users_id);
+				
+				// Refactor the given time ignoring the Date is always UTC!
+				TimeZone timezone = timezoneUtil.getTimezoneByUser(us);
+				
+				//Transform the user time in a local time of the server 
+				//machines locale timeZone and store that to the db
+				Date appointmentstart = new Date(TimezoneUtil.getCalendarInTimezone(appointmentstartStr, timezone).getTime().getTime());
+				Date appointmentend = new Date(TimezoneUtil.getCalendarInTimezone(appointmentendStr, timezone).getTime().getTime());
 
+				log.debug("timezone "+timezone);
+				log.debug("appointmentstartStr "+appointmentstartStr);
+				log.debug("appointmentendStr "+appointmentendStr);
+				log.debug("appointmentstart "+appointmentstart);
+				log.debug("appointmentend   "+appointmentend);
+				
 				Long id = appointmentLogic.saveAppointment(appointmentName,
 						users_id, appointmentLocation, appointmentDescription,
 						appointmentstart, appointmentend, isDaily, isWeekly,
@@ -152,7 +172,7 @@ public class CalendarService {
 	}
 
 	public Long updateAppointmentTimeOnly(String SID, Long appointmentId,
-			Date appointmentstart, Date appointmentend, String baseurl,
+			String appointmentstartStr, String appointmentendStr, String baseurl,
 			Long language_id) {
 		try {
 
@@ -163,6 +183,22 @@ public class CalendarService {
 				log.debug("updateAppointment");
 
 				log.debug("appointmentId " + appointmentId);
+				
+				Users us = userManagement.getUserById(users_id);
+				
+				// Refactor the given time ignoring the Date is always UTC!
+				TimeZone timezone = timezoneUtil.getTimezoneByUser(us);
+				
+				//Transform the user time in a local time of the server 
+				//machines locale timeZone and store that to the db
+				Date appointmentstart = new Date(TimezoneUtil.getCalendarInTimezone(appointmentstartStr, timezone).getTime().getTime());
+				Date appointmentend = new Date(TimezoneUtil.getCalendarInTimezone(appointmentendStr, timezone).getTime().getTime());
+
+				log.debug("up timezone "+timezone);
+				log.debug("up appointmentstartStr "+appointmentstartStr);
+				log.debug("up appointmentendStr "+appointmentendStr);
+				log.debug("up appointmentstart "+appointmentstart);
+				log.debug("up appointmentend   "+appointmentend);
 
 				appointmentLogic
 						.getAppointMentById(appointmentId);
@@ -185,7 +221,7 @@ public class CalendarService {
 	public Long updateAppointment(String SID, Long appointmentId,
 			String appointmentName, 
 			String appointmentLocation, String appointmentDescription,
-			Date appointmentstart, Date appointmentend, Boolean isDaily,
+			String appointmentstartStr, String appointmentendStr, Boolean isDaily,
 			Boolean isWeekly, Boolean isMonthly, Boolean isYearly,
 			Long categoryId, Long remind, @SuppressWarnings("rawtypes") List mmClient, Long roomType,
 			String baseUrl, Long language_id, Boolean isPasswordProtected,
@@ -214,6 +250,20 @@ public class CalendarService {
 				}
 
 				Users user = userManagement.getUserById(users_id);
+				
+				// Refactor the given time ignoring the Date is always UTC!
+				TimeZone timezone = timezoneUtil.getTimezoneByUser(user);
+				
+				//Transform the user time in a local time of the server 
+				//machines locale timeZone and store that to the db
+				Date appointmentstart = new Date(TimezoneUtil.getCalendarInTimezone(appointmentstartStr, timezone).getTime().getTime());
+				Date appointmentend = new Date(TimezoneUtil.getCalendarInTimezone(appointmentendStr, timezone).getTime().getTime());
+
+				log.debug("up2 timezone "+timezone);
+				log.debug("up2 appointmentstartStr "+appointmentstartStr);
+				log.debug("up2 appointmentendStr "+appointmentendStr);
+				log.debug("up2 appointmentstart "+appointmentstart);
+				log.debug("up2 appointmentend "+appointmentend);
 
 				return appointmentDao.updateAppointment(appointmentId,
 						appointmentName, appointmentDescription,

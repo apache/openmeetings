@@ -35,6 +35,7 @@ import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
+import org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl;
 import org.openmeetings.app.data.calendar.management.AppointmentLogic;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
@@ -93,6 +94,8 @@ public class Invitationmanagement {
 	private AuthLevelmanagement authLevelManagement;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
+	@Autowired
+	private AppointmentDaoImpl appointmentDaoImpl;
 
 	/**
 	 * Sending invitation within plain mail
@@ -900,7 +903,7 @@ public class Invitationmanagement {
 			if (point.getIcalId() == null || point.getIcalId().length() < 1) {
 				point.setIcalId(meetingId);
 
-				appointmentLogic.updateAppointMent(point);
+				appointmentDaoImpl.updateAppointment(point);
 			}
 
 			log.debug(handler.getICalDataAsString());

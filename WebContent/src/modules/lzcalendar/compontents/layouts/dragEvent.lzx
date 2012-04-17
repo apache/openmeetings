@@ -295,8 +295,8 @@
 							  remotecontext="$once{ canvas.thishib }" >     
 			<netparam><method name="getValue">return canvas.sessionId; </method></netparam>
 			<netparam><method name="getValue">return parent.parent.updateObj.appointmentId;</method></netparam>
-			<netparam><method name="getValue">return parent.parent.updateObj.appointmentstart;</method></netparam>
-			<netparam><method name="getValue">return parent.parent.updateObj.appointmentend;</method></netparam>
+			<netparam><method name="getValue">return parseDateToStringTimeSeconds(parent.parent.updateObj.appointmentstart);</method></netparam>
+			<netparam><method name="getValue">return parseDateToStringTimeSeconds(parent.parent.updateObj.appointmentend);</method></netparam>
 			<netparam><method name="getValue">return parent.parent.baseUrl;</method></netparam>
 			<netparam><method name="getValue">return hib.userlang;</method></netparam>
 	    	<handler name="ondata" args="value">

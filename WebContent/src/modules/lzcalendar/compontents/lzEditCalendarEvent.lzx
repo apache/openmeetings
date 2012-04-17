@@ -160,8 +160,8 @@
 			<netparam><method name="getValue">return parent.parent.updateObj.appointmentName;</method></netparam>	
 			<netparam><method name="getValue">return parent.parent.updateObj.appointmentLocation;</method></netparam>
 			<netparam><method name="getValue">return parent.parent.updateObj.appointmentDescription;</method></netparam>
-			<netparam><method name="getValue">return parent.parent.updateObj.appointmentstart;</method></netparam>
-			<netparam><method name="getValue">return parent.parent.updateObj.appointmentend;</method></netparam>
+			<netparam><method name="getValue">return parseDateToStringTimeSeconds(parent.parent.updateObj.appointmentstart);</method></netparam>
+			<netparam><method name="getValue">return parseDateToStringTimeSeconds(parent.parent.updateObj.appointmentend);</method></netparam>
 			<netparam><method name="getValue">return parent.parent.updateObj.isDaily;</method></netparam>
 			<netparam><method name="getValue">return parent.parent.updateObj.isWeekly;</method></netparam>
 			<netparam><method name="getValue">return parent.parent.updateObj.isMonthly;</method></netparam>
@@ -190,8 +190,8 @@
 			<netparam><method name="getValue">return parent.parent.updateObj.appointmentName;</method></netparam>	
 			<netparam><method name="getValue">return parent.parent.updateObj.appointmentLocation;</method></netparam>
 			<netparam><method name="getValue">return parent.parent.updateObj.appointmentDescription;</method></netparam>
-			<netparam><method name="getValue">return parent.parent.updateObj.appointmentstart;</method></netparam>
-			<netparam><method name="getValue">return parent.parent.updateObj.appointmentend;</method></netparam>
+			<netparam><method name="getValue">return parseDateToStringTimeSeconds(parent.parent.updateObj.appointmentstart);</method></netparam>
+			<netparam><method name="getValue">return parseDateToStringTimeSeconds(parent.parent.updateObj.appointmentend);</method></netparam>
 			<netparam><method name="getValue">return parent.parent.updateObj.isDaily;</method></netparam>
 			<netparam><method name="getValue">return parent.parent.updateObj.isWeekly;</method></netparam>
 			<netparam><method name="getValue">return parent.parent.updateObj.isMonthly;</method></netparam>

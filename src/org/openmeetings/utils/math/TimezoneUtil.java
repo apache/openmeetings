@@ -19,6 +19,7 @@
 package org.openmeetings.utils.math;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.TimeZone;
 
 import org.openmeetings.app.OpenmeetingsVariables;
@@ -166,6 +167,36 @@ public class TimezoneUtil {
 		// If everything fails take the servers default one
 		log.error("There is no correct time zone set in the configuration of OpenMeetings for the key default.timezone or key is missing in table, using default locale!");
 		return TimeZone.getDefault();
+	}
+	
+	/**
+	 * We ignore the fact that a Date Object is always in UTC internally and
+	 * treat it as if it contains only dd.mm.yyyy HH:mm:ss. We need to do this
+	 * cause we cannot trust the Date Object send from the client. We have the
+	 * timeZone information additional to the Date, so we use it to transform it
+	 * now to a Calendar Object.
+	 * 
+	 * @param dateTime
+	 * @param timezone
+	 * @return
+	 */
+	public static Calendar getCalendarInTimezone(String dateTimeStr,
+			TimeZone timezone) {
+		
+		Date dateTime = CalendarPatterns.parseImportDate(dateTimeStr);
+
+		Calendar calOrig = Calendar.getInstance();
+		calOrig.setTime(dateTime);
+
+		Calendar cal = Calendar.getInstance(timezone);
+		cal.set(Calendar.YEAR, calOrig.get(Calendar.YEAR));
+		cal.set(Calendar.MONTH, calOrig.get(Calendar.MONTH));
+		cal.set(Calendar.DATE, calOrig.get(Calendar.DATE));
+		cal.set(Calendar.HOUR_OF_DAY, calOrig.get(Calendar.HOUR_OF_DAY));
+		cal.set(Calendar.MINUTE, calOrig.get(Calendar.MINUTE));
+		cal.set(Calendar.SECOND, calOrig.get(Calendar.SECOND));
+
+		return cal;
 	}
 	
 	public static long _getOffset(TimeZone timezone) {

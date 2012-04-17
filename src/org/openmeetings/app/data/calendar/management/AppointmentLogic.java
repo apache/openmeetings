@@ -147,7 +147,7 @@ public class AppointmentLogic {
 			String password) {
 
 		log.debug("Appointmentlogic.saveAppointment");
-
+		
 		// TODO:Add this user as the default Moderator of the Room
 
 		Long numberOfParticipants = cfgManagement.getConfValue(
@@ -195,7 +195,6 @@ public class AppointmentLogic {
 			
 			// Refactor the given time ignoring the Date is always UTC!
 			TimeZone timezone = timezoneUtil.getTimezoneByUser(user);
-			log.debug("timezone "+timezone);
 			
 			Long appointmentId = appointmentDao.addAppointment(appointmentName,
 					userId, appointmentLocation, appointmentDescription,
@@ -558,16 +557,5 @@ public class AppointmentLogic {
 
 		return message;
 	}
-
-	/**
-	 * Updating AppointMent object
-	 */
-	// ----------------------------------------------------------------------------------------------
-	public Long updateAppointMent(Appointment point) {
-		log.debug("AppointmentLogic.updateAppointment");
-
-		return appointmentDao.updateAppointment(point);
-	}
-	// ----------------------------------------------------------------------------------------------
 
 }
