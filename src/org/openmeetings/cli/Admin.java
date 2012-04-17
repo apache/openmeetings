@@ -27,9 +27,11 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.Parser;
 import org.apache.commons.cli.PosixParser;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
+import org.openmeetings.app.documents.InstallationDocumentHandler;
 import org.openmeetings.app.installation.ImportInitvalues;
 import org.openmeetings.app.installation.InstallationConfig;
 import org.openmeetings.app.persistence.beans.user.Users;
+import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.servlet.outputhandler.BackupExport;
 import org.openmeetings.servlet.outputhandler.BackupImportController;
 import org.openmeetings.utils.OMContextListener;
@@ -229,7 +231,8 @@ public class Admin {
 	
 	private void process(String[] args) {
 		String ctxName = System.getProperty("context", "openmeetings");
-		File omHome = new File(new File(System.getenv("RED5_HOME"), "webapps"), ctxName);
+		File home = new File(System.getenv("RED5_HOME"));
+		File omHome = new File(new File(home, "webapps"), ctxName);
 		
 		Parser parser = new PosixParser();
 		CommandLine cmdl = null;
@@ -314,6 +317,9 @@ public class Admin {
 					ClassPathXmlApplicationContext ctx = getApplicationContext(ctxName);
 					ImportInitvalues importInit = ctx.getBean(ImportInitvalues.class);
 					importInit.loadAll(new File(omHome, ImportInitvalues.languageFolderName).getAbsolutePath(), cfg, login, pass, email, group, tz);
+					
+					File installerFile = new File(new File(home, ScopeApplicationAdapter.configDirName), InstallationDocumentHandler.installFileName);
+					InstallationDocumentHandler.getInstance().createDocument(installerFile.getAbsolutePath(), 1);
 				} catch(Exception e) {
 					handleError("Install failed", e);
 				}

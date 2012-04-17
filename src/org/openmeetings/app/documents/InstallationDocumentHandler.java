@@ -18,6 +18,7 @@
  */
 package org.openmeetings.app.documents;
 
+import java.io.File;
 import java.io.FileWriter;
 
 import org.dom4j.Document;
@@ -61,7 +62,7 @@ public class InstallationDocumentHandler {
 	public int getCurrentStepNumber(String filePath) throws Exception{
 		
 	    SAXReader reader = new SAXReader();
-        Document document = reader.read(filePath+InstallationDocumentHandler.installFileName);
+        Document document = reader.read(new File(filePath, InstallationDocumentHandler.installFileName));
         
         Node node = document.selectSingleNode( "//install/step/stepnumber" );
         

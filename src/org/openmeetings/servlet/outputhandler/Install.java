@@ -167,8 +167,7 @@ public class Install extends VelocityViewServlet {
 					+ ScopeApplicationAdapter.configDirName
 					+ File.separatorChar;
 
-			File installerFile = new File(working_dir
-					+ InstallationDocumentHandler.installFileName);
+			File installerFile = new File(working_dir, InstallationDocumentHandler.installFileName);
 
 			if (command == null || !installerFile.exists()) {
 				log.debug("command equals null");
@@ -178,8 +177,6 @@ public class Install extends VelocityViewServlet {
 					File installerdir = new File(working_dir);
 
 					log.debug("bb " + installerFile);
-					log.debug("bb " + working_dir
-							+ InstallationDocumentHandler.installFileName);
 
 					boolean b = installerdir.canWrite();
 
