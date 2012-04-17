@@ -346,7 +346,7 @@ public class Admin {
 				try {
 					File backup = new File(file);
 					if (!cmdl.hasOption("file") || !backup.exists() || !backup.isFile()) {
-						System.out.println("File should be specified, and point the the existent zip file");
+						System.out.println("File should be specified, and point the existent zip file");
 						usage();
 						System.exit(1);
 					}
