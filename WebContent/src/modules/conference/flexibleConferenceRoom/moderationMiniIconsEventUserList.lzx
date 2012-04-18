@@ -42,11 +42,7 @@
             this._canDraw.isActive = false;
             //this._canDraw._text.setAttribute("text",canvas.getLabelName(681));
             this._canDrawModerator.setAttribute("visibility","hidden");
-            this._muteDevice._tip.setAttribute("labelid",1403);
-            this._unMuteDevice._tip.setAttribute("labelid",1404);
         } else {
-        	this._muteDevice._tip.setAttribute("labelid",1394);
-            this._unMuteDevice._tip.setAttribute("labelid",1395);
             if (canvas.isAllowedToDraw) {
                 this._canDraw.setAttribute("visibility","visible");
                 this._canDraw.isActive = true;
@@ -260,13 +256,7 @@
     	<handler name="onclick">
             canvas._videocontainer._videoviewcontent.muteSound(canvas.publicSID, true);
     	</handler>
-    	<method name="confirmGloballyOff" args="bool,t" >
-            if ($debug) Debug.write("confirmGloballyOff :: ",bool);
-            if (bool) {
-                canvas.thishib.switchMicMuted.setMute(canvas.publicSID,true);
-            }
-        </method>
-        <labelTooltip name="_tip" labelid="1394" />
+        <labelTooltip name="_tip" labelid="1403" />
     </miniIconsNew>
     
     <miniIconsNew name="_unMuteDevice" x="120" width="16" height="16" innerResource="unmute_btn_rsc" 
@@ -274,7 +264,7 @@
     	<handler name="onclick">
             canvas._videocontainer._videoviewcontent.muteSound(canvas.publicSID, false);
         </handler>
-        <labelTooltip name="_tip" labelid="1395" />
+        <labelTooltip name="_tip" labelid="1404" />
     </miniIconsNew>
 
     <miniIconsNew name="_allowExclusiveAudio" x="60" width="16" height="16"

@@ -38,11 +38,11 @@
     </handler>
     
     <handler name="onmouseout">
-        this._bg.setAttribute("bgcolor",0xFFFFFF);
+        this._bg.setAttribute("bgcolor",canvas.getThemeColor('mainBackgroundColor'));
     </handler>
     
     <view name="_bg" x="1" y="1" width="$once{ parent.width-1 }" 
-          height="$once{ parent.height-2 }" bgcolor="0xFFFFFF" />
+          height="$once{ parent.height-2 }" bgcolor="$once{ canvas.getThemeColor('mainBackgroundColor') }" />
     
     <view x="2" y="2" resource="$once{ parent.resourceN }" />
              

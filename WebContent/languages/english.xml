@@ -2548,7 +2548,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="631" name="lbl_name">
-    <value>Lsst name</value>
+    <value>Surname</value>
   </string>
 
   <string id="632" name="lbl_email">

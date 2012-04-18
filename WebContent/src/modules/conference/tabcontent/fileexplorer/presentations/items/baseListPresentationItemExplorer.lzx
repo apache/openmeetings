@@ -21,7 +21,7 @@
 <library>
 	
 <class name="baseListPresentationItemExplorer" extends="view" height="110" width="$once{ parent.width }" 
-    bgcolor="0xFFFFFF" focusable="true">
+    bgcolor="$once{ canvas.getThemeColor('mainBackgroundColor') }" focusable="true">
     
     <attribute name="uploadmodul" value="" type="string"/>
     <attribute name="selectable" value="true" type="boolean" />
@@ -52,7 +52,7 @@
     <handler name="onmouseout">
         disableCurrentMouseWheelObject();
         if (!this.isselected){
-            this.setAttribute('bgcolor',0xFFFFFF);
+            this.setAttribute('bgcolor',canvas.getThemeColor('mainBackgroundColor'));
         }
     </handler>  
        

@@ -49,8 +49,8 @@
 		this.loadingbar._loading.setAttribute('width',w);
 	</method>
     
-    <text fontsize="11" name="error" />
-    <text fontsize="11" name="_src" />
+    <text fontsize="11" name="error" y="20"/>
+    <text fontsize="11" name="_src" y="40" />
     
     <view name="loadingbar" bgcolor="$once{ canvas.getThemeColor('styleMenuBarBaseColor') }" height="10"  pixellock="true"
           x="-5" y="60" width="$once{ parent.maxwidth }" visibility="hidden">
@@ -58,6 +58,7 @@
           <view name="_loading" x="1" y="1" width="0" height="8"  pixellock="true" 
           		bgcolor="$once{ canvas.getThemeColor('styleMenuBarBaseColor') }"/>
     </view>
+    
 </class>
 
 </library>

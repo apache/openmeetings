@@ -63,7 +63,7 @@
     <view x="0" y="19" width="${ this.parent.width }" height="1" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" />
 	
 	<handler name="onclick">
-        this.parent.toggleopen();
+        this.toggleopen();
     </handler>
     
     <text fontsize="11" height="17" x="2" y="1" text="${ this.parent.title }" 

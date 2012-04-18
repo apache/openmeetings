@@ -94,6 +94,7 @@
     		var t = parent.holddatainSO.getValue();
     		this.parent.close();
     		if (parent.refReturnMethod == null) {
+    			if ($debug) Debug.write("refObj ",this.parent.refObj);
     		    this.parent.refObj.sendNoConfirmation();
     		} else {
     			this.parent.refObj[parent.refReturnMethod](false,t);

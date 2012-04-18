@@ -68,7 +68,6 @@ public class Sessionmanagement {
 	 * @return
 	 */
 	public Sessiondata startsession() {
-		// log.error("startsession User: || ");
 		try {
 
 			log.debug("startsession :: startsession");
@@ -107,8 +106,6 @@ public class Sessionmanagement {
 			if (fullList.size() == 0) {
 				log.error("Could not find session to update: " + SID);
 				return null;
-			} else {
-				// log.error("Found session to update: "+SID);
 			}
 
 			Sessiondata sd = fullList.get(0);

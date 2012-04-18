@@ -217,18 +217,18 @@
         <handler name="onmousetrackover">
             if ($debug) Debug.write("onmousetrackover");
             canvas.currentImagesListdraw.currentDragItem.sendOverItem(this);
-            parent.setAttribute("bgcolor",0x93FE92);
+            this.setAttribute("bgcolor",0x93FE92);
         </handler>
         
         <handler name="onmousetrackout">
             if ($debug) Debug.write("onmousetrackout");
             canvas.currentImagesListdraw.currentDragItem.sendOutItem(this);
-            parent.setAttribute("bgcolor",0xFFFFFF);
+            this.setAttribute("bgcolor",0xFFFFFF);
         </handler>
         
         <handler name="onmousetrackup">
             if ($debug) Debug.write("onmousetrackup");
-            parent.setAttribute("bgcolor",0xFFFFFF);
+            this.setAttribute("bgcolor",0xFFFFFF);
         </handler>   
     	
     	<remoteWhiteboard y="0" name="_drawarea" isRemoteOID="true" height="${parent.height}" width="${parent.height}"

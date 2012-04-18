@@ -56,12 +56,12 @@
         <handler name="onmousetrackout">
             //if ($debug) Debug.write("onmousetrackout");
             canvas.currentImagesListdraw.currentDragItem.sendOutItem(parent);
-            this.setAttribute("bgcolor",0xFFFFFF);
+            this.setAttribute("bgcolor",canvas.getThemeColor('mainBackgroundColor'));
         </handler>
         
         <handler name="onmousetrackup">
             if ($debug) Debug.write("onmousetrackup");
-            this.setAttribute("bgcolor",0xFFFFFF);
+            this.setAttribute("bgcolor",canvas.getThemeColor('mainBackgroundColor'));
         </handler> 
         
         <handler name="onmousedown">

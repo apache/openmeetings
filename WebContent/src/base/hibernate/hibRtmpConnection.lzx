@@ -1945,6 +1945,26 @@
         </handler>   
     </netRemoteCallHib> 
     
+    <netRemoteCallHib name="setCanGiveAudio" funcname="whiteboardservice.setCanGiveAudio"
+                   remotecontext="$once{ canvas.thishib }">
+        <attribute name="publicSID" value="" type="string" />
+        <attribute name="canGiveAudio" value="true" type="boolean" />
+        <method name="sendValue" args="publicSID,giveAudio">
+        	this.publicSID = publicSID;
+        	this.canGiveAudio = giveAudio;
+        	this.doCall();
+        </method>
+        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+        <netparam><method name="getValue">return parent.publicSID;</method></netparam>
+        <netparam><method name="getValue">return parent.canGiveAudio;</method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+                //The onResult-Handler will be called be the rtmpconnection
+                if ($debug) Debug.write("setCanGiveAudio : ",value);
+            ]]>
+        </handler>
+    </netRemoteCallHib>
+    
     
 </class>
 

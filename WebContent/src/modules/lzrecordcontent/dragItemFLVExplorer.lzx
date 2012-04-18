@@ -88,7 +88,8 @@
             			   refObj:this,
             			   labelid:710,
             			   labeliderror:713,
-                           showCheckBox:false
+                           showCheckBox:false,
+                           refReturnMethod:"sendConfirmation"
             			});
     		} else if (this.overItem.isFolder){
     			if ($debug) Debug.write("MOVE ITEM",this.refObj.fileExplorerItemId);
@@ -135,10 +136,6 @@
     	} else {
     		this.destroy();
     	}
-    </method>
-    
-    <method name="sendNoConfirmation">
-    	this.destroy();
     </method>
     
     <netRemoteCallHib name="deleteFLVOrFolder" funcname="flvrecorderservice.deleteFLVOrFolder" 

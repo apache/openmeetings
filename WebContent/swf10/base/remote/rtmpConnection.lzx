@@ -56,8 +56,17 @@
             this._nc.addEventListener(NetStatusEvent.NET_STATUS, _onStatus);
             
     		if($debug) Debug.write("devRtmpConnection/registerMethods()");
+    		var clientObj = {};
+    		clientObj.setId = this.setId;
+    		
+    		this._nc.client = clientObj;
+    		
 			//Register Methods
-			this.registerMethods();
+			//this.registerMethods();
+		</method>
+		
+		<method name="setId" args="tId">
+			if ($debug) Debug.write("setId ", tId);
 		</method>
 		
         <method name="_onStatus" args="stats"><![CDATA[

@@ -315,9 +315,7 @@
         	<![CDATA[
                 if ($debug) Debug.write("Deny Give Exclusive Audio: ",parent.parent.parent.refObj.publicSID);
                 if (canvas.ismoderator && this.isActive) {
-                	canvas.thishib.setCanGiveAudio.publicSID = parent.parent.parent.refObj.publicSID;
-                    canvas.thishib.setCanGiveAudio.canGiveAudio = false;
-                    canvas.thishib.setCanGiveAudio.doCall();
+                    canvas.thishib.setCanGiveAudio.sendValue(parent.parent.parent.refObj.publicSID,false);
                 }
             ]]>
         </handler>
@@ -329,15 +327,13 @@
         <handler name="onclick">
             if ($debug) Debug.write("Allow Give Exclusive Audio: ",parent.parent.parent.refObj.publicSID);
             if (canvas.ismoderator) {
-                canvas.thishib.setCanGiveAudio.publicSID = parent.parent.parent.refObj.publicSID;
-                canvas.thishib.setCanGiveAudio.canGiveAudio = true;
-                canvas.thishib.setCanGiveAudio.doCall();
+                canvas.thishib.setCanGiveAudio.sendValue(parent.parent.parent.refObj.publicSID,true);
             }
         </handler>
         <labelTooltip labelid="1424" />
     </miniIcons>
     
-	<miniIcons name="_kickUser" x="152" width="16" height="16"
+	<miniIcons name="_kickUser" x="154" width="16" height="16"
                resource="kick_user_rsc" showhandcursor="true">
         <handler name="onclick">
         	

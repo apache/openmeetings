@@ -151,16 +151,14 @@
 	   labelidToolTipOkButton="1428">
 
     <method name="applyObject">
-        canvas.thishib.setCanGiveAudio.publicSID = this.rcl.publicSID;
-        canvas.thishib.setCanGiveAudio.canGiveAudio = true;
-        canvas.thishib.setCanGiveAudio.doCall();
+        canvas.thishib.setCanGiveAudio.sendValue(this.rcl.publicSID,true);
         this.sendClearMessage(true);
     </method>
 
     <view resource="participants_exclusive_audio_rsc" x="2" y="2" />
 
-    <labelText text="$once{ parent.message }" multiline="true" x="40"
-               width="$once{ parent.width - 60 }" font="Helvetica"/>
+    <labelText text="$once{ parent.message }" multiline="true" x="20"
+               width="$once{ parent.width - 40 }" font="Helvetica"/>
 
 </class>
 	
@@ -175,8 +173,8 @@
 	
 	<view resource="unmute_btn_rsc" x="2" y="2" />
 	
-	<labelText text="$once{ parent.message }" multiline="true" x="40"
-			   width="$once{ parent.width - 60 }" font="Helvetica"/>
+	<labelText text="$once{ parent.message }" multiline="true" x="20"
+			   width="$once{ parent.width - 40 }" font="Helvetica"/>
                
 </class>	
 
@@ -382,7 +380,7 @@
                                    canvas.getLabelName(1082) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
             }
                                
-            new lz.activityListRestrictedRoomApplyForMuteOn(this._list._list,{
+            new lz.activityListRestrictedRoomRemote(this._list._list,{
                                             message:txt,
                                             width:this._list.width-14,
                                             rcl:rcl,
@@ -580,7 +578,7 @@
 		        ]]>
             </method>
             
-            <simplelayout name="_layout" axis="y" spacing="2" />
+            <simplelayout name="_layout" axis="y" spacing="1" />
             
         </view>
         

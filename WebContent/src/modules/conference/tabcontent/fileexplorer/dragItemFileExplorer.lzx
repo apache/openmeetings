@@ -94,7 +94,8 @@
             			   refObj:this,
             			   labelid:710,
             			   labeliderror:713,
-            			   showCheckBox:false
+            			   showCheckBox:false,
+                           refReturnMethod:"sendConfirmation"
             			});
     		} else if (this.overItem["isFolder"] && this.overItem.isFolder){
     			if ($debug) Debug.write("MOVE ITEM",this.refObj.fileExplorerItemId);

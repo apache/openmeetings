@@ -125,11 +125,14 @@
                     if ($debug) Debug.warn("start play");
                     vidContainer._chatvideoinner._videostream.playStream(broadcastId,-1);
                     vidContainer.setAttribute("visibility","visible");
-                } else {
+                } else if (avsettings=="v" || avsettings=="av") {
                     //this means avsettings is either: "v" or "av"
                 	vidContainer.setDefaultVideoSize(object.VWidth,object.VHeight);
                     vidContainer._chatvideoinner._videostream.playStream(broadcastId,-1);
                     vidContainer.setAttribute("visibility","visible");
+                } else {
+                	//this means user did not select anything yet and streaming has not started
+                	vidContainer.setAttribute("visibility","hidden");
                 }
                 vidContainer.setAttribute("interviewPodId", interviewPodId);
                 vidContainer.updateAVSettingsSymbol(object);

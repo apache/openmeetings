@@ -263,7 +263,7 @@
         ]]>
     </method>
     
-    <moderationMiniIconsEventUserList name="_applyAndStatusIcons" showAvIcons="false" x="2" y="2" >
+    <moderationMiniIconsEventUserList name="_applyAndStatusIcons" x="2" y="2" >
         <handler name="onismoderator" reference="canvas" args="m">
             this.updateIcons();
         </handler>

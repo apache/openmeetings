@@ -597,10 +597,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 						currentClient);
 			}
 
-			log.debug("##### roomLeave :. " + currentClient.getStreamid()); // just
-																			// a
-																			// unique
-																			// number
 			log.debug("removing USername " + currentClient.getUsername() + " "
 					+ currentClient.getConnectedSince() + " streamid: "
 					+ currentClient.getStreamid());
@@ -620,14 +616,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			}
 
 			// Notify all clients of the same currentScope (room) with domain
-			// and room
-			// except the current disconnected cause it could throw an exception
-
+			// and room except the current disconnected cause it could throw an exception
 			log.debug("currentScope " + currentScope);
-
-			// Remove User AFTER cause otherwise the currentClient Object is
-			// NULL ?!
-			// OR before ?!?!
 
 			if (currentScope != null && currentScope.getConnections() != null) {
 				// Notify Users of the current Scope
@@ -659,22 +649,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 									 */
 									if (!currentClient.getStreamid().equals(
 											rcl.getStreamid())) {
-
-										if (rcl.getIsScreenClient() != null
-												&& rcl.getIsScreenClient()) {
-											// continue;
-										} else {
-											// Send to all connected users
-											((IServiceCapableConnection) cons)
-													.invoke("roomDisconnect",
-															new Object[] { currentClient },
-															this);
-											log.debug("sending roomDisconnect to "
-													+ cons);
-										}
-
-										// add Notification if another user is
-										// recording
+										
+										// add Notification if another user isrecording
 										log.debug("###########[roomLeave]");
 										if (rcl.getIsRecording()) {
 											log.debug("*** roomLeave Any Client is Recording - stop that");
@@ -682,7 +658,28 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 													.stopRecordingShowForClient(
 															cons, currentClient);
 										}
-
+										
+										//If the user was a avclient, we do not broadcast a message about that to everybody
+										if (currentClient.getIsAVClient() == null 
+												|| currentClient.getIsAVClient()) {
+											continue;
+										}
+										
+										if (rcl.getIsScreenClient() != null && rcl
+												.getIsScreenClient()) {
+											// screen sharing clients do not receive events
+											continue;
+										} else if (rcl.getIsAVClient() == null || rcl
+												.getIsAVClient()) {
+											// AVClients or potential AVClients do not receive events
+											continue;
+										}
+										
+										// Send to all connected users
+										((IServiceCapableConnection) cons)
+												.invoke("roomDisconnect",
+													new Object[] { currentClient },this);
+										log.debug("sending roomDisconnect to " + cons);
 									}
 								} else {
 									log.debug("For this StreamId: "
@@ -2361,7 +2358,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	 */
 	public synchronized int sendMessageWithClient(Object newMessage) {
 		try {
-			sendMessageWithClientWithSyncObject(newMessage, false);
+			sendMessageWithClientWithSyncObject(newMessage, true);
 
 		} catch (Exception err) {
 			log.error("[sendMessageWithClient] ", err);

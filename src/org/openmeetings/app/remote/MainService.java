@@ -202,18 +202,12 @@ public class MainService implements IPendingServiceCallback {
 	 * @return a unique session identifier
 	 */
 	public Sessiondata getsessiondata() {
-
-		log.debug(":: getsessiondata");
-		System.out.println(":: getsessiondata");
-
 		return sessionManagement.startsession();
 	}
 
 	public Long setCurrentUserOrganization(String SID, Long organization_id) {
 		try {
-
 			sessionManagement.updateUserOrg(SID, organization_id);
-
 			return 1L;
 		} catch (Exception err) {
 			log.error("[setCurrentUserOrganization]", err);
@@ -249,40 +243,9 @@ public class MainService implements IPendingServiceCallback {
 
 				currentClient.setFirstname(o.getFirstname());
 				currentClient.setLastname(o.getLastname());
+				
+				scopeApplicationAdapter.syncMessageToCurrentScope("roomConnect", currentClient, false);
 
-				Collection<Set<IConnection>> conCollection = current.getScope()
-						.getConnections();
-				for (Set<IConnection> conset : conCollection) {
-					for (IConnection cons : conset) {
-						if (cons != null) {
-							RoomClient rcl = this.clientListManager
-									.getClientByStreamId(cons.getClient()
-											.getId());
-							if (rcl == null) {
-								// continue;
-							} else if (rcl.getIsScreenClient() != null
-									&& rcl.getIsScreenClient()) {
-								// continue;
-							} else {
-								if (cons instanceof IServiceCapableConnection) {
-									if (!cons.equals(current)) {
-										// log.error("sending roomDisconnect to "
-										// + cons);
-										// RoomClient rcl =
-										// this.clientListManager.getClientByStreamId(cons.getClient().getId());
-										// Send to all connected users
-										((IServiceCapableConnection) cons)
-												.invoke("roomConnect",
-														new Object[] { currentClient },
-														this);
-										// log.error("sending roomDisconnect to "
-										// + cons);
-									}
-								}
-							}
-						}
-					}
-				}
 			}
 
 			return o;

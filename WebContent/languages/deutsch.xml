@@ -2795,15 +2795,15 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="693" name="apply for mod message">
-    <value>würde gerne die Moderation übernehmen. Benutzen Sie die Status-Symbole neben dem Benutzernamen in der Benutzerliste um eine Moderaton hinzuzufügen oder zu entfernen.</value>
+    <value>würde gerne die Moderation übernehmen.</value>
   </string>
 
   <string id="694" name="apply for whiteboard">
-    <value>würde gerne auf dem Zeichenbrett zeichnen. Benutzen Sie die Status-Symbole neben der Benutzerliste um das Recht etwas auf dem Zeichenbrett zu zeichnen zu vergeben oder zu verwehren.</value>
+    <value>würde gerne auf dem Zeichenbrett zeichnen.</value>
   </string>
 
   <string id="695" name="695">
-    <value>würde gerne sein Audio/Video mit anderen teilen. Benutzen Sie die Status-Symbole neben der Benutzerliste, um das Recht mit anderen Video/Audio zu teilen zu vergeben oder zu verwehren.</value>
+    <value>würde gerne sein Audio/Video mit anderen teilen.</value>
   </string>
 
   <string id="696" name="moderation message">

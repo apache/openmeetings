@@ -331,7 +331,7 @@
 	<method name="deselectItem">
 		this.selected = false;
 		if (this["_fileName"]) {
-            this._fileName.setAttribute("bgcolor",0xFFFFFF);
+            this._fileName.setAttribute("bgcolor",canvas.getThemeColor('mainBackgroundColor'));
         } else {
             if ($debug) Debug.warn("deselectItem:: _fileName is NULL ",this);
         }
