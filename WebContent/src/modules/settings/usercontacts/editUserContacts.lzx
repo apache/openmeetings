@@ -26,7 +26,7 @@
 	<attribute name="contactContent" value="null"/>
 	
 	<handler name="onvisible" args="v">
-		if ($debug) Debug.wrote("editUserContacts onvisible",v);
+		if ($debug) Debug.write("editUserContacts onvisible",v);
 		if (v) {
 			if (this.contactContent == null) {
 				//We do some tricks to render / to show some of the visible area 
