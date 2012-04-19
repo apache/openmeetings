@@ -1651,7 +1651,7 @@ public class Usermanagement {
 					}
 					IScope currentScope = scopeApplicationAdapter
 							.getRoomScope(scopeName);
-					scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope);
+					scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope, true);
 
 					HashMap<Integer, String> messageObj = new HashMap<Integer, String>();
 					messageObj.put(0, "kick");
@@ -1696,7 +1696,7 @@ public class Usermanagement {
 				scopeApplicationAdapter.sendMessageById(messageObj,
 						rcl.getStreamid(), currentScope);
 
-				scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope);
+				scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope, true);
 
 				return true;
 			}

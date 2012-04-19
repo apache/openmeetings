@@ -530,7 +530,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			// logicalRoomLeave
 			if (currentClient != null) {
 				log.debug("currentClient IS NOT NULL");
-				this.roomLeaveByScope(currentClient, room);
+				this.roomLeaveByScope(currentClient, room, true);
 			}
 
 		} catch (Exception err) {
@@ -558,7 +558,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			RoomClient currentClient = this.clientListManager
 					.getClientByStreamId(streamid);
 
-			this.roomLeaveByScope(currentClient, current.getScope());
+			this.roomLeaveByScope(currentClient, current.getScope(), true);
 
 		} catch (Exception err) {
 			log.error("[logicalRoomLeave]", err);
@@ -569,11 +569,14 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	 * Removes the Client from the List, stops recording, adds the Room-Leave
 	 * event to running recordings, clear Polls and removes Client from any list
 	 * 
+	 * This function is kind of private/protected as the client won't be able 
+	 * to call it with proper values.
+	 * 
 	 * @param currentClient
 	 * @param currentScope
 	 */
 	public synchronized void roomLeaveByScope(RoomClient currentClient,
-			IScope currentScope) {
+			IScope currentScope, boolean removeUserFromSessionList) {
 		try {
 
 			log.debug("currentClient " + currentClient);
@@ -692,7 +695,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 				}
 			}
 
-			this.clientListManager.removeClient(currentClient.getStreamid());
+			if (removeUserFromSessionList) {
+				this.clientListManager.removeClient(currentClient.getStreamid());
+			}
 		} catch (Exception err) {
 			log.error("[roomLeaveByScope]", err);
 		}

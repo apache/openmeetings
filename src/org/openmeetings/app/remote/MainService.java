@@ -689,12 +689,21 @@ public class MainService implements IPendingServiceCallback {
 	 * @return string value if completed
 	 */
 	public Long logoutUser(String SID) {
-		Long users_id = sessionManagement.checkSession(SID);
-		IConnection current = Red5.getConnectionLocal();
-		RoomClient currentClient = this.clientListManager
-				.getClientByStreamId(current.getClient().getId());
-		currentClient.setUserObject(null, null, null, null);
-		return userManagement.logout(SID, users_id);
+		try {
+			Long users_id = sessionManagement.checkSession(SID);
+			IConnection current = Red5.getConnectionLocal();
+			RoomClient currentClient = this.clientListManager
+					.getClientByStreamId(current.getClient().getId());
+			
+			scopeApplicationAdapter.roomLeaveByScope(currentClient,current.getScope(), false);
+			
+			currentClient.setUserObject(null, null, null, null);
+			
+			return userManagement.logout(SID, users_id);
+		} catch (Exception err) {
+			log.error("[logoutUser]",err);
+		}
+		return -1L;
 	}
 
 	/**

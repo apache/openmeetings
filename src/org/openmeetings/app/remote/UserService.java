@@ -533,7 +533,7 @@ public class UserService {
 						streamid, currentScope);
 
 				this.scopeApplicationAdapter
-						.roomLeaveByScope(rcl, currentScope);
+						.roomLeaveByScope(rcl, currentScope, true);
 
 				return true;
 			}
@@ -1614,7 +1614,7 @@ public class UserService {
 						rcl.getStreamid(), currentScope);
 
 				this.scopeApplicationAdapter
-						.roomLeaveByScope(rcl, currentScope);
+						.roomLeaveByScope(rcl, currentScope, true);
 
 				return true;
 			}
