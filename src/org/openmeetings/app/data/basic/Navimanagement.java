@@ -18,6 +18,7 @@
  */
 package org.openmeetings.app.data.basic;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -46,6 +47,18 @@ public class Navimanagement {
 	@Autowired
 	private Fieldmanagment fieldmanagment;
 
+	public Naviglobal getGlobalMenuEntry(long globalId) {
+		try {
+			TypedQuery<Naviglobal> query = em.createNamedQuery("getNavigationById", Naviglobal.class);
+			query.setParameter("global_id", globalId);
+			return query.getSingleResult();
+		} catch (Exception ex2) {
+			log.error("getGlobalMenuEntry", ex2);
+		}
+		return null;
+		
+	}
+	
 	public List<Naviglobal> getMainMenu(long user_level, long USER_ID, long language_id) {
 		List<Naviglobal> ll = this.getMainMenu(user_level, USER_ID);
 		for (Iterator<Naviglobal> it2 = ll.iterator(); it2.hasNext();) {
@@ -96,7 +109,6 @@ public class Navimanagement {
 			ng.setName(name);
 			ng.setStarttime(new Date());
 			ng.setTooltip_fieldvalues_id(tooltip_fieldvalues_id);
-
 			// CriteriaBuilder crit = em.getCriteriaBuilder();
 
 			em.merge(ng);
@@ -111,21 +123,28 @@ public class Navimanagement {
 			String name, long global_id, String deleted,
 			Long tooltip_fieldvalues_id) {
 		try {
-			Navimain ng = new Navimain();
-			ng.setAction(action);
-			ng.setComment("");
-			ng.setIcon("");
-			ng.setFieldvalues_id(fieldvalues_id);
-			ng.setIsleaf(isleaf);
-			ng.setNaviorder(naviorder);
-			ng.setIsopen(isopen);
-			ng.setLevel_id(level_id);
-			ng.setName(name);
-			ng.setDeleted(deleted);
-			ng.setGlobal_id(global_id);
-			ng.setStarttime(new Date());
-			ng.setTooltip_fieldvalues_id(tooltip_fieldvalues_id);
-
+			Naviglobal ng = getGlobalMenuEntry(global_id);
+			List<Navimain> mainEntries = ng.getMainnavi();
+			mainEntries = (mainEntries == null) ? new ArrayList<Navimain>() : mainEntries;
+			
+			Navimain nm = new Navimain();
+			nm.setAction(action);
+			nm.setComment("");
+			nm.setIcon("");
+			nm.setFieldvalues_id(fieldvalues_id);
+			nm.setIsleaf(isleaf);
+			nm.setNaviorder(naviorder);
+			nm.setIsopen(isopen);
+			nm.setLevel_id(level_id);
+			nm.setName(name);
+			nm.setDeleted(deleted);
+			nm.setGlobal_id(global_id);
+			nm.setStarttime(new Date());
+			nm.setTooltip_fieldvalues_id(tooltip_fieldvalues_id);
+			
+			mainEntries.add(nm);
+			ng.setMainnavi(mainEntries);
+			
 			em.merge(ng);
 
 		} catch (Exception ex2) {

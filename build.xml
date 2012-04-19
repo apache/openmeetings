@@ -93,6 +93,7 @@
 		<mkdir dir="${om.lib.dir}" />
 		<mkdir dir="${anakia.lib.dir}" />
 		<mkdir dir="${junit.lib.dir}" />
+		<mkdir dir="${junit.report.dir}" />
 		<mkdir dir="${rat.lib.dir}" />
 		<mkdir dir="${dtd-generator.lib.dir}" />
 		<mkdir dir="${svntask.lib.dir}" />
