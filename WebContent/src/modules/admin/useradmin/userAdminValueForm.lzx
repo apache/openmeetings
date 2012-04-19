@@ -302,8 +302,9 @@
 					{
 						new lz.rpcErrorDialog(canvas.main_content._content.inner,{errorid:-23});
 					}
+					
+					this.parent.parent._turnoverlist.oncallnext.sendEvent();
 				}
-				this.parent.parent._turnoverlist.oncallnext.sendEvent();
 			]]>
     	</handler>
   	</netRemoteCallHib>	
