@@ -84,14 +84,20 @@
 	</method>
 	
     <method name="doMouseDownClick" args="itemObj">
-    	this.mouseDownClickUsed = true;
-    	if ($debug) Debug.write("mouseDown CLICK Start Drag And Drop");
-    	new lz.dragItemFileExplorer(canvas,{
-    		        dragItemResource:this.fileIcon,
-            	    refObj:this,
-                    x:canvas.getMouse('x'),
-                    y:canvas.getMouse('y')
-            	})
+    	<![CDATA[
+			if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
+	    		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
+	    		return;
+	    	}
+	    	this.mouseDownClickUsed = true;
+	    	if ($debug) Debug.write("mouseDown CLICK Start Drag And Drop");
+	    	new lz.dragItemFileExplorer(canvas,{
+	    		        dragItemResource:this.fileIcon,
+	            	    refObj:this,
+	                    x:canvas.getMouse('x'),
+	                    y:canvas.getMouse('y')
+	            	});
+        ]]>
     </method>
     
     <!--
@@ -122,13 +128,18 @@
     </method>
     
     <method name="deleteFile" args="labelid">
-    	new lz.confirmationSingle(canvas,{
-                           refObj:this,
-                           labelid:labelid,
-                           labeliderror:713,
-                           showCheckBox:false
-                        });
-    	//this.deleteFileOrFolder();
+    	<![CDATA[
+			if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
+	    		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
+	    		return;
+	    	}
+	    	new lz.confirmationSingle(canvas,{
+	                           refObj:this,
+	                           labelid:labelid,
+	                           labeliderror:713,
+	                           showCheckBox:false
+	                        });
+    	]]>
     </method>
     
     <method name="sendConfirmation" args="bool,askAgain">
@@ -139,6 +150,11 @@
     
     <method name="deleteFileOrFolder">
         <![CDATA[
+			if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
+	    		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
+	    		return;
+	    	}
+	    	
             if ($debug) Debug.write("deleteFileOrFolder HTTP 1: ");
             //this.getFileExplorerByRoom.doCall();
             var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport
@@ -197,23 +213,30 @@
 	</method>
 	
 	<method name="addFolder">
-		if (this.isFolder) {
-			if ($debug) Debug.write("NEW this.fileExplorerItemId INTO ",this);
-			if ($debug) Debug.write("NEW this.fileExplorerItemId ",this.fileExplorerItemId);
-			if (this["icon_folder_pre"]) {
-    			this.icon_folder_pre.setAttribute("frame",2);
-                this.content.setAttribute("visibility","visible");
-                this._folderIcon.setAttribute("frame",2);
-        		var t = new lz.folderFileExplorerItem(this.content,{
-        			            isOwner:this.isOwner,
-        			            isFolder:true,
-                    		    fileIcon:'icon_folder_rsc',
-                                refObjListRoot:this.refObjListRoot,
-                    		    fileName:canvas.getLabelName(712)
-                    		});
-                t.addOrUpdateFolderName(this.fileExplorerItemId,true);
+		<![CDATA[
+			if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
+	    		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
+	    		return;
+	    	}
+	
+			if (this.isFolder) {
+				if ($debug) Debug.write("NEW this.fileExplorerItemId INTO ",this);
+				if ($debug) Debug.write("NEW this.fileExplorerItemId ",this.fileExplorerItemId);
+				if (this["icon_folder_pre"]) {
+	    			this.icon_folder_pre.setAttribute("frame",2);
+	                this.content.setAttribute("visibility","visible");
+	                this._folderIcon.setAttribute("frame",2);
+	        		var t = new lz.folderFileExplorerItem(this.content,{
+	        			            isOwner:this.isOwner,
+	        			            isFolder:true,
+	                    		    fileIcon:'icon_folder_rsc',
+	                                refObjListRoot:this.refObjListRoot,
+	                    		    fileName:canvas.getLabelName(712)
+	                    		});
+	                t.addOrUpdateFolderName(this.fileExplorerItemId,true);
+				}
 			}
-		}
+		]]>
 	</method>
 	
 	<method name="refresh">
@@ -225,7 +248,13 @@
 	</method>
 	
 	<method name="editFolderName">
-		this.addOrUpdateFolderName(this.fileExplorerItemId,false);
+		<![CDATA[
+			if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
+	    		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
+	    		return;
+	    	}
+			this.addOrUpdateFolderName(this.fileExplorerItemId,false);
+		]]>
 	</method>
 	
 	<method name="loadDocument">
@@ -242,6 +271,11 @@
 	
 	<method name="addOrUpdateFolderName" args="fileExplorerItemId,isNew">
 		<![CDATA[
+			if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
+	    		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
+	    		return;
+	    	}
+		
     		if ($debug) Debug.write("addOrUpdateFolderName ",fileExplorerItemId);
     		var tWidth = this._fileName.width;
     		if (tWidth < 160) {
@@ -266,61 +300,68 @@
 	</method>
 	
 	<method name="toggleOpen" args="setSelection">
-		if (this.mouseDownClickUsed) {
-			if ($debug) Debug.write("mouseDownClickUsed RESET TO DEFAULT BUT DO NO ACTION Cause its a Drag and Drop Event");
-			this.mouseDownClickUsed = false;
-			return;
-		}
-		
-		if (this.singleClickStarted) {
-            if ($debug) Debug.write("Is this selected => Double Click !!!");
-            this.singleClickStarted = false;
-            lz.Timer.removeTimer( this.singleClickDelegate );
-            
-            if (this.isVideo) {
-            	this.playVideo();
-            } else if (this.isWmlFile){
-				this.loadWmlFile();
-			} else if (this.isFolder) {
-                this.doSingleClick(null);
-            } else if (this.isPresentation) {
-                this.loadDocument();
-            }
-        } else {
-        	
-        	if (this.isFolder){
-        		if (!this.open) {
-        			this.doOpen();
-        		} else {
-        			if (setSelection) {
-            			if (this.selected) {
-            				if ($debug) Debug.write("Is this selected => Do Edit !!!");
-            				this.singleClickStarted = true;
-            			    lz.Timer.addTimer( this.singleClickDelegate, 300 );
-            			} else {
-            				
-            				this.singleClickStarted = true;
-            				lz.Timer.addTimer( this.resetClickDelegate, 300 );
-            			}
-        			} else {
-        				this.doClose();
-        			}
-        		}
-        	} else {
-        		if (setSelection) {
-                    if (this.selected) {
-                        if ($debug) Debug.write("Is this selected => Do Edit !!!");
-                        this.singleClickStarted = true;
-                        lz.Timer.addTimer( this.singleClickDelegate, 300 );
-                    } else {
-                        this.singleClickStarted = true;
-                        lz.Timer.addTimer( this.resetClickDelegate, 300 );
-                    }
-                }
-        	}
-		}
-		
-		if (setSelection) this.refObjListRoot.selectItem(this);
+		<![CDATA[
+			if (this.mouseDownClickUsed) {
+				if ($debug) Debug.write("mouseDownClickUsed RESET TO DEFAULT BUT DO NO ACTION Cause its a Drag and Drop Event");
+				this.mouseDownClickUsed = false;
+				return;
+			}
+			
+			if (this.singleClickStarted) {
+	            if ($debug) Debug.write("Is this selected => Double Click !!!");
+	            this.singleClickStarted = false;
+	            lz.Timer.removeTimer( this.singleClickDelegate );
+	            
+	            if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
+		    		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
+		    		return;
+		    	}
+	            
+	            if (this.isVideo) {
+	            	this.playVideo();
+	            } else if (this.isWmlFile){
+					this.loadWmlFile();
+				} else if (this.isFolder) {
+	                this.doSingleClick(null);
+	            } else if (this.isPresentation) {
+	                this.loadDocument();
+	            }
+	        } else {
+	        	
+	        	if (this.isFolder){
+	        		if (!this.open) {
+	        			this.doOpen();
+	        		} else {
+	        			if (setSelection) {
+	            			if (this.selected) {
+	            				if ($debug) Debug.write("Is this selected => Do Edit !!!");
+	            				this.singleClickStarted = true;
+	            			    lz.Timer.addTimer( this.singleClickDelegate, 300 );
+	            			} else {
+	            				
+	            				this.singleClickStarted = true;
+	            				lz.Timer.addTimer( this.resetClickDelegate, 300 );
+	            			}
+	        			} else {
+	        				this.doClose();
+	        			}
+	        		}
+	        	} else {
+	        		if (setSelection) {
+	                    if (this.selected) {
+	                        if ($debug) Debug.write("Is this selected => Do Edit !!!");
+	                        this.singleClickStarted = true;
+	                        lz.Timer.addTimer( this.singleClickDelegate, 300 );
+	                    } else {
+	                        this.singleClickStarted = true;
+	                        lz.Timer.addTimer( this.resetClickDelegate, 300 );
+	                    }
+	                }
+	        	}
+			}
+			
+			if (setSelection) this.refObjListRoot.selectItem(this);
+		]]>
 	</method>
 	
 	<method name="selectItem">

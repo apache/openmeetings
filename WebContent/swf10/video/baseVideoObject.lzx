@@ -331,6 +331,8 @@
         ]]>
     </method>
     
+    <attribute name="initialHeight" value="$once{ this.height }" type="number" />
+    
     <method name="minimize">
         <![CDATA[
         
@@ -344,8 +346,7 @@
             for (var eg in this.subviews) {
                 if (this.subviews[eg].name != "_toolbar" 
                         && this.subviews[eg].name != "_innertop"
-                        && this.subviews[eg].name != "_loudness"
-                        && this.subviews[eg].name != "_micView") {
+                        && this.subviews[eg].name != "_loudness") {
                      this.subviews[eg].setAttribute("visibility","hidden");   
                 }
             }
@@ -368,9 +369,9 @@
             this._toolbar._maximize2.setAttribute("visibility","hidden");
             
             this._loudness.setAttribute("x",1);
-            this._micView.setAttribute("x",21);
             
             //this.setAttribute("height",this.initialHeight); 
+            if ($debug) Debug.write("this.initialHeight ",this.initialHeight);
             this._minimizeZoom.setAttribute("to",this.initialHeight);
             this._minimizeZoom.doStart();
         ]]>
@@ -384,7 +385,6 @@
                     if (this.subviews[eg].name != "_toolbar" 
                             && this.subviews[eg].name != "_innertop"
                             && this.subviews[eg].name != "_loudness"
-                            && this.subviews[eg].name != "_micView"
                             && this.subviews[eg].name != "_innerbottom") {
                          this.subviews[eg].setAttribute("visibility","visible");   
                     }

@@ -73,48 +73,61 @@
     </method>
     
     <method name="addFile">
-    	
-    	if ($debug) Debug.write("addFile :: ",this._selected,this.parentFolderId);
-    	
-    	var isOwner = 0;
-    	if (this.parentFolderId == -2) {
-    		isOwner = 1;
-    	} else {
-    		//Check if its a subfolder of a Owners Dir
-    		if (this._selected != null) {
-    			var checkForOwer = this._selected.checkForIsOwner();
-    			if ($debug) Debug.write("checkForOwer ::",checkForOwer);
-    			if (checkForOwer) {
-    				isOwner = 1;
-    			}
-    		}
-    	}
-    	
-    	if ($debug) Debug.write("addFile :: ",isOwner);
-    	
-        new lz.uploadWindowExplorer(canvas.main_content._content.inner,{
-                            x:60,uploadmodule:canvas.uploadmoduleimg,
-                            parentFolderId:this.parentFolderId,
-                            isOwner:isOwner,
-                            fileExplorerRef:this,
-                            isOnlyImage:true,
-                            servletName:'file.upload'
-                        });
+    	<![CDATA[
+	    	if ($debug) Debug.write("addFile :: ",this._selected,this.parentFolderId);
+	    	
+	    	if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
+	    		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
+	    		return;
+	    	}
+	    	
+	    	var isOwner = 0;
+	    	if (this.parentFolderId == -2) {
+	    		isOwner = 1;
+	    	} else {
+	    		//Check if its a subfolder of a Owners Dir
+	    		if (this._selected != null) {
+	    			var checkForOwer = this._selected.checkForIsOwner();
+	    			if ($debug) Debug.write("checkForOwer ::",checkForOwer);
+	    			if (checkForOwer) {
+	    				isOwner = 1;
+	    			}
+	    		}
+	    	}
+	    	
+	    	if ($debug) Debug.write("addFile :: ",isOwner);
+	    	
+	        new lz.uploadWindowExplorer(canvas.main_content._content.inner,{
+	                            x:60,uploadmodule:canvas.uploadmoduleimg,
+	                            parentFolderId:this.parentFolderId,
+	                            isOwner:isOwner,
+	                            fileExplorerRef:this,
+	                            isOnlyImage:true,
+	                            servletName:'file.upload'
+	                        });
+        ]]>
     </method>
     
     <method name="addFolder">
-        if (this._selected == null) {
-        	if ($debug) Debug.write("addFolder ::1 ",this._selected);
-            this._filearea._contentarea.subviews[0].addFolder();
-        } else {
-            if (this._selected.isFolder) {
-            	if ($debug) Debug.write("-1 this._selected.isFolder ",this._selected);
-                this._selected.addFolder();
-            } else {
-            	if ($debug) Debug.write("-2 !this._selected.isFolder ",this._selected);
-                this._selected.parent.parent.addFolder();
-            }
-        }
+    	<![CDATA[
+    		if (!canvas.isAllowedToDraw && !canvas.ismoderator) {
+	    		new lz.labelerrorPopup(canvas,{errorlabelid:1462});
+	    		return;
+	    	}
+    
+	        if (this._selected == null) {
+	        	if ($debug) Debug.write("addFolder ::1 ",this._selected);
+	            this._filearea._contentarea.subviews[0].addFolder();
+	        } else {
+	            if (this._selected.isFolder) {
+	            	if ($debug) Debug.write("-1 this._selected.isFolder ",this._selected);
+	                this._selected.addFolder();
+	            } else {
+	            	if ($debug) Debug.write("-2 !this._selected.isFolder ",this._selected);
+	                this._selected.parent.parent.addFolder();
+	            }
+	        }
+	    ]]>
     </method>
     
     <method name="loadWmlFile" args="itemObj">

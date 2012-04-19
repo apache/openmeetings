@@ -25,17 +25,12 @@
 	<attribute name="resourceViewName" value="" type="string" />
 	
 	<attribute name="labelid" value="0" type="number" />
-	
-	<handler name="oninit">
-		<![CDATA[
-		    this._txt.setAttribute("x",31-this._txt.width/2);
-		]]>
-	</handler>
     
-	<image src="$once{ canvas.getThemeImage( parent.resourceViewName ) }" />
+	<image src="$once{ canvas.getThemeImage( parent.resourceViewName ) }" 
+		stretches="both" width="24" height="24" />
 	
-	<labelText name="_txt" labelid="$once{ parent.labelid }" x="0" 
-			   y="64" fontstyle="bold" fgcolor="0x14537C" />
+	<labelText name="_txt" labelid="$once{ parent.labelid }" x="30" 
+			   y="2" fontstyle="bold" fgcolor="0x14537C" />
 	
 </class>
 
@@ -47,38 +42,38 @@
         
         <labelText name="_txt" fontstyle="bold" labelid="774" y="0" x="2" />
         
-        <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_1" y="30" x="30" labelid="768">
+        <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_1" x="110" y="30" labelid="768">
         	<handler name="onclick">
                 quicklink('conferenceModuleRoomList');
             </handler>
         </iconStepButtonWizzard>
         
       
-        <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_2" y="30" x="144" labelid="771">
+        <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_2" x="140" y="60" labelid="771">
         	<handler name="onclick">
                 quicklink('conferenceModuleRoomList');
             </handler>
         </iconStepButtonWizzard>
         
 
-        <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_3" y="30" x="258" labelid="772" >
+        <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_3" x="170" y="90" labelid="772" >
         	<handler name="onclick">
                 quicklink('conferenceModuleRoomList');
             </handler>
         </iconStepButtonWizzard>
         
         
-        <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_4" y="30" x="382" labelid="773">
+        <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_4" x="200" y="120" labelid="773">
         	<handler name="onclick">
                 quicklink('conferenceModuleRoomList');
             </handler>
         </iconStepButtonWizzard>
         
-        <labelText labelid="804" x="10" y="$once{ parent.height-80 }" multiline="true"
+        <labelText labelid="804" x="10" y="$once{ parent.height-70 }" multiline="true"
         		   width="$once{ parent.width-210 }" />
         
         <simpleLabelButton labelid="788" width="196" x="$once{ parent.width-200 }" 
-               y="$once{ parent.height-80 }" height="24" 
+               y="$once{ parent.height-70 }" height="24" 
                onclick="this.parent.storeSettings();">
             <handler name="onclick">
                 quicklink('conferenceModuleRoomList');
@@ -87,7 +82,7 @@
         </simpleLabelButton>
         
         <simpleLabelButton labelid="291" width="196" x="$once{ parent.width-200 }" 
-               y="$once{ parent.height-54 }" height="24" 
+               y="$once{ parent.height-44 }" height="24" 
                onclick="this.parent.storeSettings();">
             <handler name="onclick">
                 quicklink('dashboardModuleCalendar');
