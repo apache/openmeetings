@@ -83,6 +83,13 @@ public class Admin {
 		options.addOption(new OmOption("i", null, "email-use-tls", false, "Is secure e-mail connection [default: no]", true));
 		options.addOption(new OmOption("i", null, "skip-default-rooms", false, "Do not create default rooms [created by default]", true));
 		options.addOption(new OmOption("i", null, "disable-frontend-register", false, "Do not allow front end register [allowed by default]", true));
+
+		options.addOption(new OmOption("i", null, "db-type", true, "The type of the DB to be used", true));
+		options.addOption(new OmOption("i", null, "db-host", true, "DNS name or IP address of database", true));
+		options.addOption(new OmOption("i", null, "db-port", true, "Database port", true));
+		options.addOption(new OmOption("i", null, "db-name", true, "The name of Openmeetings database", true));
+		options.addOption(new OmOption("i", null, "db-user", true, "User with write access to the DB specified", true));
+		options.addOption(new OmOption("i", null, "db-pass", true, "Password of the user with write access to the DB specified", true));
 		
 		return options;
 	}
@@ -292,6 +299,7 @@ public class Admin {
 						System.out.println("User login was not provided, or too short, should be at least " + InstallationConfig.USER_LOGIN_MINIMUM_LENGTH + " character long.");
 						System.exit(1);
 					}
+					
 					try {
 						if (!rfc2822.matcher(email).matches()) {
 						    throw new AddressException("Invalid address");
@@ -314,6 +322,21 @@ public class Admin {
 							System.exit(1);
 						}
 					}
+					if (cmdl.hasOption("db-type") || cmdl.hasOption("db-host") || cmdl.hasOption("db-port") || cmdl.hasOption("db-name") || cmdl.hasOption("db-user") || cmdl.hasOption("db-pass")) {
+						String dbType = cmdl.getOptionValue("db-type", "derby");
+						File srcConf = new File(omHome, "WEB-INF/classes/META-INF/" + dbType + "_persistence.xml");
+						File destConf = new File(omHome, "WEB-INF/classes/META-INF/persistence.xml");
+						ConnectionPropertiesPatcher.getPatcher(dbType).patch(
+								srcConf
+								, destConf
+								, cmdl.getOptionValue("db-host", "localhost")
+								, cmdl.getOptionValue("db-port", null)
+								, cmdl.getOptionValue("db-name", null)
+								, cmdl.getOptionValue("db-user", null)
+								, cmdl.getOptionValue("db-pass", null)
+								);
+					}
+
 					ClassPathXmlApplicationContext ctx = getApplicationContext(ctxName);
 					ImportInitvalues importInit = ctx.getBean(ImportInitvalues.class);
 					importInit.loadAll(new File(omHome, ImportInitvalues.languageFolderName).getAbsolutePath(), cfg, login, pass, email, group, tz);
