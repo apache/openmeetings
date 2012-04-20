@@ -22,14 +22,12 @@ import org.openmeetings.app.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.task.TaskExecutor;
 
 public class FlvInterviewConverterTask {
 	private static final Logger log = Red5LoggerFactory.getLogger(FlvInterviewConverterTask.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	@Qualifier("openmeetings.TaskExecutor")
 	private TaskExecutor taskExecutor;
 	@Autowired
 	private FlvInterviewConverter flvInterviewConverter;

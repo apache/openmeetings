@@ -70,12 +70,6 @@
 	<bean id="chatservice.service" class="org.openmeetings.app.remote.ChatService" />
 	<bean id="calendarservice.service" class="org.openmeetings.app.remote.CalendarService" />
 	<bean id="flvrecorderservice.service" class="org.openmeetings.app.remote.FLVRecorderService" />
-	<bean id="openmeetings.TaskExecutor"
-		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
-		<property name="corePoolSize" value="5" />
-		<property name="maxPoolSize" value="10" />
-		<property name="queueCapacity" value="25" />
-	</bean>
 	<bean id="openmeetings.FlvRecorderConverterTask"
 		class="org.openmeetings.app.data.flvrecord.converter.FlvRecorderConverterTask" />
 	<bean id="openmeetings.FlvInterviewConverterTask"
@@ -233,20 +227,15 @@
 	<bean id="resetPasswordTemplate" class="org.openmeetings.app.templates.ResetPasswordTemplate" />
 
 	<!-- Thread Executor -->
-	<bean id="mailTaskExecutor"
+	<bean id="taskExecutor"
 		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
 		<property name="corePoolSize" value="5" />
 		<property name="maxPoolSize" value="10" />
 		<property name="queueCapacity" value="25" />
 	</bean>
 
-	<bean id="mailThread" class="org.openmeetings.utils.mail.MailThread">
-		<constructor-arg ref="mailTaskExecutor" />
-	</bean>
-
-	<bean id="mailiCalThread" class="org.openmeetings.utils.mail.MailiCalThread">
-		<constructor-arg ref="mailTaskExecutor" />
-	</bean>
+	<bean id="mailThread" class="org.openmeetings.utils.mail.MailThread"/>
+	<bean id="mailiCalThread" class="org.openmeetings.utils.mail.MailiCalThread"/>
 
 	<!-- Axis2 Service Proxy's -->
 	<bean id="userWebService" class="org.openmeetings.axis.services.UserWebService" />

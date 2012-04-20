@@ -546,6 +546,14 @@ public class ImportInitvalues {
 						null,
 						"Ldap domain selected by default in the login screen");
 		
+		// set inviter's email address as ReplyTo in email invitations
+		cfgManagement.addConfByKey(
+						3, 
+						"inviter.email.as.replyto", 
+						"1", 
+						null,
+						"Set inviter's email address as ReplyTo in email invitations (1 == set, 0 == NOT set)");
+		
 		log.debug("Configuration ADDED");
 	}
 

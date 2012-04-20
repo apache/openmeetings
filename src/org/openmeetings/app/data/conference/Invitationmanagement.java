@@ -187,7 +187,7 @@ public class Invitationmanagement {
 
 					if (sendMail) {
 						this.sendInvitionLink(username, message, baseurl,
-								email, subject, invitation.getHash(),
+								email, us.getAdresses().getEmail(), subject, invitation.getHash(),
 								validFrom, validTo, language_id);
 					}
 
@@ -602,13 +602,14 @@ public class Invitationmanagement {
      * @param message
      * @param baseurl
      * @param email
+     * @param replyTo
      * @param subject
      * @param invitationsHash
      * @param dStart
      * @param dEnd
 	 * @param language_id   If it is >0 then "&language=" is added to the link
 	 */
-	private String sendInvitionLink(String username, String message,
+	private String sendInvitionLink(String replyTo, String username, String message,
 			String baseurl, String email, String subject,
 			String invitationsHash, Date dStart, Date dEnd, Long language_id) {
 		try {
@@ -632,7 +633,7 @@ public class Invitationmanagement {
 
 			System.out.println(template);
 
-			return mailHandler.sendMail(email, subject, template);
+			return mailHandler.sendMail(email, replyTo, subject, template);
 
 		} catch (Exception err) {
 			log.error("sendInvitationLink", err);
@@ -699,15 +700,17 @@ public class Invitationmanagement {
 	 * 
 	 * @param email
 	 * @param point
-	 * @param cancelling_person
+	 * @param replyTo
+	 * @param subject
+	 * @param mesage
 	 * @return
 	 */
 	// --------------------------------------------------------------------------------------------------------------
 	private String sendInvitationUpdateMail(String email, Appointment point,
-			String cancelling_person, String subject, String message) {
+			String replyTo, String subject, String message) {
 		log.debug("sendInvitationUpdateMail");
 		try {
-			return mailHandler.sendMail(email, subject, message);
+			return mailHandler.sendMail(email, replyTo, subject, message);
 		} catch (Exception e) {
 			log.error("sendInvitationUpdateMail : " + e.getMessage());
 		}
@@ -765,7 +768,7 @@ public class Invitationmanagement {
 
 		log.debug(handler.getICalDataAsString());
 
-		mailiCalThread.doSend(email, subject, handler.getIcalAsByteArray(),
+		mailiCalThread.doSend(email, user.getAdresses().getEmail(), subject, handler.getIcalAsByteArray(),
 				message);
 
 		return null;
@@ -817,7 +820,7 @@ public class Invitationmanagement {
 
 		log.debug(handler.getICalDataAsString());
 
-		mailiCalThread.doSend(email, subject, handler.getIcalAsByteArray(),
+		mailiCalThread.doSend(email, user.getAdresses().getEmail(), subject, handler.getIcalAsByteArray(),
 				message);
 
 		return null;
@@ -908,7 +911,7 @@ public class Invitationmanagement {
 
 			log.debug(handler.getICalDataAsString());
 
-			mailiCalThread.doSend(email, subject, handler.getIcalAsByteArray(),
+			mailiCalThread.doSend(email, user.getAdresses().getEmail(), subject, handler.getIcalAsByteArray(),
 					template);
 
 			return "success";
@@ -936,7 +939,7 @@ public class Invitationmanagement {
 	 */
 	public String sendInvitionLink(Long user_level, String username,
 			String message, String domain, String room, String roomtype,
-			String baseurl, String email, String subject, Long room_id,
+			String baseurl, String email, String replyTo, String subject, Long room_id,
 			Date starttime, Date endtime) {
 		try {
 			if (authLevelManagement.checkUserLevel(user_level)) {
@@ -955,7 +958,7 @@ public class Invitationmanagement {
 								invitation_link, default_lang_id, starttime,
 								endtime);
 
-				return mailHandler.sendMail(email, subject, template);
+				return mailHandler.sendMail(email, replyTo, subject, template);
 
 			}
 		} catch (Exception err) {

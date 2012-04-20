@@ -885,7 +885,7 @@ public class MainService implements IPendingServiceCallback {
 		Long user_level = userManagement.getUserLevelByID(users_id);
 		return invitationManagement.sendInvitionLink(user_level,
 				username, message, domain, room, roomtype, baseurl, email,
-				subject, room_id, null, null);
+				usersDao.getUser(users_id).getAdresses().getEmail(), subject, room_id, null, null);
 	}
 
 	/**

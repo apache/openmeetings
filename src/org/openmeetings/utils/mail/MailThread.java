@@ -23,14 +23,15 @@ import java.util.Properties;
 
 import javax.activation.DataHandler;
 import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
-import org.openmeetings.app.persistence.beans.basic.Configuration;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,51 +43,92 @@ public class MailThread {
 			MailHandler.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private Configurationmanagement cfgManagement;
+	protected Configurationmanagement cfgManagement;
+	@Autowired
+	protected TaskExecutor taskExecutor;
 
-	private final TaskExecutor taskExecutor;
-
-	public MailThread(TaskExecutor taskExecutor) {
-		this.taskExecutor = taskExecutor;
+	public void doSend(String to, String subject, String body) {
+		doSend(to, null, subject, body);
 	}
 
-	public void doSend(String smtpServer, String smtpPort, String to,
-			String from, String subject, String body, String emailUsername,
-			String emailUserpass) {
-
-		this.taskExecutor.execute(new MailSenderTask(smtpServer, smtpPort, to,
-				from, subject, body, emailUsername, emailUserpass));
-
+	public void doSend(String to, String replyTo, String subject, String body) {
+		taskExecutor.execute(new MailSenderTask(to, replyTo, subject, body));
 	}
 
-	private class MailSenderTask implements Runnable {
+	protected class MailSenderTask implements Runnable {
 
-		private final String smtpServer;
-		private final String smtpPort;
-		private final String to;
-		private final String from;
+		private final String recipients;
+		private final String replyTo;
 		private final String subject;
 		private final String body;
-		private final String emailUsername;
-		private final String emailUserpass;
 
-		public MailSenderTask(String smtpServer, String smtpPort, String to,
-				String from, String subject, String body, String emailUsername,
-				String emailUserpass) {
-			this.smtpServer = smtpServer;
-			this.smtpPort = smtpPort;
-			this.to = to;
-			this.from = from;
+		public MailSenderTask(String recipients, String replyTo, String subject, String body) {
+			this.recipients = recipients;
+			this.replyTo = replyTo;
 			this.subject = subject;
 			this.body = body;
-			this.emailUsername = emailUsername;
-			this.emailUserpass = emailUserpass;
 		}
 
 		public void run() {
 			this.send();
 		}
 
+		protected MimeMessage getMessage() throws AddressException, MessagingException {
+			log.debug("getMessage");
+
+			// Evaluating Configuration Data
+			String smtpServer = cfgManagement.getConfValue("smtp_server", String.class, null);
+			String smtpPort = cfgManagement.getConfValue("smtp_port", String.class, "25");
+			String from = cfgManagement.getConfValue("system_email_addr", String.class, null);
+			String mailAuthUser = cfgManagement.getConfValue("email_username", String.class, null);
+			String mailAuthPass = cfgManagement.getConfValue("email_userpass", String.class, null);
+
+			Properties props = System.getProperties();
+
+			props.put("mail.smtp.host", smtpServer);
+			props.put("mail.smtp.port", smtpPort);
+
+			if ("1".equals(cfgManagement.getConfValue("mail.smtp.starttls.enable", String.class, "0"))) {
+				props.put("mail.smtp.starttls.enable", "true");
+			}
+
+			// Check for Authentification
+			Session session = null;
+			if (mailAuthUser != null && mailAuthUser.length() > 0
+					&& mailAuthPass != null && mailAuthPass.length() > 0) {
+				// use SMTP Authentication
+				props.put("mail.smtp.auth", "true");
+				session = Session.getDefaultInstance(props,
+						new SmtpAuthenticator(mailAuthUser, mailAuthPass));
+			} else {
+				// not use SMTP Authentication
+				session = Session.getDefaultInstance(props, null);
+			}
+
+			// Building MimeMessage
+			MimeMessage msg = new MimeMessage(session);
+			msg.setSubject(subject);
+			msg.setFrom(new InternetAddress(from));
+			if (replyTo != null && "1".equals(cfgManagement.getConfValue("inviter.email.as.replyto", String.class, "1"))) {
+				msg.setReplyTo(new InternetAddress[]{new InternetAddress(replyTo)});
+			}
+			msg.addRecipients(Message.RecipientType.TO,
+					InternetAddress.parse(recipients, false));
+			
+			return msg;
+		}
+		
+		protected MimeMessage setMessageBody(MimeMessage msg) throws Exception {
+			// -- Set the subject and body text --
+			msg.setDataHandler(new DataHandler(new ByteArrayDataSource(
+					body, "text/html; charset=\"utf-8\"")));
+
+			// -- Set some other header information --
+			msg.setHeader("X-Mailer", "XML-Mail");
+			msg.setSentDate(new Date());
+			
+			return msg;
+		}
 		/**
 		 * Sending a mail with given values.<br>
 		 * If the parameter "emailUsername" and "emailUserpass" is exist, use
@@ -103,65 +145,12 @@ public class MailThread {
 		 */
 		public String send() {
 			try {
-
 				log.debug("Message sending in progress");
-				log.debug("  From: " + from);
-				log.debug("  To: " + to);
+				log.debug("  To: " + recipients);
 				log.debug("  Subject: " + subject);
 
-				Properties props = System.getProperties();
-
-				// -- Attaching to default Session, or we could start a new one
-				// --
-				// smtpPort 25 or 587
-				props.put("mail.smtp.host", smtpServer);
-				props.put("mail.smtp.port", smtpPort);
-
-				Configuration conf = cfgManagement.getConfKey(3,
-						"mail.smtp.starttls.enable");
-				if (conf != null) {
-					if (conf.getConf_value().equals("1")) {
-						props.put("mail.smtp.starttls.enable", "true");
-					}
-				}
-
-				Session session = null;
-				if (emailUsername != null && emailUsername.length() > 0
-						&& emailUserpass != null && emailUserpass.length() > 0) {
-					// use SMTP Authentication
-					props.put("mail.smtp.auth", "true");
-					session = Session
-							.getDefaultInstance(props, new SmtpAuthenticator(
-									emailUsername, emailUserpass));
-				} else {
-					// not use SMTP Authentication
-					session = Session.getDefaultInstance(props, null);
-				}
-
-				// -- Create a new message --
-				Message msg = new MimeMessage(session);
-
-				// -- Set the FROM and TO fields --
-				msg.setFrom(new InternetAddress(from));
-				msg.setRecipients(Message.RecipientType.TO,
-						InternetAddress.parse(to, false));
-
-				// -- We could include CC recipients too --
-				// if (cc != null)
-				// msg.setRecipients(Message.RecipientType.CC
-				// ,InternetAddress.parse(cc, false));
-
-				// -- Set the subject and body text --
-				msg.setSubject(subject);
-				msg.setDataHandler(new DataHandler(new ByteArrayDataSource(
-						body, "text/html; charset=\"utf-8\"")));
-
-				// -- Set some other header information --
-				msg.setHeader("X-Mailer", "XML-Mail");
-				msg.setSentDate(new Date());
-
 				// -- Send the message --
-				Transport.send(msg);
+				Transport.send(setMessageBody(getMessage()));
 
 				return "success";
 			} catch (Exception ex) {
