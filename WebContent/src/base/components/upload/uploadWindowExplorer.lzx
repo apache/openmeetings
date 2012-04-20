@@ -249,12 +249,16 @@
         	
         	<animator name="_hide" attribute="opacity" to="0" from="1" duration="1000" start="false">
         		<handler name="onstop">
-        			parent._show.doStart();
+        			if (parent["_show"]) {
+        				parent._show.doStart();
+        			}
         		</handler>
         	</animator>
         	<animator name="_show" attribute="opacity" to="1" from="0" duration="1000" start="false">
                 <handler name="onstop">
-                    parent._show.doStart();
+                	if (parent["_show"]) {
+                    	parent._show.doStart();
+                    }
                 </handler>
             </animator>
         </view>

@@ -31,7 +31,6 @@ import org.openmeetings.app.conference.session.RoomClient;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.basic.dao.LdapConfigDaoImpl;
-import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Statemanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.ldap.config.ConfigReader;
@@ -64,8 +63,6 @@ public class LdapLoginManagement {
 	private Usermanagement userManagement;
 	@Autowired
 	private Statemanagement statemanagement;
-	@Autowired
-	private Organisationmanagement organisationmanagement;
 	@Autowired
 	private LdapConfigDaoImpl ldapConfigDao;
 
@@ -420,7 +417,7 @@ public class LdapLoginManagement {
 			}
 		}
 
-		// Pr�fen, ob user bereits vorhanden ist
+		// check if user already exists
 
 		Users u = null;
 

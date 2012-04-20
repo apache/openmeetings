@@ -865,7 +865,7 @@ public class CoreScreenShare {
 
 				// logger.debug("IS WINDOWS");
 
-				// dr�ckt STRG+C == copy
+				// pressing STRG+C == copy
 				instance.keyPress(KeyEvent.VK_CONTROL);
 				Thread.sleep(200);
 				instance.keyPress(KeyEvent.VK_C);
@@ -914,7 +914,7 @@ public class CoreScreenShare {
 
 				// logger.debug("IS WINDOWS");
 
-				// dr�ckt STRG+V == einf�gen
+				// pressing STRG+V == insert-mode
 				instance.keyPress(KeyEvent.VK_CONTROL);
 				Thread.sleep(100);
 				instance.keyPress(KeyEvent.VK_V);

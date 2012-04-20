@@ -85,6 +85,7 @@
             ]]>
         </method>
     </view>
+    <om_hscrollbar name="_scrollbarH" id="_mainScrollHBar" visibility="hidden" />
     <om_vscrollbar name="_scrollbar" id="_mainScrollBar" />
 </view>  
   

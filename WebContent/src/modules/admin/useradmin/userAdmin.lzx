@@ -23,17 +23,17 @@
 <!--- User administration module for ADMIN.-->
 <class name="userAdmin" extends="baseContentView">
 	
-	<labelText x="2" y="8" labelid="714" />
+	<labelText x="2" y="${ 8 - parent.parent.parent.y }" labelid="714" />
 	
-	<customEdittext name="_search" y="4" x="120" width="200" height="24"/>
+	<customEdittext name="_search" y="${ 4 - parent.parent.parent.y }" x="120" width="200" height="24"/>
 	
-    <simpleLabelButton labelid="715" x="330" width="112" height="24" y="4">
+    <simpleLabelButton labelid="715" x="330" width="112" height="24" y="${ 4 - parent.parent.parent.y }">
     	<handler name="onclick">
     		parent._turnoverlist.getUserListWithSearch.doCall();
     	</handler>
     </simpleLabelButton>
 
-	<turnOverList name="_turnoverlist" width="440" height="${ canvas.height - canvas.naviHeight - 30 }" x="2" y="30" 
+	<turnOverList name="_turnoverlist" width="440" height="${ canvas.height - canvas.naviHeight - 30 }" x="2" y="${ 30 - parent.parent.parent.y }" 
 		orderby="user_id" step="50" asc="true">
 
 		<handler name="oninit">

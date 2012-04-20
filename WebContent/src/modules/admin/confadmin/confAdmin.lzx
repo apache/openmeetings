@@ -23,7 +23,9 @@
 <!--- Configuration module for ADMIN -->
 <class name="confAdmin" extends="baseContentView">
 
-    <turnOverList name="_turnoverlist" width="410" height="${ canvas.height - canvas.naviHeight }" x="2" y="0" 
+    <turnOverList name="_turnoverlist" width="410" 
+    	height="${ canvas.height - canvas.naviHeight }" x="2" 
+    	y="${ 0 - parent.parent.parent.y }" 
 		orderby="configuration_id" step="50" asc="true">
 
 		<handler name="oninit">

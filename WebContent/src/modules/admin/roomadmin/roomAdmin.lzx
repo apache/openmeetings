@@ -22,18 +22,26 @@
 
 <!--- Admin module to configure the Conference or Audience room.-->
 <class name="roomAdmin" extends="baseContentView">	
+
+	<handler name="oninit">
+		_mainScrollHBar.setAttribute("visibility","visible");
+	</handler>
 	
-	<labelText x="2" y="8" labelid="714" />
+	<handler name="ontabcontentleave" args="tRef">
+		_mainScrollHBar.setAttribute("visibility","hidden");
+	</handler>
 	
-	<customEdittext name="_search" y="4" x="120" width="200" height="24"/>
+	<labelText x="2" y="${ 8 - parent.parent.parent.y }" labelid="714" />
+	
+	<customEdittext name="_search" y="${ 4 - parent.parent.parent.y }" x="120" width="200" height="24"/>
     
-    <simpleLabelButton labelid="715" x="330" width="70" height="24" y="4">
+    <simpleLabelButton labelid="715" x="330" width="70" height="24" y="${ 4 - parent.parent.parent.y }">
         <handler name="onclick">
             parent._turnoverlist.getRooms.doCall();
         </handler>
     </simpleLabelButton>
 	
-	<turnOverList name="_turnoverlist" width="400" height="${ canvas.height - canvas.naviHeight - 30 }" x="2" y="30" 
+	<turnOverList name="_turnoverlist" width="400" height="${ canvas.height - canvas.naviHeight - 40 }" x="2" y="${ 30 - parent.parent.parent.y }" 
 		orderby="c.rooms_id" step="50" asc="true">
 
 		<handler name="oninit">
@@ -80,7 +88,7 @@
 	    	}
 	    	if (parent._roomvalueform.rooms_id == 0) {
                 if (records.length > 0) {
-                    parent._roomModerateValueForm.initValueFieldsByObject(records[0]);
+                    parent._roomvalueform.initValueFieldsByObject(records[0]);
                 }
             }
             this.sendInitialWidthUpdate();

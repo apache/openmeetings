@@ -256,9 +256,9 @@
 	
     <!-- =========  BgArea area  =========-->
     <view width="$once{ parent.width }" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }"
-          height="$once{ parent.height-20 }" x="0" y="20">
+          height="${ parent.height-20 }" x="0" y="20">
         <view width="$once{ parent.width-2 }" bgcolor="$once{ parent.parent.mainBgColor }"
-          height="$once{ parent.height-2 }" x="1" y="1"></view>
+          height="${ parent.height-2 }" x="1" y="1"></view>
     </view>
           
 	<!-- =========  List Header area  =========-->
@@ -269,7 +269,7 @@
 	</view>	
 	
 	<!-- =========  List Contents area  =========-->
-	<view name="_innerlist" height="$once{ parent.height-43 }" x="1" width="$once{ parent.width-2 }"
+	<view name="_innerlist" height="${ parent.height-43 }" x="1" width="$once{ parent.width-2 }"
 		y="42" clip="true" bgcolor="$once{ parent.mainBgColor }">
 		<view name="_inn" >
 			<innerList name="_inn" />
