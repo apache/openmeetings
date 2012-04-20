@@ -19,6 +19,7 @@
 package org.openmeetings.test.timezone;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.TimeZone;
 
 import junit.framework.TestCase;
@@ -31,6 +32,8 @@ public class TestGetIds extends TestCase {
 	public void testGetIds() {
 		try { 
 			
+			Date tDate = new Date();
+			
 			String[] ids = TimeZone.getAvailableIDs();
 		    for (String id : ids) {
 		    	
@@ -41,12 +44,20 @@ public class TestGetIds extends TestCase {
 				cal.setTimeZone(timeZone);
 				// + cal.get(Calendar.DST_OFFSET)
 				int offset = cal.get(Calendar.ZONE_OFFSET);
+				cal.setTime(tDate);
 		    	
 				int offsetInHours = offset/1000/60;
 				
-				System.out.println("<name>" + id + "</name><offset>"+offsetInHours+"</offset>");
+				String tString = cal.get(Calendar.DAY_OF_MONTH)
+								+"."+cal.get(Calendar.DAY_OF_MONTH)
+								+"."+cal.get(Calendar.YEAR)
+								+" "
+								+cal.get(Calendar.HOUR)+":"+cal.get(Calendar.MINUTE);
+				
+				
+				System.out.println("<name>" + id + "</name><offset>"+offsetInHours+"</offset><now>"+tString+"</now>");
 		    }
-			
+		    
 		} catch (Exception err) {
 			err.printStackTrace();
 		}
