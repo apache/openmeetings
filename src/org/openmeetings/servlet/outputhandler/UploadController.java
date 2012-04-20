@@ -118,7 +118,7 @@ public class UploadController extends AbstractUploadController {
     @RequestMapping(value = "/upload.upload", method = RequestMethod.POST)
     public void handleFormUpload(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 		try {
-	    	UploadInfo info = validate(request, true);
+	    	UploadInfo info = validate(request, false);
 	    	LinkedHashMap<String, Object> hs = prepareMessage(info);
 			String room_id = request.getParameter("room_id");
 			if (room_id == null) {
