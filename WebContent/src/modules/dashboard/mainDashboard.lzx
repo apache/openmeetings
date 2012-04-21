@@ -255,7 +255,7 @@
                                                     obj : value[eg],
                                                     ispublic : true,
                                                     roomid : value[eg].rooms_id,
-                                                    starttime : time,
+                                                    starttime : value[eg].starttime,
                                                     roomname : value[eg].name
                                                 });
                                     }
@@ -284,8 +284,8 @@
                         roomListDetails class are declared in modules/conference/conference/roomListDetails.lzx.
                             Mar 24 2008 commented by onokeiji@gmal.com
                      -->
-                <roomListDetails x="510" y="4" name="_roomlistdetails" visibility="hidden"
-                				 height="${ parent.height-4 }" />
+                <roomListDetails x="510" y="50" name="_roomlistdetails" 
+                				 height="${ parent.height-54 }" />
                 				 
             </view>
             

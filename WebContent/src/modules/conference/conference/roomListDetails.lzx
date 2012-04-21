@@ -81,9 +81,7 @@
 				}
 			}
 			this.bdatum.setAttribute("visibility", "hidden");
-    		this.bzeit.setAttribute("visibility", "hidden");
     		this.edatum.setAttribute("visibility", "hidden");
-    		this.ezeit.setAttribute("visibility", "hidden");
     		this.l_bdatum.setAttribute("visibility", "hidden");
     		this.l_edatum.setAttribute("visibility", "hidden");
     		if (roomid > 0) {
@@ -103,16 +101,12 @@
 		    	if(value!=null){
 		    		
 		    		if ($debug) Debug.write("Appointment Name : " + value.appointmentName);
-		    		parent.bdatum.setAttribute('text',parseDateToString(value.appointmentStarttime));
-		    		parent.bzeit.setAttribute('text',parseDateToStringTimeOnly(value.appointmentStarttime));
-		    		parent.edatum.setAttribute('text',parseDateToString(value.appointmentEndtime));
-		    		parent.ezeit.setAttribute('text',parseDateToStringTimeOnly(value.appointmentEndtime));
+		    		parent.bdatum.setAttribute('text',""+value.appointmentStarttime);
+		    		parent.edatum.setAttribute('text',""+value.appointmentEndtime);
 		    		
 		    		
 		    		parent.bdatum.setAttribute("visibility","visible");
-		    		parent.bzeit.setAttribute("visibility","visible");
 		    		parent.edatum.setAttribute("visibility","visible");
-		    		parent.ezeit.setAttribute("visibility","visible");
 		    		parent.l_bdatum.setAttribute("visibility","visible");
 		    		parent.l_edatum.setAttribute("visibility","visible");
 		    		
@@ -122,12 +116,10 @@
 		    	} else{
 		    		
 		    		parent.bdatum.setAttribute('text','');
-		    		parent.bzeit.setAttribute('text','');
+		    		parent.edatum.setAttribute('text','');
 		    		
 		    		parent.bdatum.setAttribute("visibility", "hidden");
-		    		parent.bzeit.setAttribute("visibility", "hidden");
 		    		parent.edatum.setAttribute("visibility", "hidden");
-		    		parent.ezeit.setAttribute("visibility", "hidden");
 		    		parent.l_bdatum.setAttribute("visibility", "hidden");
 		    		parent.l_edatum.setAttribute("visibility", "hidden");
 		    		
@@ -153,12 +145,10 @@
 	<labelText name="_roomname" labelid="406" y="20" width="200" />
 	
 	<labelText name="l_bdatum" labelid="570" y="40" width="50" visible="false" />
-	<customEdittext name="bdatum" y="40" x="75" width="100" text="" visible="false" /> 	            	
-	<customEdittext name="bzeit" x="200" y="40" width="50" regexpType="time" visible="false" />
+	<labelText name="bdatum" y="40" x="75" width="100" text="" visible="false" /> 	            	
 
 	<labelText name="l_edatum" labelid="571" y="60" width="50" visible="false" />
-	<customEdittext name="edatum" y="60" x="75" width="100" text="" visible="false" />
-	<customEdittext name="ezeit" x="200" y="60" width="50" regexpType="time" visible="false" />
+	<labelText name="edatum" y="60" x="75" width="100" text="" visible="false" />
 
 	<labelText name="_roomcomment" x="75" y="${parent.l_edatum.y + (parent.l_edatum.visible ? 30 : 0)}" width="100" text=""/>
 	<labelText labelid="270" y="${parent._roomcomment.y}" width="50" />

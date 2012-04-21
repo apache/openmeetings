@@ -861,13 +861,15 @@ public class AppointmentDaoImpl {
 				+ "AND app.deleted <> :app_deleted " + "AND  "
 				+ "app.appointmentStarttime between :starttime " + "AND "
 				+ " :endtime";
+		
+		TimeZone timeZone = timezoneUtil.getTimezoneByUser(usersDao.getUser(userId));
 
-		Calendar startCal = Calendar.getInstance();
+		Calendar startCal = Calendar.getInstance(timeZone);
 		startCal.set(Calendar.MINUTE, 0);
 		startCal.set(Calendar.HOUR, 0);
 		startCal.set(Calendar.SECOND, 1);
 
-		Calendar endCal = Calendar.getInstance();
+		Calendar endCal = Calendar.getInstance(timeZone);
 		endCal.set(Calendar.MINUTE, 23);
 		endCal.set(Calendar.HOUR, 59);
 		endCal.set(Calendar.SECOND, 59);

@@ -181,6 +181,7 @@
 		
 		<!-- label: enter -->
 		<simpleLabelButton name="connect" y="80" x="120" text="start" 
-						   visibility="hidden" labelid="228" width="170" height="20" onclick="parent.getRoomClients.doCall();;" />
+						   visibility="hidden" labelid="228" width="170" height="20" 
+						   onclick="parent.isRoomFull.doCall();" />
 	</class>
 </library>
