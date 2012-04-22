@@ -26,7 +26,7 @@
     <timezone orderId="4" name="Etc/GMT+9" label="Japan/Korea Standard Time, Irkutsk, East Timor" iCal="Asia/Tokyo" />
     <timezone orderId="5" name="Etc/GMT+8" label="China Standard Time, Krasnoyarsk, Philippines, Singapore" iCal="Asia/Singapore" />
     <timezone orderId="6" name="Etc/GMT+7" label="Novosibirsk, Indochina Time, Thailand, Vietnam, Jakarta" iCal="Asia/Jakarta" />
-    <timezone orderId="7" name="Etc/GMT+6" label="Yekaterinburg, Almaty, Bangladesh" iCal="Asia/Dhaka" />
+    <timezone orderId="7" name="Etc/GMT+6" label="Yekaterinburg, Almaty, Bangladesh" iCal="Asia/Yekaterinburg" />
     <timezone orderId="8" name="IST" label="Indian Standard Time GMT+5.30" iCal="Asia/Kolkata" />
     <timezone orderId="9" name="Etc/GMT+5" label="Uzbekistan, Pakistan, Maldives" iCal="Asia/Karachi" />
     <timezone orderId="10" name="Asia/Kabul" label="Kabul GMT+4.30 " iCal="Asia/Kabul" />
