@@ -2441,7 +2441,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Konferenz planen</value>
   </string>
   <string id="806" name="lzcalendar">
-    <value>Um eine Konferenz zu planen können Sie einen Event im Kalender hinzufügen. Für jeden Kalenderevent wird automatisch ein Konferenzraum angelegt.&lt;br/&gt;&lt;br/&gt;Sie können beim Anlegen der Konferenz zwischen unterschiedlichen Raumtypen wählen. Jeder Raumtyp hat ein leicht anderes Layout und Moderations-System. Sie können außerdem für jedes Event ein eigene E-Mail-Erinnerung wählen.</value>
+    <value>Um eine Konferenz zu planen können Sie einen Event im Kalender hinzufügen.</value>
   </string>
   <string id="807" name="lzcalendar">
     <value>Brauchen Sie Hilfe?</value>

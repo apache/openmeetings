@@ -2447,7 +2447,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Planejar Reunião</value>
   </string>
   <string id="806" name="lzcalendar">
-    <value>Para configurar uma conferência você pode adicionar um novo evento no calendário. Para cada evento de calendário não será automaticamente criada uma Sala de Conferências. Você e cada participante irá receber um e-mail com um link para a sala. &lt;br/&gt;&lt;br/&gt; Você pode escolher entre diferentes tipos salas que têm diferentes layouts e sistemas de moderação. Você também pode escolher entre diferentes tipos de notificação para o email que é enviado para todos os eventos do calendário.</value>
+    <value>Para configurar uma conferência você pode adicionar um novo evento no calendário.</value>
   </string>
   <string id="807" name="lzcalendar">
     <value>Precisa de ajuda?</value>
