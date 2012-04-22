@@ -323,11 +323,13 @@ public class DownloadHandler extends HttpServlet {
 					int browserType = 0;
 
 					// Firefox and Opera browsers
-					if ((httpServletRequest.getHeader("User-Agent")
-							.contains("Firefox"))
-							|| (httpServletRequest.getHeader("User-Agent")
-									.contains("Opera"))) {
-						browserType = 1;
+					if (httpServletRequest.getHeader("User-Agent") != null) {
+						if ((httpServletRequest.getHeader("User-Agent")
+								.contains("Firefox"))
+								|| (httpServletRequest.getHeader("User-Agent")
+										.contains("Opera"))) {
+							browserType = 1;
+						}
 					}
 
 					log.debug("Detected browser type:" + browserType);
