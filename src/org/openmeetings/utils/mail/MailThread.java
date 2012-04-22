@@ -110,7 +110,10 @@ public class MailThread {
 			msg.setSubject(subject);
 			msg.setFrom(new InternetAddress(from));
 			if (replyTo != null && "1".equals(cfgManagement.getConfValue("inviter.email.as.replyto", String.class, "1"))) {
-				msg.setReplyTo(new InternetAddress[]{new InternetAddress(replyTo)});
+				log.debug("setReplyTo "+replyTo);
+				if (MailUtil.matches(replyTo)) {
+					msg.setReplyTo(new InternetAddress[]{new InternetAddress(replyTo)});
+				}
 			}
 			msg.addRecipients(Message.RecipientType.TO,
 					InternetAddress.parse(recipients, false));

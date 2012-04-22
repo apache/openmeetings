@@ -186,8 +186,9 @@ public class Invitationmanagement {
 				if (invitationId > 0) {
 
 					if (sendMail) {
-						this.sendInvitionLink(username, message, baseurl,
-								email, us.getAdresses().getEmail(), subject, invitation.getHash(),
+						this.sendInvitionLink(us.getAdresses().getEmail(), 
+								username, message, baseurl,
+								email, subject, invitation.getHash(),
 								validFrom, validTo, language_id);
 					}
 
@@ -627,11 +628,6 @@ public class Invitationmanagement {
 			String template = invitationTemplate.getRegisterInvitationTemplate(
 					username, message, invitation_link, language_id, dStart,
 					dEnd);
-
-			System.out.println(dStart);
-			System.out.println(dEnd);
-
-			System.out.println(template);
 
 			return mailHandler.sendMail(email, replyTo, subject, template);
 

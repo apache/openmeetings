@@ -10,7 +10,6 @@ import java.net.URL;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -35,6 +34,7 @@ import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.servlet.outputhandler.BackupExport;
 import org.openmeetings.servlet.outputhandler.BackupImportController;
 import org.openmeetings.utils.OMContextListener;
+import org.openmeetings.utils.mail.MailUtil;
 import org.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -42,9 +42,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class Admin {
 	private static final Logger log = Red5LoggerFactory.getLogger(Admin.class);
-	private static final Pattern rfc2822 = Pattern.compile(
-	        "^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$"
-	);
+	
 	private boolean verbose = false;
 	private InstallationConfig cfg = null;
 	private Options opts = null;
@@ -301,7 +299,7 @@ public class Admin {
 					}
 					
 					try {
-						if (!rfc2822.matcher(email).matches()) {
+						if (!MailUtil.matches(email)) {
 						    throw new AddressException("Invalid address");
 						}
 						new InternetAddress(email, true);

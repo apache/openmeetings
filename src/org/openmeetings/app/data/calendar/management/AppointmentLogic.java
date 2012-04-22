@@ -153,13 +153,13 @@ public class AppointmentLogic {
 		Long numberOfParticipants = cfgManagement.getConfValue(
 				"calendar.conference.rooms.default.size", Long.class, "50");
 
-		Long room_id = roommanagement.addRoom(3, // Userlevel
+		Long room_id = roommanagement.addRoom(3, // user level
 				appointmentName, // name
 				roomType, // RoomType
 				"", // Comment
 				numberOfParticipants, // Number of participants
 				true, // public
-				null, // Organisations
+				null, // organizations
 				true, // Appointment
 				false, // Demo Room => Meeting Timer
 				null, // Meeting Timer time in seconds
@@ -190,10 +190,10 @@ public class AppointmentLogic {
 
 		try {
 
-			// Adding Invitor as Meetingmember
+			// Adding creator as MeetingMember
 			Users user = userManagement.getUserById(userId);
 			
-			// Refactor the given time ignoring the Date is always UTC!
+			// Re-factor the given time ignoring the Date is always UTC!
 			TimeZone timezone = timezoneUtil.getTimezoneByUser(user);
 			
 			Long appointmentId = appointmentDao.addAppointment(appointmentName,
