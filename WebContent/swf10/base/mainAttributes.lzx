@@ -52,6 +52,8 @@
 	<attribute name="webAppRootKey" value="" type="string" />
 
 	<attribute name="httpRootKey" value="/" type="string" />
+	
+	<attribute name="proxyType" value="none" type="string" />
 
 	<!---
 		A reference to the current screenSharingDialogContainer or 

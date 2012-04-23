@@ -40,7 +40,9 @@
         this.setAttribute('microphoneRateNormal',Number(canvas.myConfigSet.getPointer().xpathQuery('config/microphoneRateNormal/text()')));  
         this.setAttribute('microphoneRateBest',Number(canvas.myConfigSet.getPointer().xpathQuery('config/microphoneRateBest/text()')));  
         
-        this.setAttribute('httpRootKey',canvas.myConfigSet.getPointer().xpathQuery('config/httpRootKey/text()'));  
+        this.setAttribute('httpRootKey',canvas.myConfigSet.getPointer().xpathQuery('config/httpRootKey/text()'));
+        
+        this.setAttribute('proxyType',canvas.myConfigSet.getPointer().xpathQuery('config/proxyType/text()'));  
 
         var _url = this.getDisplayObject().loaderInfo.url;
         if($debug) Debug.write("_url: ",_url);
