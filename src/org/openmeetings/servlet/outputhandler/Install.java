@@ -21,6 +21,7 @@ package org.openmeetings.servlet.outputhandler;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -137,6 +138,13 @@ public class Install extends VelocityViewServlet {
 
 		return tpl;
 	}
+	
+	private String encodeUTF8(HttpServletRequest httpServletRequest, String param) 
+							throws UnsupportedEncodingException {
+		return new String(httpServletRequest
+				.getParameter(param).getBytes("8859_1"), "UTF-8");
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -232,113 +240,69 @@ public class Install extends VelocityViewServlet {
 
 					log.debug("do init installation");
 
-					String username = httpServletRequest
-							.getParameter("username");
-					String userpass = httpServletRequest
-							.getParameter("userpass");
-					String useremail = httpServletRequest
-							.getParameter("useremail");
-					String orgname = httpServletRequest.getParameter("orgname");
+					String username = encodeUTF8(httpServletRequest, "username");
+					String userpass = encodeUTF8(httpServletRequest, "userpass");
+					String useremail = encodeUTF8(httpServletRequest,"useremail");
+					String orgname = encodeUTF8(httpServletRequest,"orgname");
 					InstallationConfig cfg = new InstallationConfig();
-					cfg.allowFrontendRegister = httpServletRequest
-							.getParameter("configdefault");
+					cfg.allowFrontendRegister = encodeUTF8(httpServletRequest,"configdefault");
 
-					cfg.mailReferer = httpServletRequest
-							.getParameter("configreferer");
-					cfg.smtpServer = httpServletRequest
-							.getParameter("configsmtp");
-					cfg.smtpPort = httpServletRequest
-							.getParameter("configsmtpport");
-					cfg.mailAuthName = httpServletRequest
-							.getParameter("configmailuser");
-					cfg.mailAuthPass = httpServletRequest
-							.getParameter("configmailpass");
-					cfg.mailUseTls = httpServletRequest
-							.getParameter("mailusetls");
+					cfg.mailReferer = encodeUTF8(httpServletRequest,"configreferer");
+					cfg.smtpServer = encodeUTF8(httpServletRequest,"configsmtp");
+					cfg.smtpPort = encodeUTF8(httpServletRequest,"configsmtpport");
+					cfg.mailAuthName = encodeUTF8(httpServletRequest,"configmailuser");
+					cfg.mailAuthPass = encodeUTF8(httpServletRequest,"configmailpass");
+					cfg.mailUseTls = encodeUTF8(httpServletRequest,"mailusetls");
 
-					cfg.defaultLangId = httpServletRequest
-							.getParameter("configdefaultLang");
-					cfg.swfPath = httpServletRequest
-							.getParameter("swftools_path");
-					cfg.imageMagicPath = httpServletRequest
-							.getParameter("imagemagick_path");
-					cfg.sendEmailAtRegister = httpServletRequest
-							.getParameter("sendEmailAtRegister");
-					cfg.sendEmailWithVerficationCode = httpServletRequest
-							.getParameter("sendEmailWithVerficationCode");
-					cfg.createDefaultRooms = httpServletRequest
-							.getParameter("createDefaultRooms");
+					cfg.defaultLangId = encodeUTF8(httpServletRequest,"configdefaultLang");
+					cfg.swfPath = encodeUTF8(httpServletRequest,"swftools_path");
+					cfg.imageMagicPath = encodeUTF8(httpServletRequest,"imagemagick_path");
+					cfg.sendEmailAtRegister = encodeUTF8(httpServletRequest,"sendEmailAtRegister");
+					cfg.sendEmailWithVerficationCode = encodeUTF8(httpServletRequest,"sendEmailWithVerficationCode");
+					cfg.createDefaultRooms = encodeUTF8(httpServletRequest,"createDefaultRooms");
 
-					cfg.defaultExportFont = httpServletRequest
-							.getParameter("default_export_font");
+					cfg.defaultExportFont = encodeUTF8(httpServletRequest,"default_export_font");
 
-					cfg.cryptClassName = httpServletRequest
-							.getParameter("crypt_ClassName");
+					cfg.cryptClassName = encodeUTF8(httpServletRequest,"crypt_ClassName");
 
-					cfg.ffmpegPath = httpServletRequest
-							.getParameter("ffmpeg_path");
+					cfg.ffmpegPath = encodeUTF8(httpServletRequest,"ffmpeg_path");
 
-					cfg.soxPath = httpServletRequest
-							.getParameter("sox_path");
+					cfg.soxPath = encodeUTF8(httpServletRequest,"sox_path");
 
-					cfg.screenViewer = httpServletRequest
-							.getParameter("screen_viewer");
+					cfg.screenViewer = encodeUTF8(httpServletRequest,"screen_viewer");
 
                     // red5sip integration config
-                    cfg.red5SipEnable = httpServletRequest
-							.getParameter("red5sip_enable");
-                    cfg.red5SipRoomPrefix = httpServletRequest
-							.getParameter("red5sip_room_prefix");
-                    cfg.red5SipExtenContext = httpServletRequest
-							.getParameter("red5sip_exten_context");
+                    cfg.red5SipEnable = encodeUTF8(httpServletRequest,"red5sip_enable");
+                    cfg.red5SipRoomPrefix = encodeUTF8(httpServletRequest,"red5sip_room_prefix");
+                    cfg.red5SipExtenContext = encodeUTF8(httpServletRequest,"red5sip_exten_context");
 
 					// SIP Applet Configuration
-					cfg.sipEnable = httpServletRequest
-							.getParameter("sip_enable");
-					cfg.sipRealm = httpServletRequest
-							.getParameter("sip_realm");
-					cfg.sipPort = httpServletRequest
-							.getParameter("sip_port");
-					cfg.sipProxyName = httpServletRequest
-							.getParameter("sip_proxyname");
-					cfg.sipTunnel = httpServletRequest
-							.getParameter("sip_tunnel");
-					cfg.sipCodebase = httpServletRequest
-							.getParameter("sip_codebase");
-					cfg.sipForceTunnel = httpServletRequest
-							.getParameter("sip_forcetunnel");
+					cfg.sipEnable = encodeUTF8(httpServletRequest,"sip_enable");
+					cfg.sipRealm = encodeUTF8(httpServletRequest,"sip_realm");
+					cfg.sipPort = encodeUTF8(httpServletRequest,"sip_port");
+					cfg.sipProxyName = encodeUTF8(httpServletRequest,"sip_proxyname");
+					cfg.sipTunnel = encodeUTF8(httpServletRequest,"sip_tunnel");
+					cfg.sipCodebase = encodeUTF8(httpServletRequest,"sip_codebase");
+					cfg.sipForceTunnel = encodeUTF8(httpServletRequest,"sip_forcetunnel");
 
 					// OpenXG / OpenSIPg Configuration
-					cfg.sipOpenxgEnable = httpServletRequest
-							.getParameter("sip_openxg_enable");
-					cfg.openxgWrapperUrl = httpServletRequest
-							.getParameter("openxg_wrapper_url");
-					cfg.openxgClientId = httpServletRequest
-							.getParameter("openxg_client_id");
-					cfg.openxgClientSecret = httpServletRequest
-							.getParameter("openxg_client_secret");
-					cfg.openxgClientDomain = httpServletRequest
-							.getParameter("openxg_client_domain");
-					cfg.openxgCommunityCode = httpServletRequest
-							.getParameter("openxg_community_code");
-					cfg.openxgLanguageCode = httpServletRequest
-							.getParameter("openxg_language_code");
-					cfg.openxgAdminId = httpServletRequest
-							.getParameter("openxg_adminid");
+					cfg.sipOpenxgEnable = encodeUTF8(httpServletRequest,"sip_openxg_enable");
+					cfg.openxgWrapperUrl = encodeUTF8(httpServletRequest,"openxg_wrapper_url");
+					cfg.openxgClientId = encodeUTF8(httpServletRequest,"openxg_client_id");
+					cfg.openxgClientSecret = encodeUTF8(httpServletRequest,"openxg_client_secret");
+					cfg.openxgClientDomain = encodeUTF8(httpServletRequest,"openxg_client_domain");
+					cfg.openxgCommunityCode = encodeUTF8(httpServletRequest,"openxg_community_code");
+					cfg.openxgLanguageCode = encodeUTF8(httpServletRequest,"openxg_language_code");
+					cfg.openxgAdminId = encodeUTF8(httpServletRequest,"openxg_adminid");
 
 					// SIP Phone Range Configuration
-					cfg.sipLanguagePhoneCode = httpServletRequest
-							.getParameter("sip_language_phonecode");
-					cfg.sipPhoneRangeStart = httpServletRequest
-							.getParameter("sip_phonerange_start");
-					cfg.sipPhoneRange = httpServletRequest
-							.getParameter("sip_phonerange");
+					cfg.sipLanguagePhoneCode = encodeUTF8(httpServletRequest,"sip_language_phonecode");
+					cfg.sipPhoneRangeStart = encodeUTF8(httpServletRequest,"sip_phonerange_start");
+					cfg.sipPhoneRange = encodeUTF8(httpServletRequest,"sip_phonerange");
 
-					String timeZone = httpServletRequest
-							.getParameter("timeZone");
+					String timeZone = encodeUTF8(httpServletRequest,"timeZone");
 					
-					cfg.jodPath = httpServletRequest
-							.getParameter("jod_path");
+					cfg.jodPath = encodeUTF8(httpServletRequest,"jod_path");
 
 					log.debug("step 0+ start init with values. " + username
 							+ " ***** " + useremail + " " + orgname + " "
