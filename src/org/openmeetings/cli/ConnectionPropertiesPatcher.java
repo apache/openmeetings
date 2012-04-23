@@ -20,6 +20,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 public abstract class ConnectionPropertiesPatcher {
+	
+	ConnectionProperties connectionProperties;
+	
 	public enum PatcherType {
 		db2
 		, derby
@@ -52,7 +55,8 @@ public abstract class ConnectionPropertiesPatcher {
 		return patcher;
 	}
 	
-	public void patch(File srcXml, File destXml, String host, String port, String db, String user, String pass) throws Exception {
+	public void patch(File srcXml, File destXml, String host, String port, String db, String user, String pass, ConnectionProperties connectionProperties) throws Exception {
+		this.connectionProperties = connectionProperties;
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		//dbFactory.setNamespaceAware(true);
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -73,7 +77,7 @@ public abstract class ConnectionPropertiesPatcher {
 	
 	protected Attr patchAttribute(Attr attr, String host, String port, String db, String user, String pass) {
 		String[] tokens = attr.getValue().split(",");
-		patchUser(tokens, user, pass);
+		patchUserPassDriver(tokens, user, pass);
 		patchDb(tokens, host, port, db);
 		attr.setValue(StringUtils.join(tokens, ","));
 		return attr;
@@ -87,15 +91,41 @@ public abstract class ConnectionPropertiesPatcher {
 		}
 	}
 	
-	protected void patchUser(String[] tokens, String user, String pass) {
+	protected void patchUserPassDriver(String[] tokens, String user,
+			String pass) {
+		String prop;
 		for (int i = 0; i < tokens.length; ++i) {
+			prop = getPropFromPersistence(tokens, i, "DriverClassName");
+			if (prop != null)
+				connectionProperties.setDriverName(prop);
+			
 			if (user != null) {
 				patchProp(tokens, i, "Username", user);
+				connectionProperties.setConnectionLogin(user);
+			} else {
+				prop = getPropFromPersistence(tokens, i, "Username");
+				if (prop != null)
+					connectionProperties.setConnectionLogin(prop);
 			}
+			
 			if (pass != null) {
 				patchProp(tokens, i, "Password", pass);
+				connectionProperties.setConnectionPass(pass);
+			} else {
+				prop = getPropFromPersistence(tokens, i, "Password");
+				if (prop != null)
+					connectionProperties.setConnectionPass(prop);
 			}
 		}
+	}
+	
+	protected String getPropFromPersistence(String[] tokens, int idx, String name){
+		String prop = tokens[idx].trim();
+		if (prop.startsWith(name)) {
+			//From "Username=root" getting only "root"
+			return prop.substring(prop.indexOf("=") + 1);
+		}
+		return null;
 	}
 	
 	protected abstract void patchDb(String[] tokens, String host, String port, String db);

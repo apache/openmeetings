@@ -25,6 +25,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.Parser;
 import org.apache.commons.cli.PosixParser;
+import org.apache.openjpa.jdbc.meta.MappingTool;
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.file.FileUtils;
@@ -90,6 +91,8 @@ public class Admin {
 		options.addOption(new OmOption("i", null, "db-name", true, "The name of Openmeetings database", true));
 		options.addOption(new OmOption("i", null, "db-user", true, "User with write access to the DB specified", true));
 		options.addOption(new OmOption("i", null, "db-pass", true, "Password of the user with write access to the DB specified", true));
+		options.addOption(new OmOption("i", null, "drop", false, "Drop database before installation", true));
+		options.addOption(new OmOption("i", null, "force", false, "Install without checking the existence of old data in the database.", true));
 		
 		return options;
 	}
@@ -271,6 +274,7 @@ public class Admin {
 					String login = cmdl.getOptionValue("user");
 					String email = cmdl.getOptionValue("email");
 					String group = cmdl.getOptionValue("group");
+					//TODO commented for now, since not in use boolean force = cmdl.hasOption("force");
 					if (cmdl.hasOption("skip-default-rooms")) {
 						cfg.createDefaultRooms = "0";
 					}
@@ -322,6 +326,7 @@ public class Admin {
 							System.exit(1);
 						}
 					}
+					ConnectionProperties connectionProperties = new ConnectionProperties();
 					if (cmdl.hasOption("db-type") || cmdl.hasOption("db-host") || cmdl.hasOption("db-port") || cmdl.hasOption("db-name") || cmdl.hasOption("db-user") || cmdl.hasOption("db-pass")) {
 						String dbType = cmdl.getOptionValue("db-type", "derby");
 						File srcConf = new File(omHome, "WEB-INF/classes/META-INF/" + dbType + "_persistence.xml");
@@ -334,7 +339,15 @@ public class Admin {
 								, cmdl.getOptionValue("db-name", null)
 								, cmdl.getOptionValue("db-user", null)
 								, cmdl.getOptionValue("db-pass", null)
+								, connectionProperties
 								);
+					}
+					
+					if(cmdl.hasOption("drop")) {	
+						String[] mappingToolArgs = {"-sa", "drop", "-p", omHome.getPath() + "/WEB-INF/classes/META-INF/persistence.xml",
+								"-connectionDriverName", connectionProperties.getDriverName(), "-connectionURL", connectionProperties.getConnectionURL(),
+								"-connectionUserName", connectionProperties.getConnectionLogin(), "-connectionPassword", connectionProperties.getConnectionPass()};
+						MappingTool.main(mappingToolArgs);
 					}
 
 					ClassPathXmlApplicationContext ctx = getApplicationContext(ctxName);

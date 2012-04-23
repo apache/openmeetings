@@ -8,7 +8,9 @@ public class DerbyPatcher extends ConnectionPropertiesPatcher {
 			String prop = tokens[i].trim();
 			if (prop.startsWith("Url")) {
 				String suffix = prop.substring(prop.indexOf(';'));
-				String url = "Url=jdbc:derby" + ":" + db + suffix;
+				String connectionURL = "jdbc:derby" + ":" + db; 
+				connectionProperties.setConnectionURL(connectionURL);
+				String url = "Url=" + connectionURL + suffix;
 				tokens[i] = url;
 			}
 		}

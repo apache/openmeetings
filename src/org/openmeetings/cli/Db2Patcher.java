@@ -8,7 +8,9 @@ public class Db2Patcher extends ConnectionPropertiesPatcher {
 		for (int i = 0; i < tokens.length; ++i) {
 			String prop = tokens[i].trim();
 			if (prop.startsWith("Url")) {
-				String url = "Url=jdbc:db2://" + host + ":" + port + "/" + db;
+				String connectionURL = "jdbc:db2://" + host + ":" + port + "/" + db; 
+				connectionProperties.setConnectionURL(connectionURL);
+				String url = "Url=" + connectionURL;
 				tokens[i] = url;
 			}
 		}

@@ -8,7 +8,9 @@ public class PostgresPatcher extends ConnectionPropertiesPatcher {
 		for (int i = 0; i < tokens.length; ++i) {
 			String prop = tokens[i].trim();
 			if (prop.startsWith("Url")) {
-				String url = "Url=jdbc:postgresql://" + host + ":" + port + "/" + db;
+				String connectionURL = "jdbc:postgresql://" + host + ":" + port + "/" + db; 
+				connectionProperties.setConnectionURL(connectionURL);
+				String url = "Url=" + connectionURL;
 				tokens[i] = url;
 			}
 		}
