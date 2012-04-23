@@ -220,7 +220,9 @@ public class StreamAudioWriter extends BaseStreamWriter {
 			// Screen Data, cause there is no!
 			
 			Date virtualTime = lastcurrentTime;
-
+			log.debug("virtualTime: " + virtualTime);
+			log.debug("startedSessionTimeDate: " + startedSessionTimeDate);
+			
 			long deltaRecordingTime = virtualTime.getTime() - this.startedSessionTimeDate.getTime();
 
 			log.debug("lastTimeStamp :closeStream: " + this.lastTimeStamp);
