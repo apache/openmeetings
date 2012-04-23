@@ -1080,7 +1080,7 @@ public class CoreScreenShare {
 		if (!startPublish)
 			return;
 
-		if (buffer == null) {
+		if (buffer == null || (buffer.capacity() < video.length && !buffer.isAutoExpand())) {
 			buffer = IoBuffer.allocate(video.length);
 			buffer.setAutoExpand(true);
 		}
