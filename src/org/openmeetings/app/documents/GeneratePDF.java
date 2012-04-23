@@ -52,9 +52,9 @@ public class GeneratePDF {
 		HashMap<String, String> processPDF = new HashMap<String, String>();
 		processPDF.put("process", "processPDF");
 
-		String working_imgdir = current_dir + "upload" + File.separatorChar
+		String working_imgdir = current_dir + OpenmeetingsVariables.UPLOAD_DIR + File.separatorChar
 				+ roomName + File.separatorChar;
-		String working_pptdir = current_dir + "uploadtemp" + File.separatorChar
+		String working_pptdir = current_dir + OpenmeetingsVariables.UPLOAD_TEMP_DIR + File.separatorChar
 				+ roomName + File.separatorChar;
 
 		String fileFullPath = working_pptdir + fileName + fileExt;

@@ -359,8 +359,7 @@ public class BackupExport {
 				targetDir.mkdir();
 			}
 
-			File sourceDir = new File(omFilesDir + "upload"
-					+ File.separatorChar);
+			File sourceDir = new File(omFilesDir, OpenmeetingsVariables.UPLOAD_DIR);
 
 			File[] files = sourceDir.listFiles();
 			for (File file : files) {
@@ -387,7 +386,7 @@ public class BackupExport {
 				targetDirRec.mkdir();
 			}
 
-			File sourceDirRec = new File(omFilesDir + "streams"
+			File sourceDirRec = new File(omFilesDir, OpenmeetingsVariables.STREAMS_DIR
 					+ File.separatorChar + "hibernate" + File.separatorChar);
 
 			copyDirectory(sourceDirRec, targetDirRec);
@@ -447,8 +446,7 @@ public class BackupExport {
 					 */
 
 					String current_dir = servletCtx.getRealPath("/");
-					File working_dir = new File(current_dir, "upload"
-							+ File.separatorChar + "backup");
+					File working_dir = new File(new File(current_dir, OpenmeetingsVariables.UPLOAD_DIR), "backup");
 
 					if (!working_dir.exists()) {
 						working_dir.mkdir();

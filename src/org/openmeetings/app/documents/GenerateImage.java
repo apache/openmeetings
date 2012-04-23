@@ -60,9 +60,9 @@ public class GenerateImage {
 
 		HashMap<String, HashMap<String, String>> returnMap = new HashMap<String, HashMap<String, String>>();
 
-		String working_imgdir = current_dir + "upload" + File.separatorChar
+		String working_imgdir = current_dir + OpenmeetingsVariables.UPLOAD_DIR + File.separatorChar
 				+ roomName + File.separatorChar;
-		String working_pptdir = current_dir + "uploadtemp" + File.separatorChar
+		String working_pptdir = current_dir + OpenmeetingsVariables.UPLOAD_TEMP_DIR + File.separatorChar
 				+ roomName + File.separatorChar;
 
 		String fileFullPath = working_pptdir + fileName + fileExt;
@@ -104,11 +104,11 @@ public class GenerateImage {
 
 		HashMap<String, HashMap<String, String>> returnMap = new HashMap<String, HashMap<String, String>>();
 
-		String working_imgdir = current_dir + "upload" + File.separatorChar
+		String working_imgdir = current_dir + OpenmeetingsVariables.UPLOAD_DIR + File.separatorChar
 				+ "profiles" + File.separatorChar
 				+ ScopeApplicationAdapter.profilesPrefix + users_id
 				+ File.separatorChar;
-		String working_pptdir = current_dir + "uploadtemp" + File.separatorChar
+		String working_pptdir = current_dir + OpenmeetingsVariables.UPLOAD_TEMP_DIR + File.separatorChar
 				+ "profiles" + File.separatorChar
 				+ ScopeApplicationAdapter.profilesPrefix + users_id
 				+ File.separatorChar;

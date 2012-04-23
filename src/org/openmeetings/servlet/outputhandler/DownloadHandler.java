@@ -163,11 +163,11 @@ public class DownloadHandler extends HttpServlet {
 
 				String working_dir = "";
 
-				working_dir = current_dir + "upload" + File.separatorChar;
+				working_dir = current_dir + OpenmeetingsVariables.UPLOAD_DIR + File.separatorChar;
 
 				// Add the Folder for the Room
 				if (moduleName.equals("lzRecorderApp")) {
-					working_dir = current_dir + "streams" + File.separatorChar
+					working_dir = current_dir + OpenmeetingsVariables.STREAMS_DIR + File.separatorChar
 							+ "hibernate" + File.separatorChar;
 				} else if (moduleName.equals("videoconf1")) {
 					if (parentPath.length() != 0) {

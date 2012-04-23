@@ -26,19 +26,15 @@ import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 
 import javax.servlet.ServletContext;
-import javax.xml.stream.XMLStreamException;
 
-import org.apache.axiom.om.OMElement;
 import org.apache.axis2.AxisFault;
 import org.apache.axis2.context.MessageContext;
 import org.apache.axis2.transport.http.HTTPConstants;
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
-import org.openmeetings.app.data.basic.files.TestObject;
 import org.openmeetings.app.data.file.FileProcessor;
 import org.openmeetings.app.data.file.FileUtils;
 import org.openmeetings.app.data.file.dao.FileExplorerItemDaoImpl;
@@ -647,7 +643,7 @@ public class FileWebService {
 			if (authLevelManagement.checkWebServiceLevel(user_level)) {
 
 				String current_dir = ScopeApplicationAdapter.webAppPath
-						+ File.separatorChar + "upload";
+						+ File.separatorChar + OpenmeetingsVariables.UPLOAD_DIR;
 				String working_dir = current_dir + File.separatorChar + "files"
 						+ File.separatorChar + parentFolder;
 				log.debug("############# working_dir : " + working_dir);

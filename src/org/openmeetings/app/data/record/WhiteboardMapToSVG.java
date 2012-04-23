@@ -231,7 +231,7 @@ public class WhiteboardMapToSVG extends BatikMethods {
         		String fileItemName = graphObject.get(3).toString();
         		
         		String imageFilePath = ScopeApplicationAdapter.webAppPath + File.separatorChar +
-        								"upload" + File.separatorChar + room + File.separatorChar;
+        				OpenmeetingsVariables.UPLOAD_DIR + File.separatorChar + room + File.separatorChar;
         		
         		if (parentPath.length() > 1) {
         			imageFilePath += parentPath + File.separatorChar;

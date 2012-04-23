@@ -25,11 +25,11 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.Parser;
 import org.apache.commons.cli.PosixParser;
-import org.openmeetings.app.data.user.dao.UsersDaoImpl;
+import org.openmeetings.app.OpenmeetingsVariables;
+import org.openmeetings.app.data.file.FileUtils;
 import org.openmeetings.app.documents.InstallationDocumentHandler;
 import org.openmeetings.app.installation.ImportInitvalues;
 import org.openmeetings.app.installation.InstallationConfig;
-import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.servlet.outputhandler.BackupExport;
 import org.openmeetings.servlet.outputhandler.BackupImportController;
@@ -238,6 +238,7 @@ public class Admin {
 		String ctxName = System.getProperty("context", "openmeetings");
 		File home = new File(System.getenv("RED5_HOME"));
 		File omHome = new File(new File(home, "webapps"), ctxName);
+		File omUploadTemp = new File(omHome, OpenmeetingsVariables.UPLOAD_TEMP_DIR);
 		
 		Parser parser = new PosixParser();
 		CommandLine cmdl = null;
@@ -352,7 +353,7 @@ public class Admin {
 						System.out.println("File name was not specified, '" + file + "' will be used");
 					}
 					boolean includeFiles = Boolean.getBoolean(cmdl.getOptionValue("exclude-files", "true"));
-					File backup_dir = new File(omHome, "uploadtemp/" + System.currentTimeMillis());
+					File backup_dir = new File(omUploadTemp, "" + System.currentTimeMillis());
 					backup_dir.mkdirs();
 					
 					BackupExport export = getApplicationContext(ctxName).getBean(BackupExport.class);
@@ -380,17 +381,35 @@ public class Admin {
 				break;
 			case files:
 				try {
+					File omUpload = new File(omHome, OpenmeetingsVariables.UPLOAD_DIR);
+					File omStreams = new File(omHome, OpenmeetingsVariables.STREAMS_DIR);
+					System.out.println("Temporary upload files allocates: " + FileUtils.getHumanSize(omUploadTemp));
+					System.out.println("Upload allocates: " + FileUtils.getHumanSize(omUpload));
+					System.out.println("Recordings allocates: " + FileUtils.getHumanSize(omStreams));
+					/*
+					omHome
+					
 					ClassPathXmlApplicationContext ctx = getApplicationContext(ctxName);
 					//user pictures
-					//dist/red5/webapps/openmeetings/upload/profiles
+					//dist/red5/webapps/openmeetings/upload/profiles/profile_<id> (check if ends with filename)
 					UsersDaoImpl udao = ctx.getBean(UsersDaoImpl.class);
 					for (Users u : udao.getAllUsersDeleted()) {
 						System.out.println("id == " + u.getUser_id() + "; deleted ? " + u.getDeleted() + "; uri -> " + u.getPictureuri());
 					}
-					//public files
-					//private files
-					//public recordings
-					//private recordings
+					
+					*/
+					//Upload backup ???
+					
+					//Upload import ???
+					
+					//public/private files
+					//Object: fileexploreritem (filehash == document file/folder)
+					//webapps/openmeetings/upload/files (check if ends with filename)
+					
+					//public/private recordings
+					//Object: flvrecording
+					//webapps/openmeetings/streams/<room_id>/rec_<id>*				-->temporary files
+					//webapps/openmeetings/streams/hibernate/flvRecording_<id>*		-->files
 				} catch (Exception e) {
 					handleError("Files failed", e);
 				}

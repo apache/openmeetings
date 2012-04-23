@@ -60,7 +60,7 @@ public class FileProcessor {
 
 	private void prepareFolderStructure(String current_dir) throws Exception {
 		
-		this.workingDir = current_dir + "upload" + File.separatorChar
+		this.workingDir = current_dir + OpenmeetingsVariables.UPLOAD_DIR + File.separatorChar
         						+ "files" + File.separatorChar;
 
 		// System.out.println("IS SYSTEM PROFILE");
@@ -70,7 +70,7 @@ public class FileProcessor {
 		    localFolder.mkdir();
 		}
 		
-		this.working_dirppt = current_dir + "uploadtemp" + File.separatorChar
+		this.working_dirppt = current_dir + OpenmeetingsVariables.UPLOAD_TEMP_DIR + File.separatorChar
 		        + "files" + File.separatorChar;
 		
 		// add Temp Folder Structure

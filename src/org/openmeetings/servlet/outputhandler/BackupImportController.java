@@ -150,7 +150,7 @@ public class BackupImportController extends AbstractUploadController {
 	};
 
 	public void performImport(InputStream is, String current_dir) throws Exception {
-		File working_dir = new File(current_dir, "upload"
+		File working_dir = new File(current_dir, OpenmeetingsVariables.UPLOAD_DIR
 				+ File.separatorChar + "import");
 		if (!working_dir.exists()) {
 			working_dir.mkdir();
@@ -2178,7 +2178,7 @@ public class BackupImportController extends AbstractUploadController {
 		// Now check the room files and import them
 		File roomFilesFolder = new File(importBaseDir, "roomFiles");
 
-		String library_dir = current_dir + "upload" + File.separatorChar;
+		String library_dir = current_dir + OpenmeetingsVariables.UPLOAD_DIR + File.separatorChar;
 
 		log.debug("roomFilesFolder PATH " + roomFilesFolder.getAbsolutePath());
 
@@ -2301,7 +2301,7 @@ public class BackupImportController extends AbstractUploadController {
 
 		if (sourceDirRec.exists()) {
 
-			File targetDirRec = new File(current_dir + "streams"
+			File targetDirRec = new File(current_dir, OpenmeetingsVariables.STREAMS_DIR
 					+ File.separatorChar + "hibernate" + File.separatorChar);
 
 			copyDirectory(sourceDirRec, targetDirRec);

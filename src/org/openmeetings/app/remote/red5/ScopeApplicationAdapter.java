@@ -125,7 +125,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			// System.out.println("Custom Webapp start UP "+new Date());
 
 			webAppPath = scope.getResource("/").getFile().getAbsolutePath();
-			batchFileFir = webAppPath + File.separatorChar + "streams"
+			batchFileFir = webAppPath + File.separatorChar + OpenmeetingsVariables.STREAMS_DIR
 					+ File.separatorChar;
 
 			log.debug("webAppPath : " + webAppPath);

@@ -383,14 +383,14 @@ public class AppointmentLogic {
 	 * Sending Reminder in Simple mail format 5 minutes before Meeting begins
 	 */
 	// ----------------------------------------------------------------------------------------------
-	public void doScheduledMeetingReminder() {
+	public void doScheduledMeetingReminder() throws Exception {
 		// log.debug("doScheduledMeetingReminder");
 
 		Integer minutesReminderSend = cfgManagement.getConfValue(
 				"number.minutes.reminder.send", Integer.class, ""
 						+ DEFAULT_MINUTES_REMINDER_SEND);
 		if (minutesReminderSend == null) {
-			new Exception("minutesReminderSend is null!");
+			throw new Exception("minutesReminderSend is null!");
 		}
 
 		if (minutesReminderSend == 0) {

@@ -23,6 +23,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -48,19 +49,15 @@ public class FileUtils {
 
 			long fileSize = 0;
 
+			File base = new File(new File(ScopeApplicationAdapter.webAppPath, OpenmeetingsVariables.UPLOAD_DIR), "files");
 			if (fileExplorerItem.getIsImage()) {
 
-				File tFile = new File(ScopeApplicationAdapter.webAppPath
-						+ File.separatorChar + "upload" + File.separatorChar
-						+ "files" + File.separatorChar
-						+ fileExplorerItem.getFileHash());
+				File tFile = new File(base, fileExplorerItem.getFileHash());
 				if (tFile.exists()) {
 					fileSize += tFile.length();
 				}
 
-				File thumbFile = new File(ScopeApplicationAdapter.webAppPath
-						+ File.separatorChar + "upload" + File.separatorChar
-						+ "files" + File.separatorChar + "_thumb_"
+				File thumbFile = new File(base, "_thumb_"
 						+ fileExplorerItem.getFileHash());
 				if (thumbFile.exists()) {
 					fileSize += thumbFile.length();
@@ -70,13 +67,10 @@ public class FileUtils {
 
 			if (fileExplorerItem.getIsPresentation()) {
 
-				File tFolder = new File(ScopeApplicationAdapter.webAppPath
-						+ File.separatorChar + "upload" + File.separatorChar
-						+ "files" + File.separatorChar
-						+ fileExplorerItem.getFileHash());
+				File tFolder = new File(base, fileExplorerItem.getFileHash());
 
 				if (tFolder.exists()) {
-					fileSize += this.getDirSize(tFolder);
+					fileSize += getSize(tFolder);
 				}
 
 			}
@@ -102,7 +96,16 @@ public class FileUtils {
 		return 0;
 	}
 
-	public long getDirSize(File dir) {
+	public static String getHumanSize(File dir) {
+		long size = getSize(dir);
+
+		if(size <= 0) return "0";
+		final String[] units = new String[] { "B", "KB", "MB", "GB", "TB" };
+		int digitGroups = (int) (Math.log10(size)/Math.log10(1024));
+		return new DecimalFormat("#,##0.#").format(size/Math.pow(1024, digitGroups)) + " " + units[digitGroups];
+	}
+
+	public static long getSize(File dir) {
 		long size = 0;
 		if (dir.isFile()) {
 			size = dir.length();
@@ -113,12 +116,11 @@ public class FileUtils {
 				if (file.isFile()) {
 					size += file.length();
 				} else {
-					size += this.getDirSize(file);
+					size += getSize(file);
 				}
 
 			}
 		}
-
 		return size;
 	}
 

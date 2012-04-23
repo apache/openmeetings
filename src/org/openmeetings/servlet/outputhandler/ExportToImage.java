@@ -196,7 +196,7 @@ public class ExportToImage extends HttpServlet {
 						|| exportType.equals("pdf")) {
 
 					String current_dir = getServletContext().getRealPath("/");
-					String working_dir = current_dir + "uploadtemp"
+					String working_dir = current_dir + OpenmeetingsVariables.UPLOAD_TEMP_DIR
 							+ File.separatorChar;
 
 					String requestedFileSVG = fileName + "_"

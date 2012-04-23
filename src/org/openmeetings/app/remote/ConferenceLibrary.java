@@ -91,7 +91,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
 				String current_dir = ScopeApplicationAdapter.webAppPath
-						+ File.separatorChar + "upload";
+						+ File.separatorChar + OpenmeetingsVariables.UPLOAD_DIR;
 				String working_dir = current_dir + File.separatorChar + "files"
 						+ File.separatorChar + parentFolder;
 				log.debug("############# working_dir : " + working_dir);
@@ -146,7 +146,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 				log.debug("saveAsObject" + tObject.size());
 
 				String current_dir = ScopeApplicationAdapter.webAppPath
-						+ File.separatorChar + "upload" + File.separatorChar;
+						+ File.separatorChar + OpenmeetingsVariables.UPLOAD_DIR + File.separatorChar;
 
 				log.debug("### this is my working directory: " + current_dir);
 
@@ -203,7 +203,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 				}
 
 				String current_dir = ScopeApplicationAdapter.webAppPath
-						+ File.separatorChar + "upload" + File.separatorChar;
+						+ File.separatorChar + OpenmeetingsVariables.UPLOAD_DIR + File.separatorChar;
 				log.debug("### this is my working directory: " + current_dir);
 
 				FileExplorerItem fileExplorerItem = fileExplorerItemDao
@@ -291,7 +291,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 			if (authLevelManagement.checkUserLevel(user_level)) {
 				String roomName = room_id.toString();
 				String current_dir = ScopeApplicationAdapter.webAppPath
-						+ File.separatorChar + "upload" + File.separatorChar
+						+ File.separatorChar + OpenmeetingsVariables.UPLOAD_DIR + File.separatorChar
 						+ roomName + File.separatorChar;
 				log.debug("### this is my working directory: " + current_dir);
 
@@ -481,7 +481,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 
 					String streamFolderName = ScopeApplicationAdapter.webAppPath
 							+ File.separatorChar
-							+ "streams"
+							+ OpenmeetingsVariables.STREAMS_DIR
 							+ File.separatorChar
 							+ "hibernate"
 							+ File.separatorChar;
@@ -491,7 +491,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 
 					String targetFolderName = ScopeApplicationAdapter.webAppPath
 							+ File.separatorChar
-							+ "streams"
+							+ OpenmeetingsVariables.STREAMS_DIR
 							+ File.separatorChar + room_id + File.separatorChar;
 
 					File targetFolder = new File(targetFolderName);

@@ -171,7 +171,7 @@ public class UploadController extends AbstractUploadController {
 
 		// Get the current user directory
 		String currentDir = context.getRealPath("/");
-		String workingDir = currentDir + "upload" + File.separatorChar
+		String workingDir = currentDir + OpenmeetingsVariables.UPLOAD_DIR + File.separatorChar
 				+ roomName + File.separatorChar;
 		log.debug("workingDir: " + workingDir);
 
@@ -209,7 +209,7 @@ public class UploadController extends AbstractUploadController {
 			// User Profile Update
 			this.deleteUserProfileFilesStoreTemp(currentDir, userId);
 
-			completeName = currentDir + "upload" + File.separatorChar
+			completeName = currentDir + OpenmeetingsVariables.UPLOAD_DIR + File.separatorChar
 					+ "profiles" + File.separatorChar;
 			File f = new File(completeName);
 			if (!f.exists()) {
@@ -243,7 +243,7 @@ public class UploadController extends AbstractUploadController {
 			// check if this is a room file or UserProfile
 			// add Temp folder structure
 			String workingDirPpt = currentDir
-					+ "uploadtemp"
+					+ OpenmeetingsVariables.UPLOAD_TEMP_DIR
 					+ File.separatorChar
 					+ ((userProfile) ? "profiles" + File.separatorChar
 							+ ScopeApplicationAdapter.profilesPrefix + userId
@@ -379,7 +379,7 @@ public class UploadController extends AbstractUploadController {
 	private void deleteUserProfileFilesStoreTemp(String current_dir,
 			Long users_id) throws Exception {
 
-		String working_imgdir = current_dir + "upload" + File.separatorChar
+		String working_imgdir = current_dir + OpenmeetingsVariables.UPLOAD_DIR + File.separatorChar
 				+ "profiles" + File.separatorChar
 				+ ScopeApplicationAdapter.profilesPrefix + users_id
 				+ File.separatorChar;
@@ -392,7 +392,7 @@ public class UploadController extends AbstractUploadController {
 	private void deleteUserProfileFiles(String current_dir, Long users_id)
 			throws Exception {
 
-		String working_imgdir = current_dir + "upload" + File.separatorChar
+		String working_imgdir = current_dir + OpenmeetingsVariables.UPLOAD_DIR + File.separatorChar
 				+ "profiles" + File.separatorChar
 				+ ScopeApplicationAdapter.profilesPrefix + users_id
 				+ File.separatorChar;

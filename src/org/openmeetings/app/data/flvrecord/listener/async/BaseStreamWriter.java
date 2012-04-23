@@ -72,7 +72,7 @@ public abstract class BaseStreamWriter implements Runnable {
 	private void init() throws IOException {
 
 		File folder = new File(ScopeApplicationAdapter.webAppPath
-				+ File.separatorChar + "streams" + File.separatorChar
+				+ File.separatorChar + OpenmeetingsVariables.STREAMS_DIR + File.separatorChar
 				+ this.scope.getName());
 
 		if (!folder.exists()) {
@@ -80,7 +80,7 @@ public abstract class BaseStreamWriter implements Runnable {
 		}
 
 		String flvName = ScopeApplicationAdapter.webAppPath
-				+ File.separatorChar + "streams" + File.separatorChar
+				+ File.separatorChar + OpenmeetingsVariables.STREAMS_DIR + File.separatorChar
 				+ this.scope.getName() + File.separatorChar + this.streamName
 				+ ".flv";
 

@@ -381,7 +381,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			BaseStreamListener listenerAdapter = streamListeners.get(flvRecordingMetaDataId);
 			
 			if (listenerAdapter == null) {
-				new IllegalStateException("Could not find Listener to stop!");
+				throw new IllegalStateException("Could not find Listener to stop!");
 			}
 			
 			log.debug("Stream Closing :: " + flvRecordingMetaDataId);
@@ -591,8 +591,8 @@ public class FLVRecorderService implements IPendingServiceCallback {
 
 				// FIXME: Is there really a need to stop it manually if the user
 				// just stops the stream?
-				stopRecordingShow(conn, String.valueOf(rcl.getBroadCastID())
-						.toString(), rcl.getFlvRecordingMetaDataId());
+				stopRecordingShow(conn, String.valueOf(rcl.getBroadCastID()),
+						rcl.getFlvRecordingMetaDataId());
 
 				// Update Meta Data
 				this.flvRecordingMetaDataDao
@@ -969,7 +969,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			long fileSize = 0;
 
 			File tFile = new File(ScopeApplicationAdapter.webAppPath
-					+ File.separatorChar + "streams" + File.separatorChar
+					+ File.separatorChar + OpenmeetingsVariables.STREAMS_DIR + File.separatorChar
 					+ "hibernate" + File.separatorChar
 					+ baseFlvRecording.getFileHash());
 			if (tFile.exists()) {
@@ -977,7 +977,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			}
 
 			File dFile = new File(ScopeApplicationAdapter.webAppPath
-					+ File.separatorChar + "streams" + File.separatorChar
+					+ File.separatorChar + OpenmeetingsVariables.STREAMS_DIR + File.separatorChar
 					+ "hibernate" + File.separatorChar
 					+ baseFlvRecording.getAlternateDownload());
 			if (dFile.exists()) {
@@ -985,7 +985,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			}
 
 			File iFile = new File(ScopeApplicationAdapter.webAppPath
-					+ File.separatorChar + "streams" + File.separatorChar
+					+ File.separatorChar + OpenmeetingsVariables.STREAMS_DIR + File.separatorChar
 					+ "hibernate" + File.separatorChar
 					+ baseFlvRecording.getPreviewImage());
 			if (iFile.exists()) {

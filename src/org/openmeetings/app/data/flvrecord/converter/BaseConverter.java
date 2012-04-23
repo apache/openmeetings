@@ -92,7 +92,7 @@ public abstract class BaseConverter {
 	
 	protected String getStreamFolderName(String name) {
 		String streamFolderName = ScopeApplicationAdapter.webAppPath
-				+ File.separatorChar + "streams" + File.separatorChar
+				+ File.separatorChar + OpenmeetingsVariables.STREAMS_DIR + File.separatorChar
 				+ name + File.separatorChar;
 
 		log.debug("###################################################");
