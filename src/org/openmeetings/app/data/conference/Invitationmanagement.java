@@ -880,9 +880,10 @@ public class Invitationmanagement {
 
 			HashMap<String, String> organizerAttendee = handler
 					.getAttendeeData(email, username, invitor);
+			String replyToEmail = null;
 			if (user != null) {
-				organizerAttendee = handler.getAttendeeData(user.getAdresses()
-						.getEmail(), user.getLogin(), invitor);
+				replyToEmail = user.getAdresses().getEmail();
+				organizerAttendee = handler.getAttendeeData(replyToEmail, user.getLogin(), invitor);
 			}
 
 			GregorianCalendar start = new GregorianCalendar(timezone);
@@ -907,7 +908,7 @@ public class Invitationmanagement {
 
 			log.debug(handler.getICalDataAsString());
 
-			mailiCalThread.doSend(email, user.getAdresses().getEmail(), subject, handler.getIcalAsByteArray(),
+			mailiCalThread.doSend(email, replyToEmail, subject, handler.getIcalAsByteArray(),
 					template);
 
 			return "success";
