@@ -26,10 +26,12 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.Parser;
 import org.apache.commons.cli.PosixParser;
 import org.openmeetings.app.OpenmeetingsVariables;
+import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.file.FileUtils;
 import org.openmeetings.app.documents.InstallationDocumentHandler;
 import org.openmeetings.app.installation.ImportInitvalues;
 import org.openmeetings.app.installation.InstallationConfig;
+import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.servlet.outputhandler.BackupExport;
 import org.openmeetings.servlet.outputhandler.BackupImportController;
@@ -269,7 +271,6 @@ public class Admin {
 					String login = cmdl.getOptionValue("user");
 					String email = cmdl.getOptionValue("email");
 					String group = cmdl.getOptionValue("group");
-					String tz = cmdl.getOptionValue("tz");
 					if (cmdl.hasOption("skip-default-rooms")) {
 						cfg.createDefaultRooms = "0";
 					}
@@ -337,6 +338,19 @@ public class Admin {
 					}
 
 					ClassPathXmlApplicationContext ctx = getApplicationContext(ctxName);
+					OmTimeZoneDaoImpl tzDao =  ctx.getBean(OmTimeZoneDaoImpl.class);
+					String tz = null;
+					if (cmdl.hasOption("tz")) {
+						tz = cmdl.getOptionValue("tz");
+						tz = tzDao.getOmTimeZone(tz) == null ? null : tz;
+					}
+					if (tz == null) {
+						System.out.println("Please enter timezone, Possible timezones are:");
+						for (OmTimeZone omTz : tzDao.getOmTimeZones()) {
+							System.out.println(omTz.getJname());
+						}
+						System.exit(1);
+					}
 					ImportInitvalues importInit = ctx.getBean(ImportInitvalues.class);
 					importInit.loadAll(new File(omHome, ImportInitvalues.languageFolderName).getAbsolutePath(), cfg, login, pass, email, group, tz);
 					
