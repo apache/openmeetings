@@ -251,8 +251,7 @@
     
 		<method name="paintactionHistory" args="lastActionObject,parentView">
 		<![CDATA[
-			if ($debug)
-				Debug.write("## paintactionHistory", parentView, " opacity:",
+			if ($debug) Debug.write("## paintactionHistory", parentView, " opacity:",
 						lastActionObject[5]);
 
 			var tmpCurrentlayer = new lz.drawViewNew(parentView, {
@@ -263,15 +262,22 @@
 						height : lastActionObject[lastActionObject.length - 2],
 						opacity : lastActionObject[5]
 					});
+					
+			if ($debug) ("paintactionHistory 1 ",tmpCurrentlayer.x,tmpCurrentlayer.y,tmpCurrentlayer.opacity);
 
 			tmpCurrentlayer.fillstyle = lastActionObject[2];
 			tmpCurrentlayer.lineWidth = lastActionObject[3];
 			tmpCurrentlayer.strokeStyle = lastActionObject[4];
+			
+			if ($debug) ("paintactionHistory 2 ",tmpCurrentlayer.fillstyle,tmpCurrentlayer.lineWidth,tmpCurrentlayer.strokeStyle);
 
-			for (var eg = 0; eg < lastActionObject[1].length; eg++)
+			for (var eg = 0; eg < lastActionObject[1].length; eg++) {
+				if ($debug) ("paintactionHistory 3 ",lastActionObject[1][eg][1], lastActionObject[1][eg][2],
+										lastActionObject[1][eg][3], lastActionObject[1][eg][4]);
 				this.drawlineOnObject(tmpCurrentlayer,
 						lastActionObject[1][eg][1], lastActionObject[1][eg][2],
 						lastActionObject[1][eg][3], lastActionObject[1][eg][4]);
+			}
 
 			//tmpCurrentlayer.setAttribute('stretches','both');
 			this.doSWFDocumentStatus(tmpCurrentlayer,

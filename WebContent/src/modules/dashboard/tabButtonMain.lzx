@@ -20,7 +20,7 @@
 -->
 <library>
 
-<class name="tabButtonMain" extends="view" 
+<class name="tabButtonMain" extends="view" focusable="true"
 	   width="$once{ (parent.width-2)/2 }" height="36" y="2">
 	
 	<attribute name="labelid" value="0" type="number" />

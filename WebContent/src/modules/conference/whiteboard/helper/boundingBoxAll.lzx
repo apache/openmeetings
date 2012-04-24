@@ -72,7 +72,7 @@
     
 </class> 
     
-<class name="boundingBoxAll" extends="view" >
+<class name="boundingBoxAll" extends="view" focusable="true">
     
 <!-- 
 	<method name="removeIt">
@@ -138,6 +138,8 @@
 			this.setAttribute('height',this.eheight);	
 			this.setStartValues();		
 			if ($debug) Debug.write("Update Property Panel Settings to Object Properties ",this.objRef.name);
+			
+			lz.Focus.setFocus(this, false); 
 			
             //FIXME - Add Ellipse, Line and Free Draw Tool to it
             if (this.objRef.name.indexOf('rectangle') >= 0){
@@ -281,6 +283,45 @@
             this.objRef.setAttribute('y',ty);
         }
     </handler>
+    
+    <handler name="onkeydown" args="key">
+        if ($debug) Debug.write("onkeydown ",key);
+
+        //this.objRef.parent.UpdateByObject(this.objRef);
+
+        if (key == 46) {
+        	this.__LZRemoveItem(this.objRef);
+        } else if (key == 40) {
+        	var shiftPressed = lz.Keys.isKeyDown("shift"); 
+        	if ($debug) Debug.write("shiftPressed ",shiftPressed);
+        	this.doHandlerUpdates = true;
+        	this.setAttribute("y",this.y+(shiftPressed ? 20 : 2));
+        	this.doHandlerUpdates = false;
+        	this.objRef.parent.UpdateByObject(this.objRef);
+			this.setStartValues();
+        } else if (key == 38) {
+        	var shiftPressed = lz.Keys.isKeyDown("shift"); 
+        	this.doHandlerUpdates = true;
+        	this.setAttribute("y",this.y-(shiftPressed ? 20 : 2));
+        	this.doHandlerUpdates = false;
+        	this.objRef.parent.UpdateByObject(this.objRef);
+			this.setStartValues();
+        } else if (key == 39) {
+        	var shiftPressed = lz.Keys.isKeyDown("shift"); 
+        	this.doHandlerUpdates = true;
+        	this.setAttribute("x",this.x+(shiftPressed ? 20 : 2));
+        	this.doHandlerUpdates = false;
+        	this.objRef.parent.UpdateByObject(this.objRef);
+			this.setStartValues();
+        } else if (key == 37) {
+        	var shiftPressed = lz.Keys.isKeyDown("shift"); 
+        	this.doHandlerUpdates = true;
+        	this.setAttribute("x",this.x-(shiftPressed ? 20 : 2));
+        	this.doHandlerUpdates = false;
+        	this.objRef.parent.UpdateByObject(this.objRef);
+			this.setStartValues();
+        }
+    </handler>
 	
 	<method name="setStartValues">
 		this.startdragX = this.x;
@@ -290,6 +331,7 @@
 	</method>
 
     <method name="_applyResizestateFromThis">
+    	lz.Focus.setFocus(this, true); 
     	if ($debug) Debug.write("Apply resize State");
     	if (!this.canBeResized) {
             return;
@@ -316,6 +358,7 @@
     </method>
 	
 	<method name="_applyDragstateFromThis">
+		lz.Focus.setFocus(this, true); 
 		if (!this.canBeDragged) {
 			return;
 		}
@@ -421,10 +464,10 @@
 		</handler>
 		<handler name="onmouseover">
 	        lz.Cursor.restoreCursor();
-	        lz.Cursor.showHandCursor(false);
+	        lz.Cursor.showHandCursor(true);
 	    </handler>
 	    <handler name="onmouseout">
-	    	lz.Cursor.showHandCursor(true);
+	    	lz.Cursor.showHandCursor(false);
 	        lz.Cursor.unlock();
 	    </handler>
     
