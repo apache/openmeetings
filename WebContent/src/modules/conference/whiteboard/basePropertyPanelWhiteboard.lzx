@@ -35,6 +35,9 @@
 	<attribute name="initheight" value="0" type="number" />
 	
 	<attribute name="labelid" type="number" setter="setLabelId(labelid)" />
+	
+	<!--- if the box is allowed to be minimized  -->
+	<attribute name="allowToggle" value="true" type="boolean" />	
 		
 	<method name="setLabelId" args="_labelid" >
 		this.labelid = _labelid;
@@ -42,6 +45,9 @@
 	</method>
 	
 	<method name="toggleopen">
+		if (!this.allowToggle) {
+			return;
+		}
 		////Debug.write("this.isopen",this.isopen);
 		this.setAttribute('isopen',!this.isopen);
 		if (this.isopen){		
