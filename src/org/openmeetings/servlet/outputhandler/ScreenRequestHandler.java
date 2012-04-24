@@ -93,7 +93,6 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 			HttpServletResponse httpServletResponse, Context ctx) {
 
 		try {
-
 			if (getSessionManagement() == null) {
 				return getVelocityView().getVelocityEngine().getTemplate(
 						"booting.vm");
@@ -150,6 +149,9 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 				throw new Exception("httpRootKey is empty could not start sharer");
 			}
 
+			String baseURL = httpServletRequest.getScheme() + "://" + rtmphostlocal + ":" + red5httpport
+					+ httpRootKey;
+
 			// make a complete name out of domain(organisation) + roomname
 			String roomName = domain + "_" + room;
 			// trim whitespaces cause it is a directory name
@@ -166,13 +168,11 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 
 			log.debug("httpRootKey " + httpRootKey);
 
-			String codebase = "http://" + rtmphostlocal + ":" + red5httpport
-					+ httpRootKey + "screen";
+			String codebase = baseURL + "screen";
 
 			ctx.put("codebase", codebase);
 
-			String httpSharerURL = "http://" + rtmphostlocal + ":"
-					+ red5httpport + httpRootKey + "ScreenServlet";
+			String httpSharerURL = baseURL + "ScreenServlet";
 
 			ctx.put("webAppRootKey", httpRootKey);
 			ctx.put("httpSharerURL", httpSharerURL);
@@ -294,14 +294,12 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 
 				log.debug("RTMP Sharer labels :: " + label_sharer);
 
-				codebase = "http://" + rtmphostlocal + ":" + red5httpport
-						+ httpRootKey + "red5-screenshare";
+				codebase = baseURL + "red5-screenshare";
 
 				ConnectionType conType = ConnectionType
 						.valueOf(httpServletRequest
 								.getParameter("connectionType"));
 
-				// FIXME http:// need to be removed
 				String startUpClass;
 				switch (conType) {
 				case rtmp:
