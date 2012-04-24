@@ -213,9 +213,12 @@ public class StreamAudioWriter extends BaseStreamWriter {
 	@Override
 	public void closeStream() {
 		try {
-
 			writer.close();
+		} catch (Exception err) {
+			log.error("[closeStream, close writer]", err);
+		}
 
+		try {
 			// We do not add any End Padding or count the gaps for the
 			// Screen Data, cause there is no!
 			
@@ -223,14 +226,13 @@ public class StreamAudioWriter extends BaseStreamWriter {
 			log.debug("virtualTime: " + virtualTime);
 			log.debug("startedSessionTimeDate: " + startedSessionTimeDate);
 			
-			long deltaRecordingTime = virtualTime.getTime() - this.startedSessionTimeDate.getTime();
+			long deltaRecordingTime = virtualTime == null ? 0 : virtualTime.getTime() - startedSessionTimeDate.getTime();
 
-			log.debug("lastTimeStamp :closeStream: " + this.lastTimeStamp);
-			log.debug("lastStreamPacketTimeStamp :closeStream: " + this.lastStreamPacketTimeStamp);
+			log.debug("lastTimeStamp :closeStream: " + lastTimeStamp);
+			log.debug("lastStreamPacketTimeStamp :closeStream: " + lastStreamPacketTimeStamp);
 			log.debug("deltaRecordingTime :closeStream: " + deltaRecordingTime);
 
-			long deltaTimePaddingEnd = deltaRecordingTime
-					- this.lastTimeStamp - this.initialDelta;
+			long deltaTimePaddingEnd = deltaRecordingTime - lastTimeStamp - initialDelta;
 
 			log.debug("deltaTimePaddingEnd :: " + deltaTimePaddingEnd);
 
@@ -238,15 +240,15 @@ public class StreamAudioWriter extends BaseStreamWriter {
 
 			flvRecordingMetaDelta.setDeltaTime(deltaTimePaddingEnd);
 			flvRecordingMetaDelta
-					.setFlvRecordingMetaDataId(this.flvRecordingMetaDataId);
-			flvRecordingMetaDelta.setTimeStamp(this.lastTimeStamp);
+					.setFlvRecordingMetaDataId(flvRecordingMetaDataId);
+			flvRecordingMetaDelta.setTimeStamp(lastTimeStamp);
 			flvRecordingMetaDelta.setDebugStatus("END AUDIO");
 			flvRecordingMetaDelta.setIsStartPadding(false);
 			flvRecordingMetaDelta.setIsEndPadding(true);
 			flvRecordingMetaDelta.setDataLengthPacket(null);
 			flvRecordingMetaDelta
-					.setReceivedAudioDataLength(this.byteCount);
-			flvRecordingMetaDelta.setStartTime(this.startedSessionTimeDate);
+					.setReceivedAudioDataLength(byteCount);
+			flvRecordingMetaDelta.setStartTime(startedSessionTimeDate);
 			flvRecordingMetaDelta.setCurrentTime(new Date());
 
 			flvRecordingMetaDeltaDao
