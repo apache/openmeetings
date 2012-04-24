@@ -412,63 +412,63 @@ public class BackupExport {
 			HttpServletResponse httpServletResponse, ServletContext servletCtx)
 			throws ServletException, IOException {
 
-		try {
-			String sid = httpServletRequest.getParameter("sid");
-			if (sid == null) {
-				sid = "default";
+		String sid = httpServletRequest.getParameter("sid");
+		if (sid == null) {
+			sid = "default";
+		}
+		log.debug("sid: " + sid);
+
+		Long users_id = sessionManagement.checkSession(sid);
+		Long user_level = userManagement.getUserLevelByID(users_id);
+
+		log.debug("users_id: " + users_id);
+		log.debug("user_level: " + user_level);
+
+		if (authLevelManagement.checkAdminLevel(user_level)) {
+			// if (true) {
+
+			String includeFileOption = httpServletRequest
+					.getParameter("includeFileOption");
+			boolean includeFiles = includeFileOption == null || "yes".equals(includeFileOption);
+
+			String moduleName = httpServletRequest
+					.getParameter("moduleName");
+			if (moduleName == null) {
+				moduleName = "moduleName";
 			}
-			log.debug("sid: " + sid);
+			log.debug("moduleName: " + moduleName);
 
-			Long users_id = sessionManagement.checkSession(sid);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			if (moduleName.equals("backup")) {
 
-			log.debug("users_id: " + users_id);
-			log.debug("user_level: " + user_level);
+				/*
+				 * ##################### Create Base Folder structure
+				 */
 
-			if (authLevelManagement.checkAdminLevel(user_level)) {
-				// if (true) {
+				String current_dir = servletCtx.getRealPath("/");
+				File working_dir = new File(new File(current_dir, OpenmeetingsVariables.UPLOAD_DIR), "backup");
 
-				String includeFileOption = httpServletRequest
-						.getParameter("includeFileOption");
-				boolean includeFiles = includeFileOption == null || "yes".equals(includeFileOption);
-
-				String moduleName = httpServletRequest
-						.getParameter("moduleName");
-				if (moduleName == null) {
-					moduleName = "moduleName";
+				if (!working_dir.exists()) {
+					working_dir.mkdir();
 				}
-				log.debug("moduleName: " + moduleName);
 
-				if (moduleName.equals("backup")) {
+				String dateString = "backup_"
+						+ CalendarPatterns.getTimeForStreamId(new Date());
 
-					/*
-					 * ##################### Create Base Folder structure
-					 */
+				File backup_dir = new File(working_dir, dateString);
+				String requestedFile = dateString + ".zip";
+				File backupFile = new File(backup_dir, requestedFile);
 
-					String current_dir = servletCtx.getRealPath("/");
-					File working_dir = new File(new File(current_dir, OpenmeetingsVariables.UPLOAD_DIR), "backup");
-
-					if (!working_dir.exists()) {
-						working_dir.mkdir();
-					}
-
-					String dateString = "backup_"
-							+ CalendarPatterns.getTimeForStreamId(new Date());
-
-					File backup_dir = new File(working_dir, dateString);
-					File backupFile = new File(backup_dir, dateString + ".zip");
-
-					String full_path = backupFile.getAbsolutePath();
+				String full_path = backupFile.getAbsolutePath();
+				try {
 					performExport(full_path, backup_dir, includeFiles, current_dir);
-					
+
 					RandomAccessFile rf = new RandomAccessFile(full_path, "r");
 
-					String requestedFile = dateString + ".zip";
 
 					httpServletResponse.reset();
 					httpServletResponse.resetBuffer();
 					httpServletResponse
-							.setContentType("APPLICATION/OCTET-STREAM");
+					.setContentType("APPLICATION/OCTET-STREAM");
 					httpServletResponse.setHeader("Content-Disposition",
 							"attachment; filename=\"" + requestedFile + "\"");
 					httpServletResponse.setHeader("Content-Length",
@@ -487,23 +487,21 @@ public class BackupExport {
 
 					out.flush();
 					out.close();
-
-					if (backupFile.exists()) {
-						// log.debug("DELETE :1: "+backupFile.getAbsolutePath());
-						backupFile.delete();
-					}
-
-					deleteDirectory(backup_dir);
-
+				} catch (Exception er) {
+					log.error("Error exporting: ", er);
 				}
-			} else {
-				log.debug("ERROR LangExport: not authorized FileDownload "
-						+ (new Date()));
+
+				if (backupFile.exists()) {
+					// log.debug("DELETE :1: "+backupFile.getAbsolutePath());
+					backupFile.delete();
+				}
+
+				deleteDirectory(backup_dir);
+
 			}
-		} catch (Exception er) {
-			log.error("ERROR ", er);
-			log.debug("Error exporting: " + er);
-			er.printStackTrace();
+		} else {
+			log.debug("ERROR LangExport: not authorized FileDownload "
+					+ (new Date()));
 		}
 	}
 
