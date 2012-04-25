@@ -19,7 +19,7 @@
     <menu name="Installation and Upgrade">
     	<item name="Installation"           href="/installation.html"/>
     	<item name="Upgrade"           		href="/Upgrade.html"/>
-    	<item name="Tutorials (Plugin/Installation)"  href="http://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+related+to+OpenMeetings" />
+    	<item name="Tutorials"  href="http://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+related+to+OpenMeetings" />
     </menu>
 
     <menu name="Community">
