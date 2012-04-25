@@ -26,6 +26,7 @@ import java.util.HashMap;
 import org.apache.commons.transaction.util.FileHelper;
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
+import org.openmeetings.utils.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -146,8 +147,8 @@ public class GeneratePDF {
 			String fileFullPath, String destinationFolder, String outputfile) {
 		try {
 
-			String jodPath = cfgManagement.getConfValue("jod.path",
-					String.class, "./jod");
+			String jodPath = cfgManagement.getConfValue("jod.path", String.class, "./jod");
+			String officePath = cfgManagement.getConfValue("office.path", String.class, "");
 
 			File jodFolder = new File(jodPath);
 			if (!jodFolder.exists() || !jodFolder.isDirectory()) {
@@ -157,6 +158,9 @@ public class GeneratePDF {
 			ArrayList<String> argv = new ArrayList<String>();
 			argv.add("java");
 
+			if (officePath.trim().length() > 0) {
+				argv.add("-Doffice.home=" + officePath);
+			}
 			String jodConverterJar = "";
 
 			for (String jarFiles : jodFolder.list(new FilenameFilter() {
@@ -182,7 +186,7 @@ public class GeneratePDF {
 			argv.add(fileFullPath);
 			argv.add(destinationFolder + outputfile + ".pdf");
 
-			return GenerateSWF.executeScript("doJodConvert",
+			return ProcessHelper.executeScript("doJodConvert",
 					argv.toArray(new String[argv.size()]));
 
 		} catch (Exception ex) {

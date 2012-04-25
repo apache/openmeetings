@@ -84,7 +84,12 @@
 					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 1 </td>
 					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Set inviter's email address as ReplyTo in email invitations (1 == set, 0 == NOT set)	</td>
 					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 2.0.x </td>
-
+				</tr>
+				<tr>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> office.path </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> The path to OpenOffice/LibreOffice (optional) please set this to the real path in case jodconverter is unable to find OpenOffice/LibreOffice installation automatically	</td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 2.0.x </td>
 				</tr>
 			</table>
 		</section>

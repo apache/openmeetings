@@ -26,6 +26,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +60,7 @@ public class GenerateThumbs {
 		log.debug("END generateThumb ################# ");
 
 		if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") == -1) {
-			return GenerateSWF.executeScript("generateBatchThumbByWidth", argv);
+			return ProcessHelper.executeScript("generateBatchThumbByWidth", argv);
 		} else {
 			return this.processImageWindows(argv);
 		}
@@ -71,7 +72,7 @@ public class GenerateThumbs {
 				inputfile, outputfile };
 
 		if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") == -1) {
-			return GenerateSWF.executeScript("generateBatchThumbByWidth", argv);
+			return ProcessHelper.executeScript("generateBatchThumbByWidth", argv);
 		} else {
 			return this.processImageWindows(argv);
 		}
@@ -88,7 +89,7 @@ public class GenerateThumbs {
 					Integer.toString(thumbSize), inputfile,
 					outputpath + "_" + pre + "_page-%04d.jpg" };
 
-			return GenerateSWF.executeScript("generateBatchThumbByWidth", argv);
+			return ProcessHelper.executeScript("generateBatchThumbByWidth", argv);
 		} else {
 
 			String[] argv = new String[] {
@@ -112,7 +113,7 @@ public class GenerateThumbs {
 				outputpath + "_" + pre + "_page.png" };
 
 		if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") == -1) {
-			return GenerateSWF.executeScript("generateBatchThumbByWidth", argv);
+			return ProcessHelper.executeScript("generateBatchThumbByWidth", argv);
 		} else {
 			return this.processImageWindows(argv);
 		}

@@ -26,6 +26,7 @@ import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -172,7 +173,7 @@ public class GenerateImage {
 		// return GenerateSWF.executeScript("convertSingleJpg", argv);
 
 		if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") == -1) {
-			return GenerateSWF.executeScript("generateBatchThumbByWidth", argv);
+			return ProcessHelper.executeScript("generateBatchThumbByWidth", argv);
 		} else {
 			return generateThumbs.processImageWindows(argv);
 		}
@@ -183,7 +184,7 @@ public class GenerateImage {
 			String outputfile, int width, int height) {
 		String[] argv = new String[] { getPathToImageMagic(), "-size",
 				width + "x" + height, inputFile, outputfile };
-		return GenerateSWF.executeScript("convertImageByTypeAndSizeAndDepth",
+		return ProcessHelper.executeScript("convertImageByTypeAndSizeAndDepth",
 				argv);
 	}
 
@@ -193,7 +194,7 @@ public class GenerateImage {
 		String[] argv = new String[] { getPathToImageMagic(), "-size",
 				width + "x" + height, "-depth", Integer.toString(depth),
 				inputFile, outputfile };
-		return GenerateSWF.executeScript("convertImageByTypeAndSizeAndDepth",
+		return ProcessHelper.executeScript("convertImageByTypeAndSizeAndDepth",
 				argv);
 	}
 

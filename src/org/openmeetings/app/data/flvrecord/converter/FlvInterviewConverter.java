@@ -32,11 +32,11 @@ import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.flvrecord.FlvRecordingDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingLogDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDataDaoImpl;
-import org.openmeetings.app.documents.GenerateSWF;
 import org.openmeetings.app.documents.GenerateThumbs;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecording;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingMetaData;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -177,7 +177,7 @@ public class FlvInterviewConverter extends BaseConverter {
 				log.debug(iString);
 				log.debug("END mergeAudioToWaves ################# ");
 
-				returnLog.add(GenerateSWF.executeScript("mergeWave",
+				returnLog.add(ProcessHelper.executeScript("mergeWave",
 						argv_full_sox));
 			} else {
 
@@ -203,7 +203,7 @@ public class FlvInterviewConverter extends BaseConverter {
 				log.debug(tString);
 				log.debug("END generateSampleAudio ################# ");
 
-				returnLog.add(GenerateSWF.executeScript("mergeWave",
+				returnLog.add(ProcessHelper.executeScript("mergeWave",
 						argv_full_sox));
 
 			}
@@ -245,7 +245,7 @@ public class FlvInterviewConverter extends BaseConverter {
 					log.debug(iString);
 					log.debug("END generateImageSequence ################# ");
 
-					returnLog.add(GenerateSWF.executeScript(
+					returnLog.add(ProcessHelper.executeScript(
 							"generateImageSequence", argv_imageSeq));
 
 				}
@@ -394,7 +394,7 @@ public class FlvInterviewConverter extends BaseConverter {
 								this.getPathToImageMagick(), "+append",
 								interviewPod1Images[i], interviewPod2Images[i],
 								outputImageName };
-						returnLog.add(GenerateSWF.executeScript(
+						returnLog.add(ProcessHelper.executeScript(
 								"generateImageSequence", argv_imageMagick));
 					} else {
 						returnLog.add(processImageWindows(
@@ -449,7 +449,7 @@ public class FlvInterviewConverter extends BaseConverter {
 			log.debug(tString2);
 			log.debug("END generateFullBySequenceFLV ################# ");
 
-			returnLog.add(GenerateSWF.executeScript(
+			returnLog.add(ProcessHelper.executeScript(
 					"generateFullBySequenceFLV", argv_generatedMoview));
 
 			String hashFileFullNameFlv = "flvRecording_"
@@ -493,7 +493,7 @@ public class FlvInterviewConverter extends BaseConverter {
 			log.debug(tString);
 			log.debug("END generateFullFLV ################# ");
 
-			returnLog.add(GenerateSWF.executeScript("generateFullFLV",
+			returnLog.add(ProcessHelper.executeScript("generateFullFLV",
 					argv_fullFLV));
 
 			flvRecording.setFileHash(hashFileFullNameFlv);
@@ -527,7 +527,7 @@ public class FlvInterviewConverter extends BaseConverter {
 			log.debug(kString);
 			log.debug("END previewFullFLV ################# ");
 
-			returnLog.add(GenerateSWF.executeScript("generateFullFLV",
+			returnLog.add(ProcessHelper.executeScript("generateFullFLV",
 					argv_previewFLV));
 
 			String alternateDownloadName = "flvRecording_"
@@ -549,7 +549,7 @@ public class FlvInterviewConverter extends BaseConverter {
 			log.debug(sString);
 			log.debug("END alternateDownLoad ################# ");
 
-			returnLog.add(GenerateSWF.executeScript("alternateDownload",
+			returnLog.add(ProcessHelper.executeScript("alternateDownload",
 					argv_alternateDownload));
 
 			flvRecording.setAlternateDownload(alternateDownloadName);

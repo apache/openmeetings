@@ -303,7 +303,17 @@ public class ImportInitvalues {
 
 		cfgManagement.addConfByKey(3, "ffmpeg_path", cfg.ffmpegPath, null,
 				"Path To FFMPEG");
+		cfgManagement.addConfByKey(3, "office.path", cfg.officePath, null,
+				"The path to OpenOffice/LibreOffice (optional) please set this to the real path in case jodconverter is unable to find OpenOffice/LibreOffice installation automatically");
+		cfgManagement
+			.addConfByKey(
+					3,
+					"jod.path",
+					cfg.jodPath,
+					null,
+					"The path to JOD library (http://code.google.com/p/jodconverter), configure the path to point to the lib directory of JOD that contains also the jodconverter-core-version.jar");
 
+		
 		cfgManagement.addConfByKey(3, "rss_feed1", cfg.urlFeed, null, "Feed URL");
 
 		cfgManagement.addConfByKey(3, "rss_feed2", cfg.urlFeed2, null,
@@ -529,14 +539,6 @@ public class ImportInitvalues {
 						"123",
 						null,
 						"A hot key code for the 'give exclusive audio' functionality. Keycode 123 is F12");
-
-		cfgManagement
-				.addConfByKey(
-						3,
-						"jod.path",
-						cfg.jodPath,
-						null,
-						"The path to JOD library (http://code.google.com/p/jodconverter), configure the path to point to the lib directory of JOD that contains also the jodconverter-core-version.jar");
 
 		// system-wide ldap params
 		cfgManagement.addConfByKey(

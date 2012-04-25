@@ -31,6 +31,7 @@ import org.openmeetings.app.persistence.beans.flvrecord.FlvRecording;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingMetaData;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingMetaDelta;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -203,7 +204,7 @@ public abstract class BaseConverter {
 					}
 					log.debug("END stripAudioFromFLVs ################# ");
 	
-					returnLog.add(GenerateSWF.executeScript("generateFFMPEG",
+					returnLog.add(ProcessHelper.executeScript("generateFFMPEG",
 							argv));
 	
 					// check if the resulting Audio is valid
@@ -300,7 +301,7 @@ public abstract class BaseConverter {
 							log.debug(" commandHelper " + commandHelper);
 							log.debug("END addGapAudioToWaves ################# ");
 	
-							returnLog.add(GenerateSWF.executeScript("fillGap",
+							returnLog.add(ProcessHelper.executeScript("fillGap",
 									argv_sox));
 	
 							this.flvRecordingMetaDeltaDaoImpl
@@ -345,7 +346,7 @@ public abstract class BaseConverter {
 					log.debug("padString :: " + padString);
 					log.debug("END addAudioToWaves ################# ");
 	
-					returnLog.add(GenerateSWF.executeScript(
+					returnLog.add(ProcessHelper.executeScript(
 							"addStartEndToAudio", argv_sox));
 	
 					// Fix for Audio Length - Invalid Audio Length in Recorded

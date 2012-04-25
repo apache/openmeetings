@@ -18,25 +18,20 @@
  */
 package org.openmeetings.app.documents;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 import org.openmeetings.app.data.basic.Configurationmanagement;
+import org.openmeetings.utils.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class GenerateSWF {
 
-	private static final Logger log = Red5LoggerFactory
+	public static final Logger log = Red5LoggerFactory
 			.getLogger(GenerateSWF.class);
 
 	@Autowired
@@ -47,160 +42,8 @@ public class GenerateSWF {
 
 	public final static String execExt = isPosix ? "" : ".exe";
 
-	public static HashMap<String, String> executeScript(String process,
-			String[] argv) {
-		HashMap<String, String> returnMap = new HashMap<String, String>();
-		returnMap.put("process", process);
-		log.debug("process: " + process);
-		log.debug("args: " + Arrays.toString(argv));
-
-		try {
-			returnMap.put("command", Arrays.toString(argv));
-			returnMap.put("out","");
-
-			// By using the process Builder we have access to modify the
-			// environment variables
-			// that is handy to set variables to run it inside eclipse
-			ProcessBuilder pb = new ProcessBuilder(argv);
-
-			Process proc = pb.start();
-
-			// 20-minute timeout for command execution
-			// FFMPEG conversion of Recordings may take a real long time until
-			// its finished
-			long timeout = 60000 * 20;
-
-			ErrorStreamWatcher errorWatcher = new ErrorStreamWatcher(proc);
-			Worker worker = new Worker(proc);
-			InputStreamWatcher inputWatcher = new InputStreamWatcher(proc);
-			errorWatcher.start();
-			inputWatcher.start();
-			worker.start();
-			
-			
-			try {
-				worker.join(timeout);
-				if (worker.exit != null) {
-					returnMap.put("exitValue", "" + worker.exit);
-					log.debug("exitVal: " + worker.exit);
-					returnMap.put("error", errorWatcher.error);
-				} else {
-					returnMap.put("exception", "timeOut");
-					returnMap.put("error", errorWatcher.error);
-					returnMap.put("exitValue", "-1");
-
-					throw new TimeoutException();
-				}
-			} catch (InterruptedException ex) {
-				worker.interrupt();
-				errorWatcher.interrupt();
-				inputWatcher.interrupt();
-				Thread.currentThread().interrupt();
-
-				returnMap.put("error", ex.getMessage());
-				returnMap.put("exitValue", "-1");
-
-				throw ex;
-			} finally {
-				proc.destroy();
-			}
-			
-		} catch (TimeoutException e) {
-			// Timeout exception is processed above
-			log.error("executeScript",e);
-			e.printStackTrace();
-			returnMap.put("error", e.getMessage());
-			returnMap.put("exception", e.toString());
-			returnMap.put("exitValue", "-1");
-		} catch (Throwable t) {
-			// Any other exception is shown in debug window
-			log.error("executeScript",t);
-			t.printStackTrace();
-			returnMap.put("error", t.getMessage());
-			returnMap.put("exception", t.toString());
-			returnMap.put("exitValue", "-1");
-		}
-		
-		return returnMap;
-	}
-
-	private static class Worker extends Thread {
-		private final Process process;
-		private Integer exit;
-
-		private Worker(Process process) {
-			this.process = process;
-		}
-
-		@Override
-		public void run() {
-			try {
-				exit = process.waitFor();
-			} catch (InterruptedException ignore) {
-				return;
-			}
-		}
-	}
-
-	// This one collects errors coming from script execution
-	private static class ErrorStreamWatcher extends Thread {
-		private String error;
-		private final InputStream stderr;
-		private final InputStreamReader isr;
-		private final BufferedReader br;
-
-		private ErrorStreamWatcher(Process process) throws UnsupportedEncodingException {
-			error = "";
-			stderr = process.getErrorStream();
-			isr = new InputStreamReader(stderr, "UTF-8");
-			br = new BufferedReader(isr);
-		}
-
-		@Override
-		public void run() {
-			try {
-				String line = br.readLine();
-				while (line != null) {
-					error += line;
-					line = br.readLine();
-				}
-			} catch (IOException ioexception) {
-				return;
-			}
-		}
-	}
-
-	// This one just reads script's output stream so it can
-	// finish normally, see issue 801 http://code.google.com/p/openmeetings/issues/detail?id=801
-	// needs verification, swagner 21.02.2012
-	private static class InputStreamWatcher extends Thread {
-		
-		private final InputStream stderr;
-		private final InputStreamReader isr;
-		private final BufferedReader br;
-
-		private InputStreamWatcher(Process process) {
-			stderr = process.getInputStream();
-			isr = new InputStreamReader(stderr);
-			br = new BufferedReader(isr);
-		}
-
-		@Override
-		public void run() {
-			try {
-				String line = br.readLine();
-				while (line != null) {
-					line = br.readLine();
-				}
-			} catch (IOException ioexception) {
-				return;
-			}
-		}
-	}
-
 	private String getPathToSwfTools() {
-		String pathToSWFTools = cfgManagement.getConfKey(3, "swftools_path")
-				.getConf_value();
+		String pathToSWFTools = cfgManagement.getConfValue("swftools_path", String.class, "");
 		// If SWFTools Path is not blank a File.separator at the end of the path
 		// is needed
 		if (!pathToSWFTools.equals("")
@@ -222,7 +65,7 @@ public class GenerateSWF {
 				originalFolder + fileNamePure + ".pdf",
 				destinationFolder + fileNamePure + ".swf" };
 
-		return executeScript("generateSwf", argv);
+		return ProcessHelper.executeScript("generateSwf", argv);
 	}
 
 	/**
@@ -240,7 +83,7 @@ public class GenerateSWF {
 				"-o", outputfile, "-r", Integer.toString(fps), "-z" });
 
 		argvList.addAll(images);
-		return executeScript("generateSwfByImages",
+		return ProcessHelper.executeScript("generateSwfByImages",
 				argvList.toArray(new String[0]));
 	}
 
@@ -255,7 +98,7 @@ public class GenerateSWF {
 				"-o", outputswf, "-r", Integer.toString(fps), "-z", "-a" });
 
 		argvList.addAll(swfs);
-		return executeScript("generateSwfByImages",
+		return ProcessHelper.executeScript("generateSwfByImages",
 				argvList.toArray(new String[0]));
 	}
 
@@ -267,7 +110,7 @@ public class GenerateSWF {
 				width + "x" + height, "-b", "750k", "-ar", "44100", "-y",
 				outputswf };
 
-		return executeScript("generateSWFByFFMpeg", argv);
+		return ProcessHelper.executeScript("generateSWFByFFMpeg", argv);
 	}
 
 }

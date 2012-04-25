@@ -27,8 +27,8 @@ import java.util.regex.Pattern;
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.file.dao.FileExplorerItemDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingLogDaoImpl;
-import org.openmeetings.app.documents.GenerateSWF;
 import org.openmeetings.app.persistence.beans.files.FileExplorerItem;
+import org.openmeetings.utils.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,7 +111,7 @@ public class FlvExplorerConverter extends BaseConverter {
 			log.debug(tString);
 			log.debug("END generateFullFLV ################# ");
 			
-			HashMap<String, String> returnMapConvertFLV = GenerateSWF.executeScript("uploadFLV ID :: "
+			HashMap<String, String> returnMapConvertFLV = ProcessHelper.executeScript("uploadFLV ID :: "
 					+ fileExplorerItem.getFileExplorerItemId(), argv_fullFLV);
 			
 			//Parse the width height from the FFMPEG output
@@ -147,7 +147,7 @@ public class FlvExplorerConverter extends BaseConverter {
 			log.debug("END previewFullFLV ################# ");
 
 			returnLog
-					.add(GenerateSWF.executeScript("previewUpload ID :: "
+					.add(ProcessHelper.executeScript("previewUpload ID :: "
 							+ fileExplorerItem.getFileExplorerItemId(),
 							argv_previewFLV));
 

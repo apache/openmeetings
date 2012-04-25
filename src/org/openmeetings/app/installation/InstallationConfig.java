@@ -22,6 +22,7 @@ public class InstallationConfig {
 	public String ffmpegPath = "";
 	public String soxPath = "";
 	public String jodPath = "./jod/lib";
+	public String officePath = "";
 	
 	public String defaultLangId = "1";
 	public String sendEmailAtRegister = "0";
