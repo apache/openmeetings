@@ -39,6 +39,7 @@ limitations under the License.
             <title>Apache OpenMeetings - Home</title>
             <link rel="stylesheet" type="text/css" href="css/openmeetings.css">
             <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
+            <link rel="stylesheet" type="text/css" href="css/coin-slider-styles.css">
             
             
 			<!-- Add jQuery library -->
@@ -50,6 +51,9 @@ limitations under the License.
 			<!-- Add fancyBox main JS and CSS files -->
 			<script type="text/javascript" src="source/jquery.fancybox.js"></script>
 			<link rel="stylesheet" type="text/css" href="source/jquery.fancybox.css" media="screen" />
+			
+			<!-- Add coinslider plugins -->
+			<script type="text/javascript" src="js/coin-slider.min.js"></script>
 		
 			<!-- Add Button helper (this is optional) -->
 			<link rel="stylesheet" type="text/css" href="source/helpers/jquery.fancybox-buttons.css?v=2.0.3" />
@@ -369,7 +373,7 @@ limitations under the License.
 					      }
 				      }
 				    });
-										
+					$('#coin-slider').coinslider({ width: 640,height: 400, delay: 4000  });					
 				});
 			</script>	
 						
@@ -392,8 +396,15 @@ limitations under the License.
 </td>
                     </td>
                     <td align='LEFT'>
-                    <td width="80%" align="left" valign="bottom" >
-       
+                    <td width="80%" align="right" valign="top" >
+	<a href="http://demo.openmeetings.de" target="_BLANK">Demo</a>
+	<span>|</span> 
+	<a href="downloads.html" target="_PARENT">Download</a>
+	<span>|</span> 
+	<a href="installation.html" target="_PARENT">Installation</a>
+	<span>|</span> 
+	<a href="https://cwiki.apache.org/confluence/display/OPENMEETINGS" target="_BLANK">Wiki</a>
+	<span>&nbsp;</span>
 </td>
                     </td>
                 </tr>
@@ -861,13 +872,86 @@ limitations under the License.
                                                                     <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="Welcome to Apache OpenMeetings"><strong>Welcome to Apache OpenMeetings</strong></a>
+          <a name="Feature and overview"><strong>Feature and overview</strong></a>
           <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
         </font>
       </td></tr>
       <tr><td>
         <blockquote>
-                                    <p> Openmeetings provides video conferencing, instant messaging,
+                                    <div id="coin-slider">
+				<a href="#">
+					<img src="images/cut_conference_room.png" alt="Conference Room" />
+					<span>
+						<b>Audio/Video Conferencing</b>
+						<br />
+						OpenMeetings enables you to make Audio/Video conferencing.
+					</span>
+				</a>
+
+				<a href="#">
+					<img src="images/cut_integrated_calendar.png" alt="Calendar" />
+					<span>
+						<b>Calendar</b>
+						<br />
+						You can create meeting with the integrated calendar
+					</span>
+				</a>
+
+				<a href="#">
+					<img src="images/cut_file_explorer.png" alt="File Explorer" />
+					<span>
+						<b>File Explorer</b>
+						<br />
+						Each room has its own File-Explorer - A drag and drop interface
+						for handling files and folders.
+						Each user has its own private drive that is the same no matter what
+						conference room you go.
+					</span>
+				</a>
+
+				<a href="#">
+					<img src="images/cut_integration_api.png" alt="Integration API" />
+					<span>
+						<b>Integration API</b>
+						<br />
+						There is a SOAP/REST API to integrate into your website, as well
+						as LDAP/ADS connectors and VoIP/Asterisk integration modules
+					</span>
+				</a>
+
+				<a href="#">
+					<img src="images/cut_private_messages.png" alt="Private messages" />
+					<span>
+						<b>Private messages and contacts</b>
+						<br />
+						From the private message center you can send invitations by email
+						and attach meeting invitations to every email
+					</span>
+				</a>
+
+				<a href="#">
+					<img src="images/cut_administration_configuration.png" alt="Administration" />
+					<span>
+						<b>Administration and Configuration</b>
+						<br />
+						You can configure users, rooms, usergroups, config settings or
+						edit labels with a Web-Frontend integrated in the application
+					</span>
+				</a>
+
+				<a href="#">
+					<img src="images/cut_recordings_playback.png" alt="Share and Record" />
+					<span>
+						<b>Screensharing and Recording</b>
+						<br />
+						You can do screensharing as well as recording whole sessions
+						including audio/video and download the recordings as AVI or FLV or
+						watch directly in the integrated recordings playback UI.
+					</span>
+				</a>
+
+			</div>
+                                                <p> Openmeetings provides video conferencing, instant messaging,
 				white board, collaborative document editing and other groupware
 				tools using API functions of the Red5 Streaming Server for Remoting
 				and Streaming.
@@ -895,10 +979,22 @@ limitations under the License.
       <tr><td>
         <blockquote>
                                     <p>
-			    <strong>First builds are available at <a href="https://builds.apache.org/job/openmeetings">builds.apache.org</a> (2012-03-15)</strong><br />
-			    <strong>New committer: Timur Tleukenov (2012-03-06)</strong><br />
-			    <strong><a href="http://demo.openmeetings.de" target="_BLANK" rel="nofollow">Demo server</a> updated to r1236172 (2012-01-26)</strong><br />
-			    <strong>New committer: German Grekhov (2011-12-26)</strong><br />
+				<strong>
+					First builds are available at
+					<a href="https://builds.apache.org/job/openmeetings">builds.apache.org</a>
+					(2012-03-15)
+				</strong>
+				<br />
+				<strong>New committer: Timur Tleukenov (2012-03-06)</strong>
+				<br />
+				<strong>
+					<a href="http://demo.openmeetings.de" target="_BLANK" rel="nofollow">Demo
+						server</a>
+					updated to r1236172 (2012-01-26)
+				</strong>
+				<br />
+				<strong>New committer: German Grekhov (2011-12-26)</strong>
+				<br />
 				<strong>OpenMeetings has been accepted into the Apache Incubator
 					(2011-11-12).
 				</strong>

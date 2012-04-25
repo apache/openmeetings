@@ -39,6 +39,7 @@ limitations under the License.
             <title>Apache OpenMeetings - Downloads</title>
             <link rel="stylesheet" type="text/css" href="css/openmeetings.css">
             <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
+            <link rel="stylesheet" type="text/css" href="css/coin-slider-styles.css">
             
             
 			<!-- Add jQuery library -->
@@ -50,6 +51,9 @@ limitations under the License.
 			<!-- Add fancyBox main JS and CSS files -->
 			<script type="text/javascript" src="source/jquery.fancybox.js"></script>
 			<link rel="stylesheet" type="text/css" href="source/jquery.fancybox.css" media="screen" />
+			
+			<!-- Add coinslider plugins -->
+			<script type="text/javascript" src="js/coin-slider.min.js"></script>
 		
 			<!-- Add Button helper (this is optional) -->
 			<link rel="stylesheet" type="text/css" href="source/helpers/jquery.fancybox-buttons.css?v=2.0.3" />
@@ -369,7 +373,7 @@ limitations under the License.
 					      }
 				      }
 				    });
-										
+					$('#coin-slider').coinslider({ width: 640,height: 400, delay: 4000  });					
 				});
 			</script>	
 						
@@ -392,8 +396,15 @@ limitations under the License.
 </td>
                     </td>
                     <td align='LEFT'>
-                    <td width="80%" align="left" valign="bottom" >
-       
+                    <td width="80%" align="right" valign="top" >
+	<a href="http://demo.openmeetings.de" target="_BLANK">Demo</a>
+	<span>|</span> 
+	<a href="downloads.html" target="_PARENT">Download</a>
+	<span>|</span> 
+	<a href="installation.html" target="_PARENT">Installation</a>
+	<span>|</span> 
+	<a href="https://cwiki.apache.org/confluence/display/OPENMEETINGS" target="_BLANK">Wiki</a>
+	<span>&nbsp;</span>
 </td>
                     </td>
                 </tr>

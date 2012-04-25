@@ -17,7 +17,82 @@
 
 	<body>
 
-		<section name="Welcome to Apache OpenMeetings">
+		<section name="Feature and overview">
+
+			<div id="coin-slider">
+				<a href="#">
+					<img src="images/cut_conference_room.png" alt="Conference Room" />
+					<span>
+						<b>Audio/Video Conferencing</b>
+						<br />
+						OpenMeetings enables you to make Audio/Video conferencing.
+					</span>
+				</a>
+
+				<a href="#">
+					<img src="images/cut_integrated_calendar.png" alt="Calendar" />
+					<span>
+						<b>Calendar</b>
+						<br />
+						You can create meeting with the integrated calendar
+					</span>
+				</a>
+
+				<a href="#">
+					<img src="images/cut_file_explorer.png" alt="File Explorer" />
+					<span>
+						<b>File Explorer</b>
+						<br />
+						Each room has its own File-Explorer - A drag and drop interface
+						for handling files and folders.
+						Each user has its own private drive that is the same no matter what
+						conference room you go.
+					</span>
+				</a>
+
+				<a href="#">
+					<img src="images/cut_integration_api.png" alt="Integration API" />
+					<span>
+						<b>Integration API</b>
+						<br />
+						There is a SOAP/REST API to integrate into your website, as well
+						as LDAP/ADS connectors and VoIP/Asterisk integration modules
+					</span>
+				</a>
+
+				<a href="#">
+					<img src="images/cut_private_messages.png" alt="Private messages" />
+					<span>
+						<b>Private messages and contacts</b>
+						<br />
+						From the private message center you can send invitations by email
+						and attach meeting invitations to every email
+					</span>
+				</a>
+
+				<a href="#">
+					<img src="images/cut_administration_configuration.png" alt="Administration" />
+					<span>
+						<b>Administration and Configuration</b>
+						<br />
+						You can configure users, rooms, usergroups, config settings or
+						edit labels with a Web-Frontend integrated in the application
+					</span>
+				</a>
+
+				<a href="#">
+					<img src="images/cut_recordings_playback.png" alt="Share and Record" />
+					<span>
+						<b>Screensharing and Recording</b>
+						<br />
+						You can do screensharing as well as recording whole sessions
+						including audio/video and download the recordings as AVI or FLV or
+						watch directly in the integrated recordings playback UI.
+					</span>
+				</a>
+
+			</div>
+
 
 			<p> Openmeetings provides video conferencing, instant messaging,
 				white board, collaborative document editing and other groupware
@@ -39,10 +114,22 @@
 		<section name="OpenMeetings News">
 
 			<p>
-			    <strong>First builds are available at <a href="https://builds.apache.org/job/openmeetings">builds.apache.org</a> (2012-03-15)</strong><br/>
-			    <strong>New committer: Timur Tleukenov (2012-03-06)</strong><br/>
-			    <strong><a href="http://demo.openmeetings.de" target="_BLANK" rel="nofollow">Demo server</a> updated to r1236172 (2012-01-26)</strong><br/>
-			    <strong>New committer: German Grekhov (2011-12-26)</strong><br/>
+				<strong>
+					First builds are available at
+					<a href="https://builds.apache.org/job/openmeetings">builds.apache.org</a>
+					(2012-03-15)
+				</strong>
+				<br />
+				<strong>New committer: Timur Tleukenov (2012-03-06)</strong>
+				<br />
+				<strong>
+					<a href="http://demo.openmeetings.de" target="_BLANK" rel="nofollow">Demo
+						server</a>
+					updated to r1236172 (2012-01-26)
+				</strong>
+				<br />
+				<strong>New committer: German Grekhov (2011-12-26)</strong>
+				<br />
 				<strong>OpenMeetings has been accepted into the Apache Incubator
 					(2011-11-12).
 				</strong>
