@@ -18,9 +18,13 @@
  */
 package org.openmeetings.utils;
 
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
-import org.openmeetings.app.persistence.beans.basic.Configuration;
+import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -31,22 +35,27 @@ public class ImportHelper {
 
 	public static final int getMaxUploadSize(
 			Configurationmanagement cfgManagement) {
-		return getMaxUploadSize(cfgManagement, 3L);
-	}
-
-	public static final int getMaxUploadSize(
-			Configurationmanagement cfgManagement, Long userLevel) {
-		Configuration cfg = cfgManagement.getConfKey(userLevel,
-				"DEFAULT_MAX_UPLOAD_SIZE");
 		int result = DEFAULT_MAX_UPLOAD_SIZE;
-		if (cfg != null) {
-			String val = cfg.getConf_value();
-			try {
-				result = (int) Math.min(Long.parseLong(val), Integer.MAX_VALUE);
-			} catch (Exception e) {
-				log.error("Invalid value saved for maxUploadSize: " + val, e);
-			}
+		String maxSize = cfgManagement.getConfValue("DEFAULT_MAX_UPLOAD_SIZE", String.class, "" + result);
+		try {
+			result = (int) Math.min(Long.parseLong(maxSize), Integer.MAX_VALUE);
+		} catch (Exception e) {
+			log.error("Invalid value saved for maxUploadSize: " + maxSize, e);
 		}
+		return result;
+	}
+	
+	public static Map<String, String> getAllTimeZones(List<OmTimeZone> tzList) {
+		Map<String, String> result = new LinkedHashMap<String, String>();
+		
+		log.debug("omTimeZoneList :: " + tzList.size());
+		for (OmTimeZone omTimeZone : tzList) {
+			String labelName = omTimeZone.getJname() + " ("
+					+ omTimeZone.getLabel() + ")";
+			log.debug("labelName :: " + labelName);
+			result.put(omTimeZone.getJname(), labelName);
+		}
+		
 		return result;
 	}
 }

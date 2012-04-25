@@ -9,6 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.Map;
 import java.util.Set;
 
 import javax.mail.internet.AddressException;
@@ -27,15 +28,14 @@ import org.apache.commons.cli.Parser;
 import org.apache.commons.cli.PosixParser;
 import org.apache.openjpa.jdbc.meta.MappingTool;
 import org.openmeetings.app.OpenmeetingsVariables;
-import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.file.FileUtils;
 import org.openmeetings.app.documents.InstallationDocumentHandler;
 import org.openmeetings.app.installation.ImportInitvalues;
 import org.openmeetings.app.installation.InstallationConfig;
-import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.servlet.outputhandler.BackupExport;
 import org.openmeetings.servlet.outputhandler.BackupImportController;
+import org.openmeetings.utils.ImportHelper;
 import org.openmeetings.utils.OMContextListener;
 import org.openmeetings.utils.mail.MailUtil;
 import org.openmeetings.utils.math.CalendarPatterns;
@@ -49,6 +49,8 @@ public class Admin {
 	private boolean verbose = false;
 	private InstallationConfig cfg = null;
 	private Options opts = null;
+	private CommandLine cmdl = null;
+	File omHome = null;
 
 	private Admin() {
 		cfg = new InstallationConfig();
@@ -69,12 +71,12 @@ public class Admin {
 		options.addOption(new OmOption(null, "v", "verbose", false, "verbose error messages"));
 		//backup/restore
 		options.addOption(new OmOption("b", null, "exclude-files", false, "should backup exclude files [default: include]", true));
-		options.addOption(new OmOption("b,r", "file", null, true, "file used for backup/restore", "b"));
+		options.addOption(new OmOption("b,r,i", "file", null, true, "file used for backup/restore/install", "b"));
 		//install
-		options.addOption(new OmOption("i", "user", null, true, "Login name of the default user, minimum " + InstallationConfig.USER_LOGIN_MINIMUM_LENGTH + " characters"));
-		options.addOption(new OmOption("i", "email", null, true, "Email of the default user"));
-		options.addOption(new OmOption("i", "group", null, true, "The name of the default user group"));
-		options.addOption(new OmOption("i", "tz", null, true, "Default server time zone, and time zone for the selected user [for ex: 'GMT+10', '-2', 'Chicago']"));
+		options.addOption(new OmOption("i", "user", null, true, "Login name of the default user, minimum " + InstallationConfig.USER_LOGIN_MINIMUM_LENGTH + " characters (mutually exclusive with 'file')"));
+		options.addOption(new OmOption("i", "email", null, true, "Email of the default user (mutually exclusive with 'file')"));
+		options.addOption(new OmOption("i", "group", null, true, "The name of the default user group (mutually exclusive with 'file')"));
+		options.addOption(new OmOption("i", "tz", null, true, "Default server time zone, and time zone for the selected user (mutually exclusive with 'file')"));
 		options.addOption(new OmOption("i", null, "password", true, "Password of the default user, minimum " + InstallationConfig.USER_LOGIN_MINIMUM_LENGTH + " characters (will be prompted if not set)", true));
 		options.addOption(new OmOption("i", null, "system-email-address", true, "System e-mail address [default: " + cfg.mailReferer + "]", true));
 		options.addOption(new OmOption("i", null, "smtp-server", true, "SMTP server for outgoing e-mails [default: " + cfg.smtpServer + "]", true));
@@ -242,11 +244,10 @@ public class Admin {
 	private void process(String[] args) {
 		String ctxName = System.getProperty("context", "openmeetings");
 		File home = new File(System.getenv("RED5_HOME"));
-		File omHome = new File(new File(home, "webapps"), ctxName);
+		omHome = new File(new File(home, "webapps"), ctxName);
 		File omUploadTemp = new File(omHome, OpenmeetingsVariables.UPLOAD_TEMP_DIR);
 		
 		Parser parser = new PosixParser();
-		CommandLine cmdl = null;
 		try {
 			cmdl = parser.parse(opts, args);
 		} catch (ParseException e) {
@@ -271,9 +272,10 @@ public class Admin {
 		switch(cmd) {
 			case install:
 				try {
-					String login = cmdl.getOptionValue("user");
-					String email = cmdl.getOptionValue("email");
-					String group = cmdl.getOptionValue("group");
+					if (cmdl.hasOption("file") && (cmdl.hasOption("user") || cmdl.hasOption("email") || cmdl.hasOption("group"))) {
+						System.out.println("Please specify even 'file' option or 'admin user'.");
+						System.exit(1);
+					}
 					//TODO commented for now, since not in use boolean force = cmdl.hasOption("force");
 					if (cmdl.hasOption("skip-default-rooms")) {
 						cfg.createDefaultRooms = "0";
@@ -299,33 +301,7 @@ public class Admin {
 					if (cmdl.hasOption("email-use-tls")) {
 						cfg.mailUseTls = "1";
 					}
-					if (login == null || login.length() < InstallationConfig.USER_LOGIN_MINIMUM_LENGTH) {
-						System.out.println("User login was not provided, or too short, should be at least " + InstallationConfig.USER_LOGIN_MINIMUM_LENGTH + " character long.");
-						System.exit(1);
-					}
-					
-					try {
-						if (!MailUtil.matches(email)) {
-						    throw new AddressException("Invalid address");
-						}
-						new InternetAddress(email, true);
-					} catch (AddressException ae) {
-						System.out.println("Please provide non-empty valid email: '" + email + "' is not valid.");
-						System.exit(1);
-					}
-					if (group == null || login.length() < 1) {
-						System.out.println("User group was not provided, or too short, should be at least 1 character long.");
-						System.exit(1);
-					}
-					String pass = cmdl.getOptionValue("password");
-					if (pass == null || pass.length() < InstallationConfig.USER_PASSWORD_MINIMUM_LENGTH) {
-						System.out.print("Please enter password:");
-						pass = new BufferedReader(new InputStreamReader(System.in)).readLine();
-						if (pass == null || pass.length() < InstallationConfig.USER_PASSWORD_MINIMUM_LENGTH) {
-							System.out.println("Password was not provided, or too short, should be at least " + InstallationConfig.USER_PASSWORD_MINIMUM_LENGTH + " character long.");
-							System.exit(1);
-						}
-					}
+					String langPath = new File(omHome, ImportInitvalues.languageFolderName).getAbsolutePath(); //FIXME need to be moved to helper
 					ConnectionProperties connectionProperties = new ConnectionProperties();
 					if (cmdl.hasOption("db-type") || cmdl.hasOption("db-host") || cmdl.hasOption("db-port") || cmdl.hasOption("db-name") || cmdl.hasOption("db-user") || cmdl.hasOption("db-pass")) {
 						String dbType = cmdl.getOptionValue("db-type", "derby");
@@ -342,30 +318,18 @@ public class Admin {
 								, connectionProperties
 								);
 					}
-					
-					if(cmdl.hasOption("drop")) {	
-						String[] mappingToolArgs = {"-sa", "drop", "-p", omHome.getPath() + "/WEB-INF/classes/META-INF/persistence.xml",
-								"-connectionDriverName", connectionProperties.getDriverName(), "-connectionURL", connectionProperties.getConnectionURL(),
-								"-connectionUserName", connectionProperties.getConnectionLogin(), "-connectionPassword", connectionProperties.getConnectionPass()};
-						MappingTool.main(mappingToolArgs);
-					}
-
 					ClassPathXmlApplicationContext ctx = getApplicationContext(ctxName);
-					OmTimeZoneDaoImpl tzDao =  ctx.getBean(OmTimeZoneDaoImpl.class);
-					String tz = null;
-					if (cmdl.hasOption("tz")) {
-						tz = cmdl.getOptionValue("tz");
-						tz = tzDao.getOmTimeZone(tz) == null ? null : tz;
-					}
-					if (tz == null) {
-						System.out.println("Please enter timezone, Possible timezones are:");
-						for (OmTimeZone omTz : tzDao.getOmTimeZones()) {
-							System.out.println(omTz.getJname());
-						}
-						System.exit(1);
-					}
 					ImportInitvalues importInit = ctx.getBean(ImportInitvalues.class);
-					importInit.loadAll(new File(omHome, ImportInitvalues.languageFolderName).getAbsolutePath(), cfg, login, pass, email, group, tz);
+					if (cmdl.hasOption("file")) {
+						File backup = checkRestoreFile(file);
+						dropDB(connectionProperties);
+						importInit.loadSystem(langPath, cfg); 
+						restoreOm(ctxName, backup);
+					} else {
+						AdminUserDetails admin = checkAdminDetails(importInit, langPath);
+						dropDB(connectionProperties);
+						importInit.loadAll(langPath, cfg, admin.login, admin.pass, admin.email, admin.group, admin.tz);
+					}					
 					
 					File installerFile = new File(new File(home, ScopeApplicationAdapter.configDirName), InstallationDocumentHandler.installFileName);
 					InstallationDocumentHandler.getInstance().createDocument(installerFile.getAbsolutePath(), 1);
@@ -392,19 +356,7 @@ public class Admin {
 				}
 				break;
 			case restore:
-				try {
-					File backup = new File(file);
-					if (!cmdl.hasOption("file") || !backup.exists() || !backup.isFile()) {
-						System.out.println("File should be specified, and point the existent zip file");
-						usage();
-						System.exit(1);
-					}
-					
-					BackupImportController importCtrl = getApplicationContext(ctxName).getBean(BackupImportController.class);
-					importCtrl.performImport(new FileInputStream(backup), omHome.getAbsolutePath());
-				} catch (Exception e) {
-					handleError("Restore failed", e);
-				}
+				restoreOm(ctxName, checkRestoreFile(file));
 				break;
 			case files:
 				try {
@@ -449,6 +401,95 @@ public class Admin {
 		
 		System.out.println("... Done");
 		System.exit(0);
+	}
+	
+	private class AdminUserDetails {
+		String login = null;
+		String email = null;
+		String group = null;
+		String pass = null;
+		String tz = null;
+	}
+	
+	private AdminUserDetails checkAdminDetails(ImportInitvalues importInit, String langPath) throws Exception {
+		AdminUserDetails admin = new AdminUserDetails();
+		admin.login = cmdl.getOptionValue("user");
+		admin.email = cmdl.getOptionValue("email");
+		admin.group = cmdl.getOptionValue("group");
+		if (admin.login == null || admin.login.length() < InstallationConfig.USER_LOGIN_MINIMUM_LENGTH) {
+			System.out.println("User login was not provided, or too short, should be at least " + InstallationConfig.USER_LOGIN_MINIMUM_LENGTH + " character long.");
+			System.exit(1);
+		}
+		
+		try {
+			if (!MailUtil.matches(admin.email)) {
+			    throw new AddressException("Invalid address");
+			}
+			new InternetAddress(admin.email, true);
+		} catch (AddressException ae) {
+			System.out.println("Please provide non-empty valid email: '" + admin.email + "' is not valid.");
+			System.exit(1);
+		}
+		if (admin.group == null || admin.group.length() < 1) {
+			System.out.println("User group was not provided, or too short, should be at least 1 character long: " + admin.group);
+			System.exit(1);
+		}
+		admin.pass = cmdl.getOptionValue("password");
+		if (checkPassword(admin.pass)) {
+			System.out.print("Please enter password:");
+			admin.pass = new BufferedReader(new InputStreamReader(System.in)).readLine();
+			if (checkPassword(admin.pass)) {
+				System.out.println("Password was not provided, or too short, should be at least " + InstallationConfig.USER_PASSWORD_MINIMUM_LENGTH + " character long.");
+				System.exit(1);
+			}
+		}
+		Map<String, String> tzMap = ImportHelper.getAllTimeZones(importInit.getTimeZones(langPath));
+		admin.tz = null;
+		if (cmdl.hasOption("tz")) {
+			admin.tz = cmdl.getOptionValue("tz");
+			admin.tz = tzMap.containsKey(admin.tz) ? admin.tz : null;
+		}
+		if (admin.tz == null) {
+			System.out.println("Please enter timezone, Possible timezones are:");
+			for (String tzJname : tzMap.keySet()) {
+				System.out.println(tzJname);
+			}
+			System.exit(1);
+		}
+		return admin;
+	}
+	
+	private boolean checkPassword(String pass) {
+		return (pass == null || pass.length() < InstallationConfig.USER_PASSWORD_MINIMUM_LENGTH);
+	}
+	
+	private void dropDB(ConnectionProperties props) throws Exception {
+		if(cmdl.hasOption("drop")) {	
+			String[] mappingToolArgs = {"-sa", "drop", "-p", omHome.getAbsolutePath() + "/WEB-INF/classes/META-INF/persistence.xml",
+					"-connectionDriverName", props.getDriverName(), "-connectionURL", props.getConnectionURL(),
+					"-connectionUserName", props.getConnectionLogin(), "-connectionPassword", props.getConnectionPass()};
+			MappingTool.main(mappingToolArgs);
+		}
+	}
+	
+	private File checkRestoreFile(String file) {
+		File backup = new File(file);
+		if (!cmdl.hasOption("file") || !backup.exists() || !backup.isFile()) {
+			System.out.println("File should be specified, and point the existent zip file");
+			usage();
+			System.exit(1);
+		}
+		
+		return backup;
+	}
+	
+	private void restoreOm(String ctxName, File backup) {
+		try {
+			BackupImportController importCtrl = getApplicationContext(ctxName).getBean(BackupImportController.class);
+			importCtrl.performImport(new FileInputStream(backup), omHome.getAbsolutePath());
+		} catch (Exception e) {
+			handleError("Restore failed", e);
+		}
 	}
 	
 	public static void main(String[] args) {

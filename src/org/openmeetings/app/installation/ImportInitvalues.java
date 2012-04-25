@@ -768,8 +768,7 @@ public class ImportInitvalues {
 		List<OmTimeZone> omTimeZones = new LinkedList<OmTimeZone>();
 
 		SAXReader reader = new SAXReader();
-		Document document = reader.read(filePath
-				+ ImportInitvalues.nameOfTimeZoneFile);
+		Document document = reader.read(new File(filePath, ImportInitvalues.nameOfTimeZoneFile));
 
 		Element root = document.getRootElement();
 
@@ -960,8 +959,7 @@ public class ImportInitvalues {
 	}
 	// ------------------------------------------------------------------------------
 
-	public void loadAll(String filePath, InstallationConfig cfg, String username,
-			String userpass, String useremail, String groupame, String timeZone) throws Exception {
+	public void loadSystem(String filePath, InstallationConfig cfg) throws Exception {
 		loadMainMenu();
 		loadErrorMappingsFromXML(filePath);
 		loadInitLanguages(filePath);
@@ -974,7 +972,12 @@ public class ImportInitvalues {
 		loadPollTypes();
 
 		loadConfiguration(cfg);
+	}
+	
+	public void loadAll(String filePath, InstallationConfig cfg, String username,
+			String userpass, String useremail, String groupame, String timeZone) throws Exception {
 		
+		loadSystem(filePath, cfg);
 		loadInitUserAndOrganisation(username,
 				userpass, useremail, groupame, timeZone, cfg.defaultLangId);
 		

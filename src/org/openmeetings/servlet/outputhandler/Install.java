@@ -38,6 +38,7 @@ import org.openmeetings.app.installation.ImportInitvalues;
 import org.openmeetings.app.installation.InstallationConfig;
 import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.ImportHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.context.ApplicationContext;
@@ -117,22 +118,14 @@ public class Install extends VelocityViewServlet {
 		allFonts.put("Verdana", "Verdana");
 		allFonts.put("Arial", "Arial");
 
-		LinkedHashMap<String, String> allTimeZones = new LinkedHashMap<String, String>();
 		List<OmTimeZone> omTimeZoneList = getImportInitvalues()
 				.getTimeZones(filePath);
-		log.debug("omTimeZoneList :: " + omTimeZoneList.size());
-		for (OmTimeZone omTimeZone : omTimeZoneList) {
-			String labelName = omTimeZone.getJname() + " ("
-					+ omTimeZone.getLabel() + ")";
-			log.debug("labelName :: " + labelName);
-			allTimeZones.put(omTimeZone.getJname(), labelName);
-		}
 
 		Template tpl = super.getTemplate("install_step1_"
 				+ lang + ".vm");
 		ctx.put("allLanguages", allLanguages);
 		ctx.put("allFonts", allFonts);
-		ctx.put("allTimeZones", allTimeZones);
+		ctx.put("allTimeZones", ImportHelper.getAllTimeZones(omTimeZoneList));
 		StringWriter writer = new StringWriter();
 		tpl.merge(ctx, writer);
 
