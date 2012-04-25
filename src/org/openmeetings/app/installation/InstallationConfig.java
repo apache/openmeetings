@@ -51,8 +51,9 @@ public class InstallationConfig {
     public String red5SipEnable = "no";
     public String red5SipRoomPrefix = "400";
     public String red5SipExtenContext = "rooms";
-
-    @Override
+    public String replyToOrganizer = "1";
+    
+	@Override
 	public String toString() {
 		return "InstallationConfig [allowFrontendRegister="
 				+ allowFrontendRegister + ", createDefaultRooms="
@@ -83,6 +84,7 @@ public class InstallationConfig {
 				+ ", sipPhoneRangeStart=" + sipPhoneRangeStart
 				+ ", sipPhoneRange=" + sipPhoneRange + ", red5SipEnable="
 				+ red5SipEnable + ", red5SipRoomPrefix=" + red5SipRoomPrefix
-				+ ", red5SipExtenContext=" + red5SipExtenContext + "]";
+				+ ", red5SipExtenContext=" + red5SipExtenContext
+				+ ", replyToOrganizer=" + replyToOrganizer + "]";
 	}
 }

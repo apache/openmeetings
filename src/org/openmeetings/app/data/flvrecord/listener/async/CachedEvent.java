@@ -37,12 +37,10 @@ public class CachedEvent implements IStreamPacket {
 	}
 
 	public int getTimestamp() {
-		// TODO Auto-generated method stub
 		return timestamp;
 	}
 
 	public IoBuffer getData() {
-		// TODO Auto-generated method stub
 		return data;
 	}
 

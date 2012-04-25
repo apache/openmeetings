@@ -240,6 +240,13 @@ function checkEmail()
 	      	<option value="1">Yes</option>
 	        <option value="0" selected>No</option>
 	    </select><br />	 	       
+	    </li><li>
+        <label for="replyToOrganizer">Set inviter's email address as ReplyTo in email invitations (inviter.email.as.replyto)</label>
+    	<select name="replyToOrganizer" id="replyToOrganizer" size="1"
+    		>
+	      	<option value="1" selected>Yes</option>
+	        <option value="0">No</option>
+	    </select><br />	 
 	    </li><li> 
     	<label for="configdefaultLang">Default Language</label>
     	<select name="configdefaultLang" id="configdefaultLang" 

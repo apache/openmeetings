@@ -550,7 +550,7 @@ public class ImportInitvalues {
 		cfgManagement.addConfByKey(
 						3, 
 						"inviter.email.as.replyto", 
-						"1", 
+						cfg.replyToOrganizer, 
 						null,
 						"Set inviter's email address as ReplyTo in email invitations (1 == set, 0 == NOT set)");
 		

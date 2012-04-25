@@ -253,6 +253,7 @@ public class Install extends VelocityViewServlet {
 					cfg.mailAuthName = encodeUTF8(httpServletRequest,"configmailuser");
 					cfg.mailAuthPass = encodeUTF8(httpServletRequest,"configmailpass");
 					cfg.mailUseTls = encodeUTF8(httpServletRequest,"mailusetls");
+					cfg.replyToOrganizer = httpServletRequest.getParameter("replyToOrganizer");
 
 					cfg.defaultLangId = encodeUTF8(httpServletRequest,"configdefaultLang");
 					cfg.swfPath = encodeUTF8(httpServletRequest,"swftools_path");
