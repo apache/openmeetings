@@ -143,7 +143,10 @@
                 
                 if ($debug) Debug.write("appointmentstart: ",updateObj.appointmentstart);
                 if ($debug) Debug.write("appointmentstart: ",updateObj.appointmentend);
-                               
+                
+                if ($debug) Debug.write("appointmentstart: ",parseDateToStringTimeSeconds(updateObj.appointmentstart));
+                if ($debug) Debug.write("appointmentstart: ",parseDateToStringTimeSeconds(updateObj.appointmentend));
+                
 				if (updateObj.appointmentId > 0) {
 					this.updateAppointment.doCall();
 				} else {

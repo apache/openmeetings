@@ -53,8 +53,8 @@
         var y = tString.substring(6,10);
         var m = Number(tString.substring(3,5))-1;
         var d = tString.substring(0,2);     
-        var date = new Date(Date.UTC(y,m,d));
-        Debug.write(date); 
+        var date = new Date(y,m,d);
+        if ($debug) Debug.write(date); 
         return date;
     </method>
     
