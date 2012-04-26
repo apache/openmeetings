@@ -4414,4 +4414,10 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   <string id="1461" name="tooltip menu">
     <value>Export/Import System Backups</value>
   </string>
+  <string id="1462" name="file explorer">
+    <value>You need moderation or the right to draw on whiteboard to upload, add, delete or load files and folders.</value>
+  </string>
+  <string id="1463" name="whiteboard">
+    <value>Edit text</value>
+  </string>
 </language>

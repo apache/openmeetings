@@ -478,6 +478,9 @@ public class WhiteboardManagement {
 				// List roomItem = roomList.get(objectOID);
 				List currentObject = whiteboardObject.getRoomItems().get(
 						objectOID);
+				if (actionObject.get(0).equals("paint")) {
+					actionObject.set(1, currentObject.get(1));
+				}
 				whiteboardObject.getRoomItems().put(objectOID, actionObject);
 
 				Map roomList = whiteboardObject.getRoomItems();

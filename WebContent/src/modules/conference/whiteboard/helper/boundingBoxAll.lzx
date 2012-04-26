@@ -141,6 +141,10 @@
 			
 			lz.Focus.setFocus(this, false); 
 			
+			if (this.objRef.typeOfObject == "text") {
+				this._editText.setAttribute("visibility","visible");
+			}
+			
             //FIXME - Add Ellipse, Line and Free Draw Tool to it
             if (this.objRef.name.indexOf('rectangle') >= 0){
 				if ($debug) Debug.write("this.objRef._innerRect ",this.objRef._innerRect);
@@ -422,14 +426,13 @@
 		  onmouseover="parent.applyScrollbarToObject()" 
           onmouseout="parent.removeScrollbarToObject()"
 		  onmousedown="parent._applyDragstateFromThis()" 
-    	onmouseup="parent._removeDragstateFromThis()">
-		<handler name="oninit">
-	        var newMenu = new LzContextMenu();
-	        newMenu.hideBuiltInItems();
-	        var item1 = newMenu.makeMenuItem('remove Item', new LzDelegate(this.parent, "__LZRemoveItem"));
-	        newMenu.addItem(item1);
-	        this.setContextMenu(newMenu);		
-		</handler>	
+    	  onmouseup="parent._removeDragstateFromThis()">
+    	
+    	<contextmenu>
+			<contextmenuitem caption="$once{ canvas.getLabelName(80) }" 
+							 onselect="parent.parent.parent.__LZRemoveItem()" />
+        </contextmenu>
+		 
 		<handler name="ondblclick">
 
 			//Debug.write("ondblclick: ",this.parent.objRef.typeOfObject);
@@ -445,15 +448,43 @@
 								this.parent.objRef.height);
 			}
 		</handler>	
+		
 		<handler name="onmouseover">
 			if (this.parent.objRef.typeOfObject != "swf") {
 	           lz.Cursor.setCursorGlobal("arrow_draw_panel_cursor");
 			}
+		</handler>
+		
+		<handler name="onmouseout">
+			lz.Cursor.unlock();
+		</handler>
+		
+		
+	</view>
+	
+	<image src="$once{ canvas.getThemeImage('bounding_box_textedit_item_rsc') }" y="2"  width="16" height="16" stretches="both"
+				name="_editText" visibility="hidden" x="${ parent.width-this.width-parent.innerInsetScrollbars-18 }" >
+		<handler name="onclick">
+			this.parent.whiteboardRef
+						.editTextByValues(this.parent.objRef,
+								this.parent.objRef.name,
+								this.parent.objRef.text, 
+								this.parent.x, 
+								this.parent.y,
+								this.parent.objRef.width,
+								this.parent.objRef.height);
+		</handler>
+		<handler name="onmouseover">
+	        lz.Cursor.restoreCursor();
+	        lz.Cursor.showHandCursor(true);
 	    </handler>
 	    <handler name="onmouseout">
+	    	lz.Cursor.showHandCursor(false);
 	        lz.Cursor.unlock();
-	    </handler>	
-	</view>
+	    </handler>
+    
+		<labelTooltip labelid="1463" />
+	</image>	
 	
 	<image src="$once{ canvas.getThemeImage('bounding_box_delete_item_rsc') }" y="2"  width="16" height="16"
 					x="${ parent.width-this.width-parent.innerInsetScrollbars-2 }" stretches="both">
@@ -490,8 +521,7 @@
     <view name="_gripperNoResize" visibility="hidden" 
         resource="_boundingBoxPointerURNoGripper" x="${ parent.width-this.width }" y="${ parent.height-this.height }" />
     <view resource="_boundingBoxPointerUL" x="0" y="${ parent.height-this.height }" />
-    
-</class>
 
+</class>
 
 </library>

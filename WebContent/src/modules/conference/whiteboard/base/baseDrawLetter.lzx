@@ -21,6 +21,9 @@
 <library>
 	
 <class name="whiteBoardTextField" extends="text" >
+	<handler name="prepareForDelete" args="tRef">
+		//Nothing
+	</handler>
 	<attribute name="typeOfObject" value="text" type="string" />
 	<method name="setTextEncoded" args="tString">
 		<![CDATA[

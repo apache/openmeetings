@@ -21,7 +21,7 @@
 <language>
 	<lang id="1" rightToLeft="false" code="en">english</lang>
 	<lang id="2" rightToLeft="false" code="de">deutsch</lang>
-	<lang id="3" rightToLeft="false" code="de">deutsch (studIP)</lang>
+	<lang id="3" rightToLeft="false" code="de-StudIP">deutsch (studIP)</lang>
 	<lang id="4" rightToLeft="false" code="fr">french</lang>
 	<lang id="5" rightToLeft="false" code="it">italian</lang>
 	<lang id="6" rightToLeft="false" code="pt">portugues</lang>

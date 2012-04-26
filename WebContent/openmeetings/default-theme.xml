@@ -196,8 +196,13 @@
 	<resource name="bounding_box_delete_item_rsc" 
 				description="Toolbar Icon" 
 				license="APL Author sebawagner"
-				src="public/themes/basic-theme/general/cancel_icon_small.png" />		
-				
+				src="public/themes/basic-theme/general/cancel_icon_small.png" />	
+	
+	<resource name="bounding_box_textedit_item_rsc" 
+				description="Toolbar Icon" 
+				license="APL Author sebawagner"
+				src="public/themes/basic-theme/whiteboard/text_signature.png" />				
+					
 	<!-- document Tools -->	
 	
 	<resource name="doc_next" 

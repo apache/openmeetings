@@ -58,7 +58,7 @@
     <view x="2" y="2" resource="$once{ parent.itemResourceName }" />
     
     <view name="_clickEnabled" width="$once{ parent.width }" height="$once{ parent.height }" 
-    	  visibility="${ (parent.enabled) ? 'visible' : 'hidden' }"
+    	  visibility="${ (parent.enabled) ? 'hidden' : 'visible' }"
     	  opacity="0.5" bgcolor="0xFFFFFF" clickable="true" showhandcursor="false" />
     
     <labelTooltip x="2" y="2" labelid="$once{ parent.labelid }" />

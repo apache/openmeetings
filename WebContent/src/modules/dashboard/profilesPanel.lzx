@@ -67,7 +67,7 @@
 					parent._langAndCountry._town.setAttribute("text","<u>" + value.adresses.town + "</u>");
 				}
 				if (value.omTimeZone != null) {
-					parent._langAndCountry._timeZone.setAttribute("text","<u>" + value.omTimeZone.ical + "</u>");
+					parent._langAndCountry._timeZone.setAttribute("text","<u>" + value.omTimeZone.jname + "</u>");
 				}
 				
 				if (value.pictureuri==null || value.pictureuri.length==0){
@@ -166,13 +166,18 @@
 	    </labelText>
     </view>
     
-    <simpleLabelButton y="60" labelid="377" x="240" width="120" height="20">
-    	<labelTooltip labelid="377" />
+    <labelText y="60" labelid="377" x="140" width="180" fgcolor="0x0000CC">
+    	<handler name="oninit">
+    		<![CDATA[
+				if($debug) Debug.write("dashboard/getNumberUnreadMessages: ",value);
+				this.setAttribute("text","<u>..."+canvas.getLabelName(377)+"</u>");
+	        ]]>
+    	</handler>
     	<handler name="onclick">
         	canvas.userSettingsModuleOpt = "userProfile";
             quicklinkAct("userSettingsModule");
         </handler>
-    </simpleLabelButton> 
+    </labelText>
              
     <labelText fontstyle="bold" x="2" y="140" labelid="281" width="200"/>
     

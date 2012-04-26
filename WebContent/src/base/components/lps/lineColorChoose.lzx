@@ -65,8 +65,8 @@
     		this.rgt.setAttribute('opacity',0.3);
     		this.rgt.setAttribute('enabled',false);
     		this.colorIsEnabled = false;
-    		this.rgt._lock.setAttribute("visibility","visible");
-	    	this.rgt._lock_open.setAttribute("visibility","hidden");
+    		this.rgt_b._lock.setAttribute("visibility","visible");
+	    	this.rgt_b._lock_open.setAttribute("visibility","hidden");
     	} else {
 			this._currentcolor.setAttribute('clickable',true);
     		this._currentcolor.setAttribute('opacity',1);
@@ -74,8 +74,8 @@
     		this.rgt.setAttribute('enabled',true);
     		this.onselectedColor.sendEvent(this.selectedColor);
     		this.colorIsEnabled = true;
-    		this.rgt._lock.setAttribute("visibility","hidden");
-	    	this.rgt._lock_open.setAttribute("visibility","visible");
+    		this.rgt_b._lock.setAttribute("visibility","hidden");
+	    	this.rgt_b._lock_open.setAttribute("visibility","visible");
     	}
     </method>
     

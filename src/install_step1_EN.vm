@@ -66,14 +66,12 @@ form.cmxform label { color: #333; }
 form.cmxform fieldset {
 	border: none;
 	border-top: 1px solid #C9DCA6;
-	background: url(../images/cmxform-fieldset.gif) left bottom repeat-x;
 	}
 	
 form.cmxform fieldset fieldset { background: none; }
 	
 form.cmxform fieldset li {
 	padding: 5px 10px 7px;
-	background: url(../images/cmxform-divider.gif) left bottom repeat-x;
 	}
 	
 form.cmxform fieldset {
@@ -274,28 +272,28 @@ function checkEmail()
 	    	<input name="swftools_path" id="swftools_path" size="27" title="Enter the path to swftools for example C:/swftools (Windows) or leave blank if swftools is a known to your system path" type="text" />   	
 	    	<p><i>You can test if swftools is installed into system path by opening a shell or cmd-prompt and type pdf2swf<br/>
 	    		If this shows a list of options leave this field blank otherwise you have to specify the path to pdf2swf on your system<br/>
-	    		see also <a href="http://code.google.com/p/openmeetings/wiki/ConvertersInstallation" target="_blank">ConvertersInstallation</a></i></p>
+	    		see also <a href="http://incubator.apache.org/openmeetings/installation.html" target="_blank">Installation</a></i></p>
         </li>
         <li>
 	        <label for="imagemagick_path">ImageMagick Path</label>
 	    	<input name="imagemagick_path" id="imagemagick_path" size="27" title="Enter the path to ImageMagick, leave blank if ImageMagick is successfully installed to system-path" type="text" />   	
-	    	<p><i>see also <a href="http://code.google.com/p/openmeetings/wiki/ConvertersInstallation" target="_blank">ConvertersInstallation</a></i></p>	
+	    	<p><i>see also <a href="http://incubator.apache.org/openmeetings/installation.html" target="_blank">Installation</a></i></p>	
     	</li>
     	<li>
 	        <label for="ffmpeg_path">FFMPEG Path</label>
 	        <input name="ffmpeg_path" id="ffmpeg_path" size="27" title="Enter the path to FFMPEG, leave blank if FFMPEG is successfully installed to system-path" type="text" />    
-	        <p><i>see also <a href="http://code.google.com/p/openmeetings/wiki/ConvertersInstallation" target="_blank">ConvertersInstallation</a></i></p>  
+	        <p><i>see also <a href="http://incubator.apache.org/openmeetings/installation.html" target="_blank">Installation</a></i></p>  
         </li>
         <li>
         <label for="sox_path">SoX Path</label>
 	        <input name="sox_path" id="sox_path" size="27" title="Enter the path to SoX, leave blank if SoX is successfully installed to system-path" type="text" />    
-	        <p><i>see also <a href="http://code.google.com/p/openmeetings/wiki/ConvertersInstallation" target="_blank">ConvertersInstallation</a></i></p>  
+	        <p><i>see also <a href="http://incubator.apache.org/openmeetings/installation.html" target="_blank">Installation</a></i></p>  
         </li>
 		<li>
 	        <label for="jod_path">JOD Path</label>
 	        <input name="jod_path" id="jod_path" size="27" value="./jodconverter-core-3.0-beta-4/lib" 
 			title="The path to JOD library (http://code.google.com/p/jodconverter), configure the path to point to the lib directory of JOD that contains also the jodconverter-core-version.jar" type="text" />    
-	        <p><i>see also <a href="http://code.google.com/p/openmeetings/wiki/ConvertersInstallation" target="_blank">ConvertersInstallation</a></i></p>  
+	        <p><i>see also <a href="http://incubator.apache.org/openmeetings/installation.html" target="_blank">Installation</a></i></p>  
         </li>
 		<li>
 	        <label for="office_path">OpenOffice/LibreOffice Path for jodconverter</label>

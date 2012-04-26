@@ -58,14 +58,14 @@
     
     <method name="endDrawarrowline">
         <![CDATA[
-            //Debug.write("endDrawarrowline",this.startx,this.starty,this.endx,this.endy);
+            //if ($debug) Debug.write("endDrawarrowline",this.startx,this.starty,this.endx,this.endy);
 	        var tempName = this.currentlayer.name;
 	        //Debug.write("tempName: ",tempName);
 	        this.currentlayer.destroy();
 	        
 	        //GetBounds of that Object
-	        var minx = this.width+2;
-	        var miny = this.height+2;
+	        var minx = this.width+2000;
+	        var miny = this.height+2000;
 	        var maxx = -2;
 	        var maxy = -2;
 	

@@ -5756,38 +5756,50 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="1433" name="exclusive_audio_action">
-    <value>Mir exklusives Rederecht geben (alternativ: klick auf Video Pod oder F12)</value>
+    <value>Mir exklusives Rederecht geben (alternativ: klick auf Video Pod
+    oder F12)</value>
   </string>
+
   <string id="1434" name="micro is on">
-    <value>Microphone is on!</value>
+    <value>Mikrofon ist an</value>
   </string>
+
   <string id="1435" name="micro is off">
-    <value>Microphone is muted</value>
+    <value>Mikrofon ist abgeschaltet</value>
   </string>
+
   <string id="1436" name="hide_chat">
-    <value>Hide chat</value>
+    <value>Chat verbergen</value>
   </string>
+
   <string id="1437" name="hide_activities_and_actions">
-    <value>Hide activities</value>
+    <value>AktivitÃ¤ten verbergen</value>
   </string>
+
   <string id="1438" name="hide_files_explorer">
-    <value>Hide files explorer</value>
+    <value>Dateiverwaltung verbergen</value>
   </string>
+
   <string id="1439" name="hide_actions_menu">
-    <value>Hide actions menu</value>
+    <value>Aktionenmenu verbergen</value>
   </string>
+
   <string id="1440" name="hide_screen_sharing">
-    <value>Hide screen sharing</value>
+    <value>Screen Sharing verbergen</value>
   </string>
+
   <string id="1441" name="hide_whiteboard">
-    <value>Hide whiteboard</value>
+    <value>Whiteboard verbergen</value>
   </string>
+
   <string id="1442" name="show microphone status">
-    <value>Show micro status in video</value>
+    <value>Mikrofonstatus in Video anzeigen</value>
   </string>
+
   <string id="1443" name="layout_options">
-    <value>Layout options</value>
+    <value>Layout Optionen</value>
   </string>
+  
   <string id="1444" name="calendar new button">
     <value>New Event</value>
   </string>
@@ -5841,5 +5853,11 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
   <string id="1461" name="tooltip menu">
     <value>Export/Import System Backups</value>
+  </string>
+  <string id="1462" name="file explorer">
+    <value>You need moderation or the right to draw on whiteboard to upload, add, delete or load files and folders.</value>
+  </string>
+  <string id="1463" name="whiteboard">
+    <value>Edit text</value>
   </string>
 </language>

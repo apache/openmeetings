@@ -87,9 +87,8 @@
     	<![CDATA[
             if (this.currentBtn != null){
                 this.currentBtn.isactive=false;
-                ////if ($debug)  //Debug.write("sendActiveWindow1: ",this.currentBtn);
-                this.currentBtn._minimizebtn_mo.setAttribute('visibility','hidden');
-                this.currentBtn._minimizebtn_dn.setAttribute('visibility','hidden');
+                if (this.currentBtn._minimizebtn_mo != null) this.currentBtn._minimizebtn_mo.setAttribute('visibility','hidden');
+                if (this.currentBtn._minimizebtn_dn != null) this.currentBtn._minimizebtn_dn.setAttribute('visibility','hidden');
             }
             this.currentBtn = btn;
             this.currentBtn.objRef.setAttribute("visibility","visible");
