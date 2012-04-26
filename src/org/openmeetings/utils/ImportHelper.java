@@ -50,10 +50,10 @@ public class ImportHelper {
 		
 		log.debug("omTimeZoneList :: " + tzList.size());
 		for (OmTimeZone omTimeZone : tzList) {
-			String labelName = omTimeZone.getJname() + " ("
-					+ omTimeZone.getLabel() + ")";
+			String labelName = omTimeZone.getLabel() + " ("
+					+ omTimeZone.getJname() + ")";
 			log.debug("labelName :: " + labelName);
-			result.put(omTimeZone.getJname(), labelName);
+			result.put(omTimeZone.getIcal(), labelName);
 		}
 		
 		return result;

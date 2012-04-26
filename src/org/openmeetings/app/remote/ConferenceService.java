@@ -374,7 +374,7 @@ public class ConferenceService {
 							.equals(room_types_id))
 						continue;
 
-					rooom.setCurrentusers(this.getRoomClientsListByRoomId(rooom
+					rooom.setCurrentusers(getRoomClientsListByRoomId(rooom
 							.getRooms_id()));
 					result.add(rooom);
 				}
@@ -758,7 +758,7 @@ public class ConferenceService {
 		log.debug("getRoomClientsListByRoomId");
 		try {
 			LinkedList<RoomClient> clients = new LinkedList<RoomClient>();
-			HashMap<String, RoomClient> clientList = this.clientListManager
+			HashMap<String, RoomClient> clientList = clientListManager
 					.getClientListByRoom(room_id);
 			for (Iterator<String> iter = clientList.keySet().iterator(); iter
 					.hasNext();) {

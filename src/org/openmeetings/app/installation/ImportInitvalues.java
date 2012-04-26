@@ -559,8 +559,7 @@ public class ImportInitvalues {
 		log.debug("Configuration ADDED");
 	}
 
-	public void loadDefaultRooms(boolean createRooms) {
-
+	public void loadRoomTypes() {
 		long conference_Id = roommanagement
 				.addRoomType("conference (1-25 users)", false);
 		log.debug("conference_Id: " + conference_Id);
@@ -575,8 +574,19 @@ public class ImportInitvalues {
 		long interview_Id = roommanagement
 				.addRoomType("interview  (1:1 meeting with recording)", false);
 		log.debug("interview_Id: " + interview_Id);
-
+		
+		//Custom room type is not in use anymore
+		roommanagement.addRoomType("custom (extension point for your plugin)", true);
+		log.debug("RoomTypes ADDED");
+	}
+	
+	public void loadDefaultRooms(boolean createRooms) {
 		if (createRooms) {
+			//hardcoded IDs (they are not intended to be changed)
+			long conference_Id = 1;
+			long restricted_Id = 3;
+			long interview_Id = 4;
+			
 			roommanagement.addRoom(3, "public Interview Room", interview_Id,
 					"", new Long(16), true, null, false, false, null, false,
 					null, true, false, false, "", "", "", null, null, null,
@@ -778,8 +788,10 @@ public class ImportInitvalues {
 			String timeZoneName = item.attributeValue("name");
 			String timeZoneLabel = item.attributeValue("label");
 			Integer orderId = Integer.valueOf(item.attributeValue("orderId"));
+			String iCal = item.attributeValue("iCal");
 
 			OmTimeZone omTimeZone = new OmTimeZone();
+			omTimeZone.setIcal(iCal);
 			omTimeZone.setJname(timeZoneName);
 			omTimeZone.setLabel(timeZoneLabel);
 			omTimeZone.setOrderId(orderId);
@@ -966,11 +978,12 @@ public class ImportInitvalues {
 		loadSalutations();
 		// AppointMent Categories
 		loadInitAppointmentCategories();
-		// Appointment Remindertypes
+		// Appointment Reminder types
 		loadInitAppointmentReminderTypes();
 		// Appointment poll types
 		loadPollTypes();
-
+		loadRoomTypes();
+		
 		loadConfiguration(cfg);
 	}
 	

@@ -318,16 +318,18 @@ public class Admin {
 								, connectionProperties
 								);
 					}
-					ClassPathXmlApplicationContext ctx = getApplicationContext(ctxName);
-					ImportInitvalues importInit = ctx.getBean(ImportInitvalues.class);
 					if (cmdl.hasOption("file")) {
 						File backup = checkRestoreFile(file);
 						dropDB(connectionProperties);
+						
+						ImportInitvalues importInit = getApplicationContext(ctxName).getBean(ImportInitvalues.class);
 						importInit.loadSystem(langPath, cfg); 
 						restoreOm(ctxName, backup);
 					} else {
-						AdminUserDetails admin = checkAdminDetails(importInit, langPath);
+						AdminUserDetails admin = checkAdminDetails(ctxName, langPath);
 						dropDB(connectionProperties);
+						
+						ImportInitvalues importInit = getApplicationContext(ctxName).getBean(ImportInitvalues.class);
 						importInit.loadAll(langPath, cfg, admin.login, admin.pass, admin.email, admin.group, admin.tz);
 					}					
 					
@@ -411,7 +413,7 @@ public class Admin {
 		String tz = null;
 	}
 	
-	private AdminUserDetails checkAdminDetails(ImportInitvalues importInit, String langPath) throws Exception {
+	private AdminUserDetails checkAdminDetails(String ctxName, String langPath) throws Exception {
 		AdminUserDetails admin = new AdminUserDetails();
 		admin.login = cmdl.getOptionValue("user");
 		admin.email = cmdl.getOptionValue("email");
@@ -436,13 +438,14 @@ public class Admin {
 		}
 		admin.pass = cmdl.getOptionValue("password");
 		if (checkPassword(admin.pass)) {
-			System.out.print("Please enter password:");
+			System.out.print("Please enter password for the user '" + admin.login + "':");
 			admin.pass = new BufferedReader(new InputStreamReader(System.in)).readLine();
 			if (checkPassword(admin.pass)) {
 				System.out.println("Password was not provided, or too short, should be at least " + InstallationConfig.USER_PASSWORD_MINIMUM_LENGTH + " character long.");
 				System.exit(1);
 			}
 		}
+		ImportInitvalues importInit = getApplicationContext(ctxName).getBean(ImportInitvalues.class);
 		Map<String, String> tzMap = ImportHelper.getAllTimeZones(importInit.getTimeZones(langPath));
 		admin.tz = null;
 		if (cmdl.hasOption("tz")) {
@@ -451,8 +454,9 @@ public class Admin {
 		}
 		if (admin.tz == null) {
 			System.out.println("Please enter timezone, Possible timezones are:");
-			for (String tzJname : tzMap.keySet()) {
-				System.out.println(tzJname);
+			
+			for (String tzIcal : tzMap.keySet()) {
+				System.out.println(String.format("%1$-25s%2$s", "\"" + tzIcal + "\"", tzMap.get(tzIcal)));
 			}
 			System.exit(1);
 		}
@@ -464,6 +468,9 @@ public class Admin {
 	}
 	
 	private void dropDB(ConnectionProperties props) throws Exception {
+		//FIXME drop will not work unless any of the --db-* option is specified
+		//FIXME drop will drop not all tables (tables count is reduced since 1.9)
+		//FIXME drop will throw an exception if table name is changed/table is added
 		if(cmdl.hasOption("drop")) {	
 			String[] mappingToolArgs = {"-sa", "drop", "-p", omHome.getAbsolutePath() + "/WEB-INF/classes/META-INF/persistence.xml",
 					"-connectionDriverName", props.getDriverName(), "-connectionURL", props.getConnectionURL(),

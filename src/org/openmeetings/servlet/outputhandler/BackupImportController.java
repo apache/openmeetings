@@ -1770,265 +1770,245 @@ public class BackupImportController extends AbstractUploadController {
 		return null;
 	}
 
-	private void importRooms(File roomFile) throws Exception {
-
-		this.getRoomListByXML(roomFile);
-
-	}
-
 	@SuppressWarnings("unchecked")
-	private void getRoomListByXML(File roomFile) {
+	private void importRooms(File roomFile) throws Exception {
 		try {
-
-			// List<Rooms> roomList = new LinkedList<Rooms>();
-
-			// List<RoomModerators> roomModeratorList = new
-			// LinkedList<RoomModerators>();
-
 			SAXReader reader = new SAXReader();
 			Document document = reader.read(roomFile);
 
 			Element root = document.getRootElement();
 
-			for (Iterator<Element> i = root.elementIterator(); i.hasNext();) {
-				Element itemObject = i.next();
-				if (itemObject.getName().equals("rooms")) {
+			Element rooms = root.element("rooms");
+			for (Iterator<Element> innerIter = rooms
+					.elementIterator("room"); innerIter.hasNext();) {
 
-					for (Iterator<Element> innerIter = itemObject
-							.elementIterator("room"); innerIter.hasNext();) {
+				Element roomObject = innerIter.next();
 
-						Element roomObject = innerIter.next();
+				Long rooms_id = importLongType(unformatString(roomObject
+						.element("rooms_id").getText()));
+				String name = unformatString(roomObject.element("name")
+						.getText());
+				String deleted = unformatString(roomObject.element(
+						"deleted").getText());
+				String comment = unformatString(roomObject.element(
+						"comment").getText());
+				Long numberOfPartizipants = importLongType(unformatString((roomObject
+						.element("numberOfPartizipants").getText())));
+				Boolean appointment = importBooleanType(unformatString(roomObject
+						.element("appointment").getText()));
+				Long externalRoomId = importLongType(unformatString(roomObject
+						.element("externalRoomId").getText()));
+				String externalRoomType = unformatString(roomObject
+						.element("externalRoomType").getText());
+				Long roomtypes_id = importLongType(unformatString(roomObject
+						.element("roomtypeId").getText()));
+				
+				Boolean isDemoRoom = false;
+				if (roomObject
+						.element("isDemoRoom") != null) {
+					isDemoRoom = importBooleanType(unformatString(roomObject
+						.element("isDemoRoom").getText()));
+				}
+				
+				Integer demoTime = null;
+				if (roomObject
+						.element("demoTime") != null) {
+					demoTime = importIntegerType(unformatString(roomObject
+						.element("demoTime").getText()));
+				}
+				
+				Boolean isModeratedRoom = false;
+				if (roomObject.element("isModeratedRoom") != null) {
+					isModeratedRoom = importBooleanType(unformatString(roomObject
+						.element("isModeratedRoom").getText()));
+				}
+				
+				Boolean allowUserQuestions = true;
+				if (roomObject.element("allowUserQuestions") != null) {
+					allowUserQuestions = importBooleanType(unformatString(roomObject
+						.element("allowUserQuestions").getText()));
+				}
+				
+				
+				Boolean isAudioOnly = false;
+				if (roomObject.element("isAudioOnly") != null) {
+					isAudioOnly = importBooleanType(unformatString(roomObject
+						.element("isAudioOnly").getText()));
+				}
+				
+				String sipNumber = "";
+				if (roomObject.element("sipNumber") != null) {
+					sipNumber = unformatString(roomObject.element(
+						"sipNumber").getText());
+				}
+				
+				String conferencePin = "";
+				if (roomObject.element("conferencePin") != null) {
+					conferencePin = unformatString(roomObject
+							.element("conferencePin").getText());
+				}
+				
+				Boolean showMicrophoneStatus = false;
+				if (roomObject.element("showMicrophoneStatus") != null) {
+					showMicrophoneStatus = importBooleanType(unformatString(roomObject
+							.element("showMicrophoneStatus").getText()));
+				}
 
-						Long rooms_id = importLongType(unformatString(roomObject
-								.element("rooms_id").getText()));
-						String name = unformatString(roomObject.element("name")
-								.getText());
-						String deleted = unformatString(roomObject.element(
-								"deleted").getText());
-						String comment = unformatString(roomObject.element(
-								"comment").getText());
-						Long numberOfPartizipants = importLongType(unformatString((roomObject
-								.element("numberOfPartizipants").getText())));
-						Boolean appointment = importBooleanType(unformatString(roomObject
-								.element("appointment").getText()));
-						Long externalRoomId = importLongType(unformatString(roomObject
-								.element("externalRoomId").getText()));
-						String externalRoomType = unformatString(roomObject
-								.element("externalRoomType").getText());
-						Long roomtypes_id = importLongType(unformatString(roomObject
-								.element("roomtypeId").getText()));
-						
-						Boolean isDemoRoom = false;
-						if (roomObject
-								.element("isDemoRoom") != null) {
-							isDemoRoom = importBooleanType(unformatString(roomObject
-								.element("isDemoRoom").getText()));
-						}
-						
-						Integer demoTime = null;
-						if (roomObject
-								.element("demoTime") != null) {
-							demoTime = importIntegerType(unformatString(roomObject
-								.element("demoTime").getText()));
-						}
-						
-						Boolean isModeratedRoom = false;
-						if (roomObject.element("isModeratedRoom") != null) {
-							isModeratedRoom = importBooleanType(unformatString(roomObject
-								.element("isModeratedRoom").getText()));
-						}
-						
-						Boolean allowUserQuestions = true;
-						if (roomObject.element("allowUserQuestions") != null) {
-							allowUserQuestions = importBooleanType(unformatString(roomObject
-								.element("allowUserQuestions").getText()));
-						}
-						
-						
-						Boolean isAudioOnly = false;
-						if (roomObject.element("isAudioOnly") != null) {
-							isAudioOnly = importBooleanType(unformatString(roomObject
-								.element("isAudioOnly").getText()));
-						}
-						
-						String sipNumber = "";
-						if (roomObject.element("sipNumber") != null) {
-							sipNumber = unformatString(roomObject.element(
-								"sipNumber").getText());
-						}
-						
-						String conferencePin = "";
-						if (roomObject.element("conferencePin") != null) {
-							conferencePin = unformatString(roomObject
-									.element("conferencePin").getText());
-						}
-						
-						Boolean showMicrophoneStatus = false;
-						if (roomObject.element("showMicrophoneStatus") != null) {
-							showMicrophoneStatus = importBooleanType(unformatString(roomObject
-									.element("showMicrophoneStatus").getText()));
-						}
+				Long ownerId = null;
+				if (roomObject.element("ownerid") != null) {
+					ownerId = getNewId(
+							importLongType(unformatString(roomObject
+									.element("ownerid").getText())),
+							Maps.USERS);
+				}
 
-						Long ownerId = null;
-						if (roomObject.element("ownerid") != null) {
-							ownerId = getNewId(
-									importLongType(unformatString(roomObject
-											.element("ownerid").getText())),
-									Maps.USERS);
-						}
+				Boolean ispublic = false;
+				if (roomObject.element("ispublic") != null) {
+					ispublic = importBooleanType(unformatString(roomObject
+							.element("ispublic").getText()));
+				}
 
-						Boolean ispublic = false;
-						if (roomObject.element("ispublic") != null) {
-							ispublic = importBooleanType(unformatString(roomObject
-									.element("ispublic").getText()));
-						}
+				Boolean waitForRecording = false;
+				if (roomObject.element("waitForRecording") != null) {
+					waitForRecording = importBooleanType(unformatString(roomObject
+							.element("waitForRecording").getText()));
+				}
 
-						Boolean waitForRecording = false;
-						if (roomObject.element("waitForRecording") != null) {
-							waitForRecording = importBooleanType(unformatString(roomObject
-									.element("waitForRecording").getText()));
-						}
+				Boolean hideTopBar = false;
+				if (roomObject.element("hideTopBar") != null) {
+					hideTopBar = importBooleanType(unformatString(roomObject
+							.element("hideTopBar").getText()));
+				}
 
-						Boolean hideTopBar = false;
-						if (roomObject.element("hideTopBar") != null) {
-							hideTopBar = importBooleanType(unformatString(roomObject
-									.element("hideTopBar").getText()));
-						}
+				Boolean isClosed = false;
+				if (roomObject.element("isClosed") != null) {
+					isClosed = importBooleanType(unformatString(roomObject
+							.element("isClosed").getText()));
+				}
 
-						Boolean isClosed = false;
-						if (roomObject.element("isClosed") != null) {
-							isClosed = importBooleanType(unformatString(roomObject
-									.element("isClosed").getText()));
-						}
+				Boolean allowRecording = false;
+				if (roomObject.element("allowRecording") != null) {
+					allowRecording = importBooleanType(unformatString(roomObject
+							.element("allowRecording").getText()));
+				}
 
-						Boolean allowRecording = false;
-						if (roomObject.element("allowRecording") != null) {
-							allowRecording = importBooleanType(unformatString(roomObject
-									.element("allowRecording").getText()));
-						}
+				String redirectURL = "";
+				if (roomObject.element("redirectURL") != null) {
+					redirectURL = unformatString(roomObject.element(
+							"redirectURL").getText());
+				}
+				
+				Boolean hideActionsMenu = false;
+				if (roomObject.element("hideActionsMenu") != null) {
+					hideTopBar = importBooleanType(unformatString(roomObject
+							.element("hideActionsMenu").getText()));
+				}
+				
+				Boolean hideActivitiesAndActions = false;
+				if (roomObject.element("hideActivitiesAndActions") != null) {
+					hideTopBar = importBooleanType(unformatString(roomObject
+							.element("hideActivitiesAndActions").getText()));
+				}
+				
+				Boolean hideChat = false;
+				if (roomObject.element("hideChat") != null) {
+					hideTopBar = importBooleanType(unformatString(roomObject
+							.element("hideChat").getText()));
+				}
+				
+				Boolean hideFilesExplorer = false;
+				if (roomObject.element("hideFilesExplorer") != null) {
+					hideTopBar = importBooleanType(unformatString(roomObject
+							.element("hideFilesExplorer").getText()));
+				}
+				
+				Boolean hideScreenSharing = false;
+				if (roomObject.element("hideScreenSharing") != null) {
+					hideTopBar = importBooleanType(unformatString(roomObject
+							.element("hideScreenSharing").getText()));
+				}
+				
+				Boolean hideWhiteboard = false;
+				if (roomObject.element("hideWhiteboard") != null) {
+					hideTopBar = importBooleanType(unformatString(roomObject
+							.element("hideWhiteboard").getText()));
+				}
 
-						String redirectURL = "";
-						if (roomObject.element("redirectURL") != null) {
-							redirectURL = unformatString(roomObject.element(
-									"redirectURL").getText());
-						}
-						
-						Boolean hideActionsMenu = false;
-						if (roomObject.element("hideActionsMenu") != null) {
-							hideTopBar = importBooleanType(unformatString(roomObject
-									.element("hideActionsMenu").getText()));
-						}
-						
-						Boolean hideActivitiesAndActions = false;
-						if (roomObject.element("hideActivitiesAndActions") != null) {
-							hideTopBar = importBooleanType(unformatString(roomObject
-									.element("hideActivitiesAndActions").getText()));
-						}
-						
-						Boolean hideChat = false;
-						if (roomObject.element("hideChat") != null) {
-							hideTopBar = importBooleanType(unformatString(roomObject
-									.element("hideChat").getText()));
-						}
-						
-						Boolean hideFilesExplorer = false;
-						if (roomObject.element("hideFilesExplorer") != null) {
-							hideTopBar = importBooleanType(unformatString(roomObject
-									.element("hideFilesExplorer").getText()));
-						}
-						
-						Boolean hideScreenSharing = false;
-						if (roomObject.element("hideScreenSharing") != null) {
-							hideTopBar = importBooleanType(unformatString(roomObject
-									.element("hideScreenSharing").getText()));
-						}
-						
-						Boolean hideWhiteboard = false;
-						if (roomObject.element("hideWhiteboard") != null) {
-							hideTopBar = importBooleanType(unformatString(roomObject
-									.element("hideWhiteboard").getText()));
-						}
+				Rooms room = new Rooms();
+				room.setRooms_id(rooms_id);
+				room.setOwnerId(ownerId);
+				room.setName(name);
+				room.setDeleted(deleted);
+				room.setComment(comment);
+				room.setNumberOfPartizipants(numberOfPartizipants);
+				room.setAppointment(appointment);
+				room.setExternalRoomId(externalRoomId);
+				room.setExternalRoomType(externalRoomType);
+				room.setRoomtype(roommanagement
+						.getRoomTypesById(roomtypes_id));
+				room.setIsDemoRoom(isDemoRoom);
+				room.setDemoTime(demoTime);
+				room.setIsModeratedRoom(isModeratedRoom);
+				room.setAllowUserQuestions(allowUserQuestions);
+				room.setIsAudioOnly(isAudioOnly);
+				room.setSipNumber(sipNumber);
+				room.setConferencePin(conferencePin);
+				room.setIspublic(ispublic);
+				room.setIsClosed(isClosed);
+				room.setRedirectURL(redirectURL);
+				room.setWaitForRecording(waitForRecording);
+				room.setHideTopBar(hideTopBar);
+				room.setAllowRecording(allowRecording);
+				room.setShowMicrophoneStatus(showMicrophoneStatus);						
+				room.setHideActionsMenu(hideActionsMenu);
+				room.setHideActivitiesAndActions(hideActivitiesAndActions);
+				room.setHideChat(hideChat);
+				room.setHideFilesExplorer(hideFilesExplorer);
+				room.setHideScreenSharing(hideScreenSharing);
+				room.setHideWhiteboard(hideWhiteboard);
 
-						Rooms room = new Rooms();
-						room.setRooms_id(rooms_id);
-						room.setOwnerId(ownerId);
-						room.setName(name);
-						room.setDeleted(deleted);
-						room.setComment(comment);
-						room.setNumberOfPartizipants(numberOfPartizipants);
-						room.setAppointment(appointment);
-						room.setExternalRoomId(externalRoomId);
-						room.setExternalRoomType(externalRoomType);
-						room.setRoomtype(roommanagement
-								.getRoomTypesById(roomtypes_id));
-						room.setIsDemoRoom(isDemoRoom);
-						room.setDemoTime(demoTime);
-						room.setIsModeratedRoom(isModeratedRoom);
-						room.setAllowUserQuestions(allowUserQuestions);
-						room.setIsAudioOnly(isAudioOnly);
-						room.setSipNumber(sipNumber);
-						room.setConferencePin(conferencePin);
-						room.setIspublic(ispublic);
-						room.setIsClosed(isClosed);
-						room.setRedirectURL(redirectURL);
-						room.setWaitForRecording(waitForRecording);
-						room.setHideTopBar(hideTopBar);
-						room.setAllowRecording(allowRecording);
-						room.setShowMicrophoneStatus(showMicrophoneStatus);						
-						room.setHideActionsMenu(hideActionsMenu);
-						room.setHideActivitiesAndActions(hideActivitiesAndActions);
-						room.setHideChat(hideChat);
-						room.setHideFilesExplorer(hideFilesExplorer);
-						room.setHideScreenSharing(hideScreenSharing);
-						room.setHideWhiteboard(hideWhiteboard);
+				Long roomId = room.getRooms_id();
 
-						Long roomId = room.getRooms_id();
+				// We need to reset this as openJPA reject to store them
+				// otherwise
+				room.setRooms_id(null);
 
-						// We need to reset this as openJPA reject to store them
-						// otherwise
-						room.setRooms_id(null);
+				Long newRoomId = roommanagement.addRoom(room);
+				roomsMap.put(roomId, newRoomId);
 
-						Long newRoomId = roommanagement.addRoom(room);
-						roomsMap.put(roomId, newRoomId);
+				for (Iterator<Element> iterMods = roomObject
+						.elementIterator("room_moderators"); iterMods
+						.hasNext();) {
 
-						for (Iterator<Element> iterMods = roomObject
-								.elementIterator("room_moderators"); iterMods
-								.hasNext();) {
+					Element room_moderators = iterMods.next();
 
-							Element room_moderators = iterMods.next();
+					for (Iterator<Element> iterMod = room_moderators
+							.elementIterator("room_moderator"); iterMod
+							.hasNext();) {
 
-							for (Iterator<Element> iterMod = room_moderators
-									.elementIterator("room_moderator"); iterMod
-									.hasNext();) {
+						Element room_moderator = iterMod.next();
 
-								Element room_moderator = iterMod.next();
+						RoomModerators roomModerators = new RoomModerators();
 
-								RoomModerators roomModerators = new RoomModerators();
+						Long user_id = getNewId(
+								importLongType(unformatString(room_moderator
+										.element("user_id").getText())),
+								Maps.USERS);
+						Boolean is_supermoderator = importBooleanType(unformatString(room_moderator
+								.element("is_supermoderator").getText()));
 
-								Long user_id = getNewId(
-										importLongType(unformatString(room_moderator
-												.element("user_id").getText())),
-										Maps.USERS);
-								Boolean is_supermoderator = importBooleanType(unformatString(room_moderator
-										.element("is_supermoderator").getText()));
+						roomModerators.setDeleted("false");
+						roomModerators.setRoomId(getNewId(rooms_id,
+								Maps.ROOMS));
+						roomModerators.setUser(userManagement
+								.getUserById(user_id));
+						roomModerators
+								.setIsSuperModerator(is_supermoderator);
 
-								roomModerators.setDeleted("false");
-								roomModerators.setRoomId(getNewId(rooms_id,
-										Maps.ROOMS));
-								roomModerators.setUser(userManagement
-										.getUserById(user_id));
-								roomModerators
-										.setIsSuperModerator(is_supermoderator);
-
-								roomModeratorsDao
-										.addRoomModeratorByObj(roomModerators);
-
-							}
-
-						}
+						roomModeratorsDao
+								.addRoomModeratorByObj(roomModerators);
 
 					}
-
 				}
 			}
 
