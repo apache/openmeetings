@@ -346,7 +346,7 @@
 	<method name="getDateFirstDayInMonth">
 		<![CDATA[
 		//First calc the date by the given first day in week
-		var newDateTemp = new Date(this.showingdate.getFullYear(), this.showingdate.getMonth(), 1);
+		var newDateTemp = new Date(this.showingdate.getFullYear(), this.showingdate.getMonth(), 1, 12); //set hours to 12 to prevent timezone issues
 		////Debug.write(newDateTemp);
 		var factor = 0;
 		if (newDateTemp.getDay()>this.firstdayinweek)	
@@ -362,7 +362,7 @@
 		if (newDate.getDate()>1 && newDate.getMonth()==newDateTemp.getMonth()){
 			newDate = new Date( (newDate.getTime()-(86400000*7)) );
 		}
-		////Debug.write("getDateFirstDayInMonth ",newDate);
+		if ($debug) Debug.write("getDateFirstDayInMonth ",newDate);
 		return newDate;
 		]]>
 	</method>

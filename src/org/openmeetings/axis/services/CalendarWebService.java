@@ -724,6 +724,7 @@ public class CalendarWebService {
 				List<Week> weeks = new ArrayList<Week>(6);
 				Calendar currentDate = Calendar.getInstance();
 				currentDate.setTime(startDate);
+				currentDate.set(Calendar.HOUR_OF_DAY, 12); // set to 12 to prevent timezone issues
 				currentDate.set(Calendar.DATE, 1);
 
 				int currentWeekDay = currentDate.get(Calendar.DAY_OF_WEEK);
@@ -780,12 +781,12 @@ public class CalendarWebService {
 
 					for (int i = 0; i < 7; i++) { // 7 days a week
 
-						Calendar tCal = Calendar.getInstance();
+						Calendar tCal = Calendar.getInstance(timezone);
 						tCal.setTimeInMillis(startWeekDay.getTimeInMillis()
 								+ (z * 86400000L));
-
+						
 						Day day = new Day(tCal.getTime());
-
+						
 						for (Appointment appointment : appointments) {
 							if (appointment
 									.appointmentStartAsCalendar(timezone).get(
