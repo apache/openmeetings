@@ -112,7 +112,7 @@
             
             // Reconnect User to default Scope
             canvas.thishib.userScope = "hibernate";
-            var src = hib.protocollName+'://'+canvas.rtmphostlocal+':'+hib.protocollPort+'/'+canvas.webAppRootKey+'/'+hib.userScope;
+            var src = hib.getUrl();
             canvas.thishib.setAttribute('src',src);
             canvas.thishib.disconnect();
             canvas._mainbgcontentNavi.setAttribute('height',canvas.naviHeight);

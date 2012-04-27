@@ -46,7 +46,7 @@
 </class>
 
 <class name="hibRtmpConnection" extends="rtmpConnection" debug="false"
-    src="$once{ this.protocollName+'://'+canvas.rtmphostlocal+':'+this.protocollPort+'/'+canvas.webAppRootKey+'/'+this.userScope }" >
+    src="$once{ this.getUrl() }" >
 
     <attribute name="protocollName" type="string" value="rtmp" />
     <attribute name="protocollPort" type="string" value="$once{ canvas.rtmpport }" />
@@ -105,7 +105,10 @@
     <attribute name="showKickMessage" value="false" type="boolean"/>
     <attribute name="showFullMessage" value="false" type="boolean"/>
          
-         
+    <method name="getUrl">
+        return this.protocollName+'://'+canvas.rtmphostlocal+':'+this.protocollPort+'/'+canvas.webAppRootKey+'/'+this.userScope;
+    </method>
+             
      <!--
         The onconnect Method is triggered several times:
              - When you enter a room the NetConnection will close and reconnect to the Scope of the Room
@@ -169,7 +172,7 @@
             } else {
                 this.setAttribute('protocollName','rtmpt');
                 this.setAttribute('protocollPort',canvas.rtmpTunnelport);
-                var src = this.protocollName+'://'+canvas.rtmphostlocal+':'+this.protocollPort+'/'+canvas.webAppRootKey+'/'+this.userScope;
+                var src = getUrl();
                 this.setAttribute('src',src);
                 //Debug.write("new src ",this.src);
                 if (this.counterror<3){

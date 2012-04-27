@@ -51,7 +51,7 @@
         
         // Reconnect User to its Room Id
         canvas.thishib.userScope = canvas.thishib.currentroomid;
-        var src = hib.protocollName+'://'+canvas.rtmphostlocal+':'+hib.protocollPort+'/'+canvas.webAppRootKey+'/'+hib.userScope;
+        var src = hib.getUrl();
         
         if( $debug ) Debug.write("videoContainer: canvas.thishib: ",canvas.thishib.src,canvas.thishib);
         
