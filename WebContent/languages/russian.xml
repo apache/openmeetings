@@ -515,7 +515,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Закрыть</value>
   </string>
   <string id="164" name="organisationtablelist_idrow">
-    <value>Идент. № организации</value>
+    <value>Идент. № орг-ии</value>
   </string>
   <string id="165" name="organisationtablelist_namerow">
     <value>Имя</value>
@@ -566,7 +566,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Добавить пользователя</value>
   </string>
   <string id="181" name="orgvalue_userwinsearchfield">
-    <value>Поиск пользователя</value>
+    <value>Поиск пользоват-я</value>
   </string>
   <string id="182" name="orgvalue_userwinsearchbtn">
     <value>Искать</value>
@@ -896,7 +896,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Моя домашняя страница</value>
   </string>
   <string id="291" name="subnavi">
-    <value>Мои запланированные совещания</value>
+    <value>Мои совещания</value>
   </string>
   <string id="292" name="subnavi">
     <value>Мои запланированные лекции</value>
@@ -1793,7 +1793,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Логин</value>
   </string>
   <string id="590" name="room Administration roomclients list">
-    <value>У</value>
+    <value>x</value>
   </string>
   <string id="591" name="swf sync message">
     <value>Загрузка документа. Подождите, пока клиент синхронизируется.</value>
@@ -1862,7 +1862,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Запретить рисовать на доске</value>
   </string>
   <string id="613" name="conferencePanels">
-    <value>Пользователи</value>
+    <value>Пользоват-и</value>
   </string>
   <string id="614" name="conferencePanels">
     <value>Документы</value>
@@ -2492,7 +2492,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Является супермодератором</value>
   </string>
   <string id="823" name="room admin">
-    <value>Если комната модерируется, пользователь с правами модератора илиадминистратора автоматически становится модератором при входе. Если вам это не нужно, а Вы лишь хотите, чтобы определённый польз-ль стал модератором, используйте опцию "модератор по умолчанию".</value>
+    <value>Если комната модерируется, пользователь с правами модератора или администратора автоматически становится модератором при входе. Если вам это не нужно, а Вы лишь хотите, чтобы определённый польз-ль стал модератором, используйте опцию "модератор по умолчанию".</value>
   </string>
   <string id="824" name="room admin">
     <value>Супермодератор всегда становится модератором при входе в комнату. У него нельзя снять флаг модерации.</value>
@@ -2504,7 +2504,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Снять флаг супермодерации с польз-ля</value>
   </string>
   <string id="827" name="room admin">
-    <value>У</value>
+    <value>x</value>
   </string>
   <string id="828" name="room admin">
     <value>Если для комнаты вы добавите организацию, только пользователи этой организации будут иметь доступ к ней (действительно только если флаг isPublic не установлен)</value>
@@ -3788,10 +3788,10 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Ничего не выбрано!</value>
   </string>
   <string id="1255" name="private message">
-    <value>Перейти во входящие</value>
+    <value>Во входящие</value>
   </string>
   <string id="1256" name="private message">
-    <value>Удалить (окончательно)</value>
+    <value>Удалить (навсегда)</value>
   </string>
   <string id="1257" name="private message">
     <value>Действие не может быть отменено!</value>
@@ -4175,193 +4175,193 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>средний</value>
   </string>
   <string id="1384" name="mute micro">
-    <value>Mute microphone globally</value>
+    <value>Выключить микр. глобально</value>
   </string>
   <string id="1385" name="unmute micro">
-    <value>Unmute microphone globally</value>
+    <value>Включить микр. глобально</value>
   </string>
   <string id="1386" name="give exclusive audio">
-    <value>Mute microphone of others</value>
+    <value>Дать слово</value>
   </string>
   <string id="1387" name="mute self message">
-    <value>You are globally muted by the moderator. You cannot unmute yourself!</value>
+    <value>Микрофон был откл. модератором. Вы не можете вкл. микр. сами!</value>
   </string>
   <string id="1388" name="mute self confirm message title">
-    <value>Mute microphone globally?</value>
+    <value>Выкл. микрофон глобально?</value>
   </string>
   <string id="1389" name="mute self confirm message message">
-    <value>Do you really want to mute yourself globally? No other user will hear you anymore!</value>
+    <value>Вы действительно хотите отключит микрофон? Другие пользователи не смогут вас слышать!</value>
   </string>
   <string id="1390" name="mute others confirm message title">
-    <value>Mute microphone locally?</value>
+    <value>Отключить микрофон локально?</value>
   </string>
   <string id="1391" name="mute others confirm message">
-    <value>Do you really want to mute this microphone? You can only mute it locally on your screen. It has no effect to how other users hear this user. Only moderators can turn it off globally!</value>
+    <value>Вы действительно хотите откл. этот микрофон? Этот микрофон можно отключить только на вашем компьютере. Данное действие не повлияет на то, как остальные участники будут слышать этого пользователя. Только модератор может отключить микрофон глобально!</value>
   </string>
   <string id="1392" name="mute others confirm message title">
-    <value>Mute microphone off globally?</value>
+    <value>Отключить микрофон глобально?</value>
   </string>
   <string id="1393" name="mute others moderator message">
-    <value>Do you really want to mute this user globally? No other user will hear him anymore!</value>
+    <value>Вы действительно хотите отключить этого пользователя? Больше никто не будет слышать его!</value>
   </string>
   <string id="1394" name="mute status icons">
-    <value>Your sound is on. Click here to send moderator message to mute your microphone globally  (in the complete conference room) off!</value>
+    <value>Ваш звук включен. Нажмите сюда, чтобы послать модератору сообщение о выключении микрофона глобально (в заполненной комнате)!</value>
   </string>
   <string id="1395" name="mute status icons">
-    <value>Your sound is off. Click here to send moderator message to unmute your microphone globally  (in the complete conference room) on!</value>
+    <value>Ваш звук выключен. Нажмите сюда, чтобы послать модератору сообщение о включении микрофона глобально (в заполненной комнате)!</value>
   </string>
   <string id="1396" name="mute apply self on message">
-    <value>would like that the moderator mutes my microphone globally.</value>
+    <value>хотел бы, чтобы модератор выключил мой микрофон глобально.</value>
   </string>
   <string id="1397" name="mute apply self off message">
-    <value>would like that the moderator unmutes my microphone globally.</value>
+    <value>хотел бы, чтобы модератор включил мой микрофон глобально.</value>
   </string>
   <string id="1398" name="mute apply of message">
-    <value>want that the moderator unmutes his/her microphone.</value>
+    <value>хочет, чтобы модератор включил его/её микрофон.</value>
   </string>
   <string id="1399" name="mute apply of message">
-    <value>want that the moderator mutes his/her microphone.</value>
+    <value>хочет, чтобы модератор выключил его/её микрофон.</value>
   </string>
   <string id="1400" name="mute status icons">
-    <value>Unmute microphone. Click here to mute his/her microphone globally!</value>
+    <value>Включенный микрофон. Нажмите, чтобы выключить его/её микрофон глобально.</value>
   </string>
   <string id="1401" name="mute status icons">
-    <value>Mute microphone. Click here to unmute his/her microphone globally!</value>
+    <value>Выключенный микрофон. Нажмите, чтобы включить его/её микрофон глобально!</value>
   </string>
   <string id="1402" name="mute self message">
-    <value>This user is globally muted by the moderator. You cannot unmute him!</value>
+    <value>Этот пользователь глобально выключен модератором. Вы не можете включить его!</value>
   </string>
   <string id="1403" name="mute micro">
-    <value>Mute your microphone globally</value>
+    <value>Выключить ваш микрофон глобально</value>
   </string>
   <string id="1404" name="unmute micro">
-    <value>Unmute your microphone globally</value>
+    <value>Включить ваш микрофон глобально</value>
   </string>
   <string id="1405" name="mute micro">
-    <value>Mute microphone</value>
+    <value>Выключить микрофон</value>
   </string>
   <string id="1406" name="unmute micro">
-    <value>Unmute microphone</value>
+    <value>Включить микрофон</value>
   </string>
   <string id="1407" name="mute micro">
-    <value>Mute microphone globally</value>
+    <value>Выключить микрофон глобально</value>
   </string>
   <string id="1408" name="unmute micro">
-    <value>Unmute microphone globally</value>
+    <value>Включить микрофон глобально</value>
   </string>
   <string id="1409" name="mute moderator message">
-    <value>Only moderators can mute or unmute an user globally! To mute your own microphone: Please use the microphone icon in your video pod!</value>
+    <value>Только модераторы могут включать или выключать польз-лей глобально! Чтобы выключить ваш микрофон, используйте иконку микрофона!</value>
   </string>
   <string id="1410" name="poll_name">
-    <value>Poll Name</value>
+    <value>Имя проголосовавшего</value>
   </string>
   <string id="1411" name="poll_name">
-    <value>You</value>
+    <value>Вы</value>
   </string>
   <string id="1412" name="archived_polls">
-    <value>Archieved Polls</value>
+    <value>Заархивированные голосования</value>
   </string>
   <string id="1413" name="active_poll">
-    <value>active</value>
+    <value>активные</value>
   </string>
   <string id="1414" name="chart_simple">
-    <value>Simple Chart</value>
+    <value>Простая диаграмма</value>
   </string>
   <string id="1415" name="chart_pie">
-    <value>Pie Chart</value>
+    <value>Круговая диаграмма</value>
   </string>
   <string id="1416" name="sign_up_validation">
-    <value>Please enter email</value>
+    <value>Введите е-мейл</value>
   </string>
   <string id="1417" name="chat_notification">
-    <value>New message(s)</value>
+    <value>Новые сообщения</value>
   </string>
   <string id="1418" name="poll_close">
-    <value>Close Poll</value>
+    <value>Закрытое голосование</value>
   </string>
   <string id="1419" name="poll_close_confirm">
-    <value>Are you sure you want to close this Poll? No one will be able to vote</value>
+    <value>Уверены, что хотите закрыть голосование? Больше никто не сможет голосовать.</value>
   </string>
   <string id="1420" name="poll_delete">
-    <value>Delete Poll</value>
+    <value>Удалить голосование</value>
   </string>
   <string id="1421" name="poll_delete_confirm">
-    <value>Are you sure you want to delete this Poll? The results will be deleted as well.</value>
+    <value>Хотите удалить это голосование? Результаты тоже будут удалены.</value>
   </string>
   <string id="1422" name="language_code">
-    <value>Language ISO Code</value>
+    <value>Код ISO языка</value>
   </string>
   <string id="1423" name="exclusive_audio_permission">
-    <value>Allow/Deny right to give exclusive audio.</value>
+    <value>Разрешить/запретить права на эксклюзивный звук.</value>
   </string>
   <string id="1424" name="allow_exclusive_audio_permission">
-    <value>Allow user to give exclusive audio</value>
+    <value>Позволить пользователю эксклюзивный звук</value>
   </string>
   <string id="1425" name="deny_exclusive_audio_permission">
-    <value>Deny user to give exclusive audio</value>
+    <value>Запретить эксклюзивный звук для пользователя</value>
   </string>
   <string id="1426" name="excl_audio apply self on message">
-    <value>would like to get a permission for exclusive audio.</value>
+    <value>хотел бы получить разрешение на эксклюзивный звук.</value>
   </string>
   <string id="1427" name="excl_audio apply of message">
-    <value>want that the moderator gives me a permission for exclusive audio.</value>
+    <value>хочу, чтобы модератор разрешил мне эксклюзивный звук.</value>
   </string>
   <string id="1428" name="excl_audio status icons">
-    <value>Give a permission for exclusive audio.</value>
+    <value>Разрешить эксклюзивный звук.</value>
   </string>
   <string id="1429" name="cam_resolution">
-    <value>Cam resolution</value>
+    <value>Разрешение камеры</value>
   </string>
   <string id="1430" name="cam_resolution_info">
-    <value>Changing the resolution affects bandwidth, bigger picture needs more bandwith!</value>
+    <value>Изменение разрешения влияет на пропускную способность сети, увеличенная картинка требует больше разрешения.</value>
   </string>
   <string id="1431" name="exclusive_audio_error">
-    <value>You don't have the right to give yourself or others exclusive audio. You need to apply for the right from the moderator or ask the moderator to give you exclusive audio.</value>
+    <value>У вас нет прав разрешать себе или другим эксклюзивное аудио. Попросите у модератора эти права или пусть он разрешит вам эксклюзивный звук сам.</value>
   </string>
   <string id="1432" name="exclusive_audio_ask">
-    <value>I would like to get the right for exclusive audio</value>
+    <value>Я хотел бы получить разрешение на эксклюзивный звук.</value>
   </string>
   <string id="1433" name="exclusive_audio_action">
-    <value>Give exclusive audio to me (alternatively click on your video pod or press F12)</value>
+    <value>Дать мне эксклюзивный звук (как альтернатива, кликните на ваш экран или нажмите F12)</value>
   </string>
   <string id="1434" name="micro is on">
-    <value>Microphone is on!</value>
+    <value>Микрофон включён!</value>
   </string>
   <string id="1435" name="micro is off">
-    <value>Microphone is muted</value>
+    <value>Микрофон выключен</value>
   </string>
   <string id="1436" name="hide_chat">
-    <value>Hide chat</value>
+    <value>Скрыть чат</value>
   </string>
   <string id="1437" name="hide_activities_and_actions">
-    <value>Hide activities</value>
+    <value>Скрыть панель действий</value>
   </string>
   <string id="1438" name="hide_files_explorer">
-    <value>Hide files explorer</value>
+    <value>Скрыть панель файлов</value>
   </string>
   <string id="1439" name="hide_actions_menu">
-    <value>Hide actions menu</value>
+    <value>Скрыть меню действий</value>
   </string>
   <string id="1440" name="hide_screen_sharing">
-    <value>Hide screen sharing</value>
+    <value>Скрыть общий экран</value>
   </string>
   <string id="1441" name="hide_whiteboard">
-    <value>Hide whiteboard</value>
+    <value>Скрыть доску</value>
   </string>
   <string id="1442" name="show microphone status">
-    <value>Show micro status in video</value>
+    <value>Показать статус микрофона и видео</value>
   </string>
   <string id="1443" name="layout_options">
-    <value>Layout options</value>
+    <value>Параметры расположения</value>
   </string>
   <string id="1444" name="calendar new button">
-    <value>New Event</value>
+    <value>Новое событие</value>
   </string>
   <string id="1445" name="calendar password info text">
-    <value>Password protected are the links to the conference that are send to the participents when you save the calendar event, not the room! That means if you save the event multiple times but with different passwords every participent receives a new link that has a different password. But old links still work once send!</value>
+    <value>Ссылки, защещённые паролем - это ссылки на комнаты, которые посылаются участникам при сохранении события в календаре, не в комнате! Это значит, что если вы сохраняете событие несколько раз с разными паролями, участники каждый раз получают новые ссылки с разными паролямми. Но ссылки, посланные ранее, тоже работают!</value>
   </string>
   <string id="1446" name="calendar edit button">
-    <value>Edit details</value>
+    <value>Редактировать</value>
   </string>
   <string id="1447" name="sip show dialer">
     <value>Номеронабиратель SIP</value>
@@ -4370,48 +4370,48 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Позвонить</value>
   </string>
   <string id="1449" name="calendar contact list">
-    <value>Show calendar events of contact</value>
+    <value>Показать события календаря для контакта</value>
   </string>
   <string id="1450" name="tooltip menu">
-    <value>Your home!</value>
+    <value>Ваш дом!</value>
   </string>
   <string id="1451" name="tooltip menu">
-    <value>Plan your meetings</value>
+    <value>Планировать митинги</value>
   </string>
   <string id="1452" name="tooltip menu">
-    <value>Watch recording and interviews</value>
+    <value>Смотреть записи и интервью</value>
   </string>
   <string id="1453" name="tooltip menu">
-    <value>Choose and start a web-conference</value>
+    <value>Выбрать и начать конференцию</value>
   </string>
   <string id="1454" name="tooltip menu">
-    <value>Manage users and rights</value>
+    <value>Управлять пользователями и правами</value>
   </string>
   <string id="1455" name="tooltip menu">
-    <value>Manage connections and kick users</value>
+    <value>Управлять связями и выгонять пользователей</value>
   </string>
   <string id="1456" name="tooltip menu">
-    <value>Manage usergroups</value>
+    <value>Управлять группами пользователей</value>
   </string>
   <string id="1457" name="tooltip menu">
-    <value>Manage conference rooms</value>
+    <value>Управлять комнатами конференций</value>
   </string>
   <string id="1458" name="tooltip menu">
-    <value>Manage system settings</value>
+    <value>Управлять свойствами системы</value>
   </string>
   <string id="1459" name="tooltip menu">
-    <value>Manage labels and wording</value>
+    <value>Управлять метками и текстом</value>
   </string>
   <string id="1460" name="tooltip menu">
-    <value>Manage LDAP and ADS configurations</value>
+    <value>Конфигурировать LDAP и ADS</value>
   </string>
   <string id="1461" name="tooltip menu">
-    <value>Export/Import System Backups</value>
+    <value>Экспорт/импорт системных бэкапов</value>
   </string>
   <string id="1462" name="file explorer">
-    <value>You need moderation or the right to draw on whiteboard to upload, add, delete or load files and folders.</value>
+    <value>Вам нужны права модератора или права на рисование на доске, загрузку, выгрузку, добавление и удаление файлов и папок.</value>
   </string>
   <string id="1463" name="whiteboard">
-    <value>Edit text</value>
+    <value>Редактировать текст</value>
   </string>
 </language>
