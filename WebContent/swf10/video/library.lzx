@@ -23,11 +23,11 @@
 	<!--  FamFam Icon Creative Commons -->
     <resource name="warning_icon_popup_devices_rsc" src="resources/error.png" />
 
-	<!--  REPLACE -->
+	<!--  APL author sebawagner -->
 	<resource name="chatbgitem" src="resources/profile_pic.jpg" />
 
 	<!--  FamFam Icon Creative Commons -->
-	<resource name="resyncuser_rsc" src="resources/arrow_refresh.png" />
+	<resource name="resyncuser_rsc" src="resources/arrow_refresh_small.png" />
 	
 	<!--  APL author sebawagner -->
     <resource name="mic_rsc" src="resources/micro.png" />
