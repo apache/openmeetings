@@ -43,6 +43,7 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.openmeetings.app.OpenmeetingsVariables;
+import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.dao.LdapConfigDaoImpl;
 import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.calendar.daos.AppointmentCategoryDaoImpl;
@@ -136,6 +137,8 @@ public class BackupImportController extends AbstractUploadController {
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
 	private PollManagement pollManagement;
+	@Autowired
+	private Configurationmanagement cfgManagement;
 
 	private final HashMap<Long, Long> usersMap = new HashMap<Long, Long>();
 	private final HashMap<Long, Long> organisationsMap = new HashMap<Long, Long>();
@@ -386,7 +389,7 @@ public class BackupImportController extends AbstractUploadController {
 		log.info("File explorer item import complete, starting file poll import");
 
 		/*
-		 * ##################### Import File-Explorer Items
+		 * ##################### Import Room Polls
 		 */
 		File roomPollListFile = new File(f, "roompolls.xml");
 		if (!roomPollListFile.exists()) {
@@ -394,8 +397,18 @@ public class BackupImportController extends AbstractUploadController {
 		} else {
 			this.importRoomPolls(roomPollListFile);
 		}
+		log.info("Poll import complete, starting configs import");
 
-		log.info("Poll import complete, starting copy of files and folders");
+		/*
+		 * ##################### Import Configs
+		 */
+		File configsFile = new File(f, "configs.xml");
+		if (!configsFile.exists()) {
+			log.debug("configsFile missing");
+		} else {
+			importConfigs(configsFile);
+		}
+		log.info("Configs import complete, starting copy of files and folders");
 
 		/*
 		 * ##################### Import real files and folders
@@ -456,7 +469,35 @@ public class BackupImportController extends AbstractUploadController {
 		}
 
 	}
+	
+	private void importConfigs(File configsFile) throws Exception {
+		SAXReader reader = new SAXReader();
+		Document document = reader.read(configsFile);
 
+		Element root = document.getRootElement();
+		Element configs = root.element("configs");
+		for (@SuppressWarnings("unchecked")
+			Iterator<Element> iter = configs.elementIterator("config"); iter.hasNext();) {
+			
+			Element cfgElem = iter.next();
+			String key = cfgElem.elementText("key");
+			try {
+				Configuration cfg = cfgManagement.getConfKey(3L, key);
+				if (cfg == null) {
+					cfg = new Configuration();
+					cfg.setConf_key(key);
+				}
+				cfg.setConf_value(cfgElem.elementText("value"));
+				cfg.setUpdatetime(new Date());
+				cfg.setDeleted(cfgElem.elementText("deleted"));
+				cfg.setComment(cfgElem.elementText("comment"));
+				cfgManagement.updateConfig(cfg);
+			} catch (Exception e) {
+				log.debug("failed to add/update configuration: " + key, e);
+			}
+		}
+	}
+	
 	@SuppressWarnings("unchecked")
 	private List<RoomPoll> getRoomPolls(File roomPollListFile) throws Exception {
 
