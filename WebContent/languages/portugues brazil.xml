@@ -1501,10 +1501,10 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Não existe nenhum moderador nessa sala, mas existem alguns participantes. Você pode se candidatar a moderação ou esperar.</value>
   </string>
   <string id="499" name="feedback_template_subject">
-    <value>Feedback OpenMeetings</value>
+    <value>Feedback $APP_NAME</value>
   </string>
   <string id="500" name="invitation_template_head">
-    <value>OpenMeetings - Convite</value>
+    <value>$APP_NAME - Convite</value>
   </string>
   <string id="501" name="invitation_text_from">
     <value>Mensagem do Usuário:</value>
@@ -1522,7 +1522,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>se você tiver problemas com o link, por favor copie e cole isso no seu browser:</value>
   </string>
   <string id="506" name="registering_mail_text_head">
-    <value>OpenMeetings Inscrição</value>
+    <value>$APP_NAME Inscrição</value>
   </string>
   <string id="507" name="registering_mail_text_head2">
     <value>Seus dados:</value>
@@ -2416,7 +2416,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Participantes</value>
   </string>
   <string id="804" name="dashboard">
-    <value>OpenMeetings, sua plataforma de conferencia. Siga as instruções, pressione o botão INICIA para começar uma conferência instantaneamente ou vá para o Reuniões Agendadas e convoque uma conferência.</value>
+    <value>$APP_NAME, sua plataforma de conferencia. Siga as instruções, pressione o botão INICIA para começar uma conferência instantaneamente ou vá para o Reuniões Agendadas e convoque uma conferência.</value>
   </string>
   <string id="805" name="dashboard">
     <value>Planejar Reunião</value>
@@ -2731,7 +2731,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>The appointement has been changed. Do you want to save those changes? &lt;br/&gt;&lt;br/&gt;All attendees of the appointment will receive a EMail with the updated date and time (depending on the notification type of this appointment).</value>
   </string>
   <string id="909" name="flv recorder error message">
-    <value>Para acessar outras gravações que você tem para fazer login no aplicativo OpenMeetings.</value>
+    <value>Para acessar outras gravações que você tem para fazer login no aplicativo $APP_NAME.</value>
   </string>
   <string id="910" name="interview video pod">
     <value>Escolha o usuário para este vídeo</value>
@@ -2860,7 +2860,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Want your own Server?</value>
   </string>
   <string id="952" name="user-license">
-    <value>Você gostaria de ter OpenMeetings instalado em seu servidor ou integrado em seu Moodle, SugarCRM, site ou Intranet? Preços a partir de 700 reais por instalação!</value>
+    <value>Você gostaria de ter $APP_NAME instalado em seu servidor ou integrado em seu Moodle, SugarCRM, site ou Intranet? Preços a partir de 700 reais por instalação!</value>
   </string>
   <string id="953" name="user-license">
     <value>Or send us a message</value>
@@ -2938,7 +2938,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Submit</value>
   </string>
   <string id="978" name="payment-form">
-    <value>Passo 1: OpenMeetings - Forma de Pagamento</value>
+    <value>Passo 1: $APP_NAME - Forma de Pagamento</value>
   </string>
   <string id="979" name="payment-form">
     <value>EMail</value>
@@ -2947,7 +2947,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Click "Check out with Paypal" to pay.&lt;br/&gt; Paypal accepts VISA, MasterCard, Discover or American Express. &lt;br/&gt;It does not require to sign up with Paypal. &lt;br/&gt;Citizens from Germany can also pay with direct debit (Per Lastschrift-Einzug).</value>
   </string>
   <string id="981" name="payment-form">
-    <value>Obrigado por comprar o OpenMeetings. &lt;br/&gt; Tão logo recebermos o pagamento sua conta será atualizada. &lt;br/&gt; Você receberá um email com a sua factura em formato PDF. &lt;br/&gt; Você também pode verificar as transações atuais e passadas em seu configurações do perfil. &lt;br/&gt; &lt;br/&gt; Você pode fechar esta janela do navegador / guia agora e voltar para OpenMeetings.</value>
+    <value>Obrigado por comprar o $APP_NAME. &lt;br/&gt; Tão logo recebermos o pagamento sua conta será atualizada. &lt;br/&gt; Você receberá um email com a sua factura em formato PDF. &lt;br/&gt; Você também pode verificar as transações atuais e passadas em seu configurações do perfil. &lt;br/&gt; &lt;br/&gt; Você pode fechar esta janela do navegador / guia agora e voltar para $APP_NAME.</value>
   </string>
   <string id="982" name="payment-form">
     <value>Submit and Buy!</value>
@@ -2956,7 +2956,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Click and Buy!</value>
   </string>
   <string id="984" name="payment-from">
-    <value>Passo 3: Pagamento OpenMeetings - Confira a ordem e compre!</value>
+    <value>Passo 3: Pagamento $APP_NAME - Confira a ordem e compre!</value>
   </string>
   <string id="985" name="payment-from">
     <value>Name</value>
@@ -2971,10 +2971,10 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Nós recebemos o seu pagamento. Seu perfil de usuário está atualizado agora. Veja anexo a sua fatura. A Nota Fiscal Fatura e passada também podem ser baixadas em seu perfil de usuário.</value>
   </string>
   <string id="989" name="payment-mail">
-    <value>Obrigado por utilizar o OpenMeetings!</value>
+    <value>Obrigado por utilizar o $APP_NAME!</value>
   </string>
   <string id="990" name="payment-mail">
-    <value>OpenMeetings Pagamento Recebido -</value>
+    <value>$APP_NAME Pagamento Recebido -</value>
   </string>
   <string id="991" name="user-settings">
     <value>Payment and Transaction Status</value>
@@ -3001,7 +3001,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value></value>
   </string>
   <string id="999" name="error-license-flat">
-    <value>Você necessita pagar uma taxa para ser capaz de enviar convites ou criar encontros através do calendário. Com pagamento por minuto só é possível para você acessar o OpenMeetings. Você não pode permitir a terceiros o acesso a uma reunião.</value>
+    <value>Você necessita pagar uma taxa para ser capaz de enviar convites ou criar encontros através do calendário. Com pagamento por minuto só é possível para você acessar o $APP_NAME. Você não pode permitir a terceiros o acesso a uma reunião.</value>
   </string>
   <string id="1000" name="error user">
     <value>This Email is already used by another User.</value>
@@ -3457,7 +3457,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Please check the time zone in your user profile.</value>
   </string>
   <string id="1151" name="calendar invitation message">
-    <value>Nova conferência OpenMeetings</value>
+    <value>Nova conferência $APP_NAME</value>
   </string>
   <string id="1152" name="calendar invitation message">
     <value>Details:&lt;br/&gt;</value>
@@ -3469,16 +3469,16 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>End:</value>
   </string>
   <string id="1155" name="calendar invitation message">
-    <value>Conferência OpenMeetings Modificada:</value>
+    <value>Conferência $APP_NAME Modificada:</value>
   </string>
   <string id="1156" name="calendar invitation message">
     <value>Organizer:</value>
   </string>
   <string id="1157" name="calendar invitation message">
-    <value>Conferência OpenMeetings Cancelada:</value>
+    <value>Conferência $APP_NAME Cancelada:</value>
   </string>
   <string id="1158" name="calendar invitation message">
-    <value>OpenMeetings Lenbrete de conferência:</value>
+    <value>$APP_NAME Lenbrete de conferência:</value>
   </string>
   <string id="1159" name="user settings">
     <value>Community settings</value>
@@ -3586,7 +3586,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>would like to add you as contact.</value>
   </string>
   <string id="1194" name="user contact request">
-    <value>Verifique os seus pedidos de contato em OpenMeetings ou clique sobre os links para aceitar ou negar o pedido</value>
+    <value>Verifique os seus pedidos de contato em $APP_NAME ou clique sobre os links para aceitar ou negar o pedido</value>
   </string>
   <string id="1195" name="add user contact">
     <value>This user is already in your contact list or has received an invitation to your contact list that is not answered yet.</value>
