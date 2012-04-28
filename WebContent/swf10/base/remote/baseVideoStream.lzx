@@ -315,9 +315,14 @@
     <method name="muteMicro" args="mute">
         if(this.micro != null) {
             if(mute) {
+            	if (this.micro.gain == 0) {
+            		return;
+            	}
+            	if ($debug) Debug.write("Make Gain mute again from ",this.micro.gain);
                 this.setAttribute('micGain', this.micro.gain);
                 this.micro.gain = 0;
             } else {
+            	if ($debug) Debug.write("Make Gain loud again to ",this.micGain);
                 this.micro.gain = this.micGain;
             }
         }

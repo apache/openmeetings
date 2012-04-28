@@ -664,9 +664,6 @@
     	if ($debug) Debug.write("confirmGloballyOff :: ",bool);
     	if (bool) {
             this.setMicMuted(true);
-            if(this.publicSID == canvas.publicSID) {
-                this._chatvideoinner._videostream.muteMicro(true);
-            }
             canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_switchMicMuted', this.publicSID, true);
     	}
     </method>
