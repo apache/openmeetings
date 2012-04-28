@@ -460,7 +460,7 @@
             
             <simpleLabelButton y="130" align="right" text_padding_x="40"
                               height="26" width="$once{ parent.width / 2 }" labelid="883">
-                <view resource="flv_download_rsc" x="4" y="2" />
+                <view resource="flv_download_rsc" x="4" y="4" />
                 <handler name="onclick">
                 	<![CDATA[
                 	
@@ -485,7 +485,7 @@
             
             <simpleLabelButton y="130" align="left" text_padding_x="40" 
                               height="26" width="$once{ parent.width / 2 }" labelid="884">
-                <view resource="flv_download_rsc" x="4" y="2" />
+                <view resource="flv_download_rsc" x="4" y="4" />
                 <handler name="onclick">
                 	<![CDATA[
                 	

@@ -65,7 +65,7 @@
 	<resource name="reload_rsc" 
 				description="Save Icon" 
 				license="FamFam Icon Set"
-				src="public/themes/basic-theme/general/arrow_refresh.png" />
+				src="public/themes/basic-theme/general/arrow_refresh_small.png" />
 	
 	<resource name="button_cancel_rsc" 
 				description="Save Icon" 

@@ -20,9 +20,12 @@
 -->
 <library>
 
-	<resource name="messagebox_info_rsc" src="resources/messagebox_info.png" />
-	<resource name="_filesave_icon_pdf_rsc" src="resources/pdf.png" />
-	<resource name="_filesave_icon_original_rsc" src="resources/filesave.png" />
+	<!-- FamFam Icon Set -->
+	<resource name="messagebox_info_rsc" src="resources/information.png" />
+	<!-- FamFam Icon Set -->
+	<resource name="_filesave_icon_pdf_rsc" src="resources/page_white_acrobat.png" />
+	<!-- APL Author sebawagner -->
+	<resource name="_filesave_icon_original_rsc" src="resources/download.png" />
 
 	<include href="fileexplorer/"/>
 	<include href="chat/" />

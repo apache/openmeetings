@@ -32,11 +32,12 @@
 	<resource name="_boundingBoxPointerUL" src="resources/boundingBoxUL.png" />
 	<!-- APL author sebawagner -->
 	<resource name="pointer_whiteboard_rsc" src="resources/pointer.swf" />
-	
-	<resource name="bold" src="resources/bold.png" />
-	<resource name="italic" src="resources/italic.png" />
-	    
-	<resource name="add_whiteboard_rsc" src="resources/edit_add.png" />
+	<!-- FamFam Icon Set -->
+	<resource name="bold" src="resources/text_bold.png" />
+	<!-- FamFam Icon Set -->
+	<resource name="italic" src="resources/text_italic.png" />
+	<!-- FamFam Icon Set -->
+	<resource name="add_whiteboard_rsc" src="resources/add.png" />
 	
 	<include href="incubator/lzcombobox.lzx"/> 
 	<include href="base/" />
