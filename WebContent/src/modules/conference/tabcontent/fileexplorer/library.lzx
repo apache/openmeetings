@@ -56,7 +56,10 @@
     <resource name="file_explorer_add_folder_rsc" src="resources/folder_add.png" />
     <!-- FamFam Icon Set --> 
     <resource name="file_explorer_reload_rsc" src="resources/arrow_refresh_small.png" />
-    <!-- APL Author sebawagner -->
+    <!-- 
+    WPZOOM Creative Commons Attribution-ShareAlike 3.0 Unported License.
+    http://www.wpzoom.com/wpzoom/new-freebie-wpzoom-developer-icon-set-154-free-icons/
+     -->
     <resource name="file_explorer_trash_rsc" src="resources/trash.png" />
     <!-- APL Author sebawagner -->
     <resource name="file_explorer_close_rsc" src="resources/remove_item.png" />

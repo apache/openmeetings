@@ -200,7 +200,8 @@
 									this.setAttribute("text",parseTimeStringFromXmlString(d.childNodes[0].data));
 								</handler>
 							</text>
-							<text name="_title" x="36" datapath="title" text="$path{ 'text()' }" />
+							<text name="_title" x="36" datapath="title" text="$path{ 'text()' }" clip="true"
+											width="${ parent.width-36 }" height="${ parent.height }"/>
 							
 						</view>
 						<simplelayout axis="y" spacing="1" />

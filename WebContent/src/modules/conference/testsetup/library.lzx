@@ -20,8 +20,6 @@
 -->
 <library>
 
-    <resource name="start_conference2_rsc" src="resources/users_small.png" />
-    
     <include href="testSetup.lzx" />
     
 </library>

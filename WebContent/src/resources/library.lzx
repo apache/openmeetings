@@ -20,10 +20,11 @@
 -->
 <library>
 
-<resource name="user_moderator_list_apply_rsc" src="apply.png" />
+<!-- FamFam Icon Set -->
+<resource name="user_moderator_list_apply_rsc" src="tick.png" />
 
 <!-- add for calendar -->
-
-<resource name="user_profile_rsc" src="user-male-green.png" />
+<!-- FamFam Icon Set -->
+<resource name="user_profile_rsc" src="user.png" />
 
 </library>

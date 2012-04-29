@@ -401,7 +401,7 @@ Test the setup values before you enter a room
     	<view name="_over" width="238" height="18" x="1" y="1" bgcolor="0xFFFFFF" />
     </view>
     
-    <view y="294" resource="test_setup_info_rsc" x="10" />
+    <view y="292" resource="test_setup_info_rsc" x="16" />
     
     <labelText fontstyle="bold" labelid="765" x="39" y="290"
                width="$once{ parent.width-50 }" multiline="true" />

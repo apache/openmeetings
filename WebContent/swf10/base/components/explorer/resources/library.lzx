@@ -1,32 +1,41 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <library>
 
+<!-- APL author sebawagner -->
 <resource src="explorerbar.png" name="explorer_thumb_rsc" />
 
+<!-- APL author sebawagner -->
 <resource name="explorer_button_min_rsc" >
 	<frame src="explorbar_minimize_no.png" />
 	<frame src="explorbar_minimize_mo.png" />
 	<frame src="explorbar_minimize_dn.png" />
 </resource>
 
+<!-- APL author sebawagner -->
 <resource name="explorer_button_max_rsc" >
 	<frame src="explorbar_maximize_no.png" />
 	<frame src="explorbar_maximize_mo.png" />
 	<frame src="explorbar_maximize_dn.png" />
 </resource>
 
+<!-- APL author sebawagner -->
 <resource name="explorer_resize_rsc" src="resizer.swf" />
 
+<!-- APL author sebawagner -->
 <resource name="btn_presenter_minimize" src="minimize_up.png" />
+<!-- APL author sebawagner -->
 <resource name="btn_presenter_maximize" src="maximize_up.png" />
+<!-- APL author sebawagner -->
 <resource name="btn_presenter_maximize2" src="maximize2_up.png" />
 
+<!-- APL author sebawagner -->
 <resource name="btn_presenter_close">
     <frame src="close_up.png" />
     <frame src="close_mo.png" />
     <frame src="close_dn.png" />
 </resource> 
 
+<!-- APL author sebawagner -->
 <resource name="explorer_resizemouse_rsc" src="resizemouse.png" />
 
 </library>

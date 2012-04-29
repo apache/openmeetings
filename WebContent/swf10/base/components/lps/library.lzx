@@ -20,6 +20,7 @@
 -->
 <library>
     
+    <!-- APL author sebawagner -->
     <resource name="arrow_down_slider_rsc" src="resources/arrow_down_slider.png" /> 
 
     <include href="basePropertySelector.lzx" />

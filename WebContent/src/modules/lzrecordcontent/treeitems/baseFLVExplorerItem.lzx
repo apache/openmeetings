@@ -330,7 +330,7 @@
                                             fileName:fileExplorerItem.fileName,
                                             fileHash:fileExplorerItem.fileHash,
                                             isFolder:false,isImage:true,
-                                            fileIcon:'file_explorer_image_rsc',
+                                            fileIcon:'file_explorer_video_rsc',
                                             refObjListRoot:this.refObjListRoot
                                         });
                 }                

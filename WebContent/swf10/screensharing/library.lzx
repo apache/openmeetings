@@ -20,7 +20,8 @@
 -->
 <library>
     
-	<resource name="menupointer_rsc" src="resources/menupointer.png" />
+    <!-- FamFam Icon Set -->
+	<resource name="menupointer_rsc" src="resources/cursor.png" />
 	
 	<include href="screenSharingDialog.lzx" />
     <include href="videoObjectPlayScreenShare.lzx" />

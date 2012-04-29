@@ -405,7 +405,8 @@
 									]]>
 								</method>
 								
-								<text name="_title" x="2" datapath="title" text="$path{ 'text()' }" />
+								<text name="_title" x="2" datapath="title" text="$path{ 'text()' }" clip="true" 
+										width="${ parent.width-2 }" multiline="true" height="${ parent.height }"/>
 								
 								
 								<view width="20" height="4" valign="bottom" align="center" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }">
