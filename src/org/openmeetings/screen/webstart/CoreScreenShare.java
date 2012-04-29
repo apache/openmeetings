@@ -1,7 +1,6 @@
 package org.openmeetings.screen.webstart;
 
 import java.awt.Color;
-import java.awt.Image;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.PointerInfo;
@@ -25,7 +24,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -250,6 +248,7 @@ public class CoreScreenShare {
 		try {
 
 			ImageIcon start_btn = createImageIcon("/org/openmeetings/screen/webstart_play.png");
+			ImageIcon record_btn = createImageIcon("/org/openmeetings/screen/webstart_record.png");
 			ImageIcon stop_btn = createImageIcon("/org/openmeetings/screen/webstart_stop.png");
 
 			t = new JFrame(this.label730);
@@ -311,7 +310,7 @@ public class CoreScreenShare {
 
 				// *****
 				// Start Button Recording
-				startButtonRecording = new JButton(this.label871, start_btn);
+				startButtonRecording = new JButton(this.label871, record_btn);
 				startButtonRecording.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						startRecording = true;
@@ -359,13 +358,16 @@ public class CoreScreenShare {
 
 			// *****
 			// Background Image
-			Image im_left = ImageIO.read(getClass()
-					.getResource("/org/openmeetings/screen/background.png"));
-			ImageIcon iIconBack = new ImageIcon(im_left);
-
-			JLabel jLab = new JLabel(iIconBack);
-			jLab.setBounds(0, 0, 500, 440);
-			t.add(jLab);
+			
+			//We have no logo, that is why we need no background, sebawagner 29.04.2012
+			
+//			Image im_left = ImageIO.read(getClass()
+//					.getResource("/org/openmeetings/screen/background.png"));
+//			ImageIcon iIconBack = new ImageIcon(im_left);
+//
+//			JLabel jLab = new JLabel(iIconBack);
+//			jLab.setBounds(0, 0, 500, 440);
+//			t.add(jLab);
 
 			t.addWindowListener(new WindowAdapter() {
 				public void windowClosing(WindowEvent e) {

@@ -290,7 +290,7 @@ Test the setup values before you enter a room
             parent._level_meter.startLevel();
             parent.doninitalize();
         </handler>
-        <view resource="test_setup_record_rsc" x="2" y="4" />
+        <view resource="test_setup_record_rsc" x="2" y="2" />
     </simpleLabelButton>
     
 	

@@ -23,7 +23,7 @@
 	<!-- APL author sebawagner -->
 	<resource name="level_meter_rsc" src="resources/level_meter.png" />
 	<!-- APL author sebawagner -->
-    <resource name="test_setup_record_rsc" src="resources/record.png" />
+    <resource name="test_setup_record_rsc" src="resources/webstart_record.png" />
     <!-- APL author sebawagner -->
     <resource name="test_setup_play_rsc" src="resources/run.png" />
     <!-- APL author sebawagner -->

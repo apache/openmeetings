@@ -114,13 +114,13 @@ public class VirtualScreen {
 		css.vScreenIconDown = new JLabel();
 		css.vScreenIconDown.setBounds(30+(width/2)-8, 162+height-8, 16, 32);
 
-		Image im_left = ImageIO.read(RTMPScreenShare.class.getResource("/org/openmeetings/screen/1leftarrow.png"));
+		Image im_left = ImageIO.read(RTMPScreenShare.class.getResource("/org/openmeetings/screen/resultset_previous.png"));
 		ImageIcon iIcon1 = new ImageIcon(im_left);
-		Image im_right = ImageIO.read(RTMPScreenShare.class.getResource("/org/openmeetings/screen/1rightarrow.png"));
+		Image im_right = ImageIO.read(RTMPScreenShare.class.getResource("/org/openmeetings/screen/resultset_next.png"));
 		ImageIcon iIcon2 = new ImageIcon(im_right);
-		Image im_up = ImageIO.read(RTMPScreenShare.class.getResource("/org/openmeetings/screen/1uparrow.png"));
+		Image im_up = ImageIO.read(RTMPScreenShare.class.getResource("/org/openmeetings/screen/resultset_up.png"));
 		ImageIcon iIcon3 = new ImageIcon(im_up);
-		Image im_down = ImageIO.read(RTMPScreenShare.class.getResource("/org/openmeetings/screen/1downarrow.png"));
+		Image im_down = ImageIO.read(RTMPScreenShare.class.getResource("/org/openmeetings/screen/resultset_down.png"));
 		ImageIcon iIcon4 = new ImageIcon(im_down);
 
 		JLabel jLab1 = new JLabel(iIcon1);
