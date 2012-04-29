@@ -1676,7 +1676,7 @@ public class RoomWebService {
 								username, username, username, room_id, "",
 								isPasswordProtected, invitationpass, valid,
 								dFrom, dTo, users_id, "", 1L, false, dFrom,
-								dTo, null);
+								dTo, null, username);
 
 				if (invitation != null) {
 
@@ -1814,7 +1814,7 @@ public class RoomWebService {
 								baseurl, email, subject, room_id, "",
 								isPasswordProtected, invitationpass, valid,
 								dFrom, dTo, users_id, baseurl, language_id,
-								sendMail, dFrom, dTo, null);
+								sendMail, dFrom, dTo, null, username);
 
 				if (invitation != null) {
 
@@ -1914,7 +1914,7 @@ public class RoomWebService {
 								baseurl, email, subject, room_id, "",
 								isPasswordProtected, invitationpass, valid,
 								dFrom, dTo, users_id, baseurl, language_id,
-								sendMail, dFrom, dTo, null);
+								sendMail, dFrom, dTo, null, username);
 
 				if (invitation != null) {
 

@@ -150,7 +150,7 @@ public class InvitationService implements IPendingServiceCallback {
 							email, subject, room_id, conferencedomain,
 							isPasswordProtected, invitationpass, valid, dFrom,
 							dTo, users_id, baseurl, language_id, true,
-							gmtTimeStart, gmtTimeEnd, null);
+							gmtTimeStart, gmtTimeEnd, null, username);
 
 			if (invitation != null) {
 				return "success";

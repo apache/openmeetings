@@ -139,7 +139,8 @@ public class MeetingMemberLogic {
 								true, // really send mail sendMail
 								point.getAppointmentStarttime(),
 								point.getAppointmentEndtime(),
-								point.getAppointmentId());
+								point.getAppointmentId(),
+								invitorName);
 
 				invitationId = invitation.getInvitations_id();
 
@@ -166,7 +167,8 @@ public class MeetingMemberLogic {
 								meeting_organizer, // created by
 								point.getAppointmentId(), isInvitor,
 								language_id, timezone,
-								point.getAppointmentId());
+								point.getAppointmentId(),
+								invitorName);
 
 			}
 

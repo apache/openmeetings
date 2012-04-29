@@ -110,7 +110,7 @@ public class JabberWebService {
 				user_level, username, username, username, username, username,
 				room_id, "", Boolean.valueOf(false), null, Integer.valueOf(3),
 				null, null, users_id, "", Long.valueOf(1L),
-				Boolean.valueOf(false), null, null, null);
+				Boolean.valueOf(false), null, null, null, username);
 
 		return ((invitation == null) ? null : invitation.getHash());
 	}

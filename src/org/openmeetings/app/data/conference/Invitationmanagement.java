@@ -123,7 +123,7 @@ public class Invitationmanagement {
 			Boolean isPasswordProtected, String invitationpass, Integer valid,
 			Date validFrom, Date validTo, Long createdBy, String baseUrl,
 			Long language_id, Boolean sendMail, Date gmtTimeStart,
-			Date gmtTimeEnd, Long appointmentId) {
+			Date gmtTimeEnd, Long appointmentId, String fromUserField) {
 		try {
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -189,7 +189,7 @@ public class Invitationmanagement {
 						this.sendInvitionLink(us.getAdresses().getEmail(), 
 								username, message, baseurl,
 								email, subject, invitation.getHash(),
-								validFrom, validTo, language_id);
+								validFrom, validTo, language_id, fromUserField);
 					}
 
 					return invitation;
@@ -528,7 +528,7 @@ public class Invitationmanagement {
 			Boolean isPasswordProtected, String invitationpass, Integer valid,
 			Date validFrom, Date validTo, Long createdBy, Long appointMentId,
 			Boolean invitor, Long language_id, TimeZone timezone,
-			Long appointmentId) {
+			Long appointmentId, String fromUserField) {
 		log.debug("addInvitationIcalLink");
 
 		try {
@@ -586,7 +586,7 @@ public class Invitationmanagement {
 					this.sendInvitionIcalLink(username, message, baseurl,
 							email, subject, invitation.getHash(),
 							appointMentId, createdBy, invitor, language_id,
-							validFrom, validTo, timezone);
+							validFrom, validTo, timezone, fromUserField);
 					return invitationId;
 				}
 			}
@@ -612,7 +612,7 @@ public class Invitationmanagement {
 	 */
 	private String sendInvitionLink(String replyTo, String username, String message,
 			String baseurl, String email, String subject,
-			String invitationsHash, Date dStart, Date dEnd, Long language_id) {
+			String invitationsHash, Date dStart, Date dEnd, Long language_id, String fromUserField) {
 		try {
 
 			String invitation_link = baseurl + "?invitationHash="
@@ -626,7 +626,7 @@ public class Invitationmanagement {
 			// getConfKey(3,"default_lang_id").getConf_value()).longValue();
 
 			String template = invitationTemplate.getRegisterInvitationTemplate(
-					username, message, invitation_link, language_id, dStart,
+					fromUserField, message, invitation_link, language_id, dStart,
 					dEnd);
 
 			return mailHandler.sendMail(email, replyTo, subject, template);
@@ -845,7 +845,7 @@ public class Invitationmanagement {
 			String baseurl, String email, String subject,
 			String invitationsHash, Long appointMentId, Long organizer_userId,
 			Boolean invitor, Long language_id, Date starttime, Date endtime,
-			TimeZone timezone) {
+			TimeZone timezone, String fromUserField) {
 		try {
 
 			String invitation_link = baseurl + "?invitationHash="
@@ -858,7 +858,7 @@ public class Invitationmanagement {
 			// Long default_lang_id = Long.valueOf(cfgManagement.
 			// getConfKey(3,"default_lang_id").getConf_value()).longValue();
 			String template = invitationTemplate.getRegisterInvitationTemplate(
-					username, message, invitation_link, language_id, starttime,
+					fromUserField, message, invitation_link, language_id, starttime,
 					endtime);
 
 			IcalHandler handler = new IcalHandler(
