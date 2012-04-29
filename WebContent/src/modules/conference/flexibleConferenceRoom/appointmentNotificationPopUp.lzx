@@ -60,7 +60,7 @@
 	<labelText name="_appName" x="75" y="24" width="200" fontstyle="bold" /> 
 	
 	<labelText name="appDescr" y="46" labelid="1146" width="50"/>
-	<view name="_appDescr" x="75" y="46" width="200" height="100" bgcolor="0xFFFFFF">
+	<view name="_appDescr" x="75" y="46" width="200" height="100" bgcolor="0xFFFFFF" clip="true">
 		<labelText name="_appDescr" y="24" width="184" multiline="true" /> 
 		<om_vscrollbar />
 	</view>
