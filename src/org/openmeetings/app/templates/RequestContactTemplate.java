@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 
 public class RequestContactTemplate extends VelocityLoader {
 
-	private static final String tamplateName = "requestcontact.vm";
+	private static final String templateName = "requestcontact.vm";
 
 	private static final Logger log = Red5LoggerFactory
 			.getLogger(RequestContactTemplate.class,
@@ -52,7 +52,7 @@ public class RequestContactTemplate extends VelocityLoader {
 			/* lets render a template */
 
 			StringWriter w = new StringWriter();
-			Velocity.mergeTemplate(tamplateName, "UTF-8", context, w);
+			Velocity.mergeTemplate(templateName, "UTF-8", context, w);
 
 			return w.toString();
 

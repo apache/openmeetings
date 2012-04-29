@@ -1056,7 +1056,11 @@
 			    this._answer_area.setAttribute("visibility","visible");
 			
 				this.from.setAttribute("text",refObj.from.firstname+' '+refObj.from.lastname+' &#60;'+refObj.from.adresses.email+'&#62;');
-				this.to.setAttribute("text",refObj.to.firstname+' '+refObj.to.lastname+' &#60;'+refObj.to.adresses.email+'&#62;');
+				if (refObj.to != null) {
+					this.to.setAttribute("text",refObj.to.firstname+' '+refObj.to.lastname+' &#60;'+refObj.to.adresses.email+'&#62;');
+				} else {
+					this.to.setAttribute("text","");
+				}
 				
 				this.subject.setAttribute("text",refObj.subject);
 				

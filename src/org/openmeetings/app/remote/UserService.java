@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.conference.session.RoomClient;
@@ -36,6 +37,7 @@ import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl;
 import org.openmeetings.app.data.calendar.daos.MeetingMemberDaoImpl;
+import org.openmeetings.app.data.conference.Invitationmanagement;
 import org.openmeetings.app.data.conference.Roommanagement;
 import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Salutationmanagement;
@@ -45,6 +47,7 @@ import org.openmeetings.app.data.user.dao.PrivateMessagesDaoImpl;
 import org.openmeetings.app.data.user.dao.UserContactsDaoImpl;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.domain.Organisation;
+import org.openmeetings.app.persistence.beans.invitation.Invitations;
 import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.user.PrivateMessageFolder;
@@ -59,6 +62,7 @@ import org.openmeetings.app.templates.RequestContactTemplate;
 import org.openmeetings.utils.crypt.ManageCryptStyle;
 import org.openmeetings.utils.mail.MailHandler;
 import org.openmeetings.utils.math.CalendarPatterns;
+import org.openmeetings.utils.math.TimezoneUtil;
 import org.red5.io.utils.ObjectMap;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IScope;
@@ -117,6 +121,10 @@ public class UserService {
 	private RequestContactConfirmTemplate requestContactConfirmTemplate;
 	@Autowired
 	private AuthLevelmanagement authLevelManagement;
+	@Autowired
+	private TimezoneUtil timezoneUtil;
+	@Autowired
+	private Invitationmanagement invitationManagement;
 
 	/**
 	 * get your own user-object
@@ -906,7 +914,7 @@ public class UserService {
 		return null;
 	}
 
-	private Calendar createCalendar(Date date, String time) {
+	private Date createCalendarDate(TimeZone timezone, String dateOnly, String time) {
 		Integer hour = Integer.valueOf(
 				time.substring(0, 2)).intValue();
 		Integer minute = Integer.valueOf(
@@ -915,19 +923,18 @@ public class UserService {
 		log.info("createCalendar Hour: " + hour);
 		log.info("createCalendar Minute: " + minute);
 
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
+		Calendar cal = TimezoneUtil.getCalendarInTimezone(dateOnly, timezone);
 		cal.set(Calendar.HOUR_OF_DAY, hour);
 		cal.set(Calendar.MINUTE, minute);
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MILLISECOND, 0);
 		
-		return cal;
+		return cal.getTime();
 	}
 	
 	public Long composeMail(String SID, List<String> recipients,
 			String subject, String message, Boolean bookedRoom,
-			Date validFromDate, String validFromTime, Date validToDate,
+			String validFromDate, String validFromTime, String validToDate,
 			String validToTime, Long parentMessageId, Long roomtype_id,
 			String domain, String port, String webapp) {
 		try {
@@ -936,12 +943,11 @@ public class UserService {
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
-				Calendar calFrom = createCalendar(validFromDate, validFromTime);
-
-				Calendar calTo = createCalendar(validToDate, validToTime);
-
-				Date appointmentstart = calFrom.getTime();
-				Date appointmentend = calTo.getTime();
+				
+				TimeZone timezone = timezoneUtil.getTimezoneByUser(usersDao.getUser(users_id));
+				
+				Date appointmentstart = createCalendarDate(timezone, validFromDate, validFromTime);
+				Date appointmentend = createCalendarDate(timezone, validToDate, validToTime);
 
 				log.info("validFromDate: "
 						+ CalendarPatterns
@@ -953,9 +959,19 @@ public class UserService {
 				Users from = userManagement.getUserById(users_id);
 
 				Rooms room = null;
+				
+				String baseURL = "http://" + domain + ":" + port + webapp;
+				if (port.equals("80")) {
+					baseURL = "http://" + domain + webapp;
+				} else if (port.equals("443")) {
+					baseURL = "https://" + domain + webapp;
+				}
 
+				Long room_id = null;
+				Long appointmentId = null;
+				
 				if (bookedRoom) {
-					Long room_id = roommanagement.addRoom(3, // Userlevel
+					room_id = roommanagement.addRoom(3, // Userlevel
 							subject, // name
 							roomtype_id, // RoomType
 							"", // Comment
@@ -986,21 +1002,23 @@ public class UserService {
 							);
 
 					room = roommanagement.getRoomById(room_id);
+					
+					String sendJNameTimeZone = from.getOmTimeZone().getJname();
+					
+					appointmentId = this.addAppointmentToUser(subject, message, from,
+							recipients, room, appointmentstart,
+							appointmentend, true, true,
+							sendJNameTimeZone);
 
 				}
 
 				recipients.add(from.getAdresses().getEmail());
 
 				String sendJNameTimeZone = from.getOmTimeZone().getJname();
-
-				String baseURL = "http://" + domain + ":" + port + webapp;
-				if (port.equals("80")) {
-					baseURL = "http://" + domain + webapp;
-				} else if (port.equals("443")) {
-					baseURL = "https://" + domain + webapp;
-				}
-
+				
 				String profile_link = baseURL + "?cuser=1";
+				
+				
 
 				for (String email : recipients) {
 
@@ -1008,7 +1026,6 @@ public class UserService {
 
 					// String email = receipent.get("email").toString();
 					
-					Boolean invitor = false;
 					Long language_id = from.getLanguage_id();
 					if (language_id == null) {
 						language_id = Long.valueOf(
@@ -1016,15 +1033,55 @@ public class UserService {
 										"default_lang_id").getConf_value())
 								.longValue();
 					}
-					
+					String invitation_link = null;
 					Users to = userManagement.getUserByEmail(email);
+					
+					
+					
+					if (bookedRoom) {
+						// Add the appointment to the calendar of the user (if its an internal user)
+						// if the user is the sender then we already added the appointment as we created the 
+						// room, the invitations always belong to the appointment of the meeting creator
+						if (to != null && !to.getUser_id().equals(from.getUser_id())) {
+							this.addAppointmentToUser(subject, message, to,
+									recipients, room, appointmentstart,
+									appointmentend, false, true,
+									sendJNameTimeZone);
+						}
+						
+						Invitations invitation = invitationManagement
+								.addInvitationLink(
+										new Long(2), // userlevel
+										from.getFirstname() + " " + from.getLastname(), // username
+										message,
+										baseURL, // baseURl
+										from.getAdresses().getEmail(), // email
+										subject, // subject
+										room_id, // room_id
+										"public",
+										false, // passwordprotected
+										"", // invitationpass
+										2, // valid type
+										appointmentstart, // valid from
+										appointmentend, // valid to
+										from.getUser_id(), // created by
+										baseURL,
+										from.getUser_id(),
+										false, // really send mail sendMail
+										appointmentstart,
+										appointmentend,
+										appointmentId,
+										from.getFirstname() + " " + from.getLastname());
+						
+						invitation_link = baseURL + "?invitationHash="
+								+ invitation.getHash();
+
+						
+					}
 					
 					if (to != null) {
 						
-						if (email.equals(from.getAdresses().getEmail())) {
-							invitor = true;
-						} else {
-							
+						if (!to.getUser_id().equals(from.getUser_id())) {
 							// One message to the Send
 							privateMessagesDao.addPrivateMessage(subject, message,
 									parentMessageId, from, to, from, bookedRoom,
@@ -1034,7 +1091,7 @@ public class UserService {
 							privateMessagesDao.addPrivateMessage(subject, message,
 									parentMessageId, from, to, to, bookedRoom,
 									room, false, 0L, email);
-	
+							
 							// One copy of the Inbox message to the user
 							if (to.getLanguage_id() != null) {
 								language_id = to.getLanguage_id();
@@ -1051,33 +1108,45 @@ public class UserService {
 						//there is no Inbox for external users
 						
 					}
+					
+					//We do not send an email to the one that has created the private message
+					if (to != null && to.getUser_id().equals(from.getUser_id())) {
+						continue;
+					}
+					
 					Fieldlanguagesvalues fValue1301 = fieldmanagment
 							.getFieldByIdAndLanguage(1301L, language_id);
 					Fieldlanguagesvalues fValue1302 = fieldmanagment
 							.getFieldByIdAndLanguage(1302L, language_id);
+					Fieldlanguagesvalues labelid504 = fieldmanagment
+							.getFieldByIdAndLanguage(new Long(504), language_id);
+					Fieldlanguagesvalues labelid503 = fieldmanagment
+							.getFieldByIdAndLanguage(new Long(503), language_id);
 
 					String aLinkHTML = "";
 					if (to != null) {
 						aLinkHTML = "<br/><br/><a href='" + profile_link
 							+ "'>" + fValue1302.getValue() + "</a><br/>";
 					}
+					
+					if (invitation_link  == null) {
+						invitation_link = "";
+					} else {
+						invitation_link = 
+							"<br/>" //
+							+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(appointmentstart, timezone)
+							+ "<br/> - <br/>" //
+						    + CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(appointmentstart, timezone)	
+							+ "<br/>" + labelid503.getValue() + "<br/><a href='" + invitation_link
+							+ "'>" + labelid504.getValue() + "</a><br/>";
+					}
 
 					mailHandler.sendMail(email, fValue1301.getValue() + " "
 							+ subject, message.replaceAll("\\<.*?>", "")
-							+ aLinkHTML);
+							+ aLinkHTML
+							+ invitation_link);
 
-					if (bookedRoom) {
-
-						// But add the appointment to everybody
-						
-						if (to != null) {
-							this.addAppointmentToUser(subject, message, to,
-									recipients, room, appointmentstart,
-									appointmentend, invitor, true,
-									sendJNameTimeZone);
-						}
-						
-					}
+					
 				}
 
 			}
@@ -1092,13 +1161,11 @@ public class UserService {
 	 * Date appointmentstart = calFrom.getTime(); Date appointmentend =
 	 * calTo.getTime();
 	 */
-	private void addAppointmentToUser(String subject, String message, Users to,
+	private Long addAppointmentToUser(String subject, String message, Users to,
 			List<String> recipients, Rooms room, Date appointmentstart,
 			Date appointmentend, Boolean invitor, Boolean isConnectedEvent,
 			String sendJNameTimeZone) throws Exception {
 		
-		
-
 		Long appointmentId = appointmentDao.addAppointment(subject,
 				to.getUser_id(), "", message, appointmentstart, appointmentend,
 				false, false, false, false, 1L, 2L, room, to.getLanguage_id(),
@@ -1125,6 +1192,8 @@ public class UserService {
 				
 			}
 		}
+		
+		return appointmentId;
 
 	}
 	

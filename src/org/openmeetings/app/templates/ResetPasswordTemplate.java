@@ -34,7 +34,7 @@ public class ResetPasswordTemplate extends VelocityLoader {
 	@Autowired
 	private Fieldmanagment fieldmanagment;
 
-	private static final String tamplateName = "resetPass.vm";
+	private static final String templateName = "resetPass.vm";
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			FeedbackTemplate.class, OpenmeetingsVariables.webAppRootKey);
@@ -65,7 +65,7 @@ public class ResetPasswordTemplate extends VelocityLoader {
 
 			/* lets render a template */
 			StringWriter w = new StringWriter();
-			Velocity.mergeTemplate(tamplateName, "UTF-8", context, w);
+			Velocity.mergeTemplate(templateName, "UTF-8", context, w);
 
 			return w.toString();
 

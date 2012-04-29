@@ -32,7 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class InvitationTemplate extends VelocityLoader {
 
-	private static final String tamplateName = "invitation.vm";
+	private static final String templateName = "invitation.vm";
 
 	@Autowired
 	private Fieldmanagment fieldmanagment;
@@ -82,7 +82,7 @@ public class InvitationTemplate extends VelocityLoader {
 
 			/* lets render a template */
 			StringWriter w = new StringWriter();
-			Velocity.mergeTemplate(tamplateName, "UTF-8", context, w);
+			Velocity.mergeTemplate(templateName, "UTF-8", context, w);
 
 			return w.toString();
 
@@ -137,7 +137,7 @@ public class InvitationTemplate extends VelocityLoader {
 
 			/* lets render a template */
 			StringWriter w = new StringWriter();
-			Velocity.mergeTemplate(tamplateName, "UTF-8", context, w);
+			Velocity.mergeTemplate(templateName, "UTF-8", context, w);
 
 			return w.toString();
 

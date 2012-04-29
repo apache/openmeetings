@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 
 public class FeedbackTemplate extends VelocityLoader {
 
-	private static final String tamplateName = "feedback.vm";
+	private static final String templateName = "feedback.vm";
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			FeedbackTemplate.class, OpenmeetingsVariables.webAppRootKey);
@@ -55,7 +55,7 @@ public class FeedbackTemplate extends VelocityLoader {
 			/* lets render a template */
 
 			StringWriter w = new StringWriter();
-			Velocity.mergeTemplate(tamplateName, "UTF-8", context, w);
+			Velocity.mergeTemplate(templateName, "UTF-8", context, w);
 
 			return w.toString();
 

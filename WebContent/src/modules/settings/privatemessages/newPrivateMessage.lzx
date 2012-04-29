@@ -122,9 +122,9 @@
             <netparam><method name="getValue">return this.parent.parent._subject.getText();</method></netparam>
             <netparam><method name="getValue">return parent.parent._richText.getText();</method></netparam>
             <netparam><method name="getValue">return this.parent.parent._bookRoom.getValue();</method></netparam>
-            <netparam><method name="getValue">return parent.parent._valid_from.getDate();</method></netparam>
+            <netparam><method name="getValue">return parseDateToStringTimeSeconds(parent.parent._valid_from.getDate());</method></netparam>
             <netparam><method name="getValue">return parent.parent._timeFrom.getText();</method></netparam>
-            <netparam><method name="getValue">return parent.parent._valid_to.getDate();</method></netparam>
+            <netparam><method name="getValue">return parseDateToStringTimeSeconds(parent.parent._valid_to.getDate());</method></netparam>
             <netparam><method name="getValue">return parent.parent._timeTo.getText();</method></netparam>
             <netparam><method name="getValue">return parent.parent.parentMessageId;</method></netparam>
             <netparam><method name="getValue">return Number(parent.parent._roomtype.getValue());</method></netparam>
