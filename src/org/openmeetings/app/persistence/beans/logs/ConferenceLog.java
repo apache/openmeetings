@@ -56,7 +56,7 @@ public class ConferenceLog implements Serializable {
 	@Column(name="user_id")
 	private Long userId;
 	@Column(name="external_user_id")
-	private Long externalUserId;
+	private String externalUserId;
 	@Column(name="external_user_type")
 	private String externalUserType;
 	@Column(name="streamid")
@@ -137,10 +137,10 @@ public class ConferenceLog implements Serializable {
 		this.scopeName = scopeName;
 	}
 	
-	public Long getExternalUserId() {
+	public String getExternalUserId() {
 		return externalUserId;
 	}
-	public void setExternalUserId(Long externalUserId) {
+	public void setExternalUserId(String externalUserId) {
 		this.externalUserId = externalUserId;
 	}
 	

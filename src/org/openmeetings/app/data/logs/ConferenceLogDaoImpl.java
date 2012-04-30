@@ -42,7 +42,7 @@ public class ConferenceLogDaoImpl {
 
 	public Long addConferenceLog(String eventType, Long userId, String streamid, 
 			Long room_id, String userip, String scopeName, 
-			Long externalUserId, String externalUserType, String email,
+			String externalUserId, String externalUserType, String email,
 			String firstname, String lastname) {
 		try {
 			

@@ -593,7 +593,8 @@ public class MainService implements IPendingServiceCallback {
 							+ userObject.getExternalUserId());
 
 					if (userObject.getExternalUserId() != null
-							&& userObject.getExternalUserId() > 0) {
+							&& userObject.getExternalUserId() != null && 
+							!userObject.getExternalUserId().equals("0")) {
 
 						// If so we need to check that we create this user in
 						// OpenMeetings and update its record

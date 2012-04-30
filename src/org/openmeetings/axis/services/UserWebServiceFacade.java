@@ -140,7 +140,7 @@ public class UserWebServiceFacade {
 			String userpass, String lastname, String firstname, String email,
 			String additionalname, String street, String zip, String fax,
 			long states_id, String town, long language_id,
-			String jNameTimeZone, Long externalUserId, String externalUserType)
+			String jNameTimeZone, String externalUserId, String externalUserType)
 			throws AxisFault {
 		return getUserServiceProxy().addNewUserWithExternalType(SID, username,
 				userpass, lastname, firstname, email, additionalname, street,
@@ -173,7 +173,7 @@ public class UserWebServiceFacade {
 	 * @throws AxisFault
 	 */
 	public Long deleteUserByExternalUserIdAndType(String SID,
-			Long externalUserId, String externalUserType) throws AxisFault {
+			String externalUserId, String externalUserType) throws AxisFault {
 		return getUserServiceProxy().deleteUserByExternalUserIdAndType(SID,
 				externalUserId, externalUserType);
 	}
@@ -218,7 +218,7 @@ public class UserWebServiceFacade {
 	@Deprecated
 	public Long setUserObjectWithExternalUser(String SID, String username,
 			String firstname, String lastname, String profilePictureUrl,
-			String email, Long externalUserId, String externalUserType)
+			String email, String externalUserId, String externalUserType)
 			throws AxisFault {
 		return getUserServiceProxy().setUserObjectWithExternalUser(SID,
 				username, firstname, lastname, profilePictureUrl, email,
@@ -227,7 +227,7 @@ public class UserWebServiceFacade {
 
 	public String setUserObjectAndGenerateRoomHash(String SID, String username,
 			String firstname, String lastname, String profilePictureUrl,
-			String email, Long externalUserId, String externalUserType,
+			String email, String externalUserId, String externalUserType,
 			Long room_id, int becomeModeratorAsInt, int showAudioVideoTestAsInt)
 			throws AxisFault {
 		return getUserServiceProxy().setUserObjectAndGenerateRoomHash(SID,
@@ -238,7 +238,7 @@ public class UserWebServiceFacade {
 
 	public String setUserObjectAndGenerateRoomHashByURL(String SID,
 			String username, String firstname, String lastname,
-			String profilePictureUrl, String email, Long externalUserId,
+			String profilePictureUrl, String email, String externalUserId,
 			String externalUserType, Long room_id, int becomeModeratorAsInt,
 			int showAudioVideoTestAsInt) throws AxisFault {
 		return getUserServiceProxy().setUserObjectAndGenerateRoomHashByURL(SID,
@@ -249,7 +249,7 @@ public class UserWebServiceFacade {
 
 	public String setUserObjectAndGenerateRoomHashByURLAndRecFlag(String SID,
 			String username, String firstname, String lastname,
-			String profilePictureUrl, String email, Long externalUserId,
+			String profilePictureUrl, String email, String externalUserId,
 			String externalUserType, Long room_id, int becomeModeratorAsInt,
 			int showAudioVideoTestAsInt, int allowRecording) throws AxisFault {
 		return getUserServiceProxy()
@@ -262,7 +262,7 @@ public class UserWebServiceFacade {
 
 	public String setUserObjectMainLandingZone(String SID, String username,
 			String firstname, String lastname, String profilePictureUrl,
-			String email, Long externalUserId, String externalUserType)
+			String email, String externalUserId, String externalUserType)
 			throws AxisFault {
 		return getUserServiceProxy().setUserObjectMainLandingZone(SID,
 				username, firstname, lastname, profilePictureUrl, email,
@@ -271,7 +271,7 @@ public class UserWebServiceFacade {
 
 	public String setUserAndNickName(String SID, String username,
 			String firstname, String lastname, String profilePictureUrl,
-			String email, Long externalUserId, String externalUserType,
+			String email, String externalUserId, String externalUserType,
 			Long room_id, int becomeModeratorAsInt,
 			int showAudioVideoTestAsInt, int showNickNameDialogAsInt)
 			throws AxisFault {
@@ -283,7 +283,7 @@ public class UserWebServiceFacade {
 
 	public String setUserObjectAndGenerateRecordingHashByURL(String SID,
 			String username, String firstname, String lastname,
-			Long externalUserId, String externalUserType, Long recording_id)
+			String externalUserId, String externalUserType, Long recording_id)
 			throws AxisFault {
 		return getUserServiceProxy()
 				.setUserObjectAndGenerateRecordingHashByURL(SID, username,

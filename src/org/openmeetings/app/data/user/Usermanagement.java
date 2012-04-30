@@ -1135,13 +1135,13 @@ public class Usermanagement {
 		return null;
 	}
 
-	public Users getUserByExternalIdAndType(Long externalUserId,
+	public Users getUserByExternalIdAndType(String externalUserId,
 			String externalUserType) {
 
 		try {
 
 			String hql = "select c from Users as c "
-					+ "where c.externalUserId = :externalUserId "
+					+ "where c.externalUserId LIKE :externalUserId "
 					+ "AND c.externalUserType LIKE :externalUserType "
 					+ "AND c.deleted <> :deleted";
 
@@ -1165,7 +1165,7 @@ public class Usermanagement {
 	public Long addUserWithExternalKey(long level_id, int availible,
 			int status, String firstname, String login, String lastname,
 			long language_id, String userpass, Adresses address, Date age,
-			String hash, Long externalUserId, String externalUserType,
+			String hash, String externalUserId, String externalUserType,
 			boolean generateSipUserData, String email, String jNameTimeZone,
 			String pictureuri) {
 		try {

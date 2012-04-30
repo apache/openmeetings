@@ -121,7 +121,7 @@ public class Users implements Serializable {
 
 	// Vars to simulate external Users
 	@Column(name = "externalUserId")
-	private Long externalUserId;
+	private String externalUserId;
 	@Column(name = "externalUserType")
 	private String externalUserType;
 
@@ -365,11 +365,11 @@ public class Users implements Serializable {
 		this.activatehash = activatehash;
 	}
 
-	public Long getExternalUserId() {
+	public String getExternalUserId() {
 		return externalUserId;
 	}
 
-	public void setExternalUserId(Long externalUserId) {
+	public void setExternalUserId(String externalUserId) {
 		this.externalUserId = externalUserId;
 	}
 

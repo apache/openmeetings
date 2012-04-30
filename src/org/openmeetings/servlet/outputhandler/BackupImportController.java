@@ -708,8 +708,8 @@ public class BackupImportController extends AbstractUploadController {
 							us.setExternalUserType("");
 						}
 						if (itemUsers.element("externalUserId") != null) {
-							us.setExternalUserId(importLongType(unformatString(itemUsers
-									.element("externalUserId").getText())));
+							us.setExternalUserId(unformatString(itemUsers
+									.element("externalUserId").getText()));
 						} else {
 							us.setExternalUserId(null);
 						}

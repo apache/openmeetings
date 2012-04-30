@@ -33,7 +33,7 @@ public class RemoteSessionObject {
 	private String pictureUrl;
 	private String email;
 	
-	private Long externalUserId;
+	private String externalUserId;
 	private String externalUserType;
 	
 	public RemoteSessionObject(String username, String firstname, String lastname,
@@ -44,7 +44,7 @@ public class RemoteSessionObject {
 		this.lastname = lastname;
 		this.pictureUrl = pictureUrl;
 		this.email = email;
-		this.externalUserId = 0L;
+		this.externalUserId = "0";
 		this.externalUserType = "";
 	}
 	
@@ -65,7 +65,7 @@ public class RemoteSessionObject {
 	 */
 	public RemoteSessionObject(String username, String firstname,
 			String lastname, String pictureUrl, String email,
-			Long externalUserId, String externalUserType) {
+			String externalUserId, String externalUserType) {
 		super();
 		this.username = username;
 		this.firstname = firstname;
@@ -107,10 +107,10 @@ public class RemoteSessionObject {
 		this.email = email;
 	}
 
-	public Long getExternalUserId() {
+	public String getExternalUserId() {
 		return externalUserId;
 	}
-	public void setExternalUserId(Long externalUserId) {
+	public void setExternalUserId(String externalUserId) {
 		this.externalUserId = externalUserId;
 	}
 

@@ -182,8 +182,7 @@ public class RoomWebService {
 
 			if (authLevelManagement.checkWebServiceLevel(user_level)) {
 				List<FlvRecording> recordingList = flvRecordingDao
-						.getFlvRecordingByExternalUserId(Long
-								.parseLong(externalUserId));
+						.getFlvRecordingByExternalUserId(externalUserId);
 
 				// We need to re-marshal the Rooms object cause Axis2 cannot use
 				// our objects

@@ -393,7 +393,7 @@ public class UserWebService {
 			String userpass, String lastname, String firstname, String email,
 			String additionalname, String street, String zip, String fax,
 			long states_id, String town, long language_id,
-			String jNameTimeZone, Long externalUserId, String externalUserType)
+			String jNameTimeZone, String externalUserId, String externalUserType)
 			throws AxisFault {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
@@ -489,7 +489,7 @@ public class UserWebService {
 	 * @throws AxisFault
 	 */
 	public Long deleteUserByExternalUserIdAndType(String SID,
-			Long externalUserId, String externalUserType) throws AxisFault {
+			String externalUserId, String externalUserType) throws AxisFault {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
@@ -605,7 +605,7 @@ public class UserWebService {
 	@Deprecated
 	public Long setUserObjectWithExternalUser(String SID, String username,
 			String firstname, String lastname, String profilePictureUrl,
-			String email, Long externalUserId, String externalUserType)
+			String email, String externalUserId, String externalUserType)
 			throws AxisFault {
 		log.debug("UserService.setUserObject");
 
@@ -678,7 +678,7 @@ public class UserWebService {
 	 */
 	public String setUserObjectAndGenerateRoomHash(String SID, String username,
 			String firstname, String lastname, String profilePictureUrl,
-			String email, Long externalUserId, String externalUserType,
+			String email, String externalUserId, String externalUserType,
 			Long room_id, int becomeModeratorAsInt, int showAudioVideoTestAsInt)
 			throws AxisFault {
 		try {
@@ -776,7 +776,7 @@ public class UserWebService {
 	 */
 	public String setUserObjectAndGenerateRoomHashByURL(String SID,
 			String username, String firstname, String lastname,
-			String profilePictureUrl, String email, Long externalUserId,
+			String profilePictureUrl, String email, String externalUserId,
 			String externalUserType, Long room_id, int becomeModeratorAsInt,
 			int showAudioVideoTestAsInt) {
 		log.debug("UserService.setUserObject");
@@ -879,7 +879,7 @@ public class UserWebService {
 	 */
 	public String setUserObjectAndGenerateRoomHashByURLAndRecFlag(String SID,
 			String username, String firstname, String lastname,
-			String profilePictureUrl, String email, Long externalUserId,
+			String profilePictureUrl, String email, String externalUserId,
 			String externalUserType, Long room_id, int becomeModeratorAsInt,
 			int showAudioVideoTestAsInt, int allowRecording) {
 		try {
@@ -975,7 +975,7 @@ public class UserWebService {
 	 */
 	public String setUserObjectMainLandingZone(String SID, String username,
 			String firstname, String lastname, String profilePictureUrl,
-			String email, Long externalUserId, String externalUserType) {
+			String email, String externalUserId, String externalUserType) {
 		log.debug("UserService.setUserObjectMainLandingZone");
 
 		try {
@@ -1074,7 +1074,7 @@ public class UserWebService {
 	 */
 	public String setUserAndNickName(String SID, String username,
 			String firstname, String lastname, String profilePictureUrl,
-			String email, Long externalUserId, String externalUserType,
+			String email, String externalUserId, String externalUserType,
 			Long room_id, int becomeModeratorAsInt,
 			int showAudioVideoTestAsInt, int showNickNameDialogAsInt) {
 		try {
@@ -1160,7 +1160,7 @@ public class UserWebService {
 	 */
 	public String setUserObjectAndGenerateRecordingHashByURL(String SID,
 			String username, String firstname, String lastname,
-			Long externalUserId, String externalUserType, Long recording_id) {
+			String externalUserId, String externalUserType, Long recording_id) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);

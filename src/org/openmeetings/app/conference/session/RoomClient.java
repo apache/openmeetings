@@ -172,7 +172,7 @@ public class RoomClient implements Serializable {
 	private Boolean isBroadcasting = false;
 	
 	 //Vars to simulate external Users
-    private Long externalUserId;
+    private String externalUserId;
     private String externalUserType;
     
     private List<String> sharerSIDs = new LinkedList<String>();
@@ -439,11 +439,11 @@ public class RoomClient implements Serializable {
 		this.canShare = canShare;
 	}
 
-	public Long getExternalUserId() {
+	public String getExternalUserId() {
 		return externalUserId;
 	}
 
-	public void setExternalUserId(Long externalUserId) {
+	public void setExternalUserId(String externalUserId) {
 		this.externalUserId = externalUserId;
 	}
 

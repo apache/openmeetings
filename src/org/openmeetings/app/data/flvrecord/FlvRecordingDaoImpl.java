@@ -83,7 +83,7 @@ public class FlvRecordingDaoImpl {
 	}
 	
 	
-	public List<FlvRecording> getFlvRecordingByExternalUserId(Long externalUserId) {
+	public List<FlvRecording> getFlvRecordingByExternalUserId(String externalUserId) {
 		try { 
 			
 			log.debug("getFlvRecordingByExternalUserId :externalUserId: "+externalUserId);
@@ -91,7 +91,7 @@ public class FlvRecordingDaoImpl {
 			String hql = "SELECT c FROM FlvRecording c, Rooms r, Users u " +
 					"WHERE c.room_id = r.rooms_id " +
 					"AND c.insertedBy = u.user_id " +
-					"AND u.externalUserId = :externalUserId " +
+					"AND u.externalUserId LIKE :externalUserId " +
 					"AND c.deleted <> :deleted ";
 			
 			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);

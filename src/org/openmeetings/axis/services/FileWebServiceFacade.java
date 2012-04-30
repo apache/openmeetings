@@ -91,7 +91,7 @@ public class FileWebServiceFacade {
 	 * @return
 	 * @throws AxisFault
 	 */
-	public FileImportError[] importFile(String SID, Long externalUserId,
+	public FileImportError[] importFile(String SID, String externalUserId,
 			Long externalFileId, String externalType, Long room_id,
 			boolean isOwner, String path, Long parentFolderId,
 			String fileSystemName) throws AxisFault {
@@ -164,7 +164,7 @@ public class FileWebServiceFacade {
 	 * @throws AxisFault
 	 */
 	public Long addFolderByExternalUserIdAndType(String SID,
-			Long externalUserId, Long parentFileExplorerItemId,
+			String externalUserId, Long parentFileExplorerItemId,
 			String folderName, Long room_id, Boolean isOwner,
 			Long externalFilesid, String externalType) throws AxisFault {
 		return this.geFileServiceProxy().addFolderByExternalUserIdAndType(SID,
