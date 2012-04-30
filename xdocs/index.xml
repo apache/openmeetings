@@ -160,7 +160,7 @@
 
 				<image fullhref="images/Features_Screen_Conference_Room.png"
 					href="images/Features_Screen_Conference_Room_Thumb.png" title="OpenMeetings Conference Room"
-					width="250" height="175" fullwidth="1003" fullheight="703" />
+					width="250" height="175" fullwidth="1050" fullheight="706" />
 
 				<text>
 					There are four options to use OpenMeetings audio/video functions,
@@ -253,32 +253,32 @@
 					to every user individually .
 					<ul>
 						<li>
-							<img class="alignnone" title="Allow modaration" src="images/moderator.png"
+							<img class="alignnone" title="Allow modaration" src="images/user_add.png"
 								alt="" />
 							Allow/Deny moderation
 						</li>
 						<li>
-							<img class="alignnone" title="Whiteboard Access" src="images/whiteboard_access.png"
+							<img class="alignnone" title="Whiteboard Access" src="images/pencil_add.png"
 								alt="" />
 							Allow/Deny to draw on white board
 						</li>
 						<li>
-							<img class="alignnone" title="Screenshare" src="images/screenshare.png"
+							<img class="alignnone" title="Screenshare" src="images/monitor_add.png"
 								alt="" />
 							Allow/Deny screen-sharing/record screen
 						</li>
 						<li>
-							<img class="alignnone" title="Remote control" src="images/mouse.png"
+							<img class="alignnone" title="Remote control" src="images/mouse_add.png"
 								alt="" />
 							Allow/Deny Remote Control Screen
 						</li>
 						<li>
-							<img class="alignnone" title="Remote control" src="images/microphone2.png"
+							<img class="alignnone" title="Remote control" src="images/micro_small.png"
 								alt="" />
 							Give exclusive audio to others or self
 						</li>
 						<li>
-							<img class="alignnone" title="Video Audio" src="images/audio_video.png"
+							<img class="alignnone" title="Video Audio" src="images/audio_and_video.png"
 								alt="" />
 							(Re-) Start Audio, Video or Device settings
 						</li>
@@ -395,7 +395,7 @@
 
 			<feature title="Backup">
 				<image href="images/backup.png" fullhref="images/backup.png"
-					title="Backup" width="200" height="115" />
+					title="Backup" width="250" height="60" />
 				<text>
 					You can backup all user-generated data including files
 					uploaded by the users in a single ZIP file and import that ZIP into

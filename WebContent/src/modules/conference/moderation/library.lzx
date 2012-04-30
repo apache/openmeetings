@@ -20,7 +20,7 @@
 -->
 <library>
 
-	<resource name="applyformodicon_rsc" src="resources/kdmconfig.png" />
+	<resource name="applyformodicon_rsc" src="resources/user_add.png" />
 	
 	<!--  FamFam Icon Creative Commons -->
 	<resource name="start_screensharing_rsc" src="resources/monitor_go.png" />

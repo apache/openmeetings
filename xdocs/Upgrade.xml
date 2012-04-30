@@ -23,8 +23,8 @@
 				and Goto > Backup
 			</p>
 			<a class="fancybox-buttons" data-fancybox-group="button"
-				href="images/system_backup.png">
-				<img src="images/system_backup.png" alt="" width="512" height="170" />
+				href="images/backup.png">
+				<img src="images/backup.png" alt="" width="600" height="145"  />
 			</a>
 			<p>
 				The Text in the Administration>Backup section actually just says
