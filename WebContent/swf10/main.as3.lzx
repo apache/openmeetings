@@ -28,7 +28,7 @@
             </passthrough>
         </when>
     </switch>
-
+    
     <include href="testVideoObject.lzx" />
 
     <silverstyle name="componentStyle" basecolor="0xFFFFFF" textcolor="0x000000" />

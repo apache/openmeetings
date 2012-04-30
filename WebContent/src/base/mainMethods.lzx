@@ -90,7 +90,10 @@
     
     <confmenucommand id="cmd_invitation" actionCommand="invitation" key="['control','4']" /> 
     <confmenucommand id="cmd_editWhiteboardDefault" actionCommand="editWhiteboardDefault" key="['control','9']"/> 
+    
+    <!-- 
     <confmenucommand id="cmd_coBrowser" actionCommand="browser_open" key="['control','b']"/> 
+     -->
    
     <!--  
     	There is no image export at the moment
