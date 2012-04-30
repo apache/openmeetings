@@ -158,7 +158,7 @@
 
 			<feature title="Audio and Video Conferencing">
 
-				<image 
+				<image fullhref="images/Features_Screen_Conference_Room_Thumb.png"
 					href="images/Features_Screen_Conference_Room_Thumb.png" title="OpenMeetings Conference Room"
 					width="250" height="175" />
 
