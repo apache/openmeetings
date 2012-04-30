@@ -158,9 +158,9 @@
 
 			<feature title="Audio and Video Conferencing">
 
-				<image fullhref="images/Features_Screen_Conference_Room.png"
+				<image 
 					href="images/Features_Screen_Conference_Room_Thumb.png" title="OpenMeetings Conference Room"
-					width="250" height="175" fullwidth="1050" fullheight="706" />
+					width="250" height="175" />
 
 				<text>
 					There are four options to use OpenMeetings audio/video functions,
