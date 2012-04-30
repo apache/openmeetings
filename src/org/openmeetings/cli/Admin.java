@@ -333,8 +333,8 @@ public class Admin {
 						importInit.loadAll(langPath, cfg, admin.login, admin.pass, admin.email, admin.group, admin.tz);
 					}					
 					
-					File installerFile = new File(new File(home, ScopeApplicationAdapter.configDirName), InstallationDocumentHandler.installFileName);
-					InstallationDocumentHandler.getInstance().createDocument(installerFile.getAbsolutePath(), 1);
+					File installerFile = new File(new File(omHome, ScopeApplicationAdapter.configDirName), InstallationDocumentHandler.installFileName);
+					InstallationDocumentHandler.getInstance().createDocument(installerFile.getAbsolutePath(), 3);
 				} catch(Exception e) {
 					handleError("Install failed", e);
 				}

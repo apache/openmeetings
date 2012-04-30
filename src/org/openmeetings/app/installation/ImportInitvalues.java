@@ -697,7 +697,7 @@ public class ImportInitvalues {
 	}
 
 	public void loadInitUserAndOrganisation(String username, String userpass,
-			String email, String defaultOrganisationName, String timeZone,
+			String email, String defaultOrganisationName, String ical_timeZone,
 			String configdefaultLang) {
 		// Add user
 		try {
@@ -716,7 +716,7 @@ public class ImportInitvalues {
 					new java.util.Date(), "street", "no", "fax", "zip", 1,
 					"town", default_lang_id, false,
 					Arrays.asList(organisation_id), "phone", "", false, "", "",
-					"", false, timeZone, false, "", "", false, true);
+					"", false, omTimeZoneDaoImpl.getOmTimeZoneByIcal(ical_timeZone), false, "", "", false, true);
 
 			log.debug("Installation - User Added user-Id " + user_id);
 

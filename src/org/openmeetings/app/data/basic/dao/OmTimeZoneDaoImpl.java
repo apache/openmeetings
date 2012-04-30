@@ -102,6 +102,24 @@ public class OmTimeZoneDaoImpl {
 		return null;
 	}
 
+	public OmTimeZone getOmTimeZoneByIcal(String ical) {
+		try {
+			String hql = "select sl from OmTimeZone as sl "
+					+ "WHERE sl.ical LIKE :ical";
+			TypedQuery<OmTimeZone> query = em.createQuery(hql, OmTimeZone.class);
+			query.setParameter("ical", ical);
+			List<OmTimeZone> sList = query.getResultList();
+
+			if (sList.size() > 0) {
+				return sList.get(0);
+			}
+
+		} catch (Exception ex2) {
+			log.error("[getOmTimeZoneByIcal]: ", ex2);
+		}
+		return null;
+	}
+
 	public OmTimeZone getOmTimeZoneById(Long omtimezoneId) {
 		try {
 			String hql = "select sl from OmTimeZone as sl "

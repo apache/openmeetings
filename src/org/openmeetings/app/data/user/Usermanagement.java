@@ -48,6 +48,7 @@ import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.data.user.dao.UserSipDataDaoImpl;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.adresses.Adresses;
+import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.persistence.beans.basic.Sessiondata;
 import org.openmeetings.app.persistence.beans.domain.Organisation_Users;
 import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
@@ -938,7 +939,69 @@ public class Usermanagement {
 			List<Long> organisations, String phone, String baseURL,
 			Boolean sendConfirmation, String sip_user, String sip_pass,
 			String sip_auth, boolean generateSipUserData,
-			String jName_timezone, Boolean forceTimeZoneCheck,
+			String jname_timezone, Boolean forceTimeZoneCheck,
+			String userOffers, String userSearchs, Boolean showContactData,
+			Boolean showContactDataToContacts) throws Exception {
+		return registerUserInit(user_level, level_id, availible,
+				status, login, password, lastname,
+				firstname, email, age, street,
+				additionalname, fax, zip, states_id,
+				town, language_id, sendWelcomeMessage,
+				organisations, phone, baseURL,
+				sendConfirmation, sip_user, sip_pass,
+				sip_auth, generateSipUserData,
+				omTimeZoneDaoImpl.getOmTimeZone(jname_timezone), forceTimeZoneCheck,
+				userOffers, userSearchs, showContactData,
+				showContactDataToContacts);
+	}
+	
+	/**
+	 * @param user_level
+	 * @param level_id
+	 * @param availible
+	 * @param status
+	 * @param login
+	 * @param password
+	 * @param lastname
+	 * @param firstname
+	 * @param email
+	 * @param age
+	 * @param street
+	 * @param additionalname
+	 * @param fax
+	 * @param zip
+	 * @param states_id
+	 * @param town
+	 * @param language_id
+	 * @param sendWelcomeMessage
+	 * @param organisations
+	 * @param phone
+	 * @param baseURL
+	 * @param sendConfirmation
+	 * @param sip_user
+	 * @param sip_pass
+	 * @param sip_auth
+	 * @param generateSipUserData
+	 * @param timezone
+	 * @param forceTimeZoneCheck
+	 * @param userOffers
+	 * @param userSearchs
+	 * @param showContactData
+	 * @param showContactDataToContacts
+	 * @return new users_id OR null if an exception, -1 if an error, -4 if mail
+	 *         already taken, -5 if username already taken, -3 if login or pass
+	 *         or mail is empty
+	 * @throws Exception
+	 */
+	public Long registerUserInit(long user_level, long level_id, int availible,
+			int status, String login, String password, String lastname,
+			String firstname, String email, Date age, String street,
+			String additionalname, String fax, String zip, long states_id,
+			String town, long language_id, boolean sendWelcomeMessage,
+			List<Long> organisations, String phone, String baseURL,
+			Boolean sendConfirmation, String sip_user, String sip_pass,
+			String sip_auth, boolean generateSipUserData,
+			OmTimeZone timezone, Boolean forceTimeZoneCheck,
 			String userOffers, String userSearchs, Boolean showContactData,
 			Boolean showContactDataToContacts) throws Exception {
 		// TODO: make phone number persistent
@@ -1001,7 +1064,7 @@ public class Usermanagement {
 					Long user_id = addUser(level_id, availible, status,
 							firstname, login, lastname, language_id, password,
 							adr, age, hash, sip_user, sip_pass,
-							sip_auth, generateSipUserData, jName_timezone,
+							sip_auth, generateSipUserData, timezone,
 							forceTimeZoneCheck, userOffers, userSearchs,
 							showContactData, showContactDataToContacts, organisations);
 					log.debug("Added user-Id " + user_id);
@@ -1057,7 +1120,7 @@ public class Usermanagement {
 			String firstname, String login, String lastname, long language_id,
 			String userpass, Adresses adress, Date age, String hash,
 			String sip_user, String sip_pass, String sip_auth,
-			boolean generateSipUserData, String jName_timezone,
+			boolean generateSipUserData, OmTimeZone timezone,
 			Boolean forceTimeZoneCheck, String userOffers, String userSearchs,
 			Boolean showContactData, Boolean showContactDataToContacts, List<Long> orgIds) {
 		try {
@@ -1076,7 +1139,7 @@ public class Usermanagement {
 			users.setTitle_id(new Integer(1));
 			users.setStarttime(new Date());
 			users.setActivatehash(hash);
-			users.setOmTimeZone(omTimeZoneDaoImpl.getOmTimeZone(jName_timezone));
+			users.setOmTimeZone(timezone);
 			users.setForceTimeZoneCheck(forceTimeZoneCheck);
 
 			users.setUserOffers(userOffers);
