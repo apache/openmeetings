@@ -74,12 +74,9 @@ public class GenerateSWF {
 	public HashMap<String, String> generateSwfByImages(List<String> images,
 			String outputfile, int fps) {
 		List<String> argvList = Arrays.asList(new String[] {
-				getPathToSwfTools() + "png2swf" + execExt, "-s", "insertstop", // Insert
-																				// Stop
-																				// command
-																				// into
-																				// every
-																				// frame
+				getPathToSwfTools() + "png2swf" + execExt, "-s", 
+				"insertstop", // Insert Stop command into every frame
+				"-j", "100", // JPEG Quality to 100
 				"-o", outputfile, "-r", Integer.toString(fps), "-z" });
 
 		argvList.addAll(images);
