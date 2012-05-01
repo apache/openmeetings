@@ -62,6 +62,7 @@ public class GenerateSWF {
 				"insertstop", // insert Stop command into every frame
 				"-s","poly2bitmap", //http://www.swftools.org/gfx_tutorial.html#Rendering_pages_to_SWF_files
 				"-i", // change draw order to reduce pdf complexity
+				"-j", "100", // JPEG Quality to 100
 				originalFolder + fileNamePure + ".pdf",
 				destinationFolder + fileNamePure + ".swf" };
 
@@ -76,7 +77,6 @@ public class GenerateSWF {
 		List<String> argvList = Arrays.asList(new String[] {
 				getPathToSwfTools() + "png2swf" + execExt, "-s", 
 				"insertstop", // Insert Stop command into every frame
-				"-j", "100", // JPEG Quality to 100
 				"-o", outputfile, "-r", Integer.toString(fps), "-z" });
 
 		argvList.addAll(images);
