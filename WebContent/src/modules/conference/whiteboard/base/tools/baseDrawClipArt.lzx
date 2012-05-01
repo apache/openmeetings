@@ -57,7 +57,7 @@
     <attribute name="clipArtEndx" value="0" type="number" />
     <attribute name="clipArtEndy" value="0" type="number" />
 	
-	<attribute name="currentClipArtRessourceName" value="icons.png" type="string"/>
+	<attribute name="currentClipArtRessourceName" value="idea.png" type="string"/>
 	    
     <method name="startDrawClipArt" args="oid_name">
         <![CDATA[
