@@ -44,6 +44,7 @@ import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Salutationmanagement;
 import org.openmeetings.app.data.user.Statemanagement;
 import org.openmeetings.app.data.user.Usermanagement;
+import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.utils.ImportHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -65,6 +66,8 @@ public class ImportInitvalues {
 	private Configurationmanagement cfgManagement;
 	@Autowired
 	private Usermanagement userManagement;
+	@Autowired
+	private UsersDaoImpl usersDao;
 	@Autowired
 	private Fieldmanagment fieldmanagment;
 	@Autowired
@@ -989,7 +992,11 @@ public class ImportInitvalues {
 	
 	public void loadAll(String filePath, InstallationConfig cfg, String username,
 			String userpass, String useremail, String groupame, String timeZone) throws Exception {
-		
+		//FIXME dummy check if installation was performed before
+		if(usersDao.getAllUsers().size() > 0) {
+			log.debug("System contains users, no need to install data one more time.");
+			return;
+		}
 		loadSystem(filePath, cfg);
 		loadInitUserAndOrganisation(username,
 				userpass, useremail, groupame, timeZone, cfg.defaultLangId);
