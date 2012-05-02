@@ -617,25 +617,6 @@
         </handler>  
     </netRemoteCallHib> 
     
-    <!--
-    <netRemoteCallHib name="getRoomById" funcname="conferenceservice.getRoomById" >
-        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
-        <netparam><method name="getValue">return canvas.initroomid;</method></netparam>
-        <handler name="ondata" args="value">
-            //The onResult-Handler will be called be the rtmpconnection
-            Debug.write("getRoomById ",value);
-            canvas.isinitRoomObject = value;
-            canvas.thishib.loaderVar.close();
-            if (canvas.mail == undefined) {
-                new lz.invitationUserWin(canvas.main_content._content.inner);
-            } else {        
-                //not used for the moment
-                new lz.invitationQuickLoader(canvas.main_content._content.inner);
-            }             
-        </handler>  
-    </netRemoteCallHib>   
-     -->   
-    
     <netRemoteCallHib name="getStates" funcname="xmlcrm.getStates" dataobject="countrySet">
         <handler name="ondata" args="value">
             //The onResult-Handler will be called be the rtmpconnection
