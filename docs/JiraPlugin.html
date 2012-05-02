@@ -29,14 +29,14 @@ limitations under the License.
             <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
 
                                                     <meta name="author" value="
-            OpenMeetings Team
+			OpenMeetings Team
 		">
-            <meta name="email" value="sebawagner@apache.org">
+            <meta name="email" value="eugen.schwert@gmail.com">
             
            
                                     
                         
-            <title>Apache OpenMeetings - Howto create a custom room type in OpenMeetings</title>
+            <title>Apache OpenMeetings - Jira Plugin</title>
             <link rel="stylesheet" type="text/css" href="css/openmeetings.css">
             <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
             <link rel="stylesheet" type="text/css" href="css/coin-slider-styles.css">
@@ -908,41 +908,16 @@ limitations under the License.
                                                                     <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="Why creating a custom room type in OpenMeetings"><strong>Why creating a custom room type in OpenMeetings</strong></a>
+          <a name="Jira Plugin for OpenMeetings"><strong>Jira Plugin for OpenMeetings</strong></a>
           <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
         </font>
       </td></tr>
       <tr><td>
         <blockquote>
-                                    <p>If you want to create your own styled room the best thing to do in 
-            order to be "update-save" is to create your own custom room type. There is an empty configuration 
-				by default shipped with every release of OpenMeetings, the room type "custom" (ID = 5).<br />
-				<br />
-            You can use that and extend it, or you can add more room types to fit your use case.
-			</p>
-                                                <p />
-                            </blockquote>
-        </p>
-      </td></tr>
-      <tr><td><br/></td></tr>
-    </table>
-                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr><td ><!-- bgcolor="#EEEEEE" -->
-        <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="Create your own room type class (User Interface)"><strong>Create your own room type class (User Interface)</strong></a>
-          <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
-        </font>
-      </td></tr>
-      <tr><td>
-        <blockquote>
-                                    <p>Lets start by creating your custom room type class.
-				<br />
-					You could for example duplicate an existing room class, from <br />
-					<tt>src/modules/conference/flexibleConferenceRoom</tt> folder, for example the 
-			flexibleConferenceRoom.lzx: Generate a duplicate, change the name, for example to 
-			myCustomConferenceRoom.lzx and edit the class name inside the file name="flexibleConferenceRoom" to
-			name="myCustomConferenceRoom". Also don't miss to add an entry to library.lzx so that the compiler 
-			will find your new class.
+                                    <p>
+				You can get the latest Version of the Plugin for Jira from
+				<a href="https://svn.apache.org/repos/asf/incubator/openmeetings/branches/jira-plugin/target/openmeetings-1.0-SNAPSHOT.jar">here</a>
+				.
 			</p>
                             </blockquote>
         </p>
@@ -952,32 +927,19 @@ limitations under the License.
                                                 <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="Create nesseccary entries in configuration tables"><strong>Create nesseccary entries in configuration tables</strong></a>
+          <a name="Features"><strong>Features</strong></a>
           <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
         </font>
       </td></tr>
       <tr><td>
         <blockquote>
-                                    <p>You first need to create a number of configuration files </p>
+                                    <p>The plugin contains the following features: </p>
                                                 <ul>
-				<li>To have your roomtype available everytime you install OpenMeetings you need to add 
-					it to the default rooms: <tt>ImportInitvalues.java Method: loadDefaultRooms()</tt>. Add your entry here. 
-				You can choose any random name for the room. The ID is the important trigger for the room type 
-				to identify later. You need to run the installer so that your new room type is in the database.</li>
-				
-				<li>Add your room type in the default module configuration: 
-					<tt>src/base/moduleConfiguration.lzx</tt>, 
-				here you need to add a default class name for your room type </li>
-				
-				<li>Add your room type in the real configuration: config.xml, add a new entry.
-					<br />
-					You should fix also the file <tt>openmeetings-config.xsd</tt> that is the Schema file for the config.xml.
-				</li>
-        		
-				<li>Add a parser entry to modify the room type mapping: 
-					<tt>base/mainMethods.lzx method: myinit</tt>. You 
-        		can see some example parsing, you should add your one similar to the existing room types.</li>
-        		
+				<li>Create videoconference rooms through Jira: </li>
+				<ol>
+					<li>Integrated with Jira issues </li>										
+					<li>Configurable room type </li>
+				</ol>
 			</ul>
                             </blockquote>
         </p>
@@ -987,28 +949,19 @@ limitations under the License.
                                                 <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="Link your room type config with your room type class "><strong>Link your room type config with your room type class </strong></a>
+          <a name="Demo video"><strong>Demo video</strong></a>
           <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
         </font>
       </td></tr>
       <tr><td>
         <blockquote>
-                                    <p>Now you need to make sure that everytime the conference room is created 
-			your new class "myCustomConferenceRoom" is used. There are 3 places you need to add your mapping.</p>
-                                                <ul>
-				<li>In the global mapping: 
-					<tt>base/mainMethods.lzx method name="setRoomValues"</tt> 
-				</li>
-				<li>In file: 
-					<tt>modules/conference/conference/roomListItem.lzx method name="initRoom"</tt> 
-				</li>
-				<li>In file: 
-					<tt>modules/invitation/autoloaderBarOnly.lzx netRemoteCallHib name="setUsernameAndSession"</tt> 
-				</li>
-			</ul>
-                                                <p>Thats it. You can add/edit/delete your room with the new room type in the Administration &gt; Rooms interface of 
-			OpenMeetings like any other room.</p>
-                                                <p>If you need to have this room type available as option in the Calendar UI, you need to add it to the combobox manually.</p>
+                                    <p>The demo video of Jira plugin show you the plugin in action </p>
+                                                <object style="height: 390px; width: 640px">
+			      <param name="movie" value="http://www.youtube.com/v/xBdYj-OZvlc?version=3&amp;feature=player_detailpage" />
+			      <param name="allowFullScreen" value="true" />
+			      <param name="allowScriptAccess" value="always" />
+			      <embed src="http://www.youtube.com/v/xBdYj-OZvlc?version=3&amp;feature=player_detailpage" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="640" height="360" />
+		      </object>
                             </blockquote>
         </p>
       </td></tr>
