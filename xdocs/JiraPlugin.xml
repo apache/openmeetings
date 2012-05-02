@@ -19,7 +19,7 @@
 
 		<section name="Jira Plugin for OpenMeetings">
 			<p>
-				You can get the latest Version of the Plugin for Jira from
+				Current Development Snapshots for testing can be downloaded from:
 				<a href="https://svn.apache.org/repos/asf/incubator/openmeetings/branches/jira-plugin/target/openmeetings-1.0-SNAPSHOT.jar">here</a>
 				.
 			</p>			
