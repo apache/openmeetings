@@ -7,6 +7,7 @@ public class InstallationConfig {
 	public static final int USER_PASSWORD_MINIMUM_LENGTH = 4;
 	public String allowFrontendRegister = "1";
 	public String createDefaultRooms = "1";
+	public String ical_timeZone = "Europe/Berlin";
 	
 	public String cryptClassName = MD5Implementation.class.getCanonicalName();
 	//email
@@ -86,6 +87,8 @@ public class InstallationConfig {
 				+ ", sipPhoneRange=" + sipPhoneRange + ", red5SipEnable="
 				+ red5SipEnable + ", red5SipRoomPrefix=" + red5SipRoomPrefix
 				+ ", red5SipExtenContext=" + red5SipExtenContext
-				+ ", replyToOrganizer=" + replyToOrganizer + "]";
+				+ ", replyToOrganizer=" + replyToOrganizer
+				+ ", ical_timeZone=" + ical_timeZone 
+				+ "]";
 	}
 }

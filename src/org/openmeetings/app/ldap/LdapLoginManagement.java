@@ -31,11 +31,11 @@ import org.openmeetings.app.conference.session.RoomClient;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.basic.dao.LdapConfigDaoImpl;
+import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.user.Statemanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.ldap.config.ConfigReader;
 import org.openmeetings.app.persistence.beans.adresses.States;
-import org.openmeetings.app.persistence.beans.basic.Configuration;
 import org.openmeetings.app.persistence.beans.basic.LdapConfig;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
@@ -65,6 +65,8 @@ public class LdapLoginManagement {
 	private Statemanagement statemanagement;
 	@Autowired
 	private LdapConfigDaoImpl ldapConfigDao;
+	@Autowired
+	private OmTimeZoneDaoImpl omTimeZoneDaoImpl;
 
 	// External User Types
 	public static final String EXTERNAL_USER_TYPE_LDAP = "LDAP";
@@ -86,6 +88,8 @@ public class LdapLoginManagement {
 																							// 'no'
 
 	public static final String CONFIGKEY_LDAP_USE_LOWER_CASE = "ldap_use_lower_case";
+	
+	public static final String CONFIGKEY_LDAP_TIMEZONE_NAME = "ldap_user_timezone";
 	
 	/***
 	 * for future use (lemeur) public static final String
@@ -110,6 +114,7 @@ public class LdapLoginManagement {
 	public static final String LDAP_KEY_COUNTRY = "co";
 	public static final String LDAP_KEY_TOWN = "l";
 	public static final String LDAP_KEY_PHONE = "telephoneNumber";
+	public static final String LDAP_KEY_TIMEZONE = "timezone";
 
 	// LDAP custom attribute mapping keys
 	public static final String CONFIGKEY_LDAP_KEY_LASTNAME = "ldap_user_attr_lastname";
@@ -316,10 +321,10 @@ public class LdapLoginManagement {
 				.get(CONFIGKEY_LDAP_KEY_COUNTRY);
 		String ldap_user_attr_town = configData.get(CONFIGKEY_LDAP_KEY_TOWN);
 		String ldap_user_attr_phone = configData.get(CONFIGKEY_LDAP_KEY_PHONE);
-		
+		String ldap_user_attr_timezone = configData.get(CONFIGKEY_LDAP_TIMEZONE_NAME);
 		String ldap_use_lower_case = configData.get(CONFIGKEY_LDAP_USE_LOWER_CASE);
 		
-		if (ldap_use_lower_case.equals("true")) {
+		if (ldap_use_lower_case != null && ldap_use_lower_case.equals("true")) {
 			user = user.toLowerCase();
 		}
 
@@ -352,6 +357,9 @@ public class LdapLoginManagement {
 		}
 		if (ldap_user_attr_phone == null) {
 			ldap_user_attr_phone = LDAP_KEY_PHONE;
+		}
+		if (ldap_user_attr_timezone == null) {
+			ldap_user_attr_timezone = LDAP_KEY_TIMEZONE;
 		}
 
 		// Auth Type
@@ -445,7 +453,8 @@ public class LdapLoginManagement {
 			attributes.add(ldap_user_attr_country); // Country
 			attributes.add(ldap_user_attr_town); // Town
 			attributes.add(ldap_user_attr_phone); // Phone
-
+			attributes.add(ldap_user_attr_timezone); // Phone
+			
 			HashMap<String, String> ldapAttrs = new HashMap<String, String>();
 			ldapAttrs.put("lastnameAttr", ldap_user_attr_lastname);
 			ldapAttrs.put("firstnameAttr", ldap_user_attr_firstname);
@@ -457,6 +466,8 @@ public class LdapLoginManagement {
 			ldapAttrs.put("countryAttr", ldap_user_attr_country);
 			ldapAttrs.put("townAttr", ldap_user_attr_town);
 			ldapAttrs.put("phoneAttr", ldap_user_attr_phone);
+			ldapAttrs.put("phoneAttr", ldap_user_attr_phone);
+			ldapAttrs.put("timezoneAttr", ldap_user_attr_timezone);
 
 			Vector<HashMap<String, String>> result = lAuth.getData(
 					ldap_search_scope, ldap_search_filter, attributes);
@@ -628,6 +639,15 @@ public class LdapLoginManagement {
 			phone = userdata.get(ldapAttrs.get("phoneAttr"));
 
 		long state_id = -1;
+		
+		String jName_timeZone = "";
+		if (userdata.containsKey(ldapAttrs.get("timezoneAttr"))
+				&& userdata.get(ldapAttrs.get("timezoneAttr")) != null)
+			jName_timeZone = userdata.get(ldapAttrs.get("timezoneAttr"));
+		
+		if (omTimeZoneDaoImpl.getOmTimeZone(jName_timeZone) == null) {
+			jName_timeZone = cfgManagement.getConfValue("default.timezone", String.class, "Europe/Berlin");
+		}
 
 		if (state != null) {
 			// Lookup for states
@@ -661,14 +681,6 @@ public class LdapLoginManagement {
 		Long newUserId = null;
 
 		try {
-
-			Configuration conf = cfgManagement.getConfKey(3L,
-					"default.timezone");
-			String jName_timeZone = "";
-
-			if (conf != null) {
-				jName_timeZone = conf.getConf_value();
-			}
 
 			// Check if LDAP Users get a SIP Account Issue 1099
 

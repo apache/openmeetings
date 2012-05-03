@@ -87,7 +87,8 @@ public class OmTimeZoneDaoImpl {
 	public OmTimeZone getOmTimeZone(String jname) {
 		try {
 			String hql = "select sl from OmTimeZone as sl "
-					+ "WHERE sl.jname LIKE :jname";
+					+ "WHERE sl.jname LIKE :jname "
+					+ "OR sl.ical LIKE :jname";
 			TypedQuery<OmTimeZone> query = em.createQuery(hql, OmTimeZone.class);
 			query.setParameter("jname", jname);
 			List<OmTimeZone> sList = query.getResultList();

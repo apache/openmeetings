@@ -288,6 +288,7 @@ public class Install extends VelocityViewServlet {
 					cfg.sipPhoneRange = httpServletRequest.getParameter("sip_phonerange");
 
 					String timeZone = httpServletRequest.getParameter("timeZone");
+					cfg.ical_timeZone = timeZone;
 					
 					cfg.jodPath = httpServletRequest.getParameter("jod_path");
 

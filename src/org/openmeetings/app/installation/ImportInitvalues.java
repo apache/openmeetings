@@ -20,7 +20,6 @@ package org.openmeetings.app.installation;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -455,20 +454,7 @@ public class ImportInitvalues {
 		// Timezone settings
 		// ***************************************
 
-		Calendar cal = Calendar.getInstance();
-		int offset = cal.get(Calendar.ZONE_OFFSET);
-
-		offset = offset / 1000 / 60 / 60;
-
-		String timeZoneJavaFormat = "Etc/GMT";
-
-		if (offset > 0) {
-			timeZoneJavaFormat += "+" + offset;
-		} else {
-			timeZoneJavaFormat += "-" + offset;
-		}
-
-		cfgManagement.addConfByKey(3, "default.timezone", timeZoneJavaFormat,
+		cfgManagement.addConfByKey(3, "default.timezone", cfg.ical_timeZone,
 				null, "This is the default timezone if nothing is specified");
 
 		// ***************************************

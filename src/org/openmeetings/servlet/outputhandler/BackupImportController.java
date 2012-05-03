@@ -819,17 +819,10 @@ public class BackupImportController extends AbstractUploadController {
 							us.setForceTimeZoneCheck(false);
 						} else {
 
-							Configuration conf = cfgManagement.getConfKey(3L,
-									"default.timezone");
-							if (conf != null) {
-								String jNameTimeZone = conf.getConf_value();
-
-								OmTimeZone omTimeZone = omTimeZoneDaoImpl
-										.getOmTimeZone(jNameTimeZone);
-								us.setOmTimeZone(omTimeZone);
-
-							}
-
+							String jNameTimeZone = cfgManagement.getConfValue("default.timezone", String.class, "Europe/Berlin");
+							OmTimeZone omTimeZone = omTimeZoneDaoImpl
+									.getOmTimeZone(jNameTimeZone);
+							us.setOmTimeZone(omTimeZone);
 							us.setForceTimeZoneCheck(true);
 						}
 

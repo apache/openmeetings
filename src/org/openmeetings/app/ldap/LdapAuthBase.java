@@ -223,7 +223,6 @@ public class LdapAuthBase {
 			    
 			  }
 		}catch(Exception e){
-			log.error("Error occured on LDAP Search : " + e.getMessage());
 			log.error("Error occured on LDAP Search : " , e);
 		}
 		
