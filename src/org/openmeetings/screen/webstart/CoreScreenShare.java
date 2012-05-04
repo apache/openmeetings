@@ -399,7 +399,6 @@ public class CoreScreenShare {
 		textWarningArea.setText(warning);
 	}
 
-	@SuppressWarnings("unchecked")
 	synchronized public void sendCursorStatus() {
 		try {
 
@@ -419,13 +418,12 @@ public class CoreScreenShare {
 							Math.round(((mouseP.getY() - VirtualScreenBean.vScreenSpinnerY) * scaleFactor)
 									* Ampl_factor)).intValue();
 
-			@SuppressWarnings("rawtypes")
-			HashMap cursorPosition = new HashMap();
+			HashMap<String, Object> cursorPosition = new HashMap<String, Object>();
 			cursorPosition.put("publicSID", this.publishName);
 			cursorPosition.put("cursor_x", x);
 			cursorPosition.put("cursor_y", y);
 
-			if (instance.getConnection() != null && instance.getConnection().isConnected()) {
+			if (instance.getConnection() != null) {
 				instance.invoke("setNewCursorPosition", new Object[] { cursorPosition }, instance);
 			}
 
@@ -447,11 +445,6 @@ public class CoreScreenShare {
 			HashMap map = new HashMap();
 			map.put("screenX", VirtualScreenBean.vScreenSpinnerX);
 			map.put("screenY", VirtualScreenBean.vScreenSpinnerY);
-
-			// int scaledWidth =
-			// Float.valueOf(Math.round(VirtualScreenBean.vScreenSpinnerWidth*scaleFactor)).intValue();
-			// int scaledHeight =
-			// Float.valueOf(Math.round(VirtualScreenBean.vScreenSpinnerHeight*scaleFactor)).intValue();
 
 			int scaledWidth = Float.valueOf(
 					Math.round(VirtualScreenBean.vScreenResizeX * Ampl_factor))
