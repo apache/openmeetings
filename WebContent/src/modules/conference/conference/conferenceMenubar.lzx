@@ -247,9 +247,11 @@
 			<horizontalDropDownSpacer />
 			<conferencDropDownMenuItem labelid="42" command="cmd_checkPollVoted" 
 						 enabled="true"/>
-			<horizontalDropDownSpacer />
+			<horizontalDropDownSpacer
+						 visible="$once{ (canvas.RED5_SIP_ENABLE == 'yes') ? true : false }" />
             <conferencDropDownMenuItem labelid="1447" command="cmd_showSipDialer" 
-            			 enabled="true"/>
+            			 visible="$once{ (canvas.RED5_SIP_ENABLE == 'yes') ? true : false }"
+            			 enabled="$once{ (canvas.RED5_SIP_ENABLE == 'yes') ? true : false }"/>
             <horizontalDropDownSpacer />
 			<conferencDropDownMenuItem labelid="1126" command="cmd_editWhiteboardDefault" 
 						 enabled="true"/>

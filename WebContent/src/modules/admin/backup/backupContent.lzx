@@ -28,7 +28,7 @@
     <view x="4" resource="warning_icon_rsc" y="26" />
 
     <labelText fontsize="10" y="24"
-	     x="30" width="500" labelid="1065" multiline="true" />
+	     x="30" width="600" labelid="1065" multiline="true" />
 	
 	<labelCheckbox x="10" y="100" fontsize="11"
         name="_includeFileOption" text="Include uploaded files and recordings in backup" >

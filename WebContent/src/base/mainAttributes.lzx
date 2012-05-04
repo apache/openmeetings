@@ -448,6 +448,13 @@ and some more references to temp-objects
 <!--F12-->
 <attribute name="GIVE_EXCLUSIVE_AUDIO_KEY" value="123"/> 
 
+<!-- 
+	Indicates if the Red5 SIP Integration is enabled or not and 
+	if the SIP Dialer is shown in the conference menu
+ -->
+<attribute name="RED5_SIP_ENABLE" value="no" type="string" /> 
+
+
 <attribute name="currentNC" value="null" />
 
 </library>

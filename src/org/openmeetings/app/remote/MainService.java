@@ -737,6 +737,7 @@ public class MainService implements IPendingServiceCallback {
 			List<Configuration> cList = new LinkedList<Configuration>();
 			
 			cList.add(cfgManagement.getConfKey(3, "exclusive.audio.keycode"));
+			cList.add(cfgManagement.getConfKey(3, "red5sip.enable"));
 			
 			return cList;
 			
