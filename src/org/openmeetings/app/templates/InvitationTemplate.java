@@ -24,6 +24,7 @@ import java.util.Date;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.openmeetings.app.OpenmeetingsVariables;
+import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
 import org.red5.logging.Red5LoggerFactory;
@@ -36,6 +37,8 @@ public class InvitationTemplate extends VelocityLoader {
 
 	@Autowired
 	private Fieldmanagment fieldmanagment;
+	@Autowired
+	private Configurationmanagement configurationmanagement;
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			InvitationTemplate.class, OpenmeetingsVariables.webAppRootKey);
@@ -79,6 +82,8 @@ public class InvitationTemplate extends VelocityLoader {
 			context.put("labelid503", labelid503.getValue());
 			context.put("labelid504", labelid504.getValue());
 			context.put("labelid505", labelid505.getValue());
+			context.put("APP_NAME", configurationmanagement.getAppName());
+
 
 			/* lets render a template */
 			StringWriter w = new StringWriter();
@@ -134,6 +139,7 @@ public class InvitationTemplate extends VelocityLoader {
 			context.put("labelid503", labelid625.getValue());
 			context.put("labelid504", labelid626.getValue());
 			context.put("labelid505", labelid627.getValue());
+			context.put("APP_NAME", configurationmanagement.getAppName());
 
 			/* lets render a template */
 			StringWriter w = new StringWriter();
