@@ -75,6 +75,6 @@ public class AsteriskDbSipClient implements ISIPClient {
     }
 
     public Integer getConferenceMembersNumber(String sipNumber) {
-        return asteriskDAO.getConferensMembersNumber(sipNumber);
+        return asteriskDAO.getConferenceMembersNumber(sipNumber);
     }
 }

@@ -76,10 +76,14 @@ import org.openmeetings.app.persistence.beans.poll.RoomPollAnswers;
 import org.openmeetings.app.persistence.beans.rooms.RoomModerators;
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.rooms.Rooms_Organisation;
+import org.openmeetings.app.persistence.beans.sip.asterisk.AsteriskSipUsers;
+import org.openmeetings.app.persistence.beans.sip.asterisk.Extensions;
+import org.openmeetings.app.persistence.beans.sip.asterisk.MeetMe;
 import org.openmeetings.app.persistence.beans.user.PrivateMessageFolder;
 import org.openmeetings.app.persistence.beans.user.PrivateMessages;
 import org.openmeetings.app.persistence.beans.user.UserContacts;
 import org.openmeetings.app.persistence.beans.user.Users;
+import org.openmeetings.app.sip.api.impl.asterisk.dao.AsteriskDAOImpl;
 import org.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -137,6 +141,8 @@ public class BackupExport {
 	private PollManagement pollManagement;
 	@Autowired
 	private Configurationmanagement cfgManagement;
+	@Autowired
+	private AsteriskDAOImpl asteriskDAOImpl;
 
 	public void performExport(String filePath, File backup_dir,
 			boolean includeFiles, String omFilesDir) throws Exception {
@@ -369,6 +375,40 @@ public class BackupExport {
 			FileOutputStream fos = new FileOutputStream(aListXML);
 			this.serializetoXML(fos, "UTF-8", doc);
 		}
+		
+		/*
+		 * ##################### Asterisk SIP Data
+		 */
+		List<AsteriskSipUsers> asteriskSipUsers = asteriskDAOImpl.getAsteriskSipUsers();
+		if (asteriskSipUsers != null) {
+			Document doc = createAsteriskSipUsersDocument(asteriskSipUsers);
+			File aListXML = new File(backup_dir, "asterisksipusers.xml");
+			FileOutputStream fos = new FileOutputStream(aListXML);
+			this.serializetoXML(fos, "UTF-8", doc);
+		}
+		
+		/*
+		 * ##################### Asterisk SIP Extensions
+		 */
+		List<Extensions> extensions = asteriskDAOImpl.getExtensions();
+		if (extensions != null) {
+			Document doc = createExtensionsDocument(extensions);
+			File aListXML = new File(backup_dir, "extensions.xml");
+			FileOutputStream fos = new FileOutputStream(aListXML);
+			this.serializetoXML(fos, "UTF-8", doc);
+		}
+		
+		/*
+		 * ##################### Asterisk SIP Meetme
+		 */
+		List<MeetMe> members = asteriskDAOImpl.getMembers();
+		if (members != null) {
+			Document doc = createMembersDocument(members);
+			File aListXML = new File(backup_dir, "members.xml");
+			FileOutputStream fos = new FileOutputStream(aListXML);
+			this.serializetoXML(fos, "UTF-8", doc);
+		}
+		
 
 		if (includeFiles) {
 			/*
@@ -1682,6 +1722,114 @@ public class BackupExport {
 			cfgElem.addElement("created").addCDATA(formatString(CalendarPatterns.getExportDate(cfg.getStarttime())));
 			cfgElem.addElement("updated").addCDATA(formatString(CalendarPatterns.getExportDate(cfg.getUpdatetime())));
 			cfgElem.addElement("user_id").addCDATA(formatString("" + cfg.getUser_id()));
+		}
+		return document;
+	}
+	
+	private Document createAsteriskSipUsersDocument(
+			List<AsteriskSipUsers> asteriskSipUsers) {
+		
+		Document document = getDocument();
+		Element root = document.addElement("root");
+		Element astusersElem = root.addElement("asterisksipusers");
+		
+		for (AsteriskSipUsers asteriskSipUser : asteriskSipUsers) {
+			Element astuserElem = astusersElem.addElement("asterisksipuser");
+			astuserElem.addElement("id").addCDATA(formatString("" + asteriskSipUser.getId()));
+			astuserElem.addElement("accountcode").addCDATA(formatString("" + asteriskSipUser.getAccountcode()));
+			astuserElem.addElement("disallow").addCDATA(formatString("" + asteriskSipUser.getDisallow()));
+			astuserElem.addElement("allow").addCDATA(formatString("" + asteriskSipUser.getAllow()));
+			astuserElem.addElement("allowoverlap").addCDATA(formatString("" + asteriskSipUser.getAllowoverlap()));
+			astuserElem.addElement("allowsubscribe").addCDATA(formatString("" + asteriskSipUser.getAllowsubscribe()));
+			astuserElem.addElement("allowtransfer").addCDATA(formatString("" + asteriskSipUser.getAllowtransfer()));
+			astuserElem.addElement("amaflags").addCDATA(formatString("" + asteriskSipUser.getAmaflags()));
+			astuserElem.addElement("autoframing").addCDATA(formatString("" + asteriskSipUser.getAutoframing()));
+			astuserElem.addElement("auth").addCDATA(formatString("" + asteriskSipUser.getAuth()));
+			astuserElem.addElement("buggymwi").addCDATA(formatString("" + asteriskSipUser.getBuggymwi()));
+			astuserElem.addElement("callgroup").addCDATA(formatString("" + asteriskSipUser.getCallgroup()));
+			astuserElem.addElement("callerid").addCDATA(formatString("" + asteriskSipUser.getCallerid()));
+			astuserElem.addElement("cid_number").addCDATA(formatString("" + asteriskSipUser.getCid_number()));
+			astuserElem.addElement("fullname").addCDATA(formatString("" + asteriskSipUser.getFullname()));
+			astuserElem.addElement("callingpres").addCDATA(formatString("" + asteriskSipUser.getCallingpres()));
+			astuserElem.addElement("canreinvite").addCDATA(formatString("" + asteriskSipUser.getCanreinvite()));
+			astuserElem.addElement("context").addCDATA(formatString("" + asteriskSipUser.getContext()));
+			astuserElem.addElement("defaultip").addCDATA(formatString("" + asteriskSipUser.getDefaultip()));
+			astuserElem.addElement("dtmfmode").addCDATA(formatString("" + asteriskSipUser.getDtmfmode()));
+			astuserElem.addElement("fromuser").addCDATA(formatString("" + asteriskSipUser.getFromuser()));
+			astuserElem.addElement("fromdomain").addCDATA(formatString("" + asteriskSipUser.getFromdomain()));
+			astuserElem.addElement("fullcontact").addCDATA(formatString("" + asteriskSipUser.getFullcontact()));
+			astuserElem.addElement("g726nonstandard").addCDATA(formatString("" + asteriskSipUser.getG726nonstandard()));
+			astuserElem.addElement("host").addCDATA(formatString("" + asteriskSipUser.getHost()));
+			astuserElem.addElement("insecure").addCDATA(formatString("" + asteriskSipUser.getInsecure()));
+			astuserElem.addElement("ipaddr").addCDATA(formatString("" + asteriskSipUser.getIpaddr()));
+			astuserElem.addElement("language").addCDATA(formatString("" + asteriskSipUser.getLanguage()));
+			astuserElem.addElement("lastms").addCDATA(formatString("" + asteriskSipUser.getLastms()));
+			astuserElem.addElement("mailbox").addCDATA(formatString("" + asteriskSipUser.getMailbox()));
+			astuserElem.addElement("maxcallbitrate").addCDATA(formatString("" + asteriskSipUser.getMaxcallbitrate()));
+			astuserElem.addElement("mohsuggest").addCDATA(formatString("" + asteriskSipUser.getMohsuggest()));
+			astuserElem.addElement("md5secret").addCDATA(formatString("" + asteriskSipUser.getMd5secret()));
+			astuserElem.addElement("musiconhold").addCDATA(formatString("" + asteriskSipUser.getMusiconhold()));
+			astuserElem.addElement("name").addCDATA(formatString("" + asteriskSipUser.getName()));
+			astuserElem.addElement("nat").addCDATA(formatString("" + asteriskSipUser.getNat()));
+			astuserElem.addElement("outboundproxy").addCDATA(formatString("" + asteriskSipUser.getOutboundproxy()));
+			astuserElem.addElement("deny").addCDATA(formatString("" + asteriskSipUser.getDeny()));
+			astuserElem.addElement("permit").addCDATA(formatString("" + asteriskSipUser.getPermit()));
+			astuserElem.addElement("pickupgroup").addCDATA(formatString("" + asteriskSipUser.getPickupgroup()));
+			astuserElem.addElement("port").addCDATA(formatString("" + asteriskSipUser.getPort()));
+			astuserElem.addElement("progressinband").addCDATA(formatString("" + asteriskSipUser.getProgressinband()));
+			astuserElem.addElement("promiscredir").addCDATA(formatString("" + asteriskSipUser.getPromiscredir()));
+			astuserElem.addElement("qualify").addCDATA(formatString("" + asteriskSipUser.getQualify()));
+			astuserElem.addElement("regexten").addCDATA(formatString("" + asteriskSipUser.getRegexten()));
+			astuserElem.addElement("regseconds").addCDATA(formatString("" + asteriskSipUser.getRegseconds()));
+			astuserElem.addElement("rfc2833compensate").addCDATA(formatString("" + asteriskSipUser.getRfc2833compensate()));
+			astuserElem.addElement("rtptimeout").addCDATA(formatString("" + asteriskSipUser.getRtptimeout()));
+			astuserElem.addElement("rtpholdtimeout").addCDATA(formatString("" + asteriskSipUser.getRtpholdtimeout()));
+			astuserElem.addElement("secret").addCDATA(formatString("" + asteriskSipUser.getSecret()));
+			astuserElem.addElement("sendrpid").addCDATA(formatString("" + asteriskSipUser.getSendrpid()));
+			astuserElem.addElement("setvar").addCDATA(formatString("" + asteriskSipUser.getSetvar()));
+			astuserElem.addElement("subscribecontext").addCDATA(formatString("" + asteriskSipUser.getSubscribecontext()));
+			astuserElem.addElement("subscribemwi").addCDATA(formatString("" + asteriskSipUser.getSubscribemwi()));
+			astuserElem.addElement("t38pt_udptl").addCDATA(formatString("" + asteriskSipUser.getId()));
+			astuserElem.addElement("trustrpid").addCDATA(formatString("" + asteriskSipUser.getTrustrpid()));
+			astuserElem.addElement("type").addCDATA(formatString("" + asteriskSipUser.getType()));
+			astuserElem.addElement("useclientcode").addCDATA(formatString("" + asteriskSipUser.getUseclientcode()));
+			astuserElem.addElement("username").addCDATA(formatString("" + asteriskSipUser.getUsername()));
+			astuserElem.addElement("usereqphone").addCDATA(formatString("" + asteriskSipUser.getUsereqphone()));
+			astuserElem.addElement("videosupport").addCDATA(formatString("" + asteriskSipUser.getVideosupport()));
+			astuserElem.addElement("vmexten").addCDATA(formatString("" + asteriskSipUser.getVmexten()));
+
+		}
+		return document;
+		
+	}
+	
+	private Document createExtensionsDocument(List<Extensions> extensions) {
+		Document document = getDocument();
+		Element root = document.addElement("root");
+		Element extensionsElem = root.addElement("extensions");
+		
+		for (Extensions extension : extensions) {
+			Element extensionElem = extensionsElem.addElement("extension");
+			extensionElem.addElement("id").addCDATA(formatString("" + extension.getId()));
+			extensionElem.addElement("exten").addCDATA(formatString("" + extension.getExten()));
+			extensionElem.addElement("priority").addCDATA(formatString("" + extension.getPriority()));
+			extensionElem.addElement("app").addCDATA(formatString("" + extension.getApp()));
+			extensionElem.addElement("appdata").addCDATA(formatString("" + extension.getAppdata()));
+		}
+		return document;
+	}
+	
+	private Document createMembersDocument(List<MeetMe> members) {
+		Document document = getDocument();
+		Element root = document.addElement("root");
+		Element membersElem = root.addElement("members");
+		
+		for (MeetMe member : members) {
+			Element memberElem = membersElem.addElement("member");
+			memberElem.addElement("confno").addCDATA(formatString("" + member.getConfno()));
+			memberElem.addElement("pin").addCDATA(formatString("" + member.getPin()));
+			memberElem.addElement("adminpin").addCDATA(formatString("" + member.getAdminpin()));
+			memberElem.addElement("members").addCDATA(formatString("" + member.getMembers()));
 		}
 		return document;
 	}

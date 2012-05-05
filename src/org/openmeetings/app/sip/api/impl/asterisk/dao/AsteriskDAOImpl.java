@@ -18,6 +18,8 @@
  */
 package org.openmeetings.app.sip.api.impl.asterisk.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -90,9 +92,40 @@ public class AsteriskDAOImpl {
         return sipNumber;
     }
 
-    public Integer getConferensMembersNumber(String confNo) {
+    public Integer getConferenceMembersNumber(String confNo) {
         return ((Number)em.createQuery("SELECT m.members FROM MeetMe AS m WHERE m.confno=:confno")
                 .setParameter("confno", confNo)
                 .getSingleResult()).intValue();
     }
+    
+    public int saveAsteriskSipUsers(AsteriskSipUsers asteriskSipUsers) {
+    	em.persist(asteriskSipUsers);
+    	return asteriskSipUsers.getId();
+    }
+    
+    public List<AsteriskSipUsers> getAsteriskSipUsers() {
+    	return em.createQuery("select c from AsteriskSipUsers as c", AsteriskSipUsers.class)
+                .getResultList();
+    }
+    
+    public int saveExtensions(Extensions extensions) {
+    	em.persist(extensions);
+    	return extensions.getId();
+    }
+    
+    public List<Extensions> getExtensions() {
+    	return em.createQuery("select c from Extensions as c", Extensions.class)
+                .getResultList();
+    }
+    
+    public String saveMeetMe(MeetMe meetMe) {
+    	em.persist(meetMe);
+    	return meetMe.getConfno();
+    }
+    
+    public List<MeetMe> getMembers() {
+        return em.createQuery("select c from MeetMe as c", MeetMe.class)
+                .getResultList();
+    }
+    
 }

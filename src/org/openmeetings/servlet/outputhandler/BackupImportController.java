@@ -78,12 +78,16 @@ import org.openmeetings.app.persistence.beans.poll.RoomPollAnswers;
 import org.openmeetings.app.persistence.beans.rooms.RoomModerators;
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.rooms.Rooms_Organisation;
+import org.openmeetings.app.persistence.beans.sip.asterisk.AsteriskSipUsers;
+import org.openmeetings.app.persistence.beans.sip.asterisk.Extensions;
+import org.openmeetings.app.persistence.beans.sip.asterisk.MeetMe;
 import org.openmeetings.app.persistence.beans.user.PrivateMessageFolder;
 import org.openmeetings.app.persistence.beans.user.PrivateMessages;
 import org.openmeetings.app.persistence.beans.user.UserContacts;
 import org.openmeetings.app.persistence.beans.user.UserSipData;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.app.sip.api.impl.asterisk.dao.AsteriskDAOImpl;
 import org.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -139,6 +143,8 @@ public class BackupImportController extends AbstractUploadController {
 	private PollManagement pollManagement;
 	@Autowired
 	private Configurationmanagement cfgManagement;
+	@Autowired
+	private AsteriskDAOImpl asteriskDAOImpl;
 
 	private final HashMap<Long, Long> usersMap = new HashMap<Long, Long>();
 	private final HashMap<Long, Long> organisationsMap = new HashMap<Long, Long>();
@@ -408,7 +414,40 @@ public class BackupImportController extends AbstractUploadController {
 		} else {
 			importConfigs(configsFile);
 		}
-		log.info("Configs import complete, starting copy of files and folders");
+		log.info("Configs import complete, starting asteriskSipUsersFile import");
+		
+		/*
+		 * ##################### Import AsteriskSipUsers
+		 */
+		File asteriskSipUsersFile = new File(f, "asterisksipusers.xml");
+		if (!asteriskSipUsersFile.exists()) {
+			log.debug("asteriskSipUsersFile missing");
+		} else {
+			importAsteriskSipUsers(asteriskSipUsersFile);
+		}
+		log.info("AsteriskSipUsers import complete, starting extensions import");
+		
+		/*
+		 * ##################### Import Extensions
+		 */
+		File extensionsFile = new File(f, "extensions.xml");
+		if (!extensionsFile.exists()) {
+			log.debug("extensionsFile missing");
+		} else {
+			importExtensions(extensionsFile);
+		}
+		log.info("Extensions import complete, starting members import");
+		
+		/*
+		 * ##################### Import Extensions
+		 */
+		File membersFile = new File(f, "members.xml");
+		if (!membersFile.exists()) {
+			log.debug("membersFile missing");
+		} else {
+			importMembers(membersFile);
+		}
+		log.info("Members import complete, starting copy of files and folders");
 
 		/*
 		 * ##################### Import real files and folders
@@ -420,7 +459,7 @@ public class BackupImportController extends AbstractUploadController {
 		deleteDirectory(f);
 	}
 	
-    @RequestMapping(value = "/backup.upload", method = RequestMethod.POST)
+	@RequestMapping(value = "/backup.upload", method = RequestMethod.POST)
 	public void service(HttpServletRequest request,
 			HttpServletResponse httpServletResponse)
 			throws ServletException, IOException {
@@ -468,6 +507,213 @@ public class BackupImportController extends AbstractUploadController {
 			log.error("[getRoomPolls]", err);
 		}
 
+	}
+	
+	private void importMembers(File membersFile) throws Exception {
+		SAXReader reader = new SAXReader();
+		Document document = reader.read(membersFile);
+
+		Element root = document.getRootElement();
+		Element extensions = root.element("members");
+		for (@SuppressWarnings("unchecked")
+			Iterator<Element> iter = extensions.elementIterator("member"); iter.hasNext();) {
+			
+			Element extensionElem = iter.next();
+			String confno = extensionElem.elementText("confno");
+			try {
+				MeetMe meetMe = new MeetMe();
+				meetMe.setConfno(unformatString(extensionElem
+								.element("confno").getText()));
+				meetMe.setPin(unformatString(extensionElem
+						.element("pin").getText()));
+				meetMe.setAdminpin(unformatString(extensionElem
+						.element("adminpin").getText()));
+				meetMe.setMembers(importIntegerType(unformatString(extensionElem
+						.element("members").getText())));
+				
+				asteriskDAOImpl.saveMeetMe(meetMe);
+			} catch (Exception e) {
+				log.debug("failed to add/update members confno: " + confno, e);
+			}
+		}
+	}
+	
+	private void importExtensions(File extensionsFile) throws Exception {
+		SAXReader reader = new SAXReader();
+		Document document = reader.read(extensionsFile);
+
+		Element root = document.getRootElement();
+		Element extensions = root.element("extensions");
+		for (@SuppressWarnings("unchecked")
+			Iterator<Element> iter = extensions.elementIterator("extension"); iter.hasNext();) {
+			
+			Element extensionElem = iter.next();
+			String id = extensionElem.elementText("id");
+			try {
+				Extensions extension = new Extensions();
+				//the primary key must be null for new objects if its an auto-increment
+				extension.setExten(unformatString(extensionElem
+						.element("exten").getText()));
+				extension.setPriority(importIntegerType(unformatString(extensionElem
+						.element("priority").getText())));
+				extension.setApp(unformatString(extensionElem
+						.element("app").getText()));
+				extension.setAppdata(unformatString(extensionElem
+						.element("appdata").getText()));
+				
+				asteriskDAOImpl.saveExtensions(extension);
+			} catch (Exception e) {
+				log.debug("failed to add/update extensions id: " + id, e);
+			}
+		}
+	}
+	
+	private void importAsteriskSipUsers(File asteriskSipUsersFile) throws Exception {
+		SAXReader reader = new SAXReader();
+		Document document = reader.read(asteriskSipUsersFile);
+
+		Element root = document.getRootElement();
+		Element asterisksipusers = root.element("asterisksipusers");
+		for (@SuppressWarnings("unchecked")
+			Iterator<Element> iter = asterisksipusers.elementIterator("asterisksipuser"); iter.hasNext();) {
+			
+			Element asterisksipuserElem = iter.next();
+			
+			String id = asterisksipuserElem.elementText("id");
+			
+			try {
+			
+				AsteriskSipUsers asterisksipuser = new AsteriskSipUsers();
+				//the primary key must be null for new objects if its an auto-increment
+				asterisksipuser.setAccountcode(unformatString(asterisksipuserElem
+						.element("accountcode").getText()));
+				asterisksipuser.setDisallow(unformatString(asterisksipuserElem
+						.element("disallow").getText()));
+				asterisksipuser.setAllow(unformatString(asterisksipuserElem
+						.element("allow").getText()));
+				asterisksipuser.setAllowoverlap(unformatString(asterisksipuserElem
+						.element("allowoverlap").getText()));
+				asterisksipuser.setAllowsubscribe(unformatString(asterisksipuserElem
+						.element("allowsubscribe").getText()));
+				asterisksipuser.setAllowtransfer(unformatString(asterisksipuserElem
+						.element("allowtransfer").getText()));
+				asterisksipuser.setAmaflags(unformatString(asterisksipuserElem
+						.element("amaflags").getText()));
+				asterisksipuser.setAutoframing(unformatString(asterisksipuserElem
+						.element("autoframing").getText()));
+				asterisksipuser.setAuth(unformatString(asterisksipuserElem
+						.element("auth").getText()));
+				asterisksipuser.setBuggymwi(unformatString(asterisksipuserElem
+						.element("buggymwi").getText()));
+				asterisksipuser.setCallgroup(unformatString(asterisksipuserElem
+						.element("callgroup").getText()));
+				asterisksipuser.setCallerid(unformatString(asterisksipuserElem
+						.element("callerid").getText()));
+				asterisksipuser.setCid_number(unformatString(asterisksipuserElem
+						.element("cid_number").getText()));
+				asterisksipuser.setFullname(unformatString(asterisksipuserElem
+						.element("fullname").getText()));
+				asterisksipuser.setCallingpres(unformatString(asterisksipuserElem
+						.element("callingpres").getText()));
+				asterisksipuser.setCanreinvite(unformatString(asterisksipuserElem
+						.element("canreinvite").getText()));
+				asterisksipuser.setContext(unformatString(asterisksipuserElem
+						.element("context").getText()));
+				asterisksipuser.setDefaultip(unformatString(asterisksipuserElem
+						.element("defaultip").getText()));
+				asterisksipuser.setDtmfmode(unformatString(asterisksipuserElem
+						.element("dtmfmode").getText()));
+				asterisksipuser.setFromuser(unformatString(asterisksipuserElem
+						.element("fromuser").getText()));
+				asterisksipuser.setFromdomain(unformatString(asterisksipuserElem
+						.element("fromdomain").getText()));
+				asterisksipuser.setFullcontact(unformatString(asterisksipuserElem
+						.element("fullcontact").getText()));
+				asterisksipuser.setG726nonstandard(unformatString(asterisksipuserElem
+						.element("g726nonstandard").getText()));
+				asterisksipuser.setHost(unformatString(asterisksipuserElem
+						.element("host").getText()));
+				asterisksipuser.setInsecure(unformatString(asterisksipuserElem
+						.element("insecure").getText()));
+				asterisksipuser.setIpaddr(unformatString(asterisksipuserElem
+						.element("ipaddr").getText()));
+				asterisksipuser.setLanguage(unformatString(asterisksipuserElem
+						.element("language").getText()));
+				asterisksipuser.setLastms(unformatString(asterisksipuserElem
+						.element("lastms").getText()));
+				asterisksipuser.setMailbox(unformatString(asterisksipuserElem
+						.element("mailbox").getText()));
+				asterisksipuser.setMaxcallbitrate(importIntegerType(unformatString(asterisksipuserElem
+						.element("maxcallbitrate").getText())));
+				asterisksipuser.setMohsuggest(unformatString(asterisksipuserElem
+						.element("mohsuggest").getText()));
+				asterisksipuser.setMd5secret(unformatString(asterisksipuserElem
+						.element("md5secret").getText()));
+				asterisksipuser.setMusiconhold(unformatString(asterisksipuserElem
+						.element("musiconhold").getText()));
+				asterisksipuser.setName(unformatString(asterisksipuserElem
+						.element("name").getText()));
+				asterisksipuser.setNat(unformatString(asterisksipuserElem
+						.element("nat").getText()));
+				asterisksipuser.setOutboundproxy(unformatString(asterisksipuserElem
+						.element("outboundproxy").getText()));
+				asterisksipuser.setDeny(unformatString(asterisksipuserElem
+						.element("deny").getText()));
+				asterisksipuser.setPermit(unformatString(asterisksipuserElem
+						.element("permit").getText()));
+				asterisksipuser.setPickupgroup(unformatString(asterisksipuserElem
+						.element("pickupgroup").getText()));
+				asterisksipuser.setPort(unformatString(asterisksipuserElem
+						.element("port").getText()));
+				asterisksipuser.setProgressinband(unformatString(asterisksipuserElem
+						.element("progressinband").getText()));
+				asterisksipuser.setPromiscredir(unformatString(asterisksipuserElem
+						.element("promiscredir").getText()));
+				asterisksipuser.setQualify(unformatString(asterisksipuserElem
+						.element("qualify").getText()));
+				asterisksipuser.setRegexten(unformatString(asterisksipuserElem
+						.element("regexten").getText()));
+				asterisksipuser.setRegseconds(importIntegerType(unformatString(asterisksipuserElem
+						.element("regseconds").getText())));
+				asterisksipuser.setRfc2833compensate(unformatString(asterisksipuserElem
+						.element("rfc2833compensate").getText()));
+				asterisksipuser.setRtptimeout(unformatString(asterisksipuserElem
+						.element("rtptimeout").getText()));
+				asterisksipuser.setRtpholdtimeout(unformatString(asterisksipuserElem
+						.element("rtpholdtimeout").getText()));
+				asterisksipuser.setSecret(unformatString(asterisksipuserElem
+						.element("secret").getText()));
+				asterisksipuser.setSendrpid(unformatString(asterisksipuserElem
+						.element("sendrpid").getText()));
+				asterisksipuser.setSetvar(unformatString(asterisksipuserElem
+						.element("setvar").getText()));
+				asterisksipuser.setSubscribecontext(unformatString(asterisksipuserElem
+						.element("subscribecontext").getText()));
+				asterisksipuser.setSubscribemwi(unformatString(asterisksipuserElem
+						.element("subscribemwi").getText()));
+				asterisksipuser.setT38pt_udptl(unformatString(asterisksipuserElem
+						.element("t38pt_udptl").getText()));
+				asterisksipuser.setTrustrpid(unformatString(asterisksipuserElem
+						.element("trustrpid").getText()));
+				asterisksipuser.setType(unformatString(asterisksipuserElem
+						.element("type").getText()));
+				asterisksipuser.setUseclientcode(unformatString(asterisksipuserElem
+						.element("useclientcode").getText()));
+				asterisksipuser.setUsername(unformatString(asterisksipuserElem
+						.element("username").getText()));
+				asterisksipuser.setUsereqphone(unformatString(asterisksipuserElem
+						.element("usereqphone").getText()));
+				asterisksipuser.setVideosupport(unformatString(asterisksipuserElem
+						.element("videosupport").getText()));
+				asterisksipuser.setVmexten(unformatString(asterisksipuserElem
+						.element("vmexten").getText()));
+				
+				asteriskDAOImpl.saveAsteriskSipUsers(asterisksipuser);
+				
+			} catch (Exception e) {
+				log.debug("failed to add/update asterisksipuser id: "+id, e);
+			}
+		}
 	}
 	
 	private void importConfigs(File configsFile) throws Exception {
