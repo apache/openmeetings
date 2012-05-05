@@ -56,13 +56,11 @@ public class ChatService implements IPendingServiceCallback {
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
 	private ClientListManager clientListManager = null;
-	@Autowired
-	private EmoticonsManager emoticonsManager = null;
 	
-	//the overall chatroom is jsut another room
+	//the overall chat room is just another room
 	private static final Long overallChatRoomName = new Long(-1);
 	
-	//number of items in the Chatroom history
+	//number of items in the chat room history
 	private static final int chatRoomHistory = 50;
 	
 	private static LinkedHashMap<Long,List<HashMap<String,Object>>> myChats = new LinkedHashMap<Long,List<HashMap<String,Object>>>();
@@ -142,20 +140,26 @@ public class ChatService implements IPendingServiceCallback {
     						
     						RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
     						
+    						if (rcl == null) {
+    							continue;
+    						}
+    						if (rcl.getIsAVClient() == null || rcl.getIsAVClient()) {
+    							continue;
+    						}
     						if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
-	    						//continue;
-	    					} else {
-	    						log.debug("*..*idremote room_id: " + room_id);
-	    						log.debug("*..*my idstreamid room_id: " + rcl.getRoom_id());
-	    						if (room_id!=null && room_id.equals(rcl.getRoom_id())) {
-	    							((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient",new Object[] { hsm }, this);
-	    							log.debug("sending sendVarsToMessageWithClient to " + conn);
-	    						} else if (rcl.getIsChatNotification()) {
-	    							if (room_id.equals(rcl.getChatUserRoomId()) && room_id != null) {
-	    								((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient",new Object[] { hsm }, this);
-	    							}
-	    						}
+	    						continue;
 	    					}
+    						
+    						log.debug("*..*idremote room_id: " + room_id);
+    						log.debug("*..*my idstreamid room_id: " + rcl.getRoom_id());
+    						if (room_id!=null && room_id.equals(rcl.getRoom_id())) {
+    							((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient",new Object[] { hsm }, this);
+    							log.debug("sending sendVarsToMessageWithClient to " + conn);
+    						} else if (rcl.getIsChatNotification()) {
+    							if (room_id.equals(rcl.getChatUserRoomId()) && room_id != null) {
+    								((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient",new Object[] { hsm }, this);
+    							}
+    						}
     						
 	    			 	}
 	    			}
@@ -185,23 +189,7 @@ public class ChatService implements IPendingServiceCallback {
 			
 			HashMap<String,Object> hsm = new HashMap<String,Object>();
 			
-			//broadcast to everybody in the room/domain
-			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
-			for (Set<IConnection> conset : conCollection) {
-    			for (IConnection conn : conset) {
-    				if (conn != null) {
-    					if (conn instanceof IServiceCapableConnection) {
-			
-    						RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-    						if (!rcl.getIsScreenClient()) {
-	    						log.debug("*..*idremote: " + rcl.getStreamid());
-	    						log.debug("*..*my idstreamid: " + currentClient.getStreamid());
-	    						((IServiceCapableConnection) conn).invoke("clearChatContent",new Object[] { hsm }, this);
-    						}
-    					}
-    				}
-				}
-			}		
+			scopeApplicationAdapter.syncMessageToCurrentScope("clearChatContent", hsm, true);
 			
 			return myChatList;
 			
@@ -343,23 +331,7 @@ public class ChatService implements IPendingServiceCallback {
 			
 			log.debug("SET CHATROOM: "+overallChatRoomName);
 			
-			//broadcast to everybody in the room/domain
-			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
-			for (Set<IConnection> conset : conCollection) {
-    			for (IConnection conn : conset) {
-    				if (conn != null) {
-    					if (conn instanceof IServiceCapableConnection) {
-			
-    						RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
-    						if (!rcl.getIsScreenClient()) {
-	    						log.debug("*..*idremote: " + rcl.getStreamid());
-	    						log.debug("*..*my idstreamid: " + currentClient.getStreamid());
-	    						((IServiceCapableConnection) conn).invoke("sendVarsToOverallChat",new Object[] { hsm }, this);
-    						}
-    					}
-    				}
-				}
-			}		
+			scopeApplicationAdapter.syncMessageToCurrentScope("sendVarsToOverallChat", hsm, true);
 			
 		} catch (Exception err) {
 			log.error("[ChatService sendMessageToOverallChat] ",err);

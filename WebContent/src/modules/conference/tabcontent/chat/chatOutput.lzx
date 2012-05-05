@@ -106,24 +106,35 @@
             //this._cbtext.setAttribute('text',this._cbtext.text+newmessage);
             var usercolor = value[5];
             
-            var isDirectLink = false;
+            var isDirectLink = null;
+            if (value[8] > 0) {
+            	isDirectLink = false;
+            } else {
+            	isDirectLink = true;
+            }
+            
             if (canvas.isinitRoomDirect || canvas.remoteUserLogin 
                                 || canvas.directUserLogin || canvas.secureRemoteUserLogin) {
                 isDirectLink = true;               	
             }
             if ( usercolor==null || usercolor==0 || usercolor.length==0 )usercolor=0xCCCCCC;
-            //new lz.chatTabitem(this._cbtext,{cbtext:newmessage,user_id:value[8],usercolor:usercolor,username:username,usertime:value[1]});
+            
+            
+            
+            if ($debug) Debug.write("addChatHistory userID: ",value[8],isDirectLink);
+            
             new lz.chatTabItemEmoticons(this._cbtext,{
-	                messageObj:messageObj,
-                    user_id:value[8],
-                    publicSID:value[6],
-                    message:value[4],
-                    picture_uri:client.picture_uri,
-	                usercolor:usercolor,
-	                username:username,
-	                isDirectLink:isDirectLink,
-	                usertime:value[1]
-                });
+		                messageObj:messageObj,
+	                    user_id:value[8],
+	                    publicSID:value[6],
+	                    message:value[4],
+	                    picture_uri:client.picture_uri,
+		                usercolor:usercolor,
+		                username:username,
+		                isDirectLink:isDirectLink,
+		                usertime:value[1]
+	                });
+            
             this.setScrollToMax();              
         ]]>
     </method>           

@@ -95,18 +95,22 @@
 		  name="header_user">
 	</text>
 	
-    <miniIconsImage name="add" src="$once{ canvas.getThemeImage('edit_add_rsc') }" width="16" height="16" 
-                   y="2" x="$once{ parent.width - 122 }" showhandcursor="true">
-        <handler name="onclick">
-            if ($debug) Debug.write("Start Conference");
-            if (hib.userobject.user_id == parent.user_id) {
-                new lz.labelerrorPopup(canvas,{errorlabelid:1225});
-                return;
-            }
-            parent.requestUserToContactList.doCall();
-        </handler>
-        <labelTooltip labelid="1186" />
-    </miniIconsImage>
+	<state applied="$once{ !parent.isDirectLink }">
+	
+	    <miniIconsImage name="add" src="$once{ canvas.getThemeImage('edit_add_rsc') }" width="16" height="16" 
+	                   y="2" x="$once{ parent.width - 122 }" showhandcursor="true">
+	        <handler name="onclick">
+	            if ($debug) Debug.write("Start Conference");
+	            if (hib.userobject.user_id == parent.user_id) {
+	                new lz.labelerrorPopup(canvas,{errorlabelid:1225});
+	                return;
+	            }
+	            parent.requestUserToContactList.doCall();
+	        </handler>
+	        <labelTooltip labelid="1186" />
+	    </miniIconsImage>
+    
+    </state>
     
     <!--
     public Long requestUserToContactList(String SID, Long userToAdd_id, 
@@ -229,48 +233,53 @@
 
 	</text>
 	
-    <miniIcons name="private_message_add" resource="private_message_add_rsc" width="16" height="16" 
-                   y="0" x="$once{ parent.width - 104 }" showhandcursor="true">
-        <handler name="onclick">
-            if ($debug) Debug.write("Start Conference");
-            new lz.newPrivateMessage(canvas,{
-                                x:200,y:120,
-                                refObj:null,
-                                minimizable:true,
-                                maximizable:true,
-                                userObject:null,
-                                isdragable:true,
-                                user_id:parent.user_id,
-                                width:canvas.width-300,
-                                height:canvas.height-130
-                            });
-        </handler>
-        <labelTooltip labelid="1253" />
-    </miniIcons>
+	<state applied="$once{ !parent.isDirectLink }">
+	
+	    <miniIcons name="private_message_add" resource="private_message_add_rsc" width="16" height="16" 
+	                   y="0" x="$once{ parent.width - 104 }" showhandcursor="true">
+	        <handler name="onclick">
+	            if ($debug) Debug.write("Start Conference");
+	            new lz.newPrivateMessage(canvas,{
+	                                x:200,y:120,
+	                                refObj:null,
+	                                minimizable:true,
+	                                maximizable:true,
+	                                userObject:null,
+	                                isdragable:true,
+	                                user_id:parent.user_id,
+	                                width:canvas.width-300,
+	                                height:canvas.height-130
+	                            });
+	        </handler>
+	        <labelTooltip labelid="1253" />
+	    </miniIcons>
+	    
+	    <miniIcons resource="user_profile_rsc" width="16" height="16" 
+	               y="0" x="$once{ parent.width - 84 }" showhandcursor="true">
+	        <handler name="onclick">
+	            if ($debug) Debug.write("Start Conference");
+	            new lz.viewUserProfileWindow(canvas,{
+	                                userId:parent.user_id
+	                            });
+	        </handler>
+	        <labelTooltip labelid="1236" />
+	    </miniIcons>    		  
+			  
+	    <miniIcons y="0" x="$once{ parent.width - 64 }"
+	    		   resource="start_conference2_rsc" width="16" height="16" 
+	               showhandcursor="true">
+	        <handler name="onclick">
+	            if ($debug) Debug.write("Start Conference");
+	            new lz.chatParticipantsInviteConference(canvas,{
+	                            publicSID:parent.publicSID,
+	                            user_id:parent.user_id
+	                        });
+	        </handler>
+	        <labelTooltip labelid="1131" />
+	    </miniIcons>  
     
-    <miniIcons resource="user_profile_rsc" width="16" height="16" 
-               y="0" x="$once{ parent.width - 84 }" showhandcursor="true">
-        <handler name="onclick">
-            if ($debug) Debug.write("Start Conference");
-            new lz.viewUserProfileWindow(canvas,{
-                                userId:parent.user_id
-                            });
-        </handler>
-        <labelTooltip labelid="1236" />
-    </miniIcons>    		  
-		  
-    <miniIcons visible="$once{ !parent.isDirectLink }" y="0" x="$once{ parent.width - 64 }"
-    		   resource="start_conference2_rsc" width="16" height="16" 
-               showhandcursor="true">
-        <handler name="onclick">
-            if ($debug) Debug.write("Start Conference");
-            new lz.chatParticipantsInviteConference(canvas,{
-                            publicSID:parent.publicSID,
-                            user_id:parent.user_id
-                        });
-        </handler>
-        <labelTooltip labelid="1131" />
-    </miniIcons>  		  
+    </state>
+    		  
 	<text text="$once{ parent.usertime+'   ' }" align="right" fgcolor="0xAAAAAA"
 		  fontsize="10" name="header_time" />
 
