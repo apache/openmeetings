@@ -29,10 +29,10 @@
  
 <class name="videoObjectPlayTestBroadcast" extends="view" >
 
-	<view name="_chatvideoinner" x="0" y="0" height="$once{parent.height}" width="$once{parent.width}">
+	<view name="_chatvideoinner" x="0" y="0" height="${parent.height}" width="${parent.width}">
 		
 		<baseVideoStream name="_videostream" mode="broadcast"
-						 width="${parent.width}" height="${parent.height}" bgcolor="black" />
+						 width="${parent.width}" height="${parent.height}" bgcolor="0x000000" />
 		
 	</view>	
 </class>

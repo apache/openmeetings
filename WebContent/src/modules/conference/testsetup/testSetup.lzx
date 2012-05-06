@@ -68,7 +68,13 @@ Test the setup values before you enter a room
     	   
     	    var g = canvas.getUserData();
             var save = g["showAudioVideoTest"];
+            
+            
+            this.startConference();
+            
+            return;
     	    
+    	    //The pre-test is disabled as its integrated into the choose device settings now
             if (!canvas.showAudioVideoTest) {
                 this.startConference();
             } else if (!this.forceTest && save){

@@ -33,7 +33,7 @@
  -->
  
 <class name="editRecordStreamSWF10"  extends="labelExplorerBox" labelid="51"
-	width="300" height="286" x="14" y="-440" >
+	width="600" height="500" x="14" y="-440" >
 
     <switch>
         <when property="$as3">
@@ -62,13 +62,53 @@
 
     <attribute name="doDefaultAnimation" value="true" type="boolean" />
 
-    <attribute name="cam_default_width" value="320" type="number" />
-    <attribute name="cam_default_height" value="240" type="number" />
+    <attribute name="cam_default_width" value="240" type="number" />
+    <attribute name="cam_default_height" value="180" type="number" />
     
     <attribute name="interviewPodId" value="0" type="number" />
-
+    
+    <attribute name="lastRecorded" value="" type="string" />
+	
+	<attribute name="isRunning" value="false" type="boolean" />
+	
+	<attribute name="recordingsCounter" value="5" type="number" />
+	
+	<attribute name="timerIsRunning" value="false" type="boolean" />
+	
+	<attribute name="counterDelegate" value="null" />
+	
+	<method name="startTimer">
+		this.timerIsRunning = true;
+		this.timerWasUnmutedTheFirstTime = true;
+		lz.Timer.addTimer( this.counterDelegate, 1000 );
+	</method>
+	
+	<method name="count" args="calleeObj">
+		if (this.recordingsCounter != 0){
+			this.recordingsCounter -= 1;
+			lz.Timer.addTimer( this.counterDelegate, 1000 );
+			
+			this._text._info.setAttribute("text",""+this.recordingsCounter+" sec");
+			
+		} else {
+			this._text.setAttribute("visibility","hidden");
+			this.doStop();
+			this.timerIsRunning = false;
+			this.doPlay();
+		}
+	</method>
+	
+	<method name="startTimerToCount">
+		if (!this.timerIsRunning) {
+			this.startTimer();
+		}
+	</method>
+	
 	<handler name="oninit">
 		<![CDATA[
+		
+			this.counterDelegate = new LzDelegate( this, "count" );
+		
 			if ($debug) Debug.write("this.myvideocontainer ",this.myvideocontainer);
 			if ($debug) Debug.write("editrecordstream ###################### ");
 
@@ -155,29 +195,11 @@
             <![CDATA[
                 if ($debug) Debug.write("setUserAVSettings",value);
                 parent.currentClient = value;
-                parent.doninitalize();
+                parent.doStartConference();
             ]]>
         </handler>   
     </netRemoteCallHib>  
 
-    <!--
-        Called by local connection
-    <method name="clb_getBroadCastId" args="value">
-        if ($debug) Debug.write("getBroadCastId",value,canvas.publicSID);
-        this.myvideocontainer = canvas._videoComponent.createVideoObject(canvas.publicSID, true, -1, value);
-        this.myvideocontainer.setAttribute("visibility","hidden");
-    </method>
-    -->
-
-    <!--
-        Called by local connection
-    <method name="clb_setUserAVSettings" args="value">
-        if ($debug) Debug.write("setUserAVSettings",value);
-        this.currentClient = value;
-        this.doninitalize();
-    </method>
-    -->
-    
     <method name="storelocaldata">
         <![CDATA[
             //Debug.write("sharedobject store ");
@@ -194,7 +216,7 @@
         ]]>
     </method>
 
-    <method name="doninitalize">
+    <method name="doStartConference">
     	<![CDATA[
     	    if ($debug) Debug.write("doninitalize");
     		var valCam = this.chosenCam;
@@ -309,12 +331,132 @@
 	        this.close();
         ]]>
     </method>
+    
+    <method name="doStartRecording">
+        <![CDATA[
+        
+            this._btnStartRecording.setAttribute("enabled",false);
+            this._play.setAttribute("enabled",false);
+            
+            this.recordingsCounter = 5;
+            
+            this._text.setAttribute("visibility","visible");
+            this._text._info.setAttribute("text","5 sec");
+        
+            this.isRunning = true;
+            
+            var valCam = this.availibleCams.getValue();
+            var valMic = this.availibleCams.getValue();
+            
+            var videoview = this._video.content._publisher._chatvideoinner._videostream;
+            if ($debug) Debug.write("videoview: ",videoview);
+            if ($debug) Debug.write(valCam,valMic);
+            
+            var _micro = null;
+            var _camera = null;
+            if (valMic != null) {
+                 _micro = Microphone.getMicrophone(valMic);
+                 if (_micro != null) {
+                     _micro.codec = SoundCodec.NELLYMOSER;
+                     _micro.framesPerPacket = 1;
+                     _micro.setSilenceLevel(0, 2000);
+                     _micro.gain = 50;
+                     // this has no effect if enhanced microphone is obtained
+                    //Microphone setUseEchoSupression(bool)
+                    _micro.setUseEchoSuppression(true);
+                }
+            }
+            if (valCam != null) {
+                _camera = Camera.getCamera(valCam);
+            }
+            
+            if ($debug) Debug.write("_camera.setMode: ",videoview.width,videoview.height,canvas.framesPerSecond,true);
+
+            //Microphone.set
+            if ($debug) Debug.write("canvas.vaquality: ",canvas.vaquality, "canvas.microphoneRateBest: ",canvas.microphoneRateBest);
+            if (_camera != null) {
+                if ($debug) Debug.write("_camera.setQuality BEST: ",this.isInterview,(canvas.bandwidthNeededBest*2),canvas.camQualityBest);
+                if (this.isInterview) {
+                    _camera.setMode(videoview.width,videoview.height,24,true);
+                    if ($debug) Debug.warn("IS INTERVIEW ");
+                    _camera.setQuality(0,98);
+                } else {
+                    _camera.setMode(videoview.width,videoview.height,canvas.framesPerSecond,true);
+                    if ($debug) Debug.warn("IS NO INTERVIEW ");
+                    _camera.setQuality(canvas.bandwidthNeededBest,canvas.camQualityBest);
+                }
+            }
+            
+            //The First start-timer message will come from the Flash Object
+            
+            if ($debug) Debug.warn("_camera.muted ",_camera.muted);
+            if ($debug) Debug.warn("_micro.muted ",_micro.muted);
+            
+            if (!_camera.muted) {
+                this.startTimer();
+            }
+
+            //start recording of client stream
+            
+            var t = new Date();
+            this.lastRecorded = "TEST_SETUP_"+t.getTime();
+            
+            this._video.content._publisher.setAttribute("visibility","visible");
+            this._video.content._viewer.setAttribute("visibility","hidden");
+            
+            videoview.record(this.lastRecorded,_camera,_micro);
+        ]]>
+    </method>
+    
+    <method name="doPlay">
+    	<![CDATA[
+    	
+    	   if (this.lastRecorded == "") {
+    	   	   //Error - nothing recorded yet
+    	   	   if ($debug) Debug.warn("Nothing to Play");
+    	   } else {
+    	   	   
+    	   	   this._play.setAttribute("enabled",true);
+    	   	
+    	   	   this._video.content._publisher.setAttribute("visibility","hidden");
+               this._video.content._viewer.setAttribute("visibility","visible");
+               
+               var videoview = this._video.content._viewer._chatvideoinner._videostream;
+               
+               videoview.justPlayStream(this.lastRecorded+".flv",0);
+                
+    	   }
+    	
+    	]]>
+    </method>
+    
+    <method name="doStop">
+    	if (this.isRunning) {
+    		this.isRunning = false;
+    		
+    		var videoview = this._video.content._publisher._chatvideoinner._videostream;
+    		
+    		this._btnStartRecording.setAttribute("enabled",true);
+    		
+    		videoview._stop();
+    		
+    		this.doPlay();
+    	}
+    	
+    	var videoviewViewer = this._video.content._viewer._chatvideoinner._videostream;
+        videoviewViewer._stop();
+    </method>
 
     <animator name="_chooseDeviceAnimation" start="false" attribute="y" to="40" duration="750" />
+    
+    
+    <labelText fontstyle="bold" labelid="758"
+			   width="$once{ parent.width-2 }" height="30" multiline="true" y="20" /> 
 
-    <labelText labelid="447" fontsize="11" x="10" y="20" width="$once{ parent.width-20 }" />
+    <labelText labelid="447" fontsize="11" fontstyle="bold" 
+    			x="10" y="80" width="$once{ parent.width-20 }" />
 
-    <resetCombobox fontsize="11" name="availibleSettings" x="10" y="40" width="280" editable="false">
+    <resetCombobox fontsize="11" name="availibleSettings" x="10" y="100" width="280" editable="false">
 
         <switch>
             <when property="$as3">
@@ -391,9 +533,9 @@
         </handler>
     </resetCombobox>
 
-    <labelText name="availibleCamsLabel" labelid="52" fontsize="11" x="10" y="80" width="$once{ parent.width-20 }" />
+    <labelText name="availibleCamsLabel" labelid="52" fontsize="11" x="10" y="140" width="$once{ parent.width-20 }" />
 
-    <resetCombobox fontsize="11" name="availibleCams" x="10" y="100" width="280" editable="false">
+    <resetCombobox fontsize="11" name="availibleCams" x="10" y="160" width="280" editable="false">
         <switch>
             <when property="$as3">
                 <passthrough>
@@ -428,9 +570,9 @@
     </resetCombobox>
 
     <labelText name="availibleMicsLabel" labelid="53" fontsize="11"
-               x="10" y="120" width="$once{ parent.width-20 }" />
+               x="10" y="180" width="$once{ parent.width-20 }" />
 
-    <resetCombobox fontsize="11" name="availibleMics"  x="10" y="140" width="280" editable="false">
+    <resetCombobox fontsize="11" name="availibleMics"  x="10" y="200" width="280" editable="false">
         <switch>
             <when property="$as3">
                 <passthrough>
@@ -466,25 +608,48 @@
     </resetCombobox>
 
     <labelText name="infoTextNoAV" labelid="452" multiline="true" width="280" 
-               fontsize="11" x="10" y="180" visibility="hidden" />
+               fontsize="11" x="10" y="240" visibility="hidden" />
                
     <labelText name="availibleResolutionsLabel" labelid="1429" 
-            fontsize="11" x="10" y="164" width="$once{ parent.width-20 }" />
+            fontsize="11" x="10" y="224" width="$once{ parent.width-20 }" />
             
-    <view name="availibleResolutionsWarning" x="272" y="164" 
+    <view name="availibleResolutionsWarning" x="272" y="224" 
             resource="warning_icon_popup_devices_rsc" clickable="true">
         <labelTooltip multiline="true" labelid="1430" />
     </view>     
     
     <resetCombobox fontsize="11" name="availibleResolutions" x="10" shownitems="10"
-                y="184" width="280" editable="false">
+                y="244" width="280" editable="false">
         <!--- @keywords private -->
         <attribute name="counter" value="0" />
         <handler name="onselect" args="item">
-            //if ($debug) Debug.write("onselect w ", item.cam_width);
-            //if ($debug) Debug.write("onselect h ", item.cam_height);
-            parent.cam_default_width = item.cam_width;
-            parent.cam_default_height = item.cam_height;
+	        <![CDATA[
+	            if ($debug) Debug.write("onselect w ", item.cam_width);
+	            if ($debug) Debug.write("onselect h ", item.cam_height);
+	            parent.setAttribute("cam_default_width",item.cam_width);
+	            parent.setAttribute("cam_default_height",item.cam_height);
+	            
+	            if (item.cam_width > 240) {
+	            	var newWidth = 600 + item.cam_width - 240;
+	            	if (newWidth+parent.x+10 > canvas.width) {
+	            		newWidth = canvas.width - 10 - this.x;
+	            	}
+	            	parent.setAttribute("width",newWidth);
+	            } else {
+	            	parent.setAttribute("width",600);
+	            }
+	            
+	            if (item.cam_height > 180) {
+	            	var newHeight = 500 + item.cam_height - 180;
+	            	if (newHeight+parent.y+10 > canvas.height) {
+	            		newHeight = canvas.height - 10 - parent.y;
+	            	}
+	            	parent.setAttribute("height",newHeight);
+	            } else {
+	            	parent.setAttribute("height",500);
+	            }
+	            
+            ]]>
         </handler>
         <textlistitem datapath="myConfigSet:/config/availableCameraResolutions/resolution" >
             <switch>
@@ -530,9 +695,108 @@
             </handler>
         </textlistitem>
     </resetCombobox>      
+    
+    <simpleLabelButton name="_btnStartRecording" labelid="775" 
+    				   width="140" x="150" y="280" height="28">
+    	<handler name="onclick">
+            parent._level_meter.startLevel();
+            parent.doStartRecording();
+        </handler>
+    </simpleLabelButton>
+    
+	<view x="340" y="60" name="_video" clip="true" 
+			width="${ parent.width-this.x-10 }" height="${ parent.height-260 }"> 
+		<view name="content">
+		
+			<videoObjectTestBroadcast name="_publisher"  
+					width="${ parent.parent.parent.cam_default_width }" 
+					height="${ parent.parent.parent.cam_default_height }">
+				<handler name="sendCameraStatus" args="camStatus">
+		            if ($debug) Debug.write("sendCameraStatus -1- ",camStatus);
+		            if (camStatus == "Camera.Unmuted") {
+		            	parent.parent.parent.startTimerToCount();
+		            }
+		        </handler>
+		        
+		        <handler name="sendMicroStatus" args="micStatus">
+		            if ($debug) Debug.write("sendMicroStatus -1- ",micStatus);
+		            if (micStatus == "Microphone.Unmuted") {
+		                parent.parent.parent.startTimerToCount();
+		            }
+		        </handler>
+			</videoObjectTestBroadcast>
+			
+			<videoObjectPlayTestBroadcast name="_viewer" visibility="hidden" 
+						width="${ parent.parent.parent.cam_default_width }" 
+						height="${ parent.parent.parent.cam_default_height }" />
+		</view>
+		
+		<om_vscrollbar />
+		<om_hscrollbar />
+	</view>
+	
+								  
+	<view name="_text" x="340" y="60" width="240" height="180" visibility="hidden">
+		<text name="_info" resize="true" bgcolor="0xFFFFFF" align="right"
+			  fontsize="12" fontstyle="bold" />
+	</view>
+    
+    <simpleLabelButton name="_play" y="${ parent.height-166 }" x="490" enabled="false"
+                	width="90" labelid="764" >
+        <handler name="onclick">
+            parent.doPlay();
+        </handler>
+    </simpleLabelButton>
+     
+    <view name="_level_meter" x="340" y="${ parent.height-190 }" width="240" height="20" clip="true" bgcolor="0x000000">
+    	
+    	 <!--- Level delegate, used to track level changes. 
+              @keywords private -->
+        <attribute name="_leveldel" value="$once{new LzDelegate(this, '_updateLevel')}"/>
+    	
+    	<method name="_updateLevel" args="no">
+    		<![CDATA[
+    		    if (parent._video.content._publisher._chatvideoinner._videostream.micro == null)
+    		    {
+    		    	return;
+    		    }
+    		    this.setNewLevel(parent._video.content._publisher._chatvideoinner._videostream.micro.activityLevel);
+    		]]>
+    	</method>
+    	
+    	<method name="startLevel">
+    		this._leveldel.register(lz.Idle, "onidle");
+    	</method>
+    	
+    	<method name="resetNewLevel">
+    		this._leveldel.unregisterAll();
+    		this.setNewLevel(0);
+    	</method>
+    	
+    	<method name="setNewLevel" args="no">
+    		<![CDATA[
+    		
+                var newLevel = (238/100) * no;
+            
+                this._over.setAttribute("width",238-newLevel);
+                this._over.setAttribute("x",1+(newLevel));
+                
+            ]]>
+    	</method>
+    	
+    	<view name="_bg" width="238" height="18" x="1" y="1" bgcolor="0xFFFFFF" />
+    	<view name="_grip" resource="level_meter_rsc" x="1" y="1" />
+    	<view name="_over" width="238" height="18" x="1" y="1" bgcolor="0xFFFFFF" />
+    	<labelText labelid="767" x="2" y="2" height="16" width="236" resize="false" />
+    </view>
+    
+    <view y="${ parent.height-98 }" resource="test_setup_info_rsc" x="16" />
+    
+    <labelText fontstyle="bold" labelid="765" x="39" y="${ parent.height-100 }"
+               width="$once{ parent.width-50 }" multiline="true" />
 
     <!-- Remember Me -->
-    <labelCheckbox name="holddatainSO" labelid="762" x="10" y="260" >
+    <labelCheckbox name="holddatainSO" labelid="762" x="10" y="${ parent.height-20 }" >
         <switch>
             <when property="$as3">
                 <passthrough>
@@ -550,7 +814,7 @@
     </labelCheckbox>
 
     <simpleLabelButton fontsize="11" visibility="${ (canvas.isInterview) ? 'visible' : 'hidden' }"
-                       labelid="54" x="80" y="240" width="100">
+                       labelid="54" x="${ parent.width-220 }" y="${ parent.height-50 }" width="100">
         <handler name="onclick">
             this.parent.storelocaldata();
             this.parent.chosenCam = parent.availibleCams.getValue();
@@ -567,14 +831,14 @@
     </simpleLabelButton>
 
     <simpleLabelButton fontsize="11" visibility="${ (canvas.isInterview) ? 'visible' : 'hidden' }"
-                       labelid="918" x="190" y="240" width="100">
+                       labelid="918" x="${ parent.width-110 }" y="${ parent.height-50 }" width="100">
         <handler name="onclick">
             parent.close();
         </handler>
     </simpleLabelButton>
 
     <simpleLabelButton fontsize="11" visibility="${ (!canvas.isInterview) ? 'visible' : 'hidden' }"
-    				   labelid="54" x="190" y="240" width="100">
+    				   labelid="761" width="160" x="${ parent.width-170 }" y="${ parent.height-50 }" height="28">
         <handler name="onclick">
         	this.parent.storelocaldata();
         	this.parent.chosenCam = parent.availibleCams.getValue();

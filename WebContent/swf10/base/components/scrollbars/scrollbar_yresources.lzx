@@ -20,14 +20,6 @@
 -->
 <library>
 
-    <include href="resetCombobox.lzx" />
-    <include href="miniIconsPresenter.lzx" />
-    <include href="labelCheckbox.lzx" />
+
     
-    <include href="text/" />
-    <include href="scrollbars/" />
-    <include href="lps/" />
-    <include href="button/" />
-    <include href="explorer/" /> 
-      
 </library>

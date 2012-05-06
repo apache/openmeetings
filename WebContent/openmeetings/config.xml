@@ -195,7 +195,7 @@ of the red5-servlet
     The Quality-Modus can be chosen in the Login-Box --> 
 <bandwidthNeededNormal>16384</bandwidthNeededNormal>    
 <!-- These are the settings for the Quality-Modus *best* -->    
-<bandwidthNeededBest>49152</bandwidthNeededBest>
+<bandwidthNeededBest>0</bandwidthNeededBest>
     
     
 <!-- Camera Settings for the Quality

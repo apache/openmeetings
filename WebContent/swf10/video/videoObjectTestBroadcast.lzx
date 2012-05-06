@@ -33,10 +33,10 @@
     
     <event name="sendMicroStatus" />
     
-	<view name="_chatvideoinner" x="0" y="0" height="$once{parent.height}" width="$once{parent.width}">
+	<view name="_chatvideoinner" x="0" y="0" height="${parent.height}" width="${parent.width}">
 		
 		<baseVideoStreamDevice name="_videostream" mode="broadcast" sendNotificationViaLocalConnection="false"
-						 width="${parent.width}" height="${parent.height}" bgcolor="black">
+						 width="${parent.width}" height="${parent.height}" bgcolor="0x000000">
 			<handler name="sendCameraStatus" args="camStatus">
                 if ($debug) Debug.write("sendCameraStatus",camStatus);
                 parent.parent.sendCameraStatus.sendEvent(camStatus);
