@@ -1829,7 +1829,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="452" name="choose_video_settings_info_text">
-    <value>No audio/video from your PC will be published, you profile picture will be shown</value>
+    <value>No audio/video from your PC will be published, your profile picture will be shown</value>
   </string>
 
   <string id="453" name="calendar_dayname_monday">
@@ -5280,7 +5280,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="1312" name="upload file explorer">
-    <value>Do directly load to whiteboard</value>
+    <value>Load directly to the Whiteboard</value>
   </string>
 
   <string id="1313" name="whiteboard close confirmation">
@@ -5292,7 +5292,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="1315" name="recording flag">
-    <value>Do not forget start recording. One user per room always needs to start it to have the recording afterwards.</value>
+    <value>Do not forget to 'Start recording', if you want have the meeting recorded."</value>
   </string>
 
   <string id="1316" name="recording flag">
@@ -5852,9 +5852,10 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Export/Import System Backups</value>
   </string>
   <string id="1462" name="file explorer">
-    <value>You need moderation or the right to draw on whiteboard to upload, add, delete or load files and folders.</value>
+    <value>You need to be a Moderator or have the 'draw on whiteboard' rights to upload, add, delete or load files and folders.</value>
   </string>
   <string id="1463" name="whiteboard">
     <value>Edit text</value>
   </string>
 </language>
+
