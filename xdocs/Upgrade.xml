@@ -39,13 +39,14 @@
 
 		<section name="Upgrading OpenMeetings from command line">
 			<p>
-				<i>You need OpenMeetings 2.x or later to have the command line
+				<i>You need OpenMeetings 2.x or later to have the command line interface (CLI) 
 					feature available
 				</i>
 			</p>
 			<p>
 				Alternatively to the Web-Installer you can also export and import
-				via the command line.
+				via the command line. <br/>
+				<b>You should shutdown the Red5-Service while doing CLI export or import operations</b>
 				<br />
 				Cd to your red5-home directory, type "admin" and hit enter. You will
 				get options available.
