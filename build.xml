@@ -109,7 +109,7 @@
 		</tstamp>
 		<property name="archive.file.name" value="${dist.dir}/${project.distname}-${project.version}.r${svn.info.rev}-${build.time}" />
 		
-		<rename src="${build.base.dir}/license.txt" dest="${build.base.dir}/red5-license.txt"/>
+		<move file="${build.base.dir}/license.txt" tofile="${build.base.dir}/red5-license.txt"/>
 		<copy file="build.properties" tofile="${build.base.dir}/build.properties" overwrite="true"/>
 		<copy file="LICENSE" tofile="${build.base.dir}/LICENSE" overwrite="true"/>
 		<copy file="NOTICE" tofile="${build.base.dir}/NOTICE" overwrite="true"/>
