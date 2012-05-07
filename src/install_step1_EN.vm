@@ -266,7 +266,27 @@ function checkEmail()
     </fieldset>  
     
     <fieldset id="userConf1">
-		<legend>Converters</legend>    
+		<legend>Converters</legend>
+	<li>
+	        <label for="swftools_zoom">SWFTools Zoom</label>
+	    	<input name="swftools_zoom" id="swftools_zoom" size="4"  value="72"
+		title="Enter the dpi that swftools will use for PDF to SWF conversion" type="text" 	 />   	
+	    	<p><i>You can test if swftools is installed into system path by opening a shell or cmd-prompt and type pdf2swf<br/>
+	    		Enter the dpi that swftools will use for PDF to SWF conversion. Default is 72 dpi.<br/>
+	    		see also <a href="http://incubator.apache.org/openmeetings/installation.html" target="_blank">Installation</a></i></p>
+		
+        </li>
+	<li>
+	        <label for="swftools_jpegquality">SWFTools JPEG Quality</label>
+	    	<input name="swftools_jpegquality" id="swftools_jpegquality" size="3" value="85" 
+		title="Enter the quality of embedded jpeg pictures to quality. 0 is worst (small), 100 is best (big). (default:85)"  type="text" />   	
+	    	<p>
+		<i>You can test if swftools is installed into system path by opening a shell or cmd-prompt and type pdf2swf<br/>
+	    		Enter the quality of embedded jpeg pictures to quality. 0 is worst (small), 100 is best (big). (default:85)<br/>
+	    		see also <a href="http://incubator.apache.org/openmeetings/installation.html" target="_blank">Installation</a></i>
+		</p>
+        </li>
+    
 		<li>
 	        <label for="swftools_path">SWFTools Path</label>
 	    	<input name="swftools_path" id="swftools_path" size="27" title="Enter the path to swftools for example C:/swftools (Windows) or leave blank if swftools is a known to your system path" type="text" />   	

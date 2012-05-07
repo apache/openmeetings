@@ -240,6 +240,7 @@ public class ImportInitvalues {
 		salutationmanagement.addUserSalutation("Ms", 262);
 		salutationmanagement.addUserSalutation("Mrs", 841);
 		salutationmanagement.addUserSalutation("Dr", 842);
+		salutationmanagement.addUserSalutation("Prof", 1464);
 		log.debug("Salutations ADDED");
 	}
 
@@ -293,6 +294,12 @@ public class ImportInitvalues {
 		// "1" == "EN"
 		cfgManagement.addConfByKey(3, "default_lang_id", cfg.defaultLangId, null,
 				"Default System Language ID see language.xml");
+
+		cfgManagement.addConfByKey(3, "swftools_zoom", cfg.swfZoom, null,
+				"dpi for conversion of PDF to SWF");
+
+		cfgManagement.addConfByKey(3, "swftools_jpegquality", cfg.swfJpegQuality, null,
+				"compression quality for conversion of PDF to SWF");
 
 		cfgManagement.addConfByKey(3, "swftools_path", cfg.swfPath, null,
 				"Path To SWF-Tools");

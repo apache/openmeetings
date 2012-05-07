@@ -242,6 +242,8 @@ public class Install extends VelocityViewServlet {
 					cfg.replyToOrganizer = httpServletRequest.getParameter("replyToOrganizer");
 
 					cfg.defaultLangId = httpServletRequest.getParameter("configdefaultLang");
+					cfg.swfZoom = httpServletRequest.getParameter("swftools_zoom");
+					cfg.swfJpegQuality = httpServletRequest.getParameter("swftools_jpegquality");
 					cfg.swfPath = httpServletRequest.getParameter("swftools_path");
 					cfg.imageMagicPath = httpServletRequest.getParameter("imagemagick_path");
 					cfg.sendEmailAtRegister = httpServletRequest.getParameter("sendEmailAtRegister");

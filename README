@@ -1,0 +1,103 @@
+Apache OpenMeetings [Incubating] - README
+Licensed under Apache License 2.0 - http://www.apache.org/licenses/LICENSE-2.0
+--------------------------------------------------------------------------------
+
+About
+=====
+Apache Openmeetings [Incubating] provides video conferencing, instant messaging, white board, collaborative 
+document editing and other groupware tools using API functions of the Red5 Streaming 
+Server for Remoting and Streaming. 
+
+Release Notes
+=============
+see CHANGES file for detailed log
+
+_Restyled UI_
+The UI has been re-factored to have a common look and fee. Additionally most 
+of the icons are now loaded at runtime. That means you can change colors and icons at 
+runtime without changing the source code. 
+More info: http://incubator.apache.org/openmeetings/themes-and-branding.html
+
+_New Calendar_
+The calendar was completely re-factored and got a new UI that was build from 
+scratch that also adds some new functions. For example it is possible now to password 
+protect invitations send via the calendar. Further the timezone handling has been 
+re-factored and there is now also a SOAP/REST API to handle calendar Events 
+( http://incubator.apache.org/openmeetings/SoapRestAPI.html )
+
+_Integration with Asterisk_
+The application contains now modules to directly integrate OpenMeetings with Asterisk 
+for SIP/VoIP integration. It enables you to dial in as well as dial out of conference 
+room to SIP or landlane phones. 
+More info: http://incubator.apache.org/openmeetings/voip-sip-integration.html
+
+_Install/Backup/Import via command line_
+ Additionally to the Web-Interface you can now do all basic operations via the console. 
+ Just cd to your OpenMeetings installation directory and type “admin” and you will see 
+ all options available (OpenMeetings service should be shut down while doing those operations)
+
+_Using SWF10 for Video Components_
+All audio/video related components now use SWF10 for broadcasting and receiving 
+audio and video signals. That makes it possible to use for example the echo cancellation 
+feature build in the SWF10 Flash Player.
+
+There are a lot more improvements for example to recording, screen sharing and new layout 
+options. To see the full list please review our Release Notes for Version 2.0:
+https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&version=12319197
+
+There are also new Integration Plugins available!
+
+_Integration into Atlassian Jira_
+There is a plugin in our SVN that will be released soon 
+for integration with Atlassian Jira, you can watch a demo here: 
+https://blogs.apache.org/openmeetings/entry/jira_integration_apache_openmeetings_demo
+
+_Integration into Atlassian Confluence_
+Same for Atlassian Confluence Wiki, you can watch 
+a demo here: https://blogs.apache.org/openmeetings/entry/demo_video_about_upcoming_atlassian
+
+_Important Changes_
+OpenOffice service does not need any more to be started. But you have 
+to set the path to OpenOffice (or LibreOffice) and JODConverter tools in 
+OpenMeetings configuration. OpenMeetings (and JODConverter) will start and stop the 
+OpenOffice service when they need it.
+
+_Upgrading from Version 1.9 or prior_
+To update from an old version of OpenMeetings to 2.x 
+you should use the integrated Backup and Import tool that exists since around Version 1.3. 
+You should follow our documentation, 
+see: http://incubator.apache.org/openmeetings/Upgrade.html 
+
+
+Getting Started
+===============
+Please visit the project website for the latest information:
+    http://incubator.apache.org/openmeetings/
+    
+Documentation for Installation and Upgrade:
+    http://incubator.apache.org/openmeetings/installation.html
+    http://incubator.apache.org/openmeetings/Upgrade.html
+
+Along with the developer mailing list archive:
+    http://incubator.apache.org/openmeetings/mail-lists.html
+    
+System Requirements
+===================
+You need a platform that supports Sun Java SE 6.
+
+Building and running
+====================
+To build from source code:
+
+  - Requirements:
+    Sources compilation require Sun Java SE 6.
+    The project is built with Apache ANT 1.8.6 or later.
+  
+  - To build the OpenMeetings project run ant in the root directory:
+     ant
+    
+For a detailed documentation on how to build from source and options see:
+    http://incubator.apache.org/openmeetings/BuildInstructions.html
+    
+
+    

@@ -36,7 +36,7 @@ limitations under the License.
            
                                     
                         
-            <title>Apache OpenMeetings - Upgrade</title>
+            <title>Apache OpenMeetings [Incubating] - Upgrade</title>
             <link rel="stylesheet" type="text/css" href="css/openmeetings.css">
             <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
             <link rel="stylesheet" type="text/css" href="css/coin-slider-styles.css">
@@ -908,7 +908,7 @@ limitations under the License.
                                                                     <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="Upgrading OpenMeetings"><strong>Upgrading OpenMeetings</strong></a>
+          <a name="Upgrading OpenMeetings via the Web-Interface"><strong>Upgrading OpenMeetings via the Web-Interface</strong></a>
           <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
         </font>
       </td></tr>
@@ -929,6 +929,50 @@ limitations under the License.
 				also all uploaded Files and Documents and will re-import them again.
 
 				Max Upload Size is 1000 MB.
+			</p>
+                            </blockquote>
+        </p>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td ><!-- bgcolor="#EEEEEE" -->
+        <font color="#000000" face="verdana,arial,helvetica,sanserif">
+          <a name="Upgrading OpenMeetings from command line"><strong>Upgrading OpenMeetings from command line</strong></a>
+          <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
+        </font>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <p>
+				<i>You need OpenMeetings 2.x or later to have the command line
+					feature available
+				</i>
+			</p>
+                                                <p>
+				Alternatively to the Web-Installer you can also export and import
+				via the command line.
+				<br />
+				Cd to your red5-home directory, type "admin" and hit enter. You will
+				get options available.
+				<br />
+				<br />
+				A typical export would be:
+				<br />
+				<tt>admin -b -file backup_today.zip</tt>
+				<br />
+				<br />
+				A typical import would be:
+				<br />
+				<tt>admin -r -file backup_yesterday.zip</tt>
+				<br />
+				<br />
+				You can also combine the installation with a backup, that way you
+				will create exactly the user table that existed in the backup.
+				<br />
+				A typical install from backup would be:
+				<br />
+				<tt>admin -i -file backup_yesterday.zip</tt>
 			</p>
                             </blockquote>
         </p>

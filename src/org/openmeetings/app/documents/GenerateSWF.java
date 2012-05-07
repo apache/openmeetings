@@ -53,6 +53,24 @@ public class GenerateSWF {
 		return pathToSWFTools;
 	}
 
+	private String getSwfZoom() {
+		String valueForSwfZoom = cfgManagement.getConfValue("swftools_zoom", String.class, "");
+		// WARNING CODE NOT COMPLETE: If SWFTools zoom (dpi) should be an integer between 50 and  600 with a default value of 100 dpi
+		if (valueForSwfZoom.equals("")) {
+			valueForSwfZoom = "72";
+		}
+		return valueForSwfZoom;
+	}
+
+	private String getSwfJpegQuality() {
+		String valueForSwfJpegQuality = cfgManagement.getConfValue("swftools_jpegquality", String.class, "");
+		// WARNING CODE NOT COMPLETE: If SWFTools JPEG Quality should be an integer between 1 and 100, with a default value of 85
+		if (valueForSwfJpegQuality.equals("")) {
+			valueForSwfJpegQuality = "85";
+		}
+		return valueForSwfJpegQuality;
+	}
+
 	public HashMap<String, String> generateSwf(String current_dir,
 			String originalFolder, String destinationFolder, String fileNamePure) {
 		
@@ -62,7 +80,8 @@ public class GenerateSWF {
 				"insertstop", // insert Stop command into every frame
 				"-s","poly2bitmap", //http://www.swftools.org/gfx_tutorial.html#Rendering_pages_to_SWF_files
 				"-i", // change draw order to reduce pdf complexity
-				"-j", "100", // JPEG Quality to 100
+				"-j", " " + getSwfJpegQuality(), // JPEG Quality 
+				"-s", " zoom=" + getSwfZoom(), // set zoom dpi 
 				originalFolder + fileNamePure + ".pdf",
 				destinationFolder + fileNamePure + ".swf" };
 

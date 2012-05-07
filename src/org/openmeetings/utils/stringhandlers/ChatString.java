@@ -45,25 +45,6 @@ public class ChatString {
 		return instance;
 	}
 	
-	//Testing stuff
-//	LinkedList<String> emot = new LinkedList<String>();
-//	emot.add("smily");
-//	emot.add("\\:\\)");
-//	emot.add("y");
-//	log.error("CHECK EMOT: "+ emot.get(0));
-//	
-//	list = this.splitStr(list,emot);
-//	
-//	
-//	emot = new LinkedList<String>();
-//	emot.add("sad");
-//	emot.add("\\:\\(");
-//	emot.add("y");
-//	log.error("CHECK EMOT: "+ emot.get(0));	
-//	
-//	list = this.splitStr(list,emot);	
-	
-	
 	public LinkedList<String[]> parseChatString(String message) {
 		try {
 			LinkedList<String[]> list = new LinkedList<String[]>();

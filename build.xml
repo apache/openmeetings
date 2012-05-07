@@ -109,10 +109,15 @@
 		</tstamp>
 		<property name="archive.file.name" value="${dist.dir}/${project.distname}-${project.version}.r${svn.info.rev}-${build.time}" />
 		
+		<rename src="${build.base.dir}/license.txt" dest="${build.base.dir}/red5-license.txt"/>
 		<copy file="build.properties" tofile="${build.base.dir}/build.properties" overwrite="true"/>
+		<copy file="LICENSE" tofile="${build.base.dir}/LICENSE" overwrite="true"/>
+		<copy file="NOTICE" tofile="${build.base.dir}/NOTICE" overwrite="true"/>
+		<copy file="README" tofile="${build.base.dir}/README" overwrite="true"/>
+			
 		<echo file="${build.base.dir}/build.properties" append="true"
 			>svn.info.rev=${svn.info.rev}${line.separator}</echo>
-		<tar longfile="gnu" compression="gzip" destfile="${archive.file.name}-src.tar.gz">
+		<tar longfile="gnu" compression="gzip" destfile="apache-${archive.file.name}-incubating-src.tar.gz">
 			<tarfileset dir="${basedir}">
 				<exclude name="build/**" />
 				<exclude name="dist/**" />
@@ -122,7 +127,7 @@
 				<include name="build.properties" />
 			</tarfileset>
 		</tar>
-		<tar longfile="gnu" compression="gzip" destfile="${archive.file.name}.tar.gz">
+		<tar longfile="gnu" compression="gzip" destfile="apache-${archive.file.name}-incubating.tar.gz">
 			<tarfileset dir="${dist.dir}">
 				<include name="red5/**" />
 				<exclude name="red5/*.sh" />

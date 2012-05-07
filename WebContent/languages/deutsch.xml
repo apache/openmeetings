@@ -5880,4 +5880,9 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   <string id="1463" name="whiteboard">
     <value>Text bearbeiten</value>
   </string>
+  
+  <string id="1464" name="salutation">
+    <value>Prof</value>
+  </string>
 </language>
+  

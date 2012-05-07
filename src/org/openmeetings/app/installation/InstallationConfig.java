@@ -18,6 +18,8 @@ public class InstallationConfig {
 	public String mailReferer = "noreply@openmeetings.apache.org";
 	public String mailUseTls = "0";
 	//paths
+	public String swfZoom = "";
+	public String swfJpegQuality = "";
 	public String swfPath = "";
 	public String imageMagicPath = "";
 	public String ffmpegPath = "";
@@ -63,7 +65,8 @@ public class InstallationConfig {
 				+ ", smtpPort=" + smtpPort + ", smtpServer=" + smtpServer
 				+ ", mailAuthName=" + mailAuthName + ", mailAuthPass="
 				+ mailAuthPass + ", mailReferer=" + mailReferer
-				+ ", mailUseTls=" + mailUseTls + ", swfPath=" + swfPath
+				+ ", mailUseTls=" + mailUseTls + ", swfZoom=" + swfZoom
+				+ ", swfJpegQuality=" + swfJpegQuality  + ", swfPath=" + swfPath
 				+ ", imageMagicPath=" + imageMagicPath + ", ffmpegPath="
 				+ ffmpegPath + ", soxPath=" + soxPath + ", jodPath=" + jodPath
 				+ ", defaultLangId=" + defaultLangId + ", sendEmailAtRegister="

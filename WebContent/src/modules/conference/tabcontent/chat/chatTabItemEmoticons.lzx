@@ -223,14 +223,6 @@
 			]]>
 		</handler>	
 		
-		<method name="link" args="str">
-			<![CDATA[
-			
-				
-			
-			]]>
-		</method>	
-
 	</text>
 	
 	<state applied="$once{ !parent.isDirectLink }">
