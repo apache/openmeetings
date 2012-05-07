@@ -2,11 +2,13 @@ Apache OpenMeetings [Incubating] - README
 Licensed under Apache License 2.0 - http://www.apache.org/licenses/LICENSE-2.0
 --------------------------------------------------------------------------------
 
+
 About
 =====
 Apache Openmeetings [Incubating] provides video conferencing, instant messaging, white board, collaborative 
 document editing and other groupware tools using API functions of the Red5 Streaming 
 Server for Remoting and Streaming. 
+
 
 Release Notes
 =============
@@ -81,9 +83,11 @@ Documentation for Installation and Upgrade:
 Along with the developer mailing list archive:
     http://incubator.apache.org/openmeetings/mail-lists.html
     
+    
 System Requirements
 ===================
 You need a platform that supports Sun Java SE 6.
+
 
 Building and running
 ====================

@@ -109,11 +109,11 @@
 		</tstamp>
 		<property name="archive.file.name" value="${dist.dir}/${project.distname}-${project.version}.r${svn.info.rev}-${build.time}" />
 		
-		<move file="${dist.dir}/license.txt" tofile="${dist.dir}/red5-license.txt"/>
+		<move file="${dist.dir}/red5/license.txt" tofile="${dist.dir}/red5/red5-license.txt"/>
 		<copy file="build.properties" tofile="${build.base.dir}/build.properties" overwrite="true"/>
-		<copy file="LICENSE" tofile="${dist.dir}/LICENSE" overwrite="true"/>
-		<copy file="NOTICE" tofile="${dist.dir}/NOTICE" overwrite="true"/>
-		<copy file="README" tofile="${dist.dir}/README" overwrite="true"/>
+		<copy file="LICENSE" tofile="${dist.dir}/red5/LICENSE" overwrite="true"/>
+		<copy file="NOTICE" tofile="${dist.dir}/red5/NOTICE" overwrite="true"/>
+		<copy file="README" tofile="${dist.dir}/red5/README" overwrite="true"/>
 			
 		<echo file="${build.base.dir}/build.properties" append="true"
 			>svn.info.rev=${svn.info.rev}${line.separator}</echo>
