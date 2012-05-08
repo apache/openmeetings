@@ -239,25 +239,23 @@
 			<ul>
 				<li>
 					for VoIP and SIP Integration see also
-					<a href="/p/openmeetings/wiki/VoIPAndSIP">VoIPAndSIP</a>
+					<a href="voip-sip-integration.html">VoIPAndSIP</a>
 				</li>
 				<li>
-					<a href="/p/openmeetings/wiki/MeetingsLive">Ubuntu Live DVD</a>
-					<a href="/p/openmeetings/wiki/MeetingsLive">MeetingsLive</a>
 					<a href="http://meetingslive.sourceforge.net/" rel="nofollow">http://meetingslive.sourceforge.net/
 					</a>
 				</li>
 				<li>
-					<a href="/p/openmeetings/wiki/InstallationCentOS5">Installation on CentOS 5</a>
+					<a href="http://code.google.com/p/openmeetings/wiki/InstallationCentOS5">Installation on CentOS 5</a>
 				</li>
 				<li>
-					<a href="/p/openmeetings/wiki/InstallationRHELS">Installation on RHELS 5.6</a>
+					<a href="http://code.google.com/p/openmeetings/wiki/InstallationRHELS">Installation on RHELS 5.6</a>
 				</li>
 				<li>
-					<a href="/p/openmeetings/wiki/OpenmeetingsEnUbuntu">Instalar Openmeetings en Ubuntu 10.04 (Spanish)</a>
+					<a href="http://code.google.com/p/openmeetings/wiki/OpenmeetingsEnUbuntu">Instalar Openmeetings en Ubuntu 10.04 (Spanish)</a>
 				</li>
 				<li>
-					<a href="/p/openmeetings/wiki/UbuntuLucidLTS">Install openmeetings on Ubuntu 10.04 LTS</a>
+					<a href="http://code.google.com/p/openmeetings/wiki/UbuntuLucidLTS">Install openmeetings on Ubuntu 10.04 LTS</a>
 				</li>
 				<li>
 					<a
@@ -275,10 +273,10 @@
 						rel="nofollow">Automatic script installation for Debian</a>
 				</li>
 				<li>
-					<a href="/p/openmeetings/wiki/InstallationDebian">InstallationDebian</a>
+					<a href="http://code.google.com/p/openmeetings/wiki/InstallationDebian">InstallationDebian</a>
 				</li>
 				<li>
-					<a href="/p/openmeetings/wiki/qosTips">qosTips</a>
+					<a href="http://code.google.com/p/openmeetings/wiki/qosTips">qosTips</a>
 				</li>
 				<li>
 					French version of Installation Instructions:
