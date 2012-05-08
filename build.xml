@@ -128,12 +128,12 @@
 			</tarfileset>
 		</tar>
 		<tar longfile="gnu" compression="gzip" destfile="${archive.file.name}.tar.gz">
-			<tarfileset dir="${dist.dir}">
-				<include name="red5/**" />
-				<exclude name="red5/*.sh" />
+			<tarfileset dir="${dist.dir}/red5">
+				<include name="**" />
+				<exclude name="*.sh" />
 			</tarfileset>
-			<tarfileset dir="${dist.dir}" filemode="755" >
-				<include name="red5/*.sh" />
+			<tarfileset dir="${dist.dir}/red5" filemode="755" >
+				<include name="*.sh" />
 			</tarfileset>
 		</tar>
 	</target>
