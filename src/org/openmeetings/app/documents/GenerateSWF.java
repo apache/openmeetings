@@ -80,8 +80,8 @@ public class GenerateSWF {
 				"insertstop", // insert Stop command into every frame
 				"-s","poly2bitmap", //http://www.swftools.org/gfx_tutorial.html#Rendering_pages_to_SWF_files
 				"-i", // change draw order to reduce pdf complexity
-				"-j", " " + getSwfJpegQuality(), // JPEG Quality 
-				"-s", " zoom=" + getSwfZoom(), // set zoom dpi 
+				"-j", "" + getSwfJpegQuality(), // JPEG Quality 
+				"-s", "zoom=" + getSwfZoom(), // set zoom dpi 
 				originalFolder + fileNamePure + ".pdf",
 				destinationFolder + fileNamePure + ".swf" };
 
