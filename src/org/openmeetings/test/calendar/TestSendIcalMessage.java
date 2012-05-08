@@ -199,13 +199,9 @@ public class TestSendIcalMessage extends AbstractOpenmeetingsSpringTest {
 			String username = "shans";
 			boolean invitor = false;
 
-			GregorianCalendar start = new GregorianCalendar();
-			Calendar start1 = Calendar.getInstance();
-			start.setTimeInMillis(start1.getTimeInMillis() + 900000);
+			Calendar start = Calendar.getInstance();
 
-			GregorianCalendar end = new GregorianCalendar();
-			Calendar end1 = Calendar.getInstance();
-			end.setTimeInMillis(end1.getTimeInMillis() + 1800000);
+			Calendar end = Calendar.getInstance();
 
 			IcalHandler handler = new IcalHandler(
 					IcalHandler.ICAL_METHOD_REQUEST);
@@ -222,7 +218,7 @@ public class TestSendIcalMessage extends AbstractOpenmeetingsSpringTest {
 			atts.add(attendeeList);
 
 			// Create ICal Message
-			String meetingId = handler.addNewMeeting(start, end, "test event",
+			String meetingId = handler.addNewMeeting(start.getTime(), end.getTime(), "test event",
 					atts, "localhost:5080/link_openmeetings",
 					organizerAttendee, "", TimeZone.getDefault());
 

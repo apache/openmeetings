@@ -20,7 +20,6 @@ package org.openmeetings.app.data.conference;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
@@ -753,13 +752,8 @@ public class Invitationmanagement {
 		HashMap<String, String> attendeeList = handler.getAttendeeData(user
 				.getAdresses().getEmail(), user.getLogin(), invitor);
 
-		GregorianCalendar start = new GregorianCalendar();
-		start.setTime(startdate);
-
-		GregorianCalendar end = new GregorianCalendar();
-		end.setTime(enddate);
-
-		handler.addNewMeeting(start, end, point.getAppointmentName(), atts,
+		handler.addNewMeeting(startdate, enddate, 
+				point.getAppointmentName(), atts,
 				subject, attendeeList, point.getIcalId(), timezone);
 
 		log.debug(handler.getICalDataAsString());
@@ -805,13 +799,7 @@ public class Invitationmanagement {
 		HashMap<String, String> attendeeList = handler.getAttendeeData(user
 				.getAdresses().getEmail(), user.getLogin(), invitor);
 
-		GregorianCalendar start = new GregorianCalendar();
-		start.setTime(starttime);
-
-		GregorianCalendar end = new GregorianCalendar();
-		end.setTime(endtime);
-
-		handler.addNewMeeting(start, end, point.getAppointmentName(), atts,
+		handler.addNewMeeting(starttime, endtime, point.getAppointmentName(), atts,
 				subject, attendeeList, point.getIcalId(), timeZone);
 
 		log.debug(handler.getICalDataAsString());
@@ -886,16 +874,8 @@ public class Invitationmanagement {
 				organizerAttendee = handler.getAttendeeData(replyToEmail, user.getLogin(), invitor);
 			}
 
-			GregorianCalendar start = new GregorianCalendar(timezone);
-			start.setTime(starttime); // Must be the calculated date base on the
-										// time zone
-
-			GregorianCalendar end = new GregorianCalendar(timezone);
-			end.setTime(endtime); // Must be the calculated date base on the
-									// time zone
-
 			// Create ICal Message
-			String meetingId = handler.addNewMeeting(start, end,
+			String meetingId = handler.addNewMeeting(starttime, endtime,
 					point.getAppointmentName(), atts, invitation_link,
 					organizerAttendee, point.getIcalId(), timezone);
 

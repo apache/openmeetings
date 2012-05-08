@@ -21,7 +21,7 @@ package org.openmeetings.utils.mail;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.net.URI;
-import java.util.GregorianCalendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -118,8 +118,8 @@ public class IcalHandler {
 	 * @return UID of Meeting
 	 */
 	// ---------------------------------------------------------------------------------------
-	public String addNewMeeting(GregorianCalendar startDate,
-			GregorianCalendar endDate, String name,
+	public String addNewMeeting(Date startDate,
+			Date endDate, String name,
 			Vector<HashMap<String, String>> attendees, String description,
 			HashMap<String, String> organizer, String uid, java.util.TimeZone normalTimeZone)
 			throws Exception {
@@ -129,8 +129,11 @@ public class IcalHandler {
 		
 		TimeZone timeZone = registry.getTimeZone(normalTimeZone.getID());
 
-		DateTime start = new DateTime(startDate.getTime());
-		DateTime end = new DateTime(endDate.getTime());
+		DateTime start = new DateTime(startDate);
+		start.setTimeZone(timeZone);
+		DateTime end = new DateTime(endDate);
+		end.setTimeZone(timeZone);
+		
 		VEvent meeting = new VEvent(start, end, name);
 
 		// add timezone info..
