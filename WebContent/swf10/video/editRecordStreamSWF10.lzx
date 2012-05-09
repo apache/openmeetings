@@ -33,7 +33,7 @@
  -->
  
 <class name="editRecordStreamSWF10"  extends="labelExplorerBox" labelid="51"
-	width="600" height="500" x="14" y="-440" >
+	width="600" height="500" x="14" y="-540" >
 
     <switch>
         <when property="$as3">
@@ -117,7 +117,7 @@
 	        var t:SharedObject = SharedObject.getLocal('userdata');
 	        var g = t.data;
 	        var save = g["savecamdata"];
-	        if ($debug) Debug.write("save: ",save,g["cam"],g["mic"]);
+	        if ($debug) Debug.write("save: ",save,g["cam"],g["mic"],this.isSyncUpdate);
 	        //In case its an Audio-Only Room this box should not close automatically
             if ($debug) Debug.write("canvas.currentRoomObject: ", canvas.currentRoomObject);
 
@@ -135,8 +135,7 @@
                     this.remoteMessage = new Array();
                     this.remoteMessage[0] = 'avsettings';
                     this.remoteMessage[2] = this.chosenSetting; 
-                    //this.getBroadCastId.doCall();
-                    canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_getBroadCastId', this.chosenSetting, this.remoteMessage, this.cam_default_width, this.cam_default_height);
+                    this.getBroadCastId.doCall();
                 } else {
                     if (this.doDefaultAnimation && !canvas.isInterview) {
                         this._chooseDeviceAnimation.doStart();
@@ -154,10 +153,12 @@
 	
 	<method name="checkLocalDataComplete">
         <![CDATA[
-            var g = canvas.getUserData();
+        	var t:SharedObject = SharedObject.getLocal('userdata');
+	        var g = t.data;
             if (g["width"] > 0 && g["height"] > 0) {
                 return true;
             }
+            return false;
         ]]>
     </method>
     
@@ -267,8 +268,6 @@
    					_camera.setQuality(canvas.bandwidthNeededBest,canvas.camQualityBest);
    				}
 			}
-
-			
 
             if ($debug) Debug.write("settings: ", settings);
             if ($debug) Debug.write("BroadcastId: ", this.currentClient.broadCastID);
@@ -388,7 +387,6 @@
             }
             
             //The First start-timer message will come from the Flash Object
-            
             if ($debug) Debug.warn("_camera.muted ",_camera.muted);
             if ($debug) Debug.warn("_micro.muted ",_micro.muted);
             
@@ -397,52 +395,37 @@
             }
 
             //start recording of client stream
-            
             var t = new Date();
             this.lastRecorded = "TEST_SETUP_"+t.getTime();
-            
             this._video.content._publisher.setAttribute("visibility","visible");
             this._video.content._viewer.setAttribute("visibility","hidden");
-            
             videoview.record(this.lastRecorded,_camera,_micro);
         ]]>
     </method>
     
     <method name="doPlay">
     	<![CDATA[
-    	
     	   if (this.lastRecorded == "") {
     	   	   //Error - nothing recorded yet
     	   	   if ($debug) Debug.warn("Nothing to Play");
     	   } else {
-    	   	   
     	   	   this._play.setAttribute("enabled",true);
-    	   	
     	   	   this._video.content._publisher.setAttribute("visibility","hidden");
                this._video.content._viewer.setAttribute("visibility","visible");
-               
                var videoview = this._video.content._viewer._chatvideoinner._videostream;
-               
                videoview.justPlayStream(this.lastRecorded+".flv",0);
-                
     	   }
-    	
     	]]>
     </method>
     
     <method name="doStop">
     	if (this.isRunning) {
     		this.isRunning = false;
-    		
     		var videoview = this._video.content._publisher._chatvideoinner._videostream;
-    		
     		this._btnStartRecording.setAttribute("enabled",true);
-    		
     		videoview._stop();
-    		
     		this.doPlay();
     	}
-    	
     	var videoviewViewer = this._video.content._viewer._chatvideoinner._videostream;
         videoviewViewer._stop();
     </method>
@@ -494,7 +477,6 @@
 				} else {
 					this.selectItemAt(0);
 				}
-
             ]]>
         </handler>
 
@@ -775,12 +757,9 @@
     	
     	<method name="setNewLevel" args="no">
     		<![CDATA[
-    		
                 var newLevel = (238/100) * no;
-            
                 this._over.setAttribute("width",238-newLevel);
                 this._over.setAttribute("x",1+(newLevel));
-                
             ]]>
     	</method>
     	
@@ -825,8 +804,6 @@
             this.parent.remoteMessage[1] = "0";
             this.parent.remoteMessage[2] = this.parent.chosenSetting;
             this.parent.getBroadCastId.doCall();
-            //if ($debug) Debug.write('lc_getBroadCastId', this.parent.chosenSetting, this.parent.remoteMessage, this.parent.cam_default_width, this.parent.cam_default_height);
-            //canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_getBroadCastId', this.parent.chosenSetting, this.parent.remoteMessage, this.parent.cam_default_width, this.parent.cam_default_height);
         </handler>
     </simpleLabelButton>
 
@@ -849,8 +826,6 @@
 			this.parent.remoteMessage[1] = "0";
 			this.parent.remoteMessage[2] = this.parent.chosenSetting;
             this.parent.getBroadCastId.doCall();
-            //if ($debug) Debug.write('lc_getBroadCastId', this.parent.chosenSetting, this.parent.remoteMessage, this.parent.cam_default_width, this.parent.cam_default_height);
-            // canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_getBroadCastId', this.parent.chosenSetting, this.parent.remoteMessage, this.parent.cam_default_width, this.parent.cam_default_height);
         </handler>
     </simpleLabelButton>
 
