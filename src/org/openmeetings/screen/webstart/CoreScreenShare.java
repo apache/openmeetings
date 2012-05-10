@@ -97,10 +97,10 @@ public class CoreScreenShare {
 	public JButton startButtonRecording;
 	public JButton stopButtonRecording;
 
-	public JLabel vScreenIconLeft;
-	public JLabel vScreenIconRight;
-	public JLabel vScreenIconUp;
-	public JLabel vScreenIconDown;
+	public JLabel vScreenIconLeft = new JLabel();
+	public JLabel vScreenIconRight = new JLabel();
+	public JLabel vScreenIconUp = new JLabel();
+	public JLabel vScreenIconDown = new JLabel();
 	public JLabel myBandWidhtTestLabel;
 
 	public String host = "btg199251";
@@ -163,11 +163,10 @@ public class CoreScreenShare {
 
 	public void main(String[] args) {
 		try {
+			for (String arg : args) {
+				logger.debug("arg: " + arg);
+			}
 			if (args.length == 9) {
-				for (String arg : args) {
-					logger.debug("arg: " + arg);
-				}
-
 				host = args[0];
 				app = args[1];
 				port = Integer.parseInt(args[2]);
@@ -222,8 +221,6 @@ public class CoreScreenShare {
 				}
 
 			} else {
-				System.out
-						.println("\nRed5 SceenShare: use as java ScreenShare[RTMPT] <host> <app name> <port> <stream name>\n Example: SceenShare localhost oflaDemo 1935 screen_stream");
 				System.exit(0);
 			}
 
@@ -232,7 +229,6 @@ public class CoreScreenShare {
 					+ publishName);
 
 			createWindow();
-
 		} catch (Exception err) {
 			logger.error("", err);
 		}
@@ -275,7 +271,7 @@ public class CoreScreenShare {
 				}
 			});
 			startButton.setBounds(30, 34, 200, 32);
-			t.add(startButton);
+			contentPane.add(startButton);
 
 			// *****
 			// Stop Button Screen Sharing
@@ -289,7 +285,7 @@ public class CoreScreenShare {
 			});
 			stopButton.setBounds(290, 34, 200, 32);
 			stopButton.setEnabled(false);
-			t.add(stopButton);
+			contentPane.add(stopButton);
 
 			// add the small screen thumb to the JFrame
 			new VirtualScreen(this);
@@ -319,7 +315,7 @@ public class CoreScreenShare {
 					}
 				});
 				startButtonRecording.setBounds(30, 420, 200, 32);
-				t.add(startButtonRecording);
+				contentPane.add(startButtonRecording);
 
 				// *****
 				// Stop Button Recording
@@ -333,7 +329,7 @@ public class CoreScreenShare {
 				});
 				stopButtonRecording.setBounds(290, 420, 200, 32);
 				stopButtonRecording.setEnabled(false);
-				t.add(stopButtonRecording);
+				contentPane.add(stopButtonRecording);
 
 			}
 
@@ -354,7 +350,7 @@ public class CoreScreenShare {
 				}
 			});
 			exitButton.setBounds(290, 460, 200, 32);
-			t.add(exitButton);
+			contentPane.add(exitButton);
 
 			// *****
 			// Background Image
@@ -367,7 +363,7 @@ public class CoreScreenShare {
 //
 //			JLabel jLab = new JLabel(iIconBack);
 //			jLab.setBounds(0, 0, 500, 440);
-//			t.add(jLab);
+//			contentPane.add(jLab);
 
 			t.addWindowListener(new WindowAdapter() {
 				public void windowClosing(WindowEvent e) {
