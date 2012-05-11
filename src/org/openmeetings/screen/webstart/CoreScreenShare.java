@@ -1,6 +1,5 @@
 package org.openmeetings.screen.webstart;
 
-import java.awt.Color;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.PointerInfo;
@@ -12,8 +11,6 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -24,17 +21,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-
 import org.apache.mina.core.buffer.IoBuffer;
-import org.openmeetings.screen.webstart.gui.NumberSpinner;
-import org.openmeetings.screen.webstart.gui.VirtualScreen;
-import org.openmeetings.screen.webstart.gui.VirtualScreenBean;
-import org.openmeetings.screen.webstart.gui.VirtualScreenBean.ScreenQuality;
+import org.openmeetings.screen.webstart.gui.ScreenDimensions;
+import org.openmeetings.screen.webstart.gui.ScreenDimensions.ScreenQuality;
+import org.openmeetings.screen.webstart.gui.ScreenSharerFrame;
 import org.red5.io.ITagReader;
 import org.red5.io.ITagWriter;
 import org.red5.io.utils.ObjectMap;
@@ -68,45 +58,12 @@ public class CoreScreenShare {
 	public CaptureScreen capture = null;
 	public Thread thread = null;
 
-	public java.awt.Container contentPane;
-	public JFrame t;
-	public JLabel textArea;
-	public JLabel textWarningArea;
-	public JLabel textAreaQualy;
-	public JButton startButton;
-	public JButton stopButton;
-	public JButton exitButton;
-	public NumberSpinner jSpin;
-	public JLabel tFieldScreenZoom;
-	public JLabel blankArea;
-	public BlankArea virtualScreen;
-	public JLabel vscreenXLabel;
-	public JLabel vscreenYLabel;
-	public NumberSpinner jVScreenXSpin;
-	public NumberSpinner jVScreenYSpin;
-	public JLabel vscreenWidthLabel;
-	public JLabel vscreenHeightLabel;
-	public NumberSpinner jVScreenWidthSpin;
-	public NumberSpinner jVScreenHeightSpin;
-
-	public JComboBox jVScreenResizeMode;
-	public JLabel vscreenResizeLabel;
-
-	public JLabel textAreaHeaderRecording;
-	public JLabel textAreaHeaderRecordingDescr;
-	public JButton startButtonRecording;
-	public JButton stopButtonRecording;
-
-	public JLabel vScreenIconLeft = new JLabel();
-	public JLabel vScreenIconRight = new JLabel();
-	public JLabel vScreenIconUp = new JLabel();
-	public JLabel vScreenIconDown = new JLabel();
-	public JLabel myBandWidhtTestLabel;
+	public ScreenSharerFrame frame;
 
 	public String host = "btg199251";
 	public String app = "oflaDemo";
 	public int port = 1935;
-	public int defaultQualityScreensharing = 1;
+	public int defaultQuality = 1;
 
 	public Long organization_id = 0L;
 	public Long user_id = null;
@@ -159,7 +116,7 @@ public class CoreScreenShare {
 
 	public CoreScreenShare(IScreenShare instance) {
 		this.instance = instance;
-	};
+	}
 
 	public void main(String[] args) {
 		try {
@@ -176,8 +133,7 @@ public class CoreScreenShare {
 
 				organization_id = Long.parseLong(args[5]);
 
-				defaultQualityScreensharing = Integer
-						.parseInt(args[6]);
+				defaultQuality = Integer.parseInt(args[6]);
 				user_id = Long.parseLong(args[7]);
 				allowRecording = Boolean.parseBoolean(args[8]);
 
@@ -239,144 +195,17 @@ public class CoreScreenShare {
 	// GUI
 	//
 	// ------------------------------------------------------------------------
-
 	public void createWindow() {
 		try {
-
-			ImageIcon start_btn = createImageIcon("/org/openmeetings/screen/webstart_play.png");
-			ImageIcon record_btn = createImageIcon("/org/openmeetings/screen/webstart_record.png");
-			ImageIcon stop_btn = createImageIcon("/org/openmeetings/screen/webstart_stop.png");
-
-			t = new JFrame(this.label730);
-			contentPane = t.getContentPane();
-			contentPane.setBackground(Color.WHITE);
-			textArea = new JLabel();
-			textArea.setBackground(Color.WHITE);
-			contentPane.setLayout(null);
-			contentPane.add(textArea);
-
-			// *****
-			// Header Overall
-			textArea.setText(this.label731);
-			textArea.setBounds(10, 0, 400, 24);
-
-			// *****
-			// Start Button Screen Sharing
-			startButton = new JButton(this.label732, start_btn);
-			startButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					startRecording = false;
-					startStreaming = true;
-					captureScreenStart();
-				}
-			});
-			startButton.setBounds(30, 34, 200, 32);
-			contentPane.add(startButton);
-
-			// *****
-			// Stop Button Screen Sharing
-			stopButton = new JButton(this.label733, stop_btn);
-			stopButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					stopRecording = false;
-					stopStreaming = true;
-					captureScreenStop();
-				}
-			});
-			stopButton.setBounds(290, 34, 200, 32);
-			stopButton.setEnabled(false);
-			contentPane.add(stopButton);
-
-			// add the small screen thumb to the JFrame
-			new VirtualScreen(this);
-
-			// *****
-			// Text Recording
-			textAreaHeaderRecording = new JLabel();
-			textAreaHeaderRecording.setText(this.label869);
-			contentPane.add(textAreaHeaderRecording);
-			textAreaHeaderRecording.setBounds(10, 340, 480, 24);
-
-			textAreaHeaderRecordingDescr = new JLabel();
-			textAreaHeaderRecordingDescr.setText(this.label870);
-			contentPane.add(textAreaHeaderRecordingDescr);
-			textAreaHeaderRecordingDescr.setBounds(10, 360, 480, 54);
-
-			if (allowRecording) {
-
-				// *****
-				// Start Button Recording
-				startButtonRecording = new JButton(this.label871, record_btn);
-				startButtonRecording.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent arg0) {
-						startRecording = true;
-						startStreaming = false;
-						captureScreenStart();
-					}
-				});
-				startButtonRecording.setBounds(30, 420, 200, 32);
-				contentPane.add(startButtonRecording);
-
-				// *****
-				// Stop Button Recording
-				stopButtonRecording = new JButton(this.label872, stop_btn);
-				stopButtonRecording.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent arg0) {
-						stopRecording = true;
-						stopStreaming = false;
-						captureScreenStop();
-					}
-				});
-				stopButtonRecording.setBounds(290, 420, 200, 32);
-				stopButtonRecording.setEnabled(false);
-				contentPane.add(stopButtonRecording);
-
-			}
-
-			// *****
-			// Text Warning
-			textWarningArea = new JLabel();
-			contentPane.add(textWarningArea);
-			textWarningArea.setBounds(10, 450, 420, 54);
-			// textWarningArea.setBackground(Color.WHITE);
-
-			// *****
-			// Exit Button
-			exitButton = new JButton(this.label878);
-			exitButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					t.setVisible(false);
-					System.exit(0);
-				}
-			});
-			exitButton.setBounds(290, 460, 200, 32);
-			contentPane.add(exitButton);
-
-			// *****
-			// Background Image
-			
-			//We have no logo, that is why we need no background, sebawagner 29.04.2012
-			
-//			Image im_left = ImageIO.read(getClass()
-//					.getResource("/org/openmeetings/screen/background.png"));
-//			ImageIcon iIconBack = new ImageIcon(im_left);
-//
-//			JLabel jLab = new JLabel(iIconBack);
-//			jLab.setBounds(0, 0, 500, 440);
-//			contentPane.add(jLab);
-
-			t.addWindowListener(new WindowAdapter() {
+			frame = new ScreenSharerFrame(this);
+			frame.addWindowListener(new WindowAdapter() {
 				public void windowClosing(WindowEvent e) {
-					t.setVisible(false);
+					frame.setVisible(false);
 					System.exit(0);
 				}
-
 			});
-			t.pack();
-			t.setLocation(30, 30);
-			t.setSize(500, 530);
-			t.setVisible(true);
-			t.setResizable(false);
+			frame.setVisible(true);
+			frame.setTabsEnabled(allowRecording);
 
 			logger.debug("initialized");
 
@@ -386,32 +215,23 @@ public class CoreScreenShare {
 		}
 	}
 
-	protected ImageIcon createImageIcon(String path) throws Exception {
-		java.net.URL imgURL = getClass().getResource(path);
-		return new ImageIcon(imgURL);
-	}
-
-	public void showBandwidthWarning(String warning) {
-		textWarningArea.setText(warning);
-	}
-
 	synchronized public void sendCursorStatus() {
 		try {
 
 			PointerInfo a = MouseInfo.getPointerInfo();
 			Point mouseP = a.getLocation();
 
-			Float scaleFactor = Float.valueOf(VirtualScreenBean.vScreenResizeX)
-					/ Float.valueOf(VirtualScreenBean.vScreenSpinnerWidth);
+			Float scaleFactor = Float.valueOf(ScreenDimensions.resizeX)
+					/ Float.valueOf(ScreenDimensions.spinnerWidth);
 
 			// Real size: Real mouse position = Resize : X
 			Integer x = Long
 					.valueOf(
-							Math.round(((mouseP.getX() - VirtualScreenBean.vScreenSpinnerX) * scaleFactor)
+							Math.round(((mouseP.getX() - ScreenDimensions.spinnerX) * scaleFactor)
 									* Ampl_factor)).intValue();
 			Integer y = Long
 					.valueOf(
-							Math.round(((mouseP.getY() - VirtualScreenBean.vScreenSpinnerY) * scaleFactor)
+							Math.round(((mouseP.getY() - ScreenDimensions.spinnerY) * scaleFactor)
 									* Ampl_factor)).intValue();
 
 			HashMap<String, Object> cursorPosition = new HashMap<String, Object>();
@@ -426,27 +246,25 @@ public class CoreScreenShare {
 		} catch (Exception err) {
 			System.out.println("captureScreenStart Exception: ");
 			System.err.println(err);
-			textArea.setText("Exception: " + err);
+			frame.setStatus("Exception: " + err);
 			logger.error("[sendCursorStatus]", err);
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	synchronized public void setConnectionAsSharingClient() {
 		try {
 
 			logger.debug("########## setConnectionAsSharingClient");
 
-			@SuppressWarnings("rawtypes")
-			HashMap map = new HashMap();
-			map.put("screenX", VirtualScreenBean.vScreenSpinnerX);
-			map.put("screenY", VirtualScreenBean.vScreenSpinnerY);
+			HashMap<Object, Object> map = new HashMap<Object, Object>();
+			map.put("screenX", ScreenDimensions.spinnerX);
+			map.put("screenY", ScreenDimensions.spinnerY);
 
 			int scaledWidth = Float.valueOf(
-					Math.round(VirtualScreenBean.vScreenResizeX * Ampl_factor))
+					Math.round(ScreenDimensions.resizeX * Ampl_factor))
 					.intValue();
 			int scaledHeight = Float.valueOf(
-					Math.round(VirtualScreenBean.vScreenResizeY * Ampl_factor))
+					Math.round(ScreenDimensions.resizeY * Ampl_factor))
 					.intValue();
 
 			map.put("screenWidth", scaledWidth);
@@ -463,12 +281,12 @@ public class CoreScreenShare {
 
 		} catch (Exception err) {
 			logger.error("setConnectionAsSharingClient Exception: ", err);
-			textArea.setText("Error: " + err.getLocalizedMessage());
+			frame.setStatus("Error: " + err.getLocalizedMessage());
 			logger.error("[setConnectionAsSharingClient]", err);
 		}
 	}
 
-	private void captureScreenStart() {
+	public void captureScreenStart() {
 		try {
 
 			logger.debug("captureScreenStart");
@@ -477,34 +295,28 @@ public class CoreScreenShare {
 
 		} catch (Exception err) {
 			logger.error("captureScreenStart Exception: ", err);
-			textArea.setText("Exception: " + err);
+			frame.setStatus("Exception: " + err);
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	private void captureScreenStop() {
+	public void captureScreenStop() {
 		try {
-
 			logger.debug("INVOKE screenSharerAction" );
 
-			@SuppressWarnings("rawtypes")
-			Map map = new HashMap();
+			Map<Object, Object> map = new HashMap<Object, Object>();
 			map.put("stopStreaming", this.stopStreaming);
 			map.put("stopRecording", this.stopRecording);
 
 			instance.invoke("screenSharerAction", new Object[] { map }, instance);
 
 			if (this.stopStreaming) {
-				startButton.setEnabled(true);
-				stopButton.setEnabled(false);
+				frame.setSharingStatus(false);
 			} else {
-				startButtonRecording.setEnabled(true);
-				stopButtonRecording.setEnabled(false);
+				frame.setRecordingStatus(false);
 			}
-
 		} catch (Exception err) {
 			logger.error("captureScreenStop Exception: ", err);
-			textArea.setText("Exception: " + err);
+			frame.setStatus("Exception: " + err);
 		}
 	}
 
@@ -595,8 +407,8 @@ public class CoreScreenShare {
 				// VirtualScreenBean
 
 				Float scaleFactor = Float
-						.valueOf(VirtualScreenBean.vScreenSpinnerWidth)
-						/ Float.valueOf(VirtualScreenBean.vScreenResizeX);
+						.valueOf(ScreenDimensions.spinnerWidth)
+						/ Float.valueOf(ScreenDimensions.resizeX);
 
 				// logger.debug("x 1 scaleFactor "+scaleFactor);
 
@@ -607,13 +419,13 @@ public class CoreScreenShare {
 				// logger.debug("x 1 part_x1 "+part_x1);
 
 				Integer x = Math.round(part_x1
-						+ VirtualScreenBean.vScreenSpinnerX);
+						+ ScreenDimensions.spinnerX);
 
 				Integer y = Math
 						.round(((Float.valueOf(returnMap.get("y").toString())
 								.floatValue()
-								* VirtualScreenBean.vScreenSpinnerHeight / VirtualScreenBean.vScreenResizeY) / Ampl_factor)
-								+ VirtualScreenBean.vScreenSpinnerY);
+								* ScreenDimensions.spinnerHeight / ScreenDimensions.resizeY) / Ampl_factor)
+								+ ScreenDimensions.spinnerY);
 
 				// logger.debug("x|y "+x+" || "+y);
 
@@ -625,18 +437,18 @@ public class CoreScreenShare {
 				Robot robot = new Robot();
 
 				Float scaleFactor = Float
-						.valueOf(VirtualScreenBean.vScreenSpinnerWidth)
-						/ Float.valueOf(VirtualScreenBean.vScreenResizeX);
+						.valueOf(ScreenDimensions.spinnerWidth)
+						/ Float.valueOf(ScreenDimensions.resizeX);
 				Float part_x1 = ((Float.valueOf(returnMap.get("x").toString())
 						.floatValue() * scaleFactor) / Float
 						.valueOf(Ampl_factor));
 				Integer x = Math.round(part_x1
-						+ VirtualScreenBean.vScreenSpinnerX);
+						+ ScreenDimensions.spinnerX);
 				Integer y = Math
 						.round(((Float.valueOf(returnMap.get("y").toString())
 								.floatValue()
-								* VirtualScreenBean.vScreenSpinnerHeight / VirtualScreenBean.vScreenResizeY) / Ampl_factor)
-								+ VirtualScreenBean.vScreenSpinnerY);
+								* ScreenDimensions.spinnerHeight / ScreenDimensions.resizeY) / Ampl_factor)
+								+ ScreenDimensions.spinnerY);
 
 				robot.mouseMove(x, y);
 				robot.mousePress(InputEvent.BUTTON1_MASK);
@@ -646,21 +458,21 @@ public class CoreScreenShare {
 				Robot robot = new Robot();
 
 				Float scaleFactor = Float
-						.valueOf(VirtualScreenBean.vScreenSpinnerWidth)
-						/ Float.valueOf(VirtualScreenBean.vScreenResizeX);
+						.valueOf(ScreenDimensions.spinnerWidth)
+						/ Float.valueOf(ScreenDimensions.resizeX);
 
 				Float part_x1 = ((Float.valueOf(returnMap.get("x").toString())
 						.floatValue() * scaleFactor) / Float
 						.valueOf(Ampl_factor));
 
 				Integer x = Math.round(part_x1
-						+ VirtualScreenBean.vScreenSpinnerX);
+						+ ScreenDimensions.spinnerX);
 
 				Integer y = Math
 						.round(((Float.valueOf(returnMap.get("y").toString())
 								.floatValue()
-								* VirtualScreenBean.vScreenSpinnerHeight / VirtualScreenBean.vScreenResizeY) / Ampl_factor)
-								+ VirtualScreenBean.vScreenSpinnerY);
+								* ScreenDimensions.spinnerHeight / ScreenDimensions.resizeY) / Ampl_factor)
+								+ ScreenDimensions.spinnerY);
 
 				robot.mouseMove(x, y);
 
@@ -981,12 +793,10 @@ public class CoreScreenShare {
 				if (returnMap != null && returnMap.get("modus") != null) {
 					if (returnMap.get("modus").toString()
 							.equals("startStreaming")) {
-						this.startButton.setEnabled(false);
-						this.stopButton.setEnabled(true);
+						frame.setSharingStatus(true);
 					} else if (returnMap.get("modus").toString()
 							.equals("startRecording")) {
-						this.startButtonRecording.setEnabled(false);
-						this.stopButtonRecording.setEnabled(true);
+						frame.setRecordingStatus(true);
 					}
 				} else {
 					throw new Exception(
@@ -1004,13 +814,13 @@ public class CoreScreenShare {
 				logger.debug("setup capture thread");
 
 				logger.debug("setup capture thread getCanonicalName "
-						+ VirtualScreenBean.class.getCanonicalName());
+						+ ScreenDimensions.class.getCanonicalName());
 				logger.debug("setup capture thread getName "
-						+ VirtualScreenBean.class.getName());
+						+ ScreenDimensions.class.getName());
 				logger.debug("setup capture thread vScreenSpinnerWidth "
-						+ VirtualScreenBean.vScreenSpinnerWidth);
+						+ ScreenDimensions.spinnerWidth);
 				logger.debug("setup capture thread vScreenSpinnerHeight "
-						+ VirtualScreenBean.vScreenSpinnerHeight);
+						+ ScreenDimensions.spinnerHeight);
 
 				capture = new CaptureScreen();
 
@@ -1108,7 +918,7 @@ public class CoreScreenShare {
 		// ------------------------------------------------------------------------
 
 		public CaptureScreen() {
-			timeBetweenFrames = (VirtualScreenBean.screenQuality == ScreenQuality.VeryHigh) ? 100 : 500;
+			timeBetweenFrames = (ScreenDimensions.quality == ScreenQuality.VeryHigh) ? 100 : 500;
 			se = new ScreenV1Encoder();
 		}
 
@@ -1144,17 +954,17 @@ public class CoreScreenShare {
 				BufferedImage image = null;
 				while (active) {
 					final long ctime = System.currentTimeMillis();
-					Rectangle screen = new Rectangle(VirtualScreenBean.vScreenSpinnerX,
-							VirtualScreenBean.vScreenSpinnerY,
-							VirtualScreenBean.vScreenSpinnerWidth,
-							VirtualScreenBean.vScreenSpinnerHeight);
+					Rectangle screen = new Rectangle(ScreenDimensions.spinnerX,
+							ScreenDimensions.spinnerY,
+							ScreenDimensions.spinnerWidth,
+							ScreenDimensions.spinnerHeight);
 					
 					image = robot.createScreenCapture(screen);
 
 					try {
 						timestamp += timeBetweenFrames;
-						byte[] data = se.encode(screen, image, new Rectangle(VirtualScreenBean.vScreenResizeX,
-								VirtualScreenBean.vScreenResizeY));
+						byte[] data = se.encode(screen, image, new Rectangle(ScreenDimensions.resizeX,
+								ScreenDimensions.resizeY));
 
 						pushVideo(data.length, data, timestamp);
 					} catch (Exception e) {

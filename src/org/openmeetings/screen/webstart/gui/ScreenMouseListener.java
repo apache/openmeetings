@@ -18,54 +18,56 @@
  */
 package org.openmeetings.screen.webstart.gui;
 
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 
 import javax.swing.event.MouseInputAdapter;
 
-public class VirtualScreenYMouseListener extends MouseInputAdapter  {
-	private VirtualScreen vs;
-	private double y = 0;
+public class ScreenMouseListener extends MouseInputAdapter {
+	private ScreenSharerFrame frame;
+	private int x = 0;
+	private int y = 0;
 
-	public VirtualScreenYMouseListener(VirtualScreen vs) {
-		this.vs = vs;
+	public ScreenMouseListener(ScreenSharerFrame frame) {
+		this.frame = frame;
 	}
-	
+
 	public void mouseEntered(MouseEvent e) {
-		vs.css.t.setCursor( Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR) ) ;
+		frame.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 	}
 
 	public void mouseExited(MouseEvent e) {
-		vs.css.t.setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR ) ) ;
+		frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 	}
 
 	public void mousePressed(MouseEvent e) {
-		vs.showWarning=false;
+		frame.setShowWarning(false);
+		this.x = e.getX();
 		this.y = e.getY();
-//		System.out.println(this.x+" "+this.y);
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		vs.showWarning=true;
+		frame.setShowWarning(true);
 	}
 
 	public void mouseDragged(MouseEvent e) {
-		double newY = e.getY();
+		if (!((Component)e.getSource()).isEnabled()) {
+			return;
+		}
+		int newX = e.getX();
+		int newY = e.getY();
 
-		int delta = Long.valueOf(Math.round(this.y-newY)).intValue();
-		int newYPosition = VirtualScreenBean.vScreenSpinnerY-delta;
-		int newHeight = VirtualScreenBean.vScreenSpinnerHeight+delta;
-
-//		System.out.println(delta+" "+newYPosition+" "+newHeight);
-		if (newYPosition>=0 && newHeight>=0) {
-			vs.doUpdateBounds=false;
-			vs.css.jVScreenYSpin.setValue(newYPosition);
-			vs.css.jVScreenHeightSpin.setValue(newHeight);
-			vs.doUpdateBounds=true;
-			vs.updateVScreenBounds();
-			vs.calcRescaleFactors();
+		int newXPosition = ScreenDimensions.spinnerX - (this.x - newX);
+		int newYPosition = ScreenDimensions.spinnerY - (this.y - newY);
+		if (newXPosition >= 0) {
+			frame.setSpinnerX(newXPosition);
+		}
+		if (newYPosition >= 0) {
+			frame.setSpinnerY(newYPosition);
 		}
 
+		frame.calcRescaleFactors();
 	}
 
 }

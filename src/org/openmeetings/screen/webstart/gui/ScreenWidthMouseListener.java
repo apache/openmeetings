@@ -18,53 +18,52 @@
  */
 package org.openmeetings.screen.webstart.gui;
 
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 
 import javax.swing.event.MouseInputAdapter;
 
-
-public class VirtualScreenWidthMouseListener extends MouseInputAdapter  {
-	private VirtualScreen vs;
+public class ScreenWidthMouseListener extends MouseInputAdapter {
+	private ScreenSharerFrame frame;
 	private double x = 0;
 
-	public VirtualScreenWidthMouseListener(VirtualScreen vs) {
-		this.vs = vs;
+	public ScreenWidthMouseListener(ScreenSharerFrame frame) {
+		this.frame = frame;
 	}
-	
+
 	public void mouseEntered(MouseEvent e) {
-		vs.css.t.setCursor( Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR) ) ;
+		frame.setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
 	}
 
 	public void mouseExited(MouseEvent e) {
-		vs.css.t.setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR ) ) ;
+		frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 	}
 
 	public void mousePressed(MouseEvent e) {
-		vs.showWarning=false;
+		frame.setShowWarning(false);
 		this.x = e.getX();
-//		System.out.println(this.x+" "+this.y);
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		vs.showWarning=true;
+		frame.setShowWarning(true);
 	}
 
 	public void mouseDragged(MouseEvent e) {
+		if (!((Component)e.getSource()).isEnabled()) {
+			return;
+		}
 		double newX = e.getX();
 
-		int newWidth = VirtualScreenBean.vScreenSpinnerWidth-Long.valueOf(Math.round(this.x-newX)).intValue();
+		int newWidth = ScreenDimensions.spinnerWidth - (int)(x - newX);
+		int newSpinnerX = ScreenDimensions.spinnerX + newWidth;
 
-
-		//System.out.println(newX+"  "+newWidth);
-		if ((VirtualScreenBean.vScreenSpinnerX+newWidth)<=VirtualScreenBean.screenWidthMax) {
-			vs.doUpdateBounds=false;
-			vs.css.jVScreenWidthSpin.setValue(newWidth);
-			vs.doUpdateBounds=true;
-			vs.updateVScreenBounds();
-			vs.calcRescaleFactors();
+		if (0 <= newSpinnerX && newSpinnerX <= ScreenDimensions.widthMax) {
+			frame.setDoUpdateBounds(false);
+			frame.setSpinnerWidth(newWidth);
+			frame.setDoUpdateBounds(true);
+			frame.updateVScreenBounds();
+			frame.calcRescaleFactors();
 		}
-
 	}
-
 }

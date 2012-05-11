@@ -18,55 +18,52 @@
  */
 package org.openmeetings.screen.webstart.gui;
 
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 
 import javax.swing.event.MouseInputAdapter;
 
+public class ScreenHeightMouseListener extends MouseInputAdapter  {
+	private ScreenSharerFrame frame;
+	private double y = 0;
 
-public class VirtualScreenMouseListener extends MouseInputAdapter  {
-	private VirtualScreen vs;
-	private int x = 0;
-	private int y = 0;
-	
-	public VirtualScreenMouseListener(VirtualScreen vs) {
-		this.vs = vs;
+	public ScreenHeightMouseListener(ScreenSharerFrame frame) {
+		this.frame = frame;
 	}
 	
 	public void mouseEntered(MouseEvent e) {
-		vs.css.t.setCursor( Cursor.getPredefinedCursor( Cursor.HAND_CURSOR ) ) ;
+		frame.setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
 	}
 
 	public void mouseExited(MouseEvent e) {
-		vs.css.t.setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR ) ) ;
+		frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 	}
 
 	public void mousePressed(MouseEvent e) {
-		vs.showWarning=false;
-		this.x = e.getX();
-		this.y = e.getY();
-		System.out.println(this.x+" "+this.y);
+		frame.setShowWarning(false);
+		y = e.getY();
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		vs.showWarning=true;
+		frame.setShowWarning(true);
 	}
 
 	public void mouseDragged(MouseEvent e) {
-		int newX = e.getX();
-		int newY = e.getY();
+		if (!((Component)e.getSource()).isEnabled()) {
+			return;
+		}
+		double newY = e.getY();
 
-		int newXPosition = VirtualScreenBean.vScreenSpinnerX-(this.x-newX);
-		int newYPosition = VirtualScreenBean.vScreenSpinnerY-(this.y-newY);
-		//System.out.println(newX+" "+newY+" "+newXPosition);
-		if (newXPosition>=0) {
-			vs.css.jVScreenXSpin.setValue(newXPosition);
+		int newHeight = ScreenDimensions.spinnerHeight - (int)(y - newY);
+		int newSpinnerY = ScreenDimensions.spinnerY + newHeight;
+
+		if (newSpinnerY <= 0 && newSpinnerY <= ScreenDimensions.heightMax) {
+			frame.setDoUpdateBounds(false);
+			frame.setSpinnerHeight(newHeight);
+			frame.setDoUpdateBounds(true);
+			frame.updateVScreenBounds();
+			frame.calcRescaleFactors();
 		}
-		if (newYPosition>=0) {
-			vs.css.jVScreenYSpin.setValue(newYPosition);
-		}
-		
-		vs.calcRescaleFactors();
 	}
-
 }

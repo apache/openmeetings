@@ -34,14 +34,14 @@ public class RTMPScreenShare extends RTMPClient implements ClientExceptionHandle
 	private static final Logger logger = LoggerFactory
 			.getLogger(RTMPScreenShare.class);
 
-	private CoreScreenShare instance = null;
+	private CoreScreenShare core = null;
 
 	private RTMPScreenShare() {
-		instance = new CoreScreenShare(this);
+		core = new CoreScreenShare(this);
 	};
 
 	public static void main(String[] args) {
-		new RTMPScreenShare().instance.main(args);
+		new RTMPScreenShare().core.main(args);
 	}
 	
 	// ------------------------------------------------------------------------
@@ -67,7 +67,7 @@ public class RTMPScreenShare extends RTMPClient implements ClientExceptionHandle
 			Header source, Notify invoke, RTMP rtmp) {
 		super.onInvoke(conn, channel, source, invoke, rtmp);
 
-		instance.onInvoke(conn, channel, source, invoke, rtmp);
+		core.onInvoke(conn, channel, source, invoke, rtmp);
 	}
 
 	@Override
@@ -77,10 +77,10 @@ public class RTMPScreenShare extends RTMPClient implements ClientExceptionHandle
 	}
 
 	public void onStreamEvent(Notify notify) {
-		instance.onStreamEvent(notify);
+		core.onStreamEvent(notify);
 	}
 
 	public void resultReceived(IPendingServiceCall call) {
-		instance.resultReceived(call);
+		core.resultReceived(call);
 	}
 }

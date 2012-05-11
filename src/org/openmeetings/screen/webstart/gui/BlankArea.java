@@ -16,13 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.openmeetings.screen.webstart;
+package org.openmeetings.screen.webstart.gui;
 
 import javax.swing.*;
 import java.awt.Dimension;
 import java.awt.Color;
 
-public class BlankArea extends JLabel {
+public class BlankArea extends MouseListenerable {
 	private static final long serialVersionUID = 305723962144665147L;
 	private Dimension minSize = new Dimension(100, 50);
 
