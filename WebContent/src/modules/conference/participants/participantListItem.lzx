@@ -203,55 +203,50 @@
                 	this._x._kickUser.setAttribute("visibility","visible");
                     this._miniIcons._isModAddbutton.setAttribute("visibility","visible");
                     
+                    
+                    this._miniIcons._canDraw._text.setAttribute("text",canvas.getLabelName(612));
                     if (this.refObj.canDraw) {
-                        
                         //Only in THIS case you can remove the Draw-to-whiteboard right 
                         this._miniIcons._canDraw.setAttribute("visibility","visible");
                         this._miniIcons._canDraw.setAttribute("showhandcursor",true);
-                        this._miniIcons._canDraw._text.setAttribute("text",canvas.getLabelName(612));
-                        
                         this._miniIcons._canDrawModerator.setAttribute("visibility","hidden");
                     } else {
                         this._miniIcons._canDraw.setAttribute("visibility","hidden");
                         this._miniIcons._canDraw.setAttribute("showhandcursor",false);
                         this._miniIcons._canDraw._text.setAttribute("text","");
                         this._miniIcons._canDrawModerator.setAttribute("visibility","visible");
-                        
                     }
                     
+                  	this._miniIcons._allowShare._text.setAttribute("text",canvas.getLabelName(1068));
                     if (this.refObj.canShare) {
                     	this._miniIcons._allowShare.setAttribute("visibility","visible");
                         this._miniIcons._allowShare.setAttribute("showhandcursor",true);
-                        this._miniIcons._allowShare._text.setAttribute("text",canvas.getLabelName(1069));
                         this._miniIcons._denyShare.setAttribute("visibility","hidden");
                     } else {
                     	this._miniIcons._allowShare.setAttribute("visibility","hidden");
                         this._miniIcons._allowShare.setAttribute("showhandcursor",false);
-                        this._miniIcons._allowShare._text.setAttribute("text",canvas.getLabelName(1068));
                         this._miniIcons._denyShare.setAttribute("visibility","visible");
                     }
                     
+                    this._miniIcons._allowRemote._text.setAttribute("text",canvas.getLabelName(1079));
                     if (this.refObj.canRemote) {
                     	this._miniIcons._allowRemote.setAttribute("visibility","visible");
                         this._miniIcons._allowRemote.setAttribute("showhandcursor",true);
-                        this._miniIcons._allowRemote._text.setAttribute("text",canvas.getLabelName(1083));
                         this._miniIcons._denyRemote.setAttribute("visibility","hidden");
                     } else {
                     	this._miniIcons._allowRemote.setAttribute("visibility","hidden");
                         this._miniIcons._allowRemote.setAttribute("showhandcursor",false);
-                        this._miniIcons._allowRemote._text.setAttribute("text",canvas.getLabelName(1079));
                         this._miniIcons._denyRemote.setAttribute("visibility","visible");
                     }
 
+					this._miniIcons._allowExclusiveAudio._text.setAttribute("text",canvas.getLabelName(1425));
                     if (this.refObj.canGiveAudio) {
                     	this._miniIcons._allowExclusiveAudio.setAttribute("visibility","visible");
                         this._miniIcons._allowExclusiveAudio.setAttribute("showhandcursor",true);
-                        this._miniIcons._allowExclusiveAudio._text.setAttribute("text",canvas.getLabelName(1083));
                         this._miniIcons._denyExclusiveAudio.setAttribute("visibility","hidden");
                     } else {
                     	this._miniIcons._allowExclusiveAudio.setAttribute("visibility","hidden");
                         this._miniIcons._allowExclusiveAudio.setAttribute("showhandcursor",false);
-                        this._miniIcons._allowExclusiveAudio._text.setAttribute("text",canvas.getLabelName(1425));
                         this._miniIcons._denyExclusiveAudio.setAttribute("visibility","visible");
                     }
                     
