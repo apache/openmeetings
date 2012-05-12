@@ -102,6 +102,16 @@ public class CoreScreenShare {
 	public String label1091 = "High Quality -";
 	public String label1092 = "Medium Quality -";
 	public String label1093 = "Low Quality -";
+	public String label1465 = "Publish";
+	public String label1466 = "Start Publish";
+	public String label1467 = "Stop Publish";
+	public String label1468 = "Host";
+	public String label1469 = "Context";
+	public String label1470 = "Publish Id";
+	public String label1471 = "Reduce the width of the SharingScreen before you try to move it left";
+	public String label1472 = "Reduce the height of the SharingScreen before you try to move it bottom";
+	public String label1473 = "Reduce the x of the SharingScreen before you try to make it wider";
+	public String label1474 = "Reduce the y of the SharingScreen before you try to make it higher";
 
 	public float Ampl_factor = 1f;
 	public boolean isConnected = false;
@@ -173,7 +183,17 @@ public class CoreScreenShare {
 					label1091 = textArray[20];
 					label1092 = textArray[21];
 					label1093 = textArray[22];
-
+					
+					label1465 = textArray[23];
+					label1466 = textArray[24];
+					label1467 = textArray[25];
+					label1468 = textArray[26];
+					label1469 = textArray[27];
+					label1470 = textArray[28];
+					label1471 = textArray[29];
+					label1472 = textArray[30];
+					label1473 = textArray[31];
+					label1474 = textArray[32];
 				}
 
 			} else {
@@ -217,22 +237,14 @@ public class CoreScreenShare {
 
 	synchronized public void sendCursorStatus() {
 		try {
-
 			PointerInfo a = MouseInfo.getPointerInfo();
 			Point mouseP = a.getLocation();
 
-			Float scaleFactor = Float.valueOf(ScreenDimensions.resizeX)
-					/ Float.valueOf(ScreenDimensions.spinnerWidth);
+			float scaleFactor = (1.0f * ScreenDimensions.resizeX) / ScreenDimensions.spinnerWidth;
 
 			// Real size: Real mouse position = Resize : X
-			Integer x = Long
-					.valueOf(
-							Math.round(((mouseP.getX() - ScreenDimensions.spinnerX) * scaleFactor)
-									* Ampl_factor)).intValue();
-			Integer y = Long
-					.valueOf(
-							Math.round(((mouseP.getY() - ScreenDimensions.spinnerY) * scaleFactor)
-									* Ampl_factor)).intValue();
+			int x = (int)(Ampl_factor * (mouseP.getX() - ScreenDimensions.spinnerX) * scaleFactor);
+			int y = (int)(Ampl_factor * (mouseP.getY() - ScreenDimensions.spinnerY) * scaleFactor);
 
 			HashMap<String, Object> cursorPosition = new HashMap<String, Object>();
 			cursorPosition.put("publicSID", this.publishName);
@@ -242,7 +254,8 @@ public class CoreScreenShare {
 			if (instance.getConnection() != null) {
 				instance.invoke("setNewCursorPosition", new Object[] { cursorPosition }, instance);
 			}
-
+		} catch (NullPointerException npe) {
+			//noop
 		} catch (Exception err) {
 			System.out.println("captureScreenStart Exception: ");
 			System.err.println(err);
@@ -253,19 +266,14 @@ public class CoreScreenShare {
 
 	synchronized public void setConnectionAsSharingClient() {
 		try {
-
 			logger.debug("########## setConnectionAsSharingClient");
 
 			HashMap<Object, Object> map = new HashMap<Object, Object>();
 			map.put("screenX", ScreenDimensions.spinnerX);
 			map.put("screenY", ScreenDimensions.spinnerY);
 
-			int scaledWidth = Float.valueOf(
-					Math.round(ScreenDimensions.resizeX * Ampl_factor))
-					.intValue();
-			int scaledHeight = Float.valueOf(
-					Math.round(ScreenDimensions.resizeY * Ampl_factor))
-					.intValue();
+			int scaledWidth = (int)(Ampl_factor * ScreenDimensions.resizeX);
+			int scaledHeight = (int)(Ampl_factor * ScreenDimensions.resizeY);
 
 			map.put("screenWidth", scaledWidth);
 			map.put("screenHeight", scaledHeight);
@@ -278,7 +286,6 @@ public class CoreScreenShare {
 			map.put("user_id", this.user_id);
 
 			instance.invoke("setConnectionAsSharingClient", new Object[] { map }, instance);
-
 		} catch (Exception err) {
 			logger.error("setConnectionAsSharingClient Exception: ", err);
 			frame.setStatus("Error: " + err.getLocalizedMessage());
@@ -288,11 +295,8 @@ public class CoreScreenShare {
 
 	public void captureScreenStart() {
 		try {
-
 			logger.debug("captureScreenStart");
-
 			startStream(host, app, port, publishName);
-
 		} catch (Exception err) {
 			logger.error("captureScreenStart Exception: ", err);
 			frame.setStatus("Exception: " + err);
@@ -309,7 +313,7 @@ public class CoreScreenShare {
 
 			instance.invoke("screenSharerAction", new Object[] { map }, instance);
 
-			if (this.stopStreaming) {
+			if (stopStreaming) {
 				frame.setSharingStatus(false);
 			} else {
 				frame.setRecordingStatus(false);

@@ -24,11 +24,13 @@ import java.awt.Component;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Robot;
+import java.awt.SystemColor;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
+import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
@@ -70,10 +72,10 @@ public class ScreenSharerFrame extends JFrame {
 	private JTabbedPane tabbedPane;
 	private boolean doUpdateBounds = true;
 	private boolean showWarning = true;
-	private JButton btnPauseSharing;
-	private JButton btnStartSharing;
+	private JButton btnStartPauseSharing;
 	private JButton btnStartRecording;
 	private JButton btnStopRecording;
+	private JButton btnStopPublish;
 	private NumberSpinner spinnerX;
 	private NumberSpinner spinnerY;
 	private NumberSpinner spinnerWidth;
@@ -83,6 +85,38 @@ public class ScreenSharerFrame extends JFrame {
 	private JTextField textPublishContext;
 	private JTextField textPublishId;
 	private JLabel lblPublishURL;
+	private boolean sharingStarted = false;
+	private String startLabel;
+	private ImageIcon startIcon;
+	private String pauseLabel;
+	private ImageIcon pauseIcon;
+	private String reduceWidthLabel;
+	private String reduceHeightLabel;
+	private String reduceXLabel;
+	private String reduceYLabel;
+	
+	private class PublishTextField extends JTextField {
+		private static final long serialVersionUID = -2104245360975135871L;
+
+		PublishTextField() {
+			getDocument().addDocumentListener(
+				new DocumentListener() {
+					public void changedUpdate(DocumentEvent e) {
+						updateLabelURL();
+					}
+
+					public void removeUpdate(DocumentEvent e) {
+						updateLabelURL();
+					}
+
+					public void insertUpdate(DocumentEvent e) {
+						updateLabelURL();
+					}
+				});
+
+			setColumns(10);
+		}
+	}
 	
 	private class KeyValue<T> {
 		private String key;
@@ -173,42 +207,43 @@ public class ScreenSharerFrame extends JFrame {
 		setBackground(Color.WHITE);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(30, 30, 500, 550);
+		setBounds(30, 30, 500, 505);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBorder(new EmptyBorder(5, 0, 5, 5));
 		setContentPane(contentPane);
 		
 		JLabel lblStartSharing = new JLabel(core.label731);
 		
-		btnStartSharing = new JButton(core.label732);
-		btnStartSharing.setToolTipText(core.label732);
-		btnStartSharing.setIcon(new ImageIcon(ScreenSharerFrame.class.getResource("/org/openmeetings/screen/play.png")));
-		btnStartSharing.setSize(200, 32);
-		btnStartSharing.addActionListener(new ActionListener() {
+		startLabel = core.label732;
+		pauseLabel = core.label733;
+		reduceWidthLabel = core.label1471;
+		reduceHeightLabel = core.label1472;
+		reduceXLabel = core.label1473;
+		reduceYLabel = core.label1474;
+		startIcon = new ImageIcon(ScreenSharerFrame.class.getResource("/org/openmeetings/screen/play.png"));
+		pauseIcon = new ImageIcon(ScreenSharerFrame.class.getResource("/org/openmeetings/screen/pause.png"));
+		btnStartPauseSharing = new JButton(startLabel);
+		btnStartPauseSharing.setToolTipText(startLabel);
+		btnStartPauseSharing.setIcon(startIcon);
+		btnStartPauseSharing.setSize(200, 32);
+		btnStartPauseSharing.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				core.startRecording = false;
-				core.startStreaming = true;
-				core.captureScreenStart();
+				if (sharingStarted) {
+					core.stopRecording = false;
+					core.stopStreaming = true;
+					core.captureScreenStop();
+				} else {
+					core.startRecording = false;
+					core.startStreaming = true;
+					core.captureScreenStart();
+				}
 			}
 		});
-		
-		btnPauseSharing = new JButton(core.label733);
-		btnPauseSharing.setEnabled(false);
-		btnPauseSharing.setIcon(new ImageIcon(ScreenSharerFrame.class.getResource("/org/openmeetings/screen/pause.png")));
-		btnPauseSharing.setToolTipText(core.label733);
-		btnPauseSharing.setSize(200, 32);
-		btnPauseSharing.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				core.stopRecording = false;
-				core.stopStreaming = true;
-				core.captureScreenStop();
-			}
-		});
-		
 		JButton btnStopSharing = new JButton(core.label878);
 		btnStopSharing.setToolTipText(core.label878);
 		btnStopSharing.setSize(200, 32);
+		btnStopSharing.setIcon(new ImageIcon(ScreenSharerFrame.class.getResource("/org/openmeetings/screen/exit.png")));
 		btnStopSharing.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ScreenSharerFrame.this.setVisible(false);
@@ -244,10 +279,9 @@ public class ScreenSharerFrame extends JFrame {
 		});
 		panelRecording.add(btnStartRecording);
 		
-		btnStopRecording = new JButton(core.label872);
-		btnStopRecording.setEnabled(false);
+		ImageIcon stopIcon = new ImageIcon(ScreenSharerFrame.class.getResource("/org/openmeetings/screen/stop.png"));
+		btnStopRecording = new JButton(core.label872, stopIcon);
 		btnStopRecording.setToolTipText(core.label872);
-		btnStopRecording.setIcon(new ImageIcon(ScreenSharerFrame.class.getResource("/org/openmeetings/screen/stop.png")));
 		btnStopRecording.setBounds(257, 82, 200, 32);
 		btnStopRecording.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -259,95 +293,48 @@ public class ScreenSharerFrame extends JFrame {
 		panelRecording.add(btnStopRecording);
 		
 		panelPublish.setBackground(Color.WHITE);
-		tabbedPane.addTab("#STAB# Publish", null, panelPublish, null);
+		tabbedPane.addTab(core.label1465, null, panelPublish, null);
 		tabbedPane.setEnabledAt(1, true);
 		panelPublish.setEnabled(false);
 		panelPublish.setLayout(null);
 		
-		JLabel lblPublishHost = new JLabel("#STAB# Host");
-		lblPublishHost.setVerticalAlignment(SwingConstants.TOP);
-		lblPublishHost.setBounds(10, 10, 86, 20);
-		panelPublish.add(lblPublishHost);
-		
-		JButton btnStartPublish = new JButton("#STAB# start Publish");
-		btnStartPublish.setToolTipText("#STAB# start Publish tip");
+		JButton btnStartPublish = new JButton(core.label1466);
+		btnStartPublish.setToolTipText(core.label1466);
 		//btnStartPublish.setIcon(new ImageIcon(ScreenSharerFrame.class.getResource("/org/openmeetings/screen/record.png")));
 		btnStartPublish.setBounds(10, 82, 200, 32);
 		panelPublish.add(btnStartPublish);
 		
-		JButton btnStopPublish = new JButton("#STAB# stop Publish");
-		btnStopPublish.setEnabled(false);
-		btnStopPublish.setToolTipText("#STAB# stop Publish tip");
-		//btnStopPublish.setIcon(new ImageIcon(ScreenSharerFrame.class.getResource("/org/openmeetings/screen/stop.png")));
+		btnStopPublish = new JButton(core.label1467);
+		btnStopPublish.setToolTipText(core.label1467);
+		btnStopPublish.setIcon(stopIcon);
 		btnStopPublish.setBounds(257, 82, 200, 32);
 		panelPublish.add(btnStopPublish);
 		
-		textPublishHost = new JTextField();
-		textPublishHost.setBounds(10, 38, 86, 20);
-		textPublishHost.getDocument().addDocumentListener(
-			new DocumentListener() {
-				public void changedUpdate(DocumentEvent e) {
-					updateLabelURL();
-				}
-
-				public void removeUpdate(DocumentEvent e) {
-					updateLabelURL();
-				}
-
-				public void insertUpdate(DocumentEvent e) {
-					updateLabelURL();
-				}
-			});
-
-		panelPublish.add(textPublishHost);
-		textPublishHost.setColumns(10);
+		JLabel lblPublishHost = new JLabel(core.label1468);
+		lblPublishHost.setVerticalAlignment(SwingConstants.TOP);
+		lblPublishHost.setBounds(10, 10, 140, 20);
+		panelPublish.add(lblPublishHost);
 		
-		JLabel lblPublishContext = new JLabel("#STAB# Context");
+		textPublishHost = new PublishTextField();
+		textPublishHost.setBounds(10, 38, 140, 20);
+		panelPublish.add(textPublishHost);
+		
+		JLabel lblPublishContext = new JLabel(core.label1469);
 		lblPublishContext.setVerticalAlignment(SwingConstants.TOP);
-		lblPublishContext.setBounds(124, 10, 86, 20);
+		lblPublishContext.setBounds(160, 10, 140, 20);
 		panelPublish.add(lblPublishContext);
 		
-		textPublishContext = new JTextField();
-		textPublishContext.getDocument().addDocumentListener(
-			new DocumentListener() {
-				public void changedUpdate(DocumentEvent e) {
-					updateLabelURL();
-				}
-
-				public void removeUpdate(DocumentEvent e) {
-					updateLabelURL();
-				}
-
-				public void insertUpdate(DocumentEvent e) {
-					updateLabelURL();
-				}
-			});
-		textPublishContext.setColumns(10);
-		textPublishContext.setBounds(124, 38, 86, 20);
+		textPublishContext = new PublishTextField();
+		textPublishContext.setBounds(160, 38, 140, 20);
 		panelPublish.add(textPublishContext);
 		
-		JLabel lblPublishId = new JLabel("#STAB# Publish Id");
+		JLabel lblPublishId = new JLabel(core.label1470);
 		lblPublishId.setVerticalAlignment(SwingConstants.TOP);
-		lblPublishId.setBounds(232, 10, 86, 20);
+		lblPublishId.setBounds(310, 10, 140, 20);
 		panelPublish.add(lblPublishId);
 		
-		textPublishId = new JTextField();
-		textPublishId.setColumns(10);
-		textPublishId.setBounds(232, 38, 86, 20);
-		textPublishId.getDocument().addDocumentListener(
-			new DocumentListener() {
-				public void changedUpdate(DocumentEvent e) {
-					updateLabelURL();
-				}
-
-				public void removeUpdate(DocumentEvent e) {
-					updateLabelURL();
-				}
-
-				public void insertUpdate(DocumentEvent e) {
-					updateLabelURL();
-				}
-			});
+		textPublishId = new PublishTextField();
+		textPublishId.setBounds(310, 38, 140, 20);
 		panelPublish.add(textPublishId);
 		
 		lblPublishURL = new JLabel("");
@@ -355,6 +342,16 @@ public class ScreenSharerFrame extends JFrame {
 		panelPublish.add(lblPublishURL);
 		
 		panelScreen.setBackground(Color.WHITE);
+		
+		JPanel panelStatus = new JPanel();
+		panelStatus.setBackground(SystemColor.control);
+		panelStatus.setLayout(null);
+		lblStatus.setHorizontalAlignment(SwingConstants.LEFT);
+		lblStatus.setBounds(0, 0, 494, 20);
+		lblStatus.setBorder(BorderFactory.createCompoundBorder(
+				BorderFactory.createLineBorder(Color.LIGHT_GRAY),
+				BorderFactory.createEmptyBorder(0, 5, 0, 0)));
+		panelStatus.add(lblStatus);
 		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
@@ -366,9 +363,9 @@ public class ScreenSharerFrame extends JFrame {
 							.addComponent(lblStartSharing))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(21)
-							.addComponent(btnStartSharing, 200, 200, 200)
+							.addComponent(btnStartPauseSharing, 200, 200, 200)
 							.addGap(52)
-							.addComponent(btnPauseSharing, 200, 200, 200))
+							.addComponent(btnStopSharing, 200, 200, 200))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(7)
 							.addComponent(lblSelectArea, GroupLayout.PREFERRED_SIZE, 470, GroupLayout.PREFERRED_SIZE))
@@ -378,13 +375,8 @@ public class ScreenSharerFrame extends JFrame {
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addContainerGap()
 							.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 472, GroupLayout.PREFERRED_SIZE))
-						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(btnStopSharing, 200, 200, 200)
-							.addGap(14))
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(7)
-							.addComponent(lblStatus)))
+							.addComponent(panelStatus, 494, 494, 494)))
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		gl_contentPane.setVerticalGroup(
@@ -394,19 +386,17 @@ public class ScreenSharerFrame extends JFrame {
 					.addComponent(lblStartSharing)
 					.addGap(4)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnStartSharing, 32, 32, 32)
-						.addComponent(btnPauseSharing, 32, 32, 32))
+						.addComponent(btnStartPauseSharing, 32, 32, 32)
+						.addComponent(btnStopSharing, 32, 32, 32))
 					.addGap(4)
 					.addComponent(lblSelectArea)
 					.addGap(4)
 					.addComponent(panelScreen, 210, 210, 210)
 					.addGap(4)
 					.addComponent(tabbedPane, 150, 150, 150)
-					.addGap(4)
-					.addComponent(btnStopSharing, 32, 32, 32)
-					.addGap(4)
-					.addComponent(lblStatus)
-					.addGap(4))
+					.addGap(5)
+					.addComponent(panelStatus, 20, 20, 20)
+					)
 		);
 		panelScreen.setLayout(null);
 		
@@ -539,8 +529,10 @@ public class ScreenSharerFrame extends JFrame {
 
 	public void setSharingStatus(boolean status) {
 		panelScreen.setEnabled(!status);
-		btnStartSharing.setEnabled(!status);
-		btnPauseSharing.setEnabled(status);
+		sharingStarted = status;
+		btnStartPauseSharing.setIcon(status ? pauseIcon : startIcon);
+		btnStartPauseSharing.setText(status ? pauseLabel : startLabel);
+		btnStartPauseSharing.setToolTipText(status ? pauseLabel : startLabel);
 	}
 	
 	public void setRecordingStatus(boolean status) {
@@ -551,8 +543,10 @@ public class ScreenSharerFrame extends JFrame {
 	
 	public void setTabsEnabled(boolean enabled) {
 		panelRecording.setEnabled(enabled);
+		btnStopRecording.setEnabled(false);
 		tabbedPane.setEnabledAt(0, enabled);
 		panelPublish.setEnabled(enabled);
+		btnStopPublish.setEnabled(false);
 		tabbedPane.setEnabledAt(1, enabled);
 	}
 	
@@ -596,7 +590,7 @@ public class ScreenSharerFrame extends JFrame {
 				newX = ScreenDimensions.widthMax - ScreenDimensions.spinnerWidth;
 				spinnerX.setValue(newX);
 				if (showWarning) {
-					setStatus("Reduce the width of the SharingScreen before you try to move it left");
+					setStatus(reduceWidthLabel);
 				}
 			} else {
 				ScreenDimensions.spinnerX = newX;
@@ -616,7 +610,7 @@ public class ScreenSharerFrame extends JFrame {
 				newY = ScreenDimensions.heightMax - ScreenDimensions.spinnerHeight;
 				spinnerY.setValue(newY);
 				if (showWarning) {
-					setStatus("Reduce the height of the SharingScreen before you try to move it bottom");
+					setStatus(reduceHeightLabel);
 				}
 			} else {
 				ScreenDimensions.spinnerY = newY;
@@ -636,7 +630,7 @@ public class ScreenSharerFrame extends JFrame {
 				newWidth = ScreenDimensions.widthMax - ScreenDimensions.spinnerX;
 				spinnerWidth.setValue(newWidth);
 				if (showWarning) {
-					setStatus("Reduce the x of the SharingScreen before you try to make it wider");
+					setStatus(reduceXLabel);
 				}
 			} else {
 				ScreenDimensions.spinnerWidth = newWidth;
@@ -656,7 +650,7 @@ public class ScreenSharerFrame extends JFrame {
 				newHeight = ScreenDimensions.heightMax - ScreenDimensions.spinnerY;
 				spinnerHeight.setValue(newHeight);
 				if (showWarning) {
-					setStatus("Reduce the y of the SharingScreen before you try to make it higher");
+					setStatus(reduceYLabel);
 				}
 			} else {
 				ScreenDimensions.spinnerHeight = newHeight;

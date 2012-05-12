@@ -30,7 +30,6 @@ import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.persistence.beans.basic.Configuration;
-import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -86,6 +85,20 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 		rtmp
 		, rtmps
 		, rtmpt
+	}
+	
+	private String getLabels(Long language_id, int ... ids) {
+		Fieldmanagment fieldmanagment = getFieldmanagment();
+		StringBuilder result = new StringBuilder();
+		boolean delim = false;
+		for (int id : ids) {
+			if (delim) {
+				result.append(';');
+			}
+			result.append(fieldmanagment.getFieldByIdAndLanguage((long)id, language_id).getValue());
+			delim = true;
+		}
+		return result.toString();
 	}
 	
 	@Override
@@ -191,96 +204,17 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 
 
 			log.debug("language_id :: " + language_id);
-
-			Fieldmanagment fieldmanagment = getFieldmanagment();
-			Fieldlanguagesvalues fValue728 = fieldmanagment
-					.getFieldByIdAndLanguage(728L, language_id);
-			Fieldlanguagesvalues fValue729 = fieldmanagment
-					.getFieldByIdAndLanguage(729L, language_id);
-			Fieldlanguagesvalues fValue730 = fieldmanagment
-					.getFieldByIdAndLanguage(730L, language_id);
-			Fieldlanguagesvalues fValue731 = fieldmanagment
-					.getFieldByIdAndLanguage(731L, language_id);
-			Fieldlanguagesvalues fValue732 = fieldmanagment
-					.getFieldByIdAndLanguage(732L, language_id);
-			Fieldlanguagesvalues fValue733 = fieldmanagment
-					.getFieldByIdAndLanguage(733L, language_id);
-			Fieldlanguagesvalues fValue734 = fieldmanagment
-					.getFieldByIdAndLanguage(734L, language_id);
-			Fieldlanguagesvalues fValue735 = fieldmanagment
-					.getFieldByIdAndLanguage(735L, language_id);
-			Fieldlanguagesvalues fValue736 = fieldmanagment
-					.getFieldByIdAndLanguage(736L, language_id);
-			Fieldlanguagesvalues fValue737 = fieldmanagment
-					.getFieldByIdAndLanguage(737L, language_id);
-			Fieldlanguagesvalues fValue738 = fieldmanagment
-					.getFieldByIdAndLanguage(738L, language_id);
-			Fieldlanguagesvalues fValue739 = fieldmanagment
-					.getFieldByIdAndLanguage(739L, language_id);
-			Fieldlanguagesvalues fValue740 = fieldmanagment
-					.getFieldByIdAndLanguage(740L, language_id);
-			Fieldlanguagesvalues fValue741 = fieldmanagment
-					.getFieldByIdAndLanguage(741L, language_id);
-			Fieldlanguagesvalues fValue742 = fieldmanagment
-					.getFieldByIdAndLanguage(742L, language_id);
-			Fieldlanguagesvalues fValue844 = fieldmanagment
-					.getFieldByIdAndLanguage(844L, language_id);
-
-			Fieldlanguagesvalues fValue869 = fieldmanagment
-					.getFieldByIdAndLanguage(869L, language_id);
-			Fieldlanguagesvalues fValue870 = fieldmanagment
-					.getFieldByIdAndLanguage(870L, language_id);
-			Fieldlanguagesvalues fValue871 = fieldmanagment
-					.getFieldByIdAndLanguage(871L, language_id);
-			Fieldlanguagesvalues fValue872 = fieldmanagment
-					.getFieldByIdAndLanguage(872L, language_id);
-			Fieldlanguagesvalues fValue878 = fieldmanagment
-					.getFieldByIdAndLanguage(878L, language_id);
-
-			Fieldlanguagesvalues fValue1089 = fieldmanagment
-					.getFieldByIdAndLanguage(1089L, language_id);
-			Fieldlanguagesvalues fValue1090 = fieldmanagment
-					.getFieldByIdAndLanguage(1090L, language_id);
-			Fieldlanguagesvalues fValue1091 = fieldmanagment
-					.getFieldByIdAndLanguage(1091L, language_id);
-			Fieldlanguagesvalues fValue1092 = fieldmanagment
-					.getFieldByIdAndLanguage(1092L, language_id);
-			Fieldlanguagesvalues fValue1093 = fieldmanagment
-					.getFieldByIdAndLanguage(1093L, language_id);
-
 			String label_viewer = "Viewer";
 			String label_sharer = "Sharer";
 
 			try {
-				label_viewer = fValue728.getValue() + ";"
-						+ fValue729.getValue() + ";" + fValue736.getValue()
-						+ ";" + fValue742.getValue();
+				label_viewer = getLabels(language_id, 728, 729, 736, 742);
 
-				label_sharer = fValue730.getValue() + ";" + // 0
-						fValue731.getValue() + ";" + // 1
-						fValue732.getValue() + ";" + // 2
-						fValue733.getValue() + ";" + // 3
-						fValue734.getValue() + ";" + // 4
-						fValue735.getValue() + ";" + // 5
-						fValue737.getValue() + ";" + // 6
-						fValue738.getValue() + ";" + // 7
-						fValue739.getValue() + ";" + // 8
-						fValue740.getValue() + ";" + // 9
-						fValue741.getValue() + ";" + // 10
-						fValue742.getValue() + ";" + // 11
-						fValue844.getValue() + ";" + // 12
-						fValue869.getValue() + ";" + // 13
-						fValue870.getValue() + ";" + // 14
-						fValue871.getValue() + ";" + // 15
-						fValue872.getValue() + ";" + // 16
-						fValue878.getValue() + ";" + // 17
-						fValue1089.getValue() + ";" + // 18
-						fValue1090.getValue() + ";" + // 19
-						fValue1091.getValue() + ";" + // 20
-						fValue1092.getValue() + ";" + // 21
-						fValue1093.getValue() + ";" // 22
-				;
-
+				label_sharer = getLabels(language_id, 730, 731, 732
+					, 733, 734, 735, 737, 738, 739, 740, 741, 742
+					, 844, 869, 870, 871, 872, 878, 1089, 1090, 1091
+					, 1092, 1093, 1465, 1466, 1467, 1468, 1469, 1470
+					, 1471, 1472, 1473, 1474);
 			} catch (Exception e) {
 				log.error("Error resolving Language labels : ", e);
 			}

@@ -58,7 +58,7 @@ public class ScreenHeightMouseListener extends MouseInputAdapter  {
 		int newHeight = ScreenDimensions.spinnerHeight - (int)(y - newY);
 		int newSpinnerY = ScreenDimensions.spinnerY + newHeight;
 
-		if (newSpinnerY <= 0 && newSpinnerY <= ScreenDimensions.heightMax) {
+		if (newSpinnerY >= 0 && newSpinnerY <= ScreenDimensions.heightMax) {
 			frame.setDoUpdateBounds(false);
 			frame.setSpinnerHeight(newHeight);
 			frame.setDoUpdateBounds(true);

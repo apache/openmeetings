@@ -4413,5 +4413,34 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   <string id="1464" name="salutation">
     <value>Prof</value>
   </string>
+  <string id="1465" name="sharing client">
+    <value>Publish</value>
+  </string>
+  <string id="1466" name="sharing client">
+    <value>Start Publish</value>
+  </string>
+  <string id="1467" name="sharing client">
+    <value>Stop Publish</value>
+  </string>
+  <string id="1468" name="sharing client">
+    <value>Host</value>
+  </string>
+  <string id="1469" name="sharing client">
+    <value>Context</value>
+  </string>
+  <string id="1470" name="sharing client">
+    <value>Publish Id</value>
+  </string>
+  <string id="1471" name="sharing client">
+    <value>Reduce the width of the SharingScreen before you try to move it left</value>
+  </string>
+  <string id="1472" name="sharing client">
+    <value>Reduce the height of the SharingScreen before you try to move it bottom</value>
+  </string>
+  <string id="1473" name="sharing client">
+    <value>Reduce the x of the SharingScreen before you try to make it wider</value>
+  </string>
+  <string id="1474" name="sharing client">
+    <value>Reduce the y of the SharingScreen before you try to make it higher</value>
+  </string>
 </language>
-  
