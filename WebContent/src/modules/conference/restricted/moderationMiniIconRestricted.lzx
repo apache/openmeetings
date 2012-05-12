@@ -78,6 +78,9 @@
             this._denyRemote.setAttribute("visibility","hidden");
             this._denyExclusiveAudio.setAttribute("visibility","hidden");
 		} else {
+			
+			if ($debug) Debug.write("parent.parent.refObj.canShare :: ",parent.parent.refObj.canShare);
+		
 			if (parent.parent.refObj.canShare) {
     			this._allowScreen.setAttribute("visibility","visible");
                 this._allowScreen.isActive = true;
@@ -178,7 +181,7 @@
         <labelTooltip name="_text" labelid="676" />
     </miniIcons>
         
-    <miniIcons name="_canDraw" x="20" width="16" resource="participants_allow_drawing_rsc" 
+    <miniIcons name="_canDraw" x="20" width="16" resource="participants_allow_drawing_rsc"
                height="16" showhandcursor="false" >
     	<attribute name="isActive" value="true" type="boolean" />
         <handler name="onclick">
@@ -228,7 +231,7 @@
         <labelTooltip name="_text" labelid="1068" />
     </miniIcons>
     
-    <miniIcons name="_denyScreen" x="40" width="16" height="16" 
+    <miniIcons name="_denyScreen" x="40" width="16" height="16"  opacity="0.5"
                resource="screen_allow_rsc" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("Allow Screen: ",parent.parent.parent.refObj.publicSID);
@@ -257,7 +260,7 @@
         <labelTooltip name="_text" labelid="1079" />
     </miniIcons>
     
-    <miniIcons name="_denyRemote" x="60" width="16" height="16" 
+    <miniIcons name="_denyRemote" x="60" width="16" height="16"  opacity="0.5"
                resource="remote_allow_rsc" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("Allow Screen: ",parent.parent.parent.refObj.publicSID);
@@ -281,7 +284,8 @@
         <labelTooltip labelid="683" />
     </miniIcons>
     
-    <miniIcons name="_denyDevice" x="80" width="40" height="16" resource="av_deny_rsc" showhandcursor="true">
+    <miniIcons name="_denyDevice" x="80" width="40" height="16" resource="av_deny_rsc" 
+   				opacity="0.5" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("ALLOW: ",parent.parent.parent.refObj.publicSID);
             canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = parent.parent.parent.refObj.publicSID;
@@ -291,7 +295,8 @@
         <labelTooltip labelid="684" />
     </miniIcons>
     
-    <miniIcons name="_muteDevice" x="120" width="16" height="16" resource="mute_btn_rsc" showhandcursor="true">
+    <miniIcons name="_muteDevice" x="120" width="16" height="16" resource="mute_btn_rsc" 
+    				opacity="0.5" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("mute: ",parent.parent.parent.refObj.publicSID);
             canvas._videocontainer._videoviewcontent.muteSound(parent.parent.parent.refObj.publicSID, true);
