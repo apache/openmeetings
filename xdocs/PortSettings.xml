@@ -73,26 +73,44 @@
 				</tr>
 			</table>
 
+			<p>
+				If you change the HTTP Port (or HTTPS port) and need the REST/SOAP
+				Gateway you also should modify the file:
+				<br />
+				<tt>/webapps/openmeetings/WEB-INF/conf/axis.xml </tt>
+				(Around Line 197)
+				<br />
+				You need to restart Red5 Service so that changes to the Axis2 conf
+				are online.
+			</p>
+
 		</section>
 
 		<section name="Preventing Firewall issues">
 
 			<p>A common way of bypassing the firewall is to change HTTP port to
-				80 and rtmpT to 443. </p>
+				80 and rtmpT to 443.
+			</p>
 			<p>A short description about the connection mechanism: The
 				application first tries connecting to rtmp 3 times, because rtmp is
 				the protocol that is less performance hungry. If that fails the
-				application will fallback to rtmpT. </p>
+				application will fallback to rtmpT.
+			</p>
 			<p>Most firewalls do allow traffic on port 443 and they normally do
 				not analyse the packets, because 443 is normally SSL encrypted, so
-				the firewall should not be able to read the packets at all. </p>
+				the firewall should not be able to read the packets at all.
+			</p>
 
 		</section>
-		
+
 		<section name="OpenMeetings over SSL">
-		
-		  <p>You can run OpenMeetings completely over SSL. See <a href="RTMPSAndHTTPS.html">RTMPSAndHTTPS</a>. </p>
-		
+
+			<p>
+				You can run OpenMeetings completely over SSL. See
+				<a href="RTMPSAndHTTPS.html">RTMPSAndHTTPS</a>
+				.
+			</p>
+
 		</section>
 
 	</body>
