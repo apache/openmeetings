@@ -502,14 +502,16 @@
     </view>
 
     <view name="_giveExclusiveAudioView" valign="middle" align="center" visible="false">
-        <miniIcons name="_micButton" width="40" height="40" resource="mic_rsc" showhandcursor="true">
-            <handler name="onclick">
-                <![CDATA[
-                    parent.parent.giveExclusiveAudio();
-                ]]>
-            </handler>
+        <view name="_micButton" width="40" height="40" resource="mic_rsc" showhandcursor="true">
+        	<handler name="onclick">
+			      <![CDATA[
+			      	if (canvas.ismoderator || canvas.isAllowedToGiveExclusiveAudio) {
+			          	parent.parent.giveExclusiveAudio();
+			          }
+			      ]]>
+			</handler> 
             <labelTooltip labelid="1386" />
-        </miniIcons>
+        </view>
     </view>
 
     <handler name="onmouseover">
@@ -520,8 +522,7 @@
         if (this.minimized) {
             return;
         }
-        var canGiveAudioHimself = !this.isremote && canvas.isAllowedToGiveExclusiveAudio;
-        if (canvas.ismoderator || canGiveAudioHimself) {
+        if (canvas.ismoderator || canvas.isAllowedToGiveExclusiveAudio) {
             this._giveExclusiveAudioView.setAttribute("visible", true);
         }
         ]]>
@@ -537,7 +538,15 @@
         }
         this._giveExclusiveAudioView.setAttribute("visible", false);
         ]]>
-    </handler>  
+    </handler> 
+    
+    <handler name="onclick">
+		<![CDATA[
+	      	if (canvas.ismoderator || canvas.isAllowedToGiveExclusiveAudio) {
+	          	this.giveExclusiveAudio();
+	        }
+		]]>
+	</handler> 
     
     <dragstate name="dragger" />
     <resizestate name="rs"/>

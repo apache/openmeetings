@@ -72,6 +72,8 @@
 	
 	<attribute name="isAllowedToRemoteControl" value="false" type="boolean" />
 	
+	<attribute name="isAllowedToGiveExclusiveAudio" value="false" type="boolean" />
+	
 	<attribute name="ismoderator" value="false" type="boolean" />
 	
 	<attribute name="isInterview" value="false" type="boolean" />

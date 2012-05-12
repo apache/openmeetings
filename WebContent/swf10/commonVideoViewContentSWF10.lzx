@@ -62,6 +62,7 @@
             client.updateModerationFlag = this.updateModerationFlag;
             client.changeDevice = this.changeDevice;
             client.setDrawAllowStatus = this.setDrawAllowStatus;
+            client.setExclusiveAudioAllowStatus = this.setExclusiveAudioAllowStatus;
             client.exitRoom = this.exitRoom;
             client.closeWhiteboard = this.closeWhiteboard;
 
@@ -452,6 +453,14 @@
     		canvas.setAttribute("isAllowedToDraw",canDraw);
             canvas.setAttribute("isAllowedToScreenShare",canShare);
             canvas.setAttribute("isAllowedToRemoteControl",canRemote);
+            return;
+    	]]>
+    </method>
+    
+    <method name="setExclusiveAudioAllowStatus" args="canGiveAudio">
+    	<![CDATA[
+    		if ($debug) Debug.write("setExclusiveAudioAllowStatus :: ",canGiveAudio);
+    		canvas.setAttribute("isAllowedToGiveExclusiveAudio",canGiveAudio);
             return;
     	]]>
     </method>
