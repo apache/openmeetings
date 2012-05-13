@@ -75,6 +75,7 @@ public class ScreenSharerFrame extends JFrame {
 	private JButton btnStartPauseSharing;
 	private JButton btnStartRecording;
 	private JButton btnStopRecording;
+	private JButton btnStartPublish;
 	private JButton btnStopPublish;
 	private NumberSpinner spinnerX;
 	private NumberSpinner spinnerY;
@@ -82,7 +83,7 @@ public class ScreenSharerFrame extends JFrame {
 	private NumberSpinner spinnerHeight;
 	private JComboBox comboQuality;
 	private JTextField textPublishHost;
-	private JTextField textPublishContext;
+	private JTextField textPublishApp;
 	private JTextField textPublishId;
 	private JLabel lblPublishURL;
 	private boolean sharingStarted = false;
@@ -102,15 +103,15 @@ public class ScreenSharerFrame extends JFrame {
 			getDocument().addDocumentListener(
 				new DocumentListener() {
 					public void changedUpdate(DocumentEvent e) {
-						updateLabelURL();
+						updatePublishURL();
 					}
 
 					public void removeUpdate(DocumentEvent e) {
-						updateLabelURL();
+						updatePublishURL();
 					}
 
 					public void insertUpdate(DocumentEvent e) {
-						updateLabelURL();
+						updatePublishURL();
 					}
 				});
 
@@ -230,13 +231,9 @@ public class ScreenSharerFrame extends JFrame {
 		btnStartPauseSharing.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (sharingStarted) {
-					core.stopRecording = false;
-					core.stopStreaming = true;
-					core.captureScreenStop();
+					core.captureScreenStop(true, false);
 				} else {
-					core.startRecording = false;
-					core.startStreaming = true;
-					core.captureScreenStart();
+					core.captureScreenStart(true, false);
 				}
 			}
 		});
@@ -272,9 +269,7 @@ public class ScreenSharerFrame extends JFrame {
 		btnStartRecording.setBounds(10, 82, 200, 32);
 		btnStartRecording.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				core.startRecording = true;
-				core.startStreaming = false;
-				core.captureScreenStart();
+				core.captureScreenStart(false, true);
 			}
 		});
 		panelRecording.add(btnStartRecording);
@@ -285,9 +280,7 @@ public class ScreenSharerFrame extends JFrame {
 		btnStopRecording.setBounds(257, 82, 200, 32);
 		btnStopRecording.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				core.stopRecording = true;
-				core.stopStreaming = false;
-				core.captureScreenStop();
+				core.captureScreenStop(false, true);
 			}
 		});
 		panelRecording.add(btnStopRecording);
@@ -298,16 +291,26 @@ public class ScreenSharerFrame extends JFrame {
 		panelPublish.setEnabled(false);
 		panelPublish.setLayout(null);
 		
-		JButton btnStartPublish = new JButton(core.label1466);
+		btnStartPublish = new JButton(core.label1466);
 		btnStartPublish.setToolTipText(core.label1466);
 		//btnStartPublish.setIcon(new ImageIcon(ScreenSharerFrame.class.getResource("/org/openmeetings/screen/record.png")));
 		btnStartPublish.setBounds(10, 82, 200, 32);
+		btnStartPublish.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				core.captureScreenStart(false, false, true);
+			}
+		});
 		panelPublish.add(btnStartPublish);
 		
 		btnStopPublish = new JButton(core.label1467);
 		btnStopPublish.setToolTipText(core.label1467);
 		btnStopPublish.setIcon(stopIcon);
 		btnStopPublish.setBounds(257, 82, 200, 32);
+		btnStopPublish.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				core.captureScreenStop(false, false, true);
+			}
+		});
 		panelPublish.add(btnStopPublish);
 		
 		JLabel lblPublishHost = new JLabel(core.label1468);
@@ -319,14 +322,14 @@ public class ScreenSharerFrame extends JFrame {
 		textPublishHost.setBounds(10, 38, 140, 20);
 		panelPublish.add(textPublishHost);
 		
-		JLabel lblPublishContext = new JLabel(core.label1469);
-		lblPublishContext.setVerticalAlignment(SwingConstants.TOP);
-		lblPublishContext.setBounds(160, 10, 140, 20);
-		panelPublish.add(lblPublishContext);
+		JLabel lblPublishApp = new JLabel(core.label1469);
+		lblPublishApp.setVerticalAlignment(SwingConstants.TOP);
+		lblPublishApp.setBounds(160, 10, 140, 20);
+		panelPublish.add(lblPublishApp);
 		
-		textPublishContext = new PublishTextField();
-		textPublishContext.setBounds(160, 38, 140, 20);
-		panelPublish.add(textPublishContext);
+		textPublishApp = new PublishTextField();
+		textPublishApp.setBounds(160, 38, 140, 20);
+		panelPublish.add(textPublishApp);
 		
 		JLabel lblPublishId = new JLabel(core.label1470);
 		lblPublishId.setVerticalAlignment(SwingConstants.TOP);
@@ -511,20 +514,11 @@ public class ScreenSharerFrame extends JFrame {
 		comboQuality.setSelectedIndex(core.defaultQuality);
 		panelScreen.add(comboQuality);
 		
+		setPublishingTabEnabled(false);
 		contentPane.setLayout(gl_contentPane);
 		
-		//
 		// Background Image
-		
 		//We have no logo, that is why we need no background, sebawagner 29.04.2012
-		
-//		Image im_left = ImageIO.read(getClass()
-//				.getResource("/org/openmeetings/screen/background.png"));
-//		ImageIcon iIconBack = new ImageIcon(im_left);
-//
-//		JLabel jLab = new JLabel(iIconBack);
-//		jLab.setBounds(0, 0, 500, 440);
-//		contentPane.add(jLab);
 	}
 
 	public void setSharingStatus(boolean status) {
@@ -533,6 +527,7 @@ public class ScreenSharerFrame extends JFrame {
 		btnStartPauseSharing.setIcon(status ? pauseIcon : startIcon);
 		btnStartPauseSharing.setText(status ? pauseLabel : startLabel);
 		btnStartPauseSharing.setToolTipText(status ? pauseLabel : startLabel);
+		setPublishingTabEnabled(status);
 	}
 	
 	public void setRecordingStatus(boolean status) {
@@ -541,18 +536,39 @@ public class ScreenSharerFrame extends JFrame {
 		btnStopRecording.setEnabled(status);
 	}
 	
-	public void setTabsEnabled(boolean enabled) {
+	public void setPublishingStatus(boolean status) {
+		panelScreen.setEnabled(!status);
+		btnStartPublish.setEnabled(!status);
+		btnStopPublish.setEnabled(status);
+	}
+	
+	public void setRecordingTabEnabled(boolean enabled) {
 		panelRecording.setEnabled(enabled);
 		btnStopRecording.setEnabled(false);
 		tabbedPane.setEnabledAt(0, enabled);
+	}
+	
+	private void setPublishingTabEnabled(boolean enabled) {
 		panelPublish.setEnabled(enabled);
 		btnStopPublish.setEnabled(false);
 		tabbedPane.setEnabledAt(1, enabled);
 	}
 	
-	private void updateLabelURL() {
+	public String getPublishHost() {
+		return textPublishHost.getText();
+	}
+	
+	public String getPublishApp() {
+		return textPublishApp.getText();
+	}
+	
+	public String getPublishId() {
+		return textPublishId.getText();
+	}
+	
+	private void updatePublishURL() {
 		lblPublishURL.setText("rtmp://" + textPublishHost.getText() + ":1935/"
-				+ textPublishContext.getText() + "/" + textPublishId.getText());
+				+ textPublishApp.getText() + "/" + textPublishId.getText());
 	}
 	
 	public void setShowWarning(boolean showWarning) {

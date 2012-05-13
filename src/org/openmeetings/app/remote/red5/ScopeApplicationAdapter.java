@@ -53,6 +53,7 @@ import org.openmeetings.app.remote.WhiteBoardService;
 import org.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.adapter.ApplicationAdapter;
+import org.red5.server.api.IBasicScope;
 import org.red5.server.api.IClient;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.IScope;
@@ -61,6 +62,12 @@ import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.api.service.IServiceCapableConnection;
 import org.red5.server.api.stream.IBroadcastStream;
+import org.red5.server.api.stream.IStreamListener;
+import org.red5.server.api.stream.IStreamPacket;
+import org.red5.server.net.rtmp.event.IRTMPEvent;
+import org.red5.server.stream.IBroadcastScope;
+import org.red5.server.stream.StreamingProxy;
+import org.red5.server.stream.message.RTMPMessage;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -96,6 +103,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	@Autowired
 	private MeetingMemberDaoImpl meetingMemberDao;
 
+    private Map<String, StreamingProxy> streamingProxyMap = new HashMap<String, StreamingProxy>();
 	// This is the Folder where all executables are written
 	// for windows platform
 	public static String batchFileFir = "webapps" + File.separatorChar + "ROOT"
@@ -120,10 +128,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	@Override
 	public synchronized boolean appStart(IScope scope) {
 		try {
-			// This System out is for testing SLF4J / LOG4J and custom logging n
-			// Red5
-			// System.out.println("Custom Webapp start UP "+new Date());
-
 			webAppPath = scope.getResource("/").getFile().getAbsolutePath();
 			batchFileFir = webAppPath + File.separatorChar + OpenmeetingsVariables.STREAMS_DIR
 					+ File.separatorChar;
@@ -229,34 +233,23 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 
 			if (currentClient != null) {
 
-				boolean stopStreaming = Boolean.valueOf(map
-						.get("stopStreaming").toString());
-				boolean stopRecording = Boolean.valueOf(map
-						.get("stopRecording").toString());
-
-				if (stopStreaming) {
-
+				if (Boolean.valueOf(map.get("stopStreaming").toString())) {
 					log.debug("start streamPublishStart Is Screen Sharing -- Stop ");
 					
 					//Send message to all users
 					syncMessageToCurrentScope("stopRed5ScreenSharing", currentClient, false);
 
 					if (currentClient.isStartRecording()) {
-
 						returnMap.put("result", "stopSharingOnly");
-
 					}
 
 					currentClient.setStartStreaming(false);
 					currentClient.setScreenPublishStarted(false);
 
-					this.clientListManager.updateClientByStreamId(
+					clientListManager.updateClientByStreamId(
 							currentClient.getStreamid(), currentClient);
-
 				}
-
-				if (stopRecording) {
-
+				if (Boolean.valueOf(map.get("stopRecording").toString())) {
 					if (currentClient.isStartStreaming()) {
 						returnMap.put("result", "stopRecordingOnly");
 					}
@@ -264,21 +257,23 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 					//Send message to all users
 					syncMessageToCurrentScope("stopRecordingMessage", currentClient, false);
 
-					this.flvRecorderService.stopRecordAndSave(
+					flvRecorderService.stopRecordAndSave(
 							current.getScope(), currentClient, null);
 
 					currentClient.setStartRecording(false);
 					currentClient.setIsRecording(false);
 
-					this.clientListManager.updateClientByStreamId(
+					clientListManager.updateClientByStreamId(
 							currentClient.getStreamid(), currentClient);
-
 				}
-
+				if (Boolean.valueOf(map.get("stopPublishing").toString())) {
+					streamPublishingStop();
+					if (currentClient.getIsScreenClient() && currentClient.isStartStreaming()) {
+						returnMap.put("result", "stopPublishingOnly");
+					}
+				}
 			}
-
 			return returnMap;
-
 		} catch (Exception err) {
 			log.error("[screenSharerAction]", err);
 		}
@@ -402,27 +397,25 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 						.getClient().getId(), currentClient);
 
 				if (startStreaming) {
-
 					returnMap.put("modus", "startStreaming");
 
 					log.debug("start streamPublishStart Is Screen Sharing ");
 					
 					//Send message to all users
 					syncMessageToCurrentScope("newRed5ScreenSharing", currentClient, false);
-
-				}
-
-				if (startRecording) {
-
+				} else if (startRecording) {
 					returnMap.put("modus", "startRecording");
 
 					String recordingName = "Recording "
 							+ CalendarPatterns
 									.getDateWithTimeByMiliSeconds(new Date());
 
-					this.flvRecorderService.recordMeetingStream(recordingName,
-							"", false);
-
+					flvRecorderService.recordMeetingStream(recordingName, "", false);
+				} else if (Boolean.valueOf(map.get("startPublishing").toString())) {
+					returnMap.put("modus", "startPublishing");
+					streamPublishingStart("" + map.get("publishingHost")
+						, "" + map.get("publishingApp")
+						, "" + map.get("publishingId"));
 				}
 
 				return returnMap;
@@ -805,6 +798,64 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		}
 	}
 
+	public IBroadcastScope getBroadcastScope(IScope scope, String name) {
+		IBasicScope basicScope = scope.getBasicScope(IBroadcastScope.TYPE, name);
+		if (!(basicScope instanceof IBroadcastScope)) {
+			return null;
+		} else {
+			return (IBroadcastScope) basicScope;
+		}
+	}
+
+    public void streamPublishingStart(String host, String app, String id) {
+		IConnection current = Red5.getConnectionLocal();
+		RoomClient rc = clientListManager.getClientByStreamId(current.getClient().getId());
+		String publishName = rc.getStreamPublishName();
+		
+		if (rc.getIsScreenClient() && rc.isStartStreaming()) {
+	        IScope scope = current.getScope();
+	        IBroadcastStream stream = getBroadcastStream(scope, publishName);
+	        IBroadcastScope bsScope = getBroadcastScope(scope, publishName);
+	        final StreamingProxy proxy = new StreamingProxy();
+	        proxy.setHost(host);
+	        proxy.setApp(app);
+	        proxy.setPort(1935);
+	        proxy.init();
+	        bsScope.subscribe(proxy, null);
+	        proxy.start(id, StreamingProxy.LIVE, null);
+	        streamingProxyMap.put(publishName, proxy);
+	        stream.addStreamListener(new IStreamListener() {
+				public void packetReceived(IBroadcastStream stream, IStreamPacket packet) {
+					try {
+						RTMPMessage m = RTMPMessage.build((IRTMPEvent)packet, packet.getTimestamp());
+				        proxy.pushMessage(null, m);
+					} catch (IOException ioe) {
+						log.error("Exception while sending proxy message", ioe);
+					}
+				}
+			});
+		}
+    }
+    
+    public void streamPublishingStop() {
+		IConnection current = Red5.getConnectionLocal();
+		RoomClient rc = clientListManager.getClientByStreamId(current.getClient().getId());
+		String publishName = rc.getStreamPublishName();
+		
+		if (rc.getIsScreenClient() && publishName != null) {
+	        IScope scope = current.getScope();
+	        IBroadcastStream stream = getBroadcastStream(scope, publishName);
+			StreamingProxy proxy = streamingProxyMap.remove(publishName);
+			if (proxy != null) {
+				proxy.stop();
+				IBroadcastScope bsScope = getBroadcastScope(scope, stream.getPublishedName());
+				if (bsScope != null) {
+					bsScope.unsubscribe(proxy);
+				}
+			}
+		}
+    }
+    
 	/**
 	 * This method handles the Event after a stream has been removed all
 	 * connected Clients in the same room will get a notification
@@ -819,9 +870,10 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		log.debug("start streamBroadcastClose broadcast close: "
 				+ stream.getPublishedName());
 		try {
-			RoomClient rcl = this.clientListManager.getClientByStreamId(Red5
-					.getConnectionLocal().getClient().getId());
-
+			streamPublishingStop();
+			
+			IConnection current = Red5.getConnectionLocal();
+			RoomClient rcl = clientListManager.getClientByStreamId(current.getClient().getId());
 			sendClientBroadcastNotifications(stream, "closeStream", rcl);
 		} catch (Exception e) {
 			log.error("[streamBroadcastClose]", e);

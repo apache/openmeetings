@@ -69,11 +69,9 @@ public class CoreScreenShare {
 	public Long user_id = null;
 	public Boolean allowRecording = true;
 
-	public boolean startRecording = false;
-	public boolean stopRecording = false;
-
-	public boolean startStreaming = false;
-	public boolean stopStreaming = false;
+	private boolean startStreaming = false;
+	private boolean startRecording = false;
+	private boolean startPublishing = false;
 
 	public String label730 = "Desktop Publisher";
 	public String label731 = "This application will publish your screen";
@@ -225,7 +223,7 @@ public class CoreScreenShare {
 				}
 			});
 			frame.setVisible(true);
-			frame.setTabsEnabled(allowRecording);
+			frame.setRecordingTabEnabled(allowRecording);
 
 			logger.debug("initialized");
 
@@ -279,8 +277,12 @@ public class CoreScreenShare {
 			map.put("screenHeight", scaledHeight);
 
 			map.put("publishName", this.publishName);
-			map.put("startRecording", this.startRecording);
-			map.put("startStreaming", this.startStreaming);
+			map.put("startRecording", startRecording);
+			map.put("startStreaming", startStreaming);
+			map.put("startPublishing", startPublishing);
+			map.put("publishingHost", frame.getPublishHost());
+			map.put("publishingApp", frame.getPublishApp());
+			map.put("publishingId", frame.getPublishId());
 
 			map.put("organization_id", this.organization_id);
 			map.put("user_id", this.user_id);
@@ -293,30 +295,53 @@ public class CoreScreenShare {
 		}
 	}
 
-	public void captureScreenStart() {
+	/**
+	 * @param startStreaming flag denoting the streaming is started
+	 * @param startRecording flag denoting the recording is started
+	 */
+	public void captureScreenStart(boolean startStreaming, boolean startRecording) {
+		captureScreenStart(startStreaming, startRecording, false);
+	}
+	
+	public void captureScreenStart(boolean startStreaming, boolean startRecording, boolean startPublishing) {
 		try {
 			logger.debug("captureScreenStart");
-			startStream(host, app, port, publishName);
+			this.startStreaming = startStreaming;
+			this.startRecording= startRecording;
+			this.startPublishing = startPublishing;
+			
+			if (!isConnected) {
+				instance.connect(host, port, app, instance);
+			} else {
+				setConnectionAsSharingClient();
+			}
 		} catch (Exception err) {
 			logger.error("captureScreenStart Exception: ", err);
 			frame.setStatus("Exception: " + err);
 		}
 	}
 
-	public void captureScreenStop() {
+	public void captureScreenStop(boolean stopStreaming, boolean stopRecording) {
+		captureScreenStop(stopStreaming, stopRecording, false);
+	}
+	
+	public void captureScreenStop(boolean stopStreaming, boolean stopRecording, boolean stopPublishing) {
 		try {
 			logger.debug("INVOKE screenSharerAction" );
 
-			Map<Object, Object> map = new HashMap<Object, Object>();
-			map.put("stopStreaming", this.stopStreaming);
-			map.put("stopRecording", this.stopRecording);
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("stopStreaming", stopStreaming);
+			map.put("stopRecording", stopRecording);
+			map.put("stopPublishing", stopPublishing);
 
 			instance.invoke("screenSharerAction", new Object[] { map }, instance);
 
 			if (stopStreaming) {
 				frame.setSharingStatus(false);
-			} else {
+			} else if (stopRecording) {
 				frame.setRecordingStatus(false);
+			} else if (stopPublishing) {
+				frame.setPublishingStatus(false);
 			}
 		} catch (Exception err) {
 			logger.error("captureScreenStop Exception: ", err);
@@ -329,23 +354,6 @@ public class CoreScreenShare {
 	// Public
 	//
 	// ------------------------------------------------------------------------
-
-	public void startStream(String host, String app, int port,
-			String publishName) {
-
-		logger.debug("ScreenShare startStream");
-		this.publishName = publishName;
-
-		try {
-			if (!isConnected) {
-				instance.connect(host, port, app, instance);
-			} else {
-				setConnectionAsSharingClient();
-			}
-		} catch (Exception e) {
-			logger.error("ScreenShare startStream exception " + e);
-		}
-	}
 
 	protected void onInvoke(RTMPConnection conn, Channel channel,
 			Header source, Notify invoke, RTMP rtmp) {
@@ -758,35 +766,21 @@ public class CoreScreenShare {
 			logger.debug( "service call result: " + call );
 
 			if (call.getServiceMethodName().equals("connect")) {
-
 				isConnected = true;
 				setConnectionAsSharingClient();
-
 			} else if (call.getServiceMethodName().equals(
 					"setConnectionAsSharingClient")) {
 
-				// logger.debug("call get Method Name "+call.getServiceMethodName());
-
 				Object o = call.getResult();
-
-				// logger.debug("Result Map Type "+o.getClass().getName());
 
 				@SuppressWarnings("rawtypes")
 				Map returnMap = (Map) o;
-
-				// logger.debug("result "+returnMap.get("result"));
-
-				// for (Iterator iter =
-				// returnMap.keySet().iterator();iter.hasNext();) {
-				// logger.debug("key "+iter.next());
-				// }
 
 				if (o == null || !Boolean.valueOf("" + returnMap.get("alreadyPublished")).booleanValue()) {
 					logger.debug("Stream not yet started - do it ");
 
 					instance.createStream(instance);
 				} else {
-
 					if (this.capture != null) {
 						this.capture.resetBuffer();
 					}
@@ -794,13 +788,14 @@ public class CoreScreenShare {
 					logger.debug("The Stream was already started ");
 				}
 
-				if (returnMap != null && returnMap.get("modus") != null) {
-					if (returnMap.get("modus").toString()
-							.equals("startStreaming")) {
+				if (returnMap != null) {
+					Object modus = returnMap.get("modus");
+					if ("startStreaming".equals(modus)) {
 						frame.setSharingStatus(true);
-					} else if (returnMap.get("modus").toString()
-							.equals("startRecording")) {
+					} else if ("startRecording".equals(modus)) {
 						frame.setRecordingStatus(true);
+					} else if ("startPublishing".equals(modus)) {
+						frame.setPublishingStatus(true);
 					}
 				} else {
 					throw new Exception(
@@ -817,10 +812,6 @@ public class CoreScreenShare {
 
 				logger.debug("setup capture thread");
 
-				logger.debug("setup capture thread getCanonicalName "
-						+ ScreenDimensions.class.getCanonicalName());
-				logger.debug("setup capture thread getName "
-						+ ScreenDimensions.class.getName());
 				logger.debug("setup capture thread vScreenSpinnerWidth "
 						+ ScreenDimensions.spinnerWidth);
 				logger.debug("setup capture thread vScreenSpinnerHeight "
@@ -835,7 +826,6 @@ public class CoreScreenShare {
 				capture.start();
 
 			} else if (call.getServiceMethodName().equals("screenSharerAction")) {
-
 				logger.debug("call ### get Method Name "
 						+ call.getServiceMethodName());
 
@@ -843,27 +833,19 @@ public class CoreScreenShare {
 
 				logger.debug("Result Map Type " + o.getClass().getName());
 
-				@SuppressWarnings("rawtypes")
-				Map returnMap = (Map) o;
-
-				// logger.debug("result "+returnMap.get("result"));
-
-				// for (Iterator iter =
-				// returnMap.keySet().iterator();iter.hasNext();) {
-				// logger.debug("key "+iter.next());
-				// }
-
-				if (returnMap.get("result").equals("stopAll")) {
-
+				@SuppressWarnings("unchecked")
+				Map<String, Object> returnMap = (Map<String, Object>)o;
+				Object result = returnMap.get("result");
+				if ("stopAll".equals(result)) {
 					logger.debug("Stopping to stream, there is neither a Desktop Sharing nor Recording anymore");
-
 					stopStream();
-
+				} else if ("stopSharingOnly".equals(result)) {
+					//no op
+				} else if ("stopRecordingOnly".equals(result)) {
+					//no op
+				} else if ("stopPublishingOnly".equals(result)) {
+					frame.setPublishingStatus(false);
 				}
-
-				// logger.debug("Stop No Doubt!");
-				// stopStream();
-
 			} else if (call.getServiceMethodName().equals(
 					"setNewCursorPosition")) {
 
