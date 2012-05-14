@@ -37,14 +37,29 @@
         					uploadmodul:this.uploadmodul,thumbname:thumbName,no:no});
     </method>
     
-    <method name="addListpresentationFileOrig" args="originalName,pdfname,swfName">
-        new lz.listPresentationFileOrigExplorer(this._table._listcontent,{isExplorer:true,
-        				isoriginal:true,uploadmodul:this.uploadmodul,
-        				originalName:originalName,pdfname:pdfname,swfName:swfName});
+    <method name="addListpresentationFileOrig" args="originalName,pdfname,swfName,fileExplorerItemId">
+    	if ($debug) Debug.write("addListpresentationFileOrig ",originalName,pdfname,swfName,fileExplorerItemId);
+        new lz.listPresentationFileOrigExplorer(this._table._listcontent,{
+	        				isExplorer:true,
+	        				isoriginal:true,
+	        				uploadmodul:this.uploadmodul,
+	        				originalName:originalName,
+	        				pdfname:pdfname,
+	        				swfName:swfName,
+	        				fileExplorerItemId:fileExplorerItemId
+        				});
     </method>
     
-    <method name="addListpresentationFilePDF" args="pdfname,swfName">
-        new lz.listPresentationFilePDFExplorer(this._table._listcontent,{isExplorer:true,isoriginal:true,uploadmodul:this.uploadmodul,pdfname:pdfname,swfName:swfName});
+    <method name="addListpresentationFilePDF" args="pdfname,swfName,fileExplorerItemId">
+    	if ($debug) Debug.write("addListpresentationFilePDF ",originalName,pdfname,swfName,fileExplorerItemId);
+        new lz.listPresentationFilePDFExplorer(this._table._listcontent,{
+	        				isExplorer:true,
+	        				isoriginal:true,
+	        				uploadmodul:this.uploadmodul,
+	        				pdfname:pdfname,
+	        				swfName:swfName,
+	        				fileExplorerItemId:fileExplorerItemId
+        				});
     </method>
 	    
     <method name="resetList">

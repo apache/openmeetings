@@ -32,7 +32,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Sessionmanagement;
+import org.openmeetings.app.data.file.dao.FileExplorerItemDaoImpl;
 import org.openmeetings.app.data.user.Usermanagement;
+import org.openmeetings.app.persistence.beans.files.FileExplorerItem;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -70,6 +72,19 @@ public class DownloadHandler extends HttpServlet {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
 				return (Usermanagement) context.getBean("userManagement");
+			}
+		} catch (Exception err) {
+			log.error("[getUserManagement]", err);
+		}
+		return null;
+	}
+	
+	public FileExplorerItemDaoImpl getFileExplorerItemDaoImpl() {
+		try {
+			if (ScopeApplicationAdapter.initComplete) {
+				ApplicationContext context = WebApplicationContextUtils
+						.getWebApplicationContext(getServletContext());
+				return (FileExplorerItemDaoImpl) context.getBean("fileExplorerItemDao");
 			}
 		} catch (Exception err) {
 			log.error("[getUserManagement]", err);
@@ -151,6 +166,15 @@ public class DownloadHandler extends HttpServlet {
 				if (requestedFile == null) {
 					requestedFile = "";
 				}
+				
+				String fileExplorerItemIdParam = httpServletRequest
+						.getParameter("fileExplorerItemId");
+				Long fileExplorerItemId = null;
+				if (fileExplorerItemIdParam != null) {
+					fileExplorerItemId = Long.parseLong(fileExplorerItemIdParam);
+				}
+				
+				
 
 				// make a complete name out of domain(organisation) + roomname
 				String roomName = room_id;
@@ -350,18 +374,30 @@ public class DownloadHandler extends HttpServlet {
 					} else {
 						httpServletResponse
 								.setContentType("APPLICATION/OCTET-STREAM");
+						
+						String fileNameResult = requestedFile;
+						if (fileExplorerItemId != null && fileExplorerItemId > 0) {
+							FileExplorerItem fileExplorerItem = getFileExplorerItemDaoImpl().getFileExplorerItemsById(fileExplorerItemId);
+							if (fileExplorerItem != null) {
+								
+								fileNameResult = fileExplorerItem.getFileName().substring(0, fileExplorerItem.getFileName().length()-4)
+													+ fileNameResult.substring(fileNameResult.length()-4, fileNameResult.length());
+								
+							}
+						}
+						
 						if (browserType == 0) {
 							httpServletResponse.setHeader(
 									"Content-Disposition",
 									"attachment; filename="
 											+ java.net.URLEncoder.encode(
-													requestedFile, "UTF-8"));
+													fileNameResult, "UTF-8"));
 						} else {
 							httpServletResponse.setHeader(
 									"Content-Disposition",
 									"attachment; filename*=UTF-8'en'"
 											+ java.net.URLEncoder.encode(
-													requestedFile, "UTF-8"));
+													fileNameResult, "UTF-8"));
 						}
 
 						httpServletResponse.setHeader("Content-Length",

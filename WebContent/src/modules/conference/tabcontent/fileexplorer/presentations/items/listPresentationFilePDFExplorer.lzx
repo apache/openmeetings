@@ -26,8 +26,14 @@
     <attribute name="pdfname" value="null" />
     <attribute name="swfName" value="null" />
     
+    <attribute name="fileExplorerItemId" value="-1" type="number" />
+    
     <method name="loadFileByName" args="filename">
-        lz.Browser.loadURL(this.formatURL(filename),'_parent');
+    	<![CDATA[
+    		var lzURLToLoad = this.formatURL(filename)+"&fileExplorerItemId="+this.fileExplorerItemId;
+    		if ($debug) Debug.write("lzURLToLoad ",lzURLToLoad);
+        	lz.Browser.loadURL(lzURLToLoad,'_parent');
+        ]]>
     </method>
 
     <handler name="onclick">
