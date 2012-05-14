@@ -829,8 +829,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 					try {
 						RTMPMessage m = RTMPMessage.build((IRTMPEvent)packet, packet.getTimestamp());
 				        proxy.pushMessage(null, m);
-					} catch (IOException ioe) {
-						log.error("Exception while sending proxy message", ioe);
+					} catch (Exception e) {
+						log.error("Exception while sending proxy message", e);
 					}
 				}
 			});

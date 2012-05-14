@@ -72,45 +72,6 @@ public class CoreScreenShare {
 	private boolean startStreaming = false;
 	private boolean startRecording = false;
 	private boolean startPublishing = false;
-
-	public String label730 = "Desktop Publisher";
-	public String label731 = "This application will publish your screen";
-	public String label732 = "Start Sharing";
-	public String label733 = "Stop Sharing";
-	public String label734 = "Select your screen Area:";
-	public String label735 = "Change width";
-	public String label737 = "Change height";
-	public String label738 = "SharingScreen X:";
-	public String label739 = "SharingScreen Y:";
-	public String label740 = "SharingScreen Width:";
-	public String label741 = "SharingScreen Height:";
-	public String label742 = "Connection was closed by Server";
-	public String label844 = "Show Mouse Position at viewers";
-
-	public String label869 = "Recording";
-	public String label870 = "<HTML>You may record and share your screen at the same time."
-			+ "To enable others to see your screen just hit the start button on the top."
-			+ "To only record the Session it is sufficient to click start recording.</HTML>";
-	public String label871 = "Start Recording";
-	public String label872 = "Stop Recording";
-	public String label878 = "Stop Sharing";
-
-	public String label1089 = "Quality of the ScreenShare: -";
-	public String label1090 = "Very high Quality -";
-	public String label1091 = "High Quality -";
-	public String label1092 = "Medium Quality -";
-	public String label1093 = "Low Quality -";
-	public String label1465 = "Publish";
-	public String label1466 = "Start Publish";
-	public String label1467 = "Stop Publish";
-	public String label1468 = "Host";
-	public String label1469 = "Context";
-	public String label1470 = "Publish Id";
-	public String label1471 = "Reduce the width of the SharingScreen before you try to move it left";
-	public String label1472 = "Reduce the height of the SharingScreen before you try to move it bottom";
-	public String label1473 = "Reduce the x of the SharingScreen before you try to make it wider";
-	public String label1474 = "Reduce the y of the SharingScreen before you try to make it higher";
-
 	public float Ampl_factor = 1f;
 	public boolean isConnected = false;
 
@@ -131,6 +92,7 @@ public class CoreScreenShare {
 			for (String arg : args) {
 				logger.debug("arg: " + arg);
 			}
+			String[] textArray = null;
 			if (args.length == 9) {
 				host = args[0];
 				app = args[1];
@@ -146,7 +108,7 @@ public class CoreScreenShare {
 				allowRecording = Boolean.parseBoolean(args[8]);
 
 				if (labelTexts.length() > 0) {
-					String[] textArray = labelTexts.split(";");
+					textArray = labelTexts.split(";");
 
 					logger.debug("labelTexts :: " + labelTexts);
 
@@ -155,45 +117,7 @@ public class CoreScreenShare {
 					for (int i = 0; i < textArray.length; i++) {
 						logger.debug(i + " :: " + textArray[i]);
 					}
-
-					label730 = textArray[0];
-					label731 = textArray[1];
-					label732 = textArray[2];
-					label733 = textArray[3];
-					label734 = textArray[4];
-					label735 = textArray[5];
-					label737 = textArray[6];
-					label738 = textArray[7];
-					label739 = textArray[8];
-					label740 = textArray[9];
-					label741 = textArray[10];
-					label742 = textArray[11];
-					label844 = textArray[12];
-
-					label869 = textArray[13];
-					label870 = "<html>" + textArray[14] + "</html>";
-					label871 = textArray[15];
-					label872 = textArray[16];
-					label878 = textArray[17];
-
-					label1089 = textArray[18];
-					label1090 = textArray[19];
-					label1091 = textArray[20];
-					label1092 = textArray[21];
-					label1093 = textArray[22];
-					
-					label1465 = textArray[23];
-					label1466 = textArray[24];
-					label1467 = textArray[25];
-					label1468 = textArray[26];
-					label1469 = textArray[27];
-					label1470 = textArray[28];
-					label1471 = textArray[29];
-					label1472 = textArray[30];
-					label1473 = textArray[31];
-					label1474 = textArray[32];
 				}
-
 			} else {
 				System.exit(0);
 			}
@@ -202,7 +126,7 @@ public class CoreScreenShare {
 					+ app + ", port: " + port + ", publish: "
 					+ publishName);
 
-			createWindow();
+			createWindow(textArray);
 		} catch (Exception err) {
 			logger.error("", err);
 		}
@@ -213,9 +137,9 @@ public class CoreScreenShare {
 	// GUI
 	//
 	// ------------------------------------------------------------------------
-	public void createWindow() {
+	public void createWindow(String[] textArray) {
 		try {
-			frame = new ScreenSharerFrame(this);
+			frame = new ScreenSharerFrame(this, textArray);
 			frame.addWindowListener(new WindowAdapter() {
 				public void windowClosing(WindowEvent e) {
 					frame.setVisible(false);

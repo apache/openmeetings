@@ -210,11 +210,15 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 			try {
 				label_viewer = getLabels(language_id, 728, 729, 736, 742);
 
-				label_sharer = getLabels(language_id, 730, 731, 732
-					, 733, 734, 735, 737, 738, 739, 740, 741, 742
-					, 844, 869, 870, 871, 872, 878, 1089, 1090, 1091
-					, 1092, 1093, 1465, 1466, 1467, 1468, 1469, 1470
-					, 1471, 1472, 1473, 1474);
+				label_sharer = getLabels(language_id
+					,  730,  731,  732,  733,  734
+					,  735,  737,  738,  739,  740
+					,  741,  742,  844,  869,  870
+					,  871,  872,  878, 1089, 1090
+					, 1091, 1092, 1093, 1465, 1466
+					, 1467, 1468, 1469, 1470, 1471
+					, 1472, 1473, 1474, 1475, 1476
+					, 1477);
 			} catch (Exception e) {
 				log.error("Error resolving Language labels : ", e);
 			}

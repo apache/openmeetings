@@ -4430,7 +4430,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Host</value>
   </string>
   <string id="1469" name="sharing client">
-    <value>Context</value>
+    <value>Publish App</value>
   </string>
   <string id="1470" name="sharing client">
     <value>Publish Id</value>
@@ -4446,5 +4446,14 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
   <string id="1474" name="sharing client">
     <value>Reduce the y of the SharingScreen before you try to make it higher</value>
+  </string>
+  <string id="1475" name="sharing client">
+    <value>Fill these settings stream your screen data to 3th party providers like justin.tv</value>
+  </string>
+  <string id="1476" name="sharing client">
+    <value>Please start Screen sharing to be able to publish it</value>
+  </string>
+  <string id="1477" name="sharing client">
+    <value>Moderator permission required to start recording</value>
   </string>
 </language>
