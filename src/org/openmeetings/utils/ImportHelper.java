@@ -36,7 +36,7 @@ public class ImportHelper {
 	public static final int getMaxUploadSize(
 			Configurationmanagement cfgManagement) {
 		int result = DEFAULT_MAX_UPLOAD_SIZE;
-		String maxSize = cfgManagement.getConfValue("DEFAULT_MAX_UPLOAD_SIZE", String.class, "" + result);
+		String maxSize = cfgManagement.getConfValue("max_upload_size", String.class, "" + result);
 		try {
 			result = (int) Math.min(Long.parseLong(maxSize), Integer.MAX_VALUE);
 		} catch (Exception e) {
