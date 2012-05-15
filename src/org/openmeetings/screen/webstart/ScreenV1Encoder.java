@@ -106,7 +106,7 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 		for (int y = area.y + area.height - 1; y >= area.y; --y) {
 			for (int x = area.x; x < area.x + area.width; ++x) {
 				int pixel = img.getRGB(x, y);
-				if (!changed && pixel != last.getRGB(x, y)) {
+				if (!changed && (last == null || pixel != last.getRGB(x, y))) {
 					changed = true;
 				}
 				areaBuf[count++] = (byte)(pixel & 0xFF);			// Blue component

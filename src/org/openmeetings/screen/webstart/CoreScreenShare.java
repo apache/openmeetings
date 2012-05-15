@@ -286,9 +286,22 @@ public class CoreScreenShare {
 			return;
 		}
 
-		if (invoke.getCall().getServiceMethodName()
-				.equals("sendRemoteCursorEvent")) {
+		String method = invoke.getCall().getServiceMethodName();
+		if ("sendRemoteCursorEvent".equals(method)) {
 			sendRemoteCursorEvent(invoke.getCall().getArguments()[0]);
+		} else if ("screenSharerAction".equals(method)) {
+			Object[] args = invoke.getCall().getArguments();
+			if (args != null) {
+				@SuppressWarnings("unchecked")
+				HashMap<String, Object> params = (HashMap<String, Object>)args[0];
+				if (params.containsKey("stopPublishing")
+					&& Boolean.parseBoolean("" + params.get("stopPublishing"))) {
+					frame.setPublishingStatus(false);
+				}
+				if (params.containsKey("error")) {
+					frame.setStatus("" + params.get("error"));
+				}
+			}
 		}
 	}
 
