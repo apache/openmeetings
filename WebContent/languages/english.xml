@@ -2045,11 +2045,11 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="506" name="registering_mail_text_head">
-    <value>$APP_NAME SignUp</value>
+    <value>$APP_NAME Account Details</value>
   </string>
 
   <string id="507" name="registering_mail_text_head2">
-    <value>Your user data</value>
+    <value>Your account details</value>
   </string>
 
   <string id="508" name="registering_mail_text_username">
@@ -2069,7 +2069,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="512" name="register_mail_subject">
-    <value>$APP_NAME Sign-Up</value>
+    <value>Your $APP_NAME account details</value>
   </string>
 
   <string id="513" name="reset_password_template_head">
