@@ -167,7 +167,7 @@ public abstract class BaseConverter {
 					boolean doStop = true;
 					while(doStop) {
 						
-						log.debug("### Stream not yet written Thread Sleep - " );
+						log.debug("### Stream not yet written Thread Sleep - " + flvRecordingMetaData.getFlvRecordingMetaDataId());
 						
 						flvRecordingMetaData = flvRecordingMetaDataDaoImpl.getFlvRecordingMetaDataById(flvRecordingMetaData.getFlvRecordingMetaDataId());
 						

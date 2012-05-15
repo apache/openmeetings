@@ -93,7 +93,7 @@ public class FlvRecorderConverter extends BaseConverter {
 				boolean doStop = true;
 				while(doStop) {
 					
-					log.debug("### Stream not yet written Thread Sleep - " );
+					log.debug("### Stream not yet written Thread Sleep - " + flvRecordingMetaDataOfScreen.getFlvRecordingMetaDataId());
 					
 					Thread.sleep(100L);
 					
