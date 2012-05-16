@@ -39,9 +39,11 @@ import org.openmeetings.utils.ImportHelper;
 import org.openmeetings.utils.OMContextListener;
 import org.openmeetings.utils.mail.MailUtil;
 import org.openmeetings.utils.math.CalendarPatterns;
+import org.quartz.SchedulerException;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 public class Admin {
 	private static final Logger log = Red5LoggerFactory.getLogger(Admin.class);
@@ -50,7 +52,8 @@ public class Admin {
 	private InstallationConfig cfg = null;
 	private Options opts = null;
 	private CommandLine cmdl = null;
-	File omHome = null;
+	private File omHome = null;
+	private ClassPathXmlApplicationContext ctx = null; 
 
 	private Admin() {
 		cfg = new InstallationConfig();
@@ -130,115 +133,116 @@ public class Admin {
 	}
 	
 	private ClassPathXmlApplicationContext getApplicationContext(final String ctxName) {
-		OMContextListener omcl = new OMContextListener();
-		omcl.contextInitialized(new ServletContextEvent(new ServletContext() {
-			public void setAttribute(String arg0, Object arg1) {
+		if (ctx == null) {
+			OMContextListener omcl = new OMContextListener();
+			omcl.contextInitialized(new ServletContextEvent(new ServletContext() {
+				public void setAttribute(String arg0, Object arg1) {
+				}
+				
+				public void removeAttribute(String arg0) {
+				}
+				
+				public void log(String arg0, Throwable arg1) {
+				}
+				
+				public void log(Exception arg0, String arg1) {
+				}
+				
+				public void log(String arg0) {
+				}
+				
+				@SuppressWarnings("rawtypes")
+				public Enumeration getServlets() {
+					return null;
+				}
+				
+				@SuppressWarnings("rawtypes")
+				public Enumeration getServletNames() {
+					return null;
+				}
+				
+				public String getServletContextName() {
+					return null;
+				}
+				
+				public Servlet getServlet(String arg0) throws ServletException {
+					return null;
+				}
+				
+				public String getServerInfo() {
+					return null;
+				}
+				
+				@SuppressWarnings("rawtypes")
+				public Set getResourcePaths(String arg0) {
+					return null;
+				}
+				
+				public InputStream getResourceAsStream(String arg0) {
+					return null;
+				}
+				
+				public URL getResource(String arg0) throws MalformedURLException {
+					return null;
+				}
+				
+				public RequestDispatcher getRequestDispatcher(String arg0) {
+					return null;
+				}
+				
+				public String getRealPath(String arg0) {
+					return null;
+				}
+				
+				public RequestDispatcher getNamedDispatcher(String arg0) {
+					return null;
+				}
+				
+				public int getMinorVersion() {
+					return 0;
+				}
+				
+				public String getMimeType(String arg0) {
+					return null;
+				}
+				
+				public int getMajorVersion() {
+					return 0;
+				}
+				
+				@SuppressWarnings("rawtypes")
+				public Enumeration getInitParameterNames() {
+					return null;
+				}
+				
+				public String getInitParameter(String arg0) {
+					return null;
+				}
+				
+				public String getContextPath() {
+					return ctxName;
+				}
+				
+				public ServletContext getContext(String arg0) {
+					return null;
+				}
+				
+				@SuppressWarnings("rawtypes")
+				public Enumeration getAttributeNames() {
+					return null;
+				}
+				
+				public Object getAttribute(String arg0) {
+					return null;
+				}
+			}));
+			try {
+				ctx = new ClassPathXmlApplicationContext("openmeetings-applicationContext.xml");
+			} catch (Exception e) {
+				handleError("Unable to obtain application context", e);
 			}
-			
-			public void removeAttribute(String arg0) {
-			}
-			
-			public void log(String arg0, Throwable arg1) {
-			}
-			
-			public void log(Exception arg0, String arg1) {
-			}
-			
-			public void log(String arg0) {
-			}
-			
-			@SuppressWarnings("rawtypes")
-			public Enumeration getServlets() {
-				return null;
-			}
-			
-			@SuppressWarnings("rawtypes")
-			public Enumeration getServletNames() {
-				return null;
-			}
-			
-			public String getServletContextName() {
-				return null;
-			}
-			
-			public Servlet getServlet(String arg0) throws ServletException {
-				return null;
-			}
-			
-			public String getServerInfo() {
-				return null;
-			}
-			
-			@SuppressWarnings("rawtypes")
-			public Set getResourcePaths(String arg0) {
-				return null;
-			}
-			
-			public InputStream getResourceAsStream(String arg0) {
-				return null;
-			}
-			
-			public URL getResource(String arg0) throws MalformedURLException {
-				return null;
-			}
-			
-			public RequestDispatcher getRequestDispatcher(String arg0) {
-				return null;
-			}
-			
-			public String getRealPath(String arg0) {
-				return null;
-			}
-			
-			public RequestDispatcher getNamedDispatcher(String arg0) {
-				return null;
-			}
-			
-			public int getMinorVersion() {
-				return 0;
-			}
-			
-			public String getMimeType(String arg0) {
-				return null;
-			}
-			
-			public int getMajorVersion() {
-				return 0;
-			}
-			
-			@SuppressWarnings("rawtypes")
-			public Enumeration getInitParameterNames() {
-				return null;
-			}
-			
-			public String getInitParameter(String arg0) {
-				return null;
-			}
-			
-			public String getContextPath() {
-				return ctxName;
-			}
-			
-			public ServletContext getContext(String arg0) {
-				return null;
-			}
-			
-			@SuppressWarnings("rawtypes")
-			public Enumeration getAttributeNames() {
-				return null;
-			}
-			
-			public Object getAttribute(String arg0) {
-				return null;
-			}
-		}));
-		ClassPathXmlApplicationContext applicationContext = null;
-		try {
-			applicationContext = new ClassPathXmlApplicationContext("openmeetings-applicationContext.xml");
-		} catch (Exception e) {
-			handleError("Unable to obtain application context", e);
 		}
-		return applicationContext;
+		return ctx;
 	}
 	
 	private void process(String[] args) {
@@ -322,6 +326,7 @@ public class Admin {
 						File backup = checkRestoreFile(file);
 						dropDB(connectionProperties);
 						
+						shutdownScheduledJobs(ctxName);
 						ImportInitvalues importInit = getApplicationContext(ctxName).getBean(ImportInitvalues.class);
 						importInit.loadSystem(langPath, cfg); 
 						restoreOm(ctxName, backup);
@@ -329,6 +334,7 @@ public class Admin {
 						AdminUserDetails admin = checkAdminDetails(ctxName, langPath);
 						dropDB(connectionProperties);
 						
+						shutdownScheduledJobs(ctxName);
 						ImportInitvalues importInit = getApplicationContext(ctxName).getBean(ImportInitvalues.class);
 						importInit.loadAll(langPath, cfg, admin.login, admin.pass, admin.email, admin.group, admin.tz);
 					}					
@@ -349,6 +355,7 @@ public class Admin {
 					File backup_dir = new File(omUploadTemp, "" + System.currentTimeMillis());
 					backup_dir.mkdirs();
 					
+					shutdownScheduledJobs(ctxName);
 					BackupExport export = getApplicationContext(ctxName).getBean(BackupExport.class);
 					export.performExport(file, backup_dir, includeFiles, omHome.getAbsolutePath());
 					export.deleteDirectory(backup_dir);
@@ -358,7 +365,12 @@ public class Admin {
 				}
 				break;
 			case restore:
-				restoreOm(ctxName, checkRestoreFile(file));
+				try {
+					shutdownScheduledJobs(ctxName);
+					restoreOm(ctxName, checkRestoreFile(file));
+				} catch (Exception e) {
+					handleError("Restore failed", e);
+				}
 				break;
 			case files:
 				try {
@@ -467,15 +479,23 @@ public class Admin {
 		return (pass == null || pass.length() < InstallationConfig.USER_PASSWORD_MINIMUM_LENGTH);
 	}
 	
+	private void shutdownScheduledJobs(String ctxName) throws SchedulerException {
+		SchedulerFactoryBean sfb =  getApplicationContext(ctxName).getBean(SchedulerFactoryBean.class);
+		sfb.getScheduler().shutdown(false);
+	}
+	
 	private void dropDB(ConnectionProperties props) throws Exception {
 		//FIXME drop will not work unless any of the --db-* option is specified
-		//FIXME drop will drop not all tables (tables count is reduced since 1.9)
-		//FIXME drop will throw an exception if table name is changed/table is added
 		if(cmdl.hasOption("drop")) {	
-			String[] mappingToolArgs = {"-sa", "drop", "-p", omHome.getAbsolutePath() + "/WEB-INF/classes/META-INF/persistence.xml",
-					"-connectionDriverName", props.getDriverName(), "-connectionURL", props.getConnectionURL(),
-					"-connectionUserName", props.getConnectionLogin(), "-connectionPassword", props.getConnectionPass()};
-			MappingTool.main(mappingToolArgs);
+			String[] args = {
+					"-schemaAction", "retain,drop"
+					, "-properties", omHome.getAbsolutePath() + "/WEB-INF/classes/META-INF/persistence.xml"
+					, "-connectionDriverName", props.getDriverName()
+					, "-connectionURL", props.getConnectionURL()
+					, "-connectionUserName", props.getConnectionLogin()
+					, "-connectionPassword", props.getConnectionPass()
+					, "-ignoreErrors", "true"};
+			MappingTool.main(args);
 		}
 	}
 	
