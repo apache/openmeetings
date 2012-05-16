@@ -65,38 +65,9 @@ Test the setup values before you enter a room
     
     <handler name="oninit">
     	<![CDATA[
-    	   
-    	    var g = canvas.getUserData();
-            var save = g["showAudioVideoTest"];
-            
-            
             this.startConference();
-            
+            //The pre-test is disabled as its integrated into the choose device settings now
             return;
-    	    
-    	    //The pre-test is disabled as its integrated into the choose device settings now
-            if (!canvas.showAudioVideoTest) {
-                this.startConference();
-            } else if (!this.forceTest && save){
-            	this.startConference();
-            } else {
-
-            	if (this.isDirectLink) {
-            		this._enterMeeting.setAttribute("x",this.width-165);
-            		this._cancel.setAttribute("visibility","hidden");
-            	}
-            	
-		        var t = this;
-        		canvas.videoComp_lc.closeInitTestingApplicationConfirm = function() {
-		        	if ($debug) Debug.write("LC closeInitTestingApplicationConfirm");
-	        		t.closeInitTestingApplicationConfirm();
-		        }
-            	
-            	canvas._loadingAll.hideContentOnly();
-            	if ($debug) Debug.write("canvas.rtmp_lc_name", canvas.rtmp_lc_name, "initTestingApplication", this.x, this.y);
-            	canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "doInitTestingApplication", [this.x, this.y, canvas.thishib.src]);
-            }
-            
     	]]>
     </handler>
     

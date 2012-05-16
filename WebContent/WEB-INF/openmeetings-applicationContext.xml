@@ -131,11 +131,33 @@
 			<value>100000</value>
 		</property>
 	</bean>
+	<bean id="testSetupCleanupJob" class="org.openmeetings.app.quartz.scheduler.TestSetupCleanupJob"/>
+	<bean id="testSetupCleanup" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="testSetupCleanupJob" />
+		</property>
+		<property name="targetMethod">
+			<value>doIt</value>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="triggerTestSetupCleanup" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="testSetupCleanup" />
+		</property>
+		<property name="startDelay">
+			<value>1800000</value> <!--  30 minutes -->
+		</property>
+		<property name="repeatInterval">
+			<value>1800000</value> <!--  30 minutes -->
+		</property>
+	</bean>
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
 				<ref local="triggerSessionClear" />
 				<ref local="triggerMeetingReminder" />
+				<ref local="triggerTestSetupCleanup" />
 			</list>
 		</property>
 	</bean>
