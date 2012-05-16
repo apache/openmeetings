@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 
 public class TestSetupCleanupJob {
 	private static Logger log = Red5LoggerFactory.getLogger(TestSetupCleanupJob.class, OpenmeetingsVariables.webAppRootKey);
+	private long expirationInterval = 60 * 60 * 1000; // 1 hour
 
 	public void doIt() {
 		log.debug("TestSetupClearJob.execute");
@@ -43,9 +44,9 @@ public class TestSetupCleanupJob {
 						}
 					}))
 					{
-						if (file.isFile()) {
-							log.debug("TEST SETUP found: " + file.getAbsolutePath());
-							file.delete(); //deleted
+						if (file.isFile() && file.lastModified() + expirationInterval < System.currentTimeMillis()) {
+							log.debug("expired TEST SETUP found: " + file.getAbsolutePath());
+							file.delete();
 						}
 					}
 				}
