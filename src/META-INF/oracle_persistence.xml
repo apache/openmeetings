@@ -78,7 +78,7 @@
 							, MaxWait=10000 
 							, TestOnBorrow=true 
 							, Username=SYSTEM 
-							Password=admin" />
+							, Password=admin" />
 			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema"/>
 			<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
 			<property name="openjpa.DataCache" value="true"/>
