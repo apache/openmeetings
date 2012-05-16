@@ -62,7 +62,7 @@
 			}
 		</method>
 
-		<method name="showText">
+		<method name="showText" args="refObj">
 			if (this.doBlink) {
 				if ($debug) Debug.write("showText",this._newMessage.opacity);
 				lz.Timer.addTimer( this.fadeDelegate , 1000 );

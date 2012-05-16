@@ -169,7 +169,6 @@
     <labelText y="60" labelid="377" x="140" width="180" fgcolor="0x0000CC">
     	<handler name="oninit">
     		<![CDATA[
-				if($debug) Debug.write("dashboard/getNumberUnreadMessages: ",value);
 				this.setAttribute("text","<u>..."+canvas.getLabelName(377)+"</u>");
 	        ]]>
     	</handler>

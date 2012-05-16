@@ -302,9 +302,12 @@
     	<handler name="onwidth" args="newSub">
             parent.addNewItemButton.updatePosition();
         </handler>
+        
+        <!-- 
         <handler name="oninit">
         	this.currentBtn = this._button1;
         </handler>
+         -->
     	
     	<!--
     	<whiteboardMiniButton name="_button1" isactive="true">

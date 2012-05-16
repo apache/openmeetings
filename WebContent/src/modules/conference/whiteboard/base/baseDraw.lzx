@@ -486,6 +486,8 @@
     			}
     		}
     		
+    		if ($debug) Debug.write("deleteItemByNameSync Found Object: ",eg);
+    		
     		var newA = this.baseactionobjectList[pos];
     		
     		for (var eg=0;eg<this.baseactionobjectList.length;eg++){
@@ -553,81 +555,13 @@
 	<!-- ##############
 		undo/redo
 	 -->
-	<method name="doredo">
-		//Debug.write("redo");
-		<![CDATA[
-		if (this.redolayers.length>0){
-			if (this.boundingref!=null) this.boundingref.removeIt();
-			var lastelement = this.redolayers.pop();
-			var lastActionObject = this.baseredoactionobjectList.pop();
-			//Debug.write(lastActionObject);
-			//Redraw the View on the paintarea
-			if (lastActionObject[0]=='paint'){
-				this.paintactionHistory(lastActionObject,this);lineactionHistory
-			} else if (lastActionObject[0]=='line'){
-				this.lineactionHistory(lastActionObject,this);
-			} else if (lastActionObject[0]=='uline'){
-				this.ulineactionHistory(lastActionObject,this);
-			} else if (lastActionObject[0]=='drawarrow'){
-				this.drawarrowlineactionHistory(lastActionObject,this);
-			} else if(lastActionObject[0]=='letter'){
-				this.drawactionHistory(lastActionObject,this);
-			} else if(lastActionObject[0]=='image'){
-				this.addImageToLayerHistory(lastActionObject,this,false);
-			} else if(lastActionObject[0]=='swf'){
-				this.addSWFToLayerHistory(lastActionObject,this,false);
-			} else if(lastActionObject[0]=='rectangle'){
-				this.drawrectangleToHistory(lastActionObject,this);
-			} else if(lastActionObject[0]=='ellipse'){
-				this.drawellipseToHistory(lastActionObject,this);
-			}
-			//Push to redolayers,ObjectList
-			this.layers.push(this.currentlayer);
-			this.baseactionobjectList.push(lastActionObject);
-			//Remove this View
-			lastelement.prepareForDelete.sendEvent();
-			lastelement.destroy();
-			this.checkStepLayers();
-			this.onsharedMessage('redo',lastActionObject);
-		}
-		]]>
-	</method>
 	
 	<method name="undoredo">
 		<![CDATA[
-		if (this.layers.length>0){
+		if (this.baseactionobjectList.length>0){
 			if (this.boundingref!=null) this.boundingref.removeIt();
-			var lastelement = this.layers.pop();
 			var lastActionObject = this.baseactionobjectList.pop();
-			//Debug.write(lastActionObject);
-			//Redraw the View on the Invisible paintarea
-			if (lastActionObject[0]=='paint'){
-				//Debug.write("Undo Paint: ",lastActionObject);
-				this.paintactionHistory(lastActionObject,this.basdrawredoView);
-			} else if (lastActionObject[0]=='line'){
-				this.lineactionHistory(lastActionObject,this.basdrawredoView);
-			} else if (lastActionObject[0]=='uline'){
-				this.ulineactionHistory(lastActionObject,this.basdrawredoView);
-			} else if (lastActionObject[0]=='drawarrow'){
-				this.drawarrowlineactionHistory(lastActionObject,this.basdrawredoView);
-			} else if(lastActionObject[0]=='letter'){
-				this.drawactionHistory(lastActionObject,this.basdrawredoView);
-			} else if(lastActionObject[0]=='image'){
-				this.addImageToLayerHistory(lastActionObject,this.basdrawredoView,false);
-			} else if(lastActionObject[0]=='swf'){
-				this.addSWFToLayerHistory(lastActionObject,this.basdrawredoView,false);
-			} else if(lastActionObject[0]=='rectangle'){
-				this.drawrectangleToHistory(lastActionObject,this.basdrawredoView);
-			} else if(lastActionObject[0]=='ellipse'){
-				this.drawellipseToHistory(lastActionObject,this.basdrawredoView);
-			}
-			//Push to redolayers,redoObjectList
-			this.redolayers.push(this.currentlayer);
-			this.baseredoactionobjectList.push(lastActionObject);
-			//Remove this View
-			lastelement.prepareForDelete.sendEvent();
-			lastelement.destroy();
-			this.checkStepLayers();		
+			this.deleteItemByNameSync(lastActionObject[lastActionObject.length-1]);
 			this.onsharedMessage('undo',lastActionObject);
 		}
 		]]>
