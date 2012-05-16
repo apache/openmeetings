@@ -68,16 +68,17 @@
 		<class>org.openmeetings.app.persistence.beans.files.FileExplorerItem</class>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		<properties>
-			<property name="openjpa.RuntimeUnenhancedClasses" value="unsupported"/>
-            <property name="openjpa.ConnectionProperties"
-                value="DriverClassName=oracle.jdbc.driver.OracleDriver
-                                  Url=jdbc:oracle:thin:@localhost:1521:openmeetings, 
-                                  create=true,
-                                  MaxActive=100, 
-                                  MaxWait=10000, 
-                                  TestOnBorrow=true, 
-                                  Username=SYSTEM, 
-                                  Password=admin" />
+			<property name="openjpa.RuntimeUnenhancedClasses" value="unsupported" />
+			<property name="openjpa.ConnectionDriverName" value="org.apache.commons.dbcp.BasicDataSource" />
+			<property name="openjpa.ConnectionProperties"
+					value="DriverClassName=oracle.jdbc.driver.OracleDriver
+							Url=jdbc:oracle:thin:@localhost:1521:openmeetings, 
+							create=true,
+							MaxActive=100, 
+							MaxWait=10000, 
+							TestOnBorrow=true, 
+							Username=SYSTEM, 
+							Password=admin" />
 			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema"/>
 			<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
 			<property name="openjpa.DataCache" value="true"/>
