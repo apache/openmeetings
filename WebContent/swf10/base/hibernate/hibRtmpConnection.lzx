@@ -55,6 +55,9 @@
      <handler name="onconnect">
 		if($debug) Debug.info("hibRtmpConnection/onconnect send to LocalConnection ");
 		canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'as3ConnectionSuccess');
+		
+		//reset rights
+        canvas.isAllowedToGiveExclusiveAudio = false;
         // this.overwritePublicSID.doCall();
         //this.setUsernameReconnect.doCall();
     </handler>

@@ -74,6 +74,9 @@
         
         _mainScrollBar.setAttribute("visibility","visible");
         
+        //reset rights
+        canvas.isAllowedToGiveExclusiveAudio = false;
+        
         if (canvas._videocontainer!=null){
             canvas._videocontainer.resetAllValues();
             canvas._videocontainer = null;
