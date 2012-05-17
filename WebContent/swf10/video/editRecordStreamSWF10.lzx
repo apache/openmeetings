@@ -445,7 +445,7 @@
     
     
     <labelText fontstyle="bold" labelid="758"
-			   width="$once{ parent.width-2 }" height="30" multiline="true" y="20" /> 
+			   width="${ parent.width-2 }" height="30" multiline="true" y="20" /> 
 
     <labelText labelid="447" fontsize="11" fontstyle="bold" 
     			x="10" y="80" width="$once{ parent.width-20 }" />
