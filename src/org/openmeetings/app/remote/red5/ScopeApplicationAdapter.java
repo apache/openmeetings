@@ -386,17 +386,22 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	}
 
 	@Override
-	public boolean roomJoin(IClient client, IScope room) {
-		log.debug("roomJoin : ");
+	public boolean roomConnect(IConnection conn, Object[] params) {
+		log.debug("roomConnect : ");
 
 		try {
 
-			IConnection conn = Red5.getConnectionLocal();
 			IServiceCapableConnection service = (IServiceCapableConnection) conn;
-			String streamId = client.getId();
+			String streamId = conn.getClient().getId();
+			
+			boolean isAVClient = false;
+			if (params.length == 1) {
+				isAVClient = Boolean.parseBoolean(params[0].toString());
+			}
 
 			log.debug("### Client connected to OpenMeetings, register Client StreamId: "
-					+ streamId + " scope " + room.getName());
+					+ streamId + " scope " + conn.getScope().getName()+ " isAVClient "+isAVClient);
+			log.debug("params "+params);
 
 			// Set StreamId in Client
 			service.invoke("setId", new Object[] { streamId }, this);
@@ -407,8 +412,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			}
 
 			RoomClient rcm = this.clientListManager.addClientListItem(streamId,
-					room.getName(), conn.getRemotePort(),
-					conn.getRemoteAddress(), swfURL);
+					conn.getScope().getName(), conn.getRemotePort(),
+					conn.getRemoteAddress(), swfURL, isAVClient);
 
 			// Log the User
 			conferenceLogDao.addConferenceLog("ClientConnect",
@@ -864,8 +869,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 										}
 										
 										//If the user was a avclient, we do not broadcast a message about that to everybody
-										if (currentClient.getIsAVClient() == null 
-												|| currentClient.getIsAVClient()) {
+										if (currentClient.getIsAVClient()) {
 											continue;
 										}
 										
@@ -873,8 +877,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 												.getIsScreenClient()) {
 											// screen sharing clients do not receive events
 											continue;
-										} else if (rcl.getIsAVClient() == null || rcl
-												.getIsAVClient()) {
+										} else if (rcl.getIsAVClient()) {
 											// AVClients or potential AVClients do not receive events
 											continue;
 										}
@@ -937,7 +940,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 			}
 			//If its an audio/video client then send the session object with the full 
 			//data to everybody
-			else if (currentClient.getIsAVClient() != null && currentClient.getIsAVClient()) {
+			else if (currentClient.getIsAVClient()) {
 				clientObjectSendToSync = this.clientListManager.getClientByPublicSID(
 											currentClient.getPublicSID(), false);
 			}
@@ -975,7 +978,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 												streamid, currentClient,
 												rcl.getFlvRecordingId());
 							}
-							if (rcl.getIsAVClient() == null || rcl.getIsAVClient()) {
+							if (rcl.getIsAVClient()) {
 								log.debug("RCL getIsAVClient newStream SEND");
 								continue;
 							}
@@ -1402,8 +1405,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 						} else if (rcl.getIsScreenClient() != null
 								&& rcl.getIsScreenClient()) {
 							continue;
-						} else if (rcl.getIsAVClient() != null
-								&& rcl.getIsAVClient()) {
+						} else if (rcl.getIsAVClient()) {
 							continue;
 						}
 						
@@ -2606,8 +2608,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 											.getIsScreenClient()) {
 								// screen sharing clients do not receive events
 								continue;
-							} else if (rcl.getIsAVClient() == null || rcl
-									.getIsAVClient()) {
+							} else if (rcl.getIsAVClient()) {
 								// AVClients or potential AVClients do not receive events
 								continue;
 							} else if (current.getClient().getId().equals(
@@ -3015,7 +3016,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 						
 						if (rcl == null) {
 							continue;
-						} else if (rcl.getIsAVClient() == null || rcl.getIsAVClient()) {
+						} else if (rcl.getIsAVClient()) {
 							continue;
 						} else if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
 							continue;

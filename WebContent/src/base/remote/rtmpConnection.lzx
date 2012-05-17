@@ -42,9 +42,9 @@
             
             this._nc.proxyType = canvas.proxyType;
             
-            var ok = this._nc.connect(src == "null" ? null : src);
+            var ok = this._nc.connect(src == "null" ? null : src, false); //isAVClient = false
             if (this.debug) {
-            	Debug.write("*** debug ***");
+            	if($debug) Debug.write("*** debug ***");
             }
             
             //canvas.currentNC is the reference to the NetConnection that is used in the NetStream

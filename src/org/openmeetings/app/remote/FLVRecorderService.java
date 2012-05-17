@@ -193,8 +193,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 											.getId());
 
 							// Send every user a notification that the recording did start
-							if (rcl.getIsAVClient() != null
-									&& !rcl.getIsAVClient()) {
+							if (!rcl.getIsAVClient()) {
 								((IServiceCapableConnection) conn).invoke(
 										"startedRecording",
 										new Object[] { currentClient }, this);
@@ -241,7 +240,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 							// if the user does publish av, a, v
 							// But we only record av or a, video only is not
 							// interesting
-							(rcl.getIsAVClient() != null && rcl.getIsAVClient() &&
+							(rcl.getIsAVClient() &&
 									(rcl.getAvsettings().equals("av")
 									|| rcl.getAvsettings().equals("a")
 									|| rcl.getAvsettings().equals("v"))) {
@@ -455,7 +454,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 													new Date());
 								}
 
-							} else if (rcl.getIsAVClient() != null && rcl.getIsAVClient()
+							} else if (rcl.getIsAVClient()
 									&& (rcl.getAvsettings().equals("av")
 									|| rcl.getAvsettings().equals("a")
 									|| rcl.getAvsettings().equals("v"))) {
@@ -588,7 +587,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 									rcl.getFlvRecordingMetaDataId(), new Date());
 				}
 
-			} else if (rcl.getIsAVClient() != null && rcl.getIsAVClient() &&
+			} else if (rcl.getIsAVClient() &&
 					(rcl.getAvsettings().equals("a")
 					|| rcl.getAvsettings().equals("v") 
 					|| rcl.getAvsettings().equals("av"))) {
@@ -654,7 +653,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			} else if
 			// if the user does publish av, a, v
 			// But we only record av or a, video only is not interesting
-			(rcl.getIsAVClient() != null && rcl.getIsAVClient() && 
+			(rcl.getIsAVClient() && 
 					(rcl.getAvsettings().equals("av")
 					|| rcl.getAvsettings().equals("a")
 					|| rcl.getAvsettings().equals("v"))) {

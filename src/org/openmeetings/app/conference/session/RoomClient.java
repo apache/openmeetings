@@ -89,7 +89,7 @@ public class RoomClient implements Serializable {
 	 * false the user is a regular user with full session object<br/>
 	 * 
 	 */
-	private Boolean isAVClient = null;
+	private boolean isAVClient = false;
 	
 	/*
 	 * the color of the user, only needed in 4x4 Conference, in these rooms each user has its own
@@ -586,11 +586,11 @@ public class RoomClient implements Serializable {
 	 * @see RoomClient#isAVClient
 	 * @return
 	 */
-	public Boolean getIsAVClient() {
+	public boolean getIsAVClient() {
 		return isAVClient;
 	}
 
-	public void setIsAVClient(Boolean isAVClient) {
+	public void setIsAVClient(boolean isAVClient) {
 		this.isAVClient = isAVClient;
 	}
 

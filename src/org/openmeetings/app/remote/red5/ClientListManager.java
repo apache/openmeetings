@@ -59,7 +59,7 @@ public class ClientListManager {
 				String key = iter.next();
 				RoomClient rcl = this.getClientByStreamId(key);
 				
-				if (rcl.getIsAVClient() == null || rcl.getIsAVClient()) {
+				if (rcl.getIsAVClient()) {
 					continue;
 				}
 				
@@ -76,7 +76,7 @@ public class ClientListManager {
 
 	public synchronized RoomClient addClientListItem(String streamId,
 			String scopeName, Integer remotePort, String remoteAddress,
-			String swfUrl) {
+			String swfUrl, boolean isAVClient) {
 		try {
 
 			// Store the Connection into a bean and add it to the HashMap
@@ -93,6 +93,7 @@ public class ClientListManager {
 			rcm.setSwfurl(swfUrl);
 			rcm.setIsMod(new Boolean(false));
 			rcm.setCanDraw(new Boolean(false));
+			rcm.setIsAVClient(isAVClient);
 
 			if (clientList.containsKey(streamId)) {
 				log.error("Tried to add an existing Client " + streamId);
@@ -171,7 +172,7 @@ public class ClientListManager {
 				if (!rcl.getPublicSID().equals(publicSID)) {
 					continue;
 				}
-				if (rcl.getIsAVClient() == null || rcl.getIsAVClient() != isAVClient) {
+				if (rcl.getIsAVClient() != isAVClient) {
 					continue;
 				}
 				
@@ -290,8 +291,7 @@ public class ClientListManager {
 						rcl.getIsScreenClient()) {
 					continue;
 				}
-				if (rcl.getIsAVClient() == null || 
-						rcl.getIsAVClient()) {
+				if (rcl.getIsAVClient()) {
 					continue;
 				}
 					
