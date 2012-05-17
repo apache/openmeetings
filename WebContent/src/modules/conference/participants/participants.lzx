@@ -222,6 +222,14 @@
     </method>
 
     <method name="setSpeakingByPos" args="publicSID,bool">
+    	var tObj = this._participants.getVideoObjectByPublicSID(publicSID);
+    	if (tObj != null) {
+	    	if (bool){
+	            tObj._miniIcons._loudness.loudness.setAttribute('opacity',1);
+	        } else {
+	            tObj._miniIcons._loudness.loudness.setAttribute('opacity',0.2);
+	        }
+        }
         this._videoviewcontent.setSpeakingByPos(publicSID, bool);
     </method>
 

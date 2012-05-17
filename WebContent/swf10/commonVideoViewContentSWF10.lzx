@@ -353,9 +353,9 @@
     </method>
 
 
-    <method name="setSpeakingByPos" args="publicSID,bool,tControl">
+    <method name="setSpeakingByPos" args="publicSID,bool">
         <![CDATA[
-            if ($debug) Debug.write("setSpeakingByPos ",publicSID,bool,tControl);
+            if ($debug) Debug.write("setSpeakingByPos ",publicSID,bool);
             var obj = this.getVideoObjectByPublicSID(publicSID);
             if (obj == null) {
             	if ($debug) Debug.warn("Could not find user for setSpeakingByPos ",publicSID,bool);
