@@ -18,7 +18,8 @@
  */
 package org.openmeetings.screen.webstart;
 
-import org.apache.geronimo.mail.util.Hex;
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
 import org.red5.client.net.rtmp.ClientExceptionHandler;
 import org.red5.client.net.rtmps.RTMPSClient;
 import org.red5.server.api.service.IPendingServiceCall;
@@ -42,12 +43,12 @@ public class RTMPSScreenShare extends RTMPSClient implements ClientExceptionHand
 		core = new CoreScreenShare(this);
 	};
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws DecoderException {
 		RTMPSScreenShare client = new RTMPSScreenShare();
 		if (args.length < 11) {
 			System.exit(0);
 		}
-		client.setKeystoreBytes(Hex.decode(args[9]));
+		client.setKeystoreBytes(Hex.decodeHex(args[9].toCharArray()));
 		client.setKeyStorePassword(args[10]);
 		client.core.main(args);
 	}

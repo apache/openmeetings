@@ -29,10 +29,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.Semaphore;
 
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.conference.session.RoomClient;
@@ -56,8 +52,6 @@ import org.openmeetings.app.remote.FLVRecorderService;
 import org.openmeetings.app.remote.WhiteBoardService;
 import org.openmeetings.utils.math.CalendarPatterns;
 import org.red5.client.net.rtmp.ClientExceptionHandler;
-import org.red5.client.net.rtmp.RTMPClient;
-import org.red5.io.utils.ObjectMap;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.adapter.ApplicationAdapter;
 import org.red5.server.api.IClient;
@@ -73,19 +67,10 @@ import org.red5.server.api.service.IServiceCapableConnection;
 import org.red5.server.api.stream.IBroadcastStream;
 import org.red5.server.api.stream.IStreamListener;
 import org.red5.server.api.stream.IStreamPacket;
-import org.red5.server.messaging.IMessage;
-import org.red5.server.messaging.IMessageComponent;
-import org.red5.server.messaging.IPipe;
-import org.red5.server.messaging.OOBControlMessage;
-import org.red5.server.messaging.PipeConnectionEvent;
 import org.red5.server.net.rtmp.event.IRTMPEvent;
-import org.red5.server.net.rtmp.event.Notify;
-import org.red5.server.net.rtmp.status.StatusCodes;
-import org.red5.server.stream.StreamState;
 import org.red5.server.stream.StreamingProxy;
 import org.red5.server.stream.message.RTMPMessage;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class ScopeApplicationAdapter extends ApplicationAdapter implements
@@ -138,200 +123,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	private static long broadCastCounter = 0;
 	public static boolean initComplete = false;
 
-	//FIXME copy/pasted StreamingProxy necessary to set ClientExceptionHandler
-	private static class MyStreamingProxy extends StreamingProxy {
-		private static Logger log = LoggerFactory
-				.getLogger(StreamingProxy.class);
-		private ConcurrentLinkedQueue<IMessage> frameBuffer = new ConcurrentLinkedQueue<IMessage>();
-		private String host;
-		private int port;
-		private String app;
-		private RTMPClient rtmpClient;
-		private StreamState state;
-		private String publishName;
-		private int streamId;
-		private String publishMode;
-		private final Semaphore lock = new Semaphore(1, true);
-
-		// task timer
-		private static Timer timer;
-
-		public void init(ClientExceptionHandler exceptionHandler) {
-			rtmpClient = new RTMPClient();
-			rtmpClient.setExceptionHandler(exceptionHandler);
-			setState(StreamState.STOPPED);
-			// create a timer
-			timer = new Timer();
-		}
-
-		public void start(String publishName, String publishMode,
-				Object[] params) {
-			setState(StreamState.CONNECTING);
-			this.publishName = publishName;
-			this.publishMode = publishMode;
-			// construct the default params
-			Map<String, Object> defParams = rtmpClient
-					.makeDefaultConnectionParams(host, port, app);
-			defParams.put("swfUrl", "app:/Red5-StreamProxy.swf");
-			// defParams.put("pageUrl", String.format("http://%s:%d/%s", host, port, app));
-			defParams.put("pageUrl", "");
-			rtmpClient.setSwfVerification(true);
-			// set this as the netstream handler
-			rtmpClient.setStreamEventHandler(this);
-			// connect the client
-			rtmpClient.connect(host, port, defParams, this, params);
-		}
-
-		public void stop() {
-			timer.cancel();
-			if (state != StreamState.STOPPED) {
-				rtmpClient.disconnect();
-			}
-			setState(StreamState.STOPPED);
-			frameBuffer.clear();
-		}
-
-		private void createStream() {
-			setState(StreamState.STREAM_CREATING);
-			rtmpClient.createStream(this);
-		}
-
-		public void onPipeConnectionEvent(PipeConnectionEvent event) {
-			log.debug("onPipeConnectionEvent: {}", event);
-		}
-
-		public void pushMessage(IPipe pipe, IMessage message)
-				throws IOException {
-			if (isPublished() && message instanceof RTMPMessage) {
-				RTMPMessage rtmpMsg = (RTMPMessage) message;
-				rtmpClient.publishStreamData(streamId, rtmpMsg);
-			} else {
-				log.trace("Adding message to buffer. Current size: {}",
-						frameBuffer.size());
-				frameBuffer.add(message);
-			}
-		}
-
-		public void onOOBControlMessage(IMessageComponent source, IPipe pipe,
-				OOBControlMessage oobCtrlMsg) {
-			log.debug("onOOBControlMessage: {}", oobCtrlMsg);
-		}
-
-		/**
-		 * Called when bandwidth has been configured.
-		 */
-		public void onBWDone() {
-			log.debug("onBWDone");
-			rtmpClient.onBWDone(null);
-		}
-
-		public void setHost(String host) {
-			this.host = host;
-		}
-
-		public void setPort(int port) {
-			this.port = port;
-		}
-
-		public void setApp(String app) {
-			this.app = app;
-		}
-
-		public void onStreamEvent(Notify notify) {
-			log.debug("onStreamEvent: {}", notify);
-			ObjectMap<?, ?> map = (ObjectMap<?, ?>) notify.getCall()
-					.getArguments()[0];
-			String code = (String) map.get("code");
-			log.debug("<:{}", code);
-			if (StatusCodes.NS_PUBLISH_START.equals(code)) {
-				setState(StreamState.PUBLISHED);
-				IMessage message = null;
-				while ((message = frameBuffer.poll()) != null) {
-					rtmpClient.publishStreamData(streamId, message);
-				}
-			} else if (StatusCodes.NS_UNPUBLISHED_SUCCESS.equals(code)) {
-				setState(StreamState.UNPUBLISHED);
-			}
-		}
-
-		public void resultReceived(IPendingServiceCall call) {
-			String method = call.getServiceMethodName();
-			log.debug("resultReceived:> {}", method);
-			if ("connect".equals(method)) {
-				// rtmpClient.releaseStream(this, new Object[] { publishName });
-				timer.schedule(new BandwidthStatusTask(), 2000L);
-			} else if ("releaseStream".equals(method)) {
-				// rtmpClient.invoke("FCPublish", new Object[] { publishName },
-				// this);
-			} else if ("createStream".equals(method)) {
-				setState(StreamState.PUBLISHING);
-				Object result = call.getResult();
-				if (result instanceof Integer) {
-					streamId = ((Integer) result).intValue();
-					log.debug("Publishing: {}", state);
-					rtmpClient
-							.publish(streamId, publishName, publishMode, this);
-				} else {
-					rtmpClient.disconnect();
-					setState(StreamState.STOPPED);
-				}
-			} else if ("FCPublish".equals(method)) {
-
-			}
-		}
-
-		protected void setState(StreamState state) {
-			try {
-				lock.acquire();
-				this.state = state;
-			} catch (InterruptedException e) {
-				log.warn("Exception setting state", e);
-			} finally {
-				lock.release();
-			}
-		}
-
-		protected StreamState getState() {
-			return state;
-		}
-
-		public void setConnectionClosedHandler(Runnable connectionClosedHandler) {
-			log.debug("setConnectionClosedHandler: {}", connectionClosedHandler);
-			rtmpClient.setConnectionClosedHandler(connectionClosedHandler);
-		}
-
-		public void setExceptionHandler(ClientExceptionHandler exceptionHandler) {
-			log.debug("setExceptionHandler: {}", exceptionHandler);
-			rtmpClient.setExceptionHandler(exceptionHandler);
-		}
-
-		public boolean isPublished() {
-			return getState().equals(StreamState.PUBLISHED);
-		}
-
-		public boolean isRunning() {
-			return !getState().equals(StreamState.STOPPED);
-		}
-
-		/**
-		 * Continues to check for onBWDone
-		 */
-		private final class BandwidthStatusTask extends TimerTask {
-
-			@Override
-			public void run() {
-				// check for onBWDone
-				log.debug("Bandwidth check done: {}",
-						rtmpClient.isBandwidthCheckDone());
-				// cancel this task
-				this.cancel();
-				// initate the stream creation
-				createStream();
-			}
-
-		}
-	}
-    
 	public synchronized void resultReceived(IPendingServiceCall arg0) {
 		// TODO Auto-generated method stub
 	}
@@ -1028,11 +819,12 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	        IScope scope = conn.getScope();
 	        IBroadcastStream stream = getBroadcastStream(scope, publishName);
 	        IBroadcastScope bsScope = getBroadcastScope(scope, publishName);
-	        final MyStreamingProxy proxy = new MyStreamingProxy();
+	        final StreamingProxy proxy = new StreamingProxy();
 	        proxy.setHost(host);
 	        proxy.setApp(app);
 	        proxy.setPort(1935);
-	        proxy.init(new ClientExceptionHandler() {
+	        proxy.init();
+	        proxy.setExceptionHandler(new ClientExceptionHandler() {
 				public void handleException(Throwable throwable) {
 					result[0] = false;
 					HashMap<String, Object> params = new HashMap<String, Object>();
