@@ -1,3 +1,21 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License") +  you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.openmeetings.cli;
 
 import java.io.BufferedReader;
@@ -280,7 +298,7 @@ public class Admin {
 						System.out.println("Please specify even 'file' option or 'admin user'.");
 						System.exit(1);
 					}
-					//TODO commented for now, since not in use boolean force = cmdl.hasOption("force");
+					boolean force = cmdl.hasOption("force");
 					if (cmdl.hasOption("skip-default-rooms")) {
 						cfg.createDefaultRooms = "0";
 					}
@@ -307,13 +325,13 @@ public class Admin {
 					}
 					String langPath = new File(omHome, ImportInitvalues.languageFolderName).getAbsolutePath(); //FIXME need to be moved to helper
 					ConnectionProperties connectionProperties = new ConnectionProperties();
-					if (cmdl.hasOption("db-type") || cmdl.hasOption("db-host") || cmdl.hasOption("db-port") || cmdl.hasOption("db-name") || cmdl.hasOption("db-user") || cmdl.hasOption("db-pass")) {
+					File conf = new File(omHome, "WEB-INF/classes/META-INF/persistence.xml");
+					if (!conf.exists() || cmdl.hasOption("db-type") || cmdl.hasOption("db-host") || cmdl.hasOption("db-port") || cmdl.hasOption("db-name") || cmdl.hasOption("db-user") || cmdl.hasOption("db-pass")) {
 						String dbType = cmdl.getOptionValue("db-type", "derby");
 						File srcConf = new File(omHome, "WEB-INF/classes/META-INF/" + dbType + "_persistence.xml");
-						File destConf = new File(omHome, "WEB-INF/classes/META-INF/persistence.xml");
 						ConnectionPropertiesPatcher.getPatcher(dbType).patch(
 								srcConf
-								, destConf
+								, conf
 								, cmdl.getOptionValue("db-host", "localhost")
 								, cmdl.getOptionValue("db-port", null)
 								, cmdl.getOptionValue("db-name", null)
@@ -321,6 +339,9 @@ public class Admin {
 								, cmdl.getOptionValue("db-pass", null)
 								, connectionProperties
 								);
+					} else {
+						//get properties from existent persistence.xml
+						connectionProperties = ConnectionPropertiesPatcher.getConnectionProperties(conf);
 					}
 					if (cmdl.hasOption("file")) {
 						File backup = checkRestoreFile(file);
@@ -328,7 +349,7 @@ public class Admin {
 						
 						shutdownScheduledJobs(ctxName);
 						ImportInitvalues importInit = getApplicationContext(ctxName).getBean(ImportInitvalues.class);
-						importInit.loadSystem(langPath, cfg); 
+						importInit.loadSystem(langPath, cfg, force); 
 						restoreOm(ctxName, backup);
 					} else {
 						AdminUserDetails admin = checkAdminDetails(ctxName, langPath);
@@ -336,7 +357,7 @@ public class Admin {
 						
 						shutdownScheduledJobs(ctxName);
 						ImportInitvalues importInit = getApplicationContext(ctxName).getBean(ImportInitvalues.class);
-						importInit.loadAll(langPath, cfg, admin.login, admin.pass, admin.email, admin.group, admin.tz);
+						importInit.loadAll(langPath, cfg, admin.login, admin.pass, admin.email, admin.group, admin.tz, force);
 					}					
 					
 					File installerFile = new File(new File(omHome, ScopeApplicationAdapter.configDirName), InstallationDocumentHandler.installFileName);
@@ -485,15 +506,14 @@ public class Admin {
 	}
 	
 	private void dropDB(ConnectionProperties props) throws Exception {
-		//FIXME drop will not work unless any of the --db-* option is specified
 		if(cmdl.hasOption("drop")) {	
 			String[] args = {
 					"-schemaAction", "retain,drop"
 					, "-properties", omHome.getAbsolutePath() + "/WEB-INF/classes/META-INF/persistence.xml"
-					, "-connectionDriverName", props.getDriverName()
-					, "-connectionURL", props.getConnectionURL()
-					, "-connectionUserName", props.getConnectionLogin()
-					, "-connectionPassword", props.getConnectionPass()
+					, "-connectionDriverName", props.getDriver()
+					, "-connectionURL", props.getURL()
+					, "-connectionUserName", props.getLogin()
+					, "-connectionPassword", props.getPassword()
 					, "-ignoreErrors", "true"};
 			MappingTool.main(args);
 		}

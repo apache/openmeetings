@@ -131,6 +131,6 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 				+ ImportInitvalues.languageFolderName;
 
 		importInitvalues.loadAll(filePath, new InstallationConfig(), username, userpass,
-				useremail, orgname, timeZone);
+				useremail, orgname, timeZone, false);
 	}
 }

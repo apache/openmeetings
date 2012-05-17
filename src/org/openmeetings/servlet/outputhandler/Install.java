@@ -307,7 +307,7 @@ public class Install extends VelocityViewServlet {
 							"url_feed2");
 					
 					getImportInitvalues().loadAll(filePath, cfg, username,
-							userpass, useremail, orgname, timeZone);
+							userpass, useremail, orgname, timeZone, false);
 
 					// update to next step
 					log.debug("add level to install file");

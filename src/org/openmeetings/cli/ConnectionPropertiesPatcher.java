@@ -1,3 +1,21 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License") +  you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.openmeetings.cli;
 
 import java.io.File;
@@ -20,8 +38,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 public abstract class ConnectionPropertiesPatcher {
-	
-	ConnectionProperties connectionProperties;
+	protected static final String URL_PREFIX = "Url=";
+	protected ConnectionProperties connectionProperties;
 	
 	public enum PatcherType {
 		db2
@@ -55,18 +73,36 @@ public abstract class ConnectionPropertiesPatcher {
 		return patcher;
 	}
 	
-	public void patch(File srcXml, File destXml, String host, String port, String db, String user, String pass, ConnectionProperties connectionProperties) throws Exception {
-		this.connectionProperties = connectionProperties;
+	static ConnectionProperties getConnectionProperties(File conf) throws Exception {
+		ConnectionProperties connectionProperties = new ConnectionProperties();
+		Document doc = getDocument(conf);
+		Attr attr = getConnectionProperties(doc);
+		String[] tokens = attr.getValue().split(",");
+		processBasicProperties(tokens, null, null, connectionProperties);
+		
+		return connectionProperties;
+	}
+	
+	private static Document getDocument(File xml) throws Exception {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		//dbFactory.setNamespaceAware(true);
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-		Document doc = dBuilder.parse(srcXml);
-		
+		return dBuilder.parse(xml);
+	}
+	
+	private static Attr getConnectionProperties(Document doc) throws Exception {
 		XPath xPath = XPathFactory.newInstance().newXPath();
 		XPathExpression expr = xPath.compile("/persistence/persistence-unit/properties/property[@name='openjpa.ConnectionProperties']");
 
 		Element element = (Element)expr.evaluate(doc, XPathConstants.NODE);
-		Attr val = element.getAttributeNode("value");
+		return element.getAttributeNode("value");
+	}
+	
+	public void patch(File srcXml, File destXml, String host, String port, String db, String user, String pass, ConnectionProperties connectionProperties) throws Exception {
+		this.connectionProperties = connectionProperties;
+		Document doc = getDocument(srcXml);
+		
+		Attr val = getConnectionProperties(doc);
 		val = patchAttribute(val, host, port, db, user, pass);
 		
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -77,13 +113,13 @@ public abstract class ConnectionPropertiesPatcher {
 	
 	protected Attr patchAttribute(Attr attr, String host, String port, String db, String user, String pass) {
 		String[] tokens = attr.getValue().split(",");
-		patchUserPassDriver(tokens, user, pass);
+		processBasicProperties(tokens, user, pass, connectionProperties);
 		patchDb(tokens, host, port, db);
 		attr.setValue(StringUtils.join(tokens, ","));
 		return attr;
 	}
 
-	protected void patchProp(String[] tokens, int idx, String name, String value) {
+	protected static void patchProp(String[] tokens, int idx, String name, String value) {
 		String prop = tokens[idx].trim();
 		if (prop.startsWith(name)) {
 			prop = name + "=" + StringEscapeUtils.escapeXml(value);
@@ -91,35 +127,42 @@ public abstract class ConnectionPropertiesPatcher {
 		}
 	}
 	
-	protected void patchUserPassDriver(String[] tokens, String user,
-			String pass) {
+	private static void processBasicProperties(String[] tokens, String user,
+			String pass, ConnectionProperties connectionProperties) {
 		String prop;
 		for (int i = 0; i < tokens.length; ++i) {
 			prop = getPropFromPersistence(tokens, i, "DriverClassName");
-			if (prop != null)
-				connectionProperties.setDriverName(prop);
+			if (prop != null) {
+				connectionProperties.setDriver(prop);
+			}
 			
 			if (user != null) {
 				patchProp(tokens, i, "Username", user);
-				connectionProperties.setConnectionLogin(user);
+				connectionProperties.setLogin(user);
 			} else {
 				prop = getPropFromPersistence(tokens, i, "Username");
-				if (prop != null)
-					connectionProperties.setConnectionLogin(prop);
+				if (prop != null) {
+					connectionProperties.setLogin(prop);
+				}
 			}
 			
 			if (pass != null) {
 				patchProp(tokens, i, "Password", pass);
-				connectionProperties.setConnectionPass(pass);
+				connectionProperties.setPassword(pass);
 			} else {
 				prop = getPropFromPersistence(tokens, i, "Password");
-				if (prop != null)
-					connectionProperties.setConnectionPass(prop);
+				if (prop != null) {
+					connectionProperties.setPassword(prop);
+				}
+			}
+			prop = getPropFromPersistence(tokens, i, "Url");
+			if (prop != null) {
+				connectionProperties.setURL(prop);
 			}
 		}
 	}
 	
-	protected String getPropFromPersistence(String[] tokens, int idx, String name){
+	protected static String getPropFromPersistence(String[] tokens, int idx, String name){
 		String prop = tokens[idx].trim();
 		if (prop.startsWith(name)) {
 			//From "Username=root" getting only "root"
@@ -128,5 +171,17 @@ public abstract class ConnectionPropertiesPatcher {
 		return null;
 	}
 	
-	protected abstract void patchDb(String[] tokens, String host, String port, String db);
+	private void patchDb(String[] tokens, String host, String _port, String _db) {
+		for (int i = 0; i < tokens.length; ++i) {
+			String prop = tokens[i].trim();
+			if (prop.startsWith(URL_PREFIX)) {
+				String url = getUrl(prop.substring(URL_PREFIX.length()), host, _port, _db);
+				connectionProperties.setURL(url);
+				tokens[i] = URL_PREFIX + url;
+				break;
+			}
+		}
+	}
+	
+	protected abstract String getUrl(String url, String host, String port, String db);
 }

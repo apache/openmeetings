@@ -967,7 +967,12 @@ public class ImportInitvalues {
 	}
 	// ------------------------------------------------------------------------------
 
-	public void loadSystem(String filePath, InstallationConfig cfg) throws Exception {
+	public void loadSystem(String filePath, InstallationConfig cfg, boolean force) throws Exception {
+		//FIXME dummy check if installation was performed before
+		if(!force && usersDao.getAllUsers().size() > 0) {
+			log.debug("System contains users, no need to install data one more time.");
+			return;
+		}
 		loadMainMenu();
 		loadErrorMappingsFromXML(filePath);
 		loadInitLanguages(filePath);
@@ -984,13 +989,13 @@ public class ImportInitvalues {
 	}
 	
 	public void loadAll(String filePath, InstallationConfig cfg, String username,
-			String userpass, String useremail, String groupame, String timeZone) throws Exception {
+			String userpass, String useremail, String groupame, String timeZone, boolean force) throws Exception {
 		//FIXME dummy check if installation was performed before
-		if(usersDao.getAllUsers().size() > 0) {
+		if(!force && usersDao.getAllUsers().size() > 0) {
 			log.debug("System contains users, no need to install data one more time.");
 			return;
 		}
-		loadSystem(filePath, cfg);
+		loadSystem(filePath, cfg, force);
 		loadInitUserAndOrganisation(username,
 				userpass, useremail, groupame, timeZone, cfg.defaultLangId);
 		
