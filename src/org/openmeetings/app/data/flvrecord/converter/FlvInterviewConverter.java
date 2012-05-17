@@ -631,7 +631,7 @@ public class FlvInterviewConverter extends BaseConverter {
 			String runtimeFile = "interviewMerge" + tnow.getTime() + ".bat";
 
 			// String runtimeFile = "interviewMerge.bat";
-			executable_fileName = ScopeApplicationAdapter.batchFileFir
+			executable_fileName = ScopeApplicationAdapter.batchFileDir
 					+ runtimeFile;
 
 			cmd = new String[1];

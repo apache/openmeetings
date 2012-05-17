@@ -34,7 +34,7 @@ public class TestSetupCleanupJob {
 		log.debug("TestSetupClearJob.execute");
 		try {
 			//FIXME need to move all these staff to helper
-			File streams = new File(ScopeApplicationAdapter.batchFileFir);
+			File streams = new File(ScopeApplicationAdapter.batchFileDir);
 			File[] folders = streams.listFiles();
 			if (folders != null) {
 				for (File folder : folders) {

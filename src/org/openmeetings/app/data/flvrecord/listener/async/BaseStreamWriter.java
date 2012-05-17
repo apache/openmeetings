@@ -33,8 +33,8 @@ import org.red5.io.IStreamableFileService;
 import org.red5.io.ITagWriter;
 import org.red5.io.StreamableFileFactory;
 import org.red5.logging.Red5LoggerFactory;
-import org.red5.server.api.IScope;
-import org.red5.server.api.ScopeUtils;
+import org.red5.server.api.scope.IScope;
+import org.red5.server.util.ScopeUtils;
 import org.slf4j.Logger;
 
 public abstract class BaseStreamWriter implements Runnable {

@@ -25,9 +25,9 @@ import java.util.LinkedList;
 
 import org.slf4j.Logger;
 import org.red5.logging.Red5LoggerFactory;
+import org.red5.server.api.scope.IScope;
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.utils.stringhandlers.ChatString;
-import org.red5.server.api.IScope;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.XppDriver;

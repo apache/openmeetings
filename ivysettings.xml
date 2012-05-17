@@ -32,6 +32,7 @@
 			<url name="googlecode">
 				<artifact pattern="http://openlaszlo-openmeetings-integration.googlecode.com/svn/repository/[artifact](-[revision]).[ext]" />
 				<artifact pattern="http://openmeetings.googlecode.com/svn/repository/[artifact](-[revision]).[ext]" />
+				<artifact pattern="http://red5.googlecode.com/svn/repository/[organisation]/[artifact]/[revision]/[artifact](-[revision]).[ext]" />
 			</url>
 		</chain>
 	</resolvers>

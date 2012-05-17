@@ -65,13 +65,13 @@
 	<classpathentry kind="lib" path="build/red5/dist/lib/mina-integration-beans-2.0.4.jar"/>
 	<classpathentry kind="lib" path="build/red5/dist/lib/mina-integration-jmx-2.0.4.jar"/>
 	<classpathentry kind="lib" path="build/red5/dist/lib/quartz-1.8.5.jar"/>
-	<classpathentry kind="lib" path="build/red5/dist/lib/spring-asm-3.0.6.RELEASE.jar"/>
-	<classpathentry kind="lib" path="build/red5/dist/lib/spring-beans-3.0.6.RELEASE.jar"/>
-	<classpathentry kind="lib" path="build/red5/dist/lib/spring-context-3.0.6.RELEASE.jar"/>
-	<classpathentry kind="lib" path="build/red5/dist/lib/spring-context-support-3.0.6.RELEASE.jar"/>
-	<classpathentry kind="lib" path="build/red5/dist/lib/spring-core-3.0.6.RELEASE.jar"/>
-	<classpathentry kind="lib" path="build/red5/dist/lib/spring-expression-3.0.6.RELEASE.jar"/>
-	<classpathentry kind="lib" path="build/red5/dist/lib/spring-web-3.0.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="build/red5/dist/lib/spring-asm-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="build/red5/dist/lib/spring-beans-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="build/red5/dist/lib/spring-context-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="build/red5/dist/lib/spring-context-support-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="build/red5/dist/lib/spring-core-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="build/red5/dist/lib/spring-expression-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="build/red5/dist/lib/spring-web-3.1.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/batik-anim-jar-1.7.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/batik-awt-util-jar-1.7.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/batik-bridge-jar-1.7.jar"/>
@@ -95,27 +95,16 @@
 	<classpathentry kind="lib" path="build/lib/om/batik-ttf2svg-jar-1.7.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/batik-util-jar-1.7.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/batik-xml-jar-1.7.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/cglib-jar-2.2.2.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/com.springsource.org.aopalliance-jar-1.0.0.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/commons-dbcp-jar-1.4.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/commons-digester-jar-2.1.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/commons-fileupload-jar-1.2.2.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/commons-io-jar-2.1.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/commons-lang-jar-2.6.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/commons-transaction-jar-1.2.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/derby-jar-10.8.2.2.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/derbyclient-jar-10.8.2.2.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/dom4j-jar-1.6.1.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/fop-jar-1.0.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/geronimo-jpa_2.0_spec-bundle-1.1.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/mail-jar-1.4.4.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/mysql-connector-java-jar-5.1.9.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/org.springframework.aop-jar-3.0.6.RELEASE.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/org.springframework.aspects-jar-3.0.6.RELEASE.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/org.springframework.jdbc-jar-3.0.6.RELEASE.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/org.springframework.orm-jar-3.0.6.RELEASE.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/org.springframework.transaction-jar-3.0.6.RELEASE.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/org.springframework.web.servlet-jar-3.0.6.RELEASE.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/postgresql-jar-9.1-901.jdbc4.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/serp-jar-1.13.1.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/velocity-jar-1.7.jar"/>
@@ -128,10 +117,19 @@
 	<classpathentry kind="lib" path="build/lib/om/xpp3-jar-1.1.4c.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/xstream-jar-1.4.2.jar"/>
 	<classpathentry kind="lib" path="build/lib/junit/junit-jar-4.9.jar"/>
-	<classpathentry kind="lib" path="build/lib/junit/org.springframework.test-jar-3.0.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="build/lib/junit/org.springframework.test-jar-3.1.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="build/lib/dtd-generator/trang-jar-20091111.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/axis2-kernel-jar-1.7.0-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/axiom-api-bundle-1.2.13-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="build/red5/dist/commons-cli-jar-1.2.jar"/>
+	<classpathentry kind="lib" path="build/lib/mainlibs/red5-client-jar-1.0-RC2.jar"/>
+	<classpathentry kind="lib" path="build/lib/mainlibs/cglib-jar-2.2.2.jar"/>
+	<classpathentry kind="lib" path="build/lib/mainlibs/commons-fileupload-jar-1.2.2.jar"/>
+	<classpathentry kind="lib" path="build/lib/mainlibs/commons-io-jar-2.1.jar"/>
+	<classpathentry kind="lib" path="build/lib/mainlibs/org.springframework.aspects-jar-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="build/lib/mainlibs/org.springframework.jdbc-jar-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="build/lib/mainlibs/org.springframework.orm-jar-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="build/lib/mainlibs/org.springframework.transaction-jar-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="build/lib/mainlibs/org.springframework.web.servlet-jar-3.1.1.RELEASE.jar"/>
 	<classpathentry kind="output" path="build/classes/eclipse"/>
 </classpath>

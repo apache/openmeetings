@@ -28,7 +28,7 @@ import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingMetaData;
 import org.red5.io.ITag;
 import org.red5.io.flv.impl.Tag;
 import org.red5.logging.Red5LoggerFactory;
-import org.red5.server.api.IScope;
+import org.red5.server.api.scope.IScope;
 import org.slf4j.Logger;
 
 public class StreamVideoWriter extends BaseStreamWriter {

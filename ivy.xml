@@ -20,7 +20,7 @@
 		<conf name="default" />
 		<conf name="mainlib" extends="default" description="Top level libraries" />
 		<conf name="mainlib.ext" extends="mainlib" description="Top level libraries with different pattern" />
-		<conf name="openmeetings" extends="mainlib.ext" description="Openmeetings required libraries" />
+		<conf name="openmeetings" description="Openmeetings required libraries" />
 		<conf name="openmeetings.ext" extends="openmeetings" description="Openmeetings required libraries with different pattern" />
 		<conf name="openmeetings.axis2" extends="openmeetings.ext" description="Axis required libraries with dependencies" />
 		<conf name="anakia" description="Openmeetings required libraries" />
@@ -39,28 +39,25 @@
 		<dependency org="commons-io" name="commons-io" rev="2.1" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.springframework" name="org.springframework.aop" rev="3.0.6.RELEASE" transitive="false">
+		<dependency org="org.springframework" name="org.springframework.aspects" rev="3.1.1.RELEASE" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.springframework" name="org.springframework.aspects" rev="3.0.6.RELEASE" transitive="false">
+		<dependency org="org.springframework" name="org.springframework.jdbc" rev="3.1.1.RELEASE" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.springframework" name="org.springframework.jdbc" rev="3.0.6.RELEASE" transitive="false">
+		<dependency org="org.springframework" name="org.springframework.orm" rev="3.1.1.RELEASE" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.springframework" name="org.springframework.orm" rev="3.0.6.RELEASE" transitive="false">
+		<dependency org="org.springframework" name="org.springframework.transaction" rev="3.1.1.RELEASE" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.springframework" name="org.springframework.transaction" rev="3.0.6.RELEASE" transitive="false">
-			<include type="jar" />
-		</dependency>
-		<dependency org="org.springframework" name="org.springframework.web.servlet" rev="3.0.6.RELEASE" transitive="false">
-			<include type="jar" />
-		</dependency>
-		<dependency org="org.aopalliance" name="com.springsource.org.aopalliance" rev="1.0.0" transitive="false">
+		<dependency org="org.springframework" name="org.springframework.web.servlet" rev="3.1.1.RELEASE" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<dependency org="cglib" name="cglib" rev="2.2.2" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org/red5" name="red5-client" rev="1.0-RC2" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<!-- include type="bundle" / FIXME unable to get openjpa without  sources -->
@@ -244,7 +241,7 @@
 		<dependency org="junit" name="junit" rev="4.9" conf="junit->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.springframework" name="org.springframework.test" rev="3.0.6.RELEASE" conf="junit->*" transitive="false">
+		<dependency org="org.springframework" name="org.springframework.test" rev="3.1.1.RELEASE" conf="junit->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<!--  END OF JUNIT -->

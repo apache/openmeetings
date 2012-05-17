@@ -338,9 +338,11 @@
 			<fileset dir="${red5.lib}" includes="red5.jar" />
 			<fileset dir="${red5.server.lib}" includes="spring-context-3*.jar" />
 			<fileset dir="${red5.server.lib}" includes="spring-core-*.jar" />
+			<fileset dir="${red5.server.lib}" includes="spring-beans-*.jar" />
 			<fileset dir="${red5.server.lib}" includes="logback*.jar" />
 			<fileset dir="${red5.server.lib}" includes="mina-core*.jar" />
 			<fileset dir="${red5.server.lib}" includes="com.springsource.slf4j.api*.jar" />
+			<fileset dir="${mainlibs.lib.dir}" includes="red5-client*.jar" />
 		</copy>
 		<signjar alias="filetest" keystore="${keystore.file}" storepass="secret" lazy="false">
 			<path>

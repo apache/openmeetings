@@ -65,7 +65,7 @@ import org.openmeetings.utils.mail.MailHandler;
 import org.openmeetings.utils.math.CalendarPatterns;
 import org.red5.io.utils.ObjectMap;
 import org.red5.logging.Red5LoggerFactory;
-import org.red5.server.api.IScope;
+import org.red5.server.api.scope.IScope;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;

@@ -18,6 +18,9 @@
  */
 package org.openmeetings.servlet.outputhandler;
 
+import java.io.File;
+import java.io.FileFilter;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -170,12 +173,6 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 			// trim whitespaces cause it is a directory name
 			roomName = StringUtils.deleteWhitespace(roomName);
 
-			String current_dir = getServletContext().getRealPath("/");
-			log.debug("Current_dir: " + current_dir);
-
-			// String jnlpString =
-			// ScreenCastTemplate.getInstance(current_dir).getScreenTemplate(rtmphostlocal,
-			// red5httpport, sid, room, domain);
 			ctx.put("rtmphostlocal", rtmphostlocal); // rtmphostlocal
 			ctx.put("red5httpport", red5httpport); // red5httpport
 
@@ -229,10 +226,21 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 			log.debug("Creating JNLP Template for TCP solution");
 
 			try {
-
+				final String screenShareDirName = "red5-screenshare";
+				//libs
+				StringBuilder libs = new StringBuilder();
+				File screenShareDir = new File(ScopeApplicationAdapter.webAppPath, screenShareDirName);
+				for (File jar : screenShareDir.listFiles(new FileFilter() {
+					public boolean accept(File pathname) {
+						return pathname.getName().endsWith(".jar");
+					}
+				})) {
+					libs.append("\t\t<jar href=\"").append(jar.getName()).append("\"/>\n");
+				}
+				ctx.put("LIBRARIES", libs);
 				log.debug("RTMP Sharer labels :: " + label_sharer);
 
-				codebase = baseURL + "red5-screenshare";
+				codebase = baseURL + screenShareDirName;
 
 				ConnectionType conType = ConnectionType
 						.valueOf(httpServletRequest
