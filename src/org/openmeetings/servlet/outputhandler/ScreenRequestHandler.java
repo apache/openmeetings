@@ -20,10 +20,14 @@ package org.openmeetings.servlet.outputhandler;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.context.Context;
@@ -49,7 +53,7 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
-				return (Sessionmanagement) context.getBean("sessionManagement");
+				return context.getBean(Sessionmanagement.class);
 			}
 		} catch (Exception err) {
 			log.error("[getSessionManagement]", err);
@@ -62,8 +66,7 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
-				return (Configurationmanagement) context
-						.getBean("cfgManagement");
+				return context.getBean(Configurationmanagement.class);
 			}
 		} catch (Exception err) {
 			log.error("[getCfgManagement]", err);
@@ -76,7 +79,7 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
-				return (Fieldmanagment) context.getBean("fieldmanagment");
+				return context.getBean(Fieldmanagment.class);
 			}
 		} catch (Exception err) {
 			log.error("[getFieldmanagment]", err);
@@ -121,6 +124,9 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 			log.debug("sid: " + sid);
 
 			Long users_id = getSessionManagement().checkSession(sid);
+			if (users_id < 0) {
+				throw new Exception("Request from invalid user " + users_id);
+			}
 
 			String publicSID = httpServletRequest.getParameter("publicSID");
 			if (publicSID == null) {
@@ -237,6 +243,7 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 				})) {
 					libs.append("\t\t<jar href=\"").append(jar.getName()).append("\"/>\n");
 				}
+				addKeystore(ctx);
 				ctx.put("LIBRARIES", libs);
 				log.debug("RTMP Sharer labels :: " + label_sharer);
 
@@ -317,4 +324,58 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 		return null;
 	}
 
+	private StringBuilder addArgument(StringBuilder sb, Object arg) {
+		return sb.append("\t\t<argument>").append(arg).append("</argument>\n");
+	}
+	
+	private void addKeystore(Context ctx) {
+		log.debug("RTMP Sharer Keystore :: start");
+		FileInputStream fis = null;
+		try {
+			//FIXME hack !!!!
+			File root = new File(ScopeApplicationAdapter.webAppPath).getParentFile().getParentFile();
+			File conf = new File(root, "conf");
+
+			File keyStore = new File(conf, "keystore.screen");
+			if (keyStore.exists()) {
+				Properties red5Props = new Properties();
+				red5Props.load(new FileInputStream(new File(conf, "red5.properties")));
+				
+				byte keyBytes[] = new byte[(int)keyStore.length()];
+				fis = new FileInputStream(keyStore);
+				fis.read(keyBytes);
+				
+				StringBuilder sb = new StringBuilder();
+				sb = addArgument(addArgument(sb, Hex.encodeHexString(keyBytes)), red5Props.getProperty("rtmps.keystorepass"));
+				ctx.put("KEYSTORE", sb);
+				
+				/*
+				KeyStore ksIn = KeyStore.getInstance(KeyStore.getDefaultType());
+				ksIn.load(new FileInputStream(keyStore), red5Props.getProperty("rtmps.keystorepass").toCharArray());
+				ByteArrayInputStream bin = new ByteArrayInputStream()
+				
+				byte fileContent[] = new byte[(int)file.length()];
+				sb = addArgument(sb, Object arg)
+				ctx.put("$KEYSTORE", users_id);
+				/*
+				KeyStore ksOut = KeyStore.getInstance(KeyStore.getDefaultType());
+				for (Certificate cert : ksIn.getCertificateChain("red5")) {
+					PublicKey pub = cert.getPublicKey();
+					TrustedCertificateEntry tce = new TrustedCertificateEntry(cert);
+					tce.
+				}
+				*/
+			}
+		} catch (Exception e) {
+			//no op
+		} finally {
+			if (fis != null) {
+				try {
+					fis.close();
+				} catch (IOException e) {
+					// no op
+				}
+			}
+		}
+	}
 }

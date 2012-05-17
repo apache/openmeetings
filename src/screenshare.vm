@@ -29,7 +29,7 @@ limitations under the License.
 	</security>	
 	<resources> 
 		<j2se version='1.4+'/>
-$LIBRARIES 
+$LIBRARIES
     </resources> 
     <application-desc main-class='$startUpClass'>
     	<argument>$red5-host</argument> 
@@ -40,6 +40,7 @@ $LIBRARIES
     	<argument>$organization_id</argument> 
     	<argument>$default_quality_screensharing</argument>
     	<argument>$user_id</argument>   
-    	<argument>$allowRecording</argument>   
+    	<argument>$allowRecording</argument>
+$KEYSTORE
     </application-desc> 
 </jnlp> 

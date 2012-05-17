@@ -18,9 +18,11 @@
  */
 package org.openmeetings.screen.webstart;
 
+import org.apache.geronimo.mail.util.Hex;
 import org.red5.client.net.rtmp.ClientExceptionHandler;
 import org.red5.client.net.rtmps.RTMPSClient;
 import org.red5.server.api.service.IPendingServiceCall;
+import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.net.rtmp.Channel;
 import org.red5.server.net.rtmp.RTMPConnection;
 import org.red5.server.net.rtmp.codec.RTMP;
@@ -41,7 +43,23 @@ public class RTMPSScreenShare extends RTMPSClient implements ClientExceptionHand
 	};
 
 	public static void main(String[] args) {
-		new RTMPSScreenShare().core.main(args);
+		RTMPSScreenShare client = new RTMPSScreenShare();
+		if (args.length < 11) {
+			System.exit(0);
+		}
+		client.setKeystoreBytes(Hex.decode(args[9]));
+		client.setKeyStorePassword(args[10]);
+		client.core.main(args);
+	}
+	
+	@Override
+	public void connect(String server, int port, String application,
+			IPendingServiceCallback connectCallback) {
+		try { //FIXME need to be removed
+			super.connect(server, port, application, connectCallback);
+		} catch (NullPointerException npe) {
+			//no op, since RTMPSClient throws NPE
+		}
 	}
 	
 	// ------------------------------------------------------------------------
