@@ -621,7 +621,16 @@
         
         <view name="_loudness" x="120" >
             <view x="0" y="0" name="loudness" resource="speaking" opacity="0.2"
-                  onmouseover="" onmouseout="" >        
+                  onmouseover="" onmouseout="" >      
+			    <handler name="onclick">
+					<![CDATA[
+				      	if (canvas.ismoderator || canvas.isAllowedToGiveExclusiveAudio) {
+				            canvas.thishib.giveExclusiveAudio.setExclusiveAudio(parent.parent.parent.refObj.publicSID);
+				        } else {
+				        	new lz.labelerrorPopup(canvas.main_content._content.inner,{errorlabelid:1478});    
+				        }
+					]]>
+				</handler> 
                 <labelTooltip inittwice="true" labelid="372" />
             </view>
         </view>    

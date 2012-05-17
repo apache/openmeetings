@@ -1140,7 +1140,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>ir al final</value>
   </string>
   <string id="372" name="videobox">
-    <value>el usuario habla</value>
+    <value>el usuario habla (By clicking here you can give exclusive audio / mute the microphone of others)</value>
   </string>
   <string id="373" name="videobox">
     <value>encender o apagar sonido</value>
@@ -4463,5 +4463,8 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
   <string id="1477" name="sharing client">
     <value>Moderator permission required to start recording</value>
+  </string>
+  <string id="1478" name="no right for exclusive audio">
+    <value>You don't have permission to apply exclusive audio to any participant. You need moderation role or the right for exclusive audio to make any microphone exclusive turned on..</value>
   </string>
 </language>

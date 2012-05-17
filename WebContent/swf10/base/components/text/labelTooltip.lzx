@@ -33,6 +33,15 @@
         
     <handler name="onmouseover" reference="this.parent">
     	<![CDATA[
+            this.doonmouseover();
+        ]]>        
+    </handler>
+    <handler name="onmouseout" reference="this.parent">
+        this.doonmouseout();
+    </handler>
+    
+    <method name="doonmouseover">
+    	<![CDATA[
             this.setContent.sendEvent();
 	    	if (this.ismenubuttonlabel){
 	    		this.parent.setLabel();
@@ -64,10 +73,11 @@
 	        this.holder.setAttribute('x',xVal);
 	        this.holder.setAttribute('y',yVal);
         ]]>        
-    </handler>
-    <handler name="onmouseout" reference="this.parent">
+    </method>
+    <method name="doonmouseout">
         this.holder.destroy();
-    </handler>
+    </method>
+    
     <handler name="onmouseup" reference="this.parent">
         this.holder.destroy();
     </handler>

@@ -429,7 +429,16 @@
 	<view name="_loudness" x="1" 
 	       y="${parent.height - 20 - ((parent._innerbottom.visible) ? 18 : 0) }">
 		<view x="2" y="2" name="loudness" resource="speaking" opacity="0.2"
-			  onmouseover="" onmouseout="" >		
+			  onmouseover="" onmouseout="" >	
+			<handler name="onclick">
+				<![CDATA[
+			      	if (canvas.ismoderator || canvas.isAllowedToGiveExclusiveAudio) {
+			          	parent.parent.giveExclusiveAudio();
+			        } else {
+			        	new lz.labelerrorPopupSWF10(canvas,{errorlabelid:1478});
+			        }
+				]]>
+			</handler> 	
 			<labelTooltip inittwice="true" labelid="372" />
 		</view>
 	</view>
@@ -503,14 +512,7 @@
 
     <view name="_giveExclusiveAudioView" valign="middle" align="center" visible="false">
         <view name="_micButton" width="40" height="40" resource="mic_rsc" showhandcursor="true">
-        	<handler name="onclick">
-			      <![CDATA[
-			      	if (canvas.ismoderator || canvas.isAllowedToGiveExclusiveAudio) {
-			          	parent.parent.giveExclusiveAudio();
-			          }
-			      ]]>
-			</handler> 
-            <labelTooltip labelid="1386" />
+            <labelTooltip name="_toolTipTextExclusiveAudio" labelid="1386" />
         </view>
     </view>
 
@@ -523,6 +525,7 @@
             return;
         }
         if (canvas.ismoderator || canvas.isAllowedToGiveExclusiveAudio) {
+        	this._giveExclusiveAudioView._micButton._toolTipTextExclusiveAudio.doonmouseover();
             this._giveExclusiveAudioView.setAttribute("visible", true);
         }
         ]]>
@@ -536,6 +539,7 @@
         if (this.minimized) {
             return;
         }
+        this._giveExclusiveAudioView._micButton._toolTipTextExclusiveAudio.doonmouseout();
         this._giveExclusiveAudioView.setAttribute("visible", false);
         ]]>
     </handler> 
@@ -543,7 +547,10 @@
     <handler name="onclick">
 		<![CDATA[
 	      	if (canvas.ismoderator || canvas.isAllowedToGiveExclusiveAudio) {
+	      		this._giveExclusiveAudioView._micButton._toolTipTextExclusiveAudio.doonmouseout();
 	          	this.giveExclusiveAudio();
+	        } else {
+				new lz.labelerrorPopupSWF10(canvas,{errorlabelid:1478});        
 	        }
 		]]>
 	</handler> 

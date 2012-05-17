@@ -106,6 +106,8 @@
 	
 	<handler name="oninit">
 		<![CDATA[
+			//Make this view the upmost in the z-Index order
+			canvas.inner.bringToFront();
 		
 			this.counterDelegate = new LzDelegate( this, "count" );
 		
@@ -281,6 +283,9 @@
                         canvas.videoComp_lc.send(canvas.videoComp_lc_name, "onStartBroadcast", this.currentClient.broadCastID, settings);
                     } else {
                         this.myvideocontainer.setAttribute("visibility","visible");
+                        if (this.myvideocontainer.minimized) {
+                            this.myvideocontainer.reminimize();
+                        }
                     }
                     break;
 	    		case "av":
@@ -289,6 +294,9 @@
                         canvas.videoComp_lc.send(canvas.videoComp_lc_name, "onStartBroadcast", this.currentClient.broadCastID, settings);
                     } else {
                         this.myvideocontainer.setAttribute("visibility","visible");
+                        if (this.myvideocontainer.minimized) {
+                            this.myvideocontainer.reminimize();
+                        }
                     }
 
 	    			break;
@@ -313,6 +321,9 @@
                         canvas.videoComp_lc.send(canvas.videoComp_lc_name, "onStartBroadcast", this.currentClient.broadCastID, settings);
                     } else {
                         this.myvideocontainer.setAttribute("visibility","visible");
+                        if (this.myvideocontainer.minimized) {
+                            this.myvideocontainer.reminimize();
+                        }
                     }
 	    			break;
 	    		case "n":
