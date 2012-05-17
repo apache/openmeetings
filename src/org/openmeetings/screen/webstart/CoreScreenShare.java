@@ -111,7 +111,7 @@ public class CoreScreenShare {
 				logger.debug("arg: " + arg);
 			}
 			String[] textArray = null;
-			if (args.length > 9) {
+			if (args.length > 8) {
 				host = args[0];
 				app = args[1];
 				port = Integer.parseInt(args[2]);
