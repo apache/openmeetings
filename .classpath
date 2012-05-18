@@ -101,7 +101,6 @@
 	<classpathentry kind="lib" path="build/lib/om/dom4j-jar-1.6.1.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/fop-jar-1.0.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/mail-jar-1.4.4.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/mysql-connector-java-jar-5.1.9.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/postgresql-jar-9.1-901.jdbc4.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/serp-jar-1.13.1.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/velocity-jar-1.7.jar"/>

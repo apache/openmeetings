@@ -30,6 +30,7 @@
 		<conf name="dtd" description="Dtd-generator dependencies" />
 		<conf name="svntask" description="Svn task dependencies" />
 		<conf name="openlaszlo" description="Openlaszlo dependencies" />
+		<conf name="mysql" description="MySQL JDBC driver" />
 	</configurations>
 	<dependencies>
 		<!--  START OF mainlib -->
@@ -165,9 +166,6 @@
 		<dependency org="org.apache.derby" name="derbyclient" rev="10.8.2.2" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="mysql" name="mysql-connector-java" rev="5.1.9" conf="openmeetings->*" transitive="false">
-			<include type="jar" />
-		</dependency>
 		<dependency org="postgresql" name="postgresql" rev="9.1-901.jdbc4" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
@@ -289,6 +287,12 @@
 			<include type="jar" />
 		</dependency>
 		<!--  END OF Command Line Admin -->
+		
+		<!--  START OF MySQL Driver -->
+		<dependency org="mysql" name="mysql-connector-java" rev="5.1.9" conf="mysql->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<!--  END OF MySQL Driver -->
 	</dependencies>
 </ivy-module>
 

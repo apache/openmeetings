@@ -190,13 +190,12 @@
 
 		<chmod dir="${red5.root}" perm="755" includes="**/*.sh" />
 
+		<antcall target="-process-db" inheritAll="true" inheritRefs="true"/>
 		<copy todir="${dist.persistence.dir}">
 			<fileset file="src/META-INF/*.xml">
 				<exclude name="services.xml" />
 			</fileset>
 		</copy>
-		<echo message="db.provider == ${db}"/>
-		<copy file="src/META-INF/${db}_persistence.xml" tofile="${dist.persistence.dir}/persistence.xml" overwrite="true"/>
 
 		<!-- add language files from .war version -->
 		<copy todir="${dist.webapps.dir}/languages">
@@ -277,10 +276,16 @@
 			<fileset dir="src/">
 				<include name="META-INF/services.xml" />
 			</fileset>
+			<fileset dir="${main.out.dir}">
+				<include name="META-INF/LICENSE" />
+				<include name="META-INF/NOTICE" />
+			</fileset>
 		</jar>
 		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/openmeetings-WebService-${jar.suffix}.jar">
 			<fileset dir="${main.out.dir}">
 				<include name="**/openmeetings/axis/**" />
+				<include name="META-INF/LICENSE" />
+				<include name="META-INF/NOTICE" />
 			</fileset>
 		</jar>
 	</target>
@@ -298,6 +303,8 @@
 		<jar destfile="${screenshare.out.dir}/red5-screenshare.jar">
 			<fileset dir="${main.out.dir}">
 				<include name="org/openmeetings/screen/**" />
+				<include name="META-INF/LICENSE" />
+				<include name="META-INF/NOTICE" />
 			</fileset>
 			<fileset file="${red5-screenshare.resources}/logback.xml"/>
 			<manifest>
@@ -410,6 +417,8 @@
 			<classpath refid="compile.classpath" />
 			<compilerarg value="-Aopenjpa.metamodel=true" />
 		</javac>
+		<copy file="LICENSE" tofile="${main.out.dir}/META-INF/LICENSE" overwrite="true"/>
+		<copy file="NOTICE" tofile="${main.out.dir}/META-INF/NOTICE" overwrite="true"/>
 	</target>
 
 	<target name="doStartServer" depends="compile">
@@ -678,6 +687,8 @@
 		<available classpathref="anakia.classpath" classname="org.apache.oro.text.GlobCompiler" property="anakia.installed"/>
 		<available classpathref="rat.classpath" classname="org.apache.rat.Report" property="rat.installed"/>
 		<available classpathref="svntask.classpath" classname="org.tmatesoft.svn.core.SVNCommitInfo" property="svntask.installed"/>
+		<available classpathref="compile.classpath" classname="com.mysql.jdbc.Driver" property="mysql.installed"/>
+		<available classpathref="compile.classpath" classname="org.apache.derby.jdbc.ClientDriver" property="derby.installed"/>
 		<available file="${laszlo.home}/WEB-INF/lib" type="dir" property="laszlo.installed"/>
 		<available file="${red5.lib}/red5.sh" type="file" property="red5.installed"/>
 	</target>
@@ -829,6 +840,35 @@
 			<param name="ivy.lib.location" value="${red5.lib}"/>
 		</antcall>
 	</target>
+			
+	<target name="-retrieve-db2" unless="db2.installed" description="Retrieves the libraries if needed" depends="-availability-check">
+		<!-- empty -->
+	</target>
+	
+	<target name="-retrieve-derby" unless="derby.installed" description="Retrieves the libraries if needed" depends="-availability-check">
+		<!-- retrieved automatically, added for compatibility -->
+	</target>
+	
+	<target name="-retrieve-mysql" unless="mysql.installed" description="Retrieves the libraries if needed" depends="-availability-check">
+		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
+			<param name="ivy.conf.name" value="mysql"/>
+			<param name="ivy.lib.location" value="${om.lib.dir}"/>
+		</antcall>
+	</target>
+	
+	<target name="-retrieve-oracle" unless="oracle.installed" description="Retrieves the libraries if needed" depends="-availability-check">
+		<!-- empty -->
+	</target>
+	
+	<target name="-retrieve-postgres" unless="postgres.installed" description="Retrieves the libraries if needed" depends="-availability-check">
+		<!-- retrieved automatically, added for compatibility -->
+	</target>
+	
+	<target name="-process-db" description="performs DB related tasks based on passed DB type">
+		<echo message="db.provider == ${db}"/>
+		<antcall target="-retrieve-${db}" inheritAll="true" inheritRefs="true"/>
+		<copy file="src/META-INF/${db}_persistence.xml" tofile="src/META-INF/persistence.xml" overwrite="true"/>
+	</target>
 	
 	<!-- Clean targets -->
 	<!-- Remove classes directory for clean build -->
@@ -861,7 +901,6 @@
 		<antcall target="-retrieve-tools.jar" inheritAll="true" inheritRefs="true"/>
 		<antcall target="-retrieve-openlaszlo" inheritAll="true" inheritRefs="true"/>
 		<antcall target="-retrieve-cmdadmin" inheritAll="true" inheritRefs="true"/>
-		<echo message="db.provider == ${db}"/>
-		<copy file="src/META-INF/${db}_persistence.xml" tofile="src/META-INF/persistence.xml" overwrite="true"/>
+		<antcall target="-process-db" inheritAll="true" inheritRefs="true"/>
 	</target>
 </project>
