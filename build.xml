@@ -300,7 +300,7 @@
 			<classpath refid="compile.classpath" />
 		</manifestclasspath>
 		<!-- Screen Share -->
-		<jar destfile="${screenshare.out.dir}/red5-screenshare.jar">
+		<jar destfile="${screenshare.out.dir}/${project.distname}-screenshare-${jar.suffix}.jar">
 			<fileset dir="${main.out.dir}">
 				<include name="org/openmeetings/screen/**" />
 				<include name="META-INF/LICENSE" />
