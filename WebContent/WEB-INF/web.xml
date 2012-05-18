@@ -30,6 +30,7 @@
 		<welcome-file>login.html</welcome-file>
 		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.htm</welcome-file>
+		<welcome-file>networktesting.swf10.swf</welcome-file>
 	</welcome-file-list>
     
     <!-- Custom logging like described in Paul Gregoire Patch: 
@@ -142,6 +143,10 @@
         <servlet-name>BackupExport</servlet-name>
         <servlet-class>org.openmeetings.servlet.outputhandler.BackupExportFacade</servlet-class>
     </servlet> 
+    <servlet>
+        <servlet-name>NetworkTesting</servlet-name>
+        <servlet-class>org.openmeetings.servlet.outputhandler.NetworkTestingServlet</servlet-class>
+    </servlet>
 	
 	<servlet-mapping>
 		<servlet-name>spring-mvc</servlet-name>
@@ -199,6 +204,10 @@
     <servlet-mapping>
         <servlet-name>BackupExport</servlet-name>
         <url-pattern>/BackupExport</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NetworkTesting</servlet-name>
+        <url-pattern>/NetworkTesting</url-pattern>
     </servlet-mapping>
     <mime-mapping>
         <extension>inc</extension>

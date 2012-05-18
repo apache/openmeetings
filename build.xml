@@ -375,6 +375,27 @@
 		</java>
 	</target>
 
+        <target name="compile.laszlo.networktesting">
+            <copy todir="${dist.webapps.dir}/testingToolsFiles">
+                <fileset dir="${webcontent.src.dir}/testingToolsFiles" includes="*" />
+            </copy>
+            <java
+                classname="org.openlaszlo.compiler.Main"
+                fork="true"
+                newenvironment="true"
+                failonerror="true"
+                dir="${laszlo.as3.src.dir}/networkTesting"
+                classpathref="laszlo.lib"
+            >
+                <jvmarg value="-DLPS_HOME=${laszlo.home}" />
+                <jvmarg value="-Dlzdebug=${laszlo.debug}" />
+                <jvmarg value="-Dlzproxied=${laszlo.proxied}" />
+                <jvmarg value="-Xms512M" />
+                <jvmarg value="-Xmx512M" />
+                <arg line="--runtime=swf10 --dir ${out.dir.swf} --onerror warn networktesting.lzx" />
+            </java>
+        </target>
+
 	<target name="compile.laszlo.main.debug.as3" depends="-retrieve-openlaszlo">
 		<java classname="org.openlaszlo.compiler.Main" fork="true" newenvironment="true" failonerror="true" dir="${laszlo.as3.src.dir}" classpathref="laszlo.lib">
 			<jvmarg value="-DLPS_HOME=${laszlo.home}" />

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+
+-->
+<library>
+
+<class name="PingTool">
+
+    <switch>
+        <when property="$as3">
+            <passthrough>
+                import flash.display.*;
+                import flash.events.*;
+                import flash.net.*;
+                import flash.utils.*;
+            </passthrough>
+        </when>
+    </switch>
+
+    <attribute name="startTime" type="number" value="0" />
+    <attribute name="wholeTime" type="number" value="0" />
+    <attribute name="testsFinished" type="number" value="0" />
+    <attribute name="testsCount" type="number" value="10" />
+    <attribute name="successfulTestsCount" type="number" value="10" />
+
+    <attribute name="request" value="null" />
+    <attribute name="loader" value="null" />
+
+
+    <method name="ping" args="hostUrl">
+        this.request = new URLRequest(hostUrl);
+        this.loader = new URLLoader();
+        this.loader.addEventListener(Event.COMPLETE, this.onComplete);
+        this.loader.addEventListener(IOErrorEvent.IO_ERROR, this.onError);
+        this.testsFinished = 0;
+        this.wholeTime = 0;
+        this.successfulTestsCount = 0;
+
+        if($debug) Debug.write("Start pinging...");
+        this.startTime = getTimer();
+        this.loader.load(this.request);
+    </method>
+
+    <method name="onComplete" args="e">
+        <![CDATA[
+        var endTime = getTimer();
+        var pingTime = endTime - this.startTime;
+        this.wholeTime += pingTime;
+        if($debug) Debug.write("Ping time: ", pingTime, " ms");
+
+        this.testsFinished++;
+        this.successfulTestsCount++;
+        if (this.testsFinished < this.testsCount) {
+            this.startTime = getTimer();
+            this.loader.load(this.request);
+        } else {
+            var averageTime = wholeTime / this.successfulTestsCount;
+            if($debug) Debug.write("Average ping time: ", averageTime, " ms");
+        }
+        ]]>
+    </method>
+
+    <method name="onError" args="e">
+        <![CDATA[
+        if($debug) Debug.write("Error: ", e);
+
+        this.testsFinished++;
+        if (this.testsFinished < this.testsCount) {
+            this.startTime = getTimer();
+            this.loader.load(this.request);
+        } else {
+            var averageTime = wholeTime / this.successfulTestsCount;
+            if($debug) Debug.write("Average ping time: ", averageTime, " ms");
+        }
+        ]]>
+    </method>
+
+</class>
+
+</library>
