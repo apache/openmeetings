@@ -101,7 +101,7 @@
 				</li>
 				<li>Import the intermediate certificate(s) you normally receive with
 					the certificate:
-					keytool -import -alias intermed -keystore red5/conf/ keystore -trustcacerts
+					keytool -import -alias intermed -keystore red5/conf/keystore -trustcacerts
 					-file intermediate.crt
 				</li>
 				<li>Import the certificate you received: keytool -import -alias red5

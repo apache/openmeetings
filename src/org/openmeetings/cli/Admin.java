@@ -372,7 +372,7 @@ public class Admin {
 						file = "backup_" + CalendarPatterns.getTimeForStreamId(new Date()) + ".zip";
 						System.out.println("File name was not specified, '" + file + "' will be used");
 					}
-					boolean includeFiles = Boolean.getBoolean(cmdl.getOptionValue("exclude-files", "true"));
+					boolean includeFiles = Boolean.parseBoolean(cmdl.getOptionValue("exclude-files", "true"));
 					File backup_dir = new File(omUploadTemp, "" + System.currentTimeMillis());
 					backup_dir.mkdirs();
 					

@@ -2438,7 +2438,7 @@ public class BackupImportController extends AbstractUploadController {
 		// Now check the room files and import them
 		File roomFilesFolder = new File(importBaseDir, "roomFiles");
 
-		String library_dir = current_dir + OpenmeetingsVariables.UPLOAD_DIR + File.separatorChar;
+		File library_dir = new File(current_dir, OpenmeetingsVariables.UPLOAD_DIR);
 
 		log.debug("roomFilesFolder PATH " + roomFilesFolder.getAbsolutePath());
 
@@ -2448,13 +2448,7 @@ public class BackupImportController extends AbstractUploadController {
 			for (File file : files) {
 				if (file.isDirectory()) {
 
-					String parentFolderName = file.getName();
-
-					// Is a room folder or the profiles folder
-					String parentPath = library_dir + parentFolderName
-							+ File.separatorChar;
-
-					File parentPathFile = new File(parentPath);
+					File parentPathFile = new File(library_dir, file.getName());
 
 					if (!parentPathFile.exists()) {
 						parentPathFile.mkdir();
@@ -2488,11 +2482,7 @@ public class BackupImportController extends AbstractUploadController {
 															+ newProfileID);
 								}
 							}
-							String roomDocumentFolderName = parentPath
-									+ fileOrFolderName + File.separatorChar;
-
-							File roomDocumentFolder = new File(
-									roomDocumentFolderName);
+							File roomDocumentFolder = new File(parentPathFile, fileOrFolderName);
 
 							if (!roomDocumentFolder.exists()) {
 								roomDocumentFolder.mkdir();
@@ -2504,53 +2494,28 @@ public class BackupImportController extends AbstractUploadController {
 
 									if (roomDocumentFile.isDirectory()) {
 										log.error("Folder detected in Documents space! Folder "
-												+ roomDocumentFolderName);
+												+ roomDocumentFolder);
 									} else {
-
-										String roomDocumentFileName = roomDocumentFolderName
-												+ roomDocumentFile.getName();
-
-										this.copyFile(roomDocumentFile,
-												new File(roomDocumentFileName));
-
+										copyFile(roomDocumentFile,
+											new File(roomDocumentFolder, roomDocumentFile.getName()));
 									}
-
 								}
-
 							} else {
-
 								log.debug("Document already exists :: ",
-										roomDocumentFolderName);
-
+										roomDocumentFolder);
 							}
-
 						} else {
-
-							String roomFileOrProfileName = parentPath
-									+ roomOrProfileFileOrFolder.getName();
-
-							File roomFileOrProfileFile = new File(
-									roomFileOrProfileName);
-
+							File roomFileOrProfileFile = new File(parentPathFile, roomOrProfileFileOrFolder.getName());
 							if (!roomFileOrProfileFile.exists()) {
-
 								this.copyFile(roomOrProfileFileOrFolder,
 										roomFileOrProfileFile);
-
 							} else {
-
-								log.debug("File does already exist :: ",
-										roomFileOrProfileName);
-
+								log.debug("File does already exist :: ", roomFileOrProfileFile);
 							}
-
 						}
-
 					}
-
 				}
 			}
-
 		}
 
 		// Now check the recordings and import them
