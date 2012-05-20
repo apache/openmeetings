@@ -76,8 +76,6 @@
                 this._inner.setAttribute('text',tString);
             } else {
                 this._inner.setAttribute('text',"");
-                this.sta_btn.setAttribute('visibility','visible');
-                this.stp_btn.setAttribute('visibility','hidden');
             }
         ]]>
     </method>   

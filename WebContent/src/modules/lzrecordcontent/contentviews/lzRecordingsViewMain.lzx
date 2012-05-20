@@ -25,7 +25,7 @@
 	View for recorded contents list.
 	When you select 'Recordings' on the top menu, this class shows the list.
 -->
-<class name="lzRecordingsViewMain" extends="basePropertyPanel" labelid="858"
+<class name="lzRecordingsViewMain" extends="basePropertyPanelWhiteboard" labelid="858" allowToggle="false"
            x="${ parent._navigationArea.width + parent._navigationArea.x }"
            height="${ canvas.height - canvas.naviHeightDelta - parent._recordingsViewBottom.height }"
           width="${ canvas.width - parent._navigationArea.width - parent._navigationArea.x }">
