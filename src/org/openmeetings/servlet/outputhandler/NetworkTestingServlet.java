@@ -1,4 +1,4 @@
-package org.openmeetings.networkTestingTool;
+package org.openmeetings.servlet.outputhandler;
 
 import javax.servlet.http.HttpServlet;
 
