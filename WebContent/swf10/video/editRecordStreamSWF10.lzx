@@ -783,7 +783,7 @@
     <view y="${ parent.height-98 }" resource="test_setup_info_rsc" x="16" />
     
     <labelText fontstyle="bold" labelid="765" x="39" y="${ parent.height-100 }"
-               width="$once{ parent.width-50 }" multiline="true" />
+               width="${ parent.width-50 }" multiline="true" />
 
     <!-- Remember Me -->
     <labelCheckbox name="holddatainSO" labelid="762" x="10" y="${ parent.height-20 }" >
