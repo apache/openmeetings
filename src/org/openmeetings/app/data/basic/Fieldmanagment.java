@@ -30,10 +30,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.beans.basic.SearchResult;
@@ -492,13 +488,13 @@ public class Fieldmanagment {
 	}
 
 	public SearchResult<Fieldvalues> getFieldsByLanguage(int start, int max, String orderby,
-			boolean asc, Long language_id) {
+			boolean asc, Long language_id, String search) {
 		try {
 			SearchResult<Fieldvalues> sresult = new SearchResult<Fieldvalues>();
 			sresult.setObjectName(Fieldlanguagesvalues.class.getName());
-			sresult.setRecords(this.selectMaxFromFieldsValues());
+			sresult.setRecords(this.selectMaxFromFieldsValues(search));
 			sresult.setResult(this.getMixedFieldValuesList(start, max, orderby,
-					asc, language_id));
+					asc, language_id, search));
 			return sresult;
 		} catch (Exception ex2) {
 			log.error("[getFieldsByLanguage]: ", ex2);
@@ -506,17 +502,20 @@ public class Fieldmanagment {
 		return null;
 	}
 
-	private Long selectMaxFromFieldsValues() throws Exception {
+	private Long selectMaxFromFieldsValues(String search) throws Exception {
+		String queryLanguage = "select count(c.fieldvalues_id) from Fieldvalues c where c.deleted = 'false'";
+		if (search.length()>0) {
+			queryLanguage += " WHERE c.name LIKE %"+search+"% " +
+							"OR c.fieldvalues_id = "+search;
+		}
 		TypedQuery<Long> query = em
-				.createQuery("select max(c.fieldvalues_id) from Fieldvalues c where c.deleted = 'false'", Long.class);
-		List<Long> ll = query.getResultList();
-		// log.error((Long)ll.get(0));
-		return ll.get(0);
+				.createQuery(queryLanguage, Long.class);
+		return query.getResultList().get(0);
 	}
 
 	private List<Fieldvalues> getMixedFieldValuesList(int start, int max,
-			String orderby, boolean asc, Long language_id) throws Exception {
-		List<Fieldvalues> ll = this.getFieldsValues(start, max, orderby, asc);
+			String orderby, boolean asc, Long language_id, String search) throws Exception {
+		List<Fieldvalues> ll = this.getFieldsValues(start, max, orderby, asc, search);
 		for (Iterator<Fieldvalues> iter = ll.iterator(); iter.hasNext();) {
 			Fieldvalues fv = iter.next();
 			fv.setFieldlanguagesvalue(this.getFieldByIdAndLanguage(
@@ -526,34 +525,27 @@ public class Fieldmanagment {
 	}
 
 	private List<Fieldvalues> getFieldsValues() throws Exception {
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<Fieldvalues> cq = cb.createQuery(Fieldvalues.class);
-		Root<Fieldvalues> c = cq.from(Fieldvalues.class);
-		Predicate condition = cb.equal(c.get("deleted"), "false");
-		cq.where(condition);
-		TypedQuery<Fieldvalues> q = em.createQuery(cq);
-		List<Fieldvalues> ll = q.getResultList();
-		return ll;
+		return em.createNamedQuery("getFieldvaluesByLanguage", Fieldvalues.class)
+					.getResultList();
 	}
 
 	private List<Fieldvalues> getFieldsValues(int start, int max,
-			String orderby, boolean asc) throws Exception {
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<Fieldvalues> cq = cb.createQuery(Fieldvalues.class);
-		Root<Fieldvalues> c = cq.from(Fieldvalues.class);
-		Predicate condition = cb.equal(c.get("deleted"), "false");
-		cq.where(condition);
-		cq.distinct(asc);
-		if (asc) {
-			cq.orderBy(cb.asc(c.get(orderby)));
-		} else {
-			cq.orderBy(cb.desc(c.get(orderby)));
+			String orderby, boolean asc, String search) throws Exception {
+		String queryLanguage = "select c.fieldvalues_id from Fieldvalues c where c.deleted = 'false'";
+		if (search.length()>0) {
+			queryLanguage += " WHERE c.name LIKE %"+search+"% " +
+							"OR c.fieldvalues_id = "+search;
 		}
-		TypedQuery<Fieldvalues> q = em.createQuery(cq);
+		if (asc) {
+			queryLanguage += " ORDER BY "+orderby+ " ASC";
+		} else {
+			queryLanguage += " ORDER BY "+orderby + "DESC";
+		}
+		TypedQuery<Fieldvalues> q = em
+				.createQuery(queryLanguage, Fieldvalues.class);
 		q.setFirstResult(start);
 		q.setMaxResults(max);
-		List<Fieldvalues> ll = q.getResultList();
-		return ll;
+		return  q.getResultList();
 	}
 
 	public Fieldvalues getFieldvaluesById(Long fieldvalues_id) {
