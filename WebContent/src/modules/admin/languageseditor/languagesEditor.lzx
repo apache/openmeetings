@@ -118,10 +118,20 @@
                     });
 	    </handler>
 	    <labelTooltip multiline="true" labelid="389" />
-    </simpleLabelButton>       
+    </simpleLabelButton>     
     
-	<turnOverList name="_turnoverlist" width="460" height="${ canvas.height - canvas.naviHeight-60 }" x="2" y="60" 
-		orderby="fieldvalues_id" step="25" asc="true">
+    <labelText x="2" y="64" labelid="714" />
+	
+	<customEdittext name="_search" y="60" x="120" width="200" height="24"/>
+	
+    <simpleLabelButton labelid="715" x="330" width="132" y="60">
+    	<handler name="onclick">
+    		parent._turnoverlist.getFieldsByLanguage.doCall();
+    	</handler>
+    </simpleLabelButton>  
+    
+	<turnOverList name="_turnoverlist" width="460" height="${ canvas.height - canvas.naviHeight-90 }" x="2" y="90" 
+		orderby="c.fieldvalues_id" step="25" asc="true">
         
         <attribute name="language_id" value="0" type="number" />
 
@@ -154,6 +164,7 @@
 			<netparam><method name="getValue"> return parent.parent.orderby; </method></netparam>
 			<netparam><method name="getValue"> return parent.parent.asc; </method></netparam>
             <netparam><method name="getValue"> return parent.parent.language_id; </method></netparam>
+            <netparam><method name="getValue"> return parent.parent.parent._search.getText(); </method></netparam>
 	    	<handler name="ondata" args="value">
 	    		//if($debug) Debug.write("getFieldsByLanguage ",value);
 	    		//this.parent.destroy();

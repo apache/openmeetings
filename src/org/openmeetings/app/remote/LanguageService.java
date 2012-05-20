@@ -163,12 +163,12 @@ public class LanguageService {
 	 * @return
 	 */
 	public SearchResult<Fieldvalues> getFieldsByLanguage(String SID, int start, int max,
-			String orderby, boolean asc, Long language_id) {
+			String orderby, boolean asc, Long language_id, String search) {
 		Long users_id = sessionManagement.checkSession(SID);
 		Long user_level = userManagement.getUserLevelByID(users_id);
 		if (authLevelManagement.checkAdminLevel(user_level)) {
 			return fieldmanagment.getFieldsByLanguage(start, max, orderby, asc,
-					language_id);
+					language_id, search);
 		}
 		return null;
 	}
