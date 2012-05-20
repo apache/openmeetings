@@ -122,8 +122,6 @@
         <method name="showMetaData" args="rec">
             <![CDATA[
             
-                this.doOpen();
-            
                 this.currentRecording = rec;
             
                 if ($debug) Debug.write("showMetaData ");
