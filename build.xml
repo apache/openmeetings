@@ -34,7 +34,7 @@
 	<property name="mainlibs.lib.dir" value="${project.lib.dir}/mainlibs" />
 	<property name="om.lib.dir" value="${project.lib.dir}/om" />
 	<property name="anakia.lib.dir" value="${project.lib.dir}/anakia" />
-	<property name="red5-screenshare.resources" value="${basedir}/WebContent/red5-screenshare" />
+	<property name="screensharing.resources" value="${basedir}/WebContent/screensharing" />
 	<property name="junit.lib.dir" value="${project.lib.dir}/junit" />
 	<property name="rat.lib.dir" value="${project.lib.dir}/rat" />
 	<property name="dtd-generator.lib.dir" value="${project.lib.dir}/dtd-generator" />
@@ -50,7 +50,7 @@
 	<property name="laszlo.home" value="${build.base.dir}/openlaszlo" />
 	
 	<!-- screenshare.out.dir -->
-	<property name="screenshare.out.dir" value="${dist.webapps.dir}/red5-screenshare" />
+	<property name="screenshare.out.dir" value="${dist.webapps.dir}/screensharing" />
 	
 	<property name="main.out.dir" value="${build.base.dir}/classes/openmeetings" />
 
@@ -306,7 +306,7 @@
 				<include name="META-INF/LICENSE" />
 				<include name="META-INF/NOTICE" />
 			</fileset>
-			<fileset file="${red5-screenshare.resources}/logback.xml"/>
+			<fileset file="${screensharing.resources}/logback.xml"/>
 			<manifest>
 				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com" />
 				<attribute name="Built-On" value="${build.TODAY}" />
@@ -333,7 +333,7 @@
 			</dname>
 		</genkey>
 		<copy todir="${screenshare.out.dir}" filtering="true">
-			<fileset dir="${red5-screenshare.resources}" includes="*.jpg"/>
+			<fileset dir="${screensharing.resources}" includes="*.jpg"/>
 			<fileset dir="${red5.server.lib}" includes="commons-codec*.jar" />
 			<fileset dir="${red5.server.lib}" includes="httpclient*.jar" />
 			<fileset dir="${red5.server.lib}" includes="httpcore*.jar" />

@@ -4,7 +4,7 @@
         <wb-resource deploy-path="/" source-path="/WebContent"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/client"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/screenviewer"/>
-<wb-resource deploy-path="/WEB-INF/classes" source-path="/red5-screenshare"/>
+		<wb-resource deploy-path="/WEB-INF/classes" source-path="/screensharing"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/server"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/WebContent/WEB-INF"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>

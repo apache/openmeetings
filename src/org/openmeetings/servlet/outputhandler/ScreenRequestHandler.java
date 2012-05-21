@@ -232,7 +232,7 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 			log.debug("Creating JNLP Template for TCP solution");
 
 			try {
-				final String screenShareDirName = "red5-screenshare";
+				final String screenShareDirName = "screensharing";
 				//libs
 				StringBuilder libs = new StringBuilder();
 				File screenShareDir = new File(ScopeApplicationAdapter.webAppPath, screenShareDirName);
