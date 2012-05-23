@@ -77,9 +77,9 @@
 	<!-- compile classpath -->
 	<path id="compile.classpath">
 		<fileset dir="${red5.server.lib}" includes="*.jar" />
+		<fileset dir="${red5.lib}" includes="*.jar" />
 		<fileset dir="${mainlibs.lib.dir}" includes="*.jar" />
 		<fileset dir="${om.lib.dir}" includes="*.jar" />
-		<fileset dir="${red5.lib}" includes="*.jar" />
 		<fileset dir="${junit.lib.dir}" includes="*.jar" />
 		<fileset dir="${dtd-generator.lib.dir}" includes="*.jar" />
 		<fileset dir="${project.lib.dir}" includes="*.jar" />
@@ -433,10 +433,11 @@
 
 	<target name="compile.only" depends="clean.classes, -retrieve-mainlibs,-retrieve-om,-retrieve-dtd-generator,-retrieve-junit, -retrieve-cmdadmin, resources">
 		<echo message="Compile main to ${main.out.dir}"/>
-		<javac debug="on" debuglevel="lines,vars,source" destdir="${main.out.dir}">
+		<javac debug="on" debuglevel="lines,vars,source" destdir="${main.out.dir}" includeantruntime="false">
 			<src path="${main.src.dir}" />
 			<classpath refid="compile.classpath" />
 			<compilerarg value="-Aopenjpa.metamodel=true" />
+			<!-- compilerarg value="-Xlint:deprecation"/ -->
 		</javac>
 		<copy file="LICENSE" tofile="${main.out.dir}/META-INF/LICENSE" overwrite="true"/>
 		<copy file="NOTICE" tofile="${main.out.dir}/META-INF/NOTICE" overwrite="true"/>
@@ -683,14 +684,15 @@
 	<target name="-java6.check" unless="java6.installed" >
 		<condition property="java6.installed" value="true">
 			<and>
-               	<equals arg1="${java.specification.version}" arg2="1.6"/>
+				<or>
+					<equals arg1="${java.specification.version}" arg2="1.6"/>
+				</or>
 				<matches string="${java.vm.specification.vendor}" pattern=".*[sun,oracle].*" casesensitive="false"
 			           singleline="true"/>
-				<available property="java6.installed" classname="javax.script.Bindings"/>
 			</and>
 		</condition>
 		<echo message="Using Java ${java.version} specification: ${java.specification.version}"/>
-		<fail message="Unsupported Java version - detected: ${java.version} selected: 1.6. Only Java compiler version 1.6 supported."> 
+		<fail message="Unsupported Java version - detected: ${java.version} Only Sun/Oracle Java compiler version 1.6 supported."> 
             <condition> 
             	<not>
                    	<equals arg1="${java6.installed}" arg2="true"/>
