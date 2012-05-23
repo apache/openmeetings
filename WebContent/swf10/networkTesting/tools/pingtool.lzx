@@ -43,35 +43,36 @@
     <attribute name="loader" value="null" />
 
 
-    <method name="ping" args="hostUrl">
-        this.request = new URLRequest(hostUrl);
-        this.loader = new URLLoader();
-        this.loader.addEventListener(Event.COMPLETE, this.onComplete);
-        this.loader.addEventListener(IOErrorEvent.IO_ERROR, this.onError);
-        this.testsFinished = 0;
-        this.wholeTime = 0;
-        this.successfulTestsCount = 0;
+    <method name="ping" args="host, httpPort">
+        var hostUrl = "http://" + host + ":" + httpPort + "/openmeetings/testingToolsFiles/pingTest";
+        request = new URLRequest(hostUrl);
+        loader = new URLLoader();
+        loader.addEventListener(Event.COMPLETE, this.onComplete);
+        loader.addEventListener(IOErrorEvent.IO_ERROR, this.onError);
+        loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, this.onError);
+        testsFinished = 0;
+        wholeTime = 0;
+        successfulTestsCount = 0;
 
-        if($debug) Debug.write("Start pinging...");
-        this.startTime = getTimer();
-        this.loader.load(this.request);
+        if($debug) Debug.write("Start ping test... ", hostUrl);
+        startTime = getTimer();
+        loader.load(request);
     </method>
 
     <method name="onComplete" args="e">
         <![CDATA[
         var endTime = getTimer();
-        var pingTime = endTime - this.startTime;
-        this.wholeTime += pingTime;
+        var pingTime = endTime - startTime;
+        wholeTime += pingTime;
         if($debug) Debug.write("Ping time: ", pingTime, " ms");
 
-        this.testsFinished++;
-        this.successfulTestsCount++;
-        if (this.testsFinished < this.testsCount) {
-            this.startTime = getTimer();
-            this.loader.load(this.request);
+        testsFinished++;
+        successfulTestsCount++;
+        if (testsFinished < testsCount) {
+            startTime = getTimer();
+            loader.load(request);
         } else {
-            var averageTime = wholeTime / this.successfulTestsCount;
-            if($debug) Debug.write("Average ping time: ", averageTime, " ms");
+            this.report();
         }
         ]]>
     </method>
@@ -80,15 +81,26 @@
         <![CDATA[
         if($debug) Debug.write("Error: ", e);
 
-        this.testsFinished++;
-        if (this.testsFinished < this.testsCount) {
-            this.startTime = getTimer();
-            this.loader.load(this.request);
+        testsFinished++;
+        if (testsFinished < testsCount) {
+            startTime = getTimer();
+            loader.load(request);
         } else {
-            var averageTime = wholeTime / this.successfulTestsCount;
-            if($debug) Debug.write("Average ping time: ", averageTime, " ms");
+            this.report();
         }
         ]]>
+    </method>
+
+    <method name="report">
+        var report;
+        if (successfulTestsCount > 0) {
+            var averageTime = wholeTime / successfulTestsCount;
+            report = "Average ping time: " + averageTime + " ms";
+        } else {
+            report = "Ping test: connection error";
+        }
+
+        if($debug) Debug.write(report);
     </method>
 
 </class>

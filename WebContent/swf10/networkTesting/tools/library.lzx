@@ -21,5 +21,6 @@
 <library>
 
     <include href="pingtool.lzx" />
+    <include href="portavailabilitytool.lzx" />
 
 </library>

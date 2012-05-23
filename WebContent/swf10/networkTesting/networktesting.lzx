@@ -22,11 +22,19 @@
 
     <include href="tools/" />
 
+    <attribute name="host" type="string" value="192.168.56.101" />
+    <attribute name="rtmpPort" type="number" value="1935" />
+    <attribute name="httpPort" type="number" value="5080" />
+
     <attribute name="pingTool" value="null" />
+    <attribute name="portTool" value="null" />
 
     <handler name="oninit">
         canvas.pingTool = new lz.PingTool();
-        canvas.pingTool.ping("http://192.168.56.101:5080/openmeetings/testingToolsFiles/pingTest");
+        canvas.portTool = new lz.PortAvailabilityTool();
+
+        canvas.pingTool.ping(host, httpPort);
+        canvas.portTool.check(host, rtmpPort);
     </handler>
 
 </canvas>
