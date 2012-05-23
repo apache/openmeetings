@@ -13,17 +13,13 @@
    limitations under the License.
  -->
 <!DOCTYPE project>
-<project name="openmeetings" basedir="./" default="dist"
-	xmlns:rat="antlib:org.apache.rat.anttasks"
-	xmlns="antlib:org.apache.tools.ant"
-	xmlns:ivy="antlib:org.apache.ivy.ant"
-	>
-	<loadproperties srcFile="build.properties"/>
+<project name="openmeetings" basedir="./" default="dist" xmlns:rat="antlib:org.apache.rat.anttasks" xmlns="antlib:org.apache.tools.ant" xmlns:ivy="antlib:org.apache.ivy.ant">
+	<loadproperties srcFile="build.properties" />
 
 	<property name="project.distname" value="openmeetings" />
 	<property name="jar.suffix" value="${project.version}-${project.status}" />
 	<property environment="env" />
-	
+
 	<property name="main.src.dir" value="${basedir}/src" />
 
 	<property name="dist.dir" value="dist" />
@@ -39,7 +35,7 @@
 	<property name="rat.lib.dir" value="${project.lib.dir}/rat" />
 	<property name="dtd-generator.lib.dir" value="${project.lib.dir}/dtd-generator" />
 	<property name="svntask.lib.dir" value="${project.lib.dir}/svntask" />
-	
+
 	<property name="red5.server.dir" value="${build.base.dir}/red5" />
 	<property name="red5.lib" value="${red5.server.dir}/dist" />
 	<property name="red5.server.lib" value="${red5.lib}/lib" />
@@ -48,10 +44,10 @@
 	<property name="dist.persistence.dir" value="${dist.webapps.dir}/WEB-INF/classes/META-INF/" />
 
 	<property name="laszlo.home" value="${build.base.dir}/openlaszlo" />
-	
+
 	<!-- screenshare.out.dir -->
 	<property name="screenshare.out.dir" value="${dist.webapps.dir}/screensharing" />
-	
+
 	<property name="main.out.dir" value="${build.base.dir}/classes/openmeetings" />
 
 	<!-- LPS Properties -->
@@ -61,10 +57,10 @@
 	<property name="laszlo.src.dir" value="${webcontent.src.dir}/src" />
 
 	<property name="keystore.file" value="${build.base.dir}/filetest.keystore" />
-	
+
 	<property name="junit.base.dir" value="${build.base.dir}/junit" />
 	<property name="junit.report.dir" value="${junit.base.dir}/report" />
-	
+
 	<path id="laszlo.lib">
 		<!-- swf8 -->
 		<fileset dir="${laszlo.home}/WEB-INF/lib" includes="saxon-6.5.3-lz-p1.jar jakarta-regexp-1.2.jar
@@ -73,7 +69,7 @@
 		<fileset dir="${laszlo.home}/WEB-INF/lib" includes="mxmlc*.jar flex-messaging-common.jar swfutils.jar asc.jar
 			fxgutils.jar" />
 	</path>
-	
+
 	<!-- compile classpath -->
 	<path id="compile.classpath">
 		<fileset dir="${red5.server.lib}" includes="*.jar" />
@@ -98,8 +94,7 @@
 		<mkdir dir="${dtd-generator.lib.dir}" />
 		<mkdir dir="${svntask.lib.dir}" />
 		<mkdir dir="${laszlo.home}" />
-		<echo file="${build.base.dir}/velocity.properties" append="false"
-			>runtime.log = ${build.base.dir}/velocity.log${line.separator}</echo>
+		<echo file="${build.base.dir}/velocity.properties" append="false">runtime.log = ${build.base.dir}/velocity.log${line.separator}</echo>
 	</target>
 
 	<!-- build artefacts -->
@@ -108,15 +103,14 @@
 			<format property="build.time" pattern="dd-MM-yyyy_HHmm" />
 		</tstamp>
 		<property name="archive.file.name" value="${dist.dir}/apache-${project.distname}-incubating-${project.version}.r${svn.info.rev}-${build.time}" />
-		
-		<move file="${dist.dir}/red5/license.txt" tofile="${dist.dir}/red5/red5-license.txt"/>
-		<copy file="build.properties" tofile="${build.base.dir}/build.properties" overwrite="true"/>
-		<copy file="LICENSE" tofile="${dist.dir}/red5/LICENSE" overwrite="true"/>
-		<copy file="NOTICE" tofile="${dist.dir}/red5/NOTICE" overwrite="true"/>
-		<copy file="README" tofile="${dist.dir}/red5/README" overwrite="true"/>
-			
-		<echo file="${build.base.dir}/build.properties" append="true"
-			>svn.info.rev=${svn.info.rev}${line.separator}</echo>
+
+		<move file="${dist.dir}/red5/license.txt" tofile="${dist.dir}/red5/red5-license.txt" />
+		<copy file="build.properties" tofile="${build.base.dir}/build.properties" overwrite="true" />
+		<copy file="LICENSE" tofile="${dist.dir}/red5/LICENSE" overwrite="true" />
+		<copy file="NOTICE" tofile="${dist.dir}/red5/NOTICE" overwrite="true" />
+		<copy file="README" tofile="${dist.dir}/red5/README" overwrite="true" />
+
+		<echo file="${build.base.dir}/build.properties" append="true">svn.info.rev=${svn.info.rev}${line.separator}</echo>
 		<tar longfile="gnu" compression="gzip" destfile="${archive.file.name}-src.tar.gz">
 			<tarfileset dir="${basedir}">
 				<exclude name="build/**" />
@@ -132,12 +126,12 @@
 				<include name="**" />
 				<exclude name="*.sh" />
 			</tarfileset>
-			<tarfileset dir="${dist.dir}/red5" filemode="755" >
+			<tarfileset dir="${dist.dir}/red5" filemode="755">
 				<include name="*.sh" />
 			</tarfileset>
 		</tar>
 	</target>
-	
+
 	<!-- build webapp -->
 	<target name="-copy-libraries" description="All jars downloaded by ivy copied to appropriate places">
 		<copy todir="${red5.root}/lib">
@@ -148,21 +142,17 @@
 		</copy>
 		<chmod dir="${dist.webapps.dir}/WEB-INF/lib" perm="755" includes="**/*.sh" />
 	</target>
-	
-	<target name="dist" description="binary distribution of OpenMeetings"
-		depends="clean, jar, compile.laszlo.main, compile.laszlo.main.as3, enhance, signWebStartJars, -copy-libraries"/>
+
+	<target name="dist" description="binary distribution of OpenMeetings" depends="clean, jar, compile.laszlo.main, compile.laszlo.main.as3, enhance, signWebStartJars, -copy-libraries" />
 
 	<!-- compiles the sources without openlaszlo client -->
-	<target name="dist-test" description="binary distribution of OpenMeetings"
-		depends="clean, -dist-test-no-clean, signWebStartJars"/>
+	<target name="dist-test" description="binary distribution of OpenMeetings" depends="clean, -dist-test-no-clean, signWebStartJars" />
 
 	<!-- compiles the sources without openlaszlo client and clean -->
-	<target name="-dist-test-no-clean" description="binary distribution of OpenMeetings"
-		depends="jar, -copy-libraries"/>
+	<target name="-dist-test-no-clean" description="binary distribution of OpenMeetings" depends="jar, -copy-libraries" />
 
 	<!-- compiles the sources only with laszlo debug client -->
-	<target name="dist-debug" description="binary distribution of OpenMeetings"
-		depends="clean, jar, compile.laszlo.main.debug, compile.laszlo.main.debug.as3, signWebStartJars, -copy-libraries"/>
+	<target name="dist-debug" description="binary distribution of OpenMeetings" depends="clean, jar, compile.laszlo.main.debug, compile.laszlo.main.debug.as3, signWebStartJars, -copy-libraries" />
 
 	<!-- Check timestamp on files -->
 	<target name="prepare" depends="prepare.mkdir">
@@ -190,7 +180,7 @@
 
 		<chmod dir="${red5.root}" perm="755" includes="**/*.sh" />
 
-		<antcall target="-process-db" inheritAll="true" inheritRefs="true"/>
+		<antcall target="-process-db" inheritAll="true" inheritRefs="true" />
 		<copy todir="${dist.persistence.dir}">
 			<fileset file="src/META-INF/*.xml">
 				<exclude name="services.xml" />
@@ -214,16 +204,16 @@
 			<include name="**/*.png" />
 		</patternset>
 		<patternset id="resources">
-			<patternset refid="xmlpng"/>
+			<patternset refid="xmlpng" />
 			<include name="**/*.conf" />
 			<include name="**/*.properties" />
 			<include name="**/*.vm" />
 		</patternset>
-		
+
 		<!-- Main Applications -->
 		<copy todir="${main.out.dir}" includeEmptyDirs="yes">
 			<fileset dir="${main.src.dir}">
-				<patternset refid="resources"/>
+				<patternset refid="resources" />
 			</fileset>
 		</copy>
 	</target>
@@ -270,7 +260,7 @@
 				<attribute name="Svn-Revision" value="${svn.info.rev}" />
 			</manifest>
 		</jar>
-		
+
 		<!-- Build WebServices -->
 		<jar destfile="${dist.webapps.dir}/WEB-INF/services/OpenMeetingsService-${jar.suffix}.aar">
 			<fileset dir="src/">
@@ -306,7 +296,7 @@
 				<include name="META-INF/LICENSE" />
 				<include name="META-INF/NOTICE" />
 			</fileset>
-			<fileset file="${screensharing.resources}/logback.xml"/>
+			<fileset file="${screensharing.resources}/logback.xml" />
 			<manifest>
 				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com" />
 				<attribute name="Built-On" value="${build.TODAY}" />
@@ -333,7 +323,7 @@
 			</dname>
 		</genkey>
 		<copy todir="${screenshare.out.dir}" filtering="true">
-			<fileset dir="${screensharing.resources}" includes="*.jpg"/>
+			<fileset dir="${screensharing.resources}" includes="*.jpg" />
 			<fileset dir="${red5.server.lib}" includes="commons-codec*.jar" />
 			<fileset dir="${red5.server.lib}" includes="httpclient*.jar" />
 			<fileset dir="${red5.server.lib}" includes="httpcore*.jar" />
@@ -359,7 +349,7 @@
 			</path>
 		</signjar>
 	</target>
-	
+
 	<target name="client.only" depends="compile.laszlo.main.as3,compile.laszlo.main" />
 
 	<target name="client.debug.only" depends="compile.laszlo.main.debug.as3,compile.laszlo.main.debug" />
@@ -375,26 +365,19 @@
 		</java>
 	</target>
 
-        <target name="compile.laszlo.networktesting">
-            <copy todir="${dist.webapps.dir}/testingToolsFiles">
-                <fileset dir="${webcontent.src.dir}/testingToolsFiles" includes="*" />
-            </copy>
-            <java
-                classname="org.openlaszlo.compiler.Main"
-                fork="true"
-                newenvironment="true"
-                failonerror="true"
-                dir="${laszlo.as3.src.dir}/networkTesting"
-                classpathref="laszlo.lib"
-            >
-                <jvmarg value="-DLPS_HOME=${laszlo.home}" />
-                <jvmarg value="-Dlzdebug=${laszlo.debug}" />
-                <jvmarg value="-Dlzproxied=${laszlo.proxied}" />
-                <jvmarg value="-Xms512M" />
-                <jvmarg value="-Xmx512M" />
-                <arg line="--runtime=swf10 --dir ${out.dir.swf} --onerror warn networktesting.lzx" />
-            </java>
-        </target>
+	<target name="compile.laszlo.networktesting">
+		<copy todir="${dist.webapps.dir}/testingToolsFiles">
+			<fileset dir="${webcontent.src.dir}/testingToolsFiles" includes="*" />
+		</copy>
+		<java classname="org.openlaszlo.compiler.Main" fork="true" newenvironment="true" failonerror="true" dir="${laszlo.as3.src.dir}/networkTesting" classpathref="laszlo.lib">
+			<jvmarg value="-DLPS_HOME=${laszlo.home}" />
+			<jvmarg value="-Dlzdebug=${laszlo.debug}" />
+			<jvmarg value="-Dlzproxied=${laszlo.proxied}" />
+			<jvmarg value="-Xms512M" />
+			<jvmarg value="-Xmx512M" />
+			<arg line="--runtime=swf10 --dir ${out.dir.swf} --onerror warn networktesting.lzx" />
+		</java>
+	</target>
 
 	<target name="compile.laszlo.main.debug.as3" depends="-retrieve-openlaszlo">
 		<java classname="org.openlaszlo.compiler.Main" fork="true" newenvironment="true" failonerror="true" dir="${laszlo.as3.src.dir}" classpathref="laszlo.lib">
@@ -431,16 +414,16 @@
 
 	<target name="compile" depends="compile.only, prepare" />
 
-	<target name="compile.only" depends="clean.classes, -retrieve-mainlibs,-retrieve-om,-retrieve-dtd-generator,-retrieve-junit, -retrieve-cmdadmin, resources">
-		<echo message="Compile main to ${main.out.dir}"/>
+	<target name="compile.only" depends="clean.classes, -retrieve-mainlibs,-retrieve-om,-retrieve-dtd-generator,-retrieve-junit, -retrieve-cmdadmin, -retrieve-tools.jar, resources">
+		<echo message="Compile main to ${main.out.dir}" />
 		<javac debug="on" debuglevel="lines,vars,source" destdir="${main.out.dir}" includeantruntime="false">
 			<src path="${main.src.dir}" />
 			<classpath refid="compile.classpath" />
 			<compilerarg value="-Aopenjpa.metamodel=true" />
 			<!-- compilerarg value="-Xlint:deprecation"/ -->
 		</javac>
-		<copy file="LICENSE" tofile="${main.out.dir}/META-INF/LICENSE" overwrite="true"/>
-		<copy file="NOTICE" tofile="${main.out.dir}/META-INF/NOTICE" overwrite="true"/>
+		<copy file="LICENSE" tofile="${main.out.dir}/META-INF/LICENSE" overwrite="true" />
+		<copy file="NOTICE" tofile="${main.out.dir}/META-INF/NOTICE" overwrite="true" />
 	</target>
 
 	<target name="doStartServer" depends="compile">
@@ -482,11 +465,12 @@
 				<path refid="svntask.classpath" />
 			</classpath>
 		</typedef>
-		<svnSetting svnkit="false" javahl="false" id="svn.settings" /> <!-- native svn in the path-->
+		<svnSetting svnkit="false" javahl="false" id="svn.settings" />
+		<!-- native svn in the path-->
 	</target>
 	<target name="current_revision" depends="-ant-task" unless="svn.info.rev">
 		<svn refid="svn.settings">
-			<info target="."/>
+			<info target="." />
 		</svn>
 		<echo>Current revision: ${svn.info.rev}</echo>
 	</target>
@@ -535,22 +519,18 @@
 		<path refid="compile.classpath" />
 		<fileset dir="${anakia.lib.dir}" includes="*.jar" />
 		<fileset dir="${mainlibs.lib.dir}" includes="commons-collections*.jar,commons-lang*.jar,velocity*.jar" />
-		
+
 	</path>
 
-    <target name="anakia" depends="-retrieve-mainlibs,-retrieve-om,-retrieve-anakia">
-    	<taskdef name="anakia" classname="org.apache.velocity.anakia.AnakiaTask">
+	<target name="anakia" depends="-retrieve-mainlibs,-retrieve-om,-retrieve-anakia">
+		<taskdef name="anakia" classname="org.apache.velocity.anakia.AnakiaTask">
 			<classpath>
 				<path refid="anakia.classpath" />
 			</classpath>
-    	</taskdef>
-    	
-		<anakia basedir="${docs.src}" destdir="${docs.dest}/" extension=".html" 
-			style="./site.vsl" projectFile="stylesheets/project.xml" excludes="**/stylesheets/** empty.xml" 
-			includes="**/*.xml" lastModifiedCheck="true" templatePath="xdocs/stylesheets"
-    		velocityPropertiesFile="${build.base.dir}/velocity.properties"
-		/>
-    </target>
+		</taskdef>
+
+		<anakia basedir="${docs.src}" destdir="${docs.dest}/" extension=".html" style="./site.vsl" projectFile="stylesheets/project.xml" excludes="**/stylesheets/** empty.xml" includes="**/*.xml" lastModifiedCheck="true" templatePath="xdocs/stylesheets" velocityPropertiesFile="${build.base.dir}/velocity.properties" />
+	</target>
 
 	<target name="build.only.webservice.doc" depends="anakia">
 		<javadoc classpathref="build.webservice.classpath" useexternalfile="true">
@@ -601,24 +581,24 @@
 			</fileset>
 		</copy>
 		<copy todir="${dist.webapps.dir}/docs/js">
-            <fileset dir="${basedir}/docs/js/">
-                <include name="**/*.js" />
-            </fileset>
-        </copy>
+			<fileset dir="${basedir}/docs/js/">
+				<include name="**/*.js" />
+			</fileset>
+		</copy>
 		<copy todir="${dist.webapps.dir}/docs/source">
-            <fileset dir="${basedir}/docs/source/">
-                <include name="**/*.js" />
-                <include name="**/*.gif" />
-                <include name="**/*.png" />
-            </fileset>
-        </copy>
+			<fileset dir="${basedir}/docs/source/">
+				<include name="**/*.js" />
+				<include name="**/*.gif" />
+				<include name="**/*.png" />
+			</fileset>
+		</copy>
 		<copy todir="${dist.webapps.dir}/docs/source/helpers">
-            <fileset dir="${basedir}/docs/source/helpers">
-                <include name="**/*.js" />
-                <include name="**/*.css" />
-                <include name="**/*.png" />
-            </fileset>
-        </copy>
+			<fileset dir="${basedir}/docs/source/helpers">
+				<include name="**/*.js" />
+				<include name="**/*.css" />
+				<include name="**/*.png" />
+			</fileset>
+		</copy>
 	</target>
 
 	<!-- Unit Tests -->
@@ -676,162 +656,160 @@
 	</target>
 
 
-	<property name="ivy.jar" value="ivy-2.2.0.jar"/>
-	<taskdef uri="antlib:org.apache.ivy.ant" resource="org/apache/ivy/ant/antlib.xml"
-		classpath="${ivy.lib.dir}/${ivy.jar}"/>
+	<property name="ivy.jar" value="ivy-2.2.0.jar" />
+	<taskdef uri="antlib:org.apache.ivy.ant" resource="org/apache/ivy/ant/antlib.xml" classpath="${ivy.lib.dir}/${ivy.jar}" />
 
 	<!-- Build Targets -->
-	<target name="-java6.check" unless="java6.installed" >
+	<target name="-java6.check" unless="java6.installed">
 		<condition property="java6.installed" value="true">
 			<and>
 				<or>
-					<equals arg1="${java.specification.version}" arg2="1.6"/>
+					<equals arg1="${java.specification.version}" arg2="1.6" />
 				</or>
-				<matches string="${java.vm.specification.vendor}" pattern=".*[sun,oracle].*" casesensitive="false"
-			           singleline="true"/>
+				<matches string="${java.vm.specification.vendor}" pattern=".*[sun,oracle].*" casesensitive="false" singleline="true" />
 			</and>
 		</condition>
-		<echo message="Using Java ${java.version} specification: ${java.specification.version}"/>
-		<fail message="Unsupported Java version - detected: ${java.version} Only Sun/Oracle Java compiler version 1.6 supported."> 
-            <condition> 
-            	<not>
-                   	<equals arg1="${java6.installed}" arg2="true"/>
-            	</not>
-            </condition> 
-        </fail> 
+		<echo message="Using Java ${java.version} specification: ${java.specification.version}" />
+		<fail message="Unsupported Java version - detected: ${java.version} Only Sun/Oracle Java compiler version 1.6 supported.">
+			<condition>
+				<not>
+					<equals arg1="${java6.installed}" arg2="true" />
+				</not>
+			</condition>
+		</fail>
 	</target>
-	
+
 	<target name="-availability-check" unless="red5.installed" description="Check which libraries need to be retrieved" depends="prepare.mkdir">
-		<available classpathref="compile.classpath" classname="javax.persistence.spi.PersistenceProvider" property="mainlib.installed"/>
-		<available classpathref="compile.classpath" classname="org.apache.axis2.Version" property="om.installed"/>
-		<available classpathref="compile.classpath" classname="org.junit.Test" property="junit.installed"/>
-		<available classpathref="compile.classpath" classname="com.thaiopensource.relaxng.translate.Driver" property="dtd-generator.installed"/>
-		<available classpathref="compile.classpath" classname="org.apache.commons.cli.CommandLine" property="cmdadmin.installed"/>
-		<available classpathref="anakia.classpath" classname="org.apache.oro.text.GlobCompiler" property="anakia.installed"/>
-		<available classpathref="rat.classpath" classname="org.apache.rat.Report" property="rat.installed"/>
-		<available classpathref="svntask.classpath" classname="org.tmatesoft.svn.core.SVNCommitInfo" property="svntask.installed"/>
-		<available classpathref="compile.classpath" classname="com.mysql.jdbc.Driver" property="mysql.installed"/>
-		<available classpathref="compile.classpath" classname="org.apache.derby.jdbc.ClientDriver" property="derby.installed"/>
-		<available file="${laszlo.home}/WEB-INF/lib" type="dir" property="laszlo.installed"/>
-		<available file="${red5.lib}/red5.sh" type="file" property="red5.installed"/>
+		<available classpathref="compile.classpath" classname="javax.persistence.spi.PersistenceProvider" property="mainlib.installed" />
+		<available classpathref="compile.classpath" classname="org.apache.axis2.Version" property="om.installed" />
+		<available classpathref="compile.classpath" classname="org.junit.Test" property="junit.installed" />
+		<available classpathref="compile.classpath" classname="com.thaiopensource.relaxng.translate.Driver" property="dtd-generator.installed" />
+		<available classpathref="compile.classpath" classname="org.apache.commons.cli.CommandLine" property="cmdadmin.installed" />
+		<available classpathref="anakia.classpath" classname="org.apache.oro.text.GlobCompiler" property="anakia.installed" />
+		<available classpathref="rat.classpath" classname="org.apache.rat.Report" property="rat.installed" />
+		<available classpathref="svntask.classpath" classname="org.tmatesoft.svn.core.SVNCommitInfo" property="svntask.installed" />
+		<available classpathref="compile.classpath" classname="com.mysql.jdbc.Driver" property="mysql.installed" />
+		<available classpathref="compile.classpath" classname="org.apache.derby.jdbc.ClientDriver" property="derby.installed" />
+		<available file="${laszlo.home}/WEB-INF/lib" type="dir" property="laszlo.installed" />
+		<available file="${red5.lib}/red5.sh" type="file" property="red5.installed" />
 	</target>
-	
+
 	<target name="-retrieve" description="Retrieves the libraries if needed">
 		<condition property="ivy.conf.name" value="red5">
 			<not>
-				<isset property="ivy.conf.name"/>
+				<isset property="ivy.conf.name" />
 			</not>
 		</condition>
 		<condition property="ivy.lib.location" value="${mainlibs.lib.dir}">
 			<not>
-				<isset property="ivy.lib.location"/>
+				<isset property="ivy.lib.location" />
 			</not>
 		</condition>
 		<condition property="ivy.transitive" value="false">
 			<not>
-				<isset property="ivy.transitive"/>
+				<isset property="ivy.transitive" />
 			</not>
 		</condition>
-		<echo message="Ivy conf name: ${ivy.conf.name}, destination: ${ivy.lib.location}"/>
+		<echo message="Ivy conf name: ${ivy.conf.name}, destination: ${ivy.lib.location}" />
 		<ivy:resolve file="ivy.xml" conf="${ivy.conf.name}" checkIfChanged="false" transitive="${ivy.transitive}" />
 		<ivy:retrieve conf="${ivy.conf.name}" pattern="${ivy.lib.location}/[artifact]-[type]-[revision].[ext]" />
 	</target>
-	
+
 	<!-- Check for the Red5 libraries -->
 	<target name="-retrieve-red5" unless="red5.installed" description="Retrieves the libraries if needed" depends="-ant-task">
 		<svn refid="svn.settings">
 			<checkout url="http://red5.googlecode.com/svn/java/server/trunk/" revision="${red5.revision}" destPath="${red5.server.dir}" />
 		</svn>
 		<subant target="dist">
-			<fileset dir="${red5.server.dir}" includes="build.xml"/>
+			<fileset dir="${red5.server.dir}" includes="build.xml" />
 		</subant>
 		<echo message="JAVAEE: ${red5.server.lib}/javaee-api-5.1.2.jar" />
 		<jar destfile="${red5.server.lib}/javaee-api-5.1.2.om.jar">
-		    <zipfileset src="${red5.server.lib}/javaee-api-5.1.2.jar" excludes="javax/persistence/**/*.*"/>
+			<zipfileset src="${red5.server.lib}/javaee-api-5.1.2.jar" excludes="javax/persistence/**/*.*" />
 		</jar>
 		<delete file="${red5.server.lib}/javaee-api-5.1.2.jar" />
-		<delete dir="${red5.lib}/webapps/installer"/>
-		<delete dir="${red5.lib}/webapps/live"/>
-		<delete dir="${red5.lib}/webapps/vod"/>
+		<delete dir="${red5.lib}/webapps/installer" />
+		<delete dir="${red5.lib}/webapps/live" />
+		<delete dir="${red5.lib}/webapps/vod" />
 		<copy todir="${red5.lib}/conf" overwrite="true" force="true">
-			<fileset dir="${webcontent.src.dir}/red5" includes="jee-container*.xml"/>
+			<fileset dir="${webcontent.src.dir}/red5" includes="jee-container*.xml" />
 		</copy>
-		<copy file="${webcontent.src.dir}/red5/index.html" todir="${red5.lib}/webapps/root" overwrite="true" force="true"/>
+		<copy file="${webcontent.src.dir}/red5/index.html" todir="${red5.lib}/webapps/root" overwrite="true" force="true" />
 		<copy todir="${red5.lib}" overwrite="true" force="true">
-			<fileset dir="${webcontent.src.dir}/red5" includes="admin.*"/>
+			<fileset dir="${webcontent.src.dir}/red5" includes="admin.*" />
 		</copy>
 	</target>
 	<!-- Check for the Top level libraries -->
 	<target name="-retrieve-mainlibs" unless="mainlib.installed" description="Retrieves the libraries if needed" depends="-retrieve-red5">
 		<!-- Ivy configuration - http://ant.apache.org/ivy/history/trunk/ant.html -->
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
-			<param name="ivy.conf.name" value="mainlib"/>
-			<param name="ivy.lib.location" value="${mainlibs.lib.dir}"/>
+			<param name="ivy.conf.name" value="mainlib" />
+			<param name="ivy.lib.location" value="${mainlibs.lib.dir}" />
 		</antcall>
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
-			<param name="ivy.conf.name" value="mainlib.ext"/>
-			<param name="ivy.lib.location" value="${mainlibs.lib.dir}"/>
+			<param name="ivy.conf.name" value="mainlib.ext" />
+			<param name="ivy.lib.location" value="${mainlibs.lib.dir}" />
 		</antcall>
 		<delete>
-			<fileset dir="${mainlibs.lib.dir}" includes="*-source*.jar"/>
-			<fileset dir="${mainlibs.lib.dir}" includes="*-javadoc*.jar"/>
+			<fileset dir="${mainlibs.lib.dir}" includes="*-source*.jar" />
+			<fileset dir="${mainlibs.lib.dir}" includes="*-javadoc*.jar" />
 		</delete>
 	</target>
 	<!-- Check for the OM libraries -->
 	<target name="-retrieve-om" unless="om.installed" description="Retrieves the libraries if needed" depends="-availability-check">
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
-			<param name="ivy.conf.name" value="openmeetings"/>
-			<param name="ivy.lib.location" value="${om.lib.dir}"/>
+			<param name="ivy.conf.name" value="openmeetings" />
+			<param name="ivy.lib.location" value="${om.lib.dir}" />
 		</antcall>
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
-			<param name="ivy.conf.name" value="openmeetings.ext"/>
-			<param name="ivy.lib.location" value="${om.lib.dir}"/>
+			<param name="ivy.conf.name" value="openmeetings.ext" />
+			<param name="ivy.lib.location" value="${om.lib.dir}" />
 		</antcall>
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
-			<param name="ivy.conf.name" value="openmeetings.axis2"/>
-			<param name="ivy.lib.location" value="${om.lib.dir}"/>
+			<param name="ivy.conf.name" value="openmeetings.axis2" />
+			<param name="ivy.lib.location" value="${om.lib.dir}" />
 			<param name="ivy.transitive" value="true" />
 		</antcall>
 		<delete>
-			<fileset dir="${om.lib.dir}" includes="commons-logging*.jar"/>
-			<fileset dir="${om.lib.dir}" includes="httpcore-jar*.jar"/>
-			<fileset dir="${om.lib.dir}" includes="*-source*.jar"/>
-			<fileset dir="${om.lib.dir}" includes="*-javadoc*.jar"/>
+			<fileset dir="${om.lib.dir}" includes="commons-logging*.jar" />
+			<fileset dir="${om.lib.dir}" includes="httpcore-jar*.jar" />
+			<fileset dir="${om.lib.dir}" includes="*-source*.jar" />
+			<fileset dir="${om.lib.dir}" includes="*-javadoc*.jar" />
 		</delete>
 	</target>
 	<!-- Check for the Anakia libraries -->
 	<target name="-retrieve-anakia" unless="anakia.installed" description="Retrieves the libraries if needed" depends="-retrieve-mainlibs">
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
-			<param name="ivy.conf.name" value="anakia"/>
-			<param name="ivy.lib.location" value="${anakia.lib.dir}"/>
+			<param name="ivy.conf.name" value="anakia" />
+			<param name="ivy.lib.location" value="${anakia.lib.dir}" />
 		</antcall>
 	</target>
 	<!-- Check for junit libraries -->
 	<target name="-retrieve-junit" unless="junit.installed" description="Retrieves the libraries if needed" depends="-availability-check">
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
-			<param name="ivy.conf.name" value="junit"/>
-			<param name="ivy.lib.location" value="${junit.lib.dir}"/>
+			<param name="ivy.conf.name" value="junit" />
+			<param name="ivy.lib.location" value="${junit.lib.dir}" />
 		</antcall>
 	</target>
 	<!-- Check for rat libraries -->
 	<target name="-retrieve-rat" unless="rat.installed" description="Retrieves the libraries if needed" depends="-availability-check">
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
-			<param name="ivy.conf.name" value="rat"/>
-			<param name="ivy.lib.location" value="${rat.lib.dir}"/>
+			<param name="ivy.conf.name" value="rat" />
+			<param name="ivy.lib.location" value="${rat.lib.dir}" />
 		</antcall>
 	</target>
 	<!-- Check for dtd-generator libraries -->
 	<target name="-retrieve-dtd-generator" unless="dtd-generator.installed" description="Retrieves the libraries if needed" depends="-availability-check">
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
-			<param name="ivy.conf.name" value="dtd"/>
-			<param name="ivy.lib.location" value="${dtd-generator.lib.dir}"/>
+			<param name="ivy.conf.name" value="dtd" />
+			<param name="ivy.lib.location" value="${dtd-generator.lib.dir}" />
 		</antcall>
 	</target>
 	<!-- Check for svntask libraries -->
 	<target name="-retrieve-svntask" unless="svntask.installed" description="Retrieves the libraries if needed" depends="-availability-check">
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
-			<param name="ivy.conf.name" value="svntask"/>
-			<param name="ivy.lib.location" value="${svntask.lib.dir}"/>
+			<param name="ivy.conf.name" value="svntask" />
+			<param name="ivy.lib.location" value="${svntask.lib.dir}" />
 			<param name="ivy.transitive" value="true" />
 		</antcall>
 	</target>
@@ -842,57 +820,57 @@
 		<available file="${java.home}/lib/tools.jar" type="file" property="tools.jar.path" value="${java.home}/lib/tools.jar" />
 		<available file="${java.home}/../lib/tools.jar" type="file" property="tools.jar.path" value="${java.home}/../lib/tools.jar" />
 		<available file="${tools.jar.path}" type="file" property="tools.jar.installed" />
-		
+
 		<copy file="${tools.jar.path}" tofile="${project.lib.dir}/java_16_tools.jar" />
 	</target>
 	<!-- Check for Openlaszlo -->
 	<target name="-extract-tgz" description="Extracts given tar into ${build.base.dir} folder">
 		<echo message="Going to extract ${dep.file} to the ${build.base.dir}" />
-		<untar src="${dep.file}" dest="${build.base.dir}" compression="gzip"/>
+		<untar src="${dep.file}" dest="${build.base.dir}" compression="gzip" />
 	</target>
 	<target name="-retrieve-openlaszlo" unless="laszlo.installed" description="Retrieves the libraries if needed" depends="-availability-check">
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
-			<param name="ivy.conf.name" value="openlaszlo"/>
-			<param name="ivy.lib.location" value="${laszlo.home}"/>
+			<param name="ivy.conf.name" value="openlaszlo" />
+			<param name="ivy.lib.location" value="${laszlo.home}" />
 		</antcall>
 	</target>
 	<!-- Check for Command line admin depandencies -->
 	<target name="-retrieve-cmdadmin" unless="cmdadmin.installed" description="Retrieves the libraries if needed" depends="-availability-check">
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
-			<param name="ivy.conf.name" value="cmdadmin"/>
-			<param name="ivy.lib.location" value="${red5.lib}"/>
+			<param name="ivy.conf.name" value="cmdadmin" />
+			<param name="ivy.lib.location" value="${red5.lib}" />
 		</antcall>
 	</target>
-			
+
 	<target name="-retrieve-db2" unless="db2.installed" description="Retrieves the libraries if needed" depends="-availability-check">
 		<!-- empty -->
 	</target>
-	
+
 	<target name="-retrieve-derby" unless="derby.installed" description="Retrieves the libraries if needed" depends="-availability-check">
 		<!-- retrieved automatically, added for compatibility -->
 	</target>
-	
+
 	<target name="-retrieve-mysql" unless="mysql.installed" description="Retrieves the libraries if needed" depends="-availability-check">
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
-			<param name="ivy.conf.name" value="mysql"/>
-			<param name="ivy.lib.location" value="${om.lib.dir}"/>
+			<param name="ivy.conf.name" value="mysql" />
+			<param name="ivy.lib.location" value="${om.lib.dir}" />
 		</antcall>
 	</target>
-	
+
 	<target name="-retrieve-oracle" unless="oracle.installed" description="Retrieves the libraries if needed" depends="-availability-check">
 		<!-- empty -->
 	</target>
-	
+
 	<target name="-retrieve-postgres" unless="postgres.installed" description="Retrieves the libraries if needed" depends="-availability-check">
 		<!-- retrieved automatically, added for compatibility -->
 	</target>
-	
+
 	<target name="-process-db" description="performs DB related tasks based on passed DB type">
-		<echo message="db.provider == ${db}"/>
-		<antcall target="-retrieve-${db}" inheritAll="true" inheritRefs="true"/>
-		<copy file="src/META-INF/${db}_persistence.xml" tofile="src/META-INF/persistence.xml" overwrite="true"/>
+		<echo message="db.provider == ${db}" />
+		<antcall target="-retrieve-${db}" inheritAll="true" inheritRefs="true" />
+		<copy file="src/META-INF/${db}_persistence.xml" tofile="src/META-INF/persistence.xml" overwrite="true" />
 	</target>
-	
+
 	<!-- Clean targets -->
 	<!-- Remove classes directory for clean build -->
 	<target name="clean.classes" description="Clean Classes">
@@ -902,7 +880,7 @@
 	<target name="clean.dist" description="Clean Dist dir">
 		<delete includeemptydirs="true" dir="${dist.dir}" />
 	</target>
-	
+
 	<target name="clean" depends="clean.classes, clean.dist" description="Clean For Binary">
 		<delete includeemptydirs="true" dir="${junit.base.dir}" />
 		<delete file="${keystore.file}" />
@@ -912,18 +890,17 @@
 		<delete includeemptydirs="true" dir="${build.base.dir}" />
 	</target>
 	<target name="clean.ivy" depends="clean.all" description="Clears out the Ivy cache">
-		<delete dir="${user.home}/.ivy2/cache/red5"/>
-		<ivy:cleancache/>
+		<ivy:cleancache />
 	</target>
 
 	<target name="prepare-eclipse" if="java6.installed" description="Layout various files necessary for development" depends="-java6.check">
-		<antcall target="-retrieve-mainlibs" inheritAll="true" inheritRefs="true"/>
-		<antcall target="-retrieve-om" inheritAll="true" inheritRefs="true"/>
-		<antcall target="-retrieve-junit" inheritAll="true" inheritRefs="true"/>
-		<antcall target="-retrieve-dtd-generator" inheritAll="true" inheritRefs="true"/>
-		<antcall target="-retrieve-tools.jar" inheritAll="true" inheritRefs="true"/>
-		<antcall target="-retrieve-openlaszlo" inheritAll="true" inheritRefs="true"/>
-		<antcall target="-retrieve-cmdadmin" inheritAll="true" inheritRefs="true"/>
-		<antcall target="-process-db" inheritAll="true" inheritRefs="true"/>
+		<antcall target="-retrieve-mainlibs" inheritAll="true" inheritRefs="true" />
+		<antcall target="-retrieve-om" inheritAll="true" inheritRefs="true" />
+		<antcall target="-retrieve-junit" inheritAll="true" inheritRefs="true" />
+		<antcall target="-retrieve-dtd-generator" inheritAll="true" inheritRefs="true" />
+		<antcall target="-retrieve-tools.jar" inheritAll="true" inheritRefs="true" />
+		<antcall target="-retrieve-openlaszlo" inheritAll="true" inheritRefs="true" />
+		<antcall target="-retrieve-cmdadmin" inheritAll="true" inheritRefs="true" />
+		<antcall target="-process-db" inheritAll="true" inheritRefs="true" />
 	</target>
 </project>
