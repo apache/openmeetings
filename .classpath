@@ -52,9 +52,7 @@
 	<classpathentry kind="lib" path="build/red5/dist/lib/jaudiotagger-2.0.4-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="build/red5/dist/lib/javaee-api-5.1.2.om.jar"/>
 	<classpathentry kind="lib" path="build/red5/dist/lib/jcl-over-slf4j-1.6.1.jar"/>
-	<classpathentry kind="lib" path="build/red5/dist/lib/jruby-complete-1.1.6.jar"/>
 	<classpathentry kind="lib" path="build/red5/dist/lib/jul-to-slf4j-1.6.1.jar"/>
-	<classpathentry kind="lib" path="build/red5/dist/lib/jython-2.5.jar"/>
 	<classpathentry kind="lib" path="build/red5/dist/lib/log4j-over-slf4j-1.6.1.jar"/>
 	<classpathentry kind="lib" path="build/red5/dist/lib/logback-classic-0.9.28.jar"/>
 	<classpathentry kind="lib" path="build/red5/dist/lib/logback-core-0.9.28.jar"/>

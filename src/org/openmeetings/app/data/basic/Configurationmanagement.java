@@ -59,6 +59,7 @@ public class Configurationmanagement {
 	private UsersDaoImpl usersDao;
 	@Autowired
 	private AuthLevelmanagement authLevelManagement;
+	private String appName = null;
 
 	public Configuration getConfKey(long user_level, String CONF_KEY) {
 		try {
@@ -345,10 +346,8 @@ public class Configurationmanagement {
 	}
 
 	public String getAppName() {
-		String appName = Configurationmanagement.DEFAULT_APP_NAME;
-		Configuration application_name = getConfKey(3L, "application.name");
-		if (application_name != null) {
-			appName = application_name.getConf_value();
+		if (appName == null) {
+			appName = getConfValue("application.name", String.class, Configurationmanagement.DEFAULT_APP_NAME);
 		}
 		return appName;
 	}

@@ -192,17 +192,13 @@ public class Fieldmanagment {
 			query.setParameter("start", new Long(start));
 			query.setParameter("max", new Long(start + max));
 
-			List<Fieldlanguagesvalues> results = performReplace(query.getResultList());
+			String appName = cfgManagement.getAppName();
 			List<Map<String, Object>> returnList = new LinkedList<Map<String, Object>>();
-			if (results.size() != 0) {
-				Iterator<Fieldlanguagesvalues> flIterator = results.iterator();
-				while (flIterator.hasNext()) {
-					Fieldlanguagesvalues fl = flIterator.next();
-					Map<String, Object> map = new HashMap<String, Object>();
-					map.put("id", fl.getFieldvalues_id());
-					map.put("value", fl.getValue());
-					returnList.add(map);
-				}
+			for (Fieldlanguagesvalues fl : query.getResultList()) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("id", fl.getFieldvalues_id());
+				map.put("value", performReplace(fl.getValue(), appName));
+				returnList.add(map);
 			}
 			FieldLanguage fieldLanguage = fieldLanguageDaoImpl
 					.getFieldLanguageById(language_id);
@@ -393,13 +389,9 @@ public class Fieldmanagment {
 
 	public List<Fieldvalues> getMixedFieldValuesList(Long language_id)
 			throws Exception {
-		List<Fieldvalues> ll = this.getFieldsValues();
-		for (Iterator<Fieldvalues> iter = ll.iterator(); iter.hasNext();) {
-			Fieldvalues fv = iter.next();
-			fv.setFieldlanguagesvalue(this.getFieldByIdAndLanguage(
-					fv.getFieldvalues_id(), language_id));
-		}
-		return ll;
+		TypedQuery<Fieldvalues> q = em.createNamedQuery("getFieldvaluesByLanguage", Fieldvalues.class);
+		q.setParameter("language_id", language_id);
+		return q.getResultList();
 	}
 
 	public Fieldvalues getFieldvaluesById(Long fieldvalues_id, Long language_id) {
@@ -532,11 +524,6 @@ public class Fieldmanagment {
 		return fvList;
 	}
 
-	private List<Fieldvalues> getFieldsValues() throws Exception {
-		return em.createNamedQuery("getFieldvaluesByLanguage", Fieldvalues.class)
-					.getResultList();
-	}
-
 	private List<Fieldvalues> getFieldsValues(int start, int max,
 			String orderby, boolean asc, String search) throws Exception {
 		String queryLanguage = "select c from Fieldvalues c where c.deleted = 'false'";
@@ -595,9 +582,20 @@ public class Fieldmanagment {
 		return performReplace(f, appName);
 	}
 	
+	private String performReplace(String val, String appName) {
+		return val.replaceAll("\\$APP_NAME", appName);
+	}
+	
 	private Fieldlanguagesvalues performReplace(Fieldlanguagesvalues f, String appName) {
-		f.setValue(f.getValue().replaceAll("\\$APP_NAME", appName));
-		return f;
+		Fieldlanguagesvalues r = new Fieldlanguagesvalues();
+		r.setDeleted(f.getDeleted());
+		r.setFieldlanguagesvalues_id(f.getFieldlanguagesvalues_id());
+		r.setFieldvalues_id(f.getFieldvalues_id());
+		r.setLanguage_id(f.getLanguage_id());
+		r.setStarttime(f.getStarttime());
+		r.setUpdatetime(f.getUpdatetime());
+		r.setValue(performReplace(f.getValue(), appName));
+		return r;
 	}
 	
 	private <T extends Collection<Fieldlanguagesvalues>> T performReplace(T flv) {

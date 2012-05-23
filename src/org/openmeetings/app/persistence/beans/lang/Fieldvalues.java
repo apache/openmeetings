@@ -38,9 +38,10 @@ import javax.persistence.Transient;
 @Entity
 @NamedQueries({
 		@NamedQuery(name = "getFieldvaluesByLanguage", query = "SELECT fv from Fieldvalues fv "
-				+ "LEFT JOIN fv.fieldlanguagesvalues flv "
-				+ "WHERE flv.deleted LIKE 'false' "
-				+ "AND fv.deleted LIKE 'false' ")})
+			+ "LEFT JOIN fv.fieldlanguagesvalues flv "
+			+ "WHERE flv.deleted LIKE 'false' "
+			+ "		AND fv.deleted LIKE 'false' "
+			+ "		AND flv.language_id = :language_id")})
 @Table(name = "fieldvalues")
 public class Fieldvalues implements Serializable {
 
