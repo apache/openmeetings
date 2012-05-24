@@ -4305,6 +4305,36 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   <string id="1433" name="exclusive_audio_action">
     <value>あなたは、自分自身の手で単独話者になることができます。単独話者になるには、ここをクリックしてください。(または、あなたのビデオ画面でクリック、あるいはF12押下でも可能です)</value>
   </string>
+  <string id="1434" name="micro is on">
+    <value>Microphone is on!</value>
+  </string>
+  <string id="1435" name="micro is off">
+    <value>Microphone is muted</value>
+  </string>
+  <string id="1436" name="hide_chat">
+    <value>Hide chat</value>
+  </string>
+  <string id="1437" name="hide_activities_and_actions">
+    <value>Hide activities</value>
+  </string>
+  <string id="1438" name="hide_files_explorer">
+    <value>Hide files explorer</value>
+  </string>
+  <string id="1439" name="hide_actions_menu">
+    <value>Hide actions menu</value>
+  </string>
+  <string id="1440" name="hide_screen_sharing">
+    <value>Hide screen sharing</value>
+  </string>
+  <string id="1441" name="hide_whiteboard">
+    <value>Hide whiteboard</value>
+  </string>
+  <string id="1442" name="show microphone status">
+    <value>Show micro status in video</value>
+  </string>
+  <string id="1443" name="layout_options">
+    <value>Layout options</value>
+  </string>
   <string id="1444" name="calendar new button">
     <value>New Event</value>
   </string>
