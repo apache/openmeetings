@@ -142,10 +142,6 @@
         <display-name>BackupExport</display-name>
         <servlet-name>BackupExport</servlet-name>
         <servlet-class>org.openmeetings.servlet.outputhandler.BackupExportFacade</servlet-class>
-    </servlet> 
-    <servlet>
-        <servlet-name>NetworkTesting</servlet-name>
-        <servlet-class>org.openmeetings.servlet.outputhandler.NetworkTestingServlet</servlet-class>
     </servlet>
 	
 	<servlet-mapping>
@@ -204,10 +200,6 @@
     <servlet-mapping>
         <servlet-name>BackupExport</servlet-name>
         <url-pattern>/BackupExport</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>NetworkTesting</servlet-name>
-        <url-pattern>/NetworkTesting</url-pattern>
     </servlet-mapping>
     <mime-mapping>
         <extension>inc</extension>
