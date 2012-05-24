@@ -383,11 +383,12 @@ public class FLVRecorderService implements IPendingServiceCallback {
 
 			BaseStreamListener listenerAdapter = streamListeners.get(flvRecordingMetaDataId);
 			
+			log.debug("Stream Closing :: " + flvRecordingMetaDataId);
+			
 			if (listenerAdapter == null) {
-				throw new IllegalStateException("Could not find Listener to stop!");
+				throw new IllegalStateException("Could not find Listener to stop! flvRecordingMetaDataId "+flvRecordingMetaDataId);
 			}
 			
-			log.debug("Stream Closing :: " + flvRecordingMetaDataId);
 			listenerAdapter.closeStream();
 			streamListeners.remove(flvRecordingMetaDataId);
 
