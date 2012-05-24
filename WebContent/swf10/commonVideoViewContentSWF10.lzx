@@ -34,6 +34,7 @@
     <attribute name="offsetLength" type="number" value="40"/>
     <attribute name="videoWidth" type="number" value="132"/>
     <attribute name="videoHeight" type="number" value="132"/>
+    <attribute name="SIDEPANEL_WIDTH" type="number" value="270" />
     
     <handler name="oninit">
         <![CDATA[
@@ -241,6 +242,9 @@
     <method name="getVideoObjectFreePos" args="offsetLength,videoWidth,videoHeight">
         <![CDATA[
             var newx = 20;
+            if (canvas.currentRoomObject.hideWhiteboard) {
+                newx += SIDEPANEL_WIDTH;
+            }
             var newy = 0;
             var posFound = false;
             if (offsetLength == undefined) {
@@ -265,6 +269,9 @@
                     }
                     if ((newx + videoWidth) >= canvas.width) {
                         newx = 20;
+                        if (canvas.currentRoomObject.hideWhiteboard) {
+                            newx += SIDEPANEL_WIDTH;
+                        }
                         newy += 10;
                         posFound = false;
                     }
