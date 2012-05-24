@@ -306,7 +306,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	 * @param flvRecordingMetaDataId
 	 * @throws Exception
 	 */
-	private void recordShow(IConnection conn, String broadcastid,
+	private synchronized void recordShow(IConnection conn, String broadcastid,
 			String streamName, Long flvRecordingMetaDataId,
 			boolean isScreenData, Boolean isInterview) throws Exception {
 		try {
@@ -364,7 +364,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	 * 
 	 * @param conn
 	 */
-	public void stopRecordingShow(IConnection conn, String broadcastId,
+	public synchronized void stopRecordingShow(IConnection conn, String broadcastId,
 			Long flvRecordingMetaDataId) {
 		try {
 			
@@ -386,6 +386,14 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			log.debug("Stream Closing :: " + flvRecordingMetaDataId);
 			
 			if (listenerAdapter == null) {
+				
+				log.debug("Stream Not Found :: " + flvRecordingMetaDataId);
+				log.debug("Available Stream :: ");
+				
+				for (Long entryKey : streamListeners.keySet()) {
+					log.debug("Stored flvRecordingMetaDataId in Map: "+ entryKey);
+				}
+				
 				throw new IllegalStateException("Could not find Listener to stop! flvRecordingMetaDataId "+flvRecordingMetaDataId);
 			}
 			
