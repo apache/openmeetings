@@ -504,18 +504,21 @@
 		<path refid="compile.classpath" />
 	</path>
 
-	<path id="webservice.classes">
-		<fileset dir="src/org/openmeetings/axis/services">
-			<include name="*WebService.java" />
-		</fileset>
-	</path>
-
-	<target name="build.webservice.doc" depends="compile.only">
-		<javadoc classpathref="build.webservice.classpath" useexternalfile="true" sourcepathref="webservice.classes" />
-	</target>
+	<target name="build.webservice.doc" depends="compile.only, build.only.webservice.doc"/>
 
 	<property name="docs.dest" value="docs" />
 	<property name="docs.src" value="xdocs" />
+	<patternset id="images">
+		<include name="**/*.gif" />
+		<include name="**/*.jpeg" />
+		<include name="**/*.jpg" />
+		<include name="**/*.png" />
+	</patternset>
+	<patternset id="css">
+		<include name="**/*.css" />
+		<include name="**/*.gif" />
+		<include name="**/*.png" />
+	</patternset>
 
 	<!-- Anakia Build classpath -->
 	<path id="anakia.classpath">
@@ -532,24 +535,6 @@
 		</taskdef>
 
 		<anakia basedir="${docs.src}" destdir="${docs.dest}/" extension=".html" style="./site.vsl" projectFile="stylesheets/project.xml" excludes="**/stylesheets/** empty.xml" includes="**/*.xml" lastModifiedCheck="true" templatePath="xdocs/stylesheets" velocityPropertiesFile="${build.base.dir}/velocity.properties" />
-	</target>
-
-	<target name="build.only.webservice.doc" depends="anakia">
-		<javadoc classpathref="build.webservice.classpath" useexternalfile="true" sourcepathref="webservice.classes">
-			<doclet name="org.openmeetings.doc.WebServiceDoclet" pathref="build.webservice.classpath" />
-		</javadoc>
-
-		<patternset id="images">
-			<include name="**/*.gif" />
-			<include name="**/*.jpeg" />
-			<include name="**/*.jpg" />
-			<include name="**/*.png" />
-		</patternset>
-		<patternset id="css">
-			<include name="**/*.css" />
-			<include name="**/*.gif" />
-			<include name="**/*.png" />
-		</patternset>
 		<copy todir="${docs.dest}/images" filtering="no">
 			<fileset dir="${docs.src}/images">
 				<patternset refid="images" />
@@ -561,6 +546,15 @@
 				<patternset refid="css" />
 			</fileset>
 		</copy>
+	</target>
+
+	<target name="build.only.webservice.doc" depends="anakia">
+		<javadoc classpathref="build.webservice.classpath" useexternalfile="true">
+			<fileset dir="src/org/openmeetings/axis/services">
+				<include name="*WebService.java" />
+			</fileset>
+			<doclet name="org.openmeetings.doc.WebServiceDoclet" pathref="build.webservice.classpath" />
+		</javadoc>
 
 		<copy todir="${dist.webapps.dir}/docs">
 			<fileset dir="${basedir}/docs/">
