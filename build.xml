@@ -13,7 +13,11 @@
    limitations under the License.
  -->
 <!DOCTYPE project>
-<project name="openmeetings" basedir="./" default="dist" xmlns:rat="antlib:org.apache.rat.anttasks" xmlns="antlib:org.apache.tools.ant" xmlns:ivy="antlib:org.apache.ivy.ant">
+<project name="openmeetings" basedir="./" default="dist"
+	xmlns="antlib:org.apache.tools.ant"
+	xmlns:rat="antlib:org.apache.rat.anttasks"
+	xmlns:ivy="antlib:org.apache.ivy.ant"
+	>
 	<loadproperties srcFile="build.properties" />
 
 	<property name="project.distname" value="openmeetings" />
@@ -500,15 +504,14 @@
 		<path refid="compile.classpath" />
 	</path>
 
+	<path id="webservice.classes">
+		<fileset dir="src/org/openmeetings/axis/services">
+			<include name="*WebService.java" />
+		</fileset>
+	</path>
+
 	<target name="build.webservice.doc" depends="compile.only">
-		<javadoc classpathref="build.webservice.classpath" useexternalfile="true">
-			<source file="src/org/openmeetings/axis/services/CalendarWebService.java" />
-			<source file="src/org/openmeetings/axis/services/FileWebService.java" />
-			<source file="src/org/openmeetings/axis/services/JabberWebService.java" />
-			<source file="src/org/openmeetings/axis/services/RoomWebService.java" />
-			<source file="src/org/openmeetings/axis/services/UserWebService.java" />
-			<doclet name="org.openmeetings.doc.WebServiceDoclet" pathref="build.webservice.classpath" />
-		</javadoc>
+		<javadoc classpathref="build.webservice.classpath" useexternalfile="true" sourcepathref="webservice.classes" />
 	</target>
 
 	<property name="docs.dest" value="docs" />
@@ -519,7 +522,6 @@
 		<path refid="compile.classpath" />
 		<fileset dir="${anakia.lib.dir}" includes="*.jar" />
 		<fileset dir="${mainlibs.lib.dir}" includes="commons-collections*.jar,commons-lang*.jar,velocity*.jar" />
-
 	</path>
 
 	<target name="anakia" depends="-retrieve-mainlibs,-retrieve-om,-retrieve-anakia">
@@ -533,29 +535,30 @@
 	</target>
 
 	<target name="build.only.webservice.doc" depends="anakia">
-		<javadoc classpathref="build.webservice.classpath" useexternalfile="true">
-			<source file="src/org/openmeetings/axis/services/CalendarWebService.java" />
-			<source file="src/org/openmeetings/axis/services/FileWebService.java" />
-			<source file="src/org/openmeetings/axis/services/JabberWebService.java" />
-			<source file="src/org/openmeetings/axis/services/RoomWebService.java" />
-			<source file="src/org/openmeetings/axis/services/UserWebService.java" />
+		<javadoc classpathref="build.webservice.classpath" useexternalfile="true" sourcepathref="webservice.classes">
 			<doclet name="org.openmeetings.doc.WebServiceDoclet" pathref="build.webservice.classpath" />
 		</javadoc>
 
+		<patternset id="images">
+			<include name="**/*.gif" />
+			<include name="**/*.jpeg" />
+			<include name="**/*.jpg" />
+			<include name="**/*.png" />
+		</patternset>
+		<patternset id="css">
+			<include name="**/*.css" />
+			<include name="**/*.gif" />
+			<include name="**/*.png" />
+		</patternset>
 		<copy todir="${docs.dest}/images" filtering="no">
 			<fileset dir="${docs.src}/images">
-				<include name="**/*.gif" />
-				<include name="**/*.jpeg" />
-				<include name="**/*.jpg" />
-				<include name="**/*.png" />
+				<patternset refid="images" />
 			</fileset>
 		</copy>
 
 		<copy todir="${docs.dest}/css" filtering="no">
 			<fileset dir="${docs.src}/css">
-				<include name="**/*.css" />
-				<include name="**/*.gif" />
-				<include name="**/*.png" />
+				<patternset refid="css" />
 			</fileset>
 		</copy>
 
@@ -567,17 +570,12 @@
 		</copy>
 		<copy todir="${dist.webapps.dir}/docs/images">
 			<fileset dir="${basedir}/docs/images/">
-				<include name="**/*.gif" />
-				<include name="**/*.jpeg" />
-				<include name="**/*.jpg" />
-				<include name="**/*.png" />
+				<patternset refid="images" />
 			</fileset>
 		</copy>
 		<copy todir="${dist.webapps.dir}/docs/css">
 			<fileset dir="${basedir}/docs/css/">
-				<include name="**/*.css" />
-				<include name="**/*.gif" />
-				<include name="**/*.png" />
+				<patternset refid="css" />
 			</fileset>
 		</copy>
 		<copy todir="${dist.webapps.dir}/docs/js">
@@ -738,7 +736,14 @@
 		<copy todir="${red5.lib}" overwrite="true" force="true">
 			<fileset dir="${webcontent.src.dir}/red5" includes="admin.*" />
 		</copy>
+		<!-- FIXME need to be removed as soon as JAudioTagger (will be officially Dual Licensed) -->
+		<xslt in="${red5.lib}/conf/red5-common.xml" out="${red5.lib}/conf/red5-common1.xml" style="build-jaudiotagger.xsl" />
+		<move file="${red5.lib}/conf/red5-common1.xml" tofile="${red5.lib}/conf/red5-common.xml" />
+		<delete>
+			<fileset dir="${red5.server.lib}" includes="jaudiotagger*.jar" />
+		</delete>
 	</target>
+
 	<!-- Check for the Top level libraries -->
 	<target name="-retrieve-mainlibs" unless="mainlib.installed" description="Retrieves the libraries if needed" depends="-retrieve-red5">
 		<!-- Ivy configuration - http://ant.apache.org/ivy/history/trunk/ant.html -->
