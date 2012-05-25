@@ -11,7 +11,7 @@
 	<properties>
 		<title>OpenOffice converter for OpenMeetings</title>
 		<author email="sebawagner@apache.org">
-            OpenMeetings Team
+			OpenMeetings Team
 		</author>
 	</properties>
 
@@ -19,29 +19,36 @@
 
 		<section name="OpenOffice Service for OpenMeetings">
 
-			<p>To import .doc, .docx, .odp, .xls, .xlsx, .ppt, .pptx, ... [ all files that you can open with OpenOffice ] 
-            to OpenMeetings and use them in the whiteboard you need OpenOffice as Service running on 
-				the machine that runs OpenMeetings.<br/>
+			<p>
+				To import .doc, .docx, .odp, .xls, .xlsx, .ppt, .pptx, ... [ all
+				files that you can open with OpenOffice ]
+				to OpenMeetings and use
+				them in the whiteboard you need OpenOffice or LibreOffice
+				installed
+				the machine that runs OpenMeetings.
 			</p>
-			<p>Converter works with both: OpenOffice or LibreOffice.</p>
+			<p>
+				<i>Since Version 2.0 of OpenMeetings starting of
+					OpenOffice/LibreOffice as service in not required, JODConverter
+					will automatically start and shut down the service!
+				</i>
+			</p>
+			<p>
+				Installation of JODConverter means: You donwload the ZIP binary from
+				their
+				<a href="http://code.google.com/p/jodconverter/" target="_BLANK"
+					ref="nofollow">website</a>
+				and then configure in Apache OpenMeetings Administration >
+				Configuration (or during installation) the config key
+				<tt>jod.path</tt>
+				to point to the "lib" directory of the unpacked JODConverter binary.
+				There is no restart of OpenMeetings required.
+			</p>
 			<p>You should use an OpenOffice version greater 3</p>
-			<ul>
-				<li>Linux (Debian, et cetera): You have to start OpenOffice in "headless" modus. This requires NO graphical user interface on the server! 
-                    So there is no need to install xvfb or anything like that. However you should install ALL OpenOffice packages, 
-					for example if you want to enable the .xls, .xlsx import you need to install the openoffice-calc package.<br/>
-					You can start OpenOffice Service with this command: <br/>
-					<tt>/path/to/openoffice/program/soffice.bin -headless -nofirststartwizard -accept="socket,host=localhost,port=8100;urp;StarOffice.Service" </tt>
-					<br/>
-					It might makes sense to install ms-corefonts package on Linux machines to have MS fonts available.
-				</li>
-				<li>for Mac OS X: <tt>/path/to/openoffice.app/Contents/!MacOS/soffice.bin -headless -nofirststartwizard -accept="socket,host=localhost,port=8100;urp;StarOffice.Service"</tt> 
-				</li>
-				<li>for Windows: <tt>soffice.exe -headless -nofirststartwizard -accept="socket,host=localhost,port=8100;urp;StarOffice.Service"</tt> </li>
-			</ul>
-			
+
 		</section>
-        
-        
+
+
 	</body>
 
 </document>
