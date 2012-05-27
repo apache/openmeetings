@@ -50,12 +50,13 @@
 	</method>
     
     <text fontsize="11" name="error" y="20" fgcolor="0x666666"/>
-    <text fontsize="11" name="_src" y="50" align="center" fgcolor="0x666666"/>
+    <text fontsize="11" name="_src" y="50" align="center" fgcolor="0x666666" visibility="hidden" />
     
-    <view name="loadingbar" bgcolor="$once{ canvas.getThemeColor('styleMenuBarBaseColor') }" height="4"  pixellock="true"
+    <view name="loadingbar"  height="1" pixellock="true"
           x="-5" y="40" width="$once{ parent.maxwidth+2 }" visibility="hidden">
-          <view x="1" y="1" width="$once{ parent.width-2 }" height="2" bgcolor="0xFFFFFF"/>
-          <view name="_loading" x="1" y="1" width="0" height="2"  pixellock="true" 
+          <view x="1" y="1" width="$once{ parent.width-2 }" height="1" opacity="0.3"
+          		bgcolor="$once{ canvas.getThemeColor('styleMenuBarBaseColor') }" />
+          <view name="_loading" x="1" y="1" width="0" height="1"  pixellock="true" 
           		bgcolor="$once{ canvas.getThemeColor('styleMenuBarBaseColor') }"/>
     </view>
     
