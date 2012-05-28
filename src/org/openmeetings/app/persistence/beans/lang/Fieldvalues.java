@@ -29,19 +29,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
-@NamedQueries({
-		@NamedQuery(name = "getFieldvaluesByLanguage", query = "SELECT fv from Fieldvalues fv "
-			+ "LEFT JOIN fv.fieldlanguagesvalues flv "
-			+ "WHERE flv.deleted LIKE 'false' "
-			+ "		AND fv.deleted LIKE 'false' "
-			+ "		AND flv.language_id = :language_id")})
 @Table(name = "fieldvalues")
 public class Fieldvalues implements Serializable {
 

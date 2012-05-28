@@ -387,9 +387,9 @@ public class Fieldmanagment {
 		return null;
 	}
 
-	public List<Fieldvalues> getMixedFieldValuesList(Long language_id)
+	public List<Fieldlanguagesvalues> getMixedFieldValuesList(Long language_id)
 			throws Exception {
-		TypedQuery<Fieldvalues> q = em.createNamedQuery("getFieldvaluesByLanguage", Fieldvalues.class);
+		TypedQuery<Fieldlanguagesvalues> q = em.createNamedQuery("allFieldLanguageValues", Fieldlanguagesvalues.class);
 		q.setParameter("language_id", language_id);
 		return q.getResultList();
 	}

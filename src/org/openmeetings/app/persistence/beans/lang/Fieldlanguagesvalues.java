@@ -25,13 +25,23 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
+@NamedQueries({
+	@NamedQuery(name = "allFieldLanguageValues", query = "SELECT flv FROM Fieldlanguagesvalues flv "
+		+ "WHERE flv.deleted LIKE 'false' "
+		+ "		AND flv.fieldvalues.deleted LIKE 'false' "
+		+ "		AND flv.language_id = :language_id")})
 @Table(name = "fieldlanguagesvalues")
 public class Fieldlanguagesvalues implements Serializable {
 
@@ -53,6 +63,10 @@ public class Fieldlanguagesvalues implements Serializable {
 	@Lob
 	@Column(name="value")
 	private String value;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "fieldvalues_id")
+	private Fieldvalues fieldvalues;
 	
 	public Fieldlanguagesvalues() {
 		super();
@@ -105,6 +119,14 @@ public class Fieldlanguagesvalues implements Serializable {
 	}
 	public void setValue(String value) {
 		this.value = value;
+	}
+
+	public Fieldvalues getFieldvalues() {
+		return fieldvalues;
+	}
+
+	public void setFieldvalues(Fieldvalues fieldvalues) {
+		this.fieldvalues = fieldvalues;
 	}
 	
 }

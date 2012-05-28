@@ -21,7 +21,6 @@ package org.openmeetings.servlet.outputhandler;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -41,7 +40,6 @@ import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.persistence.beans.lang.FieldLanguage;
 import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
-import org.openmeetings.app.persistence.beans.lang.Fieldvalues;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -63,7 +61,7 @@ public class LangExport extends HttpServlet {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
-				return (Sessionmanagement) context.getBean("sessionManagement");
+				return context.getBean("sessionManagement", Sessionmanagement.class);
 			}
 		} catch (Exception err) {
 			log.error("[getSessionManagement]", err);
@@ -76,7 +74,7 @@ public class LangExport extends HttpServlet {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
-				return (Usermanagement) context.getBean("userManagement");
+				return context.getBean("userManagement", Usermanagement.class);
 			}
 		} catch (Exception err) {
 			log.error("[getUserManagement]", err);
@@ -89,7 +87,7 @@ public class LangExport extends HttpServlet {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
-				return (Fieldmanagment) context.getBean("fieldmanagment");
+				return context.getBean("fieldmanagment", Fieldmanagment.class);
 			}
 		} catch (Exception err) {
 			log.error("[getFieldmanagment]", err);
@@ -102,8 +100,7 @@ public class LangExport extends HttpServlet {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
-				return (FieldLanguageDaoImpl) context
-						.getBean("fieldLanguageDaoImpl");
+				return context.getBean("fieldLanguageDaoImpl", FieldLanguageDaoImpl.class);
 			}
 		} catch (Exception err) {
 			log.error("[getFieldLanguageDaoImpl]", err);
@@ -155,11 +152,10 @@ public class LangExport extends HttpServlet {
 				FieldLanguage fl = getFieldLanguageDaoImpl()
 						.getFieldLanguageById(language_id);
 
-				List<Fieldvalues> fvList = getFieldmanagment()
-						.getMixedFieldValuesList(language_id);
+				List<Fieldlanguagesvalues> flvList = getFieldmanagment().getMixedFieldValuesList(language_id);
 
-				if (fl != null && fvList != null) {
-					Document doc = this.createDocument(fvList);
+				if (fl != null && flvList != null) {
+					Document doc = this.createDocument(flvList);
 
 					String requestedFile = fl.getName() + ".xml";
 
@@ -190,7 +186,7 @@ public class LangExport extends HttpServlet {
 		}
 	}
 
-	public Document createDocument(List<Fieldvalues> fvList) throws Exception {
+	public Document createDocument(List<Fieldlanguagesvalues> flvList) throws Exception {
 		Document document = DocumentHelper.createDocument();
 		document.setXMLEncoding("UTF-8");
 		document.addComment("###############################################\n"
@@ -201,24 +197,12 @@ public class LangExport extends HttpServlet {
 
 		Element root = document.addElement("language");
 
-		for (Iterator<Fieldvalues> it = fvList.iterator(); it.hasNext();) {
-			Fieldvalues fv = it.next();
+		for (Fieldlanguagesvalues flv : flvList) {
 			Element eTemp = root.addElement("string")
-					.addAttribute("id", fv.getFieldvalues_id().toString())
-					.addAttribute("name", fv.getName());
+					.addAttribute("id", flv.getFieldvalues().getFieldvalues_id().toString())
+					.addAttribute("name", flv.getFieldvalues().getName());
 			Element value = eTemp.addElement("value");
-			if (fv.getFieldlanguagesvalue() != null) {
-				value.addText(fv.getFieldlanguagesvalue().getValue());
-			} else {
-				// Add english default text
-				Fieldlanguagesvalues flv = getFieldmanagment()
-						.getFieldByIdAndLanguage(fv.getFieldvalues_id(), 1L);
-				if (flv != null) {
-					value.addText(flv.getValue());
-				} else {
-					value.addText("");
-				}
-			}
+			value.addText(flv.getValue());
 		}
 
 		return document;
