@@ -155,7 +155,7 @@ public class LangExport extends HttpServlet {
 				List<Fieldlanguagesvalues> flvList = getFieldmanagment().getMixedFieldValuesList(language_id);
 
 				if (fl != null && flvList != null) {
-					Document doc = this.createDocument(flvList);
+					Document doc = createDocument(flvList, getFieldmanagment().getUntranslatedFieldValuesList(language_id));
 
 					String requestedFile = fl.getName() + ".xml";
 
@@ -186,7 +186,7 @@ public class LangExport extends HttpServlet {
 		}
 	}
 
-	public Document createDocument(List<Fieldlanguagesvalues> flvList) throws Exception {
+	public Document createDocument(List<Fieldlanguagesvalues> flvList, List<Fieldlanguagesvalues> untranslatedList) throws Exception {
 		Document document = DocumentHelper.createDocument();
 		document.setXMLEncoding("UTF-8");
 		document.addComment("###############################################\n"
@@ -203,6 +203,18 @@ public class LangExport extends HttpServlet {
 					.addAttribute("name", flv.getFieldvalues().getName());
 			Element value = eTemp.addElement("value");
 			value.addText(flv.getValue());
+		}
+
+		//untranslated
+		if (untranslatedList.size() > 0) {
+			root.addComment("Untranslated strings");
+			for (Fieldlanguagesvalues flv : untranslatedList) {
+				Element eTemp = root.addElement("string")
+						.addAttribute("id", flv.getFieldvalues().getFieldvalues_id().toString())
+						.addAttribute("name", flv.getFieldvalues().getName());
+				Element value = eTemp.addElement("value");
+				value.addText(flv.getValue());
+			}
 		}
 
 		return document;
