@@ -726,6 +726,13 @@
 		<copy todir="${red5.lib}/conf" overwrite="true" force="true">
 			<fileset dir="${webcontent.src.dir}/red5" includes="jee-container*.xml" />
 		</copy>
+		<copy file="${red5.server.dir}/src/conf/red5.properties" todir="${red5.lib}/conf" overwrite="true" force="true">
+			<filterchain>
+				<tokenfilter>
+					<replaceregex pattern="^[ \t]*rtmpt.target_reponse_size[ \t]*=.*$" replace="rtmpt.target_reponse_size=65536"/>
+				</tokenfilter>
+			</filterchain>
+		</copy>
 		<copy file="${webcontent.src.dir}/red5/index.html" todir="${red5.lib}/webapps/root" overwrite="true" force="true" />
 		<copy todir="${red5.lib}" overwrite="true" force="true">
 			<fileset dir="${webcontent.src.dir}/red5" includes="admin.*" />
