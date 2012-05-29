@@ -524,7 +524,7 @@ public class ScreenSharerFrame extends JFrame {
 				BorderFactory.createEmptyBorder(0, 5, 0, 0)));
 		panelStatus.add(lblStatus);
 		
-		setPublishingTabEnabled(false);
+		//setPublishingTabEnabled(false);
 		contentPane.setLayout(gl_contentPane);
 		
 		// Background Image
@@ -559,7 +559,7 @@ public class ScreenSharerFrame extends JFrame {
 		tabbedPane.setToolTipTextAt(0, enabled ? null : recordingTipLabel);
 	}
 	
-	private void setPublishingTabEnabled(boolean enabled) {
+	public void setPublishingTabEnabled(boolean enabled) {
 		panelPublish.setEnabled(enabled);
 		btnStopPublish.setEnabled(false);
 		tabbedPane.setEnabledAt(1, enabled);

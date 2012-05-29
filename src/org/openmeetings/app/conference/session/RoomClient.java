@@ -84,7 +84,6 @@ public class RoomClient implements Serializable {
 	 * If true this client is only used to stream audio/video events, 
 	 * he should not receive any sync events / push messages <br/>
 	 * <br/>
-	 * null means not initialized yet<br/>
 	 * true the user is an audio/video connection<br/>
 	 * false the user is a regular user with full session object<br/>
 	 * 
@@ -111,7 +110,7 @@ public class RoomClient implements Serializable {
 	 */
 	private int userport;
 	/*
-	 * current room idd while conferencing
+	 * current room id while conferencing
 	 */
 	private Long room_id;
 	
@@ -164,6 +163,7 @@ public class RoomClient implements Serializable {
 	boolean startRecording = false;
 	boolean startStreaming = false;
 	private boolean screenPublishStarted = false;
+	private boolean streamPublishStarted = false;
 	
 	/*
 	 * Indicates if this User is broadcasting his stream at all
@@ -592,6 +592,14 @@ public class RoomClient implements Serializable {
 
 	public void setIsAVClient(boolean isAVClient) {
 		this.isAVClient = isAVClient;
+	}
+
+	public boolean isStreamPublishStarted() {
+		return streamPublishStarted;
+	}
+
+	public void setStreamPublishStarted(boolean streamPublishStarted) {
+		this.streamPublishStarted = streamPublishStarted;
 	}
 
 	/**

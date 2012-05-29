@@ -114,7 +114,7 @@
 	<classpathentry kind="lib" path="build/lib/dtd-generator/trang-jar-20091111.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/axis2-kernel-jar-1.7.0-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="build/red5/dist/commons-cli-jar-1.2.jar"/>
-	<classpathentry kind="lib" path="build/lib/mainlibs/red5-client-jar-1.0-RC2.jar"/>
+	<classpathentry kind="lib" path="build/lib/mainlibs/red5-client-jar-1.0-RC2.jar" sourcepath="D:/mm_src/svn/red5-client/src"/>
 	<classpathentry kind="lib" path="build/lib/mainlibs/cglib-jar-2.2.2.jar"/>
 	<classpathentry kind="lib" path="build/lib/mainlibs/commons-fileupload-jar-1.2.2.jar"/>
 	<classpathentry kind="lib" path="build/lib/mainlibs/commons-io-jar-2.1.jar"/>

@@ -266,7 +266,7 @@
 		</jar>
 
 		<!-- Build WebServices -->
-		<jar destfile="${dist.webapps.dir}/WEB-INF/services/OpenMeetingsService-${jar.suffix}.aar">
+		<jar destfile="${dist.webapps.dir}/WEB-INF/services/${project.distname}-${jar.suffix}.aar">
 			<fileset dir="src/">
 				<include name="META-INF/services.xml" />
 			</fileset>
@@ -275,7 +275,7 @@
 				<include name="META-INF/NOTICE" />
 			</fileset>
 		</jar>
-		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/openmeetings-WebService-${jar.suffix}.jar">
+		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-WebService-${jar.suffix}.jar">
 			<fileset dir="${main.out.dir}">
 				<include name="**/openmeetings/axis/**" />
 				<include name="META-INF/LICENSE" />

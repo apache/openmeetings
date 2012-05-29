@@ -49,31 +49,23 @@ import org.openmeetings.app.persistence.beans.calendar.MeetingMember;
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.FLVRecorderService;
+import org.openmeetings.app.remote.StreamPublishingService;
 import org.openmeetings.app.remote.WhiteBoardService;
 import org.openmeetings.utils.math.CalendarPatterns;
-import org.red5.client.net.rtmp.ClientExceptionHandler;
 import org.red5.logging.Red5LoggerFactory;
-import org.red5.server.adapter.ApplicationAdapter;
+import org.red5.server.adapter.MultiThreadedApplicationAdapter;
 import org.red5.server.api.IClient;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
-import org.red5.server.api.scope.IBasicScope;
-import org.red5.server.api.scope.IBroadcastScope;
 import org.red5.server.api.scope.IScope;
-import org.red5.server.api.scope.ScopeType;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.api.service.IServiceCapableConnection;
 import org.red5.server.api.stream.IBroadcastStream;
-import org.red5.server.api.stream.IStreamListener;
-import org.red5.server.api.stream.IStreamPacket;
-import org.red5.server.net.rtmp.event.IRTMPEvent;
-import org.red5.server.stream.StreamingProxy;
-import org.red5.server.stream.message.RTMPMessage;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class ScopeApplicationAdapter extends ApplicationAdapter implements
+public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter implements
 		IPendingServiceCallback {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
@@ -104,8 +96,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	private UsersDaoImpl usersDao;
 	@Autowired
 	private MeetingMemberDaoImpl meetingMemberDao;
+	@Autowired
+	private StreamPublishingService streamPublishingService;
 
-    private Map<String, StreamingProxy> streamingProxyMap = new HashMap<String, StreamingProxy>();
 	// This is the Folder where all executables are written
 	// for windows platform
 	public static String batchFileDir = "webapps" + File.separatorChar + "ROOT"
@@ -269,7 +262,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 							currentClient.getStreamid(), currentClient);
 				}
 				if (Boolean.valueOf(map.get("stopPublishing").toString())) {
-					streamPublishingStop();
+					streamPublishingService.streamPublishingStop(this);
 					if (currentClient.getIsScreenClient() && currentClient.isStartStreaming()) {
 						returnMap.put("result", "stopPublishingOnly");
 					}
@@ -414,7 +407,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 
 					flvRecorderService.recordMeetingStream(recordingName, "", false);
 				} else if (Boolean.valueOf(map.get("startPublishing").toString())) {
-					if (streamPublishingStart("" + map.get("publishingHost")
+					if (streamPublishingService.streamPublishingStart(
+						this
+						, "" + map.get("publishingHost")
 						, "" + map.get("publishingApp")
 						, "" + map.get("publishingId")))
 					{
@@ -800,78 +795,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		}
 	}
 
-	public IBroadcastScope getBroadcastScope(IScope scope, String name) {
-		IBasicScope basicScope = scope.getBasicScope(ScopeType.BROADCAST, name);
-		if (!(basicScope instanceof IBroadcastScope)) {
-			return null;
-		} else {
-			return (IBroadcastScope) basicScope;
-		}
-	}
-
-    public boolean streamPublishingStart(String host, String app, String id) {
-    	final boolean[] result = {true};
-		final IConnection conn = Red5.getConnectionLocal();
-		RoomClient rc = clientListManager.getClientByStreamId(conn.getClient().getId());
-		String publishName = rc.getStreamPublishName();
-		
-		if (rc.getIsScreenClient() && rc.isStartStreaming()) {
-	        IScope scope = conn.getScope();
-	        IBroadcastStream stream = getBroadcastStream(scope, publishName);
-	        IBroadcastScope bsScope = getBroadcastScope(scope, publishName);
-	        final StreamingProxy proxy = new StreamingProxy();
-	        proxy.setHost(host);
-	        proxy.setApp(app);
-	        proxy.setPort(1935);
-	        proxy.init();
-	        proxy.setExceptionHandler(new ClientExceptionHandler() {
-				public void handleException(Throwable throwable) {
-					result[0] = false;
-					HashMap<String, Object> params = new HashMap<String, Object>();
-					params.put("stopPublishing", true);
-					params.put("error", throwable.getMessage());
-					((IServiceCapableConnection)conn).invoke(
-						"screenSharerAction"
-						, new Object[] { params }
-						, ScopeApplicationAdapter.this);
-				}
-			});
-	        bsScope.subscribe(proxy, null);
-	        proxy.start(id, "live", null);
-	        streamingProxyMap.put(publishName, proxy);
-	        stream.addStreamListener(new IStreamListener() {
-				public void packetReceived(IBroadcastStream stream, IStreamPacket packet) {
-					try {
-						RTMPMessage m = RTMPMessage.build((IRTMPEvent)packet, packet.getTimestamp());
-				        proxy.pushMessage(null, m);
-					} catch (Exception e) {
-						log.error("Exception while sending proxy message", e);
-					}
-				}
-			});
-		}
-		return result[0];
-    }
-    
-    public void streamPublishingStop() {
-		IConnection current = Red5.getConnectionLocal();
-		RoomClient rc = clientListManager.getClientByStreamId(current.getClient().getId());
-		String publishName = rc.getStreamPublishName();
-		
-		if (rc.getIsScreenClient() && publishName != null) {
-	        IScope scope = current.getScope();
-	        IBroadcastStream stream = getBroadcastStream(scope, publishName);
-			StreamingProxy proxy = streamingProxyMap.remove(publishName);
-			if (proxy != null) {
-				proxy.stop();
-				IBroadcastScope bsScope = getBroadcastScope(scope, stream.getPublishedName());
-				if (bsScope != null) {
-					bsScope.unsubscribe(proxy);
-				}
-			}
-		}
-    }
-    
 	/**
 	 * This method handles the Event after a stream has been removed all
 	 * connected Clients in the same room will get a notification
@@ -886,7 +809,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 		log.debug("start streamBroadcastClose broadcast close: "
 				+ stream.getPublishedName());
 		try {
-			streamPublishingStop();
+			streamPublishingService.streamPublishingStop(this);
 			
 			IConnection current = Red5.getConnectionLocal();
 			RoomClient rcl = clientListManager.getClientByStreamId(current.getClient().getId());
