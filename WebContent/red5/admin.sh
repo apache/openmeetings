@@ -13,8 +13,9 @@
 # limitations under the License.
 # #############################################
 export RED5_HOME=$(cd $(dirname "$0"); pwd) 
+export OM_CONTEXT=openmeetings
 
-export CLASSPATH=$RED5_HOME/*:$RED5_HOME/conf:$RED5_HOME/lib/*:$RED5_HOME/webapps/openmeetings/WEB-INF/lib/*:$RED5_HOME/webapps/openmeetings/WEB-INF:$RED5_HOME/webapps/openmeetings/WEB-INF/classes
+export CLASSPATH=$RED5_HOME/*:$RED5_HOME/conf:$RED5_HOME/lib/*:$RED5_HOME/webapps/${OM_CONTEXT}/WEB-INF/lib/*:$RED5_HOME/webapps/${OM_CONTEXT}/WEB-INF:$RED5_HOME/webapps/${OM_CONTEXT}/WEB-INF/classes
 
-java -cp "$CLASSPATH" -Dlogback.ContextSelector=org.red5.logging.LoggingContextSelector org.openmeetings.cli.Admin $*
+java -cp "$CLASSPATH" -Dcontext=${OM_CONTEXT} -Dlogback.ContextSelector=org.red5.logging.LoggingContextSelector org.openmeetings.cli.Admin $*
 
