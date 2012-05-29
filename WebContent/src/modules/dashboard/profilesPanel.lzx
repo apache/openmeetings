@@ -68,6 +68,7 @@
 				}
 				if (value.omTimeZone != null) {
 					parent._langAndCountry._timeZone.setAttribute("text","<u>" + value.omTimeZone.jname + "</u>");
+					canvas.timeZoneId = value.omTimeZone.omtimezoneId;
 				}
 				
 				if (value.pictureuri==null || value.pictureuri.length==0){
