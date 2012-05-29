@@ -166,7 +166,6 @@ public class CoreScreenShare {
 			});
 			frame.setVisible(true);
 			frame.setRecordingTabEnabled(allowRecording);
-			frame.setPublishingTabEnabled(allowRecording);
 
 			logger.debug("initialized");
 

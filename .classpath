@@ -22,7 +22,7 @@
 	<classpathentry kind="lib" path="build/lib/om/geronimo-ws-metadata_2.0_spec-jar-1.1.2.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/ical4j-bundle-1.0.3.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/jaxen-jar-1.1.1.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/openjpa-bundle-2.2.0.jar" sourcepath="C:/Users/swagner/.m2/repository/org/apache/openjpa/openjpa/2.2.0/openjpa-2.2.0-sources.jar"/>
+	<classpathentry kind="lib" path="build/lib/om/openjpa-bundle-2.2.0.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/stax-api-jar-1.0-2.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/wsdl4j-jar-1.6.2.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/xalan-jar-2.7.0.jar"/>
@@ -114,7 +114,7 @@
 	<classpathentry kind="lib" path="build/lib/dtd-generator/trang-jar-20091111.jar"/>
 	<classpathentry kind="lib" path="build/lib/om/axis2-kernel-jar-1.7.0-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="build/red5/dist/commons-cli-jar-1.2.jar"/>
-	<classpathentry kind="lib" path="build/lib/mainlibs/red5-client-jar-1.0-RC2.jar" sourcepath="D:/mm_src/svn/red5-client/src"/>
+	<classpathentry kind="lib" path="build/lib/mainlibs/red5-client-jar-1.0-RC2.jar"/>
 	<classpathentry kind="lib" path="build/lib/mainlibs/cglib-jar-2.2.2.jar"/>
 	<classpathentry kind="lib" path="build/lib/mainlibs/commons-fileupload-jar-1.2.2.jar"/>
 	<classpathentry kind="lib" path="build/lib/mainlibs/commons-io-jar-2.1.jar"/>

@@ -70,7 +70,6 @@
 	<bean id="chatservice.service" class="org.openmeetings.app.remote.ChatService" />
 	<bean id="calendarservice.service" class="org.openmeetings.app.remote.CalendarService" />
 	<bean id="flvrecorderservice.service" class="org.openmeetings.app.remote.FLVRecorderService" />
-	<bean id="streamPublishingService" class="org.openmeetings.app.remote.StreamPublishingService" />
 	<bean id="openmeetings.FlvRecorderConverterTask"
 		class="org.openmeetings.app.data.flvrecord.converter.FlvRecorderConverterTask" />
 	<bean id="openmeetings.FlvInterviewConverterTask"

@@ -524,7 +524,7 @@ public class ScreenSharerFrame extends JFrame {
 				BorderFactory.createEmptyBorder(0, 5, 0, 0)));
 		panelStatus.add(lblStatus);
 		
-		//setPublishingTabEnabled(false);
+		setPublishingTabEnabled(false);
 		contentPane.setLayout(gl_contentPane);
 		
 		// Background Image
