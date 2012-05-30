@@ -869,10 +869,10 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>پشتيباني و همكاري</value>
   </string>
   <string id="282" name="dashboard_quickhomepageurl">
-    <value>http://www.nlai.ir/</value>
+    <value>http://incubator.apache.org/openmeetings/</value>
   </string>
   <string id="283" name="dashboard_quickmailinglisturl">
-    <value>http://lms.nlai.ir</value>
+    <value>http://incubator.apache.org/openmeetings/mail-lists.html</value>
   </string>
   <string id="284" name="dashboard_reportbugs">
     <value>!اشكال يك ضبط</value>
@@ -881,10 +881,10 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>بيشتر</value>
   </string>
   <string id="286" name="dashboard_quicklinkhomepagelabel">
-    <value>NLAI (www.nlai.ir)</value>
+    <value>Project website (http://incubator.apache.org/openmeetings/)</value>
   </string>
   <string id="287" name="dashboard_quicklinkmailinglistlabel">
-    <value>NLAI E-Learning(lms.nlai.ir)</value>
+    <value>User mailing list (http://incubator.apache.org/openmeetings/mail-lists.html)</value>
   </string>
   <string id="288" name="login_rememberuser">
     <value>Remember Login</value>

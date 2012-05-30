@@ -869,10 +869,10 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Support dan Bantuan</value>
   </string>
   <string id="282" name="dashboard_quickhomepageurl">
-    <value>http://mayapada.com/</value>
+    <value>http://incubator.apache.org/openmeetings/</value>
   </string>
   <string id="283" name="dashboard_quickmailinglisturl">
-    <value>http://mayapada.com/</value>
+    <value>http://incubator.apache.org/openmeetings/mail-lists.html</value>
   </string>
   <string id="284" name="dashboard_reportbugs">
     <value>laporkan bug!</value>
@@ -881,10 +881,10 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Selebihnya</value>
   </string>
   <string id="286" name="dashboard_quicklinkhomepagelabel">
-    <value>Website (mayapada.com)</value>
+    <value>Website (http://incubator.apache.org/openmeetings)</value>
   </string>
   <string id="287" name="dashboard_quicklinkmailinglistlabel">
-    <value>Mailing List (mayapada.com)</value>
+    <value>Mailing List (http://incubator.apache.org/openmeetings/mail-lists.html)</value>
   </string>
   <string id="288" name="login_rememberuser">
     <value>Ingat saya</value>
