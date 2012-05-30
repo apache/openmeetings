@@ -741,9 +741,11 @@ public class ImportInitvalues {
 		for (@SuppressWarnings("rawtypes")
 		Iterator it = root.elementIterator("country"); it.hasNext();) {
 			Element item = (Element) it.next();
-			String country = item.attributeValue("name");
 
-			statemanagement.addState(country);
+			statemanagement.addState(
+				item.attributeValue("name")
+				, item.attributeValue("short")
+				, Integer.parseInt(item.attributeValue("code")));
 		}
 		log.debug("Countries ADDED");
 	}

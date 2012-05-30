@@ -45,16 +45,30 @@ public class Statemanagement {
 	private EntityManager em;
 
 	/**
-	 * adds a new State to the states table
+	 * adds a new State to the states table with no short name and code
 	 * 
-	 * @param statename
+	 * @param name
 	 * @return the id of the new state or null if an error occurred
 	 */
-	public Long addState(String statename) {
+	public Long addState(String name) {
+		return addState(name, "", 0);
+	}
+	
+	/**
+	 * adds a new State to the states table
+	 * 
+	 * @param name the name of the country
+	 * @param shortName the short name of the country
+	 * @param code the code of the country
+	 * @return the id of the new state or null if an error occurred
+	 */
+	public Long addState(String name, String shortName, int code) {
 		try {
 
 			States st = new States();
-			st.setName(statename);
+			st.setName(name);
+			st.setShortName(shortName);
+			st.setCode(code);
 			st.setStarttime(new Date());
 			st.setDeleted("false");
 

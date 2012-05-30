@@ -1086,7 +1086,7 @@ public class BackupImportController extends AbstractUploadController {
 
 						States st = statemanagement.getStateById(state_id);
 						if (st == null) {
-							statemanagement.getStateById(1L);
+							st = statemanagement.getStateById(1L);
 						}
 
 						us.setAdresses(street, zip, town,

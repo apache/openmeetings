@@ -24,38 +24,35 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-
 
 @Entity
 @Table(name = "states")
 public class States implements Serializable {
-	
 	private static final long serialVersionUID = -1629546369219451403L;
 	@Id
-	@GeneratedValue
-    
-	@Column(name="state_id")
- 	private Long state_id;
-	@Column(name="name")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "state_id")
+	private Long state_id;
+	@Column(name = "name")
 	private String name;
-	@Column(name="starttime")
+	@Column(name = "starttime")
 	private Date starttime;
-	@Column(name="updatetime")
+	@Column(name = "updatetime")
 	private Date updatetime;
-	@Column(name="deleted")
+	@Column(name = "deleted")
 	private String deleted;
-
-	public States() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	@Column(name = "shortName")
+	private String shortName;
+	@Column(name = "code")
+	private int code;
 
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -63,29 +60,48 @@ public class States implements Serializable {
 	public Long getState_id() {
 		return state_id;
 	}
+
 	public void setState_id(Long state_id) {
 		this.state_id = state_id;
 	}
-    
+
 	public Date getStarttime() {
 		return starttime;
 	}
+
 	public void setStarttime(Date starttime) {
 		this.starttime = starttime;
 	}
-    
+
 	public Date getUpdatetime() {
 		return updatetime;
 	}
+
 	public void setUpdatetime(Date updatetime) {
 		this.updatetime = updatetime;
 	}
-	
+
 	public String getDeleted() {
 		return deleted;
 	}
+
 	public void setDeleted(String deleted) {
 		this.deleted = deleted;
 	}
-	
+
+	public String getShortName() {
+		return shortName;
+	}
+
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
+	}
+
+	public int getCode() {
+		return code;
+	}
+
+	public void setCode(int code) {
+		this.code = code;
+	}
 }
