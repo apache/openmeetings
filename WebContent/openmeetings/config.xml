@@ -76,14 +76,6 @@ of the red5-servlet
 <proxyType>none</proxyType>
 	
 <!--
-	These colors are the main colors and style the whole application
- -->
-<basebgcolorizer>0xBDC0DB</basebgcolorizer>
-<baseMousecolorizer>0xBDC0DB</baseMousecolorizer>
-<baseMouseOvercolorizer>0xBDC0DB</baseMouseOvercolorizer>
-<styleMenuBarBaseColor>0x000088</styleMenuBarBaseColor>
-    
-<!--
     Name of the Application
     this is the Top-Icon Name of the Application
  -->    
