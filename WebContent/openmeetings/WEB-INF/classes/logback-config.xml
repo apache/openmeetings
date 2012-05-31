@@ -19,7 +19,8 @@
   
 -->
 
-<configuration>
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="logback.xsd">
 	<contextName>${current_openmeetings_context_name}</contextName>
 	
 	<jmxConfigurator contextName="${current_openmeetings_context_name}" />

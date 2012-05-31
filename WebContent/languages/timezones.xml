@@ -18,7 +18,8 @@
   under the License.
   
 -->
-<timezones>
+<timezones xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="timezones.xsd">
 	<!-- 
 		This file is loaded during installation to the database table "om_timezones" of OpenMeetings. 
 		Changes at runtime to this file have no effect to OpenMeetings.

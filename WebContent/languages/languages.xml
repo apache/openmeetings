@@ -18,7 +18,8 @@
   under the License.
   
 -->
-<language>
+<language xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="languages.xsd">
 	<lang id="1" rightToLeft="false" code="en">english</lang>
 	<lang id="2" rightToLeft="false" code="de">deutsch</lang>
 	<lang id="3" rightToLeft="false" code="de-StudIP">deutsch (studIP)</lang>

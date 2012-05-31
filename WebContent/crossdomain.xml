@@ -18,7 +18,8 @@
   under the License.
   
 -->
-<cross-domain-policy>
+<cross-domain-policy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="crossdomain.xsd">
 	<site-control permitted-cross-domain-policies="all"/>
 	<allow-access-from domain="localhost" to-ports="20-65535"/>
 	<allow-access-from domain="*.local" to-ports="20-65535"/>

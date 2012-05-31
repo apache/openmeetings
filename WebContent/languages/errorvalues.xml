@@ -18,7 +18,8 @@
   under the License.
   
 -->
-<ROOT>
+<ROOT xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="errorvalues.xsd">
     <row>
       <field name="errorvalues_id">1</field>
       <field name="starttime">2007-12-06 19:01:07</field>

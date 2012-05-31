@@ -1,4 +1,6 @@
-<linked-list>
+<?xml version="1.0" encoding="UTF-8"?>
+<linked-list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="emotes.xsd">
   <linked-list>
     <string>emoticon_evilgrin.png</string>
     <string>&gt;:(</string>

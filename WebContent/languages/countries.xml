@@ -26,7 +26,8 @@
 	
 	28.07.2007 add Taiwan, Republic of China country code 157, short ROC
 	 -->
-<countries>
+<countries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="countries.xsd">
 	<country code="004" name="Afghanistan" short="AFG" />
 	<country code="248" short="ALA" name="Åland Islands" />
 	<country code="008" short="ALB" name="Albania" />
