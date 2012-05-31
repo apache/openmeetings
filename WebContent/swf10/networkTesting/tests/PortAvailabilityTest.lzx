@@ -20,7 +20,7 @@
 -->
 <library>
 
-<class name="PortAvailabilityTool">
+<class name="PortAvailabilityTest" extends="NetworkTest">
 
     <switch>
         <when property="$as3">
@@ -34,23 +34,27 @@
 
     <rtmpconnection name="rtmp" autoconnect="false" />
 
-    <method name="check" args="host, port">
+    <handler name="oninit">
+        this.setAttribute("testName", "Port test");
+    </handler>
+
+    <method name="start">
         rtmp.setAttribute("src", "rtmp://"+host+":"+port+"/openmeetings/hibernate");
-        if($debug) Debug.write("Start port availability test... ", rtmp.src);
+        if($debug) Debug.write(testName + ": start test... ", rtmp.src);
 
         rtmp.connect();
     </method>
 
     <handler name="onconnect" reference="rtmp">
-        if($debug) Debug.write("Port is available");
+        if($debug) Debug.write(testName + ": port is available");
     </handler>
 
     <handler name="onerror" args="e" reference="rtmp">
-        if($debug) Debug.write("Connection error: ", e);
+        if($debug) Debug.write(testName + ": connection error - ", e);
     </handler>
 
     <handler name="onstatus" args="e" reference="rtmp">
-        if($debug) Debug.write("RTMP connect status: ", e);
+        if($debug) Debug.write(testName + ": RTMP connect status - ", e);
     </handler>
 
 </class>

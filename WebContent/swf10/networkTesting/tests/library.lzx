@@ -9,7 +9,7 @@
   with the License.  You may obtain a copy of the License at
   
       http://www.apache.org/licenses/LICENSE-2.0
-          
+    	  
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -18,22 +18,12 @@
   under the License.
   
 -->
-<canvas debug="true" width="100%" height="100%" title="NetworkTesting">
+<library>
 
-    <include href="tests/" />
+    <include href="BaseURLLoadTest.lzx" />
+    <include href="JitterTest.lzx" />
+    <include href="NetworkTest.lzx" />
+    <include href="PingTest.lzx" />
+    <include href="PortAvailabilityTest.lzx" />
 
-    <attribute name="host" type="string" value="localhost" />
-    <attribute name="rtmpPort" type="number" value="1935" />
-    <attribute name="httpPort" type="number" value="5080" />
-
-    <PingTest name="pingTest" host="${parent.host}" port="${parent.httpPort}" />
-    <PortAvailabilityTest name="portTest" host="${parent.host}" port="${parent.rtmpPort}" />
-    <JitterTest name="jitterTest" host="${parent.host}" port="${parent.httpPort}" />
-
-    <handler name="oninit">
-        canvas.pingTest.start();
-        canvas.jitterTest.start();
-        canvas.portTest.start();
-    </handler>
-
-</canvas>
+</library>

@@ -20,12 +20,11 @@
 -->
 <library>
 
-<class name="PingTool">
+<class name="BaseURLLoadTest" extends="NetworkTest">
 
     <switch>
         <when property="$as3">
             <passthrough>
-                import flash.display.*;
                 import flash.events.*;
                 import flash.net.*;
                 import flash.utils.*;
@@ -33,28 +32,37 @@
         </when>
     </switch>
 
+    <attribute name="testsCount" type="number" value="0" />
+    <attribute name="loadFileName" type="string" value="null" />
+    <attribute name="verbose" type="boolean" value="true" />
+
     <attribute name="startTime" type="number" value="0" />
     <attribute name="wholeTime" type="number" value="0" />
-    <attribute name="testsFinished" type="number" value="0" />
-    <attribute name="testsCount" type="number" value="10" />
-    <attribute name="successfulTestsCount" type="number" value="10" />
+    <attribute name="maxTime" type="number" value="0" />
+    <attribute name="minTime" type="number" value="999999" />
+    <attribute name="finishedTestsCount" type="number" value="0" />
+    <attribute name="successfulTestsCount" type="number" value="0" />
 
     <attribute name="request" value="null" />
     <attribute name="loader" value="null" />
 
 
-    <method name="ping" args="host, httpPort">
-        var hostUrl = "http://" + host + ":" + httpPort + "/openmeetings/testingToolsFiles/pingTest";
+    <method name="start">
+        var hostUrl = "http://" + host + ":" + port + "/" + loadFileName;
         request = new URLRequest(hostUrl);
+
         loader = new URLLoader();
         loader.addEventListener(Event.COMPLETE, this.onComplete);
         loader.addEventListener(IOErrorEvent.IO_ERROR, this.onError);
         loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, this.onError);
-        testsFinished = 0;
-        wholeTime = 0;
-        successfulTestsCount = 0;
 
-        if($debug) Debug.write("Start ping test... ", hostUrl);
+        finishedTestsCount = 0;
+        successfulTestsCount = 0;
+        wholeTime = 0;
+        maxTime = 0;
+        minTime = 999999;
+
+        if($debug) Debug.write(testName +": start test... ", hostUrl);
         startTime = getTimer();
         loader.load(request);
     </method>
@@ -64,11 +72,20 @@
         var endTime = getTimer();
         var pingTime = endTime - startTime;
         wholeTime += pingTime;
-        if($debug) Debug.write("Ping time: ", pingTime, " ms");
+        if (pingTime > maxTime) {
+            maxTime = pingTime;
+        }
+        if (pingTime < minTime) {
+            minTime = pingTime;
+        }
 
-        testsFinished++;
+        if (verbose) {
+            if($debug) Debug.write(testName +": load time = ", pingTime, " ms");
+        }
+
+        finishedTestsCount++;
         successfulTestsCount++;
-        if (testsFinished < testsCount) {
+        if (finishedTestsCount < testsCount) {
             startTime = getTimer();
             loader.load(request);
         } else {
@@ -79,10 +96,12 @@
 
     <method name="onError" args="e">
         <![CDATA[
-        if($debug) Debug.write("Error: ", e);
+        if (verbose) {
+            if($debug) Debug.write(testName + ": Error - ", e);
+        }
 
-        testsFinished++;
-        if (testsFinished < testsCount) {
+        finishedTestsCount++;
+        if (finishedTestsCount < testsCount) {
             startTime = getTimer();
             loader.load(request);
         } else {
@@ -94,14 +113,15 @@
     <method name="report">
         var report;
         if (successfulTestsCount > 0) {
-            var averageTime = wholeTime / successfulTestsCount;
-            report = "Average ping time: " + averageTime + " ms";
+            report = testName + " report:\n" + this.generateReport();
         } else {
             report = "Ping test: connection error";
         }
 
         if($debug) Debug.write(report);
     </method>
+
+    <method name="generateReport" />
 
 </class>
 

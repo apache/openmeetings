@@ -7,33 +7,40 @@
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
-  
+
       http://www.apache.org/licenses/LICENSE-2.0
-          
+
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
-  
+
 -->
-<canvas debug="true" width="100%" height="100%" title="NetworkTesting">
+<library>
 
-    <include href="tests/" />
-
-    <attribute name="host" type="string" value="localhost" />
-    <attribute name="rtmpPort" type="number" value="1935" />
-    <attribute name="httpPort" type="number" value="5080" />
-
-    <PingTest name="pingTest" host="${parent.host}" port="${parent.httpPort}" />
-    <PortAvailabilityTest name="portTest" host="${parent.host}" port="${parent.rtmpPort}" />
-    <JitterTest name="jitterTest" host="${parent.host}" port="${parent.httpPort}" />
+<class name="JitterTest" extends="BaseURLLoadTest">
 
     <handler name="oninit">
-        canvas.pingTest.start();
-        canvas.jitterTest.start();
-        canvas.portTest.start();
+        this.setAttribute("testsCount", 100);
+        this.setAttribute("testName", "Jitter test");
+        this.setAttribute("loadFileName", "jitterTest");
+        this.setAttribute("verbose", false);
     </handler>
 
-</canvas>
+    <method name="generateReport">
+        var averageTime = wholeTime / successfulTestsCount;
+        var jitterMax = maxTime - averageTime;
+        var jitterMin = minTime - averageTime;
+        var report = "Average time: " + averageTime + " ms\n";
+        report += "Min time: " + minTime + " ms\n";
+        report += "Max time: " + maxTime + " ms\n";
+        report += "Jitter: " + jitterMax + " ms and " + jitterMin + " ms \n";
+
+        return report;
+    </method>
+
+</class>
+
+</library>
