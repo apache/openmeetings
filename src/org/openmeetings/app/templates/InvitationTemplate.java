@@ -49,8 +49,6 @@ public class InvitationTemplate extends VelocityLoader {
 
 			super.init();
 
-			Fieldlanguagesvalues labelid500 = fieldmanagment
-					.getFieldByIdAndLanguage(new Long(500), default_lang_id);
 			Fieldlanguagesvalues labelid501 = fieldmanagment
 					.getFieldByIdAndLanguage(new Long(501), default_lang_id);
 			Fieldlanguagesvalues labelid502 = fieldmanagment
@@ -76,7 +74,7 @@ public class InvitationTemplate extends VelocityLoader {
 			context.put("invitation_link", invitation_link);
 			context.put("invitation_link2", invitation_link);
 
-			context.put("labelid500", labelid500.getValue());
+			context.put("labelid500", fieldmanagment.getString(500L, default_lang_id));
 			context.put("labelid501", labelid501.getValue());
 			context.put("labelid502", labelid502.getValue());
 			context.put("labelid503", labelid503.getValue());
@@ -113,8 +111,6 @@ public class InvitationTemplate extends VelocityLoader {
 
 			super.init();
 
-			Fieldlanguagesvalues labelid622 = fieldmanagment
-					.getFieldByIdAndLanguage(new Long(622), default_lang_id);
 			Fieldlanguagesvalues labelid623 = fieldmanagment
 					.getFieldByIdAndLanguage(new Long(623), default_lang_id);
 			Fieldlanguagesvalues labelid624 = fieldmanagment
@@ -133,7 +129,7 @@ public class InvitationTemplate extends VelocityLoader {
 			context.put("message", message);
 			context.put("invitation_link", invitation_link);
 			context.put("invitation_link2", invitation_link);
-			context.put("labelid500", labelid622.getValue());
+			context.put("labelid500", fieldmanagment.getString(622L, default_lang_id));
 			context.put("labelid501", labelid623.getValue());
 			context.put("labelid502", labelid624.getValue());
 			context.put("labelid503", labelid625.getValue());

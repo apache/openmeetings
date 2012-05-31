@@ -644,8 +644,6 @@ public class UserService {
 						.getFieldByIdAndLanguage(1192L, language_id);
 				Fieldlanguagesvalues fValue1193 = fieldmanagment
 						.getFieldByIdAndLanguage(1193L, language_id);
-				Fieldlanguagesvalues fValue1194 = fieldmanagment
-						.getFieldByIdAndLanguage(1194L, language_id);
 				Fieldlanguagesvalues fValue1190 = fieldmanagment
 						.getFieldByIdAndLanguage(1190L, language_id);
 				Fieldlanguagesvalues fValue1191 = fieldmanagment
@@ -658,7 +656,7 @@ public class UserService {
 						+ userToAdd.getLastname() + "<br/><br/>";
 				message += user.getFirstname() + " " + user.getLastname() + " "
 						+ fValue1193.getValue() + "<br/>";
-				message += fValue1194.getValue() + "<br/>";
+				message += fieldmanagment.getString(1194L, language_id) + "<br/>";
 
 				String baseURL = "http://" + domain + ":" + port + webapp;
 				if (port.equals("80")) {

@@ -48,8 +48,6 @@ public class RegisterUserTemplate extends VelocityLoader {
 
 			super.init();
 
-			Fieldlanguagesvalues labelid506 = fieldmanagment
-					.getFieldByIdAndLanguage(new Long(506), default_lang_id);
 			Fieldlanguagesvalues labelid507 = fieldmanagment
 					.getFieldByIdAndLanguage(new Long(507), default_lang_id);
 			Fieldlanguagesvalues labelid508 = fieldmanagment
@@ -58,9 +56,6 @@ public class RegisterUserTemplate extends VelocityLoader {
 					.getFieldByIdAndLanguage(new Long(509), default_lang_id);
 			Fieldlanguagesvalues labelid510 = fieldmanagment
 					.getFieldByIdAndLanguage(new Long(510), default_lang_id);
-			Fieldlanguagesvalues labelid511 = fieldmanagment
-					.getFieldByIdAndLanguage(new Long(511), default_lang_id);
-
 			Fieldlanguagesvalues labelid667 = fieldmanagment
 					.getFieldByIdAndLanguage(new Long(667), default_lang_id);
 			Fieldlanguagesvalues labelid668 = fieldmanagment
@@ -73,12 +68,12 @@ public class RegisterUserTemplate extends VelocityLoader {
 			context.put("userpass", userpass);
 			context.put("mail", email);
 			context.put("verification_url", verification_url);
-			context.put("labelid506", labelid506.getValue());
+			context.put("labelid506", fieldmanagment.getString(506L, default_lang_id));
 			context.put("labelid507", labelid507.getValue());
 			context.put("labelid508", labelid508.getValue());
 			context.put("labelid509", labelid509.getValue());
 			context.put("labelid510", labelid510.getValue());
-			context.put("labelid511", labelid511.getValue());
+			context.put("labelid511", fieldmanagment.getString(511L, default_lang_id));
 			context.put("labelid667", labelid667.getValue());
 			context.put("labelid668", labelid668.getValue());
 
@@ -105,8 +100,6 @@ public class RegisterUserTemplate extends VelocityLoader {
 			
 			super.init();
 
-			Fieldlanguagesvalues labelid506 = fieldmanagment
-					.getFieldByIdAndLanguage(new Long(506), default_lang_id);
 			Fieldlanguagesvalues labelid507 = fieldmanagment
 					.getFieldByIdAndLanguage(new Long(507), default_lang_id);
 			Fieldlanguagesvalues labelid508 = fieldmanagment
@@ -115,8 +108,6 @@ public class RegisterUserTemplate extends VelocityLoader {
 					.getFieldByIdAndLanguage(new Long(509), default_lang_id);
 			Fieldlanguagesvalues labelid510 = fieldmanagment
 					.getFieldByIdAndLanguage(new Long(510), default_lang_id);
-			Fieldlanguagesvalues labelid511 = fieldmanagment
-					.getFieldByIdAndLanguage(new Long(511), default_lang_id);
 
 			/* lets make a Context and put data into it */
 			VelocityContext context = new VelocityContext();
@@ -124,12 +115,12 @@ public class RegisterUserTemplate extends VelocityLoader {
 			context.put("username", username);
 			context.put("userpass", userpass);
 			context.put("mail", email);
-			context.put("labelid506", labelid506.getValue());
+			context.put("labelid506", fieldmanagment.getString(506L, default_lang_id));
 			context.put("labelid507", labelid507.getValue());
 			context.put("labelid508", labelid508.getValue());
 			context.put("labelid509", labelid509.getValue());
 			context.put("labelid510", labelid510.getValue());
-			context.put("labelid511", labelid511.getValue());
+			context.put("labelid511", fieldmanagment.getString(511L, default_lang_id));
 
 			/* lets render a template */
 

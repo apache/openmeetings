@@ -29,7 +29,6 @@ import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.persistence.beans.calendar.Appointment;
 import org.openmeetings.app.persistence.beans.calendar.MeetingMember;
 import org.openmeetings.app.persistence.beans.invitation.Invitations;
-import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
@@ -195,10 +194,7 @@ public class MeetingMemberLogic {
 	private String formatSubject(Long language_id, Appointment point,
 			TimeZone timezone) {
 		try {
-			Fieldlanguagesvalues labelid1151 = fieldmanagment
-					.getFieldByIdAndLanguage(new Long(1151), language_id);
-
-			String message = labelid1151.getValue() + " "
+			String message = fieldmanagment.getString(1151L, language_id) + " "
 					+ point.getAppointmentName();
 
 			message += " "
@@ -220,42 +216,27 @@ public class MeetingMemberLogic {
 	private String formatMessage(Long language_id, Appointment point,
 			TimeZone timezone, String invitorName) {
 		try {
-			Fieldlanguagesvalues labelid1151 = fieldmanagment
-					.getFieldByIdAndLanguage(new Long(1151), language_id);
-
-			String message = labelid1151.getValue() + " "
+			String message = fieldmanagment.getString(1151L, language_id) + " "
 					+ point.getAppointmentName();
 
 			if (point.getAppointmentDescription().length() != 0) {
-
-				Fieldlanguagesvalues labelid1152 = fieldmanagment
-						.getFieldByIdAndLanguage(new Long(1152), language_id);
-				message += labelid1152.getValue()
+				message += fieldmanagment.getString(1152L, language_id)
 						+ point.getAppointmentDescription();
-
 			}
 
-			Fieldlanguagesvalues labelid1153 = fieldmanagment
-					.getFieldByIdAndLanguage(new Long(1153), language_id);
-			Fieldlanguagesvalues labelid1154 = fieldmanagment
-					.getFieldByIdAndLanguage(new Long(1154), language_id);
-
 			message += "<br/>"
-					+ labelid1153.getValue()
+					+ fieldmanagment.getString(1153L, language_id)
 					+ ' '
 					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
 							point.getAppointmentStarttime(), timezone)
 					+ "<br/>";
 
-			message += labelid1154.getValue()
+			message += fieldmanagment.getString(1154L, language_id)
 					+ ' '
 					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
 							point.getAppointmentEndtime(), timezone) + "<br/>";
 
-			Fieldlanguagesvalues labelid1156 = fieldmanagment
-					.getFieldByIdAndLanguage(new Long(1156), language_id);
-
-			message += labelid1156.getValue() + invitorName + "<br/>";
+			message += fieldmanagment.getString(1156L, language_id) + invitorName + "<br/>";
 
 			return message;
 		} catch (Exception err) {

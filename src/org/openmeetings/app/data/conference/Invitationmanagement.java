@@ -280,10 +280,7 @@ public class Invitationmanagement {
 	private String formatCancelSubject(Long language_id,
 			Appointment appointment, Users user, TimeZone timezone) {
 		try {
-			Fieldlanguagesvalues labelid1157 = fieldmanagment
-					.getFieldByIdAndLanguage(new Long(1157), language_id);
-
-			String message = labelid1157.getValue()
+			String message = fieldmanagment.getString(1157L, language_id)
 					+ appointment.getAppointmentName();
 
 			message += " "
@@ -303,10 +300,7 @@ public class Invitationmanagement {
 	private String formatCancelMessage(Long language_id,
 			Appointment appointment, Users user, TimeZone timezone) {
 		try {
-			Fieldlanguagesvalues labelid1157 = fieldmanagment
-					.getFieldByIdAndLanguage(new Long(1157), language_id);
-
-			String message = labelid1157.getValue()
+			String message = fieldmanagment.getString(1157L, language_id)
 					+ appointment.getAppointmentName();
 
 			if (appointment.getAppointmentDescription().length() != 0) {
@@ -420,10 +414,7 @@ public class Invitationmanagement {
 			Appointment appointment, Users user, TimeZone timezone) {
 		try {
 
-			Fieldlanguagesvalues labelid1155 = fieldmanagment
-					.getFieldByIdAndLanguage(new Long(1155), language_id);
-
-			String message = labelid1155.getValue() + " "
+			String message = fieldmanagment.getString(1155L, language_id) + " "
 					+ appointment.getAppointmentName();
 
 			if (appointment.getAppointmentDescription().length() != 0) {
@@ -455,10 +446,7 @@ public class Invitationmanagement {
 			String invitorName) {
 		try {
 
-			Fieldlanguagesvalues labelid1155 = fieldmanagment
-					.getFieldByIdAndLanguage(new Long(1155), language_id);
-
-			String message = labelid1155.getValue() + " "
+			String message = fieldmanagment.getString(1155L, language_id) + " "
 					+ appointment.getAppointmentName();
 
 			if (appointment.getAppointmentDescription().length() != 0) {

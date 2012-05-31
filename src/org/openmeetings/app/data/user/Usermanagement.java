@@ -51,7 +51,6 @@ import org.openmeetings.app.persistence.beans.adresses.Adresses;
 import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.persistence.beans.basic.Sessiondata;
 import org.openmeetings.app.persistence.beans.domain.Organisation_Users;
-import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.persistence.beans.user.UserSipData;
 import org.openmeetings.app.persistence.beans.user.Userdata;
 import org.openmeetings.app.persistence.beans.user.Userlevel;
@@ -1521,10 +1520,7 @@ public class Usermanagement {
 		String template = resetPasswordTemplate.getResetPasswordTemplate(
 				reset_link, default_lang_id);
 
-		Fieldlanguagesvalues labelid517 = fieldmanagment
-				.getFieldByIdAndLanguage(new Long(517), default_lang_id);
-
-		mailHandler.sendMail(email, labelid517.getValue(), template);
+		mailHandler.sendMail(email, fieldmanagment.getString(517L, default_lang_id), template);
 	}
 
 	/**

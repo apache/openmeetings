@@ -26,7 +26,6 @@ import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.persistence.beans.adresses.Adresses;
-import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.templates.RegisterUserTemplate;
 import org.openmeetings.utils.mail.MailHandler;
 import org.red5.logging.Red5LoggerFactory;
@@ -83,20 +82,16 @@ public class Emailmanagement {
 						.getRegisterUserWithVerificationTemplate(Username,
 								Userpass, EMail, default_lang_id,
 								verification_url);
-				Fieldlanguagesvalues label = fieldmanagment
-						.getFieldByIdAndLanguage(new Long(512), default_lang_id);
 
-				succ = mailHandler.sendMail(EMail, label.getValue(), template);
+				succ = mailHandler.sendMail(EMail, fieldmanagment.getString(512L, default_lang_id), template);
 
 			} else {
 
 				String template = registerUserTemplate
 						.getRegisterUserTemplate(Username, Userpass, EMail,
 								default_lang_id);
-				Fieldlanguagesvalues label = fieldmanagment
-						.getFieldByIdAndLanguage(new Long(512), default_lang_id);
 
-				succ = mailHandler.sendMail(EMail, label.getValue(), template);
+				succ = mailHandler.sendMail(EMail, fieldmanagment.getString(512L, default_lang_id), template);
 			}
 
 			return succ;

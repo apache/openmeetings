@@ -45,8 +45,6 @@ public class ResetPasswordTemplate extends VelocityLoader {
 
 			super.init();
 
-			Fieldlanguagesvalues labelid513 = fieldmanagment
-					.getFieldByIdAndLanguage(new Long(513), default_lang_id);
 			Fieldlanguagesvalues labelid514 = fieldmanagment
 					.getFieldByIdAndLanguage(new Long(514), default_lang_id);
 			Fieldlanguagesvalues labelid515 = fieldmanagment
@@ -58,7 +56,7 @@ public class ResetPasswordTemplate extends VelocityLoader {
 			VelocityContext context = new VelocityContext();
 			context.put("reset_link", reset_link);
 			context.put("reset_link2", reset_link);
-			context.put("labelid513", labelid513.getValue());
+			context.put("labelid513", fieldmanagment.getString(513L, default_lang_id));
 			context.put("labelid514", labelid514.getValue());
 			context.put("labelid515", labelid515.getValue());
 			context.put("labelid516", labelid516.getValue());

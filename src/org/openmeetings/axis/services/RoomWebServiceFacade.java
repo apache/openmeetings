@@ -51,7 +51,7 @@ public class RoomWebServiceFacade {
 		try {
 			ApplicationContext context = WebApplicationContextUtils
 					.getWebApplicationContext(getServletContext());
-			return (RoomWebService) context.getBean("roomWebService");
+			return context.getBean("roomWebService", RoomWebService.class);
 		} catch (Exception err) {
 			log.error("[getRoomServiceProxy]", err);
 		}

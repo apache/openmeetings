@@ -34,15 +34,14 @@ public class FeedbackTemplate extends VelocityLoader {
 			FeedbackTemplate.class, OpenmeetingsVariables.webAppRootKey);
 
 	public String getFeedBackTemplate(String username, String email,
-			String message, Integer default_lang_id) {
+			String message, long default_lang_id) {
 		try {
 
 			super.init();
 
 			// TODO: Finish Feedback - Template
-			// Fieldlanguagesvalues fValue =
-			// fieldmanagment.getFieldByIdAndLanguage(new Long(499), new
-			// Long(default_lang_id));
+			// String fValue =
+			// fieldmanagment.getString(499L, default_lang_id);
 
 			/* lets make a Context and put data into it */
 

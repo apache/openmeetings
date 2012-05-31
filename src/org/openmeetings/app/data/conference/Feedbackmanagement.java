@@ -21,7 +21,6 @@ package org.openmeetings.app.data.conference;
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
-import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.templates.FeedbackTemplate;
 import org.openmeetings.utils.mail.MailHandler;
 import org.red5.logging.Red5LoggerFactory;
@@ -43,18 +42,13 @@ public class Feedbackmanagement {
 
 	public String sendFeedback(String username, String email, String message) {
 		try {
-			Integer default_lang_id = Integer.valueOf(
-					cfgManagement.getConfKey(3, "default_lang_id")
-							.getConf_value()).intValue();
+			Long default_lang_id = cfgManagement.getConfValue("default_lang_id", Long.class, "1");
 
 			String template = feedbackTemplate.getFeedBackTemplate(username,
 					email, message, default_lang_id);
 
-			Fieldlanguagesvalues fValue = fieldmanagment
-					.getFieldByIdAndLanguage(new Long(499), new Long(
-							default_lang_id));
 			return mailHandler.sendMail("openmeetings-user@googlegroups.com",
-					fValue.getValue(), template);
+					fieldmanagment.getString(499L, default_lang_id), template);
 
 		} catch (Exception err) {
 			log.error("sendInvitationLink", err);

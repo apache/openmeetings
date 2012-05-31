@@ -415,8 +415,7 @@ public class AppointmentLogic {
 
 		// Get the required labels one time for all meeting members. The
 		// Language of the email will be the system default language
-		Fieldlanguagesvalues labelid1158 = fieldmanagment
-				.getFieldByIdAndLanguage(new Long(1158), language_id);
+		String labelid1158 = fieldmanagment.getString(1158L, language_id);
 		Fieldlanguagesvalues labelid1153 = fieldmanagment
 				.getFieldByIdAndLanguage(new Long(1153), language_id);
 		Fieldlanguagesvalues labelid1154 = fieldmanagment
@@ -497,10 +496,10 @@ public class AppointmentLogic {
 		}
 	}
 
-	private String generateSubject(Fieldlanguagesvalues labelid1158,
+	private String generateSubject(String labelid1158,
 			Appointment ment, TimeZone timezone) {
 
-		String message = labelid1158.getValue() + " "
+		String message = labelid1158 + " "
 				+ ment.getAppointmentName();
 
 		message += ' ' + CalendarPatterns
@@ -527,12 +526,12 @@ public class AppointmentLogic {
 	 * @param labelid1154
 	 * @return
 	 */
-	private String generateMessage(Fieldlanguagesvalues labelid1158,
+	private String generateMessage(String labelid1158,
 			Appointment ment, Long language_id,
 			Fieldlanguagesvalues labelid1153, Fieldlanguagesvalues labelid1154,
 			TimeZone timezone) {
 
-		String message = labelid1158.getValue() + " "
+		String message = labelid1158 + " "
 				+ ment.getAppointmentName();
 
 		if (ment.getAppointmentDescription().length() != 0) {

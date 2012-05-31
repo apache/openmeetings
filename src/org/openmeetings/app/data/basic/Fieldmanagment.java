@@ -120,6 +120,15 @@ public class Fieldmanagment {
 		return null;
 	}
 
+	public String getString(Long fieldvalues_id, Long language_id) {
+		String result = null;
+		Fieldlanguagesvalues flv = getFieldByIdAndLanguage(fieldvalues_id, language_id);
+		if (flv != null) {
+			result = performReplace(flv).getValue();
+		}
+		return result;
+	}
+	
 	public Fieldlanguagesvalues getFieldByIdAndLanguage(Long fieldvalues_id,
 			Long language_id) {
 		try {
