@@ -330,6 +330,7 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 	
 	private void addKeystore(Context ctx) {
 		log.debug("RTMP Sharer Keystore :: start");
+		StringBuilder sb = new StringBuilder();
 		FileInputStream fis = null;
 		try {
 			//FIXME hack !!!!
@@ -345,9 +346,7 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 				fis = new FileInputStream(keyStore);
 				fis.read(keyBytes);
 				
-				StringBuilder sb = new StringBuilder();
 				sb = addArgument(addArgument(sb, Hex.encodeHexString(keyBytes)), red5Props.getProperty("rtmps.keystorepass"));
-				ctx.put("KEYSTORE", sb);
 				
 				/*
 				KeyStore ksIn = KeyStore.getInstance(KeyStore.getDefaultType());
@@ -377,5 +376,6 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 				}
 			}
 		}
+		ctx.put("KEYSTORE", sb);
 	}
 }
