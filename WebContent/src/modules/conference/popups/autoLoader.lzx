@@ -50,7 +50,7 @@
 	</method>
     
     <text fontsize="11" name="error" y="20" fgcolor="0x666666"/>
-    <text fontsize="11" name="_src" y="50" align="center" fgcolor="0x666666" visibility="hidden" />
+    <text fontsize="11" name="_src" y="50" align="center" fgcolor="0x666666" visibility="$once{ ($debug) ? 'visible' : 'hidden' }" />
     
     <view name="loadingbar"  height="1" pixellock="true"
           x="-5" y="40" width="$once{ parent.maxwidth+2 }" visibility="hidden">
