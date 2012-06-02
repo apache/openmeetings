@@ -652,7 +652,7 @@ public class Usermanagement {
 			String DATA, String Comment) {
 		String res = "Fehler beim Update";
 		try {
-			String hqlUpdate = "update Userdata set data = :data, updatetime = :updatetime, "
+			String hqlUpdate = "UPDATE Userdata set data = :data, updatetime = :updatetime, "
 					+ "comment = :comment where user_id= :user_id AND data_key = :data_key";
 			int updatedEntities = em.createQuery(hqlUpdate)
 					.setParameter("data", DATA)
@@ -663,33 +663,6 @@ public class Usermanagement {
 			res = "Success" + updatedEntities;
 		} catch (Exception ex2) {
 			log.error("updateUserdataByKey", ex2);
-		}
-		return res;
-	}
-
-	public String deleteUserdata(int DATA_ID) {
-		String res = "Fehler beim deleteUserdata";
-		try {
-			String hqlUpdate = "delete userdata where DATA_ID= :DATA_ID";
-			int updatedEntities = em.createQuery(hqlUpdate)
-					.setParameter("DATA_ID", DATA_ID).executeUpdate();
-			res = "Success" + updatedEntities;
-		} catch (Exception ex2) {
-			log.error("deleteUserdata", ex2);
-		}
-		return res;
-	}
-
-	public String deleteUserdataByUserAndKey(int users_id, String DATA_KEY) {
-		String res = "Fehler beim deleteUserdataByUserAndKey";
-		try {
-			String hqlUpdate = "delete userdata where users_id= :users_id AND DATA_KEY = :DATA_KEY";
-			int updatedEntities = em.createQuery(hqlUpdate)
-					.setParameter("users_id", users_id)
-					.setParameter("DATA_KEY", DATA_KEY).executeUpdate();
-			res = "Success" + updatedEntities;
-		} catch (Exception ex2) {
-			log.error("deleteUserdataByUserAndKey", ex2);
 		}
 		return res;
 	}

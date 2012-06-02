@@ -600,7 +600,7 @@ public class PrivateMessagesDaoImpl {
 	public int deletePrivateMessages(List<Long> privateMessageIds) {
 		try {
 			
-			String hql = "DELETE PrivateMessages c " +
+			String hql = "DELETE FROM PrivateMessages c " +
 						"where c.privateMessageId IN (:privateMessageIds) ";
 			
 			Query query = em.createQuery(hql); 
