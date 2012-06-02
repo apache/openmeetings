@@ -47,6 +47,7 @@ import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecording;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingLog;
+import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingMetaData;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.math.CalendarPatterns;
@@ -106,6 +107,8 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	private AuthLevelmanagement authLevelManagement;
 	@Autowired
 	private FlvRecordingMetaDeltaDaoImpl flvRecordingMetaDeltaDao;
+	@Autowired
+	private FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDaoImpl = null;
 
 	public void resultReceived(IPendingServiceCall arg0) {
 	}
@@ -385,25 +388,10 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			
 			log.debug("Stream Closing :: " + flvRecordingMetaDataId);
 			
-			if (listenerAdapter == null) {
-				
-				log.debug("Stream Not Found :: " + flvRecordingMetaDataId);
-				log.debug("Available Stream :: ");
-				
-				for (Long entryKey : streamListeners.keySet()) {
-					log.debug("Stored flvRecordingMetaDataId in Map: "+ entryKey);
-				}
-				
-				throw new IllegalStateException("Could not find Listener to stop! flvRecordingMetaDataId "+flvRecordingMetaDataId);
-			}
-			
-			listenerAdapter.closeStream();
-			streamListeners.remove(flvRecordingMetaDataId);
-
 			ClientBroadcastStream stream = (ClientBroadcastStream) streamToClose;
 
-			//the stream can be null if the user just closes the browser without canceling the 
-			//recording before leaving
+			//the stream can be null if the user just closes the browser 
+			//without canceling the recording before leaving
 			if (stream != null) {
 				//Iterate through all stream listeners and stop the appropriate
 				if (stream.getStreamListeners() != null) {
@@ -414,6 +402,30 @@ public class FLVRecorderService implements IPendingServiceCallback {
 					}
 				}
 			}
+			
+			if (listenerAdapter == null) {
+				
+				log.debug("Stream Not Found :: " + flvRecordingMetaDataId);
+				log.debug("Available Streams :: "+streamListeners.size());
+				
+				for (Long entryKey : streamListeners.keySet()) {
+					log.debug("Stored flvRecordingMetaDataId in Map: "+ entryKey);
+				}
+				
+				//Manually call finish on the stream so that there is no endless loop waiting  
+				//in the FlvRecorderConverter waiting for the stream to finish
+				//this would normally happen in the Listener
+				FlvRecordingMetaData flvRecordingMetaData = flvRecordingMetaDataDaoImpl.
+							getFlvRecordingMetaDataById(flvRecordingMetaDataId);
+				flvRecordingMetaData.setStreamReaderThreadComplete(true);
+				flvRecordingMetaDataDaoImpl.updateFlvRecordingMetaData(flvRecordingMetaData);
+				
+				throw new IllegalStateException("Could not find Listener to stop! flvRecordingMetaDataId "+flvRecordingMetaDataId);
+			}
+			
+			listenerAdapter.closeStream();
+			streamListeners.remove(flvRecordingMetaDataId);
+			
 
 		} catch (Exception err) {
 			log.error("[stopRecordingShow]", err);
