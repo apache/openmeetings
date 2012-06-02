@@ -46,6 +46,8 @@
         //Make sure any cursor status is reset
 		lz.Cursor.restoreCursor();
 		lz.Cursor.showHandCursor(true);
+		//Make sure any tooltip is cleared
+		canvas.clearToolTip();
         this.ontabcontentleave.sendEvent();
         if (!this.destroyByMethod) this.destroy();
         return this.destroyByMethod;

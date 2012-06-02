@@ -457,4 +457,23 @@ and some more references to temp-objects
 
 <attribute name="currentNC" value="null" />
 
+<!-- 
+	Holds a reference to the current tooltip, if there is one
+ -->
+<attribute name="currentToolTip" value="null" />
+
+<method name="registerToolTip" args="viewInstance">
+	if (this.currentToolTip != null) {
+		this.currentToolTip.cleanHolder();
+	}
+	this.currentToolTip = viewInstance;
+</method>
+
+<method name="clearToolTip">
+	if (this.currentToolTip != null) {
+		this.currentToolTip.cleanHolder();
+		this.currentToolTip = null;
+	}
+</method>
+
 </library>

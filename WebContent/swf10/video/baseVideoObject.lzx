@@ -539,7 +539,7 @@
         if (this.minimized) {
             return;
         }
-        this._giveExclusiveAudioView._micButton._toolTipTextExclusiveAudio.doonmouseout();
+        this._giveExclusiveAudioView._micButton._toolTipTextExclusiveAudio.cleanHolder();
         this._giveExclusiveAudioView.setAttribute("visible", false);
         ]]>
     </handler> 
@@ -547,7 +547,7 @@
     <handler name="onclick">
 		<![CDATA[
 	      	if (canvas.ismoderator || canvas.isAllowedToGiveExclusiveAudio) {
-	      		this._giveExclusiveAudioView._micButton._toolTipTextExclusiveAudio.doonmouseout();
+	      		this._giveExclusiveAudioView._micButton._toolTipTextExclusiveAudio.cleanHolder();
 	          	this.giveExclusiveAudio();
 	        } else {
 				new lz.labelerrorPopupSWF10(canvas,{errorlabelid:1478});        

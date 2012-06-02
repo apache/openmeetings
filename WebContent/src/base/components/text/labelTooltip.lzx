@@ -65,6 +65,7 @@
 	           this.holder.setAttribute('x',xVal);
 	           this.holder.setAttribute('y',yVal);
             }
+            canvas.registerToolTip(this);
         ]]>        
     </handler>
     <handler name="onmouseout" reference="this.parent">
@@ -80,6 +81,7 @@
         if (this.holder!=null) {
             this.holder.destroy();
             this.holder = null; 
+            canvas.clearToolTip();
         }
     </method> 
     <attribute name="labelid" type="number" setter="setLabelId(labelid)" />

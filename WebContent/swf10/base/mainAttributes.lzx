@@ -86,5 +86,24 @@
 	
 	<attribute name="interviewPod2_x" value="644" type="number" />
     <attribute name="interviewPod2_y" value="28" type="number" />
+    
+    <!-- 
+		Holds a reference to the current tooltip, if there is one
+	 -->
+	<attribute name="currentToolTip" value="null" />
+	
+	<method name="registerToolTip" args="viewInstance">
+		if (this.currentToolTip != null) {
+			this.currentToolTip.cleanHolder();
+		}
+		this.currentToolTip = viewInstance;
+	</method>
+	
+	<method name="clearToolTip">
+		if (this.currentToolTip != null) {
+			this.currentToolTip.cleanHolder();
+			this.currentToolTip = null;
+		}
+	</method>
 
 </library>

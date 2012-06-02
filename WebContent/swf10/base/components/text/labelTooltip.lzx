@@ -37,7 +37,7 @@
         ]]>        
     </handler>
     <handler name="onmouseout" reference="this.parent">
-        this.doonmouseout();
+        this.cleanHolder();
     </handler>
     
     <method name="doonmouseover">
@@ -72,18 +72,25 @@
 	        }
 	        this.holder.setAttribute('x',xVal);
 	        this.holder.setAttribute('y',yVal);
+	        canvas.registerToolTip(this);
         ]]>        
-    </method>
-    <method name="doonmouseout">
-        this.holder.destroy();
     </method>
     
     <handler name="onmouseup" reference="this.parent">
-        this.holder.destroy();
+        this.cleanHolder();
     </handler>
     <handler name="onclick" reference="this.parent">
-        this.holder.destroy();
-    </handler>    
+        this.cleanHolder();
+    </handler>  
+    
+    <method name="cleanHolder">
+        if (this.holder!=null) {
+            this.holder.destroy();
+            this.holder = null; 
+            canvas.clearToolTip();
+        }
+    </method> 
+      
     <attribute name="labelid" type="number" setter="setLabelId(labelid)" />
     <method name="setLabelId" args="_labelid" >
         this.labelid = _labelid;

@@ -539,12 +539,15 @@
                     }
                     this.doCall();
                 } else {
+                	if($debug) Debug.write("loading lang complete");
                     if (parent.initlanguageLoaded){
                         if (canvas.thishib.loaderVar != null) {
                             canvas.thishib.loaderVar.setProgress();
                         }
+                        if($debug) Debug.write("getRoomTypes");
                         parent.getRoomTypes.doCall();
                     } else {
+                    	if($debug) Debug.write("getStates");
                         parent.initlanguageLoaded=true;
                         parent.getStates.doCall();
                     }
@@ -620,7 +623,7 @@
     <netRemoteCallHib name="getStates" funcname="xmlcrm.getStates" dataobject="countrySet">
         <handler name="ondata" args="value">
             //The onResult-Handler will be called be the rtmpconnection
-            //Debug.write("getStates: ",value);
+            if ($debug) Debug.write("getStates: ",value);
             canvas.statesInitValues = value;
             canvas.thishib.loaderVar.setProgress();
             parent.getTimeZones.doCall();
@@ -630,7 +633,7 @@
     <netRemoteCallHib name="getTimeZones" funcname="xmlcrm.getTimeZones" dataobject="timeZoneSet">
         <handler name="ondata" args="value">
             //The onResult-Handler will be called be the rtmpconnection
-            //Debug.write("getStates: ",value);
+            if ($debug) Debug.write("getTimeZones: ",value);
             canvas.thishib.loaderVar.setProgress();
             parent.getGeneralOptions.doCall();
         </handler>  
