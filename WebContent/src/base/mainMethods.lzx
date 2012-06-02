@@ -25,6 +25,7 @@
 
 	<class name="baseconfmenucommand" extends="command" >
     	<attribute name="enabled" value="true" type="boolean" />
+    	<attribute name="tipLabelId" value="0" type="number" />
     </class>
     
     <class name="confmenucommand" extends="baseconfmenucommand" >
@@ -37,7 +38,7 @@
     	</handler>
     </class>
         
-    <baseconfmenucommand id="cmd_shareDesktop" key="['control','shift','d']" >
+    <baseconfmenucommand id="cmd_shareDesktop" tipLabelId="1480" >
     	<handler name="onselect" args="sel">
     		if (!this.enabled) {
     			return;
@@ -46,7 +47,7 @@
     	</handler>
     </baseconfmenucommand>
     
-    <confmenucommand id="cmd_applyforMod" key="['control','shift','1']" actionCommand="applyForMod" />
+    <confmenucommand id="cmd_applyforMod" tipLabelId="1481" actionCommand="applyForMod" />
     
     <confmenucommand id="cmd_applyforWhiteBoard" key="['control','shift','2']">
     	<handler name="onselect" args="tSel">
@@ -60,7 +61,7 @@
     	</handler>
     </confmenucommand>
     
-    <baseconfmenucommand id="cmd_applyforAV" key="['control','shift','3']">
+    <baseconfmenucommand id="cmd_applyforAV" tipLabelId="1482">
     	<handler name="onselect" args="tSel">
     		if (!this.enabled) {
     			return;
@@ -80,16 +81,16 @@
     	</handler>
     </baseconfmenucommand>
     
-    <confmenucommand id="cmd_createPoll" key="['control','shift','6']" actionCommand="createPoll" />
-    <confmenucommand id="cmd_pollResults" key="['control','shift','7']" actionCommand="pollResults" />
-    <confmenucommand id="cmd_checkPollVoted" key="['control','shift','8']" actionCommand="checkPollVoted" />
-    <confmenucommand id="cmd_importFile" key="['control','shift','f']" actionCommand="importFile" />
-    <confmenucommand id="cmd_editCamMicSettings" actionCommand="editCamMicSettings" key="['control','shift','m']"/> 
-    <confmenucommand id="cmd_quit" actionCommand="quit" key="['control','shift','q']"/>
-    <confmenucommand id="cmd_showSipDialer" actionCommand="showSipDialer" key="['control','shift','0']" />
+    <confmenucommand id="cmd_createPoll" tipLabelId="1483" actionCommand="createPoll" />
+    <confmenucommand id="cmd_pollResults" tipLabelId="1484" actionCommand="pollResults" />
+    <confmenucommand id="cmd_checkPollVoted" tipLabelId="1485" actionCommand="checkPollVoted" />
+    <confmenucommand id="cmd_importFile" tipLabelId="1479" actionCommand="importFile" />
+    <confmenucommand id="cmd_editCamMicSettings" actionCommand="editCamMicSettings" tipLabelId="1486" /> 
+    <confmenucommand id="cmd_quit" actionCommand="quit" tipLabelId="1487" />
+    <confmenucommand id="cmd_showSipDialer" actionCommand="showSipDialer" tipLabelId="1488" />
     
-    <confmenucommand id="cmd_invitation" actionCommand="invitation" key="['control','4']" /> 
-    <confmenucommand id="cmd_editWhiteboardDefault" actionCommand="editWhiteboardDefault" key="['control','shift','9']"/> 
+    <confmenucommand id="cmd_invitation" actionCommand="invitation" tipLabelId="1489" /> 
+    <confmenucommand id="cmd_editWhiteboardDefault" actionCommand="editWhiteboardDefault" tipLabelId="1490" /> 
     
     <!-- 
     <confmenucommand id="cmd_coBrowser" actionCommand="browser_open" key="['control','b']"/> 

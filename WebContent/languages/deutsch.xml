@@ -5927,4 +5927,40 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   <string id="1478" name="no right for exclusive audio">
     <value>You don't have permission to apply exclusive audio to any participant. You need moderation role or the right for exclusive audio to make any microphone exclusive turned on..</value>
   </string>
+  <string id="1479" name="conference menu">
+    <value>Upload new file to file explorer</value>
+  </string>
+  <string id="1480" name="conference menu">
+    <value>Open new dialog with sharing settings</value>
+  </string>
+  <string id="1481" name="conference menu">
+    <value>An existing moderator must approve it</value>
+  </string>
+  <string id="1482" name="conference menu">
+    <value>Ask moderator to share your webcam/micro</value>
+  </string>
+  <string id="1483" name="conference menu">
+    <value>Gather feedback by creating a poll</value>
+  </string>
+  <string id="1484" name="conference menu">
+    <value>Past and current poll results as charts</value>
+  </string>
+  <string id="1485" name="conference menu">
+    <value>Vote if there is a poll for this conference room</value>
+  </string>
+  <string id="1486" name="conference menu">
+    <value>Edit cam and mic settings</value>
+  </string>
+  <string id="1487" name="conference menu">
+    <value>Confirm and leave the room</value>
+  </string>
+  <string id="1488" name="conference menu">
+    <value>Call external people via VoIP/SIP</value>
+  </string>
+  <string id="1489" name="conference menu">
+    <value>Send an email with a direct link to this room</value>
+  </string>
+  <string id="1490" name="conference menu">
+    <value>Change your whiteboard settings</value>
+  </string>
 </language>

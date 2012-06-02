@@ -167,7 +167,7 @@
 		<method name="setCommand" args="cmd" >
             this.command = cmd;
             if ( this.command ) {
-                this._ctextTooltip.setAttribute('text', command.keysToString());
+                this._ctextTooltip.setAttribute('text',canvas.getLabelName(command.tipLabelId));
             }
         </method>
         
