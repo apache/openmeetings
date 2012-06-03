@@ -84,7 +84,7 @@ public class LanguageImport {
 				fieldvalues_id, language_id);
 
 		if (flv == null) {
-			fieldmanagment.addFieldValueByFieldAndLanguage(fieldvalues_id,
+			fieldmanagment.addFieldValueByFieldAndLanguage(fv,
 					language_id, value);
 		} else {
 			flv.setValue(value);

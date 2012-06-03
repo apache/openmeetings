@@ -321,7 +321,7 @@ public class Fieldmanagment {
 		return null;
 	}
 
-	public Long addFieldValueByFieldAndLanguage(Long field_id,
+	public Long addFieldValueByFieldAndLanguage(Fieldvalues fv,
 			Long language_id, String fieldvalue) {
 		try {
 
@@ -329,7 +329,7 @@ public class Fieldmanagment {
 			flv.setStarttime(new Date());
 			flv.setValue(fieldvalue);
 			flv.setLanguage_id(language_id);
-			flv.setFieldvalues_id(field_id);
+			flv.setFieldvalues(fv);
 			flv.setDeleted("false");
 
 			flv = em.merge(flv);
@@ -359,18 +359,16 @@ public class Fieldmanagment {
 
 	}
 
-	public Long addField(String fieldName) {
+	public Fieldvalues addField(String fieldName) {
 		try {
-
 			Fieldvalues fl = new Fieldvalues();
 			fl.setStarttime(new Date());
 			fl.setName(fieldName);
 			fl.setDeleted("false");
 
 			fl = em.merge(fl);
-			Long fieldId = fl.getFieldvalues_id();
 
-			return fieldId;
+			return fl;
 		} catch (Exception ex2) {
 			log.error("[getConfKey]: ", ex2);
 		}
@@ -476,7 +474,7 @@ public class Fieldmanagment {
 				fv.setUpdatetime(new Date());
 				this.updateField(fv);
 			}
-			this.addFieldValueByFieldAndLanguage(fieldvalues_id, language_id,
+			this.addFieldValueByFieldAndLanguage(fv, language_id,
 					value);
 			return fieldvalues_id;
 		} catch (Exception ex2) {
@@ -487,18 +485,18 @@ public class Fieldmanagment {
 
 	public Long addFieldAndLabel(String name, String value, Long language_id) {
 		try {
-			Long fieldvalues_id = this.addField(name);
-			if (fieldvalues_id > 0) {
-				this.addFieldValueByFieldAndLanguage(fieldvalues_id,
+			Fieldvalues fv = addField(name);
+			if (fv.getFieldvalues_id() > 0) {
+				this.addFieldValueByFieldAndLanguage(fv,
 						language_id, value);
-				return fieldvalues_id;
+				return fv.getFieldvalues_id();
 			} else {
-				return new Long(-1);
+				return -1L;
 			}
 		} catch (Exception ex2) {
 			log.error("[updateFieldLanguagesLabel]: ", ex2);
 		}
-		return new Long(-1);
+		return -1L;
 	}
 
 	public SearchResult<Fieldvalues> getFieldsByLanguage(int start, int max, String orderby,

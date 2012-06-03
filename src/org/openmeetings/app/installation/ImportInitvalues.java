@@ -45,6 +45,7 @@ import org.openmeetings.app.data.user.Statemanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
+import org.openmeetings.app.persistence.beans.lang.Fieldvalues;
 import org.openmeetings.utils.ImportHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -941,12 +942,15 @@ public class ImportInitvalues {
 
 				// log.error("result: "+langFieldIdIsInited+" "+id+" "+name+" "+value);
 
+				Fieldvalues fv = null;
 				// Only do that for the first field-set
 				if (!langFieldIdIsInited) {
-					fieldmanagment.addField(name);
+					fv = fieldmanagment.addField(name);
+				} else {
+					fv = fieldmanagment.getFieldvaluesById(id);
 				}
 
-				fieldmanagment.addFieldValueByFieldAndLanguage(id,
+				fieldmanagment.addFieldValueByFieldAndLanguage(fv,
 						languages_id, value);
 
 			}
