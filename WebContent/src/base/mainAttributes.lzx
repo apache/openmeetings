@@ -476,4 +476,10 @@ and some more references to temp-objects
 	}
 </method>
 
+<!-- 
+	Holds a reference to the current activity list, if there is one
+ -->
+<attribute name="currentActivityList" value="null" />
+
+
 </library>
