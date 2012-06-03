@@ -29,11 +29,13 @@
     <PingTest name="pingTest" host="${parent.host}" port="${parent.httpPort}" />
     <PortAvailabilityTest name="portTest" host="${parent.host}" port="${parent.rtmpPort}" />
     <JitterTest name="jitterTest" host="${parent.host}" port="${parent.httpPort}" />
+    <DownloadSpeedTest name="downloadTest" host="${parent.host}" port="${parent.httpPort}" />
 
     <handler name="oninit">
         canvas.pingTest.start();
         canvas.jitterTest.start();
         canvas.portTest.start();
+        canvas.downloadTest.start();
     </handler>
 
 </canvas>

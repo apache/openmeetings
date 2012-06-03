@@ -48,7 +48,7 @@
 
 
     <method name="start">
-        var hostUrl = "http://" + host + ":" + port + "/" + loadFileName;
+        var hostUrl = "http://" + host + ":" + port + "/openmeetings/testingToolsFiles/" + loadFileName;
         request = new URLRequest(hostUrl);
 
         loader = new URLLoader();
@@ -111,11 +111,11 @@
     </method>
 
     <method name="report">
-        var report;
+        var report = testName + " report:";
         if (successfulTestsCount > 0) {
-            report = testName + " report:\n" + this.generateReport();
+            report += "\n" + this.generateReport();
         } else {
-            report = "Ping test: connection error";
+            report += " connection error";
         }
 
         if($debug) Debug.write(report);
