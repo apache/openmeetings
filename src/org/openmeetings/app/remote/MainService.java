@@ -738,6 +738,7 @@ public class MainService implements IPendingServiceCallback {
 			
 			cList.add(cfgManagement.getConfKey(3, "exclusive.audio.keycode"));
 			cList.add(cfgManagement.getConfKey(3, "red5sip.enable"));
+			cList.add(cfgManagement.getConfKey(3, "max_upload_size"));
 			
 			return cList;
 			

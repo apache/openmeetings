@@ -655,6 +655,10 @@
 	                    if ($debug) Debug.write("red5sip.enable is: ", value[1].conf_value);
 	                    canvas.setAttribute('RED5_SIP_ENABLE', value[1].conf_value);
                     }
+                    if (value.length > 2) {
+	                    if ($debug) Debug.write("max_upload_size is: ", value[2].conf_value);
+	                    canvas.setAttribute('MAX_UPLOAD_SIZE', value[2].conf_value);
+                    }
                 } else {
                    if ($debug) Debug.warn("xmlcrm.getGeneralOptions empty!");
                 }

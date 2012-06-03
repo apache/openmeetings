@@ -71,7 +71,14 @@
                 lz.Browser.loadURL(exporturl,"_parent");
             ]]>
         </handler>
-    </simpleLabelButton>       
+    </simpleLabelButton>  
+    
+    <labelText fontsize="10" fontstyle="italic" y="250" x="10">
+    	<handler name="oninit">
+    		var mBytes = Math.round(Number(canvas.MAX_UPLOAD_SIZE)/1024/1024);
+    		this.setAttribute("text",canvas.getLabelName(1491)+" "+mBytes+" MB  [max_upload_size = "+canvas.MAX_UPLOAD_SIZE+" Bytes]");
+    	</handler>
+    </labelText>    
     
 </class>
 

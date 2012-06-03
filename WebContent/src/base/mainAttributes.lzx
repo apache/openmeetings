@@ -454,6 +454,10 @@ and some more references to temp-objects
  -->
 <attribute name="RED5_SIP_ENABLE" value="no" type="string" /> 
 
+<!-- 
+	The server side configuration of the max upload size for files
+ -->
+<attribute name="MAX_UPLOAD_SIZE" value="-1" type="string" /> 
 
 <attribute name="currentNC" value="null" />
 
@@ -480,6 +484,5 @@ and some more references to temp-objects
 	Holds a reference to the current activity list, if there is one
  -->
 <attribute name="currentActivityList" value="null" />
-
 
 </library>

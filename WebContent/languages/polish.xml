@@ -4569,4 +4569,7 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="1490" name="conference menu">
     <value>Change your whiteboard settings</value>
   </string>
+  <string id="1491" name="backup admin">
+    <value>Max upload size</value>
+  </string>
 </language>
