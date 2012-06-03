@@ -46,7 +46,7 @@ import javax.persistence.Table;
 		+ "WHERE flv.deleted LIKE 'false' "
 		+ "		AND flv.fieldvalues.deleted LIKE 'false' "
 		+ "		AND flv.language_id = :language_id")
-	, @NamedQuery(name="allNotTranslatedValues", query = "SELECT flv.fieldvalues_id FROM Fieldlanguagesvalues flv "
+	, @NamedQuery(name="allNotTranslatedValues", query = "SELECT flv FROM Fieldlanguagesvalues flv "
 		+ "WHERE flv.deleted LIKE 'false' "
 		+ "		AND flv.fieldvalues.deleted LIKE 'false' "
 		+ "		AND flv.language_id = 1 AND flv.fieldvalues_id NOT IN (:id_list)")
