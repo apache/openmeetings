@@ -89,8 +89,6 @@
 				</li>
 				<li>Submit CSR to your CA of choice and receive a signed certificate
 				</li>
-				<li>Submit CSR to your CA of choice and receive a signed certificate
-				</li>
 				<li>Import your chosen CA's root certificate into the keystore (may
 					need to download it from their site - make sure to get the root CA and
 					not the intermediate one): keytool -import -alias root -keystore
