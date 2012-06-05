@@ -205,7 +205,7 @@ public class Fieldmanagment {
 			List<Map<String, Object>> returnList = new LinkedList<Map<String, Object>>();
 			for (Fieldlanguagesvalues fl : query.getResultList()) {
 				Map<String, Object> map = new HashMap<String, Object>();
-				map.put("id", fl.getFieldvalues_id());
+				map.put("id", fl.getFieldvalues().getFieldvalues_id());
 				map.put("value", performReplace(fl.getValue(), appName));
 				returnList.add(map);
 			}
