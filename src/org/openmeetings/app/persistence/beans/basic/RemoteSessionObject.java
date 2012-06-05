@@ -38,14 +38,7 @@ public class RemoteSessionObject {
 	
 	public RemoteSessionObject(String username, String firstname, String lastname,
 			String pictureUrl, String email) {
-		super();
-		this.username = username;
-		this.firstname = firstname;
-		this.lastname = lastname;
-		this.pictureUrl = pictureUrl;
-		this.email = email;
-		this.externalUserId = "0";
-		this.externalUserType = "";
+		this(username, firstname, lastname, pictureUrl, email, "0", "");
 	}
 	
 	
