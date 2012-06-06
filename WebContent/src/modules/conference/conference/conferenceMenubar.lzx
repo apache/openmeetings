@@ -67,7 +67,7 @@
 						>
 				<handler name="oninit">
 					if(canvas.currentRoomObj.hideActionsMenu){	      
-						this.setAttribute.setAttribute("visibility", "hidden");
+						this.setAttribute("visibility", "hidden");
 					}
 				</handler>		
 				<handler name="onclick">
