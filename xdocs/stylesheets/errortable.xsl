@@ -13,13 +13,17 @@
    limitations under the License.
  -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-	<xsl:output method="html"/>
+	<xsl:output method="xml"/>
 	
 	<xsl:template match="ROOT">
-<html>
-	<head><title>Errors Table</title></head>
+<document>
+
+	<properties>
+		<title>Openmeetings Errors table</title>
+		<author>Apache OpenMeetings Documentation Robot</author>
+	</properties>
 	<body>
-		<h3>The table of OM errors</h3>
+		<section name="Openmeetings Errors table">
 		<table>
 			<tr>
 				<th>Code</th>
@@ -28,8 +32,9 @@
 			</tr>
 			<xsl:apply-templates/>
 		</table>
+		</section>
 	</body>
-</html>
+</document>
 	</xsl:template>
 	
 	<xsl:template match="row">
