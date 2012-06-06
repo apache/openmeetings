@@ -42,6 +42,7 @@
         <item name="REST API Sample"        href="/RestAPISample.html" />
         <item name="Ldap and ADS"           href="/LdapAndADS.html" />
         <item name="VoIP and SIP"           href="/voip-sip-integration.html" />
+        <item name="Errors table"           href="/ErrorsTable.html" />
     </menu>
     
     <menu name="Plugins">

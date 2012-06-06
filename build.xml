@@ -546,6 +546,7 @@
 				<patternset refid="css" />
 			</fileset>
 		</copy>
+		<xslt in="WebContent/languages/errorvalues.xml" out="${docs.dest}/ErrorsTable.html" style="${docs.src}/stylesheets/errortable.xsl" />
 	</target>
 
 	<target name="build.only.webservice.doc" depends="anakia">
