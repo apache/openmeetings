@@ -70,6 +70,7 @@ public class MailiCalThread extends MailThread {
 					new ByteArrayDataSource(
 							new ByteArrayInputStream(iCalMimeBody),
 							"text/calendar;method=REQUEST;charset=\"UTF-8\"")));
+			iCalAttachment.setFileName("invite.ics");
 
 			multipart.addBodyPart(html);
 			multipart.addBodyPart(iCalAttachment);

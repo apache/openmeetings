@@ -298,6 +298,7 @@ public class TestSendIcalMessage extends AbstractOpenmeetingsSpringTest {
 				new javax.mail.util.ByteArrayDataSource(
 						new ByteArrayInputStream(iCalMimeBody),
 						"text/calendar;method=REQUEST;charset=\"UTF-8\"")));
+		iCalAttachment.setFileName("invite.ics");
 
 		multipart.addBodyPart(iCalAttachment);
 		multipart.addBodyPart(msg);
