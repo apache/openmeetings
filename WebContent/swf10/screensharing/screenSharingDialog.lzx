@@ -901,8 +901,8 @@
             
         </view>
         
-        <vscrollbar />
-        <hscrollbar />
+        <om_vscrollbar />
+        <om_hscrollbar />
         
     </view>    
     

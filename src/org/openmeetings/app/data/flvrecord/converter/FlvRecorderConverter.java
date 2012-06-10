@@ -83,6 +83,11 @@ public class FlvRecorderConverter extends BaseConverter {
 					.getFlvRecordingMetaDataScreenFlvByRecording(flvRecording
 							.getFlvRecordingId());
 			
+			if (flvRecordingMetaDataOfScreen == null) {
+				throw new Exception("flvRecordingMetaDataOfScreen is Null FlvRecordingId "+flvRecording
+							.getFlvRecordingId());
+			}
+			
 			if (flvRecordingMetaDataOfScreen.getStreamReaderThreadComplete() == null) {
 				throw new Exception("StreamReaderThreadComplete Bit is NULL, error in recording");
 			}
