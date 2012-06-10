@@ -92,7 +92,7 @@ public class MailThread {
 				props.put("mail.smtp.starttls.enable", "true");
 			}
 
-			// Check for Authentification
+			// Check for Authentication
 			Session session = null;
 			if (mailAuthUser != null && mailAuthUser.length() > 0
 					&& mailAuthPass != null && mailAuthPass.length() > 0) {
