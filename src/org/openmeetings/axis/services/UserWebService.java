@@ -140,7 +140,7 @@ public class UserWebService {
 	 *            The id of the language
 	 * @return
 	 */
-	public ErrorResult getErrorByCode(String SID, Long errorid, Long language_id) {
+	public ErrorResult getErrorByCode(String SID, long errorid, long language_id) {
 		try {
 			if (errorid < 0) {
 				ErrorValues eValues = errorManagement

@@ -73,7 +73,7 @@ public class MailThread {
 			this.send();
 		}
 
-		protected MimeMessage getMessage() throws AddressException, MessagingException {
+		protected MimeMessage getMessage() throws Exception {
 			log.debug("getMessage");
 
 			// Evaluating Configuration Data
