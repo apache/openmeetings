@@ -882,7 +882,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	@Override
 	public synchronized void streamBroadcastClose(IBroadcastStream stream) {
 
-		// Notify all the clients that the stream had been started
+		// Notify all the clients that the stream had been closed
 		log.debug("start streamBroadcastClose broadcast close: "
 				+ stream.getPublishedName());
 		try {

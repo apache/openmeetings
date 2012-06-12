@@ -58,9 +58,6 @@
 		<dependency org="cglib" name="cglib" rev="2.2.2" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org/red5" name="red5-client" rev="1.0-RC2" transitive="false">
-			<include type="jar" />
-		</dependency>
 		<!-- include type="bundle" / FIXME unable to get openjpa without  sources -->
 		<dependency org="org.apache.geronimo.specs" name="geronimo-jpa_2.0_spec"
 			rev="1.1" conf="mainlib.ext->*" transitive="false"/>

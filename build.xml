@@ -40,9 +40,11 @@
 	<property name="dtd-generator.lib.dir" value="${project.lib.dir}/dtd-generator" />
 	<property name="svntask.lib.dir" value="${project.lib.dir}/svntask" />
 
-	<property name="red5.server.dir" value="${build.base.dir}/red5" />
+	<property name="red5.server.dir" value="${build.base.dir}/red5/server" />
+	<property name="red5.client.dir" value="${build.base.dir}/red5/client" />
 	<property name="red5.lib" value="${red5.server.dir}/dist" />
 	<property name="red5.server.lib" value="${red5.lib}/lib" />
+	<property name="red5.client.lib" value="${red5.client.dir}/dist" />
 	<property name="red5.root" value="${dist.dir}/red5" />
 	<property name="dist.webapps.dir" value="${red5.root}/webapps/${project.distname}" />
 	<property name="dist.persistence.dir" value="${dist.webapps.dir}/WEB-INF/classes/META-INF/" />
@@ -77,6 +79,7 @@
 	<!-- compile classpath -->
 	<path id="compile.classpath">
 		<fileset dir="${red5.server.lib}" includes="*.jar" />
+		<fileset dir="${red5.client.lib}" includes="*.jar" />
 		<fileset dir="${red5.lib}" includes="*.jar" />
 		<fileset dir="${mainlibs.lib.dir}" includes="*.jar" />
 		<fileset dir="${om.lib.dir}" includes="*.jar" />
@@ -87,6 +90,7 @@
 
 	<target name="prepare.mkdir" depends="-java6.check">
 		<mkdir dir="${red5.server.lib}" />
+		<mkdir dir="${red5.client.dir}/dist" />
 		<mkdir dir="${dist.dir}" />
 		<mkdir dir="${main.out.dir}" />
 		<mkdir dir="${mainlibs.lib.dir}" />
@@ -139,6 +143,7 @@
 	<!-- build webapp -->
 	<target name="-copy-libraries" description="All jars downloaded by ivy copied to appropriate places">
 		<copy todir="${red5.root}/lib">
+			<fileset dir="${red5.client.lib}" includes="red5-client*.jar" />
 			<fileset dir="${mainlibs.lib.dir}" includes="*.jar" />
 		</copy>
 		<copy todir="${dist.webapps.dir}/WEB-INF/lib">
@@ -334,6 +339,7 @@
 			<fileset dir="${red5.server.lib}" includes="bcprov-jdk16*.jar" />
 			<fileset dir="${red5.server.lib}" includes="ehcache-core*.jar" />
 			<fileset dir="${red5.server.lib}" includes="commons-beanutils*.jar" />
+			<fileset dir="${red5.server.lib}" includes="slf4j-api*.jar" />
 			<fileset dir="${red5.server.lib}" includes="jcl-over-slf4j*.jar" />
 			<fileset dir="${red5.server.lib}" includes="commons-collections*.jar" />
 			<fileset dir="${red5.lib}" includes="red5.jar" />
@@ -343,7 +349,7 @@
 			<fileset dir="${red5.server.lib}" includes="logback*.jar" />
 			<fileset dir="${red5.server.lib}" includes="mina-core*.jar" />
 			<fileset dir="${red5.server.lib}" includes="com.springsource.slf4j.api*.jar" />
-			<fileset dir="${mainlibs.lib.dir}" includes="red5-client*.jar" />
+			<fileset dir="${red5.client.lib}" includes="red5-client*.jar" />
 		</copy>
 		<signjar alias="filetest" keystore="${keystore.file}" storepass="secret" lazy="false">
 			<path>
@@ -685,6 +691,7 @@
 		<available classpathref="compile.classpath" classname="org.apache.derby.jdbc.ClientDriver" property="derby.installed" />
 		<available file="${laszlo.home}/WEB-INF/lib" type="dir" property="laszlo.installed" />
 		<available file="${red5.lib}/red5.sh" type="file" property="red5.installed" />
+		<available file="${red5.client.dir}/build.xml" type="file" property="red5.client.installed" />
 	</target>
 
 	<target name="-retrieve" description="Retrieves the libraries if needed">
@@ -707,11 +714,15 @@
 		<ivy:resolve file="ivy.xml" conf="${ivy.conf.name}" checkIfChanged="false" transitive="${ivy.transitive}" />
 		<ivy:retrieve conf="${ivy.conf.name}" pattern="${ivy.lib.location}/[artifact]-[type]-[revision].[ext]" />
 	</target>
+	
+	<!-- wrapper to load the server before the client to have the 
+		red5.jar that is necessary to build the client --> 
+	<target name="-retrieve-red5" depends="-retrieve-red5-client" />
 
 	<!-- Check for the Red5 libraries -->
-	<target name="-retrieve-red5" unless="red5.installed" description="Retrieves the libraries if needed" depends="-ant-task">
+	<target name="-retrieve-red5-server" unless="red5.installed" description="Retrieves the libraries if needed" depends="-ant-task">
 		<svn refid="svn.settings">
-			<checkout url="http://red5.googlecode.com/svn/java/server/trunk/" revision="${red5.revision}" destPath="${red5.server.dir}" />
+			<checkout url="http://red5.googlecode.com/svn/java/server/trunk/" revision="${red5.server.revision}" destPath="${red5.server.dir}" />
 		</svn>
 		<subant target="dist">
 			<fileset dir="${red5.server.dir}" includes="build.xml" />
@@ -744,6 +755,18 @@
 		<delete>
 			<fileset dir="${red5.server.lib}" includes="jaudiotagger*.jar" />
 		</delete>
+	</target>
+	
+	<!-- Check for the Red5 libraries -->
+	<target name="-retrieve-red5-client" unless="red5.client.installed" description="Retrieves the libraries if needed" depends="-retrieve-red5-server">
+		<svn refid="svn.settings">
+			<checkout url="http://red5.googlecode.com/svn/java/client/trunk/" revision="${red5.client.revision}" destPath="${red5.client.dir}" />
+		</svn>
+		<copy file="${red5.lib}/red5.jar" todir="${red5.client.dir}/lib" />
+		<subant target="dist">
+			<fileset dir="${red5.client.dir}" includes="build.xml" />
+		</subant>
+		<echo message="Red5 Client build" />
 	</target>
 
 	<!-- Check for the Top level libraries -->
