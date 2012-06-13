@@ -18,10 +18,10 @@
 	<description>User Service</description>
 	<messageReceivers>
         <messageReceiver 
-            mep="http://www.w3.org/2004/08/wsdl/in-only"
+            mep="http://www.w3.org/ns/wsdl/in-only"
 			class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver"/>
         <messageReceiver
-            mep="http://www.w3.org/2004/08/wsdl/in-out"
+            mep="http://www.w3.org/ns/wsdl/in-out"
 			class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
     </messageReceivers>
     <parameter name="ServiceClass" locked="xsd:false">org.openmeetings.axis.services.UserWebServiceFacade</parameter>
@@ -30,10 +30,10 @@
 	<description>Room Service</description>
 	<messageReceivers>
         <messageReceiver 
-            mep="http://www.w3.org/2004/08/wsdl/in-only"
+            mep="http://www.w3.org/ns/wsdl/in-only"
 			class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver"/>
         <messageReceiver
-            mep="http://www.w3.org/2004/08/wsdl/in-out"
+            mep="http://www.w3.org/ns/wsdl/in-out"
 			class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
     </messageReceivers>
     <parameter name="ServiceClass" locked="xsd:false">org.openmeetings.axis.services.RoomWebServiceFacade</parameter>
@@ -42,10 +42,10 @@
 	<description>File Service</description>
 	<messageReceivers>
         <messageReceiver 
-            mep="http://www.w3.org/2004/08/wsdl/in-only"
+            mep="http://www.w3.org/ns/wsdl/in-only"
 			class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver"/>
         <messageReceiver
-            mep="http://www.w3.org/2004/08/wsdl/in-out"
+            mep="http://www.w3.org/ns/wsdl/in-out"
 			class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
     </messageReceivers>
     <parameter name="ServiceClass" locked="xsd:false">org.openmeetings.axis.services.FileWebServiceFacade</parameter>
@@ -54,10 +54,10 @@
 	<description>Calendar Service</description>
 	<messageReceivers>
         <messageReceiver 
-            mep="http://www.w3.org/2004/08/wsdl/in-only"
+            mep="http://www.w3.org/ns/wsdl/in-only"
 			class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver"/>
         <messageReceiver
-            mep="http://www.w3.org/2004/08/wsdl/in-out"
+            mep="http://www.w3.org/ns/wsdl/in-out"
 			class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
     </messageReceivers>
     <parameter name="ServiceClass" locked="xsd:false">org.openmeetings.axis.services.CalendarWebServiceFacade</parameter>
@@ -66,10 +66,10 @@
 	<description>Jabber Service</description>
 	<messageReceivers>
         <messageReceiver 
-            mep="http://www.w3.org/2004/08/wsdl/in-only"
+            mep="http://www.w3.org/ns/wsdl/in-only"
 			class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver"/>
         <messageReceiver
-            mep="http://www.w3.org/2004/08/wsdl/in-out"
+            mep="http://www.w3.org/ns/wsdl/in-out"
 			class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
     </messageReceivers>
     <parameter name="ServiceClass" locked="xsd:false">org.openmeetings.axis.services.JabberWebServiceFacade</parameter>
