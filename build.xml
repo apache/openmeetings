@@ -588,6 +588,7 @@
 			</classpath>
 		</taskdef>
 
+		<xslt in="WebContent/languages/errorvalues.xml" out="${docs.src}/ErrorsTable.xml" style="${docs.src}/stylesheets/errortable.xsl" />
 		<anakia basedir="${docs.src}" destdir="${docs.dest}/" extension=".html" style="./site.vsl" projectFile="stylesheets/project.xml" excludes="**/stylesheets/** empty.xml" includes="**/*.xml" lastModifiedCheck="true" templatePath="xdocs/stylesheets" velocityPropertiesFile="${build.base.dir}/velocity.properties" />
 		<copy todir="${docs.dest}/images" filtering="no">
 			<fileset dir="${docs.src}/images">
@@ -600,7 +601,6 @@
 				<patternset refid="css" />
 			</fileset>
 		</copy>
-		<xslt in="WebContent/languages/errorvalues.xml" out="${docs.dest}/ErrorsTable.html" style="${docs.src}/stylesheets/errortable.xsl" />
 	</target>
 
 	<target name="build.only.webservice.doc" depends="anakia">

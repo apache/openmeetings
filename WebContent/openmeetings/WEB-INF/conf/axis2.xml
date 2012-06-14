@@ -17,7 +17,8 @@
   ~ under the License.
   -->
 
-<axisconfig name="AxisJava2.0">
+<axisconfig name="AxisJava2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="axis2.xsd">
     <!-- ================================================= -->
     <!-- Parameters -->
     <!-- ================================================= -->

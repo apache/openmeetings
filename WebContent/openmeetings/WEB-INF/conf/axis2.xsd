@@ -18,7 +18,7 @@
   under the License.
   
 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <xs:element name="axisconfig">
     <xs:complexType>
       <xs:sequence>
@@ -30,7 +30,7 @@
         <xs:element ref="messageReceivers"/>
         <xs:element ref="messageFormatters"/>
         <xs:element ref="messageBuilders"/>
-        <xs:element maxOccurs="unbounded" ref="transportReceiver"/>
+        <xs:element ref="transportReceiver"/>
         <xs:element maxOccurs="unbounded" ref="transportSender"/>
         <xs:element ref="module"/>
         <xs:element ref="clustering"/>
@@ -41,9 +41,18 @@
   </xs:element>
   <xs:element name="deployer">
     <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="serviceBuilderExtension"/>
+      </xs:sequence>
       <xs:attribute name="class" use="required"/>
       <xs:attribute name="directory" use="required" type="xs:NCName"/>
       <xs:attribute name="extension" use="required" type="xs:NMTOKEN"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="serviceBuilderExtension">
+    <xs:complexType>
+      <xs:attribute name="class" use="required"/>
+      <xs:attribute name="name" use="required" type="xs:NCName"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="threadContextMigrators">
