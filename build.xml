@@ -739,7 +739,7 @@
 		<available classpathref="compile.classpath" classname="org.apache.derby.jdbc.ClientDriver" property="derby.installed" />
 		<available file="${laszlo.home}/WEB-INF/lib" type="dir" property="laszlo.installed" />
 		<available file="${red5.lib}/red5.sh" type="file" property="red5.installed" />
-		<available file="${red5.client.dir}/build.xml" type="file" property="red5.client.installed" />
+		<available classpathref="compile.classpath" classname="org.red5.client.net.rtmp.RTMPClient" property="red5.client.installed" />
 	</target>
 
 	<target name="-retrieve" description="Retrieves the libraries if needed">
