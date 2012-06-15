@@ -120,7 +120,7 @@
 	<classpathentry kind="lib" path="build/lib/mainlibs/org.springframework.orm-jar-3.1.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="build/lib/mainlibs/org.springframework.transaction-jar-3.1.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="build/lib/mainlibs/org.springframework.web.servlet-jar-3.1.1.RELEASE.jar"/>
-	<classpathentry kind="lib" path="build/red5/client/dist/red5-client.jar"/>
+	<classpathentry kind="lib" path="build/red5/client/dist/red5-client.jar" sourcepath="build/red5/client/src"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/com.springsource.net.sf.cglib-2.2.0.jar"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/com.springsource.org.aopalliance-1.0.0.jar"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/jruby-1.6.7.2.jar"/>

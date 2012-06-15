@@ -41,7 +41,7 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1337248316784</id>
+			<id>1339742413697</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -50,7 +50,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1337248316804</id>
+			<id>1339742413708</id>
 			<name></name>
 			<type>10</type>
 			<matcher>
@@ -59,7 +59,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1337248316807</id>
+			<id>1339742413718</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -68,7 +68,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1337248316833</id>
+			<id>1339742413728</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -77,57 +77,21 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1337248316859</id>
+			<id>1339742413738</id>
 			<name></name>
 			<type>30</type>
 			<matcher>
 				<id>org.eclipse.ui.ide.multiFilter</id>
-				<arguments>1.0-projectRelativePath-matches-false-false-build/red5/bin</arguments>
+				<arguments>1.0-projectRelativePath-matches-false-false-build/red5/server/bin</arguments>
 			</matcher>
 		</filter>
 		<filter>
-			<id>1337248317098</id>
-			<name></name>
-			<type>26</type>
-			<matcher>
-				<id>org.eclipse.ui.ide.multiFilter</id>
-				<arguments>1.0-name-matches-false-false-.svn</arguments>
-			</matcher>
-		</filter>
-		<filter>
-			<id>1337248317140</id>
-			<name></name>
-			<type>10</type>
-			<matcher>
-				<id>org.eclipse.ui.ide.multiFilter</id>
-				<arguments>1.0-projectRelativePath-matches-false-false-dist</arguments>
-			</matcher>
-		</filter>
-		<filter>
-			<id>1337248317144</id>
-			<name></name>
-			<type>26</type>
-			<matcher>
-				<id>org.eclipse.ui.ide.multiFilter</id>
-				<arguments>1.0-projectRelativePath-matches-false-false-build/classes/openmeetings</arguments>
-			</matcher>
-		</filter>
-		<filter>
-			<id>1337248317166</id>
-			<name></name>
-			<type>26</type>
-			<matcher>
-				<id>org.eclipse.ui.ide.multiFilter</id>
-				<arguments>1.0-projectRelativePath-matches-false-false-build/openlaszlo</arguments>
-			</matcher>
-		</filter>
-		<filter>
-			<id>1337248317188</id>
+			<id>1339742413748</id>
 			<name></name>
 			<type>30</type>
 			<matcher>
 				<id>org.eclipse.ui.ide.multiFilter</id>
-				<arguments>1.0-projectRelativePath-matches-false-false-build/red5/bin</arguments>
+				<arguments>1.0-projectRelativePath-matches-false-false-build/red5/client/bin</arguments>
 			</matcher>
 		</filter>
 	</filteredResources>
