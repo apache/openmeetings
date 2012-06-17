@@ -21,7 +21,7 @@
 <library>
 	
 	<!-- FamFam Icon Set -->
-    <resource name="resyncuser_rsc" src="resources/arrow_refresh.png" />
+    <resource name="resyncuser_rsc" src="resources/arrow_refresh_small.png" />
     
     <!-- APL author sebawagner -->
     <resource name="speaking" src="resources/speaking.png" />

@@ -227,9 +227,11 @@
 			<conferencDropDownMenuItem labelid="239" command="cmd_shareDesktop" 
 						enabled="${ canvas.ismoderator }" />			
 			<horizontalDropDownSpacer />
+			<!-- 
 			<conferencDropDownMenuItem labelid="306" command="cmd_editCamMicSettings" 
 						enabled="true" />			
 			<horizontalDropDownSpacer />
+			 -->
 			<conferencDropDownMenuItem labelid="784" command="cmd_applyforMod"
 						enabled="${ !canvas.ismoderator }" />	
 			<horizontalDropDownSpacer />
