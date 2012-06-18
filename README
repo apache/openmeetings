@@ -63,6 +63,9 @@ OpenOffice service does not need any more to be started. But you have
 to set the path to OpenOffice (or LibreOffice) and JODConverter tools in 
 OpenMeetings configuration. OpenMeetings (and JODConverter) will start and stop the 
 OpenOffice service when they need it.
+If you are using MySQL: MySQL driver is no more part of the distribution due to license restrictions. 
+You will need to download the JConnector Driver on your own, see:
+http://incubator.apache.org/openmeetings/MySQLConfig.html
 
 _Upgrading from Version 1.9 or prior_
 To update from an old version of OpenMeetings to 2.x 
