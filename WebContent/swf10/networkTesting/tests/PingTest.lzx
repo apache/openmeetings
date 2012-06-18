@@ -24,7 +24,7 @@
 
     <handler name="oninit">
         this.setAttribute("testsCount", 10);
-        this.setAttribute("testName", "Ping test");
+        this.setAttribute("testName", "Ping");
         this.setAttribute("loadFileName", "pingTest");
     </handler>
 

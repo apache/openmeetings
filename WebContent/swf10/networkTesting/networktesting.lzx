@@ -22,20 +22,38 @@
 
     <include href="tests/" />
 
+    <attribute name="busy" type="boolean" value="false"/>
     <attribute name="host" type="string" value="localhost" />
     <attribute name="rtmpPort" type="number" value="1935" />
     <attribute name="httpPort" type="number" value="5080" />
+    <attribute name="offset" type="number" value="20" />
+    <attribute name="log" type="string" value="" />
 
-    <PingTest name="pingTest" host="${parent.host}" port="${parent.httpPort}" />
-    <PortAvailabilityTest name="portTest" host="${parent.host}" port="${parent.rtmpPort}" />
-    <JitterTest name="jitterTest" host="${parent.host}" port="${parent.httpPort}" />
-    <DownloadSpeedTest name="downloadTest" host="${parent.host}" port="${parent.httpPort}" />
+    <PingTest
+        name="pingTest" host="${parent.host}" port="${parent.httpPort}"
+        x="${parent.offset}"
+        y="${parent.offset}"
+    />
+    <PortAvailabilityTest
+        name="portTest" host="${parent.host}" port="${parent.rtmpPort}"
+        x="${parent.pingTest.x + parent.pingTest.width + parent.offset}"
+        y="${parent.offset}"
+     />
+    <JitterTest
+        name="jitterTest" host="${parent.host}" port="${parent.httpPort}"
+        x="${parent.portTest.x + parent.portTest.width + parent.offset}"
+        y="${parent.offset}"
+    />
+    <DownloadSpeedTest
+        name="downloadTest" host="${parent.host}" port="${parent.httpPort}"
+        x="${parent.jitterTest.x + parent.jitterTest.width + parent.offset}"
+        y="${parent.offset}"
+    />
 
-    <handler name="oninit">
-        canvas.pingTest.start();
-        canvas.jitterTest.start();
-        canvas.portTest.start();
-        canvas.downloadTest.start();
-    </handler>
+    <UploadSpeedTest
+        name="uploadTest" host="${parent.host}" port="${parent.httpPort}"
+        x="${parent.downloadTest.x + parent.downloadTest.width + parent.offset}"
+        y="${parent.offset}"
+    />
 
 </canvas>

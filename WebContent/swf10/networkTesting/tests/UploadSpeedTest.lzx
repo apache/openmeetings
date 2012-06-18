@@ -20,7 +20,7 @@
 -->
 <library>
 
-<class name="BaseURLLoadTest" extends="NetworkTest">
+<class name="UploadSpeedTest" extends="NetworkTest">
 
     <switch>
         <when property="$as3">
@@ -32,25 +32,22 @@
         </when>
     </switch>
 
-    <attribute name="testsCount" type="number" value="0" />
-    <attribute name="loadFileName" type="string" value="null" />
-    <attribute name="verbose" type="boolean" value="true" />
-
     <attribute name="startTime" type="number" value="0" />
-    <attribute name="wholeTime" type="number" value="0" />
-    <attribute name="maxTime" type="number" value="0" />
-    <attribute name="minTime" type="number" value="999999" />
-    <attribute name="finishedTestsCount" type="number" value="0" />
-    <attribute name="successfulTestsCount" type="number" value="0" />
 
     <attribute name="hostUrl" type="string" value="" />
     <attribute name="loaderInited" type="boolean" value="false" />
     <attribute name="request" value="null" />
     <attribute name="loader" value="null" />
 
+    <handler name="oninit">
+        this.setAttribute("testName", "Upload speed");
+    </handler>
+
     <method name="initLoader">
-        hostUrl = "http://" + host + ":" + port + "/openmeetings/testingTools/" + loadFileName;
+        hostUrl = "http://" + host + ":" + port + "/openmeetings/networktest.upload";
         request = new URLRequest(hostUrl);
+        request.method = URLRequestMethod.POST;
+        request.data = getDataString();
 
         loader = new URLLoader();
         loader.addEventListener(Event.COMPLETE, this.onComplete);
@@ -64,11 +61,6 @@
         if (!loaderInited) {
             this.initLoader();
         }
-        finishedTestsCount = 0;
-        successfulTestsCount = 0;
-        wholeTime = 0;
-        maxTime = 0;
-        minTime = 999999;
 
         this.log("start test... " + hostUrl);
         startTime = getTimer();
@@ -81,62 +73,41 @@
     </method>
 
     <method name="onComplete" args="e">
-        <![CDATA[
-        var endTime = getTimer();
-        var pingTime = endTime - startTime;
-        wholeTime += pingTime;
-        if (pingTime > maxTime) {
-            maxTime = pingTime;
-        }
-        if (pingTime < minTime) {
-            minTime = pingTime;
-        }
+        if (running) {
+            var endTime = getTimer();
+            var loadTime = endTime - startTime;
+            var loadTimeSec = loadTime/1000;
+            var mBytes = request.data.length/(1024*1024);
+            var speed = mBytes / loadTimeSec;
 
-        if (verbose) {
-            this.log("load time = " + pingTime + " ms");
-        }
+            var report = "report:\n";
+            report += "Bytes uploaded: " + mBytes + " Mb\n";
+            report += "Upload time: " + loadTimeSec + " s\n";
+            report += "Upload speed: " + speed + " Mb/s\n";
 
-        finishedTestsCount++;
-        successfulTestsCount++;
-        if (finishedTestsCount < testsCount && running) {
-            startTime = getTimer();
-            loader.load(request);
-        } else {
-            this.report();
+            this.log(report);
+            this.setPassed();
         }
-        ]]>
     </method>
 
     <method name="onError" args="e">
-        <![CDATA[
-        if (verbose) {
-            this.log("Error - " + e);
+        if (running) {
+            this.setFailed();
+            this.log("error - " + e);
         }
+    </method>
 
-        finishedTestsCount++;
-        if (finishedTestsCount < testsCount && running) {
-            startTime = getTimer();
-            loader.load(request);
-        } else {
-            this.report();
+    <!-- returns a 1 Mb string-->
+    <method name="getDataString">
+        <![CDATA[
+        var result = "";
+        var str64 = "0000000000000000000000000000000000000000000000000000000000000000";
+        for (var i=0; i<16384; i++) {
+            result += str64;
         }
+        return result;
         ]]>
     </method>
-
-    <method name="report">
-        var report = "report:";
-        if (successfulTestsCount > 0) {
-            this.setPassed();
-            report += "\n" + this.generateReport();
-        } else {
-            this.setFailed();
-            report += " connection error";
-        }
-
-        this.log(report);
-    </method>
-
-    <method name="generateReport" />
 
 </class>
 

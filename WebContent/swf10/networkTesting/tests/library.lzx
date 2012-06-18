@@ -20,11 +20,17 @@
 -->
 <library>
 
+    <resource name="failed" src="resources/failed.png" />
+    <resource name="notrun" src="resources/notrun.png" />
+    <resource name="passed" src="resources/passed.png" />
+    <resource name="running" src="resources/running.gif" />
+
     <include href="BaseURLLoadTest.lzx" />
     <include href="DownloadSpeedTest.lzx" />
     <include href="JitterTest.lzx" />
     <include href="NetworkTest.lzx" />
     <include href="PingTest.lzx" />
     <include href="PortAvailabilityTest.lzx" />
+    <include href="UploadSpeedTest.lzx" />
 
 </library>

@@ -32,29 +32,45 @@
         </when>
     </switch>
 
-    <rtmpconnection name="rtmp" autoconnect="false" />
+    <rtmpconnection name="rtmp" autoconnect="false" debug="true" />
 
     <handler name="oninit">
-        this.setAttribute("testName", "Port test");
+        this.setAttribute("testName", "Port");
     </handler>
 
     <method name="start">
+        rtmp.init();
         rtmp.setAttribute("src", "rtmp://"+host+":"+port+"/openmeetings/hibernate");
-        if($debug) Debug.write(testName + ": start test... ", rtmp.src);
+        this.log(": start test... " + rtmp.src);
 
         rtmp.connect();
     </method>
 
+    <method name="forcedStop">
+        this.log("stopped");
+    </method>
+
     <handler name="onconnect" reference="rtmp">
-        if($debug) Debug.write(testName + ": port is available");
+        if (running) {
+            this.setPassed();
+            this.log("port is available");
+        }
     </handler>
 
     <handler name="onerror" args="e" reference="rtmp">
-        if($debug) Debug.write(testName + ": connection error - ", e);
+        if (running) {
+            this.setFailed();
+            this.log("connection error - " + e);
+        }
     </handler>
 
     <handler name="onstatus" args="e" reference="rtmp">
-        if($debug) Debug.write(testName + ": RTMP connect status - ", e);
+        if (running) {
+            if ("timed out" == e) {
+                this.setFailed();
+            }
+            if($debug) Debug.write(testName + ": RTMP connect status - ", e);
+        }
     </handler>
 
 </class>

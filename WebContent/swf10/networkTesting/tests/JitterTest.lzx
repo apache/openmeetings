@@ -24,7 +24,7 @@
 
     <handler name="oninit">
         this.setAttribute("testsCount", 100);
-        this.setAttribute("testName", "Jitter test");
+        this.setAttribute("testName", "Jitter");
         this.setAttribute("loadFileName", "jitterTest");
         this.setAttribute("verbose", false);
     </handler>

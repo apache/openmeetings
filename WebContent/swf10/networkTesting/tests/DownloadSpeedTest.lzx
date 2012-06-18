@@ -24,7 +24,7 @@
 
     <handler name="oninit">
         this.setAttribute("testsCount", 1);
-        this.setAttribute("testName", "Download speed test");
+        this.setAttribute("testName", "Download speed");
         this.setAttribute("loadFileName", "downloadTest");
         this.setAttribute("verbose", false);
     </handler>
@@ -34,7 +34,7 @@
         var timeSec = wholeTime/1000;
         var speed = mBytes/timeSec;
 
-        var report = "Bytes loaded: " + mBytes + " Mb\n";
+        var report = "Bytes downloaded: " + mBytes + " Mb\n";
         report += "Download time: " + timeSec + " s\n";
         report += "Download speed: " + speed + " Mb/s\n";
 

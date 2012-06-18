@@ -25,8 +25,66 @@
     <attribute name="testName" type="string" value="null" />
     <attribute name="host" type="string" value="null" />
     <attribute name="port" type="number" value="null" />
+    <attribute name="running" type="boolean" value="false" />
 
     <method name="start" />
+    <method name="forcedStop" />
+
+    <view name="picture" width="113" height="113">
+        <image name="rsc" resource="notrun"/>
+    </view>
+    <text name="nameLabel"
+          text="${parent.testName}"
+          x="${(parent.picture.width - this.width)/2}"
+          y="$once{parent.picture.height}"
+    />
+
+    <handler name="onclick">
+        if (running) {
+            this.setStopped();
+        } else {
+            this.setRunning();
+        }
+    </handler>
+    
+    <method name="setPassed">
+        if (running) {
+            running=false;
+            picture.rsc.setAttribute("resource", "passed");
+            canvas.setAttribute("busy", false);
+        }
+    </method>
+
+    <method name="setFailed">
+        if (running) {
+            running=false;
+            picture.rsc.setAttribute("resource", "failed");
+            canvas.setAttribute("busy", false);
+        }
+    </method>
+
+    <method name="setRunning">
+        if (canvas.busy) {
+            return;
+        }
+        canvas.setAttribute("busy", true);
+        this.start();
+        running=true;
+        picture.rsc.setAttribute("resource", "running");
+    </method>
+
+    <method name="setStopped">
+        this.forcedStop();
+        running=false;
+        picture.rsc.setAttribute("resource", "notrun");
+        canvas.setAttribute("busy", false);
+    </method>
+
+    <method name="log" args="message">
+        var str = testName + ": " + message + "\n";
+        canvas.log += str;
+        if ($debug) Debug.write(str);
+    </method>
 
 </class>
 
