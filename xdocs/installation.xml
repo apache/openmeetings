@@ -38,7 +38,8 @@
 					<br />
 					<i>Since Version 2.0 you can also install OpenMeetings from command
 						line. Just cd to the unpacked archive and type ./admin.sh or
-						admin.bat</i>
+						admin.bat
+					</i>
 				</p>
 			</p>
 			<ol>
@@ -146,11 +147,13 @@
 						<ul>
 							<li>
 								Install
-								<b>FFMpeg</b>
-								. You should get FFMPEG in an up to date copy!
+								<b>FFMpeg (with -enabled libmp3lame option)</b>
+								. You should get FFMPEG in an up to date copy! OpenMeetings is
+								tested with FFMPEG Version 10.3
 								For
 								Windows you can
-								download a Build for example from
+								download a
+								Build for example from
 								<a href="http://ffmpeg.zeranoe.com/builds/" target="_BLANK"
 									rel="nofollow">http://ffmpeg.zeranoe.com/builds/ </a>
 								Linux or OSx Users should be
