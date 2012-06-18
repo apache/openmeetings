@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
 <classpath>
 	<classpathentry kind="src" path="WebContent/WEB-INF"/>
 	<classpathentry kind="src" path="src"/>
@@ -9,125 +22,10 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="build/lib/java_16_tools.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/activation-jar-1.1.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/commons-httpclient-jar-3.1.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/geronimo-activation_1.1_spec-jar-1.0.2.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/geronimo-annotation_1.0_spec-jar-1.1.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/geronimo-javamail_1.4_spec-bundle-1.6.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/geronimo-jaxws_2.2_spec-bundle-1.0.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/geronimo-jta_1.1_spec-jar-1.1.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/geronimo-saaj_1.3_spec-jar-1.0.1.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/geronimo-stax-api_1.0_spec-bundle-1.0.1.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/geronimo-ws-metadata_2.0_spec-jar-1.1.2.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/ical4j-bundle-1.0.3.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/jaxen-jar-1.1.1.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/openjpa-bundle-2.2.0.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/stax-api-jar-1.0-2.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/wsdl4j-jar-1.6.2.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/xalan-jar-2.7.0.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/xml-resolver-jar-1.2.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/servlet-api-jar-2.5.jar"/>
-	<classpathentry kind="lib" path="build/lib/mainlibs/geronimo-jpa_2.0_spec-bundle-1.1.jar"/>
+	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=Openmeetings&amp;ivyXmlPath=ivy.xml&amp;confs=*&amp;ivySettingsPath=%24%7Bworkspace_loc%3AOpenmeetings%2Fivysettings.xml%7D&amp;loadSettingsOnDemand=false&amp;propertyFiles="/>
+	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=Openmeetings&amp;ivyXmlPath=build%2Fred5%2Fserver%2Fivy.xml&amp;confs=default%2Cjava6&amp;ivySettingsPath=%24%7Bworkspace_loc%3AOpenmeetings%2Fbuild%2Fred5%2Fserver%2Fivysettings.xml%7D&amp;loadSettingsOnDemand=false&amp;propertyFiles="/>
 	<classpathentry kind="lib" path="build/red5/server/dist/red5.jar" sourcepath="build/red5/server/src"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/bcprov-jdk16-145.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/com.springsource.javax.xml.stream-1.0.1.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/com.springsource.org.antlr-3.1.3.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/com.springsource.org.apache.xerces-2.9.1.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/com.springsource.org.codehaus.groovy-1.7.0.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/com.springsource.org.mozilla.javascript-1.7.0.R2.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/com.springsource.org.objectweb.asm-3.2.0.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/com.springsource.org.objectweb.asm.commons-3.2.0.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/commons-beanutils-1.8.3.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/commons-codec-1.6.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/commons-collections-3.2.1.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/commons-lang3-3.1.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/commons-modeler-2.0.1.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/commons-pool-1.5.6.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/ehcache-core-2.5.0.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/httpclient-4.1.2.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/httpcore-4.1.3.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/javaee-api-5.1.2.om.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/jcl-over-slf4j-1.6.4.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/jul-to-slf4j-1.6.4.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/log4j-over-slf4j-1.6.4.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/logback-classic-1.0.3.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/logback-core-1.0.3.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/mina-core-2.0.4.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/mina-integration-beans-2.0.4.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/mina-integration-jmx-2.0.4.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/quartz-1.8.5.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/spring-asm-3.1.1.RELEASE.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/spring-beans-3.1.1.RELEASE.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/spring-context-3.1.1.RELEASE.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/spring-context-support-3.1.1.RELEASE.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/spring-core-3.1.1.RELEASE.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/spring-expression-3.1.1.RELEASE.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/spring-web-3.1.1.RELEASE.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/batik-anim-jar-1.7.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/batik-awt-util-jar-1.7.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/batik-bridge-jar-1.7.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/batik-codec-jar-1.7.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/batik-css-jar-1.7.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/batik-dom-jar-1.7.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/batik-ext-jar-1.7.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/batik-extension-jar-1.7.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/batik-gui-util-jar-1.7.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/batik-gvt-jar-1.7.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/batik-parser-jar-1.7.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/batik-rasterizer-jar-1.7.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/batik-script-jar-1.7.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/batik-slideshow-jar-1.7.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/batik-squiggle-jar-1.7.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/batik-svg-dom-jar-1.7.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/batik-svggen-jar-1.7.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/batik-svgpp-jar-1.7.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/batik-swing-jar-1.7.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/batik-transcoder-jar-1.7.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/batik-ttf2svg-jar-1.7.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/batik-util-jar-1.7.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/batik-xml-jar-1.7.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/commons-dbcp-jar-1.4.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/commons-digester-jar-2.1.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/commons-lang-jar-2.6.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/commons-transaction-jar-1.2.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/derby-jar-10.8.2.2.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/derbyclient-jar-10.8.2.2.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/dom4j-jar-1.6.1.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/fop-jar-1.0.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/mail-jar-1.4.4.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/postgresql-jar-9.1-901.jdbc4.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/serp-jar-1.13.1.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/velocity-jar-1.7.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/velocity-tools-jar-2.0.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/ws-commons-util-jar-1.0.2.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/xml-apis-ext-jar-1.3.04.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/xmlgraphics-commons-jar-1.4.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/xmlrpc-client-jar-3.1.3.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/xmlrpc-common-jar-3.1.3.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/xpp3-jar-1.1.4c.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/xstream-jar-1.4.2.jar"/>
-	<classpathentry kind="lib" path="build/lib/junit/junit-jar-4.9.jar"/>
-	<classpathentry kind="lib" path="build/lib/junit/org.springframework.test-jar-3.1.1.RELEASE.jar"/>
-	<classpathentry kind="lib" path="build/lib/dtd-generator/trang-jar-20091111.jar"/>
-	<classpathentry kind="lib" path="build/lib/om/axis2-kernel-jar-1.7.0-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/commons-cli-jar-1.2.jar"/>
-	<classpathentry kind="lib" path="build/lib/mainlibs/cglib-jar-2.2.2.jar"/>
-	<classpathentry kind="lib" path="build/lib/mainlibs/commons-fileupload-jar-1.2.2.jar"/>
-	<classpathentry kind="lib" path="build/lib/mainlibs/commons-io-jar-2.1.jar"/>
-	<classpathentry kind="lib" path="build/lib/mainlibs/org.springframework.aspects-jar-3.1.1.RELEASE.jar"/>
-	<classpathentry kind="lib" path="build/lib/mainlibs/org.springframework.jdbc-jar-3.1.1.RELEASE.jar"/>
-	<classpathentry kind="lib" path="build/lib/mainlibs/org.springframework.orm-jar-3.1.1.RELEASE.jar"/>
-	<classpathentry kind="lib" path="build/lib/mainlibs/org.springframework.transaction-jar-3.1.1.RELEASE.jar"/>
-	<classpathentry kind="lib" path="build/lib/mainlibs/org.springframework.web.servlet-jar-3.1.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="build/red5/client/dist/red5-client.jar" sourcepath="build/red5/client/src"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/com.springsource.net.sf.cglib-2.2.0.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/com.springsource.org.aopalliance-1.0.0.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/jruby-1.6.7.2.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/jython-standalone-2.5.2.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/slf4j-api-1.6.4.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/spring-aop-3.1.1.RELEASE.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/sysout-over-slf4j-1.0.2.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/xmlrpc-2.0.1.jar"/>
+	<classpathentry kind="lib" path="build/lib/java_16_tools.jar"/>
 	<classpathentry kind="output" path="build/classes/eclipse"/>
 </classpath>

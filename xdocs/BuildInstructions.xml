@@ -49,10 +49,10 @@
 				</span>
 				<br />
 				ant compile.laszlo.main
-				<span style="margin-left: 70px;"># compiles the client into main.swf8.swf</span>
+				<span style="margin-left: 70px;"># compiles the client into main.as3.swf10.swf and main.swf8.swf</span>
 				<br />
 				ant compile.laszlo.main.debug
-				<span style="margin-left: 30px;"># compiles the debug-client into maindebug.swf8.swf
+				<span style="margin-left: 30px;"># compiles the debug-client into maindebug.as3.swf10.swf andmaindebug.swf8.swf
 				</span>
 				<br />
 				ant -Ddb=&lt;name of DB&gt;
@@ -105,6 +105,11 @@
 					</li>
 					<li>Spring IDE for Eclipse (installable via Help &gt; Eclipse
 						Marketplace)
+					</li>
+					<li>
+						Apache IvyDE&#0153; For Eclipse (installable via Help &gt; Install New Software)
+						URL: http://www.apache.org/dist/ant/ivyde/updatesite detailed steps can be found here:
+						<a href="http://ant.apache.org/ivy/ivyde/download.cgi" target="_BLANK" rel="nofollow">http://ant.apache.org/ivy/ivyde/download.cgi</a>
 					</li>
 					<li>MySQL (or Postgres, or other Databases supported by Hibernate)
 						are optionally but handy to have them
