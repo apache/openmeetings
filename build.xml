@@ -143,50 +143,17 @@
 	</target>
 	
 	<!-- build artefacts -->
-		<target name="dist-release" description="pack binary distribution" depends="clean.all, dist">
-			<tstamp>
-				<format property="build.time" pattern="dd-MM-yyyy_HHmm" />
-			</tstamp>
-			<property name="archive.file.name" value="${dist.dir}/apache-${project.distname}-incubating-${project.version}.r${svn.info.rev}-${build.time}" />
-
-			<move file="${dist.dir}/red5/license.txt" tofile="${dist.dir}/red5/red5-license.txt" />
-			<copy file="build.properties" tofile="${build.base.dir}/build.properties" overwrite="true" />
-			<copy file="LICENSE" tofile="${dist.dir}/red5/LICENSE" overwrite="true" />
-			<copy file="NOTICE" tofile="${dist.dir}/red5/NOTICE" overwrite="true" />
-			<copy file="README" tofile="${dist.dir}/red5/README" overwrite="true" />
-			<copy file="CHANGELOG" tofile="${dist.dir}/red5/CHANGELOG" overwrite="true" />
-			<copy file="DISCLAIMER" tofile="${dist.dir}/red5/DISCLAIMER" overwrite="true" />
-
-			<echo file="${build.base.dir}/build.properties" append="true">svn.info.rev=${svn.info.rev}${line.separator}</echo>
-			<tar longfile="gnu" compression="gzip" destfile="${archive.file.name}-src.tar.gz">
-				<tarfileset dir="${basedir}">
-					<exclude name="build/**" />
-					<exclude name="dist/**" />
-					<exclude name="build.properties" />
-				</tarfileset>
-				<tarfileset dir="${build.base.dir}">
-					<include name="build.properties" />
-				</tarfileset>
-			</tar>
-			<zip destfile="${archive.file.name}.zip">
-				<zipfileset dir="${dist.dir}/red5">
-					<include name="**" />
-					<exclude name="*.sh" />
-				</zipfileset>
-				<zipfileset dir="${dist.dir}/red5" filemode="755">
-					<include name="*.sh" />
-				</zipfileset>
-			</zip>
-			<tar longfile="gnu" compression="gzip" destfile="${archive.file.name}.tar.gz">
-				<tarfileset dir="${dist.dir}/red5">
-					<include name="**" />
-					<exclude name="*.sh" />
-				</tarfileset>
-				<tarfileset dir="${dist.dir}/red5" filemode="755">
-					<include name="*.sh" />
-				</tarfileset>
-			</tar>
-		</target>
+	<target name="dist-release" description="pack binary distribution" depends="dist-bin">
+		<zip destfile="${archive.file.name}.zip">
+			<zipfileset dir="${dist.dir}/red5">
+				<include name="**" />
+				<exclude name="*.sh" />
+			</zipfileset>
+			<zipfileset dir="${dist.dir}/red5" filemode="755">
+				<include name="*.sh" />
+			</zipfileset>
+		</zip>
+	</target>
 
 	<!-- build webapp -->
 	<target name="-copy-libraries" description="All jars downloaded by ivy copied to appropriate places">
