@@ -18,42 +18,55 @@
   under the License.
   
 -->
-<canvas debug="true" width="100%" height="100%" title="NetworkTesting">
+<canvas debug="false" width="100%" height="100%" title="NetworkTesting">
 
-    <include href="tests/" />
+    <include href="testsView.lzx" />
 
-    <attribute name="busy" type="boolean" value="false"/>
-    <attribute name="host" type="string" value="localhost" />
+    <!--
+        These attributes are rewritten by values from "networktesting-config.xml"
+    -->
+    <attribute name="host" type="string" value="" />
     <attribute name="rtmpPort" type="number" value="1935" />
     <attribute name="httpPort" type="number" value="5080" />
-    <attribute name="offset" type="number" value="20" />
+    <attribute name="uriContext" type="string" value="/openmeetings" />
+    <attribute name="rtmpUriPath" type="string" value="/openmeetings/hibernate" />
+
+    <method name="getSettings">
+        var settingsPtr = canvas.settings.getPointer();
+
+        canvas.setAttribute("host", settingsPtr.xpathQuery("config/hostAddress/text()"));
+        canvas.setAttribute("rtmpPort", settingsPtr.xpathQuery("config/rtmpPort/text()"));
+        canvas.setAttribute("httpPort", settingsPtr.xpathQuery("config/httpPort/text()"));
+
+        canvas.setAttribute("uriContext", settingsPtr.xpathQuery("config/uriContext/text()"));
+        canvas.setAttribute("rtmpUriPath", settingsPtr.xpathQuery("config/rtmpUriPath/text()"));
+    </method>
+
+    <method name="showTests">
+        var tests = new lz.TestsView(canvas, {name:"testsView"});
+    </method>
+
+    <dataset type="http" name="settings" request="false" >
+        <handler name="oninit">
+            this.setAttribute("src","networktesting-config.xml");
+            this.doRequest();
+        </handler>
+        <handler name="ondata">
+            if ($debug) Debug.write("Settings are retrieved");
+            canvas.getSettings();
+            canvas.showTests();
+        </handler>
+        <handler name="onerror" args="e">
+            if ($debug) Debug.write("Settings error", e);
+        </handler>
+        <handler name="ontimeout" args="e">
+            if ($debug) Debug.write("Settings timeout error", e);
+        </handler>
+    </dataset>
+
+    <attribute name="busy" type="boolean" value="false"/>
     <attribute name="log" type="string" value="" />
 
-    <PingTest
-        name="pingTest" host="${parent.host}" port="${parent.httpPort}"
-        x="${parent.offset}"
-        y="${parent.offset}"
-    />
-    <PortAvailabilityTest
-        name="portTest" host="${parent.host}" port="${parent.rtmpPort}"
-        x="${parent.pingTest.x + parent.pingTest.width + parent.offset}"
-        y="${parent.offset}"
-     />
-    <JitterTest
-        name="jitterTest" host="${parent.host}" port="${parent.httpPort}"
-        x="${parent.portTest.x + parent.portTest.width + parent.offset}"
-        y="${parent.offset}"
-    />
-    <DownloadSpeedTest
-        name="downloadTest" host="${parent.host}" port="${parent.httpPort}"
-        x="${parent.jitterTest.x + parent.jitterTest.width + parent.offset}"
-        y="${parent.offset}"
-    />
-
-    <UploadSpeedTest
-        name="uploadTest" host="${parent.host}" port="${parent.httpPort}"
-        x="${parent.downloadTest.x + parent.downloadTest.width + parent.offset}"
-        y="${parent.offset}"
-    />
+    <attribute name="testsView" value="null"/>
 
 </canvas>

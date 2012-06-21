@@ -39,9 +39,9 @@
     </handler>
 
     <method name="start">
-        rtmp.init();
-        rtmp.setAttribute("src", "rtmp://"+host+":"+port+"/openmeetings/hibernate");
-        this.log(": start test... " + rtmp.src);
+        var hostUrl = "rtmp://" + host + ":" + port + canvas.rtmpUriPath;
+        rtmp.setAttribute("src", hostUrl);
+        this.log(": start test... " + hostUrl);
 
         rtmp.connect();
     </method>

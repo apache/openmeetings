@@ -391,8 +391,11 @@
 	</target>
 
 	<target name="compile.laszlo.networktesting">
+		<copy todir="${dist.webapps.dir}">
+			<fileset dir="${webcontent.src.dir}/openmeetings" includes="*" />
+		</copy>
 		<copy todir="${dist.webapps.dir}/testingTools">
-			<fileset dir="${webcontent.src.dir}/testingTools" includes="*" />
+			<fileset dir="${webcontent.src.dir}/openmeetings/testingTools" includes="*" />
 		</copy>
 		<java classname="org.openlaszlo.compiler.Main" fork="true" newenvironment="true" failonerror="true" dir="${laszlo.as3.src.dir}/networkTesting" classpathref="laszlo.lib">
 			<jvmarg value="-DLPS_HOME=${laszlo.home}" />

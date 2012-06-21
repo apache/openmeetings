@@ -30,13 +30,13 @@
     <method name="start" />
     <method name="forcedStop" />
 
-    <view name="picture" width="113" height="113">
-        <image name="rsc" resource="notrun"/>
+    <view name="picture">
+        <image name="rsc" resource="notrun" width="113" height="113" />
     </view>
     <text name="nameLabel"
           text="${parent.testName}"
-          x="${(parent.picture.width - this.width)/2}"
-          y="$once{parent.picture.height}"
+          x="${(parent.picture.rsc.width - this.width)/2}"
+          y="$once{parent.picture.rsc.height}"
     />
 
     <handler name="onclick">

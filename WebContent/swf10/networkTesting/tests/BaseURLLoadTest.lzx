@@ -49,7 +49,7 @@
     <attribute name="loader" value="null" />
 
     <method name="initLoader">
-        hostUrl = "http://" + host + ":" + port + "/openmeetings/testingTools/" + loadFileName;
+        hostUrl = "http://" + host + ":" + port + canvas.uriContext + "/testingTools/" + loadFileName;
         request = new URLRequest(hostUrl);
 
         loader = new URLLoader();

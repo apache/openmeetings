@@ -44,7 +44,7 @@
     </handler>
 
     <method name="initLoader">
-        hostUrl = "http://" + host + ":" + port + "/openmeetings/networktest.upload";
+        hostUrl = "http://" + host + ":" + port + canvas.uriContext + "/networktest.upload";
         request = new URLRequest(hostUrl);
         request.method = URLRequestMethod.POST;
         request.data = getDataString();
