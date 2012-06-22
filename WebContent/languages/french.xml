@@ -81,22 +81,22 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Nouveau sondage</value>
   </string>
   <string id="19" name="newpollheader">
-    <value>Une nouvelle enquête pour la conférence.</value>
+    <value>Un nouveau sondage pour la conférence.</value>
   </string>
   <string id="20" name="question">
     <value>Question :</value>
   </string>
   <string id="21" name="polltype">
-    <value>Type d'enquête :</value>
+    <value>Type de sondage :</value>
   </string>
   <string id="22" name="create">
     <value>Créer</value>
   </string>
   <string id="23" name="infomessage">
-    <value>Info : Chaque utilisateur reçoit la nouvelle enquête.</value>
+    <value>Info : Chaque utilisateur reçoit le nouveau sondage.</value>
   </string>
   <string id="24" name="creatpoll">
-    <value>Créer une enquête</value>
+    <value>Créer un sondage</value>
   </string>
   <string id="25" name="cancel">
     <value>Annuler</value>
@@ -108,19 +108,19 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Numérique 1-10</value>
   </string>
   <string id="28" name="poll">
-    <value>Enquête</value>
+    <value>Sondage</value>
   </string>
   <string id="29" name="moderation">
-    <value>Vous devez être modérateur pour créer une enquête.</value>
+    <value>Vous devez être modérateur pour créer un sondage.</value>
   </string>
   <string id="30" name="vote">
     <value>Votre vote est enregistré.</value>
   </string>
   <string id="31" name="alreadyvoted">
-    <value>Vous avez déjà voté pour cette enquête.</value>
+    <value>Vous avez déjà voté pour ce sondage.</value>
   </string>
   <string id="32" name="voting">
-    <value>Votez !</value>
+    <value>Voter !</value>
   </string>
   <string id="33" name="answer">
     <value>Votre réponse :</value>
@@ -147,10 +147,10 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Réponses :</value>
   </string>
   <string id="41" name="nopoll">
-    <value>Aucune enquête n'est en cours.</value>
+    <value>Aucun sondage n'est en cours.</value>
   </string>
   <string id="42" name="votings">
-    <value>Votez !</value>
+    <value>Voter !</value>
   </string>
   <string id="43" name="meeting">
     <value>Réunion (max. 4 places)</value>
@@ -246,7 +246,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Texte</value>
   </string>
   <string id="74" name="paint">
-    <value>Peindre</value>
+    <value>Dessiner</value>
   </string>
   <string id="75" name="drawline">
     <value>Tracer une ligne</value>
@@ -441,7 +441,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Date de naissance</value>
   </string>
   <string id="139" name="useralterself_streetno">
-    <value>N° de rue</value>
+    <value>Rue et N°</value>
   </string>
   <string id="140" name="useralterself_town">
     <value>Code postal/Ville</value>
@@ -750,7 +750,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Ecran de :</value>
   </string>
   <string id="242" name="whiteboard_tab_paint">
-    <value>Peindre</value>
+    <value>Dessiner</value>
   </string>
   <string id="243" name="whiteboard_tab_document">
     <value>Document</value>
@@ -933,7 +933,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Demander la modération</value>
   </string>
   <string id="303" name="conferencebar">
-    <value>Enquête</value>
+    <value>Sondage</value>
   </string>
   <string id="304" name="conferencebar">
     <value>Choisir un fichier</value>
@@ -942,7 +942,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Configuration</value>
   </string>
   <string id="306" name="conferencebar">
-    <value>Config. micro/caméra</value>
+    <value>Choix micro/caméra</value>
   </string>
   <string id="307" name="conferencebar">
     <value>Config. du tableau blanc</value>
@@ -1302,7 +1302,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Choisir une couleur</value>
   </string>
   <string id="426" name="painttools_line_disable">
-    <value>Désactiver/Activer couleur de ligne</value>
+    <value>Désactiver/Activer la couleur de ligne</value>
   </string>
   <string id="427" name="painttools_fill_disable">
     <value>changer la couleur de remplissage</value>
@@ -1311,7 +1311,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Désactiver / Activer couleur de remplissage</value>
   </string>
   <string id="429" name="change_width_arrow_down_slider">
-    <value>Changer largeur de ligne</value>
+    <value>Changer la largeur de ligne</value>
   </string>
   <string id="430" name="close_small_popups">
     <value>Fermer</value>
@@ -1533,7 +1533,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Message :</value>
   </string>
   <string id="503" name="invitation_text_click_text">
-    <value>Cliquez sur le lien pour participer au meeting :</value>
+    <value>Cliquez sur le lien pour participer à la conférence :</value>
   </string>
   <string id="504" name="invitation_text_click_text_link">
     <value>Cliquez pour entrer dans la salle</value>
@@ -1596,7 +1596,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Entrez une heure valide, par exemple 12:23 (hh:mm)</value>
   </string>
   <string id="524" name="invitation_window">
-    <value>Mot de passe protégé</value>
+    <value>Protégé par mot de passe</value>
   </string>
   <string id="525" name="invitation_window_passwordLabel">
     <value>Mot de passe</value>
@@ -1617,10 +1617,10 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Valide à partir de :</value>
   </string>
   <string id="531" name="invitation_window_validToLabel">
-    <value>Valide jusqu'a :</value>
+    <value>Valide jusqu'à :</value>
   </string>
   <string id="532" name="invitation_window_MailSubject">
-    <value>Invitation à $APP_NAME</value>
+    <value>Invitation à une conférence $APP_NAME</value>
   </string>
   <string id="533" name="invitation_error">
     <value>Pas d'invitation disponible pour ce code</value>
@@ -1695,7 +1695,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>La connexion avec le serveur est interrompue. Vérifiez le réseau ou contactez l'adminitrateur.</value>
   </string>
   <string id="557" name="557">
-    <value>Pointer</value>
+    <value>Pointeur</value>
   </string>
   <string id="558" name="sync message header">
     <value>Synchronisation</value>
@@ -1803,7 +1803,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Téléchargement ok, conversion en cours...</value>
   </string>
   <string id="593" name="upload dialog">
-    <value>Démarrer l'import</value>
+    <value>Démarrer l'importation</value>
   </string>
   <string id="594" name="upload dialog">
     <value>Sélectionnez un fichier sur votre disque :</value>
@@ -1851,10 +1851,10 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Modérateur de cette réunion</value>
   </string>
   <string id="609" name="participents panel">
-    <value>Autorisé à dessiner sur le tableau blanc</value>
+    <value>Autoriser/Refuser le droit de dessiner sur le tableau blanc</value>
   </string>
   <string id="610" name="participents panel">
-    <value>(Re) Démarrer Audio/Vidéo ou changer les paramètres</value>
+    <value>(Re) Démarrer audio/vidéo ou changer les paramètres</value>
   </string>
   <string id="611" name="participents panel">
     <value>Autoriser cet utilisateur à dessiner sur le tableau blanc</value>
@@ -2085,7 +2085,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Je souhaiterais dessiner sur le tableau blanc</value>
   </string>
   <string id="687" name="event user list">
-    <value>Je souhaiterais partager mon Audio/Vidéo</value>
+    <value>Je souhaiterais partager mon audio/vidéo</value>
   </string>
   <string id="688" name="event user list">
     <value>Vous êtes le modérateur de cette salle</value>
@@ -2103,13 +2103,13 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>L'utilisateur</value>
   </string>
   <string id="693" name="apply for mod message">
-    <value>&lt;br/&gt;demande la modération. Utilisez l'icône dans la liste des &lt;br/&gt;utilisateurs pour ajouter ou enlever la modération.</value>
+    <value>&lt;br/&gt;demande la modération. Utilisez l'icône dans la liste des utilisateurs pour ajouter ou enlever la modération.</value>
   </string>
   <string id="694" name="apply for whiteboard">
-    <value>&lt;br/&gt;demande l'accès au tableau blanc. Utilisez l'icône dans la &lt;br/&gt;liste des utilisateurs pour ajouter ou enlever le&lt;br/&gt; droit de dessiner sur le tableau blanc.</value>
+    <value>&lt;br/&gt;demande l'accès au tableau blanc. Utilisez l'icône dans la liste des utilisateurs pour ajouter ou enlever le droit de dessiner sur le tableau blanc.</value>
   </string>
   <string id="695" name="695">
-    <value>&lt;br/&gt;demande le partage Audio/Vidéo. Utilisez l'icône dans la liste &lt;br/&gt;des utilisateurs pour ajouter ou enlever le droit&lt;br/&gt;de partager l'Audio/Vidéo.</value>
+    <value>&lt;br/&gt;demande le partage audio/vidéo. Utilisez l'icône dans la liste des utilisateurs pour ajouter ou enlever le droit de partager l'audio/vidéo.</value>
   </string>
   <string id="696" name="moderation message">
     <value>Vous devez attendre qu'un modérateur entre dans la salle.</value>
@@ -2130,7 +2130,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Année</value>
   </string>
   <string id="702" name="file explorer">
-    <value>Charger le fichier</value>
+    <value>Ajouter un fichier</value>
   </string>
   <string id="703" name="file explorer">
     <value>Ajouter un dossier</value>
@@ -2319,7 +2319,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>PLAY</value>
   </string>
   <string id="765" name="test setup">
-    <value>Vous pouvez continuer sans tester si vous ne pensez pas publier votre voix ou votre vidéo. Les participants sans Audio ou Video peuvent utiliser le tableau blanc, partager leur écran ou écrire des messages.</value>
+    <value>Vous pouvez continuer sans tester si vous ne pensez pas publier votre voix ou votre vidéo. Les participants sans audio ou vidéo peuvent utiliser le tableau blanc, partager leur écran ou écrire des messages.</value>
   </string>
   <string id="766" name="test setup">
     <value>STOP</value>
@@ -2382,7 +2382,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Demander l'accès au tableau blanc</value>
   </string>
   <string id="786" name="menu option">
-    <value>Demander l'accès à camera/micro</value>
+    <value>Demander l'accès à caméra/micro</value>
   </string>
   <string id="787" name="error message soap secure login">
     <value>Ce hachage est déjà utilisé. Vous ne pouvez l'utiliser deux fois.</value>
@@ -2442,7 +2442,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Planifier</value>
   </string>
   <string id="806" name="lzcalendar">
-    <value>Pour planifier une réunion vous pouvez créer un événement dans le calendrier. Pour chaque événement du calendrier une réunion sera créée automatiquement. Chaque participant recevra un e-mail avec un lien vers la réunion.&lt;br/&gt;&lt;br/&gt;Vous pouvez choisir différents types de réunion avec des présentations et modérations différentes. Vous pouvez aussi choisir différents types de notification par e-mail.</value>
+    <value>Pour planifier une réunion vous pouvez créer un événement dans le calendrier.</value>
   </string>
   <string id="807" name="lzcalendar">
     <value>Besoin d'aide ?</value>
@@ -2616,7 +2616,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Nom</value>
   </string>
   <string id="864" name="flvrecording">
-    <value>Longueur</value>
+    <value>Durée</value>
   </string>
   <string id="865" name="flvrecording">
     <value>Date</value>
@@ -2634,7 +2634,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Enregistrement</value>
   </string>
   <string id="870" name="screen share">
-    <value>Vous pouvez enregistrer et partager votre écran en même temps. Pour permettre aux autres de voir votre écran, cliquez le bouton Démarrer en haut. Pour seulement enregistrer la session, il suffit de cliquer sur Démarrer l'enregistrement.</value>
+    <value>Vous pouvez enregistrer et partager votre écran en même temps. Pour permettre aux autres de voir votre écran, cliquez le bouton Partager en haut. Pour seulement enregistrer la session, il suffit de cliquer sur Démarrer l'enregistrement.</value>
   </string>
   <string id="871" name="screen share">
     <value>Démarrer l'enregistrement</value>
@@ -2670,7 +2670,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Droits</value>
   </string>  
   <string id="882" name="flvrecording">
-    <value>Télécharger comme AVI</value>
+    <value>Télécharger le fichier AVI</value>
   </string>  
   <string id="883" name="flvrecording">
     <value>FLV</value>
@@ -2760,13 +2760,13 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Utilisateurs disponibles pour ce conteneur</value>
   </string>
   <string id="912" name="interview info">
-    <value>Vous êtes un modérateur dans cette salle d'interview. Vous pouvez décider qui parle et vous pouvez démarrer/arrêter l'enregistrement de la session.</value>
+    <value>Vous êtes un modérateur dans cette salle d'interview. Vous pouvez décider de qui parle et vous pouvez démarrer/arrêter l'enregistrement de la session.</value>
   </string>
   <string id="913" name="interview button recording">
-    <value>Démarrer l'enregistrement</value>
+    <value>Démarrer l'enregistr.</value>
   </string>
   <string id="914" name="interview button recording">
-    <value>Arrêter l'enregistrement</value>
+    <value>Arrêter l'enregistr.</value>
   </string>
   <string id="915" name="interview error message">
     <value>L'enregisrement de l'interview est déjà démarré.</value>
@@ -3039,7 +3039,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>PIN</value>
   </string>
   <string id="1005" name="whiteboard">
-    <value>Supprimer les objets sur la dia actuelle seulement !</value>
+    <value>Supprimer les objets sur le document actuel seulement !</value>
   </string>
   <string id="1006" name="co-browser">
     <value>Seule l'URL entrée dans la barre de statut est envoyée aux participants !</value>
@@ -3243,7 +3243,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Demander le droit de partager/enregistrer l'écran.</value>
   </string>
   <string id="1073" name="moderation mini icons conference">
-    <value>Autoriser/Refuser le droit de partager/enregistrer l'écran.</value>
+    <value>Autoriser/Refuser le droit de partager/enregistrer l'écran</value>
   </string>
   <string id="1074" name="sound icon">
     <value>Couper le son</value>
@@ -3279,7 +3279,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Autoriser/Refuser le droit au contrôle à distance (Durant un partage d'écran)</value>
   </string>
   <string id="1085" name="right click screen share">
-    <value>1) Votre PC vers PC distant : Pour copier et coller du texte de votre presse-papier vers l'écran du PC distant, cliquez sur l'écran, ensuite cliquez avec le bouton droit dans le champ de texte et choisissez "Insérer" du menu contextuel (bouton droit).&lt;br/&gt;&lt;br/&gt;2) Depuis le PC distant vers votre PC : Pour copier du texte depuis le PC distant vers le presse-papier de votre PC, metez le texte en surbrillance avec votre souris sur l'écran du PC distant, ensuite cliquez avec le bouton droit sur l'écran distant et choisissez &lt;i&gt;Copier le texte en surbrillancet&lt;/i&gt;</value>
+    <value>1) Pour copier et coller du texte de votre presse-papier vers l'écran du PC distant, cliquez sur l'écran, ensuite cliquez avec le bouton droit dans le champ de texte et choisissez "Insérer" du menu contextuel.&lt;br/&gt;&lt;br/&gt;2) Pour copier du texte depuis le PC distant vers le presse-papier de votre PC, mettez le texte en surbrillance sur l'écran du PC distant, ensuite cliquez avec le bouton droit et choisissez &lt;i&gt;Copier le texte en surbrillancet&lt;/i&gt;</value>
   </string>
   <string id="1086" name="right click screen share">
     <value>Copier et coller du texte de votre PC vers un PC distant et vice-versa..</value>
@@ -3417,7 +3417,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Annuler</value>
   </string>
   <string id="1131" name="chat invite user">
-    <value>Inviter utilisateur dans la salle de conférence</value>
+    <value>Inviter l'utilisateur dans la salle de conférence</value>
   </string>
   <string id="1132" name="chat invite user">
     <value>Choisissez une salle de conférence.  L'utilisateur invité recevra un message avec votre nom et un lien vers la salle.</value>
@@ -3453,7 +3453,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Refuser</value>
   </string>
   <string id="1143" name="user profile">
-    <value>Fuseau hor.</value>
+    <value>Fus. horaire</value>
   </string>
   <string id="1144" name="appointment notification">
     <value>Détails de l'événement</value>
@@ -3471,7 +3471,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Message du fus. hor.</value>
   </string>
   <string id="1149" name="user administration">
-    <value>Vérifiez "le message du fuseau horaire" pour transmettre aux utilisateurs un message la fois prochaine qu'ils se connectent pour mettre leur profil à jour.</value>
+    <value>Vérifiez "le message du fuseau horaire" pour transmettre aux utilisateurs un message la fois prochaine qu'ils se connectent.</value>
   </string>
   <string id="1150" name="time zone update message">
     <value>Veuillez vérifier le fuseau horaire dans votre profil utilisateur.</value>
@@ -3510,16 +3510,16 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Ajoutez des champs d'intérêt que vous avez ou que vous cherchez afin de trouver des partenaires intéressants pour une conférence. Séparez les termes par des virgules.</value>
   </string>
   <string id="1162" name="user settings">
-    <value>Mes offres</value>
+    <value>Mes intérêts</value>
   </string>
   <string id="1163" name="user settings">
-    <value>Mes intérêts</value>
+    <value>Je cherche</value>
   </string>
   <string id="1164" name="user settings">
     <value>Nom</value>
   </string>
   <string id="1165" name="user settings">
-    <value>Fuseau horaire</value>
+    <value>Fus. horaire</value>
   </string>
   <string id="1166" name="user settings">
     <value>Centres d'intérêt</value>
@@ -3567,7 +3567,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Nom</value>
   </string>
   <string id="1181" name="user search">
-    <value>Fuseau horaire</value>
+    <value>Fus. horaire</value>
   </string>
   <string id="1182" name="user search">
     <value>Offres</value>
@@ -3576,7 +3576,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Recherches</value>
   </string>
   <string id="1184" name="user search">
-    <value>Résultat de la recherche</value>
+    <value>Résultat :</value>
   </string>
   <string id="1185" name="user search">
     <value>Actions</value>
@@ -3624,7 +3624,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value></value>
   </string>
   <string id="1200" name="chat log icon">
-    <value>Afficher / Copier le journal du t'chat</value>
+    <value>Afficher/Copier le journal du t'chat</value>
   </string>
   <string id="1201" name="chat log window">
     <value>Journal du t'chat</value>
@@ -3798,7 +3798,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Cette action ne peut être annulée !</value>
   </string>
   <string id="1258" name="private message">
-    <value>Ajouter un dossier</value>
+    <value>Créer dossier</value>
   </string>
   <string id="1259" name="private message">
     <value>Ajouter des dossiers et organiser vos messages !</value>
@@ -3846,7 +3846,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Confirmez la mise à jour</value>
   </string>
   <string id="1274" name="user contacts">
-    <value>Permettre aux contacts de voir le calendrier (voir seulement)</value>
+    <value>Permettre au contact de voir le calendrier (voir seulement)</value>
   </string>
   <string id="1275" name="user contacts">
     <value>Ne pas partager le calendrier</value>
@@ -3912,7 +3912,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Vous connecter avec votre login Facebook</value>
   </string>
   <string id="1296" name="view profile">
-    <value>Membre depuis</value>
+    <value>Date inscr.</value>
   </string>
   <string id="1297" name="direct login message">
     <value>Vous êtes connecté avec votre compte Facebook. Vous devriez mettre à jour votre profil avec l'e-mail correct.  Sans quoi vous ne recevrez pas les invitations et messages privés des autres utilisateurs.</value>
@@ -4101,7 +4101,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Jouer la vidéo</value>
   </string>
   <string id="1359" name="submenu">
-    <value>Voulez-vous vraiment supprimer le contenu de la dia active ?</value>
+    <value>Voulez-vous vraiment supprimer le contenu du document actif ?</value>
   </string>
   <string id="1360" name="activity_window">
     <value>Accepter et donner le droit à l'utilisateur</value>
@@ -4245,7 +4245,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Activer micro</value>
   </string>
   <string id="1407" name="mute micro">
-    <value>Couper micro globalement</value>
+    <value>Couper le micro globalement</value>
   </string>
   <string id="1408" name="unmute micro">
     <value>Activer micro globalement</value>
@@ -4260,7 +4260,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Vous</value>
   </string>
   <string id="1412" name="archived_polls">
-    <value>Sondages archivés</value>
+    <value>Sondages</value>
   </string>
   <string id="1413" name="active_poll">
     <value>actif</value>
@@ -4278,13 +4278,13 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Nouveau(x) message(s)</value>
   </string>
   <string id="1418" name="poll_close">
-    <value>Fermer sondage</value>
+    <value>Clôturer</value>
   </string>
   <string id="1419" name="poll_close_confirm">
     <value>Etes-vous sûr de vouloir clore ce sondage ? Plus personne ne pourra plus voter.</value>
   </string>
   <string id="1420" name="poll_delete">
-    <value>Supprimer sondage</value>
+    <value>Supprimer</value>
   </string>
   <string id="1421" name="poll_delete_confirm">
     <value>Etes-vous sûr de vouloir supprimer ce sondage ? Les résultats seront supprimés également.</value>
@@ -4293,7 +4293,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Code IS de la langue</value>
   </string>
   <string id="1423" name="exclusive_audio_permission">
-    <value>Autoriser/Refuser le droit de donner l'audio exclusif.</value>
+    <value>Autoriser/Refuser le droit de donner l'audio exclusif</value>
   </string>
   <string id="1424" name="allow_exclusive_audio_permission">
     <value>Autoriser l'utilisateur à donner l'audio exclusif</value>
@@ -4380,7 +4380,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Organiser les réunions</value>
   </string>
   <string id="1452" name="tooltip menu">
-    <value>Regarder les enregistrements et interviews</value>
+    <value>Regarder les enregistrements et les interviews</value>
   </string>
   <string id="1453" name="tooltip menu">
     <value>Choisir et démarrer une conférence</value>
@@ -4410,96 +4410,96 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Exporter/Importer les sauvegardes système</value>
   </string>
   <string id="1462" name="file explorer">
-    <value>You need to be a Moderator or have the 'draw on whiteboard' rights to upload, add, delete or load files and folders.</value>
+    <value>Vous devez être modérateur ou avoir le droit d'accéder au tableau blanc pour pouvoir déposer ou télécharger des fichiers ou pour ajouter ou supprimer des dossiers.</value>
   </string>
   <string id="1463" name="whiteboard">
-    <value>Edit text</value>
+    <value>Editer texte</value>
   </string>
   <string id="1464" name="salutation">
     <value>Prof</value>
   </string>
   <string id="1465" name="sharing client">
-    <value>Publish</value>
+    <value>Publier</value>
   </string>
   <string id="1466" name="sharing client">
-    <value>Start Publish</value>
+    <value>Commencer la diffusion</value>
   </string>
   <string id="1467" name="sharing client">
-    <value>Stop Publish</value>
+    <value>Arrêter la diffusion</value>
   </string>
   <string id="1468" name="sharing client">
-    <value>Host</value>
+    <value>Hôte</value>
   </string>
   <string id="1469" name="sharing client">
-    <value>Publish App</value>
+    <value>App</value>
   </string>
   <string id="1470" name="sharing client">
-    <value>Publish Id</value>
+    <value>ID</value>
   </string>
   <string id="1471" name="sharing client">
-    <value>Reduce the width of the SharingScreen before you try to move it left</value>
+    <value>Réduisez la largeur de l'écran avant de le déplacer</value>
   </string>
   <string id="1472" name="sharing client">
-    <value>Reduce the height of the SharingScreen before you try to move it bottom</value>
+    <value>Réduisez la hauteur de l'écran avant de le déplacer</value>
   </string>
   <string id="1473" name="sharing client">
-    <value>Reduce the x of the SharingScreen before you try to make it wider</value>
+    <value>Réduisez x avant d'agrandir</value>
   </string>
   <string id="1474" name="sharing client">
-    <value>Reduce the y of the SharingScreen before you try to make it higher</value>
+    <value>Réduisez y avant d'agrandir</value>
   </string>
   <string id="1475" name="sharing client">
-    <value>Fill these settings stream your screen data to 3th party providers like justin.tv</value>
+    <value>Complétez ces paramètres pour diffuser votre écran vers un site tiers.</value>
   </string>
   <string id="1476" name="sharing client">
-    <value>Please start Screen sharing to be able to publish it</value>
+    <value>Veuillez démarrer le partage d'écran pour pouvoir le diffuser</value>
   </string>
   <string id="1477" name="sharing client">
-    <value>Moderator permission required to start recording</value>
+    <value>La permission du modérateur est requise pour enregistrer</value>
   </string>
   <string id="1478" name="no right for exclusive audio">
-    <value>You don't have permission to apply exclusive audio to any participant. You need moderation role or the right for exclusive audio to make any microphone exclusive turned on..</value>
+    <value>Vous n'avez pas la permission de donner l'audio exclusif à un participant. Vous devez être modérateur ou avoir le droit de donner l'audio exclusif.</value>
   </string>
   <string id="1479" name="conference menu">
-    <value>Upload new file to file explorer</value>
+    <value>Charger un fichier</value>
   </string>
   <string id="1480" name="conference menu">
-    <value>Open new dialog with sharing settings</value>
+    <value>Ouvre la fenêtre des paramètres du partage d'écran</value>
   </string>
   <string id="1481" name="conference menu">
-    <value>An existing moderator must approve it</value>
+    <value>Un modérateur existant doit l'approuver</value>
   </string>
   <string id="1482" name="conference menu">
-    <value>Ask moderator to share your webcam/micro</value>
+    <value>Demander au modérateur de pouvoir partager votre micro/caméra</value>
   </string>
   <string id="1483" name="conference menu">
-    <value>Gather feedback by creating a poll</value>
+    <value>Proposez aux utilisateurs de voter en répondant à un sondage</value>
   </string>
   <string id="1484" name="conference menu">
-    <value>Past and current poll results as charts</value>
+    <value>Les résultats graphiques des sondages</value>
   </string>
   <string id="1485" name="conference menu">
-    <value>Vote if there is a poll for this conference room</value>
+    <value>Voter s'il existe un sondage activé dans cette salle</value>
   </string>
   <string id="1486" name="conference menu">
-    <value>Edit cam and mic settings</value>
+    <value>Editer les paramètres de la caméra et du micro</value>
   </string>
   <string id="1487" name="conference menu">
-    <value>Confirm and leave the room</value>
+    <value>Confirmer et quitter la salle</value>
   </string>
   <string id="1488" name="conference menu">
-    <value>Call external people via VoIP/SIP</value>
+    <value>Appeler une personne extérieure via VoIP/SIP</value>
   </string>
   <string id="1489" name="conference menu">
-    <value>Send an email with a direct link to this room</value>
+    <value>Envoyer un mail avec un lien direct vers cette salle</value>
   </string>
   <string id="1490" name="conference menu">
-    <value>Change your whiteboard settings</value>
+    <value>Changer les paramètres de votre tableau blanc</value>
   </string>
   <string id="1491" name="backup admin">
-    <value>Max upload size</value>
+    <value>Taille maximum</value>
   </string>
   <string id="1492" name="conference menu">
-    <value>Ask moderator to share your whiteboard</value>
+    <value>Demander au modé rateur le droit de partager votre tableau blanc</value>
   </string>
 </language>
