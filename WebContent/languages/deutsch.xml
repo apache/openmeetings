@@ -5966,4 +5966,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   <string id="1491" name="backup admin">
     <value>Max upload size</value>
   </string>
+  <string id="1492" name="conference menu">
+    <value>Ask moderator to share your whiteboard</value>
+  </string>
 </language>

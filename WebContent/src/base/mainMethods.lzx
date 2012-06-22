@@ -49,7 +49,7 @@
     
     <confmenucommand id="cmd_applyforMod" tipLabelId="1481" actionCommand="applyForMod" />
     
-    <confmenucommand id="cmd_applyforWhiteBoard" key="['control','shift','2']">
+    <confmenucommand id="cmd_applyforWhiteBoard" tipLabelId="1492" key="['control','shift','2']">
     	<handler name="onselect" args="tSel">
     		if (!this.enabled) {
     			return;
