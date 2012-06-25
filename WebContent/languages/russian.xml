@@ -663,7 +663,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Перед загрузкой файла запросить подтверждение</value>
   </string>
   <string id="213" name="send_invitation_btn">
-    <value>Отослать приглашение</value>
+    <value>Отправить приглашение</value>
   </string>
   <string id="214" name="send_invitationwin_header">
     <value>Отправить приглашение</value>
@@ -942,7 +942,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Установки</value>
   </string>
   <string id="306" name="conferencebar">
-    <value>Установки камеры и мик</value>
+    <value>Установки камеры и микрофона</value>
   </string>
   <string id="307" name="conferencebar">
     <value>Установки доски</value>
@@ -1125,7 +1125,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>добавить язык</value>
   </string>
   <string id="367" name="languageseditor">
-		<value>Резервное копирование</value>
+    <value>Резервное копирование</value>
   </string>
   <string id="368" name="turnoverlist">
     <value>к первому</value>
@@ -1191,7 +1191,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Экспорт в XML - эти файлы можно использовать для: - Внесения в проект - Импорта в другую систему - Резервного копирования - Кастомизации - Помещения в директорию "language" при следующей инсталляции</value>
   </string>
   <string id="389" name="languageseditor">
-		<value>Выберите файл языка для импорта. Выберите язык в выпадающем списке. Неважно, какое имя у этого файла, он будет импортирован в этот язык!</value>
+    <value>Выберите файл языка для импорта. Выберите язык в выпадающем списке. Неважно, какое имя у этого файла, он будет импортирован в этот язык!</value>
   </string>
   <string id="390" name="importwindow">
     <value>импорт - выберите файл</value>
@@ -1365,7 +1365,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Иконки эмоций</value>
   </string>
   <string id="447" name="choose_video_settings">
-		<value>Изменить публичные устройства</value>
+    <value>Изменить публичные устройства</value>
   </string>
   <string id="448" name="choose_video_settings_combo">
     <value>Аудио и видео</value>
@@ -1863,7 +1863,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Запретить рисовать на доске</value>
   </string>
   <string id="613" name="conferencePanels">
-		<value>Участники</value>
+    <value>Участники</value>
   </string>
   <string id="614" name="conferencePanels">
     <value>Документы</value>
@@ -1899,7 +1899,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Текст сообщения:</value>
   </string>
   <string id="625" name="inv_reminder_text_click_text">
-		<value>Для того, чтобы принять участие в совещании, кликните на ссылку:</value>
+    <value>Для того, чтобы принять участие в совещании, кликните на ссылку:</value>
   </string>
   <string id="626" name="inv_reminder_text_click_text_link">
     <value>Нажмите здесь для того, чтобы войти в комнату совещаний</value>
@@ -2217,13 +2217,13 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Публикатор экрана</value>
   </string>
   <string id="731" name="sharing client">
-		<value>Нажмите, чтобы открыть общий доступ к вашему экрану</value>
+    <value>Нажмите, чтобы открыть общий доступ к вашему экрану</value>
   </string>
   <string id="732" name="sharing client">
-		<value>Открыть доступ</value>
+    <value>Открыть доступ</value>
   </string>
   <string id="733" name="sharing client">
-		<value>Приостановить доступ</value>
+    <value>Приостановить доступ</value>
   </string>
   <string id="734" name="sharing client">
     <value>Выберите область экрана</value>
@@ -2301,7 +2301,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Проверьте установки микрофона и камеры перед тем, как войти в комнату. Запишите 5-секундное тестовое видео. После записи можно проиграть видео и проверить качество картинки и звука.</value>
   </string>
   <string id="759" name="test setup">
-		<value>Больше не показывать этот текст</value>
+    <value>Больше не показывать этот текст</value>
   </string>
   <string id="760" name="test setup">
     <value>Отмена</value>
@@ -2634,7 +2634,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Запись</value>
   </string>
   <string id="870" name="screen share">
-		<value>Вы можете записывать и делать экран общим одновременно. Чтобы сделать экран общим, нажмите кнопку “Открыть доступ” сверху. Чтобы только записывать сессию, нажмите "Начать запись".</value>
+    <value>Вы можете записывать и делать экран общим одновременно. Чтобы сделать экран общим, нажмите кнопку “Открыть доступ” сверху. Чтобы только записывать сессию, нажмите "Начать запись".</value>
   </string>
   <string id="871" name="screen share">
     <value>Начать запись</value>
@@ -2658,7 +2658,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Микрофон польз-ля включен</value>
   </string>
   <string id="878" name="sharing client">
-		<value>Закрыть доступ</value>
+    <value>Закрыть доступ</value>
   </string>
   <string id="879" name="room config">
     <value>Разрешить вопросы</value>
@@ -2679,7 +2679,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>AVI</value>
   </string>
   <string id="885" name="flvrecording">
-		<value>Необработанное видео</value>
+    <value>Необработанное видео</value>
   </string>
   <string id="886" name="flvrecording">
     <value>Только аудио</value>
@@ -2880,7 +2880,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Хотите свой собственный сервер?</value>
   </string>
   <string id="952" name="user-license">
-		<value>Вы хотите установить $APP_NAME на ваш сервер или интегрироваться с Moodle, SugarCRM, веб-сайтом или внутренней сетью? Цены начинаются с 500 евро за инстолляцию!</value>
+    <value>Вы хотите установить $APP_NAME на ваш сервер или интегрироваться с Moodle, SugarCRM, веб-сайтом или внутренней сетью? Цены начинаются с 500 евро за инстолляцию!</value>
   </string>
   <string id="953" name="user-license">
     <value>или послать сообщение</value>
@@ -3291,7 +3291,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Как скопировать и вставить</value>
   </string>
   <string id="1089" name="screen-sharer-quality">
-		<value>Качество общего доступа:</value>
+    <value>Качество общего доступа:</value>
   </string>
   <string id="1090" name="screen-sharer-quality">
     <value>Очень высокое качество</value>
@@ -3402,7 +3402,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Вам нужны права для удалённого контроля (или модерация), чтобы скопировать и вставить текст в или из удалённого экрана.</value>
   </string>
   <string id="1126" name="right click screen share">
-    <value>Установки по умолчанию.</value>
+    <value>Установки по умолчанию</value>
   </string>
   <string id="1127" name="right click screen share">
     <value>Не показывать информацию о копировании и вставке в удалённом доступе</value>
@@ -4359,7 +4359,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Новое событие</value>
   </string>
   <string id="1445" name="calendar password info text">
-		<value>Ссылки, защищённые паролем - это ссылки на комнаты, которые посылаются участникам при сохранении события в календаре, не в комнате! Это значит, что если вы сохраняете событие несколько раз с разными паролями, участники каждый раз получают новые ссылки с разными паролями. Но ссылки, посланные ранее, тоже работают!</value>
+    <value>Ссылки, защищённые паролем - это ссылки на комнаты, которые посылаются участникам при сохранении события в календаре, не в комнате! Это значит, что если вы сохраняете событие несколько раз с разными паролями, участники каждый раз получают новые ссылки с разными паролями. Но ссылки, посланные ранее, тоже работают!</value>
   </string>
   <string id="1446" name="calendar edit button">
     <value>Редактировать</value>
@@ -4419,85 +4419,85 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Prof</value>
   </string>
   <string id="1465" name="sharing client">
-		<value>Опубликовать</value>
+    <value>Опубликовать</value>
   </string>
   <string id="1466" name="sharing client">
-		<value>Начать публикацию</value>
+    <value>Начать публикацию</value>
   </string>
   <string id="1467" name="sharing client">
-		<value>Остановить</value>
+    <value>Остановить</value>
   </string>
   <string id="1468" name="sharing client">
-		<value>Хост</value>
+    <value>Хост</value>
   </string>
   <string id="1469" name="sharing client">
-		<value>Опубликовать App</value>
+    <value>Опубликовать App</value>
   </string>
   <string id="1470" name="sharing client">
-		<value>Опубликовать Id</value>
+    <value>Опубликовать Id</value>
   </string>
   <string id="1471" name="sharing client">
-		<value>Уменьшать ширину SharingScreen'а при перемещении его влево</value>
+    <value>Уменьшать ширину SharingScreen'а при перемещении его влево</value>
   </string>
   <string id="1472" name="sharing client">
-		<value>Уменьшать высоту SharingScreen'а при перемещении его вниз</value>
+    <value>Уменьшать высоту SharingScreen'а при перемещении его вниз</value>
   </string>
   <string id="1473" name="sharing client">
-		<value>Уменьшать смещение x SharingScreen'а при увеличении его ширины</value>
+    <value>Уменьшать смещение x SharingScreen'а при увеличении его ширины</value>
   </string>
   <string id="1474" name="sharing client">
-		<value>Уменьшать смещение y SharingScreen'а при увеличении его высоты</value>
+    <value>Уменьшать смещение y SharingScreen'а при увеличении его высоты</value>
   </string>
   <string id="1475" name="sharing client">
-		<value>Настройки для трансляции видео конференции на другие сервисы:</value>
+    <value>Настройки для трансляции видео конференции на другие сервисы:</value>
   </string>
   <string id="1476" name="sharing client">
-		<value>Пожалуйста, начните Screen sharing для того, чтобы опубликовать его</value>
+    <value>Пожалуйста, сделайте экран общим для того, чтобы опубликовать его</value>
   </string>
   <string id="1477" name="sharing client">
-		<value>Для того, чтобы начать запись, необходимо разрешение модератора</value>
+    <value>Для того, чтобы начать запись, необходимо разрешение модератора</value>
   </string>
   <string id="1478" name="no right for exclusive audio">
-		<value>Вам необходимо разрешение на предоставление эксклюзивного аудио любому участнику, для этого вам необходимо быть модератором или иметь эксклюзивные права на вкл/выкл микрофонов.</value>
+    <value>Вам необходимо разрешение на предоставление эксклюзивного аудио любому участнику, для этого вам необходимо быть модератором или иметь эксклюзивные права на вкл/выкл микрофонов.</value>
   </string>
   <string id="1479" name="conference menu">
-    <value>Upload new file to file explorer</value>
+    <value>Загрузить новый файл</value>
   </string>
   <string id="1480" name="conference menu">
-    <value>Open new dialog with sharing settings</value>
+    <value>Открыть настройки общего экрана в новом окне</value>
   </string>
   <string id="1481" name="conference menu">
-    <value>An existing moderator must approve it</value>
+    <value>Запросить подтверждение модератора</value>
   </string>
   <string id="1482" name="conference menu">
-    <value>Ask moderator to share your webcam/micro</value>
+    <value>Запросить разрешение модератора на доступ к камере/микрофону</value>
   </string>
   <string id="1483" name="conference menu">
-    <value>Gather feedback by creating a poll</value>
+    <value>Получение обратной связи посредством опроса</value>
   </string>
   <string id="1484" name="conference menu">
-    <value>Past and current poll results as charts</value>
+    <value>Прошлые и текущие результаты опросов в виде графиков</value>
   </string>
   <string id="1485" name="conference menu">
-    <value>Vote if there is a poll for this conference room</value>
+    <value>Проголосовать, если существует опрос для этой комнаты</value>
   </string>
   <string id="1486" name="conference menu">
-    <value>Edit cam and mic settings</value>
+    <value>Изменить настройки камеры и микрофона</value>
   </string>
   <string id="1487" name="conference menu">
-    <value>Confirm and leave the room</value>
+    <value>Подтвердить и покинуть комнату</value>
   </string>
   <string id="1488" name="conference menu">
-    <value>Call external people via VoIP/SIP</value>
+    <value>Позвонить внешним участникам при помощи VoIP/SIP</value>
   </string>
   <string id="1489" name="conference menu">
-    <value>Send an email with a direct link to this room</value>
+    <value>Отправить приглашение с прямой ссылкой на эту комнату</value>
   </string>
   <string id="1490" name="conference menu">
-    <value>Change your whiteboard settings</value>
+    <value>Изменить настройки доски</value>
   </string>
   <string id="1491" name="backup admin">
-    <value>Max upload size</value>
+    <value>Максимальный размер загружаемого файла</value>
   </string>
   <string id="1492" name="conference menu">
     <value>Запросить разрешение модератора на доступ к доске</value>
