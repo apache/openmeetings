@@ -19,6 +19,7 @@
 package org.openmeetings.app.data.calendar.daos;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -719,29 +720,22 @@ public class AppointmentDaoImpl {
 			
 			log.debug("Start " + calstart.getTime() + " End " + calend.getTime());
 
-			String hql = "select a from Appointment a "
-					+ "WHERE a.deleted <> :deleted  "
-					+ "AND "
-					+ "( "
-					+ "(a.appointmentStarttime BETWEEN :starttime AND :endtime) "
-					+ "OR "
-					+ "(a.appointmentEndtime BETWEEN :starttime AND :endtime) "
-					+ "OR "
-					+ "(a.appointmentStarttime < :starttime AND a.appointmentEndtime > :endtime) "
-					+ ") " + "AND " + "( " + "a.userId.user_id = :userId "
-					+ ")";
-
-			// "AND (a.terminstatus != 4 AND a.terminstatus != 5)";
-
-			TypedQuery<Appointment> query = em.createQuery(hql,
-					Appointment.class);
+			TypedQuery<Appointment> query = em.createNamedQuery("appointmentsInRange", Appointment.class);
 			query.setParameter("deleted", "true");
 			query.setParameter("starttime", calstart.getTime());
 			query.setParameter("endtime", calend.getTime());
 			query.setParameter("userId", userId);
-
-			List<Appointment> listAppoints = query.getResultList();
-
+			
+			List<Appointment> listAppoints = new ArrayList<Appointment>(query.getResultList()); 
+			TypedQuery<Appointment> q1 = em.createNamedQuery("joinedAppointmentsInRange", Appointment.class);
+			q1.setParameter("starttime", calstart.getTime());
+			q1.setParameter("endtime", calend.getTime());
+			q1.setParameter("userId", userId);
+			for (Appointment a : q1.getResultList()) {
+				a.setIsConnectedEvent(true); //TODO need to be reviewed
+				listAppoints.add(a);
+			}
+			
 			for (Appointment appointment : listAppoints) {
 				log.debug("" + appointment);
 

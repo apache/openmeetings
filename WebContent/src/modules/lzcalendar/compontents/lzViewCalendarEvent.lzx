@@ -54,6 +54,13 @@
             	this.eventDS.setAttribute("data", this.dataElement.childNodes);
             	
             	this.appointmentId = this.eventDS.getPointer().xpathQuery('appointmentId/text()');
+            	
+	            if ($debug) Debug.write("organizerId ", this.eventDS.getPointer().xpathQuery('organizerId/text()'));
+	            if ($debug) Debug.write("currentUser: ", canvas.user_id);
+            	if (canvas.user_id != Number(this.eventDS.getPointer().xpathQuery('organizerId/text()'))) {
+            		this._content.deleteBtn.setAttribute('visible', false); 
+            		this._content.editBtn.setAttribute('visible', false); 
+            	}
 	            
 	            if ($debug) Debug.write("this.eventDS ",this.eventDS);
 	            if ($debug) Debug.write("this.appointmentId ",this.appointmentId);
@@ -162,7 +169,7 @@
 	           	</handler>
 	        </simpleLabelButton>
 			
-			<simpleLabelButton labelid="814" width="100" x="5" y="$once{ parent.height-24 }" >
+			<simpleLabelButton name="deleteBtn" labelid="814" width="100" x="5" y="$once{ parent.height-24 }" >
 		        <handler name="onclick">
 		        	//check if event is from other user
 		        	new lz.confirmationSingle(parent.parent,{
@@ -182,7 +189,7 @@
 	           	</method>
 	        </simpleLabelButton>
 		
-		    <simpleLabelButton labelid="1446" width="110" x="$once{ parent.width-115 }" 
+		    <simpleLabelButton name="editBtn" labelid="1446" width="110" x="$once{ parent.width-115 }" 
 		           y="$once{ parent.height-24 }" 
 		           onclick="this.parent.close();">
 		        <handler name="onclick">

@@ -33,6 +33,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -41,6 +43,29 @@ import org.openmeetings.app.persistence.beans.user.Users;
 
 @Entity
 @Table(name = "appointments")
+@NamedQueries({
+    @NamedQuery(name="appointmentsInRange",
+        	query="SELECT a FROM Appointment a "
+    			+ "WHERE a.deleted <> :deleted "
+    			+ "	AND ( "
+    			+ "		(a.appointmentStarttime BETWEEN :starttime AND :endtime) "
+    			+ "		OR (a.appointmentEndtime BETWEEN :starttime AND :endtime) "
+    			+ "		OR (a.appointmentStarttime < :starttime AND a.appointmentEndtime > :endtime) "
+    			+ "	)"
+    			+ "	AND a.userId.user_id = :userId"
+    	)
+    , @NamedQuery(name="joinedAppointmentsInRange",
+    	query="SELECT a FROM MeetingMember mm, IN(mm.appointment) a "
+			+ "WHERE mm.deleted <> true AND mm.invitor <> true AND mm.userid.user_id = :userId "
+			+ "	AND a.appointmentId NOT IN (SELECT a.appointmentId FROM Appointment a WHERE a.userId.user_id = :userId)"
+			+ "	AND mm.isConnectedEvent <> true " //TODO review: isConnectedEvent is set for the MeetingMember if event is created from "Private Messages", it is weird
+			+ "	AND ( "
+			+ "		(a.appointmentStarttime BETWEEN :starttime AND :endtime) "
+			+ "		OR (a.appointmentEndtime BETWEEN :starttime AND :endtime) "
+			+ "		OR (a.appointmentStarttime < :starttime AND a.appointmentEndtime > :endtime) "
+			+ "	)"
+	)
+})
 public class Appointment implements Serializable {
 
 	private static final long serialVersionUID = 2016808778885761525L;

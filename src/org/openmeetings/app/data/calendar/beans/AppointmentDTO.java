@@ -40,6 +40,7 @@ public class AppointmentDTO {
 	private Calendar end;
 	private Boolean isPasswordProtected;
 	private List<MeetingMemberDTO> meetingMember = new ArrayList<MeetingMemberDTO>();
+	private Long organizerId;
 
 	public AppointmentDTO(Appointment appointment, TimeZone timezone) {
 		appointmentId = appointment.getAppointmentId();
@@ -58,6 +59,7 @@ public class AppointmentDTO {
 		start = appointment.appointmentStartAsCalendar(timezone);
 		end = appointment.appointmentEndAsCalendar(timezone);
 		isPasswordProtected = appointment.getIsPasswordProtected();
+		organizerId = appointment.getUserId().getUser_id();
 		for (MeetingMember meetingMemberItem : appointment.getMeetingMember()) {
 			meetingMember.add(new MeetingMemberDTO(meetingMemberItem));
 		}
@@ -157,6 +159,14 @@ public class AppointmentDTO {
 
 	public void setRoomTypeId(Long roomTypeId) {
 		this.roomTypeId = roomTypeId;
+	}
+
+	public Long getOrganizerId() {
+		return organizerId;
+	}
+
+	public void setOrganizerId(Long organizerId) {
+		this.organizerId = organizerId;
 	}
 
 }
