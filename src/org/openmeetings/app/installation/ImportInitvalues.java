@@ -945,7 +945,7 @@ public class ImportInitvalues {
 				Fieldvalues fv = null;
 				// Only do that for the first field-set
 				if (!langFieldIdIsInited) {
-					fv = fieldmanagment.addField(name);
+					fv = fieldmanagment.addFieldById(name, id);
 				} else {
 					fv = fieldmanagment.getFieldvaluesById(id);
 				}

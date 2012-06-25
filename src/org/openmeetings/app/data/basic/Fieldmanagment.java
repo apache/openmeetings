@@ -359,35 +359,15 @@ public class Fieldmanagment {
 
 	}
 
-	public Fieldvalues addField(String fieldName) {
+	public Fieldvalues addFieldById(String fieldName, Long fieldvalues_id) {
 		try {
-			Fieldvalues fl = new Fieldvalues();
-			fl.setStarttime(new Date());
-			fl.setName(fieldName);
-			fl.setDeleted("false");
-
-			fl = em.merge(fl);
-
-			return fl;
-		} catch (Exception ex2) {
-			log.error("[getConfKey]: ", ex2);
-		}
-		return null;
-	}
-
-	public Long addFieldById(String fieldName, Long fieldvalues_id) {
-		try {
-
 			Fieldvalues fl = new Fieldvalues();
 			fl.setFieldvalues_id(fieldvalues_id);
 			fl.setStarttime(new Date());
 			fl.setName(fieldName);
 			fl.setDeleted("false");
 
-			fl = em.merge(fl);
-			Long fieldId = fl.getFieldvalues_id();
-
-			return fieldId;
+			return em.merge(fl);
 		} catch (Exception ex2) {
 			log.error("[getConfKey]: ", ex2);
 		}
@@ -483,9 +463,14 @@ public class Fieldmanagment {
 		return new Long(-1);
 	}
 
+	public long getNextFieldvaluesId() {
+		TypedQuery<Long> q = em.createNamedQuery("getFieldCount", Long.class);
+		return q.getSingleResult() + 1;
+	}
+	
 	public Long addFieldAndLabel(String name, String value, Long language_id) {
 		try {
-			Fieldvalues fv = addField(name);
+			Fieldvalues fv = addFieldById(name, getNextFieldvaluesId());
 			if (fv.getFieldvalues_id() > 0) {
 				this.addFieldValueByFieldAndLanguage(fv,
 						language_id, value);

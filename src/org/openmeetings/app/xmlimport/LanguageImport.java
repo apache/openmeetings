@@ -77,7 +77,7 @@ public class LanguageImport {
 		Fieldvalues fv = fieldmanagment.getFieldvaluesById(fieldvalues_id);
 
 		if (fv == null) {
-			fieldmanagment.addFieldById(fieldName, fieldvalues_id);
+			fv = fieldmanagment.addFieldById(fieldName, fieldvalues_id);
 		}
 
 		Fieldlanguagesvalues flv = fieldmanagment.getFieldByIdAndLanguage(

@@ -25,22 +25,22 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
+@NamedQueries({
+	@NamedQuery(name = "getFieldCount", query = "SELECT COUNT(fv) FROM Fieldvalues flv WHERE flv.deleted LIKE 'false' ")
+})
 @Table(name = "fieldvalues")
 public class Fieldvalues implements Serializable {
-
-	
 	private static final long serialVersionUID = -3439614511218028085L;
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="fieldvalues_id")
 	private Long fieldvalues_id;
 	@Column(name="name")
@@ -111,5 +111,4 @@ public class Fieldvalues implements Serializable {
 	public void setFieldlanguagesvalue(Fieldlanguagesvalues fieldlanguagesvalue) {
 		this.fieldlanguagesvalue = fieldlanguagesvalue;
 	}
-	
 }
