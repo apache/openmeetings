@@ -28,7 +28,7 @@ var labelObj;
 var tempActionForNavi = '';
 
 // Load Labels from List
-var labels = new Array();
+var labels = new Object();
 
 String.prototype.startsWith = function(prefix) {
     return (this.indexOf(prefix) === 0);
@@ -81,33 +81,19 @@ function disableCurrentMouseWheelObject() {
 
 function setLabelObjectByHundred(no,obj){
     canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "hibAdapter_setLabelObjectByHundred", [no, obj]); 
-    // if($debug) Debug.write("FUNC/setLabelObjectByHundred");
-    if(no!=0) no = Math.floor(no/100);
-    //Debug.write("SetLabelObject: ",no,obj);
-    labels[no] = obj;
+   	for (var i = 0; i < obj.length; ++i) {
+	    labels["id" + obj[i].id] = obj[i].value;
+   	}
 }
 
 function getLabelTag(labelid){
-    //if($debug) Debug.write("FUNC/getLabelTag",labelid);
-    var no = Math.floor(labelid/100);
-    return getLabelTagByNo(no,labelid);
-}
-
-function getLabelTagByNo(no,labelid){
-    var labeltag = "";
-    var l = labels[no]
-    //if ($debug) Debug.write("Search label tag in: ",labelid,labels[no]);
-    for (var eg=0;eg<=l.length;eg++){
-        if (l[eg].id==labelid){
-            // if($debug) Debug.write("FUNC/getLabelTagByNo",no,labelid,l[eg].value);
-            if($debug) {
-            	return l[eg].value+" ["+labelid+"]";
-            } else {
-                return l[eg].value;
-            }
-        }
-    }
-    return "Error Missing ["+labelid+"]";
+	var l = labels["id" + labelid];
+	if (l) {
+		if ($debug) l += " [" + labelid + "]";
+	} else {
+		l = "Error Missing [" + labelid + "]";
+	}
+    return l;
 }
 
 function quicklink(action){

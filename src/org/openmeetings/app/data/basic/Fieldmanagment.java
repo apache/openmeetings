@@ -192,21 +192,21 @@ public class Fieldmanagment {
 			int start, int max) {
 		try {
 
-			String sql = "select f from Fieldlanguagesvalues as f "
-					+ "WHERE f.language_id = :language_id "
-					+ "AND f.fieldvalues_id >= :start AND f.fieldvalues_id <  :max";
+			String sql = "select f.fieldvalues.fieldvalues_id, f.value from Fieldlanguagesvalues as f "
+					+ "WHERE f.language_id = :language_id ";
 
-			TypedQuery<Fieldlanguagesvalues> query = em.createQuery(sql, Fieldlanguagesvalues.class);
+			TypedQuery<Object> query = em.createQuery(sql, Object.class);
 			query.setParameter("language_id", language_id);
-			query.setParameter("start", new Long(start));
-			query.setParameter("max", new Long(start + max));
+			query.setFirstResult(start);
+			query.setMaxResults(max);
 
 			String appName = cfgManagement.getAppName();
 			List<Map<String, Object>> returnList = new LinkedList<Map<String, Object>>();
-			for (Fieldlanguagesvalues fl : query.getResultList()) {
+			for (Object fl : query.getResultList()) {
 				Map<String, Object> map = new HashMap<String, Object>();
-				map.put("id", fl.getFieldvalues().getFieldvalues_id());
-				map.put("value", performReplace(fl.getValue(), appName));
+				Object[] row = (Object[])fl;
+				map.put("id", (Long)row[0]);
+				map.put("value", performReplace((String)row[1], appName));
 				returnList.add(map);
 			}
 			FieldLanguage fieldLanguage = fieldLanguageDaoImpl
