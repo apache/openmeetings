@@ -126,14 +126,17 @@
     <method name="report">
         var report = "report:";
         if (successfulTestsCount > 0) {
-            this.setPassed();
             report += "\n" + this.generateReport();
         } else {
-            this.setFailed();
             report += " connection error";
         }
-
         this.log(report);
+
+        if (successfulTestsCount > 0) {
+            this.setPassed();
+        } else {
+            this.setFailed();
+        }
     </method>
 
     <method name="generateReport" />

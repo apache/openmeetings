@@ -76,6 +76,29 @@
         y="${parent.pingTest.y}"
     />
 
+    <attribute name="currentTestNumber" type="number" value="0" />
+    <method name="testAll">
+        var nextTest;
+        if (0 == currentTestNumber) {
+            nextTest = pingTest;
+        } else if (1 == currentTestNumber) {
+            nextTest = portTest;
+        } else if (2 == currentTestNumber) {
+            nextTest = jitterTest;
+        } else if (3 == currentTestNumber) {
+            nextTest = downloadTest;
+        } else if (4 == currentTestNumber) {
+            nextTest = uploadTest;
+        } else if (5 == currentTestNumber) {
+            nextTest = null;
+        }
+
+        if (null != nextTest) {
+            currentTestNumber++;
+            nextTest.startAllTestsMode();
+        }
+    </method>
+
 </class>
 
 </library>

@@ -41,6 +41,7 @@
 
     <handler name="oninit">
         this.setAttribute("testName", "Upload speed");
+        this.setAttribute("resultText", true);
     </handler>
 
     <method name="initLoader">
@@ -85,6 +86,8 @@
             report += "Upload time: " + loadTimeSec + " s\n";
             report += "Upload speed: " + speed + " Mb/s\n";
 
+            resultLabel.setAttribute("text", "");
+            resultLabel.addFormat("%.2f\n%s", speed, "Mb/s");
             this.log(report);
             this.setPassed();
         }
@@ -92,8 +95,8 @@
 
     <method name="onError" args="e">
         if (running) {
-            this.setFailed();
             this.log("error - " + e);
+            this.setFailed();
         }
     </method>
 

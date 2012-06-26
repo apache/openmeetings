@@ -23,6 +23,7 @@
     <resource name="failed" src="resources/failed.png" />
     <resource name="notrun" src="resources/notrun.png" />
     <resource name="passed" src="resources/passed.png" />
+    <resource name="passed_result" src="resources/passed_result.png" />
     <resource name="running" src="resources/running.swf" />
 
     <include href="BaseURLLoadTest.lzx" />

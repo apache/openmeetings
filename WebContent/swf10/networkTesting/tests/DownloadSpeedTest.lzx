@@ -27,6 +27,7 @@
         this.setAttribute("testName", "Download speed");
         this.setAttribute("loadFileName", "downloadTest");
         this.setAttribute("verbose", false);
+        this.setAttribute("resultText", true);
     </handler>
 
     <method name="generateReport">
@@ -37,6 +38,9 @@
         var report = "Bytes downloaded: " + mBytes + " Mb\n";
         report += "Download time: " + timeSec + " s\n";
         report += "Download speed: " + speed + " Mb/s\n";
+
+        resultLabel.setAttribute("text", "");
+        resultLabel.addFormat("%.2f\n%s", speed, "Mb/s");
 
         return report;
     </method>

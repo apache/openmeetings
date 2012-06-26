@@ -48,19 +48,20 @@
 
     <method name="forcedStop">
         this.log("stopped");
+        // TODO: disconnect @rtmp
     </method>
 
     <handler name="onconnect" reference="rtmp">
         if (running) {
+            this.log("port is available\n");
             this.setPassed();
-            this.log("port is available");
         }
     </handler>
 
     <handler name="onerror" args="e" reference="rtmp">
         if (running) {
+            this.log("connection error - " + e + "\n");
             this.setFailed();
-            this.log("connection error - " + e);
         }
     </handler>
 

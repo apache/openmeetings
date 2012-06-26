@@ -44,6 +44,7 @@
 
     <method name="showTests">
         var tests = new lz.TestsView(canvas, {name:"testsView"});
+        tests.testAll();
     </method>
 
     <dataset type="http" name="settings" request="false" >
