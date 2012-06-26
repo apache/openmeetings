@@ -31,7 +31,7 @@
     <method name="forcedStop" />
 
     <view name="picture">
-        <image name="rsc" resource="notrun" width="113" height="113" />
+        <view name="rsc" resource="notrun" width="113" height="113" />
     </view>
     <text name="nameLabel"
           text="${parent.testName}"
@@ -71,6 +71,7 @@
         this.start();
         running=true;
         picture.rsc.setAttribute("resource", "running");
+        picture.rsc.play();
     </method>
 
     <method name="setStopped">
