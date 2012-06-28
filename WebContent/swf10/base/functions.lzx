@@ -48,7 +48,7 @@ function setLabelObjectByHundred(no, obj){
 
 function getLabelTag(labelid){
 	var l = labels["id" + labelid];
-	if (l) {
+	if (l != undefined) {
 		if ($debug) l += " [" + labelid + "]";
 	} else {
 		l = "Error Missing [" + labelid + "]";
