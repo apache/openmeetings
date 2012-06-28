@@ -72,7 +72,7 @@
                     '&parentPath=' + encodeURIComponent(uploadmoduleimgfolderVar + '/' )+
                     '&room_id=files'+ 
                     '&sid='+canvas.sessionId;
-                ////Debug.write("downloadurl: ",downloadurl);
+                ////if ($debug) Debug.write("downloadurl: ",downloadurl);
                 return downloadurl;
             ]]>
         </method> 
@@ -143,7 +143,7 @@
                 var nowTime = new Date();
                 var datumsString = nowTime.getHours()+':'+nowTime.getMinutes();
                 tempSendArray[1] = datumsString;
-                //Debug.write("Setting Message");
+                //if ($debug) Debug.write("Setting Message");
                 tempSendArray[2] = 'newfile';
                 tempSendArray[3] = canvas.currentusename;
                 //if ($debug) Debug.write("send: ",tempSendArray);
@@ -173,7 +173,7 @@
     
 	    <method name="onHTTPError" args="fr, httpError">
 	        <![CDATA[
-	            Debug.write('onHTTPError invoked: ' + httpError);
+	            if ($debug) Debug.write('onHTTPError invoked: ' + httpError);
 	            new lz.errorPopup(canvas,{error:'HTTP-ERROR: '+httpError});
 	            this.parent.close();
 		  		var tempSendArray = new Array ();
@@ -181,17 +181,17 @@
 		  		var nowTime = new Date();
 		  		var datumsString = nowTime.getHours()+':'+nowTime.getMinutes();
 		  		tempSendArray[1] = datumsString;
-	  			//Debug.write("Setting Message");
+	  			//if ($debug) Debug.write("Setting Message");
 	  			tempSendArray[2] = 'newfile';
 	  			tempSendArray[3] = canvas.currentusename;
-		  		//Debug.write("send: ",tempSendArray);
+		  		//if ($debug) Debug.write("send: ",tempSendArray);
 		  		canvas.objMessage = tempSendArray;
 		  		hib.sendMessage.doCall();	            
 	        ]]>
 	    </method>
     
 		<method name="onSelect" args="fr">
-			//Debug.write("onSelect: ",getName());
+			//if ($debug) Debug.write("onSelect: ",getName());
 			this.parent.txtFile.setAttribute('text',getName());
 			this.parent.upload.setAttribute('enabled', true);
 		</method>

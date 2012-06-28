@@ -42,24 +42,24 @@
 		<handler name="oninit" args="invoker">
 		<![CDATA[
 			this.fr = new flash.net.FileReference();	
-			//Debug.write(fr);
+			//if ($debug) Debug.write(fr);
     		this.fr.onHTTPError = function(fr, httpError){
                 var t = _root;
-            	t.Debug.write('onHTTPError function: ' + httpError);
+            	if ($debug) t.Debug.write('onHTTPError function: ' + httpError);
             	new lz.errorPopup(canvas,{error:'Err2: '+httpError});
 			}
 			this.fr.onIOError = function(fr){
 				var t = _root;
-                t.Debug.write.write('onIOError function');
+                if ($debug) t.Debug.write.write('onIOError function');
 				new lz.errorPopup(canvas,{error:'onIOError invoked '});
 			}
 			function callbackFunction ( e ) {
 				var t = _root;
-                t.Debug.write( e.data );
+                if ($debug) t.Debug.write( e.data );
 			}		
 			this.fr.onSecurityError = function(fr, errorString){
 				var t = _root;
-                t.Debug.write('onSecurityError function: ' + errorString);
+                if ($debug) t.Debug.write('onSecurityError function: ' + errorString);
             	new lz.errorPopup(canvas,{error:'Err2: '+errorString});
 			}
 			this.fr.addListener(invoker, callbackFunction);
@@ -135,20 +135,20 @@
 		</method>
 
 		<method name="upload" args="url"><![CDATA[
-			Debug.write("url: ",url,this.fr);
+			if ($debug) Debug.write("url: ",url,this.fr);
 			this.fr.upload(url);
 		]]>
 		</method>
 		
     <method name="onCancel" args="fr">
         <![CDATA[
-            Debug.write('onCancel invoked');
+            if ($debug) Debug.write('onCancel invoked');
         ]]>
     </method>
     
     <method name="onComplete" args="fr">
         <![CDATA[
-            Debug.write('onComplete invoked');
+            if ($debug) Debug.write('onComplete invoked');
             canvas.filedialogRef.progressBar.setValue(100);
             //canvas.filedialogRef.upload.setAttribute('enabled', false);
             if (canvas.filedialogRef.sendCompleted)canvas.filedialogRef.sendCompleted.sendEvent();
@@ -157,25 +157,25 @@
     
     <method name="onHTTPError" args="fr, httpError">
         <![CDATA[
-            Debug.write('onHTTPError invoked: ' + httpError);
+            if ($debug) Debug.write('onHTTPError invoked: ' + httpError);
         ]]>
     </method>
     
     <method name="onIOError" args="fr">
         <![CDATA[
-            Debug.write('onIOError invoked',fr);
+            if ($debug) Debug.write('onIOError invoked',fr);
         ]]>
     </method>
     
     <method name="onOpen" args="fr">
         <![CDATA[
-            Debug.write('onOpen invoked',fr);
+            if ($debug) Debug.write('onOpen invoked',fr);
         ]]>
     </method>
     
     <method name="onSecurityError" args="fr, errorString">
         <![CDATA[
-            Debug.write('onSecurityError invoked: ' + errorString);
+            if ($debug) Debug.write('onSecurityError invoked: ' + errorString);
         ]]>
     </method>
 		
