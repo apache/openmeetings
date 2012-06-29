@@ -718,7 +718,7 @@ public class CoreScreenShare {
 	public void resultReceived(IPendingServiceCall call) {
 		try {
 
-			logger.debug( "service call result: " + call );
+			logger.trace( "service call result: " + call );
 
 			if (call.getServiceMethodName().equals("connect")) {
 				isConnected = true;
@@ -732,7 +732,7 @@ public class CoreScreenShare {
 				Map returnMap = (Map) o;
 
 				if (o == null || !Boolean.valueOf("" + returnMap.get("alreadyPublished")).booleanValue()) {
-					logger.debug("Stream not yet started - do it ");
+					logger.trace("Stream not yet started - do it ");
 
 					instance.createStream(instance);
 				} else {
@@ -740,7 +740,7 @@ public class CoreScreenShare {
 						this.capture.resetBuffer();
 					}
 
-					logger.debug("The Stream was already started ");
+					logger.trace("The Stream was already started ");
 				}
 
 				if (returnMap != null) {
@@ -781,18 +781,18 @@ public class CoreScreenShare {
 				capture.start();
 
 			} else if (call.getServiceMethodName().equals("screenSharerAction")) {
-				logger.debug("call ### get Method Name "
+				logger.trace("call ### get Method Name "
 						+ call.getServiceMethodName());
 
 				Object o = call.getResult();
 
-				logger.debug("Result Map Type " + o.getClass().getName());
+				logger.trace("Result Map Type " + o.getClass().getName());
 
 				@SuppressWarnings("unchecked")
 				Map<String, Object> returnMap = (Map<String, Object>)o;
 				Object result = returnMap.get("result");
 				if ("stopAll".equals(result)) {
-					logger.debug("Stopping to stream, there is neither a Desktop Sharing nor Recording anymore");
+					logger.trace("Stopping to stream, there is neither a Desktop Sharing nor Recording anymore");
 					stopStream();
 				} else if ("stopSharingOnly".equals(result)) {
 					//no op
