@@ -822,7 +822,11 @@
 		</antcall>
 		<delete>
 			<fileset dir="${om.lib.dir}" includes="commons-logging*.jar" />
+			<fileset dir="${om.lib.dir}" includes="commons-codec*.jar" />
+			<fileset dir="${om.lib.dir}" includes="commons-fileupload*.jar" />
+			<fileset dir="${om.lib.dir}" includes="commons-io*.jar" />
 			<fileset dir="${om.lib.dir}" includes="httpcore-jar*.jar" />
+			<fileset dir="${om.lib.dir}" includes="httpclient-jar*.jar" />
 			<fileset dir="${om.lib.dir}" includes="*-source*.jar" />
 			<fileset dir="${om.lib.dir}" includes="*-javadoc*.jar" />
 		</delete>
