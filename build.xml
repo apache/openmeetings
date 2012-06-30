@@ -153,6 +153,16 @@
 				<include name="*.sh" />
 			</zipfileset>
 		</zip>
+		<zip destfile="${archive.file.name}-src.zip">
+			<zipfileset dir="${basedir}">
+				<exclude name="build/**" />
+				<exclude name="dist/**" />
+				<exclude name="build.properties" />
+			</zipfileset>
+			<zipfileset dir="${build.base.dir}">
+				<include name="build.properties" />
+			</zipfileset>
+		</zip>
 	</target>
 
 	<!-- build webapp -->
