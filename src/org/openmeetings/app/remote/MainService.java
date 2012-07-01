@@ -666,17 +666,26 @@ public class MainService implements IPendingServiceCallback {
 	}
 
 	/**
-	 * this function logs a user into if he enteres the app directly into a room
+	 * this function returns a user object with organization objects set only
+	 * the organization is not available for users that are using a HASH mechanism
+	 * cause the SOAP/REST API does not guarantee that the user connected to the HASH
+	 * has a valid user object set
 	 * 
 	 * @param SID
 	 */
 	public Users markSessionAsLogedIn(String SID) {
 		try {
 			sessionManagement.updateUserWithoutSession(SID, -1L);
-			Configuration conf = cfgManagement.getConfKey(3L,
-					"default.rpc.userid");
-			return userManagement.getUserById(Long.parseLong(conf
-					.getConf_value()));
+			
+			Long defaultRpcUserid = cfgManagement.getConfValue(
+					"default.rpc.userid", Long.class, "-1");
+			Users defaultRpcUser = userManagement.getUserById(defaultRpcUserid);
+			
+			Users user = new Users();
+			user.setOrganisation_users(defaultRpcUser.getOrganisation_users());
+			
+			return user;
+			
 		} catch (Exception err) {
 			log.error("[markSessionAsLogedIn]", err);
 		}
