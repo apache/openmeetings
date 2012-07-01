@@ -791,8 +791,6 @@
 			<checkout url="http://red5.googlecode.com/svn/java/client/trunk/" revision="${red5.client.revision}" destPath="${red5.client.dir}" />
 		</svn>
 		<copy file="${red5.lib}/red5.jar" todir="${red5.client.dir}/lib" overwrite="true" force="true" />
-		<copy file="${webcontent.src.dir}/red5/client_rtmpt_patch/RTMPTClient.java" todir="${red5.client.dir}/src/org/red5/client/net/rtmpt" overwrite="true" force="true" />
-		<copy file="${webcontent.src.dir}/red5/client_rtmpt_patch/RTMPTClientConnector.java" todir="${red5.client.dir}/src/org/red5/client/net/rtmpt" overwrite="true" force="true" />
 		<subant target="dist">
 			<fileset dir="${red5.client.dir}" includes="build.xml" />
 		</subant>
