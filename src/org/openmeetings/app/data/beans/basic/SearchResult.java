@@ -21,8 +21,7 @@ package org.openmeetings.app.data.beans.basic;
 import java.io.Serializable;
 import java.util.List;
 
-public class SearchResult<T> implements Serializable {
-	private static final long serialVersionUID = -2428450774121690218L;
+public class SearchResult<T> {
 	private String objectName;
 	private Long records;
 	private List<T> result;
