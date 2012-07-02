@@ -82,6 +82,7 @@ public class Admin {
 			.addOption(new OmOption("b", 1, "b", "backup", false, "Backups OM"))
 			.addOption(new OmOption("r", 2, "r", "restore", false, "Restores OM"))
 			.addOption(new OmOption("i", 3, "i", "install", false, "Fill DB table, and make OM usable"))
+			.addOption(new OmOption("l", 3, "l", "languages", false, "Reimport All language files into DB"))
 			.addOption(new OmOption("f", 4, "f", "files", false, "File operations - statictics/cleanup"));
 		group.setRequired(true); 
 		options.addOptionGroup(group);
@@ -121,6 +122,7 @@ public class Admin {
 		install
 		, backup
 		, restore
+		, languages
 		, files
 		, usage
 	}
@@ -288,6 +290,8 @@ public class Admin {
 			cmd = Command.backup;
 		} else if (cmdl.hasOption('r')) {
 			cmd = Command.restore;
+		} else if (cmdl.hasOption('l')) {
+			cmd = Command.languages;
 		} else if (cmdl.hasOption('f')) {
 			cmd = Command.files;
 		}
@@ -391,6 +395,15 @@ public class Admin {
 					restoreOm(ctxName, checkRestoreFile(file));
 				} catch (Exception e) {
 					handleError("Restore failed", e);
+				}
+				break;
+			case languages:
+				System.out.println("All language file will be reimported");
+				try {
+					ImportInitvalues importInit = getApplicationContext(ctxName).getBean(ImportInitvalues.class);
+					importInit.loadLanguagesFiles(); 
+				} catch (Exception e) {
+					handleError("Language reimport failed", e);
 				}
 				break;
 			case files:

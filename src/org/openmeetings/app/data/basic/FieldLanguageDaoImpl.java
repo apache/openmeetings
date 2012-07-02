@@ -46,10 +46,11 @@ public class FieldLanguageDaoImpl {
 	@PersistenceContext
 	private EntityManager em;
 
-	public Long addLanguage(String langName, Boolean langRtl, String code) {
+	public Long addLanguage(int langId, String langName, Boolean langRtl, String code) {
 		try {
 
 			FieldLanguage fl = new FieldLanguage();
+			fl.setLanguage_id((long)langId);
 			fl.setStarttime(new Date());
 			fl.setDeleted("false");
 			fl.setName(langName);

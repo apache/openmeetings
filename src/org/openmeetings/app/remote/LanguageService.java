@@ -114,7 +114,7 @@ public class LanguageService {
 		if (authLevelManagement.checkAdminLevel(user_level)) {
 			if (langName.length() == 0)
 				return new Long(-30);
-			return fieldLanguageDaoImpl.addLanguage(langName, false, code);
+			return fieldLanguageDaoImpl.addLanguage(0, langName, false, code);
 		}
 		return null;
 	}

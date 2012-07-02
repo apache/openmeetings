@@ -20,6 +20,7 @@ package org.openmeetings.app.installation;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -831,7 +832,7 @@ public class ImportInitvalues {
 			// log.error("getLanguageFiles "+country);
 			languages.put(id, lang);
 		}
-		log.debug("Languages ADDED ");
+		log.debug("Language files are loaded");
 		return languages;
 	}
 
@@ -876,22 +877,10 @@ public class ImportInitvalues {
 		}
 	}
 
-	// ------------------------------------------------------------------------------
-
-	/**
-	 * Loading initial Language from xml Files into database
-	 */
-	// ------------------------------------------------------------------------------
-	public void loadInitLanguages() throws Exception {
-
-		loadCountriesFiles();
-
-		loadTimeZoneFiles();
-
+	public void loadLanguagesFiles() throws Exception {
 		LinkedHashMap<Integer, LinkedHashMap<String, Object>> listlanguages = getLanguageFiles();
 
-		boolean langFieldIdIsInited = false;
-
+		Hashtable<Long, Fieldvalues> fieldCache = new Hashtable<Long, Fieldvalues>(3000);
 		/** Read all languages files */
 		for (Iterator<Integer> itLang = listlanguages.keySet().iterator(); itLang
 				.hasNext();) {
@@ -910,7 +899,7 @@ public class ImportInitvalues {
 			if (rtl != null && rtl.equals("true"))
 				langRtl = true;
 
-			Long languages_id = fieldLanguageDaoImpl.addLanguage(langName,
+			Long languages_id = fieldLanguageDaoImpl.addLanguage(langId, langName,
 					langRtl, code);
 
 			SAXReader reader = new SAXReader();
@@ -937,10 +926,11 @@ public class ImportInitvalues {
 
 				Fieldvalues fv = null;
 				// Only do that for the first field-set
-				if (!langFieldIdIsInited) {
+				if (!fieldCache.containsKey(id)) {
 					fv = fieldmanagment.addFieldById(name, id);
+					fieldCache.put(id,  fv);
 				} else {
-					fv = fieldmanagment.getFieldvaluesById(id);
+					fv = fieldCache.get(id);
 				}
 
 				fieldmanagment.addFieldValueByFieldAndLanguage(fv,
@@ -948,10 +938,20 @@ public class ImportInitvalues {
 
 			}
 			log.debug("Lang ADDED: " + lang);
-			if (!langFieldIdIsInited)
-				langFieldIdIsInited = true;
 		}
+		log.debug("All languages are imported");
+	}
+	
+	// ------------------------------------------------------------------------------
 
+	/**
+	 * Loading initial Language from xml Files into database
+	 */
+	// ------------------------------------------------------------------------------
+	public void loadInitLanguages() throws Exception {
+		loadCountriesFiles();
+		loadTimeZoneFiles();
+		loadLanguagesFiles();
 	}
 
 	// ------------------------------------------------------------------------------
