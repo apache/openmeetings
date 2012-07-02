@@ -21,7 +21,6 @@ package org.openmeetings.test;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 
-import java.io.File;
 import java.util.Date;
 
 import org.junit.Before;
@@ -33,7 +32,6 @@ import org.openmeetings.app.installation.ImportInitvalues;
 import org.openmeetings.app.installation.InstallationConfig;
 import org.openmeetings.app.persistence.beans.calendar.Appointment;
 import org.openmeetings.app.persistence.beans.user.Users;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,11 +124,7 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 	}
 
 	private void makeDefaultScheme() throws Exception {
-		String filePath = System.getProperty("webapps.root")
-				+ File.separatorChar + ScopeApplicationAdapter.webAppPath
-				+ ImportInitvalues.languageFolderName;
-
-		importInitvalues.loadAll(filePath, new InstallationConfig(), username, userpass,
+		importInitvalues.loadAll(new InstallationConfig(), username, userpass,
 				useremail, orgname, timeZone, false);
 	}
 }

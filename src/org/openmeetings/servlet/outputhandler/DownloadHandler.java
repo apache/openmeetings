@@ -21,7 +21,6 @@ package org.openmeetings.servlet.outputhandler;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.RandomAccessFile;
 import java.util.Date;
 
 import javax.servlet.ServletException;
@@ -36,6 +35,7 @@ import org.openmeetings.app.data.file.dao.FileExplorerItemDaoImpl;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.persistence.beans.files.FileExplorerItem;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.context.ApplicationContext;
@@ -92,8 +92,7 @@ public class DownloadHandler extends HttpServlet {
 		return null;
 	}
 
-	private void logNonExistentFolder(String dir) {
-		File f = new File(dir);
+	private void logNonExistentFolder(File f) {
 		if (!f.exists()) {
 			boolean c = f.mkdir();
 			if (!c) {
@@ -183,84 +182,37 @@ public class DownloadHandler extends HttpServlet {
 
 				// Get the current User-Directory
 
-				String current_dir = getServletContext().getRealPath("/");
-
-				String working_dir = "";
-
-				working_dir = current_dir + OpenmeetingsVariables.UPLOAD_DIR + File.separatorChar;
+				File working_dir;
 
 				// Add the Folder for the Room
 				if (moduleName.equals("lzRecorderApp")) {
-					working_dir = current_dir + OpenmeetingsVariables.STREAMS_DIR + File.separatorChar
-							+ "hibernate" + File.separatorChar;
+					working_dir = OmFileHelper.getStreamsHibernateDir();
 				} else if (moduleName.equals("videoconf1")) {
-					if (parentPath.length() != 0) {
-						if (parentPath.equals("/")) {
-							working_dir = working_dir + roomName
-									+ File.separatorChar;
-						} else {
-							working_dir = working_dir + roomName
-									+ File.separatorChar + parentPath
-									+ File.separatorChar;
-						}
-					} else {
-						working_dir = current_dir + roomName
-								+ File.separatorChar;
+					working_dir = OmFileHelper.getUploadRoomDir(roomName);
+					if (parentPath.length() != 0 && !parentPath.equals("/")) {
+						working_dir = new File(working_dir, parentPath);
 					}
 				} else if (moduleName.equals("userprofile")) {
-					working_dir += "profiles" + File.separatorChar;
-					logNonExistentFolder(working_dir);
-
-					working_dir += ScopeApplicationAdapter.profilesPrefix
-							+ users_id + File.separatorChar;
+					working_dir = OmFileHelper.getUploadProfilesUserDir(users_id);
 					logNonExistentFolder(working_dir);
 				} else if (moduleName.equals("remoteuserprofile")) {
-					working_dir += "profiles" + File.separatorChar;
-					logNonExistentFolder(working_dir);
-
-					String remoteUser_id = httpServletRequest
-							.getParameter("remoteUserid");
-					if (remoteUser_id == null) {
-						remoteUser_id = "0";
-					}
-
-					working_dir += ScopeApplicationAdapter.profilesPrefix
-							+ remoteUser_id + File.separatorChar;
+					String remoteUser_id = httpServletRequest.getParameter("remoteUserid");
+					working_dir = OmFileHelper.getUploadProfilesUserDir(remoteUser_id == null ? "0" : remoteUser_id);
 					logNonExistentFolder(working_dir);
 				} else if (moduleName.equals("remoteuserprofilebig")) {
-					working_dir += "profiles" + File.separatorChar;
+					String remoteUser_id = httpServletRequest.getParameter("remoteUserid");
+					working_dir = OmFileHelper.getUploadProfilesUserDir(remoteUser_id == null ? "0" : remoteUser_id);
 					logNonExistentFolder(working_dir);
-
-					String remoteUser_id = httpServletRequest
-							.getParameter("remoteUserid");
-					if (remoteUser_id == null) {
-						remoteUser_id = "0";
-					}
-
-					working_dir += ScopeApplicationAdapter.profilesPrefix
-							+ remoteUser_id + File.separatorChar;
-					logNonExistentFolder(working_dir);
-
-					requestedFile = this.getBigProfileUserName(working_dir);
-
+					
+					requestedFile = getBigProfileUserName(working_dir);
 				} else if (moduleName.equals("chat")) {
-
-					working_dir += "profiles" + File.separatorChar;
+					String remoteUser_id = httpServletRequest.getParameter("remoteUserid");
+					working_dir = OmFileHelper.getUploadProfilesUserDir(remoteUser_id == null ? "0" : remoteUser_id);
 					logNonExistentFolder(working_dir);
 
-					String remoteUser_id = httpServletRequest
-							.getParameter("remoteUserid");
-					if (remoteUser_id == null) {
-						remoteUser_id = "0";
-					}
-
-					working_dir += ScopeApplicationAdapter.profilesPrefix
-							+ remoteUser_id + File.separatorChar;
-					logNonExistentFolder(working_dir);
-
-					requestedFile = this.getChatUserName(working_dir);
+					requestedFile = getChatUserName(working_dir);
 				} else {
-					working_dir = working_dir + roomName + File.separatorChar;
+					working_dir = OmFileHelper.getUploadRoomDir(roomName);
 				}
 
 				if (!moduleName.equals("nomodule")) {
@@ -268,15 +220,13 @@ public class DownloadHandler extends HttpServlet {
 					log.debug("requestedFile: " + requestedFile
 							+ " current_dir: " + working_dir);
 
-					String full_path = working_dir + requestedFile;
-
-					File f = new File(full_path);
+					File full_path = new File(working_dir, requestedFile);
 
 					// If the File does not exist or is not readable show/load a
 					// place-holder picture
 
-					if (!f.exists() || !f.canRead()) {
-						if (!f.canRead()) {
+					if (!full_path.exists() || !full_path.canRead()) {
+						if (!full_path.canRead()) {
 							log.debug("LOG DownloadHandler: The request file is not readable");
 						} else {
 							log.debug("LOG DownloadHandler: The request file does not exist / has already been deleted");
@@ -292,38 +242,25 @@ public class DownloadHandler extends HttpServlet {
 							requestedFile = DownloadHandler.defaultImageName;
 							if (moduleName.equals("remoteuserprofile")) {
 								requestedFile = DownloadHandler.defaultProfileImageName;
-							} else if (moduleName
-									.equals("remoteuserprofilebig")) {
+							} else if (moduleName.equals("remoteuserprofilebig")) {
 								requestedFile = DownloadHandler.defaultProfileImageNameBig;
 							} else if (moduleName.equals("userprofile")) {
 								requestedFile = DownloadHandler.defaultProfileImageName;
 							} else if (moduleName.equals("chat")) {
 								requestedFile = DownloadHandler.defaultChatImageName;
 							}
-							// request for an image
-							full_path = current_dir + "default"
-									+ File.separatorChar + requestedFile;
 						} else if (requestedFile.endsWith(".swf")) {
 							requestedFile = DownloadHandler.defaultSWFName;
-							// request for a SWFPresentation
-							full_path = current_dir + "default"
-									+ File.separatorChar
-									+ DownloadHandler.defaultSWFName;
 						} else {
-							// Any document, must be a download request
-							// OR a Moodle Loggedin User
 							requestedFile = DownloadHandler.defaultImageName;
-							full_path = current_dir + "default"
-									+ File.separatorChar
-									+ DownloadHandler.defaultImageName;
 						}
+						full_path = new File(OmFileHelper.getDefaultDir(), DownloadHandler.defaultSWFName);
 					}
 
 					log.debug("full_path: " + full_path);
 
-					File f2 = new File(full_path);
-					if (!f2.exists() || !f2.canRead()) {
-						if (!f2.canRead()) {
+					if (!full_path.exists() || !full_path.canRead()) {
+						if (!full_path.canRead()) {
 							log.debug("DownloadHandler: The request DEFAULT-file does not exist / has already been deleted");
 						} else {
 							log.debug("DownloadHandler: The request DEFAULT-file does not exist / has already been deleted");
@@ -332,16 +269,13 @@ public class DownloadHandler extends HttpServlet {
 						return;
 					}
 					// Requested file is outside OM webapp folder
-					File curDirFile = new File(current_dir);
-					if (!f2.getCanonicalPath()
+					File curDirFile = OmFileHelper.getOmHome();
+					if (!full_path.getCanonicalPath()
 							.startsWith(curDirFile.getCanonicalPath())) {
 						throw new Exception("Invalid file requested: f2.cp == "
-								+ f2.getCanonicalPath() + "; curDir.cp == "
+								+ full_path.getCanonicalPath() + "; curDir.cp == "
 								+ curDirFile.getCanonicalPath());
 					}
-
-					// Get file and handle download
-					RandomAccessFile rf = new RandomAccessFile(full_path, "r");
 
 					// Default type - Explorer, Chrome and others
 					int browserType = 0;
@@ -370,7 +304,7 @@ public class DownloadHandler extends HttpServlet {
 						httpServletResponse
 								.setContentType("application/x-shockwave-flash");
 						httpServletResponse.setHeader("Content-Length",
-								"" + rf.length());
+								"" + full_path.length());
 					} else {
 						httpServletResponse
 								.setContentType("APPLICATION/OCTET-STREAM");
@@ -401,21 +335,12 @@ public class DownloadHandler extends HttpServlet {
 						}
 
 						httpServletResponse.setHeader("Content-Length",
-								"" + rf.length());
+								"" + full_path.length());
 					}
 
-					byte[] buffer = new byte[1024];
-					int readed = -1;
-
-					while ((readed = rf.read(buffer, 0, buffer.length)) > -1) {
-						out.write(buffer, 0, readed);
-					}
-
-					rf.close();
-
+					OmFileHelper.copyFile(full_path, out);
 					out.flush();
 					out.close();
-
 				}
 			} else {
 				System.out
@@ -429,9 +354,7 @@ public class DownloadHandler extends HttpServlet {
 		}
 	}
 
-	private String getChatUserName(String userprofile_folder) throws Exception {
-
-		File f = new File(userprofile_folder);
+	private String getChatUserName(File f) throws Exception {
 		if (f.exists() && f.isDirectory()) {
 			String filesString[] = f.list();
 			for (int i = 0; i < filesString.length; i++) {
@@ -443,10 +366,7 @@ public class DownloadHandler extends HttpServlet {
 		return "_no.jpg";
 	}
 
-	private String getBigProfileUserName(String userprofile_folder)
-			throws Exception {
-
-		File f = new File(userprofile_folder);
+	private String getBigProfileUserName(File f) throws Exception {
 		if (f.exists() && f.isDirectory()) {
 			String filesString[] = f.list();
 			for (int i = 0; i < filesString.length; i++) {

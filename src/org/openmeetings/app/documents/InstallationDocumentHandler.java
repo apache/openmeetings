@@ -18,32 +18,18 @@
  */
 package org.openmeetings.app.documents;
 
-import java.io.File;
 import java.io.FileWriter;
 
 import org.dom4j.Document;
-import org.dom4j.io.XMLWriter;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
+import org.openmeetings.utils.OmFileHelper;
 
 public class InstallationDocumentHandler {
-	
-	public static final String installFileName = "install.xml";
-	
-	private static InstallationDocumentHandler instance;
-
-	private InstallationDocumentHandler() {}
-
-	public static synchronized InstallationDocumentHandler getInstance() {
-		if (instance == null) {
-			instance = new InstallationDocumentHandler();
-		}
-		return instance;
-	}
-	
-	public void createDocument(String filePath, Integer stepNo) throws Exception {
+	public static void createDocument(Integer stepNo) throws Exception {
 		
 		Document document = DocumentHelper.createDocument();
 		
@@ -53,16 +39,16 @@ public class InstallationDocumentHandler {
 		step.addElement("stepnumber").addText(stepNo.toString());
 		step.addElement("stepname").addText("Step "+stepNo);
 		
-		XMLWriter writer = new XMLWriter( new FileWriter( filePath ) );
+		XMLWriter writer = new XMLWriter(new FileWriter(OmFileHelper.getInstallFile()));
         writer.write( document );
         writer.close();
 		
 	}
 	
-	public int getCurrentStepNumber(String filePath) throws Exception{
+	public static int getCurrentStepNumber() throws Exception{
 		
 	    SAXReader reader = new SAXReader();
-        Document document = reader.read(new File(filePath, InstallationDocumentHandler.installFileName));
+        Document document = reader.read(OmFileHelper.getInstallFile());
         
         Node node = document.selectSingleNode( "//install/step/stepnumber" );
         

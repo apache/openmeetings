@@ -20,14 +20,19 @@ package org.openmeetings.app.persistence.beans.lang;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 @Entity
 @Table(name = "fieldlanguage")
@@ -51,9 +56,10 @@ public class FieldLanguage implements Serializable {
 	@Column(name="code")
 	private String code;
 	
-    public FieldLanguage() {
-	}
-
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "language_id", insertable = true, updatable = true)
+	private List<Fieldlanguagesvalues> languageValues;
+	
 	public Long getLanguage_id() {
 		return language_id;
 	}
@@ -101,5 +107,11 @@ public class FieldLanguage implements Serializable {
 	}
 	public void setCode(String code) {
 		this.code = code;
+	}
+	public List<Fieldlanguagesvalues> getLanguageValues() {
+		return languageValues;
+	}
+	public void setLanguageValues(List<Fieldlanguagesvalues> languageValues) {
+		this.languageValues = languageValues;
 	}
 }

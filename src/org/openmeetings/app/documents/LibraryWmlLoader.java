@@ -41,15 +41,14 @@ public class LibraryWmlLoader {
 	
 	private static final String wmlFolderName = "stored";
 	
-	@SuppressWarnings({ "rawtypes", "unused" })
-	public ArrayList loadWmlFile(String filePath, String fileName){
+	@SuppressWarnings({ "rawtypes" })
+	public ArrayList loadWmlFile(File file, String fileName){
 		try {
-			LinkedHashMap lMap = new LinkedHashMap();
-			String filepathComplete = filePath + wmlFolderName + File.separatorChar + fileName;
-			if (!filepathComplete.endsWith(fileExt)) {
-				filepathComplete += fileExt;
+			String name = wmlFolderName + File.separatorChar + fileName;
+			if (!name.endsWith(fileExt)) {
+				name += fileExt;
 			}
-			
+			File filepathComplete = new File(file, name);
 			log.error("filepathComplete: "+filepathComplete);
 			
 			XStream xStream = new XStream(new XppDriver());

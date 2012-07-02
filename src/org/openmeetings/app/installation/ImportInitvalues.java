@@ -46,6 +46,7 @@ import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.persistence.beans.lang.Fieldvalues;
+import org.openmeetings.utils.OmFileHelper;
 import org.openmeetings.utils.ImportHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -55,12 +56,6 @@ public class ImportInitvalues {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			ImportInitvalues.class, OpenmeetingsVariables.webAppRootKey);
-
-	public static final String languageFolderName = "languages/";
-	private static final String nameOfLanguageFile = "languages.xml";
-	private static final String nameOfCountriesFile = "countries.xml";
-	private static final String nameOfTimeZoneFile = "timezones.xml";
-	private static final String nameOfErrorFile = "errorvalues.xml";
 
 	@Autowired
 	private Configurationmanagement cfgManagement;
@@ -197,10 +192,10 @@ public class ImportInitvalues {
 		log.debug("Error types ADDED");
 	}
 
-	public void loadErrorMappingsFromXML(String filePath) throws Exception {
+	public void loadErrorMappingsFromXML() throws Exception {
 
 		SAXReader reader = new SAXReader();
-		Document document = reader.read(new File(filePath, ImportInitvalues.nameOfErrorFile));
+		Document document = reader.read(new File(OmFileHelper.getLanguagesDir(), OmFileHelper.nameOfErrorFile));
 
 		Element root = document.getRootElement();
 
@@ -733,9 +728,9 @@ public class ImportInitvalues {
 	 * @param filePath
 	 * @throws Exception
 	 */
-	private void loadCountriesFiles(String filePath) throws Exception {
+	private void loadCountriesFiles() throws Exception {
 		SAXReader reader = new SAXReader();
-		Document document = reader.read(new File(filePath, ImportInitvalues.nameOfCountriesFile));
+		Document document = reader.read(new File(OmFileHelper.getLanguagesDir(), OmFileHelper.nameOfCountriesFile));
 
 		Element root = document.getRootElement();
 
@@ -751,9 +746,9 @@ public class ImportInitvalues {
 		log.debug("Countries ADDED");
 	}
 
-	private void loadTimeZoneFiles(String filePath) throws Exception {
+	private void loadTimeZoneFiles() throws Exception {
 		SAXReader reader = new SAXReader();
-		Document document = reader.read(new File(filePath, ImportInitvalues.nameOfTimeZoneFile));
+		Document document = reader.read(new File(OmFileHelper.getLanguagesDir(), OmFileHelper.nameOfTimeZoneFile));
 
 		Element root = document.getRootElement();
 
@@ -771,13 +766,13 @@ public class ImportInitvalues {
 		log.debug("TimeZones ADDED");
 	}
 
-	public List<OmTimeZone> getTimeZones(String filePath) throws Exception {
+	public List<OmTimeZone> getTimeZones() throws Exception {
 		log.debug(":: getTimeZones ::");
 
 		List<OmTimeZone> omTimeZones = new LinkedList<OmTimeZone>();
 
 		SAXReader reader = new SAXReader();
-		Document document = reader.read(new File(filePath, ImportInitvalues.nameOfTimeZoneFile));
+		Document document = reader.read(new File(OmFileHelper.getLanguagesDir(), OmFileHelper.nameOfTimeZoneFile));
 
 		Element root = document.getRootElement();
 
@@ -809,13 +804,12 @@ public class ImportInitvalues {
 	 * @return
 	 * @throws Exception
 	 */
-	public LinkedHashMap<Integer, LinkedHashMap<String, Object>> getLanguageFiles(
-			String filePath) throws Exception {
+	public LinkedHashMap<Integer, LinkedHashMap<String, Object>> getLanguageFiles() throws Exception {
 
 		LinkedHashMap<Integer, LinkedHashMap<String, Object>> languages = new LinkedHashMap<Integer, LinkedHashMap<String, Object>>();
 
 		SAXReader reader = new SAXReader();
-		Document document = reader.read(new File(filePath, ImportInitvalues.nameOfLanguageFile));
+		Document document = reader.read(new File(OmFileHelper.getLanguagesDir(), OmFileHelper.nameOfLanguageFile));
 
 		Element root = document.getRootElement();
 
@@ -888,14 +882,13 @@ public class ImportInitvalues {
 	 * Loading initial Language from xml Files into database
 	 */
 	// ------------------------------------------------------------------------------
-	public void loadInitLanguages(String filePath) throws Exception {
+	public void loadInitLanguages() throws Exception {
 
-		loadCountriesFiles(filePath);
+		loadCountriesFiles();
 
-		loadTimeZoneFiles(filePath);
+		loadTimeZoneFiles();
 
-		LinkedHashMap<Integer, LinkedHashMap<String, Object>> listlanguages = this
-				.getLanguageFiles(filePath);
+		LinkedHashMap<Integer, LinkedHashMap<String, Object>> listlanguages = getLanguageFiles();
 
 		boolean langFieldIdIsInited = false;
 
@@ -921,7 +914,7 @@ public class ImportInitvalues {
 					langRtl, code);
 
 			SAXReader reader = new SAXReader();
-			Document document = reader.read(new File(filePath, langName + ".xml"));
+			Document document = reader.read(new File(OmFileHelper.getLanguagesDir(), langName + ".xml"));
 
 			Element root = document.getRootElement();
 
@@ -973,15 +966,15 @@ public class ImportInitvalues {
 	}
 	// ------------------------------------------------------------------------------
 
-	public void loadSystem(String filePath, InstallationConfig cfg, boolean force) throws Exception {
+	public void loadSystem(InstallationConfig cfg, boolean force) throws Exception {
 		//FIXME dummy check if installation was performed before
 		if(!force && usersDao.getAllUsers().size() > 0) {
 			log.debug("System contains users, no need to install data one more time.");
 			return;
 		}
 		loadMainMenu();
-		loadErrorMappingsFromXML(filePath);
-		loadInitLanguages(filePath);
+		loadErrorMappingsFromXML();
+		loadInitLanguages();
 		loadSalutations();
 		// AppointMent Categories
 		loadInitAppointmentCategories();
@@ -994,14 +987,14 @@ public class ImportInitvalues {
 		loadConfiguration(cfg);
 	}
 	
-	public void loadAll(String filePath, InstallationConfig cfg, String username,
+	public void loadAll(InstallationConfig cfg, String username,
 			String userpass, String useremail, String groupame, String timeZone, boolean force) throws Exception {
 		//FIXME dummy check if installation was performed before
 		if(!force && usersDao.getAllUsers().size() > 0) {
 			log.debug("System contains users, no need to install data one more time.");
 			return;
 		}
-		loadSystem(filePath, cfg, force);
+		loadSystem(cfg, force);
 		loadInitUserAndOrganisation(username,
 				userpass, useremail, groupame, timeZone, cfg.defaultLangId);
 		

@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.transaction.util.FileHelper;
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.conference.session.RoomClient;
 import org.openmeetings.app.conference.whiteboard.WhiteboardManagement;
@@ -41,7 +42,7 @@ import org.openmeetings.app.documents.LibraryWmlLoader;
 import org.openmeetings.app.documents.LoadLibraryPresentation;
 import org.openmeetings.app.persistence.beans.files.FileExplorerItem;
 import org.openmeetings.app.remote.red5.ClientListManager;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.OmFileHelper;
 import org.openmeetings.utils.crypt.MD5;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
@@ -90,22 +91,16 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				String current_dir = ScopeApplicationAdapter.webAppPath
-						+ File.separatorChar + OpenmeetingsVariables.UPLOAD_DIR;
-				String working_dir = current_dir + File.separatorChar + "files"
-						+ File.separatorChar + parentFolder;
+				File working_dir = new File(OmFileHelper.getUploadFilesDir(), parentFolder);
 				log.debug("############# working_dir : " + working_dir);
 
-				File file = new File(working_dir + File.separatorChar
-						+ "library.xml");
+				File file = new File(working_dir, OmFileHelper.libraryFileName);
 
 				if (!file.exists()) {
-					throw new Exception("library.xml does not exist "
-							+ working_dir + File.separatorChar + "library.xml");
+					throw new Exception(file.getCanonicalPath() + ": does not exist");
 				}
 
-				return LoadLibraryPresentation.getInstance()
-						.parseLibraryFileToObject(file.getAbsolutePath());
+				return LoadLibraryPresentation.parseLibraryFileToObject(file);
 
 			} else {
 				throw new Exception("not Authenticated");
@@ -145,16 +140,9 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 
 				log.debug("saveAsObject" + tObject.size());
 
-				String current_dir = ScopeApplicationAdapter.webAppPath
-						+ File.separatorChar + OpenmeetingsVariables.UPLOAD_DIR + File.separatorChar;
+				String localFileName = MD5.do_checksum(new Date().toString()) + ".wml";
 
-				log.debug("### this is my working directory: " + current_dir);
-
-				String localFileName = MD5.do_checksum(new Date().toString())
-						+ ".wml";
-
-				LibraryDocumentConverter.getInstance().writeToLocalFolder(
-						current_dir, localFileName, tObject);
+				LibraryDocumentConverter.writeToLocalFolder(OmFileHelper.getUploadDir(), localFileName, tObject);
 
 				// String wmlPath = current_dir + File.separatorChar+fileName
 				// +".xml";
@@ -202,14 +190,10 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 					return;
 				}
 
-				String current_dir = ScopeApplicationAdapter.webAppPath
-						+ File.separatorChar + OpenmeetingsVariables.UPLOAD_DIR + File.separatorChar;
-				log.debug("### this is my working directory: " + current_dir);
-
 				FileExplorerItem fileExplorerItem = fileExplorerItemDao
 						.getFileExplorerItemsById(fileExplorerItemId);
 
-				ArrayList roomItems = libraryWmlLoader.loadWmlFile(current_dir,
+				ArrayList roomItems = libraryWmlLoader.loadWmlFile(OmFileHelper.getUploadDir(),
 						fileExplorerItem.getWmlFilePath());
 
 				Map whiteboardObjClear = new HashMap();
@@ -289,13 +273,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			if (authLevelManagement.checkUserLevel(user_level)) {
-				String roomName = room_id.toString();
-				String current_dir = ScopeApplicationAdapter.webAppPath
-						+ File.separatorChar + OpenmeetingsVariables.UPLOAD_DIR + File.separatorChar
-						+ roomName + File.separatorChar;
-				log.debug("### this is my working directory: " + current_dir);
-
-				return LibraryChartLoader.getInstance().loadChart(current_dir,
+				return LibraryChartLoader.getInstance().loadChart(OmFileHelper.getUploadRoomDir(room_id.toString()),
 						fileName);
 			}
 		} catch (Exception err) {
@@ -478,38 +456,15 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 				Long room_id = currentClient.getRoom_id();
 
 				if (room_id != null) {
+					File outputFullFlvFile = new File(OmFileHelper.getStreamsHibernateDir()
+						, "UPLOADFLV_" + flvFileExplorerId + ".flv");
 
-					String streamFolderName = ScopeApplicationAdapter.webAppPath
-							+ File.separatorChar
-							+ OpenmeetingsVariables.STREAMS_DIR
-							+ File.separatorChar
-							+ "hibernate"
-							+ File.separatorChar;
+					File targetFolder = OmFileHelper.getStreamsSubDir(room_id);
 
-					String outputFullFlv = streamFolderName + "UPLOADFLV_"
-							+ flvFileExplorerId + ".flv";
-
-					String targetFolderName = ScopeApplicationAdapter.webAppPath
-							+ File.separatorChar
-							+ OpenmeetingsVariables.STREAMS_DIR
-							+ File.separatorChar + room_id + File.separatorChar;
-
-					File targetFolder = new File(targetFolderName);
-					if (!targetFolder.exists()) {
-						targetFolder.mkdir();
-					}
-
-					String targetFullFlv = targetFolderName + "UPLOADFLV_"
-							+ flvFileExplorerId + ".flv";
-
-					File outputFullFlvFile = new File(outputFullFlv);
-					File targetFullFlvFile = new File(targetFullFlv);
-					if (outputFullFlvFile.exists()) {
-
-						if (!targetFullFlvFile.exists()) {
-							fileUtils.copyFile(outputFullFlv, targetFullFlv);
-						}
-
+					File targetFullFlvFile = new File(targetFolder
+						, "UPLOADFLV_" + flvFileExplorerId + ".flv");
+					if (outputFullFlvFile.exists() && !targetFullFlvFile.exists()) {
+						FileHelper.copy(outputFullFlvFile, targetFullFlvFile);
 					}
 
 					return 1L;

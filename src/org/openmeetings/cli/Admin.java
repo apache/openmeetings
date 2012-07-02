@@ -44,20 +44,18 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.Parser;
 import org.apache.commons.cli.PosixParser;
+import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openjpa.jdbc.meta.MappingTool;
-import org.openmeetings.app.OpenmeetingsVariables;
-import org.openmeetings.app.data.file.FileUtils;
 import org.openmeetings.app.documents.InstallationDocumentHandler;
 import org.openmeetings.app.installation.ImportInitvalues;
 import org.openmeetings.app.installation.InstallationConfig;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.servlet.outputhandler.BackupExport;
 import org.openmeetings.servlet.outputhandler.BackupImportController;
 import org.openmeetings.utils.ImportHelper;
 import org.openmeetings.utils.OMContextListener;
+import org.openmeetings.utils.OmFileHelper;
 import org.openmeetings.utils.mail.MailUtil;
 import org.openmeetings.utils.math.CalendarPatterns;
-import org.quartz.SchedulerException;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -70,7 +68,6 @@ public class Admin {
 	private InstallationConfig cfg = null;
 	private Options opts = null;
 	private CommandLine cmdl = null;
-	private File omHome = null;
 	private ClassPathXmlApplicationContext ctx = null; 
 
 	private Admin() {
@@ -259,6 +256,12 @@ public class Admin {
 			} catch (Exception e) {
 				handleError("Unable to obtain application context", e);
 			}
+			SchedulerFactoryBean sfb = ctx.getBean(SchedulerFactoryBean.class);
+			try {
+				sfb.getScheduler().shutdown(false);
+			} catch (Exception e) {
+				handleError("Unable to shutdown schedulers", e);
+			}
 		}
 		return ctx;
 	}
@@ -266,8 +269,7 @@ public class Admin {
 	private void process(String[] args) {
 		String ctxName = System.getProperty("context", "openmeetings");
 		File home = new File(System.getenv("RED5_HOME"));
-		omHome = new File(new File(home, "webapps"), ctxName);
-		File omUploadTemp = new File(omHome, OpenmeetingsVariables.UPLOAD_TEMP_DIR);
+		OmFileHelper.setOmHome(new File(new File(home, "webapps"), ctxName));
 		
 		Parser parser = new PosixParser();
 		try {
@@ -323,12 +325,11 @@ public class Admin {
 					if (cmdl.hasOption("email-use-tls")) {
 						cfg.mailUseTls = "1";
 					}
-					String langPath = new File(omHome, ImportInitvalues.languageFolderName).getAbsolutePath(); //FIXME need to be moved to helper
 					ConnectionProperties connectionProperties = new ConnectionProperties();
-					File conf = new File(omHome, "WEB-INF/classes/META-INF/persistence.xml");
+					File conf = new File(OmFileHelper.getWebinfDir(), "classes/META-INF/persistence.xml");
 					if (!conf.exists() || cmdl.hasOption("db-type") || cmdl.hasOption("db-host") || cmdl.hasOption("db-port") || cmdl.hasOption("db-name") || cmdl.hasOption("db-user") || cmdl.hasOption("db-pass")) {
 						String dbType = cmdl.getOptionValue("db-type", "derby");
-						File srcConf = new File(omHome, "WEB-INF/classes/META-INF/" + dbType + "_persistence.xml");
+						File srcConf = new File(OmFileHelper.getWebinfDir(), "classes/META-INF/" + dbType + "_persistence.xml");
 						ConnectionPropertiesPatcher.getPatcher(dbType).patch(
 								srcConf
 								, conf
@@ -347,39 +348,39 @@ public class Admin {
 						File backup = checkRestoreFile(file);
 						dropDB(connectionProperties);
 						
-						shutdownScheduledJobs(ctxName);
 						ImportInitvalues importInit = getApplicationContext(ctxName).getBean(ImportInitvalues.class);
-						importInit.loadSystem(langPath, cfg, force); 
+						importInit.loadSystem(cfg, force); 
 						restoreOm(ctxName, backup);
 					} else {
-						AdminUserDetails admin = checkAdminDetails(ctxName, langPath);
+						AdminUserDetails admin = checkAdminDetails(ctxName);
 						dropDB(connectionProperties);
 						
-						shutdownScheduledJobs(ctxName);
 						ImportInitvalues importInit = getApplicationContext(ctxName).getBean(ImportInitvalues.class);
-						importInit.loadAll(langPath, cfg, admin.login, admin.pass, admin.email, admin.group, admin.tz, force);
+						importInit.loadAll(cfg, admin.login, admin.pass, admin.email, admin.group, admin.tz, force);
 					}					
 					
-					File installerFile = new File(new File(omHome, ScopeApplicationAdapter.configDirName), InstallationDocumentHandler.installFileName);
-					InstallationDocumentHandler.getInstance().createDocument(installerFile.getAbsolutePath(), 3);
+					InstallationDocumentHandler.createDocument(3);
 				} catch(Exception e) {
 					handleError("Install failed", e);
 				}
 				break;
 			case backup:
 				try {
+					File f;
 					if (!cmdl.hasOption("file")) {
 						file = "backup_" + CalendarPatterns.getTimeForStreamId(new Date()) + ".zip";
+						f = new File(home, file);
 						System.out.println("File name was not specified, '" + file + "' will be used");
+					} else {
+						f = new File(file);
 					}
 					boolean includeFiles = Boolean.parseBoolean(cmdl.getOptionValue("exclude-files", "true"));
-					File backup_dir = new File(omUploadTemp, "" + System.currentTimeMillis());
+					File backup_dir = new File(OmFileHelper.getUploadTempDir(), "" + System.currentTimeMillis());
 					backup_dir.mkdirs();
 					
-					shutdownScheduledJobs(ctxName);
 					BackupExport export = getApplicationContext(ctxName).getBean(BackupExport.class);
-					export.performExport(file, backup_dir, includeFiles, omHome.getAbsolutePath());
-					export.deleteDirectory(backup_dir);
+					export.performExport(f, backup_dir, includeFiles);
+					FileHelper.removeRec(backup_dir);
 					backup_dir.delete();
 				} catch (Exception e) {
 					handleError("Backup failed", e);
@@ -387,7 +388,6 @@ public class Admin {
 				break;
 			case restore:
 				try {
-					shutdownScheduledJobs(ctxName);
 					restoreOm(ctxName, checkRestoreFile(file));
 				} catch (Exception e) {
 					handleError("Restore failed", e);
@@ -395,11 +395,9 @@ public class Admin {
 				break;
 			case files:
 				try {
-					File omUpload = new File(omHome, OpenmeetingsVariables.UPLOAD_DIR);
-					File omStreams = new File(omHome, OpenmeetingsVariables.STREAMS_DIR);
-					System.out.println("Temporary upload files allocates: " + FileUtils.getHumanSize(omUploadTemp));
-					System.out.println("Upload allocates: " + FileUtils.getHumanSize(omUpload));
-					System.out.println("Recordings allocates: " + FileUtils.getHumanSize(omStreams));
+					System.out.println("Temporary upload files allocates: " + OmFileHelper.getHumanSize(OmFileHelper.getUploadTempDir()));
+					System.out.println("Upload allocates: " + OmFileHelper.getHumanSize(OmFileHelper.getUploadDir()));
+					System.out.println("Recordings allocates: " + OmFileHelper.getHumanSize(OmFileHelper.getStreamsDir()));
 					/*
 					omHome
 					
@@ -446,7 +444,7 @@ public class Admin {
 		String tz = null;
 	}
 	
-	private AdminUserDetails checkAdminDetails(String ctxName, String langPath) throws Exception {
+	private AdminUserDetails checkAdminDetails(String ctxName) throws Exception {
 		AdminUserDetails admin = new AdminUserDetails();
 		admin.login = cmdl.getOptionValue("user");
 		admin.email = cmdl.getOptionValue("email");
@@ -479,7 +477,7 @@ public class Admin {
 			}
 		}
 		ImportInitvalues importInit = getApplicationContext(ctxName).getBean(ImportInitvalues.class);
-		Map<String, String> tzMap = ImportHelper.getAllTimeZones(importInit.getTimeZones(langPath));
+		Map<String, String> tzMap = ImportHelper.getAllTimeZones(importInit.getTimeZones());
 		admin.tz = null;
 		if (cmdl.hasOption("tz")) {
 			admin.tz = cmdl.getOptionValue("tz");
@@ -500,16 +498,11 @@ public class Admin {
 		return (pass == null || pass.length() < InstallationConfig.USER_PASSWORD_MINIMUM_LENGTH);
 	}
 	
-	private void shutdownScheduledJobs(String ctxName) throws SchedulerException {
-		SchedulerFactoryBean sfb =  getApplicationContext(ctxName).getBean(SchedulerFactoryBean.class);
-		sfb.getScheduler().shutdown(false);
-	}
-	
 	private void dropDB(ConnectionProperties props) throws Exception {
 		if(cmdl.hasOption("drop")) {	
 			String[] args = {
 					"-schemaAction", "retain,drop"
-					, "-properties", omHome.getAbsolutePath() + "/WEB-INF/classes/META-INF/persistence.xml"
+					, "-properties", new File(OmFileHelper.getWebinfDir(), "classes/META-INF/persistence.xml").getCanonicalPath()
 					, "-connectionDriverName", props.getDriver()
 					, "-connectionURL", props.getURL()
 					, "-connectionUserName", props.getLogin()
@@ -533,7 +526,7 @@ public class Admin {
 	private void restoreOm(String ctxName, File backup) {
 		try {
 			BackupImportController importCtrl = getApplicationContext(ctxName).getBean(BackupImportController.class);
-			importCtrl.performImport(new FileInputStream(backup), omHome.getAbsolutePath());
+			importCtrl.performImport(new FileInputStream(backup));
 		} catch (Exception e) {
 			handleError("Restore failed", e);
 		}

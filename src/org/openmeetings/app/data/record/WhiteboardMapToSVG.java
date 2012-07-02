@@ -29,7 +29,7 @@ import javax.imageio.ImageIO;
 
 import org.apache.batik.svggen.SVGGraphics2D;
 import org.openmeetings.app.OpenmeetingsVariables;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.OmFileHelper;
 import org.openmeetings.utils.geom.GeomPoint;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -230,17 +230,15 @@ public class WhiteboardMapToSVG extends BatikMethods {
         		String parentPath = graphObject.get(5).toString();
         		String fileItemName = graphObject.get(3).toString();
         		
-        		String imageFilePath = ScopeApplicationAdapter.webAppPath + File.separatorChar +
-        				OpenmeetingsVariables.UPLOAD_DIR + File.separatorChar + room + File.separatorChar;
+        		File imageFile = new File(OmFileHelper.getUploadDir(), room);
         		
         		if (parentPath.length() > 1) {
-        			imageFilePath += parentPath + File.separatorChar;
+        			imageFile = new File(imageFile, parentPath);
         		}
         		
         		//log.debug("fileItemName: "+fileItemName);
         		
-        		String full_path = imageFilePath + fileItemName;
-        		File myFile = new File(full_path);
+        		File myFile = new File(imageFile, fileItemName);
         		
         		if (myFile.exists() && myFile.canRead()) {
         			
@@ -255,7 +253,7 @@ public class WhiteboardMapToSVG extends BatikMethods {
 	        		svgGenerator_temp.drawImage(myImage, x, y, width, height, null);
         			
         		} else {
-        			log.error("tried to inculde a non existing File into SVG/Image Export Path: "+full_path);
+        			log.error("tried to inculde a non existing File into SVG/Image Export Path: " + myFile);
         		}
         		
         	} else if(graphType.equals("line") || graphType.equals("uline")) {

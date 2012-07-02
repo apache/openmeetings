@@ -18,7 +18,6 @@
  */
 package org.openmeetings.app.remote.red5;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -50,6 +49,7 @@ import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.FLVRecorderService;
 import org.openmeetings.app.remote.WhiteBoardService;
+import org.openmeetings.utils.OmFileHelper;
 import org.openmeetings.utils.math.CalendarPatterns;
 import org.red5.client.net.rtmp.ClientExceptionHandler;
 import org.red5.logging.Red5LoggerFactory;
@@ -106,16 +106,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	private MeetingMemberDaoImpl meetingMemberDao;
 
     private Map<String, StreamingProxy> streamingProxyMap = new HashMap<String, StreamingProxy>();
-	// This is the Folder where all executables are written
-	// for windows platform
-	public static String batchFileDir = "webapps" + File.separatorChar + "ROOT"
-			+ File.separatorChar + "jod" + File.separatorChar;
 	public static String lineSeperator = System.getProperty("line.separator");
-
-	// The Global WebApp Path
-	public static String webAppPath = "";
-	public static String configDirName = "conf";
-	public static String profilesPrefix = "profile_";
 
 	public static String configKeyCryptClassName = null;
 	public static Boolean whiteboardDrawStatus = null;
@@ -130,12 +121,10 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 	@Override
 	public synchronized boolean appStart(IScope scope) {
 		try {
-			webAppPath = scope.getResource("/").getFile().getAbsolutePath();
-			batchFileDir = webAppPath + File.separatorChar + OpenmeetingsVariables.STREAMS_DIR
-					+ File.separatorChar;
+			OmFileHelper.setOmHome(scope.getResource("/").getFile());
 
-			log.debug("webAppPath : " + webAppPath);
-			log.debug("batchFileFir : " + batchFileDir);
+			log.debug("webAppPath : " + OmFileHelper.getOmHome());
+			log.debug("batchFileFir : " + OmFileHelper.getStreamsFilesDir());
 
 			// Only load this Class one time
 			// Initially this value might by empty, because the DB is empty yet
@@ -152,7 +141,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements
 
 			// Spring Definition does not work here, its too early, Instance is
 			// not set yet
-			emoticonsManager.loadEmot(scope);
+			emoticonsManager.loadEmot();
 
 			for (String scopeName : scope.getScopeNames()) {
 				log.debug("scopeName :: " + scopeName);

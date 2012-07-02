@@ -19,11 +19,8 @@
 package org.openmeetings.servlet.outputhandler;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -39,6 +36,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.transaction.util.FileHelper;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
@@ -88,6 +86,7 @@ import org.openmeetings.app.persistence.beans.user.UserSipData;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.sip.api.impl.asterisk.dao.AsteriskDAOImpl;
+import org.openmeetings.utils.OmFileHelper;
 import org.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -158,34 +157,22 @@ public class BackupImportController extends AbstractUploadController {
 		USERS, ORGANISATIONS, APPOINTMENTS, ROOMS, MESSAGEFOLDERS, USERCONTACTS, FILEEXPLORERITEMS
 	};
 
-	public void performImport(InputStream is, String current_dir) throws Exception {
-		File working_dir = new File(current_dir, OpenmeetingsVariables.UPLOAD_DIR
-				+ File.separatorChar + "import");
+	public void performImport(InputStream is) throws Exception {
+		File working_dir = OmFileHelper.getUploadImportDir();
 		if (!working_dir.exists()) {
 			working_dir.mkdir();
 		}
 
-		File f = new File(working_dir, "import_" + CalendarPatterns.getTimeForStreamId(new Date()));
-
-		int recursiveNumber = 0;
-		do {
-			if (f.exists()) {
-				f = new File(f.getAbsolutePath() + (recursiveNumber++));
-			}
-		} while (f.exists());
-		f.mkdir();
+		File f = OmFileHelper.getNewDir(working_dir, "import_" + CalendarPatterns.getTimeForStreamId(new Date()));
 
 		log.debug("##### WRITE FILE TO: " + f);
 		
 		ZipInputStream zipinputstream = new ZipInputStream(is);
-		byte[] buf = new byte[1024];
 
 		ZipEntry zipentry = zipinputstream.getNextEntry();
 
 		while (zipentry != null) {
 			// for each entry to be extracted
-			int n;
-			FileOutputStream fileoutputstream;
 			File fentryName = new File(f, zipentry.getName());
 
 			if (zipentry.isDirectory()) {
@@ -228,13 +215,7 @@ public class BackupImportController extends AbstractUploadController {
 
 			}
 
-			fileoutputstream = new FileOutputStream(fentryName);
-
-			while ((n = zipinputstream.read(buf, 0, 1024)) > -1) {
-				fileoutputstream.write(buf, 0, n);
-			}
-
-			fileoutputstream.close();
+			FileHelper.copy(zipinputstream, fentryName);
 			zipinputstream.closeEntry();
 			zipentry = zipinputstream.getNextEntry();
 
@@ -452,11 +433,11 @@ public class BackupImportController extends AbstractUploadController {
 		/*
 		 * ##################### Import real files and folders
 		 */
-		importFolders(current_dir, f);
+		importFolders(f);
 
 		log.info("File explorer item import complete, clearing temp files");
 		
-		deleteDirectory(f);
+		FileHelper.removeRec(f);
 	}
 	
 	@RequestMapping(value = "/backup.upload", method = RequestMethod.POST)
@@ -466,10 +447,9 @@ public class BackupImportController extends AbstractUploadController {
 
     	UploadInfo info = validate(request, true);
     	try {
-			String current_dir = context.getRealPath("/");
 			MultipartFile multipartFile = info.file;
 			InputStream is = multipartFile.getInputStream();
-			performImport(is, current_dir);
+			performImport(is);
 
 			LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
 			hs.put("user", usersDao.getUser(info.userId));
@@ -833,67 +813,6 @@ public class BackupImportController extends AbstractUploadController {
 
 		return roomPollList;
 
-	}
-
-	public void copyDirectory(File sourceLocation, File targetLocation)
-			throws IOException {
-
-		// log.debug("^^^^ "+sourceLocation.getName()+" || "+targetLocation.getName());
-
-		if (sourceLocation.isDirectory()) {
-			if (!targetLocation.exists()) {
-				targetLocation.mkdir();
-			}
-
-			String[] children = sourceLocation.list();
-			for (int i = 0; i < children.length; i++) {
-				copyDirectory(new File(sourceLocation, children[i]), new File(
-						targetLocation, children[i]));
-			}
-		} else {
-
-			InputStream in = new FileInputStream(sourceLocation);
-			OutputStream out = new FileOutputStream(targetLocation);
-
-			// Copy the bits from instream to outstream
-			byte[] buf = new byte[1024];
-			int len;
-			while ((len = in.read(buf)) > 0) {
-				out.write(buf, 0, len);
-			}
-			in.close();
-			out.close();
-		}
-	}
-
-	public void copyFile(File sourceLocation, File targetLocation)
-			throws IOException {
-
-		InputStream in = new FileInputStream(sourceLocation);
-		OutputStream out = new FileOutputStream(targetLocation);
-
-		// Copy the bits from instream to outstream
-		byte[] buf = new byte[1024];
-		int len;
-		while ((len = in.read(buf)) > 0) {
-			out.write(buf, 0, len);
-		}
-		in.close();
-		out.close();
-	}
-
-	public boolean deleteDirectory(File path) throws IOException {
-		if (path.exists()) {
-			File[] files = path.listFiles();
-			for (int i = 0; i < files.length; i++) {
-				if (files[i].isDirectory()) {
-					deleteDirectory(files[i]);
-				} else {
-					files[i].delete();
-				}
-			}
-		}
-		return (path.delete());
 	}
 
 	private void importUsers(File userFile) throws Exception {
@@ -2432,15 +2351,15 @@ public class BackupImportController extends AbstractUploadController {
 		return null;
 	}
 
-	private void importFolders(String current_dir, File importBaseDir)
+	private void importFolders(File importBaseDir)
 			throws IOException {
 
 		// Now check the room files and import them
 		File roomFilesFolder = new File(importBaseDir, "roomFiles");
 
-		File library_dir = new File(current_dir, OpenmeetingsVariables.UPLOAD_DIR);
+		File library_dir = OmFileHelper.getUploadDir();
 
-		log.debug("roomFilesFolder PATH " + roomFilesFolder.getAbsolutePath());
+		log.debug("roomFilesFolder PATH " + roomFilesFolder.getCanonicalPath());
 
 		if (roomFilesFolder.exists()) {
 
@@ -2462,12 +2381,12 @@ public class BackupImportController extends AbstractUploadController {
 							String fileOrFolderName = roomOrProfileFileOrFolder
 									.getName();
 							int beginIndex = fileOrFolderName
-									.indexOf(ScopeApplicationAdapter.profilesPrefix);
+									.indexOf(OmFileHelper.profilesPrefix);
 							// Profile folder should be renamed if new user id
 							// is differ from current id.
 							if (beginIndex > -1) {
 								beginIndex = beginIndex
-										+ ScopeApplicationAdapter.profilesPrefix
+										+ OmFileHelper.profilesPrefix
 												.length();
 								Long profileId = importLongType(fileOrFolderName
 										.substring(beginIndex));
@@ -2476,9 +2395,9 @@ public class BackupImportController extends AbstractUploadController {
 								if (profileId != newProfileID) {
 									fileOrFolderName = fileOrFolderName
 											.replaceFirst(
-													ScopeApplicationAdapter.profilesPrefix
+													OmFileHelper.profilesPrefix
 															+ profileId,
-													ScopeApplicationAdapter.profilesPrefix
+													OmFileHelper.profilesPrefix
 															+ newProfileID);
 								}
 							}
@@ -2491,13 +2410,10 @@ public class BackupImportController extends AbstractUploadController {
 										.listFiles();
 
 								for (File roomDocumentFile : roomDocumentFiles) {
-
 									if (roomDocumentFile.isDirectory()) {
-										log.error("Folder detected in Documents space! Folder "
-												+ roomDocumentFolder);
+										log.error("Folder detected in Documents space! Folder " + roomDocumentFolder);
 									} else {
-										copyFile(roomDocumentFile,
-											new File(roomDocumentFolder, roomDocumentFile.getName()));
+										FileHelper.copy(roomDocumentFile, new File(roomDocumentFolder, roomDocumentFile.getName()));
 									}
 								}
 							} else {
@@ -2507,8 +2423,7 @@ public class BackupImportController extends AbstractUploadController {
 						} else {
 							File roomFileOrProfileFile = new File(parentPathFile, roomOrProfileFileOrFolder.getName());
 							if (!roomFileOrProfileFile.exists()) {
-								this.copyFile(roomOrProfileFileOrFolder,
-										roomFileOrProfileFile);
+								FileHelper.copy(roomOrProfileFileOrFolder, roomFileOrProfileFile);
 							} else {
 								log.debug("File does already exist :: ", roomFileOrProfileFile);
 							}
@@ -2522,17 +2437,13 @@ public class BackupImportController extends AbstractUploadController {
 
 		File sourceDirRec = new File(importBaseDir, "recordingFiles");
 
-		log.debug("sourceDirRec PATH " + sourceDirRec.getAbsolutePath());
+		log.debug("sourceDirRec PATH " + sourceDirRec.getCanonicalPath());
 
 		if (sourceDirRec.exists()) {
+			File targetDirRec = OmFileHelper.getStreamsHibernateDir();
 
-			File targetDirRec = new File(current_dir, OpenmeetingsVariables.STREAMS_DIR
-					+ File.separatorChar + "hibernate" + File.separatorChar);
-
-			copyDirectory(sourceDirRec, targetDirRec);
-
+			FileHelper.copyRec(sourceDirRec, targetDirRec);
 		}
-
 	}
 
 	private Integer importIntegerType(String value) {

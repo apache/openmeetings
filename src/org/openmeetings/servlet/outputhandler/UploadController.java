@@ -19,7 +19,6 @@
 package org.openmeetings.servlet.outputhandler;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -31,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.transaction.util.FileHelper;
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.file.FileProcessor;
 import org.openmeetings.app.data.file.dao.FileExplorerItemDaoImpl;
@@ -40,6 +40,7 @@ import org.openmeetings.app.documents.GeneratePDF;
 import org.openmeetings.app.documents.GenerateThumbs;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.OmFileHelper;
 import org.openmeetings.utils.StoredFile;
 import org.openmeetings.utils.stringhandlers.StringComparer;
 import org.red5.logging.Red5LoggerFactory;
@@ -100,15 +101,13 @@ public class UploadController extends AbstractUploadController {
 			}
 			Long parentFolderId = Long.parseLong(parentFolderIdAsString);
 	
-			String current_dir = context.getRealPath("/");
-	
 			MultipartFile multipartFile = info.file;
 			InputStream is = multipartFile.getInputStream();
 			log.debug("fileSystemName: " + info.filename);
 	
 			HashMap<String, HashMap<String, String>> returnError = fileProcessor
 					.processFile(info.userId, room_id_to_Store, isOwner, is,
-							parentFolderId, info.filename, current_dir, hs, 0L, ""); // externalFilesId,
+							parentFolderId, info.filename, hs, 0L, ""); // externalFilesId,
 																						// externalType
 	
 			HashMap<String, String> returnAttributes = returnError
@@ -187,17 +186,6 @@ public class UploadController extends AbstractUploadController {
 			throws Exception {
 		HashMap<String, HashMap<String, String>> returnError = new HashMap<String, HashMap<String, String>>();
 
-		// Get the current user directory
-		String currentDir = context.getRealPath("/");
-		String workingDir = currentDir + OpenmeetingsVariables.UPLOAD_DIR + File.separatorChar
-				+ roomName + File.separatorChar;
-		log.debug("workingDir: " + workingDir);
-
-		File localFolder = new File(workingDir);
-		if (!localFolder.exists()) {
-			localFolder.mkdirs();
-		}
-
 		// Check variable to see if this file is a presentation
 		int dotidx = fileSystemName.lastIndexOf('.');
 		String newFileName = StringComparer.getInstance().compareForRealPaths(
@@ -220,95 +208,38 @@ public class UploadController extends AbstractUploadController {
 		boolean isImage = storedFile.isImage();
 		boolean isAsIs = storedFile.isAsIs();
 
-		String completeName = "";
-
+		File workingDir = null;
 		// add outputfolders for profiles
 		if (userProfile) {
 			// User Profile Update
-			this.deleteUserProfileFilesStoreTemp(currentDir, userId);
+			this.deleteUserProfileFilesStoreTemp(userId);
 
-			completeName = currentDir + OpenmeetingsVariables.UPLOAD_DIR + File.separatorChar
-					+ "profiles" + File.separatorChar;
-			File f = new File(completeName);
-			if (!f.exists()) {
-				boolean c = f.mkdir();
-				if (!c) {
-					log.error("cannot write to directory");
-					// System.out.println("cannot write to directory");
-				}
-			}
-			completeName += ScopeApplicationAdapter.profilesPrefix + userId
-					+ File.separatorChar;
-			File f2 = new File(completeName);
-			if (!f2.exists()) {
-				boolean c = f2.mkdir();
-				if (!c) {
-					log.error("cannot write to directory");
-					// System.out.println("cannot write to directory");
-				}
-			}
+			workingDir = OmFileHelper.getUploadProfilesUserDir(userId);
 		}
 		// if it is a presenation it will be copied to another
 		// place
 		if (isAsIs) {
 			// check if this is a room file or UserProfile
-			if (userProfile) {
-				completeName += newFileName;
-			} else {
-				completeName = workingDir + newFileName;
+			if (!userProfile) {
+				workingDir = OmFileHelper.getUploadRoomDir(roomName);
 			}
 		} else if (canBeConverted || isPdf || isImage) {
-			// check if this is a room file or UserProfile
-			// add Temp folder structure
-			String workingDirPpt = currentDir
-					+ OpenmeetingsVariables.UPLOAD_TEMP_DIR
-					+ File.separatorChar
-					+ ((userProfile) ? "profiles" + File.separatorChar
-							+ ScopeApplicationAdapter.profilesPrefix + userId
-							: roomName) + File.separatorChar;
-			localFolder = new File(workingDirPpt);
-			if (!localFolder.exists()) {
-				localFolder.mkdirs();
-			}
-			completeName = workingDirPpt + newFileName;
+			workingDir = OmFileHelper.getUploadTempProfilesUserDir(userId);
 		} else {
 			return;
 		}
 
-		File f = new File(completeName + newFileExtDot);
-		if (f.exists()) {
-			int recursiveNumber = 0;
-			String tempd = completeName + "_" + recursiveNumber;
-			while (f.exists()) {
-				recursiveNumber++;
-				tempd = completeName + "_" + recursiveNumber;
-				f = new File(tempd + newFileExtDot);
+		File completeName = OmFileHelper.getNewFile(workingDir, newFileName, newFileExtDot);
 
-			}
-			completeName = tempd;
-		}
+		log.debug("write file to : " + completeName);
 
-		log.debug("write file to : " + completeName + newFileExtDot);
-
-		FileOutputStream fos = new FileOutputStream(completeName
-				+ newFileExtDot);
-		byte[] buffer = new byte[1024];
-		int len = 0;
-
-		while (len != (-1)) {
-			len = is.read(buffer, 0, 1024);
-			if (len != (-1))
-				fos.write(buffer, 0, len);
-		}
-
-		fos.close();
+		FileHelper.copy(is, completeName);
 		is.close();
 
 		log.debug("canBeConverted: " + canBeConverted);
 		if (canBeConverted) {
 			// convert to pdf, thumbs, swf and xml-description
-			returnError = generatePDF.convertPDF(currentDir, newFileName,
-					newFileExtDot, roomName, true, completeName);
+			returnError = generatePDF.convertPDF(newFileName, roomName, true, completeName);
 		} else if (isPdf) {
 			
 			boolean isEncrypted = true; 
@@ -317,16 +248,13 @@ public class UploadController extends AbstractUploadController {
 
 			if (isEncrypted) {
 				// Do convert pdf to other pdf first
-				String inputfile = completeName + newFileExtDot;
+				File f_old = completeName;
 
-				completeName = completeName + "_N_E";
-				newFileName = newFileName + "_N_E";
+				completeName = OmFileHelper.appendSuffix(completeName, "_N_E");
+				newFileName += "_N_E";
 
-				String outputfile = completeName + newFileExtDot;
+				generateThumbs.decodePDF(f_old.getCanonicalPath(), completeName.getCanonicalPath());
 
-				generateThumbs.decodePDF(inputfile, outputfile);
-
-				File f_old = new File(inputfile);
 				if (f_old.exists()) {
 					f_old.delete();
 				}
@@ -334,8 +262,7 @@ public class UploadController extends AbstractUploadController {
 			}
 
 			// convert to thumbs, swf and xml-description
-			returnError = generatePDF.convertPDF(currentDir, newFileName,
-					newFileExtDot, roomName, false, completeName);
+			returnError = generatePDF.convertPDF(newFileName, roomName, false, completeName);
 
 			// returnError.put("decodePDF", returnError2);
 
@@ -345,36 +272,29 @@ public class UploadController extends AbstractUploadController {
 
 			if (userProfile) {
 				// User Profile Update
-				this.deleteUserProfileFiles(currentDir, userId);
+				this.deleteUserProfileFiles(userId);
 				// convert it to JPG
 				returnError = generateImage.convertImageUserProfile(
-						currentDir, newFileName, newFileExtDot, userId,
-						newFileName, false);
+					newFileName, newFileExtDot, userId, newFileName, false);
 			} else {
 				// convert it to JPG
 				log.debug("##### convert it to JPG: " + userProfile);
-				returnError = generateImage.convertImage(currentDir,
-						newFileName, newFileExtDot, roomName, newFileName,
-						false);
+				returnError = generateImage.convertImage(
+					newFileName, newFileExtDot, roomName, newFileName, false);
 			}
 		} else if (isAsIs) {
 			if (userProfile) {
 				// User Profile Update
-				this.deleteUserProfileFiles(currentDir, userId);
+				this.deleteUserProfileFiles(userId);
 				// is UserProfile Picture
-				HashMap<String, String> processThumb1 = generateThumbs
-						.generateThumb("_chat_", currentDir, completeName, 40);
-				HashMap<String, String> processThumb2 = generateThumbs
-						.generateThumb("_profile_", currentDir, completeName,
-								126);
-				HashMap<String, String> processThumb3 = generateThumbs
-						.generateThumb("_big_", currentDir, completeName, 240);
-				returnError.put("processThumb1", processThumb1);
-				returnError.put("processThumb2", processThumb2);
-				returnError.put("processThumb3", processThumb3);
+				returnError.put("processThumb1", generateThumbs
+						.generateThumb("_chat_", completeName, 40));
+				returnError.put("processThumb2", generateThumbs
+						.generateThumb("_profile_", completeName, 126));
+				returnError.put("processThumb3", generateThumbs
+						.generateThumb("_big_", completeName, 240));
 
-				File fileNameToStore = new File(completeName + ".jpg");
-				String pictureuri = fileNameToStore.getName();
+				String pictureuri = completeName.getName();
 				Users us = usersDao.getUser(userId);
 				us.setUpdatetime(new java.util.Date());
 				us.setPictureuri(pictureuri);
@@ -383,7 +303,7 @@ public class UploadController extends AbstractUploadController {
 				//FIXME: After updating the picture url all other users should refresh
 			} else {
 				HashMap<String, String> processThumb = generateThumbs
-						.generateThumb("_thumb_", currentDir, completeName, 50);
+						.generateThumb("_thumb_", completeName, 50);
 				returnError.put("processThumb", processThumb);
 			}
 		}
@@ -391,33 +311,22 @@ public class UploadController extends AbstractUploadController {
 		hs.put("message", "library");
 		hs.put("action", "newFile");
 		hs.put("error", returnError);
-		hs.put("fileName", completeName);
+		hs.put("fileName", completeName.getName());
 	}
 
-	private void deleteUserProfileFilesStoreTemp(String current_dir,
-			Long users_id) throws Exception {
-
-		String working_imgdir = current_dir + OpenmeetingsVariables.UPLOAD_DIR + File.separatorChar
-				+ "profiles" + File.separatorChar
-				+ ScopeApplicationAdapter.profilesPrefix + users_id
-				+ File.separatorChar;
-		File f = new File(working_imgdir);
+	private void deleteUserProfileFilesStoreTemp(Long users_id) throws Exception {
+		File f = OmFileHelper.getUploadProfilesUserDir(users_id);
 		if (f.exists() && f.isDirectory()) {
 			this.filesString = f.list();
 		}
 	}
 
-	private void deleteUserProfileFiles(String current_dir, Long users_id)
-			throws Exception {
-
-		String working_imgdir = current_dir + OpenmeetingsVariables.UPLOAD_DIR + File.separatorChar
-				+ "profiles" + File.separatorChar
-				+ ScopeApplicationAdapter.profilesPrefix + users_id
-				+ File.separatorChar;
+	private void deleteUserProfileFiles(Long users_id) throws Exception {
+		File working_imgdir = OmFileHelper.getUploadProfilesUserDir(users_id);
 
 		for (int i = 0; i < this.filesString.length; i++) {
 			String fileName = filesString[i];
-			File subf = new File(working_imgdir + fileName);
+			File subf = new File(working_imgdir, fileName);
 			subf.delete();
 		}
 	}

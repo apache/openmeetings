@@ -50,6 +50,7 @@ import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingLog;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingMetaData;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.OmFileHelper;
 import org.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
@@ -987,41 +988,33 @@ public class FLVRecorderService implements IPendingServiceCallback {
 		return null;
 	}
 
-	private long getSizeOfDirectoryAndSubs(FlvRecording baseFlvRecording) {
+	private long getSizeOfDirectoryAndSubs(FlvRecording rec) {
 		try {
-
 			long fileSize = 0;
 
-			File tFile = new File(ScopeApplicationAdapter.webAppPath
-					+ File.separatorChar + OpenmeetingsVariables.STREAMS_DIR + File.separatorChar
-					+ "hibernate" + File.separatorChar
-					+ baseFlvRecording.getFileHash());
+			File tFile = new File(OmFileHelper.getStreamsHibernateDir(), rec.getFileHash());
 			if (tFile.exists()) {
 				fileSize += tFile.length();
 			}
 
-			File dFile = new File(ScopeApplicationAdapter.webAppPath
-					+ File.separatorChar + OpenmeetingsVariables.STREAMS_DIR + File.separatorChar
-					+ "hibernate" + File.separatorChar
-					+ baseFlvRecording.getAlternateDownload());
-			if (dFile.exists()) {
-				fileSize += dFile.length();
+			if (rec.getAlternateDownload() != null) {
+				File dFile = new File(OmFileHelper.getStreamsHibernateDir(), rec.getAlternateDownload());
+				if (dFile.exists()) {
+					fileSize += dFile.length();
+				}
+			}
+			if (rec.getPreviewImage() != null) {
+				File iFile = new File(OmFileHelper.getStreamsHibernateDir(), rec.getPreviewImage());
+				if (iFile.exists()) {
+					fileSize += iFile.length();
+				}
 			}
 
-			File iFile = new File(ScopeApplicationAdapter.webAppPath
-					+ File.separatorChar + OpenmeetingsVariables.STREAMS_DIR + File.separatorChar
-					+ "hibernate" + File.separatorChar
-					+ baseFlvRecording.getPreviewImage());
-			if (iFile.exists()) {
-				fileSize += iFile.length();
-			}
-
-			List<FlvRecording> flvRecordings = this.flvRecordingDaoImpl
-					.getFlvRecordingByParent(baseFlvRecording
-							.getFlvRecordingId());
+			List<FlvRecording> flvRecordings = flvRecordingDaoImpl.getFlvRecordingByParent(
+				rec.getFlvRecordingId());
 
 			for (FlvRecording flvRecording : flvRecordings) {
-				fileSize += this.getSizeOfDirectoryAndSubs(flvRecording);
+				fileSize += getSizeOfDirectoryAndSubs(flvRecording);
 			}
 
 			return fileSize;

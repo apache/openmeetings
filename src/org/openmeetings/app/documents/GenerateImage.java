@@ -19,13 +19,14 @@
 package org.openmeetings.app.documents;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.user.Users;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.OmFileHelper;
 import org.openmeetings.utils.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -54,90 +55,51 @@ public class GenerateImage {
 		return pathToImageMagic;
 	}
 
-	public HashMap<String, HashMap<String, String>> convertImage(
-			String current_dir, String fileName, String fileExt,
+	public HashMap<String, HashMap<String, String>> convertImage(String fileName, String fileExt,
 			String roomName, String fileNameShort, boolean fullProcessing)
 			throws Exception {
 
 		HashMap<String, HashMap<String, String>> returnMap = new HashMap<String, HashMap<String, String>>();
 
-		String working_imgdir = current_dir + OpenmeetingsVariables.UPLOAD_DIR + File.separatorChar
-				+ roomName + File.separatorChar;
-		String working_pptdir = current_dir + OpenmeetingsVariables.UPLOAD_TEMP_DIR + File.separatorChar
-				+ roomName + File.separatorChar;
+		File fileFullPath = new File(OmFileHelper.getUploadTempRoomDir(roomName), fileName + fileExt);
 
-		String fileFullPath = working_pptdir + fileName + fileExt;
-
-		File f = new File(working_imgdir + fileName + fileExt);
-		if (f.exists()) {
-			int recursiveNumber = 0;
-			String tempd = fileName + "_" + recursiveNumber;
-			while (f.exists()) {
-				recursiveNumber++;
-				tempd = fileName + "_" + recursiveNumber;
-				f = new File(working_imgdir + tempd + fileExt);
-			}
-			fileName = tempd;
-		}
-
-		String destinationFile = working_imgdir + fileName;
+		File destinationFile = OmFileHelper.getNewFile(OmFileHelper.getUploadRoomDir(roomName), fileName, ".jpg");
 
 		log.debug("##### convertImage destinationFile: " + destinationFile);
 
 		HashMap<String, String> processJPG = this.convertSingleJpg(
-				fileFullPath, destinationFile);
+				fileFullPath.getCanonicalPath(), destinationFile);
 		HashMap<String, String> processThumb = generateThumbs.generateThumb(
-				"_thumb_", current_dir, destinationFile, 50);
+				"_thumb_", destinationFile, 50);
 
 		returnMap.put("processJPG", processJPG);
 		returnMap.put("processThumb", processThumb);
 
 		// Delete old one
-		File fToDelete = new File(fileFullPath);
-		fToDelete.delete();
+		fileFullPath.delete();
 
 		return returnMap;
 	}
 
-	public HashMap<String, HashMap<String, String>> convertImageUserProfile(
-			String current_dir, String fileName, String fileExt, Long users_id,
+	public HashMap<String, HashMap<String, String>> convertImageUserProfile(String fileName, String fileExt, Long users_id,
 			String fileNameShort, boolean fullProcessing) throws Exception {
 
 		HashMap<String, HashMap<String, String>> returnMap = new HashMap<String, HashMap<String, String>>();
 
-		String working_imgdir = current_dir + OpenmeetingsVariables.UPLOAD_DIR + File.separatorChar
-				+ "profiles" + File.separatorChar
-				+ ScopeApplicationAdapter.profilesPrefix + users_id
-				+ File.separatorChar;
-		String working_pptdir = current_dir + OpenmeetingsVariables.UPLOAD_TEMP_DIR + File.separatorChar
-				+ "profiles" + File.separatorChar
-				+ ScopeApplicationAdapter.profilesPrefix + users_id
-				+ File.separatorChar;
+		File working_pptdir = OmFileHelper.getUploadTempProfilesUserDir(users_id);
 
-		String fileFullPath = working_pptdir + fileName + fileExt;
+		String fileFullPath = new File(working_pptdir, fileName + fileExt).getCanonicalPath();
 
-		File f = new File(working_imgdir + fileName + fileExt);
-		if (f.exists()) {
-			int recursiveNumber = 0;
-			String tempd = fileName + "_" + recursiveNumber;
-			while (f.exists()) {
-				recursiveNumber++;
-				tempd = fileName + "_" + recursiveNumber;
-				f = new File(working_imgdir + tempd + fileExt);
-			}
-			fileName = tempd;
-		}
-
-		String destinationFile = working_imgdir + fileName;
+		File destinationFile = OmFileHelper.getNewFile(OmFileHelper.getUploadProfilesUserDir(users_id), fileName, ".jpg");
 		HashMap<String, String> processJPG = this.convertSingleJpg(
 				fileFullPath, destinationFile);
 
 		HashMap<String, String> processThumb1 = generateThumbs.generateThumb(
-				"_chat_", current_dir, destinationFile, 40);
+				"_chat_", destinationFile, 40);
 		HashMap<String, String> processThumb2 = generateThumbs.generateThumb(
-				"_profile_", current_dir, destinationFile, 126);
+				"_profile_", destinationFile, 126);
 		HashMap<String, String> processThumb3 = generateThumbs.generateThumb(
-				"_big_", current_dir, destinationFile, 240);
+				"_big_", destinationFile, 240);
 
 		returnMap.put("processJPG", processJPG);
 		returnMap.put("processThumb1", processThumb1);
@@ -148,8 +110,7 @@ public class GenerateImage {
 		File fToDelete = new File(fileFullPath);
 		fToDelete.delete();
 
-		File fileNameToStore = new File(destinationFile + ".jpg");
-		String pictureuri = fileNameToStore.getName();
+		String pictureuri = destinationFile.getName();
 		Users us = usersDao.getUser(users_id);
 		us.setUpdatetime(new java.util.Date());
 		us.setPictureuri(pictureuri);
@@ -163,12 +124,11 @@ public class GenerateImage {
 
 	/**
 	 * -density 150 -resize 800
+	 * @throws IOException 
 	 * 
 	 */
-	private HashMap<String, String> convertSingleJpg(String inputFile,
-			String outputfile) {
-		String[] argv = new String[] { getPathToImageMagic(), inputFile,
-				outputfile + ".jpg" };
+	private HashMap<String, String> convertSingleJpg(String inputFile, File outputfile) throws IOException {
+		String[] argv = new String[] { getPathToImageMagic(), inputFile, outputfile.getCanonicalPath() };
 
 		// return GenerateSWF.executeScript("convertSingleJpg", argv);
 

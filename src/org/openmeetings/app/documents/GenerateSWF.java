@@ -19,10 +19,12 @@
 package org.openmeetings.app.documents;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.utils.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -32,7 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class GenerateSWF {
 
 	public static final Logger log = Red5LoggerFactory
-			.getLogger(GenerateSWF.class);
+			.getLogger(GenerateSWF.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
 	private Configurationmanagement cfgManagement;
@@ -71,8 +73,7 @@ public class GenerateSWF {
 		return valueForSwfJpegQuality;
 	}
 
-	public HashMap<String, String> generateSwf(String current_dir,
-			String originalFolder, String destinationFolder, String fileNamePure) {
+	public HashMap<String, String> generateSwf(File originalFolder, File destinationFolder, String fileNamePure) throws IOException {
 		
 		// Create the Content of the Converter Script (.bat or .sh File)
 		String[] argv = new String[] {
@@ -82,8 +83,8 @@ public class GenerateSWF {
 				"-i", // change draw order to reduce pdf complexity
 				"-j", "" + getSwfJpegQuality(), // JPEG Quality 
 				"-s", "zoom=" + getSwfZoom(), // set zoom dpi 
-				originalFolder + fileNamePure + ".pdf",
-				destinationFolder + fileNamePure + ".swf" };
+				new File(originalFolder, fileNamePure + ".pdf").getCanonicalPath(),
+				new File(destinationFolder, fileNamePure + ".swf").getCanonicalPath() };
 
 		return ProcessHelper.executeScript("generateSwf", argv);
 	}

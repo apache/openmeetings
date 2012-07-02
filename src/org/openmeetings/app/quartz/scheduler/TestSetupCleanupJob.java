@@ -22,7 +22,7 @@ import java.io.File;
 import java.io.FileFilter;
 
 import org.openmeetings.app.OpenmeetingsVariables;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -34,8 +34,7 @@ public class TestSetupCleanupJob {
 		log.debug("TestSetupClearJob.execute");
 		try {
 			//FIXME need to move all these staff to helper
-			File streams = new File(ScopeApplicationAdapter.batchFileDir);
-			File[] folders = streams.listFiles();
+			File[] folders = OmFileHelper.getStreamsFilesDir().listFiles();
 			if (folders != null) {
 				for (File folder : folders) {
 					if (folder.isDirectory()) {
@@ -47,7 +46,7 @@ public class TestSetupCleanupJob {
 						}))
 						{
 							if (file.isFile() && file.lastModified() + expirationInterval < System.currentTimeMillis()) {
-								log.debug("expired TEST SETUP found: " + file.getAbsolutePath());
+								log.debug("expired TEST SETUP found: " + file.getCanonicalPath());
 								file.delete();
 							}
 						}

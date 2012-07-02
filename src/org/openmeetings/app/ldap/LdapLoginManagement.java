@@ -38,7 +38,7 @@ import org.openmeetings.app.ldap.config.ConfigReader;
 import org.openmeetings.app.persistence.beans.adresses.States;
 import org.openmeetings.app.persistence.beans.basic.LdapConfig;
 import org.openmeetings.app.persistence.beans.user.Users;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -197,13 +197,7 @@ public class LdapLoginManagement {
 			throws Exception {
 		log.debug("LdapLoginmanagement.getLdapConfigData");
 
-		// String path = configVal.getConf_value().trim();
-
-		String path = ScopeApplicationAdapter.webAppPath + File.separatorChar
-				+ "conf" + File.separatorChar + ldapConfigfileName;
-
-		return readConfig(path);
-
+		return readConfig(new File(OmFileHelper.getConfDir(), ldapConfigfileName));
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -212,17 +206,15 @@ public class LdapLoginManagement {
 	 * Reading Ldap Config via ConfigReader
 	 */
 	// ----------------------------------------------------------------------------------------
-	private HashMap<String, String> readConfig(String configPath)
+	private HashMap<String, String> readConfig(File config)
 			throws Exception {
-		log.debug("LdapLoginmanagement.readConfig : " + configPath);
+		log.debug("LdapLoginmanagement.readConfig : " + config);
 
-		File configFile = new File(configPath);
-
-		if (!configFile.isFile())
+		if (!config.isFile())
 			return null;
 
 		ConfigReader reader = new ConfigReader();
-		reader.readConfig(configPath);
+		reader.readConfig(config);
 
 		return reader.getConfigMap();
 

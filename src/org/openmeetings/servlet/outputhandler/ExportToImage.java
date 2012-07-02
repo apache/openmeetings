@@ -22,7 +22,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.RandomAccessFile;
 import java.io.Writer;
 import java.util.Date;
 import java.util.List;
@@ -43,6 +42,7 @@ import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.documents.GenerateImage;
 import org.openmeetings.app.remote.PrintService;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.OmFileHelper;
 import org.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -195,9 +195,7 @@ public class ExportToImage extends HttpServlet {
 						|| exportType.equals("gif") || exportType.equals("tif")
 						|| exportType.equals("pdf")) {
 
-					String current_dir = getServletContext().getRealPath("/");
-					String working_dir = current_dir + OpenmeetingsVariables.UPLOAD_TEMP_DIR
-							+ File.separatorChar;
+					File uploadTempDir = OmFileHelper.getUploadTempDir();
 
 					String requestedFileSVG = fileName + "_"
 							+ CalendarPatterns.getTimeForStreamId(new Date())
@@ -206,25 +204,20 @@ public class ExportToImage extends HttpServlet {
 							+ CalendarPatterns.getTimeForStreamId(new Date())
 							+ "." + exportType;
 
-					log.debug("current_dir: " + current_dir);
-					log.debug("working_dir: " + working_dir);
+					log.debug("working_dir: " + uploadTempDir);
 					log.debug("requestedFileSVG: " + requestedFileSVG);
 					log.debug("resultFileName: " + resultFileName);
 
-					File svgFile = new File(working_dir + requestedFileSVG);
-					File resultFile = new File(working_dir + resultFileName);
+					File svgFile = new File(uploadTempDir, requestedFileSVG);
+					File resultFile = new File(uploadTempDir, resultFileName);
 
-					log.debug("svgFile: " + svgFile.getAbsolutePath());
-					log.debug("resultFile: " + resultFile.getAbsolutePath());
+					log.debug("svgFile: " + svgFile.getCanonicalPath());
+					log.debug("resultFile: " + resultFile.getCanonicalPath());
 					log.debug("svgFile P: " + svgFile.getPath());
 					log.debug("resultFile P: " + resultFile.getPath());
 
 					FileWriter out = new FileWriter(svgFile);
 					svgGenerator.stream(out, useCSS);
-
-					// Get file and handle download
-					RandomAccessFile rf = new RandomAccessFile(
-							resultFile.getAbsoluteFile(), "r");
 
 					httpServletResponse.reset();
 					httpServletResponse.resetBuffer();
@@ -235,16 +228,10 @@ public class ExportToImage extends HttpServlet {
 					httpServletResponse.setHeader("Content-Disposition",
 							"attachment; filename=\"" + resultFileName + "\"");
 					httpServletResponse.setHeader("Content-Length",
-							"" + rf.length());
+							"" + resultFile.length());
 
-					byte[] buffer = new byte[1024];
-					int readed = -1;
-
-					while ((readed = rf.read(buffer, 0, buffer.length)) > -1) {
-						outStream.write(buffer, 0, readed);
-					}
+					OmFileHelper.copyFile(resultFile, outStream);
 					outStream.close();
-					rf.close();
 
 					out.flush();
 					out.close();

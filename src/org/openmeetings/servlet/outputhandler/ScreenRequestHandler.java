@@ -38,6 +38,7 @@ import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.persistence.beans.basic.Configuration;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.context.ApplicationContext;
@@ -232,10 +233,9 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 			log.debug("Creating JNLP Template for TCP solution");
 
 			try {
-				final String screenShareDirName = "screensharing";
 				//libs
 				StringBuilder libs = new StringBuilder();
-				File screenShareDir = new File(ScopeApplicationAdapter.webAppPath, screenShareDirName);
+				File screenShareDir = OmFileHelper.getScreenSharingDir();
 				for (File jar : screenShareDir.listFiles(new FileFilter() {
 					public boolean accept(File pathname) {
 						return pathname.getName().endsWith(".jar");
@@ -247,7 +247,7 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 				ctx.put("LIBRARIES", libs);
 				log.debug("RTMP Sharer labels :: " + label_sharer);
 
-				codebase = baseURL + screenShareDirName;
+				codebase = baseURL + OmFileHelper.SCREENSHARING_DIR;
 
 				ConnectionType conType = ConnectionType
 						.valueOf(httpServletRequest
@@ -333,9 +333,7 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 		StringBuilder sb = new StringBuilder();
 		FileInputStream fis = null;
 		try {
-			//FIXME hack !!!!
-			File root = new File(ScopeApplicationAdapter.webAppPath).getParentFile().getParentFile();
-			File conf = new File(root, "conf");
+			File conf = new File(OmFileHelper.getRootDir(), "conf");
 
 			File keyStore = new File(conf, "keystore.screen");
 			if (keyStore.exists()) {

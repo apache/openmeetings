@@ -43,7 +43,7 @@ public class ConfigReader {
 	private String _commentSign = "#";
 	
 	/** FilePath*/
-	private String _filePath = "";
+	private File _file;
 	
 	/** result hashmap */
 	private HashMap<String, String> _configMap = new HashMap<String, String>();
@@ -75,12 +75,12 @@ public class ConfigReader {
 	 * @throws Exception
 	 */
 	//---------------------------------------------------------------------------------
-	public HashMap<String, String> readConfig(String configFilePath) throws Exception{
+	public HashMap<String, String> readConfig(File config) throws Exception{
 		
-		_filePath = configFilePath;
+		_file = config;
 		
 		// Reading File into Vector
-		Vector<String> contentVec =readFileIntoVector(configFilePath);
+		Vector<String> contentVec = readFileIntoVector(config);
 		
 		// Filtering Comments
 		contentVec = filterCommentsFromInput(contentVec);
@@ -134,7 +134,7 @@ public class ConfigReader {
 				continue;
 			
 			if(!line.contains(_divider))
-				throw new Exception("ConfigReader: ConfigFile " + _filePath + " contains invalid line(" + i+1 + ") : " + line + ". No Divider " + _divider + " found");
+				throw new Exception("ConfigReader: ConfigFile " + _file + " contains invalid line(" + i+1 + ") : " + line + ". No Divider " + _divider + " found");
 			
 			String[] splitted =  line.split(_divider);
 			
@@ -154,13 +154,13 @@ public class ConfigReader {
 	//---------------------------------------------------------------------------------
 	public String getConfigVal(String key, boolean forcereload) throws Exception{
 		
-		String notFound = "Config " + _filePath + "( read at " + _configRead.toString() + ", Servertime) doesnt contain key '" + key + "'";
+		String notFound = "Config " + _file + "( read at " + _configRead.toString() + ", Servertime) doesnt contain key '" + key + "'";
 		
 		if(!getConfigMap().containsKey(key)){
 			if(!forcereload)
 				throw new Exception(notFound);
 			else{
-				readConfig(_filePath);
+				readConfig(_file);
 				if(!getConfigMap().containsKey(key))
 					throw new Exception(notFound);
 			}
@@ -182,7 +182,7 @@ public class ConfigReader {
 		
 		Iterator<String> miter = getConfigMap().keySet().iterator();
 		
-		System.out.println("---Dumping configFile '" + _filePath + "' without comments---");
+		System.out.println("---Dumping configFile '" + _file + "' without comments---");
 		System.out.println("---------------------------------------------");
 		while(miter.hasNext()){
 			String key = miter.next();
@@ -202,14 +202,13 @@ public class ConfigReader {
 	 * @param filePath
 	 */
 	//--------------------------------------------------------------------------------------
-	public static Vector<String> readFileIntoVector(String filePath) throws Exception{
+	public static Vector<String> readFileIntoVector(File f) throws Exception{
 		
 		Vector<String> result = new Vector<String>();
 		
 		// File exists?
-		File f = new File(filePath);
         if (!f.exists())
-        	throw new Exception("Reader : File" + filePath + " not valid!");
+        	throw new Exception("Reader : File" + f.getCanonicalPath() + " not valid!");
        
 
         BufferedReader br = new BufferedReader(new FileReader(f));

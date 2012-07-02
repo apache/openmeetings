@@ -1709,9 +1709,9 @@
                         
                         var error = false;
                         for (var eg in value.error){
-                            //Debug.write("eg ",eg," value ",value.error[eg]);
-                            //Debug.write("eg ",eg," value ",value.error[eg].exitValue);
                             if (value.error[eg].exitValue!=0){
+	                            if ($debug) Debug.write("eg ",eg," value ",value.error[eg]);
+	                            if ($debug) Debug.write("eg ",eg," value ",value.error[eg].exitValue);
                                 error = true;
                             }
                         }

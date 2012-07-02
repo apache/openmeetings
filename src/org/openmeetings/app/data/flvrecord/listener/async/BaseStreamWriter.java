@@ -26,7 +26,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import org.openmeetings.app.OpenmeetingsVariables;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.OmFileHelper;
 import org.red5.io.IStreamableFile;
 import org.red5.io.IStreamableFileFactory;
 import org.red5.io.IStreamableFileService;
@@ -88,36 +88,13 @@ public abstract class BaseStreamWriter implements Runnable {
 	 *             I/O exception
 	 */
 	private void init() throws IOException {
-
-		File folder = new File(ScopeApplicationAdapter.webAppPath
-				+ File.separatorChar + OpenmeetingsVariables.STREAMS_DIR + File.separatorChar
-				+ this.scope.getName());
-
-		if (!folder.exists()) {
-			folder.mkdir();
-		}
-
-		String flvName = ScopeApplicationAdapter.webAppPath
-				+ File.separatorChar + OpenmeetingsVariables.STREAMS_DIR + File.separatorChar
-				+ this.scope.getName() + File.separatorChar + this.streamName
-				+ ".flv";
-
-		file = new File(flvName);
+		file = new File(OmFileHelper.getStreamsSubDir(this.scope.getName()), this.streamName + ".flv");
 
 		IStreamableFileFactory factory = (IStreamableFileFactory) ScopeUtils
 				.getScopeService(this.scope, IStreamableFileFactory.class,
 						StreamableFileFactory.class);
 
-		// File folder = file.getParentFile();
-
-		if (!folder.exists()) {
-			if (!folder.mkdirs()) {
-				throw new IOException("Could not create parent folder");
-			}
-		}
-
 		if (!this.file.isFile()) {
-
 			// Maybe the (previously existing) file has been deleted
 			this.file.createNewFile();
 

@@ -19,6 +19,7 @@
 package org.openmeetings.app.documents;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 
@@ -46,17 +47,16 @@ public class LibraryChartLoader {
     }
 
     @SuppressWarnings("rawtypes")
-	public ArrayList loadChart(String filePath, String fileName) {
+	public ArrayList loadChart(File dir, String fileName) {
         try {
-            String filepathComplete = filePath + fileName + fileExt;
+            File file = new File(dir, fileName + fileExt);
 
-            log.error("filepathComplete: " + filepathComplete);
+            log.error("filepathComplete: " + file);
 
             XStream xStream = new XStream(new XppDriver());
             xStream.setMode(XStream.NO_REFERENCES);
 
-            BufferedReader reader = new BufferedReader(new FileReader(
-                    filepathComplete));
+            BufferedReader reader = new BufferedReader(new FileReader(file));
             String xmlString = "";
             while (reader.ready()) {
                 xmlString += reader.readLine();

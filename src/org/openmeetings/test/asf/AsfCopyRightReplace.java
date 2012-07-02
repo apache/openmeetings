@@ -115,9 +115,7 @@ public class AsfCopyRightReplace {
 
 		for (File folderFile : folder.listFiles(new FilenameFilter() {
 			public boolean accept(File b, String name) {
-				String absPath = b.getAbsolutePath() + File.separatorChar
-						+ name;
-				File f = new File(absPath);
+				File f = new File(b, name);
 				return f.isDirectory();
 			}
 		})) {
@@ -127,7 +125,7 @@ public class AsfCopyRightReplace {
 
 	private void scanAndWriteXMLFile(File javaFile) {
 		try {
-			System.out.println("Processing " + javaFile.getAbsolutePath());
+			System.out.println("Processing " + javaFile.getCanonicalPath());
 
 			BufferedReader is = new BufferedReader(new InputStreamReader(
 					new FileInputStream(javaFile), "UTF-8"));
@@ -166,7 +164,7 @@ public class AsfCopyRightReplace {
 			is.close();
 
 			OutputStreamWriter out = new OutputStreamWriter(
-					new FileOutputStream(javaFile.getAbsolutePath()), "UTF-8");
+					new FileOutputStream(javaFile.getCanonicalPath()), "UTF-8");
 
 			out.write(strWriter.toString());
 			out.flush();
@@ -179,7 +177,7 @@ public class AsfCopyRightReplace {
 
 	private void scanAndWriteJavaFile(File javaFile) {
 		try {
-			System.out.println("Processing " + javaFile.getAbsolutePath());
+			System.out.println("Processing " + javaFile.getCanonicalPath());
 
 			BufferedReader is = new BufferedReader(new InputStreamReader(
 					new FileInputStream(javaFile), "UTF-8"));
@@ -203,7 +201,7 @@ public class AsfCopyRightReplace {
 			is.close();
 			
 			OutputStreamWriter out = new OutputStreamWriter(
-					new FileOutputStream(javaFile.getAbsolutePath()), "UTF-8");
+					new FileOutputStream(javaFile.getCanonicalPath()), "UTF-8");
 
 			out.write(strWriter.toString());
 			out.flush();

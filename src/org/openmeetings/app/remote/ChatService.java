@@ -56,6 +56,8 @@ public class ChatService implements IPendingServiceCallback {
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
 	private ClientListManager clientListManager = null;
+	@Autowired
+	private EmoticonsManager emoticonsManager;
 	
 	//the overall chat room is just another room
 	private static final Long overallChatRoomName = new Long(-1);
@@ -112,7 +114,7 @@ public class ChatService implements IPendingServiceCallback {
 			//log.error("messageText"+messageText);
 			//add server time
 			messageMap.set(1,parseDateAsTimeString());
-			LinkedList<String[]> parsedStringObjects = ChatString.getInstance().parseChatString(messageText);
+			LinkedList<String[]> parsedStringObjects = ChatString.parseChatString(messageText, emoticonsManager.getEmotfilesList());
 			//log.error("parsedStringObjects"+parsedStringObjects.size());
 			log.debug("size:"+messageMap.size());
 			messageMap.add(parsedStringObjects);
@@ -311,7 +313,7 @@ public class ChatService implements IPendingServiceCallback {
 			//log.error("messageText"+messageText);
 			//add server time
 			messageMap.set(1,parseDateAsTimeString());
-			LinkedList<String[]> parsedStringObjects = ChatString.getInstance().parseChatString(messageText);
+			LinkedList<String[]> parsedStringObjects = ChatString.parseChatString(messageText, emoticonsManager.getEmotfilesList());
 			//log.error("parsedStringObjects"+parsedStringObjects.size());
 			log.debug("size:" + messageMap.size());
 			messageMap.add(parsedStringObjects);
@@ -388,7 +390,7 @@ public class ChatService implements IPendingServiceCallback {
 	public LinkedList<LinkedList<String>> getAllPublicEmoticons(){
 		try {
 			LinkedList<LinkedList<String>> publicemotes = new LinkedList<LinkedList<String>>();
-			LinkedList<LinkedList<String>> allEmotes = EmoticonsManager.getEmotfilesList();
+			LinkedList<LinkedList<String>> allEmotes = emoticonsManager.getEmotfilesList();
 			for (Iterator<LinkedList<String>> iter = allEmotes.iterator();iter.hasNext();){
 				LinkedList<String> emot = iter.next();
 				LinkedList<String> emotPub = new LinkedList<String>();

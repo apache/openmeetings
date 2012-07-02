@@ -18,6 +18,7 @@
  */
 package org.openmeetings.app.documents;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.util.Iterator;
 
@@ -33,26 +34,14 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class LoadLibraryPresentation {
-	
 	private static final Logger log = Red5LoggerFactory.getLogger(LoadLibraryPresentation.class, OpenmeetingsVariables.webAppRootKey);
 	
-	private static LoadLibraryPresentation instance;
-
-	private LoadLibraryPresentation() {}
-
-	public static synchronized LoadLibraryPresentation getInstance() {
-		if (instance == null) {
-			instance = new LoadLibraryPresentation();
-		}
-		return instance;
-	}	
-	
-	public LibraryPresentation parseLibraryFileToObject(String filePath){
+	public static LibraryPresentation parseLibraryFileToObject(File file){
 		try {
 			LibraryPresentation lPresentation = new LibraryPresentation();
 			
 	        SAXReader reader = new SAXReader();
-	        Document document = reader.read( new FileInputStream(filePath) );
+	        Document document = reader.read( new FileInputStream(file) );
 	        
 	        Element root = document.getRootElement();
 	        
@@ -71,19 +60,19 @@ public class LoadLibraryPresentation {
 
 				if (nodeVal.equals("originalDocument")){
 					
-					lPresentation.setOriginalDocument(this.createListObjectLibraryByFileDocument(item));
+					lPresentation.setOriginalDocument(createListObjectLibraryByFileDocument(item));
 					
 				} else if (nodeVal.equals("pdfDocument")){
 					
-					lPresentation.setPdfDocument(this.createListObjectLibraryByFileDocument(item));
+					lPresentation.setPdfDocument(createListObjectLibraryByFileDocument(item));
 					
 				} else if (nodeVal.equals("swfDocument")){
 					
-					lPresentation.setSwfDocument(this.createListObjectLibraryByFileDocument(item));
+					lPresentation.setSwfDocument(createListObjectLibraryByFileDocument(item));
 					
 				} else if (nodeVal.equals("thumbs")) {
 					
-					lPresentation.setThumbs(this.createListObjectLibraryByFileDocumentThumbs(item));
+					lPresentation.setThumbs(createListObjectLibraryByFileDocumentThumbs(item));
 					
 				} else {
 					throw new Exception("Unkown Library type: "+nodeVal);
@@ -100,7 +89,7 @@ public class LoadLibraryPresentation {
 		}
 	}
 	
-	public LibraryPresentationFile createListObjectLibraryByFileDocument(Element fileElement){
+	public static LibraryPresentationFile createListObjectLibraryByFileDocument(Element fileElement){
 		try {
 			
 			log.info("createListObjectLibraryByFileDocument"+fileElement);
@@ -119,7 +108,7 @@ public class LoadLibraryPresentation {
 		return null;
 	}		
 	
-	public LibraryPresenationThumbs createListObjectLibraryByFileDocumentThumbs(Element fileElement){
+	public static LibraryPresenationThumbs createListObjectLibraryByFileDocumentThumbs(Element fileElement){
 		try {
 			
 			LibraryPresenationThumbs thumbMap = new LibraryPresenationThumbs();

@@ -18,6 +18,7 @@
  */
 package org.openmeetings.app.data.flvrecord.converter;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -86,11 +87,8 @@ public class FlvExplorerConverter extends BaseConverter {
 			String moviePath) {
 		List<HashMap<String, String>> returnLog = new LinkedList<HashMap<String, String>>();
 		try {
-
-			String streamFolderName = getStreamFolderName("hibernate");
-
-			String outputFullFlv = streamFolderName + "UPLOADFLV_"
-					+ fileExplorerItem.getFileExplorerItemId() + ".flv";
+			String name = "UPLOADFLV_" + fileExplorerItem.getFileExplorerItemId();
+			File outputFullFlv = new File(getStreamFolder(), name + ".flv");
 
 			fileExplorerItem.setIsVideo(true);
 
@@ -99,7 +97,7 @@ public class FlvExplorerConverter extends BaseConverter {
 			argv_fullFLV = new String[] { getPathToFFMPEG(), "-i", moviePath,
 					"-ar", "22050", "-acodec", "libmp3lame", "-ab", "32k",
 					"-vcodec", "flv",
-					outputFullFlv };
+					outputFullFlv.getCanonicalPath() };
 			// "-s", flvWidth + "x" + flvHeight, 
 
 			log.debug("START generateFullFLV ################# ");
@@ -127,14 +125,14 @@ public class FlvExplorerConverter extends BaseConverter {
 
 			String hashFileFullNameJPEG = "UPLOADFLV_"
 					+ fileExplorerItem.getFileExplorerItemId() + ".jpg";
-			String outPutJpeg = streamFolderName + hashFileFullNameJPEG;
+			File outPutJpeg = new File(getStreamFolder(), name + ".jpg");
 
 			fileExplorerItem.setPreviewImage(hashFileFullNameJPEG);
 
 			String[] argv_previewFLV = new String[] { getPathToFFMPEG(), "-i",
-					outputFullFlv, "-vcodec", "mjpeg", "-vframes", "1", "-an",
+					outputFullFlv.getCanonicalPath(), "-vcodec", "mjpeg", "-vframes", "1", "-an",
 					"-f", "rawvideo", "-s", flvWidth + "x" + flvHeight,
-					outPutJpeg };
+					outPutJpeg.getCanonicalPath() };
 
 			log.debug("START previewFullFLV ################# ");
 			log.debug(argv_previewFLV.toString());

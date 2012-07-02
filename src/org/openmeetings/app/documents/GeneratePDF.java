@@ -26,6 +26,7 @@ import java.util.HashMap;
 import org.apache.commons.transaction.util.FileHelper;
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
+import org.openmeetings.utils.OmFileHelper;
 import org.openmeetings.utils.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -43,97 +44,55 @@ public class GeneratePDF {
 	@Autowired
 	private Configurationmanagement cfgManagement;
 
-	public HashMap<String, HashMap<String, String>> convertPDF(
-			String current_dir, String fileName, String fileExt,
-			String roomName, boolean fullProcessing, String completeName)
+	public HashMap<String, HashMap<String, String>> convertPDF(String fileName,
+			String roomName, boolean fullProcessing, File inFile)
 			throws Exception {
 
+		String inFileName = inFile.getName();
 		HashMap<String, HashMap<String, String>> returnError = new HashMap<String, HashMap<String, String>>();
 
-		HashMap<String, String> processPDF = new HashMap<String, String>();
-		processPDF.put("process", "processPDF");
-
-		String working_imgdir = current_dir + OpenmeetingsVariables.UPLOAD_DIR + File.separatorChar
-				+ roomName + File.separatorChar;
-		String working_pptdir = current_dir + OpenmeetingsVariables.UPLOAD_TEMP_DIR + File.separatorChar
-				+ roomName + File.separatorChar;
-
-		String fileFullPath = working_pptdir + fileName + fileExt;
-		String destinationFolder = working_imgdir + fileName;
-
-		File f = new File(destinationFolder + File.separatorChar);
-		if (f.exists()) {
-			int recursiveNumber = 0;
-			String tempd = destinationFolder + "_" + recursiveNumber;
-			while (f.exists()) {
-				recursiveNumber++;
-				tempd = destinationFolder + "_" + recursiveNumber;
-				f = new File(tempd);
-
-			}
-			destinationFolder = tempd;
-		}
-
-		boolean b = f.mkdir();
-		if (!b) {
-			processPDF.put(
-					"error",
-					"convertPDF + ERROR: Folder could not create "
-							+ f.getAbsolutePath());
-			processPDF.put("exitValue", "-1");
-		} else {
-			processPDF.put("exitValue", "0");
-		}
-		returnError.put("processPDF", processPDF);
-
-		String outputfolder = destinationFolder + File.separatorChar;
-		destinationFolder = destinationFolder + File.separatorChar;
+		File fileFullPath = new File(OmFileHelper.getUploadTempRoomDir(roomName), inFileName);
+		File destinationFolder = OmFileHelper.getNewDir(OmFileHelper.getUploadRoomDir(roomName), fileName);
 
 		log.debug("fullProcessing: " + fullProcessing);
 		if (fullProcessing) {
 			HashMap<String, String> processOpenOffice = doJodConvert(
-					current_dir, fileFullPath, destinationFolder, fileName);
+					fileFullPath, destinationFolder, fileName);
 			returnError.put("processOpenOffice", processOpenOffice);
 			HashMap<String, String> processThumb = generateThumbs
-					.generateBatchThumb(current_dir, destinationFolder
-							+ fileName + ".pdf", destinationFolder, 80, "thumb");
+					.generateBatchThumb(new File(destinationFolder, fileName + ".pdf"), destinationFolder, 80, "thumb");
 			returnError.put("processThumb", processThumb);
 			HashMap<String, String> processSWF = generateSWF
-					.generateSwf(current_dir, destinationFolder,
-							destinationFolder, fileName);
+					.generateSwf(destinationFolder, destinationFolder, fileName);
 			returnError.put("processSWF", processSWF);
 		} else {
 
 			log.debug("-- generateBatchThumb --");
 
 			HashMap<String, String> processThumb = generateThumbs
-					.generateBatchThumb(current_dir, fileFullPath,
-							destinationFolder, 80, "thumb");
+					.generateBatchThumb(fileFullPath, destinationFolder, 80, "thumb");
 			returnError.put("processThumb", processThumb);
 
 			HashMap<String, String> processSWF = generateSWF.generateSwf(
-					current_dir, (new File(fileFullPath)).getParentFile()
-							.getAbsolutePath() + File.separatorChar,
-					destinationFolder, fileName);
+					fileFullPath.getParentFile(), destinationFolder, fileName);
 			returnError.put("processSWF", processSWF);
 		}
 
 		// now it should be completed so copy that file to the expected location
-		File fileToBeMoved = new File(completeName + fileExt);
-		File fileWhereToMove = new File(outputfolder + fileName + fileExt);
+		File fileWhereToMove = new File(destinationFolder, inFileName);
 		fileWhereToMove.createNewFile();
-		FileHelper.moveRec(fileToBeMoved, fileWhereToMove);
+		FileHelper.moveRec(inFile, fileWhereToMove);
 
 		if (fullProcessing) {
 			HashMap<String, String> processXML = CreateLibraryPresentation
-					.getInstance().generateXMLDocument(outputfolder,
-							fileName + fileExt, fileName + ".pdf",
+					.generateXMLDocument(destinationFolder,
+							inFileName, fileName + ".pdf",
 							fileName + ".swf");
 			returnError.put("processXML", processXML);
 		} else {
 			HashMap<String, String> processXML = CreateLibraryPresentation
-					.getInstance().generateXMLDocument(outputfolder,
-							fileName + fileExt, null, fileName + ".swf");
+					.generateXMLDocument(destinationFolder,
+							inFileName, null, fileName + ".swf");
 			returnError.put("processXML", processXML);
 		}
 
@@ -143,8 +102,7 @@ public class GeneratePDF {
 	/**
 	 * Generates PDF using JOD Library (external library)
 	 */
-	public HashMap<String, String> doJodConvert(String current_dir,
-			String fileFullPath, String destinationFolder, String outputfile) {
+	public HashMap<String, String> doJodConvert(File fileFullPath, File destinationFolder, String outputfile) {
 		try {
 
 			String jodPath = cfgManagement.getConfValue("jod.path", String.class, "./jod");
@@ -163,17 +121,16 @@ public class GeneratePDF {
 			}
 			String jodConverterJar = "";
 
-			for (String jarFiles : jodFolder.list(new FilenameFilter() {
+			for (String jar : jodFolder.list(new FilenameFilter() {
 				public boolean accept(File file1, String name) {
 					return name.endsWith(".jar");
 				}
 			})) {
 				argv.add("-cp");
-				if (jarFiles.startsWith("jodconverter")) {
-					jodConverterJar = jarFiles;
+				if (jar.startsWith("jodconverter")) {
+					jodConverterJar = jar;
 				}
-				argv.add(jodFolder.getAbsolutePath() + File.separatorChar
-						+ jarFiles);
+				argv.add(new File(jodFolder, jar).getCanonicalPath());
 			}
 			if (jodConverterJar.length() == 0) {
 				throw new Exception(
@@ -181,10 +138,9 @@ public class GeneratePDF {
 			}
 
 			argv.add("-jar");
-			argv.add(jodFolder.getAbsolutePath() + File.separatorChar
-					+ jodConverterJar);
-			argv.add(fileFullPath);
-			argv.add(destinationFolder + outputfile + ".pdf");
+			argv.add(new File(jodFolder, jodConverterJar).getCanonicalPath());
+			argv.add(fileFullPath.getCanonicalPath());
+			argv.add(new File(destinationFolder, outputfile + ".pdf").getCanonicalPath());
 
 			return ProcessHelper.executeScript("doJodConvert",
 					argv.toArray(new String[argv.size()]));

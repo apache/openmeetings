@@ -41,6 +41,7 @@ import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.app.remote.red5.WhiteBoardObjectListManager;
 import org.openmeetings.app.remote.red5.WhiteBoardObjectListManagerById;
+import org.openmeetings.utils.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
@@ -640,27 +641,18 @@ public class WhiteBoardService implements IPendingServiceCallback {
 
 	public Cliparts getClipArtIcons() {
 		try {
-
-			String current_dir = ScopeApplicationAdapter.webAppPath
-					+ File.separatorChar + "public" + File.separatorChar
-					+ "cliparts";
-
-			File clipart_dir = new File(current_dir);
+			File clipart_dir = OmFileHelper.getPublicClipartsDir();
 
 			FilenameFilter getFilesOnly = new FilenameFilter() {
 				public boolean accept(File b, String name) {
-					String absPath = b.getAbsolutePath() + File.separatorChar
-							+ name;
-					File f = new File(absPath);
+					File f = new File(b, name);
 					return !f.isDirectory();
 				}
 			};
 
 			FilenameFilter getDirectoriesOnly = new FilenameFilter() {
 				public boolean accept(File b, String name) {
-					String absPath = b.getAbsolutePath() + File.separatorChar
-							+ name;
-					File f = new File(absPath);
+					File f = new File(b, name);
 					return f.isDirectory() && !f.getName().equals("thumb");
 				}
 			};
@@ -694,8 +686,6 @@ public class WhiteBoardService implements IPendingServiceCallback {
 	}
 
 	public void resultReceived(IPendingServiceCall arg0) {
-		// TODO Auto-generated method stub
 		log.debug("resultReceived: " + arg0);
 	}
-
 }

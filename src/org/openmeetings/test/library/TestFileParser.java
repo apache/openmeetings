@@ -18,6 +18,8 @@
  */
 package org.openmeetings.test.library;
 
+import java.io.File;
+
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.openmeetings.app.documents.LibraryWmlLoader;
@@ -36,7 +38,7 @@ public class TestFileParser extends AbstractOpenmeetingsSpringTest {
 		
 		try {
 			
-			libraryWmlLoader.loadWmlFile(System.getProperty("basedir") + "/", "filename1");
+			libraryWmlLoader.loadWmlFile(new File(System.getProperty("basedir")), "filename1");
 			
 		} catch (Exception err) {
 			

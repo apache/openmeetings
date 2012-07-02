@@ -28,9 +28,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
-import org.openmeetings.app.documents.GenerateSWF;
+import org.openmeetings.app.OpenmeetingsVariables;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 public class ProcessHelper {
+	public static final Logger log = Red5LoggerFactory.getLogger(ProcessHelper.class, OpenmeetingsVariables.webAppRootKey);
 
 	private static class Worker extends Thread {
 		private final Process process;
@@ -75,6 +78,24 @@ public class ProcessHelper {
 		}
 	}
 
+	public static HashMap<String, String> executeScriptWindows(String process, String[] argv) {
+		HashMap<String, String> returnMap = new HashMap<String, String>();
+		returnMap.put("process", process);
+		try {
+			String[] cmd = new String[argv.length + 2];
+			cmd[0] = "cmd.exe";
+			cmd[1] = "/C";
+			System.arraycopy(argv, 0, cmd, 2, argv.length);
+			Map<String, String> env = new HashMap<String, String>();
+			returnMap = executeScript(process, cmd, env);
+		} catch (Throwable t) {
+			log.error("executeScriptWindows", t);
+			returnMap.put("error", t.getMessage());
+			returnMap.put("exitValue", "-1");
+		}
+		return returnMap;
+	}
+	
 	public static HashMap<String, String> executeScript(String process, String[] argv) {
 		Map<String, String> env = new HashMap<String, String>();
 		return executeScript(process, argv, env);
@@ -84,8 +105,8 @@ public class ProcessHelper {
 			String[] argv, Map<? extends String, ? extends String> env) {
 		HashMap<String, String> returnMap = new HashMap<String, String>();
 		returnMap.put("process", process);
-		GenerateSWF.log.debug("process: " + process);
-		GenerateSWF.log.debug("args: " + Arrays.toString(argv));
+		log.debug("process: " + process);
+		log.debug("args: " + Arrays.toString(argv));
 	
 		try {
 			returnMap.put("command", Arrays.toString(argv));
@@ -111,12 +132,11 @@ public class ProcessHelper {
 			inputWatcher.start();
 			worker.start();
 			
-			
 			try {
 				worker.join(timeout);
 				if (worker.exitCode != null) {
 					returnMap.put("exitValue", "" + worker.exitCode);
-					GenerateSWF.log.debug("exitVal: " + worker.exitCode);
+					log.debug("exitVal: " + worker.exitCode);
 					returnMap.put("error", errorWatcher.output.toString());
 				} else {
 					returnMap.put("exception", "timeOut");
@@ -141,15 +161,13 @@ public class ProcessHelper {
 			
 		} catch (TimeoutException e) {
 			// Timeout exception is processed above
-			GenerateSWF.log.error("executeScript",e);
-			e.printStackTrace();
+			log.error("executeScript",e);
 			returnMap.put("error", e.getMessage());
 			returnMap.put("exception", e.toString());
 			returnMap.put("exitValue", "-1");
 		} catch (Throwable t) {
 			// Any other exception is shown in debug window
-			GenerateSWF.log.error("executeScript",t);
-			t.printStackTrace();
+			log.error("executeScript",t);
 			returnMap.put("error", t.getMessage());
 			returnMap.put("exception", t.toString());
 			returnMap.put("exitValue", "-1");

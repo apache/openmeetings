@@ -30,7 +30,7 @@ import org.openmeetings.app.documents.GenerateSWF;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecording;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingMetaData;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingMetaDelta;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.OmFileHelper;
 import org.openmeetings.utils.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -83,30 +83,12 @@ public abstract class BaseConverter {
 				"use.old.style.ffmpeg.map.option", String.class, "0"));
 	}
 	
-	protected String getStreamFolderName() {
-		return getStreamFolderName("hibernate");
+	protected File getStreamFolder() {
+		return OmFileHelper.getStreamsHibernateDir();
 	}
 
-	protected String getStreamFolderName(FlvRecording flvRecording) {
-		return getStreamFolderName("" + flvRecording.getRoom_id());
-	}
-	
-	protected String getStreamFolderName(String name) {
-		String streamFolderName = ScopeApplicationAdapter.webAppPath
-				+ File.separatorChar + OpenmeetingsVariables.STREAMS_DIR + File.separatorChar
-				+ name + File.separatorChar;
-
-		log.debug("###################################################");
-		log.debug("### streamFolderName - " + streamFolderName);
-		
-		File sf = new File(streamFolderName);
-		if (!sf.exists()) {
-			log.debug("### streamFolderName is NOT exists");
-			if (!sf.mkdir()) {
-				log.error("### streamFolderName: Failed to create folder");
-			}
-		}
-		return streamFolderName;
+	protected File getStreamFolder(FlvRecording flvRecording) {
+		return OmFileHelper.getStreamsSubDir(flvRecording.getRoom_id());
 	}
 	
 	protected void deleteFileIfExists(String name) {
@@ -139,16 +121,16 @@ public abstract class BaseConverter {
 	
 	protected void stripAudioFirstPass(FlvRecording flvRecording,
 			List<HashMap<String, String>> returnLog,
-			List<String> listOfFullWaveFiles, String streamFolderName) throws Exception {
+			List<String> listOfFullWaveFiles, File streamFolder) throws Exception {
 		List<FlvRecordingMetaData> metaDataList = flvRecordingMetaDataDaoImpl
 				.getFlvRecordingMetaDataAudioFlvsByRecording(flvRecording
 						.getFlvRecordingId());
-		stripAudioFirstPass(flvRecording, returnLog, listOfFullWaveFiles, streamFolderName, metaDataList);
+		stripAudioFirstPass(flvRecording, returnLog, listOfFullWaveFiles, streamFolder, metaDataList);
 	}
 	
 	protected void stripAudioFirstPass(FlvRecording flvRecording,
 			List<HashMap<String, String>> returnLog,
-			List<String> listOfFullWaveFiles, String streamFolderName,
+			List<String> listOfFullWaveFiles, File streamFolder,
 			List<FlvRecordingMetaData> metaDataList) {
 		try {
 			// Init variables
@@ -180,23 +162,21 @@ public abstract class BaseConverter {
 					}
 				}
 	
-				String inputFlv = streamFolderName
-						+ flvRecordingMetaData.getStreamName() + ".flv";
+				File inputFlvFile = new File(streamFolder, flvRecordingMetaData.getStreamName() + ".flv");
 	
 				String hashFileName = flvRecordingMetaData.getStreamName()
 						+ "_WAVE.wav";
-				String outputWav = streamFolderName + hashFileName;
+				String outputWav = new File(streamFolder, hashFileName).getCanonicalPath(); //FIXME
 	
 				flvRecordingMetaData.setWavAudioData(hashFileName);
 	
-				File inputFlvFile = new File(inputFlv);
 				
-				log.debug("FLV File Name: {} Length: {} ",inputFlvFile.getName(), inputFlvFile.length());
+				log.debug("FLV File Name: {} Length: {} ", inputFlvFile.getName(), inputFlvFile.length());
 	
 				if (inputFlvFile.exists()) {
 	
 					String[] argv = new String[] { this.getPathToFFMPEG(),
-							"-async", "1", "-i", inputFlv, outputWav };
+							"-async", "1", "-i", inputFlvFile.getCanonicalPath(), outputWav };
 	
 					log.debug("START stripAudioFromFLVs ################# ");
 					for (int i = 0; i < argv.length; i++) {
@@ -246,8 +226,7 @@ public abstract class BaseConverter {
 								+ "_GAP_FULL_WAVE_"
 								+ counter
 								+ ".wav";
-						outputGapFullWav = streamFolderName
-								+ hashFileGapsFullName;
+						outputGapFullWav = new File(streamFolder, hashFileGapsFullName).getCanonicalPath();
 	
 						flvRecordingMetaDelta
 								.setWaveOutPutName(hashFileGapsFullName);
@@ -316,7 +295,7 @@ public abstract class BaseConverter {
 					// Strip Wave to Full Length
 					String hashFileFullName = flvRecordingMetaData
 							.getStreamName() + "_FULL_WAVE.wav";
-					String outputFullWav = streamFolderName + hashFileFullName;
+					String outputFullWav = new File(streamFolder, hashFileFullName).getCanonicalPath();
 	
 					// Calculate delta at beginning
 					Long deltaTimeStartMilliSeconds = flvRecordingMetaData

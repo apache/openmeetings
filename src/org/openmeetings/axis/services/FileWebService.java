@@ -27,11 +27,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
-import javax.servlet.ServletContext;
-
 import org.apache.axis2.AxisFault;
-import org.apache.axis2.context.MessageContext;
-import org.apache.axis2.transport.http.HTTPConstants;
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
@@ -44,7 +40,7 @@ import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.documents.LoadLibraryPresentation;
 import org.openmeetings.app.persistence.beans.files.FileExplorerItem;
 import org.openmeetings.app.persistence.beans.user.Users;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.OmFileHelper;
 import org.openmeetings.utils.StoredFile;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -75,12 +71,6 @@ public class FileWebService {
 	private FileProcessor fileProcessor;
 	@Autowired
 	private FileUtils fileUtils;
-
-	private ServletContext getServletContext() {
-		MessageContext mc = MessageContext.getCurrentMessageContext();
-		return (ServletContext) mc
-				.getProperty(HTTPConstants.MC_HTTP_SERVLETCONTEXT);
-	}
 
 	/**
 	 * 
@@ -130,8 +120,6 @@ public class FileWebService {
 
 			if (authLevelManagement.checkWebServiceLevel(User_level)) {
 
-				String current_dir = getServletContext().getRealPath("/");
-
 				URL url = new URL(path);
 				URLConnection uc = url.openConnection();
 				InputStream inputstream = new BufferedInputStream(
@@ -146,7 +134,7 @@ public class FileWebService {
 				HashMap<String, HashMap<String, String>> returnError = fileProcessor
 						.processFile(externalUser.getUser_id(), room_id,
 								isOwner, inputstream, parentFolderId,
-								fileSystemName, current_dir, hs,
+								fileSystemName, hs,
 								externalFileId, externalType);
 
 				HashMap<String, String> returnAttributes = returnError
@@ -249,8 +237,6 @@ public class FileWebService {
 
 			if (authLevelManagement.checkWebServiceLevel(User_level)) {
 
-				String current_dir = getServletContext().getRealPath("/");
-
 				URL url = new URL(path);
 				URLConnection uc = url.openConnection();
 				InputStream inputstream = new BufferedInputStream(
@@ -264,7 +250,7 @@ public class FileWebService {
 				HashMap<String, HashMap<String, String>> returnError = fileProcessor
 						.processFile(internalUser.getUser_id(), room_id,
 								isOwner, inputstream, parentFolderId,
-								fileSystemName, current_dir, hs,
+								fileSystemName, hs,
 								externalFileId, externalType);
 
 				HashMap<String, String> returnAttributes = returnError
@@ -642,22 +628,16 @@ public class FileWebService {
 
 			if (authLevelManagement.checkWebServiceLevel(user_level)) {
 
-				String current_dir = ScopeApplicationAdapter.webAppPath
-						+ File.separatorChar + OpenmeetingsVariables.UPLOAD_DIR;
-				String working_dir = current_dir + File.separatorChar + "files"
-						+ File.separatorChar + parentFolder;
+				File working_dir = new File(OmFileHelper.getUploadProfilesDir(), parentFolder);
 				log.debug("############# working_dir : " + working_dir);
 
-				File file = new File(working_dir + File.separatorChar
-						+ "library.xml");
+				File file = new File(working_dir, OmFileHelper.libraryFileName);
 
 				if (!file.exists()) {
-					throw new Exception("library.xml does not exist "
-							+ working_dir + File.separatorChar + "library.xml");
+					throw new Exception(file.getCanonicalPath() + ": does not exist ");
 				}
 
-				return LoadLibraryPresentation.getInstance()
-						.parseLibraryFileToObject(file.getAbsolutePath());
+				return LoadLibraryPresentation.parseLibraryFileToObject(file);
 
 			} else {
 

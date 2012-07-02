@@ -19,13 +19,10 @@
 package org.openmeetings.servlet.outputhandler;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -38,6 +35,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.transaction.util.FileHelper;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -84,6 +82,7 @@ import org.openmeetings.app.persistence.beans.user.PrivateMessages;
 import org.openmeetings.app.persistence.beans.user.UserContacts;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.sip.api.impl.asterisk.dao.AsteriskDAOImpl;
+import org.openmeetings.utils.OmFileHelper;
 import org.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -144,8 +143,8 @@ public class BackupExport {
 	@Autowired
 	private AsteriskDAOImpl asteriskDAOImpl;
 
-	public void performExport(String filePath, File backup_dir,
-			boolean includeFiles, String omFilesDir) throws Exception {
+	public void performExport(File filePath, File backup_dir,
+			boolean includeFiles) throws Exception {
 
 		if (!backup_dir.exists()) {
 			backup_dir.mkdirs();
@@ -420,7 +419,7 @@ public class BackupExport {
 				targetDir.mkdir();
 			}
 
-			File sourceDir = new File(omFilesDir, OpenmeetingsVariables.UPLOAD_DIR);
+			File sourceDir = OmFileHelper.getUploadDir();
 
 			File[] files = sourceDir.listFiles();
 			for (File file : files) {
@@ -433,7 +432,7 @@ public class BackupExport {
 
 						log.debug("### " + file.getName());
 
-						copyDirectory(file, targetDir);
+						FileHelper.copyRec(file, targetDir);
 					}
 				}
 			}
@@ -447,10 +446,9 @@ public class BackupExport {
 				targetDirRec.mkdir();
 			}
 
-			File sourceDirRec = new File(omFilesDir, OpenmeetingsVariables.STREAMS_DIR
-					+ File.separatorChar + "hibernate" + File.separatorChar);
+			File sourceDirRec = OmFileHelper.getStreamsHibernateDir();
 
-			copyDirectory(sourceDirRec, targetDirRec);
+			FileHelper.copyRec(sourceDirRec, targetDirRec);
 		}
 
 		List<File> fileList = new ArrayList<File>();
@@ -505,12 +503,7 @@ public class BackupExport {
 				 * ##################### Create Base Folder structure
 				 */
 
-				String current_dir = servletCtx.getRealPath("/");
-				File working_dir = new File(new File(current_dir, OpenmeetingsVariables.UPLOAD_DIR), "backup");
-
-				if (!working_dir.exists()) {
-					working_dir.mkdir();
-				}
+				File working_dir = OmFileHelper.getUploadBackupDir();
 
 				String dateString = "backup_"
 						+ CalendarPatterns.getTimeForStreamId(new Date());
@@ -519,12 +512,8 @@ public class BackupExport {
 				String requestedFile = dateString + ".zip";
 				File backupFile = new File(backup_dir, requestedFile);
 
-				String full_path = backupFile.getAbsolutePath();
 				try {
-					performExport(full_path, backup_dir, includeFiles, current_dir);
-
-					RandomAccessFile rf = new RandomAccessFile(full_path, "r");
-
+					performExport(backupFile, backup_dir, includeFiles);
 
 					httpServletResponse.reset();
 					httpServletResponse.resetBuffer();
@@ -533,18 +522,10 @@ public class BackupExport {
 					httpServletResponse.setHeader("Content-Disposition",
 							"attachment; filename=\"" + requestedFile + "\"");
 					httpServletResponse.setHeader("Content-Length",
-							"" + rf.length());
+							"" + backupFile.length());
 
 					OutputStream out = httpServletResponse.getOutputStream();
-
-					byte[] buffer = new byte[1024];
-					int readed = -1;
-
-					while ((readed = rf.read(buffer, 0, buffer.length)) > -1) {
-						out.write(buffer, 0, readed);
-					}
-
-					rf.close();
+					OmFileHelper.copyFile(backupFile, out);
 
 					out.flush();
 					out.close();
@@ -553,12 +534,11 @@ public class BackupExport {
 				}
 
 				if (backupFile.exists()) {
-					// log.debug("DELETE :1: "+backupFile.getAbsolutePath());
+					// log.debug("DELETE :1: "+backupFile.getCanonicalPath());
 					backupFile.delete();
 				}
 
-				deleteDirectory(backup_dir);
-
+				FileHelper.removeRec(backup_dir);
 			}
 		} else {
 			log.debug("ERROR LangExport: not authorized FileDownload "
@@ -649,26 +629,6 @@ public class BackupExport {
 		return document;
 	}
 
-	public boolean deleteDirectory(File path) throws IOException {
-
-		// log.debug("deleteDirectory :: "+path);
-
-		if (path.exists()) {
-			File[] files = path.listFiles();
-			for (int i = 0; i < files.length; i++) {
-				if (files[i].isDirectory()) {
-					deleteDirectory(files[i]);
-				} else {
-					files[i].delete();
-				}
-			}
-		}
-
-		// log.debug("DELETE :3: "+path.getAbsolutePath());
-
-		return (path.delete());
-	}
-
 	public void getAllFiles(File dir, List<File> fileList) throws IOException {
 		try {
 			File[] files = dir.listFiles();
@@ -707,41 +667,8 @@ public class BackupExport {
 		}
 	}
 
-	public void copyDirectory(File sourceLocation, File targetLocation)
-			throws IOException {
-
-		// log.debug("^^^^ "+sourceLocation.getName()+" || "+targetLocation.getName());
-
-		if (sourceLocation.isDirectory()) {
-			if (!targetLocation.exists()) {
-				targetLocation.mkdir();
-			}
-
-			String[] children = sourceLocation.list();
-			for (int i = 0; i < children.length; i++) {
-				copyDirectory(new File(sourceLocation, children[i]), new File(
-						targetLocation, children[i]));
-			}
-		} else {
-
-			InputStream in = new FileInputStream(sourceLocation);
-			OutputStream out = new FileOutputStream(targetLocation);
-
-			// Copy the bits from instream to outstream
-			byte[] buf = new byte[1024];
-			int len;
-			while ((len = in.read(buf)) > 0) {
-				out.write(buf, 0, len);
-			}
-			in.close();
-			out.close();
-		}
-	}
-
 	public void addToZip(File directoryToZip, File file, ZipOutputStream zos)
 			throws FileNotFoundException, IOException {
-
-		FileInputStream fis = new FileInputStream(file);
 
 		// we want the zipEntry's path to be a relative path that is relative
 		// to the directory being zipped, so chop off the rest of the path
@@ -752,14 +679,8 @@ public class BackupExport {
 		ZipEntry zipEntry = new ZipEntry(zipFilePath);
 		zos.putNextEntry(zipEntry);
 
-		byte[] bytes = new byte[1024];
-		int length;
-		while ((length = fis.read(bytes)) >= 0) {
-			zos.write(bytes, 0, length);
-		}
-
+		OmFileHelper.copyFile(file, zos);
 		zos.closeEntry();
-		fis.close();
 	}
 
 	public Document createAppointementDocument(List<Appointment> aList)

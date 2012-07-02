@@ -72,12 +72,12 @@ public class FlvRecorderConverter extends BaseConverter {
 	public void stripAudioFromFLVs(FlvRecording flvRecording) {
 		List<HashMap<String, String>> returnLog = new LinkedList<HashMap<String, String>>();
 		List<String> listOfFullWaveFiles = new LinkedList<String>();
-		String streamFolderName = getStreamFolderName(flvRecording);
+		File streamFolder = getStreamFolder(flvRecording);
 		try {
-			stripAudioFirstPass(flvRecording, returnLog, listOfFullWaveFiles, streamFolderName);
+			stripAudioFirstPass(flvRecording, returnLog, listOfFullWaveFiles, streamFolder);
 
 			// Merge Wave to Full Length
-			String streamFolderGeneralName = getStreamFolderName();
+			String streamFolderGeneralName = getStreamFolder().getCanonicalPath() + File.separator; //FIXME
 
 			FlvRecordingMetaData flvRecordingMetaDataOfScreen = this.flvRecordingMetaDataDaoImpl
 					.getFlvRecordingMetaDataScreenFlvByRecording(flvRecording
@@ -114,7 +114,7 @@ public class FlvRecorderConverter extends BaseConverter {
 			
 			String hashFileFullName = flvRecordingMetaDataOfScreen
 					.getStreamName() + "_FINAL_WAVE.wav";
-			String outputFullWav = streamFolderName + hashFileFullName;
+			String outputFullWav = new File(streamFolder, hashFileFullName).getCanonicalPath();
 
 			if (listOfFullWaveFiles.size() == 1) {
 
@@ -181,8 +181,7 @@ public class FlvRecorderConverter extends BaseConverter {
 
 			// Merge Audio with Video / Calculate resulting FLV
 
-			String inputScreenFullFlv = streamFolderName
-					+ flvRecordingMetaDataOfScreen.getStreamName() + ".flv";
+			String inputScreenFullFlv = new File(streamFolder, flvRecordingMetaDataOfScreen.getStreamName() + ".flv").getCanonicalPath();
 
 			String hashFileFullNameFlv = "flvRecording_"
 					+ flvRecording.getFlvRecordingId() + ".flv";

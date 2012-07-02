@@ -37,6 +37,7 @@ import org.openmeetings.app.installation.ImportInitvalues;
 import org.openmeetings.app.installation.InstallationConfig;
 import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
+import org.openmeetings.utils.OmFileHelper;
 import org.openmeetings.utils.ImportHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -82,10 +83,8 @@ public class Install extends VelocityViewServlet {
 		String[] headerList = header != null ? header.split(",") : new String[0];
 		String headCode = headerList.length > 0 ? headerList[0] : "en";
 		
-		String filePath = getServletContext().getRealPath("/")
-				+ ImportInitvalues.languageFolderName;
 		LinkedHashMap<Integer, LinkedHashMap<String, Object>> allLanguagesAll = getImportInitvalues()
-				.getLanguageFiles(filePath);
+				.getLanguageFiles();
 		LinkedHashMap<Integer, String> allLanguages = new LinkedHashMap<Integer, String>();
 		//first iteration for preferred language
 		Integer prefKey = -1;
@@ -118,7 +117,7 @@ public class Install extends VelocityViewServlet {
 		allFonts.put("Arial", "Arial");
 
 		List<OmTimeZone> omTimeZoneList = getImportInitvalues()
-				.getTimeZones(filePath);
+				.getTimeZones();
 
 		Template tpl = super.getTemplate("install_step1_"
 				+ lang + ".vm");
@@ -157,37 +156,24 @@ public class Install extends VelocityViewServlet {
 			if (lang == null)
 				lang = "EN";
 
-			String working_dir = getServletContext().getRealPath("/")
-					+ ScopeApplicationAdapter.configDirName
-					+ File.separatorChar;
-
-			File installerFile = new File(working_dir, InstallationDocumentHandler.installFileName);
+			File installerFile = OmFileHelper.getInstallFile();
 
 			if (command == null || !installerFile.exists()) {
 				log.debug("command equals null");
 
 				if (!installerFile.exists()) {
-
-					File installerdir = new File(working_dir);
-
-					log.debug("bb " + installerFile);
-
-					boolean b = installerdir.canWrite();
+					File confDir = OmFileHelper.getConfDir();
+					boolean b = confDir.canWrite();
 
 					if (!b) {
 						// File could not be created so throw an error
 						ctx.put("error",
 								"Could not Create File, Permission set? ");
-						ctx.put("path", working_dir);
+						ctx.put("path", confDir.getCanonicalPath());
 						return getVelocityView().getVelocityEngine()
 								.getTemplate("install_error_" + lang + ".vm");
 					} else {
-						InstallationDocumentHandler
-								.getInstance()
-								.createDocument(
-										working_dir
-												+ InstallationDocumentHandler.installFileName,
-										0);
+						InstallationDocumentHandler.createDocument(0);
 						// File has been created so follow first step of
 						// Installation
 						return getVelocityView().getVelocityEngine()
@@ -195,8 +181,7 @@ public class Install extends VelocityViewServlet {
 					}
 
 				} else {
-					int i = InstallationDocumentHandler.getInstance()
-							.getCurrentStepNumber(working_dir);
+					int i = InstallationDocumentHandler.getCurrentStepNumber();
 					if (i == 0) {
 						return getStep2Template(httpServletRequest, ctx, lang);
 					} else {
@@ -207,8 +192,7 @@ public class Install extends VelocityViewServlet {
 
 			} else if (command.equals("step1")) {
 
-				int i = InstallationDocumentHandler.getInstance()
-						.getCurrentStepNumber(working_dir);
+				int i = InstallationDocumentHandler.getCurrentStepNumber();
 				if (i == 0) {
 					return getStep2Template(httpServletRequest, ctx, lang);
 				} else {
@@ -220,8 +204,7 @@ public class Install extends VelocityViewServlet {
 
 			} else if (command.equals("step2")) {
 
-				int i = InstallationDocumentHandler.getInstance()
-						.getCurrentStepNumber(working_dir);
+				int i = InstallationDocumentHandler.getCurrentStepNumber();
 				if (i == 0) {
 
 					log.debug("do init installation");
@@ -298,25 +281,17 @@ public class Install extends VelocityViewServlet {
 							+ " ***** " + useremail + " " + orgname + " "
 							+ cfg);
 
-					String filePath = getServletContext().getRealPath("/")
-							+ ImportInitvalues.languageFolderName;
-
 					cfg.urlFeed = getServletContext().getInitParameter(
 							"url_feed");
 					cfg.urlFeed2 = getServletContext().getInitParameter(
 							"url_feed2");
 					
-					getImportInitvalues().loadAll(filePath, cfg, username,
+					getImportInitvalues().loadAll(cfg, username,
 							userpass, useremail, orgname, timeZone, false);
 
 					// update to next step
 					log.debug("add level to install file");
-					InstallationDocumentHandler
-							.getInstance()
-							.createDocument(
-									working_dir
-											+ InstallationDocumentHandler.installFileName,
-									1);
+					InstallationDocumentHandler.createDocument(1);
 
 					// return
 					// getVelocityEngine().getTemplate("install_complete_"+lang+".vm");
@@ -331,8 +306,7 @@ public class Install extends VelocityViewServlet {
 
 			} else if (command.equals("step")) {
 
-				int i = InstallationDocumentHandler.getInstance()
-						.getCurrentStepNumber(working_dir);
+				int i = InstallationDocumentHandler.getCurrentStepNumber();
 				if (i == 0) {
 
 				}

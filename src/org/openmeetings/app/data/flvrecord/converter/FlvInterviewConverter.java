@@ -18,16 +18,12 @@
  */
 package org.openmeetings.app.data.flvrecord.converter;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.transaction.util.FileHelper;
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.flvrecord.FlvRecordingDaoImpl;
 import org.openmeetings.app.data.flvrecord.FlvRecordingLogDaoImpl;
@@ -35,7 +31,6 @@ import org.openmeetings.app.data.flvrecord.FlvRecordingMetaDataDaoImpl;
 import org.openmeetings.app.documents.GenerateThumbs;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecording;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingMetaData;
-import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -140,20 +135,20 @@ public class FlvInterviewConverter extends BaseConverter {
 	public void stripAudioFromFLVs(FlvRecording flvRecording, boolean reconversion) {
 		List<HashMap<String, String>> returnLog = new LinkedList<HashMap<String, String>>();
 		List<String> listOfFullWaveFiles = new LinkedList<String>();
-		String streamFolderName = getStreamFolderName(flvRecording);
+		File streamFolder = getStreamFolder(flvRecording);
 		List<FlvRecordingMetaData> metaDataList = flvRecordingMetaDataDaoImpl
 				.getFlvRecordingMetaDataAudioFlvsByRecording(flvRecording
 						.getFlvRecordingId());
 
 		stripAudioFirstPass(flvRecording, returnLog, listOfFullWaveFiles,
-				streamFolderName, metaDataList);
+				streamFolder, metaDataList);
 		try {
 			// Merge Wave to Full Length
-			String streamFolderGeneralName = getStreamFolderName();
+			File streamFolderGeneral = getStreamFolder();
 
 			String hashFileFullName = "INTERVIEW_"
 					+ flvRecording.getFlvRecordingId() + "_FINAL_WAVE.wav";
-			String outputFullWav = streamFolderName + hashFileFullName;
+			String outputFullWav = streamFolder + hashFileFullName;
 			deleteFileIfExists(outputFullWav);
 
 			if (listOfFullWaveFiles.size() == 1) {
@@ -183,7 +178,7 @@ public class FlvInterviewConverter extends BaseConverter {
 
 				// create default Audio to merge it.
 				// strip to content length
-				String outputWav = streamFolderGeneralName + "one_second.wav";
+				String outputWav = streamFolderGeneral + "one_second.wav";
 
 				// Calculate delta at beginning
 				Long deltaTimeMilliSeconds = flvRecording.getRecordEnd()
@@ -216,22 +211,19 @@ public class FlvInterviewConverter extends BaseConverter {
 			for (FlvRecordingMetaData flvRecordingMetaData : metaDataList) {
 
 				// FLV to 24 FPS Sequence AVI
-				String inputFlv = streamFolderName + flvRecordingMetaData.getStreamName() + ".flv";
+				String inputFlv = new File(streamFolder, flvRecordingMetaData.getStreamName() + ".flv").getCanonicalPath();
 
 				File inputFlvFile = new File(inputFlv);
 
 				if (inputFlvFile.exists()) {
 					// TO Image Sequence
 
-					String outputMetaImageData = streamFolderName
-							+ flvRecordingMetaData.getFlvRecordingMetaDataId()
-							+ File.separatorChar;
-
 					// Image Folder
-					File imageSequenceFolder = new File(outputMetaImageData);
+					File imageSequenceFolder = new File(streamFolder
+						, "" + flvRecordingMetaData.getFlvRecordingMetaDataId());
 					imageSequenceFolder.mkdir();
-
-					String outputImages = outputMetaImageData + "image%d.png";
+					
+					String outputImages = new File(imageSequenceFolder, "image%d.png").getCanonicalPath();
 
 					String[] argv_imageSeq = new String[] {
 							this.getPathToFFMPEG(), "-i", inputFlv, "-r",
@@ -253,7 +245,7 @@ public class FlvInterviewConverter extends BaseConverter {
 			}
 
 			// Default Image for empty interview video pods
-			String defaultInterviewImage = streamFolderGeneralName
+			String defaultInterviewImage = streamFolderGeneral
 					+ "default_interview_image.png";
 			File defaultInterviewImageFile = new File(defaultInterviewImage);
 
@@ -262,7 +254,7 @@ public class FlvInterviewConverter extends BaseConverter {
 			}
 
 			// Create Folder for the output Image Sequence
-			String outputImageMergedData = streamFolderName + "INTERVIEW_"
+			String outputImageMergedData = streamFolder + "INTERVIEW_"
 					+ flvRecording.getFlvRecordingId() + File.separatorChar;
 
 			// Merged Image Folder
@@ -343,17 +335,13 @@ public class FlvInterviewConverter extends BaseConverter {
 							String imageName = "image" + currentImageNumber
 									+ ".png";
 
-							String outputMetaImageFullData = streamFolderName
-									+ flvRecordingMetaData
-											.getFlvRecordingMetaDataId()
-									+ File.separatorChar + imageName;
-
-							File outputMetaImageFullDataFile = new File(
-									outputMetaImageFullData);
-
-							if (!outputMetaImageFullDataFile.exists()) {
-								outputMetaImageFullData = defaultInterviewImage;
-							}
+							File outputMetaImageFullDataFile = new File(streamFolder
+								, flvRecordingMetaData.getFlvRecordingMetaDataId()
+									+ File.separatorChar + imageName);
+							
+							String outputMetaImageFullData = 
+								!outputMetaImageFullDataFile.exists() ? defaultInterviewImage
+								: outputMetaImageFullDataFile.getCanonicalPath();
 
 							if (flvRecordingMetaData.getInteriewPodId() == 1) {
 								interviewPod1Images[i] = outputMetaImageFullData;
@@ -432,7 +420,7 @@ public class FlvInterviewConverter extends BaseConverter {
 
 			String[] argv_generatedMoview = null;
 
-			String inputScreenFullFlv = streamFolderName
+			String inputScreenFullFlv = streamFolder
 					+ "COMPLETE_INTERVIEW_" + flvRecording.getFlvRecordingId()
 					+ ".flv";
 			deleteFileIfExists(inputScreenFullFlv);
@@ -454,7 +442,7 @@ public class FlvInterviewConverter extends BaseConverter {
 
 			String hashFileFullNameFlv = "flvRecording_"
 					+ flvRecording.getFlvRecordingId() + ".flv";
-			String outputFullFlv = streamFolderGeneralName
+			String outputFullFlv = streamFolderGeneral
 					+ hashFileFullNameFlv;
 			deleteFileIfExists(outputFullFlv);
 
@@ -504,7 +492,7 @@ public class FlvInterviewConverter extends BaseConverter {
 
 			String hashFileFullNameJPEG = "flvRecording_"
 					+ flvRecording.getFlvRecordingId() + ".jpg";
-			String outPutJpeg = streamFolderGeneralName + hashFileFullNameJPEG;
+			String outPutJpeg = streamFolderGeneral + hashFileFullNameJPEG;
 			deleteFileIfExists(outPutJpeg);
 
 			flvRecording.setPreviewImage(hashFileFullNameJPEG);
@@ -532,7 +520,7 @@ public class FlvInterviewConverter extends BaseConverter {
 
 			String alternateDownloadName = "flvRecording_"
 					+ flvRecording.getFlvRecordingId() + ".avi";
-			String alternateDownloadFullName = streamFolderGeneralName
+			String alternateDownloadFullName = streamFolderGeneral
 					+ alternateDownloadName;
 			deleteFileIfExists(alternateDownloadFullName);
 
@@ -575,32 +563,14 @@ public class FlvInterviewConverter extends BaseConverter {
 
 			// Delete all Image temp dirs
 			for (FlvRecordingMetaData flvRecordingMetaData : metaDataList) {
-				String outputMetaImageFullData = streamFolderName
-						+ flvRecordingMetaData.getFlvRecordingMetaDataId()
-						+ File.separatorChar;
-
-				this.deleteDirectory(new File(outputMetaImageFullData));
+				FileHelper.removeRec(new File(streamFolder, "" + flvRecordingMetaData.getFlvRecordingMetaDataId()));
 			}
 
-			this.deleteDirectory(new File(outputImageMergedData));
+			FileHelper.removeRec(new File(outputImageMergedData));
 
 		} catch (Exception err) {
 			log.error("[stripAudioFromFLVs]", err);
 		}
-	}
-
-	public boolean deleteDirectory(File path) throws Exception {
-		if (path.exists()) {
-			File[] files = path.listFiles();
-			for (int i = 0; i < files.length; i++) {
-				if (files[i].isDirectory()) {
-					deleteDirectory(files[i]);
-				} else {
-					files[i].delete();
-				}
-			}
-		}
-		return (path.delete());
 	}
 
 	public HashMap<String, String> thumbProcessImageWindows(String file1,
@@ -611,76 +581,11 @@ public class FlvInterviewConverter extends BaseConverter {
 				file3 };
 
 		return generateThumbs.processImageWindows(cmd);
-
-		// GenerateSWF.executeScript("mergeWave",cmd);
-
 	}
 
 	public HashMap<String, String> processImageWindows(String file1,
 			String file2, String file3) {
-		HashMap<String, String> returnMap = new HashMap<String, String>();
-		returnMap.put("process", "processImageWindows");
-		try {
-
-			// Init variables
-			String[] cmd;
-			String executable_fileName = "";
-			String pathToIMagick = this.getPathToImageMagick();
-
-			Date tnow = new Date();
-			String runtimeFile = "interviewMerge" + tnow.getTime() + ".bat";
-
-			// String runtimeFile = "interviewMerge.bat";
-			executable_fileName = ScopeApplicationAdapter.batchFileDir
-					+ runtimeFile;
-
-			cmd = new String[1];
-			cmd[0] = executable_fileName;
-
-			// Create the Content of the Converter Script (.bat or .sh File)
-			String fileContent = pathToIMagick + " " + file1 + " " + file2
-					+ " " + "+append" + " " + file3
-					+ ScopeApplicationAdapter.lineSeperator + "";
-
-			File previous = new File(executable_fileName);
-			if (previous.exists()) {
-				previous.delete();
-			}
-
-			// execute the Script
-			FileOutputStream fos = new FileOutputStream(executable_fileName);
-			fos.write(fileContent.getBytes());
-			fos.close();
-
-			File now = new File(executable_fileName);
-			now.setExecutable(true);
-
-			Runtime rt = Runtime.getRuntime();
-			returnMap.put("command", cmd.toString());
-			Process proc = rt.exec(cmd);
-
-			InputStream stderr = proc.getErrorStream();
-			BufferedReader br = new BufferedReader(new InputStreamReader(stderr));
-			String line = null;
-			String error = "";
-			while ((line = br.readLine()) != null) {
-				error += line;
-			}
-			br.close();
-			returnMap.put("error", error);
-			int exitVal = proc.waitFor();
-			returnMap.put("exitValue", "" + exitVal);
-
-			if (now.exists()) {
-				now.delete();
-			}
-
-			return returnMap;
-		} catch (Throwable t) {
-			t.printStackTrace();
-			returnMap.put("error", t.getMessage());
-			returnMap.put("exitValue", "-1");
-			return returnMap;
-		}
+		return ProcessHelper.executeScriptWindows("processImageWindows"
+			, new String[]{getPathToImageMagick(), file1, file2, "+append", file3});
 	}
 }
