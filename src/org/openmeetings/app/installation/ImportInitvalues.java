@@ -20,11 +20,13 @@ package org.openmeetings.app.installation;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -46,9 +48,11 @@ import org.openmeetings.app.data.user.Statemanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
+import org.openmeetings.app.persistence.beans.lang.FieldLanguage;
+import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.persistence.beans.lang.Fieldvalues;
-import org.openmeetings.utils.OmFileHelper;
 import org.openmeetings.utils.ImportHelper;
+import org.openmeetings.utils.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -885,12 +889,12 @@ public class ImportInitvalues {
 		for (Iterator<Integer> itLang = listlanguages.keySet().iterator(); itLang
 				.hasNext();) {
 			Integer langId = itLang.next();
-			LinkedHashMap<String, Object> lang = listlanguages.get(langId);
-			log.debug("loadInitLanguages lang: " + lang);
+			LinkedHashMap<String, Object> langMap = listlanguages.get(langId);
+			log.debug("loadInitLanguages lang: " + langMap);
 
-			String langName = (String) lang.get("name");
-			String rtl = (String) lang.get("rtl");
-			String code = (String) lang.get("code");
+			String langName = (String) langMap.get("name");
+			String rtl = (String) langMap.get("rtl");
+			String code = (String) langMap.get("code");
 
 			log.debug("loadInitLanguages rtl from xml: " + rtl);
 
@@ -899,14 +903,15 @@ public class ImportInitvalues {
 			if (rtl != null && rtl.equals("true"))
 				langRtl = true;
 
-			Long languages_id = fieldLanguageDaoImpl.addLanguage(langId, langName,
-					langRtl, code);
+			long ticks = System.currentTimeMillis();
+			FieldLanguage lang = fieldLanguageDaoImpl.addLanguage(langId, langName, langRtl, code);
 
 			SAXReader reader = new SAXReader();
 			Document document = reader.read(new File(OmFileHelper.getLanguagesDir(), langName + ".xml"));
 
 			Element root = document.getRootElement();
 
+			Map<Long, Fieldlanguagesvalues> flvMap = lang.getLanguageValuesMap();
 			for (@SuppressWarnings("rawtypes")
 			Iterator it = root.elementIterator("string"); it.hasNext();) {
 				Element item = (Element) it.next();
@@ -924,20 +929,31 @@ public class ImportInitvalues {
 
 				// log.error("result: "+langFieldIdIsInited+" "+id+" "+name+" "+value);
 
-				Fieldvalues fv = null;
-				// Only do that for the first field-set
-				if (!fieldCache.containsKey(id)) {
-					fv = fieldmanagment.addFieldById(name, id);
-					fieldCache.put(id,  fv);
+				if (flvMap.containsKey(id)) {
+					Fieldlanguagesvalues flv = flvMap.get(id);
+					flv.setUpdatetime(new Date());
+					flv.setValue(value);
 				} else {
-					fv = fieldCache.get(id);
+					Fieldvalues fv = null;
+					// Only do that for the first field-set
+					if (!fieldCache.containsKey(id)) {
+						fv = fieldmanagment.addFieldById(name, id);
+						fieldCache.put(id,  fv);
+					} else {
+						fv = fieldCache.get(id);
+					}
+					Fieldlanguagesvalues flv = new Fieldlanguagesvalues();
+					flv.setStarttime(new Date());
+					flv.setValue(value);
+					flv.setLanguage_id(lang.getLanguage_id());
+					flv.setFieldvalues(fv);
+					flv.setDeleted("false");
+					flvMap.put(id, flv);
 				}
-
-				fieldmanagment.addFieldValueByFieldAndLanguage(fv,
-						languages_id, value);
-
 			}
-			log.debug("Lang ADDED: " + lang);
+			lang.setLanguageValues(flvMap.values());
+			fieldLanguageDaoImpl.updateLanguage(lang);
+			log.debug("Lang ADDED: " + lang + "; seconds passed: " + (System.currentTimeMillis() - ticks) / 1000);
 		}
 		log.debug("All languages are imported");
 	}

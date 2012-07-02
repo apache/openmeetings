@@ -46,7 +46,7 @@ public class FieldLanguageDaoImpl {
 	@PersistenceContext
 	private EntityManager em;
 
-	public Long addLanguage(int langId, String langName, Boolean langRtl, String code) {
+	public FieldLanguage addLanguage(int langId, String langName, Boolean langRtl, String code) {
 		try {
 
 			FieldLanguage fl = new FieldLanguage();
@@ -58,9 +58,8 @@ public class FieldLanguageDaoImpl {
 			fl.setCode(code);
 
 			fl = em.merge(fl);
-			Long languages_id = fl.getLanguage_id();
 
-			return languages_id;
+			return fl;
 		} catch (Exception ex2) {
 			log.error("[addLanguage]: ", ex2);
 		}
@@ -69,11 +68,10 @@ public class FieldLanguageDaoImpl {
 
 	public void emptyFieldLanguage() {
 		try {
-
-			// TODO delete hql query doesn't work, must be repared
-			em.createQuery("delete from FieldLanguage");
+			TypedQuery<FieldLanguage> q = em.createQuery("delete from FieldLanguage", FieldLanguage.class);
+			q.executeUpdate();
 		} catch (Exception ex2) {
-			log.error("[getConfKey]: ", ex2);
+			log.error("[emptyFieldLanguage]: ", ex2);
 		}
 	}
 
@@ -95,7 +93,7 @@ public class FieldLanguageDaoImpl {
 		return new Long(-1);
 	}
 
-	private void updateLanguage(FieldLanguage fl) throws Exception {
+	public void updateLanguage(FieldLanguage fl) throws Exception {
 		if (fl.getLanguage_id() == null) {
 			em.persist(fl);
 		} else {

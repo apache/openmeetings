@@ -18,7 +18,6 @@
  */
 package org.openmeetings.app.data.beans.basic;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class SearchResult<T> {

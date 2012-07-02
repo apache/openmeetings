@@ -19,17 +19,16 @@
 package org.openmeetings.app.persistence.beans.lang;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
-
-
+import java.util.Hashtable;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -40,8 +39,7 @@ public class FieldLanguage implements Serializable {
 
 	private static final long serialVersionUID = 3501643212388395425L;
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="language_id")
+	@Column(name="language_id", unique=true, nullable= false)
 	private Long language_id;
 	@Column(name="name")
 	private String name;
@@ -56,9 +54,9 @@ public class FieldLanguage implements Serializable {
 	@Column(name="code")
 	private String code;
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "language_id", insertable = true, updatable = true)
-	private List<Fieldlanguagesvalues> languageValues;
+	private Collection<Fieldlanguagesvalues> languageValues;
 	
 	public Long getLanguage_id() {
 		return language_id;
@@ -108,10 +106,21 @@ public class FieldLanguage implements Serializable {
 	public void setCode(String code) {
 		this.code = code;
 	}
-	public List<Fieldlanguagesvalues> getLanguageValues() {
-		return languageValues;
+	
+	public Collection<Fieldlanguagesvalues> getLanguageValues() {
+		return languageValues == null ? new ArrayList<Fieldlanguagesvalues>() : languageValues;
 	}
-	public void setLanguageValues(List<Fieldlanguagesvalues> languageValues) {
-		this.languageValues = languageValues;
+	public void setLanguageValues(Collection<Fieldlanguagesvalues> languageValues) {
+		if (languageValues != null) {
+			this.languageValues = languageValues;
+		}
+	}
+	public Map<Long, Fieldlanguagesvalues> getLanguageValuesMap() {
+		Collection<Fieldlanguagesvalues> langVals = getLanguageValues();
+		Map<Long, Fieldlanguagesvalues> result = new Hashtable<Long, Fieldlanguagesvalues>(langVals.size());
+		for (Fieldlanguagesvalues flv : langVals) {
+			result.put(flv.getFieldvalues().getFieldvalues_id(), flv);
+		}
+		return result;
 	}
 }
