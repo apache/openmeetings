@@ -743,10 +743,6 @@
 		<ivy:retrieve conf="${ivy.conf.name}" pattern="${ivy.lib.location}/[artifact]-[type]-[revision].[ext]" />
 	</target>
 	
-	<!-- wrapper to load the server before the client to have the 
-		red5.jar that is necessary to build the client --> 
-	<target name="-retrieve-red5" depends="-retrieve-red5-client" />
-
 	<!-- Check for the Red5 libraries -->
 	<target name="-retrieve-red5-server" unless="red5.installed" description="Retrieves the libraries if needed" depends="-ant-task">
 		<svn refid="svn.settings">
@@ -798,7 +794,7 @@
 	</target>
 
 	<!-- Check for the Top level libraries -->
-	<target name="-retrieve-mainlibs" unless="mainlib.installed" description="Retrieves the libraries if needed" depends="-retrieve-red5">
+	<target name="-retrieve-mainlibs" unless="mainlib.installed" description="Retrieves the libraries if needed" depends="-retrieve-red5-client">
 		<!-- Ivy configuration - http://ant.apache.org/ivy/history/trunk/ant.html -->
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
 			<param name="ivy.conf.name" value="mainlib" />

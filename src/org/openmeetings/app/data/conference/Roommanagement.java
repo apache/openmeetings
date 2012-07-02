@@ -498,15 +498,15 @@ public class Roommanagement {
 			} else {
 				search = "%" + search + "%";
 			}
-
-			hql += " ORDER BY " + orderby;
-
-			if (asc) {
-				hql += " ASC";
-			} else {
-				hql += " DESC";
+			if (orderby != null) {
+				hql += " ORDER BY " + (orderby.startsWith("c.") ? "" : "c.") + orderby;
+	
+				if (asc) {
+					hql += " ASC";
+				} else {
+					hql += " DESC";
+				}
 			}
-
 			TypedQuery<Rooms> query = em.createQuery(hql, Rooms.class);
 			query.setParameter("search", search);
 			query.setFirstResult(start);
