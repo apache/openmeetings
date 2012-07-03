@@ -33,10 +33,97 @@
 		<attribute name="doBlink" value="false" type="boolean" />
 
 		<handler name="oninit">
+			canvas._currentChatPanel = this;
 			this.fadeDelegate = new LzDelegate( this, "showText" );
 		</handler>
 
-		<handler name="onisopen" args="o">
+        <method name="newprivatechat" args="refObj">
+            this.addChatSync(refObj[1],true);
+        </method>
+        
+        <method name="closeprivatechat" args="value">
+            if ($debug) Debug.write("closeprivatechat _1a_ ",value);
+            var publicSID = value[1];
+            if ($debug) Debug.write("closeprivatechat _1b_ ",publicSID);
+            
+            for (var eg in this.content.chatbar.subviews) {
+                 
+                if ($debug) Debug.write("closeprivatechat _2A_ ",this.content.chatbar.subviews[eg].objRef);
+                if ($debug) Debug.write("closeprivatechat _2B_ ",this.content.chatbar.subviews[eg].objRef.refObj);
+                if ($debug) Debug.write("closeprivatechat _2C_ ",this.content.chatbar.subviews[eg].objRef.refObj.publicSID);
+                    
+                if (this.content.chatbar.subviews[eg].objRef.refObj.publicSID == publicSID ) {
+                    this.content.chatbar.removeObjectSynced(this.content.chatbar.subviews[eg]);
+                    return;
+                }
+            }
+        </method>
+        
+        <method name="privatechat" args="value,client">
+            if ($debug) Debug.write("privatechat A ",client.publicSID);
+            if ($debug) Debug.write("privatechat B ",value[6]);
+            
+            for (var eg in this.content.subviews) {
+                if (this.content.subviews[eg].refObj != null) {
+                    
+                    if ($debug) Debug.write("privatechat _1_ ",this.content.subviews[eg].refObj);
+                    if ($debug) Debug.write("privatechat _2_ ",this.content.subviews[eg].refObj.publicSID);
+                    
+                    if (this.content.subviews[eg].refObj.publicSID == client.publicSID 
+                            || this.content.subviews[eg].refObj.publicSID == value[6] ) {
+                        this.content.subviews[eg]._chatoutputborder._chatoutput.addChatHistory(value,client);
+                    }
+                }
+            }
+        </method>
+        
+        <method name="addChat" args="refObj">
+            this.addChatSync(refObj,false);
+        </method>
+        
+        <method name="addChatSync" args="refObj,remoteOpen">
+            if (this.content.visibility == "hidden") {
+                this.toggleopen();
+            }
+            
+            for (var eg in this.content.subviews) {
+                if (this.content.subviews[eg].refObj != null) {
+                    if (this.content.subviews[eg].refObj.publicSID == refObj.publicSID) {
+                        new lz.labelerrorPopup(canvas.main_content._content.inner,{
+                                    errorlabelid:1496
+                                });
+                        return;
+                    }
+                }
+            }
+            
+            if ($debug) Debug.write("addChat :: ",refObj);
+            for (var eg in this.content.chatbar.subviews) {
+                this.content.chatbar.subviews[eg].isactive = false;
+                this.content.chatbar.subviews[eg].onmouseout.sendEvent(null);
+                this.content.chatbar.subviews[eg].objRef.setAttribute("visibility","hidden");
+            }
+            
+            var chatTabPrivateRef = new lz.chatTabPrivateChat(this.content,{
+                                                refObj:refObj,
+                                                remoteOpen:remoteOpen
+                                                
+                                            });
+            var tempWidth = this.content.chatbar.getCurrentSize();
+            
+            var tWhiteboardBtn = new lz.chatMiniButton(this.content.chatbar,{
+                                       objRef:chatTabPrivateRef,
+                                       width:tempWidth,
+                                       isactive:true,
+                                       btnName:refObj.firstname+" "+refObj.lastname
+                                    });
+            
+            this.content.chatbar.currentBtn = tWhiteboardBtn;                       
+                                    
+            tWhiteboardBtn.onmouseout.sendEvent(null);
+        </method>
+        
+        <handler name="onisopen" args="o">
 			if ($debug) Debug.write("onisopen",o);
 			if (o) {
 				canvas._chatcontent.doInitByOpen();
@@ -76,8 +163,57 @@
 			}
 		</method>
 
-		<chatTab name="content" y="22" height="${ parent.height-22 }"
-			visibility="hidden" width="${ parent.width }" />
+        <view name="content" visibility="hidden" y="22"
+              height="${ parent.height-22 }" width="${ parent.width }">
+            <chatBarMenu name="chatbar">
+                <attribute name="refObj" value="null" />
+                <attribute name="objMessage" value="null" />
+                <attribute name="publicSID" value="" type="string" />
+                
+                <handler name="oninit">
+                    this.currentBtn = this._button1;
+                </handler>
+                
+                <handler name="onRemoveWindow" args="publicSID">
+                    <![CDATA[
+                    
+                        if ($debug) Debug.write("onRemoveWindow :: ",publicSID);
+                        
+                        this.publicSID = publicSID;
+                    
+                        this.objMessage = new Array();
+                        this.objMessage[0] = 'closeprivatechat';
+                        this.objMessage[1] = canvas.publicSID;
+                        
+                        this.sendMessageWithClientByPublicSID.doCall();
+                    ]]>
+                </handler>
+                
+                <netRemoteCallHib name="sendMessageWithClientByPublicSID" funcname="sendMessageWithClientByPublicSID" 
+                    remotecontext="$once{ canvas.thishib }" > 
+                    <netparam><method name="getValue"> return parent.parent.objMessage; </method></netparam>
+                    <netparam><method name="getValue"> return parent.parent.publicSID; </method></netparam>
+                    <handler name="ondata" args="value">
+                        <![CDATA[
+                            //The onResult-Handler will be called be the rtmpconnection
+                            if ($debug) Debug.write("chatservice.sendMessageWithClientByPublicSID getValue : ",value);
+                        ]]>
+                    </handler>   
+                </netRemoteCallHib>
+                
+                <chatMiniButton name="_button1" isactive="true" isClosable="false" >
+                    <handler name="oninit">
+                        this.setAttribute("btnName", canvas.getLabelName(1494) + " 1");
+                        this.objRef = parent.parent._content1;
+                        this.onmouseout.sendEvent(this);
+                    </handler>
+                </chatMiniButton>
+                
+            </chatBarMenu>
+            
+            <chatTab name="_content1" />
+            
+        </view>
 			
 		<labelText labelid="1199" x="${ parent.width - this.width }" bgcolor="0xFFFFFF"
         		   y="2" fontsize="10" fontstyle="bold" fgcolor="0xFF3300" />

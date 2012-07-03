@@ -41,6 +41,8 @@
 	<resource name="av_allow_rsc" src="resources/audio_and_video.png" />
 	<!-- FamFam Icon Set -->
 	<resource name="av_deny_rsc" src="resources/audio_and_video_no.png" />
+	<!-- FamFam Icon Set -->
+	<resource name="start_private_chat_rsc" src="resources/page_edit.png" />
 	
 	<!-- APL author sebawagner -->
 	<resource name="kick_user_rsc" src="resources/cancel_icon.png" />

@@ -379,6 +379,22 @@
         <labelTooltip labelid="1213" />
     </miniIcons>              
     
+    <miniIcons name="_start_private_chat_rsc" x="172" y = "2" width="16" height="16" 
+               resource="start_private_chat_rsc" showhandcursor="true">
+        <handler name="onclick">
+        	var refObj = parent.parent.parent.refObj;
+            if ($debug) Debug.write("Start Private Chat with 1: ", refObj.publicSID);
+            if ($debug) Debug.write("Start Private Chat with 2: ", refObj);
+            if (refObj.publicSID == canvas.publicSID) {
+                new lz.labelerrorPopup(canvas.main_content._content.inner,{
+                            errorlabelid:1495
+                        });
+                return;
+            }
+			canvas._currentChatPanel.addChat(refObj);
+        </handler>
+        <labelTooltip labelid="1493" />
+    </miniIcons>
 </class>
 
 </library>

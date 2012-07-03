@@ -47,4 +47,50 @@ This is used in the conference.
 				   
 </class>
 
+<class name="chatTabPrivateChat" extends="simpleBaseTabpane" y="22" height="${ parent.height-22 }" 
+                 width="${ parent.width }">
+
+	<attribute name="refObj" value="null"/>
+	<attribute name="objMessage" value="null"/>
+	<attribute name="remoteOpen" value="false" type="boolean"/>
+	
+	<handler name="oninit">
+		<![CDATA[
+			if (this.remoteOpen) {
+				return;
+			}
+			this.objMessage = new Array();
+			this.objMessage[0] = 'newprivatechat';
+            this.objMessage[1] = canvas.thishib.userobject;
+            this.objMessage[1].publicSID = canvas.publicSID;
+			
+			this.sendMessageWithClientByPublicSID.doCall();
+		]]>
+	</handler>
+	
+    <netRemoteCallHib name="sendMessageWithClientByPublicSID" funcname="sendMessageWithClientByPublicSID" 
+        remotecontext="$once{ canvas.thishib }" > 
+        <netparam><method name="getValue"> return parent.parent.objMessage; </method></netparam>
+        <netparam><method name="getValue"> return parent.parent.refObj.publicSID; </method></netparam>
+        <handler name="ondata" args="value">
+            <![CDATA[
+                //The onResult-Handler will be called be the rtmpconnection
+                if ($debug) Debug.write("chatservice.sendMessageWithClientByPublicSID getValue : ",value);
+            ]]>
+        </handler>   
+    </netRemoteCallHib>
+	
+	<view name="_chatoutputborder" height="${ parent.height-48 }"
+       bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }"  width="${ parent.width-2 }">
+		
+		<chatOutput name="_chatoutput" x="1" y="1" >
+
+		</chatOutput>
+
+	</view>
+	
+	<privateChatTabBottom name="_chattabbottom" 
+				   y="${ parent.height-46 }" x="0" width="${ parent.width-2 }" />
+	
+</class>
 </library>

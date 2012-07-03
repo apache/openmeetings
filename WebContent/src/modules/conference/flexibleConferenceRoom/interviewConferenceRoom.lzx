@@ -135,21 +135,6 @@
     <interviewWhiteboard name="_whiteboardInterview" x="${ parent._sidePanel.width }" 
     	  width="${ canvas.width - parent._sidePanel.width }" />
     
-    <!--
-        Chat Box
-    <conferenceBox name="_chatPanelStrict" labelid="616" textInset="30" closeable="true" 
-                   height="350" x="${ parent._sidePanel.width }" bgcolor="0xFFFFFF"
-                   y="${ canvas.height - (this.height+22) }" 
-                   width="${ canvas.width - parent._sidePanel.width }">
-        <chatTab name="content" y="40" height="${ parent.height-40 }" width="${ parent.width }" />
-    </conferenceBox>
-     -->
-    
-    <baseTabChatPanel name="_chatPanelStrict" labelid="616"
-       height="200" x="${ parent._sidePanel.width }"  
-       y="${ canvas.height - (this.height) - ((canvas.currentRoomObj.hideTopBar) ? 0:28) }" 
-       width="${ canvas.width - parent._sidePanel.width }" />    
-       
 </class>
 
 </library>

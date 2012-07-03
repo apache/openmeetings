@@ -1070,10 +1070,15 @@
                       
         <netRemoteCallHib name="roomDisconnect" funcname="roomDisconnect">
             <handler name="ondata" args="value">
+            <![CDATA[
                 //The onResult-Handler will be called be the rtmpconnection
                 if ($debug) Debug.write("roomDisconnect: ",value);
                 if (value.isScreenClient) {
                     return;
+                }
+                if ($debug) Debug.write("canvas.currentBaseConferenceRoom._chatPanelStrict: ", canvas.currentBaseConferenceRoom._chatPanelStrict);
+                if (canvas.currentBaseConferenceRoom != null && canvas.currentBaseConferenceRoom._chatPanelStrict != null) {
+                	canvas.currentBaseConferenceRoom._chatPanelStrict.closeprivatechat(["close", value.publicSID]);
                 }
                 if (canvas.currentActivityList != null) {
                     canvas.currentActivityList.addMessageRequest(value, canvas.getLabelName(1367), new Date().getTime());
@@ -1091,6 +1096,7 @@
                         canvas._mymod.setMessage();                 
                     }
                 }
+            ]]>
             </handler>   
         </netRemoteCallHib>
         
@@ -1134,7 +1140,7 @@
         
         <method name="setUserStatus" args="ctx,user,o">
             <![CDATA[
-        if (!o || !user) return;
+				if (!o || !user) return;
                 //The onResult-Handler will be called be the rtmpconnection
                 if ($debug) {
                     Debug.write("setUserStatus: ", user);
@@ -1604,6 +1610,9 @@
                     }
                 } else if (value.message[0]=='applyModAnswer'){
                     canvas.currentModApply.setUserAnswer(value);
+                } else if (value.message[0]=='privatechat'){
+                    if ($debug) Debug.write("privatechat",value.message,value.client);
+                    canvas._currentChatPanel.privatechat(value.message,value.client);
                 } else if (value.message[0]=='chat'){
                     if (canvas._chatcontent) canvas._chatcontent.addChatHistory(value.message,value.client);
                     if (canvas._chatcontentRPC) canvas._chatcontentRPC.addChatHistory(value.message,value.client);
@@ -1698,7 +1707,13 @@
                 //The onResult-Handler will be called be the rtmpconnection
                 //if ($debug) Debug.write("newMessageByRoomAndDomain: ",value);    
                 <![CDATA[
-                    if (value.message=='desktop'){
+                    if (value[0]=='closeprivatechat'){
+                        if ($debug) Debug.write("closeprivatechat",value);
+                        canvas._currentChatPanel.closeprivatechat(value);
+                    } else if (value[0]=='newprivatechat'){
+	                    if ($debug) Debug.write("newprivatechat",value);
+	                    canvas._currentChatPanel.newprivatechat(value);
+	                } else if (value.message=='desktop'){
                         canvas._drawarea.incomingScreenSharing(value);
                     } else if (value.message=='library'){
                         

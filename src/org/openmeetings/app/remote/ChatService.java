@@ -94,44 +94,44 @@ public class ChatService implements IPendingServiceCallback {
 	 * @param newMessage
 	 * @return
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings("unchecked")
 	public int sendMessageWithClient(Object newMessage) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
 			Long room_id = currentClient.getRoom_id();
 			
-			log.debug("room_id: "+room_id);
-			log.debug("currentClient.getIsChatNotification(): "+currentClient.getIsChatNotification());
-			if (currentClient.getIsChatNotification()){
+			log.debug("room_id: " + room_id);
+			log.debug("currentClient.getIsChatNotification(): " + currentClient.getIsChatNotification());
+			if (currentClient.getIsChatNotification()) {
 				room_id = currentClient.getChatUserRoomId();
 			}
 			
-			//log.error(newMessage.getClass().getName());
+			@SuppressWarnings("rawtypes")
 			ArrayList messageMap = (ArrayList) newMessage;
-			//adding delimiter space, cause otherwise an emoticon in the last string would not be found
-			String messageText = messageMap.get(4).toString()+" ";
-			//log.error("messageText"+messageText);
-			//add server time
-			messageMap.set(1,parseDateAsTimeString());
+			// adding delimiter space, cause otherwise an emoticon in the last
+			// string would not be found
+			String messageText = messageMap.get(4).toString() + " ";
+			// add server time
+			messageMap.set(1, parseDateAsTimeString());
 			LinkedList<String[]> parsedStringObjects = ChatString.parseChatString(messageText, emoticonsManager.getEmotfilesList());
-			//log.error("parsedStringObjects"+parsedStringObjects.size());
-			log.debug("size:"+messageMap.size());
+			// log.error("parsedStringObjects"+parsedStringObjects.size());
+			log.debug("size:" + messageMap.size());
 			messageMap.add(parsedStringObjects);
 			newMessage = messageMap;			
 			
-			HashMap<String,Object> hsm = new HashMap<String,Object>();
+			HashMap<String, Object> hsm = new HashMap<String, Object>();
 			hsm.put("client", currentClient);
 			hsm.put("message", newMessage);
 			
-			List<HashMap<String,Object>> myChatList = myChats.get(room_id);
-			if (myChatList==null) myChatList = new LinkedList<HashMap<String,Object>>();
+			List<HashMap<String, Object>> myChatList = myChats.get(room_id);
+			if (myChatList == null) myChatList = new LinkedList<HashMap<String, Object>>();
 			
-			if (myChatList.size()==chatRoomHistory) myChatList.remove(0);
+			if (myChatList.size() == chatRoomHistory) myChatList.remove(0);
 			myChatList.add(hsm);
-			myChats.put(room_id,myChatList);
+			myChats.put(room_id, myChatList);
 			
-			log.debug("SET CHATROOM: "+room_id);
+			log.debug("SET CHATROOM: " + room_id);
 			
 			//broadcast to everybody in the room/domain
 			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
@@ -154,7 +154,7 @@ public class ChatService implements IPendingServiceCallback {
     						
     						log.debug("*..*idremote room_id: " + room_id);
     						log.debug("*..*my idstreamid room_id: " + rcl.getRoom_id());
-    						if (room_id!=null && room_id.equals(rcl.getRoom_id())) {
+    						if (room_id != null && room_id.equals(rcl.getRoom_id())) {
     							((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient",new Object[] { hsm }, this);
     							log.debug("sending sendVarsToMessageWithClient to " + conn);
     						} else if (rcl.getIsChatNotification()) {
@@ -162,19 +162,86 @@ public class ChatService implements IPendingServiceCallback {
     								((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient",new Object[] { hsm }, this);
     							}
     						}
-    						
 	    			 	}
 	    			}
     			}
 			}
-    					
 		} catch (Exception err) {
 			log.error("[ChatService sendMessageWithClient] ",err);
 			return -1;
 		}
 		return 1;
 	}
-	
+
+	//FIXME copy/past need to be removed
+	@SuppressWarnings("unchecked")
+	public int sendMessageWithClientByPublicSID(Object newMessage, String publicSID) {
+		try {
+			IConnection current = Red5.getConnectionLocal();
+			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
+			Long room_id = currentClient.getRoom_id();
+
+			log.debug("room_id: " + room_id);
+			log.debug("currentClient.getIsChatNotification(): " + currentClient.getIsChatNotification());
+			if (currentClient.getIsChatNotification()) {
+				room_id = currentClient.getChatUserRoomId();
+			}
+
+			@SuppressWarnings("rawtypes")
+			ArrayList messageMap = (ArrayList) newMessage;
+			// adding delimiter space, cause otherwise an emoticon in the last
+			// string would not be found
+			String messageText = messageMap.get(4).toString() + " ";
+			// add server time
+			messageMap.set(1, parseDateAsTimeString());
+			LinkedList<String[]> parsedStringObjects = ChatString.parseChatString(messageText, emoticonsManager.getEmotfilesList());
+			// log.error("parsedStringObjects"+parsedStringObjects.size());
+			log.debug("size:" + messageMap.size());
+			messageMap.add(parsedStringObjects);
+			newMessage = messageMap;
+
+			HashMap<String, Object> hsm = new HashMap<String, Object>();
+			hsm.put("client", currentClient);
+			hsm.put("message", newMessage);
+
+			// broadcast to everybody in the room/domain
+			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
+			for (Set<IConnection> conset : conCollection) {
+				for (IConnection conn : conset) {
+					if (conn != null) {
+						if (conn instanceof IServiceCapableConnection) {
+
+							RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+
+    						if (rcl == null) {
+    							continue;
+    						}
+    						if (rcl.getIsAVClient()) {
+    							continue;
+    						}
+    						if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+	    						continue;
+	    					}
+
+							if (rcl.getPublicSID().equals(publicSID)
+									|| rcl.getPublicSID().equals(
+											currentClient.getPublicSID())) {
+								((IServiceCapableConnection) conn).invoke(
+										"sendVarsToMessageWithClient",
+										new Object[] { hsm }, this);
+							}
+
+						}
+					}
+				}
+			}
+		} catch (Exception err) {
+			log.error("[ChatService sendMessageWithClient] ", err);
+			return -1;
+		}
+		return 1;
+	}
+
 	public List<HashMap<String,Object>> clearChat() {
 		try {
 			IConnection current = Red5.getConnectionLocal();

@@ -4575,4 +4575,19 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="1492" name="conference menu">
     <value>Ask moderator to share your whiteboard</value>
   </string>
+  <string id="1493" name="private chat">
+    <value>Start Private Chat</value>
+  </string>
+  <string id="1494" name="all_private_chat">
+    <value>All</value>
+  </string>
+  <string id="1495" name="private chat">
+    <value>You cannot start a private chat with yourself.</value>
+  </string>
+  <string id="1496" name="private chat">
+    <value>You've already started a private chat with this participant.</value>
+  </string>
+  <string id="1497" name="private chat">
+    <value>Do you really want to delete this private chat?</value>
+  </string>
 </language>

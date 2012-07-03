@@ -61,6 +61,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+@SuppressWarnings("deprecation")
 public class OpenXGHttpClient {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(

@@ -117,7 +117,7 @@
                                 || canvas.directUserLogin || canvas.secureRemoteUserLogin) {
                 isDirectLink = true;               	
             }
-            if ( usercolor==null || usercolor==0 || usercolor.length==0 )usercolor=0xCCCCCC;
+            if ( usercolor==null || usercolor==0 || (usercolor !=null && usercolor.length==0) )usercolor=0xCCCCCC;
             
             
             

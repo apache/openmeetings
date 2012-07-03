@@ -24,6 +24,8 @@
 	<include href="globalAttributes.lzx" />
 	<include href="globalMethods.lzx" />
 	
+	<include href="chatMiniButton.lzx" />
+	<include href="chatBarMenu.lzx" />
 	<include href="inviteuser/" />
 	
 	<include href="chatParticipants.lzx" />

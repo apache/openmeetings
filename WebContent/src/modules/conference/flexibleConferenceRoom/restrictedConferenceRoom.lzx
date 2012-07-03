@@ -138,11 +138,6 @@
 			<om_vscrollbar name="_attenddeescrollbar" visibility="visible"></om_vscrollbar>
 	</view>
     
-    <baseTabChatPanel name="_chatPanelStrict" labelid="616"
-       height="200" x="${ parent._sidePanel.width }"  
-       y="${ canvas.height - (this.height) - 28 }" 
-       width="${ canvas.width - parent._sidePanel.width }" />
-       
     <fixedFileExplorerWhiteboardPanel name="_whiteboard" labelid="615"
         y="0" x="${ parent._sidePanel.width }" 
         width="${ canvas.width - parent._sidePanel.width }"
