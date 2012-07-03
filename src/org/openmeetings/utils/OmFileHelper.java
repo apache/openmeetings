@@ -212,8 +212,10 @@ public class OmFileHelper {
 	}
 	
 	public static String getHumanSize(File dir) {
-		long size = getSize(dir);
+		return getHumanSize(getSize(dir));
+	}
 	
+	public static String getHumanSize(long size) {
 		if(size <= 0) return "0";
 		final String[] units = new String[] { "B", "KB", "MB", "GB", "TB" };
 		int digitGroups = (int) (Math.log10(size)/Math.log10(1024));

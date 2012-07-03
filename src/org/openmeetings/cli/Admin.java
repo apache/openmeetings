@@ -46,9 +46,11 @@ import org.apache.commons.cli.Parser;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openjpa.jdbc.meta.MappingTool;
+import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.documents.InstallationDocumentHandler;
 import org.openmeetings.app.installation.ImportInitvalues;
 import org.openmeetings.app.installation.InstallationConfig;
+import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.servlet.outputhandler.BackupExport;
 import org.openmeetings.servlet.outputhandler.BackupImportController;
 import org.openmeetings.utils.ImportHelper;
@@ -408,33 +410,66 @@ public class Admin {
 				break;
 			case files:
 				try {
-					System.out.println("Temporary upload files allocates: " + OmFileHelper.getHumanSize(OmFileHelper.getUploadTempDir()));
-					System.out.println("Upload allocates: " + OmFileHelper.getHumanSize(OmFileHelper.getUploadDir()));
-					System.out.println("Recordings allocates: " + OmFileHelper.getHumanSize(OmFileHelper.getStreamsDir()));
-					/*
-					omHome
-					
-					ClassPathXmlApplicationContext ctx = getApplicationContext(ctxName);
-					//user pictures
-					//dist/red5/webapps/openmeetings/upload/profiles/profile_<id> (check if ends with filename)
-					UsersDaoImpl udao = ctx.getBean(UsersDaoImpl.class);
-					for (Users u : udao.getAllUsersDeleted()) {
-						System.out.println("id == " + u.getUser_id() + "; deleted ? " + u.getDeleted() + "; uri -> " + u.getPictureuri());
+					StringBuilder report = new StringBuilder();
+					report.append("Temporary files allocates: ").append(OmFileHelper.getHumanSize(OmFileHelper.getUploadTempDir())).append("\n");
+					{ //UPLOAD
+						long sectionSize = OmFileHelper.getSize(OmFileHelper.getUploadDir());
+						report.append("Upload totally allocates: ").append(OmFileHelper.getHumanSize(sectionSize)).append("\n");
+						File profiles = OmFileHelper.getUploadProfilesDir();
+						long invalid = 0;
+						long deleted = 0;
+						ClassPathXmlApplicationContext ctx = getApplicationContext(ctxName);
+						UsersDaoImpl udao = ctx.getBean(UsersDaoImpl.class);
+						for (File profile : profiles.listFiles()) {
+							long pSize = OmFileHelper.getSize(profile);
+							long userId = getUserIdByProfile(profile.getName());
+							Users u = udao.getUser(userId);
+							if (profile.isFile() || userId < 0 || u == null) {
+								invalid += pSize;
+							} else if ("true".equals(u.getDeleted())) {
+								deleted += pSize;
+							}
+						}
+						long missing = 0;
+						for (Users u : udao.getAllUsersDeleted()) {
+							if (!"true".equals(u.getDeleted()) && !new File(OmFileHelper.getUploadProfilesUserDir(u.getUser_id()), u.getPictureuri()).exists()) {
+								missing++;
+							}
+						}
+						long size = OmFileHelper.getSize(profiles);
+						long restSize = sectionSize - size;
+						report.append("\t\tprofiles: ").append(OmFileHelper.getHumanSize(size)).append("\n");
+						report.append("\t\t\tinvalid: ").append(OmFileHelper.getHumanSize(invalid)).append("\n");
+						report.append("\t\t\tdeleted: ").append(OmFileHelper.getHumanSize(deleted)).append("\n");
+						report.append("\t\t\tmissing count: ").append(missing).append("\n");
+						size = OmFileHelper.getSize(OmFileHelper.getUploadImportDir());
+						restSize -= size;
+						report.append("\t\timport: ").append(OmFileHelper.getHumanSize(size)).append("\n");
+						size = OmFileHelper.getSize(OmFileHelper.getUploadBackupDir());
+						restSize -= size;
+						report.append("\t\tbackup: ").append(OmFileHelper.getHumanSize(size)).append("\n");
+						size = OmFileHelper.getSize(OmFileHelper.getUploadFilesDir());
+						restSize -= size;
+						report.append("\t\tfiles: ").append(OmFileHelper.getHumanSize(size)).append("\n");
+						//public/private files
+						//Object: fileexploreritem (filehash == document file/folder)
+						report.append("\t\trest: ").append(OmFileHelper.getHumanSize(restSize)).append("\n");
 					}
-					
-					*/
-					//Upload backup ???
-					
-					//Upload import ???
-					
-					//public/private files
-					//Object: fileexploreritem (filehash == document file/folder)
-					//webapps/openmeetings/upload/files (check if ends with filename)
-					
-					//public/private recordings
-					//Object: flvrecording
-					//webapps/openmeetings/streams/<room_id>/rec_<id>*				-->temporary files
-					//webapps/openmeetings/streams/hibernate/flvRecording_<id>*		-->files
+					{ //STREAMS
+						long sectionSize = OmFileHelper.getSize(OmFileHelper.getStreamsDir());
+						report.append("Recordings allocates: ").append(OmFileHelper.getHumanSize(sectionSize)).append("\n");
+						long size = OmFileHelper.getSize(OmFileHelper.getStreamsHibernateDir());
+						long restSize = sectionSize - size;
+						report.append("\t\tfinal: ").append(OmFileHelper.getHumanSize(size)).append("\n");
+						report.append("\t\trest: ").append(OmFileHelper.getHumanSize(restSize)).append("\n");
+						
+						//public/private recordings
+						//Object: flvrecording_metadata == possibly incomplete
+						//Object: flvrecording == final
+						//webapps/openmeetings/streams/<room_id>/rec_<id>*				-->temporary files
+						//webapps/openmeetings/streams/hibernate/flvRecording_<id>*		-->files
+					}
+					System.out.println(report);
 				} catch (Exception e) {
 					handleError("Files failed", e);
 				}
@@ -447,6 +482,18 @@ public class Admin {
 		
 		System.out.println("... Done");
 		System.exit(0);
+	}
+	
+	private long getUserIdByProfile(String name) {
+		long result = -1;
+		if (name.startsWith(OmFileHelper.profilesPrefix)) {
+			try {
+				result = Long.parseLong(name.substring(OmFileHelper.profilesPrefix.length()));
+			} catch (Exception e) {
+				//noop
+			}
+		}
+		return result;
 	}
 	
 	private class AdminUserDetails {
