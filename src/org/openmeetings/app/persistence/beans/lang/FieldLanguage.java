@@ -54,7 +54,7 @@ public class FieldLanguage implements Serializable {
 	@Column(name="code")
 	private String code;
 	
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "language_id", insertable = true, updatable = true)
 	private Collection<Fieldlanguagesvalues> languageValues;
 	

@@ -48,7 +48,6 @@ public class FieldLanguageDaoImpl {
 
 	public FieldLanguage addLanguage(int langId, String langName, Boolean langRtl, String code) {
 		try {
-
 			FieldLanguage fl = new FieldLanguage();
 			fl.setLanguage_id((long)langId);
 			fl.setStarttime(new Date());
@@ -59,7 +58,12 @@ public class FieldLanguageDaoImpl {
 
 			fl = em.merge(fl);
 
-			return fl;
+			//Eagerly FETCH values list
+			TypedQuery<FieldLanguage> q = em.createQuery("select fl from FieldLanguage fl LEFT JOIN FETCH fl.languageValues WHERE fl.language_id = :langId", FieldLanguage.class);
+			q.setParameter("langId", langId);
+			List<FieldLanguage> results = q.getResultList();
+			
+			return results != null && !results.isEmpty() ? results.get(0) : null;
 		} catch (Exception ex2) {
 			log.error("[addLanguage]: ", ex2);
 		}
