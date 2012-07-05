@@ -125,10 +125,10 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 			log.debug("sid: " + sid);
 
 			Long users_id = getSessionManagement().checkSession(sid);
-			if (users_id < 0) {
+			if (users_id == 0) {
+				//checkSession will return 0 in case of invalid session
 				throw new Exception("Request from invalid user " + users_id);
 			}
-
 			String publicSID = httpServletRequest.getParameter("publicSID");
 			if (publicSID == null) {
 				throw new Exception("publicSID is empty: " + publicSID);
@@ -294,6 +294,7 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 				ctx.put("default_quality_screensharing",
 						default_quality_screensharing);
 
+				//invited guest does not have valid user_id (have user_id == -1)
 				ctx.put("user_id", users_id);
 
 				String port = httpServletRequest.getParameter("port");

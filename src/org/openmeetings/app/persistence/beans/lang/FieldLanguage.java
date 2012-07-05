@@ -39,7 +39,7 @@ public class FieldLanguage implements Serializable {
 
 	private static final long serialVersionUID = 3501643212388395425L;
 	@Id
-	@Column(name="language_id", unique=true, nullable= false)
+	@Column(name="language_id")
 	private Long language_id;
 	@Column(name="name")
 	private String name;
