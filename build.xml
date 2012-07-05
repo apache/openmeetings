@@ -40,6 +40,8 @@
 	<property name="rat.lib.dir" value="${project.lib.dir}/rat" />
 	<property name="dtd-generator.lib.dir" value="${project.lib.dir}/dtd-generator" />
 	<property name="svntask.lib.dir" value="${project.lib.dir}/svntask" />
+	<property name="docs.dest" value="docs" />
+	<property name="docs.src" value="xdocs" />
 
 	<property name="red5.server.dir" value="${build.base.dir}/red5/server" />
 	<property name="red5.client.dir" value="${build.base.dir}/red5/client" />
@@ -530,6 +532,8 @@
 
 		<rat:report>
 			<fileset dir="${main.src.dir}" />
+			<fileset dir="${webcontent.src.dir}" />
+			<fileset dir="${docs.src}" />
 		</rat:report>
 	</target>
 
@@ -540,8 +544,6 @@
 
 	<target name="build.webservice.doc" depends="compile.only, build.only.webservice.doc"/>
 
-	<property name="docs.dest" value="docs" />
-	<property name="docs.src" value="xdocs" />
 	<patternset id="images">
 		<include name="**/*.gif" />
 		<include name="**/*.jpeg" />
