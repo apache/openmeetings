@@ -104,7 +104,7 @@
 		<mkdir dir="${dtd-generator.lib.dir}" />
 		<mkdir dir="${svntask.lib.dir}" />
 		<mkdir dir="${laszlo.home}" />
-		<echo file="${build.base.dir}/velocity.properties" append="false">runtime.log = ${build.base.dir}/velocity.log${line.separator}</echo>
+		<echo file="${build.base.dir}/velocity.properties" append="false">runtime.log = ${build.base.dir}/velocity.log${line.separator}output.encoding=UTF-8${line.separator}</echo>
 	</target>
 
 	<!-- build artefacts -->
