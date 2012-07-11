@@ -614,20 +614,6 @@
 				<include name="**/*.js" />
 			</fileset>
 		</copy>
-		<copy todir="${dist.webapps.dir}/docs/source">
-			<fileset dir="${basedir}/docs/source/">
-				<include name="**/*.js" />
-				<include name="**/*.gif" />
-				<include name="**/*.png" />
-			</fileset>
-		</copy>
-		<copy todir="${dist.webapps.dir}/docs/source/helpers">
-			<fileset dir="${basedir}/docs/source/helpers">
-				<include name="**/*.js" />
-				<include name="**/*.css" />
-				<include name="**/*.png" />
-			</fileset>
-		</copy>
 	</target>
 
 	<!-- Unit Tests -->
