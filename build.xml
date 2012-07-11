@@ -391,14 +391,24 @@
 
 	<target name="client.debug.only" depends="compile.laszlo.main.debug.as3,compile.laszlo.main.debug" />
 
-	<target name="compile.laszlo.main.as3" depends="compile.laszlo.main.debug.as3">
-		<java classname="org.openlaszlo.compiler.Main" fork="true" newenvironment="true" failonerror="true" dir="${laszlo.as3.src.dir}" classpathref="laszlo.lib">
+	<target name="-compile.flash" description="compile flash application">
+		<!-- commented for now
+		<echo message="flash.src.dir == '${flash.src.dir}'" />
+		<echo message="classpathref == '${laszlo.lib}'" />
+		<echo message="laszlo.home == '${laszlo.home}'" />
+		<echo message="laszlo.debug == '${laszlo.debug}'" />
+		<echo message="laszlo.proxied == '${laszlo.proxied}'" />
+		<echo message="flash.runtime == '${flash.runtime}'" />
+		<echo message="out.dir.swf == '${out.dir.swf}'" />
+		<echo message="flash.main.file == '${flash.main.file}'" />
+		-->
+		<java classname="org.openlaszlo.compiler.Main" fork="true" newenvironment="true" failonerror="true" dir="${flash.src.dir}" classpathref="laszlo.lib">
 			<jvmarg value="-DLPS_HOME=${laszlo.home}" />
 			<jvmarg value="-Dlzdebug=${laszlo.debug}" />
 			<jvmarg value="-Dlzproxied=${laszlo.proxied}" />
 			<jvmarg value="-Xms1024M" />
 			<jvmarg value="-Xmx1024M" />
-			<arg line="--runtime=swf10 --dir ${out.dir.swf} --onerror warn main.as3.lzx" />
+			<arg line="--runtime=${flash.runtime} --dir &quot;${out.dir.swf}&quot; --onerror warn ${flash.main.file}" />
 		</java>
 	</target>
 
@@ -409,47 +419,43 @@
 		<copy todir="${dist.webapps.dir}/testingTools">
 			<fileset dir="${webcontent.src.dir}/openmeetings/testingTools" includes="*" />
 		</copy>
-		<java classname="org.openlaszlo.compiler.Main" fork="true" newenvironment="true" failonerror="true" dir="${laszlo.as3.src.dir}/networkTesting" classpathref="laszlo.lib">
-			<jvmarg value="-DLPS_HOME=${laszlo.home}" />
-			<jvmarg value="-Dlzdebug=${laszlo.debug}" />
-			<jvmarg value="-Dlzproxied=${laszlo.proxied}" />
-			<jvmarg value="-Xms512M" />
-			<jvmarg value="-Xmx512M" />
-			<arg line="--runtime=swf10 --dir ${out.dir.swf} --onerror warn networktesting.lzx" />
-		</java>
+		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
+			<param name="flash.src.dir" value="${laszlo.as3.src.dir}/networkTesting" />
+			<param name="flash.runtime" value="swf10" />
+			<param name="flash.main.file" value="networktesting.lzx" />
+		</antcall>
+	</target>
+
+	<target name="compile.laszlo.main.as3" depends="compile.laszlo.main.debug.as3">
+		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
+			<param name="flash.src.dir" value="${laszlo.as3.src.dir}" />
+			<param name="flash.runtime" value="swf10" />
+			<param name="flash.main.file" value="main.as3.lzx" />
+		</antcall>
 	</target>
 
 	<target name="compile.laszlo.main.debug.as3" depends="-retrieve-openlaszlo">
-		<java classname="org.openlaszlo.compiler.Main" fork="true" newenvironment="true" failonerror="true" dir="${laszlo.as3.src.dir}" classpathref="laszlo.lib">
-			<jvmarg value="-DLPS_HOME=${laszlo.home}" />
-			<jvmarg value="-Dlzdebug=${laszlo.debug}" />
-			<jvmarg value="-Dlzproxied=${laszlo.proxied}" />
-			<jvmarg value="-Xms1024M" />
-			<jvmarg value="-Xmx1024M" />
-			<arg line="--runtime=swf10 --dir ${out.dir.swf} --onerror warn maindebug.as3.lzx" />
-		</java>
+		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
+			<param name="flash.src.dir" value="${laszlo.as3.src.dir}" />
+			<param name="flash.runtime" value="swf10" />
+			<param name="flash.main.file" value="maindebug.as3.lzx" />
+		</antcall>
 	</target>
 
 	<target name="compile.laszlo.main" depends="compile.laszlo.main.debug">
-		<java classname="org.openlaszlo.compiler.Main" fork="true" newenvironment="true" failonerror="true" dir="${laszlo.src.dir}" classpathref="laszlo.lib">
-			<jvmarg value="-DLPS_HOME=${laszlo.home}" />
-			<jvmarg value="-Dlzdebug=${laszlo.debug}" />
-			<jvmarg value="-Dlzproxied=${laszlo.proxied}" />
-			<jvmarg value="-Xms1024M" />
-			<jvmarg value="-Xmx1024M" />
-			<arg line="--runtime=swf8 --dir ${out.dir.swf} --mcache on --onerror warn main.lzx" />
-		</java>
+		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
+			<param name="flash.src.dir" value="${laszlo.src.dir}" />
+			<param name="flash.runtime" value="swf8" />
+			<param name="flash.main.file" value="main.lzx" />
+		</antcall>
 	</target>
 
 	<target name="compile.laszlo.main.debug" depends="-retrieve-openlaszlo">
-		<java classname="org.openlaszlo.compiler.Main" fork="true" newenvironment="true" failonerror="true" dir="${laszlo.src.dir}" classpathref="laszlo.lib">
-			<jvmarg value="-DLPS_HOME=${laszlo.home}" />
-			<jvmarg value="-Dlzdebug=${laszlo.debug}" />
-			<jvmarg value="-Dlzproxied=${laszlo.proxied}" />
-			<jvmarg value="-Xms1024M" />
-			<jvmarg value="-Xmx1024M" />
-			<arg line="--runtime=swf8 --dir ${out.dir.swf} --mcache on --onerror warn maindebug.lzx" />
-		</java>
+		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
+			<param name="flash.src.dir" value="${laszlo.src.dir}" />
+			<param name="flash.runtime" value="swf8" />
+			<param name="flash.main.file" value="maindebug.lzx" />
+		</antcall>
 	</target>
 
 	<target name="compile" depends="compile.only, prepare" />
@@ -671,7 +677,6 @@
 	</target>
 
 
-	<property name="ivy.jar" value="ivy-2.2.0.jar" />
 	<taskdef uri="antlib:org.apache.ivy.ant" resource="org/apache/ivy/ant/antlib.xml" classpath="${ivy.lib.dir}/${ivy.jar}" />
 
 	<!-- Build Targets -->
