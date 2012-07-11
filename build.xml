@@ -298,7 +298,9 @@
 		</jar>
 
 		<!-- Build WebServices -->
-		<jar destfile="${dist.webapps.dir}/WEB-INF/services/${project.distname}-${jar.suffix}.aar">
+		<property name="om_aar_name" value="${project.distname}-${jar.suffix}.aar"/>
+		<property name="om_aar_folder" value="${dist.webapps.dir}/WEB-INF/services"/>
+		<jar destfile="${om_aar_folder}/${om_aar_name}">
 			<fileset dir="src/">
 				<include name="META-INF/services.xml" />
 			</fileset>
@@ -307,6 +309,7 @@
 				<include name="META-INF/NOTICE" />
 			</fileset>
 		</jar>
+		<echo file="${om_aar_folder}/services.list" append="false">${om_aar_name}${line.separator}version.aar${line.separator}</echo>
 		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-WebService-${jar.suffix}.jar">
 			<fileset dir="${main.out.dir}">
 				<include name="**/openmeetings/axis/**" />
