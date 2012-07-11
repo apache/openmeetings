@@ -51,8 +51,8 @@ public class Server implements Serializable {
 	private String name;
 	@Column(name="address")
 	private String address;
-	@Column(name="deleted", nullable=false, columnDefinition="DEFAULT false")
-	private boolean deleted;
+	@Column(name="deleted", nullable=false)
+	private boolean deleted = false;
 	
 	public Long getId() {
 		return id;
