@@ -18,7 +18,7 @@
  */
 package org.openmeetings.app.persistence.beans.rooms;
 
-import org.openmeetings.app.conference.session.RoomClient;
+import org.openmeetings.app.persistence.beans.basic.Server;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -34,6 +34,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -106,6 +107,9 @@ public class Rooms implements Serializable {
 	private Boolean waitForRecording; //Show warning that user has to start recording
 	@Column(name = "allow_recording")
 	private Boolean allowRecording; //Show or show not the recording option in a conference room
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "server_id")
+	private Server server;
 	
 	/**
 	 * Layout of Room
@@ -373,4 +377,12 @@ public class Rooms implements Serializable {
 		this.showMicrophoneStatus = showMicrophoneStatus;
 	}
     
+
+	public Server getServer() {
+		return server;
+	}
+
+	public void setServer(Server server) {
+		this.server = server;
+	}
 }

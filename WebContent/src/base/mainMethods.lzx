@@ -115,6 +115,13 @@
     	]]>
     </method>
         
+    <method name="getServicesUrl">
+    	<![CDATA[
+    	   return canvas.protocol + '://' + canvas.rtmphostlocal
+    	   	+ ':' + canvas.red5httpport + canvas.httpRootKey + 'services/';
+    	]]>
+    </method>
+        
     <dataset type="http" name="languageData" request="false" 
         src="${ canvas.currentlanguage+'.xml' }" proxied="false">
         <handler name="ondata" args="value">
@@ -175,6 +182,7 @@
         this.setAttribute('adminModuleConnections',canvas.myConfigSet.getPointer().xpathQuery('config/adminModuleConnections/text()'));  
         this.setAttribute('adminModuleConfiguration',canvas.myConfigSet.getPointer().xpathQuery('config/adminModuleConfiguration/text()'));  
         this.setAttribute('adminModuleBackup',canvas.myConfigSet.getPointer().xpathQuery('config/adminModuleBackup/text()'));  
+        this.setAttribute('adminModuleServers',canvas.myConfigSet.getPointer().xpathQuery('config/adminModuleServers/text()'));  
         
         this.setAttribute('moderatorModuleUser',canvas.myConfigSet.getPointer().xpathQuery('config/moderatorModuleUser/text()'));  
         this.setAttribute('moderatorModuleRoom',canvas.myConfigSet.getPointer().xpathQuery('config/moderatorModuleRoom/text()'));  

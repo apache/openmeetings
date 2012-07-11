@@ -102,7 +102,10 @@
 	    		canvas.isConference = false;
 		    }
 	    	var roomObj = canvas.thishib.currentInvitation.room;
-        	hib.currentroomid = canvas.thishib.currentInvitation.room.rooms_id;
+        	hib.currentroomid = roomObj.rooms_id;
+        	if (roomObj.server != null) {
+        		canvas.rtmphostlocal = roomObj.server.address;
+	        }
 		</method>
 		
     	<method name="login">

@@ -81,6 +81,7 @@
 			this.userSearchs.setAttribute('text',"");
 			this.showContactData.selectItem("3");
             this.languages.selectItem(String('1'));
+           	this.server.selectItem(this.server.firstItem);
 			
         ]]>
 	</handler>
@@ -201,6 +202,11 @@
 				
 			}
 			
+            if (this.server.firstItem == 0 && obj.server != null) {
+	            this.server.idToSelect = obj.server.id;
+	        } else {
+           		this.server.selectItem(obj.server != null ? obj.server.id : this.server.firstItem);
+           	}
         ]]>
     </method>
 	
@@ -272,6 +278,7 @@
   			
 			this.sendObject["userOffers"] = parent.userOffers.getText();
 			this.sendObject["userSearchs"] = parent.userSearchs.getText();
+            this.sendObject["serverId"] = parent.server.getValue(); 
 			
 			var showContactData = Number(parent.showContactData.getValue());
 			
@@ -447,13 +454,16 @@
 		<labelTooltip labelid="176" />
 	</blueButton>
 	
+    <labelText labelid="1502" x="2" y="740" />
+        <serverCombobox name="server" width="270" y="740" x="120" editable="false" fontsize="11"/>
+        
     <!-- SIP Account Data -->
-    <labelText labelid="893" width="200" y="740" resize="false" 
+    <labelText labelid="893" width="200" y="770" resize="false" 
                x="0" fontstyle="bold" />   
     
-    <view resource="messagebox_info_rsc" x="0" y="760" />
+    <view resource="messagebox_info_rsc" x="0" y="790" />
     
-    <labelText labelid="894" x="24" y="760"  fontstyle="italic"
+    <labelText labelid="894" x="24" y="790"  fontstyle="italic"
                multiline="true" width="364" />
 
     <labelText labelid="921" width="200" y="830" resize="false" x="2"/>  

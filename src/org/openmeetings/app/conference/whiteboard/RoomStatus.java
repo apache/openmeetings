@@ -20,7 +20,7 @@ package org.openmeetings.app.conference.whiteboard;
 
 import java.util.HashMap;
 
-import org.openmeetings.app.conference.session.RoomClient;
+import org.openmeetings.app.persistence.beans.rooms.RoomClient;
 
 public class RoomStatus {
 	

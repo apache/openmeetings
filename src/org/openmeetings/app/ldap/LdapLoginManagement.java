@@ -27,7 +27,6 @@ import java.util.Random;
 import java.util.Vector;
 
 import org.openmeetings.app.OpenmeetingsVariables;
-import org.openmeetings.app.conference.session.RoomClient;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.basic.dao.LdapConfigDaoImpl;
@@ -37,6 +36,7 @@ import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.ldap.config.ConfigReader;
 import org.openmeetings.app.persistence.beans.adresses.States;
 import org.openmeetings.app.persistence.beans.basic.LdapConfig;
+import org.openmeetings.app.persistence.beans.rooms.RoomClient;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.utils.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -700,7 +700,8 @@ public class LdapLoginManagement {
 					"", //userOffers
 					"", //userSearchs
 					false, //showContactData
-					true //showContactDataToContacts
+					true, //showContactDataToContacts
+					null //FIXME SERVER
 					);
 
 		} catch (Exception e) {

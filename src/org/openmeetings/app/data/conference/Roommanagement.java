@@ -33,7 +33,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.openmeetings.app.conference.session.RoomClient;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.beans.basic.SearchResult;
@@ -41,7 +40,9 @@ import org.openmeetings.app.data.conference.dao.RoomModeratorsDaoImpl;
 import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.basic.Configuration;
+import org.openmeetings.app.persistence.beans.basic.Server;
 import org.openmeetings.app.persistence.beans.domain.Organisation_Users;
+import org.openmeetings.app.persistence.beans.rooms.RoomClient;
 import org.openmeetings.app.persistence.beans.rooms.RoomTypes;
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.rooms.Rooms_Organisation;
@@ -783,7 +784,7 @@ public class Roommanagement {
 			Long ownerId, Boolean waitForRecording, Boolean allowRecording,
 			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, Boolean hideFilesExplorer, 
 			Boolean hideActionsMenu, Boolean hideScreenSharing, Boolean hideWhiteboard,
-			Boolean showMicrophoneStatus) {
+			Boolean showMicrophoneStatus, Server server) {
 
 		try {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
@@ -825,6 +826,7 @@ public class Roommanagement {
 				r.setHideScreenSharing(hideScreenSharing);	
 				r.setHideWhiteboard(hideWhiteboard);
 				r.setShowMicrophoneStatus(showMicrophoneStatus);
+				r.setServer(server);
 				
 				// handle SIP Issues
 				OpenXGReturnObject openXGReturnObject = openXGHttpClient
@@ -1806,7 +1808,8 @@ public class Roommanagement {
 						false, // hideActionsMenu
 						false, // hideScreenSharing 
 						false, // hideWhiteboard
-						false //showMicrophoneStatus
+						false, //showMicrophoneStatus
+						null //server
 						);
 
 				if (rooms_id != null) {

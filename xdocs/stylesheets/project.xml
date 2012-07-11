@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -108,6 +108,9 @@
     		<subitem name="OpenOffice Converter" href="/OpenOfficeConverter.html" />
             <subitem name="FFMPEG Version Switch" href="/FFMPEGVersionSwitch.html" />
         </item>
+    	<item name="Clustering" >
+    		<subitem name="Clustering (Manual)" href="/ClusteringManual.html" />
+    	</item>
     	<item name="Misc" >
     		<subitem name="Get version info" href="/GetVersionInfo.html" />
     	</item>

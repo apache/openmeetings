@@ -67,6 +67,7 @@
         this.hideScreenSharing.setValue(false);
         this.hideWhiteboard.setValue(false); 
         this.showMicrophoneStatus.setValue(false);
+		this.server.selectItem(this.server.firstItem);
 	</handler>
 	
     <handler name="ondelete" >
@@ -225,6 +226,12 @@
             }
             
             this._listRoomModerators.getRoomModeratorsByRoomId.doCall();
+            
+            if (this.server.firstItem == 0 && obj.server != null) {
+	            this.server.idToSelect = obj.server.id;
+	        } else {
+           		this.server.selectItem(obj.server != null ? obj.server.id : this.server.firstItem);
+           	}
         ]]>
     </method>
 	
@@ -323,6 +330,7 @@
             this.sendObject["hideWhiteboard"] = parent.hideWhiteboard.getValue();      
             
             this.sendObject["showMicrophoneStatus"] = parent.showMicrophoneStatus.getValue(); 
+            this.sendObject["serverId"] = parent.server.getValue(); 
             
             var ownerId = parent.ownerId.getText();
             if (ownerId == "") ownerId = 0;
@@ -731,6 +739,9 @@
     
     <labelText labelid="1308" x="400" y="722" width="270" />                 
         <customEdittext name="ownerId" x="520" y="722" width="180" />      
+                
+    <labelText labelid="1502" x="400" y="752" width="270" />
+        <serverCombobox name="server" width="180" y="752" x="520" editable="false" fontsize="11"/>
                 
     <view x="400" y="1400" />    
     

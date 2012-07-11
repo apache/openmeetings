@@ -16,38 +16,74 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.openmeetings.app.conference.session;
+package org.openmeetings.app.persistence.beans.rooms;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.Cacheable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+@Entity
+@Cacheable
+@Table(name = "roomclient")
+@NamedQueries({
+	@NamedQuery(name="getAllRoomClients", query="SELECT rc FROM RoomClient rc")
+	, @NamedQuery(name="getByStreamId", query="SELECT rc FROM RoomClient rc WHERE rc.streamid = :streamid")
+	, @NamedQuery(name="getByStreamIdNonScreen", query="SELECT rc FROM RoomClient rc WHERE rc.streamid = :streamid AND (rc.isScreenClient IS NULL OR rc.isScreenClient = false)")
+	, @NamedQuery(name="getByPublicSidAvClient", query="SELECT rc FROM RoomClient rc WHERE rc.publicSID = :publicSID AND rc.isAVClient = :isAVClient")
+	, @NamedQuery(name="getByUserId", query="SELECT rc FROM RoomClient rc WHERE rc.user_id = :userId")
+	, @NamedQuery(name="getByRoomId", query="SELECT rc FROM RoomClient rc WHERE rc.room_id = :room_id AND rc.isScreenClient = false AND rc.isAVClient <> true")
+	, @NamedQuery(name="getByRoomIdAll", query="SELECT rc FROM RoomClient rc WHERE rc.room_id = :room_id")
+	, @NamedQuery(name="getByRoomIdMod", query="SELECT rc FROM RoomClient rc WHERE rc.room_id = :room_id AND rc.isMod = true")
+	, @NamedQuery(name="deleteByStreamId", query="DELETE FROM RoomClient rc WHERE rc.streamid = :streamid")
+	, @NamedQuery(name="deleteAll", query="DELETE FROM RoomClient rc")
+})
 public class RoomClient implements Serializable {
-	
 	private static final long serialVersionUID = 1831858089607111565L;
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="roomclient_id")
 	private Long roomClientId = null;
 	
 	/*
 	 * login name
 	 */
+	@Column(name="username")
 	private String username = "";
 	
 	/*
 	 * a unique id
 	 */
+	@Column(name="streamid")
 	private String streamid = "";
 	
+	@Column(name="scope")
 	private String scope = "";
 	
+	@Column(name="vWidth")
 	private int vWidth = 0;
+	@Column(name="vHeight")
 	private int vHeight = 0;
+	@Column(name="vX")
 	private int vX = 0;
+	@Column(name="vY")
 	private int vY = 0;
 	/**
 	 * StreamPublishName is used in the screen sharing client to publish the stream
 	 */
+	@Column(name="streamPublishName")
 	private String streamPublishName = "";
 	
 	/**
@@ -63,6 +99,7 @@ public class RoomClient implements Serializable {
 	 * didn't choose any device settings or the connection really just
 	 * has been initialized
 	 */
+	@Column(name="public_sid")
 	private String publicSID = "";
 	
 	/*
@@ -71,14 +108,23 @@ public class RoomClient implements Serializable {
 	 * sharing its video/audio
 	 * 
 	 */
+	@Column(name="is_mod")
 	private Boolean isMod = false;
+	@Column(name="is_super_mod")
 	private Boolean isSuperModerator = false;
+	@Column(name="canDraw")
 	private Boolean canDraw = false;
+	@Column(name="canShare")
 	private Boolean canShare = false;
+	@Column(name="canRemote")
 	private Boolean canRemote = false;
+	@Column(name="canGiveAudio")
     private Boolean canGiveAudio = false;
+	@Column(name="connected_since")
 	private Date connectedSince;
+	@Column(name="formated_date")
 	private String formatedDate;
+	@Column(name="isScreenClient")
 	private Boolean isScreenClient = false;
 	/**
 	 * If true this client is only used to stream audio/video events, 
@@ -88,38 +134,46 @@ public class RoomClient implements Serializable {
 	 * false the user is a regular user with full session object<br/>
 	 * 
 	 */
+	@Column(name="isAVClient", nullable=false)
 	private boolean isAVClient = false;
 	
 	/*
 	 * the color of the user, only needed in 4x4 Conference, in these rooms each user has its own
 	 * color 
 	 */
+	@Column(name="usercolor")
 	private String usercolor;
 	/*
 	 * no longer needed since broadCastId is now the new unique id
 	 * 
 	 * @deprecated
 	 */
+	@Column(name="userpos")
 	private Integer userpos;
 	/*
 	 * client IP
 	 */
+	@Column(name="userip")
 	private String userip;
 	/*
 	 * client Port
 	 */
+	@Column(name="userport")
 	private int userport;
 	/*
 	 * current room id while conferencing
 	 */
+	@Column(name="room_id")
 	private Long room_id;
 	
+	@Column(name="room_enter")
 	private Date roomEnter = null;
 	
 	/*
 	 * this is the id this user is currently using to broadcast a stream
 	 * default value is -2 cause otherwise this can due to disconnect
 	 */
+	@Column(name="broadcast_id")
 	private long broadCastID = -2;
 	
 	/*
@@ -128,20 +182,30 @@ public class RoomClient implements Serializable {
 	 * might be null or 0 even if somebody is already in a conference room
 	 * 
 	 */
+	@Column(name="user_id")
 	private Long user_id = null;
+	@Column(name="firstname")
 	private String firstname = "";
+	@Column(name="lastname")
 	private String lastname = "";
+	@Column(name="mail")
 	private String mail;
+	@Column(name="last_login")
 	private String lastLogin;
+	@Column(name="official_code")
 	private String official_code;
+	@Column(name="picture_uri")
 	private String picture_uri;
+	@Column(name="language")
 	private String language = "";
 	
 	/*
 	 * these vars are necessary to send notifications from the chatroom of a 
 	 * conference to outside of the conference room
 	 */
+	@Column(name="is_chat_notification")
 	private Boolean isChatNotification = false;
+	@Column(name="chat_user_room_id")
 	private Long chatUserRoomId = null;
 	
 	/*
@@ -151,40 +215,59 @@ public class RoomClient implements Serializable {
 	 * v - video only
 	 * n - no av only static Image
 	 */
+	@Column(name="avsettings")
 	private String avsettings = "";
 	
+	@Column(name="swfurl")
 	private String swfurl;
+	@Column(name="is_recording")
 	private Boolean isRecording = false;
+	@Column(name="room_recording_name")
 	private String roomRecordingName;
 	
+	@Column(name="flvRecordingId")
 	private Long flvRecordingId;
+	@Column(name="flvRecordingMetaDataId")
 	private Long flvRecordingMetaDataId;
+	@Column(name="organization_id")
 	private Long organization_id;
-	boolean startRecording = false;
-	boolean startStreaming = false;
+	@Column(name="startRecording")
+	private boolean startRecording = false;
+	@Column(name="startStreaming")
+	private boolean startStreaming = false;
+	@Column(name="screenPublishStarted")
 	private boolean screenPublishStarted = false;
+	@Column(name="streamPublishStarted")
 	private boolean streamPublishStarted = false;
 	
 	/*
 	 * Indicates if this User is broadcasting his stream at all
 	 * Only interesting in the Event Modus
 	 */
+	@Column(name="isBroadcasting")
 	private Boolean isBroadcasting = false;
 	
 	 //Vars to simulate external Users
+	@Column(name="externalUserId")
     private String externalUserId;
+	@Column(name="externalUserType")
     private String externalUserType;
     
+	@Transient
     private List<String> sharerSIDs = new LinkedList<String>();
     
     //Session values for handling the Interviwe Room Type
+	@Column(name="interviewPodId")
     private Integer interviewPodId = null;
+	@Column(name="allowRecording")
     private Boolean allowRecording = true;
 	
 	/*
 	 * Zombie Flag
 	 */
+	@Column(name="zombieCheckFlag")
 	private Boolean zombieCheckFlag = false;
+	@Column(name="micMuted")
     private Boolean micMuted = false;
 	
 	public void setUserObject(Long user_id, String username, String firstname, String lastname) {

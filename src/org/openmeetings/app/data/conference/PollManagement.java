@@ -27,12 +27,12 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import org.openmeetings.app.conference.session.RoomClient;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.persistence.beans.poll.PollType;
 import org.openmeetings.app.persistence.beans.poll.RoomPoll;
 import org.openmeetings.app.persistence.beans.poll.RoomPollAnswers;
+import org.openmeetings.app.persistence.beans.rooms.RoomClient;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

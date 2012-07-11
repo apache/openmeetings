@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2006 The Apache Software Foundation Licensed under the Apache 
+	License, Version 2.0 (the "License"); you may not use this file except in 
+	compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+	Unless required by applicable law or agreed to in writing, software distributed 
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+	the specific language governing permissions and limitations under the License. -->
+<document>
+	<properties>
+		<title>Clustering (Manual)</title>
+		<author email="solomax@apache.org">
+			OpenMeetings Team
+		</author>
+	</properties>
+
+	<body>
+		<section name="Description">
+			<p>Manual balancing supposes that each room and user belongs to
+				particular OpenMeetings server in the cluster.</p>
+			<p>One database is used for all the OpenMeetings servers, so there is
+				one user table and one conference room table there. Room and User tables has
+				additional field named “server” – OpenMeetings server on which the
+				conferences in this room would happen is stored there.</p>
+			<p>Certain folders should be shared between all servers to allow access
+				to the files/recording</p>
+		</section>
+		<section name="Configuration">
+			<ul>
+				<li>
+					Multiple OM servers should be set up as described in
+					<a href="installation.html" target="_BLANK">
+						<b>Installation</b>
+					</a>
+				</li>
+				<li>All servers should be configured to have same Time zone (To avoid
+					Schedulers to drop user sessions as outdated)
+				</li>
+				<li>All servers should be configured to use the same DB</li>
+				<li>Servers should be added in Administration->Servers section
+				</li>
+				<li>Servers should be assigned to the Users/Rooms in the
+					Administration->Users and Administration->Conference Rooms sections
+					correspondingly
+				</li>
+				<li>
+					Consider all servers are installed into
+					<div class="xmlcode">/opt/red5</div>
+					then the folders
+					<div class="xmlcode">/opt/red5/webapps/openmeetings/upload</div>
+					and
+					<div class="xmlcode">/opt/red5/webapps/openmeetings/streams</div>
+					should be mounted to the same physical folders (using SAMBA or NFS)
+				</li>
+			</ul>
+		</section>
+	</body>
+</document>

@@ -28,7 +28,6 @@ import java.util.Set;
 
 import org.apache.commons.transaction.util.FileHelper;
 import org.openmeetings.app.OpenmeetingsVariables;
-import org.openmeetings.app.conference.session.RoomClient;
 import org.openmeetings.app.conference.whiteboard.WhiteboardManagement;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
@@ -41,6 +40,7 @@ import org.openmeetings.app.documents.LibraryDocumentConverter;
 import org.openmeetings.app.documents.LibraryWmlLoader;
 import org.openmeetings.app.documents.LoadLibraryPresentation;
 import org.openmeetings.app.persistence.beans.files.FileExplorerItem;
+import org.openmeetings.app.persistence.beans.rooms.RoomClient;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.utils.OmFileHelper;
 import org.openmeetings.utils.crypt.MD5;

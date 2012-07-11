@@ -57,6 +57,7 @@
         <xs:element ref="adminModuleConfiguration"/>
         <xs:element ref="adminModuleBackup"/>
         <xs:element ref="adminModuleLDAP"/>
+        <xs:element ref="adminModuleServers"/>
         <xs:element ref="moderatorModuleUser"/>
         <xs:element ref="moderatorModuleRoom"/>
         <xs:element ref="dashboardModuleStartScreen"/>
@@ -121,6 +122,7 @@
   <xs:element name="adminModuleConfiguration" type="xs:NCName"/>
   <xs:element name="adminModuleBackup" type="xs:NCName"/>
   <xs:element name="adminModuleLDAP" type="xs:NCName"/>
+  <xs:element name="adminModuleServers" type="xs:NCName"/>
   <xs:element name="moderatorModuleUser" type="xs:NCName"/>
   <xs:element name="moderatorModuleRoom" type="xs:NCName"/>
   <xs:element name="dashboardModuleStartScreen" type="xs:NCName"/>

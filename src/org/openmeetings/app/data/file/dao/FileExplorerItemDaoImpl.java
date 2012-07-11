@@ -261,7 +261,7 @@ public class FileExplorerItemDaoImpl {
         log.debug(".getFileExplorerItems() started");
 
         try {
-			TypedQuery<FileExplorerItem> query = em.createNamedQuery("getAll", FileExplorerItem.class);
+			TypedQuery<FileExplorerItem> query = em.createNamedQuery("getAllFiles", FileExplorerItem.class);
 
             List<FileExplorerItem> fileExplorerList = query.getResultList();
 

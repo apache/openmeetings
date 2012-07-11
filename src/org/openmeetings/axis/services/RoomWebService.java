@@ -28,7 +28,6 @@ import java.util.Map;
 
 import org.apache.axis2.AxisFault;
 import org.openmeetings.app.OpenmeetingsVariables;
-import org.openmeetings.app.conference.session.RoomClient;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.beans.basic.SearchResult;
@@ -41,6 +40,7 @@ import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.persistence.beans.calendar.Appointment;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecording;
 import org.openmeetings.app.persistence.beans.invitation.Invitations;
+import org.openmeetings.app.persistence.beans.rooms.RoomClient;
 import org.openmeetings.app.persistence.beans.rooms.RoomTypes;
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.user.Users;
@@ -687,6 +687,7 @@ public class RoomWebService {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
+			Users u = userManagement.getUserById(users_id);
 			return roommanagement.addRoom(user_level, name, roomtypes_id,
 					comment, numberOfPartizipants, ispublic, null, false,
 					false, null, false, null, true, false, false, "", "", "",
@@ -698,7 +699,8 @@ public class RoomWebService {
 					false, // hideActionsMenu
 					false, // hideScreenSharing 
 					false, // hideWhiteboard
-					false //showMicrophoneStatus
+					false, //showMicrophoneStatus
+					u.getServer()
 					);
 		} catch (Exception err) {
 			log.error("[addRoom] ", err);
@@ -742,6 +744,7 @@ public class RoomWebService {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
+			Users u = userManagement.getUserById(users_id);
 			return roommanagement.addRoom(user_level, name, roomtypes_id,
 					comment, numberOfPartizipants, ispublic, null, appointment,
 					isDemoRoom, demoTime, isModeratedRoom, null, true, false,
@@ -753,7 +756,8 @@ public class RoomWebService {
 					false, // hideActionsMenu
 					false, // hideScreenSharing 
 					false, // hideWhiteboard
-					false //showMicrophoneStatus
+					false, //showMicrophoneStatus
+					u.getServer()
 					);
 		} catch (Exception err) {
 			log.error("[addRoomWithModeration] ", err);
@@ -803,6 +807,7 @@ public class RoomWebService {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
+			Users u = userManagement.getUserById(users_id);
 			return roommanagement.addRoom(user_level, name, roomtypes_id,
 					comment, numberOfPartizipants, ispublic, null, appointment,
 					isDemoRoom, demoTime, isModeratedRoom, null,
@@ -815,7 +820,8 @@ public class RoomWebService {
 					false, // hideActionsMenu
 					false, // hideScreenSharing 
 					false, // hideWhiteboard
-					false //showMicrophoneStatus
+					false, //showMicrophoneStatus
+					u.getServer()
 					);
 		} catch (Exception err) {
 			log.error("[addRoomWithModerationAndQuestions] ", err);
@@ -867,6 +873,7 @@ public class RoomWebService {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
+			Users u = userManagement.getUserById(users_id);
 			return roommanagement.addRoom(user_level, name, roomtypes_id,
 					comment, numberOfPartizipants, ispublic, null, appointment,
 					isDemoRoom, demoTime, isModeratedRoom, null,
@@ -879,7 +886,8 @@ public class RoomWebService {
 					false, // hideActionsMenu
 					false, // hideScreenSharing 
 					false, // hideWhiteboard
-					false //showMicrophoneStatus
+					false, //showMicrophoneStatus
+					u.getServer()
 					);
 		} catch (Exception err) {
 			log.error("[addRoomWithModerationQuestionsAndAudioType] ", err);
@@ -949,12 +957,13 @@ public class RoomWebService {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
+			Users u = userManagement.getUserById(users_id);
 			return roommanagement.addRoom(user_level, name, roomtypes_id,
 					comment, numberOfPartizipants, ispublic, null, appointment,
 					isDemoRoom, demoTime, isModeratedRoom, null,
 					allowUserQuestions, isAudioOnly, false, "", "", "", null,
 					null, null, hideTopBar, hideChat, hideActivitiesAndActions, hideFilesExplorer, 
-					hideActionsMenu, hideScreenSharing, hideWhiteboard, false);
+					hideActionsMenu, hideScreenSharing, hideWhiteboard, false, u.getServer());
 		} catch (Exception err) {
 			log.error("[addRoomWithModerationQuestionsAudioTypeAndHideOptions] ", err);
 			throw new AxisFault(err.getMessage());

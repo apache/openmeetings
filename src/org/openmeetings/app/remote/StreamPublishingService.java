@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.openmeetings.app.OpenmeetingsVariables;
-import org.openmeetings.app.conference.session.RoomClient;
+import org.openmeetings.app.persistence.beans.rooms.RoomClient;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.red5.client.net.rtmp.ClientExceptionHandler;
 import org.red5.logging.Red5LoggerFactory;

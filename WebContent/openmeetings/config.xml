@@ -270,6 +270,7 @@ of the red5-servlet
 
 <adminModuleLDAP>ldapAdmin</adminModuleLDAP>
 
+<adminModuleServers>serversAdmin</adminModuleServers>
 <!-- #############################################
     Moderator Modules
  -->

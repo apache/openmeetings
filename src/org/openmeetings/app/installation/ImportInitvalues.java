@@ -38,6 +38,7 @@ import org.openmeetings.app.data.basic.FieldLanguageDaoImpl;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.basic.Navimanagement;
 import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
+import org.openmeetings.app.data.basic.dao.ServerDaoImpl;
 import org.openmeetings.app.data.calendar.daos.AppointmentCategoryDaoImpl;
 import org.openmeetings.app.data.calendar.daos.AppointmentReminderTypDaoImpl;
 import org.openmeetings.app.data.conference.PollManagement;
@@ -48,6 +49,7 @@ import org.openmeetings.app.data.user.Statemanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
+import org.openmeetings.app.persistence.beans.basic.Server;
 import org.openmeetings.app.persistence.beans.lang.FieldLanguage;
 import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
 import org.openmeetings.app.persistence.beans.lang.Fieldvalues;
@@ -92,6 +94,8 @@ public class ImportInitvalues {
 	private AppointmentReminderTypDaoImpl appointmentReminderTypDaoImpl;
 	@Autowired
 	private PollManagement pollManagement;
+	@Autowired
+	private ServerDaoImpl serverDao;
 
 	public void loadMainMenu() {
 
@@ -190,6 +194,9 @@ public class ImportInitvalues {
 
 		navimanagement.addMainStructure("adminModuleBackup", 21, 367, true,
 				false, 3, "Administration of Backups", 6, "false", 1461L);
+
+		navimanagement.addMainStructure("adminModuleServers", 22, 1498, true,
+				false, 3, "Administration of Servers", 6, "false", 1499L);
 		log.debug("MainMenu ADDED");
 
 		errorManagement.addErrorType(new Long(1), new Long(322));
@@ -577,7 +584,7 @@ public class ImportInitvalues {
 		log.debug("RoomTypes ADDED");
 	}
 	
-	public void loadDefaultRooms(boolean createRooms) {
+	public void loadDefaultRooms(boolean createRooms, Server s) {
 		if (createRooms) {
 			//hardcoded IDs (they are not intended to be changed)
 			long conference_Id = 1;
@@ -594,7 +601,8 @@ public class ImportInitvalues {
 					false, // hideActionsMenu
 					false, // hideScreenSharing
 					false, // hideWhiteboard
-					false // showMicrophoneStatus
+					false, // showMicrophoneStatus
+					s
 					);
 
 			roommanagement.addRoom(3, "public Conference Room", conference_Id,
@@ -607,7 +615,8 @@ public class ImportInitvalues {
 					false, // hideActionsMenu
 					false, // hideScreenSharing
 					false, // hideWhiteboard
-					false // showMicrophoneStatus
+					false, // showMicrophoneStatus
+					s
 					);
 
 			roommanagement.addRoom(3, "public Video Only Room", conference_Id,
@@ -620,7 +629,8 @@ public class ImportInitvalues {
 					false, // hideActionsMenu
 					false, // hideScreenSharing
 					false, // hideWhiteboard
-					false // showMicrophoneStatus
+					false, // showMicrophoneStatus
+					s
 					);
 
 			roommanagement.addRoom(3, "public Video And Whiteboard Room",
@@ -633,7 +643,8 @@ public class ImportInitvalues {
 					false, // hideActionsMenu
 					false, // hideScreenSharing
 					false, // hideWhiteboard
-					false // showMicrophoneStatus
+					false, // showMicrophoneStatus
+					s
 					);
 
 			roommanagement.addRoom(3, "public Restricted Room", restricted_Id,
@@ -646,7 +657,8 @@ public class ImportInitvalues {
 					false, // hideActionsMenu
 					false, // hideScreenSharing
 					false, // hideWhiteboard
-					false // showMicrophoneStatus
+					false, // showMicrophoneStatus
+					s
 					);
 
 			roommanagement.addRoom(3, "restricted room with micro option set",
@@ -659,7 +671,8 @@ public class ImportInitvalues {
 					false, // hideActionsMenu
 					false, // hideScreenSharing
 					false, // hideWhiteboard
-					true // showMicrophoneStatus
+					true, // showMicrophoneStatus
+					s
 					);
 
 			roommanagement.addRoom(3, "conference room with micro option set",
@@ -672,7 +685,8 @@ public class ImportInitvalues {
 					false, // hideActionsMenu
 					false, // hideScreenSharing
 					false, // hideWhiteboard
-					true // showMicrophoneStatus
+					true, // showMicrophoneStatus
+					s
 					);
 
 			long room2 = roommanagement.addRoom(3, "private Conference Room",
@@ -685,7 +699,8 @@ public class ImportInitvalues {
 					false, // hideActionsMenu
 					false, // hideScreenSharing
 					false, // hideWhiteboard
-					false // showMicrophoneStatus
+					false, // showMicrophoneStatus
+					s
 					);
 
 			roommanagement.addRoomToOrganisation(3, room2, 1);
@@ -695,7 +710,7 @@ public class ImportInitvalues {
 
 	public void loadInitUserAndOrganisation(String username, String userpass,
 			String email, String defaultOrganisationName, String ical_timeZone,
-			String configdefaultLang) {
+			String configdefaultLang, Server s) {
 		// Add user
 		try {
 
@@ -713,7 +728,7 @@ public class ImportInitvalues {
 					new java.util.Date(), "street", "no", "fax", "zip", 1,
 					"town", default_lang_id, false,
 					Arrays.asList(organisation_id), "phone", "", false, "", "",
-					"", false, omTimeZoneDaoImpl.getOmTimeZoneByIcal(ical_timeZone), false, "", "", false, true);
+					"", false, omTimeZoneDaoImpl.getOmTimeZoneByIcal(ical_timeZone), false, "", "", false, true, s);
 
 			log.debug("Installation - User Added user-Id " + user_id);
 
@@ -1029,9 +1044,10 @@ public class ImportInitvalues {
 			return;
 		}
 		loadSystem(cfg, force);
+		Server s = serverDao.saveServer(-1, "local", "localhost");
 		loadInitUserAndOrganisation(username,
-				userpass, useremail, groupame, timeZone, cfg.defaultLangId);
+				userpass, useremail, groupame, timeZone, cfg.defaultLangId, s);
 		
-		loadDefaultRooms("1".equals(cfg.createDefaultRooms));
+		loadDefaultRooms("1".equals(cfg.createDefaultRooms), s);
 	}
 }

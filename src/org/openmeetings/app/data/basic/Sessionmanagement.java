@@ -33,8 +33,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.openmeetings.app.OpenmeetingsVariables;
-import org.openmeetings.app.conference.session.RoomClient;
 import org.openmeetings.app.persistence.beans.basic.Sessiondata;
+import org.openmeetings.app.persistence.beans.rooms.RoomClient;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.utils.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;

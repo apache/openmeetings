@@ -32,5 +32,6 @@
 	<!-- -->
 	<include href="backup/" />
     <include href="connections/" />
+	<include href="servers/" />
 
 </library>

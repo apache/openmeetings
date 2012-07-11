@@ -153,46 +153,47 @@ public class AppointmentLogic {
 		Long numberOfParticipants = cfgManagement.getConfValue(
 				"calendar.conference.rooms.default.size", Long.class, "50");
 
-		Long room_id = roommanagement.addRoom(3, // user level
-				appointmentName, // name
-				roomType, // RoomType
-				"", // Comment
-				numberOfParticipants, // Number of participants
-				true, // public
-				null, // organizations
-				true, // Appointment
-				false, // Demo Room => Meeting Timer
-				null, // Meeting Timer time in seconds
-				false, // Is Moderated Room
-				null, // Moderation List Room
-				true, // Allow User Questions
-				false, // isAudioOnly
-				false, // isClosed
-				"", // redirectURL
-				"", // sipNumber
-				"", // conferencePIN
-				null, // ownerID
-				null, null, 
-				false, // hideTopBar
-				false, // hideChat
-				false, // hideActivitiesAndActions
-				false, // hideFilesExplorer
-				false, // hideActionsMenu
-				false, // hideScreenSharing 
-				false, // hideWhiteboard
-				false //showMicrophoneStatus
-				);
-
-		log.debug("Appointmentlogic.saveAppointment : Room - " + room_id);
-		log.debug("Appointmentlogic.saveAppointment : Reminder - " + remind);
-
-		Rooms room = roommanagement.getRoomById(room_id);
-
 		try {
 
 			// Adding creator as MeetingMember
 			Users user = userManagement.getUserById(userId);
 			
+			Long room_id = roommanagement.addRoom(3, // user level
+					appointmentName, // name
+					roomType, // RoomType
+					"", // Comment
+					numberOfParticipants, // Number of participants
+					true, // public
+					null, // organizations
+					true, // Appointment
+					false, // Demo Room => Meeting Timer
+					null, // Meeting Timer time in seconds
+					false, // Is Moderated Room
+					null, // Moderation List Room
+					true, // Allow User Questions
+					false, // isAudioOnly
+					false, // isClosed
+					"", // redirectURL
+					"", // sipNumber
+					"", // conferencePIN
+					null, // ownerID
+					null, null, 
+					false, // hideTopBar
+					false, // hideChat
+					false, // hideActivitiesAndActions
+					false, // hideFilesExplorer
+					false, // hideActionsMenu
+					false, // hideScreenSharing 
+					false, // hideWhiteboard
+					false, //showMicrophoneStatus
+					user.getServer()
+				);
+
+			log.debug("Appointmentlogic.saveAppointment : Room - " + room_id);
+			log.debug("Appointmentlogic.saveAppointment : Reminder - " + remind);
+	
+			Rooms room = roommanagement.getRoomById(room_id);
+
 			// Re-factor the given time ignoring the Date is always UTC!
 			TimeZone timezone = timezoneUtil.getTimezoneByUser(user);
 			

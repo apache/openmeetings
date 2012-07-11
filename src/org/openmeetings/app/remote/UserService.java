@@ -28,12 +28,12 @@ import java.util.List;
 import java.util.TimeZone;
 
 import org.openmeetings.app.OpenmeetingsVariables;
-import org.openmeetings.app.conference.session.RoomClient;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
+import org.openmeetings.app.data.basic.dao.ServerDaoImpl;
 import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.data.calendar.daos.AppointmentDaoImpl;
 import org.openmeetings.app.data.calendar.daos.MeetingMemberDaoImpl;
@@ -49,6 +49,7 @@ import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.domain.Organisation;
 import org.openmeetings.app.persistence.beans.invitation.Invitations;
 import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
+import org.openmeetings.app.persistence.beans.rooms.RoomClient;
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.user.PrivateMessageFolder;
 import org.openmeetings.app.persistence.beans.user.PrivateMessages;
@@ -125,6 +126,8 @@ public class UserService {
 	private TimezoneUtil timezoneUtil;
 	@Autowired
 	private Invitationmanagement invitationManagement;
+	@Autowired
+	private ServerDaoImpl serverDao;
 
 	/**
 	 * get your own user-object
@@ -418,10 +421,10 @@ public class UserService {
 								.booleanValue(),
 						Boolean.valueOf(
 								argObjectMap.get("showContactDataToContacts")
-										.toString()).booleanValue());
+										.toString()).booleanValue(),
+						serverDao.getServer(Long.parseLong(argObjectMap.get("serverId").toString())));
 			} else {
-				return userManagement
-						.updateUser(
+				long userId = userManagement.updateUser(
 								user_level,
 								user_idClient,
 								Long.valueOf(
@@ -475,6 +478,12 @@ public class UserService {
 										argObjectMap.get(
 												"showContactDataToContacts")
 												.toString()).booleanValue());
+				if (userId > 0) {
+					Users user = userManagement.getUserById(userId);
+					user.setServer(serverDao.getServer(Long.parseLong(argObjectMap.get("serverId").toString())));
+					userManagement.updateUser(user);
+				}
+				return userId;
 			}
 		} catch (Exception ex) {
 			log.error("[saveOrUpdateUser]: ", ex);
@@ -996,7 +1005,8 @@ public class UserService {
 							false, // hideActionsMenu
 							false, // hideScreenSharing 
 							false, // hideWhiteboard
-							false //showMicrophoneStatus
+							false, //showMicrophoneStatus
+							from.getServer()
 							);
 
 					room = roommanagement.getRoomById(room_id);

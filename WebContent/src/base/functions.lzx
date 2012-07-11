@@ -65,7 +65,6 @@ function getLabelNameGlob(labelid){
 		}
 	}
 }
-//Debug.write("end init");
     
 var currentMouseWheelObject = null;
     

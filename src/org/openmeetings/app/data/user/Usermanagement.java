@@ -38,19 +38,21 @@ import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang.StringUtils;
 import org.openmeetings.app.OpenmeetingsVariables;
-import org.openmeetings.app.conference.session.RoomClient;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
+import org.openmeetings.app.data.basic.dao.ServerDaoImpl;
 import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.data.user.dao.UserSipDataDaoImpl;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.adresses.Adresses;
 import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
+import org.openmeetings.app.persistence.beans.basic.Server;
 import org.openmeetings.app.persistence.beans.basic.Sessiondata;
 import org.openmeetings.app.persistence.beans.domain.Organisation_Users;
+import org.openmeetings.app.persistence.beans.rooms.RoomClient;
 import org.openmeetings.app.persistence.beans.user.UserSipData;
 import org.openmeetings.app.persistence.beans.user.Userdata;
 import org.openmeetings.app.persistence.beans.user.Userlevel;
@@ -115,6 +117,8 @@ public class Usermanagement {
 	private AuthLevelmanagement authLevelManagement;
 	@Autowired
 	private ClientListManager clientListManager;
+	@Autowired
+	private ServerDaoImpl serverDao;
 
 	/**
 	 * query for a list of users
@@ -825,7 +829,7 @@ public class Usermanagement {
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, long states_id,
 			String town, long language_id, String phone, String baseURL,
-			boolean generateSipUserData, String jNameTimeZone) {
+			boolean generateSipUserData, String jNameTimeZone, Server server) {
 		
 		boolean sendConfirmation = baseURL != null
 				&& !baseURL.isEmpty()
@@ -834,25 +838,25 @@ public class Usermanagement {
 		
 		return registerUser(login, Userpass, lastname, firstname, email, age,
 				street, additionalname, fax, zip, states_id, town, language_id,
-				phone, baseURL, generateSipUserData, jNameTimeZone, sendConfirmation);
+				phone, baseURL, generateSipUserData, jNameTimeZone, sendConfirmation, server);
 	}
 
 	public Long registerUserNoEmail(String login, String Userpass,
 			String lastname, String firstname, String email, Date age,
 			String street, String additionalname, String fax, String zip,
 			long states_id, String town, long language_id, String phone,
-			boolean generateSipUserData, String jNameTimeZone) {
+			boolean generateSipUserData, String jNameTimeZone, Server server) {
 		
 		return registerUser(login, Userpass, lastname, firstname, email, age,
 				street, additionalname, fax, zip, states_id, town, language_id,
-				phone, "", generateSipUserData, jNameTimeZone, false);
+				phone, "", generateSipUserData, jNameTimeZone, false, server);
 	}
 
 	private Long registerUser(String login, String Userpass, String lastname,
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, long states_id,
 			String town, long language_id, String phone, String baseURL,
-			boolean generateSipUserData, String jNameTimeZone, Boolean sendConfirmation) {
+			boolean generateSipUserData, String jNameTimeZone, Boolean sendConfirmation, Server server) {
 		try {
 			// Checks if FrontEndUsers can register
 			if ("1".equals(cfgManagement.getConfValue("allow_frontend_register", String.class, "0"))) {
@@ -864,7 +868,7 @@ public class Usermanagement {
 						additionalname, fax, zip, states_id, town, language_id,
 						true, Arrays.asList(cfgManagement.getConfValue("default_domain_id", Long.class, null)),phone, baseURL,
 						sendConfirmation, "", "", "", generateSipUserData,
-						jNameTimeZone, false, "", "", false, true);
+						jNameTimeZone, false, "", "", false, true, server);
 
 				if (sendConfirmation) {
 					return new Long(-40);
@@ -913,7 +917,7 @@ public class Usermanagement {
 			String sip_auth, boolean generateSipUserData,
 			String jname_timezone, Boolean forceTimeZoneCheck,
 			String userOffers, String userSearchs, Boolean showContactData,
-			Boolean showContactDataToContacts) throws Exception {
+			Boolean showContactDataToContacts, Server server) throws Exception {
 		return registerUserInit(user_level, level_id, availible,
 				status, login, password, lastname,
 				firstname, email, age, street,
@@ -924,7 +928,7 @@ public class Usermanagement {
 				sip_auth, generateSipUserData,
 				omTimeZoneDaoImpl.getOmTimeZone(jname_timezone), forceTimeZoneCheck,
 				userOffers, userSearchs, showContactData,
-				showContactDataToContacts);
+				showContactDataToContacts, server);
 	}
 	
 	/**
@@ -975,7 +979,7 @@ public class Usermanagement {
 			String sip_auth, boolean generateSipUserData,
 			OmTimeZone timezone, Boolean forceTimeZoneCheck,
 			String userOffers, String userSearchs, Boolean showContactData,
-			Boolean showContactDataToContacts) throws Exception {
+			Boolean showContactDataToContacts, Server server) throws Exception {
 		// TODO: make phone number persistent
 		// User Level must be at least Admin
 		// Moderators will get a temp update of there UserLevel to add Users to
@@ -1038,7 +1042,7 @@ public class Usermanagement {
 							adr, age, hash, sip_user, sip_pass,
 							sip_auth, generateSipUserData, timezone,
 							forceTimeZoneCheck, userOffers, userSearchs,
-							showContactData, showContactDataToContacts, organisations);
+							showContactData, showContactDataToContacts, organisations, server);
 					log.debug("Added user-Id " + user_id);
 					if (user_id == null) {
 						return new Long(-111);
@@ -1094,7 +1098,8 @@ public class Usermanagement {
 			String sip_user, String sip_pass, String sip_auth,
 			boolean generateSipUserData, OmTimeZone timezone,
 			Boolean forceTimeZoneCheck, String userOffers, String userSearchs,
-			Boolean showContactData, Boolean showContactDataToContacts, List<Long> orgIds) {
+			Boolean showContactData, Boolean showContactDataToContacts, List<Long> orgIds,
+			Server server) {
 		try {
 
 			Users users = new Users();
@@ -1118,6 +1123,7 @@ public class Usermanagement {
 			users.setUserSearchs(userSearchs);
 			users.setShowContactData(showContactData);
 			users.setShowContactDataToContacts(showContactDataToContacts);
+			users.setServer(server);
 
 			if (generateSipUserData) {
 
@@ -1266,6 +1272,7 @@ public class Usermanagement {
 					.createPassPhrase(userpass));
 			users.setRegdate(new Date());
 			users.setDeleted("false");
+			users.setServer(serverDao.getServerWithMinimumUsers());
 
 			em.persist(users);
 

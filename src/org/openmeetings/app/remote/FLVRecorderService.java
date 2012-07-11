@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.openmeetings.app.OpenmeetingsVariables;
-import org.openmeetings.app.conference.session.RoomClient;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.conference.Roommanagement;
@@ -48,6 +47,7 @@ import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecording;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingLog;
 import org.openmeetings.app.persistence.beans.flvrecord.FlvRecordingMetaData;
+import org.openmeetings.app.persistence.beans.rooms.RoomClient;
 import org.openmeetings.app.remote.red5.ClientListManager;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.OmFileHelper;

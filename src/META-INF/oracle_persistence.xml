@@ -33,6 +33,7 @@
 		<class>org.openmeetings.app.persistence.beans.basic.OmTimeZone</class>
 		<class>org.openmeetings.app.persistence.beans.basic.Sessiondata</class>
 		<class>org.openmeetings.app.persistence.beans.basic.SOAPLogin</class>
+		<class>org.openmeetings.app.persistence.beans.basic.Server</class>
 		<class>org.openmeetings.app.persistence.beans.calendar.Appointment</class>
 		<class>org.openmeetings.app.persistence.beans.calendar.AppointmentCategory</class>
 		<class>org.openmeetings.app.persistence.beans.calendar.AppointmentReminderTyps</class>
@@ -52,6 +53,7 @@
 		<class>org.openmeetings.app.persistence.beans.poll.PollType</class>
 		<class>org.openmeetings.app.persistence.beans.poll.RoomPoll</class>
 		<class>org.openmeetings.app.persistence.beans.poll.RoomPollAnswers</class>
+        <class>org.openmeetings.app.persistence.beans.rooms.RoomClient</class>
 		<class>org.openmeetings.app.persistence.beans.rooms.RoomModerators</class>
 		<class>org.openmeetings.app.persistence.beans.rooms.Rooms</class>
 		<class>org.openmeetings.app.persistence.beans.rooms.RoomTypes</class>

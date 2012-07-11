@@ -121,7 +121,10 @@
         </netRemoteCallHib>
 
 		<method name="initRoom">
-			
+			if ($debug) Debug.write("roomListItem::initRoom ", this);
+        	if (this.obj.server != null) {
+        		canvas.rtmphostlocal = this.obj.server.address;
+	        }
 			canvas.isConference = !this.isaudience;
 			if (this.isaudience)
 				connectedIsAudience = '_' + 'audi';

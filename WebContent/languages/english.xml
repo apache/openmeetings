@@ -5960,4 +5960,19 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   <string id="1497" name="private chat">
     <value>Do you really want to delete this private chat?</value>
   </string>
+  <string id="1498" name="Servers">
+    <value>Servers</value>
+  </string>
+  <string id="1499" name="Servers">
+    <value>Servers participating in cluster</value>
+  </string>
+  <string id="1500" name="Server name">
+    <value>Server Name</value>
+  </string>
+  <string id="1501" name="Server Address">
+    <value>Server Address</value>
+  </string>
+  <string id="1502" name="Server details">
+    <value>Server details</value>
+  </string>
 </language>

@@ -33,7 +33,7 @@ import javax.persistence.Table;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name="getAll", query="SELECT c FROM FileExplorerItem c")
+	@NamedQuery(name="getAllFiles", query="SELECT c FROM FileExplorerItem c")
     , @NamedQuery(name="getById", query="SELECT c FROM FileExplorerItem c WHERE c.fileExplorerItemId = :fileExplorerItemId")
     , @NamedQuery(name="getByHash", query="SELECT c FROM FileExplorerItem c WHERE c.fileHash = :fileHash")
 })

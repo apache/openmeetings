@@ -216,6 +216,7 @@
 	<bean id="userContactsDao" class="org.openmeetings.app.data.user.dao.UserContactsDaoImpl" />
 	<bean id="userSipDataDao" class="org.openmeetings.app.data.user.dao.UserSipDataDaoImpl" />
 	<bean id="usersDao" class="org.openmeetings.app.data.user.dao.UsersDaoImpl" />
+	<bean id="serverDao" class="org.openmeetings.app.data.basic.dao.ServerDaoImpl" />
 
 	<!-- No Interface -->
 	<bean id="manageCryptStyle" class="org.openmeetings.utils.crypt.ManageCryptStyle" />
@@ -265,6 +266,7 @@
 	<bean id="fileWebService" class="org.openmeetings.axis.services.FileWebService" />
 	<bean id="calendarWebService" class="org.openmeetings.axis.services.CalendarWebService" />
   	<bean id="jabberWebService" class="org.openmeetings.axis.services.JabberWebService" />
+	<bean id="serverWebService" class="org.openmeetings.axis.services.ServerWebService" />
 
 	<!-- Servlet Facade Beans -->
 	<bean id="backupExport" class="org.openmeetings.servlet.outputhandler.BackupExport" />

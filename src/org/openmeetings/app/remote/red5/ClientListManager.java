@@ -18,27 +18,33 @@
  */
 package org.openmeetings.app.remote.red5;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+
 import org.openmeetings.app.OpenmeetingsVariables;
-import org.openmeetings.app.conference.session.RoomClient;
 import org.openmeetings.app.data.beans.basic.SearchResult;
+import org.openmeetings.app.persistence.beans.rooms.RoomClient;
 import org.openmeetings.utils.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 public class ClientListManager {
-	private static HashMap<String, RoomClient> clientList = new HashMap<String, RoomClient>();
-
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			ClientListManager.class, OpenmeetingsVariables.webAppRootKey);
 
+	@PersistenceContext
+	private EntityManager em;
+	
 	@Autowired
 	private ManageCryptStyle manageCryptStyle;
 	
@@ -51,23 +57,7 @@ public class ClientListManager {
 	 */
 	public HashMap<String, RoomClient> getRoomClients(Long room_id) {
 		try {
-
-			HashMap<String, RoomClient> roomClientList = new HashMap<String, RoomClient>();
-			HashMap<String, RoomClient> clientListRoom = this.getClientListByRoom(room_id);
-			for (Iterator<String> iter = clientListRoom.keySet().iterator(); iter
-					.hasNext();) {
-				String key = iter.next();
-				RoomClient rcl = this.getClientByStreamId(key);
-				
-				if (rcl.getIsAVClient()) {
-					continue;
-				}
-				
-				// Add user to List
-				roomClientList.put(key, rcl);
-			}
-
-			return roomClientList;
+			return getClientListByRoom(room_id);
 		} catch (Exception err) {
 			log.error("[getRoomClients]", err);
 		}
@@ -95,12 +85,12 @@ public class ClientListManager {
 			rcm.setCanDraw(new Boolean(false));
 			rcm.setIsAVClient(isAVClient);
 
-			if (clientList.containsKey(streamId)) {
+			if (getClientByStreamId(streamId) != null) {
 				log.error("Tried to add an existing Client " + streamId);
 				return null;
 			}
 
-			clientList.put(rcm.getStreamid(), rcm);
+			rcm = em.merge(rcm);
 
 			log.debug(" :: addClientListItem :: " + rcm.getRoomClientId());
 
@@ -112,16 +102,20 @@ public class ClientListManager {
 	}
 
 	public synchronized Collection<RoomClient> getAllClients() {
-		return clientList.values();
+		TypedQuery<RoomClient> q = em.createNamedQuery("getAllRoomClients", RoomClient.class);
+		return q.getResultList();
 	}
 
 	public synchronized RoomClient getClientByStreamId(String streamId) {
 		try {
-			if (!clientList.containsKey(streamId)) {
+			TypedQuery<RoomClient> q = em.createNamedQuery("getByStreamId", RoomClient.class);
+			q.setParameter("streamid", streamId);
+			
+			if (q.getResultList().isEmpty()) {
 				log.debug("Tried to get a non existing Client " + streamId);
 				return null;
 			}
-			return clientList.get(streamId);
+			return q.getSingleResult();
 		} catch (Exception err) {
 			log.error("[getClientByStreamId]", err);
 		}
@@ -140,44 +134,28 @@ public class ClientListManager {
 	 */
 	public synchronized RoomClient getSyncClientByStreamId(String streamId) {
 		try {
-			if (!clientList.containsKey(streamId)) {
+			TypedQuery<RoomClient> q = em.createNamedQuery("getByStreamIdNonScreen", RoomClient.class);
+			q.setParameter("streamid", streamId);
+			if (q.getResultList().isEmpty()) {
 				log.debug("Tried to get a non existing Client " + streamId);
 				return null;
 			}
-			
-			RoomClient rcl = clientList.get(streamId);
-			
-			if (rcl == null) {
-				return null;
-			}
-			
-			if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
-				return null;
-			}
-			
-			return clientList.get(streamId);
+			return q.getSingleResult();
 		} catch (Exception err) {
-			log.error("[getClientByStreamId]", err);
+			log.error("[getSyncClientByStreamId]", err);
 		}
 		return null;
 	}
 
 
-	public synchronized RoomClient getClientByPublicSID(String publicSID, Boolean isAVClient) {
+	public synchronized RoomClient getClientByPublicSID(String publicSID, boolean isAVClient) {
 		try {
-			for (Iterator<String> iter = clientList.keySet().iterator(); iter
-					.hasNext();) {
-				RoomClient rcl = clientList.get(iter.next());
+			TypedQuery<RoomClient> q = em.createNamedQuery("getByPublicSidAvClient", RoomClient.class);
+			q.setParameter("publicSID", publicSID);
+			q.setParameter("isAVClient", isAVClient);
 				
-				if (!rcl.getPublicSID().equals(publicSID)) {
-					continue;
-				}
-				if (rcl.getIsAVClient() != isAVClient) {
-					continue;
-				}
-				
-				return rcl;
-			}
+			List<RoomClient> r = q.getResultList();
+			return r.isEmpty() ? null : r.get(0);
 		} catch (Exception err) {
 			log.error("[getClientByPublicSID]", err);
 		}
@@ -186,15 +164,13 @@ public class ClientListManager {
 
 	public synchronized RoomClient getClientByUserId(Long userId) {
 		try {
-			for (Iterator<String> iter = clientList.keySet().iterator(); iter
-					.hasNext();) {
-				RoomClient rcl = clientList.get(iter.next());
-				if (rcl.getUser_id().equals(userId)) {
-					return rcl;
-				}
-			}
+			TypedQuery<RoomClient> q = em.createNamedQuery("getByUserId", RoomClient.class);
+			q.setParameter("userId", userId);
+			
+			List<RoomClient> r = q.getResultList();
+			return r.isEmpty() ? null : r.get(0);
 		} catch (Exception err) {
-			log.error("[getClientByPublicSID]", err);
+			log.error("[getClientByUserId]", err);
 		}
 		return null;
 	}
@@ -206,10 +182,8 @@ public class ClientListManager {
 	 * @param rcm
 	 * @return
 	 */
-	public synchronized Boolean updateAVClientByStreamId(String streamId,
-			RoomClient rcm) {
+	public synchronized Boolean updateAVClientByStreamId(String streamId, RoomClient rcm) {
 		try {
-			
 			//get the corresponding user session object and update the settings
 			RoomClient rclUsual = getClientByPublicSID(rcm.getPublicSID(), false);
 			if (rclUsual != null) {
@@ -219,13 +193,9 @@ public class ClientListManager {
 				rclUsual.setVWidth(rcm.getVWidth());
 				rclUsual.setVX(rcm.getVX());
 				rclUsual.setVY(rcm.getVY());
-				if (clientList.containsKey(rclUsual.getStreamid())) {
-					clientList.put(rclUsual.getStreamid(), rclUsual);
-				} else {
-					 log.debug("Tried to update a non existing Client " + rclUsual.getStreamid());
-				}
-			}
 			
+				rclUsual = em.merge(rclUsual);
+			}
 			updateClientByStreamId(streamId, rcm);
 		} catch (Exception err) {
 			log.error("[updateAVClientByStreamId]", err);
@@ -233,11 +203,10 @@ public class ClientListManager {
 		return null;
 	}
 
-	public synchronized Boolean updateClientByStreamId(String streamId,
-			RoomClient rcm) {
+	public synchronized Boolean updateClientByStreamId(String streamId, RoomClient rcm) {
 		try {
-			if (clientList.containsKey(streamId)) {
-				clientList.put(streamId, rcm);
+			if (getClientByStreamId(streamId) != null) {
+				rcm = em.merge(rcm);
 				return true;
 			} else {
 				log.debug("Tried to update a non existing Client " + streamId);
@@ -251,14 +220,10 @@ public class ClientListManager {
 
 	public synchronized Boolean removeClient(String streamId) {
 		try {
-			if (clientList.containsKey(streamId)) {
-				clientList.remove(streamId);
-				// log.debug(":: removeClient ::"+clientList.size());
-				return true;
-			} else {
-				log.debug("Tried to remove a non existing Client " + streamId);
-				return false;
-			}
+			TypedQuery<RoomClient> q = em.createNamedQuery("deleteByStreamId", RoomClient.class);
+			q.setParameter("streamid", streamId);
+			
+			q.executeUpdate();
 		} catch (Exception err) {
 			log.error("[removeClient]", err);
 		}
@@ -274,31 +239,14 @@ public class ClientListManager {
 	 * @return
 	 */
 	// FIXME seems like there is no need to return HashMap
-	public synchronized HashMap<String, RoomClient> getClientListByRoom(
-			Long room_id) {
+	public synchronized HashMap<String, RoomClient> getClientListByRoom(Long room_id) {
 		HashMap<String, RoomClient> roomClientList = new HashMap<String, RoomClient>();
 		try {
-			for (Iterator<String> iter = clientList.keySet().iterator(); iter
-					.hasNext();) {
-				String key = iter.next();
-				RoomClient rcl = clientList.get(key);
-				
-				// client initialized and same room
-				if (rcl.getRoom_id() == null || !room_id.equals(rcl.getRoom_id())) {
-					continue;
-				}
-				if (rcl.getIsScreenClient() == null ||
-						rcl.getIsScreenClient()) {
-					continue;
-				}
-				if (rcl.getIsAVClient()) {
-					continue;
-				}
+			TypedQuery<RoomClient> q = em.createNamedQuery("getByRoomId", RoomClient.class);
+			q.setParameter("room_id", room_id);
 					
-				//Only parse really those users out that are really a full session object 
-				//and no pseudo session object like the audio/video or screen sharing connection 
-				roomClientList.put(key, rcl);
-					
+			for (RoomClient rc : q.getResultList()) {
+				roomClientList.put(rc.getStreamid(), rc);
 			}
 		} catch (Exception err) {
 			log.error("[getClientListByRoom]", err);
@@ -309,22 +257,15 @@ public class ClientListManager {
 	
 
 	// FIXME seems to be copy/pasted with previous one
-	public synchronized HashMap<String, RoomClient> getClientListByRoomAll(
-			Long room_id) {
+	public synchronized HashMap<String, RoomClient> getClientListByRoomAll(Long room_id) {
 		HashMap<String, RoomClient> roomClientList = new HashMap<String, RoomClient>();
 		try {
-			for (Iterator<String> iter = clientList.keySet().iterator(); iter
-					.hasNext();) {
-				String key = iter.next();
-				// log.debug("getClientList key: "+key);
-				RoomClient rcl = clientList.get(key);
+			TypedQuery<RoomClient> q = em.createNamedQuery("getByRoomIdAll", RoomClient.class);
+			q.setParameter("room_id", room_id);
 
-				if (rcl.getRoom_id() != null
-						&& rcl.getRoom_id().equals(room_id)) {
-					// same room
-					roomClientList.put(key, rcl);
+			for (RoomClient rc : q.getResultList()) {
+				roomClientList.put(rc.getStreamid(), rc);
 				}
-			}
 		} catch (Exception err) {
 			log.error("[getClientListByRoom]", err);
 		}
@@ -338,54 +279,34 @@ public class ClientListManager {
 	 * @return
 	 */
 	public synchronized List<RoomClient> getCurrentModeratorByRoom(Long room_id) {
-
-		List<RoomClient> rclList = new LinkedList<RoomClient>();
-		for (Iterator<String> iter = clientList.keySet().iterator(); iter
-				.hasNext();) {
-			String key = iter.next();
-			RoomClient rcl = clientList.get(key);
-			//
-			log.debug("*..*unsetModerator ClientList key: " + rcl.getStreamid());
-			//
-			// Check if the Client is in the same room
-			if (room_id != null && room_id.equals(rcl.getRoom_id())
-					&& rcl.getIsMod()) {
-				log.debug("found client who is the Moderator: " + rcl);
-				rclList.add(rcl);
+		if (room_id != null) {
+			TypedQuery<RoomClient> q = em.createNamedQuery("getByRoomIdMod", RoomClient.class);
+			q.setParameter("room_id", room_id);
+			return q.getResultList();
 			}
-		}
-
-		return rclList;
+		return new ArrayList<RoomClient>();
 	}
 
-	public synchronized SearchResult<RoomClient> getListByStartAndMax(int start, int max,
-			String orderby, boolean asc) {
+	//FIXME not sorted
+	public synchronized SearchResult<RoomClient> getListByStartAndMax(int start, int max, String orderby, boolean asc) {
 		SearchResult<RoomClient> sResult = new SearchResult<RoomClient>();
 		sResult.setObjectName(RoomClient.class.getName());
-		sResult.setRecords(Long.valueOf(clientList.size()).longValue());
-		LinkedList<RoomClient> myList = new LinkedList<RoomClient>();
 
-		int i = 0;
-		// TODO Auto-generated method stub
-		Iterator<String> iter = clientList.keySet().iterator();
-		while (iter.hasNext()) {
-			String key = iter.next();
-			if (i >= start) {
-				myList.add(clientList.get(key));
-			}
-			if (i > max) {
-				break;
-			}
-			i++;
-		}
-		sResult.setResult(myList);
+		TypedQuery<RoomClient> q = em.createNamedQuery("getAllRoomClients", RoomClient.class);
+		q.setFirstResult(start);
+		q.setMaxResults(max);
+		
+		List<RoomClient> l = q.getResultList();
+		sResult.setRecords((long)l.size());
+		sResult.setResult(l);
 
 		return sResult;
 	}
 
 	public synchronized void removeAllClients() {
 		try {
-			clientList.clear();
+			TypedQuery<RoomClient> q = em.createNamedQuery("deleteAll", RoomClient.class);
+			q.executeUpdate();
 		} catch (Exception err) {
 			log.error("[removeAllClients]", err);
 		}

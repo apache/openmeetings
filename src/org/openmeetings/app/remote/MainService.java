@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.openmeetings.app.OpenmeetingsVariables;
-import org.openmeetings.app.conference.session.RoomClient;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Navimanagement;
@@ -52,6 +51,7 @@ import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.persistence.beans.basic.RemoteSessionObject;
 import org.openmeetings.app.persistence.beans.basic.SOAPLogin;
 import org.openmeetings.app.persistence.beans.basic.Sessiondata;
+import org.openmeetings.app.persistence.beans.rooms.RoomClient;
 import org.openmeetings.app.persistence.beans.user.Userdata;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.app.remote.red5.ClientListManager;
@@ -815,7 +815,7 @@ public class MainService implements IPendingServiceCallback {
 							.longValue(), regObject.get("town").toString(),
 					Long.valueOf(regObject.get("language_id").toString())
 							.longValue(), "", baseURL, true,
-					regObject.get("jNameTimeZone").toString());
+					regObject.get("jNameTimeZone").toString(), null);
 		} catch (Exception ex) {
 			log.error("registerUserByObject", ex);
 		}
@@ -853,7 +853,7 @@ public class MainService implements IPendingServiceCallback {
 			long states_id, String town, long language_id, String phone) {
 		return userManagement.registerUser(Username, Userpass, lastname,
 				firstname, email, age, street, additionalname, fax, zip,
-				states_id, town, language_id, phone, "", true, "");
+				states_id, town, language_id, phone, "", true, "", null);
 	}
 
 	/**

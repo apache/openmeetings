@@ -74,4 +74,16 @@
     </messageReceivers>
     <parameter name="ServiceClass" locked="xsd:false">org.openmeetings.axis.services.JabberWebServiceFacade</parameter>
   </service>
+  <service name="ServerService">
+	<description>Server Service</description>
+	<messageReceivers>
+        <messageReceiver 
+            mep="http://www.w3.org/ns/wsdl/in-only"
+			class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver"/>
+        <messageReceiver
+            mep="http://www.w3.org/ns/wsdl/in-out"
+			class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+    </messageReceivers>
+    <parameter name="ServiceClass" locked="xsd:false">org.openmeetings.axis.services.ServerWebServiceFacade</parameter>
+  </service>
 </serviceGroup>

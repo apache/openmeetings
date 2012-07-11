@@ -45,6 +45,8 @@ these properties can be overwritten by config.xml -->
 
 <attribute name="adminModuleBackup" value="backupContent" type="string" />
 
+<attribute name="adminModuleServers" value="serversAdmin" type="string" />
+
 
 <!-- #############################################
     Moderator Modules

@@ -20,6 +20,7 @@
 -->
 <library>
 	
+	<include href="datasetHelper.lzx" />
 	<include href="rtmpConnection.lzx" />
 	<include href="sharedObject.lzx" />
     
