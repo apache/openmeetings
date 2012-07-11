@@ -46,10 +46,12 @@ import org.apache.commons.cli.Parser;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openjpa.jdbc.meta.MappingTool;
+import org.openmeetings.app.data.file.dao.FileExplorerItemDaoImpl;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.documents.InstallationDocumentHandler;
 import org.openmeetings.app.installation.ImportInitvalues;
 import org.openmeetings.app.installation.InstallationConfig;
+import org.openmeetings.app.persistence.beans.files.FileExplorerItem;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.servlet.outputhandler.BackupExport;
 import org.openmeetings.servlet.outputhandler.BackupImportController;
@@ -116,6 +118,8 @@ public class Admin {
 		options.addOption(new OmOption("i", null, "db-pass", true, "Password of the user with write access to the DB specified", true));
 		options.addOption(new OmOption("i", null, "drop", false, "Drop database before installation", true));
 		options.addOption(new OmOption("i", null, "force", false, "Install without checking the existence of old data in the database.", true));
+		//languages
+		options.addOption(new OmOption("l", "lang", "language", true, "Single language to be imported (id or name)", true));
 		
 		return options;
 	}
@@ -403,7 +407,17 @@ public class Admin {
 				System.out.println("All language file will be reimported");
 				try {
 					ImportInitvalues importInit = getApplicationContext(ctxName).getBean(ImportInitvalues.class);
-					importInit.loadLanguagesFiles(); 
+					if (cmdl.hasOption("lang")) {
+						String lang = cmdl.getOptionValue("lang");
+						try {
+							int id = Integer.parseInt(lang);
+							importInit.loadLanguagesFile(id);
+						} catch (NumberFormatException e) {
+							importInit.loadLanguagesFile(lang);
+						}
+					} else {
+						importInit.loadLanguagesFiles();
+					}
 				} catch (Exception e) {
 					handleError("Language reimport failed", e);
 				}
@@ -415,6 +429,7 @@ public class Admin {
 					{ //UPLOAD
 						long sectionSize = OmFileHelper.getSize(OmFileHelper.getUploadDir());
 						report.append("Upload totally allocates: ").append(OmFileHelper.getHumanSize(sectionSize)).append("\n");
+						//Profiles
 						File profiles = OmFileHelper.getUploadProfilesDir();
 						long invalid = 0;
 						long deleted = 0;
@@ -448,11 +463,32 @@ public class Admin {
 						size = OmFileHelper.getSize(OmFileHelper.getUploadBackupDir());
 						restSize -= size;
 						report.append("\t\tbackup: ").append(OmFileHelper.getHumanSize(size)).append("\n");
-						size = OmFileHelper.getSize(OmFileHelper.getUploadFilesDir());
+						//Files
+						File files = OmFileHelper.getUploadFilesDir();
+						size = OmFileHelper.getSize(files);
 						restSize -= size;
+						FileExplorerItemDaoImpl fileDao = ctx.getBean(FileExplorerItemDaoImpl.class);
+						invalid = 0;
+						deleted = 0;
+						for (File f : files.listFiles()) {
+							long fSize = OmFileHelper.getSize(f);
+							FileExplorerItem item = fileDao.getFileExplorerItemsByHash(f.getName());
+							if (item == null) {
+								invalid += fSize;
+							} else if ("true".equals(item.getDeleted())) {
+								deleted += fSize;
+							}
+						}
+						missing = 0;
+						for (FileExplorerItem item : fileDao.getFileExplorerItems()) {
+							if (!"true".equals(item.getDeleted()) && !new File(files, item.getFileHash()).exists()) {
+								missing++;
+							}
+						}
 						report.append("\t\tfiles: ").append(OmFileHelper.getHumanSize(size)).append("\n");
-						//public/private files
-						//Object: fileexploreritem (filehash == document file/folder)
+						report.append("\t\t\tinvalid: ").append(OmFileHelper.getHumanSize(invalid)).append("\n");
+						report.append("\t\t\tdeleted: ").append(OmFileHelper.getHumanSize(deleted)).append("\n");
+						report.append("\t\t\tmissing count: ").append(missing).append("\n");
 						report.append("\t\trest: ").append(OmFileHelper.getHumanSize(restSize)).append("\n");
 					}
 					{ //STREAMS

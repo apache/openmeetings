@@ -27,15 +27,18 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
+@NamedQueries({
+	@NamedQuery(name="getAll", query="SELECT c FROM FileExplorerItem c")
+    , @NamedQuery(name="getById", query="SELECT c FROM FileExplorerItem c WHERE c.fileExplorerItemId = :fileExplorerItemId")
+    , @NamedQuery(name="getByHash", query="SELECT c FROM FileExplorerItem c WHERE c.fileHash = :fileHash")
+})
 @Table(name = "fileexploreritem")
 public class FileExplorerItem implements Serializable {
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 242843782142620566L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

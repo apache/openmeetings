@@ -193,15 +193,29 @@ public class FileExplorerItemDaoImpl {
         return null;
     }
 
-    public FileExplorerItem getFileExplorerItemsById(Long fileExplorerItemId) {
-        //log.debug(".getFileExplorerItemsById() started");
-
+    public FileExplorerItem getFileExplorerItemsByHash(String hash) {
         try {
 
-            String hql = "SELECT c FROM FileExplorerItem c "
-                    + "WHERE c.fileExplorerItemId = :fileExplorerItemId";
+			TypedQuery<FileExplorerItem> query = em.createNamedQuery("getByHash", FileExplorerItem.class);
+			query.setParameter("fileHash", hash);
+			
+			FileExplorerItem fileExplorerList = null;
+			try {
+				fileExplorerList = query.getSingleResult();
+		    } catch (NoResultException ex) {
+		    }
 
-			TypedQuery<FileExplorerItem> query = em.createQuery(hql, FileExplorerItem.class);
+            return fileExplorerList;
+        } catch (Exception ex2) {
+            log.error("[getFileExplorerItemsById]: ", ex2);
+        }
+        return null;
+    }
+    
+    public FileExplorerItem getFileExplorerItemsById(Long fileExplorerItemId) {
+        try {
+
+			TypedQuery<FileExplorerItem> query = em.createNamedQuery("getById", FileExplorerItem.class);
 			query.setParameter("fileExplorerItemId", fileExplorerItemId);
 			
 			FileExplorerItem fileExplorerList = null;
@@ -244,19 +258,16 @@ public class FileExplorerItemDaoImpl {
     }
 
     public List<FileExplorerItem> getFileExplorerItems() {
-        log.debug(".getFileExplorerItemsById() started");
+        log.debug(".getFileExplorerItems() started");
 
         try {
-
-            String hql = "SELECT c FROM FileExplorerItem c ";
-
-			TypedQuery<FileExplorerItem> query = em.createQuery(hql, FileExplorerItem.class);
+			TypedQuery<FileExplorerItem> query = em.createNamedQuery("getAll", FileExplorerItem.class);
 
             List<FileExplorerItem> fileExplorerList = query.getResultList();
 
             return fileExplorerList;
         } catch (Exception ex2) {
-            log.error("[getFileExplorerItemsById]: ", ex2);
+            log.error("[getFileExplorerItems]: ", ex2);
         }
         return null;
     }    

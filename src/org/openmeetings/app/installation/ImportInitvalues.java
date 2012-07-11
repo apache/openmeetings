@@ -881,79 +881,97 @@ public class ImportInitvalues {
 		}
 	}
 
+	public void loadLanguagesFile(int langId) throws Exception {
+		LinkedHashMap<Integer, LinkedHashMap<String, Object>> listlanguages = getLanguageFiles();
+		loadLanguagesFile(listlanguages, new Hashtable<Long, Fieldvalues>(3000), langId);
+	}
+	
+	public void loadLanguagesFile(String langName) throws Exception {
+		LinkedHashMap<Integer, LinkedHashMap<String, Object>> listlanguages = getLanguageFiles();
+		for (int langId : listlanguages.keySet()) {
+			LinkedHashMap<String, Object> langMap = listlanguages.get(langId);
+			if (langName.equals(langMap.get("name"))) {
+				loadLanguagesFile(listlanguages, new Hashtable<Long, Fieldvalues>(3000), langId);
+				break;
+			}
+		}
+	}
+	
+	public void loadLanguagesFile(LinkedHashMap<Integer, LinkedHashMap<String, Object>> listlanguages, Hashtable<Long, Fieldvalues> fieldCache, int langId) throws Exception {
+		LinkedHashMap<String, Object> langMap = listlanguages.get(langId);
+		log.debug("loadInitLanguages lang: " + langMap);
+
+		String langName = (String) langMap.get("name");
+		String rtl = (String) langMap.get("rtl");
+		String code = (String) langMap.get("code");
+
+		log.debug("loadInitLanguages rtl from xml: " + rtl);
+
+		Boolean langRtl = false;
+
+		if (rtl != null && rtl.equals("true"))
+			langRtl = true;
+
+		long ticks = System.currentTimeMillis();
+		FieldLanguage lang = fieldLanguageDaoImpl.addLanguage(langId, langName, langRtl, code);
+
+		SAXReader reader = new SAXReader();
+		Document document = reader.read(new File(OmFileHelper.getLanguagesDir(), langName + ".xml"));
+
+		Element root = document.getRootElement();
+
+		Map<Long, Fieldlanguagesvalues> flvMap = lang.getLanguageValuesMap();
+		for (@SuppressWarnings("rawtypes")
+		Iterator it = root.elementIterator("string"); it.hasNext();) {
+			Element item = (Element) it.next();
+			// log.error(item.getName());
+
+			Long id = Long.valueOf(item.attributeValue("id")).longValue();
+			String name = item.attributeValue("name");
+			String value = "";
+
+			for (@SuppressWarnings("rawtypes")
+			Iterator t2 = item.elementIterator("value"); t2.hasNext();) {
+				Element val = (Element) t2.next();
+				value = val.getText();
+			}
+
+			// log.error("result: "+langFieldIdIsInited+" "+id+" "+name+" "+value);
+
+			if (flvMap.containsKey(id)) {
+				Fieldlanguagesvalues flv = flvMap.get(id);
+				flv.setUpdatetime(new Date());
+				flv.setValue(value);
+			} else {
+				Fieldvalues fv = null;
+				// Only do that for the first field-set
+				if (!fieldCache.containsKey(id)) {
+					fv = fieldmanagment.addFieldById(name, id);
+					fieldCache.put(id,  fv);
+				} else {
+					fv = fieldCache.get(id);
+				}
+				Fieldlanguagesvalues flv = new Fieldlanguagesvalues();
+				flv.setStarttime(new Date());
+				flv.setValue(value);
+				flv.setLanguage_id(lang.getLanguage_id());
+				flv.setFieldvalues(fv);
+				flv.setDeleted("false");
+				flvMap.put(id, flv);
+			}
+		}
+		lang.setLanguageValues(flvMap.values());
+		fieldLanguageDaoImpl.updateLanguage(lang);
+		log.debug("Lang ADDED: " + lang + "; seconds passed: " + (System.currentTimeMillis() - ticks) / 1000);
+	}
+	
 	public void loadLanguagesFiles() throws Exception {
 		LinkedHashMap<Integer, LinkedHashMap<String, Object>> listlanguages = getLanguageFiles();
 
 		Hashtable<Long, Fieldvalues> fieldCache = new Hashtable<Long, Fieldvalues>(3000);
 		/** Read all languages files */
-		for (Iterator<Integer> itLang = listlanguages.keySet().iterator(); itLang
-				.hasNext();) {
-			Integer langId = itLang.next();
-			LinkedHashMap<String, Object> langMap = listlanguages.get(langId);
-			log.debug("loadInitLanguages lang: " + langMap);
-
-			String langName = (String) langMap.get("name");
-			String rtl = (String) langMap.get("rtl");
-			String code = (String) langMap.get("code");
-
-			log.debug("loadInitLanguages rtl from xml: " + rtl);
-
-			Boolean langRtl = false;
-
-			if (rtl != null && rtl.equals("true"))
-				langRtl = true;
-
-			long ticks = System.currentTimeMillis();
-			FieldLanguage lang = fieldLanguageDaoImpl.addLanguage(langId, langName, langRtl, code);
-
-			SAXReader reader = new SAXReader();
-			Document document = reader.read(new File(OmFileHelper.getLanguagesDir(), langName + ".xml"));
-
-			Element root = document.getRootElement();
-
-			Map<Long, Fieldlanguagesvalues> flvMap = lang.getLanguageValuesMap();
-			for (@SuppressWarnings("rawtypes")
-			Iterator it = root.elementIterator("string"); it.hasNext();) {
-				Element item = (Element) it.next();
-				// log.error(item.getName());
-
-				Long id = Long.valueOf(item.attributeValue("id")).longValue();
-				String name = item.attributeValue("name");
-				String value = "";
-
-				for (@SuppressWarnings("rawtypes")
-				Iterator t2 = item.elementIterator("value"); t2.hasNext();) {
-					Element val = (Element) t2.next();
-					value = val.getText();
-				}
-
-				// log.error("result: "+langFieldIdIsInited+" "+id+" "+name+" "+value);
-
-				if (flvMap.containsKey(id)) {
-					Fieldlanguagesvalues flv = flvMap.get(id);
-					flv.setUpdatetime(new Date());
-					flv.setValue(value);
-				} else {
-					Fieldvalues fv = null;
-					// Only do that for the first field-set
-					if (!fieldCache.containsKey(id)) {
-						fv = fieldmanagment.addFieldById(name, id);
-						fieldCache.put(id,  fv);
-					} else {
-						fv = fieldCache.get(id);
-					}
-					Fieldlanguagesvalues flv = new Fieldlanguagesvalues();
-					flv.setStarttime(new Date());
-					flv.setValue(value);
-					flv.setLanguage_id(lang.getLanguage_id());
-					flv.setFieldvalues(fv);
-					flv.setDeleted("false");
-					flvMap.put(id, flv);
-				}
-			}
-			lang.setLanguageValues(flvMap.values());
-			fieldLanguageDaoImpl.updateLanguage(lang);
-			log.debug("Lang ADDED: " + lang + "; seconds passed: " + (System.currentTimeMillis() - ticks) / 1000);
+		for (int langId : listlanguages.keySet()) {
+			loadLanguagesFile(listlanguages, fieldCache, langId);
 		}
 		log.debug("All languages are imported");
 	}

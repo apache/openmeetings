@@ -36,16 +36,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "flvrecording_metadata")
 public class FlvRecordingMetaData implements Serializable {
-	
-	public Boolean getStreamReaderThreadComplete() {
-		return streamReaderThreadComplete;
-	}
-	public void setStreamReaderThreadComplete(Boolean streamReaderThreadComplete) {
-		this.streamReaderThreadComplete = streamReaderThreadComplete;
-	}
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 8444176152324513716L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -225,4 +215,10 @@ public class FlvRecordingMetaData implements Serializable {
 		this.initialGapSeconds = initialGapSeconds;
 	}
 	
+	public Boolean getStreamReaderThreadComplete() {
+		return streamReaderThreadComplete;
+	}
+	public void setStreamReaderThreadComplete(Boolean streamReaderThreadComplete) {
+		this.streamReaderThreadComplete = streamReaderThreadComplete;
+	}
 }
