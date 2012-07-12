@@ -29,13 +29,14 @@ limitations under the License.
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
                                                     <meta name="author" value="
- Podling Documentation Team">
-            <meta name="email" value="Podling-dev@incubator.apache.org">
+			OpenMeetings Team
+		">
+            <meta name="email" value="solomax@apache.org">
             
            
                                     
                         
-            <title>Apache OpenMeetings [Incubating] - Project Dependencies</title>
+            <title>Apache OpenMeetings [Incubating] - Command line admin</title>
             <link rel="stylesheet" type="text/css" href="css/openmeetings.css">
             <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
             <link rel="stylesheet" type="text/css" href="css/coin-slider-styles.css">
@@ -584,26 +585,57 @@ limitations under the License.
                                                                     <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="The Apache Podling Project"><strong>The Apache Podling Project</strong></a>
+          <a name="Usage"><strong>Usage</strong></a>
           <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
         </font>
       </td></tr>
       <tr><td>
         <blockquote>
-                                    <p>
-Apache Podling is a project currently incubating in Apache.
-<p> 
-The common external dependencies of Podling include the tools used to build 
-and test it:
-</p>
-
-<ul>
-<li>Subversion</li>
-<li>Ant</li>
-<li>JUnit</li>
-</ul>
-
-</p>
+                                    <p>To avoid intensive traffic utilization and save your time you can
+				use command line admin to achive following tasks:</p>
+                                                <p>
+				<div class="xmlcode">
+ -v,--verbose                        verbose error messages<br />
+--------------------------------------------------------------------------------------------------<br />
+ -h,--help                           prints this message<br />
+--------------------------------------------------------------------------------------------------<br />
+ -b,--backup                         Backups OM<br />
+<span style="margin-left: 50px;">-file &lt;arg&gt;                       (optional) file used for backup/restore/install</span><br />
+<span style="margin-left: 100px;">--exclude-files                (optional) should backup exclude files [default: include]</span><br />
+--------------------------------------------------------------------------------------------------<br />
+ -r,--restore                        Restores OM<br />
+<span style="margin-left: 50px;">-file &lt;arg&gt;                       file used for backup/restore/install</span><br />
+--------------------------------------------------------------------------------------------------<br />
+ -l,--languages                      Reimport All language files into DB<br />
+<span style="margin-left: 50px;">-lang,--language &lt;arg&gt;            (optional) Single language to be imported (id or name)</span><br />
+--------------------------------------------------------------------------------------------------<br />
+ -i,--install                        Fill DB table, and make OM usable<br />
+<span style="margin-left: 50px;">-user &lt;arg&gt;                       Login name of the default user, minimum 4 characters (mutually exclusive with 'file')</span><br />
+<span style="margin-left: 50px;">-group &lt;arg&gt;                      The name of the default user group (mutually exclusive with 'file')</span><br />
+<span style="margin-left: 50px;">-email &lt;arg&gt;                      Email of the default user (mutually exclusive with 'file')</span><br />
+<span style="margin-left: 50px;">-tz &lt;arg&gt;                         Default server time zone, and time zone for the selected user (mutually exclusive with 'file') file used for backup/restore/install</span><br />
+<span style="margin-left: 100px;">--email-auth-pass &lt;arg&gt;        (optional) Email auth password (anonymous connection will be used if not set)</span><br />
+<span style="margin-left: 100px;">--db-host &lt;arg&gt;                (optional) DNS name or IP address of database</span><br />
+<span style="margin-left: 100px;">--drop                         (optional) Drop database before installation</span><br />
+<span style="margin-left: 100px;">--db-user &lt;arg&gt;                (optional) User with write access to the DB specified</span><br />
+<span style="margin-left: 100px;">--system-email-address &lt;arg&gt;   (optional) System e-mail address [default: noreply@openmeetings.apache.org]</span><br />
+<span style="margin-left: 100px;">--password &lt;arg&gt;               (optional) Password of the default user, minimum 4 characters (will be prompted if not set)</span><br />
+<span style="margin-left: 100px;">--email-use-tls                (optional) Is secure e-mail connection [default: no]</span><br />
+<span style="margin-left: 100px;">--email-auth-user &lt;arg&gt;        (optional) Email auth username (anonymous connection will be used if not set)</span><br />
+<span style="margin-left: 100px;">--db-port &lt;arg&gt;                (optional) Database port</span><br />
+<span style="margin-left: 100px;">--smtp-port &lt;arg&gt;              (optional) SMTP server for outgoing e-mails [default: 25]</span><br />
+<span style="margin-left: 100px;">--db-name &lt;arg&gt;                (optional) The name of Openmeetings database</span><br />
+<span style="margin-left: 100px;">--disable-frontend-register    (optional) Do not allow front end register [allowed by default]</span><br />
+<span style="margin-left: 100px;">--db-type &lt;arg&gt;                (optional) The type of the DB to be used</span><br />
+<span style="margin-left: 100px;">--skip-default-rooms           (optional) Do not create default rooms [created by default]</span><br />
+<span style="margin-left: 100px;">--force                        (optional) Install without checking the existence of old data in the database.</span><br />
+<span style="margin-left: 100px;">--smtp-server &lt;arg&gt;            (optional) SMTP server for outgoing e-mails [default: localhost]</span><br />
+<span style="margin-left: 100px;">--db-pass &lt;arg&gt;                (optional) Password of the user with write access to the DB specified</span><br />
+--------------------------------------------------------------------------------------------------<br />
+ -f,--files                          File operations - statictics/cleanup<br />
+--------------------------------------------------------------------------------------------------<br />
+				</div>
+			</p>
                             </blockquote>
         </p>
       </td></tr>

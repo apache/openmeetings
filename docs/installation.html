@@ -125,6 +125,12 @@ limitations under the License.
 					            		currentLink = "http://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+related+to+OpenMeetings".substr(1, "http://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+related+to+OpenMeetings".length);
 					            	} 
 					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/CommandLineAdmin.html") > 0) {
+					            		currentLocation = "InstallationandUpgrade";
+					            		currentLink = "/CommandLineAdmin.html".substr(1, "/CommandLineAdmin.html".length);
+					            	} 
+					            	
 					        				        		    										        					            					            	
 					            	else if (document.location.href.indexOf("/get-involved.html") > 0) {
 					            		currentLocation = "Community";
@@ -448,6 +454,8 @@ limitations under the License.
 <br/>
 	        		        	            	            	    <a href="http://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+related+to+OpenMeetings">Tutorials</a>
 <br/>
+	        		        	            	            	    <a href="./CommandLineAdmin.html">Command Line Admin</a>
+<br/>
 	        		            	</div>
         	<h3><a href="#Community">Community</a></h3>
     	<div  width="100%">
@@ -600,9 +608,13 @@ limitations under the License.
 				<p>
 					<i>Note: OpenMeetings requires SUN/Oracle JRE 6, not openJDK!</i>
 					<br />
-					<i>Since Version 2.0 you can also install OpenMeetings from command
+					<i>
+						Since Version 2.0 you can also install OpenMeetings from command
 						line. Just cd to the unpacked archive and type ./admin.sh or
-						admin.bat
+						admin.bat, please see
+						<a href="CommandLineAdmin.html" target="_BLANK" rel="nofollow">CommandLineAdmin
+						</a>
+						for more options
 					</i>
 				</p>
 			</p>

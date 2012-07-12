@@ -36,9 +36,13 @@
 				<p>
 					<i>Note: OpenMeetings requires SUN/Oracle JRE 6, not openJDK!</i>
 					<br />
-					<i>Since Version 2.0 you can also install OpenMeetings from command
+					<i>
+						Since Version 2.0 you can also install OpenMeetings from command
 						line. Just cd to the unpacked archive and type ./admin.sh or
-						admin.bat
+						admin.bat, please see
+						<a href="CommandLineAdmin.html" target="_BLANK" rel="nofollow">CommandLineAdmin
+						</a>
+						for more options
 					</i>
 				</p>
 			</p>
