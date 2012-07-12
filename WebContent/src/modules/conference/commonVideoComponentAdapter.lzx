@@ -185,7 +185,6 @@
     	if ($debug) Debug.write("closeWhiteboard :: ");
         canvas.sendViaLocalConnection(canvas.vid_lc_name, "closeWhiteboard", null);
     </method>
-    
 </class>
 
 </library>

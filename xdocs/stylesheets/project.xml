@@ -93,6 +93,7 @@
     		<subitem name="Dashboard" href="/Dashboard.html" />
     		<subitem name="Webcam resolutions" href="/WebcamResolutions.html" />
     		<subitem name="Room layout options" href="/ConferenceRoomLayoutOptions.html" />
+    		<subitem name="Hot Keys" href="/HotKeys.html" />
     	</item>
     	<item name="Customization" >
     		<subitem name="Webapp name/path" href="/WebappNamePath.html" />

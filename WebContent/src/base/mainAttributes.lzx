@@ -445,8 +445,9 @@ and some more references to temp-objects
 
 <attribute name="currentBaseConferenceRoom" value="null" />
 
-<!--F12-->
-<attribute name="GIVE_EXCLUSIVE_AUDIO_KEY" value="123"/> 
+<attribute name="CTRL_KEY" value="17"/> <!-- Ctrl -->
+<attribute name="GIVE_EXCLUSIVE_AUDIO_KEY" value="123"/> <!-- F12 --> 
+<attribute name="ARRANGE_WINDOWS_KEY" value="70"/> <!-- F --> 
 
 <!-- 
 	Indicates if the Red5 SIP Integration is enabled or not and 

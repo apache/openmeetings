@@ -66,6 +66,7 @@
             client.setExclusiveAudioAllowStatus = this.setExclusiveAudioAllowStatus;
             client.exitRoom = this.exitRoom;
             client.closeWhiteboard = this.closeWhiteboard;
+            client.arrangeWindows = this.arrangeWindows;
 
             var lc:LocalConnection = new LocalConnection();
             lc.connect(canvas.vid_lc_name);
@@ -539,6 +540,53 @@
     </method>
      -->
 
+	<!-- works only for 1 or 2 windows -->
+	<method name="arrangeWindows">
+	<![CDATA[
+		if ($debug) Debug.write("arrangeWindows");
+		var windowsList = this.subviews;
+		if (windowsList.length > 2 || 0 == windowsList.length) {
+			if ($debug) Debug.write("arrangeWindows:: invalid windows count: ", windowsList);
+			return;
+		}
+		
+		var offsetInPx = 40;
+		//calculate new sizes of every window
+		var windowWidth = canvas.width / windowsList.length - offsetInPx;
+		var windowHeight = canvas.height - offsetInPx;
+		if (windowHeight <= 0 || windowWidth <= 0) {
+			if ($debug) Debug.write("arrangeWindows:: invalid dimentions: ", windowHeight, windowWidth);
+			return;
+		}
+		
+		//calculate a new position of the first window
+		var xPos = offsetInPx / 2;
+		var yPos = offsetInPx / 2;
+		if (windowHeight > windowWidth) {
+			yPos = (this.height / 2) - windowWidth/2;
+			windowHeight = windowWidth;
+		} else {
+			xPos = xPos + (windowWidth/2) - (windowHeight/2);
+			windowWidth = windowHeight;
+		}
+		
+		// arrange windows with new positions and sizes
+		for (var winIdx = 0; winIdx < windowsList.length; winIdx++) {
+			var window = windowsList[winIdx];
+			window.setAttribute("x", xPos);
+			window.setAttribute("y", yPos);
+			window.setAttribute("width", windowWidth);
+			window.setAttribute("height", windowHeight);
+			
+			if (window.minimized) {
+				window.setAttribute("initialHeight", windowHeight);
+				window._toolbar._maximize2.onclick.sendEvent();
+			}
+			
+			xPos = xPos + windowWidth + offsetInPx;
+		}
+	]]>
+	</method>
 </class>
 
 </library>

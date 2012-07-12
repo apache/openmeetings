@@ -161,22 +161,42 @@
     <method name="ringring">
         if ($debug) Debug.write("ringring - ringring - ringring");
     </method>
-    
-    <handler name="onkeydown" reference="lz.Keys" args="keyCode">
-        if (canvas.GIVE_EXCLUSIVE_AUDIO_KEY == keyCode) {
-            if (canvas.ismoderator || canvas.isAllowedToGiveExclusiveAudio) {
 
-                var obj = canvas._videocontainer.getVideoObjectByPublicSID(canvas.publicSID);
-                if (null != obj) {
-                    obj._giveExclusiveAudioView._micButton.onclick.sendEvent();
-                }
-                return;
-            } else {
-                new lz.rpcErrorDialog(canvas.main_content._content.inner,{errorid:-54});
-            }
-        }
-    </handler>
-    
+	<attribute name="ctrlPressed" type="boolean" value="false" />
+	<handler name="onkeydown" reference="lz.Keys" args="keyCode">
+	<![CDATA[
+		if ($debug) Debug.write("onkeydown:: keyCode = ", keyCode);
+		if (canvas.CTRL_KEY == keyCode) {
+			ctrlPressed = true;
+			return;
+		}
+
+		// common keys are processed firstly
+		if (ctrlPressed && canvas.ARRANGE_WINDOWS_KEY == keyCode) {
+			canvas.sendViaLocalConnection(canvas.vid_lc_name, "arrangeWindows", null);
+			return;
+		}
+
+		if (canvas.GIVE_EXCLUSIVE_AUDIO_KEY == keyCode) {
+			if (canvas.ismoderator || canvas.isAllowedToGiveExclusiveAudio) {
+				var obj = canvas._videocontainer.getVideoObjectByPublicSID(canvas.publicSID);
+				if (null != obj) {
+					obj._giveExclusiveAudioView._micButton.onclick.sendEvent();
+				}
+				return;
+			} else {
+				new lz.rpcErrorDialog(canvas.main_content._content.inner,{errorid:-54});
+			}
+		}
+	]]>
+	</handler>
+
+	<handler name="onkeyup" reference="lz.Keys" args="keyCode">
+		if (canvas.CTRL_KEY == keyCode) {
+			ctrlPressed = false;
+		}
+	</handler>
+
     <screenSharingAdapter name="_screenSharingAdapter" />
     
     <baseTabChatPanel name="_chatPanelStrict" labelid="616"
