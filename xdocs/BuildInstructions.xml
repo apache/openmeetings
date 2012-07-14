@@ -9,7 +9,7 @@
 <document>
 
 	<properties>
-		<title>Upgrade</title>
+		<title>Build instructions</title>
 		<author email="sebawagner@apache.org">
 			OpenMeetings Team
 		</author>
@@ -21,7 +21,8 @@
 
 			<p>
 				You can find Nightly Builds of the software at:
-				<a href="https://builds.apache.org/view/M-R/view/OpenMeetings/" rel="nofollow" target="_BLANK">
+				<a href="https://builds.apache.org/view/M-R/view/OpenMeetings/"
+					rel="nofollow" target="_BLANK">
 					https://builds.apache.org/view/M-R/view/OpenMeetings/
 				</a>
 			</p>
@@ -29,6 +30,20 @@
 		</section>
 
 		<section name="How to Build a Distribution">
+
+			<p>
+				<p>To build a binary release of OpenMeetings you need: </p>
+				<ul>
+					<li>Sun JDK6</li>
+					<li>Apache ANT (minimum) 1.8.3</li>
+					<li>
+						SVN Command line client (Subversion 1.7 required!)
+						<a href="http://subversion.apache.org/packages.html" target="_BLANK"
+							rel="nofollow">http://subversion.apache.org/packages.html</a>
+					</li>
+				</ul>
+			</p>
+
 			<p>Get the source: </p>
 			<div class="xmlcode">
 				svn checkout
@@ -49,10 +64,12 @@
 				</span>
 				<br />
 				ant compile.laszlo.main
-				<span style="margin-left: 70px;"># compiles the client into main.as3.swf10.swf and main.swf8.swf</span>
+				<span style="margin-left: 70px;"># compiles the client into main.as3.swf10.swf and
+					main.swf8.swf</span>
 				<br />
 				ant compile.laszlo.main.debug
-				<span style="margin-left: 30px;"># compiles the debug-client into maindebug.as3.swf10.swf andmaindebug.swf8.swf
+				<span style="margin-left: 30px;"># compiles the debug-client into
+					maindebug.as3.swf10.swf and maindebug.swf8.swf
 				</span>
 				<br />
 				ant -Ddb=&lt;name of DB&gt;
@@ -107,11 +124,14 @@
 						Marketplace)
 					</li>
 					<li>
-						Apache IvyDE&#8482; For Eclipse (installable via Help &gt; Install New Software)
-						URL: http://www.apache.org/dist/ant/ivyde/updatesite detailed steps can be found here:
-						<a href="http://ant.apache.org/ivy/ivyde/download.cgi" target="_BLANK" rel="nofollow">http://ant.apache.org/ivy/ivyde/download.cgi</a>
+						Apache IvyDE&#8482; For Eclipse (installable via Help &gt; Install
+						New Software)
+						URL: http://www.apache.org/dist/ant/ivyde/updatesite
+						detailed steps can be found here:
+						<a href="http://ant.apache.org/ivy/ivyde/download.cgi" target="_BLANK"
+							rel="nofollow">http://ant.apache.org/ivy/ivyde/download.cgi</a>
 					</li>
-					<li>MySQL (or Postgres, or other Databases supported by Hibernate)
+					<li>MySQL (or Postgres, or other Databases supported by openJPA)
 						are optionally but handy to have them
 					</li>
 				</ul>
@@ -270,14 +290,16 @@
 						href="http://www.openlaszlo.org/lps4.2/laszlo-explorer/index.jsp?lzr=swf8"
 						target="_BLANK" rel="nofollow">Laszlo-in-10-Minutes</a>
 					and the
-					<a href="http://www.openlaszlo.org/lps4.2/docs/" target="_BLANK" rel="nofollow">Application
+					<a href="http://www.openlaszlo.org/lps4.2/docs/" target="_BLANK"
+						rel="nofollow">Application
 						Developer's Guide
 					</a>
 					or try the
-					<a href="http://www.openlaszlo.org/getstarted" target="_BLANK" rel="nofollow">ScreenCast</a>
+					<a href="http://www.openlaszlo.org/getstarted" target="_BLANK"
+						rel="nofollow">ScreenCast</a>
 				</li>
 				<li>
-					<a href="http://incubator.apache.org/openmeetings/svn.html" >
+					<a href="http://incubator.apache.org/openmeetings/svn.html">
 						browse SVN source
 					</a>
 				</li>

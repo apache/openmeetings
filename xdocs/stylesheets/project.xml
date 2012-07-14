@@ -49,6 +49,8 @@
         <item name="Dependencies"           href="/dependencies.html"/>
         <item name="Build Instructions"     href="/BuildInstructions.html"/>
         <item name="JUnit Testing"          href="/JUnitTesting.html"/>
+        <item name="Release Guide"          href="/ReleaseGuide.html"/>
+        <item name="Website Guide"          href="/WebsiteGuide.html"/>
     </menu>
     
     <menu name="Integration">

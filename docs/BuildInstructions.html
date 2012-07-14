@@ -36,7 +36,7 @@ limitations under the License.
            
                                     
                         
-            <title>Apache OpenMeetings [Incubating] - Upgrade</title>
+            <title>Apache OpenMeetings [Incubating] - Build instructions</title>
             <link rel="stylesheet" type="text/css" href="css/openmeetings.css">
             <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
             <link rel="stylesheet" type="text/css" href="css/coin-slider-styles.css">
@@ -183,6 +183,18 @@ limitations under the License.
 					            	else if (document.location.href.indexOf("/JUnitTesting.html") > 0) {
 					            		currentLocation = "Development";
 					            		currentLink = "/JUnitTesting.html".substr(1, "/JUnitTesting.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/ReleaseGuide.html") > 0) {
+					            		currentLocation = "Development";
+					            		currentLink = "/ReleaseGuide.html".substr(1, "/ReleaseGuide.html".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/WebsiteGuide.html") > 0) {
+					            		currentLocation = "Development";
+					            		currentLink = "/WebsiteGuide.html".substr(1, "/WebsiteGuide.html".length);
 					            	} 
 					            	
 					        				        		    										        					            					            	
@@ -484,6 +496,10 @@ limitations under the License.
 <br/>
 	        		        	            	            	    <a href="./JUnitTesting.html">JUnit Testing</a>
 <br/>
+	        		        	            	            	    <a href="./ReleaseGuide.html">Release Guide</a>
+<br/>
+	        		        	            	            	    <a href="./WebsiteGuide.html">Website Guide</a>
+<br/>
 	        		            	</div>
         	<h3><a href="#Integration">Integration</a></h3>
     	<div  width="100%">
@@ -617,7 +633,18 @@ limitations under the License.
       </td></tr>
       <tr><td>
         <blockquote>
-                                    <p>Get the source: </p>
+                                    <p>
+				<p>To build a binary release of OpenMeetings you need: </p>
+				<ul>
+					<li>Sun JDK6</li>
+					<li>Apache ANT (minimum) 1.8.3</li>
+					<li>
+						SVN Command line client (Subversion 1.7 required!)
+						<a href="http://subversion.apache.org/packages.html" target="_BLANK" rel="nofollow">http://subversion.apache.org/packages.html</a>
+					</li>
+				</ul>
+			</p>
+                                                <p>Get the source: </p>
                                                 <div class="xmlcode">
 				svn checkout
 				https://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/
@@ -637,10 +664,12 @@ limitations under the License.
 				</span>
 				<br />
 				ant compile.laszlo.main
-				<span style="margin-left: 70px;"># compiles the client into main.as3.swf10.swf and main.swf8.swf</span>
+				<span style="margin-left: 70px;"># compiles the client into main.as3.swf10.swf and
+					main.swf8.swf</span>
 				<br />
 				ant compile.laszlo.main.debug
-				<span style="margin-left: 30px;"># compiles the debug-client into maindebug.as3.swf10.swf andmaindebug.swf8.swf
+				<span style="margin-left: 30px;"># compiles the debug-client into
+					maindebug.as3.swf10.swf and maindebug.swf8.swf
 				</span>
 				<br />
 				ant -Ddb=&lt;name of DB&gt;
@@ -709,11 +738,13 @@ limitations under the License.
 						Marketplace)
 					</li>
 					<li>
-						Apache IvyDE™ For Eclipse (installable via Help &gt; Install New Software)
-						URL: http://www.apache.org/dist/ant/ivyde/updatesite detailed steps can be found here:
+						Apache IvyDE™ For Eclipse (installable via Help &gt; Install
+						New Software)
+						URL: http://www.apache.org/dist/ant/ivyde/updatesite
+						detailed steps can be found here:
 						<a href="http://ant.apache.org/ivy/ivyde/download.cgi" target="_BLANK" rel="nofollow">http://ant.apache.org/ivy/ivyde/download.cgi</a>
 					</li>
-					<li>MySQL (or Postgres, or other Databases supported by Hibernate)
+					<li>MySQL (or Postgres, or other Databases supported by openJPA)
 						are optionally but handy to have them
 					</li>
 				</ul>

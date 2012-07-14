@@ -29,13 +29,14 @@ limitations under the License.
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
                                                     <meta name="author" value="
- Podling Documentation Team">
-            <meta name="email" value="Podling-dev@incubator.apache.org">
+			OpenMeetings Team
+		">
+            <meta name="email" value="sebawagner@apache.org">
             
            
                                     
                         
-            <title>Apache OpenMeetings [Incubating] - Project Dependencies</title>
+            <title>Apache OpenMeetings [Incubating] - Release Guide</title>
             <link rel="stylesheet" type="text/css" href="css/openmeetings.css">
             <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
             <link rel="stylesheet" type="text/css" href="css/coin-slider-styles.css">
@@ -606,26 +607,45 @@ limitations under the License.
                                                                     <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="The Apache Podling Project"><strong>The Apache Podling Project</strong></a>
+          <a name="How to update Apache OpenMeetings incubator website"><strong>How to update Apache OpenMeetings incubator website</strong></a>
           <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
         </font>
       </td></tr>
       <tr><td>
         <blockquote>
                                     <p>
-Apache Podling is a project currently incubating in Apache.
-<p> 
-The common external dependencies of Podling include the tools used to build 
-and test it:
-</p>
-
-<ul>
-<li>Subversion</li>
-<li>Ant</li>
-<li>JUnit</li>
-</ul>
-
-</p>
+				Required software:
+				<ul>
+					<li>Sun JDK6</li>
+					<li>Apache ANT (1.8 or later)</li>
+				</ul>
+			</p>
+                                                <p>
+				OpenMeetings website (
+				<a href="http://incubator.apache.org/openmeetings/">http://incubator.apache.org/openmeetings/</a>
+				) is a copy from the SVN repository.
+				<br />
+				The file in the SVN to be synced are at:
+				<br />
+				<a href="http://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/docs/">http://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/docs/
+				</a>
+			</p>
+                                                <p>
+				To update the website you checkout trunk:
+				<br />
+				<a href="https://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/">https://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/
+				</a> <br />
+				edit the files in the folder <tt>xdocs</tt><br />
+				then you run the command:
+				<div class="xmlcode">
+					ant anakia
+				</div>
+				control the output locally in the folder <tt>docs</tt><br />
+				And then checkin into the SVN <i>both</i> the edited xml and generated html files.
+			</p>
+                                                <p>
+				Changes to the website should be online immediately.
+			</p>
                             </blockquote>
         </p>
       </td></tr>

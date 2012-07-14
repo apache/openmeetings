@@ -29,13 +29,14 @@ limitations under the License.
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
                                                     <meta name="author" value="
- Podling Documentation Team">
-            <meta name="email" value="Podling-dev@incubator.apache.org">
+			OpenMeetings Team
+		">
+            <meta name="email" value="sebawagner@apache.org">
             
            
                                     
                         
-            <title>Apache OpenMeetings [Incubating] - Project Dependencies</title>
+            <title>Apache OpenMeetings [Incubating] - Release Guide</title>
             <link rel="stylesheet" type="text/css" href="css/openmeetings.css">
             <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
             <link rel="stylesheet" type="text/css" href="css/coin-slider-styles.css">
@@ -606,26 +607,80 @@ limitations under the License.
                                                                     <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="The Apache Podling Project"><strong>The Apache Podling Project</strong></a>
+          <a name="How to Build a Release of OpenMeetings"><strong>How to Build a Release of OpenMeetings</strong></a>
           <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
         </font>
       </td></tr>
       <tr><td>
         <blockquote>
                                     <p>
-Apache Podling is a project currently incubating in Apache.
-<p> 
-The common external dependencies of Podling include the tools used to build 
-and test it:
-</p>
-
-<ul>
-<li>Subversion</li>
-<li>Ant</li>
-<li>JUnit</li>
-</ul>
-
-</p>
+				<p>To build a binary release of OpenMeetings you need: </p>
+				<ul>
+					<li>Sun JDK6</li>
+					<li>Apache ANT (minimum) 1.8.3</li>
+					<li>
+						SVN Command line client (Subversion 1.7 required!)
+						<a href="http://subversion.apache.org/packages.html" target="_BLANK" rel="nofollow">http://subversion.apache.org/packages.html</a>
+					</li>
+					<li>A text editor</li>
+				</ul>
+			</p>
+                                                <p>
+				Check that all files:
+				<br />
+				LICENSE, NOTICE, DISCLAIMER, CHANGELOG, README
+				<br />
+				are up to date and refer to the right version.
+			</p>
+                                                <p>
+				Create a TAG of the SVN tree that you would like to release
+			</p>
+                                                <p>Get the source from your TAG: </p>
+                                                <div class="xmlcode">
+				svn checkout
+				https://svn.apache.org/repos/asf/incubator/openmeetings/$TREE/$BRANCHORTAG/
+				<br />
+				$TREE and $BRANCHORTAG should be replaced with your new TAG
+			</div>
+                                                <p>Edit the file build.properties</p>
+                                                <div class="xmlcode">
+				project.status=SNAPSHOT
+			</div>
+                                                <p>to</p>
+                                                <div class="xmlcode">
+				project.status=RELEASE
+			</div>
+                                                <p>Run the command: </p>
+                                                <div class="xmlcode">
+				ant dist-release
+			</div>
+                                                <p>Test building the source on windows and OSx or Linux</p>
+                                                <p>Test running the binary's</p>
+                                                <p>Create MD5 checksums and signatures with the your KEY</p>
+                                                <p>Upload the build artefacts to your public_html in your home
+				directory at people.apache.org
+			</p>
+                                                <p>
+				Send a "VOTE" to the developer mailing list including links to
+				release artefacts.
+				<br />
+				After that send a vote to the general-incubator mailing list.
+				<br />
+				You need at least 3 IPMC votes
+			</p>
+                                                <p>If successful: Upload the release </p>
+                                                <div class="xmlcode">
+				The distribution upload location (www.apache.org/dist)
+				for all
+				Apache projects is the /www/www.apache.org/dist directory on
+				people.apache.org. Each project (including the Incubator) owns a
+				directory within dist.
+			</div>
+                                                <p>
+				Wait 24 hours (until all Apache mirrors have synced the packages)
+				and send an announcment to the mailing list + blog and any other
+				channel.
+			</p>
                             </blockquote>
         </p>
       </td></tr>
