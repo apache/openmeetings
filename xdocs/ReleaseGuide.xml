@@ -30,6 +30,8 @@
 							rel="nofollow">http://subversion.apache.org/packages.html</a>
 					</li>
 					<li>A text editor</li>
+					<li>You need to be online! The build process actively downloads
+						needed libraries and dependencies.</li>
 				</ul>
 			</p>
 
@@ -67,10 +69,24 @@
 			</div>
 			<p>Test building the source on windows and OSx or Linux</p>
 			<p>Test running the binary's</p>
-			<p>Create MD5 checksums and signatures with the your KEY</p>
+			<p>Create MD5 checksums</p>
+			<div class="xmlcode">
+				#On OSX you might use this command to make a MD5 checksum and store it to a file<br/>
+				md5 -r apache-openmeetings-XXX-src.zip > apache-openmeetings-XXX-src.zip.md5
+			</div>
+			<p>
+				Create signatures with the your KEY for every file, the KEY must be
+				available at:
+				<br />
+				<a href="http://www.apache.org/dist/incubator/openmeetings/KEYS">http://www.apache.org/dist/incubator/openmeetings/KEYS</a>
+			</p>
 			<p>Upload the build artefacts to your public_html in your home
 				directory at people.apache.org
 			</p>
+			<div class="xmlcode">
+				#On OSX you might use this command to upload the file<br/>
+				scp apache-openmeetings-XXXX.zip sebawagner@people.apache.org:~/public_html/
+			</div>
 			<p>
 				Send a "VOTE" to the developer mailing list including links to
 				release artefacts.
@@ -79,7 +95,7 @@
 				<br />
 				You need at least 3 IPMC votes
 			</p>
-			<p>If successful: Upload the release </p>
+			<p>If VOTEs positive: Upload the release </p>
 			<div class="xmlcode">
 				The distribution upload location (www.apache.org/dist)
 				for all
