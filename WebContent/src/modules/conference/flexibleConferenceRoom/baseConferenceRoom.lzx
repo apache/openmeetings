@@ -162,17 +162,11 @@
         if ($debug) Debug.write("ringring - ringring - ringring");
     </method>
 
-	<attribute name="ctrlPressed" type="boolean" value="false" />
 	<handler name="onkeydown" reference="lz.Keys" args="keyCode">
 	<![CDATA[
 		if ($debug) Debug.write("onkeydown:: keyCode = ", keyCode);
-		if (canvas.CTRL_KEY == keyCode) {
-			ctrlPressed = true;
-			return;
-		}
-
 		// common keys are processed firstly
-		if (ctrlPressed && canvas.ARRANGE_WINDOWS_KEY == keyCode) {
+		if (canvas.ARRANGE_WINDOWS_KEY == keyCode) {
 			canvas.sendViaLocalConnection(canvas.vid_lc_name, "arrangeWindows", null);
 			return;
 		}
@@ -189,12 +183,6 @@
 			}
 		}
 	]]>
-	</handler>
-
-	<handler name="onkeyup" reference="lz.Keys" args="keyCode">
-		if (canvas.CTRL_KEY == keyCode) {
-			ctrlPressed = false;
-		}
 	</handler>
 
     <screenSharingAdapter name="_screenSharingAdapter" />
