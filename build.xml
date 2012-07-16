@@ -90,7 +90,7 @@
 		<fileset dir="${project.lib.dir}" includes="*.jar" />
 	</path>
 
-	<target name="prepare.mkdir" depends="-java6.check">
+	<target name="prepare.mkdir">
 		<mkdir dir="${red5.server.lib}" />
 		<mkdir dir="${red5.client.dir}/dist" />
 		<mkdir dir="${dist.dir}" />
@@ -409,8 +409,8 @@
 			<jvmarg value="-DLPS_HOME=${laszlo.home}" />
 			<jvmarg value="-Dlzdebug=${laszlo.debug}" />
 			<jvmarg value="-Dlzproxied=${laszlo.proxied}" />
-			<jvmarg value="-Xms1024M" />
-			<jvmarg value="-Xmx1024M" />
+			<jvmarg value="-Xms512M" />
+			<jvmarg value="-Xmx512M" />
 			<arg line="--runtime=${flash.runtime} --dir &quot;${out.dir.swf}&quot; --onerror warn ${flash.main.file}" />
 		</java>
 	</target>
@@ -465,7 +465,8 @@
 
 	<target name="compile.only" depends="clean.classes, -retrieve-mainlibs,-retrieve-om,-retrieve-dtd-generator,-retrieve-junit, -retrieve-cmdadmin, -retrieve-tools.jar, resources">
 		<echo message="Compile main to ${main.out.dir}" />
-		<javac debug="on" debuglevel="lines,vars,source" destdir="${main.out.dir}" includeantruntime="false">
+		<javac debug="on" debuglevel="lines,vars,source" destdir="${main.out.dir}" includeantruntime="false"
+			source="1.6" target="1.6">
 			<src path="${main.src.dir}" />
 			<classpath refid="compile.classpath" />
 			<compilerarg value="-Aopenjpa.metamodel=true" />
@@ -541,7 +542,7 @@
 
 		<rat:report>
 			<fileset dir="${main.src.dir}" />
-			<fileset dir="${webcontent.src.dir}" />
+			<fileset dir="${webcontent.src.dir}" excludes="**/*.swf" />
 			<fileset dir="${docs.src}" />
 		</rat:report>
 	</target>
@@ -681,26 +682,6 @@
 
 
 	<taskdef uri="antlib:org.apache.ivy.ant" resource="org/apache/ivy/ant/antlib.xml" classpath="${ivy.lib.dir}/${ivy.jar}" />
-
-	<!-- Build Targets -->
-	<target name="-java6.check" unless="java6.installed">
-		<condition property="java6.installed" value="true">
-			<and>
-				<or>
-					<equals arg1="${java.specification.version}" arg2="1.6" />
-				</or>
-				<matches string="${java.vm.specification.vendor}" pattern=".*[sun,oracle].*" casesensitive="false" singleline="true" />
-			</and>
-		</condition>
-		<echo message="Using Java ${java.version} specification: ${java.specification.version}" />
-		<fail message="Unsupported Java version - detected: ${java.version} Only Sun/Oracle Java compiler version 1.6 supported.">
-			<condition>
-				<not>
-					<equals arg1="${java6.installed}" arg2="true" />
-				</not>
-			</condition>
-		</fail>
-	</target>
 
 	<target name="-availability-check" unless="red5.installed" description="Check which libraries need to be retrieved" depends="prepare.mkdir">
 		<available classpathref="compile.classpath" classname="javax.persistence.spi.PersistenceProvider" property="mainlib.installed" />
@@ -947,7 +928,7 @@
 		<ivy:cleancache />
 	</target>
 
-	<target name="prepare-eclipse" if="java6.installed" description="Layout various files necessary for development" depends="-java6.check">
+	<target name="prepare-eclipse" if="java6.installed" description="Layout various files necessary for development">
 		<antcall target="-retrieve-mainlibs" inheritAll="true" inheritRefs="true" />
 		<antcall target="-retrieve-om" inheritAll="true" inheritRefs="true" />
 		<antcall target="-retrieve-junit" inheritAll="true" inheritRefs="true" />
