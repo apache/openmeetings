@@ -136,6 +136,9 @@ public class Users implements Serializable {
 	@Column(name = "forceTimeZoneCheck")
 	private Boolean forceTimeZoneCheck;
 
+	@Column(name = "sendSMS")
+	private boolean sendSMS;
+
 	@Column(name = "user_offers")
 	private String userOffers;
 	@Column(name = "user_searchs")
@@ -418,6 +421,14 @@ public class Users implements Serializable {
 		this.forceTimeZoneCheck = forceTimeZoneCheck;
 	}
 
+	public boolean getSendSMS() {
+		return sendSMS;
+	}
+
+	public void setSendSMS(boolean sendSMS) {
+		this.sendSMS = sendSMS;
+	}
+
 	public String getUserOffers() {
 		return userOffers;
 	}
@@ -457,4 +468,8 @@ public class Users implements Serializable {
 	public void setServer(Server server) {
 		this.server = server;
 	}
+	
+	public String getPhoneForSMS() {
+		return getSendSMS() ? getAdresses().getPhone() : "";
+}
 }

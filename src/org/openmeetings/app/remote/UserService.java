@@ -402,6 +402,9 @@ public class UserService {
 						true,
 						orgIds,
 						argObjectMap.get("phone").toString(),
+						Boolean.valueOf(
+								argObjectMap.get("sendSMS")
+										.toString()).booleanValue(),
 						"",
 						false,
 						argObjectMap.get("sip_user").toString(),
@@ -459,6 +462,9 @@ public class UserService {
 										argObjectMap.get("title_id").toString())
 										.intValue(),
 								argObjectMap.get("phone").toString(),
+								Boolean.valueOf(
+										argObjectMap.get("sendSMS")
+												.toString()).booleanValue(),
 								argObjectMap.get("sip_user").toString(),
 								argObjectMap.get("sip_pass").toString(),
 								argObjectMap.get("sip_auth").toString(),
@@ -1189,13 +1195,14 @@ public class UserService {
 				String lastname = meetingMember.getLastname();
 	
 				meetingMemberDao.addMeetingMember(firstname, lastname, "0", "0",
-						appointmentId, meetingMember.getUser_id(), email, invitor,
+						appointmentId, meetingMember.getUser_id(), email, 
+						meetingMember.getPhoneForSMS(), invitor,
 						meetingMember.getOmTimeZone(), isConnectedEvent);
 
 			} else {
 				
 				meetingMemberDao.addMeetingMember("", "", "0", "0",
-						appointmentId, null, email, invitor,
+						appointmentId, null, email, "", invitor,
 						omTimeZoneDaoImpl.getOmTimeZone(sendJNameTimeZone), isConnectedEvent);
 				
 			}

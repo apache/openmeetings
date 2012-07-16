@@ -80,7 +80,7 @@ public class MeetingMemberLogic {
 	 */
 	public Long addMeetingMember(String firstname, String lastname,
 			String memberStatus, String appointmentStatus, Long appointmentId,
-			Long userid, String email, String baseUrl, Long meeting_organizer,
+			Long userid, String email, String phone, String baseUrl, Long meeting_organizer,
 			Boolean invitor, Long language_id, Boolean isPasswordProtected,
 			String password, TimeZone timezone, OmTimeZone omTimeZone,
 			String invitorName) {
@@ -88,7 +88,7 @@ public class MeetingMemberLogic {
 		try {
 			Long memberId = meetingMemberDao.addMeetingMember(firstname,
 					lastname, memberStatus, appointmentStatus, appointmentId,
-					userid, email, invitor, omTimeZone, false);
+					userid, email, phone, invitor, omTimeZone, false);
 
 			// DefaultInvitation
 			Appointment point = appointmentLogic
@@ -254,7 +254,7 @@ public class MeetingMemberLogic {
 	// ------------------------------------------------------------------------------------------------------------------------------
 	public Long updateMeetingMember(Long meetingMemberId, String firstname,
 			String lastname, String memberStatus, String appointmentStatus,
-			Long appointmentId, Long userid, String email) {
+			Long appointmentId, Long userid, String email, String phone) {
 
 		log.debug("MeetingMemberLogic.updateMeetingMember");
 
@@ -269,7 +269,7 @@ public class MeetingMemberLogic {
 		try {
 			return meetingMemberDao.updateMeetingMember(meetingMemberId,
 					firstname, lastname, memberStatus, appointmentStatus,
-					appointmentId, userid, email);
+					appointmentId, userid, email, phone);
 		} catch (Exception err) {
 			log.error("[updateMeetingMember]", err);
 		}

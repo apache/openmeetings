@@ -168,7 +168,7 @@ public class MeetingMemberDaoImpl {
 
 	public Long updateMeetingMember(Long meetingMemberId, String firstname,
 			String lastname, String memberStatus, String appointmentStatus,
-			Long appointmentId, Long userid, String email) {
+			Long appointmentId, Long userid, String email, String phone) {
 		try {
 
 			MeetingMember gm = this.getMeetingMemberById(meetingMemberId);
@@ -188,6 +188,7 @@ public class MeetingMemberDaoImpl {
 			gm.setUpdatetime(new Date());
 			gm.setUserid(usersDao.getUser(userid));
 			gm.setEmail(email);
+			gm.setPhone(phone);
 
 			if (gm.getMeetingMemberId() == null) {
 				em.persist(gm);
@@ -206,7 +207,7 @@ public class MeetingMemberDaoImpl {
 
 	public Long addMeetingMember(String firstname, String lastname,
 			String memberStatus, String appointmentStatus, Long appointmentId,
-			Long userid, String email, Boolean moderator, OmTimeZone omTimeZone,
+			Long userid, String email, String phone, Boolean moderator, OmTimeZone omTimeZone,
 			Boolean isConnectedEvent) {
 		try {
 
@@ -219,6 +220,7 @@ public class MeetingMemberDaoImpl {
 			gm.setAppointment(appointmentDao.getAppointmentById(appointmentId));
 			gm.setUserid(usersDao.getUser(userid));
 			gm.setEmail(email);
+			gm.setPhone(phone);
 
 			gm.setStarttime(new Date());
 			gm.setDeleted(false);

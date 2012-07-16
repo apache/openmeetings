@@ -44,7 +44,7 @@ public class TestDatabaseStructureMeetingMember extends AbstractOpenmeetingsSpri
 			
 			//MeetingMemberDaoImpl.getInstance().getMeetingMemberById(1L);
 			//MeetingMemberDaoImpl.getInstance().deleteMeetingMember(2L);
-			meetingMemberDao.updateMeetingMember(1l,"bbbbbb", "dir", "1", "2", 1L, 1L, "test"); 
+			meetingMemberDao.updateMeetingMember(1l,"bbbbbb", "dir", "1", "2", 1L, 1L, "test", ""); 
 		} catch (Exception err) {
 
 			log.error("[testAddingMeeting]",err);

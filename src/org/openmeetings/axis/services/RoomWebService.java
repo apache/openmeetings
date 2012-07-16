@@ -2256,7 +2256,7 @@ public class RoomWebService {
 				// Not In Remote List available - extern user
 				Long memberId = meetingMemberLogic.addMeetingMember(firstname,
 						lastname, "0", "0", appointment.getAppointmentId(),
-						null, email, baseUrl, null, new Boolean(false),
+						null, email, null, baseUrl, null, new Boolean(false),
 						language_id, false, "", null, null, "");
 
 				return memberId;
@@ -2318,7 +2318,7 @@ public class RoomWebService {
 				// Not In Remote List available - extern user
 				Long memberId = meetingMemberLogic.addMeetingMember(firstname,
 						lastname, "0", "0", appointment.getAppointmentId(),
-						null, email, baseUrl, null, new Boolean(false),
+						null, email, "", baseUrl, null, new Boolean(false),
 						language_id, false, "", null, null, invitorName);
 
 				return memberId;

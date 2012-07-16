@@ -51,6 +51,7 @@ import org.openmeetings.utils.mail.MailHandler;
 import org.openmeetings.utils.mail.MailiCalThread;
 import org.openmeetings.utils.math.CalendarPatterns;
 import org.openmeetings.utils.math.TimezoneUtil;
+import org.openmeetings.utils.sms.SMSHandler;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,6 +88,8 @@ public class Invitationmanagement {
 	private MailHandler mailHandler;
 	@Autowired
 	private MailiCalThread mailiCalThread;
+	@Autowired
+	private SMSHandler smsHandler;
 	@Autowired
 	private InvitationTemplate invitationTemplate;
 	@Autowired
@@ -653,6 +656,24 @@ public class Invitationmanagement {
 		}
 
 		return null;
+	}
+
+	/**
+	 * This method sends invitation reminder SMS
+	 * @param phone user's phone
+	 * @param subject 
+	 * @return
+	 */
+	public boolean sendInvitationReminderSMS(String phone, String subject) {
+		if (phone != null && phone.length() > 0) {
+			log.debug("sendInvitationReminderSMS to " + phone + ": " + subject);
+			try {
+				return smsHandler.sendSMS(phone, subject);
+			} catch (Exception e) {
+				log.error("sendInvitationReminderSMS", e);
+			}
+		}
+		return false;
 	}
 
 	// ----------------------------------------------------------------------------------------------------

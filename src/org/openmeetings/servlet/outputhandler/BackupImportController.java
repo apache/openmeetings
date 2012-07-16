@@ -1672,6 +1672,8 @@ public class BackupImportController extends AbstractUploadController {
 								.element("appointmentStatus").getText());
 						String email = unformatString(appointmentsObject
 								.element("email").getText());
+						String phone = appointmentsObject.element("phone") == null ? "" :
+								unformatString(appointmentsObject.element("phone").getText());
 						Boolean deleted = importBooleanType(unformatString(appointmentsObject
 								.element("deleted").getText()));
 						Boolean invitor = importBooleanType(unformatString(appointmentsObject
@@ -1687,6 +1689,7 @@ public class BackupImportController extends AbstractUploadController {
 						meetingMember.setMemberStatus(memberStatus);
 						meetingMember.setAppointmentStatus(appointmentStatus);
 						meetingMember.setEmail(email);
+						meetingMember.setPhone(phone);
 						meetingMember.setDeleted(deleted);
 						meetingMember.setInvitor(invitor);
 

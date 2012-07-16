@@ -53,7 +53,7 @@ public class MeetingMemberService {
 
 				return meetingMemberLogic.updateMeetingMember(
 						meetingMemberId, firstname, lastname, memberStatus,
-						appointmentStatus, appointmentId, userid, email);
+						appointmentStatus, appointmentId, userid, email, null);
 			}
 		} catch (Exception err) {
 			log.error("[updateMeetingMember]", err);

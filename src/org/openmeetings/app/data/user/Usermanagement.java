@@ -468,7 +468,7 @@ public class Usermanagement {
 			long states_id, String town, Long language_id, int availible,
 			String telefon, String fax, String mobil, String email,
 			String comment, int status, List<Long> organisations, int title_id,
-			String phone, String sip_user, String sip_pass, String sip_auth,
+			String phone, boolean sendSMS, String sip_user, String sip_pass, String sip_auth,
 			Boolean generateSipUserData, String jNameTimeZone,
 			Boolean forceTimeZoneCheck, String userOffers, String userSearchs,
 			Boolean showContactData, Boolean showContactDataToContacts) {
@@ -525,6 +525,7 @@ public class Usermanagement {
 					us.setLanguage_id(language_id);
 					us.setForceTimeZoneCheck(forceTimeZoneCheck);
 
+					us.setSendSMS(sendSMS);
 					us.setUserOffers(userOffers);
 					us.setUserSearchs(userSearchs);
 					us.setShowContactData(showContactData);
@@ -828,7 +829,7 @@ public class Usermanagement {
 	public Long registerUser(String login, String Userpass, String lastname,
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, long states_id,
-			String town, long language_id, String phone, String baseURL,
+			String town, long language_id, String phone, boolean sendSMS, String baseURL,
 			boolean generateSipUserData, String jNameTimeZone, Server server) {
 		
 		boolean sendConfirmation = baseURL != null
@@ -838,24 +839,24 @@ public class Usermanagement {
 		
 		return registerUser(login, Userpass, lastname, firstname, email, age,
 				street, additionalname, fax, zip, states_id, town, language_id,
-				phone, baseURL, generateSipUserData, jNameTimeZone, sendConfirmation, server);
+				phone, sendSMS, baseURL, generateSipUserData, jNameTimeZone, sendConfirmation, server);
 	}
 
 	public Long registerUserNoEmail(String login, String Userpass,
 			String lastname, String firstname, String email, Date age,
 			String street, String additionalname, String fax, String zip,
-			long states_id, String town, long language_id, String phone,
+			long states_id, String town, long language_id, String phone, boolean sendSMS, 
 			boolean generateSipUserData, String jNameTimeZone, Server server) {
 		
 		return registerUser(login, Userpass, lastname, firstname, email, age,
 				street, additionalname, fax, zip, states_id, town, language_id,
-				phone, "", generateSipUserData, jNameTimeZone, false, server);
+				phone, sendSMS, "", generateSipUserData, jNameTimeZone, false, server);
 	}
 
 	private Long registerUser(String login, String Userpass, String lastname,
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, long states_id,
-			String town, long language_id, String phone, String baseURL,
+			String town, long language_id, String phone, boolean sendSMS, String baseURL,
 			boolean generateSipUserData, String jNameTimeZone, Boolean sendConfirmation, Server server) {
 		try {
 			// Checks if FrontEndUsers can register
@@ -866,7 +867,7 @@ public class Usermanagement {
 				Long user_id = this.registerUserInit(3, 1, 0, 1, login,
 						Userpass, lastname, firstname, email, age, street,
 						additionalname, fax, zip, states_id, town, language_id,
-						true, Arrays.asList(cfgManagement.getConfValue("default_domain_id", Long.class, null)),phone, baseURL,
+						true, Arrays.asList(cfgManagement.getConfValue("default_domain_id", Long.class, null)),phone, sendSMS, baseURL,
 						sendConfirmation, "", "", "", generateSipUserData,
 						jNameTimeZone, false, "", "", false, true, server);
 
@@ -912,7 +913,7 @@ public class Usermanagement {
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, long states_id,
 			String town, long language_id, boolean sendWelcomeMessage,
-			List<Long> organisations, String phone, String baseURL,
+			List<Long> organisations, String phone, boolean sendSMS, String baseURL,
 			Boolean sendConfirmation, String sip_user, String sip_pass,
 			String sip_auth, boolean generateSipUserData,
 			String jname_timezone, Boolean forceTimeZoneCheck,
@@ -923,7 +924,7 @@ public class Usermanagement {
 				firstname, email, age, street,
 				additionalname, fax, zip, states_id,
 				town, language_id, sendWelcomeMessage,
-				organisations, phone, baseURL,
+				organisations, phone, sendSMS, baseURL,
 				sendConfirmation, sip_user, sip_pass,
 				sip_auth, generateSipUserData,
 				omTimeZoneDaoImpl.getOmTimeZone(jname_timezone), forceTimeZoneCheck,
@@ -952,6 +953,7 @@ public class Usermanagement {
 	 * @param sendWelcomeMessage
 	 * @param organisations
 	 * @param phone
+	 * @param sendSMS
 	 * @param baseURL
 	 * @param sendConfirmation
 	 * @param sip_user
@@ -974,7 +976,7 @@ public class Usermanagement {
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, long states_id,
 			String town, long language_id, boolean sendWelcomeMessage,
-			List<Long> organisations, String phone, String baseURL,
+			List<Long> organisations, String phone, boolean sendSMS, String baseURL,
 			Boolean sendConfirmation, String sip_user, String sip_pass,
 			String sip_auth, boolean generateSipUserData,
 			OmTimeZone timezone, Boolean forceTimeZoneCheck,
@@ -1039,7 +1041,7 @@ public class Usermanagement {
 
 					Long user_id = addUser(level_id, availible, status,
 							firstname, login, lastname, language_id, password,
-							adr, age, hash, sip_user, sip_pass,
+							adr, sendSMS, age, hash, sip_user, sip_pass,
 							sip_auth, generateSipUserData, timezone,
 							forceTimeZoneCheck, userOffers, userSearchs,
 							showContactData, showContactDataToContacts, organisations, server);
@@ -1094,7 +1096,7 @@ public class Usermanagement {
 	 */
 	public Long addUser(long level_id, int availible, int status,
 			String firstname, String login, String lastname, long language_id,
-			String userpass, Adresses adress, Date age, String hash,
+			String userpass, Adresses adress, boolean sendSMS, Date age, String hash,
 			String sip_user, String sip_pass, String sip_auth,
 			boolean generateSipUserData, OmTimeZone timezone,
 			Boolean forceTimeZoneCheck, String userOffers, String userSearchs,
@@ -1108,6 +1110,7 @@ public class Usermanagement {
 			users.setLastname(lastname);
 			users.setAge(age);
 			users.setAdresses(adress);
+			users.setSendSMS(sendSMS);
 			users.setAvailible(availible);
 			users.setLastlogin(new Date());
 			users.setLasttrans(new Long(0));
@@ -1403,6 +1406,7 @@ public class Usermanagement {
 							values.get("additionalname").toString());
 					savedUser.getAdresses()
 							.setZip(values.get("zip").toString());
+					savedUser.setSendSMS(false);
 					savedUser.setForceTimeZoneCheck(false);
 					savedUser.getAdresses().setStates(
 							statemanagement.getStateById(Long.parseLong(values

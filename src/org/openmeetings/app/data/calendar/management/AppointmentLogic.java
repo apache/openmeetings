@@ -209,7 +209,7 @@ public class AppointmentLogic {
 			// Add the creator of the meeting calendar event
 			meetingMemberLogic.addMeetingMember(user.getFirstname(), user
 					.getLastname(), "", "", appointmentId, userId, user
-					.getAdresses().getEmail(), baseUrl, userId, true,
+					.getAdresses().getEmail(), user.getPhoneForSMS(), baseUrl, userId, true,
 					language_id, isPasswordProtected, password, timezone, user.getOmTimeZone(),
 					invitorName);
 
@@ -245,12 +245,14 @@ public class AppointmentLogic {
 								.longValue();
 					}
 
+					String phone = "";
 					// Check if this is an internal user, if yes use the
 					// timezone from his profile otherwise get the timezones
 					// from the variable jNameTimeZone
 					if (sendToUserId > 0) {
 						Users interalUser = userManagement
 								.getUserById(sendToUserId);
+						phone = interalUser.getPhoneForSMS();
 						timezoneMember = timezoneUtil
 								.getTimezoneByUser(interalUser);
 						omTimeZone = interalUser.getOmTimeZone();
@@ -277,7 +279,9 @@ public class AppointmentLogic {
 							appointmentId,
 							sendToUserId, // sending To: External users have a 0
 											// here
-							clientMember.get("email").toString(), baseUrl,
+							clientMember.get("email").toString(),
+							phone,
+							baseUrl,
 							userId, // meeting_organizer
 							new Boolean(false), // invitor
 							language_id, //language_id

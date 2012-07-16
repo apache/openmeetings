@@ -45,6 +45,7 @@
             this.lastname.setAttribute('text','');
             this.email.setAttribute('text','');
             this.phone.setAttribute('text','');
+            this.sendSMS.setValue(false);
             this.age.setAttribute('text','');
             this.street.setAttribute('text','');
             this.house.setAttribute('text','');
@@ -138,6 +139,7 @@
 			this.userpass1.setAttribute('text','');
 			this.email.setAttribute('text',obj.adresses.email);
 			this.phone.setAttribute('text',obj.adresses.phone);
+			this.sendSMS.setValue(obj["sendSMS"] && obj.sendSMS!= null && obj.sendSMS);
 			this.age.setAttribute('text',parseDateToString(obj.age));
 			this.street.setAttribute('text',obj.adresses.street);
 			this.house.setAttribute('text',obj.adresses.additionalname);
@@ -249,6 +251,7 @@
   			this.sendObject["lastname"] = this.parent.lastname.getText();
   			this.sendObject["email"] = this.parent.email.getText();
   			this.sendObject["phone"] = this.parent.phone.getText();
+  			this.sendObject["sendSMS"] = parent.sendSMS.getValue();
   			this.sendObject["street"] = this.parent.street.getText();
   			this.sendObject["additionalname"] = this.parent.house.getText();
   			this.sendObject["zip"] = this.parent.zip.getText();
@@ -377,8 +380,11 @@
         <customEdittext name="email" y="310" x="120" width="270" regexpType="email" />
         				
     <labelText labelid="607" width="200" y="340" resize="false" x="2"/>
-        <customEdittext name="phone" y="340" x="120" width="270" />
+        <customEdittext name="phone" y="340" x="120" width="170" />
         
+	<labelText labelid="1503" width="200" y="340" resize="false" x="300"/>  
+        <labelCheckbox name="sendSMS" width="170" y="340" x="370" fontsize="11" />
+
     <labelText labelid="138" width="200" y="370" resize="false" x="2"/>
         <dateField name="age" y="370" x="120" width="270" />
         

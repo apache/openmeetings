@@ -5999,4 +5999,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   <string id="1502" name="Server details">
     <value>Server details</value>
   </string>
+  <string id="1503" name="Send SMS">
+    <value>Send SMS</value>
+  </string>
 </language>

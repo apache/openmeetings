@@ -619,10 +619,10 @@ public class RoomWebServiceFacade {
 	}
 
 	public Long addMeetingMemberRemindToRoom(String SID, Long room_id,
-			String firstname, String lastname, String email, String baseUrl,
+			String firstname, String lastname, String email, String phone, String baseUrl,
 			Long language_id) throws AxisFault {
 		return this.getRoomServiceProxy().addMeetingMemberRemindToRoom(SID,
-				room_id, firstname, lastname, email, baseUrl, language_id);
+				room_id, firstname, lastname, email, phone, language_id);
 	}
 
 	public Long addExternalMeetingMemberRemindToRoom(String SID, Long room_id,

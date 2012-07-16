@@ -227,6 +227,7 @@
 	<bean id="generateThumbs" class="org.openmeetings.app.documents.GenerateThumbs" />
 	<bean id="generatePDF" class="org.openmeetings.app.documents.GeneratePDF" />
 	<bean id="mailHandler" class="org.openmeetings.utils.mail.MailHandler" />
+	<bean id="smsHandler" class="org.openmeetings.utils.sms.SMSHandler" />
 	<bean id="feedbackManagement" class="org.openmeetings.app.data.conference.Feedbackmanagement" />
 	<bean id="importInitvalues" class="org.openmeetings.app.installation.ImportInitvalues" />
 	<bean id="languageImport" class="org.openmeetings.app.xmlimport.LanguageImport" />

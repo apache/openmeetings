@@ -567,6 +567,7 @@ public class AppointmentDaoImpl {
 									.longValue();
 						}
 
+						String phone = "";
 						// Check if this is an internal user, if yes use the
 						// timezone from his profile otherwise get the timezones
 						// from the variable jNameTimeZone
@@ -576,6 +577,7 @@ public class AppointmentDaoImpl {
 							timezoneMember = timezoneUtil
 									.getTimezoneByUser(interalUser);
 							omTimeZone = interalUser.getOmTimeZone();
+							phone = interalUser.getPhoneForSMS();
 						} else {
 							// Get the internal-name of the timezone set in the
 							// client object and convert it to a real one
@@ -603,6 +605,7 @@ public class AppointmentDaoImpl {
 																		// to
 																		// send
 																		// to
+								phone,
 								baseUrl, // URL to send to
 								sendToUserId, // sending To: External users have
 												// a 0 here

@@ -227,7 +227,7 @@ public class UserWebService {
 				Long user_id = userManagement.registerUser(username, userpass,
 						lastname, firstname, email, new Date(), street,
 						additionalname, fax, zip, states_id, town, language_id,
-						"", baseURL, true, // generate
+						"", false, baseURL, true, // generate
 											// SIP
 											// Data
 											// if
@@ -313,7 +313,7 @@ public class UserWebService {
 				Long user_id = userManagement.registerUser(username, userpass,
 						lastname, firstname, email, new Date(), street,
 						additionalname, fax, zip, states_id, town, language_id,
-						"", baseURL, true, // generate
+						"", false, baseURL, true, // generate
 											// SIP
 											// Data
 											// if
@@ -412,7 +412,7 @@ public class UserWebService {
 				Long user_id = userManagement.registerUserNoEmail(username,
 						userpass, lastname, firstname, email, new Date(),
 						street, additionalname, fax, zip, states_id, town,
-						language_id, "", true, // generate SIP Data if
+						language_id, "", false, true, // generate SIP Data if
 												// the config is enabled
 						jNameTimeZone, null); //FIXME
 

@@ -62,6 +62,8 @@ public class MeetingMember implements Serializable {
 	private String appointmentStatus; //status of the appointment denial, acceptance, wait. 
 	@Column(name="email")
 	private String email;
+	@Column(name="phone")
+	private String phone;
 			
 	@Column(name="starttime")
 	private Date starttime;
@@ -104,6 +106,13 @@ public class MeetingMember implements Serializable {
 		this.email = email;
 	}
 	
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
 	public String getFirstname() {
 		return firstname;
 	}

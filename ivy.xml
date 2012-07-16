@@ -219,6 +219,16 @@
 		<!-- iCal4j seems to need this JAR -->
 		<dependency org="edu.emory.mathcs" name="backport-util-concurrent" rev="3.1" conf="openmeetings->*"/>
 
+		<dependency org="commons-net" name="commons-net" rev="3.1" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="com.googlecode.jsmpp" name="jsmpp" rev="2.1.0" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="smslib" name="smslib" rev="3.5.2" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+
 			<!-- include type="bundle" / FIXME unable to get openjpa without  sources -->
 		<dependency org="org.mnode.ical4j" name="ical4j" rev="1.0.3" conf="openmeetings.ext->*" transitive="false"/>
 		<dependency org="org.apache.openjpa" name="openjpa" rev="2.2.0" conf="openmeetings.ext->*" transitive="false"/>
