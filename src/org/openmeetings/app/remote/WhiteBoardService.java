@@ -555,7 +555,8 @@ public class WhiteBoardService implements IPendingServiceCallback {
 						+ numberOfInitial);
 
 				if (numberOfInitial == 0) {
-					return scopeApplicationAdapter.syncMessageToCurrentScope("sendObjectSyncCompleteFlag", wSyncLockObject, true);
+					scopeApplicationAdapter.syncMessageToCurrentScope("sendObjectSyncCompleteFlag", wSyncLockObject, true);
+					return 1;
 				} else {
 					return -4;
 				}

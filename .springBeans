@@ -8,24 +8,6 @@
 	<enableImports><![CDATA[false]]></enableImports>
 	<configs>
 		<config>WebContent/WEB-INF/openmeetings-applicationContext.xml</config>
-		<config>WebContent/WEB-INF/red5-services/calendarservice.service.xml</config>
-		<config>WebContent/WEB-INF/red5-services/meetingmemberservice.service.xml</config>
-		<config>WebContent/WEB-INF/red5-services/fileservice.service.xml</config>
-		<config>WebContent/WEB-INF/red5-services/conferenceservice.service.xml</config>
-		<config>WebContent/WEB-INF/red5-services/userservice.service.xml</config>
-		<config>WebContent/WEB-INF/red5-services/organisationservice.service.xml</config>
-		<config>WebContent/WEB-INF/red5-services/configservice.service.xml</config>
-		<config>WebContent/WEB-INF/red5-services/errorservice.service.xml</config>
-		<config>WebContent/WEB-INF/red5-services/pollservice.service.xml</config>
-		<config>WebContent/WEB-INF/red5-services/xmlcrm.service.xml</config>
-		<config>WebContent/WEB-INF/red5-services/languageservice.service.xml</config>
-		<config>WebContent/WEB-INF/red5-services/chatservice.service.xml</config>
-		<config>WebContent/WEB-INF/red5-services/invitationservice.service.xml</config>
-		<config>WebContent/WEB-INF/red5-services/whiteboardservice.service.xml</config>
-		<config>WebContent/WEB-INF/red5-services/printservice.service.xml</config>
-		<config>WebContent/WEB-INF/red5-services/flvrecorderservice.service.xml</config>
-		<config>WebContent/WEB-INF/red5-services/ldapconfigservice.service.xml</config>
-		<config>WebContent/WEB-INF/red5-services/schedulerJobs.service.xml</config>
 	</configs>
 	<configSets>
 		<configSet>
@@ -34,24 +16,6 @@
 			<incomplete>false</incomplete>
 			<configs>
 				<config>WebContent/WEB-INF/openmeetings-applicationContext.xml</config>
-				<config>WebContent/WEB-INF/red5-services/calendarservice.service.xml</config>
-				<config>WebContent/WEB-INF/red5-services/chatservice.service.xml</config>
-				<config>WebContent/WEB-INF/red5-services/conferenceservice.service.xml</config>
-				<config>WebContent/WEB-INF/red5-services/configservice.service.xml</config>
-				<config>WebContent/WEB-INF/red5-services/errorservice.service.xml</config>
-				<config>WebContent/WEB-INF/red5-services/fileservice.service.xml</config>
-				<config>WebContent/WEB-INF/red5-services/flvrecorderservice.service.xml</config>
-				<config>WebContent/WEB-INF/red5-services/invitationservice.service.xml</config>
-				<config>WebContent/WEB-INF/red5-services/languageservice.service.xml</config>
-				<config>WebContent/WEB-INF/red5-services/ldapconfigservice.service.xml</config>
-				<config>WebContent/WEB-INF/red5-services/meetingmemberservice.service.xml</config>
-				<config>WebContent/WEB-INF/red5-services/organisationservice.service.xml</config>
-				<config>WebContent/WEB-INF/red5-services/pollservice.service.xml</config>
-				<config>WebContent/WEB-INF/red5-services/printservice.service.xml</config>
-				<config>WebContent/WEB-INF/red5-services/schedulerJobs.service.xml</config>
-				<config>WebContent/WEB-INF/red5-services/userservice.service.xml</config>
-				<config>WebContent/WEB-INF/red5-services/whiteboardservice.service.xml</config>
-				<config>WebContent/WEB-INF/red5-services/xmlcrm.service.xml</config>
 			</configs>
 			<profiles>
 			</profiles>

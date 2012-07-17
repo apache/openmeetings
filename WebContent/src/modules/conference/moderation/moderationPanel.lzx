@@ -51,6 +51,7 @@
     <attribute name="recordingsName" value="" type="string" />
     <attribute name="initial" value="true" type="boolean" />
     <attribute name="recordingUser" value="null" />
+    <attribute name="publishingObj" value="null" />
     
     <attribute name="allowUserQuestions" value="true" type="boolean" />
     <attribute name="roomName" value="" type="string" />
@@ -68,30 +69,24 @@
     <method name="setMessage">
         <![CDATA[
             if ($debug) Debug.write("setMessage: ",this.recordingUser);
+            var tString = "";
             if (this.recordingUser!=null){
-                var tString = canvas.getLabelName(419) + " "
-                        + this.recordingUser.username+" " 
-                        + this.recordingUser.firstname + " " + this.recordingUser.lastname + " "
-                        + parseDateToStringTime(this.recordingUser.roomEnter);
-                this._inner.setAttribute('text',tString);
-            } else {
-                this._inner.setAttribute('text',"");
+                tString += canvas.getLabelName(419)
+               		+ " " + this.recordingUser.username
+               		+ " " + this.recordingUser.firstname
+               		+ " " + this.recordingUser.lastname
+               		+ " " + parseDateToStringTime(this.recordingUser.roomEnter) + ";";
             }
+			if (this.publishingObj != null) {
+            	tString += canvas.getLabelName(1504)
+					+ " " + this.publishingObj.user.username
+					+ " " + this.publishingObj.user.firstname
+					+ " " + this.publishingObj.user.lastname
+					+ " " + this.publishingObj.url + ";";
+            }
+			this._inner.setAttribute('text', tString);
         ]]>
     </method>   
-    
-    <netRemoteCallHib name="checkSharerSession" remotecontext="$once{ canvas.thishib }"
-        funcname="checkSharerSession"  >
-        <handler name="ondata" args="value">
-            //The onResult-Handler will be called be the rtmpconnection
-            if ($debug) Debug.write("+++++++++++++++++ checkSharerSession: ",value); 
-            if (value) {
-                parent.checkForApplyScreen("no");
-            } else {
-                new lz.labelerrorPopup(canvas,{errorlabelid:727});
-            }
-        </handler>  
-    </netRemoteCallHib> 
     
     <method name="checkForApplyScreen" args="record">
         <![CDATA[
@@ -143,7 +138,7 @@
     			showhandcursor="true"
                visible="${canvas.currentRoomObj.hideScreenSharing ? false : ((canvas.ismoderator) ? true : ((canvas.isAllowedToScreenShare) ? true : false )) }" >
         <handler name="onclick">
-            this.parent.checkSharerSession.doCall();
+            this.parent.checkForApplyScreen("no");
         </handler>
         <labelTooltip labelid="239" />
     </miniIconsNew>

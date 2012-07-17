@@ -21,7 +21,6 @@ package org.openmeetings.screen.webstart;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.PointerInfo;
-import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -31,61 +30,43 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.mina.core.buffer.IoBuffer;
 import org.openmeetings.screen.webstart.gui.ScreenDimensions;
-import org.openmeetings.screen.webstart.gui.ScreenDimensions.ScreenQuality;
 import org.openmeetings.screen.webstart.gui.ScreenSharerFrame;
-import org.red5.io.ITagReader;
-import org.red5.io.ITagWriter;
+import org.red5.client.net.rtmp.INetStreamEventHandler;
 import org.red5.io.utils.ObjectMap;
 import org.red5.server.api.event.IEvent;
 import org.red5.server.api.service.IPendingServiceCall;
+import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.net.rtmp.Channel;
 import org.red5.server.net.rtmp.RTMPConnection;
 import org.red5.server.net.rtmp.codec.RTMP;
 import org.red5.server.net.rtmp.event.Notify;
-import org.red5.server.net.rtmp.event.VideoData;
 import org.red5.server.net.rtmp.message.Header;
 import org.red5.server.net.rtmp.status.StatusCodes;
-import org.red5.server.stream.message.RTMPMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CoreScreenShare {
-
-	private static final Logger logger = LoggerFactory
-			.getLogger(CoreScreenShare.class);
+public class CoreScreenShare implements IPendingServiceCallback, INetStreamEventHandler {
+	private static final Logger logger = LoggerFactory.getLogger(CoreScreenShare.class);
 
 	private IScreenShare instance = null;
 	
-	public boolean startPublish = false;
-	public Integer playStreamId;
-	public Integer publishStreamId;
 	public String publishName;
-	public ITagWriter writer;
-	public ITagReader reader;
-	public IoBuffer buffer;
-	public CaptureScreen capture = null;
-	public Thread thread = null;
+	private CaptureScreen capture = null;
+	private RTMPClientPublish publishClient = null;
 
-	public ScreenSharerFrame frame;
+	private ScreenSharerFrame frame;
 
-	public String host = "btg199251";
-	public String app = "oflaDemo";
-	public int port = 1935;
 	public int defaultQuality = 1;
 
 	public Long organization_id = 0L;
 	public Long user_id = null;
-	public Boolean allowRecording = true;
+	public boolean allowRecording = true;
 
 	private boolean startStreaming = false;
 	private boolean startRecording = false;
@@ -101,20 +82,18 @@ public class CoreScreenShare {
 	//
 	// ------------------------------------------------------------------------
 
-	public CoreScreenShare(IScreenShare instance) {
+	public CoreScreenShare(IScreenShare instance, String[] args) {
 		this.instance = instance;
-	}
-
-	public void main(String[] args) {
+		
 		try {
 			for (String arg : args) {
 				logger.debug("arg: " + arg);
 			}
 			String[] textArray = null;
 			if (args.length > 8) {
-				host = args[0];
-				app = args[1];
-				port = Integer.parseInt(args[2]);
+				String host = args[0];
+				String app = args[1];
+				int port = Integer.parseInt(args[2]);
 				publishName = args[3];
 
 				String labelTexts = args[4];
@@ -123,7 +102,7 @@ public class CoreScreenShare {
 
 				defaultQuality = Integer.parseInt(args[6]);
 				user_id = Long.parseLong(args[7]);
-				allowRecording = Boolean.parseBoolean(args[8]);
+				allowRecording = Boolean.valueOf(args[8]);
 
 				if (labelTexts.length() > 0) {
 					textArray = labelTexts.split(";");
@@ -136,13 +115,13 @@ public class CoreScreenShare {
 						logger.debug(i + " :: " + textArray[i]);
 					}
 				}
+				capture = new CaptureScreen(this, instance, host, app, port);
+				logger.debug("host: " + host + ", app: "
+						+ app + ", port: " + port + ", publish: "
+						+ publishName);
 			} else {
 				System.exit(0);
 			}
-
-			logger.debug("host: " + host + ", app: "
-					+ app + ", port: " + port + ", publish: "
-					+ publishName);
 
 			createWindow(textArray);
 		} catch (Exception err) {
@@ -158,17 +137,10 @@ public class CoreScreenShare {
 	public void createWindow(String[] textArray) {
 		try {
 			frame = new ScreenSharerFrame(this, textArray);
-			frame.addWindowListener(new WindowAdapter() {
-				public void windowClosing(WindowEvent e) {
-					frame.setVisible(false);
-					System.exit(0);
-				}
-			});
 			frame.setVisible(true);
 			frame.setRecordingTabEnabled(allowRecording);
-
+			frame.setPublishingTabEnabled(allowRecording);
 			logger.debug("initialized");
-
 		} catch (Exception err) {
 			logger.error("createWindow Exception: ", err);
 			err.printStackTrace();
@@ -192,7 +164,7 @@ public class CoreScreenShare {
 			cursorPosition.put("cursor_y", y);
 
 			if (instance.getConnection() != null) {
-				instance.invoke("setNewCursorPosition", new Object[] { cursorPosition }, instance);
+				instance.invoke("setNewCursorPosition", new Object[] { cursorPosition }, this);
 			}
 		} catch (NullPointerException npe) {
 			//noop
@@ -229,7 +201,7 @@ public class CoreScreenShare {
 			map.put("organization_id", this.organization_id);
 			map.put("user_id", this.user_id);
 
-			instance.invoke("setConnectionAsSharingClient", new Object[] { map }, instance);
+			instance.invoke("setConnectionAsSharingClient", new Object[] { map }, this);
 		} catch (Exception err) {
 			logger.error("setConnectionAsSharingClient Exception: ", err);
 			frame.setStatus("Error: " + err.getLocalizedMessage());
@@ -244,7 +216,7 @@ public class CoreScreenShare {
 	public void captureScreenStart(boolean startStreaming, boolean startRecording) {
 		captureScreenStart(startStreaming, startRecording, false);
 	}
-	
+
 	public void captureScreenStart(boolean startStreaming, boolean startRecording, boolean startPublishing) {
 		try {
 			logger.debug("captureScreenStart");
@@ -253,7 +225,7 @@ public class CoreScreenShare {
 			this.startPublishing = startPublishing;
 			
 			if (!isConnected) {
-				instance.connect(host, port, app, instance);
+				instance.connect(capture.getHost(), capture.getPort(), capture.getApp(), this);
 			} else {
 				setConnectionAsSharingClient();
 			}
@@ -263,40 +235,46 @@ public class CoreScreenShare {
 		}
 	}
 
-	public void captureScreenStop(boolean stopStreaming, boolean stopRecording) {
-		captureScreenStop(stopStreaming, stopRecording, false);
-	}
-	
-	public void captureScreenStop(boolean stopStreaming, boolean stopRecording, boolean stopPublishing) {
+	public void sendCaptureScreenStop(boolean stopStreaming, boolean stopRecording) {
 		try {
 			logger.debug("INVOKE screenSharerAction" );
 
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("stopStreaming", stopStreaming);
 			map.put("stopRecording", stopRecording);
-			map.put("stopPublishing", stopPublishing);
 
-			instance.invoke("screenSharerAction", new Object[] { map }, instance);
-
-			if (stopStreaming) {
-				frame.setSharingStatus(false);
-			} else if (stopRecording) {
-				frame.setRecordingStatus(false);
-			} else if (stopPublishing) {
-				frame.setPublishingStatus(false);
-			}
+			instance.invoke("screenSharerAction", new Object[] { map }, this);
 		} catch (Exception err) {
 			logger.error("captureScreenStop Exception: ", err);
 			frame.setStatus("Exception: " + err);
 		}
 	}
 
-	// ------------------------------------------------------------------------
-	//
-	// Public
-	//
-	// ------------------------------------------------------------------------
-
+	public void sendStopPublishing() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("stopPublishing", true);
+		instance.invoke("screenSharerAction", new Object[] { map }, this);
+	}
+	
+	public void stopStreaming() {
+		startStreaming = false;
+		frame.setSharingStatus(false, !startPublishing && !startRecording && !startStreaming);
+	}
+	
+	public void stopRecording() {
+		startRecording = false;
+		frame.setRecordingStatus(false, !startPublishing && !startRecording && !startStreaming);
+	}
+	
+	public void stopPublishing() {
+		startPublishing = false;
+		frame.setPublishingStatus(false, !startPublishing && !startRecording && !startStreaming);
+		if (publishClient != null) {
+			publishClient.disconnect();
+			publishClient = null;
+		}
+	}
+	
 	protected void onInvoke(RTMPConnection conn, Channel channel,
 			Header source, Notify invoke, RTMP rtmp) {
 
@@ -309,12 +287,12 @@ public class CoreScreenShare {
 			sendRemoteCursorEvent(invoke.getCall().getArguments()[0]);
 		} else if ("screenSharerAction".equals(method)) {
 			Object[] args = invoke.getCall().getArguments();
-			if (args != null) {
+			if (args != null && args.length > 0) {
 				@SuppressWarnings("unchecked")
 				HashMap<String, Object> params = (HashMap<String, Object>)args[0];
 				if (params.containsKey("stopPublishing")
-					&& Boolean.parseBoolean("" + params.get("stopPublishing"))) {
-					frame.setPublishingStatus(false);
+					&& Boolean.valueOf("" + params.get("stopPublishing"))) {
+					stopPublishing();
 				}
 				if (params.containsKey("error")) {
 					frame.setStatus("" + params.get("error"));
@@ -327,12 +305,14 @@ public class CoreScreenShare {
 		try {
 			logger.debug("ScreenShare stopStream");
 
+			stopStreaming();
+			stopRecording();
+			stopPublishing();
 			isConnected = false;
 
 			instance.disconnect();
-			capture.stop();
+			capture.setStartPublish(false);
 			capture.release();
-			thread = null;
 		} catch (Exception e) {
 			logger.error("ScreenShare stopStream exception " + e);
 		}
@@ -349,44 +329,33 @@ public class CoreScreenShare {
 
 		if (StatusCodes.NS_PUBLISH_START.equals(code)) {
 			logger.debug( "onStreamEvent Publish start" );
-			startPublish = true;
+			capture.setStartPublish(true);
 		}
 	}
 
 	public void sendRemoteCursorEvent(Object obj) {
 		try {
-
-			// logger.debug("#### sendRemoteCursorEvent ");
-
-			// logger.debug("Result Map Type "+obj.getClass().getName());
+			logger.trace("#### sendRemoteCursorEvent ");
+			logger.trace("Result Map Type "+obj.getClass().getName());
 
 			@SuppressWarnings("rawtypes")
 			Map returnMap = (Map) obj;
 
-			// logger.debug("result "+returnMap.get("result"));
-
-			String action = returnMap.get("action").toString();
+			String action = "" + returnMap.get("action");
 
 			if (action.equals("onmouseup")) {
 
 				Robot robot = new Robot();
 
-				// VirtualScreenBean
-
 				Float scaleFactor = Float
 						.valueOf(ScreenDimensions.spinnerWidth)
 						/ Float.valueOf(ScreenDimensions.resizeX);
-
-				// logger.debug("x 1 scaleFactor "+scaleFactor);
 
 				Float part_x1 = ((Float.valueOf(returnMap.get("x").toString())
 						.floatValue() * scaleFactor) / Float
 						.valueOf(Ampl_factor));
 
-				// logger.debug("x 1 part_x1 "+part_x1);
-
-				Integer x = Math.round(part_x1
-						+ ScreenDimensions.spinnerX);
+				Integer x = Math.round(part_x1 + ScreenDimensions.spinnerX);
 
 				Integer y = Math
 						.round(((Float.valueOf(returnMap.get("y").toString())
@@ -394,11 +363,8 @@ public class CoreScreenShare {
 								* ScreenDimensions.spinnerHeight / ScreenDimensions.resizeY) / Ampl_factor)
 								+ ScreenDimensions.spinnerY);
 
-				// logger.debug("x|y "+x+" || "+y);
-
 				robot.mouseMove(x, y);
 				robot.mouseRelease(InputEvent.BUTTON1_MASK);
-
 			} else if (action.equals("onmousedown")) {
 
 				Robot robot = new Robot();
@@ -557,8 +523,7 @@ public class CoreScreenShare {
 				// public synchronized int sendMessageWithClientById(Object
 				// newMessage, String clientId)
 
-				instance.invoke("sendMessageWithClientById", new Object[] { map,
-						clientId }, instance);
+				instance.invoke("sendMessageWithClientById", new Object[]{map, clientId}, this);
 
 			} else if (action.equals("show")) {
 
@@ -573,8 +538,7 @@ public class CoreScreenShare {
 				// public synchronized int sendMessageWithClientById(Object
 				// newMessage, String clientId)
 
-				instance.invoke("sendMessageWithClientById", new Object[] { map,
-						clientId }, instance);
+				instance.invoke("sendMessageWithClientById", new Object[]{map, clientId}, this);
 
 			}
 
@@ -720,70 +684,68 @@ public class CoreScreenShare {
 
 			logger.trace( "service call result: " + call );
 
-			if (call.getServiceMethodName().equals("connect")) {
+			String method = call == null ? null : call.getServiceMethodName();
+			logger.trace("call ### get Method Name " + method);
+			if ("connect".equals(method)) {
 				isConnected = true;
 				setConnectionAsSharingClient();
-			} else if (call.getServiceMethodName().equals(
-					"setConnectionAsSharingClient")) {
+			} else if ("setConnectionAsSharingClient".equals(method)) {
 
 				Object o = call.getResult();
 
-				@SuppressWarnings("rawtypes")
-				Map returnMap = (Map) o;
+				@SuppressWarnings("unchecked")
+				Map<String, Object> returnMap = (Map<String, Object>) o;
 
 				if (o == null || !Boolean.valueOf("" + returnMap.get("alreadyPublished")).booleanValue()) {
 					logger.trace("Stream not yet started - do it ");
 
-					instance.createStream(instance);
+					instance.createStream(this);
 				} else {
-					if (this.capture != null) {
-						this.capture.resetBuffer();
-					}
-
+					capture.resetBuffer();
 					logger.trace("The Stream was already started ");
 				}
-
 				if (returnMap != null) {
 					Object modus = returnMap.get("modus");
 					if ("startStreaming".equals(modus)) {
-						frame.setSharingStatus(true);
-					} else if ("startRecording".equals(modus)) {
-						frame.setRecordingStatus(true);
-					} else if ("startPublishing".equals(modus)) {
-						frame.setPublishingStatus(true);
+						frame.setSharingStatus(true, false);
+					}
+					if ("startRecording".equals(modus)) {
+						frame.setRecordingStatus(true, false);
+					}
+					if ("startPublishing".equals(modus)) {
+						frame.setPublishingStatus(true, false);
+						publishClient = new RTMPClientPublish(
+							this
+							, frame.getPublishHost()
+							, frame.getPublishApp()
+							, frame.getPublishId());
+						publishClient.connect();
 					}
 				} else {
 					throw new Exception(
 							"Could not aquire modus for event setConnectionAsSharingClient");
 				}
 
-			} else if (call.getServiceMethodName().equals("createStream")) {
-
-				publishStreamId = (Integer) call.getResult();
-				logger.debug("createPublishStream result stream id: "
-						+ publishStreamId);
-				logger.debug("publishing video by name: " + publishName);
-				instance.publish(publishStreamId, publishName, "live", instance);
-
-				logger.debug("setup capture thread");
-
-				logger.debug("setup capture thread vScreenSpinnerWidth "
-						+ ScreenDimensions.spinnerWidth);
-				logger.debug("setup capture thread vScreenSpinnerHeight "
-						+ ScreenDimensions.spinnerHeight);
-
-				capture = new CaptureScreen();
-
-				if (thread == null) {
-					thread = new Thread(capture);
-					thread.start();
+			} else if ("createStream".equals(method)) {
+				if (startRecording || startStreaming) {
+					if (call.getResult() != null) {
+						capture.setStreamId((Integer)call.getResult());
+					}
+					logger.debug("createPublishStream result stream id: " + capture.getStreamId());
+					logger.debug("publishing video by name: " + publishName);
+					instance.publish(capture.getStreamId(), publishName, "live", this);
+	
+					logger.debug("setup capture thread");
+	
+					logger.debug("setup capture thread vScreenSpinnerWidth "
+							+ ScreenDimensions.spinnerWidth);
+					logger.debug("setup capture thread vScreenSpinnerHeight "
+							+ ScreenDimensions.spinnerHeight);
+	
+					capture.setSendCursor(true);
+					capture.start();
 				}
-				capture.start();
-
-			} else if (call.getServiceMethodName().equals("screenSharerAction")) {
-				logger.trace("call ### get Method Name "
-						+ call.getServiceMethodName());
-
+			} else if ("screenSharerAction".equals(method)) {
 				Object o = call.getResult();
 
 				logger.trace("Result Map Type " + o.getClass().getName());
@@ -795,131 +757,20 @@ public class CoreScreenShare {
 					logger.trace("Stopping to stream, there is neither a Desktop Sharing nor Recording anymore");
 					stopStream();
 				} else if ("stopSharingOnly".equals(result)) {
-					//no op
+					stopStreaming();
 				} else if ("stopRecordingOnly".equals(result)) {
-					//no op
+					stopRecording();
 				} else if ("stopPublishingOnly".equals(result)) {
-					frame.setPublishingStatus(false);
+					stopPublishing();
 				}
-			} else if (call.getServiceMethodName().equals(
-					"setNewCursorPosition")) {
-
+			} else if ("setNewCursorPosition".equals(method)) {
 				// Do not do anything
-
 			} else {
-
-				logger.debug("Unknown method " + call.getServiceMethodName());
-
+				logger.debug("Unknown method " + method);
 			}
 
 		} catch (Exception err) {
 			logger.error("[resultReceived]", err);
-		}
-	}
-
-	public void pushVideo(int len, byte[] video, long ts) throws IOException {
-
-		if (!startPublish)
-			return;
-
-		if (buffer == null || (buffer.capacity() < video.length && !buffer.isAutoExpand())) {
-			buffer = IoBuffer.allocate(video.length);
-			buffer.setAutoExpand(true);
-		}
-
-		buffer.clear();
-		buffer.put(video);
-		buffer.flip();
-
-		VideoData videoData = new VideoData(buffer);
-		videoData.setTimestamp((int) ts);
-
-		RTMPMessage rtmpMsg = RTMPMessage.build(videoData);
-		instance.publishStreamData(publishStreamId, rtmpMsg);
-	}
-
-	// ------------------------------------------------------------------------
-	//
-	// CaptureScreen
-	//
-	// ------------------------------------------------------------------------
-
-	private final class CaptureScreen extends Object implements Runnable {
-		private int timeBetweenFrames = 500; // frameRate
-		private volatile long timestamp = 0;
-		private volatile boolean active = true;
-		@SuppressWarnings("unused")
-		private volatile boolean stopped = false;
-		private IScreenEncoder se;
-
-		// ------------------------------------------------------------------------
-		//
-		// Constructor
-		//
-		// ------------------------------------------------------------------------
-
-		public CaptureScreen() {
-			timeBetweenFrames = (ScreenDimensions.quality == ScreenQuality.VeryHigh) ? 100 : 500;
-			se = new ScreenV1Encoder();
-		}
-
-		// ------------------------------------------------------------------------
-		//
-		// Public
-		//
-		// ------------------------------------------------------------------------
-		public void start() {
-			stopped = false;
-		}
-
-		public void stop() {
-			stopped = true;
-		}
-
-		public void release() {
-			active = false;
-		}
-
-		public void resetBuffer() {
-			se.reset();
-		}
-
-		// ------------------------------------------------------------------------
-		//
-		// Thread loop
-		//
-		// ------------------------------------------------------------------------
-		public void run() {
-			try {
-				Robot robot = new Robot();
-				BufferedImage image = null;
-				while (active) {
-					final long ctime = System.currentTimeMillis();
-					Rectangle screen = new Rectangle(ScreenDimensions.spinnerX,
-							ScreenDimensions.spinnerY,
-							ScreenDimensions.spinnerWidth,
-							ScreenDimensions.spinnerHeight);
-					
-					image = robot.createScreenCapture(screen);
-
-					try {
-						timestamp += timeBetweenFrames;
-						byte[] data = se.encode(screen, image, new Rectangle(ScreenDimensions.resizeX,
-								ScreenDimensions.resizeY));
-
-						pushVideo(data.length, data, timestamp);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					final int spent = (int) (System.currentTimeMillis() - ctime);
-
-					sendCursorStatus();
-
-					Thread.sleep(Math.max(0, timeBetweenFrames - spent));
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 	}
 }

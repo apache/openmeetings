@@ -4536,4 +4536,7 @@ Details
   <string id="1503" name="Send SMS">
     <value>Send SMS</value>
   </string>
+  <string id="1504" name="publishing_message">
+    <value>Publishing. User:</value>
+  </string>
 </language>

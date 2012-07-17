@@ -22,7 +22,6 @@ import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.red5.client.net.rtmp.ClientExceptionHandler;
 import org.red5.client.net.rtmps.RTMPSClient;
-import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.net.rtmp.Channel;
 import org.red5.server.net.rtmp.RTMPConnection;
@@ -39,18 +38,17 @@ public class RTMPSScreenShare extends RTMPSClient implements ClientExceptionHand
 
 	private CoreScreenShare core = null;
 
-	private RTMPSScreenShare() {
-		core = new CoreScreenShare(this);
+	private RTMPSScreenShare(String[] args) {
+		core = new CoreScreenShare(this, args);
 	};
 
 	public static void main(String[] args) throws DecoderException {
-		RTMPSScreenShare client = new RTMPSScreenShare();
+		RTMPSScreenShare client = new RTMPSScreenShare(args);
 		if (args.length < 11) {
 			System.exit(0);
 		}
 		client.setKeystoreBytes(Hex.decodeHex(args[9].toCharArray()));
 		client.setKeyStorePassword(args[10]);
-		client.core.main(args);
 	}
 	
 	@Override
@@ -79,6 +77,7 @@ public class RTMPSScreenShare extends RTMPSClient implements ClientExceptionHand
 	public void connectionClosed(RTMPConnection conn, RTMP state) {
 		logger.debug("connection closed");
 		super.connectionClosed(conn, state);
+		core.stopStream();
 	}
 
 	@Override
@@ -93,13 +92,5 @@ public class RTMPSScreenShare extends RTMPSClient implements ClientExceptionHand
 	public void handleException(Throwable throwable) {
 		logger.error("{}", new Object[] { throwable.getCause() });
 		System.out.println(throwable.getCause());
-	}
-
-	public void onStreamEvent(Notify notify) {
-		core.onStreamEvent(notify);
-	}
-
-	public void resultReceived(IPendingServiceCall call) {
-		core.resultReceived(call);
 	}
 }

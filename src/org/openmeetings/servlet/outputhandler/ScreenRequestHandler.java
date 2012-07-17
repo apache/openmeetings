@@ -36,7 +36,6 @@ import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.basic.Sessionmanagement;
-import org.openmeetings.app.persistence.beans.basic.Configuration;
 import org.openmeetings.app.remote.red5.ScopeApplicationAdapter;
 import org.openmeetings.utils.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -283,16 +282,9 @@ public class ScreenRequestHandler extends VelocityViewServlet {
 				ctx.put("red5-app", OpenmeetingsVariables.webAppRootKey + "/"
 						+ room);
 
-				Configuration configuration = getCfgManagement().getConfKey(3L,
-						"default.quality.screensharing");
-				String default_quality_screensharing = "1";
-				if (configuration != null) {
-					default_quality_screensharing = configuration
-							.getConf_value();
-				}
-
 				ctx.put("default_quality_screensharing",
-						default_quality_screensharing);
+					getCfgManagement().getConfValue(
+						"default.quality.screensharing", String.class, "1"));
 
 				//invited guest does not have valid user_id (have user_id == -1)
 				ctx.put("user_id", users_id);

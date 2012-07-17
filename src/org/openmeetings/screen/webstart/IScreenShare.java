@@ -23,7 +23,7 @@ import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.messaging.IMessage;
 import org.red5.server.net.rtmp.RTMPConnection;
 
-public interface IScreenShare extends IPendingServiceCallback, INetStreamEventHandler {
+public interface IScreenShare {
 	RTMPConnection getConnection();
 	void invoke(String method, Object[] params, IPendingServiceCallback callback);
 	void connect(String server, int port, String application, IPendingServiceCallback connectCallback);

@@ -28,6 +28,8 @@ import java.awt.SystemColor;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 import javax.swing.BorderFactory;
@@ -203,6 +205,13 @@ public class ScreenSharerFrame extends JFrame {
 	private String getTextLabel(String[] textLabels, int idx) {
 		return textLabels != null && idx < textLabels.length ? textLabels[idx] : "#STAB#";
 	}
+	
+	private void stopSharingAndExit(CoreScreenShare core) {
+		core.stopStream();
+		this.setVisible(false);
+		System.exit(0);
+	}
+	
 	/**
 	 * Create the frame.
 	 * @throws AWTException 
@@ -212,7 +221,13 @@ public class ScreenSharerFrame extends JFrame {
 		setTitle(getTextLabel(textLabels, 0)); //#id 730
 		setBackground(Color.WHITE);
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				stopSharingAndExit(core);
+			}
+		});
 		setBounds(30, 30, 500, 505);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
@@ -238,7 +253,7 @@ public class ScreenSharerFrame extends JFrame {
 		btnStartPauseSharing.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (sharingStarted) {
-					core.captureScreenStop(true, false);
+					core.sendCaptureScreenStop(true, false);
 				} else {
 					core.captureScreenStart(true, false);
 				}
@@ -250,8 +265,7 @@ public class ScreenSharerFrame extends JFrame {
 		btnStopSharing.setIcon(new ImageIcon(ScreenSharerFrame.class.getResource("/org/openmeetings/screen/exit.png")));
 		btnStopSharing.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ScreenSharerFrame.this.setVisible(false);
-				System.exit(0);
+				stopSharingAndExit(core);
 			}
 		});
 		
@@ -444,7 +458,7 @@ public class ScreenSharerFrame extends JFrame {
 		btnStopRecording.setBounds(257, 82, 200, 32);
 		btnStopRecording.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				core.captureScreenStop(false, true);
+				core.sendCaptureScreenStop(false, true);
 			}
 		});
 		panelRecording.add(btnStopRecording);
@@ -508,7 +522,7 @@ public class ScreenSharerFrame extends JFrame {
 		btnStopPublish.setBounds(257, 86, 200, 32);
 		btnStopPublish.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				core.captureScreenStop(false, false, true);
+				core.sendStopPublishing();
 			}
 		});
 		panelPublish.add(btnStopPublish);
@@ -524,30 +538,28 @@ public class ScreenSharerFrame extends JFrame {
 				BorderFactory.createEmptyBorder(0, 5, 0, 0)));
 		panelStatus.add(lblStatus);
 		
-		setPublishingTabEnabled(false);
 		contentPane.setLayout(gl_contentPane);
 		
 		// Background Image
 		//We have no logo, that is why we need no background, sebawagner 29.04.2012
 	}
 
-	public void setSharingStatus(boolean status) {
-		panelScreen.setEnabled(!status);
+	public void setSharingStatus(boolean status, boolean unlockScreen) {
+		panelScreen.setEnabled(unlockScreen);
 		sharingStarted = status;
 		btnStartPauseSharing.setIcon(status ? pauseIcon : startIcon);
 		btnStartPauseSharing.setText(status ? pauseLabel : startLabel);
 		btnStartPauseSharing.setToolTipText(status ? pauseLabel : startLabel);
-		setPublishingTabEnabled(status);
 	}
 	
-	public void setRecordingStatus(boolean status) {
-		panelScreen.setEnabled(!status);
+	public void setRecordingStatus(boolean status, boolean unlockScreen) {
+		panelScreen.setEnabled(unlockScreen);
 		btnStartRecording.setEnabled(!status);
 		btnStopRecording.setEnabled(status);
 	}
 	
-	public void setPublishingStatus(boolean status) {
-		panelScreen.setEnabled(!status);
+	public void setPublishingStatus(boolean status, boolean unlockScreen) {
+		panelScreen.setEnabled(unlockScreen);
 		btnStartPublish.setEnabled(!status);
 		btnStopPublish.setEnabled(status);
 	}
@@ -695,7 +707,7 @@ public class ScreenSharerFrame extends JFrame {
 	 * Needs to be always invoked after every re-scaling
 	 */
 	void calcRescaleFactors() {
-		logger.debug("calcRescaleFactors -- ");
+		logger.trace("calcRescaleFactors -- ");
 		ScreenDimensions.resizeX = spinnerWidth.getValue();
 		ScreenDimensions.resizeY = spinnerHeight.getValue();
 		switch (ScreenDimensions.quality) {
@@ -712,7 +724,7 @@ public class ScreenSharerFrame extends JFrame {
 			default:
 				break;
 		}
-		logger.debug("resize: X:" + ScreenDimensions.resizeX + " Y: " + ScreenDimensions.resizeY);
+		logger.trace("resize: X:" + ScreenDimensions.resizeX + " Y: " + ScreenDimensions.resizeY);
 		updateVScreenBounds();
 	}
 

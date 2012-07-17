@@ -1036,7 +1036,7 @@
                 //The onResult-Handler will be called be the rtmpconnection
                 if ($debug) Debug.write("**** closeStream: ",value);
                 if (value.isScreenClient) {
-                    if ($debug) Debug.write(" onResult stopRed5ScreenSharing : ",value.streamPublishName); 
+                    if ($debug) Debug.write(" ondata closeStream: ",value.streamPublishName); 
                     canvas.currentBaseConferenceRoom._screenSharingAdapter.closeScreenSharing(value);
                 } else {
                     //free the VideoContainer
@@ -1051,11 +1051,11 @@
         <!---
             Event is invoked if a red5 stream sharing is closed
          -->
-        <netRemoteCallHib name="stopRed5ScreenSharing" funcname="stopRed5ScreenSharing">
+        <netRemoteCallHib name="stopScreenSharingMessage" funcname="stopScreenSharingMessage">
             <handler name="ondata" args="value">
                 //The onResult-Handler will be called be the rtmpconnection
                 if ($debug) Debug.write("**** closeStream: ",value);
-                if ($debug) Debug.write(" onResult stopRed5ScreenSharing : ",value.streamPublishName); 
+                if ($debug) Debug.write(" onResult stopScreenSharingMessage : ",value.streamPublishName); 
                 canvas.currentBaseConferenceRoom._screenSharingAdapter.closeScreenSharing(value);
             </handler>   
         </netRemoteCallHib> 
@@ -1067,7 +1067,22 @@
                 //parent.getClientListScope.doCall();  
             </handler>   
         </netRemoteCallHib>   
-                      
+
+		<method name="roomDisconnectUser" args="value,id">
+			if (canvas._videocontainer!=null){
+				canvas._videocontainer.disconnectclient(id);
+				if (canvas.currentModApply!=null) canvas.currentModApply.rejectUser(value);
+				//parent.getClientListScope.doCall();
+				if (value.isRecording) {
+					canvas._mymod.recordingUser = null;
+				}
+				if (value.streamPublishStarted) {
+					canvas._mymod.publishingObj = null;
+				}
+				canvas._mymod.setMessage();
+			}
+		</method>
+		
         <netRemoteCallHib name="roomDisconnect" funcname="roomDisconnect">
             <handler name="ondata" args="value">
             <![CDATA[
@@ -1087,15 +1102,7 @@
                     var parentObj = canvas._overallchatcontent.parent.parent.parent._chatparticipants;
                     parentObj.removeItemById(value.user_id);
                 }
-                if (canvas._videocontainer!=null){
-                    canvas._videocontainer.disconnectclient(value.publicSID); 
-                    if (canvas.currentModApply!=null) canvas.currentModApply.rejectUser(value);
-                    //parent.getClientListScope.doCall();  
-                    if (value.isRecording) {
-                        canvas._mymod.recordingUser = null;
-                        canvas._mymod.setMessage();                 
-                    }
-                }
+                roomDisconnectUser(value, value.publicSID);
             ]]>
             </handler>   
         </netRemoteCallHib>
@@ -1104,6 +1111,14 @@
             <handler name="ondata" args="value">
                 //The onResult-Handler will be called be the rtmpconnection
                 canvas._mymod.recordingUser = null;
+                canvas._mymod.setMessage();                 
+            </handler>   
+        </netRemoteCallHib>
+        
+        <netRemoteCallHib name="stopPublishingMessage" funcname="stopPublishingMessage">
+            <handler name="ondata" args="value">
+                //The onResult-Handler will be called be the rtmpconnection
+				canvas._mymod.publishingObj = null;
                 canvas._mymod.setMessage();                 
             </handler>   
         </netRemoteCallHib>
@@ -1117,13 +1132,7 @@
         <netRemoteCallHib name="logicalRoomLeaveDis" funcname="logicalRoomLeaveDis" >      
             <handler name="ondata" args="value">
                 if ($debug) Debug.write("logicalRoomLeaveDis: ",value);
-                canvas._videocontainer.disconnectclient(value.broadCastID); 
-                //remove that client from sync list of wmlFileLoader/image if present
-                if (canvas.currentModApply!=null) canvas.currentModApply.rejectUser(value);
-                if (value.isRecording) {
-                    canvas._mymod.recordingUser = null;
-                    canvas._mymod.setMessage();                 
-                }               
+                roomDisconnectUser(value, value.broadCastID);
             </handler>
         </netRemoteCallHib>             
   
@@ -1356,30 +1365,29 @@
         
         <!--
             Red5 Screen Sharing
-            newRed5ScreenSharing
          -->
-        <netRemoteCallHib name="newRed5ScreenSharing" funcname="newRed5ScreenSharing">
+        <netRemoteCallHib name="newScreenSharing" funcname="newScreenSharing">
             <netparam><method name="getValue">return null;</method></netparam>
             <handler name="ondata" args="value">
                 <![CDATA[
                 
                     //The onResult-Handler will be called be the rtmpconnection
-                    //if ($debug) Debug.write(" onResult newRed5ScreenSharing 1 : ",value);  
-                    //if ($debug) Debug.write(" onResult newRed5ScreenSharing 2 : ",value.streamid); 
-                    //if ($debug) Debug.write(" onResult newRed5ScreenSharing 3 : ",canvas.streamid); 
-                    if ($debug) Debug.write(" onResult newRed5ScreenSharing 4 : ",value.streamPublishName); 
-                    if ($debug) Debug.write(" onResult newRed5ScreenSharing 5 : ",canvas.publicSID); 
+                    //if ($debug) Debug.write(" onResult newScreenSharing 1 : ",value);  
+                    //if ($debug) Debug.write(" onResult newScreenSharing 2 : ",value.streamid); 
+                    //if ($debug) Debug.write(" onResult newScreenSharing 3 : ",canvas.streamid); 
+                    if ($debug) Debug.write(" onResult newScreenSharing 4 : ",value.streamPublishName); 
+                    if ($debug) Debug.write(" onResult newcreenSharing 5 : ",canvas.publicSID); 
                     
                     canvas.currentBaseConferenceRoom._screenSharingAdapter.newScreenSharing(value);
                 ]]>
             </handler>   
         </netRemoteCallHib>
         
-        <netRemoteCallHib name="checkRed5ScreenSharing" funcname="checkRed5ScreenSharing">
+        <netRemoteCallHib name="checkScreenSharing" funcname="checkScreenSharing">
             <handler name="ondata" args="value">
                 <![CDATA[
                     //The onResult-Handler will be called be the rtmpconnection
-                    if ($debug) Debug.write(" onResult checkRed5ScreenSharing : ",value);  
+                    if ($debug) Debug.write(" onResult checkScreenSharing : ",value);  
                     if (value != null) {
                     	canvas.currentBaseConferenceRoom._screenSharingAdapter.newScreenSharings(value);
                     } else {
@@ -1835,7 +1843,15 @@
                 canvas._mymod.recordingUser = value;
                 canvas._mymod.setMessage();
             }
-            parent.checkRed5ScreenSharing.doCall();
+            parent.checkScreenSharing.doCall();
+        </handler>
+    </netRemoteCallHib>
+    
+    <netRemoteCallHib name="startedPublishing" funcname="startedPublishing" >      
+        <handler name="ondata" args="value">
+            if ($debug) Debug.write("startedPublishing: ", value);
+            canvas._mymod.publishingObj = {user: value[0], url: value[1]};
+            canvas._mymod.setMessage();
         </handler>
     </netRemoteCallHib>
     

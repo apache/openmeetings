@@ -20,7 +20,6 @@ package org.openmeetings.screen.webstart;
 
 import org.red5.client.net.rtmp.ClientExceptionHandler;
 import org.red5.client.net.rtmpt.RTMPTClient;
-import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.net.rtmp.Channel;
 import org.red5.server.net.rtmp.RTMPConnection;
 import org.red5.server.net.rtmp.codec.RTMP;
@@ -30,18 +29,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class RTMPTScreenShare extends RTMPTClient implements ClientExceptionHandler, IScreenShare {
-
-	private static final Logger logger = LoggerFactory
-			.getLogger(RTMPTScreenShare.class);
+	private static final Logger logger = LoggerFactory.getLogger(RTMPTScreenShare.class);
 
 	private CoreScreenShare core = null;
 
-	private RTMPTScreenShare() {
-		core = new CoreScreenShare(this);
+	private RTMPTScreenShare(String[] args) {
+		core = new CoreScreenShare(this, args);
 	};
 
 	public static void main(String[] args) {
-		new RTMPTScreenShare().core.main(args);
+		new RTMPTScreenShare(args);
 	}
 	
 	// ------------------------------------------------------------------------
@@ -60,6 +57,7 @@ public class RTMPTScreenShare extends RTMPTClient implements ClientExceptionHand
 	public void connectionClosed(RTMPConnection conn, RTMP state) {
 		logger.debug("connection closed");
 		super.connectionClosed(conn, state);
+		core.stopStream();
 	}
 
 	@Override
@@ -74,13 +72,5 @@ public class RTMPTScreenShare extends RTMPTClient implements ClientExceptionHand
 	public void handleException(Throwable throwable) {
 		logger.error("{}", new Object[] { throwable.getCause() });
 		System.out.println(throwable.getCause());
-	}
-
-	public void onStreamEvent(Notify notify) {
-		core.onStreamEvent(notify);
-	}
-
-	public void resultReceived(IPendingServiceCall call) {
-		core.resultReceived(call);
 	}
 }
