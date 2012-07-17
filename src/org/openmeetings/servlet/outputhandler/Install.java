@@ -241,8 +241,6 @@ public class Install extends VelocityViewServlet {
 
 					cfg.soxPath = httpServletRequest.getParameter("sox_path");
 
-					cfg.screenViewer = httpServletRequest.getParameter("screen_viewer");
-
                     // red5sip integration config
                     cfg.red5SipEnable = httpServletRequest.getParameter("red5sip_enable");
                     cfg.red5SipRoomPrefix = httpServletRequest.getParameter("red5sip_room_prefix");

@@ -304,10 +304,12 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 			if (currentClient != null) {
 
-				boolean startRecording = Boolean.valueOf(map.get(
-						"startRecording").toString());
-				boolean startStreaming = Boolean.valueOf(map.get(
-						"startStreaming").toString());
+				boolean startRecording = Boolean.valueOf("" + map.get(
+						"startRecording"));
+				boolean startStreaming = Boolean.valueOf("" + map.get(
+						"startStreaming"));
+				boolean startPublishing = Boolean.valueOf("" + map.get(
+						"startPublishing"));
 
 				currentClient.setRoom_id(Long.parseLong(current.getScope()
 						.getName()));
@@ -320,9 +322,11 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				if (startStreaming) {
 					currentClient.setStartStreaming(true);
 				}
-
 				if (startRecording) {
 					currentClient.setStartRecording(true);
+				}
+				if (startPublishing) {
+					currentClient.setStreamPublishStarted(true);
 				}
 
 				currentClient.setOrganization_id(Long.parseLong(map.get(
@@ -386,7 +390,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 									.getDateWithTimeByMiliSeconds(new Date());
 
 					flvRecorderService.recordMeetingStream(recordingName, "", false);
-				} else if (Boolean.valueOf(map.get("startPublishing").toString())) {
+				} else if (startPublishing) {
 					syncMessageToCurrentScope("startedPublishing", new Object[]{currentClient, "rtmp://" + map.get("publishingHost") + ":1935/"
 							+ map.get("publishingApp") + "/" + map.get("publishingId")}, false, true);
 					returnMap.put("modus", "startPublishing");

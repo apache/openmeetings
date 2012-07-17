@@ -115,12 +115,18 @@
     	]]>
     </method>
         
-    <method name="getServicesUrl">
-    	<![CDATA[
-    	   return canvas.protocol + '://' + canvas.rtmphostlocal
-    	   	+ ':' + canvas.red5httpport + canvas.httpRootKey + 'services/';
-    	]]>
-    </method>
+	<method name="getUrl">
+	<![CDATA[
+		return canvas.protocol + '://' + canvas.rtmphostlocal
+			+ ':' + canvas.red5httpport + canvas.httpRootKey;
+	]]>
+	</method>
+        
+	<method name="getServicesUrl">
+	<![CDATA[
+		return getUrl() + 'services/';
+	]]>
+	</method>
         
     <dataset type="http" name="languageData" request="false" 
         src="${ canvas.currentlanguage+'.xml' }" proxied="false">

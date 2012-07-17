@@ -205,7 +205,7 @@ public class Fieldmanagment {
 			for (Object fl : query.getResultList()) {
 				Map<String, Object> map = new HashMap<String, Object>();
 				Object[] row = (Object[])fl;
-				map.put("id", (Long)row[0]);
+				map.put("id", row[0]);
 				map.put("value", performReplace((String)row[1], appName));
 				returnList.add(map);
 			}

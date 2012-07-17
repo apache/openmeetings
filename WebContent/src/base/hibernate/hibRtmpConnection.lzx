@@ -106,6 +106,7 @@
     <attribute name="showFullMessage" value="false" type="boolean"/>
          
     <method name="getUrl">
+    	//canvas.getUrl() can not be reused since it has different protocol
         return this.protocollName+'://'+canvas.rtmphostlocal+':'+this.protocollPort+'/'+canvas.webAppRootKey+'/'+this.userScope;
     </method>
              

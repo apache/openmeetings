@@ -38,14 +38,6 @@
     <attribute name="isSuperModerator" value="false" type="boolean"/>
     <attribute name="refObj" value="null" />
     
-    <!--
-    var downloadurl = canvas.protocol+'://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-                    +canvas.httpRootKey+'DownloadHandler?fileName=CHAT'
-                    +'&moduleName=chat&parentPath=&room_id='
-                    +'&remoteUserid='+this.user_id
-                    +'&sid='+canvas.sessionId;
-     -->
-     
     <handler name="oninit">
         <![CDATA[
             //this._userpic.setAttribute('src',downloadurl); 
@@ -81,8 +73,7 @@
                 
             } else {
         
-                var downloadurl = canvas.protocol+'://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-                        +canvas.httpRootKey+'DownloadHandler?fileName=CHAT'
+                var downloadurl = canvas.getUrl() + 'DownloadHandler?fileName=CHAT'
                         +'&moduleName=chat&parentPath=&room_id='
                         +'&remoteUserid='+this.user_id
                         +'&sid='+canvas.sessionId;

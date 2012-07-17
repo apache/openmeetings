@@ -343,26 +343,6 @@ function checkEmail()
         
     </fieldset>
     
-    <fieldset id="ScreenViewer">
-    
-		<legend>Screen Viewer</legend>    
-		<li>
-        <label for="screen_viewer">Screenviewer Config</label>
-    	<select name="screen_viewer" id="screen_viewer" size="1">
-    		<option value="4" selected>Rtmp Viewer (Standard)</option>
-	    </select><br />	
-		</li>
-    	<p><i>
-	    	The standard Screenviewer is optimized for low-bandwidth areas - You have the possibility of<BR/>
-	    	altering the quality of the screencapture,ie.<BR/>
-	    	The jrDesktop alternative starts immediately without GUI, just stoppable via SysTray Icon, but offers<BR/>
-	    	a higher speed tranferring the screencaptures to the whiteboard<BR/>
-	    	The RTP Sharer transfers Desktop Data as RTP Stream to Server. Best performance and quality is reached using 1024x768 as Screen Resolution<BR/>
-	    	
-    	</i></p>
-        
-    </fieldset>
-
     <fieldset id="red5sip">
         <legend>red5SIP Configuration</legend>
 

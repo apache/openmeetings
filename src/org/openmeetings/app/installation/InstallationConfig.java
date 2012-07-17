@@ -51,7 +51,6 @@ public class InstallationConfig {
 	public String urlFeed2 = "http://mail-archives.apache.org/mod_mbox/incubator-openmeetings-dev/?format=atom";
 	public String sendEmailWithVerficationCode = "0";
 	public String defaultExportFont = "TimesNewRoman";
-	public String screenViewer = "4";
 	public String sipEnable = "0";
 	public String sipProxyName = "";
 	public String sipPort = "";
@@ -91,7 +90,7 @@ public class InstallationConfig {
 				+ sendEmailAtRegister + ", urlFeed=" + urlFeed + ", urlFeed2="
 				+ urlFeed2 + ", sendEmailWithVerficationCode="
 				+ sendEmailWithVerficationCode + ", defaultExportFont="
-				+ defaultExportFont + ", screenViewer=" + screenViewer
+				+ defaultExportFont
 				+ ", sipEnable=" + sipEnable + ", sipProxyName=" + sipProxyName
 				+ ", sipPort=" + sipPort + ", sipTunnel=" + sipTunnel
 				+ ", sipRealm=" + sipRealm + ", sipOpenxgEnable="

@@ -66,7 +66,8 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 
 	public Long organization_id = 0L;
 	public Long user_id = null;
-	public boolean allowRecording = true;
+	private boolean allowRecording = true;
+	private boolean allowPublishing = true;
 
 	private boolean startStreaming = false;
 	private boolean startRecording = false;
@@ -103,6 +104,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 				defaultQuality = Integer.parseInt(args[6]);
 				user_id = Long.parseLong(args[7]);
 				allowRecording = Boolean.valueOf(args[8]);
+				allowPublishing = Boolean.valueOf(args[9]);
 
 				if (labelTexts.length() > 0) {
 					textArray = labelTexts.split(";");
@@ -139,7 +141,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 			frame = new ScreenSharerFrame(this, textArray);
 			frame.setVisible(true);
 			frame.setRecordingTabEnabled(allowRecording);
-			frame.setPublishingTabEnabled(allowRecording);
+			frame.setPublishingTabEnabled(allowPublishing);
 			logger.debug("initialized");
 		} catch (Exception err) {
 			logger.error("createWindow Exception: ", err);

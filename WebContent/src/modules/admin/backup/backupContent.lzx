@@ -57,8 +57,7 @@
     <simpleLabelButton text="System Backup" x="232" y="220" width="200">
         <handler name="onclick">
             <![CDATA[
-                var exporturl = canvas.protocol+'://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-                        +canvas.httpRootKey+'BackupExport?moduleName=backup'
+                var exporturl = canvas.getUrl() + 'BackupExport?moduleName=backup'
                         +'&sid='+canvas.sessionId;
                 
                 if (parent._includeFileOption.getValue()) {

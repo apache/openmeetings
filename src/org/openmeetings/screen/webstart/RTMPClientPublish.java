@@ -17,9 +17,11 @@ class RTMPClientPublish extends RTMPClient implements IPendingServiceCallback, I
 	private static final Logger logger = LoggerFactory.getLogger(RTMPClientPublish.class);
 	private final CaptureScreen publishScreen;
 	private String id;
+	private CoreScreenShare core;
 	
 	RTMPClientPublish(CoreScreenShare core, String host, String app, String id) {
 		this.id = id;
+		this.core = core;
 		publishScreen = new CaptureScreen(core, this, host, app, 1935);
 	}
 
@@ -41,8 +43,13 @@ class RTMPClientPublish extends RTMPClient implements IPendingServiceCallback, I
 	@Override
 	public void connectionClosed(RTMPConnection conn, RTMP state) {
 		super.connectionClosed(conn, state);
+		connectionClosed();
+	}
+	
+	private void connectionClosed() {
 		publishScreen.setStartPublish(false);
 		publishScreen.release();
+		core.sendStopPublishing();
 	}
 	
 	@Override
@@ -58,12 +65,15 @@ class RTMPClientPublish extends RTMPClient implements IPendingServiceCallback, I
 		if ("connect".equals(method)) {
 			//setConnectionAsSharingClient(); //FIXME
 		} else if ("createStream".equals(method)) {
-			publishScreen.setStreamId((Integer)call.getResult());
-			publish(publishScreen.getStreamId(), id, "live", this);
-			publishScreen.setStartPublish(true);
-			publishScreen.start();
+			if (call.getResult() != null) {
+				publishScreen.setStreamId((Integer)call.getResult());
+				publish(publishScreen.getStreamId(), id, "live", this);
+				publishScreen.setStartPublish(true);
+				publishScreen.start();
+			} else {
+				connectionClosed();
+			}
 		}
-		resultReceived(call);
 	}
 
 	public void onStreamEvent(Notify notify) {

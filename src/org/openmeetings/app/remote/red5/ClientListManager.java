@@ -283,7 +283,7 @@ public class ClientListManager {
 			TypedQuery<RoomClient> q = em.createNamedQuery("getByRoomIdMod", RoomClient.class);
 			q.setParameter("room_id", room_id);
 			return q.getResultList();
-			}
+		}
 		return new ArrayList<RoomClient>();
 	}
 
@@ -310,5 +310,17 @@ public class ClientListManager {
 		} catch (Exception err) {
 			log.error("[removeAllClients]", err);
 		}
+	}
+	
+	public long getRecordingCount(long roomId) {
+		TypedQuery<Long> q = em.createNamedQuery("getRecordingCountByRoomId", Long.class);
+		q.setParameter("room_id", roomId);
+		return q.getSingleResult();
+	}
+
+	public long getPublisingCount(long roomId) {
+		TypedQuery<Long> q = em.createNamedQuery("getPublisingCountByRoomId", Long.class);
+		q.setParameter("room_id", roomId);
+		return q.getSingleResult();
 	}
 }

@@ -98,10 +98,6 @@
         <servlet-class>org.openmeetings.servlet.outputhandler.Install</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ScreenRequestHandler</servlet-name>
-        <servlet-class>org.openmeetings.servlet.outputhandler.ScreenRequestHandler</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>LangExport</servlet-name>
         <servlet-class>org.openmeetings.servlet.outputhandler.LangExport</servlet-class>
     </servlet>
@@ -159,10 +155,6 @@
     <servlet-mapping>
         <servlet-name>Install</servlet-name>
         <url-pattern>/install</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ScreenRequestHandler</servlet-name>
-        <url-pattern>/ScreenRequestHandler</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LangExport</servlet-name>

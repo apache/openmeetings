@@ -264,9 +264,6 @@ public class ImportInitvalues {
 								+ "running previous Pass of users will not be workign anymore! "
 								+ "for more Information see http://code.google.com/p/openmeetings/wiki/CustomCryptMechanism");
 
-		cfgManagement.addConfByKey(3, "screen_viewer", cfg.screenViewer, null,
-				"ScreenViewer Type(0==standard, 1== jrdesktop)");
-
 		cfgManagement.addConfByKey(3, "allow_frontend_register",
 				cfg.allowFrontendRegister, null, "");
 

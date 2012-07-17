@@ -18,7 +18,6 @@
  */
 package org.openmeetings.servlet.outputhandler;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
@@ -31,14 +30,12 @@ import org.openmeetings.utils.ImportHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-public abstract class AbstractUploadController implements ServletContextAware {
+public abstract class AbstractUploadController {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			AbstractUploadController.class, OpenmeetingsVariables.webAppRootKey);
-	protected ServletContext context;
 	@Autowired
 	protected Sessionmanagement sessionManagement;
 	@Autowired
@@ -47,10 +44,6 @@ public abstract class AbstractUploadController implements ServletContextAware {
 	protected AuthLevelmanagement authLevelManagement;
 	@Autowired
 	protected Configurationmanagement cfgManagement;
-	
-	public void setServletContext(ServletContext arg0) {
-		context = arg0;
-	}
 	
 	protected class UploadInfo {
 		MultipartFile file;

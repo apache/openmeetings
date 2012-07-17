@@ -47,8 +47,8 @@ public class RTMPSScreenShare extends RTMPSClient implements ClientExceptionHand
 		if (args.length < 11) {
 			System.exit(0);
 		}
-		client.setKeystoreBytes(Hex.decodeHex(args[9].toCharArray()));
-		client.setKeyStorePassword(args[10]);
+		client.setKeystoreBytes(Hex.decodeHex(args[10].toCharArray()));
+		client.setKeyStorePassword(args[11]);
 	}
 	
 	@Override

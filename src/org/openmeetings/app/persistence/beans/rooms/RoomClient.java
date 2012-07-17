@@ -48,6 +48,8 @@ import javax.persistence.Transient;
 	, @NamedQuery(name="getByRoomIdMod", query="SELECT rc FROM RoomClient rc WHERE rc.room_id = :room_id AND rc.isMod = true")
 	, @NamedQuery(name="deleteByStreamId", query="DELETE FROM RoomClient rc WHERE rc.streamid = :streamid")
 	, @NamedQuery(name="deleteAll", query="DELETE FROM RoomClient rc")
+	, @NamedQuery(name="getRecordingCountByRoomId", query="SELECT COUNT(rc) FROM RoomClient rc WHERE rc.room_id = :room_id AND rc.startRecording = true")
+	, @NamedQuery(name="getPublisingCountByRoomId", query="SELECT COUNT(rc) FROM RoomClient rc WHERE rc.room_id = :room_id AND rc.streamPublishStarted = true")
 })
 public class RoomClient implements Serializable {
 	private static final long serialVersionUID = 1831858089607111565L;

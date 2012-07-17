@@ -41,6 +41,7 @@ $LIBRARIES
     	<argument>$default_quality_screensharing</argument>
     	<argument>$user_id</argument>   
     	<argument>$allowRecording</argument>
+    	<argument>$allowPublishing</argument>
 $KEYSTORE
     </application-desc> 
 </jnlp> 
