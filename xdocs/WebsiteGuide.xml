@@ -19,13 +19,13 @@
 
 		<section name="How to update Apache OpenMeetings incubator website">
 
-			<p>
+			<div>
 				Required software:
 				<ul>
 					<li>Sun JDK6</li>
 					<li>Apache ANT (1.8 or later)</li>
 				</ul>
-			</p>
+			</div>
 
 			<p>
 				OpenMeetings website (
@@ -39,7 +39,7 @@
 				</a>
 			</p>
 			
-			<p>
+			<div>
 				To update the website you checkout trunk:
 				<br />
 				<a
@@ -52,7 +52,7 @@
 				</div>
 				control the output locally in the folder <tt>docs</tt><br/>
 				And then checkin into the SVN <i>both</i> the edited xml and generated html files.
-			</p>
+			</div>
 			
 			<p>
 				Changes to the website should be online immediately.

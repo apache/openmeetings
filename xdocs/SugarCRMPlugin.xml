@@ -40,12 +40,14 @@
 			<p>The plugin contains the following features: </p>
 			<ul>
 				<li>Create videoconference rooms through SugarCRM: </li>
-				<ol>
-					<li>Integrated with calendar </li>
-					<li>Integrated with SugarCRM meetings </li>
-					<li>Sends invetations emails to meeting participants </li>					
-					<li>Configurable room type </li>
-				</ol>
+				<li>
+					<ol>
+						<li>Integrated with calendar </li>
+						<li>Integrated with SugarCRM meetings </li>
+						<li>Sends invetations emails to meeting participants </li>					
+						<li>Configurable room type </li>
+					</ol>
+				</li>
 			</ul>			
 		</section>
 
