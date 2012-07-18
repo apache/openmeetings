@@ -64,6 +64,22 @@ public class FlvRecordingDaoImpl {
 		return null;
 	}
 
+	public FlvRecording getRecordingByHash(String hash) {
+		try {
+			TypedQuery<FlvRecording> query = em.createNamedQuery("getRecordingByHash", FlvRecording.class);
+			query.setParameter("fileHash", hash);
+			
+			try {
+				return query.getSingleResult();
+		    } catch (NoResultException ex) {
+		    	//noop
+		    }
+		} catch (Exception ex2) {
+			log.error("[getRecordingByHash]: ",ex2);
+		}
+		return null;
+	}
+
 	public List<FlvRecording> getFlvRecordings() {
 		try { 
 			

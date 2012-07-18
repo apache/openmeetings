@@ -31,10 +31,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
+@NamedQueries({
+	@NamedQuery(name = "getRecordingByHash", query = "SELECT f FROM FlvRecording f WHERE f.fileHash = :fileHash")
+})
 @Table(name = "flvrecording")
 public class FlvRecording implements Serializable {
 	

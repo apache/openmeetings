@@ -47,11 +47,13 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openjpa.jdbc.meta.MappingTool;
 import org.openmeetings.app.data.file.dao.FileExplorerItemDaoImpl;
+import org.openmeetings.app.data.flvrecord.FlvRecordingDaoImpl;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.documents.InstallationDocumentHandler;
 import org.openmeetings.app.installation.ImportInitvalues;
 import org.openmeetings.app.installation.InstallationConfig;
 import org.openmeetings.app.persistence.beans.files.FileExplorerItem;
+import org.openmeetings.app.persistence.beans.flvrecord.FlvRecording;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.servlet.outputhandler.BackupExport;
 import org.openmeetings.servlet.outputhandler.BackupImportController;
@@ -120,6 +122,8 @@ public class Admin {
 		options.addOption(new OmOption("i", null, "force", false, "Install without checking the existence of old data in the database.", true));
 		//languages
 		options.addOption(new OmOption("l", "lang", "language", true, "Single language to be imported (id or name)", true));
+		//files
+		options.addOption(new OmOption("f", null, "cleanup", false, "Should intermediate files be clean up", true));
 		
 		return options;
 	}
@@ -404,11 +408,12 @@ public class Admin {
 				}
 				break;
 			case languages:
-				System.out.println("All language file will be reimported");
+				System.out.println("All language files will be reimported");
 				try {
 					ImportInitvalues importInit = getApplicationContext(ctxName).getBean(ImportInitvalues.class);
 					if (cmdl.hasOption("lang")) {
 						String lang = cmdl.getOptionValue("lang");
+						System.out.println("Only '" + lang + "' language will be reimported");
 						try {
 							int id = Integer.parseInt(lang);
 							importInit.loadLanguagesFile(id);
@@ -416,6 +421,7 @@ public class Admin {
 							importInit.loadLanguagesFile(lang);
 						}
 					} else {
+						System.out.println("All language files will be reimported");
 						importInit.loadLanguagesFiles();
 					}
 				} catch (Exception e) {
@@ -424,6 +430,10 @@ public class Admin {
 				break;
 			case files:
 				try {
+					boolean cleanup = cmdl.hasOption("cleanup");
+					if (cleanup) {
+						System.out.println("WARNING: all intermadiate files will be clean up!");
+					}
 					StringBuilder report = new StringBuilder();
 					report.append("Temporary files allocates: ").append(OmFileHelper.getHumanSize(OmFileHelper.getUploadTempDir())).append("\n");
 					{ //UPLOAD
@@ -440,9 +450,17 @@ public class Admin {
 							long userId = getUserIdByProfile(profile.getName());
 							Users u = udao.getUser(userId);
 							if (profile.isFile() || userId < 0 || u == null) {
-								invalid += pSize;
+								if (cleanup) {
+									FileHelper.removeRec(profile);
+								} else {
+									invalid += pSize;
+								}
 							} else if ("true".equals(u.getDeleted())) {
-								deleted += pSize;
+								if (cleanup) {
+									FileHelper.removeRec(profile);
+								} else {
+									deleted += pSize;
+								}
 							}
 						}
 						long missing = 0;
@@ -474,9 +492,17 @@ public class Admin {
 							long fSize = OmFileHelper.getSize(f);
 							FileExplorerItem item = fileDao.getFileExplorerItemsByHash(f.getName());
 							if (item == null) {
-								invalid += fSize;
+								if (cleanup) {
+									FileHelper.removeRec(f);
+								} else {
+									invalid += fSize;
+								}
 							} else if ("true".equals(item.getDeleted())) {
-								deleted += fSize;
+								if (cleanup) {
+									FileHelper.removeRec(f);
+								} else {
+									deleted += fSize;
+								}
 							}
 						}
 						missing = 0;
@@ -492,18 +518,62 @@ public class Admin {
 						report.append("\t\trest: ").append(OmFileHelper.getHumanSize(restSize)).append("\n");
 					}
 					{ //STREAMS
-						long sectionSize = OmFileHelper.getSize(OmFileHelper.getStreamsDir());
+						File streamsDir = OmFileHelper.getStreamsDir();
+						File hibernateDir = OmFileHelper.getStreamsHibernateDir();
+						if (cleanup) {
+							String hiberPath = hibernateDir.getCanonicalPath();
+							for (File f : streamsDir.listFiles()) {
+								if (!f.getCanonicalPath().equals(hiberPath)) {
+									FileHelper.removeRec(f);
+								}
+							}
+						}
+						long sectionSize = OmFileHelper.getSize(streamsDir);
 						report.append("Recordings allocates: ").append(OmFileHelper.getHumanSize(sectionSize)).append("\n");
-						long size = OmFileHelper.getSize(OmFileHelper.getStreamsHibernateDir());
+						long size = OmFileHelper.getSize(hibernateDir);
 						long restSize = sectionSize - size;
+						FlvRecordingDaoImpl recordDao = ctx.getBean(FlvRecordingDaoImpl.class);
+						long[] params = {0, 0}; // [0] == deleted [1] == missing
+						for (FlvRecording rec : recordDao.getAllFlvRecordings()) {
+							checkRecordingFile(hibernateDir, rec.getFileHash(), rec.getDeleted(), params, cleanup);
+							checkRecordingFile(hibernateDir, rec.getAlternateDownload(), rec.getDeleted(), params, cleanup);
+							checkRecordingFile(hibernateDir, rec.getPreviewImage(), rec.getDeleted(), params, cleanup);
+						}
+						long invalid = 0;
+						for (File f : hibernateDir.listFiles()) {
+							if (f.isFile() && f.getName().endsWith(".flv")) {
+								FlvRecording rec = recordDao.getRecordingByHash(f.getName());
+								if (rec == null) {
+									if (cleanup) {
+										FileHelper.removeRec(f);
+									} else {
+										invalid += f.length();
+									}
+									String name = f.getName().substring(0, f.getName().length() - 5);
+									File rfa = new File(hibernateDir, name + ".avi");
+									if (rfa.exists()) {
+										if (cleanup) {
+											FileHelper.removeRec(rfa);
+										} else {
+											invalid += rfa.length();
+										}
+									}
+									File rfj = new File(hibernateDir, name + ".jpg");
+									if (rfj.exists()) {
+										if (cleanup) {
+											FileHelper.removeRec(rfj);
+										} else {
+											invalid += rfj.length();
+										}
+									}
+								}
+							}
+						}
 						report.append("\t\tfinal: ").append(OmFileHelper.getHumanSize(size)).append("\n");
+						report.append("\t\t\tinvalid: ").append(OmFileHelper.getHumanSize(invalid)).append("\n");
+						report.append("\t\t\tdeleted: ").append(OmFileHelper.getHumanSize(params[0])).append("\n");
+						report.append("\t\t\tmissing count: ").append(params[1]).append("\n");
 						report.append("\t\trest: ").append(OmFileHelper.getHumanSize(restSize)).append("\n");
-						
-						//public/private recordings
-						//Object: flvrecording_metadata == possibly incomplete
-						//Object: flvrecording == final
-						//webapps/openmeetings/streams/<room_id>/rec_<id>*				-->temporary files
-						//webapps/openmeetings/streams/hibernate/flvRecording_<id>*		-->files
 					}
 					System.out.println(report);
 				} catch (Exception e) {
@@ -518,6 +588,22 @@ public class Admin {
 		
 		System.out.println("... Done");
 		System.exit(0);
+	}
+	
+	private void checkRecordingFile(File hibernateDir, String name, String deleted, long[] params, boolean cleanup) {
+		File flv = name != null ? new File(hibernateDir, name) : null;
+		if (flv != null) {
+			if (flv.exists() && flv.isFile()) {
+				if ("true".equals(deleted)) {
+					params[0] += flv.length();
+					if (cleanup) {
+						FileHelper.removeRec(flv);
+					}
+				}
+			} else {
+				params[1]++;
+			}
+		}
 	}
 	
 	private long getUserIdByProfile(String name) {

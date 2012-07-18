@@ -57,6 +57,7 @@
 <span style="margin-left: 100px;">--db-pass &lt;arg&gt;                (optional) Password of the user with write access to the DB specified</span><br/>
 --------------------------------------------------------------------------------------------------<br/>
  -f,--files                          File operations - statictics/cleanup<br/>
+<span style="margin-left: 100px;">--cleanup                      (optional) Should intermediate files be clean up</span><br/>
 --------------------------------------------------------------------------------------------------<br/>
 				</div>
 			</div>
