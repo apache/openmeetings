@@ -74,11 +74,9 @@ public class ScreenSharerFrame extends JFrame {
 	private JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 	private boolean doUpdateBounds = true;
 	private boolean showWarning = true;
-	private JButton btnStartPauseSharing;
-	private JButton btnStartRecording;
-	private JButton btnStopRecording;
-	private JButton btnStartPublish;
-	private JButton btnStopPublish;
+	private JButton btnStartStopSharing;
+	private JButton btnStartStopRecording;
+	private JButton btnStartStopPublish;
 	private NumberSpinner spinnerX;
 	private NumberSpinner spinnerY;
 	private NumberSpinner spinnerWidth;
@@ -89,10 +87,16 @@ public class ScreenSharerFrame extends JFrame {
 	private JTextField textPublishId;
 	private JLabel lblPublishURL;
 	private boolean sharingStarted = false;
-	private String startLabel;
+	private boolean recordingStarted = false;
+	private boolean publishStarted = false;
 	private ImageIcon startIcon;
-	private String pauseLabel;
-	private ImageIcon pauseIcon;
+	private ImageIcon stopIcon;
+	private String startSharingLabel;
+	private String stopSharingLabel;
+	private String startRecordingLabel;
+	private String stopRecordingLabel;
+	private String startPublishLabel;
+	private String stopPublishLabel;
 	private String reduceWidthLabel;
 	private String reduceHeightLabel;
 	private String reduceXLabel;
@@ -206,12 +210,6 @@ public class ScreenSharerFrame extends JFrame {
 		return textLabels != null && idx < textLabels.length ? textLabels[idx] : "#STAB#";
 	}
 	
-	private void stopSharingAndExit(CoreScreenShare core) {
-		core.stopStream();
-		this.setVisible(false);
-		System.exit(0);
-	}
-	
 	/**
 	 * Create the frame.
 	 * @throws AWTException 
@@ -225,7 +223,9 @@ public class ScreenSharerFrame extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				stopSharingAndExit(core);
+				core.stopStream();
+				ScreenSharerFrame.this.setVisible(false);
+				System.exit(0);
 			}
 		});
 		setBounds(30, 30, 500, 505);
@@ -236,8 +236,12 @@ public class ScreenSharerFrame extends JFrame {
 		
 		JLabel lblStartSharing = new JLabel(getTextLabel(textLabels, 1)); //#id 731
 		
-		startLabel = getTextLabel(textLabels, 2); //#id 732
-		pauseLabel = getTextLabel(textLabels, 3); //#id 733
+		startSharingLabel = getTextLabel(textLabels, 2); //#id 732
+		stopSharingLabel = getTextLabel(textLabels, 3); //#id 733
+		startRecordingLabel = getTextLabel(textLabels, 15); //#id 871
+		stopRecordingLabel = getTextLabel(textLabels, 16); //#id 872
+		startPublishLabel = getTextLabel(textLabels, 24); //#id 1466
+		stopPublishLabel = getTextLabel(textLabels, 25); //#id 1467
 		reduceWidthLabel = getTextLabel(textLabels, 29); //#id 1471
 		reduceHeightLabel = getTextLabel(textLabels, 30); //#id 1472
 		reduceXLabel = getTextLabel(textLabels, 31); //#id 1473
@@ -245,27 +249,18 @@ public class ScreenSharerFrame extends JFrame {
 		recordingTipLabel = getTextLabel(textLabels, 35); //#id 1477
 		publishingTipLabel = getTextLabel(textLabels, 34); //#id 1476
 		startIcon = new ImageIcon(ScreenSharerFrame.class.getResource("/org/openmeetings/screen/play.png"));
-		pauseIcon = new ImageIcon(ScreenSharerFrame.class.getResource("/org/openmeetings/screen/pause.png"));
-		btnStartPauseSharing = new JButton(startLabel);
-		btnStartPauseSharing.setToolTipText(startLabel);
-		btnStartPauseSharing.setIcon(startIcon);
-		btnStartPauseSharing.setSize(200, 32);
-		btnStartPauseSharing.addActionListener(new ActionListener() {
+		stopIcon = new ImageIcon(ScreenSharerFrame.class.getResource("/org/openmeetings/screen/stop.png"));
+		btnStartStopSharing = new JButton(startSharingLabel);
+		btnStartStopSharing.setToolTipText(startSharingLabel);
+		btnStartStopSharing.setIcon(startIcon);
+		btnStartStopSharing.setSize(200, 32);
+		btnStartStopSharing.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (sharingStarted) {
 					core.sendCaptureScreenStop(true, false);
 				} else {
 					core.captureScreenStart(true, false);
 				}
-			}
-		});
-		JButton btnStopSharing = new JButton(getTextLabel(textLabels, 17)); //#id 878
-		btnStopSharing.setToolTipText(getTextLabel(textLabels, 17)); //#id 878
-		btnStopSharing.setSize(200, 32);
-		btnStopSharing.setIcon(new ImageIcon(ScreenSharerFrame.class.getResource("/org/openmeetings/screen/exit.png")));
-		btnStopSharing.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				stopSharingAndExit(core);
 			}
 		});
 		
@@ -282,9 +277,9 @@ public class ScreenSharerFrame extends JFrame {
 							.addComponent(lblStartSharing))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(21)
-							.addComponent(btnStartPauseSharing, 200, 200, 200)
+							.addComponent(btnStartStopSharing, 200, 200, 200)
 							.addGap(52)
-							.addComponent(btnStopSharing, 200, 200, 200))
+							)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(7)
 							.addComponent(lblSelectArea, GroupLayout.PREFERRED_SIZE, 470, GroupLayout.PREFERRED_SIZE))
@@ -305,8 +300,8 @@ public class ScreenSharerFrame extends JFrame {
 					.addComponent(lblStartSharing)
 					.addGap(4)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnStartPauseSharing, 32, 32, 32)
-						.addComponent(btnStopSharing, 32, 32, 32))
+						.addComponent(btnStartStopSharing, 32, 32, 32)
+						)
 					.addGap(4)
 					.addComponent(lblSelectArea)
 					.addGap(4)
@@ -441,27 +436,20 @@ public class ScreenSharerFrame extends JFrame {
 		lblRecordingDesc.setBounds(10, 10, 447, 60);
 		panelRecording.add(lblRecordingDesc);
 		
-		btnStartRecording = new JButton(getTextLabel(textLabels, 15)); //#id 871
-		btnStartRecording.setToolTipText(getTextLabel(textLabels, 15)); //#id 871
-		btnStartRecording.setIcon(new ImageIcon(ScreenSharerFrame.class.getResource("/org/openmeetings/screen/record.png")));
-		btnStartRecording.setBounds(10, 82, 200, 32);
-		btnStartRecording.addActionListener(new ActionListener() {
+		btnStartStopRecording = new JButton(getTextLabel(textLabels, 15)); //#id 871
+		btnStartStopRecording.setToolTipText(getTextLabel(textLabels, 15)); //#id 871
+		btnStartStopRecording.setIcon(startIcon);
+		btnStartStopRecording.setBounds(10, 82, 200, 32);
+		btnStartStopRecording.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				core.captureScreenStart(false, true);
+				if (recordingStarted) {
+					core.sendCaptureScreenStop(false, true);
+				} else {
+					core.captureScreenStart(false, true);
+				}
 			}
 		});
-		panelRecording.add(btnStartRecording);
-		
-		ImageIcon stopIcon = new ImageIcon(ScreenSharerFrame.class.getResource("/org/openmeetings/screen/stop.png"));
-		btnStopRecording = new JButton(getTextLabel(textLabels, 16), stopIcon); //#id 872
-		btnStopRecording.setToolTipText(getTextLabel(textLabels, 16)); //#id 872
-		btnStopRecording.setBounds(257, 82, 200, 32);
-		btnStopRecording.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				core.sendCaptureScreenStop(false, true);
-			}
-		});
-		panelRecording.add(btnStopRecording);
+		panelRecording.add(btnStartStopRecording);
 		
 		panelPublish.setBackground(Color.WHITE);
 		tabbedPane.addTab(getTextLabel(textLabels, 23), null, panelPublish, null); //#id 1465
@@ -505,27 +493,20 @@ public class ScreenSharerFrame extends JFrame {
 		lblPublishURL.setBounds(10, 69, 447, 14);
 		panelPublish.add(lblPublishURL);
 		
-		btnStartPublish = new JButton(getTextLabel(textLabels, 24)); //#id 1466
-		btnStartPublish.setToolTipText(getTextLabel(textLabels, 24)); //#id 1466
-		//btnStartPublish.setIcon(new ImageIcon(ScreenSharerFrame.class.getResource("/org/openmeetings/screen/record.png")));
-		btnStartPublish.setBounds(10, 86, 200, 32);
-		btnStartPublish.addActionListener(new ActionListener() {
+		btnStartStopPublish = new JButton(getTextLabel(textLabels, 24)); //#id 1466
+		btnStartStopPublish.setToolTipText(getTextLabel(textLabels, 24)); //#id 1466
+		btnStartStopPublish.setIcon(startIcon);
+		btnStartStopPublish.setBounds(10, 86, 200, 32);
+		btnStartStopPublish.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				core.captureScreenStart(false, false, true);
+				if (publishStarted) {
+					core.sendStopPublishing();
+				} else {
+					core.captureScreenStart(false, false, true);
+				}
 			}
 		});
-		panelPublish.add(btnStartPublish);
-		
-		btnStopPublish = new JButton(getTextLabel(textLabels, 25)); //#id 1467
-		btnStopPublish.setToolTipText(getTextLabel(textLabels, 25)); //#id 1467
-		btnStopPublish.setIcon(stopIcon);
-		btnStopPublish.setBounds(257, 86, 200, 32);
-		btnStopPublish.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				core.sendStopPublishing();
-			}
-		});
-		panelPublish.add(btnStopPublish);
+		panelPublish.add(btnStartStopPublish);
 		
 		panelScreen.setBackground(Color.WHITE);
 		
@@ -547,33 +528,35 @@ public class ScreenSharerFrame extends JFrame {
 	public void setSharingStatus(boolean status, boolean unlockScreen) {
 		panelScreen.setEnabled(unlockScreen);
 		sharingStarted = status;
-		btnStartPauseSharing.setIcon(status ? pauseIcon : startIcon);
-		btnStartPauseSharing.setText(status ? pauseLabel : startLabel);
-		btnStartPauseSharing.setToolTipText(status ? pauseLabel : startLabel);
+		btnStartStopSharing.setIcon(status ? stopIcon : startIcon);
+		btnStartStopSharing.setText(status ? stopSharingLabel : startSharingLabel);
+		btnStartStopSharing.setToolTipText(status ? stopSharingLabel : startSharingLabel);
 	}
 	
 	public void setRecordingStatus(boolean status, boolean unlockScreen) {
 		panelScreen.setEnabled(unlockScreen);
-		btnStartRecording.setEnabled(!status);
-		btnStopRecording.setEnabled(status);
+		recordingStarted = status;
+		btnStartStopRecording.setIcon(status ? stopIcon : startIcon);
+		btnStartStopRecording.setText(status ? stopRecordingLabel : startRecordingLabel);
+		btnStartStopRecording.setToolTipText(status ? stopRecordingLabel : startRecordingLabel);
 	}
 	
 	public void setPublishingStatus(boolean status, boolean unlockScreen) {
 		panelScreen.setEnabled(unlockScreen);
-		btnStartPublish.setEnabled(!status);
-		btnStopPublish.setEnabled(status);
+		publishStarted = status;
+		btnStartStopPublish.setIcon(status ? stopIcon : startIcon);
+		btnStartStopPublish.setText(status ? stopPublishLabel : startPublishLabel);
+		btnStartStopPublish.setToolTipText(status ? stopPublishLabel : startPublishLabel);
 	}
 	
 	public void setRecordingTabEnabled(boolean enabled) {
 		panelRecording.setEnabled(enabled);
-		btnStopRecording.setEnabled(false);
 		tabbedPane.setEnabledAt(0, enabled);
 		tabbedPane.setToolTipTextAt(0, enabled ? null : recordingTipLabel);
 	}
 	
 	public void setPublishingTabEnabled(boolean enabled) {
 		panelPublish.setEnabled(enabled);
-		btnStopPublish.setEnabled(false);
 		tabbedPane.setEnabledAt(1, enabled);
 		tabbedPane.setToolTipTextAt(1, enabled ? null : publishingTipLabel);
 	}
