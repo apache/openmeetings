@@ -80,6 +80,8 @@
     <attribute name="isMutedByModerator" value="false" type="boolean"/>
     
     <attribute name="isMicrophonesRoom" value="false" type="boolean"/>
+
+    <attribute name="lastPositiveVolume" type="number" value="50" />
 	
 	<handler name="onisremote" args="r">
 		this.isremote = r;
@@ -490,7 +492,21 @@
                 parent.parent.silenceMicrophone(!parent.parent.micMuted);
             </handler>
             <labelTooltip name="_tip" labelid="1405" />
-        </miniIconsPresenter>  
+        </miniIconsPresenter>
+
+        <miniIconsPresenter x="0" y="0" name="_volume" width="16" height="16" iconRessourceName="mute_btn_rsc">
+            <handler name="onclick">
+                var volume = parent.parent.getStreamVolume();
+
+                var pick = new lz.VolumeSlider(canvas, {
+                    x:(parent.getAttributeRelative('x',canvas)),
+                    y:(parent.getAttributeRelative('y',canvas)),
+                    initialNumber:volume,
+                    videoObject:parent.parent
+                });
+                lz.ModeManager.makeModal(pick);
+            </handler>
+        </miniIconsPresenter>
         
         <miniIconsPresenter name="_minimize"
             iconRessourceName="btn_presenter_minimize">
@@ -715,6 +731,32 @@
             }
         }
         ]]>
+    </method>
+
+    <method name="setStreamVolume" args="v">
+        var stream = this._chatvideoinner._videostream;
+        if (this.isremote) {
+            stream.setSoundVolume(v);
+        } else {
+            stream.setAttribute('micGain', v);
+            stream.micro.gain = v;
+            if (0 == v) {
+                this.confirmGloballyOff(true, v);
+            } else if (micMuted) {
+                this.silenceMicrophone(false);
+            }
+        }
+    </method>
+
+    <method name="getStreamVolume">
+        var stream = this._chatvideoinner._videostream;
+        var volume;
+        if (this.isremote) {
+            volume = Number(stream._ns.soundTransform.volume * 100);
+        } else {
+            volume = stream.micro.gain;
+        }
+        return volume;
     </method>
     
 </class>

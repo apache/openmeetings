@@ -58,5 +58,6 @@
     <include href="videoObjectPlayBroadcast.lzx" />
     <include href="videoObjectTestBroadcast.lzx" />
     <include href="videoObjectPlayTestBroadcast.lzx" />
+    <include href="volumeSlider.lzx" />
     
 </library>
