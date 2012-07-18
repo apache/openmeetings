@@ -22,8 +22,8 @@ limitations under the License.
      <html>
         <head>
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
-		<meta name="author" value="OpenMeetings Team">
-		<meta name="email" value="sebawagner@apache.org">
+		<meta name="author" content="OpenMeetings Team">
+		<meta name="email" content="sebawagner@apache.org">
 		<title>OpenMeetings API Methods</title>
 		<link rel="stylesheet" type="text/css" href="openmeetings_docs.css">
         </head>
@@ -127,15 +127,16 @@ limitations under the License.
     			#set ($index = 0)
     			#foreach ( $parameter in $method.parameters() )
     				#if ($index == 0)
-    					#set ($link = $link+"?") 
+    					#set ($link = $link+"?")
+    					#set ($displayLink = $link)
     				#else
     					#set ($link = $link+"&") 
+    					#set ($displayLink = $displayLink + "&amp;")
     				#end
     				#set ($link = $link + $parameter.name()+"=VALUE") 
     				#set ($index = $index+1)
 				#end
-				<a href="$link">$link</a>
-    			</a>
+				<a href="$link">$displayLink</a>
     		  </div>
     	   #end
 		#end

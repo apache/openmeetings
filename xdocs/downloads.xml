@@ -18,7 +18,7 @@
 	<body>
 
 		<section name="Downloads">
-			<p>
+			<div>
 				A release of Podling includes the First artifact
 				and the Second artifact. The release is distributed as
 				source code and as jar files that can be accessed
@@ -31,7 +31,7 @@
 						Second artifact.
 					</li>
 				</ul>
-			</p>
+			</div>
 			<p>
 				All are available for download as source and binary.
 			</p>

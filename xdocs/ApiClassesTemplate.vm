@@ -22,8 +22,8 @@ limitations under the License.
      <html>
         <head>
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
-		<meta name="author" value="OpenMeetings Team">
-		<meta name="email" value="sebawagner@apache.org">
+		<meta name="author" content="OpenMeetings Team">
+		<meta name="email" content="sebawagner@apache.org">
 		<title>OpenMeetings API Classes</title>
 		<link rel="stylesheet" type="text/css" href="openmeetings_docs.css">
         </head>

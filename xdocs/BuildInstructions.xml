@@ -31,7 +31,7 @@
 
 		<section name="How to Build a Distribution">
 
-			<p>
+			<div>
 				<p>To build a binary release of OpenMeetings you need: </p>
 				<ul>
 					<li>Sun JDK6</li>
@@ -42,7 +42,7 @@
 							rel="nofollow">http://subversion.apache.org/packages.html</a>
 					</li>
 				</ul>
-			</p>
+			</div>
 
 			<p>Get the source: </p>
 			<div class="xmlcode">
@@ -255,7 +255,7 @@
 						<img src="images/checkout_9.png" alt="" width="310" height="297" />
 					</a>
 				</p>
-				<p>
+				<div>
 					11) Please run
 					<div class="xmlcode">
 						ant prepare-eclipse
@@ -263,7 +263,7 @@
 					to download all necessary jar files, and perform source
 					<tt>Refresh</tt>
 					to resolve all compilation issues.
-				</p>
+				</div>
 			</subsection>
 
 			<subsection name="Step3 - Deploy and Run">

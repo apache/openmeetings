@@ -58,11 +58,11 @@ public class JabberWebService {
 	private Invitationmanagement invitationManagement;
 
 	/**
-	 * Get List<Rooms> of all rooms available to the user.
+	 * Get List&lt;Rooms&gt; of all rooms available to the user.
 	 * No admin rights are necessary for this call
 	 * 
 	 * @param SID The SID from UserService.getSession
-	 * @return List<Rooms> of Rooms
+	 * @return List&lt;Rooms&gt; of Rooms
 	 */
 	public List<Rooms> getAvailableRooms(String SID) {
 		log.debug("getAvailableRooms enter");

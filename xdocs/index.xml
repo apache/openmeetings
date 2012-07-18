@@ -135,23 +135,21 @@
 		</section>
 
 		<section name="Community">
-
-			<p>
+			<div>
 				<strong>Who we are</strong>
 				<blockquote>
 					<a href="team-list.html">List of committers</a>
 					.
 				</blockquote>
-			</p>
-			<p>
+			</div>
+			<div>
 				<strong>Users!</strong>
 				<blockquote>
 					We'd love to have you involved. Check out the
 					<a href="get-involved.html">Get involved</a>
 					.
 				</blockquote>
-			</p>
-
+			</div>
 		</section>
 
 		<section name="Feature details">
@@ -162,23 +160,19 @@
 					href="images/Features_Screen_Conference_Room_Thumb.png" title="OpenMeetings Conference Room"
 					width="250" height="175" />
 
-				<text>
+				<div>
 					There are four options to use OpenMeetings audio/video functions,
 					which you can select during a conference session.
 					<ul>
-						<blockquote>
-							<li>audio + video</li>
-							<li>audio only</li>
-							<li>video only</li>
-							<li>picture only</li>
-
-						</blockquote>
+						<li>audio + video</li>
+						<li>audio only</li>
+						<li>video only</li>
+						<li>picture only</li>
 					</ul>
 					Additional you can change video-/audio-quality, choose multiple
 					camera resolutions (4:3, 16:9 or 3:2)
 					and choose your input devices.
-				</text>
-
+				</div>
 			</feature>
 
 			<feature title="Meeting recording and Screen sharing">
@@ -187,7 +181,7 @@
 					title="Screensharing-/recording" width="140" height="150" />
 				<image href="images/recordings_timeleine.png" fullhref="images/recordings_timeleine.png"
 					title="Device" width="200" height="115" />
-				<text>
+				<div>
 					<ul>
 						<li>Recorded sessions contain everything including sound recorded
 							from all audio streams in exactly the way you've seen it in the
@@ -208,7 +202,7 @@
 							File-Explorer
 						</li>
 					</ul>
-				</text>
+				</div>
 
 			</feature>
 
@@ -216,7 +210,7 @@
 
 				<image href="images/file_smal.png" title="File Explorer"
 					fullhref="images/file_smal.png" width="135" height="200" />
-				<text>
+				<div>
 					Advanced File-Explorer in every conference room, Drag and Drop
 					interface for managing uploaded files, including the possibility to
 					create a document tree with folders.
@@ -240,7 +234,7 @@
 					the conference room
 					have access to the Public
 					Drive.
-				</text>
+				</div>
 
 			</feature>
 
@@ -248,7 +242,7 @@
 
 				<image href="images/right_management.png" title="Right management"
 					fullhref="images/right_management.png" width="135" height="216" />
-				<text>
+				<div>
 					During a conference, the moderator can adjust the user permission
 					to every user individually .
 					<ul>
@@ -283,7 +277,7 @@
 							(Re-) Start Audio, Video or Device settings
 						</li>
 					</ul>
-				</text>
+				</div>
 
 			</feature>
 
@@ -294,7 +288,7 @@
 					title="Whiteboard" width="240" height="165" />
 				<image href="images/chat.png" fullhref="images/chat.png"
 					title="Chat in Conference Room" width="240" height="68" />
-				<text>
+				<div>
 					Multi-Whiteboard, you can add new whiteboard instances, each
 					white
 					board can have the full range of tools and documents inside.
@@ -320,7 +314,7 @@
 					<br />
 					You can import from a wide range of document formats (PDF, DOC,
 					ODT, PPT, et cetera...)
-				</text>
+				</div>
 
 			</feature>
 
@@ -328,7 +322,7 @@
 
 				<image href="images/dashboard.png" fullhref="images/dashboard.png"
 					title="Dashboard with MyRooms" width="250" height="130" />
-				<text>
+				<div>
 					You can manage users and multiple organizations in a single
 					OpenMeetings instance. You can also create users that only have
 					access via the SOAP-API.
@@ -343,14 +337,14 @@
 					<br />
 					You can assign conference room to all users, or you can assign them
 					only to specific user-groups.
-				</text>
+				</div>
 
 			</feature>
 
 			<feature title="Private message center">
 				<image href="images/privat_messages.png" fullhref="images/privat_messages.png"
 					title="Private Messages and Contact Search" width="230" height="125" />
-				<text>
+				<div>
 					Send users messages and organize them in folders. You can book
 					conference rooms by sending private messages. The booked event
 					automatically is in your and the participants calendar, changes to
@@ -360,13 +354,13 @@
 					User contacts, you can search users and add them to your contacts.
 					You
 					can even give them the right to see your calendar.
-				</text>
+				</div>
 			</feature>
 
 			<feature title="Plan meetings with integrated calendar">
 				<image href="images/calendar.png" fullhref="images/calendar.png"
 					title="Calendar" width="200" height="115" />
-				<text>
+				<div>
 					<ul>
 						<li>Plan your conferencing and invite attendees from OpenMeetings
 							or External.
@@ -377,30 +371,30 @@
 						</li>
 						<li>Share your calendar with your contacts.</li>
 					</ul>
-				</text>
+				</div>
 			</feature>
 
 			<feature title="Polls and Votes">
 				<image href="images/poll.png" fullhref="images/poll.png"
 					title="Create a poll" width="250" height="250" />
-				<text>
+				<div>
 					You can create a poll with yes/no or 1-10 questions, let the
 					user
 					vote and see the voting results.
 					<br />
 					<br />
 					Polls can be stored and results viewed as pie-chart
-				</text>
+				</div>
 			</feature>
 
 			<feature title="Backup">
 				<image href="images/backup.png" fullhref="images/backup.png"
 					title="Backup" width="250" height="60" />
-				<text>
+				<div>
 					You can backup all user-generated data including files
 					uploaded by the users in a single ZIP file and import that ZIP into
 					a new installation of OpenMeetings again.
-				</text>
+				</div>
 			</feature>
 
 

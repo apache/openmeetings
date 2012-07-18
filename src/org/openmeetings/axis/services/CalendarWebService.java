@@ -257,8 +257,8 @@ public class CalendarWebService {
 	 *            sample: 1,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1
 	 *            to add multiple clients you can use the same GET parameter in
 	 *            the URL multiple times, for example:
-	 *            &mmClient=1,firstname,lastname,hans
-	 *            .tier@gmail.com,1,Etc/GMT+1&mmClient
+	 *            &amp;mmClient=1,firstname,lastname,hans
+	 *            .tier@gmail.com,1,Etc/GMT+1&amp;mmClient
 	 *            =2,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1
 	 * @param roomType
 	 *            the room type for the calendar event
@@ -405,8 +405,8 @@ public class CalendarWebService {
 	 *            sample: 1,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1
 	 *            to add multiple clients you can use the same GET parameter in
 	 *            the URL multiple times, for example:
-	 *            &mmClient=1,firstname,lastname,hans
-	 *            .tier@gmail.com,1,Etc/GMT+1&mmClient
+	 *            &amp;mmClient=1,firstname,lastname,hans
+	 *            .tier@gmail.com,1,Etc/GMT+1&amp;mmClient
 	 *            =2,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1
 	 * @param roomType
 	 *            the room type for the calendar event

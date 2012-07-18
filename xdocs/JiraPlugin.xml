@@ -29,10 +29,12 @@
 			<p>The plugin contains the following features: </p>
 			<ul>
 				<li>Create videoconference rooms through Jira: </li>
-				<ol>
-					<li>Integrated with Jira issues </li>										
-					<li>Configurable room type </li>
-				</ol>
+				<li>
+					<ol>
+						<li>Integrated with Jira issues </li>										
+						<li>Configurable room type </li>
+					</ol>
+				</li>
 			</ul>			
 		</section>	
 		

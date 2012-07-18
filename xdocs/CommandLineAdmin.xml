@@ -17,7 +17,7 @@
 		<section name="Usage">
 			<p>To avoid intensive traffic utilization and save your time you can
 				use command line admin to achieve following tasks:</p>
-			<p>
+			<div>
 				<div class="xmlcode">
  -v,--verbose                        verbose error messages<br/>
 --------------------------------------------------------------------------------------------------<br/>
@@ -59,7 +59,7 @@
  -f,--files                          File operations - statictics/cleanup<br/>
 --------------------------------------------------------------------------------------------------<br/>
 				</div>
-			</p>
+			</div>
 		</section>
 	</body>
 </document>

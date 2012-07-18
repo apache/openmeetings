@@ -33,14 +33,16 @@
 			<ol>
 				<li>running tests using command line: </li>
 				<ul>
-					<li>all tests: </li>
-					<div class="xmlcode">
-						ant test
-					</div>
-					<li>subset of tests by mask: </li>
-					<div class="xmlcode">
-						ant -Dtestcases=TestError* test
-					</div>
+					<li>all tests:
+						<div class="xmlcode">
+							ant test
+						</div>
+					</li>
+					<li>subset of tests by mask:
+						<div class="xmlcode">
+							ant -Dtestcases=TestError* test
+						</div>
+					</li>
 				</ul>
 				<li>running tests from Eclipse IDE: </li>
 				<ul>
@@ -77,14 +79,16 @@
 			</p>
 			<ul>
 				<li>Select Arguments tab </li>
-				<li>Add the following code to the VM section </li>
-				<div class="xmlcode">
-					-javaagent:${workspace_loc:Openmeetings}/build/lib/om/openjpa-bundle-2.2.0.jar
-					-Dwebapps.root=${workspace_loc:Openmeetings}/dist/red5/webapps/openmeetings
-				</div>
+				<li>Add the following code to the VM section
+					<div class="xmlcode">
+						-javaagent:${workspace_loc:Openmeetings}/build/lib/om/openjpa-bundle-2.2.0.jar
+						-Dwebapps.root=${workspace_loc:Openmeetings}/dist/red5/webapps/openmeetings
+					</div>
+				</li>
 				<li>To avoid temporary files being created in OM root, modify
-					"Working Directory" as follows</li>
-				<div class="xmlcode">${workspace_loc:Openmeetings}/build/junit</div>
+					"Working Directory" as follows
+					<div class="xmlcode">${workspace_loc:Openmeetings}/build/junit</div>
+				</li>
 			</ul>
 			<p>
 				<a class="fancybox-buttons" data-fancybox-group="button"

@@ -137,8 +137,8 @@ limitations under the License.
 #end
 
 #macro ( metaauthor $author $email )
-            <meta name="author" value="$author">
-            <meta name="email" value="$email">
+            <meta name="author" content="$author">
+            <meta name="email" content="$email">
 #end
 
 #macro ( image $value )
@@ -207,8 +207,8 @@ limitations under the License.
       <tr><td ><!-- bgcolor="$bannerbg" -->
         <font color="$bannerfg" face="verdana,arial,helvetica,sanserif">
           <a name="$section.getAttributeValue("name")"><strong>$section.getAttributeValue("name")</strong></a>
-          <hr style="width:100%; color:$colorhrline; background-color:$colorhrline; height:1px; border:0px;"/>
         </font>
+        <hr style="width:100%; color:$colorhrline; background-color:$colorhrline; height:1px; border:0px;"/>
       </td></tr>
       <tr><td>
         <blockquote>
@@ -228,7 +228,6 @@ limitations under the License.
             #end
         #end
         </blockquote>
-        </p>
       </td></tr>
       <tr><td><br/></td></tr>
     </table>
@@ -237,12 +236,12 @@ limitations under the License.
 #macro ( makeProject )
 
     <!-- ============================================================ -->
-    <div id="accordion" width="100%">
+    <div id="accordion" style="width: 100%">
     
     #set ($menus = $project.getChild("body").getChildren("menu"))
     #foreach ( $menu in $menus )
     	<h3><a href="#$menu.getAttributeValue("name").replaceAll(" ","")">$menu.getAttributeValue("name")</a></h3>
-    	<div  width="100%">
+    	<div style="width: 100%">
 	        #foreach ( $item in $menu.getChildren() )
 	            #set ($name = $item.getAttributeValue("name"))
 	            #if ( $item.getAttributeValue("href").length() > 0 )
@@ -425,27 +424,23 @@ limitations under the License.
         </head>
 
         <body bgcolor="$bodybg" text="$bodyfg" link="$bodylink" vlink="$bodylink" alink="#000000">  
-        	<div class="mainbody" with="100%">
-        	<div class="superbody" width="100%">
+        	<div class="mainbody" style="width: 100%;">
+        	<div class="superbody" style="width: 100%;">
             <table border="0" width="100%" cellspacing="0">
                 <!-- TOP IMAGE -->
                 <tr>
-                    <td align='LEFT'>
                     #getProjectImage()
-                    </td>
-                    <td align='LEFT'>
                     #getBannerTitle()
-                    </td>
                 </tr>
             </table>
             <table border="0" width="100%" cellspacing="4">
                 <tr><td colspan="2">
-                    <hr noshade="" size="1"/>
+                    <hr noshade="noshade" size="1"/>
                 </td></tr>
 
                 <tr>
                     <!-- LEFT SIDE NAVIGATION -->
-                    <td width="20%" valign="top" nowrap="true">
+                    <td width="20%" valign="top" nowrap="nowrap">
 
                     <!-- special ACon Logo - leave here for next time
                     <a href="http://apachecon.com/2005/US/">
@@ -467,7 +462,7 @@ limitations under the License.
 
                 <!-- FOOTER -->
                 <tr><td colspan="2">
-                    <hr noshade="" size="1"/>
+                    <hr noshade="noshade" size="1"/>
                 </td></tr>
                 <tr><td colspan="2">
                     <div align="center"><font color="$bodylink" size="-1"><em>

@@ -27,7 +27,7 @@
 <body>
 <section name="The Apache Podling Project">
 
-<p>
+<div>
 Apache Podling is a project currently incubating in Apache.
 <p> 
 The common external dependencies of Podling include the tools used to build 
@@ -40,7 +40,7 @@ and test it:
 <li>JUnit</li>
 </ul>
 
-</p>
+</div>
 </section>
 
 </body>

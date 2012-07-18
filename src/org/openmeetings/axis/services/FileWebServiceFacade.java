@@ -68,7 +68,7 @@ public class FileWebServiceFacade {
 	 * 
 	 * @param SID
 	 * @param externalUserId
-	 *            the external user id => If the file should goto a private
+	 *            the external user id =&gt; If the file should goto a private
 	 *            section of any user, this number needs to be set
 	 * @param externalFileId
 	 *            the external file-type to identify the file later
@@ -87,7 +87,7 @@ public class FileWebServiceFacade {
 	 *            specify a parentFolderId==-2 AND isOwner == 1/true AND to make
 	 *            the file goto the private section
 	 * @param fileSystemName
-	 *            the filename => Important WITH file extension!
+	 *            the filename =&gt; Important WITH file extension!
 	 * @return
 	 * @throws AxisFault
 	 */
@@ -114,7 +114,7 @@ public class FileWebServiceFacade {
 	 * 
 	 * @param SID
 	 * @param internalUserId
-	 *            the openmeetings user id => If the file should goto a private
+	 *            the openmeetings user id =&gt; If the file should goto a private
 	 *            section of any user, this number needs to be set
 	 * @param externalFileId
 	 *            the external file-type to identify the file later
@@ -133,7 +133,7 @@ public class FileWebServiceFacade {
 	 *            specify a parentFolderId==-2 AND isOwner == 1/true AND to make
 	 *            the file goto the private section
 	 * @param fileSystemName
-	 *            the filename => Important WITH file extension!
+	 *            the filename =&gt; Important WITH file extension!
 	 * @return
 	 * @throws AxisFault
 	 */

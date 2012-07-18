@@ -32,7 +32,7 @@
  </xsl:comment>
 	<properties>
 		<title>Openmeetings Errors table</title>
-		<author>Apache OpenMeetings Documentation Robot</author>
+		<author email="solomax@apache.org">Apache OpenMeetings Documentation Robot</author>
 	</properties>
 	<body>
 		<section name="Openmeetings Errors table">

@@ -32,7 +32,7 @@ import com.sun.javadoc.RootDoc;
 import com.sun.javadoc.Tag;
 
 public class WebServiceDoclet {
-
+	static final String baseTemplatePath = "xdocs";
 	static final String basePath = "docs";
 	static final String templateName = "ApiMethodsTemplate.vm";
 	static final String templateNameIndex = "ApiClassesTemplate.vm";
@@ -74,7 +74,7 @@ public class WebServiceDoclet {
 				FileWriter strWriter = new FileWriter(basePath
 						+ File.separatorChar + defaultOutputName + ".html");
 
-				Velocity.mergeTemplate(basePath + File.separatorChar
+				Velocity.mergeTemplate(baseTemplatePath + File.separatorChar
 						+ templateName, "UTF-8", vContext, strWriter);
 				
 				strWriter.flush();
@@ -89,7 +89,7 @@ public class WebServiceDoclet {
 			FileWriter newFileIndexWriter = new FileWriter(basePath
 					+ File.separatorChar + "WebserviceIndex.html");
 
-			Velocity.mergeTemplate(basePath + File.separatorChar
+			Velocity.mergeTemplate(baseTemplatePath + File.separatorChar
 					+ templateNameIndex, "UTF-8", vIndexContext, newFileIndexWriter);
 			
 			newFileIndexWriter.flush();

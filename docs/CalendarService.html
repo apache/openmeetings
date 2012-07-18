@@ -22,8 +22,8 @@ limitations under the License.
      <html>
         <head>
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
-		<meta name="author" value="OpenMeetings Team">
-		<meta name="email" value="sebawagner@apache.org">
+		<meta name="author" content="OpenMeetings Team">
+		<meta name="email" content="sebawagner@apache.org">
 		<title>OpenMeetings API Methods</title>
 		<link rel="stylesheet" type="text/css" href="openmeetings_docs.css">
         </head>
@@ -170,8 +170,7 @@ limitations under the License.
 	    			</table>
     			    			<br/>
     			REST Sample Call/URL:<br/>
-    			    			    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/getAppointmentByRange?SID=VALUE&starttime=VALUE&endtime=VALUE">http://localhost:5080/openmeetings/services/CalendarService/getAppointmentByRange?SID=VALUE&starttime=VALUE&endtime=VALUE</a>
-    			</a>
+    			    			    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/getAppointmentByRange?SID=VALUE&starttime=VALUE&endtime=VALUE">http://localhost:5080/openmeetings/services/CalendarService/getAppointmentByRange?&amp;&amp;</a>
     		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
@@ -243,8 +242,7 @@ limitations under the License.
 	    			</table>
     			    			<br/>
     			REST Sample Call/URL:<br/>
-    			    			    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/getAppointmentByRangeForUserId?SID=VALUE&userId=VALUE&starttime=VALUE&endtime=VALUE">http://localhost:5080/openmeetings/services/CalendarService/getAppointmentByRangeForUserId?SID=VALUE&userId=VALUE&starttime=VALUE&endtime=VALUE</a>
-    			</a>
+    			    			    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/getAppointmentByRangeForUserId?SID=VALUE&userId=VALUE&starttime=VALUE&endtime=VALUE">http://localhost:5080/openmeetings/services/CalendarService/getAppointmentByRangeForUserId?&amp;&amp;&amp;</a>
     		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
@@ -286,8 +284,7 @@ limitations under the License.
 	    			</table>
     			    			<br/>
     			REST Sample Call/URL:<br/>
-    			    			    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/getNextAppointment?SID=VALUE">http://localhost:5080/openmeetings/services/CalendarService/getNextAppointment?SID=VALUE</a>
-    			</a>
+    			    			    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/getNextAppointment?SID=VALUE">http://localhost:5080/openmeetings/services/CalendarService/getNextAppointment?</a>
     		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
@@ -333,8 +330,7 @@ limitations under the License.
 	    			</table>
     			    			<br/>
     			REST Sample Call/URL:<br/>
-    			    			    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/getNextAppointmentForUserId?SID=VALUE&userId=VALUE">http://localhost:5080/openmeetings/services/CalendarService/getNextAppointmentForUserId?SID=VALUE&userId=VALUE</a>
-    			</a>
+    			    			    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/getNextAppointmentForUserId?SID=VALUE&userId=VALUE">http://localhost:5080/openmeetings/services/CalendarService/getNextAppointmentForUserId?&amp;</a>
     		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
@@ -386,8 +382,7 @@ limitations under the License.
 	    			</table>
     			    			<br/>
     			REST Sample Call/URL:<br/>
-    			    			    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/searchAppointmentByName?SID=VALUE&appointmentName=VALUE">http://localhost:5080/openmeetings/services/CalendarService/searchAppointmentByName?SID=VALUE&appointmentName=VALUE</a>
-    			</a>
+    			    			    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/searchAppointmentByName?SID=VALUE&appointmentName=VALUE">http://localhost:5080/openmeetings/services/CalendarService/searchAppointmentByName?&amp;</a>
     		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
@@ -560,8 +555,8 @@ limitations under the License.
             sample: 1,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1
             to add multiple clients you can use the same GET parameter in
             the URL multiple times, for example:
-            &mmClient=1,firstname,lastname,hans
-            .tier@gmail.com,1,Etc/GMT+1&mmClient
+            &amp;mmClient=1,firstname,lastname,hans
+            .tier@gmail.com,1,Etc/GMT+1&amp;mmClient
             =2,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1</td>
 	                   </tr>
 	                   
@@ -610,8 +605,7 @@ limitations under the License.
 	    			</table>
     			    			<br/>
     			REST Sample Call/URL:<br/>
-    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/saveAppointment?SID=VALUE&appointmentName=VALUE&appointmentLocation=VALUE&appointmentDescription=VALUE&appointmentstart=VALUE&appointmentend=VALUE&isDaily=VALUE&isWeekly=VALUE&isMonthly=VALUE&isYearly=VALUE&categoryId=VALUE&remind=VALUE&mmClient=VALUE&roomType=VALUE&baseUrl=VALUE&languageId=VALUE&isPasswordProtected=VALUE&password=VALUE">http://localhost:5080/openmeetings/services/CalendarService/saveAppointment?SID=VALUE&appointmentName=VALUE&appointmentLocation=VALUE&appointmentDescription=VALUE&appointmentstart=VALUE&appointmentend=VALUE&isDaily=VALUE&isWeekly=VALUE&isMonthly=VALUE&isYearly=VALUE&categoryId=VALUE&remind=VALUE&mmClient=VALUE&roomType=VALUE&baseUrl=VALUE&languageId=VALUE&isPasswordProtected=VALUE&password=VALUE</a>
-    			</a>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/saveAppointment?SID=VALUE&appointmentName=VALUE&appointmentLocation=VALUE&appointmentDescription=VALUE&appointmentstart=VALUE&appointmentend=VALUE&isDaily=VALUE&isWeekly=VALUE&isMonthly=VALUE&isYearly=VALUE&categoryId=VALUE&remind=VALUE&mmClient=VALUE&roomType=VALUE&baseUrl=VALUE&languageId=VALUE&isPasswordProtected=VALUE&password=VALUE">http://localhost:5080/openmeetings/services/CalendarService/saveAppointment?&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;</a>
     		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
@@ -703,8 +697,7 @@ limitations under the License.
 	    			</table>
     			    			<br/>
     			REST Sample Call/URL:<br/>
-    			    			    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/updateAppointmentTimeOnly?SID=VALUE&appointmentId=VALUE&appointmentstart=VALUE&appointmentend=VALUE&baseurl=VALUE&languageId=VALUE">http://localhost:5080/openmeetings/services/CalendarService/updateAppointmentTimeOnly?SID=VALUE&appointmentId=VALUE&appointmentstart=VALUE&appointmentend=VALUE&baseurl=VALUE&languageId=VALUE</a>
-    			</a>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/updateAppointmentTimeOnly?SID=VALUE&appointmentId=VALUE&appointmentstart=VALUE&appointmentend=VALUE&baseurl=VALUE&languageId=VALUE">http://localhost:5080/openmeetings/services/CalendarService/updateAppointmentTimeOnly?&amp;&amp;&amp;&amp;&amp;</a>
     		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
@@ -887,8 +880,8 @@ limitations under the License.
             sample: 1,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1
             to add multiple clients you can use the same GET parameter in
             the URL multiple times, for example:
-            &mmClient=1,firstname,lastname,hans
-            .tier@gmail.com,1,Etc/GMT+1&mmClient
+            &amp;mmClient=1,firstname,lastname,hans
+            .tier@gmail.com,1,Etc/GMT+1&amp;mmClient
             =2,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1</td>
 	                   </tr>
 	                   
@@ -937,8 +930,7 @@ limitations under the License.
 	    			</table>
     			    			<br/>
     			REST Sample Call/URL:<br/>
-    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/updateAppointment?SID=VALUE&appointmentId=VALUE&appointmentName=VALUE&appointmentLocation=VALUE&appointmentDescription=VALUE&appointmentstart=VALUE&appointmentend=VALUE&isDaily=VALUE&isWeekly=VALUE&isMonthly=VALUE&isYearly=VALUE&categoryId=VALUE&remind=VALUE&mmClient=VALUE&roomType=VALUE&baseurl=VALUE&languageId=VALUE&isPasswordProtected=VALUE&password=VALUE">http://localhost:5080/openmeetings/services/CalendarService/updateAppointment?SID=VALUE&appointmentId=VALUE&appointmentName=VALUE&appointmentLocation=VALUE&appointmentDescription=VALUE&appointmentstart=VALUE&appointmentend=VALUE&isDaily=VALUE&isWeekly=VALUE&isMonthly=VALUE&isYearly=VALUE&categoryId=VALUE&remind=VALUE&mmClient=VALUE&roomType=VALUE&baseurl=VALUE&languageId=VALUE&isPasswordProtected=VALUE&password=VALUE</a>
-    			</a>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/updateAppointment?SID=VALUE&appointmentId=VALUE&appointmentName=VALUE&appointmentLocation=VALUE&appointmentDescription=VALUE&appointmentstart=VALUE&appointmentend=VALUE&isDaily=VALUE&isWeekly=VALUE&isMonthly=VALUE&isYearly=VALUE&categoryId=VALUE&remind=VALUE&mmClient=VALUE&roomType=VALUE&baseurl=VALUE&languageId=VALUE&isPasswordProtected=VALUE&password=VALUE">http://localhost:5080/openmeetings/services/CalendarService/updateAppointment?&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;</a>
     		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
@@ -1006,8 +998,7 @@ limitations under the License.
 	    			</table>
     			    			<br/>
     			REST Sample Call/URL:<br/>
-    			    			    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/deleteAppointment?SID=VALUE&appointmentId=VALUE&language_id=VALUE">http://localhost:5080/openmeetings/services/CalendarService/deleteAppointment?SID=VALUE&appointmentId=VALUE&language_id=VALUE</a>
-    			</a>
+    			    			    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/deleteAppointment?SID=VALUE&appointmentId=VALUE&language_id=VALUE">http://localhost:5080/openmeetings/services/CalendarService/deleteAppointment?&amp;&amp;</a>
     		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
@@ -1059,8 +1050,7 @@ limitations under the License.
 	    			</table>
     			    			<br/>
     			REST Sample Call/URL:<br/>
-    			    			    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/getAppointmentByRoomId?SID=VALUE&room_id=VALUE">http://localhost:5080/openmeetings/services/CalendarService/getAppointmentByRoomId?SID=VALUE&room_id=VALUE</a>
-    			</a>
+    			    			    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/getAppointmentByRoomId?SID=VALUE&room_id=VALUE">http://localhost:5080/openmeetings/services/CalendarService/getAppointmentByRoomId?&amp;</a>
     		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
@@ -1102,8 +1092,7 @@ limitations under the License.
 	    			</table>
     			    			<br/>
     			REST Sample Call/URL:<br/>
-    			    			    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/getAppointmentCategoryList?SID=VALUE">http://localhost:5080/openmeetings/services/CalendarService/getAppointmentCategoryList?SID=VALUE</a>
-    			</a>
+    			    			    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/getAppointmentCategoryList?SID=VALUE">http://localhost:5080/openmeetings/services/CalendarService/getAppointmentCategoryList?</a>
     		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
@@ -1145,8 +1134,7 @@ limitations under the License.
 	    			</table>
     			    			<br/>
     			REST Sample Call/URL:<br/>
-    			    			    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/getAppointmentReminderTypList?SID=VALUE">http://localhost:5080/openmeetings/services/CalendarService/getAppointmentReminderTypList?SID=VALUE</a>
-    			</a>
+    			    			    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/getAppointmentReminderTypList?SID=VALUE">http://localhost:5080/openmeetings/services/CalendarService/getAppointmentReminderTypList?</a>
     		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
@@ -1246,8 +1234,7 @@ limitations under the License.
 	    			</table>
     			    			<br/>
     			REST Sample Call/URL:<br/>
-    			    			    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/getAppointmentsByWeekCalendar?SID=VALUE&firstDayInWeek=VALUE&startDate=VALUE&requestUserId=VALUE&omTimeZoneId=VALUE&javaTimeZoneName=VALUE">http://localhost:5080/openmeetings/services/CalendarService/getAppointmentsByWeekCalendar?SID=VALUE&firstDayInWeek=VALUE&startDate=VALUE&requestUserId=VALUE&omTimeZoneId=VALUE&javaTimeZoneName=VALUE</a>
-    			</a>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/CalendarService/getAppointmentsByWeekCalendar?SID=VALUE&firstDayInWeek=VALUE&startDate=VALUE&requestUserId=VALUE&omTimeZoneId=VALUE&javaTimeZoneName=VALUE">http://localhost:5080/openmeetings/services/CalendarService/getAppointmentsByWeekCalendar?&amp;&amp;&amp;&amp;&amp;</a>
     		  </div>
     	   			
 	

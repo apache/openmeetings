@@ -29,11 +29,13 @@
 			<p>The plugin contains the following features: </p>
 			<ul>
 				<li>Create videoconference rooms through Confluence: </li>
-				<ol>
-					<li>Integrated with Confluence content </li>										
-					<li>Configurable room type </li>
-				</ol>
-			</ul>			
+				<li>
+					<ol>
+						<li>Integrated with Confluence content </li>										
+						<li>Configurable room type </li>
+					</ol>
+				</li>
+			</ul>
 		</section>	
 		
 		<section name="Demo video">			
