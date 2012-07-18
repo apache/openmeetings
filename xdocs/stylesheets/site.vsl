@@ -97,14 +97,12 @@ limitations under the License.
 #if ($value.getAttributeValue("rowspan"))
 #set ($rowspan = $value.getAttributeValue("rowspan"))
 #end
-<td bgcolor="$tabletdbg" colspan="$!colspan" rowspan="$!rowspan" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-        #if ($value.getText().length() != 0 || $value.hasChildren())
-        $value.getContent()
-        #else
-        &nbsp;
-        #end
-    </font>
+<td bgcolor="$tabletdbg" colspan="$!colspan" rowspan="$!rowspan" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
+    #if ($value.getText().length() != 0 || $value.hasChildren())
+    $value.getContent()
+    #else
+    &nbsp;
+    #end
 </td>
 #end
 
@@ -115,14 +113,12 @@ limitations under the License.
 #if ($value.getAttributeValue("rowspan"))
 #set ($rowspan = $value.getAttributeValue("rowspan"))
 #end
-<th bgcolor="$tablethbg" colspan="$!colspan" rowspan="$!rowspan" valign="top" align="left">
-    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-        #if ($value.getText().length() != 0 || $value.hasChildren())
-        $value.getContent()
-        #else
-        &nbsp;
-        #end
-    </font>
+<th bgcolor="$tablethbg" colspan="$!colspan" rowspan="$!rowspan" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
+    #if ($value.getText().length() != 0 || $value.hasChildren())
+    $value.getContent()
+    #else
+    &nbsp;
+    #end
 </th>
 #end
 
@@ -241,7 +237,7 @@ limitations under the License.
     #set ($menus = $project.getChild("body").getChildren("menu"))
     #foreach ( $menu in $menus )
     	<h3><a href="#$menu.getAttributeValue("name").replaceAll(" ","")">$menu.getAttributeValue("name")</a></h3>
-    	<div style="width: 100%">
+    	<div>
 	        #foreach ( $item in $menu.getChildren() )
 	            #set ($name = $item.getAttributeValue("name"))
 	            #if ( $item.getAttributeValue("href").length() > 0 )

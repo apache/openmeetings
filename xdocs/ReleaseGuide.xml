@@ -19,7 +19,7 @@
 
 		<section name="How to Build a Release of OpenMeetings">
 
-			<p>
+			<div>
 				<p>To build a binary release of OpenMeetings you need: </p>
 				<ul>
 					<li>Sun JDK6</li>
@@ -33,7 +33,7 @@
 					<li>You need to be online! The build process actively downloads
 						needed libraries and dependencies.</li>
 				</ul>
-			</p>
+			</div>
 
 			<p>
 				Check that all files:

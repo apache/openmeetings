@@ -24,7 +24,7 @@
 		</section>
 
         <section name="Setup Asterisk">
-			<p>
+			<div>
                 Run the commands
                 <blockquote>
                     <i>
@@ -32,8 +32,8 @@
                     sudo apt-get install asterisk asterisk-mysql
                     </i>
                 </blockquote>
-            </p>
-            <p>
+            </div>
+            <div>
                 Ubuntu 10.04 has broken asterisk-mysql version. For other distribution next commands not needed:
                 <blockquote>
                     <i>
@@ -49,16 +49,16 @@
                     </i>
 
                 </blockquote>
-            </p>
-            <p>
+            </div>
+            <div>
                 Enable asterisk mysql realtime module:<br/><br/>
                 Add string
                 <blockquote>
                     <i>load => res_config_mysql.so</i>
                 </blockquote>
                 to the /etc/asterisk/modules.conf into the "modules" section.
-            </p>
-            <p>
+            </div>
+            <div>
                 Configure mysql realtime module:<br/><br/>
 
                 Create file /etc/asterisk/res_mysql.conf and add lines:
@@ -77,8 +77,8 @@
                     </i>
 
                 </blockquote>
-            </p>
-            <p>
+            </div>
+            <div>
                 Add next lines into the /etc/asterisk/extconfig.conf:
                 <blockquote>
                     <i>[settings]
@@ -93,8 +93,8 @@
                     </i>
 
                 </blockquote>
-            </p>
-            <p>
+            </div>
+            <div>
                 Add next lines into the /etc/asterisk/extensions.conf:
                 <blockquote>
                     <i>[rooms]
@@ -103,9 +103,9 @@
                     </i>
 
                 </blockquote>
-            </p>
+            </div>
 
-            <p>
+            <div>
                 Restart asterisk:
                 <blockquote>
                     <i>service asterisk restart</i>
@@ -116,23 +116,23 @@
                         INSERT INTO sipusers (allow, context, disallow, host, name, secret) VALUES ('ulaw' , 'rooms', NULL, 'dynamic' , 'test', '12345');
                     </i>
                 </blockquote>
-            </p>
+            </div>
 		</section>
 
         <section name="Setup red5sip transport">
-            <p>
+            <div>
                 Download red5sip from<blockquote>http://red5phone.googlecode.com/svn/branches/red5sip</blockquote>
-            </p>
+            </div>
             <p>
                 Build with Apache Ant
             </p>
-            <p>
+            <div>
                 Install jsvc:
                 <blockquote>
                     <i>apt-get install jsvc</i>
                 </blockquote>
-            </p>
-            <p>
+            </div>
+            <div>
                 Insert proper values to the /opt/red5sip/settings.properties
 
                 <blockquote>
@@ -154,8 +154,8 @@
                     </i>
 
                 </blockquote>
-            </p>
-            <p>
+            </div>
+            <div>
                 Add red5sip to autostart:
                 <blockquote>
                     <i>ln -s /opt/red5sip/red5sip.sh /etc/init.d/red5sip
@@ -166,19 +166,19 @@
                     </i>
 
                 </blockquote>
-            </p>
-            <p>
+            </div>
+            <div>
                 Start openmeetings
                 <blockquote>
                     <i>service red5 start</i>
                 </blockquote>
-            </p>
-            <p>
+            </div>
+            <div>
                 Start red5sip
                 <blockquote>
                     <i>service red5sip start</i>
                 </blockquote>
-            </p>
+            </div>
         </section>
 	</body>
 

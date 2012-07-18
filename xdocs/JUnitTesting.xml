@@ -32,31 +32,35 @@
 
 			<ol>
 				<li>running tests using command line: </li>
-				<ul>
-					<li>all tests:
-						<div class="xmlcode">
-							ant test
-						</div>
-					</li>
-					<li>subset of tests by mask:
-						<div class="xmlcode">
-							ant -Dtestcases=TestError* test
-						</div>
-					</li>
-				</ul>
+				<li>
+					<ul>
+						<li>all tests:
+							<div class="xmlcode">
+								ant test
+							</div>
+						</li>
+						<li>subset of tests by mask:
+							<div class="xmlcode">
+								ant -Dtestcases=TestError* test
+							</div>
+						</li>
+					</ul>
+				</li>
 				<li>running tests from Eclipse IDE: </li>
-				<ul>
-					<li>
-						<div class="xmlcode">
-							ant -Ddb=&lt;your_DB&gt; prepare-eclipse
-						</div>
-					</li>
-					<li>Start Eclipse </li>
-					<li>Load workspace with Openmeetings project (or refresh existing
-						project)
-					</li>
-					<li>Select "Debug Configurations..." </li>
-				</ul>
+				<li>
+					<ul>
+						<li>
+							<div class="xmlcode">
+								ant -Ddb=&lt;your_DB&gt; prepare-eclipse
+							</div>
+						</li>
+						<li>Start Eclipse </li>
+						<li>Load workspace with Openmeetings project (or refresh existing
+							project)
+						</li>
+						<li>Select "Debug Configurations..." </li>
+					</ul>
+				</li>
 			</ol>
 			<p>
 				<a class="fancybox-buttons" data-fancybox-group="button"

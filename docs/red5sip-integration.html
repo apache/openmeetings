@@ -446,7 +446,7 @@ limitations under the License.
     <div id="accordion" style="width: 100%">
     
             	<h3><a href="#General">General</a></h3>
-    	<div style="width: 100%">
+    	<div>
 	        	            	            	    <a href="./index.html">Home</a>
 <br/>
 	        		        	            	            	    <a href="./license.html">License</a>
@@ -459,7 +459,7 @@ limitations under the License.
 <br/>
 	        		            	</div>
         	<h3><a href="#InstallationandUpgrade">Installation and Upgrade</a></h3>
-    	<div style="width: 100%">
+    	<div>
 	        	            	            	    <a href="./installation.html">Installation</a>
 <br/>
 	        		        	            	            	    <a href="./Upgrade.html">Upgrade</a>
@@ -470,7 +470,7 @@ limitations under the License.
 <br/>
 	        		            	</div>
         	<h3><a href="#Community">Community</a></h3>
-    	<div style="width: 100%">
+    	<div>
 	        	            	            	    <a href="./get-involved.html">Get Involved</a>
 <br/>
 	        		        	            	            	    <a href="./team-list.html">Committers</a>
@@ -481,7 +481,7 @@ limitations under the License.
 <br/>
 	        		            	</div>
         	<h3><a href="#Development">Development</a></h3>
-    	<div style="width: 100%">
+    	<div>
 	        	            	            	    <a href="./svn.html">Source Code</a>
 <br/>
 	        		        	            	            	    <a href="http://issues.apache.org/jira/browse/OPENMEETINGS">Bugs / Issues (JIRA)</a>
@@ -498,7 +498,7 @@ limitations under the License.
 <br/>
 	        		            	</div>
         	<h3><a href="#Integration">Integration</a></h3>
-    	<div style="width: 100%">
+    	<div>
 	        	            	            	    <a href="./SoapRestAPI.html">SOAP/REST API</a>
 <br/>
 	        		        	            	            	    <a href="./RestAPISample.html">REST API Sample</a>
@@ -511,7 +511,7 @@ limitations under the License.
 <br/>
 	        		            	</div>
         	<h3><a href="#Plugins">Plugins</a></h3>
-    	<div style="width: 100%">
+    	<div>
 	        	            	            	    <a href="./MoodlePlugin.html">Moodle Plugin</a>
 <br/>
 	        		        	            	            	    <a href="./SakaiPlugin.html">Sakai Plugin</a>
@@ -524,7 +524,7 @@ limitations under the License.
 <br/>
 	        		            	</div>
         	<h3><a href="#Configuration">Configuration</a></h3>
-    	<div style="width: 100%">
+    	<div>
 	        	            	            	<b>DB Sample Configurations</b><br/>
 	            			            			    <a href="./ApacheDerbyConfig.html">Apache Derby</a>
 <br/>
@@ -625,7 +625,7 @@ limitations under the License.
       </td></tr>
       <tr><td>
         <blockquote>
-                                    <p>
+                                    <div>
                 Run the commands
                 <blockquote>
                     <i>
@@ -633,8 +633,8 @@ limitations under the License.
                     sudo apt-get install asterisk asterisk-mysql
                     </i>
                 </blockquote>
-            </p>
-                                                <p>
+            </div>
+                                                <div>
                 Ubuntu 10.04 has broken asterisk-mysql version. For other distribution next commands not needed:
                 <blockquote>
                     <i>
@@ -650,16 +650,16 @@ limitations under the License.
                     </i>
 
                 </blockquote>
-            </p>
-                                                <p>
+            </div>
+                                                <div>
                 Enable asterisk mysql realtime module:<br /><br />
                 Add string
                 <blockquote>
                     <i>load =&gt; res_config_mysql.so</i>
                 </blockquote>
                 to the /etc/asterisk/modules.conf into the "modules" section.
-            </p>
-                                                <p>
+            </div>
+                                                <div>
                 Configure mysql realtime module:<br /><br />
 
                 Create file /etc/asterisk/res_mysql.conf and add lines:
@@ -678,8 +678,8 @@ limitations under the License.
                     </i>
 
                 </blockquote>
-            </p>
-                                                <p>
+            </div>
+                                                <div>
                 Add next lines into the /etc/asterisk/extconfig.conf:
                 <blockquote>
                     <i>[settings]
@@ -694,8 +694,8 @@ limitations under the License.
                     </i>
 
                 </blockquote>
-            </p>
-                                                <p>
+            </div>
+                                                <div>
                 Add next lines into the /etc/asterisk/extensions.conf:
                 <blockquote>
                     <i>[rooms]
@@ -704,8 +704,8 @@ limitations under the License.
                     </i>
 
                 </blockquote>
-            </p>
-                                                <p>
+            </div>
+                                                <div>
                 Restart asterisk:
                 <blockquote>
                     <i>service asterisk restart</i>
@@ -716,7 +716,7 @@ limitations under the License.
                         INSERT INTO sipusers (allow, context, disallow, host, name, secret) VALUES ('ulaw' , 'rooms', NULL, 'dynamic' , 'test', '12345');
                     </i>
                 </blockquote>
-            </p>
+            </div>
                             </blockquote>
       </td></tr>
       <tr><td><br/></td></tr>
@@ -730,19 +730,19 @@ limitations under the License.
       </td></tr>
       <tr><td>
         <blockquote>
-                                    <p>
+                                    <div>
                 Download red5sip from<blockquote>http://red5phone.googlecode.com/svn/branches/red5sip</blockquote>
-            </p>
+            </div>
                                                 <p>
                 Build with Apache Ant
             </p>
-                                                <p>
+                                                <div>
                 Install jsvc:
                 <blockquote>
                     <i>apt-get install jsvc</i>
                 </blockquote>
-            </p>
-                                                <p>
+            </div>
+                                                <div>
                 Insert proper values to the /opt/red5sip/settings.properties
 
                 <blockquote>
@@ -764,8 +764,8 @@ limitations under the License.
                     </i>
 
                 </blockquote>
-            </p>
-                                                <p>
+            </div>
+                                                <div>
                 Add red5sip to autostart:
                 <blockquote>
                     <i>ln -s /opt/red5sip/red5sip.sh /etc/init.d/red5sip
@@ -776,19 +776,19 @@ limitations under the License.
                     </i>
 
                 </blockquote>
-            </p>
-                                                <p>
+            </div>
+                                                <div>
                 Start openmeetings
                 <blockquote>
                     <i>service red5 start</i>
                 </blockquote>
-            </p>
-                                                <p>
+            </div>
+                                                <div>
                 Start red5sip
                 <blockquote>
                     <i>service red5sip start</i>
                 </blockquote>
-            </p>
+            </div>
                             </blockquote>
       </td></tr>
       <tr><td><br/></td></tr>

@@ -132,7 +132,7 @@
 						<ul>
 							<li>
 								<a href="http://code.google.com/p/jodconverter/" target="_BLANK"
-									ref="nofollow">JODConverter</a>
+									rel="nofollow">JODConverter</a>
 								installed (needed since v2.x)
 							</li>
 							<li>OpenOffice or Libre Office Installed</li>

@@ -37,7 +37,7 @@
 				Installation of JODConverter means: You donwload the ZIP binary from
 				their
 				<a href="http://code.google.com/p/jodconverter/" target="_BLANK"
-					ref="nofollow">website</a>
+					rel="nofollow">website</a>
 				and then configure in Apache OpenMeetings Administration >
 				Configuration (or during installation) the config key
 				<tt>jod.path</tt>

@@ -41,9 +41,11 @@
 					$RED5_HOME/webapps/openmeetings/config.xml, you need to clear your
 					browser cache after changing the file.
 				</li>
-				<blockquote>Every server side configuration has a client side
-					representative
-				</blockquote>
+				<li>
+					<blockquote>Every server side configuration has a client side
+						representative
+					</blockquote>
+				</li>
 			</ul>
 			<p></p>
 			<table>
