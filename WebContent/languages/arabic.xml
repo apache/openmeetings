@@ -4539,4 +4539,17 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   <string id="1504" name="publishing_message">
     <value>Publishing. User:</value>
   </string>
+  <string id="1505" name="cmd_line_admin">
+    <value>
+    	To save time and internet traffic you can use command line admin to backup/restore/upgrade:<br/>
+    	&#160;&#160;1) go to OM install dir (for ex. /opt/red5) <br/>
+    	&#160;&#160;2) stop OM (for ex. ./red5-shutdown.sh)<br/>
+    	&#160;&#160;3) ./admin.sh -b -file ~/today_om_backup.zip (create backup of current OM)<br/>
+    	&#160;&#160;4) download archive with new OM<br/>
+    	&#160;&#160;5) mv /opt/red5 /opt.red5.bak (move working version of OM just in case :))<br/>
+    	&#160;&#160;6) extract downloaded OM to the /opt/red5<br/>
+    	&#160;&#160;7) ./admin.sh -i ~/today_om_backup.zip (or './admin.sh -i ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' in case of you are using non-default DB )<br/>
+    	&#160;&#160;8) start OM<br/>
+    </value>
+  </string>
 </language>

@@ -79,6 +79,7 @@
     	</handler>
     </labelText>    
     
+    <labelText fontsize="10" y="280" labelid="1505" multiline="true" />
 </class>
 
 </library>
