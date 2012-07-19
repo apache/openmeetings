@@ -19,6 +19,7 @@
 package org.openmeetings.app.data.basic;
 
 import java.lang.reflect.Constructor;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -64,18 +65,30 @@ public class Configurationmanagement {
 	public Configuration getConfKey(long user_level, String CONF_KEY) {
 		try {
 			if (authLevelManagement.checkUserLevel(user_level)) {
-				TypedQuery<Configuration> query = em
-						.createQuery(
-								"select c from Configuration as c where c.conf_key = :conf_key and c.deleted = :deleted",
-								Configuration.class);
+				TypedQuery<Configuration> query = em.createNamedQuery("getConfigurationByKey", Configuration.class);
 				query.setParameter("conf_key", CONF_KEY);
-				query.setParameter("deleted", "false");
 
 				List<Configuration> configs = query.getResultList();
 
 				if (configs != null && configs.size() > 0) {
 					return configs.get(0);
 				}
+			} else {
+				log.error("[getAllConf] Permission denied " + user_level);
+			}
+		} catch (Exception ex2) {
+			log.error("[getConfKey]: ", ex2);
+		}
+		return null;
+	}
+
+	public List<Configuration> getConfKeys(long user_level, String... keys) {
+		try {
+			if (authLevelManagement.checkUserLevel(user_level)) {
+				TypedQuery<Configuration> query = em.createNamedQuery("getConfigurationsByKeys", Configuration.class);
+				query.setParameter("conf_keys", Arrays.asList(keys));
+
+				return query.getResultList();
 			} else {
 				log.error("[getAllConf] Permission denied " + user_level);
 			}

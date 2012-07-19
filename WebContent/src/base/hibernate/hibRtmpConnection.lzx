@@ -95,6 +95,9 @@
      <!--- the current Invitation-Object -->
      <attribute name="currentInvitation" value="null" />
     
+	<!--- the current Dashboard config -->
+	<attribute name="dashboardConfig" value="null" />
+     
     <!-- shows what kind of conferenceView it is at the moment
         wether its conferenceView or audienceView -->
     <attribute name="modus" value="" type="string" />
@@ -912,10 +915,24 @@
                 if (canvas.thishib.loaderVar != null) {
                   canvas.thishib.loaderVar.setProgress();
                 }
-                parent.getNavi.doCall();                    
+                parent.getDashboardConfiguration.doCall();
             </handler>  
         </netRemoteCallHib>        
         
+		<netRemoteCallHib name="getDashboardConfiguration" funcname="xmlcrm.getDashboardConfiguration" remotecontext="$once{ canvas.thishib }" >
+			<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+			<handler name="ondata" args="value">
+			<![CDATA[
+				if ($debug) Debug.write("getDashboardConfiguration: ", value);
+				if (canvas.thishib.loaderVar != null) {
+					canvas.thishib.loaderVar.setProgress();
+				}
+				parent.dashboardConfig = value;
+				parent.getNavi.doCall();
+			]]>
+			</handler>
+		</netRemoteCallHib> 
+	    
         <netRemoteCallHib name="testMethod" funcname="testMethod">
             <handler name="ondata" args="value">
                 //The onResult-Handler will be called be the rtmpconnection
@@ -923,32 +940,6 @@
             </handler>  
         </netRemoteCallHib>
 
-        <!--- 
-            this remotecall is quite important as only at this point you can decide which
-            position a newly connected user has => this comment is deprecated! swagner 10.08.2009
-            
-            currentuserpos => is no more important
-        
-        <netRemoteCallHib name="setAudienceModus" funcname="setAudienceModus">
-            <netparam><method name="getValue">return canvas.currentusercolor;</method></netparam>        
-            <netparam><method name="getValue">return canvas.currentuserpos;</method></netparam>      
-            <handler name="ondata" args="value">
-                //The onResult-Handler will be called be the rtmpconnection
-                if ($debug) Debug.write("setAudienceModus: ",value);                   
-            </handler>  
-        </netRemoteCallHib>
-         
-          Notification of new User
-        <netRemoteCallHib name="setAudienceModusClient" funcname="setAudienceModusClient">
-            <handler name="ondata" args="value">
-                //The onResult-Handler will be called be the rtmpconnection
-                if ($debug) Debug.write("setAudienceModusClient: ",value);    
-                canvas._videocontainer.addClientItem(value.connectedSince,value.isMod,value.streamid,value.room_id,'',value.formatedDate,value.userpos,value.usercolor,value); 
-                canvas.setAttribute('numberofpartners',canvas.getAttribute('numberofpartners')+1);                              
-            </handler>  
-        </netRemoteCallHib>  
-         -->   
-         
         <!--- Notification of new User --> 
         <netRemoteCallHib name="addNewUser" funcname="addNewUser">
             <handler name="ondata" args="value">

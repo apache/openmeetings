@@ -30,29 +30,19 @@
 
 <!---  modules:dashboard -->
 <class name="mainDashboard" extends="baseContentView">	
+	<attribute name="params" value="" type="string" />
 	
     <handler name="oninit">
         //this.getRssFeeds.doCall();
-        this.getDashboardConfiguration.doCall();
+        parseConfiguration(canvas.thishib.dashboardConfig);
         _mainScrollBar.setAttribute("visibility","hidden");
     </handler>
-    
-    <netRemoteCallHib name="getDashboardConfiguration" funcname="xmlcrm.getDashboardConfiguration" 
-    				  remotecontext="$once{ canvas.thishib }" >   
-        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>  
-        <handler name="ondata" args="value">    
-            <![CDATA[
-                if ($debug) Debug.write("getDashboardConfiguration: ", value);
-                parent.parseConfiguration(value);
-            ]]>                                         
-        </handler>  
-    </netRemoteCallHib> 
     
 	<method name="parseConfiguration" args="cfManagementList">
 	<![CDATA[
 		var tCountVisibleTabs = 0;
 		var tFoundVisibleDefaultTab = false;
-		for (var i=0;i<cfManagementList.length;i++) {
+		for (var i = 0; i < cfManagementList.length; ++i) {
 			var tConfigurationObj = cfManagementList[i];
 			
 			switch (tConfigurationObj.conf_key) {
@@ -79,14 +69,27 @@
 					}
 					break;
 				case "default.dashboard.tab":
-					var tIndexNumber = Number(tConfigurationObj.conf_value);
-					var tObj = this._bottomArea._tabbar.subviews[tIndexNumber];
-					
-					if ($debug) Debug.write("tIndexNumber|tObj",tIndexNumber,tObj);
-					if (tObj && tObj.visible) {
-						tFoundVisibleDefaultTab = true;
-						tObj.onclick.sendEvent(null);
+					if (this.params = "") {
+						var tIndexNumber = Number(tConfigurationObj.conf_value);
+						var tObj = this._bottomArea._tabbar.subviews[tIndexNumber];
+						
+						if ($debug) Debug.write("tIndexNumber|tObj",tIndexNumber,tObj);
+						if (tObj && tObj.visible) {
+							tFoundVisibleDefaultTab = true;
+							tObj.onclick.sendEvent(null);
+						}
+					} else {
+						switch (this.params) {
+							case "myRoomsTabButton":
+								_bottomArea.doSelection(_bottomArea._tabbar.myRoomsTabButton);
+								break;
+							case "chatTabButton":
+								_bottomArea.doSelection(_bottomArea._tabbar.chatTabButton);
+								break;
+						}
 					}
+					break;
+				case "default.landing.zone":
 					break;
 				default:
 					if ($debug) Debug.write("Unkown Tab Key ",tConfigurationObj.conf_key);

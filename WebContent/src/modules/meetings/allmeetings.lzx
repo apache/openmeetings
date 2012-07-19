@@ -23,7 +23,7 @@
 <class name="allmeetings" extends="baseContentView" height="${ canvas.height-canvas.naviHeight }">
 	<attribute name="finishedTabsQuantity" type="number" value="0"/>	
 	<attribute name="clickedButton" value="null"/>
-    <attribute name="params" value="" type="string" />
+	<attribute name="params" value="" type="string" />
     
 	<method name="updateFinishedTabsQuantity">
 		this.finishedTabsQuantity = this.finishedTabsQuantity + 1;
@@ -38,19 +38,18 @@
 	</method>
 	
 	<handler name="oninit">
-		if ($debug) Debug.write("!!! allmeetings::oninit params = ", this.params, this._tabbar);
 		_mainScrollBar.setAttribute("visibility","hidden");
-    	switch (this.params) {
-    		case "publicTabButton":
-    			doSelection(this._tabbar.publicTabButton);
-	    		break;
-	    	case "privateTabButton":
-    			doSelection(this._tabbar.privateTabButton);
-	    		break;
-	    	case "myTabButton":
-    			doSelection(this._tabbar.myTabButton);
-	    		break;
-    	}
+		switch (this.params) {
+			case "publicTabButton":
+				doSelection(this._tabbar.publicTabButton);
+				break;
+			case "privateTabButton":
+				doSelection(this._tabbar.privateTabButton);
+				break;
+			case "myTabButton":
+				doSelection(this._tabbar.myTabButton);
+				break;
+		}
 	</handler>
 	
 	<handler name="ontabcontentleave">

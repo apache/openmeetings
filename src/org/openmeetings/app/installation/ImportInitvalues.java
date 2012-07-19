@@ -140,11 +140,11 @@ public class ImportInitvalues {
 				true, false, 1, "List of Conference Rooms Main Navi", 3,
 				"false", 1506L);
 
-		navimanagement.addMainStructure("conferenceModuleRoomList", "privateTabButton", 1, 779,
+		navimanagement.addMainStructure("conferenceModuleRoomList", "privateTabButton", 2, 779,
 				true, false, 1, "List of Conference Rooms Main Navi", 3,
 				"false", 1507L);
 
-		navimanagement.addMainStructure("conferenceModuleRoomList", "myTabButton", 1, 781,
+		navimanagement.addMainStructure("conferenceModuleRoomList", "myTabButton", 3, 781,
 				true, false, 1, "List of Conference Rooms Main Navi", 3,
 				"false", 1508L);
 		/*
@@ -563,6 +563,10 @@ public class ImportInitvalues {
 						cfg.replyToOrganizer, 
 						null,
 						"Set inviter's email address as ReplyTo in email invitations (1 == set, 0 == NOT set)");
+		
+		cfgManagement.addConfByKey(3, "default.landing.zone", "dashboard.rooms", null,
+			"Area to be shown to the user after login. Possible values are: "
+			+ "dashboard.rooms, dashboard.chat, calendar, rooms.public, rooms.private, rooms.user");
 		
 		log.debug("Configuration ADDED");
 	}

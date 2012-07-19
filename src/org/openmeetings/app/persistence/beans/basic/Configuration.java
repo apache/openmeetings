@@ -30,13 +30,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
+@NamedQueries({
+	@NamedQuery(name = "getConfigurationByKey", query = "SELECT c FROM Configuration c WHERE c.conf_key = :conf_key and c.deleted = 'false'")
+	, @NamedQuery(name = "getConfigurationsByKeys", query = "SELECT c FROM Configuration c WHERE c.conf_key IN :conf_keys and c.deleted = 'false'")
+})
 @Table(name = "configuration")
 public class Configuration implements Serializable {
-	
 	private static final long serialVersionUID = -6129473946508963339L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

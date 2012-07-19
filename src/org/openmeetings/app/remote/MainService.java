@@ -1039,53 +1039,16 @@ public class MainService implements IPendingServiceCallback {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
-			if (authLevelManagement.checkUserLevel(user_level)) {
-
-				List<Configuration> cfManagementList = new LinkedList<Configuration>();
-
-				cfManagementList.add(cfgManagement.getConfKey(3L,
-						"dashboard.show.chat"));
-				cfManagementList.add(cfgManagement.getConfKey(3L,
-						"dashboard.show.myrooms"));
-				cfManagementList.add(cfgManagement.getConfKey(3L,
-						"dashboard.show.rssfeed"));
-				cfManagementList.add(cfgManagement.getConfKey(3L,
-						"default.dashboard.tab"));
-
-				return cfManagementList;
-			}
+			return cfgManagement.getConfKeys(user_level, new String[]{
+				"dashboard.show.chat"
+				, "dashboard.show.myrooms"
+				, "dashboard.show.rssfeed"
+				, "default.dashboard.tab"
+				, "default.landing.zone"
+			});
 		} catch (Exception err) {
 			log.error("[getDashboardConfiguration]", err);
 		}
 		return null;
 	}
-
-	/*
-	 * Shopsystem
-	 * 
-	 * public zahlungsarten[] getZahlungsarten(String SID){ return
-	 * ResHandler.getZahlungsarten(SID); } public lieferarten[]
-	 * getLieferarten(String SID){ return ResHandler.getLieferarten(SID); }
-	 * public products[] getProductsByCat(String SID){ return
-	 * ResHandler.getProductByCat(SID); } public products[] searchProduct(String
-	 * SID,String searchstring){ return
-	 * ResHandler.searchProduct(SID,searchstring); } public products[]
-	 * getProductsByCatID(String SID,String cat, int start){ return
-	 * ResHandler.getProductByCat(SID,start,cat); } public products[]
-	 * getAllProductByCat(String SID,String cat){ return
-	 * ResHandler.getAllProductByCat(SID,cat); } public products
-	 * getProductByID(String SID, int artnumber){ return
-	 * ResHandler.getProductByID(SID,artnumber); } public Userwaren[]
-	 * getUserwaren(String SID){ return ResHandler.getUserwaren(SID); } public
-	 * Userwaren getUserwarenByID(String SID,int WAREN_ID){ return
-	 * ResHandler.getUserwarenByID(SID,WAREN_ID); } public String
-	 * addWarenkorb(String SID, int ARTICLE_ID, int amount){ return
-	 * ResHandler.addWarenkorb(SID,ARTICLE_ID,amount); } public String
-	 * updateWarenkorb(String SID, int WAREN_ID, int status, int ZAHLUNGS_ID,
-	 * int LIEFER_ID, int amount, String comment){ return
-	 * ResHandler.updateWarenkorb(SID, WAREN_ID, status, ZAHLUNGS_ID, LIEFER_ID,
-	 * amount, comment); } public String deleteWarenkorb(String SID, int
-	 * WAREN_ID){ return ResHandler.deleteWarenkorb(SID,WAREN_ID); }
-	 */
-
 }

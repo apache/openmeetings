@@ -448,7 +448,7 @@
                     new lz.sipDialer(canvas.main_content._content.inner);
                 } else if (stringSub=='quit') {
                     
-                    quicklink('conferenceModuleRoomList')
+                    quicklinkAct('conferenceModuleRoomList')
                 
                 } else if( stringSub == "browser_open" ){
                     var browserPanelWidth  = canvas.browserPanelWidth;

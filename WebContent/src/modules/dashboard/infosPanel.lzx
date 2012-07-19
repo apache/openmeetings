@@ -44,28 +44,28 @@
         
         <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_1" x="110" y="30" labelid="768">
         	<handler name="onclick">
-                quicklink('conferenceModuleRoomList');
+                quicklinkAct('conferenceModuleRoomList');
             </handler>
         </iconStepButtonWizzard>
         
       
         <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_2" x="140" y="60" labelid="771">
         	<handler name="onclick">
-                quicklink('conferenceModuleRoomList');
+                quicklinkAct('conferenceModuleRoomList');
             </handler>
         </iconStepButtonWizzard>
         
 
         <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_3" x="170" y="90" labelid="772" >
         	<handler name="onclick">
-                quicklink('conferenceModuleRoomList');
+                quicklinkAct('conferenceModuleRoomList');
             </handler>
         </iconStepButtonWizzard>
         
         
         <iconStepButtonWizzard resourceViewName="icon_btn_dashboard_4" x="200" y="120" labelid="773">
         	<handler name="onclick">
-                quicklink('conferenceModuleRoomList');
+                quicklinkAct('conferenceModuleRoomList');
             </handler>
         </iconStepButtonWizzard>
         
@@ -76,7 +76,7 @@
                y="$once{ parent.height-70 }" height="24" 
                onclick="this.parent.storeSettings();">
             <handler name="onclick">
-                quicklink('conferenceModuleRoomList');
+                quicklinkAct('conferenceModuleRoomList');
             </handler>
             <labelTooltip labelid="769" />
         </simpleLabelButton>
@@ -85,7 +85,7 @@
                y="$once{ parent.height-44 }" height="24" 
                onclick="this.parent.storeSettings();">
             <handler name="onclick">
-                quicklink('dashboardModuleCalendar');
+                quicklinkAct('dashboardModuleCalendar');
             </handler>
             <labelTooltip labelid="805" />
         </simpleLabelButton>

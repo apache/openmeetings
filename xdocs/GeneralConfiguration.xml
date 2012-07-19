@@ -91,6 +91,12 @@
 					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> The path to OpenOffice/LibreOffice (optional) please set this to the real path in case jodconverter is unable to find OpenOffice/LibreOffice installation automatically	</td>
 					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 2.0.x </td>
 				</tr>
+				<tr>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> default.landing.zone </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> dashboard.rooms </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Area to be shown to the user after login. Possible values are: dashboard.rooms, dashboard.chat, calendar, rooms.public, rooms.private, rooms.user </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 2.1.x </td>
+				</tr>
 			</table>
 		</section>
 

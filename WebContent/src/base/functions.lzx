@@ -95,13 +95,9 @@ function getLabelTag(labelid){
     return l;
 }
 
-function quicklink(action){
-	quicklinkAct(action);
-}   
-    
-function quicklinkAct(action){
+function quicklinkAct(action) {
     // if($debug) Debug.write("FUNC/quicklinkAct",action);
-    loadContent({action: action},null,null);
+    loadContent({action: action, params: null},null,null);
 }            
 
 function loadContent(obj,parentobj,preparentobj){
