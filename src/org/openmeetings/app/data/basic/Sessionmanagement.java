@@ -20,7 +20,6 @@ package org.openmeetings.app.data.basic;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -485,16 +484,7 @@ public class Sessionmanagement {
 	 */
 	public void clearSessionByRoomId(Long room_id) {
 		try {
-
-			HashMap<String, RoomClient> MyUserList = clientListManager
-					.getClientListByRoom(room_id);
-
-			for (Iterator<String> iter = MyUserList.keySet().iterator(); iter
-					.hasNext();) {
-				String key = iter.next();
-
-				RoomClient rcl = MyUserList.get(key);
-
+			for (RoomClient rcl : clientListManager.getClientListByRoom(room_id)) {
 				String aux = rcl.getSwfurl();
 
 				int init_pos = aux.indexOf("sid=") + 4;

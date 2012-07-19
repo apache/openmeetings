@@ -267,18 +267,10 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			RoomClient currentClient = this.clientListManager
 					.getClientByStreamId(streamid);
 
-			HashMap<String, RoomClient> roomList = this.clientListManager
-					.getClientListByRoomAll(currentClient.getRoom_id());
-
-			for (Iterator<String> iter = roomList.keySet().iterator(); iter
-					.hasNext();) {
-
-				RoomClient rcl = roomList.get(iter.next());
-
+			for (RoomClient rcl : clientListManager.getClientListByRoomAll(currentClient.getRoom_id())) {
 				if (rcl.isStartStreaming()) {
 					screenSharerList.add(rcl);
 				}
-
 			}
 
 			return screenSharerList;
@@ -1486,8 +1478,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			log.debug("##### setRoomValues : " + currentClient);
 			
 			// Check for Moderation LogicalRoom ENTER
-			HashMap<String, RoomClient> clientListRoom = this.clientListManager
-					.getRoomClients(room_id);
+			List<RoomClient> clientListRoom = clientListManager.getRoomClients(room_id);
 
 			// appointed meeting or moderated Room? => Check Max Users first
 			if (room.getNumberOfPartizipants() != null
@@ -1706,7 +1697,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			// RoomStatus roomStatus = new RoomStatus();
 
 			// FIXME: Rework Client Object to DTOs
-			roomStatus.setClientMap(clientListRoom);
+			roomStatus.setClientList(clientListRoom);
 			roomStatus.setBrowserStatus(browserStatus);
 
 			return roomStatus;
@@ -2879,19 +2870,18 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 * 
 	 * @return
 	 */
-	public synchronized HashMap<String, RoomClient> getClientListScope() {
-		HashMap<String, RoomClient> roomClientList = new HashMap<String, RoomClient>();
+	public synchronized List<RoomClient> getClientListScope() {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			RoomClient currentClient = this.clientListManager
 					.getClientByStreamId(current.getClient().getId());
 
-			return this.clientListManager.getClientListByRoom(currentClient.getRoom_id());
+			return clientListManager.getClientListByRoom(currentClient.getRoom_id());
 
 		} catch (Exception err) {
 			log.debug("[getClientListScope]", err);
 		}
-		return roomClientList;
+		return new ArrayList<RoomClient>();
 	}
 
 	private boolean getWhiteboardDrawStatus() {

@@ -106,8 +106,7 @@ public class JabberWebService {
 		Long user_level = this.userManagement.getUserLevelByID(users_id);
 
 		if (this.authLevelManagement.checkUserLevel(user_level)) {
-			return this.conferenceService.getRoomClientsMapByRoomId(roomId)
-					.size();
+			return conferenceService.getRoomClientsListByRoomId(roomId).size();
 		}
 		return -1;
 	}

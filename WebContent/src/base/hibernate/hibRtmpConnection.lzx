@@ -1054,9 +1054,6 @@
              
         <netRemoteCallHib name="clientregisterRoom" funcname="clientregisterRoom">
             <handler name="ondata" args="value">
-                //The onResult-Handler will be called be the rtmpconnection
-                ////Debug.write("clientregisterRoom: ",value);
-                //parent.getClientListScope.doCall();  
             </handler>   
         </netRemoteCallHib>   
 
@@ -1064,7 +1061,6 @@
 			if (canvas._videocontainer!=null){
 				canvas._videocontainer.disconnectclient(id);
 				if (canvas.currentModApply!=null) canvas.currentModApply.rejectUser(value);
-				//parent.getClientListScope.doCall();
 				if (value.isRecording) {
 					canvas._mymod.recordingUser = null;
 				}

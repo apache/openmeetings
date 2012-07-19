@@ -485,9 +485,13 @@ public class UserService {
 												"showContactDataToContacts")
 												.toString()).booleanValue());
 				if (userId > 0) {
-					Users user = userManagement.getUserById(userId);
-					user.setServer(serverDao.getServer(Long.parseLong(argObjectMap.get("serverId").toString())));
-					userManagement.updateUser(user);
+					try {
+						Users user = userManagement.getUserById(userId);
+						user.setServer(serverDao.getServer(Long.parseLong(argObjectMap.get("serverId").toString())));
+						userManagement.updateUser(user);
+					} catch (Exception e) {
+						log.error("Error while setting server.");
+					}
 				}
 				return userId;
 			}

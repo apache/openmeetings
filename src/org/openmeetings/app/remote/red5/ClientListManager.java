@@ -21,7 +21,6 @@ package org.openmeetings.app.remote.red5;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -55,13 +54,8 @@ public class ClientListManager {
 	 * @param room_id
 	 * @return
 	 */
-	public HashMap<String, RoomClient> getRoomClients(Long room_id) {
-		try {
-			return getClientListByRoom(room_id);
-		} catch (Exception err) {
-			log.error("[getRoomClients]", err);
-		}
-		return null;
+	public List<RoomClient> getRoomClients(Long room_id) {
+		return getClientListByRoom(room_id);
 	}
 
 	public synchronized RoomClient addClientListItem(String streamId,
@@ -239,37 +233,31 @@ public class ClientListManager {
 	 * @return
 	 */
 	// FIXME seems like there is no need to return HashMap
-	public synchronized HashMap<String, RoomClient> getClientListByRoom(Long room_id) {
-		HashMap<String, RoomClient> roomClientList = new HashMap<String, RoomClient>();
+	public synchronized List<RoomClient> getClientListByRoom(Long room_id) {
 		try {
 			TypedQuery<RoomClient> q = em.createNamedQuery("getByRoomId", RoomClient.class);
 			q.setParameter("room_id", room_id);
 					
-			for (RoomClient rc : q.getResultList()) {
-				roomClientList.put(rc.getStreamid(), rc);
-			}
+			return q.getResultList();
 		} catch (Exception err) {
 			log.error("[getClientListByRoom]", err);
 		}
-		return roomClientList;
+		return null;
 	}
 	
 	
 
 	// FIXME seems to be copy/pasted with previous one
-	public synchronized HashMap<String, RoomClient> getClientListByRoomAll(Long room_id) {
-		HashMap<String, RoomClient> roomClientList = new HashMap<String, RoomClient>();
+	public synchronized List<RoomClient> getClientListByRoomAll(Long room_id) {
 		try {
 			TypedQuery<RoomClient> q = em.createNamedQuery("getByRoomIdAll", RoomClient.class);
 			q.setParameter("room_id", room_id);
 
-			for (RoomClient rc : q.getResultList()) {
-				roomClientList.put(rc.getStreamid(), rc);
-				}
+			return q.getResultList();
 		} catch (Exception err) {
 			log.error("[getClientListByRoom]", err);
 		}
-		return roomClientList;
+		return new ArrayList<RoomClient>();
 	}
 
 	/**

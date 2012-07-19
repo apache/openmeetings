@@ -23,7 +23,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
@@ -687,9 +686,13 @@ public class ConferenceService {
 								Boolean.valueOf(argObjectMap.get("hideWhiteboard").toString()),
 								Boolean.valueOf(argObjectMap.get("showMicrophoneStatus").toString())
 								);
-				Rooms room = roommanagement.getRoomById(roomId);
-				room.setServer(serverDao.getServer(Long.parseLong(argObjectMap.get("serverId").toString())));
-				roommanagement.updateRoomObject(room);
+				try {
+					Rooms room = roommanagement.getRoomById(roomId);
+					room.setServer(serverDao.getServer(Long.parseLong(argObjectMap.get("serverId").toString())));
+					roommanagement.updateRoomObject(room);
+				} catch (Exception e) {
+					log.error("Error while setting server.");
+				}
 				return roomId;
 			}
 
@@ -761,31 +764,7 @@ public class ConferenceService {
 	 * @return
 	 */
 	public List<RoomClient> getRoomClientsListByRoomId(Long room_id) {
-		log.debug("getRoomClientsListByRoomId");
-		try {
-			LinkedList<RoomClient> clients = new LinkedList<RoomClient>();
-			HashMap<String, RoomClient> clientList = clientListManager
-					.getClientListByRoom(room_id);
-			for (Iterator<String> iter = clientList.keySet().iterator(); iter
-					.hasNext();) {
-				RoomClient rcl = clientList.get(iter.next());
-				clients.add(rcl);
-			}
-			return clients;
-		} catch (Exception err) {
-			log.error("[getRoomClientsListByRoomId]", err);
-		}
-		return null;
-	}
-
-	public HashMap<String, RoomClient> getRoomClientsMapByRoomId(Long room_id) {
-		try {
-			// log.error("getRoomClientsListByRoomId: "+room_id);
-			return this.clientListManager.getClientListByRoom(room_id);
-		} catch (Exception err) {
-			log.error("[getRoomClientsMapByRoomId]", err);
-		}
-		return null;
+		return clientListManager.getClientListByRoom(room_id);
 	}
 
 	public SearchResult<RoomClient> getRoomClientsMap(String SID, int start, int max,

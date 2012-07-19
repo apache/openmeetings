@@ -39,7 +39,7 @@
             <![CDATA[
                 if ($debug) Debug.write("+++++++++++++++++ getClientListScope : ",value);
                 
-                for (var i in value) {
+                for (var i = 0; i < value.length; ++i) {
                     parent._users.addItem(value[i].firstname+','+value[i].lastname+' ['+value[i].username+']',value[i].publicSID);
                 }
                 

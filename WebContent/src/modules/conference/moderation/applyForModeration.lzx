@@ -113,7 +113,7 @@
        		<![CDATA[
            	//The onResult-Handler will be called be the rtmpconnection
            	//Debug.write("INSTANCE getClientListScope : ",value);
-			for (var eg in value){
+            for (var eg = 0; eg < value.length; ++eg) {
 				//Debug.write("value: ",eg,value,parent.userslist.userslist.userslist);
 				if (canvas.streamid!=value[eg].streamid) {
 				    new lz.userItem(parent.userslist.userslist.userslist,{name:value[eg].streamid,username:value[eg].username,streamid:value[eg].streamid});

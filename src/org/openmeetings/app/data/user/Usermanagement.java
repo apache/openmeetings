@@ -1671,20 +1671,13 @@ public class Usermanagement {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = getUserLevelByID(users_id);
-			HashMap<String, RoomClient> MyUserList = clientListManager
-					.getClientListByRoom(room_id);
 
 			// admins only
 			if (authLevelManagement.checkAdminLevel(user_level)) {
 
 				sessionManagement.clearSessionByRoomId(room_id);
 
-				for (Iterator<String> iter = MyUserList.keySet().iterator(); iter
-						.hasNext();) {
-					String key = iter.next();
-
-					RoomClient rcl = MyUserList.get(key);
-
+				for (RoomClient rcl : clientListManager.getClientListByRoom(room_id)) {
 					if (rcl == null) {
 						return true;
 					}

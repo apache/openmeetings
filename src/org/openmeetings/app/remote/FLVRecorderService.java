@@ -22,7 +22,6 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -125,20 +124,10 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			RoomClient currentClient = this.clientListManager
 					.getClientByStreamId(streamid);
 
-			HashMap<String, RoomClient> roomClientList = this.clientListManager
-					.getClientListByRoom(currentClient.getRoom_id());
-
-			for (Iterator<String> iter = roomClientList.keySet().iterator(); iter
-					.hasNext();) {
-
-				RoomClient rcl = roomClientList.get(iter.next());
-
+			for (RoomClient rcl : clientListManager.getClientListByRoom(currentClient.getRoom_id())) {
 				if (rcl.getIsRecording()) {
-
 					return rcl;
-
 				}
-
 			}
 
 			return null;
@@ -562,18 +551,10 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			log.debug("getCurrentRoomClient -#########################- "
 					+ currentClient.getRoom_id());
 
-			HashMap<String, RoomClient> roomList = this.clientListManager
-					.getClientListByRoomAll(currentClient.getRoom_id());
-
-			for (Iterator<String> iter = roomList.keySet().iterator(); iter
-					.hasNext();) {
-
-				RoomClient rcl = roomList.get(iter.next());
-
+			for (RoomClient rcl : clientListManager.getClientListByRoomAll(currentClient.getRoom_id())) {
 				if (rcl.getIsRecording()) {
 					return rcl;
 				}
-
 			}
 
 		} catch (Exception err) {

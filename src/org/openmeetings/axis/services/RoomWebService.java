@@ -483,23 +483,13 @@ public class RoomWebService {
 
 				int i = 0;
 				for (Rooms room : rooms) {
-
-					HashMap<String, RoomClient> map = clientListManager
-							.getClientListByRoom(room.getRooms_id());
-
-					// room.setCurrentusers(new LinkedList<RoomClient>());
-
-					// for (Iterator<String> iter = map.keySet().iterator();
-					// iter.hasNext(); ) {
-					// room.getCurrentusers().add(map.get(iter.next()));
-					// }
-
 					RoomCountBean rCountBean = new RoomCountBean();
 					rCountBean.setRoomId(room.getRooms_id());
 					rCountBean.setRoomName(room.getName());
 					rCountBean.setMaxUser(room.getNumberOfPartizipants()
 							.intValue());
-					rCountBean.setRoomCount(map.size());
+					rCountBean.setRoomCount(clientListManager
+							.getClientListByRoom(room.getRooms_id()).size());
 
 					roomsArray[i] = rCountBean;
 					i++;
@@ -563,16 +553,13 @@ public class RoomWebService {
 				roomReturn.setName(room.getName());
 				roomReturn.setRoom_id(room.getRooms_id());
 
-				HashMap<String, RoomClient> map = clientListManager
+				List<RoomClient> map = clientListManager
 						.getClientListByRoom(room.getRooms_id());
 
 				RoomUser[] roomUsers = new RoomUser[map.size()];
 
 				int i = 0;
-				for (Iterator<String> iter = map.keySet().iterator(); iter
-						.hasNext();) {
-					RoomClient rcl = map.get(iter.next());
-
+				for (RoomClient rcl : map) {
 					RoomUser roomUser = new RoomUser();
 					roomUser.setFirstname(rcl.getFirstname());
 					roomUser.setLastname(rcl.getLastname());
@@ -581,10 +568,7 @@ public class RoomWebService {
 					roomUser.setIsBroadCasting(rcl.getIsBroadcasting());
 					roomUser.setAvsettings(rcl.getAvsettings());
 
-					roomUsers[i] = roomUser;
-
-					i++;
-
+					roomUsers[i++] = roomUser;
 				}
 
 				roomReturn.setRoomUser(roomUsers);

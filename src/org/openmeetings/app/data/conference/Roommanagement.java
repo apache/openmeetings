@@ -19,7 +19,6 @@
 package org.openmeetings.app.data.conference;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,7 +41,6 @@ import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.basic.Configuration;
 import org.openmeetings.app.persistence.beans.basic.Server;
 import org.openmeetings.app.persistence.beans.domain.Organisation_Users;
-import org.openmeetings.app.persistence.beans.rooms.RoomClient;
 import org.openmeetings.app.persistence.beans.rooms.RoomTypes;
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.rooms.Rooms_Organisation;
@@ -204,15 +202,7 @@ public class Roommanagement {
 				Rooms room = this.getRoomById(rooms_id);
 
 				if (room != null) {
-					HashMap<String, RoomClient> map = clientListManager
-							.getClientListByRoom(room.getRooms_id());
-
-					room.setCurrentusers(new LinkedList<RoomClient>());
-
-					for (Iterator<String> iter = map.keySet().iterator(); iter
-							.hasNext();) {
-						room.getCurrentusers().add(map.get(iter.next()));
-					}
+					room.setCurrentusers(clientListManager.getClientListByRoom(room.getRooms_id()));
 
 					return room;
 				}
@@ -334,17 +324,7 @@ public class Roommanagement {
 						asc);
 
 				for (Rooms room : rooms) {
-
-					HashMap<String, RoomClient> map = clientListManager
-							.getClientListByRoom(room.getRooms_id());
-
-					room.setCurrentusers(new LinkedList<RoomClient>());
-
-					for (Iterator<String> iter = map.keySet().iterator(); iter
-							.hasNext();) {
-						room.getCurrentusers().add(map.get(iter.next()));
-					}
-
+					room.setCurrentusers(clientListManager.getClientListByRoom(room.getRooms_id()));
 				}
 
 				sResult.setResult(rooms);
@@ -365,17 +345,7 @@ public class Roommanagement {
 						asc);
 
 				for (Rooms room : rooms) {
-
-					HashMap<String, RoomClient> map = clientListManager
-							.getClientListByRoom(room.getRooms_id());
-
-					room.setCurrentusers(new LinkedList<RoomClient>());
-
-					for (Iterator<String> iter = map.keySet().iterator(); iter
-							.hasNext();) {
-						room.getCurrentusers().add(map.get(iter.next()));
-					}
-
+					room.setCurrentusers(clientListManager.getClientListByRoom(room.getRooms_id()));
 				}
 
 				return rooms;
@@ -397,17 +367,7 @@ public class Roommanagement {
 						orderby, asc, externalRoomType);
 
 				for (Rooms room : rooms) {
-
-					HashMap<String, RoomClient> map = clientListManager
-							.getClientListByRoom(room.getRooms_id());
-
-					room.setCurrentusers(new LinkedList<RoomClient>());
-
-					for (Iterator<String> iter = map.keySet().iterator(); iter
-							.hasNext();) {
-						room.getCurrentusers().add(map.get(iter.next()));
-					}
-
+					room.setCurrentusers(clientListManager.getClientListByRoom(room.getRooms_id()));
 				}
 
 				return rooms;

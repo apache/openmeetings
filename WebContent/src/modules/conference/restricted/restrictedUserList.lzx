@@ -165,9 +165,9 @@
                 canvas.startBrowser(tObj);
             }
             
-            var value = roomStatus.clientMap;
+            var value = roomStatus.clientList;
             
-            for (var i in value){
+            for (var i = 0; i < value.length; ++i){
                 if ( value[i].streamid == canvas.streamid ) {
                     value[i].selfItem = true;
                     canvas.isAllowedToDraw = value[i].canDraw;

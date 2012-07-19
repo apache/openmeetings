@@ -18,21 +18,21 @@
  */
 package org.openmeetings.app.conference.whiteboard;
 
-import java.util.HashMap;
+import java.util.List;
 
 import org.openmeetings.app.persistence.beans.rooms.RoomClient;
 
 public class RoomStatus {
 	
-	HashMap<String,RoomClient> clientMap;
+	List<RoomClient> clientList;
 	BrowserStatus browserStatus;
 	Boolean roomFull = false;
 	
-	public HashMap<String, RoomClient> getClientMap() {
-		return clientMap;
+	public List<RoomClient> getClientList() {
+		return clientList;
 	}
-	public void setClientMap(HashMap<String, RoomClient> clientMap) {
-		this.clientMap = clientMap;
+	public void setClientList(List<RoomClient> clientList) {
+		this.clientList = clientList;
 	}
 	public BrowserStatus getBrowserStatus() {
 		return browserStatus;

@@ -284,7 +284,7 @@
 				//The onResult-Handler will be called by the rtmpconnection
 				//Debug.write("getClientListScope wml and sync Instance: ",value);
 				parent._loadingUsers = new Array();
-				for (var eg in value){
+	            for (var eg = 0; eg < value.length; ++eg) {
 					if (canvas.streamid != value[eg].streamid){
 						////Debug.write("parent._loadingUsers value eg ",eg,value[eg]);
 						parent._loadingUsers.push(value[eg]);
