@@ -58,7 +58,7 @@ public class ClientListManager {
 		return getClientListByRoom(room_id);
 	}
 
-	public synchronized RoomClient addClientListItem(String streamId,
+	public RoomClient addClientListItem(String streamId,
 			String scopeName, Integer remotePort, String remoteAddress,
 			String swfUrl, boolean isAVClient) {
 		try {
@@ -95,12 +95,12 @@ public class ClientListManager {
 		return null;
 	}
 
-	public synchronized Collection<RoomClient> getAllClients() {
+	public Collection<RoomClient> getAllClients() {
 		TypedQuery<RoomClient> q = em.createNamedQuery("getAllRoomClients", RoomClient.class);
 		return q.getResultList();
 	}
 
-	public synchronized RoomClient getClientByStreamId(String streamId) {
+	public RoomClient getClientByStreamId(String streamId) {
 		try {
 			TypedQuery<RoomClient> q = em.createNamedQuery("getByStreamId", RoomClient.class);
 			q.setParameter("streamid", streamId);
@@ -126,7 +126,7 @@ public class ClientListManager {
 	 * @param streamId
 	 * @return
 	 */
-	public synchronized RoomClient getSyncClientByStreamId(String streamId) {
+	public RoomClient getSyncClientByStreamId(String streamId) {
 		try {
 			TypedQuery<RoomClient> q = em.createNamedQuery("getByStreamIdNonScreen", RoomClient.class);
 			q.setParameter("streamid", streamId);
@@ -142,7 +142,7 @@ public class ClientListManager {
 	}
 
 
-	public synchronized RoomClient getClientByPublicSID(String publicSID, boolean isAVClient) {
+	public RoomClient getClientByPublicSID(String publicSID, boolean isAVClient) {
 		try {
 			TypedQuery<RoomClient> q = em.createNamedQuery("getByPublicSidAvClient", RoomClient.class);
 			q.setParameter("publicSID", publicSID);
@@ -156,7 +156,7 @@ public class ClientListManager {
 		return null;
 	}
 
-	public synchronized RoomClient getClientByUserId(Long userId) {
+	public RoomClient getClientByUserId(Long userId) {
 		try {
 			TypedQuery<RoomClient> q = em.createNamedQuery("getByUserId", RoomClient.class);
 			q.setParameter("userId", userId);
@@ -176,7 +176,7 @@ public class ClientListManager {
 	 * @param rcm
 	 * @return
 	 */
-	public synchronized Boolean updateAVClientByStreamId(String streamId, RoomClient rcm) {
+	public Boolean updateAVClientByStreamId(String streamId, RoomClient rcm) {
 		try {
 			//get the corresponding user session object and update the settings
 			RoomClient rclUsual = getClientByPublicSID(rcm.getPublicSID(), false);
@@ -197,7 +197,7 @@ public class ClientListManager {
 		return null;
 	}
 
-	public synchronized Boolean updateClientByStreamId(String streamId, RoomClient rcm) {
+	public Boolean updateClientByStreamId(String streamId, RoomClient rcm) {
 		try {
 			if (getClientByStreamId(streamId) != null) {
 				rcm = em.merge(rcm);
@@ -212,7 +212,7 @@ public class ClientListManager {
 		return null;
 	}
 
-	public synchronized Boolean removeClient(String streamId) {
+	public Boolean removeClient(String streamId) {
 		try {
 			TypedQuery<RoomClient> q = em.createNamedQuery("deleteByStreamId", RoomClient.class);
 			q.setParameter("streamid", streamId);
@@ -232,8 +232,7 @@ public class ClientListManager {
 	 * 
 	 * @return
 	 */
-	// FIXME seems like there is no need to return HashMap
-	public synchronized List<RoomClient> getClientListByRoom(Long room_id) {
+	public List<RoomClient> getClientListByRoom(Long room_id) {
 		try {
 			TypedQuery<RoomClient> q = em.createNamedQuery("getByRoomId", RoomClient.class);
 			q.setParameter("room_id", room_id);
@@ -247,8 +246,7 @@ public class ClientListManager {
 	
 	
 
-	// FIXME seems to be copy/pasted with previous one
-	public synchronized List<RoomClient> getClientListByRoomAll(Long room_id) {
+	public List<RoomClient> getClientListByRoomAll(Long room_id) {
 		try {
 			TypedQuery<RoomClient> q = em.createNamedQuery("getByRoomIdAll", RoomClient.class);
 			q.setParameter("room_id", room_id);
@@ -266,7 +264,7 @@ public class ClientListManager {
 	 * @param roomname
 	 * @return
 	 */
-	public synchronized List<RoomClient> getCurrentModeratorByRoom(Long room_id) {
+	public List<RoomClient> getCurrentModeratorByRoom(Long room_id) {
 		if (room_id != null) {
 			TypedQuery<RoomClient> q = em.createNamedQuery("getByRoomIdMod", RoomClient.class);
 			q.setParameter("room_id", room_id);
@@ -276,7 +274,7 @@ public class ClientListManager {
 	}
 
 	//FIXME not sorted
-	public synchronized SearchResult<RoomClient> getListByStartAndMax(int start, int max, String orderby, boolean asc) {
+	public SearchResult<RoomClient> getListByStartAndMax(int start, int max, String orderby, boolean asc) {
 		SearchResult<RoomClient> sResult = new SearchResult<RoomClient>();
 		sResult.setObjectName(RoomClient.class.getName());
 
@@ -291,7 +289,7 @@ public class ClientListManager {
 		return sResult;
 	}
 
-	public synchronized void removeAllClients() {
+	public void removeAllClients() {
 		try {
 			TypedQuery<RoomClient> q = em.createNamedQuery("deleteAll", RoomClient.class);
 			q.executeUpdate();
