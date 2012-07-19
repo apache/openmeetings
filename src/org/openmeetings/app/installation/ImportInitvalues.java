@@ -1023,11 +1023,11 @@ public class ImportInitvalues {
 	}
 	// ------------------------------------------------------------------------------
 
-	public void loadSystem(InstallationConfig cfg, boolean force) throws Exception {
+	public Server loadSystem(InstallationConfig cfg, boolean force) throws Exception {
 		//FIXME dummy check if installation was performed before
 		if(!force && usersDao.getAllUsers().size() > 0) {
 			log.debug("System contains users, no need to install data one more time.");
-			return;
+			return null;
 		}
 		loadMainMenu();
 		loadErrorMappingsFromXML();
@@ -1042,6 +1042,8 @@ public class ImportInitvalues {
 		loadRoomTypes();
 		
 		loadConfiguration(cfg);
+		
+		return serverDao.saveServer(-1, "local", "localhost");
 	}
 	
 	public void loadAll(InstallationConfig cfg, String username,
@@ -1051,8 +1053,7 @@ public class ImportInitvalues {
 			log.debug("System contains users, no need to install data one more time.");
 			return;
 		}
-		loadSystem(cfg, force);
-		Server s = serverDao.saveServer(-1, "local", "localhost");
+		Server s = loadSystem(cfg, force);
 		loadInitUserAndOrganisation(username,
 				userpass, useremail, groupame, timeZone, cfg.defaultLangId, s);
 		
