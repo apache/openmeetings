@@ -4552,4 +4552,13 @@ Details
     	&#160;&#160;8) start OM<br/>
     </value>
   </string>
+  <string id="1506" name="public_room_tooltip">
+  	<value>Rooms common to all user</value>
+  </string>
+  <string id="1507" name="private_room_tooltip">
+  	<value>Rooms common to the current user group</value>
+  </string>
+  <string id="1508" name="my_room_tooltip">
+  	<value>Rooms of the current user</value>
+  </string>
 </language>

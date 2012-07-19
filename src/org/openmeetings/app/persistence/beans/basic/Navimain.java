@@ -34,7 +34,6 @@ import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
 @Entity
 @Table(name = "navimain")
 public class Navimain implements Serializable {
-    
 	private static final long serialVersionUID = 1691787896183701877L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,6 +52,8 @@ public class Navimain implements Serializable {
     private Boolean isopen;
 	@Column(name="action")
     private String action;
+	@Column(name="params")
+    private String params;
 	@Column(name="updatetime")
     private Date updatetime;
 	@Column(name="starttime")
@@ -74,9 +75,6 @@ public class Navimain implements Serializable {
 	@Column(name="tooltip_fieldvalues_id")
 	private Long tooltip_fieldvalues_id;
 
-	public Navimain() {
-	}
-    
     public String getAction() {
         return action;
     }
@@ -202,6 +200,14 @@ public class Navimain implements Serializable {
 	}
 	public void setTooltip(Fieldlanguagesvalues tooltip) {
 		this.tooltip = tooltip;
+	}
+
+	public String getParams() {
+		return params;
+	}
+
+	public void setParams(String params) {
+		this.params = params;
 	}
 		
 }

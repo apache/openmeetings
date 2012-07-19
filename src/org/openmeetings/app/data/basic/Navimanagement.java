@@ -118,7 +118,7 @@ public class Navimanagement {
 		}
 	}
 
-	public void addMainStructure(String action, int naviorder,
+	public void addMainStructure(String action, String params, int naviorder,
 			long fieldvalues_id, boolean isleaf, boolean isopen, long level_id,
 			String name, long global_id, String deleted,
 			Long tooltip_fieldvalues_id) {
@@ -129,6 +129,7 @@ public class Navimanagement {
 			
 			Navimain nm = new Navimain();
 			nm.setAction(action);
+			nm.setParams(params);
 			nm.setComment("");
 			nm.setIcon("");
 			nm.setFieldvalues_id(fieldvalues_id);

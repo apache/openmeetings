@@ -29,7 +29,7 @@
 	
 	<simpleLabelButton name="ok" x="20" y="70" labelid="54" width="120" height="20">
 		<handler name="onclick">
-			if (!clearStageContent(objectsToClean))
+			if (!clearStageContent())
 			{
 				canvas._mainbgcontentNavi.navi.destroy();
 				canvas._mainbgcontentNavi.help.destroy();

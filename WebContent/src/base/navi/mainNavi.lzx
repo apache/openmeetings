@@ -28,7 +28,7 @@
 <class name="baseDropDownMenuListItem" extends="view" height="36">
 
     <attribute name="action" value="" type="string" />
-
+    <attribute name="params" value="" type="string" />
     <attribute name="isopen" value="false" type="boolean" />
     <attribute name="isleaf" value="false" type="boolean" />
     <attribute name="list" value="null" />
@@ -152,6 +152,7 @@
                 			isopen:this.list[i].isopen,
                 			isleaf:this.list[i].isleaf,
                 			action:this.list[i].action,
+                			params:this.list[i].params,
                 			textToolTip:list[i].tooltip.value
                			});
             }
@@ -268,7 +269,7 @@
 	                  list:value[i].mainnavi,
 	                  isleaf:value[i].isleaf,
 	                  text:value[i].label.value,
-	                     textToolTip:value[i].tooltip.value,
+	                  textToolTip:value[i].tooltip.value,
 	                  action:value[i].action
 	                 });
 	             

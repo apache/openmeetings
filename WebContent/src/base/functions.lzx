@@ -25,7 +25,7 @@
 
 var labelObj;
     
-var tempActionForNavi = '';
+var tempActionForNavi = null;
 
 // Load Labels from List
 var labels = new Object();
@@ -101,25 +101,18 @@ function quicklink(action){
     
 function quicklinkAct(action){
     // if($debug) Debug.write("FUNC/quicklinkAct",action);
-    var t = new Array();
-    t.action = action;
-    loadContent(t,null,null);
+    loadContent({action: action},null,null);
 }            
 
 function loadContent(obj,parentobj,preparentobj){
-    if($debug) Debug.write("FUNC/loadContent: ",obj.action);
+    if($debug) Debug.write("FUNC/loadContent: ", obj);
     
-    tempActionForNavi = obj.action;
-
-	if (obj.action!="logout")
-	{
-		if (!clearStageContent(obj)) 
-		{
+	if (obj.action!="logout") {
+	    tempActionForNavi = {action: obj.action, params: obj.params};
+		if (!clearStageContent()) {
 			loadContentByTempActionForNavi();
 		}
-	}
-	else
-	{
+	} else {
 		new lz.logoutConfirm(canvas,{objectsToClean: obj});
 	}
     
@@ -129,28 +122,22 @@ function loadContentByTempActionForNavi(){
     // if($debug) Debug.write("FUNC/loadContentByTempActionForNavi");
     
 	if (canvas.roomJumpId != 0) {
-		
 		canvas.initroomid = canvas.roomJumpId;
         canvas.thishib.getRoomById.doCall();
 		canvas.roomJumpId = 0;
-		
 	} else {
-		
         if($debug) Debug.write("FUNC/loadContentByString -1- ",tempActionForNavi);
-        if($debug) Debug.write("FUNC/loadContentByString -2- ",canvas[tempActionForNavi]);
-        if($debug) Debug.write("FUNC/loadContentByString -3- ",lz[canvas[tempActionForNavi]]);
+        if($debug) Debug.write("FUNC/loadContentByString -2- ",canvas[tempActionForNavi.action]);
+        if($debug) Debug.write("FUNC/loadContentByString -3- ",lz[canvas[tempActionForNavi.action]]);
         
-        new lz[canvas[tempActionForNavi]](canvas.main_content._content.inner);
+        new lz[canvas[tempActionForNavi.action]](canvas.main_content._content.inner, {params: tempActionForNavi.params});
 	}
 }    
 
-function clearStageContent(obj){
-    // if($debug) Debug.write("FUNC/clearStageContent: ",obj);
-    //can be called with zero arguments
-    //if (arguments.length!=0) obj.parent.parent.clearAllSubItemLists();  
-    
+function clearStageContent(){
     return canvas.main_content._content.clearAll();
 }
+
 function setLabelObject(labelObjRef){
     // if($debug) Debug.write("FUNC/setLabelObject",labelObjRef);
     labelObj = labelObjRef;
