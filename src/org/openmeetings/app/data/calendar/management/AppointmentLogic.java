@@ -422,9 +422,9 @@ public class AppointmentLogic {
 		// Language of the email will be the system default language
 		String labelid1158 = fieldmanagment.getString(1158L, language_id);
 		Fieldlanguagesvalues labelid1153 = fieldmanagment
-				.getFieldByIdAndLanguage(new Long(1153), language_id);
+				.getFieldByIdAndLanguage(1153L, language_id);
 		Fieldlanguagesvalues labelid1154 = fieldmanagment
-				.getFieldByIdAndLanguage(new Long(1154), language_id);
+				.getFieldByIdAndLanguage(1154L, language_id);
 
 		for (int i = 0; i < points.size(); i++) {
 			Appointment ment = points.get(i);
@@ -490,7 +490,7 @@ public class AppointmentLogic {
 					String message = generateMessage(labelid1158, ment,
 							language_id, labelid1153, labelid1154, tZone);
 
-					invitationManagement.sendInvitationReminderLink(message,
+					invitationManagement.sendInvitationReminderLink(language_id, message,
 							inv.getBaseUrl(), mm.getEmail(), subject,
 							inv.getHash());
 

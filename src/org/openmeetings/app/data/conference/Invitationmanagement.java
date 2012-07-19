@@ -462,9 +462,9 @@ public class Invitationmanagement {
 			}
 
 			Fieldlanguagesvalues labelid1153 = fieldmanagment
-					.getFieldByIdAndLanguage(new Long(1153), language_id);
+					.getFieldByIdAndLanguage(1153L, language_id);
 			Fieldlanguagesvalues labelid1154 = fieldmanagment
-					.getFieldByIdAndLanguage(new Long(1154), language_id);
+					.getFieldByIdAndLanguage(1154L, language_id);
 
 			message += "<br/>"
 					+ labelid1153.getValue()
@@ -638,7 +638,7 @@ public class Invitationmanagement {
 	 * @return
 	 */
 	// ----------------------------------------------------------------------------------------------------
-	public String sendInvitationReminderLink(String message, String baseUrl,
+	public String sendInvitationReminderLink(long langId, String message, String baseUrl,
 			String email, String subject, String invitationHash) {
 		log.debug("sendInvitationReminderLink");
 
@@ -646,11 +646,9 @@ public class Invitationmanagement {
 			String invitation_link = baseUrl + "?invitationHash="
 					+ invitationHash;
 
-			message += "<br/>";
-			message += "<a href='" + invitation_link
-					+ "'>Click here to enter room</a>";
-
-			return mailHandler.sendMail(email, subject, message);
+			return mailHandler.sendMail(email, subject
+					, message + "<br/><a href='" + invitation_link + "'>"
+					+ fieldmanagment.getFieldByIdAndLanguage(626L, langId) + "</a>");
 		} catch (Exception e) {
 			log.error("sendInvitationReminderLink", e);
 		}
