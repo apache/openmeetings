@@ -54,6 +54,10 @@
 				description="color of text for menus" />		
 	
 	<!-- Icons -->
+	<resource name="logo_image" 
+				description="Logo to display on Main BG Navi" 
+				license="APL"
+				src="public/themes/basic-theme/general/logo.png" />
 	
 	<resource name="icon_facebook_rsc_png" 
 				description="Icon for facebook button in login" 

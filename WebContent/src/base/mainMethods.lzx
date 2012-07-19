@@ -246,8 +246,17 @@
         }
     
         mainBaseText.setAttribute('text',canvas.currentappname);
+        var elemPrefix = "config/appdisplay/displayelement";
+        var cfgDp = canvas.myConfigSet.getPointer();
+        mainBaseText.setAttribute('x', cfgDp.xpathQuery(elemPrefix + "[@name='name']/@x"));
+        mainBaseText.setAttribute('y', cfgDp.xpathQuery(elemPrefix + "[@name='name']/@y"));
+        mainBaseText.setAttribute('visible', "true" == cfgDp.xpathQuery(elemPrefix + "[@name='name']/@display"));
         mainBaseText.setShadow();
         mainBaseTextLabel.setAttribute('text',canvas.currentappnameurl);  
+		mainApplogo.setAttribute('src', getThemeImage('logo_image'));
+        mainApplogo.setAttribute('x', cfgDp.xpathQuery(elemPrefix + "[@name='logo']/@x"));
+        mainApplogo.setAttribute('y', cfgDp.xpathQuery(elemPrefix + "[@name='logo']/@y"));
+        mainApplogo.setAttribute('visible', "true" == cfgDp.xpathQuery(elemPrefix + "[@name='logo']/@display"));
         
         var cleanUrl = _url;
         

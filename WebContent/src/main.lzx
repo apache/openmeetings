@@ -92,7 +92,8 @@
 <!-- View for Navigation-bar and App-name -->
 <view name="_mainbgcontentNavi" x="0" y="0" clip="true"
     width="100%" height="${ canvas.naviHeight }" visibility="hidden">
-    <text id="mainBaseText" x="10" y="10"
+    <image id="mainApplogo" visible="false" />
+    <text id="mainBaseText" visible="false"
         fgcolor="${ canvas.fontColorHeader }" fontsize="20" fontstyle="bold">
         <method name="setShadow" >
             <![CDATA[

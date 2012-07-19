@@ -32,6 +32,7 @@
         <xs:element ref="proxyType"/>
         <xs:element ref="currentappname"/>
         <xs:element ref="currentappnameurl"/>
+        <xs:element ref="appdisplay"/>
         <xs:element ref="currentappnamebugurl"/>
         <xs:element ref="loudnessAcitviation"/>
         <xs:element ref="webAppRootKey"/>
@@ -83,6 +84,21 @@
   <xs:element name="proxyType" type="xs:NCName"/>
   <xs:element name="currentappname" type="xs:string"/>
   <xs:element name="currentappnameurl" type="xs:anyURI"/>
+  <xs:element name="appdisplay">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="2" minOccurs="2" ref="displayelement"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="displayelement">
+    <xs:complexType>
+      <xs:attribute name="name" use="required" type="xs:string"/>
+      <xs:attribute name="display" use="required" type="xs:boolean"/>
+      <xs:attribute name="x" use="required" type="xs:integer"/>
+      <xs:attribute name="y" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="currentappnamebugurl" type="xs:anyURI"/>
   <xs:element name="loudnessAcitviation" type="xs:integer"/>
   <xs:element name="webAppRootKey" type="xs:NCName"/>
