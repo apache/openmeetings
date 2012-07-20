@@ -20,7 +20,7 @@ package org.openmeetings.utils.crypt;
 
 /**
  * interface for Encryption-Class
- * see: http://code.google.com/p/openmeetings/w/edit/CustomCryptMechanism
+ * see: http://incubator.apache.org/openmeetings/CustomCryptMechanism.html
  * 
  * @author sebastianwagner
  *

@@ -269,7 +269,7 @@ public class ImportInitvalues {
 						"This Class is used for Authentification-Crypting. "
 								+ "Be carefull what you do here! If you change it while "
 								+ "running previous Pass of users will not be workign anymore! "
-								+ "for more Information see http://code.google.com/p/openmeetings/wiki/CustomCryptMechanism");
+								+ "for more Information see http://incubator.apache.org/openmeetings/CustomCryptMechanism.html");
 
 		cfgManagement.addConfByKey(3, "allow_frontend_register",
 				cfg.allowFrontendRegister, null, "");

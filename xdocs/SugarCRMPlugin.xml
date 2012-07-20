@@ -55,8 +55,7 @@
 			<p>In SugarCRM's administration web-interface you will find the
 				module loader.
 			</p>
-			<a class="fancybox-buttons" data-fancybox-group="button"
-				href="images/moodle_plugin_conference.png">
+			<a class="fancybox-buttons" href="images/moodle_plugin_conference.png">
 				<img src="images/SugarCRM_Installation.png" alt="" width="640"
 					height="320" />
 			</a>

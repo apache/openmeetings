@@ -29,7 +29,7 @@
 				</a>
 				.
 			</p>
-			<p>
+			<div>
 				<a href="downloads.html" rel="nofollow">
 					<img src="images/installation_instructions.png" alt="Grafik" />
 				</a>
@@ -45,7 +45,7 @@
 						for more options
 					</i>
 				</p>
-			</p>
+			</div>
 			<ol>
 				<li>
 					<b>Recommendation for production environment</b>
@@ -54,7 +54,7 @@
 						For production environment you should consider using
 						<a href="MySQLConfig.html">MySQL</a>
 						,
-						<a href="/PostgresConfig.html">Postgres</a>
+						<a href="PostgresConfig.html">Postgres</a>
 						, or for example
 						<a href="IBMDB2Config.html">IBM DB2</a>
 						, or
@@ -204,16 +204,16 @@
 						rel="nofollow">blog-entry</a>
 				</li>
 				<li>
-					<a href="/p/openmeetings/wiki/VMWareImageDebian051">VMWareImageDebian051</a>
+					<a href="http://code.google.com/p/openmeetings/wiki/VMWareImageDebian051">VMWareImageDebian051</a>
 				</li>
 				<li>
-					<a href="/p/openmeetings/wiki/VMWareImageMoodlePackOM052">VMWareImageMoodlePackOM052</a>
+					<a href="http://code.google.com/p/openmeetings/wiki/VMWareImageMoodlePackOM052">VMWareImageMoodlePackOM052</a>
 				</li>
 				<li>
-					<a href="/p/openmeetings/wiki/VMImageRev2056">VMImageRev2056</a>
+					<a href="http://code.google.com/p/openmeetings/wiki/VMImageRev2056">VMImageRev2056</a>
 				</li>
 				<li>
-					<a href="/p/openmeetings/wiki/VMWareImageRunningOpenmeetingsV1_0RC1">VMWareImageRunningOpenmeetingsV1_0RC1</a>
+					<a href="http://code.google.com/p/openmeetings/wiki/VMWareImageRunningOpenmeetingsV1_0RC1">VMWareImageRunningOpenmeetingsV1_0RC1</a>
 				</li>
 			</ul>
 		</section>
@@ -250,7 +250,7 @@
 					(
 					<i>cient-side</i>
 					).
-					<a href="/p/openmeetings/wiki/RecommendedHardwareList">See all recommendations</a>
+					<a href="http://code.google.com/p/openmeetings/wiki/RecommendedHardwareList">See all recommendations</a>
 					for cameras, headsets and speakerphones.
 				</li>
 			</ul>
@@ -338,10 +338,7 @@
 					to move red5\wrapper\wrapper.exe to red5\wrapper.exe. Then change
 					some path in conf\wrapper.conf (like ..\lib\foo.jar to
 					lib\foo.jar). And finally change the register key in
-					HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet
-					<a href="/p/openmeetings/w/edit/CurrentControlSet">?</a>
-					\Services\Red5\ImagePath
-					<a href="/p/openmeetings/w/edit/ImagePath">?</a>
+					HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Red5\ImagePath
 					to point to the new wrapper.
 				</li>
 				<li>

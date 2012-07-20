@@ -30,8 +30,7 @@
 				OpenMeetings, goto Administration > Ldap.
 			</p>
 			
-			<a class="fancybox-buttons" data-fancybox-group="button"
-					href="images/ldap_screen.png">
+			<a class="fancybox-buttons" href="images/ldap_screen.png">
 					<img src="images/ldap_screen.png" alt="" width="442" height="282" />
 				</a>
 			

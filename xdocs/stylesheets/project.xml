@@ -12,8 +12,10 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  -->
-<project name="Apache OpenMeetings Project"
-        href="http://incubator.apache.org/openmeetings/">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="project.xsd"
+	name="Apache OpenMeetings Project"
+    href="http://incubator.apache.org/openmeetings/">
 
     <title>Apache OpenMeetings [Incubating]</title>
     <!--  -->
@@ -102,6 +104,7 @@
     		<subitem name="Navigation" href="/Navigation.html" />
     		<subitem name="Calendar and timezone" href="/CalendarAndTimezone.html" />
     		<subitem name="Custom room type" href="/CustomRoomTypeHowTo.html" />
+    		<subitem name="Custom ctypt mechanism" href="/CustomCryptMechanism.html" />
     		<subitem name="General Configuration" href="/GeneralConfiguration.html" />
     	</item>
     	<item name="Security" >

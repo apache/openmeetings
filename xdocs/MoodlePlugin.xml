@@ -49,8 +49,7 @@
 			<p>In Moodle's module configuration web-interface you will find the
 				Plugin's configuration
 			</p>
-			<a class="fancybox-buttons" data-fancybox-group="button"
-				href="images/moodle_plugin_conference.png">
+			<a class="fancybox-buttons" href="images/moodle_plugin_conference.png">
 				<img src="images/moodle_plugin_conference.png" alt="" width="500"
 					height="400" />
 			</a>

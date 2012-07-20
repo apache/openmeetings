@@ -36,7 +36,7 @@ limitations under the License.
            
                                     
                         
-            <title>Apache OpenMeetings [Incubating] - Language Editor</title>
+            <title>Apache OpenMeetings [Incubating] - Howto create a Custom Crypt styles</title>
             <link rel="stylesheet" type="text/css" href="css/openmeetings.css">
             <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
             <link rel="stylesheet" type="text/css" href="css/coin-slider-styles.css">
@@ -609,38 +609,97 @@ limitations under the License.
                                                                     <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="Language Editor"><strong>Language Editor</strong></a>
+          <a name="Configuration of Custom Crypt-Style"><strong>Configuration of Custom Crypt-Style</strong></a>
         </font>
         <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
       </td></tr>
       <tr><td>
         <blockquote>
-                                    <p>Features:</p>
-                                                <ul>
-				<li>edit the labels of any language, changes will take effect as
-					soon as you re-login
-				</li>
-				<li>add new languages (for example to fit your co-operative design
-					and language of your company)
-				</li>
-				<li>export the language-files to an XML File (these language Files
-					can be used for your next installation or as contribution to the
-					project)
-				</li>
-				<li>
-					import of language files (
-					<i>you should restart the server if you face problems, as the
-						database cache might be invalid
-					</i>
-					)
-				</li>
-			</ul>
-                                                <p>Screen from the Administration Panel: </p>
-                                                <p>
-				<a class="fancybox-buttons" href="images/langeditor_screen_v2.png">
-					<img src="images/langeditor_screen_v2.png" alt="" width="475" height="324" />
-				</a>
+                                    <p>
+				You can use custom Crypt-Types, but you should decide during
+				installation which Type of encryption you want to use. By default
+				two type are available:
 			</p>
+                                                <ul>
+				<li>org.xmlcrm.utils.crypt.MD5Implementation - this uses common MD5
+					Crypt like PHP does, this is the default one (results in something
+					like: fe01ce2a7fbac8fafaed7c982a04e229)</li>
+				<li>org.xmlcrm.utils.crypt.MD5CryptImplementation - does use
+					BSD-Style of encryption using a salt (results in something like:
+					$1$GMsj7F2I$5S3r9CeukXGXNwf6b4sph1)</li>
+			</ul>
+                                                <p>
+				You can edit the config-key during Installation or later in the
+				Administration Panel. But if you change it using the
+				Administration-Panel previous passwords might be not working anymore
+				as they are encrypted with another algorithm.
+			</p>
+                            </blockquote>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td ><!-- bgcolor="#EEEEEE" -->
+        <font color="#000000" face="verdana,arial,helvetica,sanserif">
+          <a name="Configuration of Custom Crypt-Style"><strong>Configuration of Custom Crypt-Style</strong></a>
+        </font>
+        <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <p>
+				To add your own crypt style you need to write a class which
+				implements the interface: org.xmlcrm.utils.cryptCryptString
+				<br />
+				and extends the Adapter: org.xmlcrm.utils.CryptStringAdapter
+				<br />
+				Example of an Implementation:
+			</p>
+                                                <div class="xmlcode">
+				package org.xmlcrm.utils.crypt;
+				
+				import java.security.NoSuchAlgorithmException;
+				
+				public class MD5Implementation extends CryptStringAdapter implements CryptString {
+				
+				        @Override
+				        public String createPassPhrase(String userGivenPass) {
+				                String passPhrase = null;
+				                try {
+				                        passPhrase = MD5.do_checksum(userGivenPass);
+				                } catch (NoSuchAlgorithmException e) {
+				                        e.printStackTrace();
+				                }
+				                return passPhrase;
+				        }
+				
+				        @Override
+				        public Boolean verifyPassword(String passGiven, String passwdFromDb) {
+				                return (passwdFromDb.equals(createPassPhrase(passGiven)));
+				        }
+				        
+				}
+			</div>
+                                                <p>To add your own Encryption-Class you need to add your class to the
+				OpenMeetings-Webapp (make it available to the webapp-classpath) and
+				use your custom-class-name instead of
+				org.xmlcrm.utils.crypt.MD5Implementation during the Installation or
+				at runtime by editing the config-key crypt_ClassName</p>
+                            </blockquote>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td ><!-- bgcolor="#EEEEEE" -->
+        <font color="#000000" face="verdana,arial,helvetica,sanserif">
+          <a name="Configuration of Custom Crypt-Style"><strong>Configuration of Custom Crypt-Style</strong></a>
+        </font>
+        <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <p>credits goto Mika for sharing his Implementation of the
+				MD5Crypt-Style</p>
                             </blockquote>
       </td></tr>
       <tr><td><br/></td></tr>

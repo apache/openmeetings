@@ -337,7 +337,7 @@ function checkEmail()
 	    	You can use this default crypt type which is equal to PHP-MD5 function or BSD-Style<BR/>
 	    	encryption by using:<b>org.openmeetings.utils.crypt.MD5CryptImplementation</b><BR/>
 	    	for more information or to write your own Crypt-Style see:<BR/>
-			<a href="http://code.google.com/p/openmeetings/wiki/CustomCryptMechanism" target="_blank">CustomCryptMechanism</a><BR/>
+			<a href="http://incubator.apache.org/openmeetings/CustomCryptMechanism.html" target="_blank">Custom Crypt Mechanism</a><BR/>
 			You can edit this value later BUT previous created Users and Sessions might be not usable anymore<BR/>
     	</i></p>
         

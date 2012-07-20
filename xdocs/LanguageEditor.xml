@@ -41,8 +41,7 @@
 			</ul>
 			<p>Screen from the Administration Panel: </p>
 			<p>
-				<a class="fancybox-buttons" data-fancybox-group="button"
-					href="images/langeditor_screen_v2.png">
+				<a class="fancybox-buttons" href="images/langeditor_screen_v2.png">
 					<img src="images/langeditor_screen_v2.png" alt="" width="475"
 						height="324" />
 				</a>

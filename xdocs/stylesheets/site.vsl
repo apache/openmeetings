@@ -49,7 +49,7 @@ limitations under the License.
 					#foreach ( $items in $feature.getChildren() )
 						#if ($items.getName().equals("image"))
 							<p>
-							<a class="fancybox-buttons" data-fancybox-group="button" href="$items.getAttribute("fullhref").getValue()">
+							<a class="group1 fancybox-buttons" href="$items.getAttribute("fullhref").getValue()">
 								<img src="$items.getAttribute("href").getValue()" alt="" width="$items.getAttribute("width").getValue()" 
 									height="$items.getAttribute("height").getValue()" />
 							</a>

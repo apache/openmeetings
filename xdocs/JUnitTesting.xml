@@ -63,8 +63,7 @@
 				</li>
 			</ol>
 			<p>
-				<a class="fancybox-buttons" data-fancybox-group="button"
-					href="images/DebugConfigurations.png">
+				<a class="fancybox-buttons" href="images/DebugConfigurations.png">
 					<img src="images/DebugConfigurations.png" alt="" width="367"
 						height="262" />
 				</a>
@@ -75,8 +74,7 @@
 				</li>
 			</ul>
 			<p>
-				<a class="fancybox-buttons" data-fancybox-group="button"
-					href="images/NewConfiguration.png">
+				<a class="fancybox-buttons" href="images/NewConfiguration.png">
 					<img src="images/NewConfiguration.png" alt="" width="420"
 						height="206" />
 				</a>
@@ -95,8 +93,7 @@
 				</li>
 			</ul>
 			<p>
-				<a class="fancybox-buttons" data-fancybox-group="button"
-					href="images/Arguments.png">
+				<a class="fancybox-buttons" href="images/Arguments.png">
 					<img src="images/Arguments.png" alt="" width="435" height="410" />
 				</a>
 			</p>

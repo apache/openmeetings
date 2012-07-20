@@ -22,7 +22,7 @@
 			<p>There is a System Backup and Import tool. Login as Administrator
 				and Goto > Backup
 			</p>
-			<a class="fancybox-buttons" data-fancybox-group="button" href="images/backup.png">
+			<a class="fancybox-buttons" href="images/backup.png">
 				<img src="images/backup.png" alt="" width="600" height="145" />
 			</a>
 			<p>
