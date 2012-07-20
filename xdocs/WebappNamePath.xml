@@ -17,6 +17,15 @@
 
 	<body>
 
+		<section name="Customize Openmeetings logo">
+			<p>If you want to set up your logo in Openmeetings header you can do the following:</p>
+			<ol>
+				<li>create your logo image as PNG 40px height</li>
+				<li>replace <tt>/opt/red5/webapps/openmeetings/public/themes/basic-theme/general/logo.png</tt> with your logo file</li>
+				<li>(Advanced optional) you can modify <tt>/opt/red5/webapps/openmeetings/config.xml</tt> and modify <tt>appdisplay</tt> section: set position and display for the logo and/or name</li>
+				<li>(Advanced optional) you can modify <tt>/opt/red5/webapps/openmeetings/default-theme.xml</tt> (around line 57) and change image name/path</li>
+			</ol>
+		</section>
 		<section name="Renaming /openmeetings context">
 			<p>
 				If you want to have
