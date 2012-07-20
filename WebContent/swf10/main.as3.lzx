@@ -20,13 +20,25 @@
 -->
 <canvas width="100%" height="100%" title="OpenMeetings">
 	
-    <switch>
+	<switch>
         <when property="$as3">
             <passthrough>
                 import flash.net.*;
                 import flash.display.*;
             </passthrough>
         </when>
+    </switch>
+	<switch>
+		<when property="$debug">
+			<method name="doDebugInit">
+				canvas.setAttribute('debug', true);
+			</method>
+			<debug fontsize="11" oninit="Debug.showInternalProperties = true" width="40%" y="50%" x="60%" height="50%" />
+		</when>
+		<otherwise>
+			<method name="doDebugInit">
+			</method>
+		</otherwise>
     </switch>
     
     <include href="testVideoObject.lzx" />
@@ -74,7 +86,6 @@
     <view name="mainComponent" width="${canvas.width}" height="${canvas.height}">
         <text id="mainBaseText"> </text>
     </view>
-    <!--<text name="text" y="20" width="100%" height="100%" multiline="true"></text>-->
 
     <method name="getLCSID">
         //TODO: fixme
@@ -82,6 +93,7 @@
     </method>
 
     <handler name="oninit"><![CDATA[
+		doDebugInit();
     
         var tInitArgsArry = new Array('secureHash','invitationHash','sid','roomid','directRoomId','language','hash','cuser','tAccept','moodleRoom','becomemoderator','wwwroot','user_id','picture','scopeRoomId');
     
@@ -104,7 +116,7 @@
             }
         }
         
-        var tSWFURL = "main.swf8.swf?lzproxied=solo&lc_SID="+lc_SID+tqueryString;
+        var tSWFURL = "main" + ($debug ? "debug" : "") + ".swf8.swf?lzproxied=solo&lc_SID="+lc_SID+tqueryString;
         
         if ($debug) Debug.write("tSWFURL :: ",tSWFURL);
         

@@ -399,19 +399,20 @@
 		<echo message="flash.src.dir == '${flash.src.dir}'" />
 		<echo message="classpathref == '${laszlo.lib}'" />
 		<echo message="laszlo.home == '${laszlo.home}'" />
-		<echo message="laszlo.debug == '${laszlo.debug}'" />
+		<echo message="flash.debug == '${flash.debug}'" />
 		<echo message="laszlo.proxied == '${laszlo.proxied}'" />
 		<echo message="flash.runtime == '${flash.runtime}'" />
 		<echo message="out.dir.swf == '${out.dir.swf}'" />
 		<echo message="flash.main.file == '${flash.main.file}'" />
+		<echo message="flash.out.file == '${flash.out.file}'" />
 		-->
 		<java classname="org.openlaszlo.compiler.Main" fork="true" newenvironment="true" failonerror="true" dir="${flash.src.dir}" classpathref="laszlo.lib">
 			<jvmarg value="-DLPS_HOME=${laszlo.home}" />
-			<jvmarg value="-Dlzdebug=${laszlo.debug}" />
+			<jvmarg value="-Dlzdebug=false" />
 			<jvmarg value="-Dlzproxied=${laszlo.proxied}" />
 			<jvmarg value="-Xms512M" />
 			<jvmarg value="-Xmx512M" />
-			<arg line="--runtime=${flash.runtime} --dir &quot;${out.dir.swf}&quot; --onerror warn ${flash.main.file}" />
+			<arg line="--runtime=${flash.runtime} ${flash.debug} --dir &quot;${out.dir.swf}&quot; --onerror warn ${flash.main.file} -o ${flash.out.file}" />
 		</java>
 	</target>
 
@@ -426,6 +427,8 @@
 			<param name="flash.src.dir" value="${laszlo.as3.src.dir}/networkTesting" />
 			<param name="flash.runtime" value="swf10" />
 			<param name="flash.main.file" value="networktesting.lzx" />
+			<param name="flash.out.file" value="networktesting.swf10.swf" />
+			<param name="flash.debug" value="" />
 		</antcall>
 	</target>
 
@@ -434,6 +437,8 @@
 			<param name="flash.src.dir" value="${laszlo.as3.src.dir}" />
 			<param name="flash.runtime" value="swf10" />
 			<param name="flash.main.file" value="main.as3.lzx" />
+			<param name="flash.out.file" value="main.as3.swf10.swf" />
+			<param name="flash.debug" value="" />
 		</antcall>
 	</target>
 
@@ -441,7 +446,9 @@
 		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
 			<param name="flash.src.dir" value="${laszlo.as3.src.dir}" />
 			<param name="flash.runtime" value="swf10" />
-			<param name="flash.main.file" value="maindebug.as3.lzx" />
+			<param name="flash.main.file" value="main.as3.lzx" />
+			<param name="flash.out.file" value="maindebug.as3.swf10.swf" />
+			<param name="flash.debug" value="--debug" />
 		</antcall>
 	</target>
 
@@ -450,6 +457,8 @@
 			<param name="flash.src.dir" value="${laszlo.src.dir}" />
 			<param name="flash.runtime" value="swf8" />
 			<param name="flash.main.file" value="main.lzx" />
+			<param name="flash.out.file" value="main.swf8.swf" />
+			<param name="flash.debug" value="" />
 		</antcall>
 	</target>
 
@@ -457,7 +466,9 @@
 		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
 			<param name="flash.src.dir" value="${laszlo.src.dir}" />
 			<param name="flash.runtime" value="swf8" />
-			<param name="flash.main.file" value="maindebug.lzx" />
+			<param name="flash.main.file" value="main.lzx" />
+			<param name="flash.out.file" value="maindebug.swf8.swf" />
+			<param name="flash.debug" value="--debug" />
 		</antcall>
 	</target>
 
