@@ -111,7 +111,7 @@
                 isSuperModerator:this.isSuperModerator});
 	    	this.isSelected = true;
 	    	this._userName.text = "";
-	    	this.showItem.doStart();
+	    	this.showItem.setAttribute('started', true);
     	}
     </method>
     
@@ -120,7 +120,7 @@
 	    	this._miniIcons.destroy();
 	    	this.isSelected = false;
 	    	this._userName.text = this.firstname+' '+this.lastname;
-	    	this.closeItem.doStart();
+	    	this.closeItem.setAttribute('started', true);
     	}
     </method>
      
@@ -147,12 +147,12 @@
     <labelTooltip name="_userName" text="$once{ parent.firstname+' '+parent.lastname }" />
      -->
      
-    <animatorgroup name="showItem" start="false" process="simultaneous">
+    <animatorgroup name="showItem" started="false" process="simultaneous">
     	<animator attribute="height" to="62" duration="750" />
     	<animator attribute="width" to="252" duration="750" />
     </animatorgroup>
     
-    <animatorgroup name="closeItem" start="false" process="simultaneous">
+    <animatorgroup name="closeItem" started="false" process="simultaneous">
         <animator attribute="height" to="42" duration="750" />
         <animator attribute="width" to="252" duration="750" />
     </animatorgroup>

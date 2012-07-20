@@ -33,7 +33,7 @@
     </method>
     
     <method name="closeItem">
-        this._doHide.doStart();
+        this._doHide.setAttribute('started', true);
     </method>
     
     <method name="destroyItem">
@@ -53,7 +53,7 @@
         <labelTooltip labelid="154" />
     </miniIcons>   
     
-    <animator name="_doHide" attribute="opacity" duration="1250" to="0" start="false">
+    <animator name="_doHide" attribute="opacity" duration="1250" to="0" started="false">
         <handler name="onstop">
             parent.destroyItem();
         </handler>
@@ -77,7 +77,7 @@
     </method>
     
     <method name="closeItem">
-    	this._doHide.doStart();
+    	this._doHide.setAttribute('started', true);
     </method>
     
     <method name="destroyItem">
@@ -105,7 +105,7 @@
         <labelTooltip labelid="$once{ parent.parent.labelidToolTipDenyButton }" />
     </miniIcons>   
     
-    <animator name="_doHide" attribute="opacity" duration="1250" to="0" start="false">
+    <animator name="_doHide" attribute="opacity" duration="1250" to="0" started="false">
         <handler name="onstop">
             parent.destroyItem();
         </handler>
@@ -120,7 +120,6 @@
         canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
         canvas.thishib.setBroadCastingFlag.avsettings = "av";
         canvas.thishib.setBroadCastingFlag.doCall(); 
-        //this._doHide.doStart();
         this.sendClearMessage(true);
     </method>   
     
@@ -136,7 +135,6 @@
     
     <method name="applyObject">
         canvas.thishib.switchMicMuted.setMute(this.rcl.publicSID,true);
-        //this._doHide.doStart();
         this.sendClearMessage(true);
     </method>   
     
@@ -167,7 +165,6 @@
 	
     <method name="applyObject">
     	canvas.thishib.switchMicMuted.setMute(this.rcl.publicSID,false);
-        //this._doHide.doStart();
         this.sendClearMessage(true);
     </method>	
 	
@@ -185,7 +182,6 @@
         canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
         canvas.thishib.setBroadCastingFlag.avsettings = "a";
         canvas.thishib.setBroadCastingFlag.doCall(); 
-        //this._doHide.doStart();
         this.sendClearMessage(true);
     </method>   
     
@@ -203,7 +199,6 @@
         canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
         canvas.thishib.setBroadCastingFlag.avsettings = "v";
         canvas.thishib.setBroadCastingFlag.doCall(); 
-        //this._doHide.doStart();
         this.sendClearMessage(true);
     </method>   
     
@@ -220,7 +215,6 @@
         canvas.thishib.setCanDraw.publicSID = this.rcl.publicSID;
         canvas.thishib.setCanDraw.canDraw = true;
         canvas.thishib.setCanDraw.doCall();
-        //this._doHide.doStart();
         this.sendClearMessage(true);
     </method>   
     
@@ -239,7 +233,6 @@
         canvas.thishib.setCanShare.canShare = true;
         canvas.thishib.setCanShare.doCall();
         
-        //this._doHide.doStart();
         this.sendClearMessage(true);
     </method>   
     
@@ -258,7 +251,6 @@
         canvas.thishib.setCanRemote.canRemote = true;
         canvas.thishib.setCanRemote.doCall();
 
-        //this._doHide.doStart();
         this.sendClearMessage(true);
     </method>   
     
@@ -287,7 +279,6 @@
     <method name="applyObject">
         canvas.thishib.addModerator.publicSIDOfNewModerator = this.rcl.publicSID;
         canvas.thishib.addModerator.doCall();
-        //this._doHide.doStart();
         this.sendClearMessage(true);
     </method>   
     

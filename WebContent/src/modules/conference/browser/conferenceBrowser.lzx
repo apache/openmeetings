@@ -90,7 +90,7 @@
                 
                 if (canvas.ismoderator) {
                 	
-                    this._navigation._inner._showBar.doStart();
+                    this._navigation._inner._showBar.setAttribute('started', true);
                     
                 }
                 
@@ -177,7 +177,7 @@
             <![CDATA[
                 //this.isMod = canvas.getIsModeratorByPublicSID(this.refObj.publicSID);
                 if (m) {
-                    this._navigation._inner._showBar.doStart();
+                    this._navigation._inner._showBar.setAttribute('started', true);
                 } else {
                 	this._navigation._inner.setAttribute("y",-40);
                 }
@@ -280,7 +280,7 @@
         <view name="_navigation" clip="true" y="22" height="38" width="${ parent.width }" >
     		<view name="_inner" y="-40">
     			
-    			<animator name="_showBar" attribute="y" to="0" duration="750" start="false">
+    			<animator name="_showBar" attribute="y" to="0" duration="750" started="false">
     				<handler name="onstop">
     					lz.Focus.setFocus(parent.browser.navigation.url,true);
     				</handler>

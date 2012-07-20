@@ -233,7 +233,7 @@
         <method name="updateIcons">
             <![CDATA[
                 if (canvas.ismoderator) {
-                    this.showItem.doStart();
+                    this.showItem.setAttribute('started', true);
                 } else {
                     this.setAttribute("height",0);
                 }
@@ -249,7 +249,7 @@
         <labelText labelid="912" width="270" x="0" multiline="true" y="0" />
         
         <animator name="showItem" attribute="height" 
-                  to="60" duration="1000" start="false" />
+                  to="60" duration="1000" started="false" />
     </view>
 
 </class>

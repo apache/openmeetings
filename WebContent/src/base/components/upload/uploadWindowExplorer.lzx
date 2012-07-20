@@ -238,7 +238,7 @@
         <method name="startShowing">
         	if (!this.isStarted) {
         		this.isStarted = true;
-        		this.status._hide.doStart();
+        		this.status._hide.setAttribute('started', true);
         		this.setAttribute("visibility","visible");
         	} else {
         		return;
@@ -247,17 +247,17 @@
         <view x="1" y="1" width="248" height="8" bgcolor="#FFFFFF"/>
         <view name="status" x="1" y="1" height="8" width="248" bgcolor="#D6DEEF">
         	
-        	<animator name="_hide" attribute="opacity" to="0" from="1" duration="1000" start="false">
+        	<animator name="_hide" attribute="opacity" to="0" from="1" duration="1000" started="false">
         		<handler name="onstop">
         			if (parent["_show"]) {
-        				parent._show.doStart();
+        				parent._show.setAttribute('started', true);
         			}
         		</handler>
         	</animator>
-        	<animator name="_show" attribute="opacity" to="1" from="0" duration="1000" start="false">
+        	<animator name="_show" attribute="opacity" to="1" from="0" duration="1000" started="false">
                 <handler name="onstop">
                 	if (parent["_show"]) {
-                    	parent._show.doStart();
+                    	parent._show.setAttribute('started', true);
                     }
                 </handler>
             </animator>

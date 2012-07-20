@@ -100,7 +100,7 @@
             this._showScreenSharing._width.setAttribute("to",canvas.width-260);
             this._showScreenSharing._x.setAttribute("to",260);
         
-            this._showScreenSharing.doStart();
+            this._showScreenSharing.setAttribute('started', true);
             
             if ($debug) Debug.write("this.initObject ",this.initObject);
             
@@ -124,7 +124,7 @@
            this._showScreenSharing._height.setAttribute("to",100);
            this._showScreenSharing._width.setAttribute("to",270);
            
-           this._showScreenSharing.doStart();
+           this._showScreenSharing.setAttribute('started', true);
            
            this._infoBox.setAttribute("visibility","hidden");
            this._zoombar.setAttribute("visibility","hidden");
@@ -1097,7 +1097,7 @@
         labelid="851" width="100" x="${ parent.width-102 }" 
         y="${ parent.height-22 }" onclick="this.parent.doClose();" />
         
-    <animatorgroup name="_showScreenSharing" start="false" 
+    <animatorgroup name="_showScreenSharing" started="false" 
                    process="simultaneous" duration="1000" >
         <handler name="onstop">
             if ($debug) Debug.write("onstop this._y.to ",this._y.to);

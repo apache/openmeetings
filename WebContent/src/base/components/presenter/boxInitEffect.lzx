@@ -32,8 +32,9 @@
     
     <handler name="oninit">
     	//It seems like you need additionally to start it oninit, the start = true works
-    	//only for the first initialization, sebawagner 19.03.2012 
-    	this.anm.doStart();
+    	//only for the first initialization, sebawagner 19.03.2012
+    	//the following call seems to be redundant after using non-deprecated attribute name -- solomax 2012.07.20 
+    	this.anm.setAttribute('started', true);
     </handler>
     
     <method name="sendStop">
@@ -41,7 +42,7 @@
         this.destroy();
     </method>
 
-    <animatorgroup name="anm" start="true" process="simultaneous" 
+    <animatorgroup name="anm" started="true" process="simultaneous" 
         		duration="500" onstop="this.parent.sendStop()" >
         <animator attribute="x" to="$once{ parent.parent.zielx }" />
         <animator attribute="y" to="$once{ parent.parent.ziely }" />

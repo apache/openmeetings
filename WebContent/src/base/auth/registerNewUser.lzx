@@ -18,7 +18,6 @@
   under the License.
   
 -->
-<!DOCTYPE library SYSTEM "/project.dtd">
 <library>
 
 <class name="registerNewUser" extends="labelExplorerBox" labelid="113"
@@ -68,7 +67,7 @@
     <handler name="onclose">
     	this.refObj._register.setAttribute('visible',true);
         lz.Keys.callOnKeyCombo(refObj.pressEnter, ["enter"]);
-    	this.refObj.doreset.doStart();
+    	this.refObj.doreset.setAttribute('started', true);
     </handler>
     
 
@@ -218,7 +217,7 @@
      </netRemoteCallHib>	
      
      
-     <animator name="showRegForm" attribute="y" to="120" duration="1000" start="true" />
+     <animator name="showRegForm" attribute="y" to="120" duration="1000" started="true" />
 	
 </class>
 

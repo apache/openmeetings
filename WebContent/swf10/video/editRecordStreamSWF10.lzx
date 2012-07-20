@@ -124,7 +124,7 @@
             if ($debug) Debug.write("canvas.currentRoomObject: ", canvas.currentRoomObject);
 
 	        if (false) { // canvas.currentRoomObject.isAudioOnly
-	        	this._chooseDeviceAnimation.doStart();
+	        	this._chooseDeviceAnimation.setAttribute('started', true);
 	        } else {
 	        	//In case the user presses the Sync Button this box should
                 //not close automatically and do the user-prefered values
@@ -140,7 +140,7 @@
                     this.getBroadCastId.doCall();
                 } else {
                     if (this.doDefaultAnimation && !canvas.isInterview) {
-                        this._chooseDeviceAnimation.doStart();
+                        this._chooseDeviceAnimation.setAttribute('started', true);
                     }
                 }
 	        }
@@ -441,7 +441,7 @@
         videoviewViewer._stop();
     </method>
 
-    <animator name="_chooseDeviceAnimation" start="false" attribute="y" to="40" duration="750" />
+    <animator name="_chooseDeviceAnimation" started="false" attribute="y" to="40" duration="750" />
     
     
     <labelText fontstyle="bold" labelid="758"

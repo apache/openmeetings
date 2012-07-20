@@ -37,11 +37,11 @@
     </handler>
     
     <method name="removeThis" args="refObj">
-        this._out.doStart();
+        this._out.setAttribute('started', true);
     </method>
     
     <animator name="_out" attribute="opacity" to="0" 
-    		  duration="750" start="false">
+    		  duration="750" started="false">
     	<handler name="onstop">
     		if (parent.isStopped) {
     			return;
@@ -57,26 +57,26 @@
 	<view name="_bg" bgcolor="0x7fff00" width="$once{ parent.width }"
 		  height="$once{ parent.height }">
 		<handler name="oninit">
-			this._in.doStart();
+			this._in.setAttribute('started', true);
 		</handler>
 		
 		<animator name="_out" attribute="opacity" to="0.3" 
-              duration="250" start="false">
+              duration="250" started="false">
             <handler name="onstop">
             	if (parent.parent.isStopped) {
                     return;
                 }
-                parent._in.doStart();
+                parent._in.setAttribute('started', true);
             </handler>
         </animator>
         
         <animator name="_in" attribute="opacity" to="1" 
-              duration="250" start="false">
+              duration="250" started="false">
             <handler name="onstop">
             	if (parent.parent.isStopped) {
             		return;
             	}
-                parent._out.doStart();
+                parent._out.setAttribute('started', true);
             </handler>
         </animator>
 		
@@ -91,7 +91,7 @@
 		<handler name="ontext" args="txt">
 			if ($debug) Debug.warn("ontext ",txt);
 			parent.parent.doBroadcastText(txt);
-			parent._out.doStart();
+			parent._out.setAttribute('started', true);
 		</handler>
 	</inputtext>
 	

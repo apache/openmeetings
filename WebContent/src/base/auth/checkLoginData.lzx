@@ -155,13 +155,14 @@
         <handler name="onclick">
 	        <![CDATA[
 	            this.parent._register.setAttribute('visible',false);
+	            if (this.parent.childObj != null) {
+	            	this.parent.childObj.destroy();
+	            }
 	            this.parent.childObj = new lz.registerNewUser(canvas,{
 	            									refObj:this.parent,
 	            									user_login_minimum_length:parent.user_login_minimum_length,
 	            									user_pass_minimum_length:parent.user_pass_minimum_length
-	            								});     
-	            lz.Keys.removeKeyComboCall(this.parent.pressEnter, ["enter"]);
-	            //parent.showRegForm.doStart();
+	            								});
             ]]>
         </handler>
     </simpleLabelButton>     
@@ -393,10 +394,10 @@
         <attribute name="showResetBox" value="false" type="boolean" />
         <handler name="onclick">
             if (!this.showResetBox){
-                this.parent.showResetForm.doStart();
+                this.parent.showResetForm.setAttribute('started', true);
                 this.showResetBox = true;
             } else {
-                this.parent.disableResetForm.doStart();
+                this.parent.disableResetForm.setAttribute('started', true);
                 this.showResetBox = false;
             }
         </handler>       
@@ -415,14 +416,13 @@
        lz.Keys.callOnKeyCombo(this.pressEnter, ["enter"]);
     </method>
 
-    <animator name="showRegForm" attribute="x" to="20" duration="1000" start="false" />
     <animator name="doreset" attribute="x" to="$once{ canvas.width/2 - parent.width/2 }" 
-              duration="1000" start="false" />
+              duration="1000" started="false" />
     
     <animator name="showResetForm" attribute="height" to="370" duration="1000" 
-        onstop="parent.createReset(parent)" start="false" />
+        onstop="parent.createReset(parent)" started="false" />
     <animator name="disableResetForm" attribute="height" to="230" duration="1000" 
-        onstart="parent.destroyReset(parent);" start="false" />    
+        onstart="parent.destroyReset(parent);" started="false" />    
 
 </class>
     

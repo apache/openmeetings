@@ -359,7 +359,7 @@
             this.initialHeight = this.height;
             //this.setAttribute("height",20);
             this._minimizeZoom.setAttribute("to",20);
-            this._minimizeZoom.doStart();
+            this._minimizeZoom.setAttribute('started', true);
         ]]>
     </method>
     
@@ -375,7 +375,7 @@
             //this.setAttribute("height",this.initialHeight); 
             if ($debug) Debug.write("this.initialHeight ",this.initialHeight);
             this._minimizeZoom.setAttribute("to",this.initialHeight);
-            this._minimizeZoom.doStart();
+            this._minimizeZoom.setAttribute('started', true);
         ]]>
     </method>    
     
@@ -576,7 +576,7 @@
     <dragHelper name="dragHelper"/>
     
     <animator name="_minimizeZoom" attribute="height" 
-              duration="750" to="20" start="false">
+              duration="750" to="20" started="false">
         <handler name="onstop" args="s">
             parent.reminimizeComplete();
         </handler>

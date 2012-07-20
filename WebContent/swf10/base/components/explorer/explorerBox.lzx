@@ -110,7 +110,6 @@
 	
 	<method name="close">
 		if (this.onclose) this.onclose.sendEvent();
-		//this.doOut.doStart();
 		this.doDestroy();
 	</method>
 	
@@ -316,9 +315,9 @@
 	
 	<dragstate name="dragger" />
     
-    <animator attribute="y" to="20" duration="1000" start="false" />
+    <animator attribute="y" to="20" duration="1000" started="false" />
         
-    <animator name="doOut" attribute="y" to="-500" duration="1000" start="false" onstop="parent.doDestroy()" />    
+    <animator name="doOut" attribute="y" to="-500" duration="1000" started="false" onstop="parent.doDestroy()" />    
     
     <method name="doDestroy">
         this.destroy();

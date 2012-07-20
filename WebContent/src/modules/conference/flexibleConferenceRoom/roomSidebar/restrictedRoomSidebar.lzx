@@ -66,12 +66,12 @@
     
     <method name="toggleStatus">
         if (this.isOpen) {
-            this._doClose.doStart();
+            this._doClose.setAttribute('started', true);
             this.isOpen = false;
             this._minimizeSidebar._icon.setAttribute("frame",2);
             this._minimizeSidebar._icon._labelTooltip.setAttribute("labelid",857);
         } else {
-            this._doOpen.doStart();
+            this._doOpen.setAttribute('started', true);
             this.isOpen = true;
             this._minimizeSidebar._icon.setAttribute("frame",1);
             this._minimizeSidebar._icon._labelTooltip.setAttribute("labelid",856);
@@ -132,10 +132,10 @@
     </view>
     
     <animator name="_doOpen" attribute="width" to="$once{ parent.width }" 
-              duration="750" start="false" />
+              duration="750" started="false" />
               
     <animator name="_doClose" attribute="width" to="10" 
-              duration="750" start="false" />
+              duration="750" started="false" />
     
 </class>
 

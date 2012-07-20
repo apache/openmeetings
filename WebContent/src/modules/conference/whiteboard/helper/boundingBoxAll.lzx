@@ -233,14 +233,6 @@
 		this.setStartValues();	
 	</method>
 
-	<!-- 
-    <animatorgroup start="false" process="simultaneous" duration="100" onstop="parent.doUpdateAction()">
-      <animator attribute="x" to="${ parent.parent.ex }" />
-      <animator attribute="y" to="${ parent.parent.ey }" />
-      <animator attribute="width" to="${ parent.parent.ewidth }" />
-      <animator attribute="height" to="${ parent.parent.eheight }" />            
-    </animatorgroup>	
-     -->
     <method name="doUpdateAction" >
     	this.setAttribute('doHandlerUpdates',true);
     	if (this.boundingDoUpdateOnInit) {
