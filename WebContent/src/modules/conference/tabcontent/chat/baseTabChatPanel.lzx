@@ -151,7 +151,6 @@
 
 		<method name="showText" args="refObj">
 			if (this.doBlink) {
-				if ($debug) Debug.write("showText",this._newMessage.opacity);
 				lz.Timer.addTimer( this.fadeDelegate , 1000 );
 				if (this._newMessage.opacity == 0) {
 					this._newMessage.animate( "opacity", 1.0, 400 );
@@ -221,7 +220,7 @@
 		<view name="_newMessage" y="0" x="${ parent.width-this.width }"
 			visibility="hidden">
 			<view x="1" y="2" resource="chat_message_incoming_rsc" />
-			<labelText x="22" y="2" fgcolor="0xFFFFFF" fontstyle="bold"
+			<labelText x="22" y="2" fgcolor="0x008000" fontstyle="bold"
 				labelid="1417" />
 		</view>
 
