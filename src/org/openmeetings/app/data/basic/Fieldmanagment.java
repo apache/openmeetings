@@ -330,7 +330,7 @@ public class Fieldmanagment {
 			flv.setValue(fieldvalue);
 			flv.setLanguage_id(language_id);
 			flv.setFieldvalues(fv);
-			flv.setDeleted("false");
+			flv.setDeleted(false);
 
 			flv = em.merge(flv);
 			Long fieldlanguagesvaluesId = flv.getFieldlanguagesvalues_id();
@@ -365,7 +365,7 @@ public class Fieldmanagment {
 			fl.setFieldvalues_id(fieldvalues_id);
 			fl.setStarttime(new Date());
 			fl.setName(fieldName);
-			fl.setDeleted("false");
+			fl.setDeleted(false);
 
 			return em.merge(fl);
 		} catch (Exception ex2) {
@@ -500,7 +500,7 @@ public class Fieldmanagment {
 	}
 
 	private Long selectMaxFromFieldsValues(String search) throws Exception {
-		String queryLanguage = "select count(c.fieldvalues_id) from Fieldvalues c where c.deleted = 'false'";
+		String queryLanguage = "select count(c.fieldvalues_id) from Fieldvalues c where c.deleted = false";
 		if (search.length()>0) {
 			queryLanguage += " AND (c.name LIKE :searchStr " +
 							"OR c.fieldvalues_id = :fieldvalues_id)";
@@ -531,7 +531,7 @@ public class Fieldmanagment {
 
 	private List<Fieldvalues> getFieldsValues(int start, int max,
 			String orderby, boolean asc, String search) throws Exception {
-		String queryLanguage = "select c from Fieldvalues c where c.deleted = 'false'";
+		String queryLanguage = "select c from Fieldvalues c where c.deleted = false";
 		if (search.length()>0) {
 			queryLanguage += " AND (c.name LIKE :searchStr " +
 							"OR c.fieldvalues_id = :fieldvalues_id)";

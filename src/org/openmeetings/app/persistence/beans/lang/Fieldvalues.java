@@ -35,7 +35,7 @@ import javax.persistence.Transient;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getFieldCount", query = "SELECT COUNT(fv) FROM Fieldvalues flv WHERE flv.deleted LIKE 'false' ")
+	@NamedQuery(name = "getFieldCount", query = "SELECT COUNT(fv) FROM Fieldvalues flv WHERE flv.deleted = false ")
 })
 @Table(name = "fieldvalues")
 public class Fieldvalues implements Serializable {
@@ -50,7 +50,7 @@ public class Fieldvalues implements Serializable {
 	@Column(name="updatetime")
 	private Date updatetime;
 	@Column(name="deleted")
-	private String deleted;
+	private boolean deleted;
 
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name="fieldvalues_id")
@@ -91,10 +91,10 @@ public class Fieldvalues implements Serializable {
 		this.updatetime = updatetime;
 	}
 	
-	public String getDeleted() {
+	public boolean getDeleted() {
 		return deleted;
 	}
-	public void setDeleted(String deleted) {
+	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
 

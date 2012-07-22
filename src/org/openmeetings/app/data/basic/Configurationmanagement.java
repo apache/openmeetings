@@ -195,7 +195,7 @@ public class Configurationmanagement {
 			CriteriaQuery<Configuration> cq = cb
 					.createQuery(Configuration.class);
 			Root<Configuration> c = cq.from(Configuration.class);
-			Predicate condition = cb.equal(c.get("deleted"), "false");
+			Predicate condition = cb.equal(c.get("deleted"), false);
 			cq.where(condition);
 			cq.distinct(asc);
 			if (asc) {
@@ -223,7 +223,7 @@ public class Configurationmanagement {
 			log.debug("selectMaxFromConfigurations ");
 			// get all users
 			TypedQuery<Long> query = em
-					.createQuery("select count(c.configuration_id) from Configuration c where c.deleted = 'false'", Long.class);
+					.createQuery("select count(c.configuration_id) from Configuration c where c.deleted = false", Long.class);
 			List<Long> ll = query.getResultList();
 			log.debug("selectMaxFromConfigurations" + ll.get(0));
 			return ll.get(0);
@@ -241,7 +241,7 @@ public class Configurationmanagement {
 			configuration.setConf_key(CONF_KEY);
 			configuration.setConf_value(CONF_VALUE);
 			configuration.setStarttime(new Date());
-			configuration.setDeleted("false");
+			configuration.setDeleted(false);
 			configuration.setComment(comment);
 			if (USER_ID != null)
 				configuration.setUser_id(USER_ID);
@@ -269,7 +269,7 @@ public class Configurationmanagement {
 					log.info("add new Configuration");
 					conf.setConfiguration_id(null);
 					conf.setStarttime(new Date());
-					conf.setDeleted("false");
+					conf.setDeleted(false);
 					return this.addConfig(conf);
 				} else {
 					log.info("update Configuration ID: "
@@ -280,7 +280,7 @@ public class Configurationmanagement {
 					conf2.setConf_key(conf.getConf_key());
 					conf2.setConf_value(conf.getConf_value());
 					conf2.setUser_id(users_id);
-					conf2.setDeleted("false");
+					conf2.setDeleted(false);
 					conf2.setUpdatetime(new Date());
 					return this.updateConfig(conf2);
 				}
@@ -335,7 +335,7 @@ public class Configurationmanagement {
 								Configuration.class);
 				conf.setUsers(usersDao.getUser(users_id));
 				conf.setUpdatetime(new Date());
-				conf.setDeleted("true");
+				conf.setDeleted(true);
 
 				Configuration conf2 = this.getConfByConfigurationId(3L,
 						conf.getConfiguration_id());
@@ -343,7 +343,7 @@ public class Configurationmanagement {
 				conf2.setConf_key(conf.getConf_key());
 				conf2.setConf_value(conf.getConf_value());
 				conf2.setUser_id(users_id);
-				conf2.setDeleted("true");
+				conf2.setDeleted(true);
 				conf2.setUpdatetime(new Date());
 
 				this.updateConfig(conf2);

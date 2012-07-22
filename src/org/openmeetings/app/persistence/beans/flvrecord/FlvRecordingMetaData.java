@@ -69,7 +69,7 @@ public class FlvRecordingMetaData implements Serializable {
 	@Column(name="updated")
 	private Date updated;
 	@Column(name="deleted")
-	private String deleted;
+	private boolean deleted;
 	
 	@Column(name="wav_audio_data")
 	private String wavAudioData;
@@ -152,10 +152,10 @@ public class FlvRecordingMetaData implements Serializable {
 		this.inserted = inserted;
 	}
 
-	public String getDeleted() {
+	public boolean getDeleted() {
 		return deleted;
 	}
-	public void setDeleted(String deleted) {
+	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
 	

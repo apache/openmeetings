@@ -1287,7 +1287,7 @@ public class BackupExport {
 			room_organisation.addElement("rooms_organisation_id").addCDATA(
 					formatString("" + roomOrg.getRooms_organisation_id()));
 			room_organisation.addElement("organisation_id").addCDATA(
-				"true".equals(roomOrg.getDeleted()) ? "0" :
+				roomOrg.getDeleted() ? "0" :
 				formatString(""
 						+ roomOrg.getOrganisation().getOrganisation_id()));
 			if (roomOrg.getRoom() != null) {
@@ -1639,7 +1639,7 @@ public class BackupExport {
 			cfgElem.addElement("comment").addCDATA(formatString("" + cfg.getComment()));
 			cfgElem.addElement("key").addCDATA(formatString(cfg.getConf_key()));
 			cfgElem.addElement("value").addCDATA(formatString(cfg.getConf_value()));
-			cfgElem.addElement("deleted").addCDATA(formatString(cfg.getDeleted()));
+			cfgElem.addElement("deleted").addCDATA(formatString("" + cfg.getDeleted()));
 			cfgElem.addElement("created").addCDATA(formatString(CalendarPatterns.getExportDate(cfg.getStarttime())));
 			cfgElem.addElement("updated").addCDATA(formatString(CalendarPatterns.getExportDate(cfg.getUpdatetime())));
 			cfgElem.addElement("user_id").addCDATA(formatString("" + cfg.getUser_id()));

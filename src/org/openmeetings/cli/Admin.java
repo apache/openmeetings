@@ -455,7 +455,7 @@ public class Admin {
 								} else {
 									invalid += pSize;
 								}
-							} else if ("true".equals(u.getDeleted())) {
+							} else if (u.getDeleted()) {
 								if (cleanup) {
 									FileHelper.removeRec(profile);
 								} else {
@@ -465,7 +465,7 @@ public class Admin {
 						}
 						long missing = 0;
 						for (Users u : udao.getAllUsersDeleted()) {
-							if (!"true".equals(u.getDeleted()) && !new File(OmFileHelper.getUploadProfilesUserDir(u.getUser_id()), u.getPictureuri()).exists()) {
+							if (!u.getDeleted() && !new File(OmFileHelper.getUploadProfilesUserDir(u.getUser_id()), u.getPictureuri()).exists()) {
 								missing++;
 							}
 						}
@@ -497,7 +497,7 @@ public class Admin {
 								} else {
 									invalid += fSize;
 								}
-							} else if ("true".equals(item.getDeleted())) {
+							} else if (item.getDeleted()) {
 								if (cleanup) {
 									FileHelper.removeRec(f);
 								} else {
@@ -507,7 +507,7 @@ public class Admin {
 						}
 						missing = 0;
 						for (FileExplorerItem item : fileDao.getFileExplorerItems()) {
-							if (!"true".equals(item.getDeleted()) && !new File(files, item.getFileHash()).exists()) {
+							if (!item.getDeleted() && !new File(files, item.getFileHash()).exists()) {
 								missing++;
 							}
 						}
@@ -590,11 +590,11 @@ public class Admin {
 		System.exit(0);
 	}
 	
-	private void checkRecordingFile(File hibernateDir, String name, String deleted, long[] params, boolean cleanup) {
+	private void checkRecordingFile(File hibernateDir, String name, boolean deleted, long[] params, boolean cleanup) {
 		File flv = name != null ? new File(hibernateDir, name) : null;
 		if (flv != null) {
 			if (flv.exists() && flv.isFile()) {
-				if ("true".equals(deleted)) {
+				if (deleted) {
 					params[0] += flv.length();
 					if (cleanup) {
 						FileHelper.removeRec(flv);

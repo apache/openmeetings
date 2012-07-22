@@ -62,7 +62,7 @@ public class Adresses implements Serializable {
 	@Column(name = "zip")
 	private String zip;
 	@Column(name = "deleted")
-	private String deleted;
+	private boolean deleted;
 
 	@Column(name = "email")
 	private String email;
@@ -153,11 +153,11 @@ public class Adresses implements Serializable {
 		this.zip = zip;
 	}
 
-	public String getDeleted() {
+	public boolean getDeleted() {
 		return deleted;
 	}
 
-	public void setDeleted(String deleted) {
+	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
 

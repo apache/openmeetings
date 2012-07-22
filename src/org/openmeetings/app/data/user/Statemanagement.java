@@ -70,7 +70,7 @@ public class Statemanagement {
 			st.setShortName(shortName);
 			st.setCode(code);
 			st.setStarttime(new Date());
-			st.setDeleted("false");
+			st.setDeleted(false);
 
 			st = em.merge(st);
 			Long id = st.getState_id();
@@ -95,7 +95,7 @@ public class Statemanagement {
 			TypedQuery<States> query = em
 					.createQuery("select c from States as c where c.state_id = :state_id AND c.deleted <> :deleted", States.class);
 			query.setParameter("state_id", state_id);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			List<States> ll = query.getResultList();
 			if (ll.size() > 0) {
 				return ll.get(0);
@@ -115,7 +115,7 @@ public class Statemanagement {
 		try {
 			TypedQuery<States> query = em
 					.createQuery("select c from States as c where c.deleted <> :deleted", States.class);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			List<States> ll = query.getResultList();
 			return ll;
 		} catch (Exception ex2) {

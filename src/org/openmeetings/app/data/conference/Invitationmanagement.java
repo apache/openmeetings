@@ -166,7 +166,7 @@ public class Invitationmanagement {
 					invitation.setInvitationWasUsed(false);
 				}
 
-				invitation.setDeleted("false");
+				invitation.setDeleted(false);
 
 				Users us = usersDao.getUser(createdBy);
 				String hashRaw = "HASH" + (System.currentTimeMillis());
@@ -274,7 +274,7 @@ public class Invitationmanagement {
 		Invitations inv = member.getInvitation();
 
 		if (inv != null) {
-			inv.setDeleted("true");
+			inv.setDeleted(true);
 			updateInvitation(inv);
 		}
 
@@ -552,7 +552,7 @@ public class Invitationmanagement {
 					invitation.setInvitationWasUsed(false);
 				}
 
-				invitation.setDeleted("false");
+				invitation.setDeleted(false);
 
 				Users us = usersDao.getUser(createdBy);
 				String hashRaw = "InvitationHash"
@@ -965,7 +965,7 @@ public class Invitationmanagement {
 					+ "AND invi.invitations_id = :invid";
 
 			TypedQuery<Invitations> query = em.createQuery(hql, Invitations.class);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			query.setParameter("invid", invId);
 
 			Invitations inv = null;
@@ -990,7 +990,7 @@ public class Invitationmanagement {
 					+ "AND invi.invitations_id = :invid";
 
 			TypedQuery<Invitations> query = em.createQuery(hql, Invitations.class);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			query.setParameter("invid", invId);
 
 			Invitations inv = null;
@@ -1019,7 +1019,7 @@ public class Invitationmanagement {
 					+ "AND c.deleted = :deleted";
 			TypedQuery<Invitations> query = em.createQuery(hql, Invitations.class);
 			query.setParameter("hashCode", hashCode);
-			query.setParameter("deleted", "false");
+			query.setParameter("deleted", false);
 			Invitations invitation = null;
 			try {
 				invitation = query.getSingleResult();

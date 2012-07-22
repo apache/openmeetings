@@ -97,7 +97,7 @@ public class AppointmentDaoImpl {
 				+ "AND a.room.rooms_id = :room_id ";
 
 		TypedQuery<Appointment> query = em.createQuery(hql, Appointment.class);
-		query.setParameter("deleted", "true");
+		query.setParameter("deleted", true);
 		query.setParameter("room_id", room_id);
 
 		List<Appointment> appoint = query.getResultList();
@@ -119,7 +119,7 @@ public class AppointmentDaoImpl {
 					+ "AND a.appointmentId = :appointmentId ";
 
 			TypedQuery<Appointment> query = em.createQuery(hql, Appointment.class);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			query.setParameter("appointmentId", appointmentId);
 
 			Appointment appoint = null;
@@ -164,7 +164,7 @@ public class AppointmentDaoImpl {
 
 			TypedQuery<Appointment> query = em.createQuery(hql,
 					Appointment.class);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 
 			List<Appointment> appointList = query.getResultList();
 
@@ -230,7 +230,7 @@ public class AppointmentDaoImpl {
 					.getAppointmentReminderTypById(remind));
 			ap.setStarttime(new Date());
 			ap.setIsReminderEmailSend(false);
-			ap.setDeleted("false");
+			ap.setDeleted(false);
 			ap.setIsDaily(isDaily);
 			ap.setIsWeekly(isWeekly);
 			ap.setIsMonthly(isMonthly);
@@ -692,7 +692,7 @@ public class AppointmentDaoImpl {
 
 			Appointment app = this.getAppointmentById(appointmentId);
 			app.setUpdatetime(new Date());
-			app.setDeleted("true");
+			app.setDeleted(true);
 
 			if (app.getAppointmentId() == null) {
 				em.persist(app);
@@ -724,7 +724,7 @@ public class AppointmentDaoImpl {
 			log.debug("Start " + calstart.getTime() + " End " + calend.getTime());
 
 			TypedQuery<Appointment> query = em.createNamedQuery("appointmentsInRange", Appointment.class);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			query.setParameter("starttime", calstart.getTime());
 			query.setParameter("endtime", calend.getTime());
 			query.setParameter("userId", userId);
@@ -764,7 +764,7 @@ public class AppointmentDaoImpl {
 
 			TypedQuery<Appointment> query = em.createQuery(hql,
 					Appointment.class);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			query.setParameter("categoryId", categoryId);
 
 			List<Appointment> listAppoints = query.getResultList();
@@ -781,7 +781,7 @@ public class AppointmentDaoImpl {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 			CriteriaQuery<Appointment> cq = cb.createQuery(Appointment.class);
 			Root<Appointment> c = cq.from(Appointment.class);
-			Predicate condition = cb.equal(c.get("deleted"), "false");
+			Predicate condition = cb.equal(c.get("deleted"), false);
 			Predicate subCondition = cb.equal(c.get("categoryId"), cat_id);
 			cq.where(condition, subCondition);
 			TypedQuery<Appointment> q = em.createQuery(cq);
@@ -803,7 +803,7 @@ public class AppointmentDaoImpl {
 					+ "AND a.appointmentStarttime > :appointmentStarttime ";
 
 			TypedQuery<Appointment> query = em.createQuery(hql, Appointment.class);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			query.setParameter("appointmentStarttime", appointmentStarttime);
 
 			Appointment appoint = null;
@@ -828,7 +828,7 @@ public class AppointmentDaoImpl {
 
 			TypedQuery<Appointment> query = em.createQuery(hql,
 					Appointment.class);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			query.setParameter("appointmentName", name);
 
 			List<Appointment> listAppoints = query.getResultList();
@@ -876,7 +876,7 @@ public class AppointmentDaoImpl {
 					Appointment.class);
 
 			query.setParameter("mm_deleted", true);
-			query.setParameter("app_deleted", "true");
+			query.setParameter("app_deleted", true);
 			query.setParameter("userId", userId);
 
 			query.setParameter("starttime", startCal.getTime());
@@ -935,7 +935,7 @@ public class AppointmentDaoImpl {
             log.debug("stopStamp "+stopStamp);
 
 			query.setParameter("mm_deleted", true);
-			query.setParameter("app_deleted", "true");
+			query.setParameter("app_deleted", true);
 			query.setParameter("starttime", startStamp);
 			query.setParameter("endtime", stopStamp);
 			if (isReminderEmailSend != null) {
@@ -964,7 +964,7 @@ public class AppointmentDaoImpl {
 			TypedQuery<Appointment> query = em.createQuery(hql,
 					Appointment.class);
 
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			query.setParameter("user_id", user_id);
 			query.setParameter("rooms_id", rooms_id);
 

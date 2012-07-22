@@ -119,7 +119,7 @@ public class Emailmanagement {
 			TypedQuery<Adresses> query = em
 					.createQuery("select c from Adresses as c where c.email LIKE :email AND c.deleted <> :deleted", Adresses.class);
 			query.setParameter("email", email);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			int count = query.getResultList().size();
 			log.debug("size: " + count);
 

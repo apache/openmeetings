@@ -41,7 +41,7 @@ public class TestUserOrganisation extends AbstractOpenmeetingsSpringTest {
 	
 	private Users getValidUser() {
 		for (Users u : usersDao.getAllUsers()) {
-			if ("false".equalsIgnoreCase(u.getDeleted()) && u.getOrganisation_users().size() > 0) {
+			if (!u.getDeleted() && u.getOrganisation_users().size() > 0) {
 				return u;
 			}
 		}

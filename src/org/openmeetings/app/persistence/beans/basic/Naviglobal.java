@@ -42,10 +42,10 @@ import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
 @NamedQueries({
 		@NamedQuery(name = "getNavigation", query = "SELECT DISTINCT ng from Naviglobal ng "
 				+ "LEFT JOIN ng.mainnavi nm "
-				+ "WHERE nm.deleted LIKE 'false' "
+				+ "WHERE nm.deleted = false "
 				+ "AND ng.level_id <= :level_id "
 				+ "AND nm.level_id <= :level_id "
-				+ "AND ng.deleted LIKE 'false' "
+				+ "AND ng.deleted = false "
 				+ "order by ng.naviorder, nm.naviorder"),
 		@NamedQuery(name = "getNavigationById", query = "SELECT ng from Naviglobal ng WHERE ng.global_id = :global_id") })
 @Table(name = "naviglobal")
@@ -77,7 +77,7 @@ public class Naviglobal implements Serializable {
 	@Column(name = "level_id")
 	private Long level_id;
 	@Column(name = "deleted")
-	private String deleted;
+	private boolean deleted;
 	@Column(name = "fieldvalues_id")
 	private Long fieldvalues_id;
 	@Column(name = "tooltip_fieldvalues_id")
@@ -154,11 +154,11 @@ public class Naviglobal implements Serializable {
 		this.updatetime = updatetime;
 	}
 
-	public String getDeleted() {
+	public boolean getDeleted() {
 		return deleted;
 	}
 
-	public void setDeleted(String deleted) {
+	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
 

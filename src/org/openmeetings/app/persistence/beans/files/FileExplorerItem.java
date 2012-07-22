@@ -73,7 +73,7 @@ public class FileExplorerItem implements Serializable {
 	@Column(name="updated")
 	private Date updated;
 	@Column(name="deleted")
-	private String deleted;
+	private boolean deleted;
 	
 	@Column(name="filesize")
 	private Long fileSize;
@@ -182,10 +182,10 @@ public class FileExplorerItem implements Serializable {
 		this.inserted = inserted;
 	}
 
-	public String getDeleted() {
+	public boolean getDeleted() {
 		return deleted;
 	}
-	public void setDeleted(String deleted) {
+	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
 	

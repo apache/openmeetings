@@ -37,8 +37,8 @@ import javax.persistence.Transient;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getConfigurationByKey", query = "SELECT c FROM Configuration c WHERE c.conf_key = :conf_key and c.deleted = 'false'")
-	, @NamedQuery(name = "getConfigurationsByKeys", query = "SELECT c FROM Configuration c WHERE c.conf_key IN :conf_keys and c.deleted = 'false'")
+	@NamedQuery(name = "getConfigurationByKey", query = "SELECT c FROM Configuration c WHERE c.conf_key = :conf_key and c.deleted = false")
+	, @NamedQuery(name = "getConfigurationsByKeys", query = "SELECT c FROM Configuration c WHERE c.conf_key IN :conf_keys and c.deleted = false")
 })
 @Table(name = "configuration")
 public class Configuration implements Serializable {
@@ -60,7 +60,7 @@ public class Configuration implements Serializable {
 	@Column(name="comment_field", length=2048)
 	private String comment;
 	@Column(name="deleted")
-	private String deleted;
+	private boolean deleted;
 	@Column(name="user_id")
 	private Long user_id;
 
@@ -109,10 +109,10 @@ public class Configuration implements Serializable {
 		this.updatetime = updatetime;
 	}
 	
-	public String getDeleted() {
+	public boolean getDeleted() {
 		return deleted;
 	}
-	public void setDeleted(String deleted) {
+	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
 	

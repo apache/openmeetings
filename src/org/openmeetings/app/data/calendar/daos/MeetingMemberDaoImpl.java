@@ -109,36 +109,6 @@ public class MeetingMemberDaoImpl {
 		return null;
 	}
 
-	/*
-	 * public List<MeetingMember> getMeetingMemberByRange(Long userId, Date
-	 * starttime, Date endtime) { try {
-	 * 
-	 * 
-	 * 
-	 * String hql = "select a from Appointment a , MeetingMember mm " +
-	 * "WHERE a.deleted != :deleted  " + "AND mm.userid = :userid " + "AND "+
-	 * "( " + "(a.appointmentStarttime BETWEEN :starttime AND :endtime) "+ "OR "
-	 * + "(a.appointmentEndtime BETWEEN :starttime AND :endtime) "+ "OR " +
-	 * "(a.appointmentStarttime < :starttime AND a.appointmentEndtime > :endtime) "
-	 * + ") "+ "AND " + "( " + "a.userId = :userid "+ ")";
-	 * 
-	 * //"AND (a.terminstatus != 4 AND a.terminstatus != 5)";
-	 * 
-	 * Object idf = HibernateUtil.createSession(); EntityManager session =
-	 * HibernateUtil.getSession(); EntityTransaction tx =
-	 * session.getTransaction(); tx.begin(); Query query =
-	 * session.createQuery(hql); query.setParameter("deleted", "true");
-	 * query.setParameter("starttime", starttime); query.setParameter("endtime",
-	 * endtime); query.setParameter("userid",userId);
-	 * 
-	 * List<MeetingMember> listAppoints = query.getResultList(); tx.commit();
-	 * HibernateUtil.closeSession(idf);
-	 * 
-	 * return listAppoints; } catch (HibernateException ex) {
-	 * log.error("[getMeetingMemberByRange]: " + ex); } catch (Exception ex2) {
-	 * log.error("[getMeetingMemberByRange]: " + ex2); } return null; }
-	 */
-
 	/**
 	 * Updating MeetingMember
 	 */

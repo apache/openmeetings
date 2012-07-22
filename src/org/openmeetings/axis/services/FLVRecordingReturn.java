@@ -48,7 +48,7 @@ public class FLVRecordingReturn {
 	private Long insertedBy;
 	private Date inserted;
 	private Date updated;
-	private String deleted;
+	private boolean deleted;
 	
 	private Integer width;
 	private Integer height;
@@ -248,11 +248,11 @@ public class FLVRecordingReturn {
 		this.updated = updated;
 	}
 
-	public String getDeleted() {
+	public boolean getDeleted() {
 		return deleted;
 	}
 
-	public void setDeleted(String deleted) {
+	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
 

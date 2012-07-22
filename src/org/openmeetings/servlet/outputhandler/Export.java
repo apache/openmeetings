@@ -246,7 +246,7 @@ public class Export extends HttpServlet {
 			user.addElement("age").setText(
 					CalendarPatterns.getDateByMiliSeconds(u.getAge()));
 			user.addElement("availible").setText(u.getAvailible().toString());
-			user.addElement("deleted").setText(u.getDeleted());
+			user.addElement("deleted").setText("" + u.getDeleted());
 			user.addElement("firstname").setText(u.getFirstname());
 			user.addElement("lastname").setText(u.getLastname());
 			user.addElement("login").setText(u.getLogin());

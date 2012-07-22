@@ -97,11 +97,11 @@ public class UsersDaoImpl {
 		try {
 			if (USER_ID != 0) {
 				Users us = getUser(USER_ID);
-				us.setDeleted("true");
+				us.setDeleted(true);
 				us.setUpdatetime(new Date());
 				Adresses adr = us.getAdresses();
 				if (adr != null) {
-					adr.setDeleted("true");
+					adr.setDeleted(true);
 				}
 
 				if (us.getUser_id() == null) {
@@ -127,7 +127,7 @@ public class UsersDaoImpl {
 	public Long selectMaxFromUsers() {
 		try {
 			// get all users
-			TypedQuery<Long> query = em.createQuery("select count(c.user_id) from Users c where c.deleted = 'false'", Long.class);
+			TypedQuery<Long> query = em.createQuery("select count(c.user_id) from Users c where c.deleted = false", Long.class);
 			List<Long> ll = query.getResultList();
 			log.info("selectMaxFromUsers" + ll.get(0));
 			return ll.get(0);
@@ -143,7 +143,7 @@ public class UsersDaoImpl {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 			CriteriaQuery<Users> cq = cb.createQuery(Users.class);
 			Root<Users> c = cq.from(Users.class);
-			Predicate condition = cb.equal(c.get("deleted"), "false");
+			Predicate condition = cb.equal(c.get("deleted"), false);
 			cq.where(condition);
 			TypedQuery<Users> q = em.createQuery(cq);
 			List<Users> ll = q.getResultList();
@@ -174,7 +174,7 @@ public class UsersDaoImpl {
 			// log.debug("getUserContactsBySearch: "+ userId);
 
 			String hql = "select count(u.user_id) from  Users u "
-					+ "WHERE u.deleted = 'false' ";
+					+ "WHERE u.deleted = false ";
 
 			hql += "AND ( ";
 			for (int i = 0; i < searchItems.length; i++) {
@@ -221,7 +221,7 @@ public class UsersDaoImpl {
 		try {
 			TypedQuery<Users> query = em.createQuery("select c from Users as c where c.login = :DataValue AND c.deleted <> :deleted", Users.class);
 			query.setParameter("DataValue", DataValue);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			int count = query.getResultList().size();
 
 			if (count != 0) {
@@ -239,7 +239,7 @@ public class UsersDaoImpl {
 					+ " where u.login = :login" + " AND u.deleted <> :deleted";
 			TypedQuery<Users> query = em.createQuery(hql, Users.class);
 			query.setParameter("login", login);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			Users us = null;
 			try {
 				us = query.getSingleResult();
@@ -259,7 +259,7 @@ public class UsersDaoImpl {
 					+ " AND u.deleted <> :deleted";
 			TypedQuery<Users> query = em.createQuery(hql, Users.class);
 			query.setParameter("email", email);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			Users us = null;
 			try {
 				us = query.getSingleResult();
@@ -281,7 +281,7 @@ public class UsersDaoImpl {
 					+ " AND u.deleted <> :deleted";
 			TypedQuery<Users> query = em.createQuery(hql, Users.class);
 			query.setParameter("resethash", hash);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			Users us = null;
 			try {
 				us = query.getSingleResult();
@@ -325,7 +325,7 @@ public class UsersDaoImpl {
 		try {
 
 			String hql = "select count(c.user_id) from Users c "
-					+ "where c.deleted = 'false' " + "AND ("
+					+ "where c.deleted = false " + "AND ("
 					+ "lower(c.login) LIKE :search "
 					+ "OR lower(c.firstname) LIKE :search "
 					+ "OR lower(c.lastname) LIKE :search " + ")";

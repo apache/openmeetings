@@ -94,7 +94,7 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 		ap.setAppointmentEndtime(appointmentend);
 		ap.setAppointmentDescription("appointmentDescription");
 		ap.setStarttime(new Date());
-		ap.setDeleted("false");
+		ap.setDeleted(false);
 		ap.setIsDaily(false);
 		ap.setIsWeekly(false);
 		ap.setIsMonthly(false);

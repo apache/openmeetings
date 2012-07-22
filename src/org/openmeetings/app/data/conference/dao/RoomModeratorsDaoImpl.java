@@ -60,7 +60,7 @@ public class RoomModeratorsDaoImpl {
 			rModerator.setUser(us);
 			rModerator.setIsSuperModerator(isSuperModerator);
 			rModerator.setStarttime(new Date());
-			rModerator.setDeleted("false");
+			rModerator.setDeleted(false);
 			rModerator.setRoomId(roomId);
 			rModerator = em.merge(rModerator);
 			long rModeratorId = rModerator.getRoomModeratorsId();
@@ -118,7 +118,7 @@ public class RoomModeratorsDaoImpl {
 
 			TypedQuery<RoomModerators> query = em.createQuery(hql, RoomModerators.class);
 
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			query.setParameter("roomId", roomId);
 
 			List<RoomModerators> roomModerators = query.getResultList();
@@ -143,7 +143,7 @@ public class RoomModeratorsDaoImpl {
 
 			TypedQuery<RoomModerators> query = em.createQuery(hql, RoomModerators.class);
 
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			query.setParameter("roomId", roomId);
 			query.setParameter("user_id", user_id);
 
@@ -172,7 +172,7 @@ public class RoomModeratorsDaoImpl {
 			}
 
 			rModerator.setUpdatetime(new Date());
-			rModerator.setDeleted("true");
+			rModerator.setDeleted(true);
 
 			if (rModerator.getRoomModeratorsId() == 0) {
 				em.persist(rModerator);

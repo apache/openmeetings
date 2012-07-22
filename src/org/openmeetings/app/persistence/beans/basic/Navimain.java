@@ -67,7 +67,7 @@ public class Navimain implements Serializable {
 	@Column(name="fieldvalues_id")
 	private Long fieldvalues_id;
 	@Column(name="deleted")
-	private String deleted;
+	private boolean deleted;
 	@Transient
 	private Fieldlanguagesvalues label;
 	@Transient
@@ -151,10 +151,10 @@ public class Navimain implements Serializable {
 		this.updatetime = updatetime;
 	}
 	
-	public String getDeleted() {
+	public boolean getDeleted() {
 		return deleted;
 	}
-	public void setDeleted(String deleted) {
+	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
     

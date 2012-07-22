@@ -81,7 +81,7 @@ public class UserImport {
 					.getText()));
 			us.setAvailible(Integer.valueOf(
 					itemUsers.element("availible").getText()).intValue());
-			us.setDeleted(itemUsers.element("deleted").getText());
+			us.setDeleted(Boolean.valueOf(itemUsers.element("deleted").getText()));
 			us.setFirstname(itemUsers.element("firstname").getText());
 			us.setLastname(itemUsers.element("lastname").getText());
 			us.setLogin(itemUsers.element("login").getText());

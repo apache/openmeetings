@@ -55,7 +55,7 @@ public class AppointmentReminderTypDaoImpl {
 					+ "AND app.typId = :typId";
 
 			TypedQuery<AppointmentReminderTyps> query = em.createQuery(hql, AppointmentReminderTyps.class);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			query.setParameter("typId", typId);
 
 			AppointmentReminderTyps appointmentReminderTyps = null;
@@ -102,7 +102,7 @@ public class AppointmentReminderTypDaoImpl {
 
 			ac.setName(name);
 			ac.setStarttime(new Date());
-			ac.setDeleted("false");
+			ac.setDeleted(false);
 			ac.setUser(usersDao.getUser(user_id));
 
 			ac = em.merge(ac);
@@ -128,7 +128,7 @@ public class AppointmentReminderTypDaoImpl {
 				return typId;
 			}
 			ac.setUpdatetime(new Date());
-			ac.setDeleted("true");
+			ac.setDeleted(true);
 
 			if (ac.getTypId() == null) {
 				em.persist(ac);
@@ -154,7 +154,7 @@ public class AppointmentReminderTypDaoImpl {
 					+ "WHERE a.deleted <> :deleted ";
 
 			TypedQuery<AppointmentReminderTyps> query = em.createQuery(hql, AppointmentReminderTyps.class);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 
 			List<AppointmentReminderTyps> listAppointmentReminderTyp = query
 					.getResultList();

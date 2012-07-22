@@ -159,7 +159,7 @@ public class UserContactsDaoImpl {
 			String hql = "select c from UserContacts c " +
 							"where c.owner.user_id = :ownerId " +
 							"AND c.pending = :pending " +
-							"AND c.contact.deleted <> 'true'";
+							"AND c.contact.deleted <> true";
 			
 			TypedQuery<UserContacts> query = em.createQuery(hql, UserContacts.class);
 			query.setParameter("ownerId", ownerId);
@@ -182,7 +182,7 @@ public class UserContactsDaoImpl {
 					+ "where c.contact.user_id = :userId "
 					+ "AND c.owner.user_id = :contactId "
 					+ "AND c.shareCalendar = :shareCalendar "
-					+ "AND c.contact.deleted <> 'true'";
+					+ "AND c.contact.deleted <> true";
 
 			TypedQuery<UserContacts> query = em.createQuery(hql,
 					UserContacts.class);
@@ -207,7 +207,7 @@ public class UserContactsDaoImpl {
 			String hql = "select c from UserContacts c " +
 							"where c.contact.user_id = :contactId " +
 							"AND c.shareCalendar = :shareCalendar " +
-							"AND c.contact.deleted <> 'true'";
+							"AND c.contact.deleted <> true";
 			
 			TypedQuery<UserContacts> query = em.createQuery(hql, UserContacts.class); 
 			query.setParameter("contactId", contactId);
@@ -228,7 +228,7 @@ public class UserContactsDaoImpl {
 			String hql = "select c from UserContacts c " +
 							"where c.contact.user_id = :user_id " +
 							"AND c.pending = :pending " +
-							"AND c.contact.deleted <> 'true'";
+							"AND c.contact.deleted <> true";
 			
 			TypedQuery<UserContacts> query = em.createQuery(hql, UserContacts.class); 
 			query.setParameter("user_id", user_id);

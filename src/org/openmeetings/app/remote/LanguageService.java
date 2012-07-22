@@ -127,7 +127,7 @@ public class LanguageService {
 			if (langName.length() == 0)
 				return new Long(-30);
 			return fieldLanguageDaoImpl.updateFieldLanguage(language_id,
-					langName, code, "false");
+					langName, code, false);
 		}
 		return null;
 	}
@@ -137,7 +137,7 @@ public class LanguageService {
 		Long user_level = userManagement.getUserLevelByID(users_id);
 		if (authLevelManagement.checkAdminLevel(user_level)) {
 			return fieldLanguageDaoImpl.updateFieldLanguage(language_id, "",
-					"", "true");
+					"", true);
 		}
 		return null;
 	}

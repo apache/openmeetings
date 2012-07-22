@@ -51,7 +51,7 @@ import org.openmeetings.app.persistence.beans.domain.Organisation_Users;
     @NamedQuery(name="getAllUsers",
         	query="SELECT u FROM Users u")
     , @NamedQuery(name="getUsersByOrganisationId",
-    	query="SELECT u FROM Users u WHERE u.deleted = 'false' AND u.organisation_users.organisation.organisation_id = :organisation_id")
+    	query="SELECT u FROM Users u WHERE u.deleted = false AND u.organisation_users.organisation.organisation_id = :organisation_id")
 })
 @Table(name = "users")
 public class Users implements Serializable {
@@ -93,7 +93,7 @@ public class Users implements Serializable {
 	@Column(name = "pictureuri")
 	private String pictureuri;
 	@Column(name = "deleted")
-	private String deleted;
+	private boolean deleted;
 	@Column(name = "language_id")
 	private Long language_id;
 	@Column(name = "resethash")
@@ -322,11 +322,11 @@ public class Users implements Serializable {
 		this.updatetime = updatetime;
 	}
 
-	public String getDeleted() {
+	public boolean getDeleted() {
 		return deleted;
 	}
 
-	public void setDeleted(String deleted) {
+	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
 

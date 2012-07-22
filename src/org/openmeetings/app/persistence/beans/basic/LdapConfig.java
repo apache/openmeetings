@@ -65,7 +65,7 @@ public class LdapConfig implements Serializable {
 	@JoinColumn(name="updatedby_id", updatable=true, insertable=true)
 	public Users updatedby;
 	@Column(name="deleted")
-	private String deleted;
+	private boolean deleted;
 	
 	public long getLdapConfigId() {
 		return ldapConfigId;
@@ -137,10 +137,10 @@ public class LdapConfig implements Serializable {
 		this.updatedby = updatedby;
 	}
 	
-	public String getDeleted() {
+	public boolean getDeleted() {
 		return deleted;
 	}
-	public void setDeleted(String deleted) {
+	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
 	

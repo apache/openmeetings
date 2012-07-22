@@ -75,7 +75,7 @@ public class FlvRecordingMetaDataDaoImpl {
 			
 			TypedQuery<FlvRecordingMetaData> query = em.createQuery(hql, FlvRecordingMetaData.class);
 			query.setParameter("flvRecordingId", flvRecordingId);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			
 			List<FlvRecordingMetaData> flvRecordingMetaDatas = query.getResultList();
 			
@@ -140,7 +140,7 @@ public class FlvRecordingMetaDataDaoImpl {
 			
 			FlvRecordingMetaData flvRecordingMetaData = new FlvRecordingMetaData();
 			
-			flvRecordingMetaData.setDeleted("false");
+			flvRecordingMetaData.setDeleted(false);
 			
 			flvRecordingMetaData.setFlvRecording(flvRecordingDao.getFlvRecordingById(flvRecordingId));
 			flvRecordingMetaData.setFreeTextUserName(freeTextUserName);

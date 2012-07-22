@@ -94,7 +94,7 @@ public class Navimanagement {
 
 	public void addGlobalStructure(String action, int naviorder,
 			long fieldvalues_id, boolean isleaf, boolean isopen, long level_id,
-			String name, String deleted, Long tooltip_fieldvalues_id) {
+			String name, boolean deleted, Long tooltip_fieldvalues_id) {
 		try {
 			Naviglobal ng = new Naviglobal();
 			ng.setAction(action);
@@ -120,7 +120,7 @@ public class Navimanagement {
 
 	public void addMainStructure(String action, String params, int naviorder,
 			long fieldvalues_id, boolean isleaf, boolean isopen, long level_id,
-			String name, long global_id, String deleted,
+			String name, long global_id, boolean deleted,
 			Long tooltip_fieldvalues_id) {
 		try {
 			Naviglobal ng = getGlobalMenuEntry(global_id);

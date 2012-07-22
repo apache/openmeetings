@@ -54,12 +54,7 @@ public class Userdata implements Serializable {
 	@Column(name = "comment_field")
     private String comment;
 	@Column(name = "deleted")
-    private String deleted;
-
-	public Userdata() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+    private boolean deleted;
 
 	public String getComment() {
 		return comment;
@@ -104,10 +99,10 @@ public class Userdata implements Serializable {
 		this.updatetime = updatetime;
 	}
 	
-	public String getDeleted() {
+	public boolean getDeleted() {
 		return deleted;
 	}
-	public void setDeleted(String deleted) {
+	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
 

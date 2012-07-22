@@ -54,7 +54,7 @@ public class LdapConfigDaoImpl {
 			LdapConfig ldapConfig = new LdapConfig();
 			ldapConfig.setAddDomainToUserName(addDomainToUserName);
 			ldapConfig.setConfigFileName(configFileName);
-			ldapConfig.setDeleted("false");
+			ldapConfig.setDeleted(false);
 			ldapConfig.setDomain(domain);
 			ldapConfig.setIsActive(isActive);
 			ldapConfig.setName(name);
@@ -85,7 +85,7 @@ public class LdapConfigDaoImpl {
 	public Long addLdapConfigByObject(LdapConfig ldapConfig) {
 		try {
 			
-			ldapConfig.setDeleted("false");
+			ldapConfig.setDeleted(false);
 			ldapConfig.setInserted(new Date());
 			
 			ldapConfig = em.merge(ldapConfig);
@@ -115,7 +115,7 @@ public class LdapConfigDaoImpl {
 			
 			ldapConfig.setAddDomainToUserName(addDomainToUserName);
 			ldapConfig.setConfigFileName(configFileName);
-			ldapConfig.setDeleted("false");
+			ldapConfig.setDeleted(false);
 			ldapConfig.setDomain(domain);
 			ldapConfig.setIsActive(isActive);
 			ldapConfig.setName(name);
@@ -143,11 +143,11 @@ public class LdapConfigDaoImpl {
 			
 			String hql = "select c from LdapConfig c " +
 				       	"WHERE c.ldapConfigId = :ldapConfigId " +
-				       	"AND c.deleted LIKE :deleted";
+				       	"AND c.deleted = :deleted";
 			
 			TypedQuery<LdapConfig> query = em.createQuery(hql, LdapConfig.class);
 			query.setParameter("ldapConfigId", ldapConfigId);
-			query.setParameter("deleted", "false");
+			query.setParameter("deleted", false);
 	
 			LdapConfig ldapConfig = null;
 			try {
@@ -168,7 +168,7 @@ public class LdapConfigDaoImpl {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 			CriteriaQuery<LdapConfig> cq = cb.createQuery(LdapConfig.class);
 			Root<LdapConfig> c = cq.from(LdapConfig.class);
-			Predicate condition = cb.equal(c.get("deleted"), "false");
+			Predicate condition = cb.equal(c.get("deleted"), false);
 			cq.where(condition);
 			cq.distinct(asc);
 			if (asc){
@@ -191,7 +191,7 @@ public class LdapConfigDaoImpl {
 		try {
 			log.debug("selectMaxFromConfigurations ");
 			//get all users
-			TypedQuery<Long> query = em.createQuery("select count(c.ldapConfigId) from LdapConfig c where c.deleted LIKE 'false'", Long.class); 
+			TypedQuery<Long> query = em.createQuery("select count(c.ldapConfigId) from LdapConfig c where c.deleted = false", Long.class); 
 			List<Long> ll = query.getResultList();
 			log.debug("selectMaxFromLdapConfig" + ll.get(0));
 			return ll.get(0);
@@ -226,7 +226,7 @@ public class LdapConfigDaoImpl {
 			log.debug("selectMaxFromConfigurations ");
 			
 			String hql = "select c from LdapConfig c " +
-					"where c.deleted LIKE 'false' " +
+					"where c.deleted = false " +
 					"AND c.isActive = :isActive ";
 			
 			//get all users
@@ -246,7 +246,7 @@ public class LdapConfigDaoImpl {
 			log.debug("selectMaxFromConfigurations ");
 			
 			String hql = "select c from LdapConfig c " +
-					"where c.deleted LIKE 'false' ";
+					"where c.deleted = false ";
 			
 			//get all users
 			TypedQuery<LdapConfig> query = em.createQuery(hql, LdapConfig.class);

@@ -715,7 +715,7 @@ public class BackupImportController extends AbstractUploadController {
 				}
 				cfg.setConf_value(cfgElem.elementText("value"));
 				cfg.setUpdatetime(new Date());
-				cfg.setDeleted(cfgElem.elementText("deleted"));
+				cfg.setDeleted(Boolean.valueOf(cfgElem.elementText("deleted")));
 				cfg.setComment(cfgElem.elementText("comment"));
 				cfgManagement.updateConfig(cfg);
 			} catch (Exception e) {
@@ -848,8 +848,8 @@ public class BackupImportController extends AbstractUploadController {
 										.element("age").getText())));
 						us.setAvailible(importIntegerType(unformatString(itemUsers
 								.element("availible").getText())));
-						us.setDeleted(unformatString(itemUsers.element(
-								"deleted").getText()));
+						us.setDeleted(Boolean.valueOf(unformatString(itemUsers.element(
+								"deleted").getText())));
 						us.setFirstname(unformatString(itemUsers.element(
 								"firstname").getText()));
 						us.setLastname(unformatString(itemUsers.element(
@@ -858,7 +858,7 @@ public class BackupImportController extends AbstractUploadController {
 								.getText()));
 						us.setPassword(unformatString(itemUsers.element("pass")
 								.getText()));
-						us.setDeleted(itemUsers.element("deleted").getText());
+						us.setDeleted(Boolean.valueOf(itemUsers.element("deleted").getText()));
 
 						if (itemUsers.element("activatehash") != null) {
 							us.setActivatehash(unformatString(itemUsers
@@ -1035,8 +1035,8 @@ public class BackupImportController extends AbstractUploadController {
 										Maps.ORGANISATIONS);
 								Boolean isModerator = importBooleanType(unformatString(organisationObject
 										.element("isModerator").getText()));
-								String deleted = unformatString(organisationObject
-										.element("deleted").getText());
+								boolean deleted = Boolean.valueOf(unformatString(organisationObject
+										.element("deleted").getText()));
 
 								Organisation_Users orgUser = new Organisation_Users();
 								orgUser.setOrganisation(organisationmanagement
@@ -1132,8 +1132,8 @@ public class BackupImportController extends AbstractUploadController {
 								.element("alternateDownload").getText());
 						String comment = unformatString(flvObject.element(
 								"comment").getText());
-						String deleted = unformatString(flvObject.element(
-								"deleted").getText());
+						boolean deleted = Boolean.valueOf(unformatString(flvObject.element(
+								"deleted").getText()));
 						String fileHash = unformatString(flvObject.element(
 								"fileHash").getText());
 						String fileName = unformatString(flvObject.element(
@@ -1292,7 +1292,7 @@ public class BackupImportController extends AbstractUploadController {
 							flvrecordingmetadata.setRecordEnd(recordEnd1);
 							flvrecordingmetadata.setRecordStart(recordStart1);
 							flvrecordingmetadata.setUpdated(updated);
-							flvrecordingmetadata.setDeleted("false");
+							flvrecordingmetadata.setDeleted(false);
 
 							flvRecording.getFlvRecordingMetaData().add(
 									flvrecordingmetadata);
@@ -1590,8 +1590,8 @@ public class BackupImportController extends AbstractUploadController {
 								.element("organisation_id").getText()));
 						String name = unformatString(orgObject.element("name")
 								.getText());
-						String deleted = unformatString(orgObject.element(
-								"deleted").getText());
+						boolean deleted = Boolean.valueOf(unformatString(orgObject.element(
+								"deleted").getText()));
 
 						Organisation organisation = new Organisation();
 						organisation.setName(name);
@@ -1674,7 +1674,7 @@ public class BackupImportController extends AbstractUploadController {
 								.element("email").getText());
 						String phone = appointmentsObject.element("phone") == null ? "" :
 								unformatString(appointmentsObject.element("phone").getText());
-						Boolean deleted = importBooleanType(unformatString(appointmentsObject
+						boolean deleted = importBooleanType(unformatString(appointmentsObject
 								.element("deleted").getText()));
 						Boolean invitor = importBooleanType(unformatString(appointmentsObject
 								.element("invitor").getText()));
@@ -1830,8 +1830,8 @@ public class BackupImportController extends AbstractUploadController {
 								.parseImportDate(unformatString(appointmentsObject
 										.element("appointmentEndtime")
 										.getText()));
-						String deleted = unformatString(appointmentsObject
-								.element("deleted").getText());
+						boolean deleted = Boolean.valueOf(unformatString(appointmentsObject
+								.element("deleted").getText()));
 						Long typId = importLongType(unformatString(appointmentsObject
 								.element("typId").getText()));
 						Boolean isDaily = importBooleanType(unformatString(appointmentsObject
@@ -1944,8 +1944,8 @@ public class BackupImportController extends AbstractUploadController {
 								importLongType(unformatString(orgRoomObject
 										.element("rooms_id").getText())),
 								Maps.ROOMS);
-						String deleted = unformatString(orgRoomObject.element(
-								"deleted").getText());
+						boolean deleted = Boolean.valueOf(unformatString(orgRoomObject.element(
+								"deleted").getText()));
 
 						Rooms_Organisation rooms_Organisation = new Rooms_Organisation();
 						rooms_Organisation
@@ -1990,8 +1990,8 @@ public class BackupImportController extends AbstractUploadController {
 						.element("rooms_id").getText()));
 				String name = unformatString(roomObject.element("name")
 						.getText());
-				String deleted = unformatString(roomObject.element(
-						"deleted").getText());
+				boolean deleted = Boolean.valueOf(unformatString(roomObject.element(
+						"deleted").getText()));
 				String comment = unformatString(roomObject.element(
 						"comment").getText());
 				Long numberOfPartizipants = importLongType(unformatString((roomObject
@@ -2199,7 +2199,7 @@ public class BackupImportController extends AbstractUploadController {
 						Boolean is_supermoderator = importBooleanType(unformatString(room_moderator
 								.element("is_supermoderator").getText()));
 
-						roomModerators.setDeleted("false");
+						roomModerators.setDeleted(false);
 						roomModerators.setRoomId(getNewId(rooms_id,
 								Maps.ROOMS));
 						roomModerators.setUser(userManagement
@@ -2297,8 +2297,8 @@ public class BackupImportController extends AbstractUploadController {
 						Date updated = CalendarPatterns
 								.parseImportDate(unformatString(fileExplorerItemObj
 										.element("updated").getText()));
-						String deleted = unformatString(fileExplorerItemObj
-								.element("deleted").getText());
+						boolean deleted = Boolean.valueOf(unformatString(fileExplorerItemObj
+								.element("deleted").getText()));
 						Long fileSize = importLongType(unformatString(fileExplorerItemObj
 								.element("fileSize").getText()));
 						Integer flvWidth = importIntegerType(unformatString(fileExplorerItemObj

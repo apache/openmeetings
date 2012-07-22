@@ -45,7 +45,7 @@ public class RoomTypes implements Serializable {
 	@Column(name="name")
 	private String name;
 	@Column(name = "deleted")
-	private String deleted;
+	private boolean deleted;
 
     
 	public String getName() {
@@ -76,10 +76,10 @@ public class RoomTypes implements Serializable {
 		this.updatetime = updatetime;
 	}	
 	
-	public String getDeleted() {
+	public boolean getDeleted() {
 		return deleted;
 	}
-	public void setDeleted(String deleted) {
+	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
 

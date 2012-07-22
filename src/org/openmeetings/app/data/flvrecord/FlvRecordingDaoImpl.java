@@ -87,7 +87,7 @@ public class FlvRecordingDaoImpl {
 							"WHERE c.deleted <> :deleted ";
 			
 			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			
 			List<FlvRecording> flvRecordings = query.getResultList();
 			
@@ -112,7 +112,7 @@ public class FlvRecordingDaoImpl {
 			
 			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
 			query.setParameter("externalUserId", externalUserId);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			
 			List<FlvRecording> flvRecordingList = query.getResultList();
 						
@@ -139,7 +139,7 @@ public class FlvRecordingDaoImpl {
 			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
 			query.setParameter("externalRoomType", externalRoomType);
 			query.setParameter("insertedBy", insertedBy);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			
 			List<FlvRecording> flvRecordingList = query.getResultList();
 						
@@ -180,7 +180,7 @@ public class FlvRecordingDaoImpl {
 			
 			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
 			query.setParameter("externalRoomType", externalRoomType);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			
 			List<FlvRecording> flvRecordingList = query.getResultList();
 			
@@ -203,7 +203,7 @@ public class FlvRecordingDaoImpl {
 					"ORDER BY c.isFolder DESC, c.fileName ";
 			
 			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			
 			List<FlvRecording> flvRecordingList = query.getResultList();
 			return flvRecordingList;
@@ -225,7 +225,7 @@ public class FlvRecordingDaoImpl {
 			
 			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
 			query.setParameter("organization_id", organization_id);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			
 			List<FlvRecording> flvRecordingList = query.getResultList();
 			
@@ -246,7 +246,7 @@ public class FlvRecordingDaoImpl {
 					"ORDER BY c.isFolder DESC, c.fileName ";
 			
 			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			query.setParameter("ownerId",ownerId);
 			
 			List<FlvRecording> flvRecordingList = query.getResultList();
@@ -268,7 +268,7 @@ public class FlvRecordingDaoImpl {
 					"ORDER BY c.isFolder DESC, c.fileName ";
 			
 			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			query.setParameter("ownerId",ownerId);
 			query.setParameter("parentFileExplorerItemId", parentFileExplorerItemId);
 			
@@ -290,7 +290,7 @@ public class FlvRecordingDaoImpl {
 					"ORDER BY c.isFolder DESC, c.fileName ";
 			
 			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			query.setParameter("room_id",room_id);
 			
 			List<FlvRecording> flvRecordingList = query.getResultList();
@@ -311,7 +311,7 @@ public class FlvRecordingDaoImpl {
 					"ORDER BY c.isFolder DESC, c.fileName ";
 			
 			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			query.setParameter("parentFileExplorerItemId", parentFileExplorerItemId);
 			
 			List<FlvRecording> flvRecordingList = query.getResultList();
@@ -332,7 +332,7 @@ public class FlvRecordingDaoImpl {
 			
 			flvRecording.setParentFileExplorerItemId(parentFileExplorerItemId);
 			
-			flvRecording.setDeleted("false");
+			flvRecording.setDeleted(false);
 			flvRecording.setFileHash(fileHash);
 			flvRecording.setFileName(fileName);
 			flvRecording.setFileSize(fileSize);
@@ -368,7 +368,7 @@ public class FlvRecordingDaoImpl {
 			
 			FlvRecording flvRecording = new FlvRecording();
 			
-			flvRecording.setDeleted("false");
+			flvRecording.setDeleted(false);
 			flvRecording.setFileHash(fileHash);
 			flvRecording.setFileName(fileName);
 			flvRecording.setFileSize(fileSize);
@@ -487,7 +487,7 @@ public class FlvRecordingDaoImpl {
 				return false;
 			}
 			
-			fId.setDeleted("true");
+			fId.setDeleted(true);
 			fId.setUpdated(new Date());
 			
 			if (fId.getFlvRecordingId() == 0) {

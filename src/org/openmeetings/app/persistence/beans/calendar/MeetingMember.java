@@ -70,7 +70,7 @@ public class MeetingMember implements Serializable {
 	@Column(name="updatetime")
 	private Date updatetime;
 	@Column(name="deleted")
-	private Boolean deleted;
+	private boolean deleted;
 	@Column(name="invitor")
 	private Boolean invitor;
 	
@@ -170,10 +170,10 @@ public class MeetingMember implements Serializable {
 		this.updatetime = updatetime;
 	}
 	
-	public Boolean getDeleted() {
+	public boolean getDeleted() {
 		return deleted;
 	}
-	public void setDeleted(Boolean deleted) {
+	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
 	

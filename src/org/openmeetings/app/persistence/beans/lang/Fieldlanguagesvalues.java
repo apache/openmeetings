@@ -39,16 +39,16 @@ import javax.persistence.Table;
 @Entity
 @NamedQueries({
 	@NamedQuery(name = "allFieldLanguageValues", query = "SELECT flv FROM Fieldlanguagesvalues flv "
-		+ "WHERE flv.deleted LIKE 'false' "
-		+ "		AND flv.fieldvalues.deleted LIKE 'false' "
+		+ "WHERE flv.deleted = false "
+		+ "		AND flv.fieldvalues.deleted = false "
 		+ "		AND flv.language_id = :language_id")
 	, @NamedQuery(name="allFieldValuesIds", query = "SELECT flv.fieldvalues_id FROM Fieldlanguagesvalues flv "
-		+ "WHERE flv.deleted LIKE 'false' "
-		+ "		AND flv.fieldvalues.deleted LIKE 'false' "
+		+ "WHERE flv.deleted = false "
+		+ "		AND flv.fieldvalues.deleted = false "
 		+ "		AND flv.language_id = :language_id")
 	, @NamedQuery(name="allNotTranslatedValues", query = "SELECT flv FROM Fieldlanguagesvalues flv "
-		+ "WHERE flv.deleted LIKE 'false' "
-		+ "		AND flv.fieldvalues.deleted LIKE 'false' "
+		+ "WHERE flv.deleted = false "
+		+ "		AND flv.fieldvalues.deleted = false "
 		+ "		AND flv.language_id = 1 AND flv.fieldvalues_id NOT IN (:id_list)")
 })
 @Table(name = "fieldlanguagesvalues")
@@ -68,7 +68,7 @@ public class Fieldlanguagesvalues implements Serializable {
 	@Column(name="updatetime")
 	private Date updatetime;
 	@Column(name="deleted")
-	private String deleted;
+	private boolean deleted;
 	@Lob
 	@Column(name="value")
 	private String value;
@@ -102,10 +102,10 @@ public class Fieldlanguagesvalues implements Serializable {
 		this.updatetime = updatetime;
 	}
 	
-	public String getDeleted() {
+	public boolean getDeleted() {
 		return deleted;
 	}
-	public void setDeleted(String deleted) {
+	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
 	

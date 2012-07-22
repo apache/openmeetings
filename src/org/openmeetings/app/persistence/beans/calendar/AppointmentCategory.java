@@ -57,7 +57,7 @@ public class AppointmentCategory implements Serializable {
 	@Column(name="updatetime")
 	private Date updatetime;
 	@Column(name="deleted")
-	private String deleted;
+	private boolean deleted;
 	@Lob
 	@Column(name="comment_field", length=2048)
 	private String comment;
@@ -97,10 +97,10 @@ public class AppointmentCategory implements Serializable {
 		this.updatetime = updatetime;
 	}
 	
-	public String getDeleted() {
+	public boolean getDeleted() {
 		return deleted;
 	}
-	public void setDeleted(String deleted) {
+	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
 	

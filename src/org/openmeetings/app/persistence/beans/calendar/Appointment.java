@@ -96,7 +96,7 @@ public class Appointment implements Serializable {
 	@Column(name = "updatetime")
 	private Date updatetime;
 	@Column(name = "deleted")
-	private String deleted;
+	private boolean deleted;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "remind_id", nullable = true)
 	private AppointmentReminderTyps remind;
@@ -232,11 +232,11 @@ public class Appointment implements Serializable {
 		this.updatetime = updatetime;
 	}
 
-	public String getDeleted() {
+	public boolean getDeleted() {
 		return deleted;
 	}
 
-	public void setDeleted(String deleted) {
+	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
 

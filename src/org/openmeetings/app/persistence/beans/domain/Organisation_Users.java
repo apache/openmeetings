@@ -36,9 +36,9 @@ import javax.persistence.Table;
 @Entity
 @NamedQueries({
 	@NamedQuery(name="selectMaxUsersByOrganisationId",
-		query="SELECT COUNT(c.organisation_users_id) FROM Organisation_Users c WHERE c.deleted = 'false' AND c.organisation.organisation_id = :organisation_id")
+		query="SELECT COUNT(c.organisation_users_id) FROM Organisation_Users c WHERE c.deleted = false AND c.organisation.organisation_id = :organisation_id")
 	, @NamedQuery(name="getOrganisation_UserByUserAndOrganisation",
-		query="SELECT ou FROM Users u, IN(u.organisation_users) ou WHERE u.deleted = 'false' AND u.user_id = :user_id AND ou.organisation.organisation_id = :organisation_id")
+		query="SELECT ou FROM Users u, IN(u.organisation_users) ou WHERE u.deleted = false AND u.user_id = :user_id AND ou.organisation.organisation_id = :organisation_id")
 	, @NamedQuery(name="deleteUsersFromOrganisation",
 	query="DELETE FROM Organisation_Users c WHERE c.organisation.organisation_id = :organisation_id")
 })
@@ -65,7 +65,7 @@ public class Organisation_Users implements Serializable {
 	private Date updatetime;
 	
 	@Column(name = "deleted")
-	private String deleted;
+	private boolean deleted;
 	
 	@Column(name = "is_moderator")
 	private Boolean isModerator;
@@ -110,11 +110,11 @@ public class Organisation_Users implements Serializable {
 		this.updatetime = updatetime;
 	}
 
-	public String getDeleted() {
+	public boolean getDeleted() {
 		return deleted;
 	}
 
-	public void setDeleted(String deleted) {
+	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
 

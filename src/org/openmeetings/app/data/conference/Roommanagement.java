@@ -98,7 +98,7 @@ public class Roommanagement {
 			RoomTypes rtype = new RoomTypes();
 			rtype.setName(name);
 			rtype.setStarttime(new Date());
-			rtype.setDeleted(deleted ? "true" : "false");
+			rtype.setDeleted(deleted);
 			rtype = em.merge(rtype);
 			long returnId = rtype.getRoomtypes_id();
 			return returnId;
@@ -144,7 +144,7 @@ public class Roommanagement {
 			if (authLevelManagement.checkUserLevel(user_level)) {
 				TypedQuery<RoomTypes> query = em
 						.createQuery("select c from RoomTypes as c where c.deleted <> :deleted", RoomTypes.class);
-				query.setParameter("deleted", "true");
+				query.setParameter("deleted", true);
 				List<RoomTypes> ll = query.getResultList();
 				return ll;
 			}
@@ -165,7 +165,7 @@ public class Roommanagement {
 			TypedQuery<RoomTypes> query = em
 					.createQuery("select c from RoomTypes as c where c.roomtypes_id = :roomtypes_id AND c.deleted <> :deleted", RoomTypes.class);
 			query.setParameter("roomtypes_id", roomtypes_id);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			List<?> ll = query.getResultList();
 			if (ll.size() > 0) {
 				return (RoomTypes) ll.get(0);
@@ -232,7 +232,7 @@ public class Roommanagement {
 
 			TypedQuery<Rooms> query = em.createQuery(hql, Rooms.class);
 			query.setParameter("rooms_id", rooms_id);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			List<Rooms> ll = query.getResultList();
 			if (ll.size() > 0) {
 				room = ll.get(0);
@@ -267,7 +267,7 @@ public class Roommanagement {
 			query.setParameter("externalRoomId", externalRoomId);
 			query.setParameter("externalRoomType", externalRoomType);
 			query.setParameter("roomtypes_id", roomtypes_id);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			List<?> ll = query.getResultList();
 			if (ll.size() > 0) {
 				return (Rooms) ll.get(0);
@@ -382,7 +382,7 @@ public class Roommanagement {
 	public Long selectMaxFromRooms(String search) {
 		try {
 			String hql = "select count(c.rooms_id) from Rooms c "
-					+ "where c.deleted <> 'true' " + "AND c.name LIKE :search ";
+					+ "where c.deleted <> true AND c.name LIKE :search ";
 
 			if (search.length() == 0) {
 				search = "%";
@@ -418,7 +418,7 @@ public class Roommanagement {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 			CriteriaQuery<Rooms> cq = cb.createQuery(Rooms.class);
 			Root<Rooms> c = cq.from(Rooms.class);
-			Predicate condition = cb.equal(c.get("deleted"), "false");
+			Predicate condition = cb.equal(c.get("deleted"), false);
 			cq.where(condition);
 			cq.distinct(asc);
 			if (asc) {
@@ -452,7 +452,7 @@ public class Roommanagement {
 		try {
 
 			String hql = "select c from Rooms c "
-					+ "where c.deleted <> 'true' " + "AND c.name LIKE :search ";
+					+ "where c.deleted <> true AND c.name LIKE :search ";
 
 			if (search.length() == 0) {
 				search = "%";
@@ -486,7 +486,7 @@ public class Roommanagement {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 			CriteriaQuery<Rooms> cq = cb.createQuery(Rooms.class);
 			Root<Rooms> c = cq.from(Rooms.class);
-			Predicate condition = cb.equal(c.get("deleted"), "false");
+			Predicate condition = cb.equal(c.get("deleted"), false);
 			cq.where(condition);
 			TypedQuery<Rooms> q = em.createQuery(cq);
 			List<Rooms> ll = q.getResultList();
@@ -517,7 +517,7 @@ public class Roommanagement {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 			CriteriaQuery<Rooms> cq = cb.createQuery(Rooms.class);
 			Root<Rooms> c = cq.from(Rooms.class);
-			Predicate condition = cb.equal(c.get("deleted"), "false");
+			Predicate condition = cb.equal(c.get("deleted"), false);
 			Predicate subCondition = cb.equal(c.get("externalRoomType"),
 					externalRoomType);
 			cq.where(condition, subCondition);
@@ -548,7 +548,7 @@ public class Roommanagement {
 				TypedQuery<Rooms_Organisation> q = em.createQuery(hql, Rooms_Organisation.class);
 
 				q.setParameter("rooms_id", rooms_id);
-				q.setParameter("deleted", "true");
+				q.setParameter("deleted", true);
 				List<Rooms_Organisation> ll = q.getResultList();
 				return ll;
 			}
@@ -575,7 +575,7 @@ public class Roommanagement {
 				TypedQuery<Rooms> q = em.createQuery(queryString, Rooms.class);
 				//
 				q.setParameter("ispublic", true);
-				q.setParameter("deleted", "false");
+				q.setParameter("deleted", false);
 				q.setParameter("roomtypes_id", new Long(roomtypes_id));
 
 				List<Rooms> ll = q.getResultList();
@@ -632,7 +632,7 @@ public class Roommanagement {
 				TypedQuery<Rooms> q = em.createQuery(queryString, Rooms.class);
 
 				q.setParameter("ispublic", true);
-				q.setParameter("deleted", "true");
+				q.setParameter("deleted", true);
 				List<Rooms> ll = q.getResultList();
 
 				return ll;
@@ -660,7 +660,7 @@ public class Roommanagement {
 				TypedQuery<Rooms> q = em.createQuery(queryString, Rooms.class);
 				//
 				q.setParameter("appointed", true);
-				q.setParameter("deleted", "false");
+				q.setParameter("deleted", false);
 
 				List<Rooms> ll = q.getResultList();
 
@@ -692,7 +692,7 @@ public class Roommanagement {
 				TypedQuery<Rooms> q = em.createQuery(queryString, Rooms.class);
 				//
 				q.setParameter("ispublic", true);
-				q.setParameter("deleted", "false");
+				q.setParameter("deleted", false);
 
 				List<Rooms> ll = q.getResultList();
 				return ll;
@@ -767,7 +767,7 @@ public class Roommanagement {
 				r.setIsModeratedRoom(isModeratedRoom);
 				r.setHideTopBar(hideTopBar);
 
-				r.setDeleted("false");
+				r.setDeleted(false);
 
 				r.setIsClosed(isClosed);
 				r.setRedirectURL(redirectURL);
@@ -858,7 +858,7 @@ public class Roommanagement {
 
 				r.setIsModeratedRoom(isModeratedRoom);
 
-				r.setDeleted("false");
+				r.setDeleted(false);
 				r = em.merge(r);
 				long returnId = r.getRooms_id();
 
@@ -915,7 +915,7 @@ public class Roommanagement {
 
 			r.setIsModeratedRoom(isModeratedRoom);
 
-			r.setDeleted("false");
+			r.setDeleted(false);
 
 			r.setExternalRoomId(externalRoomId);
 			r.setExternalRoomType(externalRoomType);
@@ -968,7 +968,7 @@ public class Roommanagement {
 				rOrganisation.setStarttime(new Date());
 				rOrganisation.setOrganisation(organisationmanagement
 						.getOrganisationById(organisation_id));
-				rOrganisation.setDeleted("false");
+				rOrganisation.setDeleted(false);
 
 				rOrganisation = em.merge(rOrganisation);
 				long returnId = rOrganisation.getRooms_organisation_id();
@@ -1042,7 +1042,7 @@ public class Roommanagement {
 
 				q.setParameter("roomtypes_id", roomtypes_id);
 				q.setParameter("organisation_id", organisation_id);
-				q.setParameter("deleted", "true");
+				q.setParameter("deleted", true);
 				List<Rooms_Organisation> ll = q.getResultList();
 
 				return ll;
@@ -1075,7 +1075,7 @@ public class Roommanagement {
 				TypedQuery<Rooms_Organisation> query = em.createQuery(hql, Rooms_Organisation.class);
 
 				query.setParameter("organisation_id", organisation_id);
-				query.setParameter("deleted", "true");
+				query.setParameter("deleted", true);
 
 				List<Rooms_Organisation> ll = query.getResultList();
 
@@ -1119,7 +1119,7 @@ public class Roommanagement {
 			TypedQuery<Rooms_Organisation> q = em.createQuery(hql, Rooms_Organisation.class);
 
 			q.setParameter("organisation_id", organisation_id);
-			q.setParameter("deleted", "true");
+			q.setParameter("deleted", true);
 			List<Rooms_Organisation> ll = q.getResultList();
 
 			return ll.size();
@@ -1159,7 +1159,7 @@ public class Roommanagement {
 			TypedQuery<Rooms_Organisation> q = em.createQuery(hql, Rooms_Organisation.class);
 
 			q.setParameter("organisation_id", organisation_id);
-			q.setParameter("deleted", "true");
+			q.setParameter("deleted", true);
 			q.setFirstResult(start);
 			q.setMaxResults(max);
 			List<Rooms_Organisation> ll = q.getResultList();
@@ -1182,7 +1182,7 @@ public class Roommanagement {
 
 			q.setParameter("rooms_id", rooms_id);
 			q.setParameter("organisation_id", organisation_id);
-			q.setParameter("deleted", "true");
+			q.setParameter("deleted", true);
 			List<Rooms_Organisation> ll = q.getResultList();
 
 			if (ll.size() > 0) {
@@ -1207,7 +1207,7 @@ public class Roommanagement {
 			TypedQuery<Rooms_Organisation> q = em.createQuery(hql, Rooms_Organisation.class);
 
 			q.setParameter("rooms_id", rooms_id);
-			q.setParameter("deleted", "true");
+			q.setParameter("deleted", true);
 			List<Rooms_Organisation> ll = q.getResultList();
 			return ll;
 		} catch (Exception ex2) {
@@ -1565,7 +1565,7 @@ public class Roommanagement {
 	public Long deleteRoom(Rooms r) {
 		log.debug("deleteRoom");
 		try {
-			r.setDeleted("true");
+			r.setDeleted(true);
 			r.setUpdatetime(new Date());
 			if (r.getRooms_id() == null) {
 				em.persist(r);
@@ -1654,7 +1654,7 @@ public class Roommanagement {
 	 */
 	public Long deleteRoomsOrganisation(Rooms_Organisation rOrg) {
 		try {
-			rOrg.setDeleted("true");
+			rOrg.setDeleted(true);
 			rOrg.setUpdatetime(new Date());
 			if (rOrg.getRooms_organisation_id() == null) {
 				em.persist(rOrg);
@@ -1732,7 +1732,7 @@ public class Roommanagement {
 			TypedQuery<Rooms> query = em.createQuery(hql, Rooms.class);
 			query.setParameter("ownerId", ownerId);
 			query.setParameter("roomtypesId", roomtypesId);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			List<Rooms> ll = query.getResultList();
 			if (ll.size() > 0) {
 				room = ll.get(0);

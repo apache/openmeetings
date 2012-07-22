@@ -51,7 +51,7 @@ public class FieldLanguageDaoImpl {
 			FieldLanguage fl = new FieldLanguage();
 			fl.setLanguage_id((long)langId);
 			fl.setStarttime(new Date());
-			fl.setDeleted("false");
+			fl.setDeleted(false);
 			fl.setName(langName);
 			fl.setRtl(langRtl);
 			fl.setCode(code);
@@ -80,7 +80,7 @@ public class FieldLanguageDaoImpl {
 	}
 
 	public Long updateFieldLanguage(Long language_id, String langName,
-			String code, String deleted) {
+			String code, boolean deleted) {
 		try {
 			FieldLanguage fl = this.getFieldLanguageById(language_id);
 			fl.setUpdatetime(new Date());
@@ -113,7 +113,7 @@ public class FieldLanguageDaoImpl {
 					+ "WHERE c.deleted <> :deleted "
 					+ "AND c.language_id = :language_id";
 			TypedQuery<FieldLanguage> query = em.createQuery(hql, FieldLanguage.class);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			query.setParameter("language_id", language_id);
 			FieldLanguage fl = null;
 			try {
@@ -132,7 +132,7 @@ public class FieldLanguageDaoImpl {
 			String hql = "select c from FieldLanguage as c "
 					+ "WHERE c.deleted <> :deleted ";
 			TypedQuery<FieldLanguage> query = em.createQuery(hql, FieldLanguage.class);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			List<FieldLanguage> ll = query.getResultList();
 			return ll;
 		} catch (Exception ex2) {

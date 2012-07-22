@@ -142,7 +142,7 @@ public class Usermanagement {
 				CriteriaBuilder cb = em.getCriteriaBuilder();
 				CriteriaQuery<Users> cq = cb.createQuery(Users.class);
 				Root<Users> c = cq.from(Users.class);
-				Predicate condition = cb.equal(c.get("deleted"), "false");
+				Predicate condition = cb.equal(c.get("deleted"), false);
 				cq.where(condition);
 				cq.distinct(asc);
 				if (asc) {
@@ -176,7 +176,7 @@ public class Usermanagement {
 			// log.debug("getUserContactsBySearch: "+ userId);
 
 			String hql = "select u from  Users u "
-					+ "WHERE u.deleted = 'false' ";
+					+ "WHERE u.deleted = false ";
 
 			hql += "AND ( ";
 			for (int i = 0; i < searchItems.length; i++) {
@@ -268,7 +268,7 @@ public class Usermanagement {
 
 			TypedQuery<Users> query = em.createQuery(hql, Users.class);
 			query.setParameter("userOrEmail", userOrEmail);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 
 			List<Users> ll = query.getResultList();
 
@@ -404,7 +404,7 @@ public class Usermanagement {
 				// searchstring + "%"));
 				Path<String> path = c.get(searchcriteria);
 				Predicate predicate = cb.like(path, literal);
-				Predicate condition = cb.notEqual(c.get("deleted"), "true");
+				Predicate condition = cb.notEqual(c.get("deleted"), true);
 				cq.where(condition, predicate);
 				cq.distinct(asc);
 				if (asc) {
@@ -430,7 +430,7 @@ public class Usermanagement {
 				TypedQuery<Userdata> query = em
 						.createQuery("select c from Userdata as c where c.user_id = :user_id AND c.deleted <> :deleted", Userdata.class);
 				query.setParameter("user_id", user_id.longValue());
-				query.setParameter("deleted", "true");
+				query.setParameter("deleted", true);
 				List<Userdata> ll = query.getResultList();
 				return ll;
 			} catch (Exception ex2) {
@@ -448,7 +448,7 @@ public class Usermanagement {
 						.createQuery("select c from Userdata as c where c.user_id = :user_id AND c.data_key = :data_key AND c.deleted <> :deleted", Userdata.class);
 				query.setParameter("user_id", user_id.longValue());
 				query.setParameter("data_key", DATA_KEY);
-				query.setParameter("deleted", "true");
+				query.setParameter("deleted", true);
 				for (Iterator<Userdata> it2 = query.getResultList().iterator(); it2
 						.hasNext();) {
 					userdata = it2.next();
@@ -682,7 +682,7 @@ public class Usermanagement {
 		userdata.setUpdatetime(null);
 		userdata.setComment(Comment);
 		userdata.setUser_id(new Long(USER_ID));
-		userdata.setDeleted("false");
+		userdata.setDeleted(false);
 		try {
 			userdata = em.merge(userdata);
 			ret = "success";
@@ -698,7 +698,7 @@ public class Usermanagement {
 			TypedQuery<Userlevel> query = em
 					.createQuery("select c from Userlevel as c where c.level_id = :level_id AND c.deleted <> :deleted", Userlevel.class);
 			query.setParameter("level_id", level_id.longValue());
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			for(Iterator<Userlevel> it2 = query.getResultList().iterator(); it2
 					.hasNext();) {
 				userlevel = it2.next();
@@ -726,7 +726,7 @@ public class Usermanagement {
 			}
 
 			TypedQuery<Users> query = em
-					.createQuery("select c from Users as c where c.user_id = :user_id AND c.deleted <> 'true'", Users.class);
+					.createQuery("select c from Users as c where c.user_id = :user_id AND c.deleted <> true", Users.class);
 			query.setParameter("user_id", user_id);
 			Users us = null;
 			try {
@@ -757,7 +757,7 @@ public class Usermanagement {
 			}
 
 			TypedQuery<Users> query = em
-					.createQuery("select c from Users as c where c.user_id = :user_id AND c.deleted <> 'true'", Users.class);
+					.createQuery("select c from Users as c where c.user_id = :user_id AND c.deleted <> true", Users.class);
 			query.setParameter("user_id", user_id);
 			Users us = null;
 			try {
@@ -1162,7 +1162,7 @@ public class Usermanagement {
 			users.setPassword(manageCryptStyle.getInstanceOfCrypt()
 					.createPassPhrase(userpass));
 			users.setRegdate(new Date());
-			users.setDeleted("false");
+			users.setDeleted(false);
 			
 			//new user add organizations without checks
 			if (orgIds != null) {
@@ -1192,7 +1192,7 @@ public class Usermanagement {
 			TypedQuery<Users> query = em.createQuery(hql, Users.class);
 			query.setParameter("externalUserId", externalUserId);
 			query.setParameter("externalUserType", externalUserType);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 
 			List<Users> users = query.getResultList();
 
@@ -1274,7 +1274,7 @@ public class Usermanagement {
 			users.setPassword(manageCryptStyle.getInstanceOfCrypt()
 					.createPassPhrase(userpass));
 			users.setRegdate(new Date());
-			users.setDeleted("false");
+			users.setDeleted(false);
 			users.setServer(serverDao.getServerWithMinimumUsers());
 
 			em.persist(users);
@@ -1333,7 +1333,7 @@ public class Usermanagement {
 			uslevel.setStarttime(new Date());
 			uslevel.setDescription(description);
 			uslevel.setStatuscode(new Integer(myStatus));
-			uslevel.setDeleted("false");
+			uslevel.setDeleted(false);
 			em.merge(uslevel);
 		} catch (Exception ex2) {
 			log.error("[addUserLevel]", ex2);
@@ -1521,7 +1521,7 @@ public class Usermanagement {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Users> cq = cb.createQuery(Users.class);
 		Root<Users> c = cq.from(Users.class);
-		Predicate condition = cb.equal(c.get("deleted"), "false");
+		Predicate condition = cb.equal(c.get("deleted"), false);
 		Predicate subCondition = cb.equal(c.get("user_id"), id);
 		cq.where(condition, subCondition);
 		TypedQuery<Users> q = em.createQuery(cq);
@@ -1569,7 +1569,7 @@ public class Usermanagement {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Users> cq = cb.createQuery(Users.class);
 		Root<Users> c = cq.from(Users.class);
-		Predicate condition = cb.equal(c.get("deleted"), "false");
+		Predicate condition = cb.equal(c.get("deleted"), false);
 		Predicate subCondition = cb.equal(c.get("login"), login);
 		cq.where(condition, subCondition);
 		TypedQuery<Users> q = em.createQuery(cq);
@@ -1601,7 +1601,7 @@ public class Usermanagement {
 
 		TypedQuery<Users> query = em.createQuery(hql, Users.class);
 		query.setParameter("userOrEmail", userOrEmail);
-		query.setParameter("deleted", "true");
+		query.setParameter("deleted", true);
 
 		List<Users> ll = query.getResultList();
 
@@ -1754,7 +1754,7 @@ public class Usermanagement {
 					+ " AND u.deleted <> :deleted";
 			TypedQuery<Users> query = em.createQuery(hql, Users.class);
 			query.setParameter("activatehash", hash);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			Users u = null;
 			try {
 				u = query.getSingleResult();
@@ -1788,7 +1788,7 @@ public class Usermanagement {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
 
 				String hql = "select c from Users c "
-						+ "where c.deleted = 'false' " + "AND ("
+						+ "where c.deleted = false " + "AND ("
 						+ "lower(c.login) LIKE :search "
 						+ "OR lower(c.firstname) LIKE :search "
 						+ "OR lower(c.lastname) LIKE :search " + ")";
@@ -1838,7 +1838,7 @@ public class Usermanagement {
 		try {
 
 			String hql = "select c from Users c "
-					+ "where c.deleted = 'false' ";
+					+ "where c.deleted = false ";
 
 			if (searchTxt.length() != 0 && userOffers.length() != 0
 					&& userSearchs.length() != 0) {
@@ -1987,7 +1987,7 @@ public class Usermanagement {
 		try {
 
 			String hql = "select count(c.user_id) from Users c "
-					+ "where c.deleted = 'false' ";
+					+ "where c.deleted = false ";
 
 			if (searchTxt.length() != 0 && userOffers.length() != 0
 					&& userSearchs.length() != 0) {
@@ -2125,7 +2125,7 @@ public class Usermanagement {
 		try {
 
 			String hql = "select count(c.user_id) from Users c "
-					+ "where c.deleted = 'false' " + "AND " + "(" + "("
+					+ "where c.deleted = false " + "AND " + "(" + "("
 					+ "lower(c.login) LIKE :search "
 					+ "OR lower(c.firstname) LIKE :search "
 					+ "OR lower(c.lastname) LIKE :search "

@@ -62,7 +62,7 @@ public class Salutationmanagement {
 		try {
 			Salutations ti = new Salutations();
 			ti.setName(titelname);
-			ti.setDeleted("false");
+			ti.setDeleted(false);
 			ti.setFieldvalues_id(fieldvalues_id);
 			ti.setStarttime(new Date());
 			ti = em.merge(ti);

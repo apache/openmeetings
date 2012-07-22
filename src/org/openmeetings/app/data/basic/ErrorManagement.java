@@ -46,7 +46,7 @@ public class ErrorManagement {
 			ErrorType eType = new ErrorType();
 			eType.setErrortype_id(errortype_id);
 			eType.setStarttime(new Date());
-			eType.setDeleted("false");
+			eType.setDeleted(false);
 			eType.setFieldvalues_id(fieldvalues_id);
 			eType = em.merge(eType);
 			Long newerrortype_id = eType.getErrortype_id();
@@ -62,7 +62,7 @@ public class ErrorManagement {
 			String hql = "select c from ErrorType as c "
 					+ "WHERE c.deleted <> :deleted ";
 			TypedQuery<ErrorType> query = em.createQuery(hql, ErrorType.class);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			List<ErrorType> ll = query.getResultList();
 			return ll;
 		} catch (Exception ex2) {
@@ -76,7 +76,7 @@ public class ErrorManagement {
 			String hql = "select c from ErrorType as c "
 					+ "WHERE c.deleted <> :deleted AND c.errortype_id = :errortype_id";
 			TypedQuery<ErrorType> query = em.createQuery(hql, ErrorType.class);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			query.setParameter("errortype_id", errortype_id);
 			return query.getSingleResult();
 		} catch (Exception ex2) {
@@ -91,7 +91,7 @@ public class ErrorManagement {
 			ErrorValues eValue = new ErrorValues();
 			eValue.setErrorvalues_id(errorvalues_id);
 			eValue.setErrortype_id(errortype_id);
-			eValue.setDeleted("false");
+			eValue.setDeleted(false);
 			eValue.setStarttime(new Date());
 			eValue.setFieldvalues_id(fieldvalues_id);
 			eValue = em.merge(eValue);
@@ -139,7 +139,7 @@ public class ErrorManagement {
 					+ " AND c.deleted <> :deleted";
 			TypedQuery<ErrorValues> query = em.createQuery(hql, ErrorValues.class);
 			query.setParameter("errorvalues_id", errorvalues_id);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			ErrorValues e = null;
 			try {
 				e = query.getSingleResult();

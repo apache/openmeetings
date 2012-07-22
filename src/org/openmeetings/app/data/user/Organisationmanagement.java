@@ -97,7 +97,7 @@ public class Organisationmanagement {
 			Organisation org = new Organisation();
 			org.setName(orgname);
 			org.setInsertedby(new Long(user_id));
-			org.setDeleted("false");
+			org.setDeleted(false);
 			org.setStarttime(new Date());
 			org = em.merge(org);
 
@@ -159,7 +159,7 @@ public class Organisationmanagement {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 			CriteriaQuery<Organisation> cq = cb.createQuery(Organisation.class);
 			Root<Organisation> c = cq.from(Organisation.class);
-			Predicate condition = cb.equal(c.get("deleted"), "false");
+			Predicate condition = cb.equal(c.get("deleted"), false);
 			cq.where(condition);
 			cq.distinct(asc);
 			if (asc) {
@@ -185,7 +185,7 @@ public class Organisationmanagement {
 				CriteriaQuery<Organisation> cq = cb
 						.createQuery(Organisation.class);
 				Root<Organisation> c = cq.from(Organisation.class);
-				Predicate condition = cb.equal(c.get("deleted"), "false");
+				Predicate condition = cb.equal(c.get("deleted"), false);
 				cq.where(condition);
 				TypedQuery<Organisation> q = em.createQuery(cq);
 				List<Organisation> ll = q.getResultList();
@@ -207,7 +207,7 @@ public class Organisationmanagement {
 		try {
 			// get all users
 			TypedQuery<Long> query = em
-					.createQuery("select max(c.organisation_id) from Organisation c where c.deleted LIKE 'false'", Long.class);
+					.createQuery("select max(c.organisation_id) from Organisation c where c.deleted LIKE false", Long.class);
 			Long l = query.getSingleResult();
 			log.debug("selectMaxFromOrganisations" + l);
 			return l;
@@ -373,7 +373,7 @@ public class Organisationmanagement {
 		try {
 			TypedQuery<Organisation> query = em.createNamedQuery("getOrganisationById", Organisation.class);
 			query.setParameter("organisation_id", organisation_id);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			Organisation o = null;
 			try {
 				o = query.getSingleResult();
@@ -433,7 +433,7 @@ public class Organisationmanagement {
 				.executeUpdate();
 
 			Organisation org = this.getOrganisationById(organisation_id);
-			org.setDeleted("true");
+			org.setDeleted(true);
 			org.setUpdatedby(updatedby);
 
 			if (org.getOrganisation_id() == null) {
@@ -479,7 +479,7 @@ public class Organisationmanagement {
 		
 		Organisation_Users orgUser = new Organisation_Users();
 		orgUser.setOrganisation(getOrganisationById(organisation_id));
-		orgUser.setDeleted("false");
+		orgUser.setDeleted(false);
 		
 		return orgUser;
 	}
@@ -604,7 +604,7 @@ public class Organisationmanagement {
 				"SELECT c FROM "
 				+ "Users c "
 				+ ", IN(c.organisation_users) ou "
-				+ "WHERE c.deleted = 'false' AND ou.organisation.organisation_id = :organisation_id ";
+				+ "WHERE c.deleted = false AND ou.organisation.organisation_id = :organisation_id ";
 			if (orderby.startsWith("c.")) {
 				hql += "ORDER BY " + orderby;
 			} else {
@@ -706,7 +706,7 @@ public class Organisationmanagement {
 					"SELECT o FROM Organisation AS o "
 					+ "WHERE o.organisation_id NOT IN ("
 					+ "	SELECT ou.organisation.organisation_id "
-					+ "	FROM Users u, IN(u.organisation_users) ou WHERE u.deleted = 'false' AND u.user_id = :user_id)";
+					+ "	FROM Users u, IN(u.organisation_users) ou WHERE u.deleted = false AND u.user_id = :user_id)";
 				TypedQuery<Organisation> q = em.createQuery(qSQL, Organisation.class);
 				q.setParameter("user_id", user_id);
 				q.setFirstResult(start);

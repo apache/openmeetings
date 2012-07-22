@@ -56,7 +56,7 @@ public class AppointmentCategoryDaoImpl {
 					+ "AND app.categoryId = :categoryId";
 
 			TypedQuery<AppointmentCategory> query = em.createQuery(hql, AppointmentCategory.class);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 			query.setParameter("categoryId", categoryId);
 
 			AppointmentCategory appointCategory = null;
@@ -103,7 +103,7 @@ public class AppointmentCategoryDaoImpl {
 
 			ac.setName(name);
 			ac.setStarttime(new Date());
-			ac.setDeleted("false");
+			ac.setDeleted(false);
 			ac.setUser(usersDao.getUser(user_id));
 			ac.setComment(comment);
 
@@ -130,7 +130,7 @@ public class AppointmentCategoryDaoImpl {
 				return categoryId;
 			}
 			ac.setUpdatetime(new Date());
-			ac.setDeleted("true");
+			ac.setDeleted(true);
 			if (ac.getCategoryId() == null) {
 				em.persist(ac);
 			} else {
@@ -152,7 +152,7 @@ public class AppointmentCategoryDaoImpl {
 					+ "WHERE a.deleted <> :deleted ";
 
 			TypedQuery<AppointmentCategory> query = em.createQuery(hql, AppointmentCategory.class);
-			query.setParameter("deleted", "true");
+			query.setParameter("deleted", true);
 
 			List<AppointmentCategory> listAppointmentCategory = query
 					.getResultList();
