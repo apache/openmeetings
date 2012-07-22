@@ -227,7 +227,7 @@ public class DownloadHandler extends HttpServlet {
 
 					if (!full_path.exists() || !full_path.canRead()) {
 						if (!full_path.canRead()) {
-							log.debug("LOG DownloadHandler: The request file is not readable");
+							log.debug("LOG DownloadHandler: The request file is not readable ");
 						} else {
 							log.debug("LOG DownloadHandler: The request file does not exist / has already been deleted");
 						}
@@ -254,7 +254,7 @@ public class DownloadHandler extends HttpServlet {
 						} else {
 							requestedFile = DownloadHandler.defaultImageName;
 						}
-						full_path = new File(OmFileHelper.getDefaultDir(), DownloadHandler.defaultSWFName);
+						full_path = new File(OmFileHelper.getDefaultDir(), requestedFile);
 					}
 
 					log.debug("full_path: " + full_path);
