@@ -1090,7 +1090,7 @@
                     var parentObj = canvas._overallchatcontent.parent.parent.parent._chatparticipants;
                     parentObj.removeItemById(value.user_id);
                 }
-                roomDisconnectUser(value, value.publicSID);
+                parent.roomDisconnectUser(value, value.publicSID);
             ]]>
             </handler>   
         </netRemoteCallHib>
@@ -1120,7 +1120,7 @@
         <netRemoteCallHib name="logicalRoomLeaveDis" funcname="logicalRoomLeaveDis" >      
             <handler name="ondata" args="value">
                 if ($debug) Debug.write("logicalRoomLeaveDis: ",value);
-                roomDisconnectUser(value, value.broadCastID);
+                parent.roomDisconnectUser(value, value.broadCastID);
             </handler>
         </netRemoteCallHib>             
   
@@ -1128,9 +1128,8 @@
             <netparam name="vars"><method name="getValue">return canvas.objWhiteboard;</method></netparam>
             <handler name="ondata" args="value">
                 <![CDATA[
-                //The onResult-Handler will be called be the rtmpconnection
+                	//The onResult-Handler will be called be the rtmpconnection
                     if ($debug) Debug.write("sendVars : ",value);
-                
                 ]]>
             </handler>   
         </netRemoteCallHib>    
