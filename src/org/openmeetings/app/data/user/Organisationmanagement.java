@@ -207,7 +207,7 @@ public class Organisationmanagement {
 		try {
 			// get all users
 			TypedQuery<Long> query = em
-					.createQuery("select max(c.organisation_id) from Organisation c where c.deleted LIKE false", Long.class);
+					.createQuery("select max(c.organisation_id) from Organisation c where c.deleted = false", Long.class);
 			Long l = query.getSingleResult();
 			log.debug("selectMaxFromOrganisations" + l);
 			return l;
