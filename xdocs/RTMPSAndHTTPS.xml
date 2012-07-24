@@ -157,11 +157,8 @@
 				RTMPS successfully. </p>
 			<ol>
 				<li>
-					Copy this
-					<a
-						href="http://openmeetings.googlecode.com/svn/docs/jee-container-ssl.xml"
-						rel="nofollow">jee-container-ssl.xml</a>
-					file to red5/conf/jee-container.xml
+					Copy this <tt>red5/conf/jee-container-ssl.xml</tt>
+					file to <tt>red5/conf/jee-container.xml</tt>
 				</li>
 				<li>
 					Edit red5/webapps/openmeetings/config.xml and set
