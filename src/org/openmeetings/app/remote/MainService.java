@@ -43,7 +43,7 @@ import org.openmeetings.app.data.user.Statemanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.ldap.LdapLoginManagement;
-import org.openmeetings.app.persistence.beans.adresses.States;
+import org.openmeetings.app.persistence.beans.address.State;
 import org.openmeetings.app.persistence.beans.basic.Configuration;
 import org.openmeetings.app.persistence.beans.basic.LdapConfig;
 import org.openmeetings.app.persistence.beans.basic.Naviglobal;
@@ -721,7 +721,7 @@ public class MainService implements IPendingServiceCallback {
 	 * 
 	 * @return List of State-Objects or null
 	 */
-	public List<States> getStates() {
+	public List<State> getStates() {
 		return statemanagement.getStates();
 	}
 
@@ -811,7 +811,7 @@ public class MainService implements IPendingServiceCallback {
 					regObject.get("additionalname").toString(),
 					regObject.get("fax").toString(), regObject.get("zip")
 							.toString(),
-					Long.valueOf(regObject.get("states_id").toString())
+					Long.valueOf(regObject.get("state_id").toString())
 							.longValue(), regObject.get("town").toString(),
 					Long.valueOf(regObject.get("language_id").toString())
 							.longValue(), "", false, baseURL, true,
@@ -839,7 +839,7 @@ public class MainService implements IPendingServiceCallback {
 	 * @param additionalname
 	 * @param fax
 	 * @param zip
-	 * @param states_id
+	 * @param state_id
 	 * @param town
 	 * @param language_id
 	 * @return new users_id OR null if an exception, -1 if an error, -4 if mail
@@ -850,10 +850,10 @@ public class MainService implements IPendingServiceCallback {
 	public Long registerUser(String SID, String Username, String Userpass,
 			String lastname, String firstname, String email, Date age,
 			String street, String additionalname, String fax, String zip,
-			long states_id, String town, long language_id, String phone) {
+			long state_id, String town, long language_id, String phone) {
 		return userManagement.registerUser(Username, Userpass, lastname,
 				firstname, email, age, street, additionalname, fax, zip,
-				states_id, town, language_id, phone, false, "", true, "", null);
+				state_id, town, language_id, phone, false, "", true, "", null);
 	}
 
 	/**
@@ -897,7 +897,7 @@ public class MainService implements IPendingServiceCallback {
 		Long user_level = userManagement.getUserLevelByID(users_id);
 		return invitationManagement.sendInvitionLink(user_level,
 				username, message, domain, room, roomtype, baseurl, email,
-				usersDao.getUser(users_id).getAdresses().getEmail(), subject, room_id, null, null);
+				usersDao.getUser(users_id).getAddress().getEmail(), subject, room_id, null, null);
 	}
 
 	/**

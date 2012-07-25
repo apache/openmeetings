@@ -477,7 +477,7 @@ public class AppointmentDaoImpl {
 			Users user = userManagement.getUserById(users_id);
 
 			String invitorName = user.getFirstname() + " " + user.getLastname()
-					+ " [" + user.getAdresses().getEmail() + "]";
+					+ " [" + user.getAddress().getEmail() + "]";
 
 			List<MeetingMember> meetingsRemoteMembers = meetingMemberDao
 					.getMeetingMemberByAppointmentId(ap.getAppointmentId());
@@ -665,7 +665,7 @@ public class AppointmentDaoImpl {
 			// Adding Invitor Name
 			Users user = userManagement.getUserById(users_id);
 			String invitorName = user.getFirstname() + " " + user.getLastname()
-					+ " [" + user.getAdresses().getEmail() + "]";
+					+ " [" + user.getAddress().getEmail() + "]";
 
 			// Send notification of updated Event
 			for (MeetingMember memberRemote : meetingsRemoteMembers) {

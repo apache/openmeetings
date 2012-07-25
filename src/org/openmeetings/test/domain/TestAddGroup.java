@@ -52,11 +52,11 @@ public class TestAddGroup extends AbstractOpenmeetingsSpringTest {
 		Users us = usersDao.getUser(new Long(1));
 
 		log.error(us.getLastname());
-		log.error(us.getAdresses().getTown());
+		log.error(us.getAddress().getTown());
 
 		/*
-		 * for (Iterator it = us.getAdresses().getEmails().iterator();
-		 * it.hasNext();){ Adresses_Emails addrMails = (Adresses_Emails)
+		 * for (Iterator it = us.getAddress().getEmails().iterator();
+		 * it.hasNext();){ Address_Emails addrMails = (Address_Emails)
 		 * it.next(); log.error(addrMails.getMail().getEmail()); }
 		 * log.error("size of domains: "+us.getOrganisation_users().size()); for
 		 * (Iterator it2 = us.getOrganisation_users().iterator();

@@ -869,7 +869,7 @@
 	            for (var i=0;i<canvas.statesInitValues.length;i++){
 	                var st = canvas.statesInitValues[i].name.toLowerCase();
 	                if (st.startsWith(str))a.push(canvas.statesInitValues[i]);
-	                //this.addItem(canvas.statesInitValues[i].name,canvas.statesInitValues[i].state_id);
+	                //this.addItem(canvas.statesInitValues[i].name,canvas.statesInitValues[i].id);
 	            }
 	            return a;
 	        }

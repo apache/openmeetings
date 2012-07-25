@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.openmeetings.app.persistence.beans.adresses;
+package org.openmeetings.app.persistence.beans.address;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -33,14 +33,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "adresses")
-public class Adresses implements Serializable {
+@Table(name = "address")
+public class Address implements Serializable {
 
 	private static final long serialVersionUID = 1387576041912128161L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "adresses_id")
-	private Long adresses_id;
+	@Column(name = "id")
+	private Long id;
 	@Column(name = "additionalname")
 	private String additionalname;
 	@Lob
@@ -52,7 +52,7 @@ public class Adresses implements Serializable {
 	private Date starttime;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "state_id")
-	private States states;
+	private State state;
 	@Column(name = "street")
 	private String street;
 	@Column(name = "town")
@@ -69,10 +69,6 @@ public class Adresses implements Serializable {
 	@Column(name = "phone")
 	private String phone;
 
-	public Adresses() {
-		// TODO Auto-generated constructor stub
-	}
-
 	public String getAdditionalname() {
 		return additionalname;
 	}
@@ -81,12 +77,12 @@ public class Adresses implements Serializable {
 		this.additionalname = additionalname;
 	}
 
-	public Long getAdresses_id() {
-		return adresses_id;
+	public Long getId() {
+		return id;
 	}
 
-	public void setAdresses_id(Long adresses_id) {
-		this.adresses_id = adresses_id;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getComment() {
@@ -113,12 +109,12 @@ public class Adresses implements Serializable {
 		this.starttime = starttime;
 	}
 
-	public States getStates() {
-		return states;
+	public State getState() {
+		return state;
 	}
 
-	public void setStates(States states) {
-		this.states = states;
+	public void setState(State state) {
+		this.state = state;
 	}
 
 	public String getStreet() {

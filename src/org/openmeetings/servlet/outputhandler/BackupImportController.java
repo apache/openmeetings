@@ -60,7 +60,7 @@ import org.openmeetings.app.data.user.dao.PrivateMessageFolderDaoImpl;
 import org.openmeetings.app.data.user.dao.PrivateMessagesDaoImpl;
 import org.openmeetings.app.data.user.dao.UserContactsDaoImpl;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
-import org.openmeetings.app.persistence.beans.adresses.States;
+import org.openmeetings.app.persistence.beans.address.State;
 import org.openmeetings.app.persistence.beans.basic.Configuration;
 import org.openmeetings.app.persistence.beans.basic.LdapConfig;
 import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
@@ -959,10 +959,10 @@ public class BackupImportController extends AbstractUploadController {
 								.element("additionalname").getText());
 						String comment = unformatString(itemUsers.element(
 								"comment").getText());
-						// A User can not have a deleted Adress, you cannot
+						// A User can not have a deleted Address, you cannot
 						// delete the
-						// Adress of an User
-						// String deleted = u.getAdresses().getDeleted()
+						// Address of an User
+						// String deleted = u.getAddress().getDeleted()
 						// Phone Number not done yet
 						String fax = unformatString(itemUsers.element("fax")
 								.getText());
@@ -1003,12 +1003,12 @@ public class BackupImportController extends AbstractUploadController {
 									.getText());
 						}
 
-						States st = statemanagement.getStateById(state_id);
+						State st = statemanagement.getStateById(state_id);
 						if (st == null) {
 							st = statemanagement.getStateById(1L);
 						}
 
-						us.setAdresses(street, zip, town,
+						us.setAddress(street, zip, town,
 								st, additionalname, comment, fax,
 								phone, email);
 

@@ -32,7 +32,7 @@ import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang.StringUtils;
 import org.openmeetings.app.OpenmeetingsVariables;
-import org.openmeetings.app.persistence.beans.adresses.Adresses;
+import org.openmeetings.app.persistence.beans.address.Address;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.utils.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
@@ -99,7 +99,7 @@ public class UsersDaoImpl {
 				Users us = getUser(USER_ID);
 				us.setDeleted(true);
 				us.setUpdatetime(new Date());
-				Adresses adr = us.getAdresses();
+				Address adr = us.getAddress();
 				if (adr != null) {
 					adr.setDeleted(true);
 				}
@@ -187,7 +187,7 @@ public class UsersDaoImpl {
 						+ StringUtils.lowerCase("%" + searchItems[i] + "%")
 						+ "' " + "OR lower(u.login) LIKE '"
 						+ StringUtils.lowerCase("%" + searchItems[i] + "%")
-						+ "' " + "OR lower(u.adresses.email) LIKE '"
+						+ "' " + "OR lower(u.address.email) LIKE '"
 						+ StringUtils.lowerCase("%" + searchItems[i] + "%")
 						+ "' " + ") ";
 
@@ -247,7 +247,7 @@ public class UsersDaoImpl {
 			}
 			return us;
 		} catch (Exception e) {
-			log.error("[getUserByAdressesId]", e);
+			log.error("[getUserByName]", e);
 		}
 		return null;
 	}
@@ -255,7 +255,7 @@ public class UsersDaoImpl {
 	public Users getUserByEmail(String email) {
 		try {
 			String hql = "SELECT u FROM Users as u "
-					+ " where u.adresses.email = :email"
+					+ " where u.address.email = :email"
 					+ " AND u.deleted <> :deleted";
 			TypedQuery<Users> query = em.createQuery(hql, Users.class);
 			query.setParameter("email", email);
@@ -267,7 +267,7 @@ public class UsersDaoImpl {
 			}
 			return us;
 		} catch (Exception e) {
-			log.error("[getUserByAdressesId]", e);
+			log.error("[getUserByEmail]", e);
 		}
 		return null;
 	}
@@ -293,7 +293,7 @@ public class UsersDaoImpl {
 				return new Long(-5);
 			}
 		} catch (Exception e) {
-			log.error("[getUserByAdressesId]", e);
+			log.error("[getUserByHash]", e);
 		}
 		return new Long(-1);
 	}
@@ -312,7 +312,7 @@ public class UsersDaoImpl {
 				return u;
 			}
 		} catch (Exception e) {
-			log.error("[getUserByAdressesId]", e);
+			log.error("[resetPassByHash]", e);
 		}
 		return new Long(-1);
 	}

@@ -1528,44 +1528,44 @@ public class BackupExport {
 				user.addElement("omTimeZone").addCDATA(formatString(""));
 			}
 
-			if (u.getAdresses() != null) {
+			if (u.getAddress() != null) {
 				user.addElement("additionalname").addCDATA(
-						formatString("" + u.getAdresses().getAdditionalname()));
+						formatString("" + u.getAddress().getAdditionalname()));
 				user.addElement("comment").addCDATA(
-						formatString("" + u.getAdresses().getComment()));
-				// A User can not have a deleted Adress, you cannot delete the
-				// Adress of an User
-				// String deleted = u.getAdresses().getDeleted()
+						formatString("" + u.getAddress().getComment()));
+				// A User can not have a deleted Address, you cannot delete the
+				// Address of an User
+				// String deleted = u.getAddress().getDeleted()
 				// Phone Number not done yet
 				user.addElement("fax").addCDATA(
-						formatString("" + u.getAdresses().getFax()));
-				if (u.getAdresses().getStates() != null) {
+						formatString("" + u.getAddress().getFax()));
+				if (u.getAddress().getState() != null) {
 					user.addElement("state_id").addCDATA(
 							formatString(""
-									+ u.getAdresses().getStates().getState_id()
+									+ u.getAddress().getState().getId()
 											.toString()));
 				} else {
 					user.addElement("state_id").addCDATA("1");
 				}
 				user.addElement("street").addCDATA(
-						formatString("" + u.getAdresses().getStreet()));
+						formatString("" + u.getAddress().getStreet()));
 				user.addElement("town").addCDATA(
-						formatString("" + u.getAdresses().getTown()));
+						formatString("" + u.getAddress().getTown()));
 				user.addElement("zip").addCDATA(
-						formatString("" + u.getAdresses().getZip()));
+						formatString("" + u.getAddress().getZip()));
 
 				// Email and Phone
 				user.addElement("mail").addCDATA(
-						formatString("" + u.getAdresses().getEmail()));
+						formatString("" + u.getAddress().getEmail()));
 				user.addElement("phone").addCDATA(
-						formatString("" + u.getAdresses().getPhone()));
+						formatString("" + u.getAddress().getPhone()));
 			} else {
 				user.addElement("additionalname").addCDATA(formatString(""));
 				user.addElement("comment").addCDATA(formatString(""));
 				// A User can not have a deleted address, you cannot delete the
 				// address of an User without deleting the user
 				// only SOAP users might have a null
-				// String deleted = u.getAdresses().getDeleted()
+				// String deleted = u.getAdsress().getDeleted()
 				// Phone Number not done yet
 				user.addElement("fax").addCDATA(formatString(""));
 				user.addElement("state_id").addCDATA("1");

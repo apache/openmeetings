@@ -90,7 +90,7 @@
 			this.addHeaderItemOrdered(146,70,"u.user_id",false,false); //labelid,width,orderBy,asc,isSelected
 			this.addHeaderItemOrdered(148,136,"u.firstname",false,false);
 			this.addHeaderItemOrdered(149,136,"u.lastname",false,true);
-			this.addHeaderItemOrdered(137,138,"u.adresses.email",false,false);
+			this.addHeaderItemOrdered(137,138,"u.address.email",false,false);
 			this.getAllUserBySearchRange.doCall();
 		</handler>
 		
@@ -145,7 +145,7 @@
 			    					obj:records[i],
 			    					userId:records[i].user_id,
 			    					login:records[i].login,
-			    					email:records[i].adresses.email,
+			    					email:records[i].address.email,
 			    					firstname:records[i].firstname,
 			    					lastname:records[i].lastname,
 			    					omTimeZone:records[i].omTimeZone

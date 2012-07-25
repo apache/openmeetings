@@ -188,7 +188,7 @@ public class Invitationmanagement {
 				if (invitationId > 0) {
 
 					if (sendMail) {
-						this.sendInvitionLink(us.getAdresses().getEmail(), 
+						this.sendInvitionLink(us.getAddress().getEmail(), 
 								username, message, baseurl,
 								email, subject, invitation.getHash(),
 								validFrom, validTo, language_id, fromUserField);
@@ -254,7 +254,7 @@ public class Invitationmanagement {
 		} else if (appointment.getRemind().getTypId() == 2) {
 			log.debug("ReminderType simple mail -> sending simple mail...");
 			sendInvitationCancelMail(member.getEmail(),
-					member.getAppointment(), user.getAdresses().getEmail(),
+					member.getAppointment(), user.getAddress().getEmail(),
 					subject, message);
 		} else if (appointment.getRemind().getTypId() == 3) {
 			try {
@@ -334,7 +334,7 @@ public class Invitationmanagement {
 					+ "<br/>";
 
 			String invitorName = user.getFirstname() + " " + user.getLastname()
-					+ " [" + user.getAdresses().getEmail() + "]";
+					+ " [" + user.getAddress().getEmail() + "]";
 
 			Fieldlanguagesvalues labelid1156 = fieldmanagment
 					.getFieldByIdAndLanguage(new Long(1156), language_id);
@@ -396,7 +396,7 @@ public class Invitationmanagement {
 		// nothing
 		if (appointment.getRemind().getTypId() == 2) {
 			sendInvitationUpdateMail(member.getEmail(), appointment, user
-					.getAdresses().getEmail(), subject, message);
+					.getAddress().getEmail(), subject, message);
 		} else if (appointment.getRemind().getTypId() == 3) {
 			try {
 				sendInvitationIcalUpdateMail(member.getEmail(),
@@ -757,7 +757,7 @@ public class Invitationmanagement {
 		atts.add(attendeeInDerHashMap);
 
 		HashMap<String, String> attendeeList = handler.getAttendeeData(user
-				.getAdresses().getEmail(), user.getLogin(), invitor);
+				.getAddress().getEmail(), user.getLogin(), invitor);
 
 		handler.addNewMeeting(startdate, enddate, 
 				point.getAppointmentName(), atts,
@@ -765,7 +765,7 @@ public class Invitationmanagement {
 
 		log.debug(handler.getICalDataAsString());
 
-		mailiCalThread.doSend(email, user.getAdresses().getEmail(), subject, handler.getIcalAsByteArray(),
+		mailiCalThread.doSend(email, user.getAddress().getEmail(), subject, handler.getIcalAsByteArray(),
 				message);
 
 		return null;
@@ -804,14 +804,14 @@ public class Invitationmanagement {
 		atts.add(attendeeInDerHashMap);
 
 		HashMap<String, String> attendeeList = handler.getAttendeeData(user
-				.getAdresses().getEmail(), user.getLogin(), invitor);
+				.getAddress().getEmail(), user.getLogin(), invitor);
 
 		handler.addNewMeeting(starttime, endtime, point.getAppointmentName(), atts,
 				subject, attendeeList, point.getIcalId(), timeZone);
 
 		log.debug(handler.getICalDataAsString());
 
-		mailiCalThread.doSend(email, user.getAdresses().getEmail(), subject, handler.getIcalAsByteArray(),
+		mailiCalThread.doSend(email, user.getAddress().getEmail(), subject, handler.getIcalAsByteArray(),
 				message);
 
 		return null;
@@ -877,7 +877,7 @@ public class Invitationmanagement {
 					.getAttendeeData(email, username, invitor);
 			String replyToEmail = null;
 			if (user != null) {
-				replyToEmail = user.getAdresses().getEmail();
+				replyToEmail = user.getAddress().getEmail();
 				organizerAttendee = handler.getAttendeeData(replyToEmail, user.getLogin(), invitor);
 			}
 

@@ -94,21 +94,21 @@ public class UserWebServiceFacade {
 	public Long addNewUser(String SID, String username, String userpass,
 			String lastname, String firstname, String email,
 			String additionalname, String street, String zip, String fax,
-			long states_id, String town, long language_id, String baseURL)
+			long state_id, String town, long language_id, String baseURL)
 			throws AxisFault {
 		return getUserServiceProxy().addNewUser(SID, username, userpass,
 				lastname, firstname, email, additionalname, street, zip, fax,
-				states_id, town, language_id, baseURL);
+				state_id, town, language_id, baseURL);
 	}
 
 	public Long addNewUserWithTimeZone(String SID, String username,
 			String userpass, String lastname, String firstname, String email,
 			String additionalname, String street, String zip, String fax,
-			long states_id, String town, long language_id, String baseURL,
+			long state_id, String town, long language_id, String baseURL,
 			String jNameTimeZone) throws AxisFault {
 		return getUserServiceProxy().addNewUserWithTimeZone(SID, username,
 				userpass, lastname, firstname, email, additionalname, street,
-				zip, fax, states_id, town, language_id, baseURL, jNameTimeZone);
+				zip, fax, state_id, town, language_id, baseURL, jNameTimeZone);
 
 	}
 
@@ -127,7 +127,7 @@ public class UserWebServiceFacade {
 	 * @param street
 	 * @param zip
 	 * @param fax
-	 * @param states_id
+	 * @param state_id
 	 * @param town
 	 * @param language_id
 	 * @param jNameTimeZone
@@ -139,12 +139,12 @@ public class UserWebServiceFacade {
 	public Long addNewUserWithExternalType(String SID, String username,
 			String userpass, String lastname, String firstname, String email,
 			String additionalname, String street, String zip, String fax,
-			long states_id, String town, long language_id,
+			long state_id, String town, long language_id,
 			String jNameTimeZone, String externalUserId, String externalUserType)
 			throws AxisFault {
 		return getUserServiceProxy().addNewUserWithExternalType(SID, username,
 				userpass, lastname, firstname, email, additionalname, street,
-				zip, fax, states_id, town, language_id, jNameTimeZone,
+				zip, fax, state_id, town, language_id, jNameTimeZone,
 				externalUserId, externalUserType);
 
 	}

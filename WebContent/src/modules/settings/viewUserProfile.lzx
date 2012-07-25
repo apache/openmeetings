@@ -229,12 +229,12 @@
 	<method name="showUserContactData">
 		<![CDATA[
 		
-            var tString = this.userObject.adresses.street + " " + this.userObject.adresses.additionalname + "<br/>";
-		    tString +=  this.userObject.adresses.zip + " " + this.userObject.adresses.town + "<br/>";
-		    tString +=  this.userObject.adresses.states.name + "<br/><br/>";
-            tString +=  this.userObject.adresses.email + "<br/>";
-            tString +=  this.userObject.adresses.phone + "<br/><br/>";
-            tString +=  this.userObject.adresses.comment + "<br/>";
+            var tString = this.userObject.address.street + " " + this.userObject.address.additionalname + "<br/>";
+		    tString +=  this.userObject.address.zip + " " + this.userObject.address.town + "<br/>";
+		    tString +=  this.userObject.address.state.name + "<br/><br/>";
+            tString +=  this.userObject.address.email + "<br/>";
+            tString +=  this.userObject.address.phone + "<br/><br/>";
+            tString +=  this.userObject.address.comment + "<br/>";
             
             this.userContactData.setAttribute("text",tString);
             

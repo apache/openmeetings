@@ -43,7 +43,7 @@ public class TestDatabaseStructureUsersSearch extends AbstractOpenmeetingsSpring
 			 log.debug("[records]"+ users.getRecords());
 			 
 			 //GroupMemberDaoImpl.getInstance().addGroupMember("Ad", "dir", Calendar.getInstance().getTime(), "1", "2", "interpol155", 1L, 1L);	
-			//GroupMemberDaoImpl.getInstance().addGroupMember(firstname, lastname, age, memberStatus, appointmentStatus, password, adresses_id, appointmentId);
+			//GroupMemberDaoImpl.getInstance().addGroupMember(firstname, lastname, age, memberStatus, appointmentStatus, password, address_id, appointmentId);
 			
 			//GroupMemberDaoImpl.getInstance().getGroupMemberById(1L);
 			//GroupMemberDaoImpl.getInstance().deleteGroupMember(2L);

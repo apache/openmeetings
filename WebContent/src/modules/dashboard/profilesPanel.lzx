@@ -63,8 +63,8 @@
 				if($debug) Debug.write("dashboard/getUserSelf: ",value);
 				parent._username.setAttribute('text',canvas.getLabelName(376)+" "+value.firstname+' '+value.lastname);
 				
-				if (value.adresses != null && value.adresses.town != null) {
-					parent._langAndCountry._town.setAttribute("text","<u>" + value.adresses.town + "</u>");
+				if (value.address != null && value.address.town != null) {
+					parent._langAndCountry._town.setAttribute("text","<u>" + value.address.town + "</u>");
 				}
 				if (value.omTimeZone != null) {
 					parent._langAndCountry._timeZone.setAttribute("text","<u>" + value.omTimeZone.jname + "</u>");

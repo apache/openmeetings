@@ -192,7 +192,7 @@ public class UserWebService {
 	 *            any zip
 	 * @param fax
 	 *            any fax
-	 * @param states_id
+	 * @param state_id
 	 *            a valid states_id
 	 * @param town
 	 *            any town
@@ -208,7 +208,7 @@ public class UserWebService {
 	public Long addNewUser(String SID, String username, String userpass,
 			String lastname, String firstname, String email,
 			String additionalname, String street, String zip, String fax,
-			long states_id, String town, long language_id, String baseURL)
+			long state_id, String town, long language_id, String baseURL)
 			throws AxisFault {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
@@ -226,7 +226,7 @@ public class UserWebService {
 
 				Long user_id = userManagement.registerUser(username, userpass,
 						lastname, firstname, email, new Date(), street,
-						additionalname, fax, zip, states_id, town, language_id,
+						additionalname, fax, zip, state_id, town, language_id,
 						"", false, baseURL, true, // generate
 											// SIP
 											// Data
@@ -284,7 +284,7 @@ public class UserWebService {
 	 *            any zip
 	 * @param fax
 	 *            any fax
-	 * @param states_id
+	 * @param state_id
 	 *            a valid states_id
 	 * @param town
 	 *            any town
@@ -302,7 +302,7 @@ public class UserWebService {
 	public Long addNewUserWithTimeZone(String SID, String username,
 			String userpass, String lastname, String firstname, String email,
 			String additionalname, String street, String zip, String fax,
-			long states_id, String town, long language_id, String baseURL,
+			long state_id, String town, long language_id, String baseURL,
 			String jNameTimeZone) throws AxisFault {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
@@ -312,7 +312,7 @@ public class UserWebService {
 
 				Long user_id = userManagement.registerUser(username, userpass,
 						lastname, firstname, email, new Date(), street,
-						additionalname, fax, zip, states_id, town, language_id,
+						additionalname, fax, zip, state_id, town, language_id,
 						"", false, baseURL, true, // generate
 											// SIP
 											// Data
@@ -374,7 +374,7 @@ public class UserWebService {
 	 *            any zip
 	 * @param fax
 	 *            any fax
-	 * @param states_id
+	 * @param state_id
 	 *            a valid states_id
 	 * @param town
 	 *            any town
@@ -392,7 +392,7 @@ public class UserWebService {
 	public Long addNewUserWithExternalType(String SID, String username,
 			String userpass, String lastname, String firstname, String email,
 			String additionalname, String street, String zip, String fax,
-			long states_id, String town, long language_id,
+			long state_id, String town, long language_id,
 			String jNameTimeZone, String externalUserId, String externalUserType)
 			throws AxisFault {
 		try {
@@ -411,7 +411,7 @@ public class UserWebService {
 				// This will send no email to the users
 				Long user_id = userManagement.registerUserNoEmail(username,
 						userpass, lastname, firstname, email, new Date(),
-						street, additionalname, fax, zip, states_id, town,
+						street, additionalname, fax, zip, state_id, town,
 						language_id, "", false, true, // generate SIP Data if
 												// the config is enabled
 						jNameTimeZone, null); //FIXME

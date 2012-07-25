@@ -61,7 +61,7 @@
     </method>
     
     <labeldTextListItem datapath="countrySet:/item" text="$path{ 'name/text()' }" 
-                value="$path{ 'state_id/text()' }" />
+                value="$path{ 'id/text()' }" />
    
 </class>
 

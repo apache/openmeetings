@@ -191,11 +191,11 @@ public class IcalHandler {
 	 * addMeetings Generate a Attendee
 	 */
 	// ------------------------------------------------------------------------------------------
-	public HashMap<String, String> getAttendeeData(String emailAdress,
+	public HashMap<String, String> getAttendeeData(String emailAddress,
 			String displayName, Boolean chair) {
 
 		HashMap<String, String> oneRecord = new HashMap<String, String>();
-		oneRecord.put("uri", "mailto:" + emailAdress);
+		oneRecord.put("uri", "mailto:" + emailAddress);
 		oneRecord.put("cn", displayName);
 
 		if (chair)

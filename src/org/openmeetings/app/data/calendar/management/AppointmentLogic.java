@@ -204,12 +204,12 @@ public class AppointmentLogic {
 					isPasswordProtected, password, false, user.getOmTimeZone().getJname());
 
 			String invitorName = user.getFirstname() + " " + user.getLastname()
-					+ " [" + user.getAdresses().getEmail() + "]";
+					+ " [" + user.getAddress().getEmail() + "]";
 
 			// Add the creator of the meeting calendar event
 			meetingMemberLogic.addMeetingMember(user.getFirstname(), user
 					.getLastname(), "", "", appointmentId, userId, user
-					.getAdresses().getEmail(), user.getPhoneForSMS(), baseUrl, userId, true,
+					.getAddress().getEmail(), user.getPhoneForSMS(), baseUrl, userId, true,
 					language_id, isPasswordProtected, password, timezone, user.getOmTimeZone(),
 					invitorName);
 

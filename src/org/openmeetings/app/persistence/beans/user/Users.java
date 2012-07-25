@@ -39,8 +39,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.openmeetings.app.persistence.beans.adresses.Adresses;
-import org.openmeetings.app.persistence.beans.adresses.States;
+import org.openmeetings.app.persistence.beans.address.Address;
+import org.openmeetings.app.persistence.beans.address.State;
 import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.persistence.beans.basic.Server;
 import org.openmeetings.app.persistence.beans.basic.Sessiondata;
@@ -103,15 +103,11 @@ public class Users implements Serializable {
 
 	
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(name = "adresses_id", insertable = true, updatable = true)
-	private Adresses adresses;
+	@JoinColumn(name = "address_id", insertable = true, updatable = true)
+	private Address address;
 	
 	@Transient
 	private Userlevel userlevel;
-	@Transient
-	private Userdata rechnungsaddressen;
-	@Transient
-	private Userdata lieferadressen;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id", insertable = true, updatable = true)
@@ -159,29 +155,29 @@ public class Users implements Serializable {
 		this.user_id = user_id;
 	}
 
-	public Adresses getAdresses() {
-		return adresses;
+	public Address getAddress() {
+		return address;
 	}
 
-	public void setAdresses(Adresses adresses) {
-		this.adresses = adresses;
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 
-	public void setAdresses(String street, String zip, String town,
-			States state, String additionalname, String comment, String fax,
+	public void setAddress(String street, String zip, String town,
+			State state, String additionalname, String comment, String fax,
 			String phone, String email) {
-		if (this.adresses == null) {
-			this.adresses = new Adresses();
+		if (this.address == null) {
+			this.address = new Address();
 		}
-		this.adresses.setStreet(street);
-		this.adresses.setZip(zip);
-		this.adresses.setTown(town);
-		this.adresses.setStates(state);
-		this.adresses.setAdditionalname(additionalname);
-		this.adresses.setComment(comment);
-		this.adresses.setFax(fax);
-		this.adresses.setPhone(phone);
-		this.adresses.setEmail(email);
+		this.address.setStreet(street);
+		this.address.setZip(zip);
+		this.address.setTown(town);
+		this.address.setState(state);
+		this.address.setAdditionalname(additionalname);
+		this.address.setComment(comment);
+		this.address.setFax(fax);
+		this.address.setPhone(phone);
+		this.address.setEmail(email);
 	}
 
 	public Date getAge() {
@@ -242,14 +238,6 @@ public class Users implements Serializable {
 		this.level_id = level_id;
 	}
 
-	public Userdata getLieferadressen() {
-		return lieferadressen;
-	}
-
-	public void setLieferadressen(Userdata lieferadressen) {
-		this.lieferadressen = lieferadressen;
-	}
-
 	public String getLogin() {
 		return login;
 	}
@@ -264,14 +252,6 @@ public class Users implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public Userdata getRechnungsaddressen() {
-		return rechnungsaddressen;
-	}
-
-	public void setRechnungsaddressen(Userdata rechnungsaddressen) {
-		this.rechnungsaddressen = rechnungsaddressen;
 	}
 
 	public Date getRegdate() {
@@ -470,6 +450,6 @@ public class Users implements Serializable {
 	}
 	
 	public String getPhoneForSMS() {
-		return getSendSMS() ? getAdresses().getPhone() : "";
+		return getSendSMS() ? getAddress().getPhone() : "";
 }
 }
