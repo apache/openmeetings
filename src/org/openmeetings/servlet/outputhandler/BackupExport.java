@@ -1635,7 +1635,7 @@ public class BackupExport {
 		
 		for (Configuration cfg : configs) {
 			Element cfgElem = configsElem.addElement("config");
-			cfgElem.addElement("id").addCDATA(formatString("" + cfg.getConfiguration_id()));
+			cfgElem.addElement("id").addCDATA(formatString("" + cfg.getId()));
 			cfgElem.addElement("comment").addCDATA(formatString("" + cfg.getComment()));
 			cfgElem.addElement("key").addCDATA(formatString(cfg.getConf_key()));
 			cfgElem.addElement("value").addCDATA(formatString(cfg.getConf_value()));

@@ -56,7 +56,7 @@
 	<!-- methods -->
 
     <method name="initValueFieldsByObject" args="obj">
-		this.configuration_id = obj.configuration_id;
+		this.configuration_id = obj.id;
 		if (this.configuration_id!=0){
 			this.getConfByConfigurationId.doCall();
 		}
