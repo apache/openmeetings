@@ -28,7 +28,7 @@ import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.persistence.beans.basic.ErrorType;
-import org.openmeetings.app.persistence.beans.basic.ErrorValues;
+import org.openmeetings.app.persistence.beans.basic.ErrorValue;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,12 +44,12 @@ public class ErrorManagement {
 	public Long addErrorType(Long errortype_id, Long fieldvalues_id) {
 		try {
 			ErrorType eType = new ErrorType();
-			eType.setErrortype_id(errortype_id);
+			eType.setId(errortype_id);
 			eType.setStarttime(new Date());
 			eType.setDeleted(false);
 			eType.setFieldvalues_id(fieldvalues_id);
 			eType = em.merge(eType);
-			Long newerrortype_id = eType.getErrortype_id();
+			Long newerrortype_id = eType.getId();
 			return newerrortype_id;
 		} catch (Exception ex2) {
 			log.error("[addErrorType]: ", ex2);
@@ -74,7 +74,7 @@ public class ErrorManagement {
 	public ErrorType getErrorType(Long errortype_id) {
 		try {
 			String hql = "select c from ErrorType as c "
-					+ "WHERE c.deleted <> :deleted AND c.errortype_id = :errortype_id";
+					+ "WHERE c.deleted <> :deleted AND c.id = :errortype_id";
 			TypedQuery<ErrorType> query = em.createQuery(hql, ErrorType.class);
 			query.setParameter("deleted", true);
 			query.setParameter("errortype_id", errortype_id);
@@ -88,14 +88,14 @@ public class ErrorManagement {
 	public Long addErrorValues(Long errorvalues_id, Long errortype_id,
 			Long fieldvalues_id) {
 		try {
-			ErrorValues eValue = new ErrorValues();
-			eValue.setErrorvalues_id(errorvalues_id);
-			eValue.setErrortype_id(errortype_id);
+			ErrorValue eValue = new ErrorValue();
+			eValue.setId(errorvalues_id);
+			eValue.setType(getErrorType(errortype_id));
 			eValue.setDeleted(false);
 			eValue.setStarttime(new Date());
 			eValue.setFieldvalues_id(fieldvalues_id);
 			eValue = em.merge(eValue);
-			return eValue.getErrorvalues_id();
+			return eValue.getId();
 		} catch (Exception ex2) {
 			log.error("[addErrorValues]: ", ex2);
 		}
@@ -104,12 +104,12 @@ public class ErrorManagement {
 
 	public Long getErrorValueById(Long errortype_id, Long fieldvalues_id) {
 		try {
-			ErrorValues eValue = new ErrorValues();
-			eValue.setErrortype_id(errortype_id);
+			ErrorValue eValue = new ErrorValue();
+			eValue.setType(getErrorType(errortype_id));
 			eValue.setStarttime(new Date());
 			eValue.setFieldvalues_id(fieldvalues_id);
 			eValue = em.merge(eValue);
-			Long newerrorvalues_id = eValue.getErrorvalues_id();
+			Long newerrorvalues_id = eValue.getId();
 			return newerrorvalues_id;
 		} catch (Exception ex2) {
 			log.error("[getErrorValueById]: ", ex2);
@@ -119,12 +119,12 @@ public class ErrorManagement {
 
 	public Long updateErrorValues(Long errortype_id, Long fieldvalues_id) {
 		try {
-			ErrorValues eValue = new ErrorValues();
-			eValue.setErrortype_id(errortype_id);
+			ErrorValue eValue = new ErrorValue();
+			eValue.setType(getErrorType(errortype_id));
 			eValue.setStarttime(new Date());
 			eValue.setFieldvalues_id(fieldvalues_id);
 			eValue = em.merge(eValue);
-			Long newerrorvalues_id = eValue.getErrorvalues_id();
+			Long newerrorvalues_id = eValue.getId();
 			return newerrorvalues_id;
 		} catch (Exception ex2) {
 			log.error("[addErrorType]: ", ex2);
@@ -132,15 +132,15 @@ public class ErrorManagement {
 		return null;
 	}
 
-	public ErrorValues getErrorValuesById(Long errorvalues_id) {
+	public ErrorValue getErrorValuesById(Long errorvalues_id) {
 		try {
-			String hql = "select c from ErrorValues as c "
-					+ " where c.errorvalues_id = :errorvalues_id "
+			String hql = "select c from ErrorValue as c "
+					+ " where c.id = :errorvalues_id "
 					+ " AND c.deleted <> :deleted";
-			TypedQuery<ErrorValues> query = em.createQuery(hql, ErrorValues.class);
+			TypedQuery<ErrorValue> query = em.createQuery(hql, ErrorValue.class);
 			query.setParameter("errorvalues_id", errorvalues_id);
 			query.setParameter("deleted", true);
-			ErrorValues e = null;
+			ErrorValue e = null;
 			try {
 				e = query.getSingleResult();
 			} catch (NoResultException ex) {

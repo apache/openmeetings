@@ -119,7 +119,7 @@
                 <![CDATA[
                     if ($debug) Debug.write("getActiveLdapConfigs: ",value);
                     for (var i=0;i<value.length;i++) {
-                        parent.addItem(value[i].name,value[i].ldapConfigId);
+                        parent.addItem(value[i].name,value[i].id);
                     }
                     
                     var g = canvas.getUserData();

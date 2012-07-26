@@ -34,7 +34,7 @@ import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.basic.Configuration;
-import org.openmeetings.app.persistence.beans.basic.ErrorValues;
+import org.openmeetings.app.persistence.beans.basic.ErrorValue;
 import org.openmeetings.app.persistence.beans.basic.RemoteSessionObject;
 import org.openmeetings.app.persistence.beans.basic.Sessiondata;
 import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
@@ -143,7 +143,7 @@ public class UserWebService {
 	public ErrorResult getErrorByCode(String SID, long errorid, long language_id) {
 		try {
 			if (errorid < 0) {
-				ErrorValues eValues = errorManagement
+				ErrorValue eValues = errorManagement
 						.getErrorValuesById(errorid * (-1));
 				if (eValues != null) {
 					Fieldlanguagesvalues errorValue = fieldmanagment
@@ -151,7 +151,7 @@ public class UserWebService {
 									eValues.getFieldvalues_id(), language_id);
 					Fieldlanguagesvalues typeValue = fieldmanagment
 							.getFieldByIdAndLanguage(errorManagement
-									.getErrorType(eValues.getErrortype_id())
+									.getErrorType(eValues.getType().getId())
 									.getFieldvalues_id(), language_id);
 					if (errorValue != null) {
 						return new ErrorResult(errorid, errorValue.getValue(),

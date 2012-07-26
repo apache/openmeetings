@@ -26,7 +26,7 @@
 		<class>org.openmeetings.app.persistence.beans.address.State</class>
 		<class>org.openmeetings.app.persistence.beans.basic.Configuration</class>
 		<class>org.openmeetings.app.persistence.beans.basic.ErrorType</class>
-		<class>org.openmeetings.app.persistence.beans.basic.ErrorValues</class>
+		<class>org.openmeetings.app.persistence.beans.basic.ErrorValue</class>
 		<class>org.openmeetings.app.persistence.beans.basic.LdapConfig</class>
 		<class>org.openmeetings.app.persistence.beans.basic.Naviglobal</class>
 		<class>org.openmeetings.app.persistence.beans.basic.Navimain</class>

@@ -67,7 +67,7 @@ public class LdapConfigDaoImpl {
 			log.debug("addLdapConfig :2: "+insertedby);
 			
 			ldapConfig = em.merge(ldapConfig);
-			Long ldapConfigId = ldapConfig.getLdapConfigId();
+			Long ldapConfigId = ldapConfig.getId();
 			
 			if (ldapConfigId > 0) {
 				return ldapConfigId;
@@ -89,7 +89,7 @@ public class LdapConfigDaoImpl {
 			ldapConfig.setInserted(new Date());
 			
 			ldapConfig = em.merge(ldapConfig);
-			Long ldapConfigId = ldapConfig.getLdapConfigId();
+			Long ldapConfigId = ldapConfig.getId();
 			
 			if (ldapConfigId > 0) {
 				return ldapConfigId;
@@ -128,7 +128,7 @@ public class LdapConfigDaoImpl {
 			log.debug("updateLdapConfig :2: "+updatedby);
 			
 			ldapConfig = em.merge(ldapConfig);
-			ldapConfigId = ldapConfig.getLdapConfigId();
+			ldapConfigId = ldapConfig.getId();
 			
 			return ldapConfigId;
 			
@@ -142,7 +142,7 @@ public class LdapConfigDaoImpl {
 		try {
 			
 			String hql = "select c from LdapConfig c " +
-				       	"WHERE c.ldapConfigId = :ldapConfigId " +
+				       	"WHERE c.id = :ldapConfigId " +
 				       	"AND c.deleted = :deleted";
 			
 			TypedQuery<LdapConfig> query = em.createQuery(hql, LdapConfig.class);
@@ -191,7 +191,7 @@ public class LdapConfigDaoImpl {
 		try {
 			log.debug("selectMaxFromConfigurations ");
 			//get all users
-			TypedQuery<Long> query = em.createQuery("select count(c.ldapConfigId) from LdapConfig c where c.deleted = false", Long.class); 
+			TypedQuery<Long> query = em.createQuery("select count(c.id) from LdapConfig c where c.deleted = false", Long.class); 
 			List<Long> ll = query.getResultList();
 			log.debug("selectMaxFromLdapConfig" + ll.get(0));
 			return ll.get(0);
@@ -210,7 +210,7 @@ public class LdapConfigDaoImpl {
 				return null;
 			}
 			
-			ldapConfig = em.find(LdapConfig.class, ldapConfig.getLdapConfigId());
+			ldapConfig = em.find(LdapConfig.class, ldapConfig.getId());
 			em.remove(ldapConfig);
 			
 			return ldapConfigId;
