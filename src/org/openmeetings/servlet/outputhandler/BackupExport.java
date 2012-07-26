@@ -1528,44 +1528,44 @@ public class BackupExport {
 				user.addElement("omTimeZone").addCDATA(formatString(""));
 			}
 
-			if (u.getAddress() != null) {
+			if (u.getAdresses() != null) {
 				user.addElement("additionalname").addCDATA(
-						formatString("" + u.getAddress().getAdditionalname()));
+						formatString("" + u.getAdresses().getAdditionalname()));
 				user.addElement("comment").addCDATA(
-						formatString("" + u.getAddress().getComment()));
-				// A User can not have a deleted Address, you cannot delete the
-				// Address of an User
-				// String deleted = u.getAddress().getDeleted()
+						formatString("" + u.getAdresses().getComment()));
+				// A User can not have a deleted Adress, you cannot delete the
+				// Adress of an User
+				// String deleted = u.getAdresses().getDeleted()
 				// Phone Number not done yet
 				user.addElement("fax").addCDATA(
-						formatString("" + u.getAddress().getFax()));
-				if (u.getAddress().getState() != null) {
+						formatString("" + u.getAdresses().getFax()));
+				if (u.getAdresses().getStates() != null) {
 					user.addElement("state_id").addCDATA(
 							formatString(""
-									+ u.getAddress().getState().getId()
+									+ u.getAdresses().getStates().getState_id()
 											.toString()));
 				} else {
 					user.addElement("state_id").addCDATA("1");
 				}
 				user.addElement("street").addCDATA(
-						formatString("" + u.getAddress().getStreet()));
+						formatString("" + u.getAdresses().getStreet()));
 				user.addElement("town").addCDATA(
-						formatString("" + u.getAddress().getTown()));
+						formatString("" + u.getAdresses().getTown()));
 				user.addElement("zip").addCDATA(
-						formatString("" + u.getAddress().getZip()));
+						formatString("" + u.getAdresses().getZip()));
 
 				// Email and Phone
 				user.addElement("mail").addCDATA(
-						formatString("" + u.getAddress().getEmail()));
+						formatString("" + u.getAdresses().getEmail()));
 				user.addElement("phone").addCDATA(
-						formatString("" + u.getAddress().getPhone()));
+						formatString("" + u.getAdresses().getPhone()));
 			} else {
 				user.addElement("additionalname").addCDATA(formatString(""));
 				user.addElement("comment").addCDATA(formatString(""));
 				// A User can not have a deleted address, you cannot delete the
 				// address of an User without deleting the user
 				// only SOAP users might have a null
-				// String deleted = u.getAdsress().getDeleted()
+				// String deleted = u.getAdresses().getDeleted()
 				// Phone Number not done yet
 				user.addElement("fax").addCDATA(formatString(""));
 				user.addElement("state_id").addCDATA("1");
@@ -1635,7 +1635,7 @@ public class BackupExport {
 		
 		for (Configuration cfg : configs) {
 			Element cfgElem = configsElem.addElement("config");
-			cfgElem.addElement("id").addCDATA(formatString("" + cfg.getId()));
+			cfgElem.addElement("id").addCDATA(formatString("" + cfg.getConfiguration_id()));
 			cfgElem.addElement("comment").addCDATA(formatString("" + cfg.getComment()));
 			cfgElem.addElement("key").addCDATA(formatString(cfg.getConf_key()));
 			cfgElem.addElement("value").addCDATA(formatString(cfg.getConf_value()));

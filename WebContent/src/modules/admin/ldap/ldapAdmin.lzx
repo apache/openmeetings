@@ -81,7 +81,7 @@
 	    	for (var i=0;i<records.length;i++){
 	    		new lz.ldapAdminListItem(this._innerlist._inn._inn,{
     	    		                 obj:records[i],
-    	    		                 ldapConfigId:records[i].id,
+    	    		                 ldapConfigId:records[i].ldapConfigId,
     	    		                 tName:records[i].name,
     	    		                 configFileName:records[i].configFileName
 	    		                 });

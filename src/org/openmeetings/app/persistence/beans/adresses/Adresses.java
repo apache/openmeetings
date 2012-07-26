@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.openmeetings.app.persistence.beans.address;
+package org.openmeetings.app.persistence.beans.adresses;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -33,14 +33,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "address")
-public class Address implements Serializable {
+@Table(name = "adresses")
+public class Adresses implements Serializable {
 
 	private static final long serialVersionUID = 1387576041912128161L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Long id;
+	@Column(name = "adresses_id")
+	private Long adresses_id;
 	@Column(name = "additionalname")
 	private String additionalname;
 	@Lob
@@ -52,7 +52,7 @@ public class Address implements Serializable {
 	private Date starttime;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "state_id")
-	private State state;
+	private States states;
 	@Column(name = "street")
 	private String street;
 	@Column(name = "town")
@@ -69,6 +69,10 @@ public class Address implements Serializable {
 	@Column(name = "phone")
 	private String phone;
 
+	public Adresses() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public String getAdditionalname() {
 		return additionalname;
 	}
@@ -77,12 +81,12 @@ public class Address implements Serializable {
 		this.additionalname = additionalname;
 	}
 
-	public Long getId() {
-		return id;
+	public Long getAdresses_id() {
+		return adresses_id;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setAdresses_id(Long adresses_id) {
+		this.adresses_id = adresses_id;
 	}
 
 	public String getComment() {
@@ -109,12 +113,12 @@ public class Address implements Serializable {
 		this.starttime = starttime;
 	}
 
-	public State getState() {
-		return state;
+	public States getStates() {
+		return states;
 	}
 
-	public void setState(State state) {
-		this.state = state;
+	public void setStates(States states) {
+		this.states = states;
 	}
 
 	public String getStreet() {

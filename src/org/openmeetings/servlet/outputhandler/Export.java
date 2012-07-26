@@ -272,22 +272,22 @@ public class Export extends HttpServlet {
 			user.addElement("level_id").setText(u.getLevel_id().toString());
 
 			user.addElement("additionalname").setText(
-					u.getAddress().getAdditionalname());
-			user.addElement("comment").setText(u.getAddress().getComment());
-			// A User can not have a deleted Address, you cannot delete the
-			// Address of an User
-			// String deleted = u.getAddress().getDeleted()
+					u.getAdresses().getAdditionalname());
+			user.addElement("comment").setText(u.getAdresses().getComment());
+			// A User can not have a deleted Adress, you cannot delete the
+			// Adress of an User
+			// String deleted = u.getAdresses().getDeleted()
 			// Phone Number not done yet
-			user.addElement("fax").setText(u.getAddress().getFax());
+			user.addElement("fax").setText(u.getAdresses().getFax());
 			user.addElement("state_id").setText(
-					u.getAddress().getState().getId().toString());
-			user.addElement("street").setText(u.getAddress().getStreet());
-			user.addElement("town").setText(u.getAddress().getTown());
-			user.addElement("zip").setText(u.getAddress().getZip());
+					u.getAdresses().getStates().getState_id().toString());
+			user.addElement("street").setText(u.getAdresses().getStreet());
+			user.addElement("town").setText(u.getAdresses().getTown());
+			user.addElement("zip").setText(u.getAdresses().getZip());
 
 			// Email and Phone
-			user.addElement("mail").setText(u.getAddress().getEmail());
-			user.addElement("phone").setText(u.getAddress().getPhone());
+			user.addElement("mail").setText(u.getAdresses().getEmail());
+			user.addElement("phone").setText(u.getAdresses().getPhone());
 
 			Element user_organisations = user.addElement("organisations");
 			// List<String> organisations = new LinkedList();

@@ -22,7 +22,7 @@ import org.openmeetings.app.OpenmeetingsVariables;
 import org.openmeetings.app.data.basic.ErrorManagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
 import org.openmeetings.app.data.beans.basic.ErrorResult;
-import org.openmeetings.app.persistence.beans.basic.ErrorValue;
+import org.openmeetings.app.persistence.beans.basic.ErrorValues;
 import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -58,12 +58,12 @@ public class ErrorService {
 
 		if (errorid < 0) {
 			log.debug("errorid, language_id: " + errorid + "|" + language_id);
-			ErrorValue eValues = errorManagement.getErrorValuesById(-1
+			ErrorValues eValues = errorManagement.getErrorValuesById(-1
 					* errorid);
 			if (eValues != null) {
 				log.debug("eValues.getFieldvalues_id() = " + eValues.getFieldvalues_id());
 				// log.debug(eValues.getFieldvalues().getFieldvalues_id());
-				log.debug("eValues.getErrorType() = " + errorManagement.getErrorType(eValues.getType().getId()));
+				log.debug("eValues.getErrorType() = " + errorManagement.getErrorType(eValues.getErrortype_id()));
 				// log.debug(eValues.getErrorType().getErrortype_id());
 				// log.debug(eValues.getErrorType().getFieldvalues());
 				// log.debug(eValues.getErrorType().getFieldvalues().getFieldvalues_id());
@@ -71,7 +71,7 @@ public class ErrorService {
 						.getFieldByIdAndLanguage(eValues.getFieldvalues_id(),
 								language_id);
 				Fieldlanguagesvalues typeValue = fieldmanagment
-						.getFieldByIdAndLanguage(errorManagement.getErrorType(eValues.getType().getId())
+						.getFieldByIdAndLanguage(errorManagement.getErrorType(eValues.getErrortype_id())
 								.getFieldvalues_id(), language_id);
 				if (errorValue != null) {
 					return new ErrorResult(errorid, errorValue.getValue(),

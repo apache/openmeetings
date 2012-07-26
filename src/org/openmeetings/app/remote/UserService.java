@@ -395,7 +395,7 @@ public class UserService {
 						argObjectMap.get("additionalname").toString(),
 						argObjectMap.get("fax").toString(),
 						argObjectMap.get("zip").toString(),
-						Long.valueOf(argObjectMap.get("state_id").toString())
+						Long.valueOf(argObjectMap.get("states_id").toString())
 								.longValue(),
 						argObjectMap.get("town").toString(),
 						new Long(argObjectMap.get("language_id").toString()),
@@ -442,7 +442,7 @@ public class UserService {
 								argObjectMap.get("additionalname").toString(),
 								argObjectMap.get("zip").toString(),
 								Long.valueOf(
-										argObjectMap.get("state_id")
+										argObjectMap.get("states_id")
 												.toString()).longValue(),
 								argObjectMap.get("town").toString(),
 								new Long(argObjectMap.get("language_id").toString()),
@@ -687,7 +687,7 @@ public class UserService {
 				privateMessagesDao.addPrivateMessage(user.getFirstname() + " "
 						+ user.getLastname() + " " + fValue1193.getValue(),
 						message, 0L, user, userToAdd, userToAdd, false, null,
-						true, userContactId, userToAdd.getAddress().getEmail());
+						true, userContactId, userToAdd.getAdresses().getEmail());
 
 				String link = baseURL + "?cuser=" + hash;
 
@@ -705,8 +705,8 @@ public class UserService {
 						.getRequestContactTemplate(message, aLinkHTML,
 								denyLinkHTML, profileLinkHTML);
 
-				if (userToAdd.getAddress() != null) {
-					mailHandler.sendMail(userToAdd.getAddress().getEmail(),
+				if (userToAdd.getAdresses() != null) {
+					mailHandler.sendMail(userToAdd.getAdresses().getEmail(),
 							user.getFirstname() + " " + user.getLastname()
 									+ " " + fValue1193.getValue(), template);
 				}
@@ -874,7 +874,7 @@ public class UserService {
 
 					Users user = userContacts.getOwner();
 
-					if (user.getAddress() != null) {
+					if (user.getAdresses() != null) {
 
 						Long language_id = user.getLanguage_id();
 						if (language_id == null) {
@@ -905,9 +905,9 @@ public class UserService {
 								user.getFirstname() + " " + user.getLastname()
 										+ " " + fValue1198.getValue(), message,
 								0L, userContacts.getContact(), user, user,
-								false, null, false, 0L, user.getAddress().getEmail());
+								false, null, false, 0L, user.getAdresses().getEmail());
 
-						mailHandler.sendMail(user.getAddress().getEmail(),
+						mailHandler.sendMail(user.getAdresses().getEmail(),
 								userContacts.getContact().getFirstname()
 										+ " "
 										+ userContacts.getContact()
@@ -1030,7 +1030,7 @@ public class UserService {
 
 				}
 
-				recipients.add(from.getAddress().getEmail());
+				recipients.add(from.getAdresses().getEmail());
 
 				String sendJNameTimeZone = from.getOmTimeZone().getJname();
 				
@@ -1073,7 +1073,7 @@ public class UserService {
 										from.getFirstname() + " " + from.getLastname(), // username
 										message,
 										baseURL, // baseURl
-										from.getAddress().getEmail(), // email
+										from.getAdresses().getEmail(), // email
 										subject, // subject
 										room_id, // room_id
 										"public",

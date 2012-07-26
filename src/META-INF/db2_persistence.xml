@@ -22,11 +22,11 @@
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd" version="2.0">
 	<persistence-unit name="openmeetings" transaction-type="RESOURCE_LOCAL">
 		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
-		<class>org.openmeetings.app.persistence.beans.address.Address</class>
-		<class>org.openmeetings.app.persistence.beans.address.State</class>
+		<class>org.openmeetings.app.persistence.beans.adresses.Adresses</class>
+		<class>org.openmeetings.app.persistence.beans.adresses.States</class>
 		<class>org.openmeetings.app.persistence.beans.basic.Configuration</class>
 		<class>org.openmeetings.app.persistence.beans.basic.ErrorType</class>
-		<class>org.openmeetings.app.persistence.beans.basic.ErrorValue</class>
+		<class>org.openmeetings.app.persistence.beans.basic.ErrorValues</class>
 		<class>org.openmeetings.app.persistence.beans.basic.LdapConfig</class>
 		<class>org.openmeetings.app.persistence.beans.basic.Naviglobal</class>
 		<class>org.openmeetings.app.persistence.beans.basic.Navimain</class>

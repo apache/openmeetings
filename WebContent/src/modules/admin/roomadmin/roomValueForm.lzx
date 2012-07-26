@@ -711,7 +711,7 @@
 		                    obj:records[i],
 		                    isSuperModerator:records[i].isSuperModerator,
 		                    userId:records[i].user.user_id,
-		                    email:records[i].user.address.email,
+		                    email:records[i].user.adresses.email,
 		                    uName:records[i].user.firstname+' '+records[i].user.lastname
                         });
 	            }

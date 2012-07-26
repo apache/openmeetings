@@ -640,7 +640,7 @@
 		    		
 		    		for (var k=0;k<value.result.length;k++) {
 		    			value.result[k].strTime = parseDateToStringTime(value.result[k].inserted);
-		    			value.result[k].userName = value.result[k].from.firstname+' '+value.result[k].from.lastname+' &#60;'+value.result[k].from.address.email+'&#62;';
+		    			value.result[k].userName = value.result[k].from.firstname+' '+value.result[k].from.lastname+' &#60;'+value.result[k].from.adresses.email+'&#62;';
 		    			value.result[k].itemSelected = false;
 		    			if (!value.result[k].isRead) {
 		    				parent.countUnRead++;
@@ -678,7 +678,7 @@
 		    		
 		    		for (var k=0;k<value.result.length;k++) {
 		    			value.result[k].strTime = parseDateToStringTime(value.result[k].inserted);
-		    			value.result[k].userName = value.result[k].to.firstname+' '+value.result[k].to.lastname+' &#60;'+value.result[k].to.address.email+'&#62;';
+		    			value.result[k].userName = value.result[k].to.firstname+' '+value.result[k].to.lastname+' &#60;'+value.result[k].to.adresses.email+'&#62;';
 		    			value.result[k].itemSelected = false;
 		    		}
 		    		
@@ -713,7 +713,7 @@
 		    		
 		    		for (var k=0;k<value.result.length;k++) {
 		    			value.result[k].strTime = parseDateToStringTime(value.result[k].inserted);
-		    			value.result[k].userName = value.result[k].to.firstname+' '+value.result[k].to.lastname+' &#60;'+value.result[k].to.address.email+'&#62;';
+		    			value.result[k].userName = value.result[k].to.firstname+' '+value.result[k].to.lastname+' &#60;'+value.result[k].to.adresses.email+'&#62;';
 		    			value.result[k].itemSelected = false;
 		    		}
 		    		
@@ -751,7 +751,7 @@
 		    		
 		    		for (var k=0;k<value.result.length;k++) {
 		    			value.result[k].strTime = parseDateToStringTime(value.result[k].inserted);
-		    			value.result[k].userName = value.result[k].to.firstname+' '+value.result[k].to.lastname+' &#60;'+value.result[k].to.address.email+'&#62;';
+		    			value.result[k].userName = value.result[k].to.firstname+' '+value.result[k].to.lastname+' &#60;'+value.result[k].to.adresses.email+'&#62;';
 		    			value.result[k].itemSelected = false;
 		    		}
 		    		
@@ -1055,9 +1055,9 @@
 			    
 			    this._answer_area.setAttribute("visibility","visible");
 			
-				this.from.setAttribute("text",refObj.from.firstname+' '+refObj.from.lastname+' &#60;'+refObj.from.address.email+'&#62;');
+				this.from.setAttribute("text",refObj.from.firstname+' '+refObj.from.lastname+' &#60;'+refObj.from.adresses.email+'&#62;');
 				if (refObj.to != null) {
-					this.to.setAttribute("text",refObj.to.firstname+' '+refObj.to.lastname+' &#60;'+refObj.to.address.email+'&#62;');
+					this.to.setAttribute("text",refObj.to.firstname+' '+refObj.to.lastname+' &#60;'+refObj.to.adresses.email+'&#62;');
 				} else {
 					this.to.setAttribute("text","");
 				}

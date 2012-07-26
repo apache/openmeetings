@@ -132,11 +132,11 @@
         	userObject["login"] = canvas.thishib.currentInvitation.invitedEMail;
         	userObject["firstname"] = "";
         	userObject["lastname"] = canvas.thishib.currentInvitation.invitedEMail;
-        	userObject["address"] = new Array();
-        	//userObject["address"]["emails"] = new Array();
-        	userObject["address"]["email"] = canvas.thishib.currentInvitation.invitedEMail;
-        	//userObject["address"]["emails"][0]["mail"] = new Array();
-        	//userObject["address"]["emails"][0]["mail"]["email"] = canvas.thishib.currentInvitation.invitedEMail;
+        	userObject["adresses"] = new Array();
+        	//userObject["adresses"]["emails"] = new Array();
+        	userObject["adresses"]["email"] = canvas.thishib.currentInvitation.invitedEMail;
+        	//userObject["adresses"]["emails"][0]["mail"] = new Array();
+        	//userObject["adresses"]["emails"][0]["mail"]["email"] = canvas.thishib.currentInvitation.invitedEMail;
            
         	hib.userobject = userObject;
            

@@ -139,14 +139,14 @@ public class Configurationmanagement {
 	}
 
 	public Configuration getConfByConfigurationId(long user_level,
-			long id) {
+			long configuration_id) {
 		try {
 			log.debug("getConfByConfigurationId1: user_level " + user_level);
 			if (authLevelManagement.checkAdminLevel(user_level)) {
 				Configuration configuration = null;
 				TypedQuery<Configuration> query = em
-						.createQuery("select c from Configuration as c where c.id = :id", Configuration.class);
-				query.setParameter("id", id);
+						.createQuery("select c from Configuration as c where c.configuration_id = :configuration_id", Configuration.class);
+				query.setParameter("configuration_id", configuration_id);
 				query.setMaxResults(1);
 				try {
 					configuration = query.getSingleResult();
@@ -223,7 +223,7 @@ public class Configurationmanagement {
 			log.debug("selectMaxFromConfigurations ");
 			// get all users
 			TypedQuery<Long> query = em
-					.createQuery("select count(c.id) from Configuration c where c.deleted = false", Long.class);
+					.createQuery("select count(c.configuration_id) from Configuration c where c.deleted = false", Long.class);
 			List<Long> ll = query.getResultList();
 			log.debug("selectMaxFromConfigurations" + ll.get(0));
 			return ll.get(0);
@@ -264,18 +264,18 @@ public class Configurationmanagement {
 				Configuration conf = (Configuration) CastMapToObject
 						.getInstance().castByGivenObject(values,
 								Configuration.class);
-				if (conf.getId().equals(null)
-						|| conf.getId() == 0) {
+				if (conf.getConfiguration_id().equals(null)
+						|| conf.getConfiguration_id() == 0) {
 					log.info("add new Configuration");
-					conf.setId(null);
+					conf.setConfiguration_id(null);
 					conf.setStarttime(new Date());
 					conf.setDeleted(false);
 					return this.addConfig(conf);
 				} else {
 					log.info("update Configuration ID: "
-							+ conf.getId());
+							+ conf.getConfiguration_id());
 					Configuration conf2 = this.getConfByConfigurationId(3L,
-							conf.getId());
+							conf.getConfiguration_id());
 					conf2.setComment(conf.getComment());
 					conf2.setConf_key(conf.getConf_key());
 					conf2.setConf_value(conf.getConf_value());
@@ -297,7 +297,8 @@ public class Configurationmanagement {
 	public Long addConfig(Configuration conf) {
 		try {
 			conf = em.merge(conf);
-			return conf.getId();
+			Long configuration_id = conf.getConfiguration_id();
+			return configuration_id;
 		} catch (Exception ex2) {
 			log.error("[updateConfByUID]: ", ex2);
 		}
@@ -306,7 +307,7 @@ public class Configurationmanagement {
 
 	public Long updateConfig(Configuration conf) {
 		try {
-			if (conf.getId() == null) {
+			if (conf.getConfiguration_id() == null) {
 				em.persist(conf);
 			} else {
 				if (!em.contains(conf)) {
@@ -318,7 +319,7 @@ public class Configurationmanagement {
 			} else if ("show.whiteboard.draw.status".equals(conf.getConf_key())) {
 				ScopeApplicationAdapter.whiteboardDrawStatus = "1".equals(conf.getConf_value());
 			}
-			return conf.getId();
+			return conf.getConfiguration_id();
 		} catch (Exception ex2) {
 			log.error("[updateConfByUID]: ", ex2);
 		}
@@ -337,7 +338,7 @@ public class Configurationmanagement {
 				conf.setDeleted(true);
 
 				Configuration conf2 = this.getConfByConfigurationId(3L,
-						conf.getId());
+						conf.getConfiguration_id());
 				conf2.setComment(conf.getComment());
 				conf2.setConf_key(conf.getConf_key());
 				conf2.setConf_value(conf.getConf_value());

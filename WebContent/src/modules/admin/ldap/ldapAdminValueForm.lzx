@@ -84,7 +84,7 @@
     	if (obj == null) {
     		return;
     	}
-    	this.ldapConfigId = obj.id;
+    	this.ldapConfigId = obj.ldapConfigId;
         this.tName.setAttribute('text',obj.name);
         this.configFileName.setAttribute('text',obj.configFileName);
         

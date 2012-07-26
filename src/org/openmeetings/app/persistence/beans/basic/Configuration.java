@@ -46,8 +46,8 @@ public class Configuration implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	
-	@Column(name="id")
-	private Long id;
+	@Column(name="configuration_id")
+	private Long configuration_id;
 	@Column(name="conf_key")
 	private String conf_key;
 	@Column(name="conf_value")
@@ -88,11 +88,11 @@ public class Configuration implements Serializable {
         this.conf_value = conf_value;
     }
     
-    public Long getId() {
-        return id;
+    public Long getConfiguration_id() {
+        return configuration_id;
     }
-    public void setId(Long id) {
-        this.id = id;
+    public void setConfiguration_id(Long configuration_id) {
+        this.configuration_id = configuration_id;
     }
     
 	public Date getStarttime() {

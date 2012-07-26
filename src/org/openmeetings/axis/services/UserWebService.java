@@ -34,7 +34,7 @@ import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.basic.Configuration;
-import org.openmeetings.app.persistence.beans.basic.ErrorValue;
+import org.openmeetings.app.persistence.beans.basic.ErrorValues;
 import org.openmeetings.app.persistence.beans.basic.RemoteSessionObject;
 import org.openmeetings.app.persistence.beans.basic.Sessiondata;
 import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
@@ -143,7 +143,7 @@ public class UserWebService {
 	public ErrorResult getErrorByCode(String SID, long errorid, long language_id) {
 		try {
 			if (errorid < 0) {
-				ErrorValue eValues = errorManagement
+				ErrorValues eValues = errorManagement
 						.getErrorValuesById(errorid * (-1));
 				if (eValues != null) {
 					Fieldlanguagesvalues errorValue = fieldmanagment
@@ -151,7 +151,7 @@ public class UserWebService {
 									eValues.getFieldvalues_id(), language_id);
 					Fieldlanguagesvalues typeValue = fieldmanagment
 							.getFieldByIdAndLanguage(errorManagement
-									.getErrorType(eValues.getType().getId())
+									.getErrorType(eValues.getErrortype_id())
 									.getFieldvalues_id(), language_id);
 					if (errorValue != null) {
 						return new ErrorResult(errorid, errorValue.getValue(),
@@ -192,7 +192,7 @@ public class UserWebService {
 	 *            any zip
 	 * @param fax
 	 *            any fax
-	 * @param state_id
+	 * @param states_id
 	 *            a valid states_id
 	 * @param town
 	 *            any town
@@ -208,7 +208,7 @@ public class UserWebService {
 	public Long addNewUser(String SID, String username, String userpass,
 			String lastname, String firstname, String email,
 			String additionalname, String street, String zip, String fax,
-			long state_id, String town, long language_id, String baseURL)
+			long states_id, String town, long language_id, String baseURL)
 			throws AxisFault {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
@@ -226,7 +226,7 @@ public class UserWebService {
 
 				Long user_id = userManagement.registerUser(username, userpass,
 						lastname, firstname, email, new Date(), street,
-						additionalname, fax, zip, state_id, town, language_id,
+						additionalname, fax, zip, states_id, town, language_id,
 						"", false, baseURL, true, // generate
 											// SIP
 											// Data
@@ -284,7 +284,7 @@ public class UserWebService {
 	 *            any zip
 	 * @param fax
 	 *            any fax
-	 * @param state_id
+	 * @param states_id
 	 *            a valid states_id
 	 * @param town
 	 *            any town
@@ -302,7 +302,7 @@ public class UserWebService {
 	public Long addNewUserWithTimeZone(String SID, String username,
 			String userpass, String lastname, String firstname, String email,
 			String additionalname, String street, String zip, String fax,
-			long state_id, String town, long language_id, String baseURL,
+			long states_id, String town, long language_id, String baseURL,
 			String jNameTimeZone) throws AxisFault {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
@@ -312,7 +312,7 @@ public class UserWebService {
 
 				Long user_id = userManagement.registerUser(username, userpass,
 						lastname, firstname, email, new Date(), street,
-						additionalname, fax, zip, state_id, town, language_id,
+						additionalname, fax, zip, states_id, town, language_id,
 						"", false, baseURL, true, // generate
 											// SIP
 											// Data
@@ -374,7 +374,7 @@ public class UserWebService {
 	 *            any zip
 	 * @param fax
 	 *            any fax
-	 * @param state_id
+	 * @param states_id
 	 *            a valid states_id
 	 * @param town
 	 *            any town
@@ -392,7 +392,7 @@ public class UserWebService {
 	public Long addNewUserWithExternalType(String SID, String username,
 			String userpass, String lastname, String firstname, String email,
 			String additionalname, String street, String zip, String fax,
-			long state_id, String town, long language_id,
+			long states_id, String town, long language_id,
 			String jNameTimeZone, String externalUserId, String externalUserType)
 			throws AxisFault {
 		try {
@@ -411,7 +411,7 @@ public class UserWebService {
 				// This will send no email to the users
 				Long user_id = userManagement.registerUserNoEmail(username,
 						userpass, lastname, firstname, email, new Date(),
-						street, additionalname, fax, zip, state_id, town,
+						street, additionalname, fax, zip, states_id, town,
 						language_id, "", false, true, // generate SIP Data if
 												// the config is enabled
 						jNameTimeZone, null); //FIXME

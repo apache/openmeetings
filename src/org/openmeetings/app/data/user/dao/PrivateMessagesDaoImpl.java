@@ -159,7 +159,7 @@ public class PrivateMessagesDaoImpl {
 				hql += "OR lower(c.from.firstname) LIKE :search ";
 				hql += "OR lower(c.from.lastname) LIKE :search ";
 				hql += "OR lower(c.from.login) LIKE :search ";
-				hql += "OR lower(c.from.address.email) LIKE :search ";
+				hql += "OR lower(c.from.adresses.email) LIKE :search ";
 				hql += " ) ";
 			}
 
@@ -219,7 +219,7 @@ public class PrivateMessagesDaoImpl {
 				hql += "OR lower(c.from.firstname) LIKE :search ";
 				hql += "OR lower(c.from.lastname) LIKE :search ";
 				hql += "OR lower(c.from.login) LIKE :search ";
-				hql += "OR lower(c.from.address.email) LIKE :search ";
+				hql += "OR lower(c.from.adresses.email) LIKE :search ";
 				hql += " ) ";
 			}
 			
@@ -266,7 +266,7 @@ public class PrivateMessagesDaoImpl {
 				hql += "OR lower(c.from.firstname) LIKE :search ";
 				hql += "OR lower(c.from.lastname) LIKE :search ";
 				hql += "OR lower(c.from.login) LIKE :search ";
-				hql += "OR lower(c.from.address.email) LIKE :search ";
+				hql += "OR lower(c.from.adresses.email) LIKE :search ";
 				hql += " ) ";
 			}
 
@@ -302,7 +302,7 @@ public class PrivateMessagesDaoImpl {
 				hql += "OR lower(c.from.firstname) LIKE :search ";
 				hql += "OR lower(c.from.lastname) LIKE :search ";
 				hql += "OR lower(c.from.login) LIKE :search ";
-				hql += "OR lower(c.from.address.email) LIKE :search ";
+				hql += "OR lower(c.from.adresses.email) LIKE :search ";
 				hql += " ) ";
 			}
 			
@@ -344,7 +344,7 @@ public class PrivateMessagesDaoImpl {
 				hql += "OR lower(c.from.firstname) LIKE :search ";
 				hql += "OR lower(c.from.lastname) LIKE :search ";
 				hql += "OR lower(c.from.login) LIKE :search ";
-				hql += "OR lower(c.from.address.email) LIKE :search ";
+				hql += "OR lower(c.from.adresses.email) LIKE :search ";
 				hql += " ) ";
 			}
 			
@@ -380,7 +380,7 @@ public class PrivateMessagesDaoImpl {
 				hql += "OR lower(c.from.firstname) LIKE :search ";
 				hql += "OR lower(c.from.lastname) LIKE :search ";
 				hql += "OR lower(c.from.login) LIKE :search ";
-				hql += "OR lower(c.from.address.email) LIKE :search ";
+				hql += "OR lower(c.from.adresses.email) LIKE :search ";
 				hql += " ) ";
 			}
 			
@@ -425,7 +425,7 @@ public class PrivateMessagesDaoImpl {
 				hql += "OR lower(c.from.firstname) LIKE :search ";
 				hql += "OR lower(c.from.lastname) LIKE :search ";
 				hql += "OR lower(c.from.login) LIKE :search ";
-				hql += "OR lower(c.from.address.email) LIKE :search ";
+				hql += "OR lower(c.from.adresses.email) LIKE :search ";
 				hql += " ) ";
 			}
 			
@@ -461,7 +461,7 @@ public class PrivateMessagesDaoImpl {
 				hql += "OR lower(c.from.firstname) LIKE :search ";
 				hql += "OR lower(c.from.lastname) LIKE :search ";
 				hql += "OR lower(c.from.login) LIKE :search ";
-				hql += "OR lower(c.from.address.email) LIKE :search ";
+				hql += "OR lower(c.from.adresses.email) LIKE :search ";
 				hql += " ) ";
 			}
 			

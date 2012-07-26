@@ -37,11 +37,13 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "ldapconfig")
 public class LdapConfig implements Serializable {
+	
 	private static final long serialVersionUID = 2839158519803993035L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
-	public long id;
+	
+	@Column(name="ldapconfig_id")
+	public long ldapConfigId;
 	@Column(name="name")
 	public String name;
 	@Column(name="config_file_name")
@@ -65,11 +67,11 @@ public class LdapConfig implements Serializable {
 	@Column(name="deleted")
 	private boolean deleted;
 	
-	public long getId() {
-		return id;
+	public long getLdapConfigId() {
+		return ldapConfigId;
 	}
-	public void setId(long id) {
-		this.id = id;
+	public void setLdapConfigId(long ldapConfigId) {
+		this.ldapConfigId = ldapConfigId;
 	}
     
 	public String getName() {

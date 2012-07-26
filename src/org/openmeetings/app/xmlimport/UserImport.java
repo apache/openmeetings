@@ -105,9 +105,9 @@ public class UserImport {
 			String additionalname = itemUsers.element("additionalname")
 					.getText();
 			String comment = itemUsers.element("comment").getText();
-			// A User can not have a deleted Address, you cannot delete the
-			// Address of an User
-			// String deleted = u.getAddress().getDeleted()
+			// A User can not have a deleted Adress, you cannot delete the
+			// Adress of an User
+			// String deleted = u.getAdresses().getDeleted()
 			// Phone Number not done yet
 			String fax = itemUsers.element("fax").getText();
 			Long state_id = Long.valueOf(
@@ -147,7 +147,7 @@ public class UserImport {
 
 			// check for duplicate Login or mail:
 			if (usersDao.checkUserLogin(us.getLogin()) && mailCheck) {
-				us.setAddress(street, zip,
+				us.setAdresses(street, zip,
 						town, statemanagement.getStateById(state_id), additionalname, comment, fax, phone, email);
 
 				userManagement.addUser(us);

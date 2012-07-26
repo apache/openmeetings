@@ -34,7 +34,7 @@ import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.user.Statemanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.ldap.config.ConfigReader;
-import org.openmeetings.app.persistence.beans.address.State;
+import org.openmeetings.app.persistence.beans.adresses.States;
 import org.openmeetings.app.persistence.beans.basic.LdapConfig;
 import org.openmeetings.app.persistence.beans.rooms.RoomClient;
 import org.openmeetings.app.persistence.beans.user.Users;
@@ -642,9 +642,14 @@ public class LdapLoginManagement {
 		}
 
 		if (state != null) {
-			for (State oneState : statemanagement.getStates()) {
+			// Lookup for states
+			List<States> states = statemanagement.getStates();
+
+			for (int i = 0; i < states.size(); i++) {
+				States oneState = states.get(i);
+
 				if (oneState.getName().equals(state)) {
-					state_id = oneState.getId();
+					state_id = oneState.getState_id();
 					break;
 				}
 			}

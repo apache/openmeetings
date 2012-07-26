@@ -41,7 +41,7 @@
 			if (this.userObject != null) {
 				
 				var tString = this.userObject.firstname + ' ' + this.userObject.lastname  + ' ' 
-							+ '<' + this.userObject.address.email + '>';
+							+ '<' + this.userObject.adresses.email + '>';
 				
 				this._to.sendUpdateText = false;
 				this._to.setAttribute("text",tString);
@@ -61,7 +61,7 @@
             if($debug) Debug.write("[admin]userValueForm/getUserById: ",value.lastname);
             parent.userObject = value;
             var tString = value.firstname + ' ' + value.lastname  + ' ' 
-                            + '<' + value.address.email + '>';
+                            + '<' + value.adresses.email + '>';
                 
             parent._to.sendUpdateText = false;
             parent._to.setAttribute("text",tString);
@@ -283,7 +283,7 @@
 					
 					if (canvas.userContacts[i].contact.firstname.startsWith(tString) 
 						|| canvas.userContacts[i].contact.lastname.startsWith(tString) 
-						|| canvas.userContacts[i].contact.address.email.startsWith(tString) ) {
+						|| canvas.userContacts[i].contact.adresses.email.startsWith(tString) ) {
 					
 						tResultA.push(canvas.userContacts[i]);
 							
@@ -296,7 +296,7 @@
 					
 					for (var k=0;k<tResultA.length;k++) {
 						
-						this._list.addItem(tResultA[k].contact.firstname +' '+ tResultA[k].contact.lastname + ' &#60;' + tResultA[k].contact.address.email + '&#62;', tResultA[k].contact.firstname +' '+ tResultA[k].contact.lastname + ' <' + tResultA[k].contact.address.email + '>'); 
+						this._list.addItem(tResultA[k].contact.firstname +' '+ tResultA[k].contact.lastname + ' &#60;' + tResultA[k].contact.adresses.email + '&#62;', tResultA[k].contact.firstname +' '+ tResultA[k].contact.lastname + ' <' + tResultA[k].contact.adresses.email + '>'); 
 						
 					}
 					

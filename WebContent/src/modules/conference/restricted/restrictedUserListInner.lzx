@@ -376,6 +376,19 @@
                     }
                     
                 }
+                
+                //  var x = Math.round(value.childList[i].coordX);
+                //  var y = Math.round(value.childList[i].coordY);
+                //  var name = value.childList[i].description;
+                
+                //var x = value.resultAddress[i].x;
+                //var y = value.resultAddress[i].y;
+                //var name = value.resultAddress[i].street+" "+value.resultAddress[i].houseNumber+","+value.resultAddress[i].postCode+" "+value.resultAddress[i].city+" ("+value.resultAddress[i].cityDistrict+" "+value.resultAddress[i].country+" )";
+                //////if ($debug)  //Debug.write("name,x,y ",name,x,y);
+                //this.parent._ausgabelisteMapAdress.addtableItem(x,y,name);
+                
+                //this.sendInitialWidthUpdate();
+                
             ]]>
         </method>   
         

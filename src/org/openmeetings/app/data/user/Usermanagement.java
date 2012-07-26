@@ -47,7 +47,7 @@ import org.openmeetings.app.data.basic.dao.ServerDaoImpl;
 import org.openmeetings.app.data.beans.basic.SearchResult;
 import org.openmeetings.app.data.user.dao.UserSipDataDaoImpl;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
-import org.openmeetings.app.persistence.beans.address.Address;
+import org.openmeetings.app.persistence.beans.adresses.Adresses;
 import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.persistence.beans.basic.Server;
 import org.openmeetings.app.persistence.beans.basic.Sessiondata;
@@ -189,7 +189,7 @@ public class Usermanagement {
 						+ StringUtils.lowerCase("%" + searchItems[i] + "%")
 						+ "' " + "OR lower(u.login) LIKE '"
 						+ StringUtils.lowerCase("%" + searchItems[i] + "%")
-						+ "' " + "OR lower(u.address.email) LIKE '"
+						+ "' " + "OR lower(u.adresses.email) LIKE '"
 						+ StringUtils.lowerCase("%" + searchItems[i] + "%")
 						+ "' " + ") ";
 
@@ -263,7 +263,7 @@ public class Usermanagement {
 					+ storePermanent);
 			String hql = "SELECT c from Users AS c "
 					+ "WHERE "
-					+ "(c.login LIKE :userOrEmail OR c.address.email LIKE :userOrEmail  ) "
+					+ "(c.login LIKE :userOrEmail OR c.adresses.email LIKE :userOrEmail  ) "
 					+ "AND c.deleted <> :deleted";
 
 			TypedQuery<Users> query = em.createQuery(hql, Users.class);
@@ -465,7 +465,7 @@ public class Usermanagement {
 	public Long updateUser(long user_level, Long user_id, Long level_id,
 			String login, String password, String lastname, String firstname,
 			Date age, String street, String additionalname, String zip,
-			long state_id, String town, Long language_id, int availible,
+			long states_id, String town, Long language_id, int availible,
 			String telefon, String fax, String mobil, String email,
 			String comment, int status, List<Long> organisations, int title_id,
 			String phone, boolean sendSMS, String sip_user, String sip_pass, String sip_auth,
@@ -486,7 +486,7 @@ public class Usermanagement {
 				boolean checkEmail = true;
 
 				// Compare old address with new address
-				if (!email.equals(us.getAddress().getEmail())) {
+				if (!email.equals(us.getAdresses().getEmail())) {
 
 					// Its a new one - check, whether another user already uses
 					// that one...
@@ -542,7 +542,7 @@ public class Usermanagement {
 							return new Long(-7);
 						}
 					}
-					us.setAddress(street, zip, town, statemanagement.getStateById(state_id),
+					us.setAdresses(street, zip, town, statemanagement.getStateById(states_id),
 							additionalname, comment, fax, phone, email);
 					// emailManagement.updateUserEmail(mail.getMail().getMail_id(),user_id,
 					// email);
@@ -551,7 +551,7 @@ public class Usermanagement {
 
 						UserSipData userSipData = openXGHttpClient
 								.openSIPgUserCreateUser(firstname, "",
-										lastname, us.getAddress().getEmail(),
+										lastname, us.getAdresses().getEmail(),
 										password, login);
 
 						if (us.getUserSipData() == null) {
@@ -821,14 +821,14 @@ public class Usermanagement {
 	 * @param additionalname
 	 * @param fax
 	 * @param zip
-	 * @param state_id
+	 * @param states_id
 	 * @param town
 	 * @param language_id
 	 * @return
 	 */
 	public Long registerUser(String login, String Userpass, String lastname,
 			String firstname, String email, Date age, String street,
-			String additionalname, String fax, String zip, long state_id,
+			String additionalname, String fax, String zip, long states_id,
 			String town, long language_id, String phone, boolean sendSMS, String baseURL,
 			boolean generateSipUserData, String jNameTimeZone, Server server) {
 		
@@ -838,24 +838,24 @@ public class Usermanagement {
 						"sendEmailWithVerficationCode", Integer.class, "0");
 		
 		return registerUser(login, Userpass, lastname, firstname, email, age,
-				street, additionalname, fax, zip, state_id, town, language_id,
+				street, additionalname, fax, zip, states_id, town, language_id,
 				phone, sendSMS, baseURL, generateSipUserData, jNameTimeZone, sendConfirmation, server);
 	}
 
 	public Long registerUserNoEmail(String login, String Userpass,
 			String lastname, String firstname, String email, Date age,
 			String street, String additionalname, String fax, String zip,
-			long state_id, String town, long language_id, String phone, boolean sendSMS, 
+			long states_id, String town, long language_id, String phone, boolean sendSMS, 
 			boolean generateSipUserData, String jNameTimeZone, Server server) {
 		
 		return registerUser(login, Userpass, lastname, firstname, email, age,
-				street, additionalname, fax, zip, state_id, town, language_id,
+				street, additionalname, fax, zip, states_id, town, language_id,
 				phone, sendSMS, "", generateSipUserData, jNameTimeZone, false, server);
 	}
 
 	private Long registerUser(String login, String Userpass, String lastname,
 			String firstname, String email, Date age, String street,
-			String additionalname, String fax, String zip, long state_id,
+			String additionalname, String fax, String zip, long states_id,
 			String town, long language_id, String phone, boolean sendSMS, String baseURL,
 			boolean generateSipUserData, String jNameTimeZone, Boolean sendConfirmation, Server server) {
 		try {
@@ -866,7 +866,7 @@ public class Usermanagement {
 
 				Long user_id = this.registerUserInit(3, 1, 0, 1, login,
 						Userpass, lastname, firstname, email, age, street,
-						additionalname, fax, zip, state_id, town, language_id,
+						additionalname, fax, zip, states_id, town, language_id,
 						true, Arrays.asList(cfgManagement.getConfValue("default_domain_id", Long.class, null)),phone, sendSMS, baseURL,
 						sendConfirmation, "", "", "", generateSipUserData,
 						jNameTimeZone, false, "", "", false, true, server);
@@ -884,7 +884,7 @@ public class Usermanagement {
 	}
 
 	/**
-	 * Adds a user including his address-data,auth-date,mail-data
+	 * Adds a user including his adress-data,auth-date,mail-data
 	 * 
 	 * @param user_level
 	 * @param level_id
@@ -900,7 +900,7 @@ public class Usermanagement {
 	 * @param additionalname
 	 * @param fax
 	 * @param zip
-	 * @param state_id
+	 * @param states_id
 	 * @param town
 	 * @param language_id
 	 * @param phone
@@ -911,7 +911,7 @@ public class Usermanagement {
 	public Long registerUserInit(long user_level, long level_id, int availible,
 			int status, String login, String password, String lastname,
 			String firstname, String email, Date age, String street,
-			String additionalname, String fax, String zip, long state_id,
+			String additionalname, String fax, String zip, long states_id,
 			String town, long language_id, boolean sendWelcomeMessage,
 			List<Long> organisations, String phone, boolean sendSMS, String baseURL,
 			Boolean sendConfirmation, String sip_user, String sip_pass,
@@ -922,7 +922,7 @@ public class Usermanagement {
 		return registerUserInit(user_level, level_id, availible,
 				status, login, password, lastname,
 				firstname, email, age, street,
-				additionalname, fax, zip, state_id,
+				additionalname, fax, zip, states_id,
 				town, language_id, sendWelcomeMessage,
 				organisations, phone, sendSMS, baseURL,
 				sendConfirmation, sip_user, sip_pass,
@@ -947,7 +947,7 @@ public class Usermanagement {
 	 * @param additionalname
 	 * @param fax
 	 * @param zip
-	 * @param state_id
+	 * @param states_id
 	 * @param town
 	 * @param language_id
 	 * @param sendWelcomeMessage
@@ -974,7 +974,7 @@ public class Usermanagement {
 	public Long registerUserInit(long user_level, long level_id, int availible,
 			int status, String login, String password, String lastname,
 			String firstname, String email, Date age, String street,
-			String additionalname, String fax, String zip, long state_id,
+			String additionalname, String fax, String zip, long states_id,
 			String town, long language_id, boolean sendWelcomeMessage,
 			List<Long> organisations, String phone, boolean sendSMS, String baseURL,
 			Boolean sendConfirmation, String sip_user, String sip_pass,
@@ -1022,11 +1022,11 @@ public class Usermanagement {
 						if (!sendMail.equals("success"))
 							return new Long(-19);
 					}
-					Address adr =  new Address();
+					Adresses adr =  new Adresses();
 					adr.setStreet(street);
 					adr.setZip(zip);
 					adr.setTown(town);
-					adr.setState(statemanagement.getStateById(state_id));
+					adr.setStates(statemanagement.getStateById(states_id));
 					adr.setAdditionalname(additionalname);
 					adr.setComment("");
 					adr.setFax(fax);
@@ -1051,12 +1051,12 @@ public class Usermanagement {
 					}
 
 					/*
-					 * Long address_emails_id =
+					 * Long adress_emails_id =
 					 * emailManagement.registerEmail(email, address_id,""); if
-					 * (address_emails_id==null) { return new Long(-112); }
+					 * (adress_emails_id==null) { return new Long(-112); }
 					 */
 
-					if (adr.getId() > 0 && user_id > 0) {
+					if (adr.getAdresses_id() > 0 && user_id > 0) {
 						return user_id;
 					} else {
 						return new Long(-16);
@@ -1091,12 +1091,12 @@ public class Usermanagement {
 	 * @param language_id
 	 * @param Userpass
 	 *            is MD5-crypted
-	 * @param Address address
+	 * @param Adresses adress
 	 * @return user_id or error null
 	 */
 	public Long addUser(long level_id, int availible, int status,
 			String firstname, String login, String lastname, long language_id,
-			String userpass, Address address, boolean sendSMS, Date age, String hash,
+			String userpass, Adresses adress, boolean sendSMS, Date age, String hash,
 			String sip_user, String sip_pass, String sip_auth,
 			boolean generateSipUserData, OmTimeZone timezone,
 			Boolean forceTimeZoneCheck, String userOffers, String userSearchs,
@@ -1109,7 +1109,7 @@ public class Usermanagement {
 			users.setLogin(login);
 			users.setLastname(lastname);
 			users.setAge(age);
-			users.setAddress(address);
+			users.setAdresses(adress);
 			users.setSendSMS(sendSMS);
 			users.setAvailible(availible);
 			users.setLastlogin(new Date());
@@ -1132,7 +1132,7 @@ public class Usermanagement {
 
 				UserSipData userSipData = openXGHttpClient
 						.openSIPgUserCreateUser(firstname, "", lastname, users
-								.getAddress().getEmail(), userpass, login);
+								.getAdresses().getEmail(), userpass, login);
 
 				Long userSipDataId = userSipDataDao.addUserSipData(userSipData);
 
@@ -1208,7 +1208,7 @@ public class Usermanagement {
 
 	public Long addUserWithExternalKey(long level_id, int availible,
 			int status, String firstname, String login, String lastname,
-			long language_id, String userpass, Address address, Date age,
+			long language_id, String userpass, Adresses address, Date age,
 			String hash, String externalUserId, String externalUserType,
 			boolean generateSipUserData, String email, String jNameTimeZone,
 			String pictureuri) {
@@ -1220,9 +1220,9 @@ public class Usermanagement {
 			users.setAge(age);
 
 			if (address != null) {
-				users.setAddress(address);
+				users.setAdresses(address);
 			} else {
-				users.setAddress("", "", "", statemanagement.getStateById(1L), "",
+				users.setAdresses("", "", "", statemanagement.getStateById(1L), "",
 						"", "", "", email);
 			}
 
@@ -1241,7 +1241,7 @@ public class Usermanagement {
 
 				UserSipData userSipData = openXGHttpClient
 						.openSIPgUserCreateUser(firstname, "", lastname, users
-								.getAddress().getEmail(), userpass, login);
+								.getAdresses().getEmail(), userpass, login);
 
 				Long userSipDataId = userSipDataDao.addUserSipData(userSipData);
 
@@ -1383,32 +1383,32 @@ public class Usermanagement {
 
 					String email = values.get("email").toString();
 
-					if (!email.equals(savedUser.getAddress().getEmail())) {
+					if (!email.equals(savedUser.getAdresses().getEmail())) {
 						boolean checkEmail = emailManagement
 								.checkUserEMail(email);
 						if (!checkEmail) {
 							// mail already used by another user!
 							returnLong = new Long(-11);
 						} else {
-							savedUser.getAddress().setEmail(email);
+							savedUser.getAdresses().setEmail(email);
 						}
 					}
 
 					String phone = values.get("phone").toString();
-					savedUser.getAddress().setPhone(phone);
-					savedUser.getAddress().setComment(
+					savedUser.getAdresses().setPhone(phone);
+					savedUser.getAdresses().setComment(
 							values.get("comment").toString());
-					savedUser.getAddress().setStreet(
+					savedUser.getAdresses().setStreet(
 							values.get("street").toString());
-					savedUser.getAddress().setTown(
+					savedUser.getAdresses().setTown(
 							values.get("town").toString());
-					savedUser.getAddress().setAdditionalname(
+					savedUser.getAdresses().setAdditionalname(
 							values.get("additionalname").toString());
-					savedUser.getAddress()
+					savedUser.getAdresses()
 							.setZip(values.get("zip").toString());
 					savedUser.setSendSMS(false);
 					savedUser.setForceTimeZoneCheck(false);
-					savedUser.getAddress().setState(
+					savedUser.getAdresses().setStates(
 							statemanagement.getStateById(Long.parseLong(values
 									.get("state_id").toString())));
 
@@ -1422,7 +1422,7 @@ public class Usermanagement {
 					savedUser.setUserSearchs(values.get("userSearchs")
 							.toString());
 
-					// savedUser.setAddress(addressmanagement.getaddressbyId(user.getAddress().getId()));
+					// savedUser.setAdresses(addressmanagement.getAdressbyId(user.getAdresses().getAdresses_id()));
 
 					if (savedUser.getUser_id() == null) {
 						em.persist(savedUser);
@@ -1462,7 +1462,7 @@ public class Usermanagement {
 
 			// check if Mail given
 			if (email.length() > 0) {
-				// log.debug("getId "+addr_e.getId());
+				// log.debug("getAdresses_id "+addr_e.getAdresses_id());
 				Users us = usersDao.getUserByEmail(email);
 				if (us != null) {
 					this.sendHashByUser(us, appLink);
@@ -1495,7 +1495,7 @@ public class Usermanagement {
 		String reset_link = appLink + "?lzproxied=solo&hash="
 				+ us.getResethash();
 
-		String email = us.getAddress().getEmail();
+		String email = us.getAdresses().getEmail();
 
 		Long default_lang_id = Long.valueOf(
 				cfgManagement.getConfKey(3, "default_lang_id").getConf_value())
@@ -1596,7 +1596,7 @@ public class Usermanagement {
 
 		String hql = "SELECT c from Users AS c "
 				+ "WHERE "
-				+ "(c.login LIKE :userOrEmail OR c.address.email LIKE :userOrEmail  ) "
+				+ "(c.login LIKE :userOrEmail OR c.adresses.email LIKE :userOrEmail  ) "
 				+ "AND c.externalUserId IS NULL " + "AND c.deleted <> :deleted";
 
 		TypedQuery<Users> query = em.createQuery(hql, Users.class);
@@ -1622,7 +1622,7 @@ public class Usermanagement {
 		log.debug("Usermanagement.getUserByEmail : " + userOrEmail);
 
 		String hql = "SELECT c from Users AS c " + "WHERE "
-				+ "c.address.email LIKE :userOrEmail";
+				+ "c.adresses.email LIKE :userOrEmail";
 
 		TypedQuery<Users> query = em.createQuery(hql, Users.class);
 		query.setParameter("userOrEmail", userOrEmail);
@@ -1846,8 +1846,8 @@ public class Usermanagement {
 				hql += "AND " + "(" + "(" + "lower(c.login) LIKE :search "
 						+ "OR lower(c.firstname) LIKE :search "
 						+ "OR lower(c.lastname) LIKE :search "
-						+ "OR lower(c.address.email) LIKE :search "
-						+ "OR lower(c.address.town) LIKE :search " + ")"
+						+ "OR lower(c.adresses.email) LIKE :search "
+						+ "OR lower(c.adresses.town) LIKE :search " + ")"
 						+ "AND" + "(" + "lower(c.userOffers) LIKE :userOffers "
 						+ ")" + "AND" + "("
 						+ "lower(c.userSearchs) LIKE :userSearchs " + ")" + ")";
@@ -1857,8 +1857,8 @@ public class Usermanagement {
 				hql += "AND " + "(" + "(" + "lower(c.login) LIKE :search "
 						+ "OR lower(c.firstname) LIKE :search "
 						+ "OR lower(c.lastname) LIKE :search "
-						+ "OR lower(c.address.email) LIKE :search "
-						+ "OR lower(c.address.town) LIKE :search " + ")"
+						+ "OR lower(c.adresses.email) LIKE :search "
+						+ "OR lower(c.adresses.town) LIKE :search " + ")"
 						+ "AND" + "(" + "lower(c.userOffers) LIKE :userOffers "
 						+ ")" + ")";
 
@@ -1867,8 +1867,8 @@ public class Usermanagement {
 				hql += "AND " + "(" + "(" + "lower(c.login) LIKE :search "
 						+ "OR lower(c.firstname) LIKE :search "
 						+ "OR lower(c.lastname) LIKE :search "
-						+ "OR lower(c.address.email) LIKE :search "
-						+ "OR lower(c.address.town) LIKE :search " + ")"
+						+ "OR lower(c.adresses.email) LIKE :search "
+						+ "OR lower(c.adresses.town) LIKE :search " + ")"
 						+ "AND" + "("
 						+ "lower(c.userSearchs) LIKE :userSearchs " + ")" + ")";
 
@@ -1884,8 +1884,8 @@ public class Usermanagement {
 				hql += "AND " + "(" + "(" + "lower(c.login) LIKE :search "
 						+ "OR lower(c.firstname) LIKE :search "
 						+ "OR lower(c.lastname) LIKE :search "
-						+ "OR lower(c.address.email) LIKE :search "
-						+ "OR lower(c.address.town) LIKE :search " + ")" + ")";
+						+ "OR lower(c.adresses.email) LIKE :search "
+						+ "OR lower(c.adresses.town) LIKE :search " + ")" + ")";
 
 			} else if (userOffers.length() != 0) {
 
@@ -1995,8 +1995,8 @@ public class Usermanagement {
 				hql += "AND " + "(" + "(" + "lower(c.login) LIKE :search "
 						+ "OR lower(c.firstname) LIKE :search "
 						+ "OR lower(c.lastname) LIKE :search "
-						+ "OR lower(c.address.email) LIKE :search "
-						+ "OR lower(c.address.town) LIKE :search " + ")"
+						+ "OR lower(c.adresses.email) LIKE :search "
+						+ "OR lower(c.adresses.town) LIKE :search " + ")"
 						+ "AND" + "(" + "lower(c.userOffers) LIKE :userOffers "
 						+ ")" + "AND" + "("
 						+ "lower(c.userSearchs) LIKE :userSearchs " + ")" + ")";
@@ -2006,8 +2006,8 @@ public class Usermanagement {
 				hql += "AND " + "(" + "(" + "lower(c.login) LIKE :search "
 						+ "OR lower(c.firstname) LIKE :search "
 						+ "OR lower(c.lastname) LIKE :search) "
-						+ "OR lower(c.address.email) LIKE :search "
-						+ "OR lower(c.address.town) LIKE :search " + ")"
+						+ "OR lower(c.adresses.email) LIKE :search "
+						+ "OR lower(c.adresses.town) LIKE :search " + ")"
 						+ "AND" + "(" + "lower(c.userOffers) LIKE :userOffers "
 						+ ")" + ")";
 
@@ -2016,8 +2016,8 @@ public class Usermanagement {
 				hql += "AND " + "(" + "(" + "lower(c.login) LIKE :search "
 						+ "OR lower(c.firstname) LIKE :search "
 						+ "OR lower(c.lastname) LIKE :search "
-						+ "OR lower(c.address.email) LIKE :search "
-						+ "OR lower(c.address.town) LIKE :search " + ")"
+						+ "OR lower(c.adresses.email) LIKE :search "
+						+ "OR lower(c.adresses.town) LIKE :search " + ")"
 						+ "AND" + "("
 						+ "lower(c.userSearchs) LIKE :userSearchs " + ")" + ")";
 
@@ -2033,8 +2033,8 @@ public class Usermanagement {
 				hql += "AND " + "(" + "(" + "lower(c.login) LIKE :search "
 						+ "OR lower(c.firstname) LIKE :search "
 						+ "OR lower(c.lastname) LIKE :search "
-						+ "OR lower(c.address.email) LIKE :search "
-						+ "OR lower(c.address.town) LIKE :search " + ")" + ")";
+						+ "OR lower(c.adresses.email) LIKE :search "
+						+ "OR lower(c.adresses.town) LIKE :search " + ")" + ")";
 
 			} else if (userOffers.length() != 0) {
 
@@ -2129,8 +2129,8 @@ public class Usermanagement {
 					+ "lower(c.login) LIKE :search "
 					+ "OR lower(c.firstname) LIKE :search "
 					+ "OR lower(c.lastname) LIKE :search "
-					+ "OR lower(c.address.email) LIKE :search "
-					+ "OR lower(c.address.town) LIKE :search " + ")" + "OR"
+					+ "OR lower(c.adresses.email) LIKE :search "
+					+ "OR lower(c.adresses.town) LIKE :search " + ")" + "OR"
 					+ "(" + "lower(c.userOffers) LIKE :userOffers " + ")"
 					+ "OR" + "(" + "lower(c.userSearchs) LIKE :userSearchs "
 					+ ")" + ")";

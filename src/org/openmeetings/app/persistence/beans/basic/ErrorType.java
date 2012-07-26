@@ -27,13 +27,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "errortype")
+@Table(name = "errortypes")
 public class ErrorType implements Serializable {
 	private static final long serialVersionUID = 1519570470483604258L;
 
 	@Id
-	@Column(name = "id")
-	private Long id;
+	@Column(name = "errortype_id")
+	private Long errortype_id;
 
 	@Column(name = "fieldvalues_id")
 	private Long fieldvalues_id;
@@ -45,12 +45,12 @@ public class ErrorType implements Serializable {
 	@Column(name = "deleted")
 	private boolean deleted;
 
-	public Long getId() {
-		return id;
+	public Long getErrortype_id() {
+		return errortype_id;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setErrortype_id(Long errortype_id) {
+		this.errortype_id = errortype_id;
 	}
 
 	public Date getStarttime() {

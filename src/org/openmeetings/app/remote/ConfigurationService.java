@@ -49,10 +49,10 @@ public class ConfigurationService {
         return cfgManagement.getAllConf(user_level, start, max, orderby, asc);
     }
     
-    public Configuration getConfByConfigurationId(String SID,long id){
+    public Configuration getConfByConfigurationId(String SID,long configuration_id){
         Long users_id = sessionManagement.checkSession(SID);
         Long user_level = userManagement.getUserLevelByID(users_id);     	
-        return cfgManagement.getConfByConfigurationId(user_level,id);
+        return cfgManagement.getConfByConfigurationId(user_level,configuration_id);
     }
     
     public Long saveOrUpdateConfiguration(String SID, LinkedHashMap<String, ?> values){

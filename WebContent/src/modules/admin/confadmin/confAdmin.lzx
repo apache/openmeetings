@@ -69,7 +69,7 @@
 	    	for (var i=0;i<records.length;i++){
 	    		new lz.confAdminListItem(this._innerlist._inn._inn,{
 	                    obj:records[i],
-	                    configuration_id:records[i].id,
+	                    configuration_id:records[i].configuration_id,
 	                    conf_key:records[i].conf_key,
                         conf_value:records[i].conf_value
                     });

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.openmeetings.app.persistence.beans.address;
+package org.openmeetings.app.persistence.beans.adresses;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -29,13 +29,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "state")
-public class State implements Serializable {
+@Table(name = "states")
+public class States implements Serializable {
 	private static final long serialVersionUID = -1629546369219451403L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Long id;
+	@Column(name = "state_id")
+	private Long state_id;
 	@Column(name = "name")
 	private String name;
 	@Column(name = "starttime")
@@ -57,12 +57,12 @@ public class State implements Serializable {
 		this.name = name;
 	}
 
-	public Long getId() {
-		return id;
+	public Long getState_id() {
+		return state_id;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setState_id(Long state_id) {
+		this.state_id = state_id;
 	}
 
 	public Date getStarttime() {

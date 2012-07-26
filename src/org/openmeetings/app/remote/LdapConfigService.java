@@ -78,7 +78,7 @@ public class LdapConfigService {
 			LdapConfig ldapConfig = new LdapConfig();
 			
 			ldapConfig.setName("local DB [internal]");
-			ldapConfig.setId(-1);
+			ldapConfig.setLdapConfigId(-1);
 			
 			List<LdapConfig> returnldapConfigs = new LinkedList<LdapConfig>();
 			returnldapConfigs.add(ldapConfig);

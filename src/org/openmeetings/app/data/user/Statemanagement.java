@@ -26,7 +26,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.OpenmeetingsVariables;
-import org.openmeetings.app.persistence.beans.address.State;
+import org.openmeetings.app.persistence.beans.adresses.States;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +45,7 @@ public class Statemanagement {
 	private EntityManager em;
 
 	/**
-	 * adds a new State to the state table with no short name and code
+	 * adds a new State to the states table with no short name and code
 	 * 
 	 * @param name
 	 * @return the id of the new state or null if an error occurred
@@ -55,7 +55,7 @@ public class Statemanagement {
 	}
 	
 	/**
-	 * adds a new State to the state table
+	 * adds a new State to the states table
 	 * 
 	 * @param name the name of the country
 	 * @param shortName the short name of the country
@@ -65,7 +65,7 @@ public class Statemanagement {
 	public Long addState(String name, String shortName, int code) {
 		try {
 
-			State st = new State();
+			States st = new States();
 			st.setName(name);
 			st.setShortName(shortName);
 			st.setCode(code);
@@ -73,7 +73,7 @@ public class Statemanagement {
 			st.setDeleted(false);
 
 			st = em.merge(st);
-			Long id = st.getId();
+			Long id = st.getState_id();
 
 			log.debug("added id " + id);
 
@@ -87,16 +87,16 @@ public class Statemanagement {
 	/**
 	 * selects a state by its id
 	 * 
-	 * @param id
+	 * @param state_id
 	 * @return the state-object or null
 	 */
-	public State getStateById(long id) {
+	public States getStateById(long state_id) {
 		try {
-			TypedQuery<State> query = em
-					.createQuery("select c from State as c where c.id = :id AND c.deleted <> :deleted", State.class);
-			query.setParameter("id", id);
+			TypedQuery<States> query = em
+					.createQuery("select c from States as c where c.state_id = :state_id AND c.deleted <> :deleted", States.class);
+			query.setParameter("state_id", state_id);
 			query.setParameter("deleted", true);
-			List<State> ll = query.getResultList();
+			List<States> ll = query.getResultList();
 			if (ll.size() > 0) {
 				return ll.get(0);
 			}
@@ -111,12 +111,12 @@ public class Statemanagement {
 	 * 
 	 * @return List of State Objects or null
 	 */
-	public List<State> getStates() {
+	public List<States> getStates() {
 		try {
-			TypedQuery<State> query = em
-					.createQuery("select c from State as c where c.deleted <> :deleted", State.class);
+			TypedQuery<States> query = em
+					.createQuery("select c from States as c where c.deleted <> :deleted", States.class);
 			query.setParameter("deleted", true);
-			List<State> ll = query.getResultList();
+			List<States> ll = query.getResultList();
 			return ll;
 		} catch (Exception ex2) {
 			log.error("getStates", ex2);
