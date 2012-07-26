@@ -19,38 +19,55 @@
 
 		<section name="Downloads">
 			<div>
-				A release of Podling includes the First artifact
-				and the Second artifact. The release is distributed as
-				source code and as jar files that can be accessed
-				via maven repository search.
-				<ul>
-					<li>
-						First artifact.
-					</li>
-					<li>
-						Second artifact.
-					</li>
-				</ul>
+				All downloads can be verified using the Apache OpenMeetings code
+				signing
+				<a href="http://www.apache.org/dist/incubator/openmeetings/KEYS">KEYS</a>
+				.
 			</div>
 			<p>
 				All are available for download as source and binary.
 			</p>
-			<p>
-				If downloading multiple source packages, extract them all
-				into the same directory. This will preserve the source
-				dependencies among the projects.
-			</p>
+			s
 			<subsection name="Latest Official Release">
 				<p>
-					No official releases are available.
+					Apache Openmeetings Incubating 2.0
 				</p>
+				<ul>
+					<li>
+						Binaries:
+						<ul>
+							<li>
+								<a href="http://www.apache.org/dyn/closer.cgi/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108.zip">apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108.zip</a>
+								<a href="http://www.apache.org/dist/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108.zip.sig">[SIG]</a>
+								<a href="http://www.apache.org/dist/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108.zip.md5">[MD5]</a>
+							</li>
+							<li>
+								<a href="http://www.apache.org/dyn/closer.cgi/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108.tar.gz">apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108.tar.gz</a>
+								<a href="http://www.apache.org/dist/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108.tar.gz.sig">[SIG]</a>
+								<a href="http://www.apache.org/dist/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108.tar.gz.md5">[MD5]</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						Sources:
+						<ul>
+							<li>
+								<a href="http://www.apache.org/dyn/closer.cgi/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108-src.zip">apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108-src.zip</a>
+								<a href="http://www.apache.org/dist/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108-src.zip.sig">[SIG]</a>
+								<a href="http://www.apache.org/dist/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108-src.zip.md5">[MD5]</a>
+							</li>
+							<li>
+								<a href="http://www.apache.org/dyn/closer.cgi/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108-src.tar.gz">apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108-src.tar.gz</a>
+								<a href="http://www.apache.org/dist/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108-src.tar.gz.sig">[SIG]</a>
+								<a href="http://www.apache.org/dist/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108-src.tar.gz.md5">[MD5]</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
 			</subsection>
 
-			<subsection name="Previous Official Releases">
-				<p>
-					No previous official releases are available.
-				</p>
-			</subsection>
+			<!-- <subsection name="Previous Official Releases"> <p> No previous official 
+				releases are available. </p> </subsection> -->
 
 			<subsection name="Non ASF downloads">
 				<p>
