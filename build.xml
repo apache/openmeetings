@@ -28,9 +28,9 @@
 
 	<property name="dist.dir" value="dist" />
 
-	<property name="ivy.lib.dir" value="${basedir}/lib" />
 	<property name="build.base.dir" value="${basedir}/build" />
 	<property name="project.lib.dir" value="${build.base.dir}/lib" />
+	<property name="ivy.jar.path" value="${project.lib.dir}/ivy-${ivy.install.version}.jar" />
 	<property name="mainlibs.lib.dir" value="${project.lib.dir}/mainlibs" />
 	<property name="om.lib.dir" value="${project.lib.dir}/om" />
 	<property name="anakia.lib.dir" value="${project.lib.dir}/anakia" />
@@ -691,9 +691,18 @@
 		</antcall>
 	</target>
 
-
-	<taskdef uri="antlib:org.apache.ivy.ant" resource="org/apache/ivy/ant/antlib.xml" classpath="${ivy.lib.dir}/${ivy.jar}" />
-
+	<available file="${ivy.jar.path}" type="file" property="ivy.installed" />
+	<target name="-download-ivy" unless="ivy.installed">
+		<mkdir dir="${project.lib.dir}"/>
+		<echo message="Downloading ivy..."/>
+		<get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"
+			dest="${ivy.jar.path}" usetimestamp="true"/>
+	</target>
+	
+	<target name="-install-ivy" depends="-download-ivy" description="Check if we need to download ivy or not">
+		<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpath="${ivy.jar.path}"/>
+	</target>
+	
 	<target name="-availability-check" unless="red5.installed" description="Check which libraries need to be retrieved" depends="prepare.mkdir">
 		<available classpathref="compile.classpath" classname="javax.persistence.spi.PersistenceProvider" property="mainlib.installed" />
 		<available classpathref="compile.classpath" classname="org.apache.axis2.Version" property="om.installed" />
@@ -710,7 +719,7 @@
 		<available classpathref="compile.classpath" classname="org.red5.client.net.rtmp.RTMPClient" property="red5.client.installed" />
 	</target>
 
-	<target name="-retrieve" description="Retrieves the libraries if needed">
+	<target name="-retrieve" depends="-install-ivy" description="Retrieves the libraries if needed">
 		<condition property="ivy.conf.name" value="red5">
 			<not>
 				<isset property="ivy.conf.name" />
@@ -935,7 +944,7 @@
 	<target name="clean.all" depends="clean.dist" description="Clean All">
 		<delete includeemptydirs="true" dir="${build.base.dir}" />
 	</target>
-	<target name="clean.ivy" depends="clean.all" description="Clears out the Ivy cache">
+	<target name="clean.ivy" depends="-install-ivy,clean.all" description="Clears out the Ivy cache">
 		<ivy:cleancache />
 	</target>
 
