@@ -29,19 +29,24 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
 @Entity
 @Table(name = "private_messages_folder")
+@Root(name="privatemessagefolder")
 public class PrivateMessageFolder implements Serializable {
-	
 	private static final long serialVersionUID = 3689814412815025816L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
 	@Column(name="msg_folder_id")
+	@Element(data=true)
 	private long privateMessageFolderId;
 	@Column(name="folder_name")
+	@Element(data=true)
 	private String folderName;
 	@Column(name="user_id")
+	@Element(data=true)
 	private Long userId;
 	@Column(name="inserted")
 	private Date inserted;

@@ -22,6 +22,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.openmeetings.app.persistence.beans.user.Users;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
 
 import javax.persistence.Column;
@@ -41,27 +43,42 @@ import javax.persistence.Transient;
 	, @NamedQuery(name = "getConfigurationsByKeys", query = "SELECT c FROM Configuration c WHERE c.conf_key IN :conf_keys and c.deleted = false")
 })
 @Table(name = "configuration")
+@Root(name="config")
 public class Configuration implements Serializable {
 	private static final long serialVersionUID = -6129473946508963339L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
 	@Column(name="configuration_id")
+	@Element(name="id", data=true)
 	private Long configuration_id;
+	
 	@Column(name="conf_key")
+	@Element(name="key", data=true)
 	private String conf_key;
+	
 	@Column(name="conf_value")
-	private String conf_value;	
+	@Element(name="value", data=true, required = false)
+	private String conf_value;
+	
 	@Column(name="starttime")
+	@Element(name="created", data=true, required=false)
 	private Date starttime;
+	
 	@Column(name="updatetime")
+	@Element(name="updated", data=true, required=false)
 	private Date updatetime;
+	
 	@Lob
 	@Column(name="comment_field", length=2048)
+	@Element(data=true, required = false)
 	private String comment;
+	
 	@Column(name="deleted")
+	@Element(data=true)
 	private boolean deleted;
+	
 	@Column(name="user_id")
+	@Element(data=true, required=false)
 	private Long user_id;
 
 	@Transient

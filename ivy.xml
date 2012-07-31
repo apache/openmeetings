@@ -215,6 +215,9 @@
 		<dependency org="javax.mail" name="mail" rev="1.4.4" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
+		<dependency org="org.simpleframework" name="simple-xml" rev="2.6.6" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
 		
 		<!-- iCal4j seems to need this JAR -->
 		<dependency org="edu.emory.mathcs" name="backport-util-concurrent" rev="3.1" conf="openmeetings->*"/>

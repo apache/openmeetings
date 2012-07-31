@@ -32,31 +32,46 @@ import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
 @Entity
 @Table(name = "user_contacts")
+@Root(name="usercontact")
 public class UserContacts implements Serializable {
-	
 	private static final long serialVersionUID = 2391405538978996206L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
 	@Column(name="user_contact_id")
+	@Element(data=true)
 	private long userContactId;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="user_id")
+	@Element(data=true, required=false)
 	private Users contact;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="owner_id")
+	@Element(data=true, required=false)
 	private Users owner;
+	
 	@Column(name="pending")
+	@Element(data=true)
 	private Boolean pending;
+	
 	@Column(name="hash")
+	@Element(data=true, required = false)
 	private String hash;
+	
 	@Column(name="inserted")
 	private Date inserted;
+	
 	@Column(name="updated")
 	private Date updated;
+	
 	@Column(name="share_calendar")
+	@Element(data=true, required=false)
 	private Boolean shareCalendar;
 	
 	public long getUserContactId() {

@@ -30,16 +30,21 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 /**
  * 
  */
 @Entity
 @Table(name = "flvrecording_metadata")
+@Root(name="flvrecordingmetadata")
 public class FlvRecordingMetaData implements Serializable {
 	private static final long serialVersionUID = 8444176152324513716L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="flv_meta_id")
+	@Element(data=true, required=false)
 	private long flvRecordingMetaDataId;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -47,41 +52,66 @@ public class FlvRecordingMetaData implements Serializable {
 	private FlvRecording flvRecording;
 	
 	@Column(name="record_start")
+	@Element(data=true)
 	private Date recordStart;
+	
 	@Column(name="record_end")
+	@Element(data=true, required=false)
 	private Date recordEnd;
+	
 	@Column(name="stream_name")
+	@Element(data=true)
 	private String streamName;
 	
 	@Column(name="free_text_user_name")
+	@Element(data=true)
 	private String freeTextUserName;
+	
 	@Column(name="is_audio_only")
+	@Element(data=true)
 	private Boolean isAudioOnly;
+	
 	@Column(name="is_video_only")
+	@Element(data=true)
 	private Boolean isVideoOnly;
+	
 	@Column(name="is_screen_data")
+	@Element(data=true)
 	private Boolean isScreenData;
 
 	@Column(name="inserted_by")
+	@Element(data=true, required=false)
 	private Long insertedBy;
+	
 	@Column(name="inserted")
+	@Element(data=true)
 	private Date inserted;
+	
 	@Column(name="updated")
+	@Element(data=true, required=false)
 	private Date updated;
+	
 	@Column(name="deleted")
 	private boolean deleted;
 	
 	@Column(name="wav_audio_data")
+	@Element(data=true)
 	private String wavAudioData;
+	
 	@Column(name="full_wav_audio_data")
+	@Element(data=true)
 	private String fullWavAudioData;
 	
 	@Column(name="audio_is_valid")
+	@Element(data=true, required=false)
 	private Boolean audioIsValid;
 	
 	@Column(name="interiew_pod_id")
+	@Element(data=true, required=false)
 	private Integer interiewPodId;
+	
 	@Column(name="initial_gap_seconds")
+	@Element(data=true, required=false)
 	private Integer initialGapSeconds;
 	
 	//this is only true when the asynchronous stream writer has 

@@ -36,33 +36,53 @@ import javax.persistence.Table;
 
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.user.Users;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Root;
 
 @Entity
 @Table(name = "room_polls")
+@Root(name="roompoll")
 public class RoomPoll {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "room_poll_id")
 	private Long roomPollId;
+	
 	@Column(name = "poll_name")
+	@Element(data=true)
 	private String pollName;
+	
 	@Column(name = "poll_question")
+	@Element(name="pollquestion", data=true)
 	private String pollQuestion;
+	
+	@Element(data=true)
 	@Column(name = "created")
 	private Date created;
+	
 	@Column(name = "archived")
+	@Element(data=true)
 	private boolean archived;
+	
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "poll_type_id")
+	@Element(name="polltypeid", data=true, required=false)
 	private PollType pollType;
+	
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "users_id")
+	@Element(name="createdbyuserid", data=true, required=false)
 	private Users createdBy;
+	
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "rooms_id")
+	@Element(name="roomid", data=true, required=false)
 	private Rooms room;
+	
 	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
 	@JoinColumn(name = "room_poll_id")
+	@ElementList(name="roompollanswers", required=false)
 	private List<RoomPollAnswers> roomPollAnswerList;
 
 	/**

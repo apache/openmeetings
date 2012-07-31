@@ -32,8 +32,12 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
 @Entity
 @Table(name = "adresses")
+@Root(name="address")
 public class Adresses implements Serializable {
 
 	private static final long serialVersionUID = 1387576041912128161L;
@@ -41,37 +45,54 @@ public class Adresses implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "adresses_id")
 	private Long adresses_id;
+	
 	@Column(name = "additionalname")
+	@Element(data=true, required=false)
 	private String additionalname;
+	
 	@Lob
 	@Column(name = "comment_field", length=2048)
+	@Element(data=true, required=false)
 	private String comment;
+	
 	@Column(name = "fax")
+	@Element(data=true, required=false)
 	private String fax;
+	
 	@Column(name = "starttime")
+	@Element(data=true, required=false)
 	private Date starttime;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "state_id")
+	@Element(name="state_id", data=true, required=false)
 	private States states;
+	
 	@Column(name = "street")
+	@Element(data=true, required=false)
 	private String street;
+	
 	@Column(name = "town")
+	@Element(data=true, required=false)
 	private String town;
+	
 	@Column(name = "updatetime")
 	private Date updatetime;
+	
 	@Column(name = "zip")
+	@Element(data=true, required=false)
 	private String zip;
+	
 	@Column(name = "deleted")
 	private boolean deleted;
 
 	@Column(name = "email")
+	@Element(name="mail", data=true, required=false)
 	private String email;
+	
 	@Column(name = "phone")
+	@Element(data=true, required=false)
 	private String phone;
-
-	public Adresses() {
-		// TODO Auto-generated constructor stub
-	}
 
 	public String getAdditionalname() {
 		return additionalname;

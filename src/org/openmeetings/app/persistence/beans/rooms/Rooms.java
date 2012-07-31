@@ -19,6 +19,9 @@
 package org.openmeetings.app.persistence.beans.rooms;
 
 import org.openmeetings.app.persistence.beans.basic.Server;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Root;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -34,110 +37,160 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
 @Table(name = "rooms")
+@Root(name="room")
 public class Rooms implements Serializable {
-	
 	private static final long serialVersionUID = -2860312283159251568L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
 	@Column(name="rooms_id")
+	@Element(data=true)
 	private Long rooms_id;
+	
 	@Column(name="name")
+	@Element(data=true)
 	private String name;
+	
 	@Lob //@Basic(fetch=FetchType.LAZY)
 	@Column(name="comment_field")
+	@Element(data=true, required=false)
 	private String comment;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn (name="roomtypes_id")
+	@Element(name="roomtypeId", data=true, required=false)
 	private RoomTypes roomtype;
+	
 	@Column(name = "starttime")
 	private Date starttime;
+	
 	@Column(name = "updatetime")
 	private Date updatetime;
+	
 	@Column(name = "deleted")
+	@Element(data=true)
 	private boolean deleted;
+	
 	@Column(name = "ispublic")
+	@Element(data=true, required=false)
 	private Boolean ispublic;
+	
 	@Column(name = "numberOfPartizipants")
+	@Element(data=true)
 	private Long numberOfPartizipants = new Long(4);
 	
 	@Column(name = "appointMent")
+	@Element(data=true)
 	private Boolean appointment;
 
 	//Vars to simulate external Rooms
 	@Column(name = "externalRoomId")
+	@Element(data=true, required=false)
 	private Long externalRoomId;
+	
 	@Column(name = "externalRoomType")
+	@Element(data=true)
 	private String externalRoomType;
 	
 	@Column(name = "isdemoroom")
+	@Element(data=true)
 	private Boolean isDemoRoom;
+	
 	@Column(name = "demo_time")
+	@Element(data=true, required=false)
 	private Integer demoTime; //In Seconds
 	
 	//If this is true all participants of a meeting have to wait for the moderator to come into the room
 	@Column(name = "ismoderatedroom")
+	@Element(data=true)
 	private Boolean isModeratedRoom;
 	
 	@Column(name = "allow_user_questions")
+	@Element(data=true)
 	private Boolean allowUserQuestions;
 	
 	@Column(name = "sip_number")
+	@Element(data=true, required=false)
 	private String sipNumber;
+	
 	@Column(name = "conference_pin")
+	@Element(data=true, required=false)
 	private String conferencePin;
 	
 	@Column(name = "is_audio_only")
+	@Element(data=true)
 	private Boolean isAudioOnly;
 	
 	@Column(name = "is_closed")
+	@Element(data=true)
 	private Boolean isClosed;
+	
 	@Column(name = "redirect_url")
+	@Element(data=true, required=false)
 	private String redirectURL;
 	
 	@Column(name = "owner_id")
+	@Element(name="ownerid", data=true, required=false)
 	private Long ownerId; //Those are the rooms from the myrooms section
+	
 	@Column(name = "wait_for_recording")
+	@Element(data=true, required=false)
 	private Boolean waitForRecording; //Show warning that user has to start recording
+	
 	@Column(name = "allow_recording")
+	@Element(data=true, required=false)
 	private Boolean allowRecording; //Show or show not the recording option in a conference room
+	
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "server_id")
+	@Element(required=false)
 	private Server server;
 	
 	/**
 	 * Layout of Room
 	 */
 	@Column(name = "hide_top_bar")
+	@Element(data=true, required=false)
 	private Boolean hideTopBar = false;
 	
 	@Column(name = "hide_chat")
+	@Element(data=true, required=false)
 	private Boolean hideChat = false;
 	
 	@Column(name = "hide_activities_and_actions")
+	@Element(data=true, required=false)
 	private Boolean hideActivitiesAndActions = false;
 	
 	@Column(name = "hide_files_explorer")
+	@Element(data=true, required=false)
 	private Boolean hideFilesExplorer = false;
 	
 	@Column(name = "hide_actions_menu")
+	@Element(data=true, required=false)
 	private Boolean hideActionsMenu = false;
 	
 	@Column(name = "hide_screen_sharing")
+	@Element(data=true, required=false)
 	private Boolean hideScreenSharing = false;
 	
 	@Column(name = "hide_whiteboard")
+	@Element(data=true, required=false)
 	private Boolean hideWhiteboard = false;
 	
 	@Column(name = "show_microphone_status")
+	@Element(data=true, required=false)
 	private Boolean showMicrophoneStatus = false;
-	
+
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "roomId")
+	@ElementList(name="room_moderators")
+	private List<RoomModerators> moderators;
 	/*
 	 * Non persistent attributes 
 	 */
@@ -384,5 +437,11 @@ public class Rooms implements Serializable {
 
 	public void setServer(Server server) {
 		this.server = server;
+	}
+	public List<RoomModerators> getModerators() {
+		return moderators;
+	}
+	public void setModerators(List<RoomModerators> moderators) {
+		this.moderators = moderators;
 	}
 }

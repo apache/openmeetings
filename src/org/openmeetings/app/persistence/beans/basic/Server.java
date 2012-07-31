@@ -29,29 +29,40 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
 @Entity
 @NamedQueries({
 	@NamedQuery(name="getAllServers", query="SELECT s FROM Server s WHERE s.deleted = false")
 	, @NamedQuery(name="getServerCount", query="SELECT COUNT(s) FROM Server s WHERE s.deleted = false")
 	, @NamedQuery(name="getServerById", query="SELECT s FROM Server s WHERE s.deleted = false AND s.id = :id")
+	, @NamedQuery(name="getServerByAddress", query="SELECT s FROM Server s WHERE s.deleted = false AND s.address = :address")
 	, @NamedQuery(name="getServersWithNoUsers"
 		, query="SELECT s FROM Server s WHERE s.deleted = false AND s.id NOT IN (SELECT u.server.id FROM Users u where u.server.id IS NOT NULL)")
 	, @NamedQuery(name="getServerWithMinimumUsers"
 		, query="SELECT s.id, COUNT(u) AS cnt FROM Users u JOIN u.server s WHERE s.deleted = false GROUP BY s.id ORDER BY cnt")
 })
 @Table(name = "server")
+@Root
 public class Server implements Serializable {
 	private static final long serialVersionUID = -6822732074549167727L;
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
+	@Element(data=true)
 	private Long id;
+	
 	@Column(name="name")
+	@Element(data=true)
 	private String name;
+	
 	@Column(name="address")
+	@Element(data=true)
 	private String address;
+	
 	@Column(name="deleted", nullable=false)
+	@Element(data=true)
 	private boolean deleted = false;
 	
 	public Long getId() {

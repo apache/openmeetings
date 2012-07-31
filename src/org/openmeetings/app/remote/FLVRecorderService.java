@@ -973,9 +973,11 @@ public class FLVRecorderService implements IPendingServiceCallback {
 		try {
 			long fileSize = 0;
 
-			File tFile = new File(OmFileHelper.getStreamsHibernateDir(), rec.getFileHash());
-			if (tFile.exists()) {
-				fileSize += tFile.length();
+			if (rec.getFileHash() != null) {
+				File tFile = new File(OmFileHelper.getStreamsHibernateDir(), rec.getFileHash());
+				if (tFile.exists()) {
+					fileSize += tFile.length();
+				}
 			}
 
 			if (rec.getAlternateDownload() != null) {

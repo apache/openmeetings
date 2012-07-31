@@ -22,6 +22,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
 
 import javax.persistence.Column;
@@ -37,58 +39,78 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "private_messages")
+@Root(name="privatemessage")
 public class PrivateMessages implements Serializable {
-	
 	private static final long serialVersionUID = 7541117437029707792L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
 	@Column(name="msg_id")
+	@Element(data=true)
 	private long privateMessageId;
+	
 	@Column(name="subject")
+	@Element(data=true)
 	private String subject;
+	
 	@Lob
 	@Column(name="message")
+	@Element(data=true)
 	private String message;
 	
 	@Column(name="email")
 	private String email;
 	
 	@Column(name="inserted")
+	@Element(data=true)
 	private Date inserted;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="from_id")
+	@Element(data=true, required=false)
 	private Users from;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="to_id")
+	@Element(data=true, required=false)
 	private Users to;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="owner_id")
+	@Element(data=true, required=false)
 	private Users owner;
 	
 		
 	@Column(name="booked_room")
+	@Element(data=true)
 	private Boolean bookedRoom;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="rooms_id")
+	@Element(data=true, required=false)
 	private Rooms room;
 	
 	@Column(name="is_read")
+	@Element(data=true)
 	private Boolean isRead;
 	
 	@Column(name="is_trash")
+	@Element(data=true)
 	private Boolean isTrash;
 	
 	@Column(name="parent_message_id")
+	@Element(data=true)
 	private Long parentMessage;
+	
 	@Column(name="private_message_folder_id")
+	@Element(data=true)
 	private Long privateMessageFolderId;
 	
 	@Column(name="is_contact_request")
+	@Element(data=true)
 	private Boolean isContactRequest;
+	
 	@Column(name="user_contact_id")
+	@Element(data=true)
 	private Long userContactId;
 
 	public long getPrivateMessageId() {

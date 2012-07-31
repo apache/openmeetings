@@ -25,19 +25,27 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
 @Entity
 @Table(name = "meetme")
+@Root(name="member")
 public class MeetMe implements Serializable {
 	private static final long serialVersionUID = 2789529517142208489L;
 	@Id
     @Column(name = "confno", nullable = false)
-    String confno = "0";
+	@Element(data=true)
+    private String confno = "0";
     @Column(name = "pin")
-    String pin;
+	@Element(data=true)
+    private String pin;
     @Column(name = "adminpin")
-    String adminpin;
+	@Element(data=true)
+    private String adminpin;
     @Column(name = "members", nullable = false)
-    Integer members = 0;
+	@Element(data=true)
+    private Integer members = 0;
 
     public String getConfno() {
         return confno;

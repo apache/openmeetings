@@ -35,11 +35,13 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.openmeetings.app.persistence.beans.rooms.Rooms;
 import org.openmeetings.app.persistence.beans.user.Users;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
 @Entity
 @Table(name = "appointments")
@@ -66,64 +68,100 @@ import org.openmeetings.app.persistence.beans.user.Users;
 			+ "	)"
 	)
 })
+@Root(name="appointment")
 public class Appointment implements Serializable {
-
 	private static final long serialVersionUID = 2016808778885761525L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "appointment_id")
+	@Element(data=true)
 	private Long appointmentId;
+	
 	@Column(name = "appointmentname")
+	@Element(data=true)
 	private String appointmentName;
+	
 	@Column(name = "location")
+	@Element(data=true, required=false)
 	private String appointmentLocation;
+	
 	@Column(name = "appointment_starttime")
+	@Element(data=true)
 	private Date appointmentStarttime;
+	
 	@Column(name = "appointment_endtime")
+	@Element(data=true)
 	private Date appointmentEndtime;
+	
 	@Lob 
 	@Column(name = "description", length=2048)
+	@Element(data=true, required=false)
 	private String appointmentDescription;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "category_id", nullable = true)
+	@Element(name="categoryId", data=true, required=false)
 	private AppointmentCategory appointmentCategory;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id", nullable = true)
+	@Element(name="users_id", data=true, required=false)
 	private Users userId;
 
 	@Column(name = "starttime")
 	private Date starttime;
+	
 	@Column(name = "updatetime")
 	private Date updatetime;
+	
 	@Column(name = "deleted")
+	@Element(data=true)
 	private boolean deleted;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "remind_id", nullable = true)
+	@Element(name="typId", data=true, required=false)
 	private AppointmentReminderTyps remind;
 
 	@Column(name = "isdaily")
+	@Element(data=true)
 	private Boolean isDaily;
+	
 	@Column(name = "isweekly")
+	@Element(data=true)
 	private Boolean isWeekly;
+	
 	@Column(name = "ismonthly")
+	@Element(data=true)
 	private Boolean isMonthly;
+	
 	@Column(name = "isyearly")
+	@Element(data=true)
 	private Boolean isYearly;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "room_id", nullable = true)
+	@Element(name="room_id", data=true, required=false)
 	private Rooms room;
 
 	@Column(name = "icalId")
+	@Element(data=true)
 	private String icalId;
 
-	@Transient
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "appointment_id")
 	private List<MeetingMember> meetingMember;
+	
 	@Column(name = "language_id")
+	@Element(data=true)
 	private Long language_id;
+	
 	@Column(name = "is_password_protected")
+	@Element(data=true)
 	private Boolean isPasswordProtected;
+	
 	@Column(name = "password")
+	@Element(data=true, required=false)
 	private String password;
 
 	@Column(name = "is_connected_event")

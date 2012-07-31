@@ -154,14 +154,11 @@ public class FlvRecordingDaoImpl {
 	
 	public List<FlvRecording> getAllFlvRecordings() {
 		try { 
-			
-			String hql = "SELECT c FROM FlvRecording c ";
+			String hql = "SELECT c FROM FlvRecording c LEFT JOIN FETCH c.flvRecordingMetaData";
 			
 			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
 			
-			List<FlvRecording> flvRecordings = query.getResultList();
-			
-			return flvRecordings;
+			return query.getResultList();
 		} catch (Exception ex2) {
 			log.error("[getFlvRecordings]: ",ex2);
 		}

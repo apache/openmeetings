@@ -31,6 +31,9 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
 @Entity
 @NamedQueries({
 	@NamedQuery(name="getAllFiles", query="SELECT c FROM FileExplorerItem c")
@@ -38,62 +41,99 @@ import javax.persistence.Table;
     , @NamedQuery(name="getByHash", query="SELECT c FROM FileExplorerItem c WHERE c.fileHash = :fileHash")
 })
 @Table(name = "fileexploreritem")
+@Root
 public class FileExplorerItem implements Serializable {
 	private static final long serialVersionUID = 242843782142620566L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
 	@Column(name="fileexploreritem_id")
+	@Element(data=true)
 	private long fileExplorerItemId;
+	
 	@Column(name="filename")
+	@Element(data=true)
 	private String fileName;
+	
 	@Column(name="filehash")
+	@Element(data=true, required = false)
 	private String fileHash;
+	
 	@Column(name="parent_fileexploreritem_id")
+	@Element(data=true)
 	private Long parentFileExplorerItemId;
+	
 	@Column(name="room_id")
+	@Element(data=true, required=false)
 	private Long room_id;
+	
 	@Column(name="owner_id")
+	@Element(data=true, required=false)
 	private Long ownerId;//OwnerID => only set if its directly root in Owner Directory, other Folders and Files
 	//maybe are also in a Home directory but just because their parent is
 	
 	@Column(name="is_folder")
+	@Element(data=true)
 	private Boolean isFolder;
+	
 	@Column(name="is_image")
+	@Element(data=true)
 	private Boolean isImage;
+	
 	@Column(name="is_presentation")
+	@Element(data=true)
 	private Boolean isPresentation;
+	
 	@Column(name="is_video")
+	@Element(data=true, required=false)
 	private Boolean isVideo;
 	
 	@Column(name="inserted_by")
+	@Element(data=true)
 	private Long insertedBy;
+	
 	@Column(name="inserted")
+	@Element(data=true)
 	private Date inserted;
+	
 	@Column(name="updated")
+	@Element(data=true)
 	private Date updated;
+	
 	@Column(name="deleted")
+	@Element(data=true)
 	private boolean deleted;
 	
 	@Column(name="filesize")
+	@Element(data=true, required=false)
 	private Long fileSize;
 	
 	@Column(name="flv_width")
+	@Element(data=true, required=false)
 	private Integer flvWidth;
+	
 	@Column(name="flv_height")
+	@Element(data=true, required=false)
 	private Integer flvHeight;
+	
 	@Column(name="preview_image")
+	@Element(data=true)
 	private String previewImage;
 	
 	@Column(name="wml_file_path")
+	@Element(data=true, required = false)
 	private String wmlFilePath;
+	
 	@Column(name="is_stored_wml_file")
+	@Element(data=true)
 	private Boolean isStoredWmlFile;
+	
 	@Column(name="is_chart")
+	@Element(data=true)
     private Boolean isChart;
     
 	@Column(name="external_file_id")
-    private Long externalFileId; 
+    private Long externalFileId;
+	
 	@Column(name="external_type")
     private String externalType;
 

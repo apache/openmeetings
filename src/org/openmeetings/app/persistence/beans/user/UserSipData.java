@@ -29,24 +29,34 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
 @Entity
 @Table(name = "user_sip_data")
+@Root()
 public class UserSipData implements Serializable {
-	
 	private static final long serialVersionUID = 3438146320304686554L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
 	@Column(name="user_sip_data_id")
 	private long userSipDataId;
+	
 	@Column(name="username")
+	@Element(name="sip_username", data=true, required=false)
 	private String username;
+	
 	@Column(name="userpass")
+	@Element(name="sip_userpass", data=true, required=false)
 	private String userpass;
+	
 	@Column(name="authId")
+	@Element(name="sip_authid", data=true, required=false)
 	private String authId;
+	
 	@Column(name="inserted")
 	private Date inserted;
+	
 	@Column(name="updated")
 	private Date updated;
 	

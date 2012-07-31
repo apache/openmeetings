@@ -59,8 +59,7 @@ public class ServerDaoImpl {
 	public Server getServer(long id) {
 		Server result = null;
 		log.debug("getServer enter, id = " + id);
-		TypedQuery<Server> q = em.createNamedQuery("getServerById",
-				Server.class);
+		TypedQuery<Server> q = em.createNamedQuery("getServerById", Server.class);
 		q.setParameter("id", id);
 		try {
 			result = q.getSingleResult();
@@ -68,6 +67,14 @@ public class ServerDaoImpl {
 			// noop
 		}
 		return result;
+	}
+
+	public Server getServerByAddress(String address) {
+		log.debug("getServer enter, address = " + address);
+		TypedQuery<Server> q = em.createNamedQuery("getServerByAddress", Server.class);
+		q.setParameter("address", address);
+		List<Server> list = q.getResultList();
+		return list.size() > 0 ? list.get(0) : null;
 	}
 
 	public Server getServerWithMinimumUsers() {

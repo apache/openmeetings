@@ -152,8 +152,7 @@ public class PollService implements IPendingServiceCallback {
 								&& rcl.getIsScreenClient()) {
 							// continue;
 						} else {
-							if (rcl.getRoom_id().equals(rc.getRoom_id())
-									&& rcl.getRoom_id() != null) {
+							if (rcl.getRoom_id() != null && rcl.getRoom_id().equals(rc.getRoom_id())) {
 								((IServiceCapableConnection) conn).invoke(
 										clientFunction, obj,
 										scopeApplicationAdapter);

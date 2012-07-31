@@ -22,6 +22,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.openmeetings.app.persistence.beans.user.Users;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
 
 import javax.persistence.Column;
@@ -36,23 +38,27 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "ldapconfig")
+@Root(name="ldapconfig")
 public class LdapConfig implements Serializable {
-	
 	private static final long serialVersionUID = 2839158519803993035L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
 	@Column(name="ldapconfig_id")
 	public long ldapConfigId;
 	@Column(name="name")
+	@Element(data=true)
 	public String name;
 	@Column(name="config_file_name")
+	@Element(data=true)
 	public String configFileName;
 	@Column(name="add_domain_to_user_name")
+	@Element(data=true)
 	public Boolean addDomainToUserName;
 	@Column(name="domain")
+	@Element(data=true)
 	public String domain;
 	@Column(name="is_active")
+	@Element(data=true)
 	public Boolean isActive;
 	@Column(name="inserted")
 	public Date inserted;

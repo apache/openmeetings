@@ -31,6 +31,9 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
 @Entity
 @NamedQueries({
 	@NamedQuery(name="getOrganisationById",
@@ -41,15 +44,18 @@ import javax.persistence.Table;
 		query="SELECT ou.organisation FROM Users u, IN(u.organisation_users) ou WHERE u.deleted = false AND u.user_id = :user_id")
 })
 @Table(name = "organisation")
+@Root(name="organisation")
 public class Organisation implements Serializable {
 	private static final long serialVersionUID = 99123580264065654L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="organisation_id")
+	@Element(data=true)
 	private Long organisation_id;
 	
 	@Column(name="name")
+	@Element(data=true)
 	private String name;
 	
 	@Column(name="insertedby")
@@ -65,6 +71,7 @@ public class Organisation implements Serializable {
 	private Date updatetime;
 	
 	@Column(name="deleted")
+	@Element(data=true)
 	private boolean deleted;
 	
 

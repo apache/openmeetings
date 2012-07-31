@@ -33,6 +33,9 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
 @Entity
 @NamedQueries({
 	@NamedQuery(name="selectMaxUsersByOrganisationId",
@@ -43,8 +46,8 @@ import javax.persistence.Table;
 	query="DELETE FROM Organisation_Users c WHERE c.organisation.organisation_id = :organisation_id")
 })
 @Table(name = "organisation_users")
+@Root(name="user_organisation")
 public class Organisation_Users implements Serializable {
-
 	private static final long serialVersionUID = 7206870465903375817L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,6 +56,7 @@ public class Organisation_Users implements Serializable {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "organisation_id", insertable = true, updatable = true)
+	@Element(name="organisation_id", required=false)
 	private Organisation organisation;
 
 	@Column(name = "user_id")
@@ -65,9 +69,11 @@ public class Organisation_Users implements Serializable {
 	private Date updatetime;
 	
 	@Column(name = "deleted")
+	@Element(data=true)
 	private boolean deleted;
 	
 	@Column(name = "is_moderator")
+	@Element(data=true, required=false)
 	private Boolean isModerator;
 	
 	public Organisation getOrganisation() {

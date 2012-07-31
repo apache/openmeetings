@@ -28,19 +28,30 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.openmeetings.app.persistence.beans.user.Users;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
 @Entity
 @Table(name = "room_poll_answers")
+@Root(name="roompollanswer")
 public class RoomPollAnswers {
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "users_id")
+	@Element(name="voteduserid", data=false, required=false)
 	private Users votedUser;
+	
 	@Column(name = "answer")
+	@Element(data=false, required=false)
 	private Boolean answer;
+	
 	@Column(name = "pointList")
+	@Element(name="pointlist", data=false, required=false)
 	private Integer pointList;
+	
 	@Column(name = "voteDate")
+	@Element(name="votedate", data=false)
 	private Date voteDate;
+	
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "room_poll_id")
 	private RoomPoll roomPoll;

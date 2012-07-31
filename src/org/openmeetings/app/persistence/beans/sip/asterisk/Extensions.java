@@ -27,30 +27,39 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
 @Entity
 @Table(name = "extensions")
+@Root(name="extension")
 public class Extensions implements Serializable {
 	private static final long serialVersionUID = -2669622904594408644L;
 
 	@Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+	@Element(data = true)
+    private Integer id;
 
     @Column(name = "context", nullable = false)
-    String context = "";
+    private String context = "";
 
     @Column(name = "exten", nullable = false)
-    String exten = "";
+	@Element(data = true)
+    private String exten = "";
 
     @Column(name = "priority", nullable = false)
-    Integer priority = 0;
+	@Element(data = true)
+    private Integer priority = 0;
 
     @Column(name = "app", nullable = false)
-    String app = "";
+	@Element(data = true)
+    private String app = "";
 
     @Column(name = "appdata", nullable = false)
-    String appdata = "";
+	@Element(data = true)
+    private String appdata = "";
 
     public Integer getId() {
         return id;

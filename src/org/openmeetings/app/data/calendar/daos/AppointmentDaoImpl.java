@@ -158,26 +158,12 @@ public class AppointmentDaoImpl {
 
 	public List<Appointment> getAppointments() {
 		try {
-
-			String hql = "select a from Appointment a "
-					+ "WHERE a.deleted <> :deleted ";
-
-			TypedQuery<Appointment> query = em.createQuery(hql,
-					Appointment.class);
+			TypedQuery<Appointment> query = em.createQuery(
+				"SELECT a FROM Appointment a LEFT JOIN FETCH a.meetingMember WHERE a.deleted <> :deleted "
+				, Appointment.class);
 			query.setParameter("deleted", true);
 
-			List<Appointment> appointList = query.getResultList();
-
-			for (Appointment appointment : appointList) {
-
-				appointment.setMeetingMember(meetingMemberDao
-						.getMeetingMemberByAppointmentId(appointment
-								.getAppointmentId()));
-
-			}
-
-			return appointList;
-
+			return query.getResultList();
 		} catch (Exception ex2) {
 			log.error("[getAppointmentById]: ", ex2);
 		}

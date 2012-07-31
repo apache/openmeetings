@@ -34,44 +34,66 @@ import javax.persistence.Table;
 import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.persistence.beans.invitation.Invitations;
 import org.openmeetings.app.persistence.beans.user.Users;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
 
 @Entity
 @Table(name = "meeting_members")
+@Root(name="meetingmember")
 public class MeetingMember implements Serializable {
-	
 	private static final long serialVersionUID = -3864571325368787524L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
 	@Column(name="meeting_member_id")
+	@Element(data=true)
 	private Long meetingMemberId;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="user_id", nullable=true)
+	@Element(name="userid", data=true, required=false)
 	private Users userid;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="appointment_id", nullable=true)
+	@Element(data=true, required=false)
 	private Appointment appointment;
+	
 	@Column(name="firstname")
+	@Element(data=true, required=false)
 	private String firstname;
+	
 	@Column(name="lastname")
+	@Element(data=true, required=false)
 	private String lastname;
+	
 	@Column(name="member_status")
+	@Element(data=true, required=false)
 	private String memberStatus; // internal, external.
+	
 	@Column(name="appointment_status")
-	private String appointmentStatus; //status of the appointment denial, acceptance, wait. 
+	@Element(data=true, required=false)
+	private String appointmentStatus; //status of the appointment denial, acceptance, wait.
+	
 	@Column(name="email")
+	@Element(data=true, required=false)
 	private String email;
+	
 	@Column(name="phone")
 	private String phone;
 			
 	@Column(name="starttime")
 	private Date starttime;
+	
 	@Column(name="updatetime")
 	private Date updatetime;
+	
 	@Column(name="deleted")
+	@Element(data=true)
 	private boolean deleted;
+	
 	@Column(name="invitor")
+	@Element(data=true)
 	private Boolean invitor;
 	
 	

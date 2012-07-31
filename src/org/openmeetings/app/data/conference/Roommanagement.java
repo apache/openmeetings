@@ -499,12 +499,10 @@ public class Roommanagement {
 
 	public List<Rooms> getBackupRooms() {
 		try {
-			CriteriaBuilder cb = em.getCriteriaBuilder();
-			CriteriaQuery<Rooms> cq = cb.createQuery(Rooms.class);
-			cq.from(Rooms.class);
-			TypedQuery<Rooms> q = em.createQuery(cq);
-			List<Rooms> ll = q.getResultList();
-			return ll;
+			TypedQuery<Rooms> q = em.createQuery("SELECT c FROM Rooms c LEFT JOIN FETCH c.moderators "
+					+ "WHERE c.deleted <> true ", Rooms.class);
+			
+			return q.getResultList();
 		} catch (Exception ex2) {
 			log.error("[getBackupRooms]", ex2);
 		}

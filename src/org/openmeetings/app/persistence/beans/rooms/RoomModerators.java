@@ -23,6 +23,8 @@ import java.util.Date;
 
 
 import org.openmeetings.app.persistence.beans.user.Users;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,26 +38,33 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "rooms_moderator")
+@Root(name = "room_moderator")
 public class RoomModerators implements Serializable {
-	
 	private static final long serialVersionUID = 5407758673591515018L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
 	@Column(name="room_moderators_id")
 	private long roomModeratorsId;
+	
 	@Column(name = "roomId")
 	private Long roomId;
+	
 	@Column(name="is_supermoderator")
+	@Element(name="is_supermoderator", data = true)
 	private Boolean isSuperModerator;
+	
 	@ManyToOne(fetch = FetchType.EAGER) 
 	@JoinColumn (name="user_id")
+	@Element(name="user_id", data = true, required=false)
 	private Users user;
+	
 	@Column(name = "starttime")
 	private Date starttime;
+	
 	@Column(name = "updatetime")
 	private Date updatetime;
+	
 	@Column(name = "deleted")
 	private boolean deleted;
 	

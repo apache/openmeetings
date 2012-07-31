@@ -21,40 +21,49 @@ package org.openmeetings.app.persistence.beans.rooms;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.openmeetings.app.persistence.beans.domain.Organisation;
-
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.openmeetings.app.persistence.beans.domain.Organisation;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
 @Entity
 @Table(name = "rooms_organisation")
+@Root(name="room_organisation")
 public class Rooms_Organisation implements Serializable {
-	
 	private static final long serialVersionUID = 4153935045968138984L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
 	@Column(name="rooms_organisation_id")
+	@Element(data=true)
 	private Long rooms_organisation_id;
+	
 	@ManyToOne(fetch = FetchType.EAGER) 
 	@JoinColumn(name="rooms_id", nullable=true)
+	@Element(name="rooms_id", data=true, required=false)
 	private Rooms room;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="organisation_id", nullable=true)
+	@Element(name="organisation_id", data=true, required=false)
 	private Organisation organisation;
+	
 	@Column(name = "starttime")
 	private Date starttime;
+	
 	@Column(name = "updatetime")
 	private Date updatetime;
+	
 	@Column(name = "deleted")
+	@Element(data=true)
 	private boolean deleted;
 
     public Organisation getOrganisation() {

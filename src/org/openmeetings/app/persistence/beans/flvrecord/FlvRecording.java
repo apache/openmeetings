@@ -22,107 +22,160 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import org.openmeetings.app.persistence.beans.rooms.Rooms;
-import org.openmeetings.app.persistence.beans.user.Users;
-
-
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.openmeetings.app.persistence.beans.rooms.Rooms;
+import org.openmeetings.app.persistence.beans.user.Users;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
 	@NamedQuery(name = "getRecordingByHash", query = "SELECT f FROM FlvRecording f WHERE f.fileHash = :fileHash")
 })
 @Table(name = "flvrecording")
+@Root(name="flvrecording")
 public class FlvRecording implements Serializable {
-	
 	private static final long serialVersionUID = -2234874663310617072L;
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
 	@Column(name="flvrecording_id")
+	@Element(data=true)
 	private long flvRecordingId;
 	
 	@Column(name="filename")
+	@Element(data=true)
 	private String fileName;
+	
 	@Column(name="alternate_download")
+	@Element(data=true)
 	private String alternateDownload;
+	
 	@Column(name="filehash")
+	@Element(data=true, required=false)
 	private String fileHash;
+	
 	@Column(name="comment_field")
+	@Element(data=true, required=false)
 	private String comment;
 	
 	@Column(name="parent_fileexploreritem_id")
+	@Element(data=true, required=false)
 	private Long parentFileExplorerItemId;
+	
 	@Column(name="room_id")
+	@Element(data=true)
 	private Long room_id;
+	
 	@Column(name="owner_id")
+	@Element(data=true)
 	private Long ownerId;//OwnerID => only set if its directly root in Owner Directory, other Folders and Files
 	//maybe are also in a Home directory but just because their parent is
 	
 	@Column(name="is_folder")
+	@Element(data=true)
 	private Boolean isFolder;
+	
 	@Column(name="is_image")
+	@Element(data=true)
 	private Boolean isImage;
+	
 	@Column(name="is_presentation")
+	@Element(data=true)
 	private Boolean isPresentation;
+	
 	@Column(name="is_recording")
+	@Element(data=true)
 	private Boolean isRecording;
 	
 	@Column(name="record_start")
+	@Element(data=true)
 	private Date recordStart;
+	
 	@Column(name="record_end")
+	@Element(data=true)
 	private Date recordEnd;
 	
 	@Column(name="inserted_by")
+	@Element(data=true)
 	private Long insertedBy;
+	
 	@Column(name="inserted")
+	@Element(data=true)
 	private Date inserted;
+	
 	@Column(name="updated")
 	private Date updated;
+	
 	@Column(name="deleted")
+	@Element(data=true)
 	private boolean deleted;
 	
 	@Column(name="width")
+	@Element(data=true)
 	private Integer width;
+	
 	@Column(name="height")
+	@Element(data=true)
 	private Integer height;
 	
 	@Column(name="flv_width")
+	@Element(data=true, required=false)
 	private Integer flvWidth;
+	
 	@Column(name="flv_height")
+	@Element(data=true, required=false)
 	private Integer flvHeight;
+	
 	@Column(name="preview_image")
+	@Element(data=true)
 	private String previewImage;
 	
 	@Column(name="filesize")
+	@Element(data=true, required=false)
 	private Long fileSize;
 	
 	@Column(name="recorder_stream_id")
+	@Element(data=true)
 	private String recorderStreamId;
+	
 	@Column(name="organization_id")
+	@Element(data=true)
 	private Long organization_id;
 	
 	@Column(name="is_interview")
+	@Element(data=true)
 	private Boolean isInterview;
+	
 	@Column(name="progress_post_processing")
+	@Element(data=true)
 	private Integer progressPostProcessing;
+	
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "flvrecording_id")
+	@ElementList(name="flvrecordingmetadatas")
+	private List<FlvRecordingMetaData> flvRecordingMetaData;
 	
 	//Not Mapped
 	@Transient
-	private List<FlvRecordingMetaData> flvRecordingMetaData;
-	@Transient
 	private Users creator;
+	
 	@Transient
 	private Rooms room;
+	
 	@Transient
 	private List<FlvRecordingLog> flvRecordingLog;
 	
