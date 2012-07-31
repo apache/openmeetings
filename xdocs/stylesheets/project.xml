@@ -67,6 +67,7 @@
         <item name="Moodle Plugin"          href="/MoodlePlugin.html" />
         <item name="Sakai Plugin"          	href="/SakaiPlugin.html" />
         <item name="Jira Plugin"          	href="/JiraPlugin.html" />
+        <item name="Joomla Plugin"          href="/JoomlaPlugin.html" />
         <item name="Confluence Plugin"      href="/ConfluencePlugin.html" />
         <item name="SugarCRM Plugin"        href="/SugarCRMPlugin.html" />
     </menu>

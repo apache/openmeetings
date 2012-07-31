@@ -244,6 +244,12 @@ limitations under the License.
 					            	} 
 					            	
 					        				        							            					            	
+					            	else if (document.location.href.indexOf("/JoomlaPlugin.html") > 0) {
+					            		currentLocation = "Plugins";
+					            		currentLink = "/JoomlaPlugin.html".substr(1, "/JoomlaPlugin.html".length);
+					            	} 
+					            	
+					        				        							            					            	
 					            	else if (document.location.href.indexOf("/ConfluencePlugin.html") > 0) {
 					            		currentLocation = "Plugins";
 					            		currentLink = "/ConfluencePlugin.html".substr(1, "/ConfluencePlugin.html".length);
@@ -519,6 +525,8 @@ limitations under the License.
 	        		        	            	            	    <a href="./SakaiPlugin.html">Sakai Plugin</a>
 <br/>
 	        		        	            	            	    <a href="./JiraPlugin.html">Jira Plugin</a>
+<br/>
+	        		        	            	            	    <a href="./JoomlaPlugin.html">Joomla Plugin</a>
 <br/>
 	        		        	            	            	    <a href="./ConfluencePlugin.html">Confluence Plugin</a>
 <br/>
