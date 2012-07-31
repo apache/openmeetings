@@ -34,47 +34,60 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "flvrecording_meta_delta")
 public class FlvRecordingMetaDelta implements Serializable {
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -733483974696234137L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="flv_delta_id")
+	@Column(name="id")
 	private long flvRecordingMetaDeltaId;
+	
 	@Column(name="flvrecording_metadata_id")
 	private Long flvRecordingMetaDataId;
+	
 	@Column(name="time_stamp")
 	private Integer timeStamp;
+	
 	@Column(name="delta_time")
 	private Long deltaTime;
+	
 	@Column(name="last_time_stamp")
 	private Long lastTimeStamp;
+	
 	@Column(name="start_time")
 	private Date startTime;
+	
 	@Column(name="current_event_time")
 	private Date currentTime;
+	
 	@Column(name="delta_time_stamp")
 	private Long deltaTimeStamp;
+	
 	@Column(name="missing_time")
 	private Long missingTime;
+	
 	@Column(name="duration")
 	private Integer duration;
+	
 	@Column(name="start_time_stamp")
 	private Integer startTimeStamp;
+	
 	@Column(name="packet_time_stamp")
 	private Integer packetTimeStamp;
+	
 	@Column(name="wave_out_put_name")
 	private String waveOutPutName;
+	
 	@Column(name="data_length_packet")
 	private Integer dataLengthPacket;
+	
 	@Column(name="received_audio_data_length")
 	private Long receivedAudioDataLength;
+	
 	@Column(name="is_end_padding")
 	private Boolean isEndPadding;
+	
 	@Column(name="is_start_padding")
 	private Boolean isStartPadding;
+	
 	@Column(name="debug_status")
 	private String debugStatus;
 	

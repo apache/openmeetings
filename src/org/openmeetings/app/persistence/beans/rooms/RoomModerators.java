@@ -44,7 +44,7 @@ public class RoomModerators implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="room_moderators_id")
+	@Column(name="id")
 	private long roomModeratorsId;
 	
 	@Column(name = "roomId")

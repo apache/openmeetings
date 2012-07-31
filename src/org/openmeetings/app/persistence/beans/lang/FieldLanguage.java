@@ -36,21 +36,26 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "fieldlanguage")
 public class FieldLanguage implements Serializable {
-
 	private static final long serialVersionUID = 3501643212388395425L;
 	@Id
-	@Column(name="language_id")
+	@Column(name="id")
 	private Long language_id;
+	
 	@Column(name="name")
 	private String name;
+	
 	@Column(name="starttime")
 	private Date starttime;
+	
 	@Column(name="updatetime")
 	private Date updatetime;
+	
 	@Column(name="deleted")
 	private boolean deleted;
+	
 	@Column(name="rtl")
 	private Boolean rtl;
+	
 	@Column(name="code")
 	private String code;
 	

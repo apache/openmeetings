@@ -52,7 +52,7 @@ public class FlvRecording implements Serializable {
 	private static final long serialVersionUID = -2234874663310617072L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="flvrecording_id")
+	@Column(name="id")
 	@Element(data=true)
 	private long flvRecordingId;
 	

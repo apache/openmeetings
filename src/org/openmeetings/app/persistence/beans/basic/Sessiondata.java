@@ -36,26 +36,34 @@ public class Sessiondata implements Serializable {
 	private static final long serialVersionUID = 1928177917452866750L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
 	@Column(name="id")
 	private Long id;
+	
 	@Column(name="user_id")
 	private Long user_id;
+	
 	@Column(name="session_id")
 	private String session_id;
+	
 	@Column(name="starttermin_time")
 	private Date starttermin_time;
+	
 	@Column(name="refresh_time")
 	private Date refresh_time;
+	
 	@Lob
 	@Column(name="sessionXml")
 	private String sessionXml;
+	
 	@Column(name="storePermanent")
 	private Boolean storePermanent;
+	
 	@Column(name="language_id")
 	private Long language_id;
+	
 	@Column(name="organization_id")
 	private Long organization_id;
+	
 	public Sessiondata() {
 		super();
 		// TODO Auto-generated constructor stub

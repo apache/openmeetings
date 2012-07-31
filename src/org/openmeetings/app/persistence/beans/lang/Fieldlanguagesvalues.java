@@ -53,22 +53,27 @@ import javax.persistence.Table;
 })
 @Table(name = "fieldlanguagesvalues")
 public class Fieldlanguagesvalues implements Serializable {
-
 	private static final long serialVersionUID = 1965055047163639210L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="lang_val_id")
+	@Column(name="id")
 	private Long fieldlanguagesvalues_id;
+	
 	@Column(name="fieldvalues_id")
 	private Long fieldvalues_id;
+	
 	@Column(name="language_id")
 	private Long language_id;
+	
 	@Column(name="starttime")
 	private Date starttime;
+	
 	@Column(name="updatetime")
 	private Date updatetime;
+	
 	@Column(name="deleted")
 	private boolean deleted;
+	
 	@Lob
 	@Column(name="value")
 	private String value;

@@ -34,18 +34,24 @@ public class States implements Serializable {
 	private static final long serialVersionUID = -1629546369219451403L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "state_id")
+	@Column(name = "id")
 	private Long state_id;
+	
 	@Column(name = "name")
 	private String name;
+	
 	@Column(name = "starttime")
 	private Date starttime;
+	
 	@Column(name = "updatetime")
 	private Date updatetime;
+	
 	@Column(name = "deleted")
 	private boolean deleted;
+	
 	@Column(name = "shortName")
 	private String shortName;
+	
 	@Column(name = "code")
 	private int code;
 

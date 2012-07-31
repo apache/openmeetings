@@ -37,12 +37,15 @@ public class MeetMe implements Serializable {
     @Column(name = "confno", nullable = false)
 	@Element(data=true)
     private String confno = "0";
+	
     @Column(name = "pin")
 	@Element(data=true)
     private String pin;
+    
     @Column(name = "adminpin")
 	@Element(data=true)
     private String adminpin;
+    
     @Column(name = "members", nullable = false)
 	@Element(data=true)
     private Integer members = 0;

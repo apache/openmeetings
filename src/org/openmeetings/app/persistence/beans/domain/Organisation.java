@@ -50,7 +50,7 @@ public class Organisation implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="organisation_id")
+	@Column(name="id")
 	@Element(data=true)
 	private Long organisation_id;
 	

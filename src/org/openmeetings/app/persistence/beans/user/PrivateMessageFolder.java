@@ -39,17 +39,21 @@ public class PrivateMessageFolder implements Serializable {
 	private static final long serialVersionUID = 3689814412815025816L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="msg_folder_id")
+	@Column(name="id")
 	@Element(data=true)
 	private long privateMessageFolderId;
+	
 	@Column(name="folder_name")
 	@Element(data=true)
 	private String folderName;
+	
 	@Column(name="user_id")
 	@Element(data=true)
 	private Long userId;
+	
 	@Column(name="inserted")
 	private Date inserted;
+	
 	@Column(name="updated")
 	private Date updated;
 	

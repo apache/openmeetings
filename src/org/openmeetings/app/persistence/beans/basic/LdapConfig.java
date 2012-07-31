@@ -43,33 +43,43 @@ public class LdapConfig implements Serializable {
 	private static final long serialVersionUID = 2839158519803993035L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="ldapconfig_id")
+	@Column(name="id")
 	public long ldapConfigId;
+	
 	@Column(name="name")
 	@Element(data=true)
 	public String name;
+	
 	@Column(name="config_file_name")
 	@Element(data=true)
 	public String configFileName;
+	
 	@Column(name="add_domain_to_user_name")
 	@Element(data=true)
 	public Boolean addDomainToUserName;
+	
 	@Column(name="domain")
 	@Element(data=true)
 	public String domain;
+	
 	@Column(name="is_active")
 	@Element(data=true)
 	public Boolean isActive;
+	
 	@Column(name="inserted")
 	public Date inserted;
+	
 	@Column(name="updated")
 	public Date updated;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="insertedby_id", updatable=true, insertable=true)
 	public Users insertedby;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="updatedby_id", updatable=true, insertable=true)
 	public Users updatedby;
+	
 	@Column(name="deleted")
 	private boolean deleted;
 	

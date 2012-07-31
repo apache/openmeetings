@@ -39,19 +39,23 @@ public class FlvRecordingLog implements Serializable {
 	private static final long serialVersionUID = -2577533628675416706L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="flvrecording_log_id")
+	@Column(name="id")
 	private long flvRecordingLogId;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="flvrecording_id", nullable=true)
 	private FlvRecording flvRecording;
+	
 	@Column(name="inserted")
 	private Date inserted;
+	
 	@Column(name="msg_type")
 	private String msgType;
+	
 	@Lob
 	@Column(name="ful_message")
 	private String fullMessage;
+	
 	@Column(name="exit_value")
 	private String exitValue;
 	

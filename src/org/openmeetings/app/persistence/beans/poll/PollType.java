@@ -35,11 +35,13 @@ import org.openmeetings.app.persistence.beans.lang.Fieldvalues;
 public class PollType {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "poll_type_id")
+	@Column(name = "id")
 	private Long pollTypesId;
+	
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "fieldvalues_id")
 	private Fieldvalues label;
+	
 	@Column(name = "numeric_answer")
 	private Boolean isNumericAnswer;
 	

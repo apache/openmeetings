@@ -31,20 +31,24 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "userlevel")
 public class Userlevel implements Serializable {
-	
 	private static final long serialVersionUID = -1779037202328443340L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="level_id")
+	@Column(name="id")
 	private Long level_id;
+	
 	@Column(name="description")
 	private String description;
+	
 	@Column(name="statuscode")
 	private Integer statuscode;
+	
 	@Column(name="starttime")
 	private Date starttime;
+	
 	@Column(name="updatetime")
 	private Date updatetime;
+	
 	@Column(name="deleted")
 	private boolean deleted;
 	

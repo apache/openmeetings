@@ -31,39 +31,51 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "soaplogin")
 public class SOAPLogin implements Serializable {
-	
 	private static final long serialVersionUID = 5101010700038221434L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
-	@Column(name="soapLoginId")
+	@Column(name="id")
 	private long soapLoginId;
+	
 	@Column(name="hash")
 	private String hash;
+	
 	@Column(name="room_id")
 	private Long room_id;
+	
 	@Column(name="session_hash")
 	private String sessionHash;
+	
 	@Column(name="created")
 	private Date created;
+	
 	@Column(name="used")
 	private Boolean used;
+	
 	@Column(name="use_date")
 	private Date useDate;
+	
 	@Column(name="becomemoderator")
 	private Boolean becomemoderator;
+	
 	@Column(name="showaudiovideotest")
 	private Boolean showAudioVideoTest;
+	
 	@Column(name="allow_same_url_multiple_times")
 	private Boolean allowSameURLMultipleTimes;
+	
 	@Column(name="show_nick_name_dialog")
 	private Boolean showNickNameDialog;
+	
 	@Column(name="client_url")
 	private String clientURL;
+	
 	@Column(name="room_recording_id")
 	private Long roomRecordingId;
+	
 	@Column(name="landing_zone")
 	private String landingZone;
+	
 	@Column(name="allow_recording")
 	private Boolean allowRecording;
 	

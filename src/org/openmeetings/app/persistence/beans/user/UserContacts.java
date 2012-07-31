@@ -42,7 +42,7 @@ public class UserContacts implements Serializable {
 	private static final long serialVersionUID = 2391405538978996206L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="user_contact_id")
+	@Column(name="id")
 	@Element(data=true)
 	private long userContactId;
 	

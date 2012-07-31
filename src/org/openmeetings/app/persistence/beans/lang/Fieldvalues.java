@@ -41,14 +41,18 @@ import javax.persistence.Transient;
 public class Fieldvalues implements Serializable {
 	private static final long serialVersionUID = -3439614511218028085L;
 	@Id
-	@Column(name="fieldvalues_id")
+	@Column(name="id")
 	private Long fieldvalues_id;
+	
 	@Column(name="name")
 	private String name;
+	
 	@Column(name="starttime")
 	private Date starttime;
+	
 	@Column(name="updatetime")
 	private Date updatetime;
+	
 	@Column(name="deleted")
 	private boolean deleted;
 

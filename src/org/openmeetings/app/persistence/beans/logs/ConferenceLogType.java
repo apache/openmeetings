@@ -33,20 +33,18 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "conferencelogtype")
 public class ConferenceLogType implements Serializable {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 4388958579350356294L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
-	@Column(name="conferencelogtype_id")
+	@Column(name="id")
 	private long conferenceLogTypeId;
+	
 	@Column(name="eventtype")
 	private String eventType;
+	
 	@Column(name="inserted")
 	private Date inserted;
+	
 	@Column(name="insertedby")
 	private long insertedby;
 	

@@ -43,7 +43,7 @@ public class FlvRecordingMetaData implements Serializable {
 	private static final long serialVersionUID = 8444176152324513716L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="flv_meta_id")
+	@Column(name="id")
 	@Element(data=true, required=false)
 	private long flvRecordingMetaDataId;
 	

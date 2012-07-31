@@ -39,25 +39,28 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "appointmentcategory")
 public class AppointmentCategory implements Serializable {
-	
 	private static final long serialVersionUID = 595713649933692774L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
-	@Column(name="category_id")
+	@Column(name="id")
 	private Long categoryId;
+	
 	@Column(name="name")
 	private String name;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="user_id", nullable=true)
 	private Users user;
 	
 	@Column(name="starttime")
 	private Date starttime;
+	
 	@Column(name="updatetime")
 	private Date updatetime;
+	
 	@Column(name="deleted")
 	private boolean deleted;
+	
 	@Lob
 	@Column(name="comment_field", length=2048)
 	private String comment;

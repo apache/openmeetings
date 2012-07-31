@@ -44,7 +44,7 @@ public class PrivateMessages implements Serializable {
 	private static final long serialVersionUID = 7541117437029707792L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="msg_id")
+	@Column(name="id")
 	@Element(data=true)
 	private long privateMessageId;
 	

@@ -49,7 +49,7 @@ public class Rooms implements Serializable {
 	private static final long serialVersionUID = -2860312283159251568L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="rooms_id")
+	@Column(name="id")
 	@Element(data=true)
 	private Long rooms_id;
 	

@@ -32,7 +32,7 @@ public class ErrorType implements Serializable {
 	private static final long serialVersionUID = 1519570470483604258L;
 
 	@Id
-	@Column(name = "errortype_id")
+	@Column(name = "id")
 	private Long errortype_id;
 
 	@Column(name = "fieldvalues_id")
@@ -40,8 +40,10 @@ public class ErrorType implements Serializable {
 
 	@Column(name = "starttime")
 	private Date starttime;
+	
 	@Column(name = "updatetime")
 	private Date updatetime;
+	
 	@Column(name = "deleted")
 	private boolean deleted;
 

@@ -37,26 +37,25 @@ import org.openmeetings.app.persistence.beans.user.Users;
 @Entity
 @Table(name = "appointmentremindertyps")
 public class AppointmentReminderTyps implements Serializable {
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -6543593995706839669L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
-	@Column(name="typ_id")
+	@Column(name="id")
 	private Long typId;
+	
 	@Column(name="name")
 	private String name;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="user_id", nullable=true)
 	private Users user;
 	
 	@Column(name="starttime")
 	private Date starttime;
+	
 	@Column(name="updatetime")
 	private Date updatetime;
+	
 	@Column(name="deleted")
 	private boolean deleted;
 	

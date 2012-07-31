@@ -46,7 +46,7 @@ public class FileExplorerItem implements Serializable {
 	private static final long serialVersionUID = 242843782142620566L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="fileexploreritem_id")
+	@Column(name="id")
 	@Element(data=true)
 	private long fileExplorerItemId;
 	

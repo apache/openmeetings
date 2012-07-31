@@ -37,21 +37,23 @@ import org.openmeetings.app.persistence.beans.user.Users;
 @Entity
 @Table(name = "invitations")
 public class Invitations implements Serializable {
-
 	private static final long serialVersionUID = 1153321347974705506L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "invitations_id")
+	@Column(name = "id")
 	private Long invitations_id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "invitedBy", nullable = true)
 	private Users invitedBy;
+	
 	@Column(name = "starttime")
 	private Date starttime;
+	
 	@Column(name = "updatetime")
 	private Date updatetime;
+	
 	@Column(name = "deleted")
 	private boolean deleted;
 
@@ -62,12 +64,16 @@ public class Invitations implements Serializable {
 	// the hash for the link
 	@Column(name = "hash")
 	private String hash;
+	
 	@Column(name = "invitedname")
 	private String invitedname;
+	
 	@Column(name = "invitedEMail")
 	private String invitedEMail;
+	
 	@Column(name = "ispasswordprotected")
 	private Boolean isPasswordProtected;
+	
 	@Column(name = "invitationpass")
 	private String invitationpass;
 
@@ -80,16 +86,20 @@ public class Invitations implements Serializable {
 	// TimeStamp
 	@Column(name = "isValidByTime")
 	private Boolean isValidByTime = false;
+	
 	@Column(name = "validFrom")
 	private Date validFrom;
+	
 	@Column(name = "validTo")
 	private Date validTo;
 	// An invitation which is canBeUsedOnlyOneTime = true can be only used
 	// one-time
 	@Column(name = "canBeUsedOnlyOneTime")
 	private Boolean canBeUsedOnlyOneTime = false;
+	
 	@Column(name = "invitationWasUsed")
 	private Boolean invitationWasUsed = false;
+	
 
 	@Column(name = "appointment_id")
 	private Long appointmentId;

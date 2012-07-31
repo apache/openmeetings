@@ -33,26 +33,31 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "userdata")
 public class Userdata implements Serializable {
-	
 	private static final long serialVersionUID = 8365799229794940172L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
-	@Column(name="data_id")
+	@Column(name="id")
     private Long data_id;
+	
 	@Column(name="user_id")
-    private Long user_id;    
+    private Long user_id;
+	
 	@Column(name="data_key")
     private String data_key;
+	
 	@Column(name="data")
     private String data;
+	
 	@Column(name = "starttime")
 	private Date starttime;
+	
 	@Column(name = "updatetime")
 	private Date updatetime;
+	
 	@Lob
 	@Column(name = "comment_field")
     private String comment;
+	
 	@Column(name = "deleted")
     private boolean deleted;
 

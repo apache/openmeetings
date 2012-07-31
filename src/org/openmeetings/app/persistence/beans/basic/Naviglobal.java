@@ -54,39 +54,55 @@ public class Naviglobal implements Serializable {
 	private static final long serialVersionUID = 515828033813767719L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "global_id")
+	@Column(name = "id")
 	private Long global_id;
+	
 	@Column(name = "name")
 	private String name;
+	
 	@Column(name = "icon")
 	private String icon;
+	
 	@Column(name = "isleaf")
 	private Boolean isleaf;
+	
 	@Column(name = "isopen")
 	private Boolean isopen;
+	
 	@Column(name = "action")
 	private String action;
+	
 	@Column(name = "updatetime")
 	private Date updatetime;
+	
 	@Column(name = "starttime")
 	private Date starttime;
+	
 	@Column(name = "comment_field")
 	private String comment;
+	
 	@Column(name = "naviorder")
 	private Integer naviorder;
+	
 	@Column(name = "level_id")
 	private Long level_id;
+	
 	@Column(name = "deleted")
 	private boolean deleted;
+	
 	@Column(name = "fieldvalues_id")
 	private Long fieldvalues_id;
+	
 	@Column(name = "tooltip_fieldvalues_id")
 	private Long tooltip_fieldvalues_id;
+	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "global_id")
 	private List<Navimain> mainnavi;
+	
 	@Transient
 	private Fieldlanguagesvalues label;
+	
 	@Transient
 	private Fieldlanguagesvalues tooltip;
 

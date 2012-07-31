@@ -73,7 +73,7 @@ public class Appointment implements Serializable {
 	private static final long serialVersionUID = 2016808778885761525L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "appointment_id")
+	@Column(name = "id")
 	@Element(data=true)
 	private Long appointmentId;
 	

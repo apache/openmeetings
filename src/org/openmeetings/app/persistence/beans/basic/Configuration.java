@@ -48,7 +48,7 @@ public class Configuration implements Serializable {
 	private static final long serialVersionUID = -6129473946508963339L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="configuration_id")
+	@Column(name="id")
 	@Element(name="id", data=true)
 	private Long configuration_id;
 	

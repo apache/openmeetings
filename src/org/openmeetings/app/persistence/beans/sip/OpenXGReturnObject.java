@@ -31,26 +31,27 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "open_xg_return_object")
 public class OpenXGReturnObject implements Serializable {
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -5240675684036197687L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="object_id")
+	@Column(name="id")
 	private Long openXGReturnObjectId;
 	
 	@Column(name="method_name")
 	private String methodName;
+	
 	@Column(name="inserted")
 	private Date inserted;
+	
 	@Column(name="status_code")
 	private String status_code;
+	
 	@Column(name="status_string")
 	private String status_string;
+	
 	@Column(name="conference_number")
 	private String conferenceNumber;
+	
 	@Column(name="conference_pin")
 	private String conferencePin;
 	

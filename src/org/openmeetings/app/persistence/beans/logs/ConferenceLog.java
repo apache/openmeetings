@@ -36,41 +36,50 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "conferencelog")
 public class ConferenceLog implements Serializable {
-	
-	
 	private static final long serialVersionUID = 147341496943518159L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
-	@Column(name="conferencelog_id")
+	@Column(name="id")
 	private long conferenceLogId;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="conferencelogtype_id", updatable=true, insertable=true)
 	private ConferenceLogType conferenceLogType;
+	
 	@Column(name="inserted")
 	private Date inserted;
+	
 	@Column(name="insertedby")
 	private long insertedby;
 	
 	//NULL means its a Guest/Invited User
 	@Column(name="user_id")
 	private Long userId;
+	
 	@Column(name="external_user_id")
 	private String externalUserId;
+	
 	@Column(name="external_user_type")
 	private String externalUserType;
+	
 	@Column(name="streamid")
 	private String streamid;
+	
 	@Column(name="room_id")
 	private Long room_id;
+	
 	@Column(name="userip")
 	private String userip;
+	
 	@Column(name="scopename")
 	private String scopeName;
+	
 	@Column(name="email")
 	private String email;
+	
 	@Column(name="firstname")
 	private String firstname;
+	
 	@Column(name="lastname")
 	private String lastname;
 	

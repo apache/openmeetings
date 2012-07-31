@@ -56,7 +56,7 @@ public class RoomClient implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="roomclient_id")
+	@Column(name="id")
 	private Long roomClientId = null;
 	
 	/*
@@ -76,10 +76,13 @@ public class RoomClient implements Serializable {
 	
 	@Column(name="vWidth")
 	private int vWidth = 0;
+	
 	@Column(name="vHeight")
 	private int vHeight = 0;
+	
 	@Column(name="vX")
 	private int vX = 0;
+	
 	@Column(name="vY")
 	private int vY = 0;
 	/**
@@ -112,20 +115,28 @@ public class RoomClient implements Serializable {
 	 */
 	@Column(name="is_mod")
 	private Boolean isMod = false;
+	
 	@Column(name="is_super_mod")
 	private Boolean isSuperModerator = false;
+	
 	@Column(name="canDraw")
 	private Boolean canDraw = false;
+	
 	@Column(name="canShare")
 	private Boolean canShare = false;
+	
 	@Column(name="canRemote")
 	private Boolean canRemote = false;
+	
 	@Column(name="canGiveAudio")
     private Boolean canGiveAudio = false;
+	
 	@Column(name="connected_since")
 	private Date connectedSince;
+	
 	@Column(name="formated_date")
 	private String formatedDate;
+	
 	@Column(name="isScreenClient")
 	private Boolean isScreenClient = false;
 	/**
@@ -186,18 +197,25 @@ public class RoomClient implements Serializable {
 	 */
 	@Column(name="user_id")
 	private Long user_id = null;
+	
 	@Column(name="firstname")
 	private String firstname = "";
+	
 	@Column(name="lastname")
 	private String lastname = "";
+	
 	@Column(name="mail")
 	private String mail;
+	
 	@Column(name="last_login")
 	private String lastLogin;
+	
 	@Column(name="official_code")
 	private String official_code;
+	
 	@Column(name="picture_uri")
 	private String picture_uri;
+	
 	@Column(name="language")
 	private String language = "";
 	
@@ -207,6 +225,7 @@ public class RoomClient implements Serializable {
 	 */
 	@Column(name="is_chat_notification")
 	private Boolean isChatNotification = false;
+	
 	@Column(name="chat_user_room_id")
 	private Long chatUserRoomId = null;
 	
@@ -222,23 +241,31 @@ public class RoomClient implements Serializable {
 	
 	@Column(name="swfurl")
 	private String swfurl;
+	
 	@Column(name="is_recording")
 	private Boolean isRecording = false;
+	
 	@Column(name="room_recording_name")
 	private String roomRecordingName;
 	
 	@Column(name="flvRecordingId")
 	private Long flvRecordingId;
+	
 	@Column(name="flvRecordingMetaDataId")
 	private Long flvRecordingMetaDataId;
+	
 	@Column(name="organization_id")
 	private Long organization_id;
+	
 	@Column(name="startRecording")
 	private boolean startRecording = false;
+	
 	@Column(name="startStreaming")
 	private boolean startStreaming = false;
+	
 	@Column(name="screenPublishStarted")
 	private boolean screenPublishStarted = false;
+	
 	@Column(name="streamPublishStarted")
 	private boolean streamPublishStarted = false;
 	
@@ -252,6 +279,7 @@ public class RoomClient implements Serializable {
 	 //Vars to simulate external Users
 	@Column(name="externalUserId")
     private String externalUserId;
+	
 	@Column(name="externalUserType")
     private String externalUserType;
     
@@ -261,6 +289,7 @@ public class RoomClient implements Serializable {
     //Session values for handling the Interviwe Room Type
 	@Column(name="interviewPodId")
     private Integer interviewPodId = null;
+	
 	@Column(name="allowRecording")
     private Boolean allowRecording = true;
 	
@@ -269,6 +298,7 @@ public class RoomClient implements Serializable {
 	 */
 	@Column(name="zombieCheckFlag")
 	private Boolean zombieCheckFlag = false;
+	
 	@Column(name="micMuted")
     private Boolean micMuted = false;
 	

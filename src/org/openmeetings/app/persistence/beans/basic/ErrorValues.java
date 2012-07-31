@@ -32,16 +32,21 @@ public class ErrorValues implements Serializable {
 	private static final long serialVersionUID = -1892810463706968018L;
 
 	@Id
-	@Column(name = "errorvalues_id")
+	@Column(name = "id")
 	private Long errorvalues_id;
+	
 	@Column(name = "errortype_id")
 	private Long errortype_id;
+	
 	@Column(name = "fieldvalues_id")
 	private Long fieldvalues_id;
+	
 	@Column(name = "starttime")
 	private Date starttime;
+	
 	@Column(name = "updatetime")
 	private Date updatetime;
+	
 	@Column(name = "deleted")
 	private boolean deleted;
 

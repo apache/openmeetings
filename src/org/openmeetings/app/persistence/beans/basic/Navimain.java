@@ -37,41 +37,57 @@ public class Navimain implements Serializable {
 	private static final long serialVersionUID = 1691787896183701877L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
-	@Column(name="main_id")
+	@Column(name="id")
     private Long main_id;
+	
 	@Column(name="global_id")
     private Long global_id;
+	
 	@Column(name="name")
     private String name;
+	
 	@Column(name="icon")
     private String icon;
+	
 	@Column(name="isleaf")
     private Boolean isleaf;
+	
 	@Column(name="isopen")
     private Boolean isopen;
+	
 	@Column(name="action")
     private String action;
+	
 	@Column(name="params")
     private String params;
+	
 	@Column(name="updatetime")
     private Date updatetime;
+	
 	@Column(name="starttime")
     private Date starttime;
+	
 	@Column(name="comment_field")
     private String comment;
+	
 	@Column(name="naviorder")
     private Integer naviorder;
+	
 	@Column(name="level_id")
 	private Long level_id;
+	
 	@Column(name="fieldvalues_id")
 	private Long fieldvalues_id;
+	
 	@Column(name="deleted")
 	private boolean deleted;
+	
 	@Transient
 	private Fieldlanguagesvalues label;
+	
 	@Transient
 	private Fieldlanguagesvalues tooltip;
+	
 	@Column(name="tooltip_fieldvalues_id")
 	private Long tooltip_fieldvalues_id;
 

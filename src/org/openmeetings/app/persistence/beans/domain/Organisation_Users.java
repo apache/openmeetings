@@ -51,7 +51,7 @@ public class Organisation_Users implements Serializable {
 	private static final long serialVersionUID = 7206870465903375817L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "organisation_users_id")
+	@Column(name = "id")
 	private Long organisation_users_id;
 
 	@ManyToOne(fetch = FetchType.EAGER)

@@ -39,7 +39,7 @@ public class UserSipData implements Serializable {
 	private static final long serialVersionUID = 3438146320304686554L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="user_sip_data_id")
+	@Column(name="id")
 	private long userSipDataId;
 	
 	@Column(name="username")

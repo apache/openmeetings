@@ -45,7 +45,7 @@ public class MeetingMember implements Serializable {
 	private static final long serialVersionUID = -3864571325368787524L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="meeting_member_id")
+	@Column(name="id")
 	@Element(data=true)
 	private Long meetingMemberId;
 	

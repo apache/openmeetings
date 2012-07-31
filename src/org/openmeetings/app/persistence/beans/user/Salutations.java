@@ -34,22 +34,27 @@ import javax.persistence.Transient;
 @Entity
 @Table(name = "salutations")
 public class Salutations implements Serializable {
-	
 	private static final long serialVersionUID = -5806449519074435223L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="salutations_id")
+	@Column(name="id")
 	private Long salutations_id;
+	
 	@Column(name="name")
 	private String name;
+	
 	@Column(name="starttime")
 	private Date starttime;
+	
 	@Column(name="updatetime")
 	private Date updatetime;
+	
 	@Column(name="deleted")
 	private boolean deleted;
+	
 	@Column(name="fieldvalues_id")
 	private Long fieldvalues_id;
+	
 	@Transient
 	private Fieldlanguagesvalues label;	
 

@@ -31,19 +31,21 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "roomtypes")
 public class RoomTypes implements Serializable {
-
 	private static final long serialVersionUID = -4441029424324591356L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
-	@Column(name="roomtypes_id")
+	@Column(name="id")
 	private Long roomtypes_id;
+	
 	@Column(name = "starttime")
 	private Date starttime;
+	
 	@Column(name = "updatetime")
 	private Date updatetime;
+	
 	@Column(name="name")
 	private String name;
+	
 	@Column(name = "deleted")
 	private boolean deleted;
 

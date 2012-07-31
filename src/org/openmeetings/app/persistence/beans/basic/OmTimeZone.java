@@ -33,23 +33,27 @@ import javax.persistence.Transient;
 @Entity
 @Table(name = "om_timezone")
 public class OmTimeZone implements Serializable {
-	
 	private static final long serialVersionUID = 6521571695782900198L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
-	@Column(name="om_timezone_id")
+	@Column(name="id")
 	private Long omtimezoneId;
+	
 	@Column(name="jname")
 	private String jname;
+	
 	@Column(name="label")
 	private String label;
+	
 	@Column(name="ical")
 	private String ical;
+	
 	@Column(name="inserted")
 	private Date inserted;
+	
 	@Column(name="order_id")
 	public Integer orderId;
+	
 	@Transient
 	public String frontEndLabel;
 	

@@ -46,7 +46,7 @@ import org.simpleframework.xml.Root;
 public class RoomPoll {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "room_poll_id")
+	@Column(name = "id")
 	private Long roomPollId;
 	
 	@Column(name = "poll_name")

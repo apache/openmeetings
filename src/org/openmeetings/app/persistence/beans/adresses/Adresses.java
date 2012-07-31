@@ -43,7 +43,7 @@ public class Adresses implements Serializable {
 	private static final long serialVersionUID = 1387576041912128161L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "adresses_id")
+	@Column(name = "id")
 	private Long adresses_id;
 	
 	@Column(name = "additionalname")
