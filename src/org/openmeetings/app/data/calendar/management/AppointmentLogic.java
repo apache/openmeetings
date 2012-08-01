@@ -144,7 +144,7 @@ public class AppointmentLogic {
 			Boolean isYearly, Long categoryId, Long remind,
 			@SuppressWarnings("rawtypes") List mmClient, Long roomType,
 			String baseUrl, Long language_id, Boolean isPasswordProtected,
-			String password) {
+			String password, long roomId) {
 
 		log.debug("Appointmentlogic.saveAppointment");
 		
@@ -158,7 +158,7 @@ public class AppointmentLogic {
 			// Adding creator as MeetingMember
 			Users user = userManagement.getUserById(userId);
 			
-			Long room_id = roommanagement.addRoom(3, // user level
+			Long room_id = roomId > 0 ? roomId : roommanagement.addRoom(3, // user level
 					appointmentName, // name
 					roomType, // RoomType
 					"", // Comment

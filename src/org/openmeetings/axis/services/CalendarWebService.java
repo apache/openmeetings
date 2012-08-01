@@ -279,7 +279,7 @@ public class CalendarWebService {
 			Boolean isDaily, Boolean isWeekly, Boolean isMonthly,
 			Boolean isYearly, Long categoryId, Long remind, String[] mmClient,
 			Long roomType, String baseUrl, Long languageId,
-			Boolean isPasswordProtected, String password) {
+			Boolean isPasswordProtected, String password, long roomId) {
 
 		log.debug("saveAppointMent SID:" + SID + ", baseUrl : " + baseUrl);
 
@@ -310,7 +310,7 @@ public class CalendarWebService {
 						appointmentstart.getTime(), appointmentend.getTime(),
 						isDaily, isWeekly, isMonthly, isYearly, categoryId,
 						remind, newList, roomType, baseUrl, languageId,
-						isPasswordProtected, password);
+						isPasswordProtected, password, roomId);
 
 				return id;
 			} else {

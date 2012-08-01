@@ -1054,6 +1054,7 @@
              
         <netRemoteCallHib name="clientregisterRoom" funcname="clientregisterRoom">
             <handler name="ondata" args="value">
+                if ($debug) Debug.write("**** clientregisterRoom::ondata ", value);
             </handler>   
         </netRemoteCallHib>   
 

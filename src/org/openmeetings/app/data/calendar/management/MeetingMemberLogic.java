@@ -362,43 +362,4 @@ public class MeetingMemberLogic {
 		return null;
 	}
 	// --------------------------------------------------------------------------------------------
-
-	/*
-	 * public List<Appointment> getAppointmentByRange(Long userId ,Date
-	 * starttime, Date endtime){ try { return
-	 * AppointmentDaoImpl.getInstance().getAppointmentsByRange(userId,
-	 * starttime, endtime); }catch(Exception err){
-	 * log.error("[getAppointmentByRange]",err); } return null; } //next
-	 * appointment to current date public Appointment getNextAppointment(){ try{
-	 * return AppointmentDaoImpl.getInstance().getNextAppointment(new Date());
-	 * }catch(Exception err){ log.error("[getNextAppointmentById]",err); }
-	 * return null; }
-	 * 
-	 * public List<Appointment> searchAppointmentByName(String appointmentName){
-	 * try{ return
-	 * AppointmentDaoImpl.getInstance().searchAppointmentsByName(appointmentName
-	 * ) ; }catch(Exception err){ log.error("[searchAppointmentByName]",err); }
-	 * return null; }
-	 * 
-	 * 
-	 * 
-	 * public Long deleteAppointment(Long appointmentId){ try{
-	 * AppointmentDaoImpl.getInstance().deleteAppointement(appointmentId);
-	 * return appointmentId; }catch(Exception err){
-	 * log.error("[deleteAppointment]",err); } return null;
-	 * 
-	 * }
-	 * 
-	 * public Long updateAppointment(Long appointmentId, String
-	 * appointmentName,Long userId, String appointmentDescription, Date
-	 * appointmentstart, Date appointmentend, Boolean isDaily, Boolean isWeekly,
-	 * Boolean isMonthly, Boolean isYearly, Long categoryId ){
-	 * 
-	 * try { return
-	 * AppointmentDaoImpl.getInstance().updateAppointment(appointmentId,
-	 * appointmentName, userId, appointmentDescription, appointmentstart,
-	 * appointmentend, isDaily, isWeekly, isMonthly, isYearly, categoryId); }
-	 * catch (Exception err) { log.error("[updateAppointment]",err); } return
-	 * null; }
-	 */
 }

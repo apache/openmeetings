@@ -192,7 +192,7 @@
 			
 			newAppointment.comment = "";
 			newAppointment.reminderId = 3;
-			newAppointment.roomsId = 0;
+			newAppointment.roomId = 0;
 			newAppointment.location = "";
 			newAppointment.isPasswordProtected = false;
 			newAppointment.roomTypeId = 1;

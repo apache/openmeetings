@@ -4633,4 +4633,7 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="1508" name="my_room_tooltip">
   	<value>Rooms of the current user</value>
   </string>
+  <string id="1509" name="create_new_room">
+  	<value>Create/Modify appointment special room</value>
+  </string>
 </language>

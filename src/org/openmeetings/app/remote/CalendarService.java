@@ -126,7 +126,7 @@ public class CalendarService {
 			Boolean isWeekly, Boolean isMonthly, Boolean isYearly,
 			Long categoryId, Long remind, @SuppressWarnings("rawtypes") List mmClient, Long roomType,
 			String baseUrl, Long language_id, Boolean isPasswordProtected,
-			String password) {
+			String password, long roomId) {
 
 		log.debug("saveAppointMent SID:" + SID + ", baseUrl : " + baseUrl);
 
@@ -158,7 +158,7 @@ public class CalendarService {
 						users_id, appointmentLocation, appointmentDescription,
 						appointmentstart, appointmentend, isDaily, isWeekly,
 						isMonthly, isYearly, categoryId, remind, mmClient,
-						roomType, baseUrl, language_id, isPasswordProtected, password);
+						roomType, baseUrl, language_id, isPasswordProtected, password, roomId);
 
 				return id;
 			} else {
@@ -225,7 +225,7 @@ public class CalendarService {
 			Boolean isWeekly, Boolean isMonthly, Boolean isYearly,
 			Long categoryId, Long remind, @SuppressWarnings("rawtypes") List mmClient, Long roomType,
 			String baseUrl, Long language_id, Boolean isPasswordProtected,
-			String password) {
+			String password, long roomId) {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
@@ -234,21 +234,25 @@ public class CalendarService {
 
 				log.debug("updateAppointment");
 
-				RoomTypes rt = roommanagement.getRoomTypesById(roomType);
-
-				Appointment app = appointmentLogic
-						.getAppointMentById(appointmentId);
-
+				Appointment app = appointmentLogic.getAppointMentById(appointmentId);
 				Rooms room = app.getRoom();
-				if (room != null) {
-
-					room.setComment(appointmentDescription);
-					room.setName(appointmentName);
-					room.setRoomtype(rt);
-
-					roommanagement.updateRoomObject(room);
+				if (roomId > 0) {
+					if ( room.getRooms_id() != roomId) {
+						app.setRoom(roommanagement.getRoomById(roomId));
+						appointmentDao.updateAppointment(app);
+					}
+				} else {
+					RoomTypes rt = roommanagement.getRoomTypesById(roomType);
+	
+					if (room != null) {
+	
+						room.setComment(appointmentDescription);
+						room.setName(appointmentName);
+						room.setRoomtype(rt);
+	
+						roommanagement.updateRoomObject(room);
+					}
 				}
-
 				Users user = userManagement.getUserById(users_id);
 				
 				// Refactor the given time ignoring the Date is always UTC!

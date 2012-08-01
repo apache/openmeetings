@@ -345,7 +345,7 @@
                 ]]>
             </method>    		 
     		
-    		<wrappinglayout axis="y" spacing="2" inset="2" />
+    		<wrappinglayout axis="y" spacing="2" xinset="2" />
     	</view> 
     	
     	<om_vscrollbar />

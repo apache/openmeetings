@@ -93,12 +93,12 @@ public class CalendarWebServiceFacade {
 			Boolean isDaily, Boolean isWeekly, Boolean isMonthly,
 			Boolean isYearly, Long categoryId, Long remind, String[] mmClient,
 			Long roomType, String baseUrl, Long languageId,
-			Boolean isPasswordProtected, String password) throws AxisFault {
+			Boolean isPasswordProtected, String password, long roomId) throws AxisFault {
 		return getCalendarServiceProxy().saveAppointment(SID, appointmentName,
 				appointmentLocation, appointmentDescription, appointmentstart,
 				appointmentend, isDaily, isWeekly, isMonthly, isYearly,
 				categoryId, remind, mmClient, roomType, baseUrl, languageId,
-				isPasswordProtected, password);
+				isPasswordProtected, password, roomId);
 	}
 
 	public Long updateAppointmentTimeOnly(String SID, Long appointmentId,
