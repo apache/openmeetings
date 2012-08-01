@@ -4561,6 +4561,6 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   	<value>Rooms of the current user</value>
   </string>
   <string id="1509" name="create_new_room">
-  	<value>Create/Modify appointment special room</value>
+  	<value>Создать/редактировать комнату для этого события</value>
   </string>
 </language>

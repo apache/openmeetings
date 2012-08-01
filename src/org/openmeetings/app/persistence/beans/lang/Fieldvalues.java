@@ -35,7 +35,7 @@ import javax.persistence.Transient;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getFieldCount", query = "SELECT COUNT(fv) FROM Fieldvalues flv WHERE flv.deleted = false ")
+	@NamedQuery(name = "getFieldCount", query = "SELECT COUNT(fv) FROM Fieldvalues fv WHERE fv.deleted = false ")
 })
 @Table(name = "fieldvalues")
 public class Fieldvalues implements Serializable {
