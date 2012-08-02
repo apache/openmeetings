@@ -45,8 +45,8 @@
 				<ul>
 					<li>
 						You need to download the JConnector from mysql
-						<a href="http://www.mysql.de/products/connector/" target="_BLANK"
-							rel="nofollow">http://www.mysql.de/products/connector/</a>
+						<a href="http://www.mysql.com/downloads/connector/j/" target="_BLANK"
+							rel="nofollow">http://www.mysql.com/downloads/connector/j/</a>
 						and place it into:
 						<tt>$red5/webapps/openmeetings/WEB-INF/lib/</tt>
 					</li>
