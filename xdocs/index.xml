@@ -159,7 +159,7 @@
 				<image fullhref="images/Features_Screen_Conference_Room_Thumb.png"
 					href="images/Features_Screen_Conference_Room_Thumb.png" title="OpenMeetings Conference Room"
 					width="250" height="175" />
-
+				<text>
 				<div>
 					There are four options to use OpenMeetings audio/video functions,
 					which you can select during a conference session.
@@ -173,6 +173,7 @@
 					camera resolutions (4:3, 16:9 or 3:2)
 					and choose your input devices.
 				</div>
+				</text>
 			</feature>
 
 			<feature title="Meeting recording and Screen sharing">
@@ -181,6 +182,8 @@
 					title="Screensharing-/recording" width="140" height="150" />
 				<image href="images/recordings_timeleine.png" fullhref="images/recordings_timeleine.png"
 					title="Device" width="200" height="115" />
+					
+				<text>
 				<div>
 					<ul>
 						<li>Recorded sessions contain everything including sound recorded
@@ -203,13 +206,14 @@
 						</li>
 					</ul>
 				</div>
-
+				</text>
 			</feature>
 
 			<feature title="File Explorer">
 
 				<image href="images/file_smal.png" title="File Explorer"
 					fullhref="images/file_smal.png" width="135" height="200" />
+				<text>
 				<div>
 					Advanced File-Explorer in every conference room, Drag and Drop
 					interface for managing uploaded files, including the possibility to
@@ -235,13 +239,14 @@
 					have access to the Public
 					Drive.
 				</div>
-
+				</text>
 			</feature>
 
 			<feature title="Moderating System">
 
 				<image href="images/right_management.png" title="Right management"
 					fullhref="images/right_management.png" width="135" height="216" />
+				<text>
 				<div>
 					During a conference, the moderator can adjust the user permission
 					to every user individually .
@@ -278,7 +283,7 @@
 						</li>
 					</ul>
 				</div>
-
+				</text>
 			</feature>
 
 
@@ -288,6 +293,7 @@
 					title="Whiteboard" width="240" height="165" />
 				<image href="images/chat.png" fullhref="images/chat.png"
 					title="Chat in Conference Room" width="240" height="68" />
+				<text>
 				<div>
 					Multi-Whiteboard, you can add new whiteboard instances, each
 					white
@@ -315,13 +321,14 @@
 					You can import from a wide range of document formats (PDF, DOC,
 					ODT, PPT, et cetera...)
 				</div>
-
+				</text>
 			</feature>
 
 			<feature title="User and room management">
 
 				<image href="images/dashboard.png" fullhref="images/dashboard.png"
 					title="Dashboard with MyRooms" width="250" height="130" />
+				<text>
 				<div>
 					You can manage users and multiple organizations in a single
 					OpenMeetings instance. You can also create users that only have
@@ -338,12 +345,13 @@
 					You can assign conference room to all users, or you can assign them
 					only to specific user-groups.
 				</div>
-
+				</text>
 			</feature>
 
 			<feature title="Private message center">
 				<image href="images/privat_messages.png" fullhref="images/privat_messages.png"
 					title="Private Messages and Contact Search" width="230" height="125" />
+				<text>
 				<div>
 					Send users messages and organize them in folders. You can book
 					conference rooms by sending private messages. The booked event
@@ -355,11 +363,13 @@
 					You
 					can even give them the right to see your calendar.
 				</div>
+				</text>
 			</feature>
 
 			<feature title="Plan meetings with integrated calendar">
 				<image href="images/calendar.png" fullhref="images/calendar.png"
 					title="Calendar" width="200" height="115" />
+				<text>
 				<div>
 					<ul>
 						<li>Plan your conferencing and invite attendees from OpenMeetings
@@ -372,11 +382,13 @@
 						<li>Share your calendar with your contacts.</li>
 					</ul>
 				</div>
+				</text>
 			</feature>
 
 			<feature title="Polls and Votes">
 				<image href="images/poll.png" fullhref="images/poll.png"
 					title="Create a poll" width="250" height="250" />
+				<text>
 				<div>
 					You can create a poll with yes/no or 1-10 questions, let the
 					user
@@ -385,16 +397,19 @@
 					<br />
 					Polls can be stored and results viewed as pie-chart
 				</div>
+				</text>
 			</feature>
 
 			<feature title="Backup">
 				<image href="images/backup.png" fullhref="images/backup.png"
 					title="Backup" width="250" height="60" />
+				<text>
 				<div>
 					You can backup all user-generated data including files
 					uploaded by the users in a single ZIP file and import that ZIP into
 					a new installation of OpenMeetings again.
 				</div>
+				</text>
 			</feature>
 
 
