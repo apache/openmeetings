@@ -25,7 +25,7 @@
     <handler name="oninit">
         this.setAttribute("testsCount", 10);
         this.setAttribute("testName", "Ping");
-        this.setAttribute("loadFileName", "pingTest");
+        this.setAttribute("testTypeParameter", "ping");
     </handler>
 
     <method name="generateReport">

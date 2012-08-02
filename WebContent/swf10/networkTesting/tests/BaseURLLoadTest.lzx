@@ -33,7 +33,7 @@
     </switch>
 
     <attribute name="testsCount" type="number" value="0" />
-    <attribute name="loadFileName" type="string" value="null" />
+    <attribute name="testTypeParameter" type="string" value="null" />
     <attribute name="verbose" type="boolean" value="true" />
 
     <attribute name="startTime" type="number" value="0" />
@@ -49,7 +49,7 @@
     <attribute name="loader" value="null" />
 
     <method name="initLoader">
-        hostUrl = "http://" + host + ":" + port + canvas.uriContext + "/testingTools/" + loadFileName;
+        hostUrl = "http://" + host + ":" + port + canvas.uriContext + "/networktest.upload?testType=" + testTypeParameter;
         request = new URLRequest(hostUrl);
 
         loader = new URLLoader();

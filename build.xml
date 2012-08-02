@@ -420,9 +420,6 @@
 		<copy todir="${dist.webapps.dir}">
 			<fileset dir="${webcontent.src.dir}/openmeetings" includes="*" />
 		</copy>
-		<copy todir="${dist.webapps.dir}/testingTools">
-			<fileset dir="${webcontent.src.dir}/openmeetings/testingTools" includes="*" />
-		</copy>
 		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
 			<param name="flash.src.dir" value="${laszlo.as3.src.dir}/networkTesting" />
 			<param name="flash.runtime" value="swf10" />

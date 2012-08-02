@@ -25,7 +25,7 @@
     <handler name="oninit">
         this.setAttribute("testsCount", 1);
         this.setAttribute("testName", "Download speed");
-        this.setAttribute("loadFileName", "downloadTest");
+        this.setAttribute("testTypeParameter", "download");
         this.setAttribute("verbose", false);
         this.setAttribute("resultText", true);
     </handler>
