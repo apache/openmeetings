@@ -19,6 +19,9 @@
 
 		<section name="SIP-Transport Integration">
 			<p>
+				You need minimum version 2.0 of Apache OpenMeetings to apply this guide!
+			</p>
+			<p>
 				Here is instruction how-to set up red5sip transport integration with OpenMeetings on Ubuntu 10.04.
 			</p>
 		</section>
