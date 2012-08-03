@@ -623,39 +623,133 @@ limitations under the License.
       </td></tr>
       <tr><td>
         <blockquote>
+                                        <table border="0" cellspacing="0" cellpadding="0" width="100%">
+      <tr><td bgcolor="#EFEFEF">
+        <font color="#000000" face="arial,helvetica,sanserif">
+          <a name="Required tools"><strong>Required tools</strong></a>
+        </font>
+      </td></tr>
+      <tr><td>
+        <blockquote>
                                     <div>
-				Required software:
-				<ul>
-					<li>Sun JDK6</li>
-					<li>Apache ANT (1.8 or later)</li>
-				</ul>
-			</div>
-                                                <p>
-				OpenMeetings website (
-				<a href="http://incubator.apache.org/openmeetings/">http://incubator.apache.org/openmeetings/</a>
-				) is a copy from the SVN repository.
-				<br />
-				The file in the SVN to be synced are at:
-				<br />
-				<a href="http://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/docs/">http://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/docs/
-				</a>
-			</p>
-                                                <div>
-				To update the website you checkout trunk:
-				<br />
-				<a href="https://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/">https://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/
-				</a> <br />
-				edit the files in the folder <tt>xdocs</tt><br />
-				then you run the command:
-				<div class="xmlcode">
-					ant anakia
+					<ul>
+						<li>Sun JDK6</li>
+						<li>Apache ANT (1.8 or later)</li>
+					</ul>
 				</div>
-				control the output locally in the folder <tt>docs</tt><br />
-				And then checkin into the SVN <i>both</i> the edited xml and generated html files.
-			</div>
-                                                <p>
-				Changes to the website should be online immediately.
-			</p>
+                            </blockquote>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                    <table border="0" cellspacing="0" cellpadding="0" width="100%">
+      <tr><td bgcolor="#EFEFEF">
+        <font color="#000000" face="arial,helvetica,sanserif">
+          <a name="Introduction"><strong>Introduction</strong></a>
+        </font>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <div>
+					<p>
+						The Apache OpenMeetings Incubator HTML websites are generated from XML files. 
+						You edit the XML files, run the ANT command "ant anakia" that generates the HTML files 
+						and then you checkin to SVN both: XML and HTML files.
+					</p>
+					<p>
+						The website itself uses JQuery to generate the menu, the pop images and the image slider at the landing page.
+					</p>
+				</div>
+                            </blockquote>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                    <table border="0" cellspacing="0" cellpadding="0" width="100%">
+      <tr><td bgcolor="#EFEFEF">
+        <font color="#000000" face="arial,helvetica,sanserif">
+          <a name="Editing the website"><strong>Editing the website</strong></a>
+        </font>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <div>
+					<p>
+						OpenMeetings website (
+						<a href="http://incubator.apache.org/openmeetings/">http://incubator.apache.org/openmeetings/</a>
+						) is a copy from the SVN repository.
+						<br />
+						The file in the SVN to be synced are at:
+						<br />
+						<a href="http://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/docs/">http://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/docs/
+						</a>
+						<br />and<br />
+						<a href="http://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/xdocs/">http://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/xdocs/
+						</a>
+					</p>
+					
+					<div>
+						To update the website you checkout trunk:
+						<br />
+						<a href="https://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/">https://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/
+						</a> <br />
+						edit the files in the folder <tt>xdocs</tt><br />
+						then you run the command:
+						<div class="xmlcode">
+							ant anakia
+						</div>
+						control the output locally in the folder <tt>docs</tt><br />
+						And then checkin into the SVN <i>both</i> the edited xml and generated html files.
+					</div>
+					
+					<p>
+						The public website is automatically synced with the SVN repository.<br />
+						Changes to the SVN should be immediately synced to the production website.<br />
+						If not you might login to people.apache.org,<br />
+						cd to <tt>/www/incubator.apache.org/content/openmeetings/</tt><br />
+						and run the linux command "touch" on the files that need to be synced
+					</p>
+				</div>
+                            </blockquote>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                    <table border="0" cellspacing="0" cellpadding="0" width="100%">
+      <tr><td bgcolor="#EFEFEF">
+        <font color="#000000" face="arial,helvetica,sanserif">
+          <a name="Adding a new menu entry"><strong>Adding a new menu entry</strong></a>
+        </font>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <div>
+					To add a new menu entry in the left side panel you need to modify the file: 
+					<br />
+					<tt>xdocs/stylesheets/project.xml</tt>
+				</div>
+                            </blockquote>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                    <table border="0" cellspacing="0" cellpadding="0" width="100%">
+      <tr><td bgcolor="#EFEFEF">
+        <font color="#000000" face="arial,helvetica,sanserif">
+          <a name="Writing a new macro"><strong>Writing a new macro</strong></a>
+        </font>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <div>
+					<p>
+						You can write macros in a template language to parse from the XML files certain aspects.
+					</p>
+					<p>
+						To add a new macro see the file:<br />
+						<tt>xdocs/stylesheets/site.vsl</tt>
+					</p>
+				</div>
+                            </blockquote>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
                             </blockquote>
       </td></tr>
       <tr><td><br/></td></tr>
