@@ -55,10 +55,10 @@
 					Upload the public key (either bei using the PGP Tool that you use to create the key) or by using the web form to: <a href="http://pgp.mit.edu/" target="_blank" ref="nofollow">http://pgp.mit.edu/</a><br/>
 					Add the fingerprint string (something like "BF13 CF11 F9C9 0CBE 4413 09AB 0055 16BF 93A3 0395") to your profile at <a href="http://id.apche-org" target="_blank" ref="nofollow">id.apche-org</a><br/>
 					Wait for 6-8 hours, the server will search for a public key based on your fingerprint, if success it will create a file with your name at:<br/>
-					https://people.apache.org/keys/committer/<br/>
+					<a href="https://people.apache.org/keys/committer/">https://people.apache.org/keys/committer/</a><br/>
 					<br/>
-					If that is "success" that add your key to:<br/>
-					https://svn.apache.org/repos/asf/incubator/openmeetings/project/KEYS<br/>
+					If that is "success" then add your key to:<br/>
+					<a href="https://svn.apache.org/repos/asf/incubator/openmeetings/project/KEYS">https://svn.apache.org/repos/asf/incubator/openmeetings/project/KEYS</a><br/>
 					and follow the instructions in the file.<br/>
 				</div>
 			
