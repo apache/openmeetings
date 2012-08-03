@@ -16,6 +16,9 @@
 
 	<body>
 		<section name="Description">
+			<p>
+				You require OpenMeetings Version 2.1 or later for the manual clustering.
+			</p>
 			<p>Manual balancing supposes that each room and user belongs to
 				particular OpenMeetings server in the cluster.</p>
 			<p>One database is used for all the OpenMeetings servers, so there is
