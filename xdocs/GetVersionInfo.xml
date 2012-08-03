@@ -19,14 +19,14 @@
 
 		<section name="How to check which Openmeetings version running">
 			<p>If you need to know what version of OpenMeetings you are running,
-				you can check that by the file: openmeetings.jar
+				you can check that by the file: openmeetings-*.jar
 			</p>
 			<p>
-				Unzip: /webapps/openmeetings/WEB-INF/lib/openmeetings.jar (jars are
+				Unzip: /webapps/openmeetings/WEB-INF/lib/openmeetings-*.jar (jars are
 				zips)
 				<br />
 				<br />
-				In the resulting unziped folder open the file to read:
+				In the resulting unzipped folder open the file to read:
 				/META-INF/MANIFEST.MF
 			</p>
 			<p>You get something like this: </p>
