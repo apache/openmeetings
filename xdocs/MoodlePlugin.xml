@@ -22,39 +22,55 @@
 				You can get the latest Version of the Plugin for Moodle from the
 				<a href="downloads.html">downloads</a>
 				.
-			</p>
-			<p>
+				<br/>
 				You can find the OpenMeetings Plugin also in the
 				<a href="http://moodle.org/plugins/view.php?plugin=mod_openmeetings"
 					target="_BLANK" rel="nofollow">Moodle Plugin database</a>
 				.
-			</p>
-			<p>
+				<br/>
 				A demo version of the Moodle plugin is available at
 				<a href="http://moodle.openmeetings.de" target="_BLANK" rel="nofollow">moodle.openmeetings.de
 				</a>
 				.
 			</p>
 		</section>
-
-		<section name="Installation the Moodle Plugin for OpenMeetings">
+		
+		<section name="Adding a new conference room to a Moodle course">
+			
 			<p>
-				You simply download the ZIP package and unzip it to Moodle's mod
-				directory.
-				<br />
-				The you visit the admin interface of Moodle, for example
-				<a href="http://$your_moodle_host/$MOODLE_WWW_ROOT/admin" target="_BLANK"
-					rel="nofollow">http://$your_moodle_host/$MOODLE_WWW_ROOT/admin</a>
+				After installation of the plugin you can go to the course pages in Moodle and turn editing on.
+				Then you choose the activity "OpenMeetings", Moodle will then show you the conference room 
+				configuration with all the options:
 			</p>
-			<p>In Moodle's module configuration web-interface you will find the
-				Plugin's configuration
-			</p>
-			<a class="fancybox-buttons" href="images/moodle_plugin_conference.png">
-				<img src="images/moodle_plugin_conference.png" alt="" width="500"
-					height="400" />
+			<a class="fancybox-buttons" href="images/moodle_add_activity_plugin.png">
+				<img src="images/moodle_add_activity_plugin.png" alt="" width="430"
+					height="360" />
 			</a>
 		</section>
 
+		<section name="Installation of the Moodle Plugin for Apache OpenMeetings">
+			<p>
+				You simply download the ZIP or TAR package and unzip it to Moodle's "mod" directory.
+				<br />
+				Then you visit the admin interface of Moodle, for example
+				<a href="http://$your_moodle_host/$MOODLE_WWW_ROOT/admin" target="_BLANK"
+					rel="nofollow">http://$your_moodle_host/$MOODLE_WWW_ROOT/admin</a> 
+					<br/>
+				Moodle will detect that there is a new plugin and will show the plugin installation screen:
+			</p>
+			<a class="fancybox-buttons" href="images/moodle_install_plugin.png">
+				<img src="images/moodle_install_plugin.png" alt="" width="430"
+					height="220" />
+			</a>
+			<p>
+				After you have clicked on "Update database" Moodle will show you the plugin configuration screen:
+			</p>
+			<a class="fancybox-buttons" href="images/moodle_configure_plugin.png">
+				<img src="images/moodle_configure_plugin.png" alt="" width="500"
+					height="300" />
+			</a>
+		</section>
+		
 	</body>
 
 </document>
