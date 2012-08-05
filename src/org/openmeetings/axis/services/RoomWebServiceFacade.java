@@ -71,15 +71,19 @@ public class RoomWebServiceFacade {
 	}
 
 	/**
-	 * Deletes a flv recording 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
-	 * @param flvRecordingId the id of the recording 
+	 * Deletes a flv recording
+	 * 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
+	 * @param flvRecordingId
+	 *            the id of the recording
 	 * @return
 	 * @throws AxisFault
 	 */
 	public boolean deleteFlvRecording(String SID, Long flvRecordingId)
 			throws AxisFault {
-		return this.getRoomServiceProxy().deleteFlvRecording(SID, flvRecordingId);
+		return this.getRoomServiceProxy().deleteFlvRecording(SID,
+				flvRecordingId);
 	}
 
 	public FLVRecordingReturn[] getFlvRecordingByExternalUserId(String SID,
@@ -104,8 +108,8 @@ public class RoomWebServiceFacade {
 
 	public FlvRecording[] getFlvRecordingByExternalRoomType(String SID,
 			String externalRoomType) throws AxisFault {
-		return this.getRoomServiceProxy().getFlvRecordingByExternalRoomType(SID,
-				externalRoomType);
+		return this.getRoomServiceProxy().getFlvRecordingByExternalRoomType(
+				SID, externalRoomType);
 	}
 
 	public FlvRecording[] getFlvRecordingByRoomId(String SID, Long roomId)
@@ -121,9 +125,9 @@ public class RoomWebServiceFacade {
 			Integer roomId2, Integer roomId3, Integer roomId4, Integer roomId5,
 			Integer roomId6, Integer roomId7, Integer roomId8, Integer roomId9,
 			Integer roomId10) throws AxisFault {
-		return this.getRoomServiceProxy().getRoomCounters(SID, roomId1, roomId2,
-				roomId3, roomId4, roomId5, roomId6, roomId7, roomId8, roomId9,
-				roomId10);
+		return this.getRoomServiceProxy().getRoomCounters(SID, roomId1,
+				roomId2, roomId3, roomId4, roomId5, roomId6, roomId7, roomId8,
+				roomId9, roomId10);
 	}
 
 	public Rooms getRoomById(String SID, long rooms_id) {
@@ -151,8 +155,8 @@ public class RoomWebServiceFacade {
 
 	public SearchResult<Rooms> getRooms(String SID, int start, int max,
 			String orderby, boolean asc) throws AxisFault {
-		return this.getRoomServiceProxy()
-				.getRooms(SID, start, max, orderby, asc);
+		return this.getRoomServiceProxy().getRooms(SID, start, max, orderby,
+				asc);
 	}
 
 	public SearchResult<Rooms> getRoomsWithCurrentUsers(String SID, int start,
@@ -242,9 +246,9 @@ public class RoomWebServiceFacade {
 			Boolean ispublic, Boolean appointment, Boolean isDemoRoom,
 			Integer demoTime, Boolean isModeratedRoom,
 			Boolean allowUserQuestions) throws AxisFault {
-		return this.getRoomServiceProxy().addRoomWithModerationAndQuestions(SID,
-				name, roomtypes_id, comment, numberOfPartizipants, ispublic,
-				appointment, isDemoRoom, demoTime, isModeratedRoom,
+		return this.getRoomServiceProxy().addRoomWithModerationAndQuestions(
+				SID, name, roomtypes_id, comment, numberOfPartizipants,
+				ispublic, appointment, isDemoRoom, demoTime, isModeratedRoom,
 				allowUserQuestions);
 	}
 
@@ -341,9 +345,9 @@ public class RoomWebServiceFacade {
 			Long roomtypes_id, String comment, Long numberOfPartizipants,
 			Boolean ispublic, Boolean appointment, Boolean isDemoRoom,
 			Integer demoTime, Boolean isModeratedRoom) throws AxisFault {
-		return this.getRoomServiceProxy().updateRoomWithModeration(SID, room_id,
-				name, roomtypes_id, comment, numberOfPartizipants, ispublic,
-				appointment, isDemoRoom, demoTime, isModeratedRoom);
+		return this.getRoomServiceProxy().updateRoomWithModeration(SID,
+				room_id, name, roomtypes_id, comment, numberOfPartizipants,
+				ispublic, appointment, isDemoRoom, demoTime, isModeratedRoom);
 	}
 
 	public Long updateRoomWithModerationAndQuestions(String SID, Long room_id,
@@ -351,9 +355,30 @@ public class RoomWebServiceFacade {
 			Long numberOfPartizipants, Boolean ispublic, Boolean appointment,
 			Boolean isDemoRoom, Integer demoTime, Boolean isModeratedRoom,
 			Boolean allowUserQuestions) throws AxisFault {
-		return this.getRoomServiceProxy().updateRoomWithModeration(SID, room_id,
-				name, roomtypes_id, comment, numberOfPartizipants, ispublic,
-				appointment, isDemoRoom, demoTime, isModeratedRoom);
+		return this.getRoomServiceProxy().updateRoomWithModerationAndQuestions(
+				SID, room_id, name, roomtypes_id, comment,
+				numberOfPartizipants, ispublic, appointment, isDemoRoom,
+				demoTime, isModeratedRoom, allowUserQuestions);
+	}
+
+	public Long updateRoomWithModerationQuestionsAudioTypeAndHideOptions(
+			String SID, Long room_id, String name, Long roomtypes_id,
+			String comment, Long numberOfPartizipants, Boolean ispublic,
+			Boolean appointment, Boolean isDemoRoom, Integer demoTime,
+			Boolean isModeratedRoom, Boolean allowUserQuestions,
+			Boolean isAudioOnly, Boolean hideTopBar, Boolean hideChat,
+			Boolean hideActivitiesAndActions, Boolean hideFilesExplorer,
+			Boolean hideActionsMenu, Boolean hideScreenSharing,
+			Boolean hideWhiteboard) {
+		return this.getRoomServiceProxy()
+				.updateRoomWithModerationQuestionsAudioTypeAndHideOptions(SID,
+						room_id, name, roomtypes_id, comment,
+						numberOfPartizipants, ispublic, appointment,
+						isDemoRoom, demoTime, isModeratedRoom,
+						allowUserQuestions, isAudioOnly, hideTopBar, hideChat,
+						hideActivitiesAndActions, hideFilesExplorer,
+						hideActionsMenu, hideScreenSharing, hideWhiteboard);
+
 	}
 
 	public Long deleteRoom(String SID, long rooms_id) throws AxisFault {
@@ -597,8 +622,9 @@ public class RoomWebServiceFacade {
 	public List<RoomReturn> getRoomsWithCurrentUsersByListAndType(String SID,
 			int start, int max, String orderby, boolean asc,
 			String externalRoomType) throws AxisFault {
-		return this.getRoomServiceProxy().getRoomsWithCurrentUsersByListAndType(
-				SID, start, max, orderby, asc, externalRoomType);
+		return this.getRoomServiceProxy()
+				.getRoomsWithCurrentUsersByListAndType(SID, start, max,
+						orderby, asc, externalRoomType);
 	}
 
 	public Long addRoomWithModerationAndExternalTypeAndStartEnd(String SID,
@@ -619,8 +645,8 @@ public class RoomWebServiceFacade {
 	}
 
 	public Long addMeetingMemberRemindToRoom(String SID, Long room_id,
-			String firstname, String lastname, String email, String phone, String baseUrl,
-			Long language_id) throws AxisFault {
+			String firstname, String lastname, String email, String phone,
+			String baseUrl, Long language_id) throws AxisFault {
 		return this.getRoomServiceProxy().addMeetingMemberRemindToRoom(SID,
 				room_id, firstname, lastname, email, phone, language_id);
 	}

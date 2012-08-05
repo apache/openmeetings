@@ -153,9 +153,7 @@ limitations under the License.
                 </div>
                                                <div>
                 <a href="#updateRoomWithModerationQuestionsAudioTypeAndHideOptions"><b>updateRoomWithModerationQuestionsAudioTypeAndHideOptions</b></a><br/>
-                <div class="navigation_comment"><i >update room with options for user questions, audio only and hide
- 
- * @param SID The SID of the User. This SID must be marked as Loggedin</i></div>
+                <div class="navigation_comment"><i >update room with options for user questions, audio only and hide</i></div>
                 </div>
                                                <div>
                 <a href="#deleteRoom"><b>deleteRoom</b></a><br/>
@@ -2034,7 +2032,8 @@ limitations under the License.
 	                     		                     		Boolean
 	                     		                     </td>
 	                     <td valign="top">hideWhiteboard</td>
-	                     <td valign="top">hide or show Whiteboard. If whitboard is hidden, video pods and scrollbar  appear instead.</td>
+	                     <td valign="top">hide or show Whiteboard. If whitboard is hidden, video pods
+            and scrollbar appear instead.</td>
 	                   </tr>
 	                   
 	                   	                   	                   </tbody>
@@ -2816,15 +2815,11 @@ limitations under the License.
     			</i><br/>
     			<p>
     			  update room with options for user questions, audio only and hide
- 
- * @param SID The SID of the User. This SID must be marked as Loggedin
     			</p>
     			<p>
                   Return Type: java.lang.Long
                 </p>
     			<p>Params:</p>
-    			    				<b>Warning:</b><i> Params in this method do not seem to be correctly documentated</i>
-    				<br/><br/>
     			    			
     				    			<table rules="all" border="1">
 	    			   <thead>
@@ -2839,13 +2834,21 @@ limitations under the License.
 	                     <td valign="top">
 	                     		                     		String
 	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
 	                     <td valign="top">room_id</td>
 	                     <td valign="top">the room id to update</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
 	                     <td valign="top">
-	                     		                     		Long
+	                     		                     		String
 	                     		                     </td>
 	                     <td valign="top">name</td>
 	                     <td valign="top">new name of the room</td>
@@ -2853,7 +2856,7 @@ limitations under the License.
 	                   
 	                   	                   	    			   <tr>
 	                     <td valign="top">
-	                     		                     		String
+	                     		                     		Long
 	                     		                     </td>
 	                     <td valign="top">roomtypes_id</td>
 	                     <td valign="top">new type of room (1 = Conference, 2 = Audience, 3 =
@@ -2862,7 +2865,7 @@ limitations under the License.
 	                   
 	                   	                   	    			   <tr>
 	                     <td valign="top">
-	                     		                     		Long
+	                     		                     		String
 	                     		                     </td>
 	                     <td valign="top">comment</td>
 	                     <td valign="top">new comment</td>
@@ -2870,15 +2873,15 @@ limitations under the License.
 	                   
 	                   	                   	    			   <tr>
 	                     <td valign="top">
-	                     		                     		String
+	                     		                     		Long
 	                     		                     </td>
 	                     <td valign="top">numberOfPartizipants</td>
-	                     <td valign="top">new numberOfParticipants</td>
+	                     <td valign="top">number of participants</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
 	                     <td valign="top">
-	                     		                     		Long
+	                     		                     		Boolean
 	                     		                     </td>
 	                     <td valign="top">ispublic</td>
 	                     <td valign="top">is public</td>
@@ -2889,7 +2892,8 @@ limitations under the License.
 	                     		                     		Boolean
 	                     		                     </td>
 	                     <td valign="top">appointment</td>
-	                     <td valign="top">if the room is an appointment</td>
+	                     <td valign="top">if the room is an appointment (use false if not sure what that
+            means)</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -2903,7 +2907,7 @@ limitations under the License.
 	                   
 	                   	                   	    			   <tr>
 	                     <td valign="top">
-	                     		                     		Boolean
+	                     		                     		Integer
 	                     		                     </td>
 	                     <td valign="top">demoTime</td>
 	                     <td valign="top">time in seconds after the user will be logged out (only
@@ -2912,7 +2916,7 @@ limitations under the License.
 	                   
 	                   	                   	    			   <tr>
 	                     <td valign="top">
-	                     		                     		Integer
+	                     		                     		Boolean
 	                     		                     </td>
 	                     <td valign="top">isModeratedRoom</td>
 	                     <td valign="top">Users have to wait until a Moderator arrives. Use the
@@ -2990,7 +2994,8 @@ limitations under the License.
 	                     		                     		Boolean
 	                     		                     </td>
 	                     <td valign="top">hideWhiteboard</td>
-	                     <td valign="top">hide or show Whiteboard. If whitboard is hidden, video pods and scrollbar  appear instead.</td>
+	                     <td valign="top">hide or show Whiteboard. If whitboard is hidden, video pods
+            and scrollbar appear instead.</td>
 	                   </tr>
 	                   
 	                   	                   	                   </tbody>
@@ -3086,7 +3091,8 @@ limitations under the License.
 	                     		                     		String
 	                     		                     </td>
 	                     <td valign="top">SID</td>
-	                     <td valign="top">The SID of the User. This SID must be marked as Loggedin _Admin</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as Loggedin
+            _Admin</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -3867,8 +3873,8 @@ limitations under the License.
 	                     		                     		String
 	                     		                     </td>
 	                     <td valign="top">SID</td>
-	                     <td valign="top">The SID of the User. This SID must be marked as Loggedin 
-            a valid Session Token</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as Loggedin a
+            valid Session Token</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -4021,8 +4027,8 @@ limitations under the License.
 	                     		                     		String
 	                     		                     </td>
 	                     <td valign="top">SID</td>
-	                     <td valign="top">The SID of the User. This SID must be marked as Loggedin 
-            a valid Session Token</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as Loggedin a
+            valid Session Token</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -4232,8 +4238,8 @@ limitations under the License.
 	                     		                     		String
 	                     		                     </td>
 	                     <td valign="top">SID</td>
-	                     <td valign="top">The SID of the User. This SID must be marked as Loggedin 
-            a valid Session Token</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as Loggedin a
+            valid Session Token</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>

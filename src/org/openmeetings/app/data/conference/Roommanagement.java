@@ -1545,7 +1545,7 @@ public class Roommanagement {
 	 */
 	public Long deleteRoomById(long user_level, long rooms_id) {
 		try {
-			if (authLevelManagement.checkAdminLevel(user_level)) {
+			if (authLevelManagement.checkWebServiceLevel(user_level)) {
 				this.deleteAllRoomsOrganisationOfRoom(rooms_id);
 				return this.deleteRoom(this.getRoomById(rooms_id));
 			}

@@ -139,7 +139,8 @@ public class RoomWebService {
 	/**
 	 * Deletes a flv recording
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param flvRecordingId
 	 *            the id of the recording
 	 * @return
@@ -167,7 +168,8 @@ public class RoomWebService {
 	/**
 	 * Gets a list of flv recordings
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param externalUserId
 	 *            the externalUserId
 	 * @return
@@ -215,7 +217,8 @@ public class RoomWebService {
 	/**
 	 * Gets a list of flv recordings
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param externalRoomType
 	 *            externalRoomType specified when creating the room
 	 * @param insertedBy
@@ -267,7 +270,8 @@ public class RoomWebService {
 	/**
 	 * Gets a list of flv recordings
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param externalRoomType
 	 *            externalRoomType specified when creating the room
 	 * @return
@@ -296,7 +300,8 @@ public class RoomWebService {
 	/**
 	 * Gets a list of flv recordings
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param externalRoomType
 	 *            externalRoomType specified when creating the room
 	 * @return
@@ -343,7 +348,8 @@ public class RoomWebService {
 	/**
 	 * Get list of recordings
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param roomId
 	 *            the room id
 	 * @return
@@ -391,7 +397,8 @@ public class RoomWebService {
 	/**
 	 * List of available room types
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @return
 	 * @throws AxisFault
 	 */
@@ -419,7 +426,8 @@ public class RoomWebService {
 	/**
 	 * Returns current users for rooms ids
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param roomId1
 	 * @param roomId2
 	 * @param roomId3
@@ -508,7 +516,8 @@ public class RoomWebService {
 	/**
 	 * returns a conference room object
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param rooms_id
 	 *            the room id
 	 * @return
@@ -519,7 +528,8 @@ public class RoomWebService {
 
 	/**
 	 * @deprecated this function is intend to be deleted
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param rooms_id
 	 * @return
 	 */
@@ -531,7 +541,8 @@ public class RoomWebService {
 	/**
 	 * Returns a object of type RoomReturn
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param rooms_id
 	 * @return
 	 * @throws AxisFault
@@ -589,7 +600,8 @@ public class RoomWebService {
 	 * Returns a List of Objects of Rooms You can use "name" as value for
 	 * orderby or rooms_id
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param start
 	 *            The id you want to start
 	 * @param max
@@ -610,7 +622,8 @@ public class RoomWebService {
 	 * orderby or rooms_id. It also fills the attribute currentUsers in the
 	 * Room-Object
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param start
 	 *            The id you want to start
 	 * @param max
@@ -634,7 +647,8 @@ public class RoomWebService {
 	 * 
 	 * deprecated use addRoomWithModeration instead
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param name
 	 * @param roomtypes_id
 	 * @param comment
@@ -675,17 +689,15 @@ public class RoomWebService {
 			return roommanagement.addRoom(user_level, name, roomtypes_id,
 					comment, numberOfPartizipants, ispublic, null, false,
 					false, null, false, null, true, false, false, "", "", "",
-					null, null, null, 
-					false, // hideTopBar
+					null, null, null, false, // hideTopBar
 					false, // hideChat
 					false, // hideActivitiesAndActions
 					false, // hideFilesExplorer
 					false, // hideActionsMenu
-					false, // hideScreenSharing 
+					false, // hideScreenSharing
 					false, // hideWhiteboard
-					false, //showMicrophoneStatus
-					u.getServer()
-					);
+					false, // showMicrophoneStatus
+					u.getServer());
 		} catch (Exception err) {
 			log.error("[addRoom] ", err);
 		}
@@ -695,7 +707,8 @@ public class RoomWebService {
 	/**
 	 * Create a conference room
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param name
 	 *            Name of the Room
 	 * @param roomtypes_id
@@ -732,17 +745,15 @@ public class RoomWebService {
 			return roommanagement.addRoom(user_level, name, roomtypes_id,
 					comment, numberOfPartizipants, ispublic, null, appointment,
 					isDemoRoom, demoTime, isModeratedRoom, null, true, false,
-					false, "", "", "", null, null, null, 
-					false, // hideTopBar
+					false, "", "", "", null, null, null, false, // hideTopBar
 					false, // hideChat
 					false, // hideActivitiesAndActions
 					false, // hideFilesExplorer
 					false, // hideActionsMenu
-					false, // hideScreenSharing 
+					false, // hideScreenSharing
 					false, // hideWhiteboard
-					false, //showMicrophoneStatus
-					u.getServer()
-					);
+					false, // showMicrophoneStatus
+					u.getServer());
 		} catch (Exception err) {
 			log.error("[addRoomWithModeration] ", err);
 		}
@@ -754,7 +765,8 @@ public class RoomWebService {
 	 * to apply for moderation this does only work in combination with the
 	 * room-type restricted
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param name
 	 *            Name of the Room
 	 * @param roomtypes_id
@@ -796,17 +808,15 @@ public class RoomWebService {
 					comment, numberOfPartizipants, ispublic, null, appointment,
 					isDemoRoom, demoTime, isModeratedRoom, null,
 					allowUserQuestions, false, false, "", "", "", null, null,
-					null, 
-					false, // hideTopBar
+					null, false, // hideTopBar
 					false, // hideChat
 					false, // hideActivitiesAndActions
 					false, // hideFilesExplorer
 					false, // hideActionsMenu
-					false, // hideScreenSharing 
+					false, // hideScreenSharing
 					false, // hideWhiteboard
-					false, //showMicrophoneStatus
-					u.getServer()
-					);
+					false, // showMicrophoneStatus
+					u.getServer());
 		} catch (Exception err) {
 			log.error("[addRoomWithModerationAndQuestions] ", err);
 		}
@@ -817,7 +827,8 @@ public class RoomWebService {
 	 * 
 	 * adds a new room with options for user questions and audio only
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param name
 	 *            Name of the Room
 	 * @param roomtypes_id
@@ -862,28 +873,27 @@ public class RoomWebService {
 					comment, numberOfPartizipants, ispublic, null, appointment,
 					isDemoRoom, demoTime, isModeratedRoom, null,
 					allowUserQuestions, isAudioOnly, false, "", "", "", null,
-					null, null, 
-					false, // hideTopBar
+					null, null, false, // hideTopBar
 					false, // hideChat
 					false, // hideActivitiesAndActions
 					false, // hideFilesExplorer
 					false, // hideActionsMenu
-					false, // hideScreenSharing 
+					false, // hideScreenSharing
 					false, // hideWhiteboard
-					false, //showMicrophoneStatus
-					u.getServer()
-					);
+					false, // showMicrophoneStatus
+					u.getServer());
 		} catch (Exception err) {
 			log.error("[addRoomWithModerationQuestionsAndAudioType] ", err);
 			throw new AxisFault(err.getMessage());
 		}
 	}
-	
+
 	/**
 	 * 
 	 * adds a new room with options for user questions, audio only and hide
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param name
 	 *            Name of the Room
 	 * @param roomtypes_id
@@ -916,7 +926,7 @@ public class RoomWebService {
 	 * @param hideTopBar
 	 *            hide or show TopBar
 	 * @param hideChat
-	 *            hide or show Chat           
+	 *            hide or show Chat
 	 * @param hideActivitiesAndActions
 	 *            hide or show Activities And Actions
 	 * @param hideFilesExplorer
@@ -924,19 +934,21 @@ public class RoomWebService {
 	 * @param hideActionsMenu
 	 *            hide or show Actions Menu
 	 * @param hideScreenSharing
-	 *            hide or show Screen Sharing           
+	 *            hide or show Screen Sharing
 	 * @param hideWhiteboard
-	 *            hide or show Whiteboard. If whitboard is hidden, video pods and scrollbar  appear instead.
+	 *            hide or show Whiteboard. If whitboard is hidden, video pods
+	 *            and scrollbar appear instead.
 	 * @return
 	 * @throws AxisFault
 	 */
-	public Long addRoomWithModerationQuestionsAudioTypeAndHideOptions(String SID,
-			String name, Long roomtypes_id, String comment,
+	public Long addRoomWithModerationQuestionsAudioTypeAndHideOptions(
+			String SID, String name, Long roomtypes_id, String comment,
 			Long numberOfPartizipants, Boolean ispublic, Boolean appointment,
 			Boolean isDemoRoom, Integer demoTime, Boolean isModeratedRoom,
-			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean hideTopBar, Boolean hideChat, 
-			Boolean hideActivitiesAndActions, Boolean hideFilesExplorer, 
-			Boolean hideActionsMenu, Boolean hideScreenSharing, 
+			Boolean allowUserQuestions, Boolean isAudioOnly,
+			Boolean hideTopBar, Boolean hideChat,
+			Boolean hideActivitiesAndActions, Boolean hideFilesExplorer,
+			Boolean hideActionsMenu, Boolean hideScreenSharing,
 			Boolean hideWhiteboard) throws AxisFault {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
@@ -946,10 +958,13 @@ public class RoomWebService {
 					comment, numberOfPartizipants, ispublic, null, appointment,
 					isDemoRoom, demoTime, isModeratedRoom, null,
 					allowUserQuestions, isAudioOnly, false, "", "", "", null,
-					null, null, hideTopBar, hideChat, hideActivitiesAndActions, hideFilesExplorer, 
-					hideActionsMenu, hideScreenSharing, hideWhiteboard, false, u.getServer());
+					null, null, hideTopBar, hideChat, hideActivitiesAndActions,
+					hideFilesExplorer, hideActionsMenu, hideScreenSharing,
+					hideWhiteboard, false, u.getServer());
 		} catch (Exception err) {
-			log.error("[addRoomWithModerationQuestionsAudioTypeAndHideOptions] ", err);
+			log.error(
+					"[addRoomWithModerationQuestionsAudioTypeAndHideOptions] ",
+					err);
 			throw new AxisFault(err.getMessage());
 		}
 	}
@@ -959,7 +974,8 @@ public class RoomWebService {
 	 * if yes it returns the room id if not, it will create the room and then
 	 * return the room id of the newly created room
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param name
 	 *            Name of the room
 	 * @param roomtypes_id
@@ -1027,7 +1043,8 @@ public class RoomWebService {
 	/**
 	 * TODO: Fix Organization Issue deprecated use updateRoomWithModeration
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param rooms_id
 	 * @param name
 	 * @param roomtypes_id
@@ -1070,15 +1087,14 @@ public class RoomWebService {
 						roomtypes_id, name, ispublic, comment,
 						numberOfPartizipants, null, appointment, false, null,
 						false, null, true, false, false, "", "", "", null,
-						null, null, 
-						false, // hideTopBar
+						null, null, false, // hideTopBar
 						false, // hideChat
 						false, // hideActivitiesAndActions
 						false, // hideFilesExplorer
 						false, // hideActionsMenu
-						false, // hideScreenSharing 
+						false, // hideScreenSharing
 						false, // hideWhiteboard
-						false //showMicrophoneStatus
+						false // showMicrophoneStatus
 						);
 			}
 		} catch (Exception err) {
@@ -1090,7 +1106,8 @@ public class RoomWebService {
 	/**
 	 * Updates a conference room by its room id
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param room_id
 	 *            the room id to update
 	 * @param name
@@ -1129,15 +1146,15 @@ public class RoomWebService {
 				return roommanagement.updateRoomInternal(room_id, roomtypes_id,
 						name, ispublic, comment, numberOfPartizipants, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
-						null, true, false, false, "", "", "", null, null, null, 
+						null, true, false, false, "", "", "", null, null, null,
 						false, // hideTopBar
 						false, // hideChat
 						false, // hideActivitiesAndActions
 						false, // hideFilesExplorer
 						false, // hideActionsMenu
-						false, // hideScreenSharing 
+						false, // hideScreenSharing
 						false, // hideWhiteboard
-						false //showMicrophoneStatus
+						false // showMicrophoneStatus
 						);
 			}
 		} catch (Exception err) {
@@ -1148,7 +1165,8 @@ public class RoomWebService {
 
 	/**
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param room_id
 	 *            the room id to update
 	 * @param name
@@ -1192,15 +1210,14 @@ public class RoomWebService {
 						name, ispublic, comment, numberOfPartizipants, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
 						null, allowUserQuestions, false, false, "", "", "",
-						null, null, null, 
-						false, // hideTopBar
+						null, null, null, false, // hideTopBar
 						false, // hideChat
 						false, // hideActivitiesAndActions
 						false, // hideFilesExplorer
 						false, // hideActionsMenu
-						false, // hideScreenSharing 
+						false, // hideScreenSharing
 						false, // hideWhiteboard
-						false //showMicrophoneStatus
+						false // showMicrophoneStatus
 						);
 			}
 		} catch (Exception err) {
@@ -1208,12 +1225,12 @@ public class RoomWebService {
 		}
 		return new Long(-1);
 	}
-	
+
 	/**
-	 * 
 	 * update room with options for user questions, audio only and hide
 	 * 
-	 * * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param room_id
 	 *            the room id to update
 	 * @param name
@@ -1224,11 +1241,12 @@ public class RoomWebService {
 	 * @param comment
 	 *            new comment
 	 * @param numberOfPartizipants
-	 *            new numberOfParticipants
+	 *            number of participants
 	 * @param ispublic
 	 *            is public
 	 * @param appointment
-	 *            if the room is an appointment
+	 *            if the room is an appointment (use false if not sure what that
+	 *            means)
 	 * @param isDemoRoom
 	 *            is it a Demo Room with limited time? (use false if not sure
 	 *            what that means)
@@ -1244,11 +1262,10 @@ public class RoomWebService {
 	 *            moderation
 	 * @param isAudioOnly
 	 *            enable or disable the video / or audio-only
-	 * 
 	 * @param hideTopBar
 	 *            hide or show TopBar
 	 * @param hideChat
-	 *            hide or show Chat           
+	 *            hide or show Chat
 	 * @param hideActivitiesAndActions
 	 *            hide or show Activities And Actions
 	 * @param hideFilesExplorer
@@ -1256,19 +1273,20 @@ public class RoomWebService {
 	 * @param hideActionsMenu
 	 *            hide or show Actions Menu
 	 * @param hideScreenSharing
-	 *            hide or show Screen Sharing           
+	 *            hide or show Screen Sharing
 	 * @param hideWhiteboard
-	 *            hide or show Whiteboard. If whitboard is hidden, video pods and scrollbar  appear instead.
+	 *            hide or show Whiteboard. If whitboard is hidden, video pods
+	 *            and scrollbar appear instead.
 	 * @return
-	 * @throws AxisFault
-	 */	
-	public Long updateRoomWithModerationQuestionsAudioTypeAndHideOptions(String SID, Long room_id,
-			String name, Long roomtypes_id, String comment,
-			Long numberOfPartizipants, Boolean ispublic, Boolean appointment,
-			Boolean isDemoRoom, Integer demoTime, Boolean isModeratedRoom,
-			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean hideTopBar, Boolean hideChat, 
-			Boolean hideActivitiesAndActions, Boolean hideFilesExplorer, 
-			Boolean hideActionsMenu, Boolean hideScreenSharing, 
+	 */
+	public Long updateRoomWithModerationQuestionsAudioTypeAndHideOptions(
+			String SID, Long room_id, String name, Long roomtypes_id,
+			String comment, Long numberOfPartizipants, Boolean ispublic,
+			Boolean appointment, Boolean isDemoRoom, Integer demoTime,
+			Boolean isModeratedRoom, Boolean allowUserQuestions,
+			Boolean isAudioOnly, Boolean hideTopBar, Boolean hideChat,
+			Boolean hideActivitiesAndActions, Boolean hideFilesExplorer,
+			Boolean hideActionsMenu, Boolean hideScreenSharing,
 			Boolean hideWhiteboard) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
@@ -1278,8 +1296,9 @@ public class RoomWebService {
 						name, ispublic, comment, numberOfPartizipants, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
 						null, allowUserQuestions, false, false, "", "", "",
-						null, null, null, hideTopBar, hideChat, hideActivitiesAndActions, hideFilesExplorer, 
-						hideActionsMenu, hideScreenSharing, hideWhiteboard, 
+						null, null, null, hideTopBar, hideChat,
+						hideActivitiesAndActions, hideFilesExplorer,
+						hideActionsMenu, hideScreenSharing, hideWhiteboard,
 						false // showMicrophoneStatus
 						);
 			}
@@ -1292,7 +1311,8 @@ public class RoomWebService {
 	/**
 	 * Delete a room by its room id
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param rooms_id
 	 * @return
 	 */
@@ -1303,7 +1323,9 @@ public class RoomWebService {
 	/**
 	 * kick all uses of a certain room
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin _Admin
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
+	 *            _Admin
 	 * @param room_id
 	 *            the room id
 	 * @return
@@ -1329,7 +1351,8 @@ public class RoomWebService {
 	 * external room type should be set if multiple applications use the same
 	 * OpenMeetings instance
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param name
 	 *            new name of the room
 	 * @param roomtypes_id
@@ -1381,7 +1404,8 @@ public class RoomWebService {
 	/**
 	 * Adds a new room with options for audio only
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param name
 	 *            new name of the room
 	 * @param roomtypes_id
@@ -1440,7 +1464,8 @@ public class RoomWebService {
 	/**
 	 * Adds a new room with options for recording
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param name
 	 *            new name of the room
 	 * @param roomtypes_id
@@ -1508,7 +1533,8 @@ public class RoomWebService {
 	 * Add a conference room with options to disable the top menu bar in the
 	 * conference room
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param name
 	 *            new name of the room
 	 * @param roomtypes_id
@@ -1580,8 +1606,9 @@ public class RoomWebService {
 	 * Calls Date is parsed as dd.mm.yyyy, time as hh:mm (don't forget the
 	 * leading zero's)
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
-	 *            a valid Session Token
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin a
+	 *            valid Session Token
 	 * @param username
 	 *            the username of the User that he will get
 	 * @param room_id
@@ -1696,8 +1723,9 @@ public class RoomWebService {
 	 * Calls Date is parsed as dd.mm.yyyy, time as hh:mm (don't forget the
 	 * leading zero's)
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
-	 *            a valid Session Token
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin a
+	 *            valid Session Token
 	 * @param username
 	 *            the Username of the User that he will get
 	 * @param message
@@ -1834,8 +1862,9 @@ public class RoomWebService {
 	 * Calls Date is parsed as dd.mm.yyyy, time as hh:mm (don't forget the
 	 * leading zero's)
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
-	 *            a valid Session Token
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin a
+	 *            valid Session Token
 	 * @param username
 	 *            the Username of the User that he will get
 	 * @param message
@@ -1932,7 +1961,8 @@ public class RoomWebService {
 	 * Return a RoomReturn Object with information of the current users of a
 	 * conference room
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param start
 	 *            The id you want to start
 	 * @param max
@@ -1994,7 +2024,8 @@ public class RoomWebService {
 	 * Return a RoomReturn Object with information of the current users of a
 	 * conference room with option to search for special external room types
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param start
 	 *            The id you want to start
 	 * @param max
@@ -2058,7 +2089,8 @@ public class RoomWebService {
 	/**
 	 * Adds a conference room that is only available for a period of time
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param name
 	 *            new name of the room
 	 * @param roomtypes_id
@@ -2204,7 +2236,8 @@ public class RoomWebService {
 	 * Add a meeting member to a certain room. This is the same as adding an
 	 * external user to a event in the calendar.
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param room_id
 	 *            The Room Id the meeting member is going to be added
 	 * @param firstname
@@ -2260,7 +2293,8 @@ public class RoomWebService {
 	 * Add a meeting member to a certain room. This is the same as adding an
 	 * external user to a event in the calendar. with a certain time zone
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param room_id
 	 *            The Room Id the meeting member is going to be added
 	 * @param firstname
@@ -2325,9 +2359,12 @@ public class RoomWebService {
 	 * 
 	 * Returns positive value if authentication was successful.
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin 
-	 * @param room_id the room id 
-	 * @param status false = close, true = open 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
+	 * @param room_id
+	 *            the room id
+	 * @param status
+	 *            false = close, true = open
 	 * @return
 	 * @throws AxisFault
 	 */
