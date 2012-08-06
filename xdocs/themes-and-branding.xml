@@ -23,9 +23,7 @@
 				Themes are only available starting with Openmeetings 2.x.
 				<br />
 				There are also more general client side configuration like port
-				configuration. Those configs are stored in the config.xml, see for
-				example
-				<a href="BrandingAndColors.html">BrandingAndColors.html</a>
+				configuration. Those configs are stored in the config.xml
 			</p>
 
 		</section>
