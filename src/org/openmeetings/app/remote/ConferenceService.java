@@ -593,8 +593,9 @@ public class ConferenceService {
 						argObjectMap.get("demoTime").toString()).intValue();
 			}
 
+			long roomId = -1;
 			if (rooms_id == 0) {
-				return roommanagement.addRoom(
+				roomId = roommanagement.addRoom(
 						User_level,
 						argObjectMap.get("name").toString(),
 						Long.valueOf(
@@ -635,10 +636,10 @@ public class ConferenceService {
 								Boolean.valueOf(argObjectMap.get("hideScreenSharing").toString()),
 								Boolean.valueOf(argObjectMap.get("hideWhiteboard").toString()),
 								Boolean.valueOf(argObjectMap.get("showMicrophoneStatus").toString()),
-								serverDao.getServer(Long.parseLong(argObjectMap.get("serverId").toString()))
+								null
 						);
 			} else if (rooms_id > 0) {
-				long roomId = roommanagement.updateRoom(
+				roomId = roommanagement.updateRoom(
 								User_level,
 								rooms_id,
 								Long.valueOf(
@@ -686,15 +687,23 @@ public class ConferenceService {
 								Boolean.valueOf(argObjectMap.get("hideWhiteboard").toString()),
 								Boolean.valueOf(argObjectMap.get("showMicrophoneStatus").toString())
 								);
+			}
+			long serverId = -1;
+			try {
+				serverId = Long.parseLong(argObjectMap.get("serverId").toString());
+			} catch (NumberFormatException nfe) {
+				//noop expected;
+			}
+			if (roomId > -1 && serverId > -1) {
 				try {
 					Rooms room = roommanagement.getRoomById(roomId);
-					room.setServer(serverDao.getServer(Long.parseLong(argObjectMap.get("serverId").toString())));
+					room.setServer(serverDao.getServer(serverId));
 					roommanagement.updateRoomObject(room);
 				} catch (Exception e) {
 					log.error("Error while setting server.");
 				}
-				return roomId;
 			}
+			return roomId;
 
 		} catch (Exception e) {
 			log.error("saveOrUpdateRoom", e);

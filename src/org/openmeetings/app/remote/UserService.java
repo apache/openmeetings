@@ -375,8 +375,9 @@ public class UserService {
 			log.debug("Mail : " + argObjectMap.get("email").toString());
 			log.debug("Phone : " + argObjectMap.get("phone").toString());
 
+			long userId;
 			if (user_idClient == null || user_idClient == 0) {
-				return userManagement.registerUserInit(
+				userId = userManagement.registerUserInit(
 						user_level,
 						Long.valueOf(argObjectMap.get("level_id").toString())
 								.longValue(),
@@ -425,9 +426,9 @@ public class UserService {
 						Boolean.valueOf(
 								argObjectMap.get("showContactDataToContacts")
 										.toString()).booleanValue(),
-						serverDao.getServer(Long.parseLong(argObjectMap.get("serverId").toString())));
+						null);
 			} else {
-				long userId = userManagement.updateUser(
+				userId = userManagement.updateUser(
 								user_level,
 								user_idClient,
 								Long.valueOf(
@@ -484,17 +485,23 @@ public class UserService {
 										argObjectMap.get(
 												"showContactDataToContacts")
 												.toString()).booleanValue());
-				if (userId > 0) {
-					try {
-						Users user = userManagement.getUserById(userId);
-						user.setServer(serverDao.getServer(Long.parseLong(argObjectMap.get("serverId").toString())));
-						userManagement.updateUser(user);
-					} catch (Exception e) {
-						log.error("Error while setting server.");
-					}
-				}
-				return userId;
 			}
+			long serverId = -1;
+			try {
+				serverId = Long.parseLong(argObjectMap.get("serverId").toString());
+			} catch (NumberFormatException nfe) {
+				//noop expected;
+			}
+			if (userId > -1 && serverId > -1) {
+				try {
+					Users user = userManagement.getUserById(userId);
+					user.setServer(serverDao.getServer(serverId));
+					userManagement.updateUser(user);
+				} catch (Exception e) {
+					log.error("Error while setting server.");
+				}
+			}
+			return userId;
 		} catch (Exception ex) {
 			log.error("[saveOrUpdateUser]: ", ex);
 		}
