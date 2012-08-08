@@ -4571,4 +4571,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   <string id="1509" name="create_new_room">
   	<value>Create/Modify appointment special room</value>
   </string>
+  <string id="1510" name="multiple_addresses">
+  	<value>You can enter multiple addresses in the format: firstname1 lastname1 &lt;email1&gt;,"firstname2 lastname2" &lt;email2&gt;,'firstname3 lastname3' &lt;email3&gt;, ...</value>
+  </string>
 </language>

@@ -29,16 +29,31 @@
 	</handler>
 		
 	<labelText labelid="630" y="24" x="2" />
-	<customEdittext name="vorname" x="120" width="270" y="24" />
+	<customEdittext name="firstname" x="120" width="270" y="24" />
 	
 	<labelText labelid="631" y="54" x="2" />
-	<customEdittext name="nachname" x="120" width="270" y="54" />
+	<customEdittext name="lastname" x="120" width="270" y="54" />
 	
 	<labelText labelid="632" y="84" x="2" />
-	<customEdittext name="email" x="120" width="270" y="84" />
+	<customEdittext name="email" x="120" width="270" y="84">
+		<handler name="ontext" args="t">
+		<![CDATA[
+			var singleAddress = t.indexOf(",") < 0;
+			
+			if (parent.firstname.enabled != singleAddress) {
+				parent.firstname.setAttribute('enabled', singleAddress);
+				parent.lastname.setAttribute('enabled', singleAddress);
+			}
+		]]>
+		</handler>
+	</customEdittext>
 	
-    <labelText labelid="1143" width="200" y="114" x="2" />
-     <resetCombobox name="_timeZone" editable="false" y="114" width="270" x="120"
+	<view resource="messagebox_info_rsc" x="6" y="114" 
+		width="16" height="16" stretches="both" />
+	<labelText labelid="1510" x="24" y="110" multiline="true" width="350" />
+	
+	<labelText labelid="1143" width="200" y="170" x="2" />
+     <resetCombobox name="_timeZone" editable="false" y="170" width="270" x="120"
      			   fontsize="11" style="componentStyle">
      	<attribute name="selectionActive" value="false" type="boolean"/>
      	<labeldTextListItem datapath="timeZoneSet:/item" text="$path{ 'frontEndLabel/text()' }" 
@@ -48,21 +63,50 @@
 	<simpleLabelButton name="_ok" labelid="333" x="$once{ parent.width-220 }"
 					   width="100" y="$once{ parent.height - 30 }" >
 		<handler name="onclick">
-			parent.refObj.addListItem(
-				      0, 
-				      parent.vorname["text"], 
-				      parent.nachname["text"], 
-				      parent.email["text"],
-				      0,
-				      parent._timeZone.getValue()
-			      );
-			//if ($debug) Debug.write("_innerlist: ", parent.parent.parent.refObj.terminObjRef._liste._innerlist);
-			parent.vorname="";
-			parent.nachname="";
+		<![CDATA[
+			var eml = parent.email["text"];
+			//if ($debug) Debug.write("eml: ", eml);
+			if (eml.indexOf(",") > -1) {
+				var addresses = eml.split(",");
+				for (var i = 0; i < addresses.length; ++i) {
+					var first = "", email = "", last = "", addr = parent.replaceAll(parent.replaceAll(addresses[i], "'", ""), "\"", "");
+					//if ($debug) Debug.write("addr: ", addr);
+					var idx1 = addr.indexOf("<"), idx2 = addr.indexOf(">");
+					if (idx1 > -1 && idx2 > -1 && idx2 > idx1) {
+						email = parent.trim(addr.substring(idx1 + 1, idx2));
+						var s = parent.trim(addr.substring(0, idx1));
+						var idx = s.indexOf(" ");
+						if (idx > -1) {
+							first = s.substring(0, idx); 
+							last = s.substring(idx + 1);
+						} else {
+							first = s;
+						}
+						//if ($debug) Debug.write("s, idx: ", s, idx);
+					} else {
+						email = addr;
+					}
+					parent.refObj.addListItem(0, first, last, email, 0, parent._timeZone.getValue());
+					//if ($debug) Debug.write("[first, last, email]: ", addresses[i], idx1, idx2, first, last, email);
+				}
+			} else {
+				parent.refObj.addListItem(
+					0, 
+					parent.firstname["text"], 
+					parent.lastname["text"], 
+					email,
+					0,
+					parent._timeZone.getValue()
+				);
+				//if ($debug) Debug.write("_innerlist: ", parent.parent.parent.refObj.terminObjRef._liste._innerlist);
+			}
+			parent.firstname="";
+			parent.lastname="";
 			parent.email="";
 			parent.close();
 			//parent.parent.parent.refObj.close();
 			//if ($debug) Debug.write("userId  search: ",parent.parent.parent.userId);
+		]]>
 		</handler>
 	</simpleLabelButton>
 	
@@ -72,6 +116,23 @@
 			parent.close();
 		</handler>
 	</simpleLabelButton>
+	
+	<method name="trim" args="s">
+	<![CDATA[
+		var str = "" + s, begin = 0, end = str.length - 1;
+		while (begin <= end && str.charCodeAt(begin) == 32) { ++begin; }
+		while (end > begin && str.charCodeAt(end) == 32) { --end; }
+		return str.substr(begin, end - begin + 1);
+	]]>
+	</method>
+	
+	<method name="replaceAll" args="s,f,r">
+	<![CDATA[
+		var str = s;
+		while (str.indexOf(f) > -1) { str = str.replace(f, r); }
+		return str;
+	]]>
+	</method>
 	
 </class>
 

@@ -4563,4 +4563,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   <string id="1509" name="create_new_room">
   	<value>Создать/редактировать комнату для этого события</value>
   </string>
+  <string id="1510" name="multiple_addresses">
+  	<value>Вы можете ввести несколько адресов в формате: Имя1 Фамилия1 &lt;адрес1&gt;,"Имя2 Фамилия2" &lt;адрес2&gt;,'Имя3 Фамилия3' &lt;адрес3&gt;, ...</value>
+  </string>
 </language>
