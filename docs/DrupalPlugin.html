@@ -36,7 +36,7 @@ limitations under the License.
            
                                     
                         
-            <title>Apache OpenMeetings [Incubating] - Using OpenMeetings with RTMPS and HTTPS</title>
+            <title>Apache OpenMeetings [Incubating] - Drupal Plugin</title>
             <link rel="stylesheet" type="text/css" href="css/openmeetings.css">
             <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
             <link rel="stylesheet" type="text/css" href="css/coin-slider-styles.css">
@@ -627,26 +627,18 @@ limitations under the License.
                                                                     <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="Using OpenMeetings with RTMPS and HTTPS"><strong>Using OpenMeetings with RTMPS and HTTPS</strong></a>
+          <a name="Drupal Plugin for OpenMeetings"><strong>Drupal Plugin for OpenMeetings</strong></a>
         </font>
         <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
       </td></tr>
       <tr><td>
         <blockquote>
-                                    <p>There are 3 ways the client communicates with the server: </p>
-                                                <ul>
-				<li>The flash-client uses RTMP protocol to transfer Audio/Video and
-					to send and receive the user data (login et cetera) to the server
-					and back
-				</li>
-				<li>The browser uses HTTP protocol to load the SWF and to upload and
-					download the files (documents, pdfs, images) to the server and
-					back.
-				</li>
-				<li>The screensharing client uses RTMP protocol to transfer screen
-					data and remote control to the server and back
-				</li>
-			</ul>
+                                    <p>
+				You can get the latest Version of the Plugin for Drupal from the
+				<a href="downloads.html">downloads</a>
+				.
+				<br />
+			</p>
                             </blockquote>
       </td></tr>
       <tr><td><br/></td></tr>
@@ -654,24 +646,30 @@ limitations under the License.
                                                 <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="Prerequisites"><strong>Prerequisites</strong></a>
+          <a name="Installation of the Drupal Plugin for Apache OpenMeetings"><strong>Installation of the Drupal Plugin for Apache OpenMeetings</strong></a>
         </font>
         <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
       </td></tr>
       <tr><td>
         <blockquote>
-                                    <ul>
-				<li>You need OpenMeetings 1.9.x for this, OpenMeetings 1.8.x does
-					not
-					have those options.
-				</li>
-				<li>Install OpenMeetings according to the install instructions and
-					check that it runs without problems
-				</li>
-				<li>Rename the existing keystore file red5/conf/keystore to
-					keystore.bak
-				</li>
-			</ul>
+                                    <p>
+				You simply download the ZIP or TAR package and unzip it to Drupal "mod" directory.
+				<br />
+				For a detailed description on how to install plugins in Drupal please review their 
+				<a href="http://drupal.org/documentation/install/modules-themes" target="_BLANK" ref="nofollow">handbook</a>.
+				<br />
+				Then you visit the module interface of Drupal, where you will find the new module.
+				You should switch it to "enabled" to get the "Configure" and "Permissions" buttons.
+			</p>
+                                                <a class="fancybox-buttons" href="images/drupal_module_installation.png">
+				<img src="images/drupal_module_installation.png" alt="" width="600" height="150" />
+			</a>
+                                                <p>
+				In the configuration you enter the auth data to access your Apache OpenMeetings server:
+			</p>
+                                                <a class="fancybox-buttons" href="images/drupal_module_configuration.png">
+				<img src="images/drupal_module_configuration.png" alt="" width="600" height="340" />
+			</a>
                             </blockquote>
       </td></tr>
       <tr><td><br/></td></tr>
@@ -679,159 +677,20 @@ limitations under the License.
                                                 <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="Configuring RTMPS for the Flash Client"><strong>Configuring RTMPS for the Flash Client</strong></a>
+          <a name="Adding a new conference room to Drupal"><strong>Adding a new conference room to Drupal</strong></a>
         </font>
         <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
       </td></tr>
       <tr><td>
         <blockquote>
-                                    <ol>
-				<li>
-					Create a new keystore and key, use the same password for both:<br />
-					(copied from
-					<a href="http://trac.red5.org/wiki/Documentation/Tutorials/Red5DeveloperTips/SSLTLS%29:" rel="nofollow">http://trac.red5.org/wiki/Documentation/Tutorials/Red5DeveloperTips/SSLTLS):</a>
-					<div class="xmlcode">
-						keytool -keysize 2048 -genkey -alias red5 -keyalg RSA -keystore red5/conf/keystore<br />
-						Enter keystore password:<br />
-						Re-enter new password:<br />
-						What is your first and last name?<br />
-						[Unknown]:  &lt;your hostname, e.g demo.openmeetings.de&gt;<br />
-						What is the name of your organizational unit?<br />
-						[Unknown]:  Dev<br />
-						What is the name of your organization?<br />
-						[Unknown]:  OpenMeetings<br />
-						What is the name of your City or Locality?<br />
-						[Unknown]:  Henderson<br />
-						What is the name of your State or Province?<br />
-						[Unknown]:  Nevada<br />
-						What is the two-letter country code for this unit?<br />
-						[Unknown]:  US<br />
-						Is CN=demo.openmeetings.de, OU=Dev, O=OpenMeetings, L=Henderson, ST=Nevada, C=US correct?<br />
-						[no]:  yes<br />
-						Enter key password for &lt;red5&gt;<br />
-					</div>
-				</li>
-		
-				<li>Generate a CSR: keytool -certreq -keyalg RSA -alias red5 -file
-					red5.csr -keystore red5/conf/keystore
-				</li>
-				<li>Submit CSR to your CA of choice and receive a signed certificate
-				</li>
-				<li>Import your chosen CA's root certificate into the keystore (may
-					need to download it from their site - make sure to get the root CA and
-					not the intermediate one): keytool -import -alias root -keystore
-					red5/conf/keystore
-					-trustcacerts -file root.crt (note: you may receive a warning that
-					the certificate already exists in the system wide keystore - import
-					anyway)
-				</li>
-				<li>Import the intermediate certificate(s) you normally receive with
-					the certificate:
-					keytool -import -alias intermed -keystore red5/conf/keystore -trustcacerts
-					-file intermediate.crt
-				</li>
-				<li>Import the certificate you received: keytool -import -alias red5
-					-keystore red5/conf/keystore -trustcacerts -file
-					demo.openmeetings.de.crt
-				</li>
-                <li>
-                Create additional certificate as described above.
-                Add this certificate to the following keystores: <tt>red5/conf/keystore.screen</tt> and <tt>red5/conf/keystore</tt>.
-                </li>
-			</ol>
-                            </blockquote>
-      </td></tr>
-      <tr><td><br/></td></tr>
-    </table>
-                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr><td ><!-- bgcolor="#EEEEEE" -->
-        <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="Set up RTMPS"><strong>Set up RTMPS</strong></a>
-        </font>
-        <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
-      </td></tr>
-      <tr><td>
-        <blockquote>
-                                    <ol>
-		      <li>
-		      Uncomment <tt>&lt;!-- RTMPS --&gt;</tt> section in <tt>red5/conf/red5-core.xml</tt>
-		      </li>
-
-				<li>
-					Edit <tt>red5/conf/red5.properties</tt> and set
-					<tt>rtmps.port=5443</tt>
-					and
-					<tt>rtmps.keystorepass=password</tt>
-					(password = password you set on your new
-					keystore)
-				</li>
-			
-				<li>
-					Edit red5/webapps/openmeetings/config.xml and set
-					<tt>&lt;rtmpsslport&gt;5443&lt;/rtmpsslport&gt;</tt>
-					,
-					<tt>&lt;useSSL&gt;yes&lt;/useSSL&gt;</tt>
-					and
-					<tt>&lt;proxyType&gt;best&lt;/proxyType&gt;</tt>
-				</li>
-
-				<li>Restart red5 and try to connect - your connection should now be
-					made via RTMPS (close port 1935 to be sure)
-				</li>   
-					  
-		  </ol>
-                            </blockquote>
-      </td></tr>
-      <tr><td><br/></td></tr>
-    </table>
-                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr><td ><!-- bgcolor="#EEEEEE" -->
-        <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="SSL for the web interface"><strong>SSL for the web interface</strong></a>
-        </font>
-        <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
-      </td></tr>
-      <tr><td>
-        <blockquote>
-                                    <p>If you want to use SSL for the web interface in addition to RTMPS,
-				you need to make some further modifications. This is mainly to secure
-				the server against MITM attacks, additionally some other features
-				like file uploads also use a plain HTTP connection if this is not
-				done. The following instructions assume that you have already set up
-				RTMPS successfully. </p>
-                                                <ol>
-				<li>
-					Copy this <tt>red5/conf/jee-container-ssl.xml</tt>
-					file to <tt>red5/conf/jee-container.xml</tt>
-				</li>
-				<li>
-					Edit red5/webapps/openmeetings/config.xml and set
-					<tt>&lt;protocol&gt;https&lt;/protocol&gt;</tt>
-				</li>
-				<li>Edit red5/conf/red5.properties and set <tt>https.port=443</tt> </li>
-				<li>
-					Restart red5 and try to connect to
-					<a href="https://your.server" rel="nofollow">https://your.server</a>
-					- you should be redirected to the OpenMeetings
-					app and all access should be via HTTPS or RTMPS (close port 5080 to
-					be sure).
-				</li>
-            </ol>
-                            </blockquote>
-      </td></tr>
-      <tr><td><br/></td></tr>
-    </table>
-                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr><td ><!-- bgcolor="#EEEEEE" -->
-        <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="Credits"><strong>Credits</strong></a>
-        </font>
-        <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
-      </td></tr>
-      <tr><td>
-        <blockquote>
-                                    <p>Credits goto: Nexus and Holger Rabbach for their help and
-				contribution and configuration documention! </p>
+                                    <p>
+				After installation of the plugin you can go to the front page in Drupal and add a new content item 
+				"OpenMeetings Rooms" =&gt; "Add New Room". You may find following configuration values for each 
+				conference room:
+			</p>
+                                                <a class="fancybox-buttons" href="images/drupal_room_configuration.png">
+				<img src="images/drupal_room_configuration.png" alt="" width="600" height="400" />
+			</a>
                             </blockquote>
       </td></tr>
       <tr><td><br/></td></tr>
