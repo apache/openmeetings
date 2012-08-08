@@ -33,7 +33,6 @@
 	<include href="chatTabItemEmoticons.lzx" />
 	<include href="chatOutput.lzx" />
 	<include href="chatTabBottom.lzx" />
-	<include href="privateChatTabBottom.lzx" />
 	<include href="chatTab.lzx" />
     
 </library>

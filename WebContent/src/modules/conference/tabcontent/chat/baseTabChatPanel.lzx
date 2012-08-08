@@ -46,16 +46,18 @@
             var publicSID = value[1];
             if ($debug) Debug.write("closeprivatechat _1b_ ",publicSID);
             
-            for (var eg in this.content.chatbar.subviews) {
-                 
-                if ($debug) Debug.write("closeprivatechat _2A_ ",this.content.chatbar.subviews[eg].objRef);
-                if ($debug) Debug.write("closeprivatechat _2B_ ",this.content.chatbar.subviews[eg].objRef.refObj);
-                if ($debug) Debug.write("closeprivatechat _2C_ ",this.content.chatbar.subviews[eg].objRef.refObj.publicSID);
-                    
-                if (this.content.chatbar.subviews[eg].objRef.refObj.publicSID == publicSID ) {
-                    this.content.chatbar.removeObjectSynced(this.content.chatbar.subviews[eg]);
-                    return;
-                }
+			for (var eg in this.content.chatbar.subviews) {
+				if(typeof this.content.chatbar.subviews[eg].objRef.refObj == 'undefined') {
+					continue;
+				}
+				if ($debug) Debug.write("closeprivatechat _2A_ ",this.content.chatbar.subviews[eg].objRef);
+				if ($debug) Debug.write("closeprivatechat _2B_ ",this.content.chatbar.subviews[eg].objRef.refObj);
+				if ($debug) Debug.write("closeprivatechat _2C_ ",this.content.chatbar.subviews[eg].objRef.refObj.publicSID);
+				    
+				if (this.content.chatbar.subviews[eg].objRef.refObj.publicSID == publicSID ) {
+					this.content.chatbar.removeObjectSynced(this.content.chatbar.subviews[eg]);
+					return;
+				}
             }
         </method>
         
