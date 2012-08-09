@@ -4567,4 +4567,10 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   <string id="1510" name="multiple_addresses">
   	<value>You can enter multiple addresses in the format: firstname1 lastname1 &lt;email1&gt;,"firstname2 lastname2" &lt;email2&gt;,'firstname3 lastname3' &lt;email3&gt;, ...</value>
   </string>
+  <string id="1511" name="stream_volume">
+  	<value>Adjust stream volume</value>
+  </string>
+  <string id="1512" name="microphone_gain">
+  	<value>Adjust microphone gain</value>
+  </string>
 </language>

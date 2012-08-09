@@ -494,18 +494,29 @@
             <labelTooltip name="_tip" labelid="1405" />
         </miniIconsPresenter>
 
-        <miniIconsPresenter x="0" y="0" name="_volume" width="16" height="16" iconRessourceName="mute_btn_rsc">
+        <miniIconsPresenter x="0" y="0" name="_volume" width="16" height="16" iconRessourceName="volume">
+            <handler name="oninit">
+                if (parent.parent.isremote) {
+                    _tip.setAttribute("labelid", 1511);
+                } else {
+                    _tip.setAttribute("labelid", 1512);
+                }
+            </handler>
             <handler name="onclick">
                 var volume = parent.parent.getStreamVolume();
 
+                var sliderHeight = 120;
+                var sliderX = this.getAttributeRelative('x',canvas) - 2;
                 var pick = new lz.VolumeSlider(canvas, {
-                    x:(parent.getAttributeRelative('x',canvas)),
-                    y:(parent.getAttributeRelative('y',canvas)),
+                    height:sliderHeight,
+                    x:sliderX,
+                    y:(parent.getAttributeRelative('y',canvas) - sliderHeight/2),
                     initialNumber:volume,
                     videoObject:parent.parent
                 });
                 lz.ModeManager.makeModal(pick);
             </handler>
+            <labelTooltip name="_tip" />
         </miniIconsPresenter>
         
         <miniIconsPresenter name="_minimize"

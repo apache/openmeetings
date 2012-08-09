@@ -34,6 +34,9 @@
     
     <!--  APL author sebawagner -->
 	<resource name="speaking" src="resources/speaking.png" />
+
+    <!--  IconFinder Creative Commons -->
+    <resource name="volume" src="resources/volume.png" />
 	
 	<!--  FamFam Icon Creative Commons -->
 	<resource name="mute_btn_rsc">

@@ -20,7 +20,7 @@
 -->
 <library>
 
-<class name="VolumeSlider" extends="closableView" clickable="true">
+<class name="VolumeSlider" extends="closableView" clickable="true" height="120">
 
     <switch>
     <when property="$as3">
@@ -71,10 +71,8 @@
         ]]>
     </method>
 
-    <view bgcolor="$once{canvas.getThemeColor('baseMousecolorizer')}" width="58" height="138" x="1" y="1" />
-
-    <vslider name="_slider" height="120" y="10" x="10" minvalue="0" maxvalue="100"
-        initvalue="$once{parent.initialNumber}" showrange="false" showvalue="true">
+    <vslider name="_slider" height="$once{parent.height}" y="10" x="0" minvalue="0" maxvalue="100"
+        initvalue="$once{parent.initialNumber}" showrange="false" showvalue="false" switchaxis="true">
         <handler name="onvalue" args="v">
             if ($debug) Debug.write("onvalue", v);
 
@@ -84,21 +82,6 @@
             parent.close();
         </handler>
     </vslider>
-
-    <view name="_close" x="$once{parent.width - this.width - 2}" y="2"
-        resource="btn_presenter_close"
-        onmouseover="this.setAttribute('frame', 2)"
-        onmouseout="this.setAttribute('frame', 1)"
-        onmousedown="this.setAttribute('frame', 3)"
-        onmouseup="this.setAttribute('frame', 1)"
-    >
-        <handler name="onclick">
-            this.setAttribute('frame', 2);
-            this.parent.close();
-        </handler>
-
-        <labelTooltip labelid="430" />
-    </view>
 
 </class>
 
