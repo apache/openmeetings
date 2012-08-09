@@ -4443,10 +4443,10 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Réduisez la hauteur de l'écran avant de le déplacer</value>
   </string>
   <string id="1473" name="sharing client">
-    <value>Réduisez x avant d'agrandir</value>
+    <value>Réduisez 'x' avant d'agrandir</value>
   </string>
   <string id="1474" name="sharing client">
-    <value>Réduisez y avant d'agrandir</value>
+    <value>Réduisez 'y' avant d'agrandir</value>
   </string>
   <string id="1475" name="sharing client">
     <value>Complétez ces paramètres pour diffuser votre écran vers un site tiers.</value>
@@ -4500,68 +4500,68 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Taille maximum</value>
   </string>
   <string id="1492" name="conference menu">
-    <value>Demander au modé rateur le droit de partager votre tableau blanc</value>
+    <value>Demander au modérateur le droit de partager votre tableau blanc</value>
   </string>
   <string id="1493" name="private chat">
-    <value>Start Private Chat</value>
+    <value>Démarrer t'chat privé</value>
   </string>
   <string id="1494" name="all_private_chat">
-    <value>All</value>
+    <value>Tous</value>
   </string>
   <string id="1495" name="private chat">
-    <value>You cannot start a private chat with yourself.</value>
+    <value>Vous ne pouvez pas démarrer un t'chat privé avec vous-même.</value>
   </string>
   <string id="1496" name="private chat">
-    <value>You've already started a private chat with this participant.</value>
+    <value>Vous avez déjà démarré un t'chat privé avec ce participant.</value>
   </string>
   <string id="1497" name="private chat">
-    <value>Do you really want to delete this private chat?</value>
+    <value>Voulez-vous vraiment supprimer ce t'chat privé ?</value>
   </string>
   <string id="1498" name="Servers">
-    <value>Servers</value>
+    <value>Serveurs</value>
   </string>
   <string id="1499" name="Servers">
-    <value>Servers participating in cluster</value>
+    <value>Serveurs dans le groupe</value>
   </string>
   <string id="1500" name="Server name">
-    <value>Server Name</value>
+    <value>Nom du serveur</value>
   </string>
   <string id="1501" name="Server Address">
-    <value>Server Address</value>
+    <value>Adresse du serveur</value>
   </string>
   <string id="1502" name="Server details">
-    <value>Server details</value>
+    <value>Détails du serveur</value>
   </string>
   <string id="1503" name="Send SMS">
-    <value>Send SMS</value>
+    <value>Envoyer SMS</value>
   </string>
   <string id="1504" name="publishing_message">
-    <value>Publishing. User:</value>
+    <value>Publier. Utilisateur:</value>
   </string>
   <string id="1505" name="cmd_line_admin">
     <value>
-    	To save time and internet traffic you can use command line admin to backup/restore/upgrade:<br/>
-    	&#160;&#160;1) go to OM install dir (for ex. /opt/red5) <br/>
-    	&#160;&#160;2) stop OM (for ex. ./red5-shutdown.sh)<br/>
-    	&#160;&#160;3) ./admin.sh -b -file ~/today_om_backup.zip (create backup of current OM)<br/>
-    	&#160;&#160;4) download archive with new OM<br/>
-    	&#160;&#160;5) mv /opt/red5 /opt.red5.bak (move working version of OM just in case :))<br/>
-    	&#160;&#160;6) extract downloaded OM to the /opt/red5<br/>
-    	&#160;&#160;7) ./admin.sh -i ~/today_om_backup.zip (or './admin.sh -i ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' in case of you are using non-default DB )<br/>
-    	&#160;&#160;8) start OM<br/>
+    	Pour économiser du temps et de la bande passante vous pouvez utiliser la ligne de commande pour sauvegarder/restaurer/mettre à niveau votre système :<br/>
+    	&#160;&#160;1) Aller dans le répertoire d'installation d'OM (par ex. /opt/red5) <br/>
+    	&#160;&#160;2) Arrêter OM (par ex. ./red5-shutdown.sh)<br/>
+    	&#160;&#160;3) ./admin.sh -b -file ~/nom_du_backup.zip (créer la sauvegarde d'OM)<br/>
+    	&#160;&#160;4) télécharger la nouvelle version d'OM<br/>
+    	&#160;&#160;5) mv /opt/red5 /opt.red5.bak (déplacer la version d'OM qui fonctionne par sécurité.)<br/>
+    	&#160;&#160;6) extraire la nouvelle version d'OM dans /opt/red5<br/>
+    	&#160;&#160;7) ./admin.sh -i ~/nom_du_backup.zip (ou './admin.sh -i ~/nom_du_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' dans le cas d'une BD qui n'est pas celle par défaut.)<br/>
+    	&#160;&#160;8) Démarrer OM<br/>
     </value>
   </string>
   <string id="1506" name="public_room_tooltip">
-  	<value>Rooms common to all user</value>
+  	<value>Salles pour tous les utilisateurs</value>
   </string>
   <string id="1507" name="private_room_tooltip">
-  	<value>Rooms common to the current user group</value>
+  	<value>Salles pour les utilisateurs du groupe actuel</value>
   </string>
   <string id="1508" name="my_room_tooltip">
-  	<value>Rooms of the current user</value>
+  	<value>Salles de l'utilisateur</value>
   </string>
   <string id="1509" name="create_new_room">
-  	<value>Create/Modify appointment special room</value>
+  	<value>Créer/Modifier salle particulière</value>
   </string>
   <string id="1510" name="multiple_addresses">
   	<value>You can enter multiple addresses in the format: firstname1 lastname1 &lt;email1&gt;,"firstname2 lastname2" &lt;email2&gt;,'firstname3 lastname3' &lt;email3&gt;, ...</value>
