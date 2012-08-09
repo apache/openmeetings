@@ -358,7 +358,10 @@ public class AppointmentLogic {
 			appointmentDao.deleteAppointement(appointmentId);
 
 			// Deleting Room
-			roommanagement.deleteRoom(room);
+			boolean isAppRoom = room.getAppointment();
+			if (isAppRoom) {
+				roommanagement.deleteRoom(room);
+			}
 
 			return appointmentId;
 

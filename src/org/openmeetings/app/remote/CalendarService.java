@@ -240,6 +240,10 @@ public class CalendarService {
 					if ( room.getRooms_id() != roomId) {
 						app.setRoom(roommanagement.getRoomById(roomId));
 						appointmentDao.updateAppointment(app);
+						boolean isAppRoom = room.getAppointment();
+						if (isAppRoom) {
+							roommanagement.deleteRoom(room);
+						}
 					}
 				} else {
 					RoomTypes rt = roommanagement.getRoomTypesById(roomType);
