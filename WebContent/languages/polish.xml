@@ -4642,7 +4642,7 @@ transmitowania głosu i obrazu wideo.</value>
   <string id="1511" name="stream_volume">
   	<value>Adjust stream volume</value>
   </string>
-  <string id="1512" name="microphone_gain">
-  	<value>Adjust microphone gain</value>
+  <string id="1512" name="microphone_volume">
+  	<value>Adjust microphone volume</value>
   </string>
 </language>
