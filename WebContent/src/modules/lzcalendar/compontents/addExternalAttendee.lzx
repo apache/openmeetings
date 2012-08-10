@@ -94,7 +94,7 @@
 					0, 
 					parent.firstname["text"], 
 					parent.lastname["text"], 
-					email,
+					eml,
 					0,
 					parent._timeZone.getValue()
 				);
