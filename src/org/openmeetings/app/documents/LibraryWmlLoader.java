@@ -49,7 +49,7 @@ public class LibraryWmlLoader {
 				name += fileExt;
 			}
 			File filepathComplete = new File(file, name);
-			log.error("filepathComplete: "+filepathComplete);
+			log.debug("filepathComplete: "+filepathComplete);
 			
 			XStream xStream = new XStream(new XppDriver());
 			xStream.setMode(XStream.NO_REFERENCES);
@@ -61,7 +61,7 @@ public class LibraryWmlLoader {
 		    }
 		    reader.close();
 		    //lMap = (LinkedHashMap) xStream.fromXML(xmlString);
-		   ArrayList lMapList = (ArrayList) xStream.fromXML(xmlString);
+		    ArrayList lMapList = (ArrayList) xStream.fromXML(xmlString);
 			
 			return lMapList;
 		} catch (Exception err){

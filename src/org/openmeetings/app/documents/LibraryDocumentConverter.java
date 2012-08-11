@@ -36,11 +36,11 @@ public class LibraryDocumentConverter {
 	
 	private static final String fileExt = ".wml";
 	private static final String wmlFolderName = "stored" + File.separatorChar;
-
-	public static String writeToLocalFolder(File localFolder, String fileName, @SuppressWarnings("rawtypes")ArrayList objList) {
+	
+	public static String writeToLocalFolder(File uploadRootDir, String fileName, @SuppressWarnings("rawtypes")ArrayList objList) {
 		try {
 			
-			log.debug("filePath: "+localFolder);
+			log.debug("filePath: "+uploadRootDir.getAbsolutePath());
 			
 			String fileNameExtName = fileName.substring(fileName.length()-4,fileName.length());
 			if (fileNameExtName.equals(fileExt)){
@@ -54,34 +54,32 @@ public class LibraryDocumentConverter {
 				return "-20";
 			}
 			
-			File filepathComplete = new File(localFolder, wmlFolderName + fileName + fileExt);
+			File filePathComplete = new File(uploadRootDir.getAbsolutePath() + File.separatorChar + wmlFolderName + fileName + fileExt);
 			
-			//Add the Folder for the Room if it does not exist yet
-			if (!localFolder.exists()){
-				localFolder.mkdir();
-			}		
 			//Add the Folder for the wmlFiles if it does not exist yet
-			File localFolder2 = new File(localFolder + wmlFolderName);
+			File localFolder2 = new File(uploadRootDir.getAbsolutePath() + File.separatorChar + wmlFolderName);
 			if (!localFolder2.exists()){
 				localFolder2.mkdir();
 			}
 			
-			if (filepathComplete.exists()){
+			if (filePathComplete.exists()){
 				return "-20";
 			}		
 			
 			XStream xStream = new XStream(new XppDriver());
 			xStream.setMode(XStream.NO_REFERENCES);
-			String xmlString = xStream.toXML(objList);		
+			String xmlString = xStream.toXML(objList);	
 			
-			PrintWriter pw = new PrintWriter(new FileWriter(filepathComplete));
+			log.debug("Write to "+filePathComplete);
+			
+			PrintWriter pw = new PrintWriter(new FileWriter(filePathComplete));
 		    pw.println(xmlString);
 		    pw.flush();
 		    pw.close();
 	    
 		    //return new Long(1);
 		    
-		    return filepathComplete.getCanonicalPath();
+		    return filePathComplete.getCanonicalPath();
 		} catch (Exception err){
 			log.error("writeToLocalFolder",err);
 		}
