@@ -127,6 +127,8 @@
     			    this.refObj.loadDocumentToWhiteboard();
     			} else if (this.refObj.isImage) {
     				this.refObj.loadImageToWhiteboard();
+    			} else if (this.refObj.isWmlFile) {
+    				this.refObj.loadWmlFile();
     			} else {
     				if ($debug) Debug.warn("Should never happen dragItemFileExplorer unhandled case");
     			}
