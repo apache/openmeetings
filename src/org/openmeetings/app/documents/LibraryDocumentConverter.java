@@ -53,14 +53,12 @@ public class LibraryDocumentConverter {
 				//return new Long(-21);
 				return "-20";
 			}
-			
-			File filePathComplete = new File(uploadRootDir.getAbsolutePath() + File.separatorChar + wmlFolderName + fileName + fileExt);
-			
 			//Add the Folder for the wmlFiles if it does not exist yet
-			File localFolder2 = new File(uploadRootDir.getAbsolutePath() + File.separatorChar + wmlFolderName);
+			File localFolder2 = new File(uploadRootDir, wmlFolderName);
 			if (!localFolder2.exists()){
 				localFolder2.mkdir();
 			}
+			File filePathComplete = new File(localFolder2, fileName + fileExt);
 			
 			if (filePathComplete.exists()){
 				return "-20";
