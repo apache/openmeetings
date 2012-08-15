@@ -88,6 +88,9 @@
 		<fileset dir="${junit.lib.dir}" includes="*.jar" />
 		<fileset dir="${dtd-generator.lib.dir}" includes="*.jar" />
 		<fileset dir="${project.lib.dir}" includes="*.jar" />
+		<!--
+		<fileset dir="${java.home}/lib/" includes="rt.jar" />
+		 -->
 	</path>
 
 	<target name="prepare.mkdir" depends="-java6or7.check">
@@ -254,7 +257,7 @@
 		</copy>
 	</target>
 
-	<target name="jar.only" depends="enhance.only, current_revision">
+	<target name="jar.only" depends="buildJavaDocs, enhance.only, current_revision">
 		<tstamp prefix="build">
 			<format property="TODAY" pattern="d-MMMM-yyyy" locale="en" />
 		</tstamp>
@@ -342,6 +345,25 @@
 				<attribute name="Class-Path" value="conf/ ${jar2.classpath}" />
 			</manifest>
 		</jar>
+	</target>
+	
+	<target name="buildJavaDocs">
+		<tstamp prefix="doc">
+			<format property="TODAY_YEAR" pattern="yyyy" locale="en" />
+		</tstamp>
+	    <javadoc packagenames="org.openmeetings.app.remote.*"
+	           sourcepath="src"
+	           excludepackagenames="org.openmeetings.test.*"
+	           defaultexcludes="yes"
+	           destdir="build/api"
+	           author="true"
+	           version="true"
+	           use="true"
+	           windowtitle="Apache OpenMeetings API">
+	    	<classpath refid="compile.classpath"></classpath>
+	        <doctitle><![CDATA[<h1>Apache OpenMeetings API</h1>]]></doctitle>
+	    	<bottom><![CDATA[<i>Copyright &copy; 2000-${doc.TODAY_YEAR} The Apache Software Foundation. All rights Reserved.</i>]]></bottom>
+	  	</javadoc>
 	</target>
 
 	<!-- Compile JAR -->
