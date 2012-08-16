@@ -19,17 +19,30 @@
 package org.openmeetings.utils.crypt;
 
 /**
- * adapter for Encryption-Class
+ * interface for Encryption-Class
  * see: http://incubator.apache.org/openmeetings/CustomCryptMechanism.html
  * 
  * @author sebastianwagner
  *
  */
 
-public class CryptStringAdapter {
+public interface ICryptString {
+	
+	/**
+	 * create a pass phrase
+	 * 
+	 * @param userGivenPass
+	 * @return
+	 */
+	public String createPassPhrase(String userGivenPass);
+	
+	/**
+	 * verify a password
+	 * 
+	 * @param passGiven
+	 * @param passwdFromDb
+	 * @return
+	 */
+	public Boolean verifyPassword(String passGiven, String passwdFromDb);
 
-	public String createPassPhrase(String userGivenPass){ return null; };
-	
-	public Boolean verifyPassword(String passGiven, String passwdFromDb){ return null; };
-	
 }

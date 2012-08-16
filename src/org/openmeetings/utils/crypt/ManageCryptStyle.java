@@ -35,7 +35,7 @@ public class ManageCryptStyle {
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 
-	public CryptStringAdapter getInstanceOfCrypt() {
+	public ICryptString getInstanceOfCrypt() {
 		try {
 
 			log.debug("getInstanceOfCrypt: " + this);
@@ -49,10 +49,8 @@ public class ManageCryptStyle {
 
 			log.debug("configKeyCryptClassName: " + configKeyCryptClassName);
 
-			CryptStringAdapter t = (CryptStringAdapter) Class.forName(
+			return (ICryptString) Class.forName(
 					configKeyCryptClassName).newInstance();
-			// t.getTime();
-			return t;
 
 		} catch (Exception err) {
 			log.error("[getInstanceOfCrypt]", err);

@@ -20,9 +20,12 @@ package org.openmeetings.utils.crypt;
 
 import java.security.NoSuchAlgorithmException;
 
-public class MD5Implementation extends CryptStringAdapter implements CryptString {
+public class MD5Implementation implements ICryptString {
 
-	@Override
+	/*
+	 * (non-Javadoc)
+	 * @see org.openmeetings.utils.crypt.ICryptString#createPassPhrase(java.lang.String)
+	 */
 	public String createPassPhrase(String userGivenPass) {
 		String passPhrase = null;
 		try {
@@ -33,7 +36,10 @@ public class MD5Implementation extends CryptStringAdapter implements CryptString
 		return passPhrase;
 	}
 
-	@Override
+	/*
+	 * (non-Javadoc)
+	 * @see org.openmeetings.utils.crypt.ICryptString#verifyPassword(java.lang.String, java.lang.String)
+	 */
 	public Boolean verifyPassword(String passGiven, String passwdFromDb) {
 		return (passwdFromDb.equals(createPassPhrase(passGiven)));
 	}
