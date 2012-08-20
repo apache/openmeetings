@@ -178,7 +178,7 @@ public class FlvInterviewConverter extends BaseConverter {
 
 				// create default Audio to merge it.
 				// strip to content length
-				String outputWav = streamFolderGeneral + "one_second.wav";
+				File outputWav = new File(streamFolderGeneral, "one_second.wav");
 
 				// Calculate delta at beginning
 				Long deltaTimeMilliSeconds = flvRecording.getRecordEnd()
@@ -187,7 +187,7 @@ public class FlvInterviewConverter extends BaseConverter {
 						.toString()) / 1000) - 1;
 
 				String[] argv_full_sox = new String[] { this.getPathToSoX(),
-						outputWav, outputFullWav, "pad", "0",
+						outputWav.getCanonicalPath(), outputFullWav, "pad", "0",
 						deltaPadding.toString() };
 
 				log.debug("START generateSampleAudio ################# ");
@@ -245,13 +245,12 @@ public class FlvInterviewConverter extends BaseConverter {
 			}
 
 			// Default Image for empty interview video pods
-			String defaultInterviewImage = streamFolderGeneral
-					+ "default_interview_image.png";
-			File defaultInterviewImageFile = new File(defaultInterviewImage);
+			File defaultInterviewImageFile = new File(streamFolderGeneral, "default_interview_image.png");
 
 			if (!defaultInterviewImageFile.exists()) {
 				throw new Exception("defaultInterviewImageFile does not exist!");
 			}
+			String defaultInterviewImage = defaultInterviewImageFile.getCanonicalPath();
 
 			// Create Folder for the output Image Sequence
 			String outputImageMergedData = streamFolder + "INTERVIEW_"
