@@ -441,8 +441,7 @@ public class FlvInterviewConverter extends BaseConverter {
 
 			String hashFileFullNameFlv = "flvRecording_"
 					+ flvRecording.getFlvRecordingId() + ".flv";
-			String outputFullFlv = streamFolderGeneral
-					+ hashFileFullNameFlv;
+			String outputFullFlv = new File(streamFolderGeneral, hashFileFullNameFlv).getCanonicalPath();
 			deleteFileIfExists(outputFullFlv);
 
 			// ffmpeg -vcodec flv -qscale 9.5 -r 25 -ar 22050 -ab 32k -s 320x240
@@ -491,7 +490,7 @@ public class FlvInterviewConverter extends BaseConverter {
 
 			String hashFileFullNameJPEG = "flvRecording_"
 					+ flvRecording.getFlvRecordingId() + ".jpg";
-			String outPutJpeg = streamFolderGeneral + hashFileFullNameJPEG;
+			String outPutJpeg = new File(streamFolderGeneral, hashFileFullNameJPEG).getCanonicalPath();
 			deleteFileIfExists(outPutJpeg);
 
 			flvRecording.setPreviewImage(hashFileFullNameJPEG);
@@ -519,8 +518,7 @@ public class FlvInterviewConverter extends BaseConverter {
 
 			String alternateDownloadName = "flvRecording_"
 					+ flvRecording.getFlvRecordingId() + ".avi";
-			String alternateDownloadFullName = streamFolderGeneral
-					+ alternateDownloadName;
+			String alternateDownloadFullName = new File(streamFolderGeneral, alternateDownloadName).getCanonicalPath();
 			deleteFileIfExists(alternateDownloadFullName);
 
 			String[] argv_alternateDownload = new String[] {
