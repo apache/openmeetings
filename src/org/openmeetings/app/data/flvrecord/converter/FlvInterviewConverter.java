@@ -148,7 +148,7 @@ public class FlvInterviewConverter extends BaseConverter {
 
 			String hashFileFullName = "INTERVIEW_"
 					+ flvRecording.getFlvRecordingId() + "_FINAL_WAVE.wav";
-			String outputFullWav = streamFolder + hashFileFullName;
+			String outputFullWav = streamFolder.getAbsolutePath() + File.separatorChar + hashFileFullName;
 			deleteFileIfExists(outputFullWav);
 
 			if (listOfFullWaveFiles.size() == 1) {
@@ -253,8 +253,9 @@ public class FlvInterviewConverter extends BaseConverter {
 			String defaultInterviewImage = defaultInterviewImageFile.getCanonicalPath();
 
 			// Create Folder for the output Image Sequence
-			String outputImageMergedData = streamFolder + "INTERVIEW_"
-					+ flvRecording.getFlvRecordingId() + File.separatorChar;
+			String outputImageMergedData = streamFolder.getAbsolutePath() + File.separatorChar 
+					+ "INTERVIEW_"	+ flvRecording.getFlvRecordingId() 
+					+ File.separatorChar;
 
 			// Merged Image Folder
 			File outputImageMergedDateFolder = new File(outputImageMergedData);
@@ -308,15 +309,9 @@ public class FlvInterviewConverter extends BaseConverter {
 						for (int i = 0; i < frameRate; i++) {
 
 							int currentImageNumber = firstFrame + i;
-							currentImageNumber -= (frameRate / 2); // Remove the
-																	// first
-																	// half
-																	// seconds
-																	// and fill
-																	// it up
-																	// with
-																	// black
-																	// screens
+							currentImageNumber -= (frameRate / 2); 
+							// Remove the first half seconds and fill
+							// it up with black screens
 
 							// Remove the first period of Images, this is where
 							// the user has started
@@ -331,11 +326,10 @@ public class FlvInterviewConverter extends BaseConverter {
 								currentImageNumber -= initialMissingImages;
 							}
 
-							String imageName = "image" + currentImageNumber
-									+ ".png";
+							String imageName = "image" + currentImageNumber + ".png";
 
 							File outputMetaImageFullDataFile = new File(streamFolder
-								, flvRecordingMetaData.getFlvRecordingMetaDataId()
+								, "" + flvRecordingMetaData.getFlvRecordingMetaDataId()
 									+ File.separatorChar + imageName);
 							
 							String outputMetaImageFullData = 
@@ -419,7 +413,7 @@ public class FlvInterviewConverter extends BaseConverter {
 
 			String[] argv_generatedMoview = null;
 
-			String inputScreenFullFlv = streamFolder
+			String inputScreenFullFlv = streamFolder.getAbsolutePath() + File.separatorChar
 					+ "COMPLETE_INTERVIEW_" + flvRecording.getFlvRecordingId()
 					+ ".flv";
 			deleteFileIfExists(inputScreenFullFlv);
