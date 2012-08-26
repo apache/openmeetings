@@ -112,37 +112,33 @@ public class ImportInitvalues {
 				true, false, 1, "Module Calendar", 1, false, 1451L);
 
 		/*
-		 * ######################## Recording Menu Points - disabled by default
-		 */
-
-		navimanagement.addGlobalStructure("record", 2, 395, false, true, 1,
-				"record", false, 583L);
-		navimanagement.addMainStructure("recordModule", null, 1, 395, true, false, 1,
-				"Module Recording Player", 2, false, 1452L);
-
-		/*
-		 * String action, int naviorder, long fieldvalues_id, boolean isleaf,
-		 * boolean isopen, long level_id, String name, long global_id
-		 */
-
-		/*
 		 * ######################## Conference Menu Points
 		 */
 
-		navimanagement.addGlobalStructure("meetings", 3, 792, false, true, 1,
+		navimanagement.addGlobalStructure("meetings", 2, 792, false, true, 1,
 				"List of Conference Rooms Global Navi", false, 793L);
 
 		navimanagement.addMainStructure("conferenceModuleRoomList", "publicTabButton", 1, 777,
-				true, false, 1, "List of Conference Rooms Main Navi", 3,
+				true, false, 1, "List of Conference Rooms Main Navi", 2,
 				false, 1506L);
 
 		navimanagement.addMainStructure("conferenceModuleRoomList", "privateTabButton", 2, 779,
-				true, false, 1, "List of Conference Rooms Main Navi", 3,
+				true, false, 1, "List of Conference Rooms Main Navi", 2,
 				false, 1507L);
 
 		navimanagement.addMainStructure("conferenceModuleRoomList", "myTabButton", 3, 781,
-				true, false, 1, "List of Conference Rooms Main Navi", 3,
+				true, false, 1, "List of Conference Rooms Main Navi", 2,
 				false, 1508L);
+		
+		/*
+		 * ######################## Recording Menu Points - disabled by default
+		 */
+
+		navimanagement.addGlobalStructure("record", 3, 395, false, true, 1,
+				"record", false, 583L);
+		navimanagement.addMainStructure("recordModule", null, 1, 395, true, false, 1,
+				"Module Recording Player", 3, false, 1452L);
+		
 		/*
 		 * ######################## Event Menu Points
 		 */
