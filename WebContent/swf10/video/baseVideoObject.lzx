@@ -466,15 +466,14 @@
             <handler name="onclick">
                 parent.parent.resetValues();
                 if(!this.parent.parent.isremote) {
-                    if ($debug) Debug.write("editRecordStream ################# baseVideObject ");
+                    if ($debug) Debug.write("editRecordStream ################# baseVideObject isInterview ",this.parent.parent.isInterview,this.parent.parent.interviewPodId);
                     if (this.parent.parent.isInterview) {
                         //TODO: fix it
                         new lz.editRecordStreamSWF10(canvas.inner,{
                                 name:"editRecordStream",
                                 doDefaultAnimation:false,
-                                align:'center',valign:'middle',
                                 isInterview:true,
-                                myvideocontainer:parent.parent,
+                                interviewPodId:this.parent.parent.interviewPodId,
                                 isSyncUpdate:true});
                     } else {
                         new lz.editRecordStreamSWF10(canvas.inner,{
