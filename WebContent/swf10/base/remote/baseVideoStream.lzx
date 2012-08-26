@@ -28,6 +28,7 @@
     <switch>
     <when property="$as3">
         <passthrough>
+        	import flash.events.*;
             import flash.net.*;
             import flash.media.*
         </passthrough>
@@ -104,9 +105,6 @@
 		clientObject.ioError = function(error:Object):void {
 			t.ioError(error);
 		};
-		clientObject.ioError = function(error:Object):void {
-			t.ioError(error);
-		};
 		clientObject.netStatus = function(status:Object):void {
 			t.netStatus(status);
 		};
@@ -114,6 +112,13 @@
 			t.asyncError(error);
 		};
 		this._ns.client = clientObject;
+		//this is a workaround, attaching the event to the client object does not work
+		this._ns.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus2);
+	</method>
+	
+	<method name="onNetStatus2" args="evt">
+		if($debug) Debug.write("netStream_onNetStatus: " , evt.info.code, evt.target);
+		this.onNetStatus.sendEvent(evt.info);
 	</method>
 	
 	<method name="asyncError" args="error">

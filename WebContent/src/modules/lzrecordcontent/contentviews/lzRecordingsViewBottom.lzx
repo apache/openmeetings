@@ -142,29 +142,31 @@
                 
                 if ($debug) Debug.write("widthItem ",widthItem);
                 
-                for (var i=0;i<rec.flvRecordingMetaData.length;i++) {
-                    
-                    if ($debug) Debug.write("isScreenData :: ",rec.flvRecordingMetaData[i].isScreenData);
-                    
-                    if (!rec.flvRecordingMetaData[i].isScreenData && 
-                           ( rec.flvRecordingMetaData[i].isAudioOnly ||
-                              ( !rec.flvRecordingMetaData[i].isAudioOnly && !rec.flvRecordingMetaData[i].isVideoOnly )
-                           )
-                        ) {
-	                    var startTimeInSeconds = Math.round((rec.flvRecordingMetaData[i].recordStart.getTime() - rec.recordStart.getTime())/1000);
-	                    var deltaInSecondsNew = Math.round((rec.flvRecordingMetaData[i].recordEnd.getTime() - rec.flvRecordingMetaData[i].recordStart.getTime())/1000);
+                if (rec.flvRecordingMetaData != null) {
+	                for (var i=0;i<rec.flvRecordingMetaData.length;i++) {
 	                    
-	                    var widthItem = Math.round(deltaInSecondsNew/this.pixelFactor);
-	                    var xItem = Math.round(startTimeInSeconds/this.pixelFactor);
-	                    if ($debug) Debug.write("widthItem ",i,widthItem,xItem);
+	                    if ($debug) Debug.write("isScreenData :: ",rec.flvRecordingMetaData[i].isScreenData);
 	                    
-		                new lz.userActivityItem(this.content._content.content.content,{
-	                                                  x:xItem,width:widthItem,
-		                                              userText:rec.flvRecordingMetaData[i].freeTextUserName
-		                                        });
-                    }    
-                    
-                }
+	                    if (!rec.flvRecordingMetaData[i].isScreenData && 
+	                           ( rec.flvRecordingMetaData[i].isAudioOnly ||
+	                              ( !rec.flvRecordingMetaData[i].isAudioOnly && !rec.flvRecordingMetaData[i].isVideoOnly )
+	                           )
+	                        ) {
+		                    var startTimeInSeconds = Math.round((rec.flvRecordingMetaData[i].recordStart.getTime() - rec.recordStart.getTime())/1000);
+		                    var deltaInSecondsNew = Math.round((rec.flvRecordingMetaData[i].recordEnd.getTime() - rec.flvRecordingMetaData[i].recordStart.getTime())/1000);
+		                    
+		                    var widthItem = Math.round(deltaInSecondsNew/this.pixelFactor);
+		                    var xItem = Math.round(startTimeInSeconds/this.pixelFactor);
+		                    if ($debug) Debug.write("widthItem ",i,widthItem,xItem);
+		                    
+			                new lz.userActivityItem(this.content._content.content.content,{
+		                                                  x:xItem,width:widthItem,
+			                                              userText:rec.flvRecordingMetaData[i].freeTextUserName
+			                                        });
+	                    }    
+	                    
+	                }
+	            }
                 
                 if ($debug) Debug.write("deltaInSeconds :: ",deltaInSeconds,(deltaInSeconds/60));
                 

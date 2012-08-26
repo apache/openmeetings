@@ -44,9 +44,9 @@
         this.timerDelegateStarted = false;
     </method>
 	
-	<handler name="onPlayStatusEvent" args="info">
-        //if ($debug) Debug.write("onPlayStatus ",info);
-        if (info.code ==  "NetStream.Play.Complete" ) {
+	<handler name="onNetStatus" args="info">
+        //if ($debug) Debug.write("onNetStatus ",info);
+        if (info.code ==  "NetStream.Play.Stop" ) {
         	if ($debug) Debug.write("-- stopStream");
             //parent.parent.stopStream();
             canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'stopRecordingStream', this.name);
