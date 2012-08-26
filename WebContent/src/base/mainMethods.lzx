@@ -1032,7 +1032,7 @@
 	</method>
 	
 	<method name="sendViaLocalConnection" args="lc_name,methodName,tArray">
-		if ($debug) Debug.info("sendViaLocalConnection ",lc_name,methodName); //,tArray
+		//if ($debug) Debug.info("sendViaLocalConnection ",lc_name,methodName); //,tArray
 		if (tArray == null || tArray.length == 0) {
 			canvas.lc.send(lc_name,methodName);
 		} else if (tArray.length == 1) {

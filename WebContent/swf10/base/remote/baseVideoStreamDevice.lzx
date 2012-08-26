@@ -89,8 +89,10 @@
     </method>
 	
 	<handler name="onmicro" args="m">
-		//if ($debug) Debug.write("Mic: ",m);
+		//if ($debug) Debug.write("onmicro: ",m);
 		var t = this;
+		//send mic active to true to start the onActivity callback Idle job
+		this.setAttribute("micactive", true);
         m.addEventListener(ActivityEvent.ACTIVITY, onMicActivity);
         m.addEventListener(StatusEvent.STATUS, onMicStatus);
 	</handler>
@@ -101,19 +103,18 @@
     </method>
 
     <method name="onMicActivity" args="event">
-        //if ($debug) Debug.write("onMicActivity: ",event);
-        this.setAttribute("micactive", event.activating);
+        if ($debug) Debug.write("onMicActivity: ",event);
     </method>
 	
 		<!--- Handler for the Flash Microphone onActivity callback. 
               @keywords private -->
 	<handler name="onmicactive">
 		<![CDATA[
-            if (this.onlevel) {
-                if (this.micactive) {
-                    this._leveldel.register(lz.Idle, "onidle");
+			if (this.onlevel) {
+            	if (this.micactive) {
+                	this._leveldel.register(lz.Idle, "onidle");
                 } else {
-                    this._leveldel.unregisterAll();
+                	this._leveldel.unregisterAll();
                     this.setAttribute("level", 0);
                 }
             }
@@ -163,7 +164,7 @@
 			}
 			
 			if (this.isgreater != tVal) {
-				if ($debug) Debug.write("Level sendNotification ",this.isgreater,tVal,level);
+				//if ($debug) Debug.write("Level sendNotification ",this.isgreater,tVal,level);
 				this.isgreater = tVal;
 				this.sendNotification();
 			}

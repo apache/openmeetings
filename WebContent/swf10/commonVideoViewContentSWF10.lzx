@@ -171,9 +171,9 @@
     
     <method name="getVideoObjectByPublicSID" args="publicSID">
     	<![CDATA[
-    		if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ",publicSID);
+    		//if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ",publicSID);
         	for (var i=0;i<this.subviews.length;i++){
-        	    if ($debug) Debug.write("this.subviews[i].publicSID ",this.subviews[i].publicSID);
+        	    //if ($debug) Debug.write("this.subviews[i].publicSID ",this.subviews[i].publicSID);
     			if (this.subviews[i].publicSID==publicSID){
     				return this.subviews[i];
     			}
@@ -360,7 +360,7 @@
 
     <method name="setSpeakingByPos" args="publicSID,bool">
         <![CDATA[
-            if ($debug) Debug.write("setSpeakingByPos ",publicSID,bool);
+            //if ($debug) Debug.write("setSpeakingByPos ",publicSID,bool);
             var obj = this.getVideoObjectByPublicSID(publicSID);
             if (obj == null) {
             	if ($debug) Debug.warn("Could not find user for setSpeakingByPos ",publicSID,bool);
