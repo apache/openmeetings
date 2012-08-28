@@ -142,10 +142,6 @@ public class OmFileHelper {
 		return new File(OmFileHelper.OM_HOME, STREAMS_DIR);
 	}
 	
-	public static File getStreamsFilesDir() {
-		return getDir(getStreamsDir(), FILES_DIR);
-	}
-	
 	public static File getStreamsHibernateDir() {
 		return getDir(getStreamsDir(), HIBERNATE_DIR);
 	}

@@ -117,7 +117,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			OmFileHelper.setOmHome(scope.getResource("/").getFile());
 
 			log.debug("webAppPath : " + OmFileHelper.getOmHome());
-			log.debug("batchFileFir : " + OmFileHelper.getStreamsFilesDir());
 
 			// Only load this Class one time
 			// Initially this value might by empty, because the DB is empty yet

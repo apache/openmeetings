@@ -34,7 +34,7 @@ public class TestSetupCleanupJob {
 		log.debug("TestSetupClearJob.execute");
 		try {
 			//FIXME need to move all these staff to helper
-			File[] folders = OmFileHelper.getStreamsFilesDir().listFiles();
+			File[] folders = OmFileHelper.getStreamsDir().listFiles();
 			if (folders != null) {
 				for (File folder : folders) {
 					if (folder.isDirectory()) {
