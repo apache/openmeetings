@@ -31,15 +31,17 @@ import net.fortuna.ical4j.model.TimeZone;
 import net.fortuna.ical4j.model.TimeZoneRegistry;
 import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
 import net.fortuna.ical4j.model.component.VEvent;
-import net.fortuna.ical4j.model.component.VTimeZone;
 import net.fortuna.ical4j.model.parameter.Cn;
 import net.fortuna.ical4j.model.parameter.Role;
 import net.fortuna.ical4j.model.property.Attendee;
 import net.fortuna.ical4j.model.property.CalScale;
 import net.fortuna.ical4j.model.property.Description;
+import net.fortuna.ical4j.model.property.Location;
+import net.fortuna.ical4j.model.property.Method;
 import net.fortuna.ical4j.model.property.Organizer;
 import net.fortuna.ical4j.model.property.ProdId;
 import net.fortuna.ical4j.model.property.Sequence;
+import net.fortuna.ical4j.model.property.Transp;
 import net.fortuna.ical4j.model.property.Uid;
 import net.fortuna.ical4j.model.property.Version;
 import net.fortuna.ical4j.util.UidGenerator;
@@ -66,38 +68,28 @@ public class IcalHandler {
 	// private TimeZoneRegistry timeRegistry;
 
 	/** Creation of a new Event */
-	public final static String ICAL_METHOD_REQUEST = "REQUEST";
-	public final static String ICAL_METHOD_CANCEL = "CANCEL";
-	public final static String ICAL_METHOD_REFRESH = "REFRESH";
+	public final static Method ICAL_METHOD_REQUEST = Method.REQUEST;
+	public final static Method ICAL_METHOD_CANCEL = Method.CANCEL;
+	public final static Method ICAL_METHOD_REFRESH = Method.REFRESH;
 
 	/**
 	 * Konstruktor with DefaultTimeZone
 	 * 
-	 * @param methodType
+	 * @param method
 	 *            (@see IcalHandler Constants)
 	 * @throws Exception
 	 */
-	public IcalHandler(String methodType) {
-		log.debug("Icalhandler method type : " + methodType);
+	public IcalHandler(Method method) {
+		log.debug("Icalhandler method type : " + method);
 		
 		icsCalendar = new net.fortuna.ical4j.model.Calendar();
 
 		icsCalendar.getProperties().add(
 				new ProdId("-//Events Calendar//iCal4j 1.0//EN"));
-		icsCalendar.getProperties().add(CalScale.GREGORIAN);
 		icsCalendar.getProperties().add(Version.VERSION_2_0);
+		icsCalendar.getProperties().add(CalScale.GREGORIAN);
 		
-		// Switch Method Type
-		// we comment out the Method type for now: The event type needs an organizer
-		// set, actually this leads to errors in displaying the email as iCal invitation
-		// in gmail, so we removed it for now. issue 1563
-//		if (methodType.equals(ICAL_METHOD_REFRESH))
-//			icsCalendar.getProperties().add(Method.REFRESH);
-//		else if (methodType.equals(ICAL_METHOD_CANCEL))
-//			icsCalendar.getProperties().add(Method.CANCEL);
-//		else
-//			icsCalendar.getProperties().add(Method.REQUEST);
-
+		icsCalendar.getProperties().add(method);
 	}
 
 	/**
@@ -136,14 +128,10 @@ public class IcalHandler {
 		
 		VEvent meeting = new VEvent(start, end, name);
 
-		// add timezone info..
-		VTimeZone tz = timeZone.getVTimeZone();
-
-		meeting.getProperties().add(tz.getTimeZoneId());
-
 		meeting.getProperties().add(new Description(description));
-
-		meeting.getProperties().add(new Sequence(1));
+		meeting.getProperties().add(new Sequence(0));
+		meeting.getProperties().add(new Location(""));
+		meeting.getProperties().add(Transp.OPAQUE);
 
 		// generate unique identifier (if not submitted)
 		Uid ui = null;
@@ -178,6 +166,7 @@ public class IcalHandler {
 
 		meeting.getProperties().add(orger);
 
+		icsCalendar.getComponents().add(timeZone.getVTimeZone());
 		icsCalendar.getComponents().add(meeting);
 
 		return ui.getValue();

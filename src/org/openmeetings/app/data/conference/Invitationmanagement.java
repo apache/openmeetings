@@ -756,12 +756,12 @@ public class Invitationmanagement {
 		Vector<HashMap<String, String>> atts = new Vector<HashMap<String, String>>();
 		atts.add(attendeeInDerHashMap);
 
-		HashMap<String, String> attendeeList = handler.getAttendeeData(user
+		HashMap<String, String> organizer = handler.getAttendeeData(user
 				.getAdresses().getEmail(), user.getLogin(), invitor);
 
 		handler.addNewMeeting(startdate, enddate, 
 				point.getAppointmentName(), atts,
-				subject, attendeeList, point.getIcalId(), timezone);
+				subject, organizer, point.getIcalId(), timezone);
 
 		log.debug(handler.getICalDataAsString());
 
@@ -803,11 +803,11 @@ public class Invitationmanagement {
 		Vector<HashMap<String, String>> atts = new Vector<HashMap<String, String>>();
 		atts.add(attendeeInDerHashMap);
 
-		HashMap<String, String> attendeeList = handler.getAttendeeData(user
+		HashMap<String, String> organizer = handler.getAttendeeData(user
 				.getAdresses().getEmail(), user.getLogin(), invitor);
 
 		handler.addNewMeeting(starttime, endtime, point.getAppointmentName(), atts,
-				subject, attendeeList, point.getIcalId(), timeZone);
+				subject, organizer, point.getIcalId(), timeZone);
 
 		log.debug(handler.getICalDataAsString());
 

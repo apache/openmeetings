@@ -61,18 +61,31 @@ public class MailiCalThread extends MailThread {
 			// -- Create a new message --
 			Multipart multipart = new MimeMultipart();
 
+			Multipart multiBody = new MimeMultipart("alternative");
 			BodyPart html = new MimeBodyPart();
 			html.setDataHandler(new DataHandler(new ByteArrayDataSource(
-					htmlBody, "text/html; charset=\"utf-8\"")));
+					htmlBody, "text/html; charset=UTF-8")));
+			multiBody.addBodyPart(html);
 
-			BodyPart iCalAttachment = new MimeBodyPart();
-			iCalAttachment.setDataHandler(new DataHandler(
+			BodyPart iCalContent = new MimeBodyPart();
+			iCalContent.addHeader("content-class", "urn:content-classes:calendarmessage");
+			iCalContent.setDataHandler(new DataHandler(
 					new ByteArrayDataSource(
 							new ByteArrayInputStream(iCalMimeBody),
-							"text/calendar;method=REQUEST;charset=\"UTF-8\"")));
+							"text/calendar; charset=UTF-8; method=REQUEST")));
+			multiBody.addBodyPart(iCalContent);
+			BodyPart body = new MimeBodyPart();
+			body.setContent(multiBody);
+			multipart.addBodyPart(body);
+			
+			BodyPart iCalAttachment = new MimeBodyPart();
+			iCalAttachment.setDataHandler(new DataHandler(
+				new ByteArrayDataSource(new ByteArrayInputStream(iCalMimeBody), "application/ics")));
+			iCalAttachment.removeHeader("Content-Transfer-Encoding");
+			iCalAttachment.addHeader("Content-Transfer-Encoding", "base64");
+			iCalAttachment.removeHeader("Content-Type");
+			iCalAttachment.addHeader("Content-Type", "application/ics");
 			iCalAttachment.setFileName("invite.ics");
-
-			multipart.addBodyPart(html);
 			multipart.addBodyPart(iCalAttachment);
 
 			msg.setContent(multipart);
