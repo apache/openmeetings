@@ -49,6 +49,7 @@ public class OmFileHelper {
 	private static final String CONF_DIR = "conf";
 	private static final String BACKUP_DIR = "backup";
 	private static final String DEFAULT_DIR = "default";
+	private static final String WML_DIR = "stored";
 	
 	private static final String INSTALL_FILE = "install.xml";
 	
@@ -116,6 +117,10 @@ public class OmFileHelper {
 	
 	public static File getUploadRoomDir(String roomName) {
 		return getDir(getUploadDir(), roomName);
+	}
+	
+	public static File getUploadWmlDir() {
+		return getDir(getUploadDir(), WML_DIR);
 	}
 	
 	public static File getUploadTempDir() {

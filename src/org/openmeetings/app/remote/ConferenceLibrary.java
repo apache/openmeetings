@@ -142,7 +142,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 
 				String localFileName = MD5.do_checksum(new Date().toString()) + ".wml";
 
-				LibraryDocumentConverter.writeToLocalFolder(OmFileHelper.getUploadDir(), localFileName, tObject);
+				LibraryDocumentConverter.writeToLocalFolder(localFileName, tObject);
 
 				// String wmlPath = current_dir + File.separatorChar+fileName
 				// +".xml";
@@ -193,8 +193,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 				FileExplorerItem fileExplorerItem = fileExplorerItemDao
 						.getFileExplorerItemsById(fileExplorerItemId);
 
-				ArrayList roomItems = libraryWmlLoader.loadWmlFile(OmFileHelper.getUploadDir(),
-						fileExplorerItem.getWmlFilePath());
+				ArrayList roomItems = libraryWmlLoader.loadWmlFile(fileExplorerItem.getWmlFilePath());
 
 				Map whiteboardObjClear = new HashMap();
 				whiteboardObjClear.put(2, "clear");

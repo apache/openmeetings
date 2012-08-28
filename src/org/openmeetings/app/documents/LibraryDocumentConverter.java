@@ -24,6 +24,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import org.openmeetings.app.OpenmeetingsVariables;
+import org.openmeetings.utils.OmFileHelper;
 import org.openmeetings.utils.stringhandlers.StringComparer;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -35,12 +36,11 @@ public class LibraryDocumentConverter {
 	private static final Logger log = Red5LoggerFactory.getLogger(LibraryDocumentConverter.class, OpenmeetingsVariables.webAppRootKey);
 	
 	private static final String fileExt = ".wml";
-	private static final String wmlFolderName = "stored" + File.separatorChar;
 	
-	public static String writeToLocalFolder(File uploadRootDir, String fileName, @SuppressWarnings("rawtypes")ArrayList objList) {
+	public static String writeToLocalFolder(String fileName, @SuppressWarnings("rawtypes")ArrayList objList) {
 		try {
 			
-			log.debug("filePath: "+uploadRootDir.getAbsolutePath());
+			log.debug("filePath: " + OmFileHelper.getUploadWmlDir().getCanonicalPath());
 			
 			String fileNameExtName = fileName.substring(fileName.length()-4,fileName.length());
 			if (fileNameExtName.equals(fileExt)){
@@ -54,11 +54,7 @@ public class LibraryDocumentConverter {
 				return "-20";
 			}
 			//Add the Folder for the wmlFiles if it does not exist yet
-			File localFolder2 = new File(uploadRootDir, wmlFolderName);
-			if (!localFolder2.exists()){
-				localFolder2.mkdir();
-			}
-			File filePathComplete = new File(localFolder2, fileName + fileExt);
+			File filePathComplete = new File(OmFileHelper.getUploadWmlDir(), fileName + fileExt);
 			
 			if (filePathComplete.exists()){
 				return "-20";

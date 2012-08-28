@@ -27,6 +27,7 @@ import java.util.LinkedHashMap;
 
 import org.dom4j.Element;
 import org.openmeetings.app.OpenmeetingsVariables;
+import org.openmeetings.utils.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -39,16 +40,14 @@ public class LibraryWmlLoader {
 	
 	private static final String fileExt = ".wml";
 	
-	private static final String wmlFolderName = "stored";
-	
 	@SuppressWarnings({ "rawtypes" })
-	public ArrayList loadWmlFile(File file, String fileName){
+	public ArrayList loadWmlFile(String fileName){
 		try {
-			String name = wmlFolderName + File.separatorChar + fileName;
+			String name = fileName;
 			if (!name.endsWith(fileExt)) {
 				name += fileExt;
 			}
-			File filepathComplete = new File(file, name);
+			File filepathComplete = new File(OmFileHelper.getUploadWmlDir(), name);
 			log.debug("filepathComplete: "+filepathComplete);
 			
 			XStream xStream = new XStream(new XppDriver());
