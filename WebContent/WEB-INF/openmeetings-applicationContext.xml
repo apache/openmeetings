@@ -280,5 +280,4 @@
 
 	<!-- Servlet Facade Beans -->
 	<bean id="backupExport" class="org.openmeetings.servlet.outputhandler.BackupExport" />
-
 </beans>

@@ -66,7 +66,22 @@
         <filter-name>ServletRequestExFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-    
+
+	<!--  Commented for now
+	<filter>
+		<filter-name>OpenmeetingsApplication</filter-name>
+		<filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
+		<init-param>
+			<param-name>applicationClassName</param-name>
+			<param-value>org.openmeetings.web.app.Application</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>OpenmeetingsApplication</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	-->
+	 
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>/WEB-INF/red5-*.xml</param-value>
@@ -214,10 +229,6 @@
         <web-resource-collection>
             <web-resource-name>Forbidden</web-resource-name>
             <url-pattern>/uploadtemp/*</url-pattern>
-        </web-resource-collection>
-        <web-resource-collection>
-            <web-resource-name>Forbidden</web-resource-name>
-            <url-pattern>/jod/*</url-pattern>
         </web-resource-collection>
         <auth-constraint/>
     </security-constraint>

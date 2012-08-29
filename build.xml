@@ -502,6 +502,12 @@
 			<compilerarg value="-Aopenjpa.metamodel=true" />
 			<!-- compilerarg value="-Xlint:deprecation"/ -->
 		</javac>
+		<copy todir="${main.out.dir}">
+			<fileset dir="${main.src.dir}">
+				<include name="**/*.*" />
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
 		<copy file="LICENSE" tofile="${main.out.dir}/META-INF/LICENSE" overwrite="true" />
 		<copy file="NOTICE" tofile="${main.out.dir}/META-INF/NOTICE" overwrite="true" />
 	</target>
@@ -847,6 +853,7 @@
 			<fileset dir="${om.lib.dir}" includes="commons-io*.jar" />
 			<fileset dir="${om.lib.dir}" includes="httpcore-jar*.jar" />
 			<fileset dir="${om.lib.dir}" includes="httpclient-jar*.jar" />
+			<fileset dir="${om.lib.dir}" includes="slf4j-api*.jar" />
 			<fileset dir="${om.lib.dir}" includes="*-source*.jar" />
 			<fileset dir="${om.lib.dir}" includes="*-javadoc*.jar" />
 		</delete>

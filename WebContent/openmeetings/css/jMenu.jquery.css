@@ -1,0 +1,77 @@
+/*
+@License :		Open Source - MIT License : http://www.opensource.org/licenses/mit-license.php
+*/
+#jMenu {
+	display: table;
+	margin: 0;
+	padding: 0
+}
+
+/********************/
+/** premier niveau **/
+/********************/
+#jMenu li {
+	display: table-cell;
+	background-color: #322f32;
+	margin: 0; //
+	float: left;
+}
+
+#jMenu li a {
+	padding: 10px;
+	display: block;
+	background-color: transparent;
+	color: #fff;
+	text-transform: uppercase;
+	cursor: pointer;
+	font-size: 12px;
+}
+
+/*******************/
+/** second niveau **/
+/*******************/
+#jMenu li:hover,#jMenu li ul li:hover {
+	color: #e0078c;
+	text-decoration: none;
+}
+
+#jMenu li ul {
+	display: none;
+	position: absolute;
+	padding: 0;
+	margin: 0
+}
+
+#jMenu li ul li {
+	background-color: #322f32;
+	display: block;
+	border-bottom: 1px solid #484548;
+	padding: 0
+}
+
+#jMenu li ul li.arrow {
+	background: #322f32 url('images/arrow_down.png') no-repeat center center;
+	height: 6px;
+	padding: 0;
+	border-bottom: none;
+	padding-bottom: 10px
+}
+
+#jMenu li ul li a {
+	font-size: 11px;
+	text-transform: none;
+	padding: 7px;
+	display: block;
+	border-top: 1px solid transparent;
+	border-bottom: 1px solid transparent;
+}
+
+#jMenu li ul li a.isParent {
+	background: #3A3A3A url('images/arrow_right.png') no-repeat right center;
+}
+
+#jMenu li ul li a:hover {
+	background-color: #514c52;
+	border-top: 1px solid #322f32;
+	border-bottom: 1px solid #322f32;
+}
