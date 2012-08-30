@@ -20,7 +20,6 @@ package org.openmeetings.app.data.basic;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -28,6 +27,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.openmeetings.app.OpenmeetingsVariables;
+import org.openmeetings.app.dto.NaviDTO;
+import org.openmeetings.app.dto.NaviDTO.MenuActions;
 import org.openmeetings.app.persistence.beans.basic.Naviglobal;
 import org.openmeetings.app.persistence.beans.basic.Navimain;
 import org.red5.logging.Red5LoggerFactory;
@@ -60,26 +61,45 @@ public class Navimanagement {
 	}
 	
 	public List<Naviglobal> getMainMenu(long user_level, long USER_ID, long language_id) {
-		List<Naviglobal> ll = this.getMainMenu(user_level, USER_ID);
-		for (Iterator<Naviglobal> it2 = ll.iterator(); it2.hasNext();) {
-			Naviglobal navigl = it2.next();
+		List<Naviglobal> ll = getMainMenu(user_level, USER_ID);
+		for (Naviglobal navigl : ll) {
 			navigl.setLabel(fieldmanagment.getFieldByIdAndLanguageByNavi(
 					navigl.getFieldvalues_id(), language_id));
 			navigl.setTooltip(fieldmanagment.getFieldByIdAndLanguageByNavi(
 					navigl.getTooltip_fieldvalues_id(), language_id));
-			List<Navimain> s = navigl.getMainnavi();
-			for (Iterator<Navimain> it3 = s.iterator(); it3.hasNext();) {
-				Navimain navim = it3.next();
+			for (Navimain navim : navigl.getMainnavi()) {
 				navim.setLabel(fieldmanagment.getFieldByIdAndLanguageByNavi(
 						navim.getFieldvalues_id(), language_id));
 				navim.setTooltip(fieldmanagment.getFieldByIdAndLanguageByNavi(
 						navim.getTooltip_fieldvalues_id(), language_id));
-
 			}
 		}
 		return ll;
 	}
 
+	//FIXME need to be refactored
+	public List<NaviDTO> getMainMenuDTO(long user_level, long USER_ID, long language_id) {
+		ArrayList<NaviDTO> result = new ArrayList<NaviDTO>();
+		for (Naviglobal ng: getMainMenu(user_level, USER_ID, language_id)) {
+			NaviDTO nd = new NaviDTO();
+			//nd.setAction(MenuActions.valueOf(ng.getAction()));
+			nd.setLabel(ng.getLabel().getValue());
+			nd.setTooltip(ng.getTooltip().getValue());
+			ArrayList<NaviDTO> items = new ArrayList<NaviDTO>();
+			for (Navimain navim : ng.getMainnavi()) {
+				NaviDTO mnd = new NaviDTO();
+				mnd.setAction(MenuActions.valueOf(navim.getAction()));
+				mnd.setParam(navim.getParams());
+				mnd.setLabel(navim.getLabel().getValue());
+				mnd.setTooltip(navim.getTooltip().getValue());
+				items.add(mnd);
+			}
+			nd.setItems(items);
+			result.add(nd);
+		}
+		return result;
+	}
+	
 	public List<Naviglobal> getMainMenu(long user_level, long USER_ID) {
 		try {
 			TypedQuery<Naviglobal> query = em.createNamedQuery("getNavigation", Naviglobal.class);

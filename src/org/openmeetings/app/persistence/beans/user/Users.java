@@ -51,9 +51,9 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-    @NamedQuery(name="getAllUsers",
-        	query="SELECT u FROM Users u")
-    , @NamedQuery(name="getUsersByOrganisationId",
+	@NamedQuery(name="getAllUsers", query="SELECT u FROM Users u")
+	, @NamedQuery(name="getNondeletedUsers", query="SELECT u FROM Users u WHERE u.deleted = false")
+	, @NamedQuery(name="getUsersByOrganisationId",
     	query="SELECT u FROM Users u WHERE u.deleted = false AND u.organisation_users.organisation.organisation_id = :organisation_id")
 })
 @Table(name = "users")

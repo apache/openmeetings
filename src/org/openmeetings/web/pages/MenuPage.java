@@ -18,101 +18,76 @@
  */
 package org.openmeetings.web.pages;
 
-import java.util.List;
-
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.list.AbstractItem;
-import org.apache.wicket.markup.repeater.RepeatingView;
-import org.openmeetings.app.data.basic.Navimanagement;
-import org.openmeetings.app.persistence.beans.basic.Naviglobal;
-import org.openmeetings.app.persistence.beans.basic.Navimain;
-import org.openmeetings.web.app.Application;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.openmeetings.app.dto.NaviDTO;
 import org.openmeetings.web.app.WebSession;
 import org.openmeetings.web.pages.admin.UsersPage;
 
 public class MenuPage extends UserPage {
 	private static final long serialVersionUID = 6421960759218157999L;
-	private enum MenuActions {
-		dashboardModuleStartScreen
-		, dashboardModuleCalendar
-		, recordModule
-		, conferenceModuleRoomList
-		, eventModuleRoomList
-		, moderatorModuleUser
-		, moderatorModuleRoom
-		, adminModuleUser
-		, adminModuleConnections
-		, adminModuleOrg
-		, adminModuleRoom
-		, adminModuleConfiguration
-		, adminModuleLanguages
-		, adminModuleLDAP
-		, adminModuleBackup
-		, adminModuleServers
-	}
 	
 	public MenuPage() {
-		//FIXME all this need to be refactored
-		List<Naviglobal> menu = Application.getBean(Navimanagement.class)
-			.getMainMenu(WebSession.getUserLevel(), WebSession.getUserId(), WebSession.getLanguage());
+		add(new ListView<NaviDTO>("mainItem", WebSession.getNavMenu()) {
+			private static final long serialVersionUID = 2173926553418745231L;
 
-		RepeatingView repeater = new RepeatingView("mainItem");
-		add(repeater);
-		for (Naviglobal global : menu) {
-			AbstractItem item = new AbstractItem(repeater.newChildId());
-			repeater.add(item);
-			item.add(new Label("label", global.getLabel().getValue()).setRenderBodyOnly(true));
-
-			RepeatingView subRepeater = new RepeatingView("childItem");
-			item.add(subRepeater);
-			for (Navimain subMenu : global.getMainnavi()) {
-				AbstractItem subItem = new AbstractItem(subRepeater.newChildId());
-				subRepeater.add(subItem);
+			@Override
+			protected void populateItem(ListItem<NaviDTO> item) {
+				NaviDTO gl = item.getModelObject();
+				item.add(new Label("label", gl.getLabel()).setRenderBodyOnly(true));
 				
+				item.add(new ListView<NaviDTO>("childItem", gl.getItems()) {
+					private static final long serialVersionUID = 3609635268338379087L;
 
-				Link<Void> link = new BookmarkablePageLink<Void>("link", MenuPage.class);
-				switch(MenuActions.valueOf(subMenu.getAction())) {
-					case dashboardModuleStartScreen:
-						break;
-					case dashboardModuleCalendar:
-						break;
-					case recordModule:
-						break;
-					case conferenceModuleRoomList:
-						//requires params
-						break;
-					case eventModuleRoomList:
-						break;
-					case moderatorModuleUser:
-						break;
-					case moderatorModuleRoom:
-						break;
-					case adminModuleUser:
-						link = new BookmarkablePageLink<Void>("link", UsersPage.class);
-						break;
-					case adminModuleConnections:
-						break;
-					case adminModuleOrg:
-						break;
-					case adminModuleRoom:
-						break;
-					case adminModuleConfiguration:
-						break;
-					case adminModuleLanguages:
-						break;
-					case adminModuleLDAP:
-						break;
-					case adminModuleBackup:
-						break;
-					case adminModuleServers:
-						break;
-				}
-				subItem.add(link);
-				link.add(new Label("name", subMenu.getLabel().getValue()).setRenderBodyOnly(true));
-				link.add(new Label("description", subMenu.getTooltip().getValue()).setRenderBodyOnly(true));
+					@Override
+					protected void populateItem(ListItem<NaviDTO> item) {
+						NaviDTO m = item.getModelObject();
+						Link<Void> link = new BookmarkablePageLink<Void>("link", MenuPage.class);
+						switch(m.getAction()) {
+							case dashboardModuleStartScreen:
+								break;
+							case dashboardModuleCalendar:
+								break;
+							case recordModule:
+								break;
+							case conferenceModuleRoomList:
+								//requires params
+								break;
+							case eventModuleRoomList:
+								break;
+							case moderatorModuleUser:
+								break;
+							case moderatorModuleRoom:
+								break;
+							case adminModuleUser:
+								link = new BookmarkablePageLink<Void>("link", UsersPage.class);
+								break;
+							case adminModuleConnections:
+								break;
+							case adminModuleOrg:
+								break;
+							case adminModuleRoom:
+								break;
+							case adminModuleConfiguration:
+								break;
+							case adminModuleLanguages:
+								break;
+							case adminModuleLDAP:
+								break;
+							case adminModuleBackup:
+								break;
+							case adminModuleServers:
+								break;
+						}
+						item.add(link);
+						link.add(new Label("name", m.getLabel()).setRenderBodyOnly(true));
+						link.add(new Label("description", m.getTooltip()).setRenderBodyOnly(true));
+					}
+				}.setReuseItems(true));
 			}
-		}
+		}.setReuseItems(true));
 	}
 }

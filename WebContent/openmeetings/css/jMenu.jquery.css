@@ -15,6 +15,7 @@
 	background-color: #322f32;
 	margin: 0; //
 	float: left;
+	width: 120px;
 }
 
 #jMenu li a {

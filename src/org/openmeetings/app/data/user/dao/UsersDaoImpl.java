@@ -137,6 +137,13 @@ public class UsersDaoImpl {
 		return null;
 	}
 
+	public List<Users> getNondeletedUsers(int first, int count) {
+		TypedQuery<Users> q = em.createNamedQuery("getNondeletedUsers", Users.class);
+		q.setFirstResult(first);
+		q.setMaxResults(count);
+		return q.getResultList();
+	}
+
 	public List<Users> getAllUsers() {
 		try {
 			// get all non-deleted users

@@ -64,10 +64,9 @@
     
     <filter-mapping>
         <filter-name>ServletRequestExFilter</filter-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>*</url-pattern>
     </filter-mapping>
 
-	<!--  Commented for now
 	<filter>
 		<filter-name>OpenmeetingsApplication</filter-name>
 		<filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
@@ -78,9 +77,8 @@
 	</filter>
 	<filter-mapping>
 		<filter-name>OpenmeetingsApplication</filter-name>
-		<url-pattern>/*</url-pattern>
+		<url-pattern>/html/*</url-pattern>
 	</filter-mapping>
-	-->
 	 
     <context-param>
         <param-name>contextConfigLocation</param-name>

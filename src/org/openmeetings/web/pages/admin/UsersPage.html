@@ -21,6 +21,29 @@
 <html xmlns="http://www.w3.org/1999/xhtml" 
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.5-strict.dtd" lang="en">
 	<wicket:extend>
-		Users will goes here
+		<table>
+			<tr>
+				<td>
+					<span wicket:id="navigator">[dataview navigator]</span>
+					<table>
+						<tr>
+							<th><wicket:ommessage key="146" /></th>
+							<th><wicket:ommessage key="147" /></th>
+							<th><wicket:ommessage key="148" /></th>
+							<th><wicket:ommessage key="149" /></th>
+						</tr>			
+			    		<tr wicket:id="userList">
+							<td><span wicket:id="userId"></span></td>
+							<td><span wicket:id="login"></span></td>
+							<td><span wicket:id="firstName"></span></td>
+							<td><span wicket:id="lastName"></span></td>
+						</tr>
+					</table>
+				</td>
+				<td>
+					<span wicket:id="selected"></span>
+				</td>
+			</tr>
+		</table>
 	</wicket:extend>
 </html>
