@@ -19,40 +19,33 @@
 
 		<section name="Commercial Support for OpenMeetings">
 
-			<p>There are a number of companies offering services for OpenMeetings
+			<p>There are few companies offering complex services for OpenMeetings, including code support,
+			development, integration and bug fixing
 			</p>
 			<ul>
 				<li>
-					<a href="http://www.openmeetings.de" target="_BLANK" rel="nofollow">openmeetings.de
+					<a href="http://www.webbase-design.de/" target="_BLANK">webbase-design.de
 					</a>
-					owned by Sebastian Wagner offers services for OpenMeetings,
-					Installation, Integration, Customization, Hosting
+					owned by Sebastian Wagner
 				</li>
 				<li>
-					<a href="http://www.dataved.ru" target="_BLANK" rel="nofollow">dataved.ru
+					<a href="http://www.dataved.ru" target="_BLANK">dataved.ru
 					</a>
-					run by (Alexei Fedotov, German, Maxim, Timur, Rodion) offers
-					services for OpenMeetingss, Installation, Integration,
-					Customization, Hosting
-				</li>
-				<li>
-					<a href="http://www.openmeetings.de" target="_BLANK" rel="nofollow">openmeetings.de
-					</a>
-					and
-					<a href="http://www.dataved.ru" target="_BLANK" rel="nofollow">dataved.ru
-					</a>
-					have a long term partnership and
-					price agreement
+					run by Alexei Fedotov, German, Maxim, Timur, Rodion)
 				</li>
 				<li>
                     <a href="http://www.samoo.es" target="_BLANK" rel="nofollow">samoo.es</a>
-                    provides support for the Sakai Plugin.
+                    provides support for the Sakai Plugin
                 </li>
 			</ul>
 
 			<p>
-				Want to get listed here? Please contact the
-				<a href="mail-lists.html">Mailing List</a>
+			    There are more companies offering installation, customization, hosting, conferencing and support services. You can add 
+				yourself to the <a href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Commercial+Support">wiki page</a>.
+			</p>
+			
+			<p>
+				Want to get listed here? Become a <a href="http://www.apache.org/dev/committers.html">committer</a>.
 			</p>
 		</section>
 
