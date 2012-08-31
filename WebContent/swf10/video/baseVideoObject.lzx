@@ -582,7 +582,7 @@
 	</handler> 
     
     <dragstate name="dragger" />
-    <resizestate name="rs"/>
+    <resizestatemin name="rs" resize_min_width="${70}" resize_min_height="${70}"/>
     <dragHelper name="dragHelper"/>
     
     <animator name="_minimizeZoom" attribute="height" 
