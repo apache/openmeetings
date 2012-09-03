@@ -28,25 +28,26 @@
 
  
 <class name="videoObjectBroadcast" extends="baseVideoObject" isremote="false">
-  <attribute name="interviewPodId" value="-1" />
-  <attribute name="ratioW" value="1" />
-  <attribute name="ratioH" value="1" />
-  
-  <attribute name="videoInsetX" value="2" type="number" />
-  <attribute name="videoInsetY" value="21" type="number" />
-  <attribute name="bottomBarHeight" value="0" type="number" />
-  
-  <handler name="oninit">
+    <attribute name="interviewPodId" value="-1" />
+    <attribute name="ratioW" value="1" />
+    <attribute name="ratioH" value="1" />
+
+    <attribute name="videoInsetX" value="2" type="number" />
+    <attribute name="videoInsetY" value="21" type="number" />
+    <attribute name="bottomBarHeight" value="0" type="number" />
+
+    <handler name="oninit">
      <![CDATA[
         this._loudness.bringToFront();
         this._resizeview.bringToFront();
      ]]>
-  </handler>
+    </handler>
   
      <!---
         Change the video resolution by chaning pod size
      -->
     <method name="setDefaultVideoSize" args="w,h">
+        this.initRatio = w / h;
         this.setAttribute("width",w+this.videoInsetX);
         this.isMicrophonesRoom = canvas.currentRoomObject.showMicrophoneStatus;
         if (canvas.currentRoomObject.showMicrophoneStatus) {
@@ -64,7 +65,7 @@
 			  width="$once{parent.width}" height="$once{parent.height}" />
 			  
 		<baseVideoStreamDevice name="_videostream" mode="broadcast">
-		  <handler name="onlevel">
+            <handler name="onlevel">
                 <![CDATA[
                     var fullLength = parent.height-24;
                     parent._activityLevel.setAttribute("height",this.level*(fullLength/100));
@@ -74,9 +75,9 @@
          
          <view name="_activityLevel" width="6" x="2" y="2" opacity="0.5" bgcolor="0x00FF00" 
               height="0" >
-        </view> 
+        </view>
 		
-	</view>	
+	</view>
 	
 </class>
 

@@ -82,6 +82,9 @@
     <attribute name="isMicrophonesRoom" value="false" type="boolean"/>
 
     <attribute name="lastPositiveVolume" type="number" value="50" />
+
+    <!-- Initial stream ratio: width / height -->
+    <attribute name="initRatio" type="number" value="null" />
 	
 	<handler name="onisremote" args="r">
 		this.isremote = r;
@@ -768,6 +771,30 @@
         }
         return volume;
     </method>
+
+    <handler name="onheight" args="value">
+        if (null == initRatio || !respectRatio) {
+            return;
+        }
+        var videoHeight = value - this.videoInsetY - this.bottomBarHeight;
+        var expectedVideoWidth = videoHeight * initRatio;
+        var expectedPodWidth = expectedVideoWidth + this.videoInsetX;
+        if (this.width != expectedPodWidth) {
+            this.setAttribute("width", expectedPodWidth);
+        }
+    </handler>
+
+    <handler name="onwidth" args="value">
+        if (null == initRatio || !respectRatio) {
+            return;
+        }
+        var videoWidth = value - this.videoInsetX;
+        var expectedVideoHeight = videoWidth / initRatio;
+        var expectedPodHeight = expectedVideoHeight + this.videoInsetY + this.bottomBarHeight;
+        if (this.height != expectedPodHeight) {
+            this.setAttribute("height", expectedPodHeight);
+        }
+    </handler>
     
 </class>
 
