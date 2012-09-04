@@ -686,18 +686,20 @@ public class RoomWebService {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			Users u = userManagement.getUserById(users_id);
-			return roommanagement.addRoom(user_level, name, roomtypes_id,
-					comment, numberOfPartizipants, ispublic, null, false,
-					false, null, false, null, true, false, false, "", "", "",
-					null, null, null, false, // hideTopBar
-					false, // hideChat
-					false, // hideActivitiesAndActions
-					false, // hideFilesExplorer
-					false, // hideActionsMenu
-					false, // hideScreenSharing
-					false, // hideWhiteboard
-					false, // showMicrophoneStatus
-					u.getServer());
+			if (authLevelManagement.checkWebServiceLevel(user_level)) {
+				return roommanagement.addRoom(3L, name, roomtypes_id, comment,
+						numberOfPartizipants, ispublic, null, false, false,
+						null, false, null, true, false, false, "", "", "",
+						null, null, null, false, // hideTopBar
+						false, // hideChat
+						false, // hideActivitiesAndActions
+						false, // hideFilesExplorer
+						false, // hideActionsMenu
+						false, // hideScreenSharing
+						false, // hideWhiteboard
+						false, // showMicrophoneStatus
+						u.getServer());
+			}
 		} catch (Exception err) {
 			log.error("[addRoom] ", err);
 		}
@@ -742,18 +744,20 @@ public class RoomWebService {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			Users u = userManagement.getUserById(users_id);
-			return roommanagement.addRoom(user_level, name, roomtypes_id,
-					comment, numberOfPartizipants, ispublic, null, appointment,
-					isDemoRoom, demoTime, isModeratedRoom, null, true, false,
-					false, "", "", "", null, null, null, false, // hideTopBar
-					false, // hideChat
-					false, // hideActivitiesAndActions
-					false, // hideFilesExplorer
-					false, // hideActionsMenu
-					false, // hideScreenSharing
-					false, // hideWhiteboard
-					false, // showMicrophoneStatus
-					u.getServer());
+			if (authLevelManagement.checkWebServiceLevel(user_level)) {
+				return roommanagement.addRoom(3L, name, roomtypes_id, comment,
+						numberOfPartizipants, ispublic, null, appointment,
+						isDemoRoom, demoTime, isModeratedRoom, null, true,
+						false, false, "", "", "", null, null, null, false, // hideTopBar
+						false, // hideChat
+						false, // hideActivitiesAndActions
+						false, // hideFilesExplorer
+						false, // hideActionsMenu
+						false, // hideScreenSharing
+						false, // hideWhiteboard
+						false, // showMicrophoneStatus
+						u.getServer());
+			}
 		} catch (Exception err) {
 			log.error("[addRoomWithModeration] ", err);
 		}
@@ -804,19 +808,21 @@ public class RoomWebService {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			Users u = userManagement.getUserById(users_id);
-			return roommanagement.addRoom(user_level, name, roomtypes_id,
-					comment, numberOfPartizipants, ispublic, null, appointment,
-					isDemoRoom, demoTime, isModeratedRoom, null,
-					allowUserQuestions, false, false, "", "", "", null, null,
-					null, false, // hideTopBar
-					false, // hideChat
-					false, // hideActivitiesAndActions
-					false, // hideFilesExplorer
-					false, // hideActionsMenu
-					false, // hideScreenSharing
-					false, // hideWhiteboard
-					false, // showMicrophoneStatus
-					u.getServer());
+			if (authLevelManagement.checkWebServiceLevel(user_level)) {
+				return roommanagement.addRoom(3L, name, roomtypes_id, comment,
+						numberOfPartizipants, ispublic, null, appointment,
+						isDemoRoom, demoTime, isModeratedRoom, null,
+						allowUserQuestions, false, false, "", "", "", null,
+						null, null, false, // hideTopBar
+						false, // hideChat
+						false, // hideActivitiesAndActions
+						false, // hideFilesExplorer
+						false, // hideActionsMenu
+						false, // hideScreenSharing
+						false, // hideWhiteboard
+						false, // showMicrophoneStatus
+						u.getServer());
+			}
 		} catch (Exception err) {
 			log.error("[addRoomWithModerationAndQuestions] ", err);
 		}
@@ -869,19 +875,22 @@ public class RoomWebService {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			Users u = userManagement.getUserById(users_id);
-			return roommanagement.addRoom(user_level, name, roomtypes_id,
-					comment, numberOfPartizipants, ispublic, null, appointment,
-					isDemoRoom, demoTime, isModeratedRoom, null,
-					allowUserQuestions, isAudioOnly, false, "", "", "", null,
-					null, null, false, // hideTopBar
-					false, // hideChat
-					false, // hideActivitiesAndActions
-					false, // hideFilesExplorer
-					false, // hideActionsMenu
-					false, // hideScreenSharing
-					false, // hideWhiteboard
-					false, // showMicrophoneStatus
-					u.getServer());
+			if (authLevelManagement.checkWebServiceLevel(user_level)) {
+				return roommanagement.addRoom(3L, name, roomtypes_id, comment,
+						numberOfPartizipants, ispublic, null, appointment,
+						isDemoRoom, demoTime, isModeratedRoom, null,
+						allowUserQuestions, isAudioOnly, false, "", "", "",
+						null, null, null, false, // hideTopBar
+						false, // hideChat
+						false, // hideActivitiesAndActions
+						false, // hideFilesExplorer
+						false, // hideActionsMenu
+						false, // hideScreenSharing
+						false, // hideWhiteboard
+						false, // showMicrophoneStatus
+						u.getServer());
+			}
+			return -1L;
 		} catch (Exception err) {
 			log.error("[addRoomWithModerationQuestionsAndAudioType] ", err);
 			throw new AxisFault(err.getMessage());
@@ -954,13 +963,17 @@ public class RoomWebService {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			Users u = userManagement.getUserById(users_id);
-			return roommanagement.addRoom(user_level, name, roomtypes_id,
-					comment, numberOfPartizipants, ispublic, null, appointment,
-					isDemoRoom, demoTime, isModeratedRoom, null,
-					allowUserQuestions, isAudioOnly, false, "", "", "", null,
-					null, null, hideTopBar, hideChat, hideActivitiesAndActions,
-					hideFilesExplorer, hideActionsMenu, hideScreenSharing,
-					hideWhiteboard, false, u.getServer());
+			if (authLevelManagement.checkWebServiceLevel(user_level)) {
+				return roommanagement.addRoom(3L, name, roomtypes_id, comment,
+						numberOfPartizipants, ispublic, null, appointment,
+						isDemoRoom, demoTime, isModeratedRoom, null,
+						allowUserQuestions, isAudioOnly, false, "", "", "",
+						null, null, null, hideTopBar, hideChat,
+						hideActivitiesAndActions, hideFilesExplorer,
+						hideActionsMenu, hideScreenSharing, hideWhiteboard,
+						false, u.getServer());
+			}
+			return -1L;
 		} catch (Exception err) {
 			log.error(
 					"[addRoomWithModerationQuestionsAudioTypeAndHideOptions] ",
