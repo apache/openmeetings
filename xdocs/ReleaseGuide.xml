@@ -39,29 +39,56 @@
 				</div>
 
 			</subsection>
-			
+
 			<subsection name="Prepare your Apache ID">
-				
+
 				<div>
 					Every release package must be signed with a PGP/GPG key.
-					<br/>
-					So if you want to release a package your Apache Id must be connected with a PGP key!<br/>
-					<br/>
-					You might follow:<br/>
-					<a href="http://www.apache.org/dev/new-committers-guide.html#security-and-pgp" target="_blank">http://www.apache.org/dev/new-committers-guide.html#security-and-pgp</a><br/>
-					<br/>
-					In short:<br/>
-					Create PGP key pairs (private + public) (and I recommend creating a Revoke Cert)<br/>
-					Upload the public key (either bei using the PGP Tool that you use to create the key) or by using the web form to: <a href="http://pgp.mit.edu/" target="_blank" ref="nofollow">http://pgp.mit.edu/</a><br/>
-					Add the fingerprint string (something like "BF13 CF11 F9C9 0CBE 4413 09AB 0055 16BF 93A3 0395") to your profile at <a href="http://id.apche-org" target="_blank" ref="nofollow">id.apche-org</a><br/>
-					Wait for 6-8 hours, the server will search for a public key based on your fingerprint, if success it will create a file with your name at:<br/>
-					<a href="https://people.apache.org/keys/committer/">https://people.apache.org/keys/committer/</a><br/>
-					<br/>
-					If that is "success" then add your key to:<br/>
-					<a href="https://svn.apache.org/repos/asf/incubator/openmeetings/project/KEYS">https://svn.apache.org/repos/asf/incubator/openmeetings/project/KEYS</a><br/>
-					and follow the instructions in the file.<br/>
+					<br />
+					So if you want to release a package your Apache Id must be
+					connected with a PGP key!
+					<br />
+					<br />
+					You might follow:
+					<br />
+					<a
+						href="http://www.apache.org/dev/new-committers-guide.html#security-and-pgp"
+						target="_blank">http://www.apache.org/dev/new-committers-guide.html#security-and-pgp
+					</a>
+					<br />
+					<br />
+					In short:
+					<br />
+					Create PGP key pairs (private + public) (and I recommend creating a
+					Revoke Cert)
+					<br />
+					Upload the public key (either bei using the PGP Tool that you use
+					to create the key) or by using the web form to:
+					<a href="http://pgp.mit.edu/" target="_blank" ref="nofollow">http://pgp.mit.edu/
+					</a>
+					<br />
+					Add the fingerprint string (something like "BF13 CF11 F9C9 0CBE
+					4413 09AB 0055 16BF 93A3 0395") to your profile at
+					<a href="http://id.apche-org" target="_blank" ref="nofollow">id.apche-org
+					</a>
+					<br />
+					Wait for 6-8 hours, the server will search for a public key based
+					on your fingerprint, if success it will create a file with your
+					name at:
+					<br />
+					<a href="https://people.apache.org/keys/committer/">https://people.apache.org/keys/committer/</a>
+					<br />
+					<br />
+					If that is "success" then add your key to:
+					<br />
+					<a
+						href="https://svn.apache.org/repos/asf/incubator/openmeetings/project/KEYS">https://svn.apache.org/repos/asf/incubator/openmeetings/project/KEYS
+					</a>
+					<br />
+					and follow the instructions in the file.
+					<br />
 				</div>
-			
+
 			</subsection>
 
 			<subsection name="Step1 - Prepare files">
@@ -157,7 +184,8 @@
 					<br />
 					<br />
 					After the Vote was successful on the Developer mailing list,
-					you need organize a vote on the general list:
+					you
+					need organize a vote on the general list:
 					general@incubator.apache.org
 					<br />
 					The vote on the general list has the same process, first a VOTE
@@ -172,19 +200,32 @@
 			<subsection name="Step3 - Distribute and announce">
 				<p>If VOTEs positive: Upload the release </p>
 				<div class="xmlcode">
-					The distribution upload location (www.apache.org/dist)
-					for all Apache projects is the /www/www.apache.org/dist directory on
-					people.apache.org. Each project (including the Incubator) owns a
+					The distribution upload location
+					(www.apache.org/dist)
+					for all Apache projects is the
+					/www/www.apache.org/dist directory on
+					people.apache.org. Each
+					project (including the Incubator) owns a
 					directory within dist.
 				</div>
 				<p>
 					Our distribution directory is:
-					<br/>
+					<br />
 					/www/www.apache.org/dist/incubator/openmeetings
-					<br/>
-					each version should have a subfolder within this directory matching the name of the release:
-					<br/>
+					<br />
+					each version should have a subfolder within this directory matching
+					the name of the release:
+					<br />
 					for example 2.0-incubating
+					<br />
+					Make sure the the files/folders in the section
+					/www/www.apache.org/dist/incubator/openmeetings have the proper
+					rights,
+					see:
+					<a
+						href="http://incubator.apache.org/guides/releasemanagement.html#distribution-permissions"
+						target="_BLANK">http://incubator.apache.org/guides/releasemanagement.html#distribution-permissions
+					</a>
 				</p>
 				<p>
 					Wait 24 hours (until all Apache mirrors have synced the packages)
@@ -197,11 +238,18 @@
 					[ANNOUNCE] Apache OpenMeetings x.xx [Incubating] released
 				</p>
 				<p>
-					Add a section to <a href="downloads.html">downloads</a> website. 
-					<br/>
-					Make sure that the binary packages are linked using the mirror URL as base path (<b>not</b> www.apache.org/dist):
-					<br/>
-					Mirror URL: <a href="http://www.apache.org/dyn/closer.cgi/incubator/openmeetings/">http://www.apache.org/dyn/closer.cgi/incubator/openmeetings/</a>
+					Add a section to
+					<a href="downloads.html">downloads</a>
+					website.
+					<br />
+					Make sure that the binary packages are linked using the mirror URL
+					as base path (
+					<b>not</b>
+					www.apache.org/dist):
+					<br />
+					Mirror URL:
+					<a href="http://www.apache.org/dyn/closer.cgi/incubator/openmeetings/">http://www.apache.org/dyn/closer.cgi/incubator/openmeetings/
+					</a>
 				</p>
 			</subsection>
 
