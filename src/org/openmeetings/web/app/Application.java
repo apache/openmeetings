@@ -27,7 +27,7 @@ import org.apache.wicket.markup.MarkupResourceStream;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.settings.IPageSettings;
-import org.openmeetings.web.pages.MenuPage;
+import org.openmeetings.web.pages.MainPage;
 import org.openmeetings.web.pages.auth.SignInPage;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -52,7 +52,7 @@ public class Application extends AuthenticatedWebApplication {
 	
 	@Override
 	public Class<? extends Page> getHomePage() {
-		return MenuPage.class;
+		return MainPage.class;
 	}
 
 	@Override

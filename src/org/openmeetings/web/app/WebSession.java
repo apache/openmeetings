@@ -18,19 +18,15 @@
  */
 package org.openmeetings.web.app;
 
-import java.util.List;
-
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
 import org.openmeetings.app.data.basic.AuthLevelmanagement;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.app.data.basic.Fieldmanagment;
-import org.openmeetings.app.data.basic.Navimanagement;
 import org.openmeetings.app.data.basic.Sessionmanagement;
 import org.openmeetings.app.data.user.Usermanagement;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
-import org.openmeetings.app.dto.NaviDTO;
 import org.openmeetings.app.persistence.beans.basic.Sessiondata;
 import org.openmeetings.app.persistence.beans.user.Users;
 
@@ -39,7 +35,6 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	private long userId = -1;
 	private long userLevel = -1;
 	private String SID = null;
-	private List<NaviDTO> menu = null;
 	
 	public WebSession(Request request) {
 		super(request);
@@ -87,15 +82,6 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	public static String getString(long id) {
 		Fieldmanagment fieldManagment = Application.getBean(Fieldmanagment.class);
 		return fieldManagment.getString(id, getLanguage());
-	}
-	
-	public static List<NaviDTO> getNavMenu() {
-		WebSession session = get();
-		if (session.menu == null) {
-			session.menu = Application.getBean(Navimanagement.class)
-					.getMainMenuDTO(session.userLevel, session.userId, getLanguage());
-		}
-		return session.menu;
 	}
 	
 	public static long getLanguage() {

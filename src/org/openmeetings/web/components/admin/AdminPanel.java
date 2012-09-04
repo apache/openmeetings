@@ -16,13 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.openmeetings.web.pages.admin;
+package org.openmeetings.web.components.admin;
 
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.openmeetings.web.pages.MenuPage;
+import org.openmeetings.web.components.BasePanel;
 
 @AuthorizeInstantiation("ADMIN")
-public class AdminPage extends MenuPage {
-	private static final long serialVersionUID = -3717834731100198593L;
+public abstract class AdminPanel extends BasePanel {
+	private static final long serialVersionUID = 6811243474361803279L;
 
+	public AdminPanel(String id) {
+		super(id);
+	}
 }

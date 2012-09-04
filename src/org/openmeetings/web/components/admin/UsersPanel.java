@@ -16,14 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.openmeetings.web.pages.admin;
+package org.openmeetings.web.components.admin;
 
 import java.util.Iterator;
 
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
@@ -34,13 +34,14 @@ import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.web.app.Application;
 
-public class UsersPage extends AdminPage {
+public class UsersPanel extends AdminPanel {
 	private static final long serialVersionUID = -4463107742579790120L;
 	@SuppressWarnings("unused")
 	private String selectedText = "Click on the table to change the user";
 	private Label selected = null;
 	
-	public UsersPage() {
+	public UsersPanel(String id) {
+		super(id);
 		DataView<Users> dataView = new DataView<Users>("userList", new IDataProvider<Users>(){
 			private static final long serialVersionUID = -6822789354860988626L;
 
@@ -87,6 +88,6 @@ public class UsersPage extends AdminPage {
 		add(selected);
 		dataView.setItemsPerPage(8); //FIXME need to be parametrized
 		add(dataView);
-		add(new PagingNavigator("navigator", dataView));
+		add(new AjaxPagingNavigator("navigator", dataView));
 	}
 }

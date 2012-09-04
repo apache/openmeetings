@@ -16,11 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.openmeetings.web.pages;
+package org.openmeetings.web.components;
 
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.html.panel.Panel;
 
-@AuthorizeInstantiation("USER")
-public abstract class UserPage extends BasePage {
-	private static final long serialVersionUID = -6237917782433412496L;
+public abstract class BasePanel extends Panel {
+	private static final long serialVersionUID = 8663740955529405678L;
+
+	public BasePanel(String id) {
+		super(id);
+		setOutputMarkupId(true);
+	}
+
 }
