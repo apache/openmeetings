@@ -21,6 +21,7 @@ package org.openmeetings.web.components;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.core.util.string.JavaScriptUtils;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -83,6 +84,7 @@ public class MenuPanel extends BasePanel {
 							}
 							
 							public void onClick(AjaxRequestTarget target) {
+								String hash = "#";
 								switch(action) {
 									case dashboardModuleStartScreen:
 										break;
@@ -101,7 +103,7 @@ public class MenuPanel extends BasePanel {
 										break;
 									case adminModuleUser:
 										target.add(contents.replace(new UsersPanel("child")));
-										//link = new BookmarkablePageLink<Void>("link", UsersPanel.class);
+										hash = "#admin/users";
 										break;
 									case adminModuleConnections:
 										break;
@@ -120,6 +122,7 @@ public class MenuPanel extends BasePanel {
 									case adminModuleServers:
 										break;
 								}
+								target.appendJavaScript("window.location.hash = '" + JavaScriptUtils.escapeQuotes(hash) + "';");
 							};
 						});
 					}

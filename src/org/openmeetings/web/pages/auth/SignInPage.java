@@ -85,11 +85,4 @@ public class SignInPage extends BasePage {
 			}
 		}
 	}
-/*	
-	@Override
-	protected void configureResponse(WebResponse response) {
-		super.configureResponse(response);
-        response.setHeader("Cache-Control", "no-cache, max-age=0, must-revalidate, no-store");
-	}
-*/
 }

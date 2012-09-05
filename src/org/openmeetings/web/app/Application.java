@@ -21,15 +21,16 @@ package org.openmeetings.web.app;
 import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.core.request.handler.ListenerInterfaceRequestHandler;
+import org.apache.wicket.core.request.mapper.HomePageMapper;
 import org.apache.wicket.markup.MarkupFactory;
 import org.apache.wicket.markup.MarkupParser;
 import org.apache.wicket.markup.MarkupResourceStream;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.IRequestHandler;
-import org.apache.wicket.request.IRequestMapper;
-import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Url;
+import org.apache.wicket.request.mapper.info.PageComponentInfo;
 import org.apache.wicket.settings.IPageSettings;
 import org.openmeetings.web.pages.MainPage;
 import org.openmeetings.web.pages.auth.SignInPage;
@@ -52,26 +53,22 @@ public class Application extends AuthenticatedWebApplication {
 		});
 		super.init();
 		mountPage("signin", getSignInPageClass());
-		//TODO custom mapper to hack URL
-		/*
-		getRootRequestMapperAsCompound().add(new IRequestMapper() {
-			
-			public IRequestHandler mapRequest(Request request) {
-				// TODO Auto-generated method stub
-				return null;
+
+		getRootRequestMapperAsCompound().add(new HomePageMapper(getHomePage()) {
+			@Override
+			protected void encodePageComponentInfo(Url url, PageComponentInfo info) {
+				//Does nothing
 			}
 			
+			@Override
 			public Url mapHandler(IRequestHandler requestHandler) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			
-			public int getCompatibilityScore(Request request) {
-				// TODO Auto-generated method stub
-				return 0;
+				if (requestHandler instanceof ListenerInterfaceRequestHandler) {
+					return null;
+				} else {
+					return super.mapHandler(requestHandler);
+				}
 			}
 		});
-		*/
 	}
 	
 	@Override
