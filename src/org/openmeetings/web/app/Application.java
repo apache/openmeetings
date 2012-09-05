@@ -26,6 +26,10 @@ import org.apache.wicket.markup.MarkupParser;
 import org.apache.wicket.markup.MarkupResourceStream;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.IRequestMapper;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.Url;
 import org.apache.wicket.settings.IPageSettings;
 import org.openmeetings.web.pages.MainPage;
 import org.openmeetings.web.pages.auth.SignInPage;
@@ -48,6 +52,26 @@ public class Application extends AuthenticatedWebApplication {
 		});
 		super.init();
 		mountPage("signin", getSignInPageClass());
+		//TODO custom mapper to hack URL
+		/*
+		getRootRequestMapperAsCompound().add(new IRequestMapper() {
+			
+			public IRequestHandler mapRequest(Request request) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			public Url mapHandler(IRequestHandler requestHandler) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			public int getCompatibilityScore(Request request) {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+		});
+		*/
 	}
 	
 	@Override

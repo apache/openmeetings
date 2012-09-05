@@ -22,6 +22,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.openmeetings.app.data.basic.Configurationmanagement;
 import org.openmeetings.web.app.Application;
+import org.openmeetings.web.components.HeaderPanel;
 
 public abstract class BasePage extends WebPage {
 	private static final long serialVersionUID = -6237917782433412496L;
@@ -29,6 +30,6 @@ public abstract class BasePage extends WebPage {
 	public BasePage() {
 		String appName = Application.getBean(Configurationmanagement.class).getAppName();
 		add(new Label("pageTitle", appName).setRenderBodyOnly(true));
-		add(new Label("appName", appName));
+		add(new HeaderPanel("header", appName));
 	}
 }
