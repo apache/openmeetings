@@ -10,16 +10,18 @@ import org.openmeetings.app.persistence.beans.user.Users;
 public class UserForm extends Form<Users> {
 
 	public UserForm(String id, Users user) {
-		super(id, new CompoundPropertyModel(user));
+		super(id, new CompoundPropertyModel<Users>(user));
+		setOutputMarkupId(true);
 		
-		add(new TextField("login"));
+		add(new TextField<String>("login"));
 		
         //add(new SimpleFormComponentLabel("login-label", fc));
         
         // add a button that can be used to submit the form via ajax
-        add(new AjaxButton("ajax-button", this)
-        {
-            @Override
+        add(new AjaxButton("ajax-button", this) {
+			private static final long serialVersionUID = 839803820502260006L;
+
+			@Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form)
             {
                 // repaint the feedback panel so that it is hidden

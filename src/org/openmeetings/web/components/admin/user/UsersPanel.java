@@ -79,9 +79,6 @@ public class UsersPanel extends AdminPanel {
 					private static final long serialVersionUID = -8069413566800571061L;
 
 					protected void onEvent(AjaxRequestTarget target) {
-						//selectedText = fName + " " + lName + " selected.";
-						//target.add(selected);
-						//form = new UserForm("form", u);
 						form.setModelObject(u);
 						target.add(form);
 					}
@@ -98,6 +95,5 @@ public class UsersPanel extends AdminPanel {
 		Users user = new Users();
 		form = new UserForm("form", user);
         add(form);
-        form.setOutputMarkupId(true);
 	}
 }
