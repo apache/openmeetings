@@ -30,7 +30,7 @@ import org.openmeetings.app.persistence.beans.basic.Naviglobal;
 import org.openmeetings.app.persistence.beans.basic.Navimain;
 import org.openmeetings.web.app.Application;
 import org.openmeetings.web.app.WebSession;
-import org.openmeetings.web.components.admin.UsersPanel;
+import org.openmeetings.web.components.admin.user.UsersPanel;
 
 public class MenuPanel extends BasePanel {
 	private static final long serialVersionUID = 6626039612808753514L;

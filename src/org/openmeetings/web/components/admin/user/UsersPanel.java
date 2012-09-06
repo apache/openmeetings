@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.openmeetings.web.components.admin;
+package org.openmeetings.web.components.admin.user;
 
 import java.util.Iterator;
 
@@ -33,12 +33,14 @@ import org.apache.wicket.model.PropertyModel;
 import org.openmeetings.app.data.user.dao.UsersDaoImpl;
 import org.openmeetings.app.persistence.beans.user.Users;
 import org.openmeetings.web.app.Application;
+import org.openmeetings.web.components.admin.AdminPanel;
 
 public class UsersPanel extends AdminPanel {
 	private static final long serialVersionUID = -4463107742579790120L;
 	@SuppressWarnings("unused")
 	private String selectedText = "Click on the table to change the user";
 	private Label selected = null;
+	private UserForm form = null;
 	
 	public UsersPanel(String id) {
 		super(id);
@@ -66,7 +68,7 @@ public class UsersPanel extends AdminPanel {
 
 			@Override
 			protected void populateItem(Item<Users> item) {
-				Users u = item.getModelObject();
+				final Users u = item.getModelObject();
 				item.add(new Label("userId", "" + u.getUser_id()));
 				item.add(new Label("login", u.getLogin()));
 				final String fName = u.getFirstname();
@@ -77,8 +79,11 @@ public class UsersPanel extends AdminPanel {
 					private static final long serialVersionUID = -8069413566800571061L;
 
 					protected void onEvent(AjaxRequestTarget target) {
-						selectedText = fName + " " + lName + " selected.";
-						target.add(selected);
+						//selectedText = fName + " " + lName + " selected.";
+						//target.add(selected);
+						//form = new UserForm("form", u);
+						form.setModelObject(u);
+						target.add(form);
 					}
 				});
 			}
@@ -89,5 +94,10 @@ public class UsersPanel extends AdminPanel {
 		dataView.setItemsPerPage(8); //FIXME need to be parametrized
 		add(dataView);
 		add(new AjaxPagingNavigator("navigator", dataView));
+		
+		Users user = new Users();
+		form = new UserForm("form", user);
+        add(form);
+        form.setOutputMarkupId(true);
 	}
 }
