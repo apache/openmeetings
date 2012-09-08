@@ -168,21 +168,7 @@ public class BackupExport {
 		/*
 		 * ##################### Backup Users
 		 */
-		{
-			List<Users> list = usersDao.getAllUsersDeleted();
-			Registry registry = new Registry();
-			Strategy strategy = new RegistryStrategy(registry);
-			Serializer serializer = new Persister(strategy);
-	
-			registry.bind(Organisation.class, OrganisationConverter.class);
-			registry.bind(OmTimeZone.class, OmTimeZoneConverter.class);
-			registry.bind(States.class, StateConverter.class);
-			if (list != null && list.size() > 0) {
-				registry.bind(list.get(0).getRegdate().getClass(), DateConverter.class);
-			}
-			
-			writeList(serializer, backup_dir, "users.xml", "users", list);
-		}
+		exportUsers(backup_dir, usersDao.getAllUsersDeleted());
 
 		/*
 		 * ##################### Backup Room
@@ -432,10 +418,15 @@ public class BackupExport {
 	
 	private <T> void writeList(Serializer ser, File backup_dir,
 			String fileName, String listElement, List<T> list) throws Exception {
+		
 		FileOutputStream fos = new FileOutputStream(new File(backup_dir,
 				fileName));
+		writeList(ser, fos, listElement, list);
+	}
+	
+	private <T> void writeList(Serializer ser, OutputStream os, String listElement, List<T> list) throws Exception {
 		Format format = new Format("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-		OutputNode doc = NodeBuilder.write(new OutputStreamWriter(fos, "UTF-8"), format);
+		OutputNode doc = NodeBuilder.write(new OutputStreamWriter(os, "UTF-8"), format);
 		OutputNode root = doc.getChild("root");
 		root.setComment(BACKUP_COMMENT);
 		OutputNode listNode = root.getChild(listElement);
@@ -452,6 +443,25 @@ public class BackupExport {
 		root.commit();
 	}
 
+	public void exportUsers(File backup_dir, List<Users> list) throws Exception {
+		FileOutputStream fos
+			= new FileOutputStream(new File(backup_dir, "users.xml"));
+		exportUsers(fos, list);
+	}
+	public void exportUsers(OutputStream os, List<Users> list) throws Exception {
+		Registry registry = new Registry();
+		Strategy strategy = new RegistryStrategy(registry);
+		Serializer serializer = new Persister(strategy);
+
+		registry.bind(Organisation.class, OrganisationConverter.class);
+		registry.bind(OmTimeZone.class, OmTimeZoneConverter.class);
+		registry.bind(States.class, StateConverter.class);
+		if (list != null && list.size() > 0) {
+			registry.bind(list.get(0).getRegdate().getClass(), DateConverter.class);
+		}
+		
+		writeList(serializer, os, "users", list);
+	}
 	/*
 	 * (non-Javadoc)
 	 * 

@@ -127,6 +127,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 @Controller
 public class BackupImportController extends AbstractUploadController {
@@ -275,17 +276,7 @@ public class BackupImportController extends AbstractUploadController {
 		 * ##################### Import Users
 		 */
 		{
-			Registry registry = new Registry();
-			Strategy strategy = new RegistryStrategy(registry);
-			Serializer serializer = new Persister(strategy);
-	
-			registry.bind(Organisation.class, new OrganisationConverter(organisationmanagement, organisationsMap));
-			//registry.bind(UserSipData.class, UserSipDataConverter.class);
-			registry.bind(OmTimeZone.class, new OmTimeZoneConverter(omTimeZoneDaoImpl));
-			registry.bind(States.class, new StateConverter(statemanagement));
-			registry.bind(Date.class, DateConverter.class);
-
-			List<Users> list = readUserList(serializer, f, "users.xml", "users");
+			List<Users> list = readUserList(f, "users.xml", "users");
 			for (Users u : list) {
 				OmTimeZone tz = u.getOmTimeZone();
 				if (tz.getJname() == null) {
@@ -706,12 +697,31 @@ public class BackupImportController extends AbstractUploadController {
 		return null;
 	}
 	
-	//FIXME (need to be removed in later versions) HACK to fix 2 deleted nodes in users.xml and inline Adresses and sipData
-	private List<Users> readUserList(Serializer ser, File baseDir, String fileName, String listNodeName) throws Exception {
+	public List<Users> readUserList(InputStream xml, String listNodeName) throws Exception {
+		return readUserList(new InputSource(xml), listNodeName);
+	}
+	
+	public List<Users> readUserList(File baseDir, String fileName, String listNodeName) throws Exception {
 		File xml = new File(baseDir, fileName);
 		if (!xml.exists()) {
 			throw new Exception(fileName + " missing");
 		}
+		
+		return readUserList(new InputSource(xml.toURI().toASCIIString()), listNodeName);
+	}
+	
+	//FIXME (need to be removed in later versions) HACK to fix 2 deleted nodes in users.xml and inline Adresses and sipData
+	private List<Users> readUserList(InputSource xml, String listNodeName) throws Exception {
+		Registry registry = new Registry();
+		Strategy strategy = new RegistryStrategy(registry);
+		Serializer ser = new Persister(strategy);
+
+		registry.bind(Organisation.class, new OrganisationConverter(organisationmanagement, organisationsMap));
+		//registry.bind(UserSipData.class, UserSipDataConverter.class);
+		registry.bind(OmTimeZone.class, new OmTimeZoneConverter(omTimeZoneDaoImpl));
+		registry.bind(States.class, new StateConverter(statemanagement));
+		registry.bind(Date.class, DateConverter.class);
+
 		DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 		Document doc = dBuilder.parse(xml);
 		NodeList nl = getNode(getNode(doc, "root"), listNodeName).getChildNodes();
@@ -748,10 +758,9 @@ public class BackupImportController extends AbstractUploadController {
 			InputNode item2 = listNode2.getNext(); //HACK to handle UserSipData inside user
 			while (item != null) {
 				try {
-					Users o = ser.read(Users.class, item, false);
+					Users u = ser.read(Users.class, item, false);
 
 					//HACK to handle Adresses and UserSipData inside user
-					Users u = (Users)o;
 					if (u.getAdresses() == null) {
 						Adresses a = ser.read(Adresses.class, item1, false);
 						u.setAdresses(a);
@@ -760,7 +769,7 @@ public class BackupImportController extends AbstractUploadController {
 						UserSipData usd = ser.read(UserSipData.class, item2, false);
 						u.setUserSipData(usd);
 					}
-					list.add(o);
+					list.add(u);
 				} catch (Exception e) {
 					log.debug("Exception While reading node of type: " + Users.class, e);
 				}

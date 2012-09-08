@@ -519,7 +519,7 @@ public class Usermanagement {
 					us.setUpdatetime(new Date());
 					us.setAvailible(availible);
 					us.setStatus(status);
-					us.setSalutations_id(salutations_id);
+					us.setSalutations_id((long)salutations_id);
 					us.setOmTimeZone(omTimeZoneDaoImpl
 							.getOmTimeZone(jNameTimeZone));
 					us.setLanguage_id(language_id);
@@ -1116,7 +1116,7 @@ public class Usermanagement {
 			users.setLasttrans(new Long(0));
 			users.setLevel_id(level_id);
 			users.setStatus(status);
-			users.setSalutations_id(new Integer(1));
+			users.setSalutations_id(1L);
 			users.setStarttime(new Date());
 			users.setActivatehash(hash);
 			users.setOmTimeZone(timezone);
@@ -1231,7 +1231,7 @@ public class Usermanagement {
 			users.setLasttrans(new Long(0));
 			users.setLevel_id(level_id);
 			users.setStatus(status);
-			users.setSalutations_id(new Integer(1));
+			users.setSalutations_id(1L);
 			users.setStarttime(new Date());
 			users.setActivatehash(hash);
 			users.setPictureuri(pictureuri);
@@ -1364,7 +1364,7 @@ public class Usermanagement {
 					savedUser.setAge((Date) values.get("age"));
 					savedUser.setFirstname(values.get("firstname").toString());
 					savedUser.setLastname(values.get("lastname").toString());
-					savedUser.setSalutations_id(Integer.parseInt(values.get(
+					savedUser.setSalutations_id(Long.parseLong(values.get(
 							"salutations_id").toString()));
 
 					savedUser.setLanguage_id(Long.parseLong(values.get(

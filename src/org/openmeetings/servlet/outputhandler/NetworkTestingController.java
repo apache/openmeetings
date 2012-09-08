@@ -80,6 +80,10 @@ public class NetworkTestingController {
             case DOWNLOAD_SPEED:
                 data = downloadData;
                 break;
+			case UPLOAD_SPEED:
+				break;
+			default:
+				break;
         }
 
         // set needed headers

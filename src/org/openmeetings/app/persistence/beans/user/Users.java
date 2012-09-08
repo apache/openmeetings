@@ -111,7 +111,7 @@ public class Users implements Serializable {
 	
 	//for backward compatibility, delete when AS3/Flash is gone
 	@Column(name = "salutations_id")
-	@Element(data=true, required=false)
+	@Element(name="title_id", data=true, required=false)
 	private Long salutations_id;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
