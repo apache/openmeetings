@@ -37,7 +37,7 @@
 				<b>Note: </b>If your email bounces with status messages like "Delivery Status Notification" it is 
 				likely that you have send your mail as HTML mail. Apache does not like sending HTML emails, see:
 				<br/> 
-				<a href="http://www.apache.org/dev/contrib-email-tips.html#do-not-send-html-mail" target="_BLANK" ref="nofollow">http://www.apache.org/dev/contrib-email-tips.html#do-not-send-html-mail</a>
+				<a href="http://www.apache.org/dev/contrib-email-tips.html#do-not-send-html-mail" target="_BLANK" rel="nofollow">http://www.apache.org/dev/contrib-email-tips.html#do-not-send-html-mail</a>
 			</p>
 
 			<table>

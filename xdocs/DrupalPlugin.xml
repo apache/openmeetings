@@ -36,7 +36,7 @@
 				You simply download the ZIP or TAR package and unzip it to Drupal "mod" directory.
 				<br/>
 				For a detailed description on how to install plugins in Drupal please review their 
-				<a href="http://drupal.org/documentation/install/modules-themes" target="_BLANK" ref="nofollow">handbook</a>.
+				<a href="http://drupal.org/documentation/install/modules-themes" target="_BLANK" rel="nofollow">handbook</a>.
 				<br />
 				Then you visit the module interface of Drupal, where you will find the new module.
 				You should switch it to "enabled" to get the "Configure" and "Permissions" buttons.
