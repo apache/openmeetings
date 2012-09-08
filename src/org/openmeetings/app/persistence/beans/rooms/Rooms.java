@@ -95,7 +95,7 @@ public class Rooms implements Serializable {
 	private Long externalRoomId;
 	
 	@Column(name = "externalRoomType")
-	@Element(data=true)
+	@Element(data=true, required=false)
 	private String externalRoomType;
 	
 	@Column(name = "isdemoroom")

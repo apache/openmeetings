@@ -22,6 +22,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.openmeetings.app.persistence.beans.lang.Fieldlanguagesvalues;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,14 +35,17 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name = "salutations")
+@Root
 public class Salutations implements Serializable {
 	private static final long serialVersionUID = -5806449519074435223L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
+	@Element(name="id", data=true)
 	private Long salutations_id;
 	
 	@Column(name="name")
+	@Element(data=true, required=false)
 	private String name;
 	
 	@Column(name="starttime")
@@ -50,9 +55,11 @@ public class Salutations implements Serializable {
 	private Date updatetime;
 	
 	@Column(name="deleted")
+	@Element(data=true, required=false)
 	private boolean deleted;
 	
 	@Column(name="fieldvalues_id")
+	@Element(data=true, required=false)
 	private Long fieldvalues_id;
 	
 	@Transient
