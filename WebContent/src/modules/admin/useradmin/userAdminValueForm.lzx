@@ -148,7 +148,7 @@
             this.state.addAndSelectItem(obj.adresses.states.name,String(obj.adresses.states.state_id));
 			this.adress_comment.setAttribute('text',obj.adresses.comment);
 			this.status.selectItem(String(obj.status));
-			this.salutation.selectItem(String(obj.title_id));
+			this.salutation.selectItem(String(obj.salutations_id));
 			this._timeZone.selectItem(String(obj.omTimeZone.jname));
             this.languages.selectItem(String(obj.language_id));
 			
@@ -267,7 +267,7 @@
   			this.sendObject["availible"] = 0;
   			this.sendObject["status"] = Number(this.parent.status.getValue());
   			this.sendObject["level_id"] = Number(this.parent.level.getValue());
-			this.sendObject["title_id"] = Number(this.parent.salutation.getValue());
+			this.sendObject["salutations_id"] = Number(this.parent.salutation.getValue());
 			this.sendObject["jNameTimeZone"] = parent._timeZone.getValue();
             this.sendObject["language_id"] = parent.languages.getValue();
 			this.sendObject["forceTimeZoneCheck"] = parent.forceTimeZoneCheck.getValue();

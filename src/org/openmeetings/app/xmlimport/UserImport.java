@@ -96,8 +96,17 @@ public class UserImport {
 					.intValue());
 			us.setRegdate(CalendarPatterns.parseDate(itemUsers.element(
 					"regdate").getText()));
-			us.setTitle_id(Integer.valueOf(
-					itemUsers.element("title_id").getText()).intValue());
+			
+			if (itemUsers.element("salutations_id") != null) {
+				us.setSalutations_id(Integer.valueOf(
+						itemUsers.element("salutations_id").getText()).intValue());
+			}
+			//For being backward compatible we also try to import the title_id
+			if (itemUsers.element("title_id") != null) {
+				us.setSalutations_id(Integer.valueOf(
+						itemUsers.element("title_id").getText()).intValue());
+			}
+			
 			us.setLevel_id(Long
 					.valueOf(itemUsers.element("level_id").getText())
 					.longValue());

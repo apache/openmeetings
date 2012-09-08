@@ -69,7 +69,7 @@
 			    		var tResult = new Array();
 			    		for (var t=0;t<value.length;t++) {
 			    			for (var i=0;i<canvas.salutationsInitValues.length;i++){
-			    				if (canvas.salutationsInitValues[i].salutations_id == value[t].owner.title_id) {
+			    				if (canvas.salutationsInitValues[i].salutations_id == value[t].owner.salutations_id) {
 					                value[t].owner["title"] = canvas.salutationsInitValues[i].label.value;
 					                break;
 			    				}
@@ -302,7 +302,7 @@
 			    			value[t].contact["pending"] = value[t].pending;
 			    			value[t].contact["userContactId"] = value[t].userContactId;
 			    			for (var i=0;i<canvas.salutationsInitValues.length;i++){
-			    				if (canvas.salutationsInitValues[i].salutations_id == value[t].contact.title_id) {
+			    				if (canvas.salutationsInitValues[i].salutations_id == value[t].contact.salutations_id) {
 					                value[t].contact["title"] = canvas.salutationsInitValues[i].label.value;
 					                break;
 			    				}

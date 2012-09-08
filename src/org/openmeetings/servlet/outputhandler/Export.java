@@ -268,7 +268,7 @@ public class Export extends HttpServlet {
 			user.addElement("regdate").setText(
 					CalendarPatterns.getDateWithTimeByMiliSeconds(u
 							.getRegdate()));
-			user.addElement("title_id").setText(u.getTitle_id().toString());
+			user.addElement("salutations_id").setText(u.getSalutations_id().toString());
 			user.addElement("level_id").setText(u.getLevel_id().toString());
 
 			user.addElement("additionalname").setText(

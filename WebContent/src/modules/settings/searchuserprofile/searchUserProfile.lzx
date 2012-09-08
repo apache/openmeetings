@@ -185,7 +185,7 @@
 			    		for (var t=0;t<value.result.length;t++) {
 			    			value.result[t]["pending"] = false;
 			    			for (var i=0;i<canvas.salutationsInitValues.length;i++){
-			    				if (canvas.salutationsInitValues[i].salutations_id == value.result[t].title_id) {
+			    				if (canvas.salutationsInitValues[i].salutations_id == value.result[t].salutations_id) {
 					                value.result[t]["title"] = canvas.salutationsInitValues[i].label.value;
 					                break;
 			    				}

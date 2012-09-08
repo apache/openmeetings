@@ -109,9 +109,15 @@ public class Users implements Serializable {
 	@Element(data=true, required=false)
 	private Integer status;
 	
-	@Column(name = "title_id")
+	//for backward compatibility, delete when AS3/Flash is gone
+	@Column(name = "salutations_id")
 	@Element(data=true, required=false)
-	private Integer title_id;
+	private Long salutations_id;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "salutations_id", insertable = false, updatable = false)
+	@Element(data=true, required=false)
+	private Salutations salutations;
 	
 	@Column(name = "starttime")
 	private Date starttime;
@@ -348,12 +354,20 @@ public class Users implements Serializable {
 		this.status = status;
 	}
 
-	public Integer getTitle_id() {
-		return title_id;
+	public Long getSalutations_id() {
+		return salutations_id;
 	}
 
-	public void setTitle_id(Integer title_id) {
-		this.title_id = title_id;
+	public void setSalutations_id(Long salutations_id) {
+		this.salutations_id = salutations_id;
+	}
+	
+	public Salutations getSalutations() {
+		return salutations;
+	}
+
+	public void setSalutations(Salutations salutations) {
+		this.salutations = salutations;
 	}
 
 	public Userlevel getUserlevel() {
