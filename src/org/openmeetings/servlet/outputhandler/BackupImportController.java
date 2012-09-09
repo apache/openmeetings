@@ -759,7 +759,6 @@ public class BackupImportController extends AbstractUploadController {
 			while (item != null) {
 				try {
 					Users u = ser.read(Users.class, item, false);
-					u.setSalutations(null); //TODO need to be removed
 					
 					//HACK to handle Adresses and UserSipData inside user
 					if (u.getAdresses() == null) {

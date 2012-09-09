@@ -45,7 +45,6 @@ import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.persistence.beans.basic.Server;
 import org.openmeetings.app.persistence.beans.basic.Sessiondata;
 import org.openmeetings.app.persistence.beans.domain.Organisation_Users;
-import org.openmeetings.app.persistence.beans.lang.FieldLanguage;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -110,15 +109,9 @@ public class Users implements Serializable {
 	@Element(data=true, required=false)
 	private Integer status;
 	
-	//for backward compatibility, delete when AS3/Flash is gone
 	@Column(name = "salutations_id")
 	@Element(name="title_id", data=true, required=false)
 	private Long salutations_id;
-	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "salutations_id", insertable = false, updatable = false)
-	@Element(data=true, required=false)
-	private Salutations salutations;
 	
 	@Column(name = "starttime")
 	private Date starttime;
@@ -137,11 +130,6 @@ public class Users implements Serializable {
 	@Column(name = "language_id")
 	@Element(data=true, required=false)
 	private Long language_id;
-	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "language_id", insertable = false, updatable = false)
-	//FIXME need to add correct language mapping
-	private FieldLanguage language;
 	
 	@Column(name = "resethash")
 	@Element(data=true, required=false)
@@ -368,14 +356,6 @@ public class Users implements Serializable {
 		this.salutations_id = salutations_id;
 	}
 	
-	public Salutations getSalutations() {
-		return salutations;
-	}
-
-	public void setSalutations(Salutations salutations) {
-		this.salutations = salutations;
-	}
-
 	public Userlevel getUserlevel() {
 		return userlevel;
 	}
@@ -424,16 +404,6 @@ public class Users implements Serializable {
 		this.language_id = language_id;
 	}
 	
-	
-
-	public FieldLanguage getLanguage() {
-		return language;
-	}
-
-	public void setLanguage(FieldLanguage language) {
-		this.language = language;
-	}
-
 	public List<Organisation_Users> getOrganisation_users() {
 		return organisation_users;
 	}
