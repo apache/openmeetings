@@ -236,6 +236,9 @@
 		<dependency org="org.apache.wicket" name="wicket-extensions" rev="6.0.0-beta3" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
+		<dependency org="org.apache.wicket" name="wicket-datetime" rev="6.0.0-beta3" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
 		
 		<!-- iCal4j seems to need this JAR -->
 		<dependency org="edu.emory.mathcs" name="backport-util-concurrent" rev="3.1" conf="openmeetings->*"/>

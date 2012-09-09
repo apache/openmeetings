@@ -45,6 +45,7 @@ import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
 import org.openmeetings.app.persistence.beans.basic.Server;
 import org.openmeetings.app.persistence.beans.basic.Sessiondata;
 import org.openmeetings.app.persistence.beans.domain.Organisation_Users;
+import org.openmeetings.app.persistence.beans.lang.FieldLanguage;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -136,6 +137,10 @@ public class Users implements Serializable {
 	@Column(name = "language_id")
 	@Element(data=true, required=false)
 	private Long language_id;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "language_id", insertable = false, updatable = false)
+	@Element(data=true, required=false)
+	private FieldLanguage language;
 	
 	@Column(name = "resethash")
 	@Element(data=true, required=false)
@@ -416,6 +421,16 @@ public class Users implements Serializable {
 
 	public void setLanguage_id(Long language_id) {
 		this.language_id = language_id;
+	}
+	
+	
+
+	public FieldLanguage getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(FieldLanguage language) {
+		this.language = language;
 	}
 
 	public List<Organisation_Users> getOrganisation_users() {
