@@ -14,9 +14,11 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
+import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
 import org.openmeetings.app.data.basic.FieldLanguageDaoImpl;
 import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
 import org.openmeetings.app.data.basic.dao.ServerDaoImpl;
@@ -78,7 +80,7 @@ public class UserForm extends Form<Users> {
 		throw new RuntimeException("Could not find saluation for id " + id);
 	}
 
-	public UserForm(String id, Users user) {
+	public UserForm(String id, final Users user) {
 		super(id, new CompoundPropertyModel<Users>(user));
 		setOutputMarkupId(true);
 
@@ -215,7 +217,62 @@ public class UserForm extends Form<Users> {
 		add(new DropDownChoice<Server>("server", Application.getBean(
 				ServerDaoImpl.class).getServerList(),
 				new ChoiceRenderer<Server>("name", "id")));
+
+		final String field1160 = WebSession.getString(1160); // 1160 everybody
+		final String field1168 = WebSession.getString(1168); // 1168 contact
+		final String field1169 = WebSession.getString(1169); // 1169 nobody
+
+		add(new RadioChoice<Long>("community_settings", new IModel<Long>() {
+			private static final long serialVersionUID = 1L;
+
+			public Long getObject() {
+				if (user.getShowContactData() != null
+						&& user.getShowContactData()) {
+					return 1L;
+				} else if (user.getShowContactDataToContacts() != null
+						&& user.getShowContactDataToContacts()) {
+					return 2L;
+				}
+				return 3L;
+			}
+
+			public void setObject(Long choice) {
+				if (choice.equals(1L)) {
+					user.setShowContactData(true);
+					user.setShowContactDataToContacts(false);
+				} else if (choice.equals(2L)) {
+					user.setShowContactData(false);
+					user.setShowContactDataToContacts(true);
+				} else {
+					user.setShowContactData(false);
+					user.setShowContactDataToContacts(false);
+				}
+			}
+
+			public void detach() {
+			}
+		}, Arrays.asList(1L, 2L, 3L), new IChoiceRenderer<Long>() {
+			private static final long serialVersionUID = 1L;
+
+			public Object getDisplayValue(Long id) {
+				if (id.equals(1L)) {
+					return field1160;
+				} else if (id.equals(2L)) {
+					return field1168;
+				} else {
+					return field1169;
+				}
+			}
+
+			public String getIdValue(Long id, int index) {
+				return "" + id;
+			}
+
+		}));
 		
+		add(new TextArea<String>("userOffers"));
+		add(new TextArea<String>("userSearchs"));
+
 		// add a button that can be used to submit the form via ajax
 		add(new AjaxButton("ajax-button", this) {
 			private static final long serialVersionUID = 839803820502260006L;
