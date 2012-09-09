@@ -137,9 +137,10 @@ public class Users implements Serializable {
 	@Column(name = "language_id")
 	@Element(data=true, required=false)
 	private Long language_id;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "language_id", insertable = false, updatable = false)
-	@Element(data=true, required=false)
+	//FIXME need to add correct language mapping
 	private FieldLanguage language;
 	
 	@Column(name = "resethash")
