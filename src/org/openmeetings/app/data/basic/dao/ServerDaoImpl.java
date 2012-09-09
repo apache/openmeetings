@@ -38,6 +38,14 @@ public class ServerDaoImpl {
 
 	@PersistenceContext
 	private EntityManager em;
+	
+	public List<Server> getServerList() {
+		log.debug("getServerList enter");
+		TypedQuery<Server> q = em.createNamedQuery("getAllServers",
+				Server.class);
+		return q.getResultList();
+	}
+
 
 	public List<Server> getServerList(int start, int max) {
 		log.debug("getServerList enter");
@@ -48,7 +56,7 @@ public class ServerDaoImpl {
 
 		return q.getResultList();
 	}
-
+	
 	public long getServerCount() {
 		log.debug("getServerCount enter");
 		TypedQuery<Long> q = em.createNamedQuery("getServerCount", Long.class);

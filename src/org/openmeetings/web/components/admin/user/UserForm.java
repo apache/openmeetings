@@ -13,14 +13,21 @@ import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.form.ListMultipleChoice;
+import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.openmeetings.app.data.basic.FieldLanguageDaoImpl;
 import org.openmeetings.app.data.basic.dao.OmTimeZoneDaoImpl;
+import org.openmeetings.app.data.basic.dao.ServerDaoImpl;
+import org.openmeetings.app.data.user.Organisationmanagement;
 import org.openmeetings.app.data.user.Salutationmanagement;
 import org.openmeetings.app.data.user.Statemanagement;
 import org.openmeetings.app.persistence.beans.adresses.States;
 import org.openmeetings.app.persistence.beans.basic.OmTimeZone;
+import org.openmeetings.app.persistence.beans.basic.Server;
+import org.openmeetings.app.persistence.beans.domain.Organisation;
+import org.openmeetings.app.persistence.beans.domain.Organisation_Users;
 import org.openmeetings.app.persistence.beans.lang.FieldLanguage;
 import org.openmeetings.app.persistence.beans.user.Salutations;
 import org.openmeetings.app.persistence.beans.user.Users;
@@ -76,8 +83,6 @@ public class UserForm extends Form<Users> {
 		setOutputMarkupId(true);
 
 		add(new TextField<String>("login"));
-
-		// new ChoiceRenderer<Salutations>("label.value", "salutations_id"))
 
 		add(new DropDownChoice<Long>("salutations_id", getSalutationsIds(),
 				new IChoiceRenderer<Long>() {
@@ -191,6 +196,26 @@ public class UserForm extends Form<Users> {
 
 				}));
 
+		add(new TextArea<String>("adresses.comment"));
+
+		List<Organisation> orgList = Application.getBean(
+				Organisationmanagement.class).getOrganisations(3L);
+		List<Organisation_Users> orgUsers = new ArrayList<Organisation_Users>(
+				orgList.size());
+		for (Organisation org : orgList) {
+			orgUsers.add(new Organisation_Users(org));
+		}
+		ListMultipleChoice<Organisation_Users> orgChoiceList = new ListMultipleChoice<Organisation_Users>(
+				"organisation_users", orgUsers,
+				new ChoiceRenderer<Organisation_Users>("organisation.name",
+						"organisation.organisation_id"));
+		orgChoiceList.setMaxRows(6);
+		add(orgChoiceList);
+
+		add(new DropDownChoice<Server>("server", Application.getBean(
+				ServerDaoImpl.class).getServerList(),
+				new ChoiceRenderer<Server>("name", "id")));
+		
 		// add a button that can be used to submit the form via ajax
 		add(new AjaxButton("ajax-button", this) {
 			private static final long serialVersionUID = 839803820502260006L;
