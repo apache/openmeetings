@@ -1023,11 +1023,9 @@
 	<target name="clean.all" depends="clean.dist" description="Clean All">
 		<delete includeemptydirs="true" dir="${build.base.dir}" />
 	</target>
-	<target name="clean.ivy" depends="-install-ivy,clean.all" description="Clears out the Ivy cache">
-		<ivy:cleancache />
+	<target name="clean.ivy" depends="-install-ivy,clean.all,clean.ivy.only" description="Clears out Ivy cache and build folder">
 	</target>
-	
-	<target name="clean.ivy2"  depends="-install-ivy" description="Clears out the Ivy cache">
+	<target name="clean.ivy.only"  depends="-install-ivy" description="Clears out the Ivy cache">
 		<ivy:cleancache />
 	</target>
 
