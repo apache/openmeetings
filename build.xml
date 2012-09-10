@@ -769,8 +769,10 @@
 		</antcall>
 	</target>
 
-	<available file="${ivy.jar.path}" type="file" property="ivy.installed" />
-	<target name="-download-ivy" unless="ivy.installed">
+	<target name="-check-ivy-installed">
+		<available file="${ivy.jar.path}" type="file" property="ivy.installed" />
+	</target>
+	<target name="-download-ivy" depends="-check-ivy-installed" unless="ivy.installed">
 		<mkdir dir="${project.lib.dir}"/>
 		<echo message="Downloading ivy..."/>
 		<get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"
@@ -1023,9 +1025,7 @@
 	<target name="clean.all" depends="clean.dist" description="Clean All">
 		<delete includeemptydirs="true" dir="${build.base.dir}" />
 	</target>
-	<target name="clean.ivy" depends="-install-ivy,clean.all,clean.ivy.only" description="Clears out Ivy cache and build folder">
-	</target>
-	<target name="clean.ivy.only"  depends="-install-ivy" description="Clears out the Ivy cache">
+	<target name="clean.ivy" depends="clean.all,-install-ivy" description="Clears out Ivy cache and build folder">
 		<ivy:cleancache />
 	</target>
 
