@@ -1026,6 +1026,10 @@
 	<target name="clean.ivy" depends="-install-ivy,clean.all" description="Clears out the Ivy cache">
 		<ivy:cleancache />
 	</target>
+	
+	<target name="clean.ivy2"  depends="-install-ivy" description="Clears out the Ivy cache">
+		<ivy:cleancache />
+	</target>
 
 	<target name="prepare-eclipse" if="java6.installed" description="Layout various files necessary for development" depends="-java6or7.check">
 		<antcall target="-retrieve-mainlibs" inheritAll="true" inheritRefs="true" />
