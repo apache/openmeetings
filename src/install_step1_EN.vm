@@ -331,11 +331,11 @@ function checkEmail()
     	<input name="crypt_ClassName" id="crypt_ClassName" size="27" 
     		type="text" 
     		title="Enter the Class name of the Encryption Class. DO NOT ALTER THIS IF YOU ARE NOT SURE"
-    		value="org.openmeetings.utils.crypt.MD5Implementation" />  	
+    		value="org.apache.openmeetings.utils.crypt.MD5Implementation" />  	
 		</li>
     	<p><i>
 	    	You can use this default crypt type which is equal to PHP-MD5 function or BSD-Style<BR/>
-	    	encryption by using:<b>org.openmeetings.utils.crypt.MD5CryptImplementation</b><BR/>
+	    	encryption by using:<b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b><BR/>
 	    	for more information or to write your own Crypt-Style see:<BR/>
 			<a href="http://incubator.apache.org/openmeetings/CustomCryptMechanism.html" target="_blank">Custom Crypt Mechanism</a><BR/>
 			You can edit this value later BUT previous created Users and Sessions might be not usable anymore<BR/>

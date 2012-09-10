@@ -269,8 +269,8 @@
 				<include name="**" />
 				<exclude name="**/test/**" />
 				<exclude name="**/axis/**" />
-				<exclude name="org/openmeetings/screen/**" />
-				<exclude name="org/openmeetings/doc/**" />
+				<exclude name="org/apache/openmeetings/screen/**" />
+				<exclude name="org/apache/openmeetings/doc/**" />
 				<exclude name="**/client/**" />
 				<exclude name="**/*.png" />
 				<exclude name="**/*.vm" />
@@ -298,8 +298,8 @@
 				<include name="**" />
 				<exclude name="**/test/**" />
 				<exclude name="**/axis/**" />
-				<exclude name="org/openmeetings/screen/**" />
-				<exclude name="org/openmeetings/doc/**" />
+				<exclude name="org/apache/openmeetings/screen/**" />
+				<exclude name="org/apache/openmeetings/doc/**" />
 				<exclude name="**/client/**" />
 				<exclude name="**/*.png" />
 				<exclude name="**/*.vm" />
@@ -344,7 +344,7 @@
 		<echo file="${om_aar_folder}/services.list" append="false">${om_aar_name}${line.separator}version.aar${line.separator}</echo>
 		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-WebService-${jar.suffix}.jar">
 			<fileset dir="${main.out.dir}">
-				<include name="**/openmeetings/axis/**" />
+				<include name="**/apache/openmeetings/axis/**" />
 				<include name="META-INF/LICENSE" />
 				<include name="META-INF/NOTICE" />
 			</fileset>
@@ -363,7 +363,7 @@
 		<!-- Screen Share -->
 		<jar destfile="${screenshare.out.dir}/${project.distname}-screenshare-${jar.suffix}.jar">
 			<fileset dir="${main.out.dir}">
-				<include name="org/openmeetings/screen/**" />
+				<include name="org/apache/openmeetings/screen/**" />
 				<include name="META-INF/LICENSE" />
 				<include name="META-INF/NOTICE" />
 			</fileset>
@@ -380,9 +380,9 @@
 		<tstamp prefix="doc">
 			<format property="TODAY_YEAR" pattern="yyyy" locale="en" />
 		</tstamp>
-	    <javadoc packagenames="org.openmeetings.app.remote.*"
+	    <javadoc packagenames="org.apache.openmeetings.remote.*"
 	           sourcepath="src"
-	           excludepackagenames="org.openmeetings.test.*"
+	           excludepackagenames="org.apache.openmeetings.test.*"
 	           defaultexcludes="yes"
 	           destdir="build/api"
 	           author="true"
@@ -695,10 +695,10 @@
 
 	<target name="build.only.webservice.doc" depends="anakia">
 		<javadoc classpathref="build.webservice.classpath" useexternalfile="true">
-			<fileset dir="src/org/openmeetings/axis/services">
+			<fileset dir="src/org/apache/openmeetings/axis/services">
 				<include name="*WebService.java" />
 			</fileset>
-			<doclet name="org.openmeetings.doc.WebServiceDoclet" pathref="build.webservice.classpath" />
+			<doclet name="org.apache.openmeetings.doc.WebServiceDoclet" pathref="build.webservice.classpath" />
 		</javadoc>
 
 		<copy todir="${dist.webapps.dir}/docs">
@@ -760,7 +760,7 @@
 			<formatter type="${junit.test.formatter}" />
 			<batchtest todir="${junit.report.dir}">
 				<fileset dir="${main.out.dir}">
-					<include name="org/openmeetings/test/**/${junit.test.pattern}.class" />
+					<include name="org/apache/openmeetings/test/**/${junit.test.pattern}.class" />
 					<exclude name="**/*$$*.class" />
 				</fileset>
 			</batchtest>

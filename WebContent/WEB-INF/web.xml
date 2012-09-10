@@ -39,7 +39,7 @@
     
     -->
     <listener>
-        <listener-class>org.openmeetings.utils.OMContextListener</listener-class>
+        <listener-class>org.apache.openmeetings.utils.OMContextListener</listener-class>
     </listener>
     
     <filter>
@@ -54,7 +54,7 @@
     
     <filter>
         <filter-name>ServletRequestExFilter</filter-name>
-        <filter-class>org.openmeetings.servlet.outputhandler.ServletRequestExFilter</filter-class>
+        <filter-class>org.apache.openmeetings.servlet.outputhandler.ServletRequestExFilter</filter-class>
         <init-param>
             <param-name>uriEncoding</param-name>
             <param-value>UTF-8</param-value>
@@ -72,7 +72,7 @@
 		<filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
 		<init-param>
 			<param-name>applicationClassName</param-name>
-			<param-value>org.openmeetings.web.app.Application</param-value>
+			<param-value>org.apache.openmeetings.web.app.Application</param-value>
 		</init-param>
 	</filter>
 	<filter-mapping>
@@ -104,27 +104,27 @@
     </servlet>
     <servlet>
         <servlet-name>DownloadHandler</servlet-name>
-        <servlet-class>org.openmeetings.servlet.outputhandler.DownloadHandler</servlet-class>
+        <servlet-class>org.apache.openmeetings.servlet.outputhandler.DownloadHandler</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Install</servlet-name>
-        <servlet-class>org.openmeetings.servlet.outputhandler.Install</servlet-class>
+        <servlet-class>org.apache.openmeetings.servlet.outputhandler.Install</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>LangExport</servlet-name>
-        <servlet-class>org.openmeetings.servlet.outputhandler.LangExport</servlet-class>
+        <servlet-class>org.apache.openmeetings.servlet.outputhandler.LangExport</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Export</servlet-name>
-        <servlet-class>org.openmeetings.servlet.outputhandler.Export</servlet-class>
+        <servlet-class>org.apache.openmeetings.servlet.outputhandler.Export</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ExportToImage</servlet-name>
-        <servlet-class>org.openmeetings.servlet.outputhandler.ExportToImage</servlet-class>
+        <servlet-class>org.apache.openmeetings.servlet.outputhandler.ExportToImage</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ActivateUser</servlet-name>
-        <servlet-class>org.openmeetings.servlet.outputhandler.ActivateUser</servlet-class>
+        <servlet-class>org.apache.openmeetings.servlet.outputhandler.ActivateUser</servlet-class>
     </servlet>
     <!-- Axis2 Settings -->
     <servlet>
@@ -138,19 +138,19 @@
     </servlet>
     <servlet>
 		<servlet-name>Calendar</servlet-name>
-		<servlet-class>org.openmeetings.servlet.outputhandler.CalendarServlet</servlet-class>
+		<servlet-class>org.apache.openmeetings.servlet.outputhandler.CalendarServlet</servlet-class>
 	</servlet>
     <servlet>
         <description>DefaultIndex</description>
         <display-name>DefaultIndex</display-name>
         <servlet-name>DefaultIndex</servlet-name>
-        <servlet-class>org.openmeetings.servlet.outputhandler.DefaultIndex</servlet-class>
+        <servlet-class>org.apache.openmeetings.servlet.outputhandler.DefaultIndex</servlet-class>
     </servlet> 
     <servlet>
         <description>BackupExport</description>
         <display-name>BackupExport</display-name>
         <servlet-name>BackupExport</servlet-name>
-        <servlet-class>org.openmeetings.servlet.outputhandler.BackupExportFacade</servlet-class>
+        <servlet-class>org.apache.openmeetings.servlet.outputhandler.BackupExportFacade</servlet-class>
     </servlet>
 	
 	<servlet-mapping>
