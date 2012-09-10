@@ -477,8 +477,7 @@ public class Organisationmanagement {
 	public Organisation_Users getOrgUser(Long organisation_id,
 			Long insertedby) {
 		
-		Organisation_Users orgUser = new Organisation_Users();
-		orgUser.setOrganisation(getOrganisationById(organisation_id));
+		Organisation_Users orgUser = new Organisation_Users(getOrganisationById(organisation_id));
 		orgUser.setDeleted(false);
 		
 		return orgUser;
