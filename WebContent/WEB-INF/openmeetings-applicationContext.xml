@@ -46,7 +46,7 @@
 
 	<tx:annotation-driven transaction-manager="jpaTransactionManager" />
 	<context:annotation-config />
-	<context:component-scan base-package="org.openmeetings" />
+	<context:component-scan base-package="org.apache.openmeetings" />
 
 	<!-- New Class for the Streaming Handlers -->
 	<bean id="web.handler"

@@ -133,10 +133,6 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet>
-        <servlet-name>ServerUDP</servlet-name>
-        <servlet-class>org.openmeetings.server.servlets.ServerOutputHandler</servlet-class>
-    </servlet>
-    <servlet>
 		<servlet-name>Calendar</servlet-name>
 		<servlet-class>org.apache.openmeetings.servlet.outputhandler.CalendarServlet</servlet-class>
 	</servlet>
@@ -189,10 +185,6 @@
     <servlet-mapping>
         <servlet-name>AxisServlet</servlet-name>
         <url-pattern>/services/*</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ServerUDP</servlet-name>
-        <url-pattern>/serverUDP</url-pattern>
     </servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>Calendar</servlet-name>

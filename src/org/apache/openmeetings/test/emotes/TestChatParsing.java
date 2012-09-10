@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.openmeetings.test.emotes;
+package org.apache.openmeetings.test.emotes;
 
 import java.util.LinkedList;
 

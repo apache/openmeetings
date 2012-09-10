@@ -560,15 +560,6 @@
 		<copy file="NOTICE" tofile="${main.out.dir}/META-INF/NOTICE" overwrite="true" />
 	</target>
 
-	<target name="doStartServer" depends="compile">
-		<junit>
-			<classpath refid="compile.classpath" />
-			<formatter type="plain" />
-
-			<test name="org.openmeetings.server.TestSocket" />
-		</junit>
-	</target>
-
 	<path id="jpa.enhancement.classpath">
 		<pathelement path="${main.out.dir}" />
 		<path refid="compile.classpath" />
