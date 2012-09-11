@@ -23,6 +23,7 @@ import org.apache.openmeetings.persistence.beans.basic.Naviglobal;
 import org.apache.openmeetings.persistence.beans.basic.Navimain;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.components.admin.rooms.RoomsPanel;
 import org.apache.openmeetings.web.components.admin.user.UsersPanel;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -110,6 +111,8 @@ public class MenuPanel extends BasePanel {
 									case adminModuleOrg:
 										break;
 									case adminModuleRoom:
+										target.add(contents.replace(new RoomsPanel("child")));
+										hash = "#admin/rooms";
 										break;
 									case adminModuleConfiguration:
 										break;

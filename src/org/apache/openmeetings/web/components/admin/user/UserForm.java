@@ -20,22 +20,19 @@ import org.apache.openmeetings.persistence.beans.user.Salutations;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.openmeetings.web.components.admin.AdminBaseForm;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.yui.calendar.DatePicker;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -43,7 +40,7 @@ import org.apache.wicket.util.time.Duration;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 
-public class UserForm extends Form<Users> {
+public class UserForm extends AdminBaseForm<Users> {
 
 	private final List<Salutations> saluationList = Application.getBean(
 			Salutationmanagement.class).getUserSalutations(
@@ -91,10 +88,6 @@ public class UserForm extends Form<Users> {
 		super(id, new CompoundPropertyModel<Users>(user));
 		setOutputMarkupId(true);
 		
-		final FeedbackPanel feedback = new FeedbackPanel("feedback");
-        feedback.setOutputMarkupId(true);
-        add(feedback);
-
 		RequiredTextField<String> login = new RequiredTextField<String>("login");
 		login.add(new StringValidator(4, null));
 		login.setLabel(new Model<String>("testname"));
@@ -294,70 +287,6 @@ public class UserForm extends Form<Users> {
         // event and throttle it down to once per second
 		AjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown", Duration.ONE_SECOND);
 
-		// add a button that can be used to submit the form via ajax
-		add(new AjaxButton("ajax-save-button", this) {
-			private static final long serialVersionUID = 839803820502260006L;
-
-			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				// repaint the feedback panel so that it is hidden
-				target.add(feedback);
-			}
-
-			@Override
-			protected void onError(AjaxRequestTarget target, Form<?> form) {
-				// repaint the feedback panel so errors are shown
-				target.add(feedback);
-			}
-		});
-		
-		add(new AjaxButton("ajax-new-button", this) {
-			private static final long serialVersionUID = 839803820502260006L;
-
-			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				// repaint the feedback panel so that it is hidden
-				target.add(feedback);
-			}
-
-			@Override
-			protected void onError(AjaxRequestTarget target, Form<?> form) {
-				// repaint the feedback panel so errors are shown
-				target.add(feedback);
-			}
-		});
-		
-		add(new AjaxButton("ajax-refresh-button", this) {
-			private static final long serialVersionUID = 839803820502260006L;
-
-			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				// repaint the feedback panel so that it is hidden
-				target.add(feedback);
-			}
-
-			@Override
-			protected void onError(AjaxRequestTarget target, Form<?> form) {
-				// repaint the feedback panel so errors are shown
-				target.add(feedback);
-			}
-		});
-		
-		add(new AjaxButton("ajax-cancel-button", this) {
-			private static final long serialVersionUID = 839803820502260006L;
-
-			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				// repaint the feedback panel so that it is hidden
-				target.add(feedback);
-			}
-
-			@Override
-			protected void onError(AjaxRequestTarget target, Form<?> form) {
-				// repaint the feedback panel so errors are shown
-				target.add(feedback);
-			}
-		});
 	}
 
 	/**

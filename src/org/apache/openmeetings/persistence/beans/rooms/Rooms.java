@@ -18,15 +18,9 @@
  */
 package org.apache.openmeetings.persistence.beans.rooms;
 
-import org.apache.openmeetings.persistence.beans.basic.Server;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,15 +28,25 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.apache.openmeetings.persistence.beans.basic.Server;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Root;
+
 @Entity
+@NamedQueries({
+	@NamedQuery(name="getNondeletedRooms", query="SELECT u FROM Rooms u WHERE u.deleted = false")
+})
 @Table(name = "rooms")
 @Root(name="room")
 public class Rooms implements Serializable {

@@ -311,6 +311,13 @@ public class Roommanagement {
 		}
 		return null;
 	}
+	
+	public List<Rooms> getNondeletedRooms(int first, int count) {
+		TypedQuery<Rooms> q = em.createNamedQuery("getNondeletedRooms", Rooms.class);
+		q.setFirstResult(first);
+		q.setMaxResults(count);
+		return q.getResultList();
+	}
 
 	public SearchResult<Rooms> getRoomsWithCurrentUsers(long user_level, int start,
 			int max, String orderby, boolean asc) {
