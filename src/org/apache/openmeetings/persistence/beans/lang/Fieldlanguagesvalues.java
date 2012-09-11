@@ -36,6 +36,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.apache.openmeetings.persistence.beans.OmEntity;
+
 @Entity
 @NamedQueries({
 	@NamedQuery(name = "allFieldLanguageValues", query = "SELECT flv FROM Fieldlanguagesvalues flv "
@@ -52,7 +54,7 @@ import javax.persistence.Table;
 		+ "		AND flv.language_id = 1 AND flv.fieldvalues_id NOT IN (:id_list)")
 })
 @Table(name = "fieldlanguagesvalues")
-public class Fieldlanguagesvalues implements Serializable {
+public class Fieldlanguagesvalues implements Serializable, OmEntity {
 	private static final long serialVersionUID = 1965055047163639210L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -39,6 +39,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.apache.openmeetings.persistence.beans.OmEntity;
 import org.apache.openmeetings.persistence.beans.adresses.Adresses;
 import org.apache.openmeetings.persistence.beans.adresses.States;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
@@ -51,162 +52,159 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name="getAllUsers", query="SELECT u FROM Users u")
-	, @NamedQuery(name="getNondeletedUsers", query="SELECT u FROM Users u WHERE u.deleted = false")
-	, @NamedQuery(name="getUsersByOrganisationId",
-    	query="SELECT u FROM Users u WHERE u.deleted = false AND u.organisation_users.organisation.organisation_id = :organisation_id")
-})
+		@NamedQuery(name = "getAllUsers", query = "SELECT u FROM Users u"),
+		@NamedQuery(name = "getNondeletedUsers", query = "SELECT u FROM Users u WHERE u.deleted = false"),
+		@NamedQuery(name = "getUsersByOrganisationId", query = "SELECT u FROM Users u WHERE u.deleted = false AND u.organisation_users.organisation.organisation_id = :organisation_id") })
 @Table(name = "users")
-@Root(name="user")
-public class Users implements Serializable {
+@Root(name = "user")
+public class Users implements Serializable, OmEntity {
 	private static final long serialVersionUID = -2265479712596674065L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	@Element(data=true)
+	@Element(data = true)
 	private Long user_id;
-	
+
 	@Column(name = "age")
-	@Element(data=true)
+	@Element(data = true)
 	private Date age;
-	
+
 	@Column(name = "availible")
-	@Element(data=true, required=false)
+	@Element(data = true, required = false)
 	private Integer availible;
-	
+
 	@Column(name = "firstname")
-	@Element(data=true, required=false)
+	@Element(data = true, required = false)
 	private String firstname;
-	
+
 	@Column(name = "lastlogin")
 	private Date lastlogin;
-	
+
 	@Column(name = "lastname")
-	@Element(data=true, required=false)
+	@Element(data = true, required = false)
 	private String lastname;
-	
+
 	@Column(name = "lasttrans")
-	@Element(data=true, required=false)
+	@Element(data = true, required = false)
 	private Long lasttrans;
-	
+
 	@Column(name = "level_id")
-	@Element(data=true, required=false)
+	@Element(data = true, required = false)
 	private Long level_id;
-	
+
 	@Column(name = "login")
-	@Element(data=true)
+	@Element(data = true)
 	private String login;
-	
+
 	@Column(name = "password")
-	@Element(name="pass", data=true)
+	@Element(name = "pass", data = true)
 	private String password;
-	
+
 	@Column(name = "regdate")
-	@Element(data=true)
+	@Element(data = true)
 	private Date regdate;
-	
+
 	@Column(name = "status")
-	@Element(data=true, required=false)
+	@Element(data = true, required = false)
 	private Integer status;
-	
+
 	@Column(name = "salutations_id")
-	@Element(name="title_id", data=true, required=false)
+	@Element(name = "title_id", data = true, required = false)
 	private Long salutations_id;
-	
+
 	@Column(name = "starttime")
 	private Date starttime;
-	
+
 	@Column(name = "updatetime")
 	private Date updatetime;
-	
+
 	@Column(name = "pictureuri")
-	@Element(data=true, required=false)
+	@Element(data = true, required = false)
 	private String pictureuri;
-	
+
 	@Column(name = "deleted")
-	@Element(data=true)
+	@Element(data = true)
 	private boolean deleted;
-	
+
 	@Column(name = "language_id")
-	@Element(data=true, required=false)
+	@Element(data = true, required = false)
 	private Long language_id;
-	
+
 	@Column(name = "resethash")
-	@Element(data=true, required=false)
+	@Element(data = true, required = false)
 	private String resethash;
-	
+
 	@Column(name = "activatehash")
-	@Element(data=true, required=false)
+	@Element(data = true, required = false)
 	private String activatehash;
 
-	
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "adresses_id", insertable = true, updatable = true)
-	@Element(name="address", required=false)
+	@Element(name = "address", required = false)
 	private Adresses adresses;
-	
+
 	@Transient
 	private Userlevel userlevel;
-	
+
 	@Transient
 	private Userdata rechnungsaddressen;
-	
+
 	@Transient
 	private Userdata lieferadressen;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id", insertable = true, updatable = true)
-	@ElementList(name="organisations")
+	@ElementList(name = "organisations")
 	private List<Organisation_Users> organisation_users = new ArrayList<Organisation_Users>();
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "userSipDataId", insertable = true, updatable = true)
-	@Element(name="sipData", required=false)
+	@Element(name = "sipData", required = false)
 	private UserSipData userSipData;
 
 	// Vars to simulate external Users
 	@Column(name = "externalUserId")
-	@Element(data=true, required=false)
+	@Element(data = true, required = false)
 	private String externalUserId;
-	
+
 	@Column(name = "externalUserType")
-	@Element(data=true, required=false)
+	@Element(data = true, required = false)
 	private String externalUserType;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "omtimezoneId", insertable = true, updatable = true)
-	@Element(data=true, required=false)
+	@Element(data = true, required = false)
 	private OmTimeZone omTimeZone; // In UTC +/- hours
 
 	@Transient
 	private Sessiondata sessionData;
-	
+
 	@Column(name = "forceTimeZoneCheck")
-	@Element(data=true, required=false)
+	@Element(data = true, required = false)
 	private Boolean forceTimeZoneCheck;
 
 	@Column(name = "sendSMS")
 	private boolean sendSMS;
 
 	@Column(name = "user_offers")
-	@Element(data=true, required=false)
+	@Element(data = true, required = false)
 	private String userOffers;
-	
+
 	@Column(name = "user_searchs")
-	@Element(data=true, required=false)
+	@Element(data = true, required = false)
 	private String userSearchs;
-	
+
 	@Column(name = "show_contact_data")
-	@Element(data=true, required=false)
+	@Element(data = true, required = false)
 	private Boolean showContactData;
-	
+
 	@Column(name = "show_contact_data_to_contacts")
-	@Element(data=true, required=false)
+	@Element(data = true, required = false)
 	private Boolean showContactDataToContacts;
-	
+
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "server_id")
-	@Element(required=false)
+	@Element(required = false)
 	private Server server;
 
 	public Long getUser_id() {
@@ -355,7 +353,7 @@ public class Users implements Serializable {
 	public void setSalutations_id(Long salutations_id) {
 		this.salutations_id = salutations_id;
 	}
-	
+
 	public Userlevel getUserlevel() {
 		return userlevel;
 	}
@@ -403,7 +401,7 @@ public class Users implements Serializable {
 	public void setLanguage_id(Long language_id) {
 		this.language_id = language_id;
 	}
-	
+
 	public List<Organisation_Users> getOrganisation_users() {
 		return organisation_users;
 	}
@@ -526,8 +524,8 @@ public class Users implements Serializable {
 	public void setServer(Server server) {
 		this.server = server;
 	}
-	
+
 	public String getPhoneForSMS() {
 		return getSendSMS() ? getAdresses().getPhone() : "";
-}
+	}
 }

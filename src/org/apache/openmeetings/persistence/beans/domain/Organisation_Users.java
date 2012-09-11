@@ -76,6 +76,9 @@ public class Organisation_Users implements Serializable {
 	@Element(data=true, required=false)
 	private Boolean isModerator;
 	
+	public Organisation_Users() {
+	}
+	
 	public Organisation_Users(Organisation organisation) {
 		this.organisation = organisation;
 	}

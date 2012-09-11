@@ -25,6 +25,7 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.admin.rooms.RoomsPanel;
 import org.apache.openmeetings.web.components.admin.user.UsersPanel;
+import org.apache.openmeetings.web.components.lang.LangPanel;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -117,6 +118,8 @@ public class MenuPanel extends BasePanel {
 									case adminModuleConfiguration:
 										break;
 									case adminModuleLanguages:
+										target.add(contents.replace(new LangPanel("child")));
+										hash = "#admin/lang";
 										break;
 									case adminModuleLDAP:
 										break;

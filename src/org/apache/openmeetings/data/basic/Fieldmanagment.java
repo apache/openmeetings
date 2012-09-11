@@ -381,6 +381,15 @@ public class Fieldmanagment {
 		return q.getResultList();
 	}
 
+	public List<Fieldlanguagesvalues> getMixedFieldValuesList(Long language_id, int first, int count) {
+		// all Fieldlanguagesvalues in current Language
+		TypedQuery<Fieldlanguagesvalues> q = em.createNamedQuery("allFieldLanguageValues", Fieldlanguagesvalues.class);
+		q.setParameter("language_id", language_id);
+		q.setFirstResult(first);
+		q.setMaxResults(count);
+		return q.getResultList();
+	}
+
 	public List<Fieldlanguagesvalues> getUntranslatedFieldValuesList(Long language_id) {
 		// all FieldValuesIds in current Language
 		TypedQuery<Long> q0 = em.createNamedQuery("allFieldValuesIds", Long.class);

@@ -16,16 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.components.admin.user;
+package org.apache.openmeetings.web.components.lang;
 
 import java.util.Iterator;
 
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
-import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -34,74 +33,65 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 
-public class UsersPanel extends AdminPanel {
-	private static final long serialVersionUID = -4463107742579790120L;
-	@SuppressWarnings("unused")
-	private String selectedText = "Click on the table to change the user";
-	private Label selected = null;
-	private UserForm form = null;
+public class LangPanel extends AdminPanel {
+	private static final long serialVersionUID = 5904180813198016592L;
+	long language = 1;
 	
-	public UsersPanel(String id) {
+	public LangPanel(String id) {
 		super(id);
-		DataView<Users> dataView = new DataView<Users>("userList", new IDataProvider<Users>(){
+
+		DataView<Fieldlanguagesvalues> dataView = new DataView<Fieldlanguagesvalues>("langList", new IDataProvider<Fieldlanguagesvalues>(){
 			private static final long serialVersionUID = -6822789354860988626L;
 
 			public void detach() {
 				//empty
 			}
 
-			public Iterator<? extends Users> iterator(long first, long count) {
-				return Application.getBean(UsersDaoImpl.class).getNondeletedUsers((int)first, (int)count).iterator();
+			public Iterator<? extends Fieldlanguagesvalues> iterator(long first, long count) {
+				return Application.getBean(Fieldmanagment.class).getMixedFieldValuesList(language, (int)first, (int)count).iterator();
 			}
 
 			public long size() {
-				return Application.getBean(UsersDaoImpl.class).selectMaxFromUsers();
+				return Application.getBean(Fieldmanagment.class).getNextFieldvaluesId() - 1; //FIXME need to be generalized
 			}
 
-			public IModel<Users> model(Users object) {
-				return new CompoundPropertyModel<Users>(object);
+			public IModel<Fieldlanguagesvalues> model(Fieldlanguagesvalues object) {
+				return new CompoundPropertyModel<Fieldlanguagesvalues>(object);
 			}
 			
 		}) {
 			private static final long serialVersionUID = 8715559628755439596L;
 
 			@Override
-			protected void populateItem(Item<Users> item) {
-				final Users u = item.getModelObject();
-				item.add(new Label("userId", "" + u.getUser_id()));
-				item.add(new Label("login", u.getLogin()));
-				final String fName = u.getFirstname();
-				item.add(new Label("firstName", fName));
-				final String lName = u.getLastname();
-				item.add(new Label("lastName", lName));
+			protected void populateItem(Item<Fieldlanguagesvalues> item) {
+				final Fieldlanguagesvalues flv = item.getModelObject();
+				item.add(new Label("lblId", "" + flv.getFieldlanguagesvalues_id()));
+				item.add(new Label("name", flv.getFieldvalues().getName()));
+				item.add(new Label("value", flv.getValue()));
+				/*
 				item.add(new AjaxEventBehavior("onclick") {
 					private static final long serialVersionUID = -8069413566800571061L;
 
 					protected void onEvent(AjaxRequestTarget target) {
-						form.setModelObject(u);
-						target.add(form);
+						//form.setModelObject(u);
+						//target.add(form);
 					}
 				});
+				*/
 			}
 		};
-		selected = new Label("selected", new PropertyModel<String>(this, "selectedText"));
-		selected.setOutputMarkupId(true);
-		add(selected);
-		final WebMarkupContainer userListContainer = new WebMarkupContainer("userListContainer");
-		add(userListContainer.add(dataView).setOutputMarkupId(true));
+		
+		final WebMarkupContainer langListContainer = new WebMarkupContainer("langListContainer");
+		add(langListContainer.add(dataView).setOutputMarkupId(true));
 		add(new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = 5097048616003411362L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
-				target.add(userListContainer);
+				target.add(langListContainer);
 			}
 		});
 		
-		Users user = new Users();
-		form = new UserForm("form", user);
-        add(form);
 	}
 }
