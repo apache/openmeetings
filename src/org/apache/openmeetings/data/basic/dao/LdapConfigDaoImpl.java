@@ -257,6 +257,14 @@ public class LdapConfigDaoImpl {
 			log.error("[getActiveLdapConfigs] ",ex2);
 		}
 		return null;
-	}	
+	}
+
+
+	public List<LdapConfig> getNondeletedLdapConfig(int first, int count) {
+		TypedQuery<LdapConfig> q = em.createNamedQuery("getNondeletedLdapConfigs", LdapConfig.class);
+		q.setFirstResult(first);
+		q.setMaxResults(count);
+		return q.getResultList();
+	}
 	
 }

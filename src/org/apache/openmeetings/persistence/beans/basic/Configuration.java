@@ -21,11 +21,6 @@ package org.apache.openmeetings.persistence.beans.basic;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.apache.openmeetings.persistence.beans.user.Users;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
-
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -37,10 +32,15 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.apache.openmeetings.persistence.beans.user.Users;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
 @Entity
 @NamedQueries({
 	@NamedQuery(name = "getConfigurationByKey", query = "SELECT c FROM Configuration c WHERE c.conf_key = :conf_key and c.deleted = false")
 	, @NamedQuery(name = "getConfigurationsByKeys", query = "SELECT c FROM Configuration c WHERE c.conf_key IN :conf_keys and c.deleted = false")
+	, @NamedQuery(name="getNondeletedConfiguration", query="SELECT u FROM Configuration u WHERE u.deleted = false")
 })
 @Table(name = "configuration")
 @Root(name="config")

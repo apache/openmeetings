@@ -218,7 +218,7 @@ public class Configurationmanagement {
 	 * 
 	 * @return
 	 */
-	private Long selectMaxFromConfigurations() {
+	public Long selectMaxFromConfigurations() {
 		try {
 			log.debug("selectMaxFromConfigurations ");
 			// get all users
@@ -363,5 +363,12 @@ public class Configurationmanagement {
 			appName = getConfValue("application.name", String.class, Configurationmanagement.DEFAULT_APP_NAME);
 		}
 		return appName;
+	}
+
+	public List<Configuration> getNondeletedConfiguration(int first, int count) {
+		TypedQuery<Configuration> q = em.createNamedQuery("getNondeletedConfiguration", Configuration.class);
+		q.setFirstResult(first);
+		q.setMaxResults(count);
+		return q.getResultList();
 	}
 }

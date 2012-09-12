@@ -203,7 +203,7 @@ public class Organisationmanagement {
 	 * 
 	 * @return
 	 */
-	private Long selectMaxFromOrganisations() {
+	public Long selectMaxFromOrganisations() {
 		try {
 			// get all users
 			TypedQuery<Long> query = em
@@ -822,6 +822,13 @@ public class Organisationmanagement {
 			log.error("addUserOrganisationsByHashMap", ex);
 		}
 		return null;
+	}
+
+	public List<Organisation> getNondeletedOrganisation(int first, int count) {
+		TypedQuery<Organisation> q = em.createNamedQuery("getNondeletedOrganisations", Organisation.class);
+		q.setFirstResult(first);
+		q.setMaxResults(count);
+		return q.getResultList();
 	}
 
 }

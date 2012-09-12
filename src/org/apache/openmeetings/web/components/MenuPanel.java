@@ -23,7 +23,11 @@ import org.apache.openmeetings.persistence.beans.basic.Naviglobal;
 import org.apache.openmeetings.persistence.beans.basic.Navimain;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.components.admin.configurations.ConfigsPanel;
+import org.apache.openmeetings.web.components.admin.groups.GroupsPanel;
+import org.apache.openmeetings.web.components.admin.ldaps.LdapsPanel;
 import org.apache.openmeetings.web.components.admin.rooms.RoomsPanel;
+import org.apache.openmeetings.web.components.admin.servers.ServersPanel;
 import org.apache.openmeetings.web.components.admin.user.UsersPanel;
 import org.apache.openmeetings.web.components.lang.LangPanel;
 import org.apache.wicket.MarkupContainer;
@@ -110,22 +114,30 @@ public class MenuPanel extends BasePanel {
 									case adminModuleConnections:
 										break;
 									case adminModuleOrg:
+										target.add(contents.replace(new GroupsPanel("child")));
+										hash = "#admin/groups";
 										break;
 									case adminModuleRoom:
 										target.add(contents.replace(new RoomsPanel("child")));
 										hash = "#admin/rooms";
 										break;
 									case adminModuleConfiguration:
+										target.add(contents.replace(new ConfigsPanel("child")));
+										hash = "#admin/configs";
 										break;
 									case adminModuleLanguages:
 										target.add(contents.replace(new LangPanel("child")));
 										hash = "#admin/lang";
 										break;
 									case adminModuleLDAP:
+										target.add(contents.replace(new LdapsPanel("child")));
+										hash = "#admin/ldaps";
 										break;
 									case adminModuleBackup:
 										break;
 									case adminModuleServers:
+										target.add(contents.replace(new ServersPanel("child")));
+										hash = "#admin/ldaps";
 										break;
 								}
 								target.appendJavaScript("window.location.hash = '" + JavaScriptUtils.escapeQuotes(hash) + "';");

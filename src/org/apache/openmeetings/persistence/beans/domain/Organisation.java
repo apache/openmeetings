@@ -21,7 +21,6 @@ package org.apache.openmeetings.persistence.beans.domain;
 import java.io.Serializable;
 import java.util.Date;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -42,6 +41,7 @@ import org.simpleframework.xml.Root;
 		query="SELECT c FROM Organisation AS c WHERE c.organisation_id = :organisation_id")
 	, @NamedQuery(name="getOrganisationsByUserId",
 		query="SELECT ou.organisation FROM Users u, IN(u.organisation_users) ou WHERE u.deleted = false AND u.user_id = :user_id")
+	, @NamedQuery(name="getNondeletedOrganisations", query="SELECT u FROM Organisation u WHERE u.deleted = false")
 })
 @Table(name = "organisation")
 @Root(name="organisation")

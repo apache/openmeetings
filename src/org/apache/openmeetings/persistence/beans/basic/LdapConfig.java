@@ -21,11 +21,6 @@ package org.apache.openmeetings.persistence.beans.basic;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.apache.openmeetings.persistence.beans.user.Users;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
-
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -34,9 +29,18 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.apache.openmeetings.persistence.beans.user.Users;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
 @Entity
+@NamedQueries({
+	@NamedQuery(name="getNondeletedLdapConfigs", query="SELECT u FROM LdapConfig u WHERE u.deleted = false")
+})
 @Table(name = "ldapconfig")
 @Root(name="ldapconfig")
 public class LdapConfig implements Serializable {

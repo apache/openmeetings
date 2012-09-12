@@ -34,13 +34,10 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 
 public class UsersPanel extends AdminPanel {
 	private static final long serialVersionUID = -4463107742579790120L;
 	@SuppressWarnings("unused")
-	private String selectedText = "Click on the table to change the user";
-	private Label selected = null;
 	private UserForm form = null;
 	
 	public UsersPanel(String id) {
@@ -86,9 +83,6 @@ public class UsersPanel extends AdminPanel {
 				});
 			}
 		};
-		selected = new Label("selected", new PropertyModel<String>(this, "selectedText"));
-		selected.setOutputMarkupId(true);
-		add(selected);
 		final WebMarkupContainer userListContainer = new WebMarkupContainer("userListContainer");
 		add(userListContainer.add(dataView).setOutputMarkupId(true));
 		add(new PagedEntityListPanel("navigator", dataView) {
