@@ -31,6 +31,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.data.OmDAO;
 import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
 import org.red5.logging.Red5LoggerFactory;
@@ -39,7 +40,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class LdapConfigDaoImpl {
+public class LdapConfigDaoImpl implements OmDAO<LdapConfig> {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(LdapConfigDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
 	@PersistenceContext
@@ -265,6 +266,34 @@ public class LdapConfigDaoImpl {
 		q.setFirstResult(first);
 		q.setMaxResults(count);
 		return q.getResultList();
+	}
+
+
+	public LdapConfig get(long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	public List<LdapConfig> get(int start, int count) {
+		return getNondeletedLdapConfig(start, count);
+	}
+
+
+	public long count() {
+		return selectMaxFromLdapConfig();
+	}
+
+
+	public void update(LdapConfig entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public void delete(LdapConfig entity) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

@@ -18,22 +18,17 @@
  */
 package org.apache.openmeetings.web.components.admin.user;
 
-import java.util.Iterator;
-
 import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
 import org.apache.openmeetings.persistence.beans.user.Users;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
+import org.apache.openmeetings.web.data.OmDataProvider;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
-import org.apache.wicket.markup.repeater.data.IDataProvider;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
 
 public class UsersPanel extends AdminPanel {
 	private static final long serialVersionUID = -4463107742579790120L;
@@ -41,26 +36,7 @@ public class UsersPanel extends AdminPanel {
 	
 	public UsersPanel(String id) {
 		super(id);
-		DataView<Users> dataView = new DataView<Users>("userList", new IDataProvider<Users>(){
-			private static final long serialVersionUID = -6822789354860988626L;
-
-			public void detach() {
-				//empty
-			}
-
-			public Iterator<? extends Users> iterator(long first, long count) {
-				return Application.getBean(UsersDaoImpl.class).getNondeletedUsers((int)first, (int)count).iterator();
-			}
-
-			public long size() {
-				return Application.getBean(UsersDaoImpl.class).selectMaxFromUsers();
-			}
-
-			public IModel<Users> model(Users object) {
-				return new CompoundPropertyModel<Users>(object);
-			}
-			
-		}) {
+		DataView<Users> dataView = new DataView<Users>("userList", new OmDataProvider<Users>(UsersDaoImpl.class)) {
 			private static final long serialVersionUID = 8715559628755439596L;
 
 			@Override

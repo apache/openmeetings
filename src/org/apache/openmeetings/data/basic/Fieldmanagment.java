@@ -59,6 +59,9 @@ public class Fieldmanagment {
 	private FieldLanguageDaoImpl fieldLanguageDaoImpl;
 
 	@Autowired
+	private FieldLanguagesValuesDAO fieldLanguagesValuesDAO;
+
+	@Autowired
 	private Configurationmanagement cfgManagement;
 	
 	// Reflect the Reverse Order!!
@@ -381,15 +384,6 @@ public class Fieldmanagment {
 		return q.getResultList();
 	}
 
-	public List<Fieldlanguagesvalues> getMixedFieldValuesList(Long language_id, int first, int count) {
-		// all Fieldlanguagesvalues in current Language
-		TypedQuery<Fieldlanguagesvalues> q = em.createNamedQuery("allFieldLanguageValues", Fieldlanguagesvalues.class);
-		q.setParameter("language_id", language_id);
-		q.setFirstResult(first);
-		q.setMaxResults(count);
-		return q.getResultList();
-	}
-
 	public List<Fieldlanguagesvalues> getUntranslatedFieldValuesList(Long language_id) {
 		// all FieldValuesIds in current Language
 		TypedQuery<Long> q0 = em.createNamedQuery("allFieldValuesIds", Long.class);
@@ -473,8 +467,7 @@ public class Fieldmanagment {
 	}
 
 	public long getNextFieldvaluesId() {
-		TypedQuery<Long> q = em.createNamedQuery("getFieldCount", Long.class);
-		return q.getSingleResult() + 1;
+		return fieldLanguagesValuesDAO.count() + 1;
 	}
 	
 	public Long addFieldAndLabel(String name, String value, Long language_id) {
@@ -580,15 +573,7 @@ public class Fieldmanagment {
 
 	private Fieldlanguagesvalues getFieldlanguagesvaluesById(
 			Long fieldlanguagesvalues_id) throws Exception {
-		String hql = "select f from Fieldlanguagesvalues f WHERE f.fieldlanguagesvalues_id = :fieldlanguagesvalues_id ";
-		TypedQuery<Fieldlanguagesvalues> query = em.createQuery(hql, Fieldlanguagesvalues.class);
-		query.setParameter("fieldlanguagesvalues_id", fieldlanguagesvalues_id);
-		Fieldlanguagesvalues flv = null;
-		try {
-			flv = performReplace(query.getSingleResult());
-		} catch (NoResultException ex) {
-		}
-		return flv;
+		return performReplace(fieldLanguagesValuesDAO.get(fieldlanguagesvalues_id));
 	}
 	
 	private Fieldlanguagesvalues performReplace(Fieldlanguagesvalues f) {

@@ -19,7 +19,6 @@
 package org.apache.openmeetings.utils.crypt;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -29,8 +28,6 @@ public class ManageCryptStyle {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			ManageCryptStyle.class, OpenmeetingsVariables.webAppRootKey);
-	@Autowired
-	private Configurationmanagement cfgManagement;
 
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
@@ -40,10 +37,6 @@ public class ManageCryptStyle {
 
 			log.debug("getInstanceOfCrypt: " + this);
 
-			log.debug("getInstanceOfCrypt: " + cfgManagement);
-
-			// String configKeyCryptClassName =
-			// "org.apache.openmeetings.utils.crypt.MD5Implementation";
 			String configKeyCryptClassName = scopeApplicationAdapter
 					.getCryptKey();
 

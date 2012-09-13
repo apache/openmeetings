@@ -44,7 +44,7 @@
 	<!-- Configures the @Controller programming model -->
 	<mvc:annotation-driven />
 
-	<tx:annotation-driven transaction-manager="jpaTransactionManager" />
+	<tx:annotation-driven transaction-manager="jpaTransactionManager" proxy-target-class="true"/>
 	<context:annotation-config />
 	<context:component-scan base-package="org.apache.openmeetings" />
 
@@ -186,6 +186,7 @@
 	<bean id="omTimeZoneDaoImpl" class="org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl" />
 	<bean id="statemanagement" class="org.apache.openmeetings.data.user.Statemanagement" />
 	<bean id="fieldLanguageDaoImpl" class="org.apache.openmeetings.data.basic.FieldLanguageDaoImpl" />
+	<bean id="fieldLanguagesValuesDAO" class="org.apache.openmeetings.data.basic.FieldLanguagesValuesDAO" />
 	<bean id="fieldmanagment" class="org.apache.openmeetings.data.basic.Fieldmanagment" />
 	<bean id="cfgManagement" class="org.apache.openmeetings.data.basic.Configurationmanagement" />
 	<bean id="appointmentDao"

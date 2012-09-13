@@ -18,21 +18,17 @@
  */
 package org.apache.openmeetings.web.components.admin.ldaps;
 
-import java.util.Iterator;
-
 import org.apache.openmeetings.data.basic.dao.LdapConfigDaoImpl;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
+import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
+import org.apache.openmeetings.web.data.OmDataProvider;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
-import org.apache.wicket.markup.repeater.data.IDataProvider;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
 
 public class LdapsPanel extends AdminPanel {
 
@@ -41,26 +37,8 @@ public class LdapsPanel extends AdminPanel {
 	
 	public LdapsPanel(String id) {
 		super(id);
-		DataView<LdapConfig> dataView = new DataView<LdapConfig>("ldapList", new IDataProvider<LdapConfig>(){
-			private static final long serialVersionUID = -1L;
-
-			public void detach() {
-				//empty
-			}
-
-			public Iterator<? extends LdapConfig> iterator(long first, long count) {
-				return Application.getBean(LdapConfigDaoImpl.class).getNondeletedLdapConfig((int)first, (int)count).iterator();
-			}
-
-			public long size() {
-				return Application.getBean(LdapConfigDaoImpl.class).selectMaxFromLdapConfig();
-			}
-
-			public IModel<LdapConfig> model(LdapConfig object) {
-				return new CompoundPropertyModel<LdapConfig>(object);
-			}
-			
-		}) {
+		DataView<LdapConfig> dataView = new DataView<LdapConfig>("ldapList"
+			, new OmDataProvider<LdapConfig>(LdapConfigDaoImpl.class)) {
 			private static final long serialVersionUID = 8715559628755439596L;
 
 			@Override
@@ -79,9 +57,16 @@ public class LdapsPanel extends AdminPanel {
 				});
 			}
 		};
-		dataView.setItemsPerPage(8); //FIXME need to be parametrized
-		add(dataView);
-		add(new AjaxPagingNavigator("navigator", dataView));
+		final WebMarkupContainer ldapListContainer = new WebMarkupContainer("ldapListContainer");
+		add(ldapListContainer.add(dataView).setOutputMarkupId(true));
+		add(new PagedEntityListPanel("navigator", dataView) {
+			private static final long serialVersionUID = 5097048616003411362L;
+
+			@Override
+			protected void onEvent(AjaxRequestTarget target) {
+				target.add(ldapListContainer);
+			}
+		});
 		
 		LdapConfig ldapConfig = new LdapConfig();
 		form = new LdapForm("form", ldapConfig);

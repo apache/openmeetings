@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -34,6 +35,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.data.OmDAO;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
@@ -45,7 +47,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class Configurationmanagement {
+public class Configurationmanagement implements OmDAO<Configuration>{
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			Configurationmanagement.class,
@@ -56,7 +58,7 @@ public class Configurationmanagement {
 	@PersistenceContext
 	private EntityManager em;
 
-	@Autowired
+	@Resource(name = "usersDao")
 	private UsersDaoImpl usersDao;
 	@Autowired
 	private AuthLevelmanagement authLevelManagement;
@@ -370,5 +372,28 @@ public class Configurationmanagement {
 		q.setFirstResult(first);
 		q.setMaxResults(count);
 		return q.getResultList();
+	}
+
+	public Configuration get(long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Configuration> get(int start, int count) {
+		return getNondeletedConfiguration(start, count);
+	}
+
+	public long count() {
+		return selectMaxFromConfigurations();
+	}
+
+	public void update(Configuration entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void delete(Configuration entity) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -20,19 +20,17 @@ package org.apache.openmeetings.web.components.admin.labels;
 
 import java.util.Iterator;
 
-import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.data.basic.FieldLanguagesValuesDAO;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
+import org.apache.openmeetings.web.data.OmDataProvider;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
-import org.apache.wicket.markup.repeater.data.IDataProvider;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
 
 public class LangPanel extends AdminPanel {
 	private static final long serialVersionUID = 5904180813198016592L;
@@ -41,25 +39,13 @@ public class LangPanel extends AdminPanel {
 	public LangPanel(String id) {
 		super(id);
 
-		DataView<Fieldlanguagesvalues> dataView = new DataView<Fieldlanguagesvalues>("langList", new IDataProvider<Fieldlanguagesvalues>(){
+		DataView<Fieldlanguagesvalues> dataView = new DataView<Fieldlanguagesvalues>("langList"
+				, new OmDataProvider<Fieldlanguagesvalues>(FieldLanguagesValuesDAO.class){
 			private static final long serialVersionUID = -6822789354860988626L;
 
-			public void detach() {
-				//empty
-			}
-
 			public Iterator<? extends Fieldlanguagesvalues> iterator(long first, long count) {
-				return Application.getBean(Fieldmanagment.class).getMixedFieldValuesList(language, (int)first, (int)count).iterator();
+				return Application.getBean(FieldLanguagesValuesDAO.class).get(language, (int)first, (int)count).iterator();
 			}
-
-			public long size() {
-				return Application.getBean(Fieldmanagment.class).getNextFieldvaluesId() - 1; //FIXME need to be generalized
-			}
-
-			public IModel<Fieldlanguagesvalues> model(Fieldlanguagesvalues object) {
-				return new CompoundPropertyModel<Fieldlanguagesvalues>(object);
-			}
-			
 		}) {
 			private static final long serialVersionUID = 8715559628755439596L;
 

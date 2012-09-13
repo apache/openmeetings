@@ -18,21 +18,17 @@
  */
 package org.apache.openmeetings.web.components.admin.configurations;
 
-import java.util.Iterator;
-
 import org.apache.openmeetings.data.basic.Configurationmanagement;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
+import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
+import org.apache.openmeetings.web.data.OmDataProvider;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
-import org.apache.wicket.markup.repeater.data.IDataProvider;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
 
 public class ConfigsPanel extends AdminPanel {
 
@@ -41,26 +37,8 @@ public class ConfigsPanel extends AdminPanel {
 	
 	public ConfigsPanel(String id) {
 		super(id);
-		DataView<Configuration> dataView = new DataView<Configuration>("configList", new IDataProvider<Configuration>(){
-			private static final long serialVersionUID = -1L;
-
-			public void detach() {
-				//empty
-			}
-
-			public Iterator<? extends Configuration> iterator(long first, long count) {
-				return Application.getBean(Configurationmanagement.class).getNondeletedConfiguration((int)first, (int)count).iterator();
-			}
-
-			public long size() {
-				return Application.getBean(Configurationmanagement.class).selectMaxFromConfigurations();
-			}
-
-			public IModel<Configuration> model(Configuration object) {
-				return new CompoundPropertyModel<Configuration>(object);
-			}
-			
-		}) {
+		DataView<Configuration> dataView = new DataView<Configuration>("configList"
+			, new OmDataProvider<Configuration>(Configurationmanagement.class)) {
 			private static final long serialVersionUID = 8715559628755439596L;
 
 			@Override
@@ -79,9 +57,16 @@ public class ConfigsPanel extends AdminPanel {
 				});
 			}
 		};
-		dataView.setItemsPerPage(8); //FIXME need to be parametrized
-		add(dataView);
-		add(new AjaxPagingNavigator("navigator", dataView));
+		final WebMarkupContainer confListContainer = new WebMarkupContainer("confListContainer");
+		add(confListContainer.add(dataView).setOutputMarkupId(true));
+		add(new PagedEntityListPanel("navigator", dataView) {
+			private static final long serialVersionUID = 5097048616003411362L;
+
+			@Override
+			protected void onEvent(AjaxRequestTarget target) {
+				target.add(confListContainer);
+			}
+		});
 		
 		Configuration configuration = new Configuration();
 		form = new ConfigForm("form", configuration);

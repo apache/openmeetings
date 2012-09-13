@@ -32,6 +32,7 @@ import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.data.OmDAO;
 import org.apache.openmeetings.persistence.beans.adresses.Adresses;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
@@ -41,7 +42,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class UsersDaoImpl {
+public class UsersDaoImpl implements OmDAO<Users> {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(UsersDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
 	@PersistenceContext
@@ -49,6 +50,26 @@ public class UsersDaoImpl {
 	@Autowired
 	private ManageCryptStyle manageCryptStyle;
 
+	public Users get(long id) {
+		return getUser(id);
+	}
+	
+	public List<Users> get(int first, int count) {
+		return getNondeletedUsers((int)first, (int)count);
+	}
+	
+	public long count() {
+		return selectMaxFromUsers();
+	}
+	
+	public void update(Users u) {
+		updateUser(u); 
+	}
+
+	public void delete(Users u) {
+		deleteUserID(u.getUser_id()); 
+	}
+	
 	/**
 	 * 
 	 * @param user_id

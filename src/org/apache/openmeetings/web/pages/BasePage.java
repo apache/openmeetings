@@ -29,7 +29,7 @@ public abstract class BasePage extends WebPage {
 
 	public BasePage() {
 		String appName = Application.getBean(Configurationmanagement.class).getAppName();
-		add(new Label("pageTitle", appName).setRenderBodyOnly(true));
+		add(new Label("pageTitle", appName));
 		add(new HeaderPanel("header", appName));
 	}
 }
