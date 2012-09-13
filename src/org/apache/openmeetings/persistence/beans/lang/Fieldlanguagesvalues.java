@@ -43,7 +43,7 @@ import org.apache.openmeetings.persistence.beans.OmEntity;
 	@NamedQuery(name = "allFieldLanguageValues", query = "SELECT flv FROM Fieldlanguagesvalues flv "
 		+ "WHERE flv.deleted = false "
 		+ "		AND flv.fieldvalues.deleted = false "
-		+ "		AND flv.language_id = :language_id")
+		+ "		AND flv.language_id = :language_id ORDER BY flv.fieldvalues_id ASC")
 	, @NamedQuery(name="allFieldValuesIds", query = "SELECT flv.fieldvalues_id FROM Fieldlanguagesvalues flv "
 		+ "WHERE flv.deleted = false "
 		+ "		AND flv.fieldvalues.deleted = false "

@@ -20,31 +20,43 @@ package org.apache.openmeetings.web.components.admin.labels;
 
 import java.util.Iterator;
 
+import org.apache.openmeetings.data.basic.FieldLanguageDaoImpl;
 import org.apache.openmeetings.data.basic.FieldLanguagesValuesDAO;
+import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.OmDataProvider;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 
 public class LangPanel extends AdminPanel {
 	private static final long serialVersionUID = 5904180813198016592L;
-	long language = 1;
+	private FieldLanguage language;
 	
 	public LangPanel(String id) {
 		super(id);
+		FieldLanguageDaoImpl langDao = Application.getBean(FieldLanguageDaoImpl.class);
+		language = langDao.getFieldLanguageById(1L);
+		
 
-		DataView<Fieldlanguagesvalues> dataView = new DataView<Fieldlanguagesvalues>("langList"
+		final DataView<Fieldlanguagesvalues> dataView = new DataView<Fieldlanguagesvalues>("langList"
 				, new OmDataProvider<Fieldlanguagesvalues>(FieldLanguagesValuesDAO.class){
 			private static final long serialVersionUID = -6822789354860988626L;
 
 			public Iterator<? extends Fieldlanguagesvalues> iterator(long first, long count) {
-				return Application.getBean(FieldLanguagesValuesDAO.class).get(language, (int)first, (int)count).iterator();
+				return Application.getBean(FieldLanguagesValuesDAO.class).get(language.getLanguage_id(), (int)first, (int)count).iterator();
 			}
 		}) {
 			private static final long serialVersionUID = 8715559628755439596L;
@@ -52,7 +64,7 @@ public class LangPanel extends AdminPanel {
 			@Override
 			protected void populateItem(Item<Fieldlanguagesvalues> item) {
 				final Fieldlanguagesvalues flv = item.getModelObject();
-				item.add(new Label("lblId", "" + flv.getFieldlanguagesvalues_id()));
+				item.add(new Label("lblId", "" + flv.getFieldvalues_id()));
 				item.add(new Label("name", flv.getFieldvalues().getName()));
 				item.add(new Label("value", flv.getValue()));
 				/*
@@ -68,16 +80,34 @@ public class LangPanel extends AdminPanel {
 			}
 		};
 		
-		final WebMarkupContainer langListContainer = new WebMarkupContainer("langListContainer");
-		add(langListContainer.add(dataView).setOutputMarkupId(true));
+		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
+		add(listContainer.add(dataView).setOutputMarkupId(true));
 		add(new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = 5097048616003411362L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
-				target.add(langListContainer);
+				dataView.modelChanging();
+				target.add(listContainer);
 			}
 		});
+		
+		final Form<Void> f = new Form<Void>("langForm");
+		final DropDownChoice<FieldLanguage> languages = new DropDownChoice<FieldLanguage>("language"
+			, new PropertyModel<FieldLanguage>(this, "language")
+			, langDao.getLanguages()
+			, new ChoiceRenderer<FieldLanguage>("name", "language_id"));
+		
+		languages.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+			private static final long serialVersionUID = -2055912815073387536L;
+
+				@Override
+				protected void onUpdate(AjaxRequestTarget target) {
+					target.add(listContainer);
+				}
+			});
+		f.add(languages.setNullValid(true).setOutputMarkupId(true));
+		add(f.setOutputMarkupId(true));
 		
 	}
 }

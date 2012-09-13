@@ -58,14 +58,14 @@ public class UsersPanel extends AdminPanel {
 				});
 			}
 		};
-		final WebMarkupContainer userListContainer = new WebMarkupContainer("userListContainer");
-		add(userListContainer.add(dataView).setOutputMarkupId(true));
+		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
+		add(listContainer.add(dataView).setOutputMarkupId(true));
 		add(new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = 5097048616003411362L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
-				target.add(userListContainer);
+				target.add(listContainer);
 			}
 		});
 		
