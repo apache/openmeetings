@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.pages;
 
 import org.apache.openmeetings.web.components.MenuPanel;
+import org.apache.openmeetings.web.components.user.ChatPanel;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -34,5 +35,6 @@ public class MainPage extends BasePage {
 		add(contents);
 		menu = new MenuPanel("menu", contents);
 		add(menu);
+		add(new ChatPanel("chat"));
 	}
 }

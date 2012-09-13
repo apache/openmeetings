@@ -30,6 +30,7 @@ import org.apache.openmeetings.web.components.admin.ldaps.LdapsPanel;
 import org.apache.openmeetings.web.components.admin.rooms.RoomsPanel;
 import org.apache.openmeetings.web.components.admin.servers.ServersPanel;
 import org.apache.openmeetings.web.components.admin.users.UsersPanel;
+import org.apache.openmeetings.web.components.user.calendar.CalendarPanel;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -95,6 +96,8 @@ public class MenuPanel extends BasePanel {
 									case dashboardModuleStartScreen:
 										break;
 									case dashboardModuleCalendar:
+										target.add(contents.replace(new CalendarPanel("child")));
+										hash = "#calendar";
 										break;
 									case recordModule:
 										break;
