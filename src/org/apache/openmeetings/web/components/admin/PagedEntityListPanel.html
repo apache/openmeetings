@@ -21,7 +21,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" 
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.5-strict.dtd" lang="en">
 	<wicket:panel>
-		<select wicket:id="entityesPerPage"></select>
-		<span wicket:id="navigator">[dataview navigator]</span>
+		<form wicket:id="pagingForm">
+			<select wicket:id="entitiesPerPage"></select>
+			<span wicket:id="navigator">[dataview navigator]</span>
+		</form>
 	</wicket:panel>
 </html>

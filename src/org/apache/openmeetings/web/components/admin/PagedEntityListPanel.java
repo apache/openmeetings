@@ -22,36 +22,41 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.openmeetings.persistence.beans.OmEntity;
-import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.PropertyModel;
 
 public abstract class PagedEntityListPanel extends AdminPanel {
 	private static final long serialVersionUID = -4280843184916302671L;
-	private int entityesPerPage = 50;
+	private int entitiesPerPage = 50;
 	private List<Integer> numbers = Arrays.asList(10, 25, 50, 75, 100, 200);
 	
 	public PagedEntityListPanel(String id, final DataView<? extends OmEntity> dataView) {
 		super(id);
 		
-		dataView.setItemsPerPage(entityesPerPage);
-		final AjaxPagingNavigator navigator = new AjaxPagingNavigator("navigator", dataView);
-		add(navigator.setOutputMarkupId(true));
-		
-		add(new DropDownChoice<Integer>("entityesPerPage", new PropertyModel<Integer>(this, "entityesPerPage"), numbers)
-			.add(new AjaxEventBehavior("change") {
-				private static final long serialVersionUID = 7721662282201431562L;
+		dataView.setItemsPerPage(entitiesPerPage);
+		final Form<Void> f = new Form<Void>("pagingForm");
+		f.setOutputMarkupId(true);
+		f.add(new AjaxPagingNavigator("navigator", dataView).setOutputMarkupId(true))
+			.add(new DropDownChoice<Integer>("entitiesPerPage", new PropertyModel<Integer>(this, "entitiesPerPage"), numbers)
+				.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+					private static final long serialVersionUID = -7754441983330112248L;
 
-				@Override
-				protected void onEvent(AjaxRequestTarget target) {
-					dataView.setItemsPerPage(entityesPerPage);
-					target.add(navigator);
-					PagedEntityListPanel.this.onEvent(target);
-				}
-			}));
+					@Override
+					protected void onUpdate(AjaxRequestTarget target) {
+						long newPage = dataView.getCurrentPage() * dataView.getItemsPerPage() / entitiesPerPage;
+						dataView.setItemsPerPage(entitiesPerPage);
+						dataView.setCurrentPage(newPage);
+						target.add(f);
+						PagedEntityListPanel.this.onEvent(target);
+					}
+				}));
+		
+		add(f);
 	}
 
 	protected abstract void onEvent(AjaxRequestTarget target);
