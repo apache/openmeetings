@@ -29,7 +29,7 @@ import org.apache.openmeetings.web.components.admin.groups.GroupsPanel;
 import org.apache.openmeetings.web.components.admin.ldaps.LdapsPanel;
 import org.apache.openmeetings.web.components.admin.rooms.RoomsPanel;
 import org.apache.openmeetings.web.components.admin.servers.ServersPanel;
-import org.apache.openmeetings.web.components.admin.user.UsersPanel;
+import org.apache.openmeetings.web.components.admin.users.UsersPanel;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;

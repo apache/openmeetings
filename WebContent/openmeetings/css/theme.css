@@ -28,17 +28,32 @@
 }
 
 #busy_indicator {
-  display: none;
-  float: right;
-  background: rgb(255,241,168);
-  margin-top: 5px;
-  z-index: 1000;
-  width: 200;
-  font-weight: bold;
-  text-align: center;
-  font-size: 1em;
+	display: none;
+	float: right;
+	background: rgb(255, 241, 168);
+	margin-top: 5px;
+	z-index: 1000;
+	width: 200;
+	font-weight: bold;
+	text-align: center;
+	font-size: 1em;
 }
 
 .adminPanel {
+	table-layout: fixed;
 	width: 100%;
+}
+
+.adminPanelColumnTable {
+	width: 540px;
+}
+
+table.adminListTable {
+}
+
+.adminPanelColumnForm {
+	vertical-align: top;
+}
+
+.adminForm {
 }

@@ -23,9 +23,9 @@
 	<wicket:panel>
 		<table class="adminPanel">
 			<tr>
-				<td valign="top">
+				<td valign="top" class="adminPanelColumnTable">
 					<span wicket:id="navigator">[dataview navigator]</span>
-					<table wicket:id="listContainer">
+					<table wicket:id="listContainer" class="adminListTable">
 						<tr>
 							<th><wicket:ommessage key="146" /></th>
 							<th><wicket:ommessage key="147" /></th>
@@ -40,8 +40,8 @@
 						</tr>
 					</table>
 				</td>
-				<td>
-					<form wicket:id="form">
+				<td class="adminPanelColumnForm">
+					<form wicket:id="form" class="adminForm">
 						<div wicket:id="buttons"></div>
 			            <wicket:ommessage key="132" />: <input type="text" wicket:id="login"/>
 			            <br/>
