@@ -21,7 +21,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" 
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.5-strict.dtd" lang="en">
 	<wicket:panel>
-		<table>
+		<table class="adminPanel">
 			<tr>
 				<td>
 					<span wicket:id="navigator">[dataview navigator]</span>
@@ -39,25 +39,8 @@
 					</table>
 				</td>
 				<td>
-					<span wicket:id="selected"></span>
-					<br/>
 					<form wicket:id="form">
-						<div class="formSaveBar">
-				            <div class="formSaveButton">
-				            	<input type="submit" value="" wicket:id="ajax-save-button"/>
-				            </div>
-				            <div class="formNewButton">
-				            	<input type="submit" value="" wicket:id="ajax-new-button"/>
-				            </div>
-				            <div class="formRefreshButton">
-				            	<input type="submit" value="" wicket:id="ajax-refresh-button"/>
-				            </div>
-				            <div class="formCancelButton">
-				            	<input type="submit" value="" wicket:id="ajax-cancel-button"/>
-				            </div>
-			            </div>
-			            <br/>
-						<div wicket:id="feedback">[[ feedback ]]</div>
+						<div wicket:id="buttons"></div>
 					</form>
 				</td>
 			</tr>

@@ -137,7 +137,7 @@ public class MenuPanel extends BasePanel {
 										break;
 									case adminModuleServers:
 										target.add(contents.replace(new ServersPanel("child")));
-										hash = "#admin/ldaps";
+										hash = "#admin/servers";
 										break;
 								}
 								target.appendJavaScript("window.location.hash = '" + JavaScriptUtils.escapeQuotes(hash) + "';");

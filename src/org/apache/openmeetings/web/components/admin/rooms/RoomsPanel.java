@@ -33,14 +33,10 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 
 public class RoomsPanel extends AdminPanel {
 
 	private static final long serialVersionUID = -1L;
-	@SuppressWarnings("unused")
-	private String selectedText = "Click on the table to change the room";
-	private Label selected = null;
 	private RoomForm form;
 	
 	public RoomsPanel(String id) {
@@ -83,9 +79,6 @@ public class RoomsPanel extends AdminPanel {
 				});
 			}
 		};
-		selected = new Label("selected", new PropertyModel<String>(this, "selectedText"));
-		selected.setOutputMarkupId(true);
-		add(selected);
 		dataView.setItemsPerPage(8); //FIXME need to be parametrized
 		add(dataView);
 		add(new AjaxPagingNavigator("navigator", dataView));

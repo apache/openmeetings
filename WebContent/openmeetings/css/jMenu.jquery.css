@@ -12,7 +12,7 @@
 /********************/
 #jMenu li {
 	display: table-cell;
-	background-color: #322f32;
+	background-color: #BDC0DB;
 	margin: 0; //
 	float: left;
 	width: 120px;
@@ -24,7 +24,8 @@
 	background-color: transparent;
 	color: #fff;
 	text-transform: uppercase;
-	cursor: pointer;
+	text-decoration: none;
+	cursor: default;
 	font-size: 12px;
 }
 
@@ -44,14 +45,14 @@
 }
 
 #jMenu li ul li {
-	background-color: #322f32;
+	background-color: #BDC0DB;
 	display: block;
 	border-bottom: 1px solid #484548;
 	padding: 0
 }
 
 #jMenu li ul li.arrow {
-	background: #322f32 url('images/arrow_down.png') no-repeat center center;
+	background: #BDC0DB url('images/arrow_down.png') no-repeat center center;
 	height: 6px;
 	padding: 0;
 	border-bottom: none;

@@ -37,7 +37,6 @@ import org.apache.wicket.model.IModel;
 
 public class UsersPanel extends AdminPanel {
 	private static final long serialVersionUID = -4463107742579790120L;
-	@SuppressWarnings("unused")
 	private UserForm form = null;
 	
 	public UsersPanel(String id) {
