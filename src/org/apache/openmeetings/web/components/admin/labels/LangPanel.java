@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.components.lang;
+package org.apache.openmeetings.web.components.admin.labels;
 
 import java.util.Iterator;
 
