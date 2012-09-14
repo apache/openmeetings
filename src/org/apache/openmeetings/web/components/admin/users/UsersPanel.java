@@ -32,10 +32,13 @@ import org.apache.wicket.markup.repeater.data.DataView;
 
 public class UsersPanel extends AdminPanel {
 	private static final long serialVersionUID = -4463107742579790120L;
-	private UserForm form = null;
 	
 	public UsersPanel(String id) {
 		super(id);
+		Users user = new Users();
+		final UserForm form = new UserForm("form", user);
+        add(form);
+        
 		DataView<Users> dataView = new DataView<Users>("userList", new OmDataProvider<Users>(UsersDaoImpl.class)) {
 			private static final long serialVersionUID = 8715559628755439596L;
 
@@ -68,9 +71,5 @@ public class UsersPanel extends AdminPanel {
 				target.add(listContainer);
 			}
 		});
-		
-		Users user = new Users();
-		form = new UserForm("form", user);
-        add(form);
 	}
 }

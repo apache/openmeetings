@@ -21,10 +21,21 @@
 <html xmlns="http://www.w3.org/1999/xhtml" 
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.5-strict.dtd" lang="en">
 	<wicket:panel>
+		<script type="text/javascript">
+			$(function(){
+				$('#addLanguage').dialog({
+					closeOnEscape: true
+					, autoOpen: false
+					, resizable: false
+				});
+			});
+		</script>
 		<table class="adminPanel">
 			<tr>
 				<td valign="top" class="adminPanelColumnTable">
-					<form wicket:id="langForm"><select wicket:id="language"></select></form>
+					<div class="formNewButton" onclick="$('#addLanguage :text').val(''); $('#addLanguage').dialog('open');"><input/></div>
+					<div class="formCancelButton" wicket:id="deleteLngBtn"><input/></div>
+					<form wicket:id="langForm" style="display: inline-block;"><select wicket:id="language"></select></form>
 					<span wicket:id="navigator">[dataview navigator]</span>
 					<table wicket:id="listContainer" class="adminListTable">
 						<tr>
@@ -40,9 +51,45 @@
 					</table>
 				</td>
 				<td class="adminPanelColumnForm">
-					<!-- form css class="adminForm" -->
+					<form wicket:id="form" class="adminForm">
+						<div wicket:id="buttons"></div>
+						<table>
+							<tr>
+								<td colspan="2" style="font-weight: bold;"><wicket:ommessage key="353" /></td>
+							</tr>
+							<tr>
+								<td><wicket:ommessage key="356" /></td>
+								<td><span wicket:id="fieldvalues.fieldvalues_id"></span></td>
+							</tr>
+							<tr>
+								<td><wicket:ommessage key="354" /></td>
+								<td><input type="text" wicket:id="fieldvalues.name"/></td>
+							</tr>
+							<tr>
+								<td><wicket:ommessage key="355" /></td>
+								<td><textarea wicket:id="value"></textarea></td>
+							</tr>
+						</table>
+					</form>
 				</td>
 			</tr>
 		</table>
+		<div id="addLanguage" wicket:ommessage="title:364" style="display: none;">
+			<form wicket:id="addLangForm">
+				<table>
+					<tr>
+						<td><wicket:ommessage key="365" /></td>
+						<td><input type="text" wicket:id="name" /></td>
+					</tr>
+					<tr>
+						<td><wicket:ommessage key="1422" /></td>
+						<td><input type="text" wicket:id="iso"/></td>
+					</tr>
+					<tr>
+						<td align="right" colspan="2"><input wicket:id="add" type="submit" /></td>
+					</tr>
+				</table>
+			</form>
+		</div>
 	</wicket:panel>
 </html>

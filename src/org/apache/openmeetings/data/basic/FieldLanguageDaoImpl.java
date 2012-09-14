@@ -46,6 +46,11 @@ public class FieldLanguageDaoImpl {
 	@PersistenceContext
 	private EntityManager em;
 
+	public long getNextAvailableId() {
+		TypedQuery<Long> q = em.createQuery("SELECT MAX(fl.language_id) from FieldLanguage fl", Long.class);
+		return q.getSingleResult() + 1;
+	}
+	
 	public FieldLanguage addLanguage(int langId, String langName, Boolean langRtl, String code) {
 		try {
 			FieldLanguage fl = new FieldLanguage();
