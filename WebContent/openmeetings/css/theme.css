@@ -19,7 +19,17 @@
 #topLinks {
 	position: absolute;
 	top: 10px;
-	right: 0px;
+	right: 10px;
+}
+
+#topLinks span {
+	padding-right: 5px;
+	padding-left: 5px;
+	border-right: 1px solid black;
+}
+
+#topLinks span:last-child {
+	border-right: none;
 }
 
 #menu {

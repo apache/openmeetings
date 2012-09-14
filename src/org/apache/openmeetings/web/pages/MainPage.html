@@ -38,7 +38,11 @@
 		</script>
 	</wicket:head>
 	<wicket:extend>
-		<div id="topLinks"><wicket:ommessage key="1188"/>|<wicket:ommessage key="5"/>|<wicket:ommessage key="310"/>|<wicket:ommessage key="284"/></div>
+		<div id="topLinks"><span 
+			id="contactsAndMessages"><wicket:ommessage key="1188"/></span><span 
+			id="profile"><wicket:ommessage key="5"/></span><span 
+			id="logout"><a wicket:id="logout"><wicket:ommessage key="310"/></a></span><span 
+			id="reportBug"><wicket:ommessage key="284"/></span></div>
 		<div id="busy_indicator">Loading ...</div>
 		<div wicket:id="menu"></div>
 		<div wicket:id="contents"><div wicket:id="child"></div></div>

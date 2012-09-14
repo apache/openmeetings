@@ -41,6 +41,14 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	}
 
 	@Override
+	public void invalidate() {
+		super.invalidate();
+		userId = -1;
+		userLevel = -1;
+		SID = null;
+	}
+	
+	@Override
 	public Roles getRoles() {
 		Roles r = null;
 		if (isSignedIn()) {
@@ -70,6 +78,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		
 		if (u instanceof Users) {
 			userId = ((Users)u).getUser_id();
+			Application.get().addLiveSession(this);
 			return true;
 		}
 		return false;

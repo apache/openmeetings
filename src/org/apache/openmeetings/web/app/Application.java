@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.app;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.pages.auth.SignInPage;
 import org.apache.wicket.Page;
@@ -33,11 +35,14 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.mapper.info.PageComponentInfo;
+import org.apache.wicket.session.ISessionStore.UnboundListener;
 import org.apache.wicket.settings.IPageSettings;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 public class Application extends AuthenticatedWebApplication {
+	private ConcurrentHashMap<String, WebSession> liveSessions = new ConcurrentHashMap<String, WebSession>(100); //TODO need to investigate
+	
 	@Override
 	protected void init() {
 		IPageSettings pageSettings = getPageSettings();
@@ -69,6 +74,18 @@ public class Application extends AuthenticatedWebApplication {
 				}
 			}
 		});
+		
+		getSessionStore().registerUnboundListener(new UnboundListener() {
+			public void sessionUnbound(String sessionId) {
+				liveSessions.remove(sessionId);
+			}
+		});
+	}
+	
+	void addLiveSession(WebSession session) {
+		if (!liveSessions.containsKey(session.getId())) {
+			liveSessions.put(session.getId(), session);
+		}
 	}
 	
 	@Override
@@ -82,7 +99,7 @@ public class Application extends AuthenticatedWebApplication {
 	}
 
 	@Override
-	protected Class<? extends WebPage> getSignInPageClass() {
+	public Class<? extends WebPage> getSignInPageClass() {
 		return SignInPage.class;
 	}
 	

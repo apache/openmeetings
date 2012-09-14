@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.pages.auth;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.BasePage;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
@@ -36,6 +37,9 @@ public class SignInPage extends BasePage {
 	}
 	
 	public SignInPage() {
+		if (WebSession.get().isSignedIn()) {
+			throw new RestartResponseException(Application.get().getHomePage());
+		}
 		add(new SignInForm("signin"));
 	}
 	
