@@ -27,12 +27,16 @@
 			#login .ui-dialog .ui-dialog-titlebar-close {
 				display: none;
 			}
+			#login input {
+				width: 100px;
+			}
 		</style>
 		<script type="text/javascript">
 			$(function(){
 				$('#login').dialog({
 					closeOnEscape: false
 					, resizable: false
+					, width: 400
 					, open: function(event, ui) {
 						$(".ui-dialog-titlebar-close").hide();
 					}

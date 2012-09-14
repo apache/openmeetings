@@ -27,13 +27,17 @@
 		<script type="text/javascript" src="js/jquery-ui-1.8.23.custom.min.js"></script>
 		<link media="screen" type="text/css" rel="stylesheet" href="css/jquery-ui-1.8.23.custom.css"/>
 		<script type="text/javascript">
+			function showBusyIndicator() {
+				$('#busy_indicator').show();
+			}
+			function hideBusyIndicator() {
+				$('#busy_indicator').hide();
+			}
 			$(function() {
-				Wicket.Event.subscribe('/ajax/call/failure'
-					, function(jqEvent, attributes, jqXHR, errorThrown, textStatus) { $('#busy_indicator').hide();});
-				Wicket.Event.subscribe('/ajax/call/before'
-						, function(jqEvent, attributes, jqXHR, errorThrown, textStatus) { $('#busy_indicator').show();});
-				Wicket.Event.subscribe('/ajax/call/success'
-						, function(jqEvent, attributes, jqXHR, errorThrown, textStatus) { $('#busy_indicator').hide();});
+				Wicket.Event.subscribe('/ajax/call/failure', hideBusyIndicator);
+				Wicket.Event.subscribe('/ajax/call/before', showBusyIndicator);
+				Wicket.Event.subscribe('/ajax/call/success', hideBusyIndicator);
+				Wicket.Event.subscribe('/ajax/call/complete', hideBusyIndicator);
 			});
 		</script>
 	</wicket:head>

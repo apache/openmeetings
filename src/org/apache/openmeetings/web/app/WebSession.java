@@ -78,6 +78,9 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		
 		if (u instanceof Users) {
 			userId = ((Users)u).getUser_id();
+			if (null == getId()) {
+				bind();
+			}
 			Application.get().addLiveSession(this);
 			return true;
 		}
