@@ -60,7 +60,39 @@ public class LangPanel extends AdminPanel {
 		FieldLanguageDaoImpl langDao = Application.getBean(FieldLanguageDaoImpl.class);
 		language = langDao.getFieldLanguageById(1L);
 		
-		final Form<Fieldlanguagesvalues> form = new AdminBaseForm<Fieldlanguagesvalues>("form", new CompoundPropertyModel<Fieldlanguagesvalues>(new Fieldlanguagesvalues()));
+		final AdminBaseForm<Fieldlanguagesvalues> form = new AdminBaseForm<Fieldlanguagesvalues>("form", new CompoundPropertyModel<Fieldlanguagesvalues>(new Fieldlanguagesvalues())) {
+			private static final long serialVersionUID = -1309878909524329047L;
+
+			@Override
+			protected void onNewSubmit(AjaxRequestTarget target, Form<?> f) {
+				this.setModelObject(new Fieldlanguagesvalues());
+				target.add(this);
+			}
+			
+			@Override
+			protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
+				Fieldlanguagesvalues flv = getModelObject();
+				if (flv.getFieldlanguagesvalues_id() != null) {
+					flv = Application.getBean(FieldLanguagesValuesDAO.class).get(getModelObject().getFieldlanguagesvalues_id());
+				} else {
+					flv = new Fieldlanguagesvalues();
+				}
+				this.setModelObject(flv);
+				target.add(this);
+			}
+			
+			@Override
+			protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
+				Application.getBean(FieldLanguagesValuesDAO.class).update(getModelObject());
+				//FIXME reload
+			}
+			
+			@Override
+			protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
+				Application.getBean(FieldLanguagesValuesDAO.class).delete(getModelObject());
+				//FIXME reload
+			}
+		};
 		form.add(new Label("fieldvalues.fieldvalues_id"));
 		form.add(new TextField<String>("fieldvalues.name"));
 		form.add(new TextArea<String>("value"));
@@ -87,6 +119,7 @@ public class LangPanel extends AdminPanel {
 
 					protected void onEvent(AjaxRequestTarget target) {
 						form.setModelObject(flv);
+						form.hideNewRecord();
 						target.add(form);
 					}
 				});

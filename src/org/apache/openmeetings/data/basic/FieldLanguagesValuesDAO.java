@@ -68,12 +68,15 @@ public class FieldLanguagesValuesDAO implements OmDAO<Fieldlanguagesvalues> {
 	}
 
 	public void update(Fieldlanguagesvalues entity) {
-		// TODO Auto-generated method stub
-		
+		if (entity.getFieldlanguagesvalues_id() == null) {
+			em.persist(entity);
+		} else {
+			entity = em.merge(entity);
+		}
 	}
 
 	public void delete(Fieldlanguagesvalues entity) {
-		// TODO Auto-generated method stub
-		
+		entity.setDeleted(true);
+		entity = em.merge(entity);
 	}
 }

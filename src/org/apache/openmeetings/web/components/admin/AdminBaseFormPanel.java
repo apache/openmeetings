@@ -18,14 +18,18 @@
  */
 package org.apache.openmeetings.web.components.admin;
 
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.Model;
 
-public class AdminBaseFormPanel<T> extends AdminPanel {
+public abstract class AdminBaseFormPanel<T> extends AdminPanel {
 	private static final long serialVersionUID = 8361623159373532543L;
-
+	private Label newRecord;
+	
 	public AdminBaseFormPanel(String id, final AdminBaseForm<T> form) {
 		super(id);
 
@@ -34,6 +38,8 @@ public class AdminBaseFormPanel<T> extends AdminPanel {
 		final FeedbackPanel feedback = new FeedbackPanel("feedback");
 		feedback.setOutputMarkupId(true);
 		add(feedback);
+		newRecord = new Label("newRecord", Model.of(WebSession.getString(344L)));
+		add(newRecord.setVisible(false).setOutputMarkupId(true));
 
 		// add a button that can be used to submit the form via ajax
 		add(new AjaxButton("ajax-save-button", form) {
@@ -43,12 +49,14 @@ public class AdminBaseFormPanel<T> extends AdminPanel {
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				// repaint the feedback panel so that it is hidden
 				target.add(feedback);
+				onSaveSubmit(target, form);
 			}
 
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
 				// repaint the feedback panel so errors are shown
 				target.add(feedback);
+				onSaveError(target, form);
 			}
 		});
 
@@ -59,12 +67,16 @@ public class AdminBaseFormPanel<T> extends AdminPanel {
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				// repaint the feedback panel so that it is hidden
 				target.add(feedback);
+				newRecord.setVisible(true);
+				target.add(newRecord);
+				onNewSubmit(target, form);
 			}
 
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
 				// repaint the feedback panel so errors are shown
 				target.add(feedback);
+				onNewError(target, form);
 			}
 		});
 
@@ -75,12 +87,14 @@ public class AdminBaseFormPanel<T> extends AdminPanel {
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				// repaint the feedback panel so that it is hidden
 				target.add(feedback);
+				onRefreshSubmit(target, form);
 			}
 
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
 				// repaint the feedback panel so errors are shown
 				target.add(feedback);
+				onRefreshError(target, form);
 			}
 		});
 
@@ -91,13 +105,31 @@ public class AdminBaseFormPanel<T> extends AdminPanel {
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				// repaint the feedback panel so that it is hidden
 				target.add(feedback);
+				onDeleteSubmit(target, form);
 			}
 
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
 				// repaint the feedback panel so errors are shown
 				target.add(feedback);
+				onDeleteError(target, form);
 			}
 		});
 	}
+	
+	public void hideNewRecord() {
+		newRecord.setVisible(false);
+	}
+	
+	protected abstract void onSaveSubmit(AjaxRequestTarget target, Form<?> form);
+	protected abstract void onSaveError(AjaxRequestTarget target, Form<?> form);
+
+	protected abstract void onNewSubmit(AjaxRequestTarget target, Form<?> form);
+	protected abstract void onNewError(AjaxRequestTarget target, Form<?> form);
+	
+	protected abstract void onRefreshSubmit(AjaxRequestTarget target, Form<?> form);
+	protected abstract void onRefreshError(AjaxRequestTarget target, Form<?> form);
+	
+	protected abstract void onDeleteSubmit(AjaxRequestTarget target, Form<?> form);
+	protected abstract void onDeleteError(AjaxRequestTarget target, Form<?> form);
 }

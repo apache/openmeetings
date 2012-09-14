@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.components.admin;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 
@@ -30,12 +31,85 @@ import org.apache.wicket.model.IModel;
  * @param <T>
  */
 public class AdminBaseForm<T> extends Form<T> {
-
 	private static final long serialVersionUID = 1L;
+	private AdminBaseFormPanel<T> basePanel;
 
 	public AdminBaseForm(String id, IModel<T> object) {
 		super(id, object);
-		add(new AdminBaseFormPanel<T>("buttons", this));
+		basePanel = new AdminBaseFormPanel<T>("buttons", this) {
+			private static final long serialVersionUID = -5833647470067891270L;
+
+			@Override
+			protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
+				AdminBaseForm.this.onSaveSubmit(target, form);
+			}
+
+			@Override
+			protected void onSaveError(AjaxRequestTarget target, Form<?> form) {
+				AdminBaseForm.this.onSaveError(target, form);
+			}
+
+			@Override
+			protected void onNewSubmit(AjaxRequestTarget target, Form<?> form) {
+				AdminBaseForm.this.onNewSubmit(target, form);
+			}
+
+			@Override
+			protected void onNewError(AjaxRequestTarget target, Form<?> form) {
+				AdminBaseForm.this.onNewError(target, form);
+			}
+
+			@Override
+			protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
+				AdminBaseForm.this.onRefreshSubmit(target, form);
+			}
+
+			@Override
+			protected void onRefreshError(AjaxRequestTarget target, Form<?> form) {
+				AdminBaseForm.this.onRefreshError(target, form);
+			}
+
+			@Override
+			protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
+				AdminBaseForm.this.onDeleteSubmit(target, form);
+			}
+
+			@Override
+			protected void onDeleteError(AjaxRequestTarget target, Form<?> form) {
+				AdminBaseForm.this.onDeleteError(target, form);
+			}
+			
+		};
+		add(basePanel);
 	}
 
+	public void hideNewRecord() {
+		basePanel.hideNewRecord();
+	}
+	
+	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
+	}
+	
+	protected void onSaveError(AjaxRequestTarget target, Form<?> form) {
+	}
+	
+	protected void onNewSubmit(AjaxRequestTarget target, Form<?> form) {
+	}
+	
+	protected void onNewError(AjaxRequestTarget target, Form<?> form) {
+	}
+	
+	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
+	}
+	
+	protected void onRefreshError(AjaxRequestTarget target, Form<?> form) {
+	}
+	
+	
+	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
+	}
+	
+	protected void onDeleteError(AjaxRequestTarget target, Form<?> form) {
+	}
+	
 }
