@@ -38,6 +38,7 @@ import org.apache.wicket.core.util.string.JavaScriptUtils;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class MenuPanel extends BasePanel {
 	private static final long serialVersionUID = 6626039612808753514L;
@@ -61,7 +62,7 @@ public class MenuPanel extends BasePanel {
 		, adminModuleServers
 	}
 
-	public MenuPanel(String id, final MarkupContainer contents) {
+	public MenuPanel(String id, final MarkupContainer contents, PageParameters pp) {
 		super(id);
 		setMarkupId(id);
 		

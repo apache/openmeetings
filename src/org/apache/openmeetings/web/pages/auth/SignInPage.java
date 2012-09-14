@@ -22,11 +22,12 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.BasePage;
 import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class SignInPage extends BasePage {
@@ -47,45 +48,21 @@ public class SignInPage extends BasePage {
 		private static final long serialVersionUID = 4079939497154278822L;
         private String password;
         private String login;
+        private String area = "";
 
 		public SignInForm(String id) {
 			super(id);
 			
 			add(new FeedbackPanel("feedback"));
-			add(new RequiredTextField<String>("login", new Model<String>(){
-				private static final long serialVersionUID = -1335578251793516071L;
-				
-				@Override
-				public String getObject() {
-					return SignInForm.this.login;
-				}
-				
-				@Override
-				public void setObject(String object) {
-					SignInForm.this.login = object;
-				}
-			}));
-			add(new PasswordTextField("pass", new Model<String>(){
-				private static final long serialVersionUID = 4751494320421393717L;
-
-				@Override
-				public String getObject() {
-					return SignInForm.this.password;
-				}
-				
-				@Override
-				public void setObject(String object) {
-					SignInForm.this.password = object;
-				}
-			}).setResetPassword(true));
+			add(new RequiredTextField<String>("login", new PropertyModel<String>(this, "login")));
+			add(new PasswordTextField("pass", new PropertyModel<String>(this, "password")).setResetPassword(true));
+			add(new HiddenField<String>("area", new PropertyModel<String>(this, "area")));
 		}
 		
 		@Override
 		protected void onSubmit() {
 			if (WebSession.get().signIn(login, password)) {
-				continueToOriginalDestination();
-	 			// if we reach this line there was no intercept page, so go to home page
-	 			setResponsePage(Application.get().getHomePage());
+	 			setResponsePage(Application.get().getHomePage(), new PageParameters().add("area", area));
 			}
 		}
 	}

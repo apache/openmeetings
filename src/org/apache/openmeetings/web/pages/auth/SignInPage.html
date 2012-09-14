@@ -41,6 +41,7 @@
 						$(".ui-dialog-titlebar-close").hide();
 					}
 				});
+				$('#area').val(location.hash);
 			});
 		</script>
 	</wicket:head>
@@ -61,6 +62,7 @@
 					</tr>
 				</table>
 				<span wicket:id="feedback"></span>
+				<input wicket:id="area" type="hidden" value="" />
 			</form>
 		</div>
 	</wicket:extend>
