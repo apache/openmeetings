@@ -35,6 +35,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	private long userId = -1;
 	private long userLevel = -1;
 	private String SID = null;
+	private String area = null;
 	
 	public WebSession(Request request) {
 		super(request);
@@ -115,5 +116,13 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 
 	public static long getUserLevel() {
 		return get().userLevel;
+	}
+
+	public String getArea() {
+		return area;
+	}
+
+	public void setArea(String area) {
+		this.area = area;
 	}
 }

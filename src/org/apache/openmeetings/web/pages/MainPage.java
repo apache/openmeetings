@@ -27,7 +27,6 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 @AuthorizeInstantiation("USER")
 public class MainPage extends BasePage {
@@ -35,14 +34,10 @@ public class MainPage extends BasePage {
 	private final MenuPanel menu;
 	
 	public MainPage() {
-		this(new PageParameters());
-	}
-	
-	public MainPage(PageParameters pp) {
 		MarkupContainer contents = new WebMarkupContainer("contents");
 		contents.add(new WebMarkupContainer("child")).setOutputMarkupId(true);
 		add(contents);
-		menu = new MenuPanel("menu", contents, pp);
+		menu = new MenuPanel("menu", contents);
 		add(menu);
 		add(new ConfirmableAjaxLink("logout", WebSession.getString(634L)) {
 			private static final long serialVersionUID = -2994610981053570537L;

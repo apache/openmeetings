@@ -56,13 +56,16 @@ public class SignInPage extends BasePage {
 			add(new FeedbackPanel("feedback"));
 			add(new RequiredTextField<String>("login", new PropertyModel<String>(this, "login")));
 			add(new PasswordTextField("pass", new PropertyModel<String>(this, "password")).setResetPassword(true));
-			add(new HiddenField<String>("area", new PropertyModel<String>(this, "area")));
+			add(new HiddenField<String>("area", new PropertyModel<String>(this, "area"))
+					.setMarkupId("area")
+					.setOutputMarkupId(true));
 		}
 		
 		@Override
 		protected void onSubmit() {
 			if (WebSession.get().signIn(login, password)) {
-	 			setResponsePage(Application.get().getHomePage(), new PageParameters().add("area", area));
+				WebSession.get().setArea(area);
+	 			setResponsePage(Application.get().getHomePage());
 			}
 		}
 	}

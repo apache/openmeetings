@@ -23,22 +23,26 @@ import org.apache.openmeetings.persistence.beans.basic.Naviglobal;
 import org.apache.openmeetings.persistence.beans.basic.Navimain;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.openmeetings.web.components.admin.labels.LangPanel;
 import org.apache.openmeetings.web.components.admin.configurations.ConfigsPanel;
 import org.apache.openmeetings.web.components.admin.groups.GroupsPanel;
+import org.apache.openmeetings.web.components.admin.labels.LangPanel;
 import org.apache.openmeetings.web.components.admin.ldaps.LdapsPanel;
 import org.apache.openmeetings.web.components.admin.rooms.RoomsPanel;
 import org.apache.openmeetings.web.components.admin.servers.ServersPanel;
 import org.apache.openmeetings.web.components.admin.users.UsersPanel;
 import org.apache.openmeetings.web.components.user.calendar.CalendarPanel;
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.core.util.string.JavaScriptUtils;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class MenuPanel extends BasePanel {
 	private static final long serialVersionUID = 6626039612808753514L;
@@ -62,7 +66,7 @@ public class MenuPanel extends BasePanel {
 		, adminModuleServers
 	}
 
-	public MenuPanel(String id, final MarkupContainer contents, PageParameters pp) {
+	public MenuPanel(String id, final MarkupContainer contents) {
 		super(id);
 		setMarkupId(id);
 		
@@ -84,6 +88,7 @@ public class MenuPanel extends BasePanel {
 						final String name = m.getLabel().getValue();
 						final String desc = m.getTooltip().getValue();
 						final MenuActions action = MenuActions.valueOf(m.getAction());
+						final String hash = getHash(action);
 						item.add(new AjaxLink<Void>("link") {
 							private static final long serialVersionUID = 5632618935550133709L;
 							{
@@ -92,13 +97,11 @@ public class MenuPanel extends BasePanel {
 							}
 							
 							public void onClick(AjaxRequestTarget target) {
-								String hash = "#";
 								switch(action) {
 									case dashboardModuleStartScreen:
 										break;
 									case dashboardModuleCalendar:
 										target.add(contents.replace(new CalendarPanel("child")));
-										hash = "#calendar";
 										break;
 									case recordModule:
 										break;
@@ -113,44 +116,100 @@ public class MenuPanel extends BasePanel {
 										break;
 									case adminModuleUser:
 										target.add(contents.replace(new UsersPanel("child")));
-										hash = "#admin/users";
 										break;
 									case adminModuleConnections:
 										break;
 									case adminModuleOrg:
 										target.add(contents.replace(new GroupsPanel("child")));
-										hash = "#admin/groups";
 										break;
 									case adminModuleRoom:
 										target.add(contents.replace(new RoomsPanel("child")));
-										hash = "#admin/rooms";
 										break;
 									case adminModuleConfiguration:
 										target.add(contents.replace(new ConfigsPanel("child")));
-										hash = "#admin/configs";
 										break;
 									case adminModuleLanguages:
 										target.add(contents.replace(new LangPanel("child")));
-										hash = "#admin/lang";
 										break;
 									case adminModuleLDAP:
 										target.add(contents.replace(new LdapsPanel("child")));
-										hash = "#admin/ldaps";
 										break;
 									case adminModuleBackup:
 										break;
 									case adminModuleServers:
 										target.add(contents.replace(new ServersPanel("child")));
-										hash = "#admin/servers";
 										break;
 								}
-								target.appendJavaScript("window.location.hash = '" + JavaScriptUtils.escapeQuotes(hash) + "';");
+								target.appendJavaScript("location.hash = '" + JavaScriptUtils.escapeQuotes(hash) + "';");
 							};
-						});
+						}.add(AttributeModifier.replace("href", hash)));
 					}
 				}.setReuseItems(true));
 			}
 		}.setReuseItems(true));
-	}
 
+		add(new Behavior() {
+			private static final long serialVersionUID = 9067610794087880297L;
+
+			@Override
+			public void renderHead(Component component, IHeaderResponse response) {
+				String area = WebSession.get().getArea();
+				if (area != null) { //hash passed from signin
+					response.render(OnDomReadyHeaderItem.forScript("$(\"a[href='" + JavaScriptUtils.escapeQuotes(area) + "']\").click();"));
+					WebSession.get().setArea(null);
+				} else {
+					response.render(OnDomReadyHeaderItem.forScript("$(\"a[href='\" + location.hash + \"']\").click();"));
+				}
+				super.renderHead(component, response);
+			}
+		});
+	}
+	
+	private String getHash(MenuActions action) {
+		String hash = "#";
+		switch(action) {
+			case dashboardModuleStartScreen:
+				break;
+			case dashboardModuleCalendar:
+				hash = "#calendar";
+				break;
+			case recordModule:
+				break;
+			case conferenceModuleRoomList:
+				//requires params
+				break;
+			case eventModuleRoomList:
+				break;
+			case moderatorModuleUser:
+				break;
+			case moderatorModuleRoom:
+				break;
+			case adminModuleUser:
+				hash = "#admin/users";
+				break;
+			case adminModuleConnections:
+				break;
+			case adminModuleOrg:
+				hash = "#admin/groups";
+				break;
+			case adminModuleRoom:
+				hash = "#admin/rooms";
+				break;
+			case adminModuleConfiguration:
+				hash = "#admin/configs";
+				break;
+			case adminModuleLanguages:
+				hash = "#admin/lang";
+				break;
+			case adminModuleLDAP:
+				hash = "#admin/ldaps";
+				break;
+			case adminModuleBackup:
+				break;
+			case adminModuleServers:
+				hash = "#admin/servers";
+				break;
+		}
+		return hash;
+	}
 }
