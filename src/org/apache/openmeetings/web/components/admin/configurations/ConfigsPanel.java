@@ -40,7 +40,7 @@ public class ConfigsPanel extends AdminPanel {
 	public void renderHead(HtmlHeaderContainer container) {
 
 		// Works but $(document).ready is executed before the table with the id "example" is 
-		// rendered in the UI, so you can't see anything
+		// rendered in the UI, so you can't see any effect
 		
 //		IHeaderResponse response = container.getHeaderResponse();
 //		
