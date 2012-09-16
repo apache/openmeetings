@@ -21,26 +21,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" 
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.5-strict.dtd" lang="en">
 	<wicket:head>
+	<!-- 
 		<link rel='stylesheet' type='text/css' href='media/css/demo_table_jui.css' />
+		 -->
 	</wicket:head>
 	<wicket:panel>	
-	<!-- 
-	Works, but only one time:
-	The first time you initialize the Panel, $(document).ready is executed,
-	the second time you click on the menu item / load the Panel via Ajax, 
-	the JavaScript is not executed
-	
-		<script type="text/javascript" src="media/js/jquery.dataTables.min.js"></script>
-		<script type="text/javascript">
-			$(document).ready( function() {
-				$('#example').dataTable( {
-					"sScrollY": "300px",
-					"bPaginate": false
-				} );
-			} );
-		</script>
-		
-		 -->
 		<table class="adminPanel">
 			<tr>
 				<td class="adminPanelColumnTable">

@@ -25,6 +25,9 @@ import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.OmDataProvider;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
@@ -36,29 +39,45 @@ public class ConfigsPanel extends AdminPanel {
 	private static final long serialVersionUID = -1L;
 	private ConfigForm form;
 	
+	private StringBuilder sb = new StringBuilder();
+	//Testing instance
+	private StringBuilder sb2 = new StringBuilder();
+	
 	@Override
 	public void renderHead(HtmlHeaderContainer container) {
 
-		// Works but $(document).ready is executed before the table with the id "example" is 
-		// rendered in the UI, so you can't see any effect
+		IHeaderResponse response = container.getHeaderResponse();
+		response.render(CssHeaderItem.forUrl("media/css/demo_table_jui.css"));
+		response.render(JavaScriptHeaderItem.forUrl("media/js/jquery.dataTables.min.js"));
 		
-//		IHeaderResponse response = container.getHeaderResponse();
-//		
-//		response.render(JavaScriptHeaderItem.forUrl("media/js/jquery.dataTables.min.js", "id1"));
-//		response.render(JavaScriptHeaderItem.forScript(
-//				"$(document).ready( function() { \n"
-//				+ " $('#example').dataTable( { \n"
-//				+ "	\"sScrollY\": \"300px\", \n"
-//				+ "	\"bPaginate\": false \n"
-//				+ "} );\n"
-//				+ "} );", "exampleInit")
-//			);
+		AjaxRequestTarget target = container.getRequestCycle().find(AjaxRequestTarget.class);
+		
+		if (target != null)
+		{
+			target.appendJavaScript(sb.toString());
+			target.appendJavaScript(sb2.toString());
+		}
+		else
+		{
+			response.render(JavaScriptHeaderItem.forScript(sb.toString(), "datatable"));
+			response.render(JavaScriptHeaderItem.forScript(sb2.toString(), "test2"));
+		}
 	}
-	
-	
 	
 	public ConfigsPanel(String id) {
 		super(id);
+		
+		sb.append("$(function() { \n");
+		sb.append(" $('#example').dataTable( { \n");
+		sb.append("	\"sScrollY\": \"300px\", \n");
+		sb.append("	\"bPaginate\": false \n");
+		sb.append("} );\n");
+		sb.append("} );");
+		
+		sb2.append("$(function() { \n");
+		sb2.append("alert(\"TEST\"); \n");
+		sb2.append("} );");
+		
 		DataView<Configuration> dataView = new DataView<Configuration>("configList"
 			, new OmDataProvider<Configuration>(Configurationmanagement.class)) {
 			private static final long serialVersionUID = 8715559628755439596L;
@@ -87,6 +106,8 @@ public class ConfigsPanel extends AdminPanel {
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
 				target.add(listContainer);
+				target.appendJavaScript(sb.toString());
+				target.appendJavaScript(sb2.toString());
 			}
 		});
 		
