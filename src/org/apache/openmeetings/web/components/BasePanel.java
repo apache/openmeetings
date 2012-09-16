@@ -27,5 +27,5 @@ public abstract class BasePanel extends Panel {
 		super(id);
 		setOutputMarkupId(true);
 	}
-
+	
 }

@@ -27,6 +27,7 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 
@@ -34,6 +35,27 @@ public class ConfigsPanel extends AdminPanel {
 
 	private static final long serialVersionUID = -1L;
 	private ConfigForm form;
+	
+	@Override
+	public void renderHead(HtmlHeaderContainer container) {
+
+		// Works but $(document).ready is executed before the table with the id "example" is 
+		// rendered in the UI, so you can't see anything
+		
+//		IHeaderResponse response = container.getHeaderResponse();
+//		
+//		response.render(JavaScriptHeaderItem.forUrl("media/js/jquery.dataTables.min.js", "id1"));
+//		response.render(JavaScriptHeaderItem.forScript(
+//				"$(document).ready( function() { \n"
+//				+ " $('#example').dataTable( { \n"
+//				+ "	\"sScrollY\": \"300px\", \n"
+//				+ "	\"bPaginate\": false \n"
+//				+ "} );\n"
+//				+ "} );", "exampleInit")
+//			);
+	}
+	
+	
 	
 	public ConfigsPanel(String id) {
 		super(id);
