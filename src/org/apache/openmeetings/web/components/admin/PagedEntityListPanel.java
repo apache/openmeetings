@@ -41,15 +41,7 @@ public abstract class PagedEntityListPanel extends AdminPanel {
 		dataView.setItemsPerPage(entitiesPerPage);
 		final Form<Void> f = new Form<Void>("pagingForm");
 		f.setOutputMarkupId(true);
-		f.add(new AjaxPagingNavigator("navigator", dataView) {
-			private static final long serialVersionUID = 1254170633257351152L;
-
-			@Override
-			protected void onAjaxEvent(AjaxRequestTarget target) {
-				PagedEntityListPanel.this.onEvent(target);
-			}
-			
-		}.setOutputMarkupId(true))
+		f.add(new AjaxPagingNavigator("navigator", dataView).setOutputMarkupId(true))
 			.add(new DropDownChoice<Integer>("entitiesPerPage", new PropertyModel<Integer>(this, "entitiesPerPage"), numbers)
 				.add(new AjaxFormComponentUpdatingBehavior("onchange") {
 					private static final long serialVersionUID = -7754441983330112248L;
