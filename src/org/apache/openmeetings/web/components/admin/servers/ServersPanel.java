@@ -24,6 +24,7 @@ import org.apache.openmeetings.data.basic.dao.ServerDaoImpl;
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
@@ -31,6 +32,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 
@@ -64,7 +66,7 @@ public class ServersPanel extends AdminPanel {
 			private static final long serialVersionUID = 8715559628755439596L;
 
 			@Override
-			protected void populateItem(Item<Server> item) {
+			protected void populateItem(final Item<Server> item) {
 				final Server Server = item.getModelObject();
 				item.add(new Label("id", "" + Server.getId()));
 				item.add(new Label("name", "" + Server.getName()));
@@ -77,6 +79,14 @@ public class ServersPanel extends AdminPanel {
 						target.add(form);
 					}
 				});
+				item.add(AttributeModifier.replace("class", new AbstractReadOnlyModel<String>() {
+	                private static final long serialVersionUID = 1L;
+	
+	                @Override
+	                public String getObject() {
+	                    return (item.getIndex() % 2 == 1) ? "even" : "odd";
+	                }
+                }));
 			}
 		};
 		dataView.setItemsPerPage(8); //FIXME need to be parametrized

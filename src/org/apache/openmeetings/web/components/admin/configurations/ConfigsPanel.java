@@ -23,12 +23,14 @@ import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.OmDataProvider;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 
 public class ConfigsPanel extends AdminPanel {
 
@@ -43,7 +45,7 @@ public class ConfigsPanel extends AdminPanel {
 			private static final long serialVersionUID = 8715559628755439596L;
 
 			@Override
-			protected void populateItem(Item<Configuration> item) {
+			protected void populateItem(final Item<Configuration> item) {
 				final Configuration configuration = item.getModelObject();
 				item.add(new Label("configuration_id", "" + configuration.getConfiguration_id()));
 				item.add(new Label("conf_key", "" + configuration.getConf_key()));
@@ -56,6 +58,14 @@ public class ConfigsPanel extends AdminPanel {
 						target.add(form);
 					}
 				});
+				item.add(AttributeModifier.replace("class", new AbstractReadOnlyModel<String>() {
+	                private static final long serialVersionUID = 1L;
+	
+	                @Override
+	                public String getObject() {
+	                    return (item.getIndex() % 2 == 1) ? "even" : "odd";
+	                }
+                }));
 			}
 		};
 		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");

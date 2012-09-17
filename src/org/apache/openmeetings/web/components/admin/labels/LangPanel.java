@@ -31,6 +31,7 @@ import org.apache.openmeetings.web.components.admin.AdminBaseForm;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.OmDataProvider;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -45,6 +46,7 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -109,7 +111,7 @@ public class LangPanel extends AdminPanel {
 			private static final long serialVersionUID = 8715559628755439596L;
 
 			@Override
-			protected void populateItem(Item<Fieldlanguagesvalues> item) {
+			protected void populateItem(final Item<Fieldlanguagesvalues> item) {
 				final Fieldlanguagesvalues flv = item.getModelObject();
 				item.add(new Label("lblId", "" + flv.getFieldvalues_id()));
 				item.add(new Label("name", flv.getFieldvalues().getName()));
@@ -123,6 +125,14 @@ public class LangPanel extends AdminPanel {
 						target.add(form);
 					}
 				});
+				item.add(AttributeModifier.replace("class", new AbstractReadOnlyModel<String>() {
+	                private static final long serialVersionUID = 1L;
+	
+	                @Override
+	                public String getObject() {
+	                    return (item.getIndex() % 2 == 1) ? "even" : "odd";
+	                }
+                }));
 			}
 		};
 		

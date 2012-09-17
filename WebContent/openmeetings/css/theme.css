@@ -62,10 +62,25 @@
 }
 
 .adminPanelColumnTable {
-	width: 540px;
+
 }
 
 table.adminListTable {
+	max-width: 536px;
+	min-width: 536px;
+}
+
+table.adminListTable th {
+	background: #BDC0DB;
+	color: #ffffff;
+}
+
+table.adminListTable tr.even {
+	background-color: #ffebcd;
+}
+
+table.adminListTable tr.odd {
+	background-color: #ffffff;
 }
 
 .adminPanelColumnForm {
@@ -73,4 +88,5 @@ table.adminListTable {
 }
 
 .adminForm {
+	
 }
