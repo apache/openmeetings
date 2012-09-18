@@ -1023,6 +1023,7 @@ public class UserService {
 							false, // hideScreenSharing 
 							false, // hideWhiteboard
 							false, //showMicrophoneStatus
+							false, // chatModerated
 							from.getServer()
 							);
 

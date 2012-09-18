@@ -32,9 +32,6 @@
 <!--- chat modules: chat content -->
 <attribute name="_currentChatPanel" value="null" />
 
-<!--- chat modules: chat content RPC -->
-<attribute name="_chatcontentRPC" value="null" />
-
 <!--- chat modules: overall chat content -->
 <attribute name="_overallchatcontent" value="null" />
 

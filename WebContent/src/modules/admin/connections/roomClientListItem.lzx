@@ -30,8 +30,8 @@
             String userip, int userport, Long room_id, Date roomEnter,
             long broadCastID, Long user_id, String firstname, String lastname,
             String mail, String lastLogin, String official_code,
-            String picture_uri, String language, Boolean isChatNotification,
-            Long chatUserRoomId, String avsettings, String swfurl,
+            String picture_uri, String language
+            String avsettings, String swfurl,
             Boolean isRecording, String roomRecordingName,
             Boolean zombieCheckFlag)
             -->

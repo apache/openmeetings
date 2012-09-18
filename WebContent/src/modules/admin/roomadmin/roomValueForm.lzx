@@ -67,6 +67,7 @@
         this.hideScreenSharing.setValue(false);
         this.hideWhiteboard.setValue(false); 
         this.showMicrophoneStatus.setValue(false);
+		this.chatModerated.setValue(false);
 		this.server.selectItem(this.server.firstItem);
 	</handler>
 	
@@ -224,6 +225,7 @@
             } else {
                 this.showMicrophoneStatus.setValue(false);
             }
+			this.chatModerated.setValue(obj.chatModerated != null && obj.chatModerated);
             
             this._listRoomModerators.getRoomModeratorsByRoomId.doCall();
             
@@ -329,7 +331,8 @@
             
             this.sendObject["hideWhiteboard"] = parent.hideWhiteboard.getValue();      
             
-            this.sendObject["showMicrophoneStatus"] = parent.showMicrophoneStatus.getValue(); 
+            this.sendObject["showMicrophoneStatus"] = parent.showMicrophoneStatus.getValue();
+			this.sendObject["chatModerated"] = parent.chatModerated.getValue();
             this.sendObject["serverId"] = parent.server.getValue(); 
             
             var ownerId = parent.ownerId.getText();
@@ -571,6 +574,9 @@
      
     <labelText labelid="1442" width="200" y="1100" resize="false" x="2" />  
         <labelCheckbox name="showMicrophoneStatus" width="270" y="1100" x="180" fontsize="11" />
+                                  
+    <labelText labelid="1513" width="200" y="1120" resize="false" x="2" />  
+        <labelCheckbox name="chatModerated" width="270" y="1120" x="180" fontsize="11" />
                                   
     <!-- RoomClient List Right Side -->
     <labelText labelid="587" width="300" y="40" resize="false" 

@@ -220,16 +220,6 @@ public class RoomClient implements Serializable {
 	private String language = "";
 	
 	/*
-	 * these vars are necessary to send notifications from the chatroom of a 
-	 * conference to outside of the conference room
-	 */
-	@Column(name="is_chat_notification")
-	private Boolean isChatNotification = false;
-	
-	@Column(name="chat_user_room_id")
-	private Long chatUserRoomId = null;
-	
-	/*
 	 * avsettings can be:
 	 * av - video and audio
 	 * a - audio only
@@ -467,20 +457,6 @@ public class RoomClient implements Serializable {
 	}
 	public void setRoomEnter(Date roomEnter) {
 		this.roomEnter = roomEnter;
-	}
-
-	public Boolean getIsChatNotification() {
-		return isChatNotification;
-	}
-	public void setIsChatNotification(Boolean isChatNotification) {
-		this.isChatNotification = isChatNotification;
-	} 
-
-	public Long getChatUserRoomId() {
-		return chatUserRoomId;
-	}
-	public void setChatUserRoomId(Long chatUserRoomId) {
-		this.chatUserRoomId = chatUserRoomId;
 	}
 
 	public Boolean getIsRecording() {

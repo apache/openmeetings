@@ -15,6 +15,7 @@
 <classpath>
 	<classpathentry kind="src" path="WebContent/WEB-INF"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="WebContent/openmeetings/WEB-INF/classes"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4">
 		<attributes>

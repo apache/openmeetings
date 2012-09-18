@@ -602,6 +602,7 @@ public class ImportInitvalues {
 					false, // hideScreenSharing
 					false, // hideWhiteboard
 					false, // showMicrophoneStatus
+					false, // chatModerated
 					null
 					);
 
@@ -616,6 +617,7 @@ public class ImportInitvalues {
 					false, // hideScreenSharing
 					false, // hideWhiteboard
 					false, // showMicrophoneStatus
+					false, // chatModerated
 					null
 					);
 
@@ -630,6 +632,7 @@ public class ImportInitvalues {
 					false, // hideScreenSharing
 					false, // hideWhiteboard
 					false, // showMicrophoneStatus
+					false, // chatModerated
 					null
 					);
 
@@ -644,6 +647,7 @@ public class ImportInitvalues {
 					false, // hideScreenSharing
 					false, // hideWhiteboard
 					false, // showMicrophoneStatus
+					false, // chatModerated
 					null
 					);
 
@@ -658,6 +662,7 @@ public class ImportInitvalues {
 					false, // hideScreenSharing
 					false, // hideWhiteboard
 					false, // showMicrophoneStatus
+					false, // chatModerated
 					null
 					);
 
@@ -672,6 +677,7 @@ public class ImportInitvalues {
 					false, // hideScreenSharing
 					false, // hideWhiteboard
 					true, // showMicrophoneStatus
+					false, // chatModerated
 					null
 					);
 
@@ -686,6 +692,7 @@ public class ImportInitvalues {
 					false, // hideScreenSharing
 					false, // hideWhiteboard
 					true, // showMicrophoneStatus
+					false, // chatModerated
 					null
 					);
 
@@ -700,6 +707,7 @@ public class ImportInitvalues {
 					false, // hideScreenSharing
 					false, // hideWhiteboard
 					false, // showMicrophoneStatus
+					false, // chatModerated
 					null
 					);
 

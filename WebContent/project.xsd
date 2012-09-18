@@ -4708,18 +4708,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="chatTabBottomRoomList" type="project:chatTabBottomRoomList" >
-</xs:element>
-  <xs:complexType name="chatTabBottomRoomList" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:view">
-      <xs:attribute name="objMessage" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="doUpdate" type="lzx:boolean" default="false" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="chatTabItem" type="project:chatTabItem" >
 </xs:element>
   <xs:complexType name="chatTabItem" mixed="true">

@@ -4568,4 +4568,10 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   <string id="1512" name="microphone_volume">
   	<value>Adjust microphone volume</value>
   </string>
+  <string id="1513" name="chat_moderated">
+  	<value>Is chat moderated</value>
+  </string>
+  <string id="1514" name="chat_moderated">
+  	<value>Allow message</value>
+  </string>
 </language>

@@ -186,6 +186,7 @@ public class AppointmentLogic {
 					false, // hideScreenSharing 
 					false, // hideWhiteboard
 					false, //showMicrophoneStatus
+					false, // chatModerated
 					user.getServer()
 				);
 

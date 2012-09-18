@@ -100,7 +100,7 @@
             } else {
                 var username = client.firstname+" "+client.lastname;
             }
-            var messageObj = value[9];
+            var messageObj = value[value.length - 1];
             //var newmessage = "<FONT COLOR='"+value[5]+"' size='11'>"+client.firstname+" "+client.lastname+"</FONT>:<FONT COLOR='0x000000' size='11'>"+value[4]+"</FONT><br />";
             //Debug.write("newmessage: ",newmessage);
             //this._cbtext.setAttribute('text',this._cbtext.text+newmessage);
@@ -124,6 +124,7 @@
             if ($debug) Debug.write("addChatHistory userID: ",value[8],isDirectLink);
             
             new lz.chatTabItemEmoticons(this._cbtext,{
+            			rawMessage: value,
 		                messageObj:messageObj,
 	                    user_id:value[8],
 	                    publicSID:value[6],

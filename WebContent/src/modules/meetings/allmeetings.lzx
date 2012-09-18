@@ -54,8 +54,6 @@
 	
 	<handler name="ontabcontentleave">
 		_mainScrollBar.setAttribute("visibility","visible");
-		//canvas._chatcontentRPC = null;
-		//canvas.thishib.removeClientFromChatNotification.doCall();
 	</handler>
     
     <attribute name="refObjItem" value="null" />

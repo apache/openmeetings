@@ -102,37 +102,55 @@ public class ChatService implements IPendingServiceCallback {
 			Long room_id = currentClient.getRoom_id();
 			
 			log.debug("room_id: " + room_id);
-			log.debug("currentClient.getIsChatNotification(): " + currentClient.getIsChatNotification());
-			if (currentClient.getIsChatNotification()) {
-				room_id = currentClient.getChatUserRoomId();
-			}
 			
+			if (room_id == null) {
+				return 1; //TODO weird
+			}
 			@SuppressWarnings("rawtypes")
 			ArrayList messageMap = (ArrayList) newMessage;
 			// adding delimiter space, cause otherwise an emoticon in the last
 			// string would not be found
-			String messageText = messageMap.get(4).toString() + " ";
-			// add server time
-			messageMap.set(1, parseDateAsTimeString());
+			String messageText = messageMap.get(4) + " ";
 			LinkedList<String[]> parsedStringObjects = ChatString.parseChatString(messageText, emoticonsManager.getEmotfilesList());
 			// log.error("parsedStringObjects"+parsedStringObjects.size());
 			log.debug("size:" + messageMap.size());
 			messageMap.add(parsedStringObjects);
 			newMessage = messageMap;			
-			
-			HashMap<String, Object> hsm = new HashMap<String, Object>();
-			hsm.put("client", currentClient);
-			hsm.put("message", newMessage);
-			
+
+			boolean needModeration = Boolean.valueOf("" + messageMap.get(9));
 			List<HashMap<String, Object>> myChatList = myChats.get(room_id);
 			if (myChatList == null) myChatList = new LinkedList<HashMap<String, Object>>();
 			
+			HashMap<String, Object> hsm = new HashMap<String, Object>();
+			hsm.put("message", newMessage);
+			String publicSID = "" + messageMap.get(6);
+			if (!publicSID.equals(currentClient.getPublicSID())) {
+				hsm.put("client", clientListManager.getClientByPublicSID("" + messageMap.get(6), false));
+				//need to remove unconfirmed chat message if any
+				for (int i = myChatList.size() - 1; i > -1; --i) {
+					RoomClient msgClient = (RoomClient)myChatList.get(i).get("client");
+					@SuppressWarnings("rawtypes")
+					List msgList = (List)myChatList.get(i).get("message");
+					if (publicSID.equals(msgClient.getPublicSID())
+						&& ("" + msgList.get(4)).equals(messageMap.get(4))
+						&& ("" + msgList.get(1)).equals(messageMap.get(1))
+						&& Boolean.valueOf("" + msgList.get(9))) {
+						myChatList.remove(i);
+						break;
+					}
+				}
+				
+			} else {
+				// add server time
+				messageMap.set(1, parseDateAsTimeString());
+				hsm.put("client", currentClient);
+			}
+
 			if (myChatList.size() == chatRoomHistory) myChatList.remove(0);
 			myChatList.add(hsm);
 			myChats.put(room_id, myChatList);
-			
 			log.debug("SET CHATROOM: " + room_id);
-			
+
 			//broadcast to everybody in the room/domain
 			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
 			for (Set<IConnection> conset : conCollection) {
@@ -151,16 +169,14 @@ public class ChatService implements IPendingServiceCallback {
     						if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
 	    						continue;
 	    					}
-    						
+    						if (needModeration && Boolean.TRUE != rcl.getIsMod() && Boolean.TRUE != rcl.getIsSuperModerator()) {
+    							continue;
+    						}
     						log.debug("*..*idremote room_id: " + room_id);
     						log.debug("*..*my idstreamid room_id: " + rcl.getRoom_id());
-    						if (room_id != null && room_id.equals(rcl.getRoom_id())) {
+    						if (room_id.equals(rcl.getRoom_id())) {
     							((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient",new Object[] { hsm }, this);
     							log.debug("sending sendVarsToMessageWithClient to " + conn);
-    						} else if (rcl.getIsChatNotification()) {
-    							if (room_id.equals(rcl.getChatUserRoomId()) && room_id != null) {
-    								((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient",new Object[] { hsm }, this);
-    							}
     						}
 	    			 	}
 	    			}
@@ -182,10 +198,6 @@ public class ChatService implements IPendingServiceCallback {
 			Long room_id = currentClient.getRoom_id();
 
 			log.debug("room_id: " + room_id);
-			log.debug("currentClient.getIsChatNotification(): " + currentClient.getIsChatNotification());
-			if (currentClient.getIsChatNotification()) {
-				room_id = currentClient.getChatUserRoomId();
-			}
 
 			@SuppressWarnings("rawtypes")
 			ArrayList messageMap = (ArrayList) newMessage;
@@ -274,11 +286,23 @@ public class ChatService implements IPendingServiceCallback {
 			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
 			Long room_id = currentClient.getRoom_id();
 			
-			Long chatroom = room_id;
-			log.debug("GET CHATROOM: "+chatroom);
+			log.debug("GET CHATROOM: " + room_id);
 			
-			List<HashMap<String,Object>> myChatList = myChats.get(chatroom);
-			if (myChatList==null) myChatList = new LinkedList<HashMap<String,Object>>();	
+			List<HashMap<String,Object>> myChatList = myChats.get(room_id);
+			if (myChatList==null) myChatList = new LinkedList<HashMap<String,Object>>();
+			
+			if (Boolean.TRUE != currentClient.getIsMod() && Boolean.TRUE != currentClient.getIsSuperModerator()) {
+				//current user is not moderator, chat history need to be filtered
+				List<HashMap<String,Object>> tmpChatList = new LinkedList<HashMap<String,Object>>(myChatList);
+				for (int i = tmpChatList.size() - 1; i > -1; --i) {
+					@SuppressWarnings("rawtypes")
+					List msgList = (List)tmpChatList.get(i).get("message");
+					if (Boolean.valueOf("" + msgList.get(9))) { //needModeration
+						tmpChatList.remove(i);
+					}
+				}
+				myChatList = tmpChatList;
+			}
 			
 			return myChatList;
 		} catch (Exception err) {
@@ -309,53 +333,6 @@ public class ChatService implements IPendingServiceCallback {
 		}
 	}	
 	
-	/**
-	 * adds a Client to the additional List of Users to Chat
-	 * @param userroom
-	 * @param room_id
-	 * @param orgdomain
-	 * @return
-	 */
-	public Long addClientToChatNotification(Long room_id){
-		try {
-			IConnection current = Red5.getConnectionLocal();
-			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());					
-			String streamid = currentClient.getStreamid();
-			
-			currentClient.setIsChatNotification(true);
-			currentClient.setChatUserRoomId(room_id);
-			
-			this.clientListManager.updateClientByStreamId(streamid, currentClient);
-		} catch (Exception err) {
-			log.error("[addClientToCahtNotification]",err);
-		}
-		return new Long(-1);
-	} 
-	
-	/**
-	 * remove's a Client from the additional List of users to chat
-	 * @param userroom
-	 * @param room_id
-	 * @param orgdomain
-	 * @return
-	 */
-	public Long removeClientFromChatNotification(){
-		try {
-			IConnection current = Red5.getConnectionLocal();
-			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());					
-			String streamid = currentClient.getStreamid();
-			
-			currentClient.setIsChatNotification(false);
-			currentClient.setChatUserRoomId(null);
-			
-			this.clientListManager.updateClientByStreamId(streamid, currentClient);
-		} catch (Exception err) {
-			log.error("[addClientToCahtNotification]",err);
-		}
-		return new Long(-1);
-	}
-	
-
 	public void resultReceived(IPendingServiceCall arg0) {
 		// TODO Auto-generated method stub
 		log.error("resultReceived ChatService "+arg0);

@@ -52,6 +52,7 @@
 			<simpleLabelButton name="_button" labelid="220"
 				height="21" width="80" x="$once{ parent.width-80 }">
 				<handler name="onclick">
+				<![CDATA[
 					var message = this.parent.getText();
 					if (message.length != 0) {
 						parent.objMessage = new Array();
@@ -68,27 +69,19 @@
 						om[6] = parent.parent.isPrivate ? parent.parent.parent.refObj.publicSID : canvas.publicSID;
 						om[7] = canvas.isrtl;
 						om[8] = hib.userobject.user_id;
+						om[9] = canvas.currentRoomObject.chatModerated && !canvas.ismoderator;
 						if ($debug) Debug.write("send: ", parent.parent.parent);
 						if (parent.parent.isPrivate) {
 							parent.sendMessageWithClientByPublicSID.doCall();
 						} else {
-							parent.sendMessageWithClient.doCall();
+							hib.sendChatMessageWithClient.sendMessage(om);
 						}
 						this.parent.setText('');
 					}
+				]]>
 				</handler>
 			</simpleLabelButton>
 
-			<netRemoteCallHib name="sendMessageWithClient"
-				funcname="chatservice.sendMessageWithClient" remotecontext="$once{ canvas.thishib }">
-				<netparam><method name="getValue">return parent.parent.objMessage;</method></netparam>
-				<handler name="ondata" args="value">
-	                <![CDATA[
-	                    //The onResult-Handler will be called be the rtmpconnection
-	                    if ($debug) Debug.write("chatservice.sendMessageWithClient getValue : ",value);
-	                ]]>
-				</handler>
-			</netRemoteCallHib>
 			<netRemoteCallHib name="sendMessageWithClientByPublicSID"
 				funcname="chatservice.sendMessageWithClientByPublicSID" remotecontext="$once{ canvas.thishib }">
 				<netparam><method name="getValue">return parent.parent.objMessage;</method></netparam>

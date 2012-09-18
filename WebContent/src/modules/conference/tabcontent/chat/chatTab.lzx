@@ -68,7 +68,7 @@ This is used in the conference.
         <handler name="ondata" args="value">
             <![CDATA[
                 //The onResult-Handler will be called be the rtmpconnection
-                if ($debug) Debug.write("chatservice.sendMessageWithClientByPublicSID getValue : ",value);
+                if ($debug) Debug.write("sendMessageWithClientByPublicSID getValue : ",value);
             ]]>
         </handler>   
     </netRemoteCallHib>

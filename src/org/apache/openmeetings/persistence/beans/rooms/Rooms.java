@@ -191,6 +191,10 @@ public class Rooms implements Serializable {
 	@Element(data=true, required=false)
 	private Boolean showMicrophoneStatus = false;
 
+	@Column(name = "chat_moderated")
+	@Element(data=true, required=false)
+	private Boolean chatModerated = false;
+
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "roomId")
 	@ElementList(name="room_moderators")
@@ -447,5 +451,11 @@ public class Rooms implements Serializable {
 	}
 	public void setModerators(List<RoomModerators> moderators) {
 		this.moderators = moderators;
+	}
+	public Boolean getChatModerated() {
+		return chatModerated;
+	}
+	public void setChatModerated(Boolean chatModerated) {
+		this.chatModerated = chatModerated;
 	}
 }

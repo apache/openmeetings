@@ -28,7 +28,6 @@
 	<include href="simpleBaseTabpane.lzx" />
 	<include href="showChatLog.lzx" />
 	<include href="baseTabChatPanel.lzx" />
-	<include href="chatTabBottomRoomList.lzx" />
 	<include href="chatTabItem.lzx" />
 	<include href="chatTabItemEmoticons.lzx" />
 	<include href="chatOutput.lzx" />

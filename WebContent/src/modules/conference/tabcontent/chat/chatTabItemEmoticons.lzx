@@ -32,6 +32,7 @@
 	<attribute name="isDirectLink" value="false" type="boolean" />
 	<attribute name="message" value="" type="string" />
 	<attribute name="picture_uri" value="" type="string"/>
+	<attribute name="rawMessage" value="null" />
 	
 	<handler name="oninit">
 		<![CDATA[
@@ -93,6 +94,21 @@
 		  width="140" height="$once{ parent.height }"
 		  name="header_user">
 	</text>
+	
+	<state applied="$once{ parent.rawMessage[9] }">
+		<miniIcons resource="allow_ok_icon_rsc" width="16" height="16"
+			y="2" x="$once{ parent.width - 140 }" showhandcursor="true" >
+			<handler name="onclick">
+				this.setAttribute('visible', false);
+				parent.setAttribute('visible', false);
+				parent.rawMessage.length = parent.rawMessage.length - 1;
+				parent.rawMessage[parent.rawMessage.length - 1] = false;
+				//if ($debug) Debug.write("!!!!!!!!!!!!! allow message ", parent, parent.rawMessage);
+				hib.sendChatMessageWithClient.sendMessage(parent.rawMessage);
+			</handler>
+			<labelTooltip labelid="1514" />
+		</miniIcons> 
+	</state>
 	
 	<state applied="$once{ !parent.isDirectLink }">
 	

@@ -1542,7 +1542,24 @@
                 ]]>
             </handler>   
         </netRemoteCallHib>  
-        
+
+		<netRemoteCallHib name="sendChatMessageWithClient"
+			funcname="chatservice.sendMessageWithClient" remotecontext="$once{ canvas.thishib }">
+            <attribute name="messageObj" value="null" />
+			<netparam><method name="getValue">return parent.messageObj;</method></netparam>
+
+            <method name="sendMessage" args="messageObject">
+                this.messageObj = messageObject;
+                this.doCall();
+            </method>
+			<handler name="ondata" args="value">
+                <![CDATA[
+                    //The onResult-Handler will be called be the rtmpconnection
+                    if ($debug) Debug.write("chatservice.sendMessageWithClient getValue : ",value);
+                ]]>
+			</handler>
+		</netRemoteCallHib>
+		
         <netRemoteCallHib name="sendMessageWithClient" funcname="sendMessageWithClient" 
                           remotecontext="$once{ canvas.thishib }" >  
             
@@ -1611,7 +1628,6 @@
                     canvas._currentChatPanel.privatechat(value.message,value.client);
                 } else if (value.message[0]=='chat'){
                     if (canvas._chatcontent) canvas._chatcontent.addChatHistory(value.message,value.client);
-                    if (canvas._chatcontentRPC) canvas._chatcontentRPC.addChatHistory(value.message,value.client);
                 } else if (value.message[0]=='avsettings'){
                     canvas._videocontainer.setAVSettingsToClient(value.client);
                 } else if (value.message[0]=='whiteboard'){
@@ -1800,13 +1816,6 @@
             </handler>   
         </netRemoteCallHib>       
         
-    <netRemoteCallHib name="removeClientFromChatNotification"
-        funcname="chatservice.removeClientFromChatNotification" >      
-        <handler name="ondata" args="value">
-            if ($debug) Debug.write("removeClientFromChatNotification: ",value);
-        </handler>
-    </netRemoteCallHib>
-    
    <!-- recordContentings Notifications -->
     <netRemoteCallHib name="stopedRecording" funcname="stopedRecording" >      
         <handler name="ondata" args="value">
