@@ -32,7 +32,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 
@@ -79,14 +78,7 @@ public class RoomsPanel extends AdminPanel {
 						target.add(form);
 					}
 				});
-				item.add(AttributeModifier.replace("class", new AbstractReadOnlyModel<String>() {
-	                private static final long serialVersionUID = 1L;
-	
-	                @Override
-	                public String getObject() {
-	                    return (item.getIndex() % 2 == 1) ? "even" : "odd";
-	                }
-                }));
+				item.add(AttributeModifier.replace("class", (item.getIndex() % 2 == 1) ? "even" : "odd"));
 			}
 		};
 		dataView.setItemsPerPage(8); //FIXME need to be parametrized

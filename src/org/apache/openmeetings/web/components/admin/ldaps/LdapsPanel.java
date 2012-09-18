@@ -30,7 +30,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 
 public class LdapsPanel extends AdminPanel {
 
@@ -57,14 +56,7 @@ public class LdapsPanel extends AdminPanel {
 						target.add(form);
 					}
 				});
-				item.add(AttributeModifier.replace("class", new AbstractReadOnlyModel<String>() {
-	                private static final long serialVersionUID = 1L;
-	
-	                @Override
-	                public String getObject() {
-	                    return (item.getIndex() % 2 == 1) ? "even" : "odd";
-	                }
-                }));
+				item.add(AttributeModifier.replace("class", (item.getIndex() % 2 == 1) ? "even" : "odd"));
 			}
 		};
 		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
