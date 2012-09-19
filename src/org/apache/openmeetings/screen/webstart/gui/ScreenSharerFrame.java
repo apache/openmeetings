@@ -178,8 +178,8 @@ public class ScreenSharerFrame extends JFrame {
 		private static final long serialVersionUID = 6388951979741767971L;
 
 		public VerticalSlider() {
-			ImageIcon iUp = new ImageIcon(ScreenSharerFrame.class.getResource("/org/openmeetings/screen/up.png"));
-			ImageIcon iDown = new ImageIcon(ScreenSharerFrame.class.getResource("/org/openmeetings/screen/down.png"));
+			ImageIcon iUp = new ImageIcon(ScreenSharerFrame.class.getResource("/org/apache/openmeetings/screen/up.png"));
+			ImageIcon iDown = new ImageIcon(ScreenSharerFrame.class.getResource("/org/apache/openmeetings/screen/down.png"));
 			setSize(16, 32);
 			JLabel jUp = new JLabel(iUp);
 			jUp.setBounds(0, 0, 16, 16);
@@ -194,8 +194,8 @@ public class ScreenSharerFrame extends JFrame {
 		private static final long serialVersionUID = 4630712955901760443L;
 
 		public HorizontalSlider() {
-			ImageIcon iLeft = new ImageIcon(ScreenSharerFrame.class.getResource("/org/openmeetings/screen/previous.png"));
-			ImageIcon iRight = new ImageIcon(ScreenSharerFrame.class.getResource("/org/openmeetings/screen/next.png"));
+			ImageIcon iLeft = new ImageIcon(ScreenSharerFrame.class.getResource("/org/apache/openmeetings/screen/previous.png"));
+			ImageIcon iRight = new ImageIcon(ScreenSharerFrame.class.getResource("/org/apache/openmeetings/screen/next.png"));
 			setSize(32, 16);
 			JLabel jLeft = new JLabel(iLeft);
 			jLeft.setBounds(0, 0, 16, 16);
@@ -248,8 +248,8 @@ public class ScreenSharerFrame extends JFrame {
 		reduceYLabel = getTextLabel(textLabels, 32); //#id 1474
 		recordingTipLabel = getTextLabel(textLabels, 35); //#id 1477
 		publishingTipLabel = getTextLabel(textLabels, 34); //#id 1476
-		startIcon = new ImageIcon(ScreenSharerFrame.class.getResource("/org/openmeetings/screen/play.png"));
-		stopIcon = new ImageIcon(ScreenSharerFrame.class.getResource("/org/openmeetings/screen/stop.png"));
+		startIcon = new ImageIcon(ScreenSharerFrame.class.getResource("/org/apache/openmeetings/screen/play.png"));
+		stopIcon = new ImageIcon(ScreenSharerFrame.class.getResource("/org/apache/openmeetings/screen/stop.png"));
 		btnStartStopSharing = new JButton(startSharingLabel);
 		btnStartStopSharing.setToolTipText(startSharingLabel);
 		btnStartStopSharing.setIcon(startIcon);

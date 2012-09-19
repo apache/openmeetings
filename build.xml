@@ -182,7 +182,7 @@
 		<chmod dir="${dist.webapps.dir}/WEB-INF/lib" perm="755" includes="**/*.sh" />
 	</target>
 
-	<target name="dist" description="binary distribution of OpenMeetings" depends="clean, jar, compile.laszlo.main, compile.laszlo.main.as3, enhance, signWebStartJars, -copy-libraries" />
+	<target name="dist" description="binary distribution of OpenMeetings" depends="clean, jar, compile.laszlo.main, compile.laszlo.main.as3, enhance, -copy-libraries, signWebStartJars" />
 
 	<!-- compiles the sources without openlaszlo client -->
 	<target name="dist-test" description="binary distribution of OpenMeetings" depends="clean, -dist-test-no-clean, signWebStartJars" />
@@ -191,11 +191,11 @@
 	<target name="-dist-test-no-clean" description="binary distribution of OpenMeetings" depends="jar, -copy-libraries" />
 
 	<!-- compiles the sources only with laszlo debug client -->
-	<target name="dist-debug" description="binary distribution of OpenMeetings" depends="clean, jar, compile.laszlo.main.debug, compile.laszlo.main.debug.as3, signWebStartJars, -copy-libraries" />
+	<target name="dist-debug" description="binary distribution of OpenMeetings" depends="clean, jar, compile.laszlo.main.debug, compile.laszlo.main.debug.as3, -copy-libraries, signWebStartJars" />
 
 	<!-- Check timestamp on files -->
 	<target name="prepare" depends="prepare.mkdir">
-		<copy todir="${red5.root}" filtering="true">
+		<copy todir="${red5.root}">
 			<fileset dir="${red5.lib}">
 				<exclude name="**/*.fla" />
 			</fileset>
@@ -405,7 +405,8 @@
 
 	<target name="signWebStartJars">
 		<delete file="${keystore.file}" />
-		<genkey alias="filetest" storepass="secret" keystore="${keystore.file}" verbose="true">
+		<genkey alias="filetest" storepass="secret" keystore="${keystore.file}" verbose="true"
+			sigalg="MD5withRSA" keyalg="RSA">
 			<dname>
 				<param name="CN" value="Sebastian Wagner" />
 				<param name="OU" value="technology" />
@@ -413,7 +414,7 @@
 				<param name="C" value="DE" />
 			</dname>
 		</genkey>
-		<copy todir="${screenshare.out.dir}" filtering="true">
+		<copy todir="${screenshare.out.dir}">
 			<fileset dir="${screensharing.resources}" includes="*.jpg" />
 			<fileset dir="${red5.server.lib}" includes="commons-codec*.jar" />
 			<fileset dir="${red5.server.lib}" includes="httpclient*.jar" />
@@ -433,7 +434,8 @@
 			<fileset dir="${red5.server.lib}" includes="com.springsource.slf4j.api*.jar" />
 			<fileset dir="${red5.client.lib}" includes="red5-client*.jar" />
 		</copy>
-		<signjar alias="filetest" keystore="${keystore.file}" storepass="secret" lazy="false">
+		<signjar alias="filetest" keystore="${keystore.file}" storepass="secret" lazy="false"
+			sigalg="MD5withRSA" digestalg="SHA1">
 			<path>
 				<fileset dir="${screenshare.out.dir}">
 					<include name="**/*.jar" />
@@ -672,13 +674,13 @@
 
 		<xslt in="${webcontent.src.dir}/languages/errorvalues.xml" out="${docs.src}/ErrorsTable.xml" style="${docs.src}/stylesheets/errortable.xsl" />
 		<anakia basedir="${docs.src}" destdir="${docs.dest}/" extension=".html" style="./site.vsl" projectFile="stylesheets/project.xml" excludes="**/stylesheets/** empty.xml" includes="**/*.xml" lastModifiedCheck="true" templatePath="xdocs/stylesheets" velocityPropertiesFile="${build.base.dir}/velocity.properties" />
-		<copy todir="${docs.dest}/images" filtering="no">
+		<copy todir="${docs.dest}/images">
 			<fileset dir="${docs.src}/images">
 				<patternset refid="images" />
 			</fileset>
 		</copy>
 
-		<copy todir="${docs.dest}/css" filtering="no">
+		<copy todir="${docs.dest}/css">
 			<fileset dir="${docs.src}/css">
 				<patternset refid="css" />
 			</fileset>
