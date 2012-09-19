@@ -21,24 +21,32 @@
 <html xmlns="http://www.w3.org/1999/xhtml" 
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.5-strict.dtd" lang="en">
 	<wicket:head>
-		<link rel='stylesheet' type='text/css' href='css/fullcalendar.css' />
-		<link rel='stylesheet' type='text/css' href='css/fullcalendar.print.css' media='print' />
+		<link media="screen" type="text/css" rel="stylesheet" href='css/fullcalendar.css' />
+		<!-- link media="print" type="text/css" rel="stylesheet" href='css/fullcalendar.print.css' /--> <!-- FIXME incorrectly rendered -->
 	</wicket:head>
 	<wicket:panel>
 		<script type="text/javascript" src="js/fullcalendar.min.js"></script>
+		<div wicket:id="calendar"></div>
+		<!-- bottom section -->
 		<script type="text/javascript">
+			function getCalendarHeight() {
+				return $(window).height() - $('#calendar').position().top - 20; //FIXME HACK
+			}
 			$(function() {
 				$('#calendar').fullCalendar({
 					header: {
-						//FIXME headers
 						left: 'prev,next today',
 						center: 'title',
 						right: 'month,agendaWeek,agendaDay'
 					}
 					, editable: true
+					, height: getCalendarHeight()
 				});
+				$(window).resize(function() {
+					$('#calendar').data().fullCalendar.option('height', getCalendarHeight());
+				});
+				setEventSource();
 			});
 		</script>
-		<div wicket:id="calendar"></div>
 	</wicket:panel>
 </html>

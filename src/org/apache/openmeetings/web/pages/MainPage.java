@@ -35,7 +35,7 @@ public class MainPage extends BasePage {
 	
 	public MainPage() {
 		MarkupContainer contents = new WebMarkupContainer("contents");
-		contents.add(new WebMarkupContainer("child")).setOutputMarkupId(true);
+		contents.add(new WebMarkupContainer("child")).setOutputMarkupId(true).setMarkupId("contents");
 		add(contents);
 		menu = new MenuPanel("menu", contents);
 		add(menu);
