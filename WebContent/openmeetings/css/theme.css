@@ -66,6 +66,7 @@
 }
 
 table.adminListTable {
+	overflow: hidden;
 	max-width: 536px;
 	min-width: 536px;
 }
@@ -73,6 +74,30 @@ table.adminListTable {
 table.adminListTable th {
 	background: #BDC0DB;
 	color: #ffffff;
+}
+
+/**/
+table.adminListTable td.column1 {
+	width: 36px;
+}
+table.adminListTable td.column2 {
+	width: 150px;
+}
+table.adminListTable td.column3 {
+	width: 350px;
+}
+
+table.adminListTable td div.divcolumn1 {
+	word-wrap: break-word;
+	width: 36px;
+}
+table.adminListTable td div.divcolumn2 {
+	word-wrap: break-word;
+	width: 150px;
+}
+table.adminListTable td div.divcolumn3 {
+	word-wrap: break-word;
+	width: 330px;
 }
 
 table.adminListTable tr.even {

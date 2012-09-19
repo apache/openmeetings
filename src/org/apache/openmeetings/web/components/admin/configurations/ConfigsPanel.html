@@ -27,19 +27,19 @@
 			<tr>
 				<td class="adminPanelColumnTable">
 					<span wicket:id="navigator">[dataview navigator]</span>
-					<table wicket:id="listContainer" class="adminListTable" id="example">
+					<table class="adminListTable">
 						<thead>
 							<tr>
 								<th><wicket:ommessage key="264" /></th>
 								<th><wicket:ommessage key="265" /></th>
 								<th><wicket:ommessage key="598" /></th>
 							</tr>	
-						</thead>	
-						<tbody>	
+						</thead>
+						<tbody wicket:id="listContainer" >	
 				    		<tr wicket:id="configList">
-								<td><span wicket:id="configuration_id"></span></td>
-								<td><span wicket:id="conf_key"></span></td>
-								<td><span wicket:id="conf_value"></span></td>
+								<td class="column1"><div class="divcolumn1"><span wicket:id="configuration_id"></span></div></td>
+								<td class="column2"><div class="divcolumn2"><span wicket:id="conf_key"></span></div></td>
+								<td class="column3"><div class="divcolumn3"><span wicket:id="conf_value"></span></div></td>
 							</tr>
 						</tbody>
 					</table>
