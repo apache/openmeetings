@@ -209,7 +209,8 @@
 				<include name="*.html" />
 			</fileset>
 		</copy>
-		<copy todir="${dist.webapps.dir}/WEB-INF">
+		<filter token="wicket.mode" value="${wicket.mode}" />
+		<copy todir="${dist.webapps.dir}/WEB-INF" filtering="true">
 			<fileset dir="${webcontent.src.dir}/WEB-INF">
 				<include name="*.xml" />
 				<include name="*.properties" />

@@ -74,6 +74,10 @@
 			<param-name>applicationClassName</param-name>
 			<param-value>org.apache.openmeetings.web.app.Application</param-value>
 		</init-param>
+		<init-param>
+			<param-name>configuration</param-name>
+			<param-value>@wicket.mode@</param-value>
+		</init-param>
 	</filter>
 	<filter-mapping>
 		<filter-name>OpenmeetingsApplication</filter-name>
