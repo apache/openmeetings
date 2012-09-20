@@ -29,6 +29,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.apache.openmeetings.persistence.beans.OmEntity;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -45,7 +46,7 @@ import org.simpleframework.xml.Root;
 })
 @Table(name = "server")
 @Root
-public class Server implements Serializable {
+public class Server implements Serializable, OmEntity {
 	private static final long serialVersionUID = -6822732074549167727L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -25,20 +25,28 @@
 			<tr>
 				<td valign="top" class="adminPanelColumnTable">
 					<span wicket:id="navigator">[dataview navigator]</span>
-					<table wicket:id="listContainer" class="adminListTable">
-						<tr>
-							<th><wicket:ommessage key="146" /></th>
-							<th><wicket:ommessage key="147" /></th>
-							<th><wicket:ommessage key="148" /></th>
-							<th><wicket:ommessage key="149" /></th>
-						</tr>			
-			    		<tr wicket:id="userList">
-							<td><span wicket:id="userId"></span></td>
-							<td><span wicket:id="login"></span></td>
-							<td><span wicket:id="firstName"></span></td>
-							<td><span wicket:id="lastName"></span></td>
-						</tr>
+					<table class="adminListTable">
+						<thead>
+							<tr>
+								<th class="four_column_layout_column1"><wicket:ommessage key="146" /></th>
+								<th class="four_column_layout_column2"><wicket:ommessage key="147" /></th>
+								<th class="four_column_layout_column3"><wicket:ommessage key="148" /></th>
+								<th class="four_column_layout_column4"><wicket:ommessage key="149" /></th>
+							</tr>	
+						</thead>
 					</table>
+					<div class="tableWrapper">
+						<table class="adminListTable">
+							<tbody wicket:id="listContainer">	
+					    		<tr wicket:id="userList">
+									<td class="four_column_layout_column1"><div class="four_column_layout_divcolumn1"><span wicket:id="userId"></span></div></td>
+									<td class="four_column_layout_column2"><div class="four_column_layout_divcolumn2"><span wicket:id="login"></span></div></td>
+									<td class="four_column_layout_column3"><div class="four_column_layout_divcolumn3"><span wicket:id="firstName"></span></div></td>
+									<td class="four_column_layout_column4"><div class="four_column_layout_divcolumn4"><span wicket:id="lastName"></span></div></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</td>
 				<td class="adminPanelColumnForm">
 					<form wicket:id="form" class="adminForm">

@@ -62,7 +62,7 @@ public class LdapsPanel extends AdminPanel {
 		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		add(new PagedEntityListPanel("navigator", dataView) {
-			private static final long serialVersionUID = 5097048616003411362L;
+			private static final long serialVersionUID = -1L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {

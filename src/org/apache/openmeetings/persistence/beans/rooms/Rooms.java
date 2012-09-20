@@ -38,6 +38,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.apache.openmeetings.persistence.beans.OmEntity;
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
@@ -49,7 +50,7 @@ import org.simpleframework.xml.Root;
 })
 @Table(name = "rooms")
 @Root(name="room")
-public class Rooms implements Serializable {
+public class Rooms implements Serializable, OmEntity {
 	private static final long serialVersionUID = -2860312283159251568L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
