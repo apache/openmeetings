@@ -24,10 +24,11 @@ import org.apache.openmeetings.data.user.Organisationmanagement;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
+import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
@@ -82,9 +83,18 @@ public class GroupsPanel extends AdminPanel {
 				item.add(AttributeModifier.replace("class", (item.getIndex() % 2 == 1) ? "even" : "odd"));
 			}
 		};
-		dataView.setItemsPerPage(8); //FIXME need to be parametrized
-		add(dataView);
-		add(new AjaxPagingNavigator("navigator", dataView));
+		
+		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
+		add(listContainer.add(dataView).setOutputMarkupId(true));
+		add(new PagedEntityListPanel("navigator", dataView) {
+			private static final long serialVersionUID = -7378765368303904897L;
+
+			@Override
+			protected void onEvent(AjaxRequestTarget target) {
+				target.add(listContainer);
+			}
+		});
+		
 		
 		Organisation organisation = new Organisation();
 		form = new GroupForm("form", organisation);

@@ -61,14 +61,18 @@
 	right: 100px;
 }
 
+/* 
+	################################
+	Column layout admin section
+	################################
+ */
 .adminPanelColumnTable {
-
+	
 }
 
 table.adminListTable {
-	overflow: hidden;
-	max-width: 536px;
-	min-width: 536px;
+	max-width: 518px;
+	min-width: 518px;
 }
 
 table.adminListTable th {
@@ -76,28 +80,70 @@ table.adminListTable th {
 	color: #ffffff;
 }
 
-/**/
-table.adminListTable td.column1 {
-	width: 36px;
-}
-table.adminListTable td.column2 {
-	width: 150px;
-}
-table.adminListTable td.column3 {
-	width: 350px;
+table.adminListTable th.two_column_layout_column1 {
+	width: 136px;
 }
 
-table.adminListTable td div.divcolumn1 {
+table.adminListTable th.two_column_layout_column2 {
+	width: 354px;
+}
+
+table.adminListTable td.two_column_layout_column1 {
+	width: 136px;
+}
+
+table.adminListTable td.two_column_layout_column2 {
+	width: 354px;
+}
+
+table.adminListTable td div.two_column_layout_divcolumn1 {
+	word-wrap: break-word;
+	width: 136px;
+}
+
+table.adminListTable td div.two_column_layout_divcolumn2 {
+	word-wrap: break-word;
+	width: 354px;
+}
+
+
+table.adminListTable th.three_column_layout_column1 {
+	width: 36px;
+}
+
+table.adminListTable th.three_column_layout_column2 {
+	width: 150px;
+}
+
+table.adminListTable th.three_column_layout_column3 {
+	width: 304px;
+}
+
+table.adminListTable td.three_column_layout_column1 {
+	width: 36px;
+}
+
+table.adminListTable td.three_column_layout_column2 {
+	width: 150px;
+}
+
+table.adminListTable td.three_column_layout_column3 {
+	width: 304px;
+}
+
+table.adminListTable td div.three_column_layout_divcolumn1 {
 	word-wrap: break-word;
 	width: 36px;
 }
-table.adminListTable td div.divcolumn2 {
+
+table.adminListTable td div.three_column_layout_divcolumn2 {
 	word-wrap: break-word;
 	width: 150px;
 }
-table.adminListTable td div.divcolumn3 {
+
+table.adminListTable td div.three_column_layout_divcolumn3 {
 	word-wrap: break-word;
-	width: 330px;
+	width: 304px;
 }
 
 table.adminListTable tr.even {
@@ -106,6 +152,12 @@ table.adminListTable tr.even {
 
 table.adminListTable tr.odd {
 	background-color: #ffffff;
+}
+
+div.tableWrapper {
+	width: 536px;
+	height: 500px;
+	overflow-y: scroll;
 }
 
 .adminPanelColumnForm {
