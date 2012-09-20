@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.components.user.calendar;
 
 import static org.apache.wicket.ajax.attributes.CallbackParameter.context;
+import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.resolved;
 
 import java.util.Calendar;
@@ -51,6 +52,7 @@ public class CalendarPanel extends UserPanel {
 		calendar.setOutputMarkupId(true);
 		calendar.setMarkupId("calendar");
 		add(calendar);
+		//fetchEvents
 		add(new AbstractDefaultAjaxBehavior() {
 			private static final long serialVersionUID = 6880514947331946407L;
 
@@ -66,15 +68,14 @@ public class CalendarPanel extends UserPanel {
 			public void renderHead(Component component, IHeaderResponse response) {
 				super.renderHead(component, response);
 				response.render(JavaScriptHeaderItem.forScript(
-						"function setEventSource(){\n"
-						+ "	$('#calendar').fullCalendar('addEventSource', \n"
-						+ "	{\n"
-						+ "		events: " + this.getCallbackFunction(context("start"), context("end"), context("callback"), resolved("_start", "start.getTime()"), resolved("_end", "end.getTime()")) + "\n"
-						//+ "		, color: '#4793E6'\n"
-						//+ "		, textColor: 'black'\n"
-						+ "});\n"
-						+ "}", "setEvtSource"));
-						
+					"var fetchEventsFunc = "
+						+ this.getCallbackFunction(
+							context("start")
+							, context("end")
+							, context("callback")
+							, resolved("_start", "start.getTime()")
+							, resolved("_end", "end.getTime()")) + ";"
+					, "fetchEventsFunc"));
 			}
 
 			@Override
@@ -101,5 +102,78 @@ public class CalendarPanel extends UserPanel {
 	            	new TextRequestHandler("application/json", "UTF-8", events.toString()));
 			}
 		});
+		//dropEvent
+		add(new DropResizeBehavior(true, "dropEventFunc"));
+		//resizeEvent
+		add(new DropResizeBehavior(false, "resizeEventFunc"));
+	}
+
+	private class DropResizeBehavior extends AbstractDefaultAjaxBehavior {
+		private static final long serialVersionUID = -3060872155563135236L;
+		private boolean drop = false;
+		private String funcName;
+		
+		DropResizeBehavior(boolean drop, String funcName) {
+			this.drop = drop;
+			this.funcName = funcName;
+		}
+		
+		@Override
+		protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+			super.updateAjaxAttributes(attributes);
+			attributes.getAjaxCallListeners().add(new AjaxCallListener().onFailure("revertFunc();"));
+		}
+		
+		@Override
+		public void renderHead(Component component, IHeaderResponse response) {
+			super.renderHead(component, response);
+			response.render(JavaScriptHeaderItem.forScript(
+				"var " + funcName + " = "
+					+ (drop
+						? this.getCallbackFunction(
+							context("event")
+							, explicit("dayDelta")
+							, explicit("minuteDelta")
+							, context("allDay")
+							, context("revertFunc")
+							, context("jsEvent")
+							, context("ui")
+							, context("view")
+							, resolved("_id", "event.id"))
+						: this.getCallbackFunction(
+							context("event")
+							, explicit("dayDelta")
+							, explicit("minuteDelta")
+							, context("revertFunc")
+							, context("jsEvent")
+							, context("ui")
+							, context("view")
+							, resolved("_id", "event.id"))) + ";"
+				, funcName));
+		}
+		
+		@Override
+		protected void respond(AjaxRequestTarget target) {
+			AppointmentDaoImpl dao = Application.getBean(AppointmentDaoImpl.class);
+			Appointment a = dao.getAppointmentById(
+				getRequestCycle().getRequest().getRequestParameters().getParameterValue("_id").toLong());
+
+			int dayDelta = getRequestCycle().getRequest().getRequestParameters().getParameterValue("dayDelta").toInt();
+			int minuteDelta = getRequestCycle().getRequest().getRequestParameters().getParameterValue("minuteDelta").toInt();
+
+			Calendar cal = WebSession.getCalendar();
+			if (drop) {
+				cal.setTime(a.getAppointmentStarttime());
+				cal.add(Calendar.DATE, dayDelta);
+				cal.add(Calendar.MINUTE, minuteDelta);
+				a.setAppointmentStarttime(cal.getTime());
+			}
+			cal.setTime(a.getAppointmentEndtime());
+			cal.add(Calendar.DATE, dayDelta);
+			cal.add(Calendar.MINUTE, minuteDelta);
+			a.setAppointmentEndtime(cal.getTime());
+			
+			dao.updateAppointment(a);
+		}
 	}
 }

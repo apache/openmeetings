@@ -39,17 +39,35 @@
 						center: 'title',
 						right: 'month,agendaWeek,agendaDay'
 					}
-					//, editable: true
+					, editable: true
+					, allDaySlot: false
+					, axisFormat: 'HH(:mm)'
+					, defaultEventMinutes: 60
 					, timeFormat: {
-						agenda: 'H:mm{ - H:mm}'
-						, '': 'H(:mm)'
+						agenda: 'HH:mm{ - HH:mm}'
+						, '': 'HH(:mm)'
 					}
 					, height: getCalendarHeight()
+					, windowResize: function() {
+						//$('#calendar').data().fullCalendar.option('height', getCalendarHeight());
+						this.option('height', getCalendarHeight());
+					}
+					, eventDrop: dropEventFunc //TODO confirm ??
+					, eventResize: resizeEventFunc //TODO confirm ??
+					, eventSources: [
+						{
+							events: fetchEventsFunc
+							//, color: '#4793E6'
+							//, textColor: 'black'
+						}
+					]
 				});
+				/*
 				$(window).resize(function() {
 					$('#calendar').data().fullCalendar.option('height', getCalendarHeight());
 				});
-				setEventSource();
+				*/
+				window.setInterval(function(){$('#calendar').fullCalendar('refetchEvents');}, 10 * 1000); //FIXME refresh calendar every XX seconds
 			});
 		</script>
 	</wicket:panel>
