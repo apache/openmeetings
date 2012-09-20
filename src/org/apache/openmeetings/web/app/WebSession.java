@@ -18,6 +18,11 @@
  */
 package org.apache.openmeetings.web.app;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.TimeZone;
+
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Configurationmanagement;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
@@ -36,6 +41,8 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	private long userLevel = -1;
 	private String SID = null;
 	private String area = null;
+	private TimeZone tz;
+	private SimpleDateFormat ISO8601FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 	
 	public WebSession(Request request) {
 		super(request);
@@ -78,7 +85,10 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 				null, false);
 		
 		if (u instanceof Users) {
-			userId = ((Users)u).getUser_id();
+			Users user = (Users)u;
+			userId = user.getUser_id();
+			tz = TimeZone.getTimeZone(user.getOmTimeZone().getIcal());
+			ISO8601FORMAT.setTimeZone(tz);
 			if (null == getId()) {
 				bind();
 			}
@@ -112,6 +122,14 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 
 	public static long getUserId() {
 		return get().userId;
+	}
+
+	public static Calendar getCalendar() {
+		return Calendar.getInstance(get().tz);
+	}
+
+	public static DateFormat getDateFormat() {
+		return get().ISO8601FORMAT;
 	}
 
 	public static long getUserLevel() {

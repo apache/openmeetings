@@ -39,7 +39,11 @@
 						center: 'title',
 						right: 'month,agendaWeek,agendaDay'
 					}
-					, editable: true
+					//, editable: true
+					, timeFormat: {
+						agenda: 'H:mm{ - H:mm}'
+						, '': 'H(:mm)'
+					}
 					, height: getCalendarHeight()
 				});
 				$(window).resize(function() {
