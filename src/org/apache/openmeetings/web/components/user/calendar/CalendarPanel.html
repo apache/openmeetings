@@ -42,6 +42,7 @@
 					, editable: true
 					, allDaySlot: false
 					, axisFormat: 'HH(:mm)'
+					, selectable: true
 					, defaultEventMinutes: 60
 					, timeFormat: {
 						agenda: 'HH:mm{ - HH:mm}'
@@ -54,6 +55,8 @@
 					}
 					, eventDrop: dropEventFunc //TODO confirm ??
 					, eventResize: resizeEventFunc //TODO confirm ??
+					, eventClick: eventClickFunc
+					, select: selectFunc
 					, eventSources: [
 						{
 							events: fetchEventsFunc
@@ -68,7 +71,29 @@
 				});
 				*/
 				window.setInterval(function(){$('#calendar').fullCalendar('refetchEvents');}, 10 * 1000); //FIXME refresh calendar every XX seconds
+				
+				$('#appointment').dialog({
+					closeOnEscape: true
+					, resizable: true
+					, width: 400
+					, autoOpen: false
+					, modal: true
+				});
 			});
 		</script>
+		<div id="appointment" wicket:ommessage="title:815">
+			<form wicket:id="appointment">
+				<table>
+					<tr>
+						<td><wicket:ommessage key="572" /></td>
+						<td><input type="text" wicket:id="appointmentName" /></td>
+					</tr>
+					<tr>
+						<td><wicket:ommessage key="573" /></td>
+						<td><input type="text" wicket:id="appointmentDescription" /></td>
+					</tr>
+				</table>
+			</form>
+		</div>
 	</wicket:panel>
 </html>

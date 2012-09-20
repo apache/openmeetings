@@ -24,6 +24,7 @@ import org.apache.openmeetings.web.components.admin.AdminPanel;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.OmDataProvider;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -51,7 +52,15 @@ public class UsersPanel extends AdminPanel {
 				item.add(new Label("firstName", fName));
 				final String lName = u.getLastname();
 				item.add(new Label("lastName", lName));
-				item.add(AttributeModifier.replace("class", (item.getIndex() % 2 == 1) ? "even" : "odd"));
+				item.add(AttributeModifier.append("class", "clickable " + ((item.getIndex() % 2 == 1) ? "even" : "odd")));
+				item.add(new AjaxEventBehavior("onclick") {
+					private static final long serialVersionUID = -8069413566800571061L;
+
+					protected void onEvent(AjaxRequestTarget target) {
+						form.setModelObject(u);
+						target.add(form);
+					}
+				});
 			}
 		};
 		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");

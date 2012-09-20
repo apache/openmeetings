@@ -40,6 +40,10 @@ import org.apache.wicket.ajax.json.JSONObject;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.handler.TextRequestHandler;
 
 public class CalendarPanel extends UserPanel {
@@ -52,6 +56,18 @@ public class CalendarPanel extends UserPanel {
 		calendar.setOutputMarkupId(true);
 		calendar.setMarkupId("calendar");
 		add(calendar);
+		
+		final Form<Appointment> form = new Form<Appointment>("appointment", new CompoundPropertyModel<Appointment>(new Appointment())){
+			private static final long serialVersionUID = 192883745414475639L;
+
+			{
+				setOutputMarkupId(true);
+				add(new RequiredTextField<String>("appointmentName"));
+				add(new TextArea<String>("appointmentDescription"));
+			}
+		};
+		add(form);
+		
 		//fetchEvents
 		add(new AbstractDefaultAjaxBehavior() {
 			private static final long serialVersionUID = 6880514947331946407L;
@@ -91,6 +107,7 @@ public class CalendarPanel extends UserPanel {
 						events.put(new JSONObject()
 							.put("id", a.getAppointmentId())
 							.put("title", a.getAppointmentName())
+							.put("description", a.getAppointmentDescription())
 							.put("start", WebSession.getDateFormat().format(a.getAppointmentStarttime()))
 							.put("end", WebSession.getDateFormat().format(a.getAppointmentEndtime()))
 							.put("allDay", false));
@@ -106,6 +123,79 @@ public class CalendarPanel extends UserPanel {
 		add(new DropResizeBehavior(true, "dropEventFunc"));
 		//resizeEvent
 		add(new DropResizeBehavior(false, "resizeEventFunc"));
+		//create on click-and-drag
+		add(new AbstractDefaultAjaxBehavior() {
+			private static final long serialVersionUID = 6880514947331946407L;
+
+			@Override
+			protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+				super.updateAjaxAttributes(attributes);
+				attributes.getAjaxCallListeners().add(new AjaxCallListener().onSuccess("$('#appointment').dialog('open');"));
+			}
+			
+			@Override
+			public void renderHead(Component component, IHeaderResponse response) {
+				super.renderHead(component, response);
+				response.render(JavaScriptHeaderItem.forScript(
+					"var selectFunc = "
+						+ this.getCallbackFunction(
+							context("start")
+							, context("end")
+							, context("allDay")
+							, context("jsEvent")
+							, context("view")
+							, resolved("_start", "start.getTime()")
+							, resolved("_end", "end.getTime()")) + ";"
+					, "selectFunc"));
+			}
+
+			@Override
+			protected void respond(AjaxRequestTarget target) {
+				Calendar start = WebSession.getCalendar();
+				start.setTimeInMillis(getRequestCycle().getRequest().getRequestParameters().getParameterValue("_start").toLong());
+				Calendar end = WebSession.getCalendar();
+				end.setTimeInMillis(getRequestCycle().getRequest().getRequestParameters().getParameterValue("_end").toLong());
+				
+				Appointment a = new Appointment();
+				a.setAppointmentStarttime(start.getTime());
+				a.setAppointmentEndtime(end.getTime());
+				form.setModelObject(a);
+				
+				target.add(form);
+			}
+		});
+		//eventClick
+		add(new AbstractDefaultAjaxBehavior() {
+			private static final long serialVersionUID = 6880514947331946407L;
+
+			@Override
+			protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+				super.updateAjaxAttributes(attributes);
+				attributes.getAjaxCallListeners().add(new AjaxCallListener().onSuccess("$('#appointment').dialog('open');"));
+			}
+			
+			@Override
+			public void renderHead(Component component, IHeaderResponse response) {
+				super.renderHead(component, response);
+				response.render(JavaScriptHeaderItem.forScript(
+					"var eventClickFunc = "
+						+ this.getCallbackFunction(
+							context("event")
+							, context("jsEvent")
+							, context("view")
+							, resolved("_id", "event.id")) + ";"
+					, "eventClickFunc"));
+			}
+
+			@Override
+			protected void respond(AjaxRequestTarget target) {
+				Appointment a = Application.getBean(AppointmentDaoImpl.class).getAppointmentById(
+						getRequestCycle().getRequest().getRequestParameters().getParameterValue("_id").toLong());
+				form.setModelObject(a);
+				
+				target.add(form);
+			}
+		});
 	}
 
 	private class DropResizeBehavior extends AbstractDefaultAjaxBehavior {

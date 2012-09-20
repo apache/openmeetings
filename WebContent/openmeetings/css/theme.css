@@ -115,3 +115,11 @@ table.adminListTable tr.odd {
 .adminForm {
 	
 }
+
+.clickable {
+	cursor: pointer;
+}
+
+.adminForm select {
+	width: 200px;
+}
