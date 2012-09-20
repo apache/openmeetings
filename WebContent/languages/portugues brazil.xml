@@ -4548,7 +4548,7 @@ Details
     	&#160;&#160;4) download archive with new OM<br/>
     	&#160;&#160;5) mv /opt/red5 /opt.red5.bak (move working version of OM just in case :))<br/>
     	&#160;&#160;6) extract downloaded OM to the /opt/red5<br/>
-    	&#160;&#160;7) ./admin.sh -i ~/today_om_backup.zip (or './admin.sh -i ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' in case of you are using non-default DB )<br/>
+    	&#160;&#160;7) ./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' in case of you are using non-default DB )<br/>
     	&#160;&#160;8) start OM<br/>
     </value>
   </string>

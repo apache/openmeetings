@@ -4547,7 +4547,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     	&#160;&#160;4) télécharger la nouvelle version d'OM<br/>
     	&#160;&#160;5) mv /opt/red5 /opt.red5.bak (déplacer la version d'OM qui fonctionne par sécurité.)<br/>
     	&#160;&#160;6) extraire la nouvelle version d'OM dans /opt/red5<br/>
-    	&#160;&#160;7) ./admin.sh -i ~/nom_du_backup.zip (ou './admin.sh -i ~/nom_du_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' dans le cas d'une BD qui n'est pas celle par défaut.)<br/>
+    	&#160;&#160;7) ./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' in case of you are using non-default DB )<br/>
     	&#160;&#160;8) Démarrer OM<br/>
     </value>
   </string>
