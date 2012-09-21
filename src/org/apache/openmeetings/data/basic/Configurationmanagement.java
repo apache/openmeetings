@@ -387,12 +387,12 @@ public class Configurationmanagement implements OmDAO<Configuration>{
 		return selectMaxFromConfigurations();
 	}
 
-	public void update(Configuration entity) {
+	public void update(Configuration entity, long userId) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void delete(Configuration entity) {
+	public void delete(Configuration entity, long userId) {
 		// TODO Auto-generated method stub
 		
 	}

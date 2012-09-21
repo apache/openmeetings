@@ -285,13 +285,13 @@ public class LdapConfigDaoImpl implements OmDAO<LdapConfig> {
 	}
 
 
-	public void update(LdapConfig entity) {
+	public void update(LdapConfig entity, long userId) {
 		// TODO Auto-generated method stub
 		
 	}
 
 
-	public void delete(LdapConfig entity) {
+	public void delete(LdapConfig entity, long userId) {
 		// TODO Auto-generated method stub
 		
 	}

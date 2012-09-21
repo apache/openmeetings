@@ -18,15 +18,20 @@
  */
 package org.apache.openmeetings.web.components.admin.groups;
 
-import org.apache.openmeetings.data.user.OrganisationUserDAO;
+import org.apache.openmeetings.data.user.dao.OrganisationUserDAO;
 import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.components.ConfirmCallListener;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.OmDataProvider;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
@@ -36,6 +41,10 @@ import org.apache.wicket.model.Model;
 public class GroupUsersPanel extends Panel {
 	private static final long serialVersionUID = -1813488722913433227L;
 	private long organisationId;
+	
+	public static String getUser(Users u) {
+		return u.getLogin() + " [" + u.getFirstname() + ", " + u.getLastname() + "]";
+	}
 	
 	public GroupUsersPanel(String id, long orgId) {
 		super(id);
@@ -59,7 +68,22 @@ public class GroupUsersPanel extends Panel {
 			protected void populateItem(Item<Organisation_Users> item) {
 				final Organisation_Users orgUser = item.getModelObject();
 				Users u = Application.getBean(UsersDaoImpl.class).get(orgUser.getUser_id());
-				item.add(new Label("label", Model.of(u.getLogin() + " [" + u.getFirstname() + ", " + u.getLastname() + "]")));
+				item.add(new Label("label", Model.of(getUser(u))));
+				item.add(new WebMarkupContainer("deleteUserBtn").add(new AjaxEventBehavior("onclick"){
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+						super.updateAjaxAttributes(attributes);
+						attributes.getAjaxCallListeners().add(new ConfirmCallListener(833L));
+					}
+					
+					@Override
+					protected void onEvent(AjaxRequestTarget target) {
+						Application.getBean(OrganisationUserDAO.class).delete(orgUser, WebSession.getUserId());
+						target.add(GroupUsersPanel.this);
+					}
+				})); 
 				item.add(AttributeModifier.append("class", ((item.getIndex() % 2 == 1) ? "even" : "odd")));
 			}
 		};

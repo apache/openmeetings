@@ -179,8 +179,8 @@
 		class="org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDaoImpl" />
 	<bean id="roommanagement" class="org.apache.openmeetings.data.conference.Roommanagement" />
 	<bean id="organisationmanagement" class="org.apache.openmeetings.data.user.Organisationmanagement" />
-	<bean id="organisationDAO" class="org.apache.openmeetings.data.user.OrganisationDAO" />
-	<bean id="organisationUserDAO" class="org.apache.openmeetings.data.user.OrganisationUserDAO" />
+	<bean id="organisationDAO" class="org.apache.openmeetings.data.user.dao.OrganisationDAO" />
+	<bean id="organisationUserDAO" class="org.apache.openmeetings.data.user.dao.OrganisationUserDAO" />
 	<bean id="salutationmanagement" class="org.apache.openmeetings.data.user.Salutationmanagement" />
 	<bean id="errorManagement" class="org.apache.openmeetings.data.basic.ErrorManagement" />
 	<bean id="navimanagement" class="org.apache.openmeetings.data.basic.Navimanagement" />

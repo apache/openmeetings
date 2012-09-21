@@ -27,6 +27,7 @@ import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.components.ConfirmCallListener;
 import org.apache.openmeetings.web.components.admin.AdminBaseForm;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
@@ -34,7 +35,6 @@ import org.apache.openmeetings.web.data.OmDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.attributes.AjaxCallListener;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -86,14 +86,14 @@ public class LangPanel extends AdminPanel {
 			
 			@Override
 			protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
-				Application.getBean(FieldLanguagesValuesDAO.class).update(getModelObject());
+				Application.getBean(FieldLanguagesValuesDAO.class).update(getModelObject(), WebSession.getUserId());
 				//FIXME reload
 			}
 			
 			//FIXME confirmation
 			@Override
 			protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
-				Application.getBean(FieldLanguagesValuesDAO.class).delete(getModelObject());
+				Application.getBean(FieldLanguagesValuesDAO.class).delete(getModelObject(), WebSession.getUserId());
 				//FIXME reload
 			}
 		};
@@ -166,8 +166,7 @@ public class LangPanel extends AdminPanel {
 			@Override
 			protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
 				super.updateAjaxAttributes(attributes);
-				//FIXME need to be generalized
-				attributes.getAjaxCallListeners().add(new AjaxCallListener().onBefore("if (!confirm('" + WebSession.getString(833L) + "')) {return false;}"));
+				attributes.getAjaxCallListeners().add(new ConfirmCallListener(833L));
 			}
 			
 			@Override

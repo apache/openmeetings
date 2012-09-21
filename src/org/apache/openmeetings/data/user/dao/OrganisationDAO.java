@@ -16,8 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.data.user;
+package org.apache.openmeetings.data.user.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -59,13 +60,26 @@ public class OrganisationDAO implements OmDAO<Organisation> {
 		return q.getSingleResult();
 	}
 
-	public void update(Organisation entity) {
-		// TODO Auto-generated method stub
-		
+	public void update(Organisation entity, long userId) {
+		if (entity.getOrganisation_id() == null) {
+			entity.setInsertedby(userId);
+			entity.setStarttime(new Date());
+			em.persist(entity);
+		} else {
+			entity.setUpdatedby(userId);
+			entity.setUpdatetime(new Date());
+			em.merge(entity);
+		}
 	}
 
-	public void delete(Organisation entity) {
-		// TODO Auto-generated method stub
-		
+	public void delete(Organisation entity, long userId) {
+		em.createNamedQuery("deleteUsersFromOrganisation")
+			.setParameter("id", entity.getOrganisation_id())
+			.executeUpdate();
+
+		entity.setDeleted(true);
+		entity.setUpdatedby(userId);
+
+		em.merge(entity);
 	}
 }

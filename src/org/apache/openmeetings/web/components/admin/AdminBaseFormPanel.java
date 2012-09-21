@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.components.admin;
 
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.components.ConfirmCallListener;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxCallListener;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
@@ -106,8 +107,7 @@ public abstract class AdminBaseFormPanel<T> extends AdminPanel {
 			@Override
 			protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
 				super.updateAjaxAttributes(attributes);
-				//FIXME need to be generalized
-				attributes.getAjaxCallListeners().add(new AjaxCallListener().onBefore("if (!confirm('" + WebSession.getString(833L) + "')) {return false;}"));
+				attributes.getAjaxCallListeners().add(new ConfirmCallListener(833L));
 			}
 			
 			@Override

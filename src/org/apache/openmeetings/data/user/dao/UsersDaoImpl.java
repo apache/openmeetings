@@ -55,18 +55,18 @@ public class UsersDaoImpl implements OmDAO<Users> {
 	}
 	
 	public List<Users> get(int first, int count) {
-		return getNondeletedUsers((int)first, (int)count);
+		return getNondeletedUsers(first, count);
 	}
 	
 	public long count() {
 		return selectMaxFromUsers();
 	}
 	
-	public void update(Users u) {
+	public void update(Users u, long userId) {
 		updateUser(u); 
 	}
 
-	public void delete(Users u) {
+	public void delete(Users u, long userId) {
 		deleteUserID(u.getUser_id()); 
 	}
 	

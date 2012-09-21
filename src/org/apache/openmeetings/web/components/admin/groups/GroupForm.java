@@ -18,31 +18,35 @@
  */
 package org.apache.openmeetings.web.components.admin.groups;
 
-import org.apache.openmeetings.data.user.OrganisationDAO;
+import org.apache.openmeetings.data.user.dao.OrganisationDAO;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.admin.AdminBaseForm;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 
 public class GroupForm extends AdminBaseForm<Organisation> {
 	private static final long serialVersionUID = -1720731686053912700L;
-	private GroupUsersPanel listContainer;
+	private GroupUsersPanel usersPanel;
+	private WebMarkupContainer groupList;
 	
-	public GroupForm(String id, final Organisation organisation) {
+	public GroupForm(String id, WebMarkupContainer groupList, Organisation organisation) {
 		super(id, new CompoundPropertyModel<Organisation>(organisation));
+		this.groupList = groupList;
 		setOutputMarkupId(true);
 		
 		add(new RequiredTextField<String>("name"));
-		listContainer = new GroupUsersPanel("users", getOrgId());
-		add(listContainer);
+		usersPanel = new GroupUsersPanel("users", getOrgId());
+		add(usersPanel);
 	}
 	
 	void updateView(AjaxRequestTarget target) {
-		listContainer.update(getOrgId());
-		target.add(listContainer);
+		usersPanel.update(getOrgId());
+		target.add(this);
 	}
 	
 	private long getOrgId() {
@@ -52,7 +56,7 @@ public class GroupForm extends AdminBaseForm<Organisation> {
 	@Override
 	protected void onNewSubmit(AjaxRequestTarget target, Form<?> f) {
 		this.setModelObject(new Organisation());
-		target.add(this);
+		updateView(target);
 	}
 	
 	@Override
@@ -64,8 +68,18 @@ public class GroupForm extends AdminBaseForm<Organisation> {
 			org = new Organisation();
 		}
 		this.setModelObject(org);
-		listContainer.update(getOrgId());
-		target.add(this);
+		updateView(target);
 	}
 	
+	@Override
+	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
+		Application.getBean(OrganisationDAO.class).delete(getModelObject(), WebSession.getUserId());
+		target.add(groupList);
+	}
+	
+	@Override
+	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
+		Application.getBean(OrganisationDAO.class).update(getModelObject(), WebSession.getUserId());
+		target.add(groupList);
+	}
 }

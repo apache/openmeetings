@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.data.basic;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -67,7 +68,8 @@ public class FieldLanguagesValuesDAO implements OmDAO<Fieldlanguagesvalues> {
 		return q.getSingleResult();
 	}
 
-	public void update(Fieldlanguagesvalues entity) {
+	public void update(Fieldlanguagesvalues entity, long userId) {
+		entity.setUpdatetime(new Date());
 		if (entity.getFieldlanguagesvalues_id() == null) {
 			em.persist(entity);
 		} else {
@@ -75,8 +77,9 @@ public class FieldLanguagesValuesDAO implements OmDAO<Fieldlanguagesvalues> {
 		}
 	}
 
-	public void delete(Fieldlanguagesvalues entity) {
+	public void delete(Fieldlanguagesvalues entity, long userId) {
 		entity.setDeleted(true);
+		entity.setUpdatetime(new Date());
 		entity = em.merge(entity);
 	}
 }

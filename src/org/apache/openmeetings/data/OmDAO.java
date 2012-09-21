@@ -26,6 +26,6 @@ public interface OmDAO<T extends OmEntity> {
 	T get(long id);
 	List<T> get(int start, int count);
 	long count();
-	void update(T entity);
-	void delete(T entity);
+	void update(T entity, long userId);
+	void delete(T entity, long userId);
 }

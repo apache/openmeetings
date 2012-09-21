@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.data.user;
+package org.apache.openmeetings.data.user.dao;
 
 import java.util.List;
 
@@ -26,10 +26,16 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.data.OmDAO;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
+import org.apache.openmeetings.persistence.beans.user.Users;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 public class OrganisationUserDAO implements OmDAO<Organisation_Users> {
 	@PersistenceContext
 	private EntityManager em;
+	@Autowired
+	private UsersDaoImpl usersDao;
 
 	public Organisation_Users get(long id) {
 		TypedQuery<Organisation_Users> q = em.createNamedQuery("getOrganisationUsersById", Organisation_Users.class);
@@ -59,14 +65,20 @@ public class OrganisationUserDAO implements OmDAO<Organisation_Users> {
 		return q.getSingleResult();
 	}
 
-	public void update(Organisation_Users entity) {
-		// TODO Auto-generated method stub
+	public void update(Organisation_Users entity, long userId) {
+		//if (entity.getOrganisation_users_id())// TODO Auto-generated method stub
 		
 	}
 
-	public void delete(Organisation_Users entity) {
-		// TODO Auto-generated method stub
-		
+	public void delete(Organisation_Users entity, long userId) {
+		if (entity.getOrganisation_users_id() != null) {
+			Users u = usersDao.getUser(entity.getUser_id());
+			int idx = u.getOrganisation_users().indexOf(entity);
+			//entity has been detached need to re-fetch
+			Organisation_Users ou = u.getOrganisation_users().remove(idx);
+			em.remove(ou);
+			usersDao.updateUser(u);
+		}
 	}
 
 }

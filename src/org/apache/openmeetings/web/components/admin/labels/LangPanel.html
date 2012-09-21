@@ -22,13 +22,13 @@
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.5-strict.dtd" lang="en">
 	<wicket:panel>
 		<script type="text/javascript">
-			$(function(){
+			function omComponentInit() {
 				$('#addLanguage').dialog({
 					closeOnEscape: true
 					, autoOpen: false
 					, resizable: false
 				});
-			});
+			};
 		</script>
 		<table class="adminPanel">
 			<tr>

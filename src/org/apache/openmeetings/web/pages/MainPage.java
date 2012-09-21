@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.pages;
 
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.ConfirmableAjaxLink;
 import org.apache.openmeetings.web.components.MenuPanel;
 import org.apache.openmeetings.web.components.user.ChatPanel;
@@ -39,7 +38,7 @@ public class MainPage extends BasePage {
 		add(contents);
 		menu = new MenuPanel("menu", contents);
 		add(menu);
-		add(new ConfirmableAjaxLink("logout", WebSession.getString(634L)) {
+		add(new ConfirmableAjaxLink("logout", 634L) {
 			private static final long serialVersionUID = -2994610981053570537L;
 
 			@Override

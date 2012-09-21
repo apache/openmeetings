@@ -20,6 +20,17 @@
 -->
 <html xmlns="http://www.w3.org/1999/xhtml" 
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.5-strict.dtd" lang="en">
+	<wicket:head>
+		<script type="text/javascript">
+			function omComponentInit() {
+				$('#addUsers').dialog({
+					closeOnEscape: true
+					, autoOpen: false
+					, resizable: false
+				});
+			};
+		</script>
+	</wicket:head>
 	<wicket:panel>
 		<table class="adminPanel">
 			<tr>
@@ -56,7 +67,7 @@
 							</tr>
 							<tr>
 								<td style="font-weight: bold;"><wicket:ommessage key="273" /></td>
-								<td>&nbsp;</td>
+								<td style="text-align: right;"><div class="formNewButton" onclick="$('#addUsers :text').val(''); $('#addUsers').dialog('open');"><input/></div></td>
 							</tr>
 							<tr>
 								<td><wicket:ommessage key="177" /></td>
@@ -69,5 +80,25 @@
 				</td>
 			</tr>
 		</table>
+		<div id="addUsers" wicket:ommessage="title:180" style="display: none;">
+			<form wicket:id="addUsers">
+				<table>
+					<tr>
+						<td><wicket:ommessage key="181" /></td>
+						<td><input type="text" wicket:id="searchText" /></td>
+					</tr>
+					<tr>
+						<td style="text-align: right"><input type="button" wicket:id="search" /></td>
+					</tr>
+					<tr>
+						<td><wicket:ommessage key="183" /></td>
+						<td><select wicket:id="users"></select></td>
+					</tr>
+					<tr>
+						<td style="text-align: right"><input type="button" wicket:id="add" /></td>
+					</tr>
+				</table>
+			</form>
+		</div>
 	</wicket:panel>
 </html>

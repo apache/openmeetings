@@ -23,14 +23,14 @@
 	<wicket:panel>
 		<div style="border: 1px solid black;">
 			<span wicket:id="navigator">[dataview navigator]</span>
-			<table class="adminListTable">
+			<table class="adminListTable" style="min-width: 200px;">
 				<tr>
 					<th><wicket:ommessage key="177" /></th>
 					<th><wicket:ommessage key="275" /></th>
 				</tr>			
 	    		<tr wicket:id="userList">
 					<td><span wicket:id="label"></span></td>
-					<td>Delete</td>
+					<td><div class="formCancelButton" wicket:id="deleteUserBtn" wicket:ommessage="title:274"><input/></div></td>
 				</tr>
 			</table>
 		</div>

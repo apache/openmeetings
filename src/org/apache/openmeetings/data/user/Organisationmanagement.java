@@ -38,6 +38,8 @@ import javax.persistence.criteria.Root;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
+import org.apache.openmeetings.data.user.dao.OrganisationDAO;
+import org.apache.openmeetings.data.user.dao.OrganisationUserDAO;
 import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
@@ -65,6 +67,8 @@ public class Organisationmanagement {
 	private UsersDaoImpl usersDao;
 	@Autowired
 	private OrganisationDAO orgDao;
+	@Autowired
+	private OrganisationUserDAO orgUserDao;
 	@Autowired
 	private AuthLevelmanagement authLevelManagement;
 
@@ -137,7 +141,7 @@ public class Organisationmanagement {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
 				SearchResult<Organisation> sresult = new SearchResult<Organisation>();
 				sresult.setObjectName(Organisation.class.getName());
-				sresult.setRecords(this.selectMaxFromOrganisations());
+				sresult.setRecords(orgDao.count());
 				sresult.setResult(this.getOrganisations(start, max, orderby,
 						asc));
 				return sresult;
@@ -202,24 +206,6 @@ public class Organisationmanagement {
 	}
 
 	/**
-	 * 
-	 * @return
-	 */
-	public Long selectMaxFromOrganisations() {
-		try {
-			// get all users
-			TypedQuery<Long> query = em
-					.createQuery("select max(c.organisation_id) from Organisation c where c.deleted = false", Long.class);
-			Long l = query.getSingleResult();
-			log.debug("selectMaxFromOrganisations" + l);
-			return l;
-		} catch (Exception ex2) {
-			log.error("[selectMaxFromUsers] ", ex2);
-		}
-		return null;
-	}
-
-	/**
 	 * updates an organisation if user_level is admin
 	 * 
 	 * @param user_level
@@ -233,7 +219,7 @@ public class Organisationmanagement {
 			String orgname, long users_id) {
 		try {
 
-			Organisation org = this.getOrganisationById(organisation_id);
+			Organisation org = orgDao.get(organisation_id);
 			org.setName(orgname);
 			org.setUpdatedby(users_id);
 			org.setUpdatetime(new Date());
@@ -355,7 +341,7 @@ public class Organisationmanagement {
 			long organisation_id) {
 		try {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
-				return this.getOrganisationById(organisation_id);
+				return orgDao.get(organisation_id);
 			} else {
 				log.error("[getOrganisationById] authorization required");
 			}
@@ -372,12 +358,7 @@ public class Organisationmanagement {
 	 * @return
 	 */
 	public Organisation getOrganisationById(long organisation_id) {
-		try {
-			return orgDao.get(organisation_id);
-		} catch (Exception ex2) {
-			log.error("[getOrganisationById]", ex2);
-		}
-		return null;
+		return orgDao.get(organisation_id);
 	}
 
 	public Organisation getOrganisationByIdBackup(long organisation_id) {
@@ -421,28 +402,11 @@ public class Organisationmanagement {
 	 */
 	public Long deleteOrganisation(long organisation_id, long updatedby) {
 		try {
-			em.createNamedQuery("deleteUsersFromOrganisation")
-				.setParameter("organisation_id", organisation_id)
-				.executeUpdate();
-
-			Organisation org = this.getOrganisationById(organisation_id);
-			org.setDeleted(true);
-			org.setUpdatedby(updatedby);
-
-			if (org.getOrganisation_id() == null) {
-				em.persist(org);
-			} else {
-				if (!em.contains(org)) {
-					em.merge(org);
-				}
-			}
-
-			return org.getOrganisation_id();
-
+			orgDao.delete(orgDao.get(organisation_id), updatedby);
 		} catch (Exception ex2) {
 			log.error("[deleteOrganisation]", ex2);
 		}
-		return null;
+		return organisation_id;
 	}
 
 	/**
@@ -470,7 +434,7 @@ public class Organisationmanagement {
 	public Organisation_Users getOrgUser(Long organisation_id,
 			Long insertedby) {
 		
-		Organisation_Users orgUser = new Organisation_Users(getOrganisationById(organisation_id));
+		Organisation_Users orgUser = new Organisation_Users(orgDao.get(organisation_id));
 		orgUser.setDeleted(false);
 		
 		return orgUser;
@@ -552,28 +516,13 @@ public class Organisationmanagement {
 
 			SearchResult<Users> sResult = new SearchResult<Users>();
 			sResult.setObjectName(Users.class.getName());
-			sResult.setRecords(selectMaxUsersByOrganisationId(organisation_id));
+			sResult.setRecords(orgUserDao.count(organisation_id));
 			sResult.setResult(getUsersByOrganisationId(organisation_id,
 					start, max, orderby, asc));
 			return sResult;
 
 		} catch (Exception ex2) {
 			log.error("[getUsersSearchResultByOrganisationId]", ex2);
-		}
-		return null;
-	}
-
-	private Long selectMaxUsersByOrganisationId(long organisation_id) {
-		try {
-			TypedQuery<Long> query = em.createNamedQuery("selectMaxUsersByOrganisationId", Long.class);
-			query.setParameter("organisation_id", organisation_id);
-
-			Long l = query.getSingleResult();
-			log.debug("selectMaxUsersByOrganisationId" + l);
-			return l;
-
-		} catch (Exception ex2) {
-			log.error("[getUsersByOrganisationId]", ex2);
 		}
 		return null;
 	}

@@ -39,15 +39,12 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name="selectMaxUsersByOrganisationId",
-		query="SELECT COUNT(c.organisation_users_id) FROM Organisation_Users c WHERE c.deleted = false AND c.organisation.organisation_id = :organisation_id")
-	, @NamedQuery(name="getOrganisation_UserByUserAndOrganisation",
+	@NamedQuery(name="getOrganisation_UserByUserAndOrganisation",
 		query="SELECT ou FROM Users u, IN(u.organisation_users) ou WHERE u.deleted = false AND u.user_id = :user_id AND ou.organisation.organisation_id = :organisation_id")
-	, @NamedQuery(name="deleteUsersFromOrganisation",
-	query="DELETE FROM Organisation_Users c WHERE c.organisation.organisation_id = :organisation_id")
-	, @NamedQuery(name="countOrganisationUsers", query="SELECT COUNT(c) FROM Organisation_Users c WHERE c.organisation.organisation_id = :id AND c.deleted = false")
+	, @NamedQuery(name="deleteUsersFromOrganisation", query="DELETE FROM Organisation_Users c WHERE c.organisation.organisation_id = :id")
+	, @NamedQuery(name="countOrganisationUsers", query="SELECT COUNT(c) FROM Organisation_Users c WHERE c.organisation.organisation_id = :id")
 	, @NamedQuery(name="getOrganisationUsersById", query="SELECT c FROM Organisation_Users c WHERE c.organisation_users_id = :id")
-	, @NamedQuery(name="getOrganisationUsersByOrgId", query="SELECT c FROM Organisation_Users c WHERE c.organisation.organisation_id = :id AND c.deleted = false")
+	, @NamedQuery(name="getOrganisationUsersByOrgId", query="SELECT c FROM Organisation_Users c WHERE c.organisation.organisation_id = :id")
 })
 @Table(name = "organisation_users")
 @Root(name="user_organisation")
@@ -141,5 +138,33 @@ public class Organisation_Users implements Serializable, OmEntity {
 
 	public void setIsModerator(Boolean isModerator) {
 		this.isModerator = isModerator;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime
+				* result
+				+ ((organisation_users_id == null) ? 0 : organisation_users_id
+						.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Organisation_Users other = (Organisation_Users) obj;
+		if (organisation_users_id == null) {
+			if (other.organisation_users_id != null)
+				return false;
+		} else if (!organisation_users_id.equals(other.organisation_users_id))
+			return false;
+		return true;
 	}
 }

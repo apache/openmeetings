@@ -18,23 +18,21 @@
  */
 package org.apache.openmeetings.web.components;
 
-import org.apache.wicket.ajax.attributes.AjaxCallListener;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 
 public abstract class ConfirmableAjaxLink extends AjaxLink<Void> {
 	private static final long serialVersionUID = 7301747891668537168L;
-	private String confirmText;
+	private long confirmId;
 
-	public ConfirmableAjaxLink(String id, String text) {
+	public ConfirmableAjaxLink(String id, long confirmId) {
 		super(id);
-		confirmText = text;
+		this.confirmId = confirmId;
 	}
 
-	//TODO confirm need to be replaced with jQuery modal dialog
 	@Override
 	protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
 		super.updateAjaxAttributes(attributes);
-		attributes.getAjaxCallListeners().add(new AjaxCallListener().onPrecondition("if (!confirm('" + confirmText + "')) {hideBusyIndicator(); return false;}"));
+		attributes.getAjaxCallListeners().add(new ConfirmCallListener(confirmId, "hideBusyIndicator();"));
 	}
 }
