@@ -20,6 +20,8 @@ package org.apache.openmeetings.web.components.admin;
 
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxCallListener;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -101,6 +103,13 @@ public abstract class AdminBaseFormPanel<T> extends AdminPanel {
 		add(new AjaxButton("ajax-cancel-button", form) {
 			private static final long serialVersionUID = 839803820502260006L;
 
+			@Override
+			protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+				super.updateAjaxAttributes(attributes);
+				//FIXME need to be generalized
+				attributes.getAjaxCallListeners().add(new AjaxCallListener().onBefore("if (!confirm('" + WebSession.getString(833L) + "')) {return false;}"));
+			}
+			
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				// repaint the feedback panel so that it is hidden

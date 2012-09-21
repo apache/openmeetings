@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.components;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.attributes.AjaxCallListener;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -36,13 +35,6 @@ public abstract class ConfirmableAjaxLink extends AjaxLink<Void> {
 	@Override
 	protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
 		super.updateAjaxAttributes(attributes);
-		attributes.getAjaxCallListeners().add(new AjaxCallListener() {
-			private static final long serialVersionUID = 485123450543463471L;
-
-			@Override
-			public CharSequence getPrecondition(Component component) {
-				return "if (!confirm('" + confirmText + "')) {hideBusyIndicator(); return false;}";
-			}
-		});
+		attributes.getAjaxCallListeners().add(new AjaxCallListener().onPrecondition("if (!confirm('" + confirmText + "')) {hideBusyIndicator(); return false;}"));
 	}
 }

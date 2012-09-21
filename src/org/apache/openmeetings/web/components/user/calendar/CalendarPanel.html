@@ -23,16 +23,12 @@
 	<wicket:head>
 		<link media="screen" type="text/css" rel="stylesheet" href='css/fullcalendar.css' />
 		<!-- link media="print" type="text/css" rel="stylesheet" href='css/fullcalendar.print.css' /--> <!-- FIXME incorrectly rendered -->
-	</wicket:head>
-	<wicket:panel>
-		<script type="text/javascript" src="js/fullcalendar.min.js"></script>
-		<div wicket:id="calendar"></div>
-		<!-- bottom section -->
 		<script type="text/javascript">
 			function getCalendarHeight() {
 				return $(window).height() - $('#calendar').position().top - 20; //FIXME HACK
 			}
-			$(function() {
+			
+			function omComponentInit() {
 				$('#calendar').fullCalendar({
 					header: {
 						left: 'prev,next today',
@@ -79,8 +75,13 @@
 					, autoOpen: false
 					, modal: true
 				});
-			});
+			}
 		</script>
+	</wicket:head>
+	<wicket:panel>
+		<script type="text/javascript" src="js/fullcalendar.min.js"></script>
+		<div wicket:id="calendar"></div>
+		<!-- bottom section -->
 		<div id="appointment" wicket:ommessage="title:815">
 			<form wicket:id="appointment">
 				<table>

@@ -34,6 +34,8 @@ import org.apache.openmeetings.web.data.OmDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxCallListener;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -88,6 +90,7 @@ public class LangPanel extends AdminPanel {
 				//FIXME reload
 			}
 			
+			//FIXME confirmation
 			@Override
 			protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
 				Application.getBean(FieldLanguagesValuesDAO.class).delete(getModelObject());
@@ -124,7 +127,7 @@ public class LangPanel extends AdminPanel {
 						target.add(form);
 					}
 				});
-				item.add(AttributeModifier.replace("class", (item.getIndex() % 2 == 1) ? "even" : "odd"));
+				item.add(AttributeModifier.append("class", "clickable " + ((item.getIndex() % 2 == 1) ? "even" : "odd")));
 			}
 		};
 		
@@ -160,6 +163,13 @@ public class LangPanel extends AdminPanel {
 		add(new WebMarkupContainer("deleteLngBtn").add(new AjaxEventBehavior("onclick"){
 			private static final long serialVersionUID = -1650946343073068686L;
 
+			@Override
+			protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+				super.updateAjaxAttributes(attributes);
+				//FIXME need to be generalized
+				attributes.getAjaxCallListeners().add(new AjaxCallListener().onBefore("if (!confirm('" + WebSession.getString(833L) + "')) {return false;}"));
+			}
+			
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
 				language.setDeleted(true);

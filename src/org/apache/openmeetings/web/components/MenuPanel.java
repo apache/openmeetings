@@ -140,7 +140,7 @@ public class MenuPanel extends BasePanel {
 										target.add(contents.replace(new ServersPanel("child")));
 										break;
 								}
-								target.appendJavaScript("location.hash = '" + JavaScriptUtils.escapeQuotes(hash) + "';");
+								target.appendJavaScript("location.hash = '" + JavaScriptUtils.escapeQuotes(hash) + "'; if (typeof window.omComponentInit == 'function'){ omComponentInit(); window.omComponentInit = null; };");
 							};
 						}.add(AttributeModifier.replace("href", hash)));
 					}
