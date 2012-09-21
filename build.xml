@@ -93,6 +93,10 @@
 		 -->
 	</path>
 
+	<target name="info" unless="java6.installed">
+		<echo>Ant version is ${ant.version}</echo> <!-- output Ant version -->
+	</target>
+
 	<target name="prepare.mkdir" depends="-java6or7.check">
 		<mkdir dir="${red5.server.lib}" />
 		<mkdir dir="${red5.client.dir}/dist" />
@@ -1043,7 +1047,7 @@
 		<antcall target="-process-db" inheritAll="true" inheritRefs="true" />
 	</target>
 	
-	<target name="-java6or7.check" unless="java6.installed">
+	<target name="-java6or7.check" unless="java6.installed" depends="info">
 		<condition property="java6.installed" value="true">
 			<and>
 				<or>
