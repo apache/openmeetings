@@ -20,6 +20,9 @@ package org.apache.openmeetings.web.components.admin.configurations;
 
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.web.components.admin.AdminBaseForm;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 
 public class ConfigForm extends AdminBaseForm<Configuration> {
@@ -29,6 +32,12 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 	public ConfigForm(String id, final Configuration configuration) {
 		super(id, new CompoundPropertyModel<Configuration>(configuration));
 		setOutputMarkupId(true);
+		
+		add(new TextField<String>("conf_key"));
+		add(new TextField<String>("conf_value"));
+		add(new Label("updatetime"));
+		add(new Label("users.login"));
+		add(new TextArea<String>("comment"));
 		
 	}
 }
