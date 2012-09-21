@@ -18,13 +18,11 @@
  */
 package org.apache.openmeetings.web.components.admin.groups;
 
-import java.util.Iterator;
-
-import org.apache.openmeetings.data.user.Organisationmanagement;
+import org.apache.openmeetings.data.user.OrganisationDAO;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
+import org.apache.openmeetings.web.data.OmDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -32,43 +30,21 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
-import org.apache.wicket.markup.repeater.data.IDataProvider;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
 
 public class GroupsPanel extends AdminPanel {
 
 	private static final long serialVersionUID = -1L;
-	@SuppressWarnings("unused")
-	private String selectedText = "Click on the table to change the room";
-	private GroupForm form;
 	
 	public GroupsPanel(String id) {
 		super(id);
-		DataView<Organisation> dataView = new DataView<Organisation>("groupList", new IDataProvider<Organisation>(){
-			private static final long serialVersionUID = -1L;
-
-			public void detach() {
-				//empty
-			}
-
-			public Iterator<? extends Organisation> iterator(long first, long count) {
-				return Application.getBean(Organisationmanagement.class).getNondeletedOrganisation((int)first, (int)count).iterator();
-			}
-
-			public long size() {
-				return Application.getBean(Organisationmanagement.class).selectMaxFromOrganisations();
-			}
-
-			public IModel<Organisation> model(Organisation object) {
-				return new CompoundPropertyModel<Organisation>(object);
-			}
-			
-		}) {
+		final GroupForm form = new GroupForm("form", new Organisation());
+        add(form);
+		
+		DataView<Organisation> dataView = new DataView<Organisation>("groupList", new OmDataProvider<Organisation>(OrganisationDAO.class)) {
 			private static final long serialVersionUID = 8715559628755439596L;
 
 			@Override
-			protected void populateItem(final Item<Organisation> item) {
+			protected void populateItem(Item<Organisation> item) {
 				final Organisation organisation = item.getModelObject();
 				item.add(new Label("organisation_id", "" + organisation.getOrganisation_id()));
 				item.add(new Label("name", "" + organisation.getName()));
@@ -77,28 +53,23 @@ public class GroupsPanel extends AdminPanel {
 
 					protected void onEvent(AjaxRequestTarget target) {
 						form.setModelObject(organisation);
+						form.updateView(target);
 						target.add(form);
 					}
 				});
-				item.add(AttributeModifier.replace("class", (item.getIndex() % 2 == 1) ? "even" : "odd"));
+				item.add(AttributeModifier.append("class", "clickable " + ((item.getIndex() % 2 == 1) ? "even" : "odd")));
 			}
 		};
-		
+
 		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		add(new PagedEntityListPanel("navigator", dataView) {
-			private static final long serialVersionUID = -7378765368303904897L;
+			private static final long serialVersionUID = 5097048616003411362L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
 				target.add(listContainer);
 			}
 		});
-		
-		
-		Organisation organisation = new Organisation();
-		form = new GroupForm("form", organisation);
-        add(form);
-		
 	}
 }

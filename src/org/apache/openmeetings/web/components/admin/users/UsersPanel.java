@@ -36,8 +36,7 @@ public class UsersPanel extends AdminPanel {
 	
 	public UsersPanel(String id) {
 		super(id);
-		Users user = new Users();
-		final UserForm form = new UserForm("form", user);
+		final UserForm form = new UserForm("form", new Users());
         add(form);
         
 		DataView<Users> dataView = new DataView<Users>("userList", new OmDataProvider<Users>(UsersDaoImpl.class)) {

@@ -33,6 +33,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.apache.openmeetings.persistence.beans.OmEntity;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -44,10 +45,13 @@ import org.simpleframework.xml.Root;
 		query="SELECT ou FROM Users u, IN(u.organisation_users) ou WHERE u.deleted = false AND u.user_id = :user_id AND ou.organisation.organisation_id = :organisation_id")
 	, @NamedQuery(name="deleteUsersFromOrganisation",
 	query="DELETE FROM Organisation_Users c WHERE c.organisation.organisation_id = :organisation_id")
+	, @NamedQuery(name="countOrganisationUsers", query="SELECT COUNT(c) FROM Organisation_Users c WHERE c.organisation.organisation_id = :id AND c.deleted = false")
+	, @NamedQuery(name="getOrganisationUsersById", query="SELECT c FROM Organisation_Users c WHERE c.organisation_users_id = :id")
+	, @NamedQuery(name="getOrganisationUsersByOrgId", query="SELECT c FROM Organisation_Users c WHERE c.organisation.organisation_id = :id AND c.deleted = false")
 })
 @Table(name = "organisation_users")
 @Root(name="user_organisation")
-public class Organisation_Users implements Serializable {
+public class Organisation_Users implements Serializable, OmEntity {
 	private static final long serialVersionUID = 7206870465903375817L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -64,6 +64,8 @@ public class Organisationmanagement {
 	@Autowired
 	private UsersDaoImpl usersDao;
 	@Autowired
+	private OrganisationDAO orgDao;
+	@Autowired
 	private AuthLevelmanagement authLevelManagement;
 
 	/**
@@ -371,16 +373,7 @@ public class Organisationmanagement {
 	 */
 	public Organisation getOrganisationById(long organisation_id) {
 		try {
-			TypedQuery<Organisation> query = em.createNamedQuery("getOrganisationById", Organisation.class);
-			query.setParameter("organisation_id", organisation_id);
-			query.setParameter("deleted", true);
-			Organisation o = null;
-			try {
-				o = query.getSingleResult();
-			} catch (NoResultException e) {
-				// o = null;
-			}
-			return o;
+			return orgDao.get(organisation_id);
 		} catch (Exception ex2) {
 			log.error("[getOrganisationById]", ex2);
 		}
@@ -823,12 +816,4 @@ public class Organisationmanagement {
 		}
 		return null;
 	}
-
-	public List<Organisation> getNondeletedOrganisation(int first, int count) {
-		TypedQuery<Organisation> q = em.createNamedQuery("getNondeletedOrganisations", Organisation.class);
-		q.setFirstResult(first);
-		q.setMaxResults(count);
-		return q.getResultList();
-	}
-
 }
