@@ -431,7 +431,7 @@
             fontsize="9"/>
     </view>
     
-	<view name="_loudness" x="1" 
+	<view name="_loudness" x="1" visible="${parent.isremote}"
 	       y="${parent.height - 20 - ((parent._innerbottom.visible) ? 18 : 0) }">
 		<view x="2" y="2" name="loudness" resource="speaking" opacity="0.2"
 			  onmouseover="" onmouseout="" >	

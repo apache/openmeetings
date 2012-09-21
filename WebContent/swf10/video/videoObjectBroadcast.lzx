@@ -68,12 +68,12 @@
             <handler name="onlevel">
                 <![CDATA[
                     var fullLength = parent.height-24;
-                    parent._activityLevel.setAttribute("height",this.level*(fullLength/100));
+                    parent._activityLevel.setAttribute("height",-this.level*(fullLength/100));
                 ]]>
             </handler>
          </baseVideoStreamDevice>
          
-         <view name="_activityLevel" width="6" x="2" y="2" opacity="0.5" bgcolor="0x00FF00" 
+         <view name="_activityLevel" width="6" x="2" y="${parent.height}" opacity="0.5" bgcolor="0x00FF00"
               height="0" >
         </view>
 		
