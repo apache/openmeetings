@@ -51,6 +51,11 @@ public class LangForm extends AdminBaseForm<FieldLanguage> {
 
 	private List<FieldLanguage> fieldLanguages;
 
+	/**
+	 * Get list of language ids for drow down
+	 * 
+	 * @return
+	 */
 	private List<Long> getFieldLanguageIds() {
 		List<Long> idsList = new ArrayList<Long>();
 		for (FieldLanguage fieldLanguage : fieldLanguages) {
@@ -59,6 +64,12 @@ public class LangForm extends AdminBaseForm<FieldLanguage> {
 		return idsList;
 	}
 
+	/**
+	 * get name for id for dropdown renderer
+	 * 
+	 * @param id
+	 * @return
+	 */
 	private String getFieldLanguageLabelById(Long id) {
 		for (FieldLanguage language : fieldLanguages) {
 			if (id.equals(language.getLanguage_id())) {
@@ -68,6 +79,14 @@ public class LangForm extends AdminBaseForm<FieldLanguage> {
 		throw new RuntimeException("Could not find FieldLanguage for id " + id);
 	}
 
+	/**
+	 * Render Main
+	 * 
+	 * @param id
+	 * @param listContainer
+	 * @param language
+	 * @param langPanel
+	 */
 	public LangForm(String id, final WebMarkupContainer listContainer,
 			FieldLanguage language, LangPanel langPanel) {
 
