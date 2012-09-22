@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.data.basic;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -38,7 +39,9 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  */
 @Transactional
-public class FieldLanguageDaoImpl {
+public class FieldLanguageDaoImpl implements Serializable {
+
+	private static final long serialVersionUID = -2714490167956230305L;
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			FieldLanguageDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
@@ -102,7 +105,13 @@ public class FieldLanguageDaoImpl {
 		return new Long(-1);
 	}
 
-	public void updateLanguage(FieldLanguage fl) throws Exception {
+	public void delete(FieldLanguage fl) {
+		fl.setUpdatetime(new Date());
+		fl.setDeleted(true);
+		em.merge(fl);
+	}
+
+	public void updateLanguage(FieldLanguage fl) {
 		if (fl.getLanguage_id() == null) {
 			em.persist(fl);
 		} else {

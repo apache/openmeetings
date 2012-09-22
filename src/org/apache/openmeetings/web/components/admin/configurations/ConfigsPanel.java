@@ -31,6 +31,12 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 
+/**
+ * add/update/delete {@link Configuration}
+ * 
+ * @author swagner
+ * 
+ */
 public class ConfigsPanel extends AdminPanel {
 
 	private static final long serialVersionUID = -1L;
@@ -71,8 +77,7 @@ public class ConfigsPanel extends AdminPanel {
 			}
 		});
 		
-		Configuration configuration = new Configuration();
-		form = new ConfigForm("form", listContainer, configuration);
+		form = new ConfigForm("form", listContainer, new Configuration());
         add(form);
 		
 	}

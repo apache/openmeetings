@@ -33,9 +33,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.apache.openmeetings.persistence.beans.OmEntity;
 @Entity
 @Table(name = "fieldlanguage")
-public class FieldLanguage implements Serializable {
+public class FieldLanguage implements Serializable, OmEntity {
 	private static final long serialVersionUID = 3501643212388395425L;
 	@Id
 	@Column(name="id")

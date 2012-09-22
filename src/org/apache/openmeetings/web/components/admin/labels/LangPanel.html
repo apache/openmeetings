@@ -33,9 +33,16 @@
 		<table class="adminPanel">
 			<tr>
 				<td valign="top" class="adminPanelColumnTable">
-					<div class="formNewButton" onclick="$('#addLanguage :text').val(''); $('#addLanguage').dialog('open');"><input/></div>
-					<div class="formCancelButton" wicket:id="deleteLngBtn"><input/></div>
-					<form wicket:id="langForm" style="display: inline-block;"><select wicket:id="language"></select></form>
+					<form wicket:id="langForm" style="display: inline;">
+						<div class="formNewButton" 
+							onclick="$('#addLanguage :text').val(''); $('#addLanguage').dialog('open');">
+							<input type="submit" value="" wicket:id="newLangBtn" />
+						</div>
+						<div class="formCancelButton">
+							<input type="submit" value="" wicket:id="deleteLangBtn" />
+						</div>
+						<select wicket:id="language_id"></select>
+					</form>
 					<span wicket:id="navigator">[dataview navigator]</span>
 					<table class="adminListTable">
 						<thead>
@@ -83,18 +90,18 @@
 			</tr>
 		</table>
 		<div id="addLanguage" wicket:ommessage="title:364" style="display: none;">
-			<form wicket:id="addLangForm">
+			<form > <!--  wicket:id="addLangForm" -->
 				<table>
 					<tr>
 						<td><wicket:ommessage key="365" /></td>
-						<td><input type="text" wicket:id="name" /></td>
+						<td><input type="text" /></td><!-- wicket:id="name"  -->
 					</tr>
 					<tr>
 						<td><wicket:ommessage key="1422" /></td>
-						<td><input type="text" wicket:id="iso"/></td>
+						<td><input type="text" /></td><!-- wicket:id="iso" -->
 					</tr>
 					<tr>
-						<td align="right" colspan="2"><input wicket:id="add" type="submit" /></td>
+						<td align="right" colspan="2"><input type="submit" /></td><!--  wicket:id="add"  -->
 					</tr>
 				</table>
 			</form>

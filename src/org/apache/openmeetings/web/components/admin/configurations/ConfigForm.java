@@ -32,6 +32,12 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 
+/**
+ * Handle {@link Configuration} items as list and form
+ * 
+ * @author swagner
+ * 
+ */
 public class ConfigForm extends AdminBaseForm<Configuration> {
 
 	private static final long serialVersionUID = 1L;

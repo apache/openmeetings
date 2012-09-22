@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.components.admin.labels;
 
-import java.util.Date;
 import java.util.Iterator;
 
 import org.apache.openmeetings.data.basic.FieldLanguageDaoImpl;
@@ -26,90 +25,78 @@ import org.apache.openmeetings.data.basic.FieldLanguagesValuesDAO;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.WebSession;
-import org.apache.openmeetings.web.components.ConfirmCallListener;
-import org.apache.openmeetings.web.components.admin.AdminBaseForm;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.OmDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.RequiredTextField;
-import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 
+/**
+ * Language Editor, add/insert/update {@link Fieldlanguagesvalues} and
+ * add/delete {@link FieldLanguage} contains several Forms and one list
+ * 
+ * @author solomax, swagner
+ * 
+ */
 public class LangPanel extends AdminPanel {
 	private static final long serialVersionUID = 5904180813198016592L;
+
 	private FieldLanguage language;
 	private String newLanguageName;
 	private String newLanguageISO;
-	
+
+	public FieldLanguage getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(FieldLanguage language) {
+		this.language = language;
+	}
+
+	public String getNewLanguageName() {
+		return newLanguageName;
+	}
+
+	public void setNewLanguageName(String newLanguageName) {
+		this.newLanguageName = newLanguageName;
+	}
+
+	public String getNewLanguageISO() {
+		return newLanguageISO;
+	}
+
+	public void setNewLanguageISO(String newLanguageISO) {
+		this.newLanguageISO = newLanguageISO;
+	}
+
 	public LangPanel(String id) {
 		super(id);
-		FieldLanguageDaoImpl langDao = Application.getBean(FieldLanguageDaoImpl.class);
+		FieldLanguageDaoImpl langDao = Application
+				.getBean(FieldLanguageDaoImpl.class);
 		language = langDao.getFieldLanguageById(1L);
-		
-		final AdminBaseForm<Fieldlanguagesvalues> form = new AdminBaseForm<Fieldlanguagesvalues>("form", new CompoundPropertyModel<Fieldlanguagesvalues>(new Fieldlanguagesvalues())) {
-			private static final long serialVersionUID = -1309878909524329047L;
 
-			@Override
-			protected void onNewSubmit(AjaxRequestTarget target, Form<?> f) {
-				this.setModelObject(new Fieldlanguagesvalues());
-				target.add(this);
-			}
-			
-			@Override
-			protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
-				Fieldlanguagesvalues flv = getModelObject();
-				if (flv.getFieldlanguagesvalues_id() != null) {
-					flv = Application.getBean(FieldLanguagesValuesDAO.class).get(getModelObject().getFieldlanguagesvalues_id());
-				} else {
-					flv = new Fieldlanguagesvalues();
-				}
-				this.setModelObject(flv);
-				target.add(this);
-			}
-			
-			@Override
-			protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
-				Application.getBean(FieldLanguagesValuesDAO.class).update(getModelObject(), WebSession.getUserId());
-				//FIXME reload
-			}
-			
-			//FIXME confirmation
-			@Override
-			protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
-				Application.getBean(FieldLanguagesValuesDAO.class).delete(getModelObject(), WebSession.getUserId());
-				//FIXME reload
-			}
-		};
-		form.add(new Label("fieldvalues.fieldvalues_id"));
-		form.add(new TextField<String>("fieldvalues.name"));
-		form.add(new TextArea<String>("value"));
-        add(form);
+		final LabelsForm form = new LabelsForm("form",
+				new Fieldlanguagesvalues());
+		add(form);
 
-		final DataView<Fieldlanguagesvalues> dataView = new DataView<Fieldlanguagesvalues>("langList"
-				, new OmDataProvider<Fieldlanguagesvalues>(FieldLanguagesValuesDAO.class){
-			private static final long serialVersionUID = -6822789354860988626L;
+		final DataView<Fieldlanguagesvalues> dataView = new DataView<Fieldlanguagesvalues>(
+				"langList", new OmDataProvider<Fieldlanguagesvalues>(
+						FieldLanguagesValuesDAO.class) {
+					private static final long serialVersionUID = -6822789354860988626L;
 
-			public Iterator<? extends Fieldlanguagesvalues> iterator(long first, long count) {
-				return Application.getBean(FieldLanguagesValuesDAO.class).get(language.getLanguage_id(), (int)first, (int)count).iterator();
-			}
-		}) {
+					public Iterator<? extends Fieldlanguagesvalues> iterator(
+							long first, long count) {
+						return Application
+								.getBean(FieldLanguagesValuesDAO.class)
+								.get(language.getLanguage_id(), (int) first,
+										(int) count).iterator();
+					}
+				}) {
 			private static final long serialVersionUID = 8715559628755439596L;
 
 			@Override
@@ -127,11 +114,13 @@ public class LangPanel extends AdminPanel {
 						target.add(form);
 					}
 				});
-				item.add(AttributeModifier.append("class", "clickable " + ((item.getIndex() % 2 == 1) ? "even" : "odd")));
+				item.add(AttributeModifier.append("class", "clickable "
+						+ ((item.getIndex() % 2 == 1) ? "even" : "odd")));
 			}
 		};
-		
-		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
+
+		final WebMarkupContainer listContainer = new WebMarkupContainer(
+				"listContainer");
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		add(new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = 5097048616003411362L;
@@ -142,79 +131,8 @@ public class LangPanel extends AdminPanel {
 				target.add(listContainer);
 			}
 		});
-		
-		final Form<Void> f = new Form<Void>("langForm");
-		final DropDownChoice<FieldLanguage> languages = new DropDownChoice<FieldLanguage>("language"
-			, new PropertyModel<FieldLanguage>(this, "language")
-			, langDao.getLanguages()
-			, new ChoiceRenderer<FieldLanguage>("name", "language_id"));
-		
-		languages.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-			private static final long serialVersionUID = -2055912815073387536L;
+		add(new LangForm("langForm", listContainer, language, this));
 
-				@Override
-				protected void onUpdate(AjaxRequestTarget target) {
-					target.add(listContainer);
-				}
-			});
-		f.add(languages.setOutputMarkupId(true));
-		add(f.setOutputMarkupId(true));
-
-		add(new WebMarkupContainer("deleteLngBtn").add(new AjaxEventBehavior("onclick"){
-			private static final long serialVersionUID = -1650946343073068686L;
-
-			@Override
-			protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
-				super.updateAjaxAttributes(attributes);
-				attributes.getAjaxCallListeners().add(new ConfirmCallListener(833L));
-			}
-			
-			@Override
-			protected void onEvent(AjaxRequestTarget target) {
-				language.setDeleted(true);
-				FieldLanguageDaoImpl langDao = Application.getBean(FieldLanguageDaoImpl.class);
-				try {
-					langDao.updateLanguage(language);
-				} catch (Exception e) {
-					// TODO add feedback message
-					e.printStackTrace();
-				}
-				languages.setChoices(langDao.getLanguages());
-				target.add(languages);
-				//FIXME need to forse update list container
-				target.add(listContainer);
-			}
-		})); 
-		Form<Void> addLangForm = new Form<Void>("addLangForm");
-		addLangForm.add(new AjaxButton("add", Model.of(WebSession.getString(366L)), addLangForm) {
-			private static final long serialVersionUID = -552597041751688740L;
-
-			@Override
-			public void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				FieldLanguageDaoImpl langDao = Application.getBean(FieldLanguageDaoImpl.class);
-				
-				FieldLanguage fl = new FieldLanguage();
-				fl.setLanguage_id(langDao.getNextAvailableId());
-				fl.setStarttime(new Date());
-				fl.setDeleted(false);
-				fl.setName(newLanguageName);
-				fl.setRtl(false); //FIXME
-				fl.setCode(newLanguageISO);
-				
-				try {
-					langDao.updateLanguage(fl);
-				} catch (Exception e) {
-					// TODO add feedback message
-					e.printStackTrace();
-				}
-				languages.setChoices(langDao.getLanguages());
-				target.add(languages);
-				target.appendJavaScript("$('#addLanguage').dialog('close');");
-			}
-		});
-		add(addLangForm
-			.add(new RequiredTextField<String>("name", new PropertyModel<String>(this, "newLanguageName")))
-			.add(new RequiredTextField<String>("iso", new PropertyModel<String>(this, "newLanguageISO")))
-		);
 	}
+
 }

@@ -81,7 +81,7 @@ public class UserForm extends AdminBaseForm<Users> {
 				return saluation.getLabel().getValue();
 			}
 		}
-		throw new RuntimeException("Could not find saluation for id " + id);
+		throw new RuntimeException("Could not find Salutations for id " + id);
 	}
 
 	private List<Long> getFieldLanguageIds() {
@@ -99,7 +99,7 @@ public class UserForm extends AdminBaseForm<Users> {
 				return language.getName();
 			}
 		}
-		throw new RuntimeException("Could not find saluation for id " + id);
+		throw new RuntimeException("Could not find FieldLanguage for id " + id);
 	}
 
 	public UserForm(String id, final Users user) {
