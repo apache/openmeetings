@@ -39,9 +39,10 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getConfigurationByKey", query = "SELECT c FROM Configuration c WHERE c.conf_key = :conf_key and c.deleted = false")
+	@NamedQuery(name = "getConfigurationByKey", query = "SELECT c FROM Configuration c WHERE c.conf_key LIKE :conf_key and c.deleted = false")
 	, @NamedQuery(name = "getConfigurationsByKeys", query = "SELECT c FROM Configuration c WHERE c.conf_key IN :conf_keys and c.deleted = false")
 	, @NamedQuery(name="getNondeletedConfiguration", query="SELECT u FROM Configuration u WHERE u.deleted = false")
+	, @NamedQuery(name = "getConfigurationById", query = "SELECT c FROM Configuration c WHERE c.configuration_id = :configuration_id and c.deleted = false")
 })
 @Table(name = "configuration")
 @Root(name="config")

@@ -72,7 +72,7 @@ public class ConfigsPanel extends AdminPanel {
 		});
 		
 		Configuration configuration = new Configuration();
-		form = new ConfigForm("form", configuration);
+		form = new ConfigForm("form", listContainer, configuration);
         add(form);
 		
 	}

@@ -309,7 +309,7 @@ public class Configurationmanagement implements OmDAO<Configuration>{
 
 	public Long updateConfig(Configuration conf) {
 		try {
-			if (conf.getConfiguration_id() == null) {
+			if (conf.getConfiguration_id() == null || conf.getConfiguration_id() == 0) {
 				em.persist(conf);
 			} else {
 				if (!em.contains(conf)) {
@@ -375,8 +375,9 @@ public class Configurationmanagement implements OmDAO<Configuration>{
 	}
 
 	public Configuration get(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return em.createNamedQuery("getConfigurationById", Configuration.class)
+					.setParameter("configuration_id", id)
+					.getSingleResult();
 	}
 
 	public List<Configuration> get(int start, int count) {
@@ -388,12 +389,22 @@ public class Configurationmanagement implements OmDAO<Configuration>{
 	}
 
 	public void update(Configuration entity, long userId) {
-		// TODO Auto-generated method stub
-		
+		if (entity.getConfiguration_id() == null || entity.getConfiguration_id() == 0) {
+			entity.setStarttime(new Date());
+			entity.setDeleted(false);
+			this.updateConfig(entity);
+		} else {
+			entity.setUser_id(userId);
+			entity.setDeleted(false);
+			entity.setUpdatetime(new Date());
+			this.updateConfig(entity);
+		}
 	}
 
 	public void delete(Configuration entity, long userId) {
-		// TODO Auto-generated method stub
-		
+		entity.setUser_id(userId);
+		entity.setDeleted(true);
+		entity.setUpdatetime(new Date());
+		this.updateConfig(entity);
 	}
 }
