@@ -18,42 +18,29 @@
  */
 package org.apache.openmeetings.web.components.admin.groups;
 
-import static org.apache.openmeetings.web.components.admin.groups.GroupUsersPanel.getUser;
-
 import org.apache.openmeetings.data.user.dao.OrganisationDAO;
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
-import org.apache.openmeetings.persistence.beans.user.Users;
-import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.OmDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.markup.html.form.ListMultipleChoice;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 
 public class GroupsPanel extends AdminPanel {
 	private static final long serialVersionUID = -5170400556006464830L;
-	private String userSearchText;
 	
 	public GroupsPanel(String id) {
 		super(id);
 		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
+        final WebMarkupContainer addUsersBtn = new WebMarkupContainer("addUsersBtn");
 		final GroupForm form = new GroupForm("form", listContainer, new Organisation());
-        add(form);
-		
+        add(form.add(addUsersBtn.setEnabled(false).setOutputMarkupId(true)));
+
 		DataView<Organisation> dataView = new DataView<Organisation>("groupList", new OmDataProvider<Organisation>(OrganisationDAO.class)) {
 			private static final long serialVersionUID = 8715559628755439596L;
 
@@ -67,6 +54,7 @@ public class GroupsPanel extends AdminPanel {
 
 					protected void onEvent(AjaxRequestTarget target) {
 						form.setModelObject(organisation);
+						addUsersBtn.setEnabled(true); //FIXME need to be handled differently
 						form.updateView(target);
 						target.add(form);
 					}
@@ -85,37 +73,6 @@ public class GroupsPanel extends AdminPanel {
 			}
 		});
 		
-		add(new Form<Void>("addUsers"){
-			private static final long serialVersionUID = 3726465576292784604L;
-
-			{
-				add(new TextField<String>("searchText", new PropertyModel<String>(GroupsPanel.this, "userSearchText")));
-				add(new AjaxButton("search", Model.of(WebSession.getString(182L))) {
-					private static final long serialVersionUID = -4752180617634945030L;
-
-					protected void onAfterSubmit(AjaxRequestTarget target, org.apache.wicket.markup.html.form.Form<?> form) {
-						
-					}
-				});
-				add(new ListMultipleChoice<Users>("users", Application.getBean(UsersDaoImpl.class).getAllUsers(), new IChoiceRenderer<Users>() {
-					private static final long serialVersionUID = 1L;
-
-					public Object getDisplayValue(Users object) {
-						return getUser(object);
-					}
-
-					public String getIdValue(Users object, int index) {
-						return "" + object.getUser_id();
-					}
-				}));
-				add(new AjaxButton("add", Model.of(WebSession.getString(175L))) {
-					private static final long serialVersionUID = 5553555064487161840L;
-
-					protected void onAfterSubmit(AjaxRequestTarget target, org.apache.wicket.markup.html.form.Form<?> form) {
-						
-					}
-				});
-			}
-		});
+		add(new AddUsersForm("addUsers"));
 	}
 }

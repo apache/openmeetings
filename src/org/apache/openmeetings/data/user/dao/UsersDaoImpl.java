@@ -58,6 +58,38 @@ public class UsersDaoImpl implements OmDAO<Users> {
 		return getNondeletedUsers(first, count);
 	}
 	
+	//FIXME need to be generalized with other copy/pasted methods
+	public List<Users> get(String search) {
+		String[] searchItems = search.split(" ");
+		StringBuilder hql = new StringBuilder("SELECT u FROM Users u WHERE u.deleted = false ");
+
+		hql.append("AND ( ");
+		for (int i = 0; i < searchItems.length; ++i) {
+			if (searchItems[i].isEmpty()) {
+				continue;
+			}
+			if (i != 0) {
+				hql.append(" OR ");
+			}
+			StringBuilder placeholder = new StringBuilder();
+			placeholder.append("%").append(StringUtils.lowerCase(searchItems[i])).append("%");
+
+			hql.append("(lower(u.lastname) LIKE '")
+				.append(placeholder)
+				.append("' OR lower(u.firstname) LIKE '")
+				.append(placeholder)
+				.append("' OR lower(u.login) LIKE '")
+				.append(placeholder)
+				.append("' OR lower(u.adresses.email) LIKE '")
+				.append(placeholder)
+				.append("' ) ");
+		}
+
+		hql.append(" ) ");
+		TypedQuery<Users> q = em.createQuery(hql.toString(), Users.class);
+		return q.getResultList();
+	}
+	
 	public long count() {
 		return selectMaxFromUsers();
 	}

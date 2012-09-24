@@ -27,6 +27,7 @@
 					closeOnEscape: true
 					, autoOpen: false
 					, resizable: false
+					, width: 400
 				});
 			};
 		</script>
@@ -67,7 +68,7 @@
 							</tr>
 							<tr>
 								<td style="font-weight: bold;"><wicket:ommessage key="273" /></td>
-								<td style="text-align: right;"><div class="formNewButton" onclick="$('#addUsers :text').val(''); $('#addUsers').dialog('open');"><input/></div></td>
+								<td style="text-align: right;"><div wicket:id="addUsersBtn" class="formNewButton" onclick="$('#addUsers :text').val(''); $('#addUsers').dialog('open');"><input/></div></td>
 							</tr>
 							<tr>
 								<td><wicket:ommessage key="177" /></td>
@@ -92,7 +93,7 @@
 					</tr>
 					<tr>
 						<td><wicket:ommessage key="183" /></td>
-						<td><select wicket:id="users"></select></td>
+						<td><select wicket:id="users" style="width: 200px;"></select></td>
 					</tr>
 					<tr>
 						<td style="text-align: right"><input type="button" wicket:id="add" /></td>
