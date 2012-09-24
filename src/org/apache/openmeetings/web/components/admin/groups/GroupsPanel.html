@@ -30,6 +30,11 @@
 					, width: 400
 				});
 			};
+			
+			function addUsers() {
+				$('#addUsers :text').val('');
+				$('#addUsers').dialog('open');
+			};
 		</script>
 	</wicket:head>
 	<wicket:panel>
@@ -68,7 +73,7 @@
 							</tr>
 							<tr>
 								<td style="font-weight: bold;"><wicket:ommessage key="273" /></td>
-								<td style="text-align: right;"><div wicket:id="addUsersBtn" class="formNewButton" onclick="$('#addUsers :text').val(''); $('#addUsers').dialog('open');"><input/></div></td>
+								<td style="text-align: right;"><div wicket:id="addUsersBtn" class="formNewButton disabled"><input/></div></td>
 							</tr>
 							<tr>
 								<td><wicket:ommessage key="177" /></td>

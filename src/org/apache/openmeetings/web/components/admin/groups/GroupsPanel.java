@@ -39,7 +39,7 @@ public class GroupsPanel extends AdminPanel {
 		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
         final WebMarkupContainer addUsersBtn = new WebMarkupContainer("addUsersBtn");
 		final GroupForm form = new GroupForm("form", listContainer, new Organisation());
-        add(form.add(addUsersBtn.setEnabled(false).setOutputMarkupId(true)));
+        add(form.add(addUsersBtn.setOutputMarkupId(true)));
 
 		DataView<Organisation> dataView = new DataView<Organisation>("groupList", new OmDataProvider<Organisation>(OrganisationDAO.class)) {
 			private static final long serialVersionUID = 8715559628755439596L;
@@ -54,7 +54,8 @@ public class GroupsPanel extends AdminPanel {
 
 					protected void onEvent(AjaxRequestTarget target) {
 						form.setModelObject(organisation);
-						addUsersBtn.setEnabled(true); //FIXME need to be handled differently
+						addUsersBtn.add(AttributeModifier.replace("class", "formNewButton")
+							, AttributeModifier.replace("onclick", "addUsers();")); //FIXME need to be handle 'New Record'
 						form.updateView(target);
 						target.add(form);
 					}

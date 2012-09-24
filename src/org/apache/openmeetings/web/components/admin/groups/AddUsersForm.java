@@ -40,15 +40,17 @@ import org.apache.wicket.model.PropertyModel;
 public class AddUsersForm extends Form<Void> {
 	private static final long serialVersionUID = -2458265250684437277L;
 	private String userSearchText;
+	private List<Users> usersInList = new ArrayList<Users>();
 	private List<Users> usersToAdd = new ArrayList<Users>();
 	
 	public AddUsersForm(String id) {
 		super(id);
 
-		IModel<List<Users>> usersModel = new PropertyModel<List<Users>>(AddUsersForm.this, "usersToAdd");
+		IModel<List<Users>> listUsersModel = new PropertyModel<List<Users>>(AddUsersForm.this, "usersInList");
+		IModel<List<Users>> selectedUsersModel = new PropertyModel<List<Users>>(AddUsersForm.this, "usersToAdd");
 		final ListMultipleChoice<Users> users = new ListMultipleChoice<Users>("users"
-				, usersModel
-				, usersModel
+				, selectedUsersModel
+				, listUsersModel
 				, new IChoiceRenderer<Users>() {
 			private static final long serialVersionUID = 1L;
 
@@ -67,7 +69,8 @@ public class AddUsersForm extends Form<Void> {
 
 			protected void onAfterSubmit(AjaxRequestTarget target, org.apache.wicket.markup.html.form.Form<?> form) {
 				usersToAdd.clear();
-				usersToAdd.addAll(Application.getBean(UsersDaoImpl.class).get(userSearchText));
+				usersInList.clear();
+				usersInList.addAll(Application.getBean(UsersDaoImpl.class).get(userSearchText));
 				target.add(users);
 			}
 		});

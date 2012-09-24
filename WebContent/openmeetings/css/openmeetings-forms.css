@@ -44,6 +44,16 @@ div.formNewButton input {
 	margin-top: 2px;
 }
 
+div.formNewButton.disabled input {
+	background: url(images/forms/plus_icon_disabled.png) no-repeat;
+	float: left;
+	width: 18px;
+	height: 18px;
+	border: none;
+	margin-left: 2px;
+	margin-top: 2px;
+}
+
 div.formRefreshButton input {
 	background: url(images/forms/arrow_refresh_small.png) no-repeat;
 	float: left;
