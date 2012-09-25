@@ -153,18 +153,23 @@ public class Organisation_Users implements Serializable, OmEntity {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		Organisation_Users other = (Organisation_Users) obj;
 		if (organisation_users_id == null) {
-			if (other.organisation_users_id != null)
+			if (other.organisation_users_id != null) {
 				return false;
-		} else if (!organisation_users_id.equals(other.organisation_users_id))
+			}
+		} else if (!organisation_users_id.equals(other.organisation_users_id)) {
 			return false;
+		}
 		return true;
 	}
 }

@@ -38,7 +38,31 @@ public class GroupsPanel extends AdminPanel {
 		super(id);
 		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
         final WebMarkupContainer addUsersBtn = new WebMarkupContainer("addUsersBtn");
-		final GroupForm form = new GroupForm("form", listContainer, new Organisation());
+        final AddUsersForm addUsersForm = new AddUsersForm("addUsers");
+		add(addUsersForm);
+		
+		final GroupForm form = new GroupForm("form", listContainer, new Organisation()){
+			private static final long serialVersionUID = -3042797340375988889L;
+
+			@Override
+			protected void onModelChanged() {
+				super.onModelChanged();
+				if (getModelObject().getOrganisation_id() == null) {
+					addUsersBtn.add(AttributeModifier.replace("class", "formNewButton")
+						, AttributeModifier.replace("onclick", "addUsers();"));
+				} else {
+					addUsersBtn.add(AttributeModifier.replace("class", "formNewButton disabled")
+						, AttributeModifier.replace("onclick", ""));
+				}
+				addUsersForm.setOrganisation(getModelObject());
+			}
+			
+			@Override
+			void updateView(AjaxRequestTarget target) {
+				super.updateView(target);
+				target.add(addUsersBtn);
+			}
+		};
         add(form.add(addUsersBtn.setOutputMarkupId(true)));
 
 		DataView<Organisation> dataView = new DataView<Organisation>("groupList", new OmDataProvider<Organisation>(OrganisationDAO.class)) {
@@ -54,8 +78,6 @@ public class GroupsPanel extends AdminPanel {
 
 					protected void onEvent(AjaxRequestTarget target) {
 						form.setModelObject(organisation);
-						addUsersBtn.add(AttributeModifier.replace("class", "formNewButton")
-							, AttributeModifier.replace("onclick", "addUsers();")); //FIXME need to be handle 'New Record'
 						form.updateView(target);
 						target.add(form);
 					}
@@ -73,7 +95,5 @@ public class GroupsPanel extends AdminPanel {
 				target.add(listContainer);
 			}
 		});
-		
-		add(new AddUsersForm("addUsers"));
 	}
 }

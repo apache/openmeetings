@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
+import org.apache.openmeetings.persistence.beans.domain.Organisation;
+import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
@@ -39,13 +41,14 @@ import org.apache.wicket.model.PropertyModel;
 
 public class AddUsersForm extends Form<Void> {
 	private static final long serialVersionUID = -2458265250684437277L;
+	private Organisation organisation;
 	private String userSearchText;
 	private List<Users> usersInList = new ArrayList<Users>();
 	private List<Users> usersToAdd = new ArrayList<Users>();
 	
 	public AddUsersForm(String id) {
 		super(id);
-
+		
 		IModel<List<Users>> listUsersModel = new PropertyModel<List<Users>>(AddUsersForm.this, "usersInList");
 		IModel<List<Users>> selectedUsersModel = new PropertyModel<List<Users>>(AddUsersForm.this, "usersToAdd");
 		final ListMultipleChoice<Users> users = new ListMultipleChoice<Users>("users"
@@ -80,10 +83,17 @@ public class AddUsersForm extends Form<Void> {
 
 			protected void onAfterSubmit(AjaxRequestTarget target, org.apache.wicket.markup.html.form.Form<?> form) {
 				for (Users u : usersToAdd) {
-					//add them
+					/*
+					for (Organisation_Users ou : u.getOrganisation_users()) {
+						ou.
+					}
+					*/
 				}
 			}
 		});
 	}
 
+	public void setOrganisation(Organisation org) {
+		organisation = org;
+	}
 }

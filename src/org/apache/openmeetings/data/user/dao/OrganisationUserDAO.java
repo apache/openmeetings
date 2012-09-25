@@ -81,4 +81,7 @@ public class OrganisationUserDAO implements OmDAO<Organisation_Users> {
 		}
 	}
 
+	public void add() {
+		
+	}
 }
