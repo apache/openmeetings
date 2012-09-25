@@ -24,13 +24,15 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.admin.AdminBaseForm;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.util.time.Duration;
 
 /**
  * Handle {@link Configuration} items as list and form
@@ -47,12 +49,17 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 		super(id, new CompoundPropertyModel<Configuration>(configuration));
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
-		add(new TextField<String>("conf_key"));
-		add(new TextField<String>("conf_value"));
-		add(DateLabel.forDatePattern("updatetime", "dd.MM.yyyy hh:mm"));
+		add(new RequiredTextField<String>("conf_key"));
+		add(new RequiredTextField<String>("conf_value"));
+		add(DateLabel.forDatePattern("updatetime", "dd.MM.yyyy HH:mm:ss"));
 		add(new Label("users.login"));
 		add(new TextArea<String>("comment"));
 		
+		// attach an ajax validation behavior to all form component's keydown
+		// event and throttle it down to once per second
+		AjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown",
+				Duration.ONE_SECOND);
+
 	}
 	
 	void updateView(AjaxRequestTarget target) {

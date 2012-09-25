@@ -29,12 +29,14 @@ import org.apache.openmeetings.web.components.admin.AdminBaseForm;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.util.time.Duration;
 
 /**
  * Modify the language selection, add/delete {@link FieldLanguage}
@@ -100,6 +102,11 @@ public class LangForm extends AdminBaseForm<FieldLanguage> {
 		addSaveAndDeleteButtons();
 
 		// addNewLanguagePopUp(langPanel);
+
+		// attach an ajax validation behavior to all form component's keydown
+		// event and throttle it down to once per second
+		AjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown",
+				Duration.ONE_SECOND);
 	}
 
 	/**

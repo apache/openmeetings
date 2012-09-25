@@ -81,6 +81,8 @@ public class AdminBaseForm<T> extends Form<T> {
 			
 		};
 		add(basePanel);
+
+
 	}
 
 	public void hideNewRecord() {

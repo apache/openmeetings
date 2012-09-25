@@ -20,7 +20,10 @@ package org.apache.openmeetings.test.config;
 
 import static junit.framework.Assert.assertEquals;
 
+import java.util.List;
+
 import org.apache.openmeetings.data.basic.Configurationmanagement;
+import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.apache.openmeetings.test.calendar.TestAppointmentAddAppointment;
 import org.junit.Test;
@@ -41,11 +44,35 @@ public class TestConfig extends AbstractOpenmeetingsSpringTest {
 	public void getConfigKey() {
 		
 		try {
-			String use_old_style_ffmpeg_map  = configurationmanagement.getConfValue("use.old.style.ffmpeg.map.option", String.class, "0");
+
+			System.err.println("THIS");
+
+			Configuration smtp_server = configurationmanagement.getConfKey(3L,
+					"smtp_server");
 			
-			log.debug("use_old_style_ffmpeg_map "+use_old_style_ffmpeg_map);
+			System.err.println("smtp_server " + smtp_server.getUser_id());
+			System.err.println("smtp_server " + smtp_server.getUsers());
 			
-			assertEquals(use_old_style_ffmpeg_map,"1");
+			assertEquals(null, smtp_server.getUsers());
+
+		} catch (Exception err) {
+			log.error("[startConversion]", err);
+		}
+		
+	}
+
+	@Test
+	public void getConfigs() {
+		
+		try {
+			List<Configuration> list = configurationmanagement.get(0, 1);
+			
+			for (Configuration conf : list) {
+				System.err.println("conf.getUser_id() " + conf.getUser_id());
+				System.err.println("conf.getUsers() " + conf.getUsers());
+			}
+
+			assertEquals(list.size(), 1);
 
 		} catch (Exception err) {
 			log.error("[startConversion]", err);

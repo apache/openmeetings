@@ -302,8 +302,9 @@ public class UserForm extends AdminBaseForm<Users> {
 		add(new TextArea<String>("userSearchs"));
 		
 		// attach an ajax validation behavior to all form component's keydown
-        // event and throttle it down to once per second
-		AjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown", Duration.ONE_SECOND);
+		// event and throttle it down to once per second
+		AjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown",
+				Duration.ONE_SECOND);
 
 	}
 

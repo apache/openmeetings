@@ -20,7 +20,9 @@ package org.apache.openmeetings.web.components.admin.servers;
 
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.web.components.admin.AdminBaseForm;
+import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.util.time.Duration;
 
 public class ServerForm extends AdminBaseForm<Server> {
 
@@ -29,6 +31,11 @@ public class ServerForm extends AdminBaseForm<Server> {
 	public ServerForm(String id, final Server server) {
 		super(id, new CompoundPropertyModel<Server>(server));
 		setOutputMarkupId(true);
+
 		
+		// attach an ajax validation behavior to all form component's keydown
+		// event and throttle it down to once per second
+		AjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown",
+				Duration.ONE_SECOND);
 	}
 }

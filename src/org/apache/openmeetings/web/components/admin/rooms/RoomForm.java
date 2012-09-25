@@ -20,7 +20,9 @@ package org.apache.openmeetings.web.components.admin.rooms;
 
 import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.apache.openmeetings.web.components.admin.AdminBaseForm;
+import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.util.time.Duration;
 
 public class RoomForm extends AdminBaseForm<Rooms> {
 
@@ -30,5 +32,9 @@ public class RoomForm extends AdminBaseForm<Rooms> {
 		super(id, new CompoundPropertyModel<Rooms>(room));
 		setOutputMarkupId(true);
 		
+		// attach an ajax validation behavior to all form component's keydown
+		// event and throttle it down to once per second
+		AjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown",
+				Duration.ONE_SECOND);
 	}
 }

@@ -24,10 +24,12 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.admin.AdminBaseForm;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.util.time.Duration;
 
 public class GroupForm extends AdminBaseForm<Organisation> {
 	private static final long serialVersionUID = -1720731686053912700L;
@@ -42,6 +44,11 @@ public class GroupForm extends AdminBaseForm<Organisation> {
 		add(new RequiredTextField<String>("name"));
 		usersPanel = new GroupUsersPanel("users", getOrgId());
 		add(usersPanel);
+
+		// attach an ajax validation behavior to all form component's keydown
+		// event and throttle it down to once per second
+		AjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown",
+				Duration.ONE_SECOND);
 	}
 	
 	void updateView(AjaxRequestTarget target) {

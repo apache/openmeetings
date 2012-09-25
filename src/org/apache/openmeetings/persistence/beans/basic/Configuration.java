@@ -23,14 +23,16 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.apache.openmeetings.persistence.beans.OmEntity;
 import org.apache.openmeetings.persistence.beans.user.Users;
@@ -39,10 +41,11 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getConfigurationByKey", query = "SELECT c FROM Configuration c WHERE c.conf_key LIKE :conf_key and c.deleted = false")
-	, @NamedQuery(name = "getConfigurationsByKeys", query = "SELECT c FROM Configuration c WHERE c.conf_key IN :conf_keys and c.deleted = false")
-	, @NamedQuery(name="getNondeletedConfiguration", query="SELECT u FROM Configuration u WHERE u.deleted = false")
-	, @NamedQuery(name = "getConfigurationById", query = "SELECT c FROM Configuration c WHERE c.configuration_id = :configuration_id and c.deleted = false")
+		@NamedQuery(name = "getConfigurationByKey", query = "SELECT c FROM Configuration c WHERE c.conf_key LIKE :conf_key and c.deleted = false"),
+		@NamedQuery(name = "getConfigurationsByKeys", query = "SELECT c FROM Configuration c WHERE c.conf_key IN :conf_keys and c.deleted = false"),
+		@NamedQuery(name = "getNondeletedConfiguration", query = "SELECT c FROM Configuration c  "
+				+ "LEFT JOIN c.users users WHERE c.deleted = false"),
+		@NamedQuery(name = "getConfigurationById", query = "SELECT c FROM Configuration c WHERE c.configuration_id = :configuration_id and c.deleted = false")
 })
 @Table(name = "configuration")
 @Root(name="config")
@@ -83,7 +86,9 @@ public class Configuration implements Serializable, OmEntity {
 	@Element(data=true, required=false)
 	private Long user_id;
 
-	@Transient
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	@Element(name = "user_id", data = true, required = false)
 	private Users users;
 	
     public String getComment() {
