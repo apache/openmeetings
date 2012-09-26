@@ -37,19 +37,15 @@ import org.apache.wicket.model.CompoundPropertyModel;
  * 
  */
 public class LabelsForm extends AdminBaseForm<Fieldlanguagesvalues> {
+	private static final long serialVersionUID = -1309878909524329047L;
 
 	public LabelsForm(String id, Fieldlanguagesvalues fieldlanguagesvalues) {
-		super(id, new CompoundPropertyModel<Fieldlanguagesvalues>(
-				fieldlanguagesvalues));
-		setOutputMarkupId(true);
+		super(id, new CompoundPropertyModel<Fieldlanguagesvalues>(fieldlanguagesvalues));
 
 		add(new Label("fieldvalues.fieldvalues_id"));
 		add(new TextField<String>("fieldvalues.name"));
 		add(new TextArea<String>("value"));
-
 	}
-
-	private static final long serialVersionUID = -1309878909524329047L;
 
 	@Override
 	protected void onNewSubmit(AjaxRequestTarget target, Form<?> f) {

@@ -46,33 +46,7 @@ import org.apache.wicket.markup.repeater.data.DataView;
 public class LangPanel extends AdminPanel {
 	private static final long serialVersionUID = 5904180813198016592L;
 
-	private FieldLanguage language;
-	private String newLanguageName;
-	private String newLanguageISO;
-
-	public FieldLanguage getLanguage() {
-		return language;
-	}
-
-	public void setLanguage(FieldLanguage language) {
-		this.language = language;
-	}
-
-	public String getNewLanguageName() {
-		return newLanguageName;
-	}
-
-	public void setNewLanguageName(String newLanguageName) {
-		this.newLanguageName = newLanguageName;
-	}
-
-	public String getNewLanguageISO() {
-		return newLanguageISO;
-	}
-
-	public void setNewLanguageISO(String newLanguageISO) {
-		this.newLanguageISO = newLanguageISO;
-	}
+	FieldLanguage language;
 
 	public LangPanel(String id) {
 		super(id);
@@ -131,8 +105,8 @@ public class LangPanel extends AdminPanel {
 				target.add(listContainer);
 			}
 		});
-		add(new LangForm("langForm", listContainer, language, this));
-
+		add(new LangForm("langForm", listContainer, this));
+		add(new AddLanguageForm("addLangForm"));
 	}
 
 }

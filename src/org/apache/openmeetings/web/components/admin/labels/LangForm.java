@@ -18,24 +18,20 @@
  */
 package org.apache.openmeetings.web.components.admin.labels;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.openmeetings.data.basic.FieldLanguageDaoImpl;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.components.ConfirmCallListener;
-import org.apache.openmeetings.web.components.admin.AdminBaseForm;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.time.Duration;
 
 /**
@@ -44,42 +40,12 @@ import org.apache.wicket.util.time.Duration;
  * @author swagner
  * 
  */
-public class LangForm extends AdminBaseForm<FieldLanguage> {
+public class LangForm extends Form<Void> {
 
 	private static final long serialVersionUID = 2837702941211636609L;
 	private final WebMarkupContainer listContainer;
 	private final LangPanel langPanel;
-	private DropDownChoice<Long> languages;
-
-	private List<FieldLanguage> fieldLanguages;
-
-	/**
-	 * Get list of language ids for drow down
-	 * 
-	 * @return
-	 */
-	private List<Long> getFieldLanguageIds() {
-		List<Long> idsList = new ArrayList<Long>();
-		for (FieldLanguage fieldLanguage : fieldLanguages) {
-			idsList.add(fieldLanguage.getLanguage_id());
-		}
-		return idsList;
-	}
-
-	/**
-	 * get name for id for dropdown renderer
-	 * 
-	 * @param id
-	 * @return
-	 */
-	private String getFieldLanguageLabelById(Long id) {
-		for (FieldLanguage language : fieldLanguages) {
-			if (id.equals(language.getLanguage_id())) {
-				return language.getName();
-			}
-		}
-		throw new RuntimeException("Could not find FieldLanguage for id " + id);
-	}
+	private DropDownChoice<FieldLanguage> languages;
 
 	/**
 	 * Render Main
@@ -89,50 +55,21 @@ public class LangForm extends AdminBaseForm<FieldLanguage> {
 	 * @param language
 	 * @param langPanel
 	 */
-	public LangForm(String id, final WebMarkupContainer listContainer,
-			FieldLanguage language, LangPanel langPanel) {
+	public LangForm(String id, final WebMarkupContainer listContainer, final LangPanel langPanel) {
 
-		super(id, new CompoundPropertyModel<FieldLanguage>(language));
+		super(id);
 		this.listContainer = listContainer;
 		this.langPanel = langPanel;
 		setOutputMarkupId(true);
 
-		addLanguageDropDown();
-
-		addSaveAndDeleteButtons();
-
-		// addNewLanguagePopUp(langPanel);
-
-		// attach an ajax validation behavior to all form component's keydown
-		// event and throttle it down to once per second
-		AjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown",
-				Duration.ONE_SECOND);
-	}
-
-	/**
-	 * Adds the drop down menu to choose more languages
-	 */
-	private void addLanguageDropDown() {
-
-		// prepare the list of languages
 		FieldLanguageDaoImpl langDao = Application
 				.getBean(FieldLanguageDaoImpl.class);
-		fieldLanguages = langDao.getLanguages();
-
-		languages = new DropDownChoice<Long>("language_id",
-				getFieldLanguageIds(), new IChoiceRenderer<Long>() {
-					private static final long serialVersionUID = 1L;
-
-					public Object getDisplayValue(Long id) {
-						return getFieldLanguageLabelById(id);
-					}
-
-					public String getIdValue(Long id, int index) {
-						return "" + id;
-					}
-
-				});
-
+		
+		languages = new DropDownChoice<FieldLanguage>("language"
+				, new PropertyModel<FieldLanguage>(langPanel, "language")
+				, langDao.getLanguages()
+				, new ChoiceRenderer<FieldLanguage>("name", "language_id"));
+				
 		languages.add(new AjaxFormComponentUpdatingBehavior("onchange") {
 			private static final long serialVersionUID = -2055912815073387536L;
 
@@ -141,83 +78,37 @@ public class LangForm extends AdminBaseForm<FieldLanguage> {
 				target.add(listContainer);
 			}
 		});
-
 		add(languages);
-	}
 
-	/**
-	 * adds the pop up to enter a new language
-	 * 
-	 * @param langPanel
-	 */
-	// private void addNewLanguagePopUp(LangPanel langPanel) {
-	// langPanel.add(addLangForm.add(
-	// new RequiredTextField<String>("name",
-	// new PropertyModel<String>(this, "newLanguageName")))
-	// .add(new RequiredTextField<String>("iso",
-	// new PropertyModel<String>(this, "newLanguageISO"))));
-	// }
-
-	/**
-	 * Add save and remove buttons and trigger add/delete in DAO
-	 */
-	private void addSaveAndDeleteButtons() {
-		
-		add(new AjaxButton("newLangBtn") {
-			private static final long serialVersionUID = 5570057276994987132L;
-		});
-
-		add(new AjaxButton("deleteLangBtn") {
+		add(new WebMarkupContainer("deleteLangBtn").add(new AjaxEventBehavior("onclick"){
 			private static final long serialVersionUID = -1650946343073068686L;
 
 			@Override
 			protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
 				super.updateAjaxAttributes(attributes);
-				attributes.getAjaxCallListeners().add(
-						new ConfirmCallListener(833L));
+				attributes.getAjaxCallListeners().add(new ConfirmCallListener(833L));
 			}
-
+			
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				FieldLanguageDaoImpl langDao = Application
-						.getBean(FieldLanguageDaoImpl.class);
-				langDao.delete(langPanel.getLanguage());
-				fieldLanguages = langDao.getLanguages();
-				languages.setChoices(getFieldLanguageIds());
+			protected void onEvent(AjaxRequestTarget target) {
+				langPanel.language.setDeleted(true);
+				FieldLanguageDaoImpl langDao = Application.getBean(FieldLanguageDaoImpl.class);
+				try {
+					langDao.updateLanguage(langPanel.language);
+				} catch (Exception e) {
+					// TODO add feedback message
+					e.printStackTrace();
+				}
+				languages.setChoices(langDao.getLanguages());
 				target.add(languages);
-				// FIXME need to force update list container
+				//FIXME need to forse update list container
 				target.add(listContainer);
 			}
-		});
+		})); 
 
-		// add(new AjaxButton("add", this) {
-		// private static final long serialVersionUID = -552597041751688740L;
-		//
-		// @Override
-		// public void onSubmit(AjaxRequestTarget target, Form<?> form) {
-		// FieldLanguageDaoImpl langDao = Application
-		// .getBean(FieldLanguageDaoImpl.class);
-		//
-		// FieldLanguage fl = new FieldLanguage();
-		// fl.setLanguage_id(langDao.getNextAvailableId());
-		// fl.setStarttime(new Date());
-		// fl.setDeleted(false);
-		// fl.setName(langPanel.getNewLanguageName());
-		// fl.setRtl(false); // FIXME
-		// fl.setCode(langPanel.getNewLanguageISO());
-		//
-		// try {
-		// langDao.updateLanguage(fl);
-		// } catch (Exception e) {
-		// // TODO add feedback message
-		// e.printStackTrace();
-		// }
-		// fieldLanguages = langDao.getLanguages();
-		// languages.setChoices(getFieldLanguageIds());
-		// target.add(languages);
-		// target.appendJavaScript("$('#addLanguage').dialog('close');");
-		// }
-		// });
+		// attach an ajax validation behavior to all form component's keydown
+		// event and throttle it down to once per second
+		AjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown",
+				Duration.ONE_SECOND);
 	}
-
 }

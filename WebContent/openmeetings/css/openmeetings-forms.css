@@ -47,6 +47,7 @@ div.formNewButton input {
 div.formNewButton.disabled input {
 	background: url(images/forms/plus_icon_disabled.png) no-repeat;
 	float: left;
+	cursor: default;
 	width: 18px;
 	height: 18px;
 	border: none;
