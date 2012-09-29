@@ -52,7 +52,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 		add(new RequiredTextField<String>("conf_key"));
 		add(new RequiredTextField<String>("conf_value"));
 		add(DateLabel.forDatePattern("updatetime", "dd.MM.yyyy HH:mm:ss"));
-		add(new Label("users.login"));
+		add(new Label("user.login"));
 		add(new TextArea<String>("comment"));
 		
 		// attach an ajax validation behavior to all form component's keydown

@@ -212,7 +212,6 @@ public class Organisationmanagement {
 	 * @param organisation_id
 	 * @param orgname
 	 * @param users_id
-	 * @param users
 	 * @return
 	 */
 	public Long updateOrganisation(Long user_level, long organisation_id,

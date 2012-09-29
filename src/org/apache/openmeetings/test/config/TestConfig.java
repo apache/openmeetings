@@ -51,9 +51,9 @@ public class TestConfig extends AbstractOpenmeetingsSpringTest {
 					"smtp_server");
 			
 			System.err.println("smtp_server " + smtp_server.getUser_id());
-			System.err.println("smtp_server " + smtp_server.getUsers());
+			System.err.println("smtp_server " + smtp_server.getUser());
 			
-			assertEquals(null, smtp_server.getUsers());
+			assertEquals(null, smtp_server.getUser());
 
 		} catch (Exception err) {
 			log.error("[startConversion]", err);
@@ -65,14 +65,18 @@ public class TestConfig extends AbstractOpenmeetingsSpringTest {
 	public void getConfigs() {
 		
 		try {
-			List<Configuration> list = configurationmanagement.get(0, 1);
+			List<Configuration> list = configurationmanagement.get(4, 6);
 			
 			for (Configuration conf : list) {
+				System.err.println("conf.getConf_key() " + conf.getConf_key());
 				System.err.println("conf.getUser_id() " + conf.getUser_id());
-				System.err.println("conf.getUsers() " + conf.getUsers());
+				if (conf.getUser() != null) {
+					System.err.println("conf.getUsers() "
+							+ conf.getUser().getLogin());
+				}
 			}
 
-			assertEquals(list.size(), 1);
+			assertEquals(list.size(), 6);
 
 		} catch (Exception err) {
 			log.error("[startConversion]", err);

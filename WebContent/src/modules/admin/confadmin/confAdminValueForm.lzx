@@ -71,7 +71,7 @@
 			this.conf_value.setAttribute('text',obj.conf_value);
 			this.updatetime.setAttribute('text',obj.updatetime);
             if(obj.users!=null){
-			    this.users_login.setAttribute('text',obj.users.login);
+			    this.users_login.setAttribute('text',obj.user.login);
             } else {
                 this.users_login.setAttribute('text','');
             }

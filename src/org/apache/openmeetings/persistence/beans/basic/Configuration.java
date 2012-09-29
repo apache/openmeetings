@@ -44,103 +44,109 @@ import org.simpleframework.xml.Root;
 		@NamedQuery(name = "getConfigurationByKey", query = "SELECT c FROM Configuration c WHERE c.conf_key LIKE :conf_key and c.deleted = false"),
 		@NamedQuery(name = "getConfigurationsByKeys", query = "SELECT c FROM Configuration c WHERE c.conf_key IN :conf_keys and c.deleted = false"),
 		@NamedQuery(name = "getNondeletedConfiguration", query = "SELECT c FROM Configuration c  "
-				+ "LEFT JOIN c.users users WHERE c.deleted = false"),
-		@NamedQuery(name = "getConfigurationById", query = "SELECT c FROM Configuration c WHERE c.configuration_id = :configuration_id and c.deleted = false")
-})
+				+ "LEFT JOIN FETCH c.user WHERE c.deleted = false"),
+		@NamedQuery(name = "getConfigurationById", query = "SELECT c FROM Configuration c WHERE c.configuration_id = :configuration_id and c.deleted = false") })
 @Table(name = "configuration")
-@Root(name="config")
+@Root(name = "config")
 public class Configuration implements Serializable, OmEntity {
 	private static final long serialVersionUID = -6129473946508963339L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
-	@Element(name="id", data=true)
+	@Column(name = "id")
+	@Element(name = "id", data = true)
 	private Long configuration_id;
-	
-	@Column(name="conf_key")
-	@Element(name="key", data=true)
+
+	@Column(name = "conf_key")
+	@Element(name = "key", data = true)
 	private String conf_key;
-	
-	@Column(name="conf_value")
-	@Element(name="value", data=true, required = false)
+
+	@Column(name = "conf_value")
+	@Element(name = "value", data = true, required = false)
 	private String conf_value;
-	
-	@Column(name="starttime")
-	@Element(name="created", data=true, required=false)
+
+	@Column(name = "starttime")
+	@Element(name = "created", data = true, required = false)
 	private Date starttime;
-	
-	@Column(name="updatetime")
-	@Element(name="updated", data=true, required=false)
+
+	@Column(name = "updatetime")
+	@Element(name = "updated", data = true, required = false)
 	private Date updatetime;
-	
+
 	@Lob
-	@Column(name="comment_field", length=2048)
-	@Element(data=true, required = false)
+	@Column(name = "comment_field", length = 2048)
+	@Element(data = true, required = false)
 	private String comment;
-	
-	@Column(name="deleted")
-	@Element(data=true)
+
+	@Column(name = "deleted")
+	@Element(data = true)
 	private boolean deleted;
-	
-	@Column(name="user_id")
-	@Element(data=true, required=false)
+
+	@Column(name = "user_id")
+	@Element(data = true, required = false)
 	private Long user_id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	@Element(name = "user_id", data = true, required = false)
-	private Users users;
-	
-    public String getComment() {
-        return comment;
-    }
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-    
-    public String getConf_key() {
-        return conf_key;
-    }
-    public void setConf_key(String conf_key) {
-        this.conf_key = conf_key;
-    }
-    
-    public String getConf_value() {
-        return conf_value;
-    }
-    public void setConf_value(String conf_value) {
-        this.conf_value = conf_value;
-    }
-    
-    public Long getConfiguration_id() {
-        return configuration_id;
-    }
-    public void setConfiguration_id(Long configuration_id) {
-        this.configuration_id = configuration_id;
-    }
-    
+	private Users user;
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	public String getConf_key() {
+		return conf_key;
+	}
+
+	public void setConf_key(String conf_key) {
+		this.conf_key = conf_key;
+	}
+
+	public String getConf_value() {
+		return conf_value;
+	}
+
+	public void setConf_value(String conf_value) {
+		this.conf_value = conf_value;
+	}
+
+	public Long getConfiguration_id() {
+		return configuration_id;
+	}
+
+	public void setConfiguration_id(Long configuration_id) {
+		this.configuration_id = configuration_id;
+	}
+
 	public Date getStarttime() {
 		return starttime;
 	}
+
 	public void setStarttime(Date starttime) {
 		this.starttime = starttime;
 	}
-    
+
 	public Date getUpdatetime() {
 		return updatetime;
 	}
+
 	public void setUpdatetime(Date updatetime) {
 		this.updatetime = updatetime;
 	}
-	
+
 	public boolean getDeleted() {
 		return deleted;
 	}
+
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
-	
-    public Long getUser_id() {
+
+	public Long getUser_id() {
 		return user_id;
 	}
 
@@ -148,12 +154,12 @@ public class Configuration implements Serializable, OmEntity {
 		this.user_id = user_id;
 	}
 
- public Users getUsers() {
-     return users;
- }
- public void setUsers(Users users) {
-     this.users = users;
- }
+	public Users getUser() {
+		return user;
+	}
 
-	
+	public void setUsers(Users user) {
+		this.user = user;
+	}
+
 }
