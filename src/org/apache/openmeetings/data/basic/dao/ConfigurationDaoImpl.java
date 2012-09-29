@@ -42,9 +42,9 @@ import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Insert/update/Delete on {@link Configuration}
- * 
- * provides basic mechanism to get a Conf Key:<br/>
+ * Insert/update/Delete on {@link Configuration}<br/>
+ * <br/>
+ * It provides basic mechanism to get a Conf Key:<br/>
  * {@link #getConfValue(String, Class, String)} <br/>
  * <br/>
  * <b> {@link #getConfKey(String)} is deprecated!</b>
@@ -66,8 +66,10 @@ public class ConfigurationDaoImpl implements OmDAO<Configuration> {
 	@Resource(name = "usersDao")
 	private UsersDaoImpl usersDao;
 
-	// TODO: Dao's are not the place to store a session variables,
-	// also updates to the key won't update this variable
+	/**
+	 * @deprecated Dao's are not the place to store session variables, also
+	 *             updates to the key won't update this variable
+	 */
 	@Deprecated
 	private String appName = null;
 
