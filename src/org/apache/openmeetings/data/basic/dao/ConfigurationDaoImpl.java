@@ -65,6 +65,10 @@ public class ConfigurationDaoImpl implements OmDAO<Configuration> {
 
 	@Resource(name = "usersDao")
 	private UsersDaoImpl usersDao;
+
+	// TODO: Dao's are not the place to store a session variables,
+	// also updates to the key won't update this variable
+	@Deprecated
 	private String appName = null;
 
 	/**
