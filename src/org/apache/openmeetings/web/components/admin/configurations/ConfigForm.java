@@ -70,6 +70,9 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 		Application.getBean(Configurationmanagement.class).update(getModelObject(), WebSession.getUserId());
 		Configuration conf = Application.getBean(Configurationmanagement.class).get(getModelObject().getConfiguration_id());
+
+		System.out.println(conf.getUser());
+
 		this.setModelObject(conf);
 		target.add(this);
 		target.add(listContainer);

@@ -26,7 +26,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -142,32 +141,13 @@ public class Configurationmanagement implements OmDAO<Configuration>{
 
 	public Configuration getConfByConfigurationId(long user_level,
 			long configuration_id) {
-		try {
 			log.debug("getConfByConfigurationId1: user_level " + user_level);
 			if (authLevelManagement.checkAdminLevel(user_level)) {
-				Configuration configuration = null;
-				TypedQuery<Configuration> query = em
-						.createQuery("select c from Configuration as c where c.configuration_id = :configuration_id", Configuration.class);
-				query.setParameter("configuration_id", configuration_id);
-				query.setMaxResults(1);
-				try {
-					configuration = query.getSingleResult();
-				} catch (NoResultException e) {
-				}
-				log.debug("getConfByConfigurationId4: " + configuration);
-
-				if (configuration != null && configuration.getUser_id() != null) {
-					configuration.setUsers(usersDao.getUser(configuration
-							.getUser_id()));
-				}
-				return configuration;
+			return get(configuration_id);
 			} else {
 				log.error("[getConfByConfigurationId] Permission denied "
 						+ user_level);
 			}
-		} catch (Exception ex2) {
-			log.error("[getConfByConfigurationId]: ", ex2);
-		}
 		return null;
 	}
 
@@ -236,7 +216,7 @@ public class Configurationmanagement implements OmDAO<Configuration>{
 	}
 
 	public String addConfByKey(long user_level, String CONF_KEY,
-			String CONF_VALUE, Long USER_ID, String comment) {
+			String CONF_VALUE, Long userId, String comment) {
 		String ret = "Add Configuration";
 		if (authLevelManagement.checkAdminLevel(user_level)) {
 			Configuration configuration = new Configuration();
@@ -245,8 +225,8 @@ public class Configurationmanagement implements OmDAO<Configuration>{
 			configuration.setStarttime(new Date());
 			configuration.setDeleted(false);
 			configuration.setComment(comment);
-			if (USER_ID != null)
-				configuration.setUser_id(USER_ID);
+			if (userId != null)
+				configuration.setUser(usersDao.get(userId));
 			try {
 				configuration = em.merge(configuration);
 				ret = "Erfolgreich";
@@ -281,7 +261,7 @@ public class Configurationmanagement implements OmDAO<Configuration>{
 					conf2.setComment(conf.getComment());
 					conf2.setConf_key(conf.getConf_key());
 					conf2.setConf_value(conf.getConf_value());
-					conf2.setUser_id(users_id);
+					conf2.setUser(usersDao.get(users_id));
 					conf2.setDeleted(false);
 					conf2.setUpdatetime(new Date());
 					return this.updateConfig(conf2);
@@ -335,7 +315,7 @@ public class Configurationmanagement implements OmDAO<Configuration>{
 				Configuration conf = (Configuration) CastMapToObject
 						.getInstance().castByGivenObject(values,
 								Configuration.class);
-				conf.setUsers(usersDao.getUser(users_id));
+				conf.setUser(usersDao.getUser(users_id));
 				conf.setUpdatetime(new Date());
 				conf.setDeleted(true);
 
@@ -344,7 +324,7 @@ public class Configurationmanagement implements OmDAO<Configuration>{
 				conf2.setComment(conf.getComment());
 				conf2.setConf_key(conf.getConf_key());
 				conf2.setConf_value(conf.getConf_value());
-				conf2.setUser_id(users_id);
+				conf2.setUser(usersDao.get(users_id));
 				conf2.setDeleted(true);
 				conf2.setUpdatetime(new Date());
 
@@ -394,7 +374,7 @@ public class Configurationmanagement implements OmDAO<Configuration>{
 			entity.setDeleted(false);
 			this.updateConfig(entity);
 		} else {
-			entity.setUser_id(userId);
+			entity.setUser(usersDao.get(userId));
 			entity.setDeleted(false);
 			entity.setUpdatetime(new Date());
 			this.updateConfig(entity);
@@ -402,7 +382,7 @@ public class Configurationmanagement implements OmDAO<Configuration>{
 	}
 
 	public void delete(Configuration entity, long userId) {
-		entity.setUser_id(userId);
+		entity.setUser(usersDao.get(userId));
 		entity.setDeleted(true);
 		entity.setUpdatetime(new Date());
 		this.updateConfig(entity);

@@ -50,7 +50,6 @@ public class TestConfig extends AbstractOpenmeetingsSpringTest {
 			Configuration smtp_server = configurationmanagement.getConfKey(3L,
 					"smtp_server");
 			
-			System.err.println("smtp_server " + smtp_server.getUser_id());
 			System.err.println("smtp_server " + smtp_server.getUser());
 			
 			assertEquals(null, smtp_server.getUser());
@@ -69,7 +68,7 @@ public class TestConfig extends AbstractOpenmeetingsSpringTest {
 			
 			for (Configuration conf : list) {
 				System.err.println("conf.getConf_key() " + conf.getConf_key());
-				System.err.println("conf.getUser_id() " + conf.getUser_id());
+				System.err.println("conf.getUser() " + conf.getUser());
 				if (conf.getUser() != null) {
 					System.err.println("conf.getUsers() "
 							+ conf.getUser().getLogin());

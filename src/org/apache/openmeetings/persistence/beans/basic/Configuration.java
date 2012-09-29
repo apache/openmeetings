@@ -45,7 +45,7 @@ import org.simpleframework.xml.Root;
 		@NamedQuery(name = "getConfigurationsByKeys", query = "SELECT c FROM Configuration c WHERE c.conf_key IN :conf_keys and c.deleted = false"),
 		@NamedQuery(name = "getNondeletedConfiguration", query = "SELECT c FROM Configuration c  "
 				+ "LEFT JOIN FETCH c.user WHERE c.deleted = false"),
-		@NamedQuery(name = "getConfigurationById", query = "SELECT c FROM Configuration c WHERE c.configuration_id = :configuration_id and c.deleted = false") })
+		@NamedQuery(name = "getConfigurationById", query = "SELECT c FROM Configuration c LEFT JOIN FETCH c.user WHERE c.configuration_id = :configuration_id and c.deleted = false") })
 @Table(name = "configuration")
 @Root(name = "config")
 public class Configuration implements Serializable, OmEntity {
@@ -80,10 +80,6 @@ public class Configuration implements Serializable, OmEntity {
 	@Column(name = "deleted")
 	@Element(data = true)
 	private boolean deleted;
-
-	@Column(name = "user_id")
-	@Element(data = true, required = false)
-	private Long user_id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
@@ -146,19 +142,11 @@ public class Configuration implements Serializable, OmEntity {
 		this.deleted = deleted;
 	}
 
-	public Long getUser_id() {
-		return user_id;
-	}
-
-	public void setUser_id(Long user_id) {
-		this.user_id = user_id;
-	}
-
 	public Users getUser() {
 		return user;
 	}
 
-	public void setUsers(Users user) {
+	public void setUser(Users user) {
 		this.user = user;
 	}
 
