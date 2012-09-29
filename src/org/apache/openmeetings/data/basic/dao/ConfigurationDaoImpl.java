@@ -41,6 +41,17 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Insert/update/Delete on {@link Configuration}
+ * 
+ * provides basic mechanism to get a Conf Key:<br/>
+ * {@link #getConfValue(String, Class, String)} <br/>
+ * <br/>
+ * <b> {@link #getConfKey(String)} is deprecated!</b>
+ * 
+ * @author swagner
+ * 
+ */
 @Transactional
 public class ConfigurationDaoImpl implements OmDAO<Configuration> {
 
@@ -56,11 +67,17 @@ public class ConfigurationDaoImpl implements OmDAO<Configuration> {
 	private UsersDaoImpl usersDao;
 	private String appName = null;
 
-	public Configuration getConfKey(String CONF_KEY) {
+	/**
+	 * @deprecated use {@link #getConfValue(String, Class, String)} instead
+	 * @param confKey
+	 * @return
+	 */
+	@Deprecated
+	public Configuration getConfKey(String confKey) {
 		try {
 			TypedQuery<Configuration> query = em.createNamedQuery(
 					"getConfigurationByKey", Configuration.class);
-			query.setParameter("conf_key", CONF_KEY);
+			query.setParameter("conf_key", confKey);
 
 			List<Configuration> configs = query.getResultList();
 
