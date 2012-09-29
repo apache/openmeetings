@@ -144,12 +144,12 @@ public class ConfigurationDaoImpl implements OmDAO<Configuration> {
 	public List<Configuration> getConfigurations(int start, int max,
 			String orderby, boolean asc) {
 		try {
-			
+
 			String query = "SELECT c FROM Configuration c " //
 					+ "LEFT JOIN FETCH c.user " //
 					+ "WHERE c.deleted = false " //
-					+ "ORDER BY "+ orderby;
-			
+					+ "ORDER BY " + orderby;
+
 			if (asc) {
 				query += " ASC";
 			} else {
@@ -160,25 +160,7 @@ public class ConfigurationDaoImpl implements OmDAO<Configuration> {
 					Configuration.class);
 			q.setFirstResult(start);
 			q.setMaxResults(max);
-
-			// CriteriaBuilder cb = em.getCriteriaBuilder();
-			// CriteriaQuery<Configuration> cq = cb
-			// .createQuery(Configuration.class);
-			// Root<Configuration> c = cq.from(Configuration.class);
-			// Predicate condition = cb.equal(c.get("deleted"), false);
-			// cq.where(condition);
-			// cq.distinct(asc);
-			// if (asc) {
-			// cq.orderBy(cb.asc(c.get(orderby)));
-			// } else {
-			// cq.orderBy(cb.desc(c.get(orderby)));
-			// }
-			// TypedQuery<Configuration> q = em.createQuery(cq);
-			// q.setFirstResult(start);
-			// q.setMaxResults(max);
-
-			List<Configuration> ll = q.getResultList();
-			return ll;
+			return q.getResultList();
 		} catch (Exception ex2) {
 			log.error("[getConfigurations]", ex2);
 		}
@@ -226,8 +208,8 @@ public class ConfigurationDaoImpl implements OmDAO<Configuration> {
 		return ret;
 	}
 
-	public Long saveOrUpdateConfiguration(
-			LinkedHashMap<String, ?> values, Long userId) {
+	public Long saveOrUpdateConfiguration(LinkedHashMap<String, ?> values,
+			Long userId) {
 		try {
 			Configuration conf = (Configuration) CastMapToObject.getInstance()
 					.castByGivenObject(values, Configuration.class);
