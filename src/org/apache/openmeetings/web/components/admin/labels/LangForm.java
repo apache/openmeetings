@@ -43,9 +43,15 @@ import org.apache.wicket.util.time.Duration;
 public class LangForm extends Form<Void> {
 
 	private static final long serialVersionUID = 2837702941211636609L;
-	private final WebMarkupContainer listContainer;
-	private final LangPanel langPanel;
 	private DropDownChoice<FieldLanguage> languages;
+
+	public void updateLanguages(AjaxRequestTarget target) {
+		FieldLanguageDaoImpl langDao = Application
+				.getBean(FieldLanguageDaoImpl.class);
+		languages.setChoices(langDao.getLanguages());
+		// add(languages);
+		target.add(languages);
+	}
 
 	/**
 	 * Render Main
@@ -55,11 +61,10 @@ public class LangForm extends Form<Void> {
 	 * @param language
 	 * @param langPanel
 	 */
-	public LangForm(String id, final WebMarkupContainer listContainer, final LangPanel langPanel) {
+	public LangForm(String id, final WebMarkupContainer listContainer,
+			final LangPanel langPanel) {
 
 		super(id);
-		this.listContainer = listContainer;
-		this.langPanel = langPanel;
 		setOutputMarkupId(true);
 
 		FieldLanguageDaoImpl langDao = Application
@@ -101,7 +106,7 @@ public class LangForm extends Form<Void> {
 				}
 				languages.setChoices(langDao.getLanguages());
 				target.add(languages);
-				//FIXME need to forse update list container
+				// FIXME need to force update list container
 				target.add(listContainer);
 			}
 		})); 

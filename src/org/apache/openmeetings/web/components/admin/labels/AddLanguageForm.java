@@ -31,12 +31,17 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
+/**
+ * 
+ * @author solomax, swagner
+ * 
+ */
 public class AddLanguageForm extends Form<Void> {
 	private static final long serialVersionUID = 8743289610974962636L;
 	private String newLanguageName;
 	private String newLanguageISO;
 	
-	public AddLanguageForm(String id) {
+	public AddLanguageForm(String id, final LangPanel langPanel) {
 		super(id);
 		
 		add(new RequiredTextField<String>("name", new PropertyModel<String>(this, "newLanguageName")));
@@ -63,6 +68,8 @@ public class AddLanguageForm extends Form<Void> {
 					// TODO add feedback message
 					e.printStackTrace();
 				}
+
+				langPanel.getLangForm().updateLanguages(target);
 				/* FIXME
 				languages.setChoices(langDao.getLanguages());
 				target.add(languages);

@@ -47,6 +47,7 @@ public class LangPanel extends AdminPanel {
 	private static final long serialVersionUID = 5904180813198016592L;
 
 	FieldLanguage language;
+	private LangForm langForm;
 
 	public LangPanel(String id) {
 		super(id);
@@ -105,8 +106,12 @@ public class LangPanel extends AdminPanel {
 				target.add(listContainer);
 			}
 		});
-		add(new LangForm("langForm", listContainer, this));
-		add(new AddLanguageForm("addLangForm"));
+		langForm = new LangForm("langForm", listContainer, this);
+		add(langForm);
+		add(new AddLanguageForm("addLangForm", this));
 	}
 
+	public LangForm getLangForm() {
+		return langForm;
+	}
 }
