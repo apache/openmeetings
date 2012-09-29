@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDaoImpl;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDeltaDaoImpl;
 import org.apache.openmeetings.documents.GenerateSWF;
@@ -41,14 +41,14 @@ public abstract class BaseConverter {
 			BaseConverter.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private Configurationmanagement configurationmanagement;
+	private ConfigurationDaoImpl configurationmanagement;
 	@Autowired
 	private FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDaoImpl;
 	@Autowired
 	private FlvRecordingMetaDeltaDaoImpl flvRecordingMetaDeltaDaoImpl;
 
 	protected String getPathToFFMPEG() {
-		String pathToFFMPEG = configurationmanagement.getConfKey(3,
+		String pathToFFMPEG = configurationmanagement.getConfKey(
 				"ffmpeg_path").getConf_value();
 		if (!pathToFFMPEG.equals("") && !pathToFFMPEG.endsWith(File.separator)) {
 			pathToFFMPEG += File.separator;
@@ -58,7 +58,7 @@ public abstract class BaseConverter {
 	}
 
 	protected String getPathToSoX() {
-		String pathToSoX = configurationmanagement.getConfKey(3, "sox_path")
+		String pathToSoX = configurationmanagement.getConfKey("sox_path")
 				.getConf_value();
 		if (!pathToSoX.equals("") && !pathToSoX.endsWith(File.separator)) {
 			pathToSoX += File.separator;
@@ -68,7 +68,7 @@ public abstract class BaseConverter {
 	}
 
 	protected String getPathToImageMagick() {
-		String pathToImageMagick = this.configurationmanagement.getConfKey(3,
+		String pathToImageMagick = this.configurationmanagement.getConfKey(
 				"imagemagick_path").getConf_value();
 		if (!pathToImageMagick.equals("")
 				&& !pathToImageMagick.endsWith(File.separator)) {

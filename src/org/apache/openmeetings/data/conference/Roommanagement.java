@@ -33,7 +33,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.conference.dao.RoomModeratorsDaoImpl;
 import org.apache.openmeetings.data.user.Organisationmanagement;
@@ -85,7 +85,7 @@ public class Roommanagement {
 	@Autowired
 	private ClientListManager clientListManager;
     @Autowired
-	private Configurationmanagement cfgManagement;
+	private ConfigurationDaoImpl configurationDaoImpl;
 
 	/**
 	 * add a new Record to the table roomtypes
@@ -111,7 +111,8 @@ public class Roommanagement {
 	public Long addRoom(Rooms room) {
 		try {
             /* Red5SIP integration *******************************************************************************/
-            Configuration conf = cfgManagement.getConfKey(3L, "red5sip.enable");
+			Configuration conf = configurationDaoImpl
+					.getConfKey("red5sip.enable");
             if(conf != null && conf.getConf_value().equals("yes")) {
                 if(room.getSipNumber() != null && !room.getSipNumber().isEmpty()) {
                     asteriskDbSipClient.createSIPConference(new SIPCreateConferenceRequest(room.getSipNumber()));
@@ -714,7 +715,7 @@ public class Roommanagement {
      * @return number of participants
      */
     public Integer getSipConferenceMembersNumber(Long rooms_id) {
-        Configuration conf = cfgManagement.getConfKey(3L, "red5sip.enable");
+		Configuration conf = configurationDaoImpl.getConfKey("red5sip.enable");
         if(conf != null && conf.getConf_value().equals("yes")) {
             Rooms rooms = this.getRoomById(rooms_id);
             if(rooms != null) {
@@ -804,7 +805,8 @@ public class Roommanagement {
 				}
 
                 /* Red5SIP integration *******************************************************************************/
-                Configuration conf = cfgManagement.getConfKey(3L, "red5sip.enable");
+				Configuration conf = configurationDaoImpl
+						.getConfKey("red5sip.enable");
                 if(conf != null && conf.getConf_value().equals("yes")) {
                     SipCreateConferenceRequestResult requestResult = asteriskDbSipClient
                             .createSIPConference(new SIPCreateConferenceRequest(sipNumber));

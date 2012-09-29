@@ -57,7 +57,7 @@ import org.apache.openmeetings.backup.RoomConverter;
 import org.apache.openmeetings.backup.RoomTypeConverter;
 import org.apache.openmeetings.backup.StateConverter;
 import org.apache.openmeetings.backup.UserConverter;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.data.basic.dao.LdapConfigDaoImpl;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
 import org.apache.openmeetings.data.basic.dao.ServerDaoImpl;
@@ -174,7 +174,7 @@ public class BackupImportController extends AbstractUploadController {
 	@Autowired
 	private PollManagement pollManagement;
 	@Autowired
-	private Configurationmanagement cfgManagement;
+	private ConfigurationDaoImpl configurationDaoImpl;
 	@Autowired
 	private AsteriskDAOImpl asteriskDAOImpl;
 	@Autowired
@@ -280,7 +280,8 @@ public class BackupImportController extends AbstractUploadController {
 			for (Users u : list) {
 				OmTimeZone tz = u.getOmTimeZone();
 				if (tz.getJname() == null) {
-					String jNameTimeZone = cfgManagement.getConfValue("default.timezone", String.class, "Europe/Berlin");
+					String jNameTimeZone = configurationDaoImpl.getConfValue(
+							"default.timezone", String.class, "Europe/Berlin");
 					OmTimeZone omTimeZone = omTimeZoneDaoImpl.getOmTimeZone(jNameTimeZone);
 					u.setOmTimeZone(omTimeZone);
 					u.setForceTimeZoneCheck(true);
@@ -569,9 +570,10 @@ public class BackupImportController extends AbstractUploadController {
 			
 			List<Configuration> list = readList(serializer, f, "configs.xml", "configs", Configuration.class, true);
 			for (Configuration c : list) {
-				Configuration cfg = cfgManagement.getConfKey(3L, c.getConf_key());
+				Configuration cfg = configurationDaoImpl.getConfKey(c
+						.getConf_key());
 				c.setConfiguration_id(cfg == null ? null : cfg.getConfiguration_id());
-				cfgManagement.updateConfig(c);
+				configurationDaoImpl.updateConfig(c);
 			}
 		}
 

@@ -29,7 +29,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ public class MailThread {
 			MailHandler.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	protected Configurationmanagement cfgManagement;
+	protected ConfigurationDaoImpl configurationDaoImpl;
 	@Autowired
 	protected TaskExecutor taskExecutor;
 
@@ -75,18 +75,18 @@ public class MailThread {
 			log.debug("getMessage");
 
 			// Evaluating Configuration Data
-			String smtpServer = cfgManagement.getConfValue("smtp_server", String.class, null);
-			String smtpPort = cfgManagement.getConfValue("smtp_port", String.class, "25");
-			String from = cfgManagement.getConfValue("system_email_addr", String.class, null);
-			String mailAuthUser = cfgManagement.getConfValue("email_username", String.class, null);
-			String mailAuthPass = cfgManagement.getConfValue("email_userpass", String.class, null);
+			String smtpServer = configurationDaoImpl.getConfValue("smtp_server", String.class, null);
+			String smtpPort = configurationDaoImpl.getConfValue("smtp_port", String.class, "25");
+			String from = configurationDaoImpl.getConfValue("system_email_addr", String.class, null);
+			String mailAuthUser = configurationDaoImpl.getConfValue("email_username", String.class, null);
+			String mailAuthPass = configurationDaoImpl.getConfValue("email_userpass", String.class, null);
 
 			Properties props = System.getProperties();
 
 			props.put("mail.smtp.host", smtpServer);
 			props.put("mail.smtp.port", smtpPort);
 
-			if ("1".equals(cfgManagement.getConfValue("mail.smtp.starttls.enable", String.class, "0"))) {
+			if ("1".equals(configurationDaoImpl.getConfValue("mail.smtp.starttls.enable", String.class, "0"))) {
 				props.put("mail.smtp.starttls.enable", "true");
 			}
 
@@ -107,7 +107,7 @@ public class MailThread {
 			MimeMessage msg = new MimeMessage(session);
 			msg.setSubject(subject);
 			msg.setFrom(new InternetAddress(from));
-			if (replyTo != null && "1".equals(cfgManagement.getConfValue("inviter.email.as.replyto", String.class, "1"))) {
+			if (replyTo != null && "1".equals(configurationDaoImpl.getConfValue("inviter.email.as.replyto", String.class, "1"))) {
 				log.debug("setReplyTo "+replyTo);
 				if (MailUtil.matches(replyTo)) {
 					msg.setReplyTo(new InternetAddress[]{new InternetAddress(replyTo)});

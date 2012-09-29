@@ -35,7 +35,7 @@ import javax.swing.JTextArea;
 import org.apache.batik.dom.svg.SVGDOMImplementation;
 import org.apache.batik.svggen.SVGGraphics2D;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.utils.geom.ArrowStyle;
 import org.apache.openmeetings.utils.geom.GeomPoint;
 import org.red5.logging.Red5LoggerFactory;
@@ -48,7 +48,7 @@ public class BatikMethods {
 	
 	private static final Logger log = Red5LoggerFactory.getLogger(BatikMethods.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
-	private Configurationmanagement cfgManagement;
+	private ConfigurationDaoImpl configurationDaoImpl;
 
 	public void paintTextByWidthHeight(SVGGraphics2D g2d, int x1, int y1, int width, int height,
 			String text, int style, int size, Color fontColor) throws Exception {
@@ -62,7 +62,8 @@ public class BatikMethods {
 	public void _paintTextByWidthHeight(SVGGraphics2D g2d, int x1, int y1, int width, int height,
 			String text, int style, int size, Color fontColor) throws Exception {
 
-		String default_export_font = cfgManagement.getConfKey(3,"default_export_font").getConf_value();
+		String default_export_font = configurationDaoImpl.getConfKey(
+				"default_export_font").getConf_value();
 		
 		this.drawTextByString(g2d, x1, y1, width, height, text, default_export_font, style, size, fontColor);
 
@@ -244,7 +245,8 @@ public class BatikMethods {
 	public void paintTextByWidthHeightAndDocument(SVGGraphics2D g2d, int x1, int y1, int width, int height,
 			String text, int style, int size, Color fontColor, Document document) throws Exception {
 
-		//String default_export_font = Configurationmanagement.getInstance().getConfKey(3,"default_export_font").getConf_value();
+		// String default_export_font =
+		// Configurationmanagement.getInstance().getConfKey("default_export_font").getConf_value();
 		
 		this.drawText(g2d, x1, y1, width, height, text, "Verdana", style, size, fontColor, document);
 

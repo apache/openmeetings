@@ -25,7 +25,7 @@ import java.util.HashMap;
 
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -42,7 +42,7 @@ public class GeneratePDF {
 	@Autowired
 	private GenerateSWF generateSWF;
 	@Autowired
-	private Configurationmanagement cfgManagement;
+	private ConfigurationDaoImpl configurationDaoImpl;
 
 	public HashMap<String, HashMap<String, String>> convertPDF(String fileName,
 			String roomName, boolean fullProcessing, File inFile)
@@ -105,8 +105,10 @@ public class GeneratePDF {
 	public HashMap<String, String> doJodConvert(File fileFullPath, File destinationFolder, String outputfile) {
 		try {
 
-			String jodPath = cfgManagement.getConfValue("jod.path", String.class, "./jod");
-			String officePath = cfgManagement.getConfValue("office.path", String.class, "");
+			String jodPath = configurationDaoImpl.getConfValue("jod.path",
+					String.class, "./jod");
+			String officePath = configurationDaoImpl.getConfValue(
+					"office.path", String.class, "");
 
 			File jodFolder = new File(jodPath);
 			if (!jodFolder.exists() || !jodFolder.isDirectory()) {

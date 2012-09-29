@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.components.admin.configurations;
 
-import org.apache.openmeetings.data.basic.Configurationmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
@@ -68,8 +68,8 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 	
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
-		Application.getBean(Configurationmanagement.class).update(getModelObject(), WebSession.getUserId());
-		Configuration conf = Application.getBean(Configurationmanagement.class).get(getModelObject().getConfiguration_id());
+		Application.getBean(ConfigurationDaoImpl.class).update(getModelObject(), WebSession.getUserId());
+		Configuration conf = Application.getBean(ConfigurationDaoImpl.class).get(getModelObject().getConfiguration_id());
 
 		System.out.println(conf.getUser());
 
@@ -88,7 +88,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		Configuration conf = this.getModelObject();
 		if (conf.getConfiguration_id() != null) {
-			conf = Application.getBean(Configurationmanagement.class).get(conf.getConfiguration_id());
+			conf = Application.getBean(ConfigurationDaoImpl.class).get(conf.getConfiguration_id());
 		} else {
 			conf = new Configuration();
 		}
@@ -98,7 +98,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 	
 	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
-		Application.getBean(Configurationmanagement.class).delete(this.getModelObject(), WebSession.getUserId());
+		Application.getBean(ConfigurationDaoImpl.class).delete(this.getModelObject(), WebSession.getUserId());
 		this.setModelObject(new Configuration());
 		target.add(listContainer);
 		target.add(this);

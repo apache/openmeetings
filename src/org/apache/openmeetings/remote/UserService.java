@@ -29,9 +29,9 @@ import java.util.TimeZone;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
 import org.apache.openmeetings.data.basic.dao.ServerDaoImpl;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
@@ -89,7 +89,7 @@ public class UserService {
 	@Autowired
 	private Sessionmanagement sessionManagement;
 	@Autowired
-	private Configurationmanagement cfgManagement;
+	private ConfigurationDaoImpl configurationDaoImpl;
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
@@ -660,7 +660,7 @@ public class UserService {
 				Long language_id = userToAdd.getLanguage_id();
 				if (language_id == null) {
 					language_id = Long.valueOf(
-							cfgManagement.getConfKey(3, "default_lang_id")
+							configurationDaoImpl.getConfKey("default_lang_id")
 									.getConf_value()).longValue();
 				}
 
@@ -886,7 +886,7 @@ public class UserService {
 						Long language_id = user.getLanguage_id();
 						if (language_id == null) {
 							language_id = Long.valueOf(
-									cfgManagement.getConfKey(3,
+									configurationDaoImpl.getConfKey(
 											"default_lang_id").getConf_value())
 									.longValue();
 						}
@@ -1055,7 +1055,7 @@ public class UserService {
 					Long language_id = from.getLanguage_id();
 					if (language_id == null) {
 						language_id = Long.valueOf(
-								cfgManagement.getConfKey(3,
+								configurationDaoImpl.getConfKey(
 										"default_lang_id").getConf_value())
 								.longValue();
 					}

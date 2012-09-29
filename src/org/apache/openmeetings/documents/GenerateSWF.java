@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.utils.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -37,7 +37,7 @@ public class GenerateSWF {
 			.getLogger(GenerateSWF.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private Configurationmanagement cfgManagement;
+	private ConfigurationDaoImpl configurationDaoImpl;
 
 	public final static boolean isPosix = System.getProperty("os.name")
 			.toUpperCase().indexOf("WINDOWS") == -1;
@@ -45,7 +45,8 @@ public class GenerateSWF {
 	public final static String execExt = isPosix ? "" : ".exe";
 
 	private String getPathToSwfTools() {
-		String pathToSWFTools = cfgManagement.getConfValue("swftools_path", String.class, "");
+		String pathToSWFTools = configurationDaoImpl.getConfValue(
+				"swftools_path", String.class, "");
 		// If SWFTools Path is not blank a File.separator at the end of the path
 		// is needed
 		if (!pathToSWFTools.equals("")
@@ -56,7 +57,8 @@ public class GenerateSWF {
 	}
 
 	private String getSwfZoom() {
-		String valueForSwfZoom = cfgManagement.getConfValue("swftools_zoom", String.class, "");
+		String valueForSwfZoom = configurationDaoImpl.getConfValue(
+				"swftools_zoom", String.class, "");
 		// WARNING CODE NOT COMPLETE: If SWFTools zoom (dpi) should be an integer between 50 and  600 with a default value of 100 dpi
 		if (valueForSwfZoom.equals("")) {
 			valueForSwfZoom = "72";
@@ -65,7 +67,8 @@ public class GenerateSWF {
 	}
 
 	private String getSwfJpegQuality() {
-		String valueForSwfJpegQuality = cfgManagement.getConfValue("swftools_jpegquality", String.class, "");
+		String valueForSwfJpegQuality = configurationDaoImpl.getConfValue(
+				"swftools_jpegquality", String.class, "");
 		// WARNING CODE NOT COMPLETE: If SWFTools JPEG Quality should be an integer between 1 and 100, with a default value of 85
 		if (valueForSwfJpegQuality.equals("")) {
 			valueForSwfJpegQuality = "85";

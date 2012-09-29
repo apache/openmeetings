@@ -19,7 +19,7 @@
 package org.apache.openmeetings.utils.sms;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.smslib.OutboundMessage;
@@ -40,7 +40,7 @@ public class SMSHandler {
 			SMSHandler.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	protected Configurationmanagement cfgManagement;
+	protected ConfigurationDaoImpl configurationDaoImpl;
 	@Autowired
 	protected TaskExecutor taskExecutor;
 
@@ -48,9 +48,9 @@ public class SMSHandler {
 	
 	private boolean checkBalance() throws Exception {
 		if (gateway == null) {
-			String smsProvider = cfgManagement.getConfValue("sms.provider", String.class, null);
-			String smsUsername = cfgManagement.getConfValue("sms.username", String.class, null);
-			String smsUserpass = cfgManagement.getConfValue("sms.userpass", String.class, null);
+			String smsProvider = configurationDaoImpl.getConfValue("sms.provider", String.class, null);
+			String smsUsername = configurationDaoImpl.getConfValue("sms.username", String.class, null);
+			String smsUserpass = configurationDaoImpl.getConfValue("sms.userpass", String.class, null);
 
 			if (smsProvider == null || smsProvider.length() == 0 ||
 					smsUsername == null || smsUsername.length() == 0) {

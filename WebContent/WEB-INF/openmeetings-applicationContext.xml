@@ -190,7 +190,7 @@
 	<bean id="fieldLanguageDaoImpl" class="org.apache.openmeetings.data.basic.FieldLanguageDaoImpl" />
 	<bean id="fieldLanguagesValuesDAO" class="org.apache.openmeetings.data.basic.FieldLanguagesValuesDAO" />
 	<bean id="fieldmanagment" class="org.apache.openmeetings.data.basic.Fieldmanagment" />
-	<bean id="cfgManagement" class="org.apache.openmeetings.data.basic.Configurationmanagement" />
+	<bean id="configurationDaoImpl" class="org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl" />
 	<bean id="appointmentDao"
 		class="org.apache.openmeetings.data.calendar.daos.AppointmentDaoImpl" />
 	<bean id="appointmentLogic"

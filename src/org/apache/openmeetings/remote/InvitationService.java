@@ -23,8 +23,8 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
 import org.apache.openmeetings.data.conference.Invitationmanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
@@ -44,7 +44,7 @@ public class InvitationService implements IPendingServiceCallback {
 	@Autowired
 	private Sessionmanagement sessionManagement;
 	@Autowired
-	private Configurationmanagement cfgManagement;
+	private ConfigurationDaoImpl configurationDaoImpl;
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
@@ -125,8 +125,8 @@ public class InvitationService implements IPendingServiceCallback {
 
 			// If everything fails
 			if (omTimeZone == null) {
-				Configuration conf = cfgManagement.getConfKey(3L,
-						"default.timezone");
+				Configuration conf = configurationDaoImpl
+						.getConfKey("default.timezone");
 				if (conf != null) {
 					jNameTimeZone = conf.getConf_value();
 				}

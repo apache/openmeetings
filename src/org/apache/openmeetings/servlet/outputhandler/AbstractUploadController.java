@@ -23,8 +23,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.utils.ImportHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -43,7 +43,7 @@ public abstract class AbstractUploadController {
 	@Autowired
 	protected AuthLevelmanagement authLevelManagement;
 	@Autowired
-	protected Configurationmanagement cfgManagement;
+	protected ConfigurationDaoImpl configurationDaoImpl;
 	
 	protected class UploadInfo {
 		MultipartFile file;
@@ -88,7 +88,7 @@ public abstract class AbstractUploadController {
 			//FIXME encoding HACK
 			info.filename = new String (multipartFile.getOriginalFilename().getBytes ("iso-8859-1"), "UTF-8");
 			long fileSize = multipartFile.getSize();
-			long maxSize = ImportHelper.getMaxUploadSize(cfgManagement);
+			long maxSize = ImportHelper.getMaxUploadSize(configurationDaoImpl);
 			log.debug("uploading " + fileSize + " bytes");
 			if (fileSize > maxSize) {
 				throw new ServletException("Maximum upload size: " + maxSize + " exceeded: " + fileSize);

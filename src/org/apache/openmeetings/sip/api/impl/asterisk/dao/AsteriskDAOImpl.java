@@ -24,7 +24,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.persistence.beans.sip.asterisk.AsteriskSipUsers;
 import org.apache.openmeetings.persistence.beans.sip.asterisk.Extensions;
@@ -42,11 +42,12 @@ public class AsteriskDAOImpl {
 	@PersistenceContext
 	private EntityManager em;
     @Autowired
-	private Configurationmanagement cfgManagement;
+	private ConfigurationDaoImpl configurationDaoImpl;
 
     public void addSipUser(String username, String secret) {
         AsteriskSipUsers u = new AsteriskSipUsers();
-        Configuration conf = cfgManagement.getConfKey(3L,"red5sip.exten_context");
+		Configuration conf = configurationDaoImpl
+				.getConfKey("red5sip.exten_context");
         String defaultRoomContext = "rooms";
         if(conf != null && !conf.getConf_value().isEmpty()) {
             defaultRoomContext = conf.getConf_value();
@@ -68,7 +69,8 @@ public class AsteriskDAOImpl {
 
     public String addMeetMeConference() {
         int count = ((Number)em.createQuery("SELECT COUNT(m.confno) FROM MeetMe AS m").getSingleResult()).intValue();
-        Configuration conf = cfgManagement.getConfKey(3L,"red5sip.room_prefix");
+		Configuration conf = configurationDaoImpl
+				.getConfKey("red5sip.room_prefix");
         String prefix = DEFAULT_SIP_CONTEXT;
         if(conf != null) {
             prefix = conf.getConf_value();

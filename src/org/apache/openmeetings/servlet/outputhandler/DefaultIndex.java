@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.velocity.Template;
@@ -41,14 +41,15 @@ public class DefaultIndex extends VelocityViewServlet {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			DefaultIndex.class, OpenmeetingsVariables.webAppRootKey);
 
-	private Configurationmanagement getConfigurationmanagement() {
+	private ConfigurationDaoImpl getConfigurationDaoImpl() {
 		try {
 			if (!ScopeApplicationAdapter.initComplete) {
 				return null;
 			}
 			ApplicationContext context = WebApplicationContextUtils
 					.getWebApplicationContext(getServletContext());
-			return (Configurationmanagement) context.getBean("cfgManagement");
+			return (ConfigurationDaoImpl) context
+					.getBean("configurationDaoImpl");
 		} catch (Exception err) {
 			log.error("[getConfigurationmanagement]", err);
 		}
@@ -61,7 +62,7 @@ public class DefaultIndex extends VelocityViewServlet {
 
 		try {
 
-			if (getConfigurationmanagement() == null) {
+			if (getConfigurationDaoImpl() == null) {
 				return getVelocityView().getVelocityEngine().getTemplate(
 						"booting.vm");
 			}
@@ -69,11 +70,11 @@ public class DefaultIndex extends VelocityViewServlet {
 			String template = "sip_template.vm";
 
 			// Enable SIP Template or not
-			Configuration SIP_ENABLE = getConfigurationmanagement().getConfKey(
-					3L, "sip.enable");
+			Configuration SIP_ENABLE = getConfigurationDaoImpl().getConfKey(
+					"sip.enable");
 
 			// SIP_REALM
-			ctx.put("APP_NAME", getConfigurationmanagement().getAppName());
+			ctx.put("APP_NAME", getConfigurationDaoImpl().getAppName());
 
 			if (SIP_ENABLE == null || !SIP_ENABLE.getConf_value().equals("yes")) {
 
@@ -84,8 +85,8 @@ public class DefaultIndex extends VelocityViewServlet {
 				// Set all the Params for the Applet Configuration
 
 				// SIP_REALM
-				Configuration SIP_REALM = getConfigurationmanagement()
-						.getConfKey(3L, "sip.realm");
+				Configuration SIP_REALM = getConfigurationDaoImpl()
+						.getConfKey("sip.realm");
 				if (SIP_REALM == null) {
 					ctx.put("SIP_REALM", "");
 				} else {
@@ -93,8 +94,8 @@ public class DefaultIndex extends VelocityViewServlet {
 				}
 
 				// SIP_PORT
-				Configuration SIP_PORT = getConfigurationmanagement()
-						.getConfKey(3L, "sip.port");
+				Configuration SIP_PORT = getConfigurationDaoImpl()
+						.getConfKey("sip.port");
 				if (SIP_PORT == null) {
 					ctx.put("SIP_PORT", "");
 				} else {
@@ -102,8 +103,8 @@ public class DefaultIndex extends VelocityViewServlet {
 				}
 
 				// SIP_PROXYNAME
-				Configuration SIP_PROXYNAME = getConfigurationmanagement()
-						.getConfKey(3L, "sip.proxyname");
+				Configuration SIP_PROXYNAME = getConfigurationDaoImpl()
+						.getConfKey("sip.proxyname");
 				if (SIP_PROXYNAME == null) {
 					ctx.put("SIP_PROXYNAME", "");
 				} else {
@@ -111,8 +112,8 @@ public class DefaultIndex extends VelocityViewServlet {
 				}
 
 				// SIP_TUNNEL
-				Configuration SIP_TUNNEL = getConfigurationmanagement()
-						.getConfKey(3L, "sip.tunnel");
+				Configuration SIP_TUNNEL = getConfigurationDaoImpl()
+						.getConfKey("sip.tunnel");
 				if (SIP_TUNNEL == null) {
 					ctx.put("SIP_TUNNEL", "");
 				} else {
@@ -120,8 +121,8 @@ public class DefaultIndex extends VelocityViewServlet {
 				}
 
 				// SIP_CODEBASE
-				Configuration SIP_CODEBASE = getConfigurationmanagement()
-						.getConfKey(3L, "sip.codebase");
+				Configuration SIP_CODEBASE = getConfigurationDaoImpl()
+						.getConfKey("sip.codebase");
 				if (SIP_CODEBASE == null) {
 					ctx.put("SIP_CODEBASE", "");
 				} else {
@@ -129,8 +130,8 @@ public class DefaultIndex extends VelocityViewServlet {
 				}
 
 				// SIP_FORCETUNNEL
-				Configuration SIP_FORCETUNNEL = getConfigurationmanagement()
-						.getConfKey(3L, "sip.forcetunnel");
+				Configuration SIP_FORCETUNNEL = getConfigurationDaoImpl()
+						.getConfKey("sip.forcetunnel");
 				if (SIP_FORCETUNNEL == null) {
 					ctx.put("SIP_FORCETUNNEL", "");
 				} else {

@@ -25,7 +25,7 @@ import java.util.LinkedHashMap;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -39,7 +39,7 @@ public class LoadAtomRssFeed {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			LoadAtomRssFeed.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
-	private Configurationmanagement cfgManagement;
+	private ConfigurationDaoImpl configurationDaoImpl;
 	@Autowired
 	private AuthLevelmanagement authLevelmanagement;
 
@@ -49,11 +49,11 @@ public class LoadAtomRssFeed {
 			if (authLevelmanagement.checkUserLevel(user_level)) {
 				LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, Object>>>> returnMap = new LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, Object>>>>();
 
-				String url1 = cfgManagement.getConfKey(3, "rss_feed1")
+				String url1 = configurationDaoImpl.getConfKey("rss_feed1")
 						.getConf_value();
 				returnMap.put("feed1", this.parseRssFeed(url1));
 
-				String url2 = cfgManagement.getConfKey(3, "rss_feed2")
+				String url2 = configurationDaoImpl.getConfKey("rss_feed2")
 						.getConf_value();
 				returnMap.put("feed2", this.parseRssFeed(url2));
 

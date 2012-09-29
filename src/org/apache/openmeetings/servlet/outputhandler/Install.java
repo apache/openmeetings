@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.documents.InstallationDocumentHandler;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
@@ -47,14 +47,15 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 public class Install extends VelocityViewServlet {
 	private static final long serialVersionUID = 3684381243236013771L;
 
-	private Configurationmanagement getConfigurationmanagement() {
+	private ConfigurationDaoImpl getConfigurationDaoImpl() {
 		try {
 			if (!ScopeApplicationAdapter.initComplete) {
 				return null;
 			}
 			ApplicationContext context = WebApplicationContextUtils
 					.getWebApplicationContext(getServletContext());
-			return (Configurationmanagement) context.getBean("cfgManagement");
+			return (ConfigurationDaoImpl) context
+					.getBean("configurationDaoImpl");
 		} catch (Exception err) {
 			log.error("[getConfigurationmanagement]", err);
 		}
@@ -144,12 +145,12 @@ public class Install extends VelocityViewServlet {
 		try {
 			ctx.put("APP_ROOT", OpenmeetingsVariables.webAppRootKey);
 
-			if (getImportInitvalues() == null || getConfigurationmanagement() == null) {
+			if (getImportInitvalues() == null || getConfigurationDaoImpl() == null) {
 				return getVelocityView().getVelocityEngine().getTemplate(
 						"booting_install.vm");
 			}
 
-			ctx.put("APP_NAME", getConfigurationmanagement().getAppName());
+			ctx.put("APP_NAME", getConfigurationDaoImpl().getAppName());
 			String command = httpServletRequest.getParameter("command");
 
 			String lang = httpServletRequest.getParameter("lang");

@@ -61,7 +61,7 @@ import net.fortuna.ical4j.model.property.Version;
 import net.fortuna.ical4j.util.UidGenerator;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.apache.openmeetings.utils.mail.ByteArrayDataSource;
@@ -79,7 +79,7 @@ public class TestSendIcalMessage extends AbstractOpenmeetingsSpringTest {
 			OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private Configurationmanagement cfgManagement;
+	private ConfigurationDaoImpl configurationDaoImpl;
 
 	private byte[] iCalMimeBody;
 
@@ -240,17 +240,19 @@ public class TestSendIcalMessage extends AbstractOpenmeetingsSpringTest {
 		log.debug("sendIcalMessage");
 
 		// Evaluating Configuration Data
-		String smtpServer = cfgManagement.getConfKey(3, "smtp_server")
+		String smtpServer = configurationDaoImpl.getConfKey("smtp_server")
 				.getConf_value();
-		String smtpPort = cfgManagement.getConfKey(3, "smtp_port")
+		String smtpPort = configurationDaoImpl.getConfKey("smtp_port")
 				.getConf_value();
 		// String from = "openmeetings@xmlcrm.org";
-		String from = cfgManagement.getConfKey(3, "system_email_addr")
+		String from = configurationDaoImpl.getConfKey("system_email_addr")
 				.getConf_value();
 
-		String emailUsername = cfgManagement.getConfKey(3, "email_username")
+		String emailUsername = configurationDaoImpl
+				.getConfKey("email_username")
 				.getConf_value();
-		String emailUserpass = cfgManagement.getConfKey(3, "email_userpass")
+		String emailUserpass = configurationDaoImpl
+				.getConfKey("email_userpass")
 				.getConf_value();
 
 		Properties props = System.getProperties();
@@ -258,7 +260,8 @@ public class TestSendIcalMessage extends AbstractOpenmeetingsSpringTest {
 		props.put("mail.smtp.host", smtpServer);
 		props.put("mail.smtp.port", smtpPort);
 
-		Configuration conf = cfgManagement.getConfKey(3,
+		Configuration conf = configurationDaoImpl
+				.getConfKey(
 				"mail.smtp.starttls.enable");
 		if (conf != null) {
 			if (conf.getConf_value().equals("1")) {

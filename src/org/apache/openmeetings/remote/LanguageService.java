@@ -24,10 +24,10 @@ import java.util.Map;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
 import org.apache.openmeetings.data.basic.FieldLanguageDaoImpl;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
@@ -49,7 +49,7 @@ public class LanguageService {
 	@Autowired
 	private Sessionmanagement sessionManagement;
 	@Autowired
-	private Configurationmanagement cfgManagement;
+	private ConfigurationDaoImpl configurationDaoImpl;
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
@@ -82,7 +82,8 @@ public class LanguageService {
 
 	public Integer getDefaultLanguage() {
 		return Integer.valueOf(
-				cfgManagement.getConfKey(3, "default_lang_id").getConf_value())
+				configurationDaoImpl.getConfKey("default_lang_id")
+						.getConf_value())
 				.intValue();
 	}
 

@@ -19,8 +19,8 @@
 package org.apache.openmeetings.data.conference;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.templates.FeedbackTemplate;
 import org.apache.openmeetings.utils.mail.MailHandler;
 import org.red5.logging.Red5LoggerFactory;
@@ -32,7 +32,7 @@ public class Feedbackmanagement {
 			Feedbackmanagement.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private Configurationmanagement cfgManagement;
+	private ConfigurationDaoImpl configurationDaoImpl;
 	@Autowired
 	private Fieldmanagment fieldmanagment;
 	@Autowired
@@ -42,7 +42,8 @@ public class Feedbackmanagement {
 
 	public String sendFeedback(String username, String email, String message) {
 		try {
-			Long default_lang_id = cfgManagement.getConfValue("default_lang_id", Long.class, "1");
+			Long default_lang_id = configurationDaoImpl.getConfValue(
+					"default_lang_id", Long.class, "1");
 
 			String template = feedbackTemplate.getFeedBackTemplate(username,
 					email, message, default_lang_id);

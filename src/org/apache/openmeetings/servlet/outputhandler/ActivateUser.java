@@ -24,8 +24,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.persistence.beans.user.Users;
@@ -43,14 +43,15 @@ public class ActivateUser extends VelocityViewServlet {
 	private static Logger log = Red5LoggerFactory.getLogger(ActivateUser.class,
 			OpenmeetingsVariables.webAppRootKey);
 
-	private Configurationmanagement getConfigurationmanagement() {
+	private ConfigurationDaoImpl getConfigurationmanagement() {
 		try {
 			if (!ScopeApplicationAdapter.initComplete) {
 				return null;
 			}
 			ApplicationContext context = WebApplicationContextUtils
 					.getWebApplicationContext(getServletContext());
-			return (Configurationmanagement) context.getBean("cfgManagement");
+			return (ConfigurationDaoImpl) context
+					.getBean("configurationDaoImpl");
 		} catch (Exception err) {
 			log.error("[getConfigurationmanagement]", err);
 		}
@@ -105,7 +106,7 @@ public class ActivateUser extends VelocityViewServlet {
 			if (hash == null) {
 				// No hash
 				Long default_lang_id = Long.valueOf(
-						getConfigurationmanagement().getConfKey(3,
+						getConfigurationmanagement().getConfKey(
 								"default_lang_id").getConf_value()).longValue();
 				Fieldlanguagesvalues labelid669 = getFieldmanagment()
 						.getFieldByIdAndLanguage(new Long(669), default_lang_id);
@@ -125,7 +126,7 @@ public class ActivateUser extends VelocityViewServlet {
 			if (user == null) {
 				// No User Found with this Hash
 				Long default_lang_id = Long.valueOf(
-						getConfigurationmanagement().getConfKey(3,
+						getConfigurationmanagement().getConfKey(
 								"default_lang_id").getConf_value()).longValue();
 
 				Fieldlanguagesvalues labelid669 = getFieldmanagment()
@@ -143,7 +144,7 @@ public class ActivateUser extends VelocityViewServlet {
 			} else if (user.getStatus() == 1) {
 				// already activated
 				Long default_lang_id = Long.valueOf(
-						getConfigurationmanagement().getConfKey(3,
+						getConfigurationmanagement().getConfKey(
 								"default_lang_id").getConf_value()).longValue();
 
 				Fieldlanguagesvalues labelid670 = getFieldmanagment()
@@ -166,7 +167,7 @@ public class ActivateUser extends VelocityViewServlet {
 				getUsermanagement().updateUser(user);
 
 				Long default_lang_id = Long.valueOf(
-						getConfigurationmanagement().getConfKey(3,
+						getConfigurationmanagement().getConfKey(
 								"default_lang_id").getConf_value()).longValue();
 
 				Fieldlanguagesvalues labelid671 = getFieldmanagment()
@@ -184,7 +185,7 @@ public class ActivateUser extends VelocityViewServlet {
 			} else {
 				// unkown Status
 				Long default_lang_id = Long.valueOf(
-						getConfigurationmanagement().getConfKey(3,
+						getConfigurationmanagement().getConfKey(
 								"default_lang_id").getConf_value()).longValue();
 
 				Fieldlanguagesvalues labelid672 = getFieldmanagment()

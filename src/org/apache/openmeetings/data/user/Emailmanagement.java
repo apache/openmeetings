@@ -23,8 +23,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.persistence.beans.adresses.Adresses;
 import org.apache.openmeetings.templates.RegisterUserTemplate;
 import org.apache.openmeetings.utils.mail.MailHandler;
@@ -43,7 +43,7 @@ public class Emailmanagement {
 	private EntityManager em;
 
 	@Autowired
-	private Configurationmanagement cfgManagement;
+	private ConfigurationDaoImpl configurationDaoImpl;
 	@Autowired
 	private Fieldmanagment fieldmanagment;
 	@Autowired
@@ -65,13 +65,13 @@ public class Emailmanagement {
 		String succ = "valid email";
 
 		Integer sendEmailAtRegister = Integer.valueOf(
-				cfgManagement.getConfKey(3, "sendEmailAtRegister")
+				configurationDaoImpl.getConfKey("sendEmailAtRegister")
 						.getConf_value()).intValue();
 
 		if (sendEmailAtRegister == 1) {
 
 			Long default_lang_id = Long.valueOf(
-					cfgManagement.getConfKey(3, "default_lang_id")
+					configurationDaoImpl.getConfKey("default_lang_id")
 							.getConf_value()).longValue();
 
 			if (sendEmailWithVerficationCode) {

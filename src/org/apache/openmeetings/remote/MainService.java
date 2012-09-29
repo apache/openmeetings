@@ -29,9 +29,9 @@ import java.util.Set;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
 import org.apache.openmeetings.data.basic.Navimanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.data.basic.dao.LdapConfigDaoImpl;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
 import org.apache.openmeetings.data.basic.dao.SOAPLoginDaoImpl;
@@ -85,7 +85,7 @@ public class MainService implements IPendingServiceCallback {
 	@Autowired
 	private Sessionmanagement sessionManagement;
 	@Autowired
-	private Configurationmanagement cfgManagement;
+	private ConfigurationDaoImpl configurationDaoImpl;
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
@@ -605,7 +605,8 @@ public class MainService implements IPendingServiceCallback {
 
 						if (user == null) {
 
-							Configuration conf = cfgManagement.getConfKey(3L,
+							Configuration conf = configurationDaoImpl
+									.getConfKey(
 									"default.timezone");
 							String jName_timeZone = "";
 
@@ -677,7 +678,7 @@ public class MainService implements IPendingServiceCallback {
 		try {
 			sessionManagement.updateUserWithoutSession(SID, -1L);
 			
-			Long defaultRpcUserid = cfgManagement.getConfValue(
+			Long defaultRpcUserid = configurationDaoImpl.getConfValue(
 					"default.rpc.userid", Long.class, "-1");
 			Users defaultRpcUser = userManagement.getUserById(defaultRpcUserid);
 			
@@ -737,7 +738,7 @@ public class MainService implements IPendingServiceCallback {
 	 * @return
 	 */
 	public Configuration allowFrontendRegister(String SID) {
-		return cfgManagement.getConfKey(3, "allow_frontend_register");
+		return configurationDaoImpl.getConfKey("allow_frontend_register");
 	}
 	
 	public List<Configuration> getGeneralOptions(String SID) {
@@ -745,9 +746,10 @@ public class MainService implements IPendingServiceCallback {
 			
 			List<Configuration> cList = new LinkedList<Configuration>();
 			
-			cList.add(cfgManagement.getConfKey(3, "exclusive.audio.keycode"));
-			cList.add(cfgManagement.getConfKey(3, "red5sip.enable"));
-			cList.add(cfgManagement.getConfKey(3, "max_upload_size"));
+			cList.add(configurationDaoImpl
+					.getConfKey("exclusive.audio.keycode"));
+			cList.add(configurationDaoImpl.getConfKey("red5sip.enable"));
+			cList.add(configurationDaoImpl.getConfKey("max_upload_size"));
 			
 			return cList;
 			
@@ -761,12 +763,16 @@ public class MainService implements IPendingServiceCallback {
 		try {
 
 			List<Configuration> cList = new LinkedList<Configuration>();
-			cList.add(cfgManagement.getConfKey(3, "allow_frontend_register"));
-			cList.add(cfgManagement.getConfKey(3, "show.facebook.login"));
-			cList.add(cfgManagement.getConfKey(3, "user.login.minimum.length"));
-			cList.add(cfgManagement.getConfKey(3, "user.pass.minimum.length"));
-			cList.add(cfgManagement.getConfKey(3, "user.pass.minimum.length"));
-			cList.add(cfgManagement.getConfKey(3, "ldap_default_id"));
+			cList.add(configurationDaoImpl
+					.getConfKey("allow_frontend_register"));
+			cList.add(configurationDaoImpl.getConfKey("show.facebook.login"));
+			cList.add(configurationDaoImpl
+					.getConfKey("user.login.minimum.length"));
+			cList.add(configurationDaoImpl
+					.getConfKey("user.pass.minimum.length"));
+			cList.add(configurationDaoImpl
+					.getConfKey("user.pass.minimum.length"));
+			cList.add(configurationDaoImpl.getConfKey("ldap_default_id"));
 
 			return cList;
 		} catch (Exception err) {
@@ -987,7 +993,7 @@ public class MainService implements IPendingServiceCallback {
 	public Boolean getSIPModuleStatus() {
 		try {
 
-			Configuration conf = cfgManagement.getConfKey(3L, "sip.enable");
+			Configuration conf = configurationDaoImpl.getConfKey("sip.enable");
 
 			if (conf == null) {
 				return false;
@@ -1039,13 +1045,14 @@ public class MainService implements IPendingServiceCallback {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
-			return cfgManagement.getConfKeys(user_level, new String[]{
-				"dashboard.show.chat"
-				, "dashboard.show.myrooms"
-				, "dashboard.show.rssfeed"
-				, "default.dashboard.tab"
-				, "default.landing.zone"
-			});
+			if (authLevelManagement.checkUserLevel(user_level)) {
+				return configurationDaoImpl.getConfKeys(new String[] {
+						"dashboard.show.chat", //
+						"dashboard.show.myrooms", //
+						"dashboard.show.rssfeed", //
+						"default.dashboard.tab", //
+						"default.landing.zone" });
+			}
 		} catch (Exception err) {
 			log.error("[getDashboardConfiguration]", err);
 		}

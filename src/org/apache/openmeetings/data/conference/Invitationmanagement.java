@@ -32,8 +32,8 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDaoImpl;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.data.user.Usermanagement;
@@ -73,7 +73,7 @@ public class Invitationmanagement {
 	@Autowired
 	private AppointmentLogic appointmentLogic;
 	@Autowired
-	private Configurationmanagement cfgManagement;
+	private ConfigurationDaoImpl configurationDaoImpl;
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
@@ -934,7 +934,7 @@ public class Invitationmanagement {
 						+ email + "&roomid=" + room_id;
 
 				Long default_lang_id = Long.valueOf(
-						cfgManagement.getConfKey(3, "default_lang_id")
+						configurationDaoImpl.getConfKey("default_lang_id")
 								.getConf_value()).longValue();
 
 				String template = invitationTemplate

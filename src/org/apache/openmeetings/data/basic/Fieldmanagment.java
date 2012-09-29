@@ -32,6 +32,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
@@ -62,7 +63,7 @@ public class Fieldmanagment {
 	private FieldLanguagesValuesDAO fieldLanguagesValuesDAO;
 
 	@Autowired
-	private Configurationmanagement cfgManagement;
+	private ConfigurationDaoImpl configurationDaoImpl;
 	
 	// Reflect the Reverse Order!!
 	public Fieldlanguagesvalues getFieldByIdAndLanguageByNavi(
@@ -203,7 +204,7 @@ public class Fieldmanagment {
 			query.setFirstResult(start);
 			query.setMaxResults(max);
 
-			String appName = cfgManagement.getAppName();
+			String appName = configurationDaoImpl.getAppName();
 			List<Map<String, Object>> returnList = new LinkedList<Map<String, Object>>();
 			for (Object fl : query.getResultList()) {
 				Map<String, Object> map = new HashMap<String, Object>();
@@ -577,7 +578,7 @@ public class Fieldmanagment {
 	}
 	
 	private Fieldlanguagesvalues performReplace(Fieldlanguagesvalues f) {
-		String appName = cfgManagement.getAppName();
+		String appName = configurationDaoImpl.getAppName();
 		return performReplace(f, appName);
 	}
 	
@@ -598,7 +599,7 @@ public class Fieldmanagment {
 	}
 	
 	private <T extends Collection<Fieldlanguagesvalues>> T performReplace(T flv) {
-		String appName = cfgManagement.getAppName();
+		String appName = configurationDaoImpl.getAppName();
 		
 		for (Fieldlanguagesvalues f : flv) {
 			performReplace(f, appName);

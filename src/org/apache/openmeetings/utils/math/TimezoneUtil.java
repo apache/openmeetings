@@ -23,7 +23,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
@@ -38,7 +38,7 @@ public class TimezoneUtil {
 			TimezoneUtil.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private Configurationmanagement cfgManagement;
+	private ConfigurationDaoImpl configurationDaoImpl;
 	@Autowired
 	private OmTimeZoneDaoImpl omTimeZoneDaoImpl;
 
@@ -64,7 +64,7 @@ public class TimezoneUtil {
 
 		// if user has not time zone get one from the server configuration
 
-		Configuration conf = cfgManagement.getConfKey(3L, "default.timezone");
+		Configuration conf = configurationDaoImpl.getConfKey("default.timezone");
 
 		if (conf != null) {
 
@@ -108,7 +108,7 @@ public class TimezoneUtil {
 
 		// if user has not time zone get one from the server configuration
 
-		Configuration conf = cfgManagement.getConfKey(3L, "default.timezone");
+		Configuration conf = configurationDaoImpl.getConfKey("default.timezone");
 
 		if (conf != null) {
 
@@ -148,7 +148,7 @@ public class TimezoneUtil {
 
 		// if user has not time zone get one from the server configuration
 
-		Configuration conf = cfgManagement.getConfKey(3L, "default.timezone");
+		Configuration conf = configurationDaoImpl.getConfKey("default.timezone");
 
 		if (conf != null) {
 

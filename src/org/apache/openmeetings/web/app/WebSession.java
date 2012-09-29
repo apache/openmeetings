@@ -24,9 +24,9 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
@@ -112,7 +112,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		if (session.isSignedIn()) {
 			return Application.getBean(UsersDaoImpl.class).getUser(session.userId).getLanguage_id();
 		} else {
-			return Application.getBean(Configurationmanagement.class).getConfValue("default_lang_id", Long.class, "1");
+			return Application.getBean(ConfigurationDaoImpl.class).getConfValue("default_lang_id", Long.class, "1");
 		}
 	}
 	

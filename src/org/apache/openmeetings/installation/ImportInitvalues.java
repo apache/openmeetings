@@ -29,11 +29,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
 import org.apache.openmeetings.data.basic.ErrorManagement;
 import org.apache.openmeetings.data.basic.FieldLanguageDaoImpl;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
 import org.apache.openmeetings.data.basic.Navimanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
 import org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDaoImpl;
 import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDaoImpl;
@@ -63,7 +63,7 @@ public class ImportInitvalues {
 			ImportInitvalues.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private Configurationmanagement cfgManagement;
+	private ConfigurationDaoImpl configurationDaoImpl;
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
@@ -252,9 +252,8 @@ public class ImportInitvalues {
 	}
 
 	public void loadConfiguration(InstallationConfig cfg) {
-		cfgManagement
+		configurationDaoImpl
 				.addConfByKey(
-						3,
 						"crypt_ClassName",
 						cfg.cryptClassName,
 						null,
@@ -263,83 +262,88 @@ public class ImportInitvalues {
 								+ "running previous Pass of users will not be workign anymore! "
 								+ "for more Information see http://incubator.apache.org/openmeetings/CustomCryptMechanism.html");
 
-		cfgManagement.addConfByKey(3, "allow_frontend_register",
-				cfg.allowFrontendRegister, null, "");
+		configurationDaoImpl.addConfByKey("allow_frontend_register",
+				cfg.allowFrontendRegister,
+				null, "");
 
-		cfgManagement.addConfByKey(3, "default_group_id", "1", null, "");
+		configurationDaoImpl.addConfByKey("default_group_id", "1", null, "");
 
 		// this domain_id is the Organisation of users who register through the
 		// frontend
-		cfgManagement.addConfByKey(3, "default_domain_id", "1", null, "");
+		configurationDaoImpl.addConfByKey("default_domain_id", "1", null, "");
 
 		// "smtp.xmlcrm.org"
-		cfgManagement.addConfByKey(3, "smtp_server", cfg.smtpServer, null,
+		configurationDaoImpl.addConfByKey("smtp_server", cfg.smtpServer, null,
 				"this is the smtp server to send messages");
 		// 25
-		cfgManagement.addConfByKey(3, "smtp_port", cfg.smtpPort, null,
+		configurationDaoImpl.addConfByKey("smtp_port", cfg.smtpPort, null,
 				"this is the smtp server port normally 25");
 		// "openmeetings@xmlcrm.org"
-		cfgManagement.addConfByKey(3, "system_email_addr", cfg.mailReferer, null,
-				"all send EMails by the system will have this address");
+		configurationDaoImpl.addConfByKey("system_email_addr", cfg.mailReferer,
+				null, "all send EMails by the system will have this address");
 		// "openmeetings@xmlcrm.org"
-		cfgManagement.addConfByKey(3, "email_username", cfg.mailAuthName, null,
-				"System auth email username");
+		configurationDaoImpl.addConfByKey("email_username", cfg.mailAuthName,
+				null, "System auth email username");
 		//
-		cfgManagement.addConfByKey(3, "email_userpass", cfg.mailAuthPass, null,
-				"System auth email password");
+		configurationDaoImpl.addConfByKey("email_userpass", cfg.mailAuthPass,
+				null, "System auth email password");
 
-		cfgManagement.addConfByKey(3, "mail.smtp.starttls.enable", cfg.mailUseTls,
-				null, "Enable TLS 1=true, 0=false");
+		configurationDaoImpl.addConfByKey("mail.smtp.starttls.enable",
+				cfg.mailUseTls, null,
+				"Enable TLS 1=true, 0=false");
 
-		cfgManagement.addConfByKey(3, "application.name",
-				Configurationmanagement.DEFAULT_APP_NAME, null,
-				"Name of the Browser Title window");
+		configurationDaoImpl.addConfByKey("application.name",
+				ConfigurationDaoImpl.DEFAULT_APP_NAME,
+				null, "Name of the Browser Title window");
 
 		// "1" == "EN"
-		cfgManagement.addConfByKey(3, "default_lang_id", cfg.defaultLangId, null,
-				"Default System Language ID see language.xml");
+		configurationDaoImpl.addConfByKey("default_lang_id", cfg.defaultLangId,
+				null, "Default System Language ID see language.xml");
 
-		cfgManagement.addConfByKey(3, "swftools_zoom", cfg.swfZoom, null,
+		configurationDaoImpl.addConfByKey("swftools_zoom", cfg.swfZoom, null,
 				"dpi for conversion of PDF to SWF");
 
-		cfgManagement.addConfByKey(3, "swftools_jpegquality", cfg.swfJpegQuality, null,
+		configurationDaoImpl.addConfByKey("swftools_jpegquality",
+				cfg.swfJpegQuality, null,
 				"compression quality for conversion of PDF to SWF");
 
-		cfgManagement.addConfByKey(3, "swftools_path", cfg.swfPath, null,
+		configurationDaoImpl.addConfByKey("swftools_path", cfg.swfPath, null,
 				"Path To SWF-Tools");
 
-		cfgManagement.addConfByKey(3, "imagemagick_path", cfg.imageMagicPath, null,
-				"Path to ImageMagick tools");
+		configurationDaoImpl.addConfByKey("imagemagick_path",
+				cfg.imageMagicPath, null, "Path to ImageMagick tools");
 
-		cfgManagement.addConfByKey(3, "sox_path", cfg.soxPath, null,
+		configurationDaoImpl.addConfByKey("sox_path", cfg.soxPath, null,
 				"Path To SoX-Tools");
 
-		cfgManagement.addConfByKey(3, "ffmpeg_path", cfg.ffmpegPath, null,
+		configurationDaoImpl.addConfByKey("ffmpeg_path", cfg.ffmpegPath, null,
 				"Path To FFMPEG");
-		cfgManagement.addConfByKey(3, "office.path", cfg.officePath, null,
-				"The path to OpenOffice/LibreOffice (optional) please set this to the real path in case jodconverter is unable to find OpenOffice/LibreOffice installation automatically");
-		cfgManagement
+		configurationDaoImpl
+				.addConfByKey(
+						"office.path",
+						cfg.officePath,
+						null,
+						"The path to OpenOffice/LibreOffice (optional) please set this to the real path in case jodconverter is unable to find OpenOffice/LibreOffice installation automatically");
+		configurationDaoImpl
 			.addConfByKey(
-					3,
 					"jod.path",
 					cfg.jodPath,
 					null,
 					"The path to JOD library (http://code.google.com/p/jodconverter), configure the path to point to the lib directory of JOD that contains also the jodconverter-core-version.jar");
 
 		
-		cfgManagement.addConfByKey(3, "rss_feed1", cfg.urlFeed, null, "Feed URL");
+		configurationDaoImpl.addConfByKey("rss_feed1", cfg.urlFeed, null,
+				"Feed URL");
 
-		cfgManagement.addConfByKey(3, "rss_feed2", cfg.urlFeed2, null,
+		configurationDaoImpl.addConfByKey("rss_feed2", cfg.urlFeed2, null,
 				"Feed URL 2");
 
-		cfgManagement
-				.addConfByKey(3, "sendEmailAtRegister", cfg.sendEmailAtRegister,
-						null,
+		configurationDaoImpl
+				.addConfByKey("sendEmailAtRegister", cfg.sendEmailAtRegister, null,
 						"User get a EMail with their Account data. Values: 0(No) or 1(Yes)");
 
-		cfgManagement
+		configurationDaoImpl
 				.addConfByKey(
-						3,
 						"sendEmailWithVerficationCode",
 						cfg.sendEmailWithVerficationCode,
 						null,
@@ -348,16 +352,15 @@ public class ImportInitvalues {
 								+ "It makes no sense to make this(sendEmailWithVerficationCode) 1(Yes) while "
 								+ "sendEmailAtRegister is 0(No) cause you need"
 								+ "to send a EMail.");
-		cfgManagement
+		configurationDaoImpl
 				.addConfByKey(
-						3,
 						"default_export_font",
 						cfg.defaultExportFont,
 						null,
 						"The Name of the Font used for exporting/render Images from Whiteboard"
 								+ "The Font has to exist on the Server which runs Red5");
 
-		cfgManagement.addConfByKey(3, "default.rpc.userid", "" + 1, null,
+		configurationDaoImpl.addConfByKey("default.rpc.userid", "" + 1, null,
 				"The User-Id of the Control User in OpenMeetings");
 
         // ***************************************
@@ -365,11 +368,13 @@ public class ImportInitvalues {
         // red5SIP Integration Coniguration Values
         // ***************************************
 
-        cfgManagement.addConfByKey(3, "red5sip.enable", cfg.red5SipEnable, null,
+		configurationDaoImpl.addConfByKey("red5sip.enable", cfg.red5SipEnable,
+				null, "Enable to enable the red5SIP integration ");
+		configurationDaoImpl.addConfByKey("red5sip.room_prefix",
+				cfg.red5SipRoomPrefix, null,
 				"Enable to enable the red5SIP integration ");
-        cfgManagement.addConfByKey(3, "red5sip.room_prefix", cfg.red5SipRoomPrefix, null,
-				"Enable to enable the red5SIP integration ");
-        cfgManagement.addConfByKey(3, "red5sip.exten_context", cfg.red5SipExtenContext, null,
+		configurationDaoImpl.addConfByKey("red5sip.exten_context",
+				cfg.red5SipExtenContext, null,
 				"Enable to enable the red5SIP integration ");
 
 		// ***************************************
@@ -377,40 +382,39 @@ public class ImportInitvalues {
 		// SIP Applet Configuration Values
 		// ***************************************
 
-		cfgManagement.addConfByKey(3, "sip.enable", cfg.sipEnable, null,
+		configurationDaoImpl.addConfByKey("sip.enable", cfg.sipEnable, null,
 				"Enable to load the SIP Applet in the Client and "
-						+ "call the SIP Applet whenever you enter a Room");
+				+ "call the SIP Applet whenever you enter a Room");
 
-		cfgManagement.addConfByKey(3, "sip.realm", cfg.sipRealm, null,
+		configurationDaoImpl.addConfByKey("sip.realm", cfg.sipRealm, null,
 				"So called *Domain of the SIP Provider*");
 
-		cfgManagement.addConfByKey(3, "sip.port", cfg.sipPort, null, "SIP Port");
+		configurationDaoImpl.addConfByKey("sip.port", cfg.sipPort, null,
+				"SIP Port");
 
-		cfgManagement.addConfByKey(3, "sip.proxyname", cfg.sipProxyName, null,
-				"SIP Proxy name (this is the outbound proxy)");
+		configurationDaoImpl.addConfByKey("sip.proxyname", cfg.sipProxyName,
+				null, "SIP Proxy name (this is the outbound proxy)");
 
-		cfgManagement
-				.addConfByKey(3, "sip.tunnel", cfg.sipTunnel, null,
-						"SIP Tunnel IP + Port, format domain:port, for example 10.0.0.0:443");
+		configurationDaoImpl
+				.addConfByKey("sip.tunnel", cfg.sipTunnel, null, "SIP Tunnel IP + Port, format domain:port, for example 10.0.0.0:443");
 
-		cfgManagement.addConfByKey(3, "sip.codebase", cfg.sipCodebase, null,
-				"The Base-URL to load the Ringtone from");
+		configurationDaoImpl.addConfByKey("sip.codebase", cfg.sipCodebase,
+				null, "The Base-URL to load the Ringtone from");
 
-		cfgManagement.addConfByKey(3, "sip.forcetunnel", cfg.sipForceTunnel, null,
-				"Force usage of the tunnel");
+		configurationDaoImpl.addConfByKey("sip.forcetunnel",
+				cfg.sipForceTunnel, null, "Force usage of the tunnel");
 
 		// ***************************************
 		// ***************************************
 		// OpenXG Configuration Values
 		// ***************************************
 
-		cfgManagement.addConfByKey(3, "sip.openxg.enable", cfg.sipOpenxgEnable,
-				null,
+		configurationDaoImpl.addConfByKey("sip.openxg.enable",
+				cfg.sipOpenxgEnable, null,
 				"Enable the OpenXG XML-RPC Gateway through the Wrapper URL");
 
-		cfgManagement
+		configurationDaoImpl
 				.addConfByKey(
-						3,
 						"openxg.wrapper.url",
 						cfg.openxgWrapperUrl,
 						null,
@@ -418,147 +422,155 @@ public class ImportInitvalues {
 								+ "be located on 127.0.01 by default, "
 								+ "for example http://127.0.0.1:5080/rpc_client/rpc_gateway_wrapper.php");
 
-		cfgManagement.addConfByKey(3, "openxg.client.id", cfg.openxgClientId,
-				null, "OpenXG XML-RPC Client ID");
+		configurationDaoImpl.addConfByKey("openxg.client.id",
+				cfg.openxgClientId, null,
+				"OpenXG XML-RPC Client ID");
 
-		cfgManagement.addConfByKey(3, "openxg.client.secret",
-				cfg.openxgClientSecret, null, "OpenXG XML-RPC Client Secret");
+		configurationDaoImpl.addConfByKey("openxg.client.secret",
+				cfg.openxgClientSecret,
+				null, "OpenXG XML-RPC Client Secret");
 
-		cfgManagement.addConfByKey(3, "openxg.client.domain",
-				cfg.openxgClientDomain, null, "OpenXG Domain");
+		configurationDaoImpl.addConfByKey("openxg.client.domain",
+				cfg.openxgClientDomain,
+				null, "OpenXG Domain");
 
-		cfgManagement.addConfByKey(3, "openxg.community.code",
-				cfg.openxgCommunityCode, null, "OpenXG Community Code");
+		configurationDaoImpl.addConfByKey("openxg.community.code",
+				cfg.openxgCommunityCode,
+				null, "OpenXG Community Code");
 
-		cfgManagement.addConfByKey(3, "openxg.language.code",
-				cfg.openxgLanguageCode, null, "OpenXG Language Code");
+		configurationDaoImpl.addConfByKey("openxg.language.code",
+				cfg.openxgLanguageCode,
+				null, "OpenXG Language Code");
 
-		cfgManagement.addConfByKey(3, "openxg.adminid", cfg.openxgAdminId, null,
-				"OpenXG Admin ID");
+		configurationDaoImpl.addConfByKey("openxg.adminid", cfg.openxgAdminId,
+				null, "OpenXG Admin ID");
 
 		// ***************************************
 		// ***************************************
 		// Phone Range Configuration Values
 		// ***************************************
 
-		cfgManagement.addConfByKey(3, "sip.language.phonecode",
-				cfg.sipLanguagePhoneCode, null, "For example +358 for Finland");
+		configurationDaoImpl.addConfByKey("sip.language.phonecode",
+				cfg.sipLanguagePhoneCode,
+				null, "For example +358 for Finland");
 
-		cfgManagement
-				.addConfByKey(3, "sip.phonerange.start", cfg.sipPhoneRangeStart,
-						null,
+		configurationDaoImpl
+				.addConfByKey("sip.phonerange.start", cfg.sipPhoneRangeStart, null,
 						"The first number in the Range of Phone Numbers in national format");
 
-		cfgManagement.addConfByKey(3, "sip.phonerange", cfg.sipPhoneRange, null,
-				"Amount of numbers in the Phone Range available");
+		configurationDaoImpl.addConfByKey("sip.phonerange", cfg.sipPhoneRange,
+				null, "Amount of numbers in the Phone Range available");
 
-		cfgManagement.addConfByKey(3, "sip.phonerange.currentindex", "" + 0,
-				null, "Number of used Phone Numbers in the sip.phonerange");
+		configurationDaoImpl.addConfByKey("sip.phonerange.currentindex",
+				"" + 0, null,
+				"Number of used Phone Numbers in the sip.phonerange");
 
-		cfgManagement
-				.addConfByKey(3, "sip.phonerange.conference.currentindex",
-						"" + 0, null,
-						"Number of used Phone Numbers in the sip.phonerange for the conferences");
+		configurationDaoImpl
+				.addConfByKey("sip.phonerange.conference.currentindex", "" + 0,
+						null, "Number of used Phone Numbers in the sip.phonerange for the conferences");
 
 		// ***************************************
 		// ***************************************
 		// Timezone settings
 		// ***************************************
 
-		cfgManagement.addConfByKey(3, "default.timezone", cfg.ical_timeZone,
-				null, "This is the default timezone if nothing is specified");
+		configurationDaoImpl.addConfByKey("default.timezone",
+				cfg.ical_timeZone, null,
+				"This is the default timezone if nothing is specified");
 
 		// ***************************************
 		// ***************************************
 		// additional settings
 		// ***************************************
 
-		cfgManagement.addConfByKey(3, "show.facebook.login", "" + 0, null,
+		configurationDaoImpl.addConfByKey("show.facebook.login", "" + 0, null,
 				"Show Facebook Login");
 
-		cfgManagement.addConfByKey(3, "default.quality.screensharing", "1",
+		configurationDaoImpl
+				.addConfByKey(
+						"default.quality.screensharing",
+						"1",
 						null,
 						"Default selection in ScreenSharing Quality:\n 0 - bigger frame rate, no resize\n 1 - no resize\n 2 - size == 1/2 of selected area\n 3 - size == 3/8 of selected area");
 
-		cfgManagement.addConfByKey(3, "default.dashboard.tab", "0", null,
+		configurationDaoImpl.addConfByKey("default.dashboard.tab", "0", null,
 				"Default selection in Dashboard tabs as tab-index-id");
 
-		cfgManagement.addConfByKey(3, "dashboard.show.myrooms", "1", null,
+		configurationDaoImpl.addConfByKey("dashboard.show.myrooms", "1", null,
 				"Show My Rooms Tab");
 
-		cfgManagement.addConfByKey(3, "dashboard.show.chat", "1", null,
+		configurationDaoImpl.addConfByKey("dashboard.show.chat", "1", null,
 				"Show Chat Tab");
 
-		cfgManagement.addConfByKey(3, "dashboard.show.rssfeed", "0", null,
+		configurationDaoImpl.addConfByKey("dashboard.show.rssfeed", "0", null,
 				"Show RSS Tab");
 
-		cfgManagement
+		configurationDaoImpl
 				.addConfByKey(
-						3,
 						"show.whiteboard.draw.status",
 						"0",
 						null,
 						"Display name of the user who draw the current object (User Name auto-disapper after 3 seconds.");
 
-		cfgManagement.addConfByKey(3, "max_upload_size", new Integer(
-				ImportHelper.DEFAULT_MAX_UPLOAD_SIZE).toString(), null,
-				"Maximum size of upload file (bytes)"); // defaults to 1GB
+		configurationDaoImpl.addConfByKey("max_upload_size", new Integer(
+				ImportHelper.DEFAULT_MAX_UPLOAD_SIZE).toString(), null, "Maximum size of upload file (bytes)"); // defaults to 1GB
 
-		cfgManagement
+		configurationDaoImpl
 				.addConfByKey(
-						3,
 						"number.minutes.reminder.send",
 						"15",
 						null,
 						"The number of minutes before reminder emails are send. Set to 0 to disable reminder emails");
 
-		cfgManagement.addConfByKey(3, "user.login.minimum.length", "" + InstallationConfig.USER_LOGIN_MINIMUM_LENGTH, null,
+		configurationDaoImpl.addConfByKey("user.login.minimum.length", ""
+				+ InstallationConfig.USER_LOGIN_MINIMUM_LENGTH, null,
 				"Number of chars needed in a user login");
 
-		cfgManagement.addConfByKey(3, "user.pass.minimum.length", "" + InstallationConfig.USER_PASSWORD_MINIMUM_LENGTH, null,
+		configurationDaoImpl.addConfByKey("user.pass.minimum.length", ""
+				+ InstallationConfig.USER_PASSWORD_MINIMUM_LENGTH, null,
 				"Number of chars needed in a user login");
 
-		cfgManagement
-				.addConfByKey(3, "calendar.conference.rooms.default.size",
-						"50", null,
-						"Default number of participants conference room created via calendar");
+		configurationDaoImpl
+				.addConfByKey("calendar.conference.rooms.default.size", "50",
+						null, "Default number of participants conference room created via calendar");
 
-		cfgManagement
+		configurationDaoImpl
 				.addConfByKey(
-						3,
 						"use.old.style.ffmpeg.map.option",
 						"0",
 						null,
 						"specify a 1 if you would like to use old FFMPEG -map option with 0.0 instead of 0:0");
 
 		// give exclusive audio key code
-		cfgManagement
+		configurationDaoImpl
 				.addConfByKey(
-						3,
 						"exclusive.audio.keycode",
 						"123",
 						null,
 						"A hot key code for the 'give exclusive audio' functionality. Keycode 123 is F12");
 
 		// system-wide ldap params
-		cfgManagement.addConfByKey(
-						3, 
+		configurationDaoImpl.addConfByKey(
 						"ldap_default_id", 
 						"0", 
-						null,
+						null, 
 						"Ldap domain selected by default in the login screen");
 		
 		// set inviter's email address as ReplyTo in email invitations
-		cfgManagement.addConfByKey(
-						3, 
+		configurationDaoImpl
+				.addConfByKey(
 						"inviter.email.as.replyto", 
 						cfg.replyToOrganizer, 
-						null,
+						null, 
 						"Set inviter's email address as ReplyTo in email invitations (1 == set, 0 == NOT set)");
 		
-		cfgManagement.addConfByKey(3, "default.landing.zone", "dashboard.rooms", null,
-			"Area to be shown to the user after login. Possible values are: "
-			+ "dashboard.rooms, dashboard.chat, calendar, rooms.public, rooms.private, rooms.user");
+		configurationDaoImpl
+				.addConfByKey(
+						"default.landing.zone",
+						"dashboard.rooms",
+						null,
+						"Area to be shown to the user after login. Possible values are: "
+		+ "dashboard.rooms, dashboard.chat, calendar, rooms.public, rooms.private, rooms.user");
 		
 		log.debug("Configuration ADDED");
 	}

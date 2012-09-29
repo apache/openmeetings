@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.components.admin.configurations;
 
-import org.apache.openmeetings.data.basic.Configurationmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
@@ -46,7 +46,7 @@ public class ConfigsPanel extends AdminPanel {
 		super(id);
 		
 		DataView<Configuration> dataView = new DataView<Configuration>("configList"
-			, new OmDataProvider<Configuration>(Configurationmanagement.class)) {
+			, new OmDataProvider<Configuration>(ConfigurationDaoImpl.class)) {
 			private static final long serialVersionUID = 8715559628755439596L;
 
 			@Override

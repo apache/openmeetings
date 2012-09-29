@@ -33,8 +33,8 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.conference.whiteboard.BrowserStatus;
 import org.apache.openmeetings.conference.whiteboard.RoomStatus;
 import org.apache.openmeetings.conference.whiteboard.WhiteboardManagement;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.data.calendar.daos.MeetingMemberDaoImpl;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.data.conference.Roommanagement;
@@ -83,7 +83,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	@Autowired
 	private FLVRecorderService flvRecorderService;
 	@Autowired
-	private Configurationmanagement cfgManagement;
+	private ConfigurationDaoImpl configurationDaoImpl;
 	@Autowired
 	private AppointmentLogic appointmentLogic;
 	@Autowired
@@ -120,7 +120,8 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 			// Only load this Class one time
 			// Initially this value might by empty, because the DB is empty yet
-			Configuration conf = cfgManagement.getConfKey(3, "crypt_ClassName");
+			Configuration conf = configurationDaoImpl
+					.getConfKey("crypt_ClassName");
 			if (conf != null) {
 				ScopeApplicationAdapter.configKeyCryptClassName = conf
 						.getConf_value();
@@ -2885,7 +2886,8 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 	private boolean getWhiteboardDrawStatus() {
 		if (ScopeApplicationAdapter.whiteboardDrawStatus == null) {
-			String drawStatus = cfgManagement.getConfValue("show.whiteboard.draw.status", String.class, "0");
+			String drawStatus = configurationDaoImpl.getConfValue(
+					"show.whiteboard.draw.status", String.class, "0");
 			ScopeApplicationAdapter.whiteboardDrawStatus = "1".equals(drawStatus);
 		}
 		return ScopeApplicationAdapter.whiteboardDrawStatus;
@@ -2895,7 +2897,8 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		try {
 
 			if (ScopeApplicationAdapter.configKeyCryptClassName == null) {
-				Configuration conf = cfgManagement.getConfKey(3,
+				Configuration conf = configurationDaoImpl
+						.getConfKey(
 						"crypt_ClassName");
 
 				if (conf != null) {
@@ -2912,7 +2915,8 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	}
 
     public String getExclusiveAudioKeyCode() {
-        Configuration conf = cfgManagement.getConfKey(3, "exclusive.audio.keycode");
+		Configuration conf = configurationDaoImpl
+				.getConfKey("exclusive.audio.keycode");
         if (null != conf) {
             return conf.getConf_value();
         } else {

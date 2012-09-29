@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.utils.OmFileHelper;
@@ -38,14 +38,14 @@ public class GenerateImage {
 			GenerateImage.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private Configurationmanagement cfgManagement;
+	private ConfigurationDaoImpl configurationDaoImpl;
 	@Autowired
 	private UsersDaoImpl usersDao;
 	@Autowired
 	private GenerateThumbs generateThumbs;
 
 	String getPathToImageMagic() {
-		String pathToImageMagic = cfgManagement.getConfKey(3,
+		String pathToImageMagic = configurationDaoImpl.getConfKey(
 				"imagemagick_path").getConf_value();
 		if (!pathToImageMagic.equals("")
 				&& !pathToImageMagic.endsWith(File.separator)) {

@@ -27,7 +27,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentCategory;
 import org.red5.logging.Red5LoggerFactory;
@@ -39,7 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AppointmentCategoryDaoImpl {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			Configurationmanagement.class,
+			ConfigurationDaoImpl.class,
 			OpenmeetingsVariables.webAppRootKey);
 
 	@PersistenceContext

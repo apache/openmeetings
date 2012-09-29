@@ -39,9 +39,9 @@ import javax.persistence.criteria.Root;
 import org.apache.commons.lang.StringUtils;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
 import org.apache.openmeetings.data.basic.dao.ServerDaoImpl;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
@@ -88,7 +88,7 @@ public class Usermanagement {
 	@Autowired
 	private Sessionmanagement sessionManagement;
 	@Autowired
-	private Configurationmanagement cfgManagement;
+	private ConfigurationDaoImpl configurationDaoImpl;
 	@Autowired
 	private Fieldmanagment fieldmanagment;
 	@Autowired
@@ -834,7 +834,7 @@ public class Usermanagement {
 		
 		boolean sendConfirmation = baseURL != null
 				&& !baseURL.isEmpty()
-				&& 1 == cfgManagement.getConfValue(
+				&& 1 == configurationDaoImpl.getConfValue(
 						"sendEmailWithVerficationCode", Integer.class, "0");
 		
 		return registerUser(login, Userpass, lastname, firstname, email, age,
@@ -860,14 +860,17 @@ public class Usermanagement {
 			boolean generateSipUserData, String jNameTimeZone, Boolean sendConfirmation, Server server) {
 		try {
 			// Checks if FrontEndUsers can register
-			if ("1".equals(cfgManagement.getConfValue("allow_frontend_register", String.class, "0"))) {
+			if ("1".equals(configurationDaoImpl.getConfValue(
+					"allow_frontend_register", String.class, "0"))) {
 				
 				// TODO: Read and generate SIP-Data via RPC-Interface Issue 1098
 
 				Long user_id = this.registerUserInit(3, 1, 0, 1, login,
 						Userpass, lastname, firstname, email, age, street,
 						additionalname, fax, zip, states_id, town, language_id,
-						true, Arrays.asList(cfgManagement.getConfValue("default_domain_id", Long.class, null)),phone, sendSMS, baseURL,
+						true, Arrays.asList(configurationDaoImpl.getConfValue(
+								"default_domain_id", Long.class, null)), phone,
+						sendSMS, baseURL,
 						sendConfirmation, "", "", "", generateSipUserData,
 						jNameTimeZone, false, "", "", false, true, server);
 
@@ -988,9 +991,9 @@ public class Usermanagement {
 		// their Group
 		if (authLevelManagement.checkModLevel(user_level)) {
 
-			Integer userLoginMinimumLength = cfgManagement.getConfValue(
+			Integer userLoginMinimumLength = configurationDaoImpl.getConfValue(
 					"user.login.minimum.length", Integer.class, "4");
-			Integer userPassMinimumLength = cfgManagement.getConfValue(
+			Integer userPassMinimumLength = configurationDaoImpl.getConfValue(
 					"user.pass.minimum.length", Integer.class, "4");
 
 			if (userLoginMinimumLength == null || userPassMinimumLength == null) {
@@ -1498,7 +1501,8 @@ public class Usermanagement {
 		String email = us.getAdresses().getEmail();
 
 		Long default_lang_id = Long.valueOf(
-				cfgManagement.getConfKey(3, "default_lang_id").getConf_value())
+				configurationDaoImpl.getConfKey("default_lang_id")
+						.getConf_value())
 				.longValue();
 
 		String template = resetPasswordTemplate.getResetPasswordTemplate(

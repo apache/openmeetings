@@ -32,8 +32,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.data.user.Usermanagement;
@@ -82,16 +82,16 @@ public class CalendarServlet extends HttpServlet {
 		return null;
 	}
 
-	public Configurationmanagement getCfgManagement() {
+	public ConfigurationDaoImpl getConfigurationDaoImpl() {
 		try {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
-				return (Configurationmanagement) context
-						.getBean("cfgManagement");
+				return (ConfigurationDaoImpl) context
+						.getBean("configurationDaoImpl");
 			}
 		} catch (Exception err) {
-			log.error("[getCfgManagement]", err);
+			log.error("[getConfigurationDaoImpl]", err);
 		}
 		return null;
 	}
@@ -143,7 +143,7 @@ public class CalendarServlet extends HttpServlet {
 		try {
 
 			if (getUserManagement() == null || getOmTimeZoneDaoImpl() == null
-					|| getCfgManagement() == null
+					|| getConfigurationDaoImpl() == null
 					|| getSessionManagement() == null
 					|| getAppointmentLogic() == null
 					|| getTimezoneUtil() == null) {

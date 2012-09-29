@@ -22,8 +22,8 @@ import java.io.StringWriter;
 import java.util.Date;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -38,7 +38,7 @@ public class InvitationTemplate extends VelocityLoader {
 	@Autowired
 	private Fieldmanagment fieldmanagment;
 	@Autowired
-	private Configurationmanagement configurationmanagement;
+	private ConfigurationDaoImpl configurationmanagement;
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			InvitationTemplate.class, OpenmeetingsVariables.webAppRootKey);

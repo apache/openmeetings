@@ -30,9 +30,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang.StringUtils;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.persistence.beans.rooms.RoomClient;
 import org.apache.openmeetings.remote.red5.ClientListManager;
 import org.apache.openmeetings.utils.OmFileHelper;
@@ -57,7 +57,7 @@ public class ScreenController {
 	@Autowired
 	public Sessionmanagement sessionManagement;
 	@Autowired
-	public Configurationmanagement cfgManagement;
+	public ConfigurationDaoImpl configurationDaoImpl;
 	@Autowired
 	public Fieldmanagment fieldmanagment;
 
@@ -192,7 +192,7 @@ public class ScreenController {
 			boolean allowPublishing = (0 == clientListManager.getPublisingCount(roomId));
 			
 			Context ctx = new VelocityContext();
-			ctx.put("APP_NAME", cfgManagement.getAppName());
+			ctx.put("APP_NAME", configurationDaoImpl.getAppName());
 			ctx.put("PUBLIC_SID", publicSID);
 			ctx.put("LABELSHARER", label_sharer);
 			addKeystore(ctx);
@@ -203,7 +203,8 @@ public class ScreenController {
 			ctx.put("red5-host", rtmphostlocal);
 			ctx.put("red5-app", OpenmeetingsVariables.webAppRootKey + "/" + roomId);
 			ctx.put("default_quality_screensharing",
-				cfgManagement.getConfValue(
+ configurationDaoImpl
+					.getConfValue(
 					"default.quality.screensharing", String.class, "1"));
 			//invited guest does not have valid user_id (have user_id == -1)
 			ctx.put("user_id", users_id);

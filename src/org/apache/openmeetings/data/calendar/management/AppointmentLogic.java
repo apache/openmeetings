@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
-import org.apache.openmeetings.data.basic.Configurationmanagement;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDaoImpl;
 import org.apache.openmeetings.data.calendar.daos.MeetingMemberDaoImpl;
@@ -52,7 +52,7 @@ public class AppointmentLogic {
 	@Autowired
 	private AppointmentDaoImpl appointmentDao;
 	@Autowired
-	private Configurationmanagement cfgManagement;
+	private ConfigurationDaoImpl configurationDaoImpl;
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
@@ -150,7 +150,7 @@ public class AppointmentLogic {
 		
 		// TODO:Add this user as the default Moderator of the Room
 
-		Long numberOfParticipants = cfgManagement.getConfValue(
+		Long numberOfParticipants = configurationDaoImpl.getConfValue(
 				"calendar.conference.rooms.default.size", Long.class, "50");
 
 		try {
@@ -395,7 +395,7 @@ public class AppointmentLogic {
 	public void doScheduledMeetingReminder() throws Exception {
 		// log.debug("doScheduledMeetingReminder");
 
-		Integer minutesReminderSend = cfgManagement.getConfValue(
+		Integer minutesReminderSend = configurationDaoImpl.getConfValue(
 				"number.minutes.reminder.send", Integer.class, ""
 						+ DEFAULT_MINUTES_REMINDER_SEND);
 		if (minutesReminderSend == null) {
@@ -419,7 +419,8 @@ public class AppointmentLogic {
 		}
 
 		Long language_id = Long.valueOf(
-				cfgManagement.getConfKey(3, "default_lang_id").getConf_value())
+				configurationDaoImpl.getConfKey("default_lang_id")
+						.getConf_value())
 				.longValue();
 
 		// Get the required labels one time for all meeting members. The

@@ -46,7 +46,7 @@ import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.persistence.beans.sip.OpenXGReturnObject;
 import org.apache.openmeetings.persistence.beans.user.UserSipData;
@@ -67,7 +67,7 @@ public class OpenXGHttpClient {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			OpenXGHttpClient.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
-	private Configurationmanagement cfgManagement;
+	private ConfigurationDaoImpl configurationDaoImpl;
 	@Autowired
 	private OpenXGReturnObjectDaoImpl openXGReturnObjectDao;
 
@@ -118,7 +118,8 @@ public class OpenXGHttpClient {
 		try {
 
 			// Check if the OpenXG Gateway is enabled in general
-			Configuration sip_openxg_enable = cfgManagement.getConfKey(3L,
+			Configuration sip_openxg_enable = configurationDaoImpl
+					.getConfKey(
 					"sip.openxg.enable");
 
 			if (sip_openxg_enable == null
@@ -128,9 +129,11 @@ public class OpenXGHttpClient {
 			}
 
 			// client_id and client_secret
-			Configuration openxg_client_id = cfgManagement.getConfKey(3L,
+			Configuration openxg_client_id = configurationDaoImpl
+					.getConfKey(
 					"openxg.client.id");
-			Configuration openxg_client_secret = cfgManagement.getConfKey(3L,
+			Configuration openxg_client_secret = configurationDaoImpl
+					.getConfKey(
 					"openxg.client.secret");
 			if (openxg_client_id == null || openxg_client_secret == null) {
 				throw new Exception(
@@ -140,7 +143,8 @@ public class OpenXGHttpClient {
 			String client_secret = openxg_client_secret.getConf_value();
 
 			// domain
-			Configuration openxg_client_domain = cfgManagement.getConfKey(3L,
+			Configuration openxg_client_domain = configurationDaoImpl
+					.getConfKey(
 					"openxg.client.domain");
 			if (openxg_client_domain == null) {
 				throw new Exception(
@@ -149,7 +153,8 @@ public class OpenXGHttpClient {
 			String domain = openxg_client_domain.getConf_value();
 
 			// openxg_community_code
-			Configuration openxg_community_code = cfgManagement.getConfKey(3L,
+			Configuration openxg_community_code = configurationDaoImpl
+					.getConfKey(
 					"openxg.community.code");
 			if (openxg_community_code == null) {
 				throw new Exception(
@@ -158,7 +163,8 @@ public class OpenXGHttpClient {
 			String community_code = openxg_community_code.getConf_value();
 
 			// language_code
-			Configuration openxg_language_code = cfgManagement.getConfKey(3L,
+			Configuration openxg_language_code = configurationDaoImpl
+					.getConfKey(
 					"openxg.language.code");
 			if (openxg_language_code == null) {
 				throw new Exception(
@@ -167,7 +173,8 @@ public class OpenXGHttpClient {
 			String language_code = openxg_language_code.getConf_value();
 
 			// adminid
-			Configuration openxg_adminid = cfgManagement.getConfKey(3L,
+			Configuration openxg_adminid = configurationDaoImpl
+					.getConfKey(
 					"openxg.adminid");
 			if (openxg_adminid == null) {
 				throw new Exception(
@@ -178,7 +185,8 @@ public class OpenXGHttpClient {
 			// sip_language_phonecode, for example +358, is important as port of
 			// the
 			// number/login for the SIP-User via the applet
-			Configuration sip_language_phonecode = cfgManagement.getConfKey(3L,
+			Configuration sip_language_phonecode = configurationDaoImpl
+					.getConfKey(
 					"sip.language.phonecode");
 
 			if (sip_language_phonecode == null) {
@@ -187,12 +195,14 @@ public class OpenXGHttpClient {
 			}
 
 			// Calculate the number in national format
-			Configuration sip_phonerange_start = cfgManagement.getConfKey(3L,
+			Configuration sip_phonerange_start = configurationDaoImpl
+					.getConfKey(
 					"sip.phonerange.start");
-			Configuration sip_phonerange = cfgManagement.getConfKey(3L,
+			Configuration sip_phonerange = configurationDaoImpl
+					.getConfKey(
 					"sip.phonerange");
-			Configuration sip_phonerange_currentindex = cfgManagement
-					.getConfKey(3L, "sip.phonerange.currentindex");
+			Configuration sip_phonerange_currentindex = configurationDaoImpl
+					.getConfKey("sip.phonerange.currentindex");
 			if (sip_phonerange_start == null || sip_phonerange == null
 					|| sip_phonerange_currentindex == null) {
 				throw new Exception(
@@ -311,7 +321,8 @@ public class OpenXGHttpClient {
 		try {
 
 			// Check if the OpenXG Gateway is enabled in general
-			Configuration sip_openxg_enable = cfgManagement.getConfKey(3L,
+			Configuration sip_openxg_enable = configurationDaoImpl
+					.getConfKey(
 					"sip.openxg.enable");
 
 			if (sip_openxg_enable == null
@@ -321,9 +332,11 @@ public class OpenXGHttpClient {
 			}
 
 			// client_id and client_secret
-			Configuration openxg_client_id = cfgManagement.getConfKey(3L,
+			Configuration openxg_client_id = configurationDaoImpl
+					.getConfKey(
 					"openxg.client.id");
-			Configuration openxg_client_secret = cfgManagement.getConfKey(3L,
+			Configuration openxg_client_secret = configurationDaoImpl
+					.getConfKey(
 					"openxg.client.secret");
 			if (openxg_client_id == null || openxg_client_secret == null) {
 				throw new Exception(
@@ -333,7 +346,8 @@ public class OpenXGHttpClient {
 			String client_secret = openxg_client_secret.getConf_value();
 
 			// domain
-			Configuration openxg_client_domain = cfgManagement.getConfKey(3L,
+			Configuration openxg_client_domain = configurationDaoImpl
+					.getConfKey(
 					"openxg.client.domain");
 			if (openxg_client_domain == null) {
 				throw new Exception(
@@ -342,7 +356,8 @@ public class OpenXGHttpClient {
 			String domain = openxg_client_domain.getConf_value();
 
 			// language_code
-			Configuration openxg_language_code = cfgManagement.getConfKey(3L,
+			Configuration openxg_language_code = configurationDaoImpl
+					.getConfKey(
 					"openxg.language.code");
 			if (openxg_language_code == null) {
 				throw new Exception(
@@ -351,7 +366,8 @@ public class OpenXGHttpClient {
 			String language_code = openxg_language_code.getConf_value();
 
 			// adminid
-			Configuration openxg_adminid = cfgManagement.getConfKey(3L,
+			Configuration openxg_adminid = configurationDaoImpl
+					.getConfKey(
 					"openxg.adminid");
 			if (openxg_adminid == null) {
 				throw new Exception(
@@ -374,7 +390,8 @@ public class OpenXGHttpClient {
 					"067201101", domain, "" + starttime, "" + endTime,
 					language_code, adminid, client_secret });
 
-			Configuration openxg_wrapper_url = cfgManagement.getConfKey(3L,
+			Configuration openxg_wrapper_url = configurationDaoImpl
+					.getConfKey(
 					"openxg.wrapper.url");
 
 			if (openxg_wrapper_url == null) {
@@ -416,7 +433,8 @@ public class OpenXGHttpClient {
 	public OpenXGReturnObject openSIPgPost(String stringToPost) {
 		try {
 
-			Configuration openxg_wrapper_url = cfgManagement.getConfKey(3L,
+			Configuration openxg_wrapper_url = configurationDaoImpl
+					.getConfKey(
 					"openxg.wrapper.url");
 
 			if (openxg_wrapper_url == null) {

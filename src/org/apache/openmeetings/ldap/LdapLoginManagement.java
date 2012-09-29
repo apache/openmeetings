@@ -27,8 +27,8 @@ import java.util.Random;
 import java.util.Vector;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.data.basic.dao.LdapConfigDaoImpl;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
 import org.apache.openmeetings.data.user.Statemanagement;
@@ -58,7 +58,7 @@ public class LdapLoginManagement {
 	@Autowired
 	private Sessionmanagement sessionManagement;
 	@Autowired
-	private Configurationmanagement cfgManagement;
+	private ConfigurationDaoImpl configurationDaoImpl;
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
@@ -638,7 +638,8 @@ public class LdapLoginManagement {
 			jName_timeZone = userdata.get(ldapAttrs.get("timezoneAttr"));
 		
 		if (omTimeZoneDaoImpl.getOmTimeZone(jName_timeZone) == null) {
-			jName_timeZone = cfgManagement.getConfValue("default.timezone", String.class, "Europe/Berlin");
+			jName_timeZone = configurationDaoImpl.getConfValue(
+					"default.timezone", String.class, "Europe/Berlin");
 		}
 
 		if (state != null) {
@@ -687,9 +688,12 @@ public class LdapLoginManagement {
 					new java.util.Date(), //age
 					street,
 					additionalname, fax, zip, state_id, town, 
-					cfgManagement.getConfValue("default_lang_id", Long.class,"0"), //language_id
+					configurationDaoImpl.getConfValue("default_lang_id",
+							Long.class, "0"), // language_id
 					false, // sendWelcomeMessage
-					Arrays.asList(cfgManagement.getConfValue("default_domain_id", Long.class, null)), //organozation Ids
+					Arrays.asList(configurationDaoImpl.getConfValue(
+							"default_domain_id", Long.class, null)), // organozation
+																		// Ids
 					phone, 
 					false,
 					"",// BaseURL is empty as we do not send an Email here

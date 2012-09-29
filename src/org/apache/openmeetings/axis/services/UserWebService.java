@@ -23,10 +23,10 @@ import java.util.Date;
 import org.apache.axis2.AxisFault;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
 import org.apache.openmeetings.data.basic.ErrorManagement;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.data.basic.dao.SOAPLoginDaoImpl;
 import org.apache.openmeetings.data.beans.basic.ErrorResult;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
@@ -64,7 +64,7 @@ public class UserWebService {
 	@Autowired
 	private Sessionmanagement sessionManagement;
 	@Autowired
-	private Configurationmanagement cfgManagement;
+	private ConfigurationDaoImpl configurationDaoImpl;
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
@@ -216,8 +216,8 @@ public class UserWebService {
 
 			if (authLevelManagement.checkWebServiceLevel(user_level)) {
 
-				Configuration conf = cfgManagement.getConfKey(3L,
-						"default.timezone");
+				Configuration conf = configurationDaoImpl
+						.getConfKey("default.timezone");
 				String jName_timeZone = "";
 
 				if (conf != null) {

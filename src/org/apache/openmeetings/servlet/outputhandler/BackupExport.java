@@ -49,8 +49,8 @@ import org.apache.openmeetings.backup.RoomTypeConverter;
 import org.apache.openmeetings.backup.StateConverter;
 import org.apache.openmeetings.backup.UserConverter;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.Configurationmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.data.basic.dao.LdapConfigDaoImpl;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDaoImpl;
 import org.apache.openmeetings.data.calendar.daos.MeetingMemberDaoImpl;
@@ -147,7 +147,7 @@ public class BackupExport {
 	@Autowired
 	private PollManagement pollManagement;
 	@Autowired
-	private Configurationmanagement cfgManagement;
+	private ConfigurationDaoImpl configurationDaoImpl;
 	@Autowired
 	private AsteriskDAOImpl asteriskDAOImpl;
 
@@ -337,7 +337,8 @@ public class BackupExport {
 		 * ##################### Config
 		 */
 		{
-			List<Configuration> list = cfgManagement.getConfigurations(0, Integer.MAX_VALUE, "conf_key", true);
+			List<Configuration> list = configurationDaoImpl.getConfigurations(
+					0, Integer.MAX_VALUE, "conf_key", true);
 			Registry registry = new Registry();
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);

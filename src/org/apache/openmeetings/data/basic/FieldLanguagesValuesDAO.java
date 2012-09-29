@@ -27,6 +27,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.data.OmDAO;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,10 +37,10 @@ public class FieldLanguagesValuesDAO implements OmDAO<Fieldlanguagesvalues> {
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
-	private Configurationmanagement cfgManagement;
+	private ConfigurationDaoImpl configurationDaoImpl;
 
 	public List<Fieldlanguagesvalues> get(int first, int count) {
-		return get(cfgManagement.getConfValue("default_lang_id", Long.class, "1"), first, count);
+		return get(configurationDaoImpl.getConfValue("default_lang_id", Long.class, "1"), first, count);
 	}
 	
 	public List<Fieldlanguagesvalues> get(Long language_id, int first, int count) {
