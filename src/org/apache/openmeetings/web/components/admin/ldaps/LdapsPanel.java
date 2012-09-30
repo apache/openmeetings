@@ -31,6 +31,12 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 
+/**
+ * {@link AdminPanel} to list and modify {@link LdapConfig}
+ * 
+ * @author swagner
+ * 
+ */
 public class LdapsPanel extends AdminPanel {
 
 	private static final long serialVersionUID = -1L;
@@ -71,7 +77,7 @@ public class LdapsPanel extends AdminPanel {
 		});
 		
 		LdapConfig ldapConfig = new LdapConfig();
-		form = new LdapForm("form", ldapConfig);
+		form = new LdapForm("form", listContainer, ldapConfig);
         add(form);
 		
 	}

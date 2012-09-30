@@ -28,6 +28,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -49,7 +50,7 @@ public class LdapConfig implements Serializable, OmEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
-	public long ldapConfigId;
+	public long ldapConfigId = 0L;
 	
 	@Column(name="name")
 	@Element(data=true)
@@ -88,6 +89,11 @@ public class LdapConfig implements Serializable, OmEntity {
 	@Column(name="deleted")
 	private boolean deleted;
 	
+	@Lob
+	@Column(name = "comment_field", length = 2048)
+	@Element(data = true, required = false)
+	private String comment;
+
 	public long getLdapConfigId() {
 		return ldapConfigId;
 	}
@@ -163,6 +169,14 @@ public class LdapConfig implements Serializable, OmEntity {
 	}
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 	
 }

@@ -62,17 +62,10 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 
 	}
 	
-	void updateView(AjaxRequestTarget target) {
-		target.add(this);
-	}
-	
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 		Application.getBean(ConfigurationDaoImpl.class).update(getModelObject(), WebSession.getUserId());
 		Configuration conf = Application.getBean(ConfigurationDaoImpl.class).get(getModelObject().getConfiguration_id());
-
-		System.out.println(conf.getUser());
-
 		this.setModelObject(conf);
 		target.add(this);
 		target.add(listContainer);

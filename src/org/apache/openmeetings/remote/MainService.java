@@ -317,7 +317,7 @@ public class MainService implements IPendingServiceCallback {
 
 				// LDAP Loggedin Users cannot use the permanent Login Flag
 
-				LdapConfig ldapConfig = ldapConfigDao.getLdapConfigById(ldapConfigId);
+				LdapConfig ldapConfig = ldapConfigDao.get(ldapConfigId);
 
 				String ldapLogin = usernameOrEmail;
 				if (ldapConfig.getAddDomainToUserName() != null

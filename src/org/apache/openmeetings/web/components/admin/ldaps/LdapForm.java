@@ -18,23 +18,95 @@
  */
 package org.apache.openmeetings.web.components.admin.ldaps;
 
+import org.apache.openmeetings.data.basic.dao.LdapConfigDaoImpl;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
+import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.admin.AdminBaseForm;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
+import org.apache.wicket.datetime.markup.html.basic.DateLabel;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.util.time.Duration;
 
+/**
+ * Form components to insert/update/delete {@link LdapConfig}
+ * 
+ * @author swagner
+ * 
+ */
 public class LdapForm extends AdminBaseForm<LdapConfig> {
 
 	private static final long serialVersionUID = 1L;
+	private final WebMarkupContainer listContainer;
 
-	public LdapForm(String id, final LdapConfig ldapConfig) {
+	public LdapForm(String id, WebMarkupContainer listContainer,
+			final LdapConfig ldapConfig) {
 		super(id, new CompoundPropertyModel<LdapConfig>(ldapConfig));
 		setOutputMarkupId(true);
+		this.listContainer = listContainer;
 		
+		add(new RequiredTextField<String>("name"));
+		add(new CheckBox("isActive"));
+		add(DateLabel.forDatePattern("inserted", "dd.MM.yyyy HH:mm:ss"));
+		add(new Label("insertedby.login"));
+		add(DateLabel.forDatePattern("updated", "dd.MM.yyyy HH:mm:ss"));
+		add(new Label("updatedby.login"));
+		add(new RequiredTextField<String>("configFileName"));
+		add(new CheckBox("addDomainToUserName"));
+		add(new TextField<String>("domain"));
+		add(new TextArea<String>("comment"));
+
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
 		AjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown",
 				Duration.ONE_SECOND);
 	}
+
+	@Override
+	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
+		Application.getBean(LdapConfigDaoImpl.class).update(getModelObject(),
+				WebSession.getUserId());
+		LdapConfig ldapConfig = Application.getBean(LdapConfigDaoImpl.class)
+				.get(getModelObject().getLdapConfigId());
+		this.setModelObject(ldapConfig);
+		target.add(this);
+		target.add(listContainer);
+	}
+
+	@Override
+	protected void onNewSubmit(AjaxRequestTarget target, Form<?> form) {
+		this.setModelObject(new LdapConfig());
+		target.add(this);
+	}
+
+	@Override
+	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
+		LdapConfig ldapConfig = this.getModelObject();
+		if (ldapConfig.getLdapConfigId() <= 0) {
+			ldapConfig = Application.getBean(LdapConfigDaoImpl.class).get(
+					ldapConfig.getLdapConfigId());
+		} else {
+			ldapConfig = new LdapConfig();
+		}
+		this.setModelObject(ldapConfig);
+		target.add(this);
+	}
+
+	@Override
+	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
+		Application.getBean(LdapConfigDaoImpl.class).delete(
+				this.getModelObject(), WebSession.getUserId());
+		this.setModelObject(new LdapConfig());
+		target.add(listContainer);
+		target.add(this);
+	}
+
 }

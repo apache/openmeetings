@@ -65,7 +65,7 @@ public class LdapConfigService {
         Long users_id = sessionManagement.checkSession(SID);
         Long user_level = userManagement.getUserLevelByID(users_id);
         if (authLevelManagement.checkAdminLevel(user_level)){
-        	return this.ldapConfigDaoImpl.getLdapConfigById(ldapConfigId);
+        	return this.ldapConfigDaoImpl.get(ldapConfigId);
         }
         return null;
 	}
@@ -132,7 +132,8 @@ public class LdapConfigService {
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			if (authLevelManagement.checkAdminLevel(user_level)){
 			
-				Long ldapConfigId = Long.valueOf(values.get("ldapConfigId").toString()).longValue();
+				long ldapConfigId = Long.valueOf(
+						values.get("ldapConfigId").toString()).longValue();
 				Boolean addDomainToUserName = Boolean.valueOf(values.get("addDomainToUserName").toString()).booleanValue();
 				String configFileName = values.get("configFileName").toString(); 
 				String name = values.get("tName").toString(); 

@@ -338,7 +338,7 @@ public class ConfigurationDaoImpl implements OmDAO<Configuration> {
 
 	public Configuration get(long id) {
 		try {
-			if (id == 0) {
+			if (id <= 0) {
 				return null;
 			}
 			return em
@@ -361,7 +361,7 @@ public class ConfigurationDaoImpl implements OmDAO<Configuration> {
 
 	public void update(Configuration entity, long userId) {
 		if (entity.getConfiguration_id() == null
-				|| entity.getConfiguration_id() == 0) {
+				|| entity.getConfiguration_id() <= 0) {
 			entity.setStarttime(new Date());
 			entity.setDeleted(false);
 			this.updateConfig(entity);

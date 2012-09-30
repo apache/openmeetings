@@ -161,7 +161,7 @@ public class LdapLoginManagement {
 		// Retrieve Configuration Data
 		HashMap<String, String> configData;
 
-		LdapConfig ldapConfig = ldapConfigDao.getLdapConfigById(ldapConfigId);
+		LdapConfig ldapConfig = ldapConfigDao.get(ldapConfigId);
 
 		try {
 			configData = getLdapConfigData(ldapConfig.getConfigFileName());
