@@ -126,9 +126,12 @@ public class ServerDaoImpl implements OmDAO<Server> {
 	}
 
 	/**
-	 * Get the number of minimum users for a server(?)
+	 * This method is necessary to automatically assign user to the server with minimum load.
 	 * 
-	 * @return
+	 * First of all we are trying to find servers referenced by 0 users.
+	 * If all servers are referenced by at least 1 user we are searching the first server referenced by minimum users.
+	 * 
+	 * @return Server object referenced by the minimum user accounts. 
 	 */
 	public Server getServerWithMinimumUsers() {
 		Server result = null;
