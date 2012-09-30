@@ -495,7 +495,7 @@ public class UserService {
 			if (userId > -1 && serverId > -1) {
 				try {
 					Users user = userManagement.getUserById(userId);
-					user.setServer(serverDao.getServer(serverId));
+					user.setServer(serverDao.get(serverId));
 					userManagement.updateUser(user);
 				} catch (Exception e) {
 					log.error("Error while setting server.");

@@ -18,13 +18,11 @@
  */
 package org.apache.openmeetings.web.components.admin.servers;
 
-import java.util.Iterator;
-
 import org.apache.openmeetings.data.basic.dao.ServerDaoImpl;
 import org.apache.openmeetings.persistence.beans.basic.Server;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
+import org.apache.openmeetings.web.data.OmDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -32,10 +30,13 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
-import org.apache.wicket.markup.repeater.data.IDataProvider;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
 
+/**
+ * Form component with list and form to manipulate {@link Server}
+ * 
+ * @author swagner
+ * 
+ */
 public class ServersPanel extends AdminPanel {
 
 	private static final long serialVersionUID = -1L;
@@ -43,26 +44,8 @@ public class ServersPanel extends AdminPanel {
 	
 	public ServersPanel(String id) {
 		super(id);
-		DataView<Server> dataView = new DataView<Server>("serverList", new IDataProvider<Server>(){
-			private static final long serialVersionUID = -1L;
-
-			public void detach() {
-				//empty
-			}
-
-			public Iterator<? extends Server> iterator(long first, long count) {
-				return Application.getBean(ServerDaoImpl.class).getServerList((int)first, (int)count).iterator();
-			}
-
-			public long size() {
-				return Application.getBean(ServerDaoImpl.class).getServerCount();
-			}
-
-			public IModel<Server> model(Server object) {
-				return new CompoundPropertyModel<Server>(object);
-			}
-			
-		}) {
+		DataView<Server> dataView = new DataView<Server>("serverList",
+				new OmDataProvider<Server>(ServerDaoImpl.class)) {
 			private static final long serialVersionUID = 8715559628755439596L;
 
 			@Override
@@ -95,7 +78,7 @@ public class ServersPanel extends AdminPanel {
 		});
 		
 		Server Server = new Server();
-		form = new ServerForm("form", Server);
+		form = new ServerForm("form", listContainer, Server);
         add(form);
 		
 	}

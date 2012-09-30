@@ -18,27 +18,47 @@
  */
 package org.apache.openmeetings.data.basic.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.data.OmDAO;
+import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 
+ * CRUD for {@link Server}
+ * 
+ * @author solomax, swagner
+ * 
+ */
 @Transactional
-public class ServerDaoImpl {
+public class ServerDaoImpl implements OmDAO<Server> {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			ServerDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;
 	
+	@Autowired
+	private UsersDaoImpl usersDao;
+
+	/**
+	 * Get a list of all available servers
+	 * 
+	 * @return
+	 */
 	public List<Server> getServerList() {
 		log.debug("getServerList enter");
 		TypedQuery<Server> q = em.createNamedQuery("getAllServers",
@@ -46,8 +66,12 @@ public class ServerDaoImpl {
 		return q.getResultList();
 	}
 
-
-	public List<Server> getServerList(int start, int max) {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.openmeetings.data.OmDAO#get(int, int)
+	 */
+	public List<Server> get(int start, int max) {
 		log.debug("getServerList enter");
 		TypedQuery<Server> q = em.createNamedQuery("getAllServers",
 				Server.class);
@@ -57,14 +81,24 @@ public class ServerDaoImpl {
 		return q.getResultList();
 	}
 	
-	public long getServerCount() {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.openmeetings.data.OmDAO#count()
+	 */
+	public long count() {
 		log.debug("getServerCount enter");
 		TypedQuery<Long> q = em.createNamedQuery("getServerCount", Long.class);
 
 		return q.getSingleResult();
 	}
 
-	public Server getServer(long id) {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.openmeetings.data.OmDAO#get(long)
+	 */
+	public Server get(long id) {
 		Server result = null;
 		log.debug("getServer enter, id = " + id);
 		TypedQuery<Server> q = em.createNamedQuery("getServerById", Server.class);
@@ -77,6 +111,12 @@ public class ServerDaoImpl {
 		return result;
 	}
 
+	/**
+	 * Get server by its address
+	 * 
+	 * @param address
+	 * @return
+	 */
 	public Server getServerByAddress(String address) {
 		log.debug("getServer enter, address = " + address);
 		TypedQuery<Server> q = em.createNamedQuery("getServerByAddress", Server.class);
@@ -85,6 +125,11 @@ public class ServerDaoImpl {
 		return list.size() > 0 ? list.get(0) : null;
 	}
 
+	/**
+	 * Get the number of minimum users for a server(?)
+	 * 
+	 * @return
+	 */
 	public Server getServerWithMinimumUsers() {
 		Server result = null;
 		log.debug("getServerWithMinimumUsers enter");
@@ -95,7 +140,7 @@ public class ServerDaoImpl {
 			List<Object> r = q1.getResultList();
 			if (!r.isEmpty()) {
 				// get server id from first line
-				result = getServer((Long)((Object[])r.get(0))[0]);
+				result = get((Long)((Object[])r.get(0))[0]);
 			}
 		} else {
 			result = l.get(0);
@@ -103,8 +148,17 @@ public class ServerDaoImpl {
 		return result;
 	}
 	
+	/**
+	 * @deprecated user standard mechanism of
+	 *             {@link OmDAO#update(org.apache.openmeetings.persistence.beans.OmEntity, long)}
+	 * @param id
+	 * @param name
+	 * @param address
+	 * @return
+	 */
+	@Deprecated
 	public Server saveServer(long id, String name, String address) {
-		Server s = getServer(id);
+		Server s = get(id);
 		if (s == null) {
 			s = new Server();
 		}
@@ -114,8 +168,15 @@ public class ServerDaoImpl {
 		return em.merge(s);
 	}
 
-	public boolean deleteServer(long id) {
-		Server s = getServer(id);
+	/**
+	 * @deprecated use standard mechanism of
+	 *             {@link OmDAO#delete(org.apache.openmeetings.persistence.beans.OmEntity, long)}
+	 * @param id
+	 * @return
+	 */
+	@Deprecated
+	public boolean delete(long id) {
+		Server s = get(id);
 		if (s == null) {
 			return false;
 		}
@@ -123,5 +184,46 @@ public class ServerDaoImpl {
 		s = em.merge(s);
 
 		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.openmeetings.data.OmDAO#update(org.apache.openmeetings.persistence
+	 * .beans.OmEntity, long)
+	 */
+	public void update(Server entity, long userId) {
+		try {
+			if (entity.getId() <= 0) {
+				entity.setInserted(new Date());
+				entity.setInsertedby(usersDao.get(userId));
+				entity.setDeleted(false);
+				em.persist(entity);
+			} else {
+				entity.setUpdated(new Date());
+				entity.setUpdatedby(usersDao.get(userId));
+				entity.setDeleted(false);
+				em.merge(entity);
+			}
+		} catch (PersistenceException ex) {
+			log.error("[update LdapConfig]", ex);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.openmeetings.data.OmDAO#delete(org.apache.openmeetings.persistence
+	 * .beans.OmEntity, long)
+	 */
+	public void delete(Server entity, long userId) {
+		if (entity.getId() >= 0) {
+			entity.setUpdated(new Date());
+			entity.setUpdatedby(usersDao.get(userId));
+			entity.setDeleted(true);
+			em.merge(entity);
+		}
 	}
 }

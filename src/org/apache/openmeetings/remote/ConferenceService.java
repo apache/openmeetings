@@ -699,7 +699,7 @@ public class ConferenceService {
 			if (roomId > -1 && serverId > -1) {
 				try {
 					Rooms room = roommanagement.getRoomById(roomId);
-					room.setServer(serverDao.getServer(serverId));
+					room.setServer(serverDao.get(serverId));
 					roommanagement.updateRoomObject(room);
 				} catch (Exception e) {
 					log.error("Error while setting server.");

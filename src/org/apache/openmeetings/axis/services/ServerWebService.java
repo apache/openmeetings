@@ -62,7 +62,7 @@ public class ServerWebService {
 		Long user_level = userManagement.getUserLevelByID(users_id);
 
 		if (authLevelManagement.checkWebServiceLevel(user_level)) {
-			return serversDao.getServerList(start, max).toArray(new Server[0]);
+			return serversDao.get(start, max).toArray(new Server[0]);
 		} else {
 			log.warn("Insuffisient permissions");
 			return null;
@@ -81,7 +81,7 @@ public class ServerWebService {
 		Long user_level = userManagement.getUserLevelByID(users_id);
 
 		if (authLevelManagement.checkWebServiceLevel(user_level)) {
-			return (int)serversDao.getServerCount();
+			return (int)serversDao.count();
 		} else {
 			log.warn("Insuffisient permissions");
 			return -1;
@@ -123,7 +123,7 @@ public class ServerWebService {
 		Long user_level = userManagement.getUserLevelByID(users_id);
 
 		if (authLevelManagement.checkWebServiceLevel(user_level)) {
-			return serversDao.deleteServer(id);
+			return serversDao.delete(id);
 		} else {
 			log.warn("Insuffisient permissions");
 			return false;
