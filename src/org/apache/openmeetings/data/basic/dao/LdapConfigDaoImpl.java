@@ -73,8 +73,8 @@ public class LdapConfigDaoImpl implements OmDAO<LdapConfig> {
 			ldapConfig.setName(name);
 			ldapConfig.setInserted(new Date());
 			if (insertedby != null) {
-				log.debug("addLdapConfig :1: " + usersDao.getUser(insertedby));
-				ldapConfig.setInsertedby(usersDao.getUser(insertedby));
+				log.debug("addLdapConfig :1: " + usersDao.get(insertedby));
+				ldapConfig.setInsertedby(usersDao.get(insertedby));
 			}
 
 			log.debug("addLdapConfig :2: " + insertedby);
@@ -134,8 +134,8 @@ public class LdapConfigDaoImpl implements OmDAO<LdapConfig> {
 			ldapConfig.setName(name);
 			ldapConfig.setUpdated(new Date());
 			if (updatedby != null) {
-				log.debug("updateLdapConfig :1: " + usersDao.getUser(updatedby));
-				ldapConfig.setUpdatedby(usersDao.getUser(updatedby));
+				log.debug("updateLdapConfig :1: " + usersDao.get(updatedby));
+				ldapConfig.setUpdatedby(usersDao.get(updatedby));
 			}
 
 			log.debug("updateLdapConfig :2: " + updatedby);

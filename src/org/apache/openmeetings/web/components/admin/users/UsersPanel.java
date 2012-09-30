@@ -32,14 +32,16 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 
 public class UsersPanel extends AdminPanel {
+
 	private static final long serialVersionUID = -4463107742579790120L;
-	
+
+	private UserForm form;
+
 	public UsersPanel(String id) {
 		super(id);
-		final UserForm form = new UserForm("form", new Users());
-        add(form);
-        
-		DataView<Users> dataView = new DataView<Users>("userList", new OmDataProvider<Users>(UsersDaoImpl.class)) {
+
+		DataView<Users> dataView = new DataView<Users>("userList",
+				new OmDataProvider<Users>(UsersDaoImpl.class)) {
 			private static final long serialVersionUID = 8715559628755439596L;
 
 			@Override
@@ -47,11 +49,10 @@ public class UsersPanel extends AdminPanel {
 				final Users u = item.getModelObject();
 				item.add(new Label("userId", "" + u.getUser_id()));
 				item.add(new Label("login", u.getLogin()));
-				final String fName = u.getFirstname();
-				item.add(new Label("firstName", fName));
-				final String lName = u.getLastname();
-				item.add(new Label("lastName", lName));
-				item.add(AttributeModifier.append("class", "clickable " + ((item.getIndex() % 2 == 1) ? "even" : "odd")));
+				item.add(new Label("firstName", u.getFirstname()));
+				item.add(new Label("lastName", u.getLastname()));
+				item.add(AttributeModifier.append("class", "clickable "
+						+ ((item.getIndex() % 2 == 1) ? "even" : "odd")));
 				item.add(new AjaxEventBehavior("onclick") {
 					private static final long serialVersionUID = -8069413566800571061L;
 
@@ -62,7 +63,8 @@ public class UsersPanel extends AdminPanel {
 				});
 			}
 		};
-		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
+		final WebMarkupContainer listContainer = new WebMarkupContainer(
+				"listContainer");
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		add(new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = 5097048616003411362L;
@@ -72,5 +74,8 @@ public class UsersPanel extends AdminPanel {
 				target.add(listContainer);
 			}
 		});
+
+		form = new UserForm("form", listContainer, new Users());
+		add(form);
 	}
 }

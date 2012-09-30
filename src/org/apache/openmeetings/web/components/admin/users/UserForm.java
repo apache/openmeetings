@@ -26,8 +26,9 @@ import org.apache.openmeetings.data.basic.FieldLanguageDaoImpl;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
 import org.apache.openmeetings.data.basic.dao.ServerDaoImpl;
 import org.apache.openmeetings.data.user.Organisationmanagement;
-import org.apache.openmeetings.data.user.Salutationmanagement;
-import org.apache.openmeetings.data.user.Statemanagement;
+import org.apache.openmeetings.data.user.dao.SalutationDaoImpl;
+import org.apache.openmeetings.data.user.dao.StateDaoImpl;
+import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
 import org.apache.openmeetings.persistence.beans.adresses.States;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.basic.Server;
@@ -39,14 +40,18 @@ import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.admin.AdminBaseForm;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.yui.calendar.DatePicker;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
+import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
@@ -58,14 +63,31 @@ import org.apache.wicket.util.time.Duration;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 
+/**
+ * CRUD operations in form for {@link Users}
+ * 
+ * @author swagner
+ * 
+ */
 public class UserForm extends AdminBaseForm<Users> {
 
+	private static final long serialVersionUID = 1L;
+
+	private WebMarkupContainer listContainer;
+
+	private Users user;
+
 	private final List<Salutations> saluationList = Application.getBean(
-			Salutationmanagement.class).getUserSalutations(
+			SalutationDaoImpl.class).getUserSalutations(
 			WebSession.getLanguage());
 	private final List<FieldLanguage> languageList = Application.getBean(
 			FieldLanguageDaoImpl.class).getLanguages();
 
+	/**
+	 * Get id list of {@link Salutations}
+	 * 
+	 * @return
+	 */
 	private List<Long> getSalutationsIds() {
 		ArrayList<Long> saluationIdList = new ArrayList<Long>(
 				saluationList.size());
@@ -75,6 +97,12 @@ public class UserForm extends AdminBaseForm<Users> {
 		return saluationIdList;
 	}
 
+	/**
+	 * Get a name for a given id of {@link Salutations}
+	 * 
+	 * @param id
+	 * @return
+	 */
 	private String getSaluationLabelById(Long id) {
 		for (Salutations saluation : saluationList) {
 			if (id.equals(saluation.getSalutations_id())) {
@@ -84,6 +112,11 @@ public class UserForm extends AdminBaseForm<Users> {
 		throw new RuntimeException("Could not find Salutations for id " + id);
 	}
 
+	/**
+	 * Id list of {@link FieldLanguage}
+	 * 
+	 * @return
+	 */
 	private List<Long> getFieldLanguageIds() {
 		ArrayList<Long> languageIdList = new ArrayList<Long>(
 				languageList.size());
@@ -93,6 +126,12 @@ public class UserForm extends AdminBaseForm<Users> {
 		return languageIdList;
 	}
 
+	/**
+	 * Get name of {@link FieldLanguage} by its id
+	 * 
+	 * @param id
+	 * @return
+	 */
 	private String getFieldLanguageLabelById(Long id) {
 		for (FieldLanguage language : languageList) {
 			if (id.equals(language.getLanguage_id())) {
@@ -102,15 +141,78 @@ public class UserForm extends AdminBaseForm<Users> {
 		throw new RuntimeException("Could not find FieldLanguage for id " + id);
 	}
 
-	public UserForm(String id, final Users user) {
+	public UserForm(String id, WebMarkupContainer listContainer,
+			final Users user) {
 		super(id, new CompoundPropertyModel<Users>(user));
 		setOutputMarkupId(true);
-		
+		this.listContainer = listContainer;
+		this.user = user;
+
+		// Add form fields
+		addFormFields();
+
+		// attach an ajax validation behavior to all form component's keydown
+		// event and throttle it down to once per second
+		AjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown",
+				Duration.ONE_SECOND);
+
+	}
+
+	@Override
+	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
+		Application.getBean(UsersDaoImpl.class).update(getModelObject(),
+				WebSession.getUserId());
+		Users user = Application.getBean(UsersDaoImpl.class).get(
+				getModelObject().getUser_id());
+		this.setModelObject(user);
+		target.add(this);
+		target.add(listContainer);
+	}
+
+	@Override
+	protected void onNewSubmit(AjaxRequestTarget target, Form<?> form) {
+		UsersDaoImpl usersDaoImpl = Application.getBean(UsersDaoImpl.class);
+		this.setModelObject(usersDaoImpl.getNewInstance(usersDaoImpl
+				.get(WebSession.getUserId())));
+		target.add(this);
+	}
+
+	@Override
+	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
+		Users user = this.getModelObject();
+		if (user.getUser_id() <= 0) {
+			user = Application.getBean(UsersDaoImpl.class).get(
+					user.getUser_id());
+		} else {
+			user = new Users();
+		}
+		this.setModelObject(user);
+		target.add(this);
+	}
+
+	@Override
+	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
+		UsersDaoImpl usersDaoImpl = Application.getBean(UsersDaoImpl.class);
+		usersDaoImpl.delete(this.getModelObject(),
+				WebSession.getUserId());
+		this.setModelObject(usersDaoImpl.getNewInstance(usersDaoImpl
+				.get(WebSession.getUserId())));
+		target.add(listContainer);
+		target.add(this);
+	}
+
+	/**
+	 * Add the fields to the form
+	 */
+	private void addFormFields() {
+
 		RequiredTextField<String> login = new RequiredTextField<String>("login");
 		login.add(new StringValidator(4, null));
-		login.setLabel(new Model<String>("testname"));
+		// login.setLabel(new Model<String>("testname"));
 		add(login);
-		
+
+		add(new PasswordTextField("password", Model.of("")));
+
 		add(new DropDownChoice<Long>("salutations_id", getSalutationsIds(),
 				new IChoiceRenderer<Long>() {
 					private static final long serialVersionUID = 1L;
@@ -147,8 +249,9 @@ public class UserForm extends AdminBaseForm<Users> {
 				}));
 
 		add(new CheckBox("forceTimeZoneCheck"));
-		RequiredTextField<String> email = new RequiredTextField<String>("adresses.email");
-		email.setLabel(new Model<String>("testemail"));
+		RequiredTextField<String> email = new RequiredTextField<String>(
+				"adresses.email");
+		// email.setLabel(new Model<String>("testemail"));
 		email.add(EmailAddressValidator.getInstance());
 		add(email);
 		add(new TextField<String>("adresses.phone"));
@@ -171,7 +274,7 @@ public class UserForm extends AdminBaseForm<Users> {
 		add(new TextField<String>("adresses.zip"));
 		add(new TextField<String>("adresses.town"));
 		add(new DropDownChoice<States>("adresses.states", Application.getBean(
-				Statemanagement.class).getStates(), new ChoiceRenderer<States>(
+				StateDaoImpl.class).getStates(), new ChoiceRenderer<States>(
 				"name", "state_id")));
 
 		final String field159 = WebSession.getString(159);
@@ -297,20 +400,9 @@ public class UserForm extends AdminBaseForm<Users> {
 			}
 
 		}));
-		
+
 		add(new TextArea<String>("userOffers"));
 		add(new TextArea<String>("userSearchs"));
-		
-		// attach an ajax validation behavior to all form component's keydown
-		// event and throttle it down to once per second
-		AjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown",
-				Duration.ONE_SECOND);
-
 	}
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
 }

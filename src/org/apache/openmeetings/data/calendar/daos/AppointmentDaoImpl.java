@@ -224,7 +224,7 @@ public class AppointmentDaoImpl {
 			ap.setLanguage_id(language_id);
 			ap.setIsPasswordProtected(isPasswordProtected);
 			ap.setPassword(password);
-			ap.setUserId(usersDao.getUser(userId));
+			ap.setUserId(usersDao.get(userId));
 			ap.setAppointmentCategory(appointmentCategoryDaoImpl
 					.getAppointmentCategoryById(categoryId));
 			ap.setRoom(room);
@@ -845,7 +845,7 @@ public class AppointmentDaoImpl {
 				+ "app.appointmentStarttime between :starttime " + "AND "
 				+ " :endtime";
 		
-		TimeZone timeZone = timezoneUtil.getTimezoneByUser(usersDao.getUser(userId));
+		TimeZone timeZone = timezoneUtil.getTimezoneByUser(usersDao.get(userId));
 
 		Calendar startCal = Calendar.getInstance(timeZone);
 		startCal.set(Calendar.MINUTE, 0);

@@ -32,7 +32,7 @@ public class TestDatabaseStructureGetUserStart extends AbstractOpenmeetingsSprin
 	@Test
 	public void testAddingGroup() {
 		try {
-			usersDao.getUser(new Long(1));
+			usersDao.get(new Long(1));
 		} catch (Exception err) {
 			log.error("[testAddingGroup]", err);
 		}

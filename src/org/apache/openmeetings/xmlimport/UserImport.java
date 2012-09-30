@@ -23,8 +23,8 @@ import java.io.InputStream;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.user.Emailmanagement;
 import org.apache.openmeetings.data.user.Organisationmanagement;
-import org.apache.openmeetings.data.user.Statemanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.dao.StateDaoImpl;
 import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.servlet.outputhandler.BackupImportController;
@@ -45,7 +45,7 @@ public class UserImport {
 	@Autowired
 	private UsersDaoImpl usersDao;
 	@Autowired
-	private Statemanagement statemanagement;
+	private StateDaoImpl statemanagement;
 	@Autowired
 	private BackupImportController backupController;
 

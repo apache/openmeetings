@@ -101,7 +101,7 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 		ap.setIsYearly(false);
 		ap.setIsPasswordProtected(false);
 
-		ap.setUserId(usersDao.getUser(1L));
+		ap.setUserId(usersDao.get(1L));
 		ap.setIsConnectedEvent(false);
 		Long id = appointmentDao.addAppointmentObj(ap);
 		assertNotNull("Cann't add appointment", id);

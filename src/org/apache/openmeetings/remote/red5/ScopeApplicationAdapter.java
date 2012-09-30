@@ -1448,7 +1448,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 			// Inject externalUserId if nothing is set yet
 			if (currentClient.getExternalUserId() == null) {
-				Users us = usersDao.getUser(currentClient.getUser_id());
+				Users us = usersDao.get(currentClient.getUser_id());
 				if (us != null) {
 					currentClient.setExternalUserId(us.getExternalUserId());
 					currentClient.setExternalUserType(us.getExternalUserType());
@@ -1746,7 +1746,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			// only fill this value from User-Record
 			// cause invited users have non
 			// you cannot set the firstname,lastname from the UserRecord
-			Users us = usersDao.getUser(userId);
+			Users us = usersDao.get(userId);
 			if (us != null && us.getPictureuri() != null) {
 				// set Picture-URI
 				currentClient.setPicture_uri(us.getPictureuri());
@@ -1796,7 +1796,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			// only fill this value from User-Record
 			// cause invited users have non
 			// you cannot set the firstname,lastname from the UserRecord
-			Users us = usersDao.getUser(userId);
+			Users us = usersDao.get(userId);
 			if (us != null && us.getPictureuri() != null) {
 				// set Picture-URI
 				currentClient.setPicture_uri(us.getPictureuri());

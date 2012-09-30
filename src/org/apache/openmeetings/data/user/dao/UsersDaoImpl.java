@@ -33,6 +33,8 @@ import javax.persistence.criteria.Root;
 import org.apache.commons.lang.StringUtils;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.OmDAO;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
+import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
 import org.apache.openmeetings.persistence.beans.adresses.Adresses;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
@@ -41,27 +43,73 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * CRUD operations for {@link Users}
+ * 
+ * @author swagner, solomax
+ * 
+ */
 @Transactional
 public class UsersDaoImpl implements OmDAO<Users> {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(UsersDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(
+			UsersDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
+
 	@PersistenceContext
 	private EntityManager em;
+
 	@Autowired
 	private ManageCryptStyle manageCryptStyle;
+	@Autowired
+	private SalutationDaoImpl salutationDaoImpl;
+	@Autowired
+	private ConfigurationDaoImpl configurationDaoImpl;
+	@Autowired
+	private OmTimeZoneDaoImpl omTimeZoneDaoImpl;
+	@Autowired
+	private StateDaoImpl stateDaoImpl;
 
-	public Users get(long id) {
-		return getUser(id);
+	/**
+	 * Get a new instance of the {@link Users} entity, with all default values
+	 * set
+	 * 
+	 * @return
+	 */
+	public Users getNewInstance(Users currentUser) {
+		Users user = new Users();
+		user.setSalutations_id(1L); // TODO: Fix default selection to be
+									// configurable
+		user.setLevel_id(2L);
+		user.setLanguage_id(configurationDaoImpl.getConfValue(
+				"default_lang_id", Long.class, "1"));
+		user.setOmTimeZone(omTimeZoneDaoImpl.getDefaultOmTimeZone(currentUser));
+		user.setForceTimeZoneCheck(false);
+		user.setSendSMS(false);
+		user.setAge(new Date());
+		Adresses adresses = new Adresses();
+		adresses.setStates(stateDaoImpl.getStateById(1L));
+		user.setAdresses(adresses);
+		user.setStatus(1);
+		user.setShowContactData(false);
+		user.setShowContactDataToContacts(false);
+
+		return user;
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.openmeetings.data.OmDAO#get(int, int)
+	 */
 	public List<Users> get(int first, int count) {
 		return getNondeletedUsers(first, count);
 	}
-	
-	//FIXME need to be generalized with other copy/pasted methods
+
+	// FIXME need to be generalized with other copy/pasted methods
 	public List<Users> get(String search) {
 		String[] searchItems = search.split(" ");
-		StringBuilder hql = new StringBuilder("SELECT u FROM Users u WHERE u.deleted = false ");
+		StringBuilder hql = new StringBuilder(
+				"SELECT u FROM Users u WHERE u.deleted = false ");
 
 		hql.append("AND ( ");
 		for (int i = 0; i < searchItems.length; ++i) {
@@ -72,45 +120,55 @@ public class UsersDaoImpl implements OmDAO<Users> {
 				hql.append(" OR ");
 			}
 			StringBuilder placeholder = new StringBuilder();
-			placeholder.append("%").append(StringUtils.lowerCase(searchItems[i])).append("%");
+			placeholder.append("%")
+					.append(StringUtils.lowerCase(searchItems[i])).append("%");
 
-			hql.append("(lower(u.lastname) LIKE '")
-				.append(placeholder)
-				.append("' OR lower(u.firstname) LIKE '")
-				.append(placeholder)
-				.append("' OR lower(u.login) LIKE '")
-				.append(placeholder)
-				.append("' OR lower(u.adresses.email) LIKE '")
-				.append(placeholder)
-				.append("' ) ");
+			hql.append("(lower(u.lastname) LIKE '").append(placeholder)
+					.append("' OR lower(u.firstname) LIKE '")
+					.append(placeholder).append("' OR lower(u.login) LIKE '")
+					.append(placeholder)
+					.append("' OR lower(u.adresses.email) LIKE '")
+					.append(placeholder).append("' ) ");
 		}
 
 		hql.append(" ) ");
 		TypedQuery<Users> q = em.createQuery(hql.toString(), Users.class);
 		return q.getResultList();
 	}
-	
-	public long count() {
-		return selectMaxFromUsers();
-	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.openmeetings.data.OmDAO#update(org.apache.openmeetings.persistence
+	 * .beans.OmEntity, long)
+	 */
 	public void update(Users u, long userId) {
-		updateUser(u); 
+		updateUser(u);
 	}
 
-	public void delete(Users u, long userId) {
-		deleteUserID(u.getUser_id()); 
-	}
-	
-	/**
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param user_id
-	 * @return
+	 * @see
+	 * org.apache.openmeetings.data.OmDAO#delete(org.apache.openmeetings.persistence
+	 * .beans.OmEntity, long)
 	 */
-	public Users getUser(Long user_id) {
-		if (user_id != null && user_id > 0) {
+	public void delete(Users u, long userId) {
+		deleteUserID(u.getUser_id());
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.openmeetings.data.OmDAO#get(long)
+	 */
+	public Users get(long user_id) {
+		if (user_id > 0) {
 			try {
-				TypedQuery<Users> query = em.createQuery("select c from Users as c where c.user_id = :user_id", Users.class);
+				TypedQuery<Users> query = em.createQuery(
+						"select c from Users as c where c.user_id = :user_id",
+						Users.class);
 				query.setParameter("user_id", user_id);
 
 				Users users = null;
@@ -129,27 +187,24 @@ public class UsersDaoImpl implements OmDAO<Users> {
 	}
 
 	public void updateUser(Users user) {
-		if (user.getUser_id() > 0) {
-			try {
-				if (user.getUser_id() == null) {
-					em.persist(user);
-				} else {
-					if (!em.contains(user)) {
-						em.merge(user);
-					}
+		try {
+			if (user.getUser_id() == null) {
+				em.persist(user);
+			} else {
+				user.setUpdatetime(new Date());
+				if (!em.contains(user)) {
+					em.merge(user);
 				}
-			} catch (Exception ex2) {
-				log.error("[updateUser] ", ex2);
 			}
-		} else {
-			log.info("[updateUser] " + "Error: No USER_ID given");
+		} catch (Exception ex2) {
+			log.error("[updateUser] ", ex2);
 		}
 	}
 
-	public Long deleteUserID(long USER_ID) {
+	public Long deleteUserID(long userId) {
 		try {
-			if (USER_ID != 0) {
-				Users us = getUser(USER_ID);
+			if (userId != 0) {
+				Users us = get(userId);
 				us.setDeleted(true);
 				us.setUpdatetime(new Date());
 				Adresses adr = us.getAdresses();
@@ -172,26 +227,23 @@ public class UsersDaoImpl implements OmDAO<Users> {
 		return null;
 	}
 
-	/**
-	 * returns the maximum
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return
+	 * @see org.apache.openmeetings.data.OmDAO#count()
 	 */
-	public Long selectMaxFromUsers() {
-		try {
-			// get all users
-			TypedQuery<Long> query = em.createQuery("select count(c.user_id) from Users c where c.deleted = false", Long.class);
-			List<Long> ll = query.getResultList();
-			log.info("selectMaxFromUsers" + ll.get(0));
-			return ll.get(0);
-		} catch (Exception ex2) {
-			log.error("[selectMaxFromUsers] ", ex2);
-		}
-		return null;
+	public long count() {
+		// get all users
+		TypedQuery<Long> query = em.createQuery(
+				"select count(c.user_id) from Users c where c.deleted = false",
+				Long.class);
+		List<Long> ll = query.getResultList();
+		return ll.get(0);
 	}
 
 	public List<Users> getNondeletedUsers(int first, int count) {
-		TypedQuery<Users> q = em.createNamedQuery("getNondeletedUsers", Users.class);
+		TypedQuery<Users> q = em.createNamedQuery("getNondeletedUsers",
+				Users.class);
 		q.setFirstResult(first);
 		q.setMaxResults(count);
 		return q.getResultList();
@@ -217,7 +269,8 @@ public class UsersDaoImpl implements OmDAO<Users> {
 
 	public List<Users> getAllUsersDeleted() {
 		try {
-			TypedQuery<Users> q = em.createNamedQuery("getAllUsers", Users.class);
+			TypedQuery<Users> q = em.createNamedQuery("getAllUsers",
+					Users.class);
 			return q.getResultList();
 		} catch (Exception ex2) {
 			log.error("[getAllUsersDeleted] ", ex2);
@@ -279,7 +332,10 @@ public class UsersDaoImpl implements OmDAO<Users> {
 	 */
 	public boolean checkUserLogin(String DataValue) {
 		try {
-			TypedQuery<Users> query = em.createQuery("select c from Users as c where c.login = :DataValue AND c.deleted <> :deleted", Users.class);
+			TypedQuery<Users> query = em
+					.createQuery(
+							"select c from Users as c where c.login = :DataValue AND c.deleted <> :deleted",
+							Users.class);
 			query.setParameter("DataValue", DataValue);
 			query.setParameter("deleted", true);
 			int count = query.getResultList().size();

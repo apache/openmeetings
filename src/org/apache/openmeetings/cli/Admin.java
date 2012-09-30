@@ -451,7 +451,7 @@ public class Admin {
 						for (File profile : profiles.listFiles()) {
 							long pSize = OmFileHelper.getSize(profile);
 							long userId = getUserIdByProfile(profile.getName());
-							Users u = udao.getUser(userId);
+							Users u = udao.get(userId);
 							if (profile.isFile() || userId < 0 || u == null) {
 								if (cleanup) {
 									FileHelper.removeRec(profile);

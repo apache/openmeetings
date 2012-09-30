@@ -72,7 +72,7 @@ public class OrganisationUserDAO implements OmDAO<Organisation_Users> {
 
 	public void delete(Organisation_Users entity, long userId) {
 		if (entity.getOrganisation_users_id() != null) {
-			Users u = usersDao.getUser(entity.getUser_id());
+			Users u = usersDao.get(entity.getUser_id());
 			int idx = u.getOrganisation_users().indexOf(entity);
 			//entity has been detached need to re-fetch
 			Organisation_Users ou = u.getOrganisation_users().remove(idx);

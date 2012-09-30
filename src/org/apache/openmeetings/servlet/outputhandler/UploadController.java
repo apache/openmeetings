@@ -172,7 +172,7 @@ public class UploadController extends AbstractUploadController {
 
     private LinkedHashMap<String, Object> prepareMessage(UploadInfo info) {
 		LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
-		hs.put("user", usersDao.getUser(info.userId));
+		hs.put("user", usersDao.get(info.userId));
 		return hs;
     }
     
@@ -295,7 +295,7 @@ public class UploadController extends AbstractUploadController {
 						.generateThumb("_big_", completeName, 240));
 
 				String pictureuri = completeName.getName();
-				Users us = usersDao.getUser(userId);
+				Users us = usersDao.get(userId);
 				us.setUpdatetime(new java.util.Date());
 				us.setPictureuri(pictureuri);
 				usersDao.updateUser(us);

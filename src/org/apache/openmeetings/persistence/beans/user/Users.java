@@ -58,7 +58,9 @@ import org.simpleframework.xml.Root;
 @Table(name = "users")
 @Root(name = "user")
 public class Users implements Serializable, OmEntity {
+
 	private static final long serialVersionUID = -2265479712596674065L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -528,4 +530,5 @@ public class Users implements Serializable, OmEntity {
 	public String getPhoneForSMS() {
 		return getSendSMS() ? getAdresses().getPhone() : "";
 	}
+
 }

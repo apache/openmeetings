@@ -85,7 +85,7 @@ public class ImportController extends AbstractUploadController {
 			log.debug("Return And Close");
 
 			LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
-			hs.put("user", usersDao.getUser(info.userId));
+			hs.put("user", usersDao.get(info.userId));
 			hs.put("message", "library");
 			hs.put("action", "import");
 

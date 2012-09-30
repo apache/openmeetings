@@ -110,7 +110,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	public static long getLanguage() {
 		WebSession session = get();
 		if (session.isSignedIn()) {
-			return Application.getBean(UsersDaoImpl.class).getUser(session.userId).getLanguage_id();
+			return Application.getBean(UsersDaoImpl.class).get(session.userId).getLanguage_id();
 		} else {
 			return Application.getBean(ConfigurationDaoImpl.class).getConfValue("default_lang_id", Long.class, "1");
 		}

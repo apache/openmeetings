@@ -27,8 +27,10 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
+import org.apache.openmeetings.persistence.beans.user.Users;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -39,6 +41,34 @@ public class OmTimeZoneDaoImpl {
 
 	@PersistenceContext
 	private EntityManager em;
+
+	@Autowired
+	private ConfigurationDaoImpl configurationDaoImpl;
+
+	/**
+	 * Get a default {@link OmTimeZone}, if user is set, it will return the
+	 * {@link OmTimeZone} of the user, if not it will try to load it from the
+	 * server's config
+	 * 
+	 * @param user
+	 *            can be null
+	 * @return
+	 */
+	public OmTimeZone getDefaultOmTimeZone(Users user) {
+		
+		if (user != null && user.getOmTimeZone() != null) {
+			return user.getOmTimeZone();
+		}
+		
+		String jNameTimeZone = configurationDaoImpl.getConfValue(
+				"default.timezone", String.class, "Europe/Berlin");
+		
+		OmTimeZone omTimeZone = this.getOmTimeZone(jNameTimeZone);
+		if (omTimeZone == null) {
+			throw new RuntimeException("Could not find default.timezone, misconfiguration of database");
+		}
+		return omTimeZone;
+	}
 
 	public Long addOmTimeZone(String name, String label, String iCal,
 			Integer orderId) {

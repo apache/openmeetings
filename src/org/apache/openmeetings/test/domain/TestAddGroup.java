@@ -49,7 +49,7 @@ public class TestAddGroup extends AbstractOpenmeetingsSpringTest {
 
 		log.error("new organisation_user: " + organisation_usersid);
 
-		Users us = usersDao.getUser(new Long(1));
+		Users us = usersDao.get(new Long(1));
 
 		log.error(us.getLastname());
 		log.error(us.getAdresses().getTown());

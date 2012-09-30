@@ -181,12 +181,12 @@
 	<bean id="organisationmanagement" class="org.apache.openmeetings.data.user.Organisationmanagement" />
 	<bean id="organisationDAO" class="org.apache.openmeetings.data.user.dao.OrganisationDAO" />
 	<bean id="organisationUserDAO" class="org.apache.openmeetings.data.user.dao.OrganisationUserDAO" />
-	<bean id="salutationmanagement" class="org.apache.openmeetings.data.user.Salutationmanagement" />
+	<bean id="salutationmanagement" class="org.apache.openmeetings.data.user.dao.SalutationDaoImpl" />
 	<bean id="errorManagement" class="org.apache.openmeetings.data.basic.ErrorManagement" />
 	<bean id="navimanagement" class="org.apache.openmeetings.data.basic.Navimanagement" />
 	<bean id="pollManagement" class="org.apache.openmeetings.data.conference.PollManagement" />
 	<bean id="omTimeZoneDaoImpl" class="org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl" />
-	<bean id="statemanagement" class="org.apache.openmeetings.data.user.Statemanagement" />
+	<bean id="statemanagement" class="org.apache.openmeetings.data.user.dao.StateDaoImpl" />
 	<bean id="fieldLanguageDaoImpl" class="org.apache.openmeetings.data.basic.FieldLanguageDaoImpl" />
 	<bean id="fieldLanguagesValuesDAO" class="org.apache.openmeetings.data.basic.FieldLanguagesValuesDaoImpl" />
 	<bean id="fieldmanagment" class="org.apache.openmeetings.data.basic.Fieldmanagment" />

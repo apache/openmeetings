@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.data.user;
+package org.apache.openmeetings.data.user.dao;
 
 import java.util.Date;
 import java.util.List;
@@ -37,15 +37,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
+ * CRUD operations for {@link Salutation}
  * 
  * @author swagner
  * 
  */
 @Transactional
-public class Salutationmanagement {
+public class SalutationDaoImpl {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			Salutationmanagement.class, OpenmeetingsVariables.webAppRootKey);
+			SalutationDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
 	private Fieldmanagment fieldmanagment;

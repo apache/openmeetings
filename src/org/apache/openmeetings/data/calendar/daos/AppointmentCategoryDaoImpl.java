@@ -104,7 +104,7 @@ public class AppointmentCategoryDaoImpl {
 			ac.setName(name);
 			ac.setStarttime(new Date());
 			ac.setDeleted(false);
-			ac.setUser(usersDao.getUser(user_id));
+			ac.setUser(usersDao.get(user_id));
 			ac.setComment(comment);
 
 			ac = em.merge(ac);

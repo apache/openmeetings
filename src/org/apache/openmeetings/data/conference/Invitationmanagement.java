@@ -168,7 +168,7 @@ public class Invitationmanagement {
 
 				invitation.setDeleted(false);
 
-				Users us = usersDao.getUser(createdBy);
+				Users us = usersDao.get(createdBy);
 				String hashRaw = "HASH" + (System.currentTimeMillis());
 				invitation.setHash(MD5.do_checksum(hashRaw));
 
@@ -554,7 +554,7 @@ public class Invitationmanagement {
 
 				invitation.setDeleted(false);
 
-				Users us = usersDao.getUser(createdBy);
+				Users us = usersDao.get(createdBy);
 				String hashRaw = "InvitationHash"
 						+ (System.currentTimeMillis());
 				log.debug("addInvitationIcalLink : rawHash = " + hashRaw);

@@ -1248,7 +1248,7 @@ public class Roommanagement {
 	private boolean checkUserOrgRoom(long user_id, long rooms_id) {
 		try {
 
-			Users us = usersDao.getUser(user_id);
+			Users us = usersDao.get(user_id);
 			List<Organisation_Users> s = us.getOrganisation_users();
 
 			for (Iterator<Organisation_Users> it = s.iterator(); it.hasNext();) {

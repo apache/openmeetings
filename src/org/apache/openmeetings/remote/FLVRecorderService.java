@@ -713,7 +713,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 
 				if (flvRecording.getInsertedBy() != null) {
 					flvRecording.setCreator(this.usersDaoImpl
-							.getUser(flvRecording.getInsertedBy()));
+							.get(flvRecording.getInsertedBy()));
 				}
 
 				if (flvRecording.getRoom_id() != null) {

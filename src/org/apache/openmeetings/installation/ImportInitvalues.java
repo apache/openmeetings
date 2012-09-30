@@ -40,9 +40,9 @@ import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDaoImpl;
 import org.apache.openmeetings.data.conference.PollManagement;
 import org.apache.openmeetings.data.conference.Roommanagement;
 import org.apache.openmeetings.data.user.Organisationmanagement;
-import org.apache.openmeetings.data.user.Salutationmanagement;
-import org.apache.openmeetings.data.user.Statemanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.dao.SalutationDaoImpl;
+import org.apache.openmeetings.data.user.dao.StateDaoImpl;
 import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
@@ -73,7 +73,7 @@ public class ImportInitvalues {
 	@Autowired
 	private FieldLanguageDaoImpl fieldLanguageDaoImpl;
 	@Autowired
-	private Statemanagement statemanagement;
+	private StateDaoImpl statemanagement;
 	@Autowired
 	private OmTimeZoneDaoImpl omTimeZoneDaoImpl;
 	@Autowired
@@ -81,7 +81,7 @@ public class ImportInitvalues {
 	@Autowired
 	private ErrorManagement errorManagement;
 	@Autowired
-	private Salutationmanagement salutationmanagement;
+	private SalutationDaoImpl salutationmanagement;
 	@Autowired
 	private Organisationmanagement organisationmanagement;
 	@Autowired

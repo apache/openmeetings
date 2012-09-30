@@ -40,10 +40,10 @@ import org.apache.openmeetings.data.calendar.daos.MeetingMemberDaoImpl;
 import org.apache.openmeetings.data.conference.Invitationmanagement;
 import org.apache.openmeetings.data.conference.Roommanagement;
 import org.apache.openmeetings.data.user.Organisationmanagement;
-import org.apache.openmeetings.data.user.Salutationmanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.data.user.dao.PrivateMessageFolderDaoImpl;
 import org.apache.openmeetings.data.user.dao.PrivateMessagesDaoImpl;
+import org.apache.openmeetings.data.user.dao.SalutationDaoImpl;
 import org.apache.openmeetings.data.user.dao.UserContactsDaoImpl;
 import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
@@ -97,7 +97,7 @@ public class UserService {
 	@Autowired
 	private OmTimeZoneDaoImpl omTimeZoneDaoImpl;
 	@Autowired
-	private Salutationmanagement salutationmanagement;
+	private SalutationDaoImpl salutationmanagement;
 	@Autowired
 	private Organisationmanagement organisationmanagement;
 	@Autowired
@@ -138,7 +138,7 @@ public class UserService {
 	 */
 	public Users getUserSelf(String SID) {
 		Long users_id = sessionManagement.checkSession(SID);
-		return usersDao.getUser(users_id);
+		return usersDao.get(users_id);
 	}
 
 	public Long resetUserPwd(String SID, String email, String login,
@@ -968,7 +968,7 @@ public class UserService {
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 				
-				TimeZone timezone = timezoneUtil.getTimezoneByUser(usersDao.getUser(users_id));
+				TimeZone timezone = timezoneUtil.getTimezoneByUser(usersDao.get(users_id));
 				
 				Date appointmentstart = createCalendarDate(timezone, validFromDate, validFromTime);
 				Date appointmentend = createCalendarDate(timezone, validToDate, validToTime);

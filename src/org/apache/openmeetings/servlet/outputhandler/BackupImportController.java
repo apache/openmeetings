@@ -72,9 +72,9 @@ import org.apache.openmeetings.data.file.dao.FileExplorerItemDaoImpl;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingDaoImpl;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDaoImpl;
 import org.apache.openmeetings.data.user.Organisationmanagement;
-import org.apache.openmeetings.data.user.Statemanagement;
 import org.apache.openmeetings.data.user.dao.PrivateMessageFolderDaoImpl;
 import org.apache.openmeetings.data.user.dao.PrivateMessagesDaoImpl;
+import org.apache.openmeetings.data.user.dao.StateDaoImpl;
 import org.apache.openmeetings.data.user.dao.UserContactsDaoImpl;
 import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
 import org.apache.openmeetings.persistence.beans.adresses.Adresses;
@@ -138,7 +138,7 @@ public class BackupImportController extends AbstractUploadController {
 	@Autowired
 	private AppointmentDaoImpl appointmentDao;
 	@Autowired
-	private Statemanagement statemanagement;
+	private StateDaoImpl statemanagement;
 	@Autowired
 	private OmTimeZoneDaoImpl omTimeZoneDaoImpl;
 	@Autowired
@@ -636,7 +636,7 @@ public class BackupImportController extends AbstractUploadController {
 			performImport(is);
 
 			LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
-			hs.put("user", usersDao.getUser(info.userId));
+			hs.put("user", usersDao.get(info.userId));
 			hs.put("message", "library");
 			hs.put("action", "import");
 			hs.put("error", "");

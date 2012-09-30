@@ -103,7 +103,7 @@ public class AppointmentReminderTypDaoImpl {
 			ac.setName(name);
 			ac.setStarttime(new Date());
 			ac.setDeleted(false);
-			ac.setUser(usersDao.getUser(user_id));
+			ac.setUser(usersDao.get(user_id));
 
 			ac = em.merge(ac);
 			Long category_id = ac.getTypId();

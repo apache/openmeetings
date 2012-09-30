@@ -39,8 +39,8 @@ import org.apache.openmeetings.data.conference.Feedbackmanagement;
 import org.apache.openmeetings.data.conference.Invitationmanagement;
 import org.apache.openmeetings.data.conference.Roommanagement;
 import org.apache.openmeetings.data.logs.ConferenceLogDaoImpl;
-import org.apache.openmeetings.data.user.Statemanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.dao.StateDaoImpl;
 import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
 import org.apache.openmeetings.ldap.LdapLoginManagement;
 import org.apache.openmeetings.persistence.beans.adresses.States;
@@ -89,7 +89,7 @@ public class MainService implements IPendingServiceCallback {
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
-	private Statemanagement statemanagement;
+	private StateDaoImpl statemanagement;
 	@Autowired
 	private OmTimeZoneDaoImpl omTimeZoneDaoImpl;
 	@Autowired
@@ -151,7 +151,7 @@ public class MainService implements IPendingServiceCallback {
 		Long users_id = sessionManagement.checkSession(SID);
 		long user_level = userManagement.getUserLevelByID(users_id);
 		if (user_level > 2) {
-			users = usersDao.getUser(new Long(USER_ID));
+			users = usersDao.get(new Long(USER_ID));
 		} else {
 			users.setFirstname("No rights to do this");
 		}
@@ -903,7 +903,7 @@ public class MainService implements IPendingServiceCallback {
 		Long user_level = userManagement.getUserLevelByID(users_id);
 		return invitationManagement.sendInvitionLink(user_level,
 				username, message, domain, room, roomtype, baseurl, email,
-				usersDao.getUser(users_id).getAdresses().getEmail(), subject, room_id, null, null);
+				usersDao.get(users_id).getAdresses().getEmail(), subject, room_id, null, null);
 	}
 
 	/**

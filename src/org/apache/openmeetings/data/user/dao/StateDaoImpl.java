@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.data.user;
+package org.apache.openmeetings.data.user.dao;
 
 import java.util.Date;
 import java.util.List;
@@ -32,14 +32,15 @@ import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
+ * CRUD operations for {@link States}
  * 
  * @author swagner
  * 
  */
 @Transactional
-public class Statemanagement {
+public class StateDaoImpl {
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			Statemanagement.class, OpenmeetingsVariables.webAppRootKey);
+			StateDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;

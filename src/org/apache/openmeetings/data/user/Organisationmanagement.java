@@ -441,7 +441,7 @@ public class Organisationmanagement {
 	
 	public Long addOrganisationUserObj(Long user_id, Organisation_Users orgUser) {
 		try {
-			Users u = usersDao.getUser(user_id);
+			Users u = usersDao.get(user_id);
 			
 			orgUser.setStarttime(new Date());
 			orgUser = em.merge(orgUser);
@@ -485,7 +485,7 @@ public class Organisationmanagement {
 						+ organisation_id);
 				//user should be updated to have recent organisation_users list
 				Long id = null;
-				Users u = usersDao.getUser(user_id);
+				Users u = usersDao.get(user_id);
 				List<Organisation_Users> l = u.getOrganisation_users();
 				for (Organisation_Users ou : l) {
 					if (ou.getOrganisation().getOrganisation_id().equals(organisation_id)) {

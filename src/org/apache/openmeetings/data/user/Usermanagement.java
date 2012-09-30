@@ -45,6 +45,7 @@ import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
 import org.apache.openmeetings.data.basic.dao.ServerDaoImpl;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
+import org.apache.openmeetings.data.user.dao.StateDaoImpl;
 import org.apache.openmeetings.data.user.dao.UserSipDataDaoImpl;
 import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
 import org.apache.openmeetings.persistence.beans.adresses.Adresses;
@@ -92,7 +93,7 @@ public class Usermanagement {
 	@Autowired
 	private Fieldmanagment fieldmanagment;
 	@Autowired
-	private Statemanagement statemanagement;
+	private StateDaoImpl statemanagement;
 	@Autowired
 	private OmTimeZoneDaoImpl omTimeZoneDaoImpl;
 	@Autowired
@@ -136,7 +137,7 @@ public class Usermanagement {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
 				SearchResult<Users> sresult = new SearchResult<Users>();
 				sresult.setObjectName(Users.class.getName());
-				sresult.setRecords(usersDao.selectMaxFromUsers());
+				sresult.setRecords(usersDao.count());
 
 				// get all users
 				CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -239,7 +240,7 @@ public class Usermanagement {
 		// FIXME: We have to check here for the User only cause the
 		// Org-Moderator otherwise cannot access it
 		if (authLevelManagement.checkUserLevel(user_level)) {
-			return usersDao.getUser(user_id);
+			return usersDao.get(user_id);
 		}
 		return null;
 	}
@@ -475,7 +476,7 @@ public class Usermanagement {
 
 		if (authLevelManagement.checkUserLevel(user_level) && user_id != 0) {
 			try {
-				Users us = usersDao.getUser(user_id);
+				Users us = usersDao.get(user_id);
 
 				// Check for duplicates
 				boolean checkName = true;
@@ -510,7 +511,7 @@ public class Usermanagement {
 						organisationmanagement.updateUserOrganisationsByUser(
 								us, organisations);
 					}
-					us = usersDao.getUser(user_id);
+					us = usersDao.get(user_id);
 
 					us.setLastname(lastname);
 					us.setFirstname(firstname);
@@ -1363,7 +1364,7 @@ public class Usermanagement {
 				if (user_id != null && user_id > 0) {
 
 					returnLong = user_id;
-					Users savedUser = usersDao.getUser(user_id);
+					Users savedUser = usersDao.get(user_id);
 					savedUser.setAge((Date) values.get("age"));
 					savedUser.setFirstname(values.get("firstname").toString());
 					savedUser.setLastname(values.get("lastname").toString());

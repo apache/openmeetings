@@ -111,7 +111,7 @@ public class GenerateImage {
 		fToDelete.delete();
 
 		String pictureuri = destinationFile.getName();
-		Users us = usersDao.getUser(users_id);
+		Users us = usersDao.get(users_id);
 		us.setUpdatetime(new java.util.Date());
 		us.setPictureuri(pictureuri);
 		usersDao.updateUser(us);

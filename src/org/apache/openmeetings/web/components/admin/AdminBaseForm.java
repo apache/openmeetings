@@ -89,28 +89,75 @@ public class AdminBaseForm<T> extends Form<T> {
 		basePanel.hideNewRecord();
 	}
 	
+	/**
+	 * invoked when user press save button
+	 * 
+	 * @param target
+	 * @param form
+	 */
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 	}
 	
+	/**
+	 * invoked when save has error
+	 * 
+	 * @param target
+	 * @param form
+	 */
 	protected void onSaveError(AjaxRequestTarget target, Form<?> form) {
 	}
 	
+	/**
+	 * invoked when new button is pressed
+	 * 
+	 * @param target
+	 * @param form
+	 */
 	protected void onNewSubmit(AjaxRequestTarget target, Form<?> form) {
 	}
 	
+	/**
+	 * invoked if new has error
+	 * 
+	 * @param target
+	 * @param form
+	 */
 	protected void onNewError(AjaxRequestTarget target, Form<?> form) {
 	}
 	
+	/**
+	 * invoked when refresh button is pressed
+	 * 
+	 * @param target
+	 * @param form
+	 */
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 	}
 	
+	/**
+	 * invoked when refresh has error
+	 * 
+	 * @param target
+	 * @param form
+	 */
 	protected void onRefreshError(AjaxRequestTarget target, Form<?> form) {
 	}
 	
-	
+	/**
+	 * invoked when delete button is pressed
+	 * 
+	 * @param target
+	 * @param form
+	 */
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
 	}
 	
+	/**
+	 * invoked when delete has error
+	 * 
+	 * @param target
+	 * @param form
+	 */
 	protected void onDeleteError(AjaxRequestTarget target, Form<?> form) {
 	}
 	

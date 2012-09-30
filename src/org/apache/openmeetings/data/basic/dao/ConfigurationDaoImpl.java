@@ -300,7 +300,7 @@ public class ConfigurationDaoImpl implements OmDAO<Configuration> {
 		try {
 			Configuration conf = (Configuration) CastMapToObject.getInstance()
 					.castByGivenObject(values, Configuration.class);
-			conf.setUser(usersDao.getUser(users_id));
+			conf.setUser(usersDao.get(users_id));
 			conf.setUpdatetime(new Date());
 			conf.setDeleted(true);
 
@@ -308,7 +308,7 @@ public class ConfigurationDaoImpl implements OmDAO<Configuration> {
 			conf2.setComment(conf.getComment());
 			conf2.setConf_key(conf.getConf_key());
 			conf2.setConf_value(conf.getConf_value());
-			conf2.setUser(usersDao.getUser(users_id));
+			conf2.setUser(usersDao.get(users_id));
 			conf2.setDeleted(true);
 			conf2.setUpdatetime(new Date());
 
@@ -366,7 +366,7 @@ public class ConfigurationDaoImpl implements OmDAO<Configuration> {
 			entity.setDeleted(false);
 			this.updateConfig(entity);
 		} else {
-			entity.setUser(usersDao.getUser(userId));
+			entity.setUser(usersDao.get(userId));
 			entity.setDeleted(false);
 			entity.setUpdatetime(new Date());
 			this.updateConfig(entity);
@@ -374,7 +374,7 @@ public class ConfigurationDaoImpl implements OmDAO<Configuration> {
 	}
 
 	public void delete(Configuration entity, long userId) {
-		entity.setUser(usersDao.getUser(userId));
+		entity.setUser(usersDao.get(userId));
 		entity.setDeleted(true);
 		entity.setUpdatetime(new Date());
 		this.updateConfig(entity);

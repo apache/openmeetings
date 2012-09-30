@@ -31,8 +31,8 @@ import org.apache.openmeetings.data.basic.Sessionmanagement;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.data.basic.dao.LdapConfigDaoImpl;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
-import org.apache.openmeetings.data.user.Statemanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.dao.StateDaoImpl;
 import org.apache.openmeetings.ldap.config.ConfigReader;
 import org.apache.openmeetings.persistence.beans.adresses.States;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
@@ -62,7 +62,7 @@ public class LdapLoginManagement {
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
-	private Statemanagement statemanagement;
+	private StateDaoImpl statemanagement;
 	@Autowired
 	private LdapConfigDaoImpl ldapConfigDao;
 	@Autowired

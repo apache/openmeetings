@@ -156,7 +156,7 @@ public class MeetingMemberDaoImpl {
 			gm.setAppointment(appointmentDao.getAppointmentById(appointmentId));
 			gm.setDeleted(false);
 			gm.setUpdatetime(new Date());
-			gm.setUserid(usersDao.getUser(userid));
+			gm.setUserid(usersDao.get(userid));
 			gm.setEmail(email);
 			gm.setPhone(phone);
 
@@ -188,7 +188,7 @@ public class MeetingMemberDaoImpl {
 			gm.setMemberStatus(memberStatus);
 			gm.setAppointmentStatus(appointmentStatus);
 			gm.setAppointment(appointmentDao.getAppointmentById(appointmentId));
-			gm.setUserid(usersDao.getUser(userid));
+			gm.setUserid(usersDao.get(userid));
 			gm.setEmail(email);
 			gm.setPhone(phone);
 
