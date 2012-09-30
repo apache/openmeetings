@@ -21,7 +21,7 @@ package org.apache.openmeetings.web.components.admin.labels;
 import java.util.Iterator;
 
 import org.apache.openmeetings.data.basic.FieldLanguageDaoImpl;
-import org.apache.openmeetings.data.basic.FieldLanguagesValuesDAO;
+import org.apache.openmeetings.data.basic.FieldLanguagesValuesDaoImpl;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.web.app.Application;
@@ -61,13 +61,13 @@ public class LangPanel extends AdminPanel {
 
 		final DataView<Fieldlanguagesvalues> dataView = new DataView<Fieldlanguagesvalues>(
 				"langList", new OmDataProvider<Fieldlanguagesvalues>(
-						FieldLanguagesValuesDAO.class) {
+						FieldLanguagesValuesDaoImpl.class) {
 					private static final long serialVersionUID = -6822789354860988626L;
 
 					public Iterator<? extends Fieldlanguagesvalues> iterator(
 							long first, long count) {
 						return Application
-								.getBean(FieldLanguagesValuesDAO.class)
+								.getBean(FieldLanguagesValuesDaoImpl.class)
 								.get(language.getLanguage_id(), (int) first,
 										(int) count).iterator();
 					}

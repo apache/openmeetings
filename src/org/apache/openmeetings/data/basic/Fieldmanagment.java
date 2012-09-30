@@ -60,7 +60,7 @@ public class Fieldmanagment {
 	private FieldLanguageDaoImpl fieldLanguageDaoImpl;
 
 	@Autowired
-	private FieldLanguagesValuesDAO fieldLanguagesValuesDAO;
+	private FieldLanguagesValuesDaoImpl fieldLanguagesValuesDAO;
 
 	@Autowired
 	private ConfigurationDaoImpl configurationDaoImpl;

@@ -32,43 +32,83 @@ import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 
+ * CRUD operations for {@link Fieldlanguagesvalues}
+ * 
+ * @author solomax, swagner
+ * 
+ */
 @Transactional
-public class FieldLanguagesValuesDAO implements OmDAO<Fieldlanguagesvalues> {
+public class FieldLanguagesValuesDaoImpl implements OmDAO<Fieldlanguagesvalues> {
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
 	private ConfigurationDaoImpl configurationDaoImpl;
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.openmeetings.data.OmDAO#get(int, int)
+	 */
 	public List<Fieldlanguagesvalues> get(int first, int count) {
-		return get(configurationDaoImpl.getConfValue("default_lang_id", Long.class, "1"), first, count);
+		return get(configurationDaoImpl.getConfValue("default_lang_id",
+				Long.class, "1"), first, count);
 	}
-	
+
+	/**
+	 * Advanced query to set the language id
+	 * 
+	 * @param language_id
+	 * @param first
+	 * @param count
+	 * @return
+	 */
 	public List<Fieldlanguagesvalues> get(Long language_id, int first, int count) {
 		// all Fieldlanguagesvalues in current Language
-		TypedQuery<Fieldlanguagesvalues> q = em.createNamedQuery("allFieldLanguageValues", Fieldlanguagesvalues.class);
+		TypedQuery<Fieldlanguagesvalues> q = em.createNamedQuery(
+				"allFieldLanguageValues", Fieldlanguagesvalues.class);
 		q.setParameter("language_id", language_id);
 		q.setFirstResult(first);
 		q.setMaxResults(count);
 		return q.getResultList();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.openmeetings.data.OmDAO#get(long)
+	 */
 	public Fieldlanguagesvalues get(long id) {
-		TypedQuery<Fieldlanguagesvalues> q = em.createNamedQuery("getFieldLanguagesValuesById", Fieldlanguagesvalues.class);
+		TypedQuery<Fieldlanguagesvalues> q = em.createNamedQuery(
+				"getFieldLanguagesValuesById", Fieldlanguagesvalues.class);
 		q.setParameter("id", id);
 		Fieldlanguagesvalues flv = null;
 		try {
 			flv = q.getSingleResult();
 		} catch (NoResultException e) {
-			
+
 		}
 		return flv;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.openmeetings.data.OmDAO#count()
+	 */
 	public long count() {
 		TypedQuery<Long> q = em.createNamedQuery("getFieldCount", Long.class);
 		return q.getSingleResult();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.openmeetings.data.OmDAO#update(org.apache.openmeetings.persistence
+	 * .beans.OmEntity, long)
+	 */
 	public void update(Fieldlanguagesvalues entity, long userId) {
 		entity.setUpdatetime(new Date());
 		if (entity.getFieldlanguagesvalues_id() == null) {
@@ -78,6 +118,13 @@ public class FieldLanguagesValuesDAO implements OmDAO<Fieldlanguagesvalues> {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.openmeetings.data.OmDAO#delete(org.apache.openmeetings.persistence
+	 * .beans.OmEntity, long)
+	 */
 	public void delete(Fieldlanguagesvalues entity, long userId) {
 		entity.setDeleted(true);
 		entity.setUpdatetime(new Date());

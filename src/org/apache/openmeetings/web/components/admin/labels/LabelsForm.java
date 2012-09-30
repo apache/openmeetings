@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.components.admin.labels;
 
-import org.apache.openmeetings.data.basic.FieldLanguagesValuesDAO;
+import org.apache.openmeetings.data.basic.FieldLanguagesValuesDaoImpl;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
@@ -57,7 +57,7 @@ public class LabelsForm extends AdminBaseForm<Fieldlanguagesvalues> {
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		Fieldlanguagesvalues flv = getModelObject();
 		if (flv.getFieldlanguagesvalues_id() != null) {
-			flv = Application.getBean(FieldLanguagesValuesDAO.class).get(
+			flv = Application.getBean(FieldLanguagesValuesDaoImpl.class).get(
 					getModelObject().getFieldlanguagesvalues_id());
 		} else {
 			flv = new Fieldlanguagesvalues();
@@ -68,7 +68,7 @@ public class LabelsForm extends AdminBaseForm<Fieldlanguagesvalues> {
 
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
-		Application.getBean(FieldLanguagesValuesDAO.class).update(
+		Application.getBean(FieldLanguagesValuesDaoImpl.class).update(
 				getModelObject(), WebSession.getUserId());
 		// FIXME reload
 	}
@@ -76,7 +76,7 @@ public class LabelsForm extends AdminBaseForm<Fieldlanguagesvalues> {
 	// FIXME confirmation
 	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
-		Application.getBean(FieldLanguagesValuesDAO.class).delete(
+		Application.getBean(FieldLanguagesValuesDaoImpl.class).delete(
 				getModelObject(), WebSession.getUserId());
 		// FIXME reload
 	}
