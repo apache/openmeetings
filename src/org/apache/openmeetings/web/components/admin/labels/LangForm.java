@@ -63,7 +63,6 @@ public class LangForm extends Form<Void> {
 	 */
 	public LangForm(String id, final WebMarkupContainer listContainer,
 			final LangPanel langPanel) {
-
 		super(id);
 		setOutputMarkupId(true);
 

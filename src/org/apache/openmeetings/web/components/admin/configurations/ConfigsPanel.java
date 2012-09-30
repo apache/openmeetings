@@ -63,7 +63,8 @@ public class ConfigsPanel extends AdminPanel {
 						target.add(form);
 					}
 				});
-				item.add(AttributeModifier.replace("class", (item.getIndex() % 2 == 1) ? "even" : "odd"));
+				item.add(AttributeModifier.replace("class", "clickable "
+						+ ((item.getIndex() % 2 == 1) ? "even" : "odd")));
 			}
 		};
 		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");

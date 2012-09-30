@@ -48,11 +48,11 @@ public class GroupsPanel extends AdminPanel {
 			protected void onModelChanged() {
 				super.onModelChanged();
 				if (getModelObject().getOrganisation_id() == null) {
-					addUsersBtn.add(AttributeModifier.replace("class", "formNewButton")
-						, AttributeModifier.replace("onclick", "addUsers();"));
-				} else {
 					addUsersBtn.add(AttributeModifier.replace("class", "formNewButton disabled")
-						, AttributeModifier.replace("onclick", ""));
+							, AttributeModifier.replace("onclick", ""));
+				} else {
+					addUsersBtn.add(AttributeModifier.replace("class", "formNewButton")
+							, AttributeModifier.replace("onclick", "addUsers();"));
 				}
 				addUsersForm.setOrganisation(getModelObject());
 			}
@@ -79,7 +79,7 @@ public class GroupsPanel extends AdminPanel {
 					protected void onEvent(AjaxRequestTarget target) {
 						form.setModelObject(organisation);
 						form.updateView(target);
-						target.add(form);
+						//target.add(form);
 					}
 				});
 				item.add(AttributeModifier.append("class", "clickable " + ((item.getIndex() % 2 == 1) ? "even" : "odd")));
