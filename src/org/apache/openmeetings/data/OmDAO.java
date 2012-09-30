@@ -22,10 +22,53 @@ import java.util.List;
 
 import org.apache.openmeetings.persistence.beans.OmEntity;
 
+/**
+ * General interface to perform CRUD operations on entities
+ * 
+ * @author solomax, swagner
+ * 
+ * @param <T>
+ */
 public interface OmDAO<T extends OmEntity> {
-	T get(long id);
-	List<T> get(int start, int count);
-	long count();
-	void update(T entity, long userId);
-	void delete(T entity, long userId);
+
+	/**
+	 * Get an instance of an {@link T}
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public T get(long id);
+
+	/**
+	 * Get a list of instances of {@link T}
+	 * 
+	 * @param start
+	 * @param count
+	 * @return
+	 */
+	public List<T> get(int start, int count);
+
+	/**
+	 * Count the number of instances of {@link T}
+	 * 
+	 * @return
+	 */
+	public long count();
+
+	/**
+	 * Update an instance of {@link T}
+	 * 
+	 * @param entity
+	 * @param userId
+	 */
+	public void update(T entity, long userId);
+
+	/**
+	 * Delete an instance of {@link T}
+	 * 
+	 * @param entity
+	 * @param userId
+	 */
+	public void delete(T entity, long userId);
+
 }
