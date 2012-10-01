@@ -71,33 +71,34 @@ public class ServerForm extends AdminBaseForm<Server> {
 				WebSession.getUserId());
 		Server server = Application.getBean(ServerDaoImpl.class).get(
 				getModelObject().getId());
-		this.setModelObject(server);
+		setModelObject(server);
+		hideNewRecord();
 		target.add(this);
 		target.add(listContainer);
 	}
 
 	@Override
 	protected void onNewSubmit(AjaxRequestTarget target, Form<?> form) {
-		this.setModelObject(new Server());
+		setModelObject(new Server());
 		target.add(this);
 	}
 
 	@Override
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
-		Server server = this.getModelObject();
+		Server server = getModelObject();
 		if (server.getId() <= 0) {
 			server = Application.getBean(ServerDaoImpl.class).get(
 					server.getId());
 		} else {
 			server = new Server();
 		}
-		this.setModelObject(server);
+		setModelObject(server);
 		target.add(this);
 	}
 
 	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
-		Application.getBean(ServerDaoImpl.class).delete(this.getModelObject(),
+		Application.getBean(ServerDaoImpl.class).delete(getModelObject(),
 				WebSession.getUserId());
 		this.setModelObject(new Server());
 		target.add(listContainer);

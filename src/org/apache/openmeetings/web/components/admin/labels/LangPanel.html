@@ -64,23 +64,14 @@
 				<td class="adminPanelColumnForm">
 					<form wicket:id="form" class="adminForm">
 						<div wicket:id="buttons"></div>
-						<table>
-							<tr>
-								<td colspan="2" style="font-weight: bold;"><wicket:ommessage key="353" /></td>
-							</tr>
-							<tr>
-								<td><wicket:ommessage key="356" /></td>
-								<td><span wicket:id="fieldvalues.fieldvalues_id"></span></td>
-							</tr>
-							<tr>
-								<td><wicket:ommessage key="354" /></td>
-								<td><input type="text" wicket:id="fieldvalues.name"/></td>
-							</tr>
-							<tr>
-								<td><wicket:ommessage key="355" /></td>
-								<td><textarea wicket:id="value"></textarea></td>
-							</tr>
-						</table>
+						<fieldset>
+							<legend><wicket:ommessage key="353" /></legend>
+							<wicket:ommessage key="356" /><span wicket:id="fieldvalues.fieldvalues_id"></span>
+							<br/>
+							<wicket:ommessage key="354" /><input type="text" wicket:id="fieldvalues.name"/>
+							<br/>
+							<wicket:ommessage key="355" /><textarea wicket:id="value"></textarea>
+						</fieldset>
 					</form>
 				</td>
 			</tr>

@@ -59,6 +59,7 @@ public class ConfigsPanel extends AdminPanel {
 					private static final long serialVersionUID = -8069413566800571061L;
 
 					protected void onEvent(AjaxRequestTarget target) {
+						form.hideNewRecord();
 						form.setModelObject(configuration);
 						target.add(form);
 					}
@@ -79,6 +80,7 @@ public class ConfigsPanel extends AdminPanel {
 		});
 		
 		form = new ConfigForm("form", listContainer, new Configuration());
+		form.showNewRecord();
         add(form);
 		
 	}

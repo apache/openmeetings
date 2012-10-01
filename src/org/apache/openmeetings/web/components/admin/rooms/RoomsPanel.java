@@ -76,6 +76,7 @@ public class RoomsPanel extends AdminPanel {
 
 					protected void onEvent(AjaxRequestTarget target) {
 						form.setModelObject(room);
+						form.hideNewRecord();
 						target.add(form);
 					}
 				});
@@ -94,8 +95,8 @@ public class RoomsPanel extends AdminPanel {
 			}
 		});
 		
-		Rooms room = new Rooms();
-		form = new RoomForm("form", room);
+		form = new RoomForm("form", new Rooms());
+		form.showNewRecord();
         add(form);
 		
 	}

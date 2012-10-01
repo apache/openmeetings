@@ -24,6 +24,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -73,13 +74,16 @@ public class UsersDaoImpl implements OmDAO<Users> {
 	 * Get a new instance of the {@link Users} entity, with all default values
 	 * set
 	 * 
+	 * @param currentUser
+	 *            the timezone of the current user is copied to the new default
+	 *            one (if the current user has one)
 	 * @return
 	 */
-	public Users getNewInstance(Users currentUser) {
+	public Users getNewUserInstance(Users currentUser) {
 		Users user = new Users();
 		user.setSalutations_id(1L); // TODO: Fix default selection to be
 									// configurable
-		user.setLevel_id(2L);
+		user.setLevel_id(1L);
 		user.setLanguage_id(configurationDaoImpl.getConfValue(
 				"default_lang_id", Long.class, "1"));
 		user.setOmTimeZone(omTimeZoneDaoImpl.getDefaultOmTimeZone(currentUser));
@@ -189,6 +193,7 @@ public class UsersDaoImpl implements OmDAO<Users> {
 	public void updateUser(Users user) {
 		try {
 			if (user.getUser_id() == null) {
+				user.setStarttime(new Date());
 				em.persist(user);
 			} else {
 				user.setUpdatetime(new Date());
@@ -456,6 +461,40 @@ public class UsersDaoImpl implements OmDAO<Users> {
 			log.error("[selectMaxFromUsers] ", ex2);
 		}
 		return null;
+	}
+
+	/**
+	 * Returns true if the password is correct
+	 * 
+	 * @param userId
+	 * @param password
+	 * @return
+	 */
+	public boolean verifyPassword(Long userId, String password) {
+		TypedQuery<Long> query = em.createNamedQuery("checkPassword",
+				Long.class);
+		query.setParameter("userId", userId);
+		query.setParameter("password", manageCryptStyle.getInstanceOfCrypt()
+				.createPassPhrase(password));
+		return query.getResultList().get(0) == 1;
+
+	}
+
+	/**
+	 * Password needs extra hook because being FetchType.Lazy
+	 * 
+	 * @param u
+	 * @param newPassword
+	 * @param userId
+	 * @return
+	 */
+	public int updatePassword(Users u, String newPassword) {
+		Query query = em.createNamedQuery("updatePassword");
+		query.setParameter("password", manageCryptStyle.getInstanceOfCrypt()
+				.createPassPhrase(newPassword));
+		query.setParameter("userId", u.getUser_id());
+		return query.executeUpdate();
+
 	}
 
 }

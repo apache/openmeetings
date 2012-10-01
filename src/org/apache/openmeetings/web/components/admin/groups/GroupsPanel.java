@@ -77,6 +77,7 @@ public class GroupsPanel extends AdminPanel {
 					private static final long serialVersionUID = -8069413566800571061L;
 
 					protected void onEvent(AjaxRequestTarget target) {
+						form.hideNewRecord();
 						form.setModelObject(organisation);
 						form.updateView(target);
 						//target.add(form);

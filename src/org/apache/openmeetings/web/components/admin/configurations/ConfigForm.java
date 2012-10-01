@@ -67,6 +67,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 		Application.getBean(ConfigurationDaoImpl.class).update(getModelObject(), WebSession.getUserId());
 		Configuration conf = Application.getBean(ConfigurationDaoImpl.class).get(getModelObject().getConfiguration_id());
 		this.setModelObject(conf);
+		hideNewRecord();
 		target.add(this);
 		target.add(listContainer);
 	}

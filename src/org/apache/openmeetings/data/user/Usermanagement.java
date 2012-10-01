@@ -283,9 +283,7 @@ public class Usermanagement {
 				// Refresh User Object
 				users = this.refreshUserObject(users);
 
-				if (manageCryptStyle.getInstanceOfCrypt().verifyPassword(
-						userpass, users.getPassword())) {
-					log.info("chsum OK: " + users.getUser_id());
+				if (usersDao.verifyPassword(users.getUser_id(), userpass)) {
 
 					Boolean bool = sessionManagement.updateUser(SID,
 							users.getUser_id(), storePermanent,
@@ -545,8 +543,6 @@ public class Usermanagement {
 					}
 					us.setAdresses(street, zip, town, statemanagement.getStateById(states_id),
 							additionalname, comment, fax, phone, email);
-					// emailManagement.updateUserEmail(mail.getMail().getMail_id(),user_id,
-					// email);
 
 					if (generateSipUserData) {
 
@@ -603,18 +599,7 @@ public class Usermanagement {
 
 					}
 
-					// log.info("USER " + us.getLastname());
-					// What is this code good for? The Id is already check in
-					// the initial
-					// if clause otherwise an update is not possible
-					// if (us.getUser_id() == null) {
-					// em.persist(us);
-					// } else {
-					// if (!em.contains(us)) {
 					em.merge(us);
-
-					// }
-					// }
 
 					return us.getUser_id();
 

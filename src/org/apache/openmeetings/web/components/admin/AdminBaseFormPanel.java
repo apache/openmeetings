@@ -89,6 +89,7 @@ public abstract class AdminBaseFormPanel<T> extends AdminPanel {
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				// repaint the feedback panel so that it is hidden
 				target.add(feedback);
+				hideNewRecord();
 				onRefreshSubmit(target, form);
 			}
 
@@ -96,6 +97,7 @@ public abstract class AdminBaseFormPanel<T> extends AdminPanel {
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
 				// repaint the feedback panel so errors are shown
 				target.add(feedback);
+				hideNewRecord();
 				onRefreshError(target, form);
 			}
 		});
@@ -113,6 +115,7 @@ public abstract class AdminBaseFormPanel<T> extends AdminPanel {
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				// repaint the feedback panel so that it is hidden
 				target.add(feedback);
+				hideNewRecord();
 				onDeleteSubmit(target, form);
 			}
 
@@ -120,15 +123,26 @@ public abstract class AdminBaseFormPanel<T> extends AdminPanel {
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
 				// repaint the feedback panel so errors are shown
 				target.add(feedback);
+				hideNewRecord();
 				onDeleteError(target, form);
 			}
 		});
 	}
 	
+	/**
+	 * Hide the new record text
+	 */
 	public void hideNewRecord() {
 		newRecord.setVisible(false);
 	}
 	
+	/**
+	 * Hide the new record text
+	 */
+	public void showNewRecord() {
+		newRecord.setVisible(true);
+	}
+
 	protected abstract void onSaveSubmit(AjaxRequestTarget target, Form<?> form);
 	protected abstract void onSaveError(AjaxRequestTarget target, Form<?> form);
 

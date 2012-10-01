@@ -85,10 +85,20 @@ public class AdminBaseForm<T> extends Form<T> {
 
 	}
 
+	/**
+	 * @see AdminBaseForm#hideNewRecord()
+	 */
 	public void hideNewRecord() {
 		basePanel.hideNewRecord();
 	}
 	
+	/**
+	 * @see AdminBaseForm#showNewRecord()
+	 */
+	public void showNewRecord() {
+		basePanel.showNewRecord();
+	}
+
 	/**
 	 * invoked when user press save button
 	 * 

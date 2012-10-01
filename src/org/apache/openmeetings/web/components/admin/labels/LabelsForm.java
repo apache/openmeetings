@@ -70,6 +70,7 @@ public class LabelsForm extends AdminBaseForm<Fieldlanguagesvalues> {
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 		Application.getBean(FieldLanguagesValuesDaoImpl.class).update(
 				getModelObject(), WebSession.getUserId());
+		hideNewRecord();
 		// FIXME reload
 	}
 

@@ -51,58 +51,68 @@
 				<td class="adminPanelColumnForm">
 					<form wicket:id="form" class="adminForm">
 						<div wicket:id="buttons"></div>
-			            <wicket:ommessage key="132" />: <input type="text" wicket:id="login"/>
-			            <br/>
-			            <wicket:ommessage key="133" />: <input type="password" wicket:id="password"/>
-			            <br/>
-			            <wicket:ommessage key="135" />: <select wicket:id="salutations_id" style="width: 70px;"/> <input type="text" wicket:id="firstname"/>
-			            <br/>
-			            <wicket:ommessage key="136" />: <input type="text" wicket:id="lastname"/>
-			            <br/>
-			            <wicket:ommessage key="1143" />: <select wicket:id="omTimeZone"/>
-			            <br/>
-			            <wicket:ommessage key="111" />: <select wicket:id="language_id"/>
-			            <br/>
-			            <wicket:ommessage key="1149" />
-			            <br/>
-			             <wicket:ommessage key="1148" />: <input type="checkbox" wicket:id="forceTimeZoneCheck" />
-			            <br/>
-			            <wicket:ommessage key="137" />: <input type="text" wicket:id="adresses.email"/>
-			            <br/>
-			            <wicket:ommessage key="607" />: <input type="text" wicket:id="adresses.phone"/>
-			            <br/>
-			            <wicket:ommessage key="1503" />: <input type="checkbox" wicket:id="sendSMS"/>
-			            <br/>
-			            <wicket:ommessage key="138" />: <input type="text" wicket:id="age"/>
-			            <br/>
-			            <wicket:ommessage key="139" />: <input type="text" wicket:id="adresses.street"/> <input type="text" wicket:id="adresses.additionalname"/>
-			            <br/>
-			            <wicket:ommessage key="140" />: <input type="text" wicket:id="adresses.zip"/> <input type="text" wicket:id="adresses.town"/>
-			            <br/>
-			            <wicket:ommessage key="141" />: <select wicket:id="adresses.states"/>
-			            <br/>
-			            <wicket:ommessage key="158" />: <select wicket:id="status"/>
-			            <br/>
-			            <wicket:ommessage key="169" />: <select wicket:id="level_id"/>
-			            <br/>
-			            <wicket:ommessage key="142" />: <textarea wicket:id="adresses.comment"/>
-			            <br/>
-			            <wicket:ommessage key="161" />: <select wicket:id="organisation_users"/>
-			            <br/>
-			            <wicket:ommessage key="1502" />: <select wicket:id="server"/>
-			            <br/>
-			            <wicket:ommessage key="1159" />
-			            <br/>
-			            <span wicket:id="community_settings">
-						    <input type="radio"/>
-						    <input type="radio"/>
-						    <input type="radio"/>
-						</span>
-			            <br/>
-			            <wicket:ommessage key="1162" />: <textarea wicket:id="userOffers"/>
-			            <br/>
-			            <wicket:ommessage key="1163" />: <textarea wicket:id="userSearchs"/>
-			            <br/>
+						<fieldset>
+							<legend><wicket:ommessage key="143" /></legend>
+				            <wicket:ommessage key="132" />: <input type="text" wicket:id="login"/>
+				            <br/>
+				            <wicket:ommessage key="133" />: <input type="password" wicket:id="password"/>
+				            <br/>
+				            <wicket:ommessage key="135" />: <select wicket:id="salutations_id" style="width: 70px;"/> <input type="text" wicket:id="firstname"/>
+				            <br/>
+				            <wicket:ommessage key="136" />: <input type="text" wicket:id="lastname"/>
+				            <br/>
+				            <wicket:ommessage key="1143" />: <select wicket:id="omTimeZone"/>
+				            <br/>
+				            <wicket:ommessage key="111" />: <select wicket:id="language_id"/>
+				            <br/>
+				            <wicket:ommessage key="1110" />: <span wicket:id="starttime"/>
+				            <br/>
+				            <wicket:ommessage key="1112" />: <span wicket:id="updatetime"/>
+				            <br/>
+				            <wicket:ommessage key="1149" />
+				            <br/>
+				            <wicket:ommessage key="1148" />: <input type="checkbox" wicket:id="forceTimeZoneCheck" />
+				            <br/>
+				            <wicket:ommessage key="137" />: <input type="text" wicket:id="adresses.email"/>
+				            <br/>
+				            <wicket:ommessage key="607" />: <input type="text" wicket:id="adresses.phone"/>
+				            <br/>
+				            <wicket:ommessage key="1503" />: <input type="checkbox" wicket:id="sendSMS"/>
+				            <br/>
+				            <wicket:ommessage key="138" />: <input type="text" wicket:id="age"/>
+				            <br/>
+				            <wicket:ommessage key="139" />: <input type="text" wicket:id="adresses.street"/> <input type="text" wicket:id="adresses.additionalname"/>
+				            <br/>
+				            <wicket:ommessage key="140" />: <input type="text" wicket:id="adresses.zip"/> <input type="text" wicket:id="adresses.town"/>
+				            <br/>
+				            <wicket:ommessage key="141" />: <select wicket:id="adresses.states"/>
+				            <br/>
+				            <wicket:ommessage key="158" />: <select wicket:id="status"/>
+				            <br/>
+				            <wicket:ommessage key="169" />: <select wicket:id="level_id"/>
+				            <br/>
+				            <wicket:ommessage key="142" />: <textarea wicket:id="adresses.comment"/>
+				            <br/>
+				            <wicket:ommessage key="161" />: <select wicket:id="organisation_users"/>
+				            <br/>
+				            <wicket:ommessage key="1502" />: <select wicket:id="server"/>
+				            <br/>
+			            </fieldset>
+			            <fieldset>
+							<legend><wicket:ommessage key="1159" /></legend>
+				            <wicket:ommessage key="1159" />
+				            <br/>
+				            <span wicket:id="community_settings">
+							    <input type="radio"/>
+							    <input type="radio"/>
+							    <input type="radio"/>
+							</span>
+				            <br/>
+				            <wicket:ommessage key="1162" />: <textarea wicket:id="userOffers"/>
+				            <br/>
+				            <wicket:ommessage key="1163" />: <textarea wicket:id="userSearchs"/>
+				            <br/>
+				        </fieldset>
 			        </form>
 				</td>
 			</tr>

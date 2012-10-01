@@ -57,6 +57,7 @@ public class LangPanel extends AdminPanel {
 
 		final LabelsForm form = new LabelsForm("form",
 				new Fieldlanguagesvalues());
+		form.showNewRecord();
 		add(form);
 
 		final DataView<Fieldlanguagesvalues> dataView = new DataView<Fieldlanguagesvalues>(

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -50,9 +51,23 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
+/**
+ * Entity to store user data, password field is {@link FetchType#LAZY}, so that
+ * is why there is an extra udpate statement at this moment
+ * 
+ * @author sebawagner, solomax
+ * 
+ */
 @Entity
 @NamedQueries({
 		@NamedQuery(name = "getAllUsers", query = "SELECT u FROM Users u"),
+		@NamedQuery(name = "checkPassword", query = "select count(c.user_id) from Users c "
+				+ "where c.deleted = false " //
+				+ "AND c.user_id = :userId " //
+				+ "AND c.password LIKE :password"), //
+		@NamedQuery(name = "updatePassword", query = "UPDATE Users u " //
+				+ "SET u.password = :password " //
+				+ "WHERE u.user_id = :userId"), //
 		@NamedQuery(name = "getNondeletedUsers", query = "SELECT u FROM Users u WHERE u.deleted = false"),
 		@NamedQuery(name = "getUsersByOrganisationId", query = "SELECT u FROM Users u WHERE u.deleted = false AND u.organisation_users.organisation.organisation_id = :organisation_id") })
 @Table(name = "users")
@@ -98,6 +113,7 @@ public class Users implements Serializable, OmEntity {
 	@Element(data = true)
 	private String login;
 
+	@Basic(fetch = FetchType.LAZY)
 	@Column(name = "password")
 	@Element(name = "pass", data = true)
 	private String password;

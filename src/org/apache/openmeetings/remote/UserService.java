@@ -295,8 +295,8 @@ public class UserService {
 				.getUsersList(user_level, start, max, orderby, asc);
 	}
 
-	public SearchResult<Users> getUserListWithSearch(String SID, int start, int max,
-			String orderby, boolean asc, String search) {
+	public SearchResult<Users> getUserListWithSearch(String SID, int start,
+			int max, String orderby, boolean asc, String search) {
 		Long users_id = sessionManagement.checkSession(SID);
 		Long user_level = userManagement.getUserLevelByID(users_id);
 		return userManagement.getUsersListWithSearch(user_level, start, max,
@@ -313,8 +313,8 @@ public class UserService {
 	 * @param orderby
 	 * @return
 	 */
-	public SearchResult<Users> getAllUserBySearchRange(String SID, String search,
-			int start, int max, String orderby, boolean asc) {
+	public SearchResult<Users> getAllUserBySearchRange(String SID,
+			String search, int start, int max, String orderby, boolean asc) {
 		return userManagement.getAllUserByRange(search, start, max, orderby,
 				asc);
 	}
@@ -361,11 +361,11 @@ public class UserService {
 			}
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
-			
-			List<?> orgO = (List<?>)argObjectMap.get("organisations");
+
+			List<?> orgO = (List<?>) argObjectMap.get("organisations");
 			List<Long> orgIds = new ArrayList<Long>(orgO.size());
 			for (Object o : orgO) {
-				orgIds.add(Long.valueOf((Integer)o));
+				orgIds.add(Long.valueOf((Integer) o));
 			}
 			Date age = null;
 			if (argObjectMap.get("userage") instanceof Date) {
@@ -403,9 +403,8 @@ public class UserService {
 						true,
 						orgIds,
 						argObjectMap.get("phone").toString(),
-						Boolean.valueOf(
-								argObjectMap.get("sendSMS")
-										.toString()).booleanValue(),
+						Boolean.valueOf(argObjectMap.get("sendSMS").toString())
+								.booleanValue(),
 						"",
 						false,
 						argObjectMap.get("sip_user").toString(),
@@ -425,72 +424,67 @@ public class UserService {
 								.booleanValue(),
 						Boolean.valueOf(
 								argObjectMap.get("showContactDataToContacts")
-										.toString()).booleanValue(),
-						null);
+										.toString()).booleanValue(), null);
 			} else {
 				userId = userManagement.updateUser(
-								user_level,
-								user_idClient,
-								Long.valueOf(
-										argObjectMap.get("level_id").toString())
-										.longValue(),
-								argObjectMap.get("login").toString(),
-								argObjectMap.get("password").toString(),
-								argObjectMap.get("lastname").toString(),
-								argObjectMap.get("firstname").toString(),
-								age,
-								argObjectMap.get("street").toString(),
-								argObjectMap.get("additionalname").toString(),
-								argObjectMap.get("zip").toString(),
-								Long.valueOf(
-										argObjectMap.get("states_id")
-												.toString()).longValue(),
-								argObjectMap.get("town").toString(),
-								new Long(argObjectMap.get("language_id").toString()),
-								Integer.valueOf(
-										argObjectMap.get("availible")
-												.toString()).intValue(),
-								argObjectMap.get("telefon").toString(),
-								argObjectMap.get("fax").toString(),
-								argObjectMap.get("mobil").toString(),
-								argObjectMap.get("email").toString(),
-								argObjectMap.get("comment").toString(),
-								Integer.valueOf(
-										argObjectMap.get("status").toString())
-										.intValue(),
-								orgIds,
-								Integer.valueOf(
-										argObjectMap.get("salutations_id").toString())
-										.intValue(),
-								argObjectMap.get("phone").toString(),
-								Boolean.valueOf(
-										argObjectMap.get("sendSMS")
-												.toString()).booleanValue(),
-								argObjectMap.get("sip_user").toString(),
-								argObjectMap.get("sip_pass").toString(),
-								argObjectMap.get("sip_auth").toString(),
-								Boolean.valueOf(
-										argObjectMap.get("generateSipUserData")
-												.toString()).booleanValue(),
-								argObjectMap.get("jNameTimeZone").toString(),
-								Boolean.valueOf(
-										argObjectMap.get("forceTimeZoneCheck")
-												.toString()).booleanValue(),
-								argObjectMap.get("userOffers").toString(),
-								argObjectMap.get("userSearchs").toString(),
-								Boolean.valueOf(
-										argObjectMap.get("showContactData")
-												.toString()).booleanValue(),
-								Boolean.valueOf(
-										argObjectMap.get(
-												"showContactDataToContacts")
-												.toString()).booleanValue());
+						user_level,
+						user_idClient,
+						Long.valueOf(argObjectMap.get("level_id").toString())
+								.longValue(),
+						argObjectMap.get("login").toString(),
+						argObjectMap.get("password").toString(),
+						argObjectMap.get("lastname").toString(),
+						argObjectMap.get("firstname").toString(),
+						age,
+						argObjectMap.get("street").toString(),
+						argObjectMap.get("additionalname").toString(),
+						argObjectMap.get("zip").toString(),
+						Long.valueOf(argObjectMap.get("states_id").toString())
+								.longValue(),
+						argObjectMap.get("town").toString(),
+						new Long(argObjectMap.get("language_id").toString()),
+						Integer.valueOf(
+								argObjectMap.get("availible").toString())
+								.intValue(),
+						argObjectMap.get("telefon").toString(),
+						argObjectMap.get("fax").toString(),
+						argObjectMap.get("mobil").toString(),
+						argObjectMap.get("email").toString(),
+						argObjectMap.get("comment").toString(),
+						Integer.valueOf(argObjectMap.get("status").toString())
+								.intValue(),
+						orgIds,
+						Integer.valueOf(
+								argObjectMap.get("salutations_id").toString())
+								.intValue(),
+						argObjectMap.get("phone").toString(),
+						Boolean.valueOf(argObjectMap.get("sendSMS").toString())
+								.booleanValue(),
+						argObjectMap.get("sip_user").toString(),
+						argObjectMap.get("sip_pass").toString(),
+						argObjectMap.get("sip_auth").toString(),
+						Boolean.valueOf(
+								argObjectMap.get("generateSipUserData")
+										.toString()).booleanValue(),
+						argObjectMap.get("jNameTimeZone").toString(),
+						Boolean.valueOf(
+								argObjectMap.get("forceTimeZoneCheck")
+										.toString()).booleanValue(),
+						argObjectMap.get("userOffers").toString(),
+						argObjectMap.get("userSearchs").toString(),
+						Boolean.valueOf(
+								argObjectMap.get("showContactData").toString())
+								.booleanValue(),
+						Boolean.valueOf(
+								argObjectMap.get("showContactDataToContacts")
+										.toString()).booleanValue());
 			}
 			long serverId = -1;
 			try {
-				serverId = Long.parseLong(argObjectMap.get("serverId").toString());
+				serverId = Long.parseLong(argObjectMap.get("serverId")
+						.toString());
 			} catch (NumberFormatException nfe) {
-				//noop expected;
+				// noop expected;
 			}
 			if (userId > -1 && serverId > -1) {
 				try {
@@ -566,8 +560,8 @@ public class UserService {
 				this.scopeApplicationAdapter.sendMessageById(messageObj,
 						streamid, currentScope);
 
-				this.scopeApplicationAdapter
-						.roomLeaveByScope(rcl, currentScope, true);
+				this.scopeApplicationAdapter.roomLeaveByScope(rcl,
+						currentScope, true);
 
 				return true;
 			}
@@ -682,7 +676,8 @@ public class UserService {
 						+ userToAdd.getLastname() + "<br/><br/>";
 				message += user.getFirstname() + " " + user.getLastname() + " "
 						+ fValue1193.getValue() + "<br/>";
-				message += fieldmanagment.getString(1194L, language_id) + "<br/>";
+				message += fieldmanagment.getString(1194L, language_id)
+						+ "<br/>";
 
 				String baseURL = "http://" + domain + ":" + port + webapp;
 				if (port.equals("80")) {
@@ -691,10 +686,13 @@ public class UserService {
 					baseURL = "https://" + domain + webapp;
 				}
 
-				privateMessagesDao.addPrivateMessage(user.getFirstname() + " "
-						+ user.getLastname() + " " + fValue1193.getValue(),
-						message, 0L, user, userToAdd, userToAdd, false, null,
-						true, userContactId, userToAdd.getAdresses().getEmail());
+				privateMessagesDao
+						.addPrivateMessage(
+								user.getFirstname() + " " + user.getLastname()
+										+ " " + fValue1193.getValue(), message,
+								0L, user, userToAdd, userToAdd, false, null,
+								true, userContactId, userToAdd.getAdresses()
+										.getEmail());
 
 				String link = baseURL + "?cuser=" + hash;
 
@@ -912,7 +910,8 @@ public class UserService {
 								user.getFirstname() + " " + user.getLastname()
 										+ " " + fValue1198.getValue(), message,
 								0L, userContacts.getContact(), user, user,
-								false, null, false, 0L, user.getAdresses().getEmail());
+								false, null, false, 0L, user.getAdresses()
+										.getEmail());
 
 						mailHandler.sendMail(user.getAdresses().getEmail(),
 								userContacts.getContact().getFirstname()
@@ -938,11 +937,10 @@ public class UserService {
 		return null;
 	}
 
-	private Date createCalendarDate(TimeZone timezone, String dateOnly, String time) {
-		Integer hour = Integer.valueOf(
-				time.substring(0, 2)).intValue();
-		Integer minute = Integer.valueOf(
-				time.substring(3, 5)).intValue();
+	private Date createCalendarDate(TimeZone timezone, String dateOnly,
+			String time) {
+		Integer hour = Integer.valueOf(time.substring(0, 2)).intValue();
+		Integer minute = Integer.valueOf(time.substring(3, 5)).intValue();
 
 		log.info("createCalendar Hour: " + hour);
 		log.info("createCalendar Minute: " + minute);
@@ -952,10 +950,10 @@ public class UserService {
 		cal.set(Calendar.MINUTE, minute);
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MILLISECOND, 0);
-		
+
 		return cal.getTime();
 	}
-	
+
 	public Long composeMail(String SID, List<String> recipients,
 			String subject, String message, Boolean bookedRoom,
 			String validFromDate, String validFromTime, String validToDate,
@@ -967,11 +965,14 @@ public class UserService {
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
-				
-				TimeZone timezone = timezoneUtil.getTimezoneByUser(usersDao.get(users_id));
-				
-				Date appointmentstart = createCalendarDate(timezone, validFromDate, validFromTime);
-				Date appointmentend = createCalendarDate(timezone, validToDate, validToTime);
+
+				TimeZone timezone = timezoneUtil.getTimezoneByUser(usersDao
+						.get(users_id));
+
+				Date appointmentstart = createCalendarDate(timezone,
+						validFromDate, validFromTime);
+				Date appointmentend = createCalendarDate(timezone, validToDate,
+						validToTime);
 
 				log.info("validFromDate: "
 						+ CalendarPatterns
@@ -983,7 +984,7 @@ public class UserService {
 				Users from = userManagement.getUserById(users_id);
 
 				Rooms room = null;
-				
+
 				String baseURL = "http://" + domain + ":" + port + webapp;
 				if (port.equals("80")) {
 					baseURL = "http://" + domain + webapp;
@@ -993,7 +994,7 @@ public class UserService {
 
 				Long room_id = null;
 				Long appointmentId = null;
-				
+
 				if (bookedRoom) {
 					room_id = roommanagement.addRoom(3, // Userlevel
 							subject, // name
@@ -1014,44 +1015,39 @@ public class UserService {
 							"", // sipNumber
 							"", // conferencePIN
 							null, // ownerId
-							null, null, 
-							false, // hideTopBar
+							null, null, false, // hideTopBar
 							false, // hideChat
 							false, // hideActivitiesAndActions
 							false, // hideFilesExplorer
 							false, // hideActionsMenu
-							false, // hideScreenSharing 
+							false, // hideScreenSharing
 							false, // hideWhiteboard
-							false, //showMicrophoneStatus
+							false, // showMicrophoneStatus
 							false, // chatModerated
-							from.getServer()
-							);
+							from.getServer());
 
 					room = roommanagement.getRoomById(room_id);
-					
+
 					String sendJNameTimeZone = from.getOmTimeZone().getJname();
-					
-					appointmentId = this.addAppointmentToUser(subject, message, from,
-							recipients, room, appointmentstart,
-							appointmentend, true, true,
-							sendJNameTimeZone);
+
+					appointmentId = this.addAppointmentToUser(subject, message,
+							from, recipients, room, appointmentstart,
+							appointmentend, true, true, sendJNameTimeZone);
 
 				}
 
 				recipients.add(from.getAdresses().getEmail());
 
 				String sendJNameTimeZone = from.getOmTimeZone().getJname();
-				
+
 				String profile_link = baseURL + "?cuser=1";
-				
-				
 
 				for (String email : recipients) {
 
 					// Map receipent = (Map) recipients.get(iter.next());
 
 					// String email = receipent.get("email").toString();
-					
+
 					Long language_id = from.getLanguage_id();
 					if (language_id == null) {
 						language_id = Long.valueOf(
@@ -1061,24 +1057,27 @@ public class UserService {
 					}
 					String invitation_link = null;
 					Users to = userManagement.getUserByEmail(email);
-					
-					
-					
+
 					if (bookedRoom) {
-						// Add the appointment to the calendar of the user (if its an internal user)
-						// if the user is the sender then we already added the appointment as we created the 
-						// room, the invitations always belong to the appointment of the meeting creator
-						if (to != null && !to.getUser_id().equals(from.getUser_id())) {
+						// Add the appointment to the calendar of the user (if
+						// its an internal user)
+						// if the user is the sender then we already added the
+						// appointment as we created the
+						// room, the invitations always belong to the
+						// appointment of the meeting creator
+						if (to != null
+								&& !to.getUser_id().equals(from.getUser_id())) {
 							this.addAppointmentToUser(subject, message, to,
 									recipients, room, appointmentstart,
 									appointmentend, false, true,
 									sendJNameTimeZone);
 						}
-						
+
 						Invitations invitation = invitationManagement
 								.addInvitationLink(
 										new Long(2), // userlevel
-										from.getFirstname() + " " + from.getLastname(), // username
+										from.getFirstname() + " "
+												+ from.getLastname(), // username
 										message,
 										baseURL, // baseURl
 										from.getAdresses().getEmail(), // email
@@ -1091,55 +1090,53 @@ public class UserService {
 										appointmentstart, // valid from
 										appointmentend, // valid to
 										from.getUser_id(), // created by
-										baseURL,
-										from.getUser_id(),
+										baseURL, from.getUser_id(),
 										false, // really send mail sendMail
-										appointmentstart,
-										appointmentend,
-										appointmentId,
-										from.getFirstname() + " " + from.getLastname());
-						
+										appointmentstart, appointmentend,
+										appointmentId, from.getFirstname()
+												+ " " + from.getLastname());
+
 						invitation_link = baseURL + "?invitationHash="
 								+ invitation.getHash();
 
-						
 					}
-					
+
 					if (to != null) {
-						
+
 						if (!to.getUser_id().equals(from.getUser_id())) {
 							// One message to the Send
-							privateMessagesDao.addPrivateMessage(subject, message,
-									parentMessageId, from, to, from, bookedRoom,
-									room, false, 0L, email);
-	
+							privateMessagesDao.addPrivateMessage(subject,
+									message, parentMessageId, from, to, from,
+									bookedRoom, room, false, 0L, email);
+
 							// One message to the Inbox
-							privateMessagesDao.addPrivateMessage(subject, message,
-									parentMessageId, from, to, to, bookedRoom,
-									room, false, 0L, email);
-							
+							privateMessagesDao.addPrivateMessage(subject,
+									message, parentMessageId, from, to, to,
+									bookedRoom, room, false, 0L, email);
+
 							// One copy of the Inbox message to the user
 							if (to.getLanguage_id() != null) {
 								language_id = to.getLanguage_id();
 							}
 						}
-						
+
 					} else {
-						
+
 						// One message to the Send
 						privateMessagesDao.addPrivateMessage(subject, message,
 								parentMessageId, from, to, from, bookedRoom,
 								room, false, 0L, email);
-						
-						//there is no Inbox for external users
-						
+
+						// there is no Inbox for external users
+
 					}
-					
-					//We do not send an email to the one that has created the private message
+
+					// We do not send an email to the one that has created the
+					// private message
 					if (to != null && to.getUser_id().equals(from.getUser_id())) {
 						continue;
 					}
-					
+
 					Fieldlanguagesvalues fValue1301 = fieldmanagment
 							.getFieldByIdAndLanguage(1301L, language_id);
 					Fieldlanguagesvalues fValue1302 = fieldmanagment
@@ -1151,28 +1148,32 @@ public class UserService {
 
 					String aLinkHTML = "";
 					if (to != null) {
-						aLinkHTML = "<br/><br/><a href='" + profile_link
-							+ "'>" + fValue1302.getValue() + "</a><br/>";
+						aLinkHTML = "<br/><br/><a href='" + profile_link + "'>"
+								+ fValue1302.getValue() + "</a><br/>";
 					}
-					
-					if (invitation_link  == null) {
+
+					if (invitation_link == null) {
 						invitation_link = "";
 					} else {
-						invitation_link = 
-							"<br/>" //
-							+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(appointmentstart, timezone)
-							+ "<br/> - <br/>" //
-						    + CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(appointmentstart, timezone)	
-							+ "<br/>" + labelid503.getValue() + "<br/><a href='" + invitation_link
-							+ "'>" + labelid504.getValue() + "</a><br/>";
+						invitation_link = "<br/>" //
+								+ CalendarPatterns
+										.getDateWithTimeByMiliSecondsAndTimeZone(
+												appointmentstart, timezone)
+								+ "<br/> - <br/>" //
+								+ CalendarPatterns
+										.getDateWithTimeByMiliSecondsAndTimeZone(
+												appointmentstart, timezone)
+								+ "<br/>"
+								+ labelid503.getValue()
+								+ "<br/><a href='" + invitation_link
+								+ "'>"
+								+ labelid504.getValue() + "</a><br/>";
 					}
 
 					mailHandler.sendMail(email, fValue1301.getValue() + " "
 							+ subject, message.replaceAll("\\<.*?>", "")
-							+ aLinkHTML
-							+ invitation_link);
+							+ aLinkHTML + invitation_link);
 
-					
 				}
 
 			}
@@ -1191,7 +1192,7 @@ public class UserService {
 			List<String> recipients, Rooms room, Date appointmentstart,
 			Date appointmentend, Boolean invitor, Boolean isConnectedEvent,
 			String sendJNameTimeZone) throws Exception {
-		
+
 		Long appointmentId = appointmentDao.addAppointment(subject,
 				to.getUser_id(), "", message, appointmentstart, appointmentend,
 				false, false, false, false, 1L, 2L, room, to.getLanguage_id(),
@@ -1200,30 +1201,31 @@ public class UserService {
 		for (String email : recipients) {
 
 			Users meetingMember = userManagement.getUserByEmail(email);
-			
+
 			if (meetingMember != null) {
 
 				String firstname = meetingMember.getFirstname();
 				String lastname = meetingMember.getLastname();
-	
-				meetingMemberDao.addMeetingMember(firstname, lastname, "0", "0",
-						appointmentId, meetingMember.getUser_id(), email, 
+
+				meetingMemberDao.addMeetingMember(firstname, lastname, "0",
+						"0", appointmentId, meetingMember.getUser_id(), email,
 						meetingMember.getPhoneForSMS(), invitor,
 						meetingMember.getOmTimeZone(), isConnectedEvent);
 
 			} else {
-				
+
 				meetingMemberDao.addMeetingMember("", "", "0", "0",
 						appointmentId, null, email, "", invitor,
-						omTimeZoneDaoImpl.getOmTimeZone(sendJNameTimeZone), isConnectedEvent);
-				
+						omTimeZoneDaoImpl.getOmTimeZone(sendJNameTimeZone),
+						isConnectedEvent);
+
 			}
 		}
-		
+
 		return appointmentId;
 
 	}
-	
+
 	public Long getNumberUnreadMessages(String SID) {
 		try {
 
@@ -1244,8 +1246,8 @@ public class UserService {
 		return null;
 	}
 
-	public SearchResult<PrivateMessages> getInbox(String SID, String search, String orderBy,
-			int start, Boolean asc, Integer max) {
+	public SearchResult<PrivateMessages> getInbox(String SID, String search,
+			String orderBy, int start, Boolean asc, Integer max) {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
@@ -1276,8 +1278,8 @@ public class UserService {
 		return null;
 	}
 
-	public SearchResult<PrivateMessages> getSend(String SID, String search, String orderBy,
-			Integer start, Boolean asc, Integer max) {
+	public SearchResult<PrivateMessages> getSend(String SID, String search,
+			String orderBy, Integer start, Boolean asc, Integer max) {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
@@ -1308,8 +1310,8 @@ public class UserService {
 		return null;
 	}
 
-	public SearchResult<PrivateMessages> getTrash(String SID, String search, String orderBy,
-			Integer start, Boolean asc, Integer max) {
+	public SearchResult<PrivateMessages> getTrash(String SID, String search,
+			String orderBy, Integer start, Boolean asc, Integer max) {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
@@ -1340,9 +1342,9 @@ public class UserService {
 		return null;
 	}
 
-	public SearchResult<PrivateMessages> getFolder(String SID, Long privateMessageFolderId,
-			String search, String orderBy, Integer start, Boolean asc,
-			Integer max) {
+	public SearchResult<PrivateMessages> getFolder(String SID,
+			Long privateMessageFolderId, String search, String orderBy,
+			Integer start, Boolean asc, Integer max) {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
@@ -1690,8 +1692,8 @@ public class UserService {
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				RoomClient rcl = this.clientListManager
-						.getClientByPublicSID(publicSID, false);
+				RoomClient rcl = this.clientListManager.getClientByPublicSID(
+						publicSID, false);
 
 				if (rcl == null) {
 					return true;
@@ -1709,8 +1711,8 @@ public class UserService {
 				this.scopeApplicationAdapter.sendMessageById(messageObj,
 						rcl.getStreamid(), currentScope);
 
-				this.scopeApplicationAdapter
-						.roomLeaveByScope(rcl, currentScope, true);
+				this.scopeApplicationAdapter.roomLeaveByScope(rcl,
+						currentScope, true);
 
 				return true;
 			}

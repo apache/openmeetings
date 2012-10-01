@@ -20,6 +20,8 @@ package org.apache.openmeetings.web.components.admin.users;
 
 import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
 import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.OmDataProvider;
@@ -58,6 +60,7 @@ public class UsersPanel extends AdminPanel {
 
 					protected void onEvent(AjaxRequestTarget target) {
 						form.setModelObject(u);
+						form.hideNewRecord();
 						target.add(form);
 					}
 				});
@@ -75,7 +78,11 @@ public class UsersPanel extends AdminPanel {
 			}
 		});
 
-		form = new UserForm("form", listContainer, new Users());
+		UsersDaoImpl usersDaoImpl = Application.getBean(UsersDaoImpl.class);
+		form = new UserForm("form", listContainer,
+				usersDaoImpl.getNewUserInstance(usersDaoImpl.get(WebSession
+						.getUserId())));
+		form.showNewRecord();
 		add(form);
 	}
 }

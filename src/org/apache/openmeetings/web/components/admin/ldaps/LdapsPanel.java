@@ -59,6 +59,7 @@ public class LdapsPanel extends AdminPanel {
 
 					protected void onEvent(AjaxRequestTarget target) {
 						form.setModelObject(ldapConfig);
+						form.hideNewRecord();
 						target.add(form);
 					}
 				});
@@ -76,8 +77,8 @@ public class LdapsPanel extends AdminPanel {
 			}
 		});
 		
-		LdapConfig ldapConfig = new LdapConfig();
-		form = new LdapForm("form", listContainer, ldapConfig);
+		form = new LdapForm("form", listContainer, new LdapConfig());
+		form.showNewRecord();
         add(form);
 		
 	}

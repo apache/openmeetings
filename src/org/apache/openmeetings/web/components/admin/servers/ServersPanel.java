@@ -59,6 +59,7 @@ public class ServersPanel extends AdminPanel {
 
 					protected void onEvent(AjaxRequestTarget target) {
 						form.setModelObject(Server);
+						form.hideNewRecord();
 						target.add(form);
 					}
 				});
@@ -77,8 +78,8 @@ public class ServersPanel extends AdminPanel {
 			}
 		});
 		
-		Server Server = new Server();
-		form = new ServerForm("form", listContainer, Server);
+		form = new ServerForm("form", listContainer, new Server());
+		form.showNewRecord();
         add(form);
 		
 	}

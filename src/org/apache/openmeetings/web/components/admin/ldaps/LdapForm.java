@@ -77,6 +77,7 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 		LdapConfig ldapConfig = Application.getBean(LdapConfigDaoImpl.class)
 				.get(getModelObject().getLdapConfigId());
 		this.setModelObject(ldapConfig);
+		hideNewRecord();
 		target.add(this);
 		target.add(listContainer);
 	}

@@ -87,6 +87,7 @@ public class GroupForm extends AdminBaseForm<Organisation> {
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 		Application.getBean(OrganisationDAO.class).update(getModelObject(), WebSession.getUserId());
+		hideNewRecord();
 		target.add(groupList);
 	}
 }

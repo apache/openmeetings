@@ -42,6 +42,7 @@ import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.admin.AdminBaseForm;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
+import org.apache.wicket.datetime.markup.html.basic.DateLabel;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.yui.calendar.DatePicker;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -58,7 +59,6 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
@@ -82,6 +82,8 @@ public class UserForm extends AdminBaseForm<Users> {
 			WebSession.getLanguage());
 	private final List<FieldLanguage> languageList = Application.getBean(
 			FieldLanguageDaoImpl.class).getLanguages();
+
+	private PasswordTextField passwordField;
 
 	/**
 	 * Get id list of {@link Salutations}
@@ -162,9 +164,19 @@ public class UserForm extends AdminBaseForm<Users> {
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 		Application.getBean(UsersDaoImpl.class).update(getModelObject(),
 				WebSession.getUserId());
-		Users user = Application.getBean(UsersDaoImpl.class).get(
+		Users userStored = Application.getBean(UsersDaoImpl.class).get(
 				getModelObject().getUser_id());
-		this.setModelObject(user);
+		// TODO: Why the password field is not set via the Model is because its
+		// FetchType is Lazy, this extra hook here might be not needed with a
+		// different mechanism to protect the password from being read
+		// sebawagner, 01.10.2012
+		if (passwordField.getConvertedInput() != null
+				&& !passwordField.getConvertedInput().isEmpty()) {
+			Application.getBean(UsersDaoImpl.class).updatePassword(userStored,
+					passwordField.getConvertedInput());
+		}
+		setModelObject(userStored);
+		hideNewRecord();
 		target.add(this);
 		target.add(listContainer);
 	}
@@ -172,21 +184,21 @@ public class UserForm extends AdminBaseForm<Users> {
 	@Override
 	protected void onNewSubmit(AjaxRequestTarget target, Form<?> form) {
 		UsersDaoImpl usersDaoImpl = Application.getBean(UsersDaoImpl.class);
-		this.setModelObject(usersDaoImpl.getNewInstance(usersDaoImpl
+		setModelObject(usersDaoImpl.getNewUserInstance(usersDaoImpl
 				.get(WebSession.getUserId())));
 		target.add(this);
 	}
 
 	@Override
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
-		Users user = this.getModelObject();
+		Users user = getModelObject();
 		if (user.getUser_id() <= 0) {
 			user = Application.getBean(UsersDaoImpl.class).get(
 					user.getUser_id());
 		} else {
 			user = new Users();
 		}
-		this.setModelObject(user);
+		setModelObject(user);
 		target.add(this);
 	}
 
@@ -195,7 +207,7 @@ public class UserForm extends AdminBaseForm<Users> {
 		UsersDaoImpl usersDaoImpl = Application.getBean(UsersDaoImpl.class);
 		usersDaoImpl.delete(this.getModelObject(),
 				WebSession.getUserId());
-		this.setModelObject(usersDaoImpl.getNewInstance(usersDaoImpl
+		this.setModelObject(usersDaoImpl.getNewUserInstance(usersDaoImpl
 				.get(WebSession.getUserId())));
 		target.add(listContainer);
 		target.add(this);
@@ -211,7 +223,9 @@ public class UserForm extends AdminBaseForm<Users> {
 		// login.setLabel(new Model<String>("testname"));
 		add(login);
 
-		add(new PasswordTextField("password", Model.of("")));
+		passwordField = new PasswordTextField("password");
+		add(passwordField);
+		passwordField.setRequired(false);
 
 		add(new DropDownChoice<Long>("salutations_id", getSalutationsIds(),
 				new IChoiceRenderer<Long>() {
@@ -247,6 +261,9 @@ public class UserForm extends AdminBaseForm<Users> {
 					}
 
 				}));
+
+		add(DateLabel.forDatePattern("starttime", "dd.MM.yyyy HH:mm:ss"));
+		add(DateLabel.forDatePattern("updatetime", "dd.MM.yyyy HH:mm:ss"));
 
 		add(new CheckBox("forceTimeZoneCheck"));
 		RequiredTextField<String> email = new RequiredTextField<String>(
