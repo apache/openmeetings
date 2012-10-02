@@ -112,15 +112,23 @@ public class InvitationService implements IPendingServiceCallback {
 				omTimeZone = omTimeZoneDaoImpl.getOmTimeZone(configurationDaoImpl.getConfValue("default.timezone", String.class, "Europe/Berlin"));
 			}
 
+			Calendar date = Calendar.getInstance();
+			date.setTime(validFromDate);
+			
 			String timeZoneName = omTimeZone.getIcal();
 			Calendar calFrom = Calendar.getInstance(TimeZone.getTimeZone(timeZoneName));
-			calFrom.setTime(validFromDate);
+			calFrom.set(Calendar.YEAR, date.get(Calendar.YEAR));
+			calFrom.set(Calendar.MONTH, date.get(Calendar.MONTH));
+			calFrom.set(Calendar.DAY_OF_MONTH, date.get(Calendar.DAY_OF_MONTH));
 			calFrom.set(Calendar.HOUR_OF_DAY, validFromHour);
 			calFrom.set(Calendar.MINUTE, validFromMinute);
 			calFrom.set(Calendar.SECOND, 0);
 
+			date.setTime(validToDate);
 			Calendar calTo = Calendar.getInstance(TimeZone.getTimeZone(timeZoneName));
-			calTo.setTime(validToDate);
+			calTo.set(Calendar.YEAR, date.get(Calendar.YEAR));
+			calTo.set(Calendar.MONTH, date.get(Calendar.MONTH));
+			calTo.set(Calendar.DAY_OF_MONTH, date.get(Calendar.DAY_OF_MONTH));
 			calTo.set(Calendar.HOUR_OF_DAY, validToHour);
 			calTo.set(Calendar.MINUTE, validToMinute);
 			calTo.set(Calendar.SECOND, 0);
