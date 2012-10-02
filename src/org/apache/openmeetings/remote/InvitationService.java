@@ -28,7 +28,6 @@ import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
 import org.apache.openmeetings.data.conference.Invitationmanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
-import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.invitation.Invitations;
 import org.red5.logging.Red5LoggerFactory;
@@ -102,21 +101,6 @@ public class InvitationService implements IPendingServiceCallback {
 			log.info("validFromHour: " + validFromHour);
 			log.info("validFromMinute: " + validFromMinute);
 
-			Calendar calFrom = Calendar.getInstance();
-			calFrom.setTime(validFromDate);
-			calFrom.set(Calendar.HOUR_OF_DAY, validFromHour);
-			calFrom.set(Calendar.MINUTE, validFromMinute);
-			calFrom.set(Calendar.SECOND, 0);
-
-			Calendar calTo = Calendar.getInstance();
-			calTo.setTime(validToDate);
-			calTo.set(Calendar.HOUR_OF_DAY, validToHour);
-			calTo.set(Calendar.MINUTE, validToMinute);
-			calTo.set(Calendar.SECOND, 0);
-
-			Date dFrom = calFrom.getTime();
-			Date dTo = calTo.getTime();
-
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
 
@@ -125,32 +109,31 @@ public class InvitationService implements IPendingServiceCallback {
 
 			// If everything fails
 			if (omTimeZone == null) {
-				Configuration conf = configurationDaoImpl
-						.getConfKey("default.timezone");
-				if (conf != null) {
-					jNameTimeZone = conf.getConf_value();
-				}
-				omTimeZone = omTimeZoneDaoImpl.getOmTimeZone(jNameTimeZone);
+				omTimeZone = omTimeZoneDaoImpl.getOmTimeZone(configurationDaoImpl.getConfValue("default.timezone", String.class, "Europe/Berlin"));
 			}
 
 			String timeZoneName = omTimeZone.getIcal();
+			Calendar calFrom = Calendar.getInstance(TimeZone.getTimeZone(timeZoneName));
+			calFrom.setTime(validFromDate);
+			calFrom.set(Calendar.HOUR_OF_DAY, validFromHour);
+			calFrom.set(Calendar.MINUTE, validFromMinute);
+			calFrom.set(Calendar.SECOND, 0);
 
-			Calendar cal = Calendar.getInstance();
-			cal.setTimeZone(TimeZone.getTimeZone(timeZoneName));
-			int offset = cal.get(Calendar.ZONE_OFFSET)
-					+ cal.get(Calendar.DST_OFFSET);
+			Calendar calTo = Calendar.getInstance(TimeZone.getTimeZone(timeZoneName));
+			calTo.setTime(validToDate);
+			calTo.set(Calendar.HOUR_OF_DAY, validToHour);
+			calTo.set(Calendar.MINUTE, validToMinute);
+			calTo.set(Calendar.SECOND, 0);
 
-			log.debug("addAppointment offset :: " + offset);
-
-			Date gmtTimeStart = new Date(dFrom.getTime() - offset);
-			Date gmtTimeEnd = new Date(dTo.getTime() - offset);
+			Date dFrom = calFrom.getTime();
+			Date dTo = calTo.getTime();
 
 			Invitations invitation = invitationManagement
 					.addInvitationLink(user_level, username, message, baseurl,
 							email, subject, room_id, conferencedomain,
 							isPasswordProtected, invitationpass, valid, dFrom,
 							dTo, users_id, baseurl, language_id, true,
-							gmtTimeStart, gmtTimeEnd, null, username);
+							dFrom, dTo, null, username, omTimeZone);
 
 			if (invitation != null) {
 				return "success";

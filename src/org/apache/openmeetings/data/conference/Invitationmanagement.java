@@ -34,10 +34,12 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
+import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDaoImpl;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
+import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
 import org.apache.openmeetings.persistence.beans.invitation.Invitations;
@@ -98,6 +100,8 @@ public class Invitationmanagement {
 	private TimezoneUtil timezoneUtil;
 	@Autowired
 	private AppointmentDaoImpl appointmentDaoImpl;
+	@Autowired
+	private OmTimeZoneDaoImpl omTimeZoneDaoImpl;
 
 	/**
 	 * Sending invitation within plain mail
@@ -125,7 +129,7 @@ public class Invitationmanagement {
 			Boolean isPasswordProtected, String invitationpass, Integer valid,
 			Date validFrom, Date validTo, Long createdBy, String baseUrl,
 			Long language_id, Boolean sendMail, Date gmtTimeStart,
-			Date gmtTimeEnd, Long appointmentId, String fromUserField) {
+			Date gmtTimeEnd, Long appointmentId, String fromUserField, OmTimeZone omTimeZone) {
 		try {
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -140,6 +144,7 @@ public class Invitationmanagement {
 				invitation.setInvitationWasUsed(false);
 				log.debug(baseUrl);
 				invitation.setBaseUrl(baseUrl);
+				invitation.setOmTimeZone(omTimeZone);
 
 				// valid period of Invitation
 				if (valid == 1) {
@@ -933,9 +938,7 @@ public class Invitationmanagement {
 						+ "&room=" + room + "&roomtype=" + roomtype + "&email="
 						+ email + "&roomid=" + room_id;
 
-				Long default_lang_id = Long.valueOf(
-						configurationDaoImpl.getConfKey("default_lang_id")
-								.getConf_value()).longValue();
+				Long default_lang_id = configurationDaoImpl.getConfValue("default_lang_id", Long.class, "1");
 
 				String template = invitationTemplate
 						.getRegisterInvitationTemplate(username, message,
@@ -1055,13 +1058,16 @@ public class Invitationmanagement {
 					}
 
 				} else if (invitation.getIsValidByTime()) {
+					OmTimeZone tz = invitation.getOmTimeZone() == null 
+							? omTimeZoneDaoImpl.getOmTimeZone(configurationDaoImpl.getConfValue("default.timezone", String.class, "Europe/Berlin"))
+							: invitation.getOmTimeZone();
+					Calendar now = Calendar.getInstance(TimeZone.getTimeZone(tz.getIcal()));
+					Calendar start = Calendar.getInstance(TimeZone.getTimeZone(tz.getIcal()));
+					start.setTime(invitation.getValidFrom());
 
-					Calendar now = Calendar.getInstance();
-
-					if (invitation.getValidFrom().getTime() <= now.getTime()
-							.getTime()
-							&& invitation.getValidTo().getTime() >= now
-									.getTime().getTime()) {
+					Calendar end = Calendar.getInstance(TimeZone.getTimeZone(tz.getIcal()));
+					end.setTime(invitation.getValidTo());
+					if (now.after(start) && now.before(end)) {
 						this.updateInvitation(invitation);
 						// invitation.setInvitationpass(null);
 						invitation.setAllowEntry(true);

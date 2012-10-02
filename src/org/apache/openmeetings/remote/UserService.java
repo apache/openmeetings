@@ -965,9 +965,8 @@ public class UserService {
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
-
-				TimeZone timezone = timezoneUtil.getTimezoneByUser(usersDao
-						.get(users_id));
+				Users from = userManagement.getUserById(users_id);
+				TimeZone timezone = timezoneUtil.getTimezoneByUser(from);
 
 				Date appointmentstart = createCalendarDate(timezone,
 						validFromDate, validFromTime);
@@ -980,8 +979,6 @@ public class UserService {
 				log.info("validToDate: "
 						+ CalendarPatterns
 								.getDateWithTimeByMiliSeconds(appointmentend));
-
-				Users from = userManagement.getUserById(users_id);
 
 				Rooms room = null;
 
@@ -1094,7 +1091,8 @@ public class UserService {
 										false, // really send mail sendMail
 										appointmentstart, appointmentend,
 										appointmentId, from.getFirstname()
-												+ " " + from.getLastname());
+												+ " " + from.getLastname(),
+										from.getOmTimeZone());
 
 						invitation_link = baseURL + "?invitationHash="
 								+ invitation.getHash();

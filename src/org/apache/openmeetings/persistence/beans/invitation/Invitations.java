@@ -31,6 +31,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.apache.openmeetings.persistence.beans.user.Users;
 
@@ -108,6 +109,10 @@ public class Invitations implements Serializable {
 	// reminders on serverside (updates)
 	@Column(name = "baseUrl")
 	private String baseUrl;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "omtimezoneId", insertable = true, updatable = true)
+	private OmTimeZone omTimeZone; // In UTC +/- hours
 	
 	private boolean allowEntry = true;
 
@@ -275,4 +280,11 @@ public class Invitations implements Serializable {
 		this.allowEntry = allowEntry;
 	}
 
+	public OmTimeZone getOmTimeZone() {
+		return omTimeZone;
+	}
+
+	public void setOmTimeZone(OmTimeZone omTimeZone) {
+		this.omTimeZone = omTimeZone;
+	}
 }

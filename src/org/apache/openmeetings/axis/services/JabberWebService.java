@@ -23,6 +23,8 @@ import java.util.List;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
+import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
 import org.apache.openmeetings.data.conference.Invitationmanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
@@ -56,6 +58,10 @@ public class JabberWebService {
 	private ConferenceService conferenceService;
 	@Autowired
 	private Invitationmanagement invitationManagement;
+	@Autowired
+	private OmTimeZoneDaoImpl omTimeZoneDaoImpl;
+	@Autowired
+	private ConfigurationDaoImpl cfgManagement;
 
 	/**
 	 * Get List&lt;Rooms&gt; of all rooms available to the user.
@@ -127,7 +133,8 @@ public class JabberWebService {
 				user_level, username, username, username, username, username,
 				room_id, "", Boolean.valueOf(false), null, Integer.valueOf(3),
 				null, null, users_id, "", Long.valueOf(1L),
-				Boolean.valueOf(false), null, null, null, username);
+				Boolean.valueOf(false), null, null, null, username
+				, omTimeZoneDaoImpl.getOmTimeZone(cfgManagement.getConfValue("default.timezone", String.class, "Europe/Berlin")));
 
 		return ((invitation == null) ? null : invitation.getHash());
 	}

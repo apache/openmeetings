@@ -139,7 +139,8 @@ public class MeetingMemberLogic {
 								point.getAppointmentStarttime(),
 								point.getAppointmentEndtime(),
 								point.getAppointmentId(),
-								invitorName);
+								invitorName,
+								omTimeZone);
 
 				invitationId = invitation.getInvitations_id();
 
