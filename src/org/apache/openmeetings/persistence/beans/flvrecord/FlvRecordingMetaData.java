@@ -99,7 +99,7 @@ public class FlvRecordingMetaData implements Serializable {
 	private String wavAudioData;
 	
 	@Column(name="full_wav_audio_data")
-	@Element(data=true)
+	@Element(data=true, required=false)
 	private String fullWavAudioData;
 	
 	@Column(name="audio_is_valid")
