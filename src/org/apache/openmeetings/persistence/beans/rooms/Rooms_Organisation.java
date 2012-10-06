@@ -46,7 +46,7 @@ public class Rooms_Organisation implements Serializable {
 	@Element(data=true)
 	private Long rooms_organisation_id;
 	
-	@ManyToOne(fetch = FetchType.EAGER) 
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="rooms_id", nullable=true)
 	@Element(name="rooms_id", data=true, required=false)
 	private Rooms room;
@@ -66,7 +66,14 @@ public class Rooms_Organisation implements Serializable {
 	@Element(data=true)
 	private boolean deleted;
 
-    public Organisation getOrganisation() {
+	public Rooms_Organisation(Organisation org) {
+		this.organisation = org;
+	}
+
+	public Rooms_Organisation() {
+	}
+
+	public Organisation getOrganisation() {
 		return organisation;
 	}
 	public void setOrganisation(Organisation organisation) {

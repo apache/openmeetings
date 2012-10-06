@@ -433,12 +433,11 @@ public class ConferenceService {
 	 */
 	public List<RoomTypes> getRoomTypes(String SID) {
 		Long users_id = sessionManagement.checkSession(SID);
-
-		log.debug("users_id " + users_id);
-
 		Long user_level = userManagement.getUserLevelByID(users_id);
-
-		return roommanagement.getAllRoomTypes(user_level);
+		if (authLevelManagement.checkUserLevel(user_level)) {
+			return roommanagement.getAllRoomTypes();
+		}
+		return null;
 	}
 
 	/**

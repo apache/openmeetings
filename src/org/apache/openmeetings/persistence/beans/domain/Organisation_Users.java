@@ -60,6 +60,7 @@ public class Organisation_Users implements Serializable, OmEntity {
 	@Element(name="organisation_id", required=false)
 	private Organisation organisation;
 
+	// FIXME: Does not get updated if a new relation is stored in the user
 	@Column(name = "user_id")
 	private Long user_id;
 

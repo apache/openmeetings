@@ -40,6 +40,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.apache.openjpa.persistence.ElementDependent;
 import org.apache.openmeetings.persistence.beans.OmEntity;
 import org.apache.openmeetings.persistence.beans.adresses.Adresses;
 import org.apache.openmeetings.persistence.beans.adresses.States;
@@ -173,6 +174,7 @@ public class Users implements Serializable, OmEntity {
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id", insertable = true, updatable = true)
 	@ElementList(name = "organisations")
+	@ElementDependent
 	private List<Organisation_Users> organisation_users = new ArrayList<Organisation_Users>();
 
 	@ManyToOne(fetch = FetchType.EAGER)

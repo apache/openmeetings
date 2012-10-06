@@ -18,22 +18,79 @@
  */
 package org.apache.openmeetings.web.components.admin.rooms;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.openmeetings.data.conference.Roommanagement;
+import org.apache.openmeetings.data.user.Organisationmanagement;
+import org.apache.openmeetings.persistence.beans.domain.Organisation;
+import org.apache.openmeetings.persistence.beans.rooms.RoomTypes;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms;
+import org.apache.openmeetings.persistence.beans.rooms.Rooms_Organisation;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.components.admin.AdminBaseForm;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
+import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.util.time.Duration;
+
+import edu.emory.mathcs.backport.java.util.Arrays;
 
 public class RoomForm extends AdminBaseForm<Rooms> {
 
 	private static final long serialVersionUID = 1L;
 
+	Object[] array = { 2L, 4L, 6L, 8L, 10L, 12L, 14L, 16L, 20L, 25L, 32L, 50L,
+			100L, 150L, 200L, 500L, 1000L };
+	@SuppressWarnings("unchecked")
+	List<Long> DROPDOWN_NUMBER_OF_PARTICIPANTS = Arrays.asList(array);
+
 	public RoomForm(String id, final Rooms room) {
 		super(id, new CompoundPropertyModel<Rooms>(room));
 		setOutputMarkupId(true);
-		
+
 		add(new RequiredTextField<String>("name"));
+
+		add(new DropDownChoice<Long>("numberOfPartizipants", //
+				DROPDOWN_NUMBER_OF_PARTICIPANTS, //
+				new IChoiceRenderer<Long>() {
+					private static final long serialVersionUID = 1L;
+					public Object getDisplayValue(Long id) {
+						return id;
+					}
+					public String getIdValue(Long id, int index) {
+						return "" + id;
+					}
+				}));
+
+		add(new DropDownChoice<RoomTypes>("roomtype", Application.getBean(
+				Roommanagement.class).getAllRoomTypes(),
+				new ChoiceRenderer<RoomTypes>("name", "roomtypes_id")));
+
+		add(new TextArea<String>("comment"));
+
+		add(new CheckBox("appointment"));
+		add(new CheckBox("ispublic"));
+
+		List<Organisation> orgList = Application.getBean(
+				Organisationmanagement.class).getOrganisations(3L);
+		List<Rooms_Organisation> orgRooms = new ArrayList<Rooms_Organisation>(
+				orgList.size());
+		for (Organisation org : orgList) {
+			orgRooms.add(new Rooms_Organisation(org));
+		}
+		ListMultipleChoice<Rooms_Organisation> orgChoiceList = new ListMultipleChoice<Rooms_Organisation>(
+				"roomOrganisations", orgRooms,
+				new ChoiceRenderer<Rooms_Organisation>("organisation.name",
+						"organisation.organisation_id"));
+		orgChoiceList.setMaxRows(6);
+		add(orgChoiceList);
 
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second

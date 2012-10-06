@@ -140,15 +140,12 @@ public class Roommanagement {
 	 * 
 	 * @return List of RoomTypes
 	 */
-	public List<RoomTypes> getAllRoomTypes(Long user_level) {
+	public List<RoomTypes> getAllRoomTypes() {
 		try {
-			if (authLevelManagement.checkUserLevel(user_level)) {
-				TypedQuery<RoomTypes> query = em
-						.createQuery("select c from RoomTypes as c where c.deleted <> :deleted", RoomTypes.class);
-				query.setParameter("deleted", true);
-				List<RoomTypes> ll = query.getResultList();
-				return ll;
-			}
+			TypedQuery<RoomTypes> query = em
+					.createQuery("select c from RoomTypes as c where c.deleted <> :deleted", RoomTypes.class);
+			query.setParameter("deleted", true);
+			return query.getResultList();
 		} catch (Exception ex2) {
 			log.error("[getAllRoomTypes] ", ex2);
 		}

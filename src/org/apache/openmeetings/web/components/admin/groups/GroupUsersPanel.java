@@ -67,8 +67,12 @@ public class GroupUsersPanel extends Panel {
 			@Override
 			protected void populateItem(Item<Organisation_Users> item) {
 				final Organisation_Users orgUser = item.getModelObject();
-				Users u = Application.getBean(UsersDaoImpl.class).get(orgUser.getUser_id());
-				item.add(new Label("label", Model.of(getUser(u))));
+				if (orgUser.getUser_id() != null) {
+					Users u = Application.getBean(UsersDaoImpl.class).get(orgUser.getUser_id());
+					item.add(new Label("label", Model.of(getUser(u))));
+				} else {
+					item.add(new Label("label", Model.of("")));
+				}
 				item.add(new WebMarkupContainer("deleteUserBtn").add(new AjaxEventBehavior("onclick"){
 					private static final long serialVersionUID = 1L;
 
