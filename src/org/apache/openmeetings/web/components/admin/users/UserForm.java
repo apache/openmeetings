@@ -421,5 +421,5 @@ public class UserForm extends AdminBaseForm<Users> {
 		add(new TextArea<String>("userOffers"));
 		add(new TextArea<String>("userSearchs"));
 	}
-
+	
 }

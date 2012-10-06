@@ -52,7 +52,17 @@ public class OrganisationUserDAO implements OmDAO<Organisation_Users> {
 		q.setParameter("id", orgId);
 		q.setFirstResult(start);
 		q.setMaxResults(count);
-		return q.getResultList();
+
+		// This refresh is necessary because after saving the user entity the
+		// user_id is somehow not
+		// filled into the Organisation_Users, this might be fixed by
+		// implementing another
+		// JOIN or mapping strategy
+		List<Organisation_Users> orgUserList = q.getResultList();
+		for (Organisation_Users ou : orgUserList) {
+			em.refresh(ou);
+		}
+		return orgUserList;
 	}
 
 	public long count() {

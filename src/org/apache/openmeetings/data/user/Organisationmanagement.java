@@ -420,7 +420,8 @@ public class Organisationmanagement {
 			Long insertedby) {
 		try {
 			if (this.getOrganisation_UserByUserAndOrganisation(user_id, organisation_id) == null) {
-				return addOrganisationUserObj(user_id, getOrgUser(organisation_id, insertedby));
+				return addOrganisationUserObj(user_id,
+						getOrgUser(organisation_id, insertedby));
 			} else {
 				return -35L;
 			}
@@ -430,10 +431,10 @@ public class Organisationmanagement {
 		return null;
 	}
 	
-	public Organisation_Users getOrgUser(Long organisation_id,
-			Long insertedby) {
+	public Organisation_Users getOrgUser(Long organisation_id, Long insertedby) {
 		
-		Organisation_Users orgUser = new Organisation_Users(orgDao.get(organisation_id));
+		Organisation_Users orgUser = new Organisation_Users(
+				orgDao.get(organisation_id));
 		orgUser.setDeleted(false);
 		
 		return orgUser;

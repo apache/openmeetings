@@ -117,7 +117,11 @@ public class RoomForm extends AdminBaseForm<Rooms> {
 		add(new CheckBox("showMicrophoneStatus"));
 		add(new CheckBox("chatModerated"));
 		
+		// FIXME: Room user moderator list
+
+		add(new CheckBox("isModeratedRoom"));
 		
+
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
 		AjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown",
