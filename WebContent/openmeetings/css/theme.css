@@ -67,7 +67,7 @@
 	################################
  */
 .adminPanelColumnTable {
-	
+	vertical-align: top;
 }
 
 table.adminListTable {

@@ -28,6 +28,7 @@ import org.apache.openmeetings.persistence.beans.rooms.RoomTypes;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms_Organisation;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.admin.AdminBaseForm;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -37,7 +38,9 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
@@ -54,8 +57,9 @@ public class RoomForm extends AdminBaseForm<Rooms> {
 	public RoomForm(String id, final Rooms room) {
 		super(id, new CompoundPropertyModel<Rooms>(room));
 		setOutputMarkupId(true);
-
-		add(new RequiredTextField<String>("name"));
+		RequiredTextField<String> name = new RequiredTextField<String>("name");
+		name.setLabel(new Model<String>(WebSession.getString(193)));
+		add(name);
 
 		add(new DropDownChoice<Long>("numberOfPartizipants", //
 				DROPDOWN_NUMBER_OF_PARTICIPANTS, //
@@ -92,6 +96,28 @@ public class RoomForm extends AdminBaseForm<Rooms> {
 		orgChoiceList.setMaxRows(6);
 		add(orgChoiceList);
 
+		add(new CheckBox("isDemoRoom"));
+		TextField<Integer> demoTime = new TextField<Integer>("demoTime");
+		demoTime.setLabel(new Model<String>(WebSession.getString(637)));
+		add(demoTime);
+		add(new CheckBox("allowUserQuestions"));
+		add(new CheckBox("isAudioOnly"));
+		add(new CheckBox("isClosed"));
+		add(new TextField<String>("redirectURL"));
+		add(new CheckBox("waitForRecording"));
+		add(new CheckBox("allowRecording"));
+
+		add(new CheckBox("hideTopBar"));
+		add(new CheckBox("hideChat"));
+		add(new CheckBox("hideActivitiesAndActions"));
+		add(new CheckBox("hideFilesExplorer"));
+		add(new CheckBox("hideActionsMenu"));
+		add(new CheckBox("hideScreenSharing"));
+		add(new CheckBox("hideWhiteboard"));
+		add(new CheckBox("showMicrophoneStatus"));
+		add(new CheckBox("chatModerated"));
+		
+		
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
 		AjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown",

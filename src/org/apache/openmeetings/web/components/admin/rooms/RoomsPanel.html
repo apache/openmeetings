@@ -49,6 +49,8 @@
 				<td class="adminPanelColumnForm">
 					<form wicket:id="form" class="adminForm">
 						<div wicket:id="buttons"></div>
+						
+						 <!-- General -->
 						<fieldset>
 							<legend><wicket:ommessage key="187" /></legend>
 							<wicket:ommessage key="193" /> <input type="text" wicket:id="name" />
@@ -60,9 +62,11 @@
 				            <wicket:ommessage key="196" /> <textarea style="width: 200px; height: 100px;" wicket:id="comment"/>
 				            <br/>
 				            <wicket:ommessage key="620" /> <input type="checkbox" wicket:id="appointment" />
-				            <br/>
-				            <wicket:ommessage key="191" />
-				            <br/>
+				        </fieldset>
+				        
+				        <!-- Organisations -->
+						<fieldset>
+							<legend><wicket:ommessage key="191" /></legend>
 				            <wicket:ommessage key="195" /> <input type="checkbox" wicket:id="ispublic" />
 				            <br/>
 				            <wicket:ommessage key="828" />
@@ -70,8 +74,69 @@
 				            <wicket:ommessage key="191" />
 				            <br/>
 				            <wicket:ommessage key="191" /> <select wicket:id="roomOrganisations"/>
+				        </fieldset>
+				        
+				        <!-- Limitations -->
+						<fieldset>
+							<legend><wicket:ommessage key="830" /></legend>
+				            <wicket:ommessage key="636" /> <input type="checkbox" wicket:id="isDemoRoom" />
+				            <br/>
+				            <wicket:ommessage key="637" /><input type="text" wicket:id="demoTime" />
+						</fieldset>
+						
+						<!-- Rights -->
+						<fieldset>
+							<legend><wicket:ommessage key="881" /></legend>
+				            <wicket:ommessage key="879" /> <input type="checkbox" wicket:id="allowUserQuestions" />
+				            <br/>
+				            <wicket:ommessage key="880" />
+				            <br/>
+				            <wicket:ommessage key="1076" /> <input type="checkbox" wicket:id="isAudioOnly" />
+				            <br/>
+				            <wicket:ommessage key="1077" />
+				            <br/>
+				            <wicket:ommessage key="1101" />
+				            <br/>
+				            <wicket:ommessage key="1076" /> <input type="checkbox" wicket:id="isClosed" />
+				            <br/>
+				            <wicket:ommessage key="1100" /><input type="text" wicket:id="redirectURL" />
+							<br/>
+							<wicket:ommessage key="1102" />
+				            <br/>
+				            <wicket:ommessage key="1076" /> <input type="checkbox" wicket:id="waitForRecording" />
+				            <br/>
+				            <wicket:ommessage key="1076" /> <input type="checkbox" wicket:id="allowRecording" />
 				            <br/>
 						</fieldset>
+						
+						<!-- Room Layout options -->
+						<fieldset>
+							<legend><wicket:ommessage key="1443" /></legend>
+							<wicket:ommessage key="1357" /> <input type="checkbox" wicket:id="hideTopBar" />
+				            <br/>
+				            <wicket:ommessage key="1436" /> <input type="checkbox" wicket:id="hideChat" />
+				            <br/>
+				            <wicket:ommessage key="1437" /> <input type="checkbox" wicket:id="hideActivitiesAndActions" />
+				            <br/>
+				            <wicket:ommessage key="1438" /> <input type="checkbox" wicket:id="hideFilesExplorer" />
+				            <br/>
+				            <wicket:ommessage key="1439" /> <input type="checkbox" wicket:id="hideActionsMenu" />
+				            <br/>
+				            <wicket:ommessage key="1440" /> <input type="checkbox" wicket:id="hideScreenSharing" />
+				            <br/>
+				            <wicket:ommessage key="1441" /> <input type="checkbox" wicket:id="hideWhiteboard" />
+				            <br/>
+				            <wicket:ommessage key="1442" /> <input type="checkbox" wicket:id="showMicrophoneStatus" />
+				            <br/>
+				            <wicket:ommessage key="1513" /> <input type="checkbox" wicket:id="chatModerated" />
+				            <br/>
+				            <!-- 
+				            <wicket:ommessage key="587" /> <select wicket:id="moderators"/>
+				            <br/>
+				             -->
+				            
+						</fieldset>
+						
 					</form>
 				</td>
 			</tr>
