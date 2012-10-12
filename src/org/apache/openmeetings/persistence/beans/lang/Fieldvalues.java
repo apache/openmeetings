@@ -33,12 +33,18 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.apache.openmeetings.persistence.beans.OmEntity;
+
 @Entity
 @NamedQueries({
 	@NamedQuery(name = "getFieldCount", query = "SELECT COUNT(fv) FROM Fieldvalues fv WHERE fv.deleted = false ")
+	, @NamedQuery(name = "getFieldByIdAndLanguage", query = "SELECT fv FROM Fieldvalues fv " +
+		"LEFT OUTER JOIN FETCH fv.fieldlanguagesvalues flv WHERE " +
+		"	fv.fieldvalues_id = :id AND fv.deleted = false AND flv.language_id = :lang")
+	, @NamedQuery(name = "getFieldByLanguage", query = "SELECT fv FROM Fieldvalues fv WHERE fv.deleted = false") //FIXME no language yet
 })
 @Table(name = "fieldvalues")
-public class Fieldvalues implements Serializable {
+public class Fieldvalues implements Serializable, OmEntity {
 	private static final long serialVersionUID = -3439614511218028085L;
 	@Id
 	@Column(name="id")

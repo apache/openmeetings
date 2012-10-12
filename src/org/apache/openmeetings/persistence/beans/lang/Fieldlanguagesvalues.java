@@ -54,6 +54,8 @@ import org.apache.openmeetings.persistence.beans.OmEntity;
 		+ "		AND flv.language_id = 1 AND flv.fieldvalues_id NOT IN (:id_list)")
 	, @NamedQuery(name="getFieldLanguagesValuesById"
 		, query = "SELECT f FROM Fieldlanguagesvalues f WHERE f.fieldlanguagesvalues_id = :id")
+	, @NamedQuery(name="getFieldLanguagesValuesByValueAndLang"
+		, query = "SELECT f FROM Fieldlanguagesvalues f WHERE f.fieldvalues_id = :fieldValuesId AND f.language_id = :lang AND f.deleted = false")
 })
 @Table(name = "fieldlanguagesvalues")
 public class Fieldlanguagesvalues implements Serializable, OmEntity {

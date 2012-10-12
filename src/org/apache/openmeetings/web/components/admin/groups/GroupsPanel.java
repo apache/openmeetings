@@ -80,7 +80,6 @@ public class GroupsPanel extends AdminPanel {
 						form.hideNewRecord();
 						form.setModelObject(organisation);
 						form.updateView(target);
-						//target.add(form);
 					}
 				});
 				item.add(AttributeModifier.append("class", "clickable " + ((item.getIndex() % 2 == 1) ? "even" : "odd")));

@@ -92,6 +92,19 @@ public class FieldLanguagesValuesDaoImpl implements OmDAO<Fieldlanguagesvalues> 
 		return flv;
 	}
 
+	public Fieldlanguagesvalues get(long fieldValuesId, long langId) {
+		TypedQuery<Fieldlanguagesvalues> q = em.createNamedQuery(
+				"getFieldLanguagesValuesByValueAndLang", Fieldlanguagesvalues.class);
+		q.setParameter("fieldValuesId", fieldValuesId);
+		q.setParameter("lang", langId);
+		Fieldlanguagesvalues flv = null;
+		try {
+			flv = q.getSingleResult();
+		} catch (NoResultException e) {
+		}
+		return flv;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

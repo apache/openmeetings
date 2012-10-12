@@ -21,9 +21,10 @@ package org.apache.openmeetings.web.components.admin.labels;
 import java.util.Iterator;
 
 import org.apache.openmeetings.data.basic.FieldLanguageDaoImpl;
-import org.apache.openmeetings.data.basic.FieldLanguagesValuesDaoImpl;
+import org.apache.openmeetings.data.basic.FieldValueDaoImpl;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
+import org.apache.openmeetings.persistence.beans.lang.Fieldvalues;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
@@ -60,15 +61,15 @@ public class LangPanel extends AdminPanel {
 		form.showNewRecord();
 		add(form);
 
-		final DataView<Fieldlanguagesvalues> dataView = new DataView<Fieldlanguagesvalues>(
-				"langList", new OmDataProvider<Fieldlanguagesvalues>(
-						FieldLanguagesValuesDaoImpl.class) {
+		final DataView<Fieldvalues> dataView = new DataView<Fieldvalues>(
+				"langList", new OmDataProvider<Fieldvalues>(
+						FieldValueDaoImpl.class) {
 					private static final long serialVersionUID = -6822789354860988626L;
 
-					public Iterator<? extends Fieldlanguagesvalues> iterator(
+					public Iterator<? extends Fieldvalues> iterator(
 							long first, long count) {
 						return Application
-								.getBean(FieldLanguagesValuesDaoImpl.class)
+								.getBean(FieldValueDaoImpl.class)
 								.get(language.getLanguage_id(), (int) first,
 										(int) count).iterator();
 					}
@@ -76,16 +77,16 @@ public class LangPanel extends AdminPanel {
 			private static final long serialVersionUID = 8715559628755439596L;
 
 			@Override
-			protected void populateItem(final Item<Fieldlanguagesvalues> item) {
-				final Fieldlanguagesvalues flv = item.getModelObject();
-				item.add(new Label("lblId", "" + flv.getFieldvalues_id()));
-				item.add(new Label("name", flv.getFieldvalues().getName()));
-				item.add(new Label("value", flv.getValue()));
+			protected void populateItem(final Item<Fieldvalues> item) {
+				final Fieldvalues fv = item.getModelObject();
+				item.add(new Label("lblId", "" + fv.getFieldvalues_id()));
+				item.add(new Label("name", fv.getName()));
+				item.add(new Label("value", fv.getFieldlanguagesvalue() != null ? fv.getFieldlanguagesvalue().getValue() : null));
 				item.add(new AjaxEventBehavior("onclick") {
 					private static final long serialVersionUID = -8069413566800571061L;
 
 					protected void onEvent(AjaxRequestTarget target) {
-						form.setModelObject(flv);
+						form.setModelObject(fv.getFieldlanguagesvalue());
 						form.hideNewRecord();
 						target.add(form);
 					}

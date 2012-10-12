@@ -89,7 +89,7 @@
 			<property name="openjpa.DataCache" value="true"/>
 			<!-- QueryCache disabled due to changes outside of JPA doesn't take effect with caching -->
 			<property name="openjpa.QueryCache" value="false"/>
-			<property name="openjpa.jdbc.DBDictionary"  value="batchLimit=100,tableType=myisam"/> 
+			<property name="openjpa.jdbc.DBDictionary"  value="batchLimit=100"/> 
 			<property name="openjpa.jdbc.QuerySQLCache"  value="false"/> 
 		</properties>
 	</persistence-unit>
