@@ -21,27 +21,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml" 
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.5-strict.dtd" lang="en">
 	<wicket:head>
-		<link media="screen" type="text/css" rel="stylesheet" href="css/jMenu.jquery.css"/>
+		<link media="screen" type="text/css" rel="stylesheet" href="css/jquery.ui.menubar.css"/>
 	</wicket:head>
 	<wicket:panel>
-		<script type="text/javascript" src="js/jMenu.jquery.min.js"></script>
+		<script type="text/javascript" src="js/jquery.ui.menubar.js"></script>
 		<script type="text/javascript">
 			$(function() {
-				$("#jMenu").jMenu({
-					openClick : false
-					, ulWidth : 'auto'
-					, effects : {
-						effectSpeedOpen : 300
-						, effectSpeedClose : 300
-						, effectTypeOpen : 'slide'
-						, effectTypeClose : 'slide'
-						, effectOpen : 'linear'
-						, effectClose : 'linear'
+				$("#jMenu").menubar({
+					autoExpand: true
+					, menuIcon: true
+					, buttons: true
+					, position: {
+						within: $("#menu").add(window).first()
 					}
-					, TimeBeforeOpening : 100
-					, TimeBeforeClosing : 400
-					, animatedText : false
-					, paddingLeft: 1
+					//, select: select
 				});
 			});
 		</script>
@@ -49,11 +42,10 @@
 			<li wicket:id="mainItem">
 				<a class="fNiv" href="#" onclick="return false;"><span wicket:id="label"></span></a>
 				<ul wicket:enclosure="childItem">
-					<li class="arrow" style="width: 97px; "></li>
 					<li wicket:id="childItem">
 						<a wicket:id="link" href="#">
-						<span wicket:id="name"></span><br />
-						<span wicket:id="description"></span>
+							<span class="menuName" wicket:id="name"></span><br />
+							<span class="menuDesc" wicket:id="description"></span>
 						</a>
 					</li>
 				</ul>

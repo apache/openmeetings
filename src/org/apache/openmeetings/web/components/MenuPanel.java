@@ -92,8 +92,8 @@ public class MenuPanel extends BasePanel {
 						item.add(new AjaxLink<Void>("link") {
 							private static final long serialVersionUID = 5632618935550133709L;
 							{
-								add(new Label("name", name).setRenderBodyOnly(true));
-								add(new Label("description", desc).setRenderBodyOnly(true));
+								add(new Label("name", name));
+								add(new Label("description", desc));
 							}
 							
 							public void onClick(AjaxRequestTarget target) {

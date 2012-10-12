@@ -37,6 +37,14 @@
 	margin-top: 10px;
 }
 
+.menuName {
+	font-weight: bold;
+}
+
+.menuDesc {
+	font-size: smaller;	
+}
+
 #busy_indicator {
 	display: none;
 	float: right;
