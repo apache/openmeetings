@@ -31,6 +31,7 @@ import org.apache.openmeetings.web.components.admin.rooms.RoomsPanel;
 import org.apache.openmeetings.web.components.admin.servers.ServersPanel;
 import org.apache.openmeetings.web.components.admin.users.UsersPanel;
 import org.apache.openmeetings.web.components.user.calendar.CalendarPanel;
+import org.apache.openmeetings.web.components.user.rooms.UserRoomsPanel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -66,6 +67,12 @@ public class MenuPanel extends BasePanel {
 		, adminModuleServers
 	}
 
+	public enum MenuParams {
+		publicTabButton
+		, privateTabButton
+		, myTabButton
+	}
+	
 	public MenuPanel(String id, final MarkupContainer contents) {
 		super(id);
 		setMarkupId(id);
@@ -88,7 +95,8 @@ public class MenuPanel extends BasePanel {
 						final String name = m.getLabel().getValue();
 						final String desc = m.getTooltip().getValue();
 						final MenuActions action = MenuActions.valueOf(m.getAction());
-						final String hash = getHash(action);
+						final MenuParams params = m.getParams() != null ? MenuParams.valueOf(m.getParams()) : MenuParams.publicTabButton;
+						final String hash = getHash(action, params);
 						item.add(new AjaxLink<Void>("link") {
 							private static final long serialVersionUID = 5632618935550133709L;
 							{
@@ -106,7 +114,7 @@ public class MenuPanel extends BasePanel {
 									case recordModule:
 										break;
 									case conferenceModuleRoomList:
-										//requires params
+										target.add(contents.replace(new UserRoomsPanel("child", params)));
 										break;
 									case eventModuleRoomList:
 										break;
@@ -165,7 +173,7 @@ public class MenuPanel extends BasePanel {
 		});
 	}
 	
-	private String getHash(MenuActions action) {
+	private String getHash(MenuActions action, MenuParams params) {
 		String hash = "#";
 		switch(action) {
 			case dashboardModuleStartScreen:
@@ -176,7 +184,19 @@ public class MenuPanel extends BasePanel {
 			case recordModule:
 				break;
 			case conferenceModuleRoomList:
-				//requires params
+				String zone = "public";
+				switch (params) {
+					case myTabButton:
+						zone = "my";
+						break;
+					case privateTabButton:
+						zone = "group";
+						break;
+					case publicTabButton:
+					default:
+						break;
+				}
+				hash = "#rooms/" + zone;
 				break;
 			case eventModuleRoomList:
 				break;

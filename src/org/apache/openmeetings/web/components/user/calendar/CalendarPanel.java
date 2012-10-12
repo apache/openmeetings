@@ -51,7 +51,6 @@ public class CalendarPanel extends UserPanel {
 	
 	public CalendarPanel(String id) {
 		super(id);
-		setOutputMarkupId(true);
 		WebMarkupContainer calendar = new WebMarkupContainer("calendar");
 		calendar.setOutputMarkupId(true);
 		calendar.setMarkupId("calendar");
