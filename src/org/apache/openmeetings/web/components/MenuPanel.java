@@ -23,6 +23,7 @@ import org.apache.openmeetings.persistence.beans.basic.Naviglobal;
 import org.apache.openmeetings.persistence.beans.basic.Navimain;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.components.admin.backup.BackupPanel;
 import org.apache.openmeetings.web.components.admin.configurations.ConfigsPanel;
 import org.apache.openmeetings.web.components.admin.groups.GroupsPanel;
 import org.apache.openmeetings.web.components.admin.labels.LangPanel;
@@ -143,6 +144,7 @@ public class MenuPanel extends BasePanel {
 										target.add(contents.replace(new LdapsPanel("child")));
 										break;
 									case adminModuleBackup:
+										target.add(contents.replace(new BackupPanel("child")));
 										break;
 									case adminModuleServers:
 										target.add(contents.replace(new ServersPanel("child")));
@@ -225,6 +227,7 @@ public class MenuPanel extends BasePanel {
 				hash = "#admin/ldaps";
 				break;
 			case adminModuleBackup:
+				hash = "#admin/backup";
 				break;
 			case adminModuleServers:
 				hash = "#admin/servers";
