@@ -106,10 +106,10 @@ public class ImportInitvalues {
 		 */
 		navimanagement.addGlobalStructure("home", 1, 124, false, true, 1,
 				"home", false, 582L);
-		navimanagement.addMainStructure("dashboardModuleStartScreen", null, 1, 290,
-				true, false, 1, "Dashboard Module", 1, false, 1450L);
-		navimanagement.addMainStructure("dashboardModuleCalendar", null, 2, 291,
-				true, false, 1, "Module Calendar", 1, false, 1451L);
+		navimanagement.addMainStructure("dashboardModuleStartScreen", null, 1,
+				290, true, false, 1, "Dashboard Module", 1, false, 1450L);
+		navimanagement.addMainStructure("dashboardModuleCalendar", null, 2,
+				291, true, false, 1, "Module Calendar", 1, false, 1451L);
 
 		/*
 		 * ######################## Conference Menu Points
@@ -118,27 +118,27 @@ public class ImportInitvalues {
 		navimanagement.addGlobalStructure("meetings", 2, 792, false, true, 1,
 				"List of Conference Rooms Global Navi", false, 793L);
 
-		navimanagement.addMainStructure("conferenceModuleRoomList", "publicTabButton", 1, 777,
-				true, false, 1, "List of Conference Rooms Main Navi", 2,
-				false, 1506L);
+		navimanagement.addMainStructure("conferenceModuleRoomList",
+				"publicTabButton", 1, 777, true, false, 1,
+				"List of Conference Rooms Main Navi", 2, false, 1506L);
 
-		navimanagement.addMainStructure("conferenceModuleRoomList", "privateTabButton", 2, 779,
-				true, false, 1, "List of Conference Rooms Main Navi", 2,
-				false, 1507L);
+		navimanagement.addMainStructure("conferenceModuleRoomList",
+				"privateTabButton", 2, 779, true, false, 1,
+				"List of Conference Rooms Main Navi", 2, false, 1507L);
 
-		navimanagement.addMainStructure("conferenceModuleRoomList", "myTabButton", 3, 781,
-				true, false, 1, "List of Conference Rooms Main Navi", 2,
-				false, 1508L);
-		
+		navimanagement.addMainStructure("conferenceModuleRoomList",
+				"myTabButton", 3, 781, true, false, 1,
+				"List of Conference Rooms Main Navi", 2, false, 1508L);
+
 		/*
 		 * ######################## Recording Menu Points - disabled by default
 		 */
 
 		navimanagement.addGlobalStructure("record", 3, 395, false, true, 1,
 				"record", false, 583L);
-		navimanagement.addMainStructure("recordModule", null, 1, 395, true, false, 1,
-				"Module Recording Player", 3, false, 1452L);
-		
+		navimanagement.addMainStructure("recordModule", null, 1, 395, true,
+				false, 1, "Module Recording Player", 3, false, 1452L);
+
 		/*
 		 * ######################## Event Menu Points
 		 */
@@ -146,8 +146,10 @@ public class ImportInitvalues {
 		navimanagement.addGlobalStructure("events", 4, 3, false, true, 1,
 				"List of Event Rooms Global Navi", true, 585L);
 
-		navimanagement.addMainStructure("eventModuleRoomList", null, 1, 3, true,
-				false, 1, "List of Event Rooms Main Navi", 4, false, null);
+		navimanagement
+				.addMainStructure("eventModuleRoomList", null, 1, 3, true,
+						false, 1, "List of Event Rooms Main Navi", 4, false,
+						null);
 
 		/*
 		 * ######################## Moderation Menu Points - disabled by default
@@ -155,11 +157,11 @@ public class ImportInitvalues {
 		navimanagement.addGlobalStructure("moderate", 5, 649L, false, true, 2,
 				"Moderation Menu", true, 660L);
 
-		navimanagement.addMainStructure("moderatorModuleUser", null, 1, 650, true,
-				false, 1, "Moderate Users", 5, false, null);
+		navimanagement.addMainStructure("moderatorModuleUser", null, 1, 650,
+				true, false, 1, "Moderate Users", 5, false, null);
 
-		navimanagement.addMainStructure("moderatorModuleRoom", null, 1, 651, true,
-				false, 1, "Moderate Rooms", 5, false, null);
+		navimanagement.addMainStructure("moderatorModuleRoom", null, 1, 651,
+				true, false, 1, "Moderate Rooms", 5, false, null);
 
 		/*
 		 * ######################## Administration Menu Points
@@ -171,31 +173,32 @@ public class ImportInitvalues {
 		navimanagement.addMainStructure("adminModuleUser", null, 14, 125, true,
 				false, 2, "Administration of Users", 6, false, 1454L);
 
-		navimanagement.addMainStructure("adminModuleConnections", null, 15, 597,
-				true, false, 3, "Aministration of Connections", 6, false,
+		navimanagement.addMainStructure("adminModuleConnections", null, 15,
+				597, true, false, 3, "Aministration of Connections", 6, false,
 				1455L);
 
-		navimanagement.addMainStructure("adminModuleOrg", null, 16, 127, true, false,
-				3, "Administration of Organizations", 6, false, 1456L);
+		navimanagement.addMainStructure("adminModuleOrg", null, 16, 127, true,
+				false, 3, "Administration of Organizations", 6, false, 1456L);
 
 		navimanagement.addMainStructure("adminModuleRoom", null, 17, 186, true,
 				false, 3, "Administration of Rooms", 6, false, 1457L);
 
-		navimanagement.addMainStructure("adminModuleConfiguration", null, 18, 263,
-				true, false, 3, "Administration of Configuration", 6, false,
-				1458L);
+		navimanagement.addMainStructure("adminModuleConfiguration", null, 18,
+				263, true, false, 3, "Administration of Configuration", 6,
+				false, 1458L);
 
-		navimanagement.addMainStructure("adminModuleLanguages", null, 19, 348, true,
-				false, 3, "Administration of Languages", 6, false, 1459L);
+		navimanagement.addMainStructure("adminModuleLanguages", null, 19, 348,
+				true, false, 3, "Administration of Languages", 6, false, 1459L);
 
-		navimanagement.addMainStructure("adminModuleLDAP", null, 20, 1103, true,
-				false, 3, "Administration of LDAP Configs", 6, false, 1460L);
+		navimanagement.addMainStructure("adminModuleLDAP", null, 20, 1103,
+				true, false, 3, "Administration of LDAP Configs", 6, false,
+				1460L);
 
-		navimanagement.addMainStructure("adminModuleBackup", null, 21, 367, true,
-				false, 3, "Administration of Backups", 6, false, 1461L);
+		navimanagement.addMainStructure("adminModuleBackup", null, 21, 367,
+				true, false, 3, "Administration of Backups", 6, false, 1461L);
 
-		navimanagement.addMainStructure("adminModuleServers", null, 22, 1498, true,
-				false, 3, "Administration of Servers", 6, false, 1499L);
+		navimanagement.addMainStructure("adminModuleServers", null, 22, 1498,
+				true, false, 3, "Administration of Servers", 6, false, 1499L);
 		log.debug("MainMenu ADDED");
 
 		errorManagement.addErrorType(new Long(1), new Long(322));
@@ -206,7 +209,8 @@ public class ImportInitvalues {
 	public void loadErrorMappingsFromXML() throws Exception {
 
 		SAXReader reader = new SAXReader();
-		Document document = reader.read(new File(OmFileHelper.getLanguagesDir(), OmFileHelper.nameOfErrorFile));
+		Document document = reader.read(new File(
+				OmFileHelper.getLanguagesDir(), OmFileHelper.nameOfErrorFile));
 
 		Element root = document.getRootElement();
 
@@ -263,8 +267,7 @@ public class ImportInitvalues {
 								+ "for more Information see http://incubator.apache.org/openmeetings/CustomCryptMechanism.html");
 
 		configurationDaoImpl.addConfByKey("allow_frontend_register",
-				cfg.allowFrontendRegister,
-				null, "");
+				cfg.allowFrontendRegister, null, "");
 
 		configurationDaoImpl.addConfByKey("default_group_id", "1", null, "");
 
@@ -289,12 +292,11 @@ public class ImportInitvalues {
 				null, "System auth email password");
 
 		configurationDaoImpl.addConfByKey("mail.smtp.starttls.enable",
-				cfg.mailUseTls, null,
-				"Enable TLS 1=true, 0=false");
+				cfg.mailUseTls, null, "Enable TLS 1=true, 0=false");
 
 		configurationDaoImpl.addConfByKey("application.name",
-				ConfigurationDaoImpl.DEFAULT_APP_NAME,
-				null, "Name of the Browser Title window");
+				ConfigurationDaoImpl.DEFAULT_APP_NAME, null,
+				"Name of the Browser Title window");
 
 		// "1" == "EN"
 		configurationDaoImpl.addConfByKey("default_lang_id", cfg.defaultLangId,
@@ -325,13 +327,12 @@ public class ImportInitvalues {
 						null,
 						"The path to OpenOffice/LibreOffice (optional) please set this to the real path in case jodconverter is unable to find OpenOffice/LibreOffice installation automatically");
 		configurationDaoImpl
-			.addConfByKey(
-					"jod.path",
-					cfg.jodPath,
-					null,
-					"The path to JOD library (http://code.google.com/p/jodconverter), configure the path to point to the lib directory of JOD that contains also the jodconverter-core-version.jar");
+				.addConfByKey(
+						"jod.path",
+						cfg.jodPath,
+						null,
+						"The path to JOD library (http://code.google.com/p/jodconverter), configure the path to point to the lib directory of JOD that contains also the jodconverter-core-version.jar");
 
-		
 		configurationDaoImpl.addConfByKey("rss_feed1", cfg.urlFeed, null,
 				"Feed URL");
 
@@ -339,7 +340,8 @@ public class ImportInitvalues {
 				"Feed URL 2");
 
 		configurationDaoImpl
-				.addConfByKey("sendEmailAtRegister", cfg.sendEmailAtRegister, null,
+				.addConfByKey("sendEmailAtRegister", cfg.sendEmailAtRegister,
+						null,
 						"User get a EMail with their Account data. Values: 0(No) or 1(Yes)");
 
 		configurationDaoImpl
@@ -363,10 +365,10 @@ public class ImportInitvalues {
 		configurationDaoImpl.addConfByKey("default.rpc.userid", "" + 1, null,
 				"The User-Id of the Control User in OpenMeetings");
 
-        // ***************************************
-        // ***************************************
-        // red5SIP Integration Coniguration Values
-        // ***************************************
+		// ***************************************
+		// ***************************************
+		// red5SIP Integration Coniguration Values
+		// ***************************************
 
 		configurationDaoImpl.addConfByKey("red5sip.enable", cfg.red5SipEnable,
 				null, "Enable to enable the red5SIP integration ");
@@ -384,7 +386,7 @@ public class ImportInitvalues {
 
 		configurationDaoImpl.addConfByKey("sip.enable", cfg.sipEnable, null,
 				"Enable to load the SIP Applet in the Client and "
-				+ "call the SIP Applet whenever you enter a Room");
+						+ "call the SIP Applet whenever you enter a Room");
 
 		configurationDaoImpl.addConfByKey("sip.realm", cfg.sipRealm, null,
 				"So called *Domain of the SIP Provider*");
@@ -396,7 +398,8 @@ public class ImportInitvalues {
 				null, "SIP Proxy name (this is the outbound proxy)");
 
 		configurationDaoImpl
-				.addConfByKey("sip.tunnel", cfg.sipTunnel, null, "SIP Tunnel IP + Port, format domain:port, for example 10.0.0.0:443");
+				.addConfByKey("sip.tunnel", cfg.sipTunnel, null,
+						"SIP Tunnel IP + Port, format domain:port, for example 10.0.0.0:443");
 
 		configurationDaoImpl.addConfByKey("sip.codebase", cfg.sipCodebase,
 				null, "The Base-URL to load the Ringtone from");
@@ -423,24 +426,19 @@ public class ImportInitvalues {
 								+ "for example http://127.0.0.1:5080/rpc_client/rpc_gateway_wrapper.php");
 
 		configurationDaoImpl.addConfByKey("openxg.client.id",
-				cfg.openxgClientId, null,
-				"OpenXG XML-RPC Client ID");
+				cfg.openxgClientId, null, "OpenXG XML-RPC Client ID");
 
 		configurationDaoImpl.addConfByKey("openxg.client.secret",
-				cfg.openxgClientSecret,
-				null, "OpenXG XML-RPC Client Secret");
+				cfg.openxgClientSecret, null, "OpenXG XML-RPC Client Secret");
 
 		configurationDaoImpl.addConfByKey("openxg.client.domain",
-				cfg.openxgClientDomain,
-				null, "OpenXG Domain");
+				cfg.openxgClientDomain, null, "OpenXG Domain");
 
 		configurationDaoImpl.addConfByKey("openxg.community.code",
-				cfg.openxgCommunityCode,
-				null, "OpenXG Community Code");
+				cfg.openxgCommunityCode, null, "OpenXG Community Code");
 
 		configurationDaoImpl.addConfByKey("openxg.language.code",
-				cfg.openxgLanguageCode,
-				null, "OpenXG Language Code");
+				cfg.openxgLanguageCode, null, "OpenXG Language Code");
 
 		configurationDaoImpl.addConfByKey("openxg.adminid", cfg.openxgAdminId,
 				null, "OpenXG Admin ID");
@@ -451,11 +449,11 @@ public class ImportInitvalues {
 		// ***************************************
 
 		configurationDaoImpl.addConfByKey("sip.language.phonecode",
-				cfg.sipLanguagePhoneCode,
-				null, "For example +358 for Finland");
+				cfg.sipLanguagePhoneCode, null, "For example +358 for Finland");
 
 		configurationDaoImpl
-				.addConfByKey("sip.phonerange.start", cfg.sipPhoneRangeStart, null,
+				.addConfByKey("sip.phonerange.start", cfg.sipPhoneRangeStart,
+						null,
 						"The first number in the Range of Phone Numbers in national format");
 
 		configurationDaoImpl.addConfByKey("sip.phonerange", cfg.sipPhoneRange,
@@ -467,7 +465,8 @@ public class ImportInitvalues {
 
 		configurationDaoImpl
 				.addConfByKey("sip.phonerange.conference.currentindex", "" + 0,
-						null, "Number of used Phone Numbers in the sip.phonerange for the conferences");
+						null,
+						"Number of used Phone Numbers in the sip.phonerange for the conferences");
 
 		// ***************************************
 		// ***************************************
@@ -512,8 +511,9 @@ public class ImportInitvalues {
 						null,
 						"Display name of the user who draw the current object (User Name auto-disapper after 3 seconds.");
 
-		configurationDaoImpl.addConfByKey("max_upload_size", new Integer(
-				ImportHelper.DEFAULT_MAX_UPLOAD_SIZE).toString(), null, "Maximum size of upload file (bytes)"); // defaults to 1GB
+		configurationDaoImpl.addConfByKey("max_upload_size", ""
+				+ ImportHelper.DEFAULT_MAX_UPLOAD_SIZE, null,
+				"Maximum size of upload file (bytes)"); // defaults to 1GB
 
 		configurationDaoImpl
 				.addConfByKey(
@@ -532,7 +532,8 @@ public class ImportInitvalues {
 
 		configurationDaoImpl
 				.addConfByKey("calendar.conference.rooms.default.size", "50",
-						null, "Default number of participants conference room created via calendar");
+						null,
+						"Default number of participants conference room created via calendar");
 
 		configurationDaoImpl
 				.addConfByKey(
@@ -550,59 +551,57 @@ public class ImportInitvalues {
 						"A hot key code for the 'give exclusive audio' functionality. Keycode 123 is F12");
 
 		// system-wide ldap params
-		configurationDaoImpl.addConfByKey(
-						"ldap_default_id", 
-						"0", 
-						null, 
-						"Ldap domain selected by default in the login screen");
-		
+		configurationDaoImpl.addConfByKey("ldap_default_id", "0", null,
+				"Ldap domain selected by default in the login screen");
+
 		// set inviter's email address as ReplyTo in email invitations
 		configurationDaoImpl
 				.addConfByKey(
-						"inviter.email.as.replyto", 
-						cfg.replyToOrganizer, 
-						null, 
+						"inviter.email.as.replyto",
+						cfg.replyToOrganizer,
+						null,
 						"Set inviter's email address as ReplyTo in email invitations (1 == set, 0 == NOT set)");
-		
+
 		configurationDaoImpl
 				.addConfByKey(
 						"default.landing.zone",
 						"dashboard.rooms",
 						null,
 						"Area to be shown to the user after login. Possible values are: "
-		+ "dashboard.rooms, dashboard.chat, calendar, rooms.public, rooms.private, rooms.user");
-		
+								+ "dashboard.rooms, dashboard.chat, calendar, rooms.public, rooms.private, rooms.user");
+
 		log.debug("Configuration ADDED");
 	}
 
 	public void loadRoomTypes() {
-		long conference_Id = roommanagement
-				.addRoomType("conference (1-25 users)", false);
+		long conference_Id = roommanagement.addRoomType(
+				"conference (1-25 users)", false);
 		log.debug("conference_Id: " + conference_Id);
-		
-		//Audience room type is not in use anymore
+
+		// Audience room type is not in use anymore
 		roommanagement.addRoomType("audience (1-50 users)", true);
 
-		long restricted_Id = roommanagement
-				.addRoomType("restricted  (1-150 users)", false);
+		long restricted_Id = roommanagement.addRoomType(
+				"restricted  (1-150 users)", false);
 		log.debug("restricted_Id: " + restricted_Id);
 
-		long interview_Id = roommanagement
-				.addRoomType("interview  (1:1 meeting with recording)", false);
+		long interview_Id = roommanagement.addRoomType(
+				"interview  (1:1 meeting with recording)", false);
 		log.debug("interview_Id: " + interview_Id);
-		
-		//Custom room type is not in use anymore
-		roommanagement.addRoomType("custom (extension point for your plugin)", true);
+
+		// Custom room type is not in use anymore
+		roommanagement.addRoomType("custom (extension point for your plugin)",
+				true);
 		log.debug("RoomTypes ADDED");
 	}
-	
+
 	public void loadDefaultRooms(boolean createRooms) {
 		if (createRooms) {
-			//hardcoded IDs (they are not intended to be changed)
+			// hardcoded IDs (they are not intended to be changed)
 			long conference_Id = 1;
 			long restricted_Id = 3;
 			long interview_Id = 4;
-			
+
 			roommanagement.addRoom(3, "public Interview Room", interview_Id,
 					"", new Long(16), true, null, false, false, null, false,
 					null, true, false, false, "", "", "", null, null, null,
@@ -615,8 +614,7 @@ public class ImportInitvalues {
 					false, // hideWhiteboard
 					false, // showMicrophoneStatus
 					false, // chatModerated
-					null
-					);
+					null);
 
 			roommanagement.addRoom(3, "public Conference Room", conference_Id,
 					"", new Long(32), true, null, false, false, null, false,
@@ -630,8 +628,7 @@ public class ImportInitvalues {
 					false, // hideWhiteboard
 					false, // showMicrophoneStatus
 					false, // chatModerated
-					null
-					);
+					null);
 
 			roommanagement.addRoom(3, "public Video Only Room", conference_Id,
 					"", new Long(32), true, null, false, false, null, false,
@@ -645,8 +642,7 @@ public class ImportInitvalues {
 					false, // hideWhiteboard
 					false, // showMicrophoneStatus
 					false, // chatModerated
-					null
-					);
+					null);
 
 			roommanagement.addRoom(3, "public Video And Whiteboard Room",
 					conference_Id, "", new Long(32), true, null, false, false,
@@ -660,8 +656,7 @@ public class ImportInitvalues {
 					false, // hideWhiteboard
 					false, // showMicrophoneStatus
 					false, // chatModerated
-					null
-					);
+					null);
 
 			roommanagement.addRoom(3, "public Restricted Room", restricted_Id,
 					"", new Long(100), true, null, false, false, null, false,
@@ -675,8 +670,7 @@ public class ImportInitvalues {
 					false, // hideWhiteboard
 					false, // showMicrophoneStatus
 					false, // chatModerated
-					null
-					);
+					null);
 
 			roommanagement.addRoom(3, "restricted room with micro option set",
 					restricted_Id, "", new Long(100), true, null, false, false,
@@ -690,8 +684,7 @@ public class ImportInitvalues {
 					false, // hideWhiteboard
 					true, // showMicrophoneStatus
 					false, // chatModerated
-					null
-					);
+					null);
 
 			roommanagement.addRoom(3, "conference room with micro option set",
 					conference_Id, "", new Long(32), true, null, false, false,
@@ -705,8 +698,7 @@ public class ImportInitvalues {
 					false, // hideWhiteboard
 					true, // showMicrophoneStatus
 					false, // chatModerated
-					null
-					);
+					null);
 
 			long room2 = roommanagement.addRoom(3, "private Conference Room",
 					conference_Id, "", new Long(32), false, null, false, false,
@@ -720,11 +712,10 @@ public class ImportInitvalues {
 					false, // hideWhiteboard
 					false, // showMicrophoneStatus
 					false, // chatModerated
-					null
-					);
+					null);
 
 			roommanagement.addRoomToOrganisation(3, room2, 1);
-			
+
 		}
 	}
 
@@ -747,8 +738,10 @@ public class ImportInitvalues {
 					1, username, userpass, "lastname", "firstname", email,
 					new java.util.Date(), "street", "no", "fax", "zip", 1,
 					"town", default_lang_id, false,
-					Arrays.asList(organisation_id), "phone", false, "", false, "", "",
-					"", false, omTimeZoneDaoImpl.getOmTimeZoneByIcal(ical_timeZone), false, "", "", false, true, null);
+					Arrays.asList(organisation_id), "phone", false, "", false,
+					"", "", "", false,
+					omTimeZoneDaoImpl.getOmTimeZoneByIcal(ical_timeZone),
+					false, "", "", false, true, null);
 
 			log.debug("Installation - User Added user-Id " + user_id);
 
@@ -770,7 +763,9 @@ public class ImportInitvalues {
 	 */
 	private void loadCountriesFiles() throws Exception {
 		SAXReader reader = new SAXReader();
-		Document document = reader.read(new File(OmFileHelper.getLanguagesDir(), OmFileHelper.nameOfCountriesFile));
+		Document document = reader.read(new File(
+				OmFileHelper.getLanguagesDir(),
+				OmFileHelper.nameOfCountriesFile));
 
 		Element root = document.getRootElement();
 
@@ -778,17 +773,18 @@ public class ImportInitvalues {
 		Iterator it = root.elementIterator("country"); it.hasNext();) {
 			Element item = (Element) it.next();
 
-			statemanagement.addState(
-				item.attributeValue("name")
-				, item.attributeValue("short")
-				, Integer.parseInt(item.attributeValue("code")));
+			statemanagement.addState(item.attributeValue("name"),
+					item.attributeValue("short"),
+					Integer.parseInt(item.attributeValue("code")));
 		}
 		log.debug("Countries ADDED");
 	}
 
 	private void loadTimeZoneFiles() throws Exception {
 		SAXReader reader = new SAXReader();
-		Document document = reader.read(new File(OmFileHelper.getLanguagesDir(), OmFileHelper.nameOfTimeZoneFile));
+		Document document = reader
+				.read(new File(OmFileHelper.getLanguagesDir(),
+						OmFileHelper.nameOfTimeZoneFile));
 
 		Element root = document.getRootElement();
 
@@ -812,7 +808,9 @@ public class ImportInitvalues {
 		List<OmTimeZone> omTimeZones = new LinkedList<OmTimeZone>();
 
 		SAXReader reader = new SAXReader();
-		Document document = reader.read(new File(OmFileHelper.getLanguagesDir(), OmFileHelper.nameOfTimeZoneFile));
+		Document document = reader
+				.read(new File(OmFileHelper.getLanguagesDir(),
+						OmFileHelper.nameOfTimeZoneFile));
 
 		Element root = document.getRootElement();
 
@@ -832,7 +830,7 @@ public class ImportInitvalues {
 
 			omTimeZones.add(omTimeZone);
 		}
-		
+
 		return omTimeZones;
 	}
 
@@ -844,12 +842,15 @@ public class ImportInitvalues {
 	 * @return
 	 * @throws Exception
 	 */
-	public LinkedHashMap<Integer, LinkedHashMap<String, Object>> getLanguageFiles() throws Exception {
+	public LinkedHashMap<Integer, LinkedHashMap<String, Object>> getLanguageFiles()
+			throws Exception {
 
 		LinkedHashMap<Integer, LinkedHashMap<String, Object>> languages = new LinkedHashMap<Integer, LinkedHashMap<String, Object>>();
 
 		SAXReader reader = new SAXReader();
-		Document document = reader.read(new File(OmFileHelper.getLanguagesDir(), OmFileHelper.nameOfLanguageFile));
+		Document document = reader
+				.read(new File(OmFileHelper.getLanguagesDir(),
+						OmFileHelper.nameOfLanguageFile));
 
 		Element root = document.getRootElement();
 
@@ -918,21 +919,26 @@ public class ImportInitvalues {
 
 	public void loadLanguagesFile(int langId) throws Exception {
 		LinkedHashMap<Integer, LinkedHashMap<String, Object>> listlanguages = getLanguageFiles();
-		loadLanguagesFile(listlanguages, new Hashtable<Long, Fieldvalues>(3000), langId);
+		loadLanguagesFile(listlanguages,
+				new Hashtable<Long, Fieldvalues>(3000), langId);
 	}
-	
+
 	public void loadLanguagesFile(String langName) throws Exception {
 		LinkedHashMap<Integer, LinkedHashMap<String, Object>> listlanguages = getLanguageFiles();
 		for (int langId : listlanguages.keySet()) {
 			LinkedHashMap<String, Object> langMap = listlanguages.get(langId);
 			if (langName.equals(langMap.get("name"))) {
-				loadLanguagesFile(listlanguages, new Hashtable<Long, Fieldvalues>(3000), langId);
+				loadLanguagesFile(listlanguages,
+						new Hashtable<Long, Fieldvalues>(3000), langId);
 				break;
 			}
 		}
 	}
-	
-	public void loadLanguagesFile(LinkedHashMap<Integer, LinkedHashMap<String, Object>> listlanguages, Hashtable<Long, Fieldvalues> fieldCache, int langId) throws Exception {
+
+	public void loadLanguagesFile(
+			LinkedHashMap<Integer, LinkedHashMap<String, Object>> listlanguages,
+			Hashtable<Long, Fieldvalues> fieldCache, int langId)
+			throws Exception {
 		LinkedHashMap<String, Object> langMap = listlanguages.get(langId);
 		log.debug("loadInitLanguages lang: " + langMap);
 
@@ -948,10 +954,12 @@ public class ImportInitvalues {
 			langRtl = true;
 
 		long ticks = System.currentTimeMillis();
-		FieldLanguage lang = fieldLanguageDaoImpl.addLanguage(langId, langName, langRtl, code);
+		FieldLanguage lang = fieldLanguageDaoImpl.addLanguage(langId, langName,
+				langRtl, code);
 
 		SAXReader reader = new SAXReader();
-		Document document = reader.read(new File(OmFileHelper.getLanguagesDir(), langName + ".xml"));
+		Document document = reader.read(new File(
+				OmFileHelper.getLanguagesDir(), langName + ".xml"));
 
 		Element root = document.getRootElement();
 
@@ -982,7 +990,7 @@ public class ImportInitvalues {
 				// Only do that for the first field-set
 				if (!fieldCache.containsKey(id)) {
 					fv = fieldmanagment.addFieldById(name, id);
-					fieldCache.put(id,  fv);
+					fieldCache.put(id, fv);
 				} else {
 					fv = fieldCache.get(id);
 				}
@@ -997,20 +1005,22 @@ public class ImportInitvalues {
 		}
 		lang.setLanguageValues(flvMap.values());
 		fieldLanguageDaoImpl.updateLanguage(lang);
-		log.debug("Lang ADDED: " + lang + "; seconds passed: " + (System.currentTimeMillis() - ticks) / 1000);
+		log.debug("Lang ADDED: " + lang + "; seconds passed: "
+				+ (System.currentTimeMillis() - ticks) / 1000);
 	}
-	
+
 	public void loadLanguagesFiles() throws Exception {
 		LinkedHashMap<Integer, LinkedHashMap<String, Object>> listlanguages = getLanguageFiles();
 
-		Hashtable<Long, Fieldvalues> fieldCache = new Hashtable<Long, Fieldvalues>(3000);
+		Hashtable<Long, Fieldvalues> fieldCache = new Hashtable<Long, Fieldvalues>(
+				3000);
 		/** Read all languages files */
 		for (int langId : listlanguages.keySet()) {
 			loadLanguagesFile(listlanguages, fieldCache, langId);
 		}
 		log.debug("All languages are imported");
 	}
-	
+
 	// ------------------------------------------------------------------------------
 
 	/**
@@ -1033,11 +1043,13 @@ public class ImportInitvalues {
 		pollManagement.addPollType(26L, false);
 		pollManagement.addPollType(27L, true);
 	}
+
 	// ------------------------------------------------------------------------------
 
-	public void loadSystem(InstallationConfig cfg, boolean force) throws Exception {
-		//FIXME dummy check if installation was performed before
-		if(!force && usersDao.getAllUsers().size() > 0) {
+	public void loadSystem(InstallationConfig cfg, boolean force)
+			throws Exception {
+		// FIXME dummy check if installation was performed before
+		if (!force && usersDao.getAllUsers().size() > 0) {
 			log.debug("System contains users, no need to install data one more time.");
 		}
 		loadMainMenu();
@@ -1051,21 +1063,22 @@ public class ImportInitvalues {
 		// Appointment poll types
 		loadPollTypes();
 		loadRoomTypes();
-		
+
 		loadConfiguration(cfg);
 	}
-	
+
 	public void loadAll(InstallationConfig cfg, String username,
-			String userpass, String useremail, String groupame, String timeZone, boolean force) throws Exception {
-		//FIXME dummy check if installation was performed before
-		if(!force && usersDao.getAllUsers().size() > 0) {
+			String userpass, String useremail, String groupame,
+			String timeZone, boolean force) throws Exception {
+		// FIXME dummy check if installation was performed before
+		if (!force && usersDao.getAllUsers().size() > 0) {
 			log.debug("System contains users, no need to install data one more time.");
 			return;
 		}
 		loadSystem(cfg, force);
-		loadInitUserAndOrganisation(username,
-				userpass, useremail, groupame, timeZone, cfg.defaultLangId);
-		
+		loadInitUserAndOrganisation(username, userpass, useremail, groupame,
+				timeZone, cfg.defaultLangId);
+
 		loadDefaultRooms("1".equals(cfg.createDefaultRooms));
 	}
 }

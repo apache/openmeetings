@@ -28,34 +28,50 @@ import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
+/**
+ * 
+ * Get some of the default values for the upload
+ * 
+ * @author solomax, swagner
+ * 
+ */
 public class ImportHelper {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			ImportHelper.class, OpenmeetingsVariables.webAppRootKey);
-	public static final int DEFAULT_MAX_UPLOAD_SIZE = 1024 * 1024 * 1024; // 1GB
+	public static final long DEFAULT_MAX_UPLOAD_SIZE = 1024 * 1024 * 1024; // 1GB
 
-	public static final int getMaxUploadSize(
+	/**
+	 * returns the max upload size configured by max_upload_size config key
+	 * 
+	 * @param configurationDaoImpl
+	 * @return
+	 */
+	public static final long getMaxUploadSize(
 			ConfigurationDaoImpl configurationDaoImpl) {
-		int result = DEFAULT_MAX_UPLOAD_SIZE;
-		String maxSize = configurationDaoImpl.getConfValue("max_upload_size", String.class, "" + result);
 		try {
-			result = (int) Math.min(Long.parseLong(maxSize), Integer.MAX_VALUE);
+			return configurationDaoImpl.getConfValue("max_upload_size",
+					Long.class, "" + DEFAULT_MAX_UPLOAD_SIZE);
 		} catch (Exception e) {
-			log.error("Invalid value saved for maxUploadSize: " + maxSize, e);
+			log.error("Invalid value saved for max_upload_size conf key: ", e);
 		}
-		return result;
+		return DEFAULT_MAX_UPLOAD_SIZE;
 	}
-	
+
+	/**
+	 * returns a list of all timezones as a {@link Map}
+	 * 
+	 * @param tzList
+	 * @return
+	 */
 	public static Map<String, String> getAllTimeZones(List<OmTimeZone> tzList) {
 		Map<String, String> result = new LinkedHashMap<String, String>();
-		
-		log.debug("omTimeZoneList :: " + tzList.size());
+
 		for (OmTimeZone omTimeZone : tzList) {
 			String labelName = omTimeZone.getLabel() + " ("
 					+ omTimeZone.getJname() + ")";
-			log.debug("labelName :: " + labelName);
 			result.put(omTimeZone.getIcal(), labelName);
 		}
-		
+
 		return result;
 	}
 }

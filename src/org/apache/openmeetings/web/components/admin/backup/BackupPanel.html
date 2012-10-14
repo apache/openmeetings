@@ -21,21 +21,26 @@
 <html xmlns="http://www.w3.org/1999/xhtml" 
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.5-strict.dtd" lang="en">
 	<wicket:panel>
+		<div>
+	        <span wicket:id="uploadFeedback"/>
+	     </div>
 		<!-- wicket:id="form"  -->
-		<form class="adminForm">
+		<form wicket:id="backupUpload" class="adminForm">
 			<fieldset>
 				<legend><wicket:ommessage key="1066" /></legend>
 				<wicket:ommessage key="1065" />
 	            <br/>
 	            <!-- _includeFileOption -->
-	            <span>Include uploaded files and recordings in backup</span> <input type="checkbox"/>
+	            <span>Include uploaded files and recordings in backup</span> <input type="checkbox" wicket:id="includeFilesInBackup" />
 	            <br/>
-				<div>
-					<input type="submit" value="System Import" />
-				</div>
-				<div>
-					<input type="submit" value="System Backup" />
-				</div>
+	            <input wicket:id="fileInput" type="file"/>
+	            <br/>
+	            <span wicket:id="progress">[[upload progressbar]]</span>
+	            <br/>
+	            <!-- Perform Download -->
+				<input type="submit" value="System Import" wicket:id="ajax-backup-download-button" />
+				<!-- Perform Upload -->
+				<input type="submit" value="System Backup" wicket:id="ajax-backup-upload-button" />
 	            <br/>
 	            <!-- Max upload size -->
 	            <wicket:ommessage key="1491" />

@@ -43,7 +43,7 @@ public abstract class AdminBaseFormPanel<T> extends AdminPanel {
 		newRecord = new Label("newRecord", Model.of(WebSession.getString(344L)));
 		add(newRecord.setVisible(false).setOutputMarkupId(true));
 
-		// add a button that can be used to submit the form via ajax
+		// add a save button that can be used to submit the form via ajax
 		add(new AjaxButton("ajax-save-button", form) {
 			private static final long serialVersionUID = 839803820502260006L;
 
@@ -62,6 +62,7 @@ public abstract class AdminBaseFormPanel<T> extends AdminPanel {
 			}
 		});
 
+		// add a new button that can be used to submit the form via ajax
 		add(new AjaxButton("ajax-new-button", form) {
 			private static final long serialVersionUID = 839803820502260006L;
 
@@ -82,6 +83,7 @@ public abstract class AdminBaseFormPanel<T> extends AdminPanel {
 			}
 		});
 
+		// add a refresh button that can be used to submit the form via ajax
 		add(new AjaxButton("ajax-refresh-button", form) {
 			private static final long serialVersionUID = 839803820502260006L;
 
@@ -102,6 +104,7 @@ public abstract class AdminBaseFormPanel<T> extends AdminPanel {
 			}
 		});
 
+		// add a cancel button that can be used to submit the form via ajax
 		add(new AjaxButton("ajax-cancel-button", form) {
 			private static final long serialVersionUID = 839803820502260006L;
 
