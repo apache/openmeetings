@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.data.basic;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -26,6 +27,7 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.data.OmDAO;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
+import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.persistence.beans.lang.Fieldvalues;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,7 +67,13 @@ public class FieldValueDaoImpl implements OmDAO<Fieldvalues> {
 		List<Fieldvalues> result = q.getResultList();
 		for (Fieldvalues fv : result) {
 			//FIXME ineffective !!!!!!!!!!!!!!!!!!!!
-			fv.setFieldlanguagesvalue(flvDaoImpl.get(fv.getFieldvalues_id(), language_id));
+			Fieldlanguagesvalues flv = flvDaoImpl.get(fv.getFieldvalues_id(), language_id);
+			if (flv == null) {
+				flv = new Fieldlanguagesvalues();
+				flv.setLanguage_id(language_id);
+				flv.setFieldvalues(fv);
+			}
+			fv.setFieldlanguagesvalue(flv);
 		}
 		return result;
 	}
@@ -76,8 +84,14 @@ public class FieldValueDaoImpl implements OmDAO<Fieldvalues> {
 	}
 
 	public void update(Fieldvalues entity, long userId) {
-		// TODO Auto-generated method stub
-		
+		entity.setDeleted(false);
+		if (entity.getFieldvalues_id() == null) {
+			entity.setFieldvalues_id(count() + 1);
+			entity.setStarttime(new Date());
+			em.persist(entity);
+		} else {
+			entity = em.merge(entity);
+		}
 	}
 
 	public void delete(Fieldvalues entity, long userId) {

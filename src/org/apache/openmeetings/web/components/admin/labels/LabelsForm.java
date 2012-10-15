@@ -19,7 +19,9 @@
 package org.apache.openmeetings.web.components.admin.labels;
 
 import org.apache.openmeetings.data.basic.FieldLanguagesValuesDaoImpl;
+import org.apache.openmeetings.data.basic.FieldValueDaoImpl;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
+import org.apache.openmeetings.persistence.beans.lang.Fieldvalues;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.admin.AdminBaseForm;
@@ -38,10 +40,12 @@ import org.apache.wicket.model.CompoundPropertyModel;
  */
 public class LabelsForm extends AdminBaseForm<Fieldlanguagesvalues> {
 	private static final long serialVersionUID = -1309878909524329047L;
-
-	public LabelsForm(String id, Fieldlanguagesvalues fieldlanguagesvalues) {
+	private LangPanel panel;
+	
+	public LabelsForm(String id, LangPanel panel, Fieldlanguagesvalues fieldlanguagesvalues) {
 		super(id, new CompoundPropertyModel<Fieldlanguagesvalues>(fieldlanguagesvalues));
-
+		this.panel = panel;
+		
 		add(new Label("fieldvalues.fieldvalues_id"));
 		add(new TextField<String>("fieldvalues.name"));
 		add(new TextArea<String>("value"));
@@ -49,7 +53,9 @@ public class LabelsForm extends AdminBaseForm<Fieldlanguagesvalues> {
 
 	@Override
 	protected void onNewSubmit(AjaxRequestTarget target, Form<?> f) {
-		this.setModelObject(new Fieldlanguagesvalues());
+		Fieldlanguagesvalues flv = new Fieldlanguagesvalues();
+		flv.setLanguage_id(panel.language.getLanguage_id());
+		this.setModelObject(flv);
 		target.add(this);
 	}
 
@@ -57,8 +63,8 @@ public class LabelsForm extends AdminBaseForm<Fieldlanguagesvalues> {
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		Fieldlanguagesvalues flv = getModelObject();
 		if (flv.getFieldlanguagesvalues_id() != null) {
-			flv = Application.getBean(FieldLanguagesValuesDaoImpl.class).get(
-					getModelObject().getFieldlanguagesvalues_id());
+			flv = Application.getBean(FieldLanguagesValuesDaoImpl.class)
+					.get(getModelObject().getFieldlanguagesvalues_id());
 		} else {
 			flv = new Fieldlanguagesvalues();
 		}
@@ -68,8 +74,13 @@ public class LabelsForm extends AdminBaseForm<Fieldlanguagesvalues> {
 
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
-		Application.getBean(FieldLanguagesValuesDaoImpl.class).update(
-				getModelObject(), WebSession.getUserId());
+		Fieldlanguagesvalues flv = getModelObject();
+		Fieldvalues fv = flv.getFieldvalues();
+		Application.getBean(FieldValueDaoImpl.class).update(fv, WebSession.getUserId());
+		
+		flv.setFieldvalues(fv);
+		Application.getBean(FieldLanguagesValuesDaoImpl.class)
+			.update(flv, WebSession.getUserId());
 		hideNewRecord();
 		// FIXME reload
 	}
@@ -77,8 +88,8 @@ public class LabelsForm extends AdminBaseForm<Fieldlanguagesvalues> {
 	// FIXME confirmation
 	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
-		Application.getBean(FieldLanguagesValuesDaoImpl.class).delete(
-				getModelObject(), WebSession.getUserId());
+		Application.getBean(FieldLanguagesValuesDaoImpl.class)
+			.delete(getModelObject(), WebSession.getUserId());
 		// FIXME reload
 	}
 

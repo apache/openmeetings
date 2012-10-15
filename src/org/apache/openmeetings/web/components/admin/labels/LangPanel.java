@@ -56,8 +56,9 @@ public class LangPanel extends AdminPanel {
 				.getBean(FieldLanguageDaoImpl.class);
 		language = langDao.getFieldLanguageById(1L);
 
-		final LabelsForm form = new LabelsForm("form",
-				new Fieldlanguagesvalues());
+		Fieldlanguagesvalues flv = new Fieldlanguagesvalues();
+		flv.setLanguage_id(language.getLanguage_id());
+		final LabelsForm form = new LabelsForm("form", this, flv);
 		form.showNewRecord();
 		add(form);
 
