@@ -280,7 +280,7 @@ public class UsersDaoImpl implements OmDAO<Users> {
 					Users.class);
 			@SuppressWarnings("unchecked")
 			OpenJPAQuery<Users> kq = OpenJPAPersistence.cast(q);
-			kq.getFetchPlan().addFetchGroup("passwordexport");
+			kq.getFetchPlan().addFetchGroup("backupexport");
 			return kq.getResultList();
 		} catch (Exception ex2) {
 			log.error("[getAllUsersDeleted] ", ex2);

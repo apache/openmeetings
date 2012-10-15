@@ -65,7 +65,7 @@ import org.simpleframework.xml.Root;
  */
 @Entity
 @FetchGroups({
- @FetchGroup(name = "passwordexport",
+ @FetchGroup(name = "backupexport",
 		 attributes = { @FetchAttribute(name = "password")
  })
 })
@@ -125,7 +125,7 @@ public class Users implements Serializable, OmEntity {
 
 	@Basic(fetch = FetchType.LAZY)
 	@Column(name = "password")
-	@LoadFetchGroup("passwordexport")
+	@LoadFetchGroup("backupexport")
 	@Element(name = "pass", data = true)
 	private String password;
 
