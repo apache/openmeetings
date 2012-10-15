@@ -41,6 +41,10 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.openjpa.persistence.ElementDependent;
+import org.apache.openjpa.persistence.FetchAttribute;
+import org.apache.openjpa.persistence.FetchGroup;
+import org.apache.openjpa.persistence.FetchGroups;
+import org.apache.openjpa.persistence.LoadFetchGroup;
 import org.apache.openmeetings.persistence.beans.OmEntity;
 import org.apache.openmeetings.persistence.beans.adresses.Adresses;
 import org.apache.openmeetings.persistence.beans.adresses.States;
@@ -60,6 +64,11 @@ import org.simpleframework.xml.Root;
  * 
  */
 @Entity
+@FetchGroups({
+ @FetchGroup(name = "passwordexport",
+		 attributes = { @FetchAttribute(name = "password")
+ })
+})
 @NamedQueries({
 		@NamedQuery(name = "getAllUsers", query = "SELECT u FROM Users u"),
 		@NamedQuery(name = "checkPassword", query = "select count(c.user_id) from Users c "
@@ -116,6 +125,7 @@ public class Users implements Serializable, OmEntity {
 
 	@Basic(fetch = FetchType.LAZY)
 	@Column(name = "password")
+	@LoadFetchGroup("passwordexport")
 	@Element(name = "pass", data = true)
 	private String password;
 

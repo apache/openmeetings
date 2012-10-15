@@ -32,6 +32,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.openjpa.persistence.OpenJPAPersistence;
+import org.apache.openjpa.persistence.OpenJPAQuery;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.OmDAO;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
@@ -276,7 +278,10 @@ public class UsersDaoImpl implements OmDAO<Users> {
 		try {
 			TypedQuery<Users> q = em.createNamedQuery("getAllUsers",
 					Users.class);
-			return q.getResultList();
+			@SuppressWarnings("unchecked")
+			OpenJPAQuery<Users> kq = OpenJPAPersistence.cast(q);
+			kq.getFetchPlan().addFetchGroup("passwordexport");
+			return kq.getResultList();
 		} catch (Exception ex2) {
 			log.error("[getAllUsersDeleted] ", ex2);
 		}

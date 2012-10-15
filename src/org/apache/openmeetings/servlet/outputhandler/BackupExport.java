@@ -56,10 +56,8 @@ import org.apache.openmeetings.data.calendar.daos.AppointmentDaoImpl;
 import org.apache.openmeetings.data.calendar.daos.MeetingMemberDaoImpl;
 import org.apache.openmeetings.data.conference.PollManagement;
 import org.apache.openmeetings.data.conference.Roommanagement;
-import org.apache.openmeetings.data.conference.dao.RoomModeratorsDaoImpl;
 import org.apache.openmeetings.data.file.dao.FileExplorerItemDaoImpl;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingDaoImpl;
-import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDaoImpl;
 import org.apache.openmeetings.data.user.Organisationmanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.data.user.dao.PrivateMessageFolderDaoImpl;
@@ -126,10 +124,6 @@ public class BackupExport {
 	private FileExplorerItemDaoImpl fileExplorerItemDao;
 	@Autowired
 	private FlvRecordingDaoImpl flvRecordingDao;
-	@Autowired
-	private FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDao;
-	@Autowired
-	private RoomModeratorsDaoImpl roomModeratorsDao;
 	@Autowired
 	private UsersDaoImpl usersDao;
 	@Autowired
