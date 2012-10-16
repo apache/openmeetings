@@ -124,6 +124,8 @@ public class BackupPanel extends AdminPanel {
 						download.setResourceStream(new FileResourceStream(
 					            new org.apache.wicket.util.file.File(backupFile)));
 
+						download.initiate(target);
+
 					} catch (Exception e) {
 						log.error("Exception on panel backup download ", e);
 						uploadFeedback.error(e);
