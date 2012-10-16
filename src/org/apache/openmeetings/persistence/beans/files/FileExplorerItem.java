@@ -21,7 +21,6 @@ package org.apache.openmeetings.persistence.beans.files;
 import java.io.Serializable;
 import java.util.Date;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -116,7 +115,7 @@ public class FileExplorerItem implements Serializable {
 	private Integer flvHeight;
 	
 	@Column(name="preview_image")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String previewImage;
 	
 	@Column(name="wml_file_path")

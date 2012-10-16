@@ -48,7 +48,13 @@ import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
 @Entity
-@NamedQueries({ @NamedQuery(name = "getNondeletedRooms", query = "SELECT u FROM Rooms u WHERE u.deleted = false") })
+@NamedQueries({
+	@NamedQuery(name = "getNondeletedRooms", query = "SELECT u FROM Rooms u "
+			+ "WHERE u.deleted = false"),
+	@NamedQuery(name = "getBackupRooms", query = "SELECT c FROM Rooms c "
+			+ "LEFT JOIN FETCH c.moderators "
+			+ "WHERE c.deleted <> true ")
+})
 @Table(name = "rooms")
 @Root(name = "room")
 public class Rooms implements Serializable, OmEntity {
@@ -203,13 +209,13 @@ public class Rooms implements Serializable, OmEntity {
 
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "roomId")
-	@ElementList(name = "room_moderators")
+	@ElementList(name = "room_moderators", required=false)
 	private List<RoomModerators> moderators;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "rooms_id", insertable = true, updatable = true)
-	@ElementList(name = "organisations")
 	@ElementDependent
+	@org.simpleframework.xml.Transient
 	private List<Rooms_Organisation> roomOrganisations = new ArrayList<Rooms_Organisation>();
 
 	/*

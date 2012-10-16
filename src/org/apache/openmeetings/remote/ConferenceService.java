@@ -164,8 +164,8 @@ public class ConferenceService {
 	}
 
 	/**
-	 * gets all rooms of an organisation TODO:check if the requesting user is
-	 * also member of that organisation
+	 * gets all rooms of an organization TODO:check if the requesting user is
+	 * also member of that organization
 	 * 
 	 * @param SID
 	 * @param organisation_id

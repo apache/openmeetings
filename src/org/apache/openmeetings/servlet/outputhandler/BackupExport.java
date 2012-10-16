@@ -195,7 +195,7 @@ public class BackupExport {
 		}
 
 		/*
-		 * ##################### Backup Appointements
+		 * ##################### Backup Appointments
 		 */
 		{
 			List<Appointment> list = appointmentDao.getAppointments();
@@ -332,7 +332,7 @@ public class BackupExport {
 		 */
 		{
 			List<Configuration> list = configurationDaoImpl.getConfigurations(
-					0, Integer.MAX_VALUE, "conf_key", true);
+					0, Integer.MAX_VALUE, "c.configuration_id", true);
 			Registry registry = new Registry();
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);

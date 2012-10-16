@@ -145,7 +145,7 @@ public class Appointment implements Serializable {
 	private Rooms room;
 
 	@Column(name = "icalId")
-	@Element(data=true)
+	@Element(data=true, required=false)
 	private String icalId;
 
 	@OneToMany(fetch = FetchType.LAZY)

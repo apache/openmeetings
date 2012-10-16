@@ -504,12 +504,10 @@ public class Roommanagement {
 
 	public List<Rooms> getBackupRooms() {
 		try {
-			TypedQuery<Rooms> q = em.createQuery("SELECT c FROM Rooms c LEFT JOIN FETCH c.moderators "
-					+ "WHERE c.deleted <> true ", Rooms.class);
-			
-			return q.getResultList();
-		} catch (Exception ex2) {
-			log.error("[getBackupRooms]", ex2);
+			return em.createNamedQuery("getBackupRooms", Rooms.class)
+					.getResultList();
+		} catch (Exception e) {
+			log.error("[getBackupRooms]", e);
 		}
 		return null;
 	}
@@ -1072,6 +1070,7 @@ public class Roommanagement {
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
 				String hql = "SELECT c FROM Rooms_Organisation c "
+						+ "LEFT JOIN FETCH c.room "
 						+ "WHERE c.organisation.organisation_id = :organisation_id "
 						+ "AND c.deleted <> :deleted AND c.room.deleted <> :deleted "
 						+ "AND c.organisation.deleted <> :deleted "
