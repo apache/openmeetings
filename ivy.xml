@@ -172,9 +172,6 @@
 		<dependency org="org.apache.velocity" name="velocity" rev="1.7" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.velocity" name="velocity" rev="1.7" conf="openmeetings->*" transitive="false">
-			<include type="jar" />
-		</dependency>
 		<dependency org="org.apache.velocity" name="velocity-tools" rev="2.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
