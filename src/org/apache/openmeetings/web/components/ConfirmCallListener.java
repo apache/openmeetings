@@ -32,6 +32,6 @@ public class ConfirmCallListener extends AjaxCallListener {
 	//TODO confirm need to be replaced with jQuery modal dialog
 	public ConfirmCallListener(long id, String js) {
 		onPrecondition("if (!confirm('" + JavaScriptUtils.escapeQuotes(WebSession.getString(id)) + "')) {" 
-				+ js + "; return false;}");
+				+ js + "; hideBusyIndicator(); return false;}");
 	}
 }

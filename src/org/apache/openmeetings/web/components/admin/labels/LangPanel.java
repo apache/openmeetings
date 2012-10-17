@@ -48,6 +48,7 @@ public class LangPanel extends AdminPanel {
 	private static final long serialVersionUID = 5904180813198016592L;
 
 	FieldLanguage language;
+	final WebMarkupContainer listContainer;
 	private LangForm langForm;
 
 	public LangPanel(String id) {
@@ -63,16 +64,21 @@ public class LangPanel extends AdminPanel {
 		add(form);
 
 		final OmDataView<Fieldvalues> dataView = new OmDataView<Fieldvalues>(
-				"langList", new OmDataProvider<Fieldvalues>(
-						FieldValueDaoImpl.class) {
+				"langList"
+				, new OmDataProvider<Fieldvalues>(FieldValueDaoImpl.class) {
 					private static final long serialVersionUID = -6822789354860988626L;
 
-					public Iterator<? extends Fieldvalues> iterator(
-							long first, long count) {
-						return Application
-								.getBean(FieldValueDaoImpl.class)
-								.get(language.getLanguage_id(), (int) first,
-										(int) count).iterator();
+					@Override
+					public long size() {
+						return search == null
+								? Application.getBean(FieldValueDaoImpl.class).count()
+								: Application.getBean(FieldValueDaoImpl.class).count(language.getLanguage_id(), search);
+					}
+					
+					public Iterator<? extends Fieldvalues> iterator(long first, long count) {
+						return (search == null
+								? Application.getBean(FieldValueDaoImpl.class).get(language.getLanguage_id(), (int)first, (int)count)
+								: Application.getBean(FieldValueDaoImpl.class).get(language.getLanguage_id(), search, (int)first, (int)count)).iterator();
 					}
 				}) {
 			private static final long serialVersionUID = 8715559628755439596L;
@@ -97,8 +103,7 @@ public class LangPanel extends AdminPanel {
 			}
 		};
 
-		final WebMarkupContainer listContainer = new WebMarkupContainer(
-				"listContainer");
+		listContainer = new WebMarkupContainer("listContainer");
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		add(new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = 5097048616003411362L;

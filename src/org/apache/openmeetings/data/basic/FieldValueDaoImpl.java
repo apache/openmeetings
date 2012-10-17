@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.data.basic;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,11 +30,14 @@ import org.apache.openmeetings.data.OmDAO;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.persistence.beans.lang.Fieldvalues;
+import org.apache.openmeetings.utils.DaoHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class FieldValueDaoImpl implements OmDAO<Fieldvalues> {
+	public final static String[] searchFields = {"value", "fieldvalues.name"};
+	
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
@@ -41,9 +45,12 @@ public class FieldValueDaoImpl implements OmDAO<Fieldvalues> {
 	@Autowired
 	private FieldLanguagesValuesDaoImpl flvDaoImpl;
 
+	private Long getDefaultLanguage() {
+		return configurationDaoImpl.getConfValue("default_lang_id", Long.class, "1");
+	}
+	
 	public Fieldvalues get(long id) {
-		return get(configurationDaoImpl.getConfValue("default_lang_id",
-				Long.class, "1"), id);
+		return get(getDefaultLanguage(), id);
 	}
 
 	public Fieldvalues get(Long language_id, long id) {
@@ -55,18 +62,30 @@ public class FieldValueDaoImpl implements OmDAO<Fieldvalues> {
 	}
 
 	public List<Fieldvalues> get(int start, int count) {
-		return get(configurationDaoImpl.getConfValue("default_lang_id",
-				Long.class, "1"), start, count);
+		return get(getDefaultLanguage(), start, count);
 	}
 
 	public List<Fieldvalues> get(String search, int start, int count) {
-		// TODO Auto-generated method stub
-		return null;
+		return get(getDefaultLanguage(), search, start, count);
 	}
 	
 	public List<Fieldvalues> get(Long language_id, String search, int start, int count) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = DaoHelper.getSearchQuery("Fieldlanguagesvalues", "flv", search, true, false, searchFields)
+				+ " AND flv.fieldvalues.deleted = false AND flv.language_id = :lang";
+		TypedQuery<Fieldlanguagesvalues> q = em.createQuery(sql, Fieldlanguagesvalues.class);
+		q.setParameter("lang", language_id);
+		q.setFirstResult(start);
+		q.setMaxResults(count);
+		
+		//now lets create the list of Fieldvalues
+		List<Fieldlanguagesvalues> flvList = q.getResultList();
+		List<Fieldvalues> r = new ArrayList<Fieldvalues>(flvList.size());
+		for (Fieldlanguagesvalues flv : flvList) {
+			Fieldvalues fv = flv.getFieldvalues();
+			fv.setFieldlanguagesvalue(flv);
+			r.add(fv);
+		}
+		return r;
 	}
 	
 	public List<Fieldvalues> get(Long language_id, int start, int count) {
@@ -94,8 +113,15 @@ public class FieldValueDaoImpl implements OmDAO<Fieldvalues> {
 	}
 
 	public long count(String search) {
-		// TODO Auto-generated method stub
-		return 0;
+		return count(getDefaultLanguage(), search);
+	}
+	
+	public long count(Long language_id, String search) {
+		String sql = DaoHelper.getSearchQuery("Fieldlanguagesvalues", "flv", search, true, true, searchFields)
+				+ " AND flv.fieldvalues.deleted = false AND flv.language_id = :lang";
+		TypedQuery<Long> q = em.createQuery(sql, Long.class);
+		q.setParameter("lang", language_id);
+		return q.getSingleResult();
 	}
 	
 	public void update(Fieldvalues entity, long userId) {

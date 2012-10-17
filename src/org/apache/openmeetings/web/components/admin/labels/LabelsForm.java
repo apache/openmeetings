@@ -82,15 +82,14 @@ public class LabelsForm extends AdminBaseForm<Fieldlanguagesvalues> {
 		Application.getBean(FieldLanguagesValuesDaoImpl.class)
 			.update(flv, WebSession.getUserId());
 		hideNewRecord();
-		// FIXME reload
+		target.add(panel.listContainer);
 	}
 
-	// FIXME confirmation
 	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
 		Application.getBean(FieldLanguagesValuesDaoImpl.class)
 			.delete(getModelObject(), WebSession.getUserId());
-		// FIXME reload
+		target.add(panel.listContainer);
 	}
 
 }
