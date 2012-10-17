@@ -31,7 +31,6 @@ import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
-import org.apache.openmeetings.web.util.AjaxDownload;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressBar;
@@ -41,6 +40,8 @@ import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
+import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.red5.logging.Red5LoggerFactory;
@@ -93,12 +94,8 @@ public class BackupPanel extends AdminPanel {
 			setMaxSize(Bytes.bytes(ImportHelper.getMaxUploadSize(Application
 					.getBean(ConfigurationDaoImpl.class))));
 
-			// Add a component to download a file without page refresh
-			final AjaxDownload download = new AjaxDownload();
-			add(download);
-
 			// add an download button
-			add(new AjaxButton("ajax-backup-download-button", this) {
+			add(new AjaxButton("download", this) {
 				private static final long serialVersionUID = 839803820502260006L;
 
 				@Override
@@ -110,8 +107,7 @@ public class BackupPanel extends AdminPanel {
 							+ CalendarPatterns.getTimeForStreamId(new Date());
 
 					File backup_dir = new File(working_dir, dateString);
-					String requestedFile = dateString + ".zip";
-					File backupFile = new File(backup_dir, requestedFile);
+					File backupFile = new File(backup_dir, dateString + ".zip");
 
 					try {
 						Application.getBean(BackupExport.class).performExport(
@@ -120,12 +116,11 @@ public class BackupPanel extends AdminPanel {
 								includeFilesInBackup.getConvertedInput()
 										.booleanValue());
 
-						download.setFileName(backupFile.getName());
-						download.setResourceStream(new FileResourceStream(
-					            new org.apache.wicket.util.file.File(backupFile)));
-
-						download.initiate(target);
-
+						ResourceStreamRequestHandler handler
+							= new ResourceStreamRequestHandler(new FileResourceStream(backupFile), backupFile.getName());
+						handler.setContentDisposition(ContentDisposition.ATTACHMENT);
+					
+						getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
 					} catch (Exception e) {
 						log.error("Exception on panel backup download ", e);
 						uploadFeedback.error(e);
@@ -144,7 +139,7 @@ public class BackupPanel extends AdminPanel {
 			});
 
 			// add an upload button
-			add(new AjaxButton("ajax-backup-upload-button", this) {
+			add(new AjaxButton("upload", this) {
 				private static final long serialVersionUID = 839803820502260006L;
 
 				@Override

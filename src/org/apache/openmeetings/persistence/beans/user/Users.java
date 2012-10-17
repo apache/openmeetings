@@ -126,7 +126,7 @@ public class Users implements Serializable, OmEntity {
 	@Basic(fetch = FetchType.LAZY)
 	@Column(name = "password")
 	@LoadFetchGroup("backupexport")
-	@Element(name = "pass", data = true)
+	@Element(name = "pass", data = true, required = false)
 	private String password;
 
 	@Column(name = "regdate")
