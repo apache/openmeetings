@@ -31,6 +31,7 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.OmDAO;
 import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
 import org.apache.openmeetings.persistence.beans.basic.Server;
+import org.apache.openmeetings.utils.DaoHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ServerDaoImpl implements OmDAO<Server> {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			ServerDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
+	public final static String[] searchFields = {"name", "address", "comment"};
 
 	@PersistenceContext
 	private EntityManager em;
@@ -82,8 +84,10 @@ public class ServerDaoImpl implements OmDAO<Server> {
 	}
 	
 	public List<Server> get(String search, int start, int count) {
-		// TODO Auto-generated method stub
-		return null;
+		TypedQuery<Server> q = em.createQuery(DaoHelper.getSearchQuery("Server", "s", search, true, false, searchFields), Server.class);
+		q.setFirstResult(start);
+		q.setMaxResults(count);
+		return q.getResultList();
 	}
 	
 	/*
@@ -99,8 +103,8 @@ public class ServerDaoImpl implements OmDAO<Server> {
 	}
 
 	public long count(String search) {
-		// TODO Auto-generated method stub
-		return 0;
+		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Server", "s", search, true, true, searchFields), Long.class);
+		return q.getSingleResult();
 	}
 	
 	/*
