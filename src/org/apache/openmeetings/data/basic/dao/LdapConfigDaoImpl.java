@@ -35,6 +35,7 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.OmDAO;
 import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
+import org.apache.openmeetings.utils.DaoHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,9 +50,9 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 public class LdapConfigDaoImpl implements OmDAO<LdapConfig> {
-
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			LdapConfigDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
+	public final static String[] searchFields = {"name", "configFileName", "domain", "comment"};
 
 	@PersistenceContext
 	private EntityManager em;
@@ -289,8 +290,10 @@ public class LdapConfigDaoImpl implements OmDAO<LdapConfig> {
 	}
 
 	public List<LdapConfig> get(String search, int start, int count) {
-		// TODO Auto-generated method stub
-		return null;
+		TypedQuery<LdapConfig> q = em.createQuery(DaoHelper.getSearchQuery("LdapConfig", "lc", search, true, false, searchFields), LdapConfig.class);
+		q.setFirstResult(start);
+		q.setMaxResults(count);
+		return q.getResultList();
 	}
 	
 	public long count() {
@@ -298,8 +301,8 @@ public class LdapConfigDaoImpl implements OmDAO<LdapConfig> {
 	}
 
 	public long count(String search) {
-		// TODO Auto-generated method stub
-		return 0;
+		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("LdapConfig", "lc", search, true, true, searchFields), Long.class);
+		return q.getSingleResult();
 	}
 	
 	public void update(LdapConfig entity, long userId) {
