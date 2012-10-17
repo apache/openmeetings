@@ -38,7 +38,6 @@ import org.apache.wicket.markup.repeater.Item;
  * 
  */
 public class ConfigsPanel extends AdminPanel {
-
 	private static final long serialVersionUID = -1L;
 	private ConfigForm form;
 	

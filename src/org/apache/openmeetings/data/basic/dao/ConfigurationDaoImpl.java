@@ -36,6 +36,7 @@ import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.utils.DaoHelper;
 import org.apache.openmeetings.utils.mappings.CastMapToObject;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -54,11 +55,10 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 public class ConfigurationDaoImpl implements OmDAO<Configuration> {
-
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			ConfigurationDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
-
 	public static final String DEFAULT_APP_NAME = "OpenMeetings";
+	public final static String[] searchFields = {"conf_key", "conf_value"};
 
 	@PersistenceContext
 	private EntityManager em;
@@ -352,8 +352,10 @@ public class ConfigurationDaoImpl implements OmDAO<Configuration> {
 	}
 
 	public List<Configuration> get(String search, int start, int count) {
-		// TODO Auto-generated method stub
-		return null;
+		TypedQuery<Configuration> q = em.createQuery(DaoHelper.getSearchQuery("Configuration", "c", search, true, false, searchFields), Configuration.class);
+		q.setFirstResult(start);
+		q.setMaxResults(count);
+		return q.getResultList();
 	}
 	
 	public long count() {
@@ -361,8 +363,8 @@ public class ConfigurationDaoImpl implements OmDAO<Configuration> {
 	}
 
 	public long count(String search) {
-		// TODO Auto-generated method stub
-		return 0;
+		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Configuration", "c", search, true, true, searchFields), Long.class);
+		return q.getSingleResult();
 	}
 	
 	public void update(Configuration entity, long userId) {

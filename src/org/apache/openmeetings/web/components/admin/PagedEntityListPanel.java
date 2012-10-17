@@ -67,6 +67,7 @@ public abstract class PagedEntityListPanel extends AdminPanel {
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				target.add(f);
 				PagedEntityListPanel.this.onEvent(target);
 			}
 		});
