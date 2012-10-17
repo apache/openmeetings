@@ -31,11 +31,13 @@ import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.apache.openmeetings.sip.api.impl.asterisk.AsteriskDbSipClient;
 import org.apache.openmeetings.sip.api.request.SIPCreateConferenceRequest;
 import org.apache.openmeetings.sip.api.result.SipCreateConferenceRequestResult;
+import org.apache.openmeetings.utils.DaoHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class RoomDAO implements OmDAO<Rooms> {
+	public final static String[] searchFields = {"name"};
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
@@ -58,8 +60,10 @@ public class RoomDAO implements OmDAO<Rooms> {
 	}
 
 	public List<Rooms> get(String search, int start, int count) {
-		// TODO Auto-generated method stub
-		return null;
+		TypedQuery<Rooms> q = em.createQuery(DaoHelper.getSearchQuery("Rooms", "r", search, true, false, searchFields), Rooms.class);
+		q.setFirstResult(start);
+		q.setMaxResults(count);
+		return q.getResultList();
 	}
 
 	public long count() {
@@ -68,8 +72,8 @@ public class RoomDAO implements OmDAO<Rooms> {
 	}
 
 	public long count(String search) {
-		// TODO Auto-generated method stub
-		return 0;
+		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Rooms", "r", search, true, true, searchFields), Long.class);
+		return q.getSingleResult();
 	}
 
 	public void update(Rooms entity, long userId) {
