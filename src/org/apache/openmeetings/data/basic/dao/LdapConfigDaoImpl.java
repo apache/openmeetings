@@ -280,22 +280,28 @@ public class LdapConfigDaoImpl implements OmDAO<LdapConfig> {
 		return null;
 	}
 
-	public List<LdapConfig> getNondeletedLdapConfig(int first, int count) {
+	public List<LdapConfig> get(int start, int count) {
 		TypedQuery<LdapConfig> q = em.createNamedQuery(
 				"getNondeletedLdapConfigs", LdapConfig.class);
-		q.setFirstResult(first);
+		q.setFirstResult(start);
 		q.setMaxResults(count);
 		return q.getResultList();
 	}
 
-	public List<LdapConfig> get(int start, int count) {
-		return getNondeletedLdapConfig(start, count);
+	public List<LdapConfig> get(String search, int start, int count) {
+		// TODO Auto-generated method stub
+		return null;
 	}
-
+	
 	public long count() {
 		return selectMaxFromLdapConfig();
 	}
 
+	public long count(String search) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
 	public void update(LdapConfig entity, long userId) {
 		try {
 			if (entity.getLdapConfigId() <= 0) {

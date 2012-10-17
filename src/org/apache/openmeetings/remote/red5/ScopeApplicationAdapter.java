@@ -37,11 +37,11 @@ import org.apache.openmeetings.data.basic.Sessionmanagement;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.data.calendar.daos.MeetingMemberDaoImpl;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
+import org.apache.openmeetings.data.conference.RoomDAO;
 import org.apache.openmeetings.data.conference.Roommanagement;
 import org.apache.openmeetings.data.logs.ConferenceLogDaoImpl;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
-import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
 import org.apache.openmeetings.persistence.beans.rooms.RoomClient;
@@ -97,6 +97,8 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	@Autowired
 	private UsersDaoImpl usersDao;
 	@Autowired
+	private RoomDAO roomDao;
+	@Autowired
 	private MeetingMemberDaoImpl meetingMemberDao;
 
 	public static String lineSeperator = System.getProperty("line.separator");
@@ -120,12 +122,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 			// Only load this Class one time
 			// Initially this value might by empty, because the DB is empty yet
-			Configuration conf = configurationDaoImpl
-					.getConfKey("crypt_ClassName");
-			if (conf != null) {
-				ScopeApplicationAdapter.configKeyCryptClassName = conf
-						.getConf_value();
-			}
+			getCryptKey();
 
 			// init your handler here
 
@@ -1247,8 +1244,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				return 2L;
 			} else {
 				// No moderator in this room at the moment
-				Rooms room = roommanagement.getRoomById(currentClient
-						.getRoom_id());
+				Rooms room = roomDao.get(currentClient.getRoom_id());
 
 				if (room.getIsModeratedRoom()) {
 					return 3L;
@@ -1358,7 +1354,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		try {
 
 			// appointed meeting or moderated Room?
-			Rooms room = roommanagement.getRoomById(room_id);
+			Rooms room = roomDao.get(room_id);
 
 			// not really - default logic
 			if (room.getAppointment() == null || room.getAppointment() == false) {
@@ -1461,7 +1457,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			this.clientListManager.updateClientByStreamId(streamid,
 					currentClient);
 
-            Rooms room = roommanagement.getRoomById(room_id);
+            Rooms room = roomDao.get(room_id);
             if (room.getShowMicrophoneStatus()) {
             	currentClient.setCanGiveAudio(true);
             }
@@ -2897,13 +2893,10 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		try {
 
 			if (ScopeApplicationAdapter.configKeyCryptClassName == null) {
-				Configuration conf = configurationDaoImpl
-						.getConfKey(
-						"crypt_ClassName");
+				String cryptClass = configurationDaoImpl.getConfValue("crypt_ClassName", String.class, null);
 
-				if (conf != null) {
-					ScopeApplicationAdapter.configKeyCryptClassName = conf
-							.getConf_value();
+				if (cryptClass != null) {
+					ScopeApplicationAdapter.configKeyCryptClassName = cryptClass;
 				}
 			}
 
@@ -2915,13 +2908,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	}
 
     public String getExclusiveAudioKeyCode() {
-		Configuration conf = configurationDaoImpl
-				.getConfKey("exclusive.audio.keycode");
-        if (null != conf) {
-            return conf.getConf_value();
-        } else {
-            return null;
-        }
+		return configurationDaoImpl.getConfValue("exclusive.audio.keycode", String.class, null);
     }
 
 	public synchronized IScope getRoomScope(String room) {
@@ -2973,7 +2960,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
         IConnection current = Red5.getConnectionLocal();
         String streamid = current.getClient().getId();
         RoomClient currentClient = this.clientListManager.getClientByStreamId(streamid);
-        Rooms rooms = roommanagement.getRoomById(currentClient.getRoom_id());
+        Rooms rooms = roomDao.get(currentClient.getRoom_id());
         log.debug("asterisk -rx \"originate Local/" + number + "@rooms extension " + rooms.getSipNumber() + "@rooms\"");
         try {
             Runtime.getRuntime().exec(new String[]{"asterisk", "-rx", "originate Local/" + number + "@rooms extension " + rooms.getSipNumber() + "@rooms"});
@@ -2983,7 +2970,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
     }
 
     public synchronized String getSipNumber(Long room_id) {
-        Rooms rooms = roommanagement.getRoomById(room_id);
+        Rooms rooms = roomDao.get(room_id);
         if(rooms != null) {
             log.debug("getSipNumber: room_id: {}, sipNumber: {}", new Object[]{room_id, rooms.getSipNumber()});
             return rooms.getSipNumber();

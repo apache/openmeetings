@@ -178,6 +178,7 @@
 	<bean id="appointmentCategoryDaoImpl"
 		class="org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDaoImpl" />
 	<bean id="roommanagement" class="org.apache.openmeetings.data.conference.Roommanagement" />
+	<bean id="roomDAO" class="org.apache.openmeetings.data.conference.RoomDAO" />
 	<bean id="organisationmanagement" class="org.apache.openmeetings.data.user.Organisationmanagement" />
 	<bean id="organisationDAO" class="org.apache.openmeetings.data.user.dao.OrganisationDAO" />
 	<bean id="organisationUserDAO" class="org.apache.openmeetings.data.user.dao.OrganisationUserDAO" />

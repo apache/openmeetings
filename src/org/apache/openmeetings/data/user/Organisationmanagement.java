@@ -451,7 +451,7 @@ public class Organisationmanagement {
 			List<Organisation_Users> l = u.getOrganisation_users();
 			l.add(orgUser);
 			u.setOrganisation_users(l);
-			usersDao.updateUser(u);
+			usersDao.update(u, 1L);
 			
 			return orgUser.getOrganisation_users_id();
 		} catch (Exception ex2) {
@@ -497,7 +497,7 @@ public class Organisationmanagement {
 					}
 				}
 				u.setOrganisation_users(l);
-				usersDao.updateUser(u);
+				usersDao.update(u, 1L);
 
 				return id;
 			} else {

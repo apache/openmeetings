@@ -114,7 +114,7 @@ public class GenerateImage {
 		Users us = usersDao.get(users_id);
 		us.setUpdatetime(new java.util.Date());
 		us.setPictureuri(pictureuri);
-		usersDao.updateUser(us);
+		usersDao.update(us, users_id);
 
 		//FIXME: After uploading a new picture all other clients should refresh
 		//scopeApplicationAdapter.updateUserSessionObject(users_id, pictureuri);

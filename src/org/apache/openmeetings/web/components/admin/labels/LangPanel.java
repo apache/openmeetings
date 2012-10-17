@@ -27,6 +27,7 @@ import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.persistence.beans.lang.Fieldvalues;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
+import org.apache.openmeetings.web.components.admin.OmDataView;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.OmDataProvider;
 import org.apache.wicket.AttributeModifier;
@@ -62,7 +63,7 @@ public class LangPanel extends AdminPanel {
 		form.showNewRecord();
 		add(form);
 
-		final DataView<Fieldvalues> dataView = new DataView<Fieldvalues>(
+		final OmDataView<Fieldvalues> dataView = new OmDataView<Fieldvalues>(
 				"langList", new OmDataProvider<Fieldvalues>(
 						FieldValueDaoImpl.class) {
 					private static final long serialVersionUID = -6822789354860988626L;

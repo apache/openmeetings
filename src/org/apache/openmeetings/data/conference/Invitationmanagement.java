@@ -83,7 +83,7 @@ public class Invitationmanagement {
 	@Autowired
 	private ManageCryptStyle manageCryptStyle;
 	@Autowired
-	private Roommanagement roommanagement;
+	private RoomDAO roomDao;
 	@Autowired
 	private UsersDaoImpl usersDao;
 	@Autowired
@@ -180,7 +180,7 @@ public class Invitationmanagement {
 				invitation.setInvitedBy(us);
 				invitation.setInvitedname(username);
 				invitation.setInvitedEMail(email);
-				invitation.setRoom(roommanagement.getRoomById(rooms_id));
+				invitation.setRoom(roomDao.get(rooms_id));
 				invitation.setConferencedomain(conferencedomain);
 				invitation.setStarttime(new Date());
 				invitation.setAppointmentId(appointmentId);
@@ -569,7 +569,7 @@ public class Invitationmanagement {
 				invitation.setBaseUrl(baseurl);
 				invitation.setInvitedname(username);
 				invitation.setInvitedEMail(email);
-				invitation.setRoom(roommanagement.getRoomById(rooms_id));
+				invitation.setRoom(roomDao.get(rooms_id));
 				invitation.setConferencedomain(conferencedomain);
 				invitation.setStarttime(new Date());
 				invitation.setAppointmentId(appointmentId);

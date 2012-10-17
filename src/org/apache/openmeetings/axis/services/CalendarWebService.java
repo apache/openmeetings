@@ -37,6 +37,7 @@ import org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDaoImpl;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDaoImpl;
 import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDaoImpl;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
+import org.apache.openmeetings.data.conference.RoomDAO;
 import org.apache.openmeetings.data.conference.Roommanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.data.user.dao.UserContactsDaoImpl;
@@ -74,6 +75,8 @@ public class CalendarWebService {
 	private Usermanagement userManagement;
 	@Autowired
 	private Roommanagement roommanagement;
+	@Autowired
+	private RoomDAO roomDao;
 	@Autowired
 	private AuthLevelmanagement authLevelManagement;
 	@Autowired
@@ -476,7 +479,7 @@ public class CalendarWebService {
 				room.setName(appointmentName);
 				room.setRoomtype(rt);
 
-				roommanagement.updateRoomObject(room);
+				roomDao.update(room, users_id);
 			}
 
 			Users user = userManagement.getUserById(users_id);

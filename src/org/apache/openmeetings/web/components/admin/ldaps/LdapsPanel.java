@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.components.admin.ldaps;
 import org.apache.openmeetings.data.basic.dao.LdapConfigDaoImpl;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
+import org.apache.openmeetings.web.components.admin.OmDataView;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.OmDataProvider;
 import org.apache.wicket.AttributeModifier;
@@ -29,7 +30,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.markup.repeater.data.DataView;
 
 /**
  * {@link AdminPanel} to list and modify {@link LdapConfig}
@@ -44,7 +44,7 @@ public class LdapsPanel extends AdminPanel {
 	
 	public LdapsPanel(String id) {
 		super(id);
-		DataView<LdapConfig> dataView = new DataView<LdapConfig>("ldapList"
+		OmDataView<LdapConfig> dataView = new OmDataView<LdapConfig>("ldapList"
 			, new OmDataProvider<LdapConfig>(LdapConfigDaoImpl.class)) {
 			private static final long serialVersionUID = 8715559628755439596L;
 

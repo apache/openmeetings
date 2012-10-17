@@ -298,7 +298,7 @@ public class UploadController extends AbstractUploadController {
 				Users us = usersDao.get(userId);
 				us.setUpdatetime(new java.util.Date());
 				us.setPictureuri(pictureuri);
-				usersDao.updateUser(us);
+				usersDao.update(us, userId);
 
 				//FIXME: After updating the picture url all other users should refresh
 			} else {

@@ -328,14 +328,6 @@ public class ConfigurationDaoImpl implements OmDAO<Configuration> {
 		return appName;
 	}
 
-	public List<Configuration> getNondeletedConfiguration(int first, int count) {
-		TypedQuery<Configuration> q = em.createNamedQuery(
-				"getNondeletedConfiguration", Configuration.class);
-		q.setFirstResult(first);
-		q.setMaxResults(count);
-		return q.getResultList();
-	}
-
 	public Configuration get(long id) {
 		try {
 			if (id <= 0) {
@@ -352,13 +344,27 @@ public class ConfigurationDaoImpl implements OmDAO<Configuration> {
 	}
 
 	public List<Configuration> get(int start, int count) {
-		return getNondeletedConfiguration(start, count);
+		TypedQuery<Configuration> q = em.createNamedQuery(
+				"getNondeletedConfiguration", Configuration.class);
+		q.setFirstResult(start);
+		q.setMaxResults(count);
+		return q.getResultList();
 	}
 
+	public List<Configuration> get(String search, int start, int count) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	public long count() {
 		return selectMaxFromConfigurations();
 	}
 
+	public long count(String search) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
 	public void update(Configuration entity, long userId) {
 		if (entity.getConfiguration_id() == null
 				|| entity.getConfiguration_id() <= 0) {

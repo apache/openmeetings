@@ -59,6 +59,16 @@ public class FieldValueDaoImpl implements OmDAO<Fieldvalues> {
 				Long.class, "1"), start, count);
 	}
 
+	public List<Fieldvalues> get(String search, int start, int count) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public List<Fieldvalues> get(Long language_id, String search, int start, int count) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	public List<Fieldvalues> get(Long language_id, int start, int count) {
 		TypedQuery<Fieldvalues> q = em.createNamedQuery("getFieldByLanguage", Fieldvalues.class);
 		//q.setParameter("lang", language_id); //FIXME commented for now
@@ -83,6 +93,11 @@ public class FieldValueDaoImpl implements OmDAO<Fieldvalues> {
 		return q.getSingleResult();
 	}
 
+	public long count(String search) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
 	public void update(Fieldvalues entity, long userId) {
 		entity.setDeleted(false);
 		if (entity.getFieldvalues_id() == null) {

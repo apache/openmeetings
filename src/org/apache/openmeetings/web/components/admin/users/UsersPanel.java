@@ -23,6 +23,7 @@ import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
+import org.apache.openmeetings.web.components.admin.OmDataView;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.OmDataProvider;
 import org.apache.wicket.AttributeModifier;
@@ -31,7 +32,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.markup.repeater.data.DataView;
 
 public class UsersPanel extends AdminPanel {
 
@@ -42,7 +42,7 @@ public class UsersPanel extends AdminPanel {
 	public UsersPanel(String id) {
 		super(id);
 
-		DataView<Users> dataView = new DataView<Users>("userList",
+		OmDataView<Users> dataView = new OmDataView<Users>("userList",
 				new OmDataProvider<Users>(UsersDaoImpl.class)) {
 			private static final long serialVersionUID = 8715559628755439596L;
 

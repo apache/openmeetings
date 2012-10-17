@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.components.admin.groups;
 import org.apache.openmeetings.data.user.dao.OrganisationDAO;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
+import org.apache.openmeetings.web.components.admin.OmDataView;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.OmDataProvider;
 import org.apache.wicket.AttributeModifier;
@@ -65,7 +66,7 @@ public class GroupsPanel extends AdminPanel {
 		};
         add(form.add(addUsersBtn.setOutputMarkupId(true)));
 
-		DataView<Organisation> dataView = new DataView<Organisation>("groupList", new OmDataProvider<Organisation>(OrganisationDAO.class)) {
+        OmDataView<Organisation> dataView = new OmDataView<Organisation>("groupList", new OmDataProvider<Organisation>(OrganisationDAO.class)) {
 			private static final long serialVersionUID = 8715559628755439596L;
 
 			@Override

@@ -34,41 +34,58 @@ public interface OmDAO<T extends OmEntity> {
 	/**
 	 * Get an instance of an {@link T}
 	 * 
-	 * @param id
-	 * @return
+	 * @param id - id of instance to retrieve
+	 * @return instance with the id gived
 	 */
-	public T get(long id);
+	T get(long id);
 
 	/**
 	 * Get a list of instances of {@link T}
 	 * 
-	 * @param start
-	 * @param count
-	 * @return
+	 * @param start - the start to range to retrieve
+	 * @param count - maximum instance count to retrieve
+	 * @return list of instances in the range specified
 	 */
-	public List<T> get(int start, int count);
+	List<T> get(int start, int count);
+
+	/**
+	 * Get a list of instances of {@link T}
+	 * 
+	 * @param search - string search criteria to filter entities
+	 * @param start - the start to range to retrieve
+	 * @param count - maximum instance count to retrieve
+	 * @return list of instances in the range specified
+	 */
+	List<T> get(String search, int start, int count);
 
 	/**
 	 * Count the number of instances of {@link T}
 	 * 
-	 * @return
+	 * @return count of instances
 	 */
-	public long count();
+	long count();
+
+	/**
+	 * Count the number of instances of {@link T}
+	 * 
+	 * @param search - string search criteria to filter entities
+	 * @return count of instances satisfying given search criteria
+	 */
+	long count(String search);
 
 	/**
 	 * Update an instance of {@link T}
 	 * 
-	 * @param entity
-	 * @param userId
+	 * @param entity - entity to be updated
+	 * @param userId - user performed update
 	 */
-	public void update(T entity, long userId);
+	void update(T entity, long userId);
 
 	/**
 	 * Delete an instance of {@link T}
 	 * 
-	 * @param entity
-	 * @param userId
+	 * @param entity - entity to be deleted
+	 * @param userId - user performed delete
 	 */
-	public void delete(T entity, long userId);
-
+	void delete(T entity, long userId);
 }

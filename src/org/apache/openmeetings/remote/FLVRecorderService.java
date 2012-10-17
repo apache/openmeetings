@@ -29,7 +29,7 @@ import java.util.Set;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
-import org.apache.openmeetings.data.conference.Roommanagement;
+import org.apache.openmeetings.data.conference.RoomDAO;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingDaoImpl;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingLogDaoImpl;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDaoImpl;
@@ -88,7 +88,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	@Autowired
 	private UsersDaoImpl usersDaoImpl;
 	@Autowired
-	private Roommanagement roommanagement;
+	private RoomDAO roomDao;
 	@Autowired
 	private FlvRecorderConverterTask flvRecorderConverterTask;
 	@Autowired
@@ -717,8 +717,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 				}
 
 				if (flvRecording.getRoom_id() != null) {
-					flvRecording.setRoom(this.roommanagement
-							.getRoomById(flvRecording.getRoom_id()));
+					flvRecording.setRoom(roomDao.get(flvRecording.getRoom_id()));
 				}
 
 				flvRecording.setFlvRecordingLog(this.flvRecordingLogDaoImpl

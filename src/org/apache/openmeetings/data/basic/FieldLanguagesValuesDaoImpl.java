@@ -56,6 +56,16 @@ public class FieldLanguagesValuesDaoImpl implements OmDAO<Fieldlanguagesvalues> 
 				Long.class, "1"), first, count);
 	}
 
+	public List<Fieldlanguagesvalues> get(String search, int start, int count) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public List<Fieldlanguagesvalues> get(Long language_id, String search, int start, int count) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	/**
 	 * Advanced query to set the language id
 	 * 
@@ -115,6 +125,11 @@ public class FieldLanguagesValuesDaoImpl implements OmDAO<Fieldlanguagesvalues> 
 		return q.getSingleResult();
 	}
 
+	public long count(String search) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 

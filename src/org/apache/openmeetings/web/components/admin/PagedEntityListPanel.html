@@ -24,6 +24,9 @@
 		<form wicket:id="pagingForm">
 			<select wicket:id="entitiesPerPage"></select>
 			<span wicket:id="navigator">[dataview navigator]</span>
+			<form wicket:id="searchForm" style="display: inline-block;">
+				<input type="text" wicket:id="searchText" wicket:ommessage="title:714"/><input type="submit" wicket:id="search" wicket:ommessage="value:715"/>
+			</form>
 		</form>
 	</wicket:panel>
 </html>

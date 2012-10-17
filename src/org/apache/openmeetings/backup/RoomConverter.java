@@ -20,21 +20,21 @@ package org.apache.openmeetings.backup;
 
 import java.util.Map;
 
-import org.apache.openmeetings.data.conference.Roommanagement;
+import org.apache.openmeetings.data.conference.RoomDAO;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
 public class RoomConverter extends OmConverter<Rooms> {
-	private Roommanagement roommanagement;
+	private RoomDAO roomDao;
 	private Map<Long, Long> idMap;
 	
 	public RoomConverter() {
 		//default constructor is for export
 	}
 	
-	public RoomConverter(Roommanagement roommanagement, Map<Long, Long> idMap) {
-		this.roommanagement = roommanagement;
+	public RoomConverter(RoomDAO roomDao, Map<Long, Long> idMap) {
+		this.roomDao = roomDao;
 		this.idMap = idMap;
 	}
 	
@@ -42,7 +42,7 @@ public class RoomConverter extends OmConverter<Rooms> {
 		long oldOrgId = getlongValue(node);
 		long newId = idMap.containsKey(oldOrgId) ? idMap.get(oldOrgId) : oldOrgId;
 
-		return roommanagement.getRoomById(newId);
+		return roomDao.get(newId);
 	}
 
 	public void write(OutputNode node, Rooms value) throws Exception {

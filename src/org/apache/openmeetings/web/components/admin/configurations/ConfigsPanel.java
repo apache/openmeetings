@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.components.admin.configurations;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
+import org.apache.openmeetings.web.components.admin.OmDataView;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.OmDataProvider;
 import org.apache.wicket.AttributeModifier;
@@ -29,7 +30,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.markup.repeater.data.DataView;
 
 /**
  * add/update/delete {@link Configuration}
@@ -45,7 +45,7 @@ public class ConfigsPanel extends AdminPanel {
 	public ConfigsPanel(String id) {
 		super(id);
 		
-		DataView<Configuration> dataView = new DataView<Configuration>("configList"
+		OmDataView<Configuration> dataView = new OmDataView<Configuration>("configList"
 			, new OmDataProvider<Configuration>(ConfigurationDaoImpl.class)) {
 			private static final long serialVersionUID = 8715559628755439596L;
 

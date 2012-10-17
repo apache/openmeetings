@@ -18,23 +18,18 @@
  */
 package org.apache.openmeetings.web.components.admin.rooms;
 
-import java.util.Iterator;
-
-import org.apache.openmeetings.data.conference.Roommanagement;
+import org.apache.openmeetings.data.conference.RoomDAO;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
+import org.apache.openmeetings.web.components.admin.OmDataView;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
+import org.apache.openmeetings.web.data.OmDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.markup.repeater.data.DataView;
-import org.apache.wicket.markup.repeater.data.IDataProvider;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
 
 public class RoomsPanel extends AdminPanel {
 
@@ -43,26 +38,7 @@ public class RoomsPanel extends AdminPanel {
 	
 	public RoomsPanel(String id) {
 		super(id);
-		DataView<Rooms> dataView = new DataView<Rooms>("roomList", new IDataProvider<Rooms>(){
-			private static final long serialVersionUID = -1L;
-
-			public void detach() {
-				//empty
-			}
-
-			public Iterator<? extends Rooms> iterator(long first, long count) {
-				return Application.getBean(Roommanagement.class).getNondeletedRooms((int)first, (int)count).iterator();
-			}
-
-			public long size() {
-				return Application.getBean(Roommanagement.class).selectMaxFromRooms("");
-			}
-
-			public IModel<Rooms> model(Rooms object) {
-				return new CompoundPropertyModel<Rooms>(object);
-			}
-			
-		}) {
+		OmDataView<Rooms> dataView = new OmDataView<Rooms>("roomList", new OmDataProvider<Rooms>(RoomDAO.class)) {
 			private static final long serialVersionUID = 8715559628755439596L;
 
 			@Override

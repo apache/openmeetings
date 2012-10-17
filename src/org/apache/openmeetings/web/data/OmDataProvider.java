@@ -30,6 +30,7 @@ import org.apache.wicket.model.IModel;
 public class OmDataProvider<T extends OmEntity> implements IDataProvider<T> {
 	private static final long serialVersionUID = 4325721185888905204L;
 	protected Class<? extends OmDAO<T>> clazz;
+	private String search = null;
 	
 	public OmDataProvider(Class<? extends OmDAO<T>> c) {
 		this.clazz = c;
@@ -40,15 +41,30 @@ public class OmDataProvider<T extends OmEntity> implements IDataProvider<T> {
 	}
 
 	public Iterator<? extends T> iterator(long first, long count) {
-		return Application.getBean(clazz).get((int)first, (int)count).iterator();
+		return (search == null
+			? Application.getBean(clazz).get((int)first, (int)count)
+			: Application.getBean(clazz).get(search, (int)first, (int)count)).iterator();
 	}
 
 	public long size() {
-		return Application.getBean(clazz).count();
+		return search == null
+				? Application.getBean(clazz).count()
+				: Application.getBean(clazz).count(search);
 	}
 
 	public IModel<T> model(T object) {
 		return new CompoundPropertyModel<T>(object);
 	}
 
+	public void setSearch(String search) {
+		if (search != null && !search.trim().isEmpty()) {
+			this.search = search.trim();
+		} else {
+			this.search = null;
+		}
+	}
+	
+	public String getSearch() {
+		return search;
+	}
 }

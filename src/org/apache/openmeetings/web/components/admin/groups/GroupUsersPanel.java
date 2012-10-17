@@ -25,6 +25,7 @@ import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.ConfirmCallListener;
+import org.apache.openmeetings.web.components.admin.OmDataView;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.OmDataProvider;
 import org.apache.wicket.AttributeModifier;
@@ -51,7 +52,7 @@ public class GroupUsersPanel extends Panel {
 		this.organisationId = orgId;
 		setOutputMarkupId(true);
 		
-		DataView<Organisation_Users> dataView = new DataView<Organisation_Users>("userList", new OmDataProvider<Organisation_Users>(OrganisationUserDAO.class){
+		OmDataView<Organisation_Users> dataView = new OmDataView<Organisation_Users>("userList", new OmDataProvider<Organisation_Users>(OrganisationUserDAO.class){
 			private static final long serialVersionUID = 1L;
 
 			public long size() {

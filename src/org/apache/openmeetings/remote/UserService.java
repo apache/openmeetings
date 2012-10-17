@@ -38,6 +38,7 @@ import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDaoImpl;
 import org.apache.openmeetings.data.calendar.daos.MeetingMemberDaoImpl;
 import org.apache.openmeetings.data.conference.Invitationmanagement;
+import org.apache.openmeetings.data.conference.RoomDAO;
 import org.apache.openmeetings.data.conference.Roommanagement;
 import org.apache.openmeetings.data.user.Organisationmanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
@@ -104,6 +105,8 @@ public class UserService {
 	private ManageCryptStyle manageCryptStyle;
 	@Autowired
 	private Roommanagement roommanagement;
+	@Autowired
+	private RoomDAO roomDao;
 	@Autowired
 	private MeetingMemberDaoImpl meetingMemberDao;
 	@Autowired
@@ -1023,7 +1026,7 @@ public class UserService {
 							false, // chatModerated
 							from.getServer());
 
-					room = roommanagement.getRoomById(room_id);
+					room = roomDao.get(room_id);
 
 					String sendJNameTimeZone = from.getOmTimeZone().getJname();
 

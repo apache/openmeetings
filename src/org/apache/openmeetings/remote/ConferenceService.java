@@ -33,6 +33,7 @@ import org.apache.openmeetings.data.basic.Sessionmanagement;
 import org.apache.openmeetings.data.basic.dao.ServerDaoImpl;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
+import org.apache.openmeetings.data.conference.RoomDAO;
 import org.apache.openmeetings.data.conference.Roommanagement;
 import org.apache.openmeetings.data.conference.dao.RoomModeratorsDaoImpl;
 import org.apache.openmeetings.data.user.Usermanagement;
@@ -70,6 +71,8 @@ public class ConferenceService {
 	private Usermanagement userManagement;
 	@Autowired
 	private Roommanagement roommanagement;
+	@Autowired
+	private RoomDAO roomDao;
 	@Autowired
 	private RoomModeratorsDaoImpl roomModeratorsDao;
 	@Autowired
@@ -283,7 +286,7 @@ public class ConferenceService {
 	public Appointment getAppointMentDataForRoom(Long room_id) {
 		log.debug("getAppointMentDataForRoom");
 
-		Rooms room = roommanagement.getRoomById(room_id);
+		Rooms room = roomDao.get(room_id);
 
 		if (room.getAppointment() == false)
 			return null;
@@ -313,7 +316,7 @@ public class ConferenceService {
 			RoomClient currentClient = this.clientListManager
 					.getClientByStreamId(streamid);
 	
-			Rooms room = roommanagement.getRoomById(room_id);
+			Rooms room = roomDao.get(room_id);
 	
 			if (room.getAppointment() == false) {
 				throw new IllegalStateException("Room has no appointment");
@@ -370,7 +373,7 @@ public class ConferenceService {
 					Appointment ment = points.get(i);
 
 					Long rooms_id = ment.getRoom().getRooms_id();
-					Rooms rooom = roommanagement.getRoomById(rooms_id);
+					Rooms rooom = roomDao.get(rooms_id);
 
 					if (!rooom.getRoomtype().getRoomtypes_id()
 							.equals(room_types_id))
@@ -409,7 +412,7 @@ public class ConferenceService {
 						Appointment ment = appointments.get(i);
 
 						Long rooms_id = ment.getRoom().getRooms_id();
-						Rooms rooom = roommanagement.getRoomById(rooms_id);
+						Rooms rooom = roomDao.get(rooms_id);
 
 						rooom.setCurrentusers(this
 								.getRoomClientsListByRoomId(rooom.getRooms_id()));
@@ -697,9 +700,9 @@ public class ConferenceService {
 			}
 			if (roomId > -1 && serverId > -1) {
 				try {
-					Rooms room = roommanagement.getRoomById(roomId);
+					Rooms room = roomDao.get(roomId);
 					room.setServer(serverDao.get(serverId));
-					roommanagement.updateRoomObject(room);
+					roomDao.update(room, users_id);
 				} catch (Exception e) {
 					log.error("Error while setting server.");
 				}
@@ -753,7 +756,7 @@ public class ConferenceService {
 	 */
 	public boolean isRoomFull(Long room_id) {
 		try {
-			Rooms room = roommanagement.getRoomById(room_id);
+			Rooms room = roomDao.get(room_id);
 			
 			if (room.getNumberOfPartizipants() <= this.clientListManager
 					.getClientListByRoom(room_id).size()) {

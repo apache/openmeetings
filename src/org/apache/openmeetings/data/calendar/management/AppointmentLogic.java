@@ -29,6 +29,7 @@ import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDaoImpl;
 import org.apache.openmeetings.data.calendar.daos.MeetingMemberDaoImpl;
 import org.apache.openmeetings.data.conference.Invitationmanagement;
+import org.apache.openmeetings.data.conference.RoomDAO;
 import org.apache.openmeetings.data.conference.Roommanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
@@ -61,6 +62,8 @@ public class AppointmentLogic {
 	private OmTimeZoneDaoImpl omTimeZoneDaoImpl;
 	@Autowired
 	private Roommanagement roommanagement;
+	@Autowired
+	private RoomDAO roomDao;
 	@Autowired
 	private Invitationmanagement invitationManagement;
 	@Autowired
@@ -104,7 +107,7 @@ public class AppointmentLogic {
 	public Appointment getAppointmentByRoom(Long room_id) throws Exception {
 		log.debug("getAppointmentByRoom");
 
-		Rooms room = roommanagement.getRoomById(room_id);
+		Rooms room = roomDao.get(room_id);
 
 		if (room == null)
 			throw new Exception("Room does not exist in database!");
@@ -193,7 +196,7 @@ public class AppointmentLogic {
 			log.debug("Appointmentlogic.saveAppointment : Room - " + room_id);
 			log.debug("Appointmentlogic.saveAppointment : Reminder - " + remind);
 	
-			Rooms room = roommanagement.getRoomById(room_id);
+			Rooms room = roomDao.get(room_id);
 
 			// Re-factor the given time ignoring the Date is always UTC!
 			TimeZone timezone = timezoneUtil.getTimezoneByUser(user);
@@ -361,7 +364,7 @@ public class AppointmentLogic {
 			// Deleting Room
 			boolean isAppRoom = room.getAppointment();
 			if (isAppRoom) {
-				roommanagement.deleteRoom(room);
+				roomDao.delete(room, users_id);
 			}
 
 			return appointmentId;

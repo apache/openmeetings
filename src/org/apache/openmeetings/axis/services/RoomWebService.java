@@ -34,6 +34,7 @@ import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDaoImpl;
 import org.apache.openmeetings.data.calendar.management.MeetingMemberLogic;
 import org.apache.openmeetings.data.conference.Invitationmanagement;
+import org.apache.openmeetings.data.conference.RoomDAO;
 import org.apache.openmeetings.data.conference.Roommanagement;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingDaoImpl;
 import org.apache.openmeetings.data.user.Usermanagement;
@@ -86,6 +87,8 @@ public class RoomWebService {
 	private ClientListManager clientListManager;
 	@Autowired
 	private MeetingMemberLogic meetingMemberLogic;
+	@Autowired
+	private RoomDAO roomDao;
 
 	/**
 	 * Returns an Object of Type RoomsList which contains a list of
@@ -2234,7 +2237,7 @@ public class RoomWebService {
 													// isMonthly, isYearly,
 						1L, // categoryId
 						reminderTypeId, // 1=none, 2=simple mail, 3=ICAL
-						roommanagement.getRoomById(rooms_id), 1L, // language_id
+						roomDao.get(rooms_id), 1L, // language_id
 						isPasswordProtected, // isPasswordProtected
 						password, // password
 						false, us.getOmTimeZone().getJname());

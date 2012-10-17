@@ -81,6 +81,11 @@ public class ServerDaoImpl implements OmDAO<Server> {
 		return q.getResultList();
 	}
 	
+	public List<Server> get(String search, int start, int count) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -93,6 +98,11 @@ public class ServerDaoImpl implements OmDAO<Server> {
 		return q.getSingleResult();
 	}
 
+	public long count(String search) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 

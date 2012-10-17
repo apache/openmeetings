@@ -55,11 +55,21 @@ public class OrganisationDAO implements OmDAO<Organisation> {
 		return q.getResultList();
 	}
 
+	public List<Organisation> get(String search, int start, int count) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	public long count() {
 		TypedQuery<Long> q = em.createNamedQuery("countOrganisations", Long.class);
 		return q.getSingleResult();
 	}
 
+	public long count(String search) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
 	public void update(Organisation entity, long userId) {
 		if (entity.getOrganisation_id() == null) {
 			entity.setInsertedby(userId);

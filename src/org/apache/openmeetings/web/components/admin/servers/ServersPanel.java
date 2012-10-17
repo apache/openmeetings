@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.components.admin.servers;
 import org.apache.openmeetings.data.basic.dao.ServerDaoImpl;
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
+import org.apache.openmeetings.web.components.admin.OmDataView;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.OmDataProvider;
 import org.apache.wicket.AttributeModifier;
@@ -29,7 +30,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.markup.repeater.data.DataView;
 
 /**
  * Form component with list and form to manipulate {@link Server}
@@ -44,7 +44,7 @@ public class ServersPanel extends AdminPanel {
 	
 	public ServersPanel(String id) {
 		super(id);
-		DataView<Server> dataView = new DataView<Server>("serverList",
+		OmDataView<Server> dataView = new OmDataView<Server>("serverList",
 				new OmDataProvider<Server>(ServerDaoImpl.class)) {
 			private static final long serialVersionUID = 8715559628755439596L;
 

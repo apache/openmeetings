@@ -38,7 +38,6 @@ import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.conference.dao.RoomModeratorsDaoImpl;
 import org.apache.openmeetings.data.user.Organisationmanagement;
 import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
-import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.rooms.RoomTypes;
@@ -86,6 +85,8 @@ public class Roommanagement {
 	private ClientListManager clientListManager;
     @Autowired
 	private ConfigurationDaoImpl configurationDaoImpl;
+    @Autowired
+	private RoomDAO roomDao;
 
 	/**
 	 * add a new Record to the table roomtypes
@@ -101,33 +102,6 @@ public class Roommanagement {
 			rtype.setDeleted(deleted);
 			rtype = em.merge(rtype);
 			long returnId = rtype.getRoomtypes_id();
-			return returnId;
-		} catch (Exception ex2) {
-			log.error("[addRoomType] ", ex2);
-		}
-		return null;
-	}
-
-	public Long addRoom(Rooms room) {
-		try {
-            /* Red5SIP integration *******************************************************************************/
-			Configuration conf = configurationDaoImpl
-					.getConfKey("red5sip.enable");
-            if(conf != null && conf.getConf_value().equals("yes")) {
-                if(room.getSipNumber() != null && !room.getSipNumber().isEmpty()) {
-                    asteriskDbSipClient.createSIPConference(new SIPCreateConferenceRequest(room.getSipNumber()));
-                } else {
-                    SipCreateConferenceRequestResult requestResult = asteriskDbSipClient.createSIPConference(new SIPCreateConferenceRequest());
-                    if(!requestResult.hasError()) {
-                        room.setSipNumber(requestResult.getConferenceNumber());
-                        room.setConferencePin(requestResult.getConferencePin());
-                    }
-                }
-            }
-            /*****************************************************************************************************/
-			room.setStarttime(new Date());
-			room = em.merge(room);
-			long returnId = room.getRooms_id();
 			return returnId;
 		} catch (Exception ex2) {
 			log.error("[addRoomType] ", ex2);
@@ -184,7 +158,7 @@ public class Roommanagement {
 	public Rooms getRoomById(long user_level, long rooms_id) {
 		try {
 			if (authLevelManagement.checkUserLevel(user_level)) {
-				return this.getRoomById(rooms_id);
+				return roomDao.get(rooms_id);
 			} else
 				log.error("getRoombyId : Userlevel" + user_level
 						+ " not allowed");
@@ -197,7 +171,7 @@ public class Roommanagement {
 	public Rooms getRoomWithCurrentUsersById(long user_level, long rooms_id) {
 		try {
 			if (authLevelManagement.checkUserLevel(user_level)) {
-				Rooms room = this.getRoomById(rooms_id);
+				Rooms room = roomDao.get(rooms_id);
 
 				if (room != null) {
 					room.setCurrentusers(clientListManager.getClientListByRoom(room.getRooms_id()));
@@ -207,42 +181,6 @@ public class Roommanagement {
 			}
 		} catch (Exception ex2) {
 			log.error("[getRoomWithCurrentUsersById] ", ex2);
-		}
-		return null;
-	}
-
-	/**
-	 * Get a Rooms-Object or NULL
-	 * 
-	 * @param rooms_id
-	 * @return Rooms-Object or NULL
-	 */
-	public Rooms getRoomById(long rooms_id) {
-		log.debug("getRoombyId : " + rooms_id);
-		try {
-
-			if (rooms_id == 0) {
-				return null;
-			}
-
-			String hql = "select c from Rooms as c where c.rooms_id = :rooms_id AND c.deleted <> :deleted";
-			Rooms room = null;
-
-			TypedQuery<Rooms> query = em.createQuery(hql, Rooms.class);
-			query.setParameter("rooms_id", rooms_id);
-			query.setParameter("deleted", true);
-			List<Rooms> ll = query.getResultList();
-			if (ll.size() > 0) {
-				room = ll.get(0);
-			}
-
-			if (room != null) {
-				return room;
-			} else {
-				log.info("Could not find room " + rooms_id);
-			}
-		} catch (Exception ex2) {
-			log.error("[getRoomById] ", ex2);
 		}
 		return null;
 	}
@@ -310,13 +248,6 @@ public class Roommanagement {
 		return null;
 	}
 	
-	public List<Rooms> getNondeletedRooms(int first, int count) {
-		TypedQuery<Rooms> q = em.createNamedQuery("getNondeletedRooms", Rooms.class);
-		q.setFirstResult(first);
-		q.setMaxResults(count);
-		return q.getResultList();
-	}
-
 	public SearchResult<Rooms> getRoomsWithCurrentUsers(long user_level, int start,
 			int max, String orderby, boolean asc) {
 		try {
@@ -710,9 +641,9 @@ public class Roommanagement {
      * @return number of participants
      */
     public Integer getSipConferenceMembersNumber(Long rooms_id) {
-		Configuration conf = configurationDaoImpl.getConfKey("red5sip.enable");
-        if(conf != null && conf.getConf_value().equals("yes")) {
-            Rooms rooms = this.getRoomById(rooms_id);
+		String sipEnabled = configurationDaoImpl.getConfValue("red5sip.enable", String.class, "no");
+        if("yes".equals(sipEnabled)) {
+            Rooms rooms = roomDao.get(rooms_id);
             if(rooms != null) {
                 return asteriskDbSipClient.getConferenceMembersNumber(rooms.getSipNumber());
             } else {
@@ -800,9 +731,8 @@ public class Roommanagement {
 				}
 
                 /* Red5SIP integration *******************************************************************************/
-				Configuration conf = configurationDaoImpl
-						.getConfKey("red5sip.enable");
-                if(conf != null && conf.getConf_value().equals("yes")) {
+				String sipEnabled = configurationDaoImpl.getConfValue("red5sip.enable", String.class, "no");
+                if("yes".equals(sipEnabled)) {
                     SipCreateConferenceRequestResult requestResult = asteriskDbSipClient
                             .createSIPConference(new SIPCreateConferenceRequest(sipNumber));
 
@@ -965,7 +895,7 @@ public class Roommanagement {
 		try {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
 				Rooms_Organisation rOrganisation = new Rooms_Organisation();
-				rOrganisation.setRoom(this.getRoomById(rooms_id));
+				rOrganisation.setRoom(roomDao.get(rooms_id));
 				log.debug("addRoomToOrganisation rooms '"
 						+ rOrganisation.getRoom().getName() + "'");
 				rOrganisation.setStarttime(new Date());
@@ -1287,7 +1217,7 @@ public class Roommanagement {
 
 				if (this.checkUserOrgRoom(user_id, rooms_id)) {
 
-					Rooms r = this.getRoomById(rooms_id);
+					Rooms r = roomDao.get(rooms_id);
 					r.setComment(comment);
 					r.setIspublic(ispublic);
 					r.setName(name);
@@ -1371,7 +1301,7 @@ public class Roommanagement {
 		try {
 			log.debug("*** updateRoom numberOfPartizipants: "
 					+ numberOfPartizipants);
-			Rooms r = this.getRoomById(rooms_id);
+			Rooms r = roomDao.get(rooms_id);
 			r.setComment(comment);
 
 			r.setIspublic(ispublic);
@@ -1443,7 +1373,7 @@ public class Roommanagement {
 			log.debug("*** updateRoom numberOfPartizipants: "
 					+ numberOfPartizipants);
 			if (authLevelManagement.checkModLevel(user_level)) {
-				Rooms r = this.getRoomById(rooms_id);
+				Rooms r = roomDao.get(rooms_id);
 				r.setComment(comment);
 
 				r.setIspublic(ispublic);
@@ -1554,34 +1484,11 @@ public class Roommanagement {
 		try {
 			if (authLevelManagement.checkWebServiceLevel(user_level)) {
 				this.deleteAllRoomsOrganisationOfRoom(rooms_id);
-				return this.deleteRoom(this.getRoomById(rooms_id));
+				roomDao.delete(roomDao.get(rooms_id), 1L);
+				return rooms_id;
 			}
 		} catch (Exception ex2) {
 			log.error("[deleteRoomById] ", ex2);
-		}
-		return null;
-	}
-
-	/**
-	 * deletes a Room by given Room-Object
-	 * 
-	 * @param r
-	 */
-	public Long deleteRoom(Rooms r) {
-		log.debug("deleteRoom");
-		try {
-			r.setDeleted(true);
-			r.setUpdatetime(new Date());
-			if (r.getRooms_id() == null) {
-				em.persist(r);
-			} else {
-				if (!em.contains(r)) {
-					em.merge(r);
-				}
-			}
-			return r.getRooms_id();
-		} catch (Exception ex2) {
-			log.error("[deleteRoomsOrganisation] ", ex2);
 		}
 		return null;
 	}
@@ -1675,36 +1582,16 @@ public class Roommanagement {
 		return null;
 	}
 
-	/**
-	 * Update Room Object
-	 */
-	// --------------------------------------------------------------------------------------------
-	public void updateRoomObject(Rooms room) {
-		log.debug("updateRoomObject " + room.getIsClosed());
-
-		try {
-			if (room.getRooms_id() == null) {
-				em.persist(room);
-			} else {
-				if (!em.contains(room)) {
-					em.merge(room);
-				}
-			}
-		} catch (Exception e) {
-			log.error("Error updateRoomObject : ", e);
-		}
-	}
-
 	// --------------------------------------------------------------------------------------------
 
 	public void closeRoom(Long rooms_id, Boolean status) {
 		try {
 
-			Rooms room = this.getRoomById(rooms_id);
+			Rooms room = roomDao.get(rooms_id);
 
 			room.setIsClosed(status);
 
-			this.updateRoomObject(room);
+			roomDao.update(room, 1L);
 
 		} catch (Exception e) {
 			log.error("Error updateRoomObject : ", e);
@@ -1779,7 +1666,7 @@ public class Roommanagement {
 						);
 
 				if (rooms_id != null) {
-					return this.getRoomById(rooms_id);
+					return roomDao.get(rooms_id);
 				}
 			}
 		} catch (Exception ex2) {

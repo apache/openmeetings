@@ -26,10 +26,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.openjpa.persistence.OpenJPAPersistence;
@@ -40,6 +36,7 @@ import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
 import org.apache.openmeetings.persistence.beans.adresses.Adresses;
 import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.utils.DaoHelper;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -108,9 +105,50 @@ public class UsersDaoImpl implements OmDAO<Users> {
 	 * @see org.apache.openmeetings.data.OmDAO#get(int, int)
 	 */
 	public List<Users> get(int first, int count) {
-		return getNondeletedUsers(first, count);
+		TypedQuery<Users> q = em.createNamedQuery("getNondeletedUsers",
+				Users.class);
+		q.setFirstResult(first);
+		q.setMaxResults(count);
+		return q.getResultList();
 	}
 
+	public List<Users> get(String search, int start, int count) {
+		//FIXME copy/paste
+		StringBuilder sb = new StringBuilder("SELECT u FROM Users u WHERE u.deleted = false ");
+		StringBuilder where = DaoHelper.getWhereClause(search, "u", "lastname", "firstname", "login", "adresses.email");
+		if (where.length() > 0) {
+			sb.append("AND ").append(where);
+		}
+		TypedQuery<Users> q = em.createQuery(sb.toString(), Users.class);
+		q.setFirstResult(start);
+		q.setMaxResults(count);
+		return q.getResultList();
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.openmeetings.data.OmDAO#count()
+	 */
+	public long count() {
+		// get all users
+		TypedQuery<Long> q = em.createQuery(
+				"select count(u) from Users u where u.deleted = false",
+				Long.class);
+		return q.getSingleResult();
+	}
+
+	public long count(String search) {
+		//FIXME copy/paste
+		StringBuilder sb = new StringBuilder("SELECT COUNT(u) FROM Users u WHERE u.deleted = false ");
+		StringBuilder where = DaoHelper.getWhereClause(search, "u", "lastname", "firstname", "login", "adresses.email");
+		if (where.length() > 0) {
+			sb.append("AND ").append(where);
+		}
+		TypedQuery<Long> q = em.createQuery(sb.toString(), Long.class);
+		return q.getSingleResult();
+	}
+	
 	// FIXME need to be generalized with other copy/pasted methods
 	public List<Users> get(String search) {
 		String[] searchItems = search.split(" ");
@@ -150,7 +188,13 @@ public class UsersDaoImpl implements OmDAO<Users> {
 	 * .beans.OmEntity, long)
 	 */
 	public void update(Users u, long userId) {
-		updateUser(u);
+		if (u.getUser_id() == null) {
+			u.setStarttime(new Date());
+			em.persist(u);
+		} else {
+			u.setUpdatetime(new Date());
+			u =	em.merge(u);
+		}
 	}
 
 	/*
@@ -192,22 +236,6 @@ public class UsersDaoImpl implements OmDAO<Users> {
 		return null;
 	}
 
-	public void updateUser(Users user) {
-		try {
-			if (user.getUser_id() == null) {
-				user.setStarttime(new Date());
-				em.persist(user);
-			} else {
-				user.setUpdatetime(new Date());
-				if (!em.contains(user)) {
-					em.merge(user);
-				}
-			}
-		} catch (Exception ex2) {
-			log.error("[updateUser] ", ex2);
-		}
-	}
-
 	public Long deleteUserID(long userId) {
 		try {
 			if (userId != 0) {
@@ -234,40 +262,10 @@ public class UsersDaoImpl implements OmDAO<Users> {
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.openmeetings.data.OmDAO#count()
-	 */
-	public long count() {
-		// get all users
-		TypedQuery<Long> query = em.createQuery(
-				"select count(c.user_id) from Users c where c.deleted = false",
-				Long.class);
-		List<Long> ll = query.getResultList();
-		return ll.get(0);
-	}
-
-	public List<Users> getNondeletedUsers(int first, int count) {
-		TypedQuery<Users> q = em.createNamedQuery("getNondeletedUsers",
-				Users.class);
-		q.setFirstResult(first);
-		q.setMaxResults(count);
-		return q.getResultList();
-	}
-
 	public List<Users> getAllUsers() {
 		try {
-			// get all non-deleted users
-			CriteriaBuilder cb = em.getCriteriaBuilder();
-			CriteriaQuery<Users> cq = cb.createQuery(Users.class);
-			Root<Users> c = cq.from(Users.class);
-			Predicate condition = cb.equal(c.get("deleted"), false);
-			cq.where(condition);
-			TypedQuery<Users> q = em.createQuery(cq);
-			List<Users> ll = q.getResultList();
-
-			return ll;
+			TypedQuery<Users> q = em.createNamedQuery("getNondeletedUsers", Users.class);
+			return q.getResultList();
 		} catch (Exception ex2) {
 			log.error("[getAllUsers] ", ex2);
 		}
@@ -432,7 +430,7 @@ public class UsersDaoImpl implements OmDAO<Users> {
 				us.setPassword(manageCryptStyle.getInstanceOfCrypt()
 						.createPassPhrase(pass));
 				us.setResethash("");
-				updateUser(us);
+				update(us, 1L);
 				return new Long(-8);
 			} else {
 				return u;

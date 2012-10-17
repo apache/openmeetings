@@ -49,11 +49,10 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getNondeletedRooms", query = "SELECT u FROM Rooms u "
-			+ "WHERE u.deleted = false"),
-	@NamedQuery(name = "getBackupRooms", query = "SELECT c FROM Rooms c "
-			+ "LEFT JOIN FETCH c.moderators "
-			+ "WHERE c.deleted <> true ")
+	@NamedQuery(name = "getNondeletedRooms", query = "SELECT r FROM Rooms r WHERE r.deleted = false")
+	, @NamedQuery(name = "getRoomById", query = "SELECT r FROM Rooms r WHERE r.deleted = false AND r.rooms_id = :id")
+	, @NamedQuery(name = "countRooms", query = "SELECT COUNT(r) FROM Rooms r WHERE r.deleted = false")
+	, @NamedQuery(name = "getBackupRooms", query = "SELECT r FROM Rooms r LEFT JOIN FETCH r.moderators WHERE r.deleted = false ")
 })
 @Table(name = "rooms")
 @Root(name = "room")

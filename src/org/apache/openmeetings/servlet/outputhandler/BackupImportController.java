@@ -66,6 +66,7 @@ import org.apache.openmeetings.data.calendar.daos.AppointmentDaoImpl;
 import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDaoImpl;
 import org.apache.openmeetings.data.calendar.daos.MeetingMemberDaoImpl;
 import org.apache.openmeetings.data.conference.PollManagement;
+import org.apache.openmeetings.data.conference.RoomDAO;
 import org.apache.openmeetings.data.conference.Roommanagement;
 import org.apache.openmeetings.data.conference.dao.RoomModeratorsDaoImpl;
 import org.apache.openmeetings.data.file.dao.FileExplorerItemDaoImpl;
@@ -145,6 +146,8 @@ public class BackupImportController extends AbstractUploadController {
 	private Organisationmanagement organisationmanagement;
 	@Autowired
 	private Roommanagement roommanagement;
+	@Autowired
+	private RoomDAO roomDao;
 	@Autowired
 	private AppointmentCategoryDaoImpl appointmentCategoryDaoImpl;
 	@Autowired
@@ -325,8 +328,8 @@ public class BackupImportController extends AbstractUploadController {
 				// otherwise
 				r.setRooms_id(null);
 
-				Long newRoomId = roommanagement.addRoom(r);
-				roomsMap.put(roomId, newRoomId);
+				roomDao.update(r, 1L);
+				roomsMap.put(roomId, r.getRooms_id());
 				
 				for (RoomModerators rm : r.getModerators()) {
 					roomModeratorsDao.addRoomModeratorByObj(rm);
@@ -349,7 +352,7 @@ public class BackupImportController extends AbstractUploadController {
 			Serializer serializer = new Persister(strategy);
 	
 			registry.bind(Organisation.class, new OrganisationConverter(organisationmanagement, organisationsMap));
-			registry.bind(Rooms.class, new RoomConverter(roommanagement, roomsMap));
+			registry.bind(Rooms.class, new RoomConverter(roomDao, roomsMap));
 			
 			List<Rooms_Organisation> list = readList(serializer, f, "rooms_organisation.xml", "room_organisations", Rooms_Organisation.class);
 			for (Rooms_Organisation ro : list) {
@@ -371,7 +374,7 @@ public class BackupImportController extends AbstractUploadController {
 			registry.bind(AppointmentCategory.class, new AppointmentCategoryConverter(appointmentCategoryDaoImpl));
 			registry.bind(Users.class, new UserConverter(userManagement, usersMap));
 			registry.bind(AppointmentReminderTyps.class, new AppointmentReminderTypeConverter(appointmentReminderTypDaoImpl));
-			registry.bind(Rooms.class, new RoomConverter(roommanagement, roomsMap));
+			registry.bind(Rooms.class, new RoomConverter(roomDao, roomsMap));
 			registry.bind(Date.class, DateConverter.class);
 			
 			List<Appointment> list = readList(serializer, f, "appointements.xml", "appointments", Appointment.class);
@@ -498,7 +501,7 @@ public class BackupImportController extends AbstractUploadController {
 			Serializer serializer = new Persister(strategy);
 	
 			registry.bind(Users.class, new UserConverter(userManagement, usersMap));
-			registry.bind(Rooms.class, new RoomConverter(roommanagement, roomsMap));
+			registry.bind(Rooms.class, new RoomConverter(roomDao, roomsMap));
 			registry.bind(Date.class, DateConverter.class);
 			
 			List<PrivateMessages> list = readList(serializer, f, "privateMessages.xml", "privatemessages", PrivateMessages.class, true);
@@ -545,7 +548,7 @@ public class BackupImportController extends AbstractUploadController {
 			Serializer serializer = new Persister(strategy);
 	
 			registry.bind(Users.class, new UserConverter(userManagement, usersMap));
-			registry.bind(Rooms.class, new RoomConverter(roommanagement, roomsMap));
+			registry.bind(Rooms.class, new RoomConverter(roomDao, roomsMap));
 			registry.bind(PollType.class, new PollTypeConverter(pollManagement));
 			registry.bind(Date.class, DateConverter.class);
 			

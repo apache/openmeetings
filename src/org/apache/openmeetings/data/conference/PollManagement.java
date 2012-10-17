@@ -50,7 +50,7 @@ public class PollManagement {
 	@Autowired
 	private Usermanagement usermanagement;
 	@Autowired
-	private Roommanagement roommanagement;
+	private RoomDAO roomDao;
 
 	public Long addPollType(Long labelId, Boolean isNumeric) {
 		log.debug("Adding poll type: " + labelId + ", " + isNumeric);
@@ -82,7 +82,7 @@ public class PollManagement {
 		roomP.setPollName(pollName);
 		roomP.setPollQuestion(pollQuestion);
 		roomP.setPollType(getPollType(pollTypeId));
-		roomP.setRoom(roommanagement.getRoomById(rc.getRoom_id()));
+		roomP.setRoom(roomDao.get(rc.getRoom_id()));
 		
 		em.persist(roomP);
 		return roomP;
