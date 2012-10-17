@@ -62,6 +62,7 @@ import org.apache.openmeetings.remote.red5.ClientListManager;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.sip.xmlrpc.OpenXGHttpClient;
 import org.apache.openmeetings.templates.ResetPasswordTemplate;
+import org.apache.openmeetings.utils.DaoHelper;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.apache.openmeetings.utils.mail.MailHandler;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
@@ -169,34 +170,10 @@ public class Usermanagement {
 		try {
 			SearchResult<Users> sresult = new SearchResult<Users>();
 			sresult.setObjectName(Users.class.getName());
-			sresult.setRecords(usersDao.getAllUserMax(search));
+			sresult.setRecords(usersDao.count(search));
 
-			String[] searchItems = search.split(" ");
-
-			log.debug("getUserContactsBySearch: " + search);
-			// log.debug("getUserContactsBySearch: "+ userId);
-
-			String hql = "select u from  Users u "
-					+ "WHERE u.deleted = false ";
-
-			hql += "AND ( ";
-			for (int i = 0; i < searchItems.length; i++) {
-				if (i != 0) {
-					hql += " OR ";
-				}
-				hql += "( " + "lower(u.lastname) LIKE '"
-						+ StringUtils.lowerCase("%" + searchItems[i] + "%")
-						+ "' " + "OR lower(u.firstname) LIKE '"
-						+ StringUtils.lowerCase("%" + searchItems[i] + "%")
-						+ "' " + "OR lower(u.login) LIKE '"
-						+ StringUtils.lowerCase("%" + searchItems[i] + "%")
-						+ "' " + "OR lower(u.adresses.email) LIKE '"
-						+ StringUtils.lowerCase("%" + searchItems[i] + "%")
-						+ "' " + ") ";
-
-			}
-
-			hql += " ) ";
+			String hql = DaoHelper.getSearchQuery("Users", "u", search, true, false, UsersDaoImpl.searchFields);
+			hql += " ";
 			if (orderby != null && orderby.length() > 0) {
 				hql += "ORDER BY " + orderby;
 			}
@@ -1486,10 +1463,7 @@ public class Usermanagement {
 
 		String email = us.getAdresses().getEmail();
 
-		Long default_lang_id = Long.valueOf(
-				configurationDaoImpl.getConfKey("default_lang_id")
-						.getConf_value())
-				.longValue();
+		Long default_lang_id = configurationDaoImpl.getConfValue("default_lang_id", Long.class, "1");
 
 		String template = resetPasswordTemplate.getResetPasswordTemplate(
 				reset_link, default_lang_id);

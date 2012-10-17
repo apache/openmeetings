@@ -79,6 +79,7 @@ import org.simpleframework.xml.Root;
 				+ "SET u.password = :password " //
 				+ "WHERE u.user_id = :userId"), //
 		@NamedQuery(name = "getNondeletedUsers", query = "SELECT u FROM Users u WHERE u.deleted = false"),
+		@NamedQuery(name = "countNondeletedUsers", query = "SELECT COUNT(u) FROM Users u WHERE u.deleted = false"),
 		@NamedQuery(name = "getUsersByOrganisationId", query = "SELECT u FROM Users u WHERE u.deleted = false AND u.organisation_users.organisation.organisation_id = :organisation_id") })
 @Table(name = "users")
 @Root(name = "user")

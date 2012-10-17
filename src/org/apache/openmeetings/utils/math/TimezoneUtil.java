@@ -25,7 +25,6 @@ import java.util.TimeZone;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
-import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.red5.logging.Red5LoggerFactory;
@@ -64,20 +63,15 @@ public class TimezoneUtil {
 
 		// if user has not time zone get one from the server configuration
 
-		Configuration conf = configurationDaoImpl.getConfKey("default.timezone");
+		String defaultTzName = configurationDaoImpl.getConfValue("default.timezone", String.class, "Europe/Berlin");
 
-		if (conf != null) {
+		OmTimeZone omTimeZone = omTimeZoneDaoImpl.getOmTimeZone(defaultTzName);
 
-			OmTimeZone omTimeZone = omTimeZoneDaoImpl.getOmTimeZone(conf
-					.getConf_value());
+		TimeZone timeZoneByOmTimeZone = TimeZone.getTimeZone(omTimeZone
+				.getIcal());
 
-			TimeZone timeZoneByOmTimeZone = TimeZone.getTimeZone(omTimeZone
-					.getIcal());
-
-			if (timeZoneByOmTimeZone != null) {
-				return timeZoneByOmTimeZone;
-			}
-
+		if (timeZoneByOmTimeZone != null) {
+			return timeZoneByOmTimeZone;
 		}
 
 		// If everything fails take the servers default one
@@ -108,20 +102,15 @@ public class TimezoneUtil {
 
 		// if user has not time zone get one from the server configuration
 
-		Configuration conf = configurationDaoImpl.getConfKey("default.timezone");
+		String defaultTzName = configurationDaoImpl.getConfValue("default.timezone", String.class, "Europe/Berlin");
 
-		if (conf != null) {
+		OmTimeZone omTimeZoneDefault = omTimeZoneDaoImpl.getOmTimeZone(defaultTzName);
 
-			OmTimeZone omTimeZoneDefault = omTimeZoneDaoImpl.getOmTimeZone(conf
-					.getConf_value());
+		TimeZone timeZoneByOmTimeZone = TimeZone
+				.getTimeZone(omTimeZoneDefault.getIcal());
 
-			TimeZone timeZoneByOmTimeZone = TimeZone
-					.getTimeZone(omTimeZoneDefault.getIcal());
-
-			if (timeZoneByOmTimeZone != null) {
-				return timeZoneByOmTimeZone;
-			}
-
+		if (timeZoneByOmTimeZone != null) {
+			return timeZoneByOmTimeZone;
 		}
 
 		// If everything fails take the servers default one
@@ -148,20 +137,15 @@ public class TimezoneUtil {
 
 		// if user has not time zone get one from the server configuration
 
-		Configuration conf = configurationDaoImpl.getConfKey("default.timezone");
+		String defaultTzName = configurationDaoImpl.getConfValue("default.timezone", String.class, "Europe/Berlin");
 
-		if (conf != null) {
+		OmTimeZone omTimeZoneDefault = omTimeZoneDaoImpl.getOmTimeZone(defaultTzName);
 
-			OmTimeZone omTimeZoneDefault = omTimeZoneDaoImpl.getOmTimeZone(conf
-					.getConf_value());
+		TimeZone timeZoneByOmTimeZone = TimeZone
+				.getTimeZone(omTimeZoneDefault.getIcal());
 
-			TimeZone timeZoneByOmTimeZone = TimeZone
-					.getTimeZone(omTimeZoneDefault.getIcal());
-
-			if (timeZoneByOmTimeZone != null) {
-				return timeZoneByOmTimeZone;
-			}
-
+		if (timeZoneByOmTimeZone != null) {
+			return timeZoneByOmTimeZone;
 		}
 
 		// If everything fails take the servers default one

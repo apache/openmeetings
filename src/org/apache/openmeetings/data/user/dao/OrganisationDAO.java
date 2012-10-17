@@ -28,10 +28,12 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.data.OmDAO;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
+import org.apache.openmeetings.utils.DaoHelper;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class OrganisationDAO implements OmDAO<Organisation> {
+	public final static String[] searchFields = {"name"};
 	@PersistenceContext
 	private EntityManager em;
 
@@ -56,8 +58,10 @@ public class OrganisationDAO implements OmDAO<Organisation> {
 	}
 
 	public List<Organisation> get(String search, int start, int count) {
-		// TODO Auto-generated method stub
-		return null;
+		TypedQuery<Organisation> q = em.createQuery(DaoHelper.getSearchQuery("Organisation", "o", search, true, false, searchFields), Organisation.class);
+		q.setFirstResult(start);
+		q.setMaxResults(count);
+		return q.getResultList();
 	}
 	
 	public long count() {
@@ -66,8 +70,8 @@ public class OrganisationDAO implements OmDAO<Organisation> {
 	}
 
 	public long count(String search) {
-		// TODO Auto-generated method stub
-		return 0;
+		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Organisation", "o", search, true, true, searchFields), Long.class);
+		return q.getSingleResult();
 	}
 	
 	public void update(Organisation entity, long userId) {

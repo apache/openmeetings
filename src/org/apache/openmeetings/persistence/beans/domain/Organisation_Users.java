@@ -34,6 +34,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.openmeetings.persistence.beans.OmEntity;
+import org.apache.openmeetings.persistence.beans.user.Users;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -64,6 +65,10 @@ public class Organisation_Users implements Serializable, OmEntity {
 	@Column(name = "user_id")
 	private Long user_id;
 
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "user_id", insertable = true, updatable = true)
+	private Users user;
+	
 	@Column(name = "starttime")
 	private Date starttime;
 	
@@ -172,5 +177,13 @@ public class Organisation_Users implements Serializable, OmEntity {
 			return false;
 		}
 		return true;
+	}
+
+	public Users getUser() {
+		return user;
+	}
+
+	public void setUser(Users user) {
+		this.user = user;
 	}
 }

@@ -30,7 +30,7 @@ import org.apache.wicket.model.IModel;
 public class OmDataProvider<T extends OmEntity> implements IDataProvider<T> {
 	private static final long serialVersionUID = 4325721185888905204L;
 	protected Class<? extends OmDAO<T>> clazz;
-	private String search = null;
+	protected String search = null;
 	
 	public OmDataProvider(Class<? extends OmDAO<T>> c) {
 		this.clazz = c;

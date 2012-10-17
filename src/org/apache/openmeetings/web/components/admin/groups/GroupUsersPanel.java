@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.components.admin.groups;
 
 import org.apache.openmeetings.data.user.dao.OrganisationUserDAO;
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.web.app.Application;
@@ -36,7 +35,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
 
 public class GroupUsersPanel extends Panel {
@@ -56,11 +54,15 @@ public class GroupUsersPanel extends Panel {
 			private static final long serialVersionUID = 1L;
 
 			public long size() {
-				return Application.getBean(OrganisationUserDAO.class).count(organisationId);
+				return search == null
+						? Application.getBean(OrganisationUserDAO.class).count(organisationId)
+						: Application.getBean(OrganisationUserDAO.class).count(organisationId, search);
 			}
 			
 			public java.util.Iterator<? extends Organisation_Users> iterator(long first, long count) {
-				return Application.getBean(OrganisationUserDAO.class).get(organisationId, (int)first, (int)count).iterator();
+				return (search == null
+						? Application.getBean(OrganisationUserDAO.class).get(organisationId, (int)first, (int)count)
+						: Application.getBean(OrganisationUserDAO.class).get(organisationId, search, (int)first, (int)count)).iterator();
 			}
 		}) {
 			private static final long serialVersionUID = 8715559628755439596L;
@@ -68,8 +70,8 @@ public class GroupUsersPanel extends Panel {
 			@Override
 			protected void populateItem(Item<Organisation_Users> item) {
 				final Organisation_Users orgUser = item.getModelObject();
-				if (orgUser.getUser_id() != null) {
-					Users u = Application.getBean(UsersDaoImpl.class).get(orgUser.getUser_id());
+				Users u = orgUser.getUser();
+				if (u != null) {
 					item.add(new Label("label", Model.of(getUser(u))));
 				} else {
 					item.add(new Label("label", Model.of("")));

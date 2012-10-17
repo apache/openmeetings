@@ -55,6 +55,8 @@ public class UsersDaoImpl implements OmDAO<Users> {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			UsersDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
 
+	public final static String[] searchFields = {"lastname", "firstname", "login", "adresses.email"};
+
 	@PersistenceContext
 	private EntityManager em;
 
@@ -105,21 +107,14 @@ public class UsersDaoImpl implements OmDAO<Users> {
 	 * @see org.apache.openmeetings.data.OmDAO#get(int, int)
 	 */
 	public List<Users> get(int first, int count) {
-		TypedQuery<Users> q = em.createNamedQuery("getNondeletedUsers",
-				Users.class);
+		TypedQuery<Users> q = em.createNamedQuery("getNondeletedUsers", Users.class);
 		q.setFirstResult(first);
 		q.setMaxResults(count);
 		return q.getResultList();
 	}
 
 	public List<Users> get(String search, int start, int count) {
-		//FIXME copy/paste
-		StringBuilder sb = new StringBuilder("SELECT u FROM Users u WHERE u.deleted = false ");
-		StringBuilder where = DaoHelper.getWhereClause(search, "u", "lastname", "firstname", "login", "adresses.email");
-		if (where.length() > 0) {
-			sb.append("AND ").append(where);
-		}
-		TypedQuery<Users> q = em.createQuery(sb.toString(), Users.class);
+		TypedQuery<Users> q = em.createQuery(DaoHelper.getSearchQuery("Users", "u", search, true, false, searchFields), Users.class);
 		q.setFirstResult(start);
 		q.setMaxResults(count);
 		return q.getResultList();
@@ -132,51 +127,17 @@ public class UsersDaoImpl implements OmDAO<Users> {
 	 */
 	public long count() {
 		// get all users
-		TypedQuery<Long> q = em.createQuery(
-				"select count(u) from Users u where u.deleted = false",
-				Long.class);
+		TypedQuery<Long> q = em.createNamedQuery("countNondeletedUsers", Long.class);
 		return q.getSingleResult();
 	}
 
 	public long count(String search) {
-		//FIXME copy/paste
-		StringBuilder sb = new StringBuilder("SELECT COUNT(u) FROM Users u WHERE u.deleted = false ");
-		StringBuilder where = DaoHelper.getWhereClause(search, "u", "lastname", "firstname", "login", "adresses.email");
-		if (where.length() > 0) {
-			sb.append("AND ").append(where);
-		}
-		TypedQuery<Long> q = em.createQuery(sb.toString(), Long.class);
+		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Users", "u", search, true, true, searchFields), Long.class);
 		return q.getSingleResult();
 	}
 	
-	// FIXME need to be generalized with other copy/pasted methods
 	public List<Users> get(String search) {
-		String[] searchItems = search.split(" ");
-		StringBuilder hql = new StringBuilder(
-				"SELECT u FROM Users u WHERE u.deleted = false ");
-
-		hql.append("AND ( ");
-		for (int i = 0; i < searchItems.length; ++i) {
-			if (searchItems[i].isEmpty()) {
-				continue;
-			}
-			if (i != 0) {
-				hql.append(" OR ");
-			}
-			StringBuilder placeholder = new StringBuilder();
-			placeholder.append("%")
-					.append(StringUtils.lowerCase(searchItems[i])).append("%");
-
-			hql.append("(lower(u.lastname) LIKE '").append(placeholder)
-					.append("' OR lower(u.firstname) LIKE '")
-					.append(placeholder).append("' OR lower(u.login) LIKE '")
-					.append(placeholder)
-					.append("' OR lower(u.adresses.email) LIKE '")
-					.append(placeholder).append("' ) ");
-		}
-
-		hql.append(" ) ");
-		TypedQuery<Users> q = em.createQuery(hql.toString(), Users.class);
+		TypedQuery<Users> q = em.createQuery(DaoHelper.getSearchQuery("Users", "u", search, true, false, searchFields), Users.class);
 		return q.getResultList();
 	}
 
@@ -282,52 +243,6 @@ public class UsersDaoImpl implements OmDAO<Users> {
 			return kq.getResultList();
 		} catch (Exception ex2) {
 			log.error("[getAllUsersDeleted] ", ex2);
-		}
-		return null;
-	}
-
-	public Long getAllUserMax(String search) {
-		try {
-
-			String[] searchItems = search.split(" ");
-
-			log.debug("getUserContactsBySearch: " + search);
-			// log.debug("getUserContactsBySearch: "+ userId);
-
-			String hql = "select count(u.user_id) from  Users u "
-					+ "WHERE u.deleted = false ";
-
-			hql += "AND ( ";
-			for (int i = 0; i < searchItems.length; i++) {
-				if (i != 0) {
-					hql += " OR ";
-				}
-				hql += "( " + "lower(u.lastname) LIKE '"
-						+ StringUtils.lowerCase("%" + searchItems[i] + "%")
-						+ "' " + "OR lower(u.firstname) LIKE '"
-						+ StringUtils.lowerCase("%" + searchItems[i] + "%")
-						+ "' " + "OR lower(u.login) LIKE '"
-						+ StringUtils.lowerCase("%" + searchItems[i] + "%")
-						+ "' " + "OR lower(u.adresses.email) LIKE '"
-						+ StringUtils.lowerCase("%" + searchItems[i] + "%")
-						+ "' " + ") ";
-
-			}
-			hql += " )";
-
-			log.debug("Show HQL: " + hql);
-
-			TypedQuery<Long> query = em.createQuery(hql, Long.class);
-
-			// log.debug("id: "+folderId);
-			List<Long> ll = query.getResultList();
-
-			// log.error((Long)ll.get(0));
-			Long i = ll.get(0);
-
-			return i;
-		} catch (Exception ex2) {
-			log.error("[getAllUserMax]: ", ex2);
 		}
 		return null;
 	}
