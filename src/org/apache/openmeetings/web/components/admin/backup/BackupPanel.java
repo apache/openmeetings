@@ -145,7 +145,7 @@ public class BackupPanel extends AdminPanel {
 				protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 					FileUpload upload = fileUploadField.getFileUpload();
 					try {
-						if (upload.getInputStream() == null) {
+						if (upload == null || upload.getInputStream() == null) {
 							uploadFeedback.error("File is empty");
 							return;
 						}

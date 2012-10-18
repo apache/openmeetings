@@ -20,6 +20,15 @@
 -->
 <html xmlns="http://www.w3.org/1999/xhtml" 
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.5-strict.dtd" lang="en">
+	<wicket:head>
+	   <script type="text/javascript">
+	       function omUserPanelInit() {
+	           var documentHeight = $(document).height();
+	           $('#adminForm').height(documentHeight-114);
+	           $('#adminTable').height(documentHeight-160);
+	       }
+	   </script>
+	</wicket:head>
 	<wicket:panel>
 		<table class="adminPanel">
 			<tr>
@@ -35,7 +44,7 @@
 							</tr>	
 						</thead>
 					</table>
-					<div class="tableWrapper">
+					<div class="tableWrapper" id="adminTable">
 						<table class="adminListTable">
 							<tbody wicket:id="listContainer">	
 					    		<tr wicket:id="userList">
@@ -49,70 +58,95 @@
 					</div>
 				</td>
 				<td class="adminPanelColumnForm">
-					<form wicket:id="form" class="adminForm">
+					<form wicket:id="form" class="adminForm" >
 						<div wicket:id="buttons"></div>
-						<fieldset>
-							<legend><wicket:ommessage key="143" /></legend>
-				            <wicket:ommessage key="132" />: <input type="text" wicket:id="login"/>
-				            <br/>
-				            <wicket:ommessage key="133" />: <input type="password" wicket:id="password"/>
-				            <br/>
-				            <wicket:ommessage key="135" />: <select wicket:id="salutations_id" style="width: 70px;"/> <input type="text" wicket:id="firstname"/>
-				            <br/>
-				            <wicket:ommessage key="136" />: <input type="text" wicket:id="lastname"/>
-				            <br/>
-				            <wicket:ommessage key="1143" />: <select wicket:id="omTimeZone"/>
-				            <br/>
-				            <wicket:ommessage key="111" />: <select wicket:id="language_id"/>
-				            <br/>
-				            <wicket:ommessage key="1110" />: <span wicket:id="starttime"/>
-				            <br/>
-				            <wicket:ommessage key="1112" />: <span wicket:id="updatetime"/>
-				            <br/>
-				            <wicket:ommessage key="1149" />
-				            <br/>
-				            <wicket:ommessage key="1148" />: <input type="checkbox" wicket:id="forceTimeZoneCheck" />
-				            <br/>
-				            <wicket:ommessage key="137" />: <input type="text" wicket:id="adresses.email"/>
-				            <br/>
-				            <wicket:ommessage key="607" />: <input type="text" wicket:id="adresses.phone"/>
-				            <br/>
-				            <wicket:ommessage key="1503" />: <input type="checkbox" wicket:id="sendSMS"/>
-				            <br/>
-				            <wicket:ommessage key="138" />: <input type="text" wicket:id="age"/>
-				            <br/>
-				            <wicket:ommessage key="139" />: <input type="text" wicket:id="adresses.street"/> <input type="text" wicket:id="adresses.additionalname"/>
-				            <br/>
-				            <wicket:ommessage key="140" />: <input type="text" wicket:id="adresses.zip"/> <input type="text" wicket:id="adresses.town"/>
-				            <br/>
-				            <wicket:ommessage key="141" />: <select wicket:id="adresses.states"/>
-				            <br/>
-				            <wicket:ommessage key="158" />: <select wicket:id="status"/>
-				            <br/>
-				            <wicket:ommessage key="169" />: <select wicket:id="level_id"/>
-				            <br/>
-				            <wicket:ommessage key="142" />: <textarea wicket:id="adresses.comment"/>
-				            <br/>
-				            <wicket:ommessage key="161" />: <select wicket:id="organisation_users"/>
-				            <br/>
-				            <wicket:ommessage key="1502" />: <select wicket:id="server"/>
-				            <br/>
-			            </fieldset>
-			            <fieldset>
-							<legend><wicket:ommessage key="1159" /></legend>
-				            <wicket:ommessage key="1159" />
-				            <br/>
-				            <span wicket:id="community_settings">
-							    <input type="radio"/>
-							    <input type="radio"/>
-							    <input type="radio"/>
-							</span>
-				            <br/>
-				            <wicket:ommessage key="1162" />: <textarea wicket:id="userOffers"/>
-				            <br/>
-				            <wicket:ommessage key="1163" />: <textarea wicket:id="userSearchs"/>
-				            <br/>
-				        </fieldset>
+						<div class="scrollcontent" id="adminForm">
+							<fieldset>
+								<legend><wicket:ommessage key="143" /></legend>
+								<div class="formelement">
+					                <label><wicket:ommessage key="132" /></label><input type="text" wicket:id="login"/>
+					            </div>
+					            <div class="formelement">
+					            <label><wicket:ommessage key="133" /></label><input type="password" wicket:id="password"/>
+					            </div>
+					            <div class="formelement">
+					                <label><wicket:ommessage key="135" /></label><select wicket:id="salutations_id" style="width: 60px;"/><input type="text" wicket:id="firstname" style="width: 136px;"/>
+					            </div>
+					            <div class="formelement">
+					                <label><wicket:ommessage key="136" /></label><input type="text" wicket:id="lastname"/>
+					            </div>
+					            <div class="formelement">
+					                <label><wicket:ommessage key="1143" /></label><select wicket:id="omTimeZone"/>
+					            </div>
+					            <div class="formelement">
+					                <label><wicket:ommessage key="111" /></label><select wicket:id="language_id"/>
+					            </div>
+					            <div class="formelement">
+					                <label><wicket:ommessage key="1110" /></label><span wicket:id="starttime"/>
+					            </div>
+					            <div class="formelement">
+					                <label><wicket:ommessage key="1112" /></label><span wicket:id="updatetime"/>
+					            </div>
+					            <div class="formelement">
+					                <wicket:ommessage key="1149" />
+					            </div>
+					            <div class="formelement">
+					                <label><wicket:ommessage key="1148" /></label><input class="formcheckbox" type="checkbox" wicket:id="forceTimeZoneCheck" />
+					            </div>
+				                <div class="formelement">
+					                <label><wicket:ommessage key="137" /></label><input type="text" wicket:id="adresses.email"/>
+					            </div>
+					            <div class="formelement">
+					                <label><wicket:ommessage key="607" /></label><input type="text" wicket:id="adresses.phone"/>
+					            </div>
+					            <div class="formelement">
+					                <label><wicket:ommessage key="1503" /></label><input class="formcheckbox" type="checkbox" wicket:id="sendSMS"/>
+					            </div>
+					            <div class="formelement">
+					                <label><wicket:ommessage key="138" /></label><input type="text" wicket:id="age" style="width: 180px;"/>
+					            </div>
+					            <div class="formelement">
+					                <label><wicket:ommessage key="139" /></label><input type="text" wicket:id="adresses.street" style="width: 164px;"/> <input type="text" wicket:id="adresses.additionalname" style="width: 30px;"/>
+					            </div>
+					            <div class="formelement">
+					                <label><wicket:ommessage key="140" /></label><input type="text" wicket:id="adresses.zip" style="width: 60px;"/> <input type="text" wicket:id="adresses.town" style="width: 134px;"/>
+					            </div>
+					            <div class="formelement">
+					                <label><wicket:ommessage key="141" /></label><select wicket:id="adresses.states"/>
+					            </div>
+					            <div class="formelement">
+					                <label><wicket:ommessage key="158" /></label><select wicket:id="status"/>
+					            </div>
+				                <div class="formelement">
+					                <label><wicket:ommessage key="169" /></label><select wicket:id="level_id"/>
+					            </div>
+					            <div class="formelement">
+					                <label><wicket:ommessage key="142" /></label><textarea wicket:id="adresses.comment"/>
+					            </div>
+					            <div class="formelement">
+					                <label><wicket:ommessage key="161" /></label><select wicket:id="organisation_users"/>
+					            </div>
+					            <div class="formelement">
+					                <label><wicket:ommessage key="1502" /></label><select wicket:id="server"/>
+					            </div>
+				            </fieldset>
+				            <fieldset>
+								<legend><wicket:ommessage key="1159" /></legend>
+					            <div class="formelementradiobox">
+						            <span wicket:id="community_settings">
+									    <input type="radio"/>
+									    <input type="radio"/>
+									    <input type="radio"/>
+									</span>
+					            </div>
+					            <div class="formelement">
+					                <label><wicket:ommessage key="1162" /></label><textarea wicket:id="userOffers"/>
+					            </div>
+					            <div class="formelement">
+					                <label><wicket:ommessage key="1163" /></label><textarea wicket:id="userSearchs"/>
+					            </div>
+					        </fieldset>
+				        </div>
 			        </form>
 				</td>
 			</tr>

@@ -17,222 +17,304 @@
  * under the License.
  */
 #topLinks {
-	position: absolute;
-	top: 10px;
-	right: 10px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }
 
 #topLinks span {
-	padding-right: 5px;
-	padding-left: 5px;
-	border-right: 1px solid black;
+    padding-right: 5px;
+    padding-left: 5px;
+    border-right: 1px solid black;
 }
 
 #topLinks span:last-child {
-	border-right: none;
+    border-right: none;
 }
 
 #menu {
-	background-color: #BDC0DB;
-	margin-top: 10px;
+    background-color: #BDC0DB;
+    margin-top: 10px;
 }
 
 .menuName {
-	font-weight: bold;
+    font-weight: bold;
 }
 
 .menuDesc {
-	font-size: smaller;	
+    font-size: smaller;
 }
 
 #busy_indicator {
-	display: none;
-	float: right;
-	background: rgb(255, 241, 168);
-	margin-top: 5px;
-	z-index: 1000;
-	width: 200;
-	font-weight: bold;
-	text-align: center;
-	font-size: 1em;
+    display: none;
+    float: right;
+    background: rgb(255, 241, 168);
+    margin-top: 5px;
+    z-index: 1000;
+    width: 200;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1em;
 }
 
 .adminPanel {
-	table-layout: fixed;
-	width: 100%;
+    table-layout: fixed;
+    width: 100%;
 }
 
 #chat {
-	position: fixed;
-	z-index: 2000;
-	bottom: 0px;
-	right: 100px;
+    position: fixed;
+    z-index: 2000;
+    bottom: 0px;
+    right: 100px;
 }
 
 /* 
-	################################
-	Column layout admin section
-	################################
+    ################################
+    Column layout admin section
+    ################################
  */
 .adminPanelColumnTable {
-	vertical-align: top;
+    vertical-align: top;
 }
 
 table.adminListTable {
-	max-width: 518px;
-	min-width: 518px;
+    max-width: 518px;
+    min-width: 518px;
 }
 
 table.adminListTable th {
-	background: #BDC0DB;
-	color: #ffffff;
+    background: #BDC0DB;
+    color: #ffffff;
 }
 
 table.adminListTable th.two_column_layout_column1 {
-	width: 136px;
+    width: 136px;
 }
 
 table.adminListTable th.two_column_layout_column2 {
-	width: 354px;
+    width: 354px;
 }
 
 table.adminListTable td.two_column_layout_column1 {
-	width: 136px;
+    width: 136px;
 }
 
 table.adminListTable td.two_column_layout_column2 {
-	width: 354px;
+    width: 354px;
 }
 
 table.adminListTable td div.two_column_layout_divcolumn1 {
-	word-wrap: break-word;
-	width: 136px;
+    word-wrap: break-word;
+    width: 136px;
 }
 
 table.adminListTable td div.two_column_layout_divcolumn2 {
-	word-wrap: break-word;
-	width: 354px;
+    word-wrap: break-word;
+    width: 354px;
 }
 
-
 table.adminListTable th.three_column_layout_column1 {
-	width: 36px;
+    width: 36px;
 }
 
 table.adminListTable th.three_column_layout_column2 {
-	width: 150px;
+    width: 150px;
 }
 
 table.adminListTable th.three_column_layout_column3 {
-	width: 304px;
+    width: 304px;
 }
 
 table.adminListTable td.three_column_layout_column1 {
-	width: 36px;
+    width: 36px;
 }
 
 table.adminListTable td.three_column_layout_column2 {
-	width: 150px;
+    width: 150px;
 }
 
 table.adminListTable td.three_column_layout_column3 {
-	width: 304px;
+    width: 304px;
 }
 
 table.adminListTable td div.three_column_layout_divcolumn1 {
-	word-wrap: break-word;
-	width: 36px;
+    word-wrap: break-word;
+    width: 36px;
 }
 
 table.adminListTable td div.three_column_layout_divcolumn2 {
-	word-wrap: break-word;
-	width: 150px;
+    word-wrap: break-word;
+    width: 150px;
 }
 
 table.adminListTable td div.three_column_layout_divcolumn3 {
-	word-wrap: break-word;
-	width: 304px;
+    word-wrap: break-word;
+    width: 304px;
 }
 
-
 table.adminListTable th.four_column_layout_column1 {
-	width: 36px;
+    width: 36px;
 }
 
 table.adminListTable th.four_column_layout_column2 {
-	width: 150px;
+    width: 150px;
 }
 
 table.adminListTable th.four_column_layout_column3 {
-	width: 152px;
+    width: 152px;
 }
 
 table.adminListTable th.four_column_layout_column4 {
-	width: 152px;
+    width: 152px;
 }
 
 table.adminListTable td.four_column_layout_column1 {
-	width: 36px;
+    width: 36px;
 }
 
 table.adminListTable td.four_column_layout_column2 {
-	width: 150px;
+    width: 150px;
 }
 
 table.adminListTable td.four_column_layout_column3 {
-	width: 152px;
+    width: 152px;
 }
 
 table.adminListTable td.four_column_layout_column4 {
-	width: 152px;
+    width: 152px;
 }
 
 table.adminListTable td div.four_column_layout_divcolumn1 {
-	word-wrap: break-word;
-	width: 36px;
+    word-wrap: break-word;
+    width: 36px;
 }
 
 table.adminListTable td div.four_column_layout_divcolumn2 {
-	word-wrap: break-word;
-	width: 150px;
+    word-wrap: break-word;
+    width: 150px;
 }
 
 table.adminListTable td div.four_column_layout_divcolumn3 {
-	word-wrap: break-word;
-	width: 152px;
+    word-wrap: break-word;
+    width: 152px;
 }
 
 table.adminListTable td div.four_column_layout_divcolumn4 {
-	word-wrap: break-word;
-	width: 152px;
+    word-wrap: break-word;
+    width: 152px;
 }
 
 table.adminListTable tr.even {
-	background-color: #ffebcd;
+    background-color: #ffebcd;
 }
 
 table.adminListTable tr.odd {
-	background-color: #ffffff;
+    background-color: #ffffff;
 }
 
 div.tableWrapper {
-	width: 536px;
-	height: 500px;
-	overflow-y: scroll;
+    width: 536px;
+    height: 500px;
+    overflow-y: scroll;
 }
 
 .adminPanelColumnForm {
-	vertical-align: top;
+    vertical-align: top;
+}
+
+.adminPanelColumnForm div.scrollcontent {
+    vertical-align: top;
+    height: 500px;
+    overflow-y: scroll;
 }
 
 .adminForm {
-	
+    
 }
 
-.clickable {
-	cursor: pointer;
+.adminForm input {
+    display: block;
+    float: left;
+    font-size: 14px;
+    padding: 0px 0px;
+    border: solid 1px #aacfe4;
+    width: 200px;
+    height: 20px;
+    margin: 2px 2px;
+}
+
+.adminForm input.formcheckbox {
+    display: block;
+    float: left;
+    font-size: 14px;
+    padding: 0px 0px;
+    border: none;
+    width: 200px;
+    height: 20px;
+    margin: 2px 2px;
+}
+
+.adminForm fieldset {
+    border: solid 1px #aacfe4;
+    margin-top: 4px;
+    padding: 4px;
+}
+
+.adminForm legend {
+    padding: 0.2em 0.5em;
+    margin: 0px 10px;
+    border: solid 1px #aacfe4;
+    color: #000000;
+    font-size: 90%;
+    text-align: right;
+}
+
+.adminForm textarea {
+    display: block;
+    float: left;
+    font-size: 14px;
+    padding: 0px 2px;
+    border: solid 1px #aacfe4;
+    width: 200px;
+    height: 60px;
+    margin: 0px 2px;
+}
+
+.adminForm div.formelement {
+    display: block;
+    clear: both;
+}
+
+.formelementradiobox input {
+    margin: 0px 0px;
+    border: none;
 }
 
 .adminForm select {
-	max-width: 200px;
+    float: left;
+    height: 20px;
+    font-size: 14px;
+    padding: 0px 0px;
+    border: solid 1px #aacfe4;
+    width: 200px;
+    margin: 2px 2px;
+}
+
+.adminForm label {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: right;
+    width: 220px;
+    float: left;
+    margin: 4px 2px 2px;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.adminForm select {
+    max-width: 200px;
 }

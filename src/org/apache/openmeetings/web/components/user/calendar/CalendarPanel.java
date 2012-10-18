@@ -44,8 +44,14 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.handler.TextRequestHandler;
 
 public class CalendarPanel extends UserPanel {
+
 	private static final long serialVersionUID = -6536379497642291437L;
 	
+	@Override
+	public void onMenuPanelLoad(AjaxRequestTarget target) {
+		target.appendJavaScript("calendarInit();");
+	}
+
 	public CalendarPanel(String id) {
 		super(id);
 		WebMarkupContainer calendar = new WebMarkupContainer("calendar");

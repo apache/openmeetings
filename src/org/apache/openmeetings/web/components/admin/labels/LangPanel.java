@@ -50,6 +50,11 @@ public class LangPanel extends AdminPanel {
 	FieldLanguage language;
 	final WebMarkupContainer listContainer;
 	private LangForm langForm;
+	
+	@Override
+	public void onMenuPanelLoad(AjaxRequestTarget target) {
+		target.appendJavaScript("labelsInit();");
+	}
 
 	public LangPanel(String id) {
 		super(id);

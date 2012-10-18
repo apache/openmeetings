@@ -21,7 +21,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" 
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.5-strict.dtd" lang="en">
 	<wicket:head>
-	</wicket:head>
+       <script type="text/javascript">
+           function omComponentInit() {
+               var documentHeight = $(document).height();
+               $(adminForm).height(documentHeight-114);
+               $(adminTable).height(documentHeight-150);
+           }
+       </script>
+    </wicket:head>
 	<wicket:panel>	
 		<table class="adminPanel">
 			<tr>
@@ -36,7 +43,7 @@
 							</tr>	
 						</thead>
 					</table>
-					<div class="tableWrapper">
+					<div class="tableWrapper" id="adminTable">
 						<table class="adminListTable">
 							<tbody wicket:id="listContainer" >	
 					    		<tr wicket:id="configList">
@@ -51,19 +58,26 @@
 				<td class="adminPanelColumnForm">
 					<form wicket:id="form" class="adminForm">
 						<div wicket:id="buttons"></div>
-						<fieldset>
-							<legend><wicket:ommessage key="266" /></legend>
-				            <wicket:ommessage key="267" />: <input type="text" wicket:id="conf_key"/>
-				            <br/>
-				             <wicket:ommessage key="271" />: <input type="text" wicket:id="conf_value"/>
-				            <br/>
-				            <wicket:ommessage key="268" />: <span wicket:id="updatetime"/>
-				            <br/>
-				            <wicket:ommessage key="269" />: <span wicket:id="user.login"/>
-				            <br/>
-				            <wicket:ommessage key="270" />: <textarea style="width: 200px; height: 100px;" wicket:id="comment"/>
-				            <br/>
-						</fieldset>
+						<div class="scrollcontent" id="adminForm">
+							<fieldset>
+								<legend><wicket:ommessage key="266" /></legend>
+								<div class="formelement">
+								    <label><wicket:ommessage key="267" /></label><input type="text" wicket:id="conf_key"/>
+					            </div>
+					            <div class="formelement">
+                                    <label><wicket:ommessage key="271" /></label><input type="text" wicket:id="conf_value"/>
+					            </div>
+                                <div class="formelement">
+                                    <label><wicket:ommessage key="268" /></label><span wicket:id="updatetime"/>
+					            </div>
+                                <div class="formelement">
+                                    <label><wicket:ommessage key="269" /></label><span wicket:id="user.login"/>
+					            </div>
+                                <div class="formelement">
+                                    <label><wicket:ommessage key="270" /></label><textarea style="width: 200px; height: 100px;" wicket:id="comment"/>
+					            </div>
+							</fieldset>
+						</div>
 					</form>
 				</td>
 			</tr>

@@ -46,6 +46,12 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 
+/**
+ * Loads the menu items into the main area
+ * 
+ * @author sebawagner
+ *
+ */
 public class MenuPanel extends BasePanel {
 	private static final long serialVersionUID = 6626039612808753514L;
 
@@ -106,17 +112,19 @@ public class MenuPanel extends BasePanel {
 							}
 							
 							public void onClick(AjaxRequestTarget target) {
+								
+								BasePanel basePanel = null;
+								
 								switch(action) {
 									case dashboardModuleStartScreen:
 										break;
 									case dashboardModuleCalendar:
-										target.add(contents.replace(new CalendarPanel("child")));
-										target.appendJavaScript("calendarInit();");
+										basePanel = new CalendarPanel("child");
 										break;
 									case recordModule:
 										break;
 									case conferenceModuleRoomList:
-										target.add(contents.replace(new UserRoomsPanel("child", params)));
+										basePanel = new UserRoomsPanel("child", params);
 										break;
 									case eventModuleRoomList:
 										break;
@@ -125,34 +133,38 @@ public class MenuPanel extends BasePanel {
 									case moderatorModuleRoom:
 										break;
 									case adminModuleUser:
-										target.add(contents.replace(new UsersPanel("child")));
+										basePanel = new UsersPanel("child");
 										break;
 									case adminModuleConnections:
 										break;
 									case adminModuleOrg:
-										target.add(contents.replace(new GroupsPanel("child")));
-										target.appendJavaScript("groupsInit();");
+										basePanel = new GroupsPanel("child");
 										break;
 									case adminModuleRoom:
-										target.add(contents.replace(new RoomsPanel("child")));
+										basePanel = new RoomsPanel("child");
 										break;
 									case adminModuleConfiguration:
-										target.add(contents.replace(new ConfigsPanel("child")));
+										basePanel = new ConfigsPanel("child");
 										break;
 									case adminModuleLanguages:
-										target.add(contents.replace(new LangPanel("child")));
-										target.appendJavaScript("labelsInit();");
+										basePanel = new LangPanel("child");
 										break;
 									case adminModuleLDAP:
-										target.add(contents.replace(new LdapsPanel("child")));
+										basePanel = new LdapsPanel("child");
 										break;
 									case adminModuleBackup:
-										target.add(contents.replace(new BackupPanel("child")));
+										basePanel = new BackupPanel("child");
 										break;
 									case adminModuleServers:
-										target.add(contents.replace(new ServersPanel("child")));
+										basePanel = new ServersPanel("child");
 										break;
 								}
+								
+								if (basePanel != null) {
+									target.add(contents.replace(basePanel));
+									basePanel.onMenuPanelLoad(target);
+								}
+								
 								target.appendJavaScript("location.hash = '" + JavaScriptUtils.escapeQuotes(hash) + "';");
 							};
 						}.add(AttributeModifier.replace("href", hash)));

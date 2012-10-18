@@ -37,6 +37,11 @@ public class UsersPanel extends AdminPanel {
 
 	private static final long serialVersionUID = -4463107742579790120L;
 
+	@Override
+	public void onMenuPanelLoad(AjaxRequestTarget target) {
+		target.appendJavaScript("omUserPanelInit();");
+	}
+
 	private UserForm form;
 
 	public UsersPanel(String id) {
@@ -62,6 +67,8 @@ public class UsersPanel extends AdminPanel {
 						form.setModelObject(u);
 						form.hideNewRecord();
 						target.add(form);
+						//re-initialize height
+						target.appendJavaScript("omUserPanelInit();");
 					}
 				});
 			}

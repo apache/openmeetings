@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.components;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.panel.Panel;
 
 public abstract class BasePanel extends Panel {
@@ -27,5 +28,15 @@ public abstract class BasePanel extends Panel {
 		super(id);
 		setOutputMarkupId(true);
 	}
-	
+
+	/**
+	 * Overwrite this method to execute Java code after Panel is loaded by the
+	 * {@link MenuPanel}
+	 * 
+	 * @param target
+	 */
+	public void onMenuPanelLoad(AjaxRequestTarget target) {
+
+	}
+
 }

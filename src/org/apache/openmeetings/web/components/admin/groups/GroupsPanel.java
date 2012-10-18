@@ -32,8 +32,14 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 
 public class GroupsPanel extends AdminPanel {
+	
 	private static final long serialVersionUID = -5170400556006464830L;
 	
+	@Override
+	public void onMenuPanelLoad(AjaxRequestTarget target) {
+		target.appendJavaScript("groupsInit();");
+	}
+
 	public GroupsPanel(String id) {
 		super(id);
 		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
