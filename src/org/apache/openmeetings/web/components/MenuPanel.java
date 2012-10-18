@@ -111,6 +111,7 @@ public class MenuPanel extends BasePanel {
 										break;
 									case dashboardModuleCalendar:
 										target.add(contents.replace(new CalendarPanel("child")));
+										target.appendJavaScript("calendarInit();");
 										break;
 									case recordModule:
 										break;
@@ -130,6 +131,7 @@ public class MenuPanel extends BasePanel {
 										break;
 									case adminModuleOrg:
 										target.add(contents.replace(new GroupsPanel("child")));
+										target.appendJavaScript("groupsInit();");
 										break;
 									case adminModuleRoom:
 										target.add(contents.replace(new RoomsPanel("child")));
@@ -139,6 +141,7 @@ public class MenuPanel extends BasePanel {
 										break;
 									case adminModuleLanguages:
 										target.add(contents.replace(new LangPanel("child")));
+										target.appendJavaScript("labelsInit();");
 										break;
 									case adminModuleLDAP:
 										target.add(contents.replace(new LdapsPanel("child")));
@@ -150,7 +153,7 @@ public class MenuPanel extends BasePanel {
 										target.add(contents.replace(new ServersPanel("child")));
 										break;
 								}
-								target.appendJavaScript("location.hash = '" + JavaScriptUtils.escapeQuotes(hash) + "'; if (typeof window.omComponentInit == 'function'){ omComponentInit(); };");
+								target.appendJavaScript("location.hash = '" + JavaScriptUtils.escapeQuotes(hash) + "';");
 							};
 						}.add(AttributeModifier.replace("href", hash)));
 					}

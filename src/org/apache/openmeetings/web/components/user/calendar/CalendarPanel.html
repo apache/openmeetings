@@ -28,7 +28,7 @@
 				return $(window).height() - $('#calendar').position().top - 20; //FIXME HACK
 			}
 			
-			function omComponentInit() {
+			function calendarInit() {
 				$('#calendar').fullCalendar({
 					header: {
 						left: 'prev,next today',
@@ -89,10 +89,53 @@
 						<td><wicket:ommessage key="572" /></td>
 						<td><input type="text" wicket:id="appointmentName" /></td>
 					</tr>
+					<!-- tr>
+						<td>&nbsp;</td>
+						<td>
+							<wicket:ommessage key="570" /><input type="text" wicket:id="appointmentStarttime" />
+							<wicket:ommessage key="571" /><input type="text" wicket:id="appointmentEndtime" />
+						</td>
+					</tr>
+					<tr>
+						<td><wicket:ommessage key="565" /></td>
+						<td><select wicket:id="notification" ></select></td>
+					</tr>
+					<tr>
+						<td colspan="2"><input type="checkbox" wicket:id="createRoom" /><wicket:ommessage key="1509" /></td>
+					</tr>
+					<tr>
+						<td><wicket:ommessage key="619" /></td>
+						<td><select wicket:id="roomType" ></select></td>
+					</tr>
+					<tr>
+						<td><wicket:ommessage key="406" /></td>
+						<td><select wicket:id="room" ></select></td>
+					</tr>
+					<tr>
+						<td colspan="2"><input type="checkbox" wicket:id="isPasswordProtected" /><wicket:ommessage key="1509" /></td>
+					</tr>
+					<tr>
+						<td><wicket:ommessage key="525" /></td>
+						<td><input type="text" wicket:id="password" /></td>
+					</tr>
+					<tr>
+						<td colspan="2"><wicket:ommessage key="1445" /></td>
+					</tr>
+					<tr>
+						<td><wicket:ommessage key="803" /></td>
+						<td><select wicket:id="meetingMember" ></select></td>
+					</tr>
+					<tr>
+						<td><wicket:ommessage key="569" /></td>
+						<td><input type="text" wicket:id="appointmentLocation" /></td>
+					</tr-->
 					<tr>
 						<td><wicket:ommessage key="573" /></td>
 						<td><input type="text" wicket:id="appointmentDescription" /></td>
 					</tr>
+					<!-- tr>
+						<td colspan="2" style="text-align: right"><input type="button" wicket:id="save" /><input type="button" wicket:id="cancel" /></td>
+					</tr-->
 				</table>
 			</form>
 		</div>

@@ -40,9 +40,6 @@ import org.apache.wicket.ajax.json.JSONObject;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.RequiredTextField;
-import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.handler.TextRequestHandler;
 
@@ -56,15 +53,7 @@ public class CalendarPanel extends UserPanel {
 		calendar.setMarkupId("calendar");
 		add(calendar);
 		
-		final Form<Appointment> form = new Form<Appointment>("appointment", new CompoundPropertyModel<Appointment>(new Appointment())){
-			private static final long serialVersionUID = 192883745414475639L;
-
-			{
-				setOutputMarkupId(true);
-				add(new RequiredTextField<String>("appointmentName"));
-				add(new TextArea<String>("appointmentDescription"));
-			}
-		};
+		final CalendarForm form = new CalendarForm("appointment", new CompoundPropertyModel<Appointment>(new Appointment()));
 		add(form);
 		
 		//fetchEvents

@@ -128,7 +128,6 @@ public class BackupPanel extends AdminPanel {
 
 					// repaint the feedback panel so that it is hidden
 					target.add(uploadFeedback);
-
 				}
 
 				@Override
