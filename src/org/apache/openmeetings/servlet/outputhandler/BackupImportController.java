@@ -328,7 +328,7 @@ public class BackupImportController extends AbstractUploadController {
 				// otherwise
 				r.setRooms_id(null);
 
-				roomDao.update(r, 1L);
+				r = roomDao.update(r, 1L);
 				roomsMap.put(roomId, r.getRooms_id());
 				
 				for (RoomModerators rm : r.getModerators()) {

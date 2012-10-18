@@ -79,7 +79,7 @@ public interface OmDAO<T extends OmEntity> {
 	 * @param entity - entity to be updated
 	 * @param userId - user performed update
 	 */
-	void update(T entity, long userId);
+	T update(T entity, long userId);
 
 	/**
 	 * Delete an instance of {@link T}

@@ -367,7 +367,7 @@ public class ConfigurationDaoImpl implements OmDAO<Configuration> {
 		return q.getSingleResult();
 	}
 	
-	public void update(Configuration entity, long userId) {
+	public Configuration update(Configuration entity, long userId) {
 		if (entity.getConfiguration_id() == null
 				|| entity.getConfiguration_id() <= 0) {
 			entity.setStarttime(new Date());
@@ -379,6 +379,8 @@ public class ConfigurationDaoImpl implements OmDAO<Configuration> {
 			entity.setUpdatetime(new Date());
 			this.updateConfig(entity);
 		}
+		//TODO ensure entity returned is updated
+		return entity;
 	}
 
 	public void delete(Configuration entity, long userId) {

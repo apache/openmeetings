@@ -137,13 +137,14 @@ public class FieldLanguagesValuesDaoImpl implements OmDAO<Fieldlanguagesvalues> 
 	 * org.apache.openmeetings.data.OmDAO#update(org.apache.openmeetings.persistence
 	 * .beans.OmEntity, long)
 	 */
-	public void update(Fieldlanguagesvalues entity, long userId) {
+	public Fieldlanguagesvalues update(Fieldlanguagesvalues entity, long userId) {
 		entity.setUpdatetime(new Date());
 		if (entity.getFieldlanguagesvalues_id() == null) {
 			em.persist(entity);
 		} else {
 			entity = em.merge(entity);
 		}
+		return entity;
 	}
 
 	/*

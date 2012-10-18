@@ -210,7 +210,7 @@ public class ServerDaoImpl implements OmDAO<Server> {
 	 * org.apache.openmeetings.data.OmDAO#update(org.apache.openmeetings.persistence
 	 * .beans.OmEntity, long)
 	 */
-	public void update(Server entity, long userId) {
+	public Server update(Server entity, long userId) {
 		try {
 			if (entity.getId() <= 0) {
 				entity.setInserted(new Date());
@@ -226,6 +226,7 @@ public class ServerDaoImpl implements OmDAO<Server> {
 		} catch (PersistenceException ex) {
 			log.error("[update LdapConfig]", ex);
 		}
+		return entity;
 	}
 
 	/*

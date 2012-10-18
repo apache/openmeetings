@@ -148,7 +148,7 @@ public class UsersDaoImpl implements OmDAO<Users> {
 	 * org.apache.openmeetings.data.OmDAO#update(org.apache.openmeetings.persistence
 	 * .beans.OmEntity, long)
 	 */
-	public void update(Users u, long userId) {
+	public Users update(Users u, long userId) {
 		if (u.getUser_id() == null) {
 			u.setStarttime(new Date());
 			em.persist(u);
@@ -156,6 +156,7 @@ public class UsersDaoImpl implements OmDAO<Users> {
 			u.setUpdatetime(new Date());
 			u =	em.merge(u);
 		}
+		return u;
 	}
 
 	/*

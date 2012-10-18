@@ -76,7 +76,7 @@ public class RoomDAO implements OmDAO<Rooms> {
 		return q.getSingleResult();
 	}
 
-	public void update(Rooms entity, long userId) {
+	public Rooms update(Rooms entity, long userId) {
 		if (entity.getRooms_id() == null) {
 	        /* Red5SIP integration *******************************************************************************/
 			String sipEnabled = cfgDao.getConfValue("red5sip.enable", String.class, "no");
@@ -93,11 +93,12 @@ public class RoomDAO implements OmDAO<Rooms> {
 	        }
 	        /*****************************************************************************************************/
 			entity.setStarttime(new Date());
-			entity = em.merge(entity);
+			em.persist(entity);
 		} else {
 			entity.setUpdatetime(new Date());
-			em.persist(entity);
+			entity = em.merge(entity);
 		}
+		return entity;
 	}
 
 	public void delete(Rooms entity, long userId) {

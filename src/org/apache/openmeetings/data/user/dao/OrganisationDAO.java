@@ -74,7 +74,7 @@ public class OrganisationDAO implements OmDAO<Organisation> {
 		return q.getSingleResult();
 	}
 	
-	public void update(Organisation entity, long userId) {
+	public Organisation update(Organisation entity, long userId) {
 		if (entity.getOrganisation_id() == null) {
 			entity.setInsertedby(userId);
 			entity.setStarttime(new Date());
@@ -84,6 +84,7 @@ public class OrganisationDAO implements OmDAO<Organisation> {
 			entity.setUpdatetime(new Date());
 			em.merge(entity);
 		}
+		return entity;
 	}
 
 	public void delete(Organisation entity, long userId) {

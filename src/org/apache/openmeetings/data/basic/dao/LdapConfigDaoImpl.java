@@ -305,7 +305,7 @@ public class LdapConfigDaoImpl implements OmDAO<LdapConfig> {
 		return q.getSingleResult();
 	}
 	
-	public void update(LdapConfig entity, long userId) {
+	public LdapConfig update(LdapConfig entity, long userId) {
 		try {
 			if (entity.getLdapConfigId() <= 0) {
 				entity.setInserted(new Date());
@@ -321,6 +321,7 @@ public class LdapConfigDaoImpl implements OmDAO<LdapConfig> {
 		} catch (PersistenceException ex) {
 			log.error("[update LdapConfig]", ex);
 		}
+		return entity;
 	}
 
 	public void delete(LdapConfig entity, long userId) {

@@ -124,7 +124,7 @@ public class FieldValueDaoImpl implements OmDAO<Fieldvalues> {
 		return q.getSingleResult();
 	}
 	
-	public void update(Fieldvalues entity, long userId) {
+	public Fieldvalues update(Fieldvalues entity, long userId) {
 		entity.setDeleted(false);
 		if (entity.getFieldvalues_id() == null) {
 			entity.setFieldvalues_id(count() + 1);
@@ -133,6 +133,7 @@ public class FieldValueDaoImpl implements OmDAO<Fieldvalues> {
 		} else {
 			entity = em.merge(entity);
 		}
+		return entity;
 	}
 
 	public void delete(Fieldvalues entity, long userId) {

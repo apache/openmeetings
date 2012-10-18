@@ -97,9 +97,9 @@ public class OrganisationUserDAO implements OmDAO<Organisation_Users> {
 		return q.getSingleResult();
 	}
 
-	public void update(Organisation_Users entity, long userId) {
+	public Organisation_Users update(Organisation_Users entity, long userId) {
 		//if (entity.getOrganisation_users_id())// TODO Auto-generated method stub
-		
+		return entity;
 	}
 
 	public void delete(Organisation_Users entity, long userId) {
