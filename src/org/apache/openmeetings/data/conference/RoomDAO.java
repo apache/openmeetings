@@ -87,7 +87,7 @@ public class RoomDAO implements OmDAO<Rooms> {
 		TypedQuery<Rooms> q = em.createQuery(
 				"SELECT DISTINCT c.room FROM Rooms_Organisation c LEFT JOIN FETCH c.room LEFT JOIN FETCH c.room.currentusers "
 				+ "WHERE c.organisation.organisation_id = :orgId "
-				+ "AND c.deleted = false AND c.room.deleted = false "
+				+ "AND c.deleted = false AND c.room.deleted = false AND c.room.appointment = false "
 				+ "AND c.organisation.deleted = false "
 				+ "ORDER BY c.room.name ASC", Rooms.class);
 		q.setParameter("orgId", orgId);
