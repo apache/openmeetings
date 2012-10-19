@@ -70,12 +70,14 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 		hideNewRecord();
 		target.add(this);
 		target.add(listContainer);
+		target.appendJavaScript("omConfigPanelInit();");
 	}
 
 	@Override
 	protected void onNewSubmit(AjaxRequestTarget target, Form<?> form) {
 		this.setModelObject(new Configuration());
 		target.add(this);
+		target.appendJavaScript("omConfigPanelInit();");
 	}
 	
 	@Override
@@ -88,6 +90,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 		}
 		this.setModelObject(conf);
 		target.add(this);
+		target.appendJavaScript("omConfigPanelInit();");
 	}
 	
 	@Override
@@ -96,6 +99,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 		this.setModelObject(new Configuration());
 		target.add(listContainer);
 		target.add(this);
+		target.appendJavaScript("omConfigPanelInit();");
 	}
 	
 }

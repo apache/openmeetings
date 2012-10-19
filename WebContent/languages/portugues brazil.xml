@@ -3367,7 +3367,7 @@ Details
     <value>Atualizado por</value>
   </string>
   <string id="1114" name="ldap config">
-    <value>Os arquivos de configuração estão na mesma pasta que o hibernate.cfg.xml. Você precisa carregar manualmente os arquivos para esta pasta. As alterações no arquivo de configuração estarão imediatamente online.</value>
+    <value>Os arquivos de configuração estão na pasta webapps/openmeetings/conf. Você precisa carregar manualmente os arquivos para esta pasta. As alterações no arquivo de configuração estarão imediatamente online.</value>
   </string>
   <string id="1115" name="ldap config">
     <value>Config file name</value>

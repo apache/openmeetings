@@ -33,7 +33,7 @@
 }
 
 #menu {
-    background-color: #BDC0DB;
+    background-color: #AFCBFB;
     margin-top: 10px;
 }
 
@@ -58,8 +58,7 @@
 }
 
 .adminPanel {
-    table-layout: fixed;
-    width: 100%;
+    min-width: 1070px;
 }
 
 #chat {
@@ -75,6 +74,7 @@
     ################################
  */
 .adminPanelColumnTable {
+	display: inline-block;
     vertical-align: top;
 }
 
@@ -84,7 +84,7 @@ table.adminListTable {
 }
 
 table.adminListTable th {
-    background: #BDC0DB;
+    background: #AFCBFB;
     color: #ffffff;
 }
 
@@ -115,7 +115,7 @@ table.adminListTable td div.two_column_layout_divcolumn2 {
 }
 
 table.adminListTable th.three_column_layout_column1 {
-    width: 36px;
+    width: 96px;
 }
 
 table.adminListTable th.three_column_layout_column2 {
@@ -123,11 +123,11 @@ table.adminListTable th.three_column_layout_column2 {
 }
 
 table.adminListTable th.three_column_layout_column3 {
-    width: 304px;
+    width: 244px;
 }
 
 table.adminListTable td.three_column_layout_column1 {
-    width: 36px;
+    width: 96px;
 }
 
 table.adminListTable td.three_column_layout_column2 {
@@ -135,12 +135,12 @@ table.adminListTable td.three_column_layout_column2 {
 }
 
 table.adminListTable td.three_column_layout_column3 {
-    width: 304px;
+    width: 244px;
 }
 
 table.adminListTable td div.three_column_layout_divcolumn1 {
     word-wrap: break-word;
-    width: 36px;
+    width: 96px;
 }
 
 table.adminListTable td div.three_column_layout_divcolumn2 {
@@ -150,77 +150,89 @@ table.adminListTable td div.three_column_layout_divcolumn2 {
 
 table.adminListTable td div.three_column_layout_divcolumn3 {
     word-wrap: break-word;
-    width: 304px;
+    width: 244px;
 }
 
 table.adminListTable th.four_column_layout_column1 {
-    width: 36px;
+    width: 96px;
 }
 
 table.adminListTable th.four_column_layout_column2 {
-    width: 150px;
+    width: 130px;
 }
 
 table.adminListTable th.four_column_layout_column3 {
-    width: 152px;
+    width: 132px;
 }
 
 table.adminListTable th.four_column_layout_column4 {
-    width: 152px;
+    width: 132px;
 }
 
 table.adminListTable td.four_column_layout_column1 {
-    width: 36px;
+    width: 96px;
 }
 
 table.adminListTable td.four_column_layout_column2 {
-    width: 150px;
+    width: 130px;
 }
 
 table.adminListTable td.four_column_layout_column3 {
-    width: 152px;
+    width: 132px;
 }
 
 table.adminListTable td.four_column_layout_column4 {
-    width: 152px;
+    width: 132px;
 }
 
 table.adminListTable td div.four_column_layout_divcolumn1 {
     word-wrap: break-word;
-    width: 36px;
+    width: 96px;
 }
 
 table.adminListTable td div.four_column_layout_divcolumn2 {
     word-wrap: break-word;
-    width: 150px;
+    width: 130px;
 }
 
 table.adminListTable td div.four_column_layout_divcolumn3 {
     word-wrap: break-word;
-    width: 152px;
+    width: 132px;
 }
 
 table.adminListTable td div.four_column_layout_divcolumn4 {
     word-wrap: break-word;
-    width: 152px;
+    width: 132px;
 }
 
 table.adminListTable tr.even {
-    background-color: #ffebcd;
+    background-color: #EDF2FF;
 }
 
 table.adminListTable tr.odd {
-    background-color: #ffffff;
+    background-color: #F2FAFF;
+}
+
+table.adminListTable tr:hover {
+    background-color: #CCDCE8;
+}
+
+.clickable {
+    cursor: pointer;
 }
 
 div.tableWrapper {
+	background-color: #FFFFFF;
+	border: solid 1px #aacfe4;
     width: 536px;
     height: 500px;
     overflow-y: scroll;
 }
 
 .adminPanelColumnForm {
+	display: inline-block;
     vertical-align: top;
+    margin-top: 2px;
 }
 
 .adminPanelColumnForm div.scrollcontent {
@@ -239,7 +251,7 @@ div.tableWrapper {
     font-size: 14px;
     padding: 0px 0px;
     border: solid 1px #aacfe4;
-    width: 200px;
+    width: 280px;
     height: 20px;
     margin: 2px 2px;
 }
@@ -250,23 +262,25 @@ div.tableWrapper {
     font-size: 14px;
     padding: 0px 0px;
     border: none;
-    width: 200px;
+    width: 20px;
     height: 20px;
     margin: 2px 2px;
 }
 
 .adminForm fieldset {
+	background-color: #F2FAFF;
     border: solid 1px #aacfe4;
     margin-top: 4px;
     padding: 4px;
 }
 
 .adminForm legend {
+	background-color: #F2FAFF;
     padding: 0.2em 0.5em;
     margin: 0px 10px;
     border: solid 1px #aacfe4;
     color: #000000;
-    font-size: 90%;
+    font-style: italic;
     text-align: right;
 }
 
@@ -274,21 +288,17 @@ div.tableWrapper {
     display: block;
     float: left;
     font-size: 14px;
-    padding: 0px 2px;
+    padding: 0px 0px;
     border: solid 1px #aacfe4;
-    width: 200px;
+    width: 280px;
     height: 60px;
-    margin: 0px 2px;
+    margin: 2px 2px;
 }
 
 .adminForm div.formelement {
     display: block;
     clear: both;
-}
-
-.formelementradiobox input {
-    margin: 0px 0px;
-    border: none;
+    max-width: 490px;
 }
 
 .adminForm select {
@@ -297,8 +307,8 @@ div.tableWrapper {
     font-size: 14px;
     padding: 0px 0px;
     border: solid 1px #aacfe4;
-    width: 200px;
-    margin: 2px 2px;
+    width: 282px;
+    margin: 2px 2px 2px;
 }
 
 .adminForm label {
@@ -306,15 +316,87 @@ div.tableWrapper {
     font-size: 14px;
     font-weight: bold;
     text-align: right;
-    width: 220px;
+    width: 180px;
     float: left;
     margin: 4px 2px 2px;
 }
 
-.clickable {
-    cursor: pointer;
+.formelementradiobox {
+    margin-left: 100px;
 }
 
-.adminForm select {
-    max-width: 200px;
+.formelementradiobox input {
+    margin: 0px 0px;
+    border: none;
+    width: 20px;
 }
+
+.formelementradiobox label {
+    width: 260px;
+    margin: 0px
+}
+
+.addLanguagePanel {
+	display: block;
+}
+
+.addLanguagePanel select {
+    padding: 0px 0px;
+    border: solid 1px #aacfe4;
+    width: 140px;
+    font-size: 12px;
+    margin-left: 2px;
+}
+
+.pagedEntityListPanel {
+	margin-left: 2px;
+}
+
+.pagedEntityListPanel .searchForm {
+	display: inline-block;
+}
+
+.pagedEntityListPanel select {
+	padding: 0px 0px;
+    border: solid 1px #aacfe4;
+    width: 40px;
+    font-size: 12px;
+    display: inline;
+    float: none;
+}
+
+.pagedEntityListPanel input {
+    font-size: 14px;
+    padding: 0px 0px;
+    border: solid 1px #aacfe4;
+    width: 100px;
+    height: 20px;
+    margin: 2px 2px;
+    display: inline;
+    float: none;
+}
+
+.ui-dialog {
+    -moz-box-shadow: 3px 3px 4px #000;
+    -webkit-box-shadow: 3px 3px 4px #000;
+    box-shadow: 3px 3px 4px #000;
+    /* For IE 8 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000')";
+    /* For IE 5.5 - 7 */
+    filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000');
+}
+
+.info-icon {
+	background: url(images/information.png) no-repeat;
+    float: left;
+    cursor: default;
+    width: 18px;
+    height: 18px;
+    border: none;
+    margin-left: 2px;
+    margin-top: 2px;
+}
+
+/* .adminForm select {
+    max-width: 200px;
+} */

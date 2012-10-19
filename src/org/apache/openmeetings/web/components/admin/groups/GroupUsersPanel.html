@@ -21,8 +21,26 @@
 <html xmlns="http://www.w3.org/1999/xhtml" 
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.5-strict.dtd" lang="en">
 	<wicket:panel>
-		<div style="border: 1px solid black;">
+		<div class="usergroupspanel">
 			<span wicket:id="navigator">[dataview navigator]</span>
+			<table class="adminListTable" style="min-width: 400px; max-width: 400px" >
+                <tr>
+                    <th style="width: 360px"><wicket:ommessage key="177" /></th>
+                    <th style="width: 34px"><wicket:ommessage key="275" /></th>
+                </tr>   
+            </table>
+            <div class="tableWrapper" style="width: 420px;">
+                <table class="adminListTable" style="min-width: 400px; max-width: 400px">  
+                    <tbody>   
+                        <tr wicket:id="userList">
+                            <td style="width: 360px"><div style="width: 360px"><span wicket:id="label"></span></div></td>
+                            <td style="width: 34px"><div style="width: 34px"><div class="formCancelButton" wicket:id="deleteUserBtn" wicket:ommessage="title:274"><input/></div></div></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- 
 			<table class="adminListTable" style="min-width: 200px;">
 				<tr>
 					<th><wicket:ommessage key="177" /></th>
@@ -33,6 +51,7 @@
 					<td><div class="formCancelButton" wicket:id="deleteUserBtn" wicket:ommessage="title:274"><input/></div></td>
 				</tr>
 			</table>
+			 -->
 		</div>
 	</wicket:panel>
 </html>

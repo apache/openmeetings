@@ -3367,7 +3367,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Updated by</value>
   </string>
   <string id="1114" name="ldap config">
-    <value>The config files are in the same folder as the hibernate.cfg.xml. You need to manually upload the files to this folder. Changes to the config file are immediately online.</value>
+    <value>The config files are in the folder webapps/openmeetings/conf. You need to manually upload the files to this folder. Changes to the config file are immediately online.</value>
   </string>
   <string id="1115" name="ldap config">
     <value>Config file name</value>

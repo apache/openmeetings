@@ -36,6 +36,11 @@ public class RoomsPanel extends AdminPanel {
 	private static final long serialVersionUID = -1L;
 	private RoomForm form;
 	
+	@Override
+	public void onMenuPanelLoad(AjaxRequestTarget target) {
+		target.appendJavaScript("omRoomPanelInit();");
+	}
+
 	public RoomsPanel(String id) {
 		super(id);
 		OmDataView<Rooms> dataView = new OmDataView<Rooms>("roomList", new OmDataProvider<Rooms>(RoomDAO.class)) {
@@ -54,6 +59,7 @@ public class RoomsPanel extends AdminPanel {
 						form.setModelObject(room);
 						form.hideNewRecord();
 						target.add(form);
+						target.appendJavaScript("omRoomPanelInit();");
 					}
 				});
 				item.add(AttributeModifier.replace("class", (item.getIndex() % 2 == 1) ? "even" : "odd"));

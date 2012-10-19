@@ -38,9 +38,15 @@ import org.apache.wicket.markup.repeater.Item;
  * 
  */
 public class ConfigsPanel extends AdminPanel {
+	
 	private static final long serialVersionUID = -1L;
 	private ConfigForm form;
 	
+	@Override
+	public void onMenuPanelLoad(AjaxRequestTarget target) {
+		target.appendJavaScript("omConfigPanelInit();");
+	}
+
 	public ConfigsPanel(String id) {
 		super(id);
 		
@@ -61,6 +67,7 @@ public class ConfigsPanel extends AdminPanel {
 						form.hideNewRecord();
 						form.setModelObject(configuration);
 						target.add(form);
+						target.appendJavaScript("omConfigPanelInit();");
 					}
 				});
 				item.add(AttributeModifier.replace("class", "clickable "

@@ -42,6 +42,15 @@ public class LdapsPanel extends AdminPanel {
 	private static final long serialVersionUID = -1L;
 	private LdapForm form;
 	
+	
+	
+	@Override
+	public void onMenuPanelLoad(AjaxRequestTarget target) {
+		target.appendJavaScript("omLdapPanelInit();");
+	}
+
+
+
 	public LdapsPanel(String id) {
 		super(id);
 		OmDataView<LdapConfig> dataView = new OmDataView<LdapConfig>("ldapList"
@@ -61,6 +70,7 @@ public class LdapsPanel extends AdminPanel {
 						form.setModelObject(ldapConfig);
 						form.hideNewRecord();
 						target.add(form);
+						target.appendJavaScript("omLdapPanelInit();");
 					}
 				});
 				item.add(AttributeModifier.replace("class", (item.getIndex() % 2 == 1) ? "even" : "odd"));

@@ -3366,7 +3366,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Mis à jour par</value>
   </string>
   <string id="1114" name="ldap config">
-    <value>Les fichiers de configuration sont dans le même répertoire que hibernate.cfg.xml. Vous devez charger manuellement les fichiers vers ce répertoire. Les modifications dans le fichier de configuration sont en ligne immédiatement.</value>
+    <value>Les fichiers de configuration sont dans le répertoire webapps/openmeetings/conf. Vous devez charger manuellement les fichiers vers ce répertoire. Les modifications dans le fichier de configuration sont en ligne immédiatement.</value>
   </string>
   <string id="1115" name="ldap config">
     <value>Nom du fichier</value>

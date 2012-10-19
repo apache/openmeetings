@@ -80,12 +80,14 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 		hideNewRecord();
 		target.add(this);
 		target.add(listContainer);
+		target.appendJavaScript("omLdapPanelInit();");
 	}
 
 	@Override
 	protected void onNewSubmit(AjaxRequestTarget target, Form<?> form) {
 		this.setModelObject(new LdapConfig());
 		target.add(this);
+		target.appendJavaScript("omLdapPanelInit();");
 	}
 
 	@Override
@@ -99,6 +101,7 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 		}
 		this.setModelObject(ldapConfig);
 		target.add(this);
+		target.appendJavaScript("omLdapPanelInit();");
 	}
 
 	@Override
@@ -108,6 +111,7 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 		this.setModelObject(new LdapConfig());
 		target.add(listContainer);
 		target.add(this);
+		target.appendJavaScript("omLdapPanelInit();");
 	}
 
 }

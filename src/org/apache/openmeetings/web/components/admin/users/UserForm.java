@@ -179,6 +179,7 @@ public class UserForm extends AdminBaseForm<Users> {
 		hideNewRecord();
 		target.add(this);
 		target.add(listContainer);
+		target.appendJavaScript("omUserPanelInit();");
 	}
 
 	@Override
@@ -187,6 +188,7 @@ public class UserForm extends AdminBaseForm<Users> {
 		setModelObject(usersDaoImpl.getNewUserInstance(usersDaoImpl
 				.get(WebSession.getUserId())));
 		target.add(this);
+		target.appendJavaScript("omUserPanelInit();");
 	}
 
 	@Override
@@ -200,6 +202,7 @@ public class UserForm extends AdminBaseForm<Users> {
 		}
 		setModelObject(user);
 		target.add(this);
+		target.appendJavaScript("omUserPanelInit();");
 	}
 
 	@Override
@@ -211,6 +214,7 @@ public class UserForm extends AdminBaseForm<Users> {
 				.get(WebSession.getUserId())));
 		target.add(listContainer);
 		target.add(this);
+		target.appendJavaScript("omUserPanelInit();");
 	}
 
 	/**
@@ -359,7 +363,6 @@ public class UserForm extends AdminBaseForm<Users> {
 				"organisation_users", orgUsers,
 				new ChoiceRenderer<Organisation_Users>("organisation.name",
 						"organisation.organisation_id"));
-		orgChoiceList.setMaxRows(6);
 		add(orgChoiceList);
 
 		add(new DropDownChoice<Server>("server", Application.getBean(

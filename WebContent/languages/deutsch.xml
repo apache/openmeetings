@@ -4480,7 +4480,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
 
   <string id="1114" name="ldap config">
-    <value>Die Konfigurationsdateien liegen im gleichen Ordner wie persistence.xml. Die Dateien müssen manuell in den Ordner kopiert werden. Änderungen an der Konfigurationsdatei sind direkt online wirksam.</value>
+    <value>Die Konfigurationsdateien liegen im gleichen Ordner wie webapps/openmeetings/conf. Die Dateien müssen manuell in den Ordner kopiert werden. Änderungen an der Konfigurationsdatei sind direkt online wirksam.</value>
   </string>
 
   <string id="1115" name="ldap config">

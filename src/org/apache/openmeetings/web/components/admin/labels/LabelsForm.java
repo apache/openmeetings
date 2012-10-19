@@ -57,6 +57,7 @@ public class LabelsForm extends AdminBaseForm<Fieldlanguagesvalues> {
 		flv.setLanguage_id(panel.language.getLanguage_id());
 		this.setModelObject(flv);
 		target.add(this);
+		target.appendJavaScript("labelsInit();");
 	}
 
 	@Override
@@ -70,6 +71,7 @@ public class LabelsForm extends AdminBaseForm<Fieldlanguagesvalues> {
 		}
 		this.setModelObject(flv);
 		target.add(this);
+		target.appendJavaScript("labelsInit();");
 	}
 
 	@Override
@@ -83,6 +85,7 @@ public class LabelsForm extends AdminBaseForm<Fieldlanguagesvalues> {
 			.update(flv, WebSession.getUserId());
 		hideNewRecord();
 		target.add(panel.listContainer);
+		target.appendJavaScript("labelsInit();");
 	}
 
 	@Override
@@ -90,6 +93,7 @@ public class LabelsForm extends AdminBaseForm<Fieldlanguagesvalues> {
 		Application.getBean(FieldLanguagesValuesDaoImpl.class)
 			.delete(getModelObject(), WebSession.getUserId());
 		target.add(panel.listContainer);
+		target.appendJavaScript("labelsInit();");
 	}
 
 }

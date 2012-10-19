@@ -54,6 +54,7 @@ public class GroupForm extends AdminBaseForm<Organisation> {
 	void updateView(AjaxRequestTarget target) {
 		usersPanel.update(getOrgId());
 		target.add(this);
+		target.appendJavaScript("groupsInit();");
 	}
 	
 	private long getOrgId() {
@@ -82,6 +83,7 @@ public class GroupForm extends AdminBaseForm<Organisation> {
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
 		Application.getBean(OrganisationDAO.class).delete(getModelObject(), WebSession.getUserId());
 		target.add(groupList);
+		target.appendJavaScript("groupsInit();");
 	}
 	
 	@Override
@@ -89,5 +91,6 @@ public class GroupForm extends AdminBaseForm<Organisation> {
 		Application.getBean(OrganisationDAO.class).update(getModelObject(), WebSession.getUserId());
 		hideNewRecord();
 		target.add(groupList);
+		target.appendJavaScript("groupsInit();");
 	}
 }

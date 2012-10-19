@@ -3366,7 +3366,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Изменено</value>
   </string>
   <string id="1114" name="ldap config">
-    <value>Конфигурационные файлы в той же папке, что и hibernate.cfg.xml. Загрузите файлы в папку вручную. Изменения конфиг-файлов происходят немедленно онлайн.</value>
+    <value>Конфигурационные файлы в той же папке, что и webapps/openmeetings/conf. Загрузите файлы в папку вручную. Изменения конфиг-файлов происходят немедленно онлайн.</value>
   </string>
   <string id="1115" name="ldap config">
     <value>Имя конфиг-файла</value>

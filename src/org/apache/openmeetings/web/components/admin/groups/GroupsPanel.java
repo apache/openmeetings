@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.components.admin.groups;
 
 import org.apache.openmeetings.data.user.dao.OrganisationDAO;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
+import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
 import org.apache.openmeetings.web.components.admin.OmDataView;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
@@ -31,6 +32,13 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 
+/**
+ * Modify/ CRUD operations for {@link Organisation} and
+ * {@link Organisation_Users}
+ * 
+ * @author swag
+ * 
+ */
 public class GroupsPanel extends AdminPanel {
 	
 	private static final long serialVersionUID = -5170400556006464830L;
@@ -47,6 +55,7 @@ public class GroupsPanel extends AdminPanel {
         final AddUsersForm addUsersForm = new AddUsersForm("addUsers");
 		add(addUsersForm);
 		
+		//Adding the Group Form
 		final GroupForm form = new GroupForm("form", listContainer, new Organisation()){
 			private static final long serialVersionUID = -3042797340375988889L;
 
@@ -71,6 +80,7 @@ public class GroupsPanel extends AdminPanel {
 		};
         add(form.add(addUsersBtn.setOutputMarkupId(true)));
 
+        //List view
         OmDataView<Organisation> dataView = new OmDataView<Organisation>("groupList", new OmDataProvider<Organisation>(OrganisationDAO.class)) {
 			private static final long serialVersionUID = 8715559628755439596L;
 
@@ -86,12 +96,14 @@ public class GroupsPanel extends AdminPanel {
 						form.hideNewRecord();
 						form.setModelObject(organisation);
 						form.updateView(target);
+						target.appendJavaScript("groupsInit();");
 					}
 				});
 				item.add(AttributeModifier.append("class", "clickable " + ((item.getIndex() % 2 == 1) ? "even" : "odd")));
 			}
 		};
 
+		//Paging
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		add(new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = 5097048616003411362L;

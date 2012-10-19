@@ -101,6 +101,7 @@ public class LangPanel extends AdminPanel {
 						form.setModelObject(fv.getFieldlanguagesvalue());
 						form.hideNewRecord();
 						target.add(form);
+						target.appendJavaScript("labelsInit();");
 					}
 				});
 				item.add(AttributeModifier.append("class", "clickable "
