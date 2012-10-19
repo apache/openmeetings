@@ -1000,9 +1000,9 @@ public class Roommanagement {
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
 				String hql = "SELECT c FROM Rooms_Organisation c "
-						+ "LEFT JOIN FETCH c.room "
+						+ "LEFT JOIN FETCH c.room LEFT JOIN FETCH c.room.currentusers "
 						+ "WHERE c.organisation.organisation_id = :organisation_id "
-						+ "AND c.deleted <> :deleted AND c.room.deleted <> :deleted "
+						+ "AND c.deleted <> :deleted AND c.room.deleted <> :deleted AND c.room.appointment = false "
 						+ "AND c.organisation.deleted <> :deleted "
 						+ "ORDER BY c.room.name ASC";
 

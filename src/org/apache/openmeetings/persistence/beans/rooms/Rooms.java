@@ -89,15 +89,15 @@ public class Rooms implements Serializable, OmEntity {
 
 	@Column(name = "ispublic")
 	@Element(data = true, required = false)
-	private Boolean ispublic;
+	private boolean ispublic;
 
 	@Column(name = "numberOfPartizipants")
 	@Element(data = true)
 	private Long numberOfPartizipants = new Long(4);
 
-	@Column(name = "appointMent")
+	@Column(name = "appointment")
 	@Element(data = true)
-	private Boolean appointment;
+	private boolean appointment;
 
 	// Vars to simulate external Rooms
 	@Column(name = "externalRoomId")

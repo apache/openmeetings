@@ -142,24 +142,7 @@ public class ConferenceService {
 					.getRoomsOrganisationByOrganisationId(user_level,
 							organisation_id);
 
-			if (roomOrgsList == null) {
-				return null;
-			}
-
-			List<Rooms_Organisation> filtered = new ArrayList<Rooms_Organisation>();
-
-			for (Iterator<Rooms_Organisation> iter = roomOrgsList.iterator(); iter
-					.hasNext();) {
-				Rooms_Organisation orgRoom = iter.next();
-
-				if (!orgRoom.getRoom().getAppointment()) {
-					orgRoom.getRoom().setCurrentusers(
-							this.getRoomClientsListByRoomId(orgRoom.getRoom()
-									.getRooms_id()));
-					filtered.add(orgRoom);
-				}
-			}
-			return filtered;
+			return roomOrgsList;
 		} catch (Exception err) {
 			log.error("[getRoomsByOrganisationAndType]", err);
 		}
@@ -233,27 +216,9 @@ public class ConferenceService {
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			log.debug("getRoomsPublic user_level: " + user_level);
 
-			List<Rooms> roomList = roommanagement
-					.getPublicRoomsWithoutType(user_level);
+			List<Rooms> roomList = roomDao.getPublicRooms();
 
-			if (roomList == null) {
-				return null;
-			}
-
-			// Filter : no appointed meetings
-			List<Rooms> filtered = new ArrayList<Rooms>();
-
-			for (Iterator<Rooms> iter = roomList.iterator(); iter.hasNext();) {
-				Rooms rooms = iter.next();
-
-				if (!rooms.getAppointment()) {
-					rooms.setCurrentusers(this.getRoomClientsListByRoomId(rooms
-							.getRooms_id()));
-					filtered.add(rooms);
-				}
-			}
-
-			return filtered;
+			return roomList;
 		} catch (Exception err) {
 			log.error("[getRoomsPublicWithoutType]", err);
 		}
