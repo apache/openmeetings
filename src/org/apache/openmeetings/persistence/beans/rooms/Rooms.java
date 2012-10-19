@@ -38,7 +38,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.apache.openjpa.persistence.ElementDependent;
 import org.apache.openmeetings.persistence.beans.OmEntity;
@@ -69,7 +68,6 @@ public class Rooms implements Serializable, OmEntity {
 	private String name;
 
 	@Lob
-	// @Basic(fetch=FetchType.LAZY)
 	@Column(name = "comment_field")
 	@Element(data = true, required = false)
 	private String comment;
@@ -217,10 +215,8 @@ public class Rooms implements Serializable, OmEntity {
 	@org.simpleframework.xml.Transient
 	private List<Rooms_Organisation> roomOrganisations = new ArrayList<Rooms_Organisation>();
 
-	/*
-	 * Non persistent attributes
-	 */
-	@Transient
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "room_id")
 	private List<RoomClient> currentusers;
 
 	public String getComment() {

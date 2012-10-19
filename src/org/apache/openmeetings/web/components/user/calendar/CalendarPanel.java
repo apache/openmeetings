@@ -150,6 +150,9 @@ public class CalendarPanel extends UserPanel {
 				Calendar end = WebSession.getCalendar();
 				end.setTimeInMillis(getRequestCycle().getRequest().getRequestParameters().getParameterValue("_end").toLong());
 				
+				if (start.equals(end)) {
+					end.add(Calendar.HOUR_OF_DAY, 1);
+				}
 				Appointment a = new Appointment();
 				a.setAppointmentStarttime(start.getTime());
 				a.setAppointmentEndtime(end.getTime());

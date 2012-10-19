@@ -76,6 +76,24 @@ public class RoomDAO implements OmDAO<Rooms> {
 		return q.getSingleResult();
 	}
 
+	public List<Rooms> getPublicRooms() {
+		//TypedQuery<Rooms> q = em.createNamedQuery("getNondeletedRooms", Rooms.class);
+		TypedQuery<Rooms> q = em.createQuery(
+				"SELECT r from Rooms r LEFT JOIN FETCH r.currentusers WHERE r.ispublic= true and r.deleted= false ORDER BY r.name ASC", Rooms.class);
+		return q.getResultList();
+	}
+	
+	public List<Rooms> getOrganisationRooms(long orgId) {
+		TypedQuery<Rooms> q = em.createQuery(
+				"SELECT DISTINCT c.room FROM Rooms_Organisation c LEFT JOIN FETCH c.room LEFT JOIN FETCH c.room.currentusers "
+		+ "WHERE c.organisation.organisation_id = :orgId "
+		+ "AND c.deleted = false AND c.room.deleted = false "
+		+ "AND c.organisation.deleted = false "
+		+ "ORDER BY c.room.name ASC", Rooms.class);
+		q.setParameter("orgId", orgId);
+		return q.getResultList();
+	}
+	
 	public Rooms update(Rooms entity, long userId) {
 		if (entity.getRooms_id() == null) {
 	        /* Red5SIP integration *******************************************************************************/
