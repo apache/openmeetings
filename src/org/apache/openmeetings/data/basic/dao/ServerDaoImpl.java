@@ -83,8 +83,8 @@ public class ServerDaoImpl implements OmDAO<Server> {
 		return q.getResultList();
 	}
 	
-	public List<Server> get(String search, int start, int count) {
-		TypedQuery<Server> q = em.createQuery(DaoHelper.getSearchQuery("Server", "s", search, true, false, searchFields), Server.class);
+	public List<Server> get(String search, int start, int count, String order) {
+		TypedQuery<Server> q = em.createQuery(DaoHelper.getSearchQuery("Server", "s", search, true, false, order, searchFields), Server.class);
 		q.setFirstResult(start);
 		q.setMaxResults(count);
 		return q.getResultList();
@@ -103,7 +103,7 @@ public class ServerDaoImpl implements OmDAO<Server> {
 	}
 
 	public long count(String search) {
-		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Server", "s", search, true, true, searchFields), Long.class);
+		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Server", "s", search, true, true, null, searchFields), Long.class);
 		return q.getSingleResult();
 	}
 	

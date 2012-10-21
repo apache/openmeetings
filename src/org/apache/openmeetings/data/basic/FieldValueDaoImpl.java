@@ -65,13 +65,20 @@ public class FieldValueDaoImpl implements OmDAO<Fieldvalues> {
 		return get(getDefaultLanguage(), start, count);
 	}
 
-	public List<Fieldvalues> get(String search, int start, int count) {
-		return get(getDefaultLanguage(), search, start, count);
+	public List<Fieldvalues> get(String search, int start, int count, String sort) {
+		return get(getDefaultLanguage(), search, start, count, sort);
 	}
 	
-	public List<Fieldvalues> get(Long language_id, String search, int start, int count) {
-		String sql = DaoHelper.getSearchQuery("Fieldlanguagesvalues", "flv", search, true, false, searchFields)
-				+ " AND flv.fieldvalues.deleted = false AND flv.language_id = :lang";
+	public List<Fieldvalues> get(Long language_id, String search, int start, int count, String sort) {
+		String sql = DaoHelper.getSearchQuery(
+				"Fieldlanguagesvalues"
+				, "flv"
+				, search
+				, true
+				, false
+				, "flv.fieldvalues.deleted = false AND flv.language_id = :lang"
+				, sort
+				, searchFields);
 		TypedQuery<Fieldlanguagesvalues> q = em.createQuery(sql, Fieldlanguagesvalues.class);
 		q.setParameter("lang", language_id);
 		q.setFirstResult(start);
@@ -117,8 +124,15 @@ public class FieldValueDaoImpl implements OmDAO<Fieldvalues> {
 	}
 	
 	public long count(Long language_id, String search) {
-		String sql = DaoHelper.getSearchQuery("Fieldlanguagesvalues", "flv", search, true, true, searchFields)
-				+ " AND flv.fieldvalues.deleted = false AND flv.language_id = :lang";
+		String sql = DaoHelper.getSearchQuery(
+				"Fieldlanguagesvalues"
+				, "flv"
+				, search
+				, true
+				, true
+				, "flv.fieldvalues.deleted = false AND flv.language_id = :lang"
+				, null
+				, searchFields);
 		TypedQuery<Long> q = em.createQuery(sql, Long.class);
 		q.setParameter("lang", language_id);
 		return q.getSingleResult();

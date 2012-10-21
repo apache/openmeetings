@@ -351,8 +351,8 @@ public class ConfigurationDaoImpl implements OmDAO<Configuration> {
 		return q.getResultList();
 	}
 
-	public List<Configuration> get(String search, int start, int count) {
-		TypedQuery<Configuration> q = em.createQuery(DaoHelper.getSearchQuery("Configuration", "c", search, true, false, searchFields), Configuration.class);
+	public List<Configuration> get(String search, int start, int count, String sort) {
+		TypedQuery<Configuration> q = em.createQuery(DaoHelper.getSearchQuery("Configuration", "c", search, true, false, sort, searchFields), Configuration.class);
 		q.setFirstResult(start);
 		q.setMaxResults(count);
 		return q.getResultList();
@@ -363,7 +363,7 @@ public class ConfigurationDaoImpl implements OmDAO<Configuration> {
 	}
 
 	public long count(String search) {
-		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Configuration", "c", search, true, true, searchFields), Long.class);
+		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Configuration", "c", search, true, true, null, searchFields), Long.class);
 		return q.getSingleResult();
 	}
 	

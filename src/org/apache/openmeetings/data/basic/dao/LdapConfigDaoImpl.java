@@ -289,8 +289,8 @@ public class LdapConfigDaoImpl implements OmDAO<LdapConfig> {
 		return q.getResultList();
 	}
 
-	public List<LdapConfig> get(String search, int start, int count) {
-		TypedQuery<LdapConfig> q = em.createQuery(DaoHelper.getSearchQuery("LdapConfig", "lc", search, true, false, searchFields), LdapConfig.class);
+	public List<LdapConfig> get(String search, int start, int count, String sort) {
+		TypedQuery<LdapConfig> q = em.createQuery(DaoHelper.getSearchQuery("LdapConfig", "lc", search, true, false, sort, searchFields), LdapConfig.class);
 		q.setFirstResult(start);
 		q.setMaxResults(count);
 		return q.getResultList();
@@ -301,7 +301,7 @@ public class LdapConfigDaoImpl implements OmDAO<LdapConfig> {
 	}
 
 	public long count(String search) {
-		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("LdapConfig", "lc", search, true, true, searchFields), Long.class);
+		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("LdapConfig", "lc", search, true, true, null, searchFields), Long.class);
 		return q.getSingleResult();
 	}
 	

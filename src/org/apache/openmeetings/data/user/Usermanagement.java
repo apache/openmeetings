@@ -172,17 +172,16 @@ public class Usermanagement {
 			sresult.setObjectName(Users.class.getName());
 			sresult.setRecords(usersDao.count(search));
 
-			String hql = DaoHelper.getSearchQuery("Users", "u", search, true, false, UsersDaoImpl.searchFields);
-			hql += " ";
+			String sort = null;
 			if (orderby != null && orderby.length() > 0) {
-				hql += "ORDER BY " + orderby;
+				sort = orderby;
 			}
-
 			if (asc) {
-				hql += " ASC ";
+				sort += " ASC ";
 			} else {
-				hql += " DESC ";
+				sort += " DESC ";
 			}
+			String hql = DaoHelper.getSearchQuery("Users", "u", search, true, false, sort, UsersDaoImpl.searchFields);
 
 			log.debug("Show HQL: " + hql);
 

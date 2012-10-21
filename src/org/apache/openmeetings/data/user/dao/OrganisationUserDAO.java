@@ -49,12 +49,12 @@ public class OrganisationUserDAO implements OmDAO<Organisation_Users> {
 		throw new RuntimeException("Should not be used");
 	}
 
-	public List<Organisation_Users> get(String search, int start, int count) {
+	public List<Organisation_Users> get(String search, int start, int count, String sort) {
 		throw new RuntimeException("Should not be used");
 	}
 	
-	public List<Organisation_Users> get(long orgId, String search, int start, int count) {
-		TypedQuery<Organisation_Users> q = em.createQuery(DaoHelper.getSearchQuery("Organisation_Users", "ou", search, false, false, searchFields), Organisation_Users.class);
+	public List<Organisation_Users> get(long orgId, String search, int start, int count, String sort) {
+		TypedQuery<Organisation_Users> q = em.createQuery(DaoHelper.getSearchQuery("Organisation_Users", "ou", search, false, false, sort, searchFields), Organisation_Users.class);
 		q.setFirstResult(start);
 		q.setMaxResults(count);
 		return q.getResultList();
@@ -87,7 +87,7 @@ public class OrganisationUserDAO implements OmDAO<Organisation_Users> {
 	}
 	
 	public long count(long orgId, String search) {
-		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Organisation_Users", "ou", search, false, true, searchFields), Long.class);
+		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Organisation_Users", "ou", search, false, true, null, searchFields), Long.class);
 		return q.getSingleResult();
 	}
 	

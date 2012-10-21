@@ -25,7 +25,9 @@ import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
 import org.apache.openmeetings.web.components.admin.OmDataView;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
+import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmDataProvider;
+import org.apache.openmeetings.web.data.OmOrderByBorder;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -44,11 +46,12 @@ public class UsersPanel extends AdminPanel {
 
 	private UserForm form;
 
+	@SuppressWarnings("unchecked")
 	public UsersPanel(String id) {
 		super(id);
 
-		OmDataView<Users> dataView = new OmDataView<Users>("userList",
-				new OmDataProvider<Users>(UsersDaoImpl.class)) {
+		final OmDataView<Users> dataView = new OmDataView<Users>("userList"
+				, new OmDataProvider<Users>(UsersDaoImpl.class)) {
 			private static final long serialVersionUID = 8715559628755439596L;
 
 			@Override
@@ -76,6 +79,12 @@ public class UsersPanel extends AdminPanel {
 		final WebMarkupContainer listContainer = new WebMarkupContainer(
 				"listContainer");
 		add(listContainer.add(dataView).setOutputMarkupId(true));
+		DataViewContainer<Users> container = new DataViewContainer<Users>(listContainer, dataView);
+		container.setLinks(new OmOrderByBorder<Users>("orderById", "user_id", container)
+				, new OmOrderByBorder<Users>("orderByLogin", "login", container)
+				, new OmOrderByBorder<Users>("orderByFirstName", "firstname", container)
+				, new OmOrderByBorder<Users>("orderByLastName", "lastname", container));
+		add(container.orderLinks);
 		add(new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = 5097048616003411362L;
 

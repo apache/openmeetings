@@ -113,8 +113,8 @@ public class UsersDaoImpl implements OmDAO<Users> {
 		return q.getResultList();
 	}
 
-	public List<Users> get(String search, int start, int count) {
-		TypedQuery<Users> q = em.createQuery(DaoHelper.getSearchQuery("Users", "u", search, true, false, searchFields), Users.class);
+	public List<Users> get(String search, int start, int count, String sort) {
+		TypedQuery<Users> q = em.createQuery(DaoHelper.getSearchQuery("Users", "u", search, true, false, sort, searchFields), Users.class);
 		q.setFirstResult(start);
 		q.setMaxResults(count);
 		return q.getResultList();
@@ -132,12 +132,12 @@ public class UsersDaoImpl implements OmDAO<Users> {
 	}
 
 	public long count(String search) {
-		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Users", "u", search, true, true, searchFields), Long.class);
+		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Users", "u", search, true, true, null, searchFields), Long.class);
 		return q.getSingleResult();
 	}
 	
 	public List<Users> get(String search) {
-		TypedQuery<Users> q = em.createQuery(DaoHelper.getSearchQuery("Users", "u", search, true, false, searchFields), Users.class);
+		TypedQuery<Users> q = em.createQuery(DaoHelper.getSearchQuery("Users", "u", search, true, false, null, searchFields), Users.class);
 		return q.getResultList();
 	}
 

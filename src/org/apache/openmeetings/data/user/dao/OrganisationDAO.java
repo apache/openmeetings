@@ -57,8 +57,8 @@ public class OrganisationDAO implements OmDAO<Organisation> {
 		return q.getResultList();
 	}
 
-	public List<Organisation> get(String search, int start, int count) {
-		TypedQuery<Organisation> q = em.createQuery(DaoHelper.getSearchQuery("Organisation", "o", search, true, false, searchFields), Organisation.class);
+	public List<Organisation> get(String search, int start, int count, String sort) {
+		TypedQuery<Organisation> q = em.createQuery(DaoHelper.getSearchQuery("Organisation", "o", search, true, false, sort, searchFields), Organisation.class);
 		q.setFirstResult(start);
 		q.setMaxResults(count);
 		return q.getResultList();
@@ -70,7 +70,7 @@ public class OrganisationDAO implements OmDAO<Organisation> {
 	}
 
 	public long count(String search) {
-		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Organisation", "o", search, true, true, searchFields), Long.class);
+		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Organisation", "o", search, true, true, null, searchFields), Long.class);
 		return q.getSingleResult();
 	}
 	

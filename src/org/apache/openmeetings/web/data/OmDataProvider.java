@@ -23,11 +23,11 @@ import java.util.Iterator;
 import org.apache.openmeetings.data.OmDAO;
 import org.apache.openmeetings.persistence.beans.OmEntity;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.wicket.markup.repeater.data.IDataProvider;
+import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 
-public class OmDataProvider<T extends OmEntity> implements IDataProvider<T> {
+public class OmDataProvider<T extends OmEntity> extends SortableDataProvider<T, String> {
 	private static final long serialVersionUID = 4325721185888905204L;
 	protected Class<? extends OmDAO<T>> clazz;
 	protected String search = null;
@@ -40,10 +40,18 @@ public class OmDataProvider<T extends OmEntity> implements IDataProvider<T> {
 		// does nothing
 	}
 
+	protected String getSortStr() {
+		String result = null;
+		if (getSort() != null) {
+			result = getSort().getProperty() + " " + (getSort().isAscending() ? "ASC" : "DESC");
+		}
+		return result;
+	}
+	
 	public Iterator<? extends T> iterator(long first, long count) {
-		return (search == null
+		return (search == null && getSort() == null
 			? Application.getBean(clazz).get((int)first, (int)count)
-			: Application.getBean(clazz).get(search, (int)first, (int)count)).iterator();
+			: Application.getBean(clazz).get(search, (int)first, (int)count, getSortStr())).iterator();
 	}
 
 	public long size() {

@@ -60,9 +60,9 @@ public class GroupUsersPanel extends Panel {
 			}
 			
 			public java.util.Iterator<? extends Organisation_Users> iterator(long first, long count) {
-				return (search == null
+				return (search == null && getSort() == null
 						? Application.getBean(OrganisationUserDAO.class).get(organisationId, (int)first, (int)count)
-						: Application.getBean(OrganisationUserDAO.class).get(organisationId, search, (int)first, (int)count)).iterator();
+						: Application.getBean(OrganisationUserDAO.class).get(organisationId, search, (int)first, (int)count, getSortStr())).iterator();
 			}
 		}) {
 			private static final long serialVersionUID = 8715559628755439596L;

@@ -54,9 +54,10 @@ public interface OmDAO<T extends OmEntity> {
 	 * @param search - string search criteria to filter entities
 	 * @param start - the start to range to retrieve
 	 * @param count - maximum instance count to retrieve
+	 * @param order - column and sort order
 	 * @return list of instances in the range specified
 	 */
-	List<T> get(String search, int start, int count);
+	List<T> get(String search, int start, int count, String order);
 
 	/**
 	 * Count the number of instances of {@link T}

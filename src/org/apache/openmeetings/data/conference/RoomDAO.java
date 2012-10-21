@@ -59,8 +59,8 @@ public class RoomDAO implements OmDAO<Rooms> {
 		return q.getResultList();
 	}
 
-	public List<Rooms> get(String search, int start, int count) {
-		TypedQuery<Rooms> q = em.createQuery(DaoHelper.getSearchQuery("Rooms", "r", search, true, false, searchFields), Rooms.class);
+	public List<Rooms> get(String search, int start, int count, String sort) {
+		TypedQuery<Rooms> q = em.createQuery(DaoHelper.getSearchQuery("Rooms", "r", search, true, false, sort, searchFields), Rooms.class);
 		q.setFirstResult(start);
 		q.setMaxResults(count);
 		return q.getResultList();
@@ -72,7 +72,7 @@ public class RoomDAO implements OmDAO<Rooms> {
 	}
 
 	public long count(String search) {
-		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Rooms", "r", search, true, true, searchFields), Long.class);
+		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Rooms", "r", search, true, true, null, searchFields), Long.class);
 		return q.getSingleResult();
 	}
 

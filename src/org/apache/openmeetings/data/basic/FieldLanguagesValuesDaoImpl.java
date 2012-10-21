@@ -56,12 +56,12 @@ public class FieldLanguagesValuesDaoImpl implements OmDAO<Fieldlanguagesvalues> 
 				Long.class, "1"), first, count);
 	}
 
-	public List<Fieldlanguagesvalues> get(String search, int start, int count) {
+	public List<Fieldlanguagesvalues> get(String search, int start, int count, String sort) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
-	public List<Fieldlanguagesvalues> get(Long language_id, String search, int start, int count) {
+	public List<Fieldlanguagesvalues> get(Long language_id, String search, int start, int count, String sort) {
 		// TODO Auto-generated method stub
 		return null;
 	}

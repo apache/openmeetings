@@ -22,7 +22,10 @@ import org.apache.commons.lang.StringUtils;
 
 public class DaoHelper {
 
-	public static String getSearchQuery(String table, String alias, String search, boolean filterDeleted, boolean count, String... fields) {
+	public static String getSearchQuery(String table, String alias, String search, boolean filterDeleted, boolean count, String sort, String... fields) {
+		return getSearchQuery(table, alias, search, filterDeleted, count, null, sort, fields);
+	}
+	public static String getSearchQuery(String table, String alias, String search, boolean filterDeleted, boolean count, String additionalWhere, String sort, String... fields) {
 		StringBuilder sb = new StringBuilder("SELECT ");
 		if (count) {
 			sb.append("COUNT(").append(alias).append(")");
@@ -38,11 +41,24 @@ public class DaoHelper {
 		StringBuilder where = DaoHelper.getWhereClause(search, alias, fields);
 		if (where.length() > 0) {
 			if (!whereAdded) {
+				whereAdded = true;
 				sb.append(" WHERE ");
 			} else {
 				sb.append("AND ");
 			}
 			sb.append(where);
+		}
+		if (additionalWhere != null && !additionalWhere.trim().isEmpty()) {
+			if (!whereAdded) {
+				whereAdded = true;
+				sb.append(" WHERE ");
+			} else {
+				sb.append("AND ");
+			}
+			sb.append(additionalWhere);
+		}
+		if (sort != null && !sort.trim().isEmpty()) {
+			sb.append(" ORDER BY ").append(alias).append(".").append(sort);
 		}
 		return sb.toString();
 	}

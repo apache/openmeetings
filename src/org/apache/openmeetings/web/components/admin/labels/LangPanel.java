@@ -81,9 +81,9 @@ public class LangPanel extends AdminPanel {
 					}
 					
 					public Iterator<? extends Fieldvalues> iterator(long first, long count) {
-						return (search == null
+						return (search == null && getSort() == null
 								? Application.getBean(FieldValueDaoImpl.class).get(language.getLanguage_id(), (int)first, (int)count)
-								: Application.getBean(FieldValueDaoImpl.class).get(language.getLanguage_id(), search, (int)first, (int)count)).iterator();
+								: Application.getBean(FieldValueDaoImpl.class).get(language.getLanguage_id(), search, (int)first, (int)count, getSortStr())).iterator();
 					}
 				}) {
 			private static final long serialVersionUID = 8715559628755439596L;
