@@ -23,7 +23,9 @@ import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
 import org.apache.openmeetings.web.components.admin.OmDataView;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
+import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmDataProvider;
+import org.apache.openmeetings.web.data.OmOrderByBorder;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -38,10 +40,10 @@ import org.apache.wicket.markup.repeater.Item;
  * 
  */
 public class ServersPanel extends AdminPanel {
-
-	private static final long serialVersionUID = -1L;
+	private static final long serialVersionUID = -2197334608577346569L;
 	private ServerForm form;
 	
+	@SuppressWarnings("unchecked")
 	public ServersPanel(String id) {
 		super(id);
 		OmDataView<Server> dataView = new OmDataView<Server>("serverList",
@@ -69,6 +71,11 @@ public class ServersPanel extends AdminPanel {
 		
 		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 		add(listContainer.add(dataView).setOutputMarkupId(true));
+		DataViewContainer<Server> container = new DataViewContainer<Server>(listContainer, dataView);
+		container.setLinks(new OmOrderByBorder<Server>("orderById", "id", container)
+				, new OmOrderByBorder<Server>("orderByName", "name", container)
+				, new OmOrderByBorder<Server>("orderByAddress", "address", container));
+		add(container.orderLinks);
 		add(new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = 5097048616003411362L;
 

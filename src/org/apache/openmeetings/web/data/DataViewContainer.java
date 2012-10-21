@@ -18,11 +18,14 @@
  */
 package org.apache.openmeetings.web.data;
 
+import java.io.Serializable;
+
 import org.apache.openmeetings.persistence.beans.OmEntity;
 import org.apache.openmeetings.web.components.admin.OmDataView;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
-public class DataViewContainer<T extends OmEntity> {
+public class DataViewContainer<T extends OmEntity> implements Serializable {
+	private static final long serialVersionUID = -1027478954223527890L;
 	public WebMarkupContainer container;
 	public OmDataView<T> view;
 	public OmOrderByBorder<T>[] orderLinks;

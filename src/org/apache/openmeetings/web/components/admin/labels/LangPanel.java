@@ -29,7 +29,9 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
 import org.apache.openmeetings.web.components.admin.OmDataView;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
+import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmDataProvider;
+import org.apache.openmeetings.web.data.OmOrderByBorder;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -56,6 +58,7 @@ public class LangPanel extends AdminPanel {
 		target.appendJavaScript("labelsInit();");
 	}
 
+	@SuppressWarnings("unchecked")
 	public LangPanel(String id) {
 		super(id);
 		FieldLanguageDaoImpl langDao = Application
@@ -111,6 +114,11 @@ public class LangPanel extends AdminPanel {
 
 		listContainer = new WebMarkupContainer("listContainer");
 		add(listContainer.add(dataView).setOutputMarkupId(true));
+		DataViewContainer<Fieldvalues> container = new DataViewContainer<Fieldvalues>(listContainer, dataView);
+		container.setLinks(new OmOrderByBorder<Fieldvalues>("orderById", "fieldvalues.fieldvalues_id", container)
+				, new OmOrderByBorder<Fieldvalues>("orderByName", "fieldvalues.name", container)
+				, new OmOrderByBorder<Fieldvalues>("orderByValue", "value", container));
+		add(container.orderLinks);
 		add(new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = 5097048616003411362L;
 

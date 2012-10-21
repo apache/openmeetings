@@ -23,7 +23,9 @@ import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
 import org.apache.openmeetings.web.components.admin.OmDataView;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
+import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmDataProvider;
+import org.apache.openmeetings.web.data.OmOrderByBorder;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -47,6 +49,7 @@ public class ConfigsPanel extends AdminPanel {
 		target.appendJavaScript("omConfigPanelInit();");
 	}
 
+	@SuppressWarnings("unchecked")
 	public ConfigsPanel(String id) {
 		super(id);
 		
@@ -76,6 +79,11 @@ public class ConfigsPanel extends AdminPanel {
 		};
 		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 		add(listContainer.add(dataView).setOutputMarkupId(true));
+		DataViewContainer<Configuration> container = new DataViewContainer<Configuration>(listContainer, dataView);
+		container.setLinks(new OmOrderByBorder<Configuration>("orderById", "configuration_id", container)
+				, new OmOrderByBorder<Configuration>("orderByKey", "conf_key", container)
+				, new OmOrderByBorder<Configuration>("orderByValue", "conf_value", container));
+		add(container.orderLinks);
 		add(new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = 5097048616003411362L;
 

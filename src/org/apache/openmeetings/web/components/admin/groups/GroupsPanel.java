@@ -24,7 +24,9 @@ import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
 import org.apache.openmeetings.web.components.admin.OmDataView;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
+import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmDataProvider;
+import org.apache.openmeetings.web.data.OmOrderByBorder;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -48,6 +50,7 @@ public class GroupsPanel extends AdminPanel {
 		target.appendJavaScript("groupsInit();");
 	}
 
+	@SuppressWarnings("unchecked")
 	public GroupsPanel(String id) {
 		super(id);
 		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
@@ -105,6 +108,10 @@ public class GroupsPanel extends AdminPanel {
 
 		//Paging
 		add(listContainer.add(dataView).setOutputMarkupId(true));
+		DataViewContainer<Organisation> container = new DataViewContainer<Organisation>(listContainer, dataView);
+		container.setLinks(new OmOrderByBorder<Organisation>("orderById", "organisation_id", container)
+				, new OmOrderByBorder<Organisation>("orderByName", "name", container));
+		add(container.orderLinks);
 		add(new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = 5097048616003411362L;
 
