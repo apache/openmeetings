@@ -197,6 +197,12 @@
 	<!-- compiles the sources only with laszlo debug client -->
 	<target name="dist-debug" description="binary distribution of OpenMeetings" depends="clean, jar, compile.laszlo.main.debug, compile.laszlo.main.debug.as3, -copy-libraries, signWebStartJars" />
 
+	<target name="-cleanup-jrebel" unless="jrebel.enabled">
+		<delete>
+			<fileset dir="${dist.webapps.dir}/WEB-INF/classes" includes="rebel*.xml" />
+		</delete>
+	</target>
+	
 	<!-- Check timestamp on files -->
 	<target name="prepare" depends="prepare.mkdir">
 		<copy todir="${red5.root}">
@@ -221,7 +227,7 @@
 				<exclude name="root-*.xml" />
 			</fileset>
 		</copy>
-
+		<antcall target="-cleanup-jrebel" />
 		<chmod dir="${red5.root}" perm="755" includes="**/*.sh" />
 
 		<antcall target="-process-db" inheritAll="true" inheritRefs="true" />
@@ -827,6 +833,15 @@
 		<ivy:retrieve conf="${ivy.conf.name}" pattern="${ivy.lib.location}/[artifact]-[type]-[revision].[ext]" />
 	</target>
 	
+	<target name="-patch-red5-server-start-script" if="jrebel.home">
+		<echo>Going to patch red5-debug.* with ${jrebel.home}</echo>
+		<filter token="jrebel.home" value="${jrebel.home}" />
+		<filter token="project.home" value="${user.dir}" />
+		<copy todir="${red5.lib}" filtering="true" overwrite="true" force="true">
+			<fileset dir="${webcontent.src.dir}/jrebel" includes="red5-debug.*"/>
+		</copy>
+	</target>
+	
 	<!-- Check for the Red5 libraries -->
 	<target name="-retrieve-red5-server" unless="red5.installed" description="Retrieves the libraries if needed" depends="-ant-task">
 		<svn refid="svn.settings">
@@ -863,6 +878,7 @@
 		<delete>
 			<fileset dir="${red5.server.lib}" includes="jaudiotagger*.jar" />
 		</delete>
+		<antcall target="-patch-red5-server-start-script"/> 
 	</target>
 	
 	<!-- Check for the Red5 libraries -->
