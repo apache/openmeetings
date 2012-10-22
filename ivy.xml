@@ -31,6 +31,7 @@
 		<conf name="svntask" description="Svn task dependencies" />
 		<conf name="openlaszlo" description="Openlaszlo dependencies" />
 		<conf name="mysql" description="MySQL JDBC driver" />
+		<conf name="tomcat7" description="Libraries necessary for patching Red5 to use Tomcat7" />
 	</configurations>
 	<dependencies>
 		<!--  START OF mainlib -->
@@ -321,6 +322,24 @@
 			<include type="jar" />
 		</dependency>
 		<!--  END OF MySQL Driver -->
+
+		<!-- Tomcat 7 --> 
+		<dependency org="org.apache.tomcat.embed" name="tomcat-embed-core" conf="tomcat7->*" rev="7.0.32" transitive="false" >
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.tomcat.embed" name="tomcat-embed-jasper" conf="tomcat7->*" rev="7.0.32" transitive="false" >
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.tomcat.embed" name="tomcat-embed-logging-juli" conf="tomcat7->*" rev="7.0.32" transitive="false" >
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.tomcat.embed" name="tomcat-embed-logging-log4j" conf="tomcat7->*" rev="7.0.32" transitive="false" >
+			<include type="jar" />
+		</dependency>
+		<dependency org="tomcatplugin" name="tomcatplugin" rev="1.4" conf="tomcat7->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		
 	</dependencies>
 </ivy-module>
 

@@ -847,14 +847,21 @@
 		<svn refid="svn.settings">
 			<checkout url="http://red5.googlecode.com/svn/java/server/trunk/" revision="${red5.server.revision}" destPath="${red5.server.dir}" />
 		</svn>
+		<!-- START of Tomcat 7 patch -->
+		<delete>
+			<fileset dir="${red5.server.dir}/plugins" includes="*.jar" />
+		</delete>
+		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
+			<param name="ivy.conf.name" value="tomcat7" />
+			<param name="ivy.lib.location" value="${red5.server.dir}/plugins" />
+		</antcall>
+		<!-- END of Tomcat 7 patch -->
 		<subant target="dist">
 			<fileset dir="${red5.server.dir}" includes="build.xml" />
 		</subant>
-		<echo message="JAVAEE: ${red5.server.lib}/javaee-api-5.1.2.jar" />
-		<jar destfile="${red5.server.lib}/javaee-api-5.1.2.om.jar">
-			<zipfileset src="${red5.server.lib}/javaee-api-5.1.2.jar" excludes="javax/persistence/**/*.*" />
-		</jar>
-		<delete file="${red5.server.lib}/javaee-api-5.1.2.jar" />
+		<!-- START of Tomcat 7 patch -->
+		<delete file="${red5.lib}/lib/javaee-api-5.1.2.jar" />
+		<!-- END of Tomcat 7 patch -->
 		<delete dir="${red5.lib}/webapps/installer" />
 		<delete dir="${red5.lib}/webapps/live" />
 		<delete dir="${red5.lib}/webapps/vod" />
@@ -890,6 +897,9 @@
 		<subant target="dist">
 			<fileset dir="${red5.client.dir}" includes="build.xml" />
 		</subant>
+		<!-- START of Tomcat 7 patch -->
+		<delete file="${red5.client.lib}/lib/javaee-api-5.1.2.jar" />
+		<!-- END of Tomcat 7 patch -->
 		<echo message="Red5 Client build" />
 	</target>
 
