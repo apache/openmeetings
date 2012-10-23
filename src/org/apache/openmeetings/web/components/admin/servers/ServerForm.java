@@ -75,12 +75,14 @@ public class ServerForm extends AdminBaseForm<Server> {
 		hideNewRecord();
 		target.add(this);
 		target.add(listContainer);
+		target.appendJavaScript("omServerPanelInit();");
 	}
 
 	@Override
 	protected void onNewSubmit(AjaxRequestTarget target, Form<?> form) {
 		setModelObject(new Server());
 		target.add(this);
+		target.appendJavaScript("omServerPanelInit();");
 	}
 
 	@Override
@@ -94,6 +96,7 @@ public class ServerForm extends AdminBaseForm<Server> {
 		}
 		setModelObject(server);
 		target.add(this);
+		target.appendJavaScript("omServerPanelInit();");
 	}
 
 	@Override
@@ -103,6 +106,7 @@ public class ServerForm extends AdminBaseForm<Server> {
 		this.setModelObject(new Server());
 		target.add(listContainer);
 		target.add(this);
+		target.appendJavaScript("omServerPanelInit();");
 	}
 
 }

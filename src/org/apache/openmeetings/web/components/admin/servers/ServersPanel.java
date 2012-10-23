@@ -43,6 +43,11 @@ public class ServersPanel extends AdminPanel {
 	private static final long serialVersionUID = -2197334608577346569L;
 	private ServerForm form;
 	
+	@Override
+	public void onMenuPanelLoad(AjaxRequestTarget target) {
+		target.appendJavaScript("omServerPanelInit();");
+	}
+
 	@SuppressWarnings("unchecked")
 	public ServersPanel(String id) {
 		super(id);
@@ -63,6 +68,7 @@ public class ServersPanel extends AdminPanel {
 						form.setModelObject(Server);
 						form.hideNewRecord();
 						target.add(form);
+						target.appendJavaScript("omServerPanelInit();");
 					}
 				});
 				item.add(AttributeModifier.replace("class", (item.getIndex() % 2 == 1) ? "even" : "odd"));

@@ -26,7 +26,6 @@ import org.apache.openmeetings.web.data.OmDataProvider;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -43,7 +42,8 @@ public abstract class PagedEntityListPanel extends AdminPanel {
 		dataView.setItemsPerPage(entitiesPerPage);
 		final Form<Void> f = new Form<Void>("pagingForm");
 		f.setOutputMarkupId(true);
-		f.add(new AjaxPagingNavigator("navigator", dataView).setOutputMarkupId(true))
+
+		f.add(new AdminPagingNavigator("navigator", dataView).setOutputMarkupId(true))
 			.add(new DropDownChoice<Integer>("entitiesPerPage", new PropertyModel<Integer>(this, "entitiesPerPage"), numbers)
 				.add(new AjaxFormComponentUpdatingBehavior("onchange") {
 					private static final long serialVersionUID = -7754441983330112248L;

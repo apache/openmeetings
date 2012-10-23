@@ -56,7 +56,14 @@ public class Application extends AuthenticatedWebApplication {
 				return mp;
 			}
 		});
+		
+		//Add custom resource loader at the beginning, so it will be checked first in the 
+		//chain of Resource Loaders, if not found it will search in Wicket's internal 
+		//Resource Loader for a the property key
+		getResourceSettings().getStringResourceLoaders().add(0, new LabelResourceLoader());
+		
 		super.init();
+		
 		mountPage("signin", getSignInPageClass());
 
 		getRootRequestMapperAsCompound().add(new HomePageMapper(getHomePage()) {
