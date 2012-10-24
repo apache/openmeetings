@@ -503,3 +503,13 @@ div.tableWrapper {
 	margin: 0px;
     padding: 0px;
 }
+
+.adminFormsFeedbackPanel {
+	background-color: #F2FAFF;
+	color: #ff3300;
+	position:absolute;
+	left:550px;
+	width: 480px;
+	bottom: 16px;
+	z-index:999;
+}
