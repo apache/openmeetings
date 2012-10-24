@@ -31,6 +31,7 @@ import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
+import org.apache.openmeetings.web.util.AjaxDownload;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressBar;
@@ -94,6 +95,9 @@ public class BackupPanel extends AdminPanel {
 			setMaxSize(Bytes.bytes(ImportHelper.getMaxUploadSize(Application
 					.getBean(ConfigurationDaoImpl.class))));
 
+			// Add a component to download a file without page refresh
+			final AjaxDownload download = new AjaxDownload();
+			add(download);
 			// add an download button
 			add(new AjaxButton("download", this) {
 				private static final long serialVersionUID = 839803820502260006L;
@@ -116,10 +120,13 @@ public class BackupPanel extends AdminPanel {
 								includeFilesInBackup.getConvertedInput()
 										.booleanValue());
 
+						/*download.setFileName(backupFile.getName());
+						download.setResourceStream(new FileResourceStream(backupFile));
+						download.initiate(target);*/
 						ResourceStreamRequestHandler handler
 							= new ResourceStreamRequestHandler(new FileResourceStream(backupFile), backupFile.getName());
 						handler.setContentDisposition(ContentDisposition.ATTACHMENT);
-					
+				
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
 					} catch (Exception e) {
 						log.error("Exception on panel backup download ", e);

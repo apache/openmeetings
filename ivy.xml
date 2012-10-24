@@ -216,25 +216,25 @@
 		<dependency org="org.simpleframework" name="simple-xml" rev="2.6.6" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-request" rev="6.0.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-request" rev="6.2.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-util" rev="6.0.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-util" rev="6.2.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-core" rev="6.0.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-core" rev="6.2.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-auth-roles" rev="6.0.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-auth-roles" rev="6.2.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-ioc" rev="6.0.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-ioc" rev="6.2.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-extensions" rev="6.0.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-extensions" rev="6.2.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-datetime" rev="6.0.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-datetime" rev="6.2.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		
