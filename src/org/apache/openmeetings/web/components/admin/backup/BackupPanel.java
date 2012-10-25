@@ -41,8 +41,6 @@ import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
-import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.red5.logging.Red5LoggerFactory;
@@ -120,14 +118,9 @@ public class BackupPanel extends AdminPanel {
 								includeFilesInBackup.getConvertedInput()
 										.booleanValue());
 
-						/*download.setFileName(backupFile.getName());
+						download.setFileName(backupFile.getName());
 						download.setResourceStream(new FileResourceStream(backupFile));
-						download.initiate(target);*/
-						ResourceStreamRequestHandler handler
-							= new ResourceStreamRequestHandler(new FileResourceStream(backupFile), backupFile.getName());
-						handler.setContentDisposition(ContentDisposition.ATTACHMENT);
-				
-						getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
+						download.initiate(target);
 					} catch (Exception e) {
 						log.error("Exception on panel backup download ", e);
 						uploadFeedback.error(e);

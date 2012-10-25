@@ -60,8 +60,7 @@
 			<include type="jar" />
 		</dependency>
 		<!-- include type="bundle" / FIXME unable to get openjpa without  sources -->
-		<dependency org="org.apache.geronimo.specs" name="geronimo-jpa_2.0_spec"
-			rev="1.1" conf="mainlib.ext->*" transitive="false"/>
+		<dependency org="org.apache.geronimo.specs" name="geronimo-jpa_2.0_spec" rev="1.1" conf="mainlib.ext->*" transitive="false"/>
 		<!--  END OF mainlib -->
 		
 		<!--  START OF ANAKIA -->
@@ -251,13 +250,10 @@
 			<include type="jar" />
 		</dependency>
 
-			<!-- include type="bundle" / FIXME unable to get openjpa without  sources -->
+		<!-- include type="bundle" / FIXME unable to get openjpa without  sources -->
 		<dependency org="org.mnode.ical4j" name="ical4j" rev="1.0.3" conf="openmeetings.ext->*" transitive="false"/>
 		<dependency org="org.apache.openjpa" name="openjpa" rev="2.2.0" conf="openmeetings.ext->*" transitive="false"/>
 		
-		<dependency org="javax.servlet" name="servlet-api" rev="2.5" conf="openmeetings.axis2->*" transitive="false">
-			<include type="jar" />
-		</dependency>
 		<dependency org="org.apache.ws.commons.axiom" name="axiom-impl" rev="1.2.12" conf="openmeetings.axis2->*" transitive="true">
 			<exclude name='commons-io' />
 			<exclude name='commons-logging' />
@@ -340,6 +336,7 @@
 			<include type="jar" />
 		</dependency>
 		
+		<exclude org="javax.servlet" module="servlet-api" type="*" ext="*" conf="*" matcher="exact"/>		
 	</dependencies>
 </ivy-module>
 

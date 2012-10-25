@@ -21,22 +21,13 @@ package org.apache.openmeetings.cli;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.Map;
-import java.util.Set;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.Servlet;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletException;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionGroup;
@@ -165,107 +156,7 @@ public class Admin {
 	private ClassPathXmlApplicationContext getApplicationContext(final String ctxName) {
 		if (ctx == null) {
 			OMContextListener omcl = new OMContextListener();
-			omcl.contextInitialized(new ServletContextEvent(new ServletContext() {
-				public void setAttribute(String arg0, Object arg1) {
-				}
-				
-				public void removeAttribute(String arg0) {
-				}
-				
-				public void log(String arg0, Throwable arg1) {
-				}
-				
-				public void log(Exception arg0, String arg1) {
-				}
-				
-				public void log(String arg0) {
-				}
-				
-				@SuppressWarnings("rawtypes")
-				public Enumeration getServlets() {
-					return null;
-				}
-				
-				@SuppressWarnings("rawtypes")
-				public Enumeration getServletNames() {
-					return null;
-				}
-				
-				public String getServletContextName() {
-					return null;
-				}
-				
-				public Servlet getServlet(String arg0) throws ServletException {
-					return null;
-				}
-				
-				public String getServerInfo() {
-					return null;
-				}
-				
-				@SuppressWarnings("rawtypes")
-				public Set getResourcePaths(String arg0) {
-					return null;
-				}
-				
-				public InputStream getResourceAsStream(String arg0) {
-					return null;
-				}
-				
-				public URL getResource(String arg0) throws MalformedURLException {
-					return null;
-				}
-				
-				public RequestDispatcher getRequestDispatcher(String arg0) {
-					return null;
-				}
-				
-				public String getRealPath(String arg0) {
-					return null;
-				}
-				
-				public RequestDispatcher getNamedDispatcher(String arg0) {
-					return null;
-				}
-				
-				public int getMinorVersion() {
-					return 0;
-				}
-				
-				public String getMimeType(String arg0) {
-					return null;
-				}
-				
-				public int getMajorVersion() {
-					return 0;
-				}
-				
-				@SuppressWarnings("rawtypes")
-				public Enumeration getInitParameterNames() {
-					return null;
-				}
-				
-				public String getInitParameter(String arg0) {
-					return null;
-				}
-				
-				public String getContextPath() {
-					return ctxName;
-				}
-				
-				public ServletContext getContext(String arg0) {
-					return null;
-				}
-				
-				@SuppressWarnings("rawtypes")
-				public Enumeration getAttributeNames() {
-					return null;
-				}
-				
-				public Object getAttribute(String arg0) {
-					return null;
-				}
-			}));
+			omcl.contextInitialized(new ServletContextEvent(new DummyServletContext()));
 			try {
 				ctx = new ClassPathXmlApplicationContext("openmeetings-applicationContext.xml");
 			} catch (Exception e) {

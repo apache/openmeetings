@@ -334,6 +334,8 @@ public class BackupExport {
 			List<Configuration> list = configurationDaoImpl.getConfigurations(
 					0, Integer.MAX_VALUE, "c.configuration_id", true);
 			Registry registry = new Registry();
+			registry.bind(OmTimeZone.class, OmTimeZoneConverter.class);
+			registry.bind(States.class, StateConverter.class);
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	

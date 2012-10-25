@@ -80,6 +80,7 @@
 
 	<!-- compile classpath -->
 	<path id="compile.classpath">
+		<fileset dir="${red5.lib}/plugins" includes="*.jar" />
 		<fileset dir="${red5.server.lib}" includes="*.jar" />
 		<fileset dir="${red5.client.lib}" includes="*.jar" />
 		<fileset dir="${red5.lib}" includes="*.jar" />
