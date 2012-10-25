@@ -156,7 +156,7 @@ public class Admin {
 	private ClassPathXmlApplicationContext getApplicationContext(final String ctxName) {
 		if (ctx == null) {
 			OMContextListener omcl = new OMContextListener();
-			omcl.contextInitialized(new ServletContextEvent(new DummyServletContext()));
+			omcl.contextInitialized(new ServletContextEvent(new DummyServletContext(ctxName)));
 			try {
 				ctx = new ClassPathXmlApplicationContext("openmeetings-applicationContext.xml");
 			} catch (Exception e) {

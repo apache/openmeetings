@@ -39,14 +39,19 @@ import javax.servlet.ServletRegistration.Dynamic;
 import javax.servlet.descriptor.JspConfigDescriptor;
 
 public class DummyServletContext implements ServletContext {
+	private String ctx;
+	
+	public DummyServletContext(String ctx) {
+		this.ctx = ctx;
+	}
+	
 	public ServletContext getContext(String uripath) {
 		// stab
 		return null;
 	}
 
 	public String getContextPath() {
-		// stab
-		return null;
+		return ctx;
 	}
 
 	public int getMajorVersion() {
