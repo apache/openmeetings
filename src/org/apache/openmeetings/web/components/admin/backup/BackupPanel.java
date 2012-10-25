@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.components.admin.backup;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Date;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
@@ -35,6 +36,7 @@ import org.apache.openmeetings.web.util.AjaxDownload;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressBar;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
@@ -81,6 +83,13 @@ public class BackupPanel extends AdminPanel {
 			// set this form to multipart mode (allways needed for uploads!)
 			setMultiPart(true);
 
+			// set max upload size in form as info text
+			Long maxBytes = ImportHelper.getMaxUploadSize(Application
+					.getBean(ConfigurationDaoImpl.class));
+			double megaBytes = maxBytes.doubleValue() / 1024 / 1024;
+			DecimalFormat formatter = new DecimalFormat("#,###.00");
+			add(new Label("MaxUploadSize", formatter.format(megaBytes)));
+
 			// Add one file input field
 			fileUploadField = new FileUploadField("fileInput");
 			add(fileUploadField);
@@ -119,7 +128,8 @@ public class BackupPanel extends AdminPanel {
 										.booleanValue());
 
 						download.setFileName(backupFile.getName());
-						download.setResourceStream(new FileResourceStream(backupFile));
+						download.setResourceStream(new FileResourceStream(
+								backupFile));
 						download.initiate(target);
 					} catch (Exception e) {
 						log.error("Exception on panel backup download ", e);

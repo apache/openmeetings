@@ -321,6 +321,12 @@ div.tableWrapper {
 	margin: 4px 2px 2px;
 }
 
+.adminBackupForm div.formelement {
+    display: block;
+    clear: both;
+    max-width: 1240px;
+}
+
 .formelementradiobox {
 	margin-left: 100px;
 }
