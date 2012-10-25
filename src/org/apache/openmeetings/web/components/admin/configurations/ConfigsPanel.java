@@ -18,14 +18,14 @@
  */
 package org.apache.openmeetings.web.components.admin.configurations;
 
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
-import org.apache.openmeetings.web.components.admin.OmDataView;
+import org.apache.openmeetings.web.components.admin.SearchableDataView;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
-import org.apache.openmeetings.web.data.OmDataProvider;
-import org.apache.openmeetings.web.data.OmOrderByBorder;
+import org.apache.openmeetings.web.data.SearchableDataProvider;
+import org.apache.openmeetings.web.data.OrderByBorder;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -53,8 +53,8 @@ public class ConfigsPanel extends AdminPanel {
 	public ConfigsPanel(String id) {
 		super(id);
 		
-		OmDataView<Configuration> dataView = new OmDataView<Configuration>("configList"
-			, new OmDataProvider<Configuration>(ConfigurationDaoImpl.class)) {
+		SearchableDataView<Configuration> dataView = new SearchableDataView<Configuration>("configList"
+			, new SearchableDataProvider<Configuration>(ConfigurationDao.class)) {
 			private static final long serialVersionUID = 8715559628755439596L;
 
 			@Override
@@ -80,9 +80,9 @@ public class ConfigsPanel extends AdminPanel {
 		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		DataViewContainer<Configuration> container = new DataViewContainer<Configuration>(listContainer, dataView);
-		container.setLinks(new OmOrderByBorder<Configuration>("orderById", "configuration_id", container)
-				, new OmOrderByBorder<Configuration>("orderByKey", "conf_key", container)
-				, new OmOrderByBorder<Configuration>("orderByValue", "conf_value", container));
+		container.setLinks(new OrderByBorder<Configuration>("orderById", "configuration_id", container)
+				, new OrderByBorder<Configuration>("orderByKey", "conf_key", container)
+				, new OrderByBorder<Configuration>("orderByValue", "conf_value", container));
 		add(container.orderLinks);
 		add(new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = 5097048616003411362L;

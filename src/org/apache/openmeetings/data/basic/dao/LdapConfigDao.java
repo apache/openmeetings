@@ -32,8 +32,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.OmDAO;
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
+import org.apache.openmeetings.data.IDataProviderDao;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
 import org.apache.openmeetings.utils.DaoHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -49,16 +49,16 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  */
 @Transactional
-public class LdapConfigDaoImpl implements OmDAO<LdapConfig> {
+public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			LdapConfigDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
+			LdapConfigDao.class, OpenmeetingsVariables.webAppRootKey);
 	public final static String[] searchFields = {"name", "configFileName", "domain", "comment"};
 
 	@PersistenceContext
 	private EntityManager em;
 
 	@Autowired
-	private UsersDaoImpl usersDao;
+	private UsersDao usersDao;
 
 	public Long addLdapConfig(String name, Boolean addDomainToUserName,
 			String configFileName, String domain, Long insertedby,

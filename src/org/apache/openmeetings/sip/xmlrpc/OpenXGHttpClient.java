@@ -46,7 +46,7 @@ import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.persistence.beans.sip.OpenXGReturnObject;
 import org.apache.openmeetings.persistence.beans.user.UserSipData;
@@ -67,7 +67,7 @@ public class OpenXGHttpClient {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			OpenXGHttpClient.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
-	private ConfigurationDaoImpl configurationDaoImpl;
+	private ConfigurationDao configurationDaoImpl;
 	@Autowired
 	private OpenXGReturnObjectDaoImpl openXGReturnObjectDao;
 

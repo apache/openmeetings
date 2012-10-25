@@ -37,9 +37,9 @@ import org.apache.commons.cli.Parser;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openjpa.jdbc.meta.MappingTool;
-import org.apache.openmeetings.data.file.dao.FileExplorerItemDaoImpl;
-import org.apache.openmeetings.data.flvrecord.FlvRecordingDaoImpl;
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
+import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
+import org.apache.openmeetings.data.flvrecord.FlvRecordingDao;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.documents.InstallationDocumentHandler;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
@@ -338,7 +338,7 @@ public class Admin {
 						long invalid = 0;
 						long deleted = 0;
 						ClassPathXmlApplicationContext ctx = getApplicationContext(ctxName);
-						UsersDaoImpl udao = ctx.getBean(UsersDaoImpl.class);
+						UsersDao udao = ctx.getBean(UsersDao.class);
 						for (File profile : profiles.listFiles()) {
 							long pSize = OmFileHelper.getSize(profile);
 							long userId = getUserIdByProfile(profile.getName());
@@ -379,7 +379,7 @@ public class Admin {
 						File files = OmFileHelper.getUploadFilesDir();
 						size = OmFileHelper.getSize(files);
 						restSize -= size;
-						FileExplorerItemDaoImpl fileDao = ctx.getBean(FileExplorerItemDaoImpl.class);
+						FileExplorerItemDao fileDao = ctx.getBean(FileExplorerItemDao.class);
 						invalid = 0;
 						deleted = 0;
 						for (File f : files.listFiles()) {
@@ -426,7 +426,7 @@ public class Admin {
 						report.append("Recordings allocates: ").append(OmFileHelper.getHumanSize(sectionSize)).append("\n");
 						long size = OmFileHelper.getSize(hibernateDir);
 						long restSize = sectionSize - size;
-						FlvRecordingDaoImpl recordDao = ctx.getBean(FlvRecordingDaoImpl.class);
+						FlvRecordingDao recordDao = ctx.getBean(FlvRecordingDao.class);
 						long[] params = {0, 0}; // [0] == deleted [1] == missing
 						for (FlvRecording rec : recordDao.getAllFlvRecordings()) {
 							checkRecordingFile(hibernateDir, rec.getFileHash(), rec.getDeleted(), params, cleanup);

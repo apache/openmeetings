@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.documents.InstallationDocumentHandler;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
@@ -47,14 +47,14 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 public class Install extends VelocityViewServlet {
 	private static final long serialVersionUID = 3684381243236013771L;
 
-	private ConfigurationDaoImpl getConfigurationDaoImpl() {
+	private ConfigurationDao getConfigurationDaoImpl() {
 		try {
 			if (!ScopeApplicationAdapter.initComplete) {
 				return null;
 			}
 			ApplicationContext context = WebApplicationContextUtils
 					.getWebApplicationContext(getServletContext());
-			return (ConfigurationDaoImpl) context
+			return (ConfigurationDao) context
 					.getBean("configurationDaoImpl");
 		} catch (Exception err) {
 			log.error("[getConfigurationmanagement]", err);

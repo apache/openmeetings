@@ -24,7 +24,7 @@ import static org.apache.wicket.ajax.attributes.CallbackParameter.resolved;
 
 import java.util.Calendar;
 
-import org.apache.openmeetings.data.calendar.daos.AppointmentDaoImpl;
+import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
@@ -95,7 +95,7 @@ public class CalendarPanel extends UserPanel {
 				Calendar end = WebSession.getCalendar();
 				end.setTimeInMillis(getRequestCycle().getRequest().getRequestParameters().getParameterValue("_end").toLong());
 				JSONArray events = new JSONArray();
-				for (Appointment a : Application.getBean(AppointmentDaoImpl.class).getAppointmentsByRange(WebSession.getUserId(),
+				for (Appointment a : Application.getBean(AppointmentDao.class).getAppointmentsByRange(WebSession.getUserId(),
 						start.getTime(), end.getTime())) {
 					try {
 						events.put(new JSONObject()
@@ -186,7 +186,7 @@ public class CalendarPanel extends UserPanel {
 
 			@Override
 			protected void respond(AjaxRequestTarget target) {
-				Appointment a = Application.getBean(AppointmentDaoImpl.class).getAppointmentById(
+				Appointment a = Application.getBean(AppointmentDao.class).getAppointmentById(
 						getRequestCycle().getRequest().getRequestParameters().getParameterValue("_id").toLong());
 				form.setModelObject(a);
 				
@@ -241,7 +241,7 @@ public class CalendarPanel extends UserPanel {
 		
 		@Override
 		protected void respond(AjaxRequestTarget target) {
-			AppointmentDaoImpl dao = Application.getBean(AppointmentDaoImpl.class);
+			AppointmentDao dao = Application.getBean(AppointmentDao.class);
 			Appointment a = dao.getAppointmentById(
 				getRequestCycle().getRequest().getRequestParameters().getParameterValue("_id").toLong());
 

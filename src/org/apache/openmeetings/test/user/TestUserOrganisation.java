@@ -25,7 +25,7 @@ import static org.junit.Assert.fail;
 import java.util.List;
 
 import org.apache.openmeetings.data.user.Organisationmanagement;
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.user.Users;
@@ -37,7 +37,7 @@ public class TestUserOrganisation extends AbstractOpenmeetingsSpringTest {
 	@Autowired
 	private Organisationmanagement orgManagement;
 	@Autowired
-	private UsersDaoImpl usersDao;
+	private UsersDao usersDao;
 	
 	private Users getValidUser() {
 		for (Users u : usersDao.getAllUsers()) {

@@ -21,8 +21,8 @@ package org.apache.openmeetings.web.components.admin;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.openmeetings.persistence.beans.OmEntity;
-import org.apache.openmeetings.web.data.OmDataProvider;
+import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
+import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -36,7 +36,7 @@ public abstract class PagedEntityListPanel extends AdminPanel {
 	private int entitiesPerPage = 50;
 	private List<Integer> numbers = Arrays.asList(10, 25, 50, 75, 100, 200);
 	
-	public PagedEntityListPanel(String id, final OmDataView<? extends OmEntity> dataView) {
+	public PagedEntityListPanel(String id, final SearchableDataView<? extends IDataProviderEntity> dataView) {
 		super(id);
 		
 		dataView.setItemsPerPage(entitiesPerPage);
@@ -58,7 +58,7 @@ public abstract class PagedEntityListPanel extends AdminPanel {
 					}
 				}));
 		
-		final OmDataProvider<? extends OmEntity> dp = dataView.getDataProvider();
+		final SearchableDataProvider<? extends IDataProviderEntity> dp = dataView.getDataProvider();
 		Form<Void> searchForm = new Form<Void>("searchForm");
 		f.add(searchForm);
 		searchForm.add(new TextField<String>("searchText", new PropertyModel<String>(dp, "search")).setOutputMarkupId(true));

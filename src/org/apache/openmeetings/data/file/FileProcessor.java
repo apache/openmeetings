@@ -27,7 +27,7 @@ import java.util.Map;
 
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.file.dao.FileExplorerItemDaoImpl;
+import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
 import org.apache.openmeetings.data.flvrecord.converter.FlvExplorerConverter;
 import org.apache.openmeetings.documents.GenerateImage;
 import org.apache.openmeetings.documents.GeneratePDF;
@@ -48,7 +48,7 @@ public class FileProcessor {
 	@Autowired
 	private FlvExplorerConverter flvExplorerConverter;
 	@Autowired
-	private FileExplorerItemDaoImpl fileExplorerItemDao;
+	private FileExplorerItemDao fileExplorerItemDao;
 	@Autowired
 	private GenerateImage generateImage;
 	@Autowired

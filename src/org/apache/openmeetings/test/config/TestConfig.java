@@ -22,7 +22,7 @@ import static junit.framework.Assert.assertEquals;
 
 import java.util.List;
 
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.apache.openmeetings.test.calendar.TestAppointmentAddAppointment;
@@ -37,7 +37,7 @@ public class TestConfig extends AbstractOpenmeetingsSpringTest {
 			TestAppointmentAddAppointment.class);
 	
 	@Autowired
-	private ConfigurationDaoImpl configurationmanagement;
+	private ConfigurationDao configurationmanagement;
 
 
 	@Test

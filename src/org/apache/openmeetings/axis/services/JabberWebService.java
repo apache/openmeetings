@@ -23,8 +23,8 @@ import java.util.List;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
-import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.conference.Invitationmanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
@@ -59,9 +59,9 @@ public class JabberWebService {
 	@Autowired
 	private Invitationmanagement invitationManagement;
 	@Autowired
-	private OmTimeZoneDaoImpl omTimeZoneDaoImpl;
+	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
-	private ConfigurationDaoImpl cfgManagement;
+	private ConfigurationDao cfgManagement;
 
 	/**
 	 * Get List&lt;Rooms&gt; of all rooms available to the user.

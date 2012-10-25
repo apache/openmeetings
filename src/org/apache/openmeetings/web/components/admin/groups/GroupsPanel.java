@@ -18,15 +18,15 @@
  */
 package org.apache.openmeetings.web.components.admin.groups;
 
-import org.apache.openmeetings.data.user.dao.OrganisationDAO;
+import org.apache.openmeetings.data.user.dao.OrganisationDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
-import org.apache.openmeetings.web.components.admin.OmDataView;
+import org.apache.openmeetings.web.components.admin.SearchableDataView;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
-import org.apache.openmeetings.web.data.OmDataProvider;
-import org.apache.openmeetings.web.data.OmOrderByBorder;
+import org.apache.openmeetings.web.data.SearchableDataProvider;
+import org.apache.openmeetings.web.data.OrderByBorder;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -84,7 +84,7 @@ public class GroupsPanel extends AdminPanel {
         add(form.add(addUsersBtn.setOutputMarkupId(true)));
 
         //List view
-        OmDataView<Organisation> dataView = new OmDataView<Organisation>("groupList", new OmDataProvider<Organisation>(OrganisationDAO.class)) {
+        SearchableDataView<Organisation> dataView = new SearchableDataView<Organisation>("groupList", new SearchableDataProvider<Organisation>(OrganisationDao.class)) {
 			private static final long serialVersionUID = 8715559628755439596L;
 
 			@Override
@@ -109,8 +109,8 @@ public class GroupsPanel extends AdminPanel {
 		//Paging
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		DataViewContainer<Organisation> container = new DataViewContainer<Organisation>(listContainer, dataView);
-		container.setLinks(new OmOrderByBorder<Organisation>("orderById", "organisation_id", container)
-				, new OmOrderByBorder<Organisation>("orderByName", "name", container));
+		container.setLinks(new OrderByBorder<Organisation>("orderById", "organisation_id", container)
+				, new OrderByBorder<Organisation>("orderByName", "name", container));
 		add(container.orderLinks);
 		add(new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = 5097048616003411362L;

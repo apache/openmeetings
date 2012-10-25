@@ -28,11 +28,11 @@ import java.util.Vector;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
-import org.apache.openmeetings.data.basic.dao.LdapConfigDaoImpl;
-import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.data.basic.dao.LdapConfigDao;
+import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.user.Usermanagement;
-import org.apache.openmeetings.data.user.dao.StateDaoImpl;
+import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.ldap.config.ConfigReader;
 import org.apache.openmeetings.persistence.beans.adresses.States;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
@@ -58,15 +58,15 @@ public class LdapLoginManagement {
 	@Autowired
 	private Sessionmanagement sessionManagement;
 	@Autowired
-	private ConfigurationDaoImpl configurationDaoImpl;
+	private ConfigurationDao configurationDaoImpl;
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
-	private StateDaoImpl statemanagement;
+	private StateDao statemanagement;
 	@Autowired
-	private LdapConfigDaoImpl ldapConfigDao;
+	private LdapConfigDao ldapConfigDao;
 	@Autowired
-	private OmTimeZoneDaoImpl omTimeZoneDaoImpl;
+	private OmTimeZoneDao omTimeZoneDaoImpl;
 
 	// External User Types
 	public static final String EXTERNAL_USER_TYPE_LDAP = "LDAP";

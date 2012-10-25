@@ -33,14 +33,14 @@ import org.apache.openmeetings.data.basic.Sessionmanagement;
 import org.apache.openmeetings.data.calendar.beans.AppointmentDTO;
 import org.apache.openmeetings.data.calendar.beans.Day;
 import org.apache.openmeetings.data.calendar.beans.Week;
-import org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDaoImpl;
-import org.apache.openmeetings.data.calendar.daos.AppointmentDaoImpl;
-import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDaoImpl;
+import org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDao;
+import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
+import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.data.conference.RoomDAO;
 import org.apache.openmeetings.data.conference.Roommanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
-import org.apache.openmeetings.data.user.dao.UserContactsDaoImpl;
+import org.apache.openmeetings.data.user.dao.UserContactsDao;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentCategory;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentReminderTyps;
@@ -66,7 +66,7 @@ public class CalendarWebService {
 			CalendarWebService.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private AppointmentDaoImpl appointmentDao;
+	private AppointmentDao appointmentDao;
 	@Autowired
 	private AppointmentLogic appointmentLogic;
 	@Autowired
@@ -80,13 +80,13 @@ public class CalendarWebService {
 	@Autowired
 	private AuthLevelmanagement authLevelManagement;
 	@Autowired
-	private AppointmentCategoryDaoImpl appointmentCategoryDaoImpl;
+	private AppointmentCategoryDao appointmentCategoryDaoImpl;
 	@Autowired
-	private AppointmentReminderTypDaoImpl appointmentReminderTypDaoImpl;
+	private AppointmentReminderTypDao appointmentReminderTypDaoImpl;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
 	@Autowired
-	private UserContactsDaoImpl userContactsDaoImpl;
+	private UserContactsDao userContactsDaoImpl;
 
 	/**
 	 * Load appointments by a start / end range for the current SID

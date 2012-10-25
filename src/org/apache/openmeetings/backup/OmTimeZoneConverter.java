@@ -18,20 +18,20 @@
  */
 package org.apache.openmeetings.backup;
 
-import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
+import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.simpleframework.xml.convert.Converter;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
 public class OmTimeZoneConverter implements Converter<OmTimeZone> {
-	private OmTimeZoneDaoImpl omTimeZoneDaoImpl;
+	private OmTimeZoneDao omTimeZoneDaoImpl;
 	
 	public OmTimeZoneConverter() {
 		//default constructor is for export
 	}
 	
-	public OmTimeZoneConverter(OmTimeZoneDaoImpl omTimeZoneDaoImpl) {
+	public OmTimeZoneConverter(OmTimeZoneDao omTimeZoneDaoImpl) {
 		this.omTimeZoneDaoImpl = omTimeZoneDaoImpl;
 	}
 	

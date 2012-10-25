@@ -24,8 +24,8 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.user.Emailmanagement;
 import org.apache.openmeetings.data.user.Organisationmanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
-import org.apache.openmeetings.data.user.dao.StateDaoImpl;
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
+import org.apache.openmeetings.data.user.dao.StateDao;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.servlet.outputhandler.BackupImportController;
 import org.red5.logging.Red5LoggerFactory;
@@ -43,9 +43,9 @@ public class UserImport {
 	@Autowired
 	private Emailmanagement emailManagement;
 	@Autowired
-	private UsersDaoImpl usersDao;
+	private UsersDao usersDao;
 	@Autowired
-	private StateDaoImpl statemanagement;
+	private StateDao statemanagement;
 	@Autowired
 	private BackupImportController backupController;
 

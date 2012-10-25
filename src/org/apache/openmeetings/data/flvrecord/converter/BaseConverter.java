@@ -23,9 +23,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
-import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDaoImpl;
-import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDeltaDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDao;
+import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDeltaDao;
 import org.apache.openmeetings.documents.GenerateSWF;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingMetaData;
@@ -41,11 +41,11 @@ public abstract class BaseConverter {
 			BaseConverter.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private ConfigurationDaoImpl configurationmanagement;
+	private ConfigurationDao configurationmanagement;
 	@Autowired
-	private FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDaoImpl;
+	private FlvRecordingMetaDataDao flvRecordingMetaDataDaoImpl;
 	@Autowired
-	private FlvRecordingMetaDeltaDaoImpl flvRecordingMetaDeltaDaoImpl;
+	private FlvRecordingMetaDeltaDao flvRecordingMetaDeltaDaoImpl;
 
 	protected String getPathToFFMPEG() {
 		String pathToFFMPEG = configurationmanagement.getConfKey(

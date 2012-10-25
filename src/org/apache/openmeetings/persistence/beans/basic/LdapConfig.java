@@ -34,7 +34,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import org.apache.openmeetings.persistence.beans.OmEntity;
+import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -45,7 +45,7 @@ import org.simpleframework.xml.Root;
 })
 @Table(name = "ldapconfig")
 @Root(name="ldapconfig")
-public class LdapConfig implements Serializable, OmEntity {
+public class LdapConfig implements Serializable, IDataProviderEntity {
 	private static final long serialVersionUID = 2839158519803993035L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

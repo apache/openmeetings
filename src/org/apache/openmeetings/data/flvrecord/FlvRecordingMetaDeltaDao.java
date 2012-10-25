@@ -35,9 +35,9 @@ import org.springframework.transaction.annotation.Transactional;
  *
  */
 @Transactional
-public class FlvRecordingMetaDeltaDaoImpl {
+public class FlvRecordingMetaDeltaDao {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecordingMetaDeltaDaoImpl.class,
+	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecordingMetaDeltaDao.class,
 			OpenmeetingsVariables.webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;

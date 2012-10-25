@@ -21,7 +21,7 @@ package org.apache.openmeetings.axis.services;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
-import org.apache.openmeetings.data.basic.dao.ServerDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ServerDao;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.red5.logging.Red5LoggerFactory;
@@ -46,7 +46,7 @@ public class ServerWebService {
 	@Autowired
 	private AuthLevelmanagement authLevelManagement;
 	@Autowired
-	private ServerDaoImpl serversDao;
+	private ServerDao serversDao;
 	
 	/**
 	 * Method to retrieve the list of the servers participating in cluster

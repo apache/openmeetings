@@ -28,8 +28,8 @@ import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.OmDAO;
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
+import org.apache.openmeetings.data.IDataProviderDao;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.utils.DaoHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -45,16 +45,16 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  */
 @Transactional
-public class ServerDaoImpl implements OmDAO<Server> {
+public class ServerDao implements IDataProviderDao<Server> {
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			ServerDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
+			ServerDao.class, OpenmeetingsVariables.webAppRootKey);
 	public final static String[] searchFields = {"name", "address", "comment"};
 
 	@PersistenceContext
 	private EntityManager em;
 	
 	@Autowired
-	private UsersDaoImpl usersDao;
+	private UsersDao usersDao;
 
 	/**
 	 * Get a list of all available servers
@@ -167,7 +167,7 @@ public class ServerDaoImpl implements OmDAO<Server> {
 	
 	/**
 	 * @deprecated user standard mechanism of
-	 *             {@link OmDAO#update(org.apache.openmeetings.persistence.beans.OmEntity, long)}
+	 *             {@link IDataProviderDao#update(org.apache.openmeetings.persistence.beans.OmEntity, long)}
 	 * @param id
 	 * @param name
 	 * @param address
@@ -187,7 +187,7 @@ public class ServerDaoImpl implements OmDAO<Server> {
 
 	/**
 	 * @deprecated use standard mechanism of
-	 *             {@link OmDAO#delete(org.apache.openmeetings.persistence.beans.OmEntity, long)}
+	 *             {@link IDataProviderDao#delete(org.apache.openmeetings.persistence.beans.OmEntity, long)}
 	 * @param id
 	 * @return
 	 */

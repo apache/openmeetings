@@ -31,12 +31,12 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
-import org.apache.openmeetings.data.calendar.daos.AppointmentDaoImpl;
+import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.management.MeetingMemberLogic;
 import org.apache.openmeetings.data.conference.Invitationmanagement;
 import org.apache.openmeetings.data.conference.RoomDAO;
 import org.apache.openmeetings.data.conference.Roommanagement;
-import org.apache.openmeetings.data.flvrecord.FlvRecordingDaoImpl;
+import org.apache.openmeetings.data.flvrecord.FlvRecordingDao;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
@@ -66,7 +66,7 @@ public class RoomWebService {
 			RoomWebService.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private AppointmentDaoImpl appointmentDao;
+	private AppointmentDao appointmentDao;
 	@Autowired
 	private Sessionmanagement sessionManagement;
 	@Autowired
@@ -74,7 +74,7 @@ public class RoomWebService {
 	@Autowired
 	private Roommanagement roommanagement;
 	@Autowired
-	private FlvRecordingDaoImpl flvRecordingDao;
+	private FlvRecordingDao flvRecordingDao;
 	@Autowired
 	private Invitationmanagement invitationManagement;
 	@Autowired

@@ -34,9 +34,9 @@ import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class FlvRecordingLogDaoImpl {
+public class FlvRecordingLogDao {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecordingLogDaoImpl.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecordingLogDao.class);
 	@PersistenceContext
 	private EntityManager em;
 	

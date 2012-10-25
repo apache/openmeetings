@@ -18,15 +18,15 @@
  */
 package org.apache.openmeetings.web.components.admin.groups;
 
-import org.apache.openmeetings.data.user.dao.OrganisationUserDAO;
+import org.apache.openmeetings.data.user.dao.OrganisationUserDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.ConfirmCallListener;
-import org.apache.openmeetings.web.components.admin.OmDataView;
+import org.apache.openmeetings.web.components.admin.SearchableDataView;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
-import org.apache.openmeetings.web.data.OmDataProvider;
+import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -50,19 +50,19 @@ public class GroupUsersPanel extends Panel {
 		this.organisationId = orgId;
 		setOutputMarkupId(true);
 		
-		OmDataView<Organisation_Users> dataView = new OmDataView<Organisation_Users>("userList", new OmDataProvider<Organisation_Users>(OrganisationUserDAO.class){
+		SearchableDataView<Organisation_Users> dataView = new SearchableDataView<Organisation_Users>("userList", new SearchableDataProvider<Organisation_Users>(OrganisationUserDao.class){
 			private static final long serialVersionUID = 1L;
 
 			public long size() {
 				return search == null
-						? Application.getBean(OrganisationUserDAO.class).count(organisationId)
-						: Application.getBean(OrganisationUserDAO.class).count(organisationId, search);
+						? Application.getBean(OrganisationUserDao.class).count(organisationId)
+						: Application.getBean(OrganisationUserDao.class).count(organisationId, search);
 			}
 			
 			public java.util.Iterator<? extends Organisation_Users> iterator(long first, long count) {
 				return (search == null && getSort() == null
-						? Application.getBean(OrganisationUserDAO.class).get(organisationId, (int)first, (int)count)
-						: Application.getBean(OrganisationUserDAO.class).get(organisationId, search, (int)first, (int)count, getSortStr())).iterator();
+						? Application.getBean(OrganisationUserDao.class).get(organisationId, (int)first, (int)count)
+						: Application.getBean(OrganisationUserDao.class).get(organisationId, search, (int)first, (int)count, getSortStr())).iterator();
 			}
 		}) {
 			private static final long serialVersionUID = 8715559628755439596L;
@@ -87,7 +87,7 @@ public class GroupUsersPanel extends Panel {
 					
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
-						Application.getBean(OrganisationUserDAO.class).delete(orgUser, WebSession.getUserId());
+						Application.getBean(OrganisationUserDao.class).delete(orgUser, WebSession.getUserId());
 						target.add(GroupUsersPanel.this);
 					}
 				})); 

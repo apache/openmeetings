@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -47,7 +47,7 @@ public class ImportHelper {
 	 * @return
 	 */
 	public static final long getMaxUploadSize(
-			ConfigurationDaoImpl configurationDaoImpl) {
+			ConfigurationDao configurationDaoImpl) {
 		try {
 			return configurationDaoImpl.getConfValue("max_upload_size",
 					Long.class, "" + DEFAULT_MAX_UPLOAD_SIZE);

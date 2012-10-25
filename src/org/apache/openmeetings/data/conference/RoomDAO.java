@@ -25,8 +25,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.apache.openmeetings.data.OmDAO;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
+import org.apache.openmeetings.data.IDataProviderDao;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.apache.openmeetings.sip.api.impl.asterisk.AsteriskDbSipClient;
 import org.apache.openmeetings.sip.api.request.SIPCreateConferenceRequest;
@@ -36,12 +36,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class RoomDAO implements OmDAO<Rooms> {
+public class RoomDAO implements IDataProviderDao<Rooms> {
 	public final static String[] searchFields = {"name"};
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
-	private ConfigurationDaoImpl cfgDao;
+	private ConfigurationDao cfgDao;
 	@Autowired
 	private AsteriskDbSipClient asteriskDbSipClient;
 

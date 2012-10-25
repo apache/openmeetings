@@ -30,10 +30,10 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
 import org.apache.openmeetings.data.conference.RoomDAO;
-import org.apache.openmeetings.data.flvrecord.FlvRecordingDaoImpl;
-import org.apache.openmeetings.data.flvrecord.FlvRecordingLogDaoImpl;
-import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDaoImpl;
-import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDeltaDaoImpl;
+import org.apache.openmeetings.data.flvrecord.FlvRecordingDao;
+import org.apache.openmeetings.data.flvrecord.FlvRecordingLogDao;
+import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDao;
+import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDeltaDao;
 import org.apache.openmeetings.data.flvrecord.beans.FLVRecorderObject;
 import org.apache.openmeetings.data.flvrecord.converter.FlvInterviewConverterTask;
 import org.apache.openmeetings.data.flvrecord.converter.FlvInterviewReConverterTask;
@@ -42,7 +42,7 @@ import org.apache.openmeetings.data.flvrecord.listener.BaseStreamListener;
 import org.apache.openmeetings.data.flvrecord.listener.StreamAudioListener;
 import org.apache.openmeetings.data.flvrecord.listener.StreamVideoListener;
 import org.apache.openmeetings.data.user.Usermanagement;
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingLog;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingMetaData;
@@ -82,11 +82,11 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	@Autowired
 	private ClientListManager clientListManager;
 	@Autowired
-	private FlvRecordingDaoImpl flvRecordingDaoImpl;
+	private FlvRecordingDao flvRecordingDaoImpl;
 	@Autowired
-	private FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDao;
+	private FlvRecordingMetaDataDao flvRecordingMetaDataDao;
 	@Autowired
-	private UsersDaoImpl usersDaoImpl;
+	private UsersDao usersDaoImpl;
 	@Autowired
 	private RoomDAO roomDao;
 	@Autowired
@@ -96,7 +96,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	@Autowired
 	private FlvInterviewReConverterTask flvInterviewReConverterTask;
 	@Autowired
-	private FlvRecordingLogDaoImpl flvRecordingLogDaoImpl;
+	private FlvRecordingLogDao flvRecordingLogDaoImpl;
 	@Autowired
 	private Sessionmanagement sessionManagement;
 	@Autowired
@@ -106,9 +106,9 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	@Autowired
 	private AuthLevelmanagement authLevelManagement;
 	@Autowired
-	private FlvRecordingMetaDeltaDaoImpl flvRecordingMetaDeltaDao;
+	private FlvRecordingMetaDeltaDao flvRecordingMetaDeltaDao;
 	@Autowired
-	private FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDaoImpl = null;
+	private FlvRecordingMetaDataDao flvRecordingMetaDataDaoImpl = null;
 
 	public void resultReceived(IPendingServiceCall arg0) {
 	}

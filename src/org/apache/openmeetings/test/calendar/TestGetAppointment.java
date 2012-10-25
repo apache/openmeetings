@@ -24,7 +24,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import org.apache.log4j.Logger;
-import org.apache.openmeetings.data.calendar.daos.AppointmentDaoImpl;
+import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ AbstractOpenmeetingsSpringTest {
 	private static final Logger log = Logger.getLogger(TestGetAppointment.class);
 
 	@Autowired
-	private AppointmentDaoImpl appointmentDao;
+	private AppointmentDao appointmentDao;
 	
 	@Test
 	public void getAppoinment() {

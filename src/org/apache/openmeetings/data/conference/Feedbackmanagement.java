@@ -20,7 +20,7 @@ package org.apache.openmeetings.data.conference;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.templates.FeedbackTemplate;
 import org.apache.openmeetings.utils.mail.MailHandler;
 import org.red5.logging.Red5LoggerFactory;
@@ -32,7 +32,7 @@ public class Feedbackmanagement {
 			Feedbackmanagement.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private ConfigurationDaoImpl configurationDaoImpl;
+	private ConfigurationDao configurationDaoImpl;
 	@Autowired
 	private Fieldmanagment fieldmanagment;
 	@Autowired

@@ -24,7 +24,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDaoImpl;
+import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentReminderTyps;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.junit.Test;
@@ -36,7 +36,7 @@ public class TestDatabaseStructureAppointmentReminderTyp extends AbstractOpenmee
 			.getLogger(TestDatabaseStructureAppointmentReminderTyp.class);
 
 	@Autowired
-	private AppointmentReminderTypDaoImpl appointmentReminderTypDaoImpl;
+	private AppointmentReminderTypDao appointmentReminderTypDaoImpl;
 
 	@Test
 	public void testAddingGroup() {

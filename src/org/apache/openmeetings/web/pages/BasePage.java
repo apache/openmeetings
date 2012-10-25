@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.pages;
 
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.components.HeaderPanel;
 import org.apache.wicket.markup.html.WebPage;
@@ -28,7 +28,7 @@ public abstract class BasePage extends WebPage {
 	private static final long serialVersionUID = -6237917782433412496L;
 
 	public BasePage() {
-		String appName = Application.getBean(ConfigurationDaoImpl.class).getAppName();
+		String appName = Application.getBean(ConfigurationDao.class).getAppName();
 		add(new Label("pageTitle", appName));
 		add(new HeaderPanel("header", appName));
 	}

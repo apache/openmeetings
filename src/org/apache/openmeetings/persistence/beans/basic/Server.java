@@ -34,7 +34,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import org.apache.openmeetings.persistence.beans.OmEntity;
+import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -49,7 +49,7 @@ import org.simpleframework.xml.Root;
 		@NamedQuery(name = "getServerWithMinimumUsers", query = "SELECT s.id, COUNT(u) AS cnt FROM Users u JOIN u.server s WHERE s.deleted = false GROUP BY s.id ORDER BY cnt") })
 @Table(name = "server")
 @Root
-public class Server implements Serializable, OmEntity {
+public class Server implements Serializable, IDataProviderEntity {
 
 	private static final long serialVersionUID = -6822732074549167727L;
 

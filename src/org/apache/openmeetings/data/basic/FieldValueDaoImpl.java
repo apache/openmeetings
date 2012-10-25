@@ -26,8 +26,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.apache.openmeetings.data.OmDAO;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
+import org.apache.openmeetings.data.IDataProviderDao;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.persistence.beans.lang.Fieldvalues;
 import org.apache.openmeetings.utils.DaoHelper;
@@ -35,13 +35,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class FieldValueDaoImpl implements OmDAO<Fieldvalues> {
+public class FieldValueDaoImpl implements IDataProviderDao<Fieldvalues> {
 	public final static String[] searchFields = {"value", "fieldvalues.name"};
 	
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
-	private ConfigurationDaoImpl configurationDaoImpl;
+	private ConfigurationDao configurationDaoImpl;
 	@Autowired
 	private FieldLanguagesValuesDaoImpl flvDaoImpl;
 

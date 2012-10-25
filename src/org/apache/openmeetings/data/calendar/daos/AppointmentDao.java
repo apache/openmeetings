@@ -36,11 +36,11 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
+import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.calendar.management.MeetingMemberLogic;
 import org.apache.openmeetings.data.conference.Invitationmanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentCategory;
@@ -56,24 +56,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class AppointmentDaoImpl {
+public class AppointmentDao {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			AppointmentDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
+			AppointmentDao.class, OpenmeetingsVariables.webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
-	private OmTimeZoneDaoImpl omTimeZoneDaoImpl;
+	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
-	private AppointmentCategoryDaoImpl appointmentCategoryDaoImpl;
+	private AppointmentCategoryDao appointmentCategoryDaoImpl;
 	@Autowired
-	private AppointmentReminderTypDaoImpl appointmentReminderTypDaoImpl;
+	private AppointmentReminderTypDao appointmentReminderTypDaoImpl;
 	@Autowired
-	private MeetingMemberDaoImpl meetingMemberDao;
+	private MeetingMemberDao meetingMemberDao;
 	@Autowired
-	private UsersDaoImpl usersDao;
+	private UsersDao usersDao;
 	@Autowired
 	private Invitationmanagement invitationManagement;
 	@Autowired

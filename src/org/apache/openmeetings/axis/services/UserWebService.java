@@ -26,13 +26,13 @@ import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.ErrorManagement;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
-import org.apache.openmeetings.data.basic.dao.SOAPLoginDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.data.basic.dao.SOAPLoginDao;
 import org.apache.openmeetings.data.beans.basic.ErrorResult;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.user.Organisationmanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.persistence.beans.basic.ErrorValues;
 import org.apache.openmeetings.persistence.beans.basic.RemoteSessionObject;
@@ -64,7 +64,7 @@ public class UserWebService {
 	@Autowired
 	private Sessionmanagement sessionManagement;
 	@Autowired
-	private ConfigurationDaoImpl configurationDaoImpl;
+	private ConfigurationDao configurationDaoImpl;
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
@@ -74,9 +74,9 @@ public class UserWebService {
 	@Autowired
 	private Organisationmanagement organisationmanagement;
 	@Autowired
-	private SOAPLoginDaoImpl soapLoginDao;
+	private SOAPLoginDao soapLoginDao;
 	@Autowired
-	private UsersDaoImpl usersDao;
+	private UsersDao usersDao;
 	@Autowired
 	private MainService mainService;
 	@Autowired

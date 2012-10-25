@@ -32,13 +32,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class ConferenceLogDaoImpl {
+public class ConferenceLogDao {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(ConferenceLogDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ConferenceLogDao.class, OpenmeetingsVariables.webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
-	private ConferenceLogTypeDaoImpl conferenceLogTypeDao;
+	private ConferenceLogTypeDao conferenceLogTypeDao;
 
 	public Long addConferenceLog(String eventType, Long userId, String streamid, 
 			Long room_id, String userip, String scopeName, 

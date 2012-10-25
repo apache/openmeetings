@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.components.admin.servers;
 
-import org.apache.openmeetings.data.basic.dao.ServerDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ServerDao;
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
@@ -67,9 +67,9 @@ public class ServerForm extends AdminBaseForm<Server> {
 
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
-		Application.getBean(ServerDaoImpl.class).update(getModelObject(),
+		Application.getBean(ServerDao.class).update(getModelObject(),
 				WebSession.getUserId());
-		Server server = Application.getBean(ServerDaoImpl.class).get(
+		Server server = Application.getBean(ServerDao.class).get(
 				getModelObject().getId());
 		setModelObject(server);
 		hideNewRecord();
@@ -89,7 +89,7 @@ public class ServerForm extends AdminBaseForm<Server> {
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		Server server = getModelObject();
 		if (server.getId() <= 0) {
-			server = Application.getBean(ServerDaoImpl.class).get(
+			server = Application.getBean(ServerDao.class).get(
 					server.getId());
 		} else {
 			server = new Server();
@@ -101,7 +101,7 @@ public class ServerForm extends AdminBaseForm<Server> {
 
 	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
-		Application.getBean(ServerDaoImpl.class).delete(getModelObject(),
+		Application.getBean(ServerDao.class).delete(getModelObject(),
 				WebSession.getUserId());
 		this.setModelObject(new Server());
 		target.add(listContainer);

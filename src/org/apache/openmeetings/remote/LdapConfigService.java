@@ -25,7 +25,7 @@ import java.util.List;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
-import org.apache.openmeetings.data.basic.dao.LdapConfigDaoImpl;
+import org.apache.openmeetings.data.basic.dao.LdapConfigDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
@@ -42,7 +42,7 @@ public class LdapConfigService {
 	
 	//Spring loaded Bean
 	@Autowired
-	private LdapConfigDaoImpl ldapConfigDaoImpl;
+	private LdapConfigDao ldapConfigDaoImpl;
 	@Autowired
 	private Sessionmanagement sessionManagement;
     @Autowired

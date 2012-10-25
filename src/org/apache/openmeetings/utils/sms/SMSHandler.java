@@ -19,7 +19,7 @@
 package org.apache.openmeetings.utils.sms;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.smslib.OutboundMessage;
@@ -40,7 +40,7 @@ public class SMSHandler {
 			SMSHandler.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	protected ConfigurationDaoImpl configurationDaoImpl;
+	protected ConfigurationDao configurationDaoImpl;
 	@Autowired
 	protected TaskExecutor taskExecutor;
 

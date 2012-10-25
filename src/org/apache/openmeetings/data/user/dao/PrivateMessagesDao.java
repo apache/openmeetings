@@ -37,9 +37,9 @@ import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class PrivateMessagesDaoImpl {
+public class PrivateMessagesDao {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(PrivateMessagesDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(PrivateMessagesDao.class, OpenmeetingsVariables.webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
 	

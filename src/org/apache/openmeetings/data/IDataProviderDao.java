@@ -20,7 +20,7 @@ package org.apache.openmeetings.data;
 
 import java.util.List;
 
-import org.apache.openmeetings.persistence.beans.OmEntity;
+import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
 
 /**
  * General interface to perform CRUD operations on entities
@@ -29,7 +29,7 @@ import org.apache.openmeetings.persistence.beans.OmEntity;
  * 
  * @param <T>
  */
-public interface OmDAO<T extends OmEntity> {
+public interface IDataProviderDao<T extends IDataProviderEntity> {
 
 	/**
 	 * Get an instance of an {@link T}

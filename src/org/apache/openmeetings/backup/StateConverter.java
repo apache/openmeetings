@@ -18,19 +18,19 @@
  */
 package org.apache.openmeetings.backup;
 
-import org.apache.openmeetings.data.user.dao.StateDaoImpl;
+import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.persistence.beans.adresses.States;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
 public class StateConverter extends OmConverter<States> {
-	private StateDaoImpl statemanagement;
+	private StateDao statemanagement;
 	
 	public StateConverter() {
 		//default constructor is for export
 	}
 	
-	public StateConverter(StateDaoImpl statemanagement) {
+	public StateConverter(StateDao statemanagement) {
 		this.statemanagement = statemanagement;
 	}
 	

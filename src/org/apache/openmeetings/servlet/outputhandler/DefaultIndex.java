@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.velocity.Template;
@@ -41,14 +41,14 @@ public class DefaultIndex extends VelocityViewServlet {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			DefaultIndex.class, OpenmeetingsVariables.webAppRootKey);
 
-	private ConfigurationDaoImpl getConfigurationDaoImpl() {
+	private ConfigurationDao getConfigurationDaoImpl() {
 		try {
 			if (!ScopeApplicationAdapter.initComplete) {
 				return null;
 			}
 			ApplicationContext context = WebApplicationContextUtils
 					.getWebApplicationContext(getServletContext());
-			return (ConfigurationDaoImpl) context
+			return (ConfigurationDao) context
 					.getBean("configurationDaoImpl");
 		} catch (Exception err) {
 			log.error("[getConfigurationmanagement]", err);

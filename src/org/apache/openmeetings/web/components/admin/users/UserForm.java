@@ -23,12 +23,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.openmeetings.data.basic.FieldLanguageDaoImpl;
-import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
-import org.apache.openmeetings.data.basic.dao.ServerDaoImpl;
+import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
+import org.apache.openmeetings.data.basic.dao.ServerDao;
 import org.apache.openmeetings.data.user.Organisationmanagement;
-import org.apache.openmeetings.data.user.dao.SalutationDaoImpl;
-import org.apache.openmeetings.data.user.dao.StateDaoImpl;
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
+import org.apache.openmeetings.data.user.dao.SalutationDao;
+import org.apache.openmeetings.data.user.dao.StateDao;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.adresses.States;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.basic.Server;
@@ -78,7 +78,7 @@ public class UserForm extends AdminBaseForm<Users> {
 	private Users user;
 
 	private final List<Salutations> saluationList = Application.getBean(
-			SalutationDaoImpl.class).getUserSalutations(
+			SalutationDao.class).getUserSalutations(
 			WebSession.getLanguage());
 	private final List<FieldLanguage> languageList = Application.getBean(
 			FieldLanguageDaoImpl.class).getLanguages();
@@ -162,9 +162,9 @@ public class UserForm extends AdminBaseForm<Users> {
 
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
-		Application.getBean(UsersDaoImpl.class).update(getModelObject(),
+		Application.getBean(UsersDao.class).update(getModelObject(),
 				WebSession.getUserId());
-		Users userStored = Application.getBean(UsersDaoImpl.class).get(
+		Users userStored = Application.getBean(UsersDao.class).get(
 				getModelObject().getUser_id());
 		// TODO: Why the password field is not set via the Model is because its
 		// FetchType is Lazy, this extra hook here might be not needed with a
@@ -172,7 +172,7 @@ public class UserForm extends AdminBaseForm<Users> {
 		// sebawagner, 01.10.2012
 		if (passwordField.getConvertedInput() != null
 				&& !passwordField.getConvertedInput().isEmpty()) {
-			Application.getBean(UsersDaoImpl.class).updatePassword(userStored,
+			Application.getBean(UsersDao.class).updatePassword(userStored,
 					passwordField.getConvertedInput());
 		}
 		setModelObject(userStored);
@@ -184,7 +184,7 @@ public class UserForm extends AdminBaseForm<Users> {
 
 	@Override
 	protected void onNewSubmit(AjaxRequestTarget target, Form<?> form) {
-		UsersDaoImpl usersDaoImpl = Application.getBean(UsersDaoImpl.class);
+		UsersDao usersDaoImpl = Application.getBean(UsersDao.class);
 		setModelObject(usersDaoImpl.getNewUserInstance(usersDaoImpl
 				.get(WebSession.getUserId())));
 		target.add(this);
@@ -195,7 +195,7 @@ public class UserForm extends AdminBaseForm<Users> {
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		Users user = getModelObject();
 		if (user.getUser_id() <= 0) {
-			user = Application.getBean(UsersDaoImpl.class).get(
+			user = Application.getBean(UsersDao.class).get(
 					user.getUser_id());
 		} else {
 			user = new Users();
@@ -207,7 +207,7 @@ public class UserForm extends AdminBaseForm<Users> {
 
 	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
-		UsersDaoImpl usersDaoImpl = Application.getBean(UsersDaoImpl.class);
+		UsersDao usersDaoImpl = Application.getBean(UsersDao.class);
 		usersDaoImpl.delete(this.getModelObject(),
 				WebSession.getUserId());
 		this.setModelObject(usersDaoImpl.getNewUserInstance(usersDaoImpl
@@ -249,7 +249,7 @@ public class UserForm extends AdminBaseForm<Users> {
 		add(new TextField<String>("lastname"));
 
 		add(new DropDownChoice<OmTimeZone>("omTimeZone", Application.getBean(
-				OmTimeZoneDaoImpl.class).getOmTimeZones(),
+				OmTimeZoneDao.class).getOmTimeZones(),
 				new ChoiceRenderer<OmTimeZone>("frontEndLabel", "jname")));
 
 		add(new DropDownChoice<Long>("language_id", getFieldLanguageIds(),
@@ -295,7 +295,7 @@ public class UserForm extends AdminBaseForm<Users> {
 		add(new TextField<String>("adresses.zip"));
 		add(new TextField<String>("adresses.town"));
 		add(new DropDownChoice<States>("adresses.states", Application.getBean(
-				StateDaoImpl.class).getStates(), new ChoiceRenderer<States>(
+				StateDao.class).getStates(), new ChoiceRenderer<States>(
 				"name", "state_id")));
 
 		final String field159 = WebSession.getString(159);
@@ -366,7 +366,7 @@ public class UserForm extends AdminBaseForm<Users> {
 		add(orgChoiceList);
 
 		add(new DropDownChoice<Server>("server", Application.getBean(
-				ServerDaoImpl.class).getServerList(),
+				ServerDao.class).getServerList(),
 				new ChoiceRenderer<Server>("name", "id")));
 
 		final String field1160 = WebSession.getString(1160); // 1160 everybody

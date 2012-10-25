@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.xmlimport.LanguageImport;
 import org.apache.openmeetings.xmlimport.UserImport;
@@ -43,7 +43,7 @@ public class ImportController extends AbstractUploadController {
 			OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private UsersDaoImpl usersDao;
+	private UsersDao usersDao;
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired

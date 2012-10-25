@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.persistence.beans.user.Users;
@@ -43,14 +43,14 @@ public class ActivateUser extends VelocityViewServlet {
 	private static Logger log = Red5LoggerFactory.getLogger(ActivateUser.class,
 			OpenmeetingsVariables.webAppRootKey);
 
-	private ConfigurationDaoImpl getConfigurationmanagement() {
+	private ConfigurationDao getConfigurationmanagement() {
 		try {
 			if (!ScopeApplicationAdapter.initComplete) {
 				return null;
 			}
 			ApplicationContext context = WebApplicationContextUtils
 					.getWebApplicationContext(getServletContext());
-			return (ConfigurationDaoImpl) context
+			return (ConfigurationDao) context
 					.getBean("configurationDaoImpl");
 		} catch (Exception err) {
 			log.error("[getConfigurationmanagement]", err);

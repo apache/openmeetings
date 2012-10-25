@@ -31,9 +31,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.openjpa.persistence.OpenJPAPersistence;
 import org.apache.openjpa.persistence.OpenJPAQuery;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.OmDAO;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
-import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
+import org.apache.openmeetings.data.IDataProviderDao;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.persistence.beans.adresses.Adresses;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.utils.DaoHelper;
@@ -50,10 +50,10 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  */
 @Transactional
-public class UsersDaoImpl implements OmDAO<Users> {
+public class UsersDao implements IDataProviderDao<Users> {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			UsersDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
+			UsersDao.class, OpenmeetingsVariables.webAppRootKey);
 
 	public final static String[] searchFields = {"lastname", "firstname", "login", "adresses.email"};
 
@@ -63,13 +63,13 @@ public class UsersDaoImpl implements OmDAO<Users> {
 	@Autowired
 	private ManageCryptStyle manageCryptStyle;
 	@Autowired
-	private SalutationDaoImpl salutationDaoImpl;
+	private SalutationDao salutationDaoImpl;
 	@Autowired
-	private ConfigurationDaoImpl configurationDaoImpl;
+	private ConfigurationDao configurationDaoImpl;
 	@Autowired
-	private OmTimeZoneDaoImpl omTimeZoneDaoImpl;
+	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
-	private StateDaoImpl stateDaoImpl;
+	private StateDao stateDaoImpl;
 
 	/**
 	 * Get a new instance of the {@link Users} entity, with all default values

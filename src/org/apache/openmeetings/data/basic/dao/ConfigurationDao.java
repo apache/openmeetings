@@ -31,9 +31,9 @@ import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.OmDAO;
+import org.apache.openmeetings.data.IDataProviderDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.utils.DaoHelper;
@@ -54,9 +54,9 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  */
 @Transactional
-public class ConfigurationDaoImpl implements OmDAO<Configuration> {
+public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			ConfigurationDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
+			ConfigurationDao.class, OpenmeetingsVariables.webAppRootKey);
 	public static final String DEFAULT_APP_NAME = "OpenMeetings";
 	public final static String[] searchFields = {"conf_key", "conf_value"};
 
@@ -64,7 +64,7 @@ public class ConfigurationDaoImpl implements OmDAO<Configuration> {
 	private EntityManager em;
 
 	@Resource(name = "usersDao")
-	private UsersDaoImpl usersDao;
+	private UsersDao usersDao;
 
 	/**
 	 * @deprecated Dao's are not the place to store session variables, also
@@ -323,7 +323,7 @@ public class ConfigurationDaoImpl implements OmDAO<Configuration> {
 	public String getAppName() {
 		if (appName == null) {
 			appName = getConfValue("application.name", String.class,
-					ConfigurationDaoImpl.DEFAULT_APP_NAME);
+					ConfigurationDao.DEFAULT_APP_NAME);
 		}
 		return appName;
 	}

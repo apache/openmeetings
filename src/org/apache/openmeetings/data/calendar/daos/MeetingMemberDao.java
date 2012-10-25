@@ -27,7 +27,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
 import org.red5.logging.Red5LoggerFactory;
@@ -36,16 +36,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class MeetingMemberDaoImpl {
+public class MeetingMemberDao {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			MeetingMemberDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
+			MeetingMemberDao.class, OpenmeetingsVariables.webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
-	private AppointmentDaoImpl appointmentDao;
+	private AppointmentDao appointmentDao;
 	@Autowired
-	private UsersDaoImpl usersDao;
+	private UsersDao usersDao;
 
 	public MeetingMember getMeetingMemberById(Long meetingMemberId) {
 		try {

@@ -37,10 +37,10 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  */
 @Transactional
-public class FileExplorerItemDaoImpl {
+public class FileExplorerItemDao {
 
     private static final Logger log = Red5LoggerFactory.getLogger(
-            FileExplorerItemDaoImpl.class,
+            FileExplorerItemDao.class,
             OpenmeetingsVariables.webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;

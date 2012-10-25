@@ -45,7 +45,7 @@ import org.apache.openjpa.persistence.FetchAttribute;
 import org.apache.openjpa.persistence.FetchGroup;
 import org.apache.openjpa.persistence.FetchGroups;
 import org.apache.openjpa.persistence.LoadFetchGroup;
-import org.apache.openmeetings.persistence.beans.OmEntity;
+import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
 import org.apache.openmeetings.persistence.beans.adresses.Adresses;
 import org.apache.openmeetings.persistence.beans.adresses.States;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
@@ -83,7 +83,7 @@ import org.simpleframework.xml.Root;
 		@NamedQuery(name = "getUsersByOrganisationId", query = "SELECT u FROM Users u WHERE u.deleted = false AND u.organisation_users.organisation.organisation_id = :organisation_id") })
 @Table(name = "users")
 @Root(name = "user")
-public class Users implements Serializable, OmEntity {
+public class Users implements Serializable, IDataProviderEntity {
 
 	private static final long serialVersionUID = -2265479712596674065L;
 

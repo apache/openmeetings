@@ -34,16 +34,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class OmTimeZoneDaoImpl {
+public class OmTimeZoneDao {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			OmTimeZoneDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
+			OmTimeZoneDao.class, OpenmeetingsVariables.webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;
 
 	@Autowired
-	private ConfigurationDaoImpl configurationDaoImpl;
+	private ConfigurationDao configurationDaoImpl;
 
 	/**
 	 * Get a default {@link OmTimeZone}, if user is set, it will return the

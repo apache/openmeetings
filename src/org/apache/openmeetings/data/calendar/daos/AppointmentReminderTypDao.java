@@ -27,61 +27,60 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
-import org.apache.openmeetings.persistence.beans.calendar.AppointmentCategory;
+import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.persistence.beans.calendar.AppointmentReminderTyps;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class AppointmentCategoryDaoImpl {
+public class AppointmentReminderTypDao {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			ConfigurationDaoImpl.class,
+			AppointmentReminderTypDao.class,
 			OpenmeetingsVariables.webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
-	private UsersDaoImpl usersDao;
+	private UsersDao usersDao;
 
-	public AppointmentCategory getAppointmentCategoryById(Long categoryId) {
+	public AppointmentReminderTyps getAppointmentReminderTypById(Long typId) {
 		try {
-			log.debug("getAppointmentCategoryById: " + categoryId);
+			log.debug("AppointmentReminderTypById: " + typId);
 
-			String hql = "select app from AppointmentCategory app "
+			String hql = "select app from AppointmentReminderTyps app "
 					+ "WHERE app.deleted <> :deleted "
-					+ "AND app.categoryId = :categoryId";
+					+ "AND app.typId = :typId";
 
-			TypedQuery<AppointmentCategory> query = em.createQuery(hql, AppointmentCategory.class);
+			TypedQuery<AppointmentReminderTyps> query = em.createQuery(hql, AppointmentReminderTyps.class);
 			query.setParameter("deleted", true);
-			query.setParameter("categoryId", categoryId);
+			query.setParameter("typId", typId);
 
-			AppointmentCategory appointCategory = null;
+			AppointmentReminderTyps appointmentReminderTyps = null;
 			try {
-				appointCategory = query.getSingleResult();
+				appointmentReminderTyps = query.getSingleResult();
 			} catch (NoResultException ex) {
 			}
 
-			return appointCategory;
+			return appointmentReminderTyps;
 		} catch (Exception ex2) {
-			log.error("[getAppointmentCategoryById]: " + ex2);
+			log.error("[getAppointmentReminderTypsById]: " + ex2);
 		}
 		return null;
 	}
 
-	public Long updateAppointmentCategory(Long categoryId, String name) {
+	public Long updateAppointmentReminderTyps(Long typId, String name) {
 		try {
 
-			AppointmentCategory ac = this
-					.getAppointmentCategoryById(categoryId);
+			AppointmentReminderTyps ac = this
+					.getAppointmentReminderTypById(typId);
 
 			ac.setName(name);
 			ac.setUpdatetime(new Date());
 
-			if (ac.getCategoryId() == null) {
+			if (ac.getTypId() == null) {
 				em.persist(ac);
 			} else {
 				if (!em.contains(ac)) {
@@ -89,77 +88,80 @@ public class AppointmentCategoryDaoImpl {
 				}
 			}
 
-			return categoryId;
+			return typId;
 		} catch (Exception ex2) {
-			log.error("[updateAppointmentCategory]: ", ex2);
+			log.error("[updateAppointmentReminderTyps]: ", ex2);
 		}
 		return null;
 	}
 
-	public Long addAppointmentCategory(Long user_id, String name, String comment) {
+	public Long addAppointmentReminderTyps(Long user_id, String name) {
 		try {
 
-			AppointmentCategory ac = new AppointmentCategory();
+			AppointmentReminderTyps ac = new AppointmentReminderTyps();
 
 			ac.setName(name);
 			ac.setStarttime(new Date());
 			ac.setDeleted(false);
 			ac.setUser(usersDao.get(user_id));
-			ac.setComment(comment);
 
 			ac = em.merge(ac);
-			Long category_id = ac.getCategoryId();
+			Long category_id = ac.getTypId();
 
 			return category_id;
 		} catch (Exception ex2) {
-			log.error("[addAppointmentCategory]: ", ex2);
+			log.error("[addAppointmentReminderTyps]: ", ex2);
 		}
 		return null;
 	}
 
-	public Long deleteAppointmentCategory(Long categoryId) {
+	public Long deleteAppointmentReminderTyp(Long typId) {
 		try {
 
-			AppointmentCategory ac = this
-					.getAppointmentCategoryById(categoryId);
+			AppointmentReminderTyps ac = this
+					.getAppointmentReminderTypById(typId);
 
 			log.debug("ac: " + ac);
 
 			if (ac == null) {
-				log.debug("Already deleted / Could not find: " + categoryId);
-				return categoryId;
+				log.debug("Already deleted / Could not find: " + typId);
+				return typId;
 			}
 			ac.setUpdatetime(new Date());
 			ac.setDeleted(true);
-			if (ac.getCategoryId() == null) {
+
+			if (ac.getTypId() == null) {
 				em.persist(ac);
 			} else {
 				if (!em.contains(ac)) {
 					em.merge(ac);
 				}
 			}
-			return categoryId;
+
+			return typId;
 		} catch (Exception ex2) {
-			log.error("[deleteAppointmentCategory]: " + ex2);
+			log.error("[deleteAppointmentReminderTyp]: " + ex2);
 		}
 		return null;
 	}
 
-	public List<AppointmentCategory> getAppointmentCategoryList() {
+	public List<AppointmentReminderTyps> getAppointmentReminderTypList() {
+		log.debug("getAppointmenetReminderTypList");
+
 		try {
 
-			String hql = "select a from AppointmentCategory a "
+			String hql = "select a from AppointmentReminderTyps a "
 					+ "WHERE a.deleted <> :deleted ";
 
-			TypedQuery<AppointmentCategory> query = em.createQuery(hql, AppointmentCategory.class);
+			TypedQuery<AppointmentReminderTyps> query = em.createQuery(hql, AppointmentReminderTyps.class);
 			query.setParameter("deleted", true);
 
-			List<AppointmentCategory> listAppointmentCategory = query
+			List<AppointmentReminderTyps> listAppointmentReminderTyp = query
 					.getResultList();
 
-			return listAppointmentCategory;
+			return listAppointmentReminderTyp;
 		} catch (Exception ex2) {
-			log.error("[AppointmentCategory]: " + ex2);
+			log.error("[getAppointmentReminderTypList]: " + ex2);
 		}
 		return null;
 	}

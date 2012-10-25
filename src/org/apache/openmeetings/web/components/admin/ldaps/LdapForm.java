@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.components.admin.ldaps;
 
-import org.apache.openmeetings.data.basic.dao.LdapConfigDaoImpl;
+import org.apache.openmeetings.data.basic.dao.LdapConfigDao;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
@@ -72,9 +72,9 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
-		Application.getBean(LdapConfigDaoImpl.class).update(getModelObject(),
+		Application.getBean(LdapConfigDao.class).update(getModelObject(),
 				WebSession.getUserId());
-		LdapConfig ldapConfig = Application.getBean(LdapConfigDaoImpl.class)
+		LdapConfig ldapConfig = Application.getBean(LdapConfigDao.class)
 				.get(getModelObject().getLdapConfigId());
 		this.setModelObject(ldapConfig);
 		hideNewRecord();
@@ -94,7 +94,7 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		LdapConfig ldapConfig = this.getModelObject();
 		if (ldapConfig.getLdapConfigId() <= 0) {
-			ldapConfig = Application.getBean(LdapConfigDaoImpl.class).get(
+			ldapConfig = Application.getBean(LdapConfigDao.class).get(
 					ldapConfig.getLdapConfigId());
 		} else {
 			ldapConfig = new LdapConfig();
@@ -106,7 +106,7 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 
 	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
-		Application.getBean(LdapConfigDaoImpl.class).delete(
+		Application.getBean(LdapConfigDao.class).delete(
 				this.getModelObject(), WebSession.getUserId());
 		this.setModelObject(new LdapConfig());
 		target.add(listContainer);

@@ -20,22 +20,22 @@ package org.apache.openmeetings.web.data;
 
 import java.io.Serializable;
 
-import org.apache.openmeetings.persistence.beans.OmEntity;
-import org.apache.openmeetings.web.components.admin.OmDataView;
+import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
+import org.apache.openmeetings.web.components.admin.SearchableDataView;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
-public class DataViewContainer<T extends OmEntity> implements Serializable {
+public class DataViewContainer<T extends IDataProviderEntity> implements Serializable {
 	private static final long serialVersionUID = -1027478954223527890L;
 	public WebMarkupContainer container;
-	public OmDataView<T> view;
-	public OmOrderByBorder<T>[] orderLinks;
+	public SearchableDataView<T> view;
+	public OrderByBorder<T>[] orderLinks;
 	
-	public DataViewContainer(WebMarkupContainer container, OmDataView<T> view) {
+	public DataViewContainer(WebMarkupContainer container, SearchableDataView<T> view) {
 		this.container = container;
 		this.view = view;
 	}
 	
-	public void setLinks(OmOrderByBorder<T>... orderLinks) {
+	public void setLinks(OrderByBorder<T>... orderLinks) {
 		this.orderLinks = orderLinks;
 	}
 }

@@ -57,27 +57,27 @@ import org.apache.openmeetings.backup.RoomConverter;
 import org.apache.openmeetings.backup.RoomTypeConverter;
 import org.apache.openmeetings.backup.StateConverter;
 import org.apache.openmeetings.backup.UserConverter;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
-import org.apache.openmeetings.data.basic.dao.LdapConfigDaoImpl;
-import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
-import org.apache.openmeetings.data.basic.dao.ServerDaoImpl;
-import org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDaoImpl;
-import org.apache.openmeetings.data.calendar.daos.AppointmentDaoImpl;
-import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDaoImpl;
-import org.apache.openmeetings.data.calendar.daos.MeetingMemberDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.data.basic.dao.LdapConfigDao;
+import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
+import org.apache.openmeetings.data.basic.dao.ServerDao;
+import org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDao;
+import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
+import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
+import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
 import org.apache.openmeetings.data.conference.PollManagement;
 import org.apache.openmeetings.data.conference.RoomDAO;
 import org.apache.openmeetings.data.conference.Roommanagement;
-import org.apache.openmeetings.data.conference.dao.RoomModeratorsDaoImpl;
-import org.apache.openmeetings.data.file.dao.FileExplorerItemDaoImpl;
-import org.apache.openmeetings.data.flvrecord.FlvRecordingDaoImpl;
-import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDaoImpl;
+import org.apache.openmeetings.data.conference.dao.RoomModeratorsDao;
+import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
+import org.apache.openmeetings.data.flvrecord.FlvRecordingDao;
+import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDao;
 import org.apache.openmeetings.data.user.Organisationmanagement;
-import org.apache.openmeetings.data.user.dao.PrivateMessageFolderDaoImpl;
-import org.apache.openmeetings.data.user.dao.PrivateMessagesDaoImpl;
-import org.apache.openmeetings.data.user.dao.StateDaoImpl;
-import org.apache.openmeetings.data.user.dao.UserContactsDaoImpl;
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
+import org.apache.openmeetings.data.user.dao.PrivateMessageFolderDao;
+import org.apache.openmeetings.data.user.dao.PrivateMessagesDao;
+import org.apache.openmeetings.data.user.dao.StateDao;
+import org.apache.openmeetings.data.user.dao.UserContactsDao;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.adresses.Adresses;
 import org.apache.openmeetings.persistence.beans.adresses.States;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
@@ -137,11 +137,11 @@ public class BackupImportController extends AbstractUploadController {
 			BackupImportController.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private AppointmentDaoImpl appointmentDao;
+	private AppointmentDao appointmentDao;
 	@Autowired
-	private StateDaoImpl statemanagement;
+	private StateDao statemanagement;
 	@Autowired
-	private OmTimeZoneDaoImpl omTimeZoneDaoImpl;
+	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
 	private Organisationmanagement organisationmanagement;
 	@Autowired
@@ -149,39 +149,39 @@ public class BackupImportController extends AbstractUploadController {
 	@Autowired
 	private RoomDAO roomDao;
 	@Autowired
-	private AppointmentCategoryDaoImpl appointmentCategoryDaoImpl;
+	private AppointmentCategoryDao appointmentCategoryDaoImpl;
 	@Autowired
-	private AppointmentReminderTypDaoImpl appointmentReminderTypDaoImpl;
+	private AppointmentReminderTypDao appointmentReminderTypDaoImpl;
 	@Autowired
-	private UsersDaoImpl usersDao;
+	private UsersDao usersDao;
 	@Autowired
-	private FlvRecordingDaoImpl flvRecordingDao;
+	private FlvRecordingDao flvRecordingDao;
 	@Autowired
-	private FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDao;
+	private FlvRecordingMetaDataDao flvRecordingMetaDataDao;
 	@Autowired
-	private PrivateMessageFolderDaoImpl privateMessageFolderDao;
+	private PrivateMessageFolderDao privateMessageFolderDao;
 	@Autowired
-	private PrivateMessagesDaoImpl privateMessagesDao;
+	private PrivateMessagesDao privateMessagesDao;
 	@Autowired
-	private MeetingMemberDaoImpl meetingMemberDao;
+	private MeetingMemberDao meetingMemberDao;
 	@Autowired
-	private LdapConfigDaoImpl ldapConfigDao;
+	private LdapConfigDao ldapConfigDao;
 	@Autowired
-	private RoomModeratorsDaoImpl roomModeratorsDao;
+	private RoomModeratorsDao roomModeratorsDao;
 	@Autowired
-	private FileExplorerItemDaoImpl fileExplorerItemDao;
+	private FileExplorerItemDao fileExplorerItemDao;
 	@Autowired
-	private UserContactsDaoImpl userContactsDao;
+	private UserContactsDao userContactsDao;
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
 	private PollManagement pollManagement;
 	@Autowired
-	private ConfigurationDaoImpl configurationDaoImpl;
+	private ConfigurationDao configurationDaoImpl;
 	@Autowired
 	private AsteriskDAOImpl asteriskDAOImpl;
 	@Autowired
-	private ServerDaoImpl serverDaoImpl;
+	private ServerDao serverDaoImpl;
 
 	private final HashMap<Long, Long> usersMap = new HashMap<Long, Long>();
 	private final HashMap<Long, Long> organisationsMap = new HashMap<Long, Long>();

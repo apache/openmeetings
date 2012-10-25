@@ -34,14 +34,14 @@ import org.apache.openmeetings.conference.whiteboard.BrowserStatus;
 import org.apache.openmeetings.conference.whiteboard.RoomStatus;
 import org.apache.openmeetings.conference.whiteboard.WhiteboardManagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
-import org.apache.openmeetings.data.calendar.daos.MeetingMemberDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.data.conference.RoomDAO;
 import org.apache.openmeetings.data.conference.Roommanagement;
-import org.apache.openmeetings.data.logs.ConferenceLogDaoImpl;
+import org.apache.openmeetings.data.logs.ConferenceLogDao;
 import org.apache.openmeetings.data.user.Usermanagement;
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
 import org.apache.openmeetings.persistence.beans.rooms.RoomClient;
@@ -83,7 +83,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	@Autowired
 	private FLVRecorderService flvRecorderService;
 	@Autowired
-	private ConfigurationDaoImpl configurationDaoImpl;
+	private ConfigurationDao configurationDaoImpl;
 	@Autowired
 	private AppointmentLogic appointmentLogic;
 	@Autowired
@@ -93,13 +93,13 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	@Autowired
 	private Roommanagement roommanagement;
 	@Autowired
-	private ConferenceLogDaoImpl conferenceLogDao;
+	private ConferenceLogDao conferenceLogDao;
 	@Autowired
-	private UsersDaoImpl usersDao;
+	private UsersDao usersDao;
 	@Autowired
 	private RoomDAO roomDao;
 	@Autowired
-	private MeetingMemberDaoImpl meetingMemberDao;
+	private MeetingMemberDao meetingMemberDao;
 
 	public static String lineSeperator = System.getProperty("line.separator");
 

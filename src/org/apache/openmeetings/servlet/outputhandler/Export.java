@@ -33,7 +33,7 @@ import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
 import org.apache.openmeetings.data.user.Organisationmanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
@@ -91,12 +91,12 @@ public class Export extends HttpServlet {
 		return null;
 	}
 
-	private UsersDaoImpl getUsersDao() {
+	private UsersDao getUsersDao() {
 		try {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
-				return context.getBean("usersDao", UsersDaoImpl.class);
+				return context.getBean("usersDao", UsersDao.class);
 			}
 		} catch (Exception err) {
 			log.error("[getUsersDao]", err);

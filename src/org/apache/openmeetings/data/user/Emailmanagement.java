@@ -24,7 +24,7 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.persistence.beans.adresses.Adresses;
 import org.apache.openmeetings.templates.RegisterUserTemplate;
 import org.apache.openmeetings.utils.mail.MailHandler;
@@ -33,6 +33,12 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * FIXME: This class should be <i>not</i> {@link Transactional}
+ * 
+ * @author swagner
+ *
+ */
 @Transactional
 public class Emailmanagement {
 
@@ -43,7 +49,7 @@ public class Emailmanagement {
 	private EntityManager em;
 
 	@Autowired
-	private ConfigurationDaoImpl configurationDaoImpl;
+	private ConfigurationDao configurationDaoImpl;
 	@Autowired
 	private Fieldmanagment fieldmanagment;
 	@Autowired

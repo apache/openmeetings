@@ -23,9 +23,9 @@ import static junit.framework.Assert.assertTrue;
 
 import java.util.Date;
 
-import org.apache.openmeetings.data.calendar.daos.AppointmentDaoImpl;
+import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.user.Usermanagement;
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
@@ -53,11 +53,11 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 	private static final String useremail = "junit@openmeetings.de";
 	
 	@Autowired
-	private AppointmentDaoImpl appointmentDao;
+	private AppointmentDao appointmentDao;
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
-	private UsersDaoImpl usersDao;
+	private UsersDao usersDao;
 	@Autowired
 	private ImportInitvalues importInitvalues;
 

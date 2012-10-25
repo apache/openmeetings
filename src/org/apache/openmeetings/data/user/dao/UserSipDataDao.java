@@ -32,9 +32,9 @@ import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class UserSipDataDaoImpl {
+public class UserSipDataDao {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(UserSipDataDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(UserSipDataDao.class, OpenmeetingsVariables.webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
 	

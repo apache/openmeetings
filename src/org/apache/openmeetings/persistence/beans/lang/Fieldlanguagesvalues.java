@@ -36,7 +36,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import org.apache.openmeetings.persistence.beans.OmEntity;
+import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
 
 @Entity
 @NamedQueries({
@@ -58,7 +58,7 @@ import org.apache.openmeetings.persistence.beans.OmEntity;
 		, query = "SELECT f FROM Fieldlanguagesvalues f WHERE f.fieldvalues_id = :fieldValuesId AND f.language_id = :lang AND f.deleted = false")
 })
 @Table(name = "fieldlanguagesvalues")
-public class Fieldlanguagesvalues implements Serializable, OmEntity {
+public class Fieldlanguagesvalues implements Serializable, IDataProviderEntity {
 	private static final long serialVersionUID = 1965055047163639210L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

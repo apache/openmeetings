@@ -33,11 +33,11 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
-import org.apache.openmeetings.data.conference.dao.RoomModeratorsDaoImpl;
+import org.apache.openmeetings.data.conference.dao.RoomModeratorsDao;
 import org.apache.openmeetings.data.user.Organisationmanagement;
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.rooms.RoomTypes;
@@ -76,15 +76,15 @@ public class Roommanagement {
 	@Autowired
 	private AsteriskDbSipClient asteriskDbSipClient;
 	@Autowired
-	private RoomModeratorsDaoImpl roomModeratorsDao;
+	private RoomModeratorsDao roomModeratorsDao;
 	@Autowired
-	private UsersDaoImpl usersDao;
+	private UsersDao usersDao;
 	@Autowired
 	private AuthLevelmanagement authLevelManagement;
 	@Autowired
 	private ClientListManager clientListManager;
     @Autowired
-	private ConfigurationDaoImpl configurationDaoImpl;
+	private ConfigurationDao configurationDaoImpl;
     @Autowired
 	private RoomDAO roomDao;
 

@@ -22,7 +22,7 @@ import java.util.TimeZone;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
-import org.apache.openmeetings.data.calendar.daos.MeetingMemberDaoImpl;
+import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
 import org.apache.openmeetings.data.conference.Invitationmanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
@@ -49,7 +49,7 @@ public class MeetingMemberLogic {
 	@Autowired
 	private Invitationmanagement invitationManagement;
 	@Autowired
-	private MeetingMemberDaoImpl meetingMemberDao;
+	private MeetingMemberDao meetingMemberDao;
 
 	/**
 	 * This can be either an internal or an external user, internal users have a

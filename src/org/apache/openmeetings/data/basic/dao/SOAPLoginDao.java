@@ -34,10 +34,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class SOAPLoginDaoImpl {
+public class SOAPLoginDao {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			SOAPLoginDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
+			SOAPLoginDao.class, OpenmeetingsVariables.webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;

@@ -33,8 +33,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.file.FileProcessor;
-import org.apache.openmeetings.data.file.dao.FileExplorerItemDaoImpl;
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
+import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.documents.GenerateImage;
 import org.apache.openmeetings.documents.GeneratePDF;
 import org.apache.openmeetings.documents.GenerateThumbs;
@@ -57,7 +57,7 @@ public class UploadController extends AbstractUploadController {
 			UploadController.class, OpenmeetingsVariables.webAppRootKey);
 	
 	@Autowired
-	private UsersDaoImpl usersDao;
+	private UsersDao usersDao;
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
@@ -69,7 +69,7 @@ public class UploadController extends AbstractUploadController {
 	@Autowired
 	private FileProcessor fileProcessor;
 	@Autowired
-	private FileExplorerItemDaoImpl fileExplorerItemDao;
+	private FileExplorerItemDao fileExplorerItemDao;
 
 	private String filesString[] = null;
 	

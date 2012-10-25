@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.utils.ImportHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -43,7 +43,7 @@ public abstract class AbstractUploadController {
 	@Autowired
 	protected AuthLevelmanagement authLevelManagement;
 	@Autowired
-	protected ConfigurationDaoImpl configurationDaoImpl;
+	protected ConfigurationDao configurationDaoImpl;
 	
 	protected class UploadInfo {
 		MultipartFile file;

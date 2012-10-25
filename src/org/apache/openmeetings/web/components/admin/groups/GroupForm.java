@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.components.admin.groups;
 
-import org.apache.openmeetings.data.user.dao.OrganisationDAO;
+import org.apache.openmeetings.data.user.dao.OrganisationDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
@@ -71,7 +71,7 @@ public class GroupForm extends AdminBaseForm<Organisation> {
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		Organisation org = getModelObject();
 		if (org.getOrganisation_id() != null) {
-			org = Application.getBean(OrganisationDAO.class).get(org.getOrganisation_id());
+			org = Application.getBean(OrganisationDao.class).get(org.getOrganisation_id());
 		} else {
 			org = new Organisation();
 		}
@@ -81,14 +81,14 @@ public class GroupForm extends AdminBaseForm<Organisation> {
 	
 	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
-		Application.getBean(OrganisationDAO.class).delete(getModelObject(), WebSession.getUserId());
+		Application.getBean(OrganisationDao.class).delete(getModelObject(), WebSession.getUserId());
 		target.add(groupList);
 		target.appendJavaScript("groupsInit();");
 	}
 	
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
-		Application.getBean(OrganisationDAO.class).update(getModelObject(), WebSession.getUserId());
+		Application.getBean(OrganisationDao.class).update(getModelObject(), WebSession.getUserId());
 		hideNewRecord();
 		target.add(groupList);
 		target.appendJavaScript("groupsInit();");

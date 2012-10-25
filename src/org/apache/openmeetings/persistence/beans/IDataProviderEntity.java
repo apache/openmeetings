@@ -18,6 +18,6 @@
  */
 package org.apache.openmeetings.persistence.beans;
 
-public interface OmEntity {
+public interface IDataProviderEntity {
 
 }

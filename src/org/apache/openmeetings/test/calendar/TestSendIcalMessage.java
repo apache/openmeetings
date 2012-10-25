@@ -61,7 +61,7 @@ import net.fortuna.ical4j.model.property.Version;
 import net.fortuna.ical4j.util.UidGenerator;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.apache.openmeetings.utils.mail.ByteArrayDataSource;
@@ -79,7 +79,7 @@ public class TestSendIcalMessage extends AbstractOpenmeetingsSpringTest {
 			OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private ConfigurationDaoImpl configurationDaoImpl;
+	private ConfigurationDao configurationDaoImpl;
 
 	private byte[] iCalMimeBody;
 

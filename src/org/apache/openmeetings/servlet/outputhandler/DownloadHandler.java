@@ -31,7 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
-import org.apache.openmeetings.data.file.dao.FileExplorerItemDaoImpl;
+import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.persistence.beans.files.FileExplorerItem;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
@@ -79,12 +79,12 @@ public class DownloadHandler extends HttpServlet {
 		return null;
 	}
 	
-	public FileExplorerItemDaoImpl getFileExplorerItemDaoImpl() {
+	public FileExplorerItemDao getFileExplorerItemDaoImpl() {
 		try {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
-				return (FileExplorerItemDaoImpl) context.getBean("fileExplorerItemDao");
+				return (FileExplorerItemDao) context.getBean("fileExplorerItemDao");
 			}
 		} catch (Exception err) {
 			log.error("[getUserManagement]", err);

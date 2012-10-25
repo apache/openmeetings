@@ -38,9 +38,9 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  */
 @Transactional
-public class StateDaoImpl {
+public class StateDao {
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			StateDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
+			StateDao.class, OpenmeetingsVariables.webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;

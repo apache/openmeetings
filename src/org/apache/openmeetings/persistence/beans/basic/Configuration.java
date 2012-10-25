@@ -34,7 +34,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import org.apache.openmeetings.persistence.beans.OmEntity;
+import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -53,7 +53,7 @@ import org.simpleframework.xml.Root;
 })
 @Table(name = "configuration")
 @Root(name = "config")
-public class Configuration implements Serializable, OmEntity {
+public class Configuration implements Serializable, IDataProviderEntity {
 	private static final long serialVersionUID = -6129473946508963339L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

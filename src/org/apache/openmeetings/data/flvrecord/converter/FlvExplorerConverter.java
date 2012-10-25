@@ -26,8 +26,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.file.dao.FileExplorerItemDaoImpl;
-import org.apache.openmeetings.data.flvrecord.FlvRecordingLogDaoImpl;
+import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
+import org.apache.openmeetings.data.flvrecord.FlvRecordingLogDao;
 import org.apache.openmeetings.persistence.beans.files.FileExplorerItem;
 import org.apache.openmeetings.utils.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -41,9 +41,9 @@ public class FlvExplorerConverter extends BaseConverter {
 
 	// Spring loaded Beans
 	@Autowired
-	private FileExplorerItemDaoImpl fileExplorerItemDaoImpl;
+	private FileExplorerItemDao fileExplorerItemDaoImpl;
 	@Autowired
-	private FlvRecordingLogDaoImpl flvRecordingLogDaoImpl;
+	private FlvRecordingLogDao flvRecordingLogDaoImpl;
 	
 	private class FlvDimension {
 		public FlvDimension(int width, int height) {

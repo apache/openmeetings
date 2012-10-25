@@ -21,7 +21,7 @@ package org.apache.openmeetings.data.flvrecord.listener;
 import java.util.Date;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDaoImpl;
+import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDao;
 import org.apache.openmeetings.data.flvrecord.listener.async.CachedEvent;
 import org.apache.openmeetings.data.flvrecord.listener.async.StreamVideoWriter;
 import org.red5.logging.Red5LoggerFactory;
@@ -40,7 +40,7 @@ public class StreamVideoListener extends BaseStreamListener {
 	public StreamVideoListener(String streamName, IScope scope,
 			Long flvRecordingMetaDataId, boolean isScreenData,
 			boolean isInterview,
-			FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDao) {
+			FlvRecordingMetaDataDao flvRecordingMetaDataDao) {
 		streamVideoWriter = new StreamVideoWriter(streamName, scope, flvRecordingMetaDataId, isScreenData,
 				isInterview, flvRecordingMetaDataDao);
 	}

@@ -23,8 +23,8 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.ProcessHelper;
@@ -38,9 +38,9 @@ public class GenerateImage {
 			GenerateImage.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private ConfigurationDaoImpl configurationDaoImpl;
+	private ConfigurationDao configurationDaoImpl;
 	@Autowired
-	private UsersDaoImpl usersDao;
+	private UsersDao usersDao;
 	@Autowired
 	private GenerateThumbs generateThumbs;
 

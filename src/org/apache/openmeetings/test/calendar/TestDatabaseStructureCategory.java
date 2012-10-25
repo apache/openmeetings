@@ -21,7 +21,7 @@ package org.apache.openmeetings.test.calendar;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDaoImpl;
+import org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDao;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentCategory;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.junit.Test;
@@ -30,7 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class TestDatabaseStructureCategory extends AbstractOpenmeetingsSpringTest {
 
 	@Autowired
-	private AppointmentCategoryDaoImpl appointmentCategoryDaoImpl;
+	private AppointmentCategoryDao appointmentCategoryDaoImpl;
 
 	private static final Logger log = Logger
 			.getLogger(TestDatabaseStructureCategory.class);

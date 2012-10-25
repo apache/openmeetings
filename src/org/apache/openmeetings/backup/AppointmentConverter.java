@@ -20,20 +20,20 @@ package org.apache.openmeetings.backup;
 
 import java.util.Map;
 
-import org.apache.openmeetings.data.calendar.daos.AppointmentDaoImpl;
+import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
 public class AppointmentConverter extends OmConverter<Appointment> {
-	private AppointmentDaoImpl appointmentDao;
+	private AppointmentDao appointmentDao;
 	private Map<Long, Long> idMap;
 	
 	public AppointmentConverter() {
 		//default constructor is for export
 	}
 	
-	public AppointmentConverter(AppointmentDaoImpl appointmentDao, Map<Long, Long> idMap) {
+	public AppointmentConverter(AppointmentDao appointmentDao, Map<Long, Long> idMap) {
 		this.appointmentDao = appointmentDao;
 		this.idMap = idMap;
 	}

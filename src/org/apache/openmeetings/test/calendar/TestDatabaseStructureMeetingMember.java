@@ -20,7 +20,7 @@ package org.apache.openmeetings.test.calendar;
 
 
 import org.apache.log4j.Logger;
-import org.apache.openmeetings.data.calendar.daos.MeetingMemberDaoImpl;
+import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class TestDatabaseStructureMeetingMember extends AbstractOpenmeetingsSpri
 
 	private static final Logger log = Logger.getLogger(TestDatabaseStructureMeetingMember.class);
 	@Autowired
-	private MeetingMemberDaoImpl meetingMemberDao;
+	private MeetingMemberDao meetingMemberDao;
 
 	@Test
 	public void testAddingGroup(){

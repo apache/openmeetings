@@ -25,9 +25,9 @@ import java.util.List;
 
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.flvrecord.FlvRecordingDaoImpl;
-import org.apache.openmeetings.data.flvrecord.FlvRecordingLogDaoImpl;
-import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDaoImpl;
+import org.apache.openmeetings.data.flvrecord.FlvRecordingDao;
+import org.apache.openmeetings.data.flvrecord.FlvRecordingLogDao;
+import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDao;
 import org.apache.openmeetings.documents.GenerateThumbs;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingMetaData;
@@ -48,11 +48,11 @@ public class FlvInterviewConverter extends BaseConverter {
 
 	// Spring loaded Beans
 	@Autowired
-	private FlvRecordingDaoImpl flvRecordingDaoImpl = null;
+	private FlvRecordingDao flvRecordingDaoImpl = null;
 	@Autowired
-	private FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDaoImpl = null;
+	private FlvRecordingMetaDataDao flvRecordingMetaDataDaoImpl = null;
 	@Autowired
-	private FlvRecordingLogDaoImpl flvRecordingLogDaoImpl;
+	private FlvRecordingLogDao flvRecordingLogDaoImpl;
 	@Autowired
 	private GenerateThumbs generateThumbs;
 

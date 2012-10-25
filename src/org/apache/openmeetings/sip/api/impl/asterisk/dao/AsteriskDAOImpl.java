@@ -24,7 +24,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.persistence.beans.sip.asterisk.AsteriskSipUsers;
 import org.apache.openmeetings.persistence.beans.sip.asterisk.Extensions;
@@ -42,7 +42,7 @@ public class AsteriskDAOImpl {
 	@PersistenceContext
 	private EntityManager em;
     @Autowired
-	private ConfigurationDaoImpl configurationDaoImpl;
+	private ConfigurationDao configurationDaoImpl;
 
     public void addSipUser(String username, String secret) {
         AsteriskSipUsers u = new AsteriskSipUsers();

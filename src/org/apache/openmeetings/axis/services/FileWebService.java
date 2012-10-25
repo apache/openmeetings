@@ -33,7 +33,7 @@ import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
 import org.apache.openmeetings.data.file.FileProcessor;
 import org.apache.openmeetings.data.file.FileUtils;
-import org.apache.openmeetings.data.file.dao.FileExplorerItemDaoImpl;
+import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
 import org.apache.openmeetings.data.file.dto.FileExplorerObject;
 import org.apache.openmeetings.data.file.dto.LibraryPresentation;
 import org.apache.openmeetings.data.user.Usermanagement;
@@ -64,7 +64,7 @@ public class FileWebService {
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
-	private FileExplorerItemDaoImpl fileExplorerItemDao;
+	private FileExplorerItemDao fileExplorerItemDao;
 	@Autowired
 	private AuthLevelmanagement authLevelManagement;
 	@Autowired

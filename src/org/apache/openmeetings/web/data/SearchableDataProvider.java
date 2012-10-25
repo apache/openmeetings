@@ -20,19 +20,26 @@ package org.apache.openmeetings.web.data;
 
 import java.util.Iterator;
 
-import org.apache.openmeetings.data.OmDAO;
-import org.apache.openmeetings.persistence.beans.OmEntity;
+import org.apache.openmeetings.data.IDataProviderDao;
+import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 
-public class OmDataProvider<T extends OmEntity> extends SortableDataProvider<T, String> {
+/**
+ * provides function to fill paging tables
+ * 
+ * @author swagner
+ * 
+ * @param <T>
+ */
+public class SearchableDataProvider<T extends IDataProviderEntity> extends SortableDataProvider<T, String> {
 	private static final long serialVersionUID = 4325721185888905204L;
-	protected Class<? extends OmDAO<T>> clazz;
+	protected Class<? extends IDataProviderDao<T>> clazz;
 	protected String search = null;
 	
-	public OmDataProvider(Class<? extends OmDAO<T>> c) {
+	public SearchableDataProvider(Class<? extends IDataProviderDao<T>> c) {
 		this.clazz = c;
 	}
 	

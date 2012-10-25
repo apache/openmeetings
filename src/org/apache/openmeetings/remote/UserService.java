@@ -31,22 +31,22 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
-import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
-import org.apache.openmeetings.data.basic.dao.ServerDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
+import org.apache.openmeetings.data.basic.dao.ServerDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
-import org.apache.openmeetings.data.calendar.daos.AppointmentDaoImpl;
-import org.apache.openmeetings.data.calendar.daos.MeetingMemberDaoImpl;
+import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
+import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
 import org.apache.openmeetings.data.conference.Invitationmanagement;
 import org.apache.openmeetings.data.conference.RoomDAO;
 import org.apache.openmeetings.data.conference.Roommanagement;
 import org.apache.openmeetings.data.user.Organisationmanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
-import org.apache.openmeetings.data.user.dao.PrivateMessageFolderDaoImpl;
-import org.apache.openmeetings.data.user.dao.PrivateMessagesDaoImpl;
-import org.apache.openmeetings.data.user.dao.SalutationDaoImpl;
-import org.apache.openmeetings.data.user.dao.UserContactsDaoImpl;
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
+import org.apache.openmeetings.data.user.dao.PrivateMessageFolderDao;
+import org.apache.openmeetings.data.user.dao.PrivateMessagesDao;
+import org.apache.openmeetings.data.user.dao.SalutationDao;
+import org.apache.openmeetings.data.user.dao.UserContactsDao;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.invitation.Invitations;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
@@ -86,19 +86,19 @@ public class UserService {
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
-	private AppointmentDaoImpl appointmentDao;
+	private AppointmentDao appointmentDao;
 	@Autowired
 	private Sessionmanagement sessionManagement;
 	@Autowired
-	private ConfigurationDaoImpl configurationDaoImpl;
+	private ConfigurationDao configurationDaoImpl;
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
 	private Fieldmanagment fieldmanagment;
 	@Autowired
-	private OmTimeZoneDaoImpl omTimeZoneDaoImpl;
+	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
-	private SalutationDaoImpl salutationmanagement;
+	private SalutationDao salutationmanagement;
 	@Autowired
 	private Organisationmanagement organisationmanagement;
 	@Autowired
@@ -108,15 +108,15 @@ public class UserService {
 	@Autowired
 	private RoomDAO roomDao;
 	@Autowired
-	private MeetingMemberDaoImpl meetingMemberDao;
+	private MeetingMemberDao meetingMemberDao;
 	@Autowired
-	private PrivateMessagesDaoImpl privateMessagesDao;
+	private PrivateMessagesDao privateMessagesDao;
 	@Autowired
-	private PrivateMessageFolderDaoImpl privateMessageFolderDao;
+	private PrivateMessageFolderDao privateMessageFolderDao;
 	@Autowired
-	private UsersDaoImpl usersDao;
+	private UsersDao usersDao;
 	@Autowired
-	private UserContactsDaoImpl userContactsDao;
+	private UserContactsDao userContactsDao;
 	@Autowired
 	private MailHandler mailHandler;
 	@Autowired
@@ -130,7 +130,7 @@ public class UserService {
 	@Autowired
 	private Invitationmanagement invitationManagement;
 	@Autowired
-	private ServerDaoImpl serverDao;
+	private ServerDao serverDao;
 
 	/**
 	 * get your own user-object

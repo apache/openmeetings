@@ -18,16 +18,16 @@
  */
 package org.apache.openmeetings.web.components.admin.users;
 
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
-import org.apache.openmeetings.web.components.admin.OmDataView;
+import org.apache.openmeetings.web.components.admin.SearchableDataView;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
-import org.apache.openmeetings.web.data.OmDataProvider;
-import org.apache.openmeetings.web.data.OmOrderByBorder;
+import org.apache.openmeetings.web.data.SearchableDataProvider;
+import org.apache.openmeetings.web.data.OrderByBorder;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -50,8 +50,8 @@ public class UsersPanel extends AdminPanel {
 	public UsersPanel(String id) {
 		super(id);
 
-		final OmDataView<Users> dataView = new OmDataView<Users>("userList"
-				, new OmDataProvider<Users>(UsersDaoImpl.class)) {
+		final SearchableDataView<Users> dataView = new SearchableDataView<Users>("userList"
+				, new SearchableDataProvider<Users>(UsersDao.class)) {
 			private static final long serialVersionUID = 8715559628755439596L;
 
 			@Override
@@ -80,10 +80,10 @@ public class UsersPanel extends AdminPanel {
 				"listContainer");
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		DataViewContainer<Users> container = new DataViewContainer<Users>(listContainer, dataView);
-		container.setLinks(new OmOrderByBorder<Users>("orderById", "user_id", container)
-				, new OmOrderByBorder<Users>("orderByLogin", "login", container)
-				, new OmOrderByBorder<Users>("orderByFirstName", "firstname", container)
-				, new OmOrderByBorder<Users>("orderByLastName", "lastname", container));
+		container.setLinks(new OrderByBorder<Users>("orderById", "user_id", container)
+				, new OrderByBorder<Users>("orderByLogin", "login", container)
+				, new OrderByBorder<Users>("orderByFirstName", "firstname", container)
+				, new OrderByBorder<Users>("orderByLastName", "lastname", container));
 		add(container.orderLinks);
 		add(new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = 5097048616003411362L;
@@ -94,7 +94,7 @@ public class UsersPanel extends AdminPanel {
 			}
 		});
 
-		UsersDaoImpl usersDaoImpl = Application.getBean(UsersDaoImpl.class);
+		UsersDao usersDaoImpl = Application.getBean(UsersDao.class);
 		form = new UserForm("form", listContainer,
 				usersDaoImpl.getNewUserInstance(usersDaoImpl.get(WebSession
 						.getUserId())));

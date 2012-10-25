@@ -18,14 +18,14 @@
  */
 package org.apache.openmeetings.web.components.admin.ldaps;
 
-import org.apache.openmeetings.data.basic.dao.LdapConfigDaoImpl;
+import org.apache.openmeetings.data.basic.dao.LdapConfigDao;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
-import org.apache.openmeetings.web.components.admin.OmDataView;
+import org.apache.openmeetings.web.components.admin.SearchableDataView;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
-import org.apache.openmeetings.web.data.OmDataProvider;
-import org.apache.openmeetings.web.data.OmOrderByBorder;
+import org.apache.openmeetings.web.data.SearchableDataProvider;
+import org.apache.openmeetings.web.data.OrderByBorder;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -51,8 +51,8 @@ public class LdapsPanel extends AdminPanel {
 	@SuppressWarnings("unchecked")
 	public LdapsPanel(String id) {
 		super(id);
-		OmDataView<LdapConfig> dataView = new OmDataView<LdapConfig>("ldapList"
-			, new OmDataProvider<LdapConfig>(LdapConfigDaoImpl.class)) {
+		SearchableDataView<LdapConfig> dataView = new SearchableDataView<LdapConfig>("ldapList"
+			, new SearchableDataProvider<LdapConfig>(LdapConfigDao.class)) {
 			private static final long serialVersionUID = 8715559628755439596L;
 
 			@Override
@@ -77,9 +77,9 @@ public class LdapsPanel extends AdminPanel {
 		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		DataViewContainer<LdapConfig> container = new DataViewContainer<LdapConfig>(listContainer, dataView);
-		container.setLinks(new OmOrderByBorder<LdapConfig>("orderById", "ldapConfigId", container)
-				, new OmOrderByBorder<LdapConfig>("orderByName", "name", container)
-				, new OmOrderByBorder<LdapConfig>("orderByFile", "configFileName", container));
+		container.setLinks(new OrderByBorder<LdapConfig>("orderById", "ldapConfigId", container)
+				, new OrderByBorder<LdapConfig>("orderByName", "name", container)
+				, new OrderByBorder<LdapConfig>("orderByFile", "configFileName", container));
 		add(container.orderLinks);
 		add(new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = -1L;

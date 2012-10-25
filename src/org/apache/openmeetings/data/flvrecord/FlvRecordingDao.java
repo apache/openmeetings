@@ -37,8 +37,8 @@ import org.springframework.transaction.annotation.Transactional;
  *
  */
 @Transactional
-public class FlvRecordingDaoImpl {
-	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecordingDaoImpl.class,
+public class FlvRecordingDao {
+	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecordingDao.class,
 			OpenmeetingsVariables.webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;

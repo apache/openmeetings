@@ -23,7 +23,7 @@ import java.util.Date;
 
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDaoImpl;
+import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDao;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingMetaData;
 import org.red5.io.ITag;
 import org.red5.io.flv.impl.Tag;
@@ -39,7 +39,7 @@ public class StreamVideoWriter extends BaseStreamWriter {
 
 	private long initialDelta = 0;
 	
-	private final FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDao;
+	private final FlvRecordingMetaDataDao flvRecordingMetaDataDao;
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			StreamVideoWriter.class, OpenmeetingsVariables.webAppRootKey);
@@ -47,7 +47,7 @@ public class StreamVideoWriter extends BaseStreamWriter {
 	public StreamVideoWriter(String streamName, IScope scope,
 			Long flvRecordingMetaDataId, boolean isScreenData,
 			boolean isInterview,
-			FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDao) {
+			FlvRecordingMetaDataDao flvRecordingMetaDataDao) {
 		
 		super(streamName, scope, flvRecordingMetaDataId, isScreenData);
 		

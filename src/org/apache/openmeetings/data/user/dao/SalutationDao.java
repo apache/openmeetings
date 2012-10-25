@@ -43,10 +43,10 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  */
 @Transactional
-public class SalutationDaoImpl {
+public class SalutationDao {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			SalutationDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
+			SalutationDao.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
 	private Fieldmanagment fieldmanagment;

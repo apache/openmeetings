@@ -26,13 +26,13 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.apache.openmeetings.data.OmDAO;
+import org.apache.openmeetings.data.IDataProviderDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.utils.DaoHelper;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class OrganisationDAO implements OmDAO<Organisation> {
+public class OrganisationDao implements IDataProviderDao<Organisation> {
 	public final static String[] searchFields = {"name"};
 	@PersistenceContext
 	private EntityManager em;

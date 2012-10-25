@@ -38,10 +38,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class RoomModeratorsDaoImpl {
+public class RoomModeratorsDao {
 
 	private static final Logger log = Red5LoggerFactory
-			.getLogger(RoomModeratorsDaoImpl.class);
+			.getLogger(RoomModeratorsDao.class);
 	@Autowired
 	private Usermanagement userManagement;
 	@PersistenceContext

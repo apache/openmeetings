@@ -21,10 +21,10 @@ package org.apache.openmeetings.web.components.user.calendar;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDaoImpl;
+import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
 import org.apache.openmeetings.data.conference.RoomDAO;
 import org.apache.openmeetings.data.conference.Roommanagement;
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentReminderTyps;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
@@ -65,7 +65,7 @@ public class CalendarForm extends Form<Appointment> {
 		
 		add(new DropDownChoice<AppointmentReminderTyps>(
 				"remind"
-				, Application.getBean(AppointmentReminderTypDaoImpl.class).getAppointmentReminderTypList()
+				, Application.getBean(AppointmentReminderTypDao.class).getAppointmentReminderTypList()
 				, new ChoiceRenderer<AppointmentReminderTyps>("name", "typId")));
 		
 		final DropDownChoice<RoomTypes> roomType = new DropDownChoice<RoomTypes>(
@@ -114,7 +114,7 @@ public class CalendarForm extends Form<Appointment> {
 		List<Rooms> result = new ArrayList<Rooms>();
 		RoomDAO dao = Application.getBean(RoomDAO.class);
 		result.addAll(dao.getPublicRooms());
-		for (Organisation_Users ou : Application.getBean(UsersDaoImpl.class).get(WebSession.getUserId()).getOrganisation_users()) {
+		for (Organisation_Users ou : Application.getBean(UsersDao.class).get(WebSession.getUserId()).getOrganisation_users()) {
 			result.addAll(dao.getOrganisationRooms(ou.getOrganisation().getOrganisation_id()));
 		}
 		if (getModelObject().getRoom() != null && getModelObject().getRoom().getAppointment()) { //FIXME review

@@ -32,7 +32,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
@@ -63,7 +63,7 @@ public class Fieldmanagment {
 	private FieldLanguagesValuesDaoImpl fieldLanguagesValuesDAO;
 
 	@Autowired
-	private ConfigurationDaoImpl configurationDaoImpl;
+	private ConfigurationDao configurationDaoImpl;
 	
 	// Reflect the Reverse Order!!
 	public Fieldlanguagesvalues getFieldByIdAndLanguageByNavi(

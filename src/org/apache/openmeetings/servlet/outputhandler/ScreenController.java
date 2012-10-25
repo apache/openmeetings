@@ -32,7 +32,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.persistence.beans.rooms.RoomClient;
 import org.apache.openmeetings.remote.red5.ClientListManager;
 import org.apache.openmeetings.utils.OmFileHelper;
@@ -57,7 +57,7 @@ public class ScreenController {
 	@Autowired
 	public Sessionmanagement sessionManagement;
 	@Autowired
-	public ConfigurationDaoImpl configurationDaoImpl;
+	public ConfigurationDao configurationDaoImpl;
 	@Autowired
 	public Fieldmanagment fieldmanagment;
 

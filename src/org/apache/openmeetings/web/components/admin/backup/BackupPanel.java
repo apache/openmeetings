@@ -24,7 +24,7 @@ import java.text.DecimalFormat;
 import java.util.Date;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.servlet.outputhandler.BackupExport;
 import org.apache.openmeetings.servlet.outputhandler.BackupImportController;
 import org.apache.openmeetings.utils.ImportHelper;
@@ -85,7 +85,7 @@ public class BackupPanel extends AdminPanel {
 
 			// set max upload size in form as info text
 			Long maxBytes = ImportHelper.getMaxUploadSize(Application
-					.getBean(ConfigurationDaoImpl.class));
+					.getBean(ConfigurationDao.class));
 			double megaBytes = maxBytes.doubleValue() / 1024 / 1024;
 			DecimalFormat formatter = new DecimalFormat("#,###.00");
 			add(new Label("MaxUploadSize", formatter.format(megaBytes)));
@@ -100,7 +100,7 @@ public class BackupPanel extends AdminPanel {
 
 			// Set maximum size controlled by configuration
 			setMaxSize(Bytes.bytes(ImportHelper.getMaxUploadSize(Application
-					.getBean(ConfigurationDaoImpl.class))));
+					.getBean(ConfigurationDao.class))));
 
 			// Add a component to download a file without page refresh
 			final AjaxDownload download = new AjaxDownload();

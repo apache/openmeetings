@@ -25,7 +25,7 @@ import java.util.HashMap;
 
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -42,7 +42,7 @@ public class GeneratePDF {
 	@Autowired
 	private GenerateSWF generateSWF;
 	@Autowired
-	private ConfigurationDaoImpl configurationDaoImpl;
+	private ConfigurationDao configurationDaoImpl;
 
 	public HashMap<String, HashMap<String, String>> convertPDF(String fileName,
 			String roomName, boolean fullProcessing, File inFile)

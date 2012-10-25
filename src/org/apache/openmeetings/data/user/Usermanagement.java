@@ -41,13 +41,13 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
-import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
-import org.apache.openmeetings.data.basic.dao.ServerDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
+import org.apache.openmeetings.data.basic.dao.ServerDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
-import org.apache.openmeetings.data.user.dao.StateDaoImpl;
-import org.apache.openmeetings.data.user.dao.UserSipDataDaoImpl;
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
+import org.apache.openmeetings.data.user.dao.StateDao;
+import org.apache.openmeetings.data.user.dao.UserSipDataDao;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.adresses.Adresses;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.basic.Server;
@@ -90,13 +90,13 @@ public class Usermanagement {
 	@Autowired
 	private Sessionmanagement sessionManagement;
 	@Autowired
-	private ConfigurationDaoImpl configurationDaoImpl;
+	private ConfigurationDao configurationDaoImpl;
 	@Autowired
 	private Fieldmanagment fieldmanagment;
 	@Autowired
-	private StateDaoImpl statemanagement;
+	private StateDao statemanagement;
 	@Autowired
-	private OmTimeZoneDaoImpl omTimeZoneDaoImpl;
+	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
 	private Organisationmanagement organisationmanagement;
 	@Autowired
@@ -104,11 +104,11 @@ public class Usermanagement {
 	@Autowired
 	private OpenXGHttpClient openXGHttpClient;
 	@Autowired
-	private UsersDaoImpl usersDao;
+	private UsersDao usersDao;
 	@Autowired
 	private Emailmanagement emailManagement;
 	@Autowired
-	private UserSipDataDaoImpl userSipDataDao;
+	private UserSipDataDao userSipDataDao;
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
@@ -120,7 +120,7 @@ public class Usermanagement {
 	@Autowired
 	private ClientListManager clientListManager;
 	@Autowired
-	private ServerDaoImpl serverDao;
+	private ServerDao serverDao;
 
 	/**
 	 * query for a list of users
@@ -181,7 +181,7 @@ public class Usermanagement {
 			} else {
 				sort += " DESC ";
 			}
-			String hql = DaoHelper.getSearchQuery("Users", "u", search, true, false, sort, UsersDaoImpl.searchFields);
+			String hql = DaoHelper.getSearchQuery("Users", "u", search, true, false, sort, UsersDao.searchFields);
 
 			log.debug("Show HQL: " + hql);
 

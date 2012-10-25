@@ -23,7 +23,7 @@ import static org.apache.openmeetings.web.components.admin.groups.GroupUsersPane
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.web.app.Application;
@@ -72,7 +72,7 @@ public class AddUsersForm extends Form<Void> {
 			protected void onAfterSubmit(AjaxRequestTarget target, org.apache.wicket.markup.html.form.Form<?> form) {
 				usersToAdd.clear();
 				usersInList.clear();
-				usersInList.addAll(Application.getBean(UsersDaoImpl.class).get(userSearchText));
+				usersInList.addAll(Application.getBean(UsersDao.class).get(userSearchText));
 				target.add(users);
 			}
 		});

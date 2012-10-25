@@ -18,19 +18,19 @@
  */
 package org.apache.openmeetings.backup;
 
-import org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDaoImpl;
+import org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDao;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentCategory;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
 public class AppointmentCategoryConverter  extends OmConverter<AppointmentCategory> {
-	private AppointmentCategoryDaoImpl appointmentCategoryDaoImpl;
+	private AppointmentCategoryDao appointmentCategoryDaoImpl;
 	
 	public AppointmentCategoryConverter() {
 		//default constructor is for export
 	}
 	
-	public AppointmentCategoryConverter(AppointmentCategoryDaoImpl appointmentCategoryDaoImpl) {
+	public AppointmentCategoryConverter(AppointmentCategoryDao appointmentCategoryDaoImpl) {
 		this.appointmentCategoryDaoImpl = appointmentCategoryDaoImpl;
 	}
 	

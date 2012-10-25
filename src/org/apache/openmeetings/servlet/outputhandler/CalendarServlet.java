@@ -33,8 +33,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
-import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
@@ -82,12 +82,12 @@ public class CalendarServlet extends HttpServlet {
 		return null;
 	}
 
-	public ConfigurationDaoImpl getConfigurationDaoImpl() {
+	public ConfigurationDao getConfigurationDaoImpl() {
 		try {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
-				return (ConfigurationDaoImpl) context
+				return (ConfigurationDao) context
 						.getBean("configurationDaoImpl");
 			}
 		} catch (Exception err) {
@@ -109,12 +109,12 @@ public class CalendarServlet extends HttpServlet {
 		return null;
 	}
 
-	public OmTimeZoneDaoImpl getOmTimeZoneDaoImpl() {
+	public OmTimeZoneDao getOmTimeZoneDaoImpl() {
 		try {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
-				return (OmTimeZoneDaoImpl) context.getBean("omTimeZoneDaoImpl");
+				return (OmTimeZoneDao) context.getBean("omTimeZoneDaoImpl");
 			}
 		} catch (Exception err) {
 			log.error("[getOmTimeZoneDaoImpl]", err);

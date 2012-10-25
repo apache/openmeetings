@@ -38,9 +38,9 @@ import javax.persistence.criteria.Root;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
-import org.apache.openmeetings.data.user.dao.OrganisationDAO;
-import org.apache.openmeetings.data.user.dao.OrganisationUserDAO;
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
+import org.apache.openmeetings.data.user.dao.OrganisationDao;
+import org.apache.openmeetings.data.user.dao.OrganisationUserDao;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.user.Users;
@@ -64,11 +64,11 @@ public class Organisationmanagement {
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
-	private UsersDaoImpl usersDao;
+	private UsersDao usersDao;
 	@Autowired
-	private OrganisationDAO orgDao;
+	private OrganisationDao orgDao;
 	@Autowired
-	private OrganisationUserDAO orgUserDao;
+	private OrganisationUserDao orgUserDao;
 	@Autowired
 	private AuthLevelmanagement authLevelManagement;
 

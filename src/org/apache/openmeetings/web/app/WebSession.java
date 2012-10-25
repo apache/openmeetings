@@ -26,9 +26,9 @@ import java.util.TimeZone;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.user.Usermanagement;
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
@@ -110,9 +110,9 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	public static long getLanguage() {
 		WebSession session = get();
 		if (session.isSignedIn()) {
-			return Application.getBean(UsersDaoImpl.class).get(session.userId).getLanguage_id();
+			return Application.getBean(UsersDao.class).get(session.userId).getLanguage_id();
 		} else {
-			return Application.getBean(ConfigurationDaoImpl.class).getConfValue("default_lang_id", Long.class, "1");
+			return Application.getBean(ConfigurationDao.class).getConfValue("default_lang_id", Long.class, "1");
 		}
 	}
 	

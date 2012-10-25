@@ -24,10 +24,10 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.data.basic.Fieldmanagment;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
-import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
-import org.apache.openmeetings.data.calendar.daos.AppointmentDaoImpl;
-import org.apache.openmeetings.data.calendar.daos.MeetingMemberDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
+import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
+import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
 import org.apache.openmeetings.data.conference.Invitationmanagement;
 import org.apache.openmeetings.data.conference.RoomDAO;
 import org.apache.openmeetings.data.conference.Roommanagement;
@@ -51,15 +51,15 @@ public class AppointmentLogic {
 			AppointmentLogic.class, "openmeetings");
 
 	@Autowired
-	private AppointmentDaoImpl appointmentDao;
+	private AppointmentDao appointmentDao;
 	@Autowired
-	private ConfigurationDaoImpl configurationDaoImpl;
+	private ConfigurationDao configurationDaoImpl;
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
 	private Fieldmanagment fieldmanagment;
 	@Autowired
-	private OmTimeZoneDaoImpl omTimeZoneDaoImpl;
+	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
 	private Roommanagement roommanagement;
 	@Autowired
@@ -67,7 +67,7 @@ public class AppointmentLogic {
 	@Autowired
 	private Invitationmanagement invitationManagement;
 	@Autowired
-	private MeetingMemberDaoImpl meetingMemberDao;
+	private MeetingMemberDao meetingMemberDao;
 	@Autowired
 	private MeetingMemberLogic meetingMemberLogic;
 	@Autowired

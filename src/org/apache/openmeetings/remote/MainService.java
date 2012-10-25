@@ -31,17 +31,17 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Navimanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
-import org.apache.openmeetings.data.basic.dao.LdapConfigDaoImpl;
-import org.apache.openmeetings.data.basic.dao.OmTimeZoneDaoImpl;
-import org.apache.openmeetings.data.basic.dao.SOAPLoginDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.data.basic.dao.LdapConfigDao;
+import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
+import org.apache.openmeetings.data.basic.dao.SOAPLoginDao;
 import org.apache.openmeetings.data.conference.Feedbackmanagement;
 import org.apache.openmeetings.data.conference.Invitationmanagement;
 import org.apache.openmeetings.data.conference.Roommanagement;
-import org.apache.openmeetings.data.logs.ConferenceLogDaoImpl;
+import org.apache.openmeetings.data.logs.ConferenceLogDao;
 import org.apache.openmeetings.data.user.Usermanagement;
-import org.apache.openmeetings.data.user.dao.StateDaoImpl;
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
+import org.apache.openmeetings.data.user.dao.StateDao;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.ldap.LdapLoginManagement;
 import org.apache.openmeetings.persistence.beans.adresses.States;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
@@ -85,25 +85,25 @@ public class MainService implements IPendingServiceCallback {
 	@Autowired
 	private Sessionmanagement sessionManagement;
 	@Autowired
-	private ConfigurationDaoImpl configurationDaoImpl;
+	private ConfigurationDao configurationDaoImpl;
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
-	private StateDaoImpl statemanagement;
+	private StateDao statemanagement;
 	@Autowired
-	private OmTimeZoneDaoImpl omTimeZoneDaoImpl;
+	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
 	private Navimanagement navimanagement;
 	@Autowired
 	private Roommanagement roommanagement;
 	@Autowired
-	private ConferenceLogDaoImpl conferenceLogDao;
+	private ConferenceLogDao conferenceLogDao;
 	@Autowired
-	private UsersDaoImpl usersDao;
+	private UsersDao usersDao;
 	@Autowired
-	private LdapConfigDaoImpl ldapConfigDao;
+	private LdapConfigDao ldapConfigDao;
 	@Autowired
-	private SOAPLoginDaoImpl soapLoginDao;
+	private SOAPLoginDao soapLoginDao;
 	@Autowired
 	private Invitationmanagement invitationManagement;
 	@Autowired

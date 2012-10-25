@@ -21,8 +21,8 @@ package org.apache.openmeetings.data.flvrecord.listener;
 import java.util.Date;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDaoImpl;
-import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDeltaDaoImpl;
+import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDao;
+import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDeltaDao;
 import org.apache.openmeetings.data.flvrecord.listener.async.CachedEvent;
 import org.apache.openmeetings.data.flvrecord.listener.async.StreamAudioWriter;
 import org.red5.logging.Red5LoggerFactory;
@@ -41,8 +41,8 @@ public class StreamAudioListener extends BaseStreamListener {
 	public StreamAudioListener(String streamName, IScope scope,
 			Long flvRecordingMetaDataId, boolean isScreenData,
 			boolean isInterview,
-			FlvRecordingMetaDeltaDaoImpl flvRecordingMetaDeltaDao,
-			FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDao) {
+			FlvRecordingMetaDeltaDao flvRecordingMetaDeltaDao,
+			FlvRecordingMetaDataDao flvRecordingMetaDataDao) {
 		streamAudioWriter = new StreamAudioWriter(streamName, scope,
 				flvRecordingMetaDataId, isScreenData, isInterview,
 				flvRecordingMetaDeltaDao, flvRecordingMetaDataDao);

@@ -18,14 +18,14 @@
  */
 package org.apache.openmeetings.web.components.admin.servers;
 
-import org.apache.openmeetings.data.basic.dao.ServerDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ServerDao;
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
-import org.apache.openmeetings.web.components.admin.OmDataView;
+import org.apache.openmeetings.web.components.admin.SearchableDataView;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
-import org.apache.openmeetings.web.data.OmDataProvider;
-import org.apache.openmeetings.web.data.OmOrderByBorder;
+import org.apache.openmeetings.web.data.SearchableDataProvider;
+import org.apache.openmeetings.web.data.OrderByBorder;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -51,8 +51,8 @@ public class ServersPanel extends AdminPanel {
 	@SuppressWarnings("unchecked")
 	public ServersPanel(String id) {
 		super(id);
-		OmDataView<Server> dataView = new OmDataView<Server>("serverList",
-				new OmDataProvider<Server>(ServerDaoImpl.class)) {
+		SearchableDataView<Server> dataView = new SearchableDataView<Server>("serverList",
+				new SearchableDataProvider<Server>(ServerDao.class)) {
 			private static final long serialVersionUID = 8715559628755439596L;
 
 			@Override
@@ -78,9 +78,9 @@ public class ServersPanel extends AdminPanel {
 		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		DataViewContainer<Server> container = new DataViewContainer<Server>(listContainer, dataView);
-		container.setLinks(new OmOrderByBorder<Server>("orderById", "id", container)
-				, new OmOrderByBorder<Server>("orderByName", "name", container)
-				, new OmOrderByBorder<Server>("orderByAddress", "address", container));
+		container.setLinks(new OrderByBorder<Server>("orderById", "id", container)
+				, new OrderByBorder<Server>("orderByName", "name", container)
+				, new OrderByBorder<Server>("orderByAddress", "address", container));
 		add(container.orderLinks);
 		add(new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = 5097048616003411362L;

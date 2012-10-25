@@ -34,14 +34,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class FlvRecordingMetaDataDaoImpl {
+public class FlvRecordingMetaDataDao {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecordingMetaDataDaoImpl.class,
+	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecordingMetaDataDao.class,
 			OpenmeetingsVariables.webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
-	private FlvRecordingDaoImpl flvRecordingDao;
+	private FlvRecordingDao flvRecordingDao;
 	
 	public FlvRecordingMetaData getFlvRecordingMetaDataById(Long flvRecordingMetaDataId) {
 		try { 

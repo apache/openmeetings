@@ -27,11 +27,11 @@ import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.persistence.beans.lang.Fieldvalues;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
-import org.apache.openmeetings.web.components.admin.OmDataView;
+import org.apache.openmeetings.web.components.admin.SearchableDataView;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
-import org.apache.openmeetings.web.data.OmDataProvider;
-import org.apache.openmeetings.web.data.OmOrderByBorder;
+import org.apache.openmeetings.web.data.SearchableDataProvider;
+import org.apache.openmeetings.web.data.OrderByBorder;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -71,9 +71,9 @@ public class LangPanel extends AdminPanel {
 		form.showNewRecord();
 		add(form);
 
-		final OmDataView<Fieldvalues> dataView = new OmDataView<Fieldvalues>(
+		final SearchableDataView<Fieldvalues> dataView = new SearchableDataView<Fieldvalues>(
 				"langList"
-				, new OmDataProvider<Fieldvalues>(FieldValueDaoImpl.class) {
+				, new SearchableDataProvider<Fieldvalues>(FieldValueDaoImpl.class) {
 					private static final long serialVersionUID = -6822789354860988626L;
 
 					@Override
@@ -115,9 +115,9 @@ public class LangPanel extends AdminPanel {
 		listContainer = new WebMarkupContainer("listContainer");
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		DataViewContainer<Fieldvalues> container = new DataViewContainer<Fieldvalues>(listContainer, dataView);
-		container.setLinks(new OmOrderByBorder<Fieldvalues>("orderById", "fieldvalues.fieldvalues_id", container)
-				, new OmOrderByBorder<Fieldvalues>("orderByName", "fieldvalues.name", container)
-				, new OmOrderByBorder<Fieldvalues>("orderByValue", "value", container));
+		container.setLinks(new OrderByBorder<Fieldvalues>("orderById", "fieldvalues.fieldvalues_id", container)
+				, new OrderByBorder<Fieldvalues>("orderByName", "fieldvalues.name", container)
+				, new OrderByBorder<Fieldvalues>("orderByValue", "value", container));
 		add(container.orderLinks);
 		add(new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = 5097048616003411362L;

@@ -23,8 +23,8 @@ import java.util.Date;
 
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDaoImpl;
-import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDeltaDaoImpl;
+import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDao;
+import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDeltaDao;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingMetaData;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingMetaDelta;
 import org.red5.io.ITag;
@@ -52,16 +52,16 @@ public class StreamAudioWriter extends BaseStreamWriter {
 	private long byteCount = 0;
 	
 	// Autowire is not possible
-	protected final FlvRecordingMetaDeltaDaoImpl flvRecordingMetaDeltaDao;
-	protected final FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDao;
+	protected final FlvRecordingMetaDeltaDao flvRecordingMetaDeltaDao;
+	protected final FlvRecordingMetaDataDao flvRecordingMetaDataDao;
 
 	private boolean isInterview = false;
 	
 	public StreamAudioWriter(String streamName, IScope scope,
 			Long flvRecordingMetaDataId, boolean isScreenData,
 			boolean isInterview,
-			FlvRecordingMetaDeltaDaoImpl flvRecordingMetaDeltaDao,
-			FlvRecordingMetaDataDaoImpl flvRecordingMetaDataDao) {
+			FlvRecordingMetaDeltaDao flvRecordingMetaDeltaDao,
+			FlvRecordingMetaDataDao flvRecordingMetaDataDao) {
 		super(streamName, scope, flvRecordingMetaDataId, isScreenData);
 		
 		this.flvRecordingMetaDeltaDao = flvRecordingMetaDeltaDao;

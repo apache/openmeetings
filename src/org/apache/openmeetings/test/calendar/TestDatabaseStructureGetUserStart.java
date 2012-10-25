@@ -19,7 +19,7 @@
 package org.apache.openmeetings.test.calendar;
 
 import org.apache.log4j.Logger;
-import org.apache.openmeetings.data.user.dao.UsersDaoImpl;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class TestDatabaseStructureGetUserStart extends AbstractOpenmeetingsSpringTest {
 	private static final Logger log = Logger.getLogger(TestDatabaseStructureGetUserStart.class);
 	@Autowired
-	private UsersDaoImpl usersDao;
+	private UsersDao usersDao;
 	
 	@Test
 	public void testAddingGroup() {

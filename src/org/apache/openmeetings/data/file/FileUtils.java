@@ -24,7 +24,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.file.dao.FileExplorerItemDaoImpl;
+import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
 import org.apache.openmeetings.persistence.beans.files.FileExplorerItem;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -36,7 +36,7 @@ public class FileUtils {
 			FileProcessor.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private FileExplorerItemDaoImpl fileExplorerItemDao;
+	private FileExplorerItemDao fileExplorerItemDao;
 
 	public long getSizeOfDirectoryAndSubs(FileExplorerItem fileExplorerItem) {
 		try {

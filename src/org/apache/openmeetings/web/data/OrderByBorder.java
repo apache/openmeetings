@@ -18,17 +18,17 @@
  */
 package org.apache.openmeetings.web.data;
 
-import org.apache.openmeetings.persistence.beans.OmEntity;
+import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.sort.AjaxFallbackOrderByBorder;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByLink.CssProvider;
 
-public class OmOrderByBorder<T extends OmEntity> extends AjaxFallbackOrderByBorder<String> {
+public class OrderByBorder<T extends IDataProviderEntity> extends AjaxFallbackOrderByBorder<String> {
 	private static final long serialVersionUID = -867341109912297431L;
 	private DataViewContainer<T> container;
 	
-	public OmOrderByBorder(final String id, final String property, DataViewContainer<T> container) {
-		super(id, property, container.view.getDataProvider(), new OmCssProvider());
+	public OrderByBorder(final String id, final String property, DataViewContainer<T> container) {
+		super(id, property, container.view.getDataProvider(), new SortIconCssProvider());
 		this.container = container;
 		setOutputMarkupId(true);
 	}
@@ -43,10 +43,10 @@ public class OmOrderByBorder<T extends OmEntity> extends AjaxFallbackOrderByBord
 		target.add(container.orderLinks);
 	}
 	
-	static class OmCssProvider extends CssProvider<String> {
+	static class SortIconCssProvider extends CssProvider<String> {
 		private static final long serialVersionUID = 60178231250586887L;
 
-		public OmCssProvider() {
+		public SortIconCssProvider() {
 			super("ui-icon ui-icon-carat-1-n sort-icon", "ui-icon ui-icon-carat-1-s sort-icon", "ui-icon ui-icon-carat-2-n-s sort-icon");
 		}
 	}

@@ -24,7 +24,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.apache.openmeetings.data.OmDAO;
+import org.apache.openmeetings.data.IDataProviderDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.utils.DaoHelper;
@@ -32,11 +32,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class OrganisationUserDAO implements OmDAO<Organisation_Users> {
+public class OrganisationUserDao implements IDataProviderDao<Organisation_Users> {
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
-	private UsersDaoImpl usersDao;
+	private UsersDao usersDao;
 	public final static String[] searchFields = {"user.lastname", "user.firstname", "user.login", "user.adresses.email"};
 
 	public Organisation_Users get(long id) {

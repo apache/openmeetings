@@ -25,7 +25,7 @@ import java.util.LinkedHashMap;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -39,7 +39,7 @@ public class LoadAtomRssFeed {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			LoadAtomRssFeed.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
-	private ConfigurationDaoImpl configurationDaoImpl;
+	private ConfigurationDao configurationDaoImpl;
 	@Autowired
 	private AuthLevelmanagement authLevelmanagement;
 
