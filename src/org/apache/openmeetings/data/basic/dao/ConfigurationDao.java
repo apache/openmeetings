@@ -368,6 +368,8 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	}
 	
 	public Configuration update(Configuration entity, long userId) {
+		String key = entity.getConf_key();
+		String value = entity.getConf_value();
 		if (entity.getConfiguration_id() == null
 				|| entity.getConfiguration_id() <= 0) {
 			entity.setStarttime(new Date());
@@ -378,6 +380,13 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			entity.setDeleted(false);
 			entity.setUpdatetime(new Date());
 			this.updateConfig(entity);
+		}
+		if ("crypt_ClassName".equals(key)) {
+			ScopeApplicationAdapter.configKeyCryptClassName = value;
+		} else if ("show.whiteboard.draw.status".equals(key)) {
+			ScopeApplicationAdapter.whiteboardDrawStatus = "1".equals(value);
+		} else if ("application.name".equals(key)) {
+			appName = value;
 		}
 		//TODO ensure entity returned is updated
 		return entity;

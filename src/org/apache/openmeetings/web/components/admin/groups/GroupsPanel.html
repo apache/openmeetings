@@ -28,6 +28,7 @@
 					, autoOpen: false
 					, resizable: false
 					, width: 400
+					, modal: true
 				});
 				var documentHeight = $(document).height();
                 $('#adminForm').height(documentHeight-114);
@@ -79,29 +80,6 @@
                                </div>
 					    </fieldset>
 					</div>
-					
-					<!-- 
-					<table>
-						<tr>
-							<td style="font-weight: bold;"><wicket:ommessage key="170" /></td>
-							<td>&nbsp;</td>
-						</tr>
-						<tr>
-							<td><wicket:ommessage key="171" /></td>
-							<td><input type="text" wicket:id="name" /></td>
-						</tr>
-						<tr>
-							<td style="font-weight: bold;"><wicket:ommessage key="273" /></td>
-							<td style="text-align: right;"><div wicket:id="addUsersBtn" class="formNewButton disabled"><input/></div></td>
-						</tr>
-						<tr>
-							<td><wicket:ommessage key="177" /></td>
-							<td>
-								<div wicket:id="users"></div>
-							</td>
-						</tr>
-					</table>
-					 -->
 				</form>
 			</div>
 		</div>
@@ -117,10 +95,10 @@
 					</tr>
 					<tr>
 						<td><wicket:ommessage key="183" /></td>
-						<td><select wicket:id="users" style="width: 200px;"></select></td>
+						<td><select wicket:id="users" style="width: 200px; height: 300px;"></select></td>
 					</tr>
 					<tr>
-						<td style="text-align: right"><input type="button" wicket:id="add" /></td>
+						<td colspan="2" style="text-align: right"><input type="button" wicket:id="add" /></td>
 					</tr>
 				</table>
 			</form>

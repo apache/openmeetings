@@ -177,7 +177,7 @@ public class BackupImportController extends AbstractUploadController {
 	@Autowired
 	private PollManagement pollManagement;
 	@Autowired
-	private ConfigurationDao configurationDaoImpl;
+	private ConfigurationDao configurationDao;
 	@Autowired
 	private AsteriskDAOImpl asteriskDAOImpl;
 	@Autowired
@@ -283,7 +283,7 @@ public class BackupImportController extends AbstractUploadController {
 			for (Users u : list) {
 				OmTimeZone tz = u.getOmTimeZone();
 				if (tz.getJname() == null) {
-					String jNameTimeZone = configurationDaoImpl.getConfValue(
+					String jNameTimeZone = configurationDao.getConfValue(
 							"default.timezone", String.class, "Europe/Berlin");
 					OmTimeZone omTimeZone = omTimeZoneDaoImpl.getOmTimeZone(jNameTimeZone);
 					u.setOmTimeZone(omTimeZone);
@@ -300,7 +300,9 @@ public class BackupImportController extends AbstractUploadController {
 				Server us = u.getServer();
 				if (us != null) {
 					Server s = serverDaoImpl.getServerByAddress(us.getAddress());
-					serverDaoImpl.saveServer(s.getId(), us.getName(), us.getAddress());
+					s.setName(us.getName());
+					s.setAddress(us.getAddress());
+					serverDaoImpl.update(s, 1L);
 				}
 			}
 		}
@@ -337,7 +339,9 @@ public class BackupImportController extends AbstractUploadController {
 				Server us = r.getServer();
 				if (us != null) {
 					Server s = serverDaoImpl.getServerByAddress(us.getAddress());
-					serverDaoImpl.saveServer(s.getId(), us.getName(), us.getAddress());
+					s.setName(us.getName());
+					s.setAddress(us.getAddress());
+					serverDaoImpl.update(s, 1L);
 				}
 			}
 		}
@@ -439,6 +443,12 @@ public class BackupImportController extends AbstractUploadController {
 			List<FlvRecording> list = readList(serializer, f, "flvRecordings.xml", "flvrecordings", FlvRecording.class, true);
 			for (FlvRecording fr : list) {
 				fr.setFlvRecordingId(0);
+				if (fr.getRoom_id() != null) {
+					fr.setRoom_id(roomsMap.get(fr.getRoom_id()));
+				}
+				if (fr.getOwnerId() != null) {
+					fr.setOwnerId(usersMap.get(fr.getOwnerId()));
+				}
 				for (FlvRecordingMetaData meta : fr.getFlvRecordingMetaData()) {
 					meta.setFlvRecordingMetaDataId(0);
 					meta.setFlvRecording(fr);
@@ -573,10 +583,10 @@ public class BackupImportController extends AbstractUploadController {
 			
 			List<Configuration> list = readList(serializer, f, "configs.xml", "configs", Configuration.class, true);
 			for (Configuration c : list) {
-				Configuration cfg = configurationDaoImpl.getConfKey(c
+				Configuration cfg = configurationDao.getConfKey(c
 						.getConf_key());
 				c.setConfiguration_id(cfg == null ? null : cfg.getConfiguration_id());
-				configurationDaoImpl.updateConfig(c);
+				configurationDao.update(c, 1L);
 			}
 		}
 
