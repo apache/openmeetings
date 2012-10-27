@@ -446,7 +446,7 @@
 			<fileset dir="${red5.client.lib}" includes="red5-client*.jar" />
 		</copy>
 		<signjar alias="filetest" keystore="${keystore.file}" storepass="secret" lazy="false"
-			sigalg="MD5withRSA" digestalg="SHA1">
+			> <!-- sigalg="MD5withRSA" digestalg="SHA1" -->
 			<path>
 				<fileset dir="${screenshare.out.dir}">
 					<include name="**/*.jar" />
@@ -1066,6 +1066,7 @@
 	<target name="clean.all" depends="clean.dist" description="Clean All">
 		<delete includeemptydirs="true" dir="${build.base.dir}" />
 	</target>
+	
 	<target name="clean.ivy" depends="clean.all,-install-ivy" description="Clears out Ivy cache and build folder">
 		<ivy:cleancache />
 	</target>
@@ -1099,5 +1100,43 @@
 				</not>
 			</condition>
 		</fail>
-	</target>	
+	</target>
+	
+	<path id="loadtest.classpath">
+		<fileset dir="${om.dist.webapp}/screensharing">
+			<include name="*.jar" />
+			<exclude name="openmeetings*.jar" />
+		</fileset>
+		<!--
+		<filelist>
+			<file name="${basedir}/WebContent/screensharing/logback.xml"/>
+		</filelist>
+		 -->
+		<pathelement path="${basedir}/WebContent/screensharing" />
+		<pathelement path="${main.out.dir}" />
+	</path>
+	
+	<property name="runTestHost" value="192.168.1.7" />
+	<property name="runTestPort" value="1935" />
+	<property name="runTestContext" value="openmeetings/1" />
+	
+	<target name="doRunClientTest">
+		<parallel>
+			<java classname="org.apache.openmeetings.test.rtmp.SimulateLoad">
+				<arg value="${runTestHost}"/>
+				<arg value="${runTestPort}"/>
+				<arg value="${runTestContext}"/>
+				<arg value="1" />
+				<classpath refid="loadtest.classpath" />
+			</java>
+			<java classname="org.apache.openmeetings.test.rtmp.SimulateLoad">
+				<arg value="${runTestHost}"/>
+				<arg value="${runTestPort}"/>
+				<arg value="${runTestContext}"/>
+				<arg value="2" />
+				<classpath refid="loadtest.classpath" />
+			</java>
+		</parallel>
+	</target>
+	
 </project>
