@@ -1117,23 +1117,15 @@
 	</path>
 	
 	<property name="runTestHost" value="192.168.1.7" />
+	<property name="numberOfClient" value="50" />
 	<property name="runTestPort" value="1935" />
 	<property name="runTestContext" value="openmeetings/1" />
 	
 	<target name="doRunClientTest">
 		<parallel>
-			<java classname="org.apache.openmeetings.test.rtmp.SimulateLoad">
+			<java classname="org.apache.openmeetings.test.rtmp.SimulateLoadTest">
 				<arg value="${runTestHost}"/>
-				<arg value="${runTestPort}"/>
-				<arg value="${runTestContext}"/>
-				<arg value="1" />
-				<classpath refid="loadtest.classpath" />
-			</java>
-			<java classname="org.apache.openmeetings.test.rtmp.SimulateLoad">
-				<arg value="${runTestHost}"/>
-				<arg value="${runTestPort}"/>
-				<arg value="${runTestContext}"/>
-				<arg value="2" />
+				<arg value="${numberOfClient}"/>
 				<classpath refid="loadtest.classpath" />
 			</java>
 		</parallel>

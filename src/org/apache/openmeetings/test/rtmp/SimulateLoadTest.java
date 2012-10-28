@@ -7,12 +7,27 @@ import org.junit.Test;
 
 public class SimulateLoadTest {
 
-	private int numberOfClients = 10;
+	private int numberOfClients = 25;
 	private List<SimulateLoad> simulateLoadList = new ArrayList<SimulateLoad>();
 
-	private final String host = "192.168.1.7";
+	private String host = "192.168.1.7";
 	private final int port = 1935;
 	private final String applicationContext = "openmeetings/1";
+
+	public SimulateLoadTest(String host, int numberOfClients) {
+		this.host = host;
+		this.numberOfClients = numberOfClients;
+	}
+
+	public static void main(String... args) {
+		if (args.length != 2) {
+			return;
+		}
+		SimulateLoadTest simulateLoadTest = new SimulateLoadTest(args[0],
+				Integer.valueOf(args[1]).intValue());
+		simulateLoadTest.test();
+	}
+
 
 	@Test
 	public void test() {
