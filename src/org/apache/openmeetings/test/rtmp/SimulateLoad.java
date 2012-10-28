@@ -21,16 +21,12 @@ package org.apache.openmeetings.test.rtmp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SimulateLoad {
+public class SimulateLoad extends Thread {
 
 	private static final Logger log = LoggerFactory
 			.getLogger(SimulateLoad.class);
 
 	private LoadTestRtmpClient loadTestRtmpClient;
-	private final String host;
-	private final int port;
-	private final String applicationContext;
-	private final int instanceId;
 	private boolean testRunning = true;
 
 	public double getAverageTime() {
@@ -53,8 +49,9 @@ public class SimulateLoad {
 			SimulateLoad simulateLoad = new SimulateLoad(args[0], Integer
 					.valueOf(args[1]).intValue(), args[2], Integer.valueOf(
 					args[3]).intValue());
-			simulateLoad.run();
+			simulateLoad.start();
 			System.err.println("started ");
+
 		} catch (Exception er) {
 			er.printStackTrace();
 		}
@@ -63,18 +60,14 @@ public class SimulateLoad {
 	public SimulateLoad(String host, int port, String applicationContext,
 			int instanceId) {
 		super();
-		this.host = host;
-		this.port = port;
-		this.applicationContext = applicationContext;
-		this.instanceId = instanceId;
+
+		loadTestRtmpClient = new LoadTestRtmpClient(instanceId);
+		loadTestRtmpClient.connect(host, port, applicationContext,
+				loadTestRtmpClient);
 	}
 
 	public void run() {
 		try {
-
-			loadTestRtmpClient = new LoadTestRtmpClient(instanceId);
-			loadTestRtmpClient.connect(host, port, applicationContext,
-					loadTestRtmpClient);
 
 			System.err.println("######### start client");
 
@@ -90,6 +83,10 @@ public class SimulateLoad {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public int getNumberOfCalls() {
+		return loadTestRtmpClient.getNumberOfCalls();
 	}
 
 }

@@ -26,14 +26,9 @@ import java.util.Map.Entry;
 import org.red5.client.net.rtmp.ClientExceptionHandler;
 import org.red5.client.net.rtmp.INetStreamEventHandler;
 import org.red5.client.net.rtmp.RTMPClient;
-import org.red5.server.api.event.IEvent;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
-import org.red5.server.net.rtmp.Channel;
-import org.red5.server.net.rtmp.RTMPConnection;
-import org.red5.server.net.rtmp.codec.RTMP;
 import org.red5.server.net.rtmp.event.Notify;
-import org.red5.server.net.rtmp.message.Header;
 
 public class LoadTestRtmpClient extends RTMPClient implements IPendingServiceCallback, INetStreamEventHandler, ClientExceptionHandler {
 
@@ -78,20 +73,21 @@ public class LoadTestRtmpClient extends RTMPClient implements IPendingServiceCal
 		
 		if (counterCalls % 2 == 0) {
 
-			if (counterCalls > 500) {
+			if (counterCalls > 10) {
 
 				return true;
 
 			}
 
 			System.err.println("Rest o do new call " + counterCalls);
+			counterCalls++;
+
 			Map<String, Integer> map = new HashMap<String, Integer>();
 			map.put("instanceId", instanceId);
 			map.put("count", counterCalls);
 			calls.put(counterCalls, new CallObject(new Date()));
-			invoke("syncMessageToCurrentScope", new Object[] {
+			invoke("loadTestSyncMessage", new Object[] {
 					"syncMessageToCurrentScopeResult", map, true }, this);
-			counterCalls++;
 
 		} else {
 			System.err.println("Call running " + counterCalls);
@@ -110,8 +106,8 @@ public class LoadTestRtmpClient extends RTMPClient implements IPendingServiceCal
 			long deltaTime = tCallObjectEntry.getValue().getEnded().getTime()
 					- tCallObjectEntry.getValue().getStarted().getTime();
 
-			System.err.println("Key " + tCallObjectEntry.getKey()
-					+ "deltaTime " + deltaTime);
+			// System.err.println("Key " + tCallObjectEntry.getKey()
+			// + "deltaTime " + deltaTime);
 
 			overallTime += deltaTime;
 
@@ -119,9 +115,6 @@ public class LoadTestRtmpClient extends RTMPClient implements IPendingServiceCal
 
 		double averageTime = Long.valueOf(overallTime).doubleValue()
 				/ Integer.valueOf(calls.size()).doubleValue();
-
-		System.err.println("Number of calls: " + calls.size() + "overallTime: "
-				+ overallTime + " averageTime" + averageTime);
 
 		return averageTime;
 	}
@@ -136,68 +129,44 @@ public class LoadTestRtmpClient extends RTMPClient implements IPendingServiceCal
 			isConnected = true;
 		}
 
-	}
+		if ("loadTestSyncMessage".equals(method)) {
 
-	protected void onInvoke(RTMPConnection conn, Channel channel,
-			Header source, Notify invoke, RTMP rtmp) {
-
-		super.onInvoke(conn, channel, source, invoke, rtmp);
-
-		if (invoke.getType() == IEvent.Type.STREAM_DATA) {
-			return;
-		}
-
-		String method = invoke.getCall().getServiceMethodName();
-		// System.err.println("method2 " + method);
-
-		if ("syncMessageToCurrentScopeResult".equals(method)) {
-
-			@SuppressWarnings("unchecked")
-			Map<String, Integer> arguments = (Map<String, Integer>) invoke
-					.getCall().getArguments()[0];
-			Integer currentCountReturn = arguments.get("count");
-			Integer msgInstanceId = arguments.get("instanceId");
-
-			if (!msgInstanceId.equals(instanceId)) {
-				throw new RuntimeException(
-						"Received msg from other instance msgInstanceId "
-								+ msgInstanceId + " instanceId" + instanceId);
-			}
-
-			CallObject tCallObject = calls.get(currentCountReturn);
+			CallObject tCallObject = calls.get(counterCalls);
 			if (tCallObject == null) {
 
 				for (Entry<Integer, CallObject> tCallObjectEntry : calls
 						.entrySet()) {
 
-
 					System.err.println("Key " + tCallObjectEntry.getKey()
 							+ "tCallObjectEntry "
-							+ tCallObjectEntry.getValue().getStarted()
-							+ " current instanceId " + instanceId
-							+ " message instanceId "
-							+ arguments.get("instanceId"));
+							+ tCallObjectEntry.getValue().getStarted());
 
 				}
 
 				throw new RuntimeException(
 						"tCallObject is null currentCountReturn "
-								+ currentCountReturn + " list size "
+								+ counterCalls + " list size "
 								+ calls.size());
 			}
 			tCallObject.setEnded(new Date());
-			calls.put(currentCountReturn, tCallObject);
+			calls.put(counterCalls, tCallObject);
 
-			// System.err.println("Call received " + counterCalls
-			// + " currentCountReturn: " + currentCountReturn);
+			System.err.println("Call received " + counterCalls
+					+ " instanceId: " + instanceId);
 
 			counterCalls++;
 		}
+
 	}
+
 
 	public void onStreamEvent(Notify notify) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public int getNumberOfCalls() {
+		return calls.size();
 	}
 	
 }
