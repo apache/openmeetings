@@ -75,7 +75,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private ClientListManager clientListManager;
+	private IClientList clientListManager;
 	@Autowired
 	private EmoticonsManager emoticonsManager;
 	@Autowired
@@ -2270,6 +2270,14 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		syncMessageToCurrentScope(remoteMethodName, newMessage, sendSelf, false);
 	}
 	
+	/**
+	 * Only temporary for load test, with return argument for the client to have a result
+	 * 
+	 * @param remoteMethodName
+	 * @param newMessage
+	 * @param sendSelf
+	 * @return
+	 */
 	@Deprecated
 	public synchronized boolean loadTestSyncMessage(String remoteMethodName, Object newMessage, boolean sendSelf) {
 		syncMessageToCurrentScope(remoteMethodName, newMessage, sendSelf, false);

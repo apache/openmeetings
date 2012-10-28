@@ -58,7 +58,7 @@ import org.apache.openmeetings.persistence.beans.user.UserSipData;
 import org.apache.openmeetings.persistence.beans.user.Userdata;
 import org.apache.openmeetings.persistence.beans.user.Userlevel;
 import org.apache.openmeetings.persistence.beans.user.Users;
-import org.apache.openmeetings.remote.red5.ClientListManager;
+import org.apache.openmeetings.remote.red5.IClientList;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.sip.xmlrpc.OpenXGHttpClient;
 import org.apache.openmeetings.templates.ResetPasswordTemplate;
@@ -118,7 +118,7 @@ public class Usermanagement {
 	@Autowired
 	private AuthLevelmanagement authLevelManagement;
 	@Autowired
-	private ClientListManager clientListManager;
+	private IClientList clientListManager;
 	@Autowired
 	private ServerDao serverDao;
 

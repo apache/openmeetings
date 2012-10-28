@@ -46,7 +46,7 @@ import org.apache.openmeetings.persistence.beans.rooms.RoomTypes;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.remote.ConferenceService;
-import org.apache.openmeetings.remote.red5.ClientListManager;
+import org.apache.openmeetings.remote.red5.IClientList;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
@@ -84,7 +84,7 @@ public class RoomWebService {
 	@Autowired
 	private ConferenceService conferenceService;
 	@Autowired
-	private ClientListManager clientListManager;
+	private IClientList clientListManager;
 	@Autowired
 	private MeetingMemberLogic meetingMemberLogic;
 	@Autowired

@@ -47,7 +47,7 @@ import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingLog;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingMetaData;
 import org.apache.openmeetings.persistence.beans.rooms.RoomClient;
-import org.apache.openmeetings.remote.red5.ClientListManager;
+import org.apache.openmeetings.remote.red5.IClientList;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
@@ -80,7 +80,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 
 	// Spring Beans
 	@Autowired
-	private ClientListManager clientListManager;
+	private IClientList clientListManager;
 	@Autowired
 	private FlvRecordingDao flvRecordingDaoImpl;
 	@Autowired

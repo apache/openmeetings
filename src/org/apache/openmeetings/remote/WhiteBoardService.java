@@ -37,7 +37,7 @@ import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.persistence.beans.rooms.RoomClient;
-import org.apache.openmeetings.remote.red5.ClientListManager;
+import org.apache.openmeetings.remote.red5.IClientList;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.remote.red5.WhiteBoardObjectListManager;
 import org.apache.openmeetings.remote.red5.WhiteBoardObjectListManagerById;
@@ -65,7 +65,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 	@Autowired
 	private final ScopeApplicationAdapter scopeApplicationAdapter = null;
 	@Autowired
-	private final ClientListManager clientListManager = null;
+	private final IClientList clientListManager = null;
 	@Autowired
 	private final WhiteBoardObjectListManager whiteBoardObjectListManager = null;
 	@Autowired

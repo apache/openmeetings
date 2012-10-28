@@ -34,7 +34,7 @@ import javax.persistence.criteria.Root;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
 import org.apache.openmeetings.persistence.beans.rooms.RoomClient;
-import org.apache.openmeetings.remote.red5.ClientListManager;
+import org.apache.openmeetings.remote.red5.IClientList;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -59,7 +59,7 @@ public class Sessionmanagement {
 	@Autowired
 	private ManageCryptStyle manageCryptStyle;
 	@Autowired
-	private ClientListManager clientListManager;
+	private IClientList clientListManager;
 
 	/**
 	 * creates a new session-object in the database

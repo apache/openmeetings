@@ -45,7 +45,7 @@ import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms_Organisation;
 import org.apache.openmeetings.persistence.beans.sip.OpenXGReturnObject;
 import org.apache.openmeetings.persistence.beans.user.Users;
-import org.apache.openmeetings.remote.red5.ClientListManager;
+import org.apache.openmeetings.remote.red5.IClientList;
 import org.apache.openmeetings.sip.api.impl.asterisk.AsteriskDbSipClient;
 import org.apache.openmeetings.sip.api.request.SIPCreateConferenceRequest;
 import org.apache.openmeetings.sip.api.result.SipCreateConferenceRequestResult;
@@ -82,7 +82,7 @@ public class Roommanagement {
 	@Autowired
 	private AuthLevelmanagement authLevelManagement;
 	@Autowired
-	private ClientListManager clientListManager;
+	private IClientList clientListManager;
     @Autowired
 	private ConfigurationDao configurationDaoImpl;
     @Autowired

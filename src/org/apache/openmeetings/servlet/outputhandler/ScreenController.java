@@ -34,7 +34,7 @@ import org.apache.openmeetings.data.basic.Fieldmanagment;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.persistence.beans.rooms.RoomClient;
-import org.apache.openmeetings.remote.red5.ClientListManager;
+import org.apache.openmeetings.remote.red5.IClientList;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -53,7 +53,7 @@ public class ScreenController {
 			ScreenController.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private ClientListManager clientListManager;
+	private IClientList clientListManager;
 	@Autowired
 	public Sessionmanagement sessionManagement;
 	@Autowired

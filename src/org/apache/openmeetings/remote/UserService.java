@@ -57,7 +57,7 @@ import org.apache.openmeetings.persistence.beans.user.PrivateMessages;
 import org.apache.openmeetings.persistence.beans.user.Salutations;
 import org.apache.openmeetings.persistence.beans.user.UserContacts;
 import org.apache.openmeetings.persistence.beans.user.Users;
-import org.apache.openmeetings.remote.red5.ClientListManager;
+import org.apache.openmeetings.remote.red5.IClientList;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.templates.RequestContactConfirmTemplate;
 import org.apache.openmeetings.templates.RequestContactTemplate;
@@ -82,7 +82,7 @@ public class UserService {
 			UserService.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private ClientListManager clientListManager;
+	private IClientList clientListManager;
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired

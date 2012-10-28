@@ -44,7 +44,7 @@ import org.apache.openmeetings.persistence.beans.rooms.RoomTypes;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms_Organisation;
 import org.apache.openmeetings.persistence.beans.user.Users;
-import org.apache.openmeetings.remote.red5.ClientListManager;
+import org.apache.openmeetings.remote.red5.IClientList;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.apache.openmeetings.utils.math.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
@@ -80,7 +80,7 @@ public class ConferenceService {
 	@Autowired
 	private TimezoneUtil timezoneUtil;
 	@Autowired
-	private ClientListManager clientListManager = null;
+	private IClientList clientListManager = null;
 	@Autowired
 	private ServerDao serverDao;
 

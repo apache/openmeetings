@@ -54,7 +54,7 @@ import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
 import org.apache.openmeetings.persistence.beans.rooms.RoomClient;
 import org.apache.openmeetings.persistence.beans.user.Userdata;
 import org.apache.openmeetings.persistence.beans.user.Users;
-import org.apache.openmeetings.remote.red5.ClientListManager;
+import org.apache.openmeetings.remote.red5.IClientList;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.rss.LoadAtomRssFeed;
 import org.red5.logging.Red5LoggerFactory;
@@ -79,7 +79,7 @@ public class MainService implements IPendingServiceCallback {
 	private static final Logger log = Red5LoggerFactory.getLogger(MainService.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private ClientListManager clientListManager;
+	private IClientList clientListManager;
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired

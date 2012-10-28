@@ -30,7 +30,7 @@ import org.apache.openmeetings.persistence.beans.poll.PollType;
 import org.apache.openmeetings.persistence.beans.poll.RoomPoll;
 import org.apache.openmeetings.persistence.beans.poll.RoomPollAnswers;
 import org.apache.openmeetings.persistence.beans.rooms.RoomClient;
-import org.apache.openmeetings.remote.red5.ClientListManager;
+import org.apache.openmeetings.remote.red5.IClientList;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
@@ -52,7 +52,7 @@ public class PollService implements IPendingServiceCallback {
 			PollService.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private ClientListManager clientListManager;
+	private IClientList clientListManager;
 	@Autowired
 	private Usermanagement usermanagement;
 	@Autowired

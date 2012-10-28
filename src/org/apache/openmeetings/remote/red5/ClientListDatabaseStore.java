@@ -37,9 +37,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class ClientListManager {
+public class ClientListDatabaseStore implements IClientList {
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			ClientListManager.class, OpenmeetingsVariables.webAppRootKey);
+			ClientListDatabaseStore.class, OpenmeetingsVariables.webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;
@@ -47,17 +47,16 @@ public class ClientListManager {
 	@Autowired
 	private ManageCryptStyle manageCryptStyle;
 	
-	/**
-	 * Get current clients and extends the room client with its potential 
-	 * audio/video client and settings
-	 * 
-	 * @param room_id
-	 * @return
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.remote.red5.IClientList#getRoomClients(java.lang.Long)
 	 */
 	public List<RoomClient> getRoomClients(Long room_id) {
 		return getClientListByRoom(room_id);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.remote.red5.IClientList#addClientListItem(java.lang.String, java.lang.String, java.lang.Integer, java.lang.String, java.lang.String, boolean)
+	 */
 	public RoomClient addClientListItem(String streamId,
 			String scopeName, Integer remotePort, String remoteAddress,
 			String swfUrl, boolean isAVClient) {
@@ -95,11 +94,17 @@ public class ClientListManager {
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.remote.red5.IClientList#getAllClients()
+	 */
 	public Collection<RoomClient> getAllClients() {
 		TypedQuery<RoomClient> q = em.createNamedQuery("getAllRoomClients", RoomClient.class);
 		return q.getResultList();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.remote.red5.IClientList#getClientByStreamId(java.lang.String)
+	 */
 	public RoomClient getClientByStreamId(String streamId) {
 		try {
 			TypedQuery<RoomClient> q = em.createNamedQuery("getByStreamId", RoomClient.class);
@@ -116,15 +121,8 @@ public class ClientListManager {
 		return null;
 	}
 	
-	/**
-	 * Additionally checks if the client receives sync events
-	 * 
-	 * Sync events will no be broadcasted to:
-	 * - Screensharing users
-	 * - Audio/Video connections only
-	 * 
-	 * @param streamId
-	 * @return
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.remote.red5.IClientList#getSyncClientByStreamId(java.lang.String)
 	 */
 	public RoomClient getSyncClientByStreamId(String streamId) {
 		try {
@@ -142,6 +140,9 @@ public class ClientListManager {
 	}
 
 
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.remote.red5.IClientList#getClientByPublicSID(java.lang.String, boolean)
+	 */
 	public RoomClient getClientByPublicSID(String publicSID, boolean isAVClient) {
 		try {
 			TypedQuery<RoomClient> q = em.createNamedQuery("getByPublicSidAvClient", RoomClient.class);
@@ -156,6 +157,9 @@ public class ClientListManager {
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.remote.red5.IClientList#getClientByUserId(java.lang.Long)
+	 */
 	public RoomClient getClientByUserId(Long userId) {
 		try {
 			TypedQuery<RoomClient> q = em.createNamedQuery("getByUserId", RoomClient.class);
@@ -169,12 +173,8 @@ public class ClientListManager {
 		return null;
 	}
 	
-	/**
-	 * Update the session object of the audio/video-connection and additionally swap the 
-	 * values to the session object of the user that holds the full session object
-	 * @param streamId
-	 * @param rcm
-	 * @return
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.remote.red5.IClientList#updateAVClientByStreamId(java.lang.String, org.apache.openmeetings.persistence.beans.rooms.RoomClient)
 	 */
 	public Boolean updateAVClientByStreamId(String streamId, RoomClient rcm) {
 		try {
@@ -197,6 +197,9 @@ public class ClientListManager {
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.remote.red5.IClientList#updateClientByStreamId(java.lang.String, org.apache.openmeetings.persistence.beans.rooms.RoomClient)
+	 */
 	public Boolean updateClientByStreamId(String streamId, RoomClient rcm) {
 		try {
 			if (getClientByStreamId(streamId) != null) {
@@ -212,6 +215,9 @@ public class ClientListManager {
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.remote.red5.IClientList#removeClient(java.lang.String)
+	 */
 	public Boolean removeClient(String streamId) {
 		try {
 			TypedQuery<RoomClient> q = em.createNamedQuery("deleteByStreamId", RoomClient.class);
@@ -224,13 +230,8 @@ public class ClientListManager {
 		return null;
 	}
 
-	/**
-	 * Get all ClientList Objects of that room and domain This Function is
-	 * needed cause it is invoked internally AFTER the current user has been
-	 * already removed from the ClientList to see if the Room is empty again and
-	 * the PollList can be removed
-	 * 
-	 * @return
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.remote.red5.IClientList#getClientListByRoom(java.lang.Long)
 	 */
 	public List<RoomClient> getClientListByRoom(Long room_id) {
 		try {
@@ -246,6 +247,9 @@ public class ClientListManager {
 	
 	
 
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.remote.red5.IClientList#getClientListByRoomAll(java.lang.Long)
+	 */
 	public List<RoomClient> getClientListByRoomAll(Long room_id) {
 		try {
 			TypedQuery<RoomClient> q = em.createNamedQuery("getByRoomIdAll", RoomClient.class);
@@ -258,11 +262,8 @@ public class ClientListManager {
 		return new ArrayList<RoomClient>();
 	}
 
-	/**
-	 * get the current Moderator in this room
-	 * 
-	 * @param roomname
-	 * @return
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.remote.red5.IClientList#getCurrentModeratorByRoom(java.lang.Long)
 	 */
 	public List<RoomClient> getCurrentModeratorByRoom(Long room_id) {
 		if (room_id != null) {
@@ -274,6 +275,9 @@ public class ClientListManager {
 	}
 
 	//FIXME not sorted
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.remote.red5.IClientList#getListByStartAndMax(int, int, java.lang.String, boolean)
+	 */
 	public SearchResult<RoomClient> getListByStartAndMax(int start, int max, String orderby, boolean asc) {
 		SearchResult<RoomClient> sResult = new SearchResult<RoomClient>();
 		sResult.setObjectName(RoomClient.class.getName());
@@ -289,6 +293,9 @@ public class ClientListManager {
 		return sResult;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.remote.red5.IClientList#removeAllClients()
+	 */
 	public void removeAllClients() {
 		try {
 			TypedQuery<RoomClient> q = em.createNamedQuery("deleteAll", RoomClient.class);
@@ -298,12 +305,18 @@ public class ClientListManager {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.remote.red5.IClientList#getRecordingCount(long)
+	 */
 	public long getRecordingCount(long roomId) {
 		TypedQuery<Long> q = em.createNamedQuery("getRecordingCountByRoomId", Long.class);
 		q.setParameter("room_id", roomId);
 		return q.getSingleResult();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.remote.red5.IClientList#getPublisingCount(long)
+	 */
 	public long getPublisingCount(long roomId) {
 		TypedQuery<Long> q = em.createNamedQuery("getPublisingCountByRoomId", Long.class);
 		q.setParameter("room_id", roomId);

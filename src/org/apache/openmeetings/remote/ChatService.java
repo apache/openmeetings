@@ -31,8 +31,8 @@ import java.util.Set;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.persistence.beans.rooms.RoomClient;
-import org.apache.openmeetings.remote.red5.ClientListManager;
 import org.apache.openmeetings.remote.red5.EmoticonsManager;
+import org.apache.openmeetings.remote.red5.IClientList;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.utils.stringhandlers.ChatString;
 import org.red5.logging.Red5LoggerFactory;
@@ -55,7 +55,7 @@ public class ChatService implements IPendingServiceCallback {
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
-	private ClientListManager clientListManager = null;
+	private IClientList clientListManager = null;
 	@Autowired
 	private EmoticonsManager emoticonsManager;
 	

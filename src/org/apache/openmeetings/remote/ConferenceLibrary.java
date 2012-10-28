@@ -41,7 +41,7 @@ import org.apache.openmeetings.documents.LibraryWmlLoader;
 import org.apache.openmeetings.documents.LoadLibraryPresentation;
 import org.apache.openmeetings.persistence.beans.files.FileExplorerItem;
 import org.apache.openmeetings.persistence.beans.rooms.RoomClient;
-import org.apache.openmeetings.remote.red5.ClientListManager;
+import org.apache.openmeetings.remote.red5.IClientList;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.crypt.MD5;
 import org.red5.logging.Red5LoggerFactory;
@@ -64,7 +64,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 			ConferenceLibrary.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private ClientListManager clientListManager = null;
+	private IClientList clientListManager = null;
 	@Autowired
 	private Sessionmanagement sessionManagement;
 	@Autowired
