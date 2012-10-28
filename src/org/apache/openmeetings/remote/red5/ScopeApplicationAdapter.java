@@ -2270,6 +2270,13 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		syncMessageToCurrentScope(remoteMethodName, newMessage, sendSelf, false);
 	}
 	
+	@Deprecated
+	public synchronized boolean loadTestSyncMessage(String remoteMethodName, Object newMessage, boolean sendSelf) {
+		syncMessageToCurrentScope(remoteMethodName, newMessage, sendSelf, false);
+		return true;
+	}
+	
+	
 	/**
 	 * General sync mechanism for all messages that are send from within the 
 	 * scope of the current client, but:
