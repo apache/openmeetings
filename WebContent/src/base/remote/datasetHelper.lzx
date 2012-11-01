@@ -38,6 +38,7 @@
 		</dataset>
 		
 		<method name="call">
+			if ($debug) Debug.write("this.restdataset ",this.restdataset);
 			this.restdataset.doRequest();
 		</method>
 		

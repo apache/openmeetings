@@ -22,7 +22,8 @@
 	<!--- Existing user list. used by userAdmin only -->
 	<class name="serverAdminListItem" extends="baseContentListItem">
 		<turnOverTextItem text="$once{ parent.obj.id }" width="60" />
-		<turnOverTextItem text="$once{ parent.obj.name }" width="232" />
+		<turnOverTextItem text="$once{ parent.obj.name }" width="132" />
 		<turnOverTextItem text="$once{ parent.obj.address }" width="132" />
+		<turnOverTextItem text="$once{ parent.obj.lastPing }" width="100" />
 	</class>
 </library>

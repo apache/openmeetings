@@ -95,15 +95,16 @@ public class ServerWebService {
 	 * @param id - the id of the server to save
 	 * @param name - the name of the server to save
 	 * @param address - the address(DNS name or IP) of the server to save
+	 * @param comment - comment for the server
 	 * @return the id of saved server
 	 */
-	public long saveServer(String SID, long id, String name, String address) {
+	public long saveServer(String SID, long id, String name, String address, String comment) {
 		log.debug("saveServerCount enter");
 		Long users_id = sessionManagement.checkSession(SID);
 		Long user_level = userManagement.getUserLevelByID(users_id);
 
 		if (authLevelManagement.checkWebServiceLevel(user_level)) {
-			return serversDao.saveServer(id, name, address).getId();
+			return serversDao.saveServer(id, name, address, comment, users_id).getId();
 		} else {
 			log.warn("Insuffisient permissions");
 			return -1;

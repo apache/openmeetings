@@ -37,6 +37,8 @@
 			this.server_id = 0;
 			this.serverName.setAttribute('text', '');
 			this.ip.setAttribute('text', '');
+			this.lastPing.setAttribute('text','');
+			this.comment.setAttribute('text','');
 		</handler>
 		
 	    <handler name="ondelete" >
@@ -57,13 +59,14 @@
 			this.server_id = server.id;
 			this.serverName.setAttribute('text', server.name);
 			this.ip.setAttribute('text', server.address);
+			this.lastPing.setAttribute('text', server.lastPing);
+			this.comment.setAttribute('text', server.comment);
 	    </method>
-	    
 	    
 	    <method name="doSaveEvent">
 		<![CDATA[
 			var dh = new lz.datasetHelper(this);
-			dh.setServiceSource('ServerService/saveServer', {id: this.server_id, name: this.serverName.getText(), address: this.ip.getText()});
+			dh.setServiceSource('ServerService/saveServer', {id: this.server_id, name: this.serverName.getText(), address: this.ip.getText(), comment: this.comment.getText() });
 			dh.successHandler = getSavedId;
 			dh.call();
 		]]>
@@ -83,8 +86,22 @@
 	    
 	    <labelText labelid="1500" width="200" y="70" resize="false" x="2"/>
         	<customEdittext name="serverName" y="70" x="120" width="270" />
-	    
-	    <labelText labelid="1501" width="200" y="100" resize="false" x="2"/>
+        
+        <labelText labelid="1501" width="200" y="100" resize="false" x="2"/>
         	<customEdittext name="ip" y="100" x="120" width="270" />
+        	
+	    <view resource="messagebox_info_rsc" x="2" y="130" />
+	    
+	    <labelText labelid="1516" x="24" y="130"  fontstyle="italic"
+	               multiline="true" width="370" />
+        	
+        <labelText labelid="1515" width="200" y="190" resize="false" x="2"/>
+        	<labelText name="lastPing" y="190" x="120" width="270" />
+	    
+	    <labelText labelid="270" width="200" y="220" resize="false" x="2"/>
+	        <customScrollEdittext name="comment" y="220" x="120" width="270" 
+	            height="100" text="" />    
+        	
 	</class>
+	
 </library>

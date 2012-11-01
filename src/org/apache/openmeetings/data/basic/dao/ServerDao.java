@@ -174,13 +174,19 @@ public class ServerDao implements IDataProviderDao<Server> {
 	 * @return
 	 */
 	@Deprecated
-	public Server saveServer(long id, String name, String address) {
+	public Server saveServer(long id, String name, String address, String comment, long userId) {
 		Server s = get(id);
 		if (s == null) {
 			s = new Server();
+			s.setInserted(new Date());
+			s.setInsertedby(usersDao.get(userId));
+		} else {
+			s.setUpdated(new Date());
+			s.setUpdatedby(usersDao.get(userId));
 		}
 		s.setName(name);
 		s.setAddress(address);
+		s.setComment(comment);
 
 		return em.merge(s);
 	}

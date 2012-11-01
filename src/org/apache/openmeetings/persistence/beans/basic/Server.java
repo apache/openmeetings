@@ -43,7 +43,7 @@ import org.simpleframework.xml.Root;
 @NamedQueries({
 		@NamedQuery(name = "getAllServers", query = "SELECT s FROM Server s WHERE s.deleted = false"),
 		@NamedQuery(name = "getServerCount", query = "SELECT COUNT(s) FROM Server s WHERE s.deleted = false"),
-		@NamedQuery(name = "getServerById", query = "SELECT s FROM Server s WHERE s.deleted = false AND s.id = :id"),
+		@NamedQuery(name = "getServerById", query = "SELECT s FROM Server s LEFT JOIN FETCH s.insertedby LEFT JOIN FETCH s.updatedby WHERE s.deleted = false AND s.id = :id"),
 		@NamedQuery(name = "getServerByAddress", query = "SELECT s FROM Server s WHERE s.deleted = false AND s.address = :address"),
 		@NamedQuery(name = "getServersWithNoUsers", query = "SELECT s FROM Server s WHERE s.deleted = false AND s.id NOT IN (SELECT u.server.id FROM Users u where u.server.id IS NOT NULL)"),
 		@NamedQuery(name = "getServerWithMinimumUsers", query = "SELECT s.id, COUNT(u) AS cnt FROM Users u JOIN u.server s WHERE s.deleted = false GROUP BY s.id ORDER BY cnt") })
@@ -73,11 +73,11 @@ public class Server implements Serializable, IDataProviderEntity {
 	@Column(name = "updated")
 	public Date updated;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "insertedby_id", updatable = true, insertable = true)
 	public Users insertedby;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "updatedby_id", updatable = true, insertable = true)
 	public Users updatedby;
 
@@ -86,6 +86,10 @@ public class Server implements Serializable, IDataProviderEntity {
 	@Element(data = true, required = false)
 	private String comment;
 
+	@Column(name = "last_ping", nullable = true)
+	@Element(data = true, required = false)
+	private Date lastPing;
+	
 	@Column(name = "deleted", nullable = false)
 	@Element(data = true)
 	private boolean deleted = false;
@@ -160,6 +164,14 @@ public class Server implements Serializable, IDataProviderEntity {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+	
+	public Date getLastPing() {
+		return lastPing;
+	}
+
+	public void setLastPing(Date lastPing) {
+		this.lastPing = lastPing;
 	}
 
 	@Override

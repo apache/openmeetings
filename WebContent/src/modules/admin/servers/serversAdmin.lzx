@@ -48,8 +48,9 @@
 		
 			<handler name="oninit">
 				this.addHeaderItem(188, 60);
-				this.addHeaderItem(1500, 232);
+				this.addHeaderItem(1500, 132);
 				this.addHeaderItem(1501, 132);
+				this.addHeaderItem(1515, 100);
 				loadServersData(this);
 			</handler>
 
@@ -73,6 +74,8 @@
 	    		var s = {id: dp.xpathQuery(basePath + 'id/text()')
     				, name: dp.xpathQuery(basePath + 'name/text()')
     				, address: dp.xpathQuery(basePath + 'address/text()')
+    				, lastPing: dp.xpathQuery(basePath + 'lastPing/text()')
+    				, comment: dp.xpathQuery(basePath + 'comment/text()')
     				};
 	    		var li = new lz.serverAdminListItem(this._innerlist._inn._inn, {obj: s});
 		    	if (parent._serverAdminValueForm.server_id == 0) {

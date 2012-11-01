@@ -66,10 +66,10 @@ public class ServerWebServiceFacade {
 	}
 
 	/**
-	 * Proxy method please see {@link ServerWebService#saveServer(String, long, String, String)}
+	 * Proxy method please see {@link ServerWebService#saveServer(String, long, String, String, String)}
 	 */
-	public long saveServer(String SID, long id, String name, String address) {
-		return getServerServiceProxy().saveServer(SID, id, name, address);
+	public long saveServer(String SID, long id, String name, String address, String comment) {
+		return getServerServiceProxy().saveServer(SID, id, name, address, comment);
 	}
 
 	/**
