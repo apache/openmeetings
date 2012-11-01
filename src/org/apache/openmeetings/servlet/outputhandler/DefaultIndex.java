@@ -159,11 +159,11 @@ public class DefaultIndex extends VelocityViewServlet {
 					SWF_FLASHVARS += paramKey
 							+ "="
 							+ httpServletRequest.getParameterMap()
-									.get(paramKey) + "&amp;";
+									.get(paramKey)[0] + "&amp;";
 					SWF_PARAMS += paramKey
 							+ "="
 							+ httpServletRequest.getParameterMap()
-									.get(paramKey) + "&amp;";
+									.get(paramKey)[0] + "&amp;";
 				}
 			}
 
