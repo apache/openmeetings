@@ -51,7 +51,7 @@
 	<!-- New Class for the Streaming Handlers -->
 	<bean id="web.handler"
 		class="org.apache.openmeetings.remote.red5.ScopeApplicationAdapter" />
-	<bean id="openmeetings.ClientListManager" class="org.apache.openmeetings.remote.red5.ClientListDatabaseStore" />
+	<bean id="openmeetings.ClientListManager" class="org.apache.openmeetings.remote.red5.ClientListHashMapStore" />
 	<bean id="openmeetings.EmoticonsManager" class="org.apache.openmeetings.remote.red5.EmoticonsManager" />
 	<bean id="openmeetings.WhiteBoardObjectListManager"
 		class="org.apache.openmeetings.remote.red5.WhiteBoardObjectListManager" />

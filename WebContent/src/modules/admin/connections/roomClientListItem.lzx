@@ -23,19 +23,6 @@
 <!--- list of conference/audience rooms -->
 <class name="roomClientListItem" extends="baseContentListItem">
     
-    <!--
-    RoomClient(Long roomClientId, String username, String streamid,
-            String scope, String publicSID, Boolean isMod, Date connectedSince,
-            String formatedDate, String usercolor, Integer userpos,
-            String userip, int userport, Long room_id, Date roomEnter,
-            long broadCastID, Long user_id, String firstname, String lastname,
-            String mail, String lastLogin, String official_code,
-            String picture_uri, String language
-            String avsettings, String swfurl,
-            Boolean isRecording, String roomRecordingName,
-            Boolean zombieCheckFlag)
-            -->
-            
 	<attribute name="streamid" value="0" type="number" />
 	<attribute name="login" value="" type="string" />
 	<attribute name="dateConnected" value="" type="string" />

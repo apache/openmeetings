@@ -27,6 +27,7 @@ import java.util.Random;
 import java.util.Vector;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.LdapConfigDao;
@@ -36,7 +37,6 @@ import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.ldap.config.ConfigReader;
 import org.apache.openmeetings.persistence.beans.adresses.States;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
-import org.apache.openmeetings.persistence.beans.rooms.RoomClient;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;

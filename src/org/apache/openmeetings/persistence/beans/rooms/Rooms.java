@@ -38,8 +38,10 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.apache.openjpa.persistence.ElementDependent;
+import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.simpleframework.xml.Element;
@@ -48,10 +50,11 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getNondeletedRooms", query = "SELECT r FROM Rooms r WHERE r.deleted = false")
-	, @NamedQuery(name = "getRoomById", query = "SELECT r FROM Rooms r WHERE r.deleted = false AND r.rooms_id = :id")
-	, @NamedQuery(name = "countRooms", query = "SELECT COUNT(r) FROM Rooms r WHERE r.deleted = false")
-	, @NamedQuery(name = "getBackupRooms", query = "SELECT r FROM Rooms r LEFT JOIN FETCH r.moderators WHERE r.deleted = false ")
+	@NamedQuery(name = "getNondeletedRooms", query = "SELECT r FROM Rooms r WHERE r.deleted = false"),
+	@NamedQuery(name = "getPublicRoomsOrdered", query = "SELECT r from Rooms r WHERE r.ispublic= true AND r.deleted= false AND r.appointment = false ORDER BY r.name ASC"),
+	@NamedQuery(name = "getRoomById", query = "SELECT r FROM Rooms r WHERE r.deleted = false AND r.rooms_id = :id"),
+	@NamedQuery(name = "countRooms", query = "SELECT COUNT(r) FROM Rooms r WHERE r.deleted = false"),
+	@NamedQuery(name = "getBackupRooms", query = "SELECT r FROM Rooms r LEFT JOIN FETCH r.moderators WHERE r.deleted = false ")
 })
 @Table(name = "rooms")
 @Root(name = "room")
@@ -215,8 +218,7 @@ public class Rooms implements Serializable, IDataProviderEntity {
 	@org.simpleframework.xml.Transient
 	private List<Rooms_Organisation> roomOrganisations = new ArrayList<Rooms_Organisation>();
 
-	@OneToMany(fetch = FetchType.LAZY)
-	@JoinColumn(name = "room_id")
+	@Transient
 	private List<RoomClient> currentusers;
 
 	public String getComment() {

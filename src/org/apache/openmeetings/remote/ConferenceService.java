@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
 import org.apache.openmeetings.data.basic.dao.ServerDao;
@@ -38,7 +39,6 @@ import org.apache.openmeetings.data.conference.Roommanagement;
 import org.apache.openmeetings.data.conference.dao.RoomModeratorsDao;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
-import org.apache.openmeetings.persistence.beans.rooms.RoomClient;
 import org.apache.openmeetings.persistence.beans.rooms.RoomModerators;
 import org.apache.openmeetings.persistence.beans.rooms.RoomTypes;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms;
@@ -141,6 +141,10 @@ public class ConferenceService {
 			List<Rooms_Organisation> roomOrgsList = roommanagement
 					.getRoomsOrganisationByOrganisationId(user_level,
 							organisation_id);
+			
+			for (Rooms_Organisation roomOrg : roomOrgsList) {
+				roomOrg.getRoom().setCurrentusers(clientListManager.getClientListByRoom(roomOrg.getRoom().getRooms_id()));
+			}
 
 			return roomOrgsList;
 		} catch (Exception err) {
@@ -217,6 +221,10 @@ public class ConferenceService {
 			log.debug("getRoomsPublic user_level: " + user_level);
 
 			List<Rooms> roomList = roomDao.getPublicRooms();
+			
+			for (Rooms room : roomList) {
+				room.setCurrentusers(clientListManager.getClientListByRoom(room.getRooms_id()));
+			}
 
 			return roomList;
 		} catch (Exception err) {
@@ -423,7 +431,9 @@ public class ConferenceService {
 	public Rooms getRoomWithCurrentUsersById(String SID, long rooms_id) {
 		Long users_id = sessionManagement.checkSession(SID);
 		Long user_level = userManagement.getUserLevelByID(users_id);
-		return roommanagement.getRoomById(user_level, rooms_id);
+		Rooms room = roommanagement.getRoomById(user_level, rooms_id);
+		room.setCurrentusers(clientListManager.getClientListByRoom(room.getRooms_id()));
+		return room;
 	}
 
 	/**

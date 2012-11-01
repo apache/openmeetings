@@ -21,8 +21,8 @@ package org.apache.openmeetings.remote.red5;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
-import org.apache.openmeetings.persistence.beans.rooms.RoomClient;
 
 public interface IClientList {
 

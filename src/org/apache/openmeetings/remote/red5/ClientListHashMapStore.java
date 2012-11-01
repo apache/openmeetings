@@ -28,8 +28,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
-import org.apache.openmeetings.persistence.beans.rooms.RoomClient;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -88,8 +88,6 @@ public class ClientListHashMapStore implements IClientList {
 			}
 
 			clientList.put(rcm.getStreamid(), rcm);
-
-			log.debug(" :: addClientListItem :: " + rcm.getRoomClientId());
 
 			return rcm;
 		} catch (Exception err) {
