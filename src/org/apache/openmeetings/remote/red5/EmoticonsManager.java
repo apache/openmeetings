@@ -32,7 +32,16 @@ import org.slf4j.Logger;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.XppDriver;
 
+/**
+ * Load the list of available emoticons from the XML file and store them in
+ * memory to load faster, {@link #loadEmot()} is only called once: during server
+ * startup
+ * 
+ * @author sebawagner
+ * 
+ */
 public class EmoticonsManager {
+
 	private static final Logger log = Red5LoggerFactory.getLogger(EmoticonsManager.class, OpenmeetingsVariables.webAppRootKey);
 	
 	private LinkedList<LinkedList<String>> emotfilesList = new LinkedList<LinkedList<String>>();

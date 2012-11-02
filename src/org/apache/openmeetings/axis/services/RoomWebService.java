@@ -28,6 +28,7 @@ import java.util.Map;
 
 import org.apache.axis2.AxisFault;
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.conference.room.IClientList;
 import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
@@ -46,7 +47,6 @@ import org.apache.openmeetings.persistence.beans.rooms.RoomTypes;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.remote.ConferenceService;
-import org.apache.openmeetings.remote.red5.IClientList;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;

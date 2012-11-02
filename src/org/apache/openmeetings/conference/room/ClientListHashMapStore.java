@@ -16,28 +16,34 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.remote.red5;
+package org.apache.openmeetings.conference.room;
 
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+/**
+ * User an in-memory HashMap to store the current sessions.
+ * 
+ * FIXME: Add multiple lists to enhance performance, see FIXME tagged methods
+ * 
+ * @author sebawagner
+ * 
+ */
 public class ClientListHashMapStore implements IClientList {
 
-	private static HashMap<String, RoomClient> clientList = new HashMap<String, RoomClient>();
+	private static HashMap<String, ClientSession> clientList = new HashMap<String, ClientSession>();
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			ClientListHashMapStore.class, OpenmeetingsVariables.webAppRootKey);
@@ -45,12 +51,12 @@ public class ClientListHashMapStore implements IClientList {
 	@Autowired
 	private ManageCryptStyle manageCryptStyle;
 	
-	/**
-	 * Get current clients and extends the room client with its potential 
-	 * audio/video client and settings
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param room_id
-	 * @return
+	 * @see
+	 * org.apache.openmeetings.remote.red5.IClientList#getRoomClients(java.lang
+	 * .Long)
 	 */
 	public List<RoomClient> getRoomClients(Long room_id) {
 		try {
@@ -61,6 +67,14 @@ public class ClientListHashMapStore implements IClientList {
 		return null;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.openmeetings.remote.red5.IClientList#addClientListItem(java
+	 * .lang.String, java.lang.String, java.lang.Integer, java.lang.String,
+	 * java.lang.String, boolean)
+	 */
 	public synchronized RoomClient addClientListItem(String streamId,
 			String scopeName, Integer remotePort, String remoteAddress,
 			String swfUrl, boolean isAVClient) {
@@ -87,7 +101,9 @@ public class ClientListHashMapStore implements IClientList {
 				return null;
 			}
 
-			clientList.put(rcm.getStreamid(), rcm);
+			clientList.put(
+					ClientSessionUtil.getClientSessionKey(null,
+							rcm.getStreamid()), new ClientSession(null, rcm));
 
 			return rcm;
 		} catch (Exception err) {
@@ -96,41 +112,61 @@ public class ClientListHashMapStore implements IClientList {
 		return null;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.openmeetings.remote.red5.IClientList#getAllClients()
+	 */
 	public synchronized Collection<RoomClient> getAllClients() {
-		return clientList.values();
+		// only locally clients interesting
+		List<RoomClient> rclList = new ArrayList<RoomClient>();
+		for (ClientSession cSession : clientList.values()) {
+			if (cSession.getServer() == null) {
+				rclList.add(cSession.getRoomClient());
+			}
+		}
+		return rclList;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.openmeetings.remote.red5.IClientList#getClientByStreamId(java
+	 * .lang.String)
+	 */
 	public synchronized RoomClient getClientByStreamId(String streamId) {
 		try {
-			if (!clientList.containsKey(streamId)) {
+			String uniqueKey = ClientSessionUtil.getClientSessionKey(null,
+					streamId);
+			if (!clientList.containsKey(uniqueKey)) {
 				log.debug("Tried to get a non existing Client " + streamId);
 				return null;
 			}
-			return clientList.get(streamId);
+			return clientList.get(uniqueKey).getRoomClient();
 		} catch (Exception err) {
 			log.error("[getClientByStreamId]", err);
 		}
 		return null;
 	}
 	
-	/**
-	 * Additionally checks if the client receives sync events
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * Sync events will no be broadcasted to:
-	 * - Screensharing users
-	 * - Audio/Video connections only
-	 * 
-	 * @param streamId
-	 * @return
+	 * @see
+	 * org.apache.openmeetings.remote.red5.IClientList#getSyncClientByStreamId
+	 * (java.lang.String)
 	 */
 	public synchronized RoomClient getSyncClientByStreamId(String streamId) {
 		try {
-			if (!clientList.containsKey(streamId)) {
+			String uniqueKey = ClientSessionUtil.getClientSessionKey(null,
+					streamId);
+			if (!clientList.containsKey(uniqueKey)) {
 				log.debug("Tried to get a non existing Client " + streamId);
 				return null;
 			}
 			
-			RoomClient rcl = clientList.get(streamId);
+			RoomClient rcl = clientList.get(uniqueKey).getRoomClient();
 			
 			if (rcl == null) {
 				return null;
@@ -140,18 +176,25 @@ public class ClientListHashMapStore implements IClientList {
 				return null;
 			}
 			
-			return clientList.get(streamId);
+			return clientList.get(uniqueKey).getRoomClient();
 		} catch (Exception err) {
 			log.error("[getClientByStreamId]", err);
 		}
 		return null;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.openmeetings.remote.red5.IClientList#getClientByPublicSID(
+	 * java.lang.String, boolean)
+	 */
 	public RoomClient getClientByPublicSID(String publicSID, boolean isAVClient) {
 		try {
-			for (Iterator<String> iter = clientList.keySet().iterator(); iter
-					.hasNext();) {
-				RoomClient rcl = clientList.get(iter.next());
+			for (ClientSession cSession : clientList.values()) {
+
+				RoomClient rcl = cSession.getRoomClient();
 				
 				if (!rcl.getPublicSID().equals(publicSID)) {
 					continue;
@@ -168,13 +211,18 @@ public class ClientListHashMapStore implements IClientList {
 		return null;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.openmeetings.remote.red5.IClientList#getClientByUserId(java
+	 * .lang.Long)
+	 */
 	public synchronized RoomClient getClientByUserId(Long userId) {
 		try {
-			for (Iterator<String> iter = clientList.keySet().iterator(); iter
-					.hasNext();) {
-				RoomClient rcl = clientList.get(iter.next());
-				if (rcl.getUser_id().equals(userId)) {
-					return rcl;
+			for (ClientSession cSession : clientList.values()) {
+				if (cSession.getRoomClient().getUser_id().equals(userId)) {
+					return cSession.getRoomClient();
 				}
 			}
 		} catch (Exception err) {
@@ -183,12 +231,12 @@ public class ClientListHashMapStore implements IClientList {
 		return null;
 	}
 	
-	/**
-	 * Update the session object of the audio/video-connection and additionally swap the 
-	 * values to the session object of the user that holds the full session object
-	 * @param streamId
-	 * @param rcm
-	 * @return
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.openmeetings.remote.red5.IClientList#updateAVClientByStreamId
+	 * (java.lang.String, org.apache.openmeetings.conference.room.RoomClient)
 	 */
 	public synchronized Boolean updateAVClientByStreamId(String streamId,
 			RoomClient rcm) {
@@ -203,8 +251,12 @@ public class ClientListHashMapStore implements IClientList {
 				rclUsual.setVWidth(rcm.getVWidth());
 				rclUsual.setVX(rcm.getVX());
 				rclUsual.setVY(rcm.getVY());
-				if (clientList.containsKey(rclUsual.getStreamid())) {
-					clientList.put(rclUsual.getStreamid(), rclUsual);
+				String uniqueKey = ClientSessionUtil.getClientSessionKey(null,
+						rclUsual.getStreamid());
+				ClientSession cSession = clientList.get(uniqueKey);
+				if (cSession != null) {
+					cSession.setRoomClient(rclUsual);
+					clientList.put(uniqueKey, cSession);
 				} else {
 					 log.debug("Tried to update a non existing Client " + rclUsual.getStreamid());
 				}
@@ -217,11 +269,22 @@ public class ClientListHashMapStore implements IClientList {
 		return null;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.openmeetings.remote.red5.IClientList#updateClientByStreamId
+	 * (java.lang.String, org.apache.openmeetings.conference.room.RoomClient)
+	 */
 	public synchronized Boolean updateClientByStreamId(String streamId,
 			RoomClient rcm) {
 		try {
-			if (clientList.containsKey(streamId)) {
-				clientList.put(streamId, rcm);
+			String uniqueKey = ClientSessionUtil.getClientSessionKey(null,
+					streamId);
+			ClientSession cSession = clientList.get(uniqueKey);
+			if (cSession != null) {
+				cSession.setRoomClient(rcm);
+				clientList.put(uniqueKey, cSession);
 				return true;
 			} else {
 				log.debug("Tried to update a non existing Client " + streamId);
@@ -233,11 +296,19 @@ public class ClientListHashMapStore implements IClientList {
 		return null;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.openmeetings.remote.red5.IClientList#removeClient(java.lang
+	 * .String)
+	 */
 	public synchronized Boolean removeClient(String streamId) {
 		try {
-			if (clientList.containsKey(streamId)) {
-				clientList.remove(streamId);
-				// log.debug(":: removeClient ::"+clientList.size());
+			String uniqueKey = ClientSessionUtil.getClientSessionKey(null,
+					streamId);
+			if (clientList.containsKey(uniqueKey)) {
+				clientList.remove(uniqueKey);
 				return true;
 			} else {
 				log.debug("Tried to remove a non existing Client " + streamId);
@@ -249,22 +320,22 @@ public class ClientListHashMapStore implements IClientList {
 		return null;
 	}
 
-	/**
-	 * Get all ClientList Objects of that room and domain This Function is
-	 * needed cause it is invoked internally AFTER the current user has been
-	 * already removed from the ClientList to see if the Room is empty again and
-	 * the PollList can be removed
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return
+	 * @see
+	 * org.apache.openmeetings.remote.red5.IClientList#getClientListByRoom(java
+	 * .lang.Long)
 	 */
 	public synchronized List<RoomClient> getClientListByRoom(
 			Long room_id) {
 		List<RoomClient> roomClientList = new ArrayList<RoomClient>();
 		try {
-			for (Iterator<String> iter = clientList.keySet().iterator(); iter
-					.hasNext();) {
-				String key = iter.next();
-				RoomClient rcl = clientList.get(key);
+
+			// FIXME: Enhance performance by using multiple lists
+			for (ClientSession cSession : clientList.values()) {
+
+				RoomClient rcl = cSession.getRoomClient();
 				
 				// client initialized and same room
 				if (rcl.getRoom_id() == null || !room_id.equals(rcl.getRoom_id())) {
@@ -289,15 +360,20 @@ public class ClientListHashMapStore implements IClientList {
 		return roomClientList;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.openmeetings.remote.red5.IClientList#getClientListByRoomAll
+	 * (java.lang.Long)
+	 */
 	public synchronized List<RoomClient> getClientListByRoomAll(
 			Long room_id) {
 		List<RoomClient> roomClientList = new ArrayList<RoomClient>();
 		try {
-			for (Iterator<String> iter = clientList.keySet().iterator(); iter
-					.hasNext();) {
-				String key = iter.next();
-				// log.debug("getClientList key: "+key);
-				RoomClient rcl = clientList.get(key);
+			// FIXME: Enhance performance by using multiple lists
+			for (ClientSession cSession : clientList.values()) {
+				RoomClient rcl = cSession.getRoomClient();
 
 				if (rcl.getRoom_id() != null
 						&& rcl.getRoom_id().equals(room_id)) {
@@ -311,22 +387,20 @@ public class ClientListHashMapStore implements IClientList {
 		return roomClientList;
 	}
 
-	/**
-	 * get the current Moderator in this room
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param roomname
-	 * @return
+	 * @see
+	 * org.apache.openmeetings.remote.red5.IClientList#getCurrentModeratorByRoom
+	 * (java.lang.Long)
 	 */
 	public synchronized List<RoomClient> getCurrentModeratorByRoom(Long room_id) {
 
 		List<RoomClient> rclList = new LinkedList<RoomClient>();
-		for (Iterator<String> iter = clientList.keySet().iterator(); iter
-				.hasNext();) {
-			String key = iter.next();
-			RoomClient rcl = clientList.get(key);
-			//
-			log.debug("*..*unsetModerator ClientList key: " + rcl.getStreamid());
-			//
+		// FIXME: Enhance performance by using multiple lists
+		for (ClientSession cSession : clientList.values()) {
+			// log.debug("getClientList key: "+key);
+			RoomClient rcl = cSession.getRoomClient();
 			// Check if the Client is in the same room
 			if (room_id != null && room_id.equals(rcl.getRoom_id())
 					&& rcl.getIsMod()) {
@@ -338,6 +412,13 @@ public class ClientListHashMapStore implements IClientList {
 		return rclList;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.openmeetings.remote.red5.IClientList#getListByStartAndMax(int,
+	 * int, java.lang.String, boolean)
+	 */
 	public synchronized SearchResult<RoomClient> getListByStartAndMax(int start, int max,
 			String orderby, boolean asc) {
 		SearchResult<RoomClient> sResult = new SearchResult<RoomClient>();
@@ -346,11 +427,9 @@ public class ClientListHashMapStore implements IClientList {
 		LinkedList<RoomClient> myList = new LinkedList<RoomClient>();
 
 		int i = 0;
-		Iterator<String> iter = clientList.keySet().iterator();
-		while (iter.hasNext()) {
-			String key = iter.next();
+		for (ClientSession cSession : clientList.values()) {
 			if (i >= start) {
-				myList.add(clientList.get(key));
+				myList.add(cSession.getRoomClient());
 			}
 			if (i > max) {
 				break;
@@ -362,6 +441,11 @@ public class ClientListHashMapStore implements IClientList {
 		return sResult;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.openmeetings.remote.red5.IClientList#removeAllClients()
+	 */
 	public synchronized void removeAllClients() {
 		try {
 			clientList.clear();
@@ -370,7 +454,12 @@ public class ClientListHashMapStore implements IClientList {
 		}
 	}
 
-
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.openmeetings.remote.red5.IClientList#getRecordingCount(long)
+	 */
 	public long getRecordingCount(long roomId) {
 		List<RoomClient> currentClients = this.getClientListByRoom(roomId);
 		int numberOfRecordingUsers = 0;
@@ -382,6 +471,12 @@ public class ClientListHashMapStore implements IClientList {
 		return numberOfRecordingUsers;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.openmeetings.remote.red5.IClientList#getPublisingCount(long)
+	 */
 	public long getPublisingCount(long roomId) {
 		List<RoomClient> currentClients = this.getClientListByRoom(roomId);
 		int numberOfPublishingUsers = 0;

@@ -38,6 +38,7 @@ import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.conference.room.IClientList;
 import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
@@ -58,7 +59,6 @@ import org.apache.openmeetings.persistence.beans.user.UserSipData;
 import org.apache.openmeetings.persistence.beans.user.Userdata;
 import org.apache.openmeetings.persistence.beans.user.Userlevel;
 import org.apache.openmeetings.persistence.beans.user.Users;
-import org.apache.openmeetings.remote.red5.IClientList;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.sip.xmlrpc.OpenXGHttpClient;
 import org.apache.openmeetings.templates.ResetPasswordTemplate;

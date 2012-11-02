@@ -104,6 +104,7 @@ public class RoomClient implements Serializable {
 	/**
 	 * client IP
 	 */
+	// FIXME: Move to {@link ClientSession}
 	private String userip;
 	/**
 	 * client Port
@@ -144,6 +145,7 @@ public class RoomClient implements Serializable {
 	 * n - no av only static Image
 	 */
 	private String avsettings = "";
+	// FIXME: Move to {@link ClientSession}
 	private String swfurl;
 	private Boolean isRecording = false;
 	private String roomRecordingName;

@@ -32,6 +32,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.openmeetings.conference.room.IClientList;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
@@ -45,7 +46,6 @@ import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms_Organisation;
 import org.apache.openmeetings.persistence.beans.sip.OpenXGReturnObject;
 import org.apache.openmeetings.persistence.beans.user.Users;
-import org.apache.openmeetings.remote.red5.IClientList;
 import org.apache.openmeetings.sip.api.impl.asterisk.AsteriskDbSipClient;
 import org.apache.openmeetings.sip.api.request.SIPCreateConferenceRequest;
 import org.apache.openmeetings.sip.api.result.SipCreateConferenceRequestResult;

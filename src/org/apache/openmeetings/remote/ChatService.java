@@ -30,9 +30,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.conference.room.IClientList;
 import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.remote.red5.EmoticonsManager;
-import org.apache.openmeetings.remote.red5.IClientList;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.utils.stringhandlers.ChatString;
 import org.red5.logging.Red5LoggerFactory;

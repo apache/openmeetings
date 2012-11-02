@@ -29,6 +29,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import org.apache.commons.collections.ComparatorUtils;
+import org.apache.openmeetings.conference.room.IClientList;
 import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.conference.whiteboard.Cliparts;
 import org.apache.openmeetings.conference.whiteboard.WhiteboardObject;
@@ -37,7 +38,6 @@ import org.apache.openmeetings.conference.whiteboard.WhiteboardSyncLockObject;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
-import org.apache.openmeetings.remote.red5.IClientList;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.remote.red5.WhiteBoardObjectListManager;
 import org.apache.openmeetings.remote.red5.WhiteBoardObjectListManagerById;

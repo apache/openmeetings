@@ -16,12 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.remote.red5;
+package org.apache.openmeetings.conference.room;
 
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 
 public interface IClientList {
@@ -41,6 +40,12 @@ public interface IClientList {
 
 	public abstract Collection<RoomClient> getAllClients();
 
+	/**
+	 * Get a client by its streamId
+	 * 
+	 * @param streamId
+	 * @return
+	 */
 	public abstract RoomClient getClientByStreamId(String streamId);
 
 	/**
@@ -73,6 +78,12 @@ public interface IClientList {
 	public abstract Boolean updateClientByStreamId(String streamId,
 			RoomClient rcm);
 
+	/**
+	 * Remove a client from the session store
+	 * 
+	 * @param streamId
+	 * @return
+	 */
 	public abstract Boolean removeClient(String streamId);
 
 	/**
