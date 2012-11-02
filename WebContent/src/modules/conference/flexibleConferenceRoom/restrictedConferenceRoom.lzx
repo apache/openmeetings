@@ -49,12 +49,8 @@
             }
         }
         
-        this._chatPanelStrict.toggleopen();
-        
         canvas.currentBaseConferenceRoom = this;
-        
         canvas._videocontainer.setAttribute("allowUserQuestions",this.roomobj.allowUserQuestions);
-        
     </handler>
     
     <handler name="ontabcontentleave">

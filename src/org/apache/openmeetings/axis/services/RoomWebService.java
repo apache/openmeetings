@@ -702,6 +702,8 @@ public class RoomWebService {
 						false, // hideWhiteboard
 						false, // showMicrophoneStatus
 						false, // chatModerated
+						false, // chatOpened
+						false, // filesOpened
 						u.getServer());
 			}
 		} catch (Exception err) {
@@ -761,6 +763,8 @@ public class RoomWebService {
 						false, // hideWhiteboard
 						false, // showMicrophoneStatus
 						false, // chatModerated
+						false, // chatOpened
+						false, // filesOpened
 						u.getServer());
 			}
 		} catch (Exception err) {
@@ -827,6 +831,8 @@ public class RoomWebService {
 						false, // hideWhiteboard
 						false, // showMicrophoneStatus
 						false, // chatModerated
+						false, // chatOpened
+						false, // filesOpened
 						u.getServer());
 			}
 		} catch (Exception err) {
@@ -895,6 +901,8 @@ public class RoomWebService {
 						false, // hideWhiteboard
 						false, // showMicrophoneStatus
 						false, // chatModerated
+						false, // chatOpened
+						false, // filesOpened
 						u.getServer());
 			}
 			return -1L;
@@ -978,7 +986,10 @@ public class RoomWebService {
 						null, null, null, hideTopBar, hideChat,
 						hideActivitiesAndActions, hideFilesExplorer,
 						hideActionsMenu, hideScreenSharing, hideWhiteboard,
-						false, false, u.getServer());
+						false, false, 
+						false, // chatOpened
+						false, // filesOpened
+						u.getServer());
 			}
 			return -1L;
 		} catch (Exception err) {
@@ -1115,7 +1126,9 @@ public class RoomWebService {
 						false, // hideScreenSharing
 						false, // hideWhiteboard
 						false, // showMicrophoneStatus
-						false // chatModerated
+						false, // chatModerated
+						false, // chatOpened
+						false // filesOpened
 						);
 			}
 		} catch (Exception err) {
@@ -1176,7 +1189,9 @@ public class RoomWebService {
 						false, // hideScreenSharing
 						false, // hideWhiteboard
 						false, // showMicrophoneStatus
-						false // chatModerated
+						false, // chatModerated
+						false, // chatOpened
+						false // filesOpened
 						);
 			}
 		} catch (Exception err) {
@@ -1240,7 +1255,9 @@ public class RoomWebService {
 						false, // hideScreenSharing
 						false, // hideWhiteboard
 						false, // showMicrophoneStatus
-						false // chatModerated
+						false, // chatModerated
+						false, // chatOpened
+						false // filesOpened
 						);
 			}
 		} catch (Exception err) {
@@ -1323,7 +1340,9 @@ public class RoomWebService {
 						hideActivitiesAndActions, hideFilesExplorer,
 						hideActionsMenu, hideScreenSharing, hideWhiteboard,
 						false, // showMicrophoneStatus
-						false // chatModerated
+						false, // chatModerated
+						false, // chatOpened
+						false // filesOpened
 						);
 			}
 		} catch (Exception err) {

@@ -614,6 +614,8 @@ public class ConferenceService {
 								Boolean.valueOf(argObjectMap.get("hideWhiteboard").toString()),
 								Boolean.valueOf(argObjectMap.get("showMicrophoneStatus").toString()),
 								Boolean.valueOf(argObjectMap.get("chatModerated").toString()),
+								Boolean.valueOf(argObjectMap.get("chatOpened").toString()),
+								Boolean.valueOf(argObjectMap.get("filesOpened").toString()),
 								null
 						);
 			} else if (rooms_id > 0) {
@@ -664,7 +666,9 @@ public class ConferenceService {
 								Boolean.valueOf(argObjectMap.get("hideScreenSharing").toString()),
 								Boolean.valueOf(argObjectMap.get("hideWhiteboard").toString()),
 								Boolean.valueOf(argObjectMap.get("showMicrophoneStatus").toString()),
-								Boolean.valueOf(argObjectMap.get("chatModerated").toString())
+								Boolean.valueOf(argObjectMap.get("chatModerated").toString()),
+								Boolean.valueOf(argObjectMap.get("chatOpened").toString()),
+								Boolean.valueOf(argObjectMap.get("filesOpened").toString())
 								);
 			}
 			long serverId = -1;

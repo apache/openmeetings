@@ -29,16 +29,7 @@
 <!---
  Invoked from VideoContainer cause domain/room must be set first
  -->
-    <method name="doInit">
-        //Debug.write("oninit");
-        <![CDATA[
-        	//this._cbtext.clearChatOutput();
-            //this.getRoomChatHistory.doCall();
-        ]]>
-    </method>
-    
     <method name="doInitByOpen">
-        //Debug.write("oninit");
         <![CDATA[
             if (!this.isAlreadyLoaded) {
             	this.isAlreadyLoaded = true;
@@ -49,7 +40,6 @@
     </method>
     
     <method name="reload">
-        //Debug.write("oninit");
         <![CDATA[
         	this._cbtext.clearChatOutput();
             this.getRoomChatHistory.doCall();

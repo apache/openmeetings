@@ -88,10 +88,16 @@
     		  layout="axis:x;spacing:2;inset:2" >
     
     	<handler name="oninit">
+		<![CDATA[
     		for (var eg in this.subviews) {
             	this.subviews[eg].deselect();
             }
-            this.userTabButton.doSelection();
+            if (!canvas.currentRoomObj.hideFilesExplorer && canvas.currentRoomObj.filesOpened) {
+				this.filesTabButton.doSelection();
+			} else {
+				this.userTabButton.doSelection();
+			}
+		]]>
     	</handler>
    
         <tabButtonMain name="userTabButton" height="$once{ parent.height }" width="$once{ (parent.width-6)/2 }"

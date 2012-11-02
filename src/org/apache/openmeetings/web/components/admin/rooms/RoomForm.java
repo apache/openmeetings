@@ -116,6 +116,8 @@ public class RoomForm extends AdminBaseForm<Rooms> {
 		add(new CheckBox("hideWhiteboard"));
 		add(new CheckBox("showMicrophoneStatus"));
 		add(new CheckBox("chatModerated"));
+		add(new CheckBox("chatOpened"));
+		add(new CheckBox("filesOpened"));
 		
 		// FIXME: Room user moderator list
 

@@ -6045,4 +6045,10 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   <string id="1514" name="chat_moderated">
   	<value>Allow message</value>
   </string>
+  <string id="1515" name="chat_opened">
+  	<value>Chat panel opened by default</value>
+  </string>
+  <string id="1516" name="files_opened">
+  	<value>Files panel opened by default</value>
+  </string>
 </language>

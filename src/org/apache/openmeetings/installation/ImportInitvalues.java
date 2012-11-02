@@ -614,6 +614,8 @@ public class ImportInitvalues {
 					false, // hideWhiteboard
 					false, // showMicrophoneStatus
 					false, // chatModerated
+					false, // chatOpened
+					false, // filesOpened
 					null);
 
 			roommanagement.addRoom(3, "public Conference Room", conference_Id,
@@ -628,6 +630,8 @@ public class ImportInitvalues {
 					false, // hideWhiteboard
 					false, // showMicrophoneStatus
 					false, // chatModerated
+					false, // chatOpened
+					false, // filesOpened
 					null);
 
 			roommanagement.addRoom(3, "public Video Only Room", conference_Id,
@@ -642,6 +646,8 @@ public class ImportInitvalues {
 					false, // hideWhiteboard
 					false, // showMicrophoneStatus
 					false, // chatModerated
+					false, // chatOpened
+					false, // filesOpened
 					null);
 
 			roommanagement.addRoom(3, "public Video And Whiteboard Room",
@@ -656,6 +662,8 @@ public class ImportInitvalues {
 					false, // hideWhiteboard
 					false, // showMicrophoneStatus
 					false, // chatModerated
+					false, // chatOpened
+					false, // filesOpened
 					null);
 
 			roommanagement.addRoom(3, "public Restricted Room", restricted_Id,
@@ -670,6 +678,8 @@ public class ImportInitvalues {
 					false, // hideWhiteboard
 					false, // showMicrophoneStatus
 					false, // chatModerated
+					false, // chatOpened
+					false, // filesOpened
 					null);
 
 			roommanagement.addRoom(3, "restricted room with micro option set",
@@ -684,6 +694,8 @@ public class ImportInitvalues {
 					false, // hideWhiteboard
 					true, // showMicrophoneStatus
 					false, // chatModerated
+					false, // chatOpened
+					false, // filesOpened
 					null);
 
 			roommanagement.addRoom(3, "conference room with micro option set",
@@ -698,6 +710,8 @@ public class ImportInitvalues {
 					false, // hideWhiteboard
 					true, // showMicrophoneStatus
 					false, // chatModerated
+					false, // chatOpened
+					false, // filesOpened
 					null);
 
 			long room2 = roommanagement.addRoom(3, "private Conference Room",
@@ -712,6 +726,8 @@ public class ImportInitvalues {
 					false, // hideWhiteboard
 					false, // showMicrophoneStatus
 					false, // chatModerated
+					false, // chatOpened
+					false, // filesOpened
 					null);
 
 			roommanagement.addRoomToOrganisation(3, room2, 1);

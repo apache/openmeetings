@@ -177,8 +177,10 @@
             canvas.thishib.getCurrentModeratorList.doCall(); 
             
             canvas.thishib.checkLzRecording.doCall();
-            canvas._chatcontent.doInit();   
-            ]]>
+            if (canvas._currentChatPanel.visible) {
+				canvas._currentChatPanel.toggleopen();
+			}
+		]]>
         </handler>  
     </netRemoteCallHib>
 

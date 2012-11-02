@@ -92,42 +92,19 @@
             
             if (canvas.thishib.sip_enabled) {
                 if (sipIsEnabled()) {
-                    
                     if ($debug) Debug.write("Dial SIP Number: ",canvas.currentRoomObject.sipNumber);
                     
-                    //this.sipNumberAsArray = new Array();
-                    
-                    //var numberAsString = ""+;
-                    
                     preCustomStartCallByCallTo(canvas.currentRoomObject.sipNumber);
-                    
-                    //new lz.debugPinCode(canvas);
-                    
-                    //for (var i=0;i<numberAsString.length;i++) {
-                    //  var charString = numberAsString.charAt(i);
-                    //  if ($debug) Debug.write("Dial charString: ",charString);
-                    //  if (charString == "+") {
-                    //      this.sipNumberAsArray.push(Number("0"));
-                    //  } else {
-                    //      this.sipNumberAsArray.push(Number(charString));
-                    //  }
-                    //  
-                    //}
-                    //
-                    //this.startDialing();
-                    
                 } else {
-                    
                     new lz.labelerrorPopup(canvas,{error:'SIP Applet is not ready!'});
-                    
                 }
             }
             
             if(this._chatPanelStrict){
-                if (this.roomobj.hideChat == null || !this.roomobj.hideChat) {            
-                    this._chatPanelStrict.setAttribute('visibility','visible');
-                } else {
-                    this._chatPanelStrict.setAttribute('visibility','hidden');                  
+            	var hideChat = this.roomobj.hideChat != null && this.roomobj.hideChat;
+				this._chatPanelStrict.setAttribute('visible', !hideChat);
+                if (hideChat) {            
+                    this._chatPanelStrict.setAttribute('height', 28);                  
                 }
             }            
         ]]>
@@ -190,7 +167,8 @@
     <baseTabChatPanel name="_chatPanelStrict" labelid="616"
        height="200" x="${ parent._sidePanel.width }"  
        y="${ canvas.height - (this.height) - ((canvas.currentRoomObj.hideTopBar) ? 0 : 28) }" 
-       width="${ canvas.width - parent._sidePanel.width }" />
+       width="${ canvas.width - parent._sidePanel.width }" isopen="${ !canvas.currentRoomObj.chatOpened }" />
+       <!-- isopen need to be reverted, will be toggled -->
        
 </class>
 

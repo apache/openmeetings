@@ -68,6 +68,8 @@
         this.hideWhiteboard.setValue(false); 
         this.showMicrophoneStatus.setValue(false);
 		this.chatModerated.setValue(false);
+		this.chatOpened.setValue(false);
+		this.filesOpened.setValue(false);
 		this.server.selectItem(this.server.firstItem);
 	</handler>
 	
@@ -219,6 +221,8 @@
             } else {
                 this.hideWhiteboard.setValue(false);
             }
+            this.chatOpened.setValue(obj.chatOpened);
+            this.filesOpened.setValue(obj.filesOpened);
             
             if (obj.showMicrophoneStatus != null && obj.showMicrophoneStatus){
                 this.showMicrophoneStatus.setValue(true);
@@ -333,7 +337,9 @@
             
             this.sendObject["showMicrophoneStatus"] = parent.showMicrophoneStatus.getValue();
 			this.sendObject["chatModerated"] = parent.chatModerated.getValue();
-            this.sendObject["serverId"] = parent.server.getValue(); 
+            this.sendObject["serverId"] = parent.server.getValue();
+			this.sendObject["chatOpened"] = parent.chatOpened.getValue();
+			this.sendObject["filesOpened"] = parent.filesOpened.getValue();
             
             var ownerId = parent.ownerId.getText();
             if (ownerId == "") ownerId = 0;
@@ -577,6 +583,12 @@
                                   
     <labelText labelid="1513" width="200" y="1120" resize="false" x="2" />  
         <labelCheckbox name="chatModerated" width="270" y="1120" x="180" fontsize="11" />
+                                  
+    <labelText labelid="1515" width="200" y="1140" resize="false" x="2" />  
+        <labelCheckbox name="chatOpened" width="270" y="1140" x="180" fontsize="11" />
+                                  
+    <labelText labelid="1516" width="200" y="1160" resize="false" x="2" />  
+        <labelCheckbox name="filesOpened" width="270" y="1160" x="180" fontsize="11" />
                                   
     <!-- RoomClient List Right Side -->
     <labelText labelid="587" width="300" y="40" resize="false" 

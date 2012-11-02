@@ -45,7 +45,7 @@
 	</method>
 	
 	<method name="toggleopen">
-		////Debug.write("this.isopen",this.isopen);
+		//if ($debug) Debug.write("toggleopen:: this.isopen", this.isopen);
 		this.setAttribute('isopen',!this.isopen);
 		if (this.isopen){		
 			this.setAttribute('height',this.initheight);

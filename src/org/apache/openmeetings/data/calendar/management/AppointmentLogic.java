@@ -190,6 +190,8 @@ public class AppointmentLogic {
 					false, // hideWhiteboard
 					false, //showMicrophoneStatus
 					false, // chatModerated
+					false, // chatOpened
+					false, // filesOpened
 					user.getServer()
 				);
 
@@ -421,10 +423,7 @@ public class AppointmentLogic {
 			return;
 		}
 
-		Long language_id = Long.valueOf(
-				configurationDaoImpl.getConfKey("default_lang_id")
-						.getConf_value())
-				.longValue();
+		Long language_id = configurationDaoImpl.getConfValue("default_lang_id", Long.class, "1");
 
 		// Get the required labels one time for all meeting members. The
 		// Language of the email will be the system default language

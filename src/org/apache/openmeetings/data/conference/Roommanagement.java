@@ -676,7 +676,8 @@ public class Roommanagement {
 			Long ownerId, Boolean waitForRecording, Boolean allowRecording,
 			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, Boolean hideFilesExplorer, 
 			Boolean hideActionsMenu, Boolean hideScreenSharing, Boolean hideWhiteboard,
-			Boolean showMicrophoneStatus, Boolean chatModerated, Server server) {
+			Boolean showMicrophoneStatus, Boolean chatModerated, boolean chatOpened
+			, boolean filesOpened, Server server) {
 
 		try {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
@@ -719,6 +720,8 @@ public class Roommanagement {
 				r.setHideWhiteboard(hideWhiteboard);
 				r.setShowMicrophoneStatus(showMicrophoneStatus);
 				r.setChatModerated(chatModerated);
+				r.setChatOpened(chatOpened);
+				r.setFilesOpened(filesOpened);
 				r.setServer(server);
 				
 				// handle SIP Issues
@@ -1263,7 +1266,7 @@ public class Roommanagement {
 			Long ownerId, Boolean waitForRecording, Boolean allowRecording,
 			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, 
 			Boolean hideFilesExplorer, Boolean hideActionsMenu, Boolean hideScreenSharing, Boolean hideWhiteboard,
-			Boolean showMicrophoneStatus, Boolean chatModerated) {
+			Boolean showMicrophoneStatus, Boolean chatModerated, boolean chatOpened, boolean filesOpened) {
 		try {
 
 			log.debug("*** updateRoom numberOfPartizipants: "
@@ -1277,7 +1280,8 @@ public class Roommanagement {
 						isClosed, redirectURL, sipNumber, conferencePin,
 						ownerId, waitForRecording, allowRecording, hideTopBar, hideChat, 
 						hideActivitiesAndActions, hideFilesExplorer, hideActionsMenu, 
-						hideScreenSharing, hideWhiteboard, showMicrophoneStatus, chatModerated);
+						hideScreenSharing, hideWhiteboard, showMicrophoneStatus, chatModerated
+						, chatOpened, filesOpened);
 
 			}
 
@@ -1297,7 +1301,7 @@ public class Roommanagement {
 			Long ownerId, Boolean waitForRecording, Boolean allowRecording,
 			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, Boolean hideFilesExplorer, 
 			Boolean hideActionsMenu, Boolean hideScreenSharing, Boolean hideWhiteboard, 
-			Boolean showMicrophoneStatus, Boolean chatModerated) {
+			Boolean showMicrophoneStatus, Boolean chatModerated, boolean chatOpened, boolean filesOpened) {
 		try {
 			log.debug("*** updateRoom numberOfPartizipants: "
 					+ numberOfPartizipants);
@@ -1338,6 +1342,8 @@ public class Roommanagement {
 			r.setHideWhiteboard(hideWhiteboard);
 			r.setShowMicrophoneStatus(showMicrophoneStatus);
 			r.setChatModerated(chatModerated);
+			r.setChatOpened(chatOpened);
+			r.setFilesOpened(filesOpened);
 
 			if (r.getRooms_id() == null) {
 				em.persist(r);
@@ -1662,6 +1668,8 @@ public class Roommanagement {
 						false, // hideWhiteboard
 						false, //showMicrophoneStatus
 						false, // chatModerated
+						false, //chatOpened
+						false, //filesOpened
 						null //server
 						);
 

@@ -656,9 +656,7 @@ public class UserService {
 
 				Long language_id = userToAdd.getLanguage_id();
 				if (language_id == null) {
-					language_id = Long.valueOf(
-							configurationDaoImpl.getConfKey("default_lang_id")
-									.getConf_value()).longValue();
+					language_id = configurationDaoImpl.getConfValue("default_lang_id", Long.class, "1");
 				}
 
 				String message = "";
@@ -886,10 +884,7 @@ public class UserService {
 
 						Long language_id = user.getLanguage_id();
 						if (language_id == null) {
-							language_id = Long.valueOf(
-									configurationDaoImpl.getConfKey(
-											"default_lang_id").getConf_value())
-									.longValue();
+							language_id = configurationDaoImpl.getConfValue("default_lang_id", Long.class, "1");
 						}
 
 						String message = "";
@@ -1024,6 +1019,8 @@ public class UserService {
 							false, // hideWhiteboard
 							false, // showMicrophoneStatus
 							false, // chatModerated
+							false, // chatOpened
+							false, // filesOpened
 							from.getServer());
 
 					room = roomDao.get(room_id);
@@ -1050,10 +1047,7 @@ public class UserService {
 
 					Long language_id = from.getLanguage_id();
 					if (language_id == null) {
-						language_id = Long.valueOf(
-								configurationDaoImpl.getConfKey(
-										"default_lang_id").getConf_value())
-								.longValue();
+						language_id = configurationDaoImpl.getConfValue("default_lang_id", Long.class, "1");
 					}
 					String invitation_link = null;
 					Users to = userManagement.getUserByEmail(email);

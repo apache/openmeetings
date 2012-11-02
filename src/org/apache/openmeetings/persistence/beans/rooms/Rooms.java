@@ -207,6 +207,14 @@ public class Rooms implements Serializable, IDataProviderEntity {
 	@Element(data = true, required = false)
 	private Boolean chatModerated = false;
 
+	@Column(name = "chat_opened")
+	@Element(data = true, required = false)
+	private boolean chatOpened = false;
+
+	@Column(name = "files_opened")
+	@Element(data = true, required = false)
+	private boolean filesOpened = false;
+
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "roomId")
 	@ElementList(name = "room_moderators", required=false)
@@ -515,6 +523,22 @@ public class Rooms implements Serializable, IDataProviderEntity {
 
 	public void setRoomOrganisations(List<Rooms_Organisation> roomOrganisations) {
 		this.roomOrganisations = roomOrganisations;
+	}
+
+	public boolean isChatOpened() {
+		return chatOpened;
+	}
+
+	public void setChatOpened(boolean chatOpened) {
+		this.chatOpened = chatOpened;
+	}
+
+	public boolean isFilesOpened() {
+		return filesOpened;
+	}
+
+	public void setFilesOpened(boolean filesOpened) {
+		this.filesOpened = filesOpened;
 	}
 
 }
