@@ -395,15 +395,11 @@ public class ClientListHashMapStore implements IClientList {
 	 * (java.lang.Long)
 	 */
 	public synchronized List<RoomClient> getCurrentModeratorByRoom(Long room_id) {
-
 		List<RoomClient> rclList = new LinkedList<RoomClient>();
+		List<RoomClient> currentClients = this.getClientListByRoom(room_id);
 		// FIXME: Enhance performance by using multiple lists
-		for (ClientSession cSession : clientList.values()) {
-			// log.debug("getClientList key: "+key);
-			RoomClient rcl = cSession.getRoomClient();
-			// Check if the Client is in the same room
-			if (room_id != null && room_id.equals(rcl.getRoom_id())
-					&& rcl.getIsMod()) {
+		for (RoomClient rcl : currentClients) {
+			if (rcl.getIsMod()) {
 				log.debug("found client who is the Moderator: " + rcl);
 				rclList.add(rcl);
 			}
