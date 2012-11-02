@@ -50,7 +50,7 @@
 				this.addHeaderItem(188, 60);
 				this.addHeaderItem(1500, 132);
 				this.addHeaderItem(1501, 132);
-				this.addHeaderItem(1515, 100);
+				this.addHeaderItem(1517, 100);
 				loadServersData(this);
 			</handler>
 

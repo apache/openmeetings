@@ -4580,4 +4580,10 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   <string id="1516" name="files_opened">
   	<value>Files panel opened by default</value>
   </string>
+  <string id="1517" name="server admin section lastping">
+  	<value>Last ping</value>
+  </string>
+  <string id="1518" name="server admin section lastping info">
+  	<value>Every slave sends a ping to the master every 3 seconds (configurable). Slave lastPing must be smaller then 1 minute so that the master uses the slave.</value>
+  </string>
 </language>

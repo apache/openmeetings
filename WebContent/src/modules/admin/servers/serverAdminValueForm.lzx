@@ -92,10 +92,10 @@
         	
 	    <view resource="messagebox_info_rsc" x="2" y="130" />
 	    
-	    <labelText labelid="1516" x="24" y="130"  fontstyle="italic"
+	    <labelText labelid="1518" x="24" y="130"  fontstyle="italic"
 	               multiline="true" width="370" />
         	
-        <labelText labelid="1515" width="200" y="190" resize="false" x="2"/>
+        <labelText labelid="1517" width="200" y="190" resize="false" x="2"/>
         	<labelText name="lastPing" y="190" x="120" width="270" />
 	    
 	    <labelText labelid="270" width="200" y="220" resize="false" x="2"/>
