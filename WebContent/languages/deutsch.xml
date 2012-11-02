@@ -6057,4 +6057,10 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   <string id="1518" name="server admin section lastping info">
   	<value>Every slave sends a ping to the master every 3 seconds (configurable). Slave lastPing must be smaller then 1 minute so that the master uses the slave.</value>
   </string>
+  <string id="1519" name="server admin ping failed">
+  	<value>Ping failed, could not find server by this name.</value>
+  </string>
+  <string id="1520" name="server admin ping failed">
+  	<value>Ping failed, multiple servers found with this name.</value>
+  </string>
 </language>

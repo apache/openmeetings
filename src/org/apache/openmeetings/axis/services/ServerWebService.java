@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.axis.services;
 
+import org.apache.axis2.AxisFault;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
@@ -56,7 +57,7 @@ public class ServerWebService {
 	 * @param max - Maximum server count
 	 * @return The list of servers participating in cluster
 	 */
-	public Server[] getServers(String SID, int start, int max) {
+	public Server[] getServers(String SID, int start, int max) throws AxisFault {
 		log.debug("getServers enter");
 		Long users_id = sessionManagement.checkSession(SID);
 		Long user_level = userManagement.getUserLevelByID(users_id);
@@ -75,7 +76,7 @@ public class ServerWebService {
 	 * @param SID - session id to identify the user making request
 	 * @return total count of the servers participating in cluster
 	 */
-	public int getServerCount(String SID) {
+	public int getServerCount(String SID) throws AxisFault {
 		log.debug("getServerCount enter");
 		Long users_id = sessionManagement.checkSession(SID);
 		Long user_level = userManagement.getUserLevelByID(users_id);
@@ -98,7 +99,8 @@ public class ServerWebService {
 	 * @param comment - comment for the server
 	 * @return the id of saved server
 	 */
-	public long saveServer(String SID, long id, String name, String address, String comment) {
+	public long saveServer(String SID, long id, String name, String address,
+			String comment) throws AxisFault {
 		log.debug("saveServerCount enter");
 		Long users_id = sessionManagement.checkSession(SID);
 		Long user_level = userManagement.getUserLevelByID(users_id);
@@ -118,7 +120,7 @@ public class ServerWebService {
 	 * @param id - the id of the server to delete
 	 * @return true if the server was deleted, false otherwise
 	 */
-	public boolean deleteServer(String SID, long id) {
+	public boolean deleteServer(String SID, long id) throws AxisFault {
 		log.debug("saveServerCount enter");
 		Long users_id = sessionManagement.checkSession(SID);
 		Long user_level = userManagement.getUserLevelByID(users_id);
@@ -130,4 +132,35 @@ public class ServerWebService {
 			return false;
 		}
 	}
+
+	/**
+	 * Receive a ping from the slave, see <a
+	 * href="http://incubator.apache.org/openmeetings/ClusteringManual.html"
+	 * target
+	 * ="_BLANK">http://incubator.apache.org/openmeetings/ClusteringManual.
+	 * html</a>
+	 * 
+	 * You can specify either the name. The name has to match a server in the
+	 * table of servers
+	 * 
+	 * @param SID
+	 *            - session id to identify the user making request, WebService
+	 *            Level required
+	 * @param name
+	 *            - the name of the server to be updated
+	 * @return positive value in case of success, otherwise an error id
+	 * @throws AxisFault
+	 */
+	public long ping(String SID, String name) throws AxisFault {
+		Long users_id = sessionManagement.checkSession(SID);
+		Long user_level = userManagement.getUserLevelByID(users_id);
+
+		if (authLevelManagement.checkWebServiceLevel(user_level)) {
+			return serversDao.updateLastPing(name, users_id);
+		} else {
+			log.warn("Insuffisient permissions");
+			return -1;
+		}
+	}
+
 }

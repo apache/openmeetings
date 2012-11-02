@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.data.basic.dao;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -250,4 +251,35 @@ public class ServerDao implements IDataProviderDao<Server> {
 			em.merge(entity);
 		}
 	}
+
+	/**
+	 * Update the last ping of any server.
+	 * 
+	 * @param name
+	 * @param userId
+	 * @return
+	 */
+	public long updateLastPing(String name, long userId) {
+
+		TypedQuery<Server> q = em.createNamedQuery("getServerByName",
+				Server.class);
+		q.setParameter("name", name);
+		List<Server> l = q.getResultList();
+		if (l.size() == 0) {
+			log.debug("No server found with name: " + name);
+			return -55L;
+		} else if (l.size() == 1) {
+			Server server = l.get(0);
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(new Date());
+			server.setLastPing(cal);
+			update(server, userId);
+		} else {
+			log.debug("Multiple server found with name: " + name);
+			return -56L;
+		}
+
+		return -1L;
+	}
+
 }

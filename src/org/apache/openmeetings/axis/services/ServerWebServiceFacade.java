@@ -20,6 +20,7 @@ package org.apache.openmeetings.axis.services;
 
 import javax.servlet.ServletContext;
 
+import org.apache.axis2.AxisFault;
 import org.apache.axis2.context.MessageContext;
 import org.apache.axis2.transport.http.HTTPConstants;
 import org.apache.openmeetings.OpenmeetingsVariables;
@@ -54,28 +55,29 @@ public class ServerWebServiceFacade {
 	/**
 	 * Proxy method please see {@link ServerWebService#getServers(String, int, int)}
 	 */
-	public Server[] getServers(String SID, int start, int max) {
+	public Server[] getServers(String SID, int start, int max) throws AxisFault {
 		return getServerServiceProxy().getServers(SID, start, max);
 	}
 
 	/**
 	 * Proxy method please see {@link ServerWebService#getServerCount(String)}
 	 */
-	public int getServerCount(String SID) {
+	public int getServerCount(String SID) throws AxisFault {
 		return getServerServiceProxy().getServerCount(SID);
 	}
 
 	/**
 	 * Proxy method please see {@link ServerWebService#saveServer(String, long, String, String, String)}
 	 */
-	public long saveServer(String SID, long id, String name, String address, String comment) {
+	public long saveServer(String SID, long id, String name, String address,
+			String comment) throws AxisFault {
 		return getServerServiceProxy().saveServer(SID, id, name, address, comment);
 	}
 
 	/**
 	 * Proxy method please see {@link ServerWebService#deleteServer(String, long)}
 	 */
-	public boolean deleteServer(String SID, long id) {
+	public boolean deleteServer(String SID, long id) throws AxisFault {
 		return getServerServiceProxy().deleteServer(SID, id);
 	}
 }
