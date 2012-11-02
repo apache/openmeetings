@@ -327,6 +327,7 @@ public class ClientListHashMapStore implements IClientList {
 	 * org.apache.openmeetings.remote.red5.IClientList#getClientListByRoom(java
 	 * .lang.Long)
 	 */
+	// FIXME: Enhance performance by using multiple lists
 	public synchronized List<RoomClient> getClientListByRoom(
 			Long room_id) {
 		List<RoomClient> roomClientList = new ArrayList<RoomClient>();
