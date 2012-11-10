@@ -84,13 +84,13 @@
 	
 	<turnOverList name="_turnoverlist" width="${ parent.width - 4 }" 
                   height="$once{ (parent.isSuperModerator) ? parent.height-144 : parent.height-94 }" x="2" y="46" 
-		orderby="u.lastname" step="50" asc="false" bgcolor="0xFFFFFF">
+		orderby="lastname" step="50" asc="false" bgcolor="0xFFFFFF">
 
 		<handler name="oninit">
-			this.addHeaderItemOrdered(146,70,"u.user_id",false,false); //labelid,width,orderBy,asc,isSelected
-			this.addHeaderItemOrdered(148,136,"u.firstname",false,false);
-			this.addHeaderItemOrdered(149,136,"u.lastname",false,true);
-			this.addHeaderItemOrdered(137,138,"u.adresses.email",false,false);
+			this.addHeaderItemOrdered(146,70,"user_id",false,false); //labelid,width,orderBy,asc,isSelected
+			this.addHeaderItemOrdered(148,136,"firstname",false,false);
+			this.addHeaderItemOrdered(149,136,"lastname",false,true);
+			this.addHeaderItemOrdered(137,138,"adresses.email",false,false);
 			this.getAllUserBySearchRange.doCall();
 		</handler>
 		
