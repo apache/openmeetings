@@ -203,9 +203,8 @@ public class ScreenController {
 			ctx.put("red5-host", rtmphostlocal);
 			ctx.put("red5-app", OpenmeetingsVariables.webAppRootKey + "/" + roomId);
 			ctx.put("default_quality_screensharing",
- configurationDaoImpl
-					.getConfValue(
-					"default.quality.screensharing", String.class, "1"));
+					configurationDaoImpl
+						.getConfValue("default.quality.screensharing", String.class, "1"));
 			//invited guest does not have valid user_id (have user_id == -1)
 			ctx.put("user_id", users_id);
 			ctx.put("port", port);
@@ -214,6 +213,7 @@ public class ScreenController {
 
 			String requestedFile = StringUtils.deleteWhitespace(domain + "_" + roomId) + ".jnlp";
 			response.setContentType("application/x-java-jnlp-file");
+			response.setCharacterEncoding("UTF-8");
 			response.setHeader("Content-Disposition",
 					"Inline; filename=\"" + requestedFile + "\"");
 
