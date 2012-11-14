@@ -4598,4 +4598,10 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   <string id="1524" name="server admin ping running">
     <value>Ping running</value>
   </string>
+  <string id="1524" name="server admin ping running">
+    <value>Ping running</value>
+  </string>
+  <string id="1525" name="server admin active">
+    <value>Active</value>
+  </string>
 </language>
