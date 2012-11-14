@@ -5983,15 +5983,15 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
   <string id="1505" name="cmd_line_admin">
     <value>
-    	To save time and internet traffic you can use command line admin to backup/restore/upgrade:<br/>
-    	&#160;&#160;1) go to OM install dir (for ex. /opt/red5) <br/>
-    	&#160;&#160;2) stop OM (for ex. ./red5-shutdown.sh)<br/>
-    	&#160;&#160;3) ./admin.sh -b -file ~/today_om_backup.zip (create backup of current OM)<br/>
-    	&#160;&#160;4) download archive with new OM<br/>
-    	&#160;&#160;5) mv /opt/red5 /opt.red5.bak (move working version of OM just in case :))<br/>
-    	&#160;&#160;6) extract downloaded OM to the /opt/red5<br/>
-    	&#160;&#160;7) ./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' in case of you are using non-default DB )<br/>
-    	&#160;&#160;8) start OM<br/>
+    	To save time and internet traffic you can use command line admin to backup/restore/upgrade:\n
+    	1) go to OM install dir (for ex. /opt/red5) \n
+    	2) stop OM (for ex. ./red5-shutdown.sh)\n
+    	3) ./admin.sh -b -file ~/today_om_backup.zip (create backup of current OM)\n
+    	4) download archive with new OM\n
+    	5) mv /opt/red5 /opt.red5.bak (move working version of OM just in case :))\n
+    	6) extract downloaded OM to the /opt/red5\n
+    	7) ./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' in case of you are using non-default DB )\n
+    	8) start OM\n
     </value>
   </string>
   <string id="1506" name="public_room_tooltip">
@@ -6031,12 +6031,24 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   	<value>Last ping</value>
   </string>
   <string id="1518" name="server admin section lastping info">
-  	<value>Every slave sends a ping to the master every 3 seconds (configurable). Slave lastPing must be smaller then 1 minute so that the master uses the slave.</value>
+  	<value>Every slave sends a ping to the master every 3 seconds (configurable). Slave lastPing must be smaller then 1 minute so that the master uses the slave. "Ping running" shows if the ping is currently running.</value>
   </string>
-  <string id="1519" name="server admin ping failed">
-  	<value>Ping failed, could not find server by this name.</value>
+  <string id="1519" name="server admin port">
+  	<value>HTTP Port</value>
   </string>
-  <string id="1520" name="server admin ping failed">
-  	<value>Ping failed, multiple servers found with this name.</value>
+  <string id="1520" name="server admin user">
+  	<value>User (SOAP-Access)</value>
+  </string>
+  <string id="1521" name="server admin password">
+  	<value>Password</value>
+  </string>
+  <string id="1522" name="server admin webapp path">
+  	<value>Webapp path</value>
+  </string>
+  <string id="1523" name="server admin protocol">
+  	<value>Protocol</value>
+  </string>
+  <string id="1524" name="server admin ping running">
+  	<value>Ping running</value>
   </string>
 </language>
