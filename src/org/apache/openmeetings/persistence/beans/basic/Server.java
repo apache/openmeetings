@@ -45,7 +45,7 @@ import org.simpleframework.xml.Root;
 		@NamedQuery(name = "getAllServers", query = "SELECT s FROM Server s WHERE s.deleted = false"),
 		@NamedQuery(name = "getServerCount", query = "SELECT COUNT(s) FROM Server s WHERE s.deleted = false"),
 		@NamedQuery(name = "getServerById", query = "SELECT s FROM Server s LEFT JOIN FETCH s.insertedby LEFT JOIN FETCH s.updatedby WHERE s.deleted = false AND s.id = :id"),
-		@NamedQuery(name = "getServerByName", query = "SELECT s FROM Server s WHERE s.deleted = false AND s.address LIKE :name"),
+		@NamedQuery(name = "getServerByName", query = "SELECT s FROM Server s WHERE s.deleted = false AND s.name LIKE :name"),
 		@NamedQuery(name = "getServerByAddress", query = "SELECT s FROM Server s WHERE s.deleted = false AND s.address LIKE :address"),
 		@NamedQuery(name = "getServersWithNoUsers", query = "SELECT s FROM Server s WHERE s.deleted = false AND s.id NOT IN (SELECT u.server.id FROM Users u where u.server.id IS NOT NULL)"),
 		@NamedQuery(name = "getServerWithMinimumUsers", query = "SELECT s.id, COUNT(u) AS cnt FROM Users u JOIN u.server s WHERE s.deleted = false GROUP BY s.id ORDER BY cnt") })
@@ -92,6 +92,34 @@ public class Server implements Serializable, IDataProviderEntity {
 	@Element(data = true, required = false)
 	private Calendar lastPing;
 	
+	@Column(name = "ping_running", nullable = true)
+	@Element(data = true, required = false)
+	private boolean pingRunning;
+
+	@Column(name = "port", nullable = true)
+	@Element(data = true, required = false)
+	private int port;
+
+	@Column(name = "protocol", nullable = true)
+	@Element(data = true, required = false)
+	private String protocol;
+
+	@Column(name = "webapp", nullable = true)
+	@Element(data = true, required = false)
+	private String webapp;
+
+	@Column(name = "user", nullable = true)
+	@Element(data = true, required = false)
+	private String user;
+
+	@Column(name = "pass", nullable = true)
+	@Element(data = true, required = false)
+	private String pass;
+
+	@Column(name = "active", nullable = true)
+	@Element(data = true, required = false)
+	private Boolean active;
+
 	@Column(name = "deleted", nullable = false)
 	@Element(data = true)
 	private boolean deleted = false;
@@ -176,9 +204,72 @@ public class Server implements Serializable, IDataProviderEntity {
 		this.lastPing = lastPing;
 	}
 
+	public boolean isPingRunning() {
+		return pingRunning;
+	}
+
+	public void setPingRunning(boolean pingRunning) {
+		this.pingRunning = pingRunning;
+	}
+
+	public int getPort() {
+		return port;
+	}
+
+	public void setPort(int port) {
+		this.port = port;
+	}
+
+	public String getProtocol() {
+		return protocol;
+	}
+
+	public void setProtocol(String protocol) {
+		this.protocol = protocol;
+	}
+
+	public String getWebapp() {
+		return webapp;
+	}
+
+	public void setWebapp(String webapp) {
+		this.webapp = webapp;
+	}
+
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	public String getPass() {
+		return pass;
+	}
+
+	public void setPass(String pass) {
+		this.pass = pass;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+
 	@Override
 	public String toString() {
 		return "Server [id=" + id + ", name=" + name + ", address=" + address
-				+ ", deleted=" + deleted + "]";
+				+ ", port=" + port + ", user=" + user + ", pass=" + pass
+				+ ", protocol=" + protocol + ", pingRunning=" + pingRunning
+				+ ", active=" + active + ", webapp=" + webapp + ", deleted="
+				+ deleted + "]";
 	}
 }

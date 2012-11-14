@@ -74,7 +74,14 @@
 	    		var s = {id: dp.xpathQuery(basePath + 'id/text()')
     				, name: dp.xpathQuery(basePath + 'name/text()')
     				, address: dp.xpathQuery(basePath + 'address/text()')
+    				, port: dp.xpathQuery(basePath + 'port/text()')
+    				, user: dp.xpathQuery(basePath + 'user/text()')
+    				, pass: dp.xpathQuery(basePath + 'pass/text()')
+    				, webapp: dp.xpathQuery(basePath + 'webapp/text()')
+    				, protocol: dp.xpathQuery(basePath + 'protocol/text()')
+    				, pingRunning: dp.xpathQuery(basePath + 'pingRunning/text()')
     				, lastPing: dp.xpathQuery(basePath + 'lastPing/text()')
+    				, active: dp.xpathQuery(basePath + 'active/text()')
     				, comment: dp.xpathQuery(basePath + 'comment/text()')
     				};
 	    		var li = new lz.serverAdminListItem(this._innerlist._inn._inn, {obj: s});

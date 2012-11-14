@@ -189,7 +189,8 @@ public class ScreenController {
 			Long roomId = rc.getRoom_id();
 			boolean allowRecording = rc.getAllowRecording()
 				&& (0 == clientListManager.getRecordingCount(roomId));
-			boolean allowPublishing = (0 == clientListManager.getPublisingCount(roomId));
+			boolean allowPublishing = (0 == clientListManager
+					.getPublishingCount(roomId));
 			
 			Context ctx = new VelocityContext();
 			ctx.put("APP_NAME", configurationDaoImpl.getAppName());

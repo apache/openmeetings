@@ -299,7 +299,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				boolean startStreaming = Boolean.valueOf("" + map.get(
 						"startStreaming"));
 				boolean startPublishing = Boolean.valueOf("" + map.get(
-						"startPublishing")) && (0 == clientListManager.getPublisingCount(currentClient.getRoom_id()));
+						"startPublishing")) && (0 == clientListManager.getPublishingCount(currentClient.getRoom_id()));
 
 				currentClient.setRoom_id(Long.parseLong(current.getScope()
 						.getName()));

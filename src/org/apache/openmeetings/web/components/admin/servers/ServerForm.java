@@ -28,9 +28,11 @@ import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.util.time.Duration;
 
@@ -52,7 +54,15 @@ public class ServerForm extends AdminBaseForm<Server> {
 		this.listContainer = listContainer;
 
 		add(new RequiredTextField<String>("name"));
+		add(new CheckBox("active"));
 		add(new RequiredTextField<String>("address"));
+		add(new TextField<Integer>("port"));
+		add(new TextField<String>("user"));
+		add(new TextField<String>("pass"));
+		add(new TextField<String>("webapp"));
+		add(new TextField<String>("protocol"));
+		add(DateLabel.forDatePattern("lastPing", "dd.MM.yyyy HH:mm:ss"));
+		add(new Label("pingRunning"));
 		add(DateLabel.forDatePattern("inserted", "dd.MM.yyyy HH:mm:ss"));
 		add(new Label("insertedby.login"));
 		add(DateLabel.forDatePattern("updated", "dd.MM.yyyy HH:mm:ss"));
@@ -80,7 +90,10 @@ public class ServerForm extends AdminBaseForm<Server> {
 
 	@Override
 	protected void onNewSubmit(AjaxRequestTarget target, Form<?> form) {
-		setModelObject(new Server());
+		Server s = new Server();
+		s.setWebapp("openmeetings");
+		s.setProtocol("http");
+		setModelObject(s);
 		target.add(this);
 		target.appendJavaScript("omServerPanelInit();");
 	}

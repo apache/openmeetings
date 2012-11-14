@@ -39,7 +39,8 @@ limitations under the License.
 		<hr />
 	
 	   <h3>WebService: ServerService</h3>
-	   <p>This class provides method implementations necessary for OM to manage servers participating in cluster.<p>
+	   <p>This class provides method implementations necessary for OM to manage servers
+ participating in cluster.<p>
 	   <p>WSDL sample Url: <a href="http://localhost:5080/openmeetings/services/ServerService?wsdl">http://localhost:5080/openmeetings/services/ServerService?wsdl</a><p>
 	
 	<!-- Links to Methods -->
@@ -52,7 +53,8 @@ limitations under the License.
                 </div>
                                                <div>
                 <a href="#getServerCount"><b>getServerCount</b></a><br/>
-                <div class="navigation_comment"><i >Method to retrieve the total count of the servers participating in cluster</i></div>
+                <div class="navigation_comment"><i >Method to retrieve the total count of the servers participating in
+ cluster</i></div>
                 </div>
                                                <div>
                 <a href="#saveServer"><b>saveServer</b></a><br/>
@@ -64,14 +66,11 @@ limitations under the License.
                 </div>
                                                <div>
                 <a href="#ping"><b>ping</b></a><br/>
-                <div class="navigation_comment"><i >Receive a ping from the slave, see <a
+                <div class="navigation_comment"><i >Load a ping from the slave, see <a
  href="http://incubator.apache.org/openmeetings/ClusteringManual.html"
  target
  ="_BLANK">http://incubator.apache.org/openmeetings/ClusteringManual.
- html</a>
- 
- You can specify either the name. The name has to match a server in the
- table of servers</i></div>
+ html</a></i></div>
                 </div>
                            </div>
 	   
@@ -151,7 +150,8 @@ limitations under the License.
     			       			    			)
     			</i><br/>
     			<p>
-    			  Method to retrieve the total count of the servers participating in cluster
+    			  Method to retrieve the total count of the servers participating in
+ cluster
     			</p>
     			<p>
                   Return Type: int
@@ -196,6 +196,16 @@ limitations under the License.
     			       			   String name
     			       			    			       			     , 
     			       			   String address
+    			       			    			       			     , 
+    			       			   int port
+    			       			    			       			     , 
+    			       			   String user
+    			       			    			       			     , 
+    			       			   String pass
+    			       			    			       			     , 
+    			       			   String webapp
+    			       			    			       			     , 
+    			       			   String protocol
     			       			    			       			     , 
     			       			   String comment
     			       			    			)
@@ -251,6 +261,46 @@ limitations under the License.
 	                   
 	                   	                   	    			   <tr>
 	                     <td valign="top">
+	                     		                     		int
+	                     		                     </td>
+	                     <td valign="top">port</td>
+	                     <td valign="top">- the http port of the slave</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">user</td>
+	                     <td valign="top">- REST user to access the slave</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">pass</td>
+	                     <td valign="top">- REST pass to access the slave</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">webapp</td>
+	                     <td valign="top">- webapp name of the OpenMeetings instance</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">protocol</td>
+	                     <td valign="top">- protocol to access the OpenMeetings instance</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
 	                     		                     		String
 	                     		                     </td>
 	                     <td valign="top">comment</td>
@@ -261,7 +311,7 @@ limitations under the License.
 	    			</table>
     			    			<br/>
     			REST Sample Call/URL:<br/>
-    			    			    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/ServerService/saveServer?SID=VALUE&id=VALUE&name=VALUE&address=VALUE&comment=VALUE">http://localhost:5080/openmeetings/services/ServerService/saveServer?&amp;&amp;&amp;&amp;</a>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/ServerService/saveServer?SID=VALUE&id=VALUE&name=VALUE&address=VALUE&port=VALUE&user=VALUE&pass=VALUE&webapp=VALUE&protocol=VALUE&comment=VALUE">http://localhost:5080/openmeetings/services/ServerService/saveServer?&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;</a>
     		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
@@ -324,22 +374,17 @@ limitations under the License.
     			
     			Method: <i>ping (
     			    			    			       			   String SID
-    			       			    			       			     , 
-    			       			   String name
     			       			    			)
     			</i><br/>
     			<p>
-    			  Receive a ping from the slave, see <a
+    			  Load a ping from the slave, see <a
  href="http://incubator.apache.org/openmeetings/ClusteringManual.html"
  target
  ="_BLANK">http://incubator.apache.org/openmeetings/ClusteringManual.
  html</a>
- 
- You can specify either the name. The name has to match a server in the
- table of servers
     			</p>
     			<p>
-                  Return Type: long
+                  Return Type: java.util.List
                 </p>
     			<p>Params:</p>
     			    			
@@ -361,19 +406,11 @@ limitations under the License.
             Level required</td>
 	                   </tr>
 	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		String
-	                     		                     </td>
-	                     <td valign="top">name</td>
-	                     <td valign="top">- the name of the server to be updated</td>
-	                   </tr>
-	                   
 	                   	                   	                   </tbody>
 	    			</table>
     			    			<br/>
     			REST Sample Call/URL:<br/>
-    			    			    				    								    				    												<a href="http://localhost:5080/openmeetings/services/ServerService/ping?SID=VALUE&name=VALUE">http://localhost:5080/openmeetings/services/ServerService/ping?&amp;</a>
+    			    			    				    												<a href="http://localhost:5080/openmeetings/services/ServerService/ping?SID=VALUE">http://localhost:5080/openmeetings/services/ServerService/ping?</a>
     		  </div>
     	   			
 	

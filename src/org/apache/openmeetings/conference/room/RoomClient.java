@@ -177,7 +177,22 @@ public class RoomClient implements Serializable {
 	 */
 	private Boolean zombieCheckFlag = false;
     private Boolean micMuted = false;
-	
+    
+    public RoomClient() {
+    	
+    }
+    
+	public RoomClient(String streamid, String publicSID, Long room_id,
+			Long user_id, String firstname, String lastname) {
+		super();
+		this.streamid = streamid;
+		this.publicSID = publicSID;
+		this.room_id = room_id;
+		this.user_id = user_id;
+		this.firstname = firstname;
+		this.lastname = lastname;
+	}
+
 	public void setUserObject(Long user_id, String username, String firstname, String lastname) {
 		this.user_id = user_id;
 		this.username = username;

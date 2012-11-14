@@ -18,12 +18,15 @@
  */
 package org.apache.openmeetings.axis.services;
 
+import java.util.List;
+
 import javax.servlet.ServletContext;
 
 import org.apache.axis2.AxisFault;
 import org.apache.axis2.context.MessageContext;
 import org.apache.axis2.transport.http.HTTPConstants;
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.conference.room.SlaveClientDto;
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -53,7 +56,8 @@ public class ServerWebServiceFacade {
 	}
 
 	/**
-	 * Proxy method please see {@link ServerWebService#getServers(String, int, int)}
+	 * Proxy method please see
+	 * {@link ServerWebService#getServers(String, int, int)}
 	 */
 	public Server[] getServers(String SID, int start, int max) throws AxisFault {
 		return getServerServiceProxy().getServers(SID, start, max);
@@ -67,17 +71,30 @@ public class ServerWebServiceFacade {
 	}
 
 	/**
-	 * Proxy method please see {@link ServerWebService#saveServer(String, long, String, String, String)}
+	 * Proxy method please see
+	 * {@link ServerWebService#saveServer(String, long, String, String, int, String, String, String, String, String)}
 	 */
 	public long saveServer(String SID, long id, String name, String address,
+			int port, String user, String pass, String webapp, String protocol,
 			String comment) throws AxisFault {
-		return getServerServiceProxy().saveServer(SID, id, name, address, comment);
+		return getServerServiceProxy().saveServer(SID, id, name, address, port,
+				user, pass, webapp, protocol, comment);
 	}
 
 	/**
-	 * Proxy method please see {@link ServerWebService#deleteServer(String, long)}
+	 * Proxy method please see
+	 * {@link ServerWebService#deleteServer(String, long)}
 	 */
 	public boolean deleteServer(String SID, long id) throws AxisFault {
 		return getServerServiceProxy().deleteServer(SID, id);
 	}
+
+	/**
+	 * Proxy method please see {@link ServerWebService#ping(String)}
+	 */
+	public List<SlaveClientDto> ping(String SID)
+			throws AxisFault {
+		return getServerServiceProxy().ping(SID);
+	}
+	
 }

@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.data.basic.dao;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -175,7 +174,10 @@ public class ServerDao implements IDataProviderDao<Server> {
 	 * @return
 	 */
 	@Deprecated
-	public Server saveServer(long id, String name, String address, String comment, long userId) {
+	public Server saveServer(long id, String name, String address,
+ int port,
+			String user, String pass, String webapp, String protocol,
+			String comment, long userId) {
 		Server s = get(id);
 		if (s == null) {
 			s = new Server();
@@ -187,6 +189,11 @@ public class ServerDao implements IDataProviderDao<Server> {
 		}
 		s.setName(name);
 		s.setAddress(address);
+		s.setPort(port);
+		s.setUser(user);
+		s.setPass(pass);
+		s.setWebapp(webapp);
+		s.setProtocol(protocol);
 		s.setComment(comment);
 
 		return em.merge(s);
@@ -251,35 +258,18 @@ public class ServerDao implements IDataProviderDao<Server> {
 			em.merge(entity);
 		}
 	}
-
+	
 	/**
-	 * Update the last ping of any server.
+	 * get {@link Server} by name
 	 * 
 	 * @param name
-	 * @param userId
 	 * @return
 	 */
-	public long updateLastPing(String name, long userId) {
-
+	public List<Server> getServersByName(String name) {
 		TypedQuery<Server> q = em.createNamedQuery("getServerByName",
 				Server.class);
 		q.setParameter("name", name);
-		List<Server> l = q.getResultList();
-		if (l.size() == 0) {
-			log.debug("No server found with name: " + name);
-			return -55L;
-		} else if (l.size() == 1) {
-			Server server = l.get(0);
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(new Date());
-			server.setLastPing(cal);
-			update(server, userId);
-		} else {
-			log.debug("Multiple server found with name: " + name);
-			return -56L;
-		}
-
-		return -1L;
+		return q.getResultList();
 	}
 	
 }

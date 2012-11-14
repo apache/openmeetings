@@ -106,14 +106,33 @@ public interface IClientList {
 	 */
 	public abstract List<RoomClient> getCurrentModeratorByRoom(Long room_id);
 
-	//FIXME not sorted
+	/**
+	 * Get list of current client sessions
+	 * 
+	 * @param start
+	 * @param max
+	 * @param orderby
+	 * @param asc
+	 * @return
+	 */
 	public abstract SearchResult<RoomClient> getListByStartAndMax(int start,
 			int max, String orderby, boolean asc);
 
 	public abstract void removeAllClients();
 
+	/**
+	 * returns number of current users recording
+	 * 
+	 * @param roomId
+	 * @return
+	 */
 	public abstract long getRecordingCount(long roomId);
 
-	public abstract long getPublisingCount(long roomId);
+	/**
+	 * returns a number of current users publishing screensharing
+	 * @param roomId
+	 * @return
+	 */
+	public abstract long getPublishingCount(long roomId);
 
 }

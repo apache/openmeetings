@@ -18,8 +18,12 @@
  */
 package org.apache.openmeetings.axis.services;
 
+import java.util.List;
+
 import org.apache.axis2.AxisFault;
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.conference.room.ISharedSessionStore;
+import org.apache.openmeetings.conference.room.SlaveClientDto;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
 import org.apache.openmeetings.data.basic.dao.ServerDao;
@@ -30,11 +34,12 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * This class provides method implementations necessary for OM to manage servers participating in cluster.
+ * This class provides method implementations necessary for OM to manage servers
+ * participating in cluster.
  * 
- * @author solomax
+ * @author solomax, sebawagner
  * @webservice ServerService
- *
+ * 
  */
 public class ServerWebService {
 	private static final Logger log = Red5LoggerFactory.getLogger(
@@ -48,13 +53,18 @@ public class ServerWebService {
 	private AuthLevelmanagement authLevelManagement;
 	@Autowired
 	private ServerDao serversDao;
-	
+	@Autowired
+	private ISharedSessionStore clientListManager;
+
 	/**
 	 * Method to retrieve the list of the servers participating in cluster
 	 * 
-	 * @param SID - session id to identify the user making request
-	 * @param start - server index to start with
-	 * @param max - Maximum server count
+	 * @param SID
+	 *            - session id to identify the user making request
+	 * @param start
+	 *            - server index to start with
+	 * @param max
+	 *            - Maximum server count
 	 * @return The list of servers participating in cluster
 	 */
 	public Server[] getServers(String SID, int start, int max) throws AxisFault {
@@ -71,9 +81,11 @@ public class ServerWebService {
 	}
 
 	/**
-	 * Method to retrieve the total count of the servers participating in cluster
+	 * Method to retrieve the total count of the servers participating in
+	 * cluster
 	 * 
-	 * @param SID - session id to identify the user making request
+	 * @param SID
+	 *            - session id to identify the user making request
 	 * @return total count of the servers participating in cluster
 	 */
 	public int getServerCount(String SID) throws AxisFault {
@@ -82,7 +94,7 @@ public class ServerWebService {
 		Long user_level = userManagement.getUserLevelByID(users_id);
 
 		if (authLevelManagement.checkWebServiceLevel(user_level)) {
-			return (int)serversDao.count();
+			return (int) serversDao.count();
 		} else {
 			log.warn("Insuffisient permissions");
 			return -1;
@@ -92,21 +104,39 @@ public class ServerWebService {
 	/**
 	 * Method to add/update server
 	 * 
-	 * @param SID - session id to identify the user making request
-	 * @param id - the id of the server to save
-	 * @param name - the name of the server to save
-	 * @param address - the address(DNS name or IP) of the server to save
-	 * @param comment - comment for the server
+	 * @param SID
+	 *            - session id to identify the user making request
+	 * @param id
+	 *            - the id of the server to save
+	 * @param name
+	 *            - the name of the server to save
+	 * @param address
+	 *            - the address(DNS name or IP) of the server to save
+	 * @param port
+	 *            - the http port of the slave
+	 * @param user
+	 *            - REST user to access the slave
+	 * @param pass
+	 *            - REST pass to access the slave
+	 * @param webapp
+	 *            - webapp name of the OpenMeetings instance
+	 * @param protocol
+	 *            - protocol to access the OpenMeetings instance
+	 * @param comment
+	 *            - comment for the server
 	 * @return the id of saved server
 	 */
 	public long saveServer(String SID, long id, String name, String address,
+			int port, String user, String pass, String webapp, String protocol,
 			String comment) throws AxisFault {
 		log.debug("saveServerCount enter");
 		Long users_id = sessionManagement.checkSession(SID);
 		Long user_level = userManagement.getUserLevelByID(users_id);
 
 		if (authLevelManagement.checkWebServiceLevel(user_level)) {
-			return serversDao.saveServer(id, name, address, comment, users_id).getId();
+			return serversDao.saveServer(id, name, address, port, user, pass,
+					webapp, protocol, comment, users_id)
+					.getId();
 		} else {
 			log.warn("Insuffisient permissions");
 			return -1;
@@ -116,8 +146,10 @@ public class ServerWebService {
 	/**
 	 * Method to delete server
 	 * 
-	 * @param SID - session id to identify the user making request
-	 * @param id - the id of the server to delete
+	 * @param SID
+	 *            - session id to identify the user making request
+	 * @param id
+	 *            - the id of the server to delete
 	 * @return true if the server was deleted, false otherwise
 	 */
 	public boolean deleteServer(String SID, long id) throws AxisFault {
@@ -134,33 +166,41 @@ public class ServerWebService {
 	}
 
 	/**
-	 * Receive a ping from the slave, see <a
+	 * Load a ping from the slave, see <a
 	 * href="http://incubator.apache.org/openmeetings/ClusteringManual.html"
 	 * target
 	 * ="_BLANK">http://incubator.apache.org/openmeetings/ClusteringManual.
 	 * html</a>
 	 * 
-	 * You can specify either the name. The name has to match a server in the
-	 * table of servers
-	 * 
 	 * @param SID
 	 *            - session id to identify the user making request, WebService
 	 *            Level required
-	 * @param name
-	 *            - the name of the server to be updated
-	 * @return positive value in case of success, otherwise an error id
+	 * @return List of
 	 * @throws AxisFault
 	 */
-	public long ping(String SID, String name) throws AxisFault {
+	public List<SlaveClientDto> ping(String SID)
+			throws AxisFault {
 		Long users_id = sessionManagement.checkSession(SID);
 		Long user_level = userManagement.getUserLevelByID(users_id);
 
 		if (authLevelManagement.checkWebServiceLevel(user_level)) {
-			return serversDao.updateLastPing(name, users_id);
+			
+			//sync the sessions to the masters session store
+			return clientListManager.getCurrentSlaveSessions();
+			
 		} else {
 			log.warn("Insuffisient permissions");
-			return -1;
+			throw new AxisFault("Insuffisient permissions");
 		}
 	}
+
+	// //sync the sessions to the masters session store
+	// clientListManager.syncSlaveClientSession(server, clients);
+	//
+	// //Update last ping
+	// Calendar cal = Calendar.getInstance();
+	// cal.setTime(new Date());
+	// server.setLastPing(cal);
+	// return serversDao.update(server, users_id).getId();
 
 }
