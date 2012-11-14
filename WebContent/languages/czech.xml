@@ -4583,12 +4583,6 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   <string id="1519" name="server admin port">
     <value>HTTP Port</value>
   </string>
-  <string id="1520" name="server admin ping failed">
-    <value>Ping failed, multiple servers found with this name.</value>
-  </string>
-  <string id="1520" name="server admin user">
-    <value>User (SOAP-Access)</value>
-  </string>
   <string id="1521" name="server admin password">
     <value>Password</value>
   </string>
