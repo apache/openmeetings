@@ -4540,15 +4540,15 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   </string>
   <string id="1505" name="cmd_line_admin">
     <value>
-    	Pour économiser du temps et de la bande passante vous pouvez utiliser la ligne de commande pour sauvegarder/restaurer/mettre à niveau votre système :<br/>
-    	1) Aller dans le répertoire d'installation d'OM (par ex. /opt/red5) <br/>
-    	2) Arrêter OM (par ex. ./red5-shutdown.sh)<br/>
-    	3) ./admin.sh -b -file ~/nom_du_backup.zip (créer la sauvegarde d'OM)<br/>
-    	4) télécharger la nouvelle version d'OM<br/>
-    	5) mv /opt/red5 /opt.red5.bak (déplacer la version d'OM qui fonctionne par sécurité.)<br/>
-    	6) extraire la nouvelle version d'OM dans /opt/red5<br/>
-    	7) ./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' in case of you are using non-default DB )<br/>
-    	8) Démarrer OM<br/>
+    	Pour économiser du temps et de la bande passante vous pouvez utiliser la ligne de commande pour sauvegarder/restaurer/mettre à niveau votre système :\n
+    	1) Aller dans le répertoire d'installation d'OM (par ex. /opt/red5) \n
+    	2) Arrêter OM (par ex. ./red5-shutdown.sh)\n
+    	3) ./admin.sh -b -file ~/nom_du_backup.zip (créer la sauvegarde d'OM)\n
+    	4) télécharger la nouvelle version d'OM\n
+    	5) mv /opt/red5 /opt.red5.bak (déplacer la version d'OM qui fonctionne par sécurité.)\n
+    	6) extraire la nouvelle version d'OM dans /opt/red5\n
+    	7) ./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' in case of you are using non-default DB )\n
+    	8) Démarrer OM\n
     </value>
   </string>
   <string id="1506" name="public_room_tooltip">

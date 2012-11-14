@@ -4613,15 +4613,15 @@ transmitowania głosu i obrazu wideo.</value>
   </string>
   <string id="1505" name="cmd_line_admin">
     <value>
-    	To save time and internet traffic you can use command line admin to backup/restore/upgrade:<br/>
-    	1) go to OM install dir (for ex. /opt/red5) <br/>
-    	2) stop OM (for ex. ./red5-shutdown.sh)<br/>
-    	3) ./admin.sh -b -file ~/today_om_backup.zip (create backup of current OM)<br/>
-    	4) download archive with new OM<br/>
-    	5) mv /opt/red5 /opt.red5.bak (move working version of OM just in case :))<br/>
-    	6) extract downloaded OM to the /opt/red5<br/>
-    	7) ./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' in case of you are using non-default DB )<br/>
-    	8) start OM<br/>
+    	To save time and internet traffic you can use command line admin to backup/restore/upgrade:\n
+    	1) go to OM install dir (for ex. /opt/red5) \n
+    	2) stop OM (for ex. ./red5-shutdown.sh)\n
+    	3) ./admin.sh -b -file ~/today_om_backup.zip (create backup of current OM)\n
+    	4) download archive with new OM\n
+    	5) mv /opt/red5 /opt.red5.bak (move working version of OM just in case :))\n
+    	6) extract downloaded OM to the /opt/red5\n
+    	7) ./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' in case of you are using non-default DB )\n
+    	8) start OM\n
     </value>
   </string>
   <string id="1506" name="public_room_tooltip">
