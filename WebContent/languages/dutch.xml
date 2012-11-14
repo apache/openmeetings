@@ -4123,6 +4123,9 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   <string id="1366" name="whiteboard">
     <value>Not allowed</value>
   </string>
+  <string id="1367" name="user_left_act_msg">
+    <value> has left the room.</value>
+  </string>
   <string id="1368" name="clipart icons">
     <value>Math icons</value>
   </string>
