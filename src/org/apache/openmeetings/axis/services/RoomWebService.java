@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.axis2.AxisFault;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.conference.room.IClientList;
 import org.apache.openmeetings.conference.room.RoomClient;
@@ -2444,4 +2445,36 @@ public class RoomWebService {
 
 	}
 
+	/**
+	 * Method to update arbitrary room parameter.
+	 * 
+	 * @param SID The SID of the User. This SID must be marked as Loggedin
+	 * @param room_id the room id
+	 * @param paramName
+	 * @param paramValue
+	 * @return 1 in case of success, -2 if permissions are insufficient
+	 * @throws AxisFault if any error ocurred
+	 */
+	public int modifyRoomParameter(String SID, Long room_id, String paramName, String paramValue)
+			throws AxisFault {
+		try {
+			Long users_id = sessionManagement.checkSession(SID);
+			Long user_level = userManagement.getUserLevelByID(users_id);
+	
+			log.debug("closeRoom 1 " + room_id);
+	
+			if (authLevelManagement.checkWebServiceLevel(user_level)) {
+				Rooms r = roomDao.get(room_id);
+				PropertyUtils.setSimpleProperty(r, paramName, paramValue);
+				roomDao.update(r, users_id);
+			} else {
+				return -2;
+			}
+			return 1;
+		} catch (Exception err) {
+			log.error("[modifyRoomParameter] ", err);
+
+			throw new AxisFault(err.getMessage());
+		}
+	}
 }

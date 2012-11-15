@@ -235,6 +235,10 @@ limitations under the License.
  
  Returns positive value if authentication was successful.</i></div>
                 </div>
+                                               <div>
+                <a href="#modifyRoomParameter"><b>modifyRoomParameter</b></a><br/>
+                <div class="navigation_comment"><i >Method to update arbitrary room parameter.</i></div>
+                </div>
                            </div>
 	   
 	    <h3>Methods Details in RoomService</h3>
@@ -5067,6 +5071,78 @@ limitations under the License.
     			    			<br/>
     			REST Sample Call/URL:<br/>
     			    			    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/RoomService/closeRoom?SID=VALUE&room_id=VALUE&status=VALUE">http://localhost:5080/openmeetings/services/RoomService/closeRoom?&amp;&amp;</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="modifyRoomParameter" ><b>modifyRoomParameter</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>modifyRoomParameter (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long room_id
+    			       			    			       			     , 
+    			       			   String paramName
+    			       			    			       			     , 
+    			       			   String paramValue
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Method to update arbitrary room parameter.
+    			</p>
+    			<p>
+                  Return Type: int
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">room_id</td>
+	                     <td valign="top">the room id</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">paramName</td>
+	                     <td valign="top"></td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">paramValue</td>
+	                     <td valign="top"></td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/RoomService/modifyRoomParameter?SID=VALUE&room_id=VALUE&paramName=VALUE&paramValue=VALUE">http://localhost:5080/openmeetings/services/RoomService/modifyRoomParameter?&amp;&amp;&amp;</a>
     		  </div>
     	   			
 	

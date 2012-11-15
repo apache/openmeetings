@@ -665,4 +665,8 @@ public class RoomWebServiceFacade {
 		return this.getRoomServiceProxy().closeRoom(SID, room_id, status);
 	}
 
+	public int modifyRoomParameter(String SID, Long room_id, String paramName, String paramValue)
+			throws AxisFault {
+		return getRoomServiceProxy().modifyRoomParameter(SID, room_id, paramName, paramValue);
+	}
 }
