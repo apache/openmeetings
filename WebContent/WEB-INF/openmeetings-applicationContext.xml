@@ -90,14 +90,11 @@
 	<bean id="openmeetings.FlvRecorderConverter"
 		class="org.apache.openmeetings.data.flvrecord.converter.FlvRecorderConverter" />
 		
-	<bean id="openmeetings.SlaveObserver"
-		class="org.apache.openmeetings.cluster.sync.SlaveObserver" />
-		
 	<!-- 
 	#####################################################################
 	Comment this in to enable the OpenMeetings instance to act as Master
 	#####################################################################
-		
+	 -->
 		
 	<bean id="openmeetings.ClusterSlaveJob" class="org.apache.openmeetings.quartz.scheduler.ClusterSlaveJob" />
 	<bean id="clusterSlaveJob"
@@ -128,7 +125,7 @@
 			</list>
 		</property>
 	</bean>
-	 -->
+	
 		
 	<bean id="openmeetings.SessionClearJob" class="org.apache.openmeetings.quartz.scheduler.SessionClearJob" />
 	<bean id="sessionClearJob"

@@ -41,18 +41,18 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  * CRUD for {@link Server}
  * 
- * @author solomax, swagner
+ * @author solomax, sebawagner
  * 
  */
 @Transactional
 public class ServerDao implements IDataProviderDao<Server> {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			ServerDao.class, OpenmeetingsVariables.webAppRootKey);
-	public final static String[] searchFields = {"name", "address", "comment"};
+	public final static String[] searchFields = { "name", "address", "comment" };
 
 	@PersistenceContext
 	private EntityManager em;
-	
+
 	@Autowired
 	private UsersDao usersDao;
 
@@ -74,22 +74,33 @@ public class ServerDao implements IDataProviderDao<Server> {
 	 * @see org.apache.openmeetings.data.OmDAO#get(int, int)
 	 */
 	public List<Server> get(int start, int max) {
-		log.debug("getServerList enter");
 		TypedQuery<Server> q = em.createNamedQuery("getAllServers",
 				Server.class);
 		q.setFirstResult(start);
 		q.setMaxResults(max);
-
 		return q.getResultList();
 	}
-	
+
 	public List<Server> get(String search, int start, int count, String order) {
-		TypedQuery<Server> q = em.createQuery(DaoHelper.getSearchQuery("Server", "s", search, true, false, order, searchFields), Server.class);
+		TypedQuery<Server> q = em.createQuery(DaoHelper.getSearchQuery(
+				"Server", "s", search, true, false, order, searchFields),
+				Server.class);
 		q.setFirstResult(start);
 		q.setMaxResults(count);
 		return q.getResultList();
 	}
-	
+
+	/**
+	 * get the list of all servers in the cluster that are ready to receive a
+	 * ping (active = true)
+	 * 
+	 * @return
+	 */
+	public List<Server> getSlavesForPing() {
+		return em.createNamedQuery("getSlavesForPing", Server.class)
+				.getResultList();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -103,10 +114,11 @@ public class ServerDao implements IDataProviderDao<Server> {
 	}
 
 	public long count(String search) {
-		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Server", "s", search, true, true, null, searchFields), Long.class);
+		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Server",
+				"s", search, true, true, null, searchFields), Long.class);
 		return q.getSingleResult();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -115,7 +127,8 @@ public class ServerDao implements IDataProviderDao<Server> {
 	public Server get(long id) {
 		Server result = null;
 		log.debug("getServer enter, id = " + id);
-		TypedQuery<Server> q = em.createNamedQuery("getServerById", Server.class);
+		TypedQuery<Server> q = em.createNamedQuery("getServerById",
+				Server.class);
 		q.setParameter("id", id);
 		try {
 			result = q.getSingleResult();
@@ -133,38 +146,43 @@ public class ServerDao implements IDataProviderDao<Server> {
 	 */
 	public Server getServerByAddress(String address) {
 		log.debug("getServer enter, address = " + address);
-		TypedQuery<Server> q = em.createNamedQuery("getServerByAddress", Server.class);
+		TypedQuery<Server> q = em.createNamedQuery("getServerByAddress",
+				Server.class);
 		q.setParameter("address", address);
 		List<Server> list = q.getResultList();
 		return list.size() > 0 ? list.get(0) : null;
 	}
 
 	/**
-	 * This method is necessary to automatically assign user to the server with minimum load.
+	 * This method is necessary to automatically assign user to the server with
+	 * minimum load.
 	 * 
-	 * First of all we are trying to find servers referenced by 0 users.
-	 * If all servers are referenced by at least 1 user we are searching the first server referenced by minimum users.
+	 * First of all we are trying to find servers referenced by 0 users. If all
+	 * servers are referenced by at least 1 user we are searching the first
+	 * server referenced by minimum users.
 	 * 
-	 * @return Server object referenced by the minimum user accounts. 
+	 * @return Server object referenced by the minimum user accounts.
 	 */
 	public Server getServerWithMinimumUsers() {
 		Server result = null;
 		log.debug("getServerWithMinimumUsers enter");
-		TypedQuery<Server> q = em.createNamedQuery("getServersWithNoUsers", Server.class);
+		TypedQuery<Server> q = em.createNamedQuery("getServersWithNoUsers",
+				Server.class);
 		List<Server> l = q.getResultList();
 		if (l.isEmpty()) {
-			TypedQuery<Object> q1 = em.createNamedQuery("getServerWithMinimumUsers", Object.class);
+			TypedQuery<Object> q1 = em.createNamedQuery(
+					"getServerWithMinimumUsers", Object.class);
 			List<Object> r = q1.getResultList();
 			if (!r.isEmpty()) {
 				// get server id from first line
-				result = get((Long)((Object[])r.get(0))[0]);
+				result = get((Long) ((Object[]) r.get(0))[0]);
 			}
 		} else {
 			result = l.get(0);
 		}
 		return result;
 	}
-	
+
 	/**
 	 * @deprecated user standard mechanism of
 	 *             {@link IDataProviderDao#update(org.apache.openmeetings.persistence.beans.OmEntity, long)}
@@ -174,10 +192,9 @@ public class ServerDao implements IDataProviderDao<Server> {
 	 * @return
 	 */
 	@Deprecated
-	public Server saveServer(long id, String name, String address,
- int port,
+	public Server saveServer(long id, String name, String address, int port,
 			String user, String pass, String webapp, String protocol,
-			String comment, long userId) {
+			Boolean active, String comment, long userId) {
 		Server s = get(id);
 		if (s == null) {
 			s = new Server();
@@ -194,6 +211,7 @@ public class ServerDao implements IDataProviderDao<Server> {
 		s.setPass(pass);
 		s.setWebapp(webapp);
 		s.setProtocol(protocol);
+		s.setActive(active);
 		s.setComment(comment);
 
 		return em.merge(s);
@@ -243,6 +261,11 @@ public class ServerDao implements IDataProviderDao<Server> {
 		return entity;
 	}
 
+	public Server update(Server entity) {
+		em.merge(entity);
+		return entity;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -258,7 +281,7 @@ public class ServerDao implements IDataProviderDao<Server> {
 			em.merge(entity);
 		}
 	}
-	
+
 	/**
 	 * get {@link Server} by name
 	 * 
@@ -271,5 +294,5 @@ public class ServerDao implements IDataProviderDao<Server> {
 		q.setParameter("name", name);
 		return q.getResultList();
 	}
-	
+
 }

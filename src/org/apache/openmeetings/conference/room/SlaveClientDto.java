@@ -34,18 +34,8 @@ public class SlaveClientDto {
 	private String lastName;
 	private Long userId;
 	private Long roomId;
+	private boolean isAVClient = false;
 	
-	public SlaveClientDto(String streamid, String publicSID, String firstName,
-			String lastName, Long userId, Long roomId) {
-		super();
-		this.streamid = streamid;
-		this.publicSID = publicSID;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.userId = userId;
-		this.roomId = roomId;
-	}
-
 	public SlaveClientDto(RoomClient roomClient) {
 		this.streamid = roomClient.getStreamid();
 		this.publicSID = roomClient.getPublicSID();
@@ -53,6 +43,18 @@ public class SlaveClientDto {
 		this.lastName = roomClient.getLastname();
 		this.userId = roomClient.getUser_id();
 		this.roomId = roomClient.getRoom_id();
+		this.isAVClient = roomClient.getIsAVClient();
+	}
+
+	public SlaveClientDto(String streamid, String publicSID, Long roomId2,
+			Long userId2, String firstName, String lastName, boolean isAVClient) {
+		this.streamid = streamid;
+		this.publicSID = publicSID;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.userId = userId2;
+		this.roomId = roomId2;
+		this.isAVClient = isAVClient;
 	}
 
 	public String getStreamid() {
@@ -101,6 +103,14 @@ public class SlaveClientDto {
 
 	public void setPublicSID(String publicSID) {
 		this.publicSID = publicSID;
+	}
+
+	public boolean getIsAVClient() {
+		return isAVClient;
+	}
+
+	public void setIsAVClient(boolean isAVClient) {
+		this.isAVClient = isAVClient;
 	}
 
 }

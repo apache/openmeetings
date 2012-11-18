@@ -38,7 +38,6 @@
 			this.serverName.setAttribute('text', '');
 			this.ip.setAttribute('text', '');
 			this.lastPing.setAttribute('text','');
-			this.pingRunning.setAttribute('text','');
 			this.comment.setAttribute('text','');
 			this.port.setAttribute('text','');
 			this.user.setAttribute('text','');
@@ -68,7 +67,6 @@
 			this.ip.setAttribute('text', server.address);
 			this.lastPing.setAttribute('text', server.lastPing);
 			this.comment.setAttribute('text', server.comment);
-			this.pingRunning.setAttribute('text', server.pingRunning);
 			this.comment.setAttribute('text', server.comment);
 			this.port.setAttribute('text', server.port);
 			this.user.setAttribute('text', server.user);
@@ -145,11 +143,8 @@
         <labelText labelid="1517" width="200" y="360" resize="false" x="2"/>
         	<labelText name="lastPing" y="360" x="120" width="270" />
         	
-        <labelText labelid="1524" width="200" y="380" resize="false" x="2"/>
-        	<labelText name="pingRunning" y="380" x="120" width="270" />
-	    
-	    <labelText labelid="270" width="200" y="400" resize="false" x="2"/>
-	        <customScrollEdittext name="comment" y="400" x="120" width="270" 
+	    <labelText labelid="270" width="200" y="380" resize="false" x="2"/>
+	        <customScrollEdittext name="comment" y="380" x="120" width="270" 
 	            height="100" text="" />    
         	
 	</class>

@@ -122,20 +122,22 @@ public class ServerWebService {
 	 *            - webapp name of the OpenMeetings instance
 	 * @param protocol
 	 *            - protocol to access the OpenMeetings instance
+	 * @param active
+	 *            - if the server currently participates in the cluster or not
 	 * @param comment
 	 *            - comment for the server
 	 * @return the id of saved server
 	 */
 	public long saveServer(String SID, long id, String name, String address,
 			int port, String user, String pass, String webapp, String protocol,
-			String comment) throws AxisFault {
+			Boolean active, String comment) throws AxisFault {
 		log.debug("saveServerCount enter");
 		Long users_id = sessionManagement.checkSession(SID);
 		Long user_level = userManagement.getUserLevelByID(users_id);
 
 		if (authLevelManagement.checkWebServiceLevel(user_level)) {
 			return serversDao.saveServer(id, name, address, port, user, pass,
-					webapp, protocol, comment, users_id)
+					webapp, protocol, active, comment, users_id)
 					.getId();
 		} else {
 			log.warn("Insuffisient permissions");

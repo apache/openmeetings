@@ -48,7 +48,9 @@ import org.simpleframework.xml.Root;
 		@NamedQuery(name = "getServerByName", query = "SELECT s FROM Server s WHERE s.deleted = false AND s.name LIKE :name"),
 		@NamedQuery(name = "getServerByAddress", query = "SELECT s FROM Server s WHERE s.deleted = false AND s.address LIKE :address"),
 		@NamedQuery(name = "getServersWithNoUsers", query = "SELECT s FROM Server s WHERE s.deleted = false AND s.id NOT IN (SELECT u.server.id FROM Users u where u.server.id IS NOT NULL)"),
-		@NamedQuery(name = "getServerWithMinimumUsers", query = "SELECT s.id, COUNT(u) AS cnt FROM Users u JOIN u.server s WHERE s.deleted = false GROUP BY s.id ORDER BY cnt") })
+		@NamedQuery(name = "getServerWithMinimumUsers", query = "SELECT s.id, COUNT(u) AS cnt FROM Users u JOIN u.server s WHERE s.deleted = false GROUP BY s.id ORDER BY cnt"),
+		@NamedQuery(name = "getSlavesForPing", query = "SELECT s FROM Server s WHERE s.deleted = false AND s.active = true"), //
+})
 @Table(name = "server")
 @Root
 public class Server implements Serializable, IDataProviderEntity {
@@ -92,10 +94,6 @@ public class Server implements Serializable, IDataProviderEntity {
 	@Element(data = true, required = false)
 	private Calendar lastPing;
 	
-	@Column(name = "ping_running", nullable = true)
-	@Element(data = true, required = false)
-	private boolean pingRunning;
-
 	@Column(name = "port", nullable = true)
 	@Element(data = true, required = false)
 	private int port;
@@ -204,14 +202,6 @@ public class Server implements Serializable, IDataProviderEntity {
 		this.lastPing = lastPing;
 	}
 
-	public boolean isPingRunning() {
-		return pingRunning;
-	}
-
-	public void setPingRunning(boolean pingRunning) {
-		this.pingRunning = pingRunning;
-	}
-
 	public int getPort() {
 		return port;
 	}
@@ -268,7 +258,7 @@ public class Server implements Serializable, IDataProviderEntity {
 	public String toString() {
 		return "Server [id=" + id + ", name=" + name + ", address=" + address
 				+ ", port=" + port + ", user=" + user + ", pass=" + pass
-				+ ", protocol=" + protocol + ", pingRunning=" + pingRunning
+				+ ", protocol=" + protocol 
 				+ ", active=" + active + ", webapp=" + webapp + ", deleted="
 				+ deleted + "]";
 	}

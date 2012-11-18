@@ -515,29 +515,34 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 		for (Iterator<Entry<String, ClientSession>> iter = clientList
 				.entrySet().iterator(); iter.hasNext();) {
 			Entry<String, ClientSession> entry = iter.next();
-			if (entry.getValue().getServer().equals(server)) {
+			if (entry.getValue().getServer() != null
+					&& entry.getValue().getServer().equals(server)) {
 				iter.remove();
 			}
 		}
 
-		System.err.println("Session 2 Length: " + clientList.size());
+		log.debug("Session 2 Length: " + clientList.size());
 
 		for (SlaveClientDto slaveClientDto : clients) {
 			String uniqueKey = ClientSessionUtil.getClientSessionKey(null,
 					slaveClientDto.getStreamid());
-			clientList.put(uniqueKey, new ClientSession(server, new RoomClient(
-					slaveClientDto.getStreamid(),
-					slaveClientDto.getPublicSID(), slaveClientDto.getRoomId(),
-					slaveClientDto.getUserId(), slaveClientDto.getFirstName(),
-					slaveClientDto.getLastName())));
+			clientList.put(
+					uniqueKey,
+					new ClientSession(server, new RoomClient(slaveClientDto
+							.getStreamid(), slaveClientDto.getPublicSID(),
+							slaveClientDto.getRoomId(), slaveClientDto
+									.getUserId(),
+							slaveClientDto.getFirstName(), slaveClientDto
+									.getLastName(), slaveClientDto
+									.getIsAVClient())));
 
 		}
-		
-		System.err.println("Session 3 Length: " + clientList.size());
+
+		log.debug("Session 3 Length: " + clientList.size());
 
 		for (ClientSession cSession : clientList.values()) {
-			System.err.println("cSession: " + cSession.getServer()
-					+ " cSession RCL " + cSession.getRoomClient());
+			log.warn("cSession: " + cSession.getServer() + " cSession RCL "
+					+ cSession.getRoomClient());
 		}
 	}
 

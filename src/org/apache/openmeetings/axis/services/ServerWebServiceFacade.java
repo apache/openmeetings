@@ -72,13 +72,13 @@ public class ServerWebServiceFacade {
 
 	/**
 	 * Proxy method please see
-	 * {@link ServerWebService#saveServer(String, long, String, String, int, String, String, String, String, String)}
+	 * {@link ServerWebService#saveServer(String, long, String, String, int, String, String, String, String, Boolean, String)}
 	 */
 	public long saveServer(String SID, long id, String name, String address,
 			int port, String user, String pass, String webapp, String protocol,
-			String comment) throws AxisFault {
+			Boolean active, String comment) throws AxisFault {
 		return getServerServiceProxy().saveServer(SID, id, name, address, port,
-				user, pass, webapp, protocol, comment);
+				user, pass, webapp, protocol, active, comment);
 	}
 
 	/**

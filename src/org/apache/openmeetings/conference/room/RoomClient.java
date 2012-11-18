@@ -183,7 +183,7 @@ public class RoomClient implements Serializable {
     }
     
 	public RoomClient(String streamid, String publicSID, Long room_id,
-			Long user_id, String firstname, String lastname) {
+			Long user_id, String firstname, String lastname, boolean isAVClient) {
 		super();
 		this.streamid = streamid;
 		this.publicSID = publicSID;
@@ -191,6 +191,7 @@ public class RoomClient implements Serializable {
 		this.user_id = user_id;
 		this.firstname = firstname;
 		this.lastname = lastname;
+		this.isAVClient = isAVClient;
 	}
 
 	public void setUserObject(Long user_id, String username, String firstname, String lastname) {
