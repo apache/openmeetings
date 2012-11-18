@@ -207,6 +207,8 @@ limitations under the License.
     			       			    			       			     , 
     			       			   String protocol
     			       			    			       			     , 
+    			       			   Boolean active
+    			       			    			       			     , 
     			       			   String comment
     			       			    			)
     			</i><br/>
@@ -301,6 +303,14 @@ limitations under the License.
 	                   
 	                   	                   	    			   <tr>
 	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">active</td>
+	                     <td valign="top">- if the server currently participates in the cluster or not</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
 	                     		                     		String
 	                     		                     </td>
 	                     <td valign="top">comment</td>
@@ -311,7 +321,7 @@ limitations under the License.
 	    			</table>
     			    			<br/>
     			REST Sample Call/URL:<br/>
-    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/ServerService/saveServer?SID=VALUE&id=VALUE&name=VALUE&address=VALUE&port=VALUE&user=VALUE&pass=VALUE&webapp=VALUE&protocol=VALUE&comment=VALUE">http://localhost:5080/openmeetings/services/ServerService/saveServer?&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;</a>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/ServerService/saveServer?SID=VALUE&id=VALUE&name=VALUE&address=VALUE&port=VALUE&user=VALUE&pass=VALUE&webapp=VALUE&protocol=VALUE&active=VALUE&comment=VALUE">http://localhost:5080/openmeetings/services/ServerService/saveServer?&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;</a>
     		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">

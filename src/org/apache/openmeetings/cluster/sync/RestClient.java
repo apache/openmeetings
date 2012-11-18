@@ -91,17 +91,6 @@ public class RestClient {
 				+ "/services/ServerService";
 	}
 
-	public static void main(String... strings) {
-		RestClient rClient = new RestClient("127.0.0.1", 5080, "http",
-				"openmeetings", "swagner", "qweqwe");
-		try {
-			rClient.loginUser();
-			rClient.ping();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	/**
 	 * The observerInstance will be notified whenever a ping was completed
 	 * 
@@ -122,6 +111,22 @@ public class RestClient {
 		this.webapp = server.getWebapp();
 		this.user = server.getUser();
 		this.pass = server.getPass();
+	}
+	
+	/**
+	 * Main method to perform tests
+	 * 
+	 * @param strings
+	 */
+	public static void main(String... strings) {
+		RestClient rClient = new RestClient("127.0.0.1", 5080, "http",
+				"openmeetings", "swagner", "qweqwe");
+		try {
+			rClient.loginUser();
+			rClient.ping();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
