@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.conference.room.ClientSession;
 import org.apache.openmeetings.conference.room.IClientList;
 import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
@@ -759,7 +760,17 @@ public class ConferenceService {
 		return clientListManager.getClientListByRoom(room_id);
 	}
 
-	public SearchResult<RoomClient> getRoomClientsMap(String SID, int start, int max,
+	/**
+	 * invoked in the admin interface to show the connections currently open
+	 * 
+	 * @param SID
+	 * @param start
+	 * @param max
+	 * @param orderby
+	 * @param asc
+	 * @return
+	 */
+	public SearchResult<ClientSession> getRoomClientsMap(String SID, int start, int max,
 			String orderby, boolean asc) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);

@@ -115,7 +115,7 @@ public interface IClientList {
 	 * @param asc
 	 * @return
 	 */
-	public abstract SearchResult<RoomClient> getListByStartAndMax(int start,
+	public abstract SearchResult<ClientSession> getListByStartAndMax(int start,
 			int max, String orderby, boolean asc);
 
 	public abstract void removeAllClients();

@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.conference.room;
 
+import org.apache.openmeetings.utils.math.CalendarPatterns;
+
 /**
  * 
  * Transfer object to send the master in a cluster the user load of a single
@@ -30,6 +32,9 @@ public class SlaveClientDto {
 
 	private String streamid;
 	private String publicSID;
+	private String username;
+	private String connectedSince;
+	private String scope;
 	private String firstName;
 	private String lastName;
 	private Long userId;
@@ -44,10 +49,16 @@ public class SlaveClientDto {
 		this.userId = roomClient.getUser_id();
 		this.roomId = roomClient.getRoom_id();
 		this.isAVClient = roomClient.getIsAVClient();
+		this.username = roomClient.getUsername();
+		this.scope = roomClient.getScope();
+		if (roomClient.getConnectedSince() != null) {
+			this.connectedSince = CalendarPatterns.getDateWithTimeByMiliSeconds(roomClient.getConnectedSince());
+		}
 	}
 
 	public SlaveClientDto(String streamid, String publicSID, Long roomId2,
-			Long userId2, String firstName, String lastName, boolean isAVClient) {
+			Long userId2, String firstName, String lastName, boolean isAVClient,
+			String scope, String username, String connectedSince) {
 		this.streamid = streamid;
 		this.publicSID = publicSID;
 		this.firstName = firstName;
@@ -55,6 +66,9 @@ public class SlaveClientDto {
 		this.userId = userId2;
 		this.roomId = roomId2;
 		this.isAVClient = isAVClient;
+		this.scope = scope;
+		this.username = username;
+		this.connectedSince = connectedSince;
 	}
 
 	public String getStreamid() {
@@ -105,12 +119,43 @@ public class SlaveClientDto {
 		this.publicSID = publicSID;
 	}
 
-	public boolean getIsAVClient() {
+	public boolean isAVClient() {
 		return isAVClient;
 	}
 
-	public void setIsAVClient(boolean isAVClient) {
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getConnectedSince() {
+		return connectedSince;
+	}
+
+	public void setConnectedSince(String connectedSince) {
+		this.connectedSince = connectedSince;
+	}
+
+	public String getScope() {
+		return scope;
+	}
+
+	public void setScope(String scope) {
+		this.scope = scope;
+	}
+
+	public void setAVClient(boolean isAVClient) {
 		this.isAVClient = isAVClient;
+	}
+
+	@Override
+	public String toString() {
+		return " streamid: "+streamid+" publicSID: "+publicSID+" roomId: "+roomId+" userId: "+
+				userId+" firstName: "+firstName+" lastName: "+lastName+" isAVClient: "+isAVClient+" scope: "+
+				scope+" username: "+username+" connectedSince: "+connectedSince;
 	}
 
 }

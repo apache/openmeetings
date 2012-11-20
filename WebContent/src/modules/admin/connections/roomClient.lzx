@@ -38,8 +38,9 @@
 			this.addHeaderItem(599,80);
 			this.addHeaderItem(600,240);
 			this.addHeaderItem(601,130);
-            this.addHeaderItem(602,150);
-            this.addHeaderItem(603,150);
+            this.addHeaderItem(602,100);
+            this.addHeaderItem(603,100);
+            this.addHeaderItem(1501,100);
 			this.getRoomClientsMap.doCall();
 		</handler>
 		
@@ -74,12 +75,18 @@
 	    	<![CDATA[
 	    	this.clearList();
 	    	for (var i=0;i<records.length;i++){
+	    		var tServer = "master";
+	    		if (records[i].server != null) {
+	    			tServer = "slave "+records[i].server.address+" ["+records[i].server.id+"]";
+	    		}
+	    	
 	    		new lz.roomClientListItem(this._innerlist._inn._inn,{
-	                    obj:records[i],
-	                    streamid:records[i].streamid,
-	                    login:records[i].username,
-                        dateConnected:parseDateToStringTime(records[i].connectedSince),
-	                    scope:records[i].scope
+	                    obj:records[i].roomClient,
+	                    streamid:records[i].roomClient.streamid,
+	                    login:records[i].roomClient.username,
+                        dateConnected:parseDateToStringTime(records[i].roomClient.connectedSince),
+	                    scope:records[i].roomClient.scope,
+	                    serverAddr:tServer
                     });
 	    	}
             this.sendInitialWidthUpdate();

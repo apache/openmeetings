@@ -22,10 +22,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map.Entry;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
@@ -415,31 +413,17 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 
 	/*
 	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.apache.openmeetings.remote.red5.IClientList#getListByStartAndMax(int,
-	 * int, java.lang.String, boolean)
+	 * @see org.apache.openmeetings.conference.room.IClientList#getListByStartAndMax(int, int, java.lang.String, boolean)
 	 */
 	// FIXME not sorted
-	public synchronized SearchResult<RoomClient> getListByStartAndMax(
+	public synchronized SearchResult<ClientSession> getListByStartAndMax(
 			int start, int max, String orderby, boolean asc) {
-		SearchResult<RoomClient> sResult = new SearchResult<RoomClient>();
+		SearchResult<ClientSession> sResult = new SearchResult<ClientSession>();
 		sResult.setObjectName(RoomClient.class.getName());
 		sResult.setRecords(Long.valueOf(clientList.size()).longValue());
-		LinkedList<RoomClient> myList = new LinkedList<RoomClient>();
-
-		int i = 0;
-		for (ClientSession cSession : clientList.values()) {
-			if (i >= start) {
-				myList.add(cSession.getRoomClient());
-			}
-			if (i > max) {
-				break;
-			}
-			i++;
-		}
+		ArrayList<ClientSession> myList = new ArrayList<ClientSession>();
+		myList.addAll(clientList.values());
 		sResult.setResult(myList);
-
 		return sResult;
 	}
 
@@ -500,10 +484,10 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 	// FIXME: Add multiple lists to enhance performance
 	public void syncSlaveClientSession(Server server,
 			List<SlaveClientDto> clients) {
-
-		System.err.println("Session 1 Length: " + clientList.size());
+		
+		log.debug("Session 1 Length: " + clientList.size());
 		for (ClientSession cSession : clientList.values()) {
-			System.err.println("cSession: " + cSession.getServer()
+			log.debug("cSession: " + cSession.getServer()
 					+ " cSession RCL " + cSession.getRoomClient());
 		}
 
@@ -512,29 +496,37 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 		// makes no sense, we don't know anything about the start or end date
 		// so at this point we can just remove them all and add them new
 
-		for (Iterator<Entry<String, ClientSession>> iter = clientList
-				.entrySet().iterator(); iter.hasNext();) {
-			Entry<String, ClientSession> entry = iter.next();
-			if (entry.getValue().getServer() != null
-					&& entry.getValue().getServer().equals(server)) {
-				iter.remove();
-			}
-		}
+//		for (Iterator<Entry<String, ClientSession>> iter = clientList
+//				.entrySet().iterator(); iter.hasNext();) {
+//			Entry<String, ClientSession> entry = iter.next();
+//			if (entry.getValue().getServer() != null
+//					&& entry.getValue().getServer().equals(server)) {
+//				iter.remove();
+//			}
+//		}
 
 		log.debug("Session 2 Length: " + clientList.size());
 
 		for (SlaveClientDto slaveClientDto : clients) {
-			String uniqueKey = ClientSessionUtil.getClientSessionKey(null,
+			String uniqueKey = ClientSessionUtil.getClientSessionKey(server,
 					slaveClientDto.getStreamid());
+			
+			log.debug("Session 2 uniqueKey: " + uniqueKey);
+			
 			clientList.put(
 					uniqueKey,
-					new ClientSession(server, new RoomClient(slaveClientDto
-							.getStreamid(), slaveClientDto.getPublicSID(),
-							slaveClientDto.getRoomId(), slaveClientDto
-									.getUserId(),
-							slaveClientDto.getFirstName(), slaveClientDto
-									.getLastName(), slaveClientDto
-									.getIsAVClient())));
+					new ClientSession(server, new RoomClient(
+								slaveClientDto.getStreamid(), 
+								slaveClientDto.getPublicSID(),
+								slaveClientDto.getRoomId(), 
+								slaveClientDto.getUserId(),
+								slaveClientDto.getFirstName(), 
+								slaveClientDto.getLastName(), 
+								slaveClientDto.isAVClient(),
+								slaveClientDto.getUsername(),
+								slaveClientDto.getConnectedSince(),
+								slaveClientDto.getScope()
+							)));
 
 		}
 

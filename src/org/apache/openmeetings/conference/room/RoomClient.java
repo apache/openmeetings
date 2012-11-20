@@ -28,6 +28,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.openmeetings.utils.math.CalendarPatterns;
+
 public class RoomClient implements Serializable {
 	
 	private static final long serialVersionUID = 1831858089607111565L;
@@ -183,7 +185,8 @@ public class RoomClient implements Serializable {
     }
     
 	public RoomClient(String streamid, String publicSID, Long room_id,
-			Long user_id, String firstname, String lastname, boolean isAVClient) {
+			Long user_id, String firstname, String lastname, boolean isAVClient,
+			String username, String connectedSince, String scope) {
 		super();
 		this.streamid = streamid;
 		this.publicSID = publicSID;
@@ -192,6 +195,9 @@ public class RoomClient implements Serializable {
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.isAVClient = isAVClient;
+		this.username = username;
+		this.connectedSince = CalendarPatterns.parseDateWithHour(connectedSince);
+		this.scope = scope;
 	}
 
 	public void setUserObject(Long user_id, String username, String firstname, String lastname) {

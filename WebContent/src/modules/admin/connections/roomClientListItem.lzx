@@ -27,11 +27,13 @@
 	<attribute name="login" value="" type="string" />
 	<attribute name="dateConnected" value="" type="string" />
     <attribute name="scope" value="" type="string" />
+    <attribute name="serverAddr" value="" type="string" />
 	
 	<turnOverTextItem text="$once{ parent.streamid }" />
 	<turnOverTextItem text="$once{ parent.login }" />
 	<turnOverTextItem text="$once{ parent.dateConnected }" />
     <turnOverTextItem text="$once{ parent.scope }" />
+    <turnOverTextItem text="$once{ parent.serverAddr }" />
     <simpleLabelButton labelid="603" >
         <handler name="onclick">
             if ($debug) Debug.write("onclick ",this);

@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.cluster.sync;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -69,6 +70,8 @@ public class RestClient {
 	private String sessionId;
 	
 	private boolean pingRunning = false;
+	
+	private static String nameSpaceForSlaveDto = "http://room.conference.openmeetings.apache.org/xsd";
 	
 	/**
 	 * returns true as long as the RestClient performs a ping and parses the result
@@ -373,40 +376,62 @@ public class RestClient {
 	private List<SlaveClientDto> pingFromResult(OMElement result) throws Exception {
 
 		QName pingResult = new QName(NAMESPACE_PREFIX, "return");
-		String nameSpaceForSlaveDto = "http://room.conference.openmeetings.apache.org/xsd";
 
 		@SuppressWarnings("unchecked")
 		Iterator<OMElement> elements = result.getChildrenWithName(pingResult);
 		List<SlaveClientDto> clients = new ArrayList<SlaveClientDto>();
 		while (elements.hasNext()) {
 			OMElement resultElement = elements.next();
-
-			Long roomId = null;
-			String roomIdAsXmlString = resultElement.getFirstChildWithName(
-					new QName(nameSpaceForSlaveDto, "roomId")).getText();
-			if (roomIdAsXmlString != null && roomIdAsXmlString.length() > 0) {
-				roomId = Long.valueOf(roomIdAsXmlString).longValue();
-			}
-
-			Long userId = null;
-			String userIdAsXmlString = resultElement.getFirstChildWithName(
-					new QName(nameSpaceForSlaveDto, "userId")).getText();
-			if (userIdAsXmlString != null && userIdAsXmlString.length() > 0) {
-				userId = Long.valueOf(userIdAsXmlString).longValue();
-			}
-
-			clients.add(new SlaveClientDto( //
-					resultElement.getFirstChildWithName(new QName(nameSpaceForSlaveDto, "streamid")).getText(), //
-					resultElement.getFirstChildWithName(new QName(nameSpaceForSlaveDto, "publicSID")).getText(), //
-					roomId, //
-					userId, //
-					resultElement.getFirstChildWithName(new QName(nameSpaceForSlaveDto, "firstName")).getText(), //
-					resultElement.getFirstChildWithName(new QName(nameSpaceForSlaveDto, "lastName")).getText(), //
-					Boolean.valueOf(resultElement.getFirstChildWithName(new QName(nameSpaceForSlaveDto,"isAVClient")).getText()).booleanValue() //
-			) //
-			);
+			SlaveClientDto slaveDto = new SlaveClientDto( //
+					getElementTextByName(resultElement, "streamid", String.class), //
+					getElementTextByName(resultElement, "publicSID", String.class), //
+					getElementTextByName(resultElement, "roomId", Long.class), //
+					getElementTextByName(resultElement, "userId", Long.class), //
+					getElementTextByName(resultElement, "firstName", String.class), //
+					getElementTextByName(resultElement, "lastName", String.class), //
+					getElementTextByName(resultElement, "AVClient", Boolean.class), //
+					getElementTextByName(resultElement, "scope", String.class), //
+					getElementTextByName(resultElement, "username", String.class), //
+					getElementTextByName(resultElement, "connectedSince", String.class)
+				); //
+			log.debug(slaveDto.toString());
+			clients.add(slaveDto);
 		}
 		return clients;
+	}
+	
+	/**
+	 * Get and cast the element's text (if there is any)
+	 * 
+	 * @param resultElement
+	 * @param elementName
+	 * @param typeObject
+	 * @return
+	 */
+	private <T> T getElementTextByName(OMElement resultElement, String elementName, Class<T> typeObject) {
+		try {
+			OMElement userIdElement = resultElement
+					.getFirstChildWithName(new QName(nameSpaceForSlaveDto, elementName));
+			if (userIdElement != null && userIdElement.getText() != null
+					&& userIdElement.getText().length() > 0) {
+				
+				String defaultValue = userIdElement.getText();
+				
+				// Either this can be directly assigned or try to find a constructor
+				// that handles it
+				if (typeObject.isAssignableFrom(defaultValue.getClass())) {
+					return typeObject.cast(defaultValue);
+				}
+				Constructor<T> c = typeObject.getConstructor(defaultValue
+						.getClass());
+				return c.newInstance(defaultValue);
+				
+			}
+		} catch (Exception err) {
+			//Catch any class cast exception, but log only
+			log.error("[getElementTextByName]", err);
+		}
+		return null;
 	}
 
 }
