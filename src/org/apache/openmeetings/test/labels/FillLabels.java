@@ -98,11 +98,9 @@ public class FillLabels {
 
 				for (Entry<Long, Fieldlanguagesvalues> entryMaster : masterLabels.entrySet()) {
 					
-					boolean isReplaced = false;
 					for (long replaceId : replaceIds) {
 						if (replaceId == entryMaster.getKey()) {
 							labelsArray.put(entryMaster.getKey(), entryMaster.getValue());
-							isReplaced = true;
 						}
 					}
 					
