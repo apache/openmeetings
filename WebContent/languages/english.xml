@@ -6031,7 +6031,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   	<value>Last ping</value>
   </string>
   <string id="1518" name="server admin section lastping info">
-  	<value>Every slave sends a ping to the master every 3 seconds (configurable). Slave lastPing must be smaller then 1 minute so that the master uses the slave. "Ping running" shows if the ping is currently running.</value>
+  	<value>Every slave sends a ping to the master every 3 seconds (configurable). Slave lastPing must be smaller then 1 minute so that the master uses the slave.</value>
   </string>
   <string id="1519" name="server admin port">
   	<value>HTTP Port</value>

@@ -25,9 +25,10 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.persistence.beans.lang.Fieldvalues;
@@ -63,9 +64,9 @@ public class FillLabels {
 	 * other label-id's will be only filled up if missing at the end of the
 	 * language file
 	 */
-	private final int[] replaceIds = {};
+	private final long[] replaceIds = { 1518L };
 
-	private final List<Fieldlanguagesvalues> masterLabels = new ArrayList<Fieldlanguagesvalues>();
+	private Map<Long, Fieldlanguagesvalues> masterLabels;
 
 	@Test
 	public void test() {
@@ -73,7 +74,7 @@ public class FillLabels {
 		try {
 
 			// Read master file
-			masterLabels.addAll(parseToLabelsArray(masterLangFile));
+			masterLabels = parseToLabelsArray(masterLangFile);
 
 			File languagesFilesFolder = new File(basePath);
 
@@ -92,39 +93,23 @@ public class FillLabels {
 						}
 					})) {
 
-				List<Fieldlanguagesvalues> labelsArray = parseToLabelsArray(file
+				Map<Long, Fieldlanguagesvalues> labelsArray = parseToLabelsArray(file
 						.getName());
 
-				for (int i = 0; i < masterLabels.size(); i++) {
+				for (Entry<Long, Fieldlanguagesvalues> entryMaster : masterLabels.entrySet()) {
+					
 					boolean isReplaced = false;
-					if (i + 1 < labelsArray.size()) {
-						for (int replaceId : replaceIds) {
-							if (replaceId == labelsArray.get(i)
-									.getFieldvalues_id().intValue()) {
-								labelsArray.set(i, masterLabels.get(i));
-								isReplaced = true;
-							}
+					for (long replaceId : replaceIds) {
+						if (replaceId == entryMaster.getKey()) {
+							labelsArray.put(entryMaster.getKey(), entryMaster.getValue());
+							isReplaced = true;
 						}
 					}
-					if (!isReplaced) {
-						if (i + 1 < labelsArray.size()) {
-							if (!labelsArray
-									.get(i)
-									.getFieldvalues_id()
-									.equals(masterLabels.get(i)
-											.getFieldvalues_id())) {
-								throw new Exception(
-										"Master and fill language has another index in labelid: "
-												+ masterLabels.get(i)
-														.getFieldvalues_id()
-												+ " Check file: "
-												+ file.getName() + " "
-												+ labelsArray.get(i).getValue());
-							}
-						} else {
-							labelsArray.add(masterLabels.get(i));
-						}
+					
+					if (!labelsArray.containsKey(entryMaster.getKey())) {
+						labelsArray.put(entryMaster.getKey(), entryMaster.getValue());
 					}
+					
 				}
 
 				OutputStream out = new FileOutputStream(basePath
@@ -147,10 +132,10 @@ public class FillLabels {
 	 * @throws FileNotFoundException
 	 * @throws DocumentException
 	 */
-	private List<Fieldlanguagesvalues> parseToLabelsArray(String fileName)
+	private Map<Long, Fieldlanguagesvalues> parseToLabelsArray(String fileName)
 			throws FileNotFoundException, DocumentException {
 
-		List<Fieldlanguagesvalues> labelsArray = new ArrayList<Fieldlanguagesvalues>();
+		Map<Long, Fieldlanguagesvalues> labelsArray = new LinkedHashMap<Long, Fieldlanguagesvalues>();
 
 		InputStream is = new FileInputStream(basePath + fileName);
 		SAXReader reader = new SAXReader();
@@ -171,7 +156,7 @@ public class FillLabels {
 			Fieldvalues fLabel = new Fieldvalues();
 			fLabel.setName(fieldName);
 			fValue.setFieldvalues(fLabel);
-			labelsArray.add(fValue);
+			labelsArray.put(fieldvalues_id, fValue);
 		}
 
 		return labelsArray;
@@ -184,7 +169,7 @@ public class FillLabels {
 	 * @return
 	 * @throws Exception
 	 */
-	private Document createDocument(List<Fieldlanguagesvalues> flvList)
+	private Document createDocument(Map<Long, Fieldlanguagesvalues> labelsArray)
 			throws Exception {
 
 		Document document = DocumentHelper.createDocument();
@@ -221,12 +206,12 @@ public class FillLabels {
 				"http://www.w3.org/2001/XMLSchema-instance"));
 		root.add(new Namespace("noNamespaceSchemaLocation", "language.xsd"));
 
-		for (Fieldlanguagesvalues flv : flvList) {
+		for (Entry<Long, Fieldlanguagesvalues> entryLabel : labelsArray.entrySet()) {
 			Element eTemp = root.addElement("string")
-					.addAttribute("id", flv.getFieldvalues_id().toString())
-					.addAttribute("name", flv.getFieldvalues().getName());
+					.addAttribute("id", entryLabel.getValue().getFieldvalues_id().toString())
+					.addAttribute("name", entryLabel.getValue().getFieldvalues().getName());
 			Element value = eTemp.addElement("value");
-			value.addText(flv.getValue());
+			value.addText(entryLabel.getValue().getValue());
 		}
 
 		return document;

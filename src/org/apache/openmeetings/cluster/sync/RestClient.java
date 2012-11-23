@@ -236,7 +236,7 @@ public class RestClient {
 			if (!loginSuccess) {
 				loginUser();
 			} else {
-				
+				 
 				Options options = new Options();
 				options.setTo(new EndpointReference(getServerServiceEndPoint()));
 				options.setProperty(Constants.Configuration.ENABLE_REST,
