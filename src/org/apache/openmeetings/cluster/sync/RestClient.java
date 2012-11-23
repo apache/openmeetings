@@ -33,6 +33,7 @@ import org.apache.axis2.Constants;
 import org.apache.axis2.addressing.EndpointReference;
 import org.apache.axis2.client.Options;
 import org.apache.axis2.client.ServiceClient;
+import org.apache.axis2.transport.http.HTTPConstants;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.conference.room.SlaveClientDto;
@@ -192,11 +193,17 @@ public class RestClient {
 	 * @throws Exception
 	 */
 	public void loginUser() throws Exception {
-		
+
 		Options options = new Options();
 		options.setTo(new EndpointReference(getUserServiceEndPoint()));
 		options.setProperty(Constants.Configuration.ENABLE_REST,
 				Constants.VALUE_TRUE);
+		int timeOutInMilliSeconds = 2000;
+		// setting timeout to 2 second should be sufficient, if the server is
+		// not available within the 3 second interval you got a problem anyway
+		options.setTimeOutInMilliSeconds(timeOutInMilliSeconds);
+		options.setProperty(HTTPConstants.SO_TIMEOUT, timeOutInMilliSeconds);
+		options.setProperty(HTTPConstants.CONNECTION_TIMEOUT, timeOutInMilliSeconds); 
 
 		ServiceClient sender = new ServiceClient();
 		sender.engageModule(new QName(Constants.MODULE_ADDRESSING)
@@ -234,6 +241,12 @@ public class RestClient {
 				options.setTo(new EndpointReference(getServerServiceEndPoint()));
 				options.setProperty(Constants.Configuration.ENABLE_REST,
 						Constants.VALUE_TRUE);
+				int timeOutInMilliSeconds = 2000;
+				// setting timeout to 2 second should be sufficient, if the server is
+				// not available within the 3 second interval you got a problem anyway
+				options.setTimeOutInMilliSeconds(timeOutInMilliSeconds);
+				options.setProperty(HTTPConstants.SO_TIMEOUT, timeOutInMilliSeconds);
+				options.setProperty(HTTPConstants.CONNECTION_TIMEOUT, timeOutInMilliSeconds); 
 
 				ServiceClient sender = new ServiceClient();
 				sender.engageModule(new QName(Constants.MODULE_ADDRESSING)
@@ -256,6 +269,12 @@ public class RestClient {
 			// Catches all errors to make sure the observer is notified that the
 			// ping was performed (even when performed badly)
 		} catch (Exception ex) {
+			
+			//Clear the list of clients if there are any for this server
+			if (this.observerInstance != null) {
+				this.observerInstance.pingComplete(server, new ArrayList<SlaveClientDto>(0));
+			}
+			
 			//flag this flow as complete
 			pingRunning = false;
 			log.error("[ping failed]", ex);
