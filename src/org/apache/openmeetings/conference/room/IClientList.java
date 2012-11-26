@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.openmeetings.data.beans.basic.SearchResult;
+import org.apache.openmeetings.persistence.beans.basic.Server;
 
 public interface IClientList {
 
@@ -44,9 +45,10 @@ public interface IClientList {
 	 * Get a client by its streamId
 	 * 
 	 * @param streamId
+	 * @param server TODO
 	 * @return
 	 */
-	public abstract RoomClient getClientByStreamId(String streamId);
+	public abstract RoomClient getClientByStreamId(String streamId, Server server);
 
 	/**
 	 * Additionally checks if the client receives sync events

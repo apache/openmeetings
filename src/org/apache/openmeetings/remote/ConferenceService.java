@@ -288,7 +288,7 @@ public class ConferenceService {
 			log.debug("getCurrentRoomClient -2- " + streamid);
 	
 			RoomClient currentClient = this.clientListManager
-					.getClientByStreamId(streamid);
+					.getClientByStreamId(streamid, null);
 	
 			Rooms room = roomDao.get(room_id);
 	

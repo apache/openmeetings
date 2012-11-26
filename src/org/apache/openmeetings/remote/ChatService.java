@@ -98,7 +98,7 @@ public class ChatService implements IPendingServiceCallback {
 	public int sendMessageWithClient(Object newMessage) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
+			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId(), null);
 			Long room_id = currentClient.getRoom_id();
 			
 			log.debug("room_id: " + room_id);
@@ -158,7 +158,7 @@ public class ChatService implements IPendingServiceCallback {
     				if (conn != null) {
     					if (conn instanceof IServiceCapableConnection) {
     						
-    						RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+    						RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId(), null);
     						
     						if (rcl == null) {
     							continue;
@@ -194,7 +194,7 @@ public class ChatService implements IPendingServiceCallback {
 	public int sendMessageWithClientByPublicSID(Object newMessage, String publicSID) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
+			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId(), null);
 			Long room_id = currentClient.getRoom_id();
 
 			log.debug("room_id: " + room_id);
@@ -223,7 +223,7 @@ public class ChatService implements IPendingServiceCallback {
 					if (conn != null) {
 						if (conn instanceof IServiceCapableConnection) {
 
-							RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId());
+							RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId(), null);
 
     						if (rcl == null) {
     							continue;
@@ -257,7 +257,7 @@ public class ChatService implements IPendingServiceCallback {
 	public List<HashMap<String,Object>> clearChat() {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
+			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId(), null);
 			Long room_id = currentClient.getRoom_id();
 			
 			Long chatroom = room_id;
@@ -283,7 +283,7 @@ public class ChatService implements IPendingServiceCallback {
 	public List<HashMap<String,Object>> getRoomChatHistory() {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
+			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId(), null);
 			Long room_id = currentClient.getRoom_id();
 			
 			log.debug("GET CHATROOM: " + room_id);
@@ -348,7 +348,7 @@ public class ChatService implements IPendingServiceCallback {
 	public int sendMessageToOverallChat(Object newMessage) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId());
+			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId(), null);
 			
 			//log.error(newMessage.getClass().getName());
 			ArrayList messageMap = (ArrayList) newMessage;

@@ -66,7 +66,7 @@ public class ClusterSlaveJob implements IRestClientObserver {
 		RestClient restClient = restClientsSessionStore.get(server.getId());
 
 		// check if any values of the server have been changed,
-		// if yes, we need a new RestClient to make sure it will relogin to the
+		// if yes, we need a new RestClient to make sure it will re-login to the
 		// changed server details
 		if (restClient != null && restClient.hasServerDetailsChanged(server)) {
 			log.debug("Server details changed, get new rest client");
@@ -116,13 +116,36 @@ public class ClusterSlaveJob implements IRestClientObserver {
 	 */
 	public void pingComplete(Server server, List<SlaveClientDto> slaveClients) {
 
-		log.debug("-- pingComplete -- For server: " + server);
+		log.debug("-- pingComplete -- For server: " + server+ " Size: "+slaveClients.size());
 
 		clientListManager.syncSlaveClientSession(server, slaveClients);
 
 		server.setLastPing(Calendar.getInstance());
 		serverDao.update(server);
 
+	}
+	
+	/**
+	 * Gets the current {@link RestClient} from the session store and then
+	 * performs a kickUser on that. It is not possible that there is no
+	 * {@link RestClient}, because if you want to kick a user from a slave, the
+	 * master <i>must</i> already have loaded the sessions from the slave, so
+	 * there logically <i>must</i> by a {@link RestClient} available that has an 
+	 * open connection to that slave / {@link Server}
+	 * 
+	 * @param serverId
+	 * @param publicSID
+	 */
+	public void kickSlaveUser(Server server, String publicSID) throws Exception {
+		
+		RestClient rClient = getRestClient(server);
+		
+		if (rClient == null) {
+			throw new Exception("No RestClient found for server " + server);
+		}
+		
+		rClient.kickUser(publicSID);
+		
 	}
 
 }

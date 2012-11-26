@@ -76,7 +76,9 @@
 	    	this.clearList();
 	    	for (var i=0;i<records.length;i++){
 	    		var tServer = "master";
+	    		var serverId = 0;
 	    		if (records[i].server != null) {
+	    			serverId = records[i].server.id;
 	    			tServer = "slave "+records[i].server.address+" ["+records[i].server.id+"]";
 	    		}
 	    	
@@ -86,6 +88,7 @@
 	                    login:records[i].roomClient.username,
                         dateConnected:parseDateToStringTime(records[i].roomClient.connectedSince),
 	                    scope:records[i].roomClient.scope,
+	                    serverId:serverId,
 	                    serverAddr:tServer
                     });
 	    	}

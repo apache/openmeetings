@@ -53,6 +53,10 @@ public class RestClient {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			RestClient.class, OpenmeetingsVariables.webAppRootKey);
+	
+	private enum Action {
+		PING, KICK_USER
+	}
 
 	/**
 	 * The observerInstance will be notified whenever a ping was completed
@@ -71,6 +75,8 @@ public class RestClient {
 	private String sessionId;
 	
 	private boolean pingRunning = false;
+
+	private String publicSID;
 	
 	private static String nameSpaceForSlaveDto = "http://room.conference.openmeetings.apache.org/xsd";
 	
@@ -126,7 +132,7 @@ public class RestClient {
 		RestClient rClient = new RestClient("127.0.0.1", 5080, "http",
 				"openmeetings", "swagner", "qweqwe");
 		try {
-			rClient.loginUser();
+			rClient.loginUser(Action.PING);
 			rClient.ping();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -192,7 +198,7 @@ public class RestClient {
 	 * 
 	 * @throws Exception
 	 */
-	public void loginUser() throws Exception {
+	public void loginUser(Action action) throws Exception {
 
 		Options options = new Options();
 		options.setTo(new EndpointReference(getUserServiceEndPoint()));
@@ -218,8 +224,89 @@ public class RestClient {
 
 		loginSuccess = loginSuccessFromResult(loginUserResult);
 
-		ping();
+		if (action == Action.PING) {
+			ping();
+		} else if (action == Action.KICK_USER) {
+			kickUserInternl();
+		}
 
+	}
+	
+	/**
+	 * sets the publicSID and removes a user from a slave host by calling a REST service
+	 */
+	public void kickUser(String publicSID) {
+		this.publicSID = publicSID;
+		kickUserInternl();
+	}
+	
+	private void kickUserInternl() {
+		try {
+			
+			if (!loginSuccess) {
+				loginUser(Action.KICK_USER);
+			}
+			
+			Options options = new Options();
+			options.setTo(new EndpointReference(getUserServiceEndPoint()));
+			options.setProperty(Constants.Configuration.ENABLE_REST,
+					Constants.VALUE_TRUE);
+			int timeOutInMilliSeconds = 2000;
+			// setting timeout to 2 second should be sufficient, if the server is
+			// not available within the 3 second interval you got a problem anyway
+			options.setTimeOutInMilliSeconds(timeOutInMilliSeconds);
+			options.setProperty(HTTPConstants.SO_TIMEOUT, timeOutInMilliSeconds);
+			options.setProperty(HTTPConstants.CONNECTION_TIMEOUT, timeOutInMilliSeconds); 
+
+			ServiceClient sender = new ServiceClient();
+			sender.engageModule(new QName(Constants.MODULE_ADDRESSING)
+					.getLocalPart());
+			sender.setOptions(options);
+			OMElement kickUserByPublicSIDResult = sender
+					.sendReceive(getPayloadMethodKickUserByPublicSID());
+			Boolean result = kickUserByPublicSIDFromResult(kickUserByPublicSIDResult);
+			
+			if (!result) {
+				throw new Exception("Could not delete user from slave host");
+			}
+
+		} catch (Exception err) {
+			log.error("[kickUser failed]", err);
+		}
+	}
+
+	private Boolean kickUserByPublicSIDFromResult(OMElement result) throws Exception {
+		QName kickUserResult = new QName(NAMESPACE_PREFIX, "return");
+
+		@SuppressWarnings("unchecked")
+		Iterator<OMElement> elements = result.getChildrenWithName(kickUserResult);
+		if (elements.hasNext()) {
+			OMElement resultElement = elements.next();
+			if (resultElement.getText().equals("true")) {
+				return true;
+			} else {
+				throw new Exception("Could not delete user from slave host, returns: "
+						+ resultElement.getText());
+			}
+		} else {
+			throw new Exception("Could not parse kickUserByPublicSID result");
+		}
+	}
+
+	private OMElement getPayloadMethodKickUserByPublicSID() throws Exception {
+		OMFactory fac = OMAbstractFactory.getOMFactory();
+		OMNamespace omNs = fac.createOMNamespace(NAMESPACE_PREFIX, "pre");
+		OMElement method = fac.createOMElement("kickUserByPublicSID", omNs);
+
+		OMElement sid = fac.createOMElement("SID", omNs);
+		sid.addChild(fac.createOMText(sid, sessionId));
+		method.addChild(sid);
+
+		OMElement publicSIDOmElement = fac.createOMElement("publicSID", omNs);
+		publicSIDOmElement.addChild(fac.createOMText(publicSIDOmElement, publicSID));
+		method.addChild(publicSIDOmElement);
+
+		return method;
 	}
 
 	/**
@@ -230,11 +317,13 @@ public class RestClient {
 	 */
 	public void ping() {
 		try {
-			//flag this flow as active
+			//flag this ping flow as active, so that the scheduler does not run multiple ping's 
+			//on the same instance, at the same time, cause a ping could take longer then the 
+			//scheduler interval, for example because of the server load
 			pingRunning = true;
 			
 			if (!loginSuccess) {
-				loginUser();
+				loginUser(Action.PING);
 			} else {
 				 
 				Options options = new Options();

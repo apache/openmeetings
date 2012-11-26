@@ -1674,7 +1674,7 @@ public class Usermanagement {
 			Long user_level = getUserLevelByID(users_id);
 
 			// admins only
-			if (authLevelManagement.checkAdminLevel(user_level)) {
+			if (authLevelManagement.checkWebServiceLevel(user_level)) {
 
 				RoomClient rcl = clientListManager
 						.getClientByPublicSID(publicSID, false);

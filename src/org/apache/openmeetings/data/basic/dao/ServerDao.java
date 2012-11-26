@@ -222,6 +222,7 @@ public class ServerDao implements IDataProviderDao<Server> {
 		s.setComment(comment);
 
 		return em.merge(s);
+		
 	}
 
 	/**

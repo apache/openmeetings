@@ -122,7 +122,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			log.debug("getCurrentRoomClient -2- " + streamid);
 
 			RoomClient currentClient = this.clientListManager
-					.getClientByStreamId(streamid);
+					.getClientByStreamId(streamid, null);
 
 			for (RoomClient rcl : clientListManager.getClientListByRoom(currentClient.getRoom_id())) {
 				if (rcl.getIsRecording()) {
@@ -156,7 +156,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 
 			IConnection current = Red5.getConnectionLocal();
 			RoomClient currentClient = this.clientListManager
-					.getClientByStreamId(current.getClient().getId());
+					.getClientByStreamId(current.getClient().getId(), null);
 			Long room_id = currentClient.getRoom_id();
 
 			Date now = new Date();
@@ -183,7 +183,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 						if (conn instanceof IServiceCapableConnection) {
 							RoomClient rcl = this.clientListManager
 									.getClientByStreamId(conn.getClient()
-											.getId());
+											.getId(), null);
 
 							// Send every user a notification that the recording did start
 							if (!rcl.getIsAVClient()) {
@@ -436,7 +436,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 						if (conn instanceof IServiceCapableConnection) {
 
 							RoomClient rcl = clientListManager.getClientByStreamId(
-											conn.getClient().getId());
+											conn.getClient().getId(), null);
 
 							// FIXME: Check if this function is really in use at
 							// the moment
@@ -546,7 +546,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			log.debug("getCurrentRoomClient -2- " + streamid);
 
 			RoomClient currentClient = this.clientListManager
-					.getClientByStreamId(streamid);
+					.getClientByStreamId(streamid, null);
 
 			log.debug("getCurrentRoomClient -#########################- "
 					+ currentClient.getRoom_id());

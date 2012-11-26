@@ -132,15 +132,11 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 
 	/*
 	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.apache.openmeetings.remote.red5.IClientList#getClientByStreamId(java
-	 * .lang.String)
+	 * @see org.apache.openmeetings.conference.room.IClientList#getClientByStreamId(java.lang.String, org.apache.openmeetings.persistence.beans.basic.Server)
 	 */
-	public synchronized RoomClient getClientByStreamId(String streamId) {
+	public synchronized RoomClient getClientByStreamId(String streamId, Server server) {
 		try {
-			String uniqueKey = ClientSessionUtil.getClientSessionKey(null,
-					streamId);
+			String uniqueKey = ClientSessionUtil.getClientSessionKey(server, streamId);
 			if (!clientList.containsKey(uniqueKey)) {
 				log.debug("Tried to get a non existing Client " + streamId);
 				return null;
@@ -558,7 +554,11 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 		List<SlaveClientDto> clients = new ArrayList<SlaveClientDto>(
 				clientList.size());
 		for (ClientSession cSession : clientList.values()) {
-			clients.add(new SlaveClientDto(cSession.getRoomClient()));
+			//Only deliver slave session, it can happen in testing phases that you configure
+			//the master as slave, then you duplicate your sessions
+			if (cSession.getServer() == null) {
+				clients.add(new SlaveClientDto(cSession.getRoomClient()));
+			}
 		}
 		return clients;
 	}

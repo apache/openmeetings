@@ -27,6 +27,7 @@
 	<attribute name="login" value="" type="string" />
 	<attribute name="dateConnected" value="" type="string" />
     <attribute name="scope" value="" type="string" />
+    <attribute name="serverId" value="0" type="number" />
     <attribute name="serverAddr" value="" type="string" />
 	
 	<turnOverTextItem text="$once{ parent.streamid }" />
@@ -48,6 +49,7 @@
                           remotecontext="$once{ canvas.thishib }" >      
             <netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
             <netparam><method name="getValue"> return parent.parent.parent.streamid; </method></netparam>
+            <netparam><method name="getValue"> return parent.parent.parent.serverId; </method></netparam>
             <handler name="ondata" args="value">
                 if ($debug) Debug.write("kickUserByStreamId: ",value);
                 //this.parent.destroy();

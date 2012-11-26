@@ -184,7 +184,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 
 				IConnection current = Red5.getConnectionLocal();
 				RoomClient currentClient = this.clientListManager
-						.getClientByStreamId(current.getClient().getId());
+						.getClientByStreamId(current.getClient().getId(), null);
 
 				if (currentClient == null) {
 					return;
@@ -228,7 +228,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 							if (conn instanceof IServiceCapableConnection) {
 								RoomClient rcl = this.clientListManager
 										.getClientByStreamId(conn.getClient()
-												.getId());
+												.getId(), null);
 								if ((rcl == null)
 										|| (rcl.getIsScreenClient() != null && rcl
 												.getIsScreenClient())) {
@@ -450,7 +450,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 				String streamid = current.getClient().getId();
 
 				RoomClient currentClient = this.clientListManager
-						.getClientByStreamId(streamid);
+						.getClientByStreamId(streamid, null);
 
 				Long room_id = currentClient.getRoom_id();
 

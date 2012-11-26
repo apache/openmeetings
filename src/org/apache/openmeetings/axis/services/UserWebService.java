@@ -1292,14 +1292,14 @@ public class UserWebService {
 	 */
 	public Boolean kickUserByPublicSID(String SID, String publicSID) {
 		try {
-			Boolean salida = false;
+			Boolean success = false;
 
-			salida = userManagement.kickUserByPublicSID(SID, publicSID);
+			success = userManagement.kickUserByPublicSID(SID, publicSID);
 
-			if (salida == null)
-				salida = false;
+			if (success == null)
+				success = false;
 
-			return salida;
+			return success;
 		} catch (Exception err) {
 			log.error("[kickUser]", err);
 		}

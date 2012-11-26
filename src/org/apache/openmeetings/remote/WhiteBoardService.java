@@ -85,7 +85,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
 			RoomClient currentClient = this.clientListManager
-					.getClientByStreamId(streamid);
+					.getClientByStreamId(streamid, null);
 			Long room_id = currentClient.getRoom_id();
 
 			log.debug("getRoomItems: " + room_id);
@@ -105,7 +105,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
 			RoomClient currentClient = this.clientListManager
-					.getClientByStreamId(streamid);
+					.getClientByStreamId(streamid, null);
 			Long room_id = currentClient.getRoom_id();
 
 			Long whiteBoardId = this.whiteBoardObjectListManagerById
@@ -124,7 +124,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
 			RoomClient currentClient = this.clientListManager
-					.getClientByStreamId(streamid);
+					.getClientByStreamId(streamid, null);
 			Long room_id = currentClient.getRoom_id();
 
 			WhiteboardObjectList whiteboardObjectList = this.whiteBoardObjectListManagerById
@@ -166,7 +166,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
 			RoomClient currentClient = this.clientListManager
-					.getClientByStreamId(streamid);
+					.getClientByStreamId(streamid, null);
 			Long room_id = currentClient.getRoom_id();
 
 			log.debug("getRoomItems: " + room_id);
@@ -218,7 +218,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
 			RoomClient currentClient = this.clientListManager
-					.getClientByStreamId(streamid);
+					.getClientByStreamId(streamid, null);
 
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
@@ -260,7 +260,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
 			RoomClient currentClient = this.clientListManager
-					.getClientByStreamId(streamid);
+					.getClientByStreamId(streamid, null);
 
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
@@ -302,7 +302,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
 			RoomClient currentClient = this.clientListManager
-					.getClientByStreamId(streamid);
+					.getClientByStreamId(streamid, null);
 
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
@@ -344,7 +344,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
 			RoomClient currentClient = this.clientListManager
-					.getClientByStreamId(streamid);
+					.getClientByStreamId(streamid, null);
 
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
@@ -384,7 +384,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
 			RoomClient currentClient = this.clientListManager
-					.getClientByStreamId(streamid);
+					.getClientByStreamId(streamid, null);
 			Long room_id = currentClient.getRoom_id();
 
 			WhiteboardSyncLockObject wSyncLockObject = new WhiteboardSyncLockObject();
@@ -419,7 +419,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
 			RoomClient currentClient = this.clientListManager
-					.getClientByStreamId(streamid);
+					.getClientByStreamId(streamid, null);
 			Long room_id = currentClient.getRoom_id();
 
 			Map<String, WhiteboardSyncLockObject> syncListRoom = this.whiteBoardObjectListManager
@@ -483,7 +483,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
 			RoomClient currentClient = this.clientListManager
-					.getClientByStreamId(streamid);
+					.getClientByStreamId(streamid, null);
 			Long room_id = currentClient.getRoom_id();
 
 			WhiteboardSyncLockObject wSyncLockObject = new WhiteboardSyncLockObject();
@@ -518,7 +518,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
 			RoomClient currentClient = this.clientListManager
-					.getClientByStreamId(streamid);
+					.getClientByStreamId(streamid, null);
 			Long room_id = currentClient.getRoom_id();
 
 			Map<String, WhiteboardSyncLockObject> syncListImage = this.whiteBoardObjectListManager

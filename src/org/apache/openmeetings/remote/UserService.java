@@ -49,6 +49,7 @@ import org.apache.openmeetings.data.user.dao.PrivateMessagesDao;
 import org.apache.openmeetings.data.user.dao.SalutationDao;
 import org.apache.openmeetings.data.user.dao.UserContactsDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.invitation.Invitations;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
@@ -58,6 +59,7 @@ import org.apache.openmeetings.persistence.beans.user.PrivateMessages;
 import org.apache.openmeetings.persistence.beans.user.Salutations;
 import org.apache.openmeetings.persistence.beans.user.UserContacts;
 import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.quartz.scheduler.ClusterSlaveJob;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.templates.RequestContactConfirmTemplate;
 import org.apache.openmeetings.templates.RequestContactTemplate;
@@ -72,8 +74,9 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
+ * Provides method to manipulate {@link Users}
  * 
- * @author swagner
+ * @author sebawagner
  * 
  */
 public class UserService {
@@ -131,6 +134,8 @@ public class UserService {
 	private Invitationmanagement invitationManagement;
 	@Autowired
 	private ServerDao serverDao;
+	@Autowired
+	private ClusterSlaveJob clusterSlaveJob;
 
 	/**
 	 * get your own user-object
@@ -539,40 +544,66 @@ public class UserService {
 		return null;
 	}
 
-	public Boolean kickUserByStreamId(String SID, String streamid) {
+	/**
+	 * kicks a user from the server, also from slaves if needed, this method is
+	 * only invoked by the connection administration UI
+	 * 
+	 * @param SID
+	 * @param streamid
+	 * @param serverId
+	 *            0 means the session is locally, otherwise we have to perform a
+	 *            REST call
+	 * @return
+	 */
+	public Boolean kickUserByStreamId(String SID, String streamid, long serverId) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			// admins only
 			if (authLevelManagement.checkAdminLevel(user_level)) {
-				RoomClient rcl = this.clientListManager
-						.getClientByStreamId(streamid);
 
-				if (rcl == null) {
+				if (serverId == 0) {
+
+					RoomClient rcl = this.clientListManager
+							.getClientByStreamId(streamid, null);
+
+					if (rcl == null) {
+						return true;
+					}
+					String scopeName = "hibernate";
+					if (rcl.getRoom_id() != null) {
+						scopeName = rcl.getRoom_id().toString();
+					}
+					IScope currentScope = this.scopeApplicationAdapter
+							.getRoomScope(scopeName);
+
+					HashMap<Integer, String> messageObj = new HashMap<Integer, String>();
+					messageObj.put(0, "kick");
+					this.scopeApplicationAdapter.sendMessageById(messageObj,
+							streamid, currentScope);
+
+					this.scopeApplicationAdapter.roomLeaveByScope(rcl,
+							currentScope, true);
+
+					return true;
+
+				} else {
+
+					Server server = serverDao.get(serverId);
+					RoomClient rcl = clientListManager.getClientByStreamId(
+							streamid, server);
+					clusterSlaveJob.kickSlaveUser(server, rcl.getPublicSID());
+					
+					// true means only the REST call is performed, it is no
+					// confirmation that the user is really kicked from the
+					// slave
 					return true;
 				}
-				String scopeName = "hibernate";
-				if (rcl.getRoom_id() != null) {
-					scopeName = rcl.getRoom_id().toString();
-				}
-				IScope currentScope = this.scopeApplicationAdapter
-						.getRoomScope(scopeName);
-
-				HashMap<Integer, String> messageObj = new HashMap<Integer, String>();
-				messageObj.put(0, "kick");
-				this.scopeApplicationAdapter.sendMessageById(messageObj,
-						streamid, currentScope);
-
-				this.scopeApplicationAdapter.roomLeaveByScope(rcl,
-						currentScope, true);
-
-				return true;
 			}
-
 		} catch (Exception err) {
 			log.error("[kickUserByStreamId]", err);
 		}
-		return null;
+		return false;
 	}
 
 	public Users updateUserSelfTimeZone(String SID, String jname) {
@@ -1680,6 +1711,18 @@ public class UserService {
 		return null;
 	}
 
+	/**
+	 * Kick a user by its publicSID.<br/>
+	 * <br/>
+	 * <i>Note:</i>
+	 * This method will not perform a call to the slave, cause this call can only be 
+	 * invoked from inside the conference room, that means all clients are on the
+	 * same server, no matter if clustered or not.
+	 * 
+	 * @param SID
+	 * @param publicSID
+	 * @return
+	 */
 	public Boolean kickUserByPublicSID(String SID, String publicSID) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);

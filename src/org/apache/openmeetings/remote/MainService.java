@@ -167,7 +167,7 @@ public class MainService implements IPendingServiceCallback {
 			log.debug("getCurrentRoomClient -2- " + streamid);
 
 			RoomClient currentClient = this.clientListManager
-					.getClientByStreamId(streamid);
+					.getClientByStreamId(streamid, null);
 			return currentClient;
 		} catch (Exception err) {
 			log.error("[getCurrentRoomClient]", err);
@@ -224,7 +224,7 @@ public class MainService implements IPendingServiceCallback {
 			Users o = null;
 
 			currentClient = clientListManager.getClientByStreamId(current
-					.getClient().getId());
+					.getClient().getId(), null);
 
 			o = userManagement.loginUserByRemoteHash(SID, remoteHashId);
 
@@ -313,7 +313,7 @@ public class MainService implements IPendingServiceCallback {
 				log.debug("Ldap Login");
 
 				currentClient = clientListManager
-						.getClientByStreamId(current.getClient().getId());
+						.getClientByStreamId(current.getClient().getId(), null);
 
 				// LDAP Loggedin Users cannot use the permanent Login Flag
 
@@ -330,7 +330,7 @@ public class MainService implements IPendingServiceCallback {
 						ldapConfig.getConfigFileName());
 			} else {
 
-				currentClient = clientListManager.getClientByStreamId(current.getClient().getId());
+				currentClient = clientListManager.getClientByStreamId(current.getClient().getId(), null);
 
 				o = userManagement.loginUser(SID, usernameOrEmail, Userpass,
 						currentClient, storePermanent);
@@ -356,7 +356,7 @@ public class MainService implements IPendingServiceCallback {
 						if (cons != null) {
 							RoomClient rcl = this.clientListManager
 									.getClientByStreamId(cons.getClient()
-											.getId());
+											.getId(), null);
 							if (rcl != null && rcl.getIsScreenClient() != null
 									&& rcl.getIsScreenClient()) {
 								// continue;
@@ -449,7 +449,7 @@ public class MainService implements IPendingServiceCallback {
 			IConnection current = Red5.getConnectionLocal();
 			String streamId = current.getClient().getId();
 			RoomClient currentClient = this.clientListManager
-					.getClientByStreamId(streamId);
+					.getClientByStreamId(streamId, null);
 
 			if (currentClient.getUser_id() != null) {
 				sessionManagement.updateUser(SID, currentClient.getUser_id());
@@ -521,7 +521,7 @@ public class MainService implements IPendingServiceCallback {
 			IConnection current = Red5.getConnectionLocal();
 			String streamId = current.getClient().getId();
 			RoomClient currentClient = this.clientListManager
-					.getClientByStreamId(streamId);
+					.getClientByStreamId(streamId, null);
 
 			currentClient.setFirstname(firstname);
 			currentClient.setLastname(lastname);
@@ -584,7 +584,7 @@ public class MainService implements IPendingServiceCallback {
 					IConnection current = Red5.getConnectionLocal();
 					String streamId = current.getClient().getId();
 					RoomClient currentClient = this.clientListManager
-							.getClientByStreamId(streamId);
+							.getClientByStreamId(streamId, null);
 
 					// Check if this User is simulated in the OpenMeetings
 					// Database
@@ -704,7 +704,7 @@ public class MainService implements IPendingServiceCallback {
 			Long users_id = sessionManagement.checkSession(SID);
 			IConnection current = Red5.getConnectionLocal();
 			RoomClient currentClient = this.clientListManager
-					.getClientByStreamId(current.getClient().getId());
+					.getClientByStreamId(current.getClient().getId(), null);
 			
 			scopeApplicationAdapter.roomLeaveByScope(currentClient,current.getScope(), false);
 			

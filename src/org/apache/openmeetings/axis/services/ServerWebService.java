@@ -196,13 +196,4 @@ public class ServerWebService {
 		}
 	}
 
-	// //sync the sessions to the masters session store
-	// clientListManager.syncSlaveClientSession(server, clients);
-	//
-	// //Update last ping
-	// Calendar cal = Calendar.getInstance();
-	// cal.setTime(new Date());
-	// server.setLastPing(cal);
-	// return serversDao.update(server, users_id).getId();
-
 }
