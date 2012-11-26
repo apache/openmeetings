@@ -475,6 +475,25 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 		}
 		return numberOfPublishingUsers;
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.apache.openmeetings.conference.room.ISharedSessionStore#cleanAllServers()
+	 */
+	public void cleanSessionsOfDeletedOrDeactivatedServer(Server server) {
+		// delete all existing client sessions by that slave, updating existing ones
+		// makes no sense, we don't know anything about the start or end date
+		// so at this point we can just remove them all and add them new
+		for (Iterator<Entry<String, ClientSession>> iter = clientList
+				.entrySet().iterator(); iter.hasNext();) {
+			Entry<String, ClientSession> entry = iter.next();
+			
+			if (entry.getValue().getServer() != null
+					&& entry.getValue().getServer().getId().equals(server.getId())) {
+				iter.remove();
+			}
+		}
+	}
 
 	/*
 	 * (non-Javadoc)

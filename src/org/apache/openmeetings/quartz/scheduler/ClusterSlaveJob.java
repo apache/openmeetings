@@ -86,7 +86,7 @@ public class ClusterSlaveJob implements IRestClientObserver {
 
 			log.debug("ClusterSlaveJob. SERVERS :: "
 					+ serverDao.getSlavesForPing().size());
-
+			
 			for (Server server : serverDao.getSlavesForPing()) {
 
 				RestClient rClient = getRestClient(server);

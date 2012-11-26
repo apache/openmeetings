@@ -28,6 +28,7 @@ import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.conference.room.ISharedSessionStore;
 import org.apache.openmeetings.data.IDataProviderDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.basic.Server;
@@ -55,6 +56,9 @@ public class ServerDao implements IDataProviderDao<Server> {
 
 	@Autowired
 	private UsersDao usersDao;
+	
+	@Autowired
+	private ISharedSessionStore clientListManager;
 
 	/**
 	 * Get a list of all available servers
@@ -203,6 +207,9 @@ public class ServerDao implements IDataProviderDao<Server> {
 		} else {
 			s.setUpdated(new Date());
 			s.setUpdatedby(usersDao.get(userId));
+			if (active != null && !active) {
+				clientListManager.cleanSessionsOfDeletedOrDeactivatedServer(s);
+			}
 		}
 		s.setName(name);
 		s.setAddress(address);
@@ -231,7 +238,8 @@ public class ServerDao implements IDataProviderDao<Server> {
 		}
 		s.setDeleted(true);
 		s = em.merge(s);
-
+		//remove any active session with this server
+		clientListManager.cleanSessionsOfDeletedOrDeactivatedServer(s);
 		return true;
 	}
 
@@ -244,6 +252,10 @@ public class ServerDao implements IDataProviderDao<Server> {
 	 */
 	public Server update(Server entity, long userId) {
 		try {
+			if (entity.getActive() != null && !entity.getActive()) {
+				clientListManager.cleanSessionsOfDeletedOrDeactivatedServer(entity);
+			}
+			
 			if (entity.getId() <= 0) {
 				entity.setInserted(new Date());
 				entity.setInsertedby(usersDao.get(userId));
@@ -262,6 +274,9 @@ public class ServerDao implements IDataProviderDao<Server> {
 	}
 
 	public Server update(Server entity) {
+		if (entity.getActive() != null && !entity.getActive()) {
+			clientListManager.cleanSessionsOfDeletedOrDeactivatedServer(entity);
+		}
 		em.merge(entity);
 		return entity;
 	}
@@ -275,6 +290,7 @@ public class ServerDao implements IDataProviderDao<Server> {
 	 */
 	public void delete(Server entity, long userId) {
 		if (entity.getId() >= 0) {
+			clientListManager.cleanSessionsOfDeletedOrDeactivatedServer(entity);
 			entity.setUpdated(new Date());
 			entity.setUpdatedby(usersDao.get(userId));
 			entity.setDeleted(true);
