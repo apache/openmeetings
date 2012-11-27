@@ -36,7 +36,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -49,7 +48,6 @@ import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
 import org.apache.openmeetings.persistence.beans.adresses.Adresses;
 import org.apache.openmeetings.persistence.beans.adresses.States;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
-import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.simpleframework.xml.Element;
@@ -232,11 +230,6 @@ public class Users implements Serializable, IDataProviderEntity {
 	@Column(name = "show_contact_data_to_contacts")
 	@Element(data = true, required = false)
 	private Boolean showContactDataToContacts;
-
-	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "server_id")
-	@Element(required = false)
-	private Server server;
 
 	public Long getUser_id() {
 		return user_id;
@@ -546,14 +539,6 @@ public class Users implements Serializable, IDataProviderEntity {
 
 	public void setShowContactDataToContacts(Boolean showContactDataToContacts) {
 		this.showContactDataToContacts = showContactDataToContacts;
-	}
-
-	public Server getServer() {
-		return server;
-	}
-
-	public void setServer(Server server) {
-		this.server = server;
 	}
 
 	public String getPhoneForSMS() {

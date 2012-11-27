@@ -84,9 +84,6 @@ public class ClusterSlaveJob implements IRestClientObserver {
 		log.debug("ClusterSlaveJob.execute");
 		try {
 
-			log.debug("ClusterSlaveJob. SERVERS :: "
-					+ serverDao.getSlavesForPing().size());
-			
 			for (Server server : serverDao.getSlavesForPing()) {
 
 				RestClient rClient = getRestClient(server);
@@ -97,6 +94,8 @@ public class ClusterSlaveJob implements IRestClientObserver {
 							+ " takes longer then the ping interval!");
 					continue;
 				}
+				
+				log.debug("ClusterSlaveJob. Ping server: " + server);
 
 				rClient.ping();
 

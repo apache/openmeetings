@@ -158,36 +158,6 @@ public class ServerDao implements IDataProviderDao<Server> {
 	}
 
 	/**
-	 * This method is necessary to automatically assign user to the server with
-	 * minimum load.
-	 * 
-	 * First of all we are trying to find servers referenced by 0 users. If all
-	 * servers are referenced by at least 1 user we are searching the first
-	 * server referenced by minimum users.
-	 * 
-	 * @return Server object referenced by the minimum user accounts.
-	 */
-	public Server getServerWithMinimumUsers() {
-		Server result = null;
-		log.debug("getServerWithMinimumUsers enter");
-		TypedQuery<Server> q = em.createNamedQuery("getServersWithNoUsers",
-				Server.class);
-		List<Server> l = q.getResultList();
-		if (l.isEmpty()) {
-			TypedQuery<Object> q1 = em.createNamedQuery(
-					"getServerWithMinimumUsers", Object.class);
-			List<Object> r = q1.getResultList();
-			if (!r.isEmpty()) {
-				// get server id from first line
-				result = get((Long) ((Object[]) r.get(0))[0]);
-			}
-		} else {
-			result = l.get(0);
-		}
-		return result;
-	}
-
-	/**
 	 * @deprecated user standard mechanism of
 	 *             {@link IDataProviderDao#update(org.apache.openmeetings.persistence.beans.OmEntity, long)}
 	 * @param id

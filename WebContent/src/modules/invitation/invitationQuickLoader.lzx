@@ -103,9 +103,9 @@
 		    }
 	    	var roomObj = canvas.thishib.currentInvitation.room;
         	hib.currentroomid = roomObj.rooms_id;
-        	if (roomObj.server != null) {
-        		canvas.rtmphostlocal = roomObj.server.address;
-	        }
+        	
+			//FIXME: Modify canvas.rtmphostlocal to point to cluster
+			
 		</method>
 		
     	<method name="login">

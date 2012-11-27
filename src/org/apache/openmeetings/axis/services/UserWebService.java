@@ -227,15 +227,8 @@ public class UserWebService {
 				Long user_id = userManagement.registerUser(username, userpass,
 						lastname, firstname, email, new Date(), street,
 						additionalname, fax, zip, states_id, town, language_id,
-						"", false, baseURL, true, // generate
-											// SIP
-											// Data
-											// if
-											// the
-											// config
-											// is
-											// enabled
-						jName_timeZone, null); //FIXME
+						"", false, baseURL, true, // generate SIP Data if the config is enabled
+						jName_timeZone);
 
 				if (user_id == null || user_id < 0) {
 					return user_id;
@@ -321,7 +314,7 @@ public class UserWebService {
 											// config
 											// is
 											// enabled
-						jNameTimeZone, null); //FIXME
+						jNameTimeZone); 
 
 				if (user_id < 0) {
 					return user_id;
@@ -412,9 +405,8 @@ public class UserWebService {
 				Long user_id = userManagement.registerUserNoEmail(username,
 						userpass, lastname, firstname, email, new Date(),
 						street, additionalname, fax, zip, states_id, town,
-						language_id, "", false, true, // generate SIP Data if
-												// the config is enabled
-						jNameTimeZone, null); //FIXME
+						language_id, "", false, true, // generate SIP Data if the config is enabled
+						jNameTimeZone);
 
 				if (user_id < 0) {
 					return user_id;

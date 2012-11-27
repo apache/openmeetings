@@ -39,7 +39,6 @@ import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.conference.dao.RoomModeratorsDao;
 import org.apache.openmeetings.data.user.Organisationmanagement;
 import org.apache.openmeetings.data.user.dao.UsersDao;
-import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.rooms.RoomTypes;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms;
@@ -677,7 +676,7 @@ public class Roommanagement {
 			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, Boolean hideFilesExplorer, 
 			Boolean hideActionsMenu, Boolean hideScreenSharing, Boolean hideWhiteboard,
 			Boolean showMicrophoneStatus, Boolean chatModerated, boolean chatOpened
-			, boolean filesOpened, Server server) {
+			, boolean filesOpened) {
 
 		try {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
@@ -722,7 +721,6 @@ public class Roommanagement {
 				r.setChatModerated(chatModerated);
 				r.setChatOpened(chatOpened);
 				r.setFilesOpened(filesOpened);
-				r.setServer(server);
 				
 				// handle SIP Issues
 				OpenXGReturnObject openXGReturnObject = openXGHttpClient
@@ -1669,8 +1667,7 @@ public class Roommanagement {
 						false, //showMicrophoneStatus
 						false, // chatModerated
 						false, //chatOpened
-						false, //filesOpened
-						null //server
+						false //filesOpened
 						);
 
 				if (rooms_id != null) {

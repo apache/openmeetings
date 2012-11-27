@@ -24,14 +24,12 @@ import java.util.List;
 
 import org.apache.openmeetings.data.basic.FieldLanguageDaoImpl;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
-import org.apache.openmeetings.data.basic.dao.ServerDao;
 import org.apache.openmeetings.data.user.Organisationmanagement;
 import org.apache.openmeetings.data.user.dao.SalutationDao;
 import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.adresses.States;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
-import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
@@ -364,10 +362,6 @@ public class UserForm extends AdminBaseForm<Users> {
 				new ChoiceRenderer<Organisation_Users>("organisation.name",
 						"organisation.organisation_id"));
 		add(orgChoiceList);
-
-		add(new DropDownChoice<Server>("server", Application.getBean(
-				ServerDao.class).getServerList(),
-				new ChoiceRenderer<Server>("name", "id")));
 
 		final String field1160 = WebSession.getString(1160); // 1160 everybody
 		final String field1168 = WebSession.getString(1168); // 1168 contact

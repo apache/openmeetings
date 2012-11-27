@@ -70,7 +70,6 @@
 		this.chatModerated.setValue(false);
 		this.chatOpened.setValue(false);
 		this.filesOpened.setValue(false);
-		this.server.selectItem(this.server.firstItem);
 	</handler>
 	
     <handler name="ondelete" >
@@ -232,12 +231,6 @@
 			this.chatModerated.setValue(obj.chatModerated != null && obj.chatModerated);
             
             this._listRoomModerators.getRoomModeratorsByRoomId.doCall();
-            
-            if (this.server.firstItem == 0 && obj.server != null) {
-	            this.server.idToSelect = obj.server.id;
-	        } else {
-           		this.server.selectItem(obj.server != null ? obj.server.id : this.server.firstItem);
-           	}
         ]]>
     </method>
 	
@@ -337,7 +330,6 @@
             
             this.sendObject["showMicrophoneStatus"] = parent.showMicrophoneStatus.getValue();
 			this.sendObject["chatModerated"] = parent.chatModerated.getValue();
-            this.sendObject["serverId"] = parent.server.getValue();
 			this.sendObject["chatOpened"] = parent.chatOpened.getValue();
 			this.sendObject["filesOpened"] = parent.filesOpened.getValue();
             
@@ -386,6 +378,7 @@
 	            	this.addItem(14,14);
 	            	this.addItem(16,16);
                     this.addItem(25,25);
+                    this.addItem(32,32);
                     this.addItem(50,50);
                     this.addItem(100,100);
                     this.addItem(150,150);
@@ -757,9 +750,6 @@
     
     <labelText labelid="1308" x="400" y="722" width="270" />                 
         <customEdittext name="ownerId" x="520" y="722" width="180" />      
-                
-    <labelText labelid="1502" x="400" y="752" width="270" />
-        <serverCombobox name="server" width="180" y="752" x="520" editable="false" fontsize="11"/>
                 
     <view x="400" y="1400" />    
     

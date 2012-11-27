@@ -615,8 +615,8 @@ public class ImportInitvalues {
 					false, // showMicrophoneStatus
 					false, // chatModerated
 					false, // chatOpened
-					false, // filesOpened
-					null);
+					false // filesOpened
+					);
 
 			roommanagement.addRoom(3, "public Conference Room", conference_Id,
 					"", new Long(32), true, null, false, false, null, false,
@@ -631,8 +631,8 @@ public class ImportInitvalues {
 					false, // showMicrophoneStatus
 					false, // chatModerated
 					false, // chatOpened
-					false, // filesOpened
-					null);
+					false // filesOpened
+					);
 
 			roommanagement.addRoom(3, "public Video Only Room", conference_Id,
 					"", new Long(32), true, null, false, false, null, false,
@@ -647,8 +647,8 @@ public class ImportInitvalues {
 					false, // showMicrophoneStatus
 					false, // chatModerated
 					false, // chatOpened
-					false, // filesOpened
-					null);
+					false // filesOpened
+					);
 
 			roommanagement.addRoom(3, "public Video And Whiteboard Room",
 					conference_Id, "", new Long(32), true, null, false, false,
@@ -663,8 +663,8 @@ public class ImportInitvalues {
 					false, // showMicrophoneStatus
 					false, // chatModerated
 					false, // chatOpened
-					false, // filesOpened
-					null);
+					false // filesOpened
+					);
 
 			roommanagement.addRoom(3, "public Restricted Room", restricted_Id,
 					"", new Long(100), true, null, false, false, null, false,
@@ -679,8 +679,8 @@ public class ImportInitvalues {
 					false, // showMicrophoneStatus
 					false, // chatModerated
 					false, // chatOpened
-					false, // filesOpened
-					null);
+					false // filesOpened
+					);
 
 			roommanagement.addRoom(3, "restricted room with micro option set",
 					restricted_Id, "", new Long(100), true, null, false, false,
@@ -695,8 +695,8 @@ public class ImportInitvalues {
 					true, // showMicrophoneStatus
 					false, // chatModerated
 					false, // chatOpened
-					false, // filesOpened
-					null);
+					false // filesOpened
+					);
 
 			roommanagement.addRoom(3, "conference room with micro option set",
 					conference_Id, "", new Long(32), true, null, false, false,
@@ -711,8 +711,8 @@ public class ImportInitvalues {
 					true, // showMicrophoneStatus
 					false, // chatModerated
 					false, // chatOpened
-					false, // filesOpened
-					null);
+					false // filesOpened
+					);
 
 			long room2 = roommanagement.addRoom(3, "private Conference Room",
 					conference_Id, "", new Long(32), false, null, false, false,
@@ -727,8 +727,8 @@ public class ImportInitvalues {
 					false, // showMicrophoneStatus
 					false, // chatModerated
 					false, // chatOpened
-					false, // filesOpened
-					null);
+					false // filesOpened
+					);
 
 			roommanagement.addRoomToOrganisation(3, room2, 1);
 
@@ -757,7 +757,7 @@ public class ImportInitvalues {
 					Arrays.asList(organisation_id), "phone", false, "", false,
 					"", "", "", false,
 					omTimeZoneDaoImpl.getOmTimeZoneByIcal(ical_timeZone),
-					false, "", "", false, true, null);
+					false, "", "", false, true);
 
 			log.debug("Installation - User Added user-Id " + user_id);
 

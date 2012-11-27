@@ -705,8 +705,7 @@ public class LdapLoginManagement {
 					"", //userOffers
 					"", //userSearchs
 					false, //showContactData
-					true, //showContactDataToContacts
-					null //FIXME SERVER
+					true //showContactDataToContacts
 					);
 
 		} catch (Exception e) {

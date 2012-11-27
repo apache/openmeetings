@@ -33,7 +33,6 @@ import org.apache.openmeetings.conference.room.IClientList;
 import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
-import org.apache.openmeetings.data.basic.dao.ServerDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.data.conference.RoomDAO;
@@ -82,8 +81,6 @@ public class ConferenceService {
 	private TimezoneUtil timezoneUtil;
 	@Autowired
 	private IClientList clientListManager = null;
-	@Autowired
-	private ServerDao serverDao;
 
 	/**
 	 * ( get a List of all availible Rooms of this organisation
@@ -498,49 +495,6 @@ public class ConferenceService {
 	/**
 	 * 
 	 * @param SID
-	 * @param name
-	 * @param roomtypes_id
-	 * @deprecated
-	 * @return
-	 */
-	// public Long addRoomPublic(String SID, String name, long roomtypes_id){
-	// Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-	// Long User_level = userManagement.getUserLevelByID(users_id);
-	// return roommanagement.addRoom(User_level, name,
-	// roomtypes_id,"", new Long(4), true,null,
-	// 290, 280, 2, 2,
-	// 400,
-	// true, 296, 2, 592, 660,
-	// true, 2, 284, 310, 290, false, false, null);
-	// }
-
-	/**
-	 * 
-	 * @param SID
-	 * @param organisation_id
-	 * @param name
-	 * @param roomtypes_id
-	 * @param ispublic
-	 * @deprecated
-	 * @return
-	 */
-	// public Long addRoomOrganisation(String SID, long organisation_id, String
-	// name, long roomtypes_id, boolean ispublic){
-	// Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-	// long User_level = userManagement.getUserLevelByID(users_id);
-	// Long rooms_id = roommanagement.addRoom(User_level, name,
-	// roomtypes_id,"", new Long(4), ispublic, null,
-	// 290, 280, 2, 2,
-	// 400,
-	// true, 296, 2, 592, 660,
-	// true, 2, 284, 310, 290, false, false, null);
-	// return roommanagement.addRoomToOrganisation(User_level,
-	// rooms_id, organisation_id);
-	// }
-
-	/**
-	 * 
-	 * @param SID
 	 * @param argObject
 	 * @return
 	 */
@@ -616,8 +570,7 @@ public class ConferenceService {
 								Boolean.valueOf(argObjectMap.get("showMicrophoneStatus").toString()),
 								Boolean.valueOf(argObjectMap.get("chatModerated").toString()),
 								Boolean.valueOf(argObjectMap.get("chatOpened").toString()),
-								Boolean.valueOf(argObjectMap.get("filesOpened").toString()),
-								null
+								Boolean.valueOf(argObjectMap.get("filesOpened").toString())
 						);
 			} else if (rooms_id > 0) {
 				roomId = roommanagement.updateRoom(
@@ -672,21 +625,7 @@ public class ConferenceService {
 								Boolean.valueOf(argObjectMap.get("filesOpened").toString())
 								);
 			}
-			long serverId = -1;
-			try {
-				serverId = Long.parseLong(argObjectMap.get("serverId").toString());
-			} catch (NumberFormatException nfe) {
-				//noop expected;
-			}
-			if (roomId > -1 && serverId > -1) {
-				try {
-					Rooms room = roomDao.get(roomId);
-					room.setServer(serverDao.get(serverId));
-					roomDao.update(room, users_id);
-				} catch (Exception e) {
-					log.error("Error while setting server.");
-				}
-			}
+			
 			return roomId;
 
 		} catch (Exception e) {

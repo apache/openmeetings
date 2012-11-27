@@ -83,7 +83,6 @@ import org.apache.openmeetings.persistence.beans.adresses.States;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
-import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentCategory;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentReminderTyps;
@@ -297,13 +296,6 @@ public class BackupImportController extends AbstractUploadController {
 				u.setUser_id(null);
 				Long actualNewUserId = userManagement.addUserBackup(u);
 				usersMap.put(userId, actualNewUserId);
-				Server us = u.getServer();
-				if (us != null) {
-					Server s = serverDaoImpl.getServerByAddress(us.getAddress());
-					s.setName(us.getName());
-					s.setAddress(us.getAddress());
-					serverDaoImpl.update(s, 1L);
-				}
 			}
 		}
 
@@ -335,13 +327,6 @@ public class BackupImportController extends AbstractUploadController {
 				
 				for (RoomModerators rm : r.getModerators()) {
 					roomModeratorsDao.addRoomModeratorByObj(rm);
-				}
-				Server us = r.getServer();
-				if (us != null) {
-					Server s = serverDaoImpl.getServerByAddress(us.getAddress());
-					s.setName(us.getName());
-					s.setAddress(us.getAddress());
-					serverDaoImpl.update(s, 1L);
 				}
 			}
 		}

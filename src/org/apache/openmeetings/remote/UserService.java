@@ -432,7 +432,7 @@ public class UserService {
 								.booleanValue(),
 						Boolean.valueOf(
 								argObjectMap.get("showContactDataToContacts")
-										.toString()).booleanValue(), null);
+										.toString()).booleanValue());
 			} else {
 				userId = userManagement.updateUser(
 						user_level,
@@ -487,23 +487,9 @@ public class UserService {
 								argObjectMap.get("showContactDataToContacts")
 										.toString()).booleanValue());
 			}
-			long serverId = -1;
-			try {
-				serverId = Long.parseLong(argObjectMap.get("serverId")
-						.toString());
-			} catch (NumberFormatException nfe) {
-				// noop expected;
-			}
-			if (userId > -1 && serverId > -1) {
-				try {
-					Users user = userManagement.getUserById(userId);
-					user.setServer(serverDao.get(serverId));
-					userManagement.updateUser(user);
-				} catch (Exception e) {
-					log.error("Error while setting server.");
-				}
-			}
+
 			return userId;
+			
 		} catch (Exception ex) {
 			log.error("[saveOrUpdateUser]: ", ex);
 		}
@@ -1051,8 +1037,8 @@ public class UserService {
 							false, // showMicrophoneStatus
 							false, // chatModerated
 							false, // chatOpened
-							false, // filesOpened
-							from.getServer());
+							false // filesOpened
+							);
 
 					room = roomDao.get(room_id);
 

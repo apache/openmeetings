@@ -821,7 +821,7 @@ public class MainService implements IPendingServiceCallback {
 							.longValue(), regObject.get("town").toString(),
 					Long.valueOf(regObject.get("language_id").toString())
 							.longValue(), "", false, baseURL, true,
-					regObject.get("jNameTimeZone").toString(), null);
+					regObject.get("jNameTimeZone").toString());
 		} catch (Exception ex) {
 			log.error("registerUserByObject", ex);
 		}
@@ -859,7 +859,7 @@ public class MainService implements IPendingServiceCallback {
 			long states_id, String town, long language_id, String phone) {
 		return userManagement.registerUser(Username, Userpass, lastname,
 				firstname, email, age, street, additionalname, fax, zip,
-				states_id, town, language_id, phone, false, "", true, "", null);
+				states_id, town, language_id, phone, false, "", true, "");
 	}
 
 	/**

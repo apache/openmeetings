@@ -36,14 +36,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.openjpa.persistence.ElementDependent;
 import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
-import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -162,12 +160,6 @@ public class Rooms implements Serializable, IDataProviderEntity {
 	@Element(data = true, required = false)
 	private Boolean allowRecording; // Show or show not the recording option in
 									// a conference room
-
-	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "server_id")
-	@Element(required = false)
-	private Server server;
-
 	/**
 	 * Layout of Room
 	 */
@@ -491,14 +483,6 @@ public class Rooms implements Serializable, IDataProviderEntity {
 
 	public void setShowMicrophoneStatus(Boolean showMicrophoneStatus) {
 		this.showMicrophoneStatus = showMicrophoneStatus;
-	}
-
-	public Server getServer() {
-		return server;
-	}
-
-	public void setServer(Server server) {
-		this.server = server;
 	}
 
 	public List<RoomModerators> getModerators() {

@@ -118,14 +118,6 @@
 			<value>3000</value>
 		</property>
 	</bean>	
-	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-		<property name="triggers">
-			<list>
-				<ref local="triggerClusterSlaveJob" />
-			</list>
-		</property>
-	</bean>
-	
 		
 	<bean id="openmeetings.SessionClearJob" class="org.apache.openmeetings.quartz.scheduler.SessionClearJob" />
 	<bean id="sessionClearJob"
@@ -200,12 +192,14 @@
 			<value>1800000</value> <!--  30 minutes -->
 		</property>
 	</bean>
+	
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
 				<ref local="triggerSessionClear" />
 				<ref local="triggerMeetingReminder" />
 				<ref local="triggerTestSetupCleanup" />
+				<ref local="triggerClusterSlaveJob" />
 			</list>
 		</property>
 	</bean>
