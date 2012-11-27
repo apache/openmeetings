@@ -45,7 +45,19 @@ import org.junit.Test;
 /**
  * Syncs all labels from a given master language file to all language files You
  * can also specify some labels that are overwritten from the master file to all
- * other files
+ * other files.<br/>
+ * <br/>
+ * It will read first the masterLangFile and then all other XML files and fill
+ * it. Practically I have put "english.xml" in the masterLangFile, so you can
+ * add new labels to the english.xml, run the test, refresh Eclipse and all
+ * other lang files should have the new label(s) too.<br/>
+ * <br/>
+ * It is also possible to replace existing other labels, just see the array
+ * variable: replaceIds. All Ids, in that array will be synced from the
+ * masterLangFile to all other languages.<br/>
+ * <br/>
+ * The Junit test also does some tests, for example it fails if it detects
+ * duplicate labelid's.<br/>
  * 
  * @author sebawagner
  * 
