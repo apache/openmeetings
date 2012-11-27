@@ -401,7 +401,6 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 		// FIXME: Enhance performance by using multiple lists
 		for (RoomClient rcl : currentClients) {
 			if (rcl.getIsMod()) {
-				log.debug("found client who is the Moderator: " + rcl);
 				rclList.add(rcl);
 			}
 		}
@@ -536,12 +535,6 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 
 		}
 
-		log.debug("Session 3 Length: " + clientList.size());
-
-		for (ClientSession cSession : clientList.values()) {
-			log.warn("cSession: " + cSession.getServer() + " cSession RCL "
-					+ cSession.getRoomClient());
-		}
 	}
 
 	/*
