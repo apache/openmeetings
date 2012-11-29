@@ -1673,7 +1673,7 @@ public class Usermanagement {
 			if (authLevelManagement.checkWebServiceLevel(user_level)) {
 
 				RoomClient rcl = clientListManager
-						.getClientByPublicSID(publicSID, false);
+						.getClientByPublicSID(publicSID, false, null);
 
 				if (rcl == null) {
 					return true;

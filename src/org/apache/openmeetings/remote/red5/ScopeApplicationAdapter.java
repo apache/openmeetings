@@ -140,16 +140,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 			ScopeApplicationAdapter.initComplete = true;
 
-			clientListManager.removeAllClients();
-
-			// OpenXGHttpClient.getInstance().openSIPgUserCreateTest();
-			// OpenXGWrapperClient.getInstance().testConnection();
-			// OpenXGClient.getInstance().testConnection();
-			// ServerSocketMinaProcess serverSocketMinaProcess = new
-			// ServerSocketMinaProcess();
-
-			// serverSocketMinaProcess.doInitSocket();
-
 		} catch (Exception err) {
 			log.error("[appStart]", err);
 		}
@@ -239,7 +229,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				}
 				
 				if (changed) {
-					clientListManager.updateClientByStreamId(rc.getStreamid(), rc);
+					clientListManager.updateClientByStreamId(rc.getStreamid(), rc, false);
 					
 					if (!rc.isStartStreaming() && !rc.isStartRecording() && !rc.isStreamPublishStarted()) {
 						returnMap.put("result", "stopAll");
@@ -323,7 +313,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 						"organization_id").toString()));
 
 				this.clientListManager.updateClientByStreamId(current
-						.getClient().getId(), currentClient);
+						.getClient().getId(), currentClient, false);
 
 				Map returnMap = new HashMap();
 				returnMap.put("alreadyPublished", false);
@@ -355,7 +345,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 				RoomClient currentScreenUser = this.clientListManager
 						.getClientByPublicSID(currentClient
-								.getStreamPublishName(), false);
+								.getStreamPublishName(), false, null);
 
 				currentClient.setFirstname(currentScreenUser.getFirstname());
 				currentClient.setLastname(currentScreenUser.getLastname());
@@ -363,7 +353,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				// This is duplicated, but its not sure that in the meantime
 				// somebody requests this Client Object Info
 				this.clientListManager.updateClientByStreamId(current
-						.getClient().getId(), currentClient);
+						.getClient().getId(), currentClient, false);
 
 				if (startStreaming) {
 					returnMap.put("modus", "startStreaming");
@@ -444,7 +434,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				.getClientByStreamId(current.getClient().getId(), null);
 		currentClient.setIsAVClient(false);
 		clientListManager.updateClientByStreamId(current.getClient().getId(),
-				currentClient);
+				currentClient, false);
 		return currentClient.getPublicSID();
 	}
 
@@ -463,7 +453,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			}
 			currentClient.setPublicSID(newPublicSID);
 			this.clientListManager.updateClientByStreamId(current.getClient()
-					.getId(), currentClient);
+					.getId(), currentClient, false);
 			return true;
 		} catch (Exception err) {
 			log.error("[overwritePublicSID]", err);
@@ -691,13 +681,13 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				currentClient.setScreenPublishStarted(true);
 
 				this.clientListManager.updateClientByStreamId(current
-						.getClient().getId(), currentClient);
+						.getClient().getId(), currentClient, false);
 			}
 			//If its an audio/video client then send the session object with the full 
 			//data to everybody
 			else if (currentClient.getIsAVClient()) {
 				clientObjectSendToSync = this.clientListManager.getClientByPublicSID(
-											currentClient.getPublicSID(), false);
+											currentClient.getPublicSID(), false, null);
 			}
 			
 			log.debug("newStream SEND: "+currentClient);
@@ -915,10 +905,8 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 			log.debug("*..*addModerator publicSID: " + publicSID);
 
-			// String streamid = current.getClient().getId();
-
 			RoomClient currentClient = this.clientListManager
-					.getClientByPublicSID(publicSID, false);
+					.getClientByPublicSID(publicSID, false, null);
 
 			if (currentClient == null) {
 				return -1L;
@@ -928,7 +916,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			currentClient.setIsMod(true);
 			// Put the mod-flag to true for this client
 			this.clientListManager.updateClientByStreamId(
-					currentClient.getStreamid(), currentClient);
+					currentClient.getStreamid(), currentClient, false);
 
 			List<RoomClient> currentMods = this.clientListManager
 					.getCurrentModeratorByRoom(room_id);
@@ -1011,7 +999,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			// String streamid = current.getClient().getId();
 
 			RoomClient currentClient = this.clientListManager
-					.getClientByPublicSID(publicSID, false);
+					.getClientByPublicSID(publicSID, false, null);
 
 			if (currentClient == null) {
 				return -1L;
@@ -1021,7 +1009,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			currentClient.setIsMod(false);
 			// Put the mod-flag to true for this client
 			this.clientListManager.updateClientByStreamId(
-					currentClient.getStreamid(), currentClient);
+					currentClient.getStreamid(), currentClient, false);
 
 			List<RoomClient> currentMods = this.clientListManager
 					.getCurrentModeratorByRoom(room_id);
@@ -1070,7 +1058,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			// String streamid = current.getClient().getId();
 
             RoomClient currentClient = this.clientListManager
-					.getClientByPublicSID(publicSID, false);
+					.getClientByPublicSID(publicSID, false, null);
 
 			if (currentClient == null) {
 				return -1L;
@@ -1081,7 +1069,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
             // Put the mod-flag to true for this client
 		    this.clientListManager.updateClientByStreamId(
-		    		currentClient.getStreamid(), currentClient);
+		    		currentClient.getStreamid(), currentClient, false);
 		    
 			// Notify all clients of the same scope (room)
 			Collection<Set<IConnection>> conCollection = current.getScope()
@@ -1128,7 +1116,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			// String streamid = current.getClient().getId();
 
 			RoomClient currentClient = this.clientListManager
-					.getClientByPublicSID(publicSID, false);
+					.getClientByPublicSID(publicSID, false, null);
 
 			if (currentClient == null) {
 				return -1L;
@@ -1137,7 +1125,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			// Put the mod-flag to true for this client
 			currentClient.setMicMuted(false);
 			this.clientListManager.updateClientByStreamId(
-					currentClient.getStreamid(), currentClient);
+					currentClient.getStreamid(), currentClient, false);
 
 			// Notify all clients of the same scope (room)
 			Collection<Set<IConnection>> conCollection = current.getScope()
@@ -1156,7 +1144,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 							if (rcl != currentClient) {
 								rcl.setMicMuted(true);
 								this.clientListManager.updateClientByStreamId(
-										rcl.getStreamid(), rcl);
+										rcl.getStreamid(), rcl, false);
 							}
 							log.debug("Send Flag to Client: "
 									+ rcl.getUsername());
@@ -1183,14 +1171,14 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			log.debug("*..*switchMicMuted publicSID: " + publicSID);
 
 			RoomClient currentClient = this.clientListManager
-					.getClientByPublicSID(publicSID, false);
+					.getClientByPublicSID(publicSID, false, null);
 			if (currentClient == null) {
 				return -1L;
 			}
 
 			currentClient.setMicMuted(mute);
 			this.clientListManager.updateClientByStreamId(
-					currentClient.getStreamid(), currentClient);
+					currentClient.getStreamid(), currentClient, false);
 
 			HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
 			newMessage.put(0, "updateMuteStatus");
@@ -1205,7 +1193,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
     public synchronized Boolean getMicMutedByPublicSID(String publicSID) {
         try {
-			RoomClient currentClient = this.clientListManager.getClientByPublicSID(publicSID, false);
+			RoomClient currentClient = this.clientListManager.getClientByPublicSID(publicSID, false, null);
 			if (currentClient == null) {
 				return true;
 			}
@@ -1236,7 +1224,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		try {
 
 			RoomClient currentClient = this.clientListManager
-					.getClientByPublicSID(publicSID, false);
+					.getClientByPublicSID(publicSID, false, null);
 
 			List<RoomClient> currentModList = this.clientListManager
 					.getCurrentModeratorByRoom(currentClient.getRoom_id());
@@ -1274,7 +1262,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 					.getClientByStreamId(streamid, null);
 			currentClient.setBroadCastID(broadCastCounter++);
 			this.clientListManager.updateClientByStreamId(streamid,
-					currentClient);
+					currentClient, false);
 			return currentClient.getBroadCastID();
 		} catch (Exception err) {
 			log.error("[getBroadCastId]", err);
@@ -1456,7 +1444,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			currentClient.setIsSuperModerator(isSuperModerator);
 
 			this.clientListManager.updateClientByStreamId(streamid,
-					currentClient);
+					currentClient, true);
 
             Rooms room = roomDao.get(room_id);
             if (room.getShowMicrophoneStatus()) {
@@ -1475,7 +1463,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			log.debug("##### setRoomValues : " + currentClient);
 			
 			// Check for Moderation LogicalRoom ENTER
-			List<RoomClient> clientListRoom = clientListManager.getRoomClients(room_id);
+			List<RoomClient> clientListRoom = clientListManager.getClientListByRoom(room_id);
 
 			// appointed meeting or moderated Room? => Check Max Users first
 			if (room.getNumberOfPartizipants() != null
@@ -1507,7 +1495,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 						// Update the Client List
 						this.clientListManager.updateClientByStreamId(streamid,
-								currentClient);
+								currentClient, false);
 
 						List<RoomClient> modRoomList = this.clientListManager
 								.getCurrentModeratorByRoom(currentClient.getRoom_id());
@@ -1540,7 +1528,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 							// Update the Client List
 							this.clientListManager.updateClientByStreamId(
-									streamid, currentClient);
+									streamid, currentClient, false);
 
 							List<RoomClient> modRoomList = this.clientListManager
 									.getCurrentModeratorByRoom(currentClient
@@ -1565,7 +1553,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 				// Update the Client List
 				this.clientListManager.updateClientByStreamId(streamid,
-						currentClient);
+						currentClient, false);
 
 			} else {
 
@@ -1607,7 +1595,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 								// Update the Client List
 								this.clientListManager.updateClientByStreamId(
-										streamid, currentClient);
+										streamid, currentClient, false);
 
 								List<RoomClient> modRoomList = this.clientListManager
 										.getCurrentModeratorByRoom(currentClient
@@ -1621,7 +1609,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 								moderator_set = true;
 								this.clientListManager.updateClientByStreamId(
-										streamid, currentClient);
+										streamid, currentClient, false);
 								break;
 							} else {
 								log.debug("User "
@@ -1629,7 +1617,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 										+ " is NOT moderator due to flag in MeetingMember record");
 								currentClient.setIsMod(false);
 								this.clientListManager.updateClientByStreamId(
-										streamid, currentClient);
+										streamid, currentClient, false);
 								break;
 							}
 						} else {
@@ -1649,7 +1637,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 							+ " could not be found as MeetingMember -> definitely no moderator");
 					currentClient.setIsMod(false);
 					this.clientListManager.updateClientByStreamId(streamid,
-							currentClient);
+							currentClient, false);
 				} else {
 					// if current user is part of the member list, but moderator
 					// couldn't be retrieved : first come, first draw!
@@ -1659,7 +1647,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 						// Update the Client List
 						this.clientListManager.updateClientByStreamId(streamid,
-								currentClient);
+								currentClient, false);
 
 						List<RoomClient> modRoomList = this.clientListManager
 								.getCurrentModeratorByRoom(currentClient
@@ -1673,7 +1661,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 						syncMessageToCurrentScope("setNewModeratorByList", modRoomList, false);
 						
 						this.clientListManager.updateClientByStreamId(streamid,
-								currentClient);
+								currentClient, false);
 					}
 				}
 
@@ -1749,7 +1737,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				currentClient.setPicture_uri(us.getPictureuri());
 			}
 			this.clientListManager.updateClientByStreamId(streamid,
-					currentClient);
+					currentClient, false);
 			return currentClient;
 		} catch (Exception err) {
 			log.error("[setUsername]", err);
@@ -1799,7 +1787,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				currentClient.setPicture_uri(us.getPictureuri());
 			}
 			this.clientListManager.updateClientByStreamId(streamid,
-					currentClient);
+					currentClient, false);
 			return currentClient;
 		} catch (Exception err) {
 			log.error("[setUsername]", err);
@@ -2507,7 +2495,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 			// Get Room Id to send it to the correct Scope
 			RoomClient currentClient = this.clientListManager
-					.getClientByPublicSID(publicSID, false);
+					.getClientByPublicSID(publicSID, false, null);
 
 			if (currentClient == null) {
 				throw new Exception(
@@ -2580,7 +2568,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 			// Get Room Id to send it to the correct Scope
 			RoomClient currentClient = this.clientListManager
-					.getClientByPublicSID(publicSID, false);
+					.getClientByPublicSID(publicSID, false, null);
 
 			if (currentClient == null) {
 				currentClient = this.clientListManager
@@ -2715,7 +2703,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			// later
 			current_rcl.setIsRecording(true);
 			this.clientListManager.updateClientByStreamId(current.getClient()
-					.getId(), current_rcl);
+					.getId(), current_rcl, false);
 
 			Map<String, String> interviewStatus = new HashMap<String, String>();
 			interviewStatus.put("action", "start");
@@ -2833,7 +2821,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 							// Reset the Recording Flag to Record all
 							// Participants that enter later
 							this.clientListManager.updateClientByStreamId(conn
-									.getClient().getId(), rcl);
+									.getClient().getId(), rcl, false);
 
 							found = true;
 						}
@@ -2961,7 +2949,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
         String newNumber = "("+Integer.toString(roommanagement.getSipConferenceMembersNumber(currentClient.getRoom_id())-1)+")";
         if(!newNumber.equals(currentClient.getLastname())) {
             currentClient.setLastname(newNumber);
-            this.clientListManager.updateClientByStreamId(streamid, currentClient);
+            this.clientListManager.updateClientByStreamId(streamid, currentClient, false);
             log.debug("updateSipTransport: {}, {}, {}, {}", new Object[]{currentClient.getPublicSID(),
                     currentClient.getRoom_id(), currentClient.getFirstname(), currentClient.getLastname()});
             sendMessageWithClient(new String[]{"personal",currentClient.getFirstname(),currentClient.getLastname()});
@@ -3009,7 +2997,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
         currentClient.setAvsettings("av");
         currentClient.setVWidth(120);
         currentClient.setVHeight(90);
-        this.clientListManager.updateClientByStreamId(streamid, currentClient);
+        this.clientListManager.updateClientByStreamId(streamid, currentClient, false);
 
         Collection<Set<IConnection>> conCollection = current
                 .getScope().getConnections();

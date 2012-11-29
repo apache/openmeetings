@@ -100,8 +100,8 @@ public class ServerDao implements IDataProviderDao<Server> {
 	 * 
 	 * @return
 	 */
-	public List<Server> getSlavesForPing() {
-		return em.createNamedQuery("getSlavesForPing", Server.class)
+	public List<Server> getActiveServers() {
+		return em.createNamedQuery("getActiveServers", Server.class)
 				.getResultList();
 	}
 

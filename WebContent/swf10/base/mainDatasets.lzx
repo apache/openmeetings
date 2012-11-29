@@ -41,6 +41,10 @@
     </handler>
 </dataset>
 
+<method name="reloadConfig">
+	
+</method>
+
 <!-- get values from config.xml -->
 <dataset type="http" name="mainTheme" request="false" ondata="canvas.myinit()">
     <method name="loadTheme">

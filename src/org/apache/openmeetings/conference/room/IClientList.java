@@ -23,18 +23,18 @@ import java.util.List;
 
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.persistence.beans.basic.Server;
+import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 
 public interface IClientList {
 
 	/**
-	 * Get current clients and extends the room client with its potential 
+	 * Get current clients and extends the room client with its potential
 	 * audio/video client and settings
 	 * 
 	 * @param room_id
+	 * @param server TODO
 	 * @return
 	 */
-	public abstract List<RoomClient> getRoomClients(Long room_id);
-
 	public abstract RoomClient addClientListItem(String streamId,
 			String scopeName, Integer remotePort, String remoteAddress,
 			String swfUrl, boolean isAVClient);
@@ -45,17 +45,18 @@ public interface IClientList {
 	 * Get a client by its streamId
 	 * 
 	 * @param streamId
-	 * @param server TODO
+	 * @param server
+	 *            TODO
 	 * @return
 	 */
-	public abstract RoomClient getClientByStreamId(String streamId, Server server);
+	public abstract RoomClient getClientByStreamId(String streamId,
+			Server server);
 
 	/**
 	 * Additionally checks if the client receives sync events
 	 * 
-	 * Sync events will no be broadcasted to:
-	 * - Screensharing users
-	 * - Audio/Video connections only
+	 * Sync events will no be broadcasted to: - Screensharing users -
+	 * Audio/Video connections only
 	 * 
 	 * @param streamId
 	 * @return
@@ -63,13 +64,23 @@ public interface IClientList {
 	public abstract RoomClient getSyncClientByStreamId(String streamId);
 
 	public abstract RoomClient getClientByPublicSID(String publicSID,
-			boolean isAVClient);
+			boolean isAVClient, Server server);
 
+	/**
+	 * 
+	 * @param userId
+	 * @return
+	 * 
+	 * @deprecated There could be multiple users logged in with the same userid,
+	 *             then this call would return a list not a single user
+	 */
 	public abstract RoomClient getClientByUserId(Long userId);
 
 	/**
-	 * Update the session object of the audio/video-connection and additionally swap the 
-	 * values to the session object of the user that holds the full session object
+	 * Update the session object of the audio/video-connection and additionally
+	 * swap the values to the session object of the user that holds the full
+	 * session object
+	 * 
 	 * @param streamId
 	 * @param rcm
 	 * @return
@@ -77,8 +88,21 @@ public interface IClientList {
 	public abstract Boolean updateAVClientByStreamId(String streamId,
 			RoomClient rcm);
 
+	/**
+	 * Update the session object
+	 * 
+	 * updateRoomCount is only <i>one</i> time true, in
+	 * {@link ScopeApplicationAdapter#setRoomValues(Long, Boolean, Boolean, Long, String)}
+	 * .
+	 * 
+	 * @param streamId
+	 * @param rcm
+	 * @param updateRoomCount
+	 *            true means the count for the room has to be updated
+	 * @return
+	 */
 	public abstract Boolean updateClientByStreamId(String streamId,
-			RoomClient rcm);
+			RoomClient rcm, boolean updateRoomCount);
 
 	/**
 	 * Remove a client from the session store
@@ -93,12 +117,11 @@ public interface IClientList {
 	 * needed cause it is invoked internally AFTER the current user has been
 	 * already removed from the ClientList to see if the Room is empty again and
 	 * the PollList can be removed
-	 * 
 	 * @return
 	 */
 	public abstract List<RoomClient> getClientListByRoom(Long room_id);
 
-	public abstract List<RoomClient> getClientListByRoomAll(Long room_id);
+	public abstract Collection<RoomClient> getClientListByRoomAll(Long room_id);
 
 	/**
 	 * get the current Moderator in this room
@@ -120,8 +143,6 @@ public interface IClientList {
 	public abstract SearchResult<ClientSession> getListByStartAndMax(int start,
 			int max, String orderby, boolean asc);
 
-	public abstract void removeAllClients();
-
 	/**
 	 * returns number of current users recording
 	 * 
@@ -132,6 +153,7 @@ public interface IClientList {
 
 	/**
 	 * returns a number of current users publishing screensharing
+	 * 
 	 * @param roomId
 	 * @return
 	 */

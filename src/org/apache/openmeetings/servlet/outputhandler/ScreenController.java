@@ -182,7 +182,7 @@ public class ScreenController {
 			if (port == null) {
 				throw new Exception("port is empty: ");
 			}
-			RoomClient rc = clientListManager.getClientByPublicSID(publicSID, false);
+			RoomClient rc = clientListManager.getClientByPublicSID(publicSID, false, null);
 			if (rc == null) {
 				throw new Exception("port is empty: ");
 			}

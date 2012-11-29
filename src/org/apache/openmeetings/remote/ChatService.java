@@ -125,7 +125,7 @@ public class ChatService implements IPendingServiceCallback {
 			hsm.put("message", newMessage);
 			String publicSID = "" + messageMap.get(6);
 			if (!publicSID.equals(currentClient.getPublicSID())) {
-				hsm.put("client", clientListManager.getClientByPublicSID("" + messageMap.get(6), false));
+				hsm.put("client", clientListManager.getClientByPublicSID("" + messageMap.get(6), false, null));
 				//need to remove unconfirmed chat message if any
 				for (int i = myChatList.size() - 1; i > -1; --i) {
 					RoomClient msgClient = (RoomClient)myChatList.get(i).get("client");

@@ -602,6 +602,8 @@ public class RoomClient implements Serializable {
 
 		return super.toString() //
 				+ " StreamId: " + this.getStreamid() //
+				+ " PublicSID: " + this.getPublicSID() //
+				+ " UserId: " + this.getUser_id() //
 				+ " isScreenClient: " + this.getIsScreenClient() //
 				+ " flvRecordingId: " + this.getFlvRecordingId() //
 				+ " screenPublishStarted: " + this.isScreenPublishStarted() //

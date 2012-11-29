@@ -33,7 +33,6 @@ import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.conference.whiteboard.WhiteboardManagement;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
-import org.apache.openmeetings.data.file.FileUtils;
 import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
 import org.apache.openmeetings.data.file.dto.LibraryPresentation;
 import org.apache.openmeetings.data.user.Usermanagement;
@@ -75,8 +74,6 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	private AuthLevelmanagement authLevelManagement;
 	@Autowired
 	private LibraryWmlLoader libraryWmlLoader;
-	@Autowired
-	private FileUtils fileUtils;
 
 	public LibraryPresentation getPresentationPreviewFileExplorer(String SID,
 			String parentFolder) {

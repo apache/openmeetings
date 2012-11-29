@@ -33,12 +33,14 @@ import org.apache.openmeetings.conference.room.IClientList;
 import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.dao.ServerDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.data.conference.RoomDAO;
 import org.apache.openmeetings.data.conference.Roommanagement;
 import org.apache.openmeetings.data.conference.dao.RoomModeratorsDao;
 import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.rooms.RoomModerators;
 import org.apache.openmeetings.persistence.beans.rooms.RoomTypes;
@@ -81,6 +83,8 @@ public class ConferenceService {
 	private TimezoneUtil timezoneUtil;
 	@Autowired
 	private IClientList clientListManager = null;
+	@Autowired
+	private ServerDao serverDao;
 
 	/**
 	 * ( get a List of all availible Rooms of this organisation
@@ -756,4 +760,30 @@ public class ConferenceService {
 		return null;
 	}
 
+	/**
+	 * Gives a {@link Server} entity, in case there is a cluster configured
+	 * 
+	 * @param SID
+	 * @param roomId
+	 * @return null means the user should stay on the master, otherwise a
+	 *         {@link Server} entity is returned
+	 */
+	public Server getServerForSession(String SID, long roomId) {
+		Long users_id = sessionManagement.checkSession(SID);
+		Long user_level = userManagement.getUserLevelByID(users_id);
+		if (authLevelManagement.checkUserLevel(user_level)) {
+			List<Server> serverList = serverDao.getActiveServers();
+			
+			//if there is no cluster set up, just redirect to the current one
+			if (serverList.size() == 0) {
+				return null;
+			}
+
+			
+			
+		}
+
+		return new Server();
+	}
+	
 }

@@ -54,5 +54,5 @@ public interface ISharedSessionStore {
 	 * @param server
 	 */
 	public void cleanSessionsOfDeletedOrDeactivatedServer(Server server);
-
+	
 }

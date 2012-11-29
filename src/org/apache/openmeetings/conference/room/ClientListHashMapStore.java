@@ -18,16 +18,19 @@
  */
 package org.apache.openmeetings.conference.room;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Random;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.conference.room.cache.HashMapStore;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
@@ -38,45 +41,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * User an in-memory HashMap to store the current sessions.
  * 
- * FIXME: Add multiple lists to enhance performance, see FIXME tagged methods
- * 
  * @author sebawagner
  * 
  */
 public class ClientListHashMapStore implements IClientList, ISharedSessionStore {
 
-	private static HashMap<String, ClientSession> clientList = new HashMap<String, ClientSession>();
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
+	protected static final Logger log = Red5LoggerFactory.getLogger(
 			ClientListHashMapStore.class, OpenmeetingsVariables.webAppRootKey);
+	
+	protected static HashMapStore cache = new HashMapStore();
 
 	@Autowired
 	private ManageCryptStyle manageCryptStyle;
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.apache.openmeetings.remote.red5.IClientList#getRoomClients(java.lang
-	 * .Long)
-	 */
-	public List<RoomClient> getRoomClients(Long room_id) {
-		try {
-			return this.getClientListByRoom(room_id);
-		} catch (Exception err) {
-			log.error("[getRoomClients]", err);
-		}
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.apache.openmeetings.remote.red5.IClientList#addClientListItem(java
-	 * .lang.String, java.lang.String, java.lang.Integer, java.lang.String,
-	 * java.lang.String, boolean)
-	 */
+	
 	public synchronized RoomClient addClientListItem(String streamId,
 			String scopeName, Integer remotePort, String remoteAddress,
 			String swfUrl, boolean isAVClient) {
@@ -87,9 +64,10 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 			rcm.setConnectedSince(new Date());
 			rcm.setStreamid(streamId);
 			rcm.setScope(scopeName);
-			long thistime = new Date().getTime();
+			long random = System.currentTimeMillis() + new BigInteger(256, new Random()).longValue();
+			
 			rcm.setPublicSID(manageCryptStyle.getInstanceOfCrypt()
-					.createPassPhrase(String.valueOf(thistime).toString()));
+					.createPassPhrase(String.valueOf(random).toString()));
 
 			rcm.setUserport(remotePort);
 			rcm.setUserip(remoteAddress);
@@ -98,14 +76,12 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 			rcm.setCanDraw(new Boolean(false));
 			rcm.setIsAVClient(isAVClient);
 
-			if (clientList.containsKey(streamId)) {
+			if (cache.containsKey(null, streamId)) {
 				log.error("Tried to add an existing Client " + streamId);
 				return null;
 			}
 
-			clientList.put(
-					ClientSessionUtil.getClientSessionKey(null,
-							rcm.getStreamid()), new ClientSession(null, rcm));
+			cache.put(null, rcm.getStreamid(), rcm);
 
 			return rcm;
 		} catch (Exception err) {
@@ -114,57 +90,35 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.openmeetings.remote.red5.IClientList#getAllClients()
-	 */
 	public synchronized Collection<RoomClient> getAllClients() {
-		// only locally clients interesting
-		List<RoomClient> rclList = new ArrayList<RoomClient>();
-		for (ClientSession cSession : clientList.values()) {
-			if (cSession.getServer() == null) {
-				rclList.add(cSession.getRoomClient());
-			}
+		HashMap<String, RoomClient> clients = cache.getClientsByServer(null);
+		if (clients == null) {
+			return new ArrayList<RoomClient>(0);
 		}
-		return rclList;
+		return clients.values();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.apache.openmeetings.conference.room.IClientList#getClientByStreamId(java.lang.String, org.apache.openmeetings.persistence.beans.basic.Server)
-	 */
 	public synchronized RoomClient getClientByStreamId(String streamId, Server server) {
 		try {
-			String uniqueKey = ClientSessionUtil.getClientSessionKey(server, streamId);
-			if (!clientList.containsKey(uniqueKey)) {
+			if (!cache.containsKey(server, streamId)) {
 				log.debug("Tried to get a non existing Client " + streamId);
 				return null;
 			}
-			return clientList.get(uniqueKey).getRoomClient();
+			return cache.get(server, streamId);
 		} catch (Exception err) {
 			log.error("[getClientByStreamId]", err);
 		}
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.apache.openmeetings.remote.red5.IClientList#getSyncClientByStreamId
-	 * (java.lang.String)
-	 */
 	public synchronized RoomClient getSyncClientByStreamId(String streamId) {
 		try {
-			String uniqueKey = ClientSessionUtil.getClientSessionKey(null,
-					streamId);
-			if (!clientList.containsKey(uniqueKey)) {
+			if (!cache.containsKey(null, streamId)) {
 				log.debug("Tried to get a non existing Client " + streamId);
 				return null;
 			}
 
-			RoomClient rcl = clientList.get(uniqueKey).getRoomClient();
+			RoomClient rcl = cache.get(null, streamId);
 
 			if (rcl == null) {
 				return null;
@@ -174,33 +128,19 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 				return null;
 			}
 
-			return clientList.get(uniqueKey).getRoomClient();
+			return cache.get(null, streamId);
 		} catch (Exception err) {
 			log.error("[getClientByStreamId]", err);
 		}
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.apache.openmeetings.remote.red5.IClientList#getClientByPublicSID(
-	 * java.lang.String, boolean)
-	 */
-	public RoomClient getClientByPublicSID(String publicSID, boolean isAVClient) {
+	public RoomClient getClientByPublicSID(String publicSID, boolean isAVClient, Server server) {
 		try {
-			for (ClientSession cSession : clientList.values()) {
-
-				RoomClient rcl = cSession.getRoomClient();
-
-				if (!rcl.getPublicSID().equals(publicSID)) {
-					continue;
-				}
+			for (RoomClient rcl : cache.getClientsByPublicSID(server, publicSID)) {
 				if (rcl.getIsAVClient() != isAVClient) {
 					continue;
 				}
-
 				return rcl;
 			}
 		} catch (Exception err) {
@@ -209,40 +149,33 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.apache.openmeetings.remote.red5.IClientList#getClientByUserId(java
-	 * .lang.Long)
-	 */
 	public synchronized RoomClient getClientByUserId(Long userId) {
 		try {
-			for (ClientSession cSession : clientList.values()) {
-				if (cSession.getRoomClient().getUser_id().equals(userId)) {
-					return cSession.getRoomClient();
+			for (RoomClient rcl : cache.getClientsByUserId(null, userId)) {
+				
+				if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+					continue;
 				}
+				
+				if (rcl.getIsAVClient()) {
+					continue;
+				}
+				
+				return rcl;
 			}
 		} catch (Exception err) {
-			log.error("[getClientByPublicSID]", err);
+			log.error("[getClientByUserId]", err);
 		}
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.apache.openmeetings.remote.red5.IClientList#updateAVClientByStreamId
-	 * (java.lang.String, org.apache.openmeetings.conference.room.RoomClient)
-	 */
 	public synchronized Boolean updateAVClientByStreamId(String streamId,
 			RoomClient rcm) {
 		try {
 
 			// get the corresponding user session object and update the settings
 			RoomClient rclUsual = getClientByPublicSID(rcm.getPublicSID(),
-					false);
+					false, null);
 			if (rclUsual != null) {
 				rclUsual.setBroadCastID(rcm.getBroadCastID());
 				rclUsual.setAvsettings(rcm.getAvsettings());
@@ -250,41 +183,30 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 				rclUsual.setVWidth(rcm.getVWidth());
 				rclUsual.setVX(rcm.getVX());
 				rclUsual.setVY(rcm.getVY());
-				String uniqueKey = ClientSessionUtil.getClientSessionKey(null,
-						rclUsual.getStreamid());
-				ClientSession cSession = clientList.get(uniqueKey);
-				if (cSession != null) {
-					cSession.setRoomClient(rclUsual);
-					clientList.put(uniqueKey, cSession);
+				RoomClient rclSaved = cache.get(null, rclUsual.getStreamid());
+				if (rclSaved != null) {
+					cache.put(null,rclUsual.getStreamid(), rclUsual);
 				} else {
 					log.debug("Tried to update a non existing Client "
 							+ rclUsual.getStreamid());
 				}
 			}
 
-			updateClientByStreamId(streamId, rcm);
+			updateClientByStreamId(streamId, rcm, false);
 		} catch (Exception err) {
 			log.error("[updateAVClientByStreamId]", err);
 		}
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.apache.openmeetings.remote.red5.IClientList#updateClientByStreamId
-	 * (java.lang.String, org.apache.openmeetings.conference.room.RoomClient)
-	 */
 	public synchronized Boolean updateClientByStreamId(String streamId,
-			RoomClient rcm) {
+			RoomClient rcm, boolean updateRoomCount) {
 		try {
-			String uniqueKey = ClientSessionUtil.getClientSessionKey(null,
-					streamId);
-			ClientSession cSession = clientList.get(uniqueKey);
-			if (cSession != null) {
-				cSession.setRoomClient(rcm);
-				clientList.put(uniqueKey, cSession);
+			
+			RoomClient rclSaved = cache.get(null, streamId);
+			
+			if (rclSaved != null) {
+				cache.put(null, streamId, rcm);
 				return true;
 			} else {
 				log.debug("Tried to update a non existing Client " + streamId);
@@ -296,19 +218,10 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.apache.openmeetings.remote.red5.IClientList#removeClient(java.lang
-	 * .String)
-	 */
 	public synchronized Boolean removeClient(String streamId) {
 		try {
-			String uniqueKey = ClientSessionUtil.getClientSessionKey(null,
-					streamId);
-			if (clientList.containsKey(uniqueKey)) {
-				clientList.remove(uniqueKey);
+			if (cache.containsKey(null,streamId)) {
+				cache.remove(null,streamId);
 				return true;
 			} else {
 				log.debug("Tried to remove a non existing Client " + streamId);
@@ -320,28 +233,12 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.apache.openmeetings.remote.red5.IClientList#getClientListByRoom(java
-	 * .lang.Long)
-	 */
-	// FIXME: Enhance performance by using multiple lists
-	public synchronized List<RoomClient> getClientListByRoom(Long room_id) {
-		List<RoomClient> roomClientList = new ArrayList<RoomClient>();
+	public synchronized ArrayList<RoomClient> getClientListByRoom(Long roomId) {
+		ArrayList<RoomClient> roomClientList = new ArrayList<RoomClient>();
 		try {
 
-			// FIXME: Enhance performance by using multiple lists
-			for (ClientSession cSession : clientList.values()) {
+			for (RoomClient rcl : cache.getClientsByRoomId(roomId).values()) {
 
-				RoomClient rcl = cSession.getRoomClient();
-
-				// client initialized and same room
-				if (rcl.getRoom_id() == null
-						|| !room_id.equals(rcl.getRoom_id())) {
-					continue;
-				}
 				if (rcl.getIsScreenClient() == null || rcl.getIsScreenClient()) {
 					continue;
 				}
@@ -349,8 +246,7 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 					continue;
 				}
 
-				// Only parse really those users out that are really a full
-				// session object
+				// Only parse really those users out that are really a full session object
 				// and no pseudo session object like the audio/video or screen
 				// sharing connection
 				roomClientList.add(rcl);
@@ -362,43 +258,18 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 		return roomClientList;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.apache.openmeetings.remote.red5.IClientList#getClientListByRoomAll
-	 * (java.lang.Long)
-	 */
-	public synchronized List<RoomClient> getClientListByRoomAll(Long room_id) {
-		List<RoomClient> roomClientList = new ArrayList<RoomClient>();
+	public synchronized Collection<RoomClient> getClientListByRoomAll(Long roomId) {
 		try {
-			// FIXME: Enhance performance by using multiple lists
-			for (ClientSession cSession : clientList.values()) {
-				RoomClient rcl = cSession.getRoomClient();
-
-				if (rcl.getRoom_id() != null
-						&& rcl.getRoom_id().equals(room_id)) {
-					// same room
-					roomClientList.add(rcl);
-				}
-			}
+			return cache.getClientsByRoomId(roomId).values();
 		} catch (Exception err) {
 			log.error("[getClientListByRoomAll]", err);
 		}
-		return roomClientList;
+		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.apache.openmeetings.remote.red5.IClientList#getCurrentModeratorByRoom
-	 * (java.lang.Long)
-	 */
 	public synchronized List<RoomClient> getCurrentModeratorByRoom(Long room_id) {
 		List<RoomClient> rclList = new LinkedList<RoomClient>();
 		List<RoomClient> currentClients = this.getClientListByRoom(room_id);
-		// FIXME: Enhance performance by using multiple lists
 		for (RoomClient rcl : currentClients) {
 			if (rcl.getIsMod()) {
 				rclList.add(rcl);
@@ -408,41 +279,25 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 		return rclList;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.apache.openmeetings.conference.room.IClientList#getListByStartAndMax(int, int, java.lang.String, boolean)
-	 */
 	// FIXME not sorted
 	public synchronized SearchResult<ClientSession> getListByStartAndMax(
 			int start, int max, String orderby, boolean asc) {
 		SearchResult<ClientSession> sResult = new SearchResult<ClientSession>();
 		sResult.setObjectName(RoomClient.class.getName());
-		sResult.setRecords(Long.valueOf(clientList.size()).longValue());
-		ArrayList<ClientSession> myList = new ArrayList<ClientSession>();
-		myList.addAll(clientList.values());
+		sResult.setRecords(Long.valueOf(cache.size()).longValue());
+		ArrayList<ClientSession> myList = new ArrayList<ClientSession>(cache.size());
+		
+		//FIXME: Improve the handling of the Arrays/Map/List so that this reparsing is not needed
+		for (Entry<Long, LinkedHashMap<String, RoomClient>> entry : cache.values().entrySet()) {
+			for (RoomClient rcl : entry.getValue().values()) {
+				myList.add(new ClientSession(entry.getKey(), rcl));
+			}
+		}
+		
 		sResult.setResult(myList);
 		return sResult;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.openmeetings.remote.red5.IClientList#removeAllClients()
-	 */
-	public synchronized void removeAllClients() {
-		try {
-			clientList.clear();
-		} catch (Exception err) {
-			log.error("[removeAllClients]", err);
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.apache.openmeetings.remote.red5.IClientList#getRecordingCount(long)
-	 */
 	public long getRecordingCount(long roomId) {
 		List<RoomClient> currentClients = this.getClientListByRoom(roomId);
 		int numberOfRecordingUsers = 0;
@@ -454,12 +309,6 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 		return numberOfRecordingUsers;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.apache.openmeetings.remote.red5.IClientList#getPublisingCount(long)
-	 */
 	public long getPublishingCount(long roomId) {
 		List<RoomClient> currentClients = this.getClientListByRoom(roomId);
 		int numberOfPublishingUsers = 0;
@@ -471,56 +320,29 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 		return numberOfPublishingUsers;
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see org.apache.openmeetings.conference.room.ISharedSessionStore#cleanAllServers()
-	 */
 	public void cleanSessionsOfDeletedOrDeactivatedServer(Server server) {
-		// delete all existing client sessions by that slave, updating existing ones
-		// makes no sense, we don't know anything about the start or end date
-		// so at this point we can just remove them all and add them new
-		for (Iterator<Entry<String, ClientSession>> iter = clientList
-				.entrySet().iterator(); iter.hasNext();) {
-			Entry<String, ClientSession> entry = iter.next();
-			
-			if (entry.getValue().getServer() != null
-					&& entry.getValue().getServer().getId().equals(server.getId())) {
-				iter.remove();
-			}
+		//we need to summarize those clients in a second list first, cause there are 
+		//multiple lists to be cleaned up and an iterator will not work
+		ArrayList<RoomClient> serverList = new ArrayList<RoomClient>();
+		serverList.addAll(cache.getClientsByServer(server).values());
+		
+		for (RoomClient rcl : serverList) {
+			cache.remove(server, rcl.getStreamid());
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.openmeetings.conference.room.ISharedSessionStore#
-	 * syncSlaveClientSession
-	 * (org.apache.openmeetings.persistence.beans.basic.Server, java.util.List)
-	 */
-	// FIXME: Add multiple lists to enhance performance
 	public void syncSlaveClientSession(Server server,
 			List<SlaveClientDto> clients) {
 		
 		// delete all existing client sessions by that slave, updating existing ones
 		// makes no sense, we don't know anything about the start or end date
 		// so at this point we can just remove them all and add them new
-		for (Iterator<Entry<String, ClientSession>> iter = clientList
-				.entrySet().iterator(); iter.hasNext();) {
-			Entry<String, ClientSession> entry = iter.next();
-			
-			if (entry.getValue().getServer() != null
-					&& entry.getValue().getServer().getId().equals(server.getId())) {
-				iter.remove();
-			}
-		}
+		cleanSessionsOfDeletedOrDeactivatedServer(server);
 
 		for (SlaveClientDto slaveClientDto : clients) {
-			String uniqueKey = ClientSessionUtil.getClientSessionKey(server,
-					slaveClientDto.getStreamid());
-			
-			clientList.put(
-					uniqueKey,
-					new ClientSession(server, new RoomClient(
+			cache.put(
+					server, slaveClientDto.getStreamid(),
+					new RoomClient(
 								slaveClientDto.getStreamid(), 
 								slaveClientDto.getPublicSID(),
 								slaveClientDto.getRoomId(), 
@@ -531,29 +353,46 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 								slaveClientDto.getUsername(),
 								slaveClientDto.getConnectedSince(),
 								slaveClientDto.getScope()
-							)));
-
+							));
 		}
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.openmeetings.conference.room.ISharedSessionStore#
-	 * getCurrentSlaveSessions()
-	 */
 	public List<SlaveClientDto> getCurrentSlaveSessions() {
 		List<SlaveClientDto> clients = new ArrayList<SlaveClientDto>(
-				clientList.size());
-		for (ClientSession cSession : clientList.values()) {
-			//Only deliver slave session, it can happen in testing phases that you configure
-			//the master as slave, then you duplicate your sessions
-			if (cSession.getServer() == null) {
-				clients.add(new SlaveClientDto(cSession.getRoomClient()));
-			}
+				cache.size());
+		for (RoomClient rcl : cache.getClientsByServer(null).values()) {
+			clients.add(new SlaveClientDto(rcl));
 		}
 		return clients;
 	}
+	
+//	/*
+//	 * (non-Javadoc)
+//	 * @see org.apache.openmeetings.conference.room.IClientList#getActiveRoomsByServer()
+//	 */
+//	public Map<Server,List<Long>> getActiveRoomsByServer() {
+//		Map<Server,List<Long>> serverRooms = new HashMap<Server,List<Long>>();
+//		
+//		for (ClientSession cSession : clientList.values()) {
+//			
+//			//We don't care about incomplete sessions or clients that are not logged into any room
+//			if (cSession.getRoomClient() == null 
+//					|| cSession.getRoomClient().getRoom_id() == null) {
+//				continue;
+//			}
+//			
+//			List<Long> roomIds = serverRooms.get(cSession.getServer());
+//			if (roomIds == null) {
+//				roomIds = new ArrayList<Long>();
+//			}
+//			if (!roomIds.contains(cSession.getRoomClient().getRoom_id())) {
+//				roomIds.add(cSession.getRoomClient().getRoom_id());
+//			}
+//			serverRooms.put(cSession.getServer(), roomIds);
+//		}
+//		
+//		return serverRooms;
+//	}
 
 }

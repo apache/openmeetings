@@ -172,7 +172,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			currentClient.setIsRecording(true);
 			currentClient.setFlvRecordingId(flvRecordingId);
 			this.clientListManager.updateClientByStreamId(current.getClient()
-					.getId(), currentClient);
+					.getId(), currentClient, false);
 
 			// get all stream and start recording them
 			Collection<Set<IConnection>> conCollection = current.getScope()
@@ -225,7 +225,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 
 									this.clientListManager
 											.updateClientByStreamId(
-													rcl.getStreamid(), rcl);
+													rcl.getStreamid(), rcl, false);
 
 								}
 
@@ -266,7 +266,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 								rcl.setFlvRecordingMetaDataId(flvRecordingMetaDataId);
 
 								this.clientListManager.updateClientByStreamId(
-										rcl.getStreamid(), rcl);
+										rcl.getStreamid(), rcl, false);
 
 								// Start FLV recording
 								recordShow(conn,
@@ -508,7 +508,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 				currentClient.setIsRecording(false);
 
 				this.clientListManager.updateClientByStreamId(
-						currentClient.getStreamid(), currentClient);
+						currentClient.getStreamid(), currentClient, false);
 
 				log.debug("this.flvRecorderConverterTask ",
 						this.flvRecorderConverterTask);
@@ -649,7 +649,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 					rcl.setFlvRecordingMetaDataId(flvRecordingMetaDataId);
 
 					this.clientListManager.updateClientByStreamId(
-							rcl.getStreamid(), rcl);
+							rcl.getStreamid(), rcl, false);
 
 				}
 
@@ -688,7 +688,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 				rcl.setFlvRecordingMetaDataId(flvRecordingMetaDataId);
 
 				this.clientListManager.updateClientByStreamId(
-						rcl.getStreamid(), rcl);
+						rcl.getStreamid(), rcl, false);
 
 			}
 

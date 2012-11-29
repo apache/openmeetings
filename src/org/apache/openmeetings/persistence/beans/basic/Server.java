@@ -49,7 +49,7 @@ import org.simpleframework.xml.Root;
 		@NamedQuery(name = "getServerByAddress", query = "SELECT s FROM Server s WHERE s.deleted = false AND s.address LIKE :address"),
 		@NamedQuery(name = "getServersWithNoUsers", query = "SELECT s FROM Server s WHERE s.deleted = false AND s.id NOT IN (SELECT u.server.id FROM Users u where u.server.id IS NOT NULL)"),
 		@NamedQuery(name = "getServerWithMinimumUsers", query = "SELECT s.id, COUNT(u) AS cnt FROM Users u JOIN u.server s WHERE s.deleted = false GROUP BY s.id ORDER BY cnt"),
-		@NamedQuery(name = "getSlavesForPing", query = "SELECT s FROM Server s WHERE s.deleted = false AND s.active = true") //
+		@NamedQuery(name = "getActiveServers", query = "SELECT s FROM Server s WHERE s.deleted = false AND s.active = true") //
 })
 @Table(name = "server")
 @Root

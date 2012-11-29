@@ -26,7 +26,8 @@
 Test the setup values before you enter a room
 
  -->
- 
+
+<!-- 
 <class name="simpleLabelRoundButtonIcon" extends="simpleLabelRoundButton" 
 	   height="26" fontstyle="bold" >
 	
@@ -46,6 +47,7 @@ Test the setup values before you enter a room
     </handler>
     
 </class> 
+ -->
  
 <class name="testSetup" extends="labelExplorerBox" labelid="757" allowDragging="false" 
     x="$once{ parent.width/2 - 300 }" y="100" docking="true" resizeable="false" 
@@ -63,13 +65,7 @@ Test the setup values before you enter a room
     then the window just closed -->
     <attribute name="doJustClose" value="false" type="boolean" />
     
-    <handler name="oninit">
-    	<![CDATA[
-            this.startConference();
-            //The pre-test is disabled as its integrated into the choose device settings now
-            return;
-    	]]>
-    </handler>
+    <!-- 
     
     <method name="justClose">
     	this._enterMeeting.setAttribute("enabled",false);
@@ -102,7 +98,21 @@ Test the setup values before you enter a room
             canvas.setUserData(g);
             
         ]]>
-    </method>   
+    </method>  
+    
+     --> 
+    
+    <handler name="oninit">
+    	<![CDATA[
+            this.startConference();
+            //The pre-test is disabled as its integrated into the choose device settings now
+            return;
+    	]]>
+    </handler>
+    
+    <method name="getServerForSession">
+    	
+    </method>
     
     <method name="startConference">
     	<![CDATA[
@@ -123,7 +133,7 @@ Test the setup values before you enter a room
     	]]>
     </method>
 
-    <!-- Remember Me -->
+    <!-- Remember Me
     <labelCheckbox name="holddatainSO" labelid="759" x="10" y="$once{ parent.height-24 }" >
         <handler name="oninit">
             var g = canvas.getUserData();
@@ -141,6 +151,7 @@ Test the setup values before you enter a room
     <simpleLabelButton name="_cancel" labelid="760" width="100" x="$once{ parent.width-105 }" 
            y="$once{ parent.height-30 }" height="28"  
            onclick="this.parent.justClose();" />
+     -->
 
 </class>
 

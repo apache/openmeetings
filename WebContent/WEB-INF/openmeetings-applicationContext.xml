@@ -51,8 +51,13 @@
 	<!-- New Class for the Streaming Handlers -->
 	<bean id="web.handler"
 		class="org.apache.openmeetings.remote.red5.ScopeApplicationAdapter" />
-	<bean id="openmeetings.ClientListManager" class="org.apache.openmeetings.conference.room.ClientListHashMapStore" />
-	<bean id="openmeetings.EmoticonsManager" class="org.apache.openmeetings.remote.red5.EmoticonsManager" />
+	
+	<!-- In memory / session stores -->
+	
+	<bean id="openmeetings.ClientListManager" 
+		class="org.apache.openmeetings.conference.room.ClientListHashMapStore" />
+	<bean id="openmeetings.EmoticonsManager" 
+		class="org.apache.openmeetings.remote.red5.EmoticonsManager" />
 	<bean id="openmeetings.WhiteBoardObjectListManager"
 		class="org.apache.openmeetings.remote.red5.WhiteBoardObjectListManager" />
 	<bean id="openmeetings.WhiteBoardObjectListManagerById"
@@ -89,7 +94,7 @@
 		class="org.apache.openmeetings.data.flvrecord.converter.FlvInterviewConverter" />
 	<bean id="openmeetings.FlvRecorderConverter"
 		class="org.apache.openmeetings.data.flvrecord.converter.FlvRecorderConverter" />
-		
+	
 	<!-- 
 	#####################################################################
 	Comment this in to enable the OpenMeetings instance to act as Master
@@ -286,8 +291,7 @@
 	<bean id="fileUtils" class="org.apache.openmeetings.data.file.FileUtils" />
 	<bean id="ldapLoginManagement" class="org.apache.openmeetings.ldap.LdapLoginManagement" />
 	<bean id="timezoneUtil" class="org.apache.openmeetings.utils.math.TimezoneUtil" />
-
-
+	
 	<!-- Templates -->
 	<bean id="registerUserTemplate" class="org.apache.openmeetings.templates.RegisterUserTemplate" />
 	<bean id="feedbackTemplate" class="org.apache.openmeetings.templates.FeedbackTemplate" />

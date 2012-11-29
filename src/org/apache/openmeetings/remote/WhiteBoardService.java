@@ -227,12 +227,12 @@ public class WhiteBoardService implements IPendingServiceCallback {
 
 				if (currentClient.getIsMod()) {
 					RoomClient rcl = this.clientListManager
-							.getClientByPublicSID(publicSID, false);
+							.getClientByPublicSID(publicSID, false, null);
 
 					if (rcl != null) {
 						rcl.setCanDraw(canDraw);
 						this.clientListManager.updateClientByStreamId(
-								rcl.getStreamid(), rcl);
+								rcl.getStreamid(), rcl, false);
 
 						HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
 						newMessage.put(0, "updateDrawStatus");
@@ -269,12 +269,12 @@ public class WhiteBoardService implements IPendingServiceCallback {
 
 				if (currentClient.getIsMod()) {
 					RoomClient rcl = this.clientListManager
-							.getClientByPublicSID(publicSID, false);
+							.getClientByPublicSID(publicSID, false, null);
 
 					if (rcl != null) {
 						rcl.setCanShare(canShare);
 						this.clientListManager.updateClientByStreamId(
-								rcl.getStreamid(), rcl);
+								rcl.getStreamid(), rcl, false);
 
 						HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
 						newMessage.put(0, "updateDrawStatus");
@@ -311,12 +311,12 @@ public class WhiteBoardService implements IPendingServiceCallback {
 
 				if (currentClient.getIsMod()) {
 					RoomClient rcl = this.clientListManager
-							.getClientByPublicSID(publicSID, false);
+							.getClientByPublicSID(publicSID, false, null);
 
 					if (rcl != null) {
 						rcl.setCanRemote(canRemote);
 						this.clientListManager.updateClientByStreamId(
-								rcl.getStreamid(), rcl);
+								rcl.getStreamid(), rcl, false);
 
 						HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
 						newMessage.put(0, "updateDrawStatus");
@@ -352,12 +352,12 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			if (authLevelManagement.checkUserLevel(user_level)) {
 				if (currentClient.getIsMod()) {
 					RoomClient rcl = this.clientListManager
-							.getClientByPublicSID(publicSID, false);
+							.getClientByPublicSID(publicSID, false, null);
 
 					if (rcl != null) {
 						rcl.setCanGiveAudio(canGiveAudio);
 				        this.clientListManager.updateClientByStreamId(
-				                rcl.getStreamid(), rcl);
+				                rcl.getStreamid(), rcl, false);
 
 				        HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
 				        newMessage.put(0, "updateGiveAudioStatus");
