@@ -592,6 +592,12 @@ public class Invitationmanagement {
 	}
 
 	// ---------------------------------------------------------------------------------------------------------
+	public String sendInvitionLink(Users us, Invitations inv, String message, String baseurl, String subject, Long language_id) {
+		return sendInvitionLink(us != null ? us.getAdresses().getEmail() : inv.getInvitedEMail()
+				, inv.getInvitedname()
+				, message, baseurl, inv.getInvitedEMail(), subject, inv.getHash()
+				, inv.getValidFrom(), inv.getValidTo(), language_id, us.getFirstname() + " " + us.getLastname());
+	}
 
 	/**
      * @param username

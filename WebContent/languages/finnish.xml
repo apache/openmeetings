@@ -4601,4 +4601,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   <string id="1525" name="server admin active">
     <value>Active</value>
   </string>
+  <string id="1526" name="generate_hash">
+    <value>Generate URL</value>
+  </string>
 </language>

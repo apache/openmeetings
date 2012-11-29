@@ -26,13 +26,15 @@
 		label: send invitation
 	-->
 	<class name="inviteMainWindow" extends="labelExplorerBox" labelid="214" 
-			docking="true" closable="true" width="464" x="200" y="100" height="440">
+			docking="true" closable="true" width="464" x="200" y="100" height="465">
 		
 		<attribute name="roomType" value="conference" type="string" />
 		<attribute name="baseUrl" value="http://www.denic.de" type="string" />
+		<attribute name="currentHash" value="" type="string" />
+		<attribute name="display" value="false" type="boolean" />
     	
-    	<handler name="oninit">
-            <![CDATA[
+		<handler name="oninit">
+		<![CDATA[
             
                 lz.ModeManager.makeModal(this);
                 var pressEnter = new LzDelegate(this, "register");
@@ -40,8 +42,20 @@
                 
                 getTimeZoneOffset(this);
                 
-            ]]>
-        </handler>
+				var urlObject =  lz.Browser.getBaseURL();
+				//If Port is Null or undefinied use port 80
+				var port = urlObject.port;
+				if (port!=null && port!=undefined && port != 80){
+					this.baseUrl = urlObject.protocol+"://"+urlObject.host+":"+port+urlObject.path;
+				} else {
+					this.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path;
+				}
+				if( $debug ) Debug.write("this.baseUrl: ", this.baseUrl);
+				if (!canvas.isConference){
+					this.roomType = "restricted"; //FIXME
+				}
+		]]>
+		</handler>
         
         <method name="callback" args="returnValue">
             if ($debug) Debug.write("getTimeZoneOffset callback ",returnValue);
@@ -155,6 +169,17 @@
             </netRemoteCallHib>
         </resetCombobox>
 
+		<customEdittext name="_url" enabled="false" width="$once{ parent.width - 10 }" x="5" y="405" text=""/>
+		
+		<simpleLabelButton name="generate" labelid="1526" x="$once{ parent.width-440 }" width="170" y="$once{ parent.height-26 }">
+			<handler name="onclick">
+			<![CDATA[
+        		parent.display = true;
+				parent.sendInvitationHash.doCall();
+			]]>
+			</handler>
+		</simpleLabelButton>
+		
         <!-- label: send -->
 		<simpleLabelButton labelid="218" x="$once{ parent.width-260 }" width="120" y="$once{ parent.height-26 }">
 			<handler name="onclick">
@@ -190,37 +215,65 @@
 			</handler>
 		</simpleLabelButton>
 	   
-	      <netRemoteCallHib name="sendInvitationHash" funcname="invitationservice.sendInvitationHash" remotecontext="$once{ canvas.thishib }" >    
-        		
-        		<netparam name="sid"><method name="getValue">return canvas.sessionId;</method></netparam>
-			    <netparam name="username"><method name="getValue">return hib.userobject.firstname+' '+hib.userobject.lastname</method></netparam>
-	            <netparam name="message"><method name="getValue">return this.parent.parent._message.getText();</method></netparam>
-	            <netparam name="baseurl"><method name="getValue">return parent.parent.baseUrl;</method></netparam>
-	            <netparam name="email"><method name="getValue">return this.parent.parent._recipient.getText();</method></netparam>
-	            <netparam name="subject"><method name="getValue">return this.parent.parent._subject.getText();</method></netparam>
-	            <netparam name="roomid"><method name="getValue">return hib.currentroomid;</method></netparam>
-	            <netparam name="conferencedomain"><method name="getValue">return hib.conferencedomain;</method></netparam>
-	            <netparam name="ispasswordProtected"><method name="getValue">return parent.parent._ispasswordProtected.value;</method></netparam>
-	            <netparam name="password"><method name="getValue">return parent.parent._password.getText();</method></netparam>
-	            <netparam name="valid"><method name="getValue">return parent.parent._valid.value;</method></netparam>
-	            <netparam name="validFromDate"><method name="getValue">return parent.parent._valid_from.getDate();</method></netparam>
-	            <netparam name="validFromTime"><method name="getValue">return parent.parent._timeFrom.getText();</method></netparam>
-	            <netparam name="validToDate"><method name="getValue">return parent.parent._valid_to.getDate();</method></netparam>
-	            <netparam name="validToTime"><method name="getValue">return parent.parent._timeTo.getText();</method></netparam>
-                <netparam name="language_id"><method name="getValue">return parent.parent._languages.getValue();</method></netparam>
-                <netparam name="jNameTimeZone"><method name="getValue">return parent.parent._timeZone.getValue();</method></netparam>
-                
-	            <handler name="ondata" args="value">
-	            	<![CDATA[
-	                	//The onResult-Handler will be called be the rtmpconnection
-				if ($debug) Debug.write("sendInvitationHash : ",value);
-				if (value=="success"){
+		<netRemoteCallHib name="sendInvitationByHash" funcname="invitationservice.sendInvitationByHash" remotecontext="$once{ canvas.thishib }" >
+			<netparam name="SID"><method name="getValue">return canvas.sessionId;</method></netparam>
+			<netparam name="invitationHash"><method name="getValue">return this.parent.parent.currentHash;</method></netparam>
+			<netparam name="message"><method name="getValue">return this.parent.parent._message.getText();</method></netparam>
+			<netparam name="baseurl"><method name="getValue">return parent.parent.baseUrl;</method></netparam>
+			<netparam name="subject"><method name="getValue">return this.parent.parent._subject.getText();</method></netparam>
+			<netparam name="language_id"><method name="getValue">return parent.parent._languages.getValue();</method></netparam>
+			<handler name="ondata" args="value">
+			<![CDATA[
+				if (value != null){
 					parent.close();
 				} else {
 					new lz.errorPopup(canvas.main_content._content.inner,{error:value});
 				}
-               ]]>
+			]]>
 			</handler>   
+		</netRemoteCallHib>
+			
+		<netRemoteCallHib name="sendInvitationHash" funcname="invitationservice.sendInvitationHash" remotecontext="$once{ canvas.thishib }" >
+			<netparam name="sid"><method name="getValue">return canvas.sessionId;</method></netparam>
+			<netparam name="username"><method name="getValue">return hib.userobject.firstname+' '+hib.userobject.lastname</method></netparam>
+			<netparam name="message"><method name="getValue">return this.parent.parent._message.getText();</method></netparam>
+			<netparam name="baseurl"><method name="getValue">return parent.parent.baseUrl;</method></netparam>
+			<netparam name="email"><method name="getValue">return this.parent.parent._recipient.getText();</method></netparam>
+			<netparam name="subject"><method name="getValue">return this.parent.parent._subject.getText();</method></netparam>
+			<netparam name="roomid"><method name="getValue">return hib.currentroomid;</method></netparam>
+			<netparam name="conferencedomain"><method name="getValue">return hib.conferencedomain;</method></netparam>
+			<netparam name="ispasswordProtected"><method name="getValue">return parent.parent._ispasswordProtected.value;</method></netparam>
+			<netparam name="password"><method name="getValue">return parent.parent._password.getText();</method></netparam>
+			<netparam name="valid"><method name="getValue">return parent.parent._valid.value;</method></netparam>
+			<netparam name="validFromDate"><method name="getValue">return parent.parent._valid_from.getDate();</method></netparam>
+			<netparam name="validFromTime"><method name="getValue">return parent.parent._timeFrom.getText();</method></netparam>
+			<netparam name="validToDate"><method name="getValue">return parent.parent._valid_to.getDate();</method></netparam>
+			<netparam name="validToTime"><method name="getValue">return parent.parent._timeTo.getText();</method></netparam>
+			<netparam name="language_id"><method name="getValue">return parent.parent._languages.getValue();</method></netparam>
+			<netparam name="jNameTimeZone"><method name="getValue">return parent.parent._timeZone.getValue();</method></netparam>
+			<netparam name="sendMail"><method name="getValue">return !parent.parent.display;</method></netparam>
+			
+			<handler name="ondata" args="value">
+			<![CDATA[
+				//The onResult-Handler will be called be the rtmpconnection
+				if ($debug) Debug.write("sendInvitationHash : ",value);
+				if ($debug) Debug.write("sendInvitationHash : ", (typeof value));
+				if (typeof value == "object"){
+					if (parent.display) {
+						parent.send.setAttribute('enabled', true);
+						parent._message.setAttribute('enabled', true);
+						parent._subject.setAttribute('enabled', true);
+						parent._languages.setAttribute('enabled', true);
+						parent.currentHash = value.hash;
+						parent._url.setAttribute('text', parent.baseUrl + "?invitationHash=" + parent.currentHash + "&language=" + parent._languages.getValue());
+					} else {
+						parent.close();
+					}
+				} else {
+					new lz.errorPopup(canvas.main_content._content.inner,{error:value});
+				}
+			]]>
+			</handler>
 		</netRemoteCallHib>
 	</class>
 </library>

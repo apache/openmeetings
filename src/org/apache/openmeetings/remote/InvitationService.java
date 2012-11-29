@@ -28,8 +28,10 @@ import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.conference.Invitationmanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.invitation.Invitations;
+import org.apache.openmeetings.persistence.beans.user.Users;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
@@ -44,6 +46,8 @@ public class InvitationService implements IPendingServiceCallback {
 	private Sessionmanagement sessionManagement;
 	@Autowired
 	private ConfigurationDao configurationDaoImpl;
+	@Autowired
+	private UsersDao userDAO;
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
@@ -78,12 +82,12 @@ public class InvitationService implements IPendingServiceCallback {
      * @param jNameTimeZone
 	 * @return
 	 */
-	public String sendInvitationHash(String SID, String username,
+	public Object sendInvitationHash(String SID, String username,
 			String message, String baseurl, String email, String subject,
 			Long room_id, String conferencedomain, Boolean isPasswordProtected,
 			String invitationpass, Integer valid, Date validFromDate,
 			String validFromTime, Date validToDate, String validToTime,
-			Long language_id, String jNameTimeZone) {
+			Long language_id, String jNameTimeZone, boolean sendMail) {
 
 		try {
 			log.debug("sendInvitationHash: ");
@@ -140,11 +144,11 @@ public class InvitationService implements IPendingServiceCallback {
 					.addInvitationLink(user_level, username, message, baseurl,
 							email, subject, room_id, conferencedomain,
 							isPasswordProtected, invitationpass, valid, dFrom,
-							dTo, users_id, baseurl, language_id, true,
+							dTo, users_id, baseurl, language_id, sendMail,
 							dFrom, dTo, null, username, omTimeZone);
 
 			if (invitation != null) {
-				return "success";
+				return invitation;
 			} else {
 				return "Sys - Error";
 			}
@@ -153,13 +157,14 @@ public class InvitationService implements IPendingServiceCallback {
 		}
 
 		return null;
-
-		// return
-		// invitationManagement.sendInvitionLink(user_level,
-		// username, message, domain, room, roomtype, baseurl, email, subject,
-		// room_id);
 	}
 
+	public String sendInvitationByHash(String SID, String invitationHash, String message, String baseurl, String subject, Long language_id) {
+		Users us = userDAO.get(sessionManagement.checkSession(SID));
+		Invitations inv = (Invitations)invitationManagement.getInvitationByHashCode(invitationHash, true);
+		return invitationManagement.sendInvitionLink(us, inv, message, baseurl, subject, language_id);
+	}
+	
 	public Object getInvitationByHash(String hashCode) {
 		return invitationManagement.getInvitationByHashCode(
 				hashCode, true);
