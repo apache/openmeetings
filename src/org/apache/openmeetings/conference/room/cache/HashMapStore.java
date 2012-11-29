@@ -138,9 +138,9 @@ public class HashMapStore {
 			}
 			if (!clientsByPublicSIDList.contains(rcl)) {
 				clientsByPublicSIDList.add(rcl);
+				clientListPublicSID.put(rcl.getPublicSID(), clientsByPublicSIDList);
+				clientsByServerAndPublicSID.put(getIdByServer(server), clientListPublicSID);
 			}
-			clientListPublicSID.put(rcl.getPublicSID(), clientsByPublicSIDList);
-			clientsByServerAndPublicSID.put(getIdByServer(server), clientListPublicSID);
 		}
 		
 		// By userId
@@ -161,9 +161,9 @@ public class HashMapStore {
 			}
 			if (!clientListUserIdList.contains(rcl)) {
 				clientListUserIdList.add(rcl);
+				clientListUserId.put(rcl.getUser_id(), clientListUserIdList);
+				clientsByServerAndUserId.put(getIdByServer(server), clientListUserId);
 			}
-			clientListUserId.put(rcl.getUser_id(), clientListUserIdList);
-			clientsByServerAndUserId.put(getIdByServer(server), clientListUserId);
 		}
 
 		// By roomId
@@ -274,7 +274,6 @@ public class HashMapStore {
 	}
 
 	public void remove(Server server, String streamId) {
-		// TODO Auto-generated method stub
 		
 		// By server and streamid
 		
