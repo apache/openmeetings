@@ -1636,7 +1636,7 @@ public class Usermanagement {
 
 				sessionManagement.clearSessionByRoomId(room_id);
 
-				for (RoomClient rcl : clientListManager.getClientListByRoom(room_id)) {
+				for (RoomClient rcl : clientListManager.getClientListByRoom(room_id, null)) {
 					if (rcl == null) {
 						return true;
 					}

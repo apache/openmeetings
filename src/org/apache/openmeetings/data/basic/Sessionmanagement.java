@@ -484,7 +484,7 @@ public class Sessionmanagement {
 	 */
 	public void clearSessionByRoomId(Long room_id) {
 		try {
-			for (RoomClient rcl : clientListManager.getClientListByRoom(room_id)) {
+			for (RoomClient rcl : clientListManager.getClientListByRoom(room_id, null)) {
 				String aux = rcl.getSwfurl();
 
 				int init_pos = aux.indexOf("sid=") + 4;

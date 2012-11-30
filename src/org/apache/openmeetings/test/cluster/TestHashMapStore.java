@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -44,6 +45,10 @@ public class TestHashMapStore extends AbstractOpenmeetingsSpringTest {
 		for (int i = 0; i < localSessions; i++) {
 			this.sessionManager.addClientListItem("streamId" + i, "hibernate",
 					123, "localhost", "", false);
+			
+			RoomClient rcl = this.sessionManager.getClientByStreamId("streamId" + i, null);
+			rcl.setUser_id(Long.parseLong(""+i));
+			this.sessionManager.updateClientByStreamId("streamId" + i, rcl, false);
 		}
 
 		long roomId = 1L;
@@ -89,7 +94,7 @@ public class TestHashMapStore extends AbstractOpenmeetingsSpringTest {
 		assertEquals(rcl.getStreamid(), compareRcl.getStreamid());
 		assertEquals(rcl.getPublicSID(), compareRcl.getPublicSID());
 
-		List<RoomClient> clientsByRoom = sessionManager.getClientListByRoom(1L);
+		List<RoomClient> clientsByRoom = sessionManager.getClientListByRoom(1L, null);
 
 		log.debug("clientsByRoom SIZE " + clientsByRoom.size());
 
@@ -117,7 +122,7 @@ public class TestHashMapStore extends AbstractOpenmeetingsSpringTest {
 			log.debug("rSession "+rSession);
 		}
 		
-		RoomClient rcl2 = sessionManager.getClientByStreamId("streamId50", testServer);
+		RoomClient rcl2 = sessionManager.getClientByStreamId("streamId1050", testServer);
 		log.debug("rcl2 " + rcl2);
 		RoomClient compareRcl2 = sessionManager.getClientByPublicSID(
 				rcl2.getPublicSID(), rcl2.getIsAVClient(), testServer);
@@ -140,12 +145,46 @@ public class TestHashMapStore extends AbstractOpenmeetingsSpringTest {
 		RoomClient deletedNullClient = sessionManager.getClientByPublicSID(
 				rclRemove.getPublicSID(), rclRemove.getIsAVClient(), null);
 		
+		log.debug("rclRemove: "+ rclRemove);
+		
 		if (deletedNullClient != null) {
 			log.debug("deletedNullClient "+deletedNullClient);
 		}
 		
 		assertNull(deletedNullClient);
 		
+		sessionManager.getCache().printDebugInformation(
+				Arrays.asList(HashMapStore.DEBUG_DETAILS.SIZE,
+						HashMapStore.DEBUG_DETAILS.CLIENT_BY_STREAMID,
+						HashMapStore.DEBUG_DETAILS.CLIENT_BY_PUBLICSID,
+						HashMapStore.DEBUG_DETAILS.CLIENT_BY_USERID,
+						HashMapStore.DEBUG_DETAILS.CLIENT_BY_ROOMID));
+		
+		Server s1 = new Server();
+		s1.setId(1L);
+		Server s2 = new Server();
+		s2.setId(2L);
+		Server s3 = new Server();
+		s3.setId(3L);
+		Server s4 = new Server();
+		s4.setId(4L);
+		
+		//Check if number of total sessions is same as sum of all sessions across all rooms
+		int roomSession = sessionManager.getClientListByRoomAll(1L, null).size()
+				+ sessionManager.getClientListByRoomAll(2L, null).size()
+				+ sessionManager.getClientListByRoomAll(3L, s1).size()
+				+ sessionManager.getClientListByRoomAll(4L, s2).size()
+				+ sessionManager.getClientListByRoomAll(5L, s3).size()
+				+ sessionManager.getClientListByRoomAll(6L, s4).size()
+				;
+		log.debug("Room Id 2 Number of Sessions: "+sessionManager.getClientListByRoomAll(2L, s1).size());
+		log.debug("Room Id 3 Number of Sessions: "+sessionManager.getClientListByRoomAll(3L, s1).size());
+		log.debug("Room Id 4 Number of Sessions: "+sessionManager.getClientListByRoomAll(4L, s1).size());
+		log.debug("Room Id 5 Number of Sessions: "+sessionManager.getClientListByRoomAll(5L, s1).size());
+		log.debug("roomSession: "+roomSession);
+		
+		assertEquals(roomSession, sessionManager.getCache().getTotalNumberOfSessions());
+
 	}
 
 	private void addSyncClients(long serverId) {
@@ -160,9 +199,9 @@ public class TestHashMapStore extends AbstractOpenmeetingsSpringTest {
 			Long userId = (1000 * serverId) + i + add;
 
 			SlaveClientDto slaveDto = new SlaveClientDto( //
-					"streamId" + i, //
+					"streamId" + ((1000 * serverId) + i), //
 					"publicSID_" + serverId + "_" + i, //
-					new Long(2), //
+					new Long(2+serverId), //
 					userId, //
 					"firstName" + i, //
 					"lastName" + i, //

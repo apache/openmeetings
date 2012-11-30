@@ -501,7 +501,7 @@ public class RoomWebService {
 					rCountBean.setMaxUser(room.getNumberOfPartizipants()
 							.intValue());
 					rCountBean.setRoomCount(clientListManager
-							.getClientListByRoom(room.getRooms_id()).size());
+							.getClientListByRoom(room.getRooms_id(), null).size());
 
 					roomsArray[i] = rCountBean;
 					i++;
@@ -569,7 +569,7 @@ public class RoomWebService {
 				roomReturn.setRoom_id(room.getRooms_id());
 
 				List<RoomClient> map = clientListManager
-						.getClientListByRoom(room.getRooms_id());
+						.getClientListByRoom(room.getRooms_id(), null);
 
 				RoomUser[] roomUsers = new RoomUser[map.size()];
 
