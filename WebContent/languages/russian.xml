@@ -4604,4 +4604,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   <string id="1526" name="generate_hash">
     <value>Generate URL</value>
   </string>
+  <string id="1527" name="network testing link">
+    <value>Тестирование сети</value>
+  </string>
 </language>

@@ -127,6 +127,12 @@
 		return getUrl() + 'services/';
 	]]>
 	</method>
+
+    <method name="getTestingUrl">
+    <![CDATA[
+        return getUrl() + 'networktesting.swf10.swf?lzproxied=solo';
+    ]]>
+    </method>
         
     <dataset type="http" name="languageData" request="false" 
         src="${ canvas.currentlanguage+'.xml' }" proxied="false">

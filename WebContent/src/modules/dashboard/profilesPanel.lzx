@@ -28,10 +28,12 @@
 	
 	<handler name="oninit">
         <![CDATA[
-            this.homepage.setAttribute('text',"<u><FONT color='#0000CC'>"+canvas.getLabelName(286)+"</FONT></u>");
+            this.homepage.setAttribute('text', this.formatLinkText(canvas.getLabelName(286)));
             this.homepage.setAttribute('link',canvas.getLabelName(282));
-            this.mailing.setAttribute('text',"<u><FONT color='#0000CC'>"+canvas.getLabelName(287)+"</FONT></u>");
+            this.mailing.setAttribute('text',this.formatLinkText(canvas.getLabelName(287)));
             this.mailing.setAttribute('link',canvas.getLabelName(283));
+            this.testing.setAttribute('text',this.formatLinkText(canvas.getLabelName(1527)));
+            this.testing.setAttribute('link',canvas.getTestingUrl());
         ]]>
     </handler>
         	
@@ -41,8 +43,13 @@
 			this.getUserSelf.doCall();
         ]]>
     </handler>
-    
-    
+
+    <method name="formatLinkText" args="text">
+        <![CDATA[
+            return "<u><FONT color='#0000CC'>"+text+"</FONT></u>";
+        ]]>
+    </method>
+
     <netRemoteCallHib name="getNumberUnreadMessages" funcname="userservice.getNumberUnreadMessages" 
   		remotecontext="$once{ canvas.thishib }" > 
   		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
@@ -179,21 +186,33 @@
         </handler>
     </labelText>
              
-    <labelText fontstyle="bold" x="2" y="140" labelid="281" width="200"/>
+    <labelText name="help" fontstyle="bold" x="2"
+               y="$once{parent._imageProfileBG2.y + parent._imageProfileBG2.height}"
+               labelid="281" width="200"/>
     
-    <labelText name="homepage" x="2" y="160" width="$once{ parent.width }" multiline="true" >
+    <labelText name="homepage" x="2" y="$once{parent.help.y + parent.help.height + 1}"
+               width="$once{ parent.width }" multiline="true" >
         <attribute name="link" type="string" value="" />
         <handler name="onclick">
             lz.Browser.loadURL(this.link,"_blank");
         </handler>            
     </labelText>    
     
-    <labelText name="mailing" x="2" y="180" width="$once{ parent.width }" multiline="true" >
+    <labelText name="mailing" x="2" y="${parent.homepage.y + parent.homepage.height + 1}"
+               width="$once{ parent.width }" multiline="true" >
         <attribute name="link" type="string" value="" />
         <handler name="onclick">
             lz.Browser.loadURL(this.link,"_blank");
         </handler>            
-    </labelText> 
+    </labelText>
+
+    <labelText name="testing" x="2" y="${parent.mailing.y + parent.mailing.height + 1}"
+               width="$once{ parent.width }" multiline="true" >
+        <attribute name="link" type="string" value="" />
+        <handler name="onclick">
+            lz.Browser.loadURL(this.link,"_blank");
+        </handler>
+    </labelText>
               
 	</view>
 	
