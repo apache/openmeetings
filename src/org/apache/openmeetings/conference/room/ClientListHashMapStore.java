@@ -233,11 +233,11 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 		return null;
 	}
 
-	public synchronized ArrayList<RoomClient> getClientListByRoom(Long roomId) {
+	public synchronized ArrayList<RoomClient> getClientListByRoom(Long roomId, Server server) {
 		ArrayList<RoomClient> roomClientList = new ArrayList<RoomClient>();
 		try {
 
-			for (RoomClient rcl : cache.getClientsByRoomId(roomId).values()) {
+			for (RoomClient rcl : cache.getClientsByRoomId(server, roomId).values()) {
 
 				if (rcl.getIsScreenClient() == null || rcl.getIsScreenClient()) {
 					continue;
@@ -258,9 +258,9 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 		return roomClientList;
 	}
 
-	public synchronized Collection<RoomClient> getClientListByRoomAll(Long roomId) {
+	public synchronized Collection<RoomClient> getClientListByRoomAll(Long roomId, Server server) {
 		try {
-			return cache.getClientsByRoomId(roomId).values();
+			return cache.getClientsByRoomId(server, roomId).values();
 		} catch (Exception err) {
 			log.error("[getClientListByRoomAll]", err);
 		}
@@ -269,7 +269,7 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 
 	public synchronized List<RoomClient> getCurrentModeratorByRoom(Long room_id) {
 		List<RoomClient> rclList = new LinkedList<RoomClient>();
-		List<RoomClient> currentClients = this.getClientListByRoom(room_id);
+		List<RoomClient> currentClients = this.getClientListByRoom(room_id, null);
 		for (RoomClient rcl : currentClients) {
 			if (rcl.getIsMod()) {
 				rclList.add(rcl);
@@ -299,7 +299,7 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 	}
 
 	public long getRecordingCount(long roomId) {
-		List<RoomClient> currentClients = this.getClientListByRoom(roomId);
+		List<RoomClient> currentClients = this.getClientListByRoom(roomId, null);
 		int numberOfRecordingUsers = 0;
 		for (RoomClient rcl : currentClients) {
 			if (rcl.isStartRecording()) {
@@ -310,7 +310,7 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 	}
 
 	public long getPublishingCount(long roomId) {
-		List<RoomClient> currentClients = this.getClientListByRoom(roomId);
+		List<RoomClient> currentClients = this.getClientListByRoom(roomId, null);
 		int numberOfPublishingUsers = 0;
 		for (RoomClient rcl : currentClients) {
 			if (rcl.isStreamPublishStarted()) {

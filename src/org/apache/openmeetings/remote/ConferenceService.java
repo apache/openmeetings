@@ -145,7 +145,7 @@ public class ConferenceService {
 							organisation_id);
 			
 			for (Rooms_Organisation roomOrg : roomOrgsList) {
-				roomOrg.getRoom().setCurrentusers(clientListManager.getClientListByRoom(roomOrg.getRoom().getRooms_id()));
+				roomOrg.getRoom().setCurrentusers(clientListManager.getClientListByRoom(roomOrg.getRoom().getRooms_id(), null));
 			}
 
 			return roomOrgsList;
@@ -225,7 +225,7 @@ public class ConferenceService {
 			List<Rooms> roomList = roomDao.getPublicRooms();
 			
 			for (Rooms room : roomList) {
-				room.setCurrentusers(clientListManager.getClientListByRoom(room.getRooms_id()));
+				room.setCurrentusers(clientListManager.getClientListByRoom(room.getRooms_id(), null));
 			}
 
 			return roomList;
@@ -434,7 +434,7 @@ public class ConferenceService {
 		Long users_id = sessionManagement.checkSession(SID);
 		Long user_level = userManagement.getUserLevelByID(users_id);
 		Rooms room = roommanagement.getRoomById(user_level, rooms_id);
-		room.setCurrentusers(clientListManager.getClientListByRoom(room.getRooms_id()));
+		room.setCurrentusers(clientListManager.getClientListByRoom(room.getRooms_id(), null));
 		return room;
 	}
 
@@ -682,7 +682,7 @@ public class ConferenceService {
 			Rooms room = roomDao.get(room_id);
 			
 			if (room.getNumberOfPartizipants() <= this.clientListManager
-					.getClientListByRoom(room_id).size()) {
+					.getClientListByRoom(room_id, null).size()) {
 				return true;
 			}
 			
@@ -700,7 +700,7 @@ public class ConferenceService {
 	 * @return
 	 */
 	public List<RoomClient> getRoomClientsListByRoomId(Long room_id) {
-		return clientListManager.getClientListByRoom(room_id);
+		return clientListManager.getClientListByRoom(room_id, null);
 	}
 
 	/**
