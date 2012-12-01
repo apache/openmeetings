@@ -23,8 +23,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.persistence.beans.basic.Server;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * This is actually some maps, a single map is not enough, cause we have
@@ -48,6 +51,9 @@ import org.apache.openmeetings.persistence.beans.basic.Server;
  */
 public class HashMapStore {
 	
+	protected static final Logger log = Red5LoggerFactory.getLogger(
+			HashMapStore.class, OpenmeetingsVariables.webAppRootKey);
+	
 	/**
 	 * global client list by serverId and streamid
 	 */
@@ -68,11 +74,11 @@ public class HashMapStore {
 	private LinkedHashMap<Long, LinkedHashMap<Long, List<RoomClient>>> clientsByServerAndUserId = new LinkedHashMap<Long, LinkedHashMap<Long, List<RoomClient>>>();
 
 	/**
-	 * global client list by roomId
+	 * global client list by serverId and roomId
 	 * 
 	 * It is internally a HashMap, not a simple list to make sure the order does not change
 	 */
-	private LinkedHashMap<Long, LinkedHashMap<String, RoomClient>> clientsByRoomId = new LinkedHashMap<Long, LinkedHashMap<String, RoomClient>>();
+	private LinkedHashMap<Long, LinkedHashMap<Long, LinkedHashMap<String, RoomClient>>> clientsByServerAndRoomId = new LinkedHashMap<Long, LinkedHashMap<Long, LinkedHashMap<String, RoomClient>>>();
 
 	/**
 	 * global client list by server and roomId
@@ -172,13 +178,20 @@ public class HashMapStore {
 		//but we will not want to search for a user with the roomId == null
 		//so as long as roomId is null, we don't organize the session on a special list
 		if (rcl.getRoom_id() != null) {
+			LinkedHashMap<Long, LinkedHashMap<String, RoomClient>> clientsByRoomId = clientsByServerAndRoomId.get(getIdByServer(server));
+			if (clientsByRoomId == null) {
+				clientsByRoomId = new LinkedHashMap<Long, LinkedHashMap<String, RoomClient>>();
+			}
 			LinkedHashMap<String, RoomClient> clientRoomList = clientsByRoomId.get(rcl
 					.getRoom_id());
 			if (clientRoomList == null) {
 				clientRoomList = new LinkedHashMap<String, RoomClient>();
 			}
-			clientRoomList.put(streamId, rcl);
-			clientsByRoomId.put(rcl.getRoom_id(), clientRoomList);
+			if (!clientRoomList.containsKey((streamId))) {
+				clientRoomList.put(streamId, rcl);
+				clientsByRoomId.put(rcl.getRoom_id(), clientRoomList);
+			}
+			clientsByServerAndRoomId.put(getIdByServer(server), clientsByRoomId);
 		}
 	}
 
@@ -265,7 +278,11 @@ public class HashMapStore {
 	 * @param roomId
 	 * @return will return an empty map if nothing available
 	 */
-	public  LinkedHashMap<String, RoomClient> getClientsByRoomId(Long roomId) {
+	public  LinkedHashMap<String, RoomClient> getClientsByRoomId(Server server, Long roomId) {
+		LinkedHashMap<Long, LinkedHashMap<String, RoomClient>> clientsByRoomId = clientsByServerAndRoomId.get(getIdByServer(server));
+		if (clientsByRoomId == null) {
+			return EMPTY_MAP;
+		}
 		LinkedHashMap<String, RoomClient> clients = clientsByRoomId.get(roomId);
 		if (clients == null) {
 			return EMPTY_MAP;
@@ -290,7 +307,11 @@ public class HashMapStore {
 		}
 		
 		clientList.remove(streamId);
-		clientsByServer.put(getIdByServer(server), clientList);
+		if (clientList.size() == 0) {
+			clientsByServer.remove(getIdByServer(server));
+		} else {
+			clientsByServer.put(getIdByServer(server), clientList);
+		}
 
 		// By publicSID
 		
@@ -309,8 +330,16 @@ public class HashMapStore {
 				clientsByPublicSIDList = new ArrayList<RoomClient>();
 			}
 			clientsByPublicSIDList.remove(rcl);
-			clientListPublicSID.put(rcl.getPublicSID(), clientsByPublicSIDList);
-			clientsByServerAndPublicSID.put(getIdByServer(server), clientListPublicSID);
+			if (clientsByPublicSIDList.size() == 0) {
+				clientListPublicSID.remove(rcl.getPublicSID());
+			} else {
+				clientListPublicSID.put(rcl.getPublicSID(), clientsByPublicSIDList);
+			}
+			if (clientListPublicSID.size() == 0) {
+				clientsByServerAndPublicSID.remove(getIdByServer(server));
+			} else {
+				clientsByServerAndPublicSID.put(getIdByServer(server), clientListPublicSID);
+			}
 		}
 		
 		// By userId
@@ -330,8 +359,16 @@ public class HashMapStore {
 				clientListUserIdList = new ArrayList<RoomClient>();
 			}
 			clientListUserIdList.remove(rcl);
-			clientListUserId.put(rcl.getUser_id(), clientListUserIdList);
-			clientsByServerAndUserId.put(getIdByServer(server), clientListUserId);
+			if (clientListUserIdList.size() == 0) {
+				clientListUserId.remove(rcl.getUser_id());
+			} else {
+				clientListUserId.put(rcl.getUser_id(), clientListUserIdList);
+			}
+			if (clientListUserId.size() == 0) {
+				clientsByServerAndUserId.remove(getIdByServer(server));
+			} else {
+				clientsByServerAndUserId.put(getIdByServer(server), clientListUserId);
+			}
 		}
 
 		// By roomId
@@ -340,13 +377,26 @@ public class HashMapStore {
 		//but we will not want to search for a user with the roomId == null
 		//so as long as roomId is null, we don't organize the session on a special list
 		if (rcl.getRoom_id() != null) {
+			LinkedHashMap<Long, LinkedHashMap<String, RoomClient>> clientsByRoomId = clientsByServerAndRoomId.get(getIdByServer(server));
+			if (clientsByRoomId == null) {
+				clientsByRoomId = new LinkedHashMap<Long, LinkedHashMap<String, RoomClient>>();
+			}
 			LinkedHashMap<String, RoomClient> clientRoomList = clientsByRoomId.get(rcl
 					.getRoom_id());
 			if (clientRoomList == null) {
 				clientRoomList = new LinkedHashMap<String, RoomClient>();
 			}
 			clientRoomList.remove(streamId);
-			clientsByRoomId.put(rcl.getRoom_id(), clientRoomList);
+			if (clientRoomList.size() == 0) {
+				clientsByRoomId.remove(rcl.getRoom_id());
+			} else {
+				clientsByRoomId.put(rcl.getRoom_id(), clientRoomList);
+			}
+			if (clientsByRoomId.size() == 0) {
+				clientsByServerAndRoomId.remove(getIdByServer(server));
+			} else {
+				clientsByServerAndRoomId.put(getIdByServer(server), clientsByRoomId);
+			}
 		}
 		
 	}
@@ -368,6 +418,86 @@ public class HashMapStore {
 
 	public LinkedHashMap<Long, LinkedHashMap<String, RoomClient>> values() {
 		return clientsByServer;
+	}
+	
+	public enum DEBUG_DETAILS {
+		SIZE,
+		CLIENT_BY_STREAMID, STREAMID_LIST_ALL,
+		CLIENT_BY_PUBLICSID, PUBLICSID_LIST_ALL, 
+		CLIENT_BY_USERID, USERID_LIST_ALL,
+		CLIENT_BY_ROOMID, ROOMID_LIST_ALL
+	}
+	
+	public int getTotalNumberOfSessions() {
+		int t = 0;
+		for (Entry<Long, LinkedHashMap<String, RoomClient>> entry : values().entrySet()) {
+			t += entry.getValue().values().size();
+		}
+		return t;
+	}
+	
+	public void printDebugInformation(List<DEBUG_DETAILS> detailLevel) {
+		
+		if (detailLevel.contains(DEBUG_DETAILS.SIZE)) {
+			log.debug("Number of sessions Total " + getTotalNumberOfSessions());
+			log.debug(" clientsByServer SIZE {} ",clientsByServer.size());
+			log.debug(" clientsByServerAndPublicSID SIZE {} ",clientsByServerAndPublicSID.size());
+			log.debug(" clientsByServerAndUserId SIZE {} ",clientsByServerAndUserId.size());
+			log.debug(" clientsByRoomId SIZE {} ",clientsByServerAndRoomId.size());
+		}
+		
+		if (detailLevel.contains(DEBUG_DETAILS.CLIENT_BY_STREAMID)) {
+			
+			for (Entry<Long, LinkedHashMap<String, RoomClient>> entry : clientsByServer.entrySet()) {
+				log.debug("clientsByServer Server {} Number of Clients: {} ",entry.getKey(),entry.getValue().size());
+			}
+			
+		}
+		
+		if (detailLevel.contains(DEBUG_DETAILS.CLIENT_BY_PUBLICSID)) {
+			for (Entry<Long, LinkedHashMap<String, List<RoomClient>>> entry : clientsByServerAndPublicSID.entrySet()) {
+				log.debug("clientsByServerAndPublicSID Server {} Number of PublicSIDs: {} ",entry.getKey(),entry.getValue().size());
+				
+				if (detailLevel.contains(DEBUG_DETAILS.PUBLICSID_LIST_ALL)) {
+					for (Entry<String, List<RoomClient>> innerEntry : entry.getValue().entrySet()) {
+						log.debug("clientsByServerAndPublicSID publicSID {} Number of clients {} ",innerEntry.getKey(),innerEntry.getValue().size());
+					}
+				}
+			}
+		}
+		
+		if (detailLevel.contains(DEBUG_DETAILS.CLIENT_BY_USERID)) {
+			for (Entry<Long, LinkedHashMap<Long, List<RoomClient>>> entry : clientsByServerAndUserId.entrySet()) {
+				log.debug("clientsByServerAndUserId Server {} Number of UserIds: {} ",entry.getKey(),entry.getValue().size());
+				
+				if (detailLevel.contains(DEBUG_DETAILS.USERID_LIST_ALL)) {
+					for (Entry<Long, List<RoomClient>> innerEntry : entry.getValue().entrySet()) {
+						log.debug("clientsByServerAndUserId userId {} Number of clients {} ",innerEntry.getKey(),innerEntry.getValue().size());
+					}
+				}
+			}
+		}
+		
+		if (detailLevel.contains(DEBUG_DETAILS.CLIENT_BY_ROOMID)) {
+			
+			for (Entry<Long, LinkedHashMap<Long, LinkedHashMap<String, RoomClient>>> serverEntry : clientsByServerAndRoomId.entrySet()) {
+			
+				LinkedHashMap<Long, LinkedHashMap<String, RoomClient>> clientsByRoomId = serverEntry.getValue();
+				log.debug("clientsByRoomId ServerId {} Number of Rooms: {} roomIds "+serverEntry.getValue().keySet()+" ",serverEntry.getKey(),serverEntry.getValue().size());
+				
+				for (Entry<Long, LinkedHashMap<String, RoomClient>> entry : clientsByRoomId.entrySet()) {
+					log.debug("clientsByRoomId RoomId {} Number of Clients: {} ",entry.getKey(),entry.getValue().size());
+					
+					if (detailLevel.contains(DEBUG_DETAILS.ROOMID_LIST_ALL)) {
+						for (Entry<String, RoomClient> innerEntry : entry.getValue().entrySet()) {
+							log.debug("clientsByRoomId streamId {} client {} ",innerEntry.getKey(),innerEntry.getValue());
+						}
+					}
+				}
+			
+			}
+		}
+		
 	}
 
 }

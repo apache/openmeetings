@@ -255,7 +255,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			RoomClient currentClient = this.clientListManager
 					.getClientByStreamId(streamid, null);
 
-			for (RoomClient rcl : clientListManager.getClientListByRoomAll(currentClient.getRoom_id())) {
+			for (RoomClient rcl : clientListManager.getClientListByRoomAll(currentClient.getRoom_id(), null)) {
 				if (rcl.isStartStreaming()) {
 					screenSharerList.add(rcl);
 				}
@@ -1463,7 +1463,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			log.debug("##### setRoomValues : " + currentClient);
 			
 			// Check for Moderation LogicalRoom ENTER
-			List<RoomClient> clientListRoom = clientListManager.getClientListByRoom(room_id);
+			List<RoomClient> clientListRoom = clientListManager.getClientListByRoom(room_id, null);
 
 			// appointed meeting or moderated Room? => Check Max Users first
 			if (room.getNumberOfPartizipants() != null
@@ -2876,7 +2876,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			RoomClient currentClient = this.clientListManager
 					.getClientByStreamId(current.getClient().getId(), null);
 
-			return clientListManager.getClientListByRoom(currentClient.getRoom_id());
+			return clientListManager.getClientListByRoom(currentClient.getRoom_id(), null);
 
 		} catch (Exception err) {
 			log.debug("[getClientListScope]", err);
