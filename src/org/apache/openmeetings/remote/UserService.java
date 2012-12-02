@@ -1037,7 +1037,8 @@ public class UserService {
 							false, // showMicrophoneStatus
 							false, // chatModerated
 							false, // chatOpened
-							false // filesOpened
+							false, // filesOpened
+							false // autoVideoSelect
 							);
 
 					room = roomDao.get(room_id);

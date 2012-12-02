@@ -70,6 +70,7 @@
 		this.chatModerated.setValue(false);
 		this.chatOpened.setValue(false);
 		this.filesOpened.setValue(false);
+		this.autoVideoSelect.setValue(false);
 	</handler>
 	
     <handler name="ondelete" >
@@ -220,8 +221,9 @@
             } else {
                 this.hideWhiteboard.setValue(false);
             }
-            this.chatOpened.setValue(obj.chatOpened);
-            this.filesOpened.setValue(obj.filesOpened);
+			this.chatOpened.setValue(obj.chatOpened);
+			this.filesOpened.setValue(obj.filesOpened);
+			this.autoVideoSelect.setValue(obj.autoVideoSelect);
             
             if (obj.showMicrophoneStatus != null && obj.showMicrophoneStatus){
                 this.showMicrophoneStatus.setValue(true);
@@ -332,6 +334,7 @@
 			this.sendObject["chatModerated"] = parent.chatModerated.getValue();
 			this.sendObject["chatOpened"] = parent.chatOpened.getValue();
 			this.sendObject["filesOpened"] = parent.filesOpened.getValue();
+            this.sendObject["autoVideoSelect"] = parent.autoVideoSelect.getValue();
             
             var ownerId = parent.ownerId.getText();
             if (ownerId == "") ownerId = 0;
@@ -580,9 +583,12 @@
     <labelText labelid="1515" width="200" y="1140" resize="false" x="2" />  
         <labelCheckbox name="chatOpened" width="270" y="1140" x="180" fontsize="11" />
                                   
-    <labelText labelid="1516" width="200" y="1160" resize="false" x="2" />  
-        <labelCheckbox name="filesOpened" width="270" y="1160" x="180" fontsize="11" />
-                                  
+	<labelText labelid="1516" width="200" y="1160" resize="false" x="2" />  
+		<labelCheckbox name="filesOpened" width="270" y="1160" x="180" fontsize="11" />
+
+	<labelText labelid="1528" width="200" y="1180" resize="false" x="2" />  
+		<labelCheckbox name="autoVideoSelect" width="270" y="1180" x="180" fontsize="11" />
+
     <!-- RoomClient List Right Side -->
     <labelText labelid="587" width="300" y="40" resize="false" 
                 x="398" fontstyle="bold" />   

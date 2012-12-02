@@ -6063,4 +6063,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   <string id="1527" name="network testing link">
     <value>Network testing</value>
   </string>
+  <string id="1528" name="room_options">
+    <value>Auto select interview video pod</value>
+  </string>
 </language>

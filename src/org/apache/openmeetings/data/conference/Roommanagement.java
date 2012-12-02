@@ -676,7 +676,7 @@ public class Roommanagement {
 			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, Boolean hideFilesExplorer, 
 			Boolean hideActionsMenu, Boolean hideScreenSharing, Boolean hideWhiteboard,
 			Boolean showMicrophoneStatus, Boolean chatModerated, boolean chatOpened
-			, boolean filesOpened) {
+			, boolean filesOpened, boolean autoVideoSelect) {
 
 		try {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
@@ -721,6 +721,7 @@ public class Roommanagement {
 				r.setChatModerated(chatModerated);
 				r.setChatOpened(chatOpened);
 				r.setFilesOpened(filesOpened);
+				r.setAutoVideoSelect(autoVideoSelect);
 				
 				// handle SIP Issues
 				OpenXGReturnObject openXGReturnObject = openXGHttpClient
@@ -1264,7 +1265,8 @@ public class Roommanagement {
 			Long ownerId, Boolean waitForRecording, Boolean allowRecording,
 			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, 
 			Boolean hideFilesExplorer, Boolean hideActionsMenu, Boolean hideScreenSharing, Boolean hideWhiteboard,
-			Boolean showMicrophoneStatus, Boolean chatModerated, boolean chatOpened, boolean filesOpened) {
+			Boolean showMicrophoneStatus, Boolean chatModerated, boolean chatOpened, boolean filesOpened
+			, boolean autoVideoSelect) {
 		try {
 
 			log.debug("*** updateRoom numberOfPartizipants: "
@@ -1279,7 +1281,7 @@ public class Roommanagement {
 						ownerId, waitForRecording, allowRecording, hideTopBar, hideChat, 
 						hideActivitiesAndActions, hideFilesExplorer, hideActionsMenu, 
 						hideScreenSharing, hideWhiteboard, showMicrophoneStatus, chatModerated
-						, chatOpened, filesOpened);
+						, chatOpened, filesOpened, autoVideoSelect);
 
 			}
 
@@ -1299,7 +1301,8 @@ public class Roommanagement {
 			Long ownerId, Boolean waitForRecording, Boolean allowRecording,
 			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, Boolean hideFilesExplorer, 
 			Boolean hideActionsMenu, Boolean hideScreenSharing, Boolean hideWhiteboard, 
-			Boolean showMicrophoneStatus, Boolean chatModerated, boolean chatOpened, boolean filesOpened) {
+			Boolean showMicrophoneStatus, Boolean chatModerated, boolean chatOpened, boolean filesOpened
+			, boolean autoVideoSelect) {
 		try {
 			log.debug("*** updateRoom numberOfPartizipants: "
 					+ numberOfPartizipants);
@@ -1342,6 +1345,7 @@ public class Roommanagement {
 			r.setChatModerated(chatModerated);
 			r.setChatOpened(chatOpened);
 			r.setFilesOpened(filesOpened);
+			r.setAutoVideoSelect(autoVideoSelect);
 
 			if (r.getRooms_id() == null) {
 				em.persist(r);
@@ -1667,7 +1671,8 @@ public class Roommanagement {
 						false, //showMicrophoneStatus
 						false, // chatModerated
 						false, //chatOpened
-						false //filesOpened
+						false, //filesOpened
+						false //autoVideoSelect
 						);
 
 				if (rooms_id != null) {

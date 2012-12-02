@@ -207,6 +207,10 @@ public class Rooms implements Serializable, IDataProviderEntity {
 	@Element(data = true, required = false)
 	private boolean filesOpened = false;
 
+	@Column(name = "auto_video_select")
+	@Element(data = true, required = false)
+	private boolean autoVideoSelect = false;
+
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "roomId")
 	@ElementList(name = "room_moderators", required=false)
@@ -523,6 +527,14 @@ public class Rooms implements Serializable, IDataProviderEntity {
 
 	public void setFilesOpened(boolean filesOpened) {
 		this.filesOpened = filesOpened;
+	}
+
+	public boolean isAutoVideoSelect() {
+		return autoVideoSelect;
+	}
+
+	public void setAutoVideoSelect(boolean autoVideoSelect) {
+		this.autoVideoSelect = autoVideoSelect;
 	}
 
 }

@@ -67,9 +67,8 @@
 </class>
  
 <class name="interviewVideoBox" extends="view" width="322" height="281" bgcolor="0x000000">
-
     <attribute name="interviewPodId" value="0" type="number" />
-
+    
     <method name="startInterView">
         if ($debug) Debug.write("startInterView :: ");
         var tx = this.getAttributeRelative("x",canvas);

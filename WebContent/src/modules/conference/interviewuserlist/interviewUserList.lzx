@@ -228,7 +228,7 @@
     </method>
     
     <method name="removeVideoByUser" args="userObject">
-    	if ($edebug) Debug.write("removeVideoByUser ",userObject);
+    	if ($debug) Debug.write("removeVideoByUser ",userObject);
         this.closeStreamClient(userObject.publicSID);
     </method>
     

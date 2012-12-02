@@ -37,6 +37,7 @@
     
     <handler name="oninit">
         <![CDATA[
+            if ($debug) Debug.write("!!!!! interviewListTable oninit: ");
             this.initList();
         ]]>
     </handler>
@@ -48,21 +49,20 @@
 
     <method name="addItem" args="object">
         <![CDATA[
-            if ($debug) Debug.write("eventUserList addItem: ",object,object.publicSID);
-            
-            for (var i=0;i<this._table.innerList.subviews.length;i++) {
-                if (this._table.innerList.subviews[i].refObj.publicSID == object.publicSID) {
+            if ($debug) Debug.write("interviewListTable addItem: ",object,object.publicSID);
+            var list = this._table.innerList;
+            for (var i = 0; i < list.subviews.length;i++) {
+                if (list.subviews[i].refObj.publicSID == object.publicSID) {
                     //if ($debug) Debug.warn("Already on List, do not add twice");
                     return;
                 }
             }
-            
             var lastname = object.lastname;
             if (object.isSuperModerator) {
                 lastname += " *";
             }
             
-            new lz.interviewUserListItem(this._table.innerList,{
+            new lz.interviewUserListItem(list,{
                     user_id:object.user_id,
                     firstname:object.firstname,
                     isSuperModerator:object.isSuperModerator,
@@ -76,6 +76,21 @@
                 });
             
             this.sortUserList();
+            if (canvas.currentRoomObj.autoVideoSelect) {
+				if (object.publicSID == canvas.publicSID && !object.interviewPodId
+					&& (object.isMod || object.isSuperModerator || object.canDraw))
+				{
+		            for (var ii = 1; ii < 3; ++ii) {
+		            	var obj = getVideoObjectByInterviewPodId(ii);
+		            	if (!obj) {
+	            			var interviewBox = canvas._drawarea._videoviewcontent.searchImmediateSubnodes("name", "interviewVideoBox" + ii);
+	            			//if ($debug) Debug.write("!!!! interviewListInner:: interviewBox = ", ii, interviewBox);
+	           				interviewBox.sendConfirmation(canvas.publicSID);
+		            		break;
+		            	}
+					}
+				}
+			}
         ]]>
     </method>
     
@@ -121,24 +136,43 @@
         this.initList();
     </method>
     
+	<method name="disconnectclient" args="publicSID">
+	<![CDATA[
+		var item = getVideoObjectByPublicSID(publicSID);
+		if (item) {
+			item.destroy();
+		}
+	]]>
+	</method>
+    
     <!--- get a Objects List Item
         @param string publicSID publicSID
      -->
-    <method name="getVideoObjectByPublicSID" args="publicSID">
-        <![CDATA[
-            //if ($debug) Debug.write("getVideoObjectByPublicSid SEARCH: ",publicSID);
+	<method name="getVideoObjectByPublicSID" args="publicSID">
+	<![CDATA[
+		for (var i=0;i<this._table.innerList.subviews.length;i++){
+			//if ($debug) Debug.write("getVideoObjectByPublicSID : this._table.innerList.subviews[i]",this._table.innerList.subviews[i]);
+			if (this._table.innerList.subviews[i].refObj.publicSID==publicSID){
+				return this._table.innerList.subviews[i];
+			}
+		}
+		return null;
+	]]>
+	</method>
 
-            for (var i=0;i<this._table.innerList.subviews.length;i++){
-                //if ($debug) Debug.write("getVideoObjectByPublicSID : this._table.innerList.subviews[i]",this._table.innerList.subviews[i]);
-                if (this._table.innerList.subviews[i].refObj.publicSID==publicSID){
-                    return this._table.innerList.subviews[i];
-                }
-            }
-            
-            return null;
-            
-        ]]>
-    </method>
+	<method name="getVideoObjectByInterviewPodId" args="interviewPodId">
+	<![CDATA[
+		var list = this._table.innerList.subviews;
+		for (var i = 0; i < list.length; ++i) {
+			//if ($debug) Debug.write("getVideoObjectByInterviewPodId : list[i]", list[i]);
+			if (list[i].refObj.interviewPodId == interviewPodId){
+				if ($debug) Debug.write("getVideoObjectByInterviewPodId : list[i].refObj.interviewPodId", interviewPodId, list[i].refObj.interviewPodId);
+				return list[i];
+			}
+		}
+		return null;
+	]]>
+	</method>
 
     <method name="selectItem" args="itemObj">
         <![CDATA[

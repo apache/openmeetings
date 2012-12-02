@@ -191,7 +191,8 @@ public class AppointmentLogic {
 					false, //showMicrophoneStatus
 					false, // chatModerated
 					false, // chatOpened
-					false // filesOpened
+					false, // filesOpened
+					false // autoVideoSelect
 				);
 
 			log.debug("Appointmentlogic.saveAppointment : Room - " + room_id);

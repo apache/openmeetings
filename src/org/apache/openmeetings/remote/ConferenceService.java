@@ -574,7 +574,8 @@ public class ConferenceService {
 								Boolean.valueOf(argObjectMap.get("showMicrophoneStatus").toString()),
 								Boolean.valueOf(argObjectMap.get("chatModerated").toString()),
 								Boolean.valueOf(argObjectMap.get("chatOpened").toString()),
-								Boolean.valueOf(argObjectMap.get("filesOpened").toString())
+								Boolean.valueOf(argObjectMap.get("filesOpened").toString()),
+								Boolean.valueOf(argObjectMap.get("autoVideoSelect").toString())
 						);
 			} else if (rooms_id > 0) {
 				roomId = roommanagement.updateRoom(
@@ -626,7 +627,8 @@ public class ConferenceService {
 								Boolean.valueOf(argObjectMap.get("showMicrophoneStatus").toString()),
 								Boolean.valueOf(argObjectMap.get("chatModerated").toString()),
 								Boolean.valueOf(argObjectMap.get("chatOpened").toString()),
-								Boolean.valueOf(argObjectMap.get("filesOpened").toString())
+								Boolean.valueOf(argObjectMap.get("filesOpened").toString()),
+								Boolean.valueOf(argObjectMap.get("autoVideoSelect").toString())
 								);
 			}
 			
