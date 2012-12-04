@@ -149,7 +149,7 @@ public class AsteriskSipUsers implements Serializable {
 	private String insecure;
 
 	@Column(name = "ipaddr", nullable = false)
-	@Element(data=true)
+	@Element(data=true, required=false)
 	private String ipaddr = "";
 
 	@Column(name = "language")
@@ -181,7 +181,7 @@ public class AsteriskSipUsers implements Serializable {
 	private String musiconhold;
 
 	@Column(name = "name", nullable = false)
-	@Element(data=true)
+	@Element(data=true, required=false)
 	private String name = "";
 
 	@Column(name = "nat", nullable = false)
@@ -205,7 +205,7 @@ public class AsteriskSipUsers implements Serializable {
 	private String pickupgroup;
 
 	@Column(name = "port", nullable = false)
-	@Element(data=true)
+	@Element(data=true, required=false)
 	private String port = "";
 
 	// @Column(name = "progressinband")
@@ -226,7 +226,7 @@ public class AsteriskSipUsers implements Serializable {
 	private String qualify;
 
 	@Column(name = "regexten", nullable = false)
-	@Element(data=true)
+	@Element(data=true, required=false)
 	private String regexten = "";
 
 	@Column(name = "regseconds", nullable = false)
@@ -258,7 +258,7 @@ public class AsteriskSipUsers implements Serializable {
 	private String sendrpid = "yes";
 
 	@Column(name = "setvar", nullable = false)
-	@Element(data=true)
+	@Element(data=true, required=false)
 	private String setvar = "";
 
 	@Column(name = "subscribecontext")
@@ -282,21 +282,21 @@ public class AsteriskSipUsers implements Serializable {
 	private String trustrpid = "no";
 
 	@Column(name = "type", nullable = false)
-	@Element(data=true)
+	@Element(data=true, required=false)
 	private String type = "friend";
 
 	// @Column(name = "useclientcode")
 	@Column(name = "useclientcode")
 	// @Enumerated(EnumType.STRING)
-	@Element(data=true)
+	@Element(data=true, required=false)
 	private String useclientcode = "no";
 
 	@Column(name = "username", nullable = false)
-	@Element(data=true)
+	@Element(data=true, required=false)
 	private String username = "";
 
 	@Column(name = "usereqphone", nullable = false)
-	@Element(data=true)
+	@Element(data=true, required=false)
 	private String usereqphone = "no";
 
 	// @Column(name = "videosupport")

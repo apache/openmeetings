@@ -20,29 +20,30 @@ package org.apache.openmeetings.backup;
 
 import java.util.Map;
 
-import org.apache.openmeetings.data.user.Organisationmanagement;
+import org.apache.openmeetings.data.user.dao.OrganisationDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
 public class OrganisationConverter extends OmConverter<Organisation> {
-	private Organisationmanagement organisationmanagement;
+	private OrganisationDao orgDao;
 	private Map<Long, Long> idMap;
 	
 	public OrganisationConverter() {
 		//default constructor is for export
 	}
 	
-	public OrganisationConverter(Organisationmanagement organisationmanagement, Map<Long, Long> idMap) {
-		this.organisationmanagement = organisationmanagement;
+	public OrganisationConverter(OrganisationDao orgDao, Map<Long, Long> idMap) {
+		this.orgDao = orgDao;
 		this.idMap = idMap;
 	}
 	
 	public Organisation read(InputNode node) throws Exception {
-		long oldOrgId = getlongValue(node);
-		long newId = idMap.containsKey(oldOrgId) ? idMap.get(oldOrgId) : oldOrgId;
+		long oldId = getlongValue(node);
+		long newId = idMap.containsKey(oldId) ? idMap.get(oldId) : oldId;
 		
-		return organisationmanagement.getOrganisationByIdBackup(newId);
+		Organisation o = orgDao.get(newId);
+		return o == null ? new Organisation() : o;
 	}
 
 	public void write(OutputNode node, Organisation value) throws Exception {

@@ -61,7 +61,7 @@ public class Rooms implements Serializable, IDataProviderEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	@Element(data = true)
+	@Element(data = true, required=false)
 	private Long rooms_id;
 
 	@Column(name = "name")
@@ -211,7 +211,7 @@ public class Rooms implements Serializable, IDataProviderEntity {
 	@Element(data = true, required = false)
 	private boolean autoVideoSelect = false;
 
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "roomId")
 	@ElementList(name = "room_moderators", required=false)
 	private List<RoomModerators> moderators;

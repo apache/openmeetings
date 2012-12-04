@@ -50,7 +50,7 @@ public class FileExplorerItem implements Serializable {
 	private long fileExplorerItemId;
 	
 	@Column(name="filename")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String fileName;
 	
 	@Column(name="filehash")

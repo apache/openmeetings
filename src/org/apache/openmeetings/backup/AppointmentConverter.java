@@ -39,10 +39,11 @@ public class AppointmentConverter extends OmConverter<Appointment> {
 	}
 	
 	public Appointment read(InputNode node) throws Exception {
-		long oldOrgId = getlongValue(node);
-		long newId = idMap.containsKey(oldOrgId) ? idMap.get(oldOrgId) : oldOrgId;
+		long oldId = getlongValue(node);
+		long newId = idMap.containsKey(oldId) ? idMap.get(oldId) : oldId;
 		
-		return appointmentDao.getAppointmentByIdBackup(newId);
+		Appointment a = appointmentDao.getAppointmentByIdBackup(newId);
+		return a == null ? new Appointment() : a;
 	}
 
 	public void write(OutputNode node, Appointment value) throws Exception {

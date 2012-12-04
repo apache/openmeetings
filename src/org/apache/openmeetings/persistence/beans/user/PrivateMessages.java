@@ -49,12 +49,12 @@ public class PrivateMessages implements Serializable {
 	private long privateMessageId;
 	
 	@Column(name="subject")
-	@Element(data=true)
+	@Element(data=true, required=false)
 	private String subject;
 	
 	@Lob
 	@Column(name="message")
-	@Element(data=true)
+	@Element(data=true, required=false)
 	private String message;
 	
 	@Column(name="email")

@@ -20,29 +20,30 @@ package org.apache.openmeetings.backup;
 
 import java.util.Map;
 
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
 public class UserConverter extends OmConverter<Users> {
-	private Usermanagement userManagement;
+	private UsersDao userDao;
 	private Map<Long, Long> idMap;
 	
 	public UserConverter() {
 		//default constructor is for export
 	}
 	
-	public UserConverter(Usermanagement userManagement, Map<Long, Long> idMap) {
-		this.userManagement = userManagement;
+	public UserConverter(UsersDao userDao, Map<Long, Long> idMap) {
+		this.userDao = userDao;
 		this.idMap = idMap;
 	}
 	
 	public Users read(InputNode node) throws Exception {
-		long oldOrgId = getlongValue(node);
-		long newId = idMap.containsKey(oldOrgId) ? idMap.get(oldOrgId) : oldOrgId;
+		long oldId = getlongValue(node);
+		long newId = idMap.containsKey(oldId) ? idMap.get(oldId) : oldId;
 		
-		return userManagement.getUserById(newId);
+		Users u = userDao.get(newId);
+		return u == null ? new Users() : u;
 	}
 
 	public void write(OutputNode node, Users value) throws Exception {

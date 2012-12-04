@@ -73,6 +73,7 @@ import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingDao;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDao;
 import org.apache.openmeetings.data.user.Organisationmanagement;
+import org.apache.openmeetings.data.user.dao.OrganisationDao;
 import org.apache.openmeetings.data.user.dao.PrivateMessageFolderDao;
 import org.apache.openmeetings.data.user.dao.PrivateMessagesDao;
 import org.apache.openmeetings.data.user.dao.StateDao;
@@ -93,7 +94,6 @@ import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingMetaData;
 import org.apache.openmeetings.persistence.beans.poll.PollType;
 import org.apache.openmeetings.persistence.beans.poll.RoomPoll;
-import org.apache.openmeetings.persistence.beans.rooms.RoomModerators;
 import org.apache.openmeetings.persistence.beans.rooms.RoomTypes;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms_Organisation;
@@ -143,6 +143,8 @@ public class BackupImportController extends AbstractUploadController {
 	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
 	private Organisationmanagement organisationmanagement;
+	@Autowired
+	private OrganisationDao orgDao;
 	@Autowired
 	private Roommanagement roommanagement;
 	@Autowired
@@ -311,7 +313,7 @@ public class BackupImportController extends AbstractUploadController {
 
 			matcher.bind(Long.class, LongTransform.class);
 			matcher.bind(Integer.class, IntegerTransform.class);
-			registry.bind(Users.class, new UserConverter(userManagement, usersMap));
+			registry.bind(Users.class, new UserConverter(usersDao, usersMap));
 			registry.bind(RoomTypes.class, new RoomTypeConverter(roommanagement));
 			
 			List<Rooms> list = readList(serializer, f, "rooms.xml", "rooms", Rooms.class);
@@ -324,10 +326,6 @@ public class BackupImportController extends AbstractUploadController {
 
 				r = roomDao.update(r, 1L);
 				roomsMap.put(roomId, r.getRooms_id());
-				
-				for (RoomModerators rm : r.getModerators()) {
-					roomModeratorsDao.addRoomModeratorByObj(rm);
-				}
 			}
 		}
 
@@ -340,14 +338,16 @@ public class BackupImportController extends AbstractUploadController {
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			registry.bind(Organisation.class, new OrganisationConverter(organisationmanagement, organisationsMap));
+			registry.bind(Organisation.class, new OrganisationConverter(orgDao, organisationsMap));
 			registry.bind(Rooms.class, new RoomConverter(roomDao, roomsMap));
 			
 			List<Rooms_Organisation> list = readList(serializer, f, "rooms_organisation.xml", "room_organisations", Rooms_Organisation.class);
 			for (Rooms_Organisation ro : list) {
-				// We need to reset this as openJPA reject to store them otherwise
-				ro.setRooms_organisation_id(null);
-				roommanagement.addRoomOrganisation(ro);
+				if (!ro.getDeleted()) {
+					// We need to reset this as openJPA reject to store them otherwise
+					ro.setRooms_organisation_id(null);
+					roommanagement.addRoomOrganisation(ro);
+				}
 			}
 		}
 
@@ -361,7 +361,7 @@ public class BackupImportController extends AbstractUploadController {
 			Serializer serializer = new Persister(strategy);
 	
 			registry.bind(AppointmentCategory.class, new AppointmentCategoryConverter(appointmentCategoryDaoImpl));
-			registry.bind(Users.class, new UserConverter(userManagement, usersMap));
+			registry.bind(Users.class, new UserConverter(usersDao, usersMap));
 			registry.bind(AppointmentReminderTyps.class, new AppointmentReminderTypeConverter(appointmentReminderTypDaoImpl));
 			registry.bind(Rooms.class, new RoomConverter(roomDao, roomsMap));
 			registry.bind(Date.class, DateConverter.class);
@@ -389,14 +389,19 @@ public class BackupImportController extends AbstractUploadController {
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			registry.bind(Users.class, new UserConverter(userManagement, usersMap));
+			registry.bind(Users.class, new UserConverter(usersDao, usersMap));
 			registry.bind(Appointment.class, new AppointmentConverter(appointmentDao, appointmentsMap));
 			
 			List<MeetingMember> list = readList(serializer, f, "meetingmembers.xml", "meetingmembers", MeetingMember.class);
 			for (MeetingMember ma : list) {
-				// We need to reset this as openJPA reject to store them otherwise
-				ma.setMeetingMemberId(null);
-				meetingMemberDao.addMeetingMemberByObject(ma);
+				if (ma.getUserid().getUser_id() == null) {
+					ma.setUserid(null);
+				}
+				if (!ma.getDeleted()) {
+					// We need to reset this as openJPA reject to store them otherwise
+					ma.setMeetingMemberId(null);
+					meetingMemberDao.addMeetingMemberByObject(ma);
+				}
 			}
 		}
 
@@ -471,14 +476,14 @@ public class BackupImportController extends AbstractUploadController {
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			registry.bind(Users.class, new UserConverter(userManagement, usersMap));
+			registry.bind(Users.class, new UserConverter(usersDao, usersMap));
 			
 			List<UserContacts> list = readList(serializer, f, "userContacts.xml", "usercontacts", UserContacts.class, true);
 			for (UserContacts uc : list) {
 				Long ucId = uc.getUserContactId();
 				UserContacts storedUC = userContactsDao.getUserContacts(ucId);
 
-				if (storedUC == null) {
+				if (storedUC == null && uc.getContact().getUser_id() != null) {
 					uc.setUserContactId(0);
 					Long newId = userContactsDao.addUserContactObj(uc);
 					userContactsMap.put(ucId, newId);
@@ -495,7 +500,7 @@ public class BackupImportController extends AbstractUploadController {
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			registry.bind(Users.class, new UserConverter(userManagement, usersMap));
+			registry.bind(Users.class, new UserConverter(usersDao, usersMap));
 			registry.bind(Rooms.class, new RoomConverter(roomDao, roomsMap));
 			registry.bind(Date.class, DateConverter.class);
 			
@@ -506,7 +511,12 @@ public class BackupImportController extends AbstractUploadController {
 					getNewId(p.getPrivateMessageFolderId(), Maps.MESSAGEFOLDERS));
 				p.setUserContactId(
 					getNewId(p.getUserContactId(), Maps.USERCONTACTS));
-				
+				if (p.getRoom().getRooms_id() == null) {
+					p.setRoom(null);
+				}
+				if (p.getTo().getUser_id() == null) {
+					p.setTo(null);
+				}
 				privateMessagesDao.addPrivateMessageObj(p);
 			}
 		}
@@ -542,7 +552,7 @@ public class BackupImportController extends AbstractUploadController {
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			registry.bind(Users.class, new UserConverter(userManagement, usersMap));
+			registry.bind(Users.class, new UserConverter(usersDao, usersMap));
 			registry.bind(Rooms.class, new RoomConverter(roomDao, roomsMap));
 			registry.bind(PollType.class, new PollTypeConverter(pollManagement));
 			registry.bind(Date.class, DateConverter.class);
@@ -565,12 +575,16 @@ public class BackupImportController extends AbstractUploadController {
 
 			matcher.bind(Long.class, LongTransform.class);
 			registry.bind(Date.class, DateConverter.class);
+			registry.bind(Users.class, new UserConverter(usersDao, usersMap));
 			
 			List<Configuration> list = readList(serializer, f, "configs.xml", "configs", Configuration.class, true);
 			for (Configuration c : list) {
 				Configuration cfg = configurationDao.getConfKey(c
 						.getConf_key());
 				c.setConfiguration_id(cfg == null ? null : cfg.getConfiguration_id());
+				if (c.getUser().getUser_id() == null) {
+					c.setUser(null);
+				}
 				configurationDao.update(c, 1L);
 			}
 		}
@@ -583,6 +597,7 @@ public class BackupImportController extends AbstractUploadController {
 			List<AsteriskSipUsers> list = readList(simpleSerializer, f, "asterisksipusers.xml"
 				, "asterisksipusers", AsteriskSipUsers.class, true);
 			for (AsteriskSipUsers au : list) {
+				au.setId(0);
 				asteriskDAOImpl.saveAsteriskSipUsers(au);
 			}
 		}
@@ -595,6 +610,7 @@ public class BackupImportController extends AbstractUploadController {
 			List<Extensions> list = readList(simpleSerializer, f, "extensions.xml"
 				, "extensions", Extensions.class, true);
 			for (Extensions e : list) {
+				e.setId(null);
 				asteriskDAOImpl.saveExtensions(e);
 			}
 		}
@@ -716,7 +732,7 @@ public class BackupImportController extends AbstractUploadController {
 		Strategy strategy = new RegistryStrategy(registry);
 		Serializer ser = new Persister(strategy);
 
-		registry.bind(Organisation.class, new OrganisationConverter(organisationmanagement, organisationsMap));
+		registry.bind(Organisation.class, new OrganisationConverter(orgDao, organisationsMap));
 		//registry.bind(UserSipData.class, UserSipDataConverter.class);
 		registry.bind(OmTimeZone.class, new OmTimeZoneConverter(omTimeZoneDaoImpl));
 		registry.bind(States.class, new StateConverter(statemanagement));
