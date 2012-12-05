@@ -212,7 +212,7 @@
 		<dependency org="javax.mail" name="mail" rev="1.4.4" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.simpleframework" name="simple-xml" rev="2.6.8" conf="openmeetings->*" transitive="false">
+		<dependency org="org.simpleframework" name="simple-xml" rev="2.6.9" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<dependency org="org.apache.wicket" name="wicket-request" rev="6.2.0" conf="openmeetings->*" transitive="false">
