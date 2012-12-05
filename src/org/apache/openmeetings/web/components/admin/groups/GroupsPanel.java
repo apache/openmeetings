@@ -42,8 +42,9 @@ import org.apache.wicket.markup.repeater.Item;
  * 
  */
 public class GroupsPanel extends AdminPanel {
-	
 	private static final long serialVersionUID = -5170400556006464830L;
+	private AddUsersForm addUsersForm;
+	private GroupForm form;
 	
 	@Override
 	public void onMenuPanelLoad(AjaxRequestTarget target) {
@@ -55,11 +56,9 @@ public class GroupsPanel extends AdminPanel {
 		super(id);
 		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
         final WebMarkupContainer addUsersBtn = new WebMarkupContainer("addUsersBtn");
-        final AddUsersForm addUsersForm = new AddUsersForm("addUsers");
-		add(addUsersForm);
 		
 		//Adding the Group Form
-		final GroupForm form = new GroupForm("form", listContainer, new Organisation()){
+		form = new GroupForm("form", listContainer, new Organisation()){
 			private static final long serialVersionUID = -3042797340375988889L;
 
 			@Override
@@ -82,6 +81,8 @@ public class GroupsPanel extends AdminPanel {
 			}
 		};
         add(form.add(addUsersBtn.setOutputMarkupId(true)));
+        addUsersForm = new AddUsersForm("addUsers", form);
+		add(addUsersForm);
 
         //List view
         SearchableDataView<Organisation> dataView = new SearchableDataView<Organisation>("groupList", new SearchableDataProvider<Organisation>(OrganisationDao.class)) {

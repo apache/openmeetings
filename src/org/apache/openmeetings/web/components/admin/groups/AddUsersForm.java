@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
+import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
@@ -45,7 +46,7 @@ public class AddUsersForm extends Form<Void> {
 	private List<Users> usersInList = new ArrayList<Users>();
 	private List<Users> usersToAdd = new ArrayList<Users>();
 	
-	public AddUsersForm(String id) {
+	public AddUsersForm(String id, final GroupForm groupForm) {
 		super(id);
 		
 		IModel<List<Users>> listUsersModel = new PropertyModel<List<Users>>(AddUsersForm.this, "usersInList");
@@ -81,13 +82,25 @@ public class AddUsersForm extends Form<Void> {
 			private static final long serialVersionUID = 5553555064487161840L;
 
 			protected void onAfterSubmit(AjaxRequestTarget target, org.apache.wicket.markup.html.form.Form<?> form) {
+				UsersDao userDao = Application.getBean(UsersDao.class);
 				for (Users u : usersToAdd) {
-					/*
-					for (Organisation_Users ou : u.getOrganisation_users()) {
-						ou.
+					boolean found = false;
+					List<Organisation_Users> orgUsers = u.getOrganisation_users();
+					for (Organisation_Users ou : orgUsers) {
+						if (ou.getOrganisation().getOrganisation_id() == organisation.getOrganisation_id()) {
+							found = true;
+							break;
+						}
 					}
-					*/
+					if (!found) {
+						Organisation_Users orgUser = new Organisation_Users(organisation);
+						orgUser.setDeleted(false);
+						orgUsers.add(orgUser);
+						userDao.update(u, WebSession.getUserId());
+					}
 				}
+				target.appendJavaScript("$('#addUsers').dialog('close');");
+				groupForm.updateView(target);
 			}
 		});
 	}
