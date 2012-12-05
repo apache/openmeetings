@@ -141,8 +141,7 @@ public class UserService {
 	 * get your own user-object
 	 * 
 	 * @param SID
-	 * @param user_id
-	 * @return
+	 * @return get the user bound to this session
 	 */
 	public Users getUserSelf(String SID) {
 		Long users_id = sessionManagement.checkSession(SID);
@@ -170,7 +169,7 @@ public class UserService {
 	 * 
 	 * @param SID
 	 * @param user_id
-	 * @return
+	 * @return User with the id given
 	 */
 	public Users getUserById(String SID, long user_id) {
 		Long users_id = sessionManagement.checkSession(SID);
@@ -182,7 +181,7 @@ public class UserService {
 	 * refreshes the current SID
 	 * 
 	 * @param SID
-	 * @return
+	 * @return "ok" string in case of success, "error" string in case of the error
 	 */
 	public String refreshSession(String SID) {
 		try {
@@ -198,7 +197,7 @@ public class UserService {
 	 * get all availible Salutations
 	 * 
 	 * @param SID
-	 * @return
+	 * @return all availible Salutations
 	 */
 	public List<Salutations> getUserSalutations(String SID, long language_id) {
 		return salutationmanagement.getUserSalutations(language_id);
@@ -215,7 +214,7 @@ public class UserService {
 	 * @param orderby
 	 *            login,lastname,firstname,user_id
 	 * @param asc
-	 * @return
+	 * @return List of the users found
 	 */
 	public List<Users> searchUser(String SID, String searchcriteria,
 			String searchstring, int max, int start, String orderby, boolean asc) {
@@ -234,7 +233,7 @@ public class UserService {
 	 * @param max
 	 * @param orderby
 	 * @param asc
-	 * @return
+	 * @return list of all users of an organisation
 	 */
 	public List<Users> getOrgUserList(String SID, long organisation_id,
 			int start, int max, String orderby, boolean asc) {
@@ -249,7 +248,7 @@ public class UserService {
 	}
 
 	/**
-	 * gat a list of all organisations of an user
+	 * get a list of all organisations of an user
 	 * 
 	 * @param SID
 	 * @param client_user
@@ -257,7 +256,7 @@ public class UserService {
 	 * @param max
 	 * @param orderby
 	 * @param asc
-	 * @return
+	 * @return list of all organisations of an user
 	 */
 	public List<Organisation> getOrganisationListByUser(String SID,
 			long client_user, int start, int max, String orderby, boolean asc) {
@@ -276,7 +275,7 @@ public class UserService {
 	 * @param max
 	 * @param orderby
 	 * @param asc
-	 * @return
+	 * @return list of all not assigned organisations of a user
 	 */
 	public List<Organisation> getRestOrganisationListByUser(String SID,
 			long client_user, int start, int max, String orderby, boolean asc) {
@@ -293,7 +292,7 @@ public class UserService {
 	 * @param start
 	 * @param max
 	 * @param orderby
-	 * @return
+	 * @return whole user-list
 	 */
 	public SearchResult<Users> getUserList(String SID, int start, int max,
 			String orderby, boolean asc) {
@@ -319,7 +318,7 @@ public class UserService {
 	 * @param start
 	 * @param max
 	 * @param orderby
-	 * @return
+	 * @return user-list by search criteria
 	 */
 	public SearchResult<Users> getAllUserBySearchRange(String SID,
 			String search, int start, int max, String orderby, boolean asc) {
@@ -331,7 +330,7 @@ public class UserService {
 	 * updates the user profile, every user can update his own profile
 	 * 
 	 * @param SID
-	 * @param argObject
+	 * @param values
 	 * @return user_id or NULL or negativ value (error_id)
 	 */
 	public Long updateUserSelfSmall(String SID,
@@ -355,7 +354,7 @@ public class UserService {
 	 * 
 	 * @param SID
 	 * @param regObjectObj
-	 * @return
+	 * @return - id of the user updated in case of success, null otherwise
 	 */
 	@SuppressWarnings({ "rawtypes" })
 	public Long saveOrUpdateUser(String SID, Object regObjectObj) {
@@ -501,7 +500,7 @@ public class UserService {
 	 * 
 	 * @param SID
 	 * @param user_idClient
-	 * @return
+	 * @return - id of the user deleted in case of success, error code otherwise
 	 */
 	public Long deleteUserAdmin(String SID, Long user_idClient) {
 		log.debug("deleteUserAdmin");
@@ -539,7 +538,7 @@ public class UserService {
 	 * @param serverId
 	 *            0 means the session is locally, otherwise we have to perform a
 	 *            REST call
-	 * @return
+	 * @return - true if user has sufficient permissions, false otherwise
 	 */
 	public Boolean kickUserByStreamId(String SID, String streamid, long serverId) {
 		try {
@@ -1708,7 +1707,7 @@ public class UserService {
 	 * 
 	 * @param SID
 	 * @param publicSID
-	 * @return
+	 * @return - true in case user have sufficient permissions, null otherwise
 	 */
 	public Boolean kickUserByPublicSID(String SID, String publicSID) {
 		try {

@@ -86,7 +86,7 @@ public class UserWebService {
 	 * load this session id before doing anything else Returns an Object of Type
 	 * Sessiondata, this contains a sessionId, use that sessionId in all Methods
 	 * 
-	 * @return
+	 * @return - creates new session
 	 */
 	public Sessiondata getSession() {
 		log.debug("SPRING LOADED getSession -- ");
@@ -104,7 +104,8 @@ public class UserWebService {
 	 *            Username from OpenMeetings, the user has to have Admin-rights
 	 * @param userpass
 	 *            Userpass from OpenMeetings
-	 * @return
+	 *            
+	 * @return - id of the logged in user, -1 in case of the error
 	 */
 	public Long loginUser(String SID, String username, String userpass)
 			throws AxisFault {
@@ -138,7 +139,8 @@ public class UserWebService {
 	 *            the error id (negative Value here!)
 	 * @param language_id
 	 *            The id of the language
-	 * @return
+	 *            
+	 * @return - error with the code given
 	 */
 	public ErrorResult getErrorByCode(String SID, long errorid, long language_id) {
 		try {
@@ -202,7 +204,8 @@ public class UserWebService {
 	 *            the baseURL is needed to send the Initial Email correctly to
 	 *            that User, otherwise the Link in the EMail that the new User
 	 *            will reveive is not valid
-	 * @return
+	 *            
+	 * @return - id of the user added or error code
 	 * @throws AxisFault
 	 */
 	public Long addNewUser(String SID, String username, String userpass,
@@ -289,7 +292,8 @@ public class UserWebService {
 	 *            will reveive is not valid
 	 * @param jNameTimeZone
 	 *            the name of the timezone for the user
-	 * @return
+	 *            
+	 * @return - id of the user added or the error code
 	 * @throws AxisFault
 	 */
 	public Long addNewUserWithTimeZone(String SID, String username,
@@ -379,7 +383,8 @@ public class UserWebService {
 	 *            externalUserId
 	 * @param externalUserType
 	 *            externalUserType
-	 * @return
+	 *            
+	 * @return - id of user added or error code
 	 * @throws AxisFault
 	 */
 	public Long addNewUserWithExternalType(String SID, String username,
@@ -442,7 +447,8 @@ public class UserWebService {
 	 *            The SID from getSession
 	 * @param userId
 	 *            the openmeetings user id
-	 * @return
+	 *            
+	 * @return - id of the user deleted, error code otherwise
 	 * @throws AxisFault
 	 */
 	public Long deleteUserById(String SID, Long userId) throws AxisFault {
@@ -477,7 +483,8 @@ public class UserWebService {
 	 *            externalUserId
 	 * @param externalUserType
 	 *            externalUserId
-	 * @return
+	 *            
+	 * @return - id of user deleted, or error code
 	 * @throws AxisFault
 	 */
 	public Long deleteUserByExternalUserIdAndType(String SID,
@@ -526,7 +533,8 @@ public class UserWebService {
 	 *            any profilePictureUrl
 	 * @param email
 	 *            any email
-	 * @return
+	 *            
+	 * @return - 1 in case of success, -1 otherwise
 	 * @throws AxisFault
 	 */
 	@Deprecated
@@ -591,7 +599,8 @@ public class UserWebService {
 	 *            if you have any external user Id you may set it here
 	 * @param externalUserType
 	 *            you can specify your system-name here, for example "moodle"
-	 * @return
+	 *            
+	 * @return - 1 in case of success, -1 otherwise
 	 * @throws AxisFault
 	 */
 	@Deprecated
@@ -665,7 +674,8 @@ public class UserWebService {
 	 * @param showAudioVideoTestAsInt
 	 *            0 means don't show Audio/Video Test, 1 means show Audio/Video
 	 *            Test Application before the user is logged into the room
-	 * @return
+	 *            
+	 * @return - secure hash or error code
 	 * @throws AxisFault
 	 */
 	public String setUserObjectAndGenerateRoomHash(String SID, String username,
@@ -764,7 +774,8 @@ public class UserWebService {
 	 * @param showAudioVideoTestAsInt
 	 *            0 means don't show Audio/Video Test, 1 means show Audio/Video
 	 *            Test Application before the user is logged into the room
-	 * @return
+	 *            
+	 * @return - secure hash or error code
 	 */
 	public String setUserObjectAndGenerateRoomHashByURL(String SID,
 			String username, String firstname, String lastname,
@@ -867,7 +878,8 @@ public class UserWebService {
 	 *            Test Application before the user is logged into the room
 	 * @param allowRecording
 	 *            0 means don't allow Recording, 1 means allow Recording
-	 * @return
+	 *            
+	 * @return - secure hash or error code
 	 */
 	public String setUserObjectAndGenerateRoomHashByURLAndRecFlag(String SID,
 			String username, String firstname, String lastname,
@@ -963,7 +975,8 @@ public class UserWebService {
 	 *            if you have any external user Id you may set it here
 	 * @param externalUserType
 	 *            you can specify your system-name here, for example "moodle"
-	 * @return
+	 *            
+	 * @return - secure hash or error code
 	 */
 	public String setUserObjectMainLandingZone(String SID, String username,
 			String firstname, String lastname, String profilePictureUrl,
@@ -1062,7 +1075,8 @@ public class UserWebService {
 	 * @param showNickNameDialogAsInt
 	 *            0 means do not show the popup to enter a nichname, 1 means
 	 *            that there is a popup to enter the nickname for the conference
-	 * @return
+	 *            
+	 * @return - secure hash, or error code 
 	 */
 	public String setUserAndNickName(String SID, String username,
 			String firstname, String lastname, String profilePictureUrl,
@@ -1148,7 +1162,8 @@ public class UserWebService {
 	 * @param recording_id
 	 *            the id of the recording, get a List of all Recordings with
 	 *            RoomService::getFlvRecordingByExternalRoomType
-	 * @return
+	 *            
+	 * @return - hash of the recording, or error id
 	 */
 	public String setUserObjectAndGenerateRecordingHashByURL(String SID,
 			String username, String firstname, String lastname,
@@ -1212,7 +1227,7 @@ public class UserWebService {
 	 *            the organization id
 	 * @param insertedby
 	 *            user id of the operating user
-	 * @return
+	 * @return - id of the user added, or error id in case of the error
 	 */
 	public Long addUserToOrganisation(String SID, Long user_id,
 			Long organisation_id, Long insertedby) {
@@ -1248,7 +1263,7 @@ public class UserWebService {
 	 *            orderby clause
 	 * @param asc
 	 *            asc or desc
-	 * @return
+	 * @return - users found
 	 */
 	public SearchResult<Users> getUsersByOrganisation(String SID,
 			long organisation_id, int start, int max, String orderby,
@@ -1280,7 +1295,7 @@ public class UserWebService {
 	 * @param publicSID
 	 *            the publicSID (you can get it from the call to get users in a
 	 *            room)
-	 * @return
+	 * @return - <code>true</code> if user was kicked
 	 */
 	public Boolean kickUserByPublicSID(String SID, String publicSID) {
 		try {

@@ -123,7 +123,7 @@ public class MainService implements IPendingServiceCallback {
 	 * 
 	 * @param SID
 	 * @param language_id
-	 * @return
+	 * @return - list of global navigation menus
 	 */
 	public List<Naviglobal> getNavi(String SID, long language_id, Long organisation_id) {
 		try {
@@ -144,7 +144,7 @@ public class MainService implements IPendingServiceCallback {
 	 * 
 	 * @param SID
 	 * @param USER_ID
-	 * @return
+	 * @return - user with SID given
 	 */
 	public Users getUser(String SID, int USER_ID) {
 		Users users = new Users();
@@ -176,11 +176,11 @@ public class MainService implements IPendingServiceCallback {
 	}
 
 	/**
-	 * This Method is jsut for testing you can find the corresponding CLietn
+	 * This Method is just for testing you can find the corresponding Client
 	 * Function in xmlcrm/auth/checkLoginData.lzx
 	 * 
 	 * @param myObject2
-	 * @return
+	 * @return - the size of the map passed, or -1 in case of error
 	 */
 	public int testObject(Object myObject2) {
 		try {
@@ -283,8 +283,11 @@ public class MainService implements IPendingServiceCallback {
 	 * auth function, use the SID you get by getsessiondata
 	 * 
 	 * @param SID
-	 * @param Username
+	 * @param usernameOrEmail
 	 * @param Userpass
+	 * @param storePermanent
+	 * @param language_id
+	 * @param ldapConfigId
 	 * @return a valid user account or an empty user with an error message and
 	 *         level -1
 	 */
@@ -512,9 +515,11 @@ public class MainService implements IPendingServiceCallback {
 	 * param showNickNameDialog in the Object SOAPLogin to true the user gets
 	 * displayed an additional dialog to enter his nickname
 	 * 
-	 * @return
+	 * @param firstname
+	 * @param lastname
+	 * @param email
+	 * @return - 1 in case of success, -1 otherwise
 	 */
-
 	public Long setUserNickName(String firstname, String lastname, String email) {
 		try {
 
@@ -552,7 +557,7 @@ public class MainService implements IPendingServiceCallback {
 	 * retrieved in the call from the SOAP Gateway!
 	 * 
 	 * @param SID
-	 * @return
+	 * @return - 1 in case of success, -1 otherwise
 	 */
 	public Long loginUserByRemote(String SID) {
 		try {
@@ -735,7 +740,7 @@ public class MainService implements IPendingServiceCallback {
 	 * in, needs no authentification to load
 	 * 
 	 * @param SID
-	 * @return
+	 * @return configuration with key "allow_frontend_register"
 	 */
 	public Configuration allowFrontendRegister(String SID) {
 		return configurationDaoImpl.getConfKey("allow_frontend_register");
@@ -787,7 +792,7 @@ public class MainService implements IPendingServiceCallback {
 	 * Object To allow the registering the config_key *allow_frontend_register*
 	 * has to be the value 1 otherwise the user will get an error code
 	 * 
-	 * @param regObject
+	 * @param regObjectObj
 	 * @return new users_id OR null if an exception, -1 if an error, -4 if mail
 	 *         already taken, -5 if username already taken, -3 if login or pass
 	 *         or mail is empty
@@ -866,7 +871,7 @@ public class MainService implements IPendingServiceCallback {
 	 * logs a user out and deletes his account
 	 * 
 	 * @param SID
-	 * @return
+	 * @return - id of user being deleted, or error code
 	 */
 	public Long deleteUserIDSelf(String SID) {
 		Long users_id = sessionManagement.checkSession(SID);
@@ -893,7 +898,7 @@ public class MainService implements IPendingServiceCallback {
 	 * @param email
 	 * @param subject
 	 * @param room_id
-	 * @return
+	 * @return - "success" string in case of success, error message of null otherwise
 	 */
 	@Deprecated
 	public String sendInvitation(String SID, String username, String message,
@@ -913,7 +918,7 @@ public class MainService implements IPendingServiceCallback {
 	 * @param username
 	 * @param message
 	 * @param email
-	 * @return
+	 * @return - "success" string in case of success, error message of null otherwise
 	 */
 	public String sendFeedback(String SID, String username, String message,
 			String email) {
@@ -933,7 +938,7 @@ public class MainService implements IPendingServiceCallback {
 	/**
 	 * @deprecated
 	 * @param SID
-	 * @return
+	 * @return - map of rss messages
 	 */
 	@Deprecated
 	public LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, Object>>>> getRssFeeds(
@@ -947,7 +952,7 @@ public class MainService implements IPendingServiceCallback {
 	 * 
 	 * @param SID
 	 * @param urlEndPoint
-	 * @return
+	 * @return - map of rss messages
 	 */
 	public LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, Object>>> getRssFeedByURL(
 			String SID, String urlEndPoint) {
@@ -966,7 +971,7 @@ public class MainService implements IPendingServiceCallback {
 	 * @deprecated
 	 * @param SID
 	 * @param domain
-	 * @return
+	 * @return - empty map
 	 */
 	@Deprecated
 	public LinkedHashMap<Integer, RoomClient> getUsersByDomain(String SID,

@@ -102,8 +102,7 @@ public class LdapConfigService {
 	 * @param max
 	 * @param orderby
 	 * @param asc
-	 * @param language_id
-	 * @return
+	 * @return - the list of lgap config object being searched
 	 */
 	public SearchResult<LdapConfig> getLdapConfigs(String SID, int start, int max, String orderby, boolean asc){
         Long users_id = sessionManagement.checkSession(SID);
@@ -124,7 +123,7 @@ public class LdapConfigService {
 	 * 
 	 * @param SID
 	 * @param values
-	 * @return
+	 * @return - id of added or updated config in case of success, error code otherwise
 	 */
 	public Long saveOrUpdateLdapConfig(String SID, LinkedHashMap<Object,Object> values)  {
 		try {

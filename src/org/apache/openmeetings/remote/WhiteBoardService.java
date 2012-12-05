@@ -210,7 +210,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 	 * @param SID
 	 * @param publicSID
 	 * @param canDraw
-	 * @return
+	 * @return null in case of success, false otherwise
 	 */
 	public Boolean setCanDraw(String SID, String publicSID, boolean canDraw) {
 		try {

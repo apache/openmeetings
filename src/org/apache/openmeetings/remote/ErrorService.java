@@ -49,7 +49,7 @@ public class ErrorService {
 	 * 
 	 * @param SID
 	 * @param errorid
-	 * @return
+	 * @return - ErrorResult object with the id given
 	 */
 	public ErrorResult getErrorByCode(String SID, Long errorid, Long language_id) {
 		// Long users_id = Sessionmanagement.getInstance().checkSession(SID);

@@ -91,8 +91,9 @@ public class ChatService implements IPendingServiceCallback {
 	 * sends a Chat-Message
 	 * to all members of the Chatroom
 	 * and all additional users (waitng for a free entry for example)
+	 * 
 	 * @param newMessage
-	 * @return
+	 * @return - 1 in case of success, -1 otherwise
 	 */
 	@SuppressWarnings("unchecked")
 	public int sendMessageWithClient(Object newMessage) {
@@ -313,9 +314,9 @@ public class ChatService implements IPendingServiceCallback {
 	
 	/**
 	 * gets the chat history by string for non-conference-clients
-	 * @param roomname
-	 * @param orgdomain
-	 * @return
+	 * 
+	 * @param room_id
+	 * @return - chat history of the room given, null in case of exception
 	 */
 	public List<HashMap<String,Object>> getRoomChatHistoryByString(Long room_id) {
 		try {
@@ -340,9 +341,9 @@ public class ChatService implements IPendingServiceCallback {
 	
 	/**
 	 * sends a message to all connected users
-	 * @param SID
+	 * 
 	 * @param newMessage
-	 * @return
+	 * @return - 1 in case of success, -1 otherwise
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public int sendMessageToOverallChat(Object newMessage) {
@@ -389,9 +390,8 @@ public class ChatService implements IPendingServiceCallback {
 	
 	/**
 	 * gets the chat history of overallChat
-	 * @param roomname
-	 * @param orgdomain
-	 * @return
+	 * 
+	 * @return - overall chat history
 	 */
 	public List<HashMap<String,Object>> getOverallChatHistory() {
 		try {
@@ -408,7 +408,7 @@ public class ChatService implements IPendingServiceCallback {
 	
 	/**
 	 * clear the overallChat history
-	 * @return
+	 * @return - all messages being cleaned, null in case of error
 	 */
 	public List<HashMap<String,Object>> clearOverallChat() {
 		try {

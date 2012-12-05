@@ -71,7 +71,7 @@ public class ConfigurationService {
 	 * 
 	 * @param SID
 	 * @param configuration_id
-	 * @return
+	 * @return - configuration with the id given, null otherwise
 	 */
     public Configuration getConfByConfigurationId(String SID,long configuration_id){
         Long users_id = sessionManagement.checkSession(SID);
@@ -90,7 +90,7 @@ public class ConfigurationService {
 	 * 
 	 * @param SID
 	 * @param values
-	 * @return
+	 * @return - id of configuration being updated, null otherwise
 	 */
     public Long saveOrUpdateConfiguration(String SID, LinkedHashMap<String, ?> values){
         Long users_id = sessionManagement.checkSession(SID);
@@ -110,7 +110,7 @@ public class ConfigurationService {
 	 * 
 	 * @param SID
 	 * @param values
-	 * @return
+	 * @return - id of configuration being deleted in case of success, null otherwise
 	 */
     public Long deleteConfiguration(String SID, LinkedHashMap<String, ?> values){
         Long users_id = sessionManagement.checkSession(SID);

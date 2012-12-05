@@ -97,7 +97,8 @@ public class CalendarWebService {
 	 *            start time, yyyy-mm-dd
 	 * @param endtime
 	 *            end time, yyyy-mm-dd
-	 * @return
+	 *            
+	 * @return - list of appointments in range
 	 */
 	public List<Appointment> getAppointmentByRange(String SID, Date starttime,
 			Date endtime) {
@@ -128,7 +129,8 @@ public class CalendarWebService {
 	 *            start time, yyyy-mm-dd
 	 * @param endtime
 	 *            end time, yyyy-mm-dd
-	 * @return
+	 *            
+	 * @return - list of appointments in range
 	 */
 	public List<Appointment> getAppointmentByRangeForUserId(String SID,
 			long userId, Date starttime, Date endtime) {
@@ -153,7 +155,7 @@ public class CalendarWebService {
 	 * 
 	 * @param SID
 	 *            The SID of the User. This SID must be marked as Loggedin
-	 * @return
+	 * @return - next Calendar event
 	 */
 	public Appointment getNextAppointment(String SID) {
 
@@ -177,7 +179,8 @@ public class CalendarWebService {
 	 * 
 	 * @param SID
 	 *            The SID of the User. This SID must be marked as Loggedin
-	 * @return
+	 *            
+	 * @return - next Calendar event
 	 */
 	public Appointment getNextAppointmentForUserId(String SID, long userId) {
 
@@ -203,7 +206,8 @@ public class CalendarWebService {
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param appointmentName
 	 *            the search string
-	 * @return
+	 *            
+	 * @return - calendar event list
 	 */
 	public List<Appointment> searchAppointmentByName(String SID,
 			String appointmentName) {
@@ -274,7 +278,8 @@ public class CalendarWebService {
 	 *            if the room is password protected
 	 * @param password
 	 *            the password for the room
-	 * @return
+	 *            
+	 * @return - id of appointment saved
 	 */
 	public Long saveAppointment(String SID, String appointmentName,
 			String appointmentLocation, String appointmentDescription,
@@ -341,7 +346,8 @@ public class CalendarWebService {
 	 *            the base URL for the invitations that will be send by email
 	 * @param languageId
 	 *            the language id
-	 * @return
+	 *            
+	 * @return - id of appointment updated
 	 */
 	public Long updateAppointmentTimeOnly(String SID, Long appointmentId,
 			Date appointmentstart, Date appointmentend, String baseurl,
@@ -422,7 +428,8 @@ public class CalendarWebService {
 	 *            if the room is password protected
 	 * @param password
 	 *            the password for the room
-	 * @return
+	 *            
+	 * @return - id of appointment updated
 	 */
 	public Long updateAppointment(String SID, Long appointmentId,
 			String appointmentName, String appointmentLocation,
@@ -514,7 +521,7 @@ public class CalendarWebService {
 	 * @param language_id
 	 *            the language id in which the notifications for the deleted
 	 *            appointment are send
-	 * @return
+	 * @return - id of appointment deleted
 	 */
 	public Long deleteAppointment(String SID, Long appointmentId,
 			Long language_id) throws AxisFault {
@@ -556,7 +563,7 @@ public class CalendarWebService {
 	 * 
 	 * @param SID
 	 * @param room_id
-	 * @return
+	 * @return - calendar event by its room id
 	 */
 	public Appointment getAppointmentByRoomId(String SID, Long room_id) {
 		try {
@@ -588,7 +595,7 @@ public class CalendarWebService {
 	 * Get all categories of calendar events
 	 * 
 	 * @param SID
-	 * @return
+	 * @return - all categories of calendar events
 	 */
 	public List<AppointmentCategory> getAppointmentCategoryList(String SID) {
 		log.debug("AppointmenetCategoryService.getAppointmentCategoryList SID : "
@@ -628,7 +635,7 @@ public class CalendarWebService {
 	 * Get all reminder types for calendar events
 	 * 
 	 * @param SID
-	 * @return
+	 * @return - all reminder types for calendar events
 	 */
 	public List<AppointmentReminderTyps> getAppointmentReminderTypList(
 			String SID) {
@@ -682,7 +689,8 @@ public class CalendarWebService {
 	 *            href="http://en.wikipedia.org/wiki/Time_zone#Java"
 	 *            target="_blank"
 	 *            >http://en.wikipedia.org/wiki/Time_zone#Java</a>
-	 * @return
+	 *            
+	 * @return - appointments grouped by weeks
 	 * @throws AxisFault
 	 */
 	public List<Week> getAppointmentsByWeekCalendar(String SID,

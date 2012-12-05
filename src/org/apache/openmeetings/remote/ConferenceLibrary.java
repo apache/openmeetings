@@ -118,7 +118,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	 * @param room_id
 	 * @param fileName
 	 * @param tObjectRef
-	 * @return
+	 * @return - file-explorer Id in case of success, -1 otherwise
 	 */
 	public Long saveAsObject(String SID, Long room_id, String fileName,
 			Object tObjectRef) {
@@ -261,7 +261,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	 * @param SID
 	 * @param room_id
 	 * @param fileName
-	 * @return
+	 * @return - chart object
 	 */
 	@SuppressWarnings("rawtypes")
 	public ArrayList loadChartObject(String SID, Long room_id, String fileName) {
@@ -279,162 +279,10 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	}
 
 	/**
-	 * 
-	 * Load all objects of a conference room
-	 * 
 	 * @param SID
-	 * @param room_id
-	 * @return
-	 * 
-	 *         public FileExplorerObject getFileExplorerByRoom(String SID, Long
-	 *         room_id) { try { Long users_id =
-	 *         Sessionmanagement.getInstance().checkSession(SID); Long
-	 *         user_level = userManagement.getUserLevelByID( users_id); if
-	 *         (authLevelManagement.checkUserLevel(user_level)) {
-	 * 
-	 *         log.debug("room_id " + room_id);
-	 * 
-	 *         FileExplorerObject fileExplorerObject = new FileExplorerObject();
-	 * 
-	 *         // Home File List FileExplorerItem[] fList =
-	 *         FileExplorerItemDaoImpl .getInstance()
-	 *         .getFileExplorerItemsByOwner(users_id, 0L);
-	 * 
-	 *         long homeFileSize = 0;
-	 * 
-	 *         for (FileExplorerItem homeChildExplorerItem : fList) {
-	 *         log.debug("FileExplorerItem fList " +
-	 *         homeChildExplorerItem.getFileName()); homeFileSize +=
-	 *         FileUtils.getInstance()
-	 *         .getSizeOfDirectoryAndSubs(homeChildExplorerItem); }
-	 * 
-	 *         fileExplorerObject.setUserHome(fList);
-	 *         fileExplorerObject.setUserHomeSize(homeFileSize);
-	 * 
-	 *         // Public File List FileExplorerItem[] rList =
-	 *         FileExplorerItemDaoImpl
-	 *         .getInstance().getFileExplorerItemsByRoom(room_id, 0L);
-	 * 
-	 *         long roomFileSize = 0;
-	 * 
-	 *         for (FileExplorerItem homeChildExplorerItem : rList) {
-	 *         log.debug("FileExplorerItem rList " +
-	 *         homeChildExplorerItem.getFileName()); roomFileSize +=
-	 *         FileUtils.getInstance()
-	 *         .getSizeOfDirectoryAndSubs(homeChildExplorerItem); }
-	 * 
-	 *         fileExplorerObject.setRoomHome(rList);
-	 *         fileExplorerObject.setRoomHomeSize(roomFileSize);
-	 * 
-	 *         return fileExplorerObject;
-	 * 
-	 *         } } catch (Exception err) { log.error("[getFileExplorerByRoom] ",
-	 *         err); } return null; }
-	 * 
-	 *         public FileExplorerItem[] getFileExplorerByParent(String SID,
-	 *         Long parentFileExplorerItemId, Long room_id, Boolean isOwner) {
-	 *         try { Long users_id =
-	 *         Sessionmanagement.getInstance().checkSession(SID); Long
-	 *         user_level = userManagement.getUserLevelByID( users_id); if
-	 *         (authLevelManagement.checkUserLevel(user_level)) {
-	 * 
-	 *         log.debug("parentFileExplorerItemId " +
-	 *         parentFileExplorerItemId);
-	 * 
-	 *         if (parentFileExplorerItemId == 0) { if (isOwner) { return
-	 *         FileExplorerItemDaoImpl.getInstance()
-	 *         .getFileExplorerItemsByOwner(users_id, parentFileExplorerItemId);
-	 *         } else { return FileExplorerItemDaoImpl.getInstance()
-	 *         .getFileExplorerItemsByRoom(room_id, parentFileExplorerItemId); }
-	 *         } else { return FileExplorerItemDaoImpl.getInstance()
-	 *         .getFileExplorerItemsByParent( parentFileExplorerItemId); }
-	 * 
-	 *         } } catch (Exception err) {
-	 *         log.error("[getFileExplorerByParent] ", err); } return null; }
-	 * 
-	 *         public Long addFolder(String SID, Long parentFileExplorerItemId,
-	 *         String fileName, Long room_id, Boolean isOwner) { try { Long
-	 *         users_id = Sessionmanagement.getInstance().checkSession(SID);
-	 *         Long user_level = userManagement.getUserLevelByID( users_id); if
-	 *         (authLevelManagement.checkUserLevel(user_level)) {
-	 * 
-	 *         log.debug("addFolder " + parentFileExplorerItemId);
-	 * 
-	 *         if (parentFileExplorerItemId == 0 && isOwner) { // users_id
-	 *         (OwnerID) => only set if its directly root in // Owner Directory,
-	 *         // other Folders and Files maybe are also in a Home // directory
-	 *         // but just because their parent is return
-	 *         FileExplorerItemDaoImpl.getInstance().add(fileName, "",
-	 *         parentFileExplorerItemId, users_id, room_id, users_id, true, //
-	 *         isFolder false, // isImage false, // isPresentation "", // WML
-	 *         Path false, // isStoredWML file false // isXmlFile , 0L, ""); }
-	 *         else { return FileExplorerItemDaoImpl.getInstance().add(fileName,
-	 *         "", parentFileExplorerItemId, null, room_id, users_id, true, //
-	 *         isFolder false, // isImage false, // isPresentation "", // WML
-	 *         Paht false, // isStoredWML file false // isXmlFile , 0L, ""); } }
-	 *         } catch (Exception err) { log.error("[getFileExplorerByParent] ",
-	 *         err); } return null; }
-	 * 
-	 *         public Long deleteFileOrFolder(String SID, Long
-	 *         fileExplorerItemId) { try { Long users_id =
-	 *         Sessionmanagement.getInstance().checkSession(SID); Long
-	 *         user_level = userManagement.getUserLevelByID( users_id); if
-	 *         (authLevelManagement.checkUserLevel(user_level)) {
-	 * 
-	 *         log.debug("deleteFileOrFolder " + fileExplorerItemId);
-	 * 
-	 *         FileExplorerItemDaoImpl.getInstance().deleteFileExplorerItem(
-	 *         fileExplorerItemId);
-	 * 
-	 *         } } catch (Exception err) {
-	 *         log.error("[getFileExplorerByParent] ", err); } return null; }
-	 * 
-	 *         public Long updateFileOrFolderName(String SID, Long
-	 *         fileExplorerItemId, String fileName) { try { Long users_id =
-	 *         Sessionmanagement.getInstance().checkSession(SID); Long
-	 *         user_level = userManagement.getUserLevelByID( users_id); if
-	 *         (authLevelManagement.checkUserLevel(user_level)) {
-	 * 
-	 *         log.debug("deleteFileOrFolder " + fileExplorerItemId);
-	 * 
-	 *         FileExplorerItemDaoImpl.getInstance().updateFileOrFolderName(
-	 *         fileExplorerItemId, fileName);
-	 * 
-	 *         } } catch (Exception err) {
-	 *         log.error("[updateFileOrFolderName] ", err); } return null; }
-	 * 
-	 *         public Long moveFile(String SID, Long fileExplorerItemId, Long
-	 *         newParentFileExplorerItemId, Long room_id, Boolean isOwner,
-	 *         Boolean moveToHome) { try { Long users_id =
-	 *         Sessionmanagement.getInstance().checkSession(SID); Long
-	 *         user_level = userManagement.getUserLevelByID( users_id); if
-	 *         (authLevelManagement.checkUserLevel(user_level)) {
-	 * 
-	 *         log.debug("deleteFileOrFolder " + fileExplorerItemId);
-	 * 
-	 *         FileExplorerItemDaoImpl.getInstance().moveFile(
-	 *         fileExplorerItemId, newParentFileExplorerItemId, room_id,
-	 *         isOwner, users_id);
-	 * 
-	 *         FileExplorerItem fileExplorerItem = FileExplorerItemDaoImpl
-	 *         .getInstance().getFileExplorerItemsById( fileExplorerItemId);
-	 * 
-	 *         if (moveToHome) { // set this file and all subfiles and folders
-	 *         the ownerId
-	 *         FileUtils.getInstance().setFileToOwnerOrRoomByParent(fileExplorerItem
-	 *         , users_id, null);
-	 * 
-	 *         } else { // set this file and all subfiles and folders the
-	 *         room_id
-	 *         FileUtils.getInstance().setFileToOwnerOrRoomByParent(fileExplorerItem
-	 *         , null, room_id);
-	 * 
-	 *         }
-	 * 
-	 *         } } catch (Exception err) {
-	 *         log.error("[updateFileOrFolderName] ", err); } return null; }
+	 * @param flvFileExplorerId
+	 * @return 1 in case of success, -1 otherwise
 	 */
-
 	public Long copyFileToCurrentRoom(String SID, Long flvFileExplorerId) {
 		try {
 

@@ -87,12 +87,12 @@ public class ConferenceService {
 	private ServerDao serverDao;
 
 	/**
-	 * ( get a List of all availible Rooms of this organisation
+	 * ( get a List of all available Rooms of this organization
 	 * (non-appointments)
 	 * 
 	 * @param SID
 	 * @param organisation_id
-	 * @return
+	 * @return - all available Rooms of this organization
 	 */
 	public List<Rooms_Organisation> getRoomsByOrganisationAndType(String SID,
 			long organisation_id, long roomtypes_id) {
@@ -161,7 +161,7 @@ public class ConferenceService {
 	 * 
 	 * @param SID
 	 * @param organisation_id
-	 * @return
+	 * @return - all rooms of an organization
 	 */
 	public SearchResult<Rooms_Organisation> getRoomsByOrganisation(String SID,
 			long organisation_id, int start, int max, String orderby,
@@ -181,8 +181,8 @@ public class ConferenceService {
 	 * get a List of all public availible rooms (non-appointments)
 	 * 
 	 * @param SID
-	 * @param organisation_id
-	 * @return
+	 * @param roomtypes_id
+	 * @return - public rooms with given type, null in case of the error
 	 */
 	public List<Rooms> getRoomsPublic(String SID, Long roomtypes_id) {
 		try {
@@ -238,7 +238,7 @@ public class ConferenceService {
 	/**
 	 * retrieving ServerTime
 	 * 
-	 * @return
+	 * @return - server time
 	 */
 	// --------------------------------------------------------------------------------------------
 	public Date getServerTime() {
@@ -254,10 +254,9 @@ public class ConferenceService {
 	 * 
 	 * retrieving Appointment for Room
 	 * 
-	 * @author o.becherer
-	 * 
+	 * @param room_id
+	 * @return - Appointment in case the room is appointment, null otherwise
 	 */
-	// --------------------------------------------------------------------------------------------
 	public Appointment getAppointMentDataForRoom(Long room_id) {
 		log.debug("getAppointMentDataForRoom");
 
@@ -407,7 +406,7 @@ public class ConferenceService {
 	/**
 	 * 
 	 * @param SID
-	 * @return
+	 * @return - all room types available
 	 */
 	public List<RoomTypes> getRoomTypes(String SID) {
 		Long users_id = sessionManagement.checkSession(SID);
@@ -422,7 +421,7 @@ public class ConferenceService {
 	 * 
 	 * @param SID
 	 * @param rooms_id
-	 * @return
+	 * @return - room with the id given
 	 */
 	public Rooms getRoomById(String SID, long rooms_id) {
 		Long users_id = sessionManagement.checkSession(SID);
@@ -441,8 +440,10 @@ public class ConferenceService {
 	/**
 	 * 
 	 * @param SID
-	 * @param rooms_id
-	 * @return
+	 * @param externalUserId
+	 * @param externalUserType
+	 * @param roomtypes_id
+	 * @return - room with the given external id
 	 */
 	public Rooms getRoomByExternalId(String SID, Long externalUserId,
 			String externalUserType, long roomtypes_id) {
@@ -453,14 +454,14 @@ public class ConferenceService {
 	}
 
 	/**
-	 * gets a list of all availible rooms
+	 * gets a list of all available rooms
 	 * 
 	 * @param SID
 	 * @param start
 	 * @param max
 	 * @param orderby
 	 * @param asc
-	 * @return
+	 * @return - list of rooms being searched
 	 */
 	public SearchResult<Rooms> getRooms(String SID, int start, int max,
 			String orderby, boolean asc, String search) {
@@ -487,7 +488,7 @@ public class ConferenceService {
 	 * 
 	 * @param SID
 	 * @param rooms_id
-	 * @return
+	 * @return - all Organisations of a room
 	 */
 	public List<Rooms_Organisation> getOrganisationByRoom(String SID,
 			long rooms_id) {
@@ -500,7 +501,7 @@ public class ConferenceService {
 	 * 
 	 * @param SID
 	 * @param argObject
-	 * @return
+	 * @return - id of the room being saved, null in case of the error
 	 */
 	public Long saveOrUpdateRoom(String SID, Object argObject) {
 		try {
@@ -665,7 +666,7 @@ public class ConferenceService {
 	 * 
 	 * @param SID
 	 * @param rooms_id
-	 * @return
+	 * @return - id of the room being deleted
 	 */
 	public Long deleteRoom(String SID, long rooms_id) {
 		Long users_id = sessionManagement.checkSession(SID);
@@ -677,7 +678,7 @@ public class ConferenceService {
 	 * return all participants of a room
 	 * 
 	 * @param room_id
-	 * @return
+	 * @return - true if room is full, false otherwise
 	 */
 	public boolean isRoomFull(Long room_id) {
 		try {
@@ -699,7 +700,7 @@ public class ConferenceService {
 	 * return all participants of a room
 	 * 
 	 * @param room_id
-	 * @return
+	 * @return - all participants of a room
 	 */
 	public List<RoomClient> getRoomClientsListByRoomId(Long room_id) {
 		return clientListManager.getClientListByRoom(room_id, null);
@@ -713,7 +714,7 @@ public class ConferenceService {
 	 * @param max
 	 * @param orderby
 	 * @param asc
-	 * @return
+	 * @return - list of the connections currently open
 	 */
 	public SearchResult<ClientSession> getRoomClientsMap(String SID, int start, int max,
 			String orderby, boolean asc) {

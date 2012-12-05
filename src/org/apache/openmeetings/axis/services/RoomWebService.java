@@ -101,7 +101,7 @@ public class RoomWebService {
 	 * @param SID
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param roomtypes_id
-	 * @return Rooms[]
+	 * @return - list of public rooms
 	 * @throws AxisFault
 	 */
 	public Rooms[] getRoomsPublic(String SID, Long roomtypes_id)
@@ -147,7 +147,8 @@ public class RoomWebService {
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param flvRecordingId
 	 *            the id of the recording
-	 * @return
+	 *            
+	 * @return - true if recording was deleted
 	 * @throws AxisFault
 	 */
 	public boolean deleteFlvRecording(String SID, Long flvRecordingId)
@@ -176,7 +177,8 @@ public class RoomWebService {
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param externalUserId
 	 *            the externalUserId
-	 * @return
+	 *            
+	 * @return - list of flv recordings
 	 * @throws AxisFault
 	 */
 	public FLVRecordingReturn[] getFlvRecordingByExternalUserId(String SID,
@@ -227,7 +229,7 @@ public class RoomWebService {
 	 *            externalRoomType specified when creating the room
 	 * @param insertedBy
 	 *            the userId that created the recording
-	 * @return
+	 * @return - list of flv recordings
 	 * @throws AxisFault
 	 */
 	public FLVRecordingReturn[] getFlvRecordingByExternalRoomTypeAndCreator(
@@ -278,7 +280,7 @@ public class RoomWebService {
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param externalRoomType
 	 *            externalRoomType specified when creating the room
-	 * @return
+	 * @return - list of flv recordings
 	 * @throws AxisFault
 	 */
 	public List<FlvRecording> getFlvRecordingByExternalRoomTypeByList(
@@ -308,7 +310,7 @@ public class RoomWebService {
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param externalRoomType
 	 *            externalRoomType specified when creating the room
-	 * @return
+	 * @return - list of flv recordings
 	 * @throws AxisFault
 	 */
 	public FlvRecording[] getFlvRecordingByExternalRoomType(String SID,
@@ -356,7 +358,7 @@ public class RoomWebService {
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param roomId
 	 *            the room id
-	 * @return
+	 * @return - list of recordings
 	 * @throws AxisFault
 	 */
 	public FlvRecording[] getFlvRecordingByRoomId(String SID, Long roomId)
@@ -403,7 +405,7 @@ public class RoomWebService {
 	 * 
 	 * @param SID
 	 *            The SID of the User. This SID must be marked as Loggedin
-	 * @return
+	 * @return - List of available room types
 	 * @throws AxisFault
 	 */
 	public RoomTypes[] getRoomTypes(String SID) throws AxisFault {
@@ -442,7 +444,7 @@ public class RoomWebService {
 	 * @param roomId8
 	 * @param roomId9
 	 * @param roomId10
-	 * @return
+	 * @return - current users for rooms ids
 	 * @throws AxisFault
 	 */
 	public RoomCountBean[] getRoomCounters(String SID, Integer roomId1,
@@ -524,7 +526,7 @@ public class RoomWebService {
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param rooms_id
 	 *            the room id
-	 * @return
+	 * @return - room with the id given
 	 */
 	public Rooms getRoomById(String SID, long rooms_id) {
 		return conferenceService.getRoomById(SID, rooms_id);
@@ -535,7 +537,7 @@ public class RoomWebService {
 	 * @param SID
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param rooms_id
-	 * @return
+	 * @return - room with the id given
 	 */
 	@Deprecated
 	public Rooms getRoomWithCurrentUsersById(String SID, long rooms_id) {
@@ -548,7 +550,7 @@ public class RoomWebService {
 	 * @param SID
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param rooms_id
-	 * @return
+	 * @return - object of type RoomReturn
 	 * @throws AxisFault
 	 */
 	public RoomReturn getRoomWithClientObjectsById(String SID, long rooms_id)
@@ -614,7 +616,8 @@ public class RoomWebService {
 	 *            The column it will be ordered
 	 * @param asc
 	 *            Asc or Desc sort ordering
-	 * @return
+	 *            
+	 * @return - List of Objects of Rooms
 	 */
 	public SearchResult<Rooms> getRooms(String SID, int start, int max,
 			String orderby, boolean asc) {
@@ -636,7 +639,8 @@ public class RoomWebService {
 	 *            The column it will be ordered
 	 * @param asc
 	 *            Asc or Desc sort ordering
-	 * @return
+	 *            
+	 * @return - List of Objects of Rooms
 	 */
 	public SearchResult<Rooms> getRoomsWithCurrentUsers(String SID, int start,
 			int max, String orderby, boolean asc) {
@@ -673,7 +677,7 @@ public class RoomWebService {
 	 * @param filesPanelYPosition
 	 * @param filesPanelHeight
 	 * @param filesPanelWidth
-	 * @return
+	 * @return - id of the room or error code
 	 */
 	@Deprecated
 	public Long addRoom(String SID, String name, Long roomtypes_id,
@@ -742,7 +746,8 @@ public class RoomWebService {
 	 *            Users have to wait untill a Moderator arrives. Use the
 	 *            becomeModerator param in setUserObjectAndGenerateRoomHash to
 	 *            set a user as default Moderator
-	 * @return
+	 *            
+	 * @return - id of the room or error code
 	 */
 	public Long addRoomWithModeration(String SID, String name,
 			Long roomtypes_id, String comment, Long numberOfPartizipants,
@@ -809,7 +814,8 @@ public class RoomWebService {
 	 * @param allowUserQuestions
 	 *            enable or disable the button to allow users to apply for
 	 *            moderation
-	 * @return
+	 *            
+	 * @return - id of the room or error code
 	 */
 	public Long addRoomWithModerationAndQuestions(String SID, String name,
 			Long roomtypes_id, String comment, Long numberOfPartizipants,
@@ -879,7 +885,8 @@ public class RoomWebService {
 	 *            moderation
 	 * @param isAudioOnly
 	 *            enable or disable the video / or audio-only
-	 * @return
+	 *            
+	 * @return - id of the room or error code
 	 * @throws AxisFault
 	 */
 	public Long addRoomWithModerationQuestionsAndAudioType(String SID,
@@ -967,7 +974,8 @@ public class RoomWebService {
 	 * @param hideWhiteboard
 	 *            hide or show Whiteboard. If whitboard is hidden, video pods
 	 *            and scrollbar appear instead.
-	 * @return
+	 *            
+	 * @return - id of the room or error code
 	 * @throws AxisFault
 	 */
 	public Long addRoomWithModerationQuestionsAudioTypeAndHideOptions(
@@ -1042,7 +1050,8 @@ public class RoomWebService {
 	 * @param externalRoomType
 	 *            you can specify your system-name or type of room here, for
 	 *            example "moodle"
-	 * @return
+	 *            
+	 * @return - id of the room or error code
 	 * @throws AxisFault
 	 */
 	public Long getRoomIdByExternalId(String SID, String name,
@@ -1103,7 +1112,8 @@ public class RoomWebService {
 	 * @param filesPanelYPosition
 	 * @param filesPanelHeight
 	 * @param filesPanelWidth
-	 * @return
+	 * 
+	 * @return - id of the room updated or error code
 	 */
 	@Deprecated
 	public Long updateRoom(String SID, Long rooms_id, String name,
@@ -1174,7 +1184,8 @@ public class RoomWebService {
 	 *            Users have to wait until a Moderator arrives. Use the
 	 *            becomeModerator parameter in setUserObjectAndGenerateRoomHash
 	 *            to set a user as default Moderator
-	 * @return
+	 *            
+	 * @return - id of the room updated or error code
 	 */
 	public Long updateRoomWithModeration(String SID, Long room_id, String name,
 			Long roomtypes_id, String comment, Long numberOfPartizipants,
@@ -1240,7 +1251,8 @@ public class RoomWebService {
 	 * @param allowUserQuestions
 	 *            enable or disable the button to allow users to apply for
 	 *            moderation
-	 * @return
+	 *            
+	 * @return - id of the room updated or error code
 	 */
 	public Long updateRoomWithModerationAndQuestions(String SID, Long room_id,
 			String name, Long roomtypes_id, String comment,
@@ -1326,7 +1338,8 @@ public class RoomWebService {
 	 * @param hideWhiteboard
 	 *            hide or show Whiteboard. If whitboard is hidden, video pods
 	 *            and scrollbar appear instead.
-	 * @return
+	 *            
+	 * @return - id of the room updated or error code
 	 */
 	public Long updateRoomWithModerationQuestionsAudioTypeAndHideOptions(
 			String SID, Long room_id, String name, Long roomtypes_id,
@@ -1367,7 +1380,8 @@ public class RoomWebService {
 	 * @param SID
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param rooms_id
-	 * @return
+	 * 
+	 * @return - id of the room deleted
 	 */
 	public Long deleteRoom(String SID, long rooms_id) {
 		return conferenceService.deleteRoom(SID, rooms_id);
@@ -1381,7 +1395,8 @@ public class RoomWebService {
 	 *            _Admin
 	 * @param room_id
 	 *            the room id
-	 * @return
+	 *            
+	 * @return - true if user was kicked, false otherwise
 	 */
 	public Boolean kickUser(String SID_Admin, Long room_id) {
 		try {
@@ -1432,7 +1447,8 @@ public class RoomWebService {
 	 * @param externalRoomType
 	 *            the external room type (can be used to identify different
 	 *            external systems using same OpenMeetings instance)
-	 * @return
+	 *            
+	 * @return - id of the room added or error code
 	 */
 	public Long addRoomWithModerationAndExternalType(String SID, String name,
 			Long roomtypes_id, String comment, Long numberOfPartizipants,
@@ -1490,7 +1506,8 @@ public class RoomWebService {
 	 *            moderation
 	 * @param isAudioOnly
 	 *            enable or disable the video / or audio-only
-	 * @return
+	 *            
+	 * @return - id of the room added or error code
 	 */
 	public Long addRoomWithModerationExternalTypeAndAudioType(String SID,
 			String name, Long roomtypes_id, String comment,
@@ -1555,7 +1572,8 @@ public class RoomWebService {
 	 *            should start recording before they do a conference
 	 * @param allowRecording
 	 *            if the recording option is available or not
-	 * @return
+	 *            
+	 * @return - id of the room added or error code
 	 */
 	public Long addRoomWithModerationAndRecordingFlags(String SID, String name,
 			Long roomtypes_id, String comment, Long numberOfPartizipants,
@@ -1626,7 +1644,8 @@ public class RoomWebService {
 	 *            if the recording option is available or not
 	 * @param hideTopBar
 	 *            if the top bar in the conference room is visible or not
-	 * @return
+	 *            
+	 * @return - id of the room added or error code
 	 */
 	public Long addRoomWithModerationExternalTypeAndTopBarOption(String SID,
 			String name, Long roomtypes_id, String comment,
@@ -2024,7 +2043,8 @@ public class RoomWebService {
 	 *            The column it will be ordered
 	 * @param asc
 	 *            Asc or Desc sort ordering
-	 * @return
+	 *            
+	 * @return - RoomReturn Objects with information of the current users
 	 * @throws AxisFault
 	 */
 	public List<RoomReturn> getRoomsWithCurrentUsersByList(String SID,
@@ -2089,7 +2109,8 @@ public class RoomWebService {
 	 *            Asc or Desc sort ordering
 	 * @param externalRoomType
 	 *            the external room type
-	 * @return
+	 *            
+	 * @return - list of room return objects
 	 * @throws AxisFault
 	 */
 	public List<RoomReturn> getRoomsWithCurrentUsersByListAndType(String SID,
@@ -2187,7 +2208,8 @@ public class RoomWebService {
 	 *            1=none, 2=simple mail, 3=ICAL
 	 * @param redirectURL
 	 *            URL Users will be lead to if the Conference Time is elapsed
-	 * @return
+	 *            
+	 * @return - id of the room in case of success, error code otherwise
 	 * @throws AxisFault
 	 */
 	public Long addRoomWithModerationAndExternalTypeAndStartEnd(String SID,
@@ -2305,7 +2327,8 @@ public class RoomWebService {
 	 * @param language_id
 	 *            The ID of the language, for the email that is send to the
 	 *            meeting member
-	 * @return
+	 *            
+	 * @return - id of the member in case of success, error code otherwise
 	 * @throws AxisFault
 	 */
 	public Long addMeetingMemberRemindToRoom(String SID, Long room_id,
@@ -2366,7 +2389,8 @@ public class RoomWebService {
 	 *            name of the timezone
 	 * @param invitorName
 	 *            name of invitation creators
-	 * @return
+	 *            
+	 * @return - id of the member in case of success, error code otherwise
 	 * @throws AxisFault
 	 */
 	public Long addExternalMeetingMemberRemindToRoom(String SID, Long room_id,
@@ -2418,7 +2442,8 @@ public class RoomWebService {
 	 *            the room id
 	 * @param status
 	 *            false = close, true = open
-	 * @return
+	 *            
+	 * @return - 1 in case of success, -2 otherwise
 	 * @throws AxisFault
 	 */
 	public int closeRoom(String SID, Long room_id, Boolean status)

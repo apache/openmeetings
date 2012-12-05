@@ -60,9 +60,9 @@ public class LanguageService {
 	private AuthLevelmanagement authLevelManagement;
 
 	/**
-	 * get a List of all availible Languages
+	 * get a List of all availaible Languages
 	 * 
-	 * @return
+	 * @return - List of all availaible Languages
 	 */
 	public List<FieldLanguage> getLanguages() {
 		return fieldLanguageDaoImpl.getLanguages();
@@ -73,7 +73,7 @@ public class LanguageService {
 	 * 
 	 * @param language_id
 	 * @deprecated
-	 * @return
+	 * @return - all fields of a given Language_id
 	 */
 	@Deprecated
 	public List<Fieldlanguagesvalues> getLanguageById(Long language_id) {
@@ -91,7 +91,7 @@ public class LanguageService {
 	 * get all fields of a given Language_id by params
 	 * 
 	 * @param language_id
-	 * @return
+	 * @return - all fields of a given Language_id in the range given
 	 */
 	public List<Map<String, Object>> getLanguageByIdAndMax(Long language_id,
 			int start, int max) {
@@ -162,7 +162,7 @@ public class LanguageService {
 	 * @param orderby
 	 * @param asc
 	 * @param language_id
-	 * @return
+	 * @return - the list of field values being searched in case of success, null otherwise
 	 */
 	public SearchResult<Fieldvalues> getFieldsByLanguage(String SID, int start, int max,
 			String orderby, boolean asc, Long language_id, String search) {
@@ -179,7 +179,7 @@ public class LanguageService {
 	 * 
 	 * @param SID
 	 * @param values
-	 * @return
+	 * @return - id of the label added or updated in case of success, error code otherwise
 	 */
 	public Long saveOrUpdateLabel(String SID,
 			LinkedHashMap<Object, Object> values) {

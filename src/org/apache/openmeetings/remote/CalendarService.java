@@ -377,7 +377,7 @@ public class CalendarService {
 	/**
 	 * 
 	 * @param SID
-	 * @return
+	 * @return - the list of appointment reminder types in case of success, null otherwise
 	 */
 	public List<AppointmentReminderTyps> getAppointmentReminderTypList(
 			String SID) {

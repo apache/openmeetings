@@ -80,7 +80,7 @@ public class InvitationService implements IPendingServiceCallback {
 	 * @param validToTime
 	 * @param language_id
      * @param jNameTimeZone
-	 * @return
+	 * @return - invitation object in case of success, "Sys - Error" string or null in case of error
 	 */
 	public Object sendInvitationHash(String SID, String username,
 			String message, String baseurl, String email, String subject,

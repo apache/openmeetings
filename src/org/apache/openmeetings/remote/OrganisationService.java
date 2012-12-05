@@ -52,10 +52,10 @@ public class OrganisationService {
 	private AuthLevelmanagement authLevelManagement;
 
 	/**
-	 * Loads a List of all availible Organisations (ADmin-role only)
+	 * Loads a List of all available Organizations (Admin-role only)
 	 * 
 	 * @param SID
-	 * @return
+	 * @return - List of all available Organizations
 	 */
 	public SearchResult<Organisation> getOrganisations(String SID, int start, int max,
 			String orderby, boolean asc) {
@@ -86,7 +86,7 @@ public class OrganisationService {
 	 * 
 	 * @param SID
 	 * @param organisation_id
-	 * @return
+	 * @return - organisation with given id
 	 */
 	public Organisation getOrganisationById(String SID, long organisation_id) {
 		Long users_id = sessionManagement.checkSession(SID);
@@ -100,7 +100,7 @@ public class OrganisationService {
 	 * 
 	 * @param SID
 	 * @param organisation_id
-	 * @return
+	 * @return - id of organisation in case of success, null otherwise
 	 */
 	public Long deleteOrganisation(String SID, long organisation_id) {
 		Long users_id = sessionManagement.checkSession(SID);
@@ -113,9 +113,8 @@ public class OrganisationService {
 	 * adds or updates an Organisation
 	 * 
 	 * @param SID
-	 * @param organisation_id
-	 * @param orgname
-	 * @return
+	 * @param regObjectObj
+	 * @return - id of added or updated organisation in case of success, null otherwise
 	 */
 	public Long saveOrUpdateOrganisation(String SID, Object regObjectObj) {
 		try {
@@ -149,7 +148,7 @@ public class OrganisationService {
 	 * @param max
 	 * @param orderby
 	 * @param asc
-	 * @return
+	 * @return all users of a given organisation
 	 */
 	public SearchResult<Users> getUsersByOrganisation(String SID,
 			long organisation_id, int start, int max, String orderby,

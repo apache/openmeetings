@@ -426,7 +426,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	/**
 	 * this function is invoked directly after initial connecting
 	 * 
-	 * @return
+	 * @return publicSID of current client
 	 */
 	public synchronized String getPublicSID() {
 		IConnection current = Red5.getConnectionLocal();
@@ -656,8 +656,9 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 * This method handles the Event after a stream has been added all connected
 	 * Clients in the same room will get a notification
 	 * 
-	 * @return void
-	 * 
+	 */
+	/* (non-Javadoc)
+	 * @see org.red5.server.adapter.MultiThreadedApplicationAdapter#streamPublishStart(org.red5.server.api.stream.IBroadcastStream)
 	 */
 	@Override
 	public synchronized void streamPublishStart(IBroadcastStream stream) {
@@ -767,8 +768,9 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 * This method handles the Event after a stream has been removed all
 	 * connected Clients in the same room will get a notification
 	 * 
-	 * @return void
-	 * 
+	 */
+	/* (non-Javadoc)
+	 * @see org.red5.server.adapter.MultiThreadedApplicationAdapter#streamBroadcastClose(org.red5.server.api.stream.IBroadcastStream)
 	 */
 	@Override
 	public synchronized void streamBroadcastClose(IBroadcastStream stream) {
@@ -898,7 +900,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 * Adds a Moderator by its publicSID
 	 * 
 	 * @param publicSID
-	 * @return
+	 * @return -1
 	 */
 	public synchronized Long addModerator(String publicSID) {
 		try {
@@ -1277,9 +1279,14 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 * audio a - audio only v - video only n - no a/v only static image
 	 * furthermore
 	 * 
-	 * @param avsetting
+	 * @param avsettings
 	 * @param newMessage
-	 * @return
+	 * @param vWidth
+	 * @param vHeight
+	 * @param room_id
+	 * @param publicSID
+	 * @param interviewPodId
+	 * @return RoomClient being updated in case of no errors, null otherwise
 	 */
 	public synchronized RoomClient setUserAVSettings(String avsettings,
 			Object newMessage, Integer vWidth, Integer vHeight, 
@@ -1408,9 +1415,13 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 * and all the informations about the new user is send to every user of the
 	 * current conference room<br/>
 	 * <br/>
-	 * @param room_id
-	 * @param colorObj
-	 * @return
+	 *
+	 * @param room_id - id of the room
+	 * @param becomeModerator - is user will become moderator
+	 * @param isSuperModerator - is user super moderator
+	 * @param organization_id - organization id of the user
+	 * @param colorObj - some color
+	 * @return RoomStatus object
 	 */
 	public synchronized RoomStatus setRoomValues(Long room_id,
 			Boolean becomeModerator, Boolean isSuperModerator,
@@ -1702,7 +1713,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 * @param firstname
 	 * @param lastname
 	 * @param picture_uri
-	 * @return
+	 * @return client being updated in case of success, null otherwise
 	 */
 	public synchronized RoomClient setUsernameReconnect(String SID,
 			Long userId, String username, String firstname, String lastname,
@@ -1748,12 +1759,12 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	/**
 	 * this is set initial directly after login/loading language
 	 * 
-	 * @param userId
-	 * @param username
-	 * @param firstname
-	 * @param lastname
-	 * @param orgdomain
-	 * @return
+	 * @param SID - id of the session
+	 * @param userId - id of the user being set
+	 * @param username - username of the user
+	 * @param firstname - firstname of the user
+	 * @param lastname - lastname of the user
+	 * @return RoomClient in case of everything is OK, null otherwise
 	 */
 	public synchronized RoomClient setUsernameAndSession(String SID,
 			Long userId, String username, String firstname, String lastname) {
@@ -1800,7 +1811,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 * 
 	 * @param room_id
 	 * @param message
-	 * @return
+	 * @return the list of room clients
 	 */
 	public synchronized HashMap<String, RoomClient> sendMessageByRoomAndDomain(
 			Long room_id, Object message) {
@@ -1882,8 +1893,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	/**
 	 * This Function is triggered from the Whiteboard
 	 * 
-	 * @param whiteboardObj
-	 * @return
+	 * @param whiteboardObjParam - array of parameters being sended to whiteboard
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public synchronized void sendVars(ArrayList whiteboardObjParam) {
@@ -1985,8 +1995,8 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	/**
 	 * This Function is triggered from the Whiteboard
 	 * 
-	 * @param whiteboardObj
-	 * @return
+	 * @param whiteboardObjParam - array of parameters being sended to whiteboard
+	 * @param whiteboardId - id of whiteboard parameters will be send to
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public synchronized void sendVarsByWhiteboardId(
@@ -2197,7 +2207,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	/**
 	 * send status for shared browsing to all members except self
 	 * @param newMessage
-	 * @return
+	 * @return 1
 	 */
 	@SuppressWarnings({ "rawtypes" })
 	public synchronized int sendBrowserMessageToMembers(Object newMessage) {
@@ -2265,7 +2275,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 * @param remoteMethodName
 	 * @param newMessage
 	 * @param sendSelf
-	 * @return
+	 * @return true
 	 */
 	@Deprecated
 	public synchronized boolean loadTestSyncMessage(String remoteMethodName, Object newMessage, boolean sendSelf) {
@@ -2334,7 +2344,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	/**
 	 * wrapper method
 	 * @param newMessage
-	 * @return
+	 * @return 1 in case of success, -1 otherwise
 	 */
 	public synchronized int sendMessageWithClient(Object newMessage) {
 		try {
@@ -2351,7 +2361,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 * wrapper method
 	 * @param newMessage
 	 * @param sync
-	 * @return
+	 * @return 1 in case of success, -1 otherwise
 	 */
 	public synchronized int sendMessageWithClientWithSyncObject(Object newMessage, boolean sync) {
 		try {
@@ -2379,7 +2389,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 * 
 	 * @param newMessage
 	 * @param clientId
-	 * @return
+	 * @return 1 in case of success, -1 otherwise
 	 */
 	public synchronized int sendMessageById(Object newMessage, String clientId,
 			IScope scope) {
@@ -2431,7 +2441,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 * 
 	 * @param newMessage
 	 * @param clientId
-	 * @return
+	 * @return 1 in case of no exceptions, -1 otherwise
 	 */
 	public synchronized int sendMessageWithClientById(Object newMessage,
 			String clientId) {
@@ -2790,7 +2800,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	/**
 	 * Stop the recording of the streams and send event to connected users of scope
 	 * 
-	 * @return
+	 * @return true if interview was found
 	 */
 	public synchronized Boolean stopInterviewRecording() {
 		try {
@@ -2868,7 +2878,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 * Get all ClientList Objects of that room and domain Used in
 	 * lz.applyForModeration.lzx
 	 * 
-	 * @return
+	 * @return all ClientList Objects of that room and domain
 	 */
 	public synchronized List<RoomClient> getClientListScope() {
 		try {
