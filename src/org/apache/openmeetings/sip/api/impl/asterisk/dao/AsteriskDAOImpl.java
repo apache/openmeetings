@@ -25,7 +25,6 @@ import javax.persistence.PersistenceContext;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.persistence.beans.sip.asterisk.AsteriskSipUsers;
 import org.apache.openmeetings.persistence.beans.sip.asterisk.Extensions;
 import org.apache.openmeetings.persistence.beans.sip.asterisk.MeetMe;
@@ -46,12 +45,8 @@ public class AsteriskDAOImpl {
 
     public void addSipUser(String username, String secret) {
         AsteriskSipUsers u = new AsteriskSipUsers();
-		Configuration conf = configurationDaoImpl
-				.getConfKey("red5sip.exten_context");
-        String defaultRoomContext = "rooms";
-        if(conf != null && !conf.getConf_value().isEmpty()) {
-            defaultRoomContext = conf.getConf_value();
-        }
+        String defaultRoomContext = configurationDaoImpl
+        		.getConfValue("red5sip.exten_context", String.class, "rooms");
         u.setName(username);
         u.setSecret(secret);
         u.setContext(defaultRoomContext);
@@ -68,14 +63,16 @@ public class AsteriskDAOImpl {
     }
 
     public String addMeetMeConference() {
-        int count = ((Number)em.createQuery("SELECT COUNT(m.confno) FROM MeetMe AS m").getSingleResult()).intValue();
-		Configuration conf = configurationDaoImpl
-				.getConfKey("red5sip.room_prefix");
-        String prefix = DEFAULT_SIP_CONTEXT;
-        if(conf != null) {
-            prefix = conf.getConf_value();
-        }
-        String confno = prefix+(count+1);
+        int count = (em.createQuery("SELECT COUNT(m) FROM MeetMe AS m", Long.class).getSingleResult()).intValue();
+        String prefix = configurationDaoImpl.getConfValue("red5sip.room_prefix", String.class, DEFAULT_SIP_CONTEXT);
+        String confno;
+        int count1;
+        do { // FIXME ugly
+        	confno = prefix + (++count);
+        	count1 = (em.createQuery("SELECT COUNT(m) FROM MeetMe AS m WHERE m.confno = :confno", Long.class)
+                .setParameter("confno", confno)
+        		.getSingleResult()).intValue();
+        } while (count1 > 0);
         addMeetMeConference(confno);
         return confno;
     }
