@@ -165,15 +165,16 @@ public class Organisation_Users implements Serializable, IDataProviderEntity {
 		if (obj == null) {
 			return false;
 		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		Organisation_Users other = (Organisation_Users) obj;
-		if (organisation_users_id == null) {
-			if (other.organisation_users_id != null) {
+		if (obj instanceof Organisation_Users) {
+			Organisation_Users other = (Organisation_Users) obj;
+			if (organisation_users_id == null) {
+				if (other.organisation_users_id != null) {
+					return false;
+				}
+			} else if (!organisation_users_id.equals(other.organisation_users_id)) {
 				return false;
 			}
-		} else if (!organisation_users_id.equals(other.organisation_users_id)) {
+		} else {
 			return false;
 		}
 		return true;

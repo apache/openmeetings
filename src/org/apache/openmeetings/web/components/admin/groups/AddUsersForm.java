@@ -70,9 +70,8 @@ public class AddUsersForm extends Form<Void> {
 		add(new AjaxButton("search", Model.of(WebSession.getString(182L))) {
 			private static final long serialVersionUID = -4752180617634945030L;
 
-			protected void onAfterSubmit(AjaxRequestTarget target, org.apache.wicket.markup.html.form.Form<?> form) {
-				usersToAdd.clear();
-				usersInList.clear();
+			protected void onAfterSubmit(AjaxRequestTarget target, Form<?> form) {
+				clear();
 				usersInList.addAll(Application.getBean(UsersDao.class).get(userSearchText));
 				target.add(users);
 			}
@@ -81,13 +80,13 @@ public class AddUsersForm extends Form<Void> {
 		add(new AjaxButton("add", Model.of(WebSession.getString(175L))) {
 			private static final long serialVersionUID = 5553555064487161840L;
 
-			protected void onAfterSubmit(AjaxRequestTarget target, org.apache.wicket.markup.html.form.Form<?> form) {
+			protected void onAfterSubmit(AjaxRequestTarget target, Form<?> form) {
 				UsersDao userDao = Application.getBean(UsersDao.class);
 				for (Users u : usersToAdd) {
-					boolean found = false;
 					List<Organisation_Users> orgUsers = u.getOrganisation_users();
+					boolean found = false;
 					for (Organisation_Users ou : orgUsers) {
-						if (ou.getOrganisation().getOrganisation_id() == organisation.getOrganisation_id()) {
+						if (ou.getOrganisation().getOrganisation_id().equals(organisation.getOrganisation_id())) {
 							found = true;
 							break;
 						}
@@ -105,6 +104,11 @@ public class AddUsersForm extends Form<Void> {
 		});
 	}
 
+	public void clear() {
+		usersToAdd.clear();
+		usersInList.clear();
+	}
+	
 	public void setOrganisation(Organisation org) {
 		organisation = org;
 	}

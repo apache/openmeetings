@@ -56,7 +56,16 @@ public class GroupsPanel extends AdminPanel {
 		super(id);
 		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
         final WebMarkupContainer addUsersBtn = new WebMarkupContainer("addUsersBtn");
-		
+        addUsersBtn.add(new AjaxEventBehavior("onclick") {
+			private static final long serialVersionUID = 6037994365235148885L;
+
+			protected void onEvent(AjaxRequestTarget target) {
+        		addUsersForm.clear();
+        		target.add(addUsersForm);
+        		target.appendJavaScript("addUsers();");
+        	}
+        });
+        
 		//Adding the Group Form
 		form = new GroupForm("form", listContainer, new Organisation()){
 			private static final long serialVersionUID = -3042797340375988889L;
@@ -64,13 +73,13 @@ public class GroupsPanel extends AdminPanel {
 			@Override
 			protected void onModelChanged() {
 				super.onModelChanged();
-				if (getModelObject().getOrganisation_id() == null) {
-					addUsersBtn.add(AttributeModifier.replace("class", "formNewButton disabled")
-							, AttributeModifier.replace("onclick", ""));
+				boolean orgEmpty = getModelObject().getOrganisation_id() == null;
+				if (orgEmpty) {
+					addUsersBtn.add(AttributeModifier.replace("class", "formNewButton disabled"));
 				} else {
-					addUsersBtn.add(AttributeModifier.replace("class", "formNewButton")
-							, AttributeModifier.replace("onclick", "addUsers();"));
+					addUsersBtn.add(AttributeModifier.replace("class", "formNewButton"));
 				}
+				addUsersBtn.setEnabled(!orgEmpty);
 				addUsersForm.setOrganisation(getModelObject());
 			}
 			

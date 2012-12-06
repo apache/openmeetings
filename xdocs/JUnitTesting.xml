@@ -83,7 +83,7 @@
 				<li>Select Arguments tab </li>
 				<li>Add the following code to the VM section
 					<div class="xmlcode">
-						-javaagent:${workspace_loc:Openmeetings}/build/lib/om/openjpa-bundle-2.2.0.jar
+						-javaagent:${workspace_loc:Openmeetings}/build/lib/om/openjpa-bundle-2.2.1.jar
 						-Dwebapps.root=${workspace_loc:Openmeetings}/dist/red5/webapps/openmeetings
 					</div>
 				</li>
