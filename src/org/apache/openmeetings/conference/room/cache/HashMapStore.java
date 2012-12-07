@@ -420,6 +420,14 @@ public class HashMapStore {
 		return clientsByServer;
 	}
 	
+	public LinkedHashMap<Long,LinkedHashMap<String,RoomClient>> getClientsByServerAndRoom(Server server) {
+		return clientsByServerAndRoomId.get(getIdByServer(server));
+	}
+	
+//	public Set<Long> getRoomIdsByServer(Server server) {
+//		return clientsByServerAndRoomId.get(getIdByServer(server)).keySet();
+//	}
+	
 	public enum DEBUG_DETAILS {
 		SIZE,
 		CLIENT_BY_STREAMID, STREAMID_LIST_ALL,
