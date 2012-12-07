@@ -123,11 +123,11 @@ public class FileExplorerItem implements Serializable {
 	private String wmlFilePath;
 	
 	@Column(name="is_stored_wml_file")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private Boolean isStoredWmlFile;
 	
 	@Column(name="is_chart")
-	@Element(data=true)
+	@Element(data=true, required = false)
     private Boolean isChart;
     
 	@Column(name="external_file_id")

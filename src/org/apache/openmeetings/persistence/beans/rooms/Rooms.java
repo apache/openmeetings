@@ -93,11 +93,11 @@ public class Rooms implements Serializable, IDataProviderEntity {
 	private boolean ispublic;
 
 	@Column(name = "numberOfPartizipants")
-	@Element(data = true)
+	@Element(data = true, required = false)
 	private Long numberOfPartizipants = new Long(4);
 
 	@Column(name = "appointment")
-	@Element(data = true)
+	@Element(data = true, required = false)
 	private boolean appointment;
 
 	// Vars to simulate external Rooms
@@ -110,7 +110,7 @@ public class Rooms implements Serializable, IDataProviderEntity {
 	private String externalRoomType;
 
 	@Column(name = "isdemoroom")
-	@Element(data = true)
+	@Element(data = true, required = false)
 	private Boolean isDemoRoom;
 
 	@Column(name = "demo_time")
@@ -120,11 +120,11 @@ public class Rooms implements Serializable, IDataProviderEntity {
 	// If this is true all participants of a meeting have to wait for the
 	// moderator to come into the room
 	@Column(name = "ismoderatedroom")
-	@Element(data = true)
+	@Element(data = true, required = false)
 	private Boolean isModeratedRoom;
 
 	@Column(name = "allow_user_questions")
-	@Element(data = true)
+	@Element(data = true, required = false)
 	private Boolean allowUserQuestions;
 
 	@Column(name = "sip_number")
@@ -136,11 +136,11 @@ public class Rooms implements Serializable, IDataProviderEntity {
 	private String conferencePin;
 
 	@Column(name = "is_audio_only")
-	@Element(data = true)
+	@Element(data = true, required = false)
 	private Boolean isAudioOnly;
 
 	@Column(name = "is_closed")
-	@Element(data = true)
+	@Element(data = true, required = false)
 	private Boolean isClosed;
 
 	@Column(name = "redirect_url")

@@ -43,59 +43,59 @@ public class AsteriskSipUsers implements Serializable {
 	private int id;
 
 	@Column(name = "accountcode")
-	@Element(data = true)
+	@Element(data = true, required = false)
 	private String accountcode;
 
 	@Column(name = "disallow")
-	@Element(data = true)
+	@Element(data = true, required = false)
 	private String disallow = null;
 
 	@Column(name = "allow")
-	@Element(data = true)
+	@Element(data = true, required = false)
 	private String allow = "ulaw";
 
 	@Column(name = "allowoverlap")
-	@Element(data = true)
+	@Element(data = true, required = false)
 	private String allowoverlap = "yes";
 
 	@Column(name = "allowsubscribe")
-	@Element(data = true)
+	@Element(data = true, required = false)
 	private String allowsubscribe = "yes";
 
 	@Column(name = "allowtransfer")
-	@Element(data = true)
+	@Element(data = true, required = false)
 	private String allowtransfer;
 
 	@Column(name = "amaflags")
-	@Element(data = true)
+	@Element(data = true, required = false)
 	private String amaflags;
 
 	@Column(name = "autoframing")
-	@Element(data = true)
+	@Element(data = true, required = false)
 	private String autoframing;
 
 	@Column(name = "auth")
-	@Element(data = true)
+	@Element(data = true, required = false)
 	private String auth;
 
 	@Column(name = "buggymwi")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String buggymwi = "no";
 
 	@Column(name = "callgroup")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String callgroup;
 
 	@Column(name = "callerid")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String callerid;
 
 	@Column(name = "cid_number")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String cid_number;
 
 	@Column(name = "fullname")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String fullname;
 
 	// TODO: error
@@ -103,49 +103,49 @@ public class AsteriskSipUsers implements Serializable {
 	// private int callLimit;
 
 	@Column(name = "callingpres")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String callingpres;
 
 	@Column(name = "canreinvite")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String canreinvite = "yes";
 
 	@Column(name = "context")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String context;
 
 	@Column(name = "defaultip")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String defaultip;
 
 	@Column(name = "dtmfmode")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String dtmfmode;
 
 	@Column(name = "fromuser")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String fromuser;
 
 	@Column(name = "fromdomain")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String fromdomain;
 
 	@Column(name = "fullcontact")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String fullcontact;
 
 	// @Column(name = "g726nonstandard")
 	@Column(name = "g726nonstandard")
 	// @Enumerated(EnumType.STRING)
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String g726nonstandard = "no";
 
 	@Column(name = "host", nullable = false)
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String host = "dynamic";
 
 	@Column(name = "insecure")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String insecure;
 
 	@Column(name = "ipaddr", nullable = false)
@@ -153,31 +153,31 @@ public class AsteriskSipUsers implements Serializable {
 	private String ipaddr = "";
 
 	@Column(name = "language")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String language;
 
 	@Column(name = "lastms")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String lastms;
 
 	@Column(name = "mailbox")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String mailbox;
 
 	@Column(name = "maxcallbitrate")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private int maxcallbitrate = 384;
 
 	@Column(name = "mohsuggest")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String mohsuggest;
 
 	@Column(name = "md5secret")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String md5secret;
 
 	@Column(name = "musiconhold")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String musiconhold;
 
 	@Column(name = "name", nullable = false)
@@ -185,23 +185,23 @@ public class AsteriskSipUsers implements Serializable {
 	private String name = "";
 
 	@Column(name = "nat", nullable = false)
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String nat = "no";
 
 	@Column(name = "outboundproxy")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String outboundproxy;
 
 	@Column(name = "deny")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String deny;
 
 	@Column(name = "permit")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String permit;
 
 	@Column(name = "pickupgroup")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String pickupgroup;
 
 	@Column(name = "port", nullable = false)
@@ -211,18 +211,18 @@ public class AsteriskSipUsers implements Serializable {
 	// @Column(name = "progressinband")
 	@Column(name = "progressinband")
 	// @Enumerated(EnumType.STRING)
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String progressinband = "no";
 	// private YesNoNever progressinband;
 
 	// @Column(name = "promiscredir")
 	@Column(name = "promiscredir")
 	// @Enumerated(EnumType.STRING)
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String promiscredir = "no";
 
 	@Column(name = "qualify")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String qualify;
 
 	@Column(name = "regexten", nullable = false)
@@ -230,31 +230,31 @@ public class AsteriskSipUsers implements Serializable {
 	private String regexten = "";
 
 	@Column(name = "regseconds", nullable = false)
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private int regseconds = 0;
 
 	// @Column(name = "rfc2833compensate")
 	@Column(name = "rfc2833compensate")
 	// @Enumerated(EnumType.STRING)
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String rfc2833compensate = "no";
 
 	@Column(name = "rtptimeout")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String rtptimeout;
 
 	@Column(name = "rtpholdtimeout")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String rtpholdtimeout;
 
 	@Column(name = "secret")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String secret;
 
 	// @Column(name = "sendrpid")
 	@Column(name = "sendrpid")
 	// @Enumerated(EnumType.STRING)
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String sendrpid = "yes";
 
 	@Column(name = "setvar", nullable = false)
@@ -262,23 +262,23 @@ public class AsteriskSipUsers implements Serializable {
 	private String setvar = "";
 
 	@Column(name = "subscribecontext")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String subscribecontext;
 
 	@Column(name = "subscribemwi")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String subscribemwi;
 
 	// @Column(name = "t38pt_udptl")
 	@Column(name = "t38pt_udptl")
 	// @Enumerated(EnumType.STRING)
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String t38pt_udptl = "no";
 
 	// @Column(name = "trustrpid")
 	@Column(name = "trustrpid")
 	// @Enumerated(EnumType.STRING)
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String trustrpid = "no";
 
 	@Column(name = "type", nullable = false)
@@ -302,11 +302,11 @@ public class AsteriskSipUsers implements Serializable {
 	// @Column(name = "videosupport")
 	@Column(name = "videosupport")
 	// @Enumerated(EnumType.STRING)
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String videosupport = "yes";
 
 	@Column(name = "vmexten")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private String vmexten;
 
 	// create unique index name on asterisk.sipusers (name);

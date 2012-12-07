@@ -39,15 +39,15 @@ public class MeetMe implements Serializable {
     private String confno = "0";
 	
     @Column(name = "pin")
-	@Element(data=true)
+	@Element(data=true, required = false)
     private String pin;
     
     @Column(name = "adminpin")
-	@Element(data=true)
+	@Element(data=true, required = false)
     private String adminpin;
     
     @Column(name = "members", nullable = false)
-	@Element(data=true)
+	@Element(data=true, required = false)
     private Integer members = 0;
 
     public String getConfno() {

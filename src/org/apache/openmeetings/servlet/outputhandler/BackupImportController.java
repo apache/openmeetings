@@ -283,7 +283,7 @@ public class BackupImportController extends AbstractUploadController {
 			List<Users> list = readUserList(f, "users.xml", "users");
 			for (Users u : list) {
 				OmTimeZone tz = u.getOmTimeZone();
-				if (tz.getJname() == null) {
+				if (tz == null || tz.getJname() == null) {
 					String jNameTimeZone = configurationDao.getConfValue(
 							"default.timezone", String.class, "Europe/Berlin");
 					OmTimeZone omTimeZone = omTimeZoneDaoImpl.getOmTimeZone(jNameTimeZone);
@@ -394,7 +394,7 @@ public class BackupImportController extends AbstractUploadController {
 			
 			List<MeetingMember> list = readList(serializer, f, "meetingmembers.xml", "meetingmembers", MeetingMember.class);
 			for (MeetingMember ma : list) {
-				if (ma.getUserid().getUser_id() == null) {
+				if (ma.getUserid() != null && ma.getUserid().getUser_id() == null) {
 					ma.setUserid(null);
 				}
 				if (!ma.getDeleted()) {
@@ -439,9 +439,11 @@ public class BackupImportController extends AbstractUploadController {
 				if (fr.getOwnerId() != null) {
 					fr.setOwnerId(usersMap.get(fr.getOwnerId()));
 				}
-				for (FlvRecordingMetaData meta : fr.getFlvRecordingMetaData()) {
-					meta.setFlvRecordingMetaDataId(0);
-					meta.setFlvRecording(fr);
+				if (fr.getFlvRecordingMetaData() != null) {
+					for (FlvRecordingMetaData meta : fr.getFlvRecordingMetaData()) {
+						meta.setFlvRecordingMetaDataId(0);
+						meta.setFlvRecording(fr);
+					}
 				}
 				flvRecordingDao.addFlvRecordingObj(fr);
 			}
@@ -483,7 +485,7 @@ public class BackupImportController extends AbstractUploadController {
 				Long ucId = uc.getUserContactId();
 				UserContacts storedUC = userContactsDao.getUserContacts(ucId);
 
-				if (storedUC == null && uc.getContact().getUser_id() != null) {
+				if (storedUC == null && uc.getContact() != null && uc.getContact().getUser_id() != null) {
 					uc.setUserContactId(0);
 					Long newId = userContactsDao.addUserContactObj(uc);
 					userContactsMap.put(ucId, newId);
@@ -511,10 +513,10 @@ public class BackupImportController extends AbstractUploadController {
 					getNewId(p.getPrivateMessageFolderId(), Maps.MESSAGEFOLDERS));
 				p.setUserContactId(
 					getNewId(p.getUserContactId(), Maps.USERCONTACTS));
-				if (p.getRoom().getRooms_id() == null) {
+				if (p.getRoom() != null && p.getRoom().getRooms_id() == null) {
 					p.setRoom(null);
 				}
-				if (p.getTo().getUser_id() == null) {
+				if (p.getTo() != null && p.getTo().getUser_id() == null) {
 					p.setTo(null);
 				}
 				privateMessagesDao.addPrivateMessageObj(p);
@@ -582,7 +584,7 @@ public class BackupImportController extends AbstractUploadController {
 				Configuration cfg = configurationDao.getConfKey(c
 						.getConf_key());
 				c.setConfiguration_id(cfg == null ? null : cfg.getConfiguration_id());
-				if (c.getUser().getUser_id() == null) {
+				if (c.getUser() != null && c.getUser().getUser_id() == null) {
 					c.setUser(null);
 				}
 				configurationDao.update(c, 1L);
@@ -790,8 +792,12 @@ public class BackupImportController extends AbstractUploadController {
 					log.debug("Exception While reading node of type: " + Users.class, e);
 				}
 				item = listNode.getNext();
-				item1 = listNode1.getNext(); //HACK to handle Adresses inside user
-				item2 = listNode2.getNext(); //HACK to handle UserSipData inside user
+				do {
+					item1 = listNode1.getNext(); //HACK to handle Adresses inside user
+				} while (item != null && !"user".equals(item1.getName()));
+				do {
+					item2 = listNode2.getNext(); //HACK to handle UserSipData inside user
+				} while (item != null && !"user".equals(item2.getName()));
 			}
 		}
 		return list;

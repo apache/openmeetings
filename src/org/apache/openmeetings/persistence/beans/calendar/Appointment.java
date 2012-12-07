@@ -78,7 +78,7 @@ public class Appointment implements Serializable {
 	private Long appointmentId;
 	
 	@Column(name = "appointmentname")
-	@Element(data=true)
+	@Element(data=true, required=false)
 	private String appointmentName;
 	
 	@Column(name = "location")
@@ -153,11 +153,11 @@ public class Appointment implements Serializable {
 	private List<MeetingMember> meetingMember;
 	
 	@Column(name = "language_id")
-	@Element(data=true)
+	@Element(data=true, required=false)
 	private Long language_id;
 	
 	@Column(name = "is_password_protected")
-	@Element(data=true)
+	@Element(data=true, required=false)
 	private Boolean isPasswordProtected;
 	
 	@Column(name = "password")
