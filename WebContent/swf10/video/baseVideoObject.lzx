@@ -653,10 +653,7 @@
         if (this.publicSID == canvas.publicSID) {
         	//self sound turned off
         	if (mute) {
-            	new lz.confirmationSingleSWF10(canvas,{
-                                               labelid:1388,labeliderror:1389,
-                                               refReturnMethod:'confirmGloballyOff',
-                                               refObj:this,showCheckBox:false});
+        		confirmGloballyOff(true, null);
                 return;
         	} else {
         	    this._chatvideoinner._videostream.muteMicro(false);
