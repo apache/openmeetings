@@ -17,8 +17,14 @@ import org.apache.openmeetings.conference.room.ClientSession;
 import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.conference.room.SlaveClientDto;
 import org.apache.openmeetings.conference.room.cache.HashMapStore;
+import org.apache.openmeetings.data.basic.dao.ServerDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
+import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.persistence.beans.basic.Server;
+import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
+import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.remote.ConferenceService;
+import org.apache.openmeetings.remote.MainService;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.apache.openmeetings.utils.crypt.ICryptString;
 import org.apache.openmeetings.utils.crypt.MD5Implementation;
@@ -26,6 +32,7 @@ import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestHashMapStore extends AbstractOpenmeetingsSpringTest {
 
@@ -33,10 +40,19 @@ public class TestHashMapStore extends AbstractOpenmeetingsSpringTest {
 			TestHashMapStore.class, OpenmeetingsVariables.webAppRootKey);
 
 	private ClientListHashMapStoreTesting sessionManager = new ClientListHashMapStoreTesting();
+	
+	@Autowired
+	private MainService mService;
+	@Autowired
+	private Usermanagement userManagement;
+	@Autowired
+	private ConferenceService conferenceService;
+	@Autowired
+	private ServerDao serverDao;
 
 	int localSessions = 200;
 	int slaveSessionSize = 200;
-
+	
 	@Test
 	public void doClientTest() {
 
@@ -78,7 +94,7 @@ public class TestHashMapStore extends AbstractOpenmeetingsSpringTest {
 
 		addSyncClients(1);
 		addSyncClients(2);
-		addSyncClients(4);
+		addSyncClients(3);
 
 		log.debug("Local Cache size " + sessionManager.getAllClients().size());
 		assertEquals(sessionManager.getAllClients().size(), localSessions);
@@ -109,7 +125,7 @@ public class TestHashMapStore extends AbstractOpenmeetingsSpringTest {
 		
 		addSyncClients(1);
 		addSyncClients(2);
-		addSyncClients(4);
+		addSyncClients(3);
 		
 		log.debug("Number of sessions Total " + searchResult.getRecords());
 		
@@ -184,12 +200,28 @@ public class TestHashMapStore extends AbstractOpenmeetingsSpringTest {
 		log.debug("roomSession: "+roomSession);
 		
 		assertEquals(roomSession, sessionManager.getCache().getTotalNumberOfSessions());
+		
+		Sessiondata sessionData = mService.getsessiondata();
+		
+		Users us = (Users) userManagement.loginUser(sessionData.getSession_id(), username, userpass, null, false);
+		
+		log.debug("us "+us);
+		
+		assertTrue(us != null);
+		
+		Server server = conferenceService.getServerForSession(sessionData.getSession_id(), 8);
 
+		log.debug("server "+server);
 	}
 
 	private void addSyncClients(long serverId) {
-		Server s = new Server();
-		s.setId(serverId);
+		
+		Server server = serverDao.get(serverId);	
+		if (server == null) {
+			serverDao.saveServer(serverId, "name", "127.0.0.1", 5080, "swagner", "qweqwe", "openmeetings", "http", true, "", 1L);
+			server = serverDao.get(serverId);
+		}
+		
 		List<SlaveClientDto> clients = new ArrayList<SlaveClientDto>();
 		for (int i = 0; i < slaveSessionSize; i++) {
 
@@ -212,7 +244,7 @@ public class TestHashMapStore extends AbstractOpenmeetingsSpringTest {
 			clients.add(slaveDto);
 		}
 
-		this.sessionManager.syncSlaveClientSession(s, clients);
+		this.sessionManager.syncSlaveClientSession(server, clients);
 	}
 
 	private class ClientListHashMapStoreTesting extends ClientListHashMapStore {

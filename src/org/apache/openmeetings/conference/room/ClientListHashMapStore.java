@@ -23,11 +23,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.Set;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.conference.room.cache.HashMapStore;
@@ -50,6 +52,8 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 			ClientListHashMapStore.class, OpenmeetingsVariables.webAppRootKey);
 	
 	protected static HashMapStore cache = new HashMapStore();
+	
+	private static Set<Long> EMPTY_HASH_SET = new HashSet<Long>();
 
 	@Autowired
 	private ManageCryptStyle manageCryptStyle;
@@ -367,32 +371,15 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 		return clients;
 	}
 	
-//	/*
-//	 * (non-Javadoc)
-//	 * @see org.apache.openmeetings.conference.room.IClientList#getActiveRoomsByServer()
-//	 */
-//	public Map<Server,List<Long>> getActiveRoomsByServer() {
-//		Map<Server,List<Long>> serverRooms = new HashMap<Server,List<Long>>();
-//		
-//		for (ClientSession cSession : clientList.values()) {
-//			
-//			//We don't care about incomplete sessions or clients that are not logged into any room
-//			if (cSession.getRoomClient() == null 
-//					|| cSession.getRoomClient().getRoom_id() == null) {
-//				continue;
-//			}
-//			
-//			List<Long> roomIds = serverRooms.get(cSession.getServer());
-//			if (roomIds == null) {
-//				roomIds = new ArrayList<Long>();
-//			}
-//			if (!roomIds.contains(cSession.getRoomClient().getRoom_id())) {
-//				roomIds.add(cSession.getRoomClient().getRoom_id());
-//			}
-//			serverRooms.put(cSession.getServer(), roomIds);
-//		}
-//		
-//		return serverRooms;
-//	}
+	/*
+	 * (non-Javadoc)
+	 * @see org.apache.openmeetings.conference.room.IClientList#getActiveRoomsByServer()
+	 */
+	public Set<Long> getActiveRoomIdsByServer(Server server) {
+		if (cache.getClientsByServerAndRoom(server) == null) {
+			return EMPTY_HASH_SET;
+		}
+		return cache.getClientsByServerAndRoom(server).keySet();
+	}
 
 }

@@ -20,6 +20,7 @@ package org.apache.openmeetings.conference.room;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.persistence.beans.basic.Server;
@@ -159,5 +160,14 @@ public interface IClientList {
 	 * @return
 	 */
 	public abstract long getPublishingCount(long roomId);
+	
+	/**
+	 * Get a list of all servers of all rooms on that server, serverId = null 
+	 * means it is a local session on the master.
+	 * 
+	 * @param server
+	 * @return
+	 */
+	public abstract Set<Long> getActiveRoomIdsByServer(Server server);
 
 }

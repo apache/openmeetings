@@ -19,12 +19,16 @@
 package org.apache.openmeetings.remote;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
@@ -781,11 +785,87 @@ public class ConferenceService {
 			if (serverList.size() == 0) {
 				return null;
 			}
+			
+			//if the room is already opened on a server, redirect the user to that one,
+			//we do that in too loop's because there is no query involved here,
+			//only the first user that enters the conference room needs to be adjusted 
+			//to that server that has the less maxUser count in its rooms currently.
+			//But if the room is already opened, then the maxUser is no more relevant,
+			//the user will be just redirected to the same server
+			
+			for (Server server : serverList) {
+				for (Long activeRoomId : clientListManager.getActiveRoomIdsByServer(server)) {
+					if (activeRoomId.equals(roomId)) {
+						return server;
+					}
+				}
+			}
+			
+			//the room is not opened on any server yet, its the first user, get the maxUser 
+			//per room
+			
+			//TODO / FIXME: Get room's maxUser in a single query instead a query for each room
+			final Map<Server,List<Rooms>> serverRoomMap = new HashMap<Server,List<Rooms>>();
+			
+			//Locally handled sessions are serverId = null
+			List<Rooms> localRoomList = new ArrayList<Rooms>();
+			for (Long activeRoomId : clientListManager.getActiveRoomIdsByServer(null)) {
+				//FIXME / TODO: This is the single query to get the room by its id
+				localRoomList.add(roomDao.get(activeRoomId));
+			}
+			serverRoomMap.put(null, localRoomList);
+			
+			//Slave/Server rooms
+			for (Server server : serverList) {
+				List<Rooms> roomList = new ArrayList<Rooms>();
+				for (Long activeRoomId : clientListManager.getActiveRoomIdsByServer(server)) {
+					//FIXME / TODO: This is the single query to get the room by its id
+					roomList.add(roomDao.get(activeRoomId));
+				}
+				serverRoomMap.put(server, roomList);
+			}
+			
+			//calc server with lowest max users
+			List<Server> list = new LinkedList<Server>();
+			list.addAll(serverRoomMap.keySet());
+			Collections.sort(list, new Comparator<Server>() {
+		          public int compare(Server s1, Server s2) {
+		        	  int maxUsersInRoomS1 = 0;
+		        	  for (Rooms room : serverRoomMap.get(s1)) {
+		        		  maxUsersInRoomS1 += room.getNumberOfPartizipants();
+		        	  }
+		        	  int maxUsersInRoomS2 = 0;
+		        	  for (Rooms room : serverRoomMap.get(s2)) {
+		        		  maxUsersInRoomS2 += room.getNumberOfPartizipants();
+		        	  }
+		        	  
+		              return maxUsersInRoomS1 - maxUsersInRoomS2;
+		          }
+		     });
+			
+			LinkedHashMap<Server, List<Rooms>> serverRoomMapOrdered = new LinkedHashMap<Server, List<Rooms>>();
+			for (Server server : list) {
+				serverRoomMapOrdered.put(server, serverRoomMap.get(server));
+			}
 
-			
-			
+			if (log.isDebugEnabled()) {
+				log.debug("Resulting order: ");
+				for (Entry<Server, List<Rooms>> entry : serverRoomMapOrdered
+						.entrySet()) {
+					int maxUsersInRoom = 0;
+					for (Rooms room : entry.getValue()) {
+						maxUsersInRoom += room.getNumberOfPartizipants();
+					}
+					log.debug("entry " + entry.getKey() + " Number of rooms "
+							+ entry.getValue().size() + " " + maxUsersInRoom);
+				}
+
+			}
+
+			return serverRoomMapOrdered.entrySet().iterator().next().getKey();
 		}
 
+		//Empty server object
 		return new Server();
 	}
 	
