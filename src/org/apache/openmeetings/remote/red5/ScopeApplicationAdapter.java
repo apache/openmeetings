@@ -157,7 +157,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			
 			boolean isAVClient = false;
 			if (params.length == 1) {
-				isAVClient = Boolean.parseBoolean(params[0].toString());
+				isAVClient = Boolean.valueOf("" + params[0]);
 			}
 
 			log.debug("### Client connected to OpenMeetings, register Client StreamId: "

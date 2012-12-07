@@ -48,13 +48,20 @@
 
     <method name="forcedStop">
         this.log("stopped");
-        // TODO: disconnect @rtmp
+		disconnect();
     </method>
 
+	<method name="disconnect">
+       rtmp._nc.close();
+       rtmp.setAttribute('status', 'disconnected');
+       rtmp.setAttribute('stage', 0);
+	</method>
+	
     <handler name="onconnect" reference="rtmp">
-        if (running) {
-            this.log("port is available\n");
-            this.setPassed();
+		if (running) {
+			this.log("port is available\n");
+			this.setPassed();
+			disconnect();
         }
     </handler>
 
@@ -67,9 +74,12 @@
 
     <handler name="onstatus" args="e" reference="rtmp">
         if (running) {
-            if ("timed out" == e) {
-                this.setFailed();
-            }
+        	switch(e) {
+        		case "timed out":
+        		case "connection failed":
+        			this.setFailed();
+        			break;
+        	}
             if($debug) Debug.write(testName + ": RTMP connect status - ", e);
         }
     </handler>
