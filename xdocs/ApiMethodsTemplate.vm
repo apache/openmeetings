@@ -124,6 +124,7 @@ limitations under the License.
     			<br/>
     			REST Sample Call/URL:<br/>
     			#set ($link = "http://localhost:5080/openmeetings/services/"+$webServiceName+"/"+$method.name()) 
+    			#set ($displayLink = $link)
     			#set ($index = 0)
     			#foreach ( $parameter in $method.parameters() )
     				#if ($index == 0)
