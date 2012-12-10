@@ -134,6 +134,7 @@ limitations under the License.
     					#set ($displayLink = $displayLink + "&amp;")
     				#end
     				#set ($link = $link + $parameter.name()+"=VALUE") 
+    				#set ($displayLink = $displayLink + $parameter.name()+"=VALUE") 
     				#set ($index = $index+1)
 				#end
 				<a href="$link">$displayLink</a>
