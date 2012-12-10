@@ -787,7 +787,7 @@ public class ConferenceService {
 			}
 			
 			//if the room is already opened on a server, redirect the user to that one,
-			//we do that in too loop's because there is no query involved here,
+			//we do that in two loop's because there is no query involved here,
 			//only the first user that enters the conference room needs to be adjusted 
 			//to that server that has the less maxUser count in its rooms currently.
 			//But if the room is already opened, then the maxUser is no more relevant,
@@ -856,8 +856,14 @@ public class ConferenceService {
 					for (Rooms room : entry.getValue()) {
 						maxUsersInRoom += room.getNumberOfPartizipants();
 					}
+					
+					String roomids = "";
+					for (Rooms r : entry.getValue()) { 
+						roomids += " " + r.getRooms_id(); 
+					}
+					
 					log.debug("entry " + entry.getKey() + " Number of rooms "
-							+ entry.getValue().size() + " " + maxUsersInRoom);
+							+ entry.getValue().size()+ " RoomIds: " + roomids + " max(Sum): " + maxUsersInRoom);
 				}
 
 			}

@@ -46,8 +46,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4SpringContextTests {
 	private static final Logger log = Red5LoggerFactory.getLogger(AbstractOpenmeetingsSpringTest.class);
 	
-	protected static final String username = "junit";
-	protected static final String userpass = "test";
+	protected static final String username = "swagner";
+	protected static final String userpass = "qweqwe";
 	private static final String orgname = "smoketest";
 	private static final String timeZone = "";
 	private static final String useremail = "junit@openmeetings.de";

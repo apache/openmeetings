@@ -40,7 +40,7 @@ public class TestHashMapStore extends AbstractOpenmeetingsSpringTest {
 			TestHashMapStore.class, OpenmeetingsVariables.webAppRootKey);
 
 	private ClientListHashMapStoreTesting sessionManager = new ClientListHashMapStoreTesting();
-	
+
 	@Autowired
 	private MainService mService;
 	@Autowired
@@ -52,7 +52,7 @@ public class TestHashMapStore extends AbstractOpenmeetingsSpringTest {
 
 	int localSessions = 200;
 	int slaveSessionSize = 200;
-	
+
 	@Test
 	public void doClientTest() {
 
@@ -61,10 +61,12 @@ public class TestHashMapStore extends AbstractOpenmeetingsSpringTest {
 		for (int i = 0; i < localSessions; i++) {
 			this.sessionManager.addClientListItem("streamId" + i, "hibernate",
 					123, "localhost", "", false);
-			
-			RoomClient rcl = this.sessionManager.getClientByStreamId("streamId" + i, null);
-			rcl.setUser_id(Long.parseLong(""+i));
-			this.sessionManager.updateClientByStreamId("streamId" + i, rcl, false);
+
+			RoomClient rcl = this.sessionManager.getClientByStreamId("streamId"
+					+ i, null);
+			rcl.setUser_id(Long.parseLong("" + i));
+			this.sessionManager.updateClientByStreamId("streamId" + i, rcl,
+					false);
 		}
 
 		long roomId = 1L;
@@ -92,9 +94,28 @@ public class TestHashMapStore extends AbstractOpenmeetingsSpringTest {
 
 		}
 
-		addSyncClients(1);
-		addSyncClients(2);
-		addSyncClients(3);
+		Server s1 = serverDao.get(1L);
+		if (s1 == null) {
+			serverDao.saveServer(1L, "name 1", "127.0.0.1", 5080, "swagner",
+					"qweqwe", "openmeetings", "http", true, "", 1L);
+			s1 = serverDao.get(1L);
+		}
+		Server s2 = serverDao.get(2L);
+		if (s2 == null) {
+			serverDao.saveServer(2L, "name 2", "127.0.0.1", 5080, "swagner",
+					"qweqwe", "openmeetings", "http", true, "", 1L);
+			s2 = serverDao.get(2L);
+		}
+		Server s3 = serverDao.get(3L);
+		if (s3 == null) {
+			serverDao.saveServer(3L, "name 3", "127.0.0.1", 5080, "swagner",
+					"qweqwe", "openmeetings", "http", true, "", 1L);
+			s3 = serverDao.get(3L);
+		}
+
+		addSyncClients(s1, 3, 6);
+		addSyncClients(s2, 4, 7);
+		addSyncClients(s3, 5, 8);
 
 		log.debug("Local Cache size " + sessionManager.getAllClients().size());
 		assertEquals(sessionManager.getAllClients().size(), localSessions);
@@ -110,138 +131,161 @@ public class TestHashMapStore extends AbstractOpenmeetingsSpringTest {
 		assertEquals(rcl.getStreamid(), compareRcl.getStreamid());
 		assertEquals(rcl.getPublicSID(), compareRcl.getPublicSID());
 
-		List<RoomClient> clientsByRoom = sessionManager.getClientListByRoom(1L, null);
+		List<RoomClient> clientsByRoom = sessionManager.getClientListByRoom(1L,
+				null);
 
 		log.debug("clientsByRoom SIZE " + clientsByRoom.size());
 
 		assertEquals(clientsByRoom.size(), 50);
-		
-		
-		SearchResult<ClientSession> searchResult = sessionManager.getListByStartAndMax(0, Integer.MAX_VALUE, "", true);
-		
-		log.debug("Number of sessions Total " + searchResult.getRecords());
-		
-		assertEquals(searchResult.getRecords().intValue(), 800);
-		
-		addSyncClients(1);
-		addSyncClients(2);
-		addSyncClients(3);
-		
-		log.debug("Number of sessions Total " + searchResult.getRecords());
-		
-		assertEquals(searchResult.getRecords().intValue(), 800);
-		
-		Server testServer = new Server();
-		testServer.setId(1L);
-		
-		for (RoomClient rSession : sessionManager.getCache().getClientsByServer(testServer).values()) {
-			log.debug("rSession "+rSession);
-		}
-		
-		RoomClient rcl2 = sessionManager.getClientByStreamId("streamId1050", testServer);
-		log.debug("rcl2 " + rcl2);
-		RoomClient compareRcl2 = sessionManager.getClientByPublicSID(
-				rcl2.getPublicSID(), rcl2.getIsAVClient(), testServer);
-		log.debug("compareRcl2 " + compareRcl2);
 
-		assertEquals(rcl2.getStreamid(), compareRcl2.getStreamid());
-		assertEquals(rcl2.getPublicSID(), compareRcl2.getPublicSID());
-		
-		
-		RoomClient rclRemove = sessionManager.getClientByStreamId("streamId51", null);
-		log.debug("rclRemove " + rclRemove);
-		
-		Boolean removed = sessionManager.removeClient("streamId51");
-		
-		assertTrue(removed);
-		
-		log.debug("Local Cache size " + sessionManager.getAllClients().size());
-		assertEquals(sessionManager.getAllClients().size(), localSessions-1);
-		
-		RoomClient deletedNullClient = sessionManager.getClientByPublicSID(
-				rclRemove.getPublicSID(), rclRemove.getIsAVClient(), null);
-		
-		log.debug("rclRemove: "+ rclRemove);
-		
-		if (deletedNullClient != null) {
-			log.debug("deletedNullClient "+deletedNullClient);
-		}
-		
-		assertNull(deletedNullClient);
-		
+		SearchResult<ClientSession> searchResult = sessionManager
+				.getListByStartAndMax(0, Integer.MAX_VALUE, "", true);
+
+		log.debug("Number of sessions Total " + searchResult.getRecords());
+
 		sessionManager.getCache().printDebugInformation(
 				Arrays.asList(HashMapStore.DEBUG_DETAILS.SIZE,
 						HashMapStore.DEBUG_DETAILS.CLIENT_BY_STREAMID,
 						HashMapStore.DEBUG_DETAILS.CLIENT_BY_PUBLICSID,
 						HashMapStore.DEBUG_DETAILS.CLIENT_BY_USERID,
 						HashMapStore.DEBUG_DETAILS.CLIENT_BY_ROOMID));
-		
-		Server s1 = new Server();
-		s1.setId(1L);
-		Server s2 = new Server();
-		s2.setId(2L);
-		Server s3 = new Server();
-		s3.setId(3L);
-		Server s4 = new Server();
-		s4.setId(4L);
-		
-		//Check if number of total sessions is same as sum of all sessions across all rooms
-		int roomSession = sessionManager.getClientListByRoomAll(1L, null).size()
+
+		assertEquals(searchResult.getRecords().intValue(), 1400);
+
+		addSyncClients(s1, 3, 6);
+		addSyncClients(s2, 4, 7);
+		addSyncClients(s3, 5, 8);
+
+		log.debug("Number of sessions Total " + searchResult.getRecords());
+
+		assertEquals(searchResult.getRecords().intValue(), 1400);
+
+		for (RoomClient rSession : sessionManager.getCache()
+				.getClientsByServer(s1).values()) {
+			log.debug("rSession " + rSession);
+		}
+
+		String streamId = "streamId" + ((1000 * 3 * s1.getId()) + 1);
+		RoomClient rcl2 = sessionManager.getClientByStreamId(streamId, s1);
+		log.debug("rcl2 " + rcl2);
+		RoomClient compareRcl2 = sessionManager.getClientByPublicSID(
+				rcl2.getPublicSID(), rcl2.getIsAVClient(), s1);
+		log.debug("compareRcl2 " + compareRcl2);
+
+		assertEquals(rcl2.getStreamid(), compareRcl2.getStreamid());
+		assertEquals(rcl2.getPublicSID(), compareRcl2.getPublicSID());
+
+		RoomClient rclRemove = sessionManager.getClientByStreamId("streamId51",
+				null);
+		log.debug("rclRemove " + rclRemove);
+
+		Boolean removed = sessionManager.removeClient("streamId51");
+
+		assertTrue(removed);
+
+		log.debug("Local Cache size " + sessionManager.getAllClients().size());
+		assertEquals(sessionManager.getAllClients().size(), localSessions - 1);
+
+		RoomClient deletedNullClient = sessionManager.getClientByPublicSID(
+				rclRemove.getPublicSID(), rclRemove.getIsAVClient(), null);
+
+		log.debug("rclRemove: " + rclRemove);
+
+		if (deletedNullClient != null) {
+			log.debug("deletedNullClient " + deletedNullClient);
+		}
+
+		assertNull(deletedNullClient);
+
+		sessionManager.getCache().printDebugInformation(
+				Arrays.asList(HashMapStore.DEBUG_DETAILS.SIZE,
+						HashMapStore.DEBUG_DETAILS.CLIENT_BY_STREAMID,
+						HashMapStore.DEBUG_DETAILS.CLIENT_BY_PUBLICSID,
+						HashMapStore.DEBUG_DETAILS.CLIENT_BY_USERID,
+						HashMapStore.DEBUG_DETAILS.CLIENT_BY_ROOMID));
+
+		// Check if number of total sessions is same as sum of all sessions
+		// across all rooms
+		int roomSession = sessionManager.getClientListByRoomAll(1L, null)
+				.size()
 				+ sessionManager.getClientListByRoomAll(2L, null).size()
 				+ sessionManager.getClientListByRoomAll(3L, s1).size()
 				+ sessionManager.getClientListByRoomAll(4L, s2).size()
 				+ sessionManager.getClientListByRoomAll(5L, s3).size()
-				+ sessionManager.getClientListByRoomAll(6L, s4).size()
-				;
-		log.debug("Room Id 2 Number of Sessions: "+sessionManager.getClientListByRoomAll(2L, s1).size());
-		log.debug("Room Id 3 Number of Sessions: "+sessionManager.getClientListByRoomAll(3L, s1).size());
-		log.debug("Room Id 4 Number of Sessions: "+sessionManager.getClientListByRoomAll(4L, s1).size());
-		log.debug("Room Id 5 Number of Sessions: "+sessionManager.getClientListByRoomAll(5L, s1).size());
-		log.debug("roomSession: "+roomSession);
-		
-		assertEquals(roomSession, sessionManager.getCache().getTotalNumberOfSessions());
-		
-		Sessiondata sessionData = mService.getsessiondata();
-		
-		Users us = (Users) userManagement.loginUser(sessionData.getSession_id(), username, userpass, null, false);
-		
-		log.debug("us "+us);
-		
-		assertTrue(us != null);
-		
-		Server server = conferenceService.getServerForSession(sessionData.getSession_id(), 8);
+				+ sessionManager.getClientListByRoomAll(6L, s1).size()
+				+ sessionManager.getClientListByRoomAll(7L, s2).size()
+				+ sessionManager.getClientListByRoomAll(8L, s3).size();
+		log.debug("Room Id 1 Number of Sessions: "
+				+ sessionManager.getClientListByRoomAll(1L, null).size());
+		log.debug("Room Id 2 Number of Sessions: "
+				+ sessionManager.getClientListByRoomAll(2L, null).size());
+		log.debug("Room Id 3 Number of Sessions: "
+				+ sessionManager.getClientListByRoomAll(3L, s1).size());
+		log.debug("Room Id 4 Number of Sessions: "
+				+ sessionManager.getClientListByRoomAll(4L, s2).size());
+		log.debug("Room Id 5 Number of Sessions: "
+				+ sessionManager.getClientListByRoomAll(5L, s3).size());
+		log.debug("Room Id 6 Number of Sessions: "
+				+ sessionManager.getClientListByRoomAll(6L, s1).size());
+		log.debug("Room Id 7 Number of Sessions: "
+				+ sessionManager.getClientListByRoomAll(7L, s2).size());
+		log.debug("Room Id 8 Number of Sessions: "
+				+ sessionManager.getClientListByRoomAll(8L, s3).size());
+		log.debug("roomSession: " + roomSession);
 
-		log.debug("server "+server);
+		assertEquals(roomSession, sessionManager.getCache()
+				.getTotalNumberOfSessions());
+
+		Sessiondata sessionData = mService.getsessiondata();
+
+		Users us = (Users) userManagement.loginUser(
+				sessionData.getSession_id(), username, userpass, null, false);
+
+		log.debug("us " + us);
+
+		assertTrue(us != null);
+
+		// Is running already on server3
+		Server server = conferenceService.getServerForSession(
+				sessionData.getSession_id(), 8);
+		log.debug("server " + server);
+		assertEquals(server.getId().longValue(), 3);
+
+		// New Room requested that is running on no server
+		Server serverNew = conferenceService.getServerForSession(
+				sessionData.getSession_id(), 9);
+		log.debug("serverNew " + serverNew);
+		assertEquals(serverNew, null);
+
 	}
 
-	private void addSyncClients(long serverId) {
-		
-		Server server = serverDao.get(serverId);	
-		if (server == null) {
-			serverDao.saveServer(serverId, "name", "127.0.0.1", 5080, "swagner", "qweqwe", "openmeetings", "http", true, "", 1L);
-			server = serverDao.get(serverId);
-		}
-		
+	private void addSyncClients(Server server, long... roomIds) {
+
 		List<SlaveClientDto> clients = new ArrayList<SlaveClientDto>();
-		for (int i = 0; i < slaveSessionSize; i++) {
 
-			// avClient, 2 Clients share one userId
-			int add = Double.valueOf(Math.floor((i % 2))).intValue();
+		for (long roomId : roomIds) {
+			for (int i = 0; i < slaveSessionSize; i++) {
 
-			Long userId = (1000 * serverId) + i + add;
+				// avClient, 2 Clients share one userId
+				int add = Double.valueOf(Math.floor((i % 2))).intValue();
 
-			SlaveClientDto slaveDto = new SlaveClientDto( //
-					"streamId" + ((1000 * serverId) + i), //
-					"publicSID_" + serverId + "_" + i, //
-					new Long(2+serverId), //
-					userId, //
-					"firstName" + i, //
-					"lastName" + i, //
-					(i % 2 == 0), //
-					"scope" + i, //
-					"username" + i, //
-					CalendarPatterns.getDateWithTimeByMiliSeconds(new Date())); //
-			clients.add(slaveDto);
+				Long userId = (1000 * roomId * server.getId()) + i + add;
+
+				SlaveClientDto slaveDto = new SlaveClientDto(
+						//
+						"streamId" + ((1000 * roomId * server.getId()) + i), //
+						"publicSID_" + roomId + "_ " + server.getId() + "_" + i, //
+						roomId, //
+						userId, //
+						"firstName" + roomId + "_ " + server.getId() + "_" + i, //
+						"lastName" + roomId + "_ " + server.getId() + "_" + i, //
+						(i % 2 == 0), //
+						"scope" + roomId, //
+						"username" + roomId + "_ " + server.getId() + "_" + i, //
+						CalendarPatterns
+								.getDateWithTimeByMiliSeconds(new Date())); //
+				clients.add(slaveDto);
+			}
 		}
 
 		this.sessionManager.syncSlaveClientSession(server, clients);
@@ -259,12 +303,14 @@ public class TestHashMapStore extends AbstractOpenmeetingsSpringTest {
 				rcm.setConnectedSince(new Date());
 				rcm.setStreamid(streamId);
 				rcm.setScope(scopeName);
-				
-				long random = System.currentTimeMillis() + new BigInteger(256, new Random()).longValue();
+
+				long random = System.currentTimeMillis()
+						+ new BigInteger(256, new Random()).longValue();
 
 				ICryptString cryptStyle = new MD5Implementation();
 
-				rcm.setPublicSID(cryptStyle.createPassPhrase(String.valueOf(random).toString()));
+				rcm.setPublicSID(cryptStyle.createPassPhrase(String.valueOf(
+						random).toString()));
 
 				rcm.setUserport(remotePort);
 				rcm.setUserip(remoteAddress);
@@ -286,7 +332,7 @@ public class TestHashMapStore extends AbstractOpenmeetingsSpringTest {
 			}
 			return null;
 		}
-		
+
 		public HashMapStore getCache() {
 			return cache;
 		}
