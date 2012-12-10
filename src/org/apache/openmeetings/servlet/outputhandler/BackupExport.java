@@ -336,6 +336,7 @@ public class BackupExport {
 			Registry registry = new Registry();
 			registry.bind(OmTimeZone.class, OmTimeZoneConverter.class);
 			registry.bind(States.class, StateConverter.class);
+			registry.bind(Users.class, UserConverter.class);
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
