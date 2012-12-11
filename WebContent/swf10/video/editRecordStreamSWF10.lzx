@@ -368,6 +368,7 @@
             
             var _micro = null;
             var _camera = null;
+            
             if (valMic != null) {
                  _micro = Microphone.getMicrophone(valMic);
                  if (_micro != null) {
@@ -386,7 +387,6 @@
             
             if ($debug) Debug.write("_camera.setMode: ",videoview.width,videoview.height,canvas.framesPerSecond,true);
 
-            //Microphone.set
             if ($debug) Debug.write("canvas.microphoneRateBest: ",canvas.microphoneRateBest);
             if (_camera != null) {
                 if ($debug) Debug.write("_camera.setQuality BEST: ",this.isInterview,(canvas.bandwidthNeededBest*2),canvas.camQualityBest);
@@ -399,15 +399,24 @@
                     if ($debug) Debug.warn("IS NO INTERVIEW ");
                     _camera.setQuality(canvas.bandwidthNeededBest,canvas.camQualityBest);
                 }
+            
+            
+	            //The First start-timer message will come from the Flash Object
+	            if ($debug) Debug.warn("_camera.muted ",_camera.muted);
+	            if ($debug) Debug.warn("_micro.muted ",_micro.muted);
+	            
+	            if (!_camera.muted) {
+	                this.startTimer();
+	            }
+            
+            } else {
+            	if (_micro != null) {
+            		this.startTimer();
+            	}
             }
             
-            //The First start-timer message will come from the Flash Object
-            if ($debug) Debug.warn("_camera.muted ",_camera.muted);
-            if ($debug) Debug.warn("_micro.muted ",_micro.muted);
             
-            if (!_camera.muted) {
-                this.startTimer();
-            }
+            
 
             //start recording of client stream
             var t = new Date();
