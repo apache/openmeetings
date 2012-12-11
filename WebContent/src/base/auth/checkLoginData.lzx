@@ -372,7 +372,23 @@
             if($debug) Debug.write("checkLoginData/save: ",save);
             if(save) this.setValue(true);
         </handler>
-    </labelCheckbox>        
+    </labelCheckbox>  
+    
+    <labelText name="testing" y="96" x="${ parent.width-10-this.width }">
+        <attribute name="link" type="string" value="" />
+        <handler name="onclick">
+            lz.Browser.loadURL(this.link,"_blank");
+        </handler>
+        <handler name="oninit">
+   			this.setAttribute('text',this.formatLinkText(canvas.getLabelName(1527)));
+            this.setAttribute('link',canvas.getTestingUrl());  
+        </handler>
+        <method name="formatLinkText" args="text">
+	        <![CDATA[
+	            return "<u><FONT color='#0000CC'>"+text+"</FONT></u>";
+	        ]]>
+	    </method>    
+    </labelText>
 
     <labelText align="right" resize="true" valign="bottom" >
         <handler name="oninit">
