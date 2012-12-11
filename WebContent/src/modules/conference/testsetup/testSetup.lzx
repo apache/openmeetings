@@ -64,8 +64,14 @@ RTMP-host, RTMP/RTMPT-port for the session
 			if (value != null){
 				//FIXME load config from slave server first, cause the slave could potentially  
 				//have other RTMP and RTMPT ports configured.
+				
+				//the HTTP port stays with the master, if you want to cluster HTTP traffic use
+				//the regular Apache Tomcat mechanisms!
+				
+				
+			} else {
+				this.parent.startConference();
 			}
-			this.parent.startConference();
 		</handler>
 	</netRemoteCallHib>	
     

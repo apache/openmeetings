@@ -41,7 +41,7 @@
         this.setAttribute('microphoneRateBest',Number(canvas.myConfigSet.getPointer().xpathQuery('config/microphoneRateBest/text()')));  
         
         this.setAttribute('httpRootKey',canvas.myConfigSet.getPointer().xpathQuery('config/httpRootKey/text()'));
-        
+        this.setAttribute('protocol',canvas.myConfigSet.getPointer().xpathQuery('config/protocol/text()')); 
         this.setAttribute('proxyType',canvas.myConfigSet.getPointer().xpathQuery('config/proxyType/text()'));  
 
         var _url = this.getDisplayObject().loaderInfo.url;
@@ -68,6 +68,13 @@
 		var tColor = canvas.mainTheme.getPointer().xpathQuery("theme/color[@name='"+tColor+"']/@value");
 		if ($debug) Debug.write("tColor SWF10 "+tColor);
 		return tColor;
+	</method>
+	
+	<method name="getUrl">
+		<![CDATA[
+			return canvas.protocol + '://' + canvas.rtmphostlocal
+				+ ':' + canvas.red5httpport + canvas.httpRootKey;
+		]]>
 	</method>
     
 </library>

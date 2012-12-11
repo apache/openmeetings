@@ -24,7 +24,7 @@
 	
     <method name="generateFileLink">
         <![CDATA[
-            return canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'DownloadHandler?' +
+            return canvas.getUrl()+'DownloadHandler?' +
             		'fileName='+ this.fileHash + 
                     '&moduleName='+ "videoconf1" +
                     '&parentPath='+ '/' +
@@ -38,7 +38,7 @@
     		var mouse_x = canvas._drawarea.getMouse("x");
     		var mouse_y = canvas._drawarea.getMouse("y");
     		canvas._drawarea.parent.parent.clearAreaAndAddImage(this.generateFileLink(),mouse_x,mouse_y,
-    		          canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'DownloadHandler',
+    		          canvas.getUrl()+'DownloadHandler',
     		          this.fileHash,"videoconf1","/","files",hib.conferencedomain);
 		} else {
             new lz.errorModeratorPopup(canvas,{error:canvas.getLabelName(721)});

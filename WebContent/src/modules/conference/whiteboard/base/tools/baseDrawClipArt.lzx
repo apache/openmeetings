@@ -72,8 +72,7 @@
         this.startx = this.currentlayer.getMouse('x');
         this.starty = this.currentlayer.getMouse('y');
                                     
-        var imageurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey
-                            +'public/cliparts/'+this.currentClipArtRessourceName;
+        var imageurl = canvas.getUrl() + 'public/cliparts/'+this.currentClipArtRessourceName;
         
         if ($debug) Debug.write("imageurl :: ",imageurl);
         

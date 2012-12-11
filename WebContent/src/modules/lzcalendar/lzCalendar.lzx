@@ -41,8 +41,7 @@
 		<![CDATA[
 			_mainScrollBar.setAttribute("visibility","hidden");
 			
-			var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-	                               +canvas.httpRootKey+'services/CalendarService/getAppointmentReminderTypList?'
+			var downloadurl = canvas.getUrl() + 'services/CalendarService/getAppointmentReminderTypList?'
 	                               +'SID='+canvas.sessionId;
 	               
             this.getAppointmentReminderTypList.setAttribute("src",downloadurl);

@@ -147,8 +147,7 @@
                 organisation_id = hib.currentdomainObj.organisation_id
             }
         
-            var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-                +canvas.httpRootKey+'screen.upload?'
+            var downloadurl = canvas.getUrl() + 'screen.upload?'
                 +'rtmphostlocal='+canvas.rtmphostlocal
                 +'&domain='+hib.conferencedomain
                 +'&organization_id='+organisation_id

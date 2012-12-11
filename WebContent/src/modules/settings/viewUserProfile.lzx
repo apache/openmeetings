@@ -131,8 +131,7 @@
     	
     	    this.userObject = obj;
     	
-	        //var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-	        //		+canvas.httpRootKey+'DownloadHandler?fileName='+obj.pictureuri
+	        //var downloadurl = canvas.getUrl() + 'DownloadHandler?fileName='+obj.pictureuri
 	        //		+'&moduleName=userprofile&parentPath=&room_id='
 	        //		+'&sid='+canvas.sessionId;
 	        var t = new Date();
@@ -140,8 +139,7 @@
 	        if (obj.pictureuri.startsWith("http") || obj.pictureuri.startsWith("https")) {
                 var downloadurl = obj.pictureuri;
             } else {
-        		var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-                        +canvas.httpRootKey+'DownloadHandler?fileName='+obj.pictureuri
+        		var downloadurl = canvas.getUrl() + 'DownloadHandler?fileName='+obj.pictureuri
                         +'&moduleName=remoteuserprofile&parentPath=&room_id='
                         +'&remoteUserid='+obj.user_id+'&r='+t.getTime()
                         +'&sid='+canvas.sessionId;

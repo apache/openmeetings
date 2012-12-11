@@ -32,7 +32,7 @@
     
     <method name="formatURL" args="filename">
         <![CDATA[
-            var downloadurl = canvas.protocol + '://' + canvas.rtmphostlocal + ':' + canvas.red5httpport +canvas.httpRootKey+'DownloadHandler?' +
+            var downloadurl = canvas.getUrl()+'DownloadHandler?' +
                 'fileName=' + encodeURIComponent(filename) +
                 '&moduleName=' + this.uploadmodul + 
                 '&parentPath=' + encodeURIComponent(this.uploadmoduleimgfolder + '/' )+

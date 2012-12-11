@@ -53,6 +53,8 @@
 
 	<attribute name="httpRootKey" value="/" type="string" />
 	
+	<attribute name="protocol" value="/" type="string" />
+	
 	<attribute name="proxyType" value="none" type="string" />
 
 	<!---

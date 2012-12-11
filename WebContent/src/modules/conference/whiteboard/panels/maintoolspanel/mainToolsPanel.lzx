@@ -55,9 +55,8 @@
         
         <handler name="oninit">
             this._bgIcon.setAttribute("visibility","hidden");
-            var imageurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey
-                                            +'public/cliparts/thumb/'
-                                            +canvas._drawarea.currentClipArtRessourceName;
+            var imageurl = canvas.getUrl() + 'public/cliparts/thumb/'
+                                           + canvas._drawarea.currentClipArtRessourceName;
             
             this._rscIcon.setSource(imageurl);
         </handler>

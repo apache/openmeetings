@@ -101,8 +101,7 @@
 	            if ($debug) Debug.write("deleteFileOrFolder: ",value);
 	            parent.isLoaded = true;
 	            
-	            var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-                                +canvas.httpRootKey+'DownloadHandler?fileName=UPLOADFLV_'+parent.fileExplorerItemId+'.jpg'
+	            var downloadurl = canvas.getUrl()+'DownloadHandler?fileName=UPLOADFLV_'+parent.fileExplorerItemId+'.jpg'
                                 +'&moduleName=lzRecorderApp&parentPath=&room_id='
                                 +'&sid='+canvas.sessionId;
 	            

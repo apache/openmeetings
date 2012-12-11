@@ -126,8 +126,7 @@
 				if (value.pictureuri.startsWith("http") || value.pictureuri.startsWith("https")) {
                     var downloadurl = value.pictureuri;
                 } else {
-    		        var downloadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport
-    		        		+canvas.httpRootKey+'DownloadHandler?fileName='+value.pictureuri
+    		        var downloadurl = canvas.getUrl() + 'DownloadHandler?fileName='+value.pictureuri
     		        		+'&moduleName=userprofile&parentPath=&room_id='
     		        		+'&sid='+canvas.sessionId+'&r='+t.getTime();
                 }

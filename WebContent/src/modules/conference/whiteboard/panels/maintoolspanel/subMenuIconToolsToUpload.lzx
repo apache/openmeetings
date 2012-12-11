@@ -258,8 +258,7 @@
     		folderName += "/";
     	}
     	
-    	var imageurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey
-                                        +'public/cliparts/thumb/'+refObj.modi;
+    	var imageurl = canvas.getUrl() + 'public/cliparts/thumb/'+refObj.modi;
     	
         if ($debug) Debug.write("this.refToolbar :: ",this.refToolbar);        
                                         
@@ -319,8 +318,7 @@
             <method name="loadIconThumbs" args="list,folderName">
             	<![CDATA[
             	
-                    var imageurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey
-                                        +'public/cliparts/thumb/';
+                    var imageurl = canvas.getUrl() + 'public/cliparts/thumb/';
                     
                     //if ($debug) Debug.write("imageurl :: ",imageurl);            	
                         	
