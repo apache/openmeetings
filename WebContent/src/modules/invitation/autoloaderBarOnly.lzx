@@ -131,8 +131,6 @@
             clearStageContent();		
             parent.close();
             
-            //FIXME: Modify canvas.rtmphostlocal to point to cluster
-            
 			if (canvas.thishib.currentInvitation.room.roomtype.roomtypes_id==1){
 				
 				new lz.testSetup(canvas,{isDirectLink:true,roomClassName:canvas.conferenceRoomModule,roomObj:canvas.thishib.currentInvitation.room});

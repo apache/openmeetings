@@ -552,25 +552,33 @@
         </switch>
         <handler name="oninit">
             <![CDATA[
-				//Get all availible Cam's
-				var tw = Camera.names;
-				var r = "";
-				for (var eg=0;eg<tw.length;eg++){
-					this.addItem(tw[eg],eg);
-					r=eg;
-				}
-				var t:SharedObject = SharedObject.getLocal('userdata');
+            	//Get eventually stored camera
+            	var t:SharedObject = SharedObject.getLocal('userdata');
 				var g = t.data;
 				var cam;
                 if (g != null){
-                    cam = g["cam"];
-                    if (cam == 'undefined') {
-                        cam = r;
-                    }
-                } else {
-                    cam = r;
+                    cam = ""+g["cam"];
                 }
-                this.selectItem(String(cam));
+            
+				//Get all availible Cam's
+				var tw = Camera.names;
+				var r = "";
+				 var foundStoredCam = null;
+				for (var eg=0;eg<tw.length;eg++){
+					this.addItem(tw[eg],eg);
+					r=""+eg;
+					if (r == cam) {
+						foundStoredCam = r;
+					}
+				}
+				
+				if (foundStoredCam != null) {
+					this.selectItem(foundStoredCam);
+				} else {
+					if (tw.length > 0) {
+						this.selectItemAt(0);
+					}
+				}
             ]]>
         </handler>
     </resetCombobox>
@@ -589,26 +597,35 @@
         </switch>
         <handler name="oninit">
             <![CDATA[
+            	//Get eventually stored mic from user settings/shared object/cookie
+            	var t:SharedObject = SharedObject.getLocal('userdata');
+	            var g = t.data;
+	            var mic = null;
+	            if (g != null) {
+	            	mic = "" + g["mic"];
+	            }
+            
 	            //Get all availible Mic's
 	            var tw = Microphone.names;
 	            var r = "";
+	            var foundStoredMic = null;
 	            for (var eg=0;eg<tw.length;eg++){
-	                r=eg;
+	                r = "" + eg;
 	                this.addItem(tw[eg],eg);
+	                
+	                if (r == mic) {
+	                	foundStoredMic = r;
+	                }
 	            }
 
-	            var t:SharedObject = SharedObject.getLocal('userdata');
-	            var g = t.data;
-	            var mic;
-                if (g != null){
-                    mic = g["mic"];
-                    if (mic == 'undefined') {
-                        mic = r;
-                    }
+                if ($debug) Debug.write("Select foundStoredMic: ",foundStoredMic);
+                if (foundStoredMic != null) {
+                	this.selectItem(foundStoredMic);
                 } else {
-                    mic = r;
+                    if (tw.length > 0) {
+                    	this.selectItemAt(0);
+                    }
                 }
-                this.selectItem(String(mic));
             ]]>
         </handler>
     </resetCombobox>

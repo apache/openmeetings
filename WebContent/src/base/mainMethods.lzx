@@ -575,8 +575,6 @@
     
     <method name="setRoomValues" args="roomTypeId,roomId,roomObj">
     
-    	//FIXME: Modify canvas.rtmphostlocal to point to cluster
-    
         if ($debug) Debug.warn("setRoomValues ",roomTypeId,roomId,roomObj);
         if (roomTypeId==1){
                 canvas.isConference = true;

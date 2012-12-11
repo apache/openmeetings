@@ -104,8 +104,6 @@
 	    	var roomObj = canvas.thishib.currentInvitation.room;
         	hib.currentroomid = roomObj.rooms_id;
         	
-			//FIXME: Modify canvas.rtmphostlocal to point to cluster
-			
 		</method>
 		
     	<method name="login">

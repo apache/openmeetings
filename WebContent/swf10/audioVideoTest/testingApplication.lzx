@@ -271,13 +271,18 @@ Test the setup values before you enter a room
                 var g = t.data;
                 var mic;
                 if (g != null){
+                if ($debug) Debug.write("Select mic 4: ",mic);
                     mic = g["mic"];
                     if (mic == 'undefined') {
+                    if ($debug) Debug.write("Select mic 3: ",mic);
                         mic = r;
                     }
                 } else {
+                if ($debug) Debug.write("Select mic 2: ",mic);
                     mic = r;
                 }
+                if ($debug) Debug.write("Select mic 1: ",mic);
+                
                 this.selectItem(String(mic));
             ]]>
         </handler>

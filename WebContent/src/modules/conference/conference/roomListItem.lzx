@@ -123,8 +123,6 @@
 		<method name="initRoom">
 			if ($debug) Debug.write("roomListItem::initRoom ", this);
 			
-			//FIXME: Modify canvas.rtmphostlocal to point to cluster
-	        
 			canvas.isConference = !this.isaudience;
 			if (this.isaudience)
 				connectedIsAudience = '_' + 'audi';
