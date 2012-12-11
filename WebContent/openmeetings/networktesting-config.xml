@@ -22,7 +22,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
     xsi:noNamespaceSchemaLocation="networktesting-config.xsd">
 
-    <hostAddress>192.168.56.101</hostAddress>
+    <hostAddress></hostAddress>
     <rtmpPort>1935</rtmpPort>
     <httpPort>5080</httpPort>
     <uriContext>/openmeetings</uriContext>

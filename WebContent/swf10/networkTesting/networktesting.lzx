@@ -21,6 +21,13 @@
 <canvas width="100%" height="100%" title="NetworkTesting">
 
 	<switch>
+        <when property="$as3">
+            <passthrough>
+                import flash.external.ExternalInterface;
+            </passthrough>
+        </when>
+    </switch>
+	<switch>
 		<when property="$debug">
 			<method name="doDebugInit">
 				canvas.setAttribute('debug', true);
@@ -47,16 +54,34 @@
     <attribute name="uriContext" type="string" value="/openmeetings" />
     <attribute name="rtmpUriPath" type="string" value="/openmeetings/hibernate" />
 
-    <method name="getSettings">
-        var settingsPtr = canvas.settings.getPointer();
-
-        canvas.setAttribute("host", settingsPtr.xpathQuery("config/hostAddress/text()"));
-        canvas.setAttribute("rtmpPort", settingsPtr.xpathQuery("config/rtmpPort/text()"));
-        canvas.setAttribute("httpPort", settingsPtr.xpathQuery("config/httpPort/text()"));
-
-        canvas.setAttribute("uriContext", settingsPtr.xpathQuery("config/uriContext/text()"));
-        canvas.setAttribute("rtmpUriPath", settingsPtr.xpathQuery("config/rtmpUriPath/text()"));
-    </method>
+	<method name="getSettings">
+		var settingsPtr = canvas.settings.getPointer();
+		
+		canvas.setAttribute("host", settingsPtr.xpathQuery("config/hostAddress/text()"));
+		if (!canvas.host) {
+			// trying to get host from JS call
+			var url:String = ExternalInterface.call("window.location.href.toString");
+			// in case of IE or some other security issues we will fail ...
+			url = url ? url : canvas.proxyurl;
+			if (url) {
+				if ($debug) Debug.write("url ", url);
+				var paramsIdx = url.indexOf("?");
+				if (paramsIdx != -1) {
+					url = url.substr(0, paramsIdx);
+				}
+				if ($debug) Debug.write("url ", url);
+				url = url.substr(url.indexOf("//") + 2);
+				var portIdx = url.indexOf(":");
+				canvas.setAttribute("host", url.substr(0, portIdx != -1 ? portIdx : url.indexOf("/")));
+				if ($debug) Debug.write("canvas.host ", canvas.host);
+			}
+		}
+		canvas.setAttribute("rtmpPort", settingsPtr.xpathQuery("config/rtmpPort/text()"));
+		canvas.setAttribute("httpPort", settingsPtr.xpathQuery("config/httpPort/text()"));
+		
+		canvas.setAttribute("uriContext", settingsPtr.xpathQuery("config/uriContext/text()"));
+		canvas.setAttribute("rtmpUriPath", settingsPtr.xpathQuery("config/rtmpUriPath/text()"));
+	</method>
 
     <method name="showTests">
         var tests = new lz.TestsView(canvas, {name:"testsView"});
