@@ -1444,10 +1444,12 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 			// Inject externalUserId if nothing is set yet
 			if (currentClient.getExternalUserId() == null) {
-				Users us = usersDao.get(currentClient.getUser_id());
-				if (us != null) {
-					currentClient.setExternalUserId(us.getExternalUserId());
-					currentClient.setExternalUserType(us.getExternalUserType());
+				if (currentClient.getUser_id() != null) {
+					Users us = usersDao.get(currentClient.getUser_id());
+					if (us != null) {
+						currentClient.setExternalUserId(us.getExternalUserId());
+						currentClient.setExternalUserType(us.getExternalUserType());
+					}
 				}
 			}
 
@@ -1732,20 +1734,20 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			// Update Session Data
 			sessionManagement.updateUserWithoutSession(SID, userId);
 
-			Users user = userManagement.getUserById(userId);
-
-			if (user != null) {
-				currentClient.setExternalUserId(user.getExternalUserId());
-				currentClient.setExternalUserType(user.getExternalUserType());
-			}
-
 			// only fill this value from User-Record
-			// cause invited users have non
+			// cause invited users have no associated User, so
 			// you cannot set the firstname,lastname from the UserRecord
-			Users us = usersDao.get(userId);
-			if (us != null && us.getPictureuri() != null) {
-				// set Picture-URI
-				currentClient.setPicture_uri(us.getPictureuri());
+			if (userId != null) {
+				Users us = usersDao.get(userId);
+				
+				if (us != null) {
+					currentClient.setExternalUserId(us.getExternalUserId());
+					currentClient.setExternalUserType(us.getExternalUserType());
+				}
+				if (us != null && us.getPictureuri() != null) {
+					// set Picture-URI
+					currentClient.setPicture_uri(us.getPictureuri());
+				}
 			}
 			this.clientListManager.updateClientByStreamId(streamid,
 					currentClient, false);
