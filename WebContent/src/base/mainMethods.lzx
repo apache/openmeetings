@@ -130,7 +130,7 @@
 
     <method name="getTestingUrl">
     <![CDATA[
-        return getUrl() + 'networktesting' + ($debug ? 'debug' : '') + '.swf10.swf?lzproxied=solo';
+        return getUrl() + '?swf=networktesting' + ($debug ? 'debug' : '') + '.swf10.swf';
     ]]>
     </method>
         
