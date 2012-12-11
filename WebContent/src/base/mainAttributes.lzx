@@ -49,6 +49,14 @@ these properties will be overwritten by config.xml -->
     domain-name it has been loading from
     -->
 <attribute name="rtmphostlocal" value="" type="string" />
+
+<!-- 
+	URL/IP to use for the Server for HTTP and HTTPS traffic.
+    If this value is empty it will use the rtmphostlocal 
+    variable (and in that way try to connect to the 
+    domain-name the OpenMeetings-Client has been loading from)
+ -->
+<attribute name="httphostlocal" value="" type="string" />
  
 <!---  
     Port to use for the Server

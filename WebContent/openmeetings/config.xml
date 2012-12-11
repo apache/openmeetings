@@ -22,12 +22,24 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
     xsi:noNamespaceSchemaLocation="config.xsd">
 
-<!-- URL/IP to use for the Server
-    if this value is empty it will try to connect to the 
-    domain-name the OpenMeetings-Client has been loading from  
+<!-- URL/IP to use for the Server for RTMP and RTMPT traffic.
+    If this value is empty it will try to connect to the 
+    domain-name the OpenMeetings-Client has been loading from
+    
+    Can be either and IP or a domain name. 
+    For example: 
+    <rtmphostlocal>192.168.254.182</rtmphostlocal>
+    or
+    <rtmphostlocal>mysubdomain.streaming.to</rtmphostlocal>
     -->
-<!--<rtmphostlocal>192.168.254.182</rtmphostlocal>-->
 <rtmphostlocal></rtmphostlocal>
+
+<!-- URL/IP to use for the Server for HTTP and HTTPS traffic.
+    If this value is empty it will use the rtmphostlocal 
+    variable (and in that way try to connect to the 
+    domain-name the OpenMeetings-Client has been loading from)
+    -->
+<httphostlocal></httphostlocal>
 
 <!--  
 Port to use for the Server

@@ -23,6 +23,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="rtmphostlocal"/>
+        <xs:element ref="httphostlocal"/>
         <xs:element ref="rtmpport"/>
         <xs:element ref="rtmpTunnelport"/>
         <xs:element ref="rtmpsslport"/>
@@ -73,6 +74,30 @@
     </xs:complexType>
   </xs:element>
   <xs:element name="rtmphostlocal">
+  	<xs:annotation>
+    	<xs:documentation>
+    		URL/IP to use for the Server for RTMP and RTMPT traffic.
+		    If this value is empty it will try to connect to the 
+		    domain-name the OpenMeetings-Client has been loading from
+		    
+		    Can be either and IP or a domain name. 
+		    For example: 
+		    192.168.254.182
+		    or
+		    mysubdomain.streaming.to
+    	</xs:documentation>
+    </xs:annotation>
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="httphostlocal">
+    <xs:annotation>
+    	<xs:documentation>
+    		URL/IP to use for the Server for HTTP and HTTPS traffic.
+		    If this value is empty it will use the rtmphostlocal 
+		    variable (and in that way try to connect to the 
+		    domain-name the OpenMeetings-Client has been loading from)
+    	</xs:documentation>
+    </xs:annotation>
     <xs:complexType/>
   </xs:element>
   <xs:element name="rtmpport" type="xs:integer"/>
