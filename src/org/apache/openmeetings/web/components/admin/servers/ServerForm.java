@@ -62,7 +62,7 @@ public class ServerForm extends AdminBaseForm<Server> {
 		add(new TextField<String>("webapp"));
 		add(new TextField<String>("protocol"));
 		add(DateLabel.forDatePattern("lastPing", "dd.MM.yyyy HH:mm:ss"));
-		add(new Label("pingRunning"));
+		//add(new Label("pingRunning"));
 		add(DateLabel.forDatePattern("inserted", "dd.MM.yyyy HH:mm:ss"));
 		add(new Label("insertedby.login"));
 		add(DateLabel.forDatePattern("updated", "dd.MM.yyyy HH:mm:ss"));
