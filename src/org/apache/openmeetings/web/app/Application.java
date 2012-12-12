@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.app;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.pages.auth.SignInPage;
 import org.apache.wicket.Page;
@@ -115,7 +116,10 @@ public class Application extends AuthenticatedWebApplication {
 	}
 	
 	public static <T> T getBean(Class<T> clazz) {
-		ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(get().getServletContext());
-		return context.getBean(clazz);
+		if (ScopeApplicationAdapter.initComplete) {
+			ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(get().getServletContext());
+			return context.getBean(clazz);
+		}
+		return null;
 	}
 }

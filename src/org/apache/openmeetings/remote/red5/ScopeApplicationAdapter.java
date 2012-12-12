@@ -139,6 +139,12 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			}
 
 			ScopeApplicationAdapter.initComplete = true;
+		    log.debug("\n" + 
+		    		"\t################################################\n" +
+		    		"\t#            Openmeetings is up                #\n" +
+		    		"\t#             and ready to use                 #\n" +
+		    		"\t################################################\n"
+		    		);
 
 		} catch (Exception err) {
 			log.error("[appStart]", err);
