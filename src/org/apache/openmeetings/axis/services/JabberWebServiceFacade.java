@@ -24,6 +24,7 @@ import org.apache.axis2.context.MessageContext;
 import org.apache.axis2.transport.http.HTTPConstants;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms;
+import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.context.ApplicationContext;
@@ -48,6 +49,9 @@ public class JabberWebServiceFacade {
 
 	private JabberWebService getJabberServiceProxy() {
 		try {
+			if (!ScopeApplicationAdapter.initComplete) {
+				throw new Exception("Server not yet initialized, retry in couple of seconds");
+			}
 			ApplicationContext context = WebApplicationContextUtils
 					.getWebApplicationContext(getServletContext());
 

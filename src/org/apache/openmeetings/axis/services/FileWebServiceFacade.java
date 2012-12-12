@@ -27,6 +27,7 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.file.dto.FileExplorerObject;
 import org.apache.openmeetings.data.file.dto.LibraryPresentation;
 import org.apache.openmeetings.persistence.beans.files.FileExplorerItem;
+import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.context.ApplicationContext;
@@ -45,6 +46,9 @@ public class FileWebServiceFacade {
 
 	private FileWebService geFileServiceProxy() {
 		try {
+			if (!ScopeApplicationAdapter.initComplete) {
+				throw new Exception("Server not yet initialized, retry in couple of seconds");
+			}
 			ApplicationContext context = WebApplicationContextUtils
 					.getWebApplicationContext(getServletContext());
 			return (FileWebService) context.getBean("fileWebService");

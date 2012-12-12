@@ -28,6 +28,7 @@ import org.apache.openmeetings.data.beans.basic.ErrorResult;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
 import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.context.ApplicationContext;
@@ -46,6 +47,9 @@ public class UserWebServiceFacade {
 
 	private UserWebService getUserServiceProxy() {
 		try {
+			if (!ScopeApplicationAdapter.initComplete) {
+				throw new Exception("Server not yet initialized, retry in couple of seconds");
+			}
 			ApplicationContext context = WebApplicationContextUtils
 					.getWebApplicationContext(getServletContext());
 			return (UserWebService) context.getBean("userWebService");

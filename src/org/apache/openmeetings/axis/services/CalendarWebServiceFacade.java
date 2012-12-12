@@ -32,6 +32,7 @@ import org.apache.openmeetings.data.calendar.beans.Week;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentCategory;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentReminderTyps;
+import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.context.ApplicationContext;
@@ -50,6 +51,9 @@ public class CalendarWebServiceFacade {
 
 	private CalendarWebService getCalendarServiceProxy() {
 		try {
+			if (!ScopeApplicationAdapter.initComplete) {
+				throw new Exception("Server not yet initialized, retry in couple of seconds");
+			}
 			ApplicationContext context = WebApplicationContextUtils
 					.getWebApplicationContext(getServletContext());
 			return (CalendarWebService) context.getBean("calendarWebService");

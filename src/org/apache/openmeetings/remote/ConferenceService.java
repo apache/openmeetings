@@ -32,6 +32,7 @@ import java.util.Map.Entry;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.cluster.beans.ServerDTO;
 import org.apache.openmeetings.conference.room.ClientSession;
 import org.apache.openmeetings.conference.room.IClientList;
 import org.apache.openmeetings.conference.room.RoomClient;
@@ -775,7 +776,7 @@ public class ConferenceService {
 	 * @return null means the user should stay on the master, otherwise a
 	 *         {@link Server} entity is returned
 	 */
-	public Server getServerForSession(String SID, long roomId) {
+	public ServerDTO getServerForSession(String SID, long roomId) {
 		Long users_id = sessionManagement.checkSession(SID);
 		Long user_level = userManagement.getUserLevelByID(users_id);
 		if (authLevelManagement.checkUserLevel(user_level)) {
@@ -796,7 +797,7 @@ public class ConferenceService {
 			for (Server server : serverList) {
 				for (Long activeRoomId : clientListManager.getActiveRoomIdsByServer(server)) {
 					if (activeRoomId.equals(roomId)) {
-						return server;
+						return new ServerDTO(server);
 					}
 				}
 			}
@@ -831,11 +832,15 @@ public class ConferenceService {
 			Collections.sort(list, new Comparator<Server>() {
 		          public int compare(Server s1, Server s2) {
 		        	  int maxUsersInRoomS1 = 0;
+		        	  log.debug("serverRoomMap.get(s1) SIZE "+serverRoomMap.get(s1).size());
 		        	  for (Rooms room : serverRoomMap.get(s1)) {
+		        		  log.debug("s1 room: "+room);
 		        		  maxUsersInRoomS1 += room.getNumberOfPartizipants();
 		        	  }
 		        	  int maxUsersInRoomS2 = 0;
+		        	  log.debug("serverRoomMap.get(s2) SIZE "+serverRoomMap.get(s2).size());
 		        	  for (Rooms room : serverRoomMap.get(s2)) {
+		        		  log.debug("s2 room: "+room);
 		        		  maxUsersInRoomS2 += room.getNumberOfPartizipants();
 		        	  }
 		        	  
@@ -868,11 +873,22 @@ public class ConferenceService {
 
 			}
 
-			return serverRoomMapOrdered.entrySet().iterator().next().getKey();
+			log.debug("Resulting Server");
+			
+			Server s = serverRoomMapOrdered.entrySet().iterator().next().getKey();
+			
+			if (s == null) {
+				return null;
+			}
+			
+			//Somehow this object here cannot be serialized cause its abused by OpenJPA
+			//so get a fresh copy from the entity manager and return that
+			return new ServerDTO(s);
 		}
 
+		log.error("Could not get server for cluster session");
 		//Empty server object
-		return new Server();
+		return null;
 	}
 	
 }

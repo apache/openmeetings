@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.cluster.beans.ServerDTO;
 import org.apache.openmeetings.conference.room.ClientListHashMapStore;
 import org.apache.openmeetings.conference.room.ClientSession;
 import org.apache.openmeetings.conference.room.RoomClient;
@@ -246,13 +247,13 @@ public class TestHashMapStore extends AbstractOpenmeetingsSpringTest {
 		assertTrue(us != null);
 
 		// Is running already on server3
-		Server server = conferenceService.getServerForSession(
+		ServerDTO server = conferenceService.getServerForSession(
 				sessionData.getSession_id(), 8);
 		log.debug("server " + server);
 		assertEquals(server.getId().longValue(), 3);
 
 		// New Room requested that is running on no server
-		Server serverNew = conferenceService.getServerForSession(
+		ServerDTO serverNew = conferenceService.getServerForSession(
 				sessionData.getSession_id(), 9);
 		log.debug("serverNew " + serverNew);
 		assertEquals(serverNew, null);
