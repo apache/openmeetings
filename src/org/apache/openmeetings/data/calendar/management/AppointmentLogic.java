@@ -501,6 +501,7 @@ public class AppointmentLogic {
 							inv.getBaseUrl(), mm.getEmail(), subject,
 							inv.getHash());
 
+					invitationManagement.sendInvitationReminderSMS(mm.getPhone(), subject);
 					inv.setUpdatetime(new Date());
 					invitationManagement.updateInvitation(inv);
 				}
