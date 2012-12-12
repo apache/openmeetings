@@ -118,7 +118,7 @@ public interface IClientList {
 	 * needed cause it is invoked internally AFTER the current user has been
 	 * already removed from the ClientList to see if the Room is empty again and
 	 * the PollList can be removed
-	 * @param server TODO
+	 * @param room_id 
 	 * @return
 	 */
 	public abstract List<RoomClient> getClientListByRoom(Long room_id, Server server);

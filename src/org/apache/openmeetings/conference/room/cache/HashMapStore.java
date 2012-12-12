@@ -275,19 +275,24 @@ public class HashMapStore {
 	
 	/**
 	 * 
+	 * We ignore the server here, cause ONE room can only be on ONE server and often we don't know where.
+	 * However at a later stage clients might be on different servers and still in the save room
+	 * so we keep that parameter for now
+	 * 
+	 * @param server
 	 * @param roomId
 	 * @return will return an empty map if nothing available
 	 */
 	public  LinkedHashMap<String, RoomClient> getClientsByRoomId(Server server, Long roomId) {
-		LinkedHashMap<Long, LinkedHashMap<String, RoomClient>> clientsByRoomId = clientsByServerAndRoomId.get(getIdByServer(server));
-		if (clientsByRoomId == null) {
-			return EMPTY_MAP;
+		
+		for (Entry<Long, LinkedHashMap<Long, LinkedHashMap<String, RoomClient>>> entry : clientsByServerAndRoomId.entrySet()) {
+			LinkedHashMap<String, RoomClient> roomClients = entry.getValue().get(roomId);
+			if (roomClients != null) {
+				return roomClients;
+			}
 		}
-		LinkedHashMap<String, RoomClient> clients = clientsByRoomId.get(roomId);
-		if (clients == null) {
-			return EMPTY_MAP;
-		}
-		return clients;
+		
+		return EMPTY_MAP;
 	}
 
 	public void remove(Server server, String streamId) {
