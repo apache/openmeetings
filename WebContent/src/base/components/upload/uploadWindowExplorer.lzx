@@ -131,7 +131,7 @@
                               fileExplorerItem.fileName);
             	} else if (fileExplorerItem.isImage) {
             		canvas._drawarea.parent.parent.clearAreaAndAddImage(this.generateFileLink(fileExplorerItem.fileHash),0,0,
-                      canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+'DownloadHandler',
+                      canvas.getUrl() +'DownloadHandler',
                       fileExplorerItem.fileHash,"videoconf1","/","files",hib.conferencedomain);
             	}
             }
@@ -212,7 +212,7 @@
 	<simpleLabelButton name="upload" x="10" y="120" labelid="593" width="250" enabled="false" height="20">
 		<handler name="onclick">
 			<![CDATA[
-			var uploadurl = canvas.protocol + '://'+canvas.rtmphostlocal+':'+canvas.red5httpport+canvas.httpRootKey+ parent.servletName +'?' +
+			var uploadurl = canvas.getUrl() + parent.servletName +'?' +
 					'moduleName='+this.parent.uploadmodule +
                     '&publicSID='+canvas.publicSID +
                     '&filename='+encodeURIComponent(parent.txtFile.text) +

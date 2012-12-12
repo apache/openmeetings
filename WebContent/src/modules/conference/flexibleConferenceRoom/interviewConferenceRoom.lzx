@@ -98,6 +98,9 @@
         	canvas.currentActivityList = null;
         }
         
+        //reset if the user was connected to any slave
+        canvas.isSlaveHosted = false;
+        
         //@deprecated we will not use old screen sharing implementation
         //canvas._screens.clearAllSessions();
         this.logicalRoomLeave.doCall();

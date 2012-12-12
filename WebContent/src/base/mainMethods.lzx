@@ -114,12 +114,21 @@
     	   return colorArray[Math.round(Math.random()*10)];
     	]]>
     </method>
+    
+    <method name="getHttpHost">
+    	<![CDATA[
+	    	if (canvas.httphostlocal != null && canvas.httphostlocal.length > 0) {
+				return canvas.httphostlocal;
+			}
+			return canvas.rtmphostlocal;
+		]]>
+    </method>
         
 	<method name="getUrl">
-	<![CDATA[
-		return canvas.protocol + '://' + canvas.rtmphostlocal
-			+ ':' + canvas.red5httpport + canvas.httpRootKey;
-	]]>
+		<![CDATA[
+			return canvas.protocol + '://' + getHttpHost()
+				+ ':' + canvas.red5httpport + canvas.httpRootKey;
+		]]>
 	</method>
         
 	<method name="getServicesUrl">
@@ -209,6 +218,7 @@
         this.setAttribute('recordModule',canvas.myConfigSet.getPointer().xpathQuery('config/recordModule/text()'));
           
         this.setAttribute('httpRootKey',canvas.myConfigSet.getPointer().xpathQuery('config/httpRootKey/text()'));
+        this.setAttribute('httphostlocal',canvas.myConfigSet.getPointer().xpathQuery('config/httphostlocal/text()'));
         this.setAttribute('protocol',canvas.myConfigSet.getPointer().xpathQuery('config/protocol/text()'));  
         this.setAttribute('proxyType',canvas.myConfigSet.getPointer().xpathQuery('config/proxyType/text()'));
 
@@ -377,14 +387,6 @@
             if (moodlePicture != undefined) {
                 canvas.moodlePicture = moodlePicture;
             }
-        }
-        
-        
-        hib.protocollPort = canvas.rtmpport;
-        
-        if (canvas.useSSL) {
-            hib.protocollName = "rtmps";
-            hib.protocollPort = canvas.rtmpsslport;
         }
         
         var scopeRoomId = lz.Browser.getInitArg('scopeRoomId');

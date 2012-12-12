@@ -89,8 +89,15 @@
         canvas.roomTypesInitValues = value;
     </method>
     
-    <method name="reconnectSuccess" args="connection_url,publicSID,userobject,isInterview">
+    <!-- 
+    	Synces some of the variables from the SWF8 to the SWF10.
+    	This also includes values for httphostlocal
+    	in case its a cluster'ed OpenMeetings installation the connection_url
+    	might point to the slave while the httphostlocal points to the master
+     -->
+    <method name="reconnectSuccess" args="connection_url,publicSID,userobject,isInterview,httphostlocal">
         if($debug) Debug.write("reconnectSuccess",connection_url,publicSID,userobject);
+        canvas.httphostlocal = httphostlocal;
         canvas.publicSID = publicSID;
         canvas.userobject = userobject;
         canvas.isInterview = isInterview;

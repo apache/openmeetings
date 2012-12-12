@@ -40,6 +40,11 @@
         this.setAttribute('microphoneRateNormal',Number(canvas.myConfigSet.getPointer().xpathQuery('config/microphoneRateNormal/text()')));  
         this.setAttribute('microphoneRateBest',Number(canvas.myConfigSet.getPointer().xpathQuery('config/microphoneRateBest/text()')));  
         
+        //httphostlocal variable is loaded from the SWF8 application, cause it needs value, SWF10 app
+        //knows nothing about the rtmphostlocal, and we don't want to parse the URL from the browser
+        //in both applications to find out where the user loaded the SWF from and extract the domain/ip 
+        //from it
+        
         this.setAttribute('httpRootKey',canvas.myConfigSet.getPointer().xpathQuery('config/httpRootKey/text()'));
         this.setAttribute('protocol',canvas.myConfigSet.getPointer().xpathQuery('config/protocol/text()')); 
         this.setAttribute('proxyType',canvas.myConfigSet.getPointer().xpathQuery('config/proxyType/text()'));  
@@ -70,9 +75,16 @@
 		return tColor;
 	</method>
 	
+	<!-- 
+		httphostlocal is synced from the SWF8 application, it will always point to the master
+	 -->
+	<method name="getHttpHost">
+		return canvas.httphostlocal;
+    </method>
+	
 	<method name="getUrl">
 		<![CDATA[
-			return canvas.protocol + '://' + canvas.rtmphostlocal
+			return canvas.protocol + '://' + getHttpHost()
 				+ ':' + canvas.red5httpport + canvas.httpRootKey;
 		]]>
 	</method>

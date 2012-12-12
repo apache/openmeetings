@@ -135,7 +135,7 @@
                   remotecontext="$once{ canvas.thishib }" activeErrorHandler="true" >      
         <netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
         <netparam><method name="getValue"> return parent.parent.user_id; </method></netparam>
-        <netparam><method name="getValue"> return canvas.rtmphostlocal; </method></netparam>
+        <netparam><method name="getValue"> return canvas.getHttpHost(); </method></netparam>
         <netparam><method name="getValue"> return canvas.red5httpport; </method></netparam>
         <netparam><method name="getValue"> return canvas.httpRootKey; </method></netparam>
         <handler name="ondata" args="value">

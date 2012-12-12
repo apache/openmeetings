@@ -48,8 +48,6 @@
 <class name="hibRtmpConnection" extends="rtmpConnection" debug="false"
     src="$once{ this.getUrl() }" >
 
-    <attribute name="protocollName" type="string" value="rtmp" />
-    <attribute name="protocollPort" type="string" value="$once{ canvas.rtmpport }" />
     <attribute name="counterror" type="number" value="0" />
     
     <attribute name="loaderVar" value="null" />
@@ -108,9 +106,60 @@
     <attribute name="showKickMessage" value="false" type="boolean"/>
     <attribute name="showFullMessage" value="false" type="boolean"/>
          
+    <attribute name="useRTMPT" value="false" type="boolean" />
+    
+    <method name="getProtocol">
+    	if (canvas.useSSL) {
+    		return "rtmps";
+    	}
+    	if (this.useRTMPT) {
+    		return "rtmpt";
+    	}
+    	return "rtmp";
+    </method>
+    
+    <method name="getPort">
+    	if (canvas.useSSL) {
+    		if (canvas.isSlaveHosted) {
+    			return canvas.slaveRtmpsslport;
+    		}
+            return canvas.rtmpsslport;
+        }
+    	if (this.useRTMPT) {
+    		if (canvas.isSlaveHosted) {
+    			return canvas.slaveRtmpTunnelport;
+    		}
+    		return canvas.rtmpTunnelport;
+    	}
+    	if (canvas.isSlaveHosted) {
+    		return canvas.slaveRtmpport;
+    	}
+    	return canvas.rtmpport;
+    </method>
+    
+    <method name="getHost">
+    	if (canvas.isSlaveHosted) {
+    		return canvas.slaveRtmphostlocal;
+    	}
+    	return canvas.rtmphostlocal;
+    </method>
+    
+    <method name="getWebappRootKey">
+    	if (canvas.isSlaveHosted) {
+    		return canvas.slaveWebAppRootKey;
+    	}
+    	return canvas.webAppRootKey;
+    </method>
+         
+    <!-- 
+    	canvas.getUrl() can not be reused since it has different protocol and port 
+    	and potentially in cluster another host, the only thing that stays the same
+    	no matter if hosted on slave or on master, is the scope, so
+    	userScope always stays the same
+     -->
     <method name="getUrl">
-    	//canvas.getUrl() can not be reused since it has different protocol
-        return this.protocollName+'://'+canvas.rtmphostlocal+':'+this.protocollPort+'/'+canvas.webAppRootKey+'/'+this.userScope;
+        return this.getProtocol() + '://' + this.getHost() + ':' + this.getPort() 
+        			+ '/' + this.getWebappRootKey() + '/' + this.userScope;
     </method>
              
      <!--
@@ -174,8 +223,7 @@
                 this.counterror=0;
                 this.connect();
             } else {
-                this.setAttribute('protocollName','rtmpt');
-                this.setAttribute('protocollPort',canvas.rtmpTunnelport);
+            	this.useRTMPT = true
                 var src = getUrl();
                 this.setAttribute('src',src);
                 //Debug.write("new src ",this.src);

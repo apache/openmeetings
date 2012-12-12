@@ -62,18 +62,53 @@ RTMP-host, RTMP/RTMPT-port for the session
 			if ($debug) Debug.write("getServerForSession ",value);
 			//if return value is null, everything stays the same, session is on the current host
 			if (value != null){
-				//FIXME load config from slave server first, cause the slave could potentially  
-				//have other RTMP and RTMPT ports configured.
+				//is not loaded from config.xml from slave as this is variable is empty by default!
+				canvas.slaveRtmphostlocal = value.address;
 				
-				//the HTTP port stays with the master, if you want to cluster HTTP traffic use
-				//the regular Apache Tomcat mechanisms!
+				var slaveUrl = value.protocol + "://" + value.address + ":" + value.port + "/" + value.webapp + "/";
 				
+				var d = new Date();
+		        parent.myConfigSet.setAttribute("src", slaveUrl + "config.xml?random="+d.getTime());
+		        parent.myConfigSet.doRequest();
 				
 			} else {
+				//Hosted on master
+				canvas.isSlaveHosted = false;
 				this.parent.startConference();
 			}
 		</handler>
 	</netRemoteCallHib>	
+	
+	<!-- get values from config.xml from slave -->
+	<dataset type="http" name="myConfigSet" request="false" ondata="parent.parseResultsToSlaveClusterConfig()">
+	    <handler name="ondata">
+	        if ($debug) Debug.write("ondata");
+	    </handler>
+	    <handler name="onerror" args="e">
+	        if ($debug) Debug.write("onerror",e);
+	    </handler>
+	    <handler name="ontimeout" args="e">
+	        if ($debug) Debug.write("ontimeout",e);
+	    </handler>
+	</dataset>
+	
+	<!-- 
+		Parse the results so that the RTMP traffic points to the slave
+		and the HTTP traffic points to the master
+	 -->
+	<method name="parseResultsToSlaveClusterConfig">
+		
+        canvas.slaveRtmpport = Number(this.myConfigSet.getPointer().xpathQuery('config/rtmpport/text()'));  
+        canvas.slaveRtmpTunnelport = Number(this.myConfigSet.getPointer().xpathQuery('config/rtmpTunnelport/text()')); 
+        canvas.slaveRtmpsslport = Number(this.myConfigSet.getPointer().xpathQuery('config/rtmpsslport/text()')); 
+        canvas.slaveWebAppRootKey = this.myConfigSet.getPointer().xpathQuery('config/webAppRootKey/text()'); 
+		
+		if ($debug) Debug.write("parseResults: ",canvas.slaveRtmphostlocal,canvas.slaveRtmpport,canvas.slaveRtmpTunnelport,canvas.slaveRtmpsslport,canvas.slaveWebAppRootKey);
+		
+		//Hosted on slave
+		canvas.isSlaveHosted = true;
+		this.startConference();
+	</method>
     
     <method name="startConference">
     	<![CDATA[

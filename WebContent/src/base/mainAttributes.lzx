@@ -75,15 +75,16 @@ these properties will be overwritten by config.xml -->
 
 <!--- 
     Port to use for the Server
-    This port is used to connec to the http-servlet
-    of the red5-servlet
+    This port is used to connect to the HTTP-Servlet
+    of the Red5-Servlet
  -->
 <attribute name="red5httpport" value="5080" type="string" />
 
 <attribute name="useSSL" value="false" type="boolean" />
 <attribute name="rtmpsslport" value="443" type="string" />
-    
+
 <!---
+#############################################################
     These colors are the main colors and style the hole application
  -->
 <attribute name="basebgcolorizer" value="" type="string" /> 
@@ -103,7 +104,25 @@ these properties will be overwritten by config.xml -->
 
 <attribute name="showAudioVideoTest" value="true" type="boolean" />
 
+<!-- 
+#############################################################
+Attributes needed for clustering -->
+
+<attribute name="isSlaveHosted" value="false" type="boolean" />
+
+<!-- server object's address (not loaded from config.xml cause this variable is empty by default) -->
+<attribute name="slaveRtmphostlocal" value="" type="string" />
+<!-- rtmpport from slave's config.xml  --> 
+<attribute name="slaveRtmpport" value="5080" type="string" />
+<!-- rtmpTunnelport from slave's config.xml -->
+<attribute name="slaveRtmpTunnelport" value="8088" type="string" />
+<!-- rtmpsslport from slave's config.xml -->
+<attribute name="slaveRtmpsslport" value="443" type="string" />
+<!-- from slave's config.xml -->
+<attribute name="slaveWebAppRootKey" value="" type="string" /> 
+
 <!--
+#############################################################
     Id of the Recording that is played when access the Recordings Player via Direct Link URL
  -->
 <attribute name="roomRecordingId" value="0" type="number" />

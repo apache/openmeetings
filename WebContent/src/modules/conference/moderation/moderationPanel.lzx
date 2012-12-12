@@ -101,13 +101,13 @@
             }
         
             var downloadurl = canvas.getUrl() + 'screen.upload?'
-                +'rtmphostlocal='+canvas.rtmphostlocal
+                +'rtmphostlocal='+canvas.getHttpHost()
                 +'&domain='+hib.conferencedomain
                 +'&organization_id='+organisation_id
                 +'&sid='+canvas.sessionId
                 +'&red5httpport='+canvas.red5httpport
-                +'&connectionType='+canvas.thishib.protocollName
-                +'&port='+canvas.thishib.protocollPort
+                +'&connectionType='+canvas.thishib.getProtocol()
+                +'&port='+canvas.thishib.getPort()
                 +'&publicSID='+canvas.publicSID
                 +'&httpRootKey='+canvas.httpRootKey
                 +'&languageAsString='+hib.userlang;
