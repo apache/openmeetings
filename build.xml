@@ -430,7 +430,7 @@
 			<fileset dir="${red5.server.lib}" includes="commons-codec*.jar" />
 			<fileset dir="${red5.server.lib}" includes="httpclient*.jar" />
 			<fileset dir="${red5.server.lib}" includes="httpcore*.jar" />
-			<fileset dir="${red5.server.lib}" includes="bcprov-jdk16*.jar" />
+			<fileset dir="${red5.server.lib}" includes="bcprov*.jar" />
 			<fileset dir="${red5.server.lib}" includes="ehcache-core*.jar" />
 			<fileset dir="${red5.server.lib}" includes="commons-beanutils*.jar" />
 			<fileset dir="${red5.server.lib}" includes="slf4j-api*.jar" />
