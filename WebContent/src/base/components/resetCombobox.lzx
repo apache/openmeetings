@@ -23,6 +23,10 @@
     <class name="resetCombobox" extends="combobox" editable="false" shownitems="12"
     	   style="componentStyle" itemclassname="labeldTextListItem">
     
+    	<method name="getNumItems">
+    		return this.cblist.getNumItems();
+    	</method>
+    
         <method name="reset" >
             <![CDATA[
                 var currentCount = this.cblist.getNumItems();

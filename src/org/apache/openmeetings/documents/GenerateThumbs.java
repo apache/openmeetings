@@ -20,9 +20,9 @@ package org.apache.openmeetings.documents;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.documents.beans.ConverterProcessResult;
 import org.apache.openmeetings.utils.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -36,7 +36,7 @@ public class GenerateThumbs {
 	@Autowired
 	private GenerateImage generateImage;
 
-	public HashMap<String, String> generateThumb(String pre, File f, Integer thumbSize) throws IOException {
+	public ConverterProcessResult generateThumb(String pre, File f, Integer thumbSize) throws IOException {
 		// Init variables
 		String name = f.getName();
 		File parent = f.getParentFile();
@@ -62,7 +62,7 @@ public class GenerateThumbs {
 		}
 	}
 
-	public HashMap<String, String> decodePDF(String inputfile, String outputfile) {
+	public ConverterProcessResult decodePDF(String inputfile, String outputfile) {
 
 		String[] argv = new String[] { generateImage.getPathToImageMagic(), // FIXME
 				inputfile, outputfile };
@@ -75,7 +75,7 @@ public class GenerateThumbs {
 
 	}
 
-	public HashMap<String, String> generateBatchThumb(File inputfile, File outputpath, Integer thumbSize, String pre) throws IOException {
+	public ConverterProcessResult generateBatchThumb(File inputfile, File outputpath, Integer thumbSize, String pre) throws IOException {
 
 		if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") == -1) {
 			String[] argv = new String[] {
@@ -103,7 +103,7 @@ public class GenerateThumbs {
 		}
 	}
 
-	public HashMap<String, String> generateImageBatchByWidth(
+	public ConverterProcessResult generateImageBatchByWidth(
 			String current_dir, String inputfile, String outputpath,
 			Integer thumbWidth, String pre) {
 
@@ -118,7 +118,7 @@ public class GenerateThumbs {
 		}
 	}
 
-	public HashMap<String, String> processImageWindows(String[] args) {
+	public ConverterProcessResult processImageWindows(String[] args) {
 		return ProcessHelper.executeScriptWindows("processImageWindows", args);
 	}
 }

@@ -20,11 +20,12 @@ package org.apache.openmeetings.documents;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.documents.beans.ConverterProcessResult;
+import org.apache.openmeetings.documents.beans.ConverterProcessResultList;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.ProcessHelper;
@@ -55,11 +56,11 @@ public class GenerateImage {
 		return pathToImageMagic;
 	}
 
-	public HashMap<String, HashMap<String, String>> convertImage(String fileName, String fileExt,
+	public ConverterProcessResultList convertImage(String fileName, String fileExt,
 			String roomName, String fileNameShort, boolean fullProcessing)
 			throws Exception {
 
-		HashMap<String, HashMap<String, String>> returnMap = new HashMap<String, HashMap<String, String>>();
+		ConverterProcessResultList returnMap = new ConverterProcessResultList();
 
 		File fileFullPath = new File(OmFileHelper.getUploadTempRoomDir(roomName), fileName + fileExt);
 
@@ -67,13 +68,13 @@ public class GenerateImage {
 
 		log.debug("##### convertImage destinationFile: " + destinationFile);
 
-		HashMap<String, String> processJPG = this.convertSingleJpg(
+		ConverterProcessResult processJPG = this.convertSingleJpg(
 				fileFullPath.getCanonicalPath(), destinationFile);
-		HashMap<String, String> processThumb = generateThumbs.generateThumb(
+		ConverterProcessResult processThumb = generateThumbs.generateThumb(
 				"_thumb_", destinationFile, 50);
 
-		returnMap.put("processJPG", processJPG);
-		returnMap.put("processThumb", processThumb);
+		returnMap.addItem("processJPG", processJPG);
+		returnMap.addItem("processThumb", processThumb);
 
 		// Delete old one
 		fileFullPath.delete();
@@ -81,30 +82,30 @@ public class GenerateImage {
 		return returnMap;
 	}
 
-	public HashMap<String, HashMap<String, String>> convertImageUserProfile(String fileName, String fileExt, Long users_id,
+	public ConverterProcessResultList convertImageUserProfile(String fileName, String fileExt, Long users_id,
 			String fileNameShort, boolean fullProcessing) throws Exception {
 
-		HashMap<String, HashMap<String, String>> returnMap = new HashMap<String, HashMap<String, String>>();
+		ConverterProcessResultList returnMap = new ConverterProcessResultList();
 
 		File working_pptdir = OmFileHelper.getUploadTempProfilesUserDir(users_id);
 
 		String fileFullPath = new File(working_pptdir, fileName + fileExt).getCanonicalPath();
 
 		File destinationFile = OmFileHelper.getNewFile(OmFileHelper.getUploadProfilesUserDir(users_id), fileName, ".jpg");
-		HashMap<String, String> processJPG = this.convertSingleJpg(
+		ConverterProcessResult processJPG = this.convertSingleJpg(
 				fileFullPath, destinationFile);
 
-		HashMap<String, String> processThumb1 = generateThumbs.generateThumb(
+		ConverterProcessResult processThumb1 = generateThumbs.generateThumb(
 				"_chat_", destinationFile, 40);
-		HashMap<String, String> processThumb2 = generateThumbs.generateThumb(
+		ConverterProcessResult processThumb2 = generateThumbs.generateThumb(
 				"_profile_", destinationFile, 126);
-		HashMap<String, String> processThumb3 = generateThumbs.generateThumb(
+		ConverterProcessResult processThumb3 = generateThumbs.generateThumb(
 				"_big_", destinationFile, 240);
 
-		returnMap.put("processJPG", processJPG);
-		returnMap.put("processThumb1", processThumb1);
-		returnMap.put("processThumb2", processThumb2);
-		returnMap.put("processThumb3", processThumb3);
+		returnMap.addItem("processJPG", processJPG);
+		returnMap.addItem("processThumb1", processThumb1);
+		returnMap.addItem("processThumb2", processThumb2);
+		returnMap.addItem("processThumb3", processThumb3);
 
 		// Delete old one
 		File fToDelete = new File(fileFullPath);
@@ -127,7 +128,7 @@ public class GenerateImage {
 	 * @throws IOException 
 	 * 
 	 */
-	private HashMap<String, String> convertSingleJpg(String inputFile, File outputfile) throws IOException {
+	private ConverterProcessResult convertSingleJpg(String inputFile, File outputfile) throws IOException {
 		String[] argv = new String[] { getPathToImageMagic(), inputFile, outputfile.getCanonicalPath() };
 
 		// return GenerateSWF.executeScript("convertSingleJpg", argv);
@@ -140,7 +141,7 @@ public class GenerateImage {
 
 	}
 
-	public HashMap<String, String> convertImageByTypeAndSize(String inputFile,
+	public ConverterProcessResult convertImageByTypeAndSize(String inputFile,
 			String outputfile, int width, int height) {
 		String[] argv = new String[] { getPathToImageMagic(), "-size",
 				width + "x" + height, inputFile, outputfile };
@@ -148,7 +149,7 @@ public class GenerateImage {
 				argv);
 	}
 
-	public HashMap<String, String> convertImageByTypeAndSizeAndDepth(
+	public ConverterProcessResult convertImageByTypeAndSizeAndDepth(
 			String inputFile, String outputfile, int width, int height,
 			int depth) {
 		String[] argv = new String[] { getPathToImageMagic(), "-size",

@@ -21,11 +21,12 @@ package org.apache.openmeetings.documents;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.documents.beans.ConverterProcessResult;
+import org.apache.openmeetings.documents.beans.ConverterProcessResultList;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -44,38 +45,38 @@ public class GeneratePDF {
 	@Autowired
 	private ConfigurationDao configurationDaoImpl;
 
-	public HashMap<String, HashMap<String, String>> convertPDF(String fileName,
+	public ConverterProcessResultList convertPDF(String fileName,
 			String roomName, boolean fullProcessing, File inFile)
 			throws Exception {
 
 		String inFileName = inFile.getName();
-		HashMap<String, HashMap<String, String>> returnError = new HashMap<String, HashMap<String, String>>();
+		ConverterProcessResultList returnError = new ConverterProcessResultList();
 
 		File fileFullPath = new File(OmFileHelper.getUploadTempRoomDir(roomName), inFileName);
 		File destinationFolder = OmFileHelper.getNewDir(OmFileHelper.getUploadRoomDir(roomName), fileName);
 
 		log.debug("fullProcessing: " + fullProcessing);
 		if (fullProcessing) {
-			HashMap<String, String> processOpenOffice = doJodConvert(
+			ConverterProcessResult processOpenOffice = doJodConvert(
 					fileFullPath, destinationFolder, fileName);
-			returnError.put("processOpenOffice", processOpenOffice);
-			HashMap<String, String> processThumb = generateThumbs
+			returnError.addItem("processOpenOffice", processOpenOffice);
+			ConverterProcessResult processThumb = generateThumbs
 					.generateBatchThumb(new File(destinationFolder, fileName + ".pdf"), destinationFolder, 80, "thumb");
-			returnError.put("processThumb", processThumb);
-			HashMap<String, String> processSWF = generateSWF
+			returnError.addItem("processThumb", processThumb);
+			ConverterProcessResult processSWF = generateSWF
 					.generateSwf(destinationFolder, destinationFolder, fileName);
-			returnError.put("processSWF", processSWF);
+			returnError.addItem("processSWF", processSWF);
 		} else {
 
 			log.debug("-- generateBatchThumb --");
 
-			HashMap<String, String> processThumb = generateThumbs
+			ConverterProcessResult processThumb = generateThumbs
 					.generateBatchThumb(fileFullPath, destinationFolder, 80, "thumb");
-			returnError.put("processThumb", processThumb);
+			returnError.addItem("processThumb", processThumb);
 
-			HashMap<String, String> processSWF = generateSWF.generateSwf(
+			ConverterProcessResult processSWF = generateSWF.generateSwf(
 					fileFullPath.getParentFile(), destinationFolder, fileName);
-			returnError.put("processSWF", processSWF);
+			returnError.addItem("processSWF", processSWF);
 		}
 
 		// now it should be completed so copy that file to the expected location
@@ -84,16 +85,16 @@ public class GeneratePDF {
 		FileHelper.moveRec(inFile, fileWhereToMove);
 
 		if (fullProcessing) {
-			HashMap<String, String> processXML = CreateLibraryPresentation
+			ConverterProcessResult processXML = CreateLibraryPresentation
 					.generateXMLDocument(destinationFolder,
 							inFileName, fileName + ".pdf",
 							fileName + ".swf");
-			returnError.put("processXML", processXML);
+			returnError.addItem("processXML", processXML);
 		} else {
-			HashMap<String, String> processXML = CreateLibraryPresentation
+			ConverterProcessResult processXML = CreateLibraryPresentation
 					.generateXMLDocument(destinationFolder,
 							inFileName, null, fileName + ".swf");
-			returnError.put("processXML", processXML);
+			returnError.addItem("processXML", processXML);
 		}
 
 		return returnError;
@@ -102,7 +103,7 @@ public class GeneratePDF {
 	/**
 	 * Generates PDF using JOD Library (external library)
 	 */
-	public HashMap<String, String> doJodConvert(File fileFullPath, File destinationFolder, String outputfile) {
+	public ConverterProcessResult doJodConvert(File fileFullPath, File destinationFolder, String outputfile) {
 		try {
 
 			String jodPath = configurationDaoImpl.getConfValue("jod.path",
@@ -149,18 +150,10 @@ public class GeneratePDF {
 
 		} catch (Exception ex) {
 			log.error("doJodConvert", ex);
-			return buildErrorMessage("doJodConvert", ex.getMessage(), ex);
+			return new ConverterProcessResult("doJodConvert", ex.getMessage(), ex);
 		}
 	}
 
-	private HashMap<String, String> buildErrorMessage(String process,
-			String error, Exception ex) {
-		HashMap<String, String> returnMap = new HashMap<String, String>();
-		returnMap.put("process", process);
-		returnMap.put("exception", ex.toString());
-		returnMap.put("error", error);
-		returnMap.put("exitValue", "-1");
-		return returnMap;
-	}
+	
 
 }

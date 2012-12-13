@@ -21,9 +21,7 @@ package org.apache.openmeetings.data.file;
 import java.io.File;
 import java.io.InputStream;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.OpenmeetingsVariables;
@@ -32,6 +30,8 @@ import org.apache.openmeetings.data.flvrecord.converter.FlvExplorerConverter;
 import org.apache.openmeetings.documents.GenerateImage;
 import org.apache.openmeetings.documents.GeneratePDF;
 import org.apache.openmeetings.documents.GenerateThumbs;
+import org.apache.openmeetings.documents.beans.ConverterProcessResult;
+import org.apache.openmeetings.documents.beans.ConverterProcessResultList;
 import org.apache.openmeetings.persistence.beans.files.FileExplorerItem;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.StoredFile;
@@ -56,18 +56,11 @@ public class FileProcessor {
 	@Autowired
 	private GeneratePDF generatePDF;
 
-	public HashMap<String, HashMap<String, String>> processFile(Long userId, Long room_id, 
+	public ConverterProcessResultList processFile(Long userId, Long room_id, 
 			boolean isOwner, InputStream is, Long parentFolderId, String fileSystemName, 
-			Map<String, Object> hs, Long externalFileId, 
-			String externalType) throws Exception {
+			Long externalFileId, String externalType) throws Exception {
 		
-		HashMap<String, HashMap<String, String>> returnError = new HashMap<String, HashMap<String, String>>();
-		
-		HashMap<String, String> returnAttributes = new HashMap<String, String>();
-        returnAttributes.put("process", "");
-        returnAttributes.put("command", "");
-        returnAttributes.put("exitValue", "0");
-        returnAttributes.put("error","");
+		ConverterProcessResultList returnError = new ConverterProcessResultList();
 		
 		int dotidx = fileSystemName.lastIndexOf('.');
 
@@ -96,8 +89,7 @@ public class FileProcessor {
         // add outputfolders for profiles
         // if it is a presenation it will be copied to another place
         if (!(canBeConverted || isPdf || isImage || isVideo || isAsIs)) {
-        	returnAttributes.put("error","The file type cannot be converted");
-        	returnAttributes.put("exitValue", "-1");
+        	returnError.addItem("wrongType", new ConverterProcessResult("The file type cannot be converted"));
             return returnError;
         }
 
@@ -105,8 +97,6 @@ public class FileProcessor {
         	isAsIs ? OmFileHelper.getUploadFilesDir() : OmFileHelper.getUploadTempFilesDir()
         	, newFileSystemName + newFileExtDot);
         log.debug("writing file to: " + completeName);
-        
-        returnAttributes.put("completeName", completeName.getName());
         FileHelper.copy(is, completeName);
         is.close();
 
@@ -150,7 +140,6 @@ public class FileProcessor {
         log.debug("fileExplorerItemId: " + fileExplorerItemId);
         
         
-        returnAttributes.put("fileExplorerItemId", "" + fileExplorerItemId);
         
         log.debug("canBeConverted: " + canBeConverted);
         if (canBeConverted) {
@@ -167,19 +156,22 @@ public class FileProcessor {
             returnError = generateImage.convertImage(newFileSystemName, newFileExtDot, "files",
                     newFileSystemName, false);
         } else if (isAsIs) {
-            HashMap<String, String> processThumb = generateThumbs.generateThumb("_thumb_", completeName, 50);
-            returnError.put("processThumb", processThumb);
+        	ConverterProcessResult processThumb = generateThumbs.generateThumb("_thumb_", completeName, 50);
+            returnError.addItem("processThumb", processThumb);
         } else if (isVideo) {
-        	List<HashMap<String, String>> returnList = flvExplorerConverter.startConversion(fileExplorerItemId, completeName.getCanonicalPath());
+        	List<ConverterProcessResult> returnList = flvExplorerConverter.startConversion(fileExplorerItemId, completeName.getCanonicalPath());
         	
         	int i=0;
-        	for (HashMap<String, String> returnMap : returnList) {
-        		returnError.put("processFLV "+i, returnMap);
+        	for (ConverterProcessResult returnMap : returnList) {
+        		returnError.addItem("processFLV "+i, returnMap);
         	}
         	
         }
-		
-        returnError.put("returnAttributes", returnAttributes);
+        
+        // has to happen at the end, otherwise it will be overwritten
+        //cause the variable is new initialized
+        returnError.setCompleteName(completeName.getName());
+        returnError.setFileExplorerItemId(fileExplorerItemId);
         
 		return returnError;
 		

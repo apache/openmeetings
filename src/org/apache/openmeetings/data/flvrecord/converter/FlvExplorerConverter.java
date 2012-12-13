@@ -19,8 +19,7 @@
 package org.apache.openmeetings.data.flvrecord.converter;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,6 +27,7 @@ import java.util.regex.Pattern;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingLogDao;
+import org.apache.openmeetings.documents.beans.ConverterProcessResult;
 import org.apache.openmeetings.persistence.beans.files.FileExplorerItem;
 import org.apache.openmeetings.utils.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -54,8 +54,8 @@ public class FlvExplorerConverter extends BaseConverter {
 		public int height = 0;
 	}
 
-	public List<HashMap<String, String>> startConversion(Long fileExplorerItemId, String moviePath) {
-		List<HashMap<String, String>> returnLog = new LinkedList<HashMap<String, String>>();
+	public List<ConverterProcessResult> startConversion(Long fileExplorerItemId, String moviePath) {
+		List<ConverterProcessResult> returnLog = new ArrayList<ConverterProcessResult>();
 		try {
 
 			FileExplorerItem fileExplorerItem = this.fileExplorerItemDaoImpl
@@ -68,24 +68,20 @@ public class FlvExplorerConverter extends BaseConverter {
 			return this.convertToFLV(fileExplorerItem, moviePath);
 
 			// Add empty pieces at the beginning and end of the wav
+			// FIXME: Is this really needed anymore?!
 
 		} catch (Exception err) {
 			log.error("[startConversion]", err);
-			HashMap<String, String> returnMap = new HashMap<String, String>();
-			returnMap.put("process", "startConversion");
-			returnMap.put("error", err.getMessage());
-			returnMap.put("exception", err.toString());
-			returnMap.put("exitValue", "-1");
-			returnLog.add(returnMap);
+			returnLog.add(new ConverterProcessResult("startConversion", err.getMessage(), err));
 		}
 
 		return returnLog;
 
 	}
 
-	private List<HashMap<String, String>> convertToFLV(FileExplorerItem fileExplorerItem,
+	private List<ConverterProcessResult> convertToFLV(FileExplorerItem fileExplorerItem,
 			String moviePath) {
-		List<HashMap<String, String>> returnLog = new LinkedList<HashMap<String, String>>();
+		List<ConverterProcessResult> returnLog = new ArrayList<ConverterProcessResult>();
 		try {
 			String name = "UPLOADFLV_" + fileExplorerItem.getFileExplorerItemId();
 			File outputFullFlv = new File(getStreamFolder(), name + ".flv");
@@ -109,11 +105,11 @@ public class FlvExplorerConverter extends BaseConverter {
 			log.debug(tString);
 			log.debug("END generateFullFLV ################# ");
 			
-			HashMap<String, String> returnMapConvertFLV = ProcessHelper.executeScript("uploadFLV ID :: "
+			ConverterProcessResult returnMapConvertFLV = ProcessHelper.executeScript("uploadFLV ID :: "
 					+ fileExplorerItem.getFileExplorerItemId(), argv_fullFLV);
 			
 			//Parse the width height from the FFMPEG output
-			FlvDimension flvDimension = getFlvDimension(returnMapConvertFLV.get("error"));
+			FlvDimension flvDimension = getFlvDimension(returnMapConvertFLV.getError());
 			int flvWidth = flvDimension.width;
 			int flvHeight = flvDimension.height;
 			
@@ -144,14 +140,13 @@ public class FlvExplorerConverter extends BaseConverter {
 			log.debug(kString);
 			log.debug("END previewFullFLV ################# ");
 
-			returnLog
-					.add(ProcessHelper.executeScript("previewUpload ID :: "
+			returnLog.add(ProcessHelper.executeScript("previewUpload ID :: "
 							+ fileExplorerItem.getFileExplorerItemId(),
 							argv_previewFLV));
 
 			this.fileExplorerItemDaoImpl.updateFileOrFolder(fileExplorerItem);
 
-			for (HashMap<String, String> returnMap : returnLog) {
+			for (ConverterProcessResult returnMap : returnLog) {
 				this.flvRecordingLogDaoImpl.addFLVRecordingLog(
 						"generateFFMPEG", null, returnMap);
 			}
@@ -160,12 +155,7 @@ public class FlvExplorerConverter extends BaseConverter {
 
 		} catch (Exception err) {
 			log.error("[convertToFLV]", err);
-			HashMap<String, String> returnMap = new HashMap<String, String>();
-			returnMap.put("process", "convertToFLV");
-			returnMap.put("error", err.getMessage());
-			returnMap.put("exception", err.toString());
-			returnMap.put("exitValue", "-1");
-			returnLog.add(returnMap);
+			returnLog.add(new ConverterProcessResult("convertToFLV", err.getMessage(), err));
 		}
 
 		return returnLog;

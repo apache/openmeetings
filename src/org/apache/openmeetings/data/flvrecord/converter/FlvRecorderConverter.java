@@ -19,7 +19,7 @@
 package org.apache.openmeetings.data.flvrecord.converter;
 
 import java.io.File;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,6 +27,7 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingDao;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingLogDao;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDao;
+import org.apache.openmeetings.documents.beans.ConverterProcessResult;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingMetaData;
 import org.apache.openmeetings.utils.ProcessHelper;
@@ -70,7 +71,7 @@ public class FlvRecorderConverter extends BaseConverter {
 	}
 
 	public void stripAudioFromFLVs(FlvRecording flvRecording) {
-		List<HashMap<String, String>> returnLog = new LinkedList<HashMap<String, String>>();
+		List<ConverterProcessResult> returnLog = new ArrayList<ConverterProcessResult>();
 		List<String> listOfFullWaveFiles = new LinkedList<String>();
 		File streamFolder = getStreamFolder(flvRecording);
 		try {
@@ -294,7 +295,7 @@ public class FlvRecorderConverter extends BaseConverter {
 
 			this.flvRecordingDaoImpl.updateFlvRecording(flvRecording);
 
-			for (HashMap<String, String> returnMap : returnLog) {
+			for (ConverterProcessResult returnMap : returnLog) {
 				this.flvRecordingLogDaoImpl.addFLVRecordingLog(
 						"generateFFMPEG", flvRecording, returnMap);
 			}

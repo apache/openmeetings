@@ -19,14 +19,13 @@
 package org.apache.openmeetings.data.flvrecord;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.apache.openmeetings.documents.beans.ConverterProcessResult;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingLog;
 import org.red5.logging.Red5LoggerFactory;
@@ -70,25 +69,13 @@ public class FlvRecordingLogDao {
 		}
 	}
 	
-	public Long addFLVRecordingLog(String msgType, FlvRecording flvRecording, HashMap<String, String> returnMap) {
+	public Long addFLVRecordingLog(String msgType, FlvRecording flvRecording, ConverterProcessResult returnMap) {
 		try { 
-			
-			String exitValue = returnMap.get("exitValue").toString();
-			
-			String fullMessage = "";
-			
-			for (Iterator<String> iter = returnMap.keySet().iterator();iter.hasNext();) {
-				String key = iter.next();
-				String value = returnMap.get(key);
-				fullMessage += key + "-" + value + "<br/>";
-			}
-			
 			FlvRecordingLog flvRecordingLog = new FlvRecordingLog();
-			
 			flvRecordingLog.setInserted(new Date());
-			flvRecordingLog.setExitValue(exitValue);
+			flvRecordingLog.setExitValue(returnMap.getExitValue());
 			flvRecordingLog.setFlvRecording(flvRecording);
-			flvRecordingLog.setFullMessage(fullMessage);
+			flvRecordingLog.setFullMessage(returnMap.buildLogMessage());
 			flvRecordingLog.setMsgType(msgType);
 			
 			flvRecordingLog = em.merge(flvRecordingLog);

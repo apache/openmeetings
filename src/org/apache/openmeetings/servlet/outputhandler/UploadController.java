@@ -20,9 +20,6 @@ package org.apache.openmeetings.servlet.outputhandler;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -38,6 +35,8 @@ import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.documents.GenerateImage;
 import org.apache.openmeetings.documents.GeneratePDF;
 import org.apache.openmeetings.documents.GenerateThumbs;
+import org.apache.openmeetings.documents.beans.ConverterProcessResultList;
+import org.apache.openmeetings.documents.beans.UploadCompleteMessage;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.utils.OmFileHelper;
@@ -77,7 +76,6 @@ public class UploadController extends AbstractUploadController {
     public void handleFileUpload(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException {
     	UploadInfo info = validate(request, false);
     	try {
-	    	LinkedHashMap<String, Object> hs = prepareMessage(info);
 			String room_idAsString = request.getParameter("room_id");
 			if (room_idAsString == null) {
 				throw new ServletException("Missing Room ID");
@@ -105,25 +103,30 @@ public class UploadController extends AbstractUploadController {
 			InputStream is = multipartFile.getInputStream();
 			log.debug("fileSystemName: " + info.filename);
 	
-			HashMap<String, HashMap<String, String>> returnError = fileProcessor
+			ConverterProcessResultList returnError = fileProcessor
 					.processFile(info.userId, room_id_to_Store, isOwner, is,
-							parentFolderId, info.filename, hs, 0L, ""); // externalFilesId,
-																						// externalType
+							parentFolderId, info.filename, 0L, ""); // externalFilesId, externalType
 	
-			HashMap<String, String> returnAttributes = returnError
-					.get("returnAttributes");
+			UploadCompleteMessage uploadCompleteMessage = new UploadCompleteMessage();
+	    	uploadCompleteMessage.setUser(usersDao.get(info.userId));
 	
 			// Flash cannot read the response of an upload
 			// httpServletResponse.getWriter().print(returnError);
-			hs.put("message", "library");
-			hs.put("action", "newFile");
-			hs.put("fileExplorerItem",
+	    	uploadCompleteMessage.setMessage("library");
+	    	uploadCompleteMessage.setAction("newFile");
+	    	uploadCompleteMessage.setFileExplorerItem(
 					fileExplorerItemDao.getFileExplorerItemsById(
-							Long.parseLong(returnAttributes.get(
-									"fileExplorerItemId").toString())));
-			hs.put("error", returnError);
-			hs.put("fileName", returnAttributes.get("completeName"));
-			sendMessage(info, hs);
+							returnError.getFileExplorerItemId()));
+			
+			uploadCompleteMessage.setHasError(returnError.hasError());
+			//we only send the complete log to the client if there is really something 
+			//to show because of an error
+			if (returnError.hasError()) {
+				uploadCompleteMessage.setError(returnError.getLogMessage());
+			}
+			uploadCompleteMessage.setFileName(returnError.getCompleteName());
+			
+			sendMessage(info, uploadCompleteMessage);
 		} catch (ServletException e) {
 			throw e;
 		} catch (Exception e) {
@@ -136,7 +139,7 @@ public class UploadController extends AbstractUploadController {
     public void handleFormUpload(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 		try {
 	    	UploadInfo info = validate(request, false);
-	    	LinkedHashMap<String, Object> hs = prepareMessage(info);
+	    	
 			String room_id = request.getParameter("room_id");
 			if (room_id == null) {
 				room_id = "default";
@@ -158,10 +161,13 @@ public class UploadController extends AbstractUploadController {
 			String fileSystemName = info.filename;
 			fileSystemName = StringUtils.deleteWhitespace(fileSystemName);
 	
+			UploadCompleteMessage uploadCompleteMessage = new UploadCompleteMessage();
+	    	uploadCompleteMessage.setUser(usersDao.get(info.userId));
+			
 			// Flash cannot read the response of an upload
 			// httpServletResponse.getWriter().print(returnError);
-			uploadFile(request, userProfile, info.userId, roomName, is, fileSystemName, hs);
-			sendMessage(info, hs);
+			uploadFile(request, userProfile, info.userId, roomName, is, fileSystemName, uploadCompleteMessage);
+			sendMessage(info, uploadCompleteMessage);
 		} catch (ServletException e) {
 			throw e;
 		} catch (Exception e) {
@@ -170,21 +176,27 @@ public class UploadController extends AbstractUploadController {
 		}
     }
 
-    private LinkedHashMap<String, Object> prepareMessage(UploadInfo info) {
-		LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
-		hs.put("user", usersDao.get(info.userId));
-		return hs;
-    }
     
-    private void sendMessage(UploadInfo info, LinkedHashMap<String, Object> hs) {
-		scopeApplicationAdapter.sendMessageWithClientByPublicSID(hs,
-				info.publicSID);
+    private void sendMessage(UploadInfo info, UploadCompleteMessage uploadCompleteMessage) {
+    	
+//    	UploadCompleteMessage uploadCompleteMessage = new UploadCompleteMessage(
+//				usersDao.get(info.userId),
+//				"library", //message
+//				"import", //action
+//				"", //error
+//				info.filename);
+	
+		scopeApplicationAdapter.sendUploadCompletMessageByPublicSID(
+				uploadCompleteMessage, info.publicSID);
+    	
+//		scopeApplicationAdapter.sendMessageWithClientByPublicSID(hs,
+//				info.publicSID);
     }
     
 	private void uploadFile(HttpServletRequest request, boolean userProfile, Long userId, String roomName,
-			InputStream is, String fileSystemName, Map<String, Object> hs)
+			InputStream is, String fileSystemName, UploadCompleteMessage uploadCompleteMessage)
 			throws Exception {
-		HashMap<String, HashMap<String, String>> returnError = new HashMap<String, HashMap<String, String>>();
+		ConverterProcessResultList returnError = new ConverterProcessResultList();
 
 		// Check variable to see if this file is a presentation
 		int dotidx = fileSystemName.lastIndexOf('.');
@@ -287,11 +299,11 @@ public class UploadController extends AbstractUploadController {
 				// User Profile Update
 				this.deleteUserProfileFiles(userId);
 				// is UserProfile Picture
-				returnError.put("processThumb1", generateThumbs
+				returnError.addItem("processThumb1", generateThumbs
 						.generateThumb("_chat_", completeName, 40));
-				returnError.put("processThumb2", generateThumbs
+				returnError.addItem("processThumb2", generateThumbs
 						.generateThumb("_profile_", completeName, 126));
-				returnError.put("processThumb3", generateThumbs
+				returnError.addItem("processThumb3", generateThumbs
 						.generateThumb("_big_", completeName, 240));
 
 				String pictureuri = completeName.getName();
@@ -302,16 +314,23 @@ public class UploadController extends AbstractUploadController {
 
 				//FIXME: After updating the picture url all other users should refresh
 			} else {
-				HashMap<String, String> processThumb = generateThumbs
-						.generateThumb("_thumb_", completeName, 50);
-				returnError.put("processThumb", processThumb);
+				returnError.addItem("processThumb", generateThumbs
+						.generateThumb("_thumb_", completeName, 50));
 			}
 		}
 
-		hs.put("message", "library");
-		hs.put("action", "newFile");
-		hs.put("error", returnError);
-		hs.put("fileName", completeName.getName());
+		uploadCompleteMessage.setMessage("library");
+		uploadCompleteMessage.setAction("newFile");
+		
+		uploadCompleteMessage.setHasError(returnError.hasError());
+		
+		//we only send the complete log to the client if there is really something 
+		//to show because of an error
+		if (returnError.hasError()) {
+			uploadCompleteMessage.setError(returnError.getLogMessage());
+		}
+		uploadCompleteMessage.setFileName(completeName.getName());
+		
 	}
 
 	private void deleteUserProfileFilesStoreTemp(Long users_id) throws Exception {

@@ -19,7 +19,6 @@
 package org.apache.openmeetings.data.flvrecord.converter;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
@@ -27,6 +26,7 @@ import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDao;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDeltaDao;
 import org.apache.openmeetings.documents.GenerateSWF;
+import org.apache.openmeetings.documents.beans.ConverterProcessResult;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingMetaData;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingMetaDelta;
@@ -120,7 +120,7 @@ public abstract class BaseConverter {
 	}
 	
 	protected void stripAudioFirstPass(FlvRecording flvRecording,
-			List<HashMap<String, String>> returnLog,
+			List<ConverterProcessResult> returnLog,
 			List<String> listOfFullWaveFiles, File streamFolder) throws Exception {
 		List<FlvRecordingMetaData> metaDataList = flvRecordingMetaDataDaoImpl
 				.getFlvRecordingMetaDataAudioFlvsByRecording(flvRecording
@@ -129,7 +129,7 @@ public abstract class BaseConverter {
 	}
 	
 	protected void stripAudioFirstPass(FlvRecording flvRecording,
-			List<HashMap<String, String>> returnLog,
+			List<ConverterProcessResult> returnLog,
 			List<String> listOfFullWaveFiles, File streamFolder,
 			List<FlvRecordingMetaData> metaDataList) {
 		try {

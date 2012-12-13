@@ -19,7 +19,6 @@
 package org.apache.openmeetings.servlet.outputhandler;
 
 import java.io.InputStream;
-import java.util.LinkedHashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.documents.beans.UploadCompleteMessage;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.xmlimport.LanguageImport;
 import org.apache.openmeetings.xmlimport.UserImport;
@@ -84,18 +84,20 @@ public class ImportController extends AbstractUploadController {
 
 			log.debug("Return And Close");
 
-			LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
-			hs.put("user", usersDao.get(info.userId));
-			hs.put("message", "library");
-			hs.put("action", "import");
-
 			log.debug("moduleName.equals(userprofile) ? " + moduleName);
 
 			log.debug("moduleName.equals(userprofile) ! ");
-
-			scopeApplicationAdapter.sendMessageWithClientByPublicSID(hs, 
-					info.publicSID);
-
+			
+			UploadCompleteMessage uploadCompleteMessage = new UploadCompleteMessage(
+					usersDao.get(info.userId),
+					"library", //message
+					"import", //action
+					"", //error
+					info.filename);
+		
+			scopeApplicationAdapter.sendUploadCompletMessageByPublicSID(
+					uploadCompleteMessage, info.publicSID);
+			
 		} catch (Exception er) {
 			log.error("ERROR importing:", er);
 			throw new ServletException(er);

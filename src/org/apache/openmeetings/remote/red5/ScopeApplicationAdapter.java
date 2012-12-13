@@ -44,6 +44,7 @@ import org.apache.openmeetings.data.conference.Roommanagement;
 import org.apache.openmeetings.data.logs.ConferenceLogDao;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.documents.beans.UploadCompleteMessage;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms;
@@ -2499,6 +2500,21 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		}
 		return 1;
 	}
+	
+	public synchronized void sendUploadCompletMessageByPublicSID(UploadCompleteMessage message, String publicSID) {
+		
+		//if the upload is locally, just proceed to the normal function
+		//Search for RoomClient on current server (serverId == null means it will look on the master for the RoomClient)
+		RoomClient currentClient = this.clientListManager
+							.getClientByPublicSID(publicSID, false, null);
+		
+		if (currentClient != null) {
+			sendMessageWithClientByPublicSID(message, publicSID);
+		}
+		
+		//Check if the client is on any slave host
+	}
+	
 
 	public synchronized void sendMessageWithClientByPublicSID(Object message,
 			String publicSID) {

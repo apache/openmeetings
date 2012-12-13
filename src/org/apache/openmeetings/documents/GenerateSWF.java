@@ -21,11 +21,11 @@ package org.apache.openmeetings.documents;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.documents.beans.ConverterProcessResult;
 import org.apache.openmeetings.utils.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -76,7 +76,7 @@ public class GenerateSWF {
 		return valueForSwfJpegQuality;
 	}
 
-	public HashMap<String, String> generateSwf(File originalFolder, File destinationFolder, String fileNamePure) throws IOException {
+	public ConverterProcessResult generateSwf(File originalFolder, File destinationFolder, String fileNamePure) throws IOException {
 		
 		// Create the Content of the Converter Script (.bat or .sh File)
 		String[] argv = new String[] {
@@ -95,7 +95,7 @@ public class GenerateSWF {
 	/**
 	 * Generates an SWF from the list of files.
 	 */
-	public HashMap<String, String> generateSwfByImages(List<String> images,
+	public ConverterProcessResult generateSwfByImages(List<String> images,
 			String outputfile, int fps) {
 		List<String> argvList = Arrays.asList(new String[] {
 				getPathToSwfTools() + "png2swf" + execExt, "-s", 
@@ -110,7 +110,7 @@ public class GenerateSWF {
 	/**
 	 * Combines a bunch of SWFs into one SWF by concatenate.
 	 */
-	public HashMap<String, String> generateSWFByCombine(List<String> swfs,
+	public ConverterProcessResult generateSWFByCombine(List<String> swfs,
 			String outputswf, int fps) {
 		List<String> argvList = Arrays.asList(new String[] {
 				getPathToSwfTools() + "swfcombine" + execExt, "-s",
@@ -122,7 +122,7 @@ public class GenerateSWF {
 				argvList.toArray(new String[0]));
 	}
 
-	public HashMap<String, String> generateSWFByFFMpeg(String inputWildCard,
+	public ConverterProcessResult generateSWFByFFMpeg(String inputWildCard,
 			String outputswf, int fps, int width, int height) {
 		// FIXME: ffmpeg should be on the system path
 		String[] argv = new String[] { "ffmpeg" + execExt, "-r",

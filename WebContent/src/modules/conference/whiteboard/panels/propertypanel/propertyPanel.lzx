@@ -120,7 +120,7 @@
         if (objRef.name.indexOf('swf') >= 0) {
             
             this._content._documentsPanel._currentSlideNo.setAttribute("text",objRef.slideNumber);
-            this._content._documentsPanel._zoom.setAttribute("text",objRef.currentzoomFactor);
+            //this._content._documentsPanel._zoom.setAttribute("text",objRef.currentzoomFactor);
             //this._content._fullFit.setValue(objRef.fullFit);
             
         }
@@ -307,6 +307,7 @@
                     parent.currentDocument.selectItemAt(0);
                     parent._clickLayer.setAttribute("visibility","hidden");
                 } else {
+                	parent.currentDocument.clearSelection(); 
                 	parent._clickLayer.setAttribute("visibility","visible");
                 }
             </method>

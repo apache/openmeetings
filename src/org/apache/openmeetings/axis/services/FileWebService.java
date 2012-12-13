@@ -23,8 +23,6 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 
 import org.apache.axis2.AxisFault;
@@ -38,6 +36,7 @@ import org.apache.openmeetings.data.file.dto.FileExplorerObject;
 import org.apache.openmeetings.data.file.dto.LibraryPresentation;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.documents.LoadLibraryPresentation;
+import org.apache.openmeetings.documents.beans.ConverterProcessResultList;
 import org.apache.openmeetings.persistence.beans.files.FileExplorerItem;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.utils.OmFileHelper;
@@ -132,56 +131,24 @@ public class FileWebService {
 				LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
 				hs.put("user", externalUser);
 
-				HashMap<String, HashMap<String, String>> returnError = fileProcessor
+				ConverterProcessResultList returnError = fileProcessor
 						.processFile(externalUser.getUser_id(), room_id,
 								isOwner, inputstream, parentFolderId,
-								fileSystemName, hs,
+								fileSystemName,
 								externalFileId, externalType);
-
-				HashMap<String, String> returnAttributes = returnError
-						.get("returnAttributes");
 
 				// Flash cannot read the response of an upload
 				// httpServletResponse.getWriter().print(returnError);
 				hs.put("message", "library");
 				hs.put("action", "newFile");
 				hs.put("fileExplorerItem", fileExplorerItemDao
-						.getFileExplorerItemsById(Long
-								.parseLong(returnAttributes.get(
-										"fileExplorerItemId").toString())));
-				hs.put("error", returnError);
-				hs.put("fileName", returnAttributes.get("completeName"));
+						.getFileExplorerItemsById(returnError.getFileExplorerItemId()));
+				hs.put("error", returnError.getLogMessage());
+				hs.put("fileName", returnError.getCompleteName());
+				
+				//FIXME: Send event to UI that there is a new file
 
-				FileImportError[] fileImportErrors = new FileImportError[returnError
-						.size()];
-
-				int i = 0;
-				// Axis need Objects or array of objects, Map won't work
-				for (Iterator<String> iter = returnError.keySet().iterator(); iter
-						.hasNext();) {
-
-					HashMap<String, String> returnAttribute = returnError
-							.get(iter.next());
-
-					fileImportErrors[i] = new FileImportError();
-					fileImportErrors[i].setCommand((returnAttribute
-							.get("command") != null) ? returnAttribute.get(
-							"command").toString() : "");
-					fileImportErrors[i]
-							.setError((returnAttribute.get("error") != null) ? returnAttribute
-									.get("error").toString() : "");
-					fileImportErrors[i].setExitValue((returnAttribute
-							.get("exitValue") != null) ? Integer.valueOf(
-							returnAttribute.get("exitValue").toString())
-							.intValue() : 0);
-					fileImportErrors[i].setProcess((returnAttribute
-							.get("process") != null) ? returnAttribute.get(
-							"process").toString() : "");
-
-					i++;
-				}
-
-				return fileImportErrors;
+				return returnError.convertToFileImportErrors();
 
 			}
 		} catch (Exception err) {
@@ -249,60 +216,28 @@ public class FileWebService {
 				LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
 				hs.put("user", internalUser);
 
-				HashMap<String, HashMap<String, String>> returnError = fileProcessor
+				ConverterProcessResultList returnError = fileProcessor
 						.processFile(internalUser.getUser_id(), room_id,
 								isOwner, inputstream, parentFolderId,
-								fileSystemName, hs,
+								fileSystemName, 
 								externalFileId, externalType);
-
-				HashMap<String, String> returnAttributes = returnError
-						.get("returnAttributes");
 
 				// Flash cannot read the response of an upload
 				// httpServletResponse.getWriter().print(returnError);
 				hs.put("message", "library");
 				hs.put("action", "newFile");
 				hs.put("fileExplorerItem", fileExplorerItemDao
-						.getFileExplorerItemsById(Long
-								.parseLong(returnAttributes.get(
-										"fileExplorerItemId").toString())));
+						.getFileExplorerItemsById(returnError.getFileExplorerItemId()));
 				hs.put("error", returnError);
-				hs.put("fileName", returnAttributes.get("completeName"));
+				hs.put("fileName", returnError.getCompleteName());
+				
+				//FIXME: Notificate UI of clients of new file
 
-				FileImportError[] fileImportErrors = new FileImportError[returnError
-						.size()];
-
-				int i = 0;
-				// Axis need Objects or array of objects, Map won't work
-				for (Iterator<String> iter = returnError.keySet().iterator(); iter
-						.hasNext();) {
-
-					HashMap<String, String> returnAttribute = returnError
-							.get(iter.next());
-
-					fileImportErrors[i] = new FileImportError();
-					fileImportErrors[i].setCommand((returnAttribute
-							.get("command") != null) ? returnAttribute.get(
-							"command").toString() : "");
-					fileImportErrors[i]
-							.setError((returnAttribute.get("error") != null) ? returnAttribute
-									.get("error").toString() : "");
-					fileImportErrors[i].setExitValue((returnAttribute
-							.get("exitValue") != null) ? Integer.valueOf(
-							returnAttribute.get("exitValue").toString())
-							.intValue() : 0);
-					fileImportErrors[i].setProcess((returnAttribute
-							.get("process") != null) ? returnAttribute.get(
-							"process").toString() : "");
-
-					i++;
-				}
-
-				return fileImportErrors;
+				return returnError.convertToFileImportErrors();
 
 			}
 		} catch (Exception err) {
-			log.error("[importFile]", err);
+			log.error("[importFileByInternalUserId]", err);
 		}
 		return null;
 	}

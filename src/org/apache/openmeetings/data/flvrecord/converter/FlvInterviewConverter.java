@@ -19,7 +19,7 @@
 package org.apache.openmeetings.data.flvrecord.converter;
 
 import java.io.File;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,6 +29,7 @@ import org.apache.openmeetings.data.flvrecord.FlvRecordingDao;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingLogDao;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDao;
 import org.apache.openmeetings.documents.GenerateThumbs;
+import org.apache.openmeetings.documents.beans.ConverterProcessResult;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingMetaData;
 import org.apache.openmeetings.utils.ProcessHelper;
@@ -133,7 +134,7 @@ public class FlvInterviewConverter extends BaseConverter {
 	}
 	
 	public void stripAudioFromFLVs(FlvRecording flvRecording, boolean reconversion) {
-		List<HashMap<String, String>> returnLog = new LinkedList<HashMap<String, String>>();
+		List<ConverterProcessResult> returnLog = new ArrayList<ConverterProcessResult>();
 		List<String> listOfFullWaveFiles = new LinkedList<String>();
 		File streamFolder = getStreamFolder(flvRecording);
 		List<FlvRecordingMetaData> metaDataList = flvRecordingMetaDataDaoImpl
@@ -539,7 +540,7 @@ public class FlvInterviewConverter extends BaseConverter {
 					.deleteFLVRecordingLogByRecordingId(flvRecording
 							.getFlvRecordingId());
 
-			for (HashMap<String, String> returnMap : returnLog) {
+			for (ConverterProcessResult returnMap : returnLog) {
 				flvRecordingLogDaoImpl.addFLVRecordingLog("generateFFMPEG",
 						flvRecording, returnMap);
 			}
@@ -564,7 +565,7 @@ public class FlvInterviewConverter extends BaseConverter {
 		}
 	}
 
-	public HashMap<String, String> thumbProcessImageWindows(String file1,
+	public ConverterProcessResult thumbProcessImageWindows(String file1,
 			String file2, String file3) {
 
 		// Init variables
@@ -574,7 +575,7 @@ public class FlvInterviewConverter extends BaseConverter {
 		return generateThumbs.processImageWindows(cmd);
 	}
 
-	public HashMap<String, String> processImageWindows(String file1,
+	public ConverterProcessResult processImageWindows(String file1,
 			String file2, String file3) {
 		return ProcessHelper.executeScriptWindows("processImageWindows"
 			, new String[]{getPathToImageMagick(), file1, file2, "+append", file3});

@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.documents.beans.ConverterProcessResult;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -78,39 +79,35 @@ public class ProcessHelper {
 		}
 	}
 
-	public static HashMap<String, String> executeScriptWindows(String process, String[] argv) {
-		HashMap<String, String> returnMap = new HashMap<String, String>();
-		returnMap.put("process", process);
+	public static ConverterProcessResult executeScriptWindows(String process, String[] argv) {
 		try {
 			String[] cmd = new String[argv.length + 2];
 			cmd[0] = "cmd.exe";
 			cmd[1] = "/C";
 			System.arraycopy(argv, 0, cmd, 2, argv.length);
 			Map<String, String> env = new HashMap<String, String>();
-			returnMap = executeScript(process, cmd, env);
-		} catch (Throwable t) {
+			return executeScript(process, cmd, env);
+		} catch (Exception t) {
 			log.error("executeScriptWindows", t);
-			returnMap.put("error", t.getMessage());
-			returnMap.put("exitValue", "-1");
+			return new ConverterProcessResult(process, t.getMessage(), t);
 		}
-		return returnMap;
 	}
 	
-	public static HashMap<String, String> executeScript(String process, String[] argv) {
+	public static ConverterProcessResult executeScript(String process, String[] argv) {
 		Map<String, String> env = new HashMap<String, String>();
 		return executeScript(process, argv, env);
 	}
 	
-	public static HashMap<String, String> executeScript(String process,
+	public static ConverterProcessResult executeScript(String process,
 			String[] argv, Map<? extends String, ? extends String> env) {
-		HashMap<String, String> returnMap = new HashMap<String, String>();
-		returnMap.put("process", process);
+		ConverterProcessResult returnMap = new ConverterProcessResult();
+		returnMap.setProcess(process);
 		log.debug("process: " + process);
 		log.debug("args: " + Arrays.toString(argv));
 	
 		try {
-			returnMap.put("command", Arrays.toString(argv));
-			returnMap.put("out","");
+			returnMap.setCommand(Arrays.toString(argv));
+			returnMap.setOut("");
 	
 			// By using the process Builder we have access to modify the
 			// environment variables
@@ -135,13 +132,13 @@ public class ProcessHelper {
 			try {
 				worker.join(timeout);
 				if (worker.exitCode != null) {
-					returnMap.put("exitValue", "" + worker.exitCode);
+					returnMap.setExitValue(""+worker.exitCode);
 					log.debug("exitVal: " + worker.exitCode);
-					returnMap.put("error", errorWatcher.output.toString());
+					returnMap.setError(errorWatcher.output.toString());
 				} else {
-					returnMap.put("exception", "timeOut");
-					returnMap.put("error", errorWatcher.output.toString());
-					returnMap.put("exitValue", "-1");
+					returnMap.setException("timeOut");
+					returnMap.setError(errorWatcher.output.toString());
+					returnMap.setExitValue("-1");
 	
 					throw new TimeoutException();
 				}
@@ -151,8 +148,8 @@ public class ProcessHelper {
 				inputWatcher.interrupt();
 				Thread.currentThread().interrupt();
 	
-				returnMap.put("error", ex.getMessage());
-				returnMap.put("exitValue", "-1");
+				returnMap.setError(ex.getMessage());
+				returnMap.setExitValue("-1");
 	
 				throw ex;
 			} finally {
@@ -162,15 +159,15 @@ public class ProcessHelper {
 		} catch (TimeoutException e) {
 			// Timeout exception is processed above
 			log.error("executeScript",e);
-			returnMap.put("error", e.getMessage());
-			returnMap.put("exception", e.toString());
-			returnMap.put("exitValue", "-1");
+			returnMap.setError(e.getMessage());
+			returnMap.setException(e.toString());
+			returnMap.setExitValue("-1");
 		} catch (Throwable t) {
 			// Any other exception is shown in debug window
 			log.error("executeScript",t);
-			returnMap.put("error", t.getMessage());
-			returnMap.put("exception", t.toString());
-			returnMap.put("exitValue", "-1");
+			returnMap.setError(t.getMessage());
+			returnMap.setException(t.toString());
+			returnMap.setExitValue("-1");
 		}
 		
 		return returnMap;

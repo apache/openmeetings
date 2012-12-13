@@ -27,7 +27,6 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -60,7 +59,6 @@ import org.apache.openmeetings.backup.UserConverter;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.LdapConfigDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
-import org.apache.openmeetings.data.basic.dao.ServerDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
@@ -68,10 +66,8 @@ import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
 import org.apache.openmeetings.data.conference.PollManagement;
 import org.apache.openmeetings.data.conference.RoomDAO;
 import org.apache.openmeetings.data.conference.Roommanagement;
-import org.apache.openmeetings.data.conference.dao.RoomModeratorsDao;
 import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingDao;
-import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDao;
 import org.apache.openmeetings.data.user.Organisationmanagement;
 import org.apache.openmeetings.data.user.dao.OrganisationDao;
 import org.apache.openmeetings.data.user.dao.PrivateMessageFolderDao;
@@ -79,6 +75,7 @@ import org.apache.openmeetings.data.user.dao.PrivateMessagesDao;
 import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.data.user.dao.UserContactsDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.documents.beans.UploadCompleteMessage;
 import org.apache.openmeetings.persistence.beans.adresses.Adresses;
 import org.apache.openmeetings.persistence.beans.adresses.States;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
@@ -158,8 +155,6 @@ public class BackupImportController extends AbstractUploadController {
 	@Autowired
 	private FlvRecordingDao flvRecordingDao;
 	@Autowired
-	private FlvRecordingMetaDataDao flvRecordingMetaDataDao;
-	@Autowired
 	private PrivateMessageFolderDao privateMessageFolderDao;
 	@Autowired
 	private PrivateMessagesDao privateMessagesDao;
@@ -167,8 +162,6 @@ public class BackupImportController extends AbstractUploadController {
 	private MeetingMemberDao meetingMemberDao;
 	@Autowired
 	private LdapConfigDao ldapConfigDao;
-	@Autowired
-	private RoomModeratorsDao roomModeratorsDao;
 	@Autowired
 	private FileExplorerItemDao fileExplorerItemDao;
 	@Autowired
@@ -181,8 +174,6 @@ public class BackupImportController extends AbstractUploadController {
 	private ConfigurationDao configurationDao;
 	@Autowired
 	private AsteriskDAOImpl asteriskDAOImpl;
-	@Autowired
-	private ServerDao serverDaoImpl;
 
 	private final HashMap<Long, Long> usersMap = new HashMap<Long, Long>();
 	private final HashMap<Long, Long> organisationsMap = new HashMap<Long, Long>();
@@ -651,15 +642,15 @@ public class BackupImportController extends AbstractUploadController {
 			InputStream is = multipartFile.getInputStream();
 			performImport(is);
 
-			LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
-			hs.put("user", usersDao.get(info.userId));
-			hs.put("message", "library");
-			hs.put("action", "import");
-			hs.put("error", "");
-			hs.put("fileName", info.filename);
-
-			scopeApplicationAdapter.sendMessageWithClientByPublicSID(
-					hs, info.publicSID);
+			UploadCompleteMessage uploadCompleteMessage = new UploadCompleteMessage(
+						usersDao.get(info.userId),
+						"library", //message
+						"import", //action
+						"", //error
+						info.filename);
+			
+			scopeApplicationAdapter.sendUploadCompletMessageByPublicSID(
+					uploadCompleteMessage, info.publicSID);
 
 		} catch (Exception e) {
 

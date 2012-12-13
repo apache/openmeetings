@@ -18,24 +18,23 @@
  */
 package org.apache.openmeetings.documents;
 
-import java.util.HashMap;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
+import java.util.Arrays;
 
+import org.apache.openmeetings.documents.beans.ConverterProcessResult;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.XMLWriter;
 
-import java.util.Arrays;
-
 public class CreateLibraryPresentation {
-	public static HashMap<String,String> generateXMLDocument(File targetDirectory, String originalDocument, 
+	public static ConverterProcessResult generateXMLDocument(File targetDirectory, String originalDocument, 
 			String pdfDocument, String swfDocument){
-		HashMap<String,String> returnMap = new HashMap<String,String>();
-		returnMap.put("process", "generateXMLDocument");		
+		ConverterProcessResult returnMap = new ConverterProcessResult();
+		returnMap.setProcess("generateXMLDocument");		
 		try {
 			
 	        Document document = DocumentHelper.createDocument();
@@ -94,13 +93,13 @@ public class CreateLibraryPresentation {
 	        writer.write( document );
 	        writer.close();
 			
-	        returnMap.put("exitValue", "0");
+	        returnMap.setExitValue("0");
 	        
 			return returnMap;
 		} catch (Exception err) {
 			err.printStackTrace();
-			returnMap.put("error", err.getMessage());
-			returnMap.put("exitValue", "-1");
+			returnMap.setError(err.getMessage());
+			returnMap.setExitValue("-1");
 			return returnMap;
 		}
 	}
