@@ -41,6 +41,7 @@ import org.apache.openmeetings.data.conference.RoomDAO;
 import org.apache.openmeetings.data.conference.Roommanagement;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingDao;
 import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.documents.beans.UploadCompleteMessage;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
 import org.apache.openmeetings.persistence.beans.invitation.Invitations;
@@ -2487,17 +2488,15 @@ public class RoomWebService {
 	 * @param paramName
 	 * @param paramValue
 	 * @return 1 in case of success, -2 if permissions are insufficient
-	 * @throws AxisFault if any error ocurred
+	 * @throws AxisFault if any error occurred
 	 */
 	public int modifyRoomParameter(String SID, Long room_id, String paramName, String paramValue)
 			throws AxisFault {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
-	
-			log.debug("closeRoom 1 " + room_id);
-	
 			if (authLevelManagement.checkWebServiceLevel(user_level)) {
+				log.debug("closeRoom 1 " + room_id);
 				Rooms r = roomDao.get(room_id);
 				PropertyUtils.setSimpleProperty(r, paramName, paramValue);
 				roomDao.update(r, users_id);
@@ -2511,4 +2510,51 @@ public class RoomWebService {
 			throw new AxisFault(err.getMessage());
 		}
 	}
+	
+	/**
+	 * This method is used in cluster mode to send the sync event from the master to the slave
+	 * 
+	 * @param SID The SID of the User. This SID must be marked as logged'in
+	 * @param publicSID The publicSID that will receive the message
+	 * @param userId part of sync message of document upload
+	 * @param message part of sync message of document upload
+	 * @param action part of sync message of document upload
+	 * @param error part of sync message of document upload
+	 * @param hasError part of sync message of document upload
+	 * @param fileName part of sync message of document upload
+	 * @param fileSystemName part of sync message of document upload
+	 * @param isPresentation part of sync message of document upload
+	 * @param isImage part of sync message of document upload
+	 * @param isVideo part of sync message of document upload
+	 * @param fileHash part of sync message of document upload
+	 * @return
+	 * @throws AxisFault if any error occurred
+	 */
+	public boolean syncUploadCompleteMessage(String SID, String publicSID,
+			Long userId, String message, String action, String error,
+			boolean hasError, String fileName, String fileSystemName,
+			boolean isPresentation, boolean isImage, boolean isVideo,
+			String fileHash) throws AxisFault {
+
+		try {
+			Long users_id = sessionManagement.checkSession(SID);
+			Long user_level = userManagement.getUserLevelByID(users_id);
+			if (authLevelManagement.checkWebServiceLevel(user_level)) {
+
+				scopeApplicationAdapter.sendMessageWithClientByPublicSID(
+						new UploadCompleteMessage(userId, message, action,
+								error, hasError, fileName, fileSystemName,
+								isPresentation, isImage, isVideo, fileHash),
+						publicSID);
+
+				return true;
+			}
+		} catch (Exception err) {
+			log.error("[syncUploadCompleteMessage] ", err);
+
+			throw new AxisFault(err.getMessage());
+		}
+		return false;
+	}
+	
 }

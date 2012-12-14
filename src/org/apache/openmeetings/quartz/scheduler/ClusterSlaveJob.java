@@ -29,6 +29,7 @@ import org.apache.openmeetings.cluster.sync.RestClient;
 import org.apache.openmeetings.conference.room.ISharedSessionStore;
 import org.apache.openmeetings.conference.room.SlaveClientDto;
 import org.apache.openmeetings.data.basic.dao.ServerDao;
+import org.apache.openmeetings.documents.beans.UploadCompleteMessage;
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -144,6 +145,29 @@ public class ClusterSlaveJob implements IRestClientObserver {
 		
 		rClient.kickUser(publicSID);
 		
+	}
+	
+	/**
+	 * Gets the current {@link RestClient} from the session store and then
+	 * performs a kickUser on that. It is not possible that there is no
+	 * {@link RestClient}, because if you want to kick a user from a slave, the
+	 * master <i>must</i> already have loaded the sessions from the slave, so
+	 * there logically <i>must</i> by a {@link RestClient} available that has an 
+	 * open connection to that slave / {@link Server}
+	 * 
+	 * @param server
+	 * @param publicSID
+	 * @param uploadCompleteMessage
+	 * @throws Exception
+	 */
+	public void syncMessageToClientOnSlave(Server server, String publicSID, UploadCompleteMessage uploadCompleteMessage) throws Exception {
+		RestClient rClient = getRestClient(server);
+		
+		if (rClient == null) {
+			throw new Exception("No RestClient found for server " + server);
+		}
+		
+		rClient.syncMessage(publicSID, uploadCompleteMessage);
 	}
 
 }

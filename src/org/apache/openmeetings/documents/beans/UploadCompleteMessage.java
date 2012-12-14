@@ -19,78 +19,162 @@
 package org.apache.openmeetings.documents.beans;
 
 import org.apache.openmeetings.persistence.beans.files.FileExplorerItem;
-import org.apache.openmeetings.persistence.beans.user.Users;
+
 
 /**
- * Helper bean that is send to client(s) once the servlet has completed the upload
+ * Helper bean that is send to client(s) once the servlet has completed the
+ * upload
  * 
  * @author sebawagner
- *
+ * 
  */
 public class UploadCompleteMessage {
-	
-	private Users user;
+
+	private Long userId;
 	private String message;
 	private String action;
 	private String error;
 	private boolean hasError = false;
 	private String fileName;
-	private FileExplorerItem fileExplorerItem;
-	
+
+	// Properties from the file explorerItem
+	private String fileSystemName;
+	private Boolean isPresentation = false;
+	private Boolean isImage = false;
+	private Boolean isVideo = false;
+	private String fileHash;
+
 	public UploadCompleteMessage() {
 	}
-	
-	public UploadCompleteMessage(Users user, String message, String action,
+
+	public UploadCompleteMessage(Long userId, String message, String action,
 			String error, String fileName) {
 		super();
-		this.user = user;
+		this.userId = userId;
 		this.message = message;
 		this.action = action;
 		this.error = error;
 		this.fileName = fileName;
 	}
 
-	public Users getUser() {
-		return user;
+	public UploadCompleteMessage(Long userId, String message, String action,
+			String error, boolean hasError, String fileName,
+			String fileSystemName, boolean isPresentation, boolean isImage,
+			boolean isVideo, String fileHash) {
+		super();
+		this.userId = userId;
+		this.message = message;
+		this.action = action;
+		this.error = error;
+		this.hasError = hasError;
+		this.fileName = fileName;
+		this.fileSystemName = fileSystemName;
+		this.isPresentation = isPresentation;
+		this.isImage = isImage;
+		this.isVideo = isVideo;
+		this.fileHash = fileHash;
 	}
-	public void setUser(Users user) {
-		this.user = user;
+
+	public Long getUserId() {
+		return userId;
 	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
 	public String getMessage() {
 		return message;
 	}
+
 	public void setMessage(String message) {
 		this.message = message;
 	}
+
 	public String getAction() {
 		return action;
 	}
+
 	public void setAction(String action) {
 		this.action = action;
 	}
+
 	public String getError() {
 		return error;
 	}
+
 	public void setError(String error) {
 		this.error = error;
 	}
+
 	public String getFileName() {
 		return fileName;
 	}
+
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
+
 	public boolean isHasError() {
 		return hasError;
 	}
+
 	public void setHasError(boolean hasError) {
 		this.hasError = hasError;
 	}
-	public FileExplorerItem getFileExplorerItem() {
-		return fileExplorerItem;
+
+	public String getFileSystemName() {
+		return fileSystemName;
 	}
+
+	public void setFileSystemName(String fileSystemName) {
+		this.fileSystemName = fileSystemName;
+	}
+
+	public Boolean getIsPresentation() {
+		return isPresentation;
+	}
+
+	public void setIsPresentation(Boolean isPresentation) {
+		this.isPresentation = isPresentation;
+	}
+
+	public Boolean getIsImage() {
+		return isImage;
+	}
+
+	public void setIsImage(Boolean isImage) {
+		this.isImage = isImage;
+	}
+
+	public Boolean getIsVideo() {
+		return isVideo;
+	}
+
+	public void setIsVideo(Boolean isVideo) {
+		this.isVideo = isVideo;
+	}
+
+	public String getFileHash() {
+		return fileHash;
+	}
+
+	public void setFileHash(String fileHash) {
+		this.fileHash = fileHash;
+	}
+
 	public void setFileExplorerItem(FileExplorerItem fileExplorerItem) {
-		this.fileExplorerItem = fileExplorerItem;
+		if (fileExplorerItem.getIsImage() != null) {
+			isImage = fileExplorerItem.getIsImage();
+		}
+		if (fileExplorerItem.getIsVideo() != null) {
+			isVideo = fileExplorerItem.getIsVideo();
+		}
+		if (fileExplorerItem.getIsPresentation() != null) {
+			isPresentation = fileExplorerItem.getIsPresentation();
+		}
+		fileSystemName = fileExplorerItem.getFileName();
+		fileHash = fileExplorerItem.getFileHash();
 	}
 
 }

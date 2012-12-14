@@ -78,5 +78,10 @@ public class ServerDTO {
 	public void setWebapp(String webapp) {
 		this.webapp = webapp;
 	}
+	
+	@Override
+	public String toString() {
+		return "id "+id+" address "+address+" port "+port+" protocol "+protocol;
+	}
 
 }

@@ -108,12 +108,13 @@ public class UploadController extends AbstractUploadController {
 							parentFolderId, info.filename, 0L, ""); // externalFilesId, externalType
 	
 			UploadCompleteMessage uploadCompleteMessage = new UploadCompleteMessage();
-	    	uploadCompleteMessage.setUser(usersDao.get(info.userId));
+	    	uploadCompleteMessage.setUserId(info.userId);
 	
 			// Flash cannot read the response of an upload
 			// httpServletResponse.getWriter().print(returnError);
 	    	uploadCompleteMessage.setMessage("library");
 	    	uploadCompleteMessage.setAction("newFile");
+	    	
 	    	uploadCompleteMessage.setFileExplorerItem(
 					fileExplorerItemDao.getFileExplorerItemsById(
 							returnError.getFileExplorerItemId()));
@@ -162,7 +163,7 @@ public class UploadController extends AbstractUploadController {
 			fileSystemName = StringUtils.deleteWhitespace(fileSystemName);
 	
 			UploadCompleteMessage uploadCompleteMessage = new UploadCompleteMessage();
-	    	uploadCompleteMessage.setUser(usersDao.get(info.userId));
+	    	uploadCompleteMessage.setUserId(info.userId);
 			
 			// Flash cannot read the response of an upload
 			// httpServletResponse.getWriter().print(returnError);

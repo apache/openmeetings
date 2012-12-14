@@ -78,8 +78,8 @@
 	    		var tServer = "master";
 	    		var serverId = 0;
 	    		if (records[i].server != null) {
-	    			serverId = records[i].server.id;
-	    			tServer = "slave "+records[i].server.address+" ["+records[i].server.id+"]";
+	    			serverId = records[i].server;
+	    			tServer = "slave " + " ["+serverId+"]";
 	    		}
 	    	
 	    		new lz.roomClientListItem(this._innerlist._inn._inn,{

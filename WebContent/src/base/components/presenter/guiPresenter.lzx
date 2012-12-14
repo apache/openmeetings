@@ -128,6 +128,10 @@
     <handler name="onwidth" args="w">
         <![CDATA[
             if (this.isresizeing){
+            	if (w<40){
+            		this.setAttribute('width',41); 
+            		this._resizeview.onmouseup.sendEvent();
+            	}
                 if (w<_titlebar._title.width+70) {
                     this.setAttribute('width',_titlebar._title.width+71); 
                     this._resizeview.onmouseup.sendEvent();
@@ -454,7 +458,7 @@
 				colorTo="$once{ canvas.getThemeColor('styleMenuBarBaseColor') }" >
 		</gradientview>
 		
-        <text fontsize="10" height="17" x="6" y="1" text="${ this.parent.parent.title }" 
+        <text name="_title" fontsize="10" height="17" x="6" y="1" text="${ this.parent.parent.title }" 
 			fgcolor="0xFFFFFF" resize="true" fontstyle="bold" />
 			
 	    <view name="_toolbar" visibility="$once{ ((parent.parent.fullToolBar) ? 'visible' : 'hidden' ) }" 

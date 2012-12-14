@@ -51,7 +51,8 @@ public class RoomWebServiceFacade {
 	private RoomWebService getRoomServiceProxy() {
 		try {
 			if (!ScopeApplicationAdapter.initComplete) {
-				throw new Exception("Server not yet initialized, retry in couple of seconds");
+				throw new Exception(
+						"Server not yet initialized, retry in couple of seconds");
 			}
 			ApplicationContext context = WebApplicationContextUtils
 					.getWebApplicationContext(getServletContext());
@@ -669,8 +670,20 @@ public class RoomWebServiceFacade {
 		return this.getRoomServiceProxy().closeRoom(SID, room_id, status);
 	}
 
-	public int modifyRoomParameter(String SID, Long room_id, String paramName, String paramValue)
-			throws AxisFault {
-		return getRoomServiceProxy().modifyRoomParameter(SID, room_id, paramName, paramValue);
+	public int modifyRoomParameter(String SID, Long room_id, String paramName,
+			String paramValue) throws AxisFault {
+		return getRoomServiceProxy().modifyRoomParameter(SID, room_id,
+				paramName, paramValue);
 	}
+
+	public boolean syncUploadCompleteMessage(String SID, String publicSID,
+			Long userId, String message, String action, String error,
+			boolean hasError, String fileName, String fileSystemName,
+			boolean isPresentation, boolean isImage, boolean isVideo,
+			String fileHash) throws AxisFault {
+		return getRoomServiceProxy().syncUploadCompleteMessage(SID, publicSID,
+				userId, message, action, error, hasError, fileName,
+				fileSystemName, isPresentation, isImage, isVideo, fileHash);
+	}
+	
 }

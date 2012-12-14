@@ -89,7 +89,7 @@ public class ImportController extends AbstractUploadController {
 			log.debug("moduleName.equals(userprofile) ! ");
 			
 			UploadCompleteMessage uploadCompleteMessage = new UploadCompleteMessage(
-					usersDao.get(info.userId),
+					info.userId,
 					"library", //message
 					"import", //action
 					"", //error

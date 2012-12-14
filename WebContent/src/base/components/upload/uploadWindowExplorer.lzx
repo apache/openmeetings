@@ -116,23 +116,21 @@
             
             if (parent._loadToWhiteboard.getValue()) {
             	
-            	var fileExplorerItem = tArrayValueObj.fileExplorerItem;
-            	
             	if ($debug) Debug.write(tArrayValueObj);
-            	if (fileExplorerItem.isPresentation) {
-            		var url = this.formatURL(fileExplorerItem.fileHash);
+            	if (tArrayValueObj.isPresentation) {
+            		var url = this.formatURL(tArrayValueObj.fileHash);
             		
-            		var uploadmoduleimgfolderVar = '/' + fileExplorerItem.fileHash;
+            		var uploadmoduleimgfolderVar = '/' + tArrayValueObj.fileHash;
             		
             		if ($debug) Debug.write(url);
             		
-                	canvas._drawarea.loadSWFPresentationSynced(url,fileExplorerItem.fileHash + ".swf",
+                	canvas._drawarea.loadSWFPresentationSynced(url,tArrayValueObj.fileHash + ".swf",
                               "videoconf1",uploadmoduleimgfolderVar,"files",hib.conferencedomain,1,
-                              fileExplorerItem.fileName);
-            	} else if (fileExplorerItem.isImage) {
-            		canvas._drawarea.parent.parent.clearAreaAndAddImage(this.generateFileLink(fileExplorerItem.fileHash),0,0,
+                              tArrayValueObj.fileSystemName);
+            	} else if (tArrayValueObj.isImage) {
+            		canvas._drawarea.parent.parent.clearAreaAndAddImage(this.generateFileLink(tArrayValueObj.fileHash),0,0,
                       canvas.getUrl() +'DownloadHandler',
-                      fileExplorerItem.fileHash,"videoconf1","/","files",hib.conferencedomain);
+                      tArrayValueObj.fileHash,"videoconf1","/","files",hib.conferencedomain);
             	}
             }
             

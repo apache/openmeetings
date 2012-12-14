@@ -37,6 +37,7 @@ import org.apache.axis2.transport.http.HTTPConstants;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.conference.room.SlaveClientDto;
+import org.apache.openmeetings.documents.beans.UploadCompleteMessage;
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -55,7 +56,12 @@ public class RestClient {
 			RestClient.class, OpenmeetingsVariables.webAppRootKey);
 	
 	private enum Action {
-		PING, KICK_USER
+		//send a ping to the user
+		PING, 
+		//kick the user from the server
+		KICK_USER,
+		//send a sync message to a client on that server
+		SYNC_MESSAGE
 	}
 
 	/**
@@ -77,6 +83,15 @@ public class RestClient {
 	private boolean pingRunning = false;
 
 	private String publicSID;
+
+	private UploadCompleteMessage uploadCompleteMessage;
+
+	/**
+	 * there are two publicSIDs, one for the kickUser REST call and one for the syncMessage call
+	 * theoretically they could be performed at the same time but to different users, so we don't want
+	 * to use the same variable for both
+	 */
+	private String publicSIDSync;
 	
 	private static String nameSpaceForSlaveDto = "http://room.conference.openmeetings.apache.org/xsd";
 	
@@ -99,6 +114,11 @@ public class RestClient {
 	private String getServerServiceEndPoint() {
 		return protocol + "://" + host + ":" + port + "/" + webapp
 				+ "/services/ServerService";
+	}
+	
+	private String getRoomServiceEndPoint() {
+		return protocol + "://" + host + ":" + port + "/" + webapp
+				+ "/services/RoomService";
 	}
 
 	/**
@@ -200,21 +220,8 @@ public class RestClient {
 	 */
 	public void loginUser(Action action) throws Exception {
 
-		Options options = new Options();
-		options.setTo(new EndpointReference(getUserServiceEndPoint()));
-		options.setProperty(Constants.Configuration.ENABLE_REST,
-				Constants.VALUE_TRUE);
-		int timeOutInMilliSeconds = 2000;
-		// setting timeout to 2 second should be sufficient, if the server is
-		// not available within the 3 second interval you got a problem anyway
-		options.setTimeOutInMilliSeconds(timeOutInMilliSeconds);
-		options.setProperty(HTTPConstants.SO_TIMEOUT, timeOutInMilliSeconds);
-		options.setProperty(HTTPConstants.CONNECTION_TIMEOUT, timeOutInMilliSeconds); 
-
-		ServiceClient sender = new ServiceClient();
-		sender.engageModule(new QName(Constants.MODULE_ADDRESSING)
-				.getLocalPart());
-		sender.setOptions(options);
+		ServiceClient sender = createServiceClient(getUserServiceEndPoint());
+		
 		OMElement getSessionResult = sender
 				.sendReceive(getPayloadMethodGetSession());
 		sessionId = getSessionIdFromResult(getSessionResult);
@@ -228,12 +235,117 @@ public class RestClient {
 			ping();
 		} else if (action == Action.KICK_USER) {
 			kickUserInternl();
+		} else if (action == Action.SYNC_MESSAGE) {
+			syncMessageInternl();
 		}
 
 	}
 	
+	private ServiceClient createServiceClient(String serviceEndPoint) throws Exception {
+		ServiceClient sender = new ServiceClient();
+		sender.engageModule(new QName(Constants.MODULE_ADDRESSING)
+				.getLocalPart());
+		Options options = new Options();
+		options.setTo(new EndpointReference(serviceEndPoint));
+		options.setProperty(Constants.Configuration.ENABLE_REST,
+				Constants.VALUE_TRUE);
+		int timeOutInMilliSeconds = 2000;
+		// setting timeout to 2 second should be sufficient, if the server is
+		// not available within the 3 second interval you got a problem anyway
+		options.setTimeOutInMilliSeconds(timeOutInMilliSeconds);
+		options.setProperty(HTTPConstants.SO_TIMEOUT, timeOutInMilliSeconds);
+		options.setProperty(HTTPConstants.CONNECTION_TIMEOUT, timeOutInMilliSeconds);
+		sender.setOptions(options);
+		
+		return sender;
+	}
+	
+	private OMElement createOMElement(OMFactory fac, OMNamespace omNs, String name, String value) {
+		OMElement omElement = fac.createOMElement(name, omNs);
+		omElement.addChild(fac.createOMText(omElement, value));
+		return omElement;
+	}
+
+	
+	/**
+	 * set s the publicSID the message object and sends it to the slave by calling a REST service
+	 * 
+	 * @param publicSID
+	 * @param uploadCompleteMessage
+	 */
+	public void syncMessage(String publicSID, UploadCompleteMessage uploadCompleteMessage) {
+		this.publicSIDSync = publicSID;
+		this.uploadCompleteMessage = uploadCompleteMessage;
+		syncMessageInternl();
+	}
+	
+	private void syncMessageInternl() {
+		try {
+			
+			if (!loginSuccess) {
+				loginUser(Action.SYNC_MESSAGE);
+			}
+			
+			ServiceClient sender = createServiceClient(getRoomServiceEndPoint());
+			OMElement syncMessageResult = sender
+					.sendReceive(getPayloadMethodSyncMessage());
+			Boolean result = syncMessageResultFromResult(syncMessageResult);
+			
+			if (!result) {
+				throw new Exception("Could not sync message to slave host");
+			}
+			
+		} catch (Exception err) {
+			log.error("[syncMessage failed]", err);
+		}
+	}
+	
+	private Boolean syncMessageResultFromResult(OMElement result) throws Exception {
+		QName kickUserResult = new QName(NAMESPACE_PREFIX, "return");
+
+		@SuppressWarnings("unchecked")
+		Iterator<OMElement> elements = result.getChildrenWithName(kickUserResult);
+		if (elements.hasNext()) {
+			OMElement resultElement = elements.next();
+			if (resultElement.getText().equals("true")) {
+				return true;
+			} else {
+				throw new Exception("Could not delete user from slave host, returns: "
+						+ resultElement.getText());
+			}
+		} else {
+			throw new Exception("Could not parse kickUserByPublicSID result");
+		}
+	}
+	
+	private OMElement getPayloadMethodSyncMessage() {
+		
+		OMFactory fac = OMAbstractFactory.getOMFactory();
+		OMNamespace omNs = fac.createOMNamespace(NAMESPACE_PREFIX, "pre");
+		OMElement method = fac.createOMElement("syncUploadCompleteMessage", omNs);
+
+		method.addChild(createOMElement(fac, omNs, "SID", sessionId));
+		method.addChild(createOMElement(fac, omNs, "publicSID", publicSIDSync));
+		method.addChild(createOMElement(fac, omNs, "userId", ""+ uploadCompleteMessage.getUserId()));
+		method.addChild(createOMElement(fac, omNs, "message", uploadCompleteMessage.getMessage()));
+		method.addChild(createOMElement(fac, omNs, "action", uploadCompleteMessage.getAction()));
+		method.addChild(createOMElement(fac, omNs, "error", uploadCompleteMessage.getError()));
+		method.addChild(createOMElement(fac, omNs, "hasError", ""+uploadCompleteMessage.isHasError()));
+		method.addChild(createOMElement(fac, omNs, "fileName", uploadCompleteMessage.getFileName()));
+		
+		method.addChild(createOMElement(fac, omNs, "fileSystemName", uploadCompleteMessage.getFileSystemName()));
+		method.addChild(createOMElement(fac, omNs, "isPresentation", ""+uploadCompleteMessage.getIsPresentation()));
+		method.addChild(createOMElement(fac, omNs, "isImage", ""+uploadCompleteMessage.getIsImage()));
+		method.addChild(createOMElement(fac, omNs, "isVideo", ""+uploadCompleteMessage.getIsVideo()));
+		method.addChild(createOMElement(fac, omNs, "fileHash", uploadCompleteMessage.getFileHash()));
+		
+		return method;
+	}
+
 	/**
 	 * sets the publicSID and removes a user from a slave host by calling a REST service
+	 * 
+	 * @param publicSID
 	 */
 	public void kickUser(String publicSID) {
 		this.publicSID = publicSID;
@@ -246,22 +358,9 @@ public class RestClient {
 			if (!loginSuccess) {
 				loginUser(Action.KICK_USER);
 			}
-			
-			Options options = new Options();
-			options.setTo(new EndpointReference(getUserServiceEndPoint()));
-			options.setProperty(Constants.Configuration.ENABLE_REST,
-					Constants.VALUE_TRUE);
-			int timeOutInMilliSeconds = 2000;
-			// setting timeout to 2 second should be sufficient, if the server is
-			// not available within the 3 second interval you got a problem anyway
-			options.setTimeOutInMilliSeconds(timeOutInMilliSeconds);
-			options.setProperty(HTTPConstants.SO_TIMEOUT, timeOutInMilliSeconds);
-			options.setProperty(HTTPConstants.CONNECTION_TIMEOUT, timeOutInMilliSeconds); 
 
-			ServiceClient sender = new ServiceClient();
-			sender.engageModule(new QName(Constants.MODULE_ADDRESSING)
-					.getLocalPart());
-			sender.setOptions(options);
+			ServiceClient sender = createServiceClient(getUserServiceEndPoint());
+			
 			OMElement kickUserByPublicSIDResult = sender
 					.sendReceive(getPayloadMethodKickUserByPublicSID());
 			Boolean result = kickUserByPublicSIDFromResult(kickUserByPublicSIDResult);
@@ -297,15 +396,8 @@ public class RestClient {
 		OMFactory fac = OMAbstractFactory.getOMFactory();
 		OMNamespace omNs = fac.createOMNamespace(NAMESPACE_PREFIX, "pre");
 		OMElement method = fac.createOMElement("kickUserByPublicSID", omNs);
-
-		OMElement sid = fac.createOMElement("SID", omNs);
-		sid.addChild(fac.createOMText(sid, sessionId));
-		method.addChild(sid);
-
-		OMElement publicSIDOmElement = fac.createOMElement("publicSID", omNs);
-		publicSIDOmElement.addChild(fac.createOMText(publicSIDOmElement, publicSID));
-		method.addChild(publicSIDOmElement);
-
+		method.addChild(createOMElement(fac, omNs, "SID", sessionId));
+		method.addChild(createOMElement(fac, omNs, "publicSID", publicSID));
 		return method;
 	}
 
@@ -326,22 +418,7 @@ public class RestClient {
 				loginUser(Action.PING);
 			} else {
 				 
-				Options options = new Options();
-				options.setTo(new EndpointReference(getServerServiceEndPoint()));
-				options.setProperty(Constants.Configuration.ENABLE_REST,
-						Constants.VALUE_TRUE);
-				int timeOutInMilliSeconds = 2000;
-				// setting timeout to 2 second should be sufficient, if the server is
-				// not available within the 3 second interval you got a problem anyway
-				options.setTimeOutInMilliSeconds(timeOutInMilliSeconds);
-				options.setProperty(HTTPConstants.SO_TIMEOUT, timeOutInMilliSeconds);
-				options.setProperty(HTTPConstants.CONNECTION_TIMEOUT, timeOutInMilliSeconds); 
-
-				ServiceClient sender = new ServiceClient();
-				sender.engageModule(new QName(Constants.MODULE_ADDRESSING)
-						.getLocalPart());
-				sender.setOptions(options);
-
+				ServiceClient sender = createServiceClient(getServerServiceEndPoint());
 				OMElement pingResult = sender
 						.sendReceive(getPayloadMethodPingTemp());
 
@@ -412,19 +489,9 @@ public class RestClient {
 		OMFactory fac = OMAbstractFactory.getOMFactory();
 		OMNamespace omNs = fac.createOMNamespace(NAMESPACE_PREFIX, "pre");
 		OMElement method = fac.createOMElement("loginUser", omNs);
-
-		OMElement sid = fac.createOMElement("SID", omNs);
-		sid.addChild(fac.createOMText(sid, sessionId));
-		method.addChild(sid);
-
-		OMElement username = fac.createOMElement("username", omNs);
-		username.addChild(fac.createOMText(username, user));
-		method.addChild(username);
-
-		OMElement userpass = fac.createOMElement("userpass", omNs);
-		userpass.addChild(fac.createOMText(userpass, pass));
-		method.addChild(userpass);
-
+		method.addChild(createOMElement(fac, omNs, "SID", sessionId));
+		method.addChild(createOMElement(fac, omNs, "username", user));
+		method.addChild(createOMElement(fac, omNs, "userpass", pass));
 		return method;
 	}
 
@@ -464,11 +531,7 @@ public class RestClient {
 		OMFactory fac = OMAbstractFactory.getOMFactory();
 		OMNamespace omNs = fac.createOMNamespace(NAMESPACE_PREFIX, "pre");
 		OMElement method = fac.createOMElement("ping", omNs);
-
-		OMElement sid = fac.createOMElement("SID", omNs);
-		sid.addChild(fac.createOMText(sid, sessionId));
-		method.addChild(sid);
-
+		method.addChild(createOMElement(fac, omNs, "SID", sessionId));
 		return method;
 	}
 
@@ -541,5 +604,6 @@ public class RestClient {
 		}
 		return null;
 	}
-
+	
+	
 }

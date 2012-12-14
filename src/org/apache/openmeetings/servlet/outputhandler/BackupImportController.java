@@ -643,7 +643,7 @@ public class BackupImportController extends AbstractUploadController {
 			performImport(is);
 
 			UploadCompleteMessage uploadCompleteMessage = new UploadCompleteMessage(
-						usersDao.get(info.userId),
+						info.userId,
 						"library", //message
 						"import", //action
 						"", //error
