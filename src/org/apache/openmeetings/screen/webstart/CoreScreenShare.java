@@ -55,6 +55,9 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 	private static final Logger logger = LoggerFactory.getLogger(CoreScreenShare.class);
 
 	private IScreenShare instance = null;
+	private String host;
+	private String app;
+	private int port;
 	
 	public String publishName;
 	private CaptureScreen capture = null;
@@ -77,6 +80,12 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 
 	public Map<Integer, Boolean> currentPressedKeys = new HashMap<Integer, Boolean>();
 
+	private CaptureScreen getCapture() {
+		if (capture == null) {
+			capture = new CaptureScreen(this, instance, host, app, port);
+		}
+		return capture;
+	}
 	// ------------------------------------------------------------------------
 	//
 	// Main
@@ -92,9 +101,9 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 			}
 			String[] textArray = null;
 			if (args.length > 8) {
-				String host = args[0];
-				String app = args[1];
-				int port = Integer.parseInt(args[2]);
+				host = args[0];
+				app = args[1];
+				port = Integer.parseInt(args[2]);
 				publishName = args[3];
 
 				String labelTexts = args[4];
@@ -117,7 +126,6 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 						logger.debug(i + " :: " + textArray[i]);
 					}
 				}
-				capture = new CaptureScreen(this, instance, host, app, port);
 				logger.debug("host: " + host + ", app: "
 						+ app + ", port: " + port + ", publish: "
 						+ publishName);
@@ -227,7 +235,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 			this.startPublishing = startPublishing;
 			
 			if (!isConnected) {
-				instance.connect(capture.getHost(), capture.getPort(), capture.getApp(), this);
+				instance.connect(host, port, app, this);
 			} else {
 				setConnectionAsSharingClient();
 			}
@@ -313,8 +321,9 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 			isConnected = false;
 
 			instance.disconnect();
-			capture.setStartPublish(false);
-			capture.release();
+			getCapture().setStartPublish(false);
+			getCapture().release();
+			capture = null;
 		} catch (Exception e) {
 			logger.error("ScreenShare stopStream exception " + e);
 		}
@@ -331,7 +340,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 
 		if (StatusCodes.NS_PUBLISH_START.equals(code)) {
 			logger.debug( "onStreamEvent Publish start" );
-			capture.setStartPublish(true);
+			getCapture().setStartPublish(true);
 		}
 	}
 
@@ -703,7 +712,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 
 					instance.createStream(this);
 				} else {
-					capture.resetBuffer();
+					getCapture().resetBuffer();
 					logger.trace("The Stream was already started ");
 				}
 				if (returnMap != null) {
@@ -731,11 +740,11 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 			} else if ("createStream".equals(method)) {
 				if (startRecording || startStreaming) {
 					if (call.getResult() != null) {
-						capture.setStreamId((Integer)call.getResult());
+						getCapture().setStreamId((Integer)call.getResult());
 					}
-					logger.debug("createPublishStream result stream id: " + capture.getStreamId());
+					logger.debug("createPublishStream result stream id: " + getCapture().getStreamId());
 					logger.debug("publishing video by name: " + publishName);
-					instance.publish(capture.getStreamId(), publishName, "live", this);
+					instance.publish(getCapture().getStreamId(), publishName, "live", this);
 	
 					logger.debug("setup capture thread");
 	
@@ -744,8 +753,8 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 					logger.debug("setup capture thread vScreenSpinnerHeight "
 							+ ScreenDimensions.spinnerHeight);
 	
-					capture.setSendCursor(true);
-					capture.start();
+					getCapture().setSendCursor(true);
+					getCapture().start();
 				}
 			} else if ("screenSharerAction".equals(method)) {
 				Object o = call.getResult();
