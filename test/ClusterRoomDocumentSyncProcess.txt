@@ -1,0 +1,19 @@
+Clustering HTTP traffic is not the goal of this Master/Slave login. Its all about scaling the 
+RTMP traffic.
+
+1. User logs into room and getServerForSession decides that user is redirected to slave
+
+2. User is in conference room handled by slave server (HTTP traffic handled by master, RTMP by slave)
+
+3. User upload document (HTTP traffic)
+
+4. Upload Servlet imports document (pdf, image, ppt, video, et cetera)
+
+5. Upload Servlet sends complete message to ScopeApplicationAdapter::sendUploadCompletMessageByPublicSID
+   in sendUploadCompletMessageByPublicSID, the logic will find out if the publicSID is handled on the 
+   current server (and proceed as usual by sending the sync message to the Client UI)
+   OR: If the client is handled via a slave it will find out which slave handled this publicSID and 
+   performs a REST call to the slave's RoomWebService::syncUploadCompleteMessage method
+   
+6. Slave server receives REST call RoomWebService::syncUploadCompleteMessage, it will create the sync message 
+   from its arguments and send it to the Client with that publicSID as specified by the arguments
