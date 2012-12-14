@@ -152,6 +152,22 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 		}
 		return null;
 	}
+	
+	public ClientSessionInfo getClientByPublicSIDAnyServer(String publicSID, boolean isAVClient) {
+		try {
+			for (Entry<Long,List<RoomClient>> entry : cache.getClientsByPublicSID(publicSID).entrySet()) {
+				for (RoomClient rcl : entry.getValue()) {
+					if (rcl.getIsAVClient() != isAVClient) {
+						continue;
+					}
+					return new ClientSessionInfo(rcl, entry.getKey());
+				}
+			}
+		} catch (Exception err) {
+			log.error("[getClientByPublicSIDAnyServer]", err);
+		}
+		return null;
+	}
 
 	public synchronized RoomClient getClientByUserId(Long userId) {
 		try {
@@ -291,7 +307,7 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 		sResult.setRecords(Long.valueOf(cache.size()).longValue());
 		ArrayList<ClientSession> myList = new ArrayList<ClientSession>(cache.size());
 		
-		//FIXME: Improve the handling of the Arrays/Map/List so that this reparsing is not needed
+		//FIXME: Improve the handling of the Arrays/Map/List so that this re-parsing is not needed
 		for (Entry<Long, LinkedHashMap<String, RoomClient>> entry : cache.values().entrySet()) {
 			for (RoomClient rcl : entry.getValue().values()) {
 				myList.add(new ClientSession(entry.getKey(), rcl));

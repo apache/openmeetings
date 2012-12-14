@@ -62,7 +62,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 
- * @author swagner
+ * @author sebawagner
  * 
  */
 public class ConferenceService {
@@ -793,6 +793,13 @@ public class ConferenceService {
 			//to that server that has the less maxUser count in its rooms currently.
 			//But if the room is already opened, then the maxUser is no more relevant,
 			//the user will be just redirected to the same server
+			
+			//check if the user is on master hosted, (serverId == null)
+			for (Long activeRoomId : clientListManager.getActiveRoomIdsByServer(null)) {
+				if (activeRoomId.equals(roomId)) {
+					return null;
+				}
+			}
 			
 			for (Server server : serverList) {
 				for (Long activeRoomId : clientListManager.getActiveRoomIdsByServer(server)) {

@@ -64,8 +64,33 @@ public interface IClientList {
 	 */
 	public abstract RoomClient getSyncClientByStreamId(String streamId);
 
+	/**
+	 * get a client by its publicSID and the server, 
+	 * isAVClient is normally false, as you want the data connection.
+	 * If you set isAVClient to true, you would obtain the RTMP 
+	 * connection that is used for Audio/Video streaming
+	 * 
+	 * @param publicSID
+	 * @param isAVClient
+	 * @param server
+	 * @return
+	 */
 	public abstract RoomClient getClientByPublicSID(String publicSID,
 			boolean isAVClient, Server server);
+	
+	/**
+	 * same as {@link #getClientByPublicSID(String, boolean, Server)} but it ignores 
+	 * if the server part, so it will deliver any client just by its publicSID.<br/>
+	 * <br/>
+	 * <b>Note:</b>
+	 * This method requires more time to find the user, so under normal circumstances 
+	 * you should use {@link #getClientByPublicSID(String, boolean, Server)}!
+	 * 
+	 * @param publicSID
+	 * @param isAVClient
+	 * @return
+	 */
+	public ClientSessionInfo getClientByPublicSIDAnyServer(String publicSID, boolean isAVClient);
 
 	/**
 	 * 

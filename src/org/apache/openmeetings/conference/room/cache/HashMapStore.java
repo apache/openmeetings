@@ -19,8 +19,10 @@
 package org.apache.openmeetings.conference.room.cache;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
@@ -43,7 +45,7 @@ import org.slf4j.Logger;
  * <li>client by publicSID</li>
  * <li>client by userId</li>
  * <li>clients by roomId</li>
- * <li>TODO: roomIds by server</li>
+ * <li>roomIds by server</li>
  * </ul>
  * 
  * @author sebawagner
@@ -222,7 +224,7 @@ public class HashMapStore {
 		}
 		return null;
 	}
-
+	
 	/**
 	 * 
 	 * @param server
@@ -237,6 +239,23 @@ public class HashMapStore {
 		List<RoomClient> clientList = clientListPublicSID.get(publicSID);
 		if (clientList == null) {
 			return EMPTY_LIST;
+		}
+		return clientList;
+	}
+	
+	/**
+	 * Searches for the publicSID across all servers
+	 * 
+	 * @param publicSID
+	 * @return will return a map with the serverId as key and the RoomClients as list in the value
+	 */
+	public Map<Long,List<RoomClient>> getClientsByPublicSID(String publicSID) {
+		Map<Long,List<RoomClient>> clientList = new HashMap<Long,List<RoomClient>>();
+		for (Entry<Long, LinkedHashMap<String, List<RoomClient>>> entry : clientsByServerAndPublicSID.entrySet()) {
+			List<RoomClient> clientListAtThisServer = entry.getValue().get(publicSID);
+			if (clientListAtThisServer != null) {
+				clientList.put(entry.getKey(), clientListAtThisServer);
+			}
 		}
 		return clientList;
 	}

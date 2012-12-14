@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.conference.room.ClientSessionInfo;
 import org.apache.openmeetings.conference.room.IClientList;
 import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.conference.whiteboard.BrowserStatus;
@@ -37,6 +38,7 @@ import org.apache.openmeetings.conference.whiteboard.RoomStatus;
 import org.apache.openmeetings.conference.whiteboard.WhiteboardManagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.data.basic.dao.ServerDao;
 import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.data.conference.RoomDAO;
@@ -49,6 +51,7 @@ import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.quartz.scheduler.ClusterSlaveJob;
 import org.apache.openmeetings.remote.FLVRecorderService;
 import org.apache.openmeetings.remote.WhiteBoardService;
 import org.apache.openmeetings.utils.OmFileHelper;
@@ -102,6 +105,10 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	private RoomDAO roomDao;
 	@Autowired
 	private MeetingMemberDao meetingMemberDao;
+	@Autowired
+	private ClusterSlaveJob clusterSlaveJob;
+	@Autowired
+	private ServerDao serverDao;
 
 	public static String lineSeperator = System.getProperty("line.separator");
 
@@ -2502,17 +2509,30 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	}
 	
 	public synchronized void sendUploadCompletMessageByPublicSID(UploadCompleteMessage message, String publicSID) {
-		
-		//if the upload is locally, just proceed to the normal function
-		//Search for RoomClient on current server (serverId == null means it will look on the master for the RoomClient)
-		RoomClient currentClient = this.clientListManager
-							.getClientByPublicSID(publicSID, false, null);
-		
-		if (currentClient != null) {
-			sendMessageWithClientByPublicSID(message, publicSID);
+		try {
+			//if the upload is locally, just proceed to the normal function
+			//Search for RoomClient on current server (serverId == null means it will look on the master for the RoomClient)
+			RoomClient currentClient = this.clientListManager
+								.getClientByPublicSID(publicSID, false, null);
+			
+			if (currentClient != null) {
+				sendMessageWithClientByPublicSID(message, publicSID);
+			}
+			
+			//Check if the client is on any slave host
+			ClientSessionInfo clientSessionInfo = this.clientListManager.getClientByPublicSIDAnyServer(publicSID, false);
+			
+			if (clientSessionInfo == null) {
+				throw new Exception(
+						"Could not Find RoomClient on List publicSID: "+ publicSID);
+			}
+			
+			clusterSlaveJob.syncMessageToClientOnSlave(
+					serverDao.get(clientSessionInfo.getServerId()), clientSessionInfo.getRcl().getPublicSID(), message);
+			
+		} catch (Exception err) {
+			log.error("[sendMessageWithClient] ", err);
 		}
-		
-		//Check if the client is on any slave host
 	}
 	
 
@@ -2584,7 +2604,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			}
 		} catch (Exception err) {
 			log.error("[sendMessageWithClient] ", err);
-			err.printStackTrace();
 		}
 	}
 
@@ -2672,7 +2691,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 		} catch (Exception err) {
 			log.error("[sendMessageWithClient] ", err);
-			err.printStackTrace();
 		}
 	}
 
