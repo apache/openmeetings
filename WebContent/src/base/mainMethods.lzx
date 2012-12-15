@@ -142,7 +142,17 @@
         return getUrl() + '?swf=networktesting' + ($debug ? 'debug' : '') + '.swf10.swf';
     ]]>
     </method>
-        
+
+	<method name="getAppBaseUrl">
+	<![CDATA[
+		var urlObject = lz.Browser.getBaseURL();
+		//If Port is Null or undefinied use port 80
+		var port = (urlObject.port != null && urlObject.port != undefined) ? urlObject.port : 80;
+        //if($debug) Debug.write("getBaseUrl:: [urlObject, port]", urlObject, port);
+		return urlObject.protocol + "://" + urlObject.host + ":" + (port != 80 ? port : '') + urlObject.path;;
+	]]>
+	</method>
+	
     <dataset type="http" name="languageData" request="false" 
         src="${ canvas.currentlanguage+'.xml' }" proxied="false">
         <handler name="ondata" args="value">

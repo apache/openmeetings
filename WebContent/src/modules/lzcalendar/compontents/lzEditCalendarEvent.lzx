@@ -56,21 +56,8 @@
 				canvas._loadingAll.hideContentOnly();
 				
 				//Point URL to actual File
-	            var urlObject =  lz.Browser.getBaseURL();
-				//If Port is Null or undefinied use port 80
-				if (urlObject.port!=null && urlObject.port!=undefined){
-					var port = urlObject.port;
-					
-					if (port != 80) {
-						this.baseUrl = urlObject.protocol+"://"+urlObject.host+":"+port+urlObject.path;
-					} else {
-						this.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path;
-					}
-				} else {
-					this.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path;
-				}
+                this.baseUrl = canvas.getAppBaseUrl();
 						
-				if ($debug) Debug.write("urlObject ",urlObject);
 	            if ($debug) Debug.write("this.baseUrl ",this.baseUrl);
 			
 	            if ($debug) Debug.write("this.dataElement ",this.dataElement);

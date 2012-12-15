@@ -58,21 +58,7 @@
                 } else {
                     parent.resetByMail.setAttribute('text','');
                 }
-                
-                //Point URL to actual File
-                var urlObject =  lz.Browser.getBaseURL();
-                //If Port is Null or undefinied use port 80
-                if (urlObject.port!=null && urlObject.port!=undefined){
-                    var port = urlObject.port;
-                    
-                    if (port != 80) {
-                        parent.baseUrl = urlObject.protocol+"://"+urlObject.host+":"+port+urlObject.path;
-                    } else {
-                        parent.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path;
-                    }
-                } else {
-                    parent.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path;
-                }
+                parent.baseUrl = canvas.getAppBaseUrl();
                 
     			parent.resetUserPwd.doCall();
 			]]>

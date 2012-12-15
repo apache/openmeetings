@@ -35,25 +35,17 @@
     	
 		<handler name="oninit">
 		<![CDATA[
-            
-                lz.ModeManager.makeModal(this);
-                var pressEnter = new LzDelegate(this, "register");
-                lz.Keys.callOnKeyCombo(pressEnter, ["enter"]);
-                
-                getTimeZoneOffset(this);
-                
-				var urlObject =  lz.Browser.getBaseURL();
-				//If Port is Null or undefinied use port 80
-				var port = urlObject.port;
-				if (port!=null && port!=undefined && port != 80){
-					this.baseUrl = urlObject.protocol+"://"+urlObject.host+":"+port+urlObject.path;
-				} else {
-					this.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path;
-				}
-				if( $debug ) Debug.write("this.baseUrl: ", this.baseUrl);
-				if (!canvas.isConference){
-					this.roomType = "restricted"; //FIXME
-				}
+			lz.ModeManager.makeModal(this);
+			var pressEnter = new LzDelegate(this, "register");
+			lz.Keys.callOnKeyCombo(pressEnter, ["enter"]);
+			
+			getTimeZoneOffset(this);
+			
+			this.baseUrl = canvas.getAppBaseUrl();
+			if( $debug ) Debug.write("this.baseUrl: ", this.baseUrl);
+			if (!canvas.isConference){
+				this.roomType = "restricted"; //FIXME
+			}
 		]]>
 		</handler>
         
@@ -181,29 +173,17 @@
 		</simpleLabelButton>
 		
         <!-- label: send -->
-		<simpleLabelButton labelid="218" x="$once{ parent.width-260 }" width="120" y="$once{ parent.height-26 }">
+		<simpleLabelButton name="send" labelid="218" x="$once{ parent.width-260 }" width="120" y="$once{ parent.height-26 }">
 			<handler name="onclick">
-				<![CDATA[
-					var urlObject =  lz.Browser.getBaseURL();
-					//If Port is Null or undefinied use port 80
-					if (urlObject.port!=null && urlObject.port!=undefined){
-						var port = urlObject.port;
-						
-						if (port != 80) {
-							parent.baseUrl = urlObject.protocol+"://"+urlObject.host+":"+port+urlObject.path;
-						} else {
-							parent.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path;
-						}
-					} else {
-						parent.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path;
-					}
-					
-					if( $debug ) Debug.write("parent.baseUrl: ",parent.baseUrl);
-					if (!canvas.isConference){
-						parent.roomType = "audience";
-					}
-					
-					parent.sendInvitationHash.doCall();
+			<![CDATA[
+                for (var eg in this.parent.subviews){
+                    this.parent.subviews[eg].setAttribute('enabled', false);
+                }
+                if (parent.display) {
+                    parent.sendInvitationByHash.doCall();
+                } else {
+                    parent.sendInvitationHash.doCall();
+                }
 				]]>
 			</handler>
 		</simpleLabelButton>

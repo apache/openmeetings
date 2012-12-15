@@ -447,19 +447,7 @@
 	<simpleLabelButton labelid="218" x="$once{ parent.width-260 }" width="120" y="$once{ parent.height-26 }">
 		<handler name="onclick">
 			<![CDATA[
-				var urlObject =  lz.Browser.getBaseURL();
-				//If Port is Null or undefinied use port 80
-				if (urlObject.port!=null && urlObject.port!=undefined){
-					var port = urlObject.port;
-					
-					if (port != 80) {
-						parent.baseUrl = urlObject.protocol+"://"+urlObject.host+":"+port+urlObject.path;
-					} else {
-						parent.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path;
-					}
-				} else {
-					parent.baseUrl = urlObject.protocol+"://"+urlObject.host+urlObject.path;
-				}
+                parent.baseUrl = canvas.getAppBaseUrl();
 				
 				parent.send();
 			]]>
