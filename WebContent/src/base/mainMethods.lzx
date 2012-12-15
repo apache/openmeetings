@@ -148,8 +148,8 @@
 		var urlObject = lz.Browser.getBaseURL();
 		//If Port is Null or undefinied use port 80
 		var port = (urlObject.port != null && urlObject.port != undefined) ? urlObject.port : 80;
-        //if($debug) Debug.write("getBaseUrl:: [urlObject, port]", urlObject, port);
-		return urlObject.protocol + "://" + urlObject.host + ":" + (port != 80 ? port : '') + urlObject.path;;
+		//if($debug) Debug.write("getBaseUrl:: [urlObject, port]", urlObject, port);
+		return urlObject.protocol + "://" + urlObject.host + (port != 80 ? ":" + port : "") + urlObject.path;;
 	]]>
 	</method>
 	
