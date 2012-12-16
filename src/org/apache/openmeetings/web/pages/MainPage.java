@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.web.pages;
 
+import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.ConfirmableAjaxLink;
 import org.apache.openmeetings.web.components.MenuPanel;
 import org.apache.openmeetings.web.components.user.ChatPanel;
@@ -30,10 +30,13 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.protocol.ws.api.WebSocketBehavior;
 import org.apache.wicket.protocol.ws.api.message.ClosedMessage;
 import org.apache.wicket.protocol.ws.api.message.ConnectedMessage;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 @AuthorizeInstantiation("USER")
 public class MainPage extends BasePage {
 	private static final long serialVersionUID = 6421960759218157999L;
+	private static final Logger log = Red5LoggerFactory.getLogger(MainPage.class, OpenmeetingsVariables.webAppRootKey);
 	private final MenuPanel menu;
 	
 	public MainPage() {
@@ -58,13 +61,13 @@ public class MainPage extends BasePage {
 			@Override
 			protected void onConnect(ConnectedMessage message) {
 				super.onConnect(message);
-				WebSession.get().setWebsocketPageId(message.getPageId());
+				log.debug("WebSocketBehavior::onConnect");
 			}
 			
 			@Override
 			protected void onClose(ClosedMessage message) {
 				super.onClose(message);
-				WebSession.get().setWebsocketPageId(null);
+				log.debug("WebSocketBehavior::onClose");
 			}
 		});
 	}
