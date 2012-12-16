@@ -43,6 +43,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	private String area = null;
 	private TimeZone tz;
 	private SimpleDateFormat ISO8601FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+	private Integer websocketPageId = null;
 	
 	public WebSession(Request request) {
 		super(request);
@@ -142,5 +143,13 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 
 	public void setArea(String area) {
 		this.area = area;
+	}
+
+	public Integer getWebsocketPageId() {
+		return websocketPageId;
+	}
+
+	public void setWebsocketPageId(Integer websocketPageId) {
+		this.websocketPageId = websocketPageId;
 	}
 }

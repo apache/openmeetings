@@ -19,6 +19,11 @@
 package org.apache.openmeetings.web.components.user;
 
 import org.apache.openmeetings.web.components.UserPanel;
+import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextArea;
 
 public class ChatPanel extends UserPanel {
 	private static final long serialVersionUID = -9144707674886211557L;
@@ -27,6 +32,19 @@ public class ChatPanel extends UserPanel {
 		super(id);
 		setOutputMarkupId(true);
 		setMarkupId(id);
+		
+		add(new WebMarkupContainer("messages"));
+		add(new Form<Void>("sendForm") {
+			private static final long serialVersionUID = -6367566664201921428L;
+
+			{
+				add(new TextArea<String>("message").setOutputMarkupId(true));
+				add(new Button("send").add(new AjaxFormSubmitBehavior("onclick"){
+					private static final long serialVersionUID = -3746739738826501331L;
+					
+				}));
+			}
+		});
 	}
 
 }

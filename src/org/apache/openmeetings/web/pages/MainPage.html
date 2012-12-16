@@ -23,7 +23,6 @@
 	<wicket:head>
 		<link media="screen" type="text/css" rel="stylesheet" href="css/theme.css"/>
 		
-		<script type="text/javascript" src="js/jquery-1.8.2.min.js"></script>
 		<script type="text/javascript" src="js/jquery-ui-1.9.0.custom.min.js"></script>
 		<link media="screen" type="text/css" rel="stylesheet" href="css/jquery-ui-1.9.0.custom.min.css"/>
 		<script type="text/javascript">
@@ -33,6 +32,10 @@
 			function hideBusyIndicator() {
 				$('#busy_indicator').hide();
 			}
+		</script>
+	</wicket:head>
+	<wicket:extend>
+		<script type="text/javascript">
 			$(function() {
 				Wicket.Event.subscribe('/ajax/call/failure', hideBusyIndicator);
 				Wicket.Event.subscribe('/ajax/call/before', showBusyIndicator);
@@ -40,8 +43,6 @@
 				Wicket.Event.subscribe('/ajax/call/complete', hideBusyIndicator);
 			});
 		</script>
-	</wicket:head>
-	<wicket:extend>
 		<div id="topLinks"><span 
 			id="contactsAndMessages"><wicket:ommessage key="1188"/></span><span 
 			id="profile"><wicket:ommessage key="5"/></span><span 
@@ -50,6 +51,6 @@
 		<div id="busy_indicator">Loading ...</div>
 		<div wicket:id="menu"></div>
 		<div wicket:id="contents"><div wicket:id="child"></div></div>
-		<div wicket:id="chat" style="background-color: red;">TEST</div>
+		<div wicket:id="chatPanel"></div>
 	</wicket:extend>
 </html>

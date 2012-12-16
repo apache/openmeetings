@@ -61,13 +61,26 @@
 	min-width: 1070px;
 }
 
-#chat {
+#chatPanel {
 	position: fixed;
 	z-index: 2000;
 	bottom: 0px;
-	right: 100px;
+	right: 10px;
 }
 
+#chatPanel #chat {
+	height: 10px;
+	background-color: #F2FAFF;
+}
+
+#chatPanel #chat #controlBlock:hover {
+	background-color: #2779aa;
+}
+#chatPanel #chat #controlBlock #control {
+	text-align: center;
+	margin-left: 50%;
+	margin-right: 50%;
+}
 /* 
     ################################
     Column layout admin section

@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.pages;
 
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.ConfirmableAjaxLink;
 import org.apache.openmeetings.web.components.MenuPanel;
 import org.apache.openmeetings.web.components.user.ChatPanel;
@@ -26,6 +27,9 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.protocol.ws.api.WebSocketBehavior;
+import org.apache.wicket.protocol.ws.api.message.ClosedMessage;
+import org.apache.wicket.protocol.ws.api.message.ConnectedMessage;
 
 @AuthorizeInstantiation("USER")
 public class MainPage extends BasePage {
@@ -47,6 +51,21 @@ public class MainPage extends BasePage {
 				setResponsePage(Application.get().getSignInPageClass());
 			}
 		});
-		add(new ChatPanel("chat"));
+		add(new ChatPanel("chatPanel"));
+		add(new WebSocketBehavior() {
+			private static final long serialVersionUID = -3311970325911992958L;
+
+			@Override
+			protected void onConnect(ConnectedMessage message) {
+				super.onConnect(message);
+				WebSession.get().setWebsocketPageId(message.getPageId());
+			}
+			
+			@Override
+			protected void onClose(ClosedMessage message) {
+				super.onClose(message);
+				WebSession.get().setWebsocketPageId(null);
+			}
+		});
 	}
 }

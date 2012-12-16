@@ -239,6 +239,10 @@ limitations under the License.
                 <a href="#modifyRoomParameter"><b>modifyRoomParameter</b></a><br/>
                 <div class="navigation_comment"><i >Method to update arbitrary room parameter.</i></div>
                 </div>
+                                               <div>
+                <a href="#syncUploadCompleteMessage"><b>syncUploadCompleteMessage</b></a><br/>
+                <div class="navigation_comment"><i >This method is used in cluster mode to send the sync event from the master to the slave</i></div>
+                </div>
                            </div>
 	   
 	    <h3>Methods Details in RoomService</h3>
@@ -5143,6 +5147,168 @@ limitations under the License.
     			    			<br/>
     			REST Sample Call/URL:<br/>
     			    			    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/RoomService/modifyRoomParameter?SID=VALUE&room_id=VALUE&paramName=VALUE&paramValue=VALUE">http://localhost:5080/openmeetings/services/RoomService/modifyRoomParameter?SID=VALUE&amp;room_id=VALUE&amp;paramName=VALUE&amp;paramValue=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="syncUploadCompleteMessage" ><b>syncUploadCompleteMessage</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>syncUploadCompleteMessage (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String publicSID
+    			       			    			       			     , 
+    			       			   Long userId
+    			       			    			       			     , 
+    			       			   String message
+    			       			    			       			     , 
+    			       			   String action
+    			       			    			       			     , 
+    			       			   String error
+    			       			    			       			     , 
+    			       			   boolean hasError
+    			       			    			       			     , 
+    			       			   String fileName
+    			       			    			       			     , 
+    			       			   String fileSystemName
+    			       			    			       			     , 
+    			       			   boolean isPresentation
+    			       			    			       			     , 
+    			       			   boolean isImage
+    			       			    			       			     , 
+    			       			   boolean isVideo
+    			       			    			       			     , 
+    			       			   String fileHash
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  This method is used in cluster mode to send the sync event from the master to the slave
+    			</p>
+    			<p>
+                  Return Type: boolean
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as logged'in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">publicSID</td>
+	                     <td valign="top">The publicSID that will receive the message</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">userId</td>
+	                     <td valign="top">part of sync message of document upload</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">message</td>
+	                     <td valign="top">part of sync message of document upload</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">action</td>
+	                     <td valign="top">part of sync message of document upload</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">error</td>
+	                     <td valign="top">part of sync message of document upload</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		boolean
+	                     		                     </td>
+	                     <td valign="top">hasError</td>
+	                     <td valign="top">part of sync message of document upload</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">fileName</td>
+	                     <td valign="top">part of sync message of document upload</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">fileSystemName</td>
+	                     <td valign="top">part of sync message of document upload</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		boolean
+	                     		                     </td>
+	                     <td valign="top">isPresentation</td>
+	                     <td valign="top">part of sync message of document upload</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		boolean
+	                     		                     </td>
+	                     <td valign="top">isImage</td>
+	                     <td valign="top">part of sync message of document upload</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		boolean
+	                     		                     </td>
+	                     <td valign="top">isVideo</td>
+	                     <td valign="top">part of sync message of document upload</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">fileHash</td>
+	                     <td valign="top">part of sync message of document upload</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/RoomService/syncUploadCompleteMessage?SID=VALUE&publicSID=VALUE&userId=VALUE&message=VALUE&action=VALUE&error=VALUE&hasError=VALUE&fileName=VALUE&fileSystemName=VALUE&isPresentation=VALUE&isImage=VALUE&isVideo=VALUE&fileHash=VALUE">http://localhost:5080/openmeetings/services/RoomService/syncUploadCompleteMessage?SID=VALUE&amp;publicSID=VALUE&amp;userId=VALUE&amp;message=VALUE&amp;action=VALUE&amp;error=VALUE&amp;hasError=VALUE&amp;fileName=VALUE&amp;fileSystemName=VALUE&amp;isPresentation=VALUE&amp;isImage=VALUE&amp;isVideo=VALUE&amp;fileHash=VALUE</a>
     		  </div>
     	   			
 	

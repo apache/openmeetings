@@ -20,6 +20,22 @@
 -->
 <html xmlns="http://www.w3.org/1999/xhtml" 
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.5-strict.dtd" lang="en">
+	<wicket:head>
+		<script type="text/javascript">
+			function toggleChat() {
+				var chat = $('#chat');
+				chat.animate({ height: chat.height() < 20 ? "300px" : "16px" }, 1000);
+			}
+		</script>
+	</wicket:head>
 	<wicket:panel>
+		<!-- "ui-icon ui-icon-carat-1-n sort-icon", "ui-icon ui-icon-carat-1-s sort-icon" -->
+		<div id="chat">
+			<div id="controlBlock" onclick="toggleChat();"><div id="control" class="ui-icon ui-icon-carat-1-n sort-icon"></div></div>
+			<div wicket:id="messages"></div>
+			<form wicket:id="sendForm">
+				<textarea wicket:id="message"></textarea><input type="submit" wicket:id="send"/>
+			</form>
+		</div>
 	</wicket:panel>
 </html>

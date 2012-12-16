@@ -21,6 +21,8 @@ package org.apache.openmeetings.web.pages;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.components.HeaderPanel;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 
@@ -31,5 +33,13 @@ public abstract class BasePage extends WebPage {
 		String appName = Application.getBean(ConfigurationDao.class).getAppName();
 		add(new Label("pageTitle", appName));
 		add(new HeaderPanel("header", appName));
+	}
+	
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		response.render(JavaScriptHeaderItem.forReference(Application.get()
+				.getJavaScriptLibrarySettings().getJQueryReference()));
+		response.render(JavaScriptHeaderItem.forUrl("js/jquery-ui-1.9.0.custom.min.js", "jquery-ui"));
+		super.renderHead(response);
 	}
 }
