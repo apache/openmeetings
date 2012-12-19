@@ -535,7 +535,7 @@ public class FileWebService {
 	/**
 	 * Get available import File Extension allowed during import
 	 * 
-	 * @return
+	 * @return the array of the import file extensions
 	 * @throws AxisFault
 	 */
 	public String[] getImportFileExtensions() throws AxisFault {

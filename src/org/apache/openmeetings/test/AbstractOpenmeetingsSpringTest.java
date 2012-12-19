@@ -23,6 +23,7 @@ import static junit.framework.Assert.assertTrue;
 
 import java.util.Date;
 
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.data.user.dao.UsersDao;
@@ -30,6 +31,7 @@ import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.red5.logging.Red5LoggerFactory;
@@ -60,6 +62,10 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 	private UsersDao usersDao;
 	@Autowired
 	private ImportInitvalues importInitvalues;
+	@Autowired
+	private ConfigurationDao configDao;
+	@Autowired
+	private ManageCryptStyle cryptManager;
 
 	@Before
 	public void setUp() {
@@ -114,7 +120,7 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 		users.setFirstname("firstname" + rnd);
 		users.setLastname("lastname" + rnd);
 		users.setLogin("login");
-		users.setPassword("pass" + rnd);
+		users.updatePassword(cryptManager, configDao, "pass" + rnd);
 		users.setLanguage_id(1L);
 		Long user_id = userManagement.addUser(users);
 		assertTrue("Cann't add user", user_id > 0);

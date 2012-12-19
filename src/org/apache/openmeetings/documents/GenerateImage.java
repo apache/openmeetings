@@ -22,7 +22,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.data.flvrecord.converter.BaseConverter;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.documents.beans.ConverterProcessResult;
 import org.apache.openmeetings.documents.beans.ConverterProcessResultList;
@@ -33,28 +33,15 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class GenerateImage {
+public class GenerateImage extends BaseConverter {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			GenerateImage.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private ConfigurationDao configurationDaoImpl;
-	@Autowired
 	private UsersDao usersDao;
 	@Autowired
 	private GenerateThumbs generateThumbs;
-
-	String getPathToImageMagic() {
-		String pathToImageMagic = configurationDaoImpl.getConfKey(
-				"imagemagick_path").getConf_value();
-		if (!pathToImageMagic.equals("")
-				&& !pathToImageMagic.endsWith(File.separator)) {
-			pathToImageMagic += File.separator;
-		}
-		pathToImageMagic += "convert" + GenerateSWF.execExt;
-		return pathToImageMagic;
-	}
 
 	public ConverterProcessResultList convertImage(String fileName, String fileExt,
 			String roomName, String fileNameShort, boolean fullProcessing)
@@ -129,7 +116,7 @@ public class GenerateImage {
 	 * 
 	 */
 	private ConverterProcessResult convertSingleJpg(String inputFile, File outputfile) throws IOException {
-		String[] argv = new String[] { getPathToImageMagic(), inputFile, outputfile.getCanonicalPath() };
+		String[] argv = new String[] { getPathToImageMagick(), inputFile, outputfile.getCanonicalPath() };
 
 		// return GenerateSWF.executeScript("convertSingleJpg", argv);
 
@@ -143,7 +130,7 @@ public class GenerateImage {
 
 	public ConverterProcessResult convertImageByTypeAndSize(String inputFile,
 			String outputfile, int width, int height) {
-		String[] argv = new String[] { getPathToImageMagic(), "-size",
+		String[] argv = new String[] { getPathToImageMagick(), "-size",
 				width + "x" + height, inputFile, outputfile };
 		return ProcessHelper.executeScript("convertImageByTypeAndSizeAndDepth",
 				argv);
@@ -152,7 +139,7 @@ public class GenerateImage {
 	public ConverterProcessResult convertImageByTypeAndSizeAndDepth(
 			String inputFile, String outputfile, int width, int height,
 			int depth) {
-		String[] argv = new String[] { getPathToImageMagic(), "-size",
+		String[] argv = new String[] { getPathToImageMagick(), "-size",
 				width + "x" + height, "-depth", Integer.toString(depth),
 				inputFile, outputfile };
 		return ProcessHelper.executeScript("convertImageByTypeAndSizeAndDepth",

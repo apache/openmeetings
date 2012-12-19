@@ -2624,8 +2624,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 					.getClientByPublicSID(publicSID, false, null);
 
 			if (currentClient == null) {
-				currentClient = this.clientListManager
-						.getClientByUserId(user_id);
+				currentClient = clientListManager.getClientByUserId(user_id);
 			}
 
 			Collection<Set<IConnection>> conCollection = null;
@@ -3016,10 +3015,10 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
         IConnection current = Red5.getConnectionLocal();
         String streamid = current.getClient().getId();
         RoomClient currentClient = this.clientListManager.getClientByStreamId(streamid, null);
-        Rooms rooms = roomDao.get(currentClient.getRoom_id());
-        log.debug("asterisk -rx \"originate Local/" + number + "@rooms extension " + rooms.getSipNumber() + "@rooms\"");
         try {
-            Runtime.getRuntime().exec(new String[]{"asterisk", "-rx", "originate Local/" + number + "@rooms extension " + rooms.getSipNumber() + "@rooms"});
+        	String sipNumber = getSipNumber(currentClient.getRoom_id());
+            log.debug("asterisk -rx \"originate Local/" + number + "@rooms extension " + sipNumber + "@rooms\"");
+            Runtime.getRuntime().exec(new String[]{"asterisk", "-rx", "originate Local/" + number + "@rooms extension " + sipNumber + "@rooms"});
         } catch (IOException e) {
             log.error("Executing asterisk originate error: ", e);
         }
@@ -3027,9 +3026,9 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
     public synchronized String getSipNumber(Long room_id) {
         Rooms rooms = roomDao.get(room_id);
-        if(rooms != null) {
-            log.debug("getSipNumber: room_id: {}, sipNumber: {}", new Object[]{room_id, rooms.getSipNumber()});
-            return rooms.getSipNumber();
+        if(rooms != null && rooms.getMeetme() != null) {
+            log.debug("getSipNumber: room_id: {}, sipNumber: {}", new Object[]{room_id, rooms.getMeetme().getConfno()});
+            return rooms.getMeetme().getConfno();
         }
         return null;
     }

@@ -694,11 +694,10 @@ public class RoomWebService {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
-			Users u = userManagement.getUserById(users_id);
 			if (authLevelManagement.checkWebServiceLevel(user_level)) {
 				return roommanagement.addRoom(3L, name, roomtypes_id, comment,
 						numberOfPartizipants, ispublic, null, false, false,
-						null, false, null, true, false, false, "", "", "",
+						null, false, null, true, false, false, "", "",
 						null, null, null, false, // hideTopBar
 						false, // hideChat
 						false, // hideActivitiesAndActions
@@ -757,12 +756,11 @@ public class RoomWebService {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
-			Users u = userManagement.getUserById(users_id);
 			if (authLevelManagement.checkWebServiceLevel(user_level)) {
 				return roommanagement.addRoom(3L, name, roomtypes_id, comment,
 						numberOfPartizipants, ispublic, null, appointment,
 						isDemoRoom, demoTime, isModeratedRoom, null, true,
-						false, false, "", "", "", null, null, null, false, // hideTopBar
+						false, false, "", "", null, null, null, false, // hideTopBar
 						false, // hideChat
 						false, // hideActivitiesAndActions
 						false, // hideFilesExplorer
@@ -826,12 +824,11 @@ public class RoomWebService {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
-			Users u = userManagement.getUserById(users_id);
 			if (authLevelManagement.checkWebServiceLevel(user_level)) {
 				return roommanagement.addRoom(3L, name, roomtypes_id, comment,
 						numberOfPartizipants, ispublic, null, appointment,
 						isDemoRoom, demoTime, isModeratedRoom, null,
-						allowUserQuestions, false, false, "", "", "", null,
+						allowUserQuestions, false, false, "", "", null,
 						null, null, false, // hideTopBar
 						false, // hideChat
 						false, // hideActivitiesAndActions
@@ -898,12 +895,11 @@ public class RoomWebService {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
-			Users u = userManagement.getUserById(users_id);
 			if (authLevelManagement.checkWebServiceLevel(user_level)) {
 				return roommanagement.addRoom(3L, name, roomtypes_id, comment,
 						numberOfPartizipants, ispublic, null, appointment,
 						isDemoRoom, demoTime, isModeratedRoom, null,
-						allowUserQuestions, isAudioOnly, false, "", "", "",
+						allowUserQuestions, isAudioOnly, false, "", "",
 						null, null, null, false, // hideTopBar
 						false, // hideChat
 						false, // hideActivitiesAndActions
@@ -991,12 +987,11 @@ public class RoomWebService {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
-			Users u = userManagement.getUserById(users_id);
 			if (authLevelManagement.checkWebServiceLevel(user_level)) {
 				return roommanagement.addRoom(3L, name, roomtypes_id, comment,
 						numberOfPartizipants, ispublic, null, appointment,
 						isDemoRoom, demoTime, isModeratedRoom, null,
-						allowUserQuestions, isAudioOnly, false, "", "", "",
+						allowUserQuestions, isAudioOnly, false, "", "",
 						null, null, null, hideTopBar, hideChat,
 						hideActivitiesAndActions, hideFilesExplorer,
 						hideActionsMenu, hideScreenSharing, hideWhiteboard,
@@ -1134,7 +1129,7 @@ public class RoomWebService {
 				return roommanagement.updateRoomInternal(rooms_id,
 						roomtypes_id, name, ispublic, comment,
 						numberOfPartizipants, null, appointment, false, null,
-						false, null, true, false, false, "", "", "", null,
+						false, null, true, false, false, "", "", null,
 						null, null, false, // hideTopBar
 						false, // hideChat
 						false, // hideActivitiesAndActions
@@ -1199,7 +1194,7 @@ public class RoomWebService {
 				return roommanagement.updateRoomInternal(room_id, roomtypes_id,
 						name, ispublic, comment, numberOfPartizipants, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
-						null, true, false, false, "", "", "", null, null, null,
+						null, true, false, false, "", "", null, null, null,
 						false, // hideTopBar
 						false, // hideChat
 						false, // hideActivitiesAndActions
@@ -1267,7 +1262,7 @@ public class RoomWebService {
 				return roommanagement.updateRoomInternal(room_id, roomtypes_id,
 						name, ispublic, comment, numberOfPartizipants, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
-						null, allowUserQuestions, false, false, "", "", "",
+						null, allowUserQuestions, false, false, "", "",
 						null, null, null, false, // hideTopBar
 						false, // hideChat
 						false, // hideActivitiesAndActions
@@ -1358,7 +1353,7 @@ public class RoomWebService {
 				return roommanagement.updateRoomInternal(room_id, roomtypes_id,
 						name, ispublic, comment, numberOfPartizipants, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
-						null, allowUserQuestions, false, false, "", "", "",
+						null, allowUserQuestions, false, false, "", "",
 						null, null, null, hideTopBar, hideChat,
 						hideActivitiesAndActions, hideFilesExplorer,
 						hideActionsMenu, hideScreenSharing, hideWhiteboard,
@@ -2527,7 +2522,7 @@ public class RoomWebService {
 	 * @param isImage part of sync message of document upload
 	 * @param isVideo part of sync message of document upload
 	 * @param fileHash part of sync message of document upload
-	 * @return
+	 * @return true in case there were no errors, false otherwise
 	 * @throws AxisFault if any error occurred
 	 */
 	public boolean syncUploadCompleteMessage(String SID, String publicSID,

@@ -73,10 +73,6 @@
             getTimeZoneOffset(this);
             
             this._organisationslist.clearList();
-            this.generateSipUserData.setValue(false);
-            this.sip_user.setAttribute('text','');
-            this.sip_pass.setAttribute('text','');
-            this.sip_auth.setAttribute('text','');
             
 			this.userOffers.setAttribute('text',"");
 			this.userSearchs.setAttribute('text',"");
@@ -167,18 +163,6 @@
 				this._organisationslist.addItem(obj.organisation_users[i].organisation.name,obj.organisation_users[i].organisation.organisation_id);
 			}
 			
-			this.generateSipUserData.setValue(false);
-			
-			if (obj.userSipData != null) {
-				this.sip_user.setAttribute('text',obj.userSipData.username);
-		        this.sip_pass.setAttribute('text',obj.userSipData.userpass);
-		        this.sip_auth.setAttribute('text',obj.userSipData.authId);
-			} else {
-				this.sip_user.setAttribute('text','');
-		        this.sip_pass.setAttribute('text','');
-		        this.sip_auth.setAttribute('text','');
-			}
-			
 			if (obj.userOffers != null) {
 				this.userOffers.setAttribute('text',obj.userOffers);
 			} else {
@@ -266,12 +250,6 @@
             this.sendObject["language_id"] = parent.languages.getValue();
 			this.sendObject["forceTimeZoneCheck"] = parent.forceTimeZoneCheck.getValue();
   			this.sendObject["organisations"] = this.parent._organisationslist.getAllItems();
-  			
-  			this.sendObject["generateSipUserData"] = this.parent.generateSipUserData.getValue();
-  			this.sendObject["sip_user"] = this.parent.sip_user.getText();
-  			this.sendObject["sip_pass"] = this.parent.sip_pass.getText();
-  			this.sendObject["sip_auth"] = this.parent.sip_auth.getText();
-  			
   			
 			this.sendObject["userOffers"] = parent.userOffers.getText();
 			this.sendObject["userSearchs"] = parent.userSearchs.getText();
@@ -462,21 +440,6 @@
     <labelText labelid="894" x="24" y="790"  fontstyle="italic"
                multiline="true" width="364" />
 
-    <labelText labelid="921" width="200" y="830" resize="false" x="2"/>  
-        <labelCheckbox name="generateSipUserData" width="270" y="830" x="140" fontsize="11" />
-
-    <labelText labelid="895" width="200" y="860" resize="false" x="2"/>
-        <customEdittext name="sip_user" y="860" x="120" width="270"  
-        				text="" />
-        				
-	<labelText labelid="896" width="200" y="890" resize="false" x="2"/>
-        <customEdittext name="sip_pass" y="890" x="120" width="270"  
-        				text="" />
-        				
-    <labelText labelid="897" width="200" y="920" resize="false" x="2"/>
-        <customEdittext name="sip_auth" y="920" x="120" width="270"  
-        				text="" />
-        				
     <!-- Community Settings -->
     <labelText labelid="1159" width="200" y="950" resize="false" 
                x="0" fontstyle="bold" />      				

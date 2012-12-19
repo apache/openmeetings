@@ -24,7 +24,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang.StringUtils;
@@ -61,11 +60,11 @@ public class UsersDao implements IDataProviderDao<Users> {
 	private EntityManager em;
 
 	@Autowired
-	private ManageCryptStyle manageCryptStyle;
+	private ManageCryptStyle cryptManager;
 	@Autowired
 	private SalutationDao salutationDaoImpl;
 	@Autowired
-	private ConfigurationDao configurationDaoImpl;
+	private ConfigurationDao configDao;
 	@Autowired
 	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
@@ -85,7 +84,7 @@ public class UsersDao implements IDataProviderDao<Users> {
 		user.setSalutations_id(1L); // TODO: Fix default selection to be
 									// configurable
 		user.setLevel_id(1L);
-		user.setLanguage_id(configurationDaoImpl.getConfValue(
+		user.setLanguage_id(configDao.getConfValue(
 				"default_lang_id", Long.class, "1"));
 		user.setOmTimeZone(omTimeZoneDaoImpl.getDefaultOmTimeZone(currentUser));
 		user.setForceTimeZoneCheck(false);
@@ -204,6 +203,7 @@ public class UsersDao implements IDataProviderDao<Users> {
 				Users us = get(userId);
 				us.setDeleted(true);
 				us.setUpdatetime(new Date());
+				us.setSipUser(null);
 				Adresses adr = us.getAdresses();
 				if (adr != null) {
 					adr.setDeleted(true);
@@ -343,8 +343,7 @@ public class UsersDao implements IDataProviderDao<Users> {
 			Object u = this.getUserByHash(hash);
 			if (u instanceof Users) {
 				Users us = (Users) u;
-				us.setPassword(manageCryptStyle.getInstanceOfCrypt()
-						.createPassPhrase(pass));
+				us.updatePassword(cryptManager, configDao, pass);
 				us.setResethash("");
 				update(us, 1L);
 				return new Long(-8);
@@ -393,27 +392,9 @@ public class UsersDao implements IDataProviderDao<Users> {
 		TypedQuery<Long> query = em.createNamedQuery("checkPassword",
 				Long.class);
 		query.setParameter("userId", userId);
-		query.setParameter("password", manageCryptStyle.getInstanceOfCrypt()
+		query.setParameter("password", cryptManager.getInstanceOfCrypt()
 				.createPassPhrase(password));
 		return query.getResultList().get(0) == 1;
 
 	}
-
-	/**
-	 * Password needs extra hook because being FetchType.Lazy
-	 * 
-	 * @param u
-	 * @param newPassword
-	 * @param userId
-	 * @return
-	 */
-	public int updatePassword(Users u, String newPassword) {
-		Query query = em.createNamedQuery("updatePassword");
-		query.setParameter("password", manageCryptStyle.getInstanceOfCrypt()
-				.createPassPhrase(newPassword));
-		query.setParameter("userId", u.getUser_id());
-		return query.executeUpdate();
-
-	}
-
 }

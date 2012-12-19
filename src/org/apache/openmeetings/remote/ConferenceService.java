@@ -561,8 +561,7 @@ public class ConferenceService {
 										.toString()), Boolean
 								.valueOf(argObjectMap.get("isClosed")
 										.toString()),
-						argObjectMap.get("redirectURL").toString(),
-						argObjectMap.get("sipNumber").toString(), argObjectMap
+						argObjectMap.get("redirectURL").toString(), argObjectMap
 								.get("conferencePin").toString(),
 						Long.valueOf(argObjectMap.get("ownerId").toString())
 								.longValue(), Boolean.valueOf(argObjectMap.get(
@@ -614,7 +613,6 @@ public class ConferenceService {
 								Boolean.valueOf(argObjectMap.get("isClosed")
 										.toString()),
 								argObjectMap.get("redirectURL").toString(),
-								argObjectMap.get("sipNumber").toString(),
 								argObjectMap.get("conferencePin").toString(),
 								Long.valueOf(
 										argObjectMap.get("ownerId").toString())

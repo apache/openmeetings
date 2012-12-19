@@ -48,7 +48,7 @@ public class TestConfig extends AbstractOpenmeetingsSpringTest {
 			System.err.println("THIS");
 
 			Configuration smtp_server = configurationmanagement
-					.getConfKey(
+					.get(
 					"smtp_server");
 			
 			System.err.println("smtp_server " + smtp_server.getUser());

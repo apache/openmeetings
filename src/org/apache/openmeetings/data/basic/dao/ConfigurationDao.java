@@ -48,7 +48,7 @@ import org.springframework.transaction.annotation.Transactional;
  * It provides basic mechanism to get a Conf Key:<br/>
  * {@link #getConfValue(String, Class, String)} <br/>
  * <br/>
- * <b> {@link #getConfKey(String)} is deprecated!</b>
+ * <b> {@link #get(String)} is deprecated!</b>
  * 
  * @author swagner
  * 
@@ -74,12 +74,10 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	private String appName = null;
 
 	/**
-	 * @deprecated use {@link #getConfValue(String, Class, String)} instead
 	 * @param confKey
 	 * @return
 	 */
-	@Deprecated
-	public Configuration getConfKey(String confKey) {
+	public Configuration get(String confKey) {
 		try {
 			TypedQuery<Configuration> query = em.createNamedQuery(
 					"getConfigurationByKey", Configuration.class);
@@ -123,7 +121,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	public <T> T getConfValue(String confKey, Class<T> typeObject,
 			String defaultValue) {
 		try {
-			Configuration conf_reminder = getConfKey(confKey);
+			Configuration conf_reminder = get(confKey);
 
 			if (conf_reminder == null) {
 				log.warn("Could not find key in configuration CONF_KEY: "

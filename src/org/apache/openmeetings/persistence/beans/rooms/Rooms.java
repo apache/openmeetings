@@ -36,12 +36,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.openjpa.persistence.ElementDependent;
 import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
+import org.apache.openmeetings.persistence.beans.sip.asterisk.MeetMe;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -126,10 +129,6 @@ public class Rooms implements Serializable, IDataProviderEntity {
 	@Column(name = "allow_user_questions")
 	@Element(data = true, required = false)
 	private Boolean allowUserQuestions;
-
-	@Column(name = "sip_number")
-	@Element(data = true, required = false)
-	private String sipNumber;
 
 	@Column(name = "conference_pin")
 	@Element(data = true, required = false)
@@ -216,6 +215,11 @@ public class Rooms implements Serializable, IDataProviderEntity {
 	@ElementList(name = "room_moderators", required=false)
 	private List<RoomModerators> moderators;
 
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@PrimaryKeyJoinColumn(name="confno", referencedColumnName="confno")
+	@Element(name = "meetme", required = false)
+	private MeetMe meetme;
+	
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "rooms_id", insertable = true, updatable = true)
 	@ElementDependent
@@ -359,14 +363,6 @@ public class Rooms implements Serializable, IDataProviderEntity {
 
 	public void setAllowUserQuestions(Boolean allowUserQuestions) {
 		this.allowUserQuestions = allowUserQuestions;
-	}
-
-	public String getSipNumber() {
-		return sipNumber;
-	}
-
-	public void setSipNumber(String sipNumber) {
-		this.sipNumber = sipNumber;
 	}
 
 	public String getConferencePin() {
@@ -535,6 +531,14 @@ public class Rooms implements Serializable, IDataProviderEntity {
 
 	public void setAutoVideoSelect(boolean autoVideoSelect) {
 		this.autoVideoSelect = autoVideoSelect;
+	}
+
+	public MeetMe getMeetme() {
+		return meetme;
+	}
+
+	public void setMeetme(MeetMe meetme) {
+		this.meetme = meetme;
 	}
 
 }

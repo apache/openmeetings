@@ -147,8 +147,8 @@
 			this.numberOfParticipants.selectItem(String(obj.numberOfPartizipants));
 			this.roomtype.selectItem(String(obj.roomtype.roomtypes_id));
 			
-			if (obj.sipNumber != null) {
-		        this.sipNumber.setAttribute("text",obj.sipNumber);
+			if (obj.meetme != null && obj.meetme.confno != null) {
+		        this.sipNumber.setAttribute("text", obj.meetme.confno);
 			} else {
 				this.sipNumber.setAttribute("text","");
 			}
@@ -310,7 +310,6 @@
             this.sendObject["isClosed"] = parent.isClosed.getValue();
             this.sendObject["redirectURL"] = parent.redirectURL.getText();
             
-            this.sendObject["sipNumber"] = parent.sipNumber.getText();
             this.sendObject["conferencePin"] =  parent.conferencePin.getText();
             
             this.sendObject["waitForRecording"] = parent.waitForRecording.getValue();
@@ -749,7 +748,7 @@
                multiline="true" width="270" />   
      
     <labelText labelid="1003" x="400" y="670" width="270" /> 
-    	<customEdittext name="sipNumber" x="520" y="670" width="180" />  
+    	<customEdittext name="sipNumber" x="520" y="670" width="180" enabled="false" />  
                
     <labelText labelid="1004" x="400" y="692" width="270" />                 
     	<customEdittext name="conferencePin" x="520" y="692" width="180" />                         

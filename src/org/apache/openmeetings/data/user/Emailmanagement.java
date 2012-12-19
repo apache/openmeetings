@@ -49,7 +49,7 @@ public class Emailmanagement {
 	private EntityManager em;
 
 	@Autowired
-	private ConfigurationDao configurationDaoImpl;
+	private ConfigurationDao configDao;
 	@Autowired
 	private Fieldmanagment fieldmanagment;
 	@Autowired
@@ -70,15 +70,11 @@ public class Emailmanagement {
 			String link, Boolean sendEmailWithVerficationCode) {
 		String succ = "valid email";
 
-		Integer sendEmailAtRegister = Integer.valueOf(
-				configurationDaoImpl.getConfKey("sendEmailAtRegister")
-						.getConf_value()).intValue();
+		Integer sendEmailAtRegister = configDao.getConfValue("sendEmailAtRegister", Integer.class, "0");
 
 		if (sendEmailAtRegister == 1) {
 
-			Long default_lang_id = Long.valueOf(
-					configurationDaoImpl.getConfKey("default_lang_id")
-							.getConf_value()).longValue();
+			Long default_lang_id = configDao.getConfValue("default_lang_id", Long.class, "1");
 
 			if (sendEmailWithVerficationCode) {
 

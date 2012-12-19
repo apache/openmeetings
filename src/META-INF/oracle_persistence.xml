@@ -57,16 +57,16 @@
 		<class>org.apache.openmeetings.persistence.beans.rooms.Rooms</class>
 		<class>org.apache.openmeetings.persistence.beans.rooms.RoomTypes</class>
 		<class>org.apache.openmeetings.persistence.beans.rooms.Rooms_Organisation</class>
-		<class>org.apache.openmeetings.persistence.beans.sip.OpenXGReturnObject</class>
 		<class>org.apache.openmeetings.persistence.beans.user.PrivateMessages</class>
 		<class>org.apache.openmeetings.persistence.beans.user.PrivateMessageFolder</class>
 		<class>org.apache.openmeetings.persistence.beans.user.Salutations</class>
 		<class>org.apache.openmeetings.persistence.beans.user.UserContacts</class>
 		<class>org.apache.openmeetings.persistence.beans.user.Userdata</class>
 		<class>org.apache.openmeetings.persistence.beans.user.Userlevel</class>
-		<class>org.apache.openmeetings.persistence.beans.user.UserSipData</class>
 		<class>org.apache.openmeetings.persistence.beans.user.Users</class>
 		<class>org.apache.openmeetings.persistence.beans.files.FileExplorerItem</class>
+		<class>org.apache.openmeetings.persistence.beans.sip.asterisk.AsteriskSipUser</class>
+        <class>org.apache.openmeetings.persistence.beans.sip.asterisk.MeetMe</class>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		<properties>
 			<property name="openjpa.RuntimeUnenhancedClasses" value="unsupported" />

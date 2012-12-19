@@ -34,11 +34,13 @@ import org.apache.openmeetings.data.basic.dao.LdapConfigDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.data.user.dao.StateDao;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.ldap.config.ConfigReader;
 import org.apache.openmeetings.persistence.beans.adresses.States;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.utils.OmFileHelper;
+import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,15 +52,13 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  */
 public class LdapLoginManagement {
-
-	
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			LdapLoginManagement.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
 	private Sessionmanagement sessionManagement;
 	@Autowired
-	private ConfigurationDao configurationDaoImpl;
+	private ConfigurationDao configDao;
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
@@ -67,6 +67,10 @@ public class LdapLoginManagement {
 	private LdapConfigDao ldapConfigDao;
 	@Autowired
 	private OmTimeZoneDao omTimeZoneDaoImpl;
+	@Autowired
+	private ManageCryptStyle cryptManager;
+	@Autowired
+	private UsersDao usersDao;
 
 	// External User Types
 	public static final String EXTERNAL_USER_TYPE_LDAP = "LDAP";
@@ -269,8 +273,7 @@ public class LdapLoginManagement {
 				.get(CONFIGKEY_LDAP_FIELDNAME_USER_PRINCIPAL);
 
 		// Wether or not we'll store Ldap passwd into OM db
-		String ldap_sync_passwd_to_om = configData
-				.get(CONFIGKEY_LDAP_SYNC_PASSWD_OM);
+		boolean ldap_sync_passwd_to_om = "no".equals(configData.get(CONFIGKEY_LDAP_SYNC_PASSWD_OM));
 
 		/***
 		 * for future use (lemeur) // Ldap user filter to refine the search
@@ -480,8 +483,7 @@ public class LdapLoginManagement {
 			try {
 				// Create User with LdapData
 				Long userid;
-				if (ldap_sync_passwd_to_om != null
-						&& ldap_sync_passwd_to_om.equals("no")) {
+				if (ldap_sync_passwd_to_om) {
 					Random r = new Random();
 					String token = Long.toString(Math.abs(r.nextLong()), 36);
 					log.debug("Synching Ldap user to OM DB with RANDOM password: "
@@ -554,13 +556,13 @@ public class LdapLoginManagement {
 				return new Long(-35);
 			}
 
-			// Update password (could have changed in LDAP)
-			if (ldap_sync_passwd_to_om == null
-					|| !ldap_sync_passwd_to_om.equals("no")) {
-				u.setPassword(passwd);
-			}
 			try {
-				userManagement.updateUserObject(u, true);
+				// Update password (could have changed in LDAP)
+				if (ldap_sync_passwd_to_om) {
+					u.updatePassword(cryptManager, configDao, passwd);
+				}
+
+				usersDao.update(u, 1L);
 			} catch (Exception e) {
 				log.error("Error updating user : " + e.getMessage());
 				return new Long(-1);
@@ -638,7 +640,7 @@ public class LdapLoginManagement {
 			jName_timeZone = userdata.get(ldapAttrs.get("timezoneAttr"));
 		
 		if (omTimeZoneDaoImpl.getOmTimeZone(jName_timeZone) == null) {
-			jName_timeZone = configurationDaoImpl.getConfValue(
+			jName_timeZone = configDao.getConfValue(
 					"default.timezone", String.class, "Europe/Berlin");
 		}
 
@@ -688,18 +690,16 @@ public class LdapLoginManagement {
 					new java.util.Date(), //age
 					street,
 					additionalname, fax, zip, state_id, town, 
-					configurationDaoImpl.getConfValue("default_lang_id",
+					configDao.getConfValue("default_lang_id",
 							Long.class, "0"), // language_id
 					false, // sendWelcomeMessage
-					Arrays.asList(configurationDaoImpl.getConfValue(
+					Arrays.asList(configDao.getConfValue(
 							"default_domain_id", Long.class, null)), // organozation
 																		// Ids
 					phone, 
 					false,
 					"",// BaseURL is empty as we do not send an Email here
 					false,// send verification code
-					"", "", "",// sip_user, sip_pass, sip_auth
-					true, // generate SIP Data if the config is enabled
 					jName_timeZone, 
 					false, // forceTimeZoneCheck
 					"", //userOffers

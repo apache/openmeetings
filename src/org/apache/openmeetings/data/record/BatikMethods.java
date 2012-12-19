@@ -62,8 +62,7 @@ public class BatikMethods {
 	public void _paintTextByWidthHeight(SVGGraphics2D g2d, int x1, int y1, int width, int height,
 			String text, int style, int size, Color fontColor) throws Exception {
 
-		String default_export_font = configurationDaoImpl.getConfKey(
-				"default_export_font").getConf_value();
+		String default_export_font = configurationDaoImpl.getConfValue("default_export_font", String.class, "");
 		
 		this.drawTextByString(g2d, x1, y1, width, height, text, default_export_font, style, size, fontColor);
 

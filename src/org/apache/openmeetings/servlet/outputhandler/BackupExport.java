@@ -79,7 +79,6 @@ import org.apache.openmeetings.persistence.beans.rooms.RoomTypes;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessages;
 import org.apache.openmeetings.persistence.beans.user.Users;
-import org.apache.openmeetings.sip.api.impl.asterisk.dao.AsteriskDAOImpl;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
@@ -142,8 +141,6 @@ public class BackupExport {
 	private PollManagement pollManagement;
 	@Autowired
 	private ConfigurationDao configurationDaoImpl;
-	@Autowired
-	private AsteriskDAOImpl asteriskDAOImpl;
 
 	public void performExport(File filePath, File backup_dir,
 			boolean includeFiles) throws Exception {
@@ -347,25 +344,6 @@ public class BackupExport {
 			writeList(serializer, backup_dir, "configs.xml", "configs", list);
 		}
 		
-		/*
-		 * ##################### Asterisk SIP Data
-		 */
-		writeList(simpleSerializer, backup_dir, "asterisksipusers.xml",
-				"asterisksipusers", asteriskDAOImpl.getAsteriskSipUsers());
-		
-		/*
-		 * ##################### Asterisk SIP Extensions
-		 */
-		writeList(simpleSerializer, backup_dir, "extensions.xml",
-				"extensions", asteriskDAOImpl.getExtensions());
-		
-		/*
-		 * ##################### Asterisk SIP Meetme
-		 */
-		writeList(simpleSerializer, backup_dir, "members.xml",
-				"members", asteriskDAOImpl.getMembers());
-		
-
 		if (includeFiles) {
 			/*
 			 * ##################### Backup Room Files

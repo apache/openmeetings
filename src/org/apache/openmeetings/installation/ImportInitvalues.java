@@ -374,99 +374,10 @@ public class ImportInitvalues {
 				null, "Enable to enable the red5SIP integration ");
 		configurationDaoImpl.addConfByKey("red5sip.room_prefix",
 				cfg.red5SipRoomPrefix, null,
-				"Enable to enable the red5SIP integration ");
+				"Numerical prefix for OM rooms created inside the SIP");
 		configurationDaoImpl.addConfByKey("red5sip.exten_context",
 				cfg.red5SipExtenContext, null,
 				"Enable to enable the red5SIP integration ");
-
-		// ***************************************
-		// ***************************************
-		// SIP Applet Configuration Values
-		// ***************************************
-
-		configurationDaoImpl.addConfByKey("sip.enable", cfg.sipEnable, null,
-				"Enable to load the SIP Applet in the Client and "
-						+ "call the SIP Applet whenever you enter a Room");
-
-		configurationDaoImpl.addConfByKey("sip.realm", cfg.sipRealm, null,
-				"So called *Domain of the SIP Provider*");
-
-		configurationDaoImpl.addConfByKey("sip.port", cfg.sipPort, null,
-				"SIP Port");
-
-		configurationDaoImpl.addConfByKey("sip.proxyname", cfg.sipProxyName,
-				null, "SIP Proxy name (this is the outbound proxy)");
-
-		configurationDaoImpl
-				.addConfByKey("sip.tunnel", cfg.sipTunnel, null,
-						"SIP Tunnel IP + Port, format domain:port, for example 10.0.0.0:443");
-
-		configurationDaoImpl.addConfByKey("sip.codebase", cfg.sipCodebase,
-				null, "The Base-URL to load the Ringtone from");
-
-		configurationDaoImpl.addConfByKey("sip.forcetunnel",
-				cfg.sipForceTunnel, null, "Force usage of the tunnel");
-
-		// ***************************************
-		// ***************************************
-		// OpenXG Configuration Values
-		// ***************************************
-
-		configurationDaoImpl.addConfByKey("sip.openxg.enable",
-				cfg.sipOpenxgEnable, null,
-				"Enable the OpenXG XML-RPC Gateway through the Wrapper URL");
-
-		configurationDaoImpl
-				.addConfByKey(
-						"openxg.wrapper.url",
-						cfg.openxgWrapperUrl,
-						null,
-						"openxg_wrapper_url, null, OpenXG XML-RPC Wrapper URL, the Wrapper can only "
-								+ "be located on 127.0.01 by default, "
-								+ "for example http://127.0.0.1:5080/rpc_client/rpc_gateway_wrapper.php");
-
-		configurationDaoImpl.addConfByKey("openxg.client.id",
-				cfg.openxgClientId, null, "OpenXG XML-RPC Client ID");
-
-		configurationDaoImpl.addConfByKey("openxg.client.secret",
-				cfg.openxgClientSecret, null, "OpenXG XML-RPC Client Secret");
-
-		configurationDaoImpl.addConfByKey("openxg.client.domain",
-				cfg.openxgClientDomain, null, "OpenXG Domain");
-
-		configurationDaoImpl.addConfByKey("openxg.community.code",
-				cfg.openxgCommunityCode, null, "OpenXG Community Code");
-
-		configurationDaoImpl.addConfByKey("openxg.language.code",
-				cfg.openxgLanguageCode, null, "OpenXG Language Code");
-
-		configurationDaoImpl.addConfByKey("openxg.adminid", cfg.openxgAdminId,
-				null, "OpenXG Admin ID");
-
-		// ***************************************
-		// ***************************************
-		// Phone Range Configuration Values
-		// ***************************************
-
-		configurationDaoImpl.addConfByKey("sip.language.phonecode",
-				cfg.sipLanguagePhoneCode, null, "For example +358 for Finland");
-
-		configurationDaoImpl
-				.addConfByKey("sip.phonerange.start", cfg.sipPhoneRangeStart,
-						null,
-						"The first number in the Range of Phone Numbers in national format");
-
-		configurationDaoImpl.addConfByKey("sip.phonerange", cfg.sipPhoneRange,
-				null, "Amount of numbers in the Phone Range available");
-
-		configurationDaoImpl.addConfByKey("sip.phonerange.currentindex",
-				"" + 0, null,
-				"Number of used Phone Numbers in the sip.phonerange");
-
-		configurationDaoImpl
-				.addConfByKey("sip.phonerange.conference.currentindex", "" + 0,
-						null,
-						"Number of used Phone Numbers in the sip.phonerange for the conferences");
 
 		// ***************************************
 		// ***************************************
@@ -604,7 +515,7 @@ public class ImportInitvalues {
 
 			roommanagement.addRoom(3, "public Interview Room", interview_Id,
 					"", new Long(16), true, null, false, false, null, false,
-					null, true, false, false, "", "", "", null, null, null,
+					null, true, false, false, "", "", null, null, null,
 					false, // hideTopBar
 					false, // hideChat
 					false, // hideActivitiesAndActions
@@ -621,7 +532,7 @@ public class ImportInitvalues {
 
 			roommanagement.addRoom(3, "public Conference Room", conference_Id,
 					"", new Long(32), true, null, false, false, null, false,
-					null, true, false, false, "", "", "", null, null, null,
+					null, true, false, false, "", "", null, null, null,
 					false, // hideTopBar
 					false, // hideChat
 					false, // hideActivitiesAndActions
@@ -638,7 +549,7 @@ public class ImportInitvalues {
 
 			roommanagement.addRoom(3, "public Video Only Room", conference_Id,
 					"", new Long(32), true, null, false, false, null, false,
-					null, true, false, false, "", "", "", null, null, null,
+					null, true, false, false, "", "", null, null, null,
 					false, // hideTopBar
 					false, // hideChat
 					false, // hideActivitiesAndActions
@@ -655,7 +566,7 @@ public class ImportInitvalues {
 
 			roommanagement.addRoom(3, "public Video And Whiteboard Room",
 					conference_Id, "", new Long(32), true, null, false, false,
-					null, false, null, true, false, false, "", "", "", null,
+					null, false, null, true, false, false, "", "", null,
 					null, null, false, // hideTopBar
 					false, // hideChat
 					false, // hideActivitiesAndActions
@@ -672,7 +583,7 @@ public class ImportInitvalues {
 
 			roommanagement.addRoom(3, "public Restricted Room", restricted_Id,
 					"", new Long(100), true, null, false, false, null, false,
-					null, true, false, false, "", "", "", null, null, null,
+					null, true, false, false, "", "", null, null, null,
 					false, // hideTopBar
 					false, // hideChat
 					false, // hideActivitiesAndActions
@@ -689,7 +600,7 @@ public class ImportInitvalues {
 
 			roommanagement.addRoom(3, "restricted room with micro option set",
 					restricted_Id, "", new Long(100), true, null, false, false,
-					null, false, null, true, false, false, "", "", "", null,
+					null, false, null, true, false, false, "", "", null,
 					null, null, false, // hideTopBar
 					false, // hideChat
 					false, // hideActivitiesAndActions
@@ -706,7 +617,7 @@ public class ImportInitvalues {
 
 			roommanagement.addRoom(3, "conference room with micro option set",
 					conference_Id, "", new Long(32), true, null, false, false,
-					null, false, null, true, false, false, "", "", "", null,
+					null, false, null, true, false, false, "", "", null,
 					null, null, false, // hideTopBar
 					false, // hideChat
 					false, // hideActivitiesAndActions
@@ -723,7 +634,7 @@ public class ImportInitvalues {
 
 			long room2 = roommanagement.addRoom(3, "private Conference Room",
 					conference_Id, "", new Long(32), false, null, false, false,
-					null, false, null, true, false, false, "", "", "", null,
+					null, false, null, true, false, false, "", "", null,
 					null, null, false, // hideTopBar
 					false, // hideChat
 					false, // hideActivitiesAndActions
@@ -763,7 +674,6 @@ public class ImportInitvalues {
 					new java.util.Date(), "street", "no", "fax", "zip", 1,
 					"town", default_lang_id, false,
 					Arrays.asList(organisation_id), "phone", false, "", false,
-					"", "", "", false,
 					omTimeZoneDaoImpl.getOmTimeZoneByIcal(ical_timeZone),
 					false, "", "", false, true);
 

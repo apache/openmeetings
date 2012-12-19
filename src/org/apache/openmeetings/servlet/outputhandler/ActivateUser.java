@@ -102,12 +102,11 @@ public class ActivateUser extends VelocityViewServlet {
 			String hash = httpServletRequest.getParameter("u");
 			String loginURL = OpenmeetingsVariables.webAppRootPath;
 
+			Long default_lang_id = getConfigurationmanagement()
+					.getConfValue("default_lang_id", Long.class, "1");
 			ctx.put("APP_NAME", getConfigurationmanagement().getAppName());
 			if (hash == null) {
 				// No hash
-				Long default_lang_id = Long.valueOf(
-						getConfigurationmanagement().getConfKey(
-								"default_lang_id").getConf_value()).longValue();
 				Fieldlanguagesvalues labelid669 = getFieldmanagment()
 						.getFieldByIdAndLanguage(new Long(669), default_lang_id);
 				Fieldlanguagesvalues labelid672 = getFieldmanagment()
@@ -125,10 +124,6 @@ public class ActivateUser extends VelocityViewServlet {
 
 			if (user == null) {
 				// No User Found with this Hash
-				Long default_lang_id = Long.valueOf(
-						getConfigurationmanagement().getConfKey(
-								"default_lang_id").getConf_value()).longValue();
-
 				Fieldlanguagesvalues labelid669 = getFieldmanagment()
 						.getFieldByIdAndLanguage(new Long(669), default_lang_id);
 				Fieldlanguagesvalues labelid672 = getFieldmanagment()
@@ -143,10 +138,6 @@ public class ActivateUser extends VelocityViewServlet {
 
 			} else if (user.getStatus() == 1) {
 				// already activated
-				Long default_lang_id = Long.valueOf(
-						getConfigurationmanagement().getConfKey(
-								"default_lang_id").getConf_value()).longValue();
-
 				Fieldlanguagesvalues labelid670 = getFieldmanagment()
 						.getFieldByIdAndLanguage(new Long(670), default_lang_id);
 				Fieldlanguagesvalues labelid672 = getFieldmanagment()
@@ -166,10 +157,6 @@ public class ActivateUser extends VelocityViewServlet {
 
 				getUsermanagement().updateUser(user);
 
-				Long default_lang_id = Long.valueOf(
-						getConfigurationmanagement().getConfKey(
-								"default_lang_id").getConf_value()).longValue();
-
 				Fieldlanguagesvalues labelid671 = getFieldmanagment()
 						.getFieldByIdAndLanguage(new Long(671), default_lang_id);
 				Fieldlanguagesvalues labelid672 = getFieldmanagment()
@@ -184,10 +171,6 @@ public class ActivateUser extends VelocityViewServlet {
 
 			} else {
 				// unkown Status
-				Long default_lang_id = Long.valueOf(
-						getConfigurationmanagement().getConfKey(
-								"default_lang_id").getConf_value()).longValue();
-
 				Fieldlanguagesvalues labelid672 = getFieldmanagment()
 						.getFieldByIdAndLanguage(new Long(672), default_lang_id);
 

@@ -247,30 +247,6 @@ public class Install extends VelocityViewServlet {
                     cfg.red5SipRoomPrefix = httpServletRequest.getParameter("red5sip_room_prefix");
                     cfg.red5SipExtenContext = httpServletRequest.getParameter("red5sip_exten_context");
 
-					// SIP Applet Configuration
-					cfg.sipEnable = httpServletRequest.getParameter("sip_enable");
-					cfg.sipRealm = httpServletRequest.getParameter("sip_realm");
-					cfg.sipPort = httpServletRequest.getParameter("sip_port");
-					cfg.sipProxyName = httpServletRequest.getParameter("sip_proxyname");
-					cfg.sipTunnel = httpServletRequest.getParameter("sip_tunnel");
-					cfg.sipCodebase = httpServletRequest.getParameter("sip_codebase");
-					cfg.sipForceTunnel = httpServletRequest.getParameter("sip_forcetunnel");
-
-					// OpenXG / OpenSIPg Configuration
-					cfg.sipOpenxgEnable = httpServletRequest.getParameter("sip_openxg_enable");
-					cfg.openxgWrapperUrl = httpServletRequest.getParameter("openxg_wrapper_url");
-					cfg.openxgClientId = httpServletRequest.getParameter("openxg_client_id");
-					cfg.openxgClientSecret = httpServletRequest.getParameter("openxg_client_secret");
-					cfg.openxgClientDomain = httpServletRequest.getParameter("openxg_client_domain");
-					cfg.openxgCommunityCode = httpServletRequest.getParameter("openxg_community_code");
-					cfg.openxgLanguageCode = httpServletRequest.getParameter("openxg_language_code");
-					cfg.openxgAdminId = httpServletRequest.getParameter("openxg_adminid");
-
-					// SIP Phone Range Configuration
-					cfg.sipLanguagePhoneCode = httpServletRequest.getParameter("sip_language_phonecode");
-					cfg.sipPhoneRangeStart = httpServletRequest.getParameter("sip_phonerange_start");
-					cfg.sipPhoneRange = httpServletRequest.getParameter("sip_phonerange");
-
 					String timeZone = httpServletRequest.getParameter("timeZone");
 					cfg.ical_timeZone = timeZone;
 					

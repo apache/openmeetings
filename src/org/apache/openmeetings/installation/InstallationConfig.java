@@ -51,24 +51,6 @@ public class InstallationConfig {
 	public String urlFeed2 = "http://mail-archives.apache.org/mod_mbox/incubator-openmeetings-dev/?format=atom";
 	public String sendEmailWithVerficationCode = "0";
 	public String defaultExportFont = "TimesNewRoman";
-	public String sipEnable = "0";
-	public String sipProxyName = "";
-	public String sipPort = "";
-	public String sipTunnel = "";
-	public String sipRealm = "";
-	public String sipOpenxgEnable = "0";
-	public String sipForceTunnel = "";
-	public String sipCodebase = "";
-	public String openxgClientSecret = "";
-	public String openxgWrapperUrl = "";
-	public String openxgClientId = "";
-	public String openxgClientDomain = "";
-	public String openxgCommunityCode = "";
-	public String openxgLanguageCode = "";
-	public String openxgAdminId = "";
-	public String sipLanguagePhoneCode = "";
-	public String sipPhoneRangeStart = "";
-	public String sipPhoneRange = "";
     public String red5SipEnable = "no";
     public String red5SipRoomPrefix = "400";
     public String red5SipExtenContext = "rooms";
@@ -90,21 +72,7 @@ public class InstallationConfig {
 				+ sendEmailAtRegister + ", urlFeed=" + urlFeed + ", urlFeed2="
 				+ urlFeed2 + ", sendEmailWithVerficationCode="
 				+ sendEmailWithVerficationCode + ", defaultExportFont="
-				+ defaultExportFont
-				+ ", sipEnable=" + sipEnable + ", sipProxyName=" + sipProxyName
-				+ ", sipPort=" + sipPort + ", sipTunnel=" + sipTunnel
-				+ ", sipRealm=" + sipRealm + ", sipOpenxgEnable="
-				+ sipOpenxgEnable + ", sipForceTunnel=" + sipForceTunnel
-				+ ", sipCodebase=" + sipCodebase + ", openxgClientSecret="
-				+ openxgClientSecret + ", openxgWrapperUrl=" + openxgWrapperUrl
-				+ ", openxgClientId=" + openxgClientId
-				+ ", openxgClientDomain=" + openxgClientDomain
-				+ ", openxgCommunityCode=" + openxgCommunityCode
-				+ ", openxgLanguageCode=" + openxgLanguageCode
-				+ ", openxgAdminId=" + openxgAdminId
-				+ ", sipLanguagePhoneCode=" + sipLanguagePhoneCode
-				+ ", sipPhoneRangeStart=" + sipPhoneRangeStart
-				+ ", sipPhoneRange=" + sipPhoneRange + ", red5SipEnable="
+				+ defaultExportFont + ", red5SipEnable="
 				+ red5SipEnable + ", red5SipRoomPrefix=" + red5SipRoomPrefix
 				+ ", red5SipExtenContext=" + red5SipExtenContext
 				+ ", replyToOrganizer=" + replyToOrganizer

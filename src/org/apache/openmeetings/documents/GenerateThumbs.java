@@ -22,19 +22,16 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.data.flvrecord.converter.BaseConverter;
 import org.apache.openmeetings.documents.beans.ConverterProcessResult;
 import org.apache.openmeetings.utils.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
-public class GenerateThumbs {
+public class GenerateThumbs extends BaseConverter {
 
 	private static final Logger log = Red5LoggerFactory
 			.getLogger(GenerateThumbs.class, OpenmeetingsVariables.webAppRootKey);
-
-	@Autowired
-	private GenerateImage generateImage;
 
 	public ConverterProcessResult generateThumb(String pre, File f, Integer thumbSize) throws IOException {
 		// Init variables
@@ -42,7 +39,7 @@ public class GenerateThumbs {
 		File parent = f.getParentFile();
 
 		String[] argv = new String[] {
-			generateImage.getPathToImageMagic()
+			getPathToImageMagick()
 			, "-thumbnail"
 			, Integer.toString(thumbSize) + "x" + Integer.toString(thumbSize)
 			, f.getCanonicalPath()
@@ -64,7 +61,7 @@ public class GenerateThumbs {
 
 	public ConverterProcessResult decodePDF(String inputfile, String outputfile) {
 
-		String[] argv = new String[] { generateImage.getPathToImageMagic(), // FIXME
+		String[] argv = new String[] { getPathToImageMagick(),
 				inputfile, outputfile };
 
 		if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") == -1) {
@@ -79,7 +76,7 @@ public class GenerateThumbs {
 
 		if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") == -1) {
 			String[] argv = new String[] {
-				generateImage.getPathToImageMagic()
+				getPathToImageMagick()
 				, "-thumbnail" // FIXME
 				, Integer.toString(thumbSize)
 				, inputfile.getCanonicalPath()
@@ -90,7 +87,7 @@ public class GenerateThumbs {
 		} else {
 
 			String[] argv = new String[] {
-				generateImage.getPathToImageMagic()
+				getPathToImageMagick()
 				, "-thumbnail" // FIXME
 				, Integer.toString(thumbSize)
 				, inputfile.getCanonicalPath()
@@ -107,7 +104,7 @@ public class GenerateThumbs {
 			String current_dir, String inputfile, String outputpath,
 			Integer thumbWidth, String pre) {
 
-		String[] argv = new String[] { generateImage.getPathToImageMagic(),
+		String[] argv = new String[] { getPathToImageMagick(),
 				"-resize", Integer.toString(thumbWidth), inputfile,
 				outputpath + "_" + pre + "_page.png" };
 

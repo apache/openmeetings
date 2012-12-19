@@ -177,7 +177,6 @@ public class AppointmentLogic {
 					false, // isAudioOnly
 					false, // isClosed
 					"", // redirectURL
-					"", // sipNumber
 					"", // conferencePIN
 					null, // ownerID
 					null, null, 

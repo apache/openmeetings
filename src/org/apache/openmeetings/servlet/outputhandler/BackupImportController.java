@@ -94,16 +94,11 @@ import org.apache.openmeetings.persistence.beans.poll.RoomPoll;
 import org.apache.openmeetings.persistence.beans.rooms.RoomTypes;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms_Organisation;
-import org.apache.openmeetings.persistence.beans.sip.asterisk.AsteriskSipUsers;
-import org.apache.openmeetings.persistence.beans.sip.asterisk.Extensions;
-import org.apache.openmeetings.persistence.beans.sip.asterisk.MeetMe;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessageFolder;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessages;
 import org.apache.openmeetings.persistence.beans.user.UserContacts;
-import org.apache.openmeetings.persistence.beans.user.UserSipData;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
-import org.apache.openmeetings.sip.api.impl.asterisk.dao.AsteriskDAOImpl;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
@@ -172,8 +167,6 @@ public class BackupImportController extends AbstractUploadController {
 	private PollManagement pollManagement;
 	@Autowired
 	private ConfigurationDao configurationDao;
-	@Autowired
-	private AsteriskDAOImpl asteriskDAOImpl;
 
 	private final HashMap<Long, Long> usersMap = new HashMap<Long, Long>();
 	private final HashMap<Long, Long> organisationsMap = new HashMap<Long, Long>();
@@ -287,8 +280,8 @@ public class BackupImportController extends AbstractUploadController {
 				u.setStarttime(new Date());
 				long userId = u.getUser_id();
 				u.setUser_id(null);
-				Long actualNewUserId = userManagement.addUserBackup(u);
-				usersMap.put(userId, actualNewUserId);
+				usersDao.update(u, 1L);
+				usersMap.put(userId, u.getUser_id());
 			}
 		}
 
@@ -572,7 +565,7 @@ public class BackupImportController extends AbstractUploadController {
 			
 			List<Configuration> list = readList(serializer, f, "configs.xml", "configs", Configuration.class, true);
 			for (Configuration c : list) {
-				Configuration cfg = configurationDao.getConfKey(c
+				Configuration cfg = configurationDao.get(c
 						.getConf_key());
 				c.setConfiguration_id(cfg == null ? null : cfg.getConfiguration_id());
 				if (c.getUser() != null && c.getUser().getUser_id() == null) {
@@ -582,45 +575,7 @@ public class BackupImportController extends AbstractUploadController {
 			}
 		}
 
-		log.info("Configs import complete, starting asteriskSipUsersFile import");
-		/*
-		 * ##################### Import AsteriskSipUsers
-		 */
-		{
-			List<AsteriskSipUsers> list = readList(simpleSerializer, f, "asterisksipusers.xml"
-				, "asterisksipusers", AsteriskSipUsers.class, true);
-			for (AsteriskSipUsers au : list) {
-				au.setId(0);
-				asteriskDAOImpl.saveAsteriskSipUsers(au);
-			}
-		}
-
-		log.info("AsteriskSipUsers import complete, starting extensions import");
-		/*
-		 * ##################### Import Extensions
-		 */
-		{
-			List<Extensions> list = readList(simpleSerializer, f, "extensions.xml"
-				, "extensions", Extensions.class, true);
-			for (Extensions e : list) {
-				e.setId(null);
-				asteriskDAOImpl.saveExtensions(e);
-			}
-		}
-
-		log.info("Extensions import complete, starting MeetMe members import");
-		/*
-		 * ##################### Import MeetMe
-		 */
-		{
-			List<MeetMe> list = readList(simpleSerializer, f, "members.xml"
-				, "members", MeetMe.class, true);
-			for (MeetMe mm : list) {
-				asteriskDAOImpl.saveMeetMe(mm);
-			}
-		}
-
-		log.info("Members import complete, starting copy of files and folders");
+		log.info("Configs import complete, starting copy of files and folders");
 		/*
 		 * ##################### Import real files and folders
 		 */
@@ -726,7 +681,6 @@ public class BackupImportController extends AbstractUploadController {
 		Serializer ser = new Persister(strategy);
 
 		registry.bind(Organisation.class, new OrganisationConverter(orgDao, organisationsMap));
-		//registry.bind(UserSipData.class, UserSipDataConverter.class);
 		registry.bind(OmTimeZone.class, new OmTimeZoneConverter(omTimeZoneDaoImpl));
 		registry.bind(States.class, new StateConverter(statemanagement));
 		registry.bind(Date.class, DateConverter.class);
@@ -757,26 +711,19 @@ public class BackupImportController extends AbstractUploadController {
 		List<Users> list = new ArrayList<Users>();
 		InputNode root = NodeBuilder.read(new StringReader(sw.toString()));
 		InputNode root1 = NodeBuilder.read(new StringReader(sw.toString())); //HACK to handle Adresses inside user
-		InputNode root2 = NodeBuilder.read(new StringReader(sw.toString())); //HACK to handle UserSipData inside user
 		InputNode listNode = root.getNext();
 		InputNode listNode1 = root1.getNext(); //HACK to handle Adresses inside user
-		InputNode listNode2 = root2.getNext(); //HACK to handle UserSipData inside user
 		if (listNodeName.equals(listNode.getName())) {
 			InputNode item = listNode.getNext();
 			InputNode item1 = listNode1.getNext(); //HACK to handle Adresses inside user
-			InputNode item2 = listNode2.getNext(); //HACK to handle UserSipData inside user
 			while (item != null) {
 				try {
 					Users u = ser.read(Users.class, item, false);
 					
-					//HACK to handle Adresses and UserSipData inside user
+					//HACK to handle Adresses inside user
 					if (u.getAdresses() == null) {
 						Adresses a = ser.read(Adresses.class, item1, false);
 						u.setAdresses(a);
-					}
-					if (u.getUserSipData() == null) {
-						UserSipData usd = ser.read(UserSipData.class, item2, false);
-						u.setUserSipData(usd);
 					}
 					list.add(u);
 				} catch (Exception e) {
@@ -786,9 +733,6 @@ public class BackupImportController extends AbstractUploadController {
 				do {
 					item1 = listNode1.getNext(); //HACK to handle Adresses inside user
 				} while (item != null && !"user".equals(item1.getName()));
-				do {
-					item2 = listNode2.getNext(); //HACK to handle UserSipData inside user
-				} while (item != null && !"user".equals(item2.getName()));
 			}
 		}
 		return list;

@@ -105,7 +105,7 @@ public class UserService {
 	@Autowired
 	private Organisationmanagement organisationmanagement;
 	@Autowired
-	private ManageCryptStyle manageCryptStyle;
+	private ManageCryptStyle cryptManager;
 	@Autowired
 	private Roommanagement roommanagement;
 	@Autowired
@@ -414,12 +414,6 @@ public class UserService {
 								.booleanValue(),
 						"",
 						false,
-						argObjectMap.get("sip_user").toString(),
-						argObjectMap.get("sip_pass").toString(),
-						argObjectMap.get("sip_auth").toString(),
-						Boolean.valueOf(
-								argObjectMap.get("generateSipUserData")
-										.toString()).booleanValue(),
 						argObjectMap.get("jNameTimeZone").toString(),
 						Boolean.valueOf(
 								argObjectMap.get("forceTimeZoneCheck")
@@ -467,12 +461,6 @@ public class UserService {
 						argObjectMap.get("phone").toString(),
 						Boolean.valueOf(argObjectMap.get("sendSMS").toString())
 								.booleanValue(),
-						argObjectMap.get("sip_user").toString(),
-						argObjectMap.get("sip_pass").toString(),
-						argObjectMap.get("sip_auth").toString(),
-						Boolean.valueOf(
-								argObjectMap.get("generateSipUserData")
-										.toString()).booleanValue(),
 						argObjectMap.get("jNameTimeZone").toString(),
 						Boolean.valueOf(
 								argObjectMap.get("forceTimeZoneCheck")
@@ -657,7 +645,7 @@ public class UserService {
 					return -45L;
 				}
 
-				String hash = manageCryptStyle
+				String hash = cryptManager
 						.getInstanceOfCrypt()
 						.createPassPhrase(
 								CalendarPatterns
@@ -1023,7 +1011,6 @@ public class UserService {
 							false, // isAudioOnly
 							false, // isClosed
 							"", // redirectURL
-							"", // sipNumber
 							"", // conferencePIN
 							null, // ownerId
 							null, null, false, // hideTopBar

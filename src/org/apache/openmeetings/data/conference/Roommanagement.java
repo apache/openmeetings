@@ -43,12 +43,8 @@ import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.rooms.RoomTypes;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms_Organisation;
-import org.apache.openmeetings.persistence.beans.sip.OpenXGReturnObject;
+import org.apache.openmeetings.persistence.beans.sip.asterisk.MeetMe;
 import org.apache.openmeetings.persistence.beans.user.Users;
-import org.apache.openmeetings.sip.api.impl.asterisk.AsteriskDbSipClient;
-import org.apache.openmeetings.sip.api.request.SIPCreateConferenceRequest;
-import org.apache.openmeetings.sip.api.result.SipCreateConferenceRequestResult;
-import org.apache.openmeetings.sip.xmlrpc.OpenXGHttpClient;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,10 +66,6 @@ public class Roommanagement {
 
 	@Autowired
 	private Organisationmanagement organisationmanagement;
-	@Autowired
-	private OpenXGHttpClient openXGHttpClient;
-	@Autowired
-	private AsteriskDbSipClient asteriskDbSipClient;
 	@Autowired
 	private RoomModeratorsDao roomModeratorsDao;
 	@Autowired
@@ -634,23 +626,21 @@ public class Roommanagement {
 		return null;
 	}
 
+	private String getSipNumber(long roomId) {
+		String sipEnabled = configurationDaoImpl.getConfValue("red5sip.enable", String.class, "no");
+        if("yes".equals(sipEnabled)) {
+        	return configurationDaoImpl.getConfValue("red5sip.room_prefix", String.class, "400") + roomId;
+        }
+        return null;
+	}
     /**
      * Returns number of SIP conference participants
      * @param rooms_id id of room
      * @return number of participants
      */
     public Integer getSipConferenceMembersNumber(Long rooms_id) {
-		String sipEnabled = configurationDaoImpl.getConfValue("red5sip.enable", String.class, "no");
-        if("yes".equals(sipEnabled)) {
-            Rooms rooms = roomDao.get(rooms_id);
-            if(rooms != null) {
-                return asteriskDbSipClient.getConferenceMembersNumber(rooms.getSipNumber());
-            } else {
-                return 0;
-            }
-        } else {
-            return null;
-        }
+    	Rooms rooms = roomDao.get(rooms_id);
+    	return rooms.getMeetme() != null ? rooms.getMeetme().getMembers() : null;
     }
 
 	/**
@@ -671,7 +661,7 @@ public class Roommanagement {
 			Integer demoTime, Boolean isModeratedRoom,
 			List<Map<String, Object>> roomModerators,
 			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean isClosed,
-			String redirectURL, String sipNumber, String conferencePin,
+			String redirectURL, String conferencePin,
 			Long ownerId, Boolean waitForRecording, Boolean allowRecording,
 			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, Boolean hideFilesExplorer, 
 			Boolean hideActionsMenu, Boolean hideScreenSharing, Boolean hideWhiteboard,
@@ -704,7 +694,6 @@ public class Roommanagement {
 				r.setIsClosed(isClosed);
 				r.setRedirectURL(redirectURL);
 
-				r.setSipNumber(sipNumber);
 				r.setConferencePin(conferencePin);
 				r.setOwnerId(ownerId);
 
@@ -722,31 +711,19 @@ public class Roommanagement {
 				r.setChatOpened(chatOpened);
 				r.setFilesOpened(filesOpened);
 				r.setAutoVideoSelect(autoVideoSelect);
-				
-				// handle SIP Issues
-				OpenXGReturnObject openXGReturnObject = openXGHttpClient
-						.openSIPgCreateConference();
 
-				if (openXGReturnObject != null) {
-					r.setSipNumber(openXGReturnObject.getConferenceNumber());
-					r.setConferencePin(openXGReturnObject.getConferencePin());
-				}
-
-                /* Red5SIP integration *******************************************************************************/
-				String sipEnabled = configurationDaoImpl.getConfValue("red5sip.enable", String.class, "no");
-                if("yes".equals(sipEnabled)) {
-                    SipCreateConferenceRequestResult requestResult = asteriskDbSipClient
-                            .createSIPConference(new SIPCreateConferenceRequest(sipNumber));
-
-                    if(!requestResult.hasError()) {
-                        r.setSipNumber(requestResult.getConferenceNumber());
-                        r.setConferencePin(requestResult.getConferencePin());
-                    }
-                }
                 /*****************************************************************************************************/
 
 				r = em.merge(r);
 				long returnId = r.getRooms_id();
+				String sipNumber = getSipNumber(returnId);
+				if (sipNumber != null) {
+					r.setMeetme(new MeetMe());
+					r.getMeetme().setConfno(sipNumber);
+				} else {
+					r.setMeetme(null);
+				}
+				r = em.merge(r); //FIXME double merge
 
 				if (organisations != null) {
 					Long t = this.updateRoomOrganisations(organisations, r);
@@ -1261,7 +1238,7 @@ public class Roommanagement {
 			Boolean appointment, Boolean isDemoRoom, Integer demoTime,
 			Boolean isModeratedRoom, List<Map<String, Object>> roomModerators,
 			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean isClosed,
-			String redirectURL, String sipNumber, String conferencePin,
+			String redirectURL, String conferencePin,
 			Long ownerId, Boolean waitForRecording, Boolean allowRecording,
 			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, 
 			Boolean hideFilesExplorer, Boolean hideActionsMenu, Boolean hideScreenSharing, Boolean hideWhiteboard,
@@ -1277,7 +1254,7 @@ public class Roommanagement {
 						ispublic, comment, numberOfPartizipants, organisations,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
 						roomModerators, allowUserQuestions, isAudioOnly,
-						isClosed, redirectURL, sipNumber, conferencePin,
+						isClosed, redirectURL, conferencePin,
 						ownerId, waitForRecording, allowRecording, hideTopBar, hideChat, 
 						hideActivitiesAndActions, hideFilesExplorer, hideActionsMenu, 
 						hideScreenSharing, hideWhiteboard, showMicrophoneStatus, chatModerated
@@ -1297,7 +1274,7 @@ public class Roommanagement {
 			Boolean appointment, Boolean isDemoRoom, Integer demoTime,
 			Boolean isModeratedRoom, List<Map<String, Object>> roomModerators,
 			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean isClosed,
-			String redirectURL, String sipNumber, String conferencePin,
+			String redirectURL, String conferencePin,
 			Long ownerId, Boolean waitForRecording, Boolean allowRecording,
 			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, Boolean hideFilesExplorer, 
 			Boolean hideActionsMenu, Boolean hideScreenSharing, Boolean hideWhiteboard, 
@@ -1328,7 +1305,13 @@ public class Roommanagement {
 			r.setIsClosed(isClosed);
 			r.setRedirectURL(redirectURL);
 
-			r.setSipNumber(sipNumber);
+			String sipNumber = getSipNumber(rooms_id);
+			if (sipNumber == null) {
+				r.setMeetme(null);
+			} else if (!sipNumber.equals(r.getMeetme().getConfno())) {
+				r.setMeetme(new MeetMe());
+				r.getMeetme().setConfno(sipNumber);
+			}
 			r.setConferencePin(conferencePin);
 			r.setOwnerId(ownerId);
 
@@ -1658,7 +1641,6 @@ public class Roommanagement {
 						false, // isAudioOnly
 						false, // isClosed
 						"", // redirectURL
-						"", // sipNumber
 						"", // conferencePin
 						ownerId, null, null, 
 						false, // hideTopBar

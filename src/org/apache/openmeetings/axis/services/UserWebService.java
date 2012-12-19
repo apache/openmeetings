@@ -33,7 +33,6 @@ import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.user.Organisationmanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.data.user.dao.UsersDao;
-import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.persistence.beans.basic.ErrorValues;
 import org.apache.openmeetings.persistence.beans.basic.RemoteSessionObject;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
@@ -219,13 +218,7 @@ public class UserWebService {
 
 			if (authLevelManagement.checkWebServiceLevel(user_level)) {
 
-				Configuration conf = configurationDaoImpl
-						.getConfKey("default.timezone");
-				String jName_timeZone = "";
-
-				if (conf != null) {
-					jName_timeZone = conf.getConf_value();
-				}
+				String jName_timeZone = configurationDaoImpl.getConfValue("default.timezone", String.class, "");
 
 				Long user_id = userManagement.registerUser(username, userpass,
 						lastname, firstname, email, new Date(), street,

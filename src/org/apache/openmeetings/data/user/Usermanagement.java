@@ -48,18 +48,15 @@ import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.basic.dao.ServerDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.user.dao.StateDao;
-import org.apache.openmeetings.data.user.dao.UserSipDataDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.adresses.Adresses;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
-import org.apache.openmeetings.persistence.beans.user.UserSipData;
 import org.apache.openmeetings.persistence.beans.user.Userdata;
 import org.apache.openmeetings.persistence.beans.user.Userlevel;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
-import org.apache.openmeetings.sip.xmlrpc.OpenXGHttpClient;
 import org.apache.openmeetings.templates.ResetPasswordTemplate;
 import org.apache.openmeetings.utils.DaoHelper;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
@@ -89,7 +86,7 @@ public class Usermanagement {
 	@Autowired
 	private Sessionmanagement sessionManagement;
 	@Autowired
-	private ConfigurationDao configurationDaoImpl;
+	private ConfigurationDao configDao;
 	@Autowired
 	private Fieldmanagment fieldmanagment;
 	@Autowired
@@ -99,15 +96,11 @@ public class Usermanagement {
 	@Autowired
 	private Organisationmanagement organisationmanagement;
 	@Autowired
-	private ManageCryptStyle manageCryptStyle;
-	@Autowired
-	private OpenXGHttpClient openXGHttpClient;
+	private ManageCryptStyle cryptManager;
 	@Autowired
 	private UsersDao usersDao;
 	@Autowired
 	private Emailmanagement emailManagement;
-	@Autowired
-	private UserSipDataDao userSipDataDao;
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
@@ -442,8 +435,7 @@ public class Usermanagement {
 			long states_id, String town, Long language_id, int availible,
 			String telefon, String fax, String mobil, String email,
 			String comment, int status, List<Long> organisations, int salutations_id,
-			String phone, boolean sendSMS, String sip_user, String sip_pass, String sip_auth,
-			Boolean generateSipUserData, String jNameTimeZone,
+			String phone, boolean sendSMS, String jNameTimeZone,
 			Boolean forceTimeZoneCheck, String userOffers, String userSearchs,
 			Boolean showContactData, Boolean showContactDataToContacts) {
 
@@ -465,15 +457,6 @@ public class Usermanagement {
 					// Its a new one - check, whether another user already uses
 					// that one...
 					checkEmail = emailManagement.checkUserEMail(email);
-				}
-
-				if (generateSipUserData) {
-
-					if (password.length() == 0) {
-						// Cannot perform a SIP Creation without password
-						// re-enter
-						return new Long(-43);
-					}
 				}
 
 				if (checkName && checkEmail) {
@@ -505,74 +488,18 @@ public class Usermanagement {
 					us.setShowContactData(showContactData);
 					us.setShowContactDataToContacts(showContactDataToContacts);
 
-					if (level_id != 0)
-						us.setLevel_id(new Long(level_id));
+					if (level_id != 0) {
+						us.setLevel_id(level_id);
+					}
 					if (password.length() != 0) {
-						if (password.length() >= 6) {
-							us.setPassword(manageCryptStyle
-									.getInstanceOfCrypt().createPassPhrase(
-											password));
-						} else {
+						try {
+							us.updatePassword(cryptManager, configDao, password);
+						} catch (Exception e) {
 							return new Long(-7);
 						}
 					}
 					us.setAdresses(street, zip, town, statemanagement.getStateById(states_id),
 							additionalname, comment, fax, phone, email);
-
-					if (generateSipUserData) {
-
-						UserSipData userSipData = openXGHttpClient
-								.openSIPgUserCreateUser(firstname, "",
-										lastname, us.getAdresses().getEmail(),
-										password, login);
-
-						if (us.getUserSipData() == null) {
-							Long userSipDataId = userSipDataDao
-									.addUserSipData(userSipData);
-
-							us.setUserSipData(userSipDataDao
-									.getUserSipDataById(userSipDataId));
-						} else {
-
-							us.getUserSipData().setUsername(
-									userSipData.getUsername());
-							us.getUserSipData().setUserpass(
-									userSipData.getUserpass());
-							us.getUserSipData().setAuthId(
-									userSipData.getAuthId());
-
-							userSipDataDao.updateUserSipData(us
-									.getUserSipData());
-						}
-
-					} else if (us.getUserSipData() == null) {
-						UserSipData userSipData = new UserSipData();
-
-						userSipData.setUsername(sip_user);
-						userSipData.setUserpass(sip_pass);
-						userSipData.setAuthId(sip_auth);
-
-						Long userSipDataId = userSipDataDao
-								.addUserSipData(userSipData);
-
-						us.setUserSipData(userSipDataDao
-								.getUserSipDataById(userSipDataId));
-
-					} else {
-
-						UserSipData userSipData = userSipDataDao
-								.getUserSipDataById(us.getUserSipData()
-										.getUserSipDataId());
-
-						userSipData.setUsername(sip_user);
-						userSipData.setUserpass(sip_pass);
-						userSipData.setAuthId(sip_auth);
-
-						userSipDataDao.updateUserSipData(userSipData);
-
-						us.setUserSipData(userSipData);
-
-					}
 
 					em.merge(us);
 
@@ -795,7 +722,7 @@ public class Usermanagement {
 		
 		boolean sendConfirmation = baseURL != null
 				&& !baseURL.isEmpty()
-				&& 1 == configurationDaoImpl.getConfValue(
+				&& 1 == configDao.getConfValue(
 						"sendEmailWithVerficationCode", Integer.class, "0");
 		
 		return registerUser(login, Userpass, lastname, firstname, email, age,
@@ -821,7 +748,7 @@ public class Usermanagement {
 			boolean generateSipUserData, String jNameTimeZone, Boolean sendConfirmation) {
 		try {
 			// Checks if FrontEndUsers can register
-			if ("1".equals(configurationDaoImpl.getConfValue(
+			if ("1".equals(configDao.getConfValue(
 					"allow_frontend_register", String.class, "0"))) {
 				
 				// TODO: Read and generate SIP-Data via RPC-Interface Issue 1098
@@ -829,11 +756,10 @@ public class Usermanagement {
 				Long user_id = this.registerUserInit(3, 1, 0, 1, login,
 						Userpass, lastname, firstname, email, age, street,
 						additionalname, fax, zip, states_id, town, language_id,
-						true, Arrays.asList(configurationDaoImpl.getConfValue(
+						true, Arrays.asList(configDao.getConfValue(
 								"default_domain_id", Long.class, null)), phone,
 						sendSMS, baseURL,
-						sendConfirmation, "", "", "", generateSipUserData,
-						jNameTimeZone, false, "", "", false, true);
+						sendConfirmation, jNameTimeZone, false, "", "", false, true);
 
 				if (sendConfirmation) {
 					return new Long(-40);
@@ -878,9 +804,7 @@ public class Usermanagement {
 			String additionalname, String fax, String zip, long states_id,
 			String town, long language_id, boolean sendWelcomeMessage,
 			List<Long> organisations, String phone, boolean sendSMS, String baseURL,
-			Boolean sendConfirmation, String sip_user, String sip_pass,
-			String sip_auth, boolean generateSipUserData,
-			String jname_timezone, Boolean forceTimeZoneCheck,
+			Boolean sendConfirmation, String jname_timezone, Boolean forceTimeZoneCheck,
 			String userOffers, String userSearchs, Boolean showContactData,
 			Boolean showContactDataToContacts) throws Exception {
 		return registerUserInit(user_level, level_id, availible,
@@ -889,8 +813,7 @@ public class Usermanagement {
 				additionalname, fax, zip, states_id,
 				town, language_id, sendWelcomeMessage,
 				organisations, phone, sendSMS, baseURL,
-				sendConfirmation, sip_user, sip_pass,
-				sip_auth, generateSipUserData,
+				sendConfirmation,
 				omTimeZoneDaoImpl.getOmTimeZone(jname_timezone), forceTimeZoneCheck,
 				userOffers, userSearchs, showContactData,
 				showContactDataToContacts);
@@ -920,10 +843,6 @@ public class Usermanagement {
 	 * @param sendSMS
 	 * @param baseURL
 	 * @param sendConfirmation
-	 * @param sip_user
-	 * @param sip_pass
-	 * @param sip_auth
-	 * @param generateSipUserData
 	 * @param timezone
 	 * @param forceTimeZoneCheck
 	 * @param userOffers
@@ -941,8 +860,7 @@ public class Usermanagement {
 			String additionalname, String fax, String zip, long states_id,
 			String town, long language_id, boolean sendWelcomeMessage,
 			List<Long> organisations, String phone, boolean sendSMS, String baseURL,
-			Boolean sendConfirmation, String sip_user, String sip_pass,
-			String sip_auth, boolean generateSipUserData,
+			Boolean sendConfirmation,
 			OmTimeZone timezone, Boolean forceTimeZoneCheck,
 			String userOffers, String userSearchs, Boolean showContactData,
 			Boolean showContactDataToContacts) throws Exception {
@@ -952,25 +870,21 @@ public class Usermanagement {
 		// their Group
 		if (authLevelManagement.checkModLevel(user_level)) {
 
-			Integer userLoginMinimumLength = configurationDaoImpl.getConfValue(
+			Integer userLoginMinimumLength = configDao.getConfValue(
 					"user.login.minimum.length", Integer.class, "4");
-			Integer userPassMinimumLength = configurationDaoImpl.getConfValue(
-					"user.pass.minimum.length", Integer.class, "4");
-
-			if (userLoginMinimumLength == null || userPassMinimumLength == null) {
+			if (userLoginMinimumLength == null) {
 				throw new Exception(
-						"user.login.minimum.length or user.pass.minimum.length problem");
+						"user.login.minimum.length problem");
 			}
 
 			// Check for required data
-			if (login.length() >= userLoginMinimumLength.intValue()
-					&& password.length() >= userPassMinimumLength.intValue()) {
+			if (login.length() >= userLoginMinimumLength.intValue()) {
 				// Check for duplicates
 				boolean checkName = usersDao.checkUserLogin(login);
 				boolean checkEmail = emailManagement.checkUserEMail(email);
 				if (checkName && checkEmail) {
 
-					String hash = manageCryptStyle
+					String hash = cryptManager
 							.getInstanceOfCrypt()
 							.createPassPhrase(
 									login
@@ -1005,8 +919,7 @@ public class Usermanagement {
 
 					Long user_id = addUser(level_id, availible, status,
 							firstname, login, lastname, language_id, password,
-							adr, sendSMS, age, hash, sip_user, sip_pass,
-							sip_auth, generateSipUserData, timezone,
+							adr, sendSMS, age, hash, timezone,
 							forceTimeZoneCheck, userOffers, userSearchs,
 							showContactData, showContactDataToContacts, organisations);
 					log.debug("Added user-Id " + user_id);
@@ -1061,8 +974,7 @@ public class Usermanagement {
 	public Long addUser(long level_id, int availible, int status,
 			String firstname, String login, String lastname, long language_id,
 			String userpass, Adresses adress, boolean sendSMS, Date age, String hash,
-			String sip_user, String sip_pass, String sip_auth,
-			boolean generateSipUserData, OmTimeZone timezone,
+			OmTimeZone timezone,
 			Boolean forceTimeZoneCheck, String userOffers, String userSearchs,
 			Boolean showContactData, Boolean showContactDataToContacts, List<Long> orgIds) {
 		try {
@@ -1090,30 +1002,6 @@ public class Usermanagement {
 			users.setShowContactData(showContactData);
 			users.setShowContactDataToContacts(showContactDataToContacts);
 
-			if (generateSipUserData) {
-
-				UserSipData userSipData = openXGHttpClient
-						.openSIPgUserCreateUser(firstname, "", lastname, users
-								.getAdresses().getEmail(), userpass, login);
-
-				Long userSipDataId = userSipDataDao.addUserSipData(userSipData);
-
-				users.setUserSipData(userSipDataDao
-						.getUserSipDataById(userSipDataId));
-
-			} else {
-				UserSipData userSipData = new UserSipData();
-
-				userSipData.setUsername(sip_user);
-				userSipData.setUserpass(sip_pass);
-				userSipData.setAuthId(sip_auth);
-
-				Long userSipDataId = userSipDataDao.addUserSipData(userSipData);
-
-				users.setUserSipData(userSipDataDao
-						.getUserSipDataById(userSipDataId));
-			}
-
 			// this is needed cause the language is not a needed data at
 			// registering
 			if (language_id != 0) {
@@ -1121,8 +1009,7 @@ public class Usermanagement {
 			} else {
 				users.setLanguage_id(null);
 			}
-			users.setPassword(manageCryptStyle.getInstanceOfCrypt()
-					.createPassPhrase(userpass));
+			users.updatePassword(cryptManager, configDao, userpass);
 			users.setRegdate(new Date());
 			users.setDeleted(false);
 			
@@ -1199,30 +1086,6 @@ public class Usermanagement {
 			users.setPictureuri(pictureuri);
 			users.setOmTimeZone(omTimeZoneDaoImpl.getOmTimeZone(jNameTimeZone));
 
-			if (generateSipUserData) {
-
-				UserSipData userSipData = openXGHttpClient
-						.openSIPgUserCreateUser(firstname, "", lastname, users
-								.getAdresses().getEmail(), userpass, login);
-
-				Long userSipDataId = userSipDataDao.addUserSipData(userSipData);
-
-				users.setUserSipData(userSipDataDao
-						.getUserSipDataById(userSipDataId));
-
-			} else {
-				UserSipData userSipData = new UserSipData();
-
-				userSipData.setUsername("");
-				userSipData.setUserpass("");
-				userSipData.setAuthId("");
-
-				Long userSipDataId = userSipDataDao.addUserSipData(userSipData);
-
-				users.setUserSipData(userSipDataDao
-						.getUserSipDataById(userSipDataId));
-			}
-
 			users.setExternalUserId(externalUserId);
 			users.setExternalUserType(externalUserType);
 
@@ -1233,8 +1096,7 @@ public class Usermanagement {
 			} else {
 				users.setLanguage_id(null);
 			}
-			users.setPassword(manageCryptStyle.getInstanceOfCrypt()
-					.createPassPhrase(userpass));
+			users.updatePassword(cryptManager, configDao, userpass);
 			users.setRegdate(new Date());
 			users.setDeleted(false);
 
@@ -1263,27 +1125,6 @@ public class Usermanagement {
 			return usr.getUser_id();
 		} catch (Exception ex2) {
 			log.error("[addUser]", ex2);
-		}
-		return null;
-	}
-
-	public Long addUserBackup(Users usr) {
-		try {
-
-			Long userSipDataId = userSipDataDao.addUserSipData(usr
-					.getUserSipData());
-			if (userSipDataId != null) {
-				usr.setUserSipData(userSipDataDao
-						.getUserSipDataById(userSipDataId));
-			}
-
-			usr = em.merge(usr);
-			Long user_id = usr.getUser_id();
-
-			return user_id;
-
-		} catch (Exception ex2) {
-			log.error("[addUserBackup]", ex2);
 		}
 		return null;
 	}
@@ -1335,12 +1176,7 @@ public class Usermanagement {
 									.toString())));
 
 					String password = values.get("password").toString();
-
-					if (password.length() > 3) {
-						savedUser.setPassword(manageCryptStyle
-								.getInstanceOfCrypt()
-								.createPassPhrase(password));
-					}
+					savedUser.updatePassword(cryptManager, configDao, password);
 
 					String email = values.get("email").toString();
 
@@ -1450,7 +1286,7 @@ public class Usermanagement {
 	private void sendHashByUser(Users us, String appLink) throws Exception {
 		String loginData = us.getLogin() + new Date();
 		log.debug("User: " + us.getLogin());
-		us.setResethash(manageCryptStyle.getInstanceOfCrypt().createPassPhrase(
+		us.setResethash(cryptManager.getInstanceOfCrypt().createPassPhrase(
 				loginData));
 		usersDao.update(us, 1L);
 		String reset_link = appLink + "?lzproxied=solo&hash="
@@ -1458,7 +1294,7 @@ public class Usermanagement {
 
 		String email = us.getAdresses().getEmail();
 
-		Long default_lang_id = configurationDaoImpl.getConfValue("default_lang_id", Long.class, "1");
+		Long default_lang_id = configDao.getConfValue("default_lang_id", Long.class, "1");
 
 		String template = resetPasswordTemplate.getResetPasswordTemplate(
 				reset_link, default_lang_id);
@@ -1598,24 +1434,6 @@ public class Usermanagement {
 		} else {
 			return null;
 		}
-
-	}
-
-	/**
-	 * @author o.becherer Updating User Object
-	 */
-	// -----------------------------------------------------------------------------------------------------
-	public void updateUserObject(Users user, boolean encryptPasswd)
-			throws Exception {
-		log.debug("Usermanagement.getUserByLogin");
-
-		if (encryptPasswd) {
-			String encrypted = manageCryptStyle.getInstanceOfCrypt()
-					.createPassPhrase(user.getPassword());
-			user.setPassword(encrypted);
-		}
-
-		usersDao.update(user, 1L);
 
 	}
 

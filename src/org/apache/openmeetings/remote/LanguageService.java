@@ -81,10 +81,7 @@ public class LanguageService {
 	}
 
 	public Integer getDefaultLanguage() {
-		return Integer.valueOf(
-				configurationDaoImpl.getConfKey("default_lang_id")
-						.getConf_value())
-				.intValue();
+		return configurationDaoImpl.getConfValue("default_lang_id", Integer.class, "1");
 	}
 
 	/**

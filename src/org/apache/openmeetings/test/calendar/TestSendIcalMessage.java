@@ -62,7 +62,6 @@ import net.fortuna.ical4j.util.UidGenerator;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.apache.openmeetings.utils.mail.ByteArrayDataSource;
 import org.apache.openmeetings.utils.mail.IcalHandler;
@@ -79,7 +78,7 @@ public class TestSendIcalMessage extends AbstractOpenmeetingsSpringTest {
 			OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private ConfigurationDao configurationDaoImpl;
+	private ConfigurationDao configDao;
 
 	private byte[] iCalMimeBody;
 
@@ -240,33 +239,20 @@ public class TestSendIcalMessage extends AbstractOpenmeetingsSpringTest {
 		log.debug("sendIcalMessage");
 
 		// Evaluating Configuration Data
-		String smtpServer = configurationDaoImpl.getConfKey("smtp_server")
-				.getConf_value();
-		String smtpPort = configurationDaoImpl.getConfKey("smtp_port")
-				.getConf_value();
-		// String from = "openmeetings@xmlcrm.org";
-		String from = configurationDaoImpl.getConfKey("system_email_addr")
-				.getConf_value();
-
-		String emailUsername = configurationDaoImpl
-				.getConfKey("email_username")
-				.getConf_value();
-		String emailUserpass = configurationDaoImpl
-				.getConfKey("email_userpass")
-				.getConf_value();
+		String smtpServer = configDao.getConfValue("smtp_server", String.class, "");
+		String smtpPort = configDao.getConfValue("smtp_port", String.class, "");
+		String from = configDao.getConfValue("system_email_addr", String.class, "");
+		String emailUsername = configDao.getConfValue("email_username", String.class, "");
+		String emailUserpass = configDao.getConfValue("email_userpass", String.class, "");
 
 		Properties props = System.getProperties();
 
 		props.put("mail.smtp.host", smtpServer);
 		props.put("mail.smtp.port", smtpPort);
 
-		Configuration conf = configurationDaoImpl
-				.getConfKey(
-				"mail.smtp.starttls.enable");
-		if (conf != null) {
-			if (conf.getConf_value().equals("1")) {
-				props.put("mail.smtp.starttls.enable", "true");
-			}
+		boolean isTls = (1 == configDao.getConfValue("mail.smtp.starttls.enable", Integer.class, "0"));
+		if (isTls) {
+			props.put("mail.smtp.starttls.enable", "true");
 		}
 
 		// Check for Authentification

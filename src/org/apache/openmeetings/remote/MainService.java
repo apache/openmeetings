@@ -85,7 +85,7 @@ public class MainService implements IPendingServiceCallback {
 	@Autowired
 	private Sessionmanagement sessionManagement;
 	@Autowired
-	private ConfigurationDao configurationDaoImpl;
+	private ConfigurationDao configDao;
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
@@ -609,15 +609,7 @@ public class MainService implements IPendingServiceCallback {
 								userObject.getExternalUserType());
 
 						if (user == null) {
-
-							Configuration conf = configurationDaoImpl
-									.getConfKey(
-									"default.timezone");
-							String jName_timeZone = "";
-
-							if (conf != null) {
-								jName_timeZone = conf.getConf_value();
-							}
+							String jName_timeZone = configDao.getConfValue("default.timezone", String.class, "");
 
 							long userId = userManagement
 									.addUserWithExternalKey(1, 0, 0,
@@ -683,7 +675,7 @@ public class MainService implements IPendingServiceCallback {
 		try {
 			sessionManagement.updateUserWithoutSession(SID, -1L);
 			
-			Long defaultRpcUserid = configurationDaoImpl.getConfValue(
+			Long defaultRpcUserid = configDao.getConfValue(
 					"default.rpc.userid", Long.class, "-1");
 			Users defaultRpcUser = userManagement.getUserById(defaultRpcUserid);
 			
@@ -743,7 +735,7 @@ public class MainService implements IPendingServiceCallback {
 	 * @return configuration with key "allow_frontend_register"
 	 */
 	public Configuration allowFrontendRegister(String SID) {
-		return configurationDaoImpl.getConfKey("allow_frontend_register");
+		return configDao.get("allow_frontend_register");
 	}
 	
 	public List<Configuration> getGeneralOptions(String SID) {
@@ -751,10 +743,9 @@ public class MainService implements IPendingServiceCallback {
 			
 			List<Configuration> cList = new LinkedList<Configuration>();
 			
-			cList.add(configurationDaoImpl
-					.getConfKey("exclusive.audio.keycode"));
-			cList.add(configurationDaoImpl.getConfKey("red5sip.enable"));
-			cList.add(configurationDaoImpl.getConfKey("max_upload_size"));
+			cList.add(configDao.get("exclusive.audio.keycode"));
+			cList.add(configDao.get("red5sip.enable"));
+			cList.add(configDao.get("max_upload_size"));
 			
 			return cList;
 			
@@ -768,16 +759,16 @@ public class MainService implements IPendingServiceCallback {
 		try {
 
 			List<Configuration> cList = new LinkedList<Configuration>();
-			cList.add(configurationDaoImpl
-					.getConfKey("allow_frontend_register"));
-			cList.add(configurationDaoImpl.getConfKey("show.facebook.login"));
-			cList.add(configurationDaoImpl
-					.getConfKey("user.login.minimum.length"));
-			cList.add(configurationDaoImpl
-					.getConfKey("user.pass.minimum.length"));
-			cList.add(configurationDaoImpl
-					.getConfKey("user.pass.minimum.length"));
-			cList.add(configurationDaoImpl.getConfKey("ldap_default_id"));
+			cList.add(configDao
+					.get("allow_frontend_register"));
+			cList.add(configDao.get("show.facebook.login"));
+			cList.add(configDao
+					.get("user.login.minimum.length"));
+			cList.add(configDao
+					.get("user.pass.minimum.length"));
+			cList.add(configDao
+					.get("user.pass.minimum.length"));
+			cList.add(configDao.get("ldap_default_id"));
 
 			return cList;
 		} catch (Exception err) {
@@ -995,27 +986,6 @@ public class MainService implements IPendingServiceCallback {
 		}
 	}
 
-	public Boolean getSIPModuleStatus() {
-		try {
-
-			Configuration conf = configurationDaoImpl.getConfKey("sip.enable");
-
-			if (conf == null) {
-				return false;
-			} else {
-
-				if (conf.getConf_value().equals("yes")) {
-					return true;
-				}
-
-			}
-
-		} catch (Exception err) {
-			log.error("[getSIPModuleStatus]", err);
-		}
-		return false;
-	}
-
 	public int closeRoom(String SID, Long room_id, Boolean status) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
@@ -1051,7 +1021,7 @@ public class MainService implements IPendingServiceCallback {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			if (authLevelManagement.checkUserLevel(user_level)) {
-				return configurationDaoImpl.getConfKeys(new String[] {
+				return configDao.getConfKeys(new String[] {
 						"dashboard.show.chat", //
 						"dashboard.show.myrooms", //
 						"dashboard.show.rssfeed", //

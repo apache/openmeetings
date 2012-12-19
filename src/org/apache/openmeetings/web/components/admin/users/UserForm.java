@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.openmeetings.data.basic.FieldLanguageDaoImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.user.Organisationmanagement;
 import org.apache.openmeetings.data.user.dao.SalutationDao;
@@ -35,6 +36,7 @@ import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.user.Salutations;
 import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.admin.AdminBaseForm;
@@ -160,20 +162,22 @@ public class UserForm extends AdminBaseForm<Users> {
 
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
-		Application.getBean(UsersDao.class).update(getModelObject(),
-				WebSession.getUserId());
-		Users userStored = Application.getBean(UsersDao.class).get(
-				getModelObject().getUser_id());
+		Users u = getModelObject();
 		// TODO: Why the password field is not set via the Model is because its
 		// FetchType is Lazy, this extra hook here might be not needed with a
 		// different mechanism to protect the password from being read
 		// sebawagner, 01.10.2012
-		if (passwordField.getConvertedInput() != null
-				&& !passwordField.getConvertedInput().isEmpty()) {
-			Application.getBean(UsersDao.class).updatePassword(userStored,
-					passwordField.getConvertedInput());
+		try {
+			//FIXME need to be verified
+			u.updatePassword(
+				Application.getBean(ManageCryptStyle.class)
+				, Application.getBean(ConfigurationDao.class)
+				, passwordField.getConvertedInput());
+			Application.getBean(UsersDao.class).update(u, WebSession.getUserId());
+		} catch (Exception e) {
+			//FIXME update feedback with the error details
 		}
-		setModelObject(userStored);
+		setModelObject(u);
 		hideNewRecord();
 		target.add(this);
 		target.add(listContainer);

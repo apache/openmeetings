@@ -19,6 +19,7 @@
 package org.apache.openmeetings.persistence.beans.user;
 
 import java.io.Serializable;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +37,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -44,12 +47,16 @@ import org.apache.openjpa.persistence.FetchAttribute;
 import org.apache.openjpa.persistence.FetchGroup;
 import org.apache.openjpa.persistence.FetchGroups;
 import org.apache.openjpa.persistence.LoadFetchGroup;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
 import org.apache.openmeetings.persistence.beans.adresses.Adresses;
 import org.apache.openmeetings.persistence.beans.adresses.States;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
+import org.apache.openmeetings.persistence.beans.sip.asterisk.AsteriskSipUser;
+import org.apache.openmeetings.utils.crypt.MD5;
+import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -186,10 +193,10 @@ public class Users implements Serializable, IDataProviderEntity {
 	@ElementDependent
 	private List<Organisation_Users> organisation_users = new ArrayList<Organisation_Users>();
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "userSipDataId", insertable = true, updatable = true)
-	@Element(name = "sipData", required = false)
-	private UserSipData userSipData;
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@PrimaryKeyJoinColumn(name="sip_user_id", referencedColumnName="id")
+	@Element(name = "sipUser", required = false)
+	private AsteriskSipUser sipUser;
 
 	// Vars to simulate external Users
 	@Column(name = "externalUserId")
@@ -338,10 +345,38 @@ public class Users implements Serializable, IDataProviderEntity {
 		this.login = login;
 	}
 
+	public void updatePassword(ManageCryptStyle crypt, ConfigurationDao configDao, String pass) throws NoSuchAlgorithmException {
+		Integer userPassMinimumLength = configDao.getConfValue("user.pass.minimum.length", Integer.class, "4");
+
+		if (userPassMinimumLength == null) {
+			throw new RuntimeException("user.pass.minimum.length problem");
+		}
+		if (pass == null || pass.length() < userPassMinimumLength) {
+			throw new RuntimeException("Password of invalid length is provided");
+		}
+		String sipEnabled = configDao.getConfValue("red5sip.enable", String.class, "no");
+        if("yes".equals(sipEnabled)) {
+        	if (getSipUser() == null) {
+        		setSipUser(new AsteriskSipUser());
+        	}
+        	AsteriskSipUser u = getSipUser();
+        	String defaultRoomContext = configDao.getConfValue("red5sip.exten_context", String.class, "rooms");
+        	u.setName(login);
+        	u.setDefaultuser(login);
+        	u.setMd5secret(MD5.do_checksum(login + ":asterisk:" + pass));
+        	u.setContext(defaultRoomContext);
+        	u.setHost("dynamic");
+        } else {
+        	setSipUser(null);
+        }
+		password = crypt.getInstanceOfCrypt().createPassPhrase(pass);
+	}
+	
 	public String getPassword() {
 		return password;
 	}
 
+	@Deprecated //should not be used directly (for bean usage only)
 	public void setPassword(String password) {
 		this.password = password;
 	}
@@ -477,12 +512,12 @@ public class Users implements Serializable, IDataProviderEntity {
 		this.sessionData = sessionData;
 	}
 
-	public UserSipData getUserSipData() {
-		return userSipData;
+	public AsteriskSipUser getSipUser() {
+		return sipUser;
 	}
 
-	public void setUserSipData(UserSipData userSipData) {
-		this.userSipData = userSipData;
+	public void setSipUser(AsteriskSipUser sipUser) {
+		this.sipUser = sipUser;
 	}
 
 	public OmTimeZone getOmTimeZone() {

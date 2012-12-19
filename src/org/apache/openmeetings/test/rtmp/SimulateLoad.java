@@ -54,6 +54,7 @@ public class SimulateLoad extends Thread {
 
 		} catch (Exception er) {
 			er.printStackTrace();
+			log.error("Error", er);
 		}
 	}
 

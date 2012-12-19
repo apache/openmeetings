@@ -26,7 +26,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.velocity.Template;
 import org.apache.velocity.context.Context;
@@ -67,78 +66,8 @@ public class DefaultIndex extends VelocityViewServlet {
 						"booting.vm");
 			}
 
-			String template = "sip_template.vm";
-
-			// Enable SIP Template or not
-			Configuration SIP_ENABLE = getConfigurationDaoImpl().getConfKey(
-					"sip.enable");
-
-			// SIP_REALM
+			String template = "usual_template.vm";
 			ctx.put("APP_NAME", getConfigurationDaoImpl().getAppName());
-
-			if (SIP_ENABLE == null || !SIP_ENABLE.getConf_value().equals("yes")) {
-
-				template = "usual_template.vm";
-
-			} else {
-
-				// Set all the Params for the Applet Configuration
-
-				// SIP_REALM
-				Configuration SIP_REALM = getConfigurationDaoImpl()
-						.getConfKey("sip.realm");
-				if (SIP_REALM == null) {
-					ctx.put("SIP_REALM", "");
-				} else {
-					ctx.put("SIP_REALM", SIP_REALM.getConf_value());
-				}
-
-				// SIP_PORT
-				Configuration SIP_PORT = getConfigurationDaoImpl()
-						.getConfKey("sip.port");
-				if (SIP_PORT == null) {
-					ctx.put("SIP_PORT", "");
-				} else {
-					ctx.put("SIP_PORT", SIP_PORT.getConf_value());
-				}
-
-				// SIP_PROXYNAME
-				Configuration SIP_PROXYNAME = getConfigurationDaoImpl()
-						.getConfKey("sip.proxyname");
-				if (SIP_PROXYNAME == null) {
-					ctx.put("SIP_PROXYNAME", "");
-				} else {
-					ctx.put("SIP_PROXYNAME", SIP_PROXYNAME.getConf_value());
-				}
-
-				// SIP_TUNNEL
-				Configuration SIP_TUNNEL = getConfigurationDaoImpl()
-						.getConfKey("sip.tunnel");
-				if (SIP_TUNNEL == null) {
-					ctx.put("SIP_TUNNEL", "");
-				} else {
-					ctx.put("SIP_TUNNEL", SIP_TUNNEL.getConf_value());
-				}
-
-				// SIP_CODEBASE
-				Configuration SIP_CODEBASE = getConfigurationDaoImpl()
-						.getConfKey("sip.codebase");
-				if (SIP_CODEBASE == null) {
-					ctx.put("SIP_CODEBASE", "");
-				} else {
-					ctx.put("SIP_CODEBASE", SIP_CODEBASE.getConf_value());
-				}
-
-				// SIP_FORCETUNNEL
-				Configuration SIP_FORCETUNNEL = getConfigurationDaoImpl()
-						.getConfKey("sip.forcetunnel");
-				if (SIP_FORCETUNNEL == null) {
-					ctx.put("SIP_FORCETUNNEL", "");
-				} else {
-					ctx.put("SIP_FORCETUNNEL", SIP_FORCETUNNEL.getConf_value());
-				}
-			}
-
 			// Parse the Param for the SWF URL
 			String swf = httpServletRequest.getParameter("swf");
 			if (swf == null) {
@@ -152,8 +81,7 @@ public class DefaultIndex extends VelocityViewServlet {
 
 			// Load params from URL and set into wrapper code
 			if (httpServletRequest.getParameterMap() != null) {
-				for (@SuppressWarnings("unchecked")
-				Iterator<String> iter = httpServletRequest.getParameterMap()
+				for (Iterator<String> iter = httpServletRequest.getParameterMap()
 						.keySet().iterator(); iter.hasNext();) {
 					String paramKey = iter.next();
 					SWF_FLASHVARS += paramKey

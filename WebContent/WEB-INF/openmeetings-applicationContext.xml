@@ -258,23 +258,17 @@
 		class="org.apache.openmeetings.data.conference.Invitationmanagement" />
 	<bean id="meetingMemberDao"
 		class="org.apache.openmeetings.data.calendar.daos.MeetingMemberDao" />
-	<bean id="openXGReturnObjectDao"
-		class="org.apache.openmeetings.sip.xmlrpc.custom.dao.OpenXGReturnObjectDaoImpl" />
 	<bean id="privateMessageFolderDao"
 		class="org.apache.openmeetings.data.user.dao.PrivateMessageFolderDao" />
 	<bean id="privateMessagesDao"
 		class="org.apache.openmeetings.data.user.dao.PrivateMessagesDao" />
 	<bean id="soapLoginDao" class="org.apache.openmeetings.data.basic.dao.SOAPLoginDao" />
 	<bean id="userContactsDao" class="org.apache.openmeetings.data.user.dao.UserContactsDao" />
-	<bean id="userSipDataDao" class="org.apache.openmeetings.data.user.dao.UserSipDataDao" />
 	<bean id="usersDao" class="org.apache.openmeetings.data.user.dao.UsersDao" />
 	<bean id="serverDao" class="org.apache.openmeetings.data.basic.dao.ServerDao" />
 
 	<!-- No Interface -->
 	<bean id="manageCryptStyle" class="org.apache.openmeetings.utils.crypt.ManageCryptStyle" />
-	<bean id="openXGHttpClient" class="org.apache.openmeetings.sip.xmlrpc.OpenXGHttpClient" />
-    <bean id="asteriskDbSipClient" class="org.apache.openmeetings.sip.api.impl.asterisk.AsteriskDbSipClient" />
-    <bean id="asteriskDAO" class="org.apache.openmeetings.sip.api.impl.asterisk.dao.AsteriskDAOImpl" />
     <bean id="generateImage" class="org.apache.openmeetings.documents.GenerateImage" />
 	<bean id="generateThumbs" class="org.apache.openmeetings.documents.GenerateThumbs" />
 	<bean id="generatePDF" class="org.apache.openmeetings.documents.GeneratePDF" />
