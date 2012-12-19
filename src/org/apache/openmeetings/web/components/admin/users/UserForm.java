@@ -168,11 +168,13 @@ public class UserForm extends AdminBaseForm<Users> {
 		// different mechanism to protect the password from being read
 		// sebawagner, 01.10.2012
 		try {
-			//FIXME need to be verified
-			u.updatePassword(
-				Application.getBean(ManageCryptStyle.class)
-				, Application.getBean(ConfigurationDao.class)
-				, passwordField.getConvertedInput());
+			String pass = passwordField.getConvertedInput();
+			if (pass != null&& !pass.isEmpty()) {
+				u.updatePassword(
+					Application.getBean(ManageCryptStyle.class)
+					, Application.getBean(ConfigurationDao.class)
+					, passwordField.getConvertedInput());
+			}
 			Application.getBean(UsersDao.class).update(u, WebSession.getUserId());
 		} catch (Exception e) {
 			//FIXME update feedback with the error details
