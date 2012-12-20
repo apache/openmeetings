@@ -26,6 +26,11 @@
 				var chat = $('#chat');
 				chat.animate({ height: chat.height() < 20 ? "300px" : "16px" }, 1000);
 			}
+			Wicket.Event.subscribe("/websocket/message", function(jqEvent, message) {
+				$('#messageArea').append('<div>' + message + '</div>'); 
+				// do something with the message.
+				// it may be a text or a binary message depending on what you pushed from the server side
+			});
 		</script>
 	</wicket:head>
 	<wicket:panel>

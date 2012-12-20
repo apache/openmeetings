@@ -66,6 +66,7 @@
 	z-index: 2000;
 	bottom: 0px;
 	right: 10px;
+	width: 300px;
 }
 
 #chatPanel #chat {
@@ -372,7 +373,7 @@ div.tableWrapper {
 	display: inline-block;
 }
 
-.pagedEntityListPanel .searchForm {
+.searchForm {
 	display: inline-block;
 }
 

@@ -41,7 +41,6 @@ public abstract class PagedEntityListPanel extends AdminPanel {
 		
 		dataView.setItemsPerPage(entitiesPerPage);
 		final Form<Void> f = new Form<Void>("pagingForm");
-		f.setOutputMarkupId(true);
 
 		f.add(new AdminPagingNavigator("navigator", dataView).setOutputMarkupId(true))
 			.add(new DropDownChoice<Integer>("entitiesPerPage", new PropertyModel<Integer>(this, "entitiesPerPage"), numbers)
@@ -60,7 +59,7 @@ public abstract class PagedEntityListPanel extends AdminPanel {
 		
 		final SearchableDataProvider<? extends IDataProviderEntity> dp = dataView.getDataProvider();
 		Form<Void> searchForm = new Form<Void>("searchForm");
-		f.add(searchForm);
+		add(searchForm.setOutputMarkupId(true));
 		searchForm.add(new TextField<String>("searchText", new PropertyModel<String>(dp, "search")).setOutputMarkupId(true));
 		searchForm.add(new AjaxButton("search", searchForm) {
 			private static final long serialVersionUID = -1659023337945692814L;
@@ -71,7 +70,7 @@ public abstract class PagedEntityListPanel extends AdminPanel {
 				PagedEntityListPanel.this.onEvent(target);
 			}
 		});
-		add(f);
+		add(f.setOutputMarkupId(true));
 	}
 
 	protected abstract void onEvent(AjaxRequestTarget target);
