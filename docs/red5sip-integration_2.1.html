@@ -28,15 +28,13 @@ limitations under the License.
         <head>
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-                                                    <meta name="author" content="
-			OpenMeetings Team
-		">
-            <meta name="email" content="sebawagner@apache.org">
+                                                    <meta name="author" content="OpenMeetings Team">
+            <meta name="email" content="solomax@apache.org">
             
            
                                     
                         
-            <title>Apache OpenMeetings [Incubating] - VoIP and SIP Integration</title>
+            <title>Apache OpenMeetings [Incubating] - SIP-Transport Integration</title>
             <link rel="stylesheet" type="text/css" href="css/openmeetings.css">
             <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
             <link rel="stylesheet" type="text/css" href="css/coin-slider-styles.css">
@@ -627,44 +625,216 @@ limitations under the License.
                                                                     <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="VoIP and SIP Integration"><strong>VoIP and SIP Integration</strong></a>
+          <a name="SIP-Transport Integration"><strong>SIP-Transport Integration</strong></a>
         </font>
         <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
       </td></tr>
       <tr><td>
         <blockquote>
-                                    <p>
-				There are multiple ways to integrate with VoIP and or SIP.
-				OpenMeetings does not provide out of the box a ready to run VoIP
-				integration / integration to cell phone or usual land lane.
-				The
-				nature of such integrations is that it depends heavily on the
-				infrastructure that you are using and where you would like to
-				integrate OpenMeetings into.
-				<br />
-				<br />
-				It also depends on a number of factors of which OpenMeetings is
-				impossible to set up for you, for example setting up your VoIP
-				server or provide you with a range of telephone numbers reserved for
-				conference calls in your national phone network.
-				Such an integration
-				project is likely to become a consulting job for a
-				telecommunications consultant.
-				<br />
-				<br />
-				To get help on the integration you can contact the
-				<a href="mail-lists.html">mailing lists</a>
-				or for example somebody from the list of
-				<a href="commercial-support.html">commercial support</a>
-				.
-                <br /><br />
-                <a href="red5sip-integration.html">
-                Instruction how-to set up OpenMeetings SIP-Transport integration
-                </a>.<br />
-                <a href="red5sip-integration.html">
-                Instruction how-to set up OpenMeetings SIP-Transport integration for Openmeetings 2.1
-                </a>.<br />
+                                    <p>You need Apache OpenMeetings <strong>version 2.1</strong> to apply this guide!</p>
+                                                <p>You need Asterisk <strong>version 1.8</strong> to apply this guide!</p>
+                                                <p>Here is instruction how-to set up red5sip transport integration with OpenMeetings on Ubuntu 12.10.</p>
+                            </blockquote>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td ><!-- bgcolor="#EEEEEE" -->
+        <font color="#000000" face="verdana,arial,helvetica,sanserif">
+          <a name="ODBC Setup"><strong>ODBC Setup</strong></a>
+        </font>
+        <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <div>
+				Set up Asterisk connector:<br /><br />
+				Modify file /etc/odbc.ini as follows: (replace USER, PASSWORD and Socket with values relative to your system)
+				<blockquote>
+					<i>
+						[asterisk-connector]<br />
+						Description = MySQL connection to 'openmeetings' database<br />
+						Driver = MySQL<br />
+						Database = openmeetings<br />
+						Server = localhost<br />
+						USER = root<br />
+						PASSWORD =<br />
+						Port = 3306<br />
+						Socket = /var/run/mysqld/mysqld.sock<br />
+					</i>
+				</blockquote><br /><br />
+				Modify file /etc/odbcinst.ini as follows: (replace the path to the *.so files below with the real paths on your system)
+				<blockquote>
+					<i>
+						[MySQL]<br />
+						Description = ODBC for MySQL<br />
+						Driver = /usr/lib/i386-linux-gnu/odbc/libmyodbc.so<br />
+						Setup = /usr/lib/i386-linux-gnu/odbc/libodbcmyS.so<br />
+						FileUsage = 1<br />
+					</i>
+				</blockquote><br /><br />
+				Run the following command to ensure everything works as expected:
+				<blockquote>
+					<i>echo "select 1" | isql -v asterisk-connector</i>
+				</blockquote>
+			</div>
+                            </blockquote>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td ><!-- bgcolor="#EEEEEE" -->
+        <font color="#000000" face="verdana,arial,helvetica,sanserif">
+          <a name="Setup Asterisk"><strong>Setup Asterisk</strong></a>
+        </font>
+        <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <div>
+				Run the commands
+				<blockquote>
+					<i>
+						sudo apt-get update<br />
+						sudo sudo apt-get install asterisk unixODBC unixODBC-dev libmyodbc asterisk-dahdi
+					</i>
+				</blockquote>
+			</div>
+                                                <div>
+				Enable asterisk ODBC and MeetMe modules:<br /><br />
+				Modify "[modules]" section of /etc/asterisk/modules.conf as follows:<br />
+				<strong>Add/uncomment the following lines</strong>
+				<blockquote>
+					<i>
+						preload =&gt; res_odbc.so<br />
+						preload =&gt; res_config_odbc.so<br />
+						load =&gt; app_meetme.so<br />
+					</i>
+				</blockquote>
+				<strong>Remove/comment the following lines</strong>
+				<blockquote>
+					<i>noload =&gt; res_config_odbc.so</i>
+				</blockquote>
+			</div>
+                                                <div>
+				Enable caching of SIP users:<br /><br />
+				Modify "[general]" section of /etc/asterisk/sip.conf uncomment the following line:
+				<blockquote>
+					<i>rtcachefriends=yes</i>
+				</blockquote>
+			</div>
+                                                <div>
+				Add next lines into the /etc/asterisk/extconfig.conf:
+				<blockquote>
+					<i>
+						[settings]<br />
+						sipusers =&gt; odbc,asterisk,sipusers<br />
+						sippeers =&gt; odbc,asterisk,sipusers<br />
+						meetme =&gt; odbc,asterisk,meetme<br />
+
+					</i>
+				</blockquote>
+			</div>
+                                                <div>
+				Add next lines into the /etc/asterisk/extensions.conf:
+				<blockquote>
+					<i>
+						[rooms]<br />
+						switch =&gt; Realtime/@<br /><br />
+						exten =&gt; _400X!,1,MeetMe(${EXTEN},dM)<br /><br />
+						exten =&gt; &lt;extension&gt;,1,Set(SIP_NO=&lt;number to call with sipnet&gt;)<br />
+						exten =&gt; &lt;extension&gt;,2,Goto(sipnet-out,s,1)<br /><br />
+						exten =&gt; _.,1,Answer<br />
+						exten =&gt; _.,2,Playback(invalid)<br />
+						exten =&gt; _.,3,Hangup<br /><br />
+						[sipnet-out]<br /><br />
+						exten =&gt; s,1,Answer<br />
+						exten =&gt; s,n,Dial(SIP/${SIP_NO}@SIPNET,30)<br />
+						exten =&gt; s,n,HangUp
+					</i>
+				</blockquote>
+			</div>
+                                                <div>
+				Create/update "[asterisk]" section in /etc/asterisk/res_odbc.conf:
+				<blockquote>
+					<i>
+						[asterisk]<br />
+						enabled =&gt; yes<br />
+						dsn =&gt; asterisk-connector<br />
+						pre-connect =&gt; yes
+					</i>
+				</blockquote>
+			</div>
+                                                <div>
+				Restart asterisk:
+				<blockquote>
+					<i>service asterisk restart</i>
+				</blockquote>
+			</div>
+                            </blockquote>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td ><!-- bgcolor="#EEEEEE" -->
+        <font color="#000000" face="verdana,arial,helvetica,sanserif">
+          <a name="Setup red5sip transport"><strong>Setup red5sip transport</strong></a>
+        </font>
+        <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <div>
+				Download red5sip from
+				<blockquote>http://red5phone.googlecode.com/svn/branches/red5sip</blockquote>
+			</div>
+                                                <p>
+				Build with Apache Ant
 			</p>
+                                                <div>
+				Install jsvc:
+				<blockquote>
+					<i>apt-get install jsvc</i>
+				</blockquote>
+			</div>
+                                                <div>
+				Insert proper values to the /opt/red5sip/settings.properties
+
+				<blockquote>
+					<i>
+						red5.host - red5 server address (127.0.0.1)<br />
+						sip.obproxy - asterisk adderss (127.0.0.1)<br />
+						sip.phone - sip phone number (test)<br />
+						sip.authid - sip auth id (test)<br />
+						sip.secret - sip password (12345)<br />
+						sip.realm - sip realm, "asterisk" by default<br />
+						sip.proxy - <br />
+						rooms - ids of openmeetings rooms, can be, for example, 2,3,5,6
+					</i>
+				</blockquote>
+			</div>
+                                                <div>
+				Add red5sip to autostart:
+				<blockquote>
+					<i>
+						ln -s /opt/red5sip/red5sip.sh /etc/init.d/red5sip<br />
+						chmod a+x /etc/init.d/red5sip<br />
+						update-rc.d /etc/init.d/red5sip defaults
+					</i>
+				</blockquote>
+			</div>
+                                                <div>
+				Start openmeetings
+				<blockquote>
+					<i>service red5 start</i>
+				</blockquote>
+			</div>
+                                                <div>
+				Start red5sip
+				<blockquote>
+					<i>service red5sip start</i>
+				</blockquote>
+			</div>
                             </blockquote>
       </td></tr>
       <tr><td><br/></td></tr>
