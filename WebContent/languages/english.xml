@@ -4610,4 +4610,22 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   <string id="1528" name="room_options">
     <value>Auto select interview video pod</value>
   </string>
+  <string id="1528" name="room_options">
+    <value>Auto select interview video pod</value>
+  </string>
+  <string id="1529" name="font_underline">
+    <value>Underline</value>
+  </string>
+  <string id="1530" name="font_style">
+    <value>Font style</value>
+  </string>
+  <string id="1531" name="allow_font_styles">
+    <value>Allow font styles</value>
+  </string>
+  <string id="1532" name="font_color">
+    <value>Font color</value>
+  </string>
+  <string id="1533" name="hyperlink">
+    <value>Hyperlink</value>
+  </string>
 </language>
