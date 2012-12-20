@@ -19,10 +19,14 @@
 package org.apache.openmeetings.web.pages;
 
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.HeaderPanel;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 
@@ -31,6 +35,13 @@ public abstract class BasePage extends WebPage {
 
 	public BasePage() {
 		String appName = Application.getBean(ConfigurationDao.class).getAppName();
+
+		FieldLanguage lang = WebSession.getLanguageObj();
+		String code = lang.getCode();
+		add(new TransparentWebMarkupContainer("html")
+	    	.add(new AttributeModifier("xml:lang", code))
+	    	.add(new AttributeModifier("lang", code))
+	    	.add(new AttributeModifier("dir", Boolean.TRUE.equals(lang.getRtl()) ? "rtl" : "ltr"))); 
 		add(new Label("pageTitle", appName));
 		add(new HeaderPanel("header", appName));
 	}

@@ -18,12 +18,14 @@
   under the License.
   
 -->
-<html xmlns="http://www.w3.org/1999/xhtml" 
-	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.5-strict.dtd" lang="en">
+<html xmlns:wicket="http://wicket.apache.org">
 	<wicket:head>
 		<script type="text/javascript">
 			function toggleChat() {
 				var chat = $('#chat');
+				$('#chat #controlBlock #control')
+					.removeClass('ui-icon-carat-1-' + (chat.height() < 20 ? 'n' : 's'))
+					.addClass('ui-icon-carat-1-' + (chat.height() < 20 ? 's' : 'n'));
 				chat.animate({ height: chat.height() < 20 ? "300px" : "16px" }, 1000);
 			}
 			Wicket.Event.subscribe("/websocket/message", function(jqEvent, message) {
@@ -32,15 +34,6 @@
 		</script>
 	</wicket:head>
 	<wicket:panel>
-		<!--  script type="text/javascript">
-			alert("AAAA");
-			Wicket.Event.subscribe("/websocket/message", function(jqEvent, message) {
-				$('#messageArea').append('<div>' + message + '</div>'); 
-				// do something with the message.
-				// it may be a text or a binary message depending on what you pushed from the server side
-			});
-		</script -->
-		<!-- "ui-icon ui-icon-carat-1-n sort-icon", "ui-icon ui-icon-carat-1-s sort-icon" -->
 		<div id="chat">
 			<div id="controlBlock" onclick="toggleChat();"><div id="control" class="ui-icon ui-icon-carat-1-n sort-icon"></div></div>
 			<div wicket:id="messages"></div>

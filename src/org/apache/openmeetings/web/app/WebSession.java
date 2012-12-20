@@ -24,12 +24,14 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
+import org.apache.openmeetings.data.basic.FieldLanguageDaoImpl;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
+import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
@@ -113,6 +115,10 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		} else {
 			return Application.getBean(ConfigurationDao.class).getConfValue("default_lang_id", Long.class, "1");
 		}
+	}
+	
+	public static FieldLanguage getLanguageObj() {
+		return Application.getBean(FieldLanguageDaoImpl.class).getFieldLanguageById(getLanguage());
 	}
 	
 	public static String getSid() {
