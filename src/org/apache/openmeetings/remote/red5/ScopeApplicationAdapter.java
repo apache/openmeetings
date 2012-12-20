@@ -47,6 +47,7 @@ import org.apache.openmeetings.data.logs.ConferenceLogDao;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.documents.beans.UploadCompleteMessage;
+import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms;
@@ -196,7 +197,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 					rcm.getScope(), rcm.getExternalUserId(),
 					rcm.getExternalUserType(), rcm.getMail(),
 					rcm.getFirstname(), rcm.getLastname());
-
 		} catch (Exception err) {
 			log.error("roomJoin", err);
 		}
@@ -2992,6 +2992,14 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 * SIP transport methods
 	 */
 
+	public synchronized List<Long> getActiveRoomIds() {
+		List<Long> result = new ArrayList<Long>(clientListManager.getActiveRoomIdsByServer(null));
+		for (Server s : serverDao.getActiveServers()) {
+			result.addAll(clientListManager.getActiveRoomIdsByServer(s));
+		}
+		return result;
+	}
+	
     public synchronized void updateSipTransport() {
         IConnection current = Red5.getConnectionLocal();
         String streamid = current.getClient().getId();
@@ -3072,8 +3080,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
                             if (conn instanceof IServiceCapableConnection) {
                                 ((IServiceCapableConnection) conn).invoke("addNewUser", new Object[]{currentClient}, this);
                                 ((IServiceCapableConnection) conn).invoke("newStream", new Object[]{currentClient}, this);
-                                log.debug("sending setSipTransport to "
-                                        + conn);
+                                log.debug("sending setSipTransport to " + conn);
                             }
                         }
                     }
