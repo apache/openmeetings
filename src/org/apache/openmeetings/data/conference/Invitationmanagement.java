@@ -673,11 +673,11 @@ public class Invitationmanagement {
 	 * @param subject 
 	 * @return
 	 */
-	public boolean sendInvitationReminderSMS(String phone, String subject) {
+	public boolean sendInvitationReminderSMS(String phone, String subject, long language_id) {
 		if (phone != null && phone.length() > 0) {
 			log.debug("sendInvitationReminderSMS to " + phone + ": " + subject);
 			try {
-				return smsHandler.sendSMS(phone, subject);
+				return smsHandler.sendSMS(phone, subject, language_id);
 			} catch (Exception e) {
 				log.error("sendInvitationReminderSMS", e);
 			}

@@ -493,6 +493,7 @@ public class AppointmentLogic {
 					}
 
 					String subject = generateSubject(labelid1158, ment, tZone);
+					String smsSubject = generateSMSSubject(labelid1158, ment);
 
 					String message = generateMessage(labelid1158, ment,
 							language_id, labelid1153, labelid1154, tZone);
@@ -501,7 +502,7 @@ public class AppointmentLogic {
 							inv.getBaseUrl(), mm.getEmail(), subject,
 							inv.getHash());
 
-					invitationManagement.sendInvitationReminderSMS(mm.getPhone(), subject);
+					invitationManagement.sendInvitationReminderSMS(mm.getPhone(), smsSubject, language_id);
 					inv.setUpdatetime(new Date());
 					invitationManagement.updateInvitation(inv);
 				}
@@ -527,6 +528,10 @@ public class AppointmentLogic {
 
 	}
 
+	private String generateSMSSubject(String labelid1158, Appointment ment) {
+		return labelid1158 + " " + ment.getAppointmentName();
+	}
+	
 	/**
 	 * Generate a localized message including the time and date of the meeting
 	 * event

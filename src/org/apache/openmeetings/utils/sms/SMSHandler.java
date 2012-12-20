@@ -22,6 +22,7 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.smslib.Message.MessageEncodings;
 import org.smslib.OutboundMessage;
 import org.smslib.Service;
 import org.smslib.http.BulkSmsHTTPGateway;
@@ -65,9 +66,9 @@ public class SMSHandler {
 		return gateway.queryBalance() >= 1; 
 	}
 	
-	public boolean sendSMS(String phone, String subj) {
+	public boolean sendSMS(String phone, String subj, long language_id) {
 		try {
-			taskExecutor.execute(new SMSSenderTask(phone, subj));
+			taskExecutor.execute(new SMSSenderTask(phone, subj, language_id));
 			return true;
 		} catch (Exception ex) {
 			log.error("sendSMS", ex);
@@ -76,13 +77,14 @@ public class SMSHandler {
 	}
 	
 	protected class SMSSenderTask implements Runnable {
-
 		private final String phone;
 		private final String subject;
+		private long language_id;
 
-		public SMSSenderTask(String phone, String subject) {
+		public SMSSenderTask(String phone, String subject, long language_id) {
 			this.phone = phone;
 			this.subject = subject;
+			this.language_id = language_id;
 		}
 
 		public void run() {
@@ -98,6 +100,9 @@ public class SMSHandler {
 				log.debug("SMS sending to: " + phone + ", subject is: " + subject);
 				if (checkBalance()) {
 					OutboundMessage msg = new OutboundMessage(phone, subject);
+					if (language_id != 1) {
+						msg.setEncoding(MessageEncodings.ENCUCS2);
+					}
 					return Service.getInstance().sendMessage(msg);
 				} else {
 					log.error("Error: insufficient funds on SMS provider account!");
