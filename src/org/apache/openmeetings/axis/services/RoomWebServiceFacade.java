@@ -261,12 +261,12 @@ public class RoomWebServiceFacade {
 			String name, Long roomtypes_id, String comment,
 			Long numberOfPartizipants, Boolean ispublic, Boolean appointment,
 			Boolean isDemoRoom, Integer demoTime, Boolean isModeratedRoom,
-			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean allowFontStyles) throws AxisFault {
+			Boolean allowUserQuestions, Boolean isAudioOnly) throws AxisFault {
 		return this.getRoomServiceProxy()
 				.addRoomWithModerationQuestionsAndAudioType(SID, name,
 						roomtypes_id, comment, numberOfPartizipants, ispublic,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
-						allowUserQuestions, isAudioOnly, allowFontStyles);
+						allowUserQuestions, isAudioOnly);
 	}
 
 	/**
@@ -410,25 +410,25 @@ public class RoomWebServiceFacade {
 			Long numberOfPartizipants, Boolean ispublic, Boolean appointment,
 			Boolean isDemoRoom, Integer demoTime, Boolean isModeratedRoom,
 			String externalRoomType, Boolean allowUserQuestions,
-			Boolean isAudioOnly, Boolean allowFontStyles) throws AxisFault {
+			Boolean isAudioOnly) throws AxisFault {
 		return this.getRoomServiceProxy()
 				.addRoomWithModerationExternalTypeAndAudioType(SID, name,
 						roomtypes_id, comment, numberOfPartizipants, ispublic,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
-						externalRoomType, allowUserQuestions, isAudioOnly, allowFontStyles);
+						externalRoomType, allowUserQuestions, isAudioOnly);
 	}
 
 	public Long addRoomWithModerationAndRecordingFlags(String SID, String name,
 			Long roomtypes_id, String comment, Long numberOfPartizipants,
 			Boolean ispublic, Boolean appointment, Boolean isDemoRoom,
 			Integer demoTime, Boolean isModeratedRoom, String externalRoomType,
-			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean allowFontStyles,
+			Boolean allowUserQuestions, Boolean isAudioOnly,
 			Boolean waitForRecording, Boolean allowRecording) throws AxisFault {
 		return this.getRoomServiceProxy()
 				.addRoomWithModerationAndRecordingFlags(SID, name,
 						roomtypes_id, comment, numberOfPartizipants, ispublic,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
-						externalRoomType, allowUserQuestions, isAudioOnly, allowFontStyles,
+						externalRoomType, allowUserQuestions, isAudioOnly,
 						waitForRecording, allowRecording);
 	}
 
@@ -437,13 +437,13 @@ public class RoomWebServiceFacade {
 			Long numberOfPartizipants, Boolean ispublic, Boolean appointment,
 			Boolean isDemoRoom, Integer demoTime, Boolean isModeratedRoom,
 			String externalRoomType, Boolean allowUserQuestions,
-			Boolean isAudioOnly, Boolean allowFontStyles, Boolean waitForRecording,
+			Boolean isAudioOnly, Boolean waitForRecording,
 			Boolean allowRecording, Boolean hideTopBar) throws AxisFault {
 		return this.getRoomServiceProxy()
 				.addRoomWithModerationExternalTypeAndTopBarOption(SID, name,
 						roomtypes_id, comment, numberOfPartizipants, ispublic,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
-						externalRoomType, allowUserQuestions, isAudioOnly, allowFontStyles,
+						externalRoomType, allowUserQuestions, isAudioOnly,
 						waitForRecording, allowRecording, hideTopBar);
 	}
 

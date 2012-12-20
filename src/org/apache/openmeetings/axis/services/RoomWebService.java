@@ -883,8 +883,6 @@ public class RoomWebService {
 	 *            moderation
 	 * @param isAudioOnly
 	 *            enable or disable the video / or audio-only
-	 * @param allowFontStyles
-	 * 			  allow / deny using html tags in the chat
 	 * 
 	 * @return - id of the room or error code
 	 * @throws AxisFault
@@ -893,7 +891,7 @@ public class RoomWebService {
 			String name, Long roomtypes_id, String comment,
 			Long numberOfPartizipants, Boolean ispublic, Boolean appointment,
 			Boolean isDemoRoom, Integer demoTime, Boolean isModeratedRoom,
-			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean allowFontStyles) throws AxisFault {
+			Boolean allowUserQuestions, Boolean isAudioOnly) throws AxisFault {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
@@ -902,7 +900,7 @@ public class RoomWebService {
 				return roommanagement.addRoom(3L, name, roomtypes_id, comment,
 						numberOfPartizipants, ispublic, null, appointment,
 						isDemoRoom, demoTime, isModeratedRoom, null,
-						allowUserQuestions, isAudioOnly, allowFontStyles, false, "", "",
+						allowUserQuestions, isAudioOnly, true, false, "", "",
 						null, null, null, false, // hideTopBar
 						false, // hideChat
 						false, // hideActivitiesAndActions
@@ -958,8 +956,6 @@ public class RoomWebService {
 	 *            moderation
 	 * @param isAudioOnly
 	 *            enable or disable the video / or audio-only
-	 * @param allowFontStyles
-	 * 			  allow / deny using html tags in the chat
 	 * @param hideTopBar
 	 *            hide or show TopBar
 	 * @param hideChat
@@ -983,7 +979,7 @@ public class RoomWebService {
 			String SID, String name, Long roomtypes_id, String comment,
 			Long numberOfPartizipants, Boolean ispublic, Boolean appointment,
 			Boolean isDemoRoom, Integer demoTime, Boolean isModeratedRoom,
-			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean allowFontStyle,
+			Boolean allowUserQuestions, Boolean isAudioOnly,
 			Boolean hideTopBar, Boolean hideChat,
 			Boolean hideActivitiesAndActions, Boolean hideFilesExplorer,
 			Boolean hideActionsMenu, Boolean hideScreenSharing,
@@ -995,7 +991,7 @@ public class RoomWebService {
 				return roommanagement.addRoom(3L, name, roomtypes_id, comment,
 						numberOfPartizipants, ispublic, null, appointment,
 						isDemoRoom, demoTime, isModeratedRoom, null,
-						allowUserQuestions, isAudioOnly, allowFontStyle, false, "", "",
+						allowUserQuestions, isAudioOnly, true, false, "", "",
 						null, null, null, hideTopBar, hideChat,
 						hideActivitiesAndActions, hideFilesExplorer,
 						hideActionsMenu, hideScreenSharing, hideWhiteboard,
@@ -1506,8 +1502,6 @@ public class RoomWebService {
 	 *            moderation
 	 * @param isAudioOnly
 	 *            enable or disable the video / or audio-only
-	 * @param allowFontStyles
-	 * 			  allow / deny using html tags in the chat
 	 *            
 	 * @return - id of the room added or error code
 	 */
@@ -1516,7 +1510,7 @@ public class RoomWebService {
 			Long numberOfPartizipants, Boolean ispublic, Boolean appointment,
 			Boolean isDemoRoom, Integer demoTime, Boolean isModeratedRoom,
 			String externalRoomType, Boolean allowUserQuestions,
-			Boolean isAudioOnly, Boolean allowFontStyles) {
+			Boolean isAudioOnly) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
@@ -1525,7 +1519,7 @@ public class RoomWebService {
 						comment, numberOfPartizipants, ispublic, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
 						null, null, externalRoomType, allowUserQuestions,
-						isAudioOnly, allowFontStyles, false, "", false, true, false);
+						isAudioOnly, true, false, "", false, true, false);
 			}
 		} catch (Exception err) {
 			log.error("[addRoomWithModeration] ", err);
@@ -1569,8 +1563,6 @@ public class RoomWebService {
 	 *            moderation
 	 * @param isAudioOnly
 	 *            enable or disable the video / or audio-only
-	 * @param allowFontStyles
-	 * 			  allow / deny using html tags in the chat
 	 * @param waitForRecording
 	 *            if the users in the room will get a notification that they
 	 *            should start recording before they do a conference
@@ -1583,7 +1575,7 @@ public class RoomWebService {
 			Long roomtypes_id, String comment, Long numberOfPartizipants,
 			Boolean ispublic, Boolean appointment, Boolean isDemoRoom,
 			Integer demoTime, Boolean isModeratedRoom, String externalRoomType,
-			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean allowFontStyles,
+			Boolean allowUserQuestions, Boolean isAudioOnly,
 			Boolean waitForRecording, Boolean allowRecording) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
@@ -1593,7 +1585,7 @@ public class RoomWebService {
 						comment, numberOfPartizipants, ispublic, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
 						null, null, externalRoomType, allowUserQuestions,
-						isAudioOnly, allowFontStyles, false, "", waitForRecording,
+						isAudioOnly, true, false, "", waitForRecording,
 						allowRecording, false);
 			} else {
 				return -26L;
@@ -1641,8 +1633,6 @@ public class RoomWebService {
 	 *            moderation
 	 * @param isAudioOnly
 	 *            enable or disable the video / or audio-only
-	 * @param allowFontStyles
-	 * 			  allow / deny using html tags in the chat
 	 * @param waitForRecording
 	 *            if the users in the room will get a notification that they
 	 *            should start recording before they do a conference
@@ -1658,7 +1648,7 @@ public class RoomWebService {
 			Long numberOfPartizipants, Boolean ispublic, Boolean appointment,
 			Boolean isDemoRoom, Integer demoTime, Boolean isModeratedRoom,
 			String externalRoomType, Boolean allowUserQuestions,
-			Boolean isAudioOnly, Boolean allowFontOptions, Boolean waitForRecording,
+			Boolean isAudioOnly, Boolean waitForRecording,
 			Boolean allowRecording, Boolean hideTopBar) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
@@ -1668,7 +1658,7 @@ public class RoomWebService {
 						comment, numberOfPartizipants, ispublic, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
 						null, null, externalRoomType, allowUserQuestions,
-						isAudioOnly, allowFontOptions, false, "", waitForRecording,
+						isAudioOnly, true, false, "", waitForRecording,
 						allowRecording, hideTopBar);
 			}
 		} catch (Exception err) {
