@@ -515,7 +515,7 @@ public class ImportInitvalues {
 
 			roommanagement.addRoom(3, "public Interview Room", interview_Id,
 					"", new Long(16), true, null, false, false, null, false,
-					null, true, false, false, "", "", null, null, null,
+					null, true, false, true, false, "", "", null, null, null,
 					false, // hideTopBar
 					false, // hideChat
 					false, // hideActivitiesAndActions
@@ -532,7 +532,7 @@ public class ImportInitvalues {
 
 			roommanagement.addRoom(3, "public Conference Room", conference_Id,
 					"", new Long(32), true, null, false, false, null, false,
-					null, true, false, false, "", "", null, null, null,
+					null, true, false, true, false, "", "", null, null, null,
 					false, // hideTopBar
 					false, // hideChat
 					false, // hideActivitiesAndActions
@@ -549,7 +549,7 @@ public class ImportInitvalues {
 
 			roommanagement.addRoom(3, "public Video Only Room", conference_Id,
 					"", new Long(32), true, null, false, false, null, false,
-					null, true, false, false, "", "", null, null, null,
+					null, true, false, true, false, "", "", null, null, null,
 					false, // hideTopBar
 					false, // hideChat
 					false, // hideActivitiesAndActions
@@ -566,7 +566,7 @@ public class ImportInitvalues {
 
 			roommanagement.addRoom(3, "public Video And Whiteboard Room",
 					conference_Id, "", new Long(32), true, null, false, false,
-					null, false, null, true, false, false, "", "", null,
+					null, false, null, true, false, true, false, "", "", null,
 					null, null, false, // hideTopBar
 					false, // hideChat
 					false, // hideActivitiesAndActions
@@ -583,7 +583,7 @@ public class ImportInitvalues {
 
 			roommanagement.addRoom(3, "public Restricted Room", restricted_Id,
 					"", new Long(100), true, null, false, false, null, false,
-					null, true, false, false, "", "", null, null, null,
+					null, true, false, true, false, "", "", null, null, null,
 					false, // hideTopBar
 					false, // hideChat
 					false, // hideActivitiesAndActions
@@ -600,7 +600,7 @@ public class ImportInitvalues {
 
 			roommanagement.addRoom(3, "restricted room with micro option set",
 					restricted_Id, "", new Long(100), true, null, false, false,
-					null, false, null, true, false, false, "", "", null,
+					null, false, null, true, false, true, false, "", "", null,
 					null, null, false, // hideTopBar
 					false, // hideChat
 					false, // hideActivitiesAndActions
@@ -617,7 +617,7 @@ public class ImportInitvalues {
 
 			roommanagement.addRoom(3, "conference room with micro option set",
 					conference_Id, "", new Long(32), true, null, false, false,
-					null, false, null, true, false, false, "", "", null,
+					null, false, null, true, false, true, false, "", "", null,
 					null, null, false, // hideTopBar
 					false, // hideChat
 					false, // hideActivitiesAndActions
@@ -634,7 +634,7 @@ public class ImportInitvalues {
 
 			long room2 = roommanagement.addRoom(3, "private Conference Room",
 					conference_Id, "", new Long(32), false, null, false, false,
-					null, false, null, true, false, false, "", "", null,
+					null, false, null, true, false, true, false, "", "", null,
 					null, null, false, // hideTopBar
 					false, // hideChat
 					false, // hideActivitiesAndActions

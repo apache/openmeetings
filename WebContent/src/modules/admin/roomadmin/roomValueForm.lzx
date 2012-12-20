@@ -51,6 +51,7 @@
         this._turnoverlist.clearList();
         this.allowUserQuestions.setValue(true);
         this.isAudioOnly.setValue(false);
+        this.allowFontStyles.setValue(true);
         this.sipNumber.setAttribute("text","");
         this.conferencePin.setAttribute("text","");
         this.isClosed.setValue(false);
@@ -134,6 +135,12 @@
                 this.isAudioOnly.setValue(true);
             } else {
                 this.isAudioOnly.setValue(false);
+            }
+            
+            if (obj.allowFontStyles != null && obj.allowFontStyles){
+            	this.allowFontStyles.setValue(true);
+            } else {
+            	this.allowFontStyles.setValue(false);
             }
             
             if (obj.isClosed != null && obj.isClosed){
@@ -306,6 +313,8 @@
             this.sendObject["allowUserQuestions"] = parent.allowUserQuestions.getValue();
             
             this.sendObject["isAudioOnly"] = parent.isAudioOnly.getValue();
+            
+            this.sendObject["allowFontStyles"] = parent.allowFontStyles.getValue();
             
             this.sendObject["isClosed"] = parent.isClosed.getValue();
             this.sendObject["redirectURL"] = parent.redirectURL.getText();
@@ -520,73 +529,74 @@
     <labelText labelid="1077" x="24" y="700"  fontstyle="italic"
                multiline="true" width="370" /> 
                 
-                
+    <labelText labelid="1531" x="2" resize="false" width="250" y="760" />
+    	<labelCheckbox name="allowFontStyles" width="250" y="760" x="250" />           
                
     <!-- Room termination settings -->
-    <labelText labelid="1101" width="200" y="750" fontstyle="bold"
+    <labelText labelid="1101" width="200" y="780" fontstyle="bold"
                resize="false" x="2"/>            
                                    
     <!-- isClosed -->          
-    <labelText labelid="1099" width="200" y="780" resize="false" x="2"/>  
-        <labelCheckbox name="isClosed" width="270" y="780" x="130" fontsize="11" />
+    <labelText labelid="1099" width="200" y="810" resize="false" x="2"/>  
+        <labelCheckbox name="isClosed" width="270" y="810" x="130" fontsize="11" />
         
     <!-- 1100:Exit URL -->
-    <labelText labelid="1100" width="200" y="810" resize="false" x="2"/>
-        <customEdittext name="redirectURL" y="810" x="120" width="270" text="" />    
+    <labelText labelid="1100" width="200" y="840" resize="false" x="2"/>
+        <customEdittext name="redirectURL" y="840" x="120" width="270" text="" />    
       
     <!-- termination Description -->          
-    <view resource="messagebox_info_rsc" x="0" y="840" />
+    <view resource="messagebox_info_rsc" x="0" y="870" />
     
-    <labelText labelid="1102" x="24" y="840"  fontstyle="italic"
+    <labelText labelid="1102" x="24" y="870"  fontstyle="italic"
                multiline="true" width="370" /> 
                 
     <!-- isClosed -->          
-    <labelText labelid="1355" width="200" y="880" resize="false" x="2"/>  
-        <labelCheckbox name="waitForRecording" width="270" y="880" x="180" fontsize="11" />
+    <labelText labelid="1355" width="200" y="910" resize="false" x="2"/>  
+        <labelCheckbox name="waitForRecording" width="270" y="910" x="180" fontsize="11" />
  
-    <labelText labelid="1356" width="200" y="900" resize="false" x="2" visibility="hidden" />  
-        <labelCheckbox name="allowRecording" width="270" y="900" x="180" fontsize="11" visibility="hidden" />
+    <labelText labelid="1356" width="200" y="930" resize="false" x="2" visibility="hidden" />  
+        <labelCheckbox name="allowRecording" width="270" y="930" x="180" fontsize="11" visibility="hidden" />
  
  	
  	<!-- Room Layout options -->
-    <labelText labelid="1443" width="200" y="920" fontstyle="bold"
+    <labelText labelid="1443" width="200" y="950" fontstyle="bold"
                resize="false" x="2"/>  
  
-    <labelText labelid="1357" width="200" y="960" resize="false" x="2" />  
-        <labelCheckbox name="hideTopBar" width="270" y="960" x="180" fontsize="11" />
+    <labelText labelid="1357" width="200" y="990" resize="false" x="2" />  
+        <labelCheckbox name="hideTopBar" width="270" y="990" x="180" fontsize="11" />
         
-    <labelText labelid="1436" width="200" y="980" resize="false" x="2" />  
-        <labelCheckbox name="hideChat" width="270" y="980" x="180" fontsize="11" />
+    <labelText labelid="1436" width="200" y="1010" resize="false" x="2" />  
+        <labelCheckbox name="hideChat" width="270" y="1010" x="180" fontsize="11" />
         
-    <labelText labelid="1437" width="200" y="1000" resize="false" x="2" />  
-        <labelCheckbox name="hideActivitiesAndActions" width="270" y="1000" x="180" fontsize="11" />
+    <labelText labelid="1437" width="200" y="1030" resize="false" x="2" />  
+        <labelCheckbox name="hideActivitiesAndActions" width="270" y="1030" x="180" fontsize="11" />
         
-    <labelText labelid="1438" width="200" y="1020" resize="false" x="2" />  
-        <labelCheckbox name="hideFilesExplorer" width="270" y="1020" x="180" fontsize="11" />
+    <labelText labelid="1438" width="200" y="1050" resize="false" x="2" />  
+        <labelCheckbox name="hideFilesExplorer" width="270" y="1050" x="180" fontsize="11" />
     
-    <labelText labelid="1439" width="200" y="1040" resize="false" x="2" />  
-        <labelCheckbox name="hideActionsMenu" width="270" y="1040" x="180" fontsize="11" />
+    <labelText labelid="1439" width="200" y="1070" resize="false" x="2" />  
+        <labelCheckbox name="hideActionsMenu" width="270" y="1070" x="180" fontsize="11" />
  	
- 	<labelText labelid="1440" width="200" y="1060" resize="false" x="2" />  
-        <labelCheckbox name="hideScreenSharing" width="270" y="1060" x="180" fontsize="11" />
+ 	<labelText labelid="1440" width="200" y="1090" resize="false" x="2" />  
+        <labelCheckbox name="hideScreenSharing" width="270" y="1090" x="180" fontsize="11" />
         
-    <labelText labelid="1441" width="200" y="1080" resize="false" x="2" />  
-        <labelCheckbox name="hideWhiteboard" width="270" y="1080" x="180" fontsize="11" />
+    <labelText labelid="1441" width="200" y="1110" resize="false" x="2" />  
+        <labelCheckbox name="hideWhiteboard" width="270" y="1110" x="180" fontsize="11" />
      
-    <labelText labelid="1442" width="200" y="1100" resize="false" x="2" />  
-        <labelCheckbox name="showMicrophoneStatus" width="270" y="1100" x="180" fontsize="11" />
+    <labelText labelid="1442" width="200" y="1130" resize="false" x="2" />  
+        <labelCheckbox name="showMicrophoneStatus" width="270" y="1130" x="180" fontsize="11" />
                                   
-    <labelText labelid="1513" width="200" y="1120" resize="false" x="2" />  
-        <labelCheckbox name="chatModerated" width="270" y="1120" x="180" fontsize="11" />
+    <labelText labelid="1513" width="200" y="1150" resize="false" x="2" />  
+        <labelCheckbox name="chatModerated" width="270" y="1150" x="180" fontsize="11" />
                                   
-    <labelText labelid="1515" width="200" y="1140" resize="false" x="2" />  
-        <labelCheckbox name="chatOpened" width="270" y="1140" x="180" fontsize="11" />
+    <labelText labelid="1515" width="200" y="1170" resize="false" x="2" />  
+        <labelCheckbox name="chatOpened" width="270" y="1170" x="180" fontsize="11" />
                                   
-	<labelText labelid="1516" width="200" y="1160" resize="false" x="2" />  
-		<labelCheckbox name="filesOpened" width="270" y="1160" x="180" fontsize="11" />
+	<labelText labelid="1516" width="200" y="1190" resize="false" x="2" />  
+		<labelCheckbox name="filesOpened" width="270" y="1190" x="180" fontsize="11" />
 
-	<labelText labelid="1528" width="200" y="1180" resize="false" x="2" />  
-		<labelCheckbox name="autoVideoSelect" width="270" y="1180" x="180" fontsize="11" />
+	<labelText labelid="1528" width="200" y="1210" resize="false" x="2" />  
+		<labelCheckbox name="autoVideoSelect" width="270" y="1210" x="180" fontsize="11" />
 
     <!-- RoomClient List Right Side -->
     <labelText labelid="587" width="300" y="40" resize="false" 

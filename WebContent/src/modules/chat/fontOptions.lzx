@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<library>
+
+<class name="fontOptions" extends="closableView" bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }"
+	clickable="true" width="130" height="42">
+
+	<attribute name="btnRef" value="null" />
+	
+	<method name="passModeEvent" args="eventStr,view" > 
+        <![CDATA[
+            if ( eventStr == "onmousedown"  ){
+                if ( view != null ) {
+                   if ( !view.childOf(this) ) {
+                        this.close();
+                   }
+                } else {
+                    this.close();
+                }
+            }
+            if (view && view.childOf(this)) {
+                if (view[ eventStr ]) {
+                    view[ eventStr ].sendEvent( view );
+                }
+                return false;
+            }
+            return true;
+        ]]> 
+    </method>
+    
+    <view bgcolor="$once{ canvas.getThemeColor('baseMousecolorizer') }" width="$once{ parent.width-2 }" 
+    	  height="$once{ parent.height-2 }" x="1" y="1" />
+    	  
+    <labelText x="1" y="1" labelid="1530" /><!-- 1530:Font style -->
+    
+    <view name="_close" x="$once{ parent.width-this.width-2 }" y="2"
+        resource="btn_presenter_close"
+        onmouseover="this.setAttribute('frame',2)"
+        onmouseout="this.setAttribute('frame',1)"
+        onmousedown="this.setAttribute('frame',3)"
+        onmouseup="this.setAttribute('frame',1)" >
+        <handler name="onclick">
+            this.setAttribute('frame',2);
+            this.parent.close();
+        </handler>
+        <labelTooltip labelid="430" /><!-- 430:close -->
+    </view>
+
+	<miniIcons y="18" x="0" resource="font_bold" 
+		width="24" height="24" showhandcursor="true">
+		<handler name="onclick">
+			<![CDATA[
+			parent.applyStyle("<b>", "</b>");
+			]]>
+		</handler>
+		<labelTooltip labelid="87" />
+	</miniIcons>
+	    
+	<miniIcons y="18" x="24" resource="font_italic" 
+		width="24" height="24" showhandcursor="true">
+		<handler name="onclick">
+			<![CDATA[
+			parent.applyStyle("<i>", "</i>");
+			]]>
+		</handler>
+		<labelTooltip labelid="86" />
+	</miniIcons>
+	    
+	<miniIcons y="18" x="48" resource="font_underline" 
+		width="24" height="24" showhandcursor="true">
+		<handler name="onclick">
+			<![CDATA[
+			parent.applyStyle("<u>", "</u>");
+			]]>
+		</handler>
+		<labelTooltip labelid="1529" />
+	</miniIcons>
+	
+	<miniIcons y="18" x="72" resource="font_color" 
+		width="24" height="24" showhandcursor="true">
+		<handler name="onclick">
+			<![CDATA[
+				var pick = new lz.colorPanel(canvas,{
+						fontPanel:parent,
+						x:(this.getAttributeRelative('x',canvas)-130),
+						y:(this.getAttributeRelative('y',canvas)-116)
+					});
+				lz.ModeManager.makeModal(pick);  
+			]]>
+		</handler>
+		<labelTooltip labelid="1532" />
+	</miniIcons>
+	
+	<miniIcons y="18" x="96" resource="insert_hyperlink" 
+		width="24" height="24" showhandcursor="true">
+		<handler name="onclick">
+			<![CDATA[
+			parent.applyStyle("<a href=\"\">", "</a>");
+			]]>
+		</handler>
+		<labelTooltip labelid="1533" />
+	</miniIcons>
+    
+    <method name="applyStyle" args="styleLeftPart, styleRightPart">
+    	var messageBox = btnRef.message;
+    	var beforeSelection = messageBox.getText().substring(0, messageBox._ctext.selPosition);
+    	var selection = messageBox.getText().substring(messageBox._ctext.selPosition, 
+    		messageBox._ctext.selPosition + messageBox._ctext.selSize);
+    	var afterSelection = messageBox.getText().substring(messageBox._ctext.selPosition + 
+    		messageBox._ctext.selSize, messageBox._ctext.length);
+		messageBox.setText(beforeSelection + styleLeftPart + selection + styleRightPart + afterSelection);
+		close();
+    </method>
+	
+</class>
+
+<class name="colorPanel" extends="closableView" bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }"
+	clickable="true" width="130" height="116">
+	<attribute name="fontPanel"/>
+	<method name="passModeEvent" args="eventStr,view" > 
+        <![CDATA[
+            if ( eventStr == "onmousedown"  ){
+                if ( view != null ) {
+                   if ( !view.childOf(this) ) {
+                        this.close();
+                   }
+                } else {
+                    this.close();
+                }
+            }
+            if (view && view.childOf(this)) {
+                if (view[ eventStr ]) {
+                    view[ eventStr ].sendEvent( view );
+                }
+                return false;
+            }
+            return true;
+        ]]> 
+    </method>
+    
+    <view bgcolor="$once{ canvas.getThemeColor('baseMousecolorizer') }" width="$once{ parent.width-2 }" 
+    	  height="$once{ parent.height-2 }" x="1" y="1" />
+    	  
+    <labelText x="1" y="1" labelid="1532" /><!-- 1532:Font color -->
+    
+    <view name="_close" x="$once{ parent.width-this.width-2 }" y="2"
+        resource="btn_presenter_close"
+        onmouseover="this.setAttribute('frame',2)"
+        onmouseout="this.setAttribute('frame',1)"
+        onmousedown="this.setAttribute('frame',3)"
+        onmouseup="this.setAttribute('frame',1)" >
+        <handler name="onclick">
+            this.setAttribute('frame',2);
+            this.parent.close();
+        </handler>
+        <labelTooltip labelid="430" /><!-- 430:close -->
+    </view>
+    
+    <colorbutton bgcolor="red"     x="0" y="20" />
+	<colorbutton bgcolor="green"   x="32" y="20" />
+	<colorbutton bgcolor="blue"    x="64" y="20" />
+	<colorbutton bgcolor="yellow"  x="96" y="20" />
+	<colorbutton bgcolor="magenta" x="0" y="52" />
+	<colorbutton bgcolor="pink"    x="32" y="52" />
+	<colorbutton bgcolor="orange"  x="64" y="52" />
+	<colorbutton bgcolor="purple"  x="96" y="52" />
+	<colorbutton bgcolor="cyan"    x="0" y="84" />
+	
+</class>
+
+<class name="colorbutton" extends="miniIcons" width="32" height="32">
+	<handler name="onclick">
+		<![CDATA[
+			var color = "#" + this.bgcolor.toString(16);
+			parent.fontPanel.applyStyle("<font color=\'" + color + "\'>", "</font>");
+			parent.close();
+		]]> 
+	</handler>
+</class>
+
+</library>

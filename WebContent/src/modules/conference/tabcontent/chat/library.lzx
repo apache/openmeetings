@@ -24,6 +24,12 @@
 	<resource name="copy_chat_log_rsc" src="resources/edit-copy.png" />
 	<resource name="smile_chat_log_rsc" src="resources/smile.swf" />
 	<resource name="start_conference2_rsc" src="resources/connect.png" />
+	<resource name="font_preferences" src="resources/font.png" />
+	<resource name="font_bold" src="resources/text_bold.png" />
+	<resource name="font_italic" src="resources/text_italic.png" />
+	<resource name="font_underline" src="resources/text_underline.png" />
+	<resource name="font_color" src="resources/text_color.png" />
+	<resource name="insert_hyperlink" src="resources/text_hyperlink.png" />
 	
 	<include href="simpleBaseTabpane.lzx" />
 	<include href="showChatLog.lzx" />

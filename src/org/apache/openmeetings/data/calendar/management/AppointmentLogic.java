@@ -175,6 +175,7 @@ public class AppointmentLogic {
 					null, // Moderation List Room
 					true, // Allow User Questions
 					false, // isAudioOnly
+					true, // allowFontStyles
 					false, // isClosed
 					"", // redirectURL
 					"", // conferencePIN

@@ -22,6 +22,15 @@
 
 <class name="customInputtext" extends="inputtext">
 	  
+	 <!-- lost selection workaroud -->
+	 <attribute name="selPosition" type="integer"/>
+	 <attribute name="selSize" type="integer"/>
+	 <!-- this method should be called before the component lost focus -->
+	 <method name="saveselection">
+	 	this.selPosition=getSelectionPosition();
+	 	this.selSize=getSelectionSize();
+	 </method>
+	  
 	 <handler name="onfocus">
 	 
 	 	if ($debug) Debug.write("customInputtext onFocus : ", canvas.isrtl);

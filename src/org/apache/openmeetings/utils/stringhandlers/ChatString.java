@@ -26,6 +26,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -33,12 +34,22 @@ public class ChatString {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			ChatString.class, OpenmeetingsVariables.webAppRootKey);
 
-	public static LinkedList<String[]> parseChatString(String message, LinkedList<LinkedList<String>> emotFiles) {
+	private static String htmlToText(String source) {
+		String result = source;
+		result = Strings.replaceAll(result, "<", "&lt;").toString();
+		result = Strings.replaceAll(result, ">", "&gt;").toString();
+		return result;
+	}
+	
+	public static LinkedList<String[]> parseChatString(String message, LinkedList<LinkedList<String>> emotFiles, boolean allowHTML) {
 		try {
 			LinkedList<String[]> list = new LinkedList<String[]>();
 
 			// log.debug("this.link(message) "+this.link(message));
 
+			if (!allowHTML)
+				message = htmlToText(message);
+			
 			String[] messageStr = { "text", message };
 			list.add(messageStr);
 

@@ -129,6 +129,7 @@
 			if ($debug) Debug.write("onisopen",o);
 			if (o) {
 				canvas._chatcontent.doInitByOpen();
+				content._content1._chattabbottom.updatefontbuttonvisible();
 				this.doBlink = false;
 				this._newMessage.setAttribute("visibility","hidden");
 				this._newMessage.setAttribute( "opacity", 0 );

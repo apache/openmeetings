@@ -660,7 +660,7 @@ public class Roommanagement {
 			List<Integer> organisations, Boolean appointment, Boolean isDemoRoom,
 			Integer demoTime, Boolean isModeratedRoom,
 			List<Map<String, Object>> roomModerators,
-			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean isClosed,
+			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean allowFontStyles, Boolean isClosed,
 			String redirectURL, String conferencePin,
 			Long ownerId, Boolean waitForRecording, Boolean allowRecording,
 			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, Boolean hideFilesExplorer, 
@@ -680,6 +680,7 @@ public class Roommanagement {
 				r.setIspublic(ispublic);
 				r.setAllowUserQuestions(allowUserQuestions);
 				r.setIsAudioOnly(isAudioOnly);
+				r.setAllowFontStyles(allowFontStyles);
 
 				r.setAppointment(appointment);
 
@@ -802,7 +803,7 @@ public class Roommanagement {
 			Boolean appointment, Boolean isDemoRoom, Integer demoTime,
 			Boolean isModeratedRoom, List<Map<String, Object>> roomModerators,
 			Long externalRoomId, String externalRoomType,
-			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean isClosed,
+			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean allowFontStyles, Boolean isClosed,
 			String redirectURL, Boolean waitForRecording,
 			Boolean allowRecording, Boolean hideTopBar) {
 
@@ -819,6 +820,7 @@ public class Roommanagement {
 
 			r.setAllowUserQuestions(allowUserQuestions);
 			r.setIsAudioOnly(isAudioOnly);
+			r.setAllowFontStyles(allowFontStyles);
 
 			r.setAppointment(appointment);
 
@@ -1237,7 +1239,7 @@ public class Roommanagement {
 			Long numberOfPartizipants, List<Integer> organisations,
 			Boolean appointment, Boolean isDemoRoom, Integer demoTime,
 			Boolean isModeratedRoom, List<Map<String, Object>> roomModerators,
-			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean isClosed,
+			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean allowFontStyles, Boolean isClosed,
 			String redirectURL, String conferencePin,
 			Long ownerId, Boolean waitForRecording, Boolean allowRecording,
 			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, 
@@ -1253,7 +1255,7 @@ public class Roommanagement {
 				return this.updateRoomInternal(rooms_id, roomtypes_id, name,
 						ispublic, comment, numberOfPartizipants, organisations,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
-						roomModerators, allowUserQuestions, isAudioOnly,
+						roomModerators, allowUserQuestions, isAudioOnly, allowFontStyles,
 						isClosed, redirectURL, conferencePin,
 						ownerId, waitForRecording, allowRecording, hideTopBar, hideChat, 
 						hideActivitiesAndActions, hideFilesExplorer, hideActionsMenu, 
@@ -1273,7 +1275,7 @@ public class Roommanagement {
 			Long numberOfPartizipants, List<Integer> organisations,
 			Boolean appointment, Boolean isDemoRoom, Integer demoTime,
 			Boolean isModeratedRoom, List<Map<String, Object>> roomModerators,
-			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean isClosed,
+			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean allowFontStyles, Boolean isClosed,
 			String redirectURL, String conferencePin,
 			Long ownerId, Boolean waitForRecording, Boolean allowRecording,
 			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, Boolean hideFilesExplorer, 
@@ -1293,6 +1295,7 @@ public class Roommanagement {
 			r.setUpdatetime(new Date());
 			r.setAllowUserQuestions(allowUserQuestions);
 			r.setIsAudioOnly(isAudioOnly);
+			r.setAllowFontStyles(allowFontStyles);
 
 			r.setIsDemoRoom(isDemoRoom);
 			r.setDemoTime(demoTime);
@@ -1639,6 +1642,7 @@ public class Roommanagement {
 						null, // roomModerators
 						true, // allowUserQuestions
 						false, // isAudioOnly
+						true, // allowFontStyle
 						false, // isClosed
 						"", // redirectURL
 						"", // conferencePin

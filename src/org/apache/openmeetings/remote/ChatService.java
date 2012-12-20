@@ -32,6 +32,9 @@ import java.util.Set;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.conference.room.IClientList;
 import org.apache.openmeetings.conference.room.RoomClient;
+import org.apache.openmeetings.data.conference.Roommanagement;
+import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.apache.openmeetings.remote.red5.EmoticonsManager;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.utils.stringhandlers.ChatString;
@@ -58,6 +61,10 @@ public class ChatService implements IPendingServiceCallback {
 	private IClientList clientListManager = null;
 	@Autowired
 	private EmoticonsManager emoticonsManager;
+	@Autowired
+	private Roommanagement roommanagement;
+	@Autowired
+	private Usermanagement usermanagement;
 	
 	//the overall chat room is just another room
 	private static final Long overallChatRoomName = new Long(-1);
@@ -100,19 +107,20 @@ public class ChatService implements IPendingServiceCallback {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId(), null);
-			Long room_id = currentClient.getRoom_id();
-			
+			Long room_id = currentClient.getRoom_id();			
 			log.debug("room_id: " + room_id);
 			
 			if (room_id == null) {
 				return 1; //TODO weird
 			}
+			Long user_level = usermanagement.getUserLevelByID(currentClient.getUser_id());
+			Rooms room = roommanagement.getRoomById(user_level, room_id);
 			@SuppressWarnings("rawtypes")
 			ArrayList messageMap = (ArrayList) newMessage;
 			// adding delimiter space, cause otherwise an emoticon in the last
 			// string would not be found
 			String messageText = messageMap.get(4) + " ";
-			LinkedList<String[]> parsedStringObjects = ChatString.parseChatString(messageText, emoticonsManager.getEmotfilesList());
+			LinkedList<String[]> parsedStringObjects = ChatString.parseChatString(messageText, emoticonsManager.getEmotfilesList(), room.getAllowFontStyles());
 			// log.error("parsedStringObjects"+parsedStringObjects.size());
 			log.debug("size:" + messageMap.size());
 			messageMap.add(parsedStringObjects);
@@ -197,7 +205,8 @@ public class ChatService implements IPendingServiceCallback {
 			IConnection current = Red5.getConnectionLocal();
 			RoomClient currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId(), null);
 			Long room_id = currentClient.getRoom_id();
-
+			Long user_level = usermanagement.getUserLevelByID(currentClient.getUser_id());
+			Rooms room = roommanagement.getRoomById(user_level, room_id);
 			log.debug("room_id: " + room_id);
 
 			@SuppressWarnings("rawtypes")
@@ -207,7 +216,7 @@ public class ChatService implements IPendingServiceCallback {
 			String messageText = messageMap.get(4).toString() + " ";
 			// add server time
 			messageMap.set(1, parseDateAsTimeString());
-			LinkedList<String[]> parsedStringObjects = ChatString.parseChatString(messageText, emoticonsManager.getEmotfilesList());
+			LinkedList<String[]> parsedStringObjects = ChatString.parseChatString(messageText, emoticonsManager.getEmotfilesList(), room.getAllowFontStyles());
 			// log.error("parsedStringObjects"+parsedStringObjects.size());
 			log.debug("size:" + messageMap.size());
 			messageMap.add(parsedStringObjects);
@@ -358,7 +367,7 @@ public class ChatService implements IPendingServiceCallback {
 			//log.error("messageText"+messageText);
 			//add server time
 			messageMap.set(1,parseDateAsTimeString());
-			LinkedList<String[]> parsedStringObjects = ChatString.parseChatString(messageText, emoticonsManager.getEmotfilesList());
+			LinkedList<String[]> parsedStringObjects = ChatString.parseChatString(messageText, emoticonsManager.getEmotfilesList(), true);
 			//log.error("parsedStringObjects"+parsedStringObjects.size());
 			log.debug("size:" + messageMap.size());
 			messageMap.add(parsedStringObjects);

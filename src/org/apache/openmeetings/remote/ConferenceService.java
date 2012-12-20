@@ -559,6 +559,8 @@ public class ConferenceService {
 										.toString()), Boolean
 								.valueOf(argObjectMap.get("isAudioOnly")
 										.toString()), Boolean
+								.valueOf(argObjectMap.get("allowFontStyles")
+										.toString()), Boolean
 								.valueOf(argObjectMap.get("isClosed")
 										.toString()),
 						argObjectMap.get("redirectURL").toString(), argObjectMap
@@ -610,6 +612,8 @@ public class ConferenceService {
 										"allowUserQuestions").toString()),
 								Boolean.valueOf(argObjectMap.get("isAudioOnly")
 										.toString()),
+								Boolean.valueOf(argObjectMap.get("allowFontStyles")
+										.toString()),		
 								Boolean.valueOf(argObjectMap.get("isClosed")
 										.toString()),
 								argObjectMap.get("redirectURL").toString(),

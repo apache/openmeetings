@@ -29,6 +29,7 @@
 	<include href="inviteuser/" />
 	
 	<include href="chatParticipants.lzx" />
+	<include href="fontOptions.lzx" />
 	<include href="emotIconsSelector.lzx" />
 	<include href="overAllChatOutput.lzx" />
 	<include href="overAllChatTabBottom.lzx" />
