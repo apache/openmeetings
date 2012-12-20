@@ -647,76 +647,50 @@
         This will mute it only locally, that means on other screens
         the user might be still online and loud
      -->
-    <method name="silenceMicrophone" args="mute">
-        <![CDATA[
-
-        if (this.publicSID == canvas.publicSID) {
-        	//self sound turned off
-        	if (mute) {
-        		confirmGloballyOff(true, null);
-                return;
-        	} else {
-        	    this._chatvideoinner._videostream.muteMicro(false);
-        	    canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_switchMicMuted', this.publicSID, false);
-        	}
-        } else {
-        	//disable this action for now
-        	if (!canvas.ismoderator) {
-        		new lz.labelerrorPopupSWF10(canvas,{errorlabelid:1409});
-        		return;
-        	}
-        	//you can not unmute it locally by putting sound to 100 cause the gain is set to zero globally in the micro of the sender!
-        	//so setting the sound/volume on the other remote clients has zero effect
-        	if (this.isMutedByModerator && !canvas.ismoderator) {
-                //FIXME: That is not true, you could restart audio/video ...
-                var errorlabelid = 1402;
-                if (this.publicSID == canvas.publicSID) {
-                    errorlabelid = 1387;
-                }
-                new lz.labelerrorPopupSWF10(canvas,{errorlabelid:errorlabelid});
-                return;
-            }
-        	if (canvas.ismoderator) {
-        		if (mute) {
-                    new lz.confirmationSingleSWF10(canvas,{
-                                                   labelid:1392,labeliderror:1393,
-                                                   refReturnMethod:'confirmGloballyOff',
-                                                   refObj:this,showCheckBox:false});
-                    return;
-                } else {
-                    canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_switchMicMuted', this.publicSID, false);
-                }
-        	} else {
-            	if (mute) {
-            		new lz.confirmationSingleSWF10(canvas,{
-                                                   labelid:1390,labeliderror:1391,
-                                                   refReturnMethod:'confirmLocallyOff',
-                                                   refObj:this,showCheckBox:false});
-                    return;
-                } else {
-                    this._chatvideoinner._videostream.setSoundVolume(100);
-                }
-        	}
-        }
-        this.setMicMuted(mute);
-        ]]>
-    </method>
-
-    <method name="confirmGloballyOff" args="bool,t" >
-    	if ($debug) Debug.write("confirmGloballyOff :: ",bool);
-    	if (bool) {
-            this.setMicMuted(true);
-            canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_switchMicMuted', this.publicSID, true);
-    	}
-    </method>
-
-    <method name="confirmLocallyOff" args="bool,t" >
-        if ($debug) Debug.write("confirmLocallyOff :: ",bool);
-        if (bool) {
-        	this.setMicMuted(true);
-            this._chatvideoinner._videostream.setSoundVolume(0);
-        }
-    </method>
+	<method name="silenceMicrophone" args="mute">
+	<![CDATA[
+		if (this.publicSID == canvas.publicSID) {
+			//self sound turned off
+			if (mute) {
+				canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_switchMicMuted', this.publicSID, true);
+			} else {
+				this._chatvideoinner._videostream.muteMicro(false);
+				canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_switchMicMuted', this.publicSID, false);
+			}
+		} else {
+			//disable this action for now
+			if (!canvas.ismoderator) {
+				new lz.labelerrorPopupSWF10(canvas,{errorlabelid:1409});
+				return;
+			}
+			//you can not unmute it locally by putting sound to 100 cause the gain is set to zero globally in the micro of the sender!
+			//so setting the sound/volume on the other remote clients has zero effect
+			if (this.isMutedByModerator && !canvas.ismoderator) {
+				//FIXME: That is not true, you could restart audio/video ...
+				var errorlabelid = 1402;
+				if (this.publicSID == canvas.publicSID) {
+					errorlabelid = 1387;
+				}
+				new lz.labelerrorPopupSWF10(canvas,{errorlabelid:errorlabelid});
+				return;
+			}
+			if (canvas.ismoderator) {
+				if (mute) {
+					canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_switchMicMuted', this.publicSID, true);
+				} else {
+					canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_switchMicMuted', this.publicSID, false);
+				}
+			} else {
+				if (mute) {
+					this._chatvideoinner._videostream.setSoundVolume(0);
+				} else {
+					this._chatvideoinner._videostream.setSoundVolume(100);
+				}
+			}
+		}
+		this.setMicMuted(mute);
+	]]>
+	</method>
 
     <method name="setMicMuted" args="micMuted">
         <![CDATA[
@@ -751,7 +725,8 @@
             stream.setAttribute('micGain', v);
             stream.micro.gain = v;
             if (0 == v) {
-                this.confirmGloballyOff(true, v);
+	            this.setMicMuted(true);
+	            canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_switchMicMuted', this.publicSID, true);
             } else if (micMuted) {
                 this.silenceMicrophone(false);
             }
