@@ -30,7 +30,8 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.ws.IWebSocketSettings;
-import org.apache.wicket.protocol.ws.api.WebSocketPushBroadcaster;
+import org.apache.wicket.protocol.ws.api.IWebSocketConnection;
+import org.apache.wicket.protocol.ws.api.IWebSocketConnectionRegistry;
 import org.apache.wicket.protocol.ws.api.message.IWebSocketPushMessage;
 import org.apache.wicket.protocol.ws.api.message.TextMessage;
 import org.red5.logging.Red5LoggerFactory;
@@ -41,7 +42,7 @@ public class ChatPanel extends UserPanel {
 	private static final long serialVersionUID = -9144707674886211557L;
 	private String message;
 	
-	private class ChatMessage extends TextMessage implements IWebSocketPushMessage, Serializable {
+	class ChatMessage extends TextMessage implements IWebSocketPushMessage, Serializable {
 		private static final long serialVersionUID = -3802182673895471248L;
 
 		public ChatMessage(String msg) {
@@ -62,15 +63,15 @@ public class ChatPanel extends UserPanel {
 			
 			protected void onSubmit(AjaxRequestTarget target) {
 				//Application.getBean(ChatService) sendMessageToOverallChat
-				new WebSocketPushBroadcaster(IWebSocketSettings.Holder.get(getApplication()).getConnectionRegistry())
-					.broadcastAll(getApplication(), new ChatMessage(message));
-				/*for (IWebSocketConnection c : IWebSocketSettings.Holder.get(getApplication()).getConnectionRegistry().getConnections(getApplication())) {
+				IWebSocketConnectionRegistry reg = IWebSocketSettings.Holder.get(getApplication()).getConnectionRegistry();
+				//new WebSocketPushBroadcaster(reg).broadcastAll(getApplication(), new ChatMessage(message));
+				for (IWebSocketConnection c : reg.getConnections(getApplication())) {
 					try {
 						c.sendMessage(message);
 					} catch(Exception e) {
 						log.error("Error while sending message", e);
 					}
-				}*/
+				}
 				ChatPanel.this.message = "";
 				target.add(f);
 			};

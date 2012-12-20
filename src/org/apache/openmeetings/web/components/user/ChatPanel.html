@@ -28,12 +28,18 @@
 			}
 			Wicket.Event.subscribe("/websocket/message", function(jqEvent, message) {
 				$('#messageArea').append('<div>' + message + '</div>'); 
-				// do something with the message.
-				// it may be a text or a binary message depending on what you pushed from the server side
 			});
 		</script>
 	</wicket:head>
 	<wicket:panel>
+		<!--  script type="text/javascript">
+			alert("AAAA");
+			Wicket.Event.subscribe("/websocket/message", function(jqEvent, message) {
+				$('#messageArea').append('<div>' + message + '</div>'); 
+				// do something with the message.
+				// it may be a text or a binary message depending on what you pushed from the server side
+			});
+		</script -->
 		<!-- "ui-icon ui-icon-carat-1-n sort-icon", "ui-icon ui-icon-carat-1-s sort-icon" -->
 		<div id="chat">
 			<div id="controlBlock" onclick="toggleChat();"><div id="control" class="ui-icon ui-icon-carat-1-n sort-icon"></div></div>
