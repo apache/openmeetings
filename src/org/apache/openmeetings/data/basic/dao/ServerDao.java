@@ -24,7 +24,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
@@ -157,63 +156,6 @@ public class ServerDao implements IDataProviderDao<Server> {
 		return list.size() > 0 ? list.get(0) : null;
 	}
 
-	/**
-	 * @deprecated user standard mechanism of
-	 *             {@link IDataProviderDao#update(org.apache.openmeetings.persistence.beans.OmEntity, long)}
-	 * @param id
-	 * @param name
-	 * @param address
-	 * @return
-	 */
-	@Deprecated
-	public Server saveServer(long id, String name, String address, int port,
-			String user, String pass, String webapp, String protocol,
-			Boolean active, String comment, long userId) {
-		Server s = get(id);
-		if (s == null) {
-			s = new Server();
-			s.setInserted(new Date());
-			s.setInsertedby(usersDao.get(userId));
-		} else {
-			s.setUpdated(new Date());
-			s.setUpdatedby(usersDao.get(userId));
-			if (active != null && !active) {
-				clientListManager.cleanSessionsOfDeletedOrDeactivatedServer(s);
-			}
-		}
-		s.setName(name);
-		s.setAddress(address);
-		s.setPort(port);
-		s.setUser(user);
-		s.setPass(pass);
-		s.setWebapp(webapp);
-		s.setProtocol(protocol);
-		s.setActive(active);
-		s.setComment(comment);
-
-		return em.merge(s);
-		
-	}
-
-	/**
-	 * @deprecated use standard mechanism of
-	 *             {@link IDataProviderDao#delete(org.apache.openmeetings.persistence.beans.OmEntity, long)}
-	 * @param id
-	 * @return
-	 */
-	@Deprecated
-	public boolean delete(long id) {
-		Server s = get(id);
-		if (s == null) {
-			return false;
-		}
-		s.setDeleted(true);
-		s = em.merge(s);
-		//remove any active session with this server
-		clientListManager.cleanSessionsOfDeletedOrDeactivatedServer(s);
-		return true;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -222,33 +164,24 @@ public class ServerDao implements IDataProviderDao<Server> {
 	 * .beans.OmEntity, long)
 	 */
 	public Server update(Server entity, long userId) {
-		try {
-			if (entity.getActive() != null && !entity.getActive()) {
-				clientListManager.cleanSessionsOfDeletedOrDeactivatedServer(entity);
-			}
-			
-			if (entity.getId() <= 0) {
-				entity.setInserted(new Date());
-				entity.setInsertedby(usersDao.get(userId));
-				entity.setDeleted(false);
-				em.persist(entity);
-			} else {
-				entity.setUpdated(new Date());
-				entity.setUpdatedby(usersDao.get(userId));
-				entity.setDeleted(false);
-				em.merge(entity);
-			}
-		} catch (PersistenceException ex) {
-			log.error("[update LdapConfig]", ex);
-		}
-		return entity;
-	}
-
-	public Server update(Server entity) {
 		if (entity.getActive() != null && !entity.getActive()) {
 			clientListManager.cleanSessionsOfDeletedOrDeactivatedServer(entity);
 		}
-		em.merge(entity);
+		
+		entity.setDeleted(false);
+		if (entity.getId() > 0) {
+			if (userId > 0) {
+				entity.setUpdated(new Date());
+				entity.setUpdatedby(usersDao.get(userId));
+			}
+			em.merge(entity);
+		} else {
+			if (userId > 0) {
+				entity.setInserted(new Date());
+				entity.setInsertedby(usersDao.get(userId));
+			}
+			em.persist(entity);
+		}
 		return entity;
 	}
 
@@ -260,7 +193,7 @@ public class ServerDao implements IDataProviderDao<Server> {
 	 * .beans.OmEntity, long)
 	 */
 	public void delete(Server entity, long userId) {
-		if (entity.getId() >= 0) {
+		if (entity.getId() > 0) {
 			clientListManager.cleanSessionsOfDeletedOrDeactivatedServer(entity);
 			entity.setUpdated(new Date());
 			entity.setUpdatedby(usersDao.get(userId));

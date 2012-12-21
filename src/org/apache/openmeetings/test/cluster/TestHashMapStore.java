@@ -97,20 +97,47 @@ public class TestHashMapStore extends AbstractOpenmeetingsSpringTest {
 
 		Server s1 = serverDao.get(1L);
 		if (s1 == null) {
-			serverDao.saveServer(1L, "name 1", "127.0.0.1", 5080, "swagner",
-					"qweqwe", "openmeetings", "http", true, "", 1L);
+			Server s = new Server();
+			s.setName("name 1");
+			s.setAddress("127.0.0.1");
+			s.setPort(5080);
+			s.setUser("swagner");
+			s.setPass("qweqwe");
+			s.setWebapp("openmeetings");
+			s.setProtocol("http");
+			s.setActive(true);
+			s.setComment("");
+			serverDao.update(s, 1L);
 			s1 = serverDao.get(1L);
 		}
 		Server s2 = serverDao.get(2L);
 		if (s2 == null) {
-			serverDao.saveServer(2L, "name 2", "127.0.0.1", 5080, "swagner",
-					"qweqwe", "openmeetings", "http", true, "", 1L);
+			Server s = new Server();
+			s.setName("name 2");
+			s.setAddress("127.0.0.1");
+			s.setPort(5080);
+			s.setUser("swagner");
+			s.setPass("qweqwe");
+			s.setWebapp("openmeetings");
+			s.setProtocol("http");
+			s.setActive(true);
+			s.setComment("");
+			serverDao.update(s, 1L);
 			s2 = serverDao.get(2L);
 		}
 		Server s3 = serverDao.get(3L);
 		if (s3 == null) {
-			serverDao.saveServer(3L, "name 3", "127.0.0.1", 5080, "swagner",
-					"qweqwe", "openmeetings", "http", true, "", 1L);
+			Server s = new Server();
+			s.setName("name 3");
+			s.setAddress("127.0.0.1");
+			s.setPort(5080);
+			s.setUser("swagner");
+			s.setPass("qweqwe");
+			s.setWebapp("openmeetings");
+			s.setProtocol("http");
+			s.setActive(true);
+			s.setComment("");
+			serverDao.update(s, 1L);
 			s3 = serverDao.get(3L);
 		}
 

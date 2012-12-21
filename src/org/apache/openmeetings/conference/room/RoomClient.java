@@ -179,6 +179,7 @@ public class RoomClient implements Serializable {
 	 */
 	private Boolean zombieCheckFlag = false;
     private Boolean micMuted = false;
+    private boolean sipTransport = false;
     
     public RoomClient() {
     	
@@ -613,6 +614,14 @@ public class RoomClient implements Serializable {
 				+ " broadCastID: " + this.getBroadCastID() //
 				+ " avsettings: " + this.getAvsettings() //
 				;
+	}
+
+	public boolean isSipTransport() {
+		return sipTransport;
+	}
+
+	public void setSipTransport(boolean sipTransport) {
+		this.sipTransport = sipTransport;
 	}
 	
 	

@@ -895,7 +895,6 @@ public class RoomWebService {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
-			Users u = userManagement.getUserById(users_id);
 			if (authLevelManagement.checkWebServiceLevel(user_level)) {
 				return roommanagement.addRoom(3L, name, roomtypes_id, comment,
 						numberOfPartizipants, ispublic, null, appointment,

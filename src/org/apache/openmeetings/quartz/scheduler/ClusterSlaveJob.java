@@ -120,7 +120,7 @@ public class ClusterSlaveJob implements IRestClientObserver {
 		clientListManager.syncSlaveClientSession(server, slaveClients);
 
 		server.setLastPing(Calendar.getInstance());
-		serverDao.update(server);
+		serverDao.update(server, -1L);
 
 	}
 	

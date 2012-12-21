@@ -2992,10 +2992,23 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 * SIP transport methods
 	 */
 
+	private List<Long> getVerifyedActiveRoomIds(Server s) {
+		List<Long> result = new ArrayList<Long>(clientListManager.getActiveRoomIdsByServer(s));
+		//verify
+		for (Iterator<Long> i = result.iterator(); i.hasNext();) {
+			Long id = i.next();
+			List<RoomClient> rcs = clientListManager.getClientListByRoom(id, s);
+			if (rcs.size() == 0 || (rcs.size() == 1 && rcs.get(0).isSipTransport())) {
+				i.remove();
+			}
+		}
+		return result;
+	}
+	
 	public synchronized List<Long> getActiveRoomIds() {
-		List<Long> result = new ArrayList<Long>(clientListManager.getActiveRoomIdsByServer(null));
+		List<Long> result = getVerifyedActiveRoomIds(null);
 		for (Server s : serverDao.getActiveServers()) {
-			result.addAll(clientListManager.getActiveRoomIdsByServer(s));
+			result.addAll(getVerifyedActiveRoomIds(s));
 		}
 		return result;
 	}
@@ -3056,6 +3069,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
         currentClient.setAvsettings("av");
         currentClient.setVWidth(120);
         currentClient.setVHeight(90);
+        currentClient.setSipTransport(true);
         this.clientListManager.updateClientByStreamId(streamid, currentClient, false);
 
         Collection<Set<IConnection>> conCollection = current
