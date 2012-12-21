@@ -51,7 +51,7 @@ public class InstallationConfig {
 	public String urlFeed2 = "http://mail-archives.apache.org/mod_mbox/incubator-openmeetings-dev/?format=atom";
 	public String sendEmailWithVerficationCode = "0";
 	public String defaultExportFont = "TimesNewRoman";
-    public String red5SipEnable = "no";
+    public String red5SipEnable = "yes";
     public String red5SipRoomPrefix = "400";
     public String red5SipExtenContext = "rooms";
     public String replyToOrganizer = "1";

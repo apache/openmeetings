@@ -130,10 +130,6 @@ public class Rooms implements Serializable, IDataProviderEntity {
 	@Element(data = true, required = false)
 	private Boolean allowUserQuestions;
 
-	@Column(name = "conference_pin")
-	@Element(data = true, required = false)
-	private String conferencePin;
-
 	@Column(name = "is_audio_only")
 	@Element(data = true, required = false)
 	private Boolean isAudioOnly;
@@ -367,14 +363,6 @@ public class Rooms implements Serializable, IDataProviderEntity {
 
 	public void setAllowUserQuestions(Boolean allowUserQuestions) {
 		this.allowUserQuestions = allowUserQuestions;
-	}
-
-	public String getConferencePin() {
-		return conferencePin;
-	}
-
-	public void setConferencePin(String conferencePin) {
-		this.conferencePin = conferencePin;
 	}
 
 	public Boolean getIsAudioOnly() {

@@ -160,10 +160,10 @@
 				this.sipNumber.setAttribute("text","");
 			}
 			
-			if (obj.conferencePin != null) {
-                this.conferencePin.setAttribute("text",obj.conferencePin);
+			if (obj.meetme != null && obj.meetme.pin != null) {
+                this.conferencePin.setAttribute("text", obj.meetme.pin);
 			} else {
-				this.conferencePin.setAttribute("text",obj.conferencePin);
+				this.conferencePin.setAttribute("text", "");
 			}
 			
             this._turnoverlist.clearList();

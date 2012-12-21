@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.web.components.user;
 
-import java.io.Serializable;
-
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.web.components.UserPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -32,8 +30,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.ws.IWebSocketSettings;
 import org.apache.wicket.protocol.ws.api.IWebSocketConnection;
 import org.apache.wicket.protocol.ws.api.IWebSocketConnectionRegistry;
-import org.apache.wicket.protocol.ws.api.message.IWebSocketPushMessage;
-import org.apache.wicket.protocol.ws.api.message.TextMessage;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -41,14 +37,6 @@ public class ChatPanel extends UserPanel {
 	private static final Logger log = Red5LoggerFactory.getLogger(ChatPanel.class, OpenmeetingsVariables.webAppRootKey);
 	private static final long serialVersionUID = -9144707674886211557L;
 	private String message;
-	
-	class ChatMessage extends TextMessage implements IWebSocketPushMessage, Serializable {
-		private static final long serialVersionUID = -3802182673895471248L;
-
-		public ChatMessage(String msg) {
-			super(msg);
-		}
-	}
 	
 	public ChatPanel(String id) {
 		super(id);
@@ -64,7 +52,6 @@ public class ChatPanel extends UserPanel {
 			protected void onSubmit(AjaxRequestTarget target) {
 				//Application.getBean(ChatService) sendMessageToOverallChat
 				IWebSocketConnectionRegistry reg = IWebSocketSettings.Holder.get(getApplication()).getConnectionRegistry();
-				//new WebSocketPushBroadcaster(reg).broadcastAll(getApplication(), new ChatMessage(message));
 				for (IWebSocketConnection c : reg.getConnections(getApplication())) {
 					try {
 						c.sendMessage(message);

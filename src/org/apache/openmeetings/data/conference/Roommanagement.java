@@ -695,7 +695,6 @@ public class Roommanagement {
 				r.setIsClosed(isClosed);
 				r.setRedirectURL(redirectURL);
 
-				r.setConferencePin(conferencePin);
 				r.setOwnerId(ownerId);
 
 				r.setWaitForRecording(waitForRecording);
@@ -721,6 +720,7 @@ public class Roommanagement {
 				if (sipNumber != null) {
 					r.setMeetme(new MeetMe());
 					r.getMeetme().setConfno(sipNumber);
+					r.getMeetme().setPin(conferencePin);
 				} else {
 					r.setMeetme(null);
 				}
@@ -1314,8 +1314,8 @@ public class Roommanagement {
 			} else if (!sipNumber.equals(r.getMeetme().getConfno())) {
 				r.setMeetme(new MeetMe());
 				r.getMeetme().setConfno(sipNumber);
+				r.getMeetme().setPin(conferencePin);
 			}
-			r.setConferencePin(conferencePin);
 			r.setOwnerId(ownerId);
 
 			r.setWaitForRecording(waitForRecording);
