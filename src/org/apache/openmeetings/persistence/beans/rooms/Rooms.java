@@ -134,9 +134,9 @@ public class Rooms implements Serializable, IDataProviderEntity {
 	@Element(data = true, required = false)
 	private Boolean isAudioOnly;
 	
-	@Column(name = "allow_font_styles")
+	@Column(name = "allow_font_styles", nullable = false)
 	@Element(data = true, required = false)
-	private Boolean allowFontStyles;
+	private boolean allowFontStyles = false;
 
 	@Column(name = "is_closed")
 	@Element(data = true, required = false)
@@ -373,11 +373,11 @@ public class Rooms implements Serializable, IDataProviderEntity {
 		this.isAudioOnly = isAudioOnly;
 	}
 
-	public Boolean getAllowFontStyles() {
+	public boolean getAllowFontStyles() {
 		return allowFontStyles;
 	}
 
-	public void setAllowFontStyles(Boolean allowFontStyles) {
+	public void setAllowFontStyles(boolean allowFontStyles) {
 		this.allowFontStyles = allowFontStyles;
 	}
 

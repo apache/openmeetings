@@ -1311,7 +1311,7 @@ public class Roommanagement {
 			String sipNumber = getSipNumber(rooms_id);
 			if (sipNumber == null) {
 				r.setMeetme(null);
-			} else if (!sipNumber.equals(r.getMeetme().getConfno())) {
+			} else if (r.getMeetme() == null || !sipNumber.equals(r.getMeetme().getConfno())) {
 				r.setMeetme(new MeetMe());
 				r.getMeetme().setConfno(sipNumber);
 				r.getMeetme().setPin(conferencePin);
