@@ -135,7 +135,7 @@ public class Rooms implements Serializable, IDataProviderEntity {
 	private Boolean isAudioOnly;
 	
 	@Column(name = "allow_font_styles")
-	@Element(data = true)
+	@Element(data = true, required = false)
 	private Boolean allowFontStyles;
 
 	@Column(name = "is_closed")
