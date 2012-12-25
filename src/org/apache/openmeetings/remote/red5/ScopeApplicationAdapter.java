@@ -2527,9 +2527,11 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 						"Could not Find RoomClient on List publicSID: "+ publicSID);
 			}
 			
-			clusterSlaveJob.syncMessageToClientOnSlave(
-					serverDao.get(clientSessionInfo.getServerId()), clientSessionInfo.getRcl().getPublicSID(), message);
-			
+			Server s = clientSessionInfo.getServerId() != null ? serverDao.get(clientSessionInfo.getServerId()) : null;
+			if (s != null) {
+				// no need to sync on slave if server is null
+				clusterSlaveJob.syncMessageToClientOnSlave(s, clientSessionInfo.getRcl().getPublicSID() , message);
+			}
 		} catch (Exception err) {
 			log.error("[sendMessageWithClient] ", err);
 		}
