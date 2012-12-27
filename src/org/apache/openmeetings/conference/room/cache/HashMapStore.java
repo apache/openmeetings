@@ -468,68 +468,133 @@ public class HashMapStore {
 		return t;
 	}
 	
+	
+	/**
+	 * Print some session statistics to the debug out
+	 * 
+	 * @param detailLevel
+	 */
 	public void printDebugInformation(List<DEBUG_DETAILS> detailLevel) {
-		
+
+		log.debug("Session Statistics Start ################## ");
+		log.debug(getDebugInformation(detailLevel));
+		log.debug("Session Statistics End ################## ");
+
+	}
+
+	/**
+	 * Get some session statistics
+	 * 
+	 * @param detailLevel
+	 * @return
+	 */
+	public String getDebugInformation(List<DEBUG_DETAILS> detailLevel) {
+
+		StringBuilder statistics = new StringBuilder();
+
 		if (detailLevel.contains(DEBUG_DETAILS.SIZE)) {
-			log.debug("Number of sessions Total " + getTotalNumberOfSessions());
-			log.debug(" clientsByServer SIZE {} ",clientsByServer.size());
-			log.debug(" clientsByServerAndPublicSID SIZE {} ",clientsByServerAndPublicSID.size());
-			log.debug(" clientsByServerAndUserId SIZE {} ",clientsByServerAndUserId.size());
-			log.debug(" clientsByRoomId SIZE {} ",clientsByServerAndRoomId.size());
+			addNewLine(statistics, "Number of sessions Total "
+					+ getTotalNumberOfSessions());
+			addNewLine(statistics,
+					" clientsByServer SIZE " + clientsByServer.size());
+			addNewLine(statistics, " clientsByServerAndPublicSID SIZE "
+					+ clientsByServerAndPublicSID.size());
+			addNewLine(statistics, " clientsByServerAndUserId SIZE "
+					+ clientsByServerAndUserId.size());
+			addNewLine(statistics, " clientsByRoomId SIZE "
+					+ clientsByServerAndRoomId.size());
 		}
-		
+
 		if (detailLevel.contains(DEBUG_DETAILS.CLIENT_BY_STREAMID)) {
-			
-			for (Entry<Long, LinkedHashMap<String, RoomClient>> entry : clientsByServer.entrySet()) {
-				log.debug("clientsByServer Server {} Number of Clients: {} ",entry.getKey(),entry.getValue().size());
+
+			for (Entry<Long, LinkedHashMap<String, RoomClient>> entry : clientsByServer
+					.entrySet()) {
+				addNewLine(statistics,
+						"clientsByServer Server " + entry.getKey()
+								+ " Number of Clients: "
+								+ entry.getValue().size());
 			}
-			
+
 		}
-		
+
 		if (detailLevel.contains(DEBUG_DETAILS.CLIENT_BY_PUBLICSID)) {
-			for (Entry<Long, LinkedHashMap<String, List<RoomClient>>> entry : clientsByServerAndPublicSID.entrySet()) {
-				log.debug("clientsByServerAndPublicSID Server {} Number of PublicSIDs: {} ",entry.getKey(),entry.getValue().size());
-				
+			for (Entry<Long, LinkedHashMap<String, List<RoomClient>>> entry : clientsByServerAndPublicSID
+					.entrySet()) {
+				addNewLine(statistics, "clientsByServerAndPublicSID Server "
+						+ entry.getKey() + " Number of PublicSIDs: "
+						+ entry.getValue().size());
+
 				if (detailLevel.contains(DEBUG_DETAILS.PUBLICSID_LIST_ALL)) {
-					for (Entry<String, List<RoomClient>> innerEntry : entry.getValue().entrySet()) {
-						log.debug("clientsByServerAndPublicSID publicSID {} Number of clients {} ",innerEntry.getKey(),innerEntry.getValue().size());
+					for (Entry<String, List<RoomClient>> innerEntry : entry
+							.getValue().entrySet()) {
+						addNewLine(statistics,
+								"clientsByServerAndPublicSID publicSID "
+										+ innerEntry.getKey()
+										+ " Number of clients "
+										+ innerEntry.getValue().size());
 					}
 				}
 			}
 		}
-		
+
 		if (detailLevel.contains(DEBUG_DETAILS.CLIENT_BY_USERID)) {
-			for (Entry<Long, LinkedHashMap<Long, List<RoomClient>>> entry : clientsByServerAndUserId.entrySet()) {
-				log.debug("clientsByServerAndUserId Server {} Number of UserIds: {} ",entry.getKey(),entry.getValue().size());
-				
+			for (Entry<Long, LinkedHashMap<Long, List<RoomClient>>> entry : clientsByServerAndUserId
+					.entrySet()) {
+				addNewLine(statistics, "clientsByServerAndUserId Server "
+						+ entry.getKey() + " Number of UserIds: "
+						+ entry.getValue().size());
+
 				if (detailLevel.contains(DEBUG_DETAILS.USERID_LIST_ALL)) {
-					for (Entry<Long, List<RoomClient>> innerEntry : entry.getValue().entrySet()) {
-						log.debug("clientsByServerAndUserId userId {} Number of clients {} ",innerEntry.getKey(),innerEntry.getValue().size());
+					for (Entry<Long, List<RoomClient>> innerEntry : entry
+							.getValue().entrySet()) {
+						addNewLine(
+								statistics,
+								"clientsByServerAndUserId userId "
+										+ innerEntry.getKey()
+										+ " Number of clients "
+										+ innerEntry.getValue().size());
 					}
 				}
 			}
 		}
-		
+
 		if (detailLevel.contains(DEBUG_DETAILS.CLIENT_BY_ROOMID)) {
-			
-			for (Entry<Long, LinkedHashMap<Long, LinkedHashMap<String, RoomClient>>> serverEntry : clientsByServerAndRoomId.entrySet()) {
-			
-				LinkedHashMap<Long, LinkedHashMap<String, RoomClient>> clientsByRoomId = serverEntry.getValue();
-				log.debug("clientsByRoomId ServerId {} Number of Rooms: {} roomIds "+serverEntry.getValue().keySet()+" ",serverEntry.getKey(),serverEntry.getValue().size());
-				
-				for (Entry<Long, LinkedHashMap<String, RoomClient>> entry : clientsByRoomId.entrySet()) {
-					log.debug("clientsByRoomId RoomId {} Number of Clients: {} ",entry.getKey(),entry.getValue().size());
-					
+
+			for (Entry<Long, LinkedHashMap<Long, LinkedHashMap<String, RoomClient>>> serverEntry : clientsByServerAndRoomId
+					.entrySet()) {
+
+				LinkedHashMap<Long, LinkedHashMap<String, RoomClient>> clientsByRoomId = serverEntry
+						.getValue();
+				addNewLine(statistics, "clientsByRoomId ServerId "
+						+ serverEntry.getKey() + " Number of Rooms: "
+						+ serverEntry.getValue().size() + " roomIds "
+						+ serverEntry.getValue().keySet());
+
+				for (Entry<Long, LinkedHashMap<String, RoomClient>> entry : clientsByRoomId
+						.entrySet()) {
+					addNewLine(statistics,
+							"clientsByRoomId RoomId " + entry.getKey()
+									+ " Number of Clients: "
+									+ entry.getValue().size());
+
 					if (detailLevel.contains(DEBUG_DETAILS.ROOMID_LIST_ALL)) {
-						for (Entry<String, RoomClient> innerEntry : entry.getValue().entrySet()) {
-							log.debug("clientsByRoomId streamId {} client {} ",innerEntry.getKey(),innerEntry.getValue());
+						for (Entry<String, RoomClient> innerEntry : entry
+								.getValue().entrySet()) {
+							addNewLine(statistics, "clientsByRoomId streamId "
+									+ innerEntry.getKey() + " client "
+									+ innerEntry.getValue());
 						}
 					}
 				}
-			
+
 			}
 		}
-		
+
+		return statistics.toString();
+	}
+
+	private void addNewLine(StringBuilder strBuilder, String message) {
+		strBuilder.append(message + "\n\r");
 	}
 
 }

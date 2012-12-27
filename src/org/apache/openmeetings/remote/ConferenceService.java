@@ -737,6 +737,25 @@ public class ConferenceService {
 		}
 		return null;
 	}
+	
+	/**
+	 * Get some statistics about the current sessions handled by this instance
+	 * 
+	 * @param SID
+	 * @return
+	 */
+	public String getSessionStatistics(String SID) {
+		try {
+			Long users_id = sessionManagement.checkSession(SID);
+			Long user_level = userManagement.getUserLevelByID(users_id);
+			if (authLevelManagement.checkAdminLevel(user_level)) {
+				return this.clientListManager.getSessionStatistics();
+			}
+		} catch (Exception err) {
+			log.error("[getRoomClientsMap]", err);
+		}
+		return null;
+	}
 
 	public List<Rooms> getRoomsWithCurrentUsersByList(String SID, int start,
 			int max, String orderby, boolean asc) {

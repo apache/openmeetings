@@ -71,7 +71,7 @@ public class FillLabels {
 	 * other label-id's will be only filled up if missing at the end of the
 	 * language file
 	 */
-	private final long[] replaceIds = { 1518L };
+	private final long[] replaceIds = {  }; // 1518L
 
 	private Map<Long, Fieldlanguagesvalues> masterLabels;
 

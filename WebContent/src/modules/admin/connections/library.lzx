@@ -20,6 +20,7 @@
 -->
 <library>
     
+    <include href="sessionDetails.lzx" />
     <include href="roomClient.lzx" />
     <include href="roomClientListItem.lzx" />
 

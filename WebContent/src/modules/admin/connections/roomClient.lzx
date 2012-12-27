@@ -99,6 +99,16 @@
 	</turnOverList>
 	
 	<text name="_header" fontstyle="bold" text="Sessionvars" x="790" y="2"/>
+	
+	<view resource="messagebox_info_rsc" x="${ canvas.width - 20 }" y="2">
+		<handler name="onclick">
+			<![CDATA[
+				new lz.sessionDetails(parent);
+			]]>
+		</handler>
+		<labelTooltip labelid="1534" />
+	</view>
+	
 	<view name="_roomvalueform" x="790" y="20" clip="true" 
 		  height="${ canvas.height - canvas.naviHeight - 20 }" width="${ canvas.width - 790 }">
 		

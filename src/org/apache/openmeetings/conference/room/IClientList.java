@@ -195,4 +195,11 @@ public interface IClientList {
 	 */
 	public abstract Set<Long> getActiveRoomIdsByServer(Server server);
 
+	/**
+	 * Get some statistics about the current sessions
+	 * 
+	 * @return
+	 */
+	public abstract String getSessionStatistics();
+
 }

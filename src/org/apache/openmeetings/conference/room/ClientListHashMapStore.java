@@ -20,6 +20,7 @@ package org.apache.openmeetings.conference.room;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -377,7 +378,7 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 		}
 
 	}
-
+	
 	public List<SlaveClientDto> getCurrentSlaveSessions() {
 		List<SlaveClientDto> clients = new ArrayList<SlaveClientDto>(
 				cache.size());
@@ -387,15 +388,20 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 		return clients;
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see org.apache.openmeetings.conference.room.IClientList#getActiveRoomsByServer()
-	 */
 	public Set<Long> getActiveRoomIdsByServer(Server server) {
 		if (cache.getClientsByServerAndRoom(server) == null) {
 			return EMPTY_HASH_SET;
 		}
 		return cache.getClientsByServerAndRoom(server).keySet();
+	}
+	
+	
+	public String getSessionStatistics() {
+		return cache.getDebugInformation(Arrays.asList(HashMapStore.DEBUG_DETAILS.SIZE,
+						HashMapStore.DEBUG_DETAILS.CLIENT_BY_STREAMID,
+						HashMapStore.DEBUG_DETAILS.CLIENT_BY_PUBLICSID,
+						HashMapStore.DEBUG_DETAILS.CLIENT_BY_USERID,
+						HashMapStore.DEBUG_DETAILS.CLIENT_BY_ROOMID));
 	}
 
 }
