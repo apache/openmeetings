@@ -35,8 +35,8 @@ public class RoomTypeConverter extends OmConverter<RoomTypes> {
 	}
 	
 	public RoomTypes read(InputNode node) throws Exception {
-		long id = getlongValue(node);
-		return roommanagement.getRoomTypesById(id > 0 ? id : 1); // conference type will be used in case of bad type
+		RoomTypes rt = roommanagement.getRoomTypesById(getlongValue(node));
+		return rt != null ? rt : roommanagement.getRoomTypesById(1); // conference type will be used in case of bad type
 	}
 
 	public void write(OutputNode node, RoomTypes value) throws Exception {

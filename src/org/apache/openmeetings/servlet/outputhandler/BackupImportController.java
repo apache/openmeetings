@@ -27,6 +27,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -91,9 +92,11 @@ import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingMetaData;
 import org.apache.openmeetings.persistence.beans.poll.PollType;
 import org.apache.openmeetings.persistence.beans.poll.RoomPoll;
+import org.apache.openmeetings.persistence.beans.rooms.RoomModerators;
 import org.apache.openmeetings.persistence.beans.rooms.RoomTypes;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms_Organisation;
+import org.apache.openmeetings.persistence.beans.sip.asterisk.MeetMe;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessageFolder;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessages;
 import org.apache.openmeetings.persistence.beans.user.UserContacts;
@@ -304,11 +307,23 @@ public class BackupImportController extends AbstractUploadController {
 			for (Rooms r : list) {
 				Long roomId = r.getRooms_id();
 
-				// We need to reset this as openJPA reject to store them
+				// We need to reset ids as openJPA reject to store them
 				// otherwise
 				r.setRooms_id(null);
-
+				MeetMe mm = r.getMeetme();
+				r.setMeetme(null);
+				for (Iterator<RoomModerators> i = r.getModerators().iterator(); i.hasNext();) {
+					RoomModerators rm = i.next();
+					if (rm.getUser().getUser_id() == null) {
+						i.remove();
+					}
+				}
 				r = roomDao.update(r, 1L);
+				if (mm != null) {
+					mm.setConfno(roommanagement.getSipNumber(r.getRooms_id()));
+					r.setMeetme(mm);
+					r = roomDao.update(r, 1L); //FIXME double update
+				}
 				roomsMap.put(roomId, r.getRooms_id());
 			}
 		}
@@ -356,7 +371,9 @@ public class BackupImportController extends AbstractUploadController {
 
 				// We need to reset this as openJPA reject to store them otherwise
 				a.setAppointmentId(null);
-
+				if (a.getUserId().getUser_id() == null) {
+					a.setUserId(null);
+				}
 				Long newAppId = appointmentDao.addAppointmentObj(a);
 				appointmentsMap.put(appId, newAppId);
 			}
@@ -503,6 +520,12 @@ public class BackupImportController extends AbstractUploadController {
 				if (p.getTo() != null && p.getTo().getUser_id() == null) {
 					p.setTo(null);
 				}
+				if (p.getFrom() != null && p.getFrom().getUser_id() == null) {
+					p.setFrom(null);
+				}
+				if (p.getOwner() != null && p.getOwner().getUser_id() == null) {
+					p.setOwner(null);
+				}
 				privateMessagesDao.addPrivateMessageObj(p);
 			}
 		}
@@ -623,6 +646,7 @@ public class BackupImportController extends AbstractUploadController {
 	}
 	
 	private <T> List<T> readList(Serializer ser, File baseDir, String fileName, String listNodeName, Class<T> clazz, boolean notThow) throws Exception {
+		List<T> list = new ArrayList<T>();
 		File xml = new File(baseDir, fileName);
 		if (!xml.exists()) {
 			final String msg = fileName + " missing";
@@ -631,20 +655,20 @@ public class BackupImportController extends AbstractUploadController {
 			} else {
 				throw new Exception(msg);
 			}
-		}
-		List<T> list = new ArrayList<T>();
-		InputNode root = NodeBuilder.read(new FileInputStream(xml));
-		InputNode listNode = root.getNext();
-		if (listNodeName.equals(listNode.getName())) {
-			InputNode item = listNode.getNext();
-			while (item != null) {
-				try {
-					T o = ser.read(clazz, item, false);
-					list.add(o);
-				} catch (Exception e) {
-					log.debug("Exception While reading node of type: " + clazz, e);
+		} else {
+			InputNode root = NodeBuilder.read(new FileInputStream(xml));
+			InputNode listNode = root.getNext();
+			if (listNodeName.equals(listNode.getName())) {
+				InputNode item = listNode.getNext();
+				while (item != null) {
+					try {
+						T o = ser.read(clazz, item, false);
+						list.add(o);
+					} catch (Exception e) {
+						log.debug("Exception While reading node of type: " + clazz, e);
+					}
+					item = listNode.getNext();
 				}
-				item = listNode.getNext();
 			}
 		}
 		return list;

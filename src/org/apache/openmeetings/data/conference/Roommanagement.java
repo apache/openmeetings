@@ -626,13 +626,15 @@ public class Roommanagement {
 		return null;
 	}
 
-	private String getSipNumber(long roomId) {
+	//TODO move it to helper or DAO
+	public String getSipNumber(long roomId) {
 		String sipEnabled = configurationDaoImpl.getConfValue("red5sip.enable", String.class, "no");
         if("yes".equals(sipEnabled)) {
         	return configurationDaoImpl.getConfValue("red5sip.room_prefix", String.class, "400") + roomId;
         }
         return null;
 	}
+	
     /**
      * Returns number of SIP conference participants
      * @param rooms_id id of room
