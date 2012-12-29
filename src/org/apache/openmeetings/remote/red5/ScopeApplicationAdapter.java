@@ -2517,6 +2517,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			
 			if (currentClient != null) {
 				sendMessageWithClientByPublicSID(message, publicSID);
+				return;
 			}
 			
 			//Check if the client is on any slave host
@@ -2527,11 +2528,17 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 						"Could not Find RoomClient on List publicSID: "+ publicSID);
 			}
 			
-			Server s = clientSessionInfo.getServerId() != null ? serverDao.get(clientSessionInfo.getServerId()) : null;
-			if (s != null) {
-				// no need to sync on slave if server is null
-				clusterSlaveJob.syncMessageToClientOnSlave(s, clientSessionInfo.getRcl().getPublicSID() , message);
+			Server s = clientSessionInfo.getServerId() != null ? serverDao
+					.get(clientSessionInfo.getServerId()) : null;
+			if (s == null) {
+				throw new Exception("Found session has the server null rcl: "
+						+ clientSessionInfo.getRcl() + " serverId: "
+						+ clientSessionInfo.getServerId() + " publicSID: " 
+						+ publicSID);
 			}
+			
+			clusterSlaveJob.syncMessageToClientOnSlave(s, clientSessionInfo.getRcl().getPublicSID() , message);
+			
 		} catch (Exception err) {
 			log.error("[sendMessageWithClient] ", err);
 		}
