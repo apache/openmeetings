@@ -137,6 +137,38 @@
     			description="Sort down" 
 				license="FamFam Icon Set"
 				src="public/themes/basic-theme/general/resultset_down.png" />
+    
+    <!-- Chat toolbar -->
+    
+    <resource name="font_style" 
+    			description="Change font style button" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/style.png" />
+    
+    <resource name="font_bold" 
+    			description="Bold font style button" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/text_bold.png" />
+    
+    <resource name="font_italic" 
+    			description="Italic font style button" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/text_italic.png" />
+    
+    <resource name="font_underline" 
+    			description="Underline font style button" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/text_underline.png" />
+    
+    <resource name="font_color" 
+    			description="Change font color button" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/color_swatch.png" />
+    
+    <resource name="hyperlink" 
+    			description="Insert hyperlink button" 
+				license="FamFam Icon Set"
+				src="public/themes/basic-theme/general/world_link.png" />
 				
 	<!-- Whiteboard Toolbar -->
 	

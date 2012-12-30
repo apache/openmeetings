@@ -74,10 +74,10 @@
             </handler>   
         </netRemoteCallHib>    
 
-    <view bgcolor="$once{ canvas.getThemeColor('baseMousecolorizer') }" width="$once{ parent.width-2 }" 
+    <view bgcolor="0xFFFFFF" width="$once{ parent.width-2 }" opacity="0.8"
     	  height="$once{ parent.height-2 }" x="1" y="1" />
     	  
-    <labelText x="1" y="1" labelid="446" /><!-- 446:Emoticons -->
+    <labelText x="1" y="1" labelid="446" fontstyle="bold" /><!-- 446:Emoticons -->
 	<view name="inn" width="158" height="118" x="0" y="20" clip="true">
 		<view name="inn" width="$once{ parent.height }" >
 			<wrappinglayout axis="x" spacing="2" />

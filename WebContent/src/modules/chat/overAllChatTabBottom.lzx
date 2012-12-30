@@ -112,22 +112,22 @@
 
     <view name="_button" width="140" y="22" align="right">
         
-        <miniIcons y="2" x="62" resource="font_preferences" 
-			       width="16" height="16" showhandcursor="true">
-        		<handler name="onclick">
-        			var pick = new lz.fontOptions(canvas,{
-						btnRef:this.parent.parent,
-						x:(this.getAttributeRelative('x',canvas)-130),
-						y:(this.getAttributeRelative('y',canvas)-42)
-					});
-					lz.ModeManager.makeModal(pick);   
-        		</handler>
-        		<handler name="onmouseover">
-        			<!-- lost selection workaround -->
-        			parent.parent.message._ctext.saveselection();
-        		</handler>
-        		<labelTooltip labelid="1530" />
-        	</miniIcons>
+        <miniIconsImage y="2" x="62" width="16" height="16"   
+		       showhandcursor="true" src="$once{ canvas.getThemeImage('font_style') }">
+       		<handler name="onclick">
+       			var pick = new lz.fontOptions(canvas,{
+					btnRef:this.parent.parent,
+					x:(this.getAttributeRelative('x',canvas)-130),
+					y:(this.getAttributeRelative('y',canvas)-42)
+				});
+				lz.ModeManager.makeModal(pick);   
+       		</handler>
+       		<handler name="onmouseover">
+       			<!-- lost selection workaround -->
+       			parent.parent.message._ctext.saveselection();
+       		</handler>
+       		<labelTooltip labelid="1530" />
+       	</miniIconsImage>
         
         <miniIcons y="2" x="82" resource="smile_chat_log_rsc" width="16" height="16" 
                    showhandcursor="true">
