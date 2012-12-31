@@ -19,10 +19,10 @@
 package org.apache.openmeetings.servlet.outputhandler;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.Writer;
 import java.util.Date;
 import java.util.List;
 
@@ -34,6 +34,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.batik.dom.GenericDOMImplementation;
 import org.apache.batik.dom.svg.SVGDOMImplementation;
 import org.apache.batik.svggen.SVGGraphics2D;
+import org.apache.batik.transcoder.TranscoderInput;
+import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.image.JPEGTranscoder;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.batik.beans.PrintBean;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
@@ -104,8 +107,7 @@ public class ExportToImage extends HttpServlet {
 	 * , javax.servlet.http.HttpServletResponse)
 	 */
 	@Override
-	protected void service(HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) throws ServletException,
+	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException,
 			IOException {
 
 		try {
@@ -114,24 +116,24 @@ public class ExportToImage extends HttpServlet {
 				return;
 			}
 
-			String sid = httpServletRequest.getParameter("sid");
+			String sid = request.getParameter("sid");
 			if (sid == null) {
 				sid = "default";
 			}
 			log.debug("sid: " + sid);
 
-			String hash = httpServletRequest.getParameter("hash");
+			String hash = request.getParameter("hash");
 			if (hash == null) {
 				hash = "";
 			}
 			log.debug("hash: " + hash);
 
-			String fileName = httpServletRequest.getParameter("fileName");
+			String fileName = request.getParameter("fileName");
 			if (fileName == null) {
 				fileName = "file_xyz";
 			}
 
-			String exportType = httpServletRequest.getParameter("exportType");
+			String exportType = request.getParameter("exportType");
 			if (exportType == null) {
 				exportType = "svg";
 			}
@@ -180,64 +182,38 @@ public class ExportToImage extends HttpServlet {
 				// Finally, stream out SVG to the standard output using
 				// UTF-8 encoding.
 				boolean useCSS = true; // we want to use CSS style attributes
-				// Writer out = new OutputStreamWriter(System.out, "UTF-8");
 
-				if (exportType.equals("svg")) {
-					// OutputStream out = httpServletResponse.getOutputStream();
-					// httpServletResponse.setContentType("APPLICATION/OCTET-STREAM");
-					// httpServletResponse.setHeader("Content-Disposition","attachment; filename=\""
-					// + requestedFile + "\"");
-					Writer out = httpServletResponse.getWriter();
+				File uploadTempDir = OmFileHelper.getUploadTempDir();
+				log.debug("working_dir: " + uploadTempDir);
+				String reqFilePrefix = fileName + "_" + CalendarPatterns.getTimeForStreamId(new Date());
+				File svgFile = new File(uploadTempDir, reqFilePrefix + ".svg");
+				log.debug("exported svg file: " + svgFile.getCanonicalPath());
+				FileWriter out = new FileWriter(svgFile);
+				svgGenerator.stream(out, useCSS);
+				out.flush();
+				out.close();
+				File expFile = new File(uploadTempDir, reqFilePrefix + "." + exportType);
+				log.debug("exported file: " + expFile.getCanonicalPath());
+				if ("svg".equals(exportType)) {
+					outFile(response, expFile);
+				} else if ("jpg".equals(exportType)) {
+					JPEGTranscoder t = new JPEGTranscoder();
+			        t.addTranscodingHint(JPEGTranscoder.KEY_QUALITY, 1f);
+			        
+			        OutputStream ostream = new FileOutputStream(expFile);
+			        TranscoderOutput output = new TranscoderOutput(new FileOutputStream(expFile));
 
-					svgGenerator.stream(out, useCSS);
-
-				} else if (exportType.equals("png") || exportType.equals("jpg")
+			        // Perform the transcoding.
+			        t.transcode(new TranscoderInput(svgFile.toURI().toString()), output);
+			        ostream.flush();
+			        ostream.close();
+			        
+					outFile(response, expFile);
+				} else if (exportType.equals("png")
 						|| exportType.equals("gif") || exportType.equals("tif")
 						|| exportType.equals("pdf")) {
-
-					File uploadTempDir = OmFileHelper.getUploadTempDir();
-
-					String requestedFileSVG = fileName + "_"
-							+ CalendarPatterns.getTimeForStreamId(new Date())
-							+ ".svg";
-					String resultFileName = fileName + "_"
-							+ CalendarPatterns.getTimeForStreamId(new Date())
-							+ "." + exportType;
-
-					log.debug("working_dir: " + uploadTempDir);
-					log.debug("requestedFileSVG: " + requestedFileSVG);
-					log.debug("resultFileName: " + resultFileName);
-
-					File svgFile = new File(uploadTempDir, requestedFileSVG);
-					File resultFile = new File(uploadTempDir, resultFileName);
-
-					log.debug("svgFile: " + svgFile.getCanonicalPath());
-					log.debug("resultFile: " + resultFile.getCanonicalPath());
-					log.debug("svgFile P: " + svgFile.getPath());
-					log.debug("resultFile P: " + resultFile.getPath());
-
-					FileWriter out = new FileWriter(svgFile);
-					svgGenerator.stream(out, useCSS);
-
-					httpServletResponse.reset();
-					httpServletResponse.resetBuffer();
-					OutputStream outStream = httpServletResponse
-							.getOutputStream();
-					httpServletResponse
-							.setContentType("APPLICATION/OCTET-STREAM");
-					httpServletResponse.setHeader("Content-Disposition",
-							"attachment; filename=\"" + resultFileName + "\"");
-					httpServletResponse.setHeader("Content-Length",
-							"" + resultFile.length());
-
-					OmFileHelper.copyFile(resultFile, outStream);
-					outStream.close();
-
-					out.flush();
-					out.close();
-
+						//TODO not implemented yet
 				}
-
 			}
 
 		} catch (Exception er) {
@@ -246,4 +222,17 @@ public class ExportToImage extends HttpServlet {
 			er.printStackTrace();
 		}
 	}
+	
+	private void outFile(HttpServletResponse response, File f) throws IOException {
+		response.reset();
+		response.resetBuffer();
+		OutputStream outStream = response.getOutputStream();
+		response.setContentType("APPLICATION/OCTET-STREAM");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + f.getName() + "\"");
+		response.setHeader("Content-Length", "" + f.length());
+
+		OmFileHelper.copyFile(f, outStream);
+		outStream.close();
+	}
+	
 }

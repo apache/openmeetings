@@ -96,13 +96,12 @@
     <confmenucommand id="cmd_coBrowser" actionCommand="browser_open" key="['control','b']"/> 
      -->
    
-    <!--  
-    	There is no image export at the moment
-    <confmenucommand id="cmd_exportFilePNG" onselect="canvas.doWhiteboardActionmenu('exportFilePNG')" />
-    <confmenucommand id="cmd_exportFileJPG" onselect="canvas.doWhiteboardActionmenu('exportFileJPG')" />
-    <confmenucommand id="cmd_exportFilePDF" onselect="canvas.doWhiteboardActionmenu('exportFilePDF')" />
-    <confmenucommand id="cmd_exportFileSVG" onselect="canvas.doWhiteboardActionmenu('exportFileSVG')" />
-    <confmenucommand id="cmd_exportFileTIF" onselect="canvas.doWhiteboardActionmenu('exportFileTIF')" />
+    <confmenucommand id="cmd_exportFilePNG" onselect="canvas.doWhiteboardActionmenu('exportFilePNG')" tipLabelId="1489" />
+    <confmenucommand id="cmd_exportFileJPG" onselect="canvas.doWhiteboardActionmenu('exportFileJPG')" tipLabelId="1489" />
+    <confmenucommand id="cmd_exportFileSVG" onselect="canvas.doWhiteboardActionmenu('exportFileSVG')" tipLabelId="1489" />
+    <!-- 
+    <confmenucommand id="cmd_exportFilePDF" onselect="canvas.doWhiteboardActionmenu('exportFilePDF')" tipLabelId="1489" />
+    <confmenucommand id="cmd_exportFileTIF" onselect="canvas.doWhiteboardActionmenu('exportFileTIF')" tipLabelId="1489" />
      -->
     
     <attribute name="colorArray" value="null" />
