@@ -43,14 +43,14 @@
 	</xsl:template>
     <xsl:template match="//*[@name='httpcore']">
 		<xsl:text disable-output-escaping="yes">
-			&lt;dependency org="org.apache.httpcomponents" name="httpcore" rev="4.1.3" &gt;
+			&lt;dependency org="org.apache.httpcomponents" name="httpcore" rev="4.2.1" &gt;
 				&lt;include type="jar" /&gt;
 			&lt;/dependency&gt;
 		</xsl:text>
 	</xsl:template>
     <xsl:template match="//*[@name='httpclient']">
 		<xsl:text disable-output-escaping="yes">
-			&lt;dependency org="org.apache.httpcomponents" name="httpclient" rev="4.1.2" &gt;
+			&lt;dependency org="org.apache.httpcomponents" name="httpclient" rev="4.2" &gt;
 				&lt;include type="jar" /&gt;
 			&lt;/dependency&gt;
 		</xsl:text>
