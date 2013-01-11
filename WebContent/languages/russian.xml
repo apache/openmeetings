@@ -4632,9 +4632,9 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Р”РµС‚Р°Р»РёР·Р°С†РёСЏ СЃРµСЃСЃРёРё</value>
   </string>
   <string id="1536" name="system_import">
-    <value>Системный импорт</value>
+    <value>РЎРёСЃС‚РµРјРЅС‹Р№ РёРјРїРѕСЂС‚</value>
   </string>
   <string id="1537" name="include_into_backup">
-    <value>Включать загруженные файлы и записи в бэкап</value>
+    <value>Р’РєР»СЋС‡Р°С‚СЊ Р·Р°РіСЂСѓР¶РµРЅРЅС‹Рµ С„Р°Р№Р»С‹ Рё Р·Р°РїРёСЃРё РІ Р±СЌРєР°Рї</value>
   </string>
 </language>
