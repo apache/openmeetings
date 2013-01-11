@@ -817,6 +817,12 @@
 		<available classpathref="check.classpath" classname="org.junit.Test" property="junit.installed" />
 		<available classpathref="check.classpath" classname="com.thaiopensource.relaxng.translate.Driver" property="dtd-generator.installed" />
 		<available classpathref="check.classpath" classname="org.apache.commons.cli.CommandLine" property="cmdadmin.installed" />
+		<condition property="anakia.installed">
+			<and>
+				<available classpathref="check.anakia.classpath" classname="org.apache.oro.text.GlobCompiler" />
+				<available classpathref="check.anakia.classpath" classname="org.jdom.JDOMException" />
+			</and>
+		</condition> 
 		<available classpathref="check.anakia.classpath" classname="org.apache.oro.text.GlobCompiler" property="anakia.installed" />
 		<available classpathref="check.rat.classpath" classname="org.apache.rat.Report" property="rat.installed" />
 		<available classpathref="svntask.classpath" classname="org.tmatesoft.svn.core.SVNCommitInfo" property="svntask.installed" />
@@ -857,7 +863,7 @@
 		</copy>
 	</target>
 	
-	<!-- Check for the Red5 libraries -->
+	<!-- Check for the Red5 server libraries -->
 	<target name="-retrieve-red5-server" unless="red5.installed" description="Retrieves the libraries if needed" depends="-ant-task">
 		<svn refid="svn.settings">
 			<checkout url="http://red5.googlecode.com/svn/java/server/trunk/" revision="${red5.server.revision}" destPath="${red5.server.dir}" />
@@ -871,6 +877,10 @@
 			<param name="ivy.lib.location" value="${red5.server.dir}/plugins" />
 		</antcall>
 		<!-- END of Tomcat 7 patch -->
+		<xslt in="${red5.server.dir}/ivy.xml" out="${red5.server.dir}/ivy1.xml" style="build-red5_ivy.xsl" />
+		<move file="${red5.server.dir}/ivy1.xml" tofile="${red5.server.dir}/ivy.xml" />
+		<xslt in="${red5.server.dir}/ivysettings.xml" out="${red5.server.dir}/ivysettings1.xml" style="build-red5_ivysettings.xsl" />
+		<move file="${red5.server.dir}/ivysettings1.xml" tofile="${red5.server.dir}/ivysettings.xml" />
 		<subant target="dist">
 			<fileset dir="${red5.server.dir}" includes="build.xml" />
 		</subant>
@@ -903,12 +913,14 @@
 		<antcall target="-patch-red5-server-start-script"/> 
 	</target>
 	
-	<!-- Check for the Red5 libraries -->
+	<!-- Check for the Red5 client libraries -->
 	<target name="-retrieve-red5-client" unless="red5.client.installed" description="Retrieves the libraries if needed" depends="-retrieve-red5-server">
 		<svn refid="svn.settings">
 			<checkout url="http://red5.googlecode.com/svn/java/client/trunk/" revision="${red5.client.revision}" destPath="${red5.client.dir}" />
 		</svn>
 		<copy file="${red5.lib}/red5.jar" todir="${red5.client.dir}/lib" overwrite="true" force="true" />
+		<xslt in="${red5.client.dir}/ivy.xml" out="${red5.client.dir}/ivy1.xml" style="build-red5_ivy.xsl" />
+		<move file="${red5.client.dir}/ivy1.xml" tofile="${red5.client.dir}/ivy.xml" />
 		<subant target="dist">
 			<fileset dir="${red5.client.dir}" includes="build.xml" />
 		</subant>

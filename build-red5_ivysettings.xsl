@@ -14,12 +14,16 @@
  -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
  <xsl:output omit-xml-declaration="no"/>
-    <xsl:template match="node()|@*">
+    <xsl:template match="node()|@*" name="identity">
       <xsl:copy>
          <xsl:apply-templates select="node()|@*"/>
       </xsl:copy>
     </xsl:template>
 
-    <xsl:template match="//*[@id='mp4reader.impl']"/>
-    <xsl:template match="//*[@id='mp3reader.impl']"/>
+    <xsl:template match="url[last()]">
+		<xsl:call-template name="identity"/>
+            <url name="java_net">
+				<artifact pattern="http://download.java.net/maven/2/[organisation]/[artifact]/[revision]/[artifact]-[revision].[ext]" />
+            </url>
+	</xsl:template>
 </xsl:stylesheet>
