@@ -888,7 +888,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Список электронных адресов пользователей (http://incubator.apache.org/openmeetings/mail-lists.html)</value>
   </string>
   <string id="288" name="login_rememberuser">
-    <value>Запомнить меня</value>
+    <value>Запомнить вход в систему</value>
   </string>
   <string id="289" name="main_navi">
     <value>Контент</value>
@@ -1542,7 +1542,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Если не удаётся перейти по ссылке, скопируйте этот URL в браузер:</value>
   </string>
   <string id="506" name="registering_mail_text_head">
-    <value>$APP_NAME SignUp</value>
+    <value>$APP_NAME регистрация</value>
   </string>
   <string id="507" name="registering_mail_text_head2">
     <value>Ваши пользовательские данные:</value>
@@ -1830,7 +1830,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Соединено с</value>
   </string>
   <string id="602" name="connection administration panel">
-    <value>Комната / Scope</value>
+    <value>Комната / Вместимость</value>
   </string>
   <string id="603" name="connection administration panel">
     <value>Выбросить польз-ля</value>
@@ -2139,7 +2139,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Обновить</value>
   </string>
   <string id="705" name="file explorer">
-    <value>Мусорка</value>
+    <value>Корзина</value>
   </string>
   <string id="706" name="file explorer">
     <value>Мои файлы (Локальное устройство)</value>
@@ -2895,7 +2895,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Послать</value>
   </string>
   <string id="957" name="user-license">
-    <value>Нажмите здесь, чтобы получить контактную информацию ипрайс-лист</value>
+    <value>Нажмите здесь, чтобы получить контактную информацию и прайс-лист</value>
   </string>
   <string id="958" name="payment-form">
     <value>Кредитная карта</value>
@@ -3858,7 +3858,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Ваши контакты должны разрешить вам доступ, прежде чем вы сможете видеть их календари.</value>
   </string>
   <string id="1278" name="user contacts">
-    <value>Вы не можете сохранить или удалить событияиз чужих календарей!</value>
+    <value>Вы не можете сохранить или удалить события из чужих календарей!</value>
   </string>
   <string id="1279" name="user contacts">
     <value>Показать мой календарь снова!</value>
@@ -3882,7 +3882,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Сперва соххраните событие!</value>
   </string>
   <string id="1286" name="access rooms error">
-    <value>Нет таких доступных комнат. Событиен в календаре и п рисоединённая комната уже удалены!</value>
+    <value>Нет таких доступных комнат. Событиея в календаре и присоединённая комната уже удалены!</value>
   </string>
   <string id="1287" name="nick name">
     <value>Выберите ваш ник</value>
@@ -4350,7 +4350,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Скрыть доску</value>
   </string>
   <string id="1442" name="show microphone status">
-    <value>Показать статус микрофона и видео</value>
+    <value>Показать статус микрофона в видео</value>
   </string>
   <string id="1443" name="layout_options">
     <value>Параметры расположения</value>
@@ -4416,7 +4416,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Редактировать текст</value>
   </string>
   <string id="1464" name="salutation">
-    <value>Prof</value>
+    <value>Проф-р</value>
   </string>
   <string id="1465" name="sharing client">
     <value>Опубликовать</value>
@@ -4428,25 +4428,25 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Остановить</value>
   </string>
   <string id="1468" name="sharing client">
-    <value>Хост</value>
+    <value>Сервер публикации</value>
   </string>
   <string id="1469" name="sharing client">
-    <value>Опубликовать App</value>
+    <value>Домен публикации</value>
   </string>
   <string id="1470" name="sharing client">
-    <value>Опубликовать Id</value>
+    <value>Имя публикации</value>
   </string>
   <string id="1471" name="sharing client">
-    <value>Уменьшать ширину SharingScreen'а при перемещении его влево</value>
+    <value>Уменьшать ширину общего экрана при перемещении его влево</value>
   </string>
   <string id="1472" name="sharing client">
-    <value>Уменьшать высоту SharingScreen'а при перемещении его вниз</value>
+    <value>Уменьшать высоту общего экрана при перемещении его вниз</value>
   </string>
   <string id="1473" name="sharing client">
-    <value>Уменьшать смещение x SharingScreen'а при увеличении его ширины</value>
+    <value>Уменьшать смещение x общего экрана при увеличении его ширины</value>
   </string>
   <string id="1474" name="sharing client">
-    <value>Уменьшать смещение y SharingScreen'а при увеличении его высоты</value>
+    <value>Уменьшать смещение y общего экрана при увеличении его высоты</value>
   </string>
   <string id="1475" name="sharing client">
     <value>Настройки для трансляции видео конференции на другие сервисы:</value>
@@ -4503,52 +4503,52 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Запросить разрешение модератора на доступ к доске</value>
   </string>
   <string id="1493" name="private chat">
-    <value>Start Private Chat</value>
+    <value>Начать приватный чат</value>
   </string>
   <string id="1494" name="all_private_chat">
-    <value>All</value>
+    <value>Все</value>
   </string>
   <string id="1495" name="private chat">
-    <value>You cannot start a private chat with yourself.</value>
+    <value>Вы не можете начать приватный чат с собой.</value>
   </string>
   <string id="1496" name="private chat">
-    <value>You've already started a private chat with this participant.</value>
+    <value>Вы уже начали приватный чат с этим участником.</value>
   </string>
   <string id="1497" name="private chat">
-    <value>Do you really want to delete this private chat?</value>
+    <value>Вы действительно хотите удалить этот приватный чат?</value>
   </string>
   <string id="1498" name="Servers">
-    <value>Servers</value>
+    <value>Сервера</value>
   </string>
   <string id="1499" name="Servers">
-    <value>Servers participating in cluster</value>
+    <value>Сервера кластера</value>
   </string>
   <string id="1500" name="Server name">
-    <value>Server Name</value>
+    <value>Имя Сервера</value>
   </string>
   <string id="1501" name="Server Address">
-    <value>Server Address</value>
+    <value>Адрес Сервера</value>
   </string>
   <string id="1502" name="Server details">
-    <value>Server details</value>
+    <value>Описание Сервера</value>
   </string>
   <string id="1503" name="Send SMS">
     <value>СМС</value>
   </string>
   <string id="1504" name="publishing_message">
-    <value>Publishing. User:</value>
+    <value>Сообщение. Пользователю:</value>
   </string>
   <string id="1505" name="cmd_line_admin">
-    <value>To save time and internet traffic you can use command line admin to backup/restore/upgrade:\n 1) go to OM install dir (for ex. /opt/red5) \n 2) stop OM (for ex. ./red5-shutdown.sh)\n 3) ./admin.sh -b -file ~/today_om_backup.zip (create backup of current OM)\n 4) download archive with new OM\n 5) mv /opt/red5 /opt.red5.bak (move working version of OM just in case :))\n 6) extract downloaded OM to the /opt/red5\n 7) ./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' in case of you are using non-default DB )\n 8) start OM\n</value>
+    <value>Что бы уменьшить время и интернет траффик вы можете воспользоватся командной строкой admin для копирования/восстановления/обновления: 1) войдите в установочную папку OM (например /opt/red5)  2) остановите OM (./red5-shutdown.sh) 3) выполняем ./admin.sh -b -file ~/today_om_backup.zip (создает резервную копию OM) 4) загрузите новый дистрибутив OM 5) mv /opt/red5 /opt.red5.bak (перемещаем рабочую версию OM  :)) 6) распаковываем дистрибутив OM в папку /opt/red5 7) запускаем ./admin.sh -i -file ~/today_om_backup.zip (или './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' в случае когда база данных отличается от базы по умолчанию ) 8) запускаем OM</value>
   </string>
   <string id="1506" name="public_room_tooltip">
-    <value>Rooms common to all user</value>
+    <value>Общие комнаты для всех пользователей</value>
   </string>
   <string id="1507" name="private_room_tooltip">
-    <value>Rooms common to the current user group</value>
+    <value>Общие комнаты для текущей группы пользователей</value>
   </string>
   <string id="1508" name="my_room_tooltip">
-    <value>Rooms of the current user</value>
+    <value>Комнаты данного пользователя</value>
   </string>
   <string id="1509" name="create_new_room">
     <value>Создать/редактировать комнату для этого события</value>
@@ -4557,10 +4557,10 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Вы можете ввести несколько адресов в формате: Имя1 Фамилия1 &lt;адрес1&gt;,"Имя2 Фамилия2" &lt;адрес2&gt;,'Имя3 Фамилия3' &lt;адрес3&gt;, ...</value>
   </string>
   <string id="1511" name="stream_volume">
-    <value>Adjust stream volume</value>
+    <value>Регулировать поток</value>
   </string>
   <string id="1512" name="microphone_volume">
-    <value>Adjust microphone volume</value>
+    <value>Регулировать микрфон</value>
   </string>
   <string id="1513" name="chat_moderated">
     <value>Премодерируемый чат</value>
@@ -4569,46 +4569,46 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Опубликовать сообщение</value>
   </string>
   <string id="1515" name="chat_opened">
-    <value>Chat panel opened by default</value>
+    <value>Открывать панель чата по умолчанию</value>
   </string>
   <string id="1516" name="files_opened">
-    <value>Files panel opened by default</value>
+    <value>Открывать панель файлов по умолчанию</value>
   </string>
   <string id="1517" name="server admin section lastping">
-    <value>Last ping</value>
+    <value>Прошлый запрос</value>
   </string>
   <string id="1518" name="server admin section lastping info">
-    <value>Every slave sends a ping to the master every 3 seconds (configurable). Slave lastPing must be smaller then 1 minute so that the master uses the slave.</value>
+    <value>Каждый подчиненный сервер посылает запрос главному через 3 секунды (задается в конфигурации). Параметр lastPing дожен быть менше 1 минуты так, чтобы главный сервер использовал подчиненные сервера.</value>
   </string>
   <string id="1519" name="server admin port">
-    <value>HTTP Port</value>
+    <value>HTTP Порт</value>
   </string>
   <string id="1520" name="server admin user">
-    <value>User (SOAP-Access)</value>
+    <value>SOAP Админ</value>
   </string>
   <string id="1521" name="server admin password">
-    <value>Password</value>
+    <value>Пароль</value>
   </string>
   <string id="1522" name="server admin webapp path">
-    <value>Webapp path</value>
+    <value>Путь к приложению</value>
   </string>
   <string id="1523" name="server admin protocol">
-    <value>Protocol</value>
+    <value>Протокол</value>
   </string>
   <string id="1524" name="server admin ping running">
-    <value>Ping running</value>
+    <value>Исполняемый запрос</value>
   </string>
   <string id="1525" name="server admin active">
-    <value>Active</value>
+    <value>Активный</value>
   </string>
   <string id="1526" name="generate_hash">
-    <value>Generate URL</value>
+    <value>Сгенерировать URL</value>
   </string>
   <string id="1527" name="network testing link">
     <value>Тестирование сети</value>
   </string>
   <string id="1528" name="room_options">
-    <value>Auto select interview video pod</value>
+    <value>Автоматически определять видео окно</value>
   </string>
   <string id="1529" name="font_underline">
     <value>Подчёркнутый шрифт</value>
@@ -4626,10 +4626,10 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Гиперссылка</value>
   </string>
   <string id="1534" name="connection admin">
-    <value>Show session statistics</value>
+    <value>Показать статистику сессии</value>
   </string>
   <string id="1535" name="connection admin">
-    <value>Session details</value>
+    <value>Детализация сессии</value>
   </string>
   <string id="1536" name="system_import">
     <value>��������� ������</value>
