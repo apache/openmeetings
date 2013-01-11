@@ -31,14 +31,14 @@
 	     x="30" width="600" labelid="1065" multiline="true" />
 	
 	<labelCheckbox x="10" y="180" fontsize="11"
-        name="_includeFileOption" text="Include uploaded files and recordings in backup" >
+        name="_includeFileOption" labelid="1537" >
         <handler name="oninit">
             this.setValue(true);
         </handler>
     </labelCheckbox>  
 	
 	<!-- System Import -->
-    <simpleLabelButton text="System Import" x="30" y="220" width="200">
+    <simpleLabelButton labelid="1536" x="30" y="220" width="200">
     	<handler name="onclick">
         	<![CDATA[
 	        	new lz.uploadWindowExplorer(canvas.main_content._content.inner,{
@@ -54,7 +54,7 @@
     </simpleLabelButton> 
     
     <!-- System Backup -->
-    <simpleLabelButton text="System Backup" x="232" y="220" width="200">
+    <simpleLabelButton labelid="1066" x="232" y="220" width="200">
         <handler name="onclick">
             <![CDATA[
                 var exporturl = canvas.getUrl() + 'BackupExport?moduleName=backup'

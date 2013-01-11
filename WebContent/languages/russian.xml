@@ -4631,4 +4631,10 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
   <string id="1535" name="connection admin">
     <value>Session details</value>
   </string>
+  <string id="1536" name="system_import">
+    <value>Системный импорт</value>
+  </string>
+  <string id="1537" name="include_into_backup">
+    <value>Включать загруженные файлы и записи в бэкап</value>
+  </string>
 </language>
