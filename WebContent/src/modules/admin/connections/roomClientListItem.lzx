@@ -34,7 +34,6 @@
 	<turnOverTextItem text="$once{ parent.login }" />
 	<turnOverTextItem text="$once{ parent.dateConnected }" />
     <turnOverTextItem text="$once{ parent.scope }" />
-    <turnOverTextItem text="$once{ parent.serverAddr }" />
     <simpleLabelButton labelid="603" >
         <handler name="onclick">
             if ($debug) Debug.write("onclick ",this);
@@ -58,8 +57,8 @@
                 }
             </handler>
         </netRemoteCallHib> 
-        
     </simpleLabelButton>
+    <turnOverTextItem text="$once{ parent.serverAddr }" />
     
     <labelTooltip name="_labelTooltip" multiline="false">
         <handler name="setContent">
