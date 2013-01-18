@@ -47,7 +47,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author sebawagner
  * 
  */
-public class ClientListHashMapStore implements IClientList, ISharedSessionStore {
+public class ClientListHashMapStore implements IClientList {
 
 	protected static final Logger log = Red5LoggerFactory.getLogger(
 			ClientListHashMapStore.class, OpenmeetingsVariables.webAppRootKey);
@@ -339,53 +339,6 @@ public class ClientListHashMapStore implements IClientList, ISharedSessionStore 
 			}
 		}
 		return numberOfPublishingUsers;
-	}
-	
-	public void cleanSessionsOfDeletedOrDeactivatedServer(Server server) {
-		//we need to summarize those clients in a second list first, cause there are 
-		//multiple lists to be cleaned up and an iterator will not work
-		ArrayList<RoomClient> serverList = new ArrayList<RoomClient>();
-		serverList.addAll(cache.getClientsByServer(server).values());
-		
-		for (RoomClient rcl : serverList) {
-			cache.remove(server, rcl.getStreamid());
-		}
-	}
-
-	public void syncSlaveClientSession(Server server,
-			List<SlaveClientDto> clients) {
-		
-		// delete all existing client sessions by that slave, updating existing ones
-		// makes no sense, we don't know anything about the start or end date
-		// so at this point we can just remove them all and add them new
-		cleanSessionsOfDeletedOrDeactivatedServer(server);
-
-		for (SlaveClientDto slaveClientDto : clients) {
-			cache.put(
-					server, slaveClientDto.getStreamid(),
-					new RoomClient(
-								slaveClientDto.getStreamid(), 
-								slaveClientDto.getPublicSID(),
-								slaveClientDto.getRoomId(), 
-								slaveClientDto.getUserId(),
-								slaveClientDto.getFirstName(), 
-								slaveClientDto.getLastName(), 
-								slaveClientDto.isAVClient(),
-								slaveClientDto.getUsername(),
-								slaveClientDto.getConnectedSince(),
-								slaveClientDto.getScope()
-							));
-		}
-
-	}
-	
-	public List<SlaveClientDto> getCurrentSlaveSessions() {
-		List<SlaveClientDto> clients = new ArrayList<SlaveClientDto>(
-				cache.size());
-		for (RoomClient rcl : cache.getClientsByServer(null).values()) {
-			clients.add(new SlaveClientDto(rcl));
-		}
-		return clients;
 	}
 	
 	public Set<Long> getActiveRoomIdsByServer(Server server) {

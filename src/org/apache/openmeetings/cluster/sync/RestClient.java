@@ -19,9 +19,7 @@
 package org.apache.openmeetings.cluster.sync;
 
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import javax.xml.namespace.QName;
 
@@ -35,9 +33,6 @@ import org.apache.axis2.client.Options;
 import org.apache.axis2.client.ServiceClient;
 import org.apache.axis2.transport.http.HTTPConstants;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.conference.room.RoomClient;
-import org.apache.openmeetings.conference.room.SlaveClientDto;
-import org.apache.openmeetings.documents.beans.UploadCompleteMessage;
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -56,19 +51,10 @@ public class RestClient {
 			RestClient.class, OpenmeetingsVariables.webAppRootKey);
 	
 	private enum Action {
-		//send a ping to the user
-		PING, 
 		//kick the user from the server
 		KICK_USER,
-		//send a sync message to a client on that server
-		SYNC_MESSAGE
 	}
 
-	/**
-	 * The observerInstance will be notified whenever a ping was completed
-	 */
-	private IRestClientObserver observerInstance;
-	
 	private Server server;
 	private final String host;
 	private final int port;
@@ -80,11 +66,7 @@ public class RestClient {
 	private boolean loginSuccess = false;
 	private String sessionId;
 	
-	private boolean pingRunning = false;
-
 	private String publicSID;
-
-	private UploadCompleteMessage uploadCompleteMessage;
 
 	/**
 	 * there are two publicSIDs, one for the kickUser REST call and one for the syncMessage call
@@ -95,15 +77,6 @@ public class RestClient {
 	
 	private static String nameSpaceForSlaveDto = "http://room.conference.openmeetings.apache.org/xsd";
 	
-	/**
-	 * returns true as long as the RestClient performs a ping and parses the result
-	 * 
-	 * @return
-	 */
-	public boolean getPingRunning() {
-		return pingRunning;
-	}
-
 	private static String NAMESPACE_PREFIX = "http://services.axis.openmeetings.apache.org";
 
 	private String getUserServiceEndPoint() {
@@ -111,11 +84,6 @@ public class RestClient {
 				+ "/services/UserService";
 	}
 
-	private String getServerServiceEndPoint() {
-		return protocol + "://" + host + ":" + port + "/" + webapp
-				+ "/services/ServerService";
-	}
-	
 	private String getRoomServiceEndPoint() {
 		return protocol + "://" + host + ":" + port + "/" + webapp
 				+ "/services/RoomService";
@@ -132,8 +100,7 @@ public class RestClient {
 	 * @param user
 	 * @param pass
 	 */
-	public RestClient(IRestClientObserver observerInstance, Server server) {
-		this.observerInstance = observerInstance;
+	public RestClient(Server server) {
 		this.server = server;
 		this.host = server.getAddress();
 		this.port = server.getPort();
@@ -152,8 +119,7 @@ public class RestClient {
 		RestClient rClient = new RestClient("127.0.0.1", 5080, "http",
 				"openmeetings", "swagner", "qweqwe");
 		try {
-			rClient.loginUser(Action.PING);
-			rClient.ping();
+			rClient.loginUser(Action.KICK_USER);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -231,12 +197,12 @@ public class RestClient {
 
 		loginSuccess = loginSuccessFromResult(loginUserResult);
 
-		if (action == Action.PING) {
-			ping();
-		} else if (action == Action.KICK_USER) {
-			kickUserInternl();
-		} else if (action == Action.SYNC_MESSAGE) {
-			syncMessageInternl();
+		switch (action) {
+			case KICK_USER:
+				kickUserInternl();
+				break;
+			default:
+				throw new Exception("No action defined");
 		}
 
 	}
@@ -264,82 +230,6 @@ public class RestClient {
 		OMElement omElement = fac.createOMElement(name, omNs);
 		omElement.addChild(fac.createOMText(omElement, value));
 		return omElement;
-	}
-
-	
-	/**
-	 * set s the publicSID the message object and sends it to the slave by calling a REST service
-	 * 
-	 * @param publicSID
-	 * @param uploadCompleteMessage
-	 */
-	public void syncMessage(String publicSID, UploadCompleteMessage uploadCompleteMessage) {
-		this.publicSIDSync = publicSID;
-		this.uploadCompleteMessage = uploadCompleteMessage;
-		syncMessageInternl();
-	}
-	
-	private void syncMessageInternl() {
-		try {
-			
-			if (!loginSuccess) {
-				loginUser(Action.SYNC_MESSAGE);
-			}
-			
-			ServiceClient sender = createServiceClient(getRoomServiceEndPoint());
-			OMElement syncMessageResult = sender
-					.sendReceive(getPayloadMethodSyncMessage());
-			Boolean result = syncMessageResultFromResult(syncMessageResult);
-			
-			if (!result) {
-				throw new Exception("Could not sync message to slave host");
-			}
-			
-		} catch (Exception err) {
-			log.error("[syncMessage failed]", err);
-		}
-	}
-	
-	private Boolean syncMessageResultFromResult(OMElement result) throws Exception {
-		QName kickUserResult = new QName(NAMESPACE_PREFIX, "return");
-
-		@SuppressWarnings("unchecked")
-		Iterator<OMElement> elements = result.getChildrenWithName(kickUserResult);
-		if (elements.hasNext()) {
-			OMElement resultElement = elements.next();
-			if (resultElement.getText().equals("true")) {
-				return true;
-			} else {
-				throw new Exception("Could not delete user from slave host, returns: "
-						+ resultElement.getText());
-			}
-		} else {
-			throw new Exception("Could not parse kickUserByPublicSID result");
-		}
-	}
-	
-	private OMElement getPayloadMethodSyncMessage() {
-		
-		OMFactory fac = OMAbstractFactory.getOMFactory();
-		OMNamespace omNs = fac.createOMNamespace(NAMESPACE_PREFIX, "pre");
-		OMElement method = fac.createOMElement("syncUploadCompleteMessage", omNs);
-
-		method.addChild(createOMElement(fac, omNs, "SID", sessionId));
-		method.addChild(createOMElement(fac, omNs, "publicSID", publicSIDSync));
-		method.addChild(createOMElement(fac, omNs, "userId", ""+ uploadCompleteMessage.getUserId()));
-		method.addChild(createOMElement(fac, omNs, "message", uploadCompleteMessage.getMessage()));
-		method.addChild(createOMElement(fac, omNs, "action", uploadCompleteMessage.getAction()));
-		method.addChild(createOMElement(fac, omNs, "error", uploadCompleteMessage.getError()));
-		method.addChild(createOMElement(fac, omNs, "hasError", ""+uploadCompleteMessage.isHasError()));
-		method.addChild(createOMElement(fac, omNs, "fileName", uploadCompleteMessage.getFileName()));
-		
-		method.addChild(createOMElement(fac, omNs, "fileSystemName", uploadCompleteMessage.getFileSystemName()));
-		method.addChild(createOMElement(fac, omNs, "isPresentation", ""+uploadCompleteMessage.getIsPresentation()));
-		method.addChild(createOMElement(fac, omNs, "isImage", ""+uploadCompleteMessage.getIsImage()));
-		method.addChild(createOMElement(fac, omNs, "isVideo", ""+uploadCompleteMessage.getIsVideo()));
-		method.addChild(createOMElement(fac, omNs, "fileHash", uploadCompleteMessage.getFileHash()));
-		
-		return method;
 	}
 
 	/**
@@ -402,52 +292,6 @@ public class RestClient {
 	}
 
 	/**
-	 * verifies if the user is logged in, if yes, it will try to load the
-	 * current list of sessions from the slave
-	 * 
-	 * @throws Exception
-	 */
-	public void ping() {
-		try {
-			//flag this ping flow as active, so that the scheduler does not run multiple ping's 
-			//on the same instance, at the same time, cause a ping could take longer then the 
-			//scheduler interval, for example because of the server load
-			pingRunning = true;
-			
-			if (!loginSuccess) {
-				loginUser(Action.PING);
-			} else {
-				 
-				ServiceClient sender = createServiceClient(getServerServiceEndPoint());
-				OMElement pingResult = sender
-						.sendReceive(getPayloadMethodPingTemp());
-
-				List<SlaveClientDto> slaveClients = pingFromResult(pingResult);
-
-				if (this.observerInstance != null) {
-					this.observerInstance.pingComplete(server, slaveClients);
-				}
-				
-				//flag this flow as complete
-				pingRunning = false;
-
-			}
-			// Catches all errors to make sure the observer is notified that the
-			// ping was performed (even when performed badly)
-		} catch (Exception ex) {
-			
-			//Clear the list of clients if there are any for this server
-			if (this.observerInstance != null) {
-				this.observerInstance.pingComplete(server, new ArrayList<SlaveClientDto>(0));
-			}
-			
-			//flag this flow as complete
-			pingRunning = false;
-			log.error("[ping failed]", ex);
-		}
-	}
-
-	/**
 	 * Create the REST request to get a new session Id
 	 * 
 	 * @return
@@ -481,7 +325,7 @@ public class RestClient {
 	}
 
 	/**
-	 * create the payload to login to another openmeetings instance via REST
+	 * create the payload to login to another OpenMeetings instance via REST
 	 * 
 	 * @return
 	 */
@@ -522,55 +366,6 @@ public class RestClient {
 
 	}
 
-	/**
-	 * Create the REST request for the ping method to load the users
-	 * 
-	 * @return
-	 */
-	private OMElement getPayloadMethodPingTemp() throws Exception {
-		OMFactory fac = OMAbstractFactory.getOMFactory();
-		OMNamespace omNs = fac.createOMNamespace(NAMESPACE_PREFIX, "pre");
-		OMElement method = fac.createOMElement("ping", omNs);
-		method.addChild(createOMElement(fac, omNs, "SID", sessionId));
-		return method;
-	}
-
-	/**
-	 * Parses the result of the rest request and returns a list of
-	 * {@link RoomClient}s
-	 * 
-	 * @param result
-	 *            the result of the REST request
-	 * @return list of {@link RoomClient}s
-	 * @throws Exception
-	 */
-	private List<SlaveClientDto> pingFromResult(OMElement result) throws Exception {
-
-		QName pingResult = new QName(NAMESPACE_PREFIX, "return");
-
-		@SuppressWarnings("unchecked")
-		Iterator<OMElement> elements = result.getChildrenWithName(pingResult);
-		List<SlaveClientDto> clients = new ArrayList<SlaveClientDto>();
-		while (elements.hasNext()) {
-			OMElement resultElement = elements.next();
-			SlaveClientDto slaveDto = new SlaveClientDto( //
-					getElementTextByName(resultElement, "streamid", String.class), //
-					getElementTextByName(resultElement, "publicSID", String.class), //
-					getElementTextByName(resultElement, "roomId", Long.class), //
-					getElementTextByName(resultElement, "userId", Long.class), //
-					getElementTextByName(resultElement, "firstName", String.class), //
-					getElementTextByName(resultElement, "lastName", String.class), //
-					getElementTextByName(resultElement, "AVClient", Boolean.class), //
-					getElementTextByName(resultElement, "scope", String.class), //
-					getElementTextByName(resultElement, "username", String.class), //
-					getElementTextByName(resultElement, "connectedSince", String.class)
-				); //
-			log.debug(slaveDto.toString());
-			clients.add(slaveDto);
-		}
-		return clients;
-	}
-	
 	/**
 	 * Get and cast the element's text (if there is any)
 	 * 

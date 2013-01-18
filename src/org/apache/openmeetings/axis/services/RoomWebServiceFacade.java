@@ -676,14 +676,4 @@ public class RoomWebServiceFacade {
 				paramName, paramValue);
 	}
 
-	public boolean syncUploadCompleteMessage(String SID, String publicSID,
-			Long userId, String message, String action, String error,
-			boolean hasError, String fileName, String fileSystemName,
-			boolean isPresentation, boolean isImage, boolean isVideo,
-			String fileHash) throws AxisFault {
-		return getRoomServiceProxy().syncUploadCompleteMessage(SID, publicSID,
-				userId, message, action, error, hasError, fileName,
-				fileSystemName, isPresentation, isImage, isVideo, fileHash);
-	}
-	
 }

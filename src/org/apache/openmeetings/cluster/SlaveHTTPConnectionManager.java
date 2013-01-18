@@ -16,35 +16,30 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.quartz.scheduler;
+package org.apache.openmeetings.cluster;
 
-import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.cluster.sync.IRestClientObserver;
 import org.apache.openmeetings.cluster.sync.RestClient;
-import org.apache.openmeetings.conference.room.ISharedSessionStore;
-import org.apache.openmeetings.conference.room.SlaveClientDto;
-import org.apache.openmeetings.data.basic.dao.ServerDao;
-import org.apache.openmeetings.documents.beans.UploadCompleteMessage;
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
-public class ClusterSlaveJob implements IRestClientObserver {
+/**
+ * Manages connections to the other nodes of the cluster.
+ * 
+ * Use-case: When you kick a user via the admin-panel, it is probably on anther server.
+ * So you need to perform a REST call to the node and let that node do the actual disconnect.
+ * 
+ * @author sebawagner
+ *
+ */
+public class SlaveHTTPConnectionManager {
 
 	private static Logger log = Red5LoggerFactory.getLogger(
-			ClusterSlaveJob.class, OpenmeetingsVariables.webAppRootKey);
-
-	@Autowired
-	private ServerDao serverDao;
-	@Autowired
-	private ISharedSessionStore clientListManager;
-
+			SlaveHTTPConnectionManager.class, OpenmeetingsVariables.webAppRootKey);
 
 	/**
 	 * We store the list of RestClients in the memory, so that we can simply
@@ -75,55 +70,12 @@ public class ClusterSlaveJob implements IRestClientObserver {
 		}
 
 		if (restClient == null) {
-			restClient = new RestClient(this, server);
+			restClient = new RestClient(server);
 			restClientsSessionStore.put(server.getId(), restClient);
 		}
 		return restClient;
 	}
 
-	public void doIt() {
-		try {
-
-			for (Server server : serverDao.getActiveServers()) {
-
-				RestClient rClient = getRestClient(server);
-				
-				//If the ping is still running, we don't ping the client in this session
-				if (rClient.getPingRunning()) {
-					log.warn("The ping for the server " + server
-							+ " takes longer then the ping interval!");
-					continue;
-				}
-				
-				log.debug("ClusterSlaveJob. Ping server: " + server);
-
-				rClient.ping();
-
-			}
-
-		} catch (Exception e) {
-			log.error("Unexpected exception while doRoundTrip cluster.", e);
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.apache.openmeetings.cluster.sync.IRestClientObserverEvent#pingComplete
-	 * (org.apache.openmeetings.persistence.beans.basic.Server, java.util.List)
-	 */
-	public void pingComplete(Server server, List<SlaveClientDto> slaveClients) {
-
-		log.debug("-- pingComplete -- For server: " + server+ " Size: "+slaveClients.size());
-
-		clientListManager.syncSlaveClientSession(server, slaveClients);
-
-		server.setLastPing(Calendar.getInstance());
-		serverDao.update(server, -1L);
-
-	}
-	
 	/**
 	 * Gets the current {@link RestClient} from the session store and then
 	 * performs a kickUser on that. It is not possible that there is no
@@ -147,27 +99,4 @@ public class ClusterSlaveJob implements IRestClientObserver {
 		
 	}
 	
-	/**
-	 * Gets the current {@link RestClient} from the session store and then
-	 * performs a kickUser on that. It is not possible that there is no
-	 * {@link RestClient}, because if you want to kick a user from a slave, the
-	 * master <i>must</i> already have loaded the sessions from the slave, so
-	 * there logically <i>must</i> by a {@link RestClient} available that has an 
-	 * open connection to that slave / {@link Server}
-	 * 
-	 * @param server
-	 * @param publicSID
-	 * @param uploadCompleteMessage
-	 * @throws Exception
-	 */
-	public void syncMessageToClientOnSlave(Server server, String publicSID, UploadCompleteMessage uploadCompleteMessage) throws Exception {
-		RestClient rClient = getRestClient(server);
-		
-		if (rClient == null) {
-			throw new Exception("No RestClient found for server " + server);
-		}
-		
-		rClient.syncMessage(publicSID, uploadCompleteMessage);
-	}
-
 }

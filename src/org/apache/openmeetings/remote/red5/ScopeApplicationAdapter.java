@@ -30,7 +30,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.conference.room.ClientSessionInfo;
 import org.apache.openmeetings.conference.room.IClientList;
 import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.conference.whiteboard.BrowserStatus;
@@ -52,7 +51,6 @@ import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.apache.openmeetings.persistence.beans.user.Users;
-import org.apache.openmeetings.quartz.scheduler.ClusterSlaveJob;
 import org.apache.openmeetings.remote.FLVRecorderService;
 import org.apache.openmeetings.remote.WhiteBoardService;
 import org.apache.openmeetings.utils.OmFileHelper;
@@ -106,8 +104,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	private RoomDAO roomDao;
 	@Autowired
 	private MeetingMemberDao meetingMemberDao;
-	@Autowired
-	private ClusterSlaveJob clusterSlaveJob;
 	@Autowired
 	private ServerDao serverDao;
 
@@ -2517,30 +2513,13 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			
 			if (currentClient != null) {
 				sendMessageWithClientByPublicSID(message, publicSID);
-				return;
-			}
-			
-			//Check if the client is on any slave host
-			ClientSessionInfo clientSessionInfo = this.clientListManager.getClientByPublicSIDAnyServer(publicSID, false);
-			
-			if (clientSessionInfo == null) {
+			} else {
 				throw new Exception(
 						"Could not Find RoomClient on List publicSID: "+ publicSID);
 			}
 			
-			Server s = clientSessionInfo.getServerId() != null ? serverDao
-					.get(clientSessionInfo.getServerId()) : null;
-			if (s == null) {
-				throw new Exception("Found session has the server null rcl: "
-						+ clientSessionInfo.getRcl() + " serverId: "
-						+ clientSessionInfo.getServerId() + " publicSID: " 
-						+ publicSID);
-			}
-			
-			clusterSlaveJob.syncMessageToClientOnSlave(s, clientSessionInfo.getRcl().getPublicSID() , message);
-			
 		} catch (Exception err) {
-			log.error("[sendMessageWithClient] ", err);
+			log.error("[sendUploadCompletMessageByPublicSID] ", err);
 		}
 	}
 	

@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.cluster.SlaveHTTPConnectionManager;
 import org.apache.openmeetings.conference.room.IClientList;
 import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
@@ -59,7 +60,6 @@ import org.apache.openmeetings.persistence.beans.user.PrivateMessages;
 import org.apache.openmeetings.persistence.beans.user.Salutations;
 import org.apache.openmeetings.persistence.beans.user.UserContacts;
 import org.apache.openmeetings.persistence.beans.user.Users;
-import org.apache.openmeetings.quartz.scheduler.ClusterSlaveJob;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.templates.RequestContactConfirmTemplate;
 import org.apache.openmeetings.templates.RequestContactTemplate;
@@ -135,7 +135,7 @@ public class UserService {
 	@Autowired
 	private ServerDao serverDao;
 	@Autowired
-	private ClusterSlaveJob clusterSlaveJob;
+	private SlaveHTTPConnectionManager slaveHTTPConnectionManager;
 
 	/**
 	 * get your own user-object
@@ -565,7 +565,7 @@ public class UserService {
 					Server server = serverDao.get(serverId);
 					RoomClient rcl = clientListManager.getClientByStreamId(
 							streamid, server);
-					clusterSlaveJob.kickSlaveUser(server, rcl.getPublicSID());
+					slaveHTTPConnectionManager.kickSlaveUser(server, rcl.getPublicSID());
 					
 					// true means only the REST call is performed, it is no
 					// confirmation that the user is really kicked from the

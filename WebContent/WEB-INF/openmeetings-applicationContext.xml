@@ -94,36 +94,9 @@
 		class="org.apache.openmeetings.data.flvrecord.converter.FlvInterviewConverter" />
 	<bean id="openmeetings.FlvRecorderConverter"
 		class="org.apache.openmeetings.data.flvrecord.converter.FlvRecorderConverter" />
+	<bean id="openmeetings.SlaveHTTPConnectionManager"
+		class="org.apache.openmeetings.cluster.SlaveHTTPConnectionManager" />
 	
-	<!-- 
-	#####################################################################
-	Comment this in to enable the OpenMeetings instance to act as Master
-	#####################################################################
-	 -->
-		
-	<bean id="openmeetings.ClusterSlaveJob" class="org.apache.openmeetings.quartz.scheduler.ClusterSlaveJob" />
-	<bean id="clusterSlaveJob"
-		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject">
-			<ref bean="openmeetings.ClusterSlaveJob" />
-		</property>
-		<property name="targetMethod">
-			<value>doIt</value>
-		</property>
-		<property name="concurrent" value="false" />
-	</bean>
-	<bean id="triggerClusterSlaveJob" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
-		<property name="jobDetail">
-			<ref bean="clusterSlaveJob" />
-		</property>
-		<property name="startDelay">
-			<value>5000</value>
-		</property>
-		<property name="repeatInterval">
-			<value>3000</value>
-		</property>
-	</bean>	
-		
 	<bean id="openmeetings.SessionClearJob" class="org.apache.openmeetings.quartz.scheduler.SessionClearJob" />
 	<bean id="sessionClearJob"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
@@ -204,7 +177,6 @@
 				<ref local="triggerSessionClear" />
 				<ref local="triggerMeetingReminder" />
 				<ref local="triggerTestSetupCleanup" />
-				<ref local="triggerClusterSlaveJob" />
 			</list>
 		</property>
 	</bean>

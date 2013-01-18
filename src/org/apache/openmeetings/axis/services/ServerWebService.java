@@ -18,12 +18,8 @@
  */
 package org.apache.openmeetings.axis.services;
 
-import java.util.List;
-
 import org.apache.axis2.AxisFault;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.conference.room.ISharedSessionStore;
-import org.apache.openmeetings.conference.room.SlaveClientDto;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
 import org.apache.openmeetings.data.basic.dao.ServerDao;
@@ -53,8 +49,6 @@ public class ServerWebService {
 	private AuthLevelmanagement authLevelManagement;
 	@Autowired
 	private ServerDao serversDao;
-	@Autowired
-	private ISharedSessionStore clientListManager;
 
 	/**
 	 * Method to retrieve the list of the servers participating in cluster
@@ -180,35 +174,6 @@ public class ServerWebService {
 			log.warn("Insuffisient permissions");
 		}
 		return false;
-	}
-
-	/**
-	 * Load a ping from the slave, see <a
-	 * href="http://incubator.apache.org/openmeetings/ClusteringManual.html"
-	 * target
-	 * ="_BLANK">http://incubator.apache.org/openmeetings/ClusteringManual.
-	 * html</a>
-	 * 
-	 * @param SID
-	 *            - session id to identify the user making request, WebService
-	 *            Level required
-	 * @return List of
-	 * @throws AxisFault
-	 */
-	public List<SlaveClientDto> ping(String SID)
-			throws AxisFault {
-		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
-
-		if (authLevelManagement.checkWebServiceLevel(user_level)) {
-			
-			//sync the sessions to the masters session store
-			return clientListManager.getCurrentSlaveSessions();
-			
-		} else {
-			log.warn("Insuffisient permissions");
-			throw new AxisFault("Insuffisient permissions");
-		}
 	}
 
 }

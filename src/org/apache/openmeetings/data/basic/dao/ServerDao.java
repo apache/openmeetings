@@ -27,7 +27,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.conference.room.ISharedSessionStore;
 import org.apache.openmeetings.data.IDataProviderDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.basic.Server;
@@ -56,9 +55,6 @@ public class ServerDao implements IDataProviderDao<Server> {
 	@Autowired
 	private UsersDao usersDao;
 	
-	@Autowired
-	private ISharedSessionStore clientListManager;
-
 	/**
 	 * Get a list of all available servers
 	 * 
@@ -164,10 +160,6 @@ public class ServerDao implements IDataProviderDao<Server> {
 	 * .beans.OmEntity, long)
 	 */
 	public Server update(Server entity, long userId) {
-		if (entity.getActive() != null && !entity.getActive()) {
-			clientListManager.cleanSessionsOfDeletedOrDeactivatedServer(entity);
-		}
-		
 		entity.setDeleted(false);
 		if (entity.getId() > 0) {
 			if (userId > 0) {
@@ -194,7 +186,6 @@ public class ServerDao implements IDataProviderDao<Server> {
 	 */
 	public void delete(Server entity, long userId) {
 		if (entity.getId() > 0) {
-			clientListManager.cleanSessionsOfDeletedOrDeactivatedServer(entity);
 			entity.setUpdated(new Date());
 			entity.setUpdatedby(usersDao.get(userId));
 			entity.setDeleted(true);

@@ -18,15 +18,12 @@
  */
 package org.apache.openmeetings.axis.services;
 
-import java.util.List;
-
 import javax.servlet.ServletContext;
 
 import org.apache.axis2.AxisFault;
 import org.apache.axis2.context.MessageContext;
 import org.apache.axis2.transport.http.HTTPConstants;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.conference.room.SlaveClientDto;
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
@@ -93,12 +90,4 @@ public class ServerWebServiceFacade {
 		return getServerServiceProxy().deleteServer(SID, id);
 	}
 
-	/**
-	 * Proxy method please see {@link ServerWebService#ping(String)}
-	 */
-	public List<SlaveClientDto> ping(String SID)
-			throws AxisFault {
-		return getServerServiceProxy().ping(SID);
-	}
-	
 }
