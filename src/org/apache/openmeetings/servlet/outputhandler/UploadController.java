@@ -179,19 +179,8 @@ public class UploadController extends AbstractUploadController {
 
     
     private void sendMessage(UploadInfo info, UploadCompleteMessage uploadCompleteMessage) {
-    	
-//    	UploadCompleteMessage uploadCompleteMessage = new UploadCompleteMessage(
-//				usersDao.get(info.userId),
-//				"library", //message
-//				"import", //action
-//				"", //error
-//				info.filename);
-	
 		scopeApplicationAdapter.sendUploadCompletMessageByPublicSID(
 				uploadCompleteMessage, info.publicSID);
-    	
-//		scopeApplicationAdapter.sendMessageWithClientByPublicSID(hs,
-//				info.publicSID);
     }
     
 	private void uploadFile(HttpServletRequest request, boolean userProfile, Long userId, String roomName,
@@ -226,7 +215,7 @@ public class UploadController extends AbstractUploadController {
 		if (userProfile) {
 			// User Profile Update
 			this.deleteUserProfileFilesStoreTemp(userId);
-
+			newFileName = "profile"; //set unified file name to avoid any problems with national characters
 			workingDir = OmFileHelper.getUploadProfilesUserDir(userId);
 		}
 		// if it is a presenation it will be copied to another
