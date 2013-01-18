@@ -110,7 +110,7 @@ public class UserWebService {
 			throws AxisFault {
 		try {
 			Object obj = userManagement.loginUser(SID, username, userpass,
-					null, false);
+					null, null, false);
 			if (obj == null) {
 				return new Long(-1);
 			}

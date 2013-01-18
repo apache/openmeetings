@@ -57,6 +57,7 @@ import org.apache.openmeetings.persistence.beans.user.Userdata;
 import org.apache.openmeetings.persistence.beans.user.Userlevel;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.templates.ResetPasswordTemplate;
 import org.apache.openmeetings.utils.DaoHelper;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
@@ -64,6 +65,7 @@ import org.apache.openmeetings.utils.mail.MailHandler;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.red5.io.utils.ObjectMap;
 import org.red5.logging.Red5LoggerFactory;
+import org.red5.server.api.IClient;
 import org.red5.server.api.scope.IScope;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -226,7 +228,7 @@ public class Usermanagement {
 	 * @return
 	 */
 	public Object loginUser(String SID, String userOrEmail, String userpass,
-			RoomClient currentClient, Boolean storePermanent) {
+			RoomClient currentClient, IClient client, Boolean storePermanent) {
 		try {
 			log.debug("Login user SID : " + SID + " Stored Permanent :"
 					+ storePermanent);
@@ -275,6 +277,7 @@ public class Usermanagement {
 					// If invoked via SOAP this is NULL
 					if (currentClient != null) {
 						currentClient.setUser_id(users.getUser_id());
+						SessionVariablesUtil.setUserId(client, users.getUser_id());
 					}
 
 					log.debug("loginUser " + users.getOrganisation_users());

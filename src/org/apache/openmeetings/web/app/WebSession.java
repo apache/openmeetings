@@ -84,7 +84,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		Sessiondata sessData = Application.getBean(Sessionmanagement.class).startsession();
 		SID = sessData.getSession_id();
 		Object u = Application.getBean(Usermanagement.class).loginUser(SID, login, password,
-				null, false);
+				null, null, false);
 		
 		if (u instanceof Users) {
 			Users user = (Users)u;

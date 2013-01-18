@@ -39,9 +39,11 @@ import org.apache.openmeetings.ldap.config.ConfigReader;
 import org.apache.openmeetings.persistence.beans.adresses.States;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
 import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
+import org.red5.server.api.IClient;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -234,7 +236,7 @@ public class LdapLoginManagement {
 	 */
 	// ----------------------------------------------------------------------------------------
 	public Object doLdapLogin(String user, String passwd,
-			RoomClient currentClient, String SID, String domain) {
+			RoomClient currentClient, IClient client, String SID, String domain) {
 		log.debug("LdapLoginmanagement.doLdapLogin");
 
 		// Retrieve Configuration Data
@@ -500,6 +502,7 @@ public class LdapLoginManagement {
 				// If invoked via SOAP this is NULL
 				if (currentClient != null) {
 					currentClient.setUser_id(userid);
+					SessionVariablesUtil.setUserId(client, userid);
 				}
 
 				// Update Session

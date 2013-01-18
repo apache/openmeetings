@@ -53,6 +53,7 @@ import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.remote.FLVRecorderService;
 import org.apache.openmeetings.remote.WhiteBoardService;
+import org.apache.openmeetings.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
@@ -186,6 +187,8 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			RoomClient rcm = this.clientListManager.addClientListItem(streamId,
 					conn.getScope().getName(), conn.getRemotePort(),
 					conn.getRemoteAddress(), swfURL, isAVClient);
+			
+			SessionVariablesUtil.initClient(conn.getClient(), isAVClient, rcm.getPublicSID());
 
 			// Log the User
 			conferenceLogDao.addConferenceLog("ClientConnect",
@@ -306,7 +309,12 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 				// Set this connection to be a RTMP-Java Client
 				currentClient.setIsScreenClient(true);
+				
+				SessionVariablesUtil.setIsScreenClient(current.getClient());
+				
 				currentClient.setUser_id(Long.parseLong(map.get("user_id")
+						.toString()));
+				SessionVariablesUtil.setUserId(current.getClient(), Long.parseLong(map.get("user_id")
 						.toString()));
 
 				if (startStreaming) {
@@ -442,7 +450,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		IConnection current = Red5.getConnectionLocal();
 		RoomClient currentClient = this.clientListManager
 				.getClientByStreamId(current.getClient().getId(), null);
-		currentClient.setIsAVClient(false);
 		clientListManager.updateClientByStreamId(current.getClient().getId(),
 				currentClient, false);
 		return currentClient.getPublicSID();
@@ -870,10 +877,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 									} else {
 										log.debug("is this users still alive? :"
 												+ rcl);
-										// conn.ping();
 										IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
-										// log.info("IServiceCapableConnection ID "
-										// + iStream.getClient().getId());
 										iStream.invoke(clientFunction,
 												new Object[] { rc }, this);
 									}
@@ -886,9 +890,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 									if (clientFunction.equals("closeStream")
 											&& rcl.getIsRecording()) {
 										log.debug("***  +++++++ ######## sendClientBroadcastNotifications Any Client is Recording - stop that");
-										// StreamService.stopRecordingShowForClient(conn,
-										// currentClient,
-										// rcl.getRoomRecordingName(), false);
 										this.flvRecorderService
 												.stopRecordingShowForClient(
 														conn, currentClient);
@@ -951,16 +952,10 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			RoomClient currentClient = this.clientListManager
 					.getClientByStreamId(streamid, null);
 
-			// log.debug("[setNewCursorPosition]"+item);
-
 			@SuppressWarnings("rawtypes")
 			Map cursor = (Map) item;
 			cursor.put("streamPublishName",
 					currentClient.getStreamPublishName());
-
-			// log.debug("[setNewCursorPosition x]"+cursor.get("cursor_x"));
-			// log.debug("[setNewCursorPosition y]"+cursor.get("cursor_y"));
-			// log.debug("[setNewCursorPosition publicSID]"+cursor.get("publicSID"));
 
 			// Notify all users of the same Scope
 			Collection<Set<IConnection>> conCollection = current.getScope()
@@ -969,29 +964,21 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				for (IConnection conn : conset) {
 					if (conn != null) {
 						if (conn instanceof IServiceCapableConnection) {
-							if (conn.equals(current)) {
+							IClient client = conn.getClient();
+							if (SessionVariablesUtil.isScreenClient(client)) {
+								// screen sharing clients do not receive events
 								continue;
-							} else {
-								RoomClient rcl = this.clientListManager
-										.getClientByStreamId(conn.getClient()
-												.getId(), null);
-								if (rcl == null) {
-									// continue;
-								} else if (rcl.getIsScreenClient() != null
-										&& rcl.getIsScreenClient()) {
-									// continue;
-								} else {
-									// log.debug("is this users still alive? :"+rcl);
-									// Check if the Client is in the same room
-									// and same domain
-									IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
-									// log.info("IServiceCapableConnection ID "
-									// + iStream.getClient().getId());
-									iStream.invoke("newRed5ScreenCursor",
-											new Object[] { cursor }, this);
-									// log.debug("send Notification to");
-								}
+							} else if (SessionVariablesUtil.isAVClient(client)) {
+								// AVClients or potential AVClients do not receive events
+								continue;
+							} if (client.getId().equals(
+										current.getClient().getId())) {
+								// don't send back to same user
+								continue;
 							}
+							IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
+							iStream.invoke("newRed5ScreenCursor",
+									new Object[] { cursor }, this);
 						}
 					}
 				}
@@ -1032,23 +1019,18 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			for (Set<IConnection> conset : conCollection) {
 				for (IConnection conn : conset) {
 					if (conn != null) {
-						RoomClient rcl = this.clientListManager
-								.getClientByStreamId(conn.getClient().getId(), null);
-						if (rcl == null) {
-							// continue;
-						} else if (rcl.getIsScreenClient() != null
-								&& rcl.getIsScreenClient()) {
-							// continue;
-						} else {
-							log.debug("Send Flag to Client: "
-									+ rcl.getUsername());
-							if (conn instanceof IServiceCapableConnection) {
-								((IServiceCapableConnection) conn).invoke(
-										"setNewModeratorByList",
-										new Object[] { currentMods }, this);
-								log.debug("sending setNewModeratorByList to "
-										+ conn);
+						if (conn instanceof IServiceCapableConnection) {
+							IClient client = conn.getClient();
+							if (SessionVariablesUtil.isScreenClient(client)) {
+								// screen sharing clients do not receive events
+								continue;
+							} else if (SessionVariablesUtil.isAVClient(client)) {
+								// AVClients or potential AVClients do not receive events
+								continue;
 							}
+							((IServiceCapableConnection) conn).invoke(
+								"setNewModeratorByList",
+									new Object[] { currentMods }, this);
 						}
 					}
 				}
@@ -1089,25 +1071,19 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			for (Set<IConnection> conset : conCollection) {
 				for (IConnection conn : conset) {
 					if (conn != null) {
-						RoomClient rcl = this.clientListManager
-								.getClientByStreamId(conn.getClient().getId(), null);
-						if (rcl == null) {
-							continue;
-						} else if (rcl.getIsScreenClient() != null
-								&& rcl.getIsScreenClient()) {
-							continue;
-						} else if (rcl.getIsAVClient()) {
-							continue;
-						}
-						
-						log.debug("Send Flag to Client: "
-								+ rcl.getUsername());
 						if (conn instanceof IServiceCapableConnection) {
+							IClient client = conn.getClient();
+							if (SessionVariablesUtil.isScreenClient(client)) {
+								// screen sharing clients do not receive events
+								continue;
+							} else if (SessionVariablesUtil.isAVClient(client)) {
+								// AVClients or potential AVClients do not receive events
+								continue;
+							}
+						
 							((IServiceCapableConnection) conn).invoke(
-									"setNewBroadCastingFlag",
+								"setNewBroadCastingFlag",
 									new Object[] { currentClient }, this);
-							log.debug("sending setNewBroadCastingFlag to "
-									+ conn);
 						}
 					}
 				}
@@ -1310,7 +1286,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			currentClient.setAvsettings(avsettings);
 			currentClient.setRoom_id(room_id);
 			currentClient.setPublicSID(publicSID);
-			currentClient.setIsAVClient(true);
 			currentClient.setVWidth(vWidth);
 			currentClient.setVHeight(vHeight);
 			currentClient.setInterviewPodId(interviewPodId);
@@ -1328,19 +1303,17 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				for (IConnection conn : conset) {
 					if (conn != null) {
 						if (conn instanceof IServiceCapableConnection) {
-							RoomClient rcl = this.clientListManager
-									.getClientByStreamId(conn.getClient()
-											.getId(), null);
-							if (rcl == null) {
-								// continue;
-							} else if (rcl.getIsScreenClient() != null
-									&& rcl.getIsScreenClient()) {
-								// continue;
-							} else {
-								((IServiceCapableConnection) conn).invoke(
-										"sendVarsToMessageWithClient",
-										new Object[] { hsm }, this);
+							IClient client = conn.getClient();
+							if (SessionVariablesUtil.isScreenClient(client)) {
+								// screen sharing clients do not receive events
+								continue;
+							} else if (SessionVariablesUtil.isAVClient(client)) {
+								// AVClients or potential AVClients do not receive events
+								continue;
 							}
+							((IServiceCapableConnection) conn).invoke(
+								"sendVarsToMessageWithClient",
+									new Object[] { hsm }, this);
 						}
 					}
 				}
@@ -1446,7 +1419,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			RoomClient currentClient = this.clientListManager
 					.getClientByStreamId(streamid, null);
 			currentClient.setRoom_id(room_id);
-			currentClient.setIsAVClient(false);
 			currentClient.setRoomEnter(new Date());
 			currentClient.setOrganization_id(organization_id);
 
@@ -1690,7 +1662,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 			}
 			
-			
 			//Sync message to everybody
 			syncMessageToCurrentScope("addNewUser", currentClient, false);
 
@@ -1738,6 +1709,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 			currentClient.setUsername(username);
 			currentClient.setUser_id(userId);
+			SessionVariablesUtil.setUserId(current.getClient(), userId);
 			currentClient.setPicture_uri(picture_uri);
 			currentClient.setUserObject(userId, username, firstname, lastname);
 
@@ -1788,6 +1760,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 			currentClient.setUsername(username);
 			currentClient.setUser_id(userId);
+			SessionVariablesUtil.setUserId(current.getClient(), userId);
 			currentClient.setUserObject(userId, username, firstname, lastname);
 
 			// Update Session Data
@@ -1833,14 +1806,12 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			log.debug("sendMessageByRoomAndDomain " + room_id);
 
 			IScope globalScope = getContext().getGlobalScope();
-
 			IScope webAppKeyScope = globalScope
 					.getScope(OpenmeetingsVariables.webAppRootKey);
 
 			log.debug("webAppKeyScope " + webAppKeyScope);
 
 			IScope scopeHibernate = webAppKeyScope.getScope(room_id.toString());
-			// IScope scopeHibernate = webAppKeyScope.getScope("hibernate");
 
 			if (scopeHibernate != null) {
 
@@ -1849,25 +1820,18 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				for (Set<IConnection> conset : conCollection) {
 					for (IConnection conn : conset) {
 						if (conn != null) {
-							RoomClient rcl = this.clientListManager
-									.getClientByStreamId(conn.getClient()
-											.getId(), null);
-							if (rcl == null) {
-								// continue;
-							} else if (rcl.getIsScreenClient() != null
-									&& rcl.getIsScreenClient()) {
-								// continue;
-							} else {
-								if (conn instanceof IServiceCapableConnection) {
-									// RoomClient rcl =
-									// this.clientListManager.getClientByStreamId(conn.getClient().getId());
-									((IServiceCapableConnection) conn).invoke(
-											"newMessageByRoomAndDomain",
-											new Object[] { message }, this);
-
-									// log.debug("sending newMessageByRoomAndDomain to "
-									// + conn);
+							if (conn instanceof IServiceCapableConnection) {
+								IClient client = conn.getClient();
+								if (SessionVariablesUtil.isScreenClient(client)) {
+									// screen sharing clients do not receive events
+									continue;
+								} else if (SessionVariablesUtil.isAVClient(client)) {
+									// AVClients or potential AVClients do not receive events
+									continue;
 								}
+								((IServiceCapableConnection) conn).invoke(
+										"newMessageByRoomAndDomain",
+										new Object[] { message }, this);
 							}
 						}
 					}
@@ -1886,15 +1850,10 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 	public synchronized List<RoomClient> getCurrentModeratorList() {
 		try {
-			log.debug("*..*getCurrentModerator id: ");
-
 			IConnection current = Red5.getConnectionLocal();
 			RoomClient currentClient = this.clientListManager
 					.getClientByStreamId(current.getClient().getId(), null);
 			Long room_id = currentClient.getRoom_id();
-
-			// log.debug("Who is this moderator? "+currentMod);
-
 			return this.clientListManager.getCurrentModeratorByRoom(room_id);
 		} catch (Exception err) {
 			log.error("[getCurrentModerator]", err);
@@ -1911,25 +1870,13 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	public synchronized void sendVars(ArrayList whiteboardObjParam) {
 		//
 		try {
-
-			// In previous version this has been always a Map, now its a List
-			// so I re-wrapp that class to be a Map again.
-			// swagner 13.02.2009
-			// log.debug("*..*sendVars1: " + whiteboardObjParam);
-			// log.debug("*..*sendVars2: " + whiteboardObjParam.getClass());
-			// log.debug("*..*sendVars3: " +
-			// whiteboardObjParam.getClass().getName());
-
 			Map whiteboardObj = new HashMap();
 			int i = 0;
 			for (Iterator iter = whiteboardObjParam.iterator(); iter.hasNext();) {
 				Object obj = iter.next();
-				// log.debug("obj"+obj);
 				whiteboardObj.put(i, obj);
 				i++;
 			}
-
-			// Map whiteboardObj = (Map) whiteboardObjParam;
 
 			// Check if this User is the Mod:
 			IConnection current = Red5.getConnectionLocal();
@@ -1939,12 +1886,8 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			if (currentClient == null) {
 				return;
 			}
-
 			Long room_id = currentClient.getRoom_id();
-
 			String action = whiteboardObj.get(2).toString();
-
-			// log.debug("***** sendVars: " + actionObject.get(0));
 
 			if (action != null && action.equals("whiteboardObj")) {
 				// Update Whiteboard Object
@@ -1971,29 +1914,22 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				for (IConnection conn : conset) {
 					if (conn != null) {
 						if (conn instanceof IServiceCapableConnection) {
-
-							if (conn.getClient().getId()
-									.equals(current.getClient().getId())) {
+							IClient client = conn.getClient();
+							if (SessionVariablesUtil.isScreenClient(client)) {
+								// screen sharing clients do not receive events
+								continue;
+							} else if (SessionVariablesUtil.isAVClient(client)) {
+								// AVClients or potential AVClients do not receive events
+								continue;
+							} if (client.getId().equals(
+									current.getClient().getId())) {
+								// don't send back to same user
 								continue;
 							}
-
-							RoomClient rcl = this.clientListManager
-									.getSyncClientByStreamId(conn.getClient()
-											.getId());
-
-							if (rcl == null) {
-								continue;
-							}
-
-							if (!currentClient.getStreamid().equals(
-									rcl.getStreamid())) {
-								((IServiceCapableConnection) conn)
-										.invoke("sendVarsToWhiteboard",
-												new Object[] {
-														(showDrawStatus ? currentClient
-																: null),
-														whiteboardObj }, this);
-							}
+							((IServiceCapableConnection) conn)
+								.invoke("sendVarsToWhiteboard",
+									new Object[] { (showDrawStatus ? currentClient : null), whiteboardObj }, 
+										this);
 						}
 					}
 				}
@@ -2078,13 +2014,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 			}
 
-			// This is no longer necessary
-			// boolean ismod = currentClient.getIsMod();
-
-			// log.debug("*..*ismod: " + ismod);
-
-			// if (ismod) {
-
 			Map<String, Object> sendObject = new HashMap<String, Object>();
 			sendObject.put("id", whiteboardId);
 			sendObject.put("param", whiteboardObjParam);
@@ -2098,38 +2027,27 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				for (IConnection conn : conset) {
 					if (conn != null) {
 						if (conn instanceof IServiceCapableConnection) {
-							if (conn.getClient().getId()
-									.equals(current.getClient().getId())) {
+							IClient client = conn.getClient();
+							if (SessionVariablesUtil.isScreenClient(client)) {
+								// screen sharing clients do not receive events
+								continue;
+							} else if (SessionVariablesUtil.isAVClient(client)) {
+								// AVClients or potential AVClients do not receive events
+								continue;
+							} if (client.getId().equals(
+									current.getClient().getId())) {
+								// don't send back to same user
 								continue;
 							}
-
-							RoomClient rcl = this.clientListManager
-									.getSyncClientByStreamId(conn.getClient()
-											.getId());
-
-							if (rcl == null) {
-								continue;
-							}
-
-							if (!currentClient.getStreamid().equals(
-									rcl.getStreamid())) {
-								((IServiceCapableConnection) conn).invoke(
-										"sendVarsToWhiteboardById",
-										new Object[] {
-												showDrawStatus ? currentClient
-														: null, sendObject },
+							((IServiceCapableConnection) conn).invoke(
+								"sendVarsToWhiteboardById",
+									new Object[] { showDrawStatus ? currentClient : null, sendObject }, 
 										this);
-							}
 						}
 					}
 				}
 			}
 
-			// return numberOfUsers;
-			// } else {
-			// // log.debug("*..*you are not allowed to send: "+ismod);
-			// return -1;
-			// }
 		} catch (Exception err) {
 			log.error("[sendVarsByWhiteboardId]", err);
 		}
@@ -2156,29 +2074,21 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 					for (IConnection conn : conset) {
 						if (conn != null) {
 							if (conn instanceof IServiceCapableConnection) {
-								RoomClient rcl = this.clientListManager
-										.getClientByStreamId(conn.getClient()
-												.getId(), null);
-								if (rcl == null) {
-									// continue;
-								} else if (rcl.getIsScreenClient() != null
-										&& rcl.getIsScreenClient()) {
-									// continue;
-								} else {
-									// log.debug("*..*idremote: " +
-									// rcl.getStreamid());
-									// log.debug("*..*my idstreamid: " +
-									// currentClient.getStreamid());
-									if (!currentClient.getStreamid().equals(
-											rcl.getStreamid())) {
-										((IServiceCapableConnection) conn)
-												.invoke("sendVarsToModeratorGeneral",
-														new Object[] { vars },
-														this);
-										// log.debug("sending sendVarsToModeratorGeneral to "
-										// + conn);
-									}
+								IClient client = conn.getClient();
+								if (SessionVariablesUtil.isScreenClient(client)) {
+									// screen sharing clients do not receive events
+									continue;
+								} else if (SessionVariablesUtil.isAVClient(client)) {
+									// AVClients or potential AVClients do not receive events
+									continue;
+								} if (client.getId().equals(
+										current.getClient().getId())) {
+									// don't send back to same user
+									continue;
 								}
+								((IServiceCapableConnection) conn)
+										.invoke("sendVarsToModeratorGeneral",
+												new Object[] { vars },this);
 							}
 						}
 					}
@@ -2322,25 +2232,18 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				for (IConnection conn : conset) {
 					if (conn != null) {
 						if (conn instanceof IServiceCapableConnection) {
-							RoomClient rcl = this.clientListManager
-									.getClientByStreamId(conn.getClient().getId(), null);
-							
-							if (rcl == null) {
-								// RoomClient can be null if there are network problems
-								continue;
-							} else if (!sendScreen && rcl.getIsScreenClient() != null && rcl
-											.getIsScreenClient()) {
+							IClient client = conn.getClient();
+							if (!sendScreen && SessionVariablesUtil.isScreenClient(client)) {
 								// screen sharing clients do not receive events
 								continue;
-							} else if (rcl.getIsAVClient()) {
+							} else if (SessionVariablesUtil.isAVClient(client)) {
 								// AVClients or potential AVClients do not receive events
 								continue;
-							} else if (current.getClient().getId().equals(
-										conn.getClient().getId()) && !sendSelf) {
+							} else if (!sendSelf && client.getId().equals(
+									current.getClient().getId())) {
 								//Do not send back to self
 								continue;
 							}
-							
 							((IServiceCapableConnection) conn).invoke(
 									remoteMethodName, new Object[] { newMessage }, this);
 							
@@ -2418,24 +2321,10 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				for (IConnection conn : conset) {
 					if (conn != null) {
 						if (conn instanceof IServiceCapableConnection) {
-							RoomClient rcl = this.clientListManager
-									.getClientByStreamId(conn.getClient()
-											.getId(), null);
-							if (rcl == null) {
-								// continue;
-							} else if (rcl.getIsScreenClient() != null
-									&& rcl.getIsScreenClient()) {
-								// continue;
-							} else {
-								// log.debug("### sendMessageById 1 ###"+clientId);
-								// log.debug("### sendMessageById 2 ###"+conn.getClient().getId());
-								if (conn.getClient().getId().equals(clientId)) {
-									((IServiceCapableConnection) conn).invoke(
-											"sendVarsToMessageWithClient",
-											new Object[] { hsm }, this);
-									// log.debug("sendingsendVarsToMessageWithClient ByID to "
-									// + conn);
-								}
+							if (conn.getClient().getId().equals(clientId)) {
+								((IServiceCapableConnection) conn).invoke(
+										"sendVarsToMessageWithClient",
+										new Object[] { hsm }, this);
 							}
 						}
 					}
@@ -2462,8 +2351,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			RoomClient currentClient = this.clientListManager
 					.getClientByStreamId(current.getClient().getId(), null);
 
-			log.debug("### sendMessageWithClientById ###" + clientId);
-
 			HashMap<String, Object> hsm = new HashMap<String, Object>();
 			hsm.put("client", currentClient);
 			hsm.put("message", newMessage);
@@ -2473,27 +2360,10 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 					.getConnections();
 			for (Set<IConnection> conset : conCollection) {
 				for (IConnection conn : conset) {
-					if (conn != null) {
-						RoomClient rcl = this.clientListManager
-								.getClientByStreamId(conn.getClient().getId(), null);
-						if (rcl == null) {
-							// continue;
-						} else if (rcl.getIsScreenClient() != null
-								&& rcl.getIsScreenClient()) {
-							// continue;
-						} else {
-							if (conn instanceof IServiceCapableConnection) {
-								// log.debug("### sendMessageWithClientById 1 ###"+clientId);
-								// log.debug("### sendMessageWithClientById 2 ###"+conn.getClient().getId());
-								if (conn.getClient().getId().equals(clientId)) {
-									((IServiceCapableConnection) conn).invoke(
-											"sendVarsToMessageWithClient",
-											new Object[] { hsm }, this);
-									// log.debug("sendingsendVarsToMessageWithClient ByID to "
-									// + conn);
-								}
-							}
-						}
+					if (conn.getClient().getId().equals(clientId)) {
+						((IServiceCapableConnection) conn).invoke(
+								"sendVarsToMessageWithClient",
+								new Object[] { hsm }, this);
 					}
 				}
 			}
@@ -2561,28 +2431,20 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 						.getScope(scopeName).getConnections();
 				for (Set<IConnection> conset : conCollection) {
 					for (IConnection conn : conset) {
-						if (conn != null) {
-							RoomClient rcl = this.clientListManager
-									.getClientByStreamId(conn.getClient()
-											.getId(), null);
-							if (rcl != null) {
-								if (rcl.getIsScreenClient() != null
-										&& rcl.getIsScreenClient()) {
-									// continue;
-								} else {
-									// log.debug("rcl "+rcl+" rcl.getUser_id(): "+rcl.getPublicSID()+" publicSID: "+publicSID+
-									// " IS EQUAL? "+rcl.getPublicSID().equals(publicSID));
-									if (rcl.getPublicSID().equals(publicSID)) {
-										// log.debug("IS EQUAL ");
-										((IServiceCapableConnection) conn)
-												.invoke("newMessageByRoomAndDomain",
-														new Object[] { message },
-														this);
-										log.debug("newMessageByRoomAndDomain RPC:newMessageByRoomAndDomain"
-												+ message);
-									}
-								}
-							}
+						IClient client = conn.getClient();
+						if (SessionVariablesUtil.isScreenClient(client)) {
+							// screen sharing clients do not receive events
+							continue;
+						} else if (SessionVariablesUtil.isAVClient(client)) {
+							// AVClients or potential AVClients do not receive events
+							continue;
+						}
+						
+						if (SessionVariablesUtil.getPublicSID(client).equals(publicSID)) {
+							// log.debug("IS EQUAL ");
+							((IServiceCapableConnection) conn)
+									.invoke("newMessageByRoomAndDomain",
+										new Object[] { message }, this);
 						}
 					}
 				}
@@ -2645,32 +2507,30 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			for (Set<IConnection> conset : conCollection) {
 				for (IConnection conn : conset) {
 					if (conn != null) {
-						RoomClient rcl = this.clientListManager
-								.getClientByStreamId(conn.getClient().getId(), null);
-						if (rcl != null) {
-							if (rcl.getIsScreenClient() != null
-									&& rcl.getIsScreenClient()) {
-								// continue;
-							} else {
-								// log.debug("rcl "+rcl+" rcl.getUser_id(): "+rcl.getPublicSID()+" publicSID: "+publicSID+
-								// " IS EQUAL? "+rcl.getPublicSID().equals(publicSID));
-								if (rcl.getPublicSID().equals(publicSID)) {
-									// log.debug("IS EQUAL ");
-									((IServiceCapableConnection) conn).invoke(
-											"newMessageByRoomAndDomain",
-											new Object[] { message }, this);
-									log.debug("sendMessageWithClientByPublicSID RPC:newMessageByRoomAndDomain"
-											+ message);
-								} else if (user_id != 0
-										&& rcl.getUser_id() != null
-										&& rcl.getUser_id().equals(user_id)) {
-									((IServiceCapableConnection) conn).invoke(
-											"newMessageByRoomAndDomain",
-											new Object[] { message }, this);
-									log.debug("sendMessageWithClientByPublicSID RPC:newMessageByRoomAndDomain"
-											+ message);
-								}
-							}
+						
+						IClient client = conn.getClient();
+						if (SessionVariablesUtil.isScreenClient(client)) {
+							// screen sharing clients do not receive events
+							continue;
+						} else if (SessionVariablesUtil.isAVClient(client)) {
+							// AVClients or potential AVClients do not receive events
+							continue;
+						}
+						
+						if (SessionVariablesUtil.getPublicSID(client).equals(publicSID)) {
+							// log.debug("IS EQUAL ");
+							((IServiceCapableConnection) conn).invoke(
+									"newMessageByRoomAndDomain",
+									new Object[] { message }, this);
+							log.debug("sendMessageWithClientByPublicSID RPC:newMessageByRoomAndDomain"
+									+ message);
+						} else if (user_id != 0
+								&& SessionVariablesUtil.getUserId(client).equals(user_id)) {
+							((IServiceCapableConnection) conn).invoke(
+									"newMessageByRoomAndDomain",
+									new Object[] { message }, this);
+							log.debug("sendMessageWithClientByPublicSID RPC:newMessageByRoomAndDomain"
+									+ message);
 						}
 					}
 				}
@@ -2681,6 +2541,12 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		}
 	}
 
+	/**
+	 * @deprecated this method should be reworked to use a single SQL query in
+	 *             the cache to get any client in the current room that is
+	 *             recording instead of iterating through connections!
+	 * @return
+	 */
 	public synchronized Boolean getInterviewRecordingStatus() {
 		try {
 
@@ -2693,7 +2559,8 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 					if (conn != null) {
 
 						RoomClient rcl = this.clientListManager
-								.getClientByStreamId(conn.getClient().getId(), null);
+								.getClientByStreamId(conn.getClient().getId(),
+										null);
 
 						if (rcl.getIsRecording() != null
 								&& rcl.getIsRecording()) {
@@ -2712,6 +2579,10 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		return null;
 	}
 
+	/**
+	 * @deprecated @see {@link ScopeApplicationAdapter#getInterviewRecordingStatus()}
+	 * @return
+	 */
 	public synchronized Boolean startInterviewRecording() {
 		try {
 
@@ -2751,14 +2622,12 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				for (IConnection conn : conset) {
 					if (conn != null) {
 						
-						RoomClient rcl = this.clientListManager
-								.getClientByStreamId(conn.getClient().getId(), null);
-						
-						if (rcl == null) {
+						IClient client = conn.getClient();
+						if (SessionVariablesUtil.isScreenClient(client)) {
+							// screen sharing clients do not receive events
 							continue;
-						} else if (rcl.getIsAVClient()) {
-							continue;
-						} else if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+						} else if (SessionVariablesUtil.isAVClient(client)) {
+							// AVClients or potential AVClients do not receive events
 							continue;
 						}
 
@@ -2797,26 +2666,14 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			for (Set<IConnection> conset : conCollection) {
 				for (IConnection conn : conset) {
 					if (conn != null) {
-
-						RoomClient rcl = this.clientListManager
-								.getClientByStreamId(conn.getClient().getId(), null);
-
-						if (rcl == null) {
-							// continue;
-						} else if (rcl.getIsScreenClient() != null
-								&& rcl.getIsScreenClient()) {
-
-							if (rcl.getStreamid() != null
-									&& rcl.getStreamid().equals(streamid)) {
+						IClient client = conn.getClient();
+						if (SessionVariablesUtil.isScreenClient(client)) {
+							if (conn.getClient().getId().equals(streamid)) {
 								((IServiceCapableConnection) conn).invoke(
 										"sendRemoteCursorEvent",
 										new Object[] { messageObj }, this);
-								log.debug("sendRemoteCursorEvent messageObj"
-										+ messageObj);
 							}
-
 						}
-
 					}
 				}
 			}
@@ -2885,12 +2742,17 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			for (Set<IConnection> conset : conCollection) {
 				for (IConnection conn : conset) {
 					if (conn != null) {
+						IClient client = conn.getClient();
+						if (SessionVariablesUtil.isScreenClient(client)) {
+							// screen sharing clients do not receive events
+							continue;
+						} else if (SessionVariablesUtil.isAVClient(client)) {
+							// AVClients or potential AVClients do not receive events
+							continue;
+						}
 						((IServiceCapableConnection) conn).invoke(
 								"interviewStatus",
 								new Object[] { interviewStatus }, this);
-						log.debug("sendMessageWithClientByPublicSID interviewStatus"
-								+ interviewStatus);
-
 					}
 				}
 			}
@@ -3065,25 +2927,26 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
         for (Set<IConnection> conset : conCollection) {
             for (IConnection conn : conset) {
                 if (conn != null) {
-                    RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId(), null);
-                    if (rcl == null) {
-                        // continue;
-                    } else if (rcl.getIsScreenClient() != null
-                            && rcl.getIsScreenClient()) {
-                        // continue;
-                    } else {
-                        if (!streamid.equals(rcl.getStreamid())) {
-                            // It is not needed to send back
-                            // that event to the actuall
-                            // Moderator
-                            // as it will be already triggered
-                            // in the result of this Function
-                            // in the Client
-                            if (conn instanceof IServiceCapableConnection) {
-                                ((IServiceCapableConnection) conn).invoke("addNewUser", new Object[]{currentClient}, this);
-                                ((IServiceCapableConnection) conn).invoke("newStream", new Object[]{currentClient}, this);
-                                log.debug("sending setSipTransport to " + conn);
-                            }
+                	IClient client = conn.getClient();
+					if (SessionVariablesUtil.isScreenClient(client)) {
+						// screen sharing clients do not receive events
+						continue;
+					} else if (SessionVariablesUtil.isAVClient(client)) {
+						// AVClients or potential AVClients do not receive events
+						continue;
+					}
+					
+                    if (!client.getId().equals(current.getClient().getId())) {
+                        // It is not needed to send back
+                        // that event to the actual
+                        // Moderator
+                        // as it will be already triggered
+                        // in the result of this Function
+                        // in the Client
+                        if (conn instanceof IServiceCapableConnection) {
+                            ((IServiceCapableConnection) conn).invoke("addNewUser", new Object[]{currentClient}, this);
+                            ((IServiceCapableConnection) conn).invoke("newStream", new Object[]{currentClient}, this);
+                            log.debug("sending setSipTransport to " + conn);
                         }
                     }
                 }

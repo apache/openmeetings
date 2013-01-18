@@ -37,8 +37,10 @@ import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.apache.openmeetings.remote.red5.EmoticonsManager;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.utils.stringhandlers.ChatString;
 import org.red5.logging.Red5LoggerFactory;
+import org.red5.server.api.IClient;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
 import org.red5.server.api.service.IPendingServiceCall;
@@ -181,12 +183,7 @@ public class ChatService implements IPendingServiceCallback {
     						if (needModeration && Boolean.TRUE != rcl.getIsMod() && Boolean.TRUE != rcl.getIsSuperModerator()) {
     							continue;
     						}
-    						log.debug("*..*idremote room_id: " + room_id);
-    						log.debug("*..*my idstreamid room_id: " + rcl.getRoom_id());
-    						if (room_id.equals(rcl.getRoom_id())) {
-    							((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient",new Object[] { hsm }, this);
-    							log.debug("sending sendVarsToMessageWithClient to " + conn);
-    						}
+							((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient",new Object[] { hsm }, this);
 	    			 	}
 	    			}
     			}
@@ -232,27 +229,22 @@ public class ChatService implements IPendingServiceCallback {
 				for (IConnection conn : conset) {
 					if (conn != null) {
 						if (conn instanceof IServiceCapableConnection) {
-
-							RoomClient rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId(), null);
-
-    						if (rcl == null) {
-    							continue;
-    						}
-    						if (rcl.getIsAVClient()) {
-    							continue;
-    						}
-    						if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
-	    						continue;
-	    					}
-
-							if (rcl.getPublicSID().equals(publicSID)
-									|| rcl.getPublicSID().equals(
-											currentClient.getPublicSID())) {
-								((IServiceCapableConnection) conn).invoke(
-										"sendVarsToMessageWithClient",
-										new Object[] { hsm }, this);
+    						IClient client = conn.getClient();
+							if (SessionVariablesUtil.isScreenClient(client)) {
+								// screen sharing clients do not receive events
+								continue;
+							} else if (SessionVariablesUtil.isAVClient(client)) {
+								// AVClients or potential AVClients do not receive events
+								continue;
 							}
 
+							if (SessionVariablesUtil.getPublicSID(client).equals(publicSID)
+									|| SessionVariablesUtil.getPublicSID(client).equals(
+											currentClient.getPublicSID())) {
+								((IServiceCapableConnection) conn).invoke(
+									"sendVarsToMessageWithClient",
+										new Object[] { hsm }, this);
+							}
 						}
 					}
 				}

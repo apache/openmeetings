@@ -56,6 +56,7 @@ import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
 import org.apache.openmeetings.persistence.beans.user.Userdata;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.rss.LoadAtomRssFeed;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
@@ -237,6 +238,7 @@ public class MainService implements IPendingServiceCallback {
 
 			o.setSessionData(sessionManagement.getSessionByHash(remoteHashId));
 			currentClient.setUser_id(o.getUser_id());
+			SessionVariablesUtil.setUserId(current.getClient(), o.getUser_id());
 			
 			if (currentClient.getUser_id() != null
 					&& currentClient.getUser_id() > 0) {
@@ -329,14 +331,14 @@ public class MainService implements IPendingServiceCallback {
 				}
 
 				o = ldapLoginManagement.doLdapLogin(ldapLogin,
-						Userpass, currentClient, SID,
+						Userpass, currentClient, current.getClient(), SID,
 						ldapConfig.getConfigFileName());
 			} else {
 
 				currentClient = clientListManager.getClientByStreamId(current.getClient().getId(), null);
 
 				o = userManagement.loginUser(SID, usernameOrEmail, Userpass,
-						currentClient, storePermanent);
+						currentClient, current.getClient(), storePermanent);
 			}
 
 			if (o == null)
@@ -624,6 +626,7 @@ public class MainService implements IPendingServiceCallback {
 											userObject.getPictureUrl());
 
 							currentClient.setUser_id(userId);
+							SessionVariablesUtil.setUserId(current.getClient(), userId);
 						} else {
 
 							user.setPictureuri(userObject.getPictureUrl());
@@ -631,6 +634,7 @@ public class MainService implements IPendingServiceCallback {
 							userManagement.updateUser(user);
 
 							currentClient.setUser_id(user.getUser_id());
+							SessionVariablesUtil.setUserId(current.getClient(), user.getUser_id());
 						}
 					}
 
