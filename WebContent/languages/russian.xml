@@ -1830,13 +1830,13 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Соединено с</value>
   </string>
   <string id="602" name="connection administration panel">
-    <value>Комната / Вместимость</value>
+    <value>Комната/Кол-во</value>
   </string>
   <string id="603" name="connection administration panel">
-    <value>Выбросить польз-ля</value>
+    <value>Отключить</value>
   </string>
   <string id="604" name="kick user confirmation dialog">
-    <value>Выбросить польз-ля</value>
+    <value>Отключить</value>
   </string>
   <string id="605" name="kick user confirmation dialog">
     <value>Вы действительно хотите отключит этого клиента? Клиент может залогиниться вновь</value>
