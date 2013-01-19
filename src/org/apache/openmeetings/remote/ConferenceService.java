@@ -33,9 +33,6 @@ import java.util.TimeZone;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.cluster.beans.ServerDTO;
-import org.apache.openmeetings.conference.room.ClientSession;
-import org.apache.openmeetings.conference.room.IClientList;
-import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
 import org.apache.openmeetings.data.basic.dao.ServerDao;
@@ -52,6 +49,10 @@ import org.apache.openmeetings.persistence.beans.rooms.RoomTypes;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms_Organisation;
 import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.session.Client;
+import org.apache.openmeetings.session.ClientSession;
+import org.apache.openmeetings.session.IClientSession;
+import org.apache.openmeetings.session.ISessionStore;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.apache.openmeetings.utils.math.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
@@ -87,7 +88,7 @@ public class ConferenceService {
 	@Autowired
 	private TimezoneUtil timezoneUtil;
 	@Autowired
-	private IClientList clientListManager = null;
+	private ISessionStore clientListManager = null;
 	@Autowired
 	private ServerDao serverDao;
 
@@ -292,7 +293,7 @@ public class ConferenceService {
 	
 			log.debug("getCurrentRoomClient -2- " + streamid);
 	
-			RoomClient currentClient = this.clientListManager
+			IClientSession currentClient = this.clientListManager
 					.getClientByStreamId(streamid, null);
 	
 			Rooms room = roomDao.get(room_id);
@@ -709,7 +710,7 @@ public class ConferenceService {
 	 * @param room_id
 	 * @return - all participants of a room
 	 */
-	public List<RoomClient> getRoomClientsListByRoomId(Long room_id) {
+	public List<Client> getRoomClientsListByRoomId(Long room_id) {
 		return clientListManager.getClientListByRoom(room_id, null);
 	}
 

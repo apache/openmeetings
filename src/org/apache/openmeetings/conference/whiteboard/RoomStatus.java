@@ -20,18 +20,18 @@ package org.apache.openmeetings.conference.whiteboard;
 
 import java.util.List;
 
-import org.apache.openmeetings.conference.room.RoomClient;
+import org.apache.openmeetings.session.Client;
 
 public class RoomStatus {
 	
-	List<RoomClient> clientList;
+	List<Client> clientList;
 	BrowserStatus browserStatus;
 	Boolean roomFull = false;
 	
-	public List<RoomClient> getClientList() {
+	public List<Client> getClientList() {
 		return clientList;
 	}
-	public void setClientList(List<RoomClient> clientList) {
+	public void setClientList(List<Client> clientList) {
 		this.clientList = clientList;
 	}
 	public BrowserStatus getBrowserStatus() {

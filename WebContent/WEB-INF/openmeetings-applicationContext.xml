@@ -55,7 +55,7 @@
 	<!-- In memory / session stores -->
 	
 	<bean id="openmeetings.ClientListManager" 
-		class="org.apache.openmeetings.conference.room.ClientListHashMapStore" />
+		class="org.apache.openmeetings.session.ClientHashMapStore" />
 	<bean id="openmeetings.EmoticonsManager" 
 		class="org.apache.openmeetings.remote.red5.EmoticonsManager" />
 	<bean id="openmeetings.WhiteBoardObjectListManager"

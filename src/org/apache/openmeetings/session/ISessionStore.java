@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.conference.room;
+package org.apache.openmeetings.session;
 
 import java.util.Collection;
 import java.util.List;
@@ -26,7 +26,7 @@ import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 
-public interface IClientList {
+public interface ISessionStore {
 
 	/**
 	 * Get current clients and extends the room client with its potential
@@ -36,11 +36,11 @@ public interface IClientList {
 	 * @param server TODO
 	 * @return
 	 */
-	public abstract RoomClient addClientListItem(String streamId,
+	public abstract IClientSession addClientListItem(String streamId,
 			String scopeName, Integer remotePort, String remoteAddress,
 			String swfUrl, boolean isAVClient);
 
-	public abstract Collection<RoomClient> getAllClients();
+	public abstract Collection<Client> getAllClients();
 
 	/**
 	 * Get a client by its streamId
@@ -50,7 +50,7 @@ public interface IClientList {
 	 *            TODO
 	 * @return
 	 */
-	public abstract RoomClient getClientByStreamId(String streamId,
+	public abstract Client getClientByStreamId(String streamId,
 			Server server);
 
 	/**
@@ -62,7 +62,7 @@ public interface IClientList {
 	 * @param streamId
 	 * @return
 	 */
-	public abstract RoomClient getSyncClientByStreamId(String streamId);
+	public abstract IClientSession getSyncClientByStreamId(String streamId);
 
 	/**
 	 * get a client by its publicSID and the server, 
@@ -75,7 +75,7 @@ public interface IClientList {
 	 * @param server
 	 * @return
 	 */
-	public abstract RoomClient getClientByPublicSID(String publicSID,
+	public abstract Client getClientByPublicSID(String publicSID,
 			boolean isAVClient, Server server);
 	
 	/**
@@ -100,7 +100,7 @@ public interface IClientList {
 	 * @deprecated There could be multiple users logged in with the same userid,
 	 *             then this call would return a list not a single user
 	 */
-	public abstract RoomClient getClientByUserId(Long userId);
+	public abstract IClientSession getClientByUserId(Long userId);
 
 	/**
 	 * Update the session object of the audio/video-connection and additionally
@@ -112,7 +112,7 @@ public interface IClientList {
 	 * @return
 	 */
 	public abstract Boolean updateAVClientByStreamId(String streamId,
-			RoomClient rcm);
+			Client rcm);
 
 	/**
 	 * Update the session object
@@ -128,7 +128,7 @@ public interface IClientList {
 	 * @return
 	 */
 	public abstract Boolean updateClientByStreamId(String streamId,
-			RoomClient rcm, boolean updateRoomCount);
+			Client rcm, boolean updateRoomCount);
 
 	/**
 	 * Remove a client from the session store
@@ -146,9 +146,9 @@ public interface IClientList {
 	 * @param room_id 
 	 * @return
 	 */
-	public abstract List<RoomClient> getClientListByRoom(Long room_id, Server server);
+	public abstract List<Client> getClientListByRoom(Long room_id, Server server);
 
-	public abstract Collection<RoomClient> getClientListByRoomAll(Long room_id, Server server);
+	public abstract Collection<Client> getClientListByRoomAll(Long room_id, Server server);
 
 	/**
 	 * get the current Moderator in this room
@@ -156,7 +156,7 @@ public interface IClientList {
 	 * @param roomname
 	 * @return
 	 */
-	public abstract List<RoomClient> getCurrentModeratorByRoom(Long room_id);
+	public abstract List<Client> getCurrentModeratorByRoom(Long room_id);
 
 	/**
 	 * Get list of current client sessions

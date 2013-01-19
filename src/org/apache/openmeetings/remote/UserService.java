@@ -29,8 +29,6 @@ import java.util.TimeZone;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.cluster.SlaveHTTPConnectionManager;
-import org.apache.openmeetings.conference.room.IClientList;
-import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
@@ -61,6 +59,9 @@ import org.apache.openmeetings.persistence.beans.user.Salutations;
 import org.apache.openmeetings.persistence.beans.user.UserContacts;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.session.Client;
+import org.apache.openmeetings.session.IClientSession;
+import org.apache.openmeetings.session.ISessionStore;
 import org.apache.openmeetings.templates.RequestContactConfirmTemplate;
 import org.apache.openmeetings.templates.RequestContactTemplate;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
@@ -85,7 +86,7 @@ public class UserService {
 			UserService.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private IClientList clientListManager;
+	private ISessionStore clientListManager;
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
@@ -537,7 +538,7 @@ public class UserService {
 
 				if (serverId == 0) {
 
-					RoomClient rcl = this.clientListManager
+					Client rcl = this.clientListManager
 							.getClientByStreamId(streamid, null);
 
 					if (rcl == null) {
@@ -563,7 +564,7 @@ public class UserService {
 				} else {
 
 					Server server = serverDao.get(serverId);
-					RoomClient rcl = clientListManager.getClientByStreamId(
+					IClientSession rcl = clientListManager.getClientByStreamId(
 							streamid, server);
 					slaveHTTPConnectionManager.kickSlaveUser(server, rcl.getPublicSID());
 					
@@ -1704,7 +1705,7 @@ public class UserService {
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				RoomClient rcl = this.clientListManager.getClientByPublicSID(
+				Client rcl = this.clientListManager.getClientByPublicSID(
 						publicSID, false, null);
 
 				if (rcl == null) {

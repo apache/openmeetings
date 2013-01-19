@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.conference.room.cache;
+package org.apache.openmeetings.session.cache;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,8 +26,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.persistence.beans.basic.Server;
+import org.apache.openmeetings.session.Client;
+import org.apache.openmeetings.session.IClientSession;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -59,28 +60,28 @@ public class HashMapStore {
 	/**
 	 * global client list by serverId and streamid
 	 */
-	private LinkedHashMap<Long, LinkedHashMap<String, RoomClient>> clientsByServer = new LinkedHashMap<Long, LinkedHashMap<String, RoomClient>>();
+	private LinkedHashMap<Long, LinkedHashMap<String, Client>> clientsByServer = new LinkedHashMap<Long, LinkedHashMap<String, Client>>();
 
 	/**
 	 * global client list by serverId and publicSID, there can be multiple
 	 * RoomClients with the same publicSID, the ScreenSharing client has the
 	 * same publicSID as the normal client
 	 */
-	private LinkedHashMap<Long, LinkedHashMap<String, List<RoomClient>>> clientsByServerAndPublicSID = new LinkedHashMap<Long, LinkedHashMap<String, List<RoomClient>>>();
+	private LinkedHashMap<Long, LinkedHashMap<String, List<Client>>> clientsByServerAndPublicSID = new LinkedHashMap<Long, LinkedHashMap<String, List<Client>>>();
 
 	/**
 	 * global client list by serverId and userId, there can be multiple
 	 * RoomClients with the same userId, the ScreenSharing client has the
 	 * same userId as the normal client
 	 */
-	private LinkedHashMap<Long, LinkedHashMap<Long, List<RoomClient>>> clientsByServerAndUserId = new LinkedHashMap<Long, LinkedHashMap<Long, List<RoomClient>>>();
+	private LinkedHashMap<Long, LinkedHashMap<Long, List<Client>>> clientsByServerAndUserId = new LinkedHashMap<Long, LinkedHashMap<Long, List<Client>>>();
 
 	/**
 	 * global client list by serverId and roomId
 	 * 
 	 * It is internally a HashMap, not a simple list to make sure the order does not change
 	 */
-	private LinkedHashMap<Long, LinkedHashMap<Long, LinkedHashMap<String, RoomClient>>> clientsByServerAndRoomId = new LinkedHashMap<Long, LinkedHashMap<Long, LinkedHashMap<String, RoomClient>>>();
+	private LinkedHashMap<Long, LinkedHashMap<Long, LinkedHashMap<String, Client>>> clientsByServerAndRoomId = new LinkedHashMap<Long, LinkedHashMap<Long, LinkedHashMap<String, Client>>>();
 
 	/**
 	 * global client list by server and roomId
@@ -89,12 +90,12 @@ public class HashMapStore {
 	/**
 	 * An empty Map to be returned instead of null
 	 */
-	private LinkedHashMap<String, RoomClient> EMPTY_MAP = new LinkedHashMap<String, RoomClient>(0);
+	private LinkedHashMap<String, Client> EMPTY_MAP = new LinkedHashMap<String, Client>(0);
 	
 	/**
 	 * An empty List to be returned instead of null
 	 */
-	private List<RoomClient> EMPTY_LIST = new ArrayList<RoomClient>(0);
+	private List<Client> EMPTY_LIST = new ArrayList<Client>(0);
 	
 	/**
 	 * null means its locally
@@ -115,15 +116,15 @@ public class HashMapStore {
 	 * @param streamId
 	 * @param rcl
 	 */
-	public void put(Server server, String streamId, RoomClient rcl) {
+	public void put(Server server, String streamId, Client rcl) {
 
 		// By server and streamid
 		
 		//Server and streamId are always given, if server is null, it means the user is locally
 		//and not on any slave host
-		LinkedHashMap<String, RoomClient> clientList = clientsByServer.get(getIdByServer(server));
+		LinkedHashMap<String, Client> clientList = clientsByServer.get(getIdByServer(server));
 		if (clientList == null) {
-			clientList = new LinkedHashMap<String, RoomClient>();
+			clientList = new LinkedHashMap<String, Client>();
 		}
 		clientList.put(streamId, rcl);
 		clientsByServer.put(getIdByServer(server), clientList);
@@ -134,15 +135,15 @@ public class HashMapStore {
 		//but we will not want to search for a user with the publicSID == null
 		//so as long as publicSID is null, we don't organize the session on a special list
 		if (rcl.getPublicSID() != null) {
-			LinkedHashMap<String, List<RoomClient>> clientListPublicSID = clientsByServerAndPublicSID
+			LinkedHashMap<String, List<Client>> clientListPublicSID = clientsByServerAndPublicSID
 					.get(getIdByServer(server));
 			if (clientListPublicSID == null) {
-				clientListPublicSID = new LinkedHashMap<String, List<RoomClient>>();
+				clientListPublicSID = new LinkedHashMap<String, List<Client>>();
 			}
-			List<RoomClient> clientsByPublicSIDList = clientListPublicSID.get(rcl
+			List<Client> clientsByPublicSIDList = clientListPublicSID.get(rcl
 					.getPublicSID());
 			if (clientsByPublicSIDList == null) {
-				clientsByPublicSIDList = new ArrayList<RoomClient>();
+				clientsByPublicSIDList = new ArrayList<Client>();
 			}
 			if (!clientsByPublicSIDList.contains(rcl)) {
 				clientsByPublicSIDList.add(rcl);
@@ -157,15 +158,15 @@ public class HashMapStore {
 		//but we will not want to search for a user with the userId == null
 		//so as long as userId is null, we don't organize the session on a special list
 		if (rcl.getUser_id() != null) {
-			LinkedHashMap<Long, List<RoomClient>> clientListUserId = clientsByServerAndUserId
+			LinkedHashMap<Long, List<Client>> clientListUserId = clientsByServerAndUserId
 					.get(getIdByServer(server));
 			if (clientListUserId == null) {
-				clientListUserId = new LinkedHashMap<Long, List<RoomClient>>();
+				clientListUserId = new LinkedHashMap<Long, List<Client>>();
 			}
-			List<RoomClient> clientListUserIdList = clientListUserId.get(rcl
+			List<Client> clientListUserIdList = clientListUserId.get(rcl
 					.getPublicSID());
 			if (clientListUserIdList == null) {
-				clientListUserIdList = new ArrayList<RoomClient>();
+				clientListUserIdList = new ArrayList<Client>();
 			}
 			if (!clientListUserIdList.contains(rcl)) {
 				clientListUserIdList.add(rcl);
@@ -180,14 +181,14 @@ public class HashMapStore {
 		//but we will not want to search for a user with the roomId == null
 		//so as long as roomId is null, we don't organize the session on a special list
 		if (rcl.getRoom_id() != null) {
-			LinkedHashMap<Long, LinkedHashMap<String, RoomClient>> clientsByRoomId = clientsByServerAndRoomId.get(getIdByServer(server));
+			LinkedHashMap<Long, LinkedHashMap<String, Client>> clientsByRoomId = clientsByServerAndRoomId.get(getIdByServer(server));
 			if (clientsByRoomId == null) {
-				clientsByRoomId = new LinkedHashMap<Long, LinkedHashMap<String, RoomClient>>();
+				clientsByRoomId = new LinkedHashMap<Long, LinkedHashMap<String, Client>>();
 			}
-			LinkedHashMap<String, RoomClient> clientRoomList = clientsByRoomId.get(rcl
+			LinkedHashMap<String, Client> clientRoomList = clientsByRoomId.get(rcl
 					.getRoom_id());
 			if (clientRoomList == null) {
-				clientRoomList = new LinkedHashMap<String, RoomClient>();
+				clientRoomList = new LinkedHashMap<String, Client>();
 			}
 			if (!clientRoomList.containsKey((streamId))) {
 				clientRoomList.put(streamId, rcl);
@@ -217,8 +218,8 @@ public class HashMapStore {
 	 * @param streamId
 	 * @return will return null if the client does not exist in the list
 	 */
-	public RoomClient get(Server server, String streamId) {
-		LinkedHashMap<String, RoomClient> listMap = clientsByServer.get(getIdByServer(server));
+	public Client get(Server server, String streamId) {
+		LinkedHashMap<String, Client> listMap = clientsByServer.get(getIdByServer(server));
 		if (listMap != null) {
 			return listMap.get(streamId);
 		}
@@ -231,12 +232,12 @@ public class HashMapStore {
 	 * @param publicSID
 	 * @return will return an empty list if nothing available
 	 */
-	public List<RoomClient> getClientsByPublicSID(Server server, String publicSID) {
-		LinkedHashMap<String, List<RoomClient>> clientListPublicSID = clientsByServerAndPublicSID.get(getIdByServer(server));
+	public List<Client> getClientsByPublicSID(Server server, String publicSID) {
+		LinkedHashMap<String, List<Client>> clientListPublicSID = clientsByServerAndPublicSID.get(getIdByServer(server));
 		if (clientListPublicSID == null) {
 			return EMPTY_LIST;
 		}
-		List<RoomClient> clientList = clientListPublicSID.get(publicSID);
+		List<Client> clientList = clientListPublicSID.get(publicSID);
 		if (clientList == null) {
 			return EMPTY_LIST;
 		}
@@ -249,10 +250,10 @@ public class HashMapStore {
 	 * @param publicSID
 	 * @return will return a map with the serverId as key and the RoomClients as list in the value
 	 */
-	public Map<Long,List<RoomClient>> getClientsByPublicSID(String publicSID) {
-		Map<Long,List<RoomClient>> clientList = new HashMap<Long,List<RoomClient>>();
-		for (Entry<Long, LinkedHashMap<String, List<RoomClient>>> entry : clientsByServerAndPublicSID.entrySet()) {
-			List<RoomClient> clientListAtThisServer = entry.getValue().get(publicSID);
+	public Map<Long,List<Client>> getClientsByPublicSID(String publicSID) {
+		Map<Long,List<Client>> clientList = new HashMap<Long,List<Client>>();
+		for (Entry<Long, LinkedHashMap<String, List<Client>>> entry : clientsByServerAndPublicSID.entrySet()) {
+			List<Client> clientListAtThisServer = entry.getValue().get(publicSID);
 			if (clientListAtThisServer != null) {
 				clientList.put(entry.getKey(), clientListAtThisServer);
 			}
@@ -266,8 +267,8 @@ public class HashMapStore {
 	 * @param server
 	 * @return will return an empty map if nothing available
 	 */
-	public LinkedHashMap<String, RoomClient> getClientsByServer(Server server) {
-		LinkedHashMap<String, RoomClient> listMap = clientsByServer.get(getIdByServer(server));
+	public LinkedHashMap<String, Client> getClientsByServer(Server server) {
+		LinkedHashMap<String, Client> listMap = clientsByServer.get(getIdByServer(server));
 		if (listMap == null) {
 			return EMPTY_MAP;
 		}
@@ -280,12 +281,12 @@ public class HashMapStore {
 	 * @param userId
 	 * @return will return an empty list if nothing available
 	 */
-	public List<RoomClient> getClientsByUserId(Server server, Long userId) {
-		LinkedHashMap<Long, List<RoomClient>> clientListUserId = clientsByServerAndUserId.get(getIdByServer(server));
+	public List<Client> getClientsByUserId(Server server, Long userId) {
+		LinkedHashMap<Long, List<Client>> clientListUserId = clientsByServerAndUserId.get(getIdByServer(server));
 		if (clientListUserId == null) {
 			return EMPTY_LIST;
 		}
-		List<RoomClient> clientList = clientListUserId.get(userId);
+		List<Client> clientList = clientListUserId.get(userId);
 		if (clientList == null) {
 			return EMPTY_LIST;
 		}
@@ -302,10 +303,10 @@ public class HashMapStore {
 	 * @param roomId
 	 * @return will return an empty map if nothing available
 	 */
-	public  LinkedHashMap<String, RoomClient> getClientsByRoomId(Server server, Long roomId) {
+	public  LinkedHashMap<String, Client> getClientsByRoomId(Server server, Long roomId) {
 		
-		for (Entry<Long, LinkedHashMap<Long, LinkedHashMap<String, RoomClient>>> entry : clientsByServerAndRoomId.entrySet()) {
-			LinkedHashMap<String, RoomClient> roomClients = entry.getValue().get(roomId);
+		for (Entry<Long, LinkedHashMap<Long, LinkedHashMap<String, Client>>> entry : clientsByServerAndRoomId.entrySet()) {
+			LinkedHashMap<String, Client> roomClients = entry.getValue().get(roomId);
 			if (roomClients != null) {
 				return roomClients;
 			}
@@ -320,11 +321,11 @@ public class HashMapStore {
 		
 		//Server and streamId are always given, if server is null, it means the user is locally
 		//and not on any slave host
-		LinkedHashMap<String, RoomClient> clientList = clientsByServer.get(getIdByServer(server));
+		LinkedHashMap<String, Client> clientList = clientsByServer.get(getIdByServer(server));
 		if (clientList == null) {
-			clientList = new LinkedHashMap<String, RoomClient>();
+			clientList = new LinkedHashMap<String, Client>();
 		}
-		RoomClient rcl = clientList.get(streamId);
+		IClientSession rcl = clientList.get(streamId);
 		
 		if (rcl == null) {
 			throw new NullPointerException("Could not find RoomClient with that streamId: "+streamId);
@@ -343,15 +344,15 @@ public class HashMapStore {
 		//but we will not want to search for a user with the publicSID == null
 		//so as long as publicSID is null, we don't organize the session on a special list
 		if (rcl.getPublicSID() != null) {
-			LinkedHashMap<String, List<RoomClient>> clientListPublicSID = clientsByServerAndPublicSID
+			LinkedHashMap<String, List<Client>> clientListPublicSID = clientsByServerAndPublicSID
 					.get(getIdByServer(server));
 			if (clientListPublicSID == null) {
-				clientListPublicSID = new LinkedHashMap<String, List<RoomClient>>();
+				clientListPublicSID = new LinkedHashMap<String, List<Client>>();
 			}
-			List<RoomClient> clientsByPublicSIDList = clientListPublicSID.get(rcl
+			List<Client> clientsByPublicSIDList = clientListPublicSID.get(rcl
 					.getPublicSID());
 			if (clientsByPublicSIDList == null) {
-				clientsByPublicSIDList = new ArrayList<RoomClient>();
+				clientsByPublicSIDList = new ArrayList<Client>();
 			}
 			clientsByPublicSIDList.remove(rcl);
 			if (clientsByPublicSIDList.size() == 0) {
@@ -372,15 +373,15 @@ public class HashMapStore {
 		//but we will not want to search for a user with the userId == null
 		//so as long as userId is null, we don't organize the session on a special list
 		if (rcl.getUser_id() != null) {
-			LinkedHashMap<Long, List<RoomClient>> clientListUserId = clientsByServerAndUserId
+			LinkedHashMap<Long, List<Client>> clientListUserId = clientsByServerAndUserId
 					.get(getIdByServer(server));
 			if (clientListUserId == null) {
-				clientListUserId = new LinkedHashMap<Long, List<RoomClient>>();
+				clientListUserId = new LinkedHashMap<Long, List<Client>>();
 			}
-			List<RoomClient> clientListUserIdList = clientListUserId.get(rcl
+			List<Client> clientListUserIdList = clientListUserId.get(rcl
 					.getPublicSID());
 			if (clientListUserIdList == null) {
-				clientListUserIdList = new ArrayList<RoomClient>();
+				clientListUserIdList = new ArrayList<Client>();
 			}
 			clientListUserIdList.remove(rcl);
 			if (clientListUserIdList.size() == 0) {
@@ -401,14 +402,14 @@ public class HashMapStore {
 		//but we will not want to search for a user with the roomId == null
 		//so as long as roomId is null, we don't organize the session on a special list
 		if (rcl.getRoom_id() != null) {
-			LinkedHashMap<Long, LinkedHashMap<String, RoomClient>> clientsByRoomId = clientsByServerAndRoomId.get(getIdByServer(server));
+			LinkedHashMap<Long, LinkedHashMap<String, Client>> clientsByRoomId = clientsByServerAndRoomId.get(getIdByServer(server));
 			if (clientsByRoomId == null) {
-				clientsByRoomId = new LinkedHashMap<Long, LinkedHashMap<String, RoomClient>>();
+				clientsByRoomId = new LinkedHashMap<Long, LinkedHashMap<String, Client>>();
 			}
-			LinkedHashMap<String, RoomClient> clientRoomList = clientsByRoomId.get(rcl
+			LinkedHashMap<String, Client> clientRoomList = clientsByRoomId.get(rcl
 					.getRoom_id());
 			if (clientRoomList == null) {
-				clientRoomList = new LinkedHashMap<String, RoomClient>();
+				clientRoomList = new LinkedHashMap<String, Client>();
 			}
 			clientRoomList.remove(streamId);
 			if (clientRoomList.size() == 0) {
@@ -427,7 +428,7 @@ public class HashMapStore {
 
 	public int size() {
 		int size = 0;
-		for (Entry<Long, LinkedHashMap<String, RoomClient>> entry : clientsByServer.entrySet()) {
+		for (Entry<Long, LinkedHashMap<String, Client>> entry : clientsByServer.entrySet()) {
 			size += entry.getValue().size();
 		}
 		return size;
@@ -440,11 +441,11 @@ public class HashMapStore {
 		return clientsByServer.get(getIdByServer(server)).size();
 	}
 
-	public LinkedHashMap<Long, LinkedHashMap<String, RoomClient>> values() {
+	public LinkedHashMap<Long, LinkedHashMap<String, Client>> values() {
 		return clientsByServer;
 	}
 	
-	public LinkedHashMap<Long,LinkedHashMap<String,RoomClient>> getClientsByServerAndRoom(Server server) {
+	public LinkedHashMap<Long,LinkedHashMap<String,Client>> getClientsByServerAndRoom(Server server) {
 		return clientsByServerAndRoomId.get(getIdByServer(server));
 	}
 	
@@ -462,7 +463,7 @@ public class HashMapStore {
 	
 	public int getTotalNumberOfSessions() {
 		int t = 0;
-		for (Entry<Long, LinkedHashMap<String, RoomClient>> entry : values().entrySet()) {
+		for (Entry<Long, LinkedHashMap<String, Client>> entry : values().entrySet()) {
 			t += entry.getValue().values().size();
 		}
 		return t;
@@ -507,7 +508,7 @@ public class HashMapStore {
 
 		if (detailLevel.contains(DEBUG_DETAILS.CLIENT_BY_STREAMID)) {
 
-			for (Entry<Long, LinkedHashMap<String, RoomClient>> entry : clientsByServer
+			for (Entry<Long, LinkedHashMap<String, Client>> entry : clientsByServer
 					.entrySet()) {
 				addNewLine(statistics,
 						"clientsByServer Server " + entry.getKey()
@@ -518,14 +519,14 @@ public class HashMapStore {
 		}
 
 		if (detailLevel.contains(DEBUG_DETAILS.CLIENT_BY_PUBLICSID)) {
-			for (Entry<Long, LinkedHashMap<String, List<RoomClient>>> entry : clientsByServerAndPublicSID
+			for (Entry<Long, LinkedHashMap<String, List<Client>>> entry : clientsByServerAndPublicSID
 					.entrySet()) {
 				addNewLine(statistics, "clientsByServerAndPublicSID Server "
 						+ entry.getKey() + " Number of PublicSIDs: "
 						+ entry.getValue().size());
 
 				if (detailLevel.contains(DEBUG_DETAILS.PUBLICSID_LIST_ALL)) {
-					for (Entry<String, List<RoomClient>> innerEntry : entry
+					for (Entry<String, List<Client>> innerEntry : entry
 							.getValue().entrySet()) {
 						addNewLine(statistics,
 								"clientsByServerAndPublicSID publicSID "
@@ -538,14 +539,14 @@ public class HashMapStore {
 		}
 
 		if (detailLevel.contains(DEBUG_DETAILS.CLIENT_BY_USERID)) {
-			for (Entry<Long, LinkedHashMap<Long, List<RoomClient>>> entry : clientsByServerAndUserId
+			for (Entry<Long, LinkedHashMap<Long, List<Client>>> entry : clientsByServerAndUserId
 					.entrySet()) {
 				addNewLine(statistics, "clientsByServerAndUserId Server "
 						+ entry.getKey() + " Number of UserIds: "
 						+ entry.getValue().size());
 
 				if (detailLevel.contains(DEBUG_DETAILS.USERID_LIST_ALL)) {
-					for (Entry<Long, List<RoomClient>> innerEntry : entry
+					for (Entry<Long, List<Client>> innerEntry : entry
 							.getValue().entrySet()) {
 						addNewLine(
 								statistics,
@@ -560,17 +561,17 @@ public class HashMapStore {
 
 		if (detailLevel.contains(DEBUG_DETAILS.CLIENT_BY_ROOMID)) {
 
-			for (Entry<Long, LinkedHashMap<Long, LinkedHashMap<String, RoomClient>>> serverEntry : clientsByServerAndRoomId
+			for (Entry<Long, LinkedHashMap<Long, LinkedHashMap<String, Client>>> serverEntry : clientsByServerAndRoomId
 					.entrySet()) {
 
-				LinkedHashMap<Long, LinkedHashMap<String, RoomClient>> clientsByRoomId = serverEntry
+				LinkedHashMap<Long, LinkedHashMap<String, Client>> clientsByRoomId = serverEntry
 						.getValue();
 				addNewLine(statistics, "clientsByRoomId ServerId "
 						+ serverEntry.getKey() + " Number of Rooms: "
 						+ serverEntry.getValue().size() + " roomIds "
 						+ serverEntry.getValue().keySet());
 
-				for (Entry<Long, LinkedHashMap<String, RoomClient>> entry : clientsByRoomId
+				for (Entry<Long, LinkedHashMap<String, Client>> entry : clientsByRoomId
 						.entrySet()) {
 					addNewLine(statistics,
 							"clientsByRoomId RoomId " + entry.getKey()
@@ -578,7 +579,7 @@ public class HashMapStore {
 									+ entry.getValue().size());
 
 					if (detailLevel.contains(DEBUG_DETAILS.ROOMID_LIST_ALL)) {
-						for (Entry<String, RoomClient> innerEntry : entry
+						for (Entry<String, Client> innerEntry : entry
 								.getValue().entrySet()) {
 							addNewLine(statistics, "clientsByRoomId streamId "
 									+ innerEntry.getKey() + " client "

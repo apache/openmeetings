@@ -28,8 +28,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.conference.room.IClientList;
-import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Navimanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
@@ -58,6 +56,9 @@ import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.rss.LoadAtomRssFeed;
+import org.apache.openmeetings.session.Client;
+import org.apache.openmeetings.session.IClientSession;
+import org.apache.openmeetings.session.ISessionStore;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
@@ -80,7 +81,7 @@ public class MainService implements IPendingServiceCallback {
 	private static final Logger log = Red5LoggerFactory.getLogger(MainService.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private IClientList clientListManager;
+	private ISessionStore clientListManager;
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
@@ -159,7 +160,7 @@ public class MainService implements IPendingServiceCallback {
 		return users;
 	}
 
-	public RoomClient getCurrentRoomClient(String SID) {
+	public IClientSession getCurrentRoomClient(String SID) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
@@ -167,7 +168,7 @@ public class MainService implements IPendingServiceCallback {
 			log.debug("getCurrentRoomClient -1- " + SID);
 			log.debug("getCurrentRoomClient -2- " + streamid);
 
-			RoomClient currentClient = this.clientListManager
+			IClientSession currentClient = this.clientListManager
 					.getClientByStreamId(streamid, null);
 			return currentClient;
 		} catch (Exception err) {
@@ -219,7 +220,7 @@ public class MainService implements IPendingServiceCallback {
 	public Users loginByRemember(String SID, String remoteHashId) {
 		try {
 
-			RoomClient currentClient;
+			IClientSession currentClient;
 			IConnection current = Red5.getConnectionLocal();
 
 			Users o = null;
@@ -306,7 +307,7 @@ public class MainService implements IPendingServiceCallback {
 		try {
 			log.warn("loginUser: " + SID + " " + usernameOrEmail);
 
-			RoomClient currentClient;
+			IClientSession currentClient;
 			IConnection current = Red5.getConnectionLocal();
 
 			if (current == null)
@@ -359,7 +360,7 @@ public class MainService implements IPendingServiceCallback {
 				for (Set<IConnection> conset : conCollection) {
 					for (IConnection cons : conset) {
 						if (cons != null) {
-							RoomClient rcl = this.clientListManager
+							IClientSession rcl = this.clientListManager
 									.getClientByStreamId(cons.getClient()
 											.getId(), null);
 							if (rcl != null && rcl.getIsScreenClient() != null
@@ -453,7 +454,7 @@ public class MainService implements IPendingServiceCallback {
 
 			IConnection current = Red5.getConnectionLocal();
 			String streamId = current.getClient().getId();
-			RoomClient currentClient = this.clientListManager
+			Client currentClient = this.clientListManager
 					.getClientByStreamId(streamId, null);
 
 			if (currentClient.getUser_id() != null) {
@@ -527,7 +528,7 @@ public class MainService implements IPendingServiceCallback {
 
 			IConnection current = Red5.getConnectionLocal();
 			String streamId = current.getClient().getId();
-			RoomClient currentClient = this.clientListManager
+			Client currentClient = this.clientListManager
 					.getClientByStreamId(streamId, null);
 
 			currentClient.setFirstname(firstname);
@@ -590,7 +591,7 @@ public class MainService implements IPendingServiceCallback {
 
 					IConnection current = Red5.getConnectionLocal();
 					String streamId = current.getClient().getId();
-					RoomClient currentClient = this.clientListManager
+					Client currentClient = this.clientListManager
 							.getClientByStreamId(streamId, null);
 
 					// Check if this User is simulated in the OpenMeetings
@@ -704,7 +705,7 @@ public class MainService implements IPendingServiceCallback {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			IConnection current = Red5.getConnectionLocal();
-			RoomClient currentClient = this.clientListManager
+			Client currentClient = this.clientListManager
 					.getClientByStreamId(current.getClient().getId(), null);
 			
 			scopeApplicationAdapter.roomLeaveByScope(currentClient,current.getScope(), false);
@@ -969,12 +970,12 @@ public class MainService implements IPendingServiceCallback {
 	 * @return - empty map
 	 */
 	@Deprecated
-	public LinkedHashMap<Integer, RoomClient> getUsersByDomain(String SID,
+	public LinkedHashMap<Integer, Client> getUsersByDomain(String SID,
 			String domain) {
 		Long users_id = sessionManagement.checkSession(SID);
 		Long user_level = userManagement.getUserLevelByID(users_id);
 		if (authLevelManagement.checkUserLevel(user_level)) {
-			LinkedHashMap<Integer, RoomClient> lMap = new LinkedHashMap<Integer, RoomClient>();
+			LinkedHashMap<Integer, Client> lMap = new LinkedHashMap<Integer, Client>();
 			// Integer counter = 0;
 			// for (Iterator<String> it =
 			// Application.getClientList().keySet().iterator();it.hasNext();) {

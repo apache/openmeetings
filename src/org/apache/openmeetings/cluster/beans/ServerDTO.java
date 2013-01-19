@@ -20,6 +20,14 @@ package org.apache.openmeetings.cluster.beans;
 
 import org.apache.openmeetings.persistence.beans.basic.Server;
 
+/**
+ * 
+ * Bean send to the client about the server he is going to use for the conference 
+ * session
+ * 
+ * @author sebawagner
+ *
+ */
 public class ServerDTO {
 
 	private Long id;

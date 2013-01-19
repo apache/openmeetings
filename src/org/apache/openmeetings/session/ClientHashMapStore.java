@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.conference.room;
+package org.apache.openmeetings.session;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -33,9 +33,9 @@ import java.util.Random;
 import java.util.Set;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.conference.room.cache.HashMapStore;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.persistence.beans.basic.Server;
+import org.apache.openmeetings.session.cache.HashMapStore;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -47,10 +47,10 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author sebawagner
  * 
  */
-public class ClientListHashMapStore implements IClientList {
+public class ClientHashMapStore implements ISessionStore {
 
 	protected static final Logger log = Red5LoggerFactory.getLogger(
-			ClientListHashMapStore.class, OpenmeetingsVariables.webAppRootKey);
+			ClientHashMapStore.class, OpenmeetingsVariables.webAppRootKey);
 	
 	protected static HashMapStore cache = new HashMapStore();
 	
@@ -59,13 +59,13 @@ public class ClientListHashMapStore implements IClientList {
 	@Autowired
 	private ManageCryptStyle manageCryptStyle;
 	
-	public synchronized RoomClient addClientListItem(String streamId,
+	public synchronized IClientSession addClientListItem(String streamId,
 			String scopeName, Integer remotePort, String remoteAddress,
 			String swfUrl, boolean isAVClient) {
 		try {
 
 			// Store the Connection into a bean and add it to the HashMap
-			RoomClient rcm = new RoomClient();
+			Client rcm = new Client();
 			rcm.setConnectedSince(new Date());
 			rcm.setStreamid(streamId);
 			rcm.setScope(scopeName);
@@ -95,15 +95,15 @@ public class ClientListHashMapStore implements IClientList {
 		return null;
 	}
 
-	public synchronized Collection<RoomClient> getAllClients() {
-		HashMap<String, RoomClient> clients = cache.getClientsByServer(null);
+	public synchronized Collection<Client> getAllClients() {
+		HashMap<String, Client> clients = cache.getClientsByServer(null);
 		if (clients == null) {
-			return new ArrayList<RoomClient>(0);
+			return new ArrayList<Client>(0);
 		}
 		return clients.values();
 	}
 
-	public synchronized RoomClient getClientByStreamId(String streamId, Server server) {
+	public synchronized Client getClientByStreamId(String streamId, Server server) {
 		try {
 			if (!cache.containsKey(server, streamId)) {
 				log.debug("Tried to get a non existing Client " + streamId);
@@ -116,14 +116,14 @@ public class ClientListHashMapStore implements IClientList {
 		return null;
 	}
 
-	public synchronized RoomClient getSyncClientByStreamId(String streamId) {
+	public synchronized IClientSession getSyncClientByStreamId(String streamId) {
 		try {
 			if (!cache.containsKey(null, streamId)) {
 				log.debug("Tried to get a non existing Client " + streamId);
 				return null;
 			}
 
-			RoomClient rcl = cache.get(null, streamId);
+			IClientSession rcl = cache.get(null, streamId);
 
 			if (rcl == null) {
 				return null;
@@ -140,9 +140,9 @@ public class ClientListHashMapStore implements IClientList {
 		return null;
 	}
 
-	public RoomClient getClientByPublicSID(String publicSID, boolean isAVClient, Server server) {
+	public Client getClientByPublicSID(String publicSID, boolean isAVClient, Server server) {
 		try {
-			for (RoomClient rcl : cache.getClientsByPublicSID(server, publicSID)) {
+			for (Client rcl : cache.getClientsByPublicSID(server, publicSID)) {
 				if (rcl.getIsAVClient() != isAVClient) {
 					continue;
 				}
@@ -156,8 +156,8 @@ public class ClientListHashMapStore implements IClientList {
 	
 	public ClientSessionInfo getClientByPublicSIDAnyServer(String publicSID, boolean isAVClient) {
 		try {
-			for (Entry<Long,List<RoomClient>> entry : cache.getClientsByPublicSID(publicSID).entrySet()) {
-				for (RoomClient rcl : entry.getValue()) {
+			for (Entry<Long,List<Client>> entry : cache.getClientsByPublicSID(publicSID).entrySet()) {
+				for (IClientSession rcl : entry.getValue()) {
 					if (rcl.getIsAVClient() != isAVClient) {
 						continue;
 					}
@@ -170,9 +170,9 @@ public class ClientListHashMapStore implements IClientList {
 		return null;
 	}
 
-	public synchronized RoomClient getClientByUserId(Long userId) {
+	public synchronized IClientSession getClientByUserId(Long userId) {
 		try {
-			for (RoomClient rcl : cache.getClientsByUserId(null, userId)) {
+			for (IClientSession rcl : cache.getClientsByUserId(null, userId)) {
 				
 				if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
 					continue;
@@ -191,11 +191,11 @@ public class ClientListHashMapStore implements IClientList {
 	}
 
 	public synchronized Boolean updateAVClientByStreamId(String streamId,
-			RoomClient rcm) {
+			Client rcm) {
 		try {
 
 			// get the corresponding user session object and update the settings
-			RoomClient rclUsual = getClientByPublicSID(rcm.getPublicSID(),
+			Client rclUsual = getClientByPublicSID(rcm.getPublicSID(),
 					false, null);
 			if (rclUsual != null) {
 				rclUsual.setBroadCastID(rcm.getBroadCastID());
@@ -204,7 +204,7 @@ public class ClientListHashMapStore implements IClientList {
 				rclUsual.setVWidth(rcm.getVWidth());
 				rclUsual.setVX(rcm.getVX());
 				rclUsual.setVY(rcm.getVY());
-				RoomClient rclSaved = cache.get(null, rclUsual.getStreamid());
+				IClientSession rclSaved = cache.get(null, rclUsual.getStreamid());
 				if (rclSaved != null) {
 					cache.put(null,rclUsual.getStreamid(), rclUsual);
 				} else {
@@ -221,10 +221,10 @@ public class ClientListHashMapStore implements IClientList {
 	}
 
 	public synchronized Boolean updateClientByStreamId(String streamId,
-			RoomClient rcm, boolean updateRoomCount) {
+			Client rcm, boolean updateRoomCount) {
 		try {
 			
-			RoomClient rclSaved = cache.get(null, streamId);
+			IClientSession rclSaved = cache.get(null, streamId);
 			
 			if (rclSaved != null) {
 				cache.put(null, streamId, rcm);
@@ -254,11 +254,11 @@ public class ClientListHashMapStore implements IClientList {
 		return null;
 	}
 
-	public synchronized ArrayList<RoomClient> getClientListByRoom(Long roomId, Server server) {
-		ArrayList<RoomClient> roomClientList = new ArrayList<RoomClient>();
+	public synchronized ArrayList<Client> getClientListByRoom(Long roomId, Server server) {
+		ArrayList<Client> roomClientList = new ArrayList<Client>();
 		try {
 
-			for (RoomClient rcl : cache.getClientsByRoomId(server, roomId).values()) {
+			for (Client rcl : cache.getClientsByRoomId(server, roomId).values()) {
 
 				if (rcl.getIsScreenClient() == null || rcl.getIsScreenClient()) {
 					continue;
@@ -279,7 +279,7 @@ public class ClientListHashMapStore implements IClientList {
 		return roomClientList;
 	}
 
-	public synchronized Collection<RoomClient> getClientListByRoomAll(Long roomId, Server server) {
+	public synchronized Collection<Client> getClientListByRoomAll(Long roomId, Server server) {
 		try {
 			return cache.getClientsByRoomId(server, roomId).values();
 		} catch (Exception err) {
@@ -288,10 +288,10 @@ public class ClientListHashMapStore implements IClientList {
 		return null;
 	}
 
-	public synchronized List<RoomClient> getCurrentModeratorByRoom(Long room_id) {
-		List<RoomClient> rclList = new LinkedList<RoomClient>();
-		List<RoomClient> currentClients = this.getClientListByRoom(room_id, null);
-		for (RoomClient rcl : currentClients) {
+	public synchronized List<Client> getCurrentModeratorByRoom(Long room_id) {
+		List<Client> rclList = new LinkedList<Client>();
+		List<Client> currentClients = this.getClientListByRoom(room_id, null);
+		for (Client rcl : currentClients) {
 			if (rcl.getIsMod()) {
 				rclList.add(rcl);
 			}
@@ -304,13 +304,13 @@ public class ClientListHashMapStore implements IClientList {
 	public synchronized SearchResult<ClientSession> getListByStartAndMax(
 			int start, int max, String orderby, boolean asc) {
 		SearchResult<ClientSession> sResult = new SearchResult<ClientSession>();
-		sResult.setObjectName(RoomClient.class.getName());
+		sResult.setObjectName(Client.class.getName());
 		sResult.setRecords(Long.valueOf(cache.size()).longValue());
 		ArrayList<ClientSession> myList = new ArrayList<ClientSession>(cache.size());
 		
 		//FIXME: Improve the handling of the Arrays/Map/List so that this re-parsing is not needed
-		for (Entry<Long, LinkedHashMap<String, RoomClient>> entry : cache.values().entrySet()) {
-			for (RoomClient rcl : entry.getValue().values()) {
+		for (Entry<Long, LinkedHashMap<String, Client>> entry : cache.values().entrySet()) {
+			for (IClientSession rcl : entry.getValue().values()) {
 				myList.add(new ClientSession(entry.getKey(), rcl));
 			}
 		}
@@ -320,9 +320,9 @@ public class ClientListHashMapStore implements IClientList {
 	}
 
 	public long getRecordingCount(long roomId) {
-		List<RoomClient> currentClients = this.getClientListByRoom(roomId, null);
+		List<Client> currentClients = this.getClientListByRoom(roomId, null);
 		int numberOfRecordingUsers = 0;
-		for (RoomClient rcl : currentClients) {
+		for (IClientSession rcl : currentClients) {
 			if (rcl.isStartRecording()) {
 				numberOfRecordingUsers++;
 			}
@@ -331,9 +331,9 @@ public class ClientListHashMapStore implements IClientList {
 	}
 
 	public long getPublishingCount(long roomId) {
-		List<RoomClient> currentClients = this.getClientListByRoom(roomId, null);
+		List<Client> currentClients = this.getClientListByRoom(roomId, null);
 		int numberOfPublishingUsers = 0;
-		for (RoomClient rcl : currentClients) {
+		for (IClientSession rcl : currentClients) {
 			if (rcl.isStreamPublishStarted()) {
 				numberOfPublishingUsers++;
 			}

@@ -38,8 +38,6 @@ import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.conference.room.IClientList;
-import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
@@ -58,6 +56,9 @@ import org.apache.openmeetings.persistence.beans.user.Userlevel;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;
+import org.apache.openmeetings.session.Client;
+import org.apache.openmeetings.session.IClientSession;
+import org.apache.openmeetings.session.ISessionStore;
 import org.apache.openmeetings.templates.ResetPasswordTemplate;
 import org.apache.openmeetings.utils.DaoHelper;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
@@ -112,7 +113,7 @@ public class Usermanagement {
 	@Autowired
 	private AuthLevelmanagement authLevelManagement;
 	@Autowired
-	private IClientList clientListManager;
+	private ISessionStore clientListManager;
 	@Autowired
 	private ServerDao serverDao;
 
@@ -228,7 +229,7 @@ public class Usermanagement {
 	 * @return
 	 */
 	public Object loginUser(String SID, String userOrEmail, String userpass,
-			RoomClient currentClient, IClient client, Boolean storePermanent) {
+			IClientSession currentClient, IClient client, Boolean storePermanent) {
 		try {
 			log.debug("Login user SID : " + SID + " Stored Permanent :"
 					+ storePermanent);
@@ -1457,7 +1458,7 @@ public class Usermanagement {
 
 				sessionManagement.clearSessionByRoomId(room_id);
 
-				for (RoomClient rcl : clientListManager.getClientListByRoom(room_id, null)) {
+				for (Client rcl : clientListManager.getClientListByRoom(room_id, null)) {
 					if (rcl == null) {
 						return true;
 					}
@@ -1493,7 +1494,7 @@ public class Usermanagement {
 			// admins only
 			if (authLevelManagement.checkWebServiceLevel(user_level)) {
 
-				RoomClient rcl = clientListManager
+				Client rcl = clientListManager
 						.getClientByPublicSID(publicSID, false, null);
 
 				if (rcl == null) {

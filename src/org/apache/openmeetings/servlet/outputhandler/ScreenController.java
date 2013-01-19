@@ -30,11 +30,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang.StringUtils;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.conference.room.IClientList;
-import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.session.IClientSession;
+import org.apache.openmeetings.session.ISessionStore;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -53,7 +53,7 @@ public class ScreenController {
 			ScreenController.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private IClientList clientListManager;
+	private ISessionStore clientListManager;
 	@Autowired
 	public Sessionmanagement sessionManagement;
 	@Autowired
@@ -182,7 +182,7 @@ public class ScreenController {
 			if (port == null) {
 				throw new Exception("port is empty: ");
 			}
-			RoomClient rc = clientListManager.getClientByPublicSID(publicSID, false, null);
+			IClientSession rc = clientListManager.getClientByPublicSID(publicSID, false, null);
 			if (rc == null) {
 				throw new Exception("port is empty: ");
 			}

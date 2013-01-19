@@ -28,8 +28,6 @@ import java.util.Set;
 
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.conference.room.IClientList;
-import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.conference.whiteboard.WhiteboardManagement;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
@@ -41,6 +39,8 @@ import org.apache.openmeetings.documents.LibraryDocumentConverter;
 import org.apache.openmeetings.documents.LibraryWmlLoader;
 import org.apache.openmeetings.documents.LoadLibraryPresentation;
 import org.apache.openmeetings.persistence.beans.files.FileExplorerItem;
+import org.apache.openmeetings.session.IClientSession;
+import org.apache.openmeetings.session.ISessionStore;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.crypt.MD5;
 import org.red5.logging.Red5LoggerFactory;
@@ -63,7 +63,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 			ConferenceLibrary.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private IClientList clientListManager = null;
+	private ISessionStore clientListManager = null;
 	@Autowired
 	private Sessionmanagement sessionManagement;
 	@Autowired
@@ -180,7 +180,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
 				IConnection current = Red5.getConnectionLocal();
-				RoomClient currentClient = this.clientListManager
+				IClientSession currentClient = this.clientListManager
 						.getClientByStreamId(current.getClient().getId(), null);
 
 				if (currentClient == null) {
@@ -223,7 +223,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 					for (IConnection conn : conset) {
 						if (conn != null) {
 							if (conn instanceof IServiceCapableConnection) {
-								RoomClient rcl = this.clientListManager
+								IClientSession rcl = this.clientListManager
 										.getClientByStreamId(conn.getClient()
 												.getId(), null);
 								if ((rcl == null)
@@ -294,7 +294,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 				IConnection current = Red5.getConnectionLocal();
 				String streamid = current.getClient().getId();
 
-				RoomClient currentClient = this.clientListManager
+				IClientSession currentClient = this.clientListManager
 						.getClientByStreamId(streamid, null);
 
 				Long room_id = currentClient.getRoom_id();

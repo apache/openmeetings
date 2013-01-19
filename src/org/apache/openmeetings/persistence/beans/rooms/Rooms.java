@@ -42,9 +42,9 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.openjpa.persistence.ElementDependent;
-import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
 import org.apache.openmeetings.persistence.beans.sip.asterisk.MeetMe;
+import org.apache.openmeetings.session.Client;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -227,7 +227,7 @@ public class Rooms implements Serializable, IDataProviderEntity {
 	private List<Rooms_Organisation> roomOrganisations = new ArrayList<Rooms_Organisation>();
 
 	@Transient
-	private List<RoomClient> currentusers;
+	private List<Client> currentusers;
 
 	public String getComment() {
 		return comment;
@@ -293,11 +293,11 @@ public class Rooms implements Serializable, IDataProviderEntity {
 		this.ispublic = ispublic;
 	}
 
-	public List<RoomClient> getCurrentusers() {
+	public List<Client> getCurrentusers() {
 		return currentusers;
 	}
 
-	public void setCurrentusers(List<RoomClient> currentusers) {
+	public void setCurrentusers(List<Client> currentusers) {
 		this.currentusers = currentusers;
 	}
 

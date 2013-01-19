@@ -16,23 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.conference.room;
+package org.apache.openmeetings.session;
+
 
 public class ClientSessionInfo {
 	
-	private RoomClient rcl;
+	private IClientSession rcl;
 	public Long serverId;
 	
-	public ClientSessionInfo(RoomClient rcl, Long serverId) {
+	public ClientSessionInfo(IClientSession rcl, Long serverId) {
 		super();
 		this.rcl = rcl;
 		this.serverId = serverId;
 	}
 	
-	public RoomClient getRcl() {
+	public IClientSession getRcl() {
 		return rcl;
 	}
-	public void setRcl(RoomClient rcl) {
+	public void setRcl(IClientSession rcl) {
 		this.rcl = rcl;
 	}
 	public Long getServerId() {

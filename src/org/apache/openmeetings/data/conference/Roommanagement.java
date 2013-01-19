@@ -32,7 +32,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.apache.openmeetings.conference.room.IClientList;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
@@ -45,6 +44,7 @@ import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms_Organisation;
 import org.apache.openmeetings.persistence.beans.sip.asterisk.MeetMe;
 import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.session.ISessionStore;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,7 +73,7 @@ public class Roommanagement {
 	@Autowired
 	private AuthLevelmanagement authLevelManagement;
 	@Autowired
-	private IClientList clientListManager;
+	private ISessionStore clientListManager;
     @Autowired
 	private ConfigurationDao configurationDaoImpl;
     @Autowired

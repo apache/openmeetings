@@ -29,8 +29,6 @@ import java.util.Map;
 import org.apache.axis2.AxisFault;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.conference.room.IClientList;
-import org.apache.openmeetings.conference.room.RoomClient;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
@@ -49,6 +47,9 @@ import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.remote.ConferenceService;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.session.Client;
+import org.apache.openmeetings.session.IClientSession;
+import org.apache.openmeetings.session.ISessionStore;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -85,7 +86,7 @@ public class RoomWebService {
 	@Autowired
 	private ConferenceService conferenceService;
 	@Autowired
-	private IClientList clientListManager;
+	private ISessionStore clientListManager;
 	@Autowired
 	private MeetingMemberLogic meetingMemberLogic;
 	@Autowired
@@ -570,13 +571,13 @@ public class RoomWebService {
 				roomReturn.setName(room.getName());
 				roomReturn.setRoom_id(room.getRooms_id());
 
-				List<RoomClient> map = clientListManager
+				List<Client> map = clientListManager
 						.getClientListByRoom(room.getRooms_id(), null);
 
 				RoomUser[] roomUsers = new RoomUser[map.size()];
 
 				int i = 0;
-				for (RoomClient rcl : map) {
+				for (IClientSession rcl : map) {
 					RoomUser roomUser = new RoomUser();
 					roomUser.setFirstname(rcl.getFirstname());
 					roomUser.setLastname(rcl.getLastname());
@@ -2063,7 +2064,7 @@ public class RoomWebService {
 				RoomUser[] rUser = new RoomUser[room.getCurrentusers().size()];
 
 				int i = 0;
-				for (RoomClient rcl : room.getCurrentusers()) {
+				for (IClientSession rcl : room.getCurrentusers()) {
 
 					RoomUser ru = new RoomUser();
 					ru.setFirstname(rcl.getFirstname());
@@ -2130,7 +2131,7 @@ public class RoomWebService {
 				RoomUser[] rUser = new RoomUser[room.getCurrentusers().size()];
 
 				int i = 0;
-				for (RoomClient rcl : room.getCurrentusers()) {
+				for (IClientSession rcl : room.getCurrentusers()) {
 
 					RoomUser ru = new RoomUser();
 					ru.setFirstname(rcl.getFirstname());

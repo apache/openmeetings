@@ -16,7 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.conference.room;
+package org.apache.openmeetings.session;
+
+import org.apache.openmeetings.persistence.beans.basic.Server;
+
 
 
 /**
@@ -24,8 +27,10 @@ package org.apache.openmeetings.conference.room;
  * Session object, is never populated to the clients, stays on the server
  * 
  * So in this object you can store meta information that the client does not
- * need to know. This is handy because the RoomClient object otherwise gets too
+ * need to know. This is handy because the {@link IClientSession} object otherwise gets too
  * big.
+ * 
+ * For example the {@link Server} can be referenced here.
  * 
  * @author sebawagner
  * 
@@ -38,9 +43,9 @@ public class ClientSession {
 	 */
 	private Long server;
 
-	private RoomClient roomClient;
+	private IClientSession roomClient;
 
-	public ClientSession(Long server, RoomClient roomClient) {
+	public ClientSession(Long server, IClientSession roomClient) {
 		super();
 		this.server = server;
 		this.roomClient = roomClient;
@@ -57,11 +62,11 @@ public class ClientSession {
 		this.server = server;
 	}
 
-	public RoomClient getRoomClient() {
+	public IClientSession getRoomClient() {
 		return roomClient;
 	}
 
-	public void setRoomClient(RoomClient roomClient) {
+	public void setRoomClient(IClientSession roomClient) {
 		this.roomClient = roomClient;
 	}
 

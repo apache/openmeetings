@@ -22,14 +22,14 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.Random;
 
-import org.apache.openmeetings.conference.room.IClientList;
+import org.apache.openmeetings.session.ISessionStore;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestClientListManager extends AbstractOpenmeetingsSpringTest {
 	@Autowired
-	private IClientList clientListManager;
+	private ISessionStore clientListManager;
 	
 	@Test
 	public void addClientListItem() {
