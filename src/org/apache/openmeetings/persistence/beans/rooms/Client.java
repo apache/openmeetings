@@ -16,11 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.session;
+package org.apache.openmeetings.persistence.beans.rooms;
 
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.apache.openmeetings.session.IClientSession;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 
 /**
@@ -28,222 +36,337 @@ import org.apache.openmeetings.utils.math.CalendarPatterns;
  * @author sebawagner
  *
  */
+@Entity
+@Table(name = "client")
 public class Client implements Serializable, IClientSession {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5980636447877077730L;
 	
-	private static final long serialVersionUID = 1831858089607111565L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="id")
+	private long id;
 	
 	/**
 	 * @see IClientSession#getUsername()
 	 */
+	@Column(name = "username")
 	private String username = "";
+	
 	/**
 	 * @see IClientSession#getStreamid()
 	 */
+	@Column(name = "streamid")
 	private String streamid = "";
+	
 	/**
 	 * @see IClientSession#getScope()
 	 */
+	@Column(name = "scope")
 	private String scope = "";
+	
 	/**
 	 * @see IClientSession#getVWidth()
 	 */
+	@Column(name = "vwidth")
 	private int vWidth = 0;
+	
 	/**
 	 * @see IClientSession#getVHeight()
 	 */
+	@Column(name = "vheight")
 	private int vHeight = 0;
+	
 	/**
 	 * @see IClientSession#getVX()
 	 */
+	@Column(name = "vx")
 	private int vX = 0;
+	
 	/**
 	 * @see IClientSession#getVY()
 	 */
+	@Column(name = "vy")
 	private int vY = 0;
+	
 	/**
 	 * @see IClientSession#getStreamPublishName()
 	 */
+	@Column(name = "stream_publish_name")
 	private String streamPublishName = "";
+	
 	/**
 	 * @see IClientSession#getPublicSID()
 	 */
+	@Column(name = "public_sid")
 	private String publicSID = "";
+	
 	/**
 	 * @see IClientSession#getIsMod()
 	 */
+	@Column(name = "is_mod")
 	private Boolean isMod = false;
+	
 	/**
 	 * @see IClientSession#getIsSuperModerator()
 	 */
+	@Column(name = "is_supermoderator")
 	private Boolean isSuperModerator = false;
+	
 	/**
 	 * @see IClientSession#getCanDraw()
 	 */
+	@Column(name = "can_draw")
 	private Boolean canDraw = false;
+	
 	/**
 	 * @see IClientSession#getCanShare()
 	 */
+	@Column(name = "can_share")
 	private Boolean canShare = false;
+	
 	/**
 	 * @see IClientSession#getCanRemote()
 	 */
+	@Column(name = "can_remote")
 	private Boolean canRemote = false;
+	
 	/**
 	 * @see IClientSession#getCanGiveAudio()
 	 */
+	@Column(name = "can_giveaudio")
     private Boolean canGiveAudio = false;
+	
     /**
 	 * @see IClientSession#getConnectedSince()
 	 */
+	@Column(name = "connected_since")
 	private Date connectedSince;
+	
 	/**
 	 * @see IClientSession#getFormatedDate()
 	 */
+	@Column(name = "formated_date")
 	private String formatedDate;
+	
 	/**
 	 * @see IClientSession#getIsScreenClient()
 	 */
+	@Column(name = "is_screenclient")
 	private Boolean isScreenClient = false;
+	
 	/**
 	 * @see IClientSession#getIsAVClient()
 	 */
+	@Column(name = "is_avclient")
 	private boolean isAVClient = false;
+	
 	/**
 	 * @see IClientSession#getUsercolor()
 	 */
+	@Column(name = "usercolor")
 	private String usercolor;
+	
 	/**
 	 * @see IClientSession#getUserpos()
 	 */
+	@Column(name = "userpos")
 	private Integer userpos;
+	
 	/**
 	 * @see IClientSession#getUserip()
 	 */
+	@Column(name = "userip")
 	private String userip;
+	
 	/**
 	 * @see IClientSession#getUserport()
 	 */
+	@Column(name = "userport")
 	private int userport;
+	
 	/**
 	 * @see IClientSession#getRoom_id()
 	 */
+	@Column(name = "room_id")
 	private Long room_id;
+	
 	/**
 	 * @see IClientSession#getRoomEnter()
 	 */
+	@Column(name = "room_enter")
 	private Date roomEnter = null;
+	
 	/**
 	 * @see IClientSession#getBroadCastID()
 	 */
+	@Column(name = "broadcast_id")
 	private long broadCastID = -2;
+	
 	/**
 	 * @see IClientSession#getUser_id()
 	 */
+	@Column(name = "user_id")
 	private Long user_id = null;
+	
 	/**
 	 * @see IClientSession#getFirstname()
 	 */
+	@Column(name = "firstname")
 	private String firstname = "";
+	
 	/**
 	 * @see IClientSession#getLastname()
 	 */
+	@Column(name = "lastname")
 	private String lastname = "";
+	
 	/**
 	 * @see IClientSession#getMail()
 	 */
+	@Column(name = "mail")
 	private String mail;
+	
 	/**
 	 * @see IClientSession#getLastLogin()
 	 */
+	@Column(name = "last_login")
 	private String lastLogin;
+	
 	/**
 	 * @see IClientSession#getOfficial_code()
 	 */
+	@Column(name = "official_code")
 	private String official_code;
+	
 	/**
 	 * @see IClientSession#getPicture_uri()
 	 */
+	@Column(name = "picture_uri")
 	private String picture_uri;
+	
 	/**
 	 * @see IClientSession#getLanguage()
 	 */
+	@Column(name = "language")
 	private String language = "";
+	
 	/**
 	 * @see IClientSession#getAvsettings()
 	 */
+	@Column(name = "avsettings")
 	private String avsettings = "";
+	
 	/**
 	 * @see IClientSession#getSwfurl()
 	 */
 	// FIXME: Move to {@link ClientSession}
+	@Column(name = "swfurl")
 	private String swfurl;
+	
 	/**
 	 * @see IClientSession#getIsRecording()
 	 */
+	@Column(name = "is_recording")
 	private Boolean isRecording = false;
+	
 	/**
 	 * @see IClientSession#getRoomRecordingName()
 	 */
+	@Column(name = "room_recording_name")
 	private String roomRecordingName;
+	
 	/**
 	 * @see IClientSession#getFlvRecordingId()
 	 */
+	@Column(name = "flvrecording_id")
 	private Long flvRecordingId;
+	
 	/**
 	 * @see IClientSession#getFlvRecordingMetaDataId()
 	 */
+	@Column(name = "flvrecordingmetadata_id")
 	private Long flvRecordingMetaDataId;
+	
 	/**
 	 * @see IClientSession#getOrganization_id()
 	 */
+	@Column(name = "organization_id")
 	private Long organization_id;
+	
 	/**
 	 * @see IClientSession#isStartRecording()
 	 */
+	@Column(name = "start_recording")
 	private boolean startRecording = false;
+	
 	/**
 	 * @see IClientSession#isStartStreaming()
 	 */
+	@Column(name = "start_streaming")
 	private boolean startStreaming = false;
+	
 	/**
 	 * @see IClientSession#isScreenPublishStarted()
 	 */
+	@Column(name = "screen_publish_started")
 	private boolean screenPublishStarted = false;
+	
 	/**
 	 * @see IClientSession#isStreamPublishStarted()
 	 */
+	@Column(name = "stream_publish_started")
 	private boolean streamPublishStarted = false;
+	
 	/**
 	 * @see IClientSession#getIsBroadcasting()
 	 */
+	@Column(name = "is_broadcasting")
 	private Boolean isBroadcasting = false;
+	
 	/**
 	 * @see IClientSession#getExternalUserId()
 	 */
+	@Column(name = "external_user_id")
 	private String externalUserId;
+	
 	/**
 	 * @see IClientSession#getExternalUserType()
 	 */
+	@Column(name = "external_user_type")
     private String externalUserType;
+	
     /**
 	 * @see IClientSession#getInterviewPodId()
 	 */
+	@Column(name = "interview_pod_id")
     private Integer interviewPodId = null;
+	
     /**
 	 * @see IClientSession#getAllowRecording()
 	 */
+	@Column(name = "allow_recording")
     private Boolean allowRecording = true;
+	
     /**
 	 * @see IClientSession#getZombieCheckFlag()
 	 */
+	@Column(name = "zombie_check_flag")
 	private Boolean zombieCheckFlag = false;
+	
 	/**
 	 * @see IClientSession#getMicMuted()
 	 */
+	@Column(name = "mic_muted")
     private Boolean micMuted = false;
+	
     /**
 	 * @see IClientSession#isSipTransport()
 	 */
+	@Column(name = "sip_transport")
     private boolean sipTransport = false;
     
     public Client() {
@@ -277,6 +400,14 @@ public class Client implements Serializable, IClientSession {
 		this.username = username;
 		this.firstname = firstname;
 		this.lastname = lastname;
+	}
+	
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public Date getConnectedSince() {
@@ -719,5 +850,4 @@ public class Client implements Serializable, IClientSession {
 				+ " avsettings: " + this.getAvsettings() //
 				;
 	}
-	
 }

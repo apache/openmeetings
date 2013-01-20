@@ -38,8 +38,8 @@ import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.ServerDao;
 import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
-import org.apache.openmeetings.data.conference.RoomDAO;
 import org.apache.openmeetings.data.conference.Roommanagement;
+import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.logs.ConferenceLogDao;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.data.user.dao.UsersDao;
@@ -103,7 +103,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	@Autowired
 	private UsersDao usersDao;
 	@Autowired
-	private RoomDAO roomDao;
+	private RoomDao roomDao;
 	@Autowired
 	private MeetingMemberDao meetingMemberDao;
 	@Autowired

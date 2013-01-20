@@ -53,6 +53,7 @@
 		<class>org.apache.openmeetings.persistence.beans.poll.PollType</class>
 		<class>org.apache.openmeetings.persistence.beans.poll.RoomPoll</class>
 		<class>org.apache.openmeetings.persistence.beans.poll.RoomPollAnswers</class>
+		<class>org.apache.openmeetings.persistence.beans.rooms.Client</class>
 		<class>org.apache.openmeetings.persistence.beans.rooms.RoomModerators</class>
 		<class>org.apache.openmeetings.persistence.beans.rooms.Rooms</class>
 		<class>org.apache.openmeetings.persistence.beans.rooms.RoomTypes</class>

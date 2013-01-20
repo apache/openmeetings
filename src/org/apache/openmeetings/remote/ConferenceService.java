@@ -38,8 +38,8 @@ import org.apache.openmeetings.data.basic.Sessionmanagement;
 import org.apache.openmeetings.data.basic.dao.ServerDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
-import org.apache.openmeetings.data.conference.RoomDAO;
 import org.apache.openmeetings.data.conference.Roommanagement;
+import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.conference.dao.RoomModeratorsDao;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.persistence.beans.basic.Server;
@@ -80,7 +80,7 @@ public class ConferenceService {
 	@Autowired
 	private Roommanagement roommanagement;
 	@Autowired
-	private RoomDAO roomDao;
+	private RoomDao roomDao;
 	@Autowired
 	private RoomModeratorsDao roomModeratorsDao;
 	@Autowired

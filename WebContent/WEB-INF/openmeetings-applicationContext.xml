@@ -188,10 +188,10 @@
 	<bean id="appointmentCategoryDaoImpl"
 		class="org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDao" />
 	<bean id="roommanagement" class="org.apache.openmeetings.data.conference.Roommanagement" />
-	<bean id="roomDAO" class="org.apache.openmeetings.data.conference.RoomDAO" />
+	<bean id="roomDao" class="org.apache.openmeetings.data.conference.dao.RoomDao" />
 	<bean id="organisationmanagement" class="org.apache.openmeetings.data.user.Organisationmanagement" />
-	<bean id="organisationDAO" class="org.apache.openmeetings.data.user.dao.OrganisationDao" />
-	<bean id="organisationUserDAO" class="org.apache.openmeetings.data.user.dao.OrganisationUserDao" />
+	<bean id="organisationDao" class="org.apache.openmeetings.data.user.dao.OrganisationDao" />
+	<bean id="organisationUserDao" class="org.apache.openmeetings.data.user.dao.OrganisationUserDao" />
 	<bean id="salutationmanagement" class="org.apache.openmeetings.data.user.dao.SalutationDao" />
 	<bean id="errorManagement" class="org.apache.openmeetings.data.basic.ErrorManagement" />
 	<bean id="navimanagement" class="org.apache.openmeetings.data.basic.Navimanagement" />

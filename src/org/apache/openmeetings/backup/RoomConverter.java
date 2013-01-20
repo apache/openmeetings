@@ -20,20 +20,20 @@ package org.apache.openmeetings.backup;
 
 import java.util.Map;
 
-import org.apache.openmeetings.data.conference.RoomDAO;
+import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
 public class RoomConverter extends OmConverter<Rooms> {
-	private RoomDAO roomDao;
+	private RoomDao roomDao;
 	private Map<Long, Long> idMap;
 	
 	public RoomConverter() {
 		//default constructor is for export
 	}
 	
-	public RoomConverter(RoomDAO roomDao, Map<Long, Long> idMap) {
+	public RoomConverter(RoomDao roomDao, Map<Long, Long> idMap) {
 		this.roomDao = roomDao;
 		this.idMap = idMap;
 	}

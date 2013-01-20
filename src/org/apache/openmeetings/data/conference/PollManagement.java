@@ -28,6 +28,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.persistence.beans.poll.PollType;
 import org.apache.openmeetings.persistence.beans.poll.RoomPoll;
@@ -50,7 +51,7 @@ public class PollManagement {
 	@Autowired
 	private Usermanagement usermanagement;
 	@Autowired
-	private RoomDAO roomDao;
+	private RoomDao roomDao;
 
 	public Long addPollType(Long labelId, Boolean isNumeric) {
 		log.debug("Adding poll type: " + labelId + ", " + isNumeric);

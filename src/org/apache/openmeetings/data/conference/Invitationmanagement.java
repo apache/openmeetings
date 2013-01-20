@@ -37,6 +37,7 @@ import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
+import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
@@ -83,7 +84,7 @@ public class Invitationmanagement {
 	@Autowired
 	private ManageCryptStyle manageCryptStyle;
 	@Autowired
-	private RoomDAO roomDao;
+	private RoomDao roomDao;
 	@Autowired
 	private UsersDao usersDao;
 	@Autowired

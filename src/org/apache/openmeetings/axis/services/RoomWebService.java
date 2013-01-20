@@ -35,8 +35,8 @@ import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.management.MeetingMemberLogic;
 import org.apache.openmeetings.data.conference.Invitationmanagement;
-import org.apache.openmeetings.data.conference.RoomDAO;
 import org.apache.openmeetings.data.conference.Roommanagement;
+import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingDao;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
@@ -90,7 +90,7 @@ public class RoomWebService {
 	@Autowired
 	private MeetingMemberLogic meetingMemberLogic;
 	@Autowired
-	private RoomDAO roomDao;
+	private RoomDao roomDao;
 
 	/**
 	 * Returns an Object of Type RoomsList which contains a list of

@@ -35,6 +35,7 @@ import javax.persistence.criteria.Root;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
+import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.conference.dao.RoomModeratorsDao;
 import org.apache.openmeetings.data.user.Organisationmanagement;
 import org.apache.openmeetings.data.user.dao.UsersDao;
@@ -77,7 +78,7 @@ public class Roommanagement {
     @Autowired
 	private ConfigurationDao configurationDaoImpl;
     @Autowired
-	private RoomDAO roomDao;
+	private RoomDao roomDao;
 
 	/**
 	 * add a new Record to the table roomtypes

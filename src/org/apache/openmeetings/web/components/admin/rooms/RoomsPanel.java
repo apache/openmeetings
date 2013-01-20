@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.components.admin.rooms;
 
-import org.apache.openmeetings.data.conference.RoomDAO;
+import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
 import org.apache.openmeetings.web.components.admin.SearchableDataView;
@@ -46,7 +46,7 @@ public class RoomsPanel extends AdminPanel {
 	@SuppressWarnings("unchecked")
 	public RoomsPanel(String id) {
 		super(id);
-		SearchableDataView<Rooms> dataView = new SearchableDataView<Rooms>("roomList", new SearchableDataProvider<Rooms>(RoomDAO.class)) {
+		SearchableDataView<Rooms> dataView = new SearchableDataView<Rooms>("roomList", new SearchableDataProvider<Rooms>(RoomDao.class)) {
 			private static final long serialVersionUID = 8715559628755439596L;
 
 			@Override

@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
-import org.apache.openmeetings.data.conference.RoomDAO;
 import org.apache.openmeetings.data.conference.Roommanagement;
+import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentReminderTyps;
@@ -112,7 +112,7 @@ public class CalendarForm extends Form<Appointment> {
 	private List<Rooms> getRoomList() {
 		//FIXME need to be reviewed
 		List<Rooms> result = new ArrayList<Rooms>();
-		RoomDAO dao = Application.getBean(RoomDAO.class);
+		RoomDao dao = Application.getBean(RoomDao.class);
 		result.addAll(dao.getPublicRooms());
 		for (Organisation_Users ou : Application.getBean(UsersDao.class).get(WebSession.getUserId()).getOrganisation_users()) {
 			result.addAll(dao.getOrganisationRooms(ou.getOrganisation().getOrganisation_id()));

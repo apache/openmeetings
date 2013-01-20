@@ -29,7 +29,7 @@ import java.util.Set;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
-import org.apache.openmeetings.data.conference.RoomDAO;
+import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingDao;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingLogDao;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDao;
@@ -89,7 +89,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	@Autowired
 	private UsersDao usersDaoImpl;
 	@Autowired
-	private RoomDAO roomDao;
+	private RoomDao roomDao;
 	@Autowired
 	private FlvRecorderConverterTask flvRecorderConverterTask;
 	@Autowired
