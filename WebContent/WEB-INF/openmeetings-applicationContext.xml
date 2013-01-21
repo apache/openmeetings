@@ -238,6 +238,7 @@
 	<bean id="userContactsDao" class="org.apache.openmeetings.data.user.dao.UserContactsDao" />
 	<bean id="usersDao" class="org.apache.openmeetings.data.user.dao.UsersDao" />
 	<bean id="serverDao" class="org.apache.openmeetings.data.basic.dao.ServerDao" />
+	<bean id="chatDao" class="org.apache.openmeetings.data.chat.ChatDao" />
 
 	<!-- No Interface -->
 	<bean id="manageCryptStyle" class="org.apache.openmeetings.utils.crypt.ManageCryptStyle" />

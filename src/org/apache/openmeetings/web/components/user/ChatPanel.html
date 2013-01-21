@@ -28,8 +28,13 @@
 					.addClass('ui-icon-carat-1-' + (chat.height() < 20 ? 's' : 'n'));
 				chat.animate({ height: chat.height() < 20 ? "300px" : "16px" }, 1000);
 			}
-			Wicket.Event.subscribe("/websocket/message", function(jqEvent, message) {
-				$('#messageArea').append('<div>' + message + '</div>'); 
+			function addChatMessage(m) {
+				if (m && m.type == "chat") {
+					$('#messageArea').append('<div>' + m.msg.message + '</div>');
+				}
+			}
+			Wicket.Event.subscribe("/websocket/message", function(jqEvent, msg) {
+				addChatMessage(jQuery.parseJSON(msg)); 
 			});
 		</script>
 	</wicket:head>

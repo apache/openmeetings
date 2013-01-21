@@ -38,6 +38,7 @@
 		<class>org.apache.openmeetings.persistence.beans.calendar.AppointmentCategory</class>
 		<class>org.apache.openmeetings.persistence.beans.calendar.AppointmentReminderTyps</class>
 		<class>org.apache.openmeetings.persistence.beans.calendar.MeetingMember</class>
+		<class>org.apache.openmeetings.persistence.beans.chat.ChatMessage</class>
 		<class>org.apache.openmeetings.persistence.beans.domain.Organisation</class>
 		<class>org.apache.openmeetings.persistence.beans.domain.Organisation_Users</class>
 		<class>org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording</class>
