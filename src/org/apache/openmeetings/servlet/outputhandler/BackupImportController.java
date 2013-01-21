@@ -371,7 +371,7 @@ public class BackupImportController extends AbstractUploadController {
 
 				// We need to reset this as openJPA reject to store them otherwise
 				a.setAppointmentId(null);
-				if (a.getUserId().getUser_id() == null) {
+				if (a.getUserId() != null && a.getUserId().getUser_id() == null) {
 					a.setUserId(null);
 				}
 				Long newAppId = appointmentDao.addAppointmentObj(a);

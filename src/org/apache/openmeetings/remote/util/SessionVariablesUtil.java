@@ -73,7 +73,7 @@ public class SessionVariablesUtil {
 	/**
 	 * if there is no user id set, it will return Long.MIN_VALUE
 	 * @param client
-	 * @return
+	 * @return - user id set or Long.MIN_VALUE or null if any exception happens
 	 */
 	public static Long getUserId(IClient client) {
 		try {

@@ -743,7 +743,7 @@ public class ConferenceService {
 	 * Get some statistics about the current sessions handled by this instance
 	 * 
 	 * @param SID
-	 * @return
+	 * @return - session statistics as String
 	 */
 	public String getSessionStatistics(String SID) {
 		try {

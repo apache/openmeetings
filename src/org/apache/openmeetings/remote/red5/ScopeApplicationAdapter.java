@@ -2546,7 +2546,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 * @deprecated this method should be reworked to use a single SQL query in
 	 *             the cache to get any client in the current room that is
 	 *             recording instead of iterating through connections!
-	 * @return
+	 * @return true in case there is recording session, false otherwise, null if any exception happend
 	 */
 	public synchronized Boolean getInterviewRecordingStatus() {
 		try {
@@ -2582,7 +2582,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 	/**
 	 * @deprecated @see {@link ScopeApplicationAdapter#getInterviewRecordingStatus()}
-	 * @return
+	 * @return - false if there were existing recording, true if recording was started successfully, null if any exception happens
 	 */
 	public synchronized Boolean startInterviewRecording() {
 		try {
