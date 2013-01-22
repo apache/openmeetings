@@ -464,14 +464,14 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	public synchronized Boolean overwritePublicSID(String newPublicSID) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			Client currentClient = this.clientListManager
-					.getClientByStreamId(current.getClient().getId(), null);
+			IClient c = current.getClient();
+			Client currentClient = clientListManager.getClientByStreamId(c.getId(), null);
 			if (currentClient == null) {
 				return false;
 			}
+			SessionVariablesUtil.initClient(c, SessionVariablesUtil.isAVClient(c), newPublicSID);
 			currentClient.setPublicSID(newPublicSID);
-			this.clientListManager.updateClientByStreamId(current.getClient()
-					.getId(), currentClient, false);
+			clientListManager.updateClientByStreamId(c.getId(), currentClient, false);
 			return true;
 		} catch (Exception err) {
 			log.error("[overwritePublicSID]", err);
