@@ -4254,7 +4254,7 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Только модераторы могут включать или выключать польз-лей глобально! Чтобы выключить ваш микрофон, используйте иконку микрофона!</value>
   </string>
   <string id="1410" name="poll_name">
-    <value>Имя проголосовавшего</value>
+    <value>Название опроса</value>
   </string>
   <string id="1411" name="poll_name">
     <value>Вы</value>
@@ -4278,16 +4278,16 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>Новые сообщения</value>
   </string>
   <string id="1418" name="poll_close">
-    <value>Закрытое голосование</value>
+    <value>Закрытый опрос</value>
   </string>
   <string id="1419" name="poll_close_confirm">
-    <value>Уверены, что хотите закрыть голосование? Больше никто не сможет голосовать.</value>
+    <value>Уверены, что хотите закрыть опрос? Больше никто не сможет голосовать.</value>
   </string>
   <string id="1420" name="poll_delete">
-    <value>Удалить голосование</value>
+    <value>Удалить опрос</value>
   </string>
   <string id="1421" name="poll_delete_confirm">
-    <value>Хотите удалить это голосование? Результаты тоже будут удалены.</value>
+    <value>Хотите удалить этот опрос? Результаты тоже будут удалены.</value>
   </string>
   <string id="1422" name="language_code">
     <value>Код ISO языка</value>
