@@ -1061,7 +1061,7 @@ public class Usermanagement {
 
 	public Long addUserWithExternalKey(long level_id, int availible,
 			int status, String firstname, String login, String lastname,
-			long language_id, String userpass, Adresses address, Date age,
+			long language_id, boolean emptyPass, String userpass, Adresses address, Date age,
 			String hash, String externalUserId, String externalUserType,
 			boolean generateSipUserData, String email, String jNameTimeZone,
 			String pictureuri) {
@@ -1100,7 +1100,7 @@ public class Usermanagement {
 			} else {
 				users.setLanguage_id(null);
 			}
-			users.updatePassword(cryptManager, configDao, userpass);
+			users.updatePassword(cryptManager, configDao, userpass, emptyPass);
 			users.setRegdate(new Date());
 			users.setDeleted(false);
 

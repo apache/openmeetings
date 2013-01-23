@@ -618,7 +618,8 @@ public class MainService implements IPendingServiceCallback {
 									.addUserWithExternalKey(1, 0, 0,
 											userObject.getFirstname(),
 											userObject.getUsername(),
-											userObject.getLastname(), 1L, "",
+											userObject.getLastname(), 1L,
+											true, "", // password is empty by default
 											null, null, "",
 											userObject.getExternalUserId(),
 											userObject.getExternalUserType(),

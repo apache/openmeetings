@@ -346,13 +346,19 @@ public class Users implements Serializable, IDataProviderEntity {
 	}
 
 	public void updatePassword(ManageCryptStyle crypt, ConfigurationDao configDao, String pass) throws NoSuchAlgorithmException {
-		Integer userPassMinimumLength = configDao.getConfValue("user.pass.minimum.length", Integer.class, "4");
-
-		if (userPassMinimumLength == null) {
-			throw new RuntimeException("user.pass.minimum.length problem");
-		}
-		if (pass == null || pass.length() < userPassMinimumLength) {
-			throw new RuntimeException("Password of invalid length is provided");
+		updatePassword(crypt, configDao, pass, false);
+	}
+	
+	public void updatePassword(ManageCryptStyle crypt, ConfigurationDao configDao, String pass, boolean empty) throws NoSuchAlgorithmException {
+		if (!empty) {
+			Integer userPassMinimumLength = configDao.getConfValue("user.pass.minimum.length", Integer.class, "4");
+	
+			if (userPassMinimumLength == null) {
+				throw new RuntimeException("user.pass.minimum.length problem");
+			}
+			if (pass == null || pass.length() < userPassMinimumLength) {
+				throw new RuntimeException("Password of invalid length is provided");
+			}
 		}
 		String sipEnabled = configDao.getConfValue("red5sip.enable", String.class, "no");
         if("yes".equals(sipEnabled)) {
