@@ -1281,9 +1281,9 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		try {
 
 			IConnection current = Red5.getConnectionLocal();
-			String streamid = current.getClient().getId();
-			Client currentClient = this.clientListManager
-					.getClientByStreamId(streamid, null);
+			IClient c = current.getClient();
+			String streamid = c.getId();
+			Client currentClient = clientListManager.getClientByStreamId(streamid, null);
 			currentClient.setAvsettings(avsettings);
 			currentClient.setRoom_id(room_id);
 			currentClient.setPublicSID(publicSID);
@@ -1291,8 +1291,8 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			currentClient.setVHeight(vHeight);
 			currentClient.setInterviewPodId(interviewPodId);
 			// Long room_id = currentClient.getRoom_id();
-			this.clientListManager.updateAVClientByStreamId(streamid,
-					currentClient);
+			clientListManager.updateAVClientByStreamId(streamid, currentClient);
+			SessionVariablesUtil.initClient(c, false, publicSID);
 
 			HashMap<String, Object> hsm = new HashMap<String, Object>();
 			hsm.put("client", currentClient);
@@ -2907,9 +2907,10 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
     public synchronized void setSipTransport(Long room_id, String publicSID, String broadCastId) {
         IConnection current = Red5.getConnectionLocal();
-        String streamid = current.getClient().getId();
+		IClient c = current.getClient();
+        String streamid = c.getId();
         // Notify all clients of the same scope (room)
-        Client currentClient = this.clientListManager.getClientByStreamId(streamid, null);
+        Client currentClient = clientListManager.getClientByStreamId(streamid, null);
         currentClient.setRoom_id(room_id);
         currentClient.setRoomEnter(new Date());
         currentClient.setFirstname("SIP Transport");
@@ -2921,7 +2922,8 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
         currentClient.setVWidth(120);
         currentClient.setVHeight(90);
         currentClient.setSipTransport(true);
-        this.clientListManager.updateClientByStreamId(streamid, currentClient, false);
+        clientListManager.updateClientByStreamId(streamid, currentClient, false);
+		SessionVariablesUtil.initClient(c, false, publicSID); //TODO not sure if this should be marked as AVClient or not 
 
         Collection<Set<IConnection>> conCollection = current
                 .getScope().getConnections();
@@ -2937,7 +2939,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 						continue;
 					}
 					
-                    if (!client.getId().equals(current.getClient().getId())) {
+                    if (!client.getId().equals(c.getId())) {
                         // It is not needed to send back
                         // that event to the actual
                         // Moderator
