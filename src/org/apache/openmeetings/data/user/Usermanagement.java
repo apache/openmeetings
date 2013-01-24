@@ -43,7 +43,6 @@ import org.apache.openmeetings.data.basic.Fieldmanagment;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
-import org.apache.openmeetings.data.basic.dao.ServerDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
@@ -51,14 +50,13 @@ import org.apache.openmeetings.persistence.beans.adresses.Adresses;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
+import org.apache.openmeetings.persistence.beans.rooms.Client;
 import org.apache.openmeetings.persistence.beans.user.Userdata;
 import org.apache.openmeetings.persistence.beans.user.Userlevel;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;
-import org.apache.openmeetings.session.Client;
-import org.apache.openmeetings.session.IClientSession;
-import org.apache.openmeetings.session.ISessionStore;
+import org.apache.openmeetings.session.ISessionManager;
 import org.apache.openmeetings.templates.ResetPasswordTemplate;
 import org.apache.openmeetings.utils.DaoHelper;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
@@ -113,9 +111,7 @@ public class Usermanagement {
 	@Autowired
 	private AuthLevelmanagement authLevelManagement;
 	@Autowired
-	private ISessionStore clientListManager;
-	@Autowired
-	private ServerDao serverDao;
+	private ISessionManager sessionManager;
 
 	/**
 	 * query for a list of users
@@ -229,7 +225,7 @@ public class Usermanagement {
 	 * @return
 	 */
 	public Object loginUser(String SID, String userOrEmail, String userpass,
-			IClientSession currentClient, IClient client, Boolean storePermanent) {
+			Client currentClient, IClient client, Boolean storePermanent) {
 		try {
 			log.debug("Login user SID : " + SID + " Stored Permanent :"
 					+ storePermanent);
@@ -1458,7 +1454,7 @@ public class Usermanagement {
 
 				sessionManagement.clearSessionByRoomId(room_id);
 
-				for (Client rcl : clientListManager.getClientListByRoom(room_id, null)) {
+				for (Client rcl : sessionManager.getClientListByRoom(room_id, null)) {
 					if (rcl == null) {
 						return true;
 					}
@@ -1494,7 +1490,7 @@ public class Usermanagement {
 			// admins only
 			if (authLevelManagement.checkWebServiceLevel(user_level)) {
 
-				Client rcl = clientListManager
+				Client rcl = sessionManager
 						.getClientByPublicSID(publicSID, false, null);
 
 				if (rcl == null) {

@@ -24,9 +24,17 @@ import java.util.Set;
 
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.persistence.beans.basic.Server;
+import org.apache.openmeetings.persistence.beans.rooms.Client;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 
-public interface ISessionStore {
+/**
+ * Methods to add/get/remove {@link Client}s to the session
+ * 
+ * 
+ * @author sebawagner
+ *
+ */
+public interface ISessionManager {
 
 	/**
 	 * Get current clients and extends the room client with its potential
@@ -36,7 +44,7 @@ public interface ISessionStore {
 	 * @param server TODO
 	 * @return
 	 */
-	public abstract IClientSession addClientListItem(String streamId,
+	public abstract Client addClientListItem(String streamId,
 			String scopeName, Integer remotePort, String remoteAddress,
 			String swfUrl, boolean isAVClient);
 
@@ -62,7 +70,7 @@ public interface ISessionStore {
 	 * @param streamId
 	 * @return
 	 */
-	public abstract IClientSession getSyncClientByStreamId(String streamId);
+	public abstract Client getSyncClientByStreamId(String streamId);
 
 	/**
 	 * get a client by its publicSID and the server, 
@@ -100,7 +108,7 @@ public interface ISessionStore {
 	 * @deprecated There could be multiple users logged in with the same userid,
 	 *             then this call would return a list not a single user
 	 */
-	public abstract IClientSession getClientByUserId(Long userId);
+	public abstract Client getClientByUserId(Long userId);
 
 	/**
 	 * Update the session object of the audio/video-connection and additionally
@@ -147,7 +155,7 @@ public interface ISessionStore {
 	 * @return
 	 */
 	public abstract List<Client> getClientListByRoom(Long room_id, Server server);
-
+	
 	public abstract Collection<Client> getClientListByRoomAll(Long room_id, Server server);
 
 	/**
@@ -167,7 +175,7 @@ public interface ISessionStore {
 	 * @param asc
 	 * @return
 	 */
-	public abstract SearchResult<ClientSession> getListByStartAndMax(int start,
+	public abstract SearchResult<ServerSession> getListByStartAndMax(int start,
 			int max, String orderby, boolean asc);
 
 	/**

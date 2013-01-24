@@ -22,20 +22,20 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.Random;
 
-import org.apache.openmeetings.session.ISessionStore;
+import org.apache.openmeetings.session.ISessionManager;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestClientListManager extends AbstractOpenmeetingsSpringTest {
 	@Autowired
-	private ISessionStore clientListManager;
+	private ISessionManager sessionManager;
 	
 	@Test
 	public void addClientListItem() {
 		Random rnd = new Random();
 		assertNotNull("RoomClientId created is null",
-				clientListManager.addClientListItem(rnd.nextLong() + "ABCDE"
+				sessionManager.addClientListItem(rnd.nextLong() + "ABCDE"
 						+ rnd.nextLong(), "scopeName", 66666, "remoteAddress",
 						"swfUrl", false));
 	}

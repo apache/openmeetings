@@ -117,7 +117,7 @@ public class Server implements Serializable, IDataProviderEntity {
 	@Column(name = "active", nullable = true)
 	@Element(data = true, required = false)
 	private Boolean active;
-
+	
 	@Column(name = "deleted", nullable = false)
 	@Element(data = true)
 	private boolean deleted = false;

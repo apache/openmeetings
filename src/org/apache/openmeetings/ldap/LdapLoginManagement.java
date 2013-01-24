@@ -39,7 +39,7 @@ import org.apache.openmeetings.persistence.beans.adresses.States;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;
-import org.apache.openmeetings.session.IClientSession;
+import org.apache.openmeetings.persistence.beans.rooms.Client;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
@@ -236,7 +236,7 @@ public class LdapLoginManagement {
 	 */
 	// ----------------------------------------------------------------------------------------
 	public Object doLdapLogin(String user, String passwd,
-			IClientSession currentClient, IClient client, String SID, String domain) {
+			Client currentClient, IClient client, String SID, String domain) {
 		log.debug("LdapLoginmanagement.doLdapLogin");
 
 		// Retrieve Configuration Data

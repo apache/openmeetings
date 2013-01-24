@@ -44,15 +44,14 @@ import org.apache.openmeetings.data.conference.dao.RoomModeratorsDao;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
+import org.apache.openmeetings.persistence.beans.rooms.Client;
 import org.apache.openmeetings.persistence.beans.rooms.RoomModerators;
 import org.apache.openmeetings.persistence.beans.rooms.RoomTypes;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms_Organisation;
 import org.apache.openmeetings.persistence.beans.user.Users;
-import org.apache.openmeetings.session.Client;
-import org.apache.openmeetings.session.ClientSession;
-import org.apache.openmeetings.session.IClientSession;
-import org.apache.openmeetings.session.ISessionStore;
+import org.apache.openmeetings.session.ServerSession;
+import org.apache.openmeetings.session.ISessionManager;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.apache.openmeetings.utils.math.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
@@ -88,7 +87,7 @@ public class ConferenceService {
 	@Autowired
 	private TimezoneUtil timezoneUtil;
 	@Autowired
-	private ISessionStore clientListManager = null;
+	private ISessionManager sessionManager = null;
 	@Autowired
 	private ServerDao serverDao;
 
@@ -151,7 +150,7 @@ public class ConferenceService {
 							organisation_id);
 			
 			for (Rooms_Organisation roomOrg : roomOrgsList) {
-				roomOrg.getRoom().setCurrentusers(clientListManager.getClientListByRoom(roomOrg.getRoom().getRooms_id(), null));
+				roomOrg.getRoom().setCurrentusers(sessionManager.getClientListByRoom(roomOrg.getRoom().getRooms_id(), null));
 			}
 
 			return roomOrgsList;
@@ -231,7 +230,7 @@ public class ConferenceService {
 			List<Rooms> roomList = roomDao.getPublicRooms();
 			
 			for (Rooms room : roomList) {
-				room.setCurrentusers(clientListManager.getClientListByRoom(room.getRooms_id(), null));
+				room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id(), null));
 			}
 
 			return roomList;
@@ -293,7 +292,7 @@ public class ConferenceService {
 	
 			log.debug("getCurrentRoomClient -2- " + streamid);
 	
-			IClientSession currentClient = this.clientListManager
+			Client currentClient = this.sessionManager
 					.getClientByStreamId(streamid, null);
 	
 			Rooms room = roomDao.get(room_id);
@@ -439,7 +438,7 @@ public class ConferenceService {
 		Long users_id = sessionManagement.checkSession(SID);
 		Long user_level = userManagement.getUserLevelByID(users_id);
 		Rooms room = roommanagement.getRoomById(user_level, rooms_id);
-		room.setCurrentusers(clientListManager.getClientListByRoom(room.getRooms_id(), null));
+		room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id(), null));
 		return room;
 	}
 
@@ -692,7 +691,7 @@ public class ConferenceService {
 		try {
 			Rooms room = roomDao.get(room_id);
 			
-			if (room.getNumberOfPartizipants() <= this.clientListManager
+			if (room.getNumberOfPartizipants() <= this.sessionManager
 					.getClientListByRoom(room_id, null).size()) {
 				return true;
 			}
@@ -711,7 +710,7 @@ public class ConferenceService {
 	 * @return - all participants of a room
 	 */
 	public List<Client> getRoomClientsListByRoomId(Long room_id) {
-		return clientListManager.getClientListByRoom(room_id, null);
+		return sessionManager.getClientListByRoom(room_id, null);
 	}
 
 	/**
@@ -724,13 +723,13 @@ public class ConferenceService {
 	 * @param asc
 	 * @return - list of the connections currently open
 	 */
-	public SearchResult<ClientSession> getRoomClientsMap(String SID, int start, int max,
+	public SearchResult<ServerSession> getRoomClientsMap(String SID, int start, int max,
 			String orderby, boolean asc) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			if (authLevelManagement.checkAdminLevel(user_level)) {
-				return this.clientListManager.getListByStartAndMax(start, max,
+				return this.sessionManager.getListByStartAndMax(start, max,
 						orderby, asc);
 			}
 		} catch (Exception err) {
@@ -750,7 +749,7 @@ public class ConferenceService {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			if (authLevelManagement.checkAdminLevel(user_level)) {
-				return this.clientListManager.getSessionStatistics();
+				return this.sessionManager.getSessionStatistics();
 			}
 		} catch (Exception err) {
 			log.error("[getRoomClientsMap]", err);
@@ -817,14 +816,14 @@ public class ConferenceService {
 			//the user will be just redirected to the same server
 			
 			//check if the user is on master hosted, (serverId == null)
-			for (Long activeRoomId : clientListManager.getActiveRoomIdsByServer(null)) {
+			for (Long activeRoomId : sessionManager.getActiveRoomIdsByServer(null)) {
 				if (activeRoomId.equals(roomId)) {
 					return null;
 				}
 			}
 			
 			for (Server server : serverList) {
-				for (Long activeRoomId : clientListManager.getActiveRoomIdsByServer(server)) {
+				for (Long activeRoomId : sessionManager.getActiveRoomIdsByServer(server)) {
 					if (activeRoomId.equals(roomId)) {
 						return new ServerDTO(server);
 					}
@@ -839,7 +838,7 @@ public class ConferenceService {
 			
 			//Locally handled sessions are serverId = null
 			List<Rooms> localRoomList = new ArrayList<Rooms>();
-			for (Long activeRoomId : clientListManager.getActiveRoomIdsByServer(null)) {
+			for (Long activeRoomId : sessionManager.getActiveRoomIdsByServer(null)) {
 				//FIXME / TODO: This is the single query to get the room by its id
 				localRoomList.add(roomDao.get(activeRoomId));
 			}
@@ -848,7 +847,7 @@ public class ConferenceService {
 			//Slave/Server rooms
 			for (Server server : serverList) {
 				List<Rooms> roomList = new ArrayList<Rooms>();
-				for (Long activeRoomId : clientListManager.getActiveRoomIdsByServer(server)) {
+				for (Long activeRoomId : sessionManager.getActiveRoomIdsByServer(server)) {
 					//FIXME / TODO: This is the single query to get the room by its id
 					roomList.add(roomDao.get(activeRoomId));
 				}

@@ -33,8 +33,8 @@ import javax.persistence.criteria.Root;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
-import org.apache.openmeetings.session.IClientSession;
-import org.apache.openmeetings.session.ISessionStore;
+import org.apache.openmeetings.persistence.beans.rooms.Client;
+import org.apache.openmeetings.session.ISessionManager;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -59,7 +59,7 @@ public class Sessionmanagement {
 	@Autowired
 	private ManageCryptStyle manageCryptStyle;
 	@Autowired
-	private ISessionStore clientListManager;
+	private ISessionManager sessionManager;
 
 	/**
 	 * creates a new session-object in the database
@@ -484,7 +484,7 @@ public class Sessionmanagement {
 	 */
 	public void clearSessionByRoomId(Long room_id) {
 		try {
-			for (IClientSession rcl : clientListManager.getClientListByRoom(room_id, null)) {
+			for (Client rcl : sessionManager.getClientListByRoom(room_id, null)) {
 				String aux = rcl.getSwfurl();
 
 				int init_pos = aux.indexOf("sid=") + 4;

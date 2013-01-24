@@ -62,8 +62,6 @@ public class UsersDao implements IDataProviderDao<Users> {
 	@Autowired
 	private ManageCryptStyle cryptManager;
 	@Autowired
-	private SalutationDao salutationDaoImpl;
-	@Autowired
 	private ConfigurationDao configDao;
 	@Autowired
 	private OmTimeZoneDao omTimeZoneDaoImpl;

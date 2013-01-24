@@ -52,6 +52,7 @@ import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.invitation.Invitations;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
+import org.apache.openmeetings.persistence.beans.rooms.Client;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessageFolder;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessages;
@@ -59,9 +60,7 @@ import org.apache.openmeetings.persistence.beans.user.Salutations;
 import org.apache.openmeetings.persistence.beans.user.UserContacts;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
-import org.apache.openmeetings.session.Client;
-import org.apache.openmeetings.session.IClientSession;
-import org.apache.openmeetings.session.ISessionStore;
+import org.apache.openmeetings.session.ISessionManager;
 import org.apache.openmeetings.templates.RequestContactConfirmTemplate;
 import org.apache.openmeetings.templates.RequestContactTemplate;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
@@ -86,7 +85,7 @@ public class UserService {
 			UserService.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private ISessionStore clientListManager;
+	private ISessionManager sessionManager;
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
@@ -538,7 +537,7 @@ public class UserService {
 
 				if (serverId == 0) {
 
-					Client rcl = this.clientListManager
+					Client rcl = this.sessionManager
 							.getClientByStreamId(streamid, null);
 
 					if (rcl == null) {
@@ -564,7 +563,7 @@ public class UserService {
 				} else {
 
 					Server server = serverDao.get(serverId);
-					IClientSession rcl = clientListManager.getClientByStreamId(
+					Client rcl = sessionManager.getClientByStreamId(
 							streamid, server);
 					slaveHTTPConnectionManager.kickSlaveUser(server, rcl.getPublicSID());
 					
@@ -1705,7 +1704,7 @@ public class UserService {
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				Client rcl = this.clientListManager.getClientByPublicSID(
+				Client rcl = this.sessionManager.getClientByPublicSID(
 						publicSID, false, null);
 
 				if (rcl == null) {

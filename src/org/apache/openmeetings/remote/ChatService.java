@@ -32,13 +32,12 @@ import java.util.Set;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.conference.Roommanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.persistence.beans.rooms.Client;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.apache.openmeetings.remote.red5.EmoticonsManager;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;
-import org.apache.openmeetings.session.Client;
-import org.apache.openmeetings.session.IClientSession;
-import org.apache.openmeetings.session.ISessionStore;
+import org.apache.openmeetings.session.ISessionManager;
 import org.apache.openmeetings.utils.stringhandlers.ChatString;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IClient;
@@ -52,7 +51,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 
- * @author sebastianwagner
+ * @author sebawagner
  *
  */
 public class ChatService implements IPendingServiceCallback {
@@ -61,7 +60,7 @@ public class ChatService implements IPendingServiceCallback {
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
-	private ISessionStore clientListManager = null;
+	private ISessionManager sessionManager = null;
 	@Autowired
 	private EmoticonsManager emoticonsManager;
 	@Autowired
@@ -109,7 +108,7 @@ public class ChatService implements IPendingServiceCallback {
 	public int sendMessageWithClient(Object newMessage) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			IClientSession currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId(), null);
+			Client currentClient = this.sessionManager.getClientByStreamId(current.getClient().getId(), null);
 			Long room_id = currentClient.getRoom_id();			
 			log.debug("room_id: " + room_id);
 			
@@ -137,10 +136,10 @@ public class ChatService implements IPendingServiceCallback {
 			hsm.put("message", newMessage);
 			String publicSID = "" + messageMap.get(6);
 			if (!publicSID.equals(currentClient.getPublicSID())) {
-				hsm.put("client", clientListManager.getClientByPublicSID("" + messageMap.get(6), false, null));
+				hsm.put("client", sessionManager.getClientByPublicSID("" + messageMap.get(6), false, null));
 				//need to remove unconfirmed chat message if any
 				for (int i = myChatList.size() - 1; i > -1; --i) {
-					IClientSession msgClient = (IClientSession)myChatList.get(i).get("client");
+					Client msgClient = (Client)myChatList.get(i).get("client");
 					@SuppressWarnings("rawtypes")
 					List msgList = (List)myChatList.get(i).get("message");
 					if (publicSID.equals(msgClient.getPublicSID())
@@ -170,7 +169,7 @@ public class ChatService implements IPendingServiceCallback {
     				if (conn != null) {
     					if (conn instanceof IServiceCapableConnection) {
     						
-    						IClientSession rcl = this.clientListManager.getClientByStreamId(conn.getClient().getId(), null);
+    						Client rcl = this.sessionManager.getClientByStreamId(conn.getClient().getId(), null);
     						
     						if (rcl == null) {
     							continue;
@@ -201,7 +200,7 @@ public class ChatService implements IPendingServiceCallback {
 	public int sendMessageWithClientByPublicSID(Object newMessage, String publicSID) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			IClientSession currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId(), null);
+			Client currentClient = this.sessionManager.getClientByStreamId(current.getClient().getId(), null);
 			Long room_id = currentClient.getRoom_id();
 			Long user_level = usermanagement.getUserLevelByID(currentClient.getUser_id());
 			Rooms room = roommanagement.getRoomById(user_level, room_id);
@@ -260,7 +259,7 @@ public class ChatService implements IPendingServiceCallback {
 	public List<HashMap<String,Object>> clearChat() {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			IClientSession currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId(), null);
+			Client currentClient = this.sessionManager.getClientByStreamId(current.getClient().getId(), null);
 			Long room_id = currentClient.getRoom_id();
 			
 			Long chatroom = room_id;
@@ -286,7 +285,7 @@ public class ChatService implements IPendingServiceCallback {
 	public List<HashMap<String,Object>> getRoomChatHistory() {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			IClientSession currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId(), null);
+			Client currentClient = this.sessionManager.getClientByStreamId(current.getClient().getId(), null);
 			Long room_id = currentClient.getRoom_id();
 			
 			log.debug("GET CHATROOM: " + room_id);
@@ -351,7 +350,7 @@ public class ChatService implements IPendingServiceCallback {
 	public int sendMessageToOverallChat(Object newMessage) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			IClientSession currentClient = this.clientListManager.getClientByStreamId(current.getClient().getId(), null);
+			Client currentClient = this.sessionManager.getClientByStreamId(current.getClient().getId(), null);
 			
 			//log.error(newMessage.getClass().getName());
 			ArrayList messageMap = (ArrayList) newMessage;
@@ -467,7 +466,7 @@ public class ChatService implements IPendingServiceCallback {
 			LinkedList<Client> guestList = new LinkedList<Client>();
 			LinkedList<Client> overallList = new LinkedList<Client>();
 			
-			for (Client rcl : clientListManager.getAllClients()) {
+			for (Client rcl : sessionManager.getAllClients()) {
 				if (rcl.getUser_id()==null || rcl.getUser_id()<=0) {
 					guestList.add(rcl);
 				} else {

@@ -33,8 +33,8 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.session.IClientSession;
-import org.apache.openmeetings.session.ISessionStore;
+import org.apache.openmeetings.persistence.beans.rooms.Client;
+import org.apache.openmeetings.session.ISessionManager;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -53,7 +53,7 @@ public class ScreenController {
 			ScreenController.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private ISessionStore clientListManager;
+	private ISessionManager sessionManager;
 	@Autowired
 	public Sessionmanagement sessionManagement;
 	@Autowired
@@ -182,14 +182,14 @@ public class ScreenController {
 			if (port == null) {
 				throw new Exception("port is empty: ");
 			}
-			IClientSession rc = clientListManager.getClientByPublicSID(publicSID, false, null);
+			Client rc = sessionManager.getClientByPublicSID(publicSID, false, null);
 			if (rc == null) {
 				throw new Exception("port is empty: ");
 			}
 			Long roomId = rc.getRoom_id();
 			boolean allowRecording = rc.getAllowRecording()
-				&& (0 == clientListManager.getRecordingCount(roomId));
-			boolean allowPublishing = (0 == clientListManager
+				&& (0 == sessionManager.getRecordingCount(roomId));
+			boolean allowPublishing = (0 == sessionManager
 					.getPublishingCount(roomId));
 			
 			Context ctx = new VelocityContext();

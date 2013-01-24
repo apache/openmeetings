@@ -46,10 +46,9 @@ import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingLog;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingMetaData;
+import org.apache.openmeetings.persistence.beans.rooms.Client;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
-import org.apache.openmeetings.session.Client;
-import org.apache.openmeetings.session.IClientSession;
-import org.apache.openmeetings.session.ISessionStore;
+import org.apache.openmeetings.session.ISessionManager;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
@@ -81,7 +80,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 
 	// Spring Beans
 	@Autowired
-	private ISessionStore clientListManager;
+	private ISessionManager sessionManager;
 	@Autowired
 	private FlvRecordingDao flvRecordingDaoImpl;
 	@Autowired
@@ -114,7 +113,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	public void resultReceived(IPendingServiceCall arg0) {
 	}
 
-	public IClientSession checkForRecording() {
+	public Client checkForRecording() {
 		try {
 
 			IConnection current = Red5.getConnectionLocal();
@@ -122,10 +121,10 @@ public class FLVRecorderService implements IPendingServiceCallback {
 
 			log.debug("getCurrentRoomClient -2- " + streamid);
 
-			IClientSession currentClient = this.clientListManager
+			Client currentClient = this.sessionManager
 					.getClientByStreamId(streamid, null);
 
-			for (IClientSession rcl : clientListManager.getClientListByRoom(currentClient.getRoom_id(), null)) {
+			for (Client rcl : sessionManager.getClientListByRoom(currentClient.getRoom_id(), null)) {
 				if (rcl.getIsRecording()) {
 					return rcl;
 				}
@@ -156,7 +155,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			log.debug(":: recordMeetingStream ::");
 
 			IConnection current = Red5.getConnectionLocal();
-			Client currentClient = this.clientListManager
+			Client currentClient = this.sessionManager
 					.getClientByStreamId(current.getClient().getId(), null);
 			Long room_id = currentClient.getRoom_id();
 
@@ -172,7 +171,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			// Update Client and set Flag
 			currentClient.setIsRecording(true);
 			currentClient.setFlvRecordingId(flvRecordingId);
-			this.clientListManager.updateClientByStreamId(current.getClient()
+			this.sessionManager.updateClientByStreamId(current.getClient()
 					.getId(), currentClient, false);
 
 			// get all stream and start recording them
@@ -182,7 +181,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 				for (IConnection conn : conset) {
 					if (conn != null) {
 						if (conn instanceof IServiceCapableConnection) {
-							Client rcl = this.clientListManager
+							Client rcl = this.sessionManager
 									.getClientByStreamId(conn.getClient()
 											.getId(), null);
 
@@ -224,7 +223,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 									// Add Meta Data
 									rcl.setFlvRecordingMetaDataId(flvRecordingMetaDataId);
 
-									this.clientListManager
+									this.sessionManager
 											.updateClientByStreamId(
 													rcl.getStreamid(), rcl, false);
 
@@ -266,7 +265,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 
 								rcl.setFlvRecordingMetaDataId(flvRecordingMetaDataId);
 
-								this.clientListManager.updateClientByStreamId(
+								this.sessionManager.updateClientByStreamId(
 										rcl.getStreamid(), rcl, false);
 
 								// Start FLV recording
@@ -436,7 +435,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 					if (conn != null) {
 						if (conn instanceof IServiceCapableConnection) {
 
-							IClientSession rcl = clientListManager.getClientByStreamId(
+							Client rcl = sessionManager.getClientByStreamId(
 											conn.getClient().getId(), null);
 
 							// FIXME: Check if this function is really in use at
@@ -508,7 +507,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 				currentClient.setFlvRecordingId(null);
 				currentClient.setIsRecording(false);
 
-				this.clientListManager.updateClientByStreamId(
+				this.sessionManager.updateClientByStreamId(
 						currentClient.getStreamid(), currentClient, false);
 
 				log.debug("this.flvRecorderConverterTask ",
@@ -539,20 +538,20 @@ public class FLVRecorderService implements IPendingServiceCallback {
 		return new Long(-1);
 	}
 
-	public IClientSession checkLzRecording() {
+	public Client checkLzRecording() {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
 
 			log.debug("getCurrentRoomClient -2- " + streamid);
 
-			IClientSession currentClient = this.clientListManager
+			Client currentClient = this.sessionManager
 					.getClientByStreamId(streamid, null);
 
 			log.debug("getCurrentRoomClient -#########################- "
 					+ currentClient.getRoom_id());
 
-			for (IClientSession rcl : clientListManager.getClientListByRoomAll(currentClient.getRoom_id(), null)) {
+			for (Client rcl : sessionManager.getClientListByRoomAll(currentClient.getRoom_id(), null)) {
 				if (rcl.getIsRecording()) {
 					return rcl;
 				}
@@ -564,7 +563,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 		return null;
 	}
 
-	public void stopRecordingShowForClient(IConnection conn, IClientSession rcl) {
+	public void stopRecordingShowForClient(IConnection conn, Client rcl) {
 		try {
 			// this cannot be handled here, as to stop a stream and to leave a
 			// room is not
@@ -649,7 +648,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 					// Add Meta Data
 					rcl.setFlvRecordingMetaDataId(flvRecordingMetaDataId);
 
-					this.clientListManager.updateClientByStreamId(
+					this.sessionManager.updateClientByStreamId(
 							rcl.getStreamid(), rcl, false);
 
 				}
@@ -688,7 +687,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 
 				rcl.setFlvRecordingMetaDataId(flvRecordingMetaDataId);
 
-				this.clientListManager.updateClientByStreamId(
+				this.sessionManager.updateClientByStreamId(
 						rcl.getStreamid(), rcl, false);
 
 			}

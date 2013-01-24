@@ -45,7 +45,7 @@ import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms_Organisation;
 import org.apache.openmeetings.persistence.beans.sip.asterisk.MeetMe;
 import org.apache.openmeetings.persistence.beans.user.Users;
-import org.apache.openmeetings.session.ISessionStore;
+import org.apache.openmeetings.session.ISessionManager;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,7 +74,7 @@ public class Roommanagement {
 	@Autowired
 	private AuthLevelmanagement authLevelManagement;
 	@Autowired
-	private ISessionStore clientListManager;
+	private ISessionManager sessionManager;
     @Autowired
 	private ConfigurationDao configurationDaoImpl;
     @Autowired
@@ -166,7 +166,7 @@ public class Roommanagement {
 				Rooms room = roomDao.get(rooms_id);
 
 				if (room != null) {
-					room.setCurrentusers(clientListManager.getClientListByRoom(room.getRooms_id(), null));
+					room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id(), null));
 
 					return room;
 				}
@@ -252,7 +252,7 @@ public class Roommanagement {
 						asc);
 
 				for (Rooms room : rooms) {
-					room.setCurrentusers(clientListManager.getClientListByRoom(room.getRooms_id(), null));
+					room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id(), null));
 				}
 
 				sResult.setResult(rooms);
@@ -273,7 +273,7 @@ public class Roommanagement {
 						asc);
 
 				for (Rooms room : rooms) {
-					room.setCurrentusers(clientListManager.getClientListByRoom(room.getRooms_id(), null));
+					room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id(), null));
 				}
 
 				return rooms;
@@ -295,7 +295,7 @@ public class Roommanagement {
 						orderby, asc, externalRoomType);
 
 				for (Rooms room : rooms) {
-					room.setCurrentusers(clientListManager.getClientListByRoom(room.getRooms_id(), null));
+					room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id(), null));
 				}
 
 				return rooms;

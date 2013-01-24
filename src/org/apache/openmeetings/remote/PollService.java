@@ -30,8 +30,8 @@ import org.apache.openmeetings.persistence.beans.poll.PollType;
 import org.apache.openmeetings.persistence.beans.poll.RoomPoll;
 import org.apache.openmeetings.persistence.beans.poll.RoomPollAnswers;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
-import org.apache.openmeetings.session.IClientSession;
-import org.apache.openmeetings.session.ISessionStore;
+import org.apache.openmeetings.persistence.beans.rooms.Client;
+import org.apache.openmeetings.session.ISessionManager;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
@@ -52,7 +52,7 @@ public class PollService implements IPendingServiceCallback {
 			PollService.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private ISessionStore clientListManager;
+	private ISessionManager sessionManager;
 	@Autowired
 	private Usermanagement usermanagement;
 	@Autowired
@@ -66,7 +66,7 @@ public class PollService implements IPendingServiceCallback {
 			log.debug("createPoll: " + pollQuestion);
 
 			IConnection currentcon = Red5.getConnectionLocal();
-			IClientSession rc = clientListManager.getClientByStreamId(currentcon
+			Client rc = sessionManager.getClientByStreamId(currentcon
 					.getClient().getId(), null);
 
 			log.debug("rc: " + rc.getStreamid() + " " + rc.getUsername() + " "
@@ -96,7 +96,7 @@ public class PollService implements IPendingServiceCallback {
 			log.debug("closePoll: ");
 
 			IConnection currentcon = Red5.getConnectionLocal();
-			IClientSession rc = clientListManager.getClientByStreamId(currentcon
+			Client rc = sessionManager.getClientByStreamId(currentcon
 					.getClient().getId(), null);
 
 			log.debug("rc: " + rc.getStreamid() + " " + rc.getUsername() + " "
@@ -118,7 +118,7 @@ public class PollService implements IPendingServiceCallback {
 			log.debug("closePoll: ");
 
 			IConnection currentcon = Red5.getConnectionLocal();
-			IClientSession rc = clientListManager.getClientByStreamId(currentcon
+			Client rc = sessionManager.getClientByStreamId(currentcon
 					.getClient().getId(), null);
 
 			log.debug("rc: " + rc.getStreamid() + " " + rc.getUsername() + " "
@@ -138,7 +138,7 @@ public class PollService implements IPendingServiceCallback {
 	public void sendNotification(IConnection current, String clientFunction,
 			Object[] obj) throws Exception {
 		// Notify all clients of the same scope (room)
-		IClientSession rc = this.clientListManager.getClientByStreamId(current
+		Client rc = this.sessionManager.getClientByStreamId(current
 				.getClient().getId(), null);
 		Collection<Set<IConnection>> conCollection = current.getScope()
 				.getConnections();
@@ -146,7 +146,7 @@ public class PollService implements IPendingServiceCallback {
 			for (IConnection conn : conset) {
 				if (conn != null) {
 					if (conn instanceof IServiceCapableConnection) {
-						IClientSession rcl = this.clientListManager
+						Client rcl = this.sessionManager
 								.getClientByStreamId(conn.getClient().getId(), null);
 						if (rcl.getIsScreenClient() != null
 								&& rcl.getIsScreenClient()) {
@@ -176,7 +176,7 @@ public class PollService implements IPendingServiceCallback {
 			log.debug("PollService::vote: Enter");
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			IClientSession rc = clientListManager.getClientByStreamId(streamid, null);
+			Client rc = sessionManager.getClientByStreamId(streamid, null);
 
 			if (rc == null) {
 				log.error("RoomClient IS NULL for ClientID: "
@@ -227,7 +227,7 @@ public class PollService implements IPendingServiceCallback {
 	public RoomPoll getPoll() {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			IClientSession rc = this.clientListManager.getClientByStreamId(current
+			Client rc = this.sessionManager.getClientByStreamId(current
 					.getClient().getId(), null);
 
 			// get Poll
@@ -242,7 +242,7 @@ public class PollService implements IPendingServiceCallback {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			IClientSession rc = this.clientListManager
+			Client rc = this.sessionManager
 					.getClientByStreamId(streamid, null);
 
 			long roomId = rc.getRoom_id();
@@ -260,7 +260,7 @@ public class PollService implements IPendingServiceCallback {
 	public List<RoomPoll> getArchivedPollList() {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			IClientSession rc = this.clientListManager.getClientByStreamId(current
+			Client rc = this.sessionManager.getClientByStreamId(current
 					.getClient().getId(), null);
 
 			// get Poll

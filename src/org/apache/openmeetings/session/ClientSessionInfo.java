@@ -18,22 +18,24 @@
  */
 package org.apache.openmeetings.session;
 
+import org.apache.openmeetings.persistence.beans.rooms.Client;
+
 
 public class ClientSessionInfo {
 	
-	private IClientSession rcl;
+	private Client rcl;
 	public Long serverId;
 	
-	public ClientSessionInfo(IClientSession rcl, Long serverId) {
+	public ClientSessionInfo(Client rcl, Long serverId) {
 		super();
 		this.rcl = rcl;
 		this.serverId = serverId;
 	}
 	
-	public IClientSession getRcl() {
+	public Client getRcl() {
 		return rcl;
 	}
-	public void setRcl(IClientSession rcl) {
+	public void setRcl(Client rcl) {
 		this.rcl = rcl;
 	}
 	public Long getServerId() {

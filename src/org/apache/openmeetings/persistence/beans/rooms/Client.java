@@ -28,17 +28,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.apache.openmeetings.session.IClientSession;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 
 /**
- * @see IClientSession
+ * @see Client
  * @author sebawagner
  *
  */
 @Entity
 @Table(name = "client")
-public class Client implements Serializable, IClientSession {
+public class Client implements Serializable {
 
 	/**
 	 * 
@@ -51,320 +50,320 @@ public class Client implements Serializable, IClientSession {
 	private long id;
 	
 	/**
-	 * @see IClientSession#getUsername()
+	 * @see Client#getUsername()
 	 */
 	@Column(name = "username")
 	private String username = "";
 	
 	/**
-	 * @see IClientSession#getStreamid()
+	 * @see Client#getStreamid()
 	 */
 	@Column(name = "streamid")
 	private String streamid = "";
 	
 	/**
-	 * @see IClientSession#getScope()
+	 * @see Client#getScope()
 	 */
 	@Column(name = "scope")
 	private String scope = "";
 	
 	/**
-	 * @see IClientSession#getVWidth()
+	 * @see Client#getVWidth()
 	 */
 	@Column(name = "vwidth")
 	private int vWidth = 0;
 	
 	/**
-	 * @see IClientSession#getVHeight()
+	 * @see Client#getVHeight()
 	 */
 	@Column(name = "vheight")
 	private int vHeight = 0;
 	
 	/**
-	 * @see IClientSession#getVX()
+	 * @see Client#getVX()
 	 */
 	@Column(name = "vx")
 	private int vX = 0;
 	
 	/**
-	 * @see IClientSession#getVY()
+	 * @see Client#getVY()
 	 */
 	@Column(name = "vy")
 	private int vY = 0;
 	
 	/**
-	 * @see IClientSession#getStreamPublishName()
+	 * @see Client#getStreamPublishName()
 	 */
 	@Column(name = "stream_publish_name")
 	private String streamPublishName = "";
 	
 	/**
-	 * @see IClientSession#getPublicSID()
+	 * @see Client#getPublicSID()
 	 */
 	@Column(name = "public_sid")
 	private String publicSID = "";
 	
 	/**
-	 * @see IClientSession#getIsMod()
+	 * @see Client#getIsMod()
 	 */
 	@Column(name = "is_mod")
 	private Boolean isMod = false;
 	
 	/**
-	 * @see IClientSession#getIsSuperModerator()
+	 * @see Client#getIsSuperModerator()
 	 */
 	@Column(name = "is_supermoderator")
 	private Boolean isSuperModerator = false;
 	
 	/**
-	 * @see IClientSession#getCanDraw()
+	 * @see Client#getCanDraw()
 	 */
 	@Column(name = "can_draw")
 	private Boolean canDraw = false;
 	
 	/**
-	 * @see IClientSession#getCanShare()
+	 * @see Client#getCanShare()
 	 */
 	@Column(name = "can_share")
 	private Boolean canShare = false;
 	
 	/**
-	 * @see IClientSession#getCanRemote()
+	 * @see Client#getCanRemote()
 	 */
 	@Column(name = "can_remote")
 	private Boolean canRemote = false;
 	
 	/**
-	 * @see IClientSession#getCanGiveAudio()
+	 * @see Client#getCanGiveAudio()
 	 */
 	@Column(name = "can_giveaudio")
     private Boolean canGiveAudio = false;
 	
     /**
-	 * @see IClientSession#getConnectedSince()
+	 * @see Client#getConnectedSince()
 	 */
 	@Column(name = "connected_since")
 	private Date connectedSince;
 	
 	/**
-	 * @see IClientSession#getFormatedDate()
+	 * @see Client#getFormatedDate()
 	 */
 	@Column(name = "formated_date")
 	private String formatedDate;
 	
 	/**
-	 * @see IClientSession#getIsScreenClient()
+	 * @see Client#getIsScreenClient()
 	 */
 	@Column(name = "is_screenclient")
 	private Boolean isScreenClient = false;
 	
 	/**
-	 * @see IClientSession#getIsAVClient()
+	 * @see Client#getIsAVClient()
 	 */
 	@Column(name = "is_avclient")
 	private boolean isAVClient = false;
 	
 	/**
-	 * @see IClientSession#getUsercolor()
+	 * @see Client#getUsercolor()
 	 */
 	@Column(name = "usercolor")
 	private String usercolor;
 	
 	/**
-	 * @see IClientSession#getUserpos()
+	 * @see Client#getUserpos()
 	 */
 	@Column(name = "userpos")
 	private Integer userpos;
 	
 	/**
-	 * @see IClientSession#getUserip()
+	 * @see Client#getUserip()
 	 */
 	@Column(name = "userip")
 	private String userip;
 	
 	/**
-	 * @see IClientSession#getUserport()
+	 * @see Client#getUserport()
 	 */
 	@Column(name = "userport")
 	private int userport;
 	
 	/**
-	 * @see IClientSession#getRoom_id()
+	 * @see Client#getRoom_id()
 	 */
 	@Column(name = "room_id")
 	private Long room_id;
 	
 	/**
-	 * @see IClientSession#getRoomEnter()
+	 * @see Client#getRoomEnter()
 	 */
 	@Column(name = "room_enter")
 	private Date roomEnter = null;
 	
 	/**
-	 * @see IClientSession#getBroadCastID()
+	 * @see Client#getBroadCastID()
 	 */
 	@Column(name = "broadcast_id")
 	private long broadCastID = -2;
 	
 	/**
-	 * @see IClientSession#getUser_id()
+	 * @see Client#getUser_id()
 	 */
 	@Column(name = "user_id")
 	private Long user_id = null;
 	
 	/**
-	 * @see IClientSession#getFirstname()
+	 * @see Client#getFirstname()
 	 */
 	@Column(name = "firstname")
 	private String firstname = "";
 	
 	/**
-	 * @see IClientSession#getLastname()
+	 * @see Client#getLastname()
 	 */
 	@Column(name = "lastname")
 	private String lastname = "";
 	
 	/**
-	 * @see IClientSession#getMail()
+	 * @see Client#getMail()
 	 */
 	@Column(name = "mail")
 	private String mail;
 	
 	/**
-	 * @see IClientSession#getLastLogin()
+	 * @see Client#getLastLogin()
 	 */
 	@Column(name = "last_login")
 	private String lastLogin;
 	
 	/**
-	 * @see IClientSession#getOfficial_code()
+	 * @see Client#getOfficial_code()
 	 */
 	@Column(name = "official_code")
 	private String official_code;
 	
 	/**
-	 * @see IClientSession#getPicture_uri()
+	 * @see Client#getPicture_uri()
 	 */
 	@Column(name = "picture_uri")
 	private String picture_uri;
 	
 	/**
-	 * @see IClientSession#getLanguage()
+	 * @see Client#getLanguage()
 	 */
 	@Column(name = "language")
 	private String language = "";
 	
 	/**
-	 * @see IClientSession#getAvsettings()
+	 * @see Client#getAvsettings()
 	 */
 	@Column(name = "avsettings")
 	private String avsettings = "";
 	
 	/**
-	 * @see IClientSession#getSwfurl()
+	 * @see Client#getSwfurl()
 	 */
 	// FIXME: Move to {@link ClientSession}
 	@Column(name = "swfurl")
 	private String swfurl;
 	
 	/**
-	 * @see IClientSession#getIsRecording()
+	 * @see Client#getIsRecording()
 	 */
 	@Column(name = "is_recording")
 	private Boolean isRecording = false;
 	
 	/**
-	 * @see IClientSession#getRoomRecordingName()
+	 * @see Client#getRoomRecordingName()
 	 */
 	@Column(name = "room_recording_name")
 	private String roomRecordingName;
 	
 	/**
-	 * @see IClientSession#getFlvRecordingId()
+	 * @see Client#getFlvRecordingId()
 	 */
 	@Column(name = "flvrecording_id")
 	private Long flvRecordingId;
 	
 	/**
-	 * @see IClientSession#getFlvRecordingMetaDataId()
+	 * @see Client#getFlvRecordingMetaDataId()
 	 */
 	@Column(name = "flvrecordingmetadata_id")
 	private Long flvRecordingMetaDataId;
 	
 	/**
-	 * @see IClientSession#getOrganization_id()
+	 * @see Client#getOrganization_id()
 	 */
 	@Column(name = "organization_id")
 	private Long organization_id;
 	
 	/**
-	 * @see IClientSession#isStartRecording()
+	 * @see Client#isStartRecording()
 	 */
 	@Column(name = "start_recording")
 	private boolean startRecording = false;
 	
 	/**
-	 * @see IClientSession#isStartStreaming()
+	 * @see Client#isStartStreaming()
 	 */
 	@Column(name = "start_streaming")
 	private boolean startStreaming = false;
 	
 	/**
-	 * @see IClientSession#isScreenPublishStarted()
+	 * @see Client#isScreenPublishStarted()
 	 */
 	@Column(name = "screen_publish_started")
 	private boolean screenPublishStarted = false;
 	
 	/**
-	 * @see IClientSession#isStreamPublishStarted()
+	 * @see Client#isStreamPublishStarted()
 	 */
 	@Column(name = "stream_publish_started")
 	private boolean streamPublishStarted = false;
 	
 	/**
-	 * @see IClientSession#getIsBroadcasting()
+	 * @see Client#getIsBroadcasting()
 	 */
 	@Column(name = "is_broadcasting")
 	private Boolean isBroadcasting = false;
 	
 	/**
-	 * @see IClientSession#getExternalUserId()
+	 * @see Client#getExternalUserId()
 	 */
 	@Column(name = "external_user_id")
 	private String externalUserId;
 	
 	/**
-	 * @see IClientSession#getExternalUserType()
+	 * @see Client#getExternalUserType()
 	 */
 	@Column(name = "external_user_type")
     private String externalUserType;
 	
     /**
-	 * @see IClientSession#getInterviewPodId()
+	 * @see Client#getInterviewPodId()
 	 */
 	@Column(name = "interview_pod_id")
     private Integer interviewPodId = null;
 	
     /**
-	 * @see IClientSession#getAllowRecording()
+	 * @see Client#getAllowRecording()
 	 */
 	@Column(name = "allow_recording")
     private Boolean allowRecording = true;
 	
     /**
-	 * @see IClientSession#getZombieCheckFlag()
+	 * @see Client#getZombieCheckFlag()
 	 */
 	@Column(name = "zombie_check_flag")
 	private Boolean zombieCheckFlag = false;
 	
 	/**
-	 * @see IClientSession#getMicMuted()
+	 * @see Client#getMicMuted()
 	 */
 	@Column(name = "mic_muted")
     private Boolean micMuted = false;
 	
     /**
-	 * @see IClientSession#isSipTransport()
+	 * @see Client#isSipTransport()
 	 */
 	@Column(name = "sip_transport")
     private boolean sipTransport = false;

@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.cluster.sync;
 
-import java.lang.reflect.Constructor;
 import java.util.Iterator;
 
 import javax.xml.namespace.QName;
@@ -55,7 +54,6 @@ public class RestClient {
 		KICK_USER,
 	}
 
-	private Server server;
 	private final String host;
 	private final int port;
 	private final String protocol;
@@ -68,14 +66,7 @@ public class RestClient {
 	
 	private String publicSID;
 
-	/**
-	 * there are two publicSIDs, one for the kickUser REST call and one for the syncMessage call
-	 * theoretically they could be performed at the same time but to different users, so we don't want
-	 * to use the same variable for both
-	 */
-	private String publicSIDSync;
-	
-	private static String nameSpaceForSlaveDto = "http://room.conference.openmeetings.apache.org/xsd";
+//	private static String nameSpaceForSlaveDto = "http://room.conference.openmeetings.apache.org/xsd";
 	
 	private static String NAMESPACE_PREFIX = "http://services.axis.openmeetings.apache.org";
 
@@ -83,11 +74,11 @@ public class RestClient {
 		return protocol + "://" + host + ":" + port + "/" + webapp
 				+ "/services/UserService";
 	}
-
-	private String getRoomServiceEndPoint() {
-		return protocol + "://" + host + ":" + port + "/" + webapp
-				+ "/services/RoomService";
-	}
+//
+//	private String getRoomServiceEndPoint() {
+//		return protocol + "://" + host + ":" + port + "/" + webapp
+//				+ "/services/RoomService";
+//	}
 
 	/**
 	 * The observerInstance will be notified whenever a ping was completed
@@ -101,7 +92,7 @@ public class RestClient {
 	 * @param pass
 	 */
 	public RestClient(Server server) {
-		this.server = server;
+		//this.server = server;
 		this.host = server.getAddress();
 		this.port = server.getPort();
 		this.protocol = server.getProtocol();
@@ -374,31 +365,31 @@ public class RestClient {
 	 * @param typeObject
 	 * @return
 	 */
-	private <T> T getElementTextByName(OMElement resultElement, String elementName, Class<T> typeObject) {
-		try {
-			OMElement userIdElement = resultElement
-					.getFirstChildWithName(new QName(nameSpaceForSlaveDto, elementName));
-			if (userIdElement != null && userIdElement.getText() != null
-					&& userIdElement.getText().length() > 0) {
-				
-				String defaultValue = userIdElement.getText();
-				
-				// Either this can be directly assigned or try to find a constructor
-				// that handles it
-				if (typeObject.isAssignableFrom(defaultValue.getClass())) {
-					return typeObject.cast(defaultValue);
-				}
-				Constructor<T> c = typeObject.getConstructor(defaultValue
-						.getClass());
-				return c.newInstance(defaultValue);
-				
-			}
-		} catch (Exception err) {
-			//Catch any class cast exception, but log only
-			log.error("[getElementTextByName]", err);
-		}
-		return null;
-	}
+//	private <T> T getElementTextByName(OMElement resultElement, String elementName, Class<T> typeObject) {
+//		try {
+//			OMElement userIdElement = resultElement
+//					.getFirstChildWithName(new QName(nameSpaceForSlaveDto, elementName));
+//			if (userIdElement != null && userIdElement.getText() != null
+//					&& userIdElement.getText().length() > 0) {
+//				
+//				String defaultValue = userIdElement.getText();
+//				
+//				// Either this can be directly assigned or try to find a constructor
+//				// that handles it
+//				if (typeObject.isAssignableFrom(defaultValue.getClass())) {
+//					return typeObject.cast(defaultValue);
+//				}
+//				Constructor<T> c = typeObject.getConstructor(defaultValue
+//						.getClass());
+//				return c.newInstance(defaultValue);
+//				
+//			}
+//		} catch (Exception err) {
+//			//Catch any class cast exception, but log only
+//			log.error("[getElementTextByName]", err);
+//		}
+//		return null;
+//	}
 	
 	
 }

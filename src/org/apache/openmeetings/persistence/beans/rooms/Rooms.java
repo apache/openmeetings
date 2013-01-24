@@ -44,7 +44,6 @@ import javax.persistence.Transient;
 import org.apache.openjpa.persistence.ElementDependent;
 import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
 import org.apache.openmeetings.persistence.beans.sip.asterisk.MeetMe;
-import org.apache.openmeetings.session.Client;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;

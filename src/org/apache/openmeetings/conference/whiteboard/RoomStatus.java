@@ -20,7 +20,7 @@ package org.apache.openmeetings.conference.whiteboard;
 
 import java.util.List;
 
-import org.apache.openmeetings.session.Client;
+import org.apache.openmeetings.persistence.beans.rooms.Client;
 
 public class RoomStatus {
 	

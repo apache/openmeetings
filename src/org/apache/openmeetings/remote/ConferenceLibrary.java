@@ -39,8 +39,8 @@ import org.apache.openmeetings.documents.LibraryDocumentConverter;
 import org.apache.openmeetings.documents.LibraryWmlLoader;
 import org.apache.openmeetings.documents.LoadLibraryPresentation;
 import org.apache.openmeetings.persistence.beans.files.FileExplorerItem;
-import org.apache.openmeetings.session.IClientSession;
-import org.apache.openmeetings.session.ISessionStore;
+import org.apache.openmeetings.persistence.beans.rooms.Client;
+import org.apache.openmeetings.session.ISessionManager;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.crypt.MD5;
 import org.red5.logging.Red5LoggerFactory;
@@ -63,7 +63,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 			ConferenceLibrary.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private ISessionStore clientListManager = null;
+	private ISessionManager sessionManager = null;
 	@Autowired
 	private Sessionmanagement sessionManagement;
 	@Autowired
@@ -180,7 +180,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
 				IConnection current = Red5.getConnectionLocal();
-				IClientSession currentClient = this.clientListManager
+				Client currentClient = this.sessionManager
 						.getClientByStreamId(current.getClient().getId(), null);
 
 				if (currentClient == null) {
@@ -223,7 +223,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 					for (IConnection conn : conset) {
 						if (conn != null) {
 							if (conn instanceof IServiceCapableConnection) {
-								IClientSession rcl = this.clientListManager
+								Client rcl = this.sessionManager
 										.getClientByStreamId(conn.getClient()
 												.getId(), null);
 								if ((rcl == null)
@@ -294,7 +294,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 				IConnection current = Red5.getConnectionLocal();
 				String streamid = current.getClient().getId();
 
-				IClientSession currentClient = this.clientListManager
+				Client currentClient = this.sessionManager
 						.getClientByStreamId(streamid, null);
 
 				Long room_id = currentClient.getRoom_id();

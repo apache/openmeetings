@@ -25,7 +25,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.documents.beans.UploadCompleteMessage;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.xmlimport.LanguageImport;
@@ -42,8 +41,6 @@ public class ImportController extends AbstractUploadController {
 	private static final Logger log = Red5LoggerFactory.getLogger(ImportController.class,
 			OpenmeetingsVariables.webAppRootKey);
 
-	@Autowired
-	private UsersDao usersDao;
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired

@@ -36,12 +36,11 @@ import org.apache.openmeetings.conference.whiteboard.WhiteboardSyncLockObject;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.persistence.beans.rooms.Client;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.remote.red5.WhiteBoardObjectListManager;
 import org.apache.openmeetings.remote.red5.WhiteBoardObjectListManagerById;
-import org.apache.openmeetings.session.Client;
-import org.apache.openmeetings.session.IClientSession;
-import org.apache.openmeetings.session.ISessionStore;
+import org.apache.openmeetings.session.ISessionManager;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
@@ -66,7 +65,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 	@Autowired
 	private final ScopeApplicationAdapter scopeApplicationAdapter = null;
 	@Autowired
-	private final ISessionStore clientListManager = null;
+	private final ISessionManager sessionManager = null;
 	@Autowired
 	private final WhiteBoardObjectListManager whiteBoardObjectListManager = null;
 	@Autowired
@@ -85,7 +84,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			IClientSession currentClient = this.clientListManager
+			Client currentClient = this.sessionManager
 					.getClientByStreamId(streamid, null);
 			Long room_id = currentClient.getRoom_id();
 
@@ -105,7 +104,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			IClientSession currentClient = this.clientListManager
+			Client currentClient = this.sessionManager
 					.getClientByStreamId(streamid, null);
 			Long room_id = currentClient.getRoom_id();
 
@@ -124,7 +123,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			IClientSession currentClient = this.clientListManager
+			Client currentClient = this.sessionManager
 					.getClientByStreamId(streamid, null);
 			Long room_id = currentClient.getRoom_id();
 
@@ -166,7 +165,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			IClientSession currentClient = this.clientListManager
+			Client currentClient = this.sessionManager
 					.getClientByStreamId(streamid, null);
 			Long room_id = currentClient.getRoom_id();
 
@@ -218,7 +217,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			IClientSession currentClient = this.clientListManager
+			Client currentClient = this.sessionManager
 					.getClientByStreamId(streamid, null);
 
 			Long users_id = sessionManagement.checkSession(SID);
@@ -227,12 +226,12 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
 				if (currentClient.getIsMod()) {
-					Client rcl = this.clientListManager
+					Client rcl = this.sessionManager
 							.getClientByPublicSID(publicSID, false, null);
 
 					if (rcl != null) {
 						rcl.setCanDraw(canDraw);
-						this.clientListManager.updateClientByStreamId(
+						this.sessionManager.updateClientByStreamId(
 								rcl.getStreamid(), rcl, false);
 
 						HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
@@ -260,7 +259,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			IClientSession currentClient = this.clientListManager
+			Client currentClient = this.sessionManager
 					.getClientByStreamId(streamid, null);
 
 			Long users_id = sessionManagement.checkSession(SID);
@@ -269,12 +268,12 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
 				if (currentClient.getIsMod()) {
-					Client rcl = this.clientListManager
+					Client rcl = this.sessionManager
 							.getClientByPublicSID(publicSID, false, null);
 
 					if (rcl != null) {
 						rcl.setCanShare(canShare);
-						this.clientListManager.updateClientByStreamId(
+						this.sessionManager.updateClientByStreamId(
 								rcl.getStreamid(), rcl, false);
 
 						HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
@@ -302,7 +301,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			IClientSession currentClient = this.clientListManager
+			Client currentClient = this.sessionManager
 					.getClientByStreamId(streamid, null);
 
 			Long users_id = sessionManagement.checkSession(SID);
@@ -311,12 +310,12 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
 				if (currentClient.getIsMod()) {
-					Client rcl = this.clientListManager
+					Client rcl = this.sessionManager
 							.getClientByPublicSID(publicSID, false, null);
 
 					if (rcl != null) {
 						rcl.setCanRemote(canRemote);
-						this.clientListManager.updateClientByStreamId(
+						this.sessionManager.updateClientByStreamId(
 								rcl.getStreamid(), rcl, false);
 
 						HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
@@ -344,7 +343,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
             log.debug("[setCanGiveAudio] " + SID + ", " + publicSID + ", " + canGiveAudio);
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			IClientSession currentClient = this.clientListManager
+			Client currentClient = this.sessionManager
 					.getClientByStreamId(streamid, null);
 
 			Long users_id = sessionManagement.checkSession(SID);
@@ -352,12 +351,12 @@ public class WhiteBoardService implements IPendingServiceCallback {
 
 			if (authLevelManagement.checkUserLevel(user_level)) {
 				if (currentClient.getIsMod()) {
-					Client rcl = this.clientListManager
+					Client rcl = this.sessionManager
 							.getClientByPublicSID(publicSID, false, null);
 
 					if (rcl != null) {
 						rcl.setCanGiveAudio(canGiveAudio);
-				        this.clientListManager.updateClientByStreamId(
+				        this.sessionManager.updateClientByStreamId(
 				                rcl.getStreamid(), rcl, false);
 
 				        HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
@@ -384,7 +383,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			IClientSession currentClient = this.clientListManager
+			Client currentClient = this.sessionManager
 					.getClientByStreamId(streamid, null);
 			Long room_id = currentClient.getRoom_id();
 
@@ -419,7 +418,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			IClientSession currentClient = this.clientListManager
+			Client currentClient = this.sessionManager
 					.getClientByStreamId(streamid, null);
 			Long room_id = currentClient.getRoom_id();
 
@@ -483,7 +482,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			IClientSession currentClient = this.clientListManager
+			Client currentClient = this.sessionManager
 					.getClientByStreamId(streamid, null);
 			Long room_id = currentClient.getRoom_id();
 
@@ -518,7 +517,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			IClientSession currentClient = this.clientListManager
+			Client currentClient = this.sessionManager
 					.getClientByStreamId(streamid, null);
 			Long room_id = currentClient.getRoom_id();
 
@@ -570,7 +569,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 	}
 
 	public synchronized void removeUserFromAllLists(IScope scope,
-			IClientSession currentClient) {
+			Client currentClient) {
 		try {
 
 			Long room_id = currentClient.getRoom_id();

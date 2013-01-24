@@ -19,15 +19,16 @@
 package org.apache.openmeetings.session;
 
 import org.apache.openmeetings.persistence.beans.basic.Server;
+import org.apache.openmeetings.persistence.beans.rooms.Client;
 
 
 
 /**
  * 
- * Session object, is never populated to the clients, stays on the server
+ * Session object including the server info
  * 
  * So in this object you can store meta information that the client does not
- * need to know. This is handy because the {@link IClientSession} object otherwise gets too
+ * need to know. This is handy because the {@link Client} object otherwise gets too
  * big.
  * 
  * For example the {@link Server} can be referenced here.
@@ -35,7 +36,7 @@ import org.apache.openmeetings.persistence.beans.basic.Server;
  * @author sebawagner
  * 
  */
-public class ClientSession {
+public class ServerSession {
 
 	/**
 	 * if null, the connection is handled on the master, otherwise the
@@ -43,16 +44,16 @@ public class ClientSession {
 	 */
 	private Long server;
 
-	private IClientSession roomClient;
+	private Client roomClient;
 
-	public ClientSession(Long server, IClientSession roomClient) {
+	public ServerSession(Long server, Client roomClient) {
 		super();
 		this.server = server;
 		this.roomClient = roomClient;
 	}
 
 	/**
-	 * @see ClientSession#server
+	 * @see ServerSession#server
 	 */
 	public Long getServer() {
 		return server;
@@ -62,11 +63,11 @@ public class ClientSession {
 		this.server = server;
 	}
 
-	public IClientSession getRoomClient() {
+	public Client getRoomClient() {
 		return roomClient;
 	}
 
-	public void setRoomClient(IClientSession roomClient) {
+	public void setRoomClient(Client roomClient) {
 		this.roomClient = roomClient;
 	}
 

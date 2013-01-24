@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.session.cache;
+package org.apache.openmeetings.session.store;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,16 +27,16 @@ import java.util.Map.Entry;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.persistence.beans.basic.Server;
-import org.apache.openmeetings.session.Client;
-import org.apache.openmeetings.session.IClientSession;
+import org.apache.openmeetings.persistence.beans.rooms.Client;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 /**
+ * Stores the session in the memory.
+ * Is NOT designed to be clustered across multiple servers.
+ * 
  * This is actually some maps, a single map is not enough, cause we have
- * multiple keys and multiple views on that list. And also we have combined 
- * keys, for example server + streamId is unique. But the streamId as-is can 
- * be available multiple times.
+ * multiple keys and multiple views on that list.
  * 
  * There are multiple ways to organize a Map by multiple keys, one is to have 
  * multiple lists, for every key needed, there is a separated list.
@@ -52,7 +52,7 @@ import org.slf4j.Logger;
  * @author sebawagner
  * 
  */
-public class HashMapStore {
+public class HashMapStore implements IClientPersistenceStore {
 	
 	protected static final Logger log = Red5LoggerFactory.getLogger(
 			HashMapStore.class, OpenmeetingsVariables.webAppRootKey);
@@ -110,11 +110,8 @@ public class HashMapStore {
 		return server.getId();
 	}
 
-	/**
-	 * 
-	 * @param server
-	 * @param streamId
-	 * @param rcl
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.session.memory.IClientPersistence#put(org.apache.openmeetings.persistence.beans.basic.Server, java.lang.String, org.apache.openmeetings.persistence.beans.rooms.Client)
 	 */
 	public void put(Server server, String streamId, Client rcl) {
 
@@ -198,11 +195,9 @@ public class HashMapStore {
 		}
 	}
 
-	/**
-	 * 
-	 * @param server
-	 * @param streamId
-	 * @return
+	/*
+	 * (non-Javadoc)
+	 * @see org.apache.openmeetings.session.IClientPersistenceManager#containsKey(org.apache.openmeetings.persistence.beans.basic.Server, java.lang.String)
 	 */
 	public boolean containsKey(Server server, String streamId) {
 		if (clientsByServer.containsKey(getIdByServer(server))) {
@@ -211,12 +206,8 @@ public class HashMapStore {
 		return false;
 	}
 
-	/**
-	 * by server and publicSID
-	 * 
-	 * @param server
-	 * @param streamId
-	 * @return will return null if the client does not exist in the list
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.session.memory.IClientPersistence#get(org.apache.openmeetings.persistence.beans.basic.Server, java.lang.String)
 	 */
 	public Client get(Server server, String streamId) {
 		LinkedHashMap<String, Client> listMap = clientsByServer.get(getIdByServer(server));
@@ -226,11 +217,8 @@ public class HashMapStore {
 		return null;
 	}
 	
-	/**
-	 * 
-	 * @param server
-	 * @param publicSID
-	 * @return will return an empty list if nothing available
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.session.memory.IClientPersistence#getClientsByPublicSID(org.apache.openmeetings.persistence.beans.basic.Server, java.lang.String)
 	 */
 	public List<Client> getClientsByPublicSID(Server server, String publicSID) {
 		LinkedHashMap<String, List<Client>> clientListPublicSID = clientsByServerAndPublicSID.get(getIdByServer(server));
@@ -244,11 +232,8 @@ public class HashMapStore {
 		return clientList;
 	}
 	
-	/**
-	 * Searches for the publicSID across all servers
-	 * 
-	 * @param publicSID
-	 * @return will return a map with the serverId as key and the RoomClients as list in the value
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.session.memory.IClientPersistence#getClientsByPublicSID(java.lang.String)
 	 */
 	public Map<Long,List<Client>> getClientsByPublicSID(String publicSID) {
 		Map<Long,List<Client>> clientList = new HashMap<Long,List<Client>>();
@@ -261,11 +246,8 @@ public class HashMapStore {
 		return clientList;
 	}
 	
-	/**
-	 * get all clients by a specific {@link Server}
-	 * 
-	 * @param server
-	 * @return will return an empty map if nothing available
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.session.memory.IClientPersistence#getClientsByServer(org.apache.openmeetings.persistence.beans.basic.Server)
 	 */
 	public LinkedHashMap<String, Client> getClientsByServer(Server server) {
 		LinkedHashMap<String, Client> listMap = clientsByServer.get(getIdByServer(server));
@@ -275,11 +257,8 @@ public class HashMapStore {
 		return listMap;
 	}
 	
-	/**
-	 * 
-	 * @param server
-	 * @param userId
-	 * @return will return an empty list if nothing available
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.session.memory.IClientPersistence#getClientsByUserId(org.apache.openmeetings.persistence.beans.basic.Server, java.lang.Long)
 	 */
 	public List<Client> getClientsByUserId(Server server, Long userId) {
 		LinkedHashMap<Long, List<Client>> clientListUserId = clientsByServerAndUserId.get(getIdByServer(server));
@@ -293,15 +272,8 @@ public class HashMapStore {
 		return clientList;
 	}
 	
-	/**
-	 * 
-	 * We ignore the server here, cause ONE room can only be on ONE server and often we don't know where.
-	 * However at a later stage clients might be on different servers and still in the save room
-	 * so we keep that parameter for now
-	 * 
-	 * @param server
-	 * @param roomId
-	 * @return will return an empty map if nothing available
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.session.memory.IClientPersistence#getClientsByRoomId(org.apache.openmeetings.persistence.beans.basic.Server, java.lang.Long)
 	 */
 	public  LinkedHashMap<String, Client> getClientsByRoomId(Server server, Long roomId) {
 		
@@ -315,6 +287,9 @@ public class HashMapStore {
 		return EMPTY_MAP;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.session.memory.IClientPersistence#remove(org.apache.openmeetings.persistence.beans.basic.Server, java.lang.String)
+	 */
 	public void remove(Server server, String streamId) {
 		
 		// By server and streamid
@@ -325,7 +300,7 @@ public class HashMapStore {
 		if (clientList == null) {
 			clientList = new LinkedHashMap<String, Client>();
 		}
-		IClientSession rcl = clientList.get(streamId);
+		Client rcl = clientList.get(streamId);
 		
 		if (rcl == null) {
 			throw new NullPointerException("Could not find RoomClient with that streamId: "+streamId);
@@ -426,6 +401,9 @@ public class HashMapStore {
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.session.memory.IClientPersistence#size()
+	 */
 	public int size() {
 		int size = 0;
 		for (Entry<Long, LinkedHashMap<String, Client>> entry : clientsByServer.entrySet()) {
@@ -434,6 +412,9 @@ public class HashMapStore {
 		return size;
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.session.memory.IClientPersistence#sizeByServer(org.apache.openmeetings.persistence.beans.basic.Server)
+	 */
 	public int sizeByServer(Server server) {
 		if (clientsByServer.get(getIdByServer(server)) == null) {
 			return 0;
@@ -441,10 +422,17 @@ public class HashMapStore {
 		return clientsByServer.get(getIdByServer(server)).size();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.apache.openmeetings.session.IClientPersistenceManager#values()
+	 */
 	public LinkedHashMap<Long, LinkedHashMap<String, Client>> values() {
 		return clientsByServer;
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.apache.openmeetings.session.memory.IClientPersistence#getClientsByServerAndRoom(org.apache.openmeetings.persistence.beans.basic.Server)
+	 */
 	public LinkedHashMap<Long,LinkedHashMap<String,Client>> getClientsByServerAndRoom(Server server) {
 		return clientsByServerAndRoomId.get(getIdByServer(server));
 	}
@@ -452,14 +440,6 @@ public class HashMapStore {
 //	public Set<Long> getRoomIdsByServer(Server server) {
 //		return clientsByServerAndRoomId.get(getIdByServer(server)).keySet();
 //	}
-	
-	public enum DEBUG_DETAILS {
-		SIZE,
-		CLIENT_BY_STREAMID, STREAMID_LIST_ALL,
-		CLIENT_BY_PUBLICSID, PUBLICSID_LIST_ALL, 
-		CLIENT_BY_USERID, USERID_LIST_ALL,
-		CLIENT_BY_ROOMID, ROOMID_LIST_ALL
-	}
 	
 	public int getTotalNumberOfSessions() {
 		int t = 0;
@@ -476,18 +456,14 @@ public class HashMapStore {
 	 * @param detailLevel
 	 */
 	public void printDebugInformation(List<DEBUG_DETAILS> detailLevel) {
-
 		log.debug("Session Statistics Start ################## ");
 		log.debug(getDebugInformation(detailLevel));
 		log.debug("Session Statistics End ################## ");
-
 	}
 
-	/**
-	 * Get some session statistics
-	 * 
-	 * @param detailLevel
-	 * @return
+	/*
+	 * (non-Javadoc)
+	 * @see org.apache.openmeetings.session.IClientPersistenceManager#getDebugInformation(java.util.List)
 	 */
 	public String getDebugInformation(List<DEBUG_DETAILS> detailLevel) {
 
