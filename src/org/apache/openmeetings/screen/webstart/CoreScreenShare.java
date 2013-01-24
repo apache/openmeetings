@@ -77,6 +77,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 	private boolean startPublishing = false;
 	public float Ampl_factor = 1f;
 	public boolean isConnected = false;
+	private boolean readyToRecord = false;
 
 	public Map<Integer, Boolean> currentPressedKeys = new HashMap<Integer, Boolean>();
 
@@ -285,6 +286,14 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		}
 	}
 	
+	synchronized public boolean isReadyToRecord() {
+		return readyToRecord;
+	}
+	
+	synchronized private void setReadyToRecord(boolean readyToRecord) {
+		this.readyToRecord = readyToRecord;
+	}
+	
 	protected void onInvoke(RTMPConnection conn, Channel channel,
 			Header source, Notify invoke, RTMP rtmp) {
 
@@ -321,6 +330,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 			isConnected = false;
 
 			instance.disconnect();
+			setReadyToRecord(false);
 			getCapture().setStartPublish(false);
 			getCapture().release();
 			capture = null;
@@ -341,6 +351,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		if (StatusCodes.NS_PUBLISH_START.equals(code)) {
 			logger.debug( "onStreamEvent Publish start" );
 			getCapture().setStartPublish(true);
+			setReadyToRecord(true);
 		}
 	}
 

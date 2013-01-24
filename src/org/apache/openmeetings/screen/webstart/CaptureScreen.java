@@ -65,6 +65,9 @@ final class CaptureScreen extends Thread {
 
 	public void run() {
 		try {
+			while (!core.isReadyToRecord()) {
+				Thread.sleep(60);
+			}
 			Robot robot = new Robot();
 			BufferedImage image = null;
 			while (active) {
