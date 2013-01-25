@@ -126,7 +126,7 @@
     <view resource="av_allow_rsc" x="2" y="2" />
     
     <labelText text="$once{ parent.message }" multiline="true" x="40"
-               width="$once{ parent.width - 60 }" font="Helvetica"/>
+               width="$once{ parent.width - 60 }"/>
                
 </class>
 	
@@ -141,7 +141,7 @@
     <view resource="mute_btn_rsc" x="2" y="2" />
     
     <labelText text="$once{ parent.message }" multiline="true" x="40"
-               width="$once{ parent.width - 60 }" font="Helvetica"/>
+               width="$once{ parent.width - 60 }"/>
                
 </class>
 
@@ -156,7 +156,7 @@
     <view resource="participants_exclusive_audio_rsc" x="2" y="2" />
 
     <labelText text="$once{ parent.message }" multiline="true" x="20"
-               width="$once{ parent.width - 40 }" font="Helvetica"/>
+               width="$once{ parent.width - 40 }"/>
 
 </class>
 	
@@ -171,7 +171,7 @@
 	<view resource="unmute_btn_rsc" x="2" y="2" />
 	
 	<labelText text="$once{ parent.message }" multiline="true" x="20"
-			   width="$once{ parent.width - 40 }" font="Helvetica"/>
+			   width="$once{ parent.width - 40 }"/>
                
 </class>	
 
@@ -188,7 +188,7 @@
     <view resource="allow_audio_only_rsc" x="2" y="2" />
     
     <labelText text="$once{ parent.message }" multiline="true" x="20"
-               width="$once{ parent.width - 40 }" font="Helvetica"/>
+               width="$once{ parent.width - 40 }"/>
                
 </class>  
     
@@ -205,7 +205,7 @@
     <view resource="allow_video_only_rsc" x="2" y="2" />
     
     <labelText text="$once{ parent.message }" multiline="true" x="20"
-               width="$once{ parent.width - 40 }" font="Helvetica"/>
+               width="$once{ parent.width - 40 }"/>
                
 </class>   
 
@@ -221,7 +221,7 @@
     <view resource="participants_allow_drawing_rsc" x="2" y="2" />
     
     <labelText text="$once{ parent.message }" multiline="true" x="20"
-               width="$once{ parent.width - 40 }" font="Helvetica"/>
+               width="$once{ parent.width - 40 }"/>
                
 </class>  
 
@@ -239,7 +239,7 @@
     <view resource="screen_allow_rsc" x="2" y="2" />
     
     <labelText text="$once{ parent.message }" multiline="true" x="20"
-               width="$once{ parent.width - 40 }" font="Helvetica"/>
+               width="$once{ parent.width - 40 }"/>
                
 </class>  
 
@@ -257,7 +257,7 @@
     <view resource="remote_allow_rsc" x="2" y="2" />
     
     <labelText text="$once{ parent.message }" multiline="true" x="20"
-               width="$once{ parent.width - 40 }" font="Helvetica"/>
+               width="$once{ parent.width - 40 }"/>
                
 </class> 
 
@@ -270,7 +270,7 @@
     <view resource="warning_icon_rsc" x="2" y="2" />
     
     <labelText text="$once{ parent.message }" multiline="true" x="20"
-               width="$once{ parent.width - 40 }" font="Helvetica"/>
+               width="$once{ parent.width - 40 }"/>
                
 </class>  
 
@@ -285,7 +285,7 @@
     <view resource="participants_isMod_rsc" x="2" y="2" />
     
     <labelText text="$once{ parent.message }" multiline="true" x="20"
-               width="$once{ parent.width - 40 }" font="Helvetica"/>
+               width="$once{ parent.width - 40 }"/>
                
 </class>  
 
