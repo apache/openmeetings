@@ -2854,7 +2854,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				i.remove();
 			}
 		}
-		return result;
+		return roomDao.getSipRooms(result);
 	}
 	
 	public synchronized List<Long> getActiveRoomIds() {
@@ -2862,7 +2862,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		for (Server s : serverDao.getActiveServers()) {
 			result.addAll(getVerifyedActiveRoomIds(s));
 		}
-		return result;
+		return roomDao.getSipRooms(result);
 	}
 	
     public synchronized void updateSipTransport() {
