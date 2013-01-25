@@ -538,106 +538,79 @@ public class ConferenceService {
 			long roomId = -1;
 			if (rooms_id == 0) {
 				roomId = roommanagement.addRoom(
-						User_level,
-						argObjectMap.get("name").toString(),
-						Long.valueOf(
-								argObjectMap.get("roomtypes_id").toString())
-								.longValue(),
-						argObjectMap.get("comment").toString(),
-						Long.valueOf(
-								argObjectMap.get("numberOfPartizipants")
-										.toString()).longValue(), Boolean
-								.valueOf(argObjectMap.get("ispublic")
-										.toString()), organisations, Boolean
-								.valueOf(argObjectMap.get("appointment")
-										.toString()), Boolean
-								.valueOf(argObjectMap.get("isDemoRoom")
-										.toString()), demoTime, Boolean
-								.valueOf(argObjectMap.get("isModeratedRoom")
-										.toString()), roomModerators, Boolean
-								.valueOf(argObjectMap.get("allowUserQuestions")
-										.toString()), Boolean
-								.valueOf(argObjectMap.get("isAudioOnly")
-										.toString()), Boolean
-								.valueOf(argObjectMap.get("allowFontStyles")
-										.toString()), Boolean
-								.valueOf(argObjectMap.get("isClosed")
-										.toString()),
-						argObjectMap.get("redirectURL").toString(), argObjectMap
-								.get("conferencePin").toString(),
-						Long.valueOf(argObjectMap.get("ownerId").toString())
-								.longValue(), Boolean.valueOf(argObjectMap.get(
-								"waitForRecording").toString()), Boolean
-								.valueOf(argObjectMap.get("allowRecording")
-										.toString()), Boolean
-								.valueOf(argObjectMap.get("hideTopBar")
-										.toString()), 
-								Boolean.valueOf(argObjectMap.get("hideChat").toString()),
-								Boolean.valueOf(argObjectMap.get("hideActivitiesAndActions").toString()),
-								Boolean.valueOf(argObjectMap.get("hideFilesExplorer").toString()),
-								Boolean.valueOf(argObjectMap.get("hideActionsMenu").toString()),
-								Boolean.valueOf(argObjectMap.get("hideScreenSharing").toString()),
-								Boolean.valueOf(argObjectMap.get("hideWhiteboard").toString()),
-								Boolean.valueOf(argObjectMap.get("showMicrophoneStatus").toString()),
-								Boolean.valueOf(argObjectMap.get("chatModerated").toString()),
-								Boolean.valueOf(argObjectMap.get("chatOpened").toString()),
-								Boolean.valueOf(argObjectMap.get("filesOpened").toString()),
-								Boolean.valueOf(argObjectMap.get("autoVideoSelect").toString())
+						User_level
+						, argObjectMap.get("name").toString()
+						, Long.valueOf(argObjectMap.get("roomtypes_id").toString()).longValue()
+						, argObjectMap.get("comment").toString()
+						, Long.valueOf(argObjectMap.get("numberOfPartizipants").toString()).longValue()
+						, Boolean.valueOf(argObjectMap.get("ispublic").toString())
+						, organisations
+						, Boolean.valueOf(argObjectMap.get("appointment").toString())
+						, Boolean.valueOf(argObjectMap.get("isDemoRoom").toString())
+						, demoTime
+						, Boolean.valueOf(argObjectMap.get("isModeratedRoom").toString())
+						, roomModerators
+						, Boolean.valueOf(argObjectMap.get("allowUserQuestions").toString())
+						, Boolean.valueOf(argObjectMap.get("isAudioOnly").toString())
+						, Boolean.valueOf(argObjectMap.get("allowFontStyles").toString())
+						, Boolean.valueOf(argObjectMap.get("isClosed").toString())
+						, argObjectMap.get("redirectURL").toString()
+						, argObjectMap.get("conferencePin").toString()
+						, Long.valueOf(argObjectMap.get("ownerId").toString()).longValue()
+						, Boolean.valueOf(argObjectMap.get("waitForRecording").toString())
+						, Boolean.valueOf(argObjectMap.get("allowRecording").toString())
+						, Boolean.valueOf(argObjectMap.get("hideTopBar").toString())
+						, Boolean.valueOf(argObjectMap.get("hideChat").toString())
+						, Boolean.valueOf(argObjectMap.get("hideActivitiesAndActions").toString())
+						, Boolean.valueOf(argObjectMap.get("hideFilesExplorer").toString())
+						, Boolean.valueOf(argObjectMap.get("hideActionsMenu").toString())
+						, Boolean.valueOf(argObjectMap.get("hideScreenSharing").toString())
+						, Boolean.valueOf(argObjectMap.get("hideWhiteboard").toString())
+						, Boolean.valueOf(argObjectMap.get("showMicrophoneStatus").toString())
+						, Boolean.valueOf(argObjectMap.get("chatModerated").toString())
+						, Boolean.valueOf(argObjectMap.get("chatOpened").toString())
+						, Boolean.valueOf(argObjectMap.get("filesOpened").toString())
+						, Boolean.valueOf(argObjectMap.get("autoVideoSelect").toString())
+						, Boolean.valueOf(argObjectMap.get("sipEnabled").toString())
 						);
 			} else if (rooms_id > 0) {
 				roomId = roommanagement.updateRoom(
-								User_level,
-								rooms_id,
-								Long.valueOf(
-										argObjectMap.get("roomtypes_id")
-												.toString()).longValue(),
-								argObjectMap.get("name").toString(),
-								Boolean.valueOf(argObjectMap.get("ispublic")
-										.toString()),
-								argObjectMap.get("comment").toString(),
-								Long.valueOf(
-										argObjectMap
-												.get("numberOfPartizipants")
-												.toString()).longValue(),
-								organisations,
-								Boolean.valueOf(argObjectMap.get("appointment")
-										.toString()),
-								Boolean.valueOf(argObjectMap.get("isDemoRoom")
-										.toString()),
-								demoTime,
-								Boolean.valueOf(argObjectMap.get(
-										"isModeratedRoom").toString()),
-								roomModerators,
-								Boolean.valueOf(argObjectMap.get(
-										"allowUserQuestions").toString()),
-								Boolean.valueOf(argObjectMap.get("isAudioOnly")
-										.toString()),
-								Boolean.valueOf(argObjectMap.get("allowFontStyles")
-										.toString()),		
-								Boolean.valueOf(argObjectMap.get("isClosed")
-										.toString()),
-								argObjectMap.get("redirectURL").toString(),
-								argObjectMap.get("conferencePin").toString(),
-								Long.valueOf(
-										argObjectMap.get("ownerId").toString())
-										.longValue(),
-								Boolean.valueOf(argObjectMap.get(
-										"waitForRecording").toString()),
-								Boolean.valueOf(argObjectMap.get(
-										"allowRecording").toString()), 
-								Boolean.valueOf(argObjectMap.get("hideTopBar").toString()),
-								Boolean.valueOf(argObjectMap.get("hideChat").toString()),
-								Boolean.valueOf(argObjectMap.get("hideActivitiesAndActions").toString()),
-								Boolean.valueOf(argObjectMap.get("hideFilesExplorer").toString()),
-								Boolean.valueOf(argObjectMap.get("hideActionsMenu").toString()),
-								Boolean.valueOf(argObjectMap.get("hideScreenSharing").toString()),
-								Boolean.valueOf(argObjectMap.get("hideWhiteboard").toString()),
-								Boolean.valueOf(argObjectMap.get("showMicrophoneStatus").toString()),
-								Boolean.valueOf(argObjectMap.get("chatModerated").toString()),
-								Boolean.valueOf(argObjectMap.get("chatOpened").toString()),
-								Boolean.valueOf(argObjectMap.get("filesOpened").toString()),
-								Boolean.valueOf(argObjectMap.get("autoVideoSelect").toString())
-								);
+						User_level
+						, rooms_id
+						, Long.valueOf(argObjectMap.get("roomtypes_id").toString()).longValue()
+						, argObjectMap.get("name").toString()
+						, Boolean.valueOf(argObjectMap.get("ispublic").toString())
+						, argObjectMap.get("comment").toString()
+						, Long.valueOf(argObjectMap.get("numberOfPartizipants").toString()).longValue()
+						, organisations
+						, Boolean.valueOf(argObjectMap.get("appointment").toString())
+						, Boolean.valueOf(argObjectMap.get("isDemoRoom").toString())
+						, demoTime
+						, Boolean.valueOf(argObjectMap.get("isModeratedRoom").toString())
+						, roomModerators
+						, Boolean.valueOf(argObjectMap.get("allowUserQuestions").toString())
+						, Boolean.valueOf(argObjectMap.get("isAudioOnly").toString())
+						, Boolean.valueOf(argObjectMap.get("allowFontStyles").toString())
+						, Boolean.valueOf(argObjectMap.get("isClosed").toString())
+						, argObjectMap.get("redirectURL").toString()
+						, argObjectMap.get("conferencePin").toString()
+						, Long.valueOf(argObjectMap.get("ownerId").toString()).longValue()
+						, Boolean.valueOf(argObjectMap.get("waitForRecording").toString())
+						, Boolean.valueOf(argObjectMap.get("allowRecording").toString())
+						, Boolean.valueOf(argObjectMap.get("hideTopBar").toString())
+						, Boolean.valueOf(argObjectMap.get("hideChat").toString())
+						, Boolean.valueOf(argObjectMap.get("hideActivitiesAndActions").toString())
+						, Boolean.valueOf(argObjectMap.get("hideFilesExplorer").toString())
+						, Boolean.valueOf(argObjectMap.get("hideActionsMenu").toString())
+						, Boolean.valueOf(argObjectMap.get("hideScreenSharing").toString())
+						, Boolean.valueOf(argObjectMap.get("hideWhiteboard").toString())
+						, Boolean.valueOf(argObjectMap.get("showMicrophoneStatus").toString())
+						, Boolean.valueOf(argObjectMap.get("chatModerated").toString())
+						, Boolean.valueOf(argObjectMap.get("chatOpened").toString())
+						, Boolean.valueOf(argObjectMap.get("filesOpened").toString())
+						, Boolean.valueOf(argObjectMap.get("autoVideoSelect").toString())
+						, Boolean.valueOf(argObjectMap.get("sipEnabled").toString())
+						);
 			}
 			
 			return roomId;

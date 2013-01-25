@@ -53,6 +53,7 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "getNondeletedRooms", query = "SELECT r FROM Rooms r WHERE r.deleted = false"),
 	@NamedQuery(name = "getPublicRoomsOrdered", query = "SELECT r from Rooms r WHERE r.ispublic= true AND r.deleted= false AND r.appointment = false ORDER BY r.name ASC"),
 	@NamedQuery(name = "getRoomById", query = "SELECT r FROM Rooms r WHERE r.deleted = false AND r.rooms_id = :id"),
+	@NamedQuery(name = "getSipRoomIdsByIds", query = "SELECT r.rooms_id FROM Rooms r WHERE r.deleted = false AND r.sipEnabled = true AND r.rooms_id IN :ids"),
 	@NamedQuery(name = "countRooms", query = "SELECT COUNT(r) FROM Rooms r WHERE r.deleted = false"),
 	@NamedQuery(name = "getBackupRooms", query = "SELECT r FROM Rooms r LEFT JOIN FETCH r.moderators WHERE r.deleted = false ")
 })
@@ -218,6 +219,10 @@ public class Rooms implements Serializable, IDataProviderEntity {
 	@PrimaryKeyJoinColumn(name="confno", referencedColumnName="confno")
 	@Element(name = "meetme", required = false)
 	private MeetMe meetme;
+	
+	@Column(name = "sip_enabled")
+	@Element(data = true, required = false)
+	private boolean sipEnabled;
 	
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "rooms_id", insertable = true, updatable = true)
@@ -538,6 +543,14 @@ public class Rooms implements Serializable, IDataProviderEntity {
 
 	public void setMeetme(MeetMe meetme) {
 		this.meetme = meetme;
+	}
+
+	public boolean isSipEnabled() {
+		return sipEnabled;
+	}
+
+	public void setSipEnabled(boolean sipEnabled) {
+		this.sipEnabled = sipEnabled;
 	}
 
 }

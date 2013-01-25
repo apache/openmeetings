@@ -669,7 +669,7 @@ public class Roommanagement {
 			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, Boolean hideFilesExplorer, 
 			Boolean hideActionsMenu, Boolean hideScreenSharing, Boolean hideWhiteboard,
 			Boolean showMicrophoneStatus, Boolean chatModerated, boolean chatOpened
-			, boolean filesOpened, boolean autoVideoSelect) {
+			, boolean filesOpened, boolean autoVideoSelect, boolean sipEnabled) {
 
 		try {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
@@ -714,7 +714,8 @@ public class Roommanagement {
 				r.setChatOpened(chatOpened);
 				r.setFilesOpened(filesOpened);
 				r.setAutoVideoSelect(autoVideoSelect);
-
+				r.setSipEnabled(sipEnabled);
+				
                 /*****************************************************************************************************/
 
 				r = em.merge(r);
@@ -1248,7 +1249,7 @@ public class Roommanagement {
 			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, 
 			Boolean hideFilesExplorer, Boolean hideActionsMenu, Boolean hideScreenSharing, Boolean hideWhiteboard,
 			Boolean showMicrophoneStatus, Boolean chatModerated, boolean chatOpened, boolean filesOpened
-			, boolean autoVideoSelect) {
+			, boolean autoVideoSelect, boolean sipEnabled) {
 		try {
 
 			log.debug("*** updateRoom numberOfPartizipants: "
@@ -1263,7 +1264,7 @@ public class Roommanagement {
 						ownerId, waitForRecording, allowRecording, hideTopBar, hideChat, 
 						hideActivitiesAndActions, hideFilesExplorer, hideActionsMenu, 
 						hideScreenSharing, hideWhiteboard, showMicrophoneStatus, chatModerated
-						, chatOpened, filesOpened, autoVideoSelect);
+						, chatOpened, filesOpened, autoVideoSelect, sipEnabled);
 
 			}
 
@@ -1284,7 +1285,7 @@ public class Roommanagement {
 			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, Boolean hideFilesExplorer, 
 			Boolean hideActionsMenu, Boolean hideScreenSharing, Boolean hideWhiteboard, 
 			Boolean showMicrophoneStatus, Boolean chatModerated, boolean chatOpened, boolean filesOpened
-			, boolean autoVideoSelect) {
+			, boolean autoVideoSelect, boolean sipEnabled) {
 		try {
 			log.debug("*** updateRoom numberOfPartizipants: "
 					+ numberOfPartizipants);
@@ -1335,6 +1336,7 @@ public class Roommanagement {
 			r.setChatOpened(chatOpened);
 			r.setFilesOpened(filesOpened);
 			r.setAutoVideoSelect(autoVideoSelect);
+			r.setSipEnabled(sipEnabled);
 
 			if (r.getRooms_id() == null) {
 				em.persist(r);
@@ -1661,7 +1663,8 @@ public class Roommanagement {
 						false, // chatModerated
 						false, //chatOpened
 						false, //filesOpened
-						false //autoVideoSelect
+						false, //autoVideoSelect
+						false //sipEnabled
 						);
 
 				if (rooms_id != null) {

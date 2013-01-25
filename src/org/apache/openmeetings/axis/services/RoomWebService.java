@@ -708,7 +708,8 @@ public class RoomWebService {
 						false, // chatModerated
 						false, // chatOpened
 						false, // filesOpened
-						false // autoVideoSelect
+						false, // autoVideoSelect
+						false //sipEnabled
 						);
 			}
 		} catch (Exception err) {
@@ -770,7 +771,8 @@ public class RoomWebService {
 						false, // chatModerated
 						false, // chatOpened
 						false, // filesOpened
-						false // autoVideoSelect
+						false, // autoVideoSelect
+						false //sipEnabled
 						);
 			}
 		} catch (Exception err) {
@@ -839,7 +841,8 @@ public class RoomWebService {
 						false, // chatModerated
 						false, // chatOpened
 						false, // filesOpened
-						false // autoVideoSelect
+						false, // autoVideoSelect
+						false //sipEnabled
 						);
 			}
 		} catch (Exception err) {
@@ -910,7 +913,8 @@ public class RoomWebService {
 						false, // chatModerated
 						false, // chatOpened
 						false, // filesOpened
-						false // autoVideoSelect
+						false, // autoVideoSelect
+						false //sipEnabled
 						);
 			}
 			return -1L;
@@ -996,7 +1000,8 @@ public class RoomWebService {
 						false, false, 
 						false, // chatOpened
 						false, // filesOpened
-						false // autoVideoSelect
+						false, // autoVideoSelect
+						false //sipEnabled
 						);
 			}
 			return -1L;
@@ -1139,7 +1144,8 @@ public class RoomWebService {
 						false, // chatModerated
 						false, // chatOpened
 						false, // filesOpened
-						false // autoVideoSelect
+						false, // autoVideoSelect
+						false //sipEnabled
 						);
 			}
 		} catch (Exception err) {
@@ -1204,7 +1210,8 @@ public class RoomWebService {
 						false, // chatModerated
 						false, // chatOpened
 						false, // filesOpened
-						false // autoVideoSelect
+						false, // autoVideoSelect
+						false //sipEnabled
 						);
 			}
 		} catch (Exception err) {
@@ -1272,7 +1279,8 @@ public class RoomWebService {
 						false, // chatModerated
 						false, // chatOpened
 						false, // filesOpened
-						false // autoVideoSelect
+						false, // autoVideoSelect
+						false //sipEnabled
 						);
 			}
 		} catch (Exception err) {
@@ -1359,7 +1367,8 @@ public class RoomWebService {
 						false, // chatModerated
 						false, // chatOpened
 						false, // filesOpened
-						false // autoVideoSelect
+						false, // autoVideoSelect
+						false //sipEnabled
 						);
 			}
 		} catch (Exception err) {

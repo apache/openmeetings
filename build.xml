@@ -762,6 +762,7 @@
 		</fileset>
 		<fileset dir="${red5.root}" includes="*.jar" />
 		<fileset dir="${red5.root}/lib" includes="*.jar" />
+		<fileset dir="${red5.root}/plugins" includes="*.jar" />
 		<pathelement path="${om.dist.webapp}/WEB-INF" />
 		<pathelement path="${om.dist.webapp}/WEB-INF/classes" />
 		<pathelement path="${main.out.dir}" />
@@ -772,6 +773,7 @@
 		<echo message="${myclsp}" /-->
 		<junit maxmemory="1024m" printsummary="yes" dir="${junit.base.dir}" tempdir="${junit.base.dir}" fork="yes" forkmode="perBatch">
 			<classpath refid="junit.classpath" />
+			<jvmarg value="-Dom.home=${om.home}" />
 			<jvmarg value="-Dred5.root=${red5.root}" />
 			<jvmarg value="-Dbasedir=${basedir}" />
 			<jvmarg value="-Dred5.config_root=${red5.root}/conf" />

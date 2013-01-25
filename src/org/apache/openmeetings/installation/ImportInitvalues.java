@@ -527,7 +527,8 @@ public class ImportInitvalues {
 					false, // chatModerated
 					false, // chatOpened
 					false, // filesOpened
-					false // autoVideoSelect
+					false, // autoVideoSelect
+					false //sipEnabled
 					);
 
 			roommanagement.addRoom(3, "public Conference Room", conference_Id,
@@ -544,7 +545,8 @@ public class ImportInitvalues {
 					false, // chatModerated
 					false, // chatOpened
 					false, // filesOpened
-					false // autoVideoSelect
+					false, // autoVideoSelect
+					false //sipEnabled
 					);
 
 			roommanagement.addRoom(3, "public Video Only Room", conference_Id,
@@ -561,7 +563,8 @@ public class ImportInitvalues {
 					false, // chatModerated
 					false, // chatOpened
 					false, // filesOpened
-					false // autoVideoSelect
+					false, // autoVideoSelect
+					false //sipEnabled
 					);
 
 			roommanagement.addRoom(3, "public Video And Whiteboard Room",
@@ -578,7 +581,8 @@ public class ImportInitvalues {
 					false, // chatModerated
 					false, // chatOpened
 					false, // filesOpened
-					false // autoVideoSelect
+					false, // autoVideoSelect
+					false //sipEnabled
 					);
 
 			roommanagement.addRoom(3, "public Restricted Room", restricted_Id,
@@ -595,7 +599,8 @@ public class ImportInitvalues {
 					false, // chatModerated
 					false, // chatOpened
 					false, // filesOpened
-					false // autoVideoSelect
+					false, // autoVideoSelect
+					false //sipEnabled
 					);
 
 			roommanagement.addRoom(3, "restricted room with micro option set",
@@ -612,7 +617,8 @@ public class ImportInitvalues {
 					false, // chatModerated
 					false, // chatOpened
 					false, // filesOpened
-					false // autoVideoSelect
+					false, // autoVideoSelect
+					false //sipEnabled
 					);
 
 			roommanagement.addRoom(3, "conference room with micro option set",
@@ -629,7 +635,8 @@ public class ImportInitvalues {
 					false, // chatModerated
 					false, // chatOpened
 					false, // filesOpened
-					false // autoVideoSelect
+					false, // autoVideoSelect
+					false //sipEnabled
 					);
 
 			long room2 = roommanagement.addRoom(3, "private Conference Room",
@@ -646,7 +653,8 @@ public class ImportInitvalues {
 					false, // chatModerated
 					false, // chatOpened
 					false, // filesOpened
-					false // autoVideoSelect
+					false, // autoVideoSelect
+					false //sipEnabled
 					);
 
 			roommanagement.addRoomToOrganisation(3, room2, 1);

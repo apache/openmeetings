@@ -4635,6 +4635,9 @@ see http://incubator.apache.org/openmeetings/LanguageEditor.html for Details
     <value>System import</value>
   </string>
   <string id="1537" name="include_into_backup">
-    <value>AAAInclude uploaded files and recordings in backup</value>
+    <value>Include uploaded files and recordings in backup</value>
+  </string>
+  <string id="1538" name="room_admin_sip">
+    <value>Enable SIP transport in the room</value>
   </string>
 </language>

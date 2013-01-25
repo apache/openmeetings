@@ -192,7 +192,8 @@ public class AppointmentLogic {
 					false, // chatModerated
 					false, // chatOpened
 					false, // filesOpened
-					false // autoVideoSelect
+					false, // autoVideoSelect
+					false //sipEnabled
 				);
 
 			log.debug("Appointmentlogic.saveAppointment : Room - " + room_id);

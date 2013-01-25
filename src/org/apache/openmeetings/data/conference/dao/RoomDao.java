@@ -74,6 +74,12 @@ public class RoomDao implements IDataProviderDao<Rooms> {
 				.getResultList();
 	}
 	
+	public List<Long> getSipRooms(List<Long> ids) {
+		TypedQuery<Long> q = em.createNamedQuery("getSipRoomIdsByIds", Long.class);
+		q.setParameter("ids", ids);
+		return q.getResultList();
+	}
+
 	public List<Rooms> getOrganisationRooms(long orgId) {
 		TypedQuery<Rooms> q = em.createQuery(
 				"SELECT DISTINCT c.room FROM Rooms_Organisation c LEFT JOIN FETCH c.room "
