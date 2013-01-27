@@ -23,11 +23,15 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 
 /**
@@ -367,6 +371,10 @@ public class Client implements Serializable {
 	 */
 	@Column(name = "sip_transport")
     private boolean sipTransport = false;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id")
+	private Server server;
     
     public Client() {
     	
@@ -833,6 +841,14 @@ public class Client implements Serializable {
 		this.sipTransport = sipTransport;
 	}
 	
+	public Server getServer() {
+		return server;
+	}
+
+	public void setServer(Server server) {
+		this.server = server;
+	}
+
 	@Override
 	public String toString() {
 		return super.toString() //

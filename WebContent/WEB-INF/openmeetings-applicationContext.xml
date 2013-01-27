@@ -51,17 +51,29 @@
 	<!-- New Class for the Streaming Handlers -->
 	<bean id="web.handler"
 		class="org.apache.openmeetings.remote.red5.ScopeApplicationAdapter" />
-	
-	<!-- In memory / session stores -->
+		
+	<!-- Session configuration start -->
 	
 	<bean id="openmeetings.SessionManager" 
-		class="org.apache.openmeetings.session.SessionManager" />
+		class="org.apache.openmeetings.session.SessionManager">
+		<property name="cache">
+	        <ref bean="openmeetings.HashMapStore"/>  <!-- Memory based session cache by default -->
+	    </property>	
+	</bean>
 	<bean id="openmeetings.EmoticonsManager" 
 		class="org.apache.openmeetings.remote.red5.EmoticonsManager" />
 	<bean id="openmeetings.WhiteBoardObjectListManager"
 		class="org.apache.openmeetings.remote.red5.WhiteBoardObjectListManager" />
 	<bean id="openmeetings.WhiteBoardObjectListManagerById"
 		class="org.apache.openmeetings.remote.red5.WhiteBoardObjectListManagerById" />
+	
+	<bean id="openmeetings.DatabaseStore"
+		class="org.apache.openmeetings.session.store.DatabaseStore" />
+	
+	<bean id="openmeetings.HashMapStore" scope="singleton" 
+		class="org.apache.openmeetings.session.store.HashMapStore" />
+	
+	<!-- Cluster related config start -->
 
 	<!-- Start of Services -->
 	<bean id="xmlcrm.service" class="org.apache.openmeetings.remote.MainService" />
@@ -239,6 +251,8 @@
 	<bean id="usersDao" class="org.apache.openmeetings.data.user.dao.UsersDao" />
 	<bean id="serverDao" class="org.apache.openmeetings.data.basic.dao.ServerDao" />
 	<bean id="chatDao" class="org.apache.openmeetings.data.chat.ChatDao" />
+	<bean id="clientDao" class="org.apache.openmeetings.data.conference.dao.ClientDao" />
+	
 
 	<!-- No Interface -->
 	<bean id="manageCryptStyle" class="org.apache.openmeetings.utils.crypt.ManageCryptStyle" />

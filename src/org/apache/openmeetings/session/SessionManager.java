@@ -36,7 +36,6 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.persistence.beans.rooms.Client;
-import org.apache.openmeetings.session.store.HashMapStore;
 import org.apache.openmeetings.session.store.IClientPersistenceStore;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
@@ -54,8 +53,21 @@ public class SessionManager implements ISessionManager {
 	protected static final Logger log = Red5LoggerFactory.getLogger(
 			SessionManager.class, OpenmeetingsVariables.webAppRootKey);
 	
-	protected static IClientPersistenceStore cache = new HashMapStore();
+	/**
+	 * Injected via Spring
+	 */
+	private IClientPersistenceStore cache;
 	
+	//Needs getters and setters as here it is no "Autowired" bean, as you can configure different caches
+	public IClientPersistenceStore getCache() {
+		return cache;
+	}
+
+	public void setCache(IClientPersistenceStore cache) {
+		this.cache = cache;
+	}
+
+
 	private static Set<Long> EMPTY_HASH_SET = new HashSet<Long>();
 
 	@Autowired

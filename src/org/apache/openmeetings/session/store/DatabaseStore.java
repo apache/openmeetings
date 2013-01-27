@@ -22,10 +22,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.openmeetings.data.conference.dao.ClientDao;
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.persistence.beans.rooms.Client;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class DatabaseStore implements IClientPersistenceStore {
+	
+	@Autowired
+	private ClientDao clientDao;
 
 	public void put(Server server, String streamId, Client rcl) {
 		// TODO Auto-generated method stub
