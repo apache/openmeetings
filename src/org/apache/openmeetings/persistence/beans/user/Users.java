@@ -220,6 +220,7 @@ public class Users implements Serializable, IDataProviderEntity {
 	private Boolean forceTimeZoneCheck;
 
 	@Column(name = "sendSMS")
+	@Element(data = false, required = false)
 	private boolean sendSMS;
 
 	@Column(name = "user_offers")
