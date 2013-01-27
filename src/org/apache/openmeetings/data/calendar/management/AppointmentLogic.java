@@ -530,7 +530,9 @@ public class AppointmentLogic {
 	}
 
 	private String generateSMSSubject(String labelid1158, Appointment ment) {
-		return labelid1158 + " " + ment.getAppointmentName();
+		String subj = configurationDaoImpl.getConfValue("sms.subject", String.class, null);
+		return subj == null || subj.length() == 0 ? 
+				labelid1158 + " " + ment.getAppointmentName() : subj;
 	}
 	
 	/**

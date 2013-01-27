@@ -97,6 +97,12 @@
 					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Area to be shown to the user after login. Possible values are: dashboard.rooms, dashboard.chat, calendar, rooms.public, rooms.private, rooms.user </td>
 					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 2.1.x </td>
 				</tr>
+				<tr>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> sms.subject </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;">  </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Subject of SMS reminder message </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 2.1.x </td>
+				</tr>
 			</table>
 		</section>
 
