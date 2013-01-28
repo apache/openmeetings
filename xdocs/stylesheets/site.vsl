@@ -268,7 +268,7 @@ limitations under the License.
     #set ( $pageBanner = $root.getChild("properties").getChild("title").getText() )
 #end
 <td width="80%" align="right" valign="top" >
-	<a href="http://demo.openmeetings.de" target="_BLANK">Demo</a>
+	<a href="demo.html">Demo</a>
 	<span>|</span> 
 	<a href="downloads.html" target="_PARENT">Download</a>
 	<span>|</span> 
