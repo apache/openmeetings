@@ -17,7 +17,7 @@
 
 	<body>
 
-		<section name="How to update Apache OpenMeetings incubator website">
+		<section name="How to update Apache OpenMeetings website">
 
 			<subsection name="Required tools">
 				<div>
@@ -31,7 +31,7 @@
 			<subsection name="Introduction">
 				<div>
 					<p>
-						The Apache OpenMeetings Incubator HTML websites are generated from XML files. 
+						The Apache OpenMeetings HTML websites are generated from XML files. 
 						You edit the XML files, run the ANT command "ant anakia" that generates the HTML files 
 						and then you checkin to SVN both: XML and HTML files.
 					</p>
@@ -45,17 +45,17 @@
 				<div>
 					<p>
 						OpenMeetings website (
-						<a href="http://incubator.apache.org/openmeetings/">http://incubator.apache.org/openmeetings/</a>
+						<a href="http://openmeetings.apache.org/">http://openmeetings.apache.org/</a>
 						) is a copy from the SVN repository.
 						<br />
 						The file in the SVN to be synced are at:
 						<br />
 						<a
-							href="http://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/docs/">http://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/docs/
+							href="http://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/docs/">http://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/docs/
 						</a>
 						<br/>and<br/>
 						<a
-							href="http://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/xdocs/">http://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/xdocs/
+							href="http://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/xdocs/">http://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/xdocs/
 						</a>
 					</p>
 					
@@ -63,7 +63,7 @@
 						To update the website you checkout trunk:
 						<br />
 						<a
-							href="https://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/">https://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/
+							href="https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/">https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/
 						</a> <br/>
 						edit the files in the folder <tt>xdocs</tt><br/>
 						then you run the command:
@@ -78,7 +78,7 @@
 						The public website is automatically synced with the SVN repository.<br/>
 						Changes to the SVN should be immediately synced to the production website.<br/>
 						If not you might login to people.apache.org,<br/>
-						cd to <tt>/www/incubator.apache.org/content/openmeetings/</tt><br/>
+						cd to <tt>/www/openmeetings.apache.org/content/</tt><br/>
 						and run the linux command "touch" on the files that need to be synced
 					</p>
 				</div>

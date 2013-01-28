@@ -15,9 +15,9 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
     xsi:noNamespaceSchemaLocation="project.xsd"
 	name="Apache OpenMeetings Project"
-    href="http://incubator.apache.org/openmeetings/">
+    href="http://openmeetings.apache.org/">
 
-    <title>Apache OpenMeetings [Incubating]</title>
+    <title>Apache OpenMeetings</title>
     <!--  -->
     <logo href="/images/logo-2.jpg">Apache OpenMeetings</logo>
 	

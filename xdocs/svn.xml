@@ -35,12 +35,12 @@
 			</p>
 			<p>
 				To receive notice of commits to the repository subscribe to
-				<a href="mailto:openmeetings-commits@incubator.apache.org">
-					openmeetings-commits@incubator.apache.org
+				<a href="mailto:commits@openmeetings.apache.org">
+					commits@openmeetings.apache.org
 				</a>
 				by sending email to
-				<a href="mailto:openmeetings-commits-subscribe@incubator.apache.org">
-					openmeetings-commits-subscribe@incubator.apache.org
+				<a href="mailto:commits-subscribe@openmeetings.apache.org">
+					commits-subscribe@openmeetings.apache.org
 				</a>
 				.
 			</p>
@@ -52,7 +52,7 @@
 			<p>
 				If you just want to browse the source code, you can use the
 				<a class="external" rel="nofollow"
-					href="http://svn.apache.org/viewcvs/incubator/openmeetings">
+					href="http://svn.apache.org/viewcvs/openmeetings">
 					ViewCVS web interface
 				</a>
 				to Subversion. This is current at all times.
@@ -75,7 +75,7 @@
 			<subsection name="Anonymous check out from Subversion">
 				<p>Use a command like:</p>
 				<pre>% svn checkout
-					http://svn.apache.org/repos/asf/incubator/openmeetings </pre>
+					http://svn.apache.org/repos/asf/openmeetings </pre>
 				<p>Once you have OpenMeetings checked out you can update the source
 					by executing the following command from within the openmeetings
 					directory.
@@ -93,7 +93,7 @@
 				</p>
 				<pre>
 					% svn checkout
-					https://svn.apache.org/repos/asf/incubator/openmeetings
+					https://svn.apache.org/repos/asf/openmeetings
 				</pre>
 
 			</subsection>
@@ -132,7 +132,7 @@
 				</p>
 				<pre>
 					% svn checkout
-					https://svn.apache.org/repos/asf/incubator/openmeetings
+					https://svn.apache.org/repos/asf/openmeetings
 				</pre>
 			</subsection>
 		</section>
