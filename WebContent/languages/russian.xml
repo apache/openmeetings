@@ -4638,6 +4638,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Включать загруженные файлы и записи в бэкап</value>
   </string>
   <string id="1538" name="room_admin_sip">
-    <value>Enable SIP transport in the room</value>
+    <value>Разрешить SIP транспорт в комнате</value>
   </string>
 </language>

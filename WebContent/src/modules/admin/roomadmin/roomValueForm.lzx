@@ -649,7 +649,7 @@
                x="400" fontstyle="bold" />   
     
     <labelText labelid="640" width="200" y="270" resize="false" x="400"/>  
-        <labelCheckbox name="isModeratedRoom" width="270" y="270" x="530" fontsize="11" />
+        <labelCheckbox name="isModeratedRoom" width="270" y="270" x="688" fontsize="11" />
     
     <view resource="messagebox_info_rsc" x="400" y="290" />
     
@@ -770,8 +770,8 @@
 	<labelText labelid="1308" x="400" y="722" width="270" />                 
 		<customEdittext name="ownerId" x="520" y="722" width="180" />      
 
-	<labelText labelid="1538" x="400" y="744" width="250" />                 
-        <labelCheckbox name="sipEnabled" width="180" y="744" x="520" fontsize="11" />
+	<labelText labelid="1538" x="400" y="750" width="250" />                 
+        <labelCheckbox name="sipEnabled" width="180" y="750" x="688" fontsize="11" />
 
     <view x="400" y="1400" />    
     
