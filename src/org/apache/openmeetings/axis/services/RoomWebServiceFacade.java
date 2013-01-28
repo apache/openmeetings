@@ -447,6 +447,18 @@ public class RoomWebServiceFacade {
 						waitForRecording, allowRecording, hideTopBar);
 	}
 
+	public Long addRoomWithModerationQuestionsAudioTypeAndHideOptions(
+			String SID, String name, Long roomtypes_id, String comment,
+			Long numberOfPartizipants, Boolean ispublic, Boolean appointment,
+			Boolean isDemoRoom, Integer demoTime, Boolean isModeratedRoom,
+			Boolean allowUserQuestions, Boolean isAudioOnly,
+			Boolean hideTopBar, Boolean hideChat,
+			Boolean hideActivitiesAndActions, Boolean hideFilesExplorer,
+			Boolean hideActionsMenu, Boolean hideScreenSharing,
+			Boolean hideWhiteboard) throws AxisFault {
+		return this.getRoomServiceProxy().addRoomWithModerationQuestionsAudioTypeAndHideOptions(SID, name, roomtypes_id, comment, numberOfPartizipants, ispublic, appointment, isDemoRoom, demoTime, isModeratedRoom, allowUserQuestions, isAudioOnly, hideTopBar, hideChat, hideActivitiesAndActions, hideFilesExplorer, hideActionsMenu, hideScreenSharing, hideWhiteboard);
+	}
+	
 	/**
 	 * 
 	 * Create a Invitation hash and optionally send it by mail the From to Date
