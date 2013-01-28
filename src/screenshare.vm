@@ -17,7 +17,7 @@ limitations under the License.
 	<information> 
 		<title>Screen Sharing Application</title> 
 		<vendor>$APP_NAME</vendor> 
-		<homepage>http://incubator.apache.org/openmeetings/</homepage>
+		<homepage>http://openmeetings.apache.org/</homepage>
 		<icon href="icon.jpg" />
 		<icon kind="splash" href="splashicon.jpg" />
 		<description>ScreenViewer Client Application</description> 

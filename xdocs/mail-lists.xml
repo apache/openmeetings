@@ -52,15 +52,15 @@
 						<p>
 							<strong>User List</strong>
 							:
-							<a href="mailto:openmeetings-user@incubator.apache.org">
-								openmeetings-user@incubator.apache.org
+							<a href="mailto:user@openmeetings.apache.org">
+								user@openmeetings.apache.org
 							</a>
 						</p>
 					</td>
 					<td>
 						<p>
 							<a class="external" rel="nofollow"
-								href="mailto:openmeetings-user-subscribe@incubator.apache.org">
+								href="mailto:user-subscribe@openmeetings.apache.org">
 								Subscribe
 							</a>
 						</p>
@@ -68,7 +68,7 @@
 					<td>
 						<p>
 							<a class="external" rel="nofollow"
-								href="mailto:openmeetings-user-unsubscribe@incubator.apache.org">
+								href="mailto:user-unsubscribe@openmeetings.apache.org">
 								Unsubscribe
 							</a>
 						</p>
@@ -87,15 +87,15 @@
 						<p>
 							<strong>Spanish User List</strong>
 							:
-							<a href="mailto:openmeetings-user-espanol@incubator.apache.org">
-								openmeetings-user-espanol@incubator.apache.org
+							<a href="mailto:user-espanol@openmeetings.apache.org">
+								user-espanol@openmeetings.apache.org
 							</a>
 						</p>
 					</td>
 					<td>
 						<p>
 							<a class="external" rel="nofollow"
-								href="mailto:openmeetings-user-espanol-subscribe@incubator.apache.org">
+								href="mailto:user-espanol-subscribe@openmeetings.apache.org">
 								Subscribe
 							</a>
 						</p>
@@ -103,7 +103,7 @@
 					<td>
 						<p>
 							<a class="external" rel="nofollow"
-								href="mailto:openmeetings-user-espanol-unsubscribe@incubator.apache.org">
+								href="mailto:user-espanol-unsubscribe@openmeetings.apache.org">
 								Unsubscribe
 							</a>
 						</p>
@@ -122,15 +122,15 @@
 						<p>
 							<strong>Commits List</strong>
 							:
-							<a href="mailto:openmeetings-commits@incubator.apache.org">
-								openmeetings-commits@incubator.apache.org
+							<a href="mailto:commits@openmeetings.apache.org">
+								commits@openmeetings.apache.org
 							</a>
 						</p>
 					</td>
 					<td>
 						<p>
 							<a class="external" rel="nofollow"
-								href="mailto:openmeetings-commits-subscribe@incubator.apache.org">
+								href="mailto:commits-subscribe@openmeetings.apache.org">
 								Subscribe
 							</a>
 						</p>
@@ -138,7 +138,7 @@
 					<td>
 						<p>
 							<a class="external" rel="nofollow"
-								href="mailto:openmeetings-commits-unsubscribe@incubator.apache.org">
+								href="mailto:commits-unsubscribe@openmeetings.apache.org">
 								Unsubscribe
 							</a>
 						</p>
@@ -157,15 +157,15 @@
 						<p>
 							<strong>Developer List</strong>
 							:
-							<a href="mailto:openmeetings-dev@incubator.apache.org">
-								openmeetings-dev@incubator.apache.org
+							<a href="mailto:dev@openmeetings.apache.org">
+								dev@openmeetings.apache.org
 							</a>
 						</p>
 					</td>
 					<td>
 						<p>
 							<a class="external" rel="nofollow"
-								href="mailto:openmeetings-dev-subscribe@incubator.apache.org">
+								href="mailto:dev-subscribe@openmeetings.apache.org">
 								Subscribe
 							</a>
 						</p>
@@ -173,7 +173,7 @@
 					<td>
 						<p>
 							<a class="external" rel="nofollow"
-								href="mailto:openmeetings-dev-unsubscribe@incubator.apache.org">
+								href="mailto:dev-unsubscribe@openmeetings.apache.org">
 								Unsubscribe
 							</a>
 						</p>

@@ -17,7 +17,7 @@
 
 	<body>
 
-		<section name="Apache OpenMeetings [Incubating] - Features and overview">
+		<section name="Apache OpenMeetings - Features and overview">
 
 			<div id="coin-slider">
 				<a href="#">
@@ -98,7 +98,7 @@
 			</p>
 
 			<p>
-				OpenMeetings is a project of the Apache Incubator, the old project
+				OpenMeetings is a project of the Apache, the old project
 				website at
 				<a href="http://code.google.com/p/openmeetings/" target="_BLANK">GoogleCode
 				</a>

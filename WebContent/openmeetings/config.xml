@@ -91,13 +91,13 @@ of the red5-servlet
     Name of the Application
     this is the Top-Icon Name of the Application
  -->    
-<currentappname>Apache OpenMeetings [Incubating]</currentappname>    
+<currentappname>Apache OpenMeetings</currentappname>    
     
 <!-- 
     URL to the Home of the Application
     this is the URL which is used if you click on the Top-icon
 -->    
-<currentappnameurl>http://incubator.apache.org/openmeetings</currentappnameurl>        
+<currentappnameurl>http://openmeetings.apache.org</currentappnameurl>        
 
 <!-- 
     Should APP name and/or logo be displayed

@@ -16,7 +16,7 @@
 
 	<properties>
 		<title>Get Involved</title>
-		<author email="OpenMeetings-dev@incubator.apache.org">
+		<author email="dev@openmeetings.apache.org">
 			OpenMeetings Documentation Team
 		</author>
 	</properties>
@@ -124,7 +124,7 @@
 				<li>
 					<p>
 						Check out the OpenMeetings sources and test your svn account:
-						<a href="http://svn.apache.org/viewcvs.cgi/incubator/OpenMeetings/">
+						<a href="http://svn.apache.org/viewvc/openmeetings/">
 							SubversionRepository
 						</a>
 						.

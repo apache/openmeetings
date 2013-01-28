@@ -13,7 +13,7 @@
 
 	<properties>
 		<title>Postgres Configuration</title>
-		<author email="sebawagner@incubator.apache.org">
+		<author email="sebawagner@apache.org">
 			Apache OpenMeetings Documentation Team
 		</author>
 	</properties>

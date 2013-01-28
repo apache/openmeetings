@@ -264,7 +264,7 @@ public class ImportInitvalues {
 						"This Class is used for Authentification-Crypting. "
 								+ "Be carefull what you do here! If you change it while "
 								+ "running previous Pass of users will not be workign anymore! "
-								+ "for more Information see http://incubator.apache.org/openmeetings/CustomCryptMechanism.html");
+								+ "for more Information see http://openmeetings.apache.org/CustomCryptMechanism.html");
 
 		configurationDaoImpl.addConfByKey("allow_frontend_register",
 				cfg.allowFrontendRegister, null, "");

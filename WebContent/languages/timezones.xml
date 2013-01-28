@@ -43,7 +43,7 @@
 		(http://docs.oracle.com/javase/6/docs/api/java/util/TimeZone.html)
 		
 		to get all available id that are available in your Java JRE see:
-		http://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/src/org/apache/openmeetings/test/timezone/TestGetIds.java
+		http://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/src/org/apache/openmeetings/test/timezone/TestGetIds.java
 		
 		For updating the JRE runtime with different tz-file, see:		
 		http://www.oracle.com/technetwork/java/javase/timezones-137583.html

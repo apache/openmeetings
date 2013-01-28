@@ -80,7 +80,7 @@ public class LoadAtomRssFeed {
 			conn.setRequestProperty("user-agent",
 					"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)");
 			conn.setRequestProperty("Referer",
-					"http://incubator.apache.org/openmeetings/");
+					"http://openmeetings.apache.org/");
 			conn.connect();
 
 			SAXReader reader = new SAXReader();
