@@ -57,7 +57,7 @@ import org.apache.openmeetings.session.ISessionManager;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
-import org.red5.server.adapter.MultiThreadedApplicationAdapter;
+import org.red5.server.adapter.ApplicationAdapter;
 import org.red5.server.api.IClient;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
@@ -72,8 +72,7 @@ import org.red5.server.api.stream.IBroadcastStream;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter implements
-		IPendingServiceCallback {
+public class ScopeApplicationAdapter extends ApplicationAdapter implements IPendingServiceCallback {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			ScopeApplicationAdapter.class,
