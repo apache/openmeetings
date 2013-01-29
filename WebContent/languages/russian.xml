@@ -3324,13 +3324,13 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Закрыть комнату</value>
   </string>
   <string id="1100" name="room config">
-    <value>Закрыть URL</value>
+    <value>Переадресация</value>
   </string>
   <string id="1101" name="room config">
-    <value>Установки прерывания комнаты</value>
+    <value>Установки выхода из комнаты</value>
   </string>
   <string id="1102" name="room config">
-    <value>Если комната закрыта, пользователь будет перенаправлен на выход.</value>
+    <value>Если комната закрыта, пользователь будет переадресован на указанный URL.</value>
   </string>
   <string id="1103" name="ldap config">
     <value>Ldap</value>

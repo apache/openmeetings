@@ -537,7 +537,7 @@
     	<labelCheckbox name="allowFontStyles" width="250" y="760" x="270" />           
                
     <!-- Room termination settings -->
-    <labelText labelid="1101" width="200" y="780" fontstyle="bold"
+    <labelText labelid="1101" width="250" y="780" fontstyle="bold"
                resize="false" x="2"/>            
                                    
     <!-- isClosed -->          
