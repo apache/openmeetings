@@ -128,7 +128,6 @@
 		<copy file="NOTICE" tofile="${dist.dir}/red5/NOTICE" overwrite="true" />
 		<copy file="README" tofile="${dist.dir}/red5/README" overwrite="true" />
 		<copy file="CHANGELOG" tofile="${dist.dir}/red5/CHANGELOG" overwrite="true" />
-		<copy file="DISCLAIMER" tofile="${dist.dir}/red5/DISCLAIMER" overwrite="true" />
 
 		<echo file="${build.base.dir}/build.properties" append="true">svn.info.rev=${svn.info.rev}${line.separator}</echo>
 		<tar longfile="gnu" compression="gzip" destfile="${archive.file.name}-src.tar.gz">
