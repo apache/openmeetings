@@ -873,7 +873,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>http://openmeetings.apache.org/</value>
   </string>
   <string id="283" name="dashboard_quickmailinglisturl">
-    <value>http://mail-archives.apache.org/mod_mbox/incubator-openmeetings-user/</value>
+    <value>http://mail-archives.apache.org/mod_mbox/openmeetings-user/</value>
   </string>
   <string id="284" name="dashboard_reportbugs">
     <value>バグ報告</value>
