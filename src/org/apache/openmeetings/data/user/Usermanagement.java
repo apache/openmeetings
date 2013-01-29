@@ -1176,7 +1176,9 @@ public class Usermanagement {
 									.toString())));
 
 					String password = values.get("password").toString();
-					savedUser.updatePassword(cryptManager, configDao, password);
+					if (password != null && !password.isEmpty()) {
+						savedUser.updatePassword(cryptManager, configDao, password);
+					}
 
 					String email = values.get("email").toString();
 
