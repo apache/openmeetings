@@ -50,8 +50,8 @@ import org.apache.openmeetings.persistence.beans.rooms.RoomTypes;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms_Organisation;
 import org.apache.openmeetings.persistence.beans.user.Users;
-import org.apache.openmeetings.session.ServerSession;
 import org.apache.openmeetings.session.ISessionManager;
+import org.apache.openmeetings.session.ServerSession;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.apache.openmeetings.utils.math.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
@@ -150,7 +150,7 @@ public class ConferenceService {
 							organisation_id);
 			
 			for (Rooms_Organisation roomOrg : roomOrgsList) {
-				roomOrg.getRoom().setCurrentusers(sessionManager.getClientListByRoom(roomOrg.getRoom().getRooms_id(), null));
+				roomOrg.getRoom().setCurrentusers(sessionManager.getClientListByRoom(roomOrg.getRoom().getRooms_id()));
 			}
 
 			return roomOrgsList;
@@ -230,7 +230,7 @@ public class ConferenceService {
 			List<Rooms> roomList = roomDao.getPublicRooms();
 			
 			for (Rooms room : roomList) {
-				room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id(), null));
+				room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id()));
 			}
 
 			return roomList;
@@ -438,7 +438,7 @@ public class ConferenceService {
 		Long users_id = sessionManagement.checkSession(SID);
 		Long user_level = userManagement.getUserLevelByID(users_id);
 		Rooms room = roommanagement.getRoomById(user_level, rooms_id);
-		room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id(), null));
+		room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id()));
 		return room;
 	}
 
@@ -665,7 +665,7 @@ public class ConferenceService {
 			Rooms room = roomDao.get(room_id);
 			
 			if (room.getNumberOfPartizipants() <= this.sessionManager
-					.getClientListByRoom(room_id, null).size()) {
+					.getClientListByRoom(room_id).size()) {
 				return true;
 			}
 			
@@ -683,7 +683,7 @@ public class ConferenceService {
 	 * @return - all participants of a room
 	 */
 	public List<Client> getRoomClientsListByRoomId(Long room_id) {
-		return sessionManager.getClientListByRoom(room_id, null);
+		return sessionManager.getClientListByRoom(room_id);
 	}
 
 	/**

@@ -37,7 +37,7 @@ public class TestClientListManager extends AbstractOpenmeetingsSpringTest {
 		assertNotNull("RoomClientId created is null",
 				sessionManager.addClientListItem(rnd.nextLong() + "ABCDE"
 						+ rnd.nextLong(), "scopeName", 66666, "remoteAddress",
-						"swfUrl", false));
+						"swfUrl", false, null));
 	}
 
 }

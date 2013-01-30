@@ -37,11 +37,10 @@ public interface IClientPersistenceStore {
 
 	/**
 	 * 
-	 * @param server
 	 * @param streamId
 	 * @param rcl
 	 */
-	public abstract void put(Server server, String streamId, Client rcl);
+	public abstract void put(String streamId, Client rcl);
 	
 	/**
 	 * 
@@ -105,8 +104,7 @@ public interface IClientPersistenceStore {
 	 * @param roomId
 	 * @return will return an empty map if nothing available
 	 */
-	public abstract LinkedHashMap<String, Client> getClientsByRoomId(
-			Server server, Long roomId);
+	public abstract LinkedHashMap<String, Client> getClientsByRoomId(Long roomId);
 
 	public abstract void remove(Server server, String streamId);
 

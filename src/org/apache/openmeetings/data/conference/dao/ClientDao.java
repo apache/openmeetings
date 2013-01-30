@@ -18,9 +18,13 @@
  */
 package org.apache.openmeetings.data.conference.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
+import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.persistence.beans.rooms.Client;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +39,17 @@ public class ClientDao {
 	
 	@PersistenceContext
 	private EntityManager em;
+	
+	public void cleanAllClients() {
+		em.createNamedQuery("deleteAll").executeUpdate();
+	}
 
+	public void cleanClientsByServer(Server server) {
+		em.createNamedQuery("deleteClientsByServer").
+			setParameter("server", server).
+			executeUpdate();
+	}
+	
 	public Client add(Client entity) {
 		em.persist(entity);
 		return entity;
@@ -48,6 +62,52 @@ public class ClientDao {
 	
 	public void delete(Client entity) {
 		em.remove(entity);
+	}
+
+	public long countClientsByServerAndStreamId(Server server, String streamId) {
+		TypedQuery<Long> q = em.createNamedQuery("countClientsByServerAndStreamId", Long.class);
+		q.setParameter("streamid", streamId);
+		q.setParameter("server", server);
+		return q.getSingleResult();
+	}
+
+	/**
+	 * Query.getSingleResult would throw an error if result is null, 
+	 * see: http://stackoverflow.com/questions/2002993/jpa-getsingleresult-or-null
+	 * 
+	 * @param server
+	 * @param streamId
+	 * @return
+	 */
+	public Client getClientByServerAndStreamId(Server server, String streamId) {
+		TypedQuery<Client> q = em.createNamedQuery("getClientByServerAndStreamId", Client.class);
+		q.setParameter("streamid", streamId);
+		q.setParameter("server", server);
+		List<Client> ll = q.getResultList();
+		if (ll.size() == 1) {
+			return ll.get(0);
+		} else if (ll.size() == 0) {
+			return null;
+		}
+		throw new RuntimeException("more then one client was found streamId "+ streamId + " server "+server);
+	}
+
+	public List<Client> getClientsByPublicSIDAndServer(Server server, String publicSID) {
+		TypedQuery<Client> q = em.createNamedQuery("getClientsByPublicSIDAndServer", Client.class);
+		q.setParameter("server", server);
+		return q.getResultList();
+	}
+
+	public List<Client> getClientsByPublicSID(String publicSID) {
+		TypedQuery<Client> q = em.createNamedQuery("getClientsByPublicSID", Client.class);
+		q.setParameter("publicSID", publicSID);
+		return q.getResultList();
+	}
+
+	public List<Client> getClientsByServer(Server server) {
+		TypedQuery<Client> q = em.createNamedQuery("getClientsByServer", Client.class);
+		q.setParameter("server", server);	
+		return q.getResultList();
 	}
 	
 }

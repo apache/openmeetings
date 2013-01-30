@@ -166,7 +166,7 @@ public class Roommanagement {
 				Rooms room = roomDao.get(rooms_id);
 
 				if (room != null) {
-					room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id(), null));
+					room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id()));
 
 					return room;
 				}
@@ -252,7 +252,7 @@ public class Roommanagement {
 						asc);
 
 				for (Rooms room : rooms) {
-					room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id(), null));
+					room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id()));
 				}
 
 				sResult.setResult(rooms);
@@ -273,7 +273,7 @@ public class Roommanagement {
 						asc);
 
 				for (Rooms room : rooms) {
-					room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id(), null));
+					room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id()));
 				}
 
 				return rooms;
@@ -295,7 +295,7 @@ public class Roommanagement {
 						orderby, asc, externalRoomType);
 
 				for (Rooms room : rooms) {
-					room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id(), null));
+					room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id()));
 				}
 
 				return rooms;

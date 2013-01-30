@@ -185,7 +185,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			Client rcm = this.sessionManager.addClientListItem(streamId,
 					conn.getScope().getName(), conn.getRemotePort(),
-					conn.getRemoteAddress(), swfURL, isAVClient);
+					conn.getRemoteAddress(), swfURL, isAVClient, null);
 			
 			SessionVariablesUtil.initClient(conn.getClient(), isAVClient, rcm.getPublicSID());
 
@@ -267,7 +267,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			Client currentClient = this.sessionManager
 					.getClientByStreamId(streamid, null);
 
-			for (Client rcl : sessionManager.getClientListByRoomAll(currentClient.getRoom_id(), null)) {
+			for (Client rcl : sessionManager.getClientListByRoomAll(currentClient.getRoom_id())) {
 				if (rcl.isStartStreaming()) {
 					screenSharerList.add(rcl);
 				}
@@ -1459,7 +1459,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			log.debug("##### setRoomValues : " + currentClient);
 			
 			// Check for Moderation LogicalRoom ENTER
-			List<Client> clientListRoom = sessionManager.getClientListByRoom(room_id, null);
+			List<Client> clientListRoom = sessionManager.getClientListByRoom(room_id);
 
 			// appointed meeting or moderated Room? => Check Max Users first
 			if (room.getNumberOfPartizipants() != null
@@ -2778,7 +2778,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			Client currentClient = this.sessionManager
 					.getClientByStreamId(current.getClient().getId(), null);
 
-			return sessionManager.getClientListByRoom(currentClient.getRoom_id(), null);
+			return sessionManager.getClientListByRoom(currentClient.getRoom_id());
 
 		} catch (Exception err) {
 			log.debug("[getClientListScope]", err);
@@ -2848,7 +2848,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		//verify
 		for (Iterator<Long> i = result.iterator(); i.hasNext();) {
 			Long id = i.next();
-			List<Client> rcs = sessionManager.getClientListByRoom(id, s);
+			List<Client> rcs = sessionManager.getClientListByRoom(id);
 			if (rcs.size() == 0 || (rcs.size() == 1 && rcs.get(0).isSipTransport())) {
 				i.remove();
 			}

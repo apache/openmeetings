@@ -46,7 +46,7 @@ public interface ISessionManager {
 	 */
 	public abstract Client addClientListItem(String streamId,
 			String scopeName, Integer remotePort, String remoteAddress,
-			String swfUrl, boolean isAVClient);
+			String swfUrl, boolean isAVClient, Server server);
 
 	public abstract Collection<Client> getAllClients();
 
@@ -154,9 +154,9 @@ public interface ISessionManager {
 	 * @param room_id 
 	 * @return
 	 */
-	public abstract List<Client> getClientListByRoom(Long room_id, Server server);
+	public abstract List<Client> getClientListByRoom(Long room_id);
 	
-	public abstract Collection<Client> getClientListByRoomAll(Long room_id, Server server);
+	public abstract Collection<Client> getClientListByRoomAll(Long room_id);
 
 	/**
 	 * get the current Moderator in this room

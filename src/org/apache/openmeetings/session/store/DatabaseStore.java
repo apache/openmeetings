@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.session.store;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,33 +33,50 @@ public class DatabaseStore implements IClientPersistenceStore {
 	
 	@Autowired
 	private ClientDao clientDao;
-
-	public void put(Server server, String streamId, Client rcl) {
-		// TODO Auto-generated method stub
-		
+	
+	public void put(String streamId, Client rcl) {
+		clientDao.add(rcl);
 	}
 
 	public boolean containsKey(Server server, String streamId) {
-		// TODO Auto-generated method stub
-		return false;
+		return clientDao.countClientsByServerAndStreamId(server, streamId) > 0;
 	}
 
 	public Client get(Server server, String streamId) {
-		// TODO Auto-generated method stub
-		return null;
+		return clientDao.getClientByServerAndStreamId(server, streamId);
 	}
 
 	public List<Client> getClientsByPublicSID(Server server, String publicSID) {
-		// TODO Auto-generated method stub
-		return null;
+		return clientDao.getClientsByPublicSIDAndServer(server, publicSID);
 	}
 
 	public Map<Long, List<Client>> getClientsByPublicSID(String publicSID) {
-		// TODO Auto-generated method stub
-		return null;
+		Map<Long, List<Client>> returnMap = new HashMap<Long, List<Client>>();
+		List<Client> clientList = clientDao.getClientsByPublicSID(publicSID);
+		for (Client cl : clientList) {
+			
+			if (cl.getServer() == null) {
+				List<Client> clList = returnMap.get(null);
+				if (clList == null) {
+					clList = new ArrayList<Client>();
+				}
+				clList.add(cl);
+				returnMap.put(null, clList);
+			} else {
+				List<Client> clList = returnMap.get(cl.getServer().getId());
+				if (clList == null) {
+					clList = new ArrayList<Client>();
+				}
+				clList.add(cl);
+				returnMap.put(cl.getServer().getId(), clList);
+			}
+		}
+		return returnMap;
 	}
 
 	public LinkedHashMap<String, Client> getClientsByServer(Server server) {
+		List<Client> clientList = clientDao.getClientsByServer(server);
+		
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -67,8 +86,7 @@ public class DatabaseStore implements IClientPersistenceStore {
 		return null;
 	}
 
-	public LinkedHashMap<String, Client> getClientsByRoomId(Server server,
-			Long roomId) {
+	public LinkedHashMap<String, Client> getClientsByRoomId(Long roomId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -43,22 +43,30 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * User an in-memory HashMap to store the current sessions.
+ * Handle {@link Client} objects.
+ * 
+ * Use a kind of decorator pattern to inject the {@link Server} into every call.
  * 
  * @author sebawagner
  * 
  */
 public class SessionManager implements ISessionManager {
-
+	
 	protected static final Logger log = Red5LoggerFactory.getLogger(
 			SessionManager.class, OpenmeetingsVariables.webAppRootKey);
 	
+	private static Set<Long> EMPTY_HASH_SET = new HashSet<Long>();
+	
+	@Autowired
+	private ServerUtil serverUtil;
+	
 	/**
-	 * Injected via Spring
+	 * Injected via Spring, needs a getter/setter because it can be configured
+	 * Autowired will not suit here as there are multiple implementations of the
+	 * {@link IClientPersistenceStore}
 	 */
 	private IClientPersistenceStore cache;
 	
-	//Needs getters and setters as here it is no "Autowired" bean, as you can configure different caches
 	public IClientPersistenceStore getCache() {
 		return cache;
 	}
@@ -67,335 +75,403 @@ public class SessionManager implements ISessionManager {
 		this.cache = cache;
 	}
 
+	private ISessionManager sessionManager = new ISessionManager() {
+		
+		@Autowired
+		private ManageCryptStyle manageCryptStyle;
+		
+		public synchronized Client addClientListItem(String streamId,
+				String scopeName, Integer remotePort, String remoteAddress,
+				String swfUrl, boolean isAVClient, Server server) {
+			try {
 
-	private static Set<Long> EMPTY_HASH_SET = new HashSet<Long>();
+				// Store the Connection into a bean and add it to the HashMap
+				Client rcm = new Client();
+				rcm.setConnectedSince(new Date());
+				rcm.setStreamid(streamId);
+				rcm.setScope(scopeName);
+				long random = System.currentTimeMillis() + new BigInteger(256, new Random()).longValue();
+				
+				rcm.setPublicSID(manageCryptStyle.getInstanceOfCrypt()
+						.createPassPhrase(String.valueOf(random).toString()));
 
-	@Autowired
-	private ManageCryptStyle manageCryptStyle;
-	
-	public synchronized Client addClientListItem(String streamId,
-			String scopeName, Integer remotePort, String remoteAddress,
-			String swfUrl, boolean isAVClient) {
-		try {
+				rcm.setUserport(remotePort);
+				rcm.setUserip(remoteAddress);
+				rcm.setSwfurl(swfUrl);
+				rcm.setIsMod(new Boolean(false));
+				rcm.setCanDraw(new Boolean(false));
+				rcm.setIsAVClient(isAVClient);
 
-			// Store the Connection into a bean and add it to the HashMap
-			Client rcm = new Client();
-			rcm.setConnectedSince(new Date());
-			rcm.setStreamid(streamId);
-			rcm.setScope(scopeName);
-			long random = System.currentTimeMillis() + new BigInteger(256, new Random()).longValue();
-			
-			rcm.setPublicSID(manageCryptStyle.getInstanceOfCrypt()
-					.createPassPhrase(String.valueOf(random).toString()));
-
-			rcm.setUserport(remotePort);
-			rcm.setUserip(remoteAddress);
-			rcm.setSwfurl(swfUrl);
-			rcm.setIsMod(new Boolean(false));
-			rcm.setCanDraw(new Boolean(false));
-			rcm.setIsAVClient(isAVClient);
-
-			if (cache.containsKey(null, streamId)) {
-				log.error("Tried to add an existing Client " + streamId);
-				return null;
-			}
-
-			cache.put(null, rcm.getStreamid(), rcm);
-
-			return rcm;
-		} catch (Exception err) {
-			log.error("[addClientListItem]", err);
-		}
-		return null;
-	}
-
-	public synchronized Collection<Client> getAllClients() {
-		HashMap<String, Client> clients = cache.getClientsByServer(null);
-		if (clients == null) {
-			return new ArrayList<Client>(0);
-		}
-		return clients.values();
-	}
-
-	public synchronized Client getClientByStreamId(String streamId, Server server) {
-		try {
-			if (!cache.containsKey(server, streamId)) {
-				log.debug("Tried to get a non existing Client " + streamId);
-				return null;
-			}
-			return cache.get(server, streamId);
-		} catch (Exception err) {
-			log.error("[getClientByStreamId]", err);
-		}
-		return null;
-	}
-
-	public synchronized Client getSyncClientByStreamId(String streamId) {
-		try {
-			if (!cache.containsKey(null, streamId)) {
-				log.debug("Tried to get a non existing Client " + streamId);
-				return null;
-			}
-
-			Client rcl = cache.get(null, streamId);
-
-			if (rcl == null) {
-				return null;
-			}
-
-			if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
-				return null;
-			}
-
-			return cache.get(null, streamId);
-		} catch (Exception err) {
-			log.error("[getClientByStreamId]", err);
-		}
-		return null;
-	}
-
-	public Client getClientByPublicSID(String publicSID, boolean isAVClient, Server server) {
-		try {
-			for (Client rcl : cache.getClientsByPublicSID(server, publicSID)) {
-				if (rcl.getIsAVClient() != isAVClient) {
-					continue;
+				if (cache.containsKey(null, streamId)) {
+					log.error("Tried to add an existing Client " + streamId);
+					return null;
 				}
-				return rcl;
+
+				cache.put(rcm.getStreamid(), rcm);
+
+				return rcm;
+			} catch (Exception err) {
+				log.error("[addClientListItem]", err);
 			}
-		} catch (Exception err) {
-			log.error("[getClientByPublicSID]", err);
+			return null;
 		}
-		return null;
-	}
-	
-	public ClientSessionInfo getClientByPublicSIDAnyServer(String publicSID, boolean isAVClient) {
-		try {
-			for (Entry<Long,List<Client>> entry : cache.getClientsByPublicSID(publicSID).entrySet()) {
-				for (Client rcl : entry.getValue()) {
+
+		public synchronized Collection<Client> getAllClients() {
+			HashMap<String, Client> clients = cache.getClientsByServer(null);
+			if (clients == null) {
+				return new ArrayList<Client>(0);
+			}
+			return clients.values();
+		}
+
+		public synchronized Client getClientByStreamId(String streamId, Server server) {
+			try {
+				if (!cache.containsKey(server, streamId)) {
+					log.debug("Tried to get a non existing Client " + streamId);
+					return null;
+				}
+				return cache.get(server, streamId);
+			} catch (Exception err) {
+				log.error("[getClientByStreamId]", err);
+			}
+			return null;
+		}
+
+		public synchronized Client getSyncClientByStreamId(String streamId) {
+			try {
+				if (!cache.containsKey(null, streamId)) {
+					log.debug("Tried to get a non existing Client " + streamId);
+					return null;
+				}
+
+				Client rcl = cache.get(null, streamId);
+
+				if (rcl == null) {
+					return null;
+				}
+
+				if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+					return null;
+				}
+
+				return cache.get(null, streamId);
+			} catch (Exception err) {
+				log.error("[getClientByStreamId]", err);
+			}
+			return null;
+		}
+
+		public Client getClientByPublicSID(String publicSID, boolean isAVClient, Server server) {
+			try {
+				for (Client rcl : cache.getClientsByPublicSID(server, publicSID)) {
 					if (rcl.getIsAVClient() != isAVClient) {
 						continue;
 					}
-					return new ClientSessionInfo(rcl, entry.getKey());
+					return rcl;
 				}
+			} catch (Exception err) {
+				log.error("[getClientByPublicSID]", err);
 			}
-		} catch (Exception err) {
-			log.error("[getClientByPublicSIDAnyServer]", err);
+			return null;
 		}
-		return null;
-	}
-
-	public synchronized Client getClientByUserId(Long userId) {
-		try {
-			for (Client rcl : cache.getClientsByUserId(null, userId)) {
-				
-				if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
-					continue;
+		
+		public ClientSessionInfo getClientByPublicSIDAnyServer(String publicSID, boolean isAVClient) {
+			try {
+				for (Entry<Long,List<Client>> entry : cache.getClientsByPublicSID(publicSID).entrySet()) {
+					for (Client rcl : entry.getValue()) {
+						if (rcl.getIsAVClient() != isAVClient) {
+							continue;
+						}
+						return new ClientSessionInfo(rcl, entry.getKey());
+					}
 				}
-				
-				if (rcl.getIsAVClient()) {
-					continue;
-				}
-				
-				return rcl;
+			} catch (Exception err) {
+				log.error("[getClientByPublicSIDAnyServer]", err);
 			}
-		} catch (Exception err) {
-			log.error("[getClientByUserId]", err);
+			return null;
 		}
-		return null;
-	}
 
-	public synchronized Boolean updateAVClientByStreamId(String streamId,
-			Client rcm) {
-		try {
+		public synchronized Client getClientByUserId(Long userId) {
+			try {
+				for (Client rcl : cache.getClientsByUserId(null, userId)) {
+					
+					if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+						continue;
+					}
+					
+					if (rcl.getIsAVClient()) {
+						continue;
+					}
+					
+					return rcl;
+				}
+			} catch (Exception err) {
+				log.error("[getClientByUserId]", err);
+			}
+			return null;
+		}
 
-			// get the corresponding user session object and update the settings
-			Client rclUsual = getClientByPublicSID(rcm.getPublicSID(),
-					false, null);
-			if (rclUsual != null) {
-				rclUsual.setBroadCastID(rcm.getBroadCastID());
-				rclUsual.setAvsettings(rcm.getAvsettings());
-				rclUsual.setVHeight(rcm.getVHeight());
-				rclUsual.setVWidth(rcm.getVWidth());
-				rclUsual.setVX(rcm.getVX());
-				rclUsual.setVY(rcm.getVY());
-				Client rclSaved = cache.get(null, rclUsual.getStreamid());
+		public synchronized Boolean updateAVClientByStreamId(String streamId,
+				Client rcm) {
+			try {
+
+				// get the corresponding user session object and update the settings
+				Client rclUsual = getClientByPublicSID(rcm.getPublicSID(),
+						false, null);
+				if (rclUsual != null) {
+					rclUsual.setBroadCastID(rcm.getBroadCastID());
+					rclUsual.setAvsettings(rcm.getAvsettings());
+					rclUsual.setVHeight(rcm.getVHeight());
+					rclUsual.setVWidth(rcm.getVWidth());
+					rclUsual.setVX(rcm.getVX());
+					rclUsual.setVY(rcm.getVY());
+					Client rclSaved = cache.get(null, rclUsual.getStreamid());
+					if (rclSaved != null) {
+						cache.put(rclUsual.getStreamid(),rclUsual);
+					} else {
+						log.debug("Tried to update a non existing Client "
+								+ rclUsual.getStreamid());
+					}
+				}
+
+				updateClientByStreamId(streamId, rcm, false);
+			} catch (Exception err) {
+				log.error("[updateAVClientByStreamId]", err);
+			}
+			return null;
+		}
+
+		public synchronized Boolean updateClientByStreamId(String streamId,
+				Client rcm, boolean updateRoomCount) {
+			try {
+				
+				Client rclSaved = cache.get(null, streamId);
+				
 				if (rclSaved != null) {
-					cache.put(null,rclUsual.getStreamid(), rclUsual);
+					cache.put(streamId, rcm);
+					return true;
 				} else {
-					log.debug("Tried to update a non existing Client "
-							+ rclUsual.getStreamid());
+					log.debug("Tried to update a non existing Client " + streamId);
+					return false;
+				}
+			} catch (Exception err) {
+				log.error("[updateClientByStreamId]", err);
+			}
+			return null;
+		}
+
+		public synchronized Boolean removeClient(String streamId) {
+			try {
+				if (cache.containsKey(null,streamId)) {
+					cache.remove(null,streamId);
+					return true;
+				} else {
+					log.debug("Tried to remove a non existing Client " + streamId);
+					return false;
+				}
+			} catch (Exception err) {
+				log.error("[removeClient]", err);
+			}
+			return null;
+		}
+
+		public synchronized ArrayList<Client> getClientListByRoom(Long roomId) {
+			ArrayList<Client> roomClientList = new ArrayList<Client>();
+			try {
+
+				for (Client rcl : cache.getClientsByRoomId(roomId).values()) {
+
+					if (rcl.getIsScreenClient() == null || rcl.getIsScreenClient()) {
+						continue;
+					}
+					if (rcl.getIsAVClient()) {
+						continue;
+					}
+
+					// Only parse really those users out that are really a full session object
+					// and no pseudo session object like the audio/video or screen
+					// sharing connection
+					roomClientList.add(rcl);
+
+				}
+			} catch (Exception err) {
+				log.error("[getClientListByRoom]", err);
+			}
+			return roomClientList;
+		}
+		
+		public synchronized Collection<Client> getClientListByRoomAll(Long roomId) {
+			try {
+				return cache.getClientsByRoomId(roomId).values();
+			} catch (Exception err) {
+				log.error("[getClientListByRoomAll]", err);
+			}
+			return null;
+		}
+
+		public synchronized List<Client> getCurrentModeratorByRoom(Long room_id) {
+			List<Client> rclList = new LinkedList<Client>();
+			List<Client> currentClients = this.getClientListByRoom(room_id);
+			for (Client rcl : currentClients) {
+				if (rcl.getIsMod()) {
+					rclList.add(rcl);
 				}
 			}
 
-			updateClientByStreamId(streamId, rcm, false);
-		} catch (Exception err) {
-			log.error("[updateAVClientByStreamId]", err);
+			return rclList;
 		}
-		return null;
-	}
 
-	public synchronized Boolean updateClientByStreamId(String streamId,
-			Client rcm, boolean updateRoomCount) {
-		try {
+		// FIXME not sorted
+		public synchronized SearchResult<ServerSession> getListByStartAndMax(
+				int start, int max, String orderby, boolean asc) {
+			SearchResult<ServerSession> sResult = new SearchResult<ServerSession>();
+			sResult.setObjectName(Client.class.getName());
+			sResult.setRecords(Long.valueOf(cache.size()).longValue());
+			ArrayList<ServerSession> myList = new ArrayList<ServerSession>(cache.size());
 			
-			Client rclSaved = cache.get(null, streamId);
+			//FIXME: Improve the handling of the Arrays/Map/List so that this re-parsing is not needed
+			for (Entry<Long, LinkedHashMap<String, Client>> entry : cache.values().entrySet()) {
+				for (Client rcl : entry.getValue().values()) {
+					myList.add(new ServerSession(entry.getKey(), rcl));
+				}
+			}
 			
-			if (rclSaved != null) {
-				cache.put(null, streamId, rcm);
-				return true;
-			} else {
-				log.debug("Tried to update a non existing Client " + streamId);
-				return false;
-			}
-		} catch (Exception err) {
-			log.error("[updateClientByStreamId]", err);
+			sResult.setResult(myList);
+			return sResult;
 		}
-		return null;
-	}
 
-	public synchronized Boolean removeClient(String streamId) {
-		try {
-			if (cache.containsKey(null,streamId)) {
-				cache.remove(null,streamId);
-				return true;
-			} else {
-				log.debug("Tried to remove a non existing Client " + streamId);
-				return false;
-			}
-		} catch (Exception err) {
-			log.error("[removeClient]", err);
-		}
-		return null;
-	}
-
-	public synchronized ArrayList<Client> getClientListByRoom(Long roomId, Server server) {
-		ArrayList<Client> roomClientList = new ArrayList<Client>();
-		try {
-
-			for (Client rcl : cache.getClientsByRoomId(server, roomId).values()) {
-
-				if (rcl.getIsScreenClient() == null || rcl.getIsScreenClient()) {
-					continue;
+		public long getRecordingCount(long roomId) {
+			List<Client> currentClients = this.getClientListByRoom(roomId);
+			int numberOfRecordingUsers = 0;
+			for (Client rcl : currentClients) {
+				if (rcl.isStartRecording()) {
+					numberOfRecordingUsers++;
 				}
-				if (rcl.getIsAVClient()) {
-					continue;
-				}
-
-				// Only parse really those users out that are really a full session object
-				// and no pseudo session object like the audio/video or screen
-				// sharing connection
-				roomClientList.add(rcl);
-
 			}
-		} catch (Exception err) {
-			log.error("[getClientListByRoom]", err);
+			return numberOfRecordingUsers;
 		}
-		return roomClientList;
-	}
+
+		public long getPublishingCount(long roomId) {
+			List<Client> currentClients = this.getClientListByRoom(roomId);
+			int numberOfPublishingUsers = 0;
+			for (Client rcl : currentClients) {
+				if (rcl.isStreamPublishStarted()) {
+					numberOfPublishingUsers++;
+				}
+			}
+			return numberOfPublishingUsers;
+		}
+		
+		public Set<Long> getActiveRoomIdsByServer(Server server) {
+			if (cache.getClientsByServerAndRoom(server) == null) {
+				return EMPTY_HASH_SET;
+			}
+			return cache.getClientsByServerAndRoom(server).keySet();
+		}
+		
+		
+		public String getSessionStatistics() {
+			return cache.getDebugInformation(Arrays.asList(IClientPersistenceStore.DEBUG_DETAILS.SIZE,
+							IClientPersistenceStore.DEBUG_DETAILS.CLIENT_BY_STREAMID,
+							IClientPersistenceStore.DEBUG_DETAILS.CLIENT_BY_PUBLICSID,
+							IClientPersistenceStore.DEBUG_DETAILS.CLIENT_BY_USERID,
+							IClientPersistenceStore.DEBUG_DETAILS.CLIENT_BY_ROOMID));
+		}
+		
+	};
 	
-	public List<Client> getClientSessionListByRoom(Long roomId,
+	public Client addClientListItem(String streamId, String scopeName,
+			Integer remotePort, String remoteAddress, String swfUrl,
+			boolean isAVClient, Server server) {
+		if (server == null) {
+			server = serverUtil.getCurrentServer();
+		}
+		return sessionManager.addClientListItem(streamId, scopeName,
+				remotePort, remoteAddress, swfUrl, isAVClient, server);
+	}
+
+	public Collection<Client> getAllClients() {
+		return sessionManager.getAllClients();
+	}
+
+	public Client getClientByStreamId(String streamId, Server server) {
+		if (server == null) {
+			server = serverUtil.getCurrentServer();
+		}
+		return sessionManager.getClientByStreamId(streamId, server);
+	}
+
+	public Client getSyncClientByStreamId(String streamId) {
+		return sessionManager.getSyncClientByStreamId(streamId);
+	}
+
+	public Client getClientByPublicSID(String publicSID, boolean isAVClient,
 			Server server) {
-		ArrayList<Client> roomClientList = new ArrayList<Client>();
-		try {
-
-			for (Client rcl : cache.getClientsByRoomId(server, roomId).values()) {
-
-				if (rcl.getIsScreenClient() == null || rcl.getIsScreenClient()) {
-					continue;
-				}
-				if (rcl.getIsAVClient()) {
-					continue;
-				}
-
-				// Only parse really those users out that are really a full session object
-				// and no pseudo session object like the audio/video or screen
-				// sharing connection
-				roomClientList.add(rcl);
-
-			}
-		} catch (Exception err) {
-			log.error("[getClientListByRoom]", err);
+		if (server == null) {
+			server = serverUtil.getCurrentServer();
 		}
-		return roomClientList;
+		return sessionManager.getClientByPublicSID(publicSID, isAVClient,
+				server);
 	}
 
-
-	public synchronized Collection<Client> getClientListByRoomAll(Long roomId, Server server) {
-		try {
-			return cache.getClientsByRoomId(server, roomId).values();
-		} catch (Exception err) {
-			log.error("[getClientListByRoomAll]", err);
-		}
-		return null;
+	public ClientSessionInfo getClientByPublicSIDAnyServer(String publicSID,
+			boolean isAVClient) {
+		return sessionManager.getClientByPublicSIDAnyServer(publicSID,
+				isAVClient);
 	}
 
-	public synchronized List<Client> getCurrentModeratorByRoom(Long room_id) {
-		List<Client> rclList = new LinkedList<Client>();
-		List<Client> currentClients = this.getClientListByRoom(room_id, null);
-		for (Client rcl : currentClients) {
-			if (rcl.getIsMod()) {
-				rclList.add(rcl);
-			}
-		}
-
-		return rclList;
+	public Client getClientByUserId(Long userId) {
+		return sessionManager.getClientByUserId(userId);
 	}
 
-	// FIXME not sorted
-	public synchronized SearchResult<ServerSession> getListByStartAndMax(
-			int start, int max, String orderby, boolean asc) {
-		SearchResult<ServerSession> sResult = new SearchResult<ServerSession>();
-		sResult.setObjectName(Client.class.getName());
-		sResult.setRecords(Long.valueOf(cache.size()).longValue());
-		ArrayList<ServerSession> myList = new ArrayList<ServerSession>(cache.size());
-		
-		//FIXME: Improve the handling of the Arrays/Map/List so that this re-parsing is not needed
-		for (Entry<Long, LinkedHashMap<String, Client>> entry : cache.values().entrySet()) {
-			for (Client rcl : entry.getValue().values()) {
-				myList.add(new ServerSession(entry.getKey(), rcl));
-			}
-		}
-		
-		sResult.setResult(myList);
-		return sResult;
+	public Boolean updateAVClientByStreamId(String streamId, Client rcm) {
+		return sessionManager.updateAVClientByStreamId(streamId, rcm);
+	}
+
+	public Boolean updateClientByStreamId(String streamId, Client rcm,
+			boolean updateRoomCount) {
+		return sessionManager.updateClientByStreamId(streamId, rcm,
+				updateRoomCount);
+	}
+
+	public Boolean removeClient(String streamId) {
+		return sessionManager.removeClient(streamId);
+	}
+
+	public List<Client> getClientListByRoom(Long room_id) {
+		return sessionManager.getClientListByRoom(room_id);
+	}
+
+	public Collection<Client> getClientListByRoomAll(Long room_id) {
+		return sessionManager.getClientListByRoomAll(room_id);
+	}
+
+	public List<Client> getCurrentModeratorByRoom(Long room_id) {
+		return sessionManager.getCurrentModeratorByRoom(room_id);
+	}
+
+	public SearchResult<ServerSession> getListByStartAndMax(int start, int max,
+			String orderby, boolean asc) {
+		return sessionManager.getListByStartAndMax(start, max, orderby, asc);
 	}
 
 	public long getRecordingCount(long roomId) {
-		List<Client> currentClients = this.getClientListByRoom(roomId, null);
-		int numberOfRecordingUsers = 0;
-		for (Client rcl : currentClients) {
-			if (rcl.isStartRecording()) {
-				numberOfRecordingUsers++;
-			}
-		}
-		return numberOfRecordingUsers;
+		return sessionManager.getRecordingCount(roomId);
 	}
 
 	public long getPublishingCount(long roomId) {
-		List<Client> currentClients = this.getClientListByRoom(roomId, null);
-		int numberOfPublishingUsers = 0;
-		for (Client rcl : currentClients) {
-			if (rcl.isStreamPublishStarted()) {
-				numberOfPublishingUsers++;
-			}
-		}
-		return numberOfPublishingUsers;
+		return sessionManager.getPublishingCount(roomId);
 	}
-	
+
 	public Set<Long> getActiveRoomIdsByServer(Server server) {
-		if (cache.getClientsByServerAndRoom(server) == null) {
-			return EMPTY_HASH_SET;
+		if (server == null) {
+			server = serverUtil.getCurrentServer();
 		}
-		return cache.getClientsByServerAndRoom(server).keySet();
+		return sessionManager.getActiveRoomIdsByServer(server);
 	}
-	
-	
+
 	public String getSessionStatistics() {
-		return cache.getDebugInformation(Arrays.asList(IClientPersistenceStore.DEBUG_DETAILS.SIZE,
-						IClientPersistenceStore.DEBUG_DETAILS.CLIENT_BY_STREAMID,
-						IClientPersistenceStore.DEBUG_DETAILS.CLIENT_BY_PUBLICSID,
-						IClientPersistenceStore.DEBUG_DETAILS.CLIENT_BY_USERID,
-						IClientPersistenceStore.DEBUG_DETAILS.CLIENT_BY_ROOMID));
+		return sessionManager.getSessionStatistics();
 	}
 
 }

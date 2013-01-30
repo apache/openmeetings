@@ -29,28 +29,41 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 
 /**
- * @see Client
+ * Can be configured to be stored in memory or in database
+ * 
  * @author sebawagner
- *
  */
 @Entity
+@NamedQueries({
+	@NamedQuery(name = "deleteAll", query = "DELETE FROM Client"),
+	@NamedQuery(name = "deleteClientsByServer", query = "DELETE FROM Client c WHERE c.server = :server"),
+	@NamedQuery(name = "countClientsByServerAndStreamId", query = "SELECT count(c.id) FROM Client c WHERE c.streamid LIKE :streamid AND c.server = :server"),
+	@NamedQuery(name = "getClientByServerAndStreamId", query = "SELECT c FROM Client c WHERE c.streamid LIKE :streamid AND c.server = :server"),
+	@NamedQuery(name = "getClientsByPublicSIDAndServer", query = "SELECT c FROM Client c WHERE c.publicSID LIKE :publicSID AND c.server = :server"),
+	@NamedQuery(name = "getClientsByPublicSID", query = "SELECT c FROM Client c WHERE c.publicSID LIKE :publicSID"),
+	@NamedQuery(name = "getClientsByServer", query = "SELECT c FROM Client c WHERE c.publicSID LIKE :publicSID")
+	
+	
+})
 @Table(name = "client")
 public class Client implements Serializable {
 
 	/**
-	 * 
+	 * 	
 	 */
 	private static final long serialVersionUID = -5980636447877077730L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
+	@Column(name = "id")
 	private long id;
 	
 	/**
@@ -373,7 +386,7 @@ public class Client implements Serializable {
     private boolean sipTransport = false;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "server_id")
 	private Server server;
     
     public Client() {
@@ -863,6 +876,7 @@ public class Client implements Serializable {
 				+ " isAVClient: " + this.getIsAVClient() //
 				+ " broadCastID: " + this.getBroadCastID() //
 				+ " avsettings: " + this.getAvsettings() //
+				+ " server: " + server
 				;
 	}
 }

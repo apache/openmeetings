@@ -110,12 +110,10 @@ public class HashMapStore implements IClientPersistenceStore {
 		return server.getId();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.apache.openmeetings.session.memory.IClientPersistence#put(org.apache.openmeetings.persistence.beans.basic.Server, java.lang.String, org.apache.openmeetings.persistence.beans.rooms.Client)
-	 */
-	public void put(Server server, String streamId, Client rcl) {
+	public void put(String streamId, Client rcl) {
 
 		// By server and streamid
+		Server server = rcl.getServer();
 		
 		//Server and streamId are always given, if server is null, it means the user is locally
 		//and not on any slave host
@@ -195,10 +193,6 @@ public class HashMapStore implements IClientPersistenceStore {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.apache.openmeetings.session.IClientPersistenceManager#containsKey(org.apache.openmeetings.persistence.beans.basic.Server, java.lang.String)
-	 */
 	public boolean containsKey(Server server, String streamId) {
 		if (clientsByServer.containsKey(getIdByServer(server))) {
 			return clientsByServer.get(getIdByServer(server)).containsKey(streamId);
@@ -206,9 +200,6 @@ public class HashMapStore implements IClientPersistenceStore {
 		return false;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.apache.openmeetings.session.memory.IClientPersistence#get(org.apache.openmeetings.persistence.beans.basic.Server, java.lang.String)
-	 */
 	public Client get(Server server, String streamId) {
 		LinkedHashMap<String, Client> listMap = clientsByServer.get(getIdByServer(server));
 		if (listMap != null) {
@@ -217,9 +208,6 @@ public class HashMapStore implements IClientPersistenceStore {
 		return null;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.apache.openmeetings.session.memory.IClientPersistence#getClientsByPublicSID(org.apache.openmeetings.persistence.beans.basic.Server, java.lang.String)
-	 */
 	public List<Client> getClientsByPublicSID(Server server, String publicSID) {
 		LinkedHashMap<String, List<Client>> clientListPublicSID = clientsByServerAndPublicSID.get(getIdByServer(server));
 		if (clientListPublicSID == null) {
@@ -232,9 +220,6 @@ public class HashMapStore implements IClientPersistenceStore {
 		return clientList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.apache.openmeetings.session.memory.IClientPersistence#getClientsByPublicSID(java.lang.String)
-	 */
 	public Map<Long,List<Client>> getClientsByPublicSID(String publicSID) {
 		Map<Long,List<Client>> clientList = new HashMap<Long,List<Client>>();
 		for (Entry<Long, LinkedHashMap<String, List<Client>>> entry : clientsByServerAndPublicSID.entrySet()) {
@@ -246,9 +231,6 @@ public class HashMapStore implements IClientPersistenceStore {
 		return clientList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.apache.openmeetings.session.memory.IClientPersistence#getClientsByServer(org.apache.openmeetings.persistence.beans.basic.Server)
-	 */
 	public LinkedHashMap<String, Client> getClientsByServer(Server server) {
 		LinkedHashMap<String, Client> listMap = clientsByServer.get(getIdByServer(server));
 		if (listMap == null) {
@@ -257,9 +239,6 @@ public class HashMapStore implements IClientPersistenceStore {
 		return listMap;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.apache.openmeetings.session.memory.IClientPersistence#getClientsByUserId(org.apache.openmeetings.persistence.beans.basic.Server, java.lang.Long)
-	 */
 	public List<Client> getClientsByUserId(Server server, Long userId) {
 		LinkedHashMap<Long, List<Client>> clientListUserId = clientsByServerAndUserId.get(getIdByServer(server));
 		if (clientListUserId == null) {
@@ -272,10 +251,7 @@ public class HashMapStore implements IClientPersistenceStore {
 		return clientList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.apache.openmeetings.session.memory.IClientPersistence#getClientsByRoomId(org.apache.openmeetings.persistence.beans.basic.Server, java.lang.Long)
-	 */
-	public  LinkedHashMap<String, Client> getClientsByRoomId(Server server, Long roomId) {
+	public  LinkedHashMap<String, Client> getClientsByRoomId(Long roomId) {
 		
 		for (Entry<Long, LinkedHashMap<Long, LinkedHashMap<String, Client>>> entry : clientsByServerAndRoomId.entrySet()) {
 			LinkedHashMap<String, Client> roomClients = entry.getValue().get(roomId);
@@ -287,9 +263,6 @@ public class HashMapStore implements IClientPersistenceStore {
 		return EMPTY_MAP;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.apache.openmeetings.session.memory.IClientPersistence#remove(org.apache.openmeetings.persistence.beans.basic.Server, java.lang.String)
-	 */
 	public void remove(Server server, String streamId) {
 		
 		// By server and streamid
@@ -401,9 +374,6 @@ public class HashMapStore implements IClientPersistenceStore {
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see org.apache.openmeetings.session.memory.IClientPersistence#size()
-	 */
 	public int size() {
 		int size = 0;
 		for (Entry<Long, LinkedHashMap<String, Client>> entry : clientsByServer.entrySet()) {
@@ -412,9 +382,6 @@ public class HashMapStore implements IClientPersistenceStore {
 		return size;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.apache.openmeetings.session.memory.IClientPersistence#sizeByServer(org.apache.openmeetings.persistence.beans.basic.Server)
-	 */
 	public int sizeByServer(Server server) {
 		if (clientsByServer.get(getIdByServer(server)) == null) {
 			return 0;
@@ -422,17 +389,10 @@ public class HashMapStore implements IClientPersistenceStore {
 		return clientsByServer.get(getIdByServer(server)).size();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.apache.openmeetings.session.IClientPersistenceManager#values()
-	 */
 	public LinkedHashMap<Long, LinkedHashMap<String, Client>> values() {
 		return clientsByServer;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.apache.openmeetings.session.memory.IClientPersistence#getClientsByServerAndRoom(org.apache.openmeetings.persistence.beans.basic.Server)
-	 */
 	public LinkedHashMap<Long,LinkedHashMap<String,Client>> getClientsByServerAndRoom(Server server) {
 		return clientsByServerAndRoomId.get(getIdByServer(server));
 	}
@@ -461,10 +421,6 @@ public class HashMapStore implements IClientPersistenceStore {
 		log.debug("Session Statistics End ################## ");
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.apache.openmeetings.session.IClientPersistenceManager#getDebugInformation(java.util.List)
-	 */
 	public String getDebugInformation(List<DEBUG_DETAILS> detailLevel) {
 
 		StringBuilder statistics = new StringBuilder();

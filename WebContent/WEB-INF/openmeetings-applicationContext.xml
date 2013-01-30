@@ -67,11 +67,16 @@
 	<bean id="openmeetings.WhiteBoardObjectListManagerById"
 		class="org.apache.openmeetings.remote.red5.WhiteBoardObjectListManagerById" />
 	
+	<bean id="openmeetings.HashMapStore" scope="singleton" 
+		class="org.apache.openmeetings.session.store.HashMapStore" />
+	
 	<bean id="openmeetings.DatabaseStore"
 		class="org.apache.openmeetings.session.store.DatabaseStore" />
 	
-	<bean id="openmeetings.HashMapStore" scope="singleton" 
-		class="org.apache.openmeetings.session.store.HashMapStore" />
+	<bean id="openmeetings.ServerUtil" scope="singleton"
+		class="org.apache.openmeetings.session.ServerUtil">
+		<property name="serverId" value="null" />	
+	</bean>	
 	
 	<!-- Cluster related config start -->
 

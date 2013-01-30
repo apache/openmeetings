@@ -124,7 +124,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			Client currentClient = this.sessionManager
 					.getClientByStreamId(streamid, null);
 
-			for (Client rcl : sessionManager.getClientListByRoom(currentClient.getRoom_id(), null)) {
+			for (Client rcl : sessionManager.getClientListByRoom(currentClient.getRoom_id())) {
 				if (rcl.getIsRecording()) {
 					return rcl;
 				}
@@ -551,7 +551,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			log.debug("getCurrentRoomClient -#########################- "
 					+ currentClient.getRoom_id());
 
-			for (Client rcl : sessionManager.getClientListByRoomAll(currentClient.getRoom_id(), null)) {
+			for (Client rcl : sessionManager.getClientListByRoomAll(currentClient.getRoom_id())) {
 				if (rcl.getIsRecording()) {
 					return rcl;
 				}
