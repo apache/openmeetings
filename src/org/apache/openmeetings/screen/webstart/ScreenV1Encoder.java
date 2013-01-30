@@ -92,7 +92,8 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 				//next row
 				prev.x = 0; //reset position
 				prev.width = blockSize; //reset width
-				prev.y -= (prev.y > blockSize ? blockSize : prev.y);
+				prev.height = (prev.y > blockSize ? blockSize : prev.y);
+				prev.y -= prev.height;
 			} else {
 				prev.x += blockSize;
 			}
