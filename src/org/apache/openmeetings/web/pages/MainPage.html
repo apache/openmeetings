@@ -31,6 +31,16 @@
 			function hideBusyIndicator() {
 				$('#busy_indicator').hide();
 			}
+			function showAbout() {
+				$('#aboutDialog').dialog({
+					closeOnEscape: true
+					, autoOpen: false
+					, resizable: false
+					, width: 400
+					, modal: true
+				});
+				$('#aboutDialog').dialog('open');
+			}
 		</script>
 	</wicket:head>
 	<wicket:extend>
@@ -46,10 +56,12 @@
 			id="contactsAndMessages"><wicket:ommessage key="1188"/></span><span 
 			id="profile"><wicket:ommessage key="5"/></span><span 
 			id="logout"><a wicket:id="logout"><wicket:ommessage key="310"/></a></span><span 
-			id="reportBug"><wicket:ommessage key="284"/></span></div>
+			id="reportBug"><wicket:ommessage key="284"/></span><span><a 
+			wicket:id="about">About</a></span></div>
 		<div id="busy_indicator">Loading ...</div>
 		<div wicket:id="menu"></div>
 		<div wicket:id="contents"><div wicket:id="child"></div></div>
 		<div wicket:id="chatPanel"></div>
+		<div wicket:id="aboutDialog" style="display: none;"></div>
 	</wicket:extend>
 </html>

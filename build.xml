@@ -293,6 +293,7 @@
 				<attribute name="Built-On" value="${build.TODAY}" />
 				<attribute name="Class-Path" value="conf/ ${jar.classpath}" />
 				<attribute name="Svn-Revision" value="${svn.info.rev}" />
+				<attribute name="Product-Version" value="${project.version}-${project.status}" />
 			</manifest>
 		</jar>
 	</target>
@@ -322,6 +323,7 @@
 				<attribute name="Built-On" value="${build.TODAY}" />
 				<attribute name="Class-Path" value="conf/ ${jar.classpath}" />
 				<attribute name="Svn-Revision" value="${svn.info.rev}" />
+				<attribute name="Product-Version" value="${project.version}-${project.status}" />
 			</manifest>
 		</jar>
 		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-templates-${jar.suffix}.jar">
@@ -337,6 +339,7 @@
 				<attribute name="Built-On" value="${build.TODAY}" />
 				<attribute name="Class-Path" value="conf/ ${jar.classpath}" />
 				<attribute name="Svn-Revision" value="${svn.info.rev}" />
+				<attribute name="Product-Version" value="${project.version}-${project.status}" />
 			</manifest>
 		</jar>
 
