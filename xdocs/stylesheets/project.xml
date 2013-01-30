@@ -72,6 +72,7 @@
 		<item name="Bitrix Plugin"			href="/BitrixPlugin.html" />
         <item name="Confluence Plugin"      href="/ConfluencePlugin.html" />
         <item name="SugarCRM Plugin"        href="/SugarCRMPlugin.html" />
+        <item name="Redmine Plugin"         href="/RedminePlugin.html" />
     </menu>
     
     <menu name="Configuration">
