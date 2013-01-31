@@ -24,7 +24,6 @@ import org.apache.openmeetings.web.components.ConfirmableAjaxLink;
 import org.apache.openmeetings.web.components.MenuPanel;
 import org.apache.openmeetings.web.components.user.AboutPanel;
 import org.apache.openmeetings.web.components.user.ChatPanel;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;

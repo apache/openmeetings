@@ -59,6 +59,8 @@ public class SessionManager implements ISessionManager {
 	
 	@Autowired
 	private ServerUtil serverUtil;
+	@Autowired
+	private ManageCryptStyle manageCryptStyle;
 	
 	/**
 	 * Injected via Spring, needs a getter/setter because it can be configured
@@ -76,9 +78,6 @@ public class SessionManager implements ISessionManager {
 	}
 
 	private ISessionManager sessionManager = new ISessionManager() {
-		
-		@Autowired
-		private ManageCryptStyle manageCryptStyle;
 		
 		public synchronized Client addClientListItem(String streamId,
 				String scopeName, Integer remotePort, String remoteAddress,

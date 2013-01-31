@@ -75,7 +75,11 @@
 	
 	<bean id="openmeetings.ServerUtil" scope="singleton"
 		class="org.apache.openmeetings.session.ServerUtil">
-		<property name="serverId" value="null" />	
+		<!-- 
+			Need to be uncommented and set to the real ID if in cluster mode
+			
+		<property name="serverId" value="null" />
+		 -->	
 	</bean>	
 	
 	<!-- Cluster related config start -->
