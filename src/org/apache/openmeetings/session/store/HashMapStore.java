@@ -109,7 +109,7 @@ public class HashMapStore implements IClientPersistenceStore {
 	public  LinkedHashMap<String, Client> getClientsByRoomId(Long roomId) {
 		LinkedHashMap<String,Client> clientList = new LinkedHashMap<String, Client>();
 		for (Client cl : clientsByStreamId.values()) {
-			if (cl.getRoom_id().equals(roomId)) {
+			if (cl.getRoom_id() != null && cl.getRoom_id().equals(roomId)) {
 				clientList.put(cl.getStreamid(), cl);
 			}
 		}

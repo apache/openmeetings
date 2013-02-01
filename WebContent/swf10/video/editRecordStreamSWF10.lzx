@@ -177,7 +177,7 @@
                 if ($debug) Debug.write("parent.setUserAVSettings -2- ",parent.remoteMessage);
                 if ($debug) Debug.write("parent.setUserAVSettings -3- ",parent.cam_default_width);
                 if ($debug) Debug.write("parent.setUserAVSettings -4- ",parent.cam_default_height);
-                if ($debug) Debug.write("parent.setUserAVSettings -5- ",canvas.currentRoomObject.rooms_id);
+                if ($debug) Debug.write("parent.setUserAVSettings -5a- ",canvas.currentRoomObject.rooms_id);
                 if ($debug) Debug.write("parent.setUserAVSettings -6- ",canvas.publicSID);
                 
                 parent.setUserAVSettings.doCall();
@@ -191,7 +191,7 @@
         <netparam><method name="getValue">return parent.parent.remoteMessage;</method></netparam>
         <netparam><method name="getValue">return parent.parent.cam_default_width;</method></netparam>
         <netparam><method name="getValue">return parent.parent.cam_default_height;</method></netparam>
-        <netparam><method name="getValue">return parent.parent.cam_default_height;</method></netparam>
+        <netparam><method name="getValue">return canvas.currentRoomObject.rooms_id;</method></netparam>
         <netparam><method name="getValue">return canvas.publicSID;</method></netparam>
         <netparam><method name="getValue">return parent.parent.interviewPodId;</method></netparam>
         <handler name="ondata" args="value">
