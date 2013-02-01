@@ -25,7 +25,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -94,6 +93,7 @@ public class SessionManager implements ISessionManager {
 				rcm.setPublicSID(manageCryptStyle.getInstanceOfCrypt()
 						.createPassPhrase(String.valueOf(random).toString()));
 
+				//rcm.setServer(server);
 				rcm.setUserport(remotePort);
 				rcm.setUserip(remoteAddress);
 				rcm.setSwfurl(swfUrl);
@@ -321,21 +321,12 @@ public class SessionManager implements ISessionManager {
 		}
 
 		// FIXME not sorted
-		public synchronized SearchResult<ServerSession> getListByStartAndMax(
+		public synchronized SearchResult<Client> getListByStartAndMax(
 				int start, int max, String orderby, boolean asc) {
-			SearchResult<ServerSession> sResult = new SearchResult<ServerSession>();
+			SearchResult<Client> sResult = new SearchResult<Client>();
 			sResult.setObjectName(Client.class.getName());
 			sResult.setRecords(Long.valueOf(cache.size()).longValue());
-			ArrayList<ServerSession> myList = new ArrayList<ServerSession>(cache.size());
-			
-			//FIXME: Improve the handling of the Arrays/Map/List so that this re-parsing is not needed
-			for (Entry<Long, LinkedHashMap<String, Client>> entry : cache.values().entrySet()) {
-				for (Client rcl : entry.getValue().values()) {
-					myList.add(new ServerSession(entry.getKey(), rcl));
-				}
-			}
-			
-			sResult.setResult(myList);
+			sResult.setResult(cache.values());
 			return sResult;
 		}
 
@@ -370,11 +361,12 @@ public class SessionManager implements ISessionManager {
 		
 		
 		public String getSessionStatistics() {
-			return cache.getDebugInformation(Arrays.asList(IClientPersistenceStore.DEBUG_DETAILS.SIZE,
-							IClientPersistenceStore.DEBUG_DETAILS.CLIENT_BY_STREAMID,
-							IClientPersistenceStore.DEBUG_DETAILS.CLIENT_BY_PUBLICSID,
-							IClientPersistenceStore.DEBUG_DETAILS.CLIENT_BY_USERID,
-							IClientPersistenceStore.DEBUG_DETAILS.CLIENT_BY_ROOMID));
+			return cache.getDebugInformation(Arrays.asList(IClientPersistenceStore.DEBUG_DETAILS.SIZE));
+		}
+
+		public void sessionStart() {
+			// TODO Auto-generated method stub
+			
 		}
 		
 	};
@@ -449,7 +441,7 @@ public class SessionManager implements ISessionManager {
 		return sessionManager.getCurrentModeratorByRoom(room_id);
 	}
 
-	public SearchResult<ServerSession> getListByStartAndMax(int start, int max,
+	public SearchResult<Client> getListByStartAndMax(int start, int max,
 			String orderby, boolean asc) {
 		return sessionManager.getListByStartAndMax(start, max, orderby, asc);
 	}
@@ -471,6 +463,10 @@ public class SessionManager implements ISessionManager {
 
 	public String getSessionStatistics() {
 		return sessionManager.getSessionStatistics();
+	}
+
+	public void sessionStart() {
+		sessionManager.sessionStart();
 	}
 
 }

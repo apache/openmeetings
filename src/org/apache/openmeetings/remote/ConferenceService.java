@@ -51,7 +51,6 @@ import org.apache.openmeetings.persistence.beans.rooms.Rooms;
 import org.apache.openmeetings.persistence.beans.rooms.Rooms_Organisation;
 import org.apache.openmeetings.persistence.beans.user.Users;
 import org.apache.openmeetings.session.ISessionManager;
-import org.apache.openmeetings.session.ServerSession;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.apache.openmeetings.utils.math.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
@@ -696,7 +695,7 @@ public class ConferenceService {
 	 * @param asc
 	 * @return - list of the connections currently open
 	 */
-	public SearchResult<ServerSession> getRoomClientsMap(String SID, int start, int max,
+	public SearchResult<Client> getRoomClientsMap(String SID, int start, int max,
 			String orderby, boolean asc) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);

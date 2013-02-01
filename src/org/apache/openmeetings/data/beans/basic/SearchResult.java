@@ -18,12 +18,13 @@
  */
 package org.apache.openmeetings.data.beans.basic;
 
-import java.util.List;
+import java.util.Collection;
+
 
 public class SearchResult<T> {
 	private String objectName;
 	private Long records;
-	private List<T> result;
+	private Collection<T> result;
 	private Long errorId;
 	
 	public String getObjectName() {
@@ -38,10 +39,10 @@ public class SearchResult<T> {
 	public void setRecords(Long records) {
 		this.records = records;
 	}
-	public List<T> getResult() {
+	public Collection<T> getResult() {
 		return result;
 	}
-	public void setResult(List<T> result) {
+	public void setResult(Collection<T> result) {
 		this.result = result;
 	}
 	public Long getErrorId() {

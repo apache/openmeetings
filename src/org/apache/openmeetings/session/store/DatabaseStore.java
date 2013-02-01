@@ -19,11 +19,13 @@
 package org.apache.openmeetings.session.store;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.openmeetings.data.basic.dao.ServerDao;
 import org.apache.openmeetings.data.conference.dao.ClientDao;
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.persistence.beans.rooms.Client;
@@ -33,6 +35,16 @@ public class DatabaseStore implements IClientPersistenceStore {
 	
 	@Autowired
 	private ClientDao clientDao;
+	
+	@Autowired
+	private ServerDao serverDao;
+	
+	public void clearCache() {
+		
+		List<Server> serverList = serverDao.getActiveServers();
+		
+		//clientDao.cleanUpClientsWithoutReference();
+	}
 	
 	public void put(String streamId, Client rcl) {
 		clientDao.add(rcl);
@@ -106,13 +118,13 @@ public class DatabaseStore implements IClientPersistenceStore {
 		return 0;
 	}
 
-	public LinkedHashMap<Long, LinkedHashMap<String, Client>> getClientsByServerAndRoom(
+	public LinkedHashMap<Long, Collection<Client>> getClientsByServerAndRoom(
 			Server server) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public LinkedHashMap<Long, LinkedHashMap<String, Client>> values() {
+	public Collection<Client> values() {
 		// TODO Auto-generated method stub
 		return null;
 	}

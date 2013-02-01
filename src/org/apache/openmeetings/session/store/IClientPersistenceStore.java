@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.session.store;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,12 +29,13 @@ import org.apache.openmeetings.persistence.beans.rooms.Client;
 public interface IClientPersistenceStore {
 
 	public enum DEBUG_DETAILS {
-		SIZE,
-		CLIENT_BY_STREAMID, STREAMID_LIST_ALL,
-		CLIENT_BY_PUBLICSID, PUBLICSID_LIST_ALL, 
-		CLIENT_BY_USERID, USERID_LIST_ALL,
-		CLIENT_BY_ROOMID, ROOMID_LIST_ALL
+		SIZE
 	}
+	
+	/**
+	 * called upon start of the session cache
+	 */
+	public abstract void clearCache();
 
 	/**
 	 * 
@@ -112,10 +114,10 @@ public interface IClientPersistenceStore {
 
 	public abstract int sizeByServer(Server server);
 
-	public abstract LinkedHashMap<Long, LinkedHashMap<String, Client>> getClientsByServerAndRoom(
+	public abstract LinkedHashMap<Long, Collection<Client>> getClientsByServerAndRoom(
 			Server server);
 	
-	public LinkedHashMap<Long, LinkedHashMap<String, Client>> values();
+	public abstract Collection<Client> values();
 	
 	/**
 	 * Get some session statistics
@@ -123,6 +125,6 @@ public interface IClientPersistenceStore {
 	 * @param detailLevel
 	 * @return
 	 */
-	public String getDebugInformation(List<DEBUG_DETAILS> detailLevel);
+	public abstract String getDebugInformation(List<DEBUG_DETAILS> detailLevel);
 
 }

@@ -35,6 +35,12 @@ import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
  *
  */
 public interface ISessionManager {
+	
+	/**
+	 * Notified on server start, when the session manager should be started and
+	 * eventually caches cleared/setup
+	 */
+	public abstract void sessionStart();
 
 	/**
 	 * Get current clients and extends the room client with its potential
@@ -175,7 +181,7 @@ public interface ISessionManager {
 	 * @param asc
 	 * @return
 	 */
-	public abstract SearchResult<ServerSession> getListByStartAndMax(int start,
+	public abstract SearchResult<Client> getListByStartAndMax(int start,
 			int max, String orderby, boolean asc);
 
 	/**
