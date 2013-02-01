@@ -65,51 +65,17 @@
 					</li>
 				</ul>
 				
-				<p>
-					If you are looking for more plugins for 3th party applications check out <a href="http://code.google.com/a/apache-extras.org/hosting/search?q=openmeetings" target="_BLANK" rel="nofollow">apache-extras.org</a>.
-				</p>
-				
-				<p>
-					Apache Openmeetings Moodle Plugin Incubating 1.4
-				</p>
-				<ul>
-					<li>
-						Binaries:
-						<ul>
-							<li>
-								<a href="http://www.apache.org/dyn/closer.cgi/incubator/openmeetings/moodle-plugin-1.4-incubating/apache-openmeetings-moodle-plugin-incubating-1.4.zip">apache-openmeetings-moodle-plugin-incubating-1.4.zip</a>
-								<a href="http://www.apache.org/dist/incubator/openmeetings/moodle-plugin-1.4-incubating/apache-openmeetings-moodle-plugin-incubating-1.4.zip.sig">[SIG]</a>
-								<a href="http://www.apache.org/dist/incubator/openmeetings/moodle-plugin-1.4-incubating/apache-openmeetings-moodle-plugin-incubating-1.4.zip.md5">[MD5]</a>
-							</li>
-							<li>
-								<a href="http://www.apache.org/dyn/closer.cgi/incubator/openmeetings/moodle-plugin-1.4-incubating/apache-openmeetings-moodle-plugin-incubating-1.4.tar.gz">apache-openmeetings-moodle-plugin-incubating-1.4.tar.gz</a>
-								<a href="http://www.apache.org/dist/incubator/openmeetings/moodle-plugin-1.4-incubating/apache-openmeetings-moodle-plugin-incubating-1.4.tar.gz.sig">[SIG]</a>
-								<a href="http://www.apache.org/dist/incubator/openmeetings/moodle-plugin-1.4-incubating/apache-openmeetings-moodle-plugin-incubating-1.4.tar.gz.md5">[MD5]</a>
-							</li>
-						</ul>
-					</li>
-					<li>
-						Sources:
-						<ul>
-							<li>
-								<a href="http://www.apache.org/dyn/closer.cgi/incubator/openmeetings/moodle-plugin-1.4-incubating/apache-openmeetings-moodle-plugin-incubating-1.4-src.zip">apache-openmeetings-moodle-plugin-incubating-1.4-src.zip</a>
-								<a href="http://www.apache.org/dist/incubator/openmeetings/moodle-plugin-1.4-incubating/apache-openmeetings-moodle-plugin-incubating-1.4-src.zip.sig">[SIG]</a>
-								<a href="http://www.apache.org/dist/incubator/openmeetings/moodle-plugin-1.4-incubating/apache-openmeetings-moodle-plugin-incubating-1.4-src.zip.md5">[MD5]</a>
-							</li>
-							<li>
-								<a href="http://www.apache.org/dyn/closer.cgi/incubator/openmeetings/moodle-plugin-1.4-incubating/apache-openmeetings-moodle-plugin-incubating-1.4-src.tar.gz">apache-openmeetings-moodle-plugin-incubating-1.4-src.tar.gz</a>
-								<a href="http://www.apache.org/dist/incubator/openmeetings/moodle-plugin-1.4-incubating/apache-openmeetings-moodle-plugin-incubating-1.4-src.tar.gz.sig">[SIG]</a>
-								<a href="http://www.apache.org/dist/incubator/openmeetings/moodle-plugin-1.4-incubating/apache-openmeetings-moodle-plugin-incubating-1.4-src.tar.gz.md5">[MD5]</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
 			</subsection>
 
 			<!-- <subsection name="Previous Official Releases"> <p> No previous official 
 				releases are available. </p> </subsection> -->
 
 			<subsection name="Non ASF downloads">
+			
+				<p>
+					If you are looking for more plugins for 3th party applications (Moodle, Drupal, Joomla, ...) check out <a href="http://code.google.com/a/apache-extras.org/hosting/search?q=openmeetings" target="_BLANK" rel="nofollow">apache-extras.org</a>.
+				</p>
+			
 				<p>
 					Releases that are not part of the ASF can be downloaded from the
 					old
