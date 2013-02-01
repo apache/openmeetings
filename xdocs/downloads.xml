@@ -70,14 +70,14 @@
 			<!-- <subsection name="Previous Official Releases"> <p> No previous official 
 				releases are available. </p> </subsection> -->
 
-			<subsection name="Non ASF downloads">
+			<subsection name="Plugins / Non ASF downloads">
 			
 				<p>
 					If you are looking for more plugins for 3th party applications (Moodle, Drupal, Joomla, ...) check out <a href="http://code.google.com/a/apache-extras.org/hosting/search?q=openmeetings" target="_BLANK" rel="nofollow">apache-extras.org</a>.
 				</p>
 			
 				<p>
-					Releases that are not part of the ASF can be downloaded from the
+					OpenMeetings releases that are not part of the ASF can be downloaded from the
 					old
 					<a href="http://code.google.com/p/openmeetings/downloads/list"
 						target="_BLANK">GoogleCode website</a>
