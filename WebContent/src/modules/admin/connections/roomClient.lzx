@@ -78,16 +78,16 @@
 	    		var tServer = "master";
 	    		var serverId = 0;
 	    		if (records[i].server != null) {
-	    			serverId = records[i].server;
+	    			serverId = records[i].server.id;
 	    			tServer = "slave " + " ["+serverId+"]";
 	    		}
 	    	
 	    		new lz.roomClientListItem(this._innerlist._inn._inn,{
-	                    obj:records[i].roomClient,
-	                    streamid:records[i].roomClient.streamid,
-	                    login:records[i].roomClient.username,
-                        dateConnected:parseDateToStringTime(records[i].roomClient.connectedSince),
-	                    scope:records[i].roomClient.scope,
+	                    obj:records[i],
+	                    streamid:records[i].streamid,
+	                    login:records[i].username,
+                        dateConnected:parseDateToStringTime(records[i].connectedSince),
+	                    scope:records[i].scope,
 	                    serverId:serverId,
 	                    serverAddr:tServer
                     });
