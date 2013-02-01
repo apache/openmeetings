@@ -58,23 +58,8 @@ public class HashMapStore implements IClientPersistenceStore {
 		// Nothing todo here
 	}
 	
-	/**
-	 * null means its locally
-	 * 
-	 * @param server
-	 * @return
-	 */
-	private Long getIdByServer(Server server) {
-		if (server == null) {
-			return null;
-		}
-		return server.getId();
-	}
-
 	public void put(String streamId, Client rcl) {
-		
 		clientsByStreamId.put(rcl.getStreamid(), rcl);
-
 	}
 
 	public boolean containsKey(Server server, String streamId) {
