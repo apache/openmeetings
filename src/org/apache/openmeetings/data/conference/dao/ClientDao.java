@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.persistence.beans.basic.Server;
@@ -61,7 +62,26 @@ public class ClientDao {
 	}
 	
 	public void delete(Client entity) {
-		em.remove(entity);
+		Query q = em.createNamedQuery("deletedById");
+		q.setParameter("id", entity.getId());
+		q.executeUpdate();
+	}
+	
+	public void removeClientByServerAndStreamId(Server server, String streamId) {
+		Query q = em.createNamedQuery("deletedByServerAndStreamId");
+		q.setParameter("server", server);
+		q.setParameter("streamid", streamId);
+		q.executeUpdate();
+	}
+	
+	public int countClients() {
+		return em.createNamedQuery("countClients", Long.class).getSingleResult().intValue();
+	}
+	
+	public int countClientsByServer(Server server) {
+		TypedQuery<Long> q = em.createNamedQuery("countClientsByServer", Long.class);
+		q.setParameter("server", server);
+		return q.getSingleResult().intValue();
 	}
 
 	public long countClientsByServerAndStreamId(Server server, String streamId) {
@@ -114,5 +134,23 @@ public class ClientDao {
 	public List<Client> getClients() {
 		return em.createNamedQuery("getClients", Client.class).getResultList();
 	}
-	
+
+	public List<Client> getClientsByUserId(Server server, Long userId) {
+		TypedQuery<Client> q = em.createNamedQuery("getClientsByUserId", Client.class);
+		q.setParameter("server", server);
+		q.setParameter("user_id", userId);	
+		return q.getResultList();
+	}
+
+	public List<Client> getClientsByRoomId(Long roomId) {
+		TypedQuery<Client> q = em.createNamedQuery("getClientsByRoomId", Client.class);
+		q.setParameter("room_id", roomId);	
+		return q.getResultList();
+	}
+
+	public List<Long> getRoomsIdsByServer(Server server) {
+		//TODO needed for cluster implementation	
+		return null;
+	}
+
 }

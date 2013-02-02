@@ -44,13 +44,19 @@ import org.apache.openmeetings.utils.math.CalendarPatterns;
 @Entity
 @NamedQueries({
 	@NamedQuery(name = "deleteAll", query = "DELETE FROM Client"),
+	@NamedQuery(name = "deletedById", query = "DELETE FROM Client c WHERE c.id = :id"),
 	@NamedQuery(name = "deleteClientsByServer", query = "DELETE FROM Client c WHERE c.server = :server"),
+	@NamedQuery(name = "deletedByServerAndStreamId", query = "DELETE FROM Client c WHERE c.server = :server AND c.streamid LIKE :streamid"),
+	@NamedQuery(name = "countClients", query = "SELECT count(c.id) FROM Client c"),
+	@NamedQuery(name = "countClientsByServer", query = "SELECT count(c.id) FROM Client c WHERE c.server = :server"),
 	@NamedQuery(name = "countClientsByServerAndStreamId", query = "SELECT count(c.id) FROM Client c WHERE c.streamid LIKE :streamid AND c.server = :server"),
 	@NamedQuery(name = "getClientByServerAndStreamId", query = "SELECT c FROM Client c WHERE c.streamid LIKE :streamid AND c.server = :server"),
 	@NamedQuery(name = "getClientsByPublicSIDAndServer", query = "SELECT c FROM Client c WHERE c.publicSID LIKE :publicSID AND c.server = :server"),
 	@NamedQuery(name = "getClientsByPublicSID", query = "SELECT c FROM Client c WHERE c.publicSID LIKE :publicSID"),
 	@NamedQuery(name = "getClientsByServer", query = "SELECT c FROM Client c WHERE c.server = :server"),
-	@NamedQuery(name = "getClients", query = "SELECT c FROM Client c")
+	@NamedQuery(name = "getClients", query = "SELECT c FROM Client c"),
+	@NamedQuery(name = "getClientsByUserId", query = "SELECT c FROM Client c WHERE c.server = :server AND c.user_id = :user_id"),
+	@NamedQuery(name = "getClientsByRoomId", query = "SELECT c FROM Client c WHERE c.room_id = :room_id")
 })
 @Table(name = "client")
 public class Client implements Serializable {

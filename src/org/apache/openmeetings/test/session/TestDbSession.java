@@ -64,6 +64,7 @@ public class TestDbSession extends AbstractOpenmeetingsSpringTest {
 		Client cl1 = new Client();
 		cl1.setStreamid("1");
 		cl1.setServer(null);
+		cl1.setUser_id(1L);
 		cl1.setRoom_id(1L);
 		cl1.setPublicSID("public1");
 		clientDao.add(cl1);
@@ -71,7 +72,8 @@ public class TestDbSession extends AbstractOpenmeetingsSpringTest {
 		Client cl2 = new Client();
 		cl2.setStreamid("2");
 		cl2.setServer(null);
-		cl2.setRoom_id(2L);
+		cl2.setRoom_id(1L);
+		cl2.setUser_id(2L);
 		cl2.setPublicSID("public2");
 		clientDao.add(cl2);
 
@@ -79,6 +81,7 @@ public class TestDbSession extends AbstractOpenmeetingsSpringTest {
 		cl3.setStreamid("3");
 		cl3.setServer(server);
 		cl3.setRoom_id(3L);
+		cl3.setUser_id(3L);
 		cl3.setPublicSID("public3");
 		clientDao.add(cl3);
 		
@@ -137,8 +140,59 @@ public class TestDbSession extends AbstractOpenmeetingsSpringTest {
 		List<Client> clientsAll = clientDao.getClients();
 		assertEquals(3, clientsAll.size());
 		
+		//by userid
+		List<Client> clTest_User_1_list = clientDao.getClientsByUserId(null, 1L);
+		assertEquals(cl1.getId(), clTest_User_1_list.get(0).getId());
+		
+		List<Client> clTest_User_3_list = clientDao.getClientsByUserId(server, 3L);
+		assertEquals(cl3.getId(), clTest_User_3_list.get(0).getId());
+		
+		List<Client> clTest_UserFail_list = clientDao.getClientsByUserId(null, 3L);
+		assertEquals(0, clTest_UserFail_list.size());
+		
+		//by roomid
+		List<Client> clTest_Room_1_list = clientDao.getClientsByRoomId(1L);
+		assertEquals(2, clTest_Room_1_list.size());
+		
+		List<Client> clTest_Room_3_list = clientDao.getClientsByRoomId(3L);
+		assertEquals(cl3.getId(), clTest_Room_3_list.get(0).getId());
+		
+		List<Client> clTest_RoomFail_list = clientDao.getClientsByRoomId(2L);
+		assertEquals(0, clTest_RoomFail_list.size());
+		
+		//count all
+		int countAll = clientDao.countClients();
+		assertEquals(3, countAll);
+		
+		//count by server
+		int clTest_Count_1_list = clientDao.countClientsByServer(null);
+		assertEquals(2, clTest_Count_1_list);
+		
+		int clTest_Count_3_list = clientDao.countClientsByServer(server);
+		assertEquals(1, clTest_Count_3_list);
+		
+		//remove by id
+		clientDao.delete(cl1);
+		
+		int clTest_Count_Delete_list = clientDao.countClientsByServer(null);
+		assertEquals(1, clTest_Count_Delete_list);
+		
+		//remove by server and streamid
+		clientDao.removeClientByServerAndStreamId(null, "2");
+		
+		clTest_Count_Delete_list = clientDao.countClientsByServer(null);
+		assertEquals(0, clTest_Count_Delete_list);
+		
+		clientDao.removeClientByServerAndStreamId(server, "3");
+		
+		clTest_Count_Delete_list = clientDao.countClientsByServer(server);
+		assertEquals(0, clTest_Count_Delete_list);
+		
+		//delete all
 		clientDao.cleanAllClients();
 
+		countAll = clientDao.countClients();
+		assertEquals(0, countAll);
 	}
 
 }
