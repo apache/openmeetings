@@ -85,12 +85,13 @@ public class DatabaseStore implements IClientPersistenceStore {
 		}
 		return returnMap;
 	}
+	
+	public Collection<Client> getClients() {
+		return clientDao.getClients();
+	}
 
-	public LinkedHashMap<String, Client> getClientsByServer(Server server) {
-		List<Client> clientList = clientDao.getClientsByServer(server);
-		
-		// TODO Auto-generated method stub
-		return null;
+	public Collection<Client> getClientsByServer(Server server) {
+		return clientDao.getClientsByServer(server);
 	}
 
 	public List<Client> getClientsByUserId(Server server, Long userId) {

@@ -92,8 +92,12 @@ public class HashMapStore implements IClientPersistenceStore {
 		return clientMapList;
 	}
 	
-	public LinkedHashMap<String, Client> getClientsByServer(Server server) {
-		return clientsByStreamId;
+	public Collection<Client> getClients() {
+		return clientsByStreamId.values();
+	}
+	
+	public Collection<Client> getClientsByServer(Server server) {
+		return clientsByStreamId.values();
 	}
 	
 	public List<Client> getClientsByUserId(Server server, Long userId) {

@@ -79,14 +79,15 @@ public interface IClientPersistenceStore {
 	public abstract Map<Long, List<Client>> getClientsByPublicSID(
 			String publicSID);
 
+	public abstract Collection<Client> getClients();
+	
 	/**
 	 * get all clients by a specific {@link Server}
 	 * 
 	 * @param server
 	 * @return will return an empty map if nothing available
 	 */
-	public abstract LinkedHashMap<String, Client> getClientsByServer(
-			Server server);
+	public abstract Collection<Client> getClientsByServer(Server server);
 
 	/**
 	 * 
@@ -94,7 +95,7 @@ public interface IClientPersistenceStore {
 	 * @param userId
 	 * @return will return an empty list if nothing available
 	 */
-	public abstract List<Client> getClientsByUserId(Server server, Long userId);
+	public abstract Collection<Client> getClientsByUserId(Server server, Long userId);
 
 	/**
 	 * 
