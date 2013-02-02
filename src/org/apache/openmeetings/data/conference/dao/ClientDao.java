@@ -95,6 +95,7 @@ public class ClientDao {
 	public List<Client> getClientsByPublicSIDAndServer(Server server, String publicSID) {
 		TypedQuery<Client> q = em.createNamedQuery("getClientsByPublicSIDAndServer", Client.class);
 		q.setParameter("server", server);
+		q.setParameter("publicSID", publicSID);
 		return q.getResultList();
 	}
 
@@ -108,6 +109,10 @@ public class ClientDao {
 		TypedQuery<Client> q = em.createNamedQuery("getClientsByServer", Client.class);
 		q.setParameter("server", server);	
 		return q.getResultList();
+	}
+
+	public List<Client> getClients() {
+		return em.createNamedQuery("getClients", Client.class).getResultList();
 	}
 	
 }

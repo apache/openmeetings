@@ -49,9 +49,8 @@ import org.apache.openmeetings.utils.math.CalendarPatterns;
 	@NamedQuery(name = "getClientByServerAndStreamId", query = "SELECT c FROM Client c WHERE c.streamid LIKE :streamid AND c.server = :server"),
 	@NamedQuery(name = "getClientsByPublicSIDAndServer", query = "SELECT c FROM Client c WHERE c.publicSID LIKE :publicSID AND c.server = :server"),
 	@NamedQuery(name = "getClientsByPublicSID", query = "SELECT c FROM Client c WHERE c.publicSID LIKE :publicSID"),
-	@NamedQuery(name = "getClientsByServer", query = "SELECT c FROM Client c WHERE c.publicSID LIKE :publicSID")
-	
-	
+	@NamedQuery(name = "getClientsByServer", query = "SELECT c FROM Client c WHERE c.server = :server"),
+	@NamedQuery(name = "getClients", query = "SELECT c FROM Client c")
 })
 @Table(name = "client")
 public class Client implements Serializable {

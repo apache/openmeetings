@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -116,11 +115,7 @@ public class SessionManager implements ISessionManager {
 		}
 
 		public synchronized Collection<Client> getAllClients() {
-			HashMap<String, Client> clients = cache.getClientsByServer(null);
-			if (clients == null) {
-				return new ArrayList<Client>(0);
-			}
-			return clients.values();
+			return cache.getClients();
 		}
 
 		public synchronized Client getClientByStreamId(String streamId, Server server) {

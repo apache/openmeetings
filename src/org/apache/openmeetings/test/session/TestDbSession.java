@@ -20,6 +20,8 @@ package org.apache.openmeetings.test.session;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.List;
+
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.dao.ServerDao;
 import org.apache.openmeetings.data.conference.dao.ClientDao;
@@ -46,11 +48,16 @@ public class TestDbSession extends AbstractOpenmeetingsSpringTest {
 	public void testDbSessionFunctions() {
 
 		clientDao.cleanAllClients();
+		
+		List<Server> serverList = serverDao.getActiveServers();
 
-		Server server = serverDao.get(1);
-		if (server == null) {
+		Server server = null;
+		if (serverList.size() > 0) {
+			server = serverList.get(0);
+		} else {
 			server = new Server();
-			server.setName("Server 1");
+			server.setName("Test Server");
+			server.setActive(true);
 			serverDao.update(server, 0);
 		}
 
@@ -74,7 +81,7 @@ public class TestDbSession extends AbstractOpenmeetingsSpringTest {
 		cl3.setRoom_id(3L);
 		cl3.setPublicSID("public3");
 		clientDao.add(cl3);
-
+		
 		Client clTest = clientDao.getClientByServerAndStreamId(null, "1");
 
 		log.debug("cl1 " + cl1);
@@ -93,6 +100,44 @@ public class TestDbSession extends AbstractOpenmeetingsSpringTest {
 
 		log.debug("clTest_NOT_3 " + clTest_NOT_3);
 		assertEquals(null, clTest_NOT_3);
+		
+		long numberOfClients1 = clientDao.countClientsByServerAndStreamId(null, "1");
+		assertEquals(1, numberOfClients1);
+		
+		long numberOfClients3 = clientDao.countClientsByServerAndStreamId(server, "3");
+		assertEquals(1, numberOfClients3);
+		
+		long numberOfClients4 = clientDao.countClientsByServerAndStreamId(null, "3");
+		assertEquals(0, numberOfClients4);
+		
+		List<Client> clTest_Pub_1_list = clientDao.getClientsByPublicSIDAndServer(null, "public1");
+		assertEquals(cl1.getId(), clTest_Pub_1_list.get(0).getId());
+		
+		List<Client> clTest_Pub_3_list = clientDao.getClientsByPublicSIDAndServer(server, "public3");
+		assertEquals(cl3.getId(), clTest_Pub_3_list.get(0).getId());
+		
+		List<Client> clTest_Fail_list = clientDao.getClientsByPublicSIDAndServer(null, "public3");
+		assertEquals(0, clTest_Fail_list.size());
+		
+		List<Client> clTest_PubAll_1_list = clientDao.getClientsByPublicSID("public1");
+		assertEquals(cl1.getId(), clTest_PubAll_1_list.get(0).getId());
+		
+		List<Client> clTest_PubAll_3_list = clientDao.getClientsByPublicSID("public3");
+		assertEquals(cl3.getId(), clTest_PubAll_3_list.get(0).getId());
+		
+		List<Client> clTest_FailAll_list = clientDao.getClientsByPublicSID("public4");
+		assertEquals(0, clTest_FailAll_list.size());
+		
+		List<Client> clientsByServerNull = clientDao.getClientsByServer(null);
+		assertEquals(2, clientsByServerNull.size());
+		
+		List<Client> clientsByServer = clientDao.getClientsByServer(server);
+		assertEquals(1, clientsByServer.size());
+		
+		List<Client> clientsAll = clientDao.getClients();
+		assertEquals(3, clientsAll.size());
+		
+		clientDao.cleanAllClients();
 
 	}
 
