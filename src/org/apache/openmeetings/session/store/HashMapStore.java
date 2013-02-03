@@ -110,11 +110,11 @@ public class HashMapStore implements IClientPersistenceStore {
 		return clientList;
 	}
 	
-	public  LinkedHashMap<String, Client> getClientsByRoomId(Long roomId) {
-		LinkedHashMap<String,Client> clientList = new LinkedHashMap<String, Client>();
+	public  List<Client> getClientsByRoomId(Long roomId) {
+		List<Client> clientList = new ArrayList<Client>();
 		for (Client cl : clientsByStreamId.values()) {
 			if (cl.getRoom_id() != null && cl.getRoom_id().equals(roomId)) {
-				clientList.put(cl.getStreamid(), cl);
+				clientList.add(cl);
 			}
 		}
 		return clientList;
@@ -134,12 +134,6 @@ public class HashMapStore implements IClientPersistenceStore {
 
 	public Collection<Client> values() {
 		return clientsByStreamId.values();
-	}
-	
-	public LinkedHashMap<Long,Collection<Client>> getClientsByServerAndRoom(Server server) {
-		LinkedHashMap<Long,Collection<Client>> clientsByServer = new LinkedHashMap<Long,Collection<Client>>();
-		clientsByServer.put(null, clientsByStreamId.values());
-		return clientsByServer;
 	}
 	
 	public int getTotalNumberOfSessions() {
@@ -172,6 +166,10 @@ public class HashMapStore implements IClientPersistenceStore {
 
 	private void addNewLine(StringBuilder strBuilder, String message) {
 		strBuilder.append(message + "\n\r");
+	}
+
+	public List<Long> getRoomsIdsByServer(Server server) {
+		throw new RuntimeException("This method should bever be called if the server is running in a single node (NON-Cluster) setup!");
 	}
 
 }

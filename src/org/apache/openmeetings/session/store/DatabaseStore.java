@@ -21,7 +21,6 @@ package org.apache.openmeetings.session.store;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +46,11 @@ public class DatabaseStore implements IClientPersistenceStore {
 	}
 	
 	public void put(String streamId, Client rcl) {
-		clientDao.add(rcl);
+		if (rcl.getId() > 0) {
+			clientDao.update(rcl);
+		} else {
+			clientDao.add(rcl);
+		}
 	}
 
 	public boolean containsKey(Server server, String streamId) {
@@ -95,44 +98,36 @@ public class DatabaseStore implements IClientPersistenceStore {
 	}
 
 	public List<Client> getClientsByUserId(Server server, Long userId) {
-		// TODO Auto-generated method stub
-		return null;
+		return clientDao.getClientsByUserId(server, userId);
 	}
 
-	public LinkedHashMap<String, Client> getClientsByRoomId(Long roomId) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Client> getClientsByRoomId(Long roomId) {
+		return clientDao.getClientsByRoomId(roomId);
 	}
 
 	public void remove(Server server, String streamId) {
-		// TODO Auto-generated method stub
-		
+		clientDao.removeClientByServerAndStreamId(server, streamId);
 	}
 
 	public int size() {
-		// TODO Auto-generated method stub
-		return 0;
+		return clientDao.countClients();
 	}
 
 	public int sizeByServer(Server server) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public LinkedHashMap<Long, Collection<Client>> getClientsByServerAndRoom(
-			Server server) {
-		// TODO Auto-generated method stub
-		return null;
+		return clientDao.countClientsByServer(server);
 	}
 
 	public Collection<Client> values() {
-		// TODO Auto-generated method stub
-		return null;
+		return clientDao.getClients();
 	}
 
 	public String getDebugInformation(List<DEBUG_DETAILS> detailLevel) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public List<Long> getRoomsIdsByServer(Server server) {
+		return clientDao.getRoomsIdsByServer(server);
 	}
 
 }

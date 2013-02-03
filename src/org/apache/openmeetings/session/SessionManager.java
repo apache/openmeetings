@@ -23,12 +23,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
-import java.util.Set;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
@@ -52,8 +50,6 @@ public class SessionManager implements ISessionManager {
 	
 	protected static final Logger log = Red5LoggerFactory.getLogger(
 			SessionManager.class, OpenmeetingsVariables.webAppRootKey);
-	
-	private static Set<Long> EMPTY_HASH_SET = new HashSet<Long>();
 	
 	@Autowired
 	private ServerUtil serverUtil;
@@ -273,7 +269,7 @@ public class SessionManager implements ISessionManager {
 			ArrayList<Client> roomClientList = new ArrayList<Client>();
 			try {
 
-				for (Client rcl : cache.getClientsByRoomId(roomId).values()) {
+				for (Client rcl : cache.getClientsByRoomId(roomId)) {
 
 					if (rcl.getIsScreenClient() == null || rcl.getIsScreenClient()) {
 						continue;
@@ -296,7 +292,7 @@ public class SessionManager implements ISessionManager {
 		
 		public synchronized Collection<Client> getClientListByRoomAll(Long roomId) {
 			try {
-				return cache.getClientsByRoomId(roomId).values();
+				return cache.getClientsByRoomId(roomId);
 			} catch (Exception err) {
 				log.error("[getClientListByRoomAll]", err);
 			}
@@ -347,11 +343,8 @@ public class SessionManager implements ISessionManager {
 			return numberOfPublishingUsers;
 		}
 		
-		public Set<Long> getActiveRoomIdsByServer(Server server) {
-			if (cache.getClientsByServerAndRoom(server) == null) {
-				return EMPTY_HASH_SET;
-			}
-			return cache.getClientsByServerAndRoom(server).keySet();
+		public List<Long> getActiveRoomIdsByServer(Server server) {
+			return cache.getRoomsIdsByServer(server);
 		}
 		
 		
@@ -449,7 +442,7 @@ public class SessionManager implements ISessionManager {
 		return sessionManager.getPublishingCount(roomId);
 	}
 
-	public Set<Long> getActiveRoomIdsByServer(Server server) {
+	public List<Long> getActiveRoomIdsByServer(Server server) {
 		if (server == null) {
 			server = serverUtil.getCurrentServer();
 		}

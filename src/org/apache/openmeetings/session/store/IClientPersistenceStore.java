@@ -19,7 +19,6 @@
 package org.apache.openmeetings.session.store;
 
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -100,14 +99,11 @@ public interface IClientPersistenceStore {
 	/**
 	 * 
 	 * We ignore the server here, cause ONE room can only be on ONE server and often we don't know where.
-	 * However at a later stage clients might be on different servers and still in the save room
-	 * so we keep that parameter for now
 	 * 
-	 * @param server
 	 * @param roomId
 	 * @return will return an empty map if nothing available
 	 */
-	public abstract LinkedHashMap<String, Client> getClientsByRoomId(Long roomId);
+	public abstract List<Client> getClientsByRoomId(Long roomId);
 
 	public abstract void remove(Server server, String streamId);
 
@@ -115,9 +111,6 @@ public interface IClientPersistenceStore {
 
 	public abstract int sizeByServer(Server server);
 
-	public abstract LinkedHashMap<Long, Collection<Client>> getClientsByServerAndRoom(
-			Server server);
-	
 	public abstract Collection<Client> values();
 	
 	/**
@@ -127,5 +120,7 @@ public interface IClientPersistenceStore {
 	 * @return
 	 */
 	public abstract String getDebugInformation(List<DEBUG_DETAILS> detailLevel);
+
+	public abstract List<Long> getRoomsIdsByServer(Server server);
 
 }

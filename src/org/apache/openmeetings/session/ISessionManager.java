@@ -20,7 +20,6 @@ package org.apache.openmeetings.session;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.persistence.beans.basic.Server;
@@ -207,7 +206,7 @@ public interface ISessionManager {
 	 * @param server
 	 * @return
 	 */
-	public abstract Set<Long> getActiveRoomIdsByServer(Server server);
+	public abstract List<Long> getActiveRoomIdsByServer(Server server);
 
 	/**
 	 * Get some statistics about the current sessions
