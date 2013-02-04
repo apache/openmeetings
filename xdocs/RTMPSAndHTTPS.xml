@@ -164,6 +164,15 @@
 					Edit red5/webapps/openmeetings/config.xml and set
 					<tt>&lt;protocol&gt;https&lt;/protocol&gt;</tt>
 				</li>
+				<li>
+					Edit red5/webapps/openmeetings/config.xml and set
+					<tt>red5httpport</tt> to <tt>https</tt> port
+				</li>
+				<li>In webapps/openmeetings/WEB-INF/conf/axis2.xml add (below the existing http transportReceiver (around line 225))
+					<div class="xmlcode">&lt;transportReceiver name="https" class="org.apache.axis2.transport.http.AxisServletListener"&gt;<br/>
+    &#160;&#160;&#160;&#160;&lt;parameter name="port"&gt;443&lt;/parameter&gt;<br/>
+&lt;/transportReceiver&gt;</div>
+				</li>
 				<li>Edit red5/conf/red5.properties and set <tt>https.port=443</tt> </li>
 				<li>
 					Restart red5 and try to connect to
