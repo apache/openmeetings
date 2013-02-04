@@ -121,7 +121,7 @@
     </method>    
 
 	<method name="activateSynced">
-		this.parent.sendActiveWindowSynced(this,win);
+		this.parent.sendActiveWindowSynced(this);
 	</method>
     
     <view name="_minimizebtn_mo" width="${ parent.width-2 }" height="16"

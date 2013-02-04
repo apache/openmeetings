@@ -74,6 +74,8 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	private AuthLevelmanagement authLevelManagement;
 	@Autowired
 	private LibraryWmlLoader libraryWmlLoader;
+	@Autowired
+	private WhiteboardManagement whiteboardManagement;
 
 	public LibraryPresentation getPresentationPreviewFileExplorer(String SID,
 			String parentFolder) {
@@ -196,7 +198,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 				whiteboardObjClear.put(2, "clear");
 				whiteboardObjClear.put(3, null);
 
-				WhiteboardManagement.getInstance().addWhiteBoardObjectById(
+				whiteboardManagement.addWhiteBoardObjectById(
 						room_id, whiteboardObjClear, whiteboardId);
 
 				for (int k = 0; k < roomItems.size(); k++) {
@@ -207,7 +209,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 					whiteboardObj.put(2, "draw");
 					whiteboardObj.put(3, actionObject);
 
-					WhiteboardManagement.getInstance().addWhiteBoardObjectById(
+					whiteboardManagement.addWhiteBoardObjectById(
 							room_id, whiteboardObj, whiteboardId);
 
 				}
@@ -231,17 +233,9 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 												.getIsScreenClient())) {
 									continue;
 								} else {
-									// log.debug("*..*idremote: " +
-									// rcl.getStreamid());
-									// log.debug("*..* sendVars room_id IS EQUAL: "
-									// + currentClient.getStreamid() + " asd " +
-									// rcl.getStreamid() + " IS eq? "
-									// +currentClient.getStreamid().equals(rcl.getStreamid()));
 									((IServiceCapableConnection) conn).invoke(
 											"loadWmlToWhiteboardById",
 											new Object[] { sendObject }, this);
-									// log.debug("sending sendVarsToWhiteboard to "
-									// + conn + " rcl " + rcl);
 								}
 							}
 						}

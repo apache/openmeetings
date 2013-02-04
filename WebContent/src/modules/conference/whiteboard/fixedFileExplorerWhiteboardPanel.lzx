@@ -38,9 +38,8 @@
         <netparam><method name="getValue">return parent.parent.whiteboardId;</method></netparam>
         <handler name="ondata" args="value">
             <![CDATA[
-            //The onResult-Handler will be called be the rtmpconnection
-            	//if ($debug) Debug.write("sendVars : ",value);
-            
+                //The onResult-Handler will be called be the rtmpconnection
+            	//if ($debug) Debug.write("sendVarsByWhiteboardId : ",value);
             ]]>
         </handler>   
     </netRemoteCallHib>     

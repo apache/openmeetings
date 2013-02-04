@@ -316,7 +316,7 @@
         <handler name="ondata" args="value">
             <![CDATA[
             //The onResult-Handler will be called be the rtmpconnection
-            //Debug.write("sendVarsModeratorGeneral : ",value);
+            //Debug.write("whiteboardservice.setCanDraw : ",value);
             
             ]]>
         </handler>   
@@ -330,7 +330,7 @@
         <handler name="ondata" args="value">
             <![CDATA[
             //The onResult-Handler will be called be the rtmpconnection
-            //Debug.write("sendVarsModeratorGeneral : ",value);
+            //Debug.write("whiteboardservice.setCanShare : ",value);
             
             ]]>
         </handler>   
@@ -346,7 +346,7 @@
         <handler name="ondata" args="value">
             <![CDATA[
                 //The onResult-Handler will be called be the rtmpconnection
-                if ($debug) Debug.write("setCanRemote : ",value);
+                if ($debug) Debug.write("whiteboardservice.setCanRemote : ",value);
             ]]>
         </handler>   
     </netRemoteCallHib>

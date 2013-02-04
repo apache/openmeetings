@@ -38,7 +38,7 @@ import org.apache.openmeetings.data.basic.Sessionmanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.persistence.beans.rooms.Client;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
-import org.apache.openmeetings.remote.red5.WhiteBoardObjectListManager;
+import org.apache.openmeetings.remote.red5.WhiteBoardObjectSyncManager;
 import org.apache.openmeetings.remote.red5.WhiteBoardObjectListManagerById;
 import org.apache.openmeetings.session.ISessionManager;
 import org.apache.openmeetings.utils.OmFileHelper;
@@ -67,7 +67,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 	@Autowired
 	private final ISessionManager sessionManager = null;
 	@Autowired
-	private final WhiteBoardObjectListManager whiteBoardObjectListManager = null;
+	private final WhiteBoardObjectSyncManager whiteBoardObjectListManager = null;
 	@Autowired
 	private final WhiteBoardObjectListManagerById whiteBoardObjectListManagerById = null;
 	@Autowired
@@ -79,7 +79,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 	 * Loading the List of Objects on the whiteboard
 	 * 
 	 * @return HashMap<String,Map>
-	 */
+	
 	public WhiteboardObject getRoomItems() {
 		try {
 			IConnection current = Red5.getConnectionLocal();
@@ -98,6 +98,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 		}
 		return null;
 	}
+	 */
 
 	public Long getNewWhiteboardId() {
 		try {
@@ -575,8 +576,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			Long room_id = currentClient.getRoom_id();
 
 			// TODO: Maybe we should also check all rooms, independent from the
-			// current
-			// room_id if there is any user registered
+			// current room_id if there is any user registered
 			if (room_id != null) {
 
 				log.debug("removeUserFromAllLists this.whiteBoardObjectListManager: "

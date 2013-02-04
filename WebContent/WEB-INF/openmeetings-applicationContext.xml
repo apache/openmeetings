@@ -62,14 +62,17 @@
 	</bean>
 	<bean id="openmeetings.EmoticonsManager" 
 		class="org.apache.openmeetings.remote.red5.EmoticonsManager" />
-	<bean id="openmeetings.WhiteBoardObjectListManager"
-		class="org.apache.openmeetings.remote.red5.WhiteBoardObjectListManager" />
-	<bean id="openmeetings.WhiteBoardObjectListManagerById"
-		class="org.apache.openmeetings.remote.red5.WhiteBoardObjectListManagerById" />
-	
+		
+	<!--  Singletons for memory based cache -->
 	<bean id="openmeetings.HashMapStore" scope="singleton" 
 		class="org.apache.openmeetings.session.store.HashMapStore" />
+	<bean id="whiteBoardObjectListManagerById" scope="singleton"  
+	    class="org.apache.openmeetings.remote.red5.WhiteBoardObjectListManagerById" />
+	<!-- WhiteBoardObjectSyncManager can stay in the memory, even on cluster! -->
+	<bean id="whiteBoardObjectSyncManager" scope="singleton"  
+	    class="org.apache.openmeetings.remote.red5.WhiteBoardObjectSyncManager" />
 	
+	<!-- Database cache -->
 	<bean id="openmeetings.DatabaseStore"
 		class="org.apache.openmeetings.session.store.DatabaseStore" />
 	
@@ -77,9 +80,8 @@
 		class="org.apache.openmeetings.session.ServerUtil">
 		<!-- 
 			Need to be uncommented and set to the real ID if in cluster mode
-			
-		<property name="serverId" value="null" />
-		 -->	
+		<property name="serverId" value="1" />
+		 -->  
 	</bean>	
 	
 	<!-- Cluster related config start -->
@@ -281,6 +283,7 @@
 	<bean id="fileUtils" class="org.apache.openmeetings.data.file.FileUtils" />
 	<bean id="ldapLoginManagement" class="org.apache.openmeetings.ldap.LdapLoginManagement" />
 	<bean id="timezoneUtil" class="org.apache.openmeetings.utils.math.TimezoneUtil" />
+	<bean id="whiteboardManagement" class="org.apache.openmeetings.conference.whiteboard.WhiteboardManagement" />
 	
 	<!-- Templates -->
 	<bean id="registerUserTemplate" class="org.apache.openmeetings.templates.RegisterUserTemplate" />

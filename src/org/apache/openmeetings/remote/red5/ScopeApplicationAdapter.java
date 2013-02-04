@@ -85,6 +85,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	@Autowired
 	private WhiteBoardService whiteBoardService;
 	@Autowired
+	private WhiteboardManagement whiteboardManagement;
+	@Autowired
 	private FLVRecorderService flvRecorderService;
 	@Autowired
 	private ConfigurationDao configurationDaoImpl;
@@ -1866,85 +1868,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * This Function is triggered from the Whiteboard
 	 * 
 	 * @param whiteboardObjParam - array of parameters being sended to whiteboard
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public synchronized void sendVars(ArrayList whiteboardObjParam) {
-		//
-		try {
-			Map whiteboardObj = new HashMap();
-			int i = 0;
-			for (Iterator iter = whiteboardObjParam.iterator(); iter.hasNext();) {
-				Object obj = iter.next();
-				whiteboardObj.put(i, obj);
-				i++;
-			}
-
-			// Check if this User is the Mod:
-			IConnection current = Red5.getConnectionLocal();
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(current.getClient().getId(), null);
-
-			if (currentClient == null) {
-				return;
-			}
-			Long room_id = currentClient.getRoom_id();
-			String action = whiteboardObj.get(2).toString();
-
-			if (action != null && action.equals("whiteboardObj")) {
-				// Update Whiteboard Object
-				List actionObject = (List) whiteboardObj.get(3);
-				WhiteboardManagement.getInstance().updateWhiteboardObject(
-						room_id, actionObject);
-			} else if (action != null && action.equals("moveMap")) {
-				// Update Whiteboard Object
-				List actionObject = (List) whiteboardObj.get(3);
-				WhiteboardManagement.getInstance().updateWhiteboardObjectPos(
-						room_id, actionObject);
-			} else {
-				// Store event in list
-				WhiteboardManagement.getInstance().addWhiteBoardObject(room_id,
-						whiteboardObj);
-			}
-
-			boolean showDrawStatus = getWhiteboardDrawStatus();
-
-			// Notify all Clients of that Scope (Room)
-			Collection<Set<IConnection>> conCollection = current.getScope()
-					.getConnections();
-			for (Set<IConnection> conset : conCollection) {
-				for (IConnection conn : conset) {
-					if (conn != null) {
-						if (conn instanceof IServiceCapableConnection) {
-							IClient client = conn.getClient();
-							if (SessionVariablesUtil.isScreenClient(client)) {
-								// screen sharing clients do not receive events
-								continue;
-							} else if (SessionVariablesUtil.isAVClient(client)) {
-								// AVClients or potential AVClients do not receive events
-								continue;
-							} if (client.getId().equals(
-									current.getClient().getId())) {
-								// don't send back to same user
-								continue;
-							}
-							((IServiceCapableConnection) conn)
-								.invoke("sendVarsToWhiteboard",
-									new Object[] { (showDrawStatus ? currentClient : null), whiteboardObj }, 
-										this);
-						}
-					}
-				}
-			}
-
-		} catch (Exception err) {
-			log.error("[sendVars]", err);
-		}
-	}
-
-	/**
-	 * This Function is triggered from the Whiteboard
-	 * 
-	 * @param whiteboardObjParam - array of parameters being sended to whiteboard
 	 * @param whiteboardId - id of whiteboard parameters will be send to
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -2003,14 +1926,14 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 					whiteboardTempObj.put(3, tempActionObject);
 
-					WhiteboardManagement.getInstance().addWhiteBoardObjectById(
+					whiteboardManagement.addWhiteBoardObjectById(
 							room_id, whiteboardTempObj, whiteboardId);
 
 				}
 
 			} else {
 
-				WhiteboardManagement.getInstance().addWhiteBoardObjectById(
+				whiteboardManagement.addWhiteBoardObjectById(
 						room_id, whiteboardObj, whiteboardId);
 
 			}

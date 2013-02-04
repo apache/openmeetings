@@ -317,7 +317,7 @@
              -->
              
             <handler name="onopenWhiteBoard" >
-                parent.parent.getRoomItems.doCall();
+                //parent.parent.getRoomItems.doCall();
             </handler>
             
             <!-- clientid  = streamid of the user -->
@@ -468,6 +468,7 @@
             </handler>   
         </netRemoteCallHib>     
     
+    <!-- 
         <netRemoteCallHib name="getRoomItems" funcname="whiteboardservice.getRoomItems"
             remotecontext="$once{ canvas.thishib }" >
             <handler name="ondata" args="value">
@@ -477,7 +478,8 @@
                     canvas._drawarea.loadObjectList(value);
                 ]]>
             </handler>   
-        </netRemoteCallHib>     
+        </netRemoteCallHib>  
+     -->  
         
     <view name="panelArea" width="${ parent.parent.width }" 
           height="${ parent.parent.height-42-parent._propertyPanel.height }">

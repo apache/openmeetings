@@ -1120,16 +1120,6 @@
             </handler>
         </netRemoteCallHib>             
   
-        <netRemoteCallHib name="sendVars" funcname="sendVars" showLoading="false">
-            <netparam name="vars"><method name="getValue">return canvas.objWhiteboard;</method></netparam>
-            <handler name="ondata" args="value">
-                <![CDATA[
-                	//The onResult-Handler will be called be the rtmpconnection
-                    if ($debug) Debug.write("sendVars : ",value);
-                ]]>
-            </handler>   
-        </netRemoteCallHib>    
-        
         <method name="setUserStatus" args="ctx,user,o">
             <![CDATA[
 				if (!o || !user) return;
@@ -1626,11 +1616,13 @@
                 } else if (value.message[0]=='avsettings'){
                     canvas._videocontainer.setAVSettingsToClient(value.client);
                 } else if (value.message[0]=='whiteboard'){
-                    if (value.message[1]=='wmlloadcomplete'){
-                        canvas._drawarea.sendCompleteWmlLoadedRClient(value.client);
-                    } else if (value.message[1]=='wmlsynccomplete'){
-                        canvas._drawarea.sendCompleteWmlSync(value.client);
-                    } else if (value.message[1]=='imageloadcomplete'){
+                    //if (value.message[1]=='wmlloadcomplete'){
+                    //    canvas._drawarea.sendCompleteWmlLoadedRClient(value.client);
+                    //} else if (value.message[1]=='wmlsynccomplete'){
+                    //    canvas._drawarea.sendCompleteWmlSync(value.client);
+                    //} else 
+                    
+                    if (value.message[1]=='imageloadcomplete'){
                         canvas._drawarea.sendCompleteImageLoadedRClient(value.client);
                     } else if (value.message[1]=='imagesynccomplete'){
                         canvas._drawarea.sendCompleteImageSync(value.client);

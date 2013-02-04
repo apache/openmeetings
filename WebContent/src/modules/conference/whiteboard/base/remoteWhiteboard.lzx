@@ -240,7 +240,7 @@
 		}
     </method>
 	
-	<method name="loadRemoteObject">
+	<method name="loadRemoteObject" args="ref">
 		<![CDATA[
 			this.sendRemoteWatchObject(this.loadingObjectList[this.loadingObjectListId]);
 			this.loadingObjectListId++;
