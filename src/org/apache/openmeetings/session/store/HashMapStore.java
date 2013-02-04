@@ -175,7 +175,16 @@ public class HashMapStore implements IClientPersistenceStore {
 	}
 
 	public List<Long> getRoomsIdsByServer(Server server) {
-		throw new RuntimeException("This method should bever be called if the server is running in a single node (NON-Cluster) setup!");
+		List<Long> roomIds = new ArrayList<Long>();
+		for (Client cl : clientsByStreamId.values()) {
+			Long roomId = cl.getRoom_id();
+			if (roomId != null && roomId > 0) {
+				if (!roomIds.contains(roomId)) {
+					
+				}
+			}
+		}
+		return roomIds;
 	}
 
 }

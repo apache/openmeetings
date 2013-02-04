@@ -203,7 +203,7 @@ public interface ISessionManager {
 	 * means it is a local session on the master.
 	 * 
 	 * @param server
-	 * @return
+	 * @return a set, a roomId can be only one time in this list
 	 */
 	public abstract List<Long> getActiveRoomIdsByServer(Server server);
 

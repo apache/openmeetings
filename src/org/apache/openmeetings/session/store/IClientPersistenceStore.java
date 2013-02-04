@@ -121,6 +121,14 @@ public interface IClientPersistenceStore {
 	 */
 	public abstract String getDebugInformation(List<DEBUG_DETAILS> detailLevel);
 
+	/**
+	 * returns a list of roomIds (unique) that are currently active on the given server
+	 * In case the session is stored in the memory (no-cluster setup) it will always 
+	 * return simply all active roomIds
+	 * 
+	 * @param server
+	 * @return
+	 */
 	public abstract List<Long> getRoomsIdsByServer(Server server);
 
 	/**

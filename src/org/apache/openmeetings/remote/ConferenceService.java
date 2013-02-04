@@ -789,7 +789,7 @@ public class ConferenceService {
 			
 			//check if the user is on master hosted, (serverId == null)
 			for (Long activeRoomId : sessionManager.getActiveRoomIdsByServer(null)) {
-				if (activeRoomId.equals(roomId)) {
+				if (activeRoomId != null && activeRoomId.equals(roomId)) {
 					return null;
 				}
 			}

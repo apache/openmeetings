@@ -57,7 +57,8 @@ import org.apache.openmeetings.utils.math.CalendarPatterns;
 	@NamedQuery(name = "getClients", query = "SELECT c FROM Client c"),
 	@NamedQuery(name = "getClientsWithServer", query = "SELECT c FROM Client c LEFT JOIN FETCH c.server"),
 	@NamedQuery(name = "getClientsByUserId", query = "SELECT c FROM Client c WHERE c.server = :server AND c.user_id = :user_id"),
-	@NamedQuery(name = "getClientsByRoomId", query = "SELECT c FROM Client c WHERE c.room_id = :room_id")
+	@NamedQuery(name = "getClientsByRoomId", query = "SELECT c FROM Client c WHERE c.room_id = :room_id"),
+	@NamedQuery(name = "getRoomsIdsByServer", query = "SELECT c.room_id FROM Client c WHERE c.server = :server GROUP BY c.room_id")
 })
 @Table(name = "client")
 public class Client implements Serializable {
