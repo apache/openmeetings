@@ -16,35 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.conference.whiteboard;
+package org.apache.openmeetings.data.whiteboard.dto;
 
-import java.util.List;
+public class BrowserStatus {
+	
+	private boolean browserInited = false;
+	private String currentURL = "";
+	
+	public boolean isBrowserInited() {
+		return browserInited;
+	}
+	public void setBrowserInited(boolean browserInited) {
+		this.browserInited = browserInited;
+	}
+	public String getCurrentURL() {
+		return currentURL;
+	}
+	public void setCurrentURL(String currentURL) {
+		this.currentURL = currentURL;
+	}
 
-import org.apache.openmeetings.persistence.beans.rooms.Client;
-
-public class RoomStatus {
-	
-	List<Client> clientList;
-	BrowserStatus browserStatus;
-	Boolean roomFull = false;
-	
-	public List<Client> getClientList() {
-		return clientList;
-	}
-	public void setClientList(List<Client> clientList) {
-		this.clientList = clientList;
-	}
-	public BrowserStatus getBrowserStatus() {
-		return browserStatus;
-	}
-	public void setBrowserStatus(BrowserStatus browserStatus) {
-		this.browserStatus = browserStatus;
-	}
-	public Boolean getRoomFull() {
-		return roomFull;
-	}
-	public void setRoomFull(Boolean roomFull) {
-		this.roomFull = roomFull;
-	}
-	
 }

@@ -16,12 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.remote.red5;
+package org.apache.openmeetings.data.whiteboard;
 
 import java.util.HashMap;
 
-import org.apache.openmeetings.conference.whiteboard.WhiteboardObject;
-import org.apache.openmeetings.conference.whiteboard.WhiteboardObjectList;
+import org.apache.openmeetings.data.whiteboard.dto.WhiteboardObject;
+import org.apache.openmeetings.data.whiteboard.dto.WhiteboardObjectList;
 
 /**
  * Memory based cache, configured as singleton in spring configuration

@@ -16,27 +16,35 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.conference.whiteboard;
+package org.apache.openmeetings.data.whiteboard.dto;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
-public class WhiteboardObjectList {
+import org.apache.openmeetings.persistence.beans.rooms.Client;
 
-	private Long room_id;
-	private Map<Long,WhiteboardObject> whiteboardObjects = new HashMap<Long,WhiteboardObject>();
+public class RoomStatus {
 	
-	public Long getRoom_id() {
-		return room_id;
+	List<Client> clientList;
+	BrowserStatus browserStatus;
+	Boolean roomFull = false;
+	
+	public List<Client> getClientList() {
+		return clientList;
 	}
-	public void setRoom_id(Long roomId) {
-		room_id = roomId;
+	public void setClientList(List<Client> clientList) {
+		this.clientList = clientList;
 	}
-	public Map<Long, WhiteboardObject> getWhiteboardObjects() {
-		return whiteboardObjects;
+	public BrowserStatus getBrowserStatus() {
+		return browserStatus;
 	}
-	public void setWhiteboardObjects(Map<Long, WhiteboardObject> whiteboardObjects) {
-		this.whiteboardObjects = whiteboardObjects;
+	public void setBrowserStatus(BrowserStatus browserStatus) {
+		this.browserStatus = browserStatus;
+	}
+	public Boolean getRoomFull() {
+		return roomFull;
+	}
+	public void setRoomFull(Boolean roomFull) {
+		this.roomFull = roomFull;
 	}
 	
 }

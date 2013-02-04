@@ -16,24 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.conference.whiteboard;
+package org.apache.openmeetings.data.whiteboard.dto;
 
-public class BrowserStatus {
-	
-	private boolean browserInited = false;
-	private String currentURL = "";
-	
-	public boolean isBrowserInited() {
-		return browserInited;
-	}
-	public void setBrowserInited(boolean browserInited) {
-		this.browserInited = browserInited;
-	}
-	public String getCurrentURL() {
-		return currentURL;
-	}
-	public void setCurrentURL(String currentURL) {
-		this.currentURL = currentURL;
-	}
+import java.util.HashMap;
+import java.util.Map;
 
+public class WhiteboardObjectList {
+
+	private Long room_id;
+	private Map<Long,WhiteboardObject> whiteboardObjects = new HashMap<Long,WhiteboardObject>();
+	
+	public Long getRoom_id() {
+		return room_id;
+	}
+	public void setRoom_id(Long roomId) {
+		room_id = roomId;
+	}
+	public Map<Long, WhiteboardObject> getWhiteboardObjects() {
+		return whiteboardObjects;
+	}
+	public void setWhiteboardObjects(Map<Long, WhiteboardObject> whiteboardObjects) {
+		this.whiteboardObjects = whiteboardObjects;
+	}
+	
 }

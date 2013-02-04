@@ -61,16 +61,16 @@
 	    </property>	
 	</bean>
 	<bean id="openmeetings.EmoticonsManager" 
-		class="org.apache.openmeetings.remote.red5.EmoticonsManager" />
+		class="org.apache.openmeetings.data.whiteboard.EmoticonsManager" />
 		
 	<!--  Singletons for memory based cache -->
 	<bean id="openmeetings.HashMapStore" scope="singleton" 
 		class="org.apache.openmeetings.session.store.HashMapStore" />
 	<bean id="whiteBoardObjectListManagerById" scope="singleton"  
-	    class="org.apache.openmeetings.remote.red5.WhiteBoardObjectListManagerById" />
+	    class="org.apache.openmeetings.data.whiteboard.WhiteBoardObjectListManagerById" />
 	<!-- WhiteBoardObjectSyncManager can stay in the memory, even on cluster! -->
 	<bean id="whiteBoardObjectSyncManager" scope="singleton"  
-	    class="org.apache.openmeetings.remote.red5.WhiteBoardObjectSyncManager" />
+	    class="org.apache.openmeetings.data.whiteboard.WhiteBoardObjectSyncManager" />
 	
 	<!-- Database cache -->
 	<bean id="openmeetings.DatabaseStore"
@@ -283,7 +283,7 @@
 	<bean id="fileUtils" class="org.apache.openmeetings.data.file.FileUtils" />
 	<bean id="ldapLoginManagement" class="org.apache.openmeetings.ldap.LdapLoginManagement" />
 	<bean id="timezoneUtil" class="org.apache.openmeetings.utils.math.TimezoneUtil" />
-	<bean id="whiteboardManagement" class="org.apache.openmeetings.conference.whiteboard.WhiteboardManagement" />
+	<bean id="whiteboardManagement" class="org.apache.openmeetings.data.whiteboard.WhiteboardManagement" />
 	
 	<!-- Templates -->
 	<bean id="registerUserTemplate" class="org.apache.openmeetings.templates.RegisterUserTemplate" />

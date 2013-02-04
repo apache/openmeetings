@@ -16,13 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.remote.red5;
+package org.apache.openmeetings.data.whiteboard;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.conference.whiteboard.WhiteboardSyncLockObject;
+import org.apache.openmeetings.data.whiteboard.dto.WhiteboardSyncLockObject;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
