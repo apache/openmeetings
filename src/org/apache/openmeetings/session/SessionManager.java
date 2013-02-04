@@ -88,7 +88,7 @@ public class SessionManager implements ISessionManager {
 				rcm.setPublicSID(manageCryptStyle.getInstanceOfCrypt()
 						.createPassPhrase(String.valueOf(random).toString()));
 
-				//rcm.setServer(server);
+				rcm.setServer(server);
 				rcm.setUserport(remotePort);
 				rcm.setUserip(remoteAddress);
 				rcm.setSwfurl(swfUrl);
@@ -110,41 +110,21 @@ public class SessionManager implements ISessionManager {
 			return null;
 		}
 
-		public synchronized Collection<Client> getAllClients() {
+		public synchronized Collection<Client> getClients() {
 			return cache.getClients();
+		}
+		
+		public synchronized Collection<Client> getClientsWithServer() {
+			return cache.getClientsWithServer();
 		}
 
 		public synchronized Client getClientByStreamId(String streamId, Server server) {
 			try {
 				if (!cache.containsKey(server, streamId)) {
-					log.debug("Tried to get a non existing Client " + streamId);
+					log.debug("Tried to get a non existing Client " + streamId + " server " + server);
 					return null;
 				}
 				return cache.get(server, streamId);
-			} catch (Exception err) {
-				log.error("[getClientByStreamId]", err);
-			}
-			return null;
-		}
-
-		public synchronized Client getSyncClientByStreamId(String streamId) {
-			try {
-				if (!cache.containsKey(null, streamId)) {
-					log.debug("Tried to get a non existing Client " + streamId);
-					return null;
-				}
-
-				Client rcl = cache.get(null, streamId);
-
-				if (rcl == null) {
-					return null;
-				}
-
-				if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
-					return null;
-				}
-
-				return cache.get(null, streamId);
 			} catch (Exception err) {
 				log.error("[getClientByStreamId]", err);
 			}
@@ -317,7 +297,7 @@ public class SessionManager implements ISessionManager {
 			SearchResult<Client> sResult = new SearchResult<Client>();
 			sResult.setObjectName(Client.class.getName());
 			sResult.setRecords(Long.valueOf(cache.size()).longValue());
-			sResult.setResult(cache.values());
+			sResult.setResult(cache.getClientsWithServer());
 			return sResult;
 		}
 
@@ -369,8 +349,12 @@ public class SessionManager implements ISessionManager {
 				remotePort, remoteAddress, swfUrl, isAVClient, server);
 	}
 
-	public Collection<Client> getAllClients() {
-		return sessionManager.getAllClients();
+	public Collection<Client> getClients() {
+		return sessionManager.getClients();
+	}
+	
+	public Collection<Client> getClientsWithServer() {
+		return sessionManager.getClientsWithServer();
 	}
 
 	public Client getClientByStreamId(String streamId, Server server) {
@@ -378,10 +362,6 @@ public class SessionManager implements ISessionManager {
 			server = serverUtil.getCurrentServer();
 		}
 		return sessionManager.getClientByStreamId(streamId, server);
-	}
-
-	public Client getSyncClientByStreamId(String streamId) {
-		return sessionManager.getSyncClientByStreamId(streamId);
 	}
 
 	public Client getClientByPublicSID(String publicSID, boolean isAVClient,
@@ -465,5 +445,5 @@ public class SessionManager implements ISessionManager {
 	public void sessionStart() {
 		sessionManager.sessionStart();
 	}
-
+	
 }

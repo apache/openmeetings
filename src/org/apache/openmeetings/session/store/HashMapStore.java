@@ -96,6 +96,12 @@ public class HashMapStore implements IClientPersistenceStore {
 		return clientsByStreamId.values();
 	}
 	
+	public Collection<Client> getClientsWithServer() {
+		//there is no server object to be loaded, memory cache means
+		//there is no cluster enabled
+		return getClients();
+	}
+	
 	public Collection<Client> getClientsByServer(Server server) {
 		return clientsByStreamId.values();
 	}

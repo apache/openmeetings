@@ -123,4 +123,12 @@ public interface IClientPersistenceStore {
 
 	public abstract List<Long> getRoomsIdsByServer(Server server);
 
+	/**
+	 * if database cache + cluster is enabled, the server object will be loaded 
+	 * into the client
+	 * 
+	 * @return
+	 */
+	public abstract Collection<Client> getClientsWithServer();
+
 }

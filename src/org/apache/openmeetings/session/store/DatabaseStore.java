@@ -92,6 +92,10 @@ public class DatabaseStore implements IClientPersistenceStore {
 	public Collection<Client> getClients() {
 		return clientDao.getClients();
 	}
+	
+	public Collection<Client> getClientsWithServer() {
+		return clientDao.getClientsWithServer();
+	}
 
 	public Collection<Client> getClientsByServer(Server server) {
 		return clientDao.getClientsByServer(server);

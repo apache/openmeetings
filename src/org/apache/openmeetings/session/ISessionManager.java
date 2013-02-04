@@ -42,40 +42,39 @@ public interface ISessionManager {
 	public abstract void sessionStart();
 
 	/**
-	 * Get current clients and extends the room client with its potential
-	 * audio/video client and settings
+	 * add a new client item
 	 * 
-	 * @param room_id
-	 * @param server TODO
+	 * @param streamId
+	 * @param scopeName
+	 * @param remotePort
+	 * @param remoteAddress
+	 * @param swfUrl
+	 * @param isAVClient
+	 * @param server
 	 * @return
 	 */
 	public abstract Client addClientListItem(String streamId,
 			String scopeName, Integer remotePort, String remoteAddress,
 			String swfUrl, boolean isAVClient, Server server);
 
-	public abstract Collection<Client> getAllClients();
+	public abstract Collection<Client> getClients();
+	
+	/**
+	 * loads the server into the client (only if database cache is used)
+	 * 
+	 * @return
+	 */
+	public abstract Collection<Client> getClientsWithServer();
 
 	/**
 	 * Get a client by its streamId
 	 * 
 	 * @param streamId
 	 * @param server
-	 *            TODO
 	 * @return
 	 */
 	public abstract Client getClientByStreamId(String streamId,
 			Server server);
-
-	/**
-	 * Additionally checks if the client receives sync events
-	 * 
-	 * Sync events will no be broadcasted to: - Screensharing users -
-	 * Audio/Video connections only
-	 * 
-	 * @param streamId
-	 * @return
-	 */
-	public abstract Client getSyncClientByStreamId(String streamId);
 
 	/**
 	 * get a client by its publicSID and the server, 
