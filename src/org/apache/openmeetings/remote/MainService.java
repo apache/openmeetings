@@ -462,7 +462,7 @@ public class MainService implements IPendingServiceCallback {
 
 			currentClient.setAllowRecording(soapLogin.getAllowRecording());
 			this.sessionManager.updateClientByStreamId(streamId,
-					currentClient, false);
+					currentClient, false, null);
 
 			if (loginReturn == null) {
 
@@ -544,7 +544,7 @@ public class MainService implements IPendingServiceCallback {
 					currentClient.getLastname());
 
 			this.sessionManager.updateClientByStreamId(streamId,
-					currentClient, false);
+					currentClient, false, null);
 
 			return 1L;
 
@@ -657,7 +657,7 @@ public class MainService implements IPendingServiceCallback {
 					}
 
 					this.sessionManager.updateClientByStreamId(streamId,
-							currentClient, false);
+							currentClient, false, null);
 
 					return new Long(1);
 				}

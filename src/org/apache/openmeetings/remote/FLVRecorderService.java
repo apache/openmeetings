@@ -172,7 +172,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			currentClient.setIsRecording(true);
 			currentClient.setFlvRecordingId(flvRecordingId);
 			this.sessionManager.updateClientByStreamId(current.getClient()
-					.getId(), currentClient, false);
+					.getId(), currentClient, false, null);
 
 			// get all stream and start recording them
 			Collection<Set<IConnection>> conCollection = current.getScope()
@@ -225,7 +225,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 
 									this.sessionManager
 											.updateClientByStreamId(
-													rcl.getStreamid(), rcl, false);
+													rcl.getStreamid(), rcl, false, null);
 
 								}
 
@@ -266,7 +266,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 								rcl.setFlvRecordingMetaDataId(flvRecordingMetaDataId);
 
 								this.sessionManager.updateClientByStreamId(
-										rcl.getStreamid(), rcl, false);
+										rcl.getStreamid(), rcl, false, null);
 
 								// Start FLV recording
 								recordShow(conn,
@@ -508,7 +508,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 				currentClient.setIsRecording(false);
 
 				this.sessionManager.updateClientByStreamId(
-						currentClient.getStreamid(), currentClient, false);
+						currentClient.getStreamid(), currentClient, false, null);
 
 				log.debug("this.flvRecorderConverterTask ",
 						this.flvRecorderConverterTask);
@@ -649,7 +649,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 					rcl.setFlvRecordingMetaDataId(flvRecordingMetaDataId);
 
 					this.sessionManager.updateClientByStreamId(
-							rcl.getStreamid(), rcl, false);
+							rcl.getStreamid(), rcl, false, null);
 
 				}
 
@@ -688,7 +688,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 				rcl.setFlvRecordingMetaDataId(flvRecordingMetaDataId);
 
 				this.sessionManager.updateClientByStreamId(
-						rcl.getStreamid(), rcl, false);
+						rcl.getStreamid(), rcl, false, null);
 
 			}
 

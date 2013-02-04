@@ -232,7 +232,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 					if (rcl != null) {
 						rcl.setCanDraw(canDraw);
 						this.sessionManager.updateClientByStreamId(
-								rcl.getStreamid(), rcl, false);
+								rcl.getStreamid(), rcl, false, null);
 
 						HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
 						newMessage.put(0, "updateDrawStatus");
@@ -274,7 +274,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 					if (rcl != null) {
 						rcl.setCanShare(canShare);
 						this.sessionManager.updateClientByStreamId(
-								rcl.getStreamid(), rcl, false);
+								rcl.getStreamid(), rcl, false, null);
 
 						HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
 						newMessage.put(0, "updateDrawStatus");
@@ -316,7 +316,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 					if (rcl != null) {
 						rcl.setCanRemote(canRemote);
 						this.sessionManager.updateClientByStreamId(
-								rcl.getStreamid(), rcl, false);
+								rcl.getStreamid(), rcl, false, null);
 
 						HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
 						newMessage.put(0, "updateDrawStatus");
@@ -357,7 +357,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 					if (rcl != null) {
 						rcl.setCanGiveAudio(canGiveAudio);
 				        this.sessionManager.updateClientByStreamId(
-				                rcl.getStreamid(), rcl, false);
+				                rcl.getStreamid(), rcl, false, null);
 
 				        HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
 				        newMessage.put(0, "updateGiveAudioStatus");

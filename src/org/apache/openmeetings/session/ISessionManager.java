@@ -125,7 +125,7 @@ public interface ISessionManager {
 	 * @return
 	 */
 	public abstract Boolean updateAVClientByStreamId(String streamId,
-			Client rcm);
+			Client rcm, Server server);
 
 	/**
 	 * Update the session object
@@ -141,7 +141,7 @@ public interface ISessionManager {
 	 * @return
 	 */
 	public abstract Boolean updateClientByStreamId(String streamId,
-			Client rcm, boolean updateRoomCount);
+			Client rcm, boolean updateRoomCount, Server server);
 
 	/**
 	 * Remove a client from the session store
@@ -149,7 +149,7 @@ public interface ISessionManager {
 	 * @param streamId
 	 * @return
 	 */
-	public abstract Boolean removeClient(String streamId);
+	public abstract Boolean removeClient(String streamId, Server server);
 
 	/**
 	 * Get all ClientList Objects of that room and domain This Function is

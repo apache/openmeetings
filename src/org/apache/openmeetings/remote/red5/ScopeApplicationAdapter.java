@@ -241,7 +241,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				}
 				
 				if (changed) {
-					sessionManager.updateClientByStreamId(rc.getStreamid(), rc, false);
+					sessionManager.updateClientByStreamId(rc.getStreamid(), rc, false, null);
 					
 					if (!rc.isStartStreaming() && !rc.isStartRecording() && !rc.isStreamPublishStarted()) {
 						returnMap.put("result", "stopAll");
@@ -330,7 +330,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						"organization_id").toString()));
 
 				this.sessionManager.updateClientByStreamId(current
-						.getClient().getId(), currentClient, false);
+						.getClient().getId(), currentClient, false, null);
 
 				Map returnMap = new HashMap();
 				returnMap.put("alreadyPublished", false);
@@ -370,7 +370,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				// This is duplicated, but its not sure that in the meantime
 				// somebody requests this Client Object Info
 				this.sessionManager.updateClientByStreamId(current
-						.getClient().getId(), currentClient, false);
+						.getClient().getId(), currentClient, false, null);
 
 				if (startStreaming) {
 					returnMap.put("modus", "startStreaming");
@@ -450,7 +450,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		Client currentClient = this.sessionManager
 				.getClientByStreamId(current.getClient().getId(), null);
 		sessionManager.updateClientByStreamId(current.getClient().getId(),
-				currentClient, false);
+				currentClient, false, null);
 		return currentClient.getPublicSID();
 	}
 
@@ -469,7 +469,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			}
 			SessionVariablesUtil.initClient(c, SessionVariablesUtil.isAVClient(c), newPublicSID);
 			currentClient.setPublicSID(newPublicSID);
-			sessionManager.updateClientByStreamId(c.getId(), currentClient, false);
+			sessionManager.updateClientByStreamId(c.getId(), currentClient, false, null);
 			return true;
 		} catch (Exception err) {
 			log.error("[overwritePublicSID]", err);
@@ -661,7 +661,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			}
 
 			if (removeUserFromSessionList) {
-				this.sessionManager.removeClient(currentClient.getStreamid());
+				this.sessionManager.removeClient(currentClient.getStreamid(), null);
 			}
 		} catch (Exception err) {
 			log.error("[roomLeaveByScope]", err);
@@ -698,7 +698,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				currentClient.setScreenPublishStarted(true);
 
 				this.sessionManager.updateClientByStreamId(current
-						.getClient().getId(), currentClient, false);
+						.getClient().getId(), currentClient, false, null);
 			}
 			//If its an audio/video client then send the session object with the full 
 			//data to everybody
@@ -928,7 +928,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			currentClient.setIsMod(true);
 			// Put the mod-flag to true for this client
 			this.sessionManager.updateClientByStreamId(
-					currentClient.getStreamid(), currentClient, false);
+					currentClient.getStreamid(), currentClient, false, null);
 
 			List<Client> currentMods = this.sessionManager
 					.getCurrentModeratorByRoom(room_id);
@@ -1007,7 +1007,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			currentClient.setIsMod(false);
 			// Put the mod-flag to true for this client
 			this.sessionManager.updateClientByStreamId(
-					currentClient.getStreamid(), currentClient, false);
+					currentClient.getStreamid(), currentClient, false, null);
 
 			List<Client> currentMods = this.sessionManager
 					.getCurrentModeratorByRoom(room_id);
@@ -1062,7 +1062,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
             // Put the mod-flag to true for this client
 		    this.sessionManager.updateClientByStreamId(
-		    		currentClient.getStreamid(), currentClient, false);
+		    		currentClient.getStreamid(), currentClient, false, null);
 		    
 			// Notify all clients of the same scope (room)
 			Collection<Set<IConnection>> conCollection = current.getScope()
@@ -1112,7 +1112,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			// Put the mod-flag to true for this client
 			currentClient.setMicMuted(false);
 			this.sessionManager.updateClientByStreamId(
-					currentClient.getStreamid(), currentClient, false);
+					currentClient.getStreamid(), currentClient, false, null);
 
 			// Notify all clients of the same scope (room)
 			Collection<Set<IConnection>> conCollection = current.getScope()
@@ -1131,7 +1131,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 							if (rcl != currentClient) {
 								rcl.setMicMuted(true);
 								this.sessionManager.updateClientByStreamId(
-										rcl.getStreamid(), rcl, false);
+										rcl.getStreamid(), rcl, false, null);
 							}
 							log.debug("Send Flag to Client: "
 									+ rcl.getUsername());
@@ -1165,7 +1165,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			currentClient.setMicMuted(mute);
 			this.sessionManager.updateClientByStreamId(
-					currentClient.getStreamid(), currentClient, false);
+					currentClient.getStreamid(), currentClient, false, null);
 
 			HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
 			newMessage.put(0, "updateMuteStatus");
@@ -1249,7 +1249,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					.getClientByStreamId(streamid, null);
 			currentClient.setBroadCastID(broadCastCounter++);
 			this.sessionManager.updateClientByStreamId(streamid,
-					currentClient, false);
+					currentClient, false, null);
 			return currentClient.getBroadCastID();
 		} catch (Exception err) {
 			log.error("[getBroadCastId]", err);
@@ -1291,7 +1291,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			currentClient.setInterviewPodId(interviewPodId);
 			// Long room_id = currentClient.getRoom_id();
 			this.sessionManager.updateAVClientByStreamId(streamid,
-					currentClient);
+					currentClient, null);
 			SessionVariablesUtil.initClient(c, false, publicSID);
 
 			HashMap<String, Object> hsm = new HashMap<String, Object>();
@@ -1440,7 +1440,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			currentClient.setIsSuperModerator(isSuperModerator);
 
 			this.sessionManager.updateClientByStreamId(streamid,
-					currentClient, true);
+					currentClient, true, null);
 
             Rooms room = roomDao.get(room_id);
             if (room.getShowMicrophoneStatus()) {
@@ -1491,7 +1491,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 						// Update the Client List
 						this.sessionManager.updateClientByStreamId(streamid,
-								currentClient, false);
+								currentClient, false, null);
 
 						List<Client> modRoomList = this.sessionManager
 								.getCurrentModeratorByRoom(currentClient.getRoom_id());
@@ -1524,7 +1524,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 							// Update the Client List
 							this.sessionManager.updateClientByStreamId(
-									streamid, currentClient, false);
+									streamid, currentClient, false, null);
 
 							List<Client> modRoomList = this.sessionManager
 									.getCurrentModeratorByRoom(currentClient
@@ -1549,7 +1549,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 				// Update the Client List
 				this.sessionManager.updateClientByStreamId(streamid,
-						currentClient, false);
+						currentClient, false, null);
 
 			} else {
 
@@ -1591,7 +1591,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 								// Update the Client List
 								this.sessionManager.updateClientByStreamId(
-										streamid, currentClient, false);
+										streamid, currentClient, false, null);
 
 								List<Client> modRoomList = this.sessionManager
 										.getCurrentModeratorByRoom(currentClient
@@ -1605,7 +1605,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 								moderator_set = true;
 								this.sessionManager.updateClientByStreamId(
-										streamid, currentClient, false);
+										streamid, currentClient, false, null);
 								break;
 							} else {
 								log.debug("User "
@@ -1613,7 +1613,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 										+ " is NOT moderator due to flag in MeetingMember record");
 								currentClient.setIsMod(false);
 								this.sessionManager.updateClientByStreamId(
-										streamid, currentClient, false);
+										streamid, currentClient, false, null);
 								break;
 							}
 						} else {
@@ -1633,7 +1633,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 							+ " could not be found as MeetingMember -> definitely no moderator");
 					currentClient.setIsMod(false);
 					this.sessionManager.updateClientByStreamId(streamid,
-							currentClient, false);
+							currentClient, false, null);
 				} else {
 					// if current user is part of the member list, but moderator
 					// couldn't be retrieved : first come, first draw!
@@ -1643,7 +1643,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 						// Update the Client List
 						this.sessionManager.updateClientByStreamId(streamid,
-								currentClient, false);
+								currentClient, false, null);
 
 						List<Client> modRoomList = this.sessionManager
 								.getCurrentModeratorByRoom(currentClient
@@ -1657,7 +1657,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						syncMessageToCurrentScope("setNewModeratorByList", modRoomList, false);
 						
 						this.sessionManager.updateClientByStreamId(streamid,
-								currentClient, false);
+								currentClient, false, null);
 					}
 				}
 
@@ -1733,7 +1733,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				}
 			}
 			this.sessionManager.updateClientByStreamId(streamid,
-					currentClient, false);
+					currentClient, false, null);
 			return currentClient;
 		} catch (Exception err) {
 			log.error("[setUsername]", err);
@@ -1784,7 +1784,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				currentClient.setPicture_uri(us.getPictureuri());
 			}
 			this.sessionManager.updateClientByStreamId(streamid,
-					currentClient, false);
+					currentClient, false, null);
 			return currentClient;
 		} catch (Exception err) {
 			log.error("[setUsername]", err);
@@ -2614,7 +2614,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			// later
 			current_rcl.setIsRecording(true);
 			this.sessionManager.updateClientByStreamId(current.getClient()
-					.getId(), current_rcl, false);
+					.getId(), current_rcl, false, null);
 
 			Map<String, String> interviewStatus = new HashMap<String, String>();
 			interviewStatus.put("action", "start");
@@ -2718,7 +2718,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 							// Reset the Recording Flag to Record all
 							// Participants that enter later
 							this.sessionManager.updateClientByStreamId(conn
-									.getClient().getId(), rcl, false);
+									.getClient().getId(), rcl, false, null);
 
 							found = true;
 						}
@@ -2872,7 +2872,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
         String newNumber = "("+Integer.toString(roommanagement.getSipConferenceMembersNumber(currentClient.getRoom_id())-1)+")";
         if(!newNumber.equals(currentClient.getLastname())) {
             currentClient.setLastname(newNumber);
-            this.sessionManager.updateClientByStreamId(streamid, currentClient, false);
+            this.sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
             log.debug("updateSipTransport: {}, {}, {}, {}", new Object[]{currentClient.getPublicSID(),
                     currentClient.getRoom_id(), currentClient.getFirstname(), currentClient.getLastname()});
             sendMessageWithClient(new String[]{"personal",currentClient.getFirstname(),currentClient.getLastname()});
@@ -2922,7 +2922,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
         currentClient.setVWidth(120);
         currentClient.setVHeight(90);
         currentClient.setSipTransport(true);
-        this.sessionManager.updateClientByStreamId(streamid, currentClient, false);
+        this.sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
         SessionVariablesUtil.initClient(c, false, publicSID); //TODO not sure if this should be marked as AVClient or not 
 
 
