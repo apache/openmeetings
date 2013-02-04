@@ -75,11 +75,11 @@
 	    	<![CDATA[
 	    	this.clearList();
 	    	for (var i=0;i<records.length;i++){
-	    		var tServer = "master";
+	    		var tServer = "no cluster";
 	    		var serverId = 0;
 	    		if (records[i].server != null) {
-	    			serverId = records[i].server.id;
-	    			tServer = "slave " + " ["+serverId+"]";
+	    		    serverId = records[i].server.id;
+	    			tServer = records[i].server.address + " ["+records[i].server.id+"]";
 	    		}
 	    	
 	    		new lz.roomClientListItem(this._innerlist._inn._inn,{

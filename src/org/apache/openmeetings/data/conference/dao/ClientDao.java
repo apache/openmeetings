@@ -134,6 +134,10 @@ public class ClientDao {
 	public List<Client> getClients() {
 		return em.createNamedQuery("getClients", Client.class).getResultList();
 	}
+	
+	public List<Client> getClientsWithServer() {
+		return em.createNamedQuery("getClientsWithServer", Client.class).getResultList();
+	}
 
 	public List<Client> getClientsByUserId(Server server, Long userId) {
 		TypedQuery<Client> q = em.createNamedQuery("getClientsByUserId", Client.class);

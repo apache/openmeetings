@@ -55,6 +55,7 @@ import org.apache.openmeetings.utils.math.CalendarPatterns;
 	@NamedQuery(name = "getClientsByPublicSID", query = "SELECT c FROM Client c WHERE c.publicSID LIKE :publicSID"),
 	@NamedQuery(name = "getClientsByServer", query = "SELECT c FROM Client c WHERE c.server = :server"),
 	@NamedQuery(name = "getClients", query = "SELECT c FROM Client c"),
+	@NamedQuery(name = "getClientsWithServer", query = "SELECT c FROM Client c LEFT JOIN FETCH c.server"),
 	@NamedQuery(name = "getClientsByUserId", query = "SELECT c FROM Client c WHERE c.server = :server AND c.user_id = :user_id"),
 	@NamedQuery(name = "getClientsByRoomId", query = "SELECT c FROM Client c WHERE c.room_id = :room_id")
 })

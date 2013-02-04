@@ -466,7 +466,7 @@ public class ChatService implements IPendingServiceCallback {
 			LinkedList<Client> guestList = new LinkedList<Client>();
 			LinkedList<Client> overallList = new LinkedList<Client>();
 			
-			for (Client rcl : sessionManager.getAllClients()) {
+			for (Client rcl : sessionManager.getClients()) {
 				if (rcl.getUser_id()==null || rcl.getUser_id()<=0) {
 					guestList.add(rcl);
 				} else {
