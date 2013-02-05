@@ -284,6 +284,9 @@ public class BackupImportController extends AbstractUploadController {
 				u.setStarttime(new Date());
 				long userId = u.getUser_id();
 				u.setUser_id(null);
+				if (u.getSipUser() != null && u.getSipUser().getId() != 0) {
+					u.getSipUser().setId(0);
+				}
 				usersDao.update(u, -1L);
 				usersMap.put(userId, u.getUser_id());
 			}
