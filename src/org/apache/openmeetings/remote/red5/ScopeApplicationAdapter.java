@@ -2785,7 +2785,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		for (Server s : serverDao.getActiveServers()) {
 			result.addAll(getVerifiedActiveRoomIds(s));
 		}
-		return roomDao.getSipRooms(result);
+		return result.isEmpty() ? result : roomDao.getSipRooms(result);
 	}
 	
     public synchronized void updateSipTransport() {
