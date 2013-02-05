@@ -76,11 +76,15 @@ public class OrganisationDao implements IDataProviderDao<Organisation> {
 	
 	public Organisation update(Organisation entity, long userId) {
 		if (entity.getOrganisation_id() == null) {
-			entity.setInsertedby(userId);
+			if (userId > 0) {
+				entity.setInsertedby(userId);
+			}
 			entity.setStarttime(new Date());
 			em.persist(entity);
 		} else {
-			entity.setUpdatedby(userId);
+			if (userId > 0) {
+				entity.setUpdatedby(userId);
+			}
 			entity.setUpdatetime(new Date());
 			em.merge(entity);
 		}
@@ -93,7 +97,9 @@ public class OrganisationDao implements IDataProviderDao<Organisation> {
 			.executeUpdate();
 
 		entity.setDeleted(true);
-		entity.setUpdatedby(userId);
+		if (userId > 0) {
+			entity.setUpdatedby(userId);
+		}
 
 		em.merge(entity);
 	}

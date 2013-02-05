@@ -1403,7 +1403,7 @@ public class Roommanagement {
 		try {
 			if (authLevelManagement.checkWebServiceLevel(user_level)) {
 				this.deleteAllRoomsOrganisationOfRoom(rooms_id);
-				roomDao.delete(roomDao.get(rooms_id), 1L);
+				roomDao.delete(roomDao.get(rooms_id), -1L);
 				return rooms_id;
 			}
 		} catch (Exception ex2) {
@@ -1510,7 +1510,7 @@ public class Roommanagement {
 
 			room.setIsClosed(status);
 
-			roomDao.update(room, 1L);
+			roomDao.update(room, -1L);
 
 		} catch (Exception e) {
 			log.error("Error updateRoomObject : ", e);

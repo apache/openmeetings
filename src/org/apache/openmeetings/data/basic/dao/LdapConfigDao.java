@@ -309,12 +309,16 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 		try {
 			if (entity.getLdapConfigId() <= 0) {
 				entity.setInserted(new Date());
-				entity.setInsertedby(usersDao.get(userId));
+				if (userId > 0) {
+					entity.setInsertedby(usersDao.get(userId));
+				}
 				entity.setDeleted(false);
 				em.persist(entity);
 			} else {
 				entity.setUpdated(new Date());
-				entity.setUpdatedby(usersDao.get(userId));
+				if (userId > 0) {
+					entity.setUpdatedby(usersDao.get(userId));
+				}
 				entity.setDeleted(false);
 				em.merge(entity);
 			}
@@ -327,7 +331,9 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 	public void delete(LdapConfig entity, long userId) {
 		if (entity.getLdapConfigId() >= 0) {
 			entity.setUpdated(new Date());
-			entity.setUpdatedby(usersDao.get(userId));
+			if (userId > 0) {
+				entity.setUpdatedby(usersDao.get(userId));
+			}
 			entity.setDeleted(true);
 			em.merge(entity);
 		}

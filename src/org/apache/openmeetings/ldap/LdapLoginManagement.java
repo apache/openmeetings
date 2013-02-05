@@ -573,7 +573,7 @@ public class LdapLoginManagement {
 					u.updatePassword(cryptManager, configDao, passwd);
 				}
 
-				usersDao.update(u, 1L);
+				usersDao.update(u, -1L);
 			} catch (Exception e) {
 				log.error("Error updating user : " + e.getMessage());
 				return new Long(-1);
@@ -726,7 +726,7 @@ public class LdapLoginManagement {
 			
 			User user = usersDao.get(newUserId);
 			user.setPictureuri(pictureUri);
-			usersDao.update(user, 1L);
+			usersDao.update(user, -1L);
 
 		} catch (Exception e) {
 			log.error("Error creating user : " + e.getMessage());

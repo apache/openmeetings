@@ -303,7 +303,7 @@ public class UsersDao implements IDataProviderDao<User> {
 				User us = (User) u;
 				us.updatePassword(cryptManager, configDao, pass);
 				us.setResethash("");
-				update(us, 1L);
+				update(us, -1L);
 				return new Long(-8);
 			} else {
 				return u;

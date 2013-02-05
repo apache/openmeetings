@@ -284,7 +284,7 @@ public class BackupImportController extends AbstractUploadController {
 				u.setStarttime(new Date());
 				long userId = u.getUser_id();
 				u.setUser_id(null);
-				usersDao.update(u, 1L);
+				usersDao.update(u, -1L);
 				usersMap.put(userId, u.getUser_id());
 			}
 		}
@@ -321,7 +321,7 @@ public class BackupImportController extends AbstractUploadController {
 						}
 					}
 				}
-				r = roomDao.update(r, 1L);
+				r = roomDao.update(r, -1L);
 				if (mm != null) {
 					mm.setConfno(roommanagement.getSipNumber(r.getRooms_id()));
 					r.setMeetme(mm);
@@ -603,7 +603,7 @@ public class BackupImportController extends AbstractUploadController {
 						c.setConf_value(MD5Implementation.class.getCanonicalName());
 					}
 				}
-				configurationDao.update(c, 1L);
+				configurationDao.update(c, -1L);
 			}
 		}
 

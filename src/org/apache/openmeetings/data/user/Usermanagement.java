@@ -1290,7 +1290,7 @@ public class Usermanagement {
 		log.debug("User: " + us.getLogin());
 		us.setResethash(cryptManager.getInstanceOfCrypt().createPassPhrase(
 				loginData));
-		usersDao.update(us, 1L);
+		usersDao.update(us, -1L);
 		String reset_link = appLink + "?lzproxied=solo&hash="
 				+ us.getResethash();
 
@@ -1549,7 +1549,7 @@ public class Usermanagement {
 	}
 
 	public void updateUser(User user) {
-		usersDao.update(user, 1L);
+		usersDao.update(user, -1L);
 	}
 
 	/**
