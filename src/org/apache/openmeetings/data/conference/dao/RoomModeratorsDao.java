@@ -107,7 +107,7 @@ public class RoomModeratorsDao {
 
 	public List<RoomModerator> getRoomModeratorByRoomId(Long roomId) {
 		try {
-			TypedQuery<RoomModerator> query = em.createQuery("getRoomModeratorByRoomId", RoomModerator.class);
+			TypedQuery<RoomModerator> query = em.createNamedQuery("getRoomModeratorByRoomId", RoomModerator.class);
 			query.setParameter("deleted", true);
 			query.setParameter("roomId", roomId);
 			return query.getResultList();

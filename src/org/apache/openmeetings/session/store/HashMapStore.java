@@ -21,6 +21,7 @@ package org.apache.openmeetings.session.store;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -175,16 +176,14 @@ public class HashMapStore implements IClientPersistenceStore {
 	}
 
 	public List<Long> getRoomsIdsByServer(Server server) {
-		List<Long> roomIds = new ArrayList<Long>();
+		HashSet<Long> rooms = new HashSet<Long>();
 		for (Client cl : clientsByStreamId.values()) {
 			Long roomId = cl.getRoom_id();
-			if (roomId != null && roomId > 0) {
-				if (!roomIds.contains(roomId)) {
-					
-				}
+			if (roomId != null && roomId > 0 && !rooms.contains(roomId)) {
+				rooms.add(roomId);
 			}
 		}
-		return roomIds;
+		return new ArrayList<Long>(rooms);
 	}
 
 }

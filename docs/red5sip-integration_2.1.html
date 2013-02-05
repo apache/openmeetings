@@ -672,6 +672,7 @@ limitations under the License.
 				</blockquote><br /><br />
 				Modify file /etc/odbcinst.ini as follows: (replace the path to the *.so files below with the real paths on your system)
 				<blockquote>
+					(The path below is for x32 server, x64 version is most probably located at /usr/lib/x86_64-linux-gnu/odbc)<br />
 					<i>
 						[MySQL]<br />
 						Description = ODBC for MySQL<br />
@@ -728,6 +729,19 @@ limitations under the License.
 				Modify "[general]" section of /etc/asterisk/sip.conf uncomment the following line:
 				<blockquote>
 					<i>rtcachefriends=yes</i>
+				</blockquote>
+				add following section to create internal user for red5sip:
+				<blockquote>
+					<i>
+						[sip]
+						type=friend
+						user=sip
+						context=rooms
+						secret=12345
+						disallow=all
+						allow=ulaw
+						host=dynamic
+					</i>
 				</blockquote>
 			</div>
                                                 <div>
@@ -795,9 +809,18 @@ limitations under the License.
 				Download red5sip from
 				<blockquote>http://red5phone.googlecode.com/svn/branches/red5sip</blockquote>
 			</div>
-                                                <p>
+                                                <div>
 				Build with Apache Ant
-			</p>
+				<blockquote>
+					<i>ant</i>
+				</blockquote>
+			</div>
+                                                <div>
+				Set red5sip.sh to be executable:
+				<blockquote>
+					<i>chmod a+x red5sip.sh</i>
+				</blockquote>
+			</div>
                                                 <div>
 				Install jsvc:
 				<blockquote>
@@ -811,10 +834,10 @@ limitations under the License.
 					<i>
 						red5.host - red5 server address (127.0.0.1)<br />
 						sip.obproxy - asterisk adderss (127.0.0.1)<br />
-						sip.phone - sip phone number (test)<br />
-						sip.authid - sip auth id (test)<br />
+						sip.phone - sip phone number (sip)<br />
+						sip.authid - sip auth id (sip)<br />
 						sip.secret - sip password (12345)<br />
-						sip.realm - sip realm, "asterisk" by default<br />
+						sip.realm - sip realm (asterisk)<br />
 						sip.proxy - <br />
 					</i>
 				</blockquote>

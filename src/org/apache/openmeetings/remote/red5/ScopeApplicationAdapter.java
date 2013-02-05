@@ -2777,7 +2777,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				i.remove();
 			}
 		}
-		return roomDao.getSipRooms(result);
+		return result.isEmpty() ? result : roomDao.getSipRooms(result);
 	}
 	
 	public synchronized List<Long> getActiveRoomIds() {
