@@ -89,6 +89,9 @@ public class ScreenSharerFrame extends JFrame {
 	private boolean sharingStarted = false;
 	private boolean recordingStarted = false;
 	private boolean publishStarted = false;
+	private boolean recordingActionRequested = false;
+	private boolean publishingActionRequested = false;
+	private boolean sharingActionRequested = false;
 	private ImageIcon startIcon;
 	private ImageIcon stopIcon;
 	private String startSharingLabel;
@@ -257,9 +260,19 @@ public class ScreenSharerFrame extends JFrame {
 		btnStartStopSharing.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (sharingStarted) {
-					core.sendCaptureScreenStop(true, false);
+					if (!sharingActionRequested) {
+						sharingActionRequested = true;
+						core.sendCaptureScreenStop(true, false);
+					} else {
+						logger.warn("Sharing action is already requested");
+					}
 				} else {
-					core.captureScreenStart(true, false);
+					if (!sharingActionRequested) {
+						sharingActionRequested = true;
+						core.captureScreenStart(true, false);
+					} else {
+						logger.warn("Sharing action is already requested");
+					}
 				}
 			}
 		});
@@ -443,9 +456,19 @@ public class ScreenSharerFrame extends JFrame {
 		btnStartStopRecording.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (recordingStarted) {
-					core.sendCaptureScreenStop(false, true);
+					if (!recordingActionRequested) {
+						recordingActionRequested = true;
+						core.sendCaptureScreenStop(false, true);
+					} else {
+						logger.warn("Recording action is already requested");
+					}
 				} else {
-					core.captureScreenStart(false, true);
+					if (!recordingActionRequested) {
+						recordingActionRequested = true;
+						core.captureScreenStart(false, true);
+					} else {
+						logger.warn("Recording action is already requested");
+					}
 				}
 			}
 		});
@@ -500,9 +523,19 @@ public class ScreenSharerFrame extends JFrame {
 		btnStartStopPublish.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (publishStarted) {
-					core.sendStopPublishing();
+					if (!publishingActionRequested) {
+						publishingActionRequested = true;
+						core.sendStopPublishing();
+					} else {
+						logger.warn("Publishing action is already requested");
+					}
 				} else {
-					core.captureScreenStart(false, false, true);
+					if (!publishingActionRequested) {
+						publishingActionRequested = true;
+						core.captureScreenStart(false, false, true);
+					} else {
+						logger.warn("Publishing action is already requested");
+					}
 				}
 			}
 		});
@@ -527,6 +560,9 @@ public class ScreenSharerFrame extends JFrame {
 
 	public void setSharingStatus(boolean status, boolean unlockScreen) {
 		panelScreen.setEnabled(unlockScreen);
+		if (status != sharingStarted) {
+			sharingActionRequested = false;
+		}
 		sharingStarted = status;
 		btnStartStopSharing.setIcon(status ? stopIcon : startIcon);
 		btnStartStopSharing.setText(status ? stopSharingLabel : startSharingLabel);
@@ -535,6 +571,10 @@ public class ScreenSharerFrame extends JFrame {
 	
 	public void setRecordingStatus(boolean status, boolean unlockScreen) {
 		panelScreen.setEnabled(unlockScreen);
+		if (status != recordingStarted) {
+			recordingActionRequested = false;
+		}
+		logger.debug("recordingActionRequested=" + recordingActionRequested);
 		recordingStarted = status;
 		btnStartStopRecording.setIcon(status ? stopIcon : startIcon);
 		btnStartStopRecording.setText(status ? stopRecordingLabel : startRecordingLabel);
@@ -543,6 +583,9 @@ public class ScreenSharerFrame extends JFrame {
 	
 	public void setPublishingStatus(boolean status, boolean unlockScreen) {
 		panelScreen.setEnabled(unlockScreen);
+		if (status != publishStarted) {
+			publishingActionRequested = false;
+		}
 		publishStarted = status;
 		btnStartStopPublish.setIcon(status ? stopIcon : startIcon);
 		btnStartStopPublish.setText(status ? stopPublishLabel : startPublishLabel);

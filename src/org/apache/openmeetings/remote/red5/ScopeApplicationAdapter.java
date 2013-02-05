@@ -215,7 +215,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			log.debug("-----------  ");
 			if (rc != null) {
 				boolean changed = false;
-				if (Boolean.valueOf("" + map.get("stopStreaming"))) {
+				if (Boolean.valueOf("" + map.get("stopStreaming")) && rc.isStartStreaming()) {
 					changed = true;
 					rc.setStartStreaming(false);
 					//Send message to all users
@@ -223,7 +223,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					
 					returnMap.put("result", "stopSharingOnly");
 				}
-				if (Boolean.valueOf("" + map.get("stopRecording"))) {
+				if (Boolean.valueOf("" + map.get("stopRecording")) && rc.getIsRecording()) {
 					changed = true;
 					rc.setStartRecording(false);
 					rc.setIsRecording(false);
@@ -234,7 +234,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 					flvRecorderService.stopRecordAndSave(current.getScope(), rc, null);
 				}
-				if (Boolean.valueOf("" + map.get("stopPublishing"))) {
+				if (Boolean.valueOf("" + map.get("stopPublishing")) && rc.isScreenPublishStarted()) {
 					changed = true;
 					rc.setScreenPublishStarted(false);
 					returnMap.put("result", "stopPublishingOnly");
@@ -319,9 +319,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				SessionVariablesUtil.setUserId(current.getClient(), Long.parseLong(map.get("user_id")
 						.toString()));
 
+				boolean alreadyStreaming = currentClient.isStartStreaming();
 				if (startStreaming) {
 					currentClient.setStartStreaming(true);
 				}
+				boolean alreadyRecording = currentClient.isStartRecording();
 				if (startRecording) {
 					currentClient.setStartRecording(true);
 				}
@@ -376,20 +378,27 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						.getClient().getId(), currentClient, false, null);
 
 				if (startStreaming) {
-					returnMap.put("modus", "startStreaming");
-
-					log.debug("start streamPublishStart Is Screen Sharing ");
-					
-					//Send message to all users
-					syncMessageToCurrentScope("newScreenSharing", currentClient, false);
+					if (!alreadyStreaming) {
+						returnMap.put("modus", "startStreaming");
+	
+						log.debug("start streamPublishStart Is Screen Sharing ");
+						
+						//Send message to all users
+						syncMessageToCurrentScope("newScreenSharing", currentClient, false);
+					} else {
+						log.warn("Streaming is already started for the client id=" + currentClient.getId() + ". Second request is ignored.");
+					}
 				} else if (startRecording) {
-					returnMap.put("modus", "startRecording");
-
-					String recordingName = "Recording "
-							+ CalendarPatterns
-									.getDateWithTimeByMiliSeconds(new Date());
-
-					flvRecorderService.recordMeetingStream(recordingName, "", false);
+					if (!alreadyRecording) {
+						returnMap.put("modus", "startRecording");
+	
+						String recordingName = "Recording "
+								+ CalendarPatterns.getDateWithTimeByMiliSeconds(new Date());
+	
+						flvRecorderService.recordMeetingStream(recordingName, "", false);
+					} else {
+						log.warn("Recording is already started for the client id=" + currentClient.getId() + ". Second request is ignored.");
+					}
 				} else if (startPublishing) {
 					syncMessageToCurrentScope("startedPublishing", new Object[]{currentClient, "rtmp://" + map.get("publishingHost") + ":1935/"
 							+ map.get("publishingApp") + "/" + map.get("publishingId")}, false, true);

@@ -110,7 +110,7 @@ public abstract class BaseStreamWriter implements Runnable {
 
 	private void open() {
 		running = true;
-		new Thread(this).start();
+		new Thread(this, "Recording " + file.getName()).start();
 	}
 
 	public void stop() {
